@@ -1,101 +1,55 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 5 Nov 2019 21:48:26 +0100
-Subject: [Buildroot] [PATCH 0/6] Cargo virtual and Rust 1.38.0
-In-Reply-To: <37c0450a-07f5-c9d9-1ddb-12f21b8d4160@mind.be>
-References: <20190929171656.30187-1-eric.le.bihan.dev@free.fr>
- <e6d594bc-f2e1-fb71-a2c4-5e88a4a05d28@mind.be>
- <20191005160400.GA10008@ned>
- <1b4bd4cb-b62e-2532-f40d-73bc3bf8f87f@mind.be>
- <37c0450a-07f5-c9d9-1ddb-12f21b8d4160@mind.be>
-Message-ID: <20191105204708.GA26889@ned>
+Date: Tue,  5 Nov 2019 22:12:52 +0100
+Subject: [Buildroot] [RFC PATCH 0/7] Rust: drop cargo package
+Message-ID: <20191105211259.27673-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2019-10-27 23:19, Arnout Vandecappelle wrote:
->
->
-> On 08/10/2019 23:17, Arnout Vandecappelle wrote:
-> >
-> >
-> > On 05/10/2019 18:06, Eric Le Bihan wrote:
-> >> Hi!
-> >> On 2019-09-29 21:22, Arnout Vandecappelle wrote:
-> >>>
-> >>>
-> >>> On 29/09/2019 19:16, Eric Le Bihan wrote:
-> >>>> Cargo source code is not provided anymore as a separate tarball but is now
-> >>>> built along with the Rust compiler.
-> >>>>
-> >>>> This patch series converts cargo to a virtual package and declare cargo-bin
-> >>>> and rust are providers. Versions for each package are also bumped to latest
-> >>>> ones.
-> >>>
-> >>>  Why do we need the virtual package? I would think that cargo just becomes a
-> >>> sub-option of rust. Or, given how cargo and rust really go hand in hand, we
-> >>> could just remove the cargo package entirely and always build cargo as part of
-> >>> rust. For host packages, we don't care about size (too much), the only possible
-> >>> issue is build time. But I expect building rust with cargo isn't going to be
-> >>> that much longer.
-> >>
-> >> Rust needs a Rust compiler and Cargo to build. So there are some
-> >> packages providing the pre-built binaries (rust-bin and cargo-bin). When
-> >> Cargo was available as a standalone package, the user could choose to
-> >> either:
-> >>
-> >> a) select rust-bin and build cargo (using cargo-bin).
-> >> b) select to build rust and cargo, using rust-bin and cargo-bin.
-> >
-> >  OK, I didn't realize that a) was a possibility. I thought we always built
-> > rust+cargo based on rust-bin+cargo-bin.
-> >
-> >  So, if I understand correctly, we have this choice between rust-bin or rust to
-> > be able to save some build time (in case the standard library from rust-bin can
-> > be used).
-> >
-> >  If it simplifies our life, I think it's worth considering to drop this choice
-> > and instead *always* build rust for the target if it's needed for the target,
-> > and *always* use rust-bin/cargo-bin if it only needed for the host. But that is
-> > kind of orthogonal to this version bump.
-> >
-> >
-> >> Now that Cargo is provided and built along with the Rust compiler,
-> >> option a) is not possible anymore, unless cargo-bin is updated to be
-> >> also installable and not only used as an intermediate tool. In that case
-> >> we have two packages providing the same program (rust and cargo-bin),
-> >> hence the idea of introducing the virtual package for Cargo.
-> >>
-> >> But it sure may be overkill and having just a sub-option might do the
-> >> trick. Would adding a sub-option to Rust which behaves as follows be
-> >> suitable?
-> >>
-> >> - if rust-bin is selected, then install Cargo from cargo-bin
-> >> - if rust is selected, build Cargo along with the compiler using
-> >>   rust-bin and cargo-bin and install it.
-> >
-> >  It would make most sense to me to drop either cargo or rust as a
-> > user-selectable option.
->
->  We've discussed this at the BR developer day. The conclusion is:
->
-> - no virtual package for cargo;
-> - remove cargo entirely as a package;
-> - rustc implies cargo:
->   - if rust-bin is used as rustc provider, rustc depends on cargo-bin;
->   - if rust is used as rustc provider, rust will provide cargo;
-> - since cargo is implied by rustc, is can be removed from packages (i.e. ripgrep);
-> - if indeed there is a tarball that contains the rust and the cargo binary, then
-> cargo-bin can be removed as well.
->
->
->  I've marked the series as changes requested so you can rework accordingly.
+Hi!
 
-OK. So I'll send one series for these changes, then another for the
-version bump. Thanks for the review.
+The source code for Cargo, the build and package manager for Rust, is now
+shipped along with the compiler and standard library.
 
-Regards,
+So there can not be a standalone package for Cargo anymore.
+
+This series does the following:
+
+- update host-rust to build and install Cargo.
+- install host-cargo-bin if host-rust-bin is selected instead of host-rust.
+- update dependencies for package(s) using Cargo.
+- remove cargo packaging.
+- update the packaging documentation.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2019-October/264437.html
+
+Eric Le Bihan (7):
+  package/rust: build and install cargo
+  package/cargo-bin: install if rust-bin selected
+  package/rust-bin: host variant depends on host-cargo-bin
+  package/rust: drop dependency on host-cargo-bin
+  package/ripgrep: depends on host-rustc
+  package/cargo: drop package
+  docs/manual: cargo packages depend on host-rustc
+
+ docs/manual/adding-packages-cargo.txt | 11 ++--
+ package/Config.in.host                |  1 -
+ package/cargo-bin/cargo-bin.mk        |  7 +++
+ package/cargo/Config.in.host          |  9 ---
+ package/cargo/cargo.hash              |  8 ---
+ package/cargo/cargo.mk                | 91 ---------------------------
+ package/ripgrep/Config.in             |  1 -
+ package/ripgrep/ripgrep.mk            |  2 +-
+ package/rust-bin/rust-bin.mk          |  1 +
+ package/{cargo => rust}/config.in     |  0
+ package/rust/rust.mk                  | 26 +++++++-
+ 11 files changed, 38 insertions(+), 119 deletions(-)
+ delete mode 100644 package/cargo/Config.in.host
+ delete mode 100644 package/cargo/cargo.hash
+ delete mode 100644 package/cargo/cargo.mk
+ rename package/{cargo => rust}/config.in (100%)
 
 --
-ELB
+2.21.0
