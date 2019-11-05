@@ -1,138 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Nov 2019 23:39:17 +0100
-Subject: [Buildroot] [git commit] Update for 2019.11-rc1
-Message-ID: <20191105223307.445138E870@busybox.osuosl.org>
+From: Stephan Henningsen <stephan@asklandd.dk>
+Date: Tue,  5 Nov 2019 23:42:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sudo: make adding 'sudo' group+rule
+ optional
+Message-ID: <20191105224229.20488-1-stephan@asklandd.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78d373f78746de9222ca7ac1063dc2b324973776
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Stephan Henningsen <stephan+buildroot@asklandd.dk>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+I have concerns about the change that was made to my original patch;
+Instead of having the 'sudo' group and sudoers rule enabled by the user
+manually and thereby giving her concent, a change was made to apply the
+option silently.
+
+While I do understand that making this all default will make the user
+experience a bit smoother, I fear that this won't be the case for
+everyone.
+
+My motivations for making it an option to begin with (and for this
+follow-up patch) are the following:
+
+1) Not everyone may be interested in the added rule to /etc/sudoers; it
+may even conflict with a custom rule. For example if a custom rule was
+added that does not prompt for user password, then the newly added rule,
+which does prompt for user password, maybe break automated cronjobs that
+rely on sudo for elevated priviledges without a password prompt.
+
+2) Adding this group and rule is only one of many use-cases of the sudo
+package; some people may prefer adding custom rules that only allow
+certain well-known users (e.g. alice, bob) or certain system groups
+(e.g. wheel, daemon) to become root.  These users may have to manually
+revert the changes now done to their /etc/sudoers.
+
+3) If only a little, this addition adds to the size of the system's
+attack surface, potentially inadvertently allowing users to become root.
+
+4) Not everyone may be interested in the added non-standard system group
+'sudo'; they may even have to manually revert the changes now done to
+their /etc/groups to trim it.
+
+5) We're chaning default behavior of a security-critical package that may
+affect systems that have run in production of years.
+
+Most of this is just speculation, of course.  But the fact remains that
+the default behavior of a package that deals with elevating user
+priviledges has been changed, and for no real reason at all.  "If it ain't
+broke, don't fix it" certain seems fitting, I think.
+
+Signed-off-by: Stephan Henningsen <stephan+buildroot@asklandd.dk>
 ---
- CHANGES                    |  2 +-
- Makefile                   |  4 ++--
- docs/website/download.html | 22 +++++++++++-----------
- docs/website/news.html     | 23 +++++++++++++++++++++++
- 4 files changed, 37 insertions(+), 14 deletions(-)
+ package/sudo/Config.in | 13 +++++++++++++
+ package/sudo/sudo.mk   |  2 ++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index fa741be405..ab9f10278e 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,4 +1,4 @@
--2019.11-rc1, not yet released
-+2019.11-rc1, released November 5th, 2019
+diff --git a/package/sudo/Config.in b/package/sudo/Config.in
+index cbef15d67b..982a4ffaa8 100644
+--- a/package/sudo/Config.in
++++ b/package/sudo/Config.in
+@@ -9,3 +9,16 @@ config BR2_PACKAGE_SUDO
+ 	  but still allow people to get their work done.
  
- 	Fixes all over the tree and new features.
- 
-diff --git a/Makefile b/Makefile
-index bab34ab9b5..c78c2cbcf6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2019.11-git
-+export BR2_VERSION := 2019.11-rc1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1567371000
-+BR2_VERSION_EPOCH = 1572993000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 18d7bd52c9..bc8cb3c0ef 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -75,41 +75,41 @@
- 	  <p><a href="/downloads/buildroot-2019.08.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--<!--
--      <h3 style="text-align: center;">Latest release candidate: <b>2019.08-rc3</b></h3>
+ 	  http://www.sudo.ws/sudo/
 +
-+      <h3 style="text-align: center;">Latest release candidate: <b>2019.11-rc1</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.08-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.08-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2019.08-rc3.tar.gz">buildroot-2019.08-rc3.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2019.08-rc3.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.11-rc1.tar.gz">buildroot-2019.11-rc1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.11-rc1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.08-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.11-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.08-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.11-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2019.08-rc3.tar.bz2">buildroot-2019.08-rc3.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2019.08-rc3.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.11-rc1.tar.bz2">buildroot-2019.11-rc1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.11-rc1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
---->
++if BR2_PACKAGE_SUDO
 +
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 42db4dd7a1..53b1c1b95d 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,29 @@
- <h2>News</h2>
- <ul class="timeline">
++config BR2_PACKAGE_SUDO_GROUP_AND_RULE
++	bool "add group 'sudo' and enable associated sudoers rule"
++	default n
++	help
++	  Creates a group named 'sudo', and enables the following rule
++	  in the /etc/sudoers configuration file that allows members of
++	  group 'sudo' to execute any command as root:
++
++	  %sudo ALL=(ALL) ALL
++endif
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 7d52eb0b57..b8c3924d8a 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -74,9 +74,11 @@ define SUDO_USERS
+ 	- - sudo -1 - - - -
+ endef
  
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.11-rc1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 November 2019</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>We have a new release candidate! Lots of changes all over the
-+	  tree, see the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.11-rc1">CHANGES</a>
-+	  file for details.
-+	</p>
-+
-+	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.11-rc1.tar.bz2">2019.11-rc1
-+	    release candidate</a>, and report any problems found to the
-+	  <a href="support.html">mailing list</a> or
-+	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++ifeq ($(BR2_PACKAGE_SUDO_GROUP_AND_RULE),y)
+ define SUDO_ENABLE_SUDO_GROUP_RULE
+ 	$(SED) '/^# \%sudo\tALL=(ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
+ endef
+ SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_ENABLE_SUDO_GROUP_RULE
++endif
+ 
+ $(eval $(autotools-package))
+-- 
+2.17.1
