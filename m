@@ -1,88 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Nov 2019 17:38:30 +0100
-Subject: [Buildroot] [PATCH v7 3/8] core: implement per-package SDK and
- target
-In-Reply-To: <b92540ca-37ad-42ad-9bf3-eee8f6f6ed26@cesnet.cz>
-References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
- <20181228104335.22379-4-thomas.petazzoni@bootlin.com>
- <b92540ca-37ad-42ad-9bf3-eee8f6f6ed26@cesnet.cz>
-Message-ID: <20191105173830.6c8fc5d1@windsurf>
+Date: Tue,  5 Nov 2019 17:46:41 +0100
+Subject: [Buildroot] [PATCH next v8 2/6] Makefile: allow top-level parallel
+ build with BR2_PER_PACKAGE_DIRECTORIES=y
+In-Reply-To: <20191105164646.23820-1-thomas.petazzoni@bootlin.com>
+References: <20191105164646.23820-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20191105164646.23820-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jan,
+With per-package folder support, top-level parallel build becomes
+safe, so we can enclose the .NOTPARALLEL statement in a
+!BR2_PER_PACKAGE_DIRECTORIES condition.
 
-Yes, some feedback on an almost year old comment!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ Makefile | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
 
-On Tue, 08 Jan 2019 19:02:56 +0100
-Jan Kundr?t <jan.kundrat@cesnet.cz> wrote:
-
-> I gave this series (the ppsh-v7-work merged into master, actually, with a 
-> revert of 51395b14ed1a23858eef5d7f2bcf3a03cca6dfb3). The only immediate 
-> breakage I see so far on my config (ARM, systemd, glibc, linaro toolchain) 
-> is related to systemd-networkd and its /etc/resolv.conf symlink handling, 
-> but I am afraid that I see a bigger problem.
-> 
-> The basic skeleton defines a symlink (it's in 
-> system/skeleton/etc/resolv.conf) pointing to ../tmp/resolv.conf . This is 
-> overwritten in package/systemd/systemd.mk through 
-> SYSTEMD_INSTALL_RESOLVCONF_HOOK, and indeed it results in a correct symlink 
-> in the systemd's per-package target dir:
-> 
->   per-package/systemd/target/etc/resolv.conf -> 
-> ../run/systemd/resolve/resolv.conf
-> 
-> The problem is that at the rsync time, packages are processed in 
-> alphabetical order. If the very last package to be rsynced (in my case, 
-> this is zlib) does not transitively depend on systemd, then rsync will 
-> update the /etc/resolv.conf symlink back to one obtained from the default 
-> skeleton.
-
-Indeed. Clearly, we have identified since quite a while that the
-per-package directory mechanism only works if all packages install
-distinct set of files, unless they have a dependency relationship.
-
-> I think that this is -- potentially -- also a problem for any package "P2" 
-> which calls `ln -sf` from its *_INSTALL_TARGET_HOOKS to overwrite stuff 
-> which belongs to another package "P1". If any other package "P3" depends on 
-> "P1" and not on "P2", *and* if P3's name sorts after P2, then the P1's 
-> symlink gets preserved via P3.
-> 
-> This will not necessary be fixed by changing to do the rsync in a 
-> dependency order because "P3" can still be rsynced after "P2".
-> 
-> What is the cleanest fix here? Should this symlink overriding go to 
-> *_TARGET_FINALIZE_HOOKS? If the `ln -sf` was just in TARGET_FINALIZE_HOOKS, 
-> that would mean that the corresponding per-package/*/target would *not* 
-> contain these fixes which would be quite confusing, IMHO... OTOH, two hooks 
-> for overwriting would be ugly.
-
-For the case of resolv.conf, I think solving it through a
-TARGET_FINALIZE_HOOKS is probably the most appropriate option for now.
-We'll have to see later on if we have other cases like this, and if
-there is a pattern that allows us to invent some useful bit of
-additional infrastructure.
-
-Or we could:
-
- (1) Move the /etc/resolv.conf symlink from system/skeleton/ to
-     package/skeleton-init-sysv/skeleton/etc.
-
- (2) Tweak the systemd.mk so that it always creates resolv.conf, either
-     pointing to ../run/systemd/resolve/resolv.conf when resolved is
-     enabled, or to /tmp/resolv.conf otherwise.
-
-This would avoid the overwriting entirely.
-
-What do you think ?
-
-Best regards,
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 823c219c86..c117da7e8c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -227,21 +227,12 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ -include $(BR2_CONFIG)
+ endif
+ 
+-# Parallel execution of this Makefile is disabled because it changes
+-# the packages building order, that can be a problem for two reasons:
+-# - If a package has an unspecified optional dependency and that
+-#   dependency is present when the package is built, it is used,
+-#   otherwise it isn't (but compilation happily proceeds) so the end
+-#   result will differ if the order is swapped due to parallel
+-#   building.
+-# - Also changing the building order can be a problem if two packages
+-#   manipulate the same file in the target directory.
+-#
+-# Taking into account the above considerations, if you still want to execute
+-# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
+-# use the -j<jobs> option when building, e.g:
+-#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),)
++# Disable top-level parallel build if per-package directories is not
++# used. Indeed, per-package directories is necessary to guarantee
++# determinism and reproducibility with top-level parallel build.
+ .NOTPARALLEL:
++endif
+ 
+ # timezone and locale may affect build output
+ ifeq ($(BR2_REPRODUCIBLE),y)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
