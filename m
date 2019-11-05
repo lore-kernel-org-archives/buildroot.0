@@ -1,43 +1,99 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 5 Nov 2019 19:50:05 +0100
-Subject: [Buildroot] [git commit] package/sudo: new config to add sudo group
+Date: Tue, 5 Nov 2019 19:51:14 +0100
+Subject: [Buildroot] [PATCH] package/sudo: new config to add sudo group
  and rule
-Message-ID: <20191105184322.387B78E810@busybox.osuosl.org>
+In-Reply-To: <20191103214153.24621-1-stephan@asklandd.dk>
+References: <20191103214153.24621-1-stephan@asklandd.dk>
+Message-ID: <20191105185114.GM2710@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a751f6ba8a5299bbca2ed748deababed05e2a444
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Stephan, All,
 
-Signed-off-by: Stephan Henningsen <stephan+buildroot@asklandd.dk>
-[yann.morin.1998 at free.fr:
-  - drop the conditional creation
-  - uid -is -'- when username is
-  - leading TAB in user table, squeeze other spaces
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/sudo/sudo.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On 2019-11-03 22:41 +0100, Stephan Henningsen spake thusly:
+> From: Stephan Henningsen <stephan+buildroot@asklandd.dk>
+> 
+> Signed-off-by: Stephan Henningsen <stephan+buildroot@asklandd.dk>
+> ---
+>  package/sudo/Config.in | 15 +++++++++++++++
+>  package/sudo/sudo.mk   | 13 +++++++++++++
+>  2 files changed, 28 insertions(+)
+> 
+> diff --git a/package/sudo/Config.in b/package/sudo/Config.in
+> index cbef15d67b..403d634ceb 100644
+> --- a/package/sudo/Config.in
+> +++ b/package/sudo/Config.in
+> @@ -9,3 +9,18 @@ config BR2_PACKAGE_SUDO
+>  	  but still allow people to get their work done.
+>  
+>  	  http://www.sudo.ws/sudo/
+> +
+> +
+> +if BR2_PACKAGE_SUDO
+> +
+> +config BR2_PACKAGE_SUDO_GROUP_AND_RULE
+> +	bool "add group 'sudo' and enable associated sudo rule"
+> +	select BR2_PACKAGE_SUDO_GROUP
+> +	help
+> +	  Creates a group named 'sudo', and enables the following rule
+> +	  in the /etc/sudoers configuration file that allows members of
+> +	  group 'sudo' to execute any command as root:
+> +
+> +	  %sudo ALL=(ALL) ALL
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index ab58f308ec..7d52eb0b57 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -70,4 +70,13 @@ define SUDO_REMOVE_DIST_EXAMPLES
- endef
- SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_REMOVE_DIST_EXAMPLES
- 
-+define SUDO_USERS
-+	- - sudo -1 - - - -
-+endef
-+
-+define SUDO_ENABLE_SUDO_GROUP_RULE
-+	$(SED) '/^# \%sudo\tALL=(ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
-+endef
-+SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_ENABLE_SUDO_GROUP_RULE
-+
- $(eval $(autotools-package))
+I thought the conclusion from the previous iteration was that the
+addition of the group and sudo rules were to be non-optional.
+
+> +endif
+> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+> index cf8b63b1db..5df39b193e 100644
+> --- a/package/sudo/sudo.mk
+> +++ b/package/sudo/sudo.mk
+> @@ -64,4 +64,17 @@ define SUDO_PERMISSIONS
+>  	/usr/bin/sudo f 4755 0 0 - - - - -
+>  endef
+>  
+> +ifeq ($(BR2_PACKAGE_SUDO_GROUP_AND_RULE),y)
+> +define SUDO_USERS
+> +    -               -1   sudo            -1   -             -            -         -
+
+When the username is '-', even the uid is ignored, we usually make it
+'-' too. Also, there are too many spaces (see PERMISSIONS above).
+
+So, I removed the condition (and thus the Config.in option), tweaked the
+USERS variable, and pushed to master now.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +
+> +define SUDO_ENABLE_SUDO_GROUP_RULE
+> +	$(SED) '/^# \%sudo\tALL=(ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
+> +endef
+> +
+> +SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_ENABLE_SUDO_GROUP_RULE
+> +
+> +endif
+> +
+>  $(eval $(autotools-package))
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
