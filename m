@@ -1,65 +1,38 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 5 Nov 2019 10:19:41 +0000
-Subject: [Buildroot] [PATCH] toolchain,
- glibc: Allow ARC big endian glibc builds
-In-Reply-To: <20191101190337.13411-1-vgupta@synopsys.com>
-References: <20191101190337.13411-1-vgupta@synopsys.com>
-Message-ID: <CY4PR1201MB0120ABDDCAB8033A0268CDC1A17E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+From: Patrick Havelange <patrick.havelange@essensium.com>
+Date: Tue, 5 Nov 2019 11:50:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 3.2.1
+In-Reply-To: <20191104220147.6b9ac9c2@windsurf.home>
+References: <20191104131237.27902-1-patrick.havelange@essensium.com>
+ <20191104220147.6b9ac9c2@windsurf.home>
+Message-ID: <e773c862-6bc0-b71b-342c-d85f4ba7a29d@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vineet,
+On 04.11.19 22:01, Thomas Petazzoni wrote:
+> On Mon,  4 Nov 2019 14:12:37 +0100
+> Patrick Havelange <patrick.havelange@essensium.com> wrote:
+> 
+>> Some lxc segfaults (in 3.1.0) are fixed in this newer version.
+>> New dependency on !UCLIBC as fexecve() is required now.
+>>
+>> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+>> ---
+>>   package/lxc/Config.in | 6 ++++--
+>>   package/lxc/lxc.hash  | 2 +-
+>>   package/lxc/lxc.mk    | 2 +-
+>>   3 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> Applied to master, thanks. Could you report the bug to the upstream
+> uClibc-ng project that lxc can't be built/used anymore due to fexecve()
+> being missing ?
 
-> -----Original Message-----
-> From: Vineet Gupta <vgupta@synopsys.com>
-> Sent: Friday, November 1, 2019 10:04 PM
-> To: buildroot at busybox.net
-> Cc: linux-snps-arc at lists.infradead.org; Alexey Brodkin <abrodkin@synopsys.com>; Evgeniy Didin
-> <didin@synopsys.com>; Vineet Gupta <vgupta@synopsys.com>
-> Subject: [PATCH] toolchain,glibc: Allow ARC big endian glibc builds
-> 
-> Apparently big endian glibc builds just work, if we let the endian
-> header allow that (which prev was #error).
-> 
-> So this patch bumps glibc to version which fixes the header (this
-> hopefully will become arc-2019.09-release) and then enables arceb
-> in glibc toolchain builds
-> 
-> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-> ---
->  package/glibc/glibc.mk                  | 2 +-
->  toolchain/toolchain-buildroot/Config.in | 3 ++-
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index d46063c5d111..754408881397 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
-> 
->  ifeq ($(BR2_arc),y)
-> -GLIBC_VERSION =  arc-2019.03-release
-> +GLIBC_VERSION = ec681dddfa99894513c85da7d5d257b60d04f915
->  GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
->  else ifeq ($(BR2_RISCV_32),y)
->  GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index c0612bf04176..587e097a9c92 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -48,7 +48,8 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
->  		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
->  		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
->  		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
-> -		   (BR2_arcle && BR2_ARC_ATOMIC_EXT) || BR2_csky
-> +		   ((BR2_arcle || BR2_arceb) && BR2_ARC_ATOMIC_EXT)     || \
-> +		   BR2_csky
+Done, https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/issues/5
 
-I guess here we may just use "BR2_arc" which is set for both BR2_arcle && BR2_arceb,
-see https://git.buildroot.org/buildroot/tree/arch/Config.in.arc#n54
-
--Alexey
+> 
+> Thanks,
+> 
+> Thomas
+> 
