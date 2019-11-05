@@ -1,68 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 5 Nov 2019 20:54:49 +0100
-Subject: [Buildroot] [PATCH] package/linux-serial-test: new package
-In-Reply-To: <20191105115607.5406-1-yegorslists@googlemail.com>
-References: <20191105115607.5406-1-yegorslists@googlemail.com>
-Message-ID: <20191105195449.GN2710@scaer>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 5 Nov 2019 14:19:28 -0600
+Subject: [Buildroot] [PATCH 1/1] package/domoticz: fix build with RELRO
+In-Reply-To: <20191104231237.1954d080@windsurf.home>
+References: <20191031102306.15433-1-fontaine.fabrice@gmail.com>
+ <20191031134302.685d1858@windsurf.home>
+ <CAPi7W81G6kXj_ueiGDq2ocz_Q8HesGVDpp5g7BgXJ1qpqpu6WQ@mail.gmail.com>
+ <20191104231237.1954d080@windsurf.home>
+Message-ID: <CANQCQpYQN5siLJi80xqbqbW81wncZ9mPhSojwWqdc66hDhoaOw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor, All,
+Thomas,
 
-On 2019-11-05 12:56 +0100, yegorslists at googlemail.com spake thusly:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-[--SNIP--]
-> diff --git a/package/linux-serial-test/linux-serial-test.hash b/package/linux-serial-test/linux-serial-test.hash
-> new file mode 100644
-> index 0000000000..4f94bff436
-> --- /dev/null
-> +++ b/package/linux-serial-test/linux-serial-test.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256  d04f4420abfeda5ee62662e790ea6ae5ddc2e758870e04ab76fa35d6de9cdce0  linux-serial-test-9965dad53ba63eea0eea05a0f9d5cb851425fcba.tar.gz
+On Mon, Nov 4, 2019 at 4:12 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> I'm adding a few more people in Cc: Matt, Yann, Arnout, Peter.
+>
+> On Thu, 31 Oct 2019 14:01:33 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > > What is the relationship between using precompiled headers and relro
+> > > build problems ?
+> > I took me some time to understand the issue.
+> > It seems that linker flag such as -Wl,-z,relro should not be used when
+> > building a precompiled header.
+> > I discovered this through this domoticz commit message:
+> > https://github.com/domoticz/domoticz/commit/68698e7a5dce80dea5a9b997d7e171b80bf566ac
+> >
+> > However, this commit does not fix the issue on buildroot as
+> > -Wl,-z,relro is not passed through CXXFLAGS but through our
+> > toolchain-wrapper.
+> > Updating toolchain/toolchain-wrapper.c to add the logic to manage
+> > precompiled header seems more complicated than adding an option to
+> > disable this feature from domoticz.
+>
+> So, I looked into this, found
+> https://lists.fedoraproject.org/pipermail/devel/2011-July/153664.html
+> and https://bugzilla.redhat.com/show_bug.cgi?id=718719.
+>
+> So it really seems like -Wl,-z,relzo should not be passed when
+> compiling. But our compiler wrapper passes it unconditionally when
+> RELRO is enabled.
+>
+> Do we have a way to detect that the wrapper is called to compile or to
+> link ? I don't think we do.
 
-I've added a hash for the license file, and pushed to master now.
+Looks like we can just key on -xc-header or -xc++-header and
+selectively enable the RELRO flags.  I'll do some builds and then send
+a patch if that looks ok.
 
-Thanks!
+https://pastebin.com/XGc8bFxh
 
-Regards,
-Yann E. MORIN.
-
-> diff --git a/package/linux-serial-test/linux-serial-test.mk b/package/linux-serial-test/linux-serial-test.mk
-> new file mode 100644
-> index 0000000000..e10a45ce90
-> --- /dev/null
-> +++ b/package/linux-serial-test/linux-serial-test.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# linux-serial-test
-> +#
-> +################################################################################
-> +
-> +LINUX_SERIAL_TEST_VERSION = 9965dad53ba63eea0eea05a0f9d5cb851425fcba
-> +LINUX_SERIAL_TEST_SITE = $(call github,cbrake,linux-serial-test,$(LINUX_SERIAL_TEST_VERSION))
-> +LINUX_SERIAL_TEST_LICENSE = MIT
-> +LINUX_SERIAL_TEST_LICENSE_FILES = LICENSES/MIT
-> +
-> +$(eval $(cmake-package))
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Matt
