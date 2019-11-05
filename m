@@ -1,88 +1,88 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  5 Nov 2019 12:56:07 +0100
-Subject: [Buildroot] [PATCH] package/linux-serial-test: new package
-Message-ID: <20191105115607.5406-1-yegorslists@googlemail.com>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Tue, 5 Nov 2019 12:02:59 +0000
+Subject: [Buildroot] [RFC PATCH v2 05/30] llvm: add config to build
+ backend for host arch
+In-Reply-To: <fa174a39-24ea-3b27-fb67-68a431863df7@mind.be>
+References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
+ <20191017152929.49153-6-michael.drake@codethink.co.uk>
+ <59ddb71c-d7e4-c314-3d19-d28d8fea68cd@mind.be>
+ <fa174a39-24ea-3b27-fb67-68a431863df7@mind.be>
+Message-ID: <9fb7d609-fba3-7a5d-6f41-7c7123f9c71d@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
++Romain Naour, as we discussed this on the #buildroot channel yesterday. 
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/linux-serial-test/Config.in              |  6 ++++++
- package/linux-serial-test/linux-serial-test.hash |  2 ++
- package/linux-serial-test/linux-serial-test.mk   | 12 ++++++++++++
- 5 files changed, 22 insertions(+)
- create mode 100644 package/linux-serial-test/Config.in
- create mode 100644 package/linux-serial-test/linux-serial-test.hash
- create mode 100644 package/linux-serial-test/linux-serial-test.mk
+Hi all,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 24c57b25f7..33273ce6c8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2504,6 +2504,7 @@ F:	package/libsocketcan/
- F:	package/libubox/
- F:	package/libuci/
- F:	package/linux-firmware/
-+F:	package/linux-serial-test/
- F:	package/modem-manager/
- F:	package/nftables/
- F:	package/nuttcp/
-diff --git a/package/Config.in b/package/Config.in
-index 1ad1d49a8a..f72c77b416 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -470,6 +470,7 @@ endmenu
- 	source "package/libubootenv/Config.in"
- 	source "package/libuio/Config.in"
- 	source "package/linux-backports/Config.in"
-+	source "package/linux-serial-test/Config.in"
- 	source "package/linuxconsoletools/Config.in"
- 	source "package/lirc-tools/Config.in"
- 	source "package/lm-sensors/Config.in"
-diff --git a/package/linux-serial-test/Config.in b/package/linux-serial-test/Config.in
-new file mode 100644
-index 0000000000..9ba4badc92
---- /dev/null
-+++ b/package/linux-serial-test/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LINUX_SERIAL_TEST
-+	bool "linux-serial-test"
-+	help
-+	  Serial port test utility.
-+
-+	  https://github.com/cbrake/linux-serial-test
-diff --git a/package/linux-serial-test/linux-serial-test.hash b/package/linux-serial-test/linux-serial-test.hash
-new file mode 100644
-index 0000000000..4f94bff436
---- /dev/null
-+++ b/package/linux-serial-test/linux-serial-test.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  d04f4420abfeda5ee62662e790ea6ae5ddc2e758870e04ab76fa35d6de9cdce0  linux-serial-test-9965dad53ba63eea0eea05a0f9d5cb851425fcba.tar.gz
-diff --git a/package/linux-serial-test/linux-serial-test.mk b/package/linux-serial-test/linux-serial-test.mk
-new file mode 100644
-index 0000000000..e10a45ce90
---- /dev/null
-+++ b/package/linux-serial-test/linux-serial-test.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# linux-serial-test
-+#
-+################################################################################
-+
-+LINUX_SERIAL_TEST_VERSION = 9965dad53ba63eea0eea05a0f9d5cb851425fcba
-+LINUX_SERIAL_TEST_SITE = $(call github,cbrake,linux-serial-test,$(LINUX_SERIAL_TEST_VERSION))
-+LINUX_SERIAL_TEST_LICENSE = MIT
-+LINUX_SERIAL_TEST_LICENSE_FILES = LICENSES/MIT
-+
-+$(eval $(cmake-package))
--- 
-2.17.1
+On 19/10/2019 23:20, Arnout Vandecappelle wrote:
+> On 20/10/2019 00:04, Arnout Vandecappelle wrote:
+>> On 17/10/2019 17:29, Michael Drake wrote:
+>>> From: Joseph Kogut <joseph.kogut@gmail.com>
+>>  We need a bit more explanation why this option is useful/needed.
+>>
+>>> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+>>> Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+>>> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+> 
+>  I think I should clarify my review a little...
+> 
+>  I think this should be split into two patches, where I doubt the second one is
+> relevant:
+> 
+> 1. Add the host arch as a target for the host-llvm build. I think this can be
+> done unconditionally, which makes the patch a whole lot simpler.
+> 
+> 2. Add a Config.in.host option for llvm. This is only useful if you want to use
+> host-llvm outside of Buildroot, in a post-build/image script. I don't think this
+> is the case.
+> 
+>  If the patch is reduced to the first bit, then I think the
+> BR2_PACKAGE_HOST_LLVM_HOST_ARCH symbol (the only bit remaining in
+> Config.in.host) should move to Config.in. And the change to the .mk file becomes
+> very simple, as I indicated.
+> 
+
+We agree that the above changes simplify this patch, and have rolled them in. Thanks!
+
+We had an issue yesterday where this didn't actually allow LLVM to build for the host
+architecture, but rebuilding all of the LLVM packages fixed that:
+    
+    host-llvm, host-clang, host-lld
+    
+We also have to explicitly use lld, as clang tries to use the
+arm-buildroot-linux-gnueabihf-ld linker. We noticed this is turned off in
+llvm.mk:
+
+    HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_LLD=OFF
+
+Is there still a reason for this now that host-lld exists?
+
+Many thanks,
+Thomas
+
+P.s. Here is some working output:
+    
+$ codethink/docker-run.sh ./output/host/bin/llc --version
+
+LLVM (http://llvm.org/):
+  LLVM version 9.0.0
+  Optimized build.
+  Default target: arm-buildroot-linux-gnueabihf
+  Host CPU: znver1
+
+  Registered Targets:
+    arm     - ARM
+    armeb   - ARM (big endian)
+    thumb   - Thumb
+    thumbeb - Thumb (big endian)
+    x86     - 32-bit X86: Pentium-Pro and above
+    x86-64  - 64-bit X86: EM64T and AMD64
+
+$ ./codethink/docker-run.sh output/host/bin/clang -target x86_64-linux-gnu -fuse-ld=/mnt/output/host/bin/ld.lld -o hello hello.c
+
+$ ./hello
+Hello, world
