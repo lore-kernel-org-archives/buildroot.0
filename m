@@ -1,112 +1,135 @@
 From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Tue, 5 Nov 2019 12:41:57 +0000
-Subject: [Buildroot] [PATCH 1/1] utils: add a csv to xml conversion script
- for legal info, rendering as html
-In-Reply-To: <17534e09b92af585ca4aca23718bf0e5d5b1db77.camel@orolia.com>
-References: <20191027161523.30907-1-nicolas.carrier@orolia.com>
- <20191102114449.GB2710@scaer>,
- <17534e09b92af585ca4aca23718bf0e5d5b1db77.camel@orolia.com>
-Message-ID: <AM6PR06MB43416BC282E6A6B77D75854F847E0@AM6PR06MB4341.eurprd06.prod.outlook.com>
+Date: Tue, 5 Nov 2019 12:51:12 +0000
+Subject: [Buildroot] [PATCH v4 2/2] support/testing: add bmap_tools test
+In-Reply-To: <20191105125039.1443-1-nicolas.carrier@orolia.com>
+References: <20191105125039.1443-1-nicolas.carrier@orolia.com>
+Message-ID: <20191105125039.1443-2-nicolas.carrier@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch implements a simple test in which a dummy file system image
+is created, then `bmaptool create` and `bmaptool copy` are used to copy
+it to another file.
 
+---
 
-Hello Yann,
-Thank you for taking the time to review this proposal.
+Changes v3 -> v4:
+  - no change
 
-I tried the very same sequence of commands and it worked for me with
-Firefox 70.0, Chrome 77.0.3865.120 and Chromium 76.0.3809.100.
+Changes v2 -> v3:
+  - title changed to "support/testing: add bmap_tools test"
+    I followed Arnout's suggestion, but if there's a veto on that I can still
+    change...
+  - added myself in the DEVELOPERS file for both test scripts
+  - implemented genericity following Thomas' comment, i.e. without ABC, which
+    results in a simpler, cleaner and shorter code (thank you btw ^^)
+  - fixed all the defects reported by flake8
+  - increased timeout to 20s
 
-I suspect something related to your particular installation /
-configuration of Firefox.
-Have you been able to test with another web browser by chance?
+I saw that most of the python tests duplicate code between tests for v2 and v3.
+I think we should factor that, even if only small portions of code are
+concerned and, of course, I'm willing to do that if it's considered a good idea.
 
-Can you please try to launch Firefox with a blank profile? Something
-like the following should work:
+---
 
-     $ mkdir output/temp-profile
-     $ firefox -profile output/temp-profile/ -no-remote -new-instance
-http://127.0.0.1:1234/output/legal-info/legal-info.xml
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+---
+ DEVELOPERS                                    |  2 +
+ .../tests/package/sample_bmap_tools.sh        | 15 ++++++
+ .../testing/tests/package/test_bmap_tools.py  | 47 +++++++++++++++++++
+ 3 files changed, 64 insertions(+)
+ create mode 100755 support/testing/tests/package/sample_bmap_tools.sh
+ create mode 100644 support/testing/tests/package/test_bmap_tools.py
 
-Can you also try to generate the html file with the xsltproc command-
-line and check if you have the same issue? As a reminder:
-
-     $ xsltproc --output output/legal-info/legal-info.html
-output/legal-info/legal-info.xml
-
-You can then try to open output/legal-info/legal-info.html either
-directly in firefox and via the HTTP server you launched via python.
-
-
-And then, last, can you please try using the attached xsl file instead,
-which has neither styling nor javascript?
-
-
-PS: this is a resend to the busybox ML which I originally forgot to add to the recipients list.
-On Sat, 2019-11-02 at 12:44 +0100, Yann E. MORIN wrote:
-> Nicolas, All,
->
-> On 2019-10-27 16:15 +0000, Nicolas Carrier spake thusly:
-> > An xsl file is provided alongside the python script, which is
-> > referenced
-> > by the generated xml.
-> > This xsl file can be customized at will by users if they want to
-> > add, say
-> > extra information, styling or even a logo...
-> > When the xml file is served in http, browsers like firefox can
-> > render it
-> > as if it was pure HTML.
->
-> It does not work for me, unfortunately. From a clean tree:
->
->     $ make defconfig
->     $ make legal-info
->     $ ./utils/legal-info-to-xml output/legal-info/manifest.csv \
->                                >output/legal-info/legal-info.xml
->     $ cp utils/legal-info.xsl output/legal-info/legal-info.xsl
->     $ python2 -m SimpleHTTPServer 1234
->
-> And then in firefox:
->
->     http://127.0.0.1:1234/output/legal-info/legal-info.xml
->
-> Then firefox will never stop "loading" the page (the boucing loading
-> symbol in the tab will never stop). However, opening the console
-> (F12)
-> will indeed show the HTML page with the expected content (see
-> attached
-> HTML page). But the firefox page stays blank...
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------
-> ------------.
-> >  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> > conspiracy: |
-> > +33 662 376 056 | Software  Designer | \ /
-> > CAMPAIGN     |  ___               |
-> > +33 561 099 427 `------------.-------
-> > :  X  AGAINST      |  \e/  There is no  |
-> > http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML
-> > MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------
-> ------------'
-> ATTENTION: This email came from an external source.
-> Do not open attachments or click on links from unknown senders or
-> unexpected emails.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191105/92abfc41/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: legal-info.xsl
-Type: application/xslt+xml
-Size: 750 bytes
-Desc: legal-info.xsl
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191105/92abfc41/attachment.xslt>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 947722a8c7..5a8888ab90 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1730,6 +1730,8 @@ F:	package/uacme/
+ 
+ N:	Nicolas Carrier <nicolas.carrier@orolia.com>
+ F:	package/bmap-tools/
++F:	support/testing/tests/package/sample_bmap_tools.sh
++F:	support/testing/tests/package/test_bmap_tools.py
+ 
+ N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+ F:	package/libgit2/
+diff --git a/support/testing/tests/package/sample_bmap_tools.sh b/support/testing/tests/package/sample_bmap_tools.sh
+new file mode 100755
+index 0000000000..7c90368c17
+--- /dev/null
++++ b/support/testing/tests/package/sample_bmap_tools.sh
+@@ -0,0 +1,15 @@
++#!/bin/sh
++# simple test which creates a dummy file system image, then use bmaptool create
++# and bmaptool copy to copy it to another file
++
++set -xeu
++
++# create the necessary test files
++dd if=/dev/zero of=disk.img bs=2M count=1
++mkfs.ext4 disk.img
++fallocate -d disk.img
++dd if=/dev/zero of=copy.img bs=2M count=1
++
++# do a test copy of the file system image
++bmaptool create -o disk.img.bmap disk.img
++bmaptool copy disk.img copy.img
+diff --git a/support/testing/tests/package/test_bmap_tools.py b/support/testing/tests/package/test_bmap_tools.py
+new file mode 100644
+index 0000000000..7ea4057aba
+--- /dev/null
++++ b/support/testing/tests/package/test_bmap_tools.py
+@@ -0,0 +1,47 @@
++import os
++import infra
++
++from infra.basetest import BRTest
++
++
++class TestBmapTools(BRTest):
++    __test__ = False
++    sample_script = "tests/package/sample_bmap_tools.sh"
++    copy_script = 'tests/package/copy-sample-script-to-target.sh'
++    config = f'''
++        {infra.basetest.BASIC_TOOLCHAIN_CONFIG}
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_PACKAGE_BMAP_TOOLS=y
++        BR2_ROOTFS_POST_BUILD_SCRIPT="{infra.filepath(copy_script)}"
++        BR2_ROOTFS_POST_SCRIPT_ARGS="{infra.filepath(sample_script)}"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_UTIL_LINUX=y
++        BR2_PACKAGE_UTIL_LINUX_FALLOCATE=y
++        BR2_PACKAGE_E2FSPROGS=y
++        BR2_PACKAGE_UTIL_LINUX_LIBUUID=y
++        '''
++
++    def login(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++    def test_run(self):
++        self.login()
++        cmd = f"/root/{os.path.basename(self.sample_script)}"
++        _, exit_code = self.emulator.run(cmd, timeout=20)
++        self.assertEqual(exit_code, 0)
++
++
++class TestPy2BmapTools(TestBmapTools):
++    __test__ = True
++    config = f"""{TestBmapTools.config}
++    BR2_PACKAGE_PYTHON=y"""
++
++
++class TestPy3BmapTools(TestBmapTools):
++    __test__ = True
++    config = f"""{TestBmapTools.config}
++    BR2_PACKAGE_PYTHON3=y"""
+-- 
+2.20.1
