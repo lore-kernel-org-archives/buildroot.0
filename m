@@ -1,55 +1,85 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue,  5 Nov 2019 22:12:52 +0100
-Subject: [Buildroot] [RFC PATCH 0/7] Rust: drop cargo package
-Message-ID: <20191105211259.27673-1-eric.le.bihan.dev@free.fr>
+Date: Tue,  5 Nov 2019 22:12:53 +0100
+Subject: [Buildroot] [RFC PATCH 1/7] package/rust: build and install cargo
+In-Reply-To: <20191105211259.27673-1-eric.le.bihan.dev@free.fr>
+References: <20191105211259.27673-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20191105211259.27673-2-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Cargo source code is not provided anymore as a separate tarball but is
+now built along with the Rust compiler.
 
-The source code for Cargo, the build and package manager for Rust, is now
-shipped along with the compiler and standard library.
+So update rust host variant to build Cargo and install the
+cross-compilation configuration file.
 
-So there can not be a standalone package for Cargo anymore.
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/rust/config.in |  2 ++
+ package/rust/rust.mk   | 25 ++++++++++++++++++++++++-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+ create mode 100644 package/rust/config.in
 
-This series does the following:
-
-- update host-rust to build and install Cargo.
-- install host-cargo-bin if host-rust-bin is selected instead of host-rust.
-- update dependencies for package(s) using Cargo.
-- remove cargo packaging.
-- update the packaging documentation.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2019-October/264437.html
-
-Eric Le Bihan (7):
-  package/rust: build and install cargo
-  package/cargo-bin: install if rust-bin selected
-  package/rust-bin: host variant depends on host-cargo-bin
-  package/rust: drop dependency on host-cargo-bin
-  package/ripgrep: depends on host-rustc
-  package/cargo: drop package
-  docs/manual: cargo packages depend on host-rustc
-
- docs/manual/adding-packages-cargo.txt | 11 ++--
- package/Config.in.host                |  1 -
- package/cargo-bin/cargo-bin.mk        |  7 +++
- package/cargo/Config.in.host          |  9 ---
- package/cargo/cargo.hash              |  8 ---
- package/cargo/cargo.mk                | 91 ---------------------------
- package/ripgrep/Config.in             |  1 -
- package/ripgrep/ripgrep.mk            |  2 +-
- package/rust-bin/rust-bin.mk          |  1 +
- package/{cargo => rust}/config.in     |  0
- package/rust/rust.mk                  | 26 +++++++-
- 11 files changed, 38 insertions(+), 119 deletions(-)
- delete mode 100644 package/cargo/Config.in.host
- delete mode 100644 package/cargo/cargo.hash
- delete mode 100644 package/cargo/cargo.mk
- rename package/{cargo => rust}/config.in (100%)
-
---
+diff --git a/package/rust/config.in b/package/rust/config.in
+new file mode 100644
+index 0000000000..47fad026be
+--- /dev/null
++++ b/package/rust/config.in
+@@ -0,0 +1,2 @@
++[target. at RUSTC_TARGET_NAME@]
++linker = "@CROSS_PREFIX at gcc"
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 5d14fc6682..901995c203 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -47,11 +47,14 @@ define HOST_RUST_CONFIGURE_CMDS
+ 		echo 'python = "$(HOST_DIR)/bin/python2"'; \
+ 		echo 'submodules = false'; \
+ 		echo 'vendor = true'; \
++		echo 'extended = true'; \
++		echo 'tools = ["cargo"]'; \
+ 		echo 'compiler-docs = false'; \
+ 		echo 'docs = false'; \
+ 		echo 'verbose = $(HOST_RUST_VERBOSITY)'; \
+ 		echo '[install]'; \
+ 		echo 'prefix = "$(HOST_DIR)"'; \
++		echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
+ 		echo '[rust]'; \
+ 		echo 'channel = "stable"'; \
+ 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
+@@ -64,9 +67,29 @@ define HOST_RUST_BUILD_CMDS
+ 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py build
+ endef
+ 
+-define HOST_RUST_INSTALL_CMDS
++define HOST_RUST_INSTALL_RUST_BIN
+ 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py dist
+ 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py install
+ endef
+ 
++define HOST_RUST_INSTALL_CARGO_BIN
++	find $(@D)/build/tmp/dist -maxdepth 2 -wholename '*cargo*/install.sh' \
++		-exec {} --prefix=$(HOST_DIR) --disable-ldconfig \;
++endef
++
++define HOST_RUST_INSTALL_CARGO_CONFIG
++	$(INSTALL) -D package/rust/config.in \
++		$(HOST_DIR)/share/cargo/config
++	$(SED) 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
++		$(HOST_DIR)/share/cargo/config
++	$(SED) 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
++		$(HOST_DIR)/share/cargo/config
++endef
++
++define HOST_RUST_INSTALL_CMDS
++	$(HOST_RUST_INSTALL_RUST_BIN)
++	$(HOST_RUST_INSTALL_CARGO_BIN)
++	$(HOST_RUST_INSTALL_CARGO_CONFIG)
++endef
++
+ $(eval $(host-generic-package))
+-- 
 2.21.0
