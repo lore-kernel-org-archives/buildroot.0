@@ -1,57 +1,46 @@
-From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Tue,  5 Nov 2019 09:35:02 -0800
-Subject: [Buildroot] [PATCH v2] toolchain,
- glibc: Allow ARC big endian glibc builds
-In-Reply-To: <CY4PR1201MB0120ABDDCAB8033A0268CDC1A17E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
-References: <CY4PR1201MB0120ABDDCAB8033A0268CDC1A17E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
-Message-ID: <20191105173502.11553-1-vgupta@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 5 Nov 2019 19:27:48 +0100
+Subject: [Buildroot] [git commit] package/freerdp: fix pulseaudio support
+Message-ID: <20191105182602.61B9A8E801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apparently big endian glibc builds just work, if we let the endian
-header allow that (which prev was #error).
+commit: https://git.buildroot.net/buildroot/commit/?id=807495a88588ecd675ba4a39fa0de2ad8d2fa05d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So this patch bumps glibc to version which fixes the header (this
-hopefully will become arc-2019.09-release) and then enables arceb
-in glibc toolchain builds
+The name of the option to enable/disable support for pulseaudio has been
+in flux in FreeRDP, soemtimes being WITH_PULSE, sometimes being the
+erroneous WITH_PULSEAUDIO. Eventually, FreeRDP came to their feet, and
+fixed it to WITH_PULSE everywhere.
 
-Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+[yann.morin.1998 at free.fr:
+  - remove useless (obsolete) WITH_PULSEAUDIO
+  - fix the else clause too
+  - enhance commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes since v1
-  - Use BR2_arc iso BR2_arcle && BR2_arcbe
----
- package/glibc/glibc.mk                  | 2 +-
- toolchain/toolchain-buildroot/Config.in | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freerdp/freerdp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index d46063c5d111..754408881397 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 0f32ff4718..293b6b5c01 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -50,10 +50,10 @@ FREERDP_CONF_OPTS += -DWITH_ALSA=OFF
+ endif
  
- ifeq ($(BR2_arc),y)
--GLIBC_VERSION =  arc-2019.03-release
-+GLIBC_VERSION = ec681dddfa99894513c85da7d5d257b60d04f915
- GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
- else ifeq ($(BR2_RISCV_32),y)
- GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index c0612bf04176..327314585b8e 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -48,7 +48,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
- 		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
- 		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
--		   (BR2_arcle && BR2_ARC_ATOMIC_EXT) || BR2_csky
-+		   (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
--- 
-2.20.1
+ ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
+-FREERDP_CONF_OPTS += -DWITH_PULSEAUDIO=ON
++FREERDP_CONF_OPTS += -DWITH_PULSE=ON
+ FREERDP_DEPENDENCIES += pulseaudio
+ else
+-FREERDP_CONF_OPTS += -DWITH_PULSEAUDIO=OFF
++FREERDP_CONF_OPTS += -DWITH_PULSE=OFF
+ endif
+ 
+ # For the systemd journal
