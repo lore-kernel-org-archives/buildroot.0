@@ -1,44 +1,110 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  5 Nov 2019 17:46:45 +0100
-Subject: [Buildroot] [PATCH next v8 6/6] docs/manual: document the effect of
- per-package directory on variables
+Date: Tue,  5 Nov 2019 17:46:44 +0100
+Subject: [Buildroot] [PATCH next v8 5/6] docs/manual: add details about
+ top-level parallel build support
 In-Reply-To: <20191105164646.23820-1-thomas.petazzoni@bootlin.com>
 References: <20191105164646.23820-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191105164646.23820-7-thomas.petazzoni@bootlin.com>
+Message-ID: <20191105164646.23820-6-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As suggested by Arnout Vandecappelle, this commit adjusts the
-generic-package documentation to document the effect of per-package
-directory support on HOST_DIR, STAGING_DIR and TARGET_DIR.
-
-Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/adding-packages-generic.txt | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ docs/manual/common-usage.txt        | 47 +++++++++++++++++++++++++++++
+ docs/manual/faq-troubleshooting.txt |  3 ++
+ docs/manual/quickstart.txt          |  8 ++---
+ 3 files changed, 54 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index b2386f2c01..86300e7460 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -586,6 +586,13 @@ In the action definitions, you can use the following variables:
- * +$(TARGET_CROSS)+ to get the cross-compilation toolchain prefix
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index a87980d4a2..2d315de440 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -347,6 +347,53 @@ Refer to the help text of this script for more details:
+ utils/size-stats-compare -h
+ ----------------
  
- * Of course the +$(HOST_DIR)+, +$(STAGING_DIR)+ and +$(TARGET_DIR)+
--  variables to install the packages properly.
-+  variables to install the packages properly. Those variables point to
-+  the global _host_, _staging_ and _target_ directories, unless
-+  _per-package directory_ support is used, in which case they point to
-+  the current package _host_, _staging_ and _target_ directories. In
-+  both cases, it doesn't make any difference from the package point of
-+  view: it should simply use +HOST_DIR+, +STAGING_DIR+ and
-+  +TARGET_DIR+. See xref:top-level-parallel-build[] for more details
-+  about _per-package directory_ support.
++[[top-level-parallel-build]]
++=== Top-level parallel build
++
++.Note
++This section deals with a very experimental feature, which is known to
++break even in some non-unusual situations. Use at your own risk.
++
++Buildroot has always been capable of using parallel build on a per
++package basis: each package is built by Buildroot using +make -jN+ (or
++the equivalent invocation for non-make-based build systems). The level
++of parallelism is by default number of CPUs + 1, but it can be
++adjusted using the +BR2_JLEVEL+ configuration option.
++
++Until 2019.02, Buildroot was however building packages in a serial
++fashion: each package was built one after the other, without
++parallelization of the build between packages. As of 2019.02,
++Buildroot has experimental support for *top-level parallel build*,
++which allows some signicant build time savings by building packages
++that have no dependency relationship in parallel. This feature is
++however marked as experimental and is known not to work in some cases.
++
++In order to use top-level parallel build, one must:
++
++. Enable the option +BR2_PER_PACKAGE_DIRECTORIES+ in the Buildroot
++configuration
++
++. Use +make -jN+ when starting the Buildroot build
++
++Internally, the +BR2_PER_PACKAGE_DIRECTORIES+ will enable a mechanism
++called *per-package directories*, which will have the following
++effects:
++
++* Instead of a global _target_ directory and a global _host_ directory
++  common to all packages, per-package _target_ and _host_ directories
++  will be used, in +$(O)/per-package/<pkg>/target/+ and
++  +$(O)/per-package/<pkg>/host/+ respectively. Those folders will be
++  populated from the corresponding folders of the package dependencies
++  at the beginning of +<pkg>+ build. The compiler and all other tools
++  will therefore only be able to see and access files installed by
++  dependencies explicitly listed by +<pkg>+.
++
++* At the end of the build, the global _target_ and _host_ directories
++  will be populated, located in +$(O)/target+ and +$(O)/host+
++  respectively. This means that during the build, those folders will
++  be empty and it's only at the very end of the build that they will
++  be populated.
++
+ include::eclipse-integration.txt[]
  
- Finally, you can also use hooks. See xref:hooks[] for more information.
+ include::advanced.txt[]
+diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+index b144c9e7f0..5adf3fa6ce 100644
+--- a/docs/manual/faq-troubleshooting.txt
++++ b/docs/manual/faq-troubleshooting.txt
+@@ -239,3 +239,6 @@ help reduce the build time:
+ 
+  * Buy new hardware. SSDs and lots of RAM are key to speeding up the
+    builds.
++
++ * Experiment with top-level parallel build, see
++   xref:top-level-parallel-build[].
+diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
+index 74158ae249..77b73ef116 100644
+--- a/docs/manual/quickstart.txt
++++ b/docs/manual/quickstart.txt
+@@ -60,10 +60,10 @@ To start the build process, simply run:
+  $ make
+ --------------------
+ 
+-You *should never* use +make -jN+ with Buildroot: top-level parallel
+-make is currently not supported. Instead, use the +BR2_JLEVEL+ option
+-to tell Buildroot to run the compilation of each individual package
+-with +make -jN+.
++By default, Buildroot does not support top-level parallel build, so
++running +make -jN+ is not necessary. There is however experimental
++support for top-level parallel build, see
++xref:top-level-parallel-build[].
+ 
+ The `make` command will generally perform the following steps:
+ 
 -- 
 2.21.0
