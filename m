@@ -1,46 +1,33 @@
-From: Heiko Thiery <Heiko.Thiery@kontron.com>
-Date: Tue, 5 Nov 2019 08:19:23 +0000
-Subject: [Buildroot] [PATCH 1/1] package/sysrepo: fix host/staging
- install steps
-In-Reply-To: <20191105090931.5b8953c9@windsurf>
-References: <20191103060113.4884-1-heiko.thiery@gmail.com>
- <20191104223848.5e67d301@windsurf.home>
- <CAEyMn7bdb24JJnVQMa+Tr_uBQU3vHEdcnj6vxEMewr3oADXfrA@mail.gmail.com>
- <20191105090931.5b8953c9@windsurf>
-Message-ID: <645328c13bf64cca873529e470eb453d@kontron.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 05 Nov 2019 09:27:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 3.2.1
+In-Reply-To: <9th69gxcp2.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
+ message of "Mon, 04 Nov 2019 22:30:49 +0100")
+References: <20191104131237.27902-1-patrick.havelange@essensium.com>
+ <20191104220147.6b9ac9c2@windsurf.home>
+ <9th69gxcp2.ln2@ID-313208.user.individual.net>
+Message-ID: <878soug23m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-> -----Urspr?ngliche Nachricht-----
-> Von: Thomas Petazzoni [mailto:thomas.petazzoni at bootlin.com]
-> Gesendet: Dienstag, 5. November 2019 09:10
-> An: Heiko Thiery
-> Cc: Heiko Thiery; buildroot at buildroot.org
-> Betreff: Re: [Buildroot] [PATCH 1/1] package/sysrepo: fix host/staging install
-> steps
-> 
-> On Tue, 5 Nov 2019 09:03:27 +0100
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
-> 
-> > The problem comes from the hardcoded TARGET_DIR that is compiled-in
-> > the needed host tools (sysrepocfg, sysrepoctl) in the build host step.
-> > This value is used
-> > as target for this tools as well as search path for other dependencies.
-> > With this all install steps tries to install parts into that
-> > TARGET_DIR. I think it is not really clean that this happens. When I
-> > just do the part hat only the tools are build in the host step. Then
-> > the staging will fail because there are missing files that are
-> > expected to be located in the TARGET_DIR. The tools have the hardcoded
-> > search path set to the TARGET_DIR.
-> 
-> Hum, OK. Did you talk about this with the upstream project ?
-> 
-> Your proposed solution is probably good as a workaround, but long term it
-> would be nice to have the upstream sysrepo project support better cross-
-> compilation, by solving those paths issues.
+ > Am Mon, 04 Nov 2019 22:01:47 +0100 schrieb Thomas Petazzoni:
+ >> Applied to master, thanks. Could you report the bug to the upstream
+ >> uClibc-ng project that lxc can't be built/used anymore due to fexecve()
+ >> being missing ?
 
-I agree. I tried this and it is still ongoing.
+ > Hi Thomas,
+
+ > we already had http://patchwork.ozlabs.org/patch/1148360/ which also 
+ > included the information that this bump fixed CVE-2019-5736.
+
+And was more complete, E.G. had the openssl support logic.
+
+Care to send a followup patch adding that?
+
+-- 
+Bye, Peter Korsgaard
