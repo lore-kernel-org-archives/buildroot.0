@@ -1,197 +1,84 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  6 Nov 2019 21:44:32 +0100
-Subject: [Buildroot] [PATCH 3/5] package/rpi-userland: bump version to
- 5070cb7f
-In-Reply-To: <20191106204434.24898-1-ps.report@gmx.net>
-References: <20191106204434.24898-1-ps.report@gmx.net>
-Message-ID: <20191106204434.24898-3-ps.report@gmx.net>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Wed, 6 Nov 2019 17:45:53 -0300
+Subject: [Buildroot] [PATCH] package/modem-manager: use libqmi and
+ libmbim if they are selected
+In-Reply-To: <168ba3a0-d921-d4d8-7dac-506226ced5fd@mind.be>
+References: <20191104124844.8112-1-unixmania@gmail.com>
+ <20191104220513.5e8c6269@windsurf.home>
+ <168ba3a0-d921-d4d8-7dac-506226ced5fd@mind.be>
+Message-ID: <CAJ4jsafLcLMp7qEu19Cb13CRsDAKWimDqMEaaU-2_sPghJyiEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- rebased 0003-Disable-Werror-everywhere.patch
-- remove vcfiled support (upstream removed, see [1])
+On Wed, Nov 6, 2019 at 10:12 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 04/11/2019 22:05, Thomas Petazzoni wrote:
+> > Hello,
+> >
+> > Adding our Config.in.legacy expert Arnout.
+> >
+> > On Mon,  4 Nov 2019 09:48:44 -0300
+> > unixmania at gmail.com wrote:
+> >
+> >> diff --git a/Config.in.legacy b/Config.in.legacy
+> >> index fcb10b1291..3336ef85d1 100644
+> >> --- a/Config.in.legacy
+> >> +++ b/Config.in.legacy
+> >> @@ -146,6 +146,22 @@ endif
+> >>
+> >>  comment "Legacy options removed in 2019.11"
+> >>
+> >> +config BR2_PACKAGE_MODEM_MANAGER_LIBMBIM
+> >> +    bool "BR2_PACKAGE_MODEM_MANAGER_LIBMBIM has been removed"
+> >> +    select BR2_LEGACY
+> >> +    select BR2_PACKAGE_LIBMBIM
+> >> +    help
+> >> +      Select BR2_PACKAGE_LIBMBIM to enable support for MBIM protocol
+> >> +      in ModemManager
+> >> +
+> >> +config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+> >> +    bool "BR2_PACKAGE_MODEM_MANAGER_LIBQMI has been removed"
+> >> +    select BR2_LEGACY
+> >> +    select BR2_PACKAGE_LIBQMI
+> >> +    help
+> >> +      Select BR2_PACKAGE_LIBQMI to enable support for QMI protocol
+> >> +      in ModemManager
+> >
+> > I think in this specific case, we don't need Config.in.legacy handling.
+> > Indeed, a full .config that had BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+> > enabled will already have BR2_PACKAGE_LIBQMI, and since the .mk file
+> > now relies on BR2_PACKAGE_LIBQMI to enable libqmi support in
+> > modem-manager, I think we're good.
+> >
+> > Of course, that won't work for defconfigs, but I believe updating with
+> > a defconfig is not really guaranteed to give the right result. Arnout ?
+>
+>  In my point of view, indeed it isn't, but this isn't documented anywhere I think.
+>
+>  So indeed, I agree that no legacy handling is needed here. It will annoy many
+> users (because they have to go and disable it in the legacy menu), while being
+> of no benefit for most of them.
+>
+>  Regards,
+>  Arnout
+>
+>
+> > Other than that, patch looks good to me. No need to resend, let's just
+> > wait to see what Arnout says about the Config.in.legacy handling.
+> >
+> > Best regards,
+> >
+> > Thomas
+> >
 
-[1] https://github.com/raspberrypi/userland/commit/f00a1189b9f8246dc24c45985de599c50b8c62a5
+I suggest to apply https://patchwork.ozlabs.org/patch/1186596/ to
+solve the build problem, then we can decide if modem-manager and
+network-manager need additional changes.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- Config.in.legacy                              |  6 +++++
- .../0003-Disable-Werror-everywhere.patch      | 27 +++++++------------
- package/rpi-userland/Config.in                |  7 -----
- package/rpi-userland/rpi-userland.hash        |  2 +-
- package/rpi-userland/rpi-userland.mk          | 23 ++--------------
- 5 files changed, 18 insertions(+), 47 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index fcb10b1291..7167b1d60c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
-
- comment "Legacy options removed in 2019.11"
-
-+config BR2_PACKAGE_RPI_USERLAND_START_VCFILED
-+	bool "rpi-userland start vcfiled was removed"
-+	select BR2_LEGACY
-+	help
-+	  The vcfiled support was removed upstream.
-+
- config BR2_PACKAGE_ALLJOYN
- 	bool "alljoyn was removed"
- 	select BR2_LEGACY
-diff --git a/package/rpi-userland/0003-Disable-Werror-everywhere.patch b/package/rpi-userland/0003-Disable-Werror-everywhere.patch
-index 7fb2f97978..27c8acdd41 100644
---- a/package/rpi-userland/0003-Disable-Werror-everywhere.patch
-+++ b/package/rpi-userland/0003-Disable-Werror-everywhere.patch
-@@ -1,4 +1,4 @@
--From 8275a380658070336df0c404f0ff585d27681836 Mon Sep 17 00:00:00 2001
-+From cc9ac86bcff79697d354cc51d3a984fd0f362868 Mon Sep 17 00:00:00 2001
- From: Peter Seiderer <ps.report@gmx.net>
- Date: Thu, 22 Sep 2016 22:59:11 +0200
- Subject: [PATCH] Disable Werror everywhere
-@@ -15,6 +15,9 @@ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
- [Rebased for rpi-userland-8f0abfb07b96e7ee85f46e59d895014ec5e25f5e]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+
-+[Rebased for rpi-userland-5070cb7fc150fc98f1ed64a7739c3356970d9f76]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-  host_applications/android/apps/vidtex/CMakeLists.txt | 2 +-
-  host_applications/linux/apps/gencmd/CMakeLists.txt   | 2 +-
-@@ -26,8 +29,7 @@ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-  interface/vcos/CMakeLists.txt                        | 2 +-
-  interface/vcos/pthreads/CMakeLists.txt               | 2 +-
-  interface/vmcs_host/CMakeLists.txt                   | 2 +-
-- interface/vmcs_host/linux/vcfiled/CMakeLists.txt     | 2 +-
-- 11 files changed, 11 insertions(+), 11 deletions(-)
-+ 10 files changed, 10 insertions(+), 10 deletions(-)
-
- diff --git a/host_applications/android/apps/vidtex/CMakeLists.txt b/host_applications/android/apps/vidtex/CMakeLists.txt
- index 6d66d69..06a3192 100644
-@@ -55,7 +57,7 @@ index f95d1a1..034bf20 100644
-
-  include_directories( ../../../..
- diff --git a/host_applications/linux/apps/raspicam/CMakeLists.txt b/host_applications/linux/apps/raspicam/CMakeLists.txt
--index 42636e8..d778f09 100644
-+index f7db21e..b94bdc3 100644
- --- a/host_applications/linux/apps/raspicam/CMakeLists.txt
- +++ b/host_applications/linux/apps/raspicam/CMakeLists.txt
- @@ -1,7 +1,7 @@
-@@ -107,7 +109,7 @@ index 5ce5aca..02aea7c 100644
-
-  include_directories( ../../../..
- diff --git a/interface/mmal/CMakeLists.txt b/interface/mmal/CMakeLists.txt
--index 37ae757..78b24a9 100644
-+index 46f149d..06273dc 100644
- --- a/interface/mmal/CMakeLists.txt
- +++ b/interface/mmal/CMakeLists.txt
- @@ -3,7 +3,7 @@ if (NOT DEFINED LIBRARY_TYPE)
-@@ -146,7 +148,7 @@ index 1d81ca3..b35cd8e 100644
-  endif ()
-
- diff --git a/interface/vmcs_host/CMakeLists.txt b/interface/vmcs_host/CMakeLists.txt
--index fde18da..802c158 100755
-+index a157db1..dc384ca 100755
- --- a/interface/vmcs_host/CMakeLists.txt
- +++ b/interface/vmcs_host/CMakeLists.txt
- @@ -2,7 +2,7 @@
-@@ -158,17 +160,6 @@ index fde18da..802c158 100755
-
-  # vc_vchi_gencmd.c has a type-punning problem in vc_gencmd_read_response
-  add_definitions(-fno-strict-aliasing)
--diff --git a/interface/vmcs_host/linux/vcfiled/CMakeLists.txt b/interface/vmcs_host/linux/vcfiled/CMakeLists.txt
--index aed0e83..d834b3f 100644
----- a/interface/vmcs_host/linux/vcfiled/CMakeLists.txt
--+++ b/interface/vmcs_host/linux/vcfiled/CMakeLists.txt
--@@ -1,5 +1,5 @@
--
---add_definitions(-Werror)
--+add_definitions()
--
-- # vcfiled - serves files to videocore. used for media handlers from
-- # OpenMAX/IL and loading VLLs.
- --
--2.19.0
-+2.23.0
-
-diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
-index 8d349f21e1..342faf26e3 100644
---- a/package/rpi-userland/Config.in
-+++ b/package/rpi-userland/Config.in
-@@ -32,13 +32,6 @@ config BR2_PACKAGE_PROVIDES_LIBOPENVG
- config BR2_PACKAGE_PROVIDES_LIBOPENMAX
- 	default "rpi-userland"
-
--config BR2_PACKAGE_RPI_USERLAND_START_VCFILED
--	bool "Start vcfiled"
--	depends on BR2_INIT_SYSV || BR2_INIT_BUSYBOX
--	help
--	  vcfiled is a daemon serving files to VideoCore from the host
--	  file system.
--
- config BR2_PACKAGE_RPI_USERLAND_HELLO
- 	bool "hello_pi examples"
- 	help
-diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
-index 2502a3f592..6d59f2aafc 100644
---- a/package/rpi-userland/rpi-userland.hash
-+++ b/package/rpi-userland/rpi-userland.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 9424ffa45ef888fb61483c63fd66532c1c648e071fea72c93762efbb3c2a8669 rpi-userland-e5803f2c986cbf8c919c60278b3231dcdf4271a6.tar.gz
-+sha256 d6231e9fa33c805cf7cbb559a0d6eb125605fc2ba862d9e5a3248778dd269859 rpi-userland-5070cb7fc150fc98f1ed64a7739c3356970d9f76.tar.gz
- sha256 bee6f1249175683d8610651706e1aa7dffcbfd3f9c4c05bc1e5ab34f313c2db5 LICENCE
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 20ef2fca98..2b672b6c97 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,31 +4,15 @@
- #
- ################################################################################
-
--RPI_USERLAND_VERSION = e5803f2c986cbf8c919c60278b3231dcdf4271a6
-+RPI_USERLAND_VERSION = 5070cb7fc150fc98f1ed64a7739c3356970d9f76
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3-Clause
- RPI_USERLAND_LICENSE_FILES = LICENCE
- RPI_USERLAND_INSTALL_STAGING = YES
--RPI_USERLAND_CONF_OPTS = -DVMCS_INSTALL_PREFIX=/usr \
--	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) \
--		-DVCFILED_LOCKFILE=\\\"/var/run/vcfiled.pid\\\""
-+RPI_USERLAND_CONF_OPTS = -DVMCS_INSTALL_PREFIX=/usr
-
- RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
-
--ifeq ($(BR2_PACKAGE_RPI_USERLAND_START_VCFILED),y)
--define RPI_USERLAND_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D package/rpi-userland/S94vcfiled \
--		$(TARGET_DIR)/etc/init.d/S94vcfiled
--endef
--define RPI_USERLAND_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 package/rpi-userland/vcfiled.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/vcfiled.service
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../../usr/lib/systemd/system/vcfiled.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/vcfiled.service
--endef
--endif
--
- ifeq ($(BR2_PACKAGE_RPI_USERLAND_HELLO),y)
-
- RPI_USERLAND_CONF_OPTS += -DALL_APPS=ON
-@@ -54,9 +38,6 @@ RPI_USERLAND_CONF_OPTS += -DALL_APPS=OFF
- endif # BR2_PACKAGE_RPI_USERLAND_HELLO
-
- define RPI_USERLAND_POST_TARGET_CLEANUP
--	rm -f $(TARGET_DIR)/etc/init.d/vcfiled
--	rm -f $(TARGET_DIR)/usr/share/install/vcfiled
--	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/install
- 	rm -Rf $(TARGET_DIR)/usr/src
- endef
- RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
---
-2.23.0
+-- 
+Carlos Santos <unixmania@gmail.com>
