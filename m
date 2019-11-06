@@ -1,50 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Nov 2019 23:39:55 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/linux-tools:
- selftests depend on !static
-Message-ID: <20191106223600.A84B38E944@busybox.osuosl.org>
+Date: Wed, 6 Nov 2019 23:38:38 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/python-autobahn:
+ add missing dependency on C++
+Message-ID: <20191106223600.A04A88E944@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b439be342c194b10ff08a73901d26fbe8595fc0
+commit: https://git.buildroot.net/buildroot/commit/?id=cd4b6429c793120913b902da4c63b93737d8542a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-The indirect dependency through kmod was not tracked.
+The indirect dependency via python-cryptography was not set in the
+Config.in.
 
 Detected with randconfig.
 
+And propagate this to the reverse dependencies.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Peter: also propagate to the reverse dependencies]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0c768dbbd90639c03588df15ffee0ddd127f6e41)
+(cherry picked from commit a0e9caf40d7080c91279f2dbd6036c13d8ccd65a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-tools/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/python-autobahn/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 1c660f76f5..ab8cc3891c 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -82,6 +82,7 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
- 	bool"selftests"
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
- 	depends on BR2_USE_MMU  # bash
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LINUX_TOOLS
- 	select BR2_PACKAGE_BASH # runtime
- 	select BR2_PACKAGE_NCURSES
-@@ -103,9 +104,9 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
- 	  This is very much a use at your risk option and may not work
- 	  for every setup or every architecture.
+diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
+index e08d5d58a1..ba54d8b12f 100644
+--- a/package/python-autobahn/Config.in
++++ b/package/python-autobahn/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_AUTOBAHN
+ 	bool "python-autobahn"
++	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography -> python-pyasn
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TXAIO # runtime
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN
+ 	  framework.
  
--comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
-+comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS and a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_LINUX_TOOLS_TMON
- 	bool "tmon"
+ 	  https://pypi.python.org/pypi/autobahn
++
++comment "python-autobahn needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
