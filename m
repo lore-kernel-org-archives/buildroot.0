@@ -1,54 +1,121 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Nov 2019 23:18:36 +0100
-Subject: [Buildroot] [PATCH 2/2] package/qt5/qt5base: add support for
- gcnano-binaries
-In-Reply-To: <20191106155611.31575-3-scooby22@web.de>
-References: <20191106155611.31575-1-scooby22@web.de>
- <20191106155611.31575-3-scooby22@web.de>
-Message-ID: <20191106231836.404b2cf5@windsurf>
+Date: Wed, 6 Nov 2019 23:31:00 +0100
+Subject: [Buildroot] [PATCH 1/1] Include makefiles from GLOBAL_PATCH_DIR
+In-Reply-To: <20191106163748.GA3419@scaer>
+References: <20191026145151.17749-1-jeremy.rosen@smile.fr>
+ <20191106163748.GA3419@scaer>
+Message-ID: <20191106233100.3b66c426@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jens,
+Hello,
 
-On Wed,  6 Nov 2019 16:56:11 +0100
-Jens Kleintje <scooby22@web.de> wrote:
+On Wed, 6 Nov 2019 17:37:48 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-We need your Signed-off-by line in the commit log.
-
-> ---
->  package/qt5/qt5base/qt5base.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+> > * add a function to pkg-utils.mk to include makefiles from GLOBAL_PATCH_DIR
+> > * modify all pkg-* to use it as their first action  
 > 
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 15c9650391..1a152be94b 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -78,6 +78,9 @@ endif
->  ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
->  QT5BASE_CONFIGURE_OPTS += -gbm
->  QT5BASE_DEPENDENCIES += mesa3d
-> +else ifeq ($(BR2_PACKAGE_GCNANO_BINARIES),y)
-> +QT5BASE_CONFIGURE_OPTS += -gbm
-> +QT5BASE_DEPENDENCIES += gcnano-binaries
+> So I finally took the time to think about this patch. This is not really
+> a review per-se, because the core of the changes are pretty trivial
+> overall.
+> 
+> Rather, it is mostly my point of view on the subject, and why I think
+> an override-based solution is a bad idea. We discussed this during the
+> last dev-days, but for posterity, I'll recap all here to spur more
+> comments.
 
-I think at some point, we will have to get rid of this, using a libgbm
-virtual package. I tried at
-https://github.com/tpetazzoni/buildroot/commits/gbm, but it was not
-very convincing as the existing gbm implementation we have were not
-really compatible with each other. But perhaps this will make more
-sense now.
+Here is also my point of view. I will contradict Yann on several
+points, but this does not necessarily mean that I strongly support the
+patch. It's just an attempt at providing a different point of view in
+the discussion.
 
-Anyway, don't worry about this: we won't make this a requirement to
-merge the gcnano-binaries support. We can for now do it like you're
-proposing.
+> First, this solution does not cover all use-cases. One major drawback it
+> has, is that it can't allow overriding the version of a package. The
+> reason for this limitation is that he .hash file is not overridden, so it
+> is not possible to provide an alternate version. However, when exposed
+> with your proposal, the very first thing most users thought about using
+> it for, was *exactly* for that: changing the version of the package.
+> 
+> So, the most obvious limitations of this solution, is also the most
+> obvious use-case users would expect to use it for. Big drawback...
 
-But we do need your Signed-off-by line in the commit log.
+True, but could we also allow overriding the .hash file ? Perhaps we
+could specify that in a BR2_EXTERNAL tree, package/foo/foo.mk gets
+included at the end of package/foo/foo.mk of the main Buildroot tree,
+right before the $(eval $(something-package)), and that
+package/foo/foo.hash in the BR2_EXTERNAL takes precedence over
+package/foo/foo.hash in the Buildroot tree. I agree it starts to be
+messy and complicated, but probably not impossible either.
 
-Thanks,
+> Second, the excuse for such an override is to be able to claim not
+> touching the Buildroot tree, and to be able to update the Buildroot tree
+> with just a simple "git pull".
+> 
+> I believe this is broken by design, because this actually hides breakage
+> when updating Buildroot. When you update Buildroot, you have to account
+> for the changes in the new version: new config options, new variables,
+> new values in existing variables, or even changes deep in the various
+> infrastructures. A proper override would have to go so far as to unset
+> all the variables of a package before redefining it entirely.
+> 
+> Hiding local changes away in an override actually is a missed opportunity
+> to notice these changes with actual merge (or rebase) conflicts, instead
+> leading to issues much later down the road, which means a lot of time
+> lost. That would not show semantic conflicts, true, but actual
+> code-level conflicts would show, and they would probably be the most
+> common.
+> 
+> So, I am afraid that these overrides are a poor excuse for not wanting to
+> do actual VCS work.
+
+Well, you are the one who introduced BR2_EXTERNAL in the first place!
+And what we can put today in a BR2_EXTERNAL is in fact what is the
+easiest to maintain using a VCS inside the Buildroot tree: new
+defconfigs, new packages, board/ artefacts. These are always new files,
+they will never conflict in any way when rebasing, etc. And still, we
+agreed on adding BR2_EXTERNAL, even if at the time there was the same
+concern: why don't people simply use the capabilities of their VCS.
+
+> Third, since the override is outside the Buildroot tree (if it were in,
+> there would be no point in the override to begin with), it means it is
+> easy to miss it in critical times. Some packages in Buildroot are
+> licensed under copyleft licenses (GPL, LGPL...), and those have 
+> requirements reading something along the lines of "complete source code
+> means [...], plus the scripts used to control compilation and
+> installation of the executable." Scripts which happens to be Buildroot
+> in our case, and the stuff in your override.
+> 
+> Since the override would live in a separate tree with private, non
+> public stuff, it would be very easy to miss it when coming into
+> compliance for such packages, as one would be tempted to only distribute
+> their Buildroot tree.
+
+The problem already exists today with BR2_EXTERNAL: one can easily mess
+up and create a BR2_EXTERNAL with a mix of GPL-licensed packages and
+proprietary-licensed packages, and forget to redistribute the source
+code of the BR2_EXTERNAL. So that doesn't really seem like a good
+argument against Jeremy's patch: the problem already exists today, and
+we can't avoid it. Jeremy's patch doesn't really make it better or
+worse.
+
+A reasonably sane person would probably use two BR2_EXTERNAL: a first
+one with the additional GPL-licensed packages + the package overrides
+to existing Buildroot packages, and a second one with all the
+proprietary/product-specific bits. The first BR2_EXTERNAL would be
+published, not the second one.
+
+> In conclusion, my position on this topic is pretty straightforward: if
+> you want to modify the package recipes, then do so, and do so your the
+> Buildroot tree. Use a branch that contains your changes, and when you
+> need, merge a new master (or stable, or LTS) into your branch.
+
+So we can remove the BR2_EXTERNAL feature ? :-)
+
+Best regards,
 
 Thomas
 -- 
