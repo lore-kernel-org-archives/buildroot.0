@@ -1,62 +1,62 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  6 Nov 2019 20:18:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 19.2.3
-Message-ID: <20191106191825.12153-1-bernd.kuhls@t-online.de>
+Date: Wed, 06 Nov 2019 20:37:02 +0100
+Subject: [Buildroot] [PATCH next v8 0/6] Top-level parallel build support
+References: <20191105164646.23820-1-thomas.petazzoni@bootlin.com>
+Message-ID: <uvjb9gxeno.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-Created patch for master branch because the bump is a bugfix release.
+Am Tue, 05 Nov 2019 17:46:39 +0100 schrieb Thomas Petazzoni:
 
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+> This is really only the core changes. It is sufficient for a number of
+> configuration, but we know some specific packages are broken with
+> per-package directories (for example: Qt5).
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 8c1494c0a2..65d1c49cdb 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 19.2.2
-+MESA3D_HEADERS_VERSION = 19.2.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index d478c51a22..11ad50158c 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2019-October/000551.html
--sha256 7e4f0e2678bfcf3b94f533078b514f37943378a4a8604e477c888ec8a2904394  mesa-19.2.2.tar.xz
--sha512 a3269052c2dfb5404180d1aebd68f5b9b0cc136d634ba89fed3f60fcc9b279072e09ee2db9b485375d39e886209053841df920c9d0b975e0de2825e3da4164a5  mesa-19.2.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2019-November/000553.html
-+sha256 5ee6e42504fe41dcc9a6eba26982656a675b2550a640946f463927ed7f1c5047  mesa-19.2.3.tar.xz
-+sha512 a64a6b508c28a61b9f5a50f639d0cdca2546caa2118c2478100e3535961d76bf3877357d4a7ddd7dc1d3dfc617883c8ee188915523b003aed8db03e0d5e1c007  mesa-19.2.3.tar.xz
- 
- # License
- sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 3d470baa66..972a2e8847 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 19.2.2
-+MESA3D_VERSION = 19.2.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.20.1
+Hi,
+
+are you, at this stage, interested in per-package bug reports?
+
+If yes, this defconfig does not build:
+
+BR2_x86_64=y
+BR2_x86_core2=y
+BR2_PER_PACKAGE_DIRECTORIES=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/
+tarballs/br-x86-64-core2-full-2019.05.1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_APR_UTIL=y
+
+>>> apr-util 1.6.1 Building
+PATH="/home/buildroot/br/output/per-package/apr-util/host/bin:/home/
+buildroot/br/output/per-package/apr-util/host/sbin:/usr/lib/android-ndk:/
+usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"  /usr/bin/make   
+-C /home/buildroot/br/output/build/apr-util-1.6.1/
+make[1]: Entering directory '/home/buildroot/br/output/build/apr-
+util-1.6.1'
+make[2]: Entering directory '/home/buildroot/br/output/build/apr-
+util-1.6.1'
+/bin/bash /home/buildroot/br/output/per-package/apr/host/x86_64-buildroot-
+linux-uclibc/sysroot/usr/build-1/libtool --silent --mode=compile /home/
+buildroot/br/output/per-package/apr/host/bin/x86_64-linux-gcc   -
+D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -
+DLINUX -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H    -D_LARGEFILE_SOURCE -
+D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/buildroot/br/output/
+build/apr-util-1.6.1/include -I/home/buildroot/br/output/build/apr-
+util-1.6.1/include/private  -I/home/buildroot/br/output/per-package/apr-
+util/host/x86_64-buildroot-linux-uclibc/sysroot/usr/bin/../../usr/include/
+apr-1    -o xml/apr_xml.lo -c xml/apr_xml.c && touch xml/apr_xml.lo
+xml/apr_xml.c:35:10: fatal error: expat.h: No such file or directory
+ #include <expat.h>
+          ^~~~~~~~~
+compilation terminated.
+
+Regards, Bernd
