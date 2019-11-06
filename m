@@ -1,106 +1,69 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Wed, 6 Nov 2019 18:23:05 +0100
-Subject: [Buildroot] [PATCH v3 1/2]
- package/freescale-imx/imx-m4-firmware: new package
-In-Reply-To: <20191105120304.19928-1-fabrice.goucem@nxp.com>
-References: <20191030133955.30611-1-fabrice.goucem@nxp.com>
- <20191105120304.19928-1-fabrice.goucem@nxp.com>
-Message-ID: <20191106172305.GA24513@g751>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  6 Nov 2019 18:59:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/minizip: fix options
+Message-ID: <20191106175957.32565-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Options have been prefixed by MZ_ since version 2.8.3 and
+https://github.com/nmoinvaz/minizip/commit/cdedc087e7306fbe2c73d4302920846f5c4a8a11
 
-On Tue, Nov 05, 2019 at 12:03:55PM +0000, Fabrice Goucem wrote:
-> New package to download and install i.MX Cortex-M4 firmware
-> for following SoCs:
-> * i.MX7D
-> * i.MX7ULP
-> * i.MX8M
-> * i.MX8MM
-> * i.MX8QXP
+This will fix a build failure with php due to the compat headers being
+enabled
 
-Any reason why there's no i.MX6SX package?
+Fixes:
+ - http://autobuild.buildroot.org/results/fee97d1879b5ea2d9630b2ae629f12b0e202a50e
 
-> Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
-> Tested-by: Julien Olivain <julien.olivain@nxp.com>
-> ---
->  DEVELOPERS                                    |  3 +
->  board/freescale/common/imx/post-image.sh      | 14 +++-
->  package/freescale-imx/Config.in               |  8 +++
->  .../freescale-imx/imx-m4-firmware/Config.in   | 11 +++
->  .../imx-m4-firmware/imx-m4-firmware.hash      |  8 +++
->  .../imx-m4-firmware/imx-m4-firmware.mk        | 72 +++++++++++++++++++
->  6 files changed, 115 insertions(+), 1 deletion(-)
->  create mode 100644 package/freescale-imx/imx-m4-firmware/Config.in
->  create mode 100644 package/freescale-imx/imx-m4-firmware/imx-m4-firmware.hash
->  create mode 100644 package/freescale-imx/imx-m4-firmware/imx-m4-firmware.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 24c57b25f7..93f395ed69 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -874,6 +874,9 @@ F:	package/tinydtls/
->  F:	package/tinymembench/
->  F:	package/whois/
->  
-> +N:	Fabrice Goucem <fabrice.goucem@nxp.com>
-> +F:	package/freescale-imx/imx-m4-firmware/
-> +
->  N:	Falco Hyfing <hyfinglists@gmail.com>
->  F:	package/python-pymodbus/
->  
-> diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-> index 19d8fffb63..f9851c2d3b 100755
-> --- a/board/freescale/common/imx/post-image.sh
-> +++ b/board/freescale/common/imx/post-image.sh
-> @@ -30,6 +30,18 @@ linux_image()
->  	fi
->  }
->  
-> +#
-> +# m4_image prints all available M4 firmware file names for the genimage
-> +# configuration file
-> +#
-> +m4_image()
-> +{
-> +	if grep -Eq "^BR2_PACKAGE_IMX_M4_FIRMWARE=y$" ${BR2_CONFIG}; then
-> +		echo -n ", "
-> +		for f in $(ls ${BINARIES_DIR}/m4_*); do echo -n "$(basename $f), "; done
-> +	fi
-> +}
-> +
->  genimage_type()
->  {
->  	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
-> @@ -75,7 +87,7 @@ uboot_image()
->  
->  main()
->  {
-> -	local FILES="$(dtb_list) $(linux_image)"
-> +	local FILES="$(dtb_list) $(linux_image) $(m4_image)"
->  	local IMXOFFSET="$(imx_offset)"
->  	local UBOOTBIN="$(uboot_image)"
->  	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
-> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-> index f010aab87b..76694bc788 100644
-> --- a/package/freescale-imx/Config.in
-> +++ b/package/freescale-imx/Config.in
-> @@ -83,10 +83,18 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
->  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
->  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
->  
-> +config BR2_PACKAGE_FREESCALE_IMX_HAS_M4
-> +	bool
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
-> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
-> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
-> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/minizip/minizip.mk | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Same here.
-
-Regards,
-Gary
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index bf0b6198b0..3ae8d1d6f0 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -12,30 +12,30 @@ MINIZIP_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ MINIZIP_INSTALL_STAGING = YES
+ MINIZIP_CONF_OPTS = \
+-	$(if $(BR2_PACKAGE_MINIZIP_DEMOS),-DBUILD_TEST=ON) \
+-	-DUSE_COMPAT=OFF
++	$(if $(BR2_PACKAGE_MINIZIP_DEMOS),-DMZ_BUILD_TEST=ON) \
++	-DMZ_COMPAT=OFF
+ MINIZIP_LICENSE = Zlib
+ MINIZIP_LICENSE_FILES = LICENSE
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ MINIZIP_DEPENDENCIES += bzip2
+-MINIZIP_CONF_OPTS += -DUSE_BZIP2=ON
++MINIZIP_CONF_OPTS += -DMZ_BZIP2=ON
+ else
+-MINIZIP_CONF_OPTS += -DUSE_BZIP2=OFF
++MINIZIP_CONF_OPTS += -DMZ_BZIP2=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MINIZIP_DEPENDENCIES += openssl
+-MINIZIP_CONF_OPTS += -DUSE_OPENSSL=ON
++MINIZIP_CONF_OPTS += -DMZ_OPENSSL=ON
+ else
+-MINIZIP_CONF_OPTS += -DUSE_OPENSSL=OFF
++MINIZIP_CONF_OPTS += -DMZ_OPENSSL=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ MINIZIP_DEPENDENCIES += zlib
+-MINIZIP_CONF_OPTS += -DUSE_ZLIB=ON
++MINIZIP_CONF_OPTS += -DMZ_ZLIB=ON
+ else
+-MINIZIP_CONF_OPTS += -DUSE_ZLIB=OFF
++MINIZIP_CONF_OPTS += -DMZ_ZLIB=OFF
+ endif
+ 
+ $(eval $(cmake-package))
+-- 
+2.23.0
