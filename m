@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Nov 2019 23:41:52 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/linux-tools:
+Date: Wed, 6 Nov 2019 23:39:55 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/linux-tools:
  selftests depend on !static
-Message-ID: <20191106223554.E2BA88E93D@busybox.osuosl.org>
+Message-ID: <20191106223600.A84B38E944@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d7d152a77a803bd7785ec1133ff7d17c1d7db50
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8b439be342c194b10ff08a73901d26fbe8595fc0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 The indirect dependency through kmod was not tracked.
 
