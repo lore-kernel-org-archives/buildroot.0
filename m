@@ -1,204 +1,150 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Nov 2019 23:44:25 +0100
-Subject: [Buildroot] [PATCH v2] docs/manual: run-tests run-time test
- framework
-In-Reply-To: <20191105192938.60771-1-matthew.weber@rockwellcollins.com>
-References: <20191105192938.60771-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20191106234425.5af524a2@windsurf>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Thu, 7 Nov 2019 00:41:43 +0200
+Subject: [Buildroot] [PATCH 1/1] Include makefiles from GLOBAL_PATCH_DIR
+In-Reply-To: <20191106233100.3b66c426@windsurf>
+References: <20191026145151.17749-1-jeremy.rosen@smile.fr>
+ <20191106163748.GA3419@scaer> <20191106233100.3b66c426@windsurf>
+Message-ID: <CAMw6YJ+bZy5Pfu849F1qpDJoYR0=a16Qp7p3raLsfiLkjV0wKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi All,
 
-Thanks for contributing this addition to the Buildroot manual!
+Regarding the package replacing by one from the BR2_EXTERNAL, I really
+did not tried this
+just in case may be it may help.
 
-On Tue,  5 Nov 2019 13:29:38 -0600
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+On Thu, Nov 7, 2019 at 12:31 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Wed, 6 Nov 2019 17:37:48 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>
+> > > * add a function to pkg-utils.mk to include makefiles from GLOBAL_PATCH_DIR
+> > > * modify all pkg-* to use it as their first action
+> >
+> > So I finally took the time to think about this patch. This is not really
+> > a review per-se, because the core of the changes are pretty trivial
+> > overall.
+> >
+> > Rather, it is mostly my point of view on the subject, and why I think
+> > an override-based solution is a bad idea. We discussed this during the
+> > last dev-days, but for posterity, I'll recap all here to spur more
+> > comments.
+>
+> Here is also my point of view. I will contradict Yann on several
+> points, but this does not necessarily mean that I strongly support the
+> patch. It's just an attempt at providing a different point of view in
+> the discussion.
+>
+> > First, this solution does not cover all use-cases. One major drawback it
+> > has, is that it can't allow overriding the version of a package. The
+> > reason for this limitation is that he .hash file is not overridden, so it
+> > is not possible to provide an alternate version. However, when exposed
+> > with your proposal, the very first thing most users thought about using
+> > it for, was *exactly* for that: changing the version of the package.
+> >
+> > So, the most obvious limitations of this solution, is also the most
+> > obvious use-case users would expect to use it for. Big drawback...
+>
+> True, but could we also allow overriding the .hash file ? Perhaps we
+> could specify that in a BR2_EXTERNAL tree, package/foo/foo.mk gets
+> included at the end of package/foo/foo.mk of the main Buildroot tree,
+> right before the $(eval $(something-package)), and that
+> package/foo/foo.hash in the BR2_EXTERNAL takes precedence over
+> package/foo/foo.hash in the Buildroot tree. I agree it starts to be
+> messy and complicated, but probably not impossible either.
+>
 
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> index f339ca50b8..91ebd01b47 100644
-> --- a/docs/manual/contribute.txt
-> +++ b/docs/manual/contribute.txt
-> @@ -487,3 +487,128 @@ preserve Unix-style line terminators when downloading raw pastes.
->  Following pastebin services are known to work correctly:
->  - https://gist.github.com/
->  - http://code.bulix.org/
-> +
-> +=== Contributing run-time tests
+Well, I am not a makefile expert but what if BR2_EXTERNAL package might set
+XXX_OVERRIDE_PKG and replace the original package with its content and
+the following
+code in common Makefile (which is in Buildroot tree) will just skip
+including the original package:
 
-The title doesn't seem to match the contents: the writeup you have
-doesn't explain how to contribute run-time tests, but how to use/run
-existing run-time tests. How to contribute/write new tests will require
-additional details.
+    include $(sort $(foreach p,$(wildcard package/*/*.mk),$(if
+$($(call UPPERCASE,$(p))_OVERRIDE_PKG),,$(p))))
 
-> +Buildroot includes a run-time testing framework called run-tests built
-> +upon python scripting and QEMU runtime execution.
+> > Second, the excuse for such an override is to be able to claim not
+> > touching the Buildroot tree, and to be able to update the Buildroot tree
+> > with just a simple "git pull".
+> >
+> > I believe this is broken by design, because this actually hides breakage
+> > when updating Buildroot. When you update Buildroot, you have to account
+> > for the changes in the new version: new config options, new variables,
+> > new values in existing variables, or even changes deep in the various
+> > infrastructures. A proper override would have to go so far as to unset
+> > all the variables of a package before redefining it entirely.
+> >
+> > Hiding local changes away in an override actually is a missed opportunity
+> > to notice these changes with actual merge (or rebase) conflicts, instead
+> > leading to issues much later down the road, which means a lot of time
+> > lost. That would not show semantic conflicts, true, but actual
+> > code-level conflicts would show, and they would probably be the most
+> > common.
+> >
+> > So, I am afraid that these overrides are a poor excuse for not wanting to
+> > do actual VCS work.
+>
+> Well, you are the one who introduced BR2_EXTERNAL in the first place!
+> And what we can put today in a BR2_EXTERNAL is in fact what is the
+> easiest to maintain using a VCS inside the Buildroot tree: new
+> defconfigs, new packages, board/ artefacts. These are always new files,
+> they will never conflict in any way when rebasing, etc. And still, we
+> agreed on adding BR2_EXTERNAL, even if at the time there was the same
+> concern: why don't people simply use the capabilities of their VCS.
+>
+> > Third, since the override is outside the Buildroot tree (if it were in,
+> > there would be no point in the override to begin with), it means it is
+> > easy to miss it in critical times. Some packages in Buildroot are
+> > licensed under copyleft licenses (GPL, LGPL...), and those have
+> > requirements reading something along the lines of "complete source code
+> > means [...], plus the scripts used to control compilation and
+> > installation of the executable." Scripts which happens to be Buildroot
+> > in our case, and the stuff in your override.
+> >
+> > Since the override would live in a separate tree with private, non
+> > public stuff, it would be very easy to miss it when coming into
+> > compliance for such packages, as one would be tempted to only distribute
+> > their Buildroot tree.
+>
+> The problem already exists today with BR2_EXTERNAL: one can easily mess
+> up and create a BR2_EXTERNAL with a mix of GPL-licensed packages and
+> proprietary-licensed packages, and forget to redistribute the source
+> code of the BR2_EXTERNAL. So that doesn't really seem like a good
+> argument against Jeremy's patch: the problem already exists today, and
+> we can't avoid it. Jeremy's patch doesn't really make it better or
+> worse.
+>
+> A reasonably sane person would probably use two BR2_EXTERNAL: a first
+> one with the additional GPL-licensed packages + the package overrides
+> to existing Buildroot packages, and a second one with all the
+> proprietary/product-specific bits. The first BR2_EXTERNAL would be
+> published, not the second one.
+>
+> > In conclusion, my position on this topic is pretty straightforward: if
+> > you want to modify the package recipes, then do so, and do so your the
+> > Buildroot tree. Use a branch that contains your changes, and when you
+> > need, merge a new master (or stable, or LTS) into your branch.
+>
+> So we can remove the BR2_EXTERNAL feature ? :-)
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-python -> Python
-
-"and *optionally* QEMU runtime execution". Indeed, not all tests run
-stuff inside Qemu. Some are really just build tests.
-
-> +
-> +* Builds a well defined configuration
-
-* Optionally, verify some properties of the build output
-
-> +* Boots it under QEMU
-> +* Runs some test to verify that a given feature is working
-> +
-> +These tests are hooked into the Gitlab CI's build and testing
-> +infrastructure. To see the current job status, visit
-> +https://gitlab.com/buildroot.org/buildroot/-/jobs.
-
-I am not sure it's really relevant at this point. Overall, I think
-there are too many references to GitlabCI throughout your write-up,
-while it's in fact a minor detail. It should be mentioned, but perhaps
-just at this end: "Those runtime tests are regularly executed by
-Buildroot Gitlab CI infrastructure, see .gitlab.yml and
-https://gitlab.com/buildroot.org/buildroot/-/jobs.
-
-> +Within the Buildroot repository, the testing framework is organized at the
-> +top level in +support/testing/+ by folders of +conf+, +infra+ and +tests+.
-> +All the test cases live under the +tests+ folder and are organized by +boot+,
-> ++core+, +download+, +fs+, +init+, +package+, +toolchain+, and +utils+.
-
-I don't think it makes much sense to list the subdirectories of +test+,
-as some more subfolders will very likely be added. Also, does it really
-make sense to document that here? It seems more sensible to first
-document how to run/use the runtime tests, and then separately,
-document how to add more tests (which will require providing details
-about how it's working internally).
-
-> +The Gitlab CI job's execute the +support/testing/run-tests+ tool. For a
-
-We don't care about Gitlab CI really. Just say that the entry point to
-run one or several tests is support/testing/run-tests.
-
-> +current set of tool options see the help description by executing the tool
-> +with '-h'. Some common options include setting the download folder, the
-> +output folder, keeping build output, and for multiple test cases, you
-> +can set the JLEVEL for each.
-> +
-> +Here is an example walk through of running a test case.
-> +
-> +* For a first step, lets see what all the test case options are. The test
-> +cases can be listed by executing +support/testing/run-tests -l+. These tests
-> +can all be ran individually during test development from the console. Both
-> +one at a time and selectively as a group of a subset of tests.
-> +
-> +---------------------
-> +$ support/testing/run-tests -l
-> +List of tests
-> +test_run (tests.utils.test_check_package.TestCheckPackage)
-> +Test the various ways the script can be called in a simple top to ... ok
-> +test_run (tests.toolchain.test_external.TestExternalToolchainBuildrootMusl) ... ok
-> +test_run (tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc) ... ok
-> +test_run (tests.toolchain.test_external.TestExternalToolchainCCache) ... ok
-> +test_run (tests.toolchain.test_external.TestExternalToolchainCtngMusl) ... ok
-> +test_run (tests.toolchain.test_external.TestExternalToolchainLinaroArm) ... ok
-> +test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv4) ... ok
-> +test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv5) ... ok
-> +test_run (tests.toolchain.test_external.TestExternalToolchainSourceryArmv7) ... ok
-> +[snip]
-> +test_run (tests.init.test_systemd.TestInitSystemSystemdRoFull) ... ok
-> +test_run (tests.init.test_systemd.TestInitSystemSystemdRoIfupdown) ... ok
-> +test_run (tests.init.test_systemd.TestInitSystemSystemdRoNetworkd) ... ok
-> +test_run (tests.init.test_systemd.TestInitSystemSystemdRwFull) ... ok
-> +test_run (tests.init.test_systemd.TestInitSystemSystemdRwIfupdown) ... ok
-> +test_run (tests.init.test_systemd.TestInitSystemSystemdRwNetworkd) ... ok
-> +test_run (tests.init.test_busybox.TestInitSystemBusyboxRo) ... ok
-> +test_run (tests.init.test_busybox.TestInitSystemBusyboxRoNet) ... ok
-> +test_run (tests.init.test_busybox.TestInitSystemBusyboxRw) ... ok
-> +test_run (tests.init.test_busybox.TestInitSystemBusyboxRwNet) ... ok
-> +
-> +Ran 157 tests in 0.021s
-> +
-> +OK
-> +---------------------
-> +
-> +* Next let's use the Busybox Init system test case with a read/write rootfs
-> ++tests.init.test_busybox.TestInitSystemBusyboxRw+ as our example test case.
-> +* A minimal set of command line arguments when debugging a test case would
-> +include '-d' which points to your dl folder, '-o' to an output folder, and
-> +'-k' to keep any output on both pass/fail. With those options, the test will
-> +retain logging and build artifacts providing status of the build and
-> +execution of the test case.
-> +
-> +---------------------
-> +$ support/testing/run-tests -d dl -o output_folder -k tests.init.test_busybox.TestInitSystemBusyboxRw
-> +15:03:26 TestInitSystemBusyboxRw                  Starting
-> +15:03:28 TestInitSystemBusyboxRw                  Building
-> +15:08:18 TestInitSystemBusyboxRw                  Building done
-> +15:08:27 TestInitSystemBusyboxRw                  Cleaning up
-> +.
-> +Ran 1 test in 301.140s
-> +
-> +OK
-> +---------------------
-> +
-> +* For the case of a successful build, the +output_folder+ would contain a
-> +<test name> folder with the Buildroot build, build log and run-time log. If
-> +the build failed, the console output would show the stage at which it failed
-> +(setup / build / run). Depending on the failure stage, the build/run logs
-> +and/or Buildroot build artifacts can be inspected and instrumented. If the
-> +QEMU instance needs to be launched for additional testing, the first few
-> +lines of the run-time log capture it and it would allow some incremental
-> +testing without re-running +support/testing/run-tests+.
-> +
-> +You can also make modifications to the current sources inside the
-> ++output_folder+ (e.g. for debug purposes) and rerun the standard
-> +buildroot make targets (in order to regenerate the complete image with
-> +the new modifications) and then rerun the test. Modifying the sources
-> +directly can speed up debugging compared to adding patches file, wiping
-
-patches file -> patch files ?
-
-> +the output directory, and starting the test again.
-> +
-> +---------------------
-> +$ ls output_folder/
-> +TestInitSystemBusyboxRw/
-> +TestInitSystemBusyboxRw-build.log
-> +TestInitSystemBusyboxRw-run.log
-> +---------------------
-> +
-> +* The source file used to implement this example test is found under
-> ++support/testing/tests/init/test_busybox.py+. This file outlines the
-> +minimal defconfig that creates the build, QEMU configuration to launch
-> +the built images and the test case assertions.
-> +
-> +The best way to get familiar with how to create a test case is to look at a
-> +few of the basic file system +support/testing/tests/fs/+ and init
-> ++support/testing/tests/init/+ test scripts. Those tests give good examples
-> +of a basic build and build with run type of tests. There are other more
-> +advanced cases that use things like nested +br2-external+ folders to provide
-> +skeletons and additional packages. Beyond creating the test script, there
-> +are a couple additional steps that should be taken once you have your initial
-> +test case script. The first is to add yourself in the +DEVELOPERS+ file to
-> +be the maintainer of that test case. The second is to update the Gitlab CI
-> +yml by executing +make .gitlab-ci.yml+.
-
-I think this should go in a separate section on how to write tests, and
-be a bit more detailed: a class needs to be created, with a method
-called this and that, what are the important class members that need to
-be provided, etc.
-
-> +To test an existing or new test case within Gitlab CI, there is a method of
-> +invoking a specific test by creating a Buildroot fork in Gitlab under your
-> +account and then follow the instructions outlined in
-> +https://git.busybox.net/buildroot/commit/?id=12904c03a7ccbf0c04c5b1f7e3302916c6f37f50.
-
-I think we should repeat the instructions here rather than pointing to
-a commit.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Vadym Kochan
