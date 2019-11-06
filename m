@@ -1,36 +1,41 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Wed, 06 Nov 2019 08:54:15 +0100
-Subject: [Buildroot] ISO image creation: x86_64 architecture
-In-Reply-To: <mailman.3367.1573024282.158800.buildroot@busybox.net>
-References: <mailman.3367.1573024282.158800.buildroot@busybox.net>
-Message-ID: <f3ce4019f973549558651457739b4177@umbiko.net>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Wed, 06 Nov 2019 09:13:41 +0100
+Subject: [Buildroot] 
+ =?iso-8859-1?q?=5BPATCH_v7_3/8=5D_core=3A_implement_?=
+ =?iso-8859-1?q?per-package_SDK_and_target?=
+In-Reply-To: <20191106085733.3b339da7@windsurf>
+References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
+ <20181228104335.22379-4-thomas.petazzoni@bootlin.com>
+ <b92540ca-37ad-42ad-9bf3-eee8f6f6ed26@cesnet.cz>
+ <20191105173830.6c8fc5d1@windsurf>
+ <CAJ4jsafpnaBRuxtd-6RFAGVcFgkEgmqNbjDLgPEYQV5DXGMxMw@mail.gmail.com>
+ <20191106085733.3b339da7@windsurf>
+Message-ID: <077a17f3-becf-4504-ad01-7e0a2014096c@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2019-11-06 08:11, buildroot-request at busybox.net wrote:
-> ...
-> I'm new to Buildroot and using x86_64 architecture and squashfs root
-> filesystem, please help me with the process of creating an iso image 
-> that I
-> can run on VM.
-> ...
+> Then I guess the TARGET_FINALIZE_HOOKS is the only solution here.
 
-Hi Anushka,
+Yes, this sounds reasonable.
 
-You might take a look at the readme.txt in buildroot/board/pc, it 
-describes how to generate a bootable image and also how to run it on 
-qemu.
+> But thinking more about this issue, it really means that no package
+> should overwrite any file installed by one of its dependencies:
 
-Qemu will also boot the kernel file directly, without bootable image. 
-This is what I use for testing builds (kernel image contains the root 
-file system):
+Agreed. Of course there are still scenarios where packages have to 
+overwrite stuff which belongs to something else (think of packages 
+"registering themselves" within a file managed by a package they depend 
+on). These can be solved by explicitly configuring these packages so that 
+this conflicting resource exists in just one location, i.e., outside of the 
+per-package namespace.
 
-   # qemu-system-x86_64 -enable-kvm -m 256 \
-	-device e1000,netdev=lan0 -netdev user,id=lan0 \
-	-kernel /tmp/bzImage -append root=/dev/ram
+I've been doing this with (still out-of-tree) sysrepo etc like this:
 
-Kind regards,
-Andreas
+https://gerrit.cesnet.cz/plugins/gitiles/github/buildroot/buildroot/+/refs/heads/cesnet/2019-06-10/package/sysrepo/sysrepo.mk#41
+
+How does merging the ppsh work look?
+
+With kind regards,
+Jan
