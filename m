@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Nov 2019 23:54:54 +0100
-Subject: [Buildroot] [PATCH 2/3 v2] package/eudev: generate the hwdb.bin
-In-Reply-To: <c6266382b309d867f2479131467f57c4a6aca4de.1572386855.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 29 Oct 2019 23:07:54 +0100")
+Date: Wed, 06 Nov 2019 23:55:05 +0100
+Subject: [Buildroot] [PATCH 3/3 v2] packagesystemd: generate the hwdb.bin
+In-Reply-To: <803cedc8ae9597d0ae287e65d873cb9e0f6a91d9.1572386855.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Tue, 29 Oct 2019 23:07:55 +0100")
 References: <cover.1572386855.git.yann.morin.1998@free.fr>
- <c6266382b309d867f2479131467f57c4a6aca4de.1572386855.git.yann.morin.1998@free.fr>
-Message-ID: <87r22kboox.fsf@dell.be.48ers.dk>
+ <803cedc8ae9597d0ae287e65d873cb9e0f6a91d9.1572386855.git.yann.morin.1998@free.fr>
+Message-ID: <87mud8boom.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
