@@ -1,7 +1,9 @@
 From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Wed,  6 Nov 2019 19:30:21 +0100
-Subject: [Buildroot] [PATCH 1/3] package/python-pyserial: new package
-Message-ID: <20191106183023.531278-1-b.bilas@grinn-global.com>
+Date: Wed,  6 Nov 2019 19:30:22 +0100
+Subject: [Buildroot] [PATCH 2/3] package/python-pyaes: new package
+In-Reply-To: <20191106183023.531278-1-b.bilas@grinn-global.com>
+References: <20191106183023.531278-1-b.bilas@grinn-global.com>
+Message-ID: <20191106183023.531278-2-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,81 +12,82 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/python-pyserial/Config.in            |  6 ++++++
- package/python-pyserial/python-pyserial.hash |  5 +++++
- package/python-pyserial/python-pyserial.mk   | 14 ++++++++++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/python-pyserial/Config.in
- create mode 100644 package/python-pyserial/python-pyserial.hash
- create mode 100644 package/python-pyserial/python-pyserial.mk
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-pyaes/Config.in         |  7 +++++++
+ package/python-pyaes/python-pyaes.hash |  5 +++++
+ package/python-pyaes/python-pyaes.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/python-pyaes/Config.in
+ create mode 100644 package/python-pyaes/python-pyaes.hash
+ create mode 100644 package/python-pyaes/python-pyaes.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 33273ce6c8..cdc16c8b52 100644
+index cdc16c8b52..e453b828d0 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -258,6 +258,7 @@ F:	package/orbit/
- N:	Bartosz Bilas <b.bilas@grinn-global.com>
+@@ -259,6 +259,7 @@ N:	Bartosz Bilas <b.bilas@grinn-global.com>
  F:	package/qt5/qt5scxml/
  F:	package/qt5/qt5webview/
-+F:	package/python-pyserial
+ F:	package/python-pyserial
++F:	package/python-pyaes
  
  N:	Bartosz Golaszewski <brgl@bgdev.pl>
  F:	package/autoconf-archive/
 diff --git a/package/Config.in b/package/Config.in
-index f72c77b416..ae7dc89df7 100644
+index ae7dc89df7..86332e5e91 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1040,6 +1040,7 @@ menu "External python modules"
- 	source "package/python-pyro/Config.in"
- 	source "package/python-pyroute2/Config.in"
- 	source "package/python-pysendfile/Config.in"
-+	source "package/python-pyserial/Config.in"
- 	source "package/python-pysmb/Config.in"
- 	source "package/python-pysmi/Config.in"
- 	source "package/python-pysnmp/Config.in"
-diff --git a/package/python-pyserial/Config.in b/package/python-pyserial/Config.in
+@@ -1006,6 +1006,7 @@ menu "External python modules"
+ 	source "package/python-ptyprocess/Config.in"
+ 	source "package/python-pudb/Config.in"
+ 	source "package/python-py/Config.in"
++	source "package/python-pyaes/Config.in"
+ 	source "package/python-pyasn/Config.in"
+ 	source "package/python-pyasn-modules/Config.in"
+ 	source "package/python-pyasn1/Config.in"
+diff --git a/package/python-pyaes/Config.in b/package/python-pyaes/Config.in
 new file mode 100644
-index 0000000000..1a55346b45
+index 0000000000..629fd82801
 --- /dev/null
-+++ b/package/python-pyserial/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PYSERIAL
-+	bool "python-pyserial"
++++ b/package/python-pyaes/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PYAES
++	bool "python-pyaes"
 +	help
-+	  Python Serial Port Extension.
++	  Pure-Python Implementation of the AES block-cipher and
++	  common modes of operation.
 +
-+	  https://github.com/pyserial/pyserial
-diff --git a/package/python-pyserial/python-pyserial.hash b/package/python-pyserial/python-pyserial.hash
++	  https://github.com/ricmoo/pyaes
+diff --git a/package/python-pyaes/python-pyaes.hash b/package/python-pyaes/python-pyaes.hash
 new file mode 100644
-index 0000000000..aea4994296
+index 0000000000..25a15f1e19
 --- /dev/null
-+++ b/package/python-pyserial/python-pyserial.hash
++++ b/package/python-pyaes/python-pyaes.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pyserial/json
-+md5	ed6183b15519a0ae96675e9c3330c69b  pyserial-3.4.tar.gz
-+sha256	6e2d401fdee0eab996cf734e67773a0143b932772ca8b42451440cfed942c627  pyserial-3.4.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyaes/json
++md5	20fd5c6e29dcfdd08098e85a859a54ec  pyaes-1.6.1.tar.gz
++sha256	02c1b1405c38d3c370b085fb952dd8bea3fadcee6411ad99f312cc129c536d8f  pyaes-1.6.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256	a89d951d157e2c199fbbe7ecf8d41bc3bc93de166db524aa6b9b610dbccc832d  LICENSE.txt
-diff --git a/package/python-pyserial/python-pyserial.mk b/package/python-pyserial/python-pyserial.mk
++sha256	1efe6c78b28b4203d397ea9b68bdc9c658d21cd9afaf8ae8223def83f2a7ebbd  LICENSE.txt
+diff --git a/package/python-pyaes/python-pyaes.mk b/package/python-pyaes/python-pyaes.mk
 new file mode 100644
-index 0000000000..b1ad969f09
+index 0000000000..a738d3c76a
 --- /dev/null
-+++ b/package/python-pyserial/python-pyserial.mk
++++ b/package/python-pyaes/python-pyaes.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pyserial
++# python-pyaes
 +#
 +################################################################################
 +
-+PYTHON_PYSERIAL_VERSION = 3.4
-+PYTHON_PYSERIAL_SOURCE = pyserial-$(PYTHON_PYSERIAL_VERSION).tar.gz
-+PYTHON_PYSERIAL_SITE = https://files.pythonhosted.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d
-+PYTHON_PYSERIAL_SETUP_TYPE = setuptools
-+PYTHON_PYSERIAL_LICENSE = FIXME: please specify the exact BSD version
-+PYTHON_PYSERIAL_LICENSE_FILES = LICENSE.txt
++PYTHON_PYAES_VERSION = 1.6.1
++PYTHON_PYAES_SOURCE = pyaes-$(PYTHON_PYAES_VERSION).tar.gz
++PYTHON_PYAES_SITE = https://files.pythonhosted.org/packages/44/66/2c17bae31c906613795711fc78045c285048168919ace2220daa372c7d72
++PYTHON_PYAES_SETUP_TYPE = distutils
++PYTHON_PYAES_LICENSE = MIT
++PYTHON_PYAES_LICENSE_FILES = LICENSE.txt
 +
 +$(eval $(python-package))
 -- 
