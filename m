@@ -1,109 +1,106 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Nov 2019 17:37:48 +0100
-Subject: [Buildroot] [PATCH 1/1] Include makefiles from GLOBAL_PATCH_DIR
-In-Reply-To: <20191026145151.17749-1-jeremy.rosen@smile.fr>
-References: <20191026145151.17749-1-jeremy.rosen@smile.fr>
-Message-ID: <20191106163748.GA3419@scaer>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Wed, 6 Nov 2019 18:23:05 +0100
+Subject: [Buildroot] [PATCH v3 1/2]
+ package/freescale-imx/imx-m4-firmware: new package
+In-Reply-To: <20191105120304.19928-1-fabrice.goucem@nxp.com>
+References: <20191030133955.30611-1-fabrice.goucem@nxp.com>
+ <20191105120304.19928-1-fabrice.goucem@nxp.com>
+Message-ID: <20191106172305.GA24513@g751>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?my, All,
+Hi Fabrice,
 
-Adding some core devs to the Cc list.
+On Tue, Nov 05, 2019 at 12:03:55PM +0000, Fabrice Goucem wrote:
+> New package to download and install i.MX Cortex-M4 firmware
+> for following SoCs:
+> * i.MX7D
+> * i.MX7ULP
+> * i.MX8M
+> * i.MX8MM
+> * i.MX8QXP
 
-On 2019-10-26 16:51 +0200, J?r?my Rosen spake thusly:
-> Including a file named <pkgname>.mk from the GLOBAL_PATCH_DIR allows a user
-> to tweak a package provided by buildroot to his own need.
+Any reason why there's no i.MX6SX package?
 
-Thanks for sharing your work with this proposal.
+> Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+> Tested-by: Julien Olivain <julien.olivain@nxp.com>
+> ---
+>  DEVELOPERS                                    |  3 +
+>  board/freescale/common/imx/post-image.sh      | 14 +++-
+>  package/freescale-imx/Config.in               |  8 +++
+>  .../freescale-imx/imx-m4-firmware/Config.in   | 11 +++
+>  .../imx-m4-firmware/imx-m4-firmware.hash      |  8 +++
+>  .../imx-m4-firmware/imx-m4-firmware.mk        | 72 +++++++++++++++++++
+>  6 files changed, 115 insertions(+), 1 deletion(-)
+>  create mode 100644 package/freescale-imx/imx-m4-firmware/Config.in
+>  create mode 100644 package/freescale-imx/imx-m4-firmware/imx-m4-firmware.hash
+>  create mode 100644 package/freescale-imx/imx-m4-firmware/imx-m4-firmware.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 24c57b25f7..93f395ed69 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -874,6 +874,9 @@ F:	package/tinydtls/
+>  F:	package/tinymembench/
+>  F:	package/whois/
+>  
+> +N:	Fabrice Goucem <fabrice.goucem@nxp.com>
+> +F:	package/freescale-imx/imx-m4-firmware/
+> +
+>  N:	Falco Hyfing <hyfinglists@gmail.com>
+>  F:	package/python-pymodbus/
+>  
+> diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+> index 19d8fffb63..f9851c2d3b 100755
+> --- a/board/freescale/common/imx/post-image.sh
+> +++ b/board/freescale/common/imx/post-image.sh
+> @@ -30,6 +30,18 @@ linux_image()
+>  	fi
+>  }
+>  
+> +#
+> +# m4_image prints all available M4 firmware file names for the genimage
+> +# configuration file
+> +#
+> +m4_image()
+> +{
+> +	if grep -Eq "^BR2_PACKAGE_IMX_M4_FIRMWARE=y$" ${BR2_CONFIG}; then
+> +		echo -n ", "
+> +		for f in $(ls ${BINARIES_DIR}/m4_*); do echo -n "$(basename $f), "; done
+> +	fi
+> +}
+> +
+>  genimage_type()
+>  {
+>  	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
+> @@ -75,7 +87,7 @@ uboot_image()
+>  
+>  main()
+>  {
+> -	local FILES="$(dtb_list) $(linux_image)"
+> +	local FILES="$(dtb_list) $(linux_image) $(m4_image)"
+>  	local IMXOFFSET="$(imx_offset)"
+>  	local UBOOTBIN="$(uboot_image)"
+>  	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
+> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+> index f010aab87b..76694bc788 100644
+> --- a/package/freescale-imx/Config.in
+> +++ b/package/freescale-imx/Config.in
+> @@ -83,10 +83,18 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+>  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+>  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+>  
+> +config BR2_PACKAGE_FREESCALE_IMX_HAS_M4
+> +	bool
+> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
 
-> * add a function to pkg-utils.mk to include makefiles from GLOBAL_PATCH_DIR
-> * modify all pkg-* to use it as their first action
-
-So I finally took the time to think about this patch. This is not really
-a review per-se, because the core of the changes are pretty trivial
-overall.
-
-Rather, it is mostly my point of view on the subject, and why I think
-an override-based solution is a bad idea. We discussed this during the
-last dev-days, but for posterity, I'll recap all here to spur more
-comments.
-
-
-*
-First, this solution does not cover all use-cases. One major drawback it
-has, is that it can't allow overriding the version of a package. The
-reason for this limitation is that he .hash file is not overridden, so it
-is not possible to provide an alternate version. However, when exposed
-with your proposal, the very first thing most users thought about using
-it for, was *exactly* for that: changing the version of the package.
-
-So, the most obvious limitations of this solution, is also the most
-obvious use-case users would expect to use it for. Big drawback...
-
-
-*
-Second, the excuse for such an override is to be able to claim not
-touching the Buildroot tree, and to be able to update the Buildroot tree
-with just a simple "git pull".
-
-I believe this is broken by design, because this actually hides breakage
-when updating Buildroot. When you update Buildroot, you have to account
-for the changes in the new version: new config options, new variables,
-new values in existing variables, or even changes deep in the various
-infrastructures. A proper override would have to go so far as to unset
-all the variables of a package before redefining it entirely.
-
-Hiding local changes away in an override actually is a missed opportunity
-to notice these changes with actual merge (or rebase) conflicts, instead
-leading to issues much later down the road, which means a lot of time
-lost. That would not show semantic conflicts, true, but actual
-code-level conflicts would show, and they would probably be the most
-common.
-
-So, I am afraid that these overrides are a poor excuse for not wanting to
-do actual VCS work.
-
-
-*
-Third, since the override is outside the Buildroot tree (if it were in,
-there would be no point in the override to begin with), it means it is
-easy to miss it in critical times. Some packages in Buildroot are
-licensed under copyleft licenses (GPL, LGPL...), and those have 
-requirements reading something along the lines of "complete source code
-means [...], plus the scripts used to control compilation and
-installation of the executable." Scripts which happens to be Buildroot
-in our case, and the stuff in your override.
-
-Since the override would live in a separate tree with private, non
-public stuff, it would be very easy to miss it when coming into
-compliance for such packages, as one would be tempted to only distribute
-their Buildroot tree.
-
-So, such overrides actually makes one's life more difficult in this
-already complex topic.
-
-
-*
-In conclusion, my position on this topic is pretty straightforward: if
-you want to modify the package recipes, then do so, and do so your the
-Buildroot tree. Use a branch that contains your changes, and when you
-need, merge a new master (or stable, or LTS) into your branch.
-
-This is probably not a pleasing answer or review, I am sorry for that,
-but for all the reasons expressed above, I think an override-based
-solution is not a correct solution.
+Same here.
 
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Gary
