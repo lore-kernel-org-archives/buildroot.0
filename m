@@ -1,43 +1,211 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Nov 2019 00:07:25 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/piglit: set
- python executable
-Message-ID: <20191106230046.54C048E965@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 7 Nov 2019 07:01:20 +0200
+Subject: [Buildroot] [PATCH 1/5] configs/raspberrypi*: bump kernel
+ version to 1.20190925-1
+In-Reply-To: <20191106204434.24898-1-ps.report@gmx.net>
+References: <20191106204434.24898-1-ps.report@gmx.net>
+Message-ID: <20191107050120.nkrbwqfahjpdhxnv@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ce6f87267780aee4fb5c544139303c1cc17295d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Hi Peter,
 
-Without this change, piglit will detect and use python from host
-resulting in build failures if python-mako, python-numpy or python-six
-are not installed
+On Wed, Nov 06, 2019 at 09:44:30PM +0100, Peter Seiderer wrote:
+> Now based on 4.19.75 (from 4.19.66).
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  configs/raspberrypi0_defconfig       |  2 +-
+>  configs/raspberrypi0w_defconfig      |  2 +-
+>  configs/raspberrypi2_defconfig       |  2 +-
+>  configs/raspberrypi3_64_defconfig    |  2 +-
+>  configs/raspberrypi3_defconfig       |  2 +-
+>  configs/raspberrypi3_qt5we_defconfig |  2 +-
+>  configs/raspberrypi4_defconfig       |  2 +-
+>  configs/raspberrypi_defconfig        |  2 +-
+>  package/rpi-userland/S94vcfiled      | 47 ----------------------------
+>  package/rpi-userland/vcfiled.service |  9 ------
 
-Fixes:
- - http://autobuild.buildroot.org/results/8d782589b6073031626fd769982a0844f3731906
+Shouldn't this vcfiled removal be moved to patch #3 in this series?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ad3570e457cc6e3c0869fa486aab6b9b6af94fce)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/piglit/piglit.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+baruch
 
-diff --git a/package/piglit/piglit.mk b/package/piglit/piglit.mk
-index 4f95e77cfd..d4753b9f7a 100644
---- a/package/piglit/piglit.mk
-+++ b/package/piglit/piglit.mk
-@@ -29,7 +29,8 @@ PIGLIT_DEPENDENCIES = host-pkgconf \
- PIGLIT_CONF_OPTS += \
- 	-DPIGLIT_USE_WAFFLE=ON \
- 	-DPIGLIT_BUILD_CL_TESTS=OFF \
--	-DPIGLIT_BUILD_WGL_TESTS=OFF
-+	-DPIGLIT_BUILD_WGL_TESTS=OFF \
-+	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
- # libxcb for xcb-dri2
+>  10 files changed, 8 insertions(+), 64 deletions(-)
+>  delete mode 100644 package/rpi-userland/S94vcfiled
+>  delete mode 100644 package/rpi-userland/vcfiled.service
+> 
+> diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
+> index 7255f8d067..1600e219d1 100644
+> --- a/configs/raspberrypi0_defconfig
+> +++ b/configs/raspberrypi0_defconfig
+> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> 
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+> 
+>  # Build the DTBs for A/B from the kernel sources: the zero is the same
+> diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
+> index 57276aa8f7..ea5856e8c0 100644
+> --- a/configs/raspberrypi0w_defconfig
+> +++ b/configs/raspberrypi0w_defconfig
+> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> 
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
+> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+> index 73f5f349d3..e6c38e74b7 100644
+> --- a/configs/raspberrypi2_defconfig
+> +++ b/configs/raspberrypi2_defconfig
+> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> 
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+> 
+>  # Build the DTB from the kernel sources
+> diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+> index 61cf730a19..de1cd10c22 100644
+> --- a/configs/raspberrypi3_64_defconfig
+> +++ b/configs/raspberrypi3_64_defconfig
+> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> 
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+> 
+>  # Build the DTB from the kernel sources
+> diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+> index 744b16dca9..01aa239805 100644
+> --- a/configs/raspberrypi3_defconfig
+> +++ b/configs/raspberrypi3_defconfig
+> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> 
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+> 
+>  # Build the DTB from the kernel sources
+> diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+> index 7fd834c502..775eb9114e 100644
+> --- a/configs/raspberrypi3_qt5we_defconfig
+> +++ b/configs/raspberrypi3_qt5we_defconfig
+> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> 
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+> 
+>  # Build the DTB from the kernel sources
+> diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
+> index ec29c13804..6eea0ca816 100644
+> --- a/configs/raspberrypi4_defconfig
+> +++ b/configs/raspberrypi4_defconfig
+> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> 
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+> 
+>  # Build the DTB from the kernel sources
+> diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+> index 11107c44a9..969a92820e 100644
+> --- a/configs/raspberrypi_defconfig
+> +++ b/configs/raspberrypi_defconfig
+> @@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> 
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+> 
+>  # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
+> diff --git a/package/rpi-userland/S94vcfiled b/package/rpi-userland/S94vcfiled
+> deleted file mode 100644
+> index 4d27b91bae..0000000000
+> --- a/package/rpi-userland/S94vcfiled
+> +++ /dev/null
+> @@ -1,47 +0,0 @@
+> -#!/bin/sh
+> -
+> -NAME=vcfiled
+> -DESC="VideoCore file server daemon $NAME"
+> -DAEMON="/usr/sbin/$NAME"
+> -DAEMON_ARGS=""
+> -CFGFILE="/etc/default/$NAME"
+> -PIDFILE="/var/run/$NAME.pid"
+> -
+> -# Read configuration variable file if it is present
+> -[ -r "$CFGFILE" ] && . "$CFGFILE"
+> -
+> -start()
+> -{
+> -	printf "Starting $DESC: "
+> -	start-stop-daemon -S -q -p "$PIDFILE" -x "$DAEMON" -- $DAEMON_ARGS &&
+> -			echo "done" || echo "failed"
+> -}
+> -
+> -stop()
+> -{
+> -	printf "Stopping $DESC: "
+> -	if start-stop-daemon -K -q -R TERM/30/KILL/5 -p "$PIDFILE" -n "$NAME"; then
+> -		# This daemon does not remove its PID file when it exits.
+> -		rm -f "$PIDFILE"
+> -		echo "done"
+> -	else
+> -		echo "failed"
+> -	fi
+> -}
+> -
+> -case "$1" in
+> -	start)
+> -		start
+> -		;;
+> -	stop)
+> -		stop
+> -		;;
+> -	restart|reload)
+> -		stop
+> -		start
+> -		;;
+> -	*)
+> -		echo "Usage: $0 {start|stop|restart|reload}" >&2
+> -		exit 1
+> -		;;
+> -esac
+> diff --git a/package/rpi-userland/vcfiled.service b/package/rpi-userland/vcfiled.service
+> deleted file mode 100644
+> index b09aa62774..0000000000
+> --- a/package/rpi-userland/vcfiled.service
+> +++ /dev/null
+> @@ -1,9 +0,0 @@
+> -[Unit]
+> -Description=VideoCore file server daemon
+> -
+> -[Service]
+> -ExecStart=/usr/sbin/vcfiled --foreground
+> -Restart=always
+> -
+> -[Install]
+> -WantedBy=multi-user.target
