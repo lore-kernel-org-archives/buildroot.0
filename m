@@ -1,28 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Nov 2019 22:03:07 +0100
-Subject: [Buildroot] [PATCH v3] package/valijson: bump version to 0.2
-In-Reply-To: <1573051682-29180-1-git-send-email-santosh.multhalli@rockwellcollins.com>
-References: <1573051682-29180-1-git-send-email-santosh.multhalli@rockwellcollins.com>
-Message-ID: <20191107220307.0eb75ca6@windsurf>
+Date: Thu, 7 Nov 2019 22:09:29 +0100
+Subject: [Buildroot] [PATCH] umtprd: Add package
+In-Reply-To: <20191107164513.5760-1-paul@crapouillou.net>
+References: <20191107164513.5760-1-paul@crapouillou.net>
+Message-ID: <20191107220929.2645c47b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  6 Nov 2019 20:18:02 +0530
-Santosh Multhalli <santosh.multhalli@rockwellcollins.com> wrote:
+Hello Paul,
 
-> - Added hash of LICENSE file in valijson.hash
-> - Updated hash of valijson tar file in valijson.hash file
-> - Added option to set tests off which drops the curlpp dependency
-> 
-> Signed-off-by: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
-> ----
+Some comments in addition to the ones done by Baruch and Yann.
 
-This line should have been "---" (i.e 3 dashes) and not 4, for Git to
-properly discard what's after this line when writing the commit log. I
-fixed that up and applied to next. Thanks!
+On Thu,  7 Nov 2019 17:45:13 +0100
+Paul Cercueil <paul@crapouillou.net> wrote:
+
+>  package/Config.in                             |  1 +
+>  ...thread.h-include-in-inc-mtp.h-header.patch | 28 +++++++++++++++++++
+>  package/umtprd/Config.in                      |  6 ++++
+>  package/umtprd/umtprd.hash                    |  2 ++
+>  package/umtprd/umtprd.mk                      | 20 +++++++++++++
+>  5 files changed, 57 insertions(+)
+
+You should add an entry in the DEVELOPERS file.
+
+
+> diff --git a/package/umtprd/umtprd.hash b/package/umtprd/umtprd.hash
+> new file mode 100644
+> index 0000000000..aa91696613
+> --- /dev/null
+> +++ b/package/umtprd/umtprd.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256	e1301bdd89170cc2c679446c1cc5873feaacd061bf0ab547fc0a11670bae9163	umtprd-1.0.0.tar.gz
+
+Please add a hash for the license file.
+
+> diff --git a/package/umtprd/umtprd.mk b/package/umtprd/umtprd.mk
+> new file mode 100644
+> index 0000000000..8460f82b7d
+> --- /dev/null
+> +++ b/package/umtprd/umtprd.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# umtprd
+> +#
+> +################################################################################
+> +
+> +UMTPRD_VERSION = 1.0.0
+> +UMTPRD_SITE = https://github.com/viveris/uMTP-Responder/archive
+
+It is never clear to me if those URLs are auto-generated tarballs, or
+tarballs produced by the project maintainer and uploaded to Github. If
+these are auto-generated tarballs, then the "github" macro should be
+used instead.
+
+Thanks,
 
 Thomas
 -- 
