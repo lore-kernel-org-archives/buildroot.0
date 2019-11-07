@@ -1,45 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Nov 2019 22:27:10 +0100
-Subject: [Buildroot] [git commit branch/next] package/modem-manager: bump to
- version 1.12.0
-Message-ID: <20191107212911.310548EA18@busybox.osuosl.org>
+Date: Thu, 7 Nov 2019 22:40:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-six: bump to version
+ 1.13.0
+In-Reply-To: <20191105194756.9213-1-asafka7@gmail.com>
+References: <20191105194756.9213-1-asafka7@gmail.com>
+Message-ID: <20191107224029.19d66a4e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80d7b04c32b48797abe5a0a24fc59d292d754a75
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue,  5 Nov 2019 21:47:55 +0200
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-Reviewed-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> License changed due to a copyright year bump.
+> 
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  package/python-six/python-six.hash | 6 +++---
+>  package/python-six/python-six.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index fc826a6121..b1fef98fe2 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  cbe174078dbdf3f746a55f0004353d3c27da2a31da553036d90fc7dc34a0169a  ModemManager-1.10.8.tar.xz
-+sha256  3daca86164145fffb589939433f596c13fa077c9a187c0d5820fdd5b4e4a6424  ModemManager-1.12.0.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index a5f3d63560..b5aa7914f6 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MODEM_MANAGER_VERSION = 1.10.8
-+MODEM_MANAGER_VERSION = 1.12.0
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
