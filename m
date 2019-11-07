@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Nov 2019 22:34:50 +0100
-Subject: [Buildroot] [git commit branch/next] package/unrar: bump to version
- 5.8.3
-Message-ID: <20191107212911.4AB7B8EA18@busybox.osuosl.org>
+Date: Thu, 7 Nov 2019 22:27:10 +0100
+Subject: [Buildroot] [git commit branch/next] package/modem-manager: bump to
+ version 1.12.0
+Message-ID: <20191107212911.310548EA18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=951e600b57d94ad5796262996d69ddcdc71a70e9
+commit: https://git.buildroot.net/buildroot/commit/?id=80d7b04c32b48797abe5a0a24fc59d292d754a75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Reviewed-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/unrar/unrar.hash | 2 +-
- package/unrar/unrar.mk   | 2 +-
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
-index 7f9bb865c8..f688a4e364 100644
---- a/package/unrar/unrar.hash
-+++ b/package/unrar/unrar.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	33386623fd3fb153b56292df4a6a69b457e69e1803b6d07b614e5fd22fb33dda	unrarsrc-5.8.2.tar.gz
-+sha256	3591685c8f5bbcb0be09de3d0a0544adb88966b9cccb80986f6cd2b534fd91a6	unrarsrc-5.8.3.tar.gz
- sha256	6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a	license.txt
-diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
-index 942f52b031..cdaff26988 100644
---- a/package/unrar/unrar.mk
-+++ b/package/unrar/unrar.mk
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index fc826a6121..b1fef98fe2 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  cbe174078dbdf3f746a55f0004353d3c27da2a31da553036d90fc7dc34a0169a  ModemManager-1.10.8.tar.xz
++sha256  3daca86164145fffb589939433f596c13fa077c9a187c0d5820fdd5b4e4a6424  ModemManager-1.12.0.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index a5f3d63560..b5aa7914f6 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UNRAR_VERSION = 5.8.2
-+UNRAR_VERSION = 5.8.3
- UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
- UNRAR_SITE = http://www.rarlab.com/rar
- UNRAR_LICENSE = unrar
+-MODEM_MANAGER_VERSION = 1.10.8
++MODEM_MANAGER_VERSION = 1.12.0
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
