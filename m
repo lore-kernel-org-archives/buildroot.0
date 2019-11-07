@@ -1,130 +1,41 @@
-From: Fabrice Goucem <fabrice.goucem@nxp.com>
-Date: Thu, 7 Nov 2019 09:59:14 +0000
-Subject: [Buildroot] [EXT] Re: [PATCH v3 1/2]
- package/freescale-imx/imx-m4-firmware: new package
-In-Reply-To: <20191106172305.GA24513@g751>
-References: <20191030133955.30611-1-fabrice.goucem@nxp.com>
- <20191105120304.19928-1-fabrice.goucem@nxp.com>
- <20191106172305.GA24513@g751>
-Message-ID: <413c6aa15947a393c6088d21c6a9d08e966524e3.camel@nxp.com>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Thu,  7 Nov 2019 12:40:03 +0100
+Subject: [Buildroot] [PATCH] package/modem-manager: bump to version 1.12.0
+Message-ID: <20191107114003.1038623-1-aleksander@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+---
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, 2019-11-06 at 18:23 +0100, Gary Bisson wrote:
-> Caution: EXT Email
-> 
-> Hi Fabrice,
-> 
-> On Tue, Nov 05, 2019 at 12:03:55PM +0000, Fabrice Goucem wrote:
-> > New package to download and install i.MX Cortex-M4 firmware
-> > for following SoCs:
-> > * i.MX7D
-> > * i.MX7ULP
-> > * i.MX8M
-> > * i.MX8MM
-> > * i.MX8QXP
-> 
-> Any reason why there's no i.MX6SX package?
-
-Simply because I could not locate an M4 demo image from NXP servers.
-I used the NXP Yocto recipes to locate the different M4 images and
-i.MX6SX is not a SoC supported by these recipes.
-Will gladly add an image if a reliable location is found.
-
-> > Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
-> > Tested-by: Julien Olivain <julien.olivain@nxp.com>
-> > ---
-> >  DEVELOPERS                                    |  3 +
-> >  board/freescale/common/imx/post-image.sh      | 14 +++-
-> >  package/freescale-imx/Config.in               |  8 +++
-> >  .../freescale-imx/imx-m4-firmware/Config.in   | 11 +++
-> >  .../imx-m4-firmware/imx-m4-firmware.hash      |  8 +++
-> >  .../imx-m4-firmware/imx-m4-firmware.mk        | 72
-> > +++++++++++++++++++
-> >  6 files changed, 115 insertions(+), 1 deletion(-)
-> >  create mode 100644 package/freescale-imx/imx-m4-firmware/Config.in
-> >  create mode 100644 package/freescale-imx/imx-m4-firmware/imx-m4-
-> > firmware.hash
-> >  create mode 100644 package/freescale-imx/imx-m4-firmware/imx-m4-
-> > firmware.mk
-> > 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 24c57b25f7..93f395ed69 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -874,6 +874,9 @@ F:        package/tinydtls/
-> >  F:   package/tinymembench/
-> >  F:   package/whois/
-> > 
-> > +N:   Fabrice Goucem <fabrice.goucem@nxp.com>
-> > +F:   package/freescale-imx/imx-m4-firmware/
-> > +
-> >  N:   Falco Hyfing <hyfinglists@gmail.com>
-> >  F:   package/python-pymodbus/
-> > 
-> > diff --git a/board/freescale/common/imx/post-image.sh
-> > b/board/freescale/common/imx/post-image.sh
-> > index 19d8fffb63..f9851c2d3b 100755
-> > --- a/board/freescale/common/imx/post-image.sh
-> > +++ b/board/freescale/common/imx/post-image.sh
-> > @@ -30,6 +30,18 @@ linux_image()
-> >       fi
-> >  }
-> > 
-> > +#
-> > +# m4_image prints all available M4 firmware file names for the
-> > genimage
-> > +# configuration file
-> > +#
-> > +m4_image()
-> > +{
-> > +     if grep -Eq "^BR2_PACKAGE_IMX_M4_FIRMWARE=y$" ${BR2_CONFIG};
-> > then
-> > +             echo -n ", "
-> > +             for f in $(ls ${BINARIES_DIR}/m4_*); do echo -n
-> > "$(basename $f), "; done
-> > +     fi
-> > +}
-> > +
-> >  genimage_type()
-> >  {
-> >       if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$"
-> > ${BR2_CONFIG}; then
-> > @@ -75,7 +87,7 @@ uboot_image()
-> > 
-> >  main()
-> >  {
-> > -     local FILES="$(dtb_list) $(linux_image)"
-> > +     local FILES="$(dtb_list) $(linux_image) $(m4_image)"
-> >       local IMXOFFSET="$(imx_offset)"
-> >       local UBOOTBIN="$(uboot_image)"
-> >       local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
-> > diff --git a/package/freescale-imx/Config.in b/package/freescale-
-> > imx/Config.in
-> > index f010aab87b..76694bc788 100644
-> > --- a/package/freescale-imx/Config.in
-> > +++ b/package/freescale-imx/Config.in
-> > @@ -83,10 +83,18 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
-> >               BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
-> >               BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
-> > 
-> > +config BR2_PACKAGE_FREESCALE_IMX_HAS_M4
-> > +     bool
-> > +     default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
-> > +             BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
-> > +             BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
-> > +             BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
-> 
-> Same here.
-> 
-> Regards,
-> Gary
-
-Regards,
-
-Fabrice
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index fc826a6121..b1fef98fe2 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  cbe174078dbdf3f746a55f0004353d3c27da2a31da553036d90fc7dc34a0169a  ModemManager-1.10.8.tar.xz
++sha256  3daca86164145fffb589939433f596c13fa077c9a187c0d5820fdd5b4e4a6424  ModemManager-1.12.0.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index a5f3d63560..b5aa7914f6 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MODEM_MANAGER_VERSION = 1.10.8
++MODEM_MANAGER_VERSION = 1.12.0
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+-- 
+2.24.0
