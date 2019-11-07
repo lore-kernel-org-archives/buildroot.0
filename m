@@ -1,101 +1,141 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Thu,  7 Nov 2019 18:05:04 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/python-esptool: new package
-In-Reply-To: <20191107170504.1327891-1-b.bilas@grinn-global.com>
-References: <20191107170504.1327891-1-b.bilas@grinn-global.com>
-Message-ID: <20191107170504.1327891-2-b.bilas@grinn-global.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 7 Nov 2019 19:05:06 +0200
+Subject: [Buildroot] [PATCH] umtprd: Add package
+In-Reply-To: <20191107164513.5760-1-paul@crapouillou.net>
+References: <20191107164513.5760-1-paul@crapouillou.net>
+Message-ID: <20191107170506.rg3bav5gflvestqf@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
-Changes v1 -> v2:
-  - Use existing python-serial package 
-    instead of creating a new python-pyserial.
+Hi Paul,
 
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-esptool/Config.in           | 10 ++++++++++
- package/python-esptool/python-esptool.hash |  5 +++++
- package/python-esptool/python-esptool.mk   | 14 ++++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/python-esptool/Config.in
- create mode 100644 package/python-esptool/python-esptool.hash
- create mode 100644 package/python-esptool/python-esptool.mk
+On Thu, Nov 07, 2019 at 05:45:13PM +0100, Paul Cercueil wrote:
+> uMTP-Responder is a lightweight USB Media Transfer Protocol (MTP)
+> responder daemon for GNU/Linux.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  package/Config.in                             |  1 +
+>  ...thread.h-include-in-inc-mtp.h-header.patch | 28 +++++++++++++++++++
+>  package/umtprd/Config.in                      |  6 ++++
+>  package/umtprd/umtprd.hash                    |  2 ++
+>  package/umtprd/umtprd.mk                      | 20 +++++++++++++
+>  5 files changed, 57 insertions(+)
+>  create mode 100644 package/umtprd/0001-Add-missing-pthread.h-include-in-inc-mtp.h-header.patch
+>  create mode 100644 package/umtprd/Config.in
+>  create mode 100644 package/umtprd/umtprd.hash
+>  create mode 100644 package/umtprd/umtprd.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index f72c77b416..4d945e0b04 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -550,6 +550,7 @@ endmenu
+>  	source "package/udev/Config.in"
+>  	source "package/udisks/Config.in"
+>  	source "package/uhubctl/Config.in"
+> +	source "package/umtprd/Config.in"
+>  	source "package/upower/Config.in"
+>  	source "package/usb_modeswitch/Config.in"
+>  	source "package/usb_modeswitch_data/Config.in"
+> diff --git a/package/umtprd/0001-Add-missing-pthread.h-include-in-inc-mtp.h-header.patch b/package/umtprd/0001-Add-missing-pthread.h-include-in-inc-mtp.h-header.patch
+> new file mode 100644
+> index 0000000000..ea0b31d052
+> --- /dev/null
+> +++ b/package/umtprd/0001-Add-missing-pthread.h-include-in-inc-mtp.h-header.patch
+> @@ -0,0 +1,28 @@
+> +From 6572d07a68466aaa3a7efcb4a55cc61ff31cfde3 Mon Sep 17 00:00:00 2001
+> +From: Paul Cercueil <paul@crapouillou.net>
+> +Date: Thu, 30 May 2019 00:23:11 +0200
+> +Subject: [PATCH] Add missing <pthread.h> include in inc/mtp.h header
+> +
+> +This fixes the build under GCC 8 with the musl C library.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e9f5345520..49440930fc 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -259,6 +259,7 @@ N:	Bartosz Bilas <b.bilas@grinn-global.com>
- F:	package/qt5/qt5scxml/
- F:	package/qt5/qt5webview/
- F:	package/python-pyaes
-+F:	package/python-esptool
- 
- N:	Bartosz Golaszewski <brgl@bgdev.pl>
- F:	package/autoconf-archive/
-diff --git a/package/Config.in b/package/Config.in
-index 8b554e46d8..a9742ba953 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -902,6 +902,7 @@ menu "External python modules"
- 	source "package/python-engineio/Config.in"
- 	source "package/python-enum/Config.in"
- 	source "package/python-enum34/Config.in"
-+	source "package/python-esptool/Config.in"
- 	source "package/python-falcon/Config.in"
- 	source "package/python-fire/Config.in"
- 	source "package/python-flask/Config.in"
-diff --git a/package/python-esptool/Config.in b/package/python-esptool/Config.in
-new file mode 100644
-index 0000000000..10066797a7
---- /dev/null
-+++ b/package/python-esptool/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_ESPTOOL
-+	bool "python-esptool"
-+	select BR2_PACKAGE_PYTHON_SERIAL # runtime
-+	select BR2_PACKAGE_PYTHON_PYAES # runtime
-+	select BR2_PACKAGE_PYTHON_ECDSA # runtime
-+	help
-+	  A serial utility to communicate & flash code to Espressif
-+	  ESP8266 & ESP32 chips.
-+
-+	  https://github.com/espressif/esptool
-diff --git a/package/python-esptool/python-esptool.hash b/package/python-esptool/python-esptool.hash
-new file mode 100644
-index 0000000000..b4dac7ed51
---- /dev/null
-+++ b/package/python-esptool/python-esptool.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/esptool/json
-+md5	d17b9293910773045b9de0d5caa0597d  esptool-2.8.tar.gz
-+sha256	1e4288d9f00e55ba36809cc79c493643c623bfa036d7b019a0ebe396284bc317  esptool-2.8.tar.gz
-+# Locally computed sha256 checksums
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/python-esptool/python-esptool.mk b/package/python-esptool/python-esptool.mk
-new file mode 100644
-index 0000000000..a2bd335ac4
---- /dev/null
-+++ b/package/python-esptool/python-esptool.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-esptool
-+#
-+################################################################################
-+
-+PYTHON_ESPTOOL_VERSION = 2.8
-+PYTHON_ESPTOOL_SOURCE = esptool-$(PYTHON_ESPTOOL_VERSION).tar.gz
-+PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/68/91/08c182f66fa3f12a96e754ae8ec7762abb2d778429834638f5746f81977a
-+PYTHON_ESPTOOL_SETUP_TYPE = setuptools
-+PYTHON_ESPTOOL_LICENSE = GNU General Public License v2 or later (GPLv2+)
-+PYTHON_ESPTOOL_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+Please add a link to your upstream pull request:
+
+  https://github.com/viveris/uMTP-Responder/pull/28
+
+> +
+> +Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> +---
+> + inc/mtp.h | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/inc/mtp.h b/inc/mtp.h
+> +index 238de68..5f5b804 100644
+> +--- a/inc/mtp.h
+> ++++ b/inc/mtp.h
+> +@@ -26,6 +26,8 @@
+> + #ifndef _INC_MTP_H_
+> + #define _INC_MTP_H_
+> + 
+> ++#include <pthread.h>
+
+This most likely means ...
+
+> ++
+> + #define MAX_STORAGE_NB 16
+> + #define MAX_CFG_STRING_SIZE 512
+> + 
+> +-- 
+> +2.21.0.593.g511ec345e18
+> +
+> diff --git a/package/umtprd/Config.in b/package/umtprd/Config.in
+> new file mode 100644
+> index 0000000000..28c08ce5bd
+> --- /dev/null
+> +++ b/package/umtprd/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_UMTPRD
+> +	bool "umtprd"
+> +	help
+> +	  Lightweight USB MTP responder daemon for GNU/Linux
+> +
+> +	  https://github.com/viveris/uMTP-Responder
+
+... that the package needs to depend on BR2_TOOLCHAIN_HAS_THREADS?
+
+baruch
+
+> diff --git a/package/umtprd/umtprd.hash b/package/umtprd/umtprd.hash
+> new file mode 100644
+> index 0000000000..aa91696613
+> --- /dev/null
+> +++ b/package/umtprd/umtprd.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256	e1301bdd89170cc2c679446c1cc5873feaacd061bf0ab547fc0a11670bae9163	umtprd-1.0.0.tar.gz
+> diff --git a/package/umtprd/umtprd.mk b/package/umtprd/umtprd.mk
+> new file mode 100644
+> index 0000000000..8460f82b7d
+> --- /dev/null
+> +++ b/package/umtprd/umtprd.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# umtprd
+> +#
+> +################################################################################
+> +
+> +UMTPRD_VERSION = 1.0.0
+> +UMTPRD_SITE = https://github.com/viveris/uMTP-Responder/archive
+> +UMTPRD_LICENSE = GPL-3.0
+> +UMTPRD_LICENSE_FILES = LICENSE
+> +
+> +define UMTPRD_BUILD_CMDS
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> +endef
+> +
+> +define UMTPRD_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/umtprd $(TARGET_DIR)/usr/sbin/umtprd
+> +endef
+> +
+> +$(eval $(generic-package))
+
 -- 
-2.24.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
