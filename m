@@ -1,45 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Nov 2019 08:00:07 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/yaffs2utils: fix
- upstream URL
-Message-ID: <20191107065342.DE8798E9BD@busybox.osuosl.org>
+Date: Thu, 07 Nov 2019 08:01:02 +0100
+Subject: [Buildroot] [PATCH] package/yaffs2utils: fix upstream URL
+In-Reply-To: <20191102211409.31980-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 2 Nov 2019 22:14:09 +0100")
+References: <20191102211409.31980-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87eeykb26p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9805deba0d258935ec7186efbe50a8e05e087d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-The current URL from which we download the yaffs2utils tarball no
-longer works:
+ > The current URL from which we download the yaffs2utils tarball no
+ > longer works:
 
--2019-11-02 10:17:20--  https://yaffs2utils.googlecode.com/files/0.2.9.tar.gz
-Resolving yaffs2utils.googlecode.com (yaffs2utils.googlecode.com)... 2a00:1450:400c:c02::52, 173.194.76.82
-Connecting to yaffs2utils.googlecode.com (yaffs2utils.googlecode.com)|2a00:1450:400c:c02::52|:443... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2019-11-02 10:17:20 ERROR 404: Not Found.
+ > -2019-11-02 10:17:20--  https://yaffs2utils.googlecode.com/files/0.2.9.tar.gz
+ > Resolving yaffs2utils.googlecode.com (yaffs2utils.googlecode.com)... 2a00:1450:400c:c02::52, 173.194.76.82
+ > Connecting to yaffs2utils.googlecode.com (yaffs2utils.googlecode.com)|2a00:1450:400c:c02::52|:443... connected.
+ > HTTP request sent, awaiting response... 404 Not Found
+ > 2019-11-02 10:17:20 ERROR 404: Not Found.
 
-So, let's replace it with a working URL.
+ > So, let's replace it with a working URL.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 41f4c85dd0556f4df1666206f98d164e4bf7892d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/yaffs2utils/yaffs2utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/package/yaffs2utils/yaffs2utils.mk b/package/yaffs2utils/yaffs2utils.mk
-index d3a8bdc9d2..bcd5d6d66f 100644
---- a/package/yaffs2utils/yaffs2utils.mk
-+++ b/package/yaffs2utils/yaffs2utils.mk
-@@ -6,7 +6,7 @@
- 
- YAFFS2UTILS_VERSION = 0.2.9
- YAFFS2UTILS_SOURCE = $(YAFFS2UTILS_VERSION).tar.gz
--YAFFS2UTILS_SITE = https://yaffs2utils.googlecode.com/files
-+YAFFS2UTILS_SITE = https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/yaffs2utils
- YAFFS2UTILS_LICENSE = GPL-2.0
- YAFFS2UTILS_LICENSE_FILES = COPYING
- 
+Committed to 2019.02.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
