@@ -1,52 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Nov 2019 22:34:24 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-six: bump to
- version 1.13.0
-Message-ID: <20191107212911.396DB8EA19@busybox.osuosl.org>
+Date: Thu, 7 Nov 2019 22:34:46 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-uvloop: bump to
+ version 0.14.0
+Message-ID: <20191107212911.426C68EA18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=425b56c437a26d04461f68f37249fb61fb43972b
+commit: https://git.buildroot.net/buildroot/commit/?id=87a5494a90e0363e17e990430452e5ad9b27577e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-License changed due to a copyright year bump.
+The package now fully supports Python 3.8, so the pre-build
+hook and the dependency on host-python-cython can be removed.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-six/python-six.hash | 6 +++---
- package/python-six/python-six.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-uvloop/python-uvloop.hash |  4 ++--
+ package/python-uvloop/python-uvloop.mk   | 17 +++++------------
+ 2 files changed, 7 insertions(+), 14 deletions(-)
 
-diff --git a/package/python-six/python-six.hash b/package/python-six/python-six.hash
-index b7262b12b1..fe9a455c05 100644
---- a/package/python-six/python-six.hash
-+++ b/package/python-six/python-six.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/six/json
--md5	9ae5d1feed8c0215f4ae4adcd9207fcb  six-1.12.0.tar.gz
--sha256	d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73  six-1.12.0.tar.gz
-+md5	e92c23c882c7d5564ce5773fe31b2771  six-1.13.0.tar.gz
-+sha256	30f610279e8b2578cab6db20741130331735c781b56053c59c4076da27f06b66  six-1.13.0.tar.gz
+diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
+index 3c274097fe..436babf915 100644
+--- a/package/python-uvloop/python-uvloop.hash
++++ b/package/python-uvloop/python-uvloop.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/uvloop/json
+-md5	11c84a0a62048200a70272ec9a990ff9  uvloop-0.13.0.tar.gz
+-sha256	942cd07035510b149d6160796f4e972137130ae953871b6a98c2cf5d5ab68c2e  uvloop-0.13.0.tar.gz
++md5	a2f82abb676756f11f544c6b51caf171  uvloop-0.14.0.tar.gz
++sha256	123ac9c0c7dd71464f58f1b4ee0bbd81285d96cdda8bc3519281b8973e3a461e  uvloop-0.14.0.tar.gz
  # Locally computed sha256 checksums
--sha256	e732f54da58f3e9cf0c48e8b512948936fcf7361bd58afa63a9a3c392bf794ad  LICENSE
-+sha256	b7529b8c07171a78a8c36c3283905528e4812945d977d125eb926e8ccbf245b6  LICENSE
-diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
-index 95817fa34b..906c268d74 100644
---- a/package/python-six/python-six.mk
-+++ b/package/python-six/python-six.mk
-@@ -4,9 +4,9 @@
+ sha256	2fdc436a67077941295c58647f521fbef8f50e46db0970552fa1a4dd8ae261c6  LICENSE-APACHE
+ sha256	9185f3c77e9f6ef8859a6ba4c94128ac1329876be3e813aad32d7645e51ae409  LICENSE-MIT
+diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
+index 8dbe3b36d9..3ee8d299a3 100644
+--- a/package/python-uvloop/python-uvloop.mk
++++ b/package/python-uvloop/python-uvloop.mk
+@@ -4,21 +4,14 @@
  #
  ################################################################################
  
--PYTHON_SIX_VERSION = 1.12.0
-+PYTHON_SIX_VERSION = 1.13.0
- PYTHON_SIX_SOURCE = six-$(PYTHON_SIX_VERSION).tar.gz
--PYTHON_SIX_SITE = https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca
-+PYTHON_SIX_SITE = https://files.pythonhosted.org/packages/94/3e/edcf6fef41d89187df7e38e868b2dd2182677922b600e880baad7749c865
- PYTHON_SIX_SETUP_TYPE = setuptools
- PYTHON_SIX_LICENSE = MIT
- PYTHON_SIX_LICENSE_FILES = LICENSE
+-PYTHON_UVLOOP_VERSION = 0.13.0
++PYTHON_UVLOOP_VERSION = 0.14.0
+ PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
+-PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/e3/15/dc3276384f4363015d7c72282f37066bae26c77f99158f66c9058ac167cf
++PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/84/2e/462e7a25b787d2b40cf6c9864a9e702f358349fc9cfb77e83c38acb73048
+ PYTHON_UVLOOP_SETUP_TYPE = setuptools
+ PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
+ PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-PYTHON_UVLOOP_BUILD_OPTS = build_ext --inplace --cython-always --use-system-libuv
+-PYTHON_UVLOOP_INSTALL_TARGET_OPTS = build_ext --inplace --cython-always --use-system-libuv
+-PYTHON_UVLOOP_DEPENDENCIES = libuv host-python-cython
+-
+-# force regenerating loop.c with cython. can be removed with the next
+-# uvloop version bump
+-define PYTHON_UVLOOP_FORCE_REGEN_LOOPC
+-	$(RM) $(@D)/uvloop/loop.c
+-endef
+-PYTHON_UVLOOP_PRE_BUILD_HOOKS += PYTHON_UVLOOP_FORCE_REGEN_LOOPC
++PYTHON_UVLOOP_BUILD_OPTS = build_ext --inplace --use-system-libuv
++PYTHON_UVLOOP_INSTALL_TARGET_OPTS = build_ext --inplace --use-system-libuv
++PYTHON_UVLOOP_DEPENDENCIES = libuv
+ 
+ $(eval $(python-package))
