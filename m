@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Nov 2019 08:42:51 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/freerdp: fix
+Date: Thu, 7 Nov 2019 08:41:46 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/freerdp: fix
  pulseaudio support
-Message-ID: <20191107073650.3FDE58E9C5@busybox.osuosl.org>
+Message-ID: <20191107073655.09CA28E9C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6467983e078721122a6907335a6a062e176f54c9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=eabd84d77b0a05bd0e6953eb60ff8ec049dcad4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 The name of the option to enable/disable support for pulseaudio has been
 in flux in FreeRDP, sometimes being WITH_PULSE, sometimes being the
