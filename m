@@ -1,65 +1,46 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  7 Nov 2019 21:23:39 +0100
-Subject: [Buildroot] [PATCH v2 5/5] configs/raspberrypi3_64_defconfig: use
- pi3-miniuart-bt device tree overlay
+Date: Thu,  7 Nov 2019 21:23:36 +0100
+Subject: [Buildroot] [PATCH v2 2/5] package/rpi-firmware: bump version to
+ 1.20190925-1
 In-Reply-To: <20191107202339.6371-1-ps.report@gmx.net>
 References: <20191107202339.6371-1-ps.report@gmx.net>
-Message-ID: <20191107202339.6371-5-ps.report@gmx.net>
+Message-ID: <20191107202339.6371-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the pi3-miniuart-bt device tree overlay (as the 32bit raspberrypi3
-defconfig) instead of the enable_uart option.
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
  - no changes
 ---
- board/raspberrypi/post-image.sh   | 9 ---------
- configs/raspberrypi3_64_defconfig | 3 +--
- 2 files changed, 1 insertion(+), 11 deletions(-)
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index bf9af5dc60..bbeb0bc721 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -28,15 +28,6 @@ __EOF__
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 58737b4585..63d8ac50a0 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 ec2dbd3cd7654f743894ffb9100e7e86ef9d840e7cf113c0b517e0da42cbbb02 rpi-firmware-1.20190819.tar.gz
++sha256 b3c5c9d3cda1f77caf317b8d1f0496cd7ca791ddaeec8207a5a1940111483509 rpi-firmware-1.20190925.tar.gz
+ sha256 ba76edfc10a248166d965b8eaf320771c44f4f432d4fce2fd31fd272e7038add boot/LICENCE.broadcom
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 3a23bc26d1..ee59ee2f26 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
 
- # enable 64bits support
- arm_64bit=1
--__EOF__
--		fi
--
--		# Enable uart console
--		if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
--			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
--
--# enable rpi3 ttyS0 serial console
--enable_uart=1
- __EOF__
- 		fi
- 		;;
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index f9a6f5fe1f..27141f364e 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -22,7 +22,6 @@ BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-
- BR2_PACKAGE_RPI_FIRMWARE=y
--# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
-
- # Required tools to create the SD image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-@@ -36,4 +35,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --add-pi3-miniuart-bt-overlay"
+-RPI_FIRMWARE_VERSION = 1.20190819
++RPI_FIRMWARE_VERSION = 1.20190925
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 --
 2.23.0
