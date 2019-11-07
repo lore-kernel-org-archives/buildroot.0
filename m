@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Nov 2019 08:00:42 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/yaffs2utils: fix
+Date: Thu, 7 Nov 2019 08:00:07 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/yaffs2utils: fix
  upstream URL
-Message-ID: <20191107065339.0CBB68E9BA@busybox.osuosl.org>
+Message-ID: <20191107065342.DE8798E9BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=046990d18b1261034988d4dd6572e3f0d9e776f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b9805deba0d258935ec7186efbe50a8e05e087d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 The current URL from which we download the yaffs2utils tarball no
 longer works:
