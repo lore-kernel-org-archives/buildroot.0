@@ -1,42 +1,65 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  7 Nov 2019 21:23:38 +0100
-Subject: [Buildroot] [PATCH v2 4/5] configs/raspberrypi3_64_defconfig:
- enable device tree overlay support
+Date: Thu,  7 Nov 2019 21:23:39 +0100
+Subject: [Buildroot] [PATCH v2 5/5] configs/raspberrypi3_64_defconfig: use
+ pi3-miniuart-bt device tree overlay
 In-Reply-To: <20191107202339.6371-1-ps.report@gmx.net>
 References: <20191107202339.6371-1-ps.report@gmx.net>
-Message-ID: <20191107202339.6371-4-ps.report@gmx.net>
+Message-ID: <20191107202339.6371-5-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Use the pi3-miniuart-bt device tree overlay (as the 32bit raspberrypi3
+defconfig) instead of the enable_uart option.
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
  - no changes
-
-Notes:
-
-Only the 64bit RPi compile seems to need the extra enabling
-of device tree overlay support (the 32bit ones seem to do
-it automatically). But for symmetry all RPi defconfigs should
-set BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT?
 ---
- configs/raspberrypi3_64_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ board/raspberrypi/post-image.sh   | 9 ---------
+ configs/raspberrypi3_64_defconfig | 3 +--
+ 2 files changed, 1 insertion(+), 11 deletions(-)
 
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index bf9af5dc60..bbeb0bc721 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -28,15 +28,6 @@ __EOF__
+
+ # enable 64bits support
+ arm_64bit=1
+-__EOF__
+-		fi
+-
+-		# Enable uart console
+-		if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+-			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+-
+-# enable rpi3 ttyS0 serial console
+-enable_uart=1
+ __EOF__
+ 		fi
+ 		;;
 diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index de1cd10c22..f9a6f5fe1f 100644
+index f9a6f5fe1f..27141f364e 100644
 --- a/configs/raspberrypi3_64_defconfig
 +++ b/configs/raspberrypi3_64_defconfig
-@@ -17,6 +17,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
- # Build the DTB from the kernel sources
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2837-rpi-3-b"
-+BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
-
+@@ -22,7 +22,6 @@ BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 
+ BR2_PACKAGE_RPI_FIRMWARE=y
+-# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+
+ # Required tools to create the SD image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+@@ -36,4 +35,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --add-pi3-miniuart-bt-overlay"
 --
 2.23.0
