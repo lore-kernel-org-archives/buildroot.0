@@ -1,31 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 7 Nov 2019 18:55:35 +0100
-Subject: [Buildroot] [PATCH] umtprd: Add package
-In-Reply-To: <20191107170506.rg3bav5gflvestqf@sapphire.tkos.co.il>
-References: <20191107164513.5760-1-paul@crapouillou.net>
- <20191107170506.rg3bav5gflvestqf@sapphire.tkos.co.il>
-Message-ID: <20191107175535.GB3419@scaer>
+Date: Thu, 7 Nov 2019 19:09:58 +0100
+Subject: [Buildroot] [PATCH 1/1] Include makefiles from GLOBAL_PATCH_DIR
+In-Reply-To: <20191106233100.3b66c426@windsurf>
+References: <20191026145151.17749-1-jeremy.rosen@smile.fr>
+ <20191106163748.GA3419@scaer> <20191106233100.3b66c426@windsurf>
+Message-ID: <20191107180958.GC3419@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paul, All,
+Thomas, All,
 
-On 2019-11-07 19:05 +0200, Baruch Siach spake thusly:
-> On Thu, Nov 07, 2019 at 05:45:13PM +0100, Paul Cercueil wrote:
-> > uMTP-Responder is a lightweight USB Media Transfer Protocol (MTP)
-> > responder daemon for GNU/Linux.
+On 2019-11-06 23:31 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 6 Nov 2019 17:37:48 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 [--SNIP--]
-> > ++#include <pthread.h>
-> This most likely means ...
-> > +config BR2_PACKAGE_UMTPRD
-> > +	bool "umtprd"
-> ... that the package needs to depend on BR2_TOOLCHAIN_HAS_THREADS?
+> > So, I am afraid that these overrides are a poor excuse for not wanting to
+> > do actual VCS work.
+> Well, you are the one who introduced BR2_EXTERNAL in the first place!
 
-It also needs kernel headers >= 3.15 (for FUNCTIONFS_HAS_FS_DESC and
-FUNCTIONFS_HAS_HS_DESC in functionfs.h)
+Ahem... git show a4239f7fd10 ;-)
+
+I did introduce support for multi br2-external, though.
+
+Anyway, this patch, as on IRC by J?r?my, has a designe flaw: since the
+override files are included too early, they hcamge the way pkgdir is
+computed, and this breaks completely.
+
+This can be corrected, though, and it might even not be too complex to
+do.
+
+But if we're going to do the override stuff, I think we must think it
+thouroughly, and not use an half-baked solution.
+
+If at all, I'd favour looking at the aternate solution that was floated
+around during the last devdays: postpone evaluation of the infras to
+after all the packages hav actually been scanned. This would even allow
+overriding the type of a package (e.g. autotools-package instead of
+meson-package, in case the version was changed to use another
+buildsystem).
 
 Regards,
 Yann E. MORIN.
