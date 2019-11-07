@@ -1,120 +1,164 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Thu,  7 Nov 2019 17:45:13 +0100
-Subject: [Buildroot] [PATCH] umtprd: Add package
-Message-ID: <20191107164513.5760-1-paul@crapouillou.net>
+From: Patrick Havelange <patrick.havelange@essensium.com>
+Date: Thu,  7 Nov 2019 17:48:04 +0100
+Subject: [Buildroot] [PATCH 1/1] support/testing: add lxc test
+Message-ID: <20191107164804.30773-1-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uMTP-Responder is a lightweight USB Media Transfer Protocol (MTP)
-responder daemon for GNU/Linux.
+The test starts a simple container with an iperf3 server.
+The container is using the tini init system, with a shared rootfs.
+An iperf3 client is started from the host to check that the container
+is really up and running.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 ---
- package/Config.in                             |  1 +
- ...thread.h-include-in-inc-mtp.h-header.patch | 28 +++++++++++++++++++
- package/umtprd/Config.in                      |  6 ++++
- package/umtprd/umtprd.hash                    |  2 ++
- package/umtprd/umtprd.mk                      | 20 +++++++++++++
- 5 files changed, 57 insertions(+)
- create mode 100644 package/umtprd/0001-Add-missing-pthread.h-include-in-inc-mtp.h-header.patch
- create mode 100644 package/umtprd/Config.in
- create mode 100644 package/umtprd/umtprd.hash
- create mode 100644 package/umtprd/umtprd.mk
+ .gitlab-ci.yml                                |  1 +
+ support/testing/tests/package/test_lxc.py     | 58 +++++++++++++++++++
+ .../tests/package/test_lxc/kernel_config_frag | 20 +++++++
+ .../test_lxc_rootfs_overlay/usr/bin/iperf3.sh |  2 +
+ .../usr/share/lxc/config/minimal-iperf3.conf  |  4 ++
+ .../usr/share/lxc/config/minimal.conf         |  6 ++
+ 6 files changed, 91 insertions(+)
+ create mode 100644 support/testing/tests/package/test_lxc.py
+ create mode 100644 support/testing/tests/package/test_lxc/kernel_config_frag
+ create mode 100755 support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/bin/iperf3.sh
+ create mode 100644 support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/share/lxc/config/minimal-iperf3.conf
+ create mode 100644 support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/share/lxc/config/minimal.conf
 
-diff --git a/package/Config.in b/package/Config.in
-index f72c77b416..4d945e0b04 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -550,6 +550,7 @@ endmenu
- 	source "package/udev/Config.in"
- 	source "package/udisks/Config.in"
- 	source "package/uhubctl/Config.in"
-+	source "package/umtprd/Config.in"
- 	source "package/upower/Config.in"
- 	source "package/usb_modeswitch/Config.in"
- 	source "package/usb_modeswitch_data/Config.in"
-diff --git a/package/umtprd/0001-Add-missing-pthread.h-include-in-inc-mtp.h-header.patch b/package/umtprd/0001-Add-missing-pthread.h-include-in-inc-mtp.h-header.patch
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 1d71257a20..9ef93130a1 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -410,6 +410,7 @@ tests.package.test_luasocket.TestLuajitLuaSocket: { extends: .runtime_test }
+ tests.package.test_luasyslog.TestLuaLuasyslog: { extends: .runtime_test }
+ tests.package.test_luasyslog.TestLuajitLuasyslog: { extends: .runtime_test }
+ tests.package.test_luvi.TestLuvi: { extends: .runtime_test }
++tests.package.test_lxc.TestLxc: { extends: .runtime_test }
+ tests.package.test_lzlib.TestLuaLzlib: { extends: .runtime_test }
+ tests.package.test_openjdk.TestOpenJdk: { extends: .runtime_test }
+ tests.package.test_perl.TestPerl: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/test_lxc.py b/support/testing/tests/package/test_lxc.py
 new file mode 100644
-index 0000000000..ea0b31d052
+index 0000000000..348703ada6
 --- /dev/null
-+++ b/package/umtprd/0001-Add-missing-pthread.h-include-in-inc-mtp.h-header.patch
-@@ -0,0 +1,28 @@
-+From 6572d07a68466aaa3a7efcb4a55cc61ff31cfde3 Mon Sep 17 00:00:00 2001
-+From: Paul Cercueil <paul@crapouillou.net>
-+Date: Thu, 30 May 2019 00:23:11 +0200
-+Subject: [PATCH] Add missing <pthread.h> include in inc/mtp.h header
++++ b/support/testing/tests/package/test_lxc.py
+@@ -0,0 +1,58 @@
++import os
 +
-+This fixes the build under GCC 8 with the musl C library.
++import infra.basetest
++import pexpect
 +
-+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-+---
-+ inc/mtp.h | 2 ++
-+ 1 file changed, 2 insertions(+)
++class TestLxc(infra.basetest.BRTest):
++    config = \
++            """
++            BR2_arm=y
++            BR2_TOOLCHAIN_EXTERNAL=y
++            BR2_LINUX_KERNEL=y
++            BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++            BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.79"
++            BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++            BR2_LINUX_KERNEL_DTS_SUPPORT=y
++            BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++            BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
++            BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++            BR2_INIT_SYSTEMD=y
++            BR2_PACKAGE_LXC=y
++            BR2_PACKAGE_TINI=y
++            BR2_PACKAGE_IPERF3=y
++            BR2_ROOTFS_OVERLAY="{}"
++            BR2_TARGET_ROOTFS_CPIO=y
++            """.format(
++            infra.filepath("tests/package/test_lxc/kernel_config_frag"),
++            infra.filepath("tests/package/test_lxc/test_lxc_rootfs_overlay"))
 +
-+diff --git a/inc/mtp.h b/inc/mtp.h
-+index 238de68..5f5b804 100644
-+--- a/inc/mtp.h
-++++ b/inc/mtp.h
-+@@ -26,6 +26,8 @@
-+ #ifndef _INC_MTP_H_
-+ #define _INC_MTP_H_
-+ 
-++#include <pthread.h>
-++
-+ #define MAX_STORAGE_NB 16
-+ #define MAX_CFG_STRING_SIZE 512
-+ 
-+-- 
-+2.21.0.593.g511ec345e18
++    def run_ok(self, cmd):
++        full_cmd = "sh -c '{}'".format(cmd)
++        out, exit_code = self.emulator.run(full_cmd, 120)
++        self.assertEqual(exit_code, 0)
 +
-diff --git a/package/umtprd/Config.in b/package/umtprd/Config.in
++    def wait_boot(self):
++        #the complete boot with systemd takes more time than what the default multipler permits
++        self.emulator.timeout_multiplier *= 10
++        self.emulator.login()
++
++    def setup_run_test_container(self):
++        self.run_ok("lxc-create -n lxc_iperf3 -t none -f /usr/share/lxc/config/minimal-iperf3.conf")
++        self.run_ok("lxc-start -l trace -n lxc_iperf3 -o /tmp/lxc.log -L /tmp/lxc.console.log")
++        #need to wait for the container to be fully started
++        self.run_ok("sleep 2")
++        self.run_ok("iperf3 -c 192.168.1.2 -t 2")
++        #if the test fails, just cat /tmp/*.log
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        kernel_file = os.path.join(self.builddir, "images", "zImage")
++        dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
++        self.emulator.boot(arch="armv7", kernel=kernel_file,
++                           kernel_cmdline=[
++                                        "console=ttyAMA0,115200"],
++                           options=["-initrd", cpio_file,
++                                        "-dtb", dtb_file,
++                                        "-M", "vexpress-a9"])
++        self.wait_boot()
++        self.setup_run_test_container()
+diff --git a/support/testing/tests/package/test_lxc/kernel_config_frag b/support/testing/tests/package/test_lxc/kernel_config_frag
 new file mode 100644
-index 0000000000..28c08ce5bd
+index 0000000000..32f8bdd65e
 --- /dev/null
-+++ b/package/umtprd/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_UMTPRD
-+	bool "umtprd"
-+	help
-+	  Lightweight USB MTP responder daemon for GNU/Linux
-+
-+	  https://github.com/viveris/uMTP-Responder
-diff --git a/package/umtprd/umtprd.hash b/package/umtprd/umtprd.hash
-new file mode 100644
-index 0000000000..aa91696613
---- /dev/null
-+++ b/package/umtprd/umtprd.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	e1301bdd89170cc2c679446c1cc5873feaacd061bf0ab547fc0a11670bae9163	umtprd-1.0.0.tar.gz
-diff --git a/package/umtprd/umtprd.mk b/package/umtprd/umtprd.mk
-new file mode 100644
-index 0000000000..8460f82b7d
---- /dev/null
-+++ b/package/umtprd/umtprd.mk
++++ b/support/testing/tests/package/test_lxc/kernel_config_frag
 @@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# umtprd
-+#
-+################################################################################
-+
-+UMTPRD_VERSION = 1.0.0
-+UMTPRD_SITE = https://github.com/viveris/uMTP-Responder/archive
-+UMTPRD_LICENSE = GPL-3.0
-+UMTPRD_LICENSE_FILES = LICENSE
-+
-+define UMTPRD_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define UMTPRD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/umtprd $(TARGET_DIR)/usr/sbin/umtprd
-+endef
-+
-+$(eval $(generic-package))
++CONFIG_FIX_EARLYCON_MEM=y
++CONFIG_BLK_CGROUP=y
++CONFIG_CGROUP_SCHED=y
++CONFIG_CGROUP_PIDS=y
++CONFIG_CGROUP_FREEZER=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_CGROUP_DEBUG=y
++CONFIG_NETFILTER_XT_MATCH_CGROUP=y
++CONFIG_SOCK_CGROUP_DATA=y
++CONFIG_CGROUP_NET_PRIO=y
++CONFIG_CGROUP_NET_CLASSID=y
++CONFIG_NAMESPACES=y
++CONFIG_IPC_NS=y
++CONFIG_PID_NS=y
++CONFIG_UTS_NS=y
++CONFIG_USER_NS=y
++CONFIG_NET_NS=y
++CONFIG_BRIDGE=y
++CONFIG_VETH=y
+diff --git a/support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/bin/iperf3.sh b/support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/bin/iperf3.sh
+new file mode 100755
+index 0000000000..7045ca4806
+--- /dev/null
++++ b/support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/bin/iperf3.sh
+@@ -0,0 +1,2 @@
++#!/bin/sh
++iperf3 -s -1 > /tmp/iperf3.serv.log 2>&1
+diff --git a/support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/share/lxc/config/minimal-iperf3.conf b/support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/share/lxc/config/minimal-iperf3.conf
+new file mode 100644
+index 0000000000..41cc5311d6
+--- /dev/null
++++ b/support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/share/lxc/config/minimal-iperf3.conf
+@@ -0,0 +1,4 @@
++lxc.include = /usr/share/lxc/config/minimal.conf
++lxc.hook.version = 1
++lxc.hook.start-host = ip a add 192.168.1.1/24 dev lxc0
++lxc.init.cmd = tini -g iperf3.sh
+diff --git a/support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/share/lxc/config/minimal.conf b/support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/share/lxc/config/minimal.conf
+new file mode 100644
+index 0000000000..7319821506
+--- /dev/null
++++ b/support/testing/tests/package/test_lxc/test_lxc_rootfs_overlay/usr/share/lxc/config/minimal.conf
+@@ -0,0 +1,6 @@
++lxc.autodev = 0
++lxc.net.0.type = veth
++lxc.net.0.veth.pair = lxc0
++lxc.net.0.name = eth0
++lxc.net.0.flags = up
++lxc.net.0.ipv4.address = 192.168.1.2/24
 -- 
-2.24.0.rc1
+2.17.1
