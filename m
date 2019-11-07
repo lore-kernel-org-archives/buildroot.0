@@ -1,21 +1,24 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  7 Nov 2019 21:47:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ndisc6: Fix musl build
-Message-ID: <20191107204726.2834-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 7 Nov 2019 21:54:39 +0100
+Subject: [Buildroot] [git commit] package/ndisc6: fix musl build
+Message-ID: <20191107204738.692308E9E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=5044d205e9bad882b97e06d4e5b9eb3adba3ef67
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes:
 http://autobuild.buildroot.net/results/eec/eecbb0ee0901735db9d5595d2d6b91bb22cca3ca/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ndisc6/0001-Fix-musl-build.patch | 34 ++++++++++++++++++++++++
+ package/ndisc6/0001-Fix-musl-build.patch | 34 ++++++++++++++++++++++++++++++++
  1 file changed, 34 insertions(+)
- create mode 100644 package/ndisc6/0001-Fix-musl-build.patch
 
 diff --git a/package/ndisc6/0001-Fix-musl-build.patch b/package/ndisc6/0001-Fix-musl-build.patch
 new file mode 100644
@@ -57,5 +60,3 @@ index 0000000000..6a13a435c5
 +-- 
 +2.20.1
 +
--- 
-2.20.1
