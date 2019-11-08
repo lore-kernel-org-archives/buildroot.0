@@ -1,33 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 8 Nov 2019 21:54:01 +0100
-Subject: [Buildroot] [PATCH 1/1] utils/scanpypi: sort alphabetically
- list of required packages
-In-Reply-To: <20191108161043.342378-1-b.bilas@grinn-global.com>
-References: <20191108161043.342378-1-b.bilas@grinn-global.com>
-Message-ID: <20191108215401.2e9ca679@windsurf>
+Date: Fri, 8 Nov 2019 21:54:50 +0100
+Subject: [Buildroot] [PATCH] infra/pkg-generic: use site method for
+ same-site extra downloads
+In-Reply-To: <20191108172645.22584-1-yann.morin.1998@free.fr>
+References: <20191108172645.22584-1-yann.morin.1998@free.fr>
+Message-ID: <20191108215450.1ae1e1fb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  8 Nov 2019 17:10:43 +0100
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+On Fri,  8 Nov 2019 18:26:45 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> That change will alphabetically set list order
-> of required packages in Config.in file automatically.
+> When a package specifies extra downloads, it has the option to only name
+> the basename of the extra download, in which case that extra download
+> will be retrieved from the same location the main download is retrieved
+> from.
 > 
-> Example below:
+> In that case, if the extra download contains a '+', it would confuse the
+> dl-wrapper, which believes the LHS of the '+' is the site method, and
+> the RHS the actual URI, and so the dl-wrapper mangles and damages the
+> URI when fetching such extra downloads, like that happens with android
+> tools, where the proper URI and mangled URIs of the extra download are,
+> respectively:
 > 
-> before: ['python-pyserial', 'python-pyaes', 'python-ecdsa']
-> after:  ['python-ecdsa', 'python-pyaes', 'python-pyserial']
+>     https://launchpad.net/ubuntu/+archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+>     http://archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
 > 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> We fix that by always propagating the site method to extra downloads,
+> but only when they are specified as relative to the main download URI.
+> 
+> For the extra downloads that specify a full URI, it is not systematic
+> that it is the same site method. For example, a main download could be a
+> git clone, but an extra download a pure http download; in that case we
+> can't replicate the site method for extra downloads, so they'll have to
+> take appropriate care to specify the required method and encoding if
+> needed.
+> 
+> Reported-by: Jemy Zhang <jemy.zhang@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Jemy Zhang <jemy.zhang@gmail.com>
 > ---
->  utils/scanpypi | 1 +
->  1 file changed, 1 insertion(+)
+>  package/pkg-generic.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
