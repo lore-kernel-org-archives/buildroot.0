@@ -1,55 +1,53 @@
 From: Carlos Santos <unixmania@gmail.com>
-Date: Fri, 8 Nov 2019 20:05:17 -0300
-Subject: [Buildroot] [PATCH 1/2] board/beaglebone: fix boot on
- BeagleBone Black
-In-Reply-To: <20191108220944.326df425@windsurf>
+Date: Fri, 8 Nov 2019 20:11:14 -0300
+Subject: [Buildroot] [PATCH 2/2] configs/beaglebone: use the new
+ BeagleBoard/BeagleBone kernel repository
+In-Reply-To: <20191108221256.089bfa50@windsurf>
 References: <20191102223839.16262-1-unixmania@gmail.com>
- <20191102223839.16262-2-unixmania@gmail.com>
- <20191108220944.326df425@windsurf>
-Message-ID: <CAJ4jsadkh6aa76yffGmxZptT2jb3ZL+JnBrdOYwQCaGHijhefw@mail.gmail.com>
+ <20191102223839.16262-3-unixmania@gmail.com>
+ <20191108221256.089bfa50@windsurf>
+Message-ID: <CAJ4jsaeuA66DLtkH8dLpJQpimSwjd5w5ntOZh2+9o7O1zvGOTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 8, 2019 at 6:09 PM Thomas Petazzoni
+On Fri, Nov 8, 2019 at 6:12 PM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> Hello Carlos,
+> Hello,
 >
-> On Sat,  2 Nov 2019 19:38:38 -0300
+> +Peter, who contributed the beagleboneai defconfig.
+>
+> On Sat,  2 Nov 2019 19:38:39 -0300
 > unixmania at gmail.com wrote:
 >
 > > From: Carlos Santos <unixmania@gmail.com>
 > >
-> > Commit 68b5b79b2f has set the getty port to the default console but left
-> > "ttyO0" in bootargs, in the U-Boot environment. Use "ttyS0", instead.
+> > The original source URL (http://beagleboard.org/source) now redirects to
+> > https://elinux.org/Beagleboard:BeagleBoneBlack_Rebuilding_Software_Image
+> > which points to an official kernel repository at GitHub.
 > >
-> > Also set loadaddr to 0x82000000 and fdtaddr to 0x88000000, replacing the
-> > ancient U-Boot 2013.10-dirty default values that cause system hangs.
+> > There are updated RT and non-RT kernel source trees. Use the last non-RT
+> > release (4.19.73-ti-r29) and the omap2plus defconfig.
+> >
+> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
 >
-> Where are we using U-Boot 2013.10-dirty on BeagleBone ?
->
-> $ grep UBOOT_CUSTOM_VERSION_VALUE configs/beaglebone*
-> configs/beagleboneai_defconfig:BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
-> configs/beaglebone_defconfig:BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
-> configs/beaglebone_qt5_defconfig:BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
->
-> And these are upstream, unpatched, versions.
->
-> Could you clarify this? Otherwise the patch looks good, of course.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> I've applied to next... but after doing, I realized that you could have
+> used the github macro, like we do in beagleboneai_defconfig. Could you
+> send a patch for that ?
 
-That's the SPL in old Beaglebone cards. I will rephrase the commit
-message to clarify it.
+I kept using git download method but I can replace it by the download
+or the tarbal from GitHub.
+
+> Also, it would be nice if we could align beagleboneai, beaglebone and
+> beaglebone_qt5 to use the same U-Boot/Linux versions, if possible. I
+> see that the beagleboneai is using 4.14 even though it's a much newer
+> platform than beaglebone.
+
+I have been working on it but did not have much free time in the last
+weeks. I will try to fix it on time for 2019.11.
 
 -- 
 Carlos Santos <unixmania@gmail.com>
