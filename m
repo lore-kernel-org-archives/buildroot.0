@@ -1,79 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 Nov 2019 18:28:19 +0100
-Subject: [Buildroot] [PATCH 1/1] fix corrupted download url of extra
- packages
-In-Reply-To: <20191105090448.99235-2-jemy.zhang@gmail.com>
-References: <20191105090448.99235-1-jemy.zhang@gmail.com>
- <20191105090448.99235-2-jemy.zhang@gmail.com>
-Message-ID: <20191108172819.GG3419@scaer>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Fri, 8 Nov 2019 18:30:26 +0100
+Subject: [Buildroot] [PATCH 2/7] package/freescale-imx: add option for
+ i.MX8QM
+In-Reply-To: <20190909121525.13935-2-maeva.manuel@nxp.com>
+References: <20190909121525.13935-1-maeva.manuel@nxp.com>
+ <20190909121525.13935-2-maeva.manuel@nxp.com>
+Message-ID: <20191108173026.GB9828@g751>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jemy, All,
+Hi Maeva,
 
-On 2019-11-05 17:04 +0800, jemy.zhang at gmail.com spake thusly:
-> From: "Jemy Zhang" <jemy.zhang@gmail.com>
-> 
-> If the download url of extra packages contains '+', the contents before
-> '+' will be parsed as SITE_METHOD, the original download url corrupted.
-> 
-> check with android-tools package.
+Sorry for the (very) late reply.
 
-Indeed this is broken. Thank you very much for noticing the issue.
-
-> Signed-off-by: Jemy Zhang <jemy.zhang@gmail.com>
+On Mon, Sep 09, 2019 at 12:14:58PM +0000, Maeva Manuel wrote:
+> Signed-off-by: Maeva Manuel <maeva.manuel@nxp.com>
 > ---
->  package/pkg-generic.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  package/freescale-imx/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 893faba22a..bb0ca939a3 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -523,8 +523,9 @@ endif
->  $(2)_ALL_DOWNLOADS = \
->  	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
->  	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
-> -		$$(if $$(findstring ://,$$(p)),$$(p),\
-> -			$$($(2)_SITE)/$$(p)))
-> +		$$(call getschemeplusuri,$$(call qstrip,\
-> +		  $$(if $$(findstring ://,$$(p)),$$(p),\
-> +			  $$($(2)_SITE)/$$(p))),urlencode))
+> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+> index f010aab87b..5672e09b05 100644
+> --- a/package/freescale-imx/Config.in
+> +++ b/package/freescale-imx/Config.in
+> @@ -40,6 +40,9 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+>  	bool "imx7d/imx7ulp"
+>  
+> +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+> +	bool "imx8"
+> +
+>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+>  	bool "imx8m"
 
-I am not certain that we want to unconditionally enforce urlencode on
-all additional downloads...
+This isn't sufficient, you also need to make sure to add
+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 in the
+BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU definition as I'm sure it has a
+Vivante GPU ;)
 
-Instead, I think we should just replicate the site method for extra
-downloads that use the same site as the main download.
-
-I've sent a patch that does just that:
-    https://patchwork.ozlabs.org/patch/1192073/
-
-Can you see if that fixes it for you (it did for me, but if you have an
-alternate test-case, that'd be nice to have feedback on it too).
-
-Thanks again for the report! :-)
+Looking at Config.in, seems that MX8MM has the same issue.
 
 Regards,
-Yann E. MORIN.
-
->  ifndef $(2)_SITE
->   ifdef $(3)_SITE
-> -- 
-> 2.22.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Gary
