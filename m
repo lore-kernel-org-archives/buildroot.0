@@ -1,41 +1,94 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Nov 2019 18:37:19 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/sudo: fix rmdir
-Message-ID: <20191108173719.27345-1-fontaine.fabrice@gmail.com>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Fri,  8 Nov 2019 09:41:11 -0800
+Subject: [Buildroot] [PATCH 2/3] arch/config.in.arc: Introduce ARC ISA
+ toggle to ease downstream toggles
+In-Reply-To: <20191108174112.28183-1-vgupta@synopsys.com>
+References: <20191108174112.28183-1-vgupta@synopsys.com>
+Message-ID: <20191108174112.28183-3-vgupta@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pass --ignore-fail-on-non-empty to rmdir to fix the following error:
-
-rmdir /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/target/etc/sudoers.d
-rmdir: failed to remove '/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/target/etc/sudoers.d': Directory not empty
-
-Fixes:
- - http://autobuild.buildroot.org/results/0cfc61a98760c1d3a98aa0f1e126767881c49abd
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
 ---
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Pass --ignore-fail-on-non-empty option to rmdir instead of $(RM) -rf
+ arch/Config.in.arc | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
- package/sudo/sudo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 7d52eb0b57..a7966047f8 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -66,7 +66,7 @@ endef
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 284951b82cee..dbc608db39c6 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -1,3 +1,18 @@
++choice
++	prompt "Target ISA"
++	default BR2_arcompact
++	depends on BR2_arc
++	help
++	    Specific ARC ISA to use
++
++config BR2_arcompact
++	bool "ARCompact ISA"
++
++config BR2_arcv2
++	bool "ARCv2 ISA"
++
++endchoice
++
+ choice
+ 	prompt "Target CPU"
+ 	default BR2_arc770d
+@@ -7,12 +22,15 @@ choice
  
- define SUDO_REMOVE_DIST_EXAMPLES
- 	$(RM) $(TARGET_DIR)/etc/sudoers.dist
--	rmdir $(TARGET_DIR)/etc/sudoers.d
-+	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/etc/sudoers.d
- endef
- SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_REMOVE_DIST_EXAMPLES
+ config BR2_arc750d
+ 	bool "ARC 750D"
++	depends on BR2_arcompact
  
+ config BR2_arc770d
+ 	bool "ARC 770D"
++	depends on BR2_arcompact
+ 
+ config BR2_archs
+ 	bool "ARC HS38"
++	depends on BR2_arcv2
+ 	help
+ 	  Generic ARC HS capable of running Linux, i.e. with MMU,
+ 	  caches and 32-bit multiplier. Also it corresponds to the default
+@@ -20,6 +38,7 @@ config BR2_archs
+ 
+ config BR2_archs38
+ 	bool "ARC HS38 with 64-bit mpy"
++	depends on BR2_arcv2
+ 	help
+ 	  Fully featured ARC HS capable of running Linux, i.e. with MMU,
+ 	  caches and 64-bit multiplier.
+@@ -29,6 +48,7 @@ config BR2_archs38
+ 
+ config BR2_archs38_full
+ 	bool "ARC HS38 with Quad MAC & FPU"
++	depends on BR2_arcv2
+ 	help
+ 	  Fully featured ARC HS with additional support for
+ 	   - Dual- and quad multiply and MC oprations
+@@ -39,6 +59,7 @@ config BR2_archs38_full
+ 
+ config BR2_archs4x_rel31
+ 	bool "ARC HS48 rel 31"
++	depends on BR2_arcv2
+ 	help
+ 	   Latest release of HS48 processor
+ 	   - Dual- and quad multiply and MC oprations
+@@ -72,8 +93,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "hs4x_rel31"	 if BR2_archs4x_rel31
+ 
+ config BR2_READELF_ARCH_NAME
+-	default "ARCompact"	if BR2_arc750d || BR2_arc770d
+-	default "ARCv2"		if BR2_archs || BR2_archs38 || BR2_archs38_full || BR2_archs4x_rel31
++	default "ARCompact"	if BR2_arcompact
++	default "ARCv2"		if BR2_arcv2
+ 
+ choice
+ 	prompt "MMU Page Size"
 -- 
-2.23.0
+2.20.1
