@@ -1,66 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 8 Nov 2019 22:28:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vnstat: fix build failure due
- to double install of programs
-In-Reply-To: <20191031121848.7914-1-fontaine.fabrice@gmail.com>
-References: <20191031121848.7914-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191108222826.14ea446c@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 8 Nov 2019 22:28:41 +0100
+Subject: [Buildroot] [PATCH 1/2] package/gmpc: needs -lm
+In-Reply-To: <20191108220442.4b596996@windsurf>
+References: <20191029214046.14722-1-fontaine.fabrice@gmail.com>
+ <20191108220442.4b596996@windsurf>
+Message-ID: <20191108222841.4ff8debf@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hello Fabrice, Thomas,
 
-On Thu, 31 Oct 2019 13:18:48 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Fri, 8 Nov 2019 22:04:42 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/3aefa8d63f710b71720fc114450110d2f885820b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> On Tue, 29 Oct 2019 22:40:45 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > gmpc forgets to link with -lm:
+> >
+> > /home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/../../../../mips-linux-gnu/bin/ld: GmpcVolume.o: undefined reference to symbol 'ceil@@GLIBC_2.0'
+> > /home/buildroot/autobuild/instance-2/output-1/host/mips64el-buildroot-linux-gnu/sysroot/soft-float/el/lib64/libm.so.6: error adding symbols: DSO missing from command line
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/a79e0487135ad90530595d5c6ecc32f9c8cea7c4
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> We need to understand why this is happening now. This package has not
+> been modified since July 2017, but suddenly, on October 21, 2019, it
+> started failing like this. Why? Was there a change in one of the
+> dependencies, that is no longer linked with libm, and that causes this
+> problem ?
 
-Why is this happening just 3 times? Is it a parallel build issue? Also,
-when I build vnstat a first time, and then do "make vnstat-rebuild",
-which reinstalls the same files at the same place, it doesn't fail. So
-why does it fail in those situations ?
+Maybe the same cause/problem as in the libv4l case regarding libatomic,
+evaluating vs. not evaluationg the *.la files (see [1])?
 
-> +-install-data-hook: install-exec
-> ++install-data-hook:
+Regards,
+Peter
 
-This solution is anyway not good, because it reverts upstream commit
-3a76e18434fb033d8ac80955626fc8e2ca966cfa, which is necessary. Look at
-the Makefile.am, in the native compilation case:
+[1] http://lists.busybox.net/pipermail/buildroot/2019-October/264928.html
 
-install-data-hook: install-exec
-        if [ -f $(DESTDIR)$(man1dir)/vnstatd.1 ]; then rm -f $(DESTDIR)$(man1dir)/vnstatd.1; fi
-        $(MKDIR_P) $(DESTDIR)$(sysconfdir)
-if IS_CROSSCOMPILED
-        if [ ! -f $(DESTDIR)$(sysconfdir)/vnstat.conf ]; \
-        then cp -fv $(srcdir)/cfg/vnstat.conf $(DESTDIR)$(sysconfdir)/vnstat.conf; \
-        fi
-else
-        $(DESTDIR)$(bindir)/vnstat$(EXEEXT) --showconfig >vnstat.conf.new
-        if [ -f $(DESTDIR)$(sysconfdir)/vnstat.conf ]; \
-        then cp -fv $(DESTDIR)$(sysconfdir)/vnstat.conf vnstat.conf.old; \
-        fi
-        cp -fv vnstat.conf.new $(DESTDIR)$(sysconfdir)/vnstat.conf
-endif
-
-It runs the vnstat program itself! So it has to make sure it has been
-installed before running it. Of course, this could be changed to run
-the vnstat from the build directory instead of from the installation
-location.
-
-But as it is, your patch breaks things for upstream. For the Buildroot
-case, it works fine, but we want more details as to what the problem
-is, and why it happens so infrequently.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> I think I already asked this in the past: when you fix an issue, don't
+> just fix the issue, but explain why the issue is happening, especially
+> in situations like these.
+>
+> Thanks!
+>
+> Thomas
