@@ -1,55 +1,171 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 8 Nov 2019 21:54:50 +0100
-Subject: [Buildroot] [PATCH] infra/pkg-generic: use site method for
- same-site extra downloads
-In-Reply-To: <20191108172645.22584-1-yann.morin.1998@free.fr>
-References: <20191108172645.22584-1-yann.morin.1998@free.fr>
-Message-ID: <20191108215450.1ae1e1fb@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 8 Nov 2019 21:55:03 +0100
+Subject: [Buildroot] [PATCH v2] package/dcron: fix startup error due to
+ missing directories
+In-Reply-To: <20190722002425.6783-1-unixmania@gmail.com>
+References: <20190722002425.6783-1-unixmania@gmail.com>
+Message-ID: <20191108205503.GK3419@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  8 Nov 2019 18:26:45 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Carlos, All,
 
-> When a package specifies extra downloads, it has the option to only name
-> the basename of the extra download, in which case that extra download
-> will be retrieved from the same location the main download is retrieved
-> from.
+On 2019-07-21 21:24 -0300, unixmania at gmail.com spake thusly:
+> From: Carlos Santos <unixmania@gmail.com>
+> crond uses the /var/spool/cron/{crontabs,cronstamps} directories to
+> store the per-user crontabs and timestamps for jobs, respectively.
 > 
-> In that case, if the extra download contains a '+', it would confuse the
-> dl-wrapper, which believes the LHS of the '+' is the site method, and
-> the RHS the actual URI, and so the dl-wrapper mangles and damages the
-> URI when fetching such extra downloads, like that happens with android
-> tools, where the proper URI and mangled URIs of the extra download are,
-> respectively:
+> On systems with busybox or sysv init /var/spool is by default a link to
+> /tmp (see package/skeleton-init-sysv/skeleton/). So if those directories
+> are created at installation time they actually are under /tmp/spool and
+> vanish at run time when a tmpfs is mounted at /tmp. In this case crond
+> issues error messages that can't be seen.
 > 
->     https://launchpad.net/ubuntu/+archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
->     http://archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+> The error is hidden because we use start-stop-daemon to run crond in
+> foreground mode to create a pid file and move crond to background. In
+> this mode crond does not use syslog and all error messages are lost
+> because start-stop-daemon redirects strderr to /dev/null.
 > 
-> We fix that by always propagating the site method to extra downloads,
-> but only when they are specified as relative to the main download URI.
+> Getting a presistent storage for /var/spool would require customisations
+> of the directory layout, which can not be done in a generic way, as each
+> one will need to adapt to their own constraints.
 > 
-> For the extra downloads that specify a full URI, it is not systematic
-> that it is the same site method. For example, a main download could be a
-> git clone, but an extra download a pure http download; in that case we
-> can't replicate the site method for extra downloads, so they'll have to
-> take appropriate care to specify the required method and encoding if
-> needed.
+> Fix these problem by means of the following changes:
 > 
-> Reported-by: Jemy Zhang <jemy.zhang@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Jemy Zhang <jemy.zhang@gmail.com>
+> - Add configs for the crontabs and cronstamps paths. They can be used to
+>   move the directories to persistent filesystems, if necessary.
+> - Change the init script and systemd unit to ensure that the directories
+>   are created before starting crond.
+> - Start crond in daemon mode in the init script and use "pidof crond" to
+>   create the required pid file.
+> 
+> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12011
+
+I did provide some review on this patch, but I haven't seen any reply or
+repost.
+
+I've marked it changes-requested in Ptchwork. Feel free to respin a
+fixed up version that addresses my comments (either in the commit log,
+or as different changes).
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
 > ---
->  package/pkg-generic.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes v1->v2:
+>   - Remove (partially), since the fix is now complete
+> ---
+>  package/dcron/Config.in     | 16 ++++++++++++++++
+>  package/dcron/S90dcron      |  8 +++++++-
+>  package/dcron/dcron.mk      | 11 +++++++++--
+>  package/dcron/dcron.service |  3 ++-
+>  4 files changed, 34 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/dcron/Config.in b/package/dcron/Config.in
+> index d7f66bdb7d..1203c42dec 100644
+> --- a/package/dcron/Config.in
+> +++ b/package/dcron/Config.in
+> @@ -21,3 +21,19 @@ config BR2_PACKAGE_DCRON
+>  	  with sgid bit enabled.
+>  
+>  	  http://www.jimpryor.net/linux/dcron.html
+> +
+> +if BR2_PACKAGE_DCRON
+> +
+> +config BR2_PACKAGE_DCRON_CRONTABS_DIR
+> +	string "crontabs directory"
+> +	default "/var/spool/cron/crontabs"
+> +	help
+> +	  Directory of per-user crontabs
+> +
+> +config BR2_PACKAGE_DCRON_CRONSTAMPS_DIR
+> +	string "cronstamps directory"
+> +	default "/var/spool/cron/cronstamps"
+> +	help
+> +	  Directory of timestamps for @freq and FREQ=... jobs
+> +
+> +endif
+> diff --git a/package/dcron/S90dcron b/package/dcron/S90dcron
+> index de21d2ca13..4527277623 100644
+> --- a/package/dcron/S90dcron
+> +++ b/package/dcron/S90dcron
+> @@ -1,9 +1,15 @@
+>  #!/bin/sh
+>  
+> +CRONTABS_DIR=%%CRONTABS_DIR%%
+> +CRONSTAMPS_DIR=%%CRONSTAMPS_DIR%%
+> +
+>  case "$1" in
+>  	start)
+>  		printf "Starting cron ... "
+> -		start-stop-daemon -S -q -m -b -p /var/run/dcron.pid --exec /usr/sbin/crond -- -f
+> +		mkdir -p "$CRONTABS_DIR" "$CRONSTAMPS_DIR"
+> +		start-stop-daemon -S -q -p /var/run/dcron.pid -x /usr/sbin/crond \
+> +			-- -c "$CRONTABS_DIR" -t "$CRONSTAMPS_DIR"
+> +		pidof crond > /var/run/dcron.pid || rm -f /var/run/dcron.pid
+>  		echo "done."
+>  		;;
+>  	stop)
+> diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
+> index 2ee0709af5..453e3acb54 100644
+> --- a/package/dcron/dcron.mk
+> +++ b/package/dcron/dcron.mk
+> @@ -19,18 +19,25 @@ define DCRON_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -D -m0644 $(@D)/extra/root.crontab $(TARGET_DIR)/etc/cron.d/system
+>  	# Busybox provides run-parts, so there is no need to use nor install provided run-cron
+>  	$(SED) 's#/usr/sbin/run-cron#/bin/run-parts#g' $(TARGET_DIR)/etc/cron.d/system
+> -	$(INSTALL) -d -m0755 $(TARGET_DIR)/var/spool/cron/crontabs \
+> -		$(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
+> +	$(INSTALL) -d -m750 $(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
+>  		$(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
+>  endef
+>  
+>  define DCRON_INSTALL_INIT_SYSV
+>  	$(INSTALL) -D -m 0755 package/dcron/S90dcron $(TARGET_DIR)/etc/init.d/S90dcron
+> +	$(SED) 's#%%CRONTABS_DIR%%#$(BR2_PACKAGE_DCRON_CRONTABS_DIR)#' \
+> +		$(TARGET_DIR)/etc/init.d/S90dcron
+> +	$(SED) 's#%%CRONSTAMPS_DIR%%#$(BR2_PACKAGE_DCRON_CRONSTAMPS_DIR)#' \
+> +		$(TARGET_DIR)/etc/init.d/S90dcron
+>  endef
+>  
+>  define DCRON_INSTALL_INIT_SYSTEMD
+>  	$(INSTALL) -D -m 644 package/dcron/dcron.service \
+>  		$(TARGET_DIR)/usr/lib/systemd/system/dcron.service
+> +	$(SED) 's#%%CRONTABS_DIR%%#$(BR2_PACKAGE_DCRON_CRONTABS_DIR)#' \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/dcron.service
+> +	$(SED) 's#%%CRONSTAMPS_DIR%%#$(BR2_PACKAGE_DCRON_CRONSTAMPS_DIR)#' \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/dcron.service
+>  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>  	ln -sf ../../../../usr/lib/systemd/system/dcron.service \
+>  		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dcron.service
+> diff --git a/package/dcron/dcron.service b/package/dcron/dcron.service
+> index 924ed72205..abce25ba4f 100644
+> --- a/package/dcron/dcron.service
+> +++ b/package/dcron/dcron.service
+> @@ -3,7 +3,8 @@ Description=Task scheduler daemon
+>  After=syslog.target
+>  
+>  [Service]
+> -ExecStart=/usr/sbin/crond -S
+> +ExecStartPre=mkdir -p %%CRONTABS_DIR%% %%CRONSTAMPS_DIR%%
+> +ExecStart=/usr/sbin/crond -c %%CRONTABS_DIR%% -t %%CRONSTAMPS_DIR%%
+>  Type=forking
+>  
+>  [Install]
+> -- 
+> 2.18.1
+> 
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
