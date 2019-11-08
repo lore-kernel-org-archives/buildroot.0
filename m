@@ -1,100 +1,51 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Fri, 8 Nov 2019 10:17:00 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/python-esptool: new package
-In-Reply-To: <483e9989-ac40-cfdd-de79-78088c70ab89@grinn-global.com>
-References: <20191107170504.1327891-1-b.bilas@grinn-global.com>
- <20191107170504.1327891-2-b.bilas@grinn-global.com>
- <20191107235045.667813a1@windsurf>
- <44e04441-7a39-7770-6ce7-6dcc5fee3870@grinn-global.com>
- <20191108094927.49828a98@windsurf>
- <483e9989-ac40-cfdd-de79-78088c70ab89@grinn-global.com>
-Message-ID: <1b5aa6b2-be6c-7685-9fcb-ab3b01b1253b@grinn-global.com>
+From: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Date: Fri,  8 Nov 2019 10:17:00 +0100
+Subject: [Buildroot] [PATCH 1/3] php: libsodium support
+Message-ID: <20191108091700.7438-1-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+---
+ package/php/Config.ext | 6 ++++++
+ package/php/php.mk     | 5 +++++
+ 2 files changed, 11 insertions(+)
 
-I've forgotten about Yegor in Cc.
-
-Best
-Bartek
-On 08.11.2019 10:06, Bartosz Bilas wrote:
-> Hello guys,
->
-> On 08.11.2019 09:49, Thomas Petazzoni wrote:
->> Hello,
->>
->> +Yegor in Cc.
->>
->> On Fri, 8 Nov 2019 09:45:50 +0100
->> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
->>
->>>>> +PYTHON_ESPTOOL_LICENSE = GNU General Public License v2 or later 
->>>>> (GPLv2+)
->>>> The proper way to describe this is just:
->>>>
->>>> PYTHON_ESPTOOL_LICENSE = GPL-2.0+
->>> this was created using scanpypi script so do you think we should fix
->>> that script or adjust that manually as you did?
->> scanpipy already has a conversion table between Pipy-provided license
->> strings and Buildroot license tags:
->>
->> ???????????????? 'Apache Software License': 'Apache-2.0',
->> ???????????????? 'BSD License': 'FIXME: please specify the exact BSD 
->> version',
->> ???????????????? 'European Union Public Licence 1.0': 'EUPL-1.0',
->> ???????????????? 'European Union Public Licence 1.1': 'EUPL-1.1',
->> ???????????????? "GNU General Public License": "GPL",
->> ???????????????? "GNU General Public License v2": "GPL-2.0",
->> ???????????????? "GNU General Public License v2 or later": "GPL-2.0+",
->> ???????????????? "GNU General Public License v3": "GPL-3.0",
->> ???????????????? "GNU General Public License v3 or later": "GPL-3.0+",
->> ???????????????? "GNU Lesser General Public License v2": "LGPL-2.1",
->> ???????????????? "GNU Lesser General Public License v2 or later": 
->> "LGPL-2.1+",
->> ???????????????? "GNU Lesser General Public License v3": "LGPL-3.0",
->> ???????????????? "GNU Lesser General Public License v3 or later": 
->> "LGPL-3.0+",
->> ???????????????? "GNU Library or Lesser General Public License": 
->> "LGPL-2.0",
->> ???????????????? "ISC License": "ISC",
->> ???????????????? "MIT License": "MIT",
->> ???????????????? "Mozilla Public License 1.0": "MPL-1.0",
->> ???????????????? "Mozilla Public License 1.1": "MPL-1.1",
->> ???????????????? "Mozilla Public License 2.0": "MPL-2.0",
->> ???????????????? "Zope Public License": "ZPL"
->>
->> Obviously, the value "GNU General Public License v2 or later (GPLv2+)"
->> that was used by this package didn't match any entry in this table.
->> Since "GNU General Public License v2 or later (GPLv2+)" is apparently
->> rarely used, I don't think it's worth adding an entry to the table: for
->> such cases, we simply have to do a manual fixup. In any case,
->> ./utils/scanpipy does not guarantee that it provides a fully working
->> and correct Buildroot package: it extracts most information from Pipy,
->> but a careful review, and possibly some changes may be necessary.
->
-> I assume that's the same for that comment bellow:
->
-> > +config BR2_PACKAGE_PYTHON_ESPTOOL
-> > +??? bool "python-esptool"
-> > +??? select BR2_PACKAGE_PYTHON_SERIAL # runtime
-> > +??? select BR2_PACKAGE_PYTHON_PYAES # runtime
-> > +??? select BR2_PACKAGE_PYTHON_ECDSA # runtime
->
-> Alphabetic ordering.
->
-> but I think it wouldn't be difficult to handle it in the script.
->
-> Best
-> Bartek
->>
->> Best regards,
->>
->> Thomas
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index c7f0332fd8..0c6ed4b401 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -70,6 +70,12 @@ config BR2_PACKAGE_PHP_EXT_HASH
+ 	help
+ 	  HASH message digest framework
+ 
++config BR2_PACKAGE_PHP_EXT_LIBSODIUM
++	bool "libsodium"
++	select BR2_PACKAGE_LIBSODIUM
++	help
++	  libsodium support
++
+ config BR2_PACKAGE_PHP_EXT_MCRYPT
+ 	bool "mcrypt"
+ 	select BR2_PACKAGE_LIBMCRYPT
+diff --git a/package/php/php.mk b/package/php/php.mk
+index b679531238..85bf2075ae 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -122,6 +122,11 @@ PHP_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_PHP_EXT_MBSTRING),--enable-mbstring) \
+ 	$(if $(BR2_PACKAGE_PHP_EXT_PHAR),--enable-phar)
+ 
++ifeq ($(BR2_PACKAGE_PHP_EXT_LIBSODIUM),y)
++PHP_CONF_OPTS += --with-sodium=$(STAGING_DIR)/usr
++PHP_DEPENDENCIES += libsodium
++endif
++
+ ifeq ($(BR2_PACKAGE_PHP_EXT_MCRYPT),y)
+ PHP_CONF_OPTS += --with-mcrypt=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += libmcrypt
+-- 
+2.17.1
