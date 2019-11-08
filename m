@@ -1,41 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 8 Nov 2019 10:21:48 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/python-esptool: new package
-In-Reply-To: <483e9989-ac40-cfdd-de79-78088c70ab89@grinn-global.com>
-References: <20191107170504.1327891-1-b.bilas@grinn-global.com>
- <20191107170504.1327891-2-b.bilas@grinn-global.com>
- <20191107235045.667813a1@windsurf>
- <44e04441-7a39-7770-6ce7-6dcc5fee3870@grinn-global.com>
- <20191108094927.49828a98@windsurf>
- <483e9989-ac40-cfdd-de79-78088c70ab89@grinn-global.com>
-Message-ID: <20191108102148.720ed8e5@windsurf>
+From: Patrick Havelange <patrick.havelange@essensium.com>
+Date: Fri,  8 Nov 2019 10:41:19 +0100
+Subject: [Buildroot] [RFC PATCH 1/1] libcap: always build static version
+Message-ID: <20191108094119.6749-1-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 8 Nov 2019 10:06:31 +0100
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+Some tools require a static libcap to be able to be built. This is
+the case for lxc's init.lxc.static binary. As it is currently not
+possible to depend explicitely on a specific static library only,
+this patch always builds the static version of libcap.
 
+We could also do this only when building lxc, however this would
+make things more complicated inside libcap.mk, and would not bring
+us that much as the static lib is not installed on target anyway.
+This also reverts the previous commit
+7984f2d97b4271c14e0922ef22027edaedd78e59.
 
-> I assume that's the same for that comment bellow:
-> 
->  > +config BR2_PACKAGE_PYTHON_ESPTOOL
->  > +??? bool "python-esptool"
->  > +??? select BR2_PACKAGE_PYTHON_SERIAL # runtime
->  > +??? select BR2_PACKAGE_PYTHON_PYAES # runtime
->  > +??? select BR2_PACKAGE_PYTHON_ECDSA # runtime  
-> 
-> Alphabetic ordering.
-> 
-> but I think it wouldn't be difficult to handle it in the script.
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 
-Indeed, the alphabetic ordering here could I suppose be easily handled
-by the script.
+---
+This patch was originally developped for the Lxc test, however
+the init.lxc.static is only used when there is no init system
+specified for the container. Thus it is no longer required for the
+test. However somebody might still need it.
+---
+ package/libcap/libcap.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Thomas
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 4919a4adca..23888c4682 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -18,9 +18,6 @@ HOST_LIBCAP_DEPENDENCIES = host-gperf
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBCAP_MAKE_TARGET = libcap.a libcap.pc
+ LIBCAP_MAKE_INSTALL_TARGET = install-static
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-LIBCAP_MAKE_TARGET = all
+-LIBCAP_MAKE_INSTALL_TARGET = install-shared
+ else
+ LIBCAP_MAKE_TARGET = all
+ LIBCAP_MAKE_INSTALL_TARGET = install
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
