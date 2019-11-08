@@ -1,64 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 Nov 2019 21:42:30 +0100
-Subject: [Buildroot] [PATCH] package/pkg-meson: really generate the
- global cross-compilation.conf
-Message-ID: <20191108204229.GJ3419@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 8 Nov 2019 21:52:51 +0100
+Subject: [Buildroot] [git commit] package/pkg-generic.mk: use site method
+ for same-site extra downloads
+Message-ID: <20191108204542.676F08EB31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2c543b4f4c4f06fccadb20e7568a662d3d0b854e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-11-06 16:25 +0100, Thomas Petazzoni spake thusly:
-> Commit ccc9e05990a44d8db5825c07ed61d405ebb40caa ("package/meson:
-> install cross-compilation.conf during toolchain install") moved the
-> logic to generate the global cross-compilation.conf from
-> package/meson/meson.mk to package/pkg-meson.mk. While doing so, it
-> renamed the macro from HOST_MESON_INSTALL_CROSS_CONF to
-> PKG_MESON_INSTALL_CROSS_CONF, but the registration of this hook in
-> TOOLCHAIN_POST_INSTALL_STAGING_HOOKS was not changed accordingly: it
-> is still registering HOST_MESON_INSTALL_CROSS_CONF.
-> 
-> Due to this, the global cross-compilation.conf file was no longer
-> generated.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+When a package specifies extra downloads, it has the option to only name
+the basename of the extra download, in which case that extra download
+will be retrieved from the same location the main download is retrieved
+from.
 
-Applied to master. Thanks.
+In that case, if the extra download contains a '+', it would confuse the
+dl-wrapper, which believes the LHS of the '+' is the site method, and
+the RHS the actual URI, and so the dl-wrapper mangles and damages the
+URI when fetching such extra downloads, like that happens with android
+tools, where the proper URI and mangled URIs of the extra download are,
+respectively:
 
-Regards,
-Yann E. MORIN.
+    https://launchpad.net/ubuntu/+archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+    http://archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
 
-> ---
->  package/pkg-meson.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index b11bc3a7c0..e7eea2aa58 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -205,4 +205,4 @@ define PKG_MESON_INSTALL_CROSS_CONF
->  	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
->  endef
->  
-> -TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
-> +TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
-> -- 
-> 2.21.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+We fix that by always propagating the site method to extra downloads,
+but only when they are specified as relative to the main download URI.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+For the extra downloads that specify a full URI, it is not systematic
+that it is the same site method. For example, a main download could be a
+git clone, but an extra download a pure http download; in that case we
+can't replicate the site method for extra downloads, so they'll have to
+take appropriate care to specify the required method and encoding if
+needed.
+
+Reported-by: Jemy Zhang <jemy.zhang@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Jemy Zhang <jemy.zhang@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 893faba22a..7d6fa08418 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -524,7 +524,7 @@ $(2)_ALL_DOWNLOADS = \
+ 	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
+ 	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+ 		$$(if $$(findstring ://,$$(p)),$$(p),\
+-			$$($(2)_SITE)/$$(p)))
++			$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$(p)))
+ 
+ ifndef $(2)_SITE
+  ifdef $(3)_SITE
