@@ -1,42 +1,44 @@
-From: Avraham Shukron <avraham.shukron@gmail.com>
-Date: Fri, 8 Nov 2019 22:01:08 +0200
-Subject: [Buildroot] No $(HOST_DIR)/bin/python symlink when building
- host-pyhton3
-Message-ID: <CAJX3zAuodCFDg2w-kRrS9knqcxzdkEz0k1rnW57X-cPXn8_v8w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 8 Nov 2019 21:41:39 +0100
+Subject: [Buildroot] [git commit] package/pkg-meson: really generate the
+ global cross-compilation.conf
+Message-ID: <20191108203444.06D5E8EB2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to build for qemu_x86_64 on a clean installation of Ubuntu 18.04.
-Ubuntu 18.04 comes with python3 only. There is no symlink named `python` by
-default on the PATH.
+commit: https://git.buildroot.net/buildroot/commit/?id=51bac54bbf0f8a545ca30cea6f1f10a0de7623ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The qemu_x86_64_defconfig does not select python nor python3 for the target.
-Nonetheless there are still many packages depending on host-python /
-host-python3.
+Commit ccc9e05990a44d8db5825c07ed61d405ebb40caa ("package/meson:
+install cross-compilation.conf during toolchain install") moved the
+logic to generate the global cross-compilation.conf from
+package/meson/meson.mk to package/pkg-meson.mk. While doing so, it
+renamed the macro from HOST_MESON_INSTALL_CROSS_CONF to
+PKG_MESON_INSTALL_CROSS_CONF, but the registration of this hook in
+TOOLCHAIN_POST_INSTALL_STAGING_HOOKS was not changed accordingly: it
+is still registering HOST_MESON_INSTALL_CROSS_CONF.
 
-Buildroot will only build host-python3 in this case in order to save build
-time.
-BUT - for a reason I can''t fully understand, python3.mk does not install
-the HOST symlink unless pyhton3 is selected for the TARGET.
+Due to this, the global cross-compilation.conf file was no longer
+generated.
 
-So to summarize: No python on target, python3 on host, but no symlink
-installed on $(HOST_DIR)/bin/python.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-meson.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-When trying to build, packages begin to fail for not finding python.
-The first one is host-ninja, but that is an easy one since it requires
-python3 specifically, so I explicitly specified $(HOST_DIR)/bin/python3.
-
-But now host-qemu fails to configure because it can't find python and I
-don't know what to do.
-
-The way I see it - there has to be SOME python installed to the host
-directory at $(HOST_DIR)/bin/python, but if you don't select python for the
-target then you don't get the symlink on the host.
-
-What should I do?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191108/2fa18e67/attachment.html>
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index b11bc3a7c0..e7eea2aa58 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -205,4 +205,4 @@ define PKG_MESON_INSTALL_CROSS_CONF
+ 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
+ endef
+ 
+-TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
++TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
