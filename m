@@ -1,38 +1,41 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Fri, 8 Nov 2019 18:34:12 +0100
-Subject: [Buildroot] [PATCH 4/7] package/freescale-imx/imx-sc-firmware:
- add hash file
-In-Reply-To: <20190909121525.13935-4-maeva.manuel@nxp.com>
-References: <20190909121525.13935-1-maeva.manuel@nxp.com>
- <20190909121525.13935-4-maeva.manuel@nxp.com>
-Message-ID: <20191108173412.GD9828@g751>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  8 Nov 2019 18:37:19 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/sudo: fix rmdir
+Message-ID: <20191108173719.27345-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maeva,
+Pass --ignore-fail-on-non-empty to rmdir to fix the following error:
 
-On Mon, Sep 09, 2019 at 12:15:02PM +0000, Maeva Manuel wrote:
-> Signed-off-by: Maeva Manuel <maeva.manuel@nxp.com>
-> ---
->  package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash | 4 ++++
->  1 file changed, 4 insertions(+)
->  create mode 100644 package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
-> 
-> diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
-> new file mode 100644
-> index 0000000000..3b4326302f
-> --- /dev/null
-> +++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
-> @@ -0,0 +1,4 @@
-> +# Locally calculated
-> +sha256 d07f8e517e0bd82175d1cd77e01b6702735eb95774053f9c431d1a5016fc7152  imx-sc-firmware-1.1.bin
-> +sha256 fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
-> +sha256 78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
+rmdir /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/target/etc/sudoers.d
+rmdir: failed to remove '/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/target/etc/sudoers.d': Directory not empty
 
-This should be part of PATCH 3/7, no need to separate it.
+Fixes:
+ - http://autobuild.buildroot.org/results/0cfc61a98760c1d3a98aa0f1e126767881c49abd
 
-Regards,
-Gary
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Pass --ignore-fail-on-non-empty option to rmdir instead of $(RM) -rf
+
+ package/sudo/sudo.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 7d52eb0b57..a7966047f8 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -66,7 +66,7 @@ endef
+ 
+ define SUDO_REMOVE_DIST_EXAMPLES
+ 	$(RM) $(TARGET_DIR)/etc/sudoers.dist
+-	rmdir $(TARGET_DIR)/etc/sudoers.d
++	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/etc/sudoers.d
+ endef
+ SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_REMOVE_DIST_EXAMPLES
+ 
+-- 
+2.23.0
