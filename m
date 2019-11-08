@@ -1,58 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  8 Nov 2019 18:26:45 +0100
-Subject: [Buildroot] [PATCH] infra/pkg-generic: use site method for
- same-site extra downloads
-Message-ID: <20191108172645.22584-1-yann.morin.1998@free.fr>
+Date: Fri, 8 Nov 2019 18:28:19 +0100
+Subject: [Buildroot] [PATCH 1/1] fix corrupted download url of extra
+ packages
+In-Reply-To: <20191105090448.99235-2-jemy.zhang@gmail.com>
+References: <20191105090448.99235-1-jemy.zhang@gmail.com>
+ <20191105090448.99235-2-jemy.zhang@gmail.com>
+Message-ID: <20191108172819.GG3419@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a package specifies extra downloads, it has the option to only name
-the basename of the extra download, in which case that extra download
-will be retrieved from the same location the main download is retrieved
-from.
+Jemy, All,
 
-In that case, if the extra download contains a '+', it would confuse the
-dl-wrapper, which believes the LHS of the '+' is the site method, and
-the RHS the actual URI, and so the dl-wrapper mangles and damages the
-URI when fetching such extra downloads, like that happens with android
-tools, where the proper URI and mangled URIs of the extra download are,
-respectively:
+On 2019-11-05 17:04 +0800, jemy.zhang at gmail.com spake thusly:
+> From: "Jemy Zhang" <jemy.zhang@gmail.com>
+> 
+> If the download url of extra packages contains '+', the contents before
+> '+' will be parsed as SITE_METHOD, the original download url corrupted.
+> 
+> check with android-tools package.
 
-    https://launchpad.net/ubuntu/+archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
-    http://archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+Indeed this is broken. Thank you very much for noticing the issue.
 
-We fix that by always propagating the site method to extra downloads,
-but only when they are specified as relative to the main download URI.
+> Signed-off-by: Jemy Zhang <jemy.zhang@gmail.com>
+> ---
+>  package/pkg-generic.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 893faba22a..bb0ca939a3 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -523,8 +523,9 @@ endif
+>  $(2)_ALL_DOWNLOADS = \
+>  	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
+>  	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+> -		$$(if $$(findstring ://,$$(p)),$$(p),\
+> -			$$($(2)_SITE)/$$(p)))
+> +		$$(call getschemeplusuri,$$(call qstrip,\
+> +		  $$(if $$(findstring ://,$$(p)),$$(p),\
+> +			  $$($(2)_SITE)/$$(p))),urlencode))
 
-For the extra downloads that specify a full URI, it is not systematic
-that it is the same site method. For example, a main download could be a
-git clone, but an extra download a pure http download; in that case we
-can't replicate the site method for extra downloads, so they'll have to
-take appropriate care to specify the required method and encoding if
-needed.
+I am not certain that we want to unconditionally enforce urlencode on
+all additional downloads...
 
-Reported-by: Jemy Zhang <jemy.zhang@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Jemy Zhang <jemy.zhang@gmail.com>
----
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Instead, I think we should just replicate the site method for extra
+downloads that use the same site as the main download.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 893faba22a..7d6fa08418 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -524,7 +524,7 @@ $(2)_ALL_DOWNLOADS = \
- 	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
- 	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
- 		$$(if $$(findstring ://,$$(p)),$$(p),\
--			$$($(2)_SITE)/$$(p)))
-+			$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$(p)))
- 
- ifndef $(2)_SITE
-  ifdef $(3)_SITE
+I've sent a patch that does just that:
+    https://patchwork.ozlabs.org/patch/1192073/
+
+Can you see if that fixes it for you (it did for me, but if you have an
+alternate test-case, that'd be nice to have feedback on it too).
+
+Thanks again for the report! :-)
+
+Regards,
+Yann E. MORIN.
+
+>  ifndef $(2)_SITE
+>   ifdef $(3)_SITE
+> -- 
+> 2.22.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
