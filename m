@@ -1,150 +1,81 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Fri,  8 Nov 2019 09:21:11 +0100
-Subject: [Buildroot] [PATCH 2/3] libargon2: add new package
-In-Reply-To: <20191108082112.5541-1-p.debruijn@unilogic.nl>
-References: <20191108082112.5541-1-p.debruijn@unilogic.nl>
-Message-ID: <20191108082112.5541-2-p.debruijn@unilogic.nl>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 8 Nov 2019 10:01:45 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/python-esptool: new package
+In-Reply-To: <20191108094927.49828a98@windsurf>
+References: <20191107170504.1327891-1-b.bilas@grinn-global.com>
+ <20191107170504.1327891-2-b.bilas@grinn-global.com>
+ <20191107235045.667813a1@windsurf>
+ <44e04441-7a39-7770-6ce7-6dcc5fee3870@grinn-global.com>
+ <20191108094927.49828a98@windsurf>
+Message-ID: <CAGm1_kucWJ1j2DUUzhFRXUwN7dpgj4Xs-nk-V_oxuaK+SXZeZw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/Config.in                             |  1 +
- ...argon2-dont-fail-on-existing-symlink.patch | 12 +++++++
- .../0002-libargon2-fix-cross-compile.patch    | 34 +++++++++++++++++++
- package/libargon2/Config.in                   |  6 ++++
- package/libargon2/libargon2.hash              |  3 ++
- package/libargon2/libargon2.mk                | 25 ++++++++++++++
- 6 files changed, 81 insertions(+)
- create mode 100644 package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch
- create mode 100644 package/libargon2/0002-libargon2-fix-cross-compile.patch
- create mode 100644 package/libargon2/Config.in
- create mode 100644 package/libargon2/libargon2.hash
- create mode 100644 package/libargon2/libargon2.mk
+Moin moin!
 
-diff --git a/package/Config.in b/package/Config.in
-index f72c77b416..694f985bec 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1253,6 +1253,7 @@ menu "Crypto"
- 	source "package/libscrypt/Config.in"
- 	source "package/libsecret/Config.in"
- 	source "package/libsha1/Config.in"
-+	source "package/libargon2/Config.in"
- 	source "package/libsodium/Config.in"
- 	source "package/libssh/Config.in"
- 	source "package/libssh2/Config.in"
-diff --git a/package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch b/package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch
-new file mode 100644
-index 0000000000..1a65486554
---- /dev/null
-+++ b/package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch
-@@ -0,0 +1,12 @@
-+diff -Nurpd a/Makefile b/Makefile
-+--- a/Makefile	2017-12-27 20:56:31.000000000 +0100
-++++ b/Makefile	2019-11-07 09:52:49.554284682 +0100
-+@@ -176,7 +176,7 @@ install: $(RUN) libs
-+ 	$(INSTALL) -d $(INST_LIBRARY)
-+ 	$(INSTALL) $(LIBRARIES) $(INST_LIBRARY)
-+ ifdef LINKED_LIB_SH
-+-	cd $(INST_LIBRARY) && ln -s $(notdir $(LIB_SH) $(LINKED_LIB_SH))
-++	cd $(INST_LIBRARY) && ln -sf $(notdir $(LIB_SH) $(LINKED_LIB_SH))
-+ endif
-+ 	$(INSTALL) -d $(INST_BINARY)
-+ 	$(INSTALL) $(RUN) $(INST_BINARY)
-diff --git a/package/libargon2/0002-libargon2-fix-cross-compile.patch b/package/libargon2/0002-libargon2-fix-cross-compile.patch
-new file mode 100644
-index 0000000000..b50b8ddb52
---- /dev/null
-+++ b/package/libargon2/0002-libargon2-fix-cross-compile.patch
-@@ -0,0 +1,34 @@
-+From cd1c1d8d204e4ec4557e358013567c097cb70562 Mon Sep 17 00:00:00 2001
-+From: Vika <kisik21@fireburn.ru>
-+Date: Mon, 26 Aug 2019 14:05:22 +0300
-+Subject: [PATCH] Fix cross-compilation on some systems
-+
-+Some Linux distributions (e.g. NixOS, where this issue was spotted) don't provide an unprefixed ar when cross-compiling. This PR aims to fix this.
-+
-+See[NixOS/nixpkgs#67490](https://github.com/NixOS/nixpkgs/pull/67490) for information on where did it start.
-+---
-+ Makefile | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 837e7f7..38f16fc 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -123,6 +123,8 @@ ifdef LINKED_LIB_EXT
-+ LINKED_LIB_SH := lib$(LIB_NAME).$(LINKED_LIB_EXT)
-+ endif
-+ 
-++# Some systems don't provide an unprefixed ar when cross-compiling.
-++AR=ar
-+ 
-+ LIBRARIES = $(LIB_SH) $(LIB_ST)
-+ HEADERS = include/argon2.h
-+@@ -182,7 +184,7 @@ $(LIB_SH): 	$(SRC)
-+ 		$(CC) $(CFLAGS) $(LIB_CFLAGS) $(LDFLAGS) $(SO_LDFLAGS) $^ -o $@
-+ 
-+ $(LIB_ST): 	$(OBJ)
-+-		ar rcs $@ $^
-++		$(AR) rcs $@ $^
-+ 
-+ .PHONY: clean
-+ clean:
-diff --git a/package/libargon2/Config.in b/package/libargon2/Config.in
-new file mode 100644
-index 0000000000..1f9a5f435f
---- /dev/null
-+++ b/package/libargon2/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBARGON2
-+	bool "libargon2"
-+	help
-+	  A modern pass hashing algorithm
-+
-+	  https://password-hashing.net/#argon2
-diff --git a/package/libargon2/libargon2.hash b/package/libargon2/libargon2.hash
-new file mode 100644
-index 0000000000..43fdb5467b
---- /dev/null
-+++ b/package/libargon2/libargon2.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 eaea0172c1f4ee4550d1b6c9ce01aab8d1ab66b4207776aa67991eb5872fdcd8  libargon2-20171227.tar.gz
-+
-diff --git a/package/libargon2/libargon2.mk b/package/libargon2/libargon2.mk
-new file mode 100644
-index 0000000000..204af49148
---- /dev/null
-+++ b/package/libargon2/libargon2.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# libargon2
-+#
-+################################################################################
-+
-+LIBARGON2_VERSION = 20171227		# 20190702 is not recognized by php7.3
-+LIBARGON2_SITE = $(call github,P-H-C,phc-winner-argon2,$(LIBARGON2_VERSION))
-+LIBARGON2_LICENSE = CC0
-+LIBARGON2_LICENSE_FILES = LICENSE
-+LIBARGON2_INSTALL_STAGING = YES
-+
-+define LIBARGON2_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) OPTTARGET=$(GCC_TARGET_ARCH)
-+endef
-+
-+define LIBARGON2_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) install
-+endef
-+
-+define LIBARGON2_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.17.1
+On Fri, Nov 8, 2019 at 9:49 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> +Yegor in Cc.
+>
+> On Fri, 8 Nov 2019 09:45:50 +0100
+> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+>
+> > >> +PYTHON_ESPTOOL_LICENSE = GNU General Public License v2 or later (GPLv2+)
+> > > The proper way to describe this is just:
+> > >
+> > > PYTHON_ESPTOOL_LICENSE = GPL-2.0+
+> >
+> > this was created using scanpypi script so do you think we should fix
+> > that script or adjust that manually as you did?
+>
+> scanpipy already has a conversion table between Pipy-provided license
+> strings and Buildroot license tags:
+>
+>                 'Apache Software License': 'Apache-2.0',
+>                 'BSD License': 'FIXME: please specify the exact BSD version',
+>                 'European Union Public Licence 1.0': 'EUPL-1.0',
+>                 'European Union Public Licence 1.1': 'EUPL-1.1',
+>                 "GNU General Public License": "GPL",
+>                 "GNU General Public License v2": "GPL-2.0",
+>                 "GNU General Public License v2 or later": "GPL-2.0+",
+>                 "GNU General Public License v3": "GPL-3.0",
+>                 "GNU General Public License v3 or later": "GPL-3.0+",
+>                 "GNU Lesser General Public License v2": "LGPL-2.1",
+>                 "GNU Lesser General Public License v2 or later": "LGPL-2.1+",
+>                 "GNU Lesser General Public License v3": "LGPL-3.0",
+>                 "GNU Lesser General Public License v3 or later": "LGPL-3.0+",
+>                 "GNU Library or Lesser General Public License": "LGPL-2.0",
+>                 "ISC License": "ISC",
+>                 "MIT License": "MIT",
+>                 "Mozilla Public License 1.0": "MPL-1.0",
+>                 "Mozilla Public License 1.1": "MPL-1.1",
+>                 "Mozilla Public License 2.0": "MPL-2.0",
+>                 "Zope Public License": "ZPL"
+>
+> Obviously, the value "GNU General Public License v2 or later (GPLv2+)"
+> that was used by this package didn't match any entry in this table.
+> Since "GNU General Public License v2 or later (GPLv2+)" is apparently
+> rarely used, I don't think it's worth adding an entry to the table: for
+> such cases, we simply have to do a manual fixup. In any case,
+> ./utils/scanpipy does not guarantee that it provides a fully working
+> and correct Buildroot package: it extracts most information from Pipy,
+> but a careful review, and possibly some changes may be necessary.
+
+And one more thing. This table won't be used if you have installed the
+spdx package. But even this is not 100% correct as the license text
+doesn't determine whether it is GPL-2.0 or PGL-2.0+. It is stated in
+the source code.
+
+The best thing would be if all projects would adhere to REUSE layout
+and SPDX identifiers [1].
+
+[1] https://reuse.software/spec/
+
+Best regards,
+Yegor
