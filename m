@@ -1,86 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 Nov 2019 22:22:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix build not adding
- stack protector library
-In-Reply-To: <20190920085314.7816-1-nolange79@gmail.com>
-References: <20190920085314.7816-1-nolange79@gmail.com>
-Message-ID: <20191108212212.GM3419@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 8 Nov 2019 22:28:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/vnstat: fix build failure due
+ to double install of programs
+In-Reply-To: <20191031121848.7914-1-fontaine.fabrice@gmail.com>
+References: <20191031121848.7914-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191108222826.14ea446c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+Hello Fabrice,
 
-On 2019-09-20 10:53 +0200, Norbert Lange spake thusly:
-> the stack protector flag is added during compilation,
-> but not when linking. A compiler not defaulting to ssp
-> will complain about missing symbols
+On Thu, 31 Oct 2019 13:18:48 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results/3aefa8d63f710b71720fc114450110d2f885820b
 > 
-> upstream PR #13599
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Sorry for the late reply, In the meantime, systemd has been bumped to a
-version that incorporates your change, so I marked this patch as
-superseded.
+Why is this happening just 3 times? Is it a parallel build issue? Also,
+when I build vnstat a first time, and then do "make vnstat-rebuild",
+which reinstalls the same files at the same place, it doesn't fail. So
+why does it fail in those situations ?
 
-Thank you!
+> +-install-data-hook: install-exec
+> ++install-data-hook:
 
-Regards,
-Yann E. MORIN.
+This solution is anyway not good, because it reverts upstream commit
+3a76e18434fb033d8ac80955626fc8e2ca966cfa, which is necessary. Look at
+the Makefile.am, in the native compilation case:
 
-> ---
->  ...ompilers-with-default-stack-protecto.patch | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/systemd/0005-fix-build-with-compilers-with-default-stack-protecto.patch
-> 
-> diff --git a/package/systemd/0005-fix-build-with-compilers-with-default-stack-protecto.patch b/package/systemd/0005-fix-build-with-compilers-with-default-stack-protecto.patch
-> new file mode 100644
-> index 0000000000..d233df90da
-> --- /dev/null
-> +++ b/package/systemd/0005-fix-build-with-compilers-with-default-stack-protecto.patch
-> @@ -0,0 +1,31 @@
-> +From e028863a2ed4b380e12a79479fc7fc13d7b3214a Mon Sep 17 00:00:00 2001
-> +From: Norbert Lange <nolange79@gmail.com>
-> +Date: Thu, 19 Sep 2019 17:49:20 +0200
-> +Subject: [PATCH] fix build with compilers with default stack-protector enabled
-> +
-> +building systemd fails with a compiler that supports
-> +-fstack-protector but does not enable it by default.
-> +(will miss several __stack_chk_* symbols).
-> +
-> +fix this by also adding the switch during linking.
-> +
-> +Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> +---
-> + meson.build | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index e5ceb1e..4fc7dfa 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -382,6 +382,7 @@ possible_cc_flags = [
-> + possible_link_flags = [
-> +         '-Wl,-z,relro',
-> +         '-Wl,-z,now',
-> ++        '-fstack-protector',
-> + ]
-> +
-> + if cc.get_id() == 'clang'
-> +--
-> +2.23.0
-> +
-> -- 
-> 2.23.0
-> 
+install-data-hook: install-exec
+        if [ -f $(DESTDIR)$(man1dir)/vnstatd.1 ]; then rm -f $(DESTDIR)$(man1dir)/vnstatd.1; fi
+        $(MKDIR_P) $(DESTDIR)$(sysconfdir)
+if IS_CROSSCOMPILED
+        if [ ! -f $(DESTDIR)$(sysconfdir)/vnstat.conf ]; \
+        then cp -fv $(srcdir)/cfg/vnstat.conf $(DESTDIR)$(sysconfdir)/vnstat.conf; \
+        fi
+else
+        $(DESTDIR)$(bindir)/vnstat$(EXEEXT) --showconfig >vnstat.conf.new
+        if [ -f $(DESTDIR)$(sysconfdir)/vnstat.conf ]; \
+        then cp -fv $(DESTDIR)$(sysconfdir)/vnstat.conf vnstat.conf.old; \
+        fi
+        cp -fv vnstat.conf.new $(DESTDIR)$(sysconfdir)/vnstat.conf
+endif
 
+It runs the vnstat program itself! So it has to make sure it has been
+installed before running it. Of course, this could be changed to run
+the vnstat from the build directory instead of from the installation
+location.
+
+But as it is, your patch breaks things for upstream. For the Buildroot
+case, it works fine, but we want more details as to what the problem
+is, and why it happens so infrequently.
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
