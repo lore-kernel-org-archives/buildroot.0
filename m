@@ -1,7 +1,9 @@
 From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Fri,  8 Nov 2019 09:21:10 +0100
-Subject: [Buildroot] [PATCH 1/3] php: libsodium support
-Message-ID: <20191108082112.5541-1-p.debruijn@unilogic.nl>
+Date: Fri,  8 Nov 2019 09:21:11 +0100
+Subject: [Buildroot] [PATCH 2/3] libargon2: add new package
+In-Reply-To: <20191108082112.5541-1-p.debruijn@unilogic.nl>
+References: <20191108082112.5541-1-p.debruijn@unilogic.nl>
+Message-ID: <20191108082112.5541-2-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,42 +11,140 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
- package/php/Config.ext | 6 ++++++
- package/php/php.mk     | 5 +++++
- 2 files changed, 11 insertions(+)
+ package/Config.in                             |  1 +
+ ...argon2-dont-fail-on-existing-symlink.patch | 12 +++++++
+ .../0002-libargon2-fix-cross-compile.patch    | 34 +++++++++++++++++++
+ package/libargon2/Config.in                   |  6 ++++
+ package/libargon2/libargon2.hash              |  3 ++
+ package/libargon2/libargon2.mk                | 25 ++++++++++++++
+ 6 files changed, 81 insertions(+)
+ create mode 100644 package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch
+ create mode 100644 package/libargon2/0002-libargon2-fix-cross-compile.patch
+ create mode 100644 package/libargon2/Config.in
+ create mode 100644 package/libargon2/libargon2.hash
+ create mode 100644 package/libargon2/libargon2.mk
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index c7f0332fd8..0c6ed4b401 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -70,6 +70,12 @@ config BR2_PACKAGE_PHP_EXT_HASH
- 	help
- 	  HASH message digest framework
- 
-+config BR2_PACKAGE_PHP_EXT_LIBSODIUM
-+	bool "libsodium"
-+	select BR2_PACKAGE_LIBSODIUM
+diff --git a/package/Config.in b/package/Config.in
+index f72c77b416..694f985bec 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1253,6 +1253,7 @@ menu "Crypto"
+ 	source "package/libscrypt/Config.in"
+ 	source "package/libsecret/Config.in"
+ 	source "package/libsha1/Config.in"
++	source "package/libargon2/Config.in"
+ 	source "package/libsodium/Config.in"
+ 	source "package/libssh/Config.in"
+ 	source "package/libssh2/Config.in"
+diff --git a/package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch b/package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch
+new file mode 100644
+index 0000000000..1a65486554
+--- /dev/null
++++ b/package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch
+@@ -0,0 +1,12 @@
++diff -Nurpd a/Makefile b/Makefile
++--- a/Makefile	2017-12-27 20:56:31.000000000 +0100
+++++ b/Makefile	2019-11-07 09:52:49.554284682 +0100
++@@ -176,7 +176,7 @@ install: $(RUN) libs
++ 	$(INSTALL) -d $(INST_LIBRARY)
++ 	$(INSTALL) $(LIBRARIES) $(INST_LIBRARY)
++ ifdef LINKED_LIB_SH
++-	cd $(INST_LIBRARY) && ln -s $(notdir $(LIB_SH) $(LINKED_LIB_SH))
+++	cd $(INST_LIBRARY) && ln -sf $(notdir $(LIB_SH) $(LINKED_LIB_SH))
++ endif
++ 	$(INSTALL) -d $(INST_BINARY)
++ 	$(INSTALL) $(RUN) $(INST_BINARY)
+diff --git a/package/libargon2/0002-libargon2-fix-cross-compile.patch b/package/libargon2/0002-libargon2-fix-cross-compile.patch
+new file mode 100644
+index 0000000000..b50b8ddb52
+--- /dev/null
++++ b/package/libargon2/0002-libargon2-fix-cross-compile.patch
+@@ -0,0 +1,34 @@
++From cd1c1d8d204e4ec4557e358013567c097cb70562 Mon Sep 17 00:00:00 2001
++From: Vika <kisik21@fireburn.ru>
++Date: Mon, 26 Aug 2019 14:05:22 +0300
++Subject: [PATCH] Fix cross-compilation on some systems
++
++Some Linux distributions (e.g. NixOS, where this issue was spotted) don't provide an unprefixed ar when cross-compiling. This PR aims to fix this.
++
++See[NixOS/nixpkgs#67490](https://github.com/NixOS/nixpkgs/pull/67490) for information on where did it start.
++---
++ Makefile | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 837e7f7..38f16fc 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -123,6 +123,8 @@ ifdef LINKED_LIB_EXT
++ LINKED_LIB_SH := lib$(LIB_NAME).$(LINKED_LIB_EXT)
++ endif
++ 
+++# Some systems don't provide an unprefixed ar when cross-compiling.
+++AR=ar
++ 
++ LIBRARIES = $(LIB_SH) $(LIB_ST)
++ HEADERS = include/argon2.h
++@@ -182,7 +184,7 @@ $(LIB_SH): 	$(SRC)
++ 		$(CC) $(CFLAGS) $(LIB_CFLAGS) $(LDFLAGS) $(SO_LDFLAGS) $^ -o $@
++ 
++ $(LIB_ST): 	$(OBJ)
++-		ar rcs $@ $^
+++		$(AR) rcs $@ $^
++ 
++ .PHONY: clean
++ clean:
+diff --git a/package/libargon2/Config.in b/package/libargon2/Config.in
+new file mode 100644
+index 0000000000..1f9a5f435f
+--- /dev/null
++++ b/package/libargon2/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBARGON2
++	bool "libargon2"
 +	help
-+	  libsodium support
++	  A modern pass hashing algorithm
 +
- config BR2_PACKAGE_PHP_EXT_MCRYPT
- 	bool "mcrypt"
- 	select BR2_PACKAGE_LIBMCRYPT
-diff --git a/package/php/php.mk b/package/php/php.mk
-index b679531238..85bf2075ae 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -122,6 +122,11 @@ PHP_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_PHP_EXT_MBSTRING),--enable-mbstring) \
- 	$(if $(BR2_PACKAGE_PHP_EXT_PHAR),--enable-phar)
- 
-+ifeq ($(BR2_PACKAGE_PHP_EXT_LIBSODIUM),y)
-+PHP_CONF_OPTS += --with-sodium=$(STAGING_DIR)/usr
-+PHP_DEPENDENCIES += libsodium
-+endif
++	  https://password-hashing.net/#argon2
+diff --git a/package/libargon2/libargon2.hash b/package/libargon2/libargon2.hash
+new file mode 100644
+index 0000000000..43fdb5467b
+--- /dev/null
++++ b/package/libargon2/libargon2.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 eaea0172c1f4ee4550d1b6c9ce01aab8d1ab66b4207776aa67991eb5872fdcd8  libargon2-20171227.tar.gz
 +
- ifeq ($(BR2_PACKAGE_PHP_EXT_MCRYPT),y)
- PHP_CONF_OPTS += --with-mcrypt=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += libmcrypt
+diff --git a/package/libargon2/libargon2.mk b/package/libargon2/libargon2.mk
+new file mode 100644
+index 0000000000..204af49148
+--- /dev/null
++++ b/package/libargon2/libargon2.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# libargon2
++#
++################################################################################
++
++LIBARGON2_VERSION = 20171227		# 20190702 is not recognized by php7.3
++LIBARGON2_SITE = $(call github,P-H-C,phc-winner-argon2,$(LIBARGON2_VERSION))
++LIBARGON2_LICENSE = CC0
++LIBARGON2_LICENSE_FILES = LICENSE
++LIBARGON2_INSTALL_STAGING = YES
++
++define LIBARGON2_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) OPTTARGET=$(GCC_TARGET_ARCH)
++endef
++
++define LIBARGON2_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) install
++endef
++
++define LIBARGON2_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
 -- 
 2.17.1
