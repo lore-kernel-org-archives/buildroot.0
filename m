@@ -1,48 +1,75 @@
-From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Fri,  8 Nov 2019 10:41:19 +0100
-Subject: [Buildroot] [RFC PATCH 1/1] libcap: always build static version
-Message-ID: <20191108094119.6749-1-patrick.havelange@essensium.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri, 8 Nov 2019 15:08:30 +0100
+Subject: [Buildroot] sysrepo
+In-Reply-To: <CAPi7W81eAVaY57jh40GQvzSRr-z4vysA9gK5948ddsKxgHxnFA@mail.gmail.com>
+References: <AM0PR04MB6403DB36B76351BD39E6038F847B0@AM0PR04MB6403.eurprd04.prod.outlook.com>
+ <CAPi7W81eAVaY57jh40GQvzSRr-z4vysA9gK5948ddsKxgHxnFA@mail.gmail.com>
+Message-ID: <CAEyMn7bbWeTM4z-Czpr=x0Z2sYuOFxfLJ4A52v+5FnbYBiNiEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some tools require a static libcap to be able to be built. This is
-the case for lxc's init.lxc.static binary. As it is currently not
-possible to depend explicitely on a specific static library only,
-this patch always builds the static version of libcap.
+Hi,
 
-We could also do this only when building lxc, however this would
-make things more complicated inside libcap.mk, and would not bring
-us that much as the static lib is not installed on target anyway.
-This also reverts the previous commit
-7984f2d97b4271c14e0922ef22027edaedd78e59.
+yes I'm aware of that issue. And I already submitted a patch to fix
+this and other stuff
+(http://lists.busybox.net/pipermail/buildroot/2019-November/265212.html).
 
-Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+There are also the netopeer2(server/cli/keystored) packages
+outstanding (http://lists.busybox.net/pipermail/buildroot/2019-October/264461.html).
 
----
-This patch was originally developped for the Lxc test, however
-the init.lxc.static is only used when there is no init system
-specified for the container. Thus it is no longer required for the
-test. However somebody might still need it.
----
- package/libcap/libcap.mk | 3 ---
- 1 file changed, 3 deletions(-)
+But thank you for reporting that. It is good to hear that others also
+working/waiting for that packages.
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 4919a4adca..23888c4682 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -18,9 +18,6 @@ HOST_LIBCAP_DEPENDENCIES = host-gperf
- ifeq ($(BR2_STATIC_LIBS),y)
- LIBCAP_MAKE_TARGET = libcap.a libcap.pc
- LIBCAP_MAKE_INSTALL_TARGET = install-static
--else ifeq ($(BR2_SHARED_LIBS),y)
--LIBCAP_MAKE_TARGET = all
--LIBCAP_MAKE_INSTALL_TARGET = install-shared
- else
- LIBCAP_MAKE_TARGET = all
- LIBCAP_MAKE_INSTALL_TARGET = install
--- 
-2.17.1
+By the way. Could you please use git send-email for sending your patch
+to the mailing list? this is more easy for reviewing and applying the
+patch for the maintainers. You will find a introduction how to do
+here:
+https://buildroot.org/downloads/manual/manual.html#_contributing_to_buildroot
+and for sending the patches here:
+https://buildroot.org/downloads/manual/manual.html#submitting-patches
+
+Thanks,
+Heiko
+
+Am Fr., 8. Nov. 2019 um 14:25 Uhr schrieb Fabrice Fontaine
+<fontaine.fabrice@gmail.com>:
+>
+> Hi Xiaolin,
+>
+> I'm not the one that added sysrepo to buildroot, this was the work of Heiko.
+> As I only helped to fix some of the bugs on this package, I think
+> Heiko will probably give a better review than me.
+>
+> Best Regards,
+>
+> Fabrice
+>
+>
+> Le ven. 8 nov. 2019 ? 13:20, Xiaolin He <xiaolin.he@nxp.com> a ?crit :
+> >
+> > Hi Fabrice,
+> >
+> >        Thanks a lot for adding sysrepo to buildroot.
+> >
+> > Basing on your work, I added Netopeer2 pacakge. But when I Install yang modules with host-sysrepoctl, it will install related modules to host directory.
+> >
+> > Like following:
+> >
+> >        - Installing module ietf-x509-cert-to-name...
+> >
+> > Installing a new module from file '/home/hexl/bitbucket/openil/output/build/netopeer2-keystored-v0.7-r2/keystored/scripts/../../modules/ietf-x509-cert-to-name.yang'...
+> >
+> > Installing the YANG file to '/home/hexl/bitbucket/openil/output/host/etc/sysrepo/yang/ietf-x509-cert-to-name at 2014-12-10.yang'...
+> >
+> > Thus, when I run my netopeer2-server on board, it will be failed.
+> >
+> > Finally, I change the config option of host-sysrepo as the attachment do, and the issue was fixed.
+> >
+> > But I don?t sure whether this patch is rational or not or have other effects on your apps. So, please review it.
+> >
+> > Best Regards,
+> >
+> > Xiaolin He
