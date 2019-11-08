@@ -1,68 +1,55 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  8 Nov 2019 23:28:34 +0100
-Subject: [Buildroot] [PATCH v3 3/3] configs/raspberrypi3_64_defconfig: use
- pi3-miniuart-bt device tree overlay
-In-Reply-To: <20191108222834.9269-1-ps.report@gmx.net>
-References: <20191108222834.9269-1-ps.report@gmx.net>
-Message-ID: <20191108222834.9269-3-ps.report@gmx.net>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Fri, 8 Nov 2019 20:05:17 -0300
+Subject: [Buildroot] [PATCH 1/2] board/beaglebone: fix boot on
+ BeagleBone Black
+In-Reply-To: <20191108220944.326df425@windsurf>
+References: <20191102223839.16262-1-unixmania@gmail.com>
+ <20191102223839.16262-2-unixmania@gmail.com>
+ <20191108220944.326df425@windsurf>
+Message-ID: <CAJ4jsadkh6aa76yffGmxZptT2jb3ZL+JnBrdOYwQCaGHijhefw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the pi3-miniuart-bt device tree overlay (as the 32bit raspberrypi3
-defconfig) instead of the enable_uart option.
+On Fri, Nov 8, 2019 at 6:09 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Carlos,
+>
+> On Sat,  2 Nov 2019 19:38:38 -0300
+> unixmania at gmail.com wrote:
+>
+> > From: Carlos Santos <unixmania@gmail.com>
+> >
+> > Commit 68b5b79b2f has set the getty port to the default console but left
+> > "ttyO0" in bootargs, in the U-Boot environment. Use "ttyS0", instead.
+> >
+> > Also set loadaddr to 0x82000000 and fdtaddr to 0x88000000, replacing the
+> > ancient U-Boot 2013.10-dirty default values that cause system hangs.
+>
+> Where are we using U-Boot 2013.10-dirty on BeagleBone ?
+>
+> $ grep UBOOT_CUSTOM_VERSION_VALUE configs/beaglebone*
+> configs/beagleboneai_defconfig:BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
+> configs/beaglebone_defconfig:BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
+> configs/beaglebone_qt5_defconfig:BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
+>
+> And these are upstream, unpatched, versions.
+>
+> Could you clarify this? Otherwise the patch looks good, of course.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
- - no changes
+That's the SPL in old Beaglebone cards. I will rephrase the commit
+message to clarify it.
 
-Changes v2 -> v3:
- - no changes
----
- board/raspberrypi/post-image.sh   | 9 ---------
- configs/raspberrypi3_64_defconfig | 3 +--
- 2 files changed, 1 insertion(+), 11 deletions(-)
-
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index bf9af5dc60..bbeb0bc721 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -28,15 +28,6 @@ __EOF__
-
- # enable 64bits support
- arm_64bit=1
--__EOF__
--		fi
--
--		# Enable uart console
--		if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
--			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
--
--# enable rpi3 ttyS0 serial console
--enable_uart=1
- __EOF__
- 		fi
- 		;;
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index f9a6f5fe1f..27141f364e 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -22,7 +22,6 @@ BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-
- BR2_PACKAGE_RPI_FIRMWARE=y
--# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
-
- # Required tools to create the SD image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-@@ -36,4 +35,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --add-pi3-miniuart-bt-overlay"
---
-2.23.0
+-- 
+Carlos Santos <unixmania@gmail.com>
