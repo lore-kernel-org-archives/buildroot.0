@@ -1,61 +1,49 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat,  9 Nov 2019 17:47:57 +0100
-Subject: [Buildroot] [PATCH] package/xvisor: unconditionally disable SSP
-Message-ID: <20191109164757.29565-1-eric.le.bihan.dev@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 09 Nov 2019 18:13:20 +0100
+Subject: [Buildroot] [PATCH] infra/pkg-generic: use site method for
+ same-site extra downloads
+In-Reply-To: <20191108172645.22584-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Fri, 8 Nov 2019 18:26:45 +0100")
+References: <20191108172645.22584-1-yann.morin.1998@free.fr>
+Message-ID: <87pni1km6n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-- http://autobuild.buildroot.net/results/5de37d3da17ca5cb17c0113d942ce8c22c0074e0
-- http://autobuild.buildroot.net/results/41b00d95ec4eb851abceaa7919aa1c533d4f16e8
-- http://autobuild.buildroot.net/results/119e22e8b03991ab9196e428a131f5a8ae2a2b2f
+ > When a package specifies extra downloads, it has the option to only name
+ > the basename of the extra download, in which case that extra download
+ > will be retrieved from the same location the main download is retrieved
+ > from.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- ...MAKEFILE-Unconditionally-disable-SSP.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
+ > In that case, if the extra download contains a '+', it would confuse the
+ > dl-wrapper, which believes the LHS of the '+' is the site method, and
+ > the RHS the actual URI, and so the dl-wrapper mangles and damages the
+ > URI when fetching such extra downloads, like that happens with android
+ > tools, where the proper URI and mangled URIs of the extra download are,
+ > respectively:
 
-diff --git a/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch b/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
-new file mode 100644
-index 0000000000..b69a745462
---- /dev/null
-+++ b/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
-@@ -0,0 +1,31 @@
-+From f04d1b73a9060e8f09cf1173f89daab73d6c0a18 Mon Sep 17 00:00:00 2001
-+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+Date: Sat, 9 Nov 2019 17:13:46 +0100
-+Subject: [PATCH] [MAKEFILE] Unconditionally disable SSP
-+
-+Though -nostdlib is passed in $(cflags), -fno-stack-protector must also be
-+passed to avoid linking errors related to undefined references to
-+'__stack_chk_guard' and '__stack_chk_fail' if toolchain enforces
-+-fstack-protector.
-+
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index d6bcf519..de8e1043 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -137,7 +137,7 @@ cppflags+=$(cpu-cppflags)
-+ cppflags+=$(board-cppflags)
-+ cppflags+=$(libs-cppflags-y)
-+ cc=$(CROSS_COMPILE)gcc
-+-cflags=-g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -D__VMM__
-++cflags=-g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -D__VMM__ -fno-stack-protector
-+ cflags+=$(board-cflags) 
-+ cflags+=$(cpu-cflags) 
-+ cflags+=$(libs-cflags-y) 
-+-- 
-+2.21.0
-+
+ >     https://launchpad.net/ubuntu/+archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+ >     http://archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+
+ > We fix that by always propagating the site method to extra downloads,
+ > but only when they are specified as relative to the main download URI.
+
+ > For the extra downloads that specify a full URI, it is not systematic
+ > that it is the same site method. For example, a main download could be a
+ > git clone, but an extra download a pure http download; in that case we
+ > can't replicate the site method for extra downloads, so they'll have to
+ > take appropriate care to specify the required method and encoding if
+ > needed.
+
+ > Reported-by: Jemy Zhang <jemy.zhang@gmail.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Jemy Zhang <jemy.zhang@gmail.com>
+
+Committed to 2019.02.x and 2019.08.x, thanks.
+
 -- 
-2.21.0
+Bye, Peter Korsgaard
