@@ -1,35 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Nov 2019 14:30:00 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-11-06
-In-Reply-To: <569eeff2-f02f-3506-5cdc-1f02a8e3c325@gmail.com>
-References: <5dc3c4b8.1c69fb81.ff4f2.2a4cSMTPIN_ADDED_MISSING@mx.google.com>
- <6d4b57b9-90c8-c2ba-9703-0a456b2dec9f@gmail.com>
- <20191109120151.GO3419@scaer>
- <569eeff2-f02f-3506-5cdc-1f02a8e3c325@gmail.com>
-Message-ID: <20191109143000.37b5a746@windsurf>
+Date: Sat, 9 Nov 2019 14:33:51 +0100
+Subject: [Buildroot] [git commit branch/next]
+ configs/raspberrypi3_64_defconfig: enable device tree overlay support
+Message-ID: <20191109132719.83E538E91E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 9 Nov 2019 14:09:50 +0100
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2aa92335cdc5f71c2d09391dc49fcf3c7627d6f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Well, It's the same problem as for using llvm/clang on the host to build some
-> host tools. For your case you have to build hos-llvm with your host variant
-> (x86_64 for example) (LLVM_TARGETS_TO_BUILD).
-> 
-> But since we use the same LLVM_TARGET_ARCH for the host-llvm and llvm, we need
-> to use -target x86_64-linux-gnu when using clang.
+Enables the usage of the standard Raspberry Pi overlays (as already
+possible for all 32bit defconfigs and as expected by most Raspberry Pi
+defconfig users), follow up patch will use the overlay feature to
+enable the ttyS0 serial console in the same way as done for the
+raspberrypi3_defconfig case (instead using an alternative approach).
 
-Wouldn't it be more "natural" for clang to by default produce binaries
-for the host, and when you want to cross-compile, have to explicitly
-pass -target arm-something-something ?
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/raspberrypi3_64_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index de1cd10c22..f9a6f5fe1f 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -17,6 +17,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+ # Build the DTB from the kernel sources
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2837-rpi-3-b"
++BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
+ 
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
