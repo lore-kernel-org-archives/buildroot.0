@@ -1,104 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Nov 2019 18:49:57 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/elf2flt:
- .ARM.exidx RO data section is incorrectly mapped to data
-Message-ID: <20191109174741.EE83A8EA4F@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
+Date: Sat,  9 Nov 2019 19:55:10 +0100
+Subject: [Buildroot] [PATCH v2 0/2] Include makefiles from GLOBAL_PATCH_DIR
+Message-ID: <20191109185512.24139-1-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec09b5f3e921e76edd0b54e85f87d94284e1f1ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+V2:
+* fix includes happening multiple times on host+target packages
+* change name of included makefiles from .mk to .smk (see commit for
+  details)
 
-Starting with Binutils 2.33.1, elf2flt segfault while building busybox:
-"ld (ld-elf2flt):
-/opt/armv7m--uclibc--bleeding-edge-2/arm-buildroot-uclinux-uclibcgnueabi/bin/elf2flt
+Note that the first patch might be usefull independently of the (more
+controversial) second patch. 
 
-This was reported to the Binutils mailing list and it's seems
-an elf2flt issue with .ARM.exidx RO data section as explained
-by: https://sourceware.org/ml/binutils/2019-10/msg00132.html
+I am opened to changing the .smk to any pattern you suggest
+I am not sure where to fit this in the documentation. suggestions
+welcomed
 
-Apply the patch provided by Greg Ungerer [1] and tested by
-Christophe Priouzeau using stm32f469_disco_defconfig on
-stm32f469-disco board.
+J?r?my Rosen (2):
+  allow .smk files as includes in packages
+  Include makefiles from GLOBAL_PATCH_DIR
 
-Fixes:
-https://gitlab.com/kubu93/toolchains-builder/-/jobs/319395300
+ package/pkg-autotools.mk     |  1 +
+ package/pkg-cmake.mk         |  1 +
+ package/pkg-generic.mk       |  8 ++++++--
+ package/pkg-golang.mk        |  1 +
+ package/pkg-kconfig.mk       |  1 +
+ package/pkg-kernel-module.mk |  1 +
+ package/pkg-luarocks.mk      |  1 +
+ package/pkg-meson.mk         |  1 +
+ package/pkg-perl.mk          |  1 +
+ package/pkg-python.mk        |  1 +
+ package/pkg-rebar.mk         |  1 +
+ package/pkg-utils.mk         | 21 ++++++++++++++++++++-
+ package/pkg-virtual.mk       |  1 +
+ package/pkg-waf.mk           |  1 +
+ 14 files changed, 38 insertions(+), 3 deletions(-)
 
-[1] https://github.com/uclinux-dev/elf2flt/issues/12
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2b064f86b6a0fd683f307b51f12d9d919fcaa386)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...lf2flt-fix-relocations-for-read-only-data.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
-
-diff --git a/package/elf2flt/0002-elf2flt-fix-relocations-for-read-only-data.patch b/package/elf2flt/0002-elf2flt-fix-relocations-for-read-only-data.patch
-new file mode 100644
-index 0000000000..6cb3a55433
---- /dev/null
-+++ b/package/elf2flt/0002-elf2flt-fix-relocations-for-read-only-data.patch
-@@ -0,0 +1,58 @@
-+From 6006e8d789f7a1129414fb3a8c930b094af0cafa Mon Sep 17 00:00:00 2001
-+From: Greg Ungerer <gerg@kernel.org>
-+Date: Wed, 6 Nov 2019 21:19:24 +0100
-+Subject: [PATCH] elf2flt: fix relocations for read-only data
-+
-+Readonly data sections are mapped into the "text" section in the
-+elf2flt.ld linker script. The relocation generation code is not handling
-+that case properly though, and is actually mapping any data section type
-+into the "data" section of the target binary.
-+
-+This problem case has been detected with elf2flt core dumping when used
-+with binutils-2.33.1 (on ARM architecture targets). See thread at:
-+
-+   https://sourceware.org/ml/binutils/2019-10/msg00132.html
-+
-+Tested by Christophe Priouzeau [1]
-+
-+* binutils 2.33.1
-+* buildroot 2019.11-rc1
-+* patch on top of elf2flt (patch available on this thread)
-+* configuration: stm32f469-disco with initramfs configuration on buildroot
-+
-+Result:
-+Build: OK, all the binaries are generated
-+Runtime test on stm32f469-disco: OK
-+
-+[1] https://github.com/uclinux-dev/elf2flt/issues/12
-+
-+Signed-off-by: Greg Ungerer <gerg@kernel.org>
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
-+---
-+ elf2flt.c | 8 +++++---
-+ 1 file changed, 5 insertions(+), 3 deletions(-)
-+
-+diff --git a/elf2flt.c b/elf2flt.c
-+index 67f720a..8973cef 100644
-+--- a/elf2flt.c
-++++ b/elf2flt.c
-+@@ -418,10 +418,12 @@ output_relocs (
-+ //		continue;
-+ 
-+ 	/*
-+-	 *	Only relocate things in the data sections if we are PIC/GOT.
-+-	 *	otherwise do text as well
-++	 * Only relocate things in the writable data sections if we are PIC/GOT.
-++	 * Otherwise do text (and read only data) as well.
-+ 	 */
-+-	if ((!pic_with_got || ALWAYS_RELOC_TEXT) && (a->flags & SEC_CODE))
-++	if ((!pic_with_got || ALWAYS_RELOC_TEXT) &&
-++	    ((a->flags & SEC_CODE) ||
-++	    ((a->flags & (SEC_DATA | SEC_READONLY)) == (SEC_DATA | SEC_READONLY))))
-+ 		sectionp = text + (a->vma - text_vma);
-+ 	else if (a->flags & SEC_DATA)
-+ 		sectionp = data + (a->vma - data_vma);
-+-- 
-+2.21.0
-+
+-- 
+2.24.0.rc1
