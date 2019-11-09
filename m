@@ -1,90 +1,54 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 9 Nov 2019 10:44:13 +0100
-Subject: [Buildroot] [PATCH v2 3/5] package/rpi-userland: bump version
- to 5070cb7f
-In-Reply-To: <20191108231735.1d2bc178@gmx.net>
-References: <20191107202339.6371-1-ps.report@gmx.net>
- <20191107202339.6371-3-ps.report@gmx.net>
- <20191107224604.3fbb7261@windsurf>
- <20191108231735.1d2bc178@gmx.net>
-Message-ID: <20191109104413.2317d778@gmx.net>
+Date: Sat,  9 Nov 2019 10:45:19 +0100
+Subject: [Buildroot] [PATCH v4 2/3] configs/raspberrypi3_64_defconfig:
+ enable device tree overlay support
+In-Reply-To: <20191109094520.5543-1-ps.report@gmx.net>
+References: <20191109094520.5543-1-ps.report@gmx.net>
+Message-ID: <20191109094520.5543-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Enables the usage of the standard raspberry pi overlays (as already
+possible for all 32bit defconfigs and as expected by most rasperry
+pi defconfig users), follow up patch will use the overlay feature to
+enable the ttyS0 serial console in the same way as done for the
+raspberrypi3_defconfig case (instead using an alternative approach).
 
-On Fri, 8 Nov 2019 23:17:35 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+ - no changes
 
-> Hello Thomas,
->
-> On Thu, 7 Nov 2019 22:46:04 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->
-> > On Thu,  7 Nov 2019 21:23:37 +0100
-> > Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > > - rebased 0003-Disable-Werror-everywhere.patch
-> > > - remove vcfiled support (upstream removed, see [1])
-> > >
-> > > [1] https://github.com/raspberrypi/userland/commit/f00a1189b9f8246dc24c45985de599c50b8c62a5
-> > >
-> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> >
-> > This patch doesn't apply properly here:
-> > 10d39ce2be063488dd4820cf3b9901a134d18329
-> > $ git pwam 1191416
-> > Applying patch #1191416 using "git am -s"
-> > Description: [v2,3/5] package/rpi-userland: bump version to 5070cb7f
-> > Applying: package/rpi-userland: bump version to 5070cb7f
-> > error: patch failed: package/rpi-userland/0003-Disable-Werror-everywhere.patch:55
-> > error: package/rpi-userland/0003-Disable-Werror-everywhere.patch: patch does not apply
-> > Patch failed at 0001 package/rpi-userland: bump version to 5070cb7f
-> > hint: Use 'git am --show-current-patch' to see the failed patch
-> > When you have resolved this problem, run "git am --continue".
-> > If you prefer to skip this patch, run "git am --skip" instead.
-> > To restore the original branch and stop patching, run "git am --abort".
-> > 'git am' failed with exit status 128
-> >
-> > I have not investigated why.
->
-> Mhhh, strange (and once again, I think it happened already before)...
->
-> Diff of the original 'git format-patch' version and the Patchwork download
-> version:
->
-> 	$ diff -u v2-0003-package-rpi-userland-bump-version-to-5070cb7f.patch v2-3-5-package-rpi-userland-bump-version-to-5070cb7f.patch
-> [...]
->  diff --git a/Config.in.legacy b/Config.in.legacy
->  index fcb10b1291..7167b1d60c 100644
->  --- a/Config.in.legacy
->  +++ b/Config.in.legacy
->  @@ -146,6 +146,12 @@ endif
-> -
-> +
->   comment "Legacy options removed in 2019.11"
-> -
-> +
-> [...]
->
-> With '-<space><newline>' against '+<newline>'..., same against
-> the saved copy returned from the buildroot mailing list...,
-> seems someone is eating up my spaces...
->
-> Will re-try/re-send the patches...
+Changes v2 -> v3:
+ - add commit log (suggested by Thomas Petazzoni)
 
-Checked the v3 version, seems to suffer the same space-damage, will send
-a v4 version with git 'sendemail.transferEncoding = base64' enabled
-(instead of auto which will use 8bit encoding as default)...
+Changes v3 -> v4:
+ - resend with git sendemail.transferEncoding=base64
 
-Regards,
-Peter
+Notes:
 
->
-> Regards,
-> Peter
->
-> >
-> > Thomas
->
+Only the 64bit RPi compile seems to need the extra enabling
+of device tree overlay support (the 32bit ones seem to do
+it automatically). But for symmetry all RPi defconfigs should
+set BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT?
+---
+ configs/raspberrypi3_64_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index de1cd10c22..f9a6f5fe1f 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -17,6 +17,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+ # Build the DTB from the kernel sources
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2837-rpi-3-b"
++BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
+ 
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+-- 
+2.23.0
