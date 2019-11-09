@@ -1,104 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Nov 2019 18:51:48 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/elf2flt:
- .ARM.exidx RO data section is incorrectly mapped to data
-Message-ID: <20191109174734.D3A6E8E9C4@busybox.osuosl.org>
+Date: Sat, 9 Nov 2019 18:16:12 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/domoticz: fix
+ build with RELRO
+Message-ID: <20191109174734.CACCF8E9C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab466e4dad58c0e11c8c8b8d31279d654d28e446
+commit: https://git.buildroot.net/buildroot/commit/?id=a4a088d4f6b4af26c64a12841c103b71a19e8e20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Starting with Binutils 2.33.1, elf2flt segfault while building busybox:
-"ld (ld-elf2flt):
-/opt/armv7m--uclibc--bleeding-edge-2/arm-buildroot-uclinux-uclibcgnueabi/bin/elf2flt
-
-This was reported to the Binutils mailing list and it's seems
-an elf2flt issue with .ARM.exidx RO data section as explained
-by: https://sourceware.org/ml/binutils/2019-10/msg00132.html
-
-Apply the patch provided by Greg Ungerer [1] and tested by
-Christophe Priouzeau using stm32f469_disco_defconfig on
-stm32f469-disco board.
-
 Fixes:
-https://gitlab.com/kubu93/toolchains-builder/-/jobs/319395300
+ - http://autobuild.buildroot.org/results/5c1ca3083ad672401d1e050c6c3a07b8c33b851d
 
-[1] https://github.com/uclinux-dev/elf2flt/issues/12
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2b064f86b6a0fd683f307b51f12d9d919fcaa386)
+(cherry picked from commit 6d8c56f77627e594fb285a7c6f4245ed196ce392)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...lf2flt-fix-relocations-for-read-only-data.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ ...txt-add-c-argument-to-build-precompiled-h.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/elf2flt/0002-elf2flt-fix-relocations-for-read-only-data.patch b/package/elf2flt/0002-elf2flt-fix-relocations-for-read-only-data.patch
+diff --git a/package/domoticz/0003-CMakeLists.txt-add-c-argument-to-build-precompiled-h.patch b/package/domoticz/0003-CMakeLists.txt-add-c-argument-to-build-precompiled-h.patch
 new file mode 100644
-index 0000000000..6cb3a55433
+index 0000000000..b14f4c56c3
 --- /dev/null
-+++ b/package/elf2flt/0002-elf2flt-fix-relocations-for-read-only-data.patch
-@@ -0,0 +1,58 @@
-+From 6006e8d789f7a1129414fb3a8c930b094af0cafa Mon Sep 17 00:00:00 2001
-+From: Greg Ungerer <gerg@kernel.org>
-+Date: Wed, 6 Nov 2019 21:19:24 +0100
-+Subject: [PATCH] elf2flt: fix relocations for read-only data
++++ b/package/domoticz/0003-CMakeLists.txt-add-c-argument-to-build-precompiled-h.patch
+@@ -0,0 +1,34 @@
++From 17107b876fb308e3ef3e759ab90f3d8e4755cdc4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 8 Nov 2019 14:17:58 +0100
++Subject: [PATCH] CMakeLists.txt: add -c argument to build precompiled headers
 +
-+Readonly data sections are mapped into the "text" section in the
-+elf2flt.ld linker script. The relocation generation code is not handling
-+that case properly though, and is actually mapping any data section type
-+into the "data" section of the target binary.
++Add "-c" argument when building precompiler headers as suggested
++by Arnout in https://patchwork.ozlabs.org/patch/1187328.
 +
-+This problem case has been detected with elf2flt core dumping when used
-+with binutils-2.33.1 (on ARM architecture targets). See thread at:
++This will fix the build with RELRO
 +
-+   https://sourceware.org/ml/binutils/2019-10/msg00132.html
-+
-+Tested by Christophe Priouzeau [1]
-+
-+* binutils 2.33.1
-+* buildroot 2019.11-rc1
-+* patch on top of elf2flt (patch available on this thread)
-+* configuration: stm32f469-disco with initramfs configuration on buildroot
-+
-+Result:
-+Build: OK, all the binaries are generated
-+Runtime test on stm32f469-disco: OK
-+
-+[1] https://github.com/uclinux-dev/elf2flt/issues/12
-+
-+Signed-off-by: Greg Ungerer <gerg@kernel.org>
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/domoticz/domoticz/commit/17107b876fb308e3ef3e759ab90f3d8e4755cdc4]
 +---
-+ elf2flt.c | 8 +++++---
-+ 1 file changed, 5 insertions(+), 3 deletions(-)
++ CMakeLists.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/elf2flt.c b/elf2flt.c
-+index 67f720a..8973cef 100644
-+--- a/elf2flt.c
-++++ b/elf2flt.c
-+@@ -418,10 +418,12 @@ output_relocs (
-+ //		continue;
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 32a0dd2a8c..010cdf2db8 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -277,10 +277,10 @@ MACRO(ADD_PRECOMPILED_HEADER _targetName _input)
++     ENDFOREACH(item)
 + 
-+ 	/*
-+-	 *	Only relocate things in the data sections if we are PIC/GOT.
-+-	 *	otherwise do text as well
-++	 * Only relocate things in the writable data sections if we are PIC/GOT.
-++	 * Otherwise do text (and read only data) as well.
-+ 	 */
-+-	if ((!pic_with_got || ALWAYS_RELOC_TEXT) && (a->flags & SEC_CODE))
-++	if ((!pic_with_got || ALWAYS_RELOC_TEXT) &&
-++	    ((a->flags & SEC_CODE) ||
-++	    ((a->flags & (SEC_DATA | SEC_READONLY)) == (SEC_DATA | SEC_READONLY))))
-+ 		sectionp = text + (a->vma - text_vma);
-+ 	else if (a->flags & SEC_DATA)
-+ 		sectionp = data + (a->vma - data_vma);
-+-- 
-+2.21.0
-+
++     SEPARATE_ARGUMENTS(_compiler_FLAGS)
++-    MESSAGE("${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -o ${_output} ${_source}")
+++    MESSAGE("${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -c -o ${_output} ${_source}")
++     ADD_CUSTOM_COMMAND(
++       OUTPUT ${_output}
++-      COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -o ${_output} ${_source}
+++      COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -c -o ${_output} ${_source}
++       DEPENDS ${_source} )
++     ADD_CUSTOM_TARGET(${_targetName}_gch DEPENDS ${_output})
++     ADD_DEPENDENCIES(${_targetName} ${_targetName}_gch)
