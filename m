@@ -1,84 +1,136 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Nov 2019 22:33:57 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-11-06
-In-Reply-To: <569eeff2-f02f-3506-5cdc-1f02a8e3c325@gmail.com>
-References: <5dc3c4b8.1c69fb81.ff4f2.2a4cSMTPIN_ADDED_MISSING@mx.google.com>
- <6d4b57b9-90c8-c2ba-9703-0a456b2dec9f@gmail.com>
- <20191109120151.GO3419@scaer>
- <569eeff2-f02f-3506-5cdc-1f02a8e3c325@gmail.com>
-Message-ID: <20191109213357.GP3419@scaer>
+Date: Sat, 9 Nov 2019 22:49:22 +0100
+Subject: [Buildroot] [PATCH 01/15] new recipe : host-systemd
+In-Reply-To: <20191103165640.21819-2-jeremy.rosen@smile.fr>
+References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
+ <20191103165640.21819-2-jeremy.rosen@smile.fr>
+Message-ID: <20191109214922.GQ3419@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+J?r?my, All,
 
-On 2019-11-09 14:09 +0100, Romain Naour spake thusly:
-> Le 09/11/2019 ? 13:01, Yann E. MORIN a ?crit?:
-> > On 2019-11-09 11:40 +0100, Romain Naour spake thusly:
-> >>>   mips64el   |        host-llvm-9.0.0         | http://autobuild.buildroot.net/results/d3aa03ca7085727d0794228178c7744859900137
-> >> This is weird since mips is not (yet) supported by Buildroot's llvm package (see
-> >> BR2_PACKAGE_LLVM_ARCH_SUPPORTS).
-> >>
-> >> host-llvm dependency seems trigged by another package at Makefile level without
-> >> being llvm/clang at Kconfig level.
-> >>
-> >> Yann, the issue seems related to qt5tools for Qt 5.12 [1].
-> >> Since it now depends on libclang, BR2_PACKAGE_QT5TOOLS_QDOC_TOOL must depends on
-> >> BR2_PACKAGE_LLVM_ARCH_SUPPORTS (at least).
-> > 
-> > This is a serious limitation in the host-llvm package, then.
-> > 
-> > qt5tools wants llvm to build a tool (namely, qdoc) for the host, not
-> > the target. So it should not be bothered by whatever the target is.
+On 2019-11-03 17:56 +0100, J?r?my Rosen spake thusly:
+> Add the infrastructure to build the host version of systemd
+> * disable all optional features, they can be re-added when needed
+> * systemd has creative way of dealing with cross compile
+>   we build a "normal" host systemd, but install it in $HOST_DIR
+>   we use systemctl --root to correctly act on TARGET_DIR
+> * we need to adjust RPATH using patchelf because meson can't do it
+>   correctly by itsel
 > 
-> Well, It's the same problem as for using llvm/clang on the host to build some
-> host tools. For your case you have to build hos-llvm with your host variant
-> (x86_64 for example) (LLVM_TARGETS_TO_BUILD).
+> Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
+[--SNIP--]
+> diff --git a/package/systemd/Config.in.host b/package/systemd/Config.in.host
+> new file mode 100644
+> index 0000000000..09099752d2
+> --- /dev/null
+> +++ b/package/systemd/Config.in.host
+> @@ -0,0 +1,4 @@
+> +config BR2_PACKAGE_HOST_SYSTEMD
+> +	bool "host systemd tools"
+> +	help
+> +	  Systemd command-line tools for the host
 
-qdoc is a host tool that scans qt-based source code, extracts the
-special comments, and generates the documentation. It does not generate
-target binary (afaik). It is only linked with libclang:
+I don;t think we (at the current point) need a user-visible option.
 
-    $ readelf -d build/qt5tools-5.12.5/bin/qdoc
-    Dynamic section at offset 0x229680 contains 34 entries:
-      Tag        Type                         Name/Value
-     0x0000000000000001 (NEEDED)             Shared library: [libclang.so.9]
-     0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
-     0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
-     0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
-     0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
-     0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
-     0x0000000000000001 (NEEDED)             Shared library: [ld-linux-x86-64.so.2]
+This host-systemd is initially a way to get systemctl only, and this is
+just internal to how Buildroot will enable the units (by using systemctl
+preset-all or so).
 
-> But since we use the same LLVM_TARGET_ARCH for the host-llvm and llvm, we need
-> to use -target x86_64-linux-gnu when using clang.
+Later, if/when it becomes possible to build extra utilities for users to
+manually run (or in a post-build/image script), then we can expose a
+user-visible host-systemd option.
 
-But if there is no target llvm built, we could just fallback to the host
-machine, then, no?
+But for now, it is not needed.
+
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 94d5f703cd..1e4f706517 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -550,3 +550,95 @@ SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
+>  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
+>  
+>  $(eval $(meson-package))
+> +
+> +
+> +
+
+Too many empty lines. Run 'make check-package'.
+
+> +#
+> +# Host-systemd configuration
+> +#
+> +HOST_SYSTEMD_CONF_OPTS= \
+> +	-Dsplit-bin=true \
+> +	-Dsplit-usr=false \
+> +	-Dutmp=false \
+> +	-Dhibernate=false \
+> +	-Dldconfig=false \
+> +	-Dresolve=false \
+[--SNIP--]
+> +	-Dsysvinit-path='' \
+> +	--prefix=/usr \
+> +	--libdir=lib \
+> +	--sysconfdir=/etc \
+> +	--localstatedir=/var \
+
+This list will be difficult to maintain on each version bump... :-(
+Can't we push for upstream to implement a simple switch:
+--disable-all-that-is-not-explicitly-enabled-please-and-i-d-like-a-pony-too-pretty-please
+
+> +
+> +HOST_SYSTEMD_DEPENDENCIES = \
+> +    host-util-linux \
+> +    host-patchelf \
+> +    host-libcap \
+> +    host-gperf \
+> +
+> +# Fix RPATH After installation
+> +# * systemd provides a install_rpath instruction to meson because the binaries need to link with
+> +#   libsystemd which is not in a standard path
+> +# * meson can only replace the RPATH, not append to it
+> +# * the original rpatch is thus lost. 
+> +# * the original path had been tweaked by buildroot vial LD_FLAGS to add $(HOST_DIR)/lib
+> +# * thus re-tweak rpath after the installation for all binaries that need it
+> +#buildroot detects incorrect RPATH, so adding new binaries should be safe (it won't compile 
+> +#unless properly integrated).
+> +HOST_SYSTEMD_HOST_TOOLS = \
+> +    systemd-analyze  systemd-mount systemctl
+
+Once again, I think we should just keep systemctl for now: remove
+everything else. We just need systemctl for now.
+
+We can then *later* add those (esp. analyse).
+
+> +define HOST_SYSTEMD_FIX_RPATH
+> +	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
+> +		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
+
+It is not possible to make an RPATH longer than it previously was. How
+can we ensure that the rpath that is set by meson will be big enough to
+later cary our own rpath?
 
 Regards,
 Yann E. MORIN.
 
-> See: http://lists.busybox.net/pipermail/buildroot/2019-November/265490.html
+> +	)
+> +endef
+> +
+> +HOST_SYSTEMD_POST_INSTALL_HOOKS +=  HOST_SYSTEMD_FIX_RPATH
+> +HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+> +
+> +$(eval $(host-meson-package))
+> -- 
+> 2.24.0.rc1
 > 
-> Initially llvm was packaged as a cross-toolchain only. Here you want to use it
-> as a native compiler. It's like if you want to build a host-gcc for you build
-> machine instead of using the compiler provided by you distribution.
-> 
-> In this case we probably can use clang provided by the build machine ?
-> 
-> Best regards,
-> Romain
-> 
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> > 
-> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
