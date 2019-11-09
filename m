@@ -1,40 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Nov 2019 15:19:28 +0100
-Subject: [Buildroot] [PATCH 2/2] configs/beaglebone: use the new
- BeagleBoard/BeagleBone kernel repository
-In-Reply-To: <CAJ4jsaeuA66DLtkH8dLpJQpimSwjd5w5ntOZh2+9o7O1zvGOTQ@mail.gmail.com>
-References: <20191102223839.16262-1-unixmania@gmail.com>
- <20191102223839.16262-3-unixmania@gmail.com>
- <20191108221256.089bfa50@windsurf>
- <CAJ4jsaeuA66DLtkH8dLpJQpimSwjd5w5ntOZh2+9o7O1zvGOTQ@mail.gmail.com>
-Message-ID: <20191109151928.19e4b11e@windsurf>
+Date: Sat, 9 Nov 2019 15:22:05 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/stm32mp157c_dk2: disable mkfs
+ metadata_csum and dir_index options
+In-Reply-To: <20191103115017.788940-1-b.bilas@grinn-global.com>
+References: <20191103115017.788940-1-b.bilas@grinn-global.com>
+Message-ID: <20191109152205.0bd1b924@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 8 Nov 2019 20:11:14 -0300
-Carlos Santos <unixmania@gmail.com> wrote:
+Hello Bartosz,
 
-> > I've applied to next... but after doing, I realized that you could have
-> > used the github macro, like we do in beagleboneai_defconfig. Could you
-> > send a patch for that ?  
+On Sun,  3 Nov 2019 12:50:16 +0100
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+
+> To solve issue with non-possibilities to mount rootfs partition we
+> should disable a new mkfs features such as metadata_csum and
+> dir_index because there is incompatibility with these options.
 > 
-> I kept using git download method but I can replace it by the download
-> or the tarbal from GitHub.
-
-Yes, it's nicer to use the github macro, it saves a lot of download time.
-
-> > Also, it would be nice if we could align beagleboneai, beaglebone and
-> > beaglebone_qt5 to use the same U-Boot/Linux versions, if possible. I
-> > see that the beagleboneai is using 4.14 even though it's a much newer
-> > platform than beaglebone.  
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> ---
+>  configs/stm32mp157c_dk2_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> I have been working on it but did not have much free time in the last
-> weeks. I will try to fix it on time for 2019.11.
+> diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+> index a1e61d752d..ba044e5e55 100644
+> --- a/configs/stm32mp157c_dk2_defconfig
+> +++ b/configs/stm32mp157c_dk2_defconfig
+> @@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+> +BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^64bit,^metadata_csum,^dir_index"
 
-Sure, no problem. That was really a "nice to have" comment. Thanks!
+Are you sure it is necessary to disable those three options?
+
+Indeed, U-Boot ext4 write support clearly excludes filesystems that
+have the metadata_csum option enabled:
+
+  https://gitlab.denx.de/u-boot/u-boot/blob/master/fs/ext4/ext4_write.c#L880
+
+However, there's nothing about the 64bit and dir_index options. How did
+you conclude that they were causing problems? Did you try with just -O
+^metadata_csum ?
+
+Thanks,
 
 Thomas
 -- 
