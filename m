@@ -1,47 +1,43 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 9 Nov 2019 14:42:56 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-11-06
-In-Reply-To: <20191109143000.37b5a746@windsurf>
-References: <5dc3c4b8.1c69fb81.ff4f2.2a4cSMTPIN_ADDED_MISSING@mx.google.com>
- <6d4b57b9-90c8-c2ba-9703-0a456b2dec9f@gmail.com>
- <20191109120151.GO3419@scaer>
- <569eeff2-f02f-3506-5cdc-1f02a8e3c325@gmail.com>
- <20191109143000.37b5a746@windsurf>
-Message-ID: <43ec9f4c-0fc9-baa5-f3e5-b40b53a00808@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 9 Nov 2019 14:43:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/safeclib: bump to version
+ 08112019
+In-Reply-To: <20191108170742.29680-1-fontaine.fabrice@gmail.com>
+References: <20191108170742.29680-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191109144302.6152ff10@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 09/11/2019 ? 14:30, Thomas Petazzoni a ?crit?:
-> On Sat, 9 Nov 2019 14:09:50 +0100
-> Romain Naour <romain.naour@gmail.com> wrote:
+On Fri,  8 Nov 2019 18:07:42 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> - Drop patch (already in version)
+> - Include a fix for musl on x86_64:
+>   https://github.com/rurban/safeclib/commit/19e7154e9c5189b0dfb5594b94cb7b883f9b6dcf
 > 
->> Well, It's the same problem as for using llvm/clang on the host to build some
->> host tools. For your case you have to build hos-llvm with your host variant
->> (x86_64 for example) (LLVM_TARGETS_TO_BUILD).
->>
->> But since we use the same LLVM_TARGET_ARCH for the host-llvm and llvm, we need
->> to use -target x86_64-linux-gnu when using clang.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/7923fe7e609a6b2638492350996cc96582cc9193
 > 
-> Wouldn't it be more "natural" for clang to by default produce binaries
-> for the host, and when you want to cross-compile, have to explicitly
-> pass -target arm-something-something ?
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../0001-Define-_GNU_SOURCE-when-needed.patch | 115 ------------------
+>  package/safeclib/safeclib.hash                |   4 +-
+>  package/safeclib/safeclib.mk                  |   4 +-
+>  3 files changed, 4 insertions(+), 119 deletions(-)
+>  delete mode 100644 package/safeclib/0001-Define-_GNU_SOURCE-when-needed.patch
 
-It's seems Valentin had some issues when LLVM_TARGET_ARCH is not the same for
-host-llvm and llvm, there is a comment about it:
+We normally don't take version bumps in master. But this one fixes a
+build issue, and safeclib doesn't have any reverse dependencies in
+Buildroot, so the risk for issues is quite limited. So I've applied to
+master.
 
-# It must be set to LLVM_TARGET_ARCH for host and target, otherwise we get
-# "No available targets are compatible for this triple" with llvmpipe when host
-# and target architectures are different.
+Thanks,
 
-Valentin, do you remember ? Was It a runtime issue ?
-
-Best regards,
-Romain
-
-> 
-> Thomas
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
