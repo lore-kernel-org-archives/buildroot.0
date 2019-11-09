@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Nov 2019 23:11:39 +0100
-Subject: [Buildroot] [PATCH 07/15] package/connman: adapt to preset-all
-In-Reply-To: <20191103165640.21819-8-jeremy.rosen@smile.fr>
+Date: Sat, 9 Nov 2019 23:14:20 +0100
+Subject: [Buildroot] [PATCH 11/15] package/network-manager: adapt to
+ preset-all
+In-Reply-To: <20191103165640.21819-12-jeremy.rosen@smile.fr>
 References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
- <20191103165640.21819-8-jeremy.rosen@smile.fr>
-Message-ID: <20191109221139.GT3419@scaer>
+ <20191103165640.21819-12-jeremy.rosen@smile.fr>
+Message-ID: <20191109221420.GU3419@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,43 +15,53 @@ To: buildroot@busybox.net
 J?r?my, All,
 
 On 2019-11-03 17:56 +0100, J?r?my Rosen spake thusly:
-> connman has two services
-> * connman.service which is the real daemon
-> * connman-wait-online.service which is a sync point for network-online.target
+> NM has three services
+> * NetworkManger.service : the main daemon
+> * NetworkManger-dispatcher.service : a daemon handling network callbacks
+> * NetworkManager-wait-online.service : sync of other services with network-online
 > 
-> Only the first one was enabled. This adaptation enables both.
-> 
-> Not enabling connman-wait-online.service is probably a bug
+> Only the first two were activated. We now also enable
+> wait-online. Not enabling it was probably a bug.
 
-Actually no, that's not a bug; not enabling it is a privacy feature.
-Some people are concerned about the phone-home-alike that check-online
-may do.
+Same as for connman: it was intentional that this was not enabled.
+
+And besides the privacy concerns, some devices are never exposed to the
+real internet, and always only ever stay on closed networkd, so
+wait-online could not phone home to detect connectivity anyway.
 
 Regards,
 Yann E. MORIN.
 
+> Note that buildroot adds an alias dbus-org.freedesktop.NetworkManager
+> Adding an alias that is not known upstream is not clean,
+> but I left it for backward compatibility
+> 
 > Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 > ---
->  package/connman/connman.mk | 6 ------
->  1 file changed, 6 deletions(-)
+>  package/network-manager/network-manager.mk | 7 -------
+>  1 file changed, 7 deletions(-)
 > 
-> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-> index 839bc7a0e2..d70eb1ac82 100644
-> --- a/package/connman/connman.mk
-> +++ b/package/connman/connman.mk
-> @@ -32,12 +32,6 @@ define CONNMAN_INSTALL_INIT_SYSV
->  	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
+> diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+> index 6412d3a241..67e6a76774 100644
+> --- a/package/network-manager/network-manager.mk
+> +++ b/package/network-manager/network-manager.mk
+> @@ -88,16 +88,9 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSV
 >  endef
 >  
-> -define CONNMAN_INSTALL_INIT_SYSTEMD
+>  define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
 > -	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> -	ln -fs ../../../../usr/lib/systemd/system/connman.service \
-> -		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
-> -endef
 > -
->  ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
->  CONNMAN_CONF_OPTS += --enable-client
->  CONNMAN_DEPENDENCIES += readline
+>  	ln -sf /usr/lib/systemd/system/NetworkManager.service \
+>  		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
+>  
+> -	ln -sf /usr/lib/systemd/system/NetworkManager.service \
+> -		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager.service
+> -
+> -	ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
+> -		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+>  endef
+>  
+>  $(eval $(autotools-package))
 > -- 
 > 2.24.0.rc1
 > 
