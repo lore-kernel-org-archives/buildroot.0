@@ -1,65 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Nov 2019 18:15:03 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/domoticz: fix
- build with RELRO
-Message-ID: <20191109174741.CC9D68E9C7@busybox.osuosl.org>
+Date: Sat, 9 Nov 2019 18:47:22 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/dtc: needs
+ host-pkgconf unconditionally
+Message-ID: <20191109174741.DFFC58EB26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c8eae30e50b927c5da77402c1ed066d00365aa1
+commit: https://git.buildroot.net/buildroot/commit/?id=29c1577c65150ee8364d9c3bfe2259fc0f870668
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/5c1ca3083ad672401d1e050c6c3a07b8c33b851d
+Commits 495e757d2 (package/dtc: add optional libyaml dependency) and
+e43d9072a (package/dtc: fix build without libyaml), added a conditional
+dependency to host-pkgconf, when libyaml is enabled, while commit
+56d6dd453 (package/dtc: disable valgrind) explicitly disabled support of
+valgrind.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+However, presence of libyaml, as well as that of valgrind, *is* detected
+by calling pkg-config:
+
+    NO_VALGRIND := $(shell $(PKG_CONFIG) --exists valgrind; echo $$?)
+    NO_YAML := $(shell $(PKG_CONFIG) --exists yaml-0.1; echo $$?)
+
+Passing NO_YAML=1 or NO_VALGRIND=1 do not prevent the tests from being
+executed, which would yield messages like:
+
+    /bin/sh: 1: /home/ymorin/dev/buildroot/O/host/bin/pkg-config: not found
+
+(note however that, even if the test is executed, the value we pass on
+the command line still takes precedence, and the support for either is
+properly disabled.)
+
+So, move the dependency on host-pkgconfig out of the condition. Ditto
+for the host package.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Titouan Christophe <titouan.christophe@railnova.eu>
+Cc: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6d8c56f77627e594fb285a7c6f4245ed196ce392)
+(cherry picked from commit 78b77a5c4a5eef1ad5b4af51879758d38a8cc98d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...txt-add-c-argument-to-build-precompiled-h.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/dtc/dtc.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/domoticz/0003-CMakeLists.txt-add-c-argument-to-build-precompiled-h.patch b/package/domoticz/0003-CMakeLists.txt-add-c-argument-to-build-precompiled-h.patch
-new file mode 100644
-index 0000000000..b14f4c56c3
---- /dev/null
-+++ b/package/domoticz/0003-CMakeLists.txt-add-c-argument-to-build-precompiled-h.patch
-@@ -0,0 +1,34 @@
-+From 17107b876fb308e3ef3e759ab90f3d8e4755cdc4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 8 Nov 2019 14:17:58 +0100
-+Subject: [PATCH] CMakeLists.txt: add -c argument to build precompiled headers
-+
-+Add "-c" argument when building precompiler headers as suggested
-+by Arnout in https://patchwork.ozlabs.org/patch/1187328.
-+
-+This will fix the build with RELRO
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/domoticz/domoticz/commit/17107b876fb308e3ef3e759ab90f3d8e4755cdc4]
-+---
-+ CMakeLists.txt | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 32a0dd2a8c..010cdf2db8 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -277,10 +277,10 @@ MACRO(ADD_PRECOMPILED_HEADER _targetName _input)
-+     ENDFOREACH(item)
-+ 
-+     SEPARATE_ARGUMENTS(_compiler_FLAGS)
-+-    MESSAGE("${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -o ${_output} ${_source}")
-++    MESSAGE("${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -c -o ${_output} ${_source}")
-+     ADD_CUSTOM_COMMAND(
-+       OUTPUT ${_output}
-+-      COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -o ${_output} ${_source}
-++      COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -c -o ${_output} ${_source}
-+       DEPENDS ${_source} )
-+     ADD_CUSTOM_TARGET(${_targetName}_gch DEPENDS ${_output})
-+     ADD_DEPENDENCIES(${_targetName} ${_targetName}_gch)
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index 0ed914ba41..32e652d16c 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -10,8 +10,8 @@ DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
+ DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
+ DTC_LICENSE_FILES = README.license GPL
+ DTC_INSTALL_STAGING = YES
+-DTC_DEPENDENCIES = host-bison host-flex
+-HOST_DTC_DEPENDENCIES = host-bison host-flex
++DTC_DEPENDENCIES = host-bison host-flex host-pkgconf
++HOST_DTC_DEPENDENCIES = host-bison host-flex host-pkgconf
+ 
+ DTC_MAKE_OPTS = \
+ 	PREFIX=/usr \
+@@ -25,7 +25,7 @@ HOST_DTC_MAKE_OPTS = \
+ 	NO_YAML=1
+ 
+ ifeq ($(BR2_PACKAGE_LIBYAML),y)
+-DTC_DEPENDENCIES += host-pkgconf libyaml
++DTC_DEPENDENCIES += libyaml
+ else
+ DTC_MAKE_OPTS += NO_YAML=1
+ endif
