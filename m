@@ -1,90 +1,93 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Nov 2019 20:41:24 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] Update for 2019.08.2
-Message-ID: <20191109193434.C01928E818@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  9 Nov 2019 21:26:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/domoticz: fix build with python 3.8
+Message-ID: <20191109202648.16533-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6493a3214ae78bcb163982824693c1e0b1d093c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Fixes:
+ - http://autobuild.buildroot.org/results/7790f4726d1fca3e5c0630f71f15417eeb7bf02a
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- CHANGES  | 38 ++++++++++++++++++++++++++------------
- Makefile |  4 ++--
- 2 files changed, 28 insertions(+), 14 deletions(-)
+ ...ayedLink.h-fix-build-with-python-3-8.patch | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 package/domoticz/0004-DelayedLink.h-fix-build-with-python-3-8.patch
 
-diff --git a/CHANGES b/CHANGES
-index fba44dd52b..ae1730d1e6 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,24 +1,38 @@
--2019.08.2, not yet released:
-+2019.08.2, released November 9th, 2019
- 
- 	Important / security related fixes.
- 
--	toolchain: Also copy libssp.so for external toolchains if SSP
-+	Toolchain: Also copy libssp.so for external toolchains if SSP
- 	to handle toolchains providing SSP support in libssp rather
- 	than in the C library
- 
-+	Download: Also use the package download method for extra
-+	downloads from the same site, so it does not get confused by
-+	URLs containing '+'
+diff --git a/package/domoticz/0004-DelayedLink.h-fix-build-with-python-3-8.patch b/package/domoticz/0004-DelayedLink.h-fix-build-with-python-3-8.patch
+new file mode 100644
+index 0000000000..5b9abffabd
+--- /dev/null
++++ b/package/domoticz/0004-DelayedLink.h-fix-build-with-python-3-8.patch
+@@ -0,0 +1,66 @@
++From e9bd383ceb63db7cfe8a284014f0cdf8c2bfe4f0 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 1 Nov 2019 10:54:11 +0100
++Subject: [PATCH] DelayedLink.h: fix build with python 3.8
 +
-+	Fakeroot now works correctly under Microsoft Windows 10
-+	Services for Linux, which does not provide SYSV IPC support
++Fix build with python 3.8 by copy/pasting the vim workaround from
++https://github.com/vim/vim/commit/13a1f3fb0c9d08bba6109fe2131c9524e6ba7e15
 +
- 	utils/test-pkg: ensure to exit with an error upon failure
- 
- 	Updated/fixed packages: asterisk, azmq, binutils,
--	cups-filters, duma, exfat, exfat-utils, fdk-aac, file, gcc,
--	gd, ghostscript, go, gpsd, grpc, gst1-plugins-base, gvfs, icu,
--	intel-microcode, kvm-unit-tests, libnspr, libnss, libopenssl,
--	libpcap, libpciaccess, librsvg, libseccomp, libsigrok,
--	libtorrent, libunwind, libva, lua-sdl2, lxc, minizip,
--	mjpegtools, mongoose, mono, nbd, nfs-utils, php, python,
--	python-pysnmp-apps, python-tornado, qemu, qt5base, ruby,
--	safeclib, samba4, sdl_mixer, sox, sudo, suricata, tcpdump,
--	unscd, util-linux, vdr-plugin-vnsiserver, vtun, wireshark,
--	xvisor
-+	cups-filters, domoticz, dtc, duma, elf2flt, eudev, exfat,
-+	exfat-utils, fakeroot, fdk-aac, file, freerdp, gcc, gd,
-+	ghostscript, go, gpsd, grpc, gst1-plugins-base, gvfs, icu,
-+	intel-microcode, kvm-unit-tests, libfribidi, libnspr, libnss,
-+	libopenssl, libpcap, libpciaccess, librsvg, libseccomp,
-+	libsigrok, libtorrent, libunwind, libva, linux-tools,
-+	lua-sdl2, lxc, minizip, mjpegtools, mongoose, mono, nbd,
-+	nfs-utils, php, piglit, python, python-autobahn,
-+	python-pysnmp-apps, python-tornado, python3, qemu, qt5base,
-+	ruby, safeclib, samba4, sdl_mixer, sox, sudo, suricata,
-+	systemd, tcpdump, unscd, util-linux, vdr-plugin-vnsiserver,
-+	vtun, wireshark, xvisor, yaffs2utils
++Fix 3703
 +
-+	Issues resolved (http://bugs.uclibc.org):
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/domoticz/domoticz/commit/e9bd383ceb63db7cfe8a284014f0cdf8c2bfe4f0]
++---
++ hardware/plugins/DelayedLink.h | 38 ++++++++++++++++++++++++++++++++++
++ 1 file changed, 38 insertions(+)
 +
-+	#11366: [2018.08] SysV IPC not available for fakeroot on WSL
-+	#12261: sudo versions prior to 1.8.28 are affected
- 
- 2019.08.1, released October 3rd, 2019
- 
-diff --git a/Makefile b/Makefile
-index 39c01135f8..9b0291372f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2019.08.1
-+export BR2_VERSION := 2019.08.2
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1570086600
-+BR2_VERSION_EPOCH = 1573328000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
++diff --git a/hardware/plugins/DelayedLink.h b/hardware/plugins/DelayedLink.h
++index 4bf1973281..c90a7d8e69 100644
++--- a/hardware/plugins/DelayedLink.h
+++++ b/hardware/plugins/DelayedLink.h
++@@ -14,6 +14,44 @@
++ #include <frameobject.h>
++ #include "../../main/Helper.h"
++ 
+++#if PY_VERSION_HEX >= 0x030800f0
+++static inline void
+++py3__Py_DECREF(const char *filename, int lineno, PyObject *op)
+++{
+++	(void)filename; /* may be unused, shut up -Wunused-parameter */
+++	(void)lineno; /* may be unused, shut up -Wunused-parameter */
+++	_Py_DEC_REFTOTAL;
+++	if (--op->ob_refcnt != 0)
+++	{
+++#ifdef Py_REF_DEBUG
+++	if (op->ob_refcnt < 0)
+++	{
+++		_Py_NegativeRefcount(filename, lineno, op);
+++	}
+++#endif
+++	}
+++	else
+++	{
+++		_Py_Dealloc(op);
+++	}
+++}
+++
+++#undef Py_DECREF
+++#define Py_DECREF(op) py3__Py_DECREF(__FILE__, __LINE__, _PyObject_CAST(op))
+++
+++static inline void
+++py3__Py_XDECREF(PyObject *op)
+++{
+++	if (op != NULL)
+++	{
+++		Py_DECREF(op);
+++	}
+++}
+++
+++#undef Py_XDECREF
+++#define Py_XDECREF(op) py3__Py_XDECREF(_PyObject_CAST(op))
+++#endif
+++
++ namespace Plugins {
++ 
++ #ifdef WIN32
+-- 
+2.23.0
