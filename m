@@ -1,62 +1,104 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Nov 2019 18:12:50 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/pkg-generic.mk:
- use site method for same-site extra downloads
-Message-ID: <20191109174741.B80278EA4F@busybox.osuosl.org>
+Date: Sat, 9 Nov 2019 18:49:57 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/elf2flt:
+ .ARM.exidx RO data section is incorrectly mapped to data
+Message-ID: <20191109174741.EE83A8EA4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69712a3d74151b8a04e6ee2b851e541585284093
+commit: https://git.buildroot.net/buildroot/commit/?id=ec09b5f3e921e76edd0b54e85f87d94284e1f1ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-When a package specifies extra downloads, it has the option to only name
-the basename of the extra download, in which case that extra download
-will be retrieved from the same location the main download is retrieved
-from.
+Starting with Binutils 2.33.1, elf2flt segfault while building busybox:
+"ld (ld-elf2flt):
+/opt/armv7m--uclibc--bleeding-edge-2/arm-buildroot-uclinux-uclibcgnueabi/bin/elf2flt
 
-In that case, if the extra download contains a '+', it would confuse the
-dl-wrapper, which believes the LHS of the '+' is the site method, and
-the RHS the actual URI, and so the dl-wrapper mangles and damages the
-URI when fetching such extra downloads, like that happens with android
-tools, where the proper URI and mangled URIs of the extra download are,
-respectively:
+This was reported to the Binutils mailing list and it's seems
+an elf2flt issue with .ARM.exidx RO data section as explained
+by: https://sourceware.org/ml/binutils/2019-10/msg00132.html
 
-    https://launchpad.net/ubuntu/+archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
-    http://archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+Apply the patch provided by Greg Ungerer [1] and tested by
+Christophe Priouzeau using stm32f469_disco_defconfig on
+stm32f469-disco board.
 
-We fix that by always propagating the site method to extra downloads,
-but only when they are specified as relative to the main download URI.
+Fixes:
+https://gitlab.com/kubu93/toolchains-builder/-/jobs/319395300
 
-For the extra downloads that specify a full URI, it is not systematic
-that it is the same site method. For example, a main download could be a
-git clone, but an extra download a pure http download; in that case we
-can't replicate the site method for extra downloads, so they'll have to
-take appropriate care to specify the required method and encoding if
-needed.
+[1] https://github.com/uclinux-dev/elf2flt/issues/12
 
-Reported-by: Jemy Zhang <jemy.zhang@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Jemy Zhang <jemy.zhang@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2c543b4f4c4f06fccadb20e7568a662d3d0b854e)
+(cherry picked from commit 2b064f86b6a0fd683f307b51f12d9d919fcaa386)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...lf2flt-fix-relocations-for-read-only-data.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9620dec524..e14714cf40 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -523,7 +523,7 @@ $(2)_ALL_DOWNLOADS = \
- 	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
- 	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
- 		$$(if $$(findstring ://,$$(p)),$$(p),\
--			$$($(2)_SITE)/$$(p)))
-+			$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$(p)))
- 
- ifndef $(2)_SITE
-  ifdef $(3)_SITE
+diff --git a/package/elf2flt/0002-elf2flt-fix-relocations-for-read-only-data.patch b/package/elf2flt/0002-elf2flt-fix-relocations-for-read-only-data.patch
+new file mode 100644
+index 0000000000..6cb3a55433
+--- /dev/null
++++ b/package/elf2flt/0002-elf2flt-fix-relocations-for-read-only-data.patch
+@@ -0,0 +1,58 @@
++From 6006e8d789f7a1129414fb3a8c930b094af0cafa Mon Sep 17 00:00:00 2001
++From: Greg Ungerer <gerg@kernel.org>
++Date: Wed, 6 Nov 2019 21:19:24 +0100
++Subject: [PATCH] elf2flt: fix relocations for read-only data
++
++Readonly data sections are mapped into the "text" section in the
++elf2flt.ld linker script. The relocation generation code is not handling
++that case properly though, and is actually mapping any data section type
++into the "data" section of the target binary.
++
++This problem case has been detected with elf2flt core dumping when used
++with binutils-2.33.1 (on ARM architecture targets). See thread at:
++
++   https://sourceware.org/ml/binutils/2019-10/msg00132.html
++
++Tested by Christophe Priouzeau [1]
++
++* binutils 2.33.1
++* buildroot 2019.11-rc1
++* patch on top of elf2flt (patch available on this thread)
++* configuration: stm32f469-disco with initramfs configuration on buildroot
++
++Result:
++Build: OK, all the binaries are generated
++Runtime test on stm32f469-disco: OK
++
++[1] https://github.com/uclinux-dev/elf2flt/issues/12
++
++Signed-off-by: Greg Ungerer <gerg@kernel.org>
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
++---
++ elf2flt.c | 8 +++++---
++ 1 file changed, 5 insertions(+), 3 deletions(-)
++
++diff --git a/elf2flt.c b/elf2flt.c
++index 67f720a..8973cef 100644
++--- a/elf2flt.c
+++++ b/elf2flt.c
++@@ -418,10 +418,12 @@ output_relocs (
++ //		continue;
++ 
++ 	/*
++-	 *	Only relocate things in the data sections if we are PIC/GOT.
++-	 *	otherwise do text as well
+++	 * Only relocate things in the writable data sections if we are PIC/GOT.
+++	 * Otherwise do text (and read only data) as well.
++ 	 */
++-	if ((!pic_with_got || ALWAYS_RELOC_TEXT) && (a->flags & SEC_CODE))
+++	if ((!pic_with_got || ALWAYS_RELOC_TEXT) &&
+++	    ((a->flags & SEC_CODE) ||
+++	    ((a->flags & (SEC_DATA | SEC_READONLY)) == (SEC_DATA | SEC_READONLY))))
++ 		sectionp = text + (a->vma - text_vma);
++ 	else if (a->flags & SEC_DATA)
++ 		sectionp = data + (a->vma - data_vma);
++-- 
++2.21.0
++
