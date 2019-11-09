@@ -1,62 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Nov 2019 18:12:57 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/pkg-generic.mk:
- use site method for same-site extra downloads
-Message-ID: <20191109174734.C32368EA4F@busybox.osuosl.org>
+Date: Sat, 9 Nov 2019 18:14:20 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libfribidi: add
+ upstream security fix
+Message-ID: <20191109174741.C10478E9C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23791423a1616235321f0c165c17af0c61f3155e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b431c6b9519fdce1cd7e7f83a01e0625b157fce6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-When a package specifies extra downloads, it has the option to only name
-the basename of the extra download, in which case that extra download
-will be retrieved from the same location the main download is retrieved
-from.
+Fixes the following security issue:
 
-In that case, if the extra download contains a '+', it would confuse the
-dl-wrapper, which believes the LHS of the '+' is the site method, and
-the RHS the actual URI, and so the dl-wrapper mangles and damages the
-URI when fetching such extra downloads, like that happens with android
-tools, where the proper URI and mangled URIs of the extra download are,
-respectively:
+- CVE-2019-18397: GNU FriBidi stack buffer overflow >= 1.0.0
 
-    https://launchpad.net/ubuntu/+archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
-    http://archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+For more details, see the advisory:
+https://www.openwall.com/lists/oss-security/2019/11/08/5
 
-We fix that by always propagating the site method to extra downloads,
-but only when they are specified as relative to the main download URI.
-
-For the extra downloads that specify a full URI, it is not systematic
-that it is the same site method. For example, a main download could be a
-git clone, but an extra download a pure http download; in that case we
-can't replicate the site method for extra downloads, so they'll have to
-take appropriate care to specify the required method and encoding if
-needed.
-
-Reported-by: Jemy Zhang <jemy.zhang@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Jemy Zhang <jemy.zhang@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2c543b4f4c4f06fccadb20e7568a662d3d0b854e)
+(cherry picked from commit bc1aec413b0101a3ff1622ea75fb1df90c75ae01)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...olate_level-to-FRIBIDI_BIDI_MAX_EXPLICIT_.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 21778f448f..3cb13176ed 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -521,7 +521,7 @@ $(2)_ALL_DOWNLOADS = \
- 	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
- 	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
- 		$$(if $$(findstring ://,$$(p)),$$(p),\
--			$$($(2)_SITE)/$$(p)))
-+			$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$(p)))
- 
- ifndef $(2)_SITE
-  ifdef $(3)_SITE
+diff --git a/package/libfribidi/0001-Truncate-isolate_level-to-FRIBIDI_BIDI_MAX_EXPLICIT_.patch b/package/libfribidi/0001-Truncate-isolate_level-to-FRIBIDI_BIDI_MAX_EXPLICIT_.patch
+new file mode 100644
+index 0000000000..b78f9b2111
+--- /dev/null
++++ b/package/libfribidi/0001-Truncate-isolate_level-to-FRIBIDI_BIDI_MAX_EXPLICIT_.patch
+@@ -0,0 +1,30 @@
++From 034c6e9a1d296286305f4cfd1e0072b879f52568 Mon Sep 17 00:00:00 2001
++From: Dov Grobgeld <dov.grobgeld@gmail.com>
++Date: Thu, 24 Oct 2019 09:37:29 +0300
++Subject: [PATCH] Truncate isolate_level to FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL
++
++CVE-2019-18397
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ lib/fribidi-bidi.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/lib/fribidi-bidi.c b/lib/fribidi-bidi.c
++index 6c84392..d384878 100644
++--- a/lib/fribidi-bidi.c
+++++ b/lib/fribidi-bidi.c
++@@ -747,7 +747,9 @@ fribidi_get_par_embedding_levels_ex (
++             }
++ 
++ 	  RL_LEVEL (pp) = level;
++-          RL_ISOLATE_LEVEL (pp) = isolate_level++;
+++          RL_ISOLATE_LEVEL (pp) = isolate_level;
+++          if (isolate_level < FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL-1)
+++              isolate_level++;
++           base_level_per_iso_level[isolate_level] = new_level;
++ 
++ 	  if (!FRIBIDI_IS_NEUTRAL (override))
++-- 
++2.20.1
++
