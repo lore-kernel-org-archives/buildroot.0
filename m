@@ -1,65 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Nov 2019 18:16:12 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/domoticz: fix
- build with RELRO
-Message-ID: <20191109174734.CACCF8E9C4@busybox.osuosl.org>
+Date: Sat, 9 Nov 2019 18:12:57 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/pkg-generic.mk:
+ use site method for same-site extra downloads
+Message-ID: <20191109174734.C32368EA4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4a088d4f6b4af26c64a12841c103b71a19e8e20
+commit: https://git.buildroot.net/buildroot/commit/?id=23791423a1616235321f0c165c17af0c61f3155e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/5c1ca3083ad672401d1e050c6c3a07b8c33b851d
+When a package specifies extra downloads, it has the option to only name
+the basename of the extra download, in which case that extra download
+will be retrieved from the same location the main download is retrieved
+from.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In that case, if the extra download contains a '+', it would confuse the
+dl-wrapper, which believes the LHS of the '+' is the site method, and
+the RHS the actual URI, and so the dl-wrapper mangles and damages the
+URI when fetching such extra downloads, like that happens with android
+tools, where the proper URI and mangled URIs of the extra download are,
+respectively:
+
+    https://launchpad.net/ubuntu/+archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+    http://archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+
+We fix that by always propagating the site method to extra downloads,
+but only when they are specified as relative to the main download URI.
+
+For the extra downloads that specify a full URI, it is not systematic
+that it is the same site method. For example, a main download could be a
+git clone, but an extra download a pure http download; in that case we
+can't replicate the site method for extra downloads, so they'll have to
+take appropriate care to specify the required method and encoding if
+needed.
+
+Reported-by: Jemy Zhang <jemy.zhang@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Jemy Zhang <jemy.zhang@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6d8c56f77627e594fb285a7c6f4245ed196ce392)
+(cherry picked from commit 2c543b4f4c4f06fccadb20e7568a662d3d0b854e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...txt-add-c-argument-to-build-precompiled-h.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/domoticz/0003-CMakeLists.txt-add-c-argument-to-build-precompiled-h.patch b/package/domoticz/0003-CMakeLists.txt-add-c-argument-to-build-precompiled-h.patch
-new file mode 100644
-index 0000000000..b14f4c56c3
---- /dev/null
-+++ b/package/domoticz/0003-CMakeLists.txt-add-c-argument-to-build-precompiled-h.patch
-@@ -0,0 +1,34 @@
-+From 17107b876fb308e3ef3e759ab90f3d8e4755cdc4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 8 Nov 2019 14:17:58 +0100
-+Subject: [PATCH] CMakeLists.txt: add -c argument to build precompiled headers
-+
-+Add "-c" argument when building precompiler headers as suggested
-+by Arnout in https://patchwork.ozlabs.org/patch/1187328.
-+
-+This will fix the build with RELRO
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/domoticz/domoticz/commit/17107b876fb308e3ef3e759ab90f3d8e4755cdc4]
-+---
-+ CMakeLists.txt | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 32a0dd2a8c..010cdf2db8 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -277,10 +277,10 @@ MACRO(ADD_PRECOMPILED_HEADER _targetName _input)
-+     ENDFOREACH(item)
-+ 
-+     SEPARATE_ARGUMENTS(_compiler_FLAGS)
-+-    MESSAGE("${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -o ${_output} ${_source}")
-++    MESSAGE("${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -c -o ${_output} ${_source}")
-+     ADD_CUSTOM_COMMAND(
-+       OUTPUT ${_output}
-+-      COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -o ${_output} ${_source}
-++      COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_compiler_FLAGS} -x c++-header -c -o ${_output} ${_source}
-+       DEPENDS ${_source} )
-+     ADD_CUSTOM_TARGET(${_targetName}_gch DEPENDS ${_output})
-+     ADD_DEPENDENCIES(${_targetName} ${_targetName}_gch)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 21778f448f..3cb13176ed 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -521,7 +521,7 @@ $(2)_ALL_DOWNLOADS = \
+ 	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
+ 	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+ 		$$(if $$(findstring ://,$$(p)),$$(p),\
+-			$$($(2)_SITE)/$$(p)))
++			$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$(p)))
+ 
+ ifndef $(2)_SITE
+  ifdef $(3)_SITE
