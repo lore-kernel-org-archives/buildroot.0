@@ -1,53 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Nov 2019 15:40:27 +0100
-Subject: [Buildroot] [git commit branch/next] configs/orangepi_zero_plus2:
- bump kernel and u-boot versions
-Message-ID: <20191109143403.BF9FB8EB7D@busybox.osuosl.org>
+Date: Sat, 9 Nov 2019 15:40:58 +0100
+Subject: [Buildroot] [git commit branch/next] configs/orangepi_lite: bump
+ kernel and u-boot versions
+Message-ID: <20191109143403.D6FD48E882@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0675be79c9742ecbf7ffb6637d920876bb6c7141
+commit: https://git.buildroot.net/buildroot/commit/?id=a32f0824f0e152f6b6f7c90fa8c72de9d1f903ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Bump Linux to 5.3.8 and U-Boot to 2019.10.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Tested-by: Jan Kraval <jan.kraval@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/orangepi_zero_plus2_defconfig | 6 +++---
+ configs/orangepi_lite_defconfig | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
-index 4ae7ef9355..a0183714a4 100644
---- a/configs/orangepi_zero_plus2_defconfig
-+++ b/configs/orangepi_zero_plus2_defconfig
-@@ -2,7 +2,7 @@ BR2_aarch64=y
- BR2_cortex_a53=y
+diff --git a/configs/orangepi_lite_defconfig b/configs/orangepi_lite_defconfig
+index 1c3b99cf1d..249224ed35 100644
+--- a/configs/orangepi_lite_defconfig
++++ b/configs/orangepi_lite_defconfig
+@@ -1,12 +1,12 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
  BR2_ARM_FPU_VFPV4=y
- 
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
- 
-@@ -18,7 +18,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Lite"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Lite"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-lite/linux-extras.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -22,7 +22,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_lite"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-@@ -33,7 +33,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-plus2/boot.cmd
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.8"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
