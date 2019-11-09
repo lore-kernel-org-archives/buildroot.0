@@ -1,144 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Nov 2019 14:50:11 +0100
-Subject: [Buildroot] [PATCH 2/3] arch/config.in.arc: Introduce ARC ISA
- toggle to ease downstream toggles
-In-Reply-To: <20191108174112.28183-3-vgupta@synopsys.com>
-References: <20191108174112.28183-1-vgupta@synopsys.com>
- <20191108174112.28183-3-vgupta@synopsys.com>
-Message-ID: <20191109145011.28728dbd@windsurf>
+Date: Sat, 9 Nov 2019 14:50:40 +0100
+Subject: [Buildroot] [git commit branch/next] package/ffmpeg: enable ARC
+ glibc builds
+Message-ID: <20191109134343.425578E8C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=30a32eb27e5d89dee79633f503bbcaf871305711
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri,  8 Nov 2019 09:41:11 -0800
-Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+ARC glibc fenv.h has the needed macros for quite some time now so
+allow ffmpeg builds.
 
-> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-> ---
->  arch/Config.in.arc | 25 +++++++++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-> index 284951b82cee..dbc608db39c6 100644
-> --- a/arch/Config.in.arc
-> +++ b/arch/Config.in.arc
-> @@ -1,3 +1,18 @@
-> +choice
-> +	prompt "Target ISA"
-> +	default BR2_arcompact
-> +	depends on BR2_arc
-> +	help
-> +	    Specific ARC ISA to use
-> +
-> +config BR2_arcompact
-> +	bool "ARCompact ISA"
-> +
-> +config BR2_arcv2
-> +	bool "ARCv2 ISA"
-> +
-> +endchoice
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ffmpeg/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-I don't think we want a choice for that. It should simply be implied by
-the target CPU selection.
-
-So instead, do it like this:
-
-config BR2_ARC_ARCH_ISA_ARCOMPACT
-	bool
-
-config BR2_ARC_ARCH_ISA_ARCV2
-	bool
-
-(note: the names are just a proposal, there are probably some better
-names)
-
->  choice
->  	prompt "Target CPU"
->  	default BR2_arc770d
-> @@ -7,12 +22,15 @@ choice
->  
->  config BR2_arc750d
->  	bool "ARC 750D"
-> +	depends on BR2_arcompact
-
-Replace by:
-
-	select BR2_ARC_ARCH_ISA_ARCOMPACT
-
->  
->  config BR2_arc770d
->  	bool "ARC 770D"
-> +	depends on BR2_arcompact
-
-Ditto.
-
->  
->  config BR2_archs
->  	bool "ARC HS38"
-> +	depends on BR2_arcv2
-
-	select BR2_ARC_ARCH_ISA_ARCV2
-
->  	help
->  	  Generic ARC HS capable of running Linux, i.e. with MMU,
->  	  caches and 32-bit multiplier. Also it corresponds to the default
-> @@ -20,6 +38,7 @@ config BR2_archs
->  
->  config BR2_archs38
->  	bool "ARC HS38 with 64-bit mpy"
-> +	depends on BR2_arcv2
-
-	select BR2_ARC_ARCH_ISA_ARCV2
-
-
->  	help
->  	  Fully featured ARC HS capable of running Linux, i.e. with MMU,
->  	  caches and 64-bit multiplier.
-> @@ -29,6 +48,7 @@ config BR2_archs38
->  
->  config BR2_archs38_full
->  	bool "ARC HS38 with Quad MAC & FPU"
-> +	depends on BR2_arcv2
-
-	select BR2_ARC_ARCH_ISA_ARCV2
-
-
->  	help
->  	  Fully featured ARC HS with additional support for
->  	   - Dual- and quad multiply and MC oprations
-> @@ -39,6 +59,7 @@ config BR2_archs38_full
->  
->  config BR2_archs4x_rel31
->  	bool "ARC HS48 rel 31"
-> +	depends on BR2_arcv2
-
-	select BR2_ARC_ARCH_ISA_ARCV2
-
->  	help
->  	   Latest release of HS48 processor
->  	   - Dual- and quad multiply and MC oprations
-> @@ -72,8 +93,8 @@ config BR2_GCC_TARGET_CPU
->  	default "hs4x_rel31"	 if BR2_archs4x_rel31
->  
->  config BR2_READELF_ARCH_NAME
-> -	default "ARCompact"	if BR2_arc750d || BR2_arc770d
-> -	default "ARCv2"		if BR2_archs || BR2_archs38 || BR2_archs38_full || BR2_archs4x_rel31
-> +	default "ARCompact"	if BR2_arcompact
-
-	default "ARCompact"	if BR2_ARC_ARCH_ISA_ARCOMPACT
-
-> +	default "ARCv2"		if BR2_arcv2
-
-	default "ARCv2"		if BR2_ARC_ARCH_ISA_ARCV2
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 0c71415276..33baff262e 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	bool
+ 	default y
+-	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW
+-	depends on !(BR2_archs38 && BR2_TOOLCHAIN_USES_GLIBC)
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+ 	depends on !BR2_nios2
+ 	# No support for ARMv7-M in the ARM assembly logic
