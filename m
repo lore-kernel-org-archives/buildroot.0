@@ -1,141 +1,98 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Nov 2019 22:49:22 +0100
-Subject: [Buildroot] [PATCH 01/15] new recipe : host-systemd
-In-Reply-To: <20191103165640.21819-2-jeremy.rosen@smile.fr>
-References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
- <20191103165640.21819-2-jeremy.rosen@smile.fr>
-Message-ID: <20191109214922.GQ3419@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 09 Nov 2019 22:52:09 +0100
+Subject: [Buildroot] Buildroot 2019.08.2 released
+Message-ID: <874kzclnue.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?my, All,
+Hi,
 
-On 2019-11-03 17:56 +0100, J?r?my Rosen spake thusly:
-> Add the infrastructure to build the host version of systemd
-> * disable all optional features, they can be re-added when needed
-> * systemd has creative way of dealing with cross compile
->   we build a "normal" host systemd, but install it in $HOST_DIR
->   we use systemctl --root to correctly act on TARGET_DIR
-> * we need to adjust RPATH using patchelf because meson can't do it
->   correctly by itsel
-> 
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-[--SNIP--]
-> diff --git a/package/systemd/Config.in.host b/package/systemd/Config.in.host
-> new file mode 100644
-> index 0000000000..09099752d2
-> --- /dev/null
-> +++ b/package/systemd/Config.in.host
-> @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_HOST_SYSTEMD
-> +	bool "host systemd tools"
-> +	help
-> +	  Systemd command-line tools for the host
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-I don;t think we (at the current point) need a user-visible option.
+Buildroot 2019.08.2 is released - Go download it at:
 
-This host-systemd is initially a way to get systemctl only, and this is
-just internal to how Buildroot will enable the units (by using systemctl
-preset-all or so).
+http://buildroot.org/downloads/buildroot-2019.08.2.tar.gz
 
-Later, if/when it becomes possible to build extra utilities for users to
-manually run (or in a post-build/image script), then we can expose a
-user-visible host-systemd option.
+or
 
-But for now, it is not needed.
+http://buildroot.org/downloads/buildroot-2019.08.2.tar.bz2
 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 94d5f703cd..1e4f706517 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -550,3 +550,95 @@ SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
->  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
->  
->  $(eval $(meson-package))
-> +
-> +
-> +
+Or get it from Git:
 
-Too many empty lines. Run 'make check-package'.
+git://git.buildroot.org/buildroot
 
-> +#
-> +# Host-systemd configuration
-> +#
-> +HOST_SYSTEMD_CONF_OPTS= \
-> +	-Dsplit-bin=true \
-> +	-Dsplit-usr=false \
-> +	-Dutmp=false \
-> +	-Dhibernate=false \
-> +	-Dldconfig=false \
-> +	-Dresolve=false \
-[--SNIP--]
-> +	-Dsysvinit-path='' \
-> +	--prefix=/usr \
-> +	--libdir=lib \
-> +	--sysconfdir=/etc \
-> +	--localstatedir=/var \
+Buildroot 2019.08.2 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2019.08.1 release.
 
-This list will be difficult to maintain on each version bump... :-(
-Can't we push for upstream to implement a simple switch:
---disable-all-that-is-not-explicitly-enabled-please-and-i-d-like-a-pony-too-pretty-please
+- Toolchain: Also copy libssp.so for external toolchains if SSP is
+  enabled to handle toolchains providing SSP support in libssp rather
+  than in the C library
 
-> +
-> +HOST_SYSTEMD_DEPENDENCIES = \
-> +    host-util-linux \
-> +    host-patchelf \
-> +    host-libcap \
-> +    host-gperf \
-> +
-> +# Fix RPATH After installation
-> +# * systemd provides a install_rpath instruction to meson because the binaries need to link with
-> +#   libsystemd which is not in a standard path
-> +# * meson can only replace the RPATH, not append to it
-> +# * the original rpatch is thus lost. 
-> +# * the original path had been tweaked by buildroot vial LD_FLAGS to add $(HOST_DIR)/lib
-> +# * thus re-tweak rpath after the installation for all binaries that need it
-> +#buildroot detects incorrect RPATH, so adding new binaries should be safe (it won't compile 
-> +#unless properly integrated).
-> +HOST_SYSTEMD_HOST_TOOLS = \
-> +    systemd-analyze  systemd-mount systemctl
+- Download: Also use the package download method for extra downloads
+  from the same site, so it does not get confused by URLs containing '+'
 
-Once again, I think we should just keep systemctl for now: remove
-everything else. We just need systemctl for now.
+- Fakeroot now works correctly under Microsoft Windows 10 Services for
+  Linux, which does not provide SYSV IPC support
 
-We can then *later* add those (esp. analyse).
+- Security fixes for asterisk, file, gd, ghostscript, go,
+  intel-microcode, libfribidi, libnss, libpcap, mongoose, php, python,
+  python3, ruby, samba4, sudo, suricata, tcpdump, wireshark
 
-> +define HOST_SYSTEMD_FIX_RPATH
-> +	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
-> +		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
+- Fixes for download/compilation/runtime issues in binutils,
+  cups-filters, domoticz, dtc, duma, elf2flt, eudev, exfat, exfat-utils,
+  fakeroot, freerdp, gcc, gpsd, grpc, gstreamer1, gvfs, icu,
+  kvm-unit-tests, libnss, libopenssl, libpciaccess, librsvg, libseccomp,
+  libsigrok, libtorrent, libunwind, libva, linux-tools, lua-sdl2, lxc,
+  minizip, mjpegtools, mono, nbd, nfs-utils, piglit, python-autobahn,
+  python-snmp-apps, python-tornado, qemu, qt5base, ruby, safeclib,
+  sdl_mixer, sox, systemd, unscd, vdr-plugin-vniserver, vtun, xvisor,
+  yaffs2utils
 
-It is not possible to make an RPATH longer than it previously was. How
-can we ensure that the rpath that is set by meson will be big enough to
-later cary our own rpath?
+For more details, see the CHANGES file:
 
-Regards,
-Yann E. MORIN.
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.08.2
 
-> +	)
-> +endef
-> +
-> +HOST_SYSTEMD_POST_INSTALL_HOOKS +=  HOST_SYSTEMD_FIX_RPATH
-> +HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
-> +
-> +$(eval $(host-meson-package))
-> -- 
-> 2.24.0.rc1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2019.08.1..
+
+    26  Fabrice Fontaine
+    15  Bernd Kuhls
+    10  Peter Korsgaard
+     6  Carlos Santos
+     6  Thomas Petazzoni
+     6  Yann E. MORIN
+     5  Giulio Benetti
+     5  Romain Naour
+     3  Arnout Vandecappelle (Essensium/Mind)
+     2  Asaf Kahlon
+     2  Baruch Siach
+     2  James Hilliard
+     2  Matt Weber
+     2  Pierre-Jean Texier
+     2  Vivien Didelot
+     2  Yann Droneaud
+     1  Alexey Brodkin
+     1  Alexey Lukyanchuk
+     1  Andrey Skvortsov
+     1  Charlie Turner
+     1  Fabio Estevam
+     1  Francois Perrad
+     1  Heiko Thiery
+     1  J?rg Krause
+     1  Nicolas Carrier
+     1  Patrick Havelange
+     1  Paulo Matos
+     1  Peter Seiderer
+     1  Robert Hancock
+     1  Simon Rowe
+     1  Wolfgang Grandegger
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
