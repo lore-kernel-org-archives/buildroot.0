@@ -1,48 +1,65 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat,  9 Nov 2019 12:22:54 -0300
-Subject: [Buildroot] [PATCH] board/beaglebone: fix boot on BeagleBone Black
-Message-ID: <20191109152254.15562-1-unixmania@gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sat, 9 Nov 2019 16:25:32 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/stm32mp157c_dk2: disable mkfs
+ metadata_csum and dir_index options
+In-Reply-To: <20191109152205.0bd1b924@windsurf>
+References: <20191103115017.788940-1-b.bilas@grinn-global.com>
+ <20191109152205.0bd1b924@windsurf>
+Message-ID: <0a7b32f7-65bf-98dd-64cd-7a663518479a@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+Hello Thomas,
 
-Commit 68b5b79b2f has set the getty port to the default console but left
-"ttyO0" in bootargs, in the U-Boot environment. Use "ttyS0", instead.
+On 09.11.2019 15:22, Thomas Petazzoni wrote:
+> Hello Bartosz,
+>
+> On Sun,  3 Nov 2019 12:50:16 +0100
+> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+>
+>> To solve issue with non-possibilities to mount rootfs partition we
+>> should disable a new mkfs features such as metadata_csum and
+>> dir_index because there is incompatibility with these options.
+>>
+>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+>> ---
+>>   configs/stm32mp157c_dk2_defconfig | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+>> index a1e61d752d..ba044e5e55 100644
+>> --- a/configs/stm32mp157c_dk2_defconfig
+>> +++ b/configs/stm32mp157c_dk2_defconfig
+>> @@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>>   BR2_TARGET_ROOTFS_EXT2=y
+>>   BR2_TARGET_ROOTFS_EXT2_4=y
+>>   BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>> +BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^64bit,^metadata_csum,^dir_index"
+> Are you sure it is necessary to disable those three options?
+>
+> Indeed, U-Boot ext4 write support clearly excludes filesystems that
+> have the metadata_csum option enabled:
+>
+>    https://gitlab.denx.de/u-boot/u-boot/blob/master/fs/ext4/ext4_write.c#L880
+> However, there's nothing about the 64bit and dir_index options. How did
+> you conclude that they were causing problems? Did you try with just -O
+> ^metadata_csum ?
 
-Also set loadaddr to 0x82000000 and fdtaddr to 0x88000000, replacing the
-values that were valid for the ancient U-Boot and Linux pre-installed on
-old boards but cause boot hangs with the current versions.
+I was talking with the maintainer of that board on U-Boot mailing list 
+[1] and he said that I should disable those 2 options (dir_index and 
+metada_csum) to have U-Boot working properly. I'm not sure about 64bit 
+because I saw that was set by default in buildroot. I didn't check that 
+with metadata_csum option only but I'll do that and let you know if it 
+works.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-CC: Lothar Felten <lothar.felten@gmail.com>
----
-Changes v1->v2:
-- Clarify the explanation about old U-Boot versions in the commit
-  message.
----
- board/beaglebone/uEnv.txt | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+[1] https://lists.denx.de/pipermail/u-boot/2019-October/388618.html
 
-diff --git a/board/beaglebone/uEnv.txt b/board/beaglebone/uEnv.txt
-index a665f20889..8fce54d87e 100644
---- a/board/beaglebone/uEnv.txt
-+++ b/board/beaglebone/uEnv.txt
-@@ -3,6 +3,9 @@ devtype=mmc
- bootdir=
- bootfile=zImage
- bootpartition=mmcblk0p2
-+console=ttyS0,115200n8
-+loadaddr=0x82000000
-+fdtaddr=0x88000000
- set_mmc1=if test $board_name = A33515BB; then setenv bootpartition mmcblk1p2; fi
--set_bootargs=setenv bootargs console=ttyO0,115200n8 root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
-+set_bootargs=setenv bootargs console=${console} root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
- uenvcmd=run set_mmc1; run set_bootargs;run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr}
--- 
-2.18.1
+Best
+Bartek
+>
+> Thanks,
+>
+> Thomas
