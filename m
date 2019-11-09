@@ -1,60 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Nov 2019 09:51:01 +0100
-Subject: [Buildroot] [PATCH 2/2] package/zxing-cpp: fix build with
- cppunit and gcc 5
-In-Reply-To: <20191109083710.10660-2-fontaine.fabrice@gmail.com>
-References: <20191109083710.10660-1-fontaine.fabrice@gmail.com>
- <20191109083710.10660-2-fontaine.fabrice@gmail.com>
-Message-ID: <20191109085101.GN3419@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 9 Nov 2019 10:44:13 +0100
+Subject: [Buildroot] [PATCH v2 3/5] package/rpi-userland: bump version
+ to 5070cb7f
+In-Reply-To: <20191108231735.1d2bc178@gmx.net>
+References: <20191107202339.6371-1-ps.report@gmx.net>
+ <20191107202339.6371-3-ps.report@gmx.net>
+ <20191107224604.3fbb7261@windsurf>
+ <20191108231735.1d2bc178@gmx.net>
+Message-ID: <20191109104413.2317d778@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello Thomas,
 
-On 2019-11-09 09:37 +0100, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/8c675300aa7e7f2a5a2f0a2ac0f191b8d2ff8c42
+On Fri, 8 Nov 2019 23:17:35 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 
-This should be folded in the previous patch, as this is mostly the same
-thing: adding the optional dependency on cppunit and fixing the build
-with cppunit.
+> Hello Thomas,
+>
+> On Thu, 7 Nov 2019 22:46:04 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>
+> > On Thu,  7 Nov 2019 21:23:37 +0100
+> > Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > > - rebased 0003-Disable-Werror-everywhere.patch
+> > > - remove vcfiled support (upstream removed, see [1])
+> > >
+> > > [1] https://github.com/raspberrypi/userland/commit/f00a1189b9f8246dc24c45985de599c50b8c62a5
+> > >
+> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> >
+> > This patch doesn't apply properly here:
+> > 10d39ce2be063488dd4820cf3b9901a134d18329
+> > $ git pwam 1191416
+> > Applying patch #1191416 using "git am -s"
+> > Description: [v2,3/5] package/rpi-userland: bump version to 5070cb7f
+> > Applying: package/rpi-userland: bump version to 5070cb7f
+> > error: patch failed: package/rpi-userland/0003-Disable-Werror-everywhere.patch:55
+> > error: package/rpi-userland/0003-Disable-Werror-everywhere.patch: patch does not apply
+> > Patch failed at 0001 package/rpi-userland: bump version to 5070cb7f
+> > hint: Use 'git am --show-current-patch' to see the failed patch
+> > When you have resolved this problem, run "git am --continue".
+> > If you prefer to skip this patch, run "git am --skip" instead.
+> > To restore the original branch and stop patching, run "git am --abort".
+> > 'git am' failed with exit status 128
+> >
+> > I have not investigated why.
+>
+> Mhhh, strange (and once again, I think it happened already before)...
+>
+> Diff of the original 'git format-patch' version and the Patchwork download
+> version:
+>
+> 	$ diff -u v2-0003-package-rpi-userland-bump-version-to-5070cb7f.patch v2-3-5-package-rpi-userland-bump-version-to-5070cb7f.patch
+> [...]
+>  diff --git a/Config.in.legacy b/Config.in.legacy
+>  index fcb10b1291..7167b1d60c 100644
+>  --- a/Config.in.legacy
+>  +++ b/Config.in.legacy
+>  @@ -146,6 +146,12 @@ endif
+> -
+> +
+>   comment "Legacy options removed in 2019.11"
+> -
+> +
+> [...]
+>
+> With '-<space><newline>' against '+<newline>'..., same against
+> the saved copy returned from the buildroot mailing list...,
+> seems someone is eating up my spaces...
+>
+> Will re-try/re-send the patches...
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[--SNIP--]
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index ccb2ba9..738f4e1 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -34,6 +34,8 @@ include(source_files.cmake)
-> +     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-> +     add_definitions(/Za)
-> + endif()
-> ++
-> ++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-
-This hints that maybe a dependency on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 is
-now needed, no?
+Checked the v3 version, seems to suffer the same space-damage, will send
+a v4 version with git 'sendemail.transferEncoding = base64' enabled
+(instead of auto which will use 8bit encoding as default)...
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> + # Add libzxing library.
-> + file(GLOB_RECURSE LIBZXING_FILES
-> -- 
-> 2.23.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> Regards,
+> Peter
+>
+> >
+> > Thomas
+>
