@@ -1,45 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Nov 2019 15:29:01 +0100
-Subject: [Buildroot] [git commit branch/next] package/rtl8189fs: bump
- revision to 54bd6808
-Message-ID: <20191109143403.8D7738E882@busybox.osuosl.org>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sat,  9 Nov 2019 15:56:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/log4qt: new package
+Message-ID: <20191109145648.348739-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0efe2e15a95a7399a34d7182eabc9d074cf6c667
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Logging for the Qt cross-platform application framework
 
-Out-of-tree driver has been updated to work with Linux kernels v5.x.
-
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Tested-by: Jan Kraval <jan.kraval@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/rtl8189fs/rtl8189fs.hash | 2 +-
- package/rtl8189fs/rtl8189fs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/log4qt/Config.in   | 13 +++++++++++
+ package/log4qt/log4qt.hash |  3 +++
+ package/log4qt/log4qt.mk   | 47 ++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 65 insertions(+)
+ create mode 100644 package/log4qt/Config.in
+ create mode 100644 package/log4qt/log4qt.hash
+ create mode 100644 package/log4qt/log4qt.mk
 
-diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
-index d6ce6c1e8a..f1524a6fcc 100644
---- a/package/rtl8189fs/rtl8189fs.hash
-+++ b/package/rtl8189fs/rtl8189fs.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 93472471e1769f92984792f40a0898dd8dd02122d745d48e8edd1a8cc869bc82 rtl8189fs-569bdb91f2cc76e2f5b77df42471db2a62fd2376.tar.gz
-+sha256 f3f8bcc1e75f095350f12c36f7b8af88eebf3913d4bc921083489f1758cb5068 rtl8189fs-54bd6808e38f213126e7d6447ae9d80c656179f3.tar.gz
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index d463bba7e6..39122bc786 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c0863aabc6..f8ebd8e0d7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -258,6 +258,7 @@ F:	package/orbit/
+ N:	Bartosz Bilas <b.bilas@grinn-global.com>
+ F:	package/qt5/qt5scxml/
+ F:	package/qt5/qt5webview/
++F:	package/log4qt/
  
--RTL8189FS_VERSION = 569bdb91f2cc76e2f5b77df42471db2a62fd2376
-+RTL8189FS_VERSION = 54bd6808e38f213126e7d6447ae9d80c656179f3
- RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
- RTL8189FS_LICENSE = GPL-2.0
- 
+ N:	Bartosz Golaszewski <brgl@bgdev.pl>
+ F:	package/autoconf-archive/
+diff --git a/package/Config.in b/package/Config.in
+index f72c77b416..9149f3b733 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1523,6 +1523,7 @@ menu "Logging"
+ 	source "package/log4cplus/Config.in"
+ 	source "package/log4cpp/Config.in"
+ 	source "package/log4cxx/Config.in"
++	source "package/log4qt/Config.in"
+ 	source "package/opentracing-cpp/Config.in"
+ 	source "package/spdlog/Config.in"
+ 	source "package/zlog/Config.in"
+diff --git a/package/log4qt/Config.in b/package/log4qt/Config.in
+new file mode 100644
+index 0000000000..1193d4d6d4
+--- /dev/null
++++ b/package/log4qt/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LOG4QT
++	bool "log4qt"
++	depends on BR2_PACKAGE_QT5BASE
++	depends on BR2_PACKAGE_QT5_VERSION_LATEST
++	help
++	  Log4Qt is a C++ port of the Apache Software Foundation
++	  Log4j package using the Qt Framework. It is intended to be
++	  used by open source and commercial Qt projects.
++
++	  https://github.com/MEONMedical/Log4Qt
++
++comment "log4qt needs a qt5base, qt >= 5.7"
++	depends on !BR2_PACKAGE_QT5BASE || !BR2_PACKAGE_QT5_VERSION_LATEST
+diff --git a/package/log4qt/log4qt.hash b/package/log4qt/log4qt.hash
+new file mode 100644
+index 0000000000..e324e324d8
+--- /dev/null
++++ b/package/log4qt/log4qt.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256 d35d08ae72523284f6d0f209734861241d5dac576678bb89e7f6f23a8762d243  log4qt-v1.5.0.tar.gz
++sha256 c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE
+diff --git a/package/log4qt/log4qt.mk b/package/log4qt/log4qt.mk
+new file mode 100644
+index 0000000000..74c78c102d
+--- /dev/null
++++ b/package/log4qt/log4qt.mk
+@@ -0,0 +1,47 @@
++################################################################################
++#
++# log4qt
++#
++################################################################################
++
++LOG4QT_VERSION = v1.5.0
++LOG4QT_SITE = $(call github,MEONMedical,Log4Qt,$(LOG4QT_VERSION))
++LOG4QT_DEPENDENCIES += qt5base
++LOG4QT_LICENSE = Apache-2.0
++LOG4QT_LICENSE_FILES = LICENSE
++LOG4QT_INSTALL_STAGING = YES
++
++define LOG4QT_CONFIGURE_CMDS
++	cd $(@D) && $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake $(LOG4QT_CONFIGURE_OPTS)
++endef
++
++define LOG4QT_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define LOG4QT_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)/usr/
++endef
++
++ifneq ($(BR2_STATIC_LIBS),y)
++define LOG4QT_INSTALL_TARGET_LIBS
++	cp -dpf $(STAGING_DIR)/usr/lib/liblog4qt.so* $(TARGET_DIR)/usr/lib
++endef
++endif
++
++define LOG4QT_INSTALL_TARGET_CMDS
++	$(LOG4QT_INSTALL_TARGET_LIBS)
++endef
++
++ifeq ($(BR2_PACKAGE_QT5BASE_SQL),y)
++ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_QT),y)
++LOG4QT_CONFIGURE_OPTS += "QT += sql"
++endif
++
++ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),y)
++LOG4QT_CONFIGURE_OPTS += "QT += sql"
++LOG4QT_DEPENDENCIES   += sqlite
++endif
++endif
++
++$(eval $(generic-package))
+-- 
+2.24.0
