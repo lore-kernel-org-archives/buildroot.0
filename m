@@ -1,73 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Nov 2019 18:47:22 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/dtc: needs
- host-pkgconf unconditionally
-Message-ID: <20191109174741.DFFC58EB26@busybox.osuosl.org>
+Date: Sat, 9 Nov 2019 18:12:50 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/pkg-generic.mk:
+ use site method for same-site extra downloads
+Message-ID: <20191109174741.B80278EA4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29c1577c65150ee8364d9c3bfe2259fc0f870668
+commit: https://git.buildroot.net/buildroot/commit/?id=69712a3d74151b8a04e6ee2b851e541585284093
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Commits 495e757d2 (package/dtc: add optional libyaml dependency) and
-e43d9072a (package/dtc: fix build without libyaml), added a conditional
-dependency to host-pkgconf, when libyaml is enabled, while commit
-56d6dd453 (package/dtc: disable valgrind) explicitly disabled support of
-valgrind.
+When a package specifies extra downloads, it has the option to only name
+the basename of the extra download, in which case that extra download
+will be retrieved from the same location the main download is retrieved
+from.
 
-However, presence of libyaml, as well as that of valgrind, *is* detected
-by calling pkg-config:
+In that case, if the extra download contains a '+', it would confuse the
+dl-wrapper, which believes the LHS of the '+' is the site method, and
+the RHS the actual URI, and so the dl-wrapper mangles and damages the
+URI when fetching such extra downloads, like that happens with android
+tools, where the proper URI and mangled URIs of the extra download are,
+respectively:
 
-    NO_VALGRIND := $(shell $(PKG_CONFIG) --exists valgrind; echo $$?)
-    NO_YAML := $(shell $(PKG_CONFIG) --exists yaml-0.1; echo $$?)
+    https://launchpad.net/ubuntu/+archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
+    http://archive/primary/+files/android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
 
-Passing NO_YAML=1 or NO_VALGRIND=1 do not prevent the tests from being
-executed, which would yield messages like:
+We fix that by always propagating the site method to extra downloads,
+but only when they are specified as relative to the main download URI.
 
-    /bin/sh: 1: /home/ymorin/dev/buildroot/O/host/bin/pkg-config: not found
+For the extra downloads that specify a full URI, it is not systematic
+that it is the same site method. For example, a main download could be a
+git clone, but an extra download a pure http download; in that case we
+can't replicate the site method for extra downloads, so they'll have to
+take appropriate care to specify the required method and encoding if
+needed.
 
-(note however that, even if the test is executed, the value we pass on
-the command line still takes precedence, and the support for either is
-properly disabled.)
-
-So, move the dependency on host-pkgconfig out of the condition. Ditto
-for the host package.
-
+Reported-by: Jemy Zhang <jemy.zhang@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Titouan Christophe <titouan.christophe@railnova.eu>
-Cc: Carlos Santos <unixmania@gmail.com>
+Cc: Jemy Zhang <jemy.zhang@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 78b77a5c4a5eef1ad5b4af51879758d38a8cc98d)
+(cherry picked from commit 2c543b4f4c4f06fccadb20e7568a662d3d0b854e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dtc/dtc.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index 0ed914ba41..32e652d16c 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -10,8 +10,8 @@ DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
- DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
- DTC_LICENSE_FILES = README.license GPL
- DTC_INSTALL_STAGING = YES
--DTC_DEPENDENCIES = host-bison host-flex
--HOST_DTC_DEPENDENCIES = host-bison host-flex
-+DTC_DEPENDENCIES = host-bison host-flex host-pkgconf
-+HOST_DTC_DEPENDENCIES = host-bison host-flex host-pkgconf
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 9620dec524..e14714cf40 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -523,7 +523,7 @@ $(2)_ALL_DOWNLOADS = \
+ 	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
+ 	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+ 		$$(if $$(findstring ://,$$(p)),$$(p),\
+-			$$($(2)_SITE)/$$(p)))
++			$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$(p)))
  
- DTC_MAKE_OPTS = \
- 	PREFIX=/usr \
-@@ -25,7 +25,7 @@ HOST_DTC_MAKE_OPTS = \
- 	NO_YAML=1
- 
- ifeq ($(BR2_PACKAGE_LIBYAML),y)
--DTC_DEPENDENCIES += host-pkgconf libyaml
-+DTC_DEPENDENCIES += libyaml
- else
- DTC_MAKE_OPTS += NO_YAML=1
- endif
+ ifndef $(2)_SITE
+  ifdef $(3)_SITE
