@@ -1,132 +1,201 @@
 From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Sun, 10 Nov 2019 11:19:42 +0100
-Subject: [Buildroot] [PATCH 07/15] package/connman: adapt to preset-all
-In-Reply-To: <CADvTj4rOOCzeF2FRPqfqpvLsNmr_yA2uKo2NsJGJ-vZONcwgVA@mail.gmail.com>
+Date: Sun, 10 Nov 2019 11:43:46 +0100
+Subject: [Buildroot] [PATCH 01/15] new recipe : host-systemd
+In-Reply-To: <20191109214922.GQ3419@scaer>
 References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
- <20191103165640.21819-8-jeremy.rosen@smile.fr>
- <20191109221139.GT3419@scaer>
- <CADvTj4rOOCzeF2FRPqfqpvLsNmr_yA2uKo2NsJGJ-vZONcwgVA@mail.gmail.com>
-Message-ID: <CAFvCimXS=t0S3zNySwBzpF2tqp9e4gZW3oTpwnjwdAr1h52yGw@mail.gmail.com>
+ <20191103165640.21819-2-jeremy.rosen@smile.fr>
+ <20191109214922.GQ3419@scaer>
+Message-ID: <CAFvCimWRt-D2MBX3d==8Tcd0uhEhoJLSf5Wca81mAe7bZn4Enw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes, the whole "*-wait-online" mechanism is a boot synchronisation thing.
-
-The point is to delay starting of all network-facing daemon until
-* either the network is up (DHCP dialog is done)
-* or the network has failed (and won't be brought up at all during boot)
-
-The exact implementation depends on your network-manager, so it might be
-different
-for NetworkManager, connman or systemd-networkd.
-
-That being said, I have never heard of any of those "phoning home" They
-just wait for the
-end of the network configuration.
-
-Moreover, since sysV, network-facing daemons have always been delayed after
-the
-network was up (through unit.d file ordering) and changing that might break
-things in
-subtle ways.
-
-I'm pretty sure it's a bug, I'll leave them enable for v2, but we can
-discuss it some more if you want...
-
-
-Le sam. 9 nov. 2019 ? 23:36, James Hilliard <james.hilliard1@gmail.com> a
+Le sam. 9 nov. 2019 ? 22:49, Yann E. MORIN <yann.morin.1998@free.fr> a
 ?crit :
 
-> On Sat, Nov 9, 2019 at 3:11 PM Yann E. MORIN <yann.morin.1998@free.fr>
-> wrote:
-> >
-> > J?r?my, All,
-> >
-> > On 2019-11-03 17:56 +0100, J?r?my Rosen spake thusly:
-> > > connman has two services
-> > > * connman.service which is the real daemon
-> > > * connman-wait-online.service which is a sync point for
-> network-online.target
-> > >
-> > > Only the first one was enabled. This adaptation enables both.
-> > >
-> > > Not enabling connman-wait-online.service is probably a bug
-> >
-> > Actually no, that's not a bug; not enabling it is a privacy feature.
-> > Some people are concerned about the phone-home-alike that check-online
-> > may do.
-> I don't think connman-wait-online.service phones home, it appears to wait
-> for
-> an interface to be live which should not impact privacy.
-> See:
+> J?r?my, All,
 >
-> https://git.kernel.org/pub/scm/network/connman/connman.git/tree/src/connman-wait-online.service.in?h=1.37&id=caf6895ee2ea3b6ed58213ca8bacd0ec32f7e31c#n11
+> On 2019-11-03 17:56 +0100, J?r?my Rosen spake thusly:
+> > Add the infrastructure to build the host version of systemd
+> > * disable all optional features, they can be re-added when needed
+> > * systemd has creative way of dealing with cross compile
+> >   we build a "normal" host systemd, but install it in $HOST_DIR
+> >   we use systemctl --root to correctly act on TARGET_DIR
+> > * we need to adjust RPATH using patchelf because meson can't do it
+> >   correctly by itsel
+> >
+> > Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
+> [--SNIP--]
+> > diff --git a/package/systemd/Config.in.host
+> b/package/systemd/Config.in.host
+> > new file mode 100644
+> > index 0000000000..09099752d2
+> > --- /dev/null
+> > +++ b/package/systemd/Config.in.host
+> > @@ -0,0 +1,4 @@
+> > +config BR2_PACKAGE_HOST_SYSTEMD
+> > +     bool "host systemd tools"
+> > +     help
+> > +       Systemd command-line tools for the host
 >
-> https://git.kernel.org/pub/scm/network/connman/connman.git/tree/src/connmand-wait-online.c
-> According to: https://01.org/connman/blogs/pflykt/2015/connman-1.31
-> connmand-wait-online
-> <https://01.org/connman/blogs/pflykt/2015/connman-1.31connmand-wait-online>
-> works exactly like systemd-networkd-wait-online
-> which does not appear to phone home per:
+> I don;t think we (at the current point) need a user-visible option.
 >
-> https://www.freedesktop.org/software/systemd/man/systemd-networkd-wait-online.service.html
-> but rather waits until the interface is online.
+> This host-systemd is initially a way to get systemctl only, and this is
+> just internal to how Buildroot will enable the units (by using systemctl
+> preset-all or so).
+>
+> Later, if/when it becomes possible to build extra utilities for users to
+> manually run (or in a post-build/image script), then we can expose a
+> user-visible host-systemd option.
+>
+> But for now, it is not needed.
+>
+
+Ok, will do...
+
+The host-tools are pretty usefull, but I don't see any use-cases where you
+would want the host-side tool without systemd on the target anyway...
+
+
+> > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> > index 94d5f703cd..1e4f706517 100644
+> > --- a/package/systemd/systemd.mk
+> > +++ b/package/systemd/systemd.mk
+> > @@ -550,3 +550,95 @@ SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
+> >  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
 > >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > > Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-> > > ---
-> > >  package/connman/connman.mk | 6 ------
-> > >  1 file changed, 6 deletions(-)
-> > >
-> > > diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-> > > index 839bc7a0e2..d70eb1ac82 100644
-> > > --- a/package/connman/connman.mk
-> > > +++ b/package/connman/connman.mk
-> > > @@ -32,12 +32,6 @@ define CONNMAN_INSTALL_INIT_SYSV
-> > >       $(INSTALL) -m 0755 -D package/connman/S45connman
-> $(TARGET_DIR)/etc/init.d/S45connman
-> > >  endef
-> > >
-> > > -define CONNMAN_INSTALL_INIT_SYSTEMD
-> > > -     mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> > > -     ln -fs ../../../../usr/lib/systemd/system/connman.service \
-> > > -
->  $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
-> > > -endef
-> > > -
-> > >  ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
-> > >  CONNMAN_CONF_OPTS += --enable-client
-> > >  CONNMAN_DEPENDENCIES += readline
-> > > --
-> > > 2.24.0.rc1
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
+> >  $(eval $(meson-package))
+> > +
+> > +
+> > +
+>
+> Too many empty lines. Run 'make check-package'.
+>
+> done
+
+> > +#
+> > +# Host-systemd configuration
+> > +#
+> > +HOST_SYSTEMD_CONF_OPTS= \
+> > +     -Dsplit-bin=true \
+> > +     -Dsplit-usr=false \
+> > +     -Dutmp=false \
+> > +     -Dhibernate=false \
+> > +     -Dldconfig=false \
+> > +     -Dresolve=false \
+> [--SNIP--]
+> > +     -Dsysvinit-path='' \
+> > +     --prefix=/usr \
+> > +     --libdir=lib \
+> > +     --sysconfdir=/etc \
+> > +     --localstatedir=/var \
+>
+> This list will be difficult to maintain on each version bump... :-(
+> Can't we push for upstream to implement a simple switch:
+>
+> --disable-all-that-is-not-explicitly-enabled-please-and-i-d-like-a-pony-too-pretty-please
+>
+> That's not the kind of stuff upstream would accept... we might have more
+chance if we
+provided a "make host-tools" target or something like that, but my
+meson-knowledge is too
+low to do that. so... not right now.
+
+I have split the options in two blocks, the ones we tweak and the long list
+of "=false" options,
+that might help readability
+
+
+> > +
+> > +HOST_SYSTEMD_DEPENDENCIES = \
+> > +    host-util-linux \
+> > +    host-patchelf \
+> > +    host-libcap \
+> > +    host-gperf \
+> > +
+> > +# Fix RPATH After installation
+> > +# * systemd provides a install_rpath instruction to meson because the
+> binaries need to link with
+> > +#   libsystemd which is not in a standard path
+> > +# * meson can only replace the RPATH, not append to it
+> > +# * the original rpatch is thus lost.
+> > +# * the original path had been tweaked by buildroot vial LD_FLAGS to
+> add $(HOST_DIR)/lib
+> > +# * thus re-tweak rpath after the installation for all binaries that
+> need it
+> > +#buildroot detects incorrect RPATH, so adding new binaries should be
+> safe (it won't compile
+> > +#unless properly integrated).
+> > +HOST_SYSTEMD_HOST_TOOLS = \
+> > +    systemd-analyze  systemd-mount systemctl
+>
+> Once again, I think we should just keep systemctl for now: remove
+> everything else. We just need systemctl for now.
+>
+>
+This is already the minimal set... I can't reduce it more without patching
+upstream
+There are actually more binaries generated than those (we do build a PID1,
+after all)
+Those are the ones that need to be tweaked because of libsystemd. The
+others are fine.
+
+Again, an upstream patch to build on a tool per tool basis could be
+usefull, but beyond the scope
+of this patch
+
+We can then *later* add those (esp. analyse).
+>
+> > +define HOST_SYSTEMD_FIX_RPATH
+> > +     $(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
+> > +             $(HOST_DIR)/bin/patchelf --set-rpath
+> $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
+>
+> It is not possible to make an RPATH longer than it previously was. How
+> can we ensure that the rpath that is set by meson will be big enough to
+> later cary our own rpath?
+>
+> I just checked the source and patchelf does increase the side of the
+section to fit the new
+size.... so we are good
+
+Cheers
+J?r?my
+
+
+> Regards,
+> Yann E. MORIN.
+>
+> > +     )
+> > +endef
+> > +
+> > +HOST_SYSTEMD_POST_INSTALL_HOOKS +=  HOST_SYSTEMD_FIX_RPATH
+> > +HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+> > +
+> > +$(eval $(host-meson-package))
 > > --
+> > 2.24.0.rc1
 > >
-> .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->        |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
-> >
-> '------------------------------^-------^------------------^--------------------'
 > > _______________________________________________
 > > buildroot mailing list
 > > buildroot at busybox.net
 > > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
 >
 
 
@@ -151,4 +220,4 @@ Architecte technique
 <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191110/6ec8e8ac/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191110/535641cb/attachment.html>
