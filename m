@@ -1,7 +1,9 @@
 From: Louis Aussedat <aussedat.louis@gmail.com>
-Date: Sun, 10 Nov 2019 23:26:53 +0100
-Subject: [Buildroot] [PATCH 1/3] package/python-dnspython: new package
-Message-ID: <20191110222655.21977-1-aussedat.louis@gmail.com>
+Date: Sun, 10 Nov 2019 23:26:54 +0100
+Subject: [Buildroot] [PATCH 2/3] package/python-huepy: new package
+In-Reply-To: <20191110222655.21977-1-aussedat.louis@gmail.com>
+References: <20191110222655.21977-1-aussedat.louis@gmail.com>
+Message-ID: <20191110222655.21977-2-aussedat.louis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,87 +12,79 @@ To: buildroot@busybox.net
 
 Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/python-dnspython/Config.in            |  6 ++++++
- .../python-dnspython/python-dnspython.hash    |  5 +++++
- package/python-dnspython/python-dnspython.mk  | 20 +++++++++++++++++++
- 5 files changed, 33 insertions(+)
- create mode 100644 package/python-dnspython/Config.in
- create mode 100644 package/python-dnspython/python-dnspython.hash
- create mode 100644 package/python-dnspython/python-dnspython.mk
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-huepy/Config.in         |  6 ++++++
+ package/python-huepy/python-huepy.hash |  4 ++++
+ package/python-huepy/python-huepy.mk   | 13 +++++++++++++
+ 5 files changed, 25 insertions(+)
+ create mode 100644 package/python-huepy/Config.in
+ create mode 100644 package/python-huepy/python-huepy.hash
+ create mode 100644 package/python-huepy/python-huepy.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c0863aabc6..fc332affa5 100644
+index fc332affa5..68328b30b3 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1393,6 +1393,7 @@ F:	package/ti-sgx-um/
- N:	Louis Aussedat <aussedat.louis@gmail.com>
+@@ -1394,6 +1394,7 @@ N:	Louis Aussedat <aussedat.louis@gmail.com>
  F:	board/friendlyarm/nanopi-neo-plus2/
  F:	configs/friendlyarm_nanopi_neo_plus2_defconfig
-+F:  package/python-dnspython/
+ F:  package/python-dnspython/
++F:  package/python-huepy/
  F:	package/python-tqdm/
  
  N:	Louis-Paul Cordier <lpdev@cordier.org>
 diff --git a/package/Config.in b/package/Config.in
-index f72c77b416..581191ca70 100644
+index 581191ca70..66f7b29b74 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -891,6 +891,7 @@ menu "External python modules"
- 	source "package/python-dicttoxml/Config.in"
- 	source "package/python-django/Config.in"
- 	source "package/python-django-enumfields/Config.in"
-+	source "package/python-dnspython/Config.in"
- 	source "package/python-docker/Config.in"
- 	source "package/python-docker-pycreds/Config.in"
- 	source "package/python-dockerpty/Config.in"
-diff --git a/package/python-dnspython/Config.in b/package/python-dnspython/Config.in
+@@ -921,6 +921,7 @@ menu "External python modules"
+ 	source "package/python-hpack/Config.in"
+ 	source "package/python-html5lib/Config.in"
+ 	source "package/python-httplib2/Config.in"
++	source "package/python-huepy/Config.in"
+ 	source "package/python-humanize/Config.in"
+ 	source "package/python-hyperframe/Config.in"
+ 	source "package/python-hyperlink/Config.in"
+diff --git a/package/python-huepy/Config.in b/package/python-huepy/Config.in
 new file mode 100644
-index 0000000000..99fd6a9a5f
+index 0000000000..0bdd25ffda
 --- /dev/null
-+++ b/package/python-dnspython/Config.in
++++ b/package/python-huepy/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_DNSPYTHON
-+	bool "python-dnspython"
++config BR2_PACKAGE_PYTHON_HUEPY
++	bool "python-huepy"
 +	help
-+	  A powerful DNS toolkit for python.
++	  Hue will help you to print awesomely in terminals.
 +
-+	  http://www.dnspython.org
-diff --git a/package/python-dnspython/python-dnspython.hash b/package/python-dnspython/python-dnspython.hash
++	  https://github.com/s0md3v/hue
+diff --git a/package/python-huepy/python-huepy.hash b/package/python-huepy/python-huepy.hash
 new file mode 100644
-index 0000000000..af09d51cd5
+index 0000000000..5a1a8fc1e3
 --- /dev/null
-+++ b/package/python-dnspython/python-dnspython.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/dnspython/json
-+md5	bc9ca3b3a82164667d5730ec6d5248a2  dnspython-1.16.0.zip
-+sha256	36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01  dnspython-1.16.0.zip
-+# Locally computed sha256 checksums
-+sha256  c3ea3ff5654b329c19d3bc5f7481af623c3dded4a6145585499f843ad3d741cd  LICENSE
-diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
++++ b/package/python-huepy/python-huepy.hash
+@@ -0,0 +1,4 @@
++# Locally computer sha256 checksums
++md5	da6514d9d61fb75ac9470f6863ce1aca  python-huepy-a9851d5aea10d2299cc62b3f6dce26ac4ef2ea3e.tar.gz
++sha256	63147cef5ecae5c1ab38000be91def351710e6bef2c5f67b5303418becf6c0f2  python-huepy-a9851d5aea10d2299cc62b3f6dce26ac4ef2ea3e.tar.gz
++sha256  8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  LICENSE
+diff --git a/package/python-huepy/python-huepy.mk b/package/python-huepy/python-huepy.mk
 new file mode 100644
-index 0000000000..18d98efd72
+index 0000000000..5c1041205d
 --- /dev/null
-+++ b/package/python-dnspython/python-dnspython.mk
-@@ -0,0 +1,20 @@
++++ b/package/python-huepy/python-huepy.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-dnspython
++# python-huepy
 +#
 +################################################################################
 +
-+PYTHON_DNSPYTHON_VERSION = 1.16.0
-+PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).zip
-+PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/ec/c5/14bcd63cb6d06092a004793399ec395405edf97c2301dfdc146dfbd5beed
-+PYTHON_DNSPYTHON_LICENSE = ISC
-+PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
-+PYTHON_DNSPYTHON_SETUP_TYPE = setuptools
-+
-+define PYTHON_DNSPYTHON_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(PYTHON_DNSPYTHON_DL_DIR)/$(PYTHON_DNSPYTHON_SOURCE)
-+	mv $(@D)/dnspython-$(PYTHON_DNSPYTHON_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/dnspython-$(PYTHON_DNSPYTHON_VERSION)
-+endef
++PYTHON_HUEPY_VERSION = a9851d5aea10d2299cc62b3f6dce26ac4ef2ea3e
++PYTHON_HUEPY_SITE = $(call github,s0md3v,hue,$(PYTHON_HUEPY_VERSION))
++PYTHON_HUEPY_LICENSE = GPL-3.0
++PYTHON_HUEPY_LICENSE_FILES = LICENSE
++PYTHON_HUEPY_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
