@@ -1,103 +1,154 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 10 Nov 2019 09:39:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/linux-serial-test: fix build on
- MIPS
-In-Reply-To: <CAGm1_ktusnrVNCo-15_iPyySmLCOxFvL4TvE3sWZWiTNrvomuQ@mail.gmail.com>
-References: <20191109231321.19690-1-fontaine.fabrice@gmail.com>
- <CAGm1_ktusnrVNCo-15_iPyySmLCOxFvL4TvE3sWZWiTNrvomuQ@mail.gmail.com>
-Message-ID: <CAGm1_kv6Gw6Oje+Xk=r-90birjd+5tSQsE3dELKPVkLrQrXquA@mail.gmail.com>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Sun, 10 Nov 2019 11:19:42 +0100
+Subject: [Buildroot] [PATCH 07/15] package/connman: adapt to preset-all
+In-Reply-To: <CADvTj4rOOCzeF2FRPqfqpvLsNmr_yA2uKo2NsJGJ-vZONcwgVA@mail.gmail.com>
+References: <20191103165640.21819-1-jeremy.rosen@smile.fr>
+ <20191103165640.21819-8-jeremy.rosen@smile.fr>
+ <20191109221139.GT3419@scaer>
+ <CADvTj4rOOCzeF2FRPqfqpvLsNmr_yA2uKo2NsJGJ-vZONcwgVA@mail.gmail.com>
+Message-ID: <CAFvCimXS=t0S3zNySwBzpF2tqp9e4gZW3oTpwnjwdAr1h52yGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Nov 10, 2019 at 9:37 AM Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
->
-> Hi Fabrice,
->
-> On Sun, Nov 10, 2019 at 12:12 AM Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> wrote:
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/86e06fdcaa91dca682651736162e9e743329412c
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Could you also submit a PR upstream?
+Yes, the whole "*-wait-online" mechanism is a boot synchronisation thing.
 
-OK. It's already merged. Thanks and sorry for the noise.
+The point is to delay starting of all network-facing daemon until
+* either the network is up (DHCP dialog is done)
+* or the network has failed (and won't be brought up at all during boot)
 
-Yegor
+The exact implementation depends on your network-manager, so it might be
+different
+for NetworkManager, connman or systemd-networkd.
 
-> > ---
-> >  ...t.c-fix-missing-CMSPAR-define-on-MIP.patch | 54 +++++++++++++++++++
-> >  1 file changed, 54 insertions(+)
-> >  create mode 100644 package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch
+That being said, I have never heard of any of those "phoning home" They
+just wait for the
+end of the network configuration.
+
+Moreover, since sysV, network-facing daemons have always been delayed after
+the
+network was up (through unit.d file ordering) and changing that might break
+things in
+subtle ways.
+
+I'm pretty sure it's a bug, I'll leave them enable for v2, but we can
+discuss it some more if you want...
+
+
+Le sam. 9 nov. 2019 ? 23:36, James Hilliard <james.hilliard1@gmail.com> a
+?crit :
+
+> On Sat, Nov 9, 2019 at 3:11 PM Yann E. MORIN <yann.morin.1998@free.fr>
+> wrote:
 > >
-> > diff --git a/package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch b/package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch
-> > new file mode 100644
-> > index 0000000000..fe5a1c6813
-> > --- /dev/null
-> > +++ b/package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch
-> > @@ -0,0 +1,54 @@
-> > +From c34767aa22623a21369f1464c52fc4635895223c Mon Sep 17 00:00:00 2001
-> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +Date: Fri, 8 Nov 2019 18:25:35 +0100
-> > +Subject: [PATCH] linux-serial-test.c: fix missing CMSPAR define on MIPS
-> > +
-> > +This patch is an adaptation of
-> > +https://git.busybox.net/buildroot/diff/package/freerdp/0003-add-missing-define.patch?id=78cd32631e959e04b1a2f18be7b0757e21482438
-> > +
-> > +linux-serial-test.c uses CMSPAR, which is defined by glibc in
-> > +bits/termios.h.
-> > +
-> > +glibc has two flavours of bits/termios.h: a generic one and an
-> > +architecture-specific one. When installing, glibc will install the
-> > +architecture-specific file if it exists, otherwise it installs the
-> > +generic file. Only Alpha, MIPS, PPC and Sparc have their own
-> > +bits/termios.h.
-> > +
-> > +The generic bits/termios.h, as well as the Alpha, PPC and Sparc flavours
-> > +do define CMSPAR. However, the MIPS flavour does not define it.
-> > +
-> > +Define CMSPAR to the value from the generic value, which is also the
-> > +value known to the Linux kernel for MIPS.
-> > +
-> > +Fixes:
-> > + - http://autobuild.buildroot.org/results/1350cc46dcb285772b1a4c90aec6ba38fdb11e3c
-> > +
-> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +[Upstream status: https://github.com/cbrake/linux-serial-test/pull/20]
-> > +---
-> > + linux-serial-test.c | 8 ++++++++
-> > + 1 file changed, 8 insertions(+)
-> > +
-> > +diff --git a/linux-serial-test.c b/linux-serial-test.c
-> > +index 5e7504e..0d4a919 100644
-> > +--- a/linux-serial-test.c
-> > ++++ b/linux-serial-test.c
-> > +@@ -17,6 +17,14 @@
-> > + #include <linux/serial.h>
-> > + #include <errno.h>
-> > +
-> > ++/*
-> > ++ * glibc for MIPS has its own bits/termios.h which does not define
-> > ++ * CMSPAR, so we vampirise the value from the generic bits/termios.h
-> > ++ */
-> > ++#ifndef CMSPAR
-> > ++#define CMSPAR 010000000000
-> > ++#endif
-> > ++
-> > + // command line args
-> > + int _cl_baud = 0;
-> > + char *_cl_port = NULL;
-> > +--
-> > +2.23.0
-> > +
+> > J?r?my, All,
+> >
+> > On 2019-11-03 17:56 +0100, J?r?my Rosen spake thusly:
+> > > connman has two services
+> > > * connman.service which is the real daemon
+> > > * connman-wait-online.service which is a sync point for
+> network-online.target
+> > >
+> > > Only the first one was enabled. This adaptation enables both.
+> > >
+> > > Not enabling connman-wait-online.service is probably a bug
+> >
+> > Actually no, that's not a bug; not enabling it is a privacy feature.
+> > Some people are concerned about the phone-home-alike that check-online
+> > may do.
+> I don't think connman-wait-online.service phones home, it appears to wait
+> for
+> an interface to be live which should not impact privacy.
+> See:
+>
+> https://git.kernel.org/pub/scm/network/connman/connman.git/tree/src/connman-wait-online.service.in?h=1.37&id=caf6895ee2ea3b6ed58213ca8bacd0ec32f7e31c#n11
+>
+> https://git.kernel.org/pub/scm/network/connman/connman.git/tree/src/connmand-wait-online.c
+> According to: https://01.org/connman/blogs/pflykt/2015/connman-1.31
+> connmand-wait-online
+> <https://01.org/connman/blogs/pflykt/2015/connman-1.31connmand-wait-online>
+> works exactly like systemd-networkd-wait-online
+> which does not appear to phone home per:
+>
+> https://www.freedesktop.org/software/systemd/man/systemd-networkd-wait-online.service.html
+> but rather waits until the interface is online.
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > > Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
+> > > ---
+> > >  package/connman/connman.mk | 6 ------
+> > >  1 file changed, 6 deletions(-)
+> > >
+> > > diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+> > > index 839bc7a0e2..d70eb1ac82 100644
+> > > --- a/package/connman/connman.mk
+> > > +++ b/package/connman/connman.mk
+> > > @@ -32,12 +32,6 @@ define CONNMAN_INSTALL_INIT_SYSV
+> > >       $(INSTALL) -m 0755 -D package/connman/S45connman
+> $(TARGET_DIR)/etc/init.d/S45connman
+> > >  endef
+> > >
+> > > -define CONNMAN_INSTALL_INIT_SYSTEMD
+> > > -     mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> > > -     ln -fs ../../../../usr/lib/systemd/system/connman.service \
+> > > -
+>  $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
+> > > -endef
+> > > -
+> > >  ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
+> > >  CONNMAN_CONF_OPTS += --enable-client
+> > >  CONNMAN_DEPENDENCIES += readline
+> > > --
+> > > 2.24.0.rc1
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
 > > --
-> > 2.23.0
 > >
+> .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>        |
+> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There
+> is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+> >
+> '------------------------------^-------^------------------^--------------------'
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+-- 
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191110/6ec8e8ac/attachment.html>
