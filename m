@@ -1,89 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Nov 2019 22:40:03 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] Update for 2019.02.7
-Message-ID: <20191110213303.BAD928ECEC@busybox.osuosl.org>
+From: Louis Aussedat <aussedat.louis@gmail.com>
+Date: Sun, 10 Nov 2019 23:26:53 +0100
+Subject: [Buildroot] [PATCH 1/3] package/python-dnspython: new package
+Message-ID: <20191110222655.21977-1-aussedat.louis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83c2e5f6e3b0a27a171cad6de2b2e8b04dd8c517
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
 ---
- CHANGES  | 36 +++++++++++++++++++++++++-----------
- Makefile |  4 ++--
- 2 files changed, 27 insertions(+), 13 deletions(-)
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/python-dnspython/Config.in            |  6 ++++++
+ .../python-dnspython/python-dnspython.hash    |  5 +++++
+ package/python-dnspython/python-dnspython.mk  | 20 +++++++++++++++++++
+ 5 files changed, 33 insertions(+)
+ create mode 100644 package/python-dnspython/Config.in
+ create mode 100644 package/python-dnspython/python-dnspython.hash
+ create mode 100644 package/python-dnspython/python-dnspython.mk
 
-diff --git a/CHANGES b/CHANGES
-index 3d5f55f6dd..3bea34bf4d 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,24 +1,38 @@
--2019.02.7, not yet released:
-+2019.02.7, Released November 10th, 2019
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c0863aabc6..fc332affa5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1393,6 +1393,7 @@ F:	package/ti-sgx-um/
+ N:	Louis Aussedat <aussedat.louis@gmail.com>
+ F:	board/friendlyarm/nanopi-neo-plus2/
+ F:	configs/friendlyarm_nanopi_neo_plus2_defconfig
++F:  package/python-dnspython/
+ F:	package/python-tqdm/
  
- 	Important / security related fixes.
- 
- 	support/testing: use a kernel with HW_RANDOM_VIRTIO to work
- 	around issues with lack of entrophy
- 
--	toolchain: Also copy libssp.so for external toolchains if SSP
--	to handle toolchains providing SSP support in libssp rather
--	than in the C library
-+	Toolchain: Also copy libssp.so for external toolchains if SSP
-+	is enabled to handle toolchains providing SSP support in
-+	libssp rather than in the C library
+ N:	Louis-Paul Cordier <lpdev@cordier.org>
+diff --git a/package/Config.in b/package/Config.in
+index f72c77b416..581191ca70 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -891,6 +891,7 @@ menu "External python modules"
+ 	source "package/python-dicttoxml/Config.in"
+ 	source "package/python-django/Config.in"
+ 	source "package/python-django-enumfields/Config.in"
++	source "package/python-dnspython/Config.in"
+ 	source "package/python-docker/Config.in"
+ 	source "package/python-docker-pycreds/Config.in"
+ 	source "package/python-dockerpty/Config.in"
+diff --git a/package/python-dnspython/Config.in b/package/python-dnspython/Config.in
+new file mode 100644
+index 0000000000..99fd6a9a5f
+--- /dev/null
++++ b/package/python-dnspython/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_DNSPYTHON
++	bool "python-dnspython"
++	help
++	  A powerful DNS toolkit for python.
 +
-+	Download: Also use the package download method for extra
-+	downloads from the same site, so it does not get confused by
-+	URLs containing '+'
++	  http://www.dnspython.org
+diff --git a/package/python-dnspython/python-dnspython.hash b/package/python-dnspython/python-dnspython.hash
+new file mode 100644
+index 0000000000..af09d51cd5
+--- /dev/null
++++ b/package/python-dnspython/python-dnspython.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/dnspython/json
++md5	bc9ca3b3a82164667d5730ec6d5248a2  dnspython-1.16.0.zip
++sha256	36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01  dnspython-1.16.0.zip
++# Locally computed sha256 checksums
++sha256  c3ea3ff5654b329c19d3bc5f7481af623c3dded4a6145585499f843ad3d741cd  LICENSE
+diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
+new file mode 100644
+index 0000000000..18d98efd72
+--- /dev/null
++++ b/package/python-dnspython/python-dnspython.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# python-dnspython
++#
++################################################################################
 +
-+	Fakeroot now works correctly under Microsoft Windows 10
-+	Services for Linux, which does not provide SYSV IPC support
- 
- 	utils/test-pkg: ensure to exit with an error upon failure
- 
--	Updated/fixed packages: asterisk, azmq, cups-filters, duma,
--	exfat, exfat-utils, file, gd, ghostscript, go, gvfs,
--	intel-microcode, kvm-unit-tests, libnspr, libnss, libopenssl,
-+	Updated/fixed packages: asterisk, azmq, cups-filters,
-+	domoticz, duma, elf2flt, eudev, exfat, exfat-utils, fakeroot,
-+	file, freerdp, gd, ghostscript, go, gvfs, intel-microcode,
-+	kvm-unit-tests, libarchive, libnspr, libnss, libopenssl,
- 	libpcap, libpciaccess, librsvg, libseccomp, libsigrok,
--	libtorrent, libunwind, lua-sdl2, lxc, minizip, mjpegtools,
--	mongoose, php, python, python-pysnmp-apps, qemu, qt5base,
--	ruby, safeclib, samba4, sdl_mixer, sox, sudo, tcpdump, unscd,
--	util-lkinux, vtun, xvisor
-+	libtorrent, libunwind, linux-tools, lua-sdl2, lxc, minizip,
-+	mjpegtools, mongoose, php, python, python-pysnmp-apps,
-+	python3, qemu, qt5base, ruby, safeclib, samba4, sdl_mixer,
-+	sox, sudo, systemd, tcpdump, unscd, util-lkinux, vtun, xvisor,
-+	yaffs2utils
++PYTHON_DNSPYTHON_VERSION = 1.16.0
++PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).zip
++PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/ec/c5/14bcd63cb6d06092a004793399ec395405edf97c2301dfdc146dfbd5beed
++PYTHON_DNSPYTHON_LICENSE = ISC
++PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
++PYTHON_DNSPYTHON_SETUP_TYPE = setuptools
 +
-+	Issues resolved (http://bugs.uclibc.org):
++define PYTHON_DNSPYTHON_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(PYTHON_DNSPYTHON_DL_DIR)/$(PYTHON_DNSPYTHON_SOURCE)
++	mv $(@D)/dnspython-$(PYTHON_DNSPYTHON_VERSION)/* $(@D)
++	$(RM) -r $(@D)/dnspython-$(PYTHON_DNSPYTHON_VERSION)
++endef
 +
-+	#11366: [2018.08] SysV IPC not available for fakeroot on WSL
-+	#12261: sudo versions prior to 1.8.28 are affected
- 
- 2019.02.6, Released October 3rd, 2019
- 
-diff --git a/Makefile b/Makefile
-index 8bdf546097..43c4411e67 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2019.02.6
-+export BR2_VERSION := 2019.02.7
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1570115000
-+BR2_VERSION_EPOCH = 1573422000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
++$(eval $(python-package))
+-- 
+2.20.1
