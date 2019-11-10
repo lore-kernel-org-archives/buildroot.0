@@ -1,39 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Nov 2019 21:17:57 +0100
-Subject: [Buildroot] [git commit] legacy: add missing entry for openvmtools'
- procps removal
-Message-ID: <20191110201048.1EE6E8ECB2@busybox.osuosl.org>
+Date: Sun, 10 Nov 2019 21:20:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvmtools: remove procps
+ option
+In-Reply-To: <20191110201314.GC3419@scaer>
+References: <20190929180408.17745-1-fontaine.fabrice@gmail.com>
+ <20191110201314.GC3419@scaer>
+Message-ID: <20191110202015.GD3419@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b6630156d3a8f953f70290d593f13724ff5581c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Rabrice, All,
 
-Commit 2be4232d98 removed the config option for openvmtools' procps
-support, but forgot to add it to the legacy menu.
+On 2019-11-10 21:13 +0100, Yann E. MORIN spake thusly:
+> On 2019-09-29 20:04 +0200, Fabrice Fontaine spake thusly:
+> > procps support has been removed since version 10.2.5 and
+> > https://github.com/vmware/open-vm-tools/commit/ed2e2348dd6af823f9458c5959c89acf2f13a952
+> > 
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> 
+> Applied to master, thanks, with a small nit...
+> 
+> > ---
+> >  package/openvmtools/Config.in      | 10 ----------
+> >  package/openvmtools/openvmtools.mk |  7 -------
+> >  2 files changed, 17 deletions(-)
+> > 
+> > diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+> > index 2bd5c272a9..1a077a2a47 100644
+> > --- a/package/openvmtools/Config.in
+> > +++ b/package/openvmtools/Config.in
+> > @@ -22,16 +22,6 @@ config BR2_PACKAGE_OPENVMTOOLS
+> >  
+> >  if BR2_PACKAGE_OPENVMTOOLS
+> >  
+> > -config BR2_PACKAGE_OPENVMTOOLS_PROCPS
+> > -	bool "procps support"
+> > -	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> > -	select BR2_PACKAGE_PROCPS_NG
+> > -	help
+> > -	  Enable support for procps / meminfo
+> 
+> This needs a Config.in.legacy entry, so I added it.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- Config.in.legacy | 6 ++++++
- 1 file changed, 6 insertions(+)
+... which I obviously forgot to git commit --amend before I pushed, so I
+pushed it in a separate commit.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index fcb10b1291..848551cfce 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2019.11"
- 
-+config BR2_PACKAGE_OPENVMTOOLS_PROCPS
-+	bool "oenvmtools' procps support was removed"
-+	select BR2_LEGACY
-+	help
-+	  Upstream stopped supporting this option a while ago.
-+
- config BR2_PACKAGE_ALLJOYN
- 	bool "alljoyn was removed"
- 	select BR2_LEGACY
+Sorry for the mess...
+
+> Regards,
+> Yann E. MORIN.
+> 
+> > -comment "procps support needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
+> > -	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> > -
+> >  config BR2_PACKAGE_OPENVMTOOLS_PAM
+> >  	bool "PAM support"
+> >  	# linux-pam needs locale and wchar, but we already have this
+> > diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+> > index e97eaf224e..fc56bb5ee0 100644
+> > --- a/package/openvmtools/openvmtools.mk
+> > +++ b/package/openvmtools/openvmtools.mk
+> > @@ -37,13 +37,6 @@ else
+> >  OPENVMTOOLS_CONF_OPTS += --without-ssl
+> >  endif
+> >  
+> > -ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PROCPS),y)
+> > -OPENVMTOOLS_CONF_OPTS += --with-procps
+> > -OPENVMTOOLS_DEPENDENCIES += procps-ng
+> > -else
+> > -OPENVMTOOLS_CONF_OPTS += --without-procps
+> > -endif
+> > -
+> >  ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PAM),y)
+> >  OPENVMTOOLS_CONF_OPTS += --with-pam
+> >  OPENVMTOOLS_DEPENDENCIES += linux-pam
+> > -- 
+> > 2.23.0
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
