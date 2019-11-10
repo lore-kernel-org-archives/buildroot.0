@@ -1,127 +1,182 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sun, 10 Nov 2019 18:25:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to version
- 2.26.2
-Message-ID: <20191110162503.3529982-1-aperez@igalia.com>
+Date: Sun, 10 Nov 2019 19:48:13 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/cage: new package
+In-Reply-To: <d20f39f0-3085-00f4-4a58-41956a779bbb@mind.be>
+References: <20190613000836.41302-1-aperez@igalia.com>
+ <20190613000836.41302-3-aperez@igalia.com>
+ <d20f39f0-3085-00f4-4a58-41956a779bbb@mind.be>
+Message-ID: <20191110194813.GB289317@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a minor release which includes fixes for CVE-2019-8812 and
-CVE-2019-8814.
+Hello Arnout,
 
-This release also fixes the build with WebDriver disabled, making patch
-"0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch" unneeded
-(and therefore removed). There is also a performance improvement for
-a regression related to fallback font selection, and a couple of small
-fixes. The full release notes are available at:
+Thanks for the thorough review ? I am finally getting round to applying the
+suggested changes. Also, v3 of the patch set will include wlroots 0.8.1,
+which has been released in the meantime.
 
-  https://wpewebkit.org/release/wpewebkit-2.26.2.html
+I also have a couple of comments inline below.
 
-The detailed security advisory can be found at:
-
-  https://wpewebkit.org/security/WSA-2019-0006.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- ...uild-fails-with-ENABLE_WEBDRIVER-OFF.patch | 56 -------------------
- package/wpewebkit/wpewebkit.hash              |  8 +--
- package/wpewebkit/wpewebkit.mk                |  2 +-
- 3 files changed, 5 insertions(+), 61 deletions(-)
- delete mode 100644 package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
-
-diff --git a/package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch b/package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
-deleted file mode 100644
-index d8bf85e8cd..0000000000
---- a/package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From fb0f978af0dd3923a1d3bcb6dccf610861e284d3 Mon Sep 17 00:00:00 2001
--From: Adrian Perez de Castro <aperez@igalia.com>
--Date: Tue, 8 Oct 2019 11:06:56 +0300
--Subject: [PATCH xserver 2/2] [WPE][GTK] Build fails with ENABLE_WEBDRIVER=OFF
-- https://bugs.webkit.org/show_bug.cgi?id=202658
--
--Reviewed by NOBODY (OOPS!).
--
--* UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp: Add missing
--ENABLE(WEBDRIVER_MOUSE_INTERACTIONS) and ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
--preprocessor guards.
--* UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp: Ditto.
--
--Fetch (and adapted) from: https://bugs.webkit.org/show_bug.cgi?id=202658
--Upstream-Status: Pending
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--
-----
-- Source/WebKit/ChangeLog                              | 12 ++++++++++++
-- .../Automation/gtk/WebAutomationSessionGtk.cpp       |  4 ++++
-- .../Automation/wpe/WebAutomationSessionWPE.cpp       |  4 ++++
-- 3 files changed, 20 insertions(+)
--
--diff --git a/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp b/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp
--index d601f0e57ae..683f0b8eed4 100644
----- a/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp
--+++ b/Source/WebKit/UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp
--@@ -32,6 +32,7 @@
-- namespace WebKit {
-- using namespace WebCore;
-- 
--+#if ENABLE(WEBDRIVER_MOUSE_INTERACTIONS)
-- static uint32_t modifiersToEventState(OptionSet<WebEvent::Modifier> modifiers)
-- {
--     uint32_t state = 0;
--@@ -121,7 +122,9 @@ void WebAutomationSession::platformSimulateMouseInteraction(WebPageProxy& page,
--         break;
--     }
-- }
--+#endif // ENABLE(WEBDRIVER_MOUSE_INTERACTIONS)
-- 
--+#if ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
-- static void doKeyStrokeEvent(struct wpe_view_backend* viewBackend, bool pressed, uint32_t keyCode, uint32_t modifiers, bool doReleaseAfterPress = false)
-- {
--     struct wpe_input_xkb_keymap_entry* entries;
--@@ -309,6 +312,7 @@ void WebAutomationSession::platformSimulateKeySequence(WebPageProxy& page, const
--         p = g_utf8_next_char(p);
--     } while (*p);
-- }
--+#endif // ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
-- 
-- } // namespace WebKit
-- 
---- 
--2.23.0
--
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 052252c32e..85a3271874 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.26.1.tar.xz.sums
--md5 bec094fe878e03f42de751cbaf0b3e99 wpewebkit-2.26.1.tar.xz
--sha1 53dfafab8d5ccb537e7330febb9504c390e3bf52 wpewebkit-2.26.1.tar.xz
--sha256 d1ae85dffb5bfc106c5ac6d5e73a3dfe3cb2c1df1f18c16103e1dc744cd4ac14 wpewebkit-2.26.1.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.26.2.tar.xz.sums
-+md5 057cc2647231e90c8197873df9a9f54c wpewebkit-2.26.2.tar.xz
-+sha1 eca4e35af2c2e70bd36a9bdef3bfbbfbd417210c wpewebkit-2.26.2.tar.xz
-+sha256 dd4fce390f1721d8d6d017fa712adb990f7230bde84a1b7d27327bd589053fdd wpewebkit-2.26.2.tar.xz
+On Fri, 2 Aug 2019 00:01:49 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
  
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 012e67af1f..c90e2d1421 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.26.1
-+WPEWEBKIT_VERSION = 2.26.2
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
--- 
-2.24.0
+> On 13/06/2019 02:08, Adrian Perez de Castro wrote:
+> > Cage is a "kiosk" Wayland compositor, which shows a single maximized
+> > application at a time and limits user interaction to that application.
+> > 
+> > https://www.hjdskes.nl/projects/cage/
+> > 
+> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> > 
+> > ---
+> > Changes v1 -> v2:
+> >   - Reviewed dependencies (as per Thomas' suggestions)
+> >   - Switched to Cage 0.1.1, which does not require patching to build
+> >     with wlroots 0.6.0
+> > 
+> > ---
+> >  package/Config.in      |  1 +
+> >  package/cage/Config.in | 32 ++++++++++++++++++++++++++++++++
+> >  package/cage/cage.hash |  5 +++++
+> >  package/cage/cage.mk   | 19 +++++++++++++++++++
+> >  4 files changed, 57 insertions(+)
+> >  create mode 100644 package/cage/Config.in
+> >  create mode 100644 package/cage/cage.hash
+> >  create mode 100644 package/cage/cage.mk
+> > 
+> > diff --git a/package/Config.in b/package/Config.in
+> > index a7d70b6b48..bb7c97d3fd 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -329,6 +329,7 @@ comment "QT libraries and helper libraries"
+> >  	source "package/quazip/Config.in"
+> >  	source "package/qwt/Config.in"
+> >  endif
+> > +	source "package/cage/Config.in"
+> >  	source "package/tekui/Config.in"
+> >  	source "package/weston/Config.in"
+> >  	source "package/x11r7/Config.in"
+> > diff --git a/package/cage/Config.in b/package/cage/Config.in
+> > new file mode 100644
+> > index 0000000000..e1f428a701
+> > --- /dev/null
+> > +++ b/package/cage/Config.in
+> > @@ -0,0 +1,32 @@
+> > +config BR2_PACKAGE_CAGE
+> > +	bool "cage"
+> > +	depends on !BR2_STATIC_LIBS # wlroots
+> 
+>  Not so important, but we usually do # wlroots -> wayland
+
+I'll add the ?-> foo? part, to me it makes clearer where the dependency
+came from :)
+
+> > +	depends on BR2_INSTALL_LIBSTDCPP # wlroots
+> > +	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
+> > +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # wlroots
+> > +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # wlroots
+> > +	depends on BR2_ENABLE_LOCALE # wlroots
+> > +	depends on BR2_PACKAGE_HAS_UDEV # wlroots
+> > +	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
+> > +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wlroots
+> > +	depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
+> 
+>  You didn't update these after updating wlroots...
+> 
+> > +	select BR2_PACKAGE_WLROOTS
+> > +	help
+> > +	  Kiosk compositor for Wayland, which displays a single
+> > +	  maximized application at a time.
+> > +
+> > +	  https://www.hjdskes.nl/projects/cage/
+> > +
+> > +if BR2_PACKAGE_CAGE
+> > +
+> > +config BR2_PACKAGE_CAGE_XWAYLAND
+> > +	bool "XWayland support"
+> > +	depends on BR2_PACKAGE_XORG7 # wlroots
+> > +	depends on BR2_PACKAGE_WLROOTS_XWAYLAND
+> 
+>  I forgot to mention for wlroots: does it make sense to make Xwayland support
+> optional? If you have Xorg enabled and you also select a wayland compositor,
+> you're bound to want xwayland, no? And I can't imagine that it would add much to
+> the build size anyway.
+
+The difference in code size is a few tens of kilobytes on 64-bit ARM. That's
+peanuts compared with the size of X.org itself, so I think you are right and
+XWayland support can be automatically enabled in wlroots (and Cage) if the
+BR2_PACKAGE_XORG7=y symbol is defined.
+
+> > +	help
+> > +	  Enable support for running X11 applications through XWayland
+> > +
+> > +comment "XWayland supports needs X.org and support in wlroots enabled"
+> > +	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_WLROOTS_XWAYLAND
+> > +
+> > +endif
+> > diff --git a/package/cage/cage.hash b/package/cage/cage.hash
+> > new file mode 100644
+> > index 0000000000..166932bc15
+> > --- /dev/null
+> > +++ b/package/cage/cage.hash
+> > @@ -0,0 +1,5 @@
+> > +# Generated locally
+> 
+>  Same story about checking .asc.
+> 
+> > +sha256 63efbe96cf307381f2bedf9b80153343e255970a70d612515da7dc325dd49478  v0.1.1.tar.gz
+> > +
+> > +# Hashes for license files:
+> > +sha256 1fd28695090b961ed2846627365489228d84f784bff60a90e933febcedaeb65d  LICENSE
+> > diff --git a/package/cage/cage.mk b/package/cage/cage.mk
+> > new file mode 100644
+> > index 0000000000..db7369276a
+> > --- /dev/null
+> > +++ b/package/cage/cage.mk
+> > @@ -0,0 +1,19 @@
+> > +################################################################################
+> > +#
+> > +# cage
+> > +#
+> > +################################################################################
+> > +
+> > +CAGE_VERSION = 0.1.1
+> > +CAGE_SITE = https://github.com/Hjdskes/cage/archive
+> 
+>  Same story about using github helper.
+
+It won't be needed anymore for wlroots, as proper (uploded) tarballs are
+available in the GitHub releases for the newer releases. Let's use the
+helper for Cage anyway, of course!
+
+Cheers,
+?Adri?n
+
+>  Regards,
+>  Arnout
+> 
+> > +CAGE_SOURCE = v$(CAGE_VERSION).tar.gz
+> > +CAGE_LICENSE = MIT
+> > +CAGE_DEPENDENCIES = host-pkgconf wlroots
+> > +
+> > +ifeq ($(BR2_PACKAGE_CAGE_XWAYLAND),y)
+> > +CAGE_CONF_OPTS = -Dxwayland=true
+> > +else
+> > +CAGE_CONF_OPTS = -Dxwayland=false
+> > +endif
+> > +
+> > +$(eval $(meson-package))
+> > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191110/ff2426b4/attachment.asc>
