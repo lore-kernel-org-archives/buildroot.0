@@ -1,42 +1,63 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 10 Nov 2019 15:22:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bird: disable on nios2
-Message-ID: <20191110142258.12684-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 10 Nov 2019 15:33:07 +0100
+Subject: [Buildroot] [git commit] package/jailhouse: python scripts needs
+ python-mako
+Message-ID: <20191110142612.66B338E76E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build fails with truncation errors:
+commit: https://git.buildroot.net/buildroot/commit/?id=9e63ec171df98860e18d8328d9d00248050af69d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LD -pthread -o bird obj/conf/cf-parse.tab.o obj/conf/cf-lex.o obj/conf/conf.o obj/filter/filter.o obj/filter/data.o obj/filter/f-util.o obj/filter/tree.o obj/filter/trie.o obj/filter/inst-gen.o obj/lib/bitops.o obj/lib/checksum.o obj/lib/event.o obj/lib/flowspec.o obj/lib/idm.o obj/lib/ip.o obj/lib/lists.o obj/lib/mac.o obj/lib/md5.o obj/lib/mempool.o obj/lib/net.o obj/lib/patmatch.o obj/lib/printf.o obj/lib/resource.o obj/lib/sha1.o obj/lib/sha256.o obj/lib/sha512.o obj/lib/slab.o obj/lib/slists.o obj/lib/strtoul.o obj/lib/tbf.o obj/lib/timer.o obj/lib/xmalloc.o obj/nest/a-path.o obj/nest/a-set.o obj/nest/cli.o obj/nest/cmds.o obj/nest/iface.o obj/nest/locks.o obj/nest/neighbor.o obj/nest/password.o obj/nest/proto.o obj/nest/rt-attr.o obj/nest/rt-dev.o obj/nest/rt-fib.o obj/nest/rt-show.o obj/nest/rt-table.o obj/proto/bgp/attrs.o obj/proto/bgp/bgp.o obj/proto/bgp/packets.o obj/sysdep/linux/netlink.o obj/sysdep/unix/io.o obj/sysdep/unix/krt.o obj/sysdep/unix/log.o obj/sysdep/unix/main.o obj/sysdep/unix/random.o
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/7.4.0/../../../../nios2-buildroot-linux-gnu/bin/ld: FDE encoding in /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/7.4.0/libgcc.a(_divdi3.o)(.eh_frame) prevents .eh_frame_hdr table being created
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/7.4.0/../../../../nios2-buildroot-linux-gnu/bin/ld: FDE encoding in /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/7.4.0/libgcc.a(_moddi3.o)(.eh_frame) prevents .eh_frame_hdr table being created
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/7.4.0/../../../../nios2-buildroot-linux-gnu/bin/ld: FDE encoding in /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/7.4.0/libgcc.a(_udivdi3.o)(.eh_frame) prevents .eh_frame_hdr table being created
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/7.4.0/../../../../nios2-buildroot-linux-gnu/bin/ld: FDE encoding in /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/7.4.0/libgcc.a(_umoddi3.o)(.eh_frame) prevents .eh_frame_hdr table being created
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/7.4.0/../../../../nios2-buildroot-linux-gnu/bin/ld: obj/filter/filter.o: in function `f_rta_cow.constprop.12':
-filter.c:(.text+0x9c): relocation truncated to fit: R_NIOS2_TLS_LE16 against `filter_state'
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/7.4.0/../../../../nios2-buildroot-linux-gnu/bin/ld: filter.c:(.text+0xe4): relocation truncated to fit: R_NIOS2_TLS_LE16 against `filter_state'
+jailhouse-config-create script needs python-mako, see
+https://github.com/siemens/jailhouse/commit/5c7f2c4c30f19aa7eb95dffa7b7bb92393c09ba7
 
-Fixes:
- - http://autobuild.buildroot.org/results/d3971f9e1305c3c4388dbf48763f5a54ba223307
+Moreover jailhouse-config-create needs host-python-mako to build
+jailhouse-config-collect
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bird/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/jailhouse/Config.in    |  1 +
+ package/jailhouse/jailhouse.mk | 12 +++++++++---
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/package/bird/Config.in b/package/bird/Config.in
-index c2951c74c3..ea59126be1 100644
---- a/package/bird/Config.in
-+++ b/package/bird/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_BIRD
- 	bool "bird"
-+	depends on !BR2_nios2 # relocations don't fit 
- 	depends on BR2_USE_MMU # fork()
+diff --git a/package/jailhouse/Config.in b/package/jailhouse/Config.in
+index 5b9ecc7b7b..d270a2ae8e 100644
+--- a/package/jailhouse/Config.in
++++ b/package/jailhouse/Config.in
+@@ -16,6 +16,7 @@ if BR2_PACKAGE_JAILHOUSE
+ config BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS
+ 	bool "Jailhouse helper scripts"
+ 	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_MAKO # runtime
  	help
- 	  BIRD Internet Routing Daemon
--- 
-2.23.0
+ 	  Python-based helpers for the Jailhouse Hypervisor.
+ 
+diff --git a/package/jailhouse/jailhouse.mk b/package/jailhouse/jailhouse.mk
+index fa74f9e8c4..aab232eb92 100644
+--- a/package/jailhouse/jailhouse.mk
++++ b/package/jailhouse/jailhouse.mk
+@@ -18,10 +18,16 @@ JAILHOUSE_MAKE_OPTS = \
+ 	DESTDIR="$(TARGET_DIR)"
+ 
+ ifeq ($(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS),y)
+-JAILHOUSE_DEPENDENCIES += host-python-setuptools
+-JAILHOUSE_MAKE_OPTS += PYTHON_PIP_USABLE="yes"
++JAILHOUSE_DEPENDENCIES += \
++	host-python-mako \
++	host-python-setuptools
++JAILHOUSE_MAKE_OPTS += \
++	HAS_PYTHON_MAKO="yes" \
++	PYTHON_PIP_USABLE="yes"
+ else
+-JAILHOUSE_MAKE_OPTS += PYTHON_PIP_USABLE="no"
++JAILHOUSE_MAKE_OPTS += \
++	HAS_PYTHON_MAKO="no" \
++	PYTHON_PIP_USABLE="no"
+ endif
+ 
+ define JAILHOUSE_BUILD_CMDS
