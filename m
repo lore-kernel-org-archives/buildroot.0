@@ -1,55 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Nov 2019 09:26:10 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2019-11-09
-In-Reply-To: <20191110071632.380E787DAA@hemlock.osuosl.org>
-References: <20191110071632.380E787DAA@hemlock.osuosl.org>
-Message-ID: <20191110082610.GV3419@scaer>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 10 Nov 2019 09:37:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/linux-serial-test: fix build on
+ MIPS
+In-Reply-To: <20191109231321.19690-1-fontaine.fabrice@gmail.com>
+References: <20191109231321.19690-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAGm1_ktusnrVNCo-15_iPyySmLCOxFvL4TvE3sWZWiTNrvomuQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hi Fabrice,
 
-On 2019-11-10 07:16 -0000, Thomas Petazzoni spake thusly:
-> Results for branch 'master'
->   riscv64    |   systemd-243-78-gef677436aa   | NOK | http://autobuild.buildroot.net/results/65c6741d812efe86398982d667a28199ea06d0f9 |     
-> 
-> Results for branch 'next'
->  powerpc64   |   systemd-243-78-gef677436aa   | NOK | http://autobuild.buildroot.net/results/f1e5dbe21685195dc43bf9e6e25425f8a4ec940b |     
+On Sun, Nov 10, 2019 at 12:12 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/86e06fdcaa91dca682651736162e9e743329412c
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-That's because systemd v243 introduced a call to realpath(1), which is
-not available on "old" distros (Ubuntu 14.04 does not have it, like it
-does not have 'ln --relative').
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-This is strating to be slightly annoying, especially since upstreaam is
-really unreceptive about supporting such old-ish build environments...
+Could you also submit a PR upstream?
 
-We now have two packages (as I know of) that have workarounds: systemd
-and cups-filters.
+Thanks.
 
-So I've looked at adding host-coreutils as a dependency for those
-packages. All the depednencies of host-coreutils are already (direct or
-indirect) dependencies of systemd or cups-filters, so the overhead is
-just the time it takes to build host-coreutils, which is about 1min
-here, most of which is spent in configure. Since the build time of all
-the dependencies is already large, this is not too bad.
+Regards.
+Yegor
 
-I'll send a patch later today...
-
-The alternative would be that we do systematically install wrappers for
-ln and realpath (like the one use for cups-filters, but more generic),
-that could be provided with host-skeleton for example...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> ---
+>  ...t.c-fix-missing-CMSPAR-define-on-MIP.patch | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch
+>
+> diff --git a/package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch b/package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch
+> new file mode 100644
+> index 0000000000..fe5a1c6813
+> --- /dev/null
+> +++ b/package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch
+> @@ -0,0 +1,54 @@
+> +From c34767aa22623a21369f1464c52fc4635895223c Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Fri, 8 Nov 2019 18:25:35 +0100
+> +Subject: [PATCH] linux-serial-test.c: fix missing CMSPAR define on MIPS
+> +
+> +This patch is an adaptation of
+> +https://git.busybox.net/buildroot/diff/package/freerdp/0003-add-missing-define.patch?id=78cd32631e959e04b1a2f18be7b0757e21482438
+> +
+> +linux-serial-test.c uses CMSPAR, which is defined by glibc in
+> +bits/termios.h.
+> +
+> +glibc has two flavours of bits/termios.h: a generic one and an
+> +architecture-specific one. When installing, glibc will install the
+> +architecture-specific file if it exists, otherwise it installs the
+> +generic file. Only Alpha, MIPS, PPC and Sparc have their own
+> +bits/termios.h.
+> +
+> +The generic bits/termios.h, as well as the Alpha, PPC and Sparc flavours
+> +do define CMSPAR. However, the MIPS flavour does not define it.
+> +
+> +Define CMSPAR to the value from the generic value, which is also the
+> +value known to the Linux kernel for MIPS.
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/1350cc46dcb285772b1a4c90aec6ba38fdb11e3c
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/cbrake/linux-serial-test/pull/20]
+> +---
+> + linux-serial-test.c | 8 ++++++++
+> + 1 file changed, 8 insertions(+)
+> +
+> +diff --git a/linux-serial-test.c b/linux-serial-test.c
+> +index 5e7504e..0d4a919 100644
+> +--- a/linux-serial-test.c
+> ++++ b/linux-serial-test.c
+> +@@ -17,6 +17,14 @@
+> + #include <linux/serial.h>
+> + #include <errno.h>
+> +
+> ++/*
+> ++ * glibc for MIPS has its own bits/termios.h which does not define
+> ++ * CMSPAR, so we vampirise the value from the generic bits/termios.h
+> ++ */
+> ++#ifndef CMSPAR
+> ++#define CMSPAR 010000000000
+> ++#endif
+> ++
+> + // command line args
+> + int _cl_baud = 0;
+> + char *_cl_port = NULL;
+> +--
+> +2.23.0
+> +
+> --
+> 2.23.0
+>
