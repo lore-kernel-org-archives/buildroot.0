@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Nov 2019 14:29:11 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Carlo Caione for jailhouse
-Message-ID: <20191110132912.16295-1-thomas.petazzoni@bootlin.com>
+Date: Sun, 10 Nov 2019 14:32:08 +0100
+Subject: [Buildroot] [git commit] package/glog: disable on microblaze
+Message-ID: <20191110132459.6011E8EC26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The jailhouse package was added in commit
-ee4990721c14c624c99295598fde29e395647fb9 by Carlo Caione, but no entry
-in the DEVELOPERS file was added. Let's fix this to ensure we have a
-registered maintainer for the Jailhouse package.
+commit: https://git.buildroot.net/buildroot/commit/?id=cd080fe42133b917d6e0fffc6c5c6344de6f642d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Disable glog on microblaze instead of trying to fix the build failure
+due to __ELF__ being undefined on this architecture following Arnout
+request during review of https://patchwork.ozlabs.org/patch/1186107
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ae138c08361d3544df92f88edf3f6dcd617b6232
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Carlo Caione <ccaione@baylibre.com>
 ---
-Carlo, could you Acked-by this patch?
+ package/glog/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Also, if you're still using Jailhouse, it is typically the type of
-package for which it would be useful to have a test in our runtime
-test infrastructure (see support/testing). We are working on adding
-documentation about this infrastructure, there's a documentation patch
-being discussed on the mailing list.
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c0863aabc6..991be89849 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -461,6 +461,7 @@ N:	Brock Williams <brock@cottonwoodcomputer.com>
- F:	package/pdmenu/
+diff --git a/package/glog/Config.in b/package/glog/Config.in
+index e864094646..3376323004 100644
+--- a/package/glog/Config.in
++++ b/package/glog/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_GLOG
+ 	bool "glog"
++	# __ELF__ not defined on Microblaze
++	depends on !BR2_microblaze
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  C++ implementation of the Google logging module
+@@ -7,4 +9,5 @@ config BR2_PACKAGE_GLOG
+ 	  https://github.com/google/glog
  
- N:	Carlo Caione <carlo.caione@gmail.com>
-+F:	package/jailhouse/
- F:	package/sunxi-boards/
- 
- N:	Carlos Santos <unixmania@gmail.com>
--- 
-2.21.0
+ comment "glog needs a toolchain w/ C++"
++	depends on !BR2_microblaze
+ 	depends on !BR2_INSTALL_LIBSTDCPP
