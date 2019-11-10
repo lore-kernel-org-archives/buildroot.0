@@ -1,36 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Nov 2019 14:16:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/linux-serial-test: fix build on
- MIPS
-In-Reply-To: <20191109231321.19690-1-fontaine.fabrice@gmail.com>
-References: <20191109231321.19690-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191110141617.0e1f25ec@windsurf>
+Date: Sun, 10 Nov 2019 14:26:26 +0100
+Subject: [Buildroot] [PATCH] package/jailhouse: fix misc details in Config.in
+Message-ID: <20191110132627.15985-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 10 Nov 2019 00:13:21 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+This commit fixes a number of small minor details in the jailhouse
+Config.in file:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/86e06fdcaa91dca682651736162e9e743329412c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...t.c-fix-missing-CMSPAR-define-on-MIP.patch | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch
+ - The Config.in comment is in the middle of the main
+   BR2_PACKAGE_JAILHOUSE option and its sub-options, causing the
+   sub-options to not be indented properly in menuconfig
 
-Applied to master, thanks. Could you also send a patch to glibc adding
-the missing define to the MIPS header? Because this would be the real
-fix for this issue in fact.
+ - jailhouse was capitalized as Jailhouse, while all Buildroot
+   packages in menuconfig use small letters, so use "jailhouse"
+   everywhere
 
-Thanks!
+ - no need to repeat "jailhouse" in the prompt of the sub-option for
+   helper scripts, since it is not properly indented under the main
+   jailhouse option.
 
-Thomas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/jailhouse/Config.in | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/package/jailhouse/Config.in b/package/jailhouse/Config.in
+index 5b9ecc7b7b..e792900d76 100644
+--- a/package/jailhouse/Config.in
++++ b/package/jailhouse/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_JAILHOUSE
+-	bool "Jailhouse"
++	bool "jailhouse"
+ 	depends on BR2_aarch64 || BR2_x86_64
+ 	depends on BR2_LINUX_KERNEL
+ 	help
+@@ -7,21 +7,21 @@ config BR2_PACKAGE_JAILHOUSE
+ 
+ 	  https://github.com/siemens/jailhouse
+ 
+-comment "Jailhouse needs a Linux kernel to be built"
+-	depends on BR2_aarch64 || BR2_x86_64
+-	depends on !BR2_LINUX_KERNEL
+-
+ if BR2_PACKAGE_JAILHOUSE
+ 
+ config BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS
+-	bool "Jailhouse helper scripts"
++	bool "helper scripts"
+ 	depends on BR2_PACKAGE_PYTHON
+ 	help
+ 	  Python-based helpers for the Jailhouse Hypervisor.
+ 
+ 	  https://github.com/siemens/jailhouse
+ 
+-comment "Jailhouse helper scripts require Python"
++comment "jailhouse helper scripts require Python"
+ 	depends on !BR2_PACKAGE_PYTHON
+ 
+ endif
++
++comment "jailhouse needs a Linux kernel to be built"
++	depends on BR2_aarch64 || BR2_x86_64
++	depends on !BR2_LINUX_KERNEL
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
