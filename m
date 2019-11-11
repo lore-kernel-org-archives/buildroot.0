@@ -1,76 +1,55 @@
-From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Mon, 11 Nov 2019 18:47:07 +0000
-Subject: [Buildroot] [PATCH 1/3] arch/config.in.arc: Introduce the ARC
- optimized hs38 config
-In-Reply-To: <20191109144656.3da6a1b0@windsurf>
-References: <20191108174112.28183-1-vgupta@synopsys.com>
- <20191108174112.28183-2-vgupta@synopsys.com>
- <20191109144656.3da6a1b0@windsurf>
-Message-ID: <1112f6a7-8a23-6cd9-0af0-76e0b92e496b@synopsys.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 11 Nov 2019 20:22:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sysrepo: fix host/staging
+ install steps
+In-Reply-To: <20191111161247.51724528@windsurf.home>
+References: <20191103060113.4884-1-heiko.thiery@gmail.com>
+ <20191108225833.6d81ea18@windsurf>
+ <CAEyMn7Yg83V6bQoCG3-JH0ScRm=3qAxVLM3fKA_k1naKjFQqJw@mail.gmail.com>
+ <20191111145304.00972312@windsurf.home>
+ <CAEyMn7Zm+7k+Mwugu-oxRGUjfsyV3btam3DCdR+8mrenzdCzug@mail.gmail.com>
+ <20191111152732.43c195c1@windsurf.home>
+ <CAEyMn7bWYSitctm2hA6h-BTByHwOuYRyEUkVK-d6a2SsmDeiQQ@mail.gmail.com>
+ <20191111154027.0e7bb998@windsurf.home>
+ <CAEyMn7aeP+6eeW4+EDtVeB6+m9Dmsc-BUY0TTmsAC3rLdA7hFg@mail.gmail.com>
+ <20191111155902.2751963d@windsurf.home>
+ <CAEyMn7arpqUFV9trzwjMnwL6mK+eEYMenkpLhzpAPWBcD5XSCg@mail.gmail.com>
+ <20191111161247.51724528@windsurf.home>
+Message-ID: <CAEyMn7aXzyzZJ4dgozKiBqSGpC+J_aFdS9Df3vSyVMjmJSdTxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> schrieb am Mo., 11. Nov.
+2019, 16:12:
 
-On 11/9/19 5:46 AM, Thomas Petazzoni wrote:
-> Hello,
+> On Mon, 11 Nov 2019 16:04:15 +0100
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
 >
-> +Arnout for legacy handling.
+> > Installing the sysrepo database to the target directory
 >
-> On Fri,  8 Nov 2019 09:41:10 -0800
-> Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+> And how do you do that? When does it happen?
 >
->> This corresponds to -mcu=hs38 with mpy-option=9 (64-bit multiplier)
->>
->> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
->> ---
->>  arch/Config.in.arc | 21 ++++++++++++++-------
->>  1 file changed, 14 insertions(+), 7 deletions(-)
->>
->> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
->> index c65bb01f1f4f..284951b82cee 100644
->> --- a/arch/Config.in.arc
->> +++ b/arch/Config.in.arc
->> @@ -11,13 +11,19 @@ config BR2_arc750d
->>  config BR2_arc770d
->>  	bool "ARC 770D"
->>  
->> -config BR2_archs38
->> +config BR2_archs
->>  	bool "ARC HS38"
->>  	help
->>  	  Generic ARC HS capable of running Linux, i.e. with MMU,
->> -	  caches and multiplier. Also it corresponds to the default
->> +	  caches and 32-bit multiplier. Also it corresponds to the default
->>  	  configuration in older GNU toolchain versions.
->>  
->> +config BR2_archs38
-> This re-use of an existing name is a bit annoying. Indeed, all existing
-> users of Buildroot that have a configuration with BR2_archs38 will now
-> be building for a ARC system with a 64-bit multiplier, while they were
-> previously building for a 32-bit multiplier.
->
-> I see that what you have done is to try to be consistent between the
-> BR2_ options and the gcc options. I'm hesitating between keeping the
-> consistency but making the migration a bit annoying for users, or
-> breaking the consistency to make the migration smooth for users.
->
-> Since I think the number of affected users will probably be quite
-> small/limited, I think I would be fine with merging your patch as-is,
-> but I'd like to hear from others.
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-I agree that this might cause potential breakage, but this is not totally
-uncharted territory for software build config. We've been building Linux kernel
-with this option as default since mid 2018.
 
-2018-09-07 00a99339f0a3 ARCv2: build: use mcpu=hs38 iso generic mcpu=archs?
+When setting the REPOSITORY_LOC=$(TARGET_DIR)/etc/sysrepo in the host
+confguration the syrepo database
+is created correctly in the install step into the target dir. But then in
+all install steps (host, staging and target) the files
+are created in the target dir. Therefore I do not allow to use the sysrepo
+buildsystem install in host and staging step.
+The files that are incluenced form this REPOSITORY_LOC setting will en in
+"etc/sysrepo/yang/" and "etc/sysrepo/data".
 
-Granted that kernel build is just one part of puzzle and any latent codegen issues
-are more likely to surface with default applied to full software stack, I would
-still vote for switching default to -mcpu=hs38
-
-Thx,
--Vineet
+--
+Heiko
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191111/c328202f/attachment.html>
