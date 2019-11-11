@@ -1,50 +1,56 @@
-From: Avi Shukron <avraham.shukron@gmail.com>
-Date: Mon, 11 Nov 2019 22:03:53 +0200
-Subject: [Buildroot] [PATCH 2/2] package/qemu: add host-python as an
- explicit dependency
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 11 Nov 2019 22:13:13 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ninja: invoke python3
+ explicitly to configure the package
 In-Reply-To: <20191111200401.16924-1-avraham.shukron@gmail.com>
 References: <20191111200401.16924-1-avraham.shukron@gmail.com>
-Message-ID: <20191111200401.16924-2-avraham.shukron@gmail.com>
+Message-ID: <CALFsTFUeGv84EQhxWbFF=beVOr3Bgcwt-SZHQ=GVafK=QsATLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qemu requires python in its configre script. Yet host-python was
-not listed as one of the package's dependencies. If no other package
-requested host-python, then configuring this package will fail since
-it won't find any executable named python in the host dir.
+Hello,
 
-In order to reproduce this issue you must not have python2 installed
-on your host machine.
+On Mon, Nov 11, 2019 at 10:04 PM Avi Shukron <avraham.shukron@gmail.com> wrote:
+>
+> ninja depends on python3 specifically, but the configure.py file
+> simply uses "env python". Where no python is selected for the target
+> you simply won't get a python symlink in $(HOST_DIR)/usr/bin, so the
+> configure.py script fails to run since it can't find "python".
+>
+> Notice that in order to reproduce the issue, you must not have
+> python2 installed on your host machine.
+>
+> Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
+> ---
+>  package/ninja/ninja.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
+> index 4897012150..867b92c4c3 100644
+> --- a/package/ninja/ninja.mk
+> +++ b/package/ninja/ninja.mk
+> @@ -17,7 +17,7 @@ NINJA_LICENSE_FILES = COPYING
+>  HOST_NINJA_DEPENDENCIES = host-python3
+>
+>  define HOST_NINJA_BUILD_CMDS
+> -       (cd $(@D); ./configure.py --bootstrap)
+> +       (cd $(@D); $(HOST_DIR)/bin/python3 ./configure.py --bootstrap)
 
-Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
----
- package/qemu/qemu.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Well, I guess you can now remove the "./" before configure.py
+as now you explicitly call python3 before it.
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index a91f9d3eeb..00d413b68d 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -21,7 +21,7 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
- #-------------------------------------------------------------
- # Target-qemu
- 
--QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman
-+QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman host-python
- 
- # Need the LIBS variable because librt and libm are
- # not automatically pulled. :-(
-@@ -182,7 +182,7 @@ $(eval $(generic-package))
- #-------------------------------------------------------------
- # Host-qemu
- 
--HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
-+HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman host-python
- 
- #       BR ARCH         qemu
- #       -------         ----
--- 
-2.17.1
+>  endef
+>
+>  define HOST_NINJA_INSTALL_CMDS
+> --
+> 2.17.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Asaf.
