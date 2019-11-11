@@ -1,47 +1,68 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 11 Nov 2019 00:59:34 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp: bump to version
- 3.6.2
-Message-ID: <20191111075934.127687-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Nov 2019 09:01:14 +0100
+Subject: [Buildroot] [git commit] Update for 2019.02.7
+Message-ID: <20191111075755.1560A8ED27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-aiohttp/python-aiohttp.hash | 4 ++--
- package/python-aiohttp/python-aiohttp.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=046735f5d17d0faa0a008b62fd9e260ad1c55e7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-index bd9e2d7a62..fd02bc80d6 100644
---- a/package/python-aiohttp/python-aiohttp.hash
-+++ b/package/python-aiohttp/python-aiohttp.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp/json
--md5	85fe5c9037256c58d4678148bd91b3f3  aiohttp-3.5.4.tar.gz
--sha256	9c4c83f4fa1938377da32bc2d59379025ceeee8e24b89f72fcbccd8ca22dc9bf  aiohttp-3.5.4.tar.gz
-+md5	ca40144c199a09fc1a141960cf6295f0  aiohttp-3.6.2.tar.gz
-+sha256	259ab809ff0727d0e834ac5e8a283dc5e3e0ecc30c4d80b3cd17a4139ce1f326  aiohttp-3.6.2.tar.gz
- # Locally computed sha256 checksums
- sha256	6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
-diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-index 7a142a6550..5a5964ed5f 100644
---- a/package/python-aiohttp/python-aiohttp.mk
-+++ b/package/python-aiohttp/python-aiohttp.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 83c2e5f6e3b0a27a171cad6de2b2e8b04dd8c517)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/CHANGES b/CHANGES
+index 9161ba16e8..b3bef0d234 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -550,6 +550,42 @@
+ 	#11761: Building custom kernel 5.1-rc3 or later breaks on objtool
+ 	#11816: Only selected coreutils binaries are installed
  
--PYTHON_AIOHTTP_VERSION = 3.5.4
-+PYTHON_AIOHTTP_VERSION = 3.6.2
- PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
--PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/0f/58/c8b83f999da3b13e66249ea32f325be923791c0c10aee6cf16002a3effc1
-+PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/00/94/f9fa18e8d7124d7850a5715a0b9c0584f7b9375d331d35e157cee50f27cc
- PYTHON_AIOHTTP_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
--- 
-2.20.1
++2019.02.7, Released November 10th, 2019
++
++	Important / security related fixes.
++
++	support/testing: use a kernel with HW_RANDOM_VIRTIO to work
++	around issues with lack of entrophy
++
++	Toolchain: Also copy libssp.so for external toolchains if SSP
++	is enabled to handle toolchains providing SSP support in
++	libssp rather than in the C library
++
++	Download: Also use the package download method for extra
++	downloads from the same site, so it does not get confused by
++	URLs containing '+'
++
++	Fakeroot now works correctly under Microsoft Windows 10
++	Services for Linux, which does not provide SYSV IPC support
++
++	utils/test-pkg: ensure to exit with an error upon failure
++
++	Updated/fixed packages: asterisk, azmq, cups-filters,
++	domoticz, duma, elf2flt, eudev, exfat, exfat-utils, fakeroot,
++	file, freerdp, gd, ghostscript, go, gvfs, intel-microcode,
++	kvm-unit-tests, libarchive, libnspr, libnss, libopenssl,
++	libpcap, libpciaccess, librsvg, libseccomp, libsigrok,
++	libtorrent, libunwind, linux-tools, lua-sdl2, lxc, minizip,
++	mjpegtools, mongoose, php, python, python-pysnmp-apps,
++	python3, qemu, qt5base, ruby, safeclib, samba4, sdl_mixer,
++	sox, sudo, systemd, tcpdump, unscd, util-lkinux, vtun, xvisor,
++	yaffs2utils
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11366: [2018.08] SysV IPC not available for fakeroot on WSL
++	#12261: sudo versions prior to 1.8.28 are affected
++
+ 2019.02.6, Released October 3rd, 2019
+ 
+ 	Important / security related fixes.
