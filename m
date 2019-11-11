@@ -1,56 +1,61 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 11 Nov 2019 22:13:13 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ninja: invoke python3
- explicitly to configure the package
-In-Reply-To: <20191111200401.16924-1-avraham.shukron@gmail.com>
-References: <20191111200401.16924-1-avraham.shukron@gmail.com>
-Message-ID: <CALFsTFUeGv84EQhxWbFF=beVOr3Bgcwt-SZHQ=GVafK=QsATLw@mail.gmail.com>
+From: Whitney, Scott <scwhitn@amazon.com>
+Date: Mon, 11 Nov 2019 20:14:59 +0000
+Subject: [Buildroot] How to create/install U-Boot and Linux to boot from eMMC
+Message-ID: <a78aeb5e102b46c5827b626bcc23c23c@EX13D04UEA001.ant.amazon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Buildroot community,
 
-On Mon, Nov 11, 2019 at 10:04 PM Avi Shukron <avraham.shukron@gmail.com> wrote:
->
-> ninja depends on python3 specifically, but the configure.py file
-> simply uses "env python". Where no python is selected for the target
-> you simply won't get a python symlink in $(HOST_DIR)/usr/bin, so the
-> configure.py script fails to run since it can't find "python".
->
-> Notice that in order to reproduce the issue, you must not have
-> python2 installed on your host machine.
->
-> Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
-> ---
->  package/ninja/ninja.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
-> index 4897012150..867b92c4c3 100644
-> --- a/package/ninja/ninja.mk
-> +++ b/package/ninja/ninja.mk
-> @@ -17,7 +17,7 @@ NINJA_LICENSE_FILES = COPYING
->  HOST_NINJA_DEPENDENCIES = host-python3
->
->  define HOST_NINJA_BUILD_CMDS
-> -       (cd $(@D); ./configure.py --bootstrap)
-> +       (cd $(@D); $(HOST_DIR)/bin/python3 ./configure.py --bootstrap)
+I'm using Buildroot to successfully build U-Boot and a Linux image for an AM6548 Sitara processor.  I created sdcard.img in output/images using genimage, with the following configuration file:
 
-Well, I guess you can now remove the "./" before configure.py
-as now you explicitly call python3 before it.
+image boot.vfat {
+    vfat {
+        files = {
+            "sysfw.itb",
+            "tiboot3.bin",
+            "tispl.bin",
+            "u-boot.img",
+            "uEnv.txt",
+            "Image",
+            "k3-am654-reflex3-board.dtb"
+        }
+    }
+    size = 70M
+}
 
->  endef
->
->  define HOST_NINJA_INSTALL_CMDS
-> --
-> 2.17.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+image sdcard.img {
+    hdimage {
+    }
 
-Asaf.
+    partition u-boot {
+        partition-type = 0xC
+        bootable = "true"
+        image = "boot.vfat"
+    }
+
+    partition rootfs {
+        partition-type = 0x83
+        image = "rootfs.ext4"
+        size = 1G
+    }
+}
+
+I program this directly onto the SD card with:
+
+    sudo dd if=./sdcard.img of=/dev/mmcblk0 bs=1M
+
+where /dev/mmcblk0 is how my SD card shows up in Ubuntu, as can be seen using lsblk.  This combination of boot and rootfs partitions goes through U-Boot successfully and gets me to a Linux login prompt.  So far, so good.
+
+Our board also has 8GB of eMMC memory.  I'd like to know how to use Buildroot to program boot/U-Boot and rootfs/Linux onto the eMMC so that we can boot directly from that without having to have an SD card installed.
+
+Can anyone provide instructions for partitioning, formatting, and installing an image suitable for booting from eMMC card?  I can have genimage create an eMMC.img file if the format needs to be different, but I'm just not sure what needs to be on the eMMC for this to work successfully.
+
+Many thanks for your help, and best regards!
+Scott Whitney | Contractor - Software Engineering
+scwhitn at amazon.com| o: xxx.xxx.xxx| m: 603.321.6662
+a: 300 Riverpark Drive, North Reading, MA 01864
+www.amazonrobotics.com
