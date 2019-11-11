@@ -1,46 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Nov 2019 16:29:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/systemd: hybrid cgroupfs
- hierarchy for docker compatibility
-In-Reply-To: <20191111083348.3964650-1-christian@paral.in>
-References: <20191111083348.3964650-1-christian@paral.in>
-Message-ID: <20191111162944.5529d1b2@windsurf.home>
+Date: Mon, 11 Nov 2019 16:29:58 +0100
+Subject: [Buildroot] [git commit] package/qt5wayland: fix installation with
+ Qt 5.6
+Message-ID: <20191111152243.EE70C8ED48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 Nov 2019 00:33:48 -0800
-Christian Stewart <christian@paral.in> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=21783d8403f4f41bd97014768e08f9fc355adf87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Docker fails to start with "Devices cgroup isn't mounted" as of systemd 243.
-> According to the systemd documentation:
-> 
->   systemd now defaults to the "unified" cgroup hierarchy setup during
->   build-time, i.e. -Ddefault-hierarchy=unified is now the build-time default.
->   Previously, -Ddefault-hierarchy=hybrid was the default. [...] Downstream
->   production distributions might want to continue to use
->   -Ddefault-hierarchy=hybrid (or even =legacy) for their builds as unfortunately
->   the popular container managers have not caught up with the kernel API changes.
-> 
-> Changing this option to "hybrid" or "legacy" fixes the Docker startup.
-> 
-> Reference: https://github.com/opencontainers/runc/issues/654
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/systemd/systemd.mk | 1 +
->  1 file changed, 1 insertion(+)
+Install QtWayland only if the latest Qt version is selected. It does not
+exist in version 5.6.
 
-Applied to master, thanks. It would be nice to have some runtime tests
-around Docker, to verify that it is still working properly at runtime,
-so that we can catch this kind of issues.
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5wayland/qt5wayland.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
+index 0bda596f3b..4790efc660 100644
+--- a/package/qt5/qt5wayland/qt5wayland.mk
++++ b/package/qt5/qt5wayland/qt5wayland.mk
+@@ -52,7 +52,7 @@ define QT5WAYLAND_INSTALL_COMPOSITOR
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Compositor.so* $(TARGET_DIR)/usr/lib
+ endef
+ endif
+-ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5_VERSION_LATEST),yy)
+ define QT5WAYLAND_INSTALL_COMPOSITOR_QMLS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtWayland $(TARGET_DIR)/usr/qml/
+ endef
