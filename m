@@ -1,67 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Nov 2019 16:28:14 +0100
-Subject: [Buildroot] [PATCH] configs/microchip: addition of the sama5d27
- wlsom1 ek board
-In-Reply-To: <1573463816-7843-1-git-send-email-eugen.hristev@microchip.com>
-References: <1573463816-7843-1-git-send-email-eugen.hristev@microchip.com>
-Message-ID: <20191111162814.4429c59d@windsurf.home>
+Date: Mon, 11 Nov 2019 16:28:36 +0100
+Subject: [Buildroot] [git commit] package/systemd: hybrid cgroupfs hierarchy
+ for docker compatibility
+Message-ID: <20191111152141.526E08ED42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Eugen,
+commit: https://git.buildroot.net/buildroot/commit/?id=272695277e2eaef5fa34bfb23bb3eb815a8ed933
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 11 Nov 2019 09:17:14 +0000
-<Eugen.Hristev@microchip.com> wrote:
+Docker fails to start with "Devices cgroup isn't mounted" as of systemd 243.
+According to the systemd documentation:
 
-> From: Eugen Hristev <eugen.hristev@microchip.com>
-> 
-> Add the new SAMA5D27 WLSOM1 Evaluation Kit with linux4sam_6.2 components.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
->  .../atmel/sama5d27_wlsom1_ek_mmc/genimage.cfg | 31 +++++++
->  ...ochip_sama5d27_wlsom1_ek_mmc_dev_defconfig | 87 +++++++++++++++++++
+  systemd now defaults to the "unified" cgroup hierarchy setup during
+  build-time, i.e. -Ddefault-hierarchy=unified is now the build-time default.
+  Previously, -Ddefault-hierarchy=hybrid was the default. [...] Downstream
+  production distributions might want to continue to use
+  -Ddefault-hierarchy=hybrid (or even =legacy) for their builds as unfortunately
+  the popular container managers have not caught up with the kernel API changes.
 
-Thanks for your contribution. However, we really want a minimal
-defconfig next to the "dev" defconfig that you are contributing.
+Changing this option to "hybrid" or "legacy" fixes the Docker startup.
 
-In addition, a new defconfig needs:
+Reference: https://github.com/opencontainers/runc/issues/654
 
- - A readme.txt file in board/atmel/ that explains how to use the
-   defconfig on the actual HW.
+Signed-off-by: Christian Stewart <christian@paral.in>
+Tested-by: J??r??my Rosen <jeremy.rosen@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/systemd/systemd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- - An update to the DEVELOPERS file to reference the newly added
-   defconfig and board files.
-
-
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
-> +BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-
-[...]
-
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-
-You can use a custom tarball like for the kernel above.
-
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_wlsom1_eksd_uboot"
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-
-Same here.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 94d5f703cd..92490eb86b 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -26,6 +26,7 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dima=false \
+ 	-Dldconfig=false \
+ 	-Ddefault-dnssec=no \
++	-Ddefault-hierarchy=hybrid \
+ 	-Dtests=false \
+ 	-Dsplit-bin=true \
+ 	-Dsplit-usr=false \
