@@ -1,55 +1,41 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 11 Nov 2019 20:22:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysrepo: fix host/staging
- install steps
-In-Reply-To: <20191111161247.51724528@windsurf.home>
-References: <20191103060113.4884-1-heiko.thiery@gmail.com>
- <20191108225833.6d81ea18@windsurf>
- <CAEyMn7Yg83V6bQoCG3-JH0ScRm=3qAxVLM3fKA_k1naKjFQqJw@mail.gmail.com>
- <20191111145304.00972312@windsurf.home>
- <CAEyMn7Zm+7k+Mwugu-oxRGUjfsyV3btam3DCdR+8mrenzdCzug@mail.gmail.com>
- <20191111152732.43c195c1@windsurf.home>
- <CAEyMn7bWYSitctm2hA6h-BTByHwOuYRyEUkVK-d6a2SsmDeiQQ@mail.gmail.com>
- <20191111154027.0e7bb998@windsurf.home>
- <CAEyMn7aeP+6eeW4+EDtVeB6+m9Dmsc-BUY0TTmsAC3rLdA7hFg@mail.gmail.com>
- <20191111155902.2751963d@windsurf.home>
- <CAEyMn7arpqUFV9trzwjMnwL6mK+eEYMenkpLhzpAPWBcD5XSCg@mail.gmail.com>
- <20191111161247.51724528@windsurf.home>
-Message-ID: <CAEyMn7aXzyzZJ4dgozKiBqSGpC+J_aFdS9Df3vSyVMjmJSdTxw@mail.gmail.com>
+From: Refik Tuzakli <tuzakli.refik@gmail.com>
+Date: Mon, 11 Nov 2019 22:40:15 +0300
+Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-cpp: bump version to 1.1
+Message-ID: <1573501215-26658-1-git-send-email-tuzakli.refik@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> schrieb am Mo., 11. Nov.
-2019, 16:12:
+Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
+---
+ package/paho-mqtt-cpp/paho-mqtt-cpp.hash | 2 +-
+ package/paho-mqtt-cpp/paho-mqtt-cpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> On Mon, 11 Nov 2019 16:04:15 +0100
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > Installing the sysrepo database to the target directory
->
-> And how do you do that? When does it happen?
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-
-When setting the REPOSITORY_LOC=$(TARGET_DIR)/etc/sysrepo in the host
-confguration the syrepo database
-is created correctly in the install step into the target dir. But then in
-all install steps (host, staging and target) the files
-are created in the target dir. Therefore I do not allow to use the sysrepo
-buildsystem install in host and staging step.
-The files that are incluenced form this REPOSITORY_LOC setting will en in
-"etc/sysrepo/yang/" and "etc/sysrepo/data".
-
---
-Heiko
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191111/c328202f/attachment.html>
+diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
+index b98e073..e5406e0 100644
+--- a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
++++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  e97386d159b811e534b98d21e3f6881ab2b43678ec026da7525d5c21ebc292ff  paho-mqtt-cpp-1.0.1.tar.gz
++sha256  cb0343349ed91ef51d0e76ae860d19435a730d3d355e57886bb090014cb70bbe  paho-mqtt-cpp-1.1.tar.gz
+ sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
+ sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
+diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
+index 246e076..2cb65d9 100644
+--- a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
++++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PAHO_MQTT_CPP_VERSION = 1.0.1
++PAHO_MQTT_CPP_VERSION = 1.1
+ PAHO_MQTT_CPP_SITE = $(call github,eclipse,paho.mqtt.cpp,v$(PAHO_MQTT_CPP_VERSION))
+ PAHO_MQTT_CPP_LICENSE = EPL-1.0 or BSD-3-Clause
+ PAHO_MQTT_CPP_LICENSE_FILES = epl-v10 edl-v10
+-- 
+2.7.4
