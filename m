@@ -1,118 +1,156 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Mon, 11 Nov 2019 17:12:13 +0000
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: Fix ARM
- build
-In-Reply-To: <c7a19ef5-03ee-64c5-bf1b-e84d220561ef@codethink.co.uk>
-References: <20191111124807.1151582-1-thomas.preston@codethink.co.uk>
- <20191111153657.1a56760e@windsurf.home>
- <c7a19ef5-03ee-64c5-bf1b-e84d220561ef@codethink.co.uk>
-Message-ID: <08d749aa-743d-d05c-7aae-b98e70862617@codethink.co.uk>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
+Date: Mon, 11 Nov 2019 18:24:34 +0100
+Subject: [Buildroot] [PATCH v2 0/9] use host-systemd to enable units
+Message-ID: <20191111172443.6874-1-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/11/2019 15:06, Thomas Preston wrote:
-> Hey,
-> Thanks for reviewing.
-> 
-> On 11/11/2019 14:36, Thomas Petazzoni wrote:
->> Hello Thomas,
->>
->> On Mon, 11 Nov 2019 12:48:07 +0000
->> Thomas Preston <thomas.preston@codethink.co.uk> wrote:
->>
->>> The ARM sys/io.h has been removed from upstream glibc, which is in
->>> buildroot. This causes the xorg-server build to fail on ARM when using
->>> the glibc toolchain.
->>>
->>> The following patches from upstream xserver fix this, but have not yet
->>> been released.
->>>
->>> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
->>
->> Do we have any autobuilder failures for this? From a quick look, I
->> don't see any. So the question is: why?
->>
-> 
-> I will reproduce and get back to you.
-> 
+As discussed during the buildroot dev days, upstream systemd now relies
+on systemctl to enable units at install time.
 
-I can reproduce with some changes to raspberrypi3_defconfig. The
-changes can be summarised as:
-- Switch glibc toolchain instead of uclibc
-- Enable xorg-server
+The patch bumping systemd to v243 in buildroot did add the logic to
+handle that through Makefiles.
 
-I don't think there are any defconfigs (except with my changes) which
-meet these conditions:
+This patch adds support for compiling host-systemd and using it to
+enable all units.
 
-	$ git grep -l BR2_arm=y configs | xargs grep -l GLIBC | xargs grep XORG_SERVER
-	configs/raspberrypi3_defconfig:BR2_PACKAGE_XSERVER_XORG_SERVER=y
+* 0001-new-recipe-host-systemd.patch
+I might have missed some build-dependencies. Please review carefully
 
-So this condition is never reproduced in the autobuilder.
+* 0002-use-host-systemctl-preset-all-to-enable-units.patch
+Use the previous patch to simplify the systemd recipe
 
-Here is the error:
+* 0003-fix-tty-handling.patch
+TTY handling is tricky. Separate it in its own patch
 
-	>>> xserver_xorg-server 1.20.5 Building
-	[snip]
-	In file included from lnx_init.c:33:
-	../../../../hw/xfree86/common/compiler.h:767:10: fatal error: sys/io.h: No such file or directory
-	 #include <sys/io.h>
-          ^~~~~~~~~~
-	compilation terminated.
+Everything else deals with updating the packages
 
-And here are my changes to raspberrypi3_defconfig:
+Version 2
+* run check-package
+* removed host-side configuration option
+* rework tty-handling to work with the now-upstreamed fix,
+  carry the corresponding patch locally until next systemd bump 
 
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 744b16dca9..0781a124d7 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -1,37 +1,27 @@
- BR2_arm=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_NEON_VFPV4=y
--
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
--
- BR2_SYSTEM_DHCP="eth0"
--
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
--
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
--
--# Build the DTB from the kernel sources
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus bcm2710-rpi-cm3"
--
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--
-+BR2_PACKAGE_XORG7=y
-+BR2_PACKAGE_XSERVER_XORG_SERVER=y
- BR2_PACKAGE_RPI_FIRMWARE=y
--
--# Required tools to create the SD image
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--
--# Filesystem / image
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+* package/dante : dropped patch. it is now default-enabled
+* package/linuxptp : enable both units by default
+* package/tor : dropped patch. it is now default-enabled
+* package/sysklogd : dropped patch. it is now default-enabled
+* package/targetfbcli : dropped patch. it is now default-enabled
+* package/docker : dropped patch. both service and socket are now enabled
+* package/avahi : dropped patch. it is now default-enabled
+* package/wpa_supplicant : enabled the daemon but not the templates
+  a patch in upstream-systemd has been submited
+  a patch in upstream wpa_supplicant has been around since 2014 :(
+
+
+J?r?my Rosen (9):
+  new recipe : host-systemd
+  use host-systemctl preset all to enable units
+  fix tty handling
+  fix trivial packages with buildroot-provided services
+  fix trivial cases, upstream-provided services
+  package/connman: adapt to preset-all
+  package/linuxptp adapt to preset-all
+  package/network-manager: adapt to preset-all
+  package/wpa_supplicant: adapt for preset-all
+
+ package/acpid/acpid.mk                        |   3 -
+ package/apache/apache.mk                      |   3 -
+ package/audit/audit.mk                        |   4 -
+ package/avahi/avahi.mk                        |   8 -
+ package/babeld/babeld.mk                      |   5 -
+ package/bandwidthd/bandwidthd.mk              |   5 -
+ package/bind/bind.mk                          |   5 -
+ package/bluez5_utils/bluez5_utils.mk          |   8 -
+ package/boinc/boinc.mk                        |   5 -
+ package/brltty/brltty.mk                      |   4 -
+ package/chrony/chrony.mk                      |   3 -
+ package/collectd/collectd.mk                  |   3 -
+ package/connman/connman.mk                    |   6 -
+ package/darkhttpd/darkhttpd.mk                |   3 -
+ package/dcron/dcron.mk                        |   3 -
+ package/dhcp/dhcp.mk                          |   5 -
+ package/dhcpcd/dhcpcd.mk                      |   3 -
+ package/domoticz/domoticz.mk                  |   3 -
+ package/dropbear/dropbear.mk                  |   3 -
+ package/exim/exim.mk                          |   3 -
+ package/fail2ban/fail2ban.mk                  |   3 -
+ package/freescale-imx/imx-uuc/imx-uuc.mk      |   3 -
+ package/gerbera/gerbera.mk                    |   6 -
+ package/haveged/haveged.mk                    |   3 -
+ package/i2pd/i2pd.mk                          |   3 -
+ package/ifupdown-scripts/ifupdown-scripts.mk  |   3 -
+ package/igd2-for-linux/igd2-for-linux.mk      |   3 -
+ package/inadyn/inadyn.mk                      |   3 -
+ .../input-event-daemon/input-event-daemon.mk  |   3 -
+ package/irqbalance/irqbalance.mk              |   3 -
+ package/iucode-tool/iucode-tool.mk            |   3 -
+ package/kodi/kodi.mk                          |   5 -
+ package/lighttpd/lighttpd.mk                  |   6 -
+ .../linuxptp/linuxptp-system-clock.service    |   1 -
+ package/linuxptp/linuxptp.mk                  |   3 -
+ package/lldpd/lldpd.mk                        |   6 -
+ package/mariadb/mariadb.mk                    |   3 -
+ package/mender/mender.mk                      |   3 -
+ package/mini-snmpd/mini-snmpd.mk              |   3 -
+ package/minidlna/minidlna.mk                  |   5 -
+ package/minissdpd/minissdpd.mk                |   3 -
+ package/mosquitto/mosquitto.mk                |   3 -
+ package/motion/motion.mk                      |   3 -
+ package/netplug/netplug.mk                    |   3 -
+ package/network-manager/network-manager.mk    |   7 -
+ package/nfs-utils/nfs-utils.mk                |  16 --
+ package/nginx/nginx.mk                        |   5 -
+ package/nss-pam-ldapd/nss-pam-ldapd.mk        |   3 -
+ package/ntp/ntp.mk                            |   3 -
+ package/ofono/ofono.mk                        |   6 -
+ package/olsr/olsr.mk                          |   3 -
+ package/openntpd/openntpd.mk                  |   3 -
+ package/openssh/openssh.mk                    |   3 -
+ package/openvmtools/openvmtools.mk            |   3 -
+ package/oracle-mysql/oracle-mysql.mk          |   3 -
+ package/pcsc-lite/pcsc-lite.mk                |   6 -
+ package/php/php.mk                            |   3 -
+ package/postgresql/postgresql.mk              |   3 -
+ package/proftpd/proftpd.mk                    |   3 -
+ package/psplash/psplash.mk                    |   6 -
+ package/ptpd/ptpd.mk                          |   3 -
+ package/ptpd2/ptpd2.mk                        |   3 -
+ package/pulseaudio/pulseaudio.mk              |   3 -
+ package/python-web2py/python-web2py.mk        |   3 -
+ package/rabbitmq-server/rabbitmq-server.mk    |   5 -
+ package/redis/redis.mk                        |   3 -
+ package/rng-tools/rng-tools.mk                |   3 -
+ package/rpcbind/rpcbind.mk                    |   3 -
+ package/rpi-userland/rpi-userland.mk          |   3 -
+ package/rsyslog/rsyslog.mk                    |  14 --
+ package/rygel/rygel.mk                        |   3 -
+ package/sane-backends/sane-backends.mk        |   6 -
+ package/squid/squid.mk                        |   3 -
+ package/sshguard/sshguard.mk                  |   3 -
+ package/supervisor/supervisor.mk              |   3 -
+ package/suricata/suricata.mk                  |   3 -
+ .../systemd-bootchart/systemd-bootchart.mk    |   6 -
+ .../0002-allow-an-empty-DefaultInstance.patch |  28 +++
+ package/systemd/80-buildroot.preset           |   4 +
+ package/systemd/Config.in                     |   1 +
+ package/systemd/systemd.mk                    | 221 ++++++++++--------
+ package/tcf-agent/tcf-agent.mk                |   3 -
+ package/thttpd/thttpd.mk                      |   3 -
+ package/ti-gfx/ti-gfx.mk                      |   3 -
+ package/tinyhttpd/tinyhttpd.mk                |   3 -
+ package/transmission/transmission.mk          |   3 -
+ package/triggerhappy/triggerhappy.mk          |   3 -
+ package/upmpdcli/upmpdcli.mk                  |   3 -
+ .../wpa_supplicant/50-wpa_supplicant.preset   |   4 +
+ package/wpa_supplicant/wpa_supplicant.mk      |   2 +
+ 90 files changed, 164 insertions(+), 431 deletions(-)
+ create mode 100644 package/systemd/0002-allow-an-empty-DefaultInstance.patch
+ create mode 100644 package/systemd/80-buildroot.preset
+ create mode 100644 package/wpa_supplicant/50-wpa_supplicant.preset
+
+-- 
+2.24.0.rc1
