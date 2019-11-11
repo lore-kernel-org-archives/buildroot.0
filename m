@@ -1,68 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2019 09:01:14 +0100
-Subject: [Buildroot] [git commit] Update for 2019.02.7
-Message-ID: <20191111075755.1560A8ED27@busybox.osuosl.org>
+Date: Mon, 11 Nov 2019 09:04:56 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2019.02.7
+Message-ID: <20191111075755.1F2A08ED27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=046735f5d17d0faa0a008b62fd9e260ad1c55e7a
+commit: https://git.buildroot.net/buildroot/commit/?id=ade15bbbbf07d7254a8e53d4e3711c49d9b5a773
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 83c2e5f6e3b0a27a171cad6de2b2e8b04dd8c517)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 9161ba16e8..b3bef0d234 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -550,6 +550,42 @@
- 	#11761: Building custom kernel 5.1-rc3 or later breaks on objtool
- 	#11816: Only selected coreutils binaries are installed
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 1674bc3340..0c831f9166 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
-+2019.02.7, Released November 10th, 2019
-+
-+	Important / security related fixes.
-+
-+	support/testing: use a kernel with HW_RANDOM_VIRTIO to work
-+	around issues with lack of entrophy
-+
-+	Toolchain: Also copy libssp.so for external toolchains if SSP
-+	is enabled to handle toolchains providing SSP support in
-+	libssp rather than in the C library
-+
-+	Download: Also use the package download method for extra
-+	downloads from the same site, so it does not get confused by
-+	URLs containing '+'
-+
-+	Fakeroot now works correctly under Microsoft Windows 10
-+	Services for Linux, which does not provide SYSV IPC support
-+
-+	utils/test-pkg: ensure to exit with an error upon failure
-+
-+	Updated/fixed packages: asterisk, azmq, cups-filters,
-+	domoticz, duma, elf2flt, eudev, exfat, exfat-utils, fakeroot,
-+	file, freerdp, gd, ghostscript, go, gvfs, intel-microcode,
-+	kvm-unit-tests, libarchive, libnspr, libnss, libopenssl,
-+	libpcap, libpciaccess, librsvg, libseccomp, libsigrok,
-+	libtorrent, libunwind, linux-tools, lua-sdl2, lxc, minizip,
-+	mjpegtools, mongoose, php, python, python-pysnmp-apps,
-+	python3, qemu, qt5base, ruby, safeclib, samba4, sdl_mixer,
-+	sox, sudo, systemd, tcpdump, unscd, util-lkinux, vtun, xvisor,
-+	yaffs2utils
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11366: [2018.08] SysV IPC not available for fakeroot on WSL
-+	#12261: sudo versions prior to 1.8.28 are affected
-+
- 2019.02.6, Released October 3rd, 2019
+-      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.6</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.7</b></h3>
  
- 	Important / security related fixes.
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2019.02.6.tar.gz">buildroot-2019.02.6.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.02.6.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.02.7.tar.gz">buildroot-2019.02.7.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2019.02.7.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2019.02.6.tar.bz2">buildroot-2019.02.6.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.02.6.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.02.7.tar.bz2">buildroot-2019.02.7.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2019.02.7.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index c714e8d4bd..8528713847 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2019.02.7 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 November 2019</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2019.02.7 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2019.02.6 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.7">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-November/265909.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2019.02.7.tar.bz2">2019.02.7 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
