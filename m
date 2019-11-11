@@ -1,49 +1,76 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Mon, 11 Nov 2019 18:24:43 +0100
-Subject: [Buildroot] [PATCH v2 9/9] package/wpa_supplicant: adapt for
- preset-all
-In-Reply-To: <20191111172443.6874-1-jeremy.rosen@smile.fr>
-References: <20191111172443.6874-1-jeremy.rosen@smile.fr>
-Message-ID: <20191111172443.6874-10-jeremy.rosen@smile.fr>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Mon, 11 Nov 2019 18:47:07 +0000
+Subject: [Buildroot] [PATCH 1/3] arch/config.in.arc: Introduce the ARC
+ optimized hs38 config
+In-Reply-To: <20191109144656.3da6a1b0@windsurf>
+References: <20191108174112.28183-1-vgupta@synopsys.com>
+ <20191108174112.28183-2-vgupta@synopsys.com>
+ <20191109144656.3da6a1b0@windsurf>
+Message-ID: <1112f6a7-8a23-6cd9-0af0-76e0b92e496b@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-all services were installed but not enabled.
-This change enables the service but not the templates
+Hi Thomas,
 
-Enabling the templates creates weird links which are probably an
-upstream bug.
----
- package/wpa_supplicant/50-wpa_supplicant.preset | 4 ++++
- package/wpa_supplicant/wpa_supplicant.mk        | 2 ++
- 2 files changed, 6 insertions(+)
- create mode 100644 package/wpa_supplicant/50-wpa_supplicant.preset
+On 11/9/19 5:46 AM, Thomas Petazzoni wrote:
+> Hello,
+>
+> +Arnout for legacy handling.
+>
+> On Fri,  8 Nov 2019 09:41:10 -0800
+> Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+>
+>> This corresponds to -mcu=hs38 with mpy-option=9 (64-bit multiplier)
+>>
+>> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+>> ---
+>>  arch/Config.in.arc | 21 ++++++++++++++-------
+>>  1 file changed, 14 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+>> index c65bb01f1f4f..284951b82cee 100644
+>> --- a/arch/Config.in.arc
+>> +++ b/arch/Config.in.arc
+>> @@ -11,13 +11,19 @@ config BR2_arc750d
+>>  config BR2_arc770d
+>>  	bool "ARC 770D"
+>>  
+>> -config BR2_archs38
+>> +config BR2_archs
+>>  	bool "ARC HS38"
+>>  	help
+>>  	  Generic ARC HS capable of running Linux, i.e. with MMU,
+>> -	  caches and multiplier. Also it corresponds to the default
+>> +	  caches and 32-bit multiplier. Also it corresponds to the default
+>>  	  configuration in older GNU toolchain versions.
+>>  
+>> +config BR2_archs38
+> This re-use of an existing name is a bit annoying. Indeed, all existing
+> users of Buildroot that have a configuration with BR2_archs38 will now
+> be building for a ARC system with a 64-bit multiplier, while they were
+> previously building for a 32-bit multiplier.
+>
+> I see that what you have done is to try to be consistent between the
+> BR2_ options and the gcc options. I'm hesitating between keeping the
+> consistency but making the migration a bit annoying for users, or
+> breaking the consistency to make the migration smooth for users.
+>
+> Since I think the number of affected users will probably be quite
+> small/limited, I think I would be fine with merging your patch as-is,
+> but I'd like to hear from others.
 
-diff --git a/package/wpa_supplicant/50-wpa_supplicant.preset b/package/wpa_supplicant/50-wpa_supplicant.preset
-new file mode 100644
-index 0000000000..9af8562c0e
---- /dev/null
-+++ b/package/wpa_supplicant/50-wpa_supplicant.preset
-@@ -0,0 +1,4 @@
-+disable wpa_supplicant at .service
-+disable wpa_supplicant-nl80211 at .service
-+disable wpa_supplicant-wired at .service
-+
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 9dcebca9bf..42b12b1fb4 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -227,6 +227,8 @@ define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-nl80211 at .service
- 	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-wired at .service
-+	$(INSTALL) -D -m 644 package/wpa_supplicant/50-wpa_supplicant.preset \
-+		$(TARGET_DIR)/usr/lib/systemd/system-preset/50-wpa_supplicant.preset
- endef
- 
- $(eval $(generic-package))
--- 
-2.24.0.rc1
+I agree that this might cause potential breakage, but this is not totally
+uncharted territory for software build config. We've been building Linux kernel
+with this option as default since mid 2018.
+
+2018-09-07 00a99339f0a3 ARCv2: build: use mcpu=hs38 iso generic mcpu=archs?
+
+Granted that kernel build is just one part of puzzle and any latent codegen issues
+are more likely to surface with default applied to full software stack, I would
+still vote for switching default to -mcpu=hs38
+
+Thx,
+-Vineet
