@@ -1,75 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Nov 2019 14:53:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysrepo: fix host/staging
- install steps
-In-Reply-To: <CAEyMn7Yg83V6bQoCG3-JH0ScRm=3qAxVLM3fKA_k1naKjFQqJw@mail.gmail.com>
-References: <20191103060113.4884-1-heiko.thiery@gmail.com>
- <20191108225833.6d81ea18@windsurf>
- <CAEyMn7Yg83V6bQoCG3-JH0ScRm=3qAxVLM3fKA_k1naKjFQqJw@mail.gmail.com>
-Message-ID: <20191111145304.00972312@windsurf.home>
+Date: Mon, 11 Nov 2019 14:55:12 +0100
+Subject: [Buildroot] [PATCH 1/2] package/gcnano-binaries: new package
+In-Reply-To: <trinity-d44d2103-0290-4df8-bdc8-499800075a5c-1573480088102@3c-app-webde-bs25>
+References: <20191106155611.31575-1-scooby22@web.de>
+ <20191106155611.31575-2-scooby22@web.de>
+ <20191106230831.0a4017c6@windsurf>
+ <trinity-e5303488-a97e-46bb-8738-520846b1c6db-1573110060239@3c-app-webde-bap18>
+ <trinity-5b74f91d-c30f-42b7-9c54-1a49e1f58aee-1573467571744@3c-app-webde-bs25>
+ <20191111141609.757023f1@windsurf>
+ <trinity-d44d2103-0290-4df8-bdc8-499800075a5c-1573480088102@3c-app-webde-bs25>
+Message-ID: <20191111145512.6be6c762@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Heiko,
+On Mon, 11 Nov 2019 14:48:08 +0100
+"Jens Kleintje" <Scooby22@web.de> wrote:
 
-On Sun, 10 Nov 2019 17:00:14 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+> > Not a problem, the github macro works with any arbitrary commit.  
+> The problem is, that I get everytime the HEAD and not the commit with SHA c01642ed5e18cf09ecd905af193e935cb3be95ed.
+> Today I got the commit with SHA 271f87d816a957bf196f6328c34110cab1224d4d.
+> Did I miss something?
 
-> > Do you have a minimal/simple defconfig that allows to reproduce the problem?
-> >
-> > When I build this simple configuration:
-> >
-> > BR2_arm=y
-> > BR2_TOOLCHAIN_EXTERNAL=y
-> > BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> > BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> > BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.05.1.tar.bz2"
-> > BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> > BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-> > BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> > # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> > BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> > BR2_INIT_NONE=y
-> > BR2_SYSTEM_BIN_SH_NONE=y
-> > # BR2_PACKAGE_BUSYBOX is not set
-> > BR2_PACKAGE_SYSREPO=y
-> > # BR2_TARGET_ROOTFS_TAR is not set
-> >
-> > It builds just fine, with no problem. What is the thing that triggers
-> > the issue ?  
-> 
-> Your defconfig shows the problem not while building rather in the install step.
+Depends on how you did it I guess. Did you do it like this:
 
-Hu? When I said "build", it of course means a Buildroot build, so it
-does both the build and installation of all packages.
-
-The autobuilder failures happens at Buildroot build time, and I was not
-able to reproduce it, and therefore not able to check that your patch
-solves it.
-
-> the main problem is that the sysrepo cmake build system has a config
-> option REPOSITORY_LOC. This folder is used to set the target of the
-> sysrepo database. Since we want to create this database during the
-> build in the target we have to set this variable to the target
-> directory (currently still a bug in the last applied package). But
-> when setting this directory to the target the host install step also
-> installs stuff (yang models) in this directory. That means host
-> install touches the target directory. I think this is not correct.
-
-True.
-
-> Is there a way to check that the steps only installs/touchs files in
-> the directories they are responsible? With this the problem above
-> could be shown easier.
-
-Not easily no, and there are some packages that violate this rule.
-While not nice, some packages are quite complicated and cannot be
-fixed. An example is the qt5base package, which mainly builds/installs
-Qt5 libraries for the target, but as a side effect also installs some
-host tools in $(HOST_DIR).
+V4L2GRAB_VERSION = f8d8844d52387b3db7b8736f5e86156d9374f781
+V4L2GRAB_SITE = $(call github,twam,v4l2grab,$(V4L2GRAB_VERSION))
 
 Thomas
 -- 
