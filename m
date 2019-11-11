@@ -1,73 +1,106 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Mon, 11 Nov 2019 15:06:54 +0000
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: Fix ARM
- build
-In-Reply-To: <20191111153657.1a56760e@windsurf.home>
-References: <20191111124807.1151582-1-thomas.preston@codethink.co.uk>
- <20191111153657.1a56760e@windsurf.home>
-Message-ID: <c7a19ef5-03ee-64c5-bf1b-e84d220561ef@codethink.co.uk>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Mon, 11 Nov 2019 15:05:34 +0000
+Subject: [Buildroot] [PATCH 1/1] package/pigpio: add sysv and systemd init
+ scripts
+Message-ID: <20191111150534.1181-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
-Thanks for reviewing.
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ package/pigpio/S50pigpio      | 40 +++++++++++++++++++++++++++++++++++
+ package/pigpio/pigpio.mk      | 13 ++++++++++++
+ package/pigpio/pigpio.service | 10 +++++++++
+ 3 files changed, 63 insertions(+)
+ create mode 100644 package/pigpio/S50pigpio
+ create mode 100644 package/pigpio/pigpio.service
 
-On 11/11/2019 14:36, Thomas Petazzoni wrote:
-> Hello Thomas,
-> 
-> On Mon, 11 Nov 2019 12:48:07 +0000
-> Thomas Preston <thomas.preston@codethink.co.uk> wrote:
-> 
->> The ARM sys/io.h has been removed from upstream glibc, which is in
->> buildroot. This causes the xorg-server build to fail on ARM when using
->> the glibc toolchain.
->>
->> The following patches from upstream xserver fix this, but have not yet
->> been released.
->>
->> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
-> 
-> Do we have any autobuilder failures for this? From a quick look, I
-> don't see any. So the question is: why?
-> 
-
-I will reproduce and get back to you.
-
->> diff --git a/package/x11r7/xserver_xorg-server/1.20.5/0006-compiler.h-only-use-inx-outx-on-ARM-with-glibc.patch b/package/x11r7/xserver_xorg-server/1.20.5/0006-compiler.h-only-use-inx-outx-on-ARM-with-glibc.patch
->> new file mode 100644
->> index 0000000000..f1b27d7484
->> --- /dev/null
->> +++ b/package/x11r7/xserver_xorg-server/1.20.5/0006-compiler.h-only-use-inx-outx-on-ARM-with-glibc.patch
->> @@ -0,0 +1,32 @@
->> +From 6a2ce6c5da9456b97683db6224f38ef3b02cce4b Mon Sep 17 00:00:00 2001
->> +From: Ross Burton <ross.burton@intel.com>
->> +Date: Thu, 20 Sep 2018 13:21:34 +0100
->> +Subject: [PATCH 1/2] compiler.h: only use inx/outx on ARM with glibc
-> 
-> Use "git format-patch -N" when generating patches, so that we don't
-> have the "PATCH 1/2" prefix, but just "PATCH". Indeed PATCH 1/2 for a
-> patch labeled 0006-something is a bit useless.
-> 
-
-Noted, thanks.
-
->> +
->> +musl only implements inx/outx on x86, so check for __GLIBC__ instead of
->> +__linux__.
->> +
->> +Signed-off-by: Ross Burton <ross.burton@intel.com>
-> 
-> But this commit doesn't seem at all related to the glibc failure, it
-> would rather be useful to fix a build issue against the musl C library.
-> I also don't see such build failures in our autobuilders. Why?
-
-I'm not sure about failures on musl, I included this commit is to provide
-context for the next patch.
-
-Is it normal to pull in patches in from upstream or are "buildroot patches"
-specifically to fix buildroot build errors. Eg. the context patch above
-doesn't fix anything for buildroot per say, just prepares the source for
-the following patch.
+diff --git a/package/pigpio/S50pigpio b/package/pigpio/S50pigpio
+new file mode 100644
+index 0000000000..7b2e979600
+--- /dev/null
++++ b/package/pigpio/S50pigpio
+@@ -0,0 +1,40 @@
++#!/bin/sh
++#
++# Starts pigpio daemon.
++#
++
++# Allow a few customizations from a config file
++test -r /etc/default/pigpio && . /etc/default/pigpio
++
++start() {
++	printf "Starting pigpio daemon: "
++	umask 077
++	pigpiod $PIGPIOD_ARGS
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++stop() {
++	printf "Stopping pigpio daemon: "
++	start-stop-daemon -K -q -p /var/run/pigpio.pid
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	restart
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
+index 1cf8f50afc..e8c37621d9 100644
+--- a/package/pigpio/pigpio.mk
++++ b/package/pigpio/pigpio.mk
+@@ -38,4 +38,17 @@ define PIGPIO_INSTALL_STAGING_CMDS
+ 	ln -sf libpigpiod_if2.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if2.so
+ endef
+ 
++define PIGPIO_INSTALL_INIT_SYSV
++        $(INSTALL) -D -m 755 package/pigpio/S50pigpio \
++                $(TARGET_DIR)/etc/init.d/S50pigpio
++endef
++
++define PIGPIO_INSTALL_INIT_SYSTEMD
++        $(INSTALL) -D -m 644 package/pigpio/pigpio.service \
++                $(TARGET_DIR)/usr/lib/systemd/system/pigpio.service
++        mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++        ln -fs ../../../../usr/lib/systemd/system/pigpio.service \
++                $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/pigpio.service
++endef
++
+ $(eval $(generic-package))
+diff --git a/package/pigpio/pigpio.service b/package/pigpio/pigpio.service
+new file mode 100644
+index 0000000000..135624cc43
+--- /dev/null
++++ b/package/pigpio/pigpio.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Pigpio daemon
++After=network.target
++
++[Service]
++EnvironmentFile=-/etc/default/pigpio
++ExecStart=/usr/bin/pigpiod -g $PIGPIOD_ARGS
++
++[Install]
++WantedBy=multi-user.target
+-- 
+2.24.0
