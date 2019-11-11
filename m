@@ -1,100 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2019 09:04:56 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2019.02.7
-Message-ID: <20191111075755.1F2A08ED27@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 11 Nov 2019 01:05:46 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-aiomonitor: bump to version
+ 0.4.5
+Message-ID: <20191111080546.5688-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ade15bbbbf07d7254a8e53d4e3711c49d9b5a773
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ package/python-aiomonitor/python-aiomonitor.hash | 4 ++--
+ package/python-aiomonitor/python-aiomonitor.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 1674bc3340..0c831f9166 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/package/python-aiomonitor/python-aiomonitor.hash b/package/python-aiomonitor/python-aiomonitor.hash
+index 14a4466ddd..410beb7973 100644
+--- a/package/python-aiomonitor/python-aiomonitor.hash
++++ b/package/python-aiomonitor/python-aiomonitor.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiomonitor/json
+-md5	38028c80adf5708ad5f7adadf0fdf404  aiomonitor-0.4.4.tar.gz
+-sha256	c3e0d79cb637baa06ce50db8070e8db0798e16ea626606b703d9d0e3ca5b30ff  aiomonitor-0.4.4.tar.gz
++md5	5f184e4b97ea161fc2d690aef604f997  aiomonitor-0.4.5.tar.gz
++sha256	6232c1ab14bf06cd7217845801c27340032f74e283bdaf32d01cdd3b7c673d0e  aiomonitor-0.4.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256	9b42fe3a288996988c552e387e7877be7525a1649e62086aedd6b32d3cb56365  LICENSE
+diff --git a/package/python-aiomonitor/python-aiomonitor.mk b/package/python-aiomonitor/python-aiomonitor.mk
+index 4cd7254bdd..a8860097d5 100644
+--- a/package/python-aiomonitor/python-aiomonitor.mk
++++ b/package/python-aiomonitor/python-aiomonitor.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.6</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.7</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2019.02.6.tar.gz">buildroot-2019.02.6.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2019.02.6.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.02.7.tar.gz">buildroot-2019.02.7.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.02.7.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2019.02.6.tar.bz2">buildroot-2019.02.6.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2019.02.6.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.02.7.tar.bz2">buildroot-2019.02.7.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.02.7.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index c714e8d4bd..8528713847 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.02.7 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 November 2019</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2019.02.7 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2019.02.6 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.7">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-November/265909.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.02.7.tar.bz2">2019.02.7 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+-PYTHON_AIOMONITOR_VERSION = 0.4.4
++PYTHON_AIOMONITOR_VERSION = 0.4.5
+ PYTHON_AIOMONITOR_SOURCE = aiomonitor-$(PYTHON_AIOMONITOR_VERSION).tar.gz
+-PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/fe/15/ac345a2a55ef106b466347c58ebc5f77ef491aea5a05f700e80a181cda47
++PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/98/76/b62e9fbe267287527fb6f4b6774394d4f00650195774173bb0055a99ab3d
+ PYTHON_AIOMONITOR_SETUP_TYPE = setuptools
+ PYTHON_AIOMONITOR_LICENSE = Apache-2.0
+ PYTHON_AIOMONITOR_LICENSE_FILES = LICENSE
+-- 
+2.20.1
