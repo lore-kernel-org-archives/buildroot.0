@@ -1,47 +1,93 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 11 Nov 2019 00:55:55 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-session: bump to
- version 2.9.0
-Message-ID: <20191111075555.117744-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Nov 2019 08:56:57 +0100
+Subject: [Buildroot] Buildroot 2019.02.7 released
+Message-ID: <87zhh2kfqu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-aiohttp-session/python-aiohttp-session.hash | 4 ++--
- package/python-aiohttp-session/python-aiohttp-session.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi,
 
-diff --git a/package/python-aiohttp-session/python-aiohttp-session.hash b/package/python-aiohttp-session/python-aiohttp-session.hash
-index 794c272b0d..f10827b616 100644
---- a/package/python-aiohttp-session/python-aiohttp-session.hash
-+++ b/package/python-aiohttp-session/python-aiohttp-session.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp-session/json
--md5	64ba16af01abad4fc1feaf16fba574c6  aiohttp-session-2.8.0.tar.gz
--sha256	4975ad108341520a7107f5e4d482c6a9f2bbc367b9c9b08e7df524d353f5f0cb  aiohttp-session-2.8.0.tar.gz
-+md5	993ec277ece4765472d0edc0f6c0bba3  aiohttp-session-2.9.0.tar.gz
-+sha256	959413468b84e30e7ca09719617cfb0000066a2e0f6c20062d043433e82aeb74  aiohttp-session-2.9.0.tar.gz
- # Locally computed sha256 checksums
- sha256	2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
-diff --git a/package/python-aiohttp-session/python-aiohttp-session.mk b/package/python-aiohttp-session/python-aiohttp-session.mk
-index 093459a9ca..8fcd8e21b9 100644
---- a/package/python-aiohttp-session/python-aiohttp-session.mk
-+++ b/package/python-aiohttp-session/python-aiohttp-session.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_AIOHTTP_SESSION_VERSION = 2.8.0
-+PYTHON_AIOHTTP_SESSION_VERSION = 2.9.0
- PYTHON_AIOHTTP_SESSION_SOURCE = aiohttp-session-$(PYTHON_AIOHTTP_SESSION_VERSION).tar.gz
--PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/a1/da/d49d017faadb5e2c754fce83e1bd3fbcea9d10bc970bc8df9471880463f0
-+PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/f8/fe/53dfd35f5c7fcc7f2d0866cb29e722303e3fae7f749c1f3d4d11d361dc38
- PYTHON_AIOHTTP_SESSION_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_SESSION_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_SESSION_LICENSE_FILES = LICENSE
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
+
+Buildroot 2019.02.7 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2019.02.7.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2019.02.7.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2019.02.7 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2019.02.6 release. The 2019.02.x series is
+supported until March 2020.
+
+- Toolchain: Also copy libssp.so for external toolchains if SSP is
+  enabled to handle toolchains providing SSP support in libssp rather
+  than in the C library
+
+- Download: Also use the package download method for extra downloads
+  from the same site, so it does not get confused by URLs containing '+'
+
+- Fakeroot now works correctly under Microsoft Windows 10 Services for
+  Linux, which does not provide SYSV IPC support
+
+- Security fixes for asterisk, file, gd, ghostscript, go,
+  intel-microcode, libarchive, libnss, libpcap, mongoose, php, python,
+  python3, ruby, samba4, sudo, tcpdump
+
+- Fixes for download/compilation/runtime issues in azmq, cups-filters,
+  domoticz, duma, elf2flt, eudev, exfat, exfat-utils, fakeroot, freerdp,
+  gvfs, kvm-unit-tests, libseccomp, libopenssl, librsvg, libsigrok,
+  libtorrent, libunwind, linux-tools, lua-sdl2, lxc, minizip,
+  mjpegtools, python-pysnmp-apps, qemu, qt5base, ruby, safeclib,
+  sdl_mixer, sox, systemd, unscd, vtun, xvisor, yaffs2utils
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.7
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2019.02.6..
+
+    21  Fabrice Fontaine
+    14  Peter Korsgaard
+    11  Bernd Kuhls
+     5  Carlos Santos
+     5  Giulio Benetti
+     5  Yann E. MORIN
+     4  Thomas Petazzoni
+     3  Ricardo Martincoski
+     3  Romain Naour
+     2  Asaf Kahlon
+     2  Baruch Siach
+     2  Matt Weber
+     2  Vivien Didelot
+     2  Yann Droneaud
+     1  Alexey Brodkin
+     1  Alexey Lukyanchuk
+     1  Andrey Skvortsov
+     1  Arnout Vandecappelle (Essensium/Mind)
+     1  Francois Perrad
+     1  Heiko Thiery
+     1  James Hilliard
+     1  Nicolas Carrier
+     1  Patrick Havelange
+     1  Paulo Matos
+     1  Pierre-Jean Texier
+     1  Simon Rowe
+     1  Wolfgang Grandegger
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
