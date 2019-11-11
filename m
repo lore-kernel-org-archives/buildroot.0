@@ -1,51 +1,49 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Mon, 11 Nov 2019 18:24:42 +0100
-Subject: [Buildroot] [PATCH v2 8/9] package/network-manager: adapt to
+Date: Mon, 11 Nov 2019 18:24:43 +0100
+Subject: [Buildroot] [PATCH v2 9/9] package/wpa_supplicant: adapt for
  preset-all
 In-Reply-To: <20191111172443.6874-1-jeremy.rosen@smile.fr>
 References: <20191111172443.6874-1-jeremy.rosen@smile.fr>
-Message-ID: <20191111172443.6874-9-jeremy.rosen@smile.fr>
+Message-ID: <20191111172443.6874-10-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NM has three services
-* NetworkManger.service : the main daemon
-* NetworkManger-dispatcher.service : a daemon handling network callbacks
-* NetworkManager-wait-online.service : sync of other services with network-online
+all services were installed but not enabled.
+This change enables the service but not the templates
 
-Only the first two were activated. We now also enable
-wait-online. Not enabling it was probably a bug.
-
-Note that buildroot adds an alias dbus-org.freedesktop.NetworkManager
-Adding an alias that is not known upstream is not clean,
-but I left it for backward compatibility
+Enabling the templates creates weird links which are probably an
+upstream bug.
 ---
- package/network-manager/network-manager.mk | 7 -------
- 1 file changed, 7 deletions(-)
+ package/wpa_supplicant/50-wpa_supplicant.preset | 4 ++++
+ package/wpa_supplicant/wpa_supplicant.mk        | 2 ++
+ 2 files changed, 6 insertions(+)
+ create mode 100644 package/wpa_supplicant/50-wpa_supplicant.preset
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index e913d69927..9ec205cc04 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -88,16 +88,9 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSV
+diff --git a/package/wpa_supplicant/50-wpa_supplicant.preset b/package/wpa_supplicant/50-wpa_supplicant.preset
+new file mode 100644
+index 0000000000..9af8562c0e
+--- /dev/null
++++ b/package/wpa_supplicant/50-wpa_supplicant.preset
+@@ -0,0 +1,4 @@
++disable wpa_supplicant at .service
++disable wpa_supplicant-nl80211 at .service
++disable wpa_supplicant-wired at .service
++
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 9dcebca9bf..42b12b1fb4 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -227,6 +227,8 @@ define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-nl80211 at .service
+ 	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-wired at .service
++	$(INSTALL) -D -m 644 package/wpa_supplicant/50-wpa_supplicant.preset \
++		$(TARGET_DIR)/usr/lib/systemd/system-preset/50-wpa_supplicant.preset
  endef
  
- define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--
- 	ln -sf /usr/lib/systemd/system/NetworkManager.service \
- 		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
- 
--	ln -sf /usr/lib/systemd/system/NetworkManager.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager.service
--
--	ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
--		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
- endef
- 
- $(eval $(autotools-package))
+ $(eval $(generic-package))
 -- 
 2.24.0.rc1
