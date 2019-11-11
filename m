@@ -1,57 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Nov 2019 15:36:57 +0100
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: Fix ARM
- build
-In-Reply-To: <20191111124807.1151582-1-thomas.preston@codethink.co.uk>
-References: <20191111124807.1151582-1-thomas.preston@codethink.co.uk>
-Message-ID: <20191111153657.1a56760e@windsurf.home>
+Date: Mon, 11 Nov 2019 15:39:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: hybrid cgroupfs
+ hierarchy for docker compatibility
+In-Reply-To: <CAFvCimUCex67b=3_NMgM=aWwfL=jSaJ00FFZ+o4=fHStXTpt2w@mail.gmail.com>
+References: <20191111083348.3964650-1-christian@paral.in>
+ <CADvTj4o4m-CSrPiJ_FSLKzUhxTKacMRVRKFjf99jUgCrLJKhrQ@mail.gmail.com>
+ <CAFvCimUCex67b=3_NMgM=aWwfL=jSaJ00FFZ+o4=fHStXTpt2w@mail.gmail.com>
+Message-ID: <20191111153905.59ab2f4c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello,
 
-On Mon, 11 Nov 2019 12:48:07 +0000
-Thomas Preston <thomas.preston@codethink.co.uk> wrote:
+On Mon, 11 Nov 2019 11:09:27 +0100
+J?r?my ROSEN <jeremy.rosen@smile.fr> wrote:
 
-> The ARM sys/io.h has been removed from upstream glibc, which is in
-> buildroot. This causes the xorg-server build to fail on ARM when using
-> the glibc toolchain.
-> 
-> The following patches from upstream xserver fix this, but have not yet
-> been released.
-> 
-> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+> Keeping a list like that is going to be tricky...
 
-Do we have any autobuilder failures for this? From a quick look, I
-don't see any. So the question is: why?
+You don't really have to keep a list. You can have a blind option:
 
-> diff --git a/package/x11r7/xserver_xorg-server/1.20.5/0006-compiler.h-only-use-inx-outx-on-ARM-with-glibc.patch b/package/x11r7/xserver_xorg-server/1.20.5/0006-compiler.h-only-use-inx-outx-on-ARM-with-glibc.patch
-> new file mode 100644
-> index 0000000000..f1b27d7484
-> --- /dev/null
-> +++ b/package/x11r7/xserver_xorg-server/1.20.5/0006-compiler.h-only-use-inx-outx-on-ARM-with-glibc.patch
-> @@ -0,0 +1,32 @@
-> +From 6a2ce6c5da9456b97683db6224f38ef3b02cce4b Mon Sep 17 00:00:00 2001
-> +From: Ross Burton <ross.burton@intel.com>
-> +Date: Thu, 20 Sep 2018 13:21:34 +0100
-> +Subject: [PATCH 1/2] compiler.h: only use inx/outx on ARM with glibc
+config BR2_PACKAGE_SYSTEMD_NEEDS_HYBRID_HIERARCHY
+	bool
 
-Use "git format-patch -N" when generating patches, so that we don't
-have the "PATCH 1/2" prefix, but just "PATCH". Indeed PATCH 1/2 for a
-patch labeled 0006-something is a bit useless.
+systemd.mk would observe this boolean to enable (or not) the hybrid
+hierarchy, and packages that need it would select this boolean.
 
-> +
-> +musl only implements inx/outx on x86, so check for __GLIBC__ instead of
-> +__linux__.
-> +
-> +Signed-off-by: Ross Burton <ross.burton@intel.com>
-
-But this commit doesn't seem at all related to the glibc failure, it
-would rather be useful to fix a build issue against the musl C library.
-I also don't see such build failures in our autobuilders. Why?
+That being said, is there any drawback in unconditionally using the
+hybrid hierarchy? James, since you suggested to make it conditional, do
+you have some arguments/feedback?
 
 Thanks,
 
