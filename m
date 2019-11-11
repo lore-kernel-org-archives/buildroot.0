@@ -1,106 +1,35 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Mon, 11 Nov 2019 15:05:34 +0000
-Subject: [Buildroot] [PATCH 1/1] package/pigpio: add sysv and systemd init
- scripts
-Message-ID: <20191111150534.1181-1-grzegorz@blach.pl>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 11 Nov 2019 16:12:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sysrepo: fix host/staging
+ install steps
+In-Reply-To: <CAEyMn7arpqUFV9trzwjMnwL6mK+eEYMenkpLhzpAPWBcD5XSCg@mail.gmail.com>
+References: <20191103060113.4884-1-heiko.thiery@gmail.com>
+ <20191108225833.6d81ea18@windsurf>
+ <CAEyMn7Yg83V6bQoCG3-JH0ScRm=3qAxVLM3fKA_k1naKjFQqJw@mail.gmail.com>
+ <20191111145304.00972312@windsurf.home>
+ <CAEyMn7Zm+7k+Mwugu-oxRGUjfsyV3btam3DCdR+8mrenzdCzug@mail.gmail.com>
+ <20191111152732.43c195c1@windsurf.home>
+ <CAEyMn7bWYSitctm2hA6h-BTByHwOuYRyEUkVK-d6a2SsmDeiQQ@mail.gmail.com>
+ <20191111154027.0e7bb998@windsurf.home>
+ <CAEyMn7aeP+6eeW4+EDtVeB6+m9Dmsc-BUY0TTmsAC3rLdA7hFg@mail.gmail.com>
+ <20191111155902.2751963d@windsurf.home>
+ <CAEyMn7arpqUFV9trzwjMnwL6mK+eEYMenkpLhzpAPWBcD5XSCg@mail.gmail.com>
+Message-ID: <20191111161247.51724528@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
- package/pigpio/S50pigpio      | 40 +++++++++++++++++++++++++++++++++++
- package/pigpio/pigpio.mk      | 13 ++++++++++++
- package/pigpio/pigpio.service | 10 +++++++++
- 3 files changed, 63 insertions(+)
- create mode 100644 package/pigpio/S50pigpio
- create mode 100644 package/pigpio/pigpio.service
+On Mon, 11 Nov 2019 16:04:15 +0100
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-diff --git a/package/pigpio/S50pigpio b/package/pigpio/S50pigpio
-new file mode 100644
-index 0000000000..7b2e979600
---- /dev/null
-+++ b/package/pigpio/S50pigpio
-@@ -0,0 +1,40 @@
-+#!/bin/sh
-+#
-+# Starts pigpio daemon.
-+#
-+
-+# Allow a few customizations from a config file
-+test -r /etc/default/pigpio && . /etc/default/pigpio
-+
-+start() {
-+	printf "Starting pigpio daemon: "
-+	umask 077
-+	pigpiod $PIGPIOD_ARGS
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+stop() {
-+	printf "Stopping pigpio daemon: "
-+	start-stop-daemon -K -q -p /var/run/pigpio.pid
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
-+	;;
-+  restart|reload)
-+	restart
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
-index 1cf8f50afc..e8c37621d9 100644
---- a/package/pigpio/pigpio.mk
-+++ b/package/pigpio/pigpio.mk
-@@ -38,4 +38,17 @@ define PIGPIO_INSTALL_STAGING_CMDS
- 	ln -sf libpigpiod_if2.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if2.so
- endef
- 
-+define PIGPIO_INSTALL_INIT_SYSV
-+        $(INSTALL) -D -m 755 package/pigpio/S50pigpio \
-+                $(TARGET_DIR)/etc/init.d/S50pigpio
-+endef
-+
-+define PIGPIO_INSTALL_INIT_SYSTEMD
-+        $(INSTALL) -D -m 644 package/pigpio/pigpio.service \
-+                $(TARGET_DIR)/usr/lib/systemd/system/pigpio.service
-+        mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+        ln -fs ../../../../usr/lib/systemd/system/pigpio.service \
-+                $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/pigpio.service
-+endef
-+
- $(eval $(generic-package))
-diff --git a/package/pigpio/pigpio.service b/package/pigpio/pigpio.service
-new file mode 100644
-index 0000000000..135624cc43
---- /dev/null
-+++ b/package/pigpio/pigpio.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Pigpio daemon
-+After=network.target
-+
-+[Service]
-+EnvironmentFile=-/etc/default/pigpio
-+ExecStart=/usr/bin/pigpiod -g $PIGPIOD_ARGS
-+
-+[Install]
-+WantedBy=multi-user.target
+> Installing the sysrepo database to the target directory
+
+And how do you do that? When does it happen?
+
+Thomas
 -- 
-2.24.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
