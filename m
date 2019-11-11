@@ -1,220 +1,249 @@
-From: Fabrice Goucem <fabrice.goucem@nxp.com>
-Date: Mon, 11 Nov 2019 10:15:19 +0000
-Subject: [Buildroot] [PATCH v5 2/2] configs/freescale_imx7ulpevk: new
- defconfig
-In-Reply-To: <20191111101452.32032-1-fabrice.goucem@nxp.com>
-References: <20191110230831.11479-1-fabrice.goucem@nxp.com>
- <20191111101452.32032-1-fabrice.goucem@nxp.com>
-Message-ID: <20191111101452.32032-2-fabrice.goucem@nxp.com>
+From: Jens Kleintje <Scooby22@web.de>
+Date: Mon, 11 Nov 2019 11:19:31 +0100
+Subject: [Buildroot] [PATCH 1/2] package/gcnano-binaries: new package
+In-Reply-To: <trinity-e5303488-a97e-46bb-8738-520846b1c6db-1573110060239@3c-app-webde-bap18>
+References: <20191106155611.31575-1-scooby22@web.de>
+ <20191106155611.31575-2-scooby22@web.de> <20191106230831.0a4017c6@windsurf>
+ <trinity-e5303488-a97e-46bb-8738-520846b1c6db-1573110060239@3c-app-webde-bap18>
+Message-ID: <trinity-5b74f91d-c30f-42b7-9c54-1a49e1f58aee-1573467571744@3c-app-webde-bs25>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add basic support for NXP's i.MX7 ULP EVK board:
+> Gesendet:?Mittwoch, 06. November 2019 um 23:08 Uhr
+> Von:?"Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> An:?"Jens Kleintje" <scooby22@web.de>
+> Cc:?buildroot at busybox.net
+> Betreff:?Re: [Buildroot] [PATCH 1/2] package/gcnano-binaries: new package
+> Hello Jens,
 
-https://www.nxp.com/design/development-boards/i.mx-evaluation-and-development-boards/evaluation-kit-for-the-i.mx-7ulp-applications-processor:MCIMX7ULP-EVK
+> Thanks for your contribution! I suppose you're the person I met last
+> week during the Embedded Linux Conference Europe in Lyon, who asked me
+> about submitting this gcnano-binaries package ?
+You are right.
 
-Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+> > In any case, glad to see this package being contributed.
 
----
-Changes v4 -> v5:
-  - Changed all occurences of m4-firmware to m4-demos (suggested by
-    Gilles Talis)
-  - Changed wrong flag name in post-image.sh (indirectly suggested by
-    Gilles Talis)
+> > On Wed, 6 Nov 2019 16:56:10 +0100
+> > Jens Kleintje <scooby22@web.de> wrote:
 
-Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
----
- .gitlab-ci.yml                         |  1 +
- DEVELOPERS                             |  2 +
- board/freescale/imx7ulpevk/readme.txt  | 76 ++++++++++++++++++++++++++
- configs/freescale_imx7ulpevk_defconfig | 28 ++++++++++
- package/freescale-imx/Config.in        |  8 ++-
- 5 files changed, 114 insertions(+), 1 deletion(-)
- create mode 100644 board/freescale/imx7ulpevk/readme.txt
- create mode 100644 configs/freescale_imx7ulpevk_defconfig
+> > New package which provides the driver and binary blob libraries for the
+> > STM32MP157 vivante gcnano gpu.
+> > The precompiled libaries depends on wayland and libdrm.
+> > Since the github repo has no releases/tags we use the standard git method
+> > with explicit SHA.
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 1d71257a20..74ee5b732e 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -177,6 +177,7 @@ freescale_imx6qsabreauto_defconfig: { extends: .defconfig }
- freescale_imx6qsabresd_defconfig: { extends: .defconfig }
- freescale_imx6sxsabresd_defconfig: { extends: .defconfig }
- freescale_imx7dsabresd_defconfig: { extends: .defconfig }
-+freescale_imx7ulpevk_defconfig: { extends: .defconfig }
- freescale_imx8mmevk_defconfig: { extends: .defconfig }
- freescale_imx8mqevk_defconfig: { extends: .defconfig }
- freescale_imx8qxpmek_defconfig: { extends: .defconfig }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b2519ca2c2..ccd331e364 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -875,6 +875,8 @@ F:	package/tinymembench/
- F:	package/whois/
- 
- N:	Fabrice Goucem <fabrice.goucem@nxp.com>
-+F:	board/freescale/imx7ulpevk/
-+F:	configs/freescale_imx7ulpevk_defconfig
- F:	package/freescale-imx/imx-m4-demos/
- 
- N:	Falco Hyfing <hyfinglists@gmail.com>
-diff --git a/board/freescale/imx7ulpevk/readme.txt b/board/freescale/imx7ulpevk/readme.txt
-new file mode 100644
-index 0000000000..c18f901010
---- /dev/null
-+++ b/board/freescale/imx7ulpevk/readme.txt
-@@ -0,0 +1,76 @@
-+****************************
-+Freescale i.MX7ULP EVK board
-+****************************
-+
-+This file documents the Buildroot support for the Freescale i.MX7ULP EVK board.
-+
-+Build
-+=====
-+
-+First, configure Buildroot for your i.MX7ULP EVK board:
-+
-+  make freescale_imx7ulpevk_defconfig
-+
-+Build all components:
-+
-+  make
-+
-+You will find in output/images/ the following files:
-+  - boot.vfat
-+  - imx7ulp-evkb.dtb
-+  - m4_imx7ulp_erpc_matrix_multiply_rpmsg_rtos_imxcm4.img
-+  - m4_imx7ulp_m4_demo.img
-+  - m4_imx7ulp_rpmsg_lite_pingpong_rtos.img
-+  - m4_imx7ulp_rpmsg_lite_str_echo_rtos.img
-+  - m4_imx7ulp_wireless_uart_bridge.img
-+  - rootfs.ext2
-+  - rootfs.ext4
-+  - rootfs.tar
-+  - sdcard.img
-+  - u-boot.imx
-+  - zImage
-+
-+Create a bootable SD card
-+=========================
-+
-+To determine the device associated to the SD card have a look in the
-+/proc/partitions file:
-+
-+  cat /proc/partitions
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be dumped on a SD card. Launch the following
-+command as root:
-+
-+  dd if=./output/images/sdcard.img of=/dev/<your-sd-device>
-+
-+*** WARNING! This will destroy all the card content. Use with care! ***
-+
-+For details about the medium image layout, see the definition in
-+board/freescale/common/imx/genimage.cfg.template.
-+
-+Flash QSPI with Cortex-M4 demo
-+==============================
-+
-+Cortex-M4 demo can be flashed onto QSPI NOR memory.
-+To do so, stop at u-boot prompt and run the following commands:
-+
-+  sf probe
-+  sf erase 0 30000
-+  fatload mmc 0 62000000 m4_imx7ulp_m4_demo.img
-+  sf write 62000000 0 30000
-+
-+Boot the i.MX7ULP EVK board
-+===========================
-+
-+To boot your newly created system (refer to the i.MX 7ULP EVK Quick Start Guide [1] for guidance):
-+- insert the SD card in the micro SD slot of the board;
-+- put a micro USB cable into the Debug USB Port and connect using a terminal
-+  emulator at 115200 bps, 8n1;
-+- power on the board.
-+
-+Enjoy!
-+
-+References
-+==========
-+[1] https://www.nxp.com/docs/en/user-guide/IMX7ULPQSG.pdf
-diff --git a/configs/freescale_imx7ulpevk_defconfig b/configs/freescale_imx7ulpevk_defconfig
-new file mode 100644
-index 0000000000..7998eb04ad
---- /dev/null
-+++ b/configs/freescale_imx7ulpevk_defconfig
-@@ -0,0 +1,28 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.0.0"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7ulp-evkb"
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP=y
-+BR2_PACKAGE_IMX_M4_DEMOS=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx7ulp_evk"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.0.0"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 55cd53aa37..639b789ebe 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -38,7 +38,10 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
- 	bool "imx6ul/imx6ull"
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
--	bool "imx7d/imx7ulp"
-+	bool "imx7d"
-+
-+config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP
-+	bool "imx7ulp"
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
- 	bool "imx8m"
-@@ -62,6 +65,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
- 	default "IMX6S" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
- 	default "IMX6UL" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
- 	default "IMX7" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
-+	default "IMX7ULP" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP
- 	default "IMX8" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
- 
- config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
-@@ -80,12 +84,14 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
- 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
- 
- config BR2_PACKAGE_FREESCALE_IMX_HAS_M4
- 	bool
- 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
--- 
-2.24.0.rc1
+> We need your Signed-off-by line here.
+OK
+
+> > ---
+> > package/Config.in | 1 +
+> > package/gcnano-binaries/gcnano-binaries.hash | 2 +
+> > package/gcnano-binaries/gcnano-binaries.mk | 87 ++++++++++++++++++++
+
+> You forgot to include the package/gcnano-binaries/Config.in file in
+> your patch, so we cannot review the full package.
+Sorry
+
+> Also, please add an entry in the DEVELOPERS file for this new package.
+OK
+
+> > diff --git a/package/gcnano-binaries/gcnano-binaries.hash b/package/gcnano-binaries/gcnano-binaries.hash
+> > new file mode 100644
+> > index 0000000000..fae7e56deb
+> > --- /dev/null
+> > +++ b/package/gcnano-binaries/gcnano-binaries.hash
+> > @@ -0,0 +1,2 @@
+> > +sha256 19f3fe4e83ec95fd2ecb70d5cb03c7b00a13357966a9b6e56b59e5788c550c88 gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed.tar.gz
+> > +sha256 7d209718473d18f69f75adb7caf9cb5d4b0a31da068756aa011bea617de3dc57 EULA
+> > diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
+> > new file mode 100644
+> > index 0000000000..806abd7840
+> > --- /dev/null
+> > +++ b/package/gcnano-binaries/gcnano-binaries.mk
+> > @@ -0,0 +1,87 @@
+> > +################################################################################
+> > +#
+> > +# VIVANTE GCNANO BINARIES
+> > +#
+> > +################################################################################
+> > +
+> > +
+> > +GCNANO_BINARIES_FILE_VERSION = 6.2.4.p4
+> > +GCNANO_BINARIES_VERSION = c01642ed5e18cf09ecd905af193e935cb3be95ed
+> > +GCNANO_BINARIES_SITE = https://github.com/STMicroelectronics/gcnano-binaries.git
+> > +GCNANO_BINARIES_SITE_METHOD = git
+
+> Please use the "github" helper macro:
+
+> GCNANO_BINARIES_VERSION = c01642ed5e18cf09ecd905af193e935cb3be95ed
+> GCNANO_BINARIES_SITE = $(call github,STMicroelectronics,gcnano-binaries,$(GCNANO_BINARIES_VERSION))
+
+> and remove the _SITE_METHOD variable.
+The page (https://github.com/STMicroelectronics/gcnano-binaries)
+has no release and no tag. So I think there is no archive directory.
+
+> > +
+> > +GCNANO_BINARIES_LICENSE = MIT, Vivante End User Software License Terms
+> > +GCNANO_BINARIES_LICENSE_FILES = EULA
+> > +GCNANO_BINARIES_REDISTRIBUTE = NO
+> > +
+> > +GCNANO_BINARIES_DEPENDENCIES = linux wayland libdrm
+> > +
+> > +GCNANO_BINARIES_INSTALL_STAGING = YES
+> > +
+> > +GCNANO_BINARIES_PROVIDES = libegl libgles
+> > +
+> > +define GCNANO_BINARIES_EXTRACT_HELPER
+> > + awk 'BEGIN { start = 0; } \
+> > + /^EOEULA/ { start = 0; } \
+> > + { if (start) print; } \
+> > + /<<EOEULA/ { start = 1; }' \
+> > + $(1) > $(@D)/EULA
+> > + cd $(@D) && sh $(1) --auto-accept
+> > + find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
+> > + rmdir $(@D)/$(basename $(notdir $(1)))
+> > +endef
+> > +
+> > +
+> > +define GCNANO_BINARIES_EXTRACT_CMDS
+> > +gzip -d -c $(GCNANO_BINARIES_DL_DIR)/gcnano-binaries-$(GCNANO_BINARIES_VERSION).tar.gz | tar --strip-components=1 -C $(@D) -xf -
+> > +tar --strip-components=1 -xJf $(@D)/gcnano-driver-$(GCNANO_BINARIES_FILE_VERSION).tar.xz -C $(@D)
+
+> These two lines look like the default extract commands, so why are you
+> doing this ? Just because you need to call the
+> GCNANO_BINARIES_EXTRACT_HELPER ?
+
+> If so, then you don't need that, simply do:
+
+> GCNANO_BINARIES_POST_EXTRACT_HOOKS += GCNANO_BINARIES_EXTRACT_HELPER
+
+> and in GCNANO_BINARIES_EXTRACT_HELPER, instead of using $(1), just use
+> $(@D)/gcnano-userland-multi-$(GCNANO_BINARIES_FILE_VERSION)-20190626.bin
+> directly.
+
+> Also, could you add a comment on top of GCNANO_BINARIES_EXTRACT_HELPER
+> to explain what it does, because it is not obvious.
+OK
+
+> > +$(call GCNANO_BINARIES_EXTRACT_HELPER,$(@D)/gcnano-userland-multi-$(GCNANO_BINARIES_FILE_VERSION)-20190626.bin)
+> > +endef
+> > +
+> > +GCNANO_BINARIES_MODULE_MAKE_OPTS = \
+> > + KERNEL_DIR=$(LINUX_DIR) \
+> > + SOC_PLATFORM=st-st\
+
+> Space before \
+
+> > + AQROOT=$(@D)\
+
+> Ditto.
+
+> > + DEBUG=0
+> > +
+> > +define GCNANO_BINARIES_INSTALL_STAGING_CMDS
+> > + cp $(@D)/usr/lib/pkgconfig/* $(STAGING_DIR)/usr/lib/pkgconfig/
+> > + cp -r $(@D)/usr/lib/* $(STAGING_DIR)/usr/lib/
+> > + cd $(STAGING_DIR)/usr/lib; \
+> > + ln -sf gbm_viv.6.2.4.multi.release.so gbm_viv.so; \
+> > + ln -sf libEGL.6.2.4.multi.release.so libEGL.so; \
+> > + ln -sf libEGL.so libEGL.so.1; \
+> > + ln -sf libGAL.6.2.4.multi.release.so libGAL.so; \
+> > + ln -sf libgbm.6.2.4.multi.release.so libgbm.so; \
+> > + ln -sf libgbm.so libgbm.so.1; \
+> > + ln -sf libGLESv1_CM.6.2.4.multi.release.so libGLESv1_CM.so; \
+> > + ln -sf libGLESv2.6.2.4.multi.release.so libGLESv2.so; \
+> > + ln -sf libGLESv2.so libGLESv2.so.2; \
+> > + ln -sf libGLSLC.6.2.4.multi.release.so libGLSLC.so; \
+> > + ln -sf libOpenVG.6.2.4.multi.release.so libOpenVG.so; \
+> > + ln -sf libVSC.6.2.4.multi.release.so libVSC.so
+> > + rm -f $(STAGING_DIR)/usr/lib/pkgconfig/wayland-egl.pc
+
+> Why are you removing this .pc file ?
+The file is already provided by wayland package.
+I saw it from in the yocto package  
+https://github.com/STMicroelectronics/meta-st-stm32mp/blob/thud/recipes-graphics/gcnano-userland/gcnano-userland-binary.inc
+
+> > + cp -r $(@D)/usr/include/* $(STAGING_DIR)/usr/include/
+> > +endef
+> > +
+> > +GCNANO_BINARIES_POST_INSTALL_TARGET_HOOKS += GCNANO_BINARIES_COPY_LIBS
+
+> I am not sure why you are using a
+> GCNANO_BINARIES_POST_INSTALL_TARGET_HOOKS. Why not simply rename
+> GCNANO_BINARIES_COPY_LIBS to GCNANO_BINARIES_INSTALL_TARGET_CMDS.
+I need to accept the EULA. But some parts I will move.
+
+> > +define GCNANO_BINARIES_COPY_LIBS
+> > + cp -r $(@D)/usr/lib/* $(TARGET_DIR)/usr/lib/
+> > + cd $(TARGET_DIR)/usr/lib; \
+> > + ln -sf gbm_viv.6.2.4.multi.release.so gbm_viv.so; \
+> > + ln -sf libEGL.6.2.4.multi.release.so libEGL.so; \
+> > + ln -sf libEGL.so libEGL.so.1; \
+> > + ln -sf libGAL.6.2.4.multi.release.so libGAL.so; \
+> > + ln -sf libgbm.6.2.4.multi.release.so libgbm.so; \
+> > + ln -sf libgbm.so libgbm.so.1; \
+> > + ln -sf libGLESv1_CM.6.2.4.multi.release.so libGLESv1_CM.so; \
+> > + ln -sf libGLESv2.6.2.4.multi.release.so libGLESv2.so; \
+> > + ln -sf libGLESv2.so libGLESv2.so.2; \
+> > + ln -sf libGLSLC.6.2.4.multi.release.so libGLSLC.so; \
+> > + ln -sf libOpenVG.6.2.4.multi.release.so libOpenVG.so; \
+> > + ln -sf libVSC.6.2.4.multi.release.so libVSC.so;
+> > +endef
+
+> The long list of symlinks to be created is not nice, but I don't really
+> see a nicer solution to achieve the same. Perhaps one thing that could
+> be done is to factorize stuff a bit:
+
+> define GCNANO_BINARIES_INSTALL
+> cp $(@D)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
+> cp -r $(@D)/usr/lib/* $(1)/usr/lib/
+> cd $(1)/usr/lib; \
+> ln -sf gbm_viv.6.2.4.multi.release.so gbm_viv.so; \
+> ln -sf libEGL.6.2.4.multi.release.so libEGL.so; \
+> ln -sf libEGL.so libEGL.so.1; \
+> ln -sf libGAL.6.2.4.multi.release.so libGAL.so; \
+> ln -sf libgbm.6.2.4.multi.release.so libgbm.so; \
+> ln -sf libgbm.so libgbm.so.1; \
+> ln -sf libGLESv1_CM.6.2.4.multi.release.so libGLESv1_CM.so; \
+> ln -sf libGLESv2.6.2.4.multi.release.so libGLESv2.so; \
+> ln -sf libGLESv2.so libGLESv2.so.2; \
+> ln -sf libGLSLC.6.2.4.multi.release.so libGLSLC.so; \
+> ln -sf libOpenVG.6.2.4.multi.release.so libOpenVG.so; \
+> ln -sf libVSC.6.2.4.multi.release.so libVSC.so
+> rm -f $(1)/usr/lib/pkgconfig/wayland-egl.pc
+> cp -r $(@D)/usr/include/* $(1)/usr/include/
+> endef
+
+> And then:
+
+> define GCNANO_BINARIES_INSTALL_STAGING_CMDS
+> $(call GCNANO_BINARIES_INSTALL,$(STAGING_DIR))
+> endef
+
+> define GCNANO_BINARIES_INSTALL_TARGET_CMDS
+> $(call GCNANO_BINARIES_INSTALL,$(TARGET_DIR))
+> endef
+
+> Note: it is perfectly fine to install header files and .pc files to
+> $(TARGET_DIR), they anyway get cleaned up later in the build.
+OK
+
+> Could you rework your patch to take into account those comments ?
+Will come soon.
+> Thanks!
+
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com[https://bootlin.com]
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot[http://lists.busybox.net/mailman/listinfo/buildroot]
+Regards
+
+Jens Kleintje
