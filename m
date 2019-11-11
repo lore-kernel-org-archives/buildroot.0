@@ -1,39 +1,76 @@
-From: Avi Shukron <avraham.shukron@gmail.com>
-Date: Mon, 11 Nov 2019 23:31:45 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/ninja: invoke python3 explicitly
- to configure the package
-Message-ID: <20191111213154.19409-1-avraham.shukron@gmail.com>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Mon, 11 Nov 2019 21:32:10 +0000
+Subject: [Buildroot] [PATCH 1/3] arch/config.in.arc: Introduce the ARC
+ optimized hs38 config
+In-Reply-To: <20191111210900.GH3419@scaer>
+References: <20191108174112.28183-1-vgupta@synopsys.com>
+ <20191108174112.28183-2-vgupta@synopsys.com>
+ <20191109144656.3da6a1b0@windsurf>
+ <1112f6a7-8a23-6cd9-0af0-76e0b92e496b@synopsys.com>
+ <20191111210900.GH3419@scaer>
+Message-ID: <1b9054bb-3c8d-2c36-d5c1-83b6993cc2d4@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ninja depends on python3 specifically, but the configure.py file
-simply uses "env python". Where no python is selected for the target
-you simply won't get a python symlink in $(HOST_DIR)/usr/bin, so the
-configure.py script fails to run since it can't find "python".
+Hi Yann,
 
-Notice that in order to reproduce the issue, you must not have
-python2 installed on your host machine.
+On 11/11/19 1:09 PM, Yann E. MORIN wrote:
+>
+>>> This re-use of an existing name is a bit annoying. Indeed, all existing
+>>> users of Buildroot that have a configuration with BR2_archs38 will now
+>>> be building for a ARC system with a 64-bit multiplier, while they were
+>>> previously building for a 32-bit multiplier.
+>>>
+>>> I see that what you have done is to try to be consistent between the
+>>> BR2_ options and the gcc options. I'm hesitating between keeping the
+>>> consistency but making the migration a bit annoying for users, or
+>>> breaking the consistency to make the migration smooth for users.
+>>>
+>>> Since I think the number of affected users will probably be quite
+>>> small/limited, I think I would be fine with merging your patch as-is,
+>>> but I'd like to hear from others.
+>> I agree that this might cause potential breakage, but this is not totally
+>> uncharted territory for software build config. We've been building Linux kernel
+>> with this option as default since mid 2018.
+> I think there is some misunderstanding.
 
-Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
----
- package/ninja/ninja.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Not really, I understand what you and Thomas are asking for - its not a super
+complicated patch after all ;-)
 
-diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
-index 4897012150..281cd70412 100644
---- a/package/ninja/ninja.mk
-+++ b/package/ninja/ninja.mk
-@@ -17,7 +17,7 @@ NINJA_LICENSE_FILES = COPYING
- HOST_NINJA_DEPENDENCIES = host-python3
- 
- define HOST_NINJA_BUILD_CMDS
--	(cd $(@D); ./configure.py --bootstrap)
-+	(cd $(@D); $(HOST_DIR)/bin/python3 configure.py --bootstrap)
- endef
- 
- define HOST_NINJA_INSTALL_CMDS
--- 
-2.17.1
+> What Thomas and I argue on, is the way to change the meaning for the
+> BR2_archs38 option.
+
+Yeah I understand that part.
+
+> Before this patch, BR2_archs38 meant "ARC HS38". But with your patch, it
+> now means "ARC HS38 with 64-bit mpy".
+>
+> So, a user that updates their Buildroot configurationi which previously
+> had a "plain" HS38 setup, but with this patch, they get an "extended"
+> HS38 with the 64-bit multiplier.
+>
+> That's why I suggested in my own reply, to keep BR2_archs38 as it was
+> before, and introduce BR2_archs38_64mpy to mean the new HS38 w/ the
+> 64-bit multiplier.
+>
+> Indeed, it does not match the gcc config options, but that would hardly
+> be the only derogation we have in Buildroot... ;-)
+
+Right that's not the point of doing this exercise anyways.
+
+>> 2018-09-07 00a99339f0a3 ARCv2: build: use mcpu=hs38 iso generic mcpu=archs?
+>>
+>> Granted that kernel build is just one part of puzzle and any latent codegen issues
+>> are more likely to surface with default applied to full software stack, I would
+>> still vote for switching default to -mcpu=hs38
+> Changing the meaning of an option, and changing the default of a choice,
+> are two different things. I'm OK with changing the default, but I'd
+> rather that options keep their meaning.
+
+Ok sounds good !
+
+Thx,
+-Vineet
