@@ -1,249 +1,302 @@
-From: Jens Kleintje <Scooby22@web.de>
-Date: Mon, 11 Nov 2019 11:19:31 +0100
-Subject: [Buildroot] [PATCH 1/2] package/gcnano-binaries: new package
-In-Reply-To: <trinity-e5303488-a97e-46bb-8738-520846b1c6db-1573110060239@3c-app-webde-bap18>
-References: <20191106155611.31575-1-scooby22@web.de>
- <20191106155611.31575-2-scooby22@web.de> <20191106230831.0a4017c6@windsurf>
- <trinity-e5303488-a97e-46bb-8738-520846b1c6db-1573110060239@3c-app-webde-bap18>
-Message-ID: <trinity-5b74f91d-c30f-42b7-9c54-1a49e1f58aee-1573467571744@3c-app-webde-bs25>
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Mon, 11 Nov 2019 10:09:57 +0000
+Subject: [Buildroot] [EXT] Re: [PATCH v4 1/2]
+ package/freescale-imx/imx-m4-demos: new package
+In-Reply-To: <CAKcgs2w-PUPwGrHEDLVOCRvXV1V=tpd590jMX7FZW=MpjXGbyw@mail.gmail.com>
+References: <20191105120304.19928-1-fabrice.goucem@nxp.com>
+ <20191110230831.11479-1-fabrice.goucem@nxp.com>
+ <CAKcgs2w-PUPwGrHEDLVOCRvXV1V=tpd590jMX7FZW=MpjXGbyw@mail.gmail.com>
+Message-ID: <f2aa7f8c2061a66d3afbde5bb51f44ac296d03b5.camel@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Gesendet:?Mittwoch, 06. November 2019 um 23:08 Uhr
-> Von:?"Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> An:?"Jens Kleintje" <scooby22@web.de>
-> Cc:?buildroot at busybox.net
-> Betreff:?Re: [Buildroot] [PATCH 1/2] package/gcnano-binaries: new package
-> Hello Jens,
+Hello Gilles,
 
-> Thanks for your contribution! I suppose you're the person I met last
-> week during the Embedded Linux Conference Europe in Lyon, who asked me
-> about submitting this gcnano-binaries package ?
-You are right.
+Thanks for the review.
 
-> > In any case, glad to see this package being contributed.
+On Mon, 2019-11-11 at 09:50 +0100, Gilles Talis wrote:
 
-> > On Wed, 6 Nov 2019 16:56:10 +0100
-> > Jens Kleintje <scooby22@web.de> wrote:
-
-> > New package which provides the driver and binary blob libraries for the
-> > STM32MP157 vivante gcnano gpu.
-> > The precompiled libaries depends on wayland and libdrm.
-> > Since the github repo has no releases/tags we use the standard git method
-> > with explicit SHA.
-
-> We need your Signed-off-by line here.
-OK
-
+> Hello Fabrice,
+> 
+> Le lun. 11 nov. 2019 ? 02:44, Fabrice Goucem <fabrice.goucem@nxp.com>
+> a ?crit :
+> > New package to download and install i.MX Cortex-M4 demos
+> > for following SoCs:
+> > * i.MX7D
+> > * i.MX7ULP
+> > * i.MX8M
+> > * i.MX8MM
+> > * i.MX8QXP
+> > 
+> > Yocto recipes from where the demos location has been extracted:
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsource.codeaurora.org%2Fexternal%2Fimx%2Fmeta-fsl-bsp-release%2Ftree%2Fimx%2Fmeta-sdk%2Frecipes-fsl%2Fm4-demos%3Fh%3Dimx-morty%26id%3Dbfb1e26798775f161b14218ac6f1d50069bea8ed&amp;data=02%7C01%7Cfabrice.goucem%40nxp.com%7Cc21a49595bba4a98f54e08d7668440b0%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637090590525363574&amp;sdata=Y8DTYqGNj6tjGOMShOhjmcSUvquwygc2SWik1JLvf1c%3D&amp;reserved=0
+> > 
+> > Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+> > Tested-by: Julien Olivain <julien.olivain@nxp.com>
 > > ---
-> > package/Config.in | 1 +
-> > package/gcnano-binaries/gcnano-binaries.hash | 2 +
-> > package/gcnano-binaries/gcnano-binaries.mk | 87 ++++++++++++++++++++
+> >  DEVELOPERS                                    |  3 +
+> >  board/freescale/common/imx/post-image.sh      | 14 +++-
+> >  package/freescale-imx/Config.in               |  8 +++
+> >  package/freescale-imx/imx-m4-demos/Config.in  | 11 +++
+> >  .../imx-m4-demos/imx-m4-demos.hash            |  8 +++
+> >  .../imx-m4-demos/imx-m4-demos.mk              | 72
+> > +++++++++++++++++++
+> >  6 files changed, 115 insertions(+), 1 deletion(-)
+> >  create mode 100644 package/freescale-imx/imx-m4-demos/Config.in
+> >  create mode 100644 package/freescale-imx/imx-m4-demos/imx-m4-
+> > demos.hash
+> >  create mode 100644 package/freescale-imx/imx-m4-demos/imx-m4-
+> > demos.mk
+> > 
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index c0863aabc6..194e5249d0 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -874,6 +874,9 @@ F:  package/tinydtls/
+> >  F:     package/tinymembench/
+> >  F:     package/whois/
+> > 
+> > +N:     Fabrice Goucem <fabrice.goucem@nxp.com>
+> > +F:     package/freescale-imx/imx-m4-firmware/
+> You need to change the package name here: imx-m4-firmware -> imx-m4-
+> demos
 
-> You forgot to include the package/gcnano-binaries/Config.in file in
-> your patch, so we cannot review the full package.
-Sorry
+Thanks for spotting that one.
 
-> Also, please add an entry in the DEVELOPERS file for this new package.
-OK
-
-> > diff --git a/package/gcnano-binaries/gcnano-binaries.hash b/package/gcnano-binaries/gcnano-binaries.hash
-> > new file mode 100644
-> > index 0000000000..fae7e56deb
-> > --- /dev/null
-> > +++ b/package/gcnano-binaries/gcnano-binaries.hash
-> > @@ -0,0 +1,2 @@
-> > +sha256 19f3fe4e83ec95fd2ecb70d5cb03c7b00a13357966a9b6e56b59e5788c550c88 gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed.tar.gz
-> > +sha256 7d209718473d18f69f75adb7caf9cb5d4b0a31da068756aa011bea617de3dc57 EULA
-> > diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
-> > new file mode 100644
-> > index 0000000000..806abd7840
-> > --- /dev/null
-> > +++ b/package/gcnano-binaries/gcnano-binaries.mk
-> > @@ -0,0 +1,87 @@
-> > +################################################################################
+> 
+> > +
+> >  N:     Falco Hyfing <hyfinglists@gmail.com>
+> >  F:     package/python-pymodbus/
+> > 
+> > diff --git a/board/freescale/common/imx/post-image.sh
+> > b/board/freescale/common/imx/post-image.sh
+> > index 19d8fffb63..f9851c2d3b 100755
+> > --- a/board/freescale/common/imx/post-image.sh
+> > +++ b/board/freescale/common/imx/post-image.sh
+> > @@ -30,6 +30,18 @@ linux_image()
+> >         fi
+> >  }
+> > 
 > > +#
-> > +# VIVANTE GCNANO BINARIES
+> > +# m4_image prints all available M4 firmware file names for the
+> > genimage
+> > +# configuration file
 > > +#
-> > +################################################################################
-> > +
-> > +
-> > +GCNANO_BINARIES_FILE_VERSION = 6.2.4.p4
-> > +GCNANO_BINARIES_VERSION = c01642ed5e18cf09ecd905af193e935cb3be95ed
-> > +GCNANO_BINARIES_SITE = https://github.com/STMicroelectronics/gcnano-binaries.git
-> > +GCNANO_BINARIES_SITE_METHOD = git
+> > +m4_image()
+> > +{
+> > +       if grep -Eq "^BR2_PACKAGE_IMX_M4_FIRMWARE=y$" 
 
-> Please use the "github" helper macro:
+There's this as well, which I'm fixing in v5.
 
-> GCNANO_BINARIES_VERSION = c01642ed5e18cf09ecd905af193e935cb3be95ed
-> GCNANO_BINARIES_SITE = $(call github,STMicroelectronics,gcnano-binaries,$(GCNANO_BINARIES_VERSION))
-
-> and remove the _SITE_METHOD variable.
-The page (https://github.com/STMicroelectronics/gcnano-binaries)
-has no release and no tag. So I think there is no archive directory.
-
+> > ${BR2_CONFIG}; then
+> > +               echo -n ", "
+> > +               for f in $(ls ${BINARIES_DIR}/m4_*); do echo -n
+> > "$(basename $f), "; done
+> > +       fi
+> > +}
 > > +
-> > +GCNANO_BINARIES_LICENSE = MIT, Vivante End User Software License Terms
-> > +GCNANO_BINARIES_LICENSE_FILES = EULA
-> > +GCNANO_BINARIES_REDISTRIBUTE = NO
+> >  genimage_type()
+> >  {
+> >         if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$"
+> > ${BR2_CONFIG}; then
+> > @@ -75,7 +87,7 @@ uboot_image()
+> > 
+> >  main()
+> >  {
+> > -       local FILES="$(dtb_list) $(linux_image)"
+> > +       local FILES="$(dtb_list) $(linux_image) $(m4_image)"
+> >         local IMXOFFSET="$(imx_offset)"
+> >         local UBOOTBIN="$(uboot_image)"
+> >         local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
+> > diff --git a/package/freescale-imx/Config.in b/package/freescale-
+> > imx/Config.in
+> > index f010aab87b..55cd53aa37 100644
+> > --- a/package/freescale-imx/Config.in
+> > +++ b/package/freescale-imx/Config.in
+> > @@ -83,10 +83,18 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+> >                 BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+> >                 BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+> > 
+> > +config BR2_PACKAGE_FREESCALE_IMX_HAS_M4
+> > +       bool
+> > +       default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
+> > +               BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
+> > +               BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+> > +               BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
 > > +
-> > +GCNANO_BINARIES_DEPENDENCIES = linux wayland libdrm
+> >  source "package/freescale-imx/imx-alsa-plugins/Config.in"
+> >  source "package/freescale-imx/imx-codec/Config.in"
+> >  source "package/freescale-imx/imx-kobs/Config.in"
+> >  source "package/freescale-imx/imx-lib/Config.in"
+> > +source "package/freescale-imx/imx-m4-demos/Config.in"
+> >  source "package/freescale-imx/imx-m4fwloader/Config.in"
+> >  source "package/freescale-imx/imx-parser/Config.in"
+> >  source "package/freescale-imx/imx-uuc/Config.in"
+> > diff --git a/package/freescale-imx/imx-m4-demos/Config.in
+> > b/package/freescale-imx/imx-m4-demos/Config.in
+> > new file mode 100644
+> > index 0000000000..fc2312d410
+> > --- /dev/null
+> > +++ b/package/freescale-imx/imx-m4-demos/Config.in
+> > @@ -0,0 +1,11 @@
+> > +comment "imx-m4-demos needs an i.MX platform with Cortex-M4"
+> > +       depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_M4
 > > +
-> > +GCNANO_BINARIES_INSTALL_STAGING = YES
+> > +config BR2_PACKAGE_IMX_M4_DEMOS
+> > +       bool "imx-m4-demos"
+> > +       depends on BR2_PACKAGE_FREESCALE_IMX_HAS_M4
+> > +       help
+> > +         Cortex-M4 firmware blobs for the Freescale i.MX SoCs.
 > > +
-> > +GCNANO_BINARIES_PROVIDES = libegl libgles
+> > +         This library is provided by Freescale as-is and doesn't
+> > have
+> > +         an upstream.
+> > diff --git a/package/freescale-imx/imx-m4-demos/imx-m4-demos.hash
+> > b/package/freescale-imx/imx-m4-demos/imx-m4-demos.hash
+> > new file mode 100644
+> > index 0000000000..fdbf1ab608
+> > --- /dev/null
+> > +++ b/package/freescale-imx/imx-m4-demos/imx-m4-demos.hash
+> > @@ -0,0 +1,8 @@
+> > +# locally computed
+> > +sha256  cc00d3b936d49b2794a2a99e10129437e70caba3fd26b8379b8c50dd22
+> > f73254  imx7d-sabresd-m4-freertos-1.0.1.bin
+> > +sha256  e4efb9646b66df867f618bd8121e14afe17ebadea4a405a4df951d45d8
+> > 41e681  imx7ulp-m4-demo-2.6.0.bin
+> > +sha256  4e41e270506870e0fd2d53e3d69afdcf6d613d099b0da5c516a512944c
+> > 5c12c3  imx8mm-m4-demo-2.5.0.bin
+> > +sha256  fd441e75395b0c6f90626c883ee8a93406b14e7d55adc7925116254394
+> > bb7ad8  imx8mq-m4-demo-2.3.0.bin
+> > +sha256  4e83d60e27cd8ad67d4174ad3082a5f4a06b7df93571cfd2274615cbdf
+> > 66eb6c  imx8qx-m4-demo-2.5.0.bin
 > > +
-> > +define GCNANO_BINARIES_EXTRACT_HELPER
-> > + awk 'BEGIN { start = 0; } \
-> > + /^EOEULA/ { start = 0; } \
-> > + { if (start) print; } \
-> > + /<<EOEULA/ { start = 1; }' \
-> > + $(1) > $(@D)/EULA
-> > + cd $(@D) && sh $(1) --auto-accept
-> > + find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
-> > + rmdir $(@D)/$(basename $(notdir $(1)))
+> > +# no hash for license file as it is different for each package
+> > listed above
+> > diff --git a/package/freescale-imx/imx-m4-demos/imx-m4-demos.mk
+> > b/package/freescale-imx/imx-m4-demos/imx-m4-demos.mk
+> > new file mode 100644
+> > index 0000000000..6d08dcc8f8
+> > --- /dev/null
+> > +++ b/package/freescale-imx/imx-m4-demos/imx-m4-demos.mk
+> > @@ -0,0 +1,72 @@
+> > +##################################################################
+> > ##############
+> > +#
+> > +# imx-m4-demos
+> > +#
+> > +##################################################################
+> > ##############
+> > +
+> > +IMX_M4_DEMOS_SITE = $(FREESCALE_IMX_SITE)
+> > +
+> > +IMX_M4_DEMOS_LICENSE = NXP Semiconductor Software License
+> > Agreement
+> > +IMX_M4_DEMOS_LICENSE_FILES = COPYING
+> > +IMX_M4_DEMOS_REDISTRIBUTE = NO
+> > +
+> > +define IMX_M4_DEMOS_EXTRACT_CMDS
+> > +       $(call
+> > FREESCALE_IMX_EXTRACT_HELPER,$(IMX_M4_DEMOS_DL_DIR)/$(IMX_M4_DEMOS_
+> > SOURCE))
 > > +endef
 > > +
+> > +# Note: firmware names are copied to binaries directory with an
+> > "m4_" prefix, for easier post image scripting
 > > +
-> > +define GCNANO_BINARIES_EXTRACT_CMDS
-> > +gzip -d -c $(GCNANO_BINARIES_DL_DIR)/gcnano-binaries-$(GCNANO_BINARIES_VERSION).tar.gz | tar --strip-components=1 -C $(@D) -xf -
-> > +tar --strip-components=1 -xJf $(@D)/gcnano-driver-$(GCNANO_BINARIES_FILE_VERSION).tar.xz -C $(@D)
-
-> These two lines look like the default extract commands, so why are you
-> doing this ? Just because you need to call the
-> GCNANO_BINARIES_EXTRACT_HELPER ?
-
-> If so, then you don't need that, simply do:
-
-> GCNANO_BINARIES_POST_EXTRACT_HOOKS += GCNANO_BINARIES_EXTRACT_HELPER
-
-> and in GCNANO_BINARIES_EXTRACT_HELPER, instead of using $(1), just use
-> $(@D)/gcnano-userland-multi-$(GCNANO_BINARIES_FILE_VERSION)-20190626.bin
-> directly.
-
-> Also, could you add a comment on top of GCNANO_BINARIES_EXTRACT_HELPER
-> to explain what it does, because it is not obvious.
-OK
-
-> > +$(call GCNANO_BINARIES_EXTRACT_HELPER,$(@D)/gcnano-userland-multi-$(GCNANO_BINARIES_FILE_VERSION)-20190626.bin)
+> > +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP),y)
+> > +IMX_M4_DEMOS_VERSION = 2.6.0
+> > +IMX_M4_DEMOS_SOURCE = imx7ulp-m4-demo-$(IMX_M4_DEMOS_VERSION).bin
+> > +IMX_M4_DEMOS_INSTALL_IMAGES = YES
+> > +define IMX_M4_DEMOS_INSTALL_IMAGES_CMDS
+> > +       cp $(@D)/imx7ulp_erpc_matrix_multiply_rpmsg_rtos_imxcm4.img
+> > $(BINARIES_DIR)/m4_imx7ulp_erpc_matrix_multiply_rpmsg_rtos_imxcm4.i
+> > mg
+> > +       cp $(@D)/imx7ulp_m4_demo.img
+> > $(BINARIES_DIR)/m4_imx7ulp_m4_demo.img
+> > +       cp $(@D)/imx7ulp_rpmsg_lite_pingpong_rtos.img
+> > $(BINARIES_DIR)/m4_imx7ulp_rpmsg_lite_pingpong_rtos.img
+> > +       cp $(@D)/imx7ulp_rpmsg_lite_str_echo_rtos.img
+> > $(BINARIES_DIR)/m4_imx7ulp_rpmsg_lite_str_echo_rtos.img
+> > +       cp $(@D)/imx7ulp_wireless_uart_bridge.img
+> > $(BINARIES_DIR)/m4_imx7ulp_wireless_uart_bridge.img
 > > +endef
-> > +
-> > +GCNANO_BINARIES_MODULE_MAKE_OPTS = \
-> > + KERNEL_DIR=$(LINUX_DIR) \
-> > + SOC_PLATFORM=st-st\
-
-> Space before \
-
-> > + AQROOT=$(@D)\
-
-> Ditto.
-
-> > + DEBUG=0
-> > +
-> > +define GCNANO_BINARIES_INSTALL_STAGING_CMDS
-> > + cp $(@D)/usr/lib/pkgconfig/* $(STAGING_DIR)/usr/lib/pkgconfig/
-> > + cp -r $(@D)/usr/lib/* $(STAGING_DIR)/usr/lib/
-> > + cd $(STAGING_DIR)/usr/lib; \
-> > + ln -sf gbm_viv.6.2.4.multi.release.so gbm_viv.so; \
-> > + ln -sf libEGL.6.2.4.multi.release.so libEGL.so; \
-> > + ln -sf libEGL.so libEGL.so.1; \
-> > + ln -sf libGAL.6.2.4.multi.release.so libGAL.so; \
-> > + ln -sf libgbm.6.2.4.multi.release.so libgbm.so; \
-> > + ln -sf libgbm.so libgbm.so.1; \
-> > + ln -sf libGLESv1_CM.6.2.4.multi.release.so libGLESv1_CM.so; \
-> > + ln -sf libGLESv2.6.2.4.multi.release.so libGLESv2.so; \
-> > + ln -sf libGLESv2.so libGLESv2.so.2; \
-> > + ln -sf libGLSLC.6.2.4.multi.release.so libGLSLC.so; \
-> > + ln -sf libOpenVG.6.2.4.multi.release.so libOpenVG.so; \
-> > + ln -sf libVSC.6.2.4.multi.release.so libVSC.so
-> > + rm -f $(STAGING_DIR)/usr/lib/pkgconfig/wayland-egl.pc
-
-> Why are you removing this .pc file ?
-The file is already provided by wayland package.
-I saw it from in the yocto package  
-https://github.com/STMicroelectronics/meta-st-stm32mp/blob/thud/recipes-graphics/gcnano-userland/gcnano-userland-binary.inc
-
-> > + cp -r $(@D)/usr/include/* $(STAGING_DIR)/usr/include/
+> > +else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7),y)
+> > +IMX_M4_DEMOS_VERSION = 1.0.1
+> > +IMX_M4_DEMOS_SOURCE = imx7d-sabresd-m4-freertos-
+> > $(IMX_M4_DEMOS_VERSION).bin
+> > +IMX_M4_DEMOS_INSTALL_IMAGES = YES
+> > +define IMX_M4_DEMOS_INSTALL_IMAGES_CMDS
+> > +       cp $(@D)/imx7d_sabresd_m4_TCM_helloworld.bin
+> > $(BINARIES_DIR)/m4_imx7d_sabresd_m4_TCM_helloworld.bin
+> > +       cp $(@D)/imx7d_sabresd_m4_TCM_mcctty.bin
+> > $(BINARIES_DIR)/m4_imx7d_sabresd_m4_TCM_mcctty.bin
+> > +       cp $(@D)/imx7d_sabresd_m4_TCM_Pingpang.bin
+> > $(BINARIES_DIR)/m4_imx7d_sabresd_m4_TCM_Pingpang.bin
 > > +endef
-> > +
-> > +GCNANO_BINARIES_POST_INSTALL_TARGET_HOOKS += GCNANO_BINARIES_COPY_LIBS
-
-> I am not sure why you are using a
-> GCNANO_BINARIES_POST_INSTALL_TARGET_HOOKS. Why not simply rename
-> GCNANO_BINARIES_COPY_LIBS to GCNANO_BINARIES_INSTALL_TARGET_CMDS.
-I need to accept the EULA. But some parts I will move.
-
-> > +define GCNANO_BINARIES_COPY_LIBS
-> > + cp -r $(@D)/usr/lib/* $(TARGET_DIR)/usr/lib/
-> > + cd $(TARGET_DIR)/usr/lib; \
-> > + ln -sf gbm_viv.6.2.4.multi.release.so gbm_viv.so; \
-> > + ln -sf libEGL.6.2.4.multi.release.so libEGL.so; \
-> > + ln -sf libEGL.so libEGL.so.1; \
-> > + ln -sf libGAL.6.2.4.multi.release.so libGAL.so; \
-> > + ln -sf libgbm.6.2.4.multi.release.so libgbm.so; \
-> > + ln -sf libgbm.so libgbm.so.1; \
-> > + ln -sf libGLESv1_CM.6.2.4.multi.release.so libGLESv1_CM.so; \
-> > + ln -sf libGLESv2.6.2.4.multi.release.so libGLESv2.so; \
-> > + ln -sf libGLESv2.so libGLESv2.so.2; \
-> > + ln -sf libGLSLC.6.2.4.multi.release.so libGLSLC.so; \
-> > + ln -sf libOpenVG.6.2.4.multi.release.so libOpenVG.so; \
-> > + ln -sf libVSC.6.2.4.multi.release.so libVSC.so;
+> > +else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+> > +IMX_M4_DEMOS_VERSION = 2.5.0
+> > +IMX_M4_DEMOS_SOURCE = imx8qx-m4-demo-$(IMX_M4_DEMOS_VERSION).bin
+> > +IMX_M4_DEMOS_INSTALL_IMAGES = YES
+> > +define IMX_M4_DEMOS_INSTALL_IMAGES_CMDS
+> > +       cp $(@D)/imx8qx_m4_TCM_hello_world.bin
+> > $(BINARIES_DIR)/m4_imx8qx_m4_TCM_hello_world.bin
+> > +       cp $(@D)/imx8qx_m4_TCM_power_mode_switch.bin
+> > $(BINARIES_DIR)/m4_imx8qx_m4_TCM_power_mode_switch.bin
+> > +       cp $(@D)/imx8qx_m4_TCM_rear_view_camera.bin
+> > $(BINARIES_DIR)/m4_imx8qx_m4_TCM_rear_view_camera.bin
+> > +       cp
+> > $(@D)/imx8qx_m4_TCM_rpmsg_lite_pingpong_rtos_linux_remote.bin
+> > $(BINARIES_DIR)/m4_imx8qx_m4_TCM_rpmsg_lite_pingpong_rtos_linux_rem
+> > ote.bin
+> > +       cp $(@D)/imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin
+> > $(BINARIES_DIR)/m4_imx8qx_m4_TCM_rpmsg_lite_str_echo_rtos.bin
+> > +       cp $(@D)/imx8qx_m4_TCM_srtm_demo.bin
+> > $(BINARIES_DIR)/m4_imx8qx_m4_TCM_srtm_demo.bin
 > > +endef
+> > +else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
+> > +IMX_M4_DEMOS_VERSION = 2.3.0
+> > +IMX_M4_DEMOS_SOURCE = imx8mq-m4-demo-$(IMX_M4_DEMOS_VERSION).bin
+> > +IMX_M4_DEMOS_INSTALL_IMAGES = YES
+> > +define IMX_M4_DEMOS_INSTALL_IMAGES_CMDS
+> > +       cp $(@D)/imx8mq_m4_TCM_hello_world.bin
+> > $(BINARIES_DIR)/m4_imx8mq_m4_TCM_hello_world.bin
+> > +       cp
+> > $(@D)/imx8mq_m4_TCM_rpmsg_lite_pingpong_rtos_linux_remote.bin
+> > $(BINARIES_DIR)/m4_imx8mq_m4_TCM_rpmsg_lite_pingpong_rtos_linux_rem
+> > ote.bin
+> > +       cp $(@D)/imx8mq_m4_TCM_rpmsg_lite_str_echo_rtos.bin
+> > $(BINARIES_DIR)/m4_imx8mq_m4_TCM_rpmsg_lite_str_echo_rtos.bin
+> > +endef
+> > +else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM),y)
+> > +IMX_M4_DEMOS_VERSION = 2.5.0
+> > +IMX_M4_DEMOS_SOURCE = imx8mm-m4-demo-$(IMX_M4_DEMOS_VERSION).bin
+> > +IMX_M4_DEMOS_INSTALL_IMAGES = YES
+> > +define IMX_M4_DEMOS_INSTALL_IMAGES_CMDS
+> > +       cp $(@D)/imx8mm_m4_TCM_hello_world.bin
+> > $(BINARIES_DIR)/m4_imx8mm_m4_TCM_hello_world.bin
+> > +       cp
+> > $(@D)/imx8mm_m4_TCM_rpmsg_lite_pingpong_rtos_linux_remote.bin
+> > $(BINARIES_DIR)/m4_imx8mm_m4_TCM_rpmsg_lite_pingpong_rtos_linux_rem
+> > ote.bin
+> > +       cp $(@D)/imx8mm_m4_TCM_rpmsg_lite_str_echo_rtos.bin
+> > $(BINARIES_DIR)/m4_imx8mm_m4_TCM_rpmsg_lite_str_echo_rtos.bin
+> > +       cp $(@D)/imx8mm_m4_TCM_sai_low_power_audio.bin
+> > $(BINARIES_DIR)/m4_imx8mm_m4_TCM_sai_low_power_audio.bin
+> > +endef
+> > +endif
+> > +
+> > +$(eval $(generic-package))
+> Other than that, the rest is OK with me.
+>
+> thanks
+> Gilles.
 
-> The long list of symlinks to be created is not nice, but I don't really
-> see a nicer solution to achieve the same. Perhaps one thing that could
-> be done is to factorize stuff a bit:
+Fixed all (plus the board/freescale/common/imx/post-image.sh one) in a
+coming v5.
 
-> define GCNANO_BINARIES_INSTALL
-> cp $(@D)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
-> cp -r $(@D)/usr/lib/* $(1)/usr/lib/
-> cd $(1)/usr/lib; \
-> ln -sf gbm_viv.6.2.4.multi.release.so gbm_viv.so; \
-> ln -sf libEGL.6.2.4.multi.release.so libEGL.so; \
-> ln -sf libEGL.so libEGL.so.1; \
-> ln -sf libGAL.6.2.4.multi.release.so libGAL.so; \
-> ln -sf libgbm.6.2.4.multi.release.so libgbm.so; \
-> ln -sf libgbm.so libgbm.so.1; \
-> ln -sf libGLESv1_CM.6.2.4.multi.release.so libGLESv1_CM.so; \
-> ln -sf libGLESv2.6.2.4.multi.release.so libGLESv2.so; \
-> ln -sf libGLESv2.so libGLESv2.so.2; \
-> ln -sf libGLSLC.6.2.4.multi.release.so libGLSLC.so; \
-> ln -sf libOpenVG.6.2.4.multi.release.so libOpenVG.so; \
-> ln -sf libVSC.6.2.4.multi.release.so libVSC.so
-> rm -f $(1)/usr/lib/pkgconfig/wayland-egl.pc
-> cp -r $(@D)/usr/include/* $(1)/usr/include/
-> endef
+Regards,
 
-> And then:
-
-> define GCNANO_BINARIES_INSTALL_STAGING_CMDS
-> $(call GCNANO_BINARIES_INSTALL,$(STAGING_DIR))
-> endef
-
-> define GCNANO_BINARIES_INSTALL_TARGET_CMDS
-> $(call GCNANO_BINARIES_INSTALL,$(TARGET_DIR))
-> endef
-
-> Note: it is perfectly fine to install header files and .pc files to
-> $(TARGET_DIR), they anyway get cleaned up later in the build.
-OK
-
-> Could you rework your patch to take into account those comments ?
-Will come soon.
-> Thanks!
-
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com[https://bootlin.com]
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot[http://lists.busybox.net/mailman/listinfo/buildroot]
-Regards
-
-Jens Kleintje
+Fabrice
