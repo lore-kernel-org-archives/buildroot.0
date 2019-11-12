@@ -1,44 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Nov 2019 22:05:34 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/qemu: add host-python as an
- explicit dependency
-In-Reply-To: <20191111213154.19409-2-avraham.shukron@gmail.com>
-References: <20191111213154.19409-1-avraham.shukron@gmail.com>
- <20191111213154.19409-2-avraham.shukron@gmail.com>
-Message-ID: <20191112220534.531a470f@windsurf>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Tue, 12 Nov 2019 18:21:15 -0300
+Subject: [Buildroot] [PATCH] toolchain/helpers: make sure we bail out
+ when kernel headers check fails
+In-Reply-To: <20191112202118.56136-1-thomas.petazzoni@bootlin.com>
+References: <20191112202118.56136-1-thomas.petazzoni@bootlin.com>
+Message-ID: <CAJ4jsaeAhEVJY9pCR3-vhmhpuAndc3F1Y3GVjrM-KXbEJv34KQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 Nov 2019 23:31:46 +0200
-Avi Shukron <avraham.shukron@gmail.com> wrote:
+On Tue, Nov 12, 2019 at 5:21 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> In commit 6136765b23abd9faba610dd54ed276a777811575 ("toolchain:
+> generate check-headers program under $(BUILD_DIR)"), the
+> check_kernel_headers_version function was simplified to not check the
+> return value of the check-kernel-headers.sh script, assuming that
+> "make" does bail out on the first failing command.
+>
+> However, check_kernel_headers_version when used in $(2)_CONFIGURE_CMDS
+> from pkg-toolchain-external.mk, is called in a sequence of commands,
+> where the return value of each command is not checked. Therefore, a
+> failure of check-kernel-headers.sh no longer aborts the build.
+>
+> Since all other macros are using this principle of calling "exit 1",
+> we revert back to the same for check_kernel_headers_version, as it was
+> done prior to 6136765b23abd9faba610dd54ed276a777811575.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Carlos Santos <unixmania@gmail.com>
+> ---
+>  toolchain/helpers.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 42e5522060..996cc70d44 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -163,7 +163,9 @@ copy_toolchain_sysroot = \
+>  # $3: kernel version string, in the form: X.Y
+>  #
+>  check_kernel_headers_version = \
+> -       support/scripts/check-kernel-headers.sh $(1) $(2) $(3)
+> +       if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3); then \
+> +               exit 1; \
+> +       fi
+>
+>  #
+>  # Check the specific gcc version actually matches the version in the
+> --
+> 2.23.0
+>
 
-> qemu requires python in its configre script. Yet host-python was
-> not listed as one of the package's dependencies. If no other package
-> requested host-python, then configuring this package will fail since
-> it won't find any executable named python in the host dir.
-> 
-> In order to reproduce this issue you must not have python2 installed
-> on your host machine.
-> 
-> Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
+The function became a one-liner after commit 6136765b23. Wouldn't it
+be simpler and more readable to run the script and test the result,
+both in linux-headers.mk and pkg-toolchain-external.mk?
 
-qemu needs python 2 *or* python 3, so we can do something like this:
-
-QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-
-This way, if you have Python 3.x enabled for the target (and therefore
-you are already building host-python3), it will use host-python3.
-
-Could you test this in a configuration that has BR2_PACKAGE_QEMU=y and
-BR2_PACKAGE_PYTHON3=y, and check it works properly ?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Carlos Santos <unixmania@gmail.com>
