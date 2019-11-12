@@ -1,77 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 Nov 2019 23:06:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lxc: fix build without SSP
-Message-ID: <20191111220658.9741-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 12 Nov 2019 07:45:46 +0200
+Subject: [Buildroot] How to create/install U-Boot and Linux to boot from
+ eMMC
+In-Reply-To: <a78aeb5e102b46c5827b626bcc23c23c@EX13D04UEA001.ant.amazon.com>
+References: <a78aeb5e102b46c5827b626bcc23c23c@EX13D04UEA001.ant.amazon.com>
+Message-ID: <20191112054546.2imksgoqfieqjpu4@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/57945f54ffbc5c8764b6891a4516c4907e56ab97
+Hi Scott,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...c-fix-build-on-toolchain-without-SSP.patch | 36 +++++++++++++++++++
- package/lxc/lxc.mk                            |  2 ++
- 2 files changed, 38 insertions(+)
- create mode 100644 package/lxc/0002-configure.ac-fix-build-on-toolchain-without-SSP.patch
+On Mon, Nov 11, 2019 at 08:14:59PM +0000, Whitney, Scott wrote:
+> Our board also has 8GB of eMMC memory.  I'd like to know how to use 
+> Buildroot to program boot/U-Boot and rootfs/Linux onto the eMMC so that we 
+> can boot directly from that without having to have an SD card installed.
+> 
+> Can anyone provide instructions for partitioning, formatting, and installing 
+> an image suitable for booting from eMMC card?  I can have genimage create an 
+> eMMC.img file if the format needs to be different, but I'm just not sure 
+> what needs to be on the eMMC for this to work successfully.
 
-diff --git a/package/lxc/0002-configure.ac-fix-build-on-toolchain-without-SSP.patch b/package/lxc/0002-configure.ac-fix-build-on-toolchain-without-SSP.patch
-new file mode 100644
-index 0000000000..aa35e93824
---- /dev/null
-+++ b/package/lxc/0002-configure.ac-fix-build-on-toolchain-without-SSP.patch
-@@ -0,0 +1,36 @@
-+From 226205f0c5e3ef6f5757ffdfddd5b815b217e4ff Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 11 Nov 2019 22:55:36 +0100
-+Subject: [PATCH] configure.ac: fix build on toolchain without SSP
-+
-+Commit 3b5a0eebd4d2efdaa03c6fb11950abfcf081fab8 reverted
-+3aa7271157d3c815a4426c1f8eaea2f3b6dafa6a resulting in lxc being unable
-+to be built on toolchain without SSP support
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/57945f54ffbc5c8764b6891a4516c4907e56ab97
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/lxc/lxc/pull/3184]
-+---
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 645a2166d..4c1a10b3d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -713,8 +713,8 @@ AX_CHECK_COMPILE_FLAG([-Wcast-align], [CFLAGS="$CFLAGS -Wcast-align"],,[-Werror]
-+ AX_CHECK_COMPILE_FLAG([-Wstrict-prototypes], [CFLAGS="$CFLAGS -Wstrict-prototypes"],,[-Werror])
-+ AX_CHECK_COMPILE_FLAG([-fno-strict-aliasing], [CFLAGS="$CFLAGS -fno-strict-aliasing"],,[-Werror])
-+ AX_CHECK_COMPILE_FLAG([-fstack-clash-protection], [CFLAGS="$CFLAGS -fstack-clash-protection"],,[-Werror])
-+-AX_CHECK_COMPILE_FLAG([-fstack-protector-strong], [CFLAGS="$CFLAGS -fstack-protector-strong"],,[-Werror])
-+-AX_CHECK_COMPILE_FLAG([--param=ssp-buffer-size=4], [CFLAGS="$CFLAGS --param=ssp-buffer-size=4"],,[-Werror])
-++AX_CHECK_LINK_FLAG([-fstack-protector-strong], [CFLAGS="$CFLAGS -fstack-protector-strong"],,[-Werror])
-++AX_CHECK_LINK_FLAG([--param=ssp-buffer-size=4], [CFLAGS="$CFLAGS --param=ssp-buffer-size=4"],,[-Werror])
-+ AX_CHECK_COMPILE_FLAG([-g], [CFLAGS="$CFLAGS -g"],,[-Werror])
-+ AX_CHECK_COMPILE_FLAG([--mcet -fcf-protection], [CFLAGS="$CFLAGS --mcet -fcf-protection"],,[-Werror])
-+ AX_CHECK_COMPILE_FLAG([-Werror=implicit-function-declaration], [CFLAGS="$CFLAGS -Werror=implicit-function-declaration"],,[-Werror])
-+-- 
-+2.23.0
-+
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 81adeef5ee..53e3c85c6d 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -10,6 +10,8 @@ LXC_LICENSE = LGPL-2.1+
- LXC_LICENSE_FILES = COPYING
- LXC_DEPENDENCIES = host-pkgconf
- LXC_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+LXC_AUTORECONF = YES
- 
- LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-werror \
+eMMC usually provides two hardware boot partitions that are meant to make boot 
+more reliable. These are shown as /dev/mmcblkXboot{0,1} device nodes under 
+Linux. That in addition to the main /dev/mmcblkX device node. See the link 
+below for some more information.
+
+  https://www.kernel.org/doc/html/latest/driver-api/mmc/mmc-dev-parts.html
+
+Some hardware platforms are aware of eMMC boot partitions, some not. To 
+complicate things even more, there are eMMC hardware configuration settings 
+(BOOT_PARTITION_ENABLE, PARTITION_ACCESS) that control the visibility of the 
+boot partition at boot. Use the mmc-utils 'mmc' utility, or U-Boot 'mmc 
+partconf' command to query and manipulate these bits.
+
+Also note that the offset of the boot image into the block device might be 
+different when the eMMC boot partition is used for boot.
+
+See below two eMMC software installation guides that I have been involved in, 
+for two different platforms.
+
+  https://developer.solid-run.com/knowledge-base/installing-and-booting-an-image-on-i-mx6-som-emmc/
+  https://developer.solid-run.com/knowledge-base/a388-debian/#emmc-software-installation
+
+They talk about Debian image installation, but it equally applies to any SD 
+card software image like the one you generated with Buildroot. You'll find 
+there some hints that might help you while experimenting with your hardware.
+
+Hope this helps,
+baruch
+
 -- 
-2.23.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
