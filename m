@@ -1,49 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Nov 2019 21:21:17 +0100
-Subject: [Buildroot] [PATCH] toolchain/helpers: make sure we bail out when
- kernel headers check fails
-Message-ID: <20191112202118.56136-1-thomas.petazzoni@bootlin.com>
+Date: Tue, 12 Nov 2019 21:24:46 +0100
+Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: Fix ARM
+ build
+In-Reply-To: <08d749aa-743d-d05c-7aae-b98e70862617@codethink.co.uk>
+References: <20191111124807.1151582-1-thomas.preston@codethink.co.uk>
+ <20191111153657.1a56760e@windsurf.home>
+ <c7a19ef5-03ee-64c5-bf1b-e84d220561ef@codethink.co.uk>
+ <08d749aa-743d-d05c-7aae-b98e70862617@codethink.co.uk>
+Message-ID: <20191112212446.21cbdbca@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 6136765b23abd9faba610dd54ed276a777811575 ("toolchain:
-generate check-headers program under $(BUILD_DIR)"), the
-check_kernel_headers_version function was simplified to not check the
-return value of the check-kernel-headers.sh script, assuming that
-"make" does bail out on the first failing command.
+Hello Thomas,
 
-However, check_kernel_headers_version when used in $(2)_CONFIGURE_CMDS
-from pkg-toolchain-external.mk, is called in a sequence of commands,
-where the return value of each command is not checked. Therefore, a
-failure of check-kernel-headers.sh no longer aborts the build.
+On Mon, 11 Nov 2019 17:12:13 +0000
+Thomas Preston <thomas.preston@codethink.co.uk> wrote:
 
-Since all other macros are using this principle of calling "exit 1",
-we revert back to the same for check_kernel_headers_version, as it was
-done prior to 6136765b23abd9faba610dd54ed276a777811575.
+> I can reproduce with some changes to raspberrypi3_defconfig. The
+> changes can be summarised as:
+> - Switch glibc toolchain instead of uclibc
+> - Enable xorg-server
+> 
+> I don't think there are any defconfigs (except with my changes) which
+> meet these conditions:
+> 
+> 	$ git grep -l BR2_arm=y configs | xargs grep -l GLIBC | xargs grep XORG_SERVER
+> 	configs/raspberrypi3_defconfig:BR2_PACKAGE_XSERVER_XORG_SERVER=y
+> 
+> So this condition is never reproduced in the autobuilder.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Carlos Santos <unixmania@gmail.com>
----
- toolchain/helpers.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+The autobuilders are completely unrelated to the defconfigs.
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 42e5522060..996cc70d44 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -163,7 +163,9 @@ copy_toolchain_sysroot = \
- # $3: kernel version string, in the form: X.Y
- #
- check_kernel_headers_version = \
--	support/scripts/check-kernel-headers.sh $(1) $(2) $(3)
-+	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3); then \
-+		exit 1; \
-+	fi
- 
- #
- # Check the specific gcc version actually matches the version in the
+We have two completely distinct CI mechanisms:
+
+ (1) Gitlab CI. This one does the kind of traditional CI that most
+     projects have. In the case of Buildroot, it does build the defconfigs
+     and runs the runtime tests on a regular basis.
+
+ (2) Autobuilders. These generate random configurations, and build
+     those random configurations. We have a number of machines (about
+     5-6 machines) that do this 24/7 and report the results at
+     http://autobuild.buildroot.org. This gives a much wider testing
+     coverage than building defconfigs, as our defconfigs are almost all
+     minimal.
+
+So, when I say "autobuilders", I'm referring to (2) above. And I don't
+get why this sys/io.h doesn't occur in the autobuilders.
+
+Best regards,
+
+Thomas
 -- 
-2.23.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
