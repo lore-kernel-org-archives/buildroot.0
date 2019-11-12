@@ -1,65 +1,41 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 12 Nov 2019 15:03:00 -0600
-Subject: [Buildroot] [Next] package/python-bunch: new package
-Message-ID: <20191112210300.17792-1-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 12 Nov 2019 21:55:57 +0100
+Subject: [Buildroot] [git commit] package/ninja: invoke python3 explicitly
+ to configure the package
+Message-ID: <20191112205611.6E8D68E606@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/python-bunch/Config.in         |  6 ++++++
- package/python-bunch/python-bunch.hash |  5 +++++
- package/python-bunch/python-bunch.mk   | 14 ++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 package/python-bunch/Config.in
- create mode 100644 package/python-bunch/python-bunch.hash
- create mode 100644 package/python-bunch/python-bunch.mk
+commit: https://git.buildroot.net/buildroot/commit/?id=f31cd33cefc0fd71f41459d39c42b049ade3605d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-bunch/Config.in b/package/python-bunch/Config.in
-new file mode 100644
-index 0000000000..89eae742b8
---- /dev/null
-+++ b/package/python-bunch/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_BUNCH
-+	bool "python-bunch"
-+	help
-+	  A dot-accessible dictionary (a la JavaScript objects).
-+
-+	  http://github.com/dsc/bunch
-diff --git a/package/python-bunch/python-bunch.hash b/package/python-bunch/python-bunch.hash
-new file mode 100644
-index 0000000000..5cf2cece46
---- /dev/null
-+++ b/package/python-bunch/python-bunch.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/bunch/json
-+md5	0a829d64e95ed96defbcae2bf9061bb0  bunch-1.0.1.tar.gz
-+sha256	50c77a0fc0cb372dfe48b5e11937d5f70e743adbf42683f3a6d2857645a76aaa  bunch-1.0.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	57ca95c92059c8380625192462979bd32994aae3fcdf902ff6eb1e467eeb0469  LICENSE.txt
-diff --git a/package/python-bunch/python-bunch.mk b/package/python-bunch/python-bunch.mk
-new file mode 100644
-index 0000000000..18fdc223bb
---- /dev/null
-+++ b/package/python-bunch/python-bunch.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-bunch
-+#
-+################################################################################
-+
-+PYTHON_BUNCH_VERSION = 1.0.1
-+PYTHON_BUNCH_SOURCE = bunch-$(PYTHON_BUNCH_VERSION).tar.gz
-+PYTHON_BUNCH_SITE = https://files.pythonhosted.org/packages/ef/bf/a4cf1779a4ffb4f610903fa08e15d1f4a8a2f4e3353a02afbe097c5bf4a8
-+PYTHON_BUNCH_SETUP_TYPE = setuptools
-+PYTHON_BUNCH_LICENSE = MIT
-+PYTHON_BUNCH_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
--- 
-2.17.1
+ninja depends on python3 specifically, but the configure.py file
+simply uses "env python". Where no python is selected for the target
+you simply won't get a python symlink in $(HOST_DIR)/usr/bin, so the
+configure.py script fails to run since it can't find "python".
+
+Notice that in order to reproduce the issue, you must not have
+python2 installed on your host machine.
+
+Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ninja/ninja.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
+index 4897012150..281cd70412 100644
+--- a/package/ninja/ninja.mk
++++ b/package/ninja/ninja.mk
+@@ -17,7 +17,7 @@ NINJA_LICENSE_FILES = COPYING
+ HOST_NINJA_DEPENDENCIES = host-python3
+ 
+ define HOST_NINJA_BUILD_CMDS
+-	(cd $(@D); ./configure.py --bootstrap)
++	(cd $(@D); $(HOST_DIR)/bin/python3 configure.py --bootstrap)
+ endef
+ 
+ define HOST_NINJA_INSTALL_CMDS
