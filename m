@@ -1,15 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Nov 2019 23:13:33 +0100
+Date: Tue, 12 Nov 2019 23:14:58 +0100
 Subject: [Buildroot] [PATCH] configs/pc_x86_64_efi: add GPT partition
  table support.
 In-Reply-To: <20190807135457.6201-1-alexandre.payen@smile.fr>
 References: <20190807135457.6201-1-alexandre.payen@smile.fr>
-Message-ID: <20191112231333.740f52b2@windsurf>
+Message-ID: <20191112231458.2c775567@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Hello,
+
+(Resending with Carlos new e-mail address)
 
 On Wed,  7 Aug 2019 15:54:57 +0200
 Aalx <alexandre.payen@smile.fr> wrote:
