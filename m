@@ -1,32 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Nov 2019 21:52:04 +0100
-Subject: [Buildroot] [PATCH v2 1/1] arch/config.in.arc: Introduce the
- ARC optimized hs38 config
-In-Reply-To: <20191112153443.15715-2-vgupta@synopsys.com>
-References: <20191112153443.15715-1-vgupta@synopsys.com>
- <20191112153443.15715-2-vgupta@synopsys.com>
-Message-ID: <20191112215204.0ea65eb9@windsurf>
+Date: Tue, 12 Nov 2019 21:53:41 +0100
+Subject: [Buildroot] [PATCH,
+ next 1/1] package/libglib2: bump to version 2.62.2
+In-Reply-To: <20191111210251.2216431-1-aduskett@gmail.com>
+References: <20191111210251.2216431-1-aduskett@gmail.com>
+Message-ID: <20191112215341.28f7b1aa@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 Nov 2019 07:34:43 -0800
-Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+Hello Adam,
 
-> This corresponds to -mcu=hs38 with mpy-option=9 (64-bit multiplier)
-> 
-> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-> ---
-> Changes since v1
->  - Retained BR2_hs38 build semantics (dropped BR2_archs)
->  - Introduced BR2_hs38_64mpy for generating double multiply instructions
-> ---
->  arch/Config.in.arc | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+On Mon, 11 Nov 2019 13:02:51 -0800
+aduskett at gmail.com wrote:
 
-Applied to next, thanks.
+> diff --git a/package/libglib2/0002-add-option-to-build-tests.patch b/package/libglib2/0002-add-option-to-build-tests.patch
+> index 5caaaff6b2..5f0d638dbf 100644
+> --- a/package/libglib2/0002-add-option-to-build-tests.patch
+> +++ b/package/libglib2/0002-add-option-to-build-tests.patch
+
+This patch is no longer adding an option to build tests, so I'm
+surprised that the title/commit description hasn't changed.
+
+> + # Don?t build the tests unless we can run them (either natively, in an exe wrapper, or by installing them for later use)
+> +-build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper()) or installed_tests_enabled
+> ++build_tests = installed_tests_enabled
+
+Why do we need to change this ? Is meson.has_exe_wrapper() true in our case ?
+
+Thanks,
 
 Thomas
 -- 
