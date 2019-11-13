@@ -1,61 +1,29 @@
-From: Avraham Shukron <avraham.shukron@gmail.com>
-Date: Wed, 13 Nov 2019 22:22:00 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/qemu: add host-python as an
- explicit dependency
-In-Reply-To: <20191112220534.531a470f@windsurf>
-References: <20191111213154.19409-1-avraham.shukron@gmail.com>
- <20191111213154.19409-2-avraham.shukron@gmail.com>
- <20191112220534.531a470f@windsurf>
-Message-ID: <CAJX3zAuwNz7zzdrxupT+o_ZWR7AYRrk6h1XpRuYHk778pMU0ZQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Nov 2019 21:32:18 +0100
+Subject: [Buildroot] [git commit] package/kodi: add hash for license file
+Message-ID: <20191113203143.A63048EE82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 12, 2019 at 11:05 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
->
->
-> qemu needs python 2 *or* python 3, so we can do something like this:
->
-> QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman $(if
-$(BR2_PACKAGE_PYTHON3),host-python3,host-python)
->
-> This way, if you have Python 3.x enabled for the target (and therefore
-> you are already building host-python3), it will use host-python3.
->
-> Could you test this in a configuration that has BR2_PACKAGE_QEMU=y and
-> BR2_PACKAGE_PYTHON3=y, and check it works properly ?
+commit: https://git.buildroot.net/buildroot/commit/?id=3f761492ac9bf425b57f6a54d09c77f9699f2609
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Your suggestion works. If python3 is selected - host-python3 is used.
-BUT - host-qemu also depends on host-libglib2 which depends on host-meson
-which depends on python3,
-so even if you **don't** select python3 you end up with host-python3
-because of meson, and also
-host-python because now host-qemu directly depends on it. Attached a
-dependency graph depicting
-the scenario.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/kodi/kodi.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-So - since host-python3 will be used anyway - I suggest we just depend on
-it exclusively.
-What do you think?
-
-BTW - I'm pretty sure that there aren't really so many packages that truly
-depends on **host**-python2 (except maybe python2 itself)
-So in general I think it could be a good idea to just replace **all**
-host-python with host-python3 (again - except python2 itself) and
-just see what happens.
-It might just work.
-
-Avi.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191113/a331bcf6/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: host-qemu-graph-depends.png
-Type: image/png
-Size: 203002 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191113/a331bcf6/attachment-0001.png>
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index 8018c67a3a..2b2e5e64f9 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -8,3 +8,5 @@ sha256 b6eb2d929ff56cb051152c32010afc5e7cf5fe8c5ae32dca412a2b46b6b57e34  2f12236
+ sha256 312b3d15bc448d24e92f4b2e7248409525eccc4e75776026d805478e51c5ef3d  981488f.tar.gz
+ # Locally computed - libdvdread
+ sha256 e7179b2054163652596a56301c9f025515cb08c6d6310b42b897c3ad11c0199b  17d99db.tar.gz
++# Locally computed
++sha256 89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
