@@ -1,70 +1,60 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Tue, 12 Nov 2019 22:09:36 -0300
-Subject: [Buildroot] [PATCH] configs/pc_x86_64_efi: add GPT partition
- table support.
-In-Reply-To: <20191112231458.2c775567@windsurf>
-References: <20190807135457.6201-1-alexandre.payen@smile.fr>
- <20191112231458.2c775567@windsurf>
-Message-ID: <CAJ4jsadt96wNM-ig2+PHC+9Ns6u=eNrax3LUJXH0K3FmCzhAcA@mail.gmail.com>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Wed, 13 Nov 2019 03:41:44 +0000
+Subject: [Buildroot] [PATCH v2] toolchain,
+ glibc: Allow ARC big endian glibc builds
+In-Reply-To: <20191105173502.11553-1-vgupta@synopsys.com>
+References: <CY4PR1201MB0120ABDDCAB8033A0268CDC1A17E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+ <20191105173502.11553-1-vgupta@synopsys.com>
+Message-ID: <6c2f89b6-763c-c286-d901-f31adacc092c@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 12, 2019 at 7:14 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> (Resending with Carlos new e-mail address)
->
-> On Wed,  7 Aug 2019 15:54:57 +0200
-> Aalx <alexandre.payen@smile.fr> wrote:
->
-> > From: Alexandre PAYEN <alexandre.payen@smile.fr>
-> >
-> > Based on commit fee29b05bb7db25e37c8a5175ce00dc712554edf[1].
-> > It add the use of GPT partition table on pc_x86_64_efi.
-> > This commit removed the use of genimage and replace it with a shell
-> > script.
-> >
-> > Since version 11, genimage support GPT partition table.
-> >
-> > Tested in QEMU, not on a physical device.
-> >
-> > So:
-> > - revert commit fee29b05bb7db25e37c8a5175ce00dc712554edf[1]
-> > - add GPT support
-> > - tweak shell script to add the correct UUID in genimage config.
-> >
-> > [1]: https://git.buildroot.net/buildroot/commit/?id=fee29b05bb7db25e37c8a5175ce00dc712554edf
-> > [2]: https://git.buildroot.net/buildroot/commit/?id=79b8540d624ac4846ba341b1b9691eccacf0bc05
-> >
-> > Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
-> > Cc: Carlos Santos <casantos@datacom.com.br>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->
-> So, I kind of screwed up: I applied this version of the patch, taking
-> into account the comments from Carlos, and then only realized that
-> Carlos has sent a v2.
->
-> From a quick look, Carlos v2 seems identical to the changes I've done
-> to this v1.
->
-> Carlos, could you double check that what I have applied is OK ? I did a
-> test build, and booted under Qemu and it worked fine here.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Ping !
 
-It's OK. The "set -e" at the beginning of board/pc/post-image-efi.sh
-is nice to have but not essential.
-
--- 
-Carlos Santos <unixmania@gmail.com>
+On 11/5/19 9:35 AM, Vineet Gupta wrote:
+> Apparently big endian glibc builds just work, if we let the endian
+> header allow that (which prev was #error).
+> 
+> So this patch bumps glibc to version which fixes the header (this
+> hopefully will become arc-2019.09-release) and then enables arceb
+> in glibc toolchain builds
+> 
+> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+> ---
+> Changes since v1
+>   - Use BR2_arc iso BR2_arcle && BR2_arcbe
+> ---
+>  package/glibc/glibc.mk                  | 2 +-
+>  toolchain/toolchain-buildroot/Config.in | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index d46063c5d111..754408881397 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  ifeq ($(BR2_arc),y)
+> -GLIBC_VERSION =  arc-2019.03-release
+> +GLIBC_VERSION = ec681dddfa99894513c85da7d5d257b60d04f915
+>  GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
+>  else ifeq ($(BR2_RISCV_32),y)
+>  GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index c0612bf04176..327314585b8e 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -48,7 +48,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>  		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+>  		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
+>  		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
+> -		   (BR2_arcle && BR2_ARC_ATOMIC_EXT) || BR2_csky
+> +		   (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+> 
