@@ -1,73 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Nov 2019 22:41:14 +0100
-Subject: [Buildroot] [PATCH] toolchain/helpers: make sure we bail out
- when kernel headers check fails
-In-Reply-To: <20191112202118.56136-1-thomas.petazzoni@bootlin.com>
-References: <20191112202118.56136-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191113214114.GB26360@scaer>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 13 Nov 2019 16:44:29 -0600
+Subject: [Buildroot] [Next] package/python-wsgiref: new package
+Message-ID: <20191113224429.30980-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/Config.in                          |  1 +
+ package/python-wsgiref/Config.in           |  6 ++++++
+ package/python-wsgiref/python-wsgiref.hash |  3 +++
+ package/python-wsgiref/python-wsgiref.mk   | 18 ++++++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-wsgiref/Config.in
+ create mode 100644 package/python-wsgiref/python-wsgiref.hash
+ create mode 100644 package/python-wsgiref/python-wsgiref.mk
 
-On 2019-11-12 21:21 +0100, Thomas Petazzoni spake thusly:
-> In commit 6136765b23abd9faba610dd54ed276a777811575 ("toolchain:
-> generate check-headers program under $(BUILD_DIR)"), the
-> check_kernel_headers_version function was simplified to not check the
-> return value of the check-kernel-headers.sh script, assuming that
-> "make" does bail out on the first failing command.
-> 
-> However, check_kernel_headers_version when used in $(2)_CONFIGURE_CMDS
-> from pkg-toolchain-external.mk, is called in a sequence of commands,
-> where the return value of each command is not checked. Therefore, a
-> failure of check-kernel-headers.sh no longer aborts the build.
-> 
-> Since all other macros are using this principle of calling "exit 1",
-> we revert back to the same for check_kernel_headers_version, as it was
-> done prior to 6136765b23abd9faba610dd54ed276a777811575.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Carlos Santos <unixmania@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  toolchain/helpers.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 42e5522060..996cc70d44 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -163,7 +163,9 @@ copy_toolchain_sysroot = \
->  # $3: kernel version string, in the form: X.Y
->  #
->  check_kernel_headers_version = \
-> -	support/scripts/check-kernel-headers.sh $(1) $(2) $(3)
-> +	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3); then \
-> +		exit 1; \
-> +	fi
->  
->  #
->  # Check the specific gcc version actually matches the version in the
-> -- 
-> 2.23.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index e87b5a57d7..c150ee2473 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1133,6 +1133,7 @@ menu "External python modules"
+ 	source "package/python-wrapt/Config.in"
+ 	source "package/python-ws4py/Config.in"
+ 	source "package/python-wsaccel/Config.in"
++	source "package/python-wsgiref/Config.in"
+ 	source "package/python-wtforms/Config.in"
+ 	source "package/python-xlib/Config.in"
+ 	source "package/python-xlrd/Config.in"
+diff --git a/package/python-wsgiref/Config.in b/package/python-wsgiref/Config.in
+new file mode 100644
+index 0000000000..2fde92cab0
+--- /dev/null
++++ b/package/python-wsgiref/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_WSGIREF
++	bool "python-wsgiref"
++	help
++	  WSGI (PEP 333) Reference Library.
++
++	  http://cheeseshop.python.org/pypi/wsgiref
+diff --git a/package/python-wsgiref/python-wsgiref.hash b/package/python-wsgiref/python-wsgiref.hash
+new file mode 100644
+index 0000000000..0c9a4fecd8
+--- /dev/null
++++ b/package/python-wsgiref/python-wsgiref.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/wsgiref/json
++md5	29b146e6ebd0f9fb119fe321f7bcf6cb  wsgiref-0.1.2.zip
++sha256	c7e610c800957046c04c8014aab8cce8f0b9f0495c8cd349e57c1f7cabf40e79  wsgiref-0.1.2.zip
+diff --git a/package/python-wsgiref/python-wsgiref.mk b/package/python-wsgiref/python-wsgiref.mk
+new file mode 100644
+index 0000000000..e30f4c6a31
+--- /dev/null
++++ b/package/python-wsgiref/python-wsgiref.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# python-wsgiref
++#
++################################################################################
++
++PYTHON_WSGIREF_VERSION = 0.1.2
++PYTHON_WSGIREF_SOURCE = wsgiref-$(PYTHON_WSGIREF_VERSION).zip
++PYTHON_WSGIREF_SITE = https://files.pythonhosted.org/packages/41/9e/309259ce8dff8c596e8c26df86dbc4e848b9249fd36797fd60be456f03fc
++PYTHON_WSGIREF_SETUP_TYPE = setuptools
++PYTHON_WSGIREF_LICENSE = PSF or ZPL
++
++define PYTHON_WSGIREF_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(PYTHON_WSGIREF_DL_DIR)/$(PYTHON_WSGIREF_SOURCE)
++	mv $(@D)/wsgiref-$(PYTHON_WSGIREF_VERSION)/* $(@D)/
++endef
++
++$(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
