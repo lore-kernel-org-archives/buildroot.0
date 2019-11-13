@@ -1,18 +1,50 @@
-From: a <anushka.parashar@tesco.com>
-Date: Wed, 13 Nov 2019 05:41:55 -0600 (CST)
-Subject: [Buildroot] lshw package not getting added to the resulting image
-Message-ID: <1573645315718-0.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 13 Nov 2019 13:06:30 +0100
+Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: Fix ARM
+ build
+In-Reply-To: <1debcd70-de93-f709-a313-f358572c3048@smile.fr>
+References: <20191111124807.1151582-1-thomas.preston@codethink.co.uk>
+ <20191111153657.1a56760e@windsurf.home>
+ <c7a19ef5-03ee-64c5-bf1b-e84d220561ef@codethink.co.uk>
+ <08d749aa-743d-d05c-7aae-b98e70862617@codethink.co.uk>
+ <20191112212446.21cbdbca@windsurf>
+ <77353588-bf06-8112-4afe-41f488dbaa66@codethink.co.uk>
+ <1debcd70-de93-f709-a313-f358572c3048@smile.fr>
+Message-ID: <20191113130630.759bf8de@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I wanna run lshw from my resulting image, 
-I have selected hwdata but lshw pacakge is not getting added to output/build
-after the compilation is over. 
+Hello,
 
+On Wed, 13 Nov 2019 12:10:34 +0100
+Romain Naour <romain.naour@smile.fr> wrote:
 
+> @Thomas Petazzoni: Maybe we need to rebuild the arm bleeding edge toolchain used
+> by the autobuilders using the current glibc version (2.30).
 
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+True.
+
+> The current prebuilt toolchain are from 06/2019 but glibc 2.30 has been released
+> 08/2019.
+> 
+> There is only one internal toolchain for arm and it use uclibc-ng by default.
+> 
+> Maybe we can add a new internal toolchain for glibc and musl ?
+
+We already have these:
+
+$ ls -1 support/config-fragments/autobuild/br-arm-internal-*
+support/config-fragments/autobuild/br-arm-internal-full.config
+support/config-fragments/autobuild/br-arm-internal-glibc.config
+support/config-fragments/autobuild/br-arm-internal-musl.config
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
