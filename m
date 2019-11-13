@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Nov 2019 22:13:57 +0100
-Subject: [Buildroot] [PATCH 00/11] Fix license incompatibility with
- readline
-In-Reply-To: <20191113151724.12155-1-peter@korsgaard.com>
+Date: Wed, 13 Nov 2019 22:26:27 +0100
+Subject: [Buildroot] [PATCH 05/11] package/kodi: drop readline dependency
+In-Reply-To: <20191113151724.12155-6-peter@korsgaard.com>
 References: <20191113151724.12155-1-peter@korsgaard.com>
-Message-ID: <20191113211357.GT3419@scaer>
+ <20191113151724.12155-6-peter@korsgaard.com>
+Message-ID: <20191113212627.GU3419@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,48 @@ To: buildroot@busybox.net
 Peter, All,
 
 On 2019-11-13 16:17 +0100, Peter Korsgaard spake thusly:
-> We have a number of packages where we (optionally) link with readline,
-> even though the license of the package isn't compatible with the
-> license of readline (GPL-3.0+), E.G. for packages licensed under
-> GPL-2.0 only.
+> {python-,}readline is (no longer) a required dependency of kodi, and
+> readline (GPL-3.0+) is not license compatible with kodi (GPL-2.0), so drop
+> the dependency.
 > 
-> This series aims to fix that. I've tried to review the entire tree,
-> and this is what I found:
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+[--SNIP--]
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index 028bf551bc..49728e464b 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -38,7 +38,6 @@ KODI_DEPENDENCIES = \
+>  	openssl \
+>  	pcre \
+>  	python \
+> -	readline \
 
-Thanks a lot for doing this tedious work. Series mostly applied to
-master now, except these two patches:
+What does actually prevent kodi from linking with readline, is that
+happens to be built before?
 
-> kodi: fixed (GPL-2.0)
-> neardal: fixed (GPL-2.0)
+I'll kick-start a build here (without your patch) and see what goes
+linked with readline, if anything.
 
-I'll reply (or have already replied) with more details to the individual
-patches.
+In the meantime, I've pondered applying this patch anyway, because it
+removes the explicit dependency, so that if kodi still links to
+readline, that would be an accident due to another intermediate
+dependency, and thus not our fault. But I am not too happy either, so
+I refrained eventually...
 
 Regards,
 Yann E. MORIN.
+
+>  	sqlite \
+>  	taglib \
+>  	tinyxml \
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
