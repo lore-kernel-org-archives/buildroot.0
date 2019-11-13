@@ -1,53 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Nov 2019 21:39:31 +0100
-Subject: [Buildroot] [PATCH 06/11] package/kodi: add hash for license
- file
-In-Reply-To: <20191113151724.12155-7-peter@korsgaard.com>
-References: <20191113151724.12155-1-peter@korsgaard.com>
- <20191113151724.12155-7-peter@korsgaard.com>
-Message-ID: <20191113203931.GN3419@scaer>
+Date: Wed, 13 Nov 2019 21:44:12 +0100
+Subject: [Buildroot] [PATCH] package/kodi: share the download dir with
+ helper programs
+Message-ID: <20191113204412.27018-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+The two helper programs TesturePackager and JsonSchemaBuilder are built
+out of the same source tree as Kodi, so to avoid downloading the same
+archive three times, let's them share the same download directory.
 
-On 2019-11-13 16:17 +0100, Peter Korsgaard spake thusly:
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 1 +
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 1 +
+ 2 files changed, 2 insertions(+)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/kodi/kodi.hash | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-> index 8018c67a3a..2b2e5e64f9 100644
-> --- a/package/kodi/kodi.hash
-> +++ b/package/kodi/kodi.hash
-> @@ -8,3 +8,5 @@ sha256 b6eb2d929ff56cb051152c32010afc5e7cf5fe8c5ae32dca412a2b46b6b57e34  2f12236
->  sha256 312b3d15bc448d24e92f4b2e7248409525eccc4e75776026d805478e51c5ef3d  981488f.tar.gz
->  # Locally computed - libdvdread
->  sha256 e7179b2054163652596a56301c9f025515cb08c6d6310b42b897c3ad11c0199b  17d99db.tar.gz
-> +# Locally computed
-> +sha256 89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index fcf4888a9c..713d415fed 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -9,6 +9,7 @@
+ KODI_JSONSCHEMABUILDER_VERSION = 17.6-Krypton
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
++KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+ KODI_JSONSCHEMABUILDER_LICENSE = GPL-2.0
+ KODI_JSONSCHEMABUILDER_LICENSE_FILES = LICENSE.GPL
+ HOST_KODI_JSONSCHEMABUILDER_SUBDIR = tools/depends/native/JsonSchemaBuilder
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index 31e3580aed..bb35252b94 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -9,6 +9,7 @@
+ KODI_TEXTUREPACKER_VERSION = 17.6-Krypton
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
++KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+ KODI_TEXTUREPACKER_LICENSE = GPL-2.0
+ KODI_TEXTUREPACKER_LICENSE_FILES = LICENSE.GPL
+ HOST_KODI_TEXTUREPACKER_SUBDIR = tools/depends/native/TexturePacker
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
