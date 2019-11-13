@@ -1,48 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Nov 2019 20:15:28 +0100
-Subject: [Buildroot] [PATCH 03/11] package/dropwatch: license is GPL-2.0+
-In-Reply-To: <87imnneol1.fsf@tarshish> (Baruch Siach's message of "Wed, 13 Nov
- 2019 18:19:22 +0200")
-References: <20191113151724.12155-1-peter@korsgaard.com>
- <20191113151724.12155-4-peter@korsgaard.com> <87imnneol1.fsf@tarshish>
-Message-ID: <87eeybk2pb.fsf@dell.be.48ers.dk>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 13 Nov 2019 11:19:50 -0800
+Subject: [Buildroot] [PATCH,
+ next 1/1] package/libglib2: bump to version 2.62.2
+In-Reply-To: <20191112215341.28f7b1aa@windsurf>
+References: <20191111210251.2216431-1-aduskett@gmail.com>
+ <20191112215341.28f7b1aa@windsurf>
+Message-ID: <CAFSsvmqzCBG0+FX+bp2p+XJQD+pQDM3f=sefTEn9067CH7tM0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hi Thomas;
 
- > Hi Peter,
- > On Wed, Nov 13 2019, Peter Korsgaard wrote:
+On Tue, Nov 12, 2019 at 12:53 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Adam,
+>
+> On Mon, 11 Nov 2019 13:02:51 -0800
+> aduskett at gmail.com wrote:
+>
+> > diff --git a/package/libglib2/0002-add-option-to-build-tests.patch b/package/libglib2/0002-add-option-to-build-tests.patch
+> > index 5caaaff6b2..5f0d638dbf 100644
+> > --- a/package/libglib2/0002-add-option-to-build-tests.patch
+> > +++ b/package/libglib2/0002-add-option-to-build-tests.patch
+>
+> This patch is no longer adding an option to build tests, so I'm
+> surprised that the title/commit description hasn't changed.
+>
+I can change it.
 
- >> Dropwatch links with readline, which is GPL-3.0+, so not compatible with
- >> GPL-2.0.  When asked about this, upstream has clarified that the license
- >> really is GPL-2.0+:
- >> 
- >> https://github.com/nhorman/dropwatch/issues/14
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- >> package/dropwatch/dropwatch.mk | 2 +-
- >> 1 file changed, 1 insertion(+), 1 deletion(-)
- >> 
- >> diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
- >> index 1af61458e0..53d3683c5a 100644
- >> --- a/package/dropwatch/dropwatch.mk
- >> +++ b/package/dropwatch/dropwatch.mk
- >> @@ -7,7 +7,7 @@
- >> DROPWATCH_VERSION = 1.5.1
- >> DROPWATCH_SITE = $(call github,nhorman,dropwatch,v$(DROPWATCH_VERSION))
- >> DROPWATCH_DEPENDENCIES = libnl readline host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- >> -DROPWATCH_LICENSE = GPL-2.0
- >> +DROPWATCH_LICENSE = GPL-2.0+
+> > + # Don?t build the tests unless we can run them (either natively, in an exe wrapper, or by installing them for later use)
+> > +-build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper()) or installed_tests_enabled
+> > ++build_tests = installed_tests_enabled
+>
+> Why do we need to change this ? Is meson.has_exe_wrapper() true in our case ?
+>
+I believe so. Without the change, the tests are triggered to build.
+I'm not sure where we are triggering has_exe_wrapper,
+but it is indeed being triggered.
 
- > Maybe add a link to upstream license clarification in a comment?
-
-True, lets do that when committing. Upstream has not actually made any
-changes to the repo yet though.
-
--- 
-Bye, Peter Korsgaard
+Adam
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
