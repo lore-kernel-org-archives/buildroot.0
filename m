@@ -1,38 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Nov 2019 20:45:52 +0100
-Subject: [Buildroot] [PATCH,
- next 1/1] package/libglib2: bump to version 2.62.2
-In-Reply-To: <CAFSsvmqzCBG0+FX+bp2p+XJQD+pQDM3f=sefTEn9067CH7tM0w@mail.gmail.com>
-References: <20191111210251.2216431-1-aduskett@gmail.com>
- <20191112215341.28f7b1aa@windsurf>
- <CAFSsvmqzCBG0+FX+bp2p+XJQD+pQDM3f=sefTEn9067CH7tM0w@mail.gmail.com>
-Message-ID: <20191113204552.5198d038@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Nov 2019 21:10:12 +0100
+Subject: [Buildroot] [git commit] package/chrony: use libedit for command
+ line editing
+Message-ID: <20191113200253.B170C8EE6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 13 Nov 2019 11:19:50 -0800
-Adam Duskett <aduskett@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=baadfbcc02298d03b7d532cb37eb31b26322d68b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > > + # Don?t build the tests unless we can run them (either natively, in an exe wrapper, or by installing them for later use)
-> > > +-build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper()) or installed_tests_enabled
-> > > ++build_tests = installed_tests_enabled  
-> >
-> > Why do we need to change this ? Is meson.has_exe_wrapper() true in our case ?
-> >  
-> I believe so. Without the change, the tests are triggered to build.
-> I'm not sure where we are triggering has_exe_wrapper,
-> but it is indeed being triggered.
+chrony is licensed under GPL-2.0, which is not license compatible with
+readline (GPL-3.0+), so remove the optional readline handling and replace
+with libedit instead.
 
-It would be good to understand what is this has_exe_wrapper thing, and
-why we are triggering it.
+While we are at it, also explicitly disable the libedit backend when not
+available.
 
-Thanks,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/chrony/chrony.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index f6dcb11794..379745022c 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -13,6 +13,7 @@ CHRONY_CONF_OPTS = \
+ 	--host-system=Linux \
+ 	--host-machine=$(BR2_ARCH) \
+ 	--prefix=/usr \
++	--without-readline \
+ 	--without-tomcrypt \
+ 	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
+ 
+@@ -35,10 +36,10 @@ else
+ CHRONY_CONF_OPTS += --without-seccomp
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_READLINE),y)
+-CHRONY_DEPENDENCIES += readline
++ifeq ($(BR2_PACKAGE_LIBEDIT),y)
++CHRONY_DEPENDENCIES += libedit
+ else
+-CHRONY_CONF_OPTS += --disable-readline
++CHRONY_CONF_OPTS += --without-editline --disable-readline
+ endif
+ 
+ # If pps-tools is available, build it before so the package can use it
