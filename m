@@ -1,79 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Nov 2019 19:53:11 +0100
-Subject: [Buildroot] [PATCH 01/11] package/chrony: use libedit for
- command line editing
-In-Reply-To: <20191113151724.12155-2-peter@korsgaard.com>
-References: <20191113151724.12155-1-peter@korsgaard.com>
- <20191113151724.12155-2-peter@korsgaard.com>
-Message-ID: <20191113185311.GJ3419@scaer>
+Date: Wed, 13 Nov 2019 19:55:56 +0100
+Subject: [Buildroot] [git commit] package/connman: clarify license of client
+ code
+Message-ID: <20191113184835.4F7E58EE47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7d0ee8b4b8b162e010341f63821410100903370d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-11-13 16:17 +0100, Peter Korsgaard spake thusly:
-> chrony is licensed under GPL-2.0, which is not license compatible with
-> readline (GPL-3.0+), so remove the optional readline handling and replace
-> with libedit instead.
-> 
-> While we are at it, also explicitly disable the libedit backend when not
-> available.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/chrony/chrony.mk | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-> index f6dcb11794..379745022c 100644
-> --- a/package/chrony/chrony.mk
-> +++ b/package/chrony/chrony.mk
-> @@ -13,6 +13,7 @@ CHRONY_CONF_OPTS = \
->  	--host-system=Linux \
->  	--host-machine=$(BR2_ARCH) \
->  	--prefix=/usr \
-> +	--without-readline \
+While the core connman code is licensed under GPL-2.0, the client code is
+GPL-2.0+ for compatibility with readline (which is GPL-3.0+).
 
-Why is this --without-readline needed here...
+Extend the _LICENSE with this info to clarify that linking against
+readline is OK licensing wise.
 
->  	--without-tomcrypt \
->  	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
->  
-> @@ -35,10 +36,10 @@ else
->  CHRONY_CONF_OPTS += --without-seccomp
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_READLINE),y)
-> -CHRONY_DEPENDENCIES += readline
-> +ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-> +CHRONY_DEPENDENCIES += libedit
->  else
-> -CHRONY_CONF_OPTS += --disable-readline
-> +CHRONY_CONF_OPTS += --without-editline --disable-readline
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/connman/connman.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-... with this other --disable-readline here?
-
-Regards,
-Yann E. MORIN.
-
->  endif
->  
->  # If pps-tools is available, build it before so the package can use it
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 839bc7a0e2..7ca49726dd 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -39,6 +39,7 @@ define CONNMAN_INSTALL_INIT_SYSTEMD
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
++CONNMAN_LICENSE += , GPL-2.0+ (client)
+ CONNMAN_CONF_OPTS += --enable-client
+ CONNMAN_DEPENDENCIES += readline
+ 
