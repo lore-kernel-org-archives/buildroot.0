@@ -1,48 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Nov 2019 21:16:58 +0100
-Subject: [Buildroot] [git commit] package/ipsec-tools: add license
- information
-Message-ID: <20191113201430.360B98EE71@busybox.osuosl.org>
+From: Avraham Shukron <avraham.shukron@gmail.com>
+Date: Wed, 13 Nov 2019 22:22:00 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/qemu: add host-python as an
+ explicit dependency
+In-Reply-To: <20191112220534.531a470f@windsurf>
+References: <20191111213154.19409-1-avraham.shukron@gmail.com>
+ <20191111213154.19409-2-avraham.shukron@gmail.com>
+ <20191112220534.531a470f@windsurf>
+Message-ID: <CAJX3zAuwNz7zzdrxupT+o_ZWR7AYRrk6h1XpRuYHk778pMU0ZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2dff01f24b07583221cf23e4d6213a14b9a33731
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, Nov 12, 2019 at 11:05 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+>
+>
+> qemu needs python 2 *or* python 3, so we can do something like this:
+>
+> QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman $(if
+$(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+>
+> This way, if you have Python 3.x enabled for the target (and therefore
+> you are already building host-python3), it will use host-python3.
+>
+> Could you test this in a configuration that has BR2_PACKAGE_QEMU=y and
+> BR2_PACKAGE_PYTHON3=y, and check it works properly ?
 
-The tarball unfortunately does not include a dedicated license file, so
-instead use the main source file for the setkey command.
+Your suggestion works. If python3 is selected - host-python3 is used.
+BUT - host-qemu also depends on host-libglib2 which depends on host-meson
+which depends on python3,
+so even if you **don't** select python3 you end up with host-python3
+because of meson, and also
+host-python because now host-qemu directly depends on it. Attached a
+dependency graph depicting
+the scenario.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/ipsec-tools/ipsec-tools.hash | 3 +++
- package/ipsec-tools/ipsec-tools.mk   | 2 ++
- 2 files changed, 5 insertions(+)
+So - since host-python3 will be used anyway - I suggest we just depend on
+it exclusively.
+What do you think?
 
-diff --git a/package/ipsec-tools/ipsec-tools.hash b/package/ipsec-tools/ipsec-tools.hash
-index b12bea9477..7a944eb8ee 100644
---- a/package/ipsec-tools/ipsec-tools.hash
-+++ b/package/ipsec-tools/ipsec-tools.hash
-@@ -1,3 +1,6 @@
- # From http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools/0.8.2/
- md5	d53ec14a0a3ece64e09e5e34b3350b41	ipsec-tools-0.8.2.tar.bz2
- sha1	7d92cae9fde59fb4f125636698c43b0a3df3d0f0	ipsec-tools-0.8.2.tar.bz2
-+
-+# Locally calculated
-+sha256	3f4af4aef0b2599928bee9875935b8fad8449ddbb98ea7da74c20c3dff5cdef7  src/setkey/setkey.c
-diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
-index 7ac6b5cb22..634d752661 100644
---- a/package/ipsec-tools/ipsec-tools.mk
-+++ b/package/ipsec-tools/ipsec-tools.mk
-@@ -7,6 +7,8 @@
- IPSEC_TOOLS_VERSION = 0.8.2
- IPSEC_TOOLS_SOURCE = ipsec-tools-$(IPSEC_TOOLS_VERSION).tar.bz2
- IPSEC_TOOLS_SITE = http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools/$(IPSEC_TOOLS_VERSION)
-+IPSEC_TOOLS_LICENSE = BSD-3-Clause
-+IPSEC_TOOLS_LICENSE_FILES = src/setkey/setkey.c
- IPSEC_TOOLS_INSTALL_STAGING = YES
- IPSEC_TOOLS_MAKE = $(MAKE1)
- IPSEC_TOOLS_DEPENDENCIES = openssl flex host-pkgconf host-flex host-bison
+BTW - I'm pretty sure that there aren't really so many packages that truly
+depends on **host**-python2 (except maybe python2 itself)
+So in general I think it could be a good idea to just replace **all**
+host-python with host-python3 (again - except python2 itself) and
+just see what happens.
+It might just work.
+
+Avi.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191113/a331bcf6/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: host-qemu-graph-depends.png
+Type: image/png
+Size: 203002 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191113/a331bcf6/attachment-0001.png>
