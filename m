@@ -1,59 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Nov 2019 22:08:36 +0100
-Subject: [Buildroot] [git commit] package/oracle-mysql: use bundled GPL-2.0+
- libreadline
-Message-ID: <20191113210137.C96F88E865@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 13 Nov 2019 22:13:43 +0100
+Subject: [Buildroot] Linaro Toolchain for RPI and OABI Issues
+In-Reply-To: <1573650440531-0.post@n4.nabble.com>
+References: <1573542699220-0.post@n4.nabble.com>
+ <20191112201551.1f1f6190@gmx.net>
+ <1573650440531-0.post@n4.nabble.com>
+Message-ID: <20191113221343.2eb4fad3@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11e75a714567e2b02ddeb0bb40809a163619684a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello rscr,
 
-oracle-mysql is licensed under GPL-2.0, which is not license compatible with
-modern readline (GPL-3.0+), so instead use the bundled older version
-(GPL-2.0+ licensed) of readline instead.
+On Wed, 13 Nov 2019 07:07:20 -0600 (CST), rscr <rafacrespiramon@gmail.com> wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/mysql/Config.in              | 1 -
- package/oracle-mysql/oracle-mysql.mk | 4 ++--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+> Hi Peter,
+>
+> Keeps not working.
+>
+> I have changed to new recommended cross-compiler for x64
+> (arm-rpi-4.9.3-linux-gnueabihf) and I get the same error too.
 
-diff --git a/package/mysql/Config.in b/package/mysql/Config.in
-index d3f9f1f00d..ef4a9531a7 100644
---- a/package/mysql/Config.in
-+++ b/package/mysql/Config.in
-@@ -37,7 +37,6 @@ comment "mariadb needs a toolchain w/ dynamic library"
- config BR2_PACKAGE_ORACLE_MYSQL
- 	bool "oracle mysql"
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_HAS_MYSQL
- 	help
- 	  The MySQL Open Source Database System
-diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
-index 0275a8428f..326fbcc040 100644
---- a/package/oracle-mysql/oracle-mysql.mk
-+++ b/package/oracle-mysql/oracle-mysql.mk
-@@ -9,7 +9,7 @@ ORACLE_MYSQL_VERSION = $(ORACLE_MYSQL_VERSION_MAJOR).73
- ORACLE_MYSQL_SOURCE = mysql-$(ORACLE_MYSQL_VERSION).tar.gz
- ORACLE_MYSQL_SITE = http://dev.mysql.com/get/Downloads/MySQL-$(ORACLE_MYSQL_VERSION_MAJOR)
- ORACLE_MYSQL_INSTALL_STAGING = YES
--ORACLE_MYSQL_DEPENDENCIES = readline ncurses
-+ORACLE_MYSQL_DEPENDENCIES = ncurses
- ORACLE_MYSQL_AUTORECONF = YES
- ORACLE_MYSQL_LICENSE = GPL-2.0
- ORACLE_MYSQL_LICENSE_FILES = README COPYING
-@@ -33,7 +33,7 @@ ORACLE_MYSQL_CONF_OPTS = \
- 	--without-docs \
- 	--without-man \
- 	--without-libedit \
--	--without-readline \
-+	--with-readline \
- 	--with-low-memory \
- 	--enable-thread-safe-client \
- 	--with-unix-socket-path=$(MYSQL_SOCKET) \
+Are your sure buildroot uses your configured compiler?
+
+Take a look at toolchain/helpers.mk and the check for OABI,
+the check is (simpliefied):
+
+	$ <yout_path_to_toolchain>/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-gcc -v 2>&1 | grep ^Target | cut -f2 -d ' '
+	arm-bcm2708-linux-gnueabi
+
+	$ echo arm-bcm2708-linux-gnueabi | grep -E 'eabi(hf)?$$'
+	arm-bcm2708-linux-gnueabi
+
+Regards,
+Peter
+
+>
+> Thanks
+>
+>
+>
+> --
+> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
