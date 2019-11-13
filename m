@@ -1,51 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Nov 2019 23:15:39 +0100
-Subject: [Buildroot] [PATCH v3] package/rcw: add option to generate the
- RCW
-In-Reply-To: <20190803210052.6240-1-arnout@mind.be>
-References: <20190803210052.6240-1-arnout@mind.be>
-Message-ID: <20191112231539.61a328d1@windsurf>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Tue, 12 Nov 2019 22:09:36 -0300
+Subject: [Buildroot] [PATCH] configs/pc_x86_64_efi: add GPT partition
+ table support.
+In-Reply-To: <20191112231458.2c775567@windsurf>
+References: <20190807135457.6201-1-alexandre.payen@smile.fr>
+ <20191112231458.2c775567@windsurf>
+Message-ID: <CAJ4jsadt96wNM-ig2+PHC+9Ns6u=eNrax3LUJXH0K3FmCzhAcA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  3 Aug 2019 23:00:52 +0200
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+On Tue, Nov 12, 2019 at 7:14 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> (Resending with Carlos new e-mail address)
+>
+> On Wed,  7 Aug 2019 15:54:57 +0200
+> Aalx <alexandre.payen@smile.fr> wrote:
+>
+> > From: Alexandre PAYEN <alexandre.payen@smile.fr>
+> >
+> > Based on commit fee29b05bb7db25e37c8a5175ce00dc712554edf[1].
+> > It add the use of GPT partition table on pc_x86_64_efi.
+> > This commit removed the use of genimage and replace it with a shell
+> > script.
+> >
+> > Since version 11, genimage support GPT partition table.
+> >
+> > Tested in QEMU, not on a physical device.
+> >
+> > So:
+> > - revert commit fee29b05bb7db25e37c8a5175ce00dc712554edf[1]
+> > - add GPT support
+> > - tweak shell script to add the correct UUID in genimage config.
+> >
+> > [1]: https://git.buildroot.net/buildroot/commit/?id=fee29b05bb7db25e37c8a5175ce00dc712554edf
+> > [2]: https://git.buildroot.net/buildroot/commit/?id=79b8540d624ac4846ba341b1b9691eccacf0bc05
+> >
+> > Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
+> > Cc: Carlos Santos <casantos@datacom.com.br>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>
+> So, I kind of screwed up: I applied this version of the patch, taking
+> into account the comments from Carlos, and then only realized that
+> Carlos has sent a v2.
+>
+> From a quick look, Carlos v2 seems identical to the changes I've done
+> to this v1.
+>
+> Carlos, could you double check that what I have applied is OK ? I did a
+> test build, and booted under Qemu and it worked fine here.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-> From: Jared Bents <jared.bents@rockwellcollins.com>
-> 
-> When the rcw tools is built, it is probably to generate the RCW (Reset
-> Configuration Word) of the target. So it makes sense to do this directly
-> in the Buildroot infra and install it in the images directory, just like
-> we do for e.g. device tree blobs.
-> 
-> Add an option BR2_PACKAGE_HOST_RCW_CUSTOM_PATH that allows to specify
-> the source for the RCW. And while we're at it, make it possible to
-> specify multiple .rcw and .rcwi files, just like for device trees.
-> 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> [Arnout:
->   * Reword help text and commit message
->   * Remove definition of RCW_DELIVERY_FILE
->   * Define and use RCW_FILES
->   * Enclose everything in ifneq($(RCW_FILES),)
->   * Enclose error in ifeq($(BR_BUILDING),y)
->   * Add actual error message
->   * Don't limit to only %.rcwi files
->   * Don't delete *.bin
-> ]
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Note to Jared: if you follow my suggestion of not copying things, then
-> most of my changes become irrelevant, so you can remove the piece
-> between square brackets above.
+It's OK. The "set -e" at the beginning of board/pc/post-image-efi.sh
+is nice to have but not essential.
 
-Applied to next, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Carlos Santos <unixmania@gmail.com>
