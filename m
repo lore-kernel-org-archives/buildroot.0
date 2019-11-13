@@ -1,50 +1,43 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 13 Nov 2019 22:13:43 +0100
-Subject: [Buildroot] Linaro Toolchain for RPI and OABI Issues
-In-Reply-To: <1573650440531-0.post@n4.nabble.com>
-References: <1573542699220-0.post@n4.nabble.com>
- <20191112201551.1f1f6190@gmx.net>
- <1573650440531-0.post@n4.nabble.com>
-Message-ID: <20191113221343.2eb4fad3@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Nov 2019 22:13:57 +0100
+Subject: [Buildroot] [PATCH 00/11] Fix license incompatibility with
+ readline
+In-Reply-To: <20191113151724.12155-1-peter@korsgaard.com>
+References: <20191113151724.12155-1-peter@korsgaard.com>
+Message-ID: <20191113211357.GT3419@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello rscr,
+Peter, All,
 
-On Wed, 13 Nov 2019 07:07:20 -0600 (CST), rscr <rafacrespiramon@gmail.com> wrote:
+On 2019-11-13 16:17 +0100, Peter Korsgaard spake thusly:
+> We have a number of packages where we (optionally) link with readline,
+> even though the license of the package isn't compatible with the
+> license of readline (GPL-3.0+), E.G. for packages licensed under
+> GPL-2.0 only.
+> 
+> This series aims to fix that. I've tried to review the entire tree,
+> and this is what I found:
 
-> Hi Peter,
->
-> Keeps not working.
->
-> I have changed to new recommended cross-compiler for x64
-> (arm-rpi-4.9.3-linux-gnueabihf) and I get the same error too.
+Thanks a lot for doing this tedious work. Series mostly applied to
+master now, except these two patches:
 
-Are your sure buildroot uses your configured compiler?
+> kodi: fixed (GPL-2.0)
+> neardal: fixed (GPL-2.0)
 
-Take a look at toolchain/helpers.mk and the check for OABI,
-the check is (simpliefied):
-
-	$ <yout_path_to_toolchain>/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-gcc -v 2>&1 | grep ^Target | cut -f2 -d ' '
-	arm-bcm2708-linux-gnueabi
-
-	$ echo arm-bcm2708-linux-gnueabi | grep -E 'eabi(hf)?$$'
-	arm-bcm2708-linux-gnueabi
+I'll reply (or have already replied) with more details to the individual
+patches.
 
 Regards,
-Peter
+Yann E. MORIN.
 
->
-> Thanks
->
->
->
-> --
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
