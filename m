@@ -1,71 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Nov 2019 22:27:38 +0100
-Subject: [Buildroot] [PATCH 04/11] package/ipsec-tools: add license
- information
-In-Reply-To: <20191113151724.12155-5-peter@korsgaard.com>
-References: <20191113151724.12155-1-peter@korsgaard.com>
- <20191113151724.12155-5-peter@korsgaard.com>
-Message-ID: <20191113212738.GV3419@scaer>
+Date: Wed, 13 Nov 2019 22:32:10 +0100
+Subject: [Buildroot] [git commit] package/ndisc6: needs c11
+Message-ID: <20191113212548.7EC5A8EEA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a7c4fce8084ae338f7215b09de93aee241409fbf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-11-13 16:17 +0100, Peter Korsgaard spake thusly:
-> The tarball unfortunately does not include a dedicated license file, so
-> instead use the main source file for the setkey command.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ndisc needs c11 because of alignas since version 1.0.4 and
+https://git.remlab.net/gitweb/?p=ndisc6.git;a=commit;h=d917e5172531dd72e896b317c07f64274e8024a1
+https://git.remlab.net/gitweb/?p=ndisc6.git;a=commit;h=77a2efc350fdd52b76b1a4c874ec4029e722048b
 
-Applied to master, thanks.
+So replace -std=gnu99 by -std=c11 and add a dependency on gcc 4.7
 
-Regards,
-Yann E. MORIN.
+This will fix build with gcc 8
 
-> ---
->  package/ipsec-tools/ipsec-tools.hash | 3 +++
->  package/ipsec-tools/ipsec-tools.mk   | 2 ++
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/package/ipsec-tools/ipsec-tools.hash b/package/ipsec-tools/ipsec-tools.hash
-> index b12bea9477..7a944eb8ee 100644
-> --- a/package/ipsec-tools/ipsec-tools.hash
-> +++ b/package/ipsec-tools/ipsec-tools.hash
-> @@ -1,3 +1,6 @@
->  # From http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools/0.8.2/
->  md5	d53ec14a0a3ece64e09e5e34b3350b41	ipsec-tools-0.8.2.tar.bz2
->  sha1	7d92cae9fde59fb4f125636698c43b0a3df3d0f0	ipsec-tools-0.8.2.tar.bz2
-> +
-> +# Locally calculated
-> +sha256	3f4af4aef0b2599928bee9875935b8fad8449ddbb98ea7da74c20c3dff5cdef7  src/setkey/setkey.c
-> diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
-> index 7ac6b5cb22..634d752661 100644
-> --- a/package/ipsec-tools/ipsec-tools.mk
-> +++ b/package/ipsec-tools/ipsec-tools.mk
-> @@ -7,6 +7,8 @@
->  IPSEC_TOOLS_VERSION = 0.8.2
->  IPSEC_TOOLS_SOURCE = ipsec-tools-$(IPSEC_TOOLS_VERSION).tar.bz2
->  IPSEC_TOOLS_SITE = http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools/$(IPSEC_TOOLS_VERSION)
-> +IPSEC_TOOLS_LICENSE = BSD-3-Clause
-> +IPSEC_TOOLS_LICENSE_FILES = src/setkey/setkey.c
->  IPSEC_TOOLS_INSTALL_STAGING = YES
->  IPSEC_TOOLS_MAKE = $(MAKE1)
->  IPSEC_TOOLS_DEPENDENCIES = openssl flex host-pkgconf host-flex host-bison
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes:
+ - http://autobuild.buildroot.org/results/1cab1e5f7c4250a153fd1ab758f818078833972f
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/ndisc6/Config.in | 5 +++++
+ package/ndisc6/ndisc6.mk | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/package/ndisc6/Config.in b/package/ndisc6/Config.in
+index 5531123851..287dc9199f 100644
+--- a/package/ndisc6/Config.in
++++ b/package/ndisc6/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_NDISC6
+ 	bool "ndisc6 tools"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # c11
+ 	help
+ 	  NDisc6 is a small collection of useful tools for IPv6
+ 	  networking
+@@ -45,3 +46,7 @@ config BR2_PACKAGE_NDISC6_TCPSPRAY
+ 	  TCP/IP bandwidth measurement tool (Discard and Echo client).
+ 
+ endif
++
++comment "ndisc6 needs a toolchain w/ gcc >= 4.7"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
+index 38eeb00567..9845aa2c9a 100644
+--- a/package/ndisc6/ndisc6.mk
++++ b/package/ndisc6/ndisc6.mk
+@@ -7,7 +7,7 @@
+ NDISC6_VERSION = 1.0.4
+ NDISC6_SOURCE = ndisc6-$(NDISC6_VERSION).tar.bz2
+ NDISC6_SITE = http://www.remlab.net/files/ndisc6
+-NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99" LIBS=$(TARGET_NLS_LIBS)
++NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=c11" LIBS=$(TARGET_NLS_LIBS)
+ NDISC6_CONF_OPTS = --disable-rpath --disable-suid-install
+ NDISC6_LICENSE = GPL-2.0 or GPL-3.0
+ NDISC6_LICENSE_FILES = COPYING
