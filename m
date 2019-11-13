@@ -1,63 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Nov 2019 19:56:44 +0100
-Subject: [Buildroot] [PATCH 02/11] package/connman: clarify license of
- client code
-In-Reply-To: <20191113151724.12155-3-peter@korsgaard.com>
-References: <20191113151724.12155-1-peter@korsgaard.com>
- <20191113151724.12155-3-peter@korsgaard.com>
-Message-ID: <20191113185644.GK3419@scaer>
+Date: Wed, 13 Nov 2019 19:58:52 +0100
+Subject: [Buildroot] [git commit] package/dropwatch: license is GPL-2.0+
+Message-ID: <20191113185221.EC3D88EE4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c074fade2c5cfde60c26003c25c05471d1e00c0f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-11-13 16:17 +0100, Peter Korsgaard spake thusly:
-> While the core connman code is licensed under GPL-2.0, the client code is
-> GPL-2.0+ for compatibility with readline (which is GPL-3.0+).
-> 
-> Extend the _LICENSE with this info to clarify that linking against
-> readline is OK licensing wise.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Dropwatch links with readline, which is GPL-3.0+, so not compatible with
+GPL-2.0.  When asked about this, upstream has clarified that the license
+really is GPL-2.0+:
 
-Applied to master, thanks.
+https://github.com/nhorman/dropwatch/issues/14
 
-It's a pity they do not have a license file for it, though...
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[yann.morin.1998 at free.fr: add a coomet as suggested by Baruc]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
+---
+ package/dropwatch/dropwatch.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/connman/connman.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-> index 839bc7a0e2..7ca49726dd 100644
-> --- a/package/connman/connman.mk
-> +++ b/package/connman/connman.mk
-> @@ -39,6 +39,7 @@ define CONNMAN_INSTALL_INIT_SYSTEMD
->  endef
->  
->  ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
-> +CONNMAN_LICENSE += , GPL-2.0+ (client)
->  CONNMAN_CONF_OPTS += --enable-client
->  CONNMAN_DEPENDENCIES += readline
->  
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
+index 1af61458e0..769b4d4d38 100644
+--- a/package/dropwatch/dropwatch.mk
++++ b/package/dropwatch/dropwatch.mk
+@@ -7,7 +7,9 @@
+ DROPWATCH_VERSION = 1.5.1
+ DROPWATCH_SITE = $(call github,nhorman,dropwatch,v$(DROPWATCH_VERSION))
+ DROPWATCH_DEPENDENCIES = libnl readline host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+-DROPWATCH_LICENSE = GPL-2.0
++# Until upstream updates their tree with a proper license
++# blurb: https://github.com/nhorman/dropwatch/issues/14
++DROPWATCH_LICENSE = GPL-2.0+
+ DROPWATCH_LICENSE_FILES = COPYING
+ # From git
+ DROPWATCH_AUTORECONF = YES
