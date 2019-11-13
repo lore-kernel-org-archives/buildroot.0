@@ -1,76 +1,84 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 13 Nov 2019 12:10:34 +0100
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: Fix ARM
- build
-In-Reply-To: <77353588-bf06-8112-4afe-41f488dbaa66@codethink.co.uk>
-References: <20191111124807.1151582-1-thomas.preston@codethink.co.uk>
- <20191111153657.1a56760e@windsurf.home>
- <c7a19ef5-03ee-64c5-bf1b-e84d220561ef@codethink.co.uk>
- <08d749aa-743d-d05c-7aae-b98e70862617@codethink.co.uk>
- <20191112212446.21cbdbca@windsurf>
- <77353588-bf06-8112-4afe-41f488dbaa66@codethink.co.uk>
-Message-ID: <1debcd70-de93-f709-a313-f358572c3048@smile.fr>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Wed, 13 Nov 2019 12:16:41 +0100
+Subject: [Buildroot] [PATCH] umtprd: Add package
+In-Reply-To: <20191107220929.2645c47b@windsurf>
+References: <20191107164513.5760-1-paul@crapouillou.net>
+ <20191107220929.2645c47b@windsurf>
+Message-ID: <1573643801.3.4@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas?, All,
+Hi Thomas,
 
-Le 13/11/2019 ? 11:39, Thomas Preston a ?crit?:
-> On 12/11/2019 20:24, Thomas Petazzoni wrote:
->> Hello Thomas,
->>
->> On Mon, 11 Nov 2019 17:12:13 +0000
->> Thomas Preston <thomas.preston@codethink.co.uk> wrote:
->>
->>> I don't think there are any defconfigs (except with my changes) which
->>> meet these conditions:
->>>
->>> 	$ git grep -l BR2_arm=y configs | xargs grep -l GLIBC | xargs grep XORG_SERVER
->>> 	configs/raspberrypi3_defconfig:BR2_PACKAGE_XSERVER_XORG_SERVER=y
->>>
->>> So this condition is never reproduced in the autobuilder.
->>
->> The autobuilders are completely unrelated to the defconfigs.
->>
->> We have two completely distinct CI mechanisms:
->>
->>  (1) Gitlab CI. This one does the kind of traditional CI that most
->>      projects have. In the case of Buildroot, it does build the defconfigs
->>      and runs the runtime tests on a regular basis.
->>
->>  (2) Autobuilders. These generate random configurations, and build
->>      those random configurations. We have a number of machines (about
->>      5-6 machines) that do this 24/7 and report the results at
->>      http://autobuild.buildroot.org. This gives a much wider testing
->>      coverage than building defconfigs, as our defconfigs are almost all
->>      minimal.
->>
->> So, when I say "autobuilders", I'm referring to (2) above. And I don't
->> get why this sys/io.h doesn't occur in the autobuilders.
+
+Le jeu., nov. 7, 2019 at 22:09, Thomas Petazzoni 
+<thomas.petazzoni@bootlin.com> a ?crit :
+> Hello Paul,
 > 
-> Got it, thanks. Is it possible to search the autobuilder configurations for
-> the above case? Maybe it never came up. Or maybe it *has* been tested, just
-> before this bug was introduced.
-
-@Thomas Petazzoni: Maybe we need to rebuild the arm bleeding edge toolchain used
-by the autobuilders using the current glibc version (2.30).
-
-The current prebuilt toolchain are from 06/2019 but glibc 2.30 has been released
-08/2019.
-
-There is only one internal toolchain for arm and it use uclibc-ng by default.
-
-Maybe we can add a new internal toolchain for glibc and musl ?
-
-Best regards,
-Romain
-
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Some comments in addition to the ones done by Baruch and Yann.
 > 
+> On Thu,  7 Nov 2019 17:45:13 +0100
+> Paul Cercueil <paul@crapouillou.net> wrote:
+> 
+>>   package/Config.in                             |  1 +
+>>   ...thread.h-include-in-inc-mtp.h-header.patch | 28 
+>> +++++++++++++++++++
+>>   package/umtprd/Config.in                      |  6 ++++
+>>   package/umtprd/umtprd.hash                    |  2 ++
+>>   package/umtprd/umtprd.mk                      | 20 +++++++++++++
+>>   5 files changed, 57 insertions(+)
+> 
+> You should add an entry in the DEVELOPERS file.
+> 
+> 
+>>  diff --git a/package/umtprd/umtprd.hash b/package/umtprd/umtprd.hash
+>>  new file mode 100644
+>>  index 0000000000..aa91696613
+>>  --- /dev/null
+>>  +++ b/package/umtprd/umtprd.hash
+>>  @@ -0,0 +1,2 @@
+>>  +# Locally computed
+>>  
+>> +sha256	e1301bdd89170cc2c679446c1cc5873feaacd061bf0ab547fc0a11670bae9163	umtprd-1.0.0.tar.gz
+> 
+> Please add a hash for the license file.
+> 
+>>  diff --git a/package/umtprd/umtprd.mk b/package/umtprd/umtprd.mk
+>>  new file mode 100644
+>>  index 0000000000..8460f82b7d
+>>  --- /dev/null
+>>  +++ b/package/umtprd/umtprd.mk
+>>  @@ -0,0 +1,20 @@
+>>  
+>> +################################################################################
+>>  +#
+>>  +# umtprd
+>>  +#
+>>  
+>> +################################################################################
+>>  +
+>>  +UMTPRD_VERSION = 1.0.0
+>>  +UMTPRD_SITE = https://github.com/viveris/uMTP-Responder/archive
+> 
+> It is never clear to me if those URLs are auto-generated tarballs, or
+> tarballs produced by the project maintainer and uploaded to Github. If
+> these are auto-generated tarballs, then the "github" macro should be
+> used instead.
+
+It's a release manually uploaded to github, that's why I didn't use the 
+"github" macro.
+
+Cheers,
+-Paul
+
+> 
+> Thanks,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
