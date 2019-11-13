@@ -1,65 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Nov 2019 14:02:05 +0100
-Subject: [Buildroot] [PATCH v4] package/sdbusplus: new package
-In-Reply-To: <20190807191146.32047-1-jfaith@impinj.com>
-References: <710b4b46-81d6-e5e6-4820-f8e1fb435750@mind.be>
- <20190807191146.32047-1-jfaith@impinj.com>
-Message-ID: <20191113140205.03121bcb@windsurf>
+Date: Wed, 13 Nov 2019 14:02:35 +0100
+Subject: [Buildroot] [git commit branch/next] configs/beaglebone: bump
+ kernel version to 4.19.79-ti-r30
+Message-ID: <20191113125515.5178A81DB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello John,
+commit: https://git.buildroot.net/buildroot/commit/?id=447368496c88e86c0f261ef25419dae263bc2987
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 7 Aug 2019 19:12:00 +0000
-John Faith <jfaith@impinj.com> wrote:
+Use the github macro instead of git, to save download time.
 
-> A C++ library for interacting with sd-bus and a C++ bindings generator.
-> 
-> The host build produces a code generation tool, sdbus++ while the
-> target build gives libsdbusplus.
-> 
-> The code generator requires host-python-pyyaml, host-python-inflection,
-> and host-python-mako. Since it isn't built for the target, the target
-> build does not require them.
-> 
-> The host package includes a code and documentation generation program,
-> which is useful for including in a buildroot SDK, even if no target
-> package needs it, so make it a user-selectable host package.
-> 
-> host-autoconf-archive is added as a dependency since configure.ac
-> uses the AX_PKG_CHECK_MODULES macro.
-> 
-> Signed-off-by: John Faith <jfaith@impinj.com>
-> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/beaglebone_defconfig | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-I have finally applied to next, with one change. See below.
-
-> +SDBUSPLUS_VERSION = 4212292bcf136d04b38ba5116aa568b0fa312798
-> +SDBUSPLUS_SITE = $(call github,openbmc,sdbusplus,$(SDBUSPLUS_VERSION))
-> +SDBUSPLUS_DEPENDENCIES = host-autoconf-archive host-pkgconf systemd
-> +HOST_SDBUSPLUS_DEPENDENCIES = \
-> +	host-autoconf-archive \
-> +	host-pkgconf \
-> +	host-python \
-
-I replaced this with:
-
-	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-
-which is something we do in many other packages, to use host-python3
-when host-python3 is anyway going to be built as a dependency of the
-target python3.
-
-I tested it, and it does seem to work, i.e I was able to use the
-binding generator tool with a Python 3 installation.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 2de1bd0b32..f8b7cc66ab 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -6,9 +6,8 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/beaglebone/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/beagleboard/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4.19.73-ti-r29"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,4.19.79-ti-r30)/linux-4.19.79-ti-r30.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
