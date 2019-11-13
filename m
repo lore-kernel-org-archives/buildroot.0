@@ -1,50 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Nov 2019 13:06:30 +0100
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: Fix ARM
- build
-In-Reply-To: <1debcd70-de93-f709-a313-f358572c3048@smile.fr>
-References: <20191111124807.1151582-1-thomas.preston@codethink.co.uk>
- <20191111153657.1a56760e@windsurf.home>
- <c7a19ef5-03ee-64c5-bf1b-e84d220561ef@codethink.co.uk>
- <08d749aa-743d-d05c-7aae-b98e70862617@codethink.co.uk>
- <20191112212446.21cbdbca@windsurf>
- <77353588-bf06-8112-4afe-41f488dbaa66@codethink.co.uk>
- <1debcd70-de93-f709-a313-f358572c3048@smile.fr>
-Message-ID: <20191113130630.759bf8de@windsurf>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Wed, 13 Nov 2019 09:21:58 -0300
+Subject: [Buildroot] [PATCH/next] configs/beaglebone: bump kernel version to
+ 4.19.79-ti-r30
+Message-ID: <20191113122158.11955-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Carlos Santos <unixmania@gmail.com>
 
-On Wed, 13 Nov 2019 12:10:34 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
+Use the github macro instead of git, to save download time.
 
-> @Thomas Petazzoni: Maybe we need to rebuild the arm bleeding edge toolchain used
-> by the autobuilders using the current glibc version (2.30).
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+ configs/beaglebone_defconfig | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-True.
-
-> The current prebuilt toolchain are from 06/2019 but glibc 2.30 has been released
-> 08/2019.
-> 
-> There is only one internal toolchain for arm and it use uclibc-ng by default.
-> 
-> Maybe we can add a new internal toolchain for glibc and musl ?
-
-We already have these:
-
-$ ls -1 support/config-fragments/autobuild/br-arm-internal-*
-support/config-fragments/autobuild/br-arm-internal-full.config
-support/config-fragments/autobuild/br-arm-internal-glibc.config
-support/config-fragments/autobuild/br-arm-internal-musl.config
-
-Best regards,
-
-Thomas
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 2de1bd0b32..f8b7cc66ab 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -6,9 +6,8 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/beaglebone/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/beagleboard/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4.19.73-ti-r29"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,4.19.79-ti-r30)/linux-4.19.79-ti-r30.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.1
