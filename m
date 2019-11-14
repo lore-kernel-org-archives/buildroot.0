@@ -1,40 +1,33 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 14 Nov 2019 12:55:25 -0600
-Subject: [Buildroot] [next] package/xtables-addons: bump to 3.5
-Message-ID: <20191114185525.8081-1-matthew.weber@rockwellcollins.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 14 Nov 2019 20:13:17 +0100
+Subject: [Buildroot] [PATCH 1/5] package/spice: add optional gdk-pixbuf
+ dependency
+Message-ID: <20191114191321.11789-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/xtables-addons/xtables-addons.hash | 2 +-
- package/xtables-addons/xtables-addons.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This dependency has been added in version 0.14.1 with
+https://gitlab.freedesktop.org/spice/spice-common/commit/d58a5b6a5a25134396661e1d805dfc567181e3af
 
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index 5ecc4197b7..0d30b1ab1e 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 1152205156ceb4ea02307a361d7c4888f07eabc6bb844bd82e7ffab8d1ebd627 xtables-addons-3.4.tar.xz
-+sha256 189ff57a0b8960969bd99141a6c79c345efa67e4461f450e2f162c9bd3d17da6 xtables-addons-3.5.tar.xz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 LICENSE
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index 6b7114f5f7..e8b931eaeb 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XTABLES_ADDONS_VERSION = 3.4
-+XTABLES_ADDONS_VERSION = 3.5
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
- XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/spice/spice.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+index 16e57441a8..f5801ce0ff 100644
+--- a/package/spice/spice.mk
++++ b/package/spice/spice.mk
+@@ -13,6 +13,7 @@ SPICE_INSTALL_STAGING = YES
+ SPICE_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	jpeg \
++	$(if $(BR2_PACKAGE_GDK_PIXBUF),gdk-pixbuf) \
+ 	libglib2 \
+ 	openssl \
+ 	pixman \
 -- 
-2.17.1
+2.23.0
