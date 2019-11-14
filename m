@@ -1,60 +1,36 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 14 Nov 2019 21:14:23 +0100
-Subject: [Buildroot] [PATCH,
- next 1/1] package/libglib2: bump to version 2.62.2
-In-Reply-To: <CAFSsvmphUacxn59u6N4A3BYBMwCAG5FFbUvDfrPMTkRbSVvZ8g@mail.gmail.com>
-References: <20191111210251.2216431-1-aduskett@gmail.com>
- <20191112215341.28f7b1aa@windsurf>
- <CAFSsvmqzCBG0+FX+bp2p+XJQD+pQDM3f=sefTEn9067CH7tM0w@mail.gmail.com>
- <20191113204552.5198d038@windsurf>
- <CAFSsvmphUacxn59u6N4A3BYBMwCAG5FFbUvDfrPMTkRbSVvZ8g@mail.gmail.com>
-Message-ID: <20191114211423.555413ad@gmx.net>
+From: Louis Aussedat <aussedat.louis@gmail.com>
+Date: Thu, 14 Nov 2019 21:14:07 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/python-huepy: fix build with
+ python3.8
+Message-ID: <20191114201407.6370-1-aussedat.louis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam, Thomas,
+Fixes:
+  - http://autobuild.buildroot.net/results/240c397a6479b98f30b63b5135bfb2e45281de7d
 
-On Thu, 14 Nov 2019 08:12:47 -0800, Adam Duskett <aduskett@gmail.com> wrote:
+Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+---
+ package/python-huepy/0001-fix-import-with-python3.patch | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 package/python-huepy/0001-fix-import-with-python3.patch
 
-> I believe it's triggered due to the `needs_exe_wrapper = true` in
-> package/meson/cross-compilation.conf
-> 
-> On Wed, Nov 13, 2019 at 11:45 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > On Wed, 13 Nov 2019 11:19:50 -0800
-> > Adam Duskett <aduskett@gmail.com> wrote:
-> >  
-> > > > > + # Don?t build the tests unless we can run them (either natively, in an exe wrapper, or by installing them for later use)
-> > > > > +-build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper()) or installed_tests_enabled
-> > > > > ++build_tests = installed_tests_enabled  
-> > > >
-> > > > Why do we need to change this ? Is meson.has_exe_wrapper() true in our case ?
-
-No, for the host build it is the 'not meson.is_cross_build()' case...
-
-Regards,
-Peter
-
-> > > >  
-> > > I believe so. Without the change, the tests are triggered to build.
-> > > I'm not sure where we are triggering has_exe_wrapper,
-> > > but it is indeed being triggered.  
-> >
-> > It would be good to understand what is this has_exe_wrapper thing, and
-> > why we are triggering it.
-> >
-> > Thanks,
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com  
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/python-huepy/0001-fix-import-with-python3.patch b/package/python-huepy/0001-fix-import-with-python3.patch
+new file mode 100644
+index 0000000000..e04eacb228
+--- /dev/null
++++ b/package/python-huepy/0001-fix-import-with-python3.patch
+@@ -0,0 +1,8 @@
++--- a/huepy/__init__.py
+++++ b/huepy/__init__.py
++@@ -1,4 +1,4 @@
++-from hue import COMMANDS
+++from .hue import COMMANDS
++ 
++ __all__ = list(COMMANDS.keys())
++ __version__ = '1.0.1'
+-- 
+2.20.1
