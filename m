@@ -1,41 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 Nov 2019 09:23:55 +0100
-Subject: [Buildroot] [PATCH 09/11] package/neardal: unconditionally use
- libedit
-In-Reply-To: <20191113151724.12155-10-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 13 Nov 2019 16:17:22 +0100")
-References: <20191113151724.12155-1-peter@korsgaard.com>
- <20191113151724.12155-10-peter@korsgaard.com>
-Message-ID: <87zhgyj278.fsf@dell.be.48ers.dk>
+From: Min Xu <xuminready@gmail.com>
+Date: Thu, 14 Nov 2019 00:28:53 -0800
+Subject: [Buildroot] [PATCH 1/1] package/shadowsocks-libev bump version to
+ 3.3.3
+Message-ID: <20191114082853.5090-1-xuminready@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Signed-off-by: Min Xu <xuminready@gmail.com>
+---
+ package/shadowsocks-libev/shadowsocks-libev.hash | 2 +-
+ package/shadowsocks-libev/shadowsocks-libev.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > neardal is licensed under GPL-2.0, which is not license compatible with
- > readline (GPL-3.0+), so always use the libedit backend.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Strangely enough I have not received your reply, neither directly or
-through the list, even though I see it in the archive - I guess the mail
-issues aren't over yet.
-
-Anyway, you are right - Our license tag is apparently wrong, and I
-didn't verify it.
-
-Still, given the unclarity about LGPL-2.0 vs GPL-3.0 - And the fact that
-readline is only used in the ncl utility and not in the library (and
-using LGPL for an application), so I would prefer to err on the side of
-caution and unconditionally use libedit.
-
-I will send an updated series changing _LICENSE and adjusting the
-commit message of this patch to refer to LGPL instead.
-
-Thanks.
-
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
+index b8bc437..76928eb 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.hash
++++ b/package/shadowsocks-libev/shadowsocks-libev.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 65a67c355df1794dc0ef94d80d2d596fd590b13fdcd0a21bda28859c88924ce5 shadowsocks-libev-3.2.4.tar.gz
++sha256 677356a5ed6b5ae9e32a898061db2587158ff27e245db03f4bde9b006ef12dc9 shadowsocks-libev-3.3.3.tar.gz
+ 
+ # License files, locally calculated
+ sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index fcebe34..4b0b963 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHADOWSOCKS_LIBEV_VERSION = 3.2.4
++SHADOWSOCKS_LIBEV_VERSION = 3.3.3
+ SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
+ SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
 -- 
-Bye, Peter Korsgaard
+2.20.1
