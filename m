@@ -1,60 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Nov 2019 21:56:02 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/python-huepy: fix build
- with python3.8
-In-Reply-To: <20191114201407.6370-1-aussedat.louis@gmail.com>
-References: <20191114201407.6370-1-aussedat.louis@gmail.com>
-Message-ID: <20191114205602.GE26360@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 14 Nov 2019 22:20:11 +0100
+Subject: [Buildroot] [PATCH 1/2] package/neardal: license is LGPL-2.0,
+ not GPL-2.0
+Message-ID: <20191114212013.29398-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Louis, All,
+COPYING states LGPL-2.0, not GPL-2.0:
 
-On 2019-11-14 21:14 +0100, Louis Aussedat spake thusly:
-> Fixes:
->   - http://autobuild.buildroot.net/results/240c397a6479b98f30b63b5135bfb2e45281de7d
-> 
-> Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+                  GNU LIBRARY GENERAL PUBLIC LICENSE
+                       Version 2, June 1991
 
-Applied to next, thanks.
+So use that for the license tag.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/neardal/neardal.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  package/python-huepy/0001-fix-import-with-python3.patch | 8 ++++++++
->  1 file changed, 8 insertions(+)
->  create mode 100644 package/python-huepy/0001-fix-import-with-python3.patch
-> 
-> diff --git a/package/python-huepy/0001-fix-import-with-python3.patch b/package/python-huepy/0001-fix-import-with-python3.patch
-> new file mode 100644
-> index 0000000000..e04eacb228
-> --- /dev/null
-> +++ b/package/python-huepy/0001-fix-import-with-python3.patch
-> @@ -0,0 +1,8 @@
-> +--- a/huepy/__init__.py
-> ++++ b/huepy/__init__.py
-> +@@ -1,4 +1,4 @@
-> +-from hue import COMMANDS
-> ++from .hue import COMMANDS
-> + 
-> + __all__ = list(COMMANDS.keys())
-> + __version__ = '1.0.1'
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
+index ea9643244e..b56ce3b3a3 100644
+--- a/package/neardal/neardal.mk
++++ b/package/neardal/neardal.mk
+@@ -7,7 +7,7 @@
+ NEARDAL_VERSION = 4143d130ed39299bfc59d08d2c7c77dbc7f809e9
+ NEARDAL_SITE = $(call github,connectivity,neardal,$(NEARDAL_VERSION))
+ NEARDAL_INSTALL_STAGING = YES
+-NEARDAL_LICENSE = GPL-2.0
++NEARDAL_LICENSE = LGPL-2.0
+ NEARDAL_LICENSE_FILES = COPYING
+ 
+ NEARDAL_DEPENDENCIES = host-pkgconf dbus dbus-glib
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
