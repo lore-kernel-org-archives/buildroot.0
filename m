@@ -1,53 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Nov 2019 18:37:10 +0100
-Subject: [Buildroot] [git commit] package/kodi: drop readline dependency
-Message-ID: <20191114172951.7C2C88EF32@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 14 Nov 2019 18:54:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.2.4
+Message-ID: <20191114175424.17183-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d588b718de3cc17aee95462fd356933c6470006
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Quoting
+https://lists.freedesktop.org/archives/mesa-announce/2019-November/000555.html
+"This is an emergency release, to fix a critical bug found in the
+ 19.2.3 release which causes incomplete rendering on all mesa drivers."
 
-{python-,}readline is (no longer) a required dependency of kodi, and
-readline (GPL-3.0+) is not license compatible with kodi (GPL-2.0), so drop
-the dependency.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 2 --
- package/kodi/kodi.mk   | 1 -
- 2 files changed, 3 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 40bee1b898..db6931ed8a 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -72,12 +72,10 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_PYTHON_BZIP2
- 	select BR2_PACKAGE_PYTHON_CURSES
- 	select BR2_PACKAGE_PYTHON_PYEXPAT
--	select BR2_PACKAGE_PYTHON_READLINE
- 	select BR2_PACKAGE_PYTHON_SQLITE
- 	select BR2_PACKAGE_PYTHON_SSL
- 	select BR2_PACKAGE_PYTHON_UNICODEDATA
- 	select BR2_PACKAGE_PYTHON_ZLIB
--	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_TAGLIB
- 	select BR2_PACKAGE_TINYXML
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 028bf551bc..49728e464b 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -38,7 +38,6 @@ KODI_DEPENDENCIES = \
- 	openssl \
- 	pcre \
- 	python \
--	readline \
- 	sqlite \
- 	taglib \
- 	tinyxml \
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 65d1c49cdb..44dc131877 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.2.3
++MESA3D_HEADERS_VERSION = 19.2.4
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 11ad50158c..89b0a13196 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2019-November/000553.html
+-sha256 5ee6e42504fe41dcc9a6eba26982656a675b2550a640946f463927ed7f1c5047  mesa-19.2.3.tar.xz
+-sha512 a64a6b508c28a61b9f5a50f639d0cdca2546caa2118c2478100e3535961d76bf3877357d4a7ddd7dc1d3dfc617883c8ee188915523b003aed8db03e0d5e1c007  mesa-19.2.3.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-November/000555.html
++sha256 09000a0f7dbbd82e193b81a8f1bf0c118eab7ca975c0329181968596e548e30f  mesa-19.2.4.tar.xz
++sha512 e8a0e90460f3153d730f8fb13f2c912a9826c05d2af9e22dc575bcd8885bf6a33c0af1c6659e81701ff097a132df88eead208e89dceb552b9da809ab543fa479  mesa-19.2.4.tar.xz
+ 
+ # License
+ sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 972a2e8847..6e7fa7692c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.2.3
++MESA3D_VERSION = 19.2.4
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.20.1
