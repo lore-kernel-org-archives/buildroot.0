@@ -1,86 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Nov 2019 22:55:50 +0100
-Subject: [Buildroot] [PATCH 2/2] package/neardal: unconditionally use
- libedit
-In-Reply-To: <20191114212013.29398-2-peter@korsgaard.com>
-References: <20191114212013.29398-1-peter@korsgaard.com>
- <20191114212013.29398-2-peter@korsgaard.com>
-Message-ID: <20191114215550.GG26360@scaer>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 14 Nov 2019 14:52:40 -0800
+Subject: [Buildroot] [PATCH,
+ next 1/1] package/libglib2: bump to version 2.62.2
+In-Reply-To: <20191114211423.555413ad@gmx.net>
+References: <20191111210251.2216431-1-aduskett@gmail.com>
+ <20191112215341.28f7b1aa@windsurf>
+ <CAFSsvmqzCBG0+FX+bp2p+XJQD+pQDM3f=sefTEn9067CH7tM0w@mail.gmail.com>
+ <20191113204552.5198d038@windsurf>
+ <CAFSsvmphUacxn59u6N4A3BYBMwCAG5FFbUvDfrPMTkRbSVvZ8g@mail.gmail.com>
+ <20191114211423.555413ad@gmx.net>
+Message-ID: <CAFSsvmok+d2rigqu6oD=Uyg27-SBP0Mx9kC-GO3bwdEdjYSfXQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Ah yeah, I'm not sure what I was thinking!
 
-On 2019-11-14 22:20 +0100, Peter Korsgaard spake thusly:
-> neardal is licensed under LGPL-2.0, which is (most likely) not license
-> compatible with readline (GPL-3.0+), so always use the libedit backend.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+That would be the issue yes.
 
-Both applied to master, thanks.
+Adam
 
-As discussed on IRC, I've expanded this commit log to explain how libedit
-gets used and not readline.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/neardal/Config.in  |  2 +-
->  package/neardal/neardal.mk | 10 +---------
->  2 files changed, 2 insertions(+), 10 deletions(-)
-> 
-> diff --git a/package/neardal/Config.in b/package/neardal/Config.in
-> index c729283380..5f33ae4953 100644
-> --- a/package/neardal/Config.in
-> +++ b/package/neardal/Config.in
-> @@ -5,7 +5,7 @@ config BR2_PACKAGE_NEARDAL
->  	depends on BR2_USE_MMU # dbus
->  	select BR2_PACKAGE_DBUS
->  	select BR2_PACKAGE_DBUS_GLIB
-> -	select BR2_PACKAGE_READLINE if !BR2_PACKAGE_LIBEDIT
-> +	select BR2_PACKAGE_LIBEDIT
->  	help
->  	  Provides a simple C API to exchange data with the neard NFC
->  	  manager daemon.
-> diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
-> index b56ce3b3a3..28e2850e30 100644
-> --- a/package/neardal/neardal.mk
-> +++ b/package/neardal/neardal.mk
-> @@ -10,17 +10,9 @@ NEARDAL_INSTALL_STAGING = YES
->  NEARDAL_LICENSE = LGPL-2.0
->  NEARDAL_LICENSE_FILES = COPYING
->  
-> -NEARDAL_DEPENDENCIES = host-pkgconf dbus dbus-glib
-> +NEARDAL_DEPENDENCIES = host-pkgconf dbus dbus-glib libedit
->  NEARDAL_AUTORECONF = YES
->  
-> -# Either readline or libedit are needed, and the Config.in file
-> -# guarantees at least one of them is enabled
-> -ifeq ($(BR2_PACKAGE_READLINE),y)
-> -NEARDAL_DEPENDENCIES += readline
-> -else ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-> -NEARDAL_DEPENDENCIES += libedit
-> -endif
-> -
->  define NEARDAL_INSTALL_NCL
->  	$(INSTALL) -m 0755 -D $(@D)/ncl/ncl $(TARGET_DIR)/usr/bin/ncl
->  endef
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On Thu, Nov 14, 2019 at 12:14 PM Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> Hello Adam, Thomas,
+>
+> On Thu, 14 Nov 2019 08:12:47 -0800, Adam Duskett <aduskett@gmail.com> wrote:
+>
+> > I believe it's triggered due to the `needs_exe_wrapper = true` in
+> > package/meson/cross-compilation.conf
+> >
+> > On Wed, Nov 13, 2019 at 11:45 AM Thomas Petazzoni
+> > <thomas.petazzoni@bootlin.com> wrote:
+> > >
+> > > On Wed, 13 Nov 2019 11:19:50 -0800
+> > > Adam Duskett <aduskett@gmail.com> wrote:
+> > >
+> > > > > > + # Don?t build the tests unless we can run them (either natively, in an exe wrapper, or by installing them for later use)
+> > > > > > +-build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper()) or installed_tests_enabled
+> > > > > > ++build_tests = installed_tests_enabled
+> > > > >
+> > > > > Why do we need to change this ? Is meson.has_exe_wrapper() true in our case ?
+>
+> No, for the host build it is the 'not meson.is_cross_build()' case...
+>
+> Regards,
+> Peter
+>
+> > > > >
+> > > > I believe so. Without the change, the tests are triggered to build.
+> > > > I'm not sure where we are triggering has_exe_wrapper,
+> > > > but it is indeed being triggered.
+> > >
+> > > It would be good to understand what is this has_exe_wrapper thing, and
+> > > why we are triggering it.
+> > >
+> > > Thanks,
+> > >
+> > > Thomas
+> > > --
+> > > Thomas Petazzoni, CTO, Bootlin
+> > > Embedded Linux and Kernel engineering
+> > > https://bootlin.com
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
