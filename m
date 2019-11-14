@@ -1,22 +1,40 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 14 Nov 2019 19:28:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: proper fix for
- missing __kernel_fsid_t
-In-Reply-To: <20191114181541.26984-1-petr.vorel@gmail.com>
-References: <20191114181541.26984-1-petr.vorel@gmail.com>
-Message-ID: <20191114182801.GA30864@x230>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 14 Nov 2019 12:55:25 -0600
+Subject: [Buildroot] [next] package/xtables-addons: bump to 3.5
+Message-ID: <20191114185525.8081-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/xtables-addons/xtables-addons.hash | 2 +-
+ package/xtables-addons/xtables-addons.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Backported 3 fixes from upstream (2 of them require calling autoreconf.
-
-> Fixes: http://autobuild.buildroot.net/results/7a29e3b767e3d23dd64c130daa735ca6c062baf8
-Sorry, this one is invalid.
-
-Kind regards,
-Petr
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index 5ecc4197b7..0d30b1ab1e 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 1152205156ceb4ea02307a361d7c4888f07eabc6bb844bd82e7ffab8d1ebd627 xtables-addons-3.4.tar.xz
++sha256 189ff57a0b8960969bd99141a6c79c345efa67e4461f450e2f162c9bd3d17da6 xtables-addons-3.5.tar.xz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 LICENSE
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index 6b7114f5f7..e8b931eaeb 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XTABLES_ADDONS_VERSION = 3.4
++XTABLES_ADDONS_VERSION = 3.5
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+ XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
+-- 
+2.17.1
