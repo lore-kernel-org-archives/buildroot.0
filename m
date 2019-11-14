@@ -1,45 +1,45 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 14 Nov 2019 08:12:47 -0800
-Subject: [Buildroot] [PATCH,
- next 1/1] package/libglib2: bump to version 2.62.2
-In-Reply-To: <20191113204552.5198d038@windsurf>
-References: <20191111210251.2216431-1-aduskett@gmail.com>
- <20191112215341.28f7b1aa@windsurf>
- <CAFSsvmqzCBG0+FX+bp2p+XJQD+pQDM3f=sefTEn9067CH7tM0w@mail.gmail.com>
- <20191113204552.5198d038@windsurf>
-Message-ID: <CAFSsvmphUacxn59u6N4A3BYBMwCAG5FFbUvDfrPMTkRbSVvZ8g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 14 Nov 2019 17:44:54 +0100
+Subject: [Buildroot] [git commit branch/next] package/shadowsocks-libev:
+ bump version to 3.3.3
+Message-ID: <20191114164124.80E358EF2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I believe it's triggered due to the `needs_exe_wrapper = true` in
-package/meson/cross-compilation.conf
+commit: https://git.buildroot.net/buildroot/commit/?id=6f3ffafdd4b880d65afa6738f862e4e96eef61a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, Nov 13, 2019 at 11:45 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Wed, 13 Nov 2019 11:19:50 -0800
-> Adam Duskett <aduskett@gmail.com> wrote:
->
-> > > > + # Don?t build the tests unless we can run them (either natively, in an exe wrapper, or by installing them for later use)
-> > > > +-build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper()) or installed_tests_enabled
-> > > > ++build_tests = installed_tests_enabled
-> > >
-> > > Why do we need to change this ? Is meson.has_exe_wrapper() true in our case ?
-> > >
-> > I believe so. Without the change, the tests are triggered to build.
-> > I'm not sure where we are triggering has_exe_wrapper,
-> > but it is indeed being triggered.
->
-> It would be good to understand what is this has_exe_wrapper thing, and
-> why we are triggering it.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Signed-off-by: Min Xu <xuminready@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/shadowsocks-libev/shadowsocks-libev.hash | 2 +-
+ package/shadowsocks-libev/shadowsocks-libev.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
+index b8bc4379a9..76928ebb48 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.hash
++++ b/package/shadowsocks-libev/shadowsocks-libev.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 65a67c355df1794dc0ef94d80d2d596fd590b13fdcd0a21bda28859c88924ce5 shadowsocks-libev-3.2.4.tar.gz
++sha256 677356a5ed6b5ae9e32a898061db2587158ff27e245db03f4bde9b006ef12dc9 shadowsocks-libev-3.3.3.tar.gz
+ 
+ # License files, locally calculated
+ sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index fcebe34a4b..4b0b963eef 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHADOWSOCKS_LIBEV_VERSION = 3.2.4
++SHADOWSOCKS_LIBEV_VERSION = 3.3.3
+ SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
+ SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
