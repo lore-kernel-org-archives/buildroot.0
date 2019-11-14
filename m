@@ -1,97 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Nov 2019 18:37:02 +0100
-Subject: [Buildroot] [PATCH 05/11] package/kodi: drop readline dependency
-In-Reply-To: <20191113212627.GU3419@scaer>
-References: <20191113151724.12155-1-peter@korsgaard.com>
- <20191113151724.12155-6-peter@korsgaard.com>
- <20191113212627.GU3419@scaer>
-Message-ID: <20191114173702.GD26360@scaer>
+Date: Thu, 14 Nov 2019 18:37:10 +0100
+Subject: [Buildroot] [git commit] package/kodi: drop readline dependency
+Message-ID: <20191114172951.7C2C88EF32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2019-11-13 22:26 +0100, Yann E. MORIN spake thusly:
-> On 2019-11-13 16:17 +0100, Peter Korsgaard spake thusly:
-> > {python-,}readline is (no longer) a required dependency of kodi, and
-> > readline (GPL-3.0+) is not license compatible with kodi (GPL-2.0), so drop
-> > the dependency.
-> > 
-> > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> > ---
-> [--SNIP--]
-> > diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> > index 028bf551bc..49728e464b 100644
-> > --- a/package/kodi/kodi.mk
-> > +++ b/package/kodi/kodi.mk
-> > @@ -38,7 +38,6 @@ KODI_DEPENDENCIES = \
-> >  	openssl \
-> >  	pcre \
-> >  	python \
-> > -	readline \
-> 
-> What does actually prevent kodi from linking with readline, is that
-> happens to be built before?
+commit: https://git.buildroot.net/buildroot/commit/?id=6d588b718de3cc17aee95462fd356933c6470006
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So, it happens that with the Kodi version we have, 17.6-Krypton, nothing
-in Kodi actually links with readline:
+{python-,}readline is (no longer) a required dependency of kodi, and
+readline (GPL-3.0+) is not license compatible with kodi (GPL-2.0), so drop
+the dependency.
 
-    $ grep -r libreadline.so.8 output/target
-    Binary file target/usr/lib/python2.7/lib-dynload/readline.so matches
-    Binary file target/usr/lib/libreadline.so.8.0 matches
-    Binary file target/usr/bin/sqlite3 matches
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/kodi/Config.in | 2 --
+ package/kodi/kodi.mk   | 1 -
+ 2 files changed, 3 deletions(-)
 
-Kodi itself is linked to libpython2.7.so.1.0, but does not seem to
-actually import the readline module at runtime (as far as I could see).
-
-So: applied to master, thanks.
-
-When we bump kodi to 18.x-Leia, any remaining problem will resolve by
-itself as Kodi is now GPL-2.0-or-later.
-
-Regards,
-Yann E. MORIN.
-
-> I'll kick-start a build here (without your patch) and see what goes
-> linked with readline, if anything.
-> 
-> In the meantime, I've pondered applying this patch anyway, because it
-> removes the explicit dependency, so that if kodi still links to
-> readline, that would be an accident due to another intermediate
-> dependency, and thus not our fault. But I am not too happy either, so
-> I refrained eventually...
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> >  	sqlite \
-> >  	taglib \
-> >  	tinyxml \
-> > -- 
-> > 2.20.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 40bee1b898..db6931ed8a 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -72,12 +72,10 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_PYTHON_BZIP2
+ 	select BR2_PACKAGE_PYTHON_CURSES
+ 	select BR2_PACKAGE_PYTHON_PYEXPAT
+-	select BR2_PACKAGE_PYTHON_READLINE
+ 	select BR2_PACKAGE_PYTHON_SQLITE
+ 	select BR2_PACKAGE_PYTHON_SSL
+ 	select BR2_PACKAGE_PYTHON_UNICODEDATA
+ 	select BR2_PACKAGE_PYTHON_ZLIB
+-	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_TAGLIB
+ 	select BR2_PACKAGE_TINYXML
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 028bf551bc..49728e464b 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -38,7 +38,6 @@ KODI_DEPENDENCIES = \
+ 	openssl \
+ 	pcre \
+ 	python \
+-	readline \
+ 	sqlite \
+ 	taglib \
+ 	tinyxml \
