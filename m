@@ -1,45 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 09:46:14 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-huepy: fix
- build with python3.8
-In-Reply-To: <20191114204747.097698EF48@busybox.osuosl.org>
-References: <20191114204747.097698EF48@busybox.osuosl.org>
-Message-ID: <20191115094614.6b3fe95f@windsurf>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Fri, 15 Nov 2019 10:47:41 +0100
+Subject: [Buildroot] [PATCH/next] modem-manager: fix order of libraries when
+ linking
+Message-ID: <20191115094741.59903-1-aleksander@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes the following build failure:
+  http://autobuild.buildroot.net/results/2386d296fd00fca506053d213806200f4bca80d7/build-end.log
 
-On Thu, 14 Nov 2019 21:46:36 +0100
-Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+---
 
-> commit: https://git.buildroot.net/buildroot/commit/?id=2be8b37a1e3448f27ace763c25bdf69641ce27f0
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-> 
-> Fixes:
->   - http://autobuild.buildroot.net/results/240c397a6479b98f30b63b5135bfb2e45281de7d
-> 
-> Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  package/python-huepy/0001-fix-import-with-python3.patch | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/python-huepy/0001-fix-import-with-python3.patch b/package/python-huepy/0001-fix-import-with-python3.patch
-> new file mode 100644
-> index 0000000000..e04eacb228
-> --- /dev/null
-> +++ b/package/python-huepy/0001-fix-import-with-python3.patch
+Hey Thomas,
 
-This patch lacks a proper commit log and Signed-off-by.
+Haven't been able to locally reproduce this build failure, not even playing with --as-needed, but I believe this patch should solve it (applicable to next branch!)
+Cheers!
 
-Best regards,
+---
+ ...test-fix-order-of-included-libraries.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/modem-manager/0001-build-test-fix-order-of-included-libraries.patch
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/modem-manager/0001-build-test-fix-order-of-included-libraries.patch b/package/modem-manager/0001-build-test-fix-order-of-included-libraries.patch
+new file mode 100644
+index 0000000000..de3918fec0
+--- /dev/null
++++ b/package/modem-manager/0001-build-test-fix-order-of-included-libraries.patch
+@@ -0,0 +1,40 @@
++From 64b31d64c6824e33082cd947989f060be4b87d2f Mon Sep 17 00:00:00 2001
++From: Aleksander Morgado <aleksander@aleksander.es>
++Date: Fri, 15 Nov 2019 09:52:39 +0100
++Subject: [PATCH] build,test: fix order of included libraries
++
++Symbols are resolved forward, so if libhelpers depends on libmm-glib,
++it needs to be specified first.
++
++(cherry picked from commit 42dab8e827d84b86d0f7253ce68748758f29aef1)
++---
++ test/Makefile.am | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/test/Makefile.am b/test/Makefile.am
++index 20e2a068..ba737bc5 100644
++--- a/test/Makefile.am
+++++ b/test/Makefile.am
++@@ -87,8 +87,8 @@ mmsmspdu_CPPFLAGS = \
++
++ mmsmspdu_LDADD = \
++ 	$(MM_LIBS) \
++-	$(top_builddir)/libmm-glib/libmm-glib.la \
++ 	$(top_builddir)/src/libhelpers.la \
+++	$(top_builddir)/libmm-glib/libmm-glib.la \
++ 	$(NULL)
++
++ ################################################################################
++@@ -112,8 +112,8 @@ mmsmsmonitor_CPPFLAGS = \
++
++ mmsmsmonitor_LDADD = \
++ 	$(MM_LIBS) \
++-	$(top_builddir)/libmm-glib/libmm-glib.la \
++ 	$(top_builddir)/src/libhelpers.la \
+++	$(top_builddir)/libmm-glib/libmm-glib.la \
++ 	$(NULL)
++
++ ################################################################################
++--
++2.24.0
++
+--
+2.24.0
