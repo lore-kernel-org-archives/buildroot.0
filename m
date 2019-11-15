@@ -1,51 +1,90 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Nov 2019 19:08:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: bump version to 12.1
-Message-ID: <20191115180831.10818-1-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 15 Nov 2019 18:56:33 +0000
+Subject: [Buildroot] [Bug 12316] New: tzdata fails to install with empty
+ "default local time"
+Message-ID: <bug-12316-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes of the bugfix release:
-https://www.postgresql.org/about/news/1994/
-https://www.postgresql.org/docs/current/release-12-1.html
+https://bugs.busybox.net/show_bug.cgi?id=12316
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/postgresql/postgresql.hash | 8 ++++----
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+            Bug ID: 12316
+            Target: aarch64 on Nvidia TX2
+           Summary: tzdata fails to install with empty "default local
+                    time"
+           Product: buildroot
+           Version: 2019.02.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: andrew.trapani at ontera.bio
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 3230818fac..5acdc957f2 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,7 +1,7 @@
--# From https://ftp.postgresql.org/pub/source/v12.0/postgresql-12.0.tar.bz2.md5
--md5 87545416ef021eee8621d31a93fcc899  postgresql-12.0.tar.bz2
--# From https://ftp.postgresql.org/pub/source/v12.0/postgresql-12.0.tar.bz2.sha256
--sha256 cda2397215f758b793f741c86be05468257b0e6bcb1a6113882ab5d0df0855c6  postgresql-12.0.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v12.1/postgresql-12.1.tar.bz2.md5
-+md5 2ee1bd4ec5f49363a3f456f07e599b41  postgresql-12.1.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v12.1/postgresql-12.1.tar.bz2.sha256
-+sha256 a09bf3abbaf6763980d0f8acbb943b7629a8b20073de18d867aecdb7988483ed  postgresql-12.1.tar.bz2
- 
- # License file, Locally calculated
- sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 58f829ee00..858cd6975e 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 12.0
-+POSTGRESQL_VERSION = 12.1
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+Option #1:
+
+Under menuconfig
+System configuration  --->
+-*- Install timezone info
+ (default) timezone list
+ ()    default local time 
+
+My understanding after doing internet searches was that an empty "default local
+time" field would be set to Etc/UTC.
+
+
+However, the build failed here:
+>>> host-tzdata 2018e Installing to host directory
+>>> tzdata 2018e Extracting
+>>> tzdata 2018e Patching
+>>> tzdata 2018e Configuring
+>>> tzdata 2018e Building
+>>> tzdata 2018e Installing to target
+Error: '' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting
+package/pkg-generic.mk:331: recipe for target
+'/build/output/tx2_basecamp/build/tzdata-2018e/.stamp_target_installed' failed
+make[1]: ***
+[/build/output/tx2_basecamp/build/tzdata-2018e/.stamp_target_installed] Error 1
+Makefile:23: recipe for target '_all' failed
+make: *** [_all] Error 2
+Could not create rootfs... not building image
+Makefile:89: recipe for target 'docker_build_image' failed
+
+
+Option #2:
+Then Under menuconfig
+
+ -*- Install timezone info
+ (default) timezone list
+ (Etc/UTC) default local time 
+
+Then tzdata works and the build continues.
+
+
+
+Do a symsearch for TZDATA to find out what is required:
+Symbol: BR2_PACKAGE_TZDATA [=y]
+Type  : bool
+  Defined at package/tzdata/Config.in:4
+  Selected by [y]:
+  - BR2_TARGET_TZ_INFO [=y] && BR2_TOOLCHAIN_USES_GLIBC [=y]
+  Selected by [n]:
+  - BR2_TARGET_TZ_INFO [=y] && BR2_TOOLCHAIN_USES_MUSL [=n] 
+
+
+The config is attached, but please be warned that it references local paths to
+local things and won't build for you.
+
+It also has Etc/UTC set as the "default local time". This is how I got tzdata
+to complete.
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
