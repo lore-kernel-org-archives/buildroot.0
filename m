@@ -1,52 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 21:41:35 +0100
-Subject: [Buildroot] [git commit branch/next] package/sdbusplus: fix
- check-package warnings
-Message-ID: <20191115204111.2DABA8EFE3@busybox.osuosl.org>
+Date: Fri, 15 Nov 2019 21:48:52 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: add pattern
+ based copy for ATF as already used for u-boot
+In-Reply-To: <1573804220-8890-1-git-send-email-michael.schenk@noser.com>
+References: <1573804220-8890-1-git-send-email-michael.schenk@noser.com>
+Message-ID: <20191115214852.29d8309e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5c246412b3b7fb2ab944af09a6e304beb269b4a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Fri, 15 Nov 2019 07:51:01 +0000
+Schenk Michael <michael.schenk@noser.com> wrote:
 
-Fixes:
+> This adds support for different platforms where the
+> binaries have different extensions.
+> 
+> Signed-off-by: Michael Schenk <michael.schenk@noser.com>
+> ---
+>  boot/arm-trusted-firmware/Config.in               | 7 +++++++
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 +++-
+>  2 files changed, 10 insertions(+), 1 deletion(-)
 
-package/sdbusplus/Config.in.host:7: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-package/sdbusplus/sdbusplus.mk:26: expected indent with tabs
+Applied to next with a slightly shorter commit title. Thanks!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sdbusplus/Config.in.host | 4 ++--
- package/sdbusplus/sdbusplus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/sdbusplus/Config.in.host b/package/sdbusplus/Config.in.host
-index cff9f20384..2b1d1ce31d 100644
---- a/package/sdbusplus/Config.in.host
-+++ b/package/sdbusplus/Config.in.host
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_HOST_SDBUSPLUS
- 	help
- 	  A C++ library for sd-bus with a bindings and doc generator.
- 
--	  This will build the Python host side generation tool for bindings
--	  and documentation.
-+	  This will build the Python host side generation tool for
-+	  bindings and documentation.
- 
- 	  https://github.com/openbmc/sdbusplus
-diff --git a/package/sdbusplus/sdbusplus.mk b/package/sdbusplus/sdbusplus.mk
-index 976f987fad..e7a3dc2665 100644
---- a/package/sdbusplus/sdbusplus.mk
-+++ b/package/sdbusplus/sdbusplus.mk
-@@ -23,7 +23,7 @@ SDBUSPLUS_LICENSE = Apache-2.0
- SDBUSPLUS_LICENSE_FILES = LICENSE
- 
- define SDBUSPLUS_CREATE_M4
--    mkdir -p $(@D)/m4
-+	mkdir -p $(@D)/m4
- endef
- SDBUSPLUS_POST_PATCH_HOOKS += SDBUSPLUS_CREATE_M4
- HOST_SDBUSPLUS_POST_PATCH_HOOKS += SDBUSPLUS_CREATE_M4
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
