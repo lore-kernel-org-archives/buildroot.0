@@ -1,36 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 17:00:21 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-11-14
-In-Reply-To: <CANQCQpassM+yz=UYThsDSd4XK7JqZZMx564qWqPh_2bL=RwRiA@mail.gmail.com>
-References: <20191115071632.914A660464@crulimr02.rockwellcollins.com>
- <CANQCQpassM+yz=UYThsDSd4XK7JqZZMx564qWqPh_2bL=RwRiA@mail.gmail.com>
-Message-ID: <20191115170021.09b53d36@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 15 Nov 2019 17:28:33 +0100
+Subject: [Buildroot] lshw package not getting added to the resulting
+ image
+In-Reply-To: <1573794819086-0.post@n4.nabble.com>
+References: <1573645315718-0.post@n4.nabble.com>
+ <20191113215806.45bb1ec7@gmx.net>
+ <1573716587196-0.post@n4.nabble.com>
+ <20191114202532.7bdd338b@gmx.net>
+ <1573794819086-0.post@n4.nabble.com>
+Message-ID: <20191115172833.7fabae3a@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 15 Nov 2019 09:32:25 -0600
-Matthew Weber <matthew.weber@collins.com> wrote:
+Hello,
 
-> > Build failures related to your packages:
-> >
-> >     arch     |             reason             |                                       url
-> > -------------+--------------------------------+---------------------------------------------------------------------------------
-> >     arm      |         libselinux-2.9         | http://autobuild.buildroot.net/results/6fad51b79d7e9780663fab324020d30515ed6256
-> >     arm      |         libselinux-2.9         | http://autobuild.buildroot.net/results/8730b6f844fff5b1908a08ffdea8135ad128be15
-> >     arm      |         libselinux-2.9         | http://autobuild.buildroot.net/results/7f39a5a6306fdac81138f4221a63a0dc51d50341
-> >     arm      |         libselinux-2.9         | http://autobuild.buildroot.net/results/b4497f19feb682aa76837ce6445ef7dc265ef7c9  
-> 
-> http://patchwork.ozlabs.org/patch/1185307/
+On Thu, 14 Nov 2019 23:13:39 -0600 (CST), a <anushka.parashar@tesco.com> wrote:
 
-Yes, I know, but I'm still a bit "meh" about this patch. I guess I
-should reply to the patch itself with my concerns.
+> Hi!
+>
+> I'm using buildroot-2019.02.6
+>
+> PFA .config file and build.log
+>
+> *.config file* is the file before I set BR2_PACKAGE_LSHW=y, and
+>
+> *build.log file* is the log after I set BR2_PACKAGE_LSHW=y and now it's
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Sorry, no config/build.log files attached to the e-mail...
+
+Regards,
+Peter
+
+> showing the following error while building lshw B.02.18 package:
+> make[1]:
+> /root/buildroot-hello/output/host/bin/x86_64-buildroot-linux-uclibc-g++:
+> Command not found
+> make[1]: *** [lshw.o] Error 127
+> make[1]: *** Waiting for unfinished jobs....
+> make[2]: Entering directory
+> `/root/buildroot-hello/output/build/lshw-B.02.18/src/core'
+> /root/buildroot-hello/output/host/bin/x86_64-buildroot-linux-uclibc-g++ -g
+> -Wall -g -I./core/ -DPREFIX=\"/usr\" -DSBINDIR=\"/usr/sbin\"
+> -DMANDIR=\"/usr/share/man\" -DDATADIR=\"/usr/share\" -D_LARGEFILE_SOURCE
+> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c hw.cc -o hw.o
+> make[2]:
+> /root/buildroot-hello/output/host/bin/x86_64-buildroot-linux-uclibc-g++:
+> Command not found
+> make[2]: *** [hw.o] Error 127
+> make[2]: Leaving directory
+> `/root/buildroot-hello/output/build/lshw-B.02.18/src/core'
+> make[1]: *** [core] Error 2
+> make[1]: Leaving directory
+> `/root/buildroot-hello/output/build/lshw-B.02.18/src'
+> make: *** [/root/buildroot-hello/output/build/lshw-B.02.18/.stamp_built]
+> Error 2
+>
+>
+>
+>
+> --
+> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
