@@ -1,55 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Nov 2019 21:20:29 +0100
-Subject: [Buildroot] [PATCH 1/5] package/spice: add optional gdk-pixbuf
- dependency
-In-Reply-To: <20191114191321.11789-1-fontaine.fabrice@gmail.com>
-References: <20191114191321.11789-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191115202029.GH26360@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 15 Nov 2019 21:21:01 +0100
+Subject: [Buildroot] [PATCH] configs/atmel: bump to linux4sam_6.2 and
+ at91bootstrap 3.9.0
+In-Reply-To: <1573823254-15612-1-git-send-email-eugen.hristev@microchip.com>
+References: <1573823254-15612-1-git-send-email-eugen.hristev@microchip.com>
+Message-ID: <20191115212101.75c0eb16@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+On Fri, 15 Nov 2019 13:07:54 +0000
+<Eugen.Hristev@microchip.com> wrote:
 
-On 2019-11-14 20:13 +0100, Fabrice Fontaine spake thusly:
-> This dependency has been added in version 0.14.1 with
-> https://gitlab.freedesktop.org/spice/spice-common/commit/d58a5b6a5a25134396661e1d805dfc567181e3af
+> From: Eugen Hristev <eugen.hristev@microchip.com>
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Update configs with latest linux4sam and at91bootstrap.
+> 
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 > ---
->  package/spice/spice.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-> index 16e57441a8..f5801ce0ff 100644
-> --- a/package/spice/spice.mk
-> +++ b/package/spice/spice.mk
-> @@ -13,6 +13,7 @@ SPICE_INSTALL_STAGING = YES
->  SPICE_DEPENDENCIES = \
->  	host-pkgconf \
->  	jpeg \
-> +	$(if $(BR2_PACKAGE_GDK_PIXBUF),gdk-pixbuf) \
+>  configs/atmel_sama5d2_xplained_mmc_defconfig     | 6 +++---
+>  configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 6 +++---
+>  configs/atmel_sama5d3_xplained_defconfig         | 6 +++---
+>  configs/atmel_sama5d3_xplained_dev_defconfig     | 6 +++---
+>  configs/atmel_sama5d3_xplained_mmc_defconfig     | 6 +++---
+>  configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 6 +++---
+>  configs/atmel_sama5d4_xplained_defconfig         | 6 +++---
+>  configs/atmel_sama5d4_xplained_dev_defconfig     | 6 +++---
+>  configs/atmel_sama5d4_xplained_mmc_defconfig     | 6 +++---
+>  configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 6 +++---
+>  10 files changed, 30 insertions(+), 30 deletions(-)
 
-I see you've gine for conciseness here. However, I think we want to
-handle this optional dependency like we handle the optional dependency
-on opus, lines 53..56.
+Thanks Eugen, I have applied to our next branch. However, could you
+send some additional patches to:
 
-Regards,
-Yann E. MORIN.
+ - Update the at91sam9x5ek defconfigs to those new components version
 
->  	libglib2 \
->  	openssl \
->  	pixman \
-> -- 
-> 2.23.0
-> 
+ - Use the github helper not only for the Linux kernel, but also for
+   U-Boot and AT91Bootstrap
 
+Thanks a lot!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
