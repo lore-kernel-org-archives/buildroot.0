@@ -1,46 +1,51 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Fri, 15 Nov 2019 14:06:26 -0300
-Subject: [Buildroot] [PATCH 1/1] package/dtc: bump version to 1.5.1
-In-Reply-To: <20191115094502.478cc28b@windsurf>
-References: <2e17e96615b10c843fa81e291fedc48749bd98c0.1573797870.git.sbobroff@linux.ibm.com>
- <20191115094502.478cc28b@windsurf>
-Message-ID: <CAJ4jsadDZ_jL77dttO00TrDi5xORLvceTZzysLhLXDcSH-foJw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 15 Nov 2019 19:08:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: bump version to 12.1
+Message-ID: <20191115180831.10818-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 15, 2019 at 5:45 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Sam,
->
-> On Fri, 15 Nov 2019 17:04:34 +1100
-> Sam Bobroff <sbobroff@linux.ibm.com> wrote:
->
-> > Updated patch 1 to handle changed context.
-> > Removed patch 2 which is now upstream.
-> >
-> > The update allows QEMU's configure script to successfully detect libfdt.
-> >
-> > Signed-off-by: Sam Bobroff <sbobroff@linux.ibm.com>
->
-> We did update to 1.5.1 some time ago, but had to revert, as it was
-> causing too many problems.
->
-> See the revert comit b78eecb2c2a97742cf5cb7e526dffe01d881e753 for more
-> details.
->
-> Best regards,
->
-> Thomas
->
+Release notes of the bugfix release:
+https://www.postgresql.org/about/news/1994/
+https://www.postgresql.org/docs/current/release-12-1.html
 
-There is a proposed solution but it can wait for the release of 2019.11:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/postgresql/postgresql.hash | 8 ++++----
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-    https://patchwork.ozlabs.org/patch/1188569/
-    https://patchwork.ozlabs.org/patch/1188570/
-
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 3230818fac..5acdc957f2 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,7 +1,7 @@
+-# From https://ftp.postgresql.org/pub/source/v12.0/postgresql-12.0.tar.bz2.md5
+-md5 87545416ef021eee8621d31a93fcc899  postgresql-12.0.tar.bz2
+-# From https://ftp.postgresql.org/pub/source/v12.0/postgresql-12.0.tar.bz2.sha256
+-sha256 cda2397215f758b793f741c86be05468257b0e6bcb1a6113882ab5d0df0855c6  postgresql-12.0.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.1/postgresql-12.1.tar.bz2.md5
++md5 2ee1bd4ec5f49363a3f456f07e599b41  postgresql-12.1.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.1/postgresql-12.1.tar.bz2.sha256
++sha256 a09bf3abbaf6763980d0f8acbb943b7629a8b20073de18d867aecdb7988483ed  postgresql-12.1.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 58f829ee00..858cd6975e 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 12.0
++POSTGRESQL_VERSION = 12.1
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.20.1
