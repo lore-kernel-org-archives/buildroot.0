@@ -1,55 +1,55 @@
-From: Avi Shukron <avraham.shukron@gmail.com>
-Date: Fri, 15 Nov 2019 22:19:00 +0200
-Subject: [Buildroot] [PATCH v3] package/qemu: add host-python as an explicit
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 15 Nov 2019 21:20:29 +0100
+Subject: [Buildroot] [PATCH 1/5] package/spice: add optional gdk-pixbuf
  dependency
-In-Reply-To: <20191112220534.531a470f@windsurf>
-References: <20191112220534.531a470f@windsurf>
-Message-ID: <20191115201908.8216-1-avraham.shukron@gmail.com>
+In-Reply-To: <20191114191321.11789-1-fontaine.fabrice@gmail.com>
+References: <20191114191321.11789-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191115202029.GH26360@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qemu requires python in its configre script. Yet host-python was
-not listed as one of the package's dependencies. If no other package
-requested host-python, then configuring this package will fail since
-it won't find any executable named python in the host dir.
+Fabrice, All,
 
-In order to reproduce this issue you must not have python2 installed
-on your host machine.
+On 2019-11-14 20:13 +0100, Fabrice Fontaine spake thusly:
+> This dependency has been added in version 0.14.1 with
+> https://gitlab.freedesktop.org/spice/spice-common/commit/d58a5b6a5a25134396661e1d805dfc567181e3af
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/spice/spice.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+> index 16e57441a8..f5801ce0ff 100644
+> --- a/package/spice/spice.mk
+> +++ b/package/spice/spice.mk
+> @@ -13,6 +13,7 @@ SPICE_INSTALL_STAGING = YES
+>  SPICE_DEPENDENCIES = \
+>  	host-pkgconf \
+>  	jpeg \
+> +	$(if $(BR2_PACKAGE_GDK_PIXBUF),gdk-pixbuf) \
 
-Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
----
-Changes v2->v3:
-- Depend directly on host-python3, since it is already a transitive
-  dependency of qemu
----
- package/qemu/qemu.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+I see you've gine for conciseness here. However, I think we want to
+handle this optional dependency like we handle the optional dependency
+on opus, lines 53..56.
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index a91f9d3eeb..c46e41919f 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -20,8 +20,7 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
- 
- #-------------------------------------------------------------
- # Target-qemu
--
--QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman
-+QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman host-python3
- 
- # Need the LIBS variable because librt and libm are
- # not automatically pulled. :-(
-@@ -182,7 +181,7 @@ $(eval $(generic-package))
- #-------------------------------------------------------------
- # Host-qemu
- 
--HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
-+HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman host-python3
- 
- #       BR ARCH         qemu
- #       -------         ----
+Regards,
+Yann E. MORIN.
+
+>  	libglib2 \
+>  	openssl \
+>  	pixman \
+> -- 
+> 2.23.0
+> 
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
