@@ -1,54 +1,55 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 15 Nov 2019 21:19:09 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/ltp-testsuite: proper fix
- for missing __kernel_fsid_t
-In-Reply-To: <20191115193118.GA19966@x230>
-References: <20191114200219.1568-1-petr.vorel@gmail.com>
- <20191114213050.GF26360@scaer> <20191115193118.GA19966@x230>
-Message-ID: <20191115201909.GA24188@x230>
+From: Avi Shukron <avraham.shukron@gmail.com>
+Date: Fri, 15 Nov 2019 22:19:00 +0200
+Subject: [Buildroot] [PATCH v3] package/qemu: add host-python as an explicit
+ dependency
+In-Reply-To: <20191112220534.531a470f@windsurf>
+References: <20191112220534.531a470f@windsurf>
+Message-ID: <20191115201908.8216-1-avraham.shukron@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+qemu requires python in its configre script. Yet host-python was
+not listed as one of the package's dependencies. If no other package
+requested host-python, then configuring this package will fail since
+it won't find any executable named python in the host dir.
 
-> Musl config which works:
-> * /home/pevik/br-test-pkg/br-x86-64-musl/.config
-> BR2_DEFCONFIG="$(CONFIG_DIR)/defconfig"
-> BR2_TOOLCHAIN_USES_MUSL=y
-> BR2_TOOLCHAIN_EXTERNAL_MUSL=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-musl-2019.05.1.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-> BR2_PACKAGE_MUSL_COMPAT_HEADERS=y
-> BR2_PACKAGE_MUSL_FTS=y
-> # BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS is not set
+In order to reproduce this issue you must not have python2 installed
+on your host machine.
 
-> Broken one (
-> * pc_x86_64_bios_defconfig, libc changed to musl
-> BR2_DEFCONFIG="/home/pevik/install/src/buildroot.git/configs/pc_x86_64_bios_defconfig"
-> BR2_TOOLCHAIN_USES_MUSL=y
-> BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-> BR2_TOOLCHAIN_BUILDROOT_LIBC="musl"
-> BR2_PACKAGE_MUSL=y
-> BR2_PACKAGE_MUSL_COMPAT_HEADERS=y
-> BR2_PACKAGE_MUSL_FTS=y
-> # BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS is not set
+Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
+---
+Changes v2->v3:
+- Depend directly on host-python3, since it is already a transitive
+  dependency of qemu
+---
+ package/qemu/qemu.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> There are more differences in these 2 configs, but I bet this
-> BR2_TOOLCHAIN_BUILDROOT_MUSL=y vs. BR2_TOOLCHAIN_EXTERNAL_MUSL=y can be
-> the difference.
-
-OK, external toolchain has older MUSL, it's without 
-f67b3c17 ("sys/fanotify.h: update for linux v5.1")
-from v1.1.23. => need to fix autoconf in LTP for latest musl release.
-
-I didn't realized that there could be more MUSL versions,
-next time, I'll check with utils/test-pkg
-support/config-fragments/autobuild/*musl*
-and also for internal toolchain (somehow wasn't able to use 
-support/config-fragments/autobuild/*internal-*musl* with utils/test-pkg).
-
-Kind regards,
-Petr
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index a91f9d3eeb..c46e41919f 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -20,8 +20,7 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
+ 
+ #-------------------------------------------------------------
+ # Target-qemu
+-
+-QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman
++QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman host-python3
+ 
+ # Need the LIBS variable because librt and libm are
+ # not automatically pulled. :-(
+@@ -182,7 +181,7 @@ $(eval $(generic-package))
+ #-------------------------------------------------------------
+ # Host-qemu
+ 
+-HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
++HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman host-python3
+ 
+ #       BR ARCH         qemu
+ #       -------         ----
+-- 
+2.17.1
