@@ -1,46 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 23:35:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
- version 2.26.2
-In-Reply-To: <20191110162503.3529982-1-aperez@igalia.com>
-References: <20191110162503.3529982-1-aperez@igalia.com>
-Message-ID: <20191115233534.4e0b95f4@windsurf.home>
+Date: Fri, 15 Nov 2019 23:37:40 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add Carlo Caione for jailhouse
+Message-ID: <20191115223018.020798F0A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 10 Nov 2019 18:25:03 +0200
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7bb0691475702654868c7560eae02cf9cee61155
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This is a minor release which includes fixes for CVE-2019-8812 and
-> CVE-2019-8814.
-> 
-> This release also fixes the build with WebDriver disabled, making patch
-> "0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch" unneeded
-> (and therefore removed). There is also a performance improvement for
-> a regression related to fallback font selection, and a couple of small
-> fixes. The full release notes are available at:
-> 
->   https://wpewebkit.org/release/wpewebkit-2.26.2.html
-> 
-> The detailed security advisory can be found at:
-> 
->   https://wpewebkit.org/security/WSA-2019-0006.html
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  ...uild-fails-with-ENABLE_WEBDRIVER-OFF.patch | 56 -------------------
->  package/wpewebkit/wpewebkit.hash              |  8 +--
->  package/wpewebkit/wpewebkit.mk                |  2 +-
->  3 files changed, 5 insertions(+), 61 deletions(-)
->  delete mode 100644 package/wpewebkit/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
+The jailhouse package was added in commit
+ee4990721c14c624c99295598fde29e395647fb9 by Carlo Caione, but no entry
+in the DEVELOPERS file was added. Let's fix this to ensure we have a
+registered maintainer for the Jailhouse package.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Carlo Caione <ccaione@baylibre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c0863aabc6..991be89849 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -461,6 +461,7 @@ N:	Brock Williams <brock@cottonwoodcomputer.com>
+ F:	package/pdmenu/
+ 
+ N:	Carlo Caione <carlo.caione@gmail.com>
++F:	package/jailhouse/
+ F:	package/sunxi-boards/
+ 
+ N:	Carlos Santos <unixmania@gmail.com>
