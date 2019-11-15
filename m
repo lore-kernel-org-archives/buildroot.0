@@ -1,69 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 15 Nov 2019 21:27:42 +0100
-Subject: [Buildroot] [PATCH 1/5] package/spice: add optional gdk-pixbuf
- dependency
-In-Reply-To: <20191115202029.GH26360@scaer>
-References: <20191114191321.11789-1-fontaine.fabrice@gmail.com>
- <20191115202029.GH26360@scaer>
-Message-ID: <CAPi7W82gKs0tkx+QvxSHB36W56KpgbHxc38VbS+eV4MuejZ4sA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 15 Nov 2019 21:29:54 +0100
+Subject: [Buildroot] [git commit branch/next] boot/arm-trusted-firmware: add
+ pattern based image copy for ATF
+Message-ID: <20191115204111.204CD8EFE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=e4d276c357fdf9f19f99f826cab63f373687f902
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Le ven. 15 nov. 2019 ? 21:20, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
->
-> Fabrice, All,
->
-> On 2019-11-14 20:13 +0100, Fabrice Fontaine spake thusly:
-> > This dependency has been added in version 0.14.1 with
-> > https://gitlab.freedesktop.org/spice/spice-common/commit/d58a5b6a5a25134396661e1d805dfc567181e3af
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/spice/spice.mk | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-> > index 16e57441a8..f5801ce0ff 100644
-> > --- a/package/spice/spice.mk
-> > +++ b/package/spice/spice.mk
-> > @@ -13,6 +13,7 @@ SPICE_INSTALL_STAGING = YES
-> >  SPICE_DEPENDENCIES = \
-> >       host-pkgconf \
-> >       jpeg \
-> > +     $(if $(BR2_PACKAGE_GDK_PIXBUF),gdk-pixbuf) \
->
-> I see you've gine for conciseness here. However, I think we want to
-> handle this optional dependency like we handle the optional dependency
-> on opus, lines 53..56.
-OK, I can send a v2 with this change however I've also think about it
-and I can also send a v2 that disable tests in spice-common. This will
-avoid this gdk-pixbuf dependency as well as the dynamic library
-dependency (I'll move it to celt051). The only drawback is that I'll
-have to add a hook to call autoreconf in subprojects/spice-common.
-What do you think about this proposal?
->
-> Regards,
-> Yann E. MORIN.
->
-> >       libglib2 \
-> >       openssl \
-> >       pixman \
-> > --
-> > 2.23.0
-> >
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-Best Regards,
+This adds support for different platforms where the binaries have
+different extensions.
 
-Fabrice
+Signed-off-by: Michael Schenk <michael.schenk@noser.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/arm-trusted-firmware/Config.in               | 7 +++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 +++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index beb95fbf06..78c03019d5 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -135,4 +135,11 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
+ 	help
+ 	  Enable this option to build ATF with DEBUG=1.
+ 
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES
++	string "Binary boot images"
++	default "*.bin"
++	help
++	  Names of generated image files that are installed in the
++	  output images/ directory.
++
+ endif
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index a7814e534a..e528686aa1 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -146,7 +146,9 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
+ endef
+ 
+ define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
+-	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
++	$(foreach f,$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES)), \
++		cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(f) $(BINARIES_DIR)/
++	)
+ 	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL)
+ 	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF)
+ endef
