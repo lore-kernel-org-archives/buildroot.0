@@ -1,46 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Nov 2019 21:54:55 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/ltp-testsuite: proper fix
- for missing __kernel_fsid_t
-In-Reply-To: <20191115201909.GA24188@x230>
-References: <20191114200219.1568-1-petr.vorel@gmail.com>
- <20191114213050.GF26360@scaer> <20191115193118.GA19966@x230>
- <20191115201909.GA24188@x230>
-Message-ID: <20191115205455.GA32494@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 15 Nov 2019 21:55:04 +0100
+Subject: [Buildroot] [git commit branch/next] package/qemu: search for
+ host-dtc (libfdt) headers at the right place
+Message-ID: <20191115204852.249DB8EFE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=19197809d616d8c2dfdb5755c1455423b1b20955
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2019-11-15 21:19 +0100, Petr Vorel spake thusly:
-[--SNIP--]
-> OK, external toolchain has older MUSL, it's without 
-> f67b3c17 ("sys/fanotify.h: update for linux v5.1")
-> from v1.1.23. => need to fix autoconf in LTP for latest musl release.
+The libfdt headers are installed at $(HOST_DIR)/include/libfdt now, to
+prevent conflicts with the kernel dtc code. Pass that path to the qemu
+configure script, otherwise it uses its bundled copy of libfdt.
 
-Thank you for the very good investigations! :-)
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qemu/qemu.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> I didn't realized that there could be more MUSL versions,
-> next time, I'll check with utils/test-pkg
-
-I noticed the build failure by just building the config file from the
-autobuild referenced in your commit log. I did not even try to build it
-with test-pkg...
-
-> support/config-fragments/autobuild/*musl*
-> and also for internal toolchain (somehow wasn't able to use 
-> support/config-fragments/autobuild/*internal-*musl* with utils/test-pkg).
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index a91f9d3eeb..1a5c642726 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -246,9 +246,12 @@ endif
+ endif
+ HOST_QEMU_SYS_ARCH ?= $(HOST_QEMU_ARCH)
+ 
++HOST_QEMU_CFLAGS = $(HOST_CFLAGS)
++
+ ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
+ HOST_QEMU_TARGETS += $(HOST_QEMU_SYS_ARCH)-softmmu
+ HOST_QEMU_OPTS += --enable-system --enable-fdt
++HOST_QEMU_CFLAGS += -I$(HOST_DIR)/include/libfdt
+ HOST_QEMU_DEPENDENCIES += host-dtc
+ else
+ HOST_QEMU_OPTS += --disable-system
+@@ -297,7 +300,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--interp-prefix=$(STAGING_DIR) \
+ 		--cc="$(HOSTCC)" \
+ 		--host-cc="$(HOSTCC)" \
+-		--extra-cflags="$(HOST_CFLAGS)" \
++		--extra-cflags="$(HOST_QEMU_CFLAGS)" \
+ 		--extra-ldflags="$(HOST_LDFLAGS)" \
+ 		$(HOST_QEMU_OPTS)
+ endef
