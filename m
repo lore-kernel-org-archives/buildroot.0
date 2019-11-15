@@ -1,32 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 09:45:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dtc: bump version to 1.5.1
-In-Reply-To: <2e17e96615b10c843fa81e291fedc48749bd98c0.1573797870.git.sbobroff@linux.ibm.com>
-References: <2e17e96615b10c843fa81e291fedc48749bd98c0.1573797870.git.sbobroff@linux.ibm.com>
-Message-ID: <20191115094502.478cc28b@windsurf>
+Date: Fri, 15 Nov 2019 09:46:14 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-huepy: fix
+ build with python3.8
+In-Reply-To: <20191114204747.097698EF48@busybox.osuosl.org>
+References: <20191114204747.097698EF48@busybox.osuosl.org>
+Message-ID: <20191115094614.6b3fe95f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sam,
+Hello,
 
-On Fri, 15 Nov 2019 17:04:34 +1100
-Sam Bobroff <sbobroff@linux.ibm.com> wrote:
+On Thu, 14 Nov 2019 21:46:36 +0100
+Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
-> Updated patch 1 to handle changed context.
-> Removed patch 2 which is now upstream.
+> commit: https://git.buildroot.net/buildroot/commit/?id=2be8b37a1e3448f27ace763c25bdf69641ce27f0
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 > 
-> The update allows QEMU's configure script to successfully detect libfdt.
+> Fixes:
+>   - http://autobuild.buildroot.net/results/240c397a6479b98f30b63b5135bfb2e45281de7d
 > 
-> Signed-off-by: Sam Bobroff <sbobroff@linux.ibm.com>
+> Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  package/python-huepy/0001-fix-import-with-python3.patch | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/python-huepy/0001-fix-import-with-python3.patch b/package/python-huepy/0001-fix-import-with-python3.patch
+> new file mode 100644
+> index 0000000000..e04eacb228
+> --- /dev/null
+> +++ b/package/python-huepy/0001-fix-import-with-python3.patch
 
-We did update to 1.5.1 some time ago, but had to revert, as it was
-causing too many problems.
-
-See the revert comit b78eecb2c2a97742cf5cb7e526dffe01d881e753 for more
-details.
+This patch lacks a proper commit log and Signed-off-by.
 
 Best regards,
 
