@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 23:38:29 +0100
-Subject: [Buildroot] [git commit] board/beaglebone: fix boot on BeagleBone
+Date: Fri, 15 Nov 2019 23:38:44 +0100
+Subject: [Buildroot] [PATCH] board/beaglebone: fix boot on BeagleBone
  Black
-Message-ID: <20191115223107.21BED8F0AF@busybox.osuosl.org>
+In-Reply-To: <20191109152254.15562-1-unixmania@gmail.com>
+References: <20191109152254.15562-1-unixmania@gmail.com>
+Message-ID: <20191115233844.0d1b9b5c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6458b154a2064267116fe14b50315b3b55d47e50
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  9 Nov 2019 12:22:54 -0300
+unixmania at gmail.com wrote:
 
-Commit 68b5b79b2f has set the getty port to the default console but left
-"ttyO0" in bootargs, in the U-Boot environment. Use "ttyS0", instead.
+> From: Carlos Santos <unixmania@gmail.com>
+> 
+> Commit 68b5b79b2f has set the getty port to the default console but left
+> "ttyO0" in bootargs, in the U-Boot environment. Use "ttyS0", instead.
+> 
+> Also set loadaddr to 0x82000000 and fdtaddr to 0x88000000, replacing the
+> values that were valid for the ancient U-Boot and Linux pre-installed on
+> old boards but cause boot hangs with the current versions.
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ---
+> CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> CC: Lothar Felten <lothar.felten@gmail.com>
+> ---
+> Changes v1->v2:
+> - Clarify the explanation about old U-Boot versions in the commit
+>   message.
+> ---
+>  board/beaglebone/uEnv.txt | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-Also set loadaddr to 0x82000000 and fdtaddr to 0x88000000, replacing the
-values that were valid for the ancient U-Boot and Linux pre-installed on
-old boards but cause boot hangs with the current versions.
+Applied to master, thanks.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/beaglebone/uEnv.txt | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/board/beaglebone/uEnv.txt b/board/beaglebone/uEnv.txt
-index a665f20889..8fce54d87e 100644
---- a/board/beaglebone/uEnv.txt
-+++ b/board/beaglebone/uEnv.txt
-@@ -3,6 +3,9 @@ devtype=mmc
- bootdir=
- bootfile=zImage
- bootpartition=mmcblk0p2
-+console=ttyS0,115200n8
-+loadaddr=0x82000000
-+fdtaddr=0x88000000
- set_mmc1=if test $board_name = A33515BB; then setenv bootpartition mmcblk1p2; fi
--set_bootargs=setenv bootargs console=ttyO0,115200n8 root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
-+set_bootargs=setenv bootargs console=${console} root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
- uenvcmd=run set_mmc1; run set_bootargs;run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr}
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
