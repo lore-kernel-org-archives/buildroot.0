@@ -1,55 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 23:34:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dhcp: fix autoreconf for
- libtool-enabled build
-In-Reply-To: <20191111033106.6987-1-bernd.kuhls@t-online.de>
-References: <20191111033106.6987-1-bernd.kuhls@t-online.de>
-Message-ID: <20191115233426.17a2fd13@windsurf.home>
+Date: Fri, 15 Nov 2019 23:34:50 +0100
+Subject: [Buildroot] [git commit branch/next] package/irqbalance: bump to
+ version 1.6.0
+Message-ID: <20191115222724.806458F07A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=b45f6a03ee5ed0fe50a0e261e7691e3fcbce8f47
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 11 Nov 2019 04:31:06 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+See full changelog https://github.com/Irqbalance/irqbalance/releases/tag/v1.6.0
 
-> Upstream provides two configure.ac versions, the default one does not
-> use libtool. For libtool-enabled builds the default configure.ac calls
-> https://gitlab.isc.org/isc-projects/dhcp/blob/master/configure.ac#L873
-> https://gitlab.isc.org/isc-projects/dhcp/blob/master/config+lt
-> 
-> which copies configure.ac+lt to configure.ac and starts autoreconf.
-> 
-> On host systems lacking autoreconf this causes a build error:
-> 
-> configure: WARNING: legacy configure is used but libtool is enabled. Trying to recover...
-> /home/buildroot/autobuild/instance-2/output-1/build/dhcp-4.4.1/config+lt: 20:
->  /home/buildroot/autobuild/instance-2/output-1/build/dhcp-4.4.1/config+lt: autoreconf: not found
-> autoreconf failed
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/16f/16f800dd844572336c2fbba3d123604405382a84/
-> http://autobuild.buildroot.net/results/eac/eac1e7b25128476eccf40aece612e13a1e0637dc/
-> http://autobuild.buildroot.net/results/8fc/8fcfe7b40af3ae42549351c70466b4dd388820e3/
-> http://autobuild.buildroot.net/results/7ff/7ff82708b9dea09f1447f0ef94b9bb21fca73196/
-> http://autobuild.buildroot.net/results/1c5/1c5f401ce7eef13f5ca4603ca8d7c67da249d7c9/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/irqbalance/irqbalance.hash | 2 +-
+ package/irqbalance/irqbalance.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I was quite surprised when reading your patch, because it seems a bit
-crazy the way it works. But indeed, that's how the dhcp configure stuff
-seems to be designed...
-
-I looked at if we could use --disable-libtool unconditionally, but it
-refuses to not use libtool when only shared libraries are built.
-
-So: applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/irqbalance/irqbalance.hash b/package/irqbalance/irqbalance.hash
+index 3aba2e7dba..2e7cf49c25 100644
+--- a/package/irqbalance/irqbalance.hash
++++ b/package/irqbalance/irqbalance.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 3318eddc03782cfdad22b20eff18eaf378c498c5de286e8cbaa5521ddf4f810b  irqbalance-1.5.0.tar.gz
++sha256 5ace9dd69d5190e24ee34210c3131333e9963e3ba649bf9237eabb4313c300d2  irqbalance-1.6.0.tar.gz
+ sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
+index 8e550df3bf..b01eba96c8 100644
+--- a/package/irqbalance/irqbalance.mk
++++ b/package/irqbalance/irqbalance.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRQBALANCE_VERSION = 1.5.0
++IRQBALANCE_VERSION = 1.6.0
+ IRQBALANCE_SITE = $(call github,irqbalance,irqbalance,v$(IRQBALANCE_VERSION))
+ IRQBALANCE_LICENSE = GPL-2.0
+ IRQBALANCE_LICENSE_FILES = COPYING
