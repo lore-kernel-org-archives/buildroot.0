@@ -1,32 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 23:37:56 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Carlo Caione for jailhouse
-In-Reply-To: <20191110132912.16295-1-thomas.petazzoni@bootlin.com>
-References: <20191110132912.16295-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191115233756.6cadcf1d@windsurf.home>
+Date: Fri, 15 Nov 2019 23:38:29 +0100
+Subject: [Buildroot] [git commit] board/beaglebone: fix boot on BeagleBone
+ Black
+Message-ID: <20191115223107.21BED8F0AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 10 Nov 2019 14:29:11 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6458b154a2064267116fe14b50315b3b55d47e50
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The jailhouse package was added in commit
-> ee4990721c14c624c99295598fde29e395647fb9 by Carlo Caione, but no entry
-> in the DEVELOPERS file was added. Let's fix this to ensure we have a
-> registered maintainer for the Jailhouse package.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Carlo Caione <ccaione@baylibre.com>
-> ---
-> Carlo, could you Acked-by this patch?
+Commit 68b5b79b2f has set the getty port to the default console but left
+"ttyO0" in bootargs, in the U-Boot environment. Use "ttyS0", instead.
 
-Applied to master, thanks.
+Also set loadaddr to 0x82000000 and fdtaddr to 0x88000000, replacing the
+values that were valid for the ancient U-Boot and Linux pre-installed on
+old boards but cause boot hangs with the current versions.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/beaglebone/uEnv.txt | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/board/beaglebone/uEnv.txt b/board/beaglebone/uEnv.txt
+index a665f20889..8fce54d87e 100644
+--- a/board/beaglebone/uEnv.txt
++++ b/board/beaglebone/uEnv.txt
+@@ -3,6 +3,9 @@ devtype=mmc
+ bootdir=
+ bootfile=zImage
+ bootpartition=mmcblk0p2
++console=ttyS0,115200n8
++loadaddr=0x82000000
++fdtaddr=0x88000000
+ set_mmc1=if test $board_name = A33515BB; then setenv bootpartition mmcblk1p2; fi
+-set_bootargs=setenv bootargs console=ttyO0,115200n8 root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
++set_bootargs=setenv bootargs console=${console} root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
+ uenvcmd=run set_mmc1; run set_bootargs;run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr}
