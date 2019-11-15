@@ -1,50 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 22:24:47 +0100
-Subject: [Buildroot] [git commit] package/kodi: share the download dir with
+Date: Fri, 15 Nov 2019 22:25:17 +0100
+Subject: [Buildroot] [PATCH] package/kodi: share the download dir with
  helper programs
-Message-ID: <20191115211726.3DD3B8080E@busybox.osuosl.org>
+In-Reply-To: <20191113204412.27018-1-yann.morin.1998@free.fr>
+References: <20191113204412.27018-1-yann.morin.1998@free.fr>
+Message-ID: <20191115222517.2bdb5f9d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce9a16fdfe4702e18c143e720aa1da5788de2ea0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 13 Nov 2019 21:44:12 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-The two helper programs TesturePackager and JsonSchemaBuilder are built
-out of the same source tree as Kodi, so to avoid downloading the same
-archive three times, let's them share the same download directory.
+> The two helper programs TesturePackager and JsonSchemaBuilder are built
+> out of the same source tree as Kodi, so to avoid downloading the same
+> archive three times, let's them share the same download directory.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 1 +
+>  package/kodi-texturepacker/kodi-texturepacker.mk         | 1 +
+>  2 files changed, 2 insertions(+)
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 1 +
- package/kodi-texturepacker/kodi-texturepacker.mk         | 1 +
- 2 files changed, 2 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-index fcf4888a9c..713d415fed 100644
---- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-@@ -9,6 +9,7 @@
- KODI_JSONSCHEMABUILDER_VERSION = 17.6-Krypton
- KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
- KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
-+KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
- KODI_JSONSCHEMABUILDER_LICENSE = GPL-2.0
- KODI_JSONSCHEMABUILDER_LICENSE_FILES = LICENSE.GPL
- HOST_KODI_JSONSCHEMABUILDER_SUBDIR = tools/depends/native/JsonSchemaBuilder
-diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
-index 31e3580aed..bb35252b94 100644
---- a/package/kodi-texturepacker/kodi-texturepacker.mk
-+++ b/package/kodi-texturepacker/kodi-texturepacker.mk
-@@ -9,6 +9,7 @@
- KODI_TEXTUREPACKER_VERSION = 17.6-Krypton
- KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
- KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
-+KODI_TEXTUREPACKER_DL_SUBDIR = kodi
- KODI_TEXTUREPACKER_LICENSE = GPL-2.0
- KODI_TEXTUREPACKER_LICENSE_FILES = LICENSE.GPL
- HOST_KODI_TEXTUREPACKER_SUBDIR = tools/depends/native/TexturePacker
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
