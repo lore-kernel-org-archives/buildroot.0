@@ -1,70 +1,53 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 14 Nov 2019 14:52:40 -0800
-Subject: [Buildroot] [PATCH,
- next 1/1] package/libglib2: bump to version 2.62.2
-In-Reply-To: <20191114211423.555413ad@gmx.net>
-References: <20191111210251.2216431-1-aduskett@gmail.com>
- <20191112215341.28f7b1aa@windsurf>
- <CAFSsvmqzCBG0+FX+bp2p+XJQD+pQDM3f=sefTEn9067CH7tM0w@mail.gmail.com>
- <20191113204552.5198d038@windsurf>
- <CAFSsvmphUacxn59u6N4A3BYBMwCAG5FFbUvDfrPMTkRbSVvZ8g@mail.gmail.com>
- <20191114211423.555413ad@gmx.net>
-Message-ID: <CAFSsvmok+d2rigqu6oD=Uyg27-SBP0Mx9kC-GO3bwdEdjYSfXQ@mail.gmail.com>
+From: a <anushka.parashar@tesco.com>
+Date: Thu, 14 Nov 2019 23:13:39 -0600 (CST)
+Subject: [Buildroot] lshw package not getting added to the resulting
+ image
+In-Reply-To: <20191114202532.7bdd338b@gmx.net>
+References: <1573645315718-0.post@n4.nabble.com>
+ <20191113215806.45bb1ec7@gmx.net> <1573716587196-0.post@n4.nabble.com>
+ <20191114202532.7bdd338b@gmx.net>
+Message-ID: <1573794819086-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ah yeah, I'm not sure what I was thinking!
+Hi!
 
-That would be the issue yes.
+I'm using buildroot-2019.02.6
 
-Adam
+PFA .config file and build.log
 
-On Thu, Nov 14, 2019 at 12:14 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> Hello Adam, Thomas,
->
-> On Thu, 14 Nov 2019 08:12:47 -0800, Adam Duskett <aduskett@gmail.com> wrote:
->
-> > I believe it's triggered due to the `needs_exe_wrapper = true` in
-> > package/meson/cross-compilation.conf
-> >
-> > On Wed, Nov 13, 2019 at 11:45 AM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> > >
-> > > On Wed, 13 Nov 2019 11:19:50 -0800
-> > > Adam Duskett <aduskett@gmail.com> wrote:
-> > >
-> > > > > > + # Don?t build the tests unless we can run them (either natively, in an exe wrapper, or by installing them for later use)
-> > > > > > +-build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper()) or installed_tests_enabled
-> > > > > > ++build_tests = installed_tests_enabled
-> > > > >
-> > > > > Why do we need to change this ? Is meson.has_exe_wrapper() true in our case ?
->
-> No, for the host build it is the 'not meson.is_cross_build()' case...
->
-> Regards,
-> Peter
->
-> > > > >
-> > > > I believe so. Without the change, the tests are triggered to build.
-> > > > I'm not sure where we are triggering has_exe_wrapper,
-> > > > but it is indeed being triggered.
-> > >
-> > > It would be good to understand what is this has_exe_wrapper thing, and
-> > > why we are triggering it.
-> > >
-> > > Thanks,
-> > >
-> > > Thomas
-> > > --
-> > > Thomas Petazzoni, CTO, Bootlin
-> > > Embedded Linux and Kernel engineering
-> > > https://bootlin.com
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
+*.config file* is the file before I set BR2_PACKAGE_LSHW=y, and
+
+*build.log file* is the log after I set BR2_PACKAGE_LSHW=y and now it's
+showing the following error while building lshw B.02.18 package:
+make[1]:
+/root/buildroot-hello/output/host/bin/x86_64-buildroot-linux-uclibc-g++:
+Command not found
+make[1]: *** [lshw.o] Error 127
+make[1]: *** Waiting for unfinished jobs....
+make[2]: Entering directory
+`/root/buildroot-hello/output/build/lshw-B.02.18/src/core'
+/root/buildroot-hello/output/host/bin/x86_64-buildroot-linux-uclibc-g++ -g
+-Wall -g -I./core/ -DPREFIX=\"/usr\" -DSBINDIR=\"/usr/sbin\"
+-DMANDIR=\"/usr/share/man\" -DDATADIR=\"/usr/share\" -D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c hw.cc -o hw.o
+make[2]:
+/root/buildroot-hello/output/host/bin/x86_64-buildroot-linux-uclibc-g++:
+Command not found
+make[2]: *** [hw.o] Error 127
+make[2]: Leaving directory
+`/root/buildroot-hello/output/build/lshw-B.02.18/src/core'
+make[1]: *** [core] Error 2
+make[1]: Leaving directory
+`/root/buildroot-hello/output/build/lshw-B.02.18/src'
+make: *** [/root/buildroot-hello/output/build/lshw-B.02.18/.stamp_built]
+Error 2
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
