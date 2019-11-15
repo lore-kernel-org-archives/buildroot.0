@@ -1,42 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 22:14:13 +0100
-Subject: [Buildroot] [git commit] package/gettext-tiny: fix prefix in
- autopoint
-Message-ID: <20191115210824.251988F002@busybox.osuosl.org>
+Date: Fri, 15 Nov 2019 22:15:25 +0100
+Subject: [Buildroot] [git commit] package/kodi: add missing host-gettext
+ dependency
+Message-ID: <20191115210824.395C68F002@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75a257f45e1f1da2c9ba4f5c4d1598234d0961a2
+commit: https://git.buildroot.net/buildroot/commit/?id=d90fc22ee3a3420fd5881416107f55447a900ea2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gettext-tiny also installs a fake autopoint, but it still needs to be
-pointed at the m4 macros, which the template autopoint expects to be in
-@datadir@, where datadir is the traditional autotools datadir, derived
-from datarootdir, itself derived from prefix.
+A sub-component of Kodi (cpluff) needs to be autoreconf-ed, and uses
+gettext, so calls to autopoint:
 
-So, pass prefix so all the locations are properly pointing to HOST_DIR,
-instead of the default /usr/local.
+    [  2%] Performing autoreconf step for 'libcpluff'
+    autoreconf: Entering directory `.'
+    autoreconf: running: autopoint --force
+    Can't exec "autopoint": No such file or directory at [...]/host/share/autoconf/Auto4te/FileUtils.pm line 345.
+    autoreconf: failed to run autopoint: No such file or directory
+    autoreconf: autopoint is needed because this package uses Gettext
+    make[4]: *** [CMakeFiles/libcpluff.dir/build.make:121: build/cpluff/src/libcpluff-stamp/libcpluff-autoreconf] Error 1
+    make[3]: *** [CMakeFiles/Makefile2:615: CMakeFiles/libcpluff.dir/all] Error 2
+
+Add a dependency to host-gettext to bring an appropriate variant that
+provides autotpoint (gettext-tiny's autopoint works like a charm, for
+the curious).
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Vadim Kochan <vadim4j@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gettext-tiny/gettext-tiny.mk | 1 +
+ package/kodi/kodi.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-index 23a9d9a057..6ee6269e09 100644
---- a/package/gettext-tiny/gettext-tiny.mk
-+++ b/package/gettext-tiny/gettext-tiny.mk
-@@ -52,6 +52,7 @@ HOST_GETTEXT_TINY_POST_PATCH_HOOKS += HOST_GETTEXT_TINY_COPY_EXTRA_FILES
- define HOST_GETTEXT_TINY_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(HOST_CONFIGURE_OPTS) \
-+		prefix=$(HOST_DIR) \
- 		CFLAGS="$(HOST_CFLAGS) -fPIC" \
- 		LIBINTL=NONE
- 
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 49728e464b..ceab5d5c0b 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -19,6 +19,7 @@ KODI_DEPENDENCIES = \
+ 	freetype \
+ 	gnutls \
+ 	host-gawk \
++	host-gettext \
+ 	host-gperf \
+ 	host-kodi-jsonschemabuilder \
+ 	host-kodi-texturepacker \
