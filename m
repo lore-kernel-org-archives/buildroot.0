@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 23:38:44 +0100
-Subject: [Buildroot] [PATCH] board/beaglebone: fix boot on BeagleBone
- Black
-In-Reply-To: <20191109152254.15562-1-unixmania@gmail.com>
-References: <20191109152254.15562-1-unixmania@gmail.com>
-Message-ID: <20191115233844.0d1b9b5c@windsurf.home>
+Date: Fri, 15 Nov 2019 23:51:21 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/qemu: add host-python as an
+ explicit dependency
+In-Reply-To: <CAJX3zAv9dAhtoiAUn-5sRFE1QOMWKK_G8P6yD1wqK25hpkq=hA@mail.gmail.com>
+References: <20191111213154.19409-1-avraham.shukron@gmail.com>
+ <20191111213154.19409-2-avraham.shukron@gmail.com>
+ <20191112220534.531a470f@windsurf>
+ <CAJX3zAuwNz7zzdrxupT+o_ZWR7AYRrk6h1XpRuYHk778pMU0ZQ@mail.gmail.com>
+ <20191115220834.56a3e732@windsurf.home>
+ <CAJX3zAv9dAhtoiAUn-5sRFE1QOMWKK_G8P6yD1wqK25hpkq=hA@mail.gmail.com>
+Message-ID: <20191115235121.531a0e36@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  9 Nov 2019 12:22:54 -0300
-unixmania at gmail.com wrote:
+Hello,
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> Commit 68b5b79b2f has set the getty port to the default console but left
-> "ttyO0" in bootargs, in the U-Boot environment. Use "ttyS0", instead.
-> 
-> Also set loadaddr to 0x82000000 and fdtaddr to 0x88000000, replacing the
-> values that were valid for the ancient U-Boot and Linux pre-installed on
-> old boards but cause boot hangs with the current versions.
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
-> CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> CC: Lothar Felten <lothar.felten@gmail.com>
-> ---
-> Changes v1->v2:
-> - Clarify the explanation about old U-Boot versions in the commit
->   message.
-> ---
->  board/beaglebone/uEnv.txt | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+On Sat, 16 Nov 2019 00:04:59 +0200
+Avraham Shukron <avraham.shukron@gmail.com> wrote:
 
-Applied to master, thanks.
+> Damn, you are right, host-python3 won't work.
+> I've managed to build it only because I had host-python(2) still installed
+> in my host dir during my experiments.
+> A clean build still fails because there is no "python" executable in the
+> host dir unless you build any python for
+> the target.
+> 
+> So we only left with your suggestion, that in the best case (python3 is
+> selected for the target)
+> will only build host-python3.
+> Any other case will force both host-python and host-python3 to be built.
+> 
+> So I'll re-submit with your $(if..) solution soon.
+
+So, the qemu build system requires having an interpreter called "python" ?
 
 Thomas
 -- 
