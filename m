@@ -1,59 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 21:23:48 +0100
-Subject: [Buildroot] [PATCH v1] docs/manual/quickstart: Mention sysroot
- dir.
-In-Reply-To: <20191115121022.27662-1-michael.drake@codethink.co.uk>
-References: <20191115121022.27662-1-michael.drake@codethink.co.uk>
-Message-ID: <20191115212348.5a1a2fa3@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 15 Nov 2019 21:27:42 +0100
+Subject: [Buildroot] [PATCH 1/5] package/spice: add optional gdk-pixbuf
+ dependency
+In-Reply-To: <20191115202029.GH26360@scaer>
+References: <20191114191321.11789-1-fontaine.fabrice@gmail.com>
+ <20191115202029.GH26360@scaer>
+Message-ID: <CAPi7W82gKs0tkx+QvxSHB36W56KpgbHxc38VbS+eV4MuejZ4sA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael,
+Hi Yann,
 
-Thanks for your contribution!
+Le ven. 15 nov. 2019 ? 21:20, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+>
+> Fabrice, All,
+>
+> On 2019-11-14 20:13 +0100, Fabrice Fontaine spake thusly:
+> > This dependency has been added in version 0.14.1 with
+> > https://gitlab.freedesktop.org/spice/spice-common/commit/d58a5b6a5a25134396661e1d805dfc567181e3af
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/spice/spice.mk | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+> > index 16e57441a8..f5801ce0ff 100644
+> > --- a/package/spice/spice.mk
+> > +++ b/package/spice/spice.mk
+> > @@ -13,6 +13,7 @@ SPICE_INSTALL_STAGING = YES
+> >  SPICE_DEPENDENCIES = \
+> >       host-pkgconf \
+> >       jpeg \
+> > +     $(if $(BR2_PACKAGE_GDK_PIXBUF),gdk-pixbuf) \
+>
+> I see you've gine for conciseness here. However, I think we want to
+> handle this optional dependency like we handle the optional dependency
+> on opus, lines 53..56.
+OK, I can send a v2 with this change however I've also think about it
+and I can also send a v2 that disable tests in spice-common. This will
+avoid this gdk-pixbuf dependency as well as the dynamic library
+dependency (I'll move it to celt051). The only drawback is that I'll
+have to add a hook to call autoreconf in subprojects/spice-common.
+What do you think about this proposal?
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >       libglib2 \
+> >       openssl \
+> >       pixman \
+> > --
+> > 2.23.0
+> >
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+Best Regards,
 
-On Fri, 15 Nov 2019 12:10:22 +0000
-Michael Drake <michael.drake@codethink.co.uk> wrote:
-
-> Mention that staging/ is a symlink to the host/$(GNU_TARGET_NAME)/sysroot
-> directory.
-
-We need your Signed-off-by line here, to be able to apply your patch. However ...
-
-> ---
->  docs/manual/quickstart.txt | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
-> index 74158ae249..d9bbc2527b 100644
-> --- a/docs/manual/quickstart.txt
-> +++ b/docs/manual/quickstart.txt
-> @@ -95,7 +95,8 @@ This directory contains several subdirectories:
->    files, unstripped binaries and libraries that make it far too big
->    for an embedded system. These development files are used to compile
->    libraries and applications for the target that depend on other
-> -  libraries.
-> +  libraries. +staging/+ is actually a symlink to the toolchain's target
-> +  sysroot directory inside +host/+.
-
-... I think this section needs a much better overhaul. We want to
-extend the description of the "host" directory to mention that it
-contains both the tools built for the host *and* the sysroot of the
-compiler (possibly reusing the wording of the current staging
-directory). And this "host" directory should be documented before
-"staging".
-
-And then, the description for staging should be simplified to just say
-it's a backward compatibility symlink pointing to the target toolchain
-sysroot in host/.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
