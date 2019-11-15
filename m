@@ -1,29 +1,24 @@
-From: rscr <rafacrespiramon@gmail.com>
-Date: Fri, 15 Nov 2019 01:27:19 -0600 (CST)
-Subject: [Buildroot] Linaro Toolchain for RPI and OABI Issues
-In-Reply-To: <20191114151503.1e0e291b@gmx.net>
-References: <1573542699220-0.post@n4.nabble.com>
- <20191112201551.1f1f6190@gmx.net> <1573650440531-0.post@n4.nabble.com>
- <20191113221343.2eb4fad3@gmx.net> <1573739593129-0.post@n4.nabble.com>
- <20191114151503.1e0e291b@gmx.net>
-Message-ID: <1573802839206-0.post@n4.nabble.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Fri, 15 Nov 2019 10:29:22 +0300
+Subject: [Buildroot] [PATCH 1/1] add pattern based copy for ATF as
+ already used for u-boot. This add support for different platforms where the
+ binaries have different extension
+In-Reply-To: <1573738166-12850-1-git-send-email-michael.schenk@noser.com>
+References: <1573738166-12850-1-git-send-email-michael.schenk@noser.com>
+Message-ID: <20191115072922.4uvgndviwvjj3irb@bars>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, 
+> Signed-off-by: Michael Schenk <michael.schenk@noser.com>
+> ---
+>  boot/arm-trusted-firmware/Config.in               | 7 +++++++
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 +++-
+>  2 files changed, 10 insertions(+), 1 deletion(-)
 
-With BR2_TOOLCHAIN_EXTERNAL_PATH  =  /home/<your
-login>/rcr/tools/toolchaines/linaro/rpi/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf
-worked!
+Reviewed-by: Sergey Matyukevich <geomatsi@gmail.com>
 
-Thanks a lot, 
-
-Rafa
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+Regards,
+Sergey
