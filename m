@@ -1,55 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Nov 2019 21:29:54 +0100
-Subject: [Buildroot] [git commit branch/next] boot/arm-trusted-firmware: add
- pattern based image copy for ATF
-Message-ID: <20191115204111.204CD8EFE3@busybox.osuosl.org>
+Date: Fri, 15 Nov 2019 21:41:35 +0100
+Subject: [Buildroot] [git commit branch/next] package/sdbusplus: fix
+ check-package warnings
+Message-ID: <20191115204111.2DABA8EFE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4d276c357fdf9f19f99f826cab63f373687f902
+commit: https://git.buildroot.net/buildroot/commit/?id=b5c246412b3b7fb2ab944af09a6e304beb269b4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This adds support for different platforms where the binaries have
-different extensions.
+Fixes:
 
-Signed-off-by: Michael Schenk <michael.schenk@noser.com>
+package/sdbusplus/Config.in.host:7: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+package/sdbusplus/sdbusplus.mk:26: expected indent with tabs
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/arm-trusted-firmware/Config.in               | 7 +++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 +++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ package/sdbusplus/Config.in.host | 4 ++--
+ package/sdbusplus/sdbusplus.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index beb95fbf06..78c03019d5 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -135,4 +135,11 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
+diff --git a/package/sdbusplus/Config.in.host b/package/sdbusplus/Config.in.host
+index cff9f20384..2b1d1ce31d 100644
+--- a/package/sdbusplus/Config.in.host
++++ b/package/sdbusplus/Config.in.host
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_HOST_SDBUSPLUS
  	help
- 	  Enable this option to build ATF with DEBUG=1.
+ 	  A C++ library for sd-bus with a bindings and doc generator.
  
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES
-+	string "Binary boot images"
-+	default "*.bin"
-+	help
-+	  Names of generated image files that are installed in the
-+	  output images/ directory.
-+
- endif
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index a7814e534a..e528686aa1 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -146,7 +146,9 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- endef
+-	  This will build the Python host side generation tool for bindings
+-	  and documentation.
++	  This will build the Python host side generation tool for
++	  bindings and documentation.
  
- define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
--	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
-+	$(foreach f,$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES)), \
-+		cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(f) $(BINARIES_DIR)/
-+	)
- 	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL)
- 	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF)
+ 	  https://github.com/openbmc/sdbusplus
+diff --git a/package/sdbusplus/sdbusplus.mk b/package/sdbusplus/sdbusplus.mk
+index 976f987fad..e7a3dc2665 100644
+--- a/package/sdbusplus/sdbusplus.mk
++++ b/package/sdbusplus/sdbusplus.mk
+@@ -23,7 +23,7 @@ SDBUSPLUS_LICENSE = Apache-2.0
+ SDBUSPLUS_LICENSE_FILES = LICENSE
+ 
+ define SDBUSPLUS_CREATE_M4
+-    mkdir -p $(@D)/m4
++	mkdir -p $(@D)/m4
  endef
+ SDBUSPLUS_POST_PATCH_HOOKS += SDBUSPLUS_CREATE_M4
+ HOST_SDBUSPLUS_POST_PATCH_HOOKS += SDBUSPLUS_CREATE_M4
