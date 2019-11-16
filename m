@@ -1,7 +1,7 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 16 Nov 2019 06:48:44 -0600
-Subject: [Buildroot] [next] package/git: bump to 2.24.0
-Message-ID: <20191116124844.13039-1-matthew.weber@rockwellcollins.com>
+Date: Sat, 16 Nov 2019 07:02:17 -0600
+Subject: [Buildroot] [next] package/libcurl: bump to 7.67.0
+Message-ID: <20191116130217.55859-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcurl/libcurl.hash | 6 ++----
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index e02fd0d181..40cd8a169f 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,4 +1,4 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 159e4b599f8af4612e70b666600a3139541f8bacc18124daf2cbe8d1b934f29f  git-2.22.0.tar.xz
-+sha256 9f71d61973626d8b28c4cdf8e2484b4bf13870ed643fed982d68b2cfd754371b  git-2.24.0.tar.xz
- sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index fdcb9aa54d..4fec24bf27 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 8f2d0c058c..b46ee52d04 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,3 @@
+-# Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.66.0.tar.xz.asc
+-# with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256 dbb48088193016d079b97c5c3efde8efa56ada2ebf336e8a97d04eb8e2ed98c1  curl-7.66.0.tar.xz
++# Locally calculated
++sha256 f5d2e7320379338c3952dcc7566a140abb49edb575f9f99272455785c40e536c  curl-7.67.0.tar.xz
+ sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 8384210d48..373befae13 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GIT_VERSION = 2.22.0
-+GIT_VERSION = 2.24.0
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+-LIBCURL_VERSION = 7.66.0
++LIBCURL_VERSION = 7.67.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
 2.17.1
