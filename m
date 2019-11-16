@@ -1,7 +1,7 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 16 Nov 2019 07:24:41 -0600
-Subject: [Buildroot] [next] package/python-tinyrpc: bump to 1.0.4
-Message-ID: <20191116132441.24983-1-matthew.weber@rockwellcollins.com>
+Date: Sat, 16 Nov 2019 07:29:30 -0600
+Subject: [Buildroot] [next] package/python-txdbus: bump to 1.1.1
+Message-ID: <20191116132930.21821-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +10,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/python-tinyrpc/python-tinyrpc.hash | 5 ++---
- package/python-tinyrpc/python-tinyrpc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-txdbus/python-txdbus.hash | 4 ++--
+ package/python-txdbus/python-txdbus.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-tinyrpc/python-tinyrpc.hash b/package/python-tinyrpc/python-tinyrpc.hash
-index d01575c11c..b4bc7ae863 100644
---- a/package/python-tinyrpc/python-tinyrpc.hash
-+++ b/package/python-tinyrpc/python-tinyrpc.hash
-@@ -1,5 +1,4 @@
- # md5, sha256 from https://pypi.org/pypi/tinyrpc/json
--md5	b3a95133c65c7b5b5eb4f88c4713e909  tinyrpc-1.0.3.tar.gz
--sha256	aa9f707a26cea5fd69af55fea28e8761f96b244e00efe3c8ccbeb233d5a9852e  tinyrpc-1.0.3.tar.gz
--# Locally computed sha256 checksums
-+sha256	4b41fab967fb1c978f573bf0d609a3b12cc3b6ed62bd3108f43f575563746396  tinyrpc-1.0.4.tar.gz
-+md5	cd61e3cbc01ea940abc97d3a87abf4a7  tinyrpc-1.0.4.tar.gz
- sha256	587f1ea174824613f4a7e0d7fb95fda000a7f58ca17df12416e014c9ee82e619  LICENSE
-diff --git a/package/python-tinyrpc/python-tinyrpc.mk b/package/python-tinyrpc/python-tinyrpc.mk
-index d589936d88..0ac0470f74 100644
---- a/package/python-tinyrpc/python-tinyrpc.mk
-+++ b/package/python-tinyrpc/python-tinyrpc.mk
+diff --git a/package/python-txdbus/python-txdbus.hash b/package/python-txdbus/python-txdbus.hash
+index 38760fada6..60740e29d2 100644
+--- a/package/python-txdbus/python-txdbus.hash
++++ b/package/python-txdbus/python-txdbus.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/txdbus/json
+-md5	f17c9204c7f56365c297ba68e6840900  txdbus-1.1.0.tar.gz
+-sha256	6ff57f42c58d935956024b3c6824c1019db7d233d0af86aa0573b73b63b0817c  txdbus-1.1.0.tar.gz
++sha256	eefcffa4efbf82ba11222f17f5989fe1b2b6ef57226ef896c4a7084c990ba217  txdbus-1.1.1.tar.gz
++md5	ce8a0e0a17cdbada725e3159802ae75f  txdbus-1.1.1.tar.gz
+diff --git a/package/python-txdbus/python-txdbus.mk b/package/python-txdbus/python-txdbus.mk
+index 08429baac8..d8e7a7bee9 100644
+--- a/package/python-txdbus/python-txdbus.mk
++++ b/package/python-txdbus/python-txdbus.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TINYRPC_VERSION = 1.0.3
-+PYTHON_TINYRPC_VERSION = 1.0.4
- PYTHON_TINYRPC_SOURCE = tinyrpc-$(PYTHON_TINYRPC_VERSION).tar.gz
--PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/21/7a/ff1a74256e1bcc04fbaa414c13a2bb79a29ac9918b25f2238592b991e3bc
-+PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/9d/91/c639ba014aada92446516c5fc4b04f2cee3539ab2d0758a6a87a6da973cb
- PYTHON_TINYRPC_SETUP_TYPE = setuptools
- PYTHON_TINYRPC_LICENSE = MIT
- PYTHON_TINYRPC_LICENSE_FILES = LICENSE
+-PYTHON_TXDBUS_VERSION = 1.1.0
++PYTHON_TXDBUS_VERSION = 1.1.1
+ PYTHON_TXDBUS_SOURCE = txdbus-$(PYTHON_TXDBUS_VERSION).tar.gz
+-PYTHON_TXDBUS_SITE = https://files.pythonhosted.org/packages/8e/7c/0b8726b82943ae99dc71b8fe20e2e0beb7feb4ef61105865021a64f08b16
++PYTHON_TXDBUS_SITE = https://files.pythonhosted.org/packages/4a/68/dfd06f3f349999cbbb31eade239fe76fbff2d6a905eb7d20449666d1b2ce
+ PYTHON_TXDBUS_SETUP_TYPE = setuptools
+ PYTHON_TXDBUS_LICENSE = MIT
+ 
 -- 
 2.17.1
