@@ -1,39 +1,98 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 Nov 2019 09:11:32 +0000
-Subject: [Buildroot] [Bug 12316] tzdata fails to install with empty "default
- local time"
-In-Reply-To: <bug-12316-163@https.bugs.busybox.net/>
-References: <bug-12316-163@https.bugs.busybox.net/>
-Message-ID: <bug-12316-163-0yO0NmBAVg@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Nov 2019 10:24:57 +0100
+Subject: [Buildroot] [PATCH/next] package/raspi-gpio: new package
+In-Reply-To: <1573593749-31151-1-git-send-email-pjtexier@koncepto.io>
+References: <1573593749-31151-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20191116092456.GB32494@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12316
+Pierre-Jean, All,
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+On 2019-11-12 22:22 +0100, Pierre-Jean Texier spake thusly:
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> ---
+[--SNIP--]
+> diff --git a/package/raspi-gpio/Config.in b/package/raspi-gpio/Config.in
+> new file mode 100644
+> index 0000000..25c1db0
+> --- /dev/null
+> +++ b/package/raspi-gpio/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_RASPI_GPIO
+> +	bool "raspi-gpio"
+> +	help
+> +	  Tool to help debug / hack at the BCM283x GPIO.
+> +	  You can dump the state of a GPIO or (all GPIOs).
+> +	  You can change a GPIO mode and pulls (and level
+> +	  if set as an output).
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
-                   |.org                        |
-             Status|NEW                         |ASSIGNED
-                 CC|                            |yann.morin.1998 at free.fr
+We already have package/pigpio/ and a bunch of other GPIO-related
+packages.We even have two python modules dedicated to the GPIO on the
+rpi: package/python-pigpio/ (a python binding to pigpio), and
+package/python-rpi-gpio/.
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Andrew,
-Thanks for the report.
+Why can't the rpi folks just use the generic interfaces provided by the
+kernel, of even by the generic libgpiod?
 
-I just sent a patch that I believe handles this case:
-    https://patchwork.ozlabs.org/patch/1196072/
+So, what does that package brings that the existing ones do not?
 
-Care to test that, and report, please?
+> +	  Beware this tool writes directly to the BCM283x GPIO reisters,
+
+*registers
+
+> +	  ignoring anything else that may be using them (like Linux drivers).
+> +
+> +	  https://github.com/RPi-Distro/raspi-gpio
+> diff --git a/package/raspi-gpio/raspi-gpio.hash b/package/raspi-gpio/raspi-gpio.hash
+> new file mode 100644
+> index 0000000..8a808b6
+> --- /dev/null
+> +++ b/package/raspi-gpio/raspi-gpio.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256 8f3fb411746d339d69adc398497892883c11d2d715ccbe6d8b0b5a401da73bd5  raspi-gpio-2eaa8b8755a550e34d07c898b90b0d9b3d66fd81.tar.gz
+> +sha256 6e02227e1fb942687163996678d94add7911890c50025912d0ae7ee66d256bb2  LICENSE
+> diff --git a/package/raspi-gpio/raspi-gpio.mk b/package/raspi-gpio/raspi-gpio.mk
+> new file mode 100644
+> index 0000000..7381f75
+> --- /dev/null
+> +++ b/package/raspi-gpio/raspi-gpio.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# raspi-gpio
+> +#
+> +################################################################################
+> +
+> +RASPI_GPIO_VERSION = 2eaa8b8755a550e34d07c898b90b0d9b3d66fd81
+> +RASPI_GPIO_SITE = $(call github,RPi-Distro,raspi-gpio,$(RASPI_GPIO_VERSION))
+> +RASPI_GPIO_LICENSE = BSD-3-Clause
+> +RASPI_GPIO_LICENSE_FILES = LICENSE
+> +RASPI_GPIO_INSTALL_STAGING = YES
+
+Why staging? As far as I can see, it just installs a single executable,
+and no library.
 
 Regards,
 Yann E. MORIN.
 
+> +$(eval $(autotools-package))
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
