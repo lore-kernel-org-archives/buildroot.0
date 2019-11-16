@@ -1,34 +1,31 @@
-From: Avraham Shukron <avraham.shukron@gmail.com>
-Date: Sat, 16 Nov 2019 13:59:36 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/qemu: add host-python as an
- explicit dependency
-In-Reply-To: <20191115235121.531a0e36@windsurf.home>
-References: <20191111213154.19409-1-avraham.shukron@gmail.com>
- <20191111213154.19409-2-avraham.shukron@gmail.com>
- <20191112220534.531a470f@windsurf>
- <CAJX3zAuwNz7zzdrxupT+o_ZWR7AYRrk6h1XpRuYHk778pMU0ZQ@mail.gmail.com>
- <20191115220834.56a3e732@windsurf.home>
- <CAJX3zAv9dAhtoiAUn-5sRFE1QOMWKK_G8P6yD1wqK25hpkq=hA@mail.gmail.com>
- <20191115235121.531a0e36@windsurf.home>
-Message-ID: <CAJX3zAu7OnUt9g0xdQg6-KJckYo+iW=b36MxxvXFKyJOwS5t8A@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 16 Nov 2019 09:14:20 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-11-15
+In-Reply-To: <5dcfa2a9.1c69fb81.7eabb.0dddSMTPIN_ADDED_MISSING@mx.google.com>
+References: <5dcfa2a9.1c69fb81.7eabb.0dddSMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <CAOMZO5Bprz=r4+N5tZnp+X09GOO2XOwmpuufuS48T7M3rDQd7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Nov 16, 2019 at 12:51 AM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
+Hi Thomas and Arnout,
 
-> So, the qemu build system requires having an interpreter called "python" ?
+On Sat, Nov 16, 2019 at 4:18 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+
+> Build failures related to your defconfigs:
 >
+>                         defconfig |                        link to the job
+> ----------------------------------+--------------------------------------------------------------
+>                  imx6-sabresd_qt5 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/351579609
 
-Yes.
-But now I see that I can pass --python to the configure script with
-the path to the interpreter, so I can simply pass $(HOST_DIR)/bin/python3
-and
-be done with it...
-One less package depending on host-python(2).
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191116/9e191f39/attachment.html>
+Received this report for the second time.
+
+The build is taking more than 6 hours.
+
+Should I ignore it?
+
+Thanks
