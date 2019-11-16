@@ -1,70 +1,114 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 16 Nov 2019 09:53:08 +0100
-Subject: [Buildroot] lshw package not getting added to the resulting
- image
-In-Reply-To: <CAJ4jsac-kgESqTrKdp7KG9sgGksH+ZCTU4vrOFacwT24mdGr-Q@mail.gmail.com>
-References: <1573645315718-0.post@n4.nabble.com>
- <20191113215806.45bb1ec7@gmx.net>
- <1573716587196-0.post@n4.nabble.com>
- <20191114202532.7bdd338b@gmx.net>
- <1573794819086-0.post@n4.nabble.com>
- <20191115172833.7fabae3a@gmx.net>
- <CAJ4jsac-kgESqTrKdp7KG9sgGksH+ZCTU4vrOFacwT24mdGr-Q@mail.gmail.com>
-Message-ID: <20191116095308.2e091dec@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Nov 2019 10:10:04 +0100
+Subject: [Buildroot] [PATCH] system: allow not setting a default,
+ system-wide time zone
+Message-ID: <20191116091004.23726-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+It is valid that there is no system-wide default time zone defined, in
+which case Etc/UTC is assumed.
 
-On Fri, 15 Nov 2019 14:01:46 -0300, Carlos Santos <unixmania@gmail.com> wrote:
+Fixes: #12316
 
-> On Fri, Nov 15, 2019 at 1:29 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > Hello,
-> >
-> > On Thu, 14 Nov 2019 23:13:39 -0600 (CST), a <anushka.parashar@tesco.com> wrote:
-> >
-> > > Hi!
-> > >
-> > > I'm using buildroot-2019.02.6
-> > >
-> > > PFA .config file and build.log
-> > >
-> > > *.config file* is the file before I set BR2_PACKAGE_LSHW=y, and
-> > >
-> > > *build.log file* is the log after I set BR2_PACKAGE_LSHW=y and now it's
-> >
-> > Sorry, no config/build.log files attached to the e-mail...
-> >
-> > Regards,
-> > Peter
-> >
-> > > showing the following error while building lshw B.02.18 package:
-> > > make[1]:
-> > > /root/buildroot-hello/output/host/bin/x86_64-buildroot-linux-uclibc-g++:
-> > > Command not found
-> > > make[1]: *** [lshw.o] Error 127
-> > > make[1]: *** Waiting for unfinished jobs....
-> > > make[2]: Entering directory
-> > > `/root/buildroot-hello/output/build/lshw-B.02.18/src/core'
-> > > /root/buildroot-hello/output/host/bin/x86_64-buildroot-linux-uclibc-g++ -g
-> > > -Wall -g -I./core/ -DPREFIX=\"/usr\" -DSBINDIR=\"/usr/sbin\"
-> > > -DMANDIR=\"/usr/share/man\" -DDATADIR=\"/usr/share\" -D_LARGEFILE_SOURCE
-> > > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c hw.cc -o hw.o
-> > > make[2]:
-> > > /root/buildroot-hello/output/host/bin/x86_64-buildroot-linux-uclibc-g++:
-> > > Command not found
->
-> Your toolchain does not have C++
->
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Martin Bark <martin@barkynet.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Richard Braun <rbraun@sceen.net>
+Cc: Andrew Trapani <andrew.trapani@ontera.bio>
+---
+ package/tz/tz.mk         | 17 +++++++++++------
+ package/tzdata/tzdata.mk | 19 ++++++++++++-------
+ system/Config.in         |  2 ++
+ 3 files changed, 25 insertions(+), 13 deletions(-)
 
-In case you changed your .config already to enable C++, a full re-build will
-maybe fix the problem, see [1] for details...
-
-Regards,
-Peter
-
-[1] http://nightly.buildroot.org/manual.html#full-rebuild
+diff --git a/package/tz/tz.mk b/package/tz/tz.mk
+index 1e797046d2..135726c2ce 100644
+--- a/package/tz/tz.mk
++++ b/package/tz/tz.mk
+@@ -8,6 +8,16 @@ TZ_DEPENDENCIES = host-tzdata host-tzdump
+ TZ_LICENSE = Public domain
+ 
+ TZ_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
++ifneq ($(TZ_LOCALTIME),)
++define TZ_SET_LOCALTIME
++	if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/uclibc/$(TZ_LOCALTIME) ]; then \
++		printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
++			"$(TZ_LOCALTIME)"; \
++		exit 1; \
++	fi
++	ln -sf ../usr/share/zoneinfo/uclibc/$(TZ_LOCALTIME) $(TARGET_DIR)/etc/TZ
++endef
++endif
+ 
+ define TZ_BUILD_CMDS
+ 	(cd $(HOST_DIR)/share/zoneinfo/posix/; \
+@@ -25,12 +35,7 @@ define TZ_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/usr/share/zoneinfo/iso3166.tab
+ 	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo/uclibc
+ 	cp -a $(@D)/output/* $(TARGET_DIR)/usr/share/zoneinfo/uclibc
+-	if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/uclibc/$(TZ_LOCALTIME) ]; then \
+-		printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
+-			"$(TZ_LOCALTIME)"; \
+-		exit 1; \
+-	fi
+-	ln -sf ../usr/share/zoneinfo/uclibc/$(TZ_LOCALTIME) $(TARGET_DIR)/etc/TZ
++	$(TZ_SET_LOCALTIME)
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 4d097dbee9..b656bc7f7f 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -26,6 +26,17 @@ TZDATA_ZONELIST = $(call qstrip,$(BR2_TARGET_TZ_ZONELIST))
+ endif
+ 
+ TZDATA_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
++ifneq ($(TZDATA_LOCALTIME),)
++define TZDATA_SET_LOCALTIME
++	if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/$(TZDATA_LOCALTIME) ]; then \
++		printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
++			"$(TZDATA_LOCALTIME)"; \
++		exit 1; \
++	fi
++	ln -sf ../usr/share/zoneinfo/$(TZDATA_LOCALTIME) $(TARGET_DIR)/etc/localtime
++	echo "$(TZDATA_LOCALTIME)" >$(TARGET_DIR)/etc/timezone
++endef
++endif
+ 
+ # No need to extract for target, we're using the host-installed files
+ TZDATA_EXTRACT_CMDS =
+@@ -37,13 +48,7 @@ define TZDATA_INSTALL_TARGET_CMDS
+ 	for zone in posix/*; do \
+ 	    ln -sfn "$${zone}" "$${zone##*/}"; \
+ 	done
+-	if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/$(TZDATA_LOCALTIME) ]; then \
+-		printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
+-			"$(TZDATA_LOCALTIME)"; \
+-		exit 1; \
+-	fi
+-	ln -sf ../usr/share/zoneinfo/$(TZDATA_LOCALTIME) $(TARGET_DIR)/etc/localtime
+-	echo "$(TZDATA_LOCALTIME)" >$(TARGET_DIR)/etc/timezone
++	$(TZDATA_SET_LOCALTIME)
+ endef
+ 
+ define HOST_TZDATA_BUILD_CMDS
+diff --git a/system/Config.in b/system/Config.in
+index c87266f431..c8c5be40e0 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -494,6 +494,8 @@ config BR2_TARGET_LOCALTIME
+ 	    Pacific/Wallis
+ 	    ...
+ 
++	  Set to empty to not install a default time zone.
++
+ endif # BR2_TARGET_TZ_INFO
+ 
+ config BR2_ROOTFS_USERS_TABLES
+-- 
+2.20.1
