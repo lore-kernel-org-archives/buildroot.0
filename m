@@ -1,49 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 Nov 2019 23:45:22 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-tinyrpc: bump
- to 1.0.4
-Message-ID: <20191116223937.653248F079@busybox.osuosl.org>
+Date: Sat, 16 Nov 2019 23:44:30 +0100
+Subject: [Buildroot] [git commit branch/next] package/git: bump to 2.24.0
+Message-ID: <20191116223937.555AF8F079@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb53f7ed4d07b1c003892876c9c707e88caf5350
+commit: https://git.buildroot.net/buildroot/commit/?id=cfb4d62b68b63e4ad0d6aa0c06c2f2eca4d6b009
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-tinyrpc/python-tinyrpc.hash | 5 ++---
- package/python-tinyrpc/python-tinyrpc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-tinyrpc/python-tinyrpc.hash b/package/python-tinyrpc/python-tinyrpc.hash
-index d01575c11c..b4bc7ae863 100644
---- a/package/python-tinyrpc/python-tinyrpc.hash
-+++ b/package/python-tinyrpc/python-tinyrpc.hash
-@@ -1,5 +1,4 @@
- # md5, sha256 from https://pypi.org/pypi/tinyrpc/json
--md5	b3a95133c65c7b5b5eb4f88c4713e909  tinyrpc-1.0.3.tar.gz
--sha256	aa9f707a26cea5fd69af55fea28e8761f96b244e00efe3c8ccbeb233d5a9852e  tinyrpc-1.0.3.tar.gz
--# Locally computed sha256 checksums
-+sha256	4b41fab967fb1c978f573bf0d609a3b12cc3b6ed62bd3108f43f575563746396  tinyrpc-1.0.4.tar.gz
-+md5	cd61e3cbc01ea940abc97d3a87abf4a7  tinyrpc-1.0.4.tar.gz
- sha256	587f1ea174824613f4a7e0d7fb95fda000a7f58ca17df12416e014c9ee82e619  LICENSE
-diff --git a/package/python-tinyrpc/python-tinyrpc.mk b/package/python-tinyrpc/python-tinyrpc.mk
-index d589936d88..0ac0470f74 100644
---- a/package/python-tinyrpc/python-tinyrpc.mk
-+++ b/package/python-tinyrpc/python-tinyrpc.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/git/git.hash b/package/git/git.hash
+index e02fd0d181..40cd8a169f 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,4 +1,4 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 159e4b599f8af4612e70b666600a3139541f8bacc18124daf2cbe8d1b934f29f  git-2.22.0.tar.xz
++sha256 9f71d61973626d8b28c4cdf8e2484b4bf13870ed643fed982d68b2cfd754371b  git-2.24.0.tar.xz
+ sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index fdcb9aa54d..4fec24bf27 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_TINYRPC_VERSION = 1.0.3
-+PYTHON_TINYRPC_VERSION = 1.0.4
- PYTHON_TINYRPC_SOURCE = tinyrpc-$(PYTHON_TINYRPC_VERSION).tar.gz
--PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/21/7a/ff1a74256e1bcc04fbaa414c13a2bb79a29ac9918b25f2238592b991e3bc
-+PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/9d/91/c639ba014aada92446516c5fc4b04f2cee3539ab2d0758a6a87a6da973cb
- PYTHON_TINYRPC_SETUP_TYPE = setuptools
- PYTHON_TINYRPC_LICENSE = MIT
- PYTHON_TINYRPC_LICENSE_FILES = LICENSE
+-GIT_VERSION = 2.22.0
++GIT_VERSION = 2.24.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
