@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Nov 2019 20:40:48 +0100
-Subject: [Buildroot] [PATCH 1/1] support/testing: add lxc test
-In-Reply-To: <20191109150546.7b5d8de0@windsurf>
-References: <20191107164804.30773-1-patrick.havelange@essensium.com>
- <20191109150546.7b5d8de0@windsurf>
-Message-ID: <7a98da86-dba2-d1e0-3e13-18fd9b7c6d34@mind.be>
+Date: Sun, 17 Nov 2019 20:45:19 +0100
+Subject: [Buildroot] [PATCH 1/2] package/gmpc: needs -lm
+In-Reply-To: <20191108222841.4ff8debf@gmx.net>
+References: <20191029214046.14722-1-fontaine.fabrice@gmail.com>
+ <20191108220442.4b596996@windsurf> <20191108222841.4ff8debf@gmx.net>
+Message-ID: <c16fab60-ebf2-106e-962f-c2595472803d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,75 +13,58 @@ To: buildroot@busybox.net
 
 
 
-On 09/11/2019 15:05, Thomas Petazzoni wrote:
-> Hello Patrick,
+On 08/11/2019 22:28, Peter Seiderer wrote:
+> Hello Fabrice, Thomas,
 > 
-> On Thu,  7 Nov 2019 17:48:04 +0100
-> Patrick Havelange <patrick.havelange@essensium.com> wrote:
+> On Fri, 8 Nov 2019 22:04:42 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 > 
->> The test starts a simple container with an iperf3 server.
->> The container is using the tini init system, with a shared rootfs.
->> An iperf3 client is started from the host to check that the container
->> is really up and running.
+>> On Tue, 29 Oct 2019 22:40:45 +0100
+>> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 >>
->> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+>>> gmpc forgets to link with -lm:
+>>>
+>>> /home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/../../../../mips-linux-gnu/bin/ld: GmpcVolume.o: undefined reference to symbol 'ceil@@GLIBC_2.0'
+>>> /home/buildroot/autobuild/instance-2/output-1/host/mips64el-buildroot-linux-gnu/sysroot/soft-float/el/lib64/libm.so.6: error adding symbols: DSO missing from command line
+>>>
+>>> Fixes:
+>>>  - http://autobuild.buildroot.org/results/a79e0487135ad90530595d5c6ecc32f9c8cea7c4
+>>>
+>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>
+>> We need to understand why this is happening now. This package has not
+>> been modified since July 2017, but suddenly, on October 21, 2019, it
+>> started failing like this. Why? Was there a change in one of the
+>> dependencies, that is no longer linked with libm, and that causes this
+>> problem ?
+
+ It started because of RELRO, I think.
+
 > 
-> Thanks for your contribution. I don't have a lot of very definitive
-> feedback, more some general thoughts.
-> 
-> First of all, what was the idea behind the use of iperf3 ? Is it just a
-> mean to make sure that both the container and host can communicate, and
-> that the container runs fine ?
+> Maybe the same cause/problem as in the libv4l case regarding libatomic,
+> evaluating vs. not evaluationg the *.la files (see [1])?
 
- Indeed. The container running is a bit limited for a test. Having network
-access to it is a way to get a bit more confidence that it is really functional.
-
- ssh would be another option to test the network access, but is more complicated.
-
- nc also sounds like an obvious alternative, but that turns out to be
-surprisingly difficult to set up correctly (in particular, reliably detecting
-failure and not just timing out).
-
- That's why Patrick choose iperf, because it is really trivial.
-
-
-> Another question is about the shared rootfs situation: if I understand
-> correctly, the container runs with the same rootfs as the host.
-> Recently, Carlos Santos (in Cc), submitted a patch "package/test-vm: a
-> virtual machine image to  test libvirt", which builds a separate rootfs
-> image to run as a VM using libvirt. Shouldn't we standardize a bit how
-> the test cases will test things such as lxc/libvirt, and try to use
-> more or less the same strategy/logic to build the image executed inside
-> the container or VM ?
-
- The idea would be to add several lxc tests, for the different use cases. One of
-the use cases is a shared rootfs, another is a separate rootfs. test-vm could be
-used for the second case. Another useful case will be with systemd inside and
-outisde the container and being sure that they can talk to each other properly.
-
-
-> Note: this comment is really to open up the discussion on this topic.
-> Perhaps we will decide that what you did is good enough, and can
-> possibly be improved later.
-> 
->> +    def run_ok(self, cmd):
->> +        full_cmd = "sh -c '{}'".format(cmd)
-> 
-> Why is running through "sh -c" necessary ?
-
- Good question. Probably a leftover from when some commands were using redirection?
-
-
->> +        out, exit_code = self.emulator.run(full_cmd, 120)
->> +        self.assertEqual(exit_code, 0)
-> 
-> This seems like a useful helper method, perhaps we should have it in
-> the emulator class, and make use of it in other tests ?
-
- Indeed, that could be useful.
-
- But then it should probably be called assertRunOk, similar to assertEqual. And
-that again requires a noqa marking :-(
+ And this one because of PIC_PIE.
 
  Regards,
  Arnout
+
+> 
+> Regards,
+> Peter
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2019-October/264928.html
+> 
+>>
+>> I think I already asked this in the past: when you fix an issue, don't
+>> just fix the issue, but explain why the issue is happening, especially
+>> in situations like these.
+>>
+>> Thanks!
+>>
+>> Thomas
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
