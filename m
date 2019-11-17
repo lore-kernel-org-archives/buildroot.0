@@ -1,12 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Nov 2019 20:31:50 +0100
-Subject: [Buildroot] [PATCH 1/2] configs/stm32mp157c_dk2: disable mkfs
- metadata_csum and dir_index options
-In-Reply-To: <0a7b32f7-65bf-98dd-64cd-7a663518479a@grinn-global.com>
-References: <20191103115017.788940-1-b.bilas@grinn-global.com>
- <20191109152205.0bd1b924@windsurf>
- <0a7b32f7-65bf-98dd-64cd-7a663518479a@grinn-global.com>
-Message-ID: <420d175c-4476-c7f7-1ce8-c468a9b1a2d2@mind.be>
+Date: Sun, 17 Nov 2019 20:40:48 +0100
+Subject: [Buildroot] [PATCH 1/1] support/testing: add lxc test
+In-Reply-To: <20191109150546.7b5d8de0@windsurf>
+References: <20191107164804.30773-1-patrick.havelange@essensium.com>
+ <20191109150546.7b5d8de0@windsurf>
+Message-ID: <7a98da86-dba2-d1e0-3e13-18fd9b7c6d34@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,68 +13,75 @@ To: buildroot@busybox.net
 
 
 
-On 09/11/2019 16:25, Bartosz Bilas wrote:
-> Hello Thomas,
+On 09/11/2019 15:05, Thomas Petazzoni wrote:
+> Hello Patrick,
 > 
-> On 09.11.2019 15:22, Thomas Petazzoni wrote:
->> Hello Bartosz,
->>
->> On Sun,? 3 Nov 2019 12:50:16 +0100
->> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
->>
->>> To solve issue with non-possibilities to mount rootfs partition we
->>> should disable a new mkfs features such as metadata_csum and
->>> dir_index because there is incompatibility with these options.
->>>
->>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
->>> ---
->>> ? configs/stm32mp157c_dk2_defconfig | 1 +
->>> ? 1 file changed, 1 insertion(+)
->>>
->>> diff --git a/configs/stm32mp157c_dk2_defconfig
->>> b/configs/stm32mp157c_dk2_defconfig
->>> index a1e61d752d..ba044e5e55 100644
->>> --- a/configs/stm32mp157c_dk2_defconfig
->>> +++ b/configs/stm32mp157c_dk2_defconfig
->>> @@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
->>> ? BR2_TARGET_ROOTFS_EXT2=y
->>> ? BR2_TARGET_ROOTFS_EXT2_4=y
->>> ? BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->>> +BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^64bit,^metadata_csum,^dir_index"
->> Are you sure it is necessary to disable those three options?
->>
->> Indeed, U-Boot ext4 write support clearly excludes filesystems that
->> have the metadata_csum option enabled:
->>
->> ?? https://gitlab.denx.de/u-boot/u-boot/blob/master/fs/ext4/ext4_write.c#L880
->> However, there's nothing about the 64bit and dir_index options. How did
->> you conclude that they were causing problems? Did you try with just -O
->> ^metadata_csum ?
+> On Thu,  7 Nov 2019 17:48:04 +0100
+> Patrick Havelange <patrick.havelange@essensium.com> wrote:
 > 
-> I was talking with the maintainer of that board on U-Boot mailing list [1] and
-> he said that I should disable those 2 options (dir_index and metada_csum) to
-> have U-Boot working properly. I'm not sure about 64bit because I saw that was
-> set by default in buildroot. I didn't check that with metadata_csum option only
-> but I'll do that and let you know if it works.
+>> The test starts a simple container with an iperf3 server.
+>> The container is using the tini init system, with a shared rootfs.
+>> An iperf3 client is started from the host to check that the container
+>> is really up and running.
+>>
+>> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+> 
+> Thanks for your contribution. I don't have a lot of very definitive
+> feedback, more some general thoughts.
+> 
+> First of all, what was the idea behind the use of iperf3 ? Is it just a
+> mean to make sure that both the container and host can communicate, and
+> that the container runs fine ?
 
- As explained in the help text of the option:
+ Indeed. The container running is a bit limited for a test. Having network
+access to it is a way to get a bit more confidence that it is really functional.
 
-          The default is "-O ^64bit", i.e. disable 64-bit filesystem
-          support. This default value has been chosen because U-Boot
-          versions before 2017.02 don't support this filesystem
-          option: using it may make the filesystem unreadable by
-          U-Boot.
+ ssh would be another option to test the network access, but is more complicated.
 
- Since this defconfig uses a more recent U-Boot, it's not necessary.
+ nc also sounds like an obvious alternative, but that turns out to be
+surprisingly difficult to set up correctly (in particular, reliably detecting
+failure and not just timing out).
 
- That said, if those two options should be disabled for U-Boot to work, it's
-probably a good idea to add them to the defaults (i.e. all three options, like
-you put in the defconfig here).
-
- Regards,
- Arnout
+ That's why Patrick choose iperf, because it is really trivial.
 
 
+> Another question is about the shared rootfs situation: if I understand
+> correctly, the container runs with the same rootfs as the host.
+> Recently, Carlos Santos (in Cc), submitted a patch "package/test-vm: a
+> virtual machine image to  test libvirt", which builds a separate rootfs
+> image to run as a VM using libvirt. Shouldn't we standardize a bit how
+> the test cases will test things such as lxc/libvirt, and try to use
+> more or less the same strategy/logic to build the image executed inside
+> the container or VM ?
+
+ The idea would be to add several lxc tests, for the different use cases. One of
+the use cases is a shared rootfs, another is a separate rootfs. test-vm could be
+used for the second case. Another useful case will be with systemd inside and
+outisde the container and being sure that they can talk to each other properly.
+
+
+> Note: this comment is really to open up the discussion on this topic.
+> Perhaps we will decide that what you did is good enough, and can
+> possibly be improved later.
+> 
+>> +    def run_ok(self, cmd):
+>> +        full_cmd = "sh -c '{}'".format(cmd)
+> 
+> Why is running through "sh -c" necessary ?
+
+ Good question. Probably a leftover from when some commands were using redirection?
+
+
+>> +        out, exit_code = self.emulator.run(full_cmd, 120)
+>> +        self.assertEqual(exit_code, 0)
+> 
+> This seems like a useful helper method, perhaps we should have it in
+> the emulator class, and make use of it in other tests ?
+
+ Indeed, that could be useful.
+
+ But then it should probably be called assertRunOk, similar to assertEqual. And
+that again requires a noqa marking :-(
 
  Regards,
  Arnout
