@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Nov 2019 20:28:28 +0100
-Subject: [Buildroot] xorg with nodm/xdm init.d script conflicts causes
- blank screen
-In-Reply-To: <348ab096ff9aeb8f448af5c8bddf15fdac9a61ed.camel@collabora.com>
-References: <e18d5ea17ba0b23913db2136db94d67a@smartguide.com.au>
- <20190913194112.49f3fa68@windsurf.home>
- <348ab096ff9aeb8f448af5c8bddf15fdac9a61ed.camel@collabora.com>
-Message-ID: <1f4aee0a-074a-dbfc-2d53-908b091501a5@mind.be>
+Date: Sun, 17 Nov 2019 20:31:50 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/stm32mp157c_dk2: disable mkfs
+ metadata_csum and dir_index options
+In-Reply-To: <0a7b32f7-65bf-98dd-64cd-7a663518479a@grinn-global.com>
+References: <20191103115017.788940-1-b.bilas@grinn-global.com>
+ <20191109152205.0bd1b924@windsurf>
+ <0a7b32f7-65bf-98dd-64cd-7a663518479a@grinn-global.com>
+Message-ID: <420d175c-4476-c7f7-1ce8-c468a9b1a2d2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,66 +15,68 @@ To: buildroot@busybox.net
 
 
 
-On 13/09/2019 23:08, Ezequiel Garcia wrote:
-> Hello everyone,
+On 09/11/2019 16:25, Bartosz Bilas wrote:
+> Hello Thomas,
 > 
-> On Fri, 2019-09-13 at 19:41 +0200, Thomas Petazzoni wrote:
-[snip]
->> So it means that starting /usr/bin/nodm in fact starts another X.org
->> server. I would have expected S40xorg to start the X.org server, and
->> then S90nodm to start the display manager inside the X.org server
->> started by S40xorg, but apparently it's not the case.
+> On 09.11.2019 15:22, Thomas Petazzoni wrote:
+>> Hello Bartosz,
 >>
+>> On Sun,? 3 Nov 2019 12:50:16 +0100
+>> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+>>
+>>> To solve issue with non-possibilities to mount rootfs partition we
+>>> should disable a new mkfs features such as metadata_csum and
+>>> dir_index because there is incompatibility with these options.
+>>>
+>>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+>>> ---
+>>> ? configs/stm32mp157c_dk2_defconfig | 1 +
+>>> ? 1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/configs/stm32mp157c_dk2_defconfig
+>>> b/configs/stm32mp157c_dk2_defconfig
+>>> index a1e61d752d..ba044e5e55 100644
+>>> --- a/configs/stm32mp157c_dk2_defconfig
+>>> +++ b/configs/stm32mp157c_dk2_defconfig
+>>> @@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>>> ? BR2_TARGET_ROOTFS_EXT2=y
+>>> ? BR2_TARGET_ROOTFS_EXT2_4=y
+>>> ? BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>>> +BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^64bit,^metadata_csum,^dir_index"
+>> Are you sure it is necessary to disable those three options?
+>>
+>> Indeed, U-Boot ext4 write support clearly excludes filesystems that
+>> have the metadata_csum option enabled:
+>>
+>> ?? https://gitlab.denx.de/u-boot/u-boot/blob/master/fs/ext4/ext4_write.c#L880
+>> However, there's nothing about the 64bit and dir_index options. How did
+>> you conclude that they were causing problems? Did you try with just -O
+>> ^metadata_csum ?
 > 
-> Normally, display managers start X. E.g.:
-> 
-> gdm:
-> https://github.com/GNOME/gdm/blob/master/daemon/gdm-server.c#L710
-> 
-> nodm:
-> https://github.com/spanezz/nodm/blob/master/xserver.c#L159
-[snip]
->> So if all display manager all start their own X.org server instance, it
->> means that perhaps S40xorg should only be installed if there's no
->> display manager enabled ?
-[snip]
-> When nodm was introduced, xorg-server didn't have the sysv init script.
-> I assume it was added because Bernd needed to launch X without any session,
-> but I don't truly understand the reasons for that route, as opposed to
-> using a display manager. Or nodm, in case a fixed user login, no security
-> is needed, as in a e.g. kiosk thing.
-> 
-> I haven't checked if it's possible, but I guess we can make some hidden
-> config symbol PROVIDES_X_DISPLAY_MANAGER for display managers to select,
-> and then use it to restrict the xorg server sysv init so it's available
-> only if no display manager was selected.
+> I was talking with the maintainer of that board on U-Boot mailing list [1] and
+> he said that I should disable those 2 options (dir_index and metada_csum) to
+> have U-Boot working properly. I'm not sure about 64bit because I saw that was
+> set by default in buildroot. I didn't check that with metadata_csum option only
+> but I'll do that and let you know if it works.
 
- Indeed, the proper way is probably to create a virtual package for display
-managers, make the different display managers implementations of that virtual
-package, and install the xorg init script only when there is no display manager.
+ As explained in the help text of the option:
 
- The virtual package will also make sure that there is only 1 display manager.
+          The default is "-O ^64bit", i.e. disable 64-bit filesystem
+          support. This default value has been chosen because U-Boot
+          versions before 2017.02 don't support this filesystem
+          option: using it may make the filesystem unreadable by
+          U-Boot.
+
+ Since this defconfig uses a more recent U-Boot, it's not necessary.
+
+ That said, if those two options should be disabled for U-Boot to work, it's
+probably a good idea to add them to the defaults (i.e. all three options, like
+you put in the defconfig here).
 
  Regards,
  Arnout
 
-> 
-> Curious about the unfolding,
-> Ezequiel
-> 
->>> P.S. (As an aside, why don't more buildroot init scripts use 
->>> /etc/default config files?)
->>
->> Because we need more contributions to make our init scripts consistent
->> and use /etc/default config files! :-)
->>
->> Best regards,
->>
->> Thomas
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+
+
+ Regards,
+ Arnout
