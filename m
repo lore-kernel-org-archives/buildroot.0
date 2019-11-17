@@ -1,8 +1,10 @@
-From: Florent VIARD (Mojix) <florent.viard@mojix.com>
-Date: Sun, 17 Nov 2019 17:12:37 +0100
-Subject: [Buildroot] [PATCH 1/1] core: load a global.mk file if it exists to
- override global vars
-Message-ID: <06c9840e-2577-dc81-c0ab-f9301b5bcce7@mojix.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 17 Nov 2019 17:14:14 +0100
+Subject: [Buildroot] How to create/install U-Boot and Linux to boot from
+ eMMC
+In-Reply-To: <a78aeb5e102b46c5827b626bcc23c23c@EX13D04UEA001.ant.amazon.com>
+References: <a78aeb5e102b46c5827b626bcc23c23c@EX13D04UEA001.ant.amazon.com>
+Message-ID: <55cec8fc-e640-3ac8-3a8b-d01dcd155b26@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,84 +12,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-For example, this can be useful to permanently set a
-BR2_EXTERNAL without having to use the "env var" at least once.
 
-The global.mk file has to be located inside TOPDIR.
+On 11/11/2019 21:14, Whitney, Scott wrote:
+> Hi Buildroot community,
+> 
+> I'm using Buildroot to successfully build U-Boot and a Linux image for an AM6548 Sitara processor.  I created sdcard.img in output/images using genimage, with the following configuration file:
+[snip]
+> Our board also has 8GB of eMMC memory.  I'd like to know how to use Buildroot to program boot/U-Boot and rootfs/Linux onto the eMMC so that we can boot directly from that without having to have an SD card installed.
+> 
+> Can anyone provide instructions for partitioning, formatting, and installing an image suitable for booting from eMMC card?  I can have genimage create an eMMC.img file if the format needs to be different, but I'm just not sure what needs to be on the eMMC for this to work successfully.
 
-Example:
--- global.mk --
-BR2_EXTERNAL = ext-myproject
+ Baruch gave you a complex answer. In general, though, you can flash the same
+image to eMMC that you used for the SD card, and it will just work.
 
-It can also probably be used for BR2_VERSION customization or to add
-global variables to be used in custom config files.
+ Basically, you have to make sure that each step in the boot process finds the
+next one:
 
-To give a little bit of context of the genesis of this change:
-- I have a project using buildroot for a custom product.
-- I have an "ext-myproject" folder at the root of TOPDIR that is an
-external folder.
-- All the configs, scripts or vendor specific packages are located
-inside this external folder.
+ROM -> SPL -> U-Boot -> kernel -> rootfs
 
-Like that, the project is kind of "out-of-tree", with everything located
-in a specific dir, and the buildroot original file/folders stay clean.
-So, it is more easy to merge updated versions.
+ ROM should normally try the different boot devices and find the boot.vfat
+partition on eMMC.
 
-The issue solved by this change is that, currently, path to external
-folder(s) has to be manually set through the env var at least once by
-everyone in the team after a checkout and eventually again after a make
-distclean. Because, the BR2_EXTERNAL path settings are saved within the
-"output" folder.
+ SPL will generally use the information on where it booted from to decide where
+to load the next step, so it will load U-Boot from eMMC as well. Sometimes,
+however, the next step is hardcoded in SPL, so you should check that.
 
-Using the global.mk file, i can setup the BR2_EXTERNAL and save/commit
-it with the project, so that anyone can start building with a single
-"make" without non obvious manipulation.
+ U-Boot will generally try different devices to find the kernel. What it does
+exactly depends on its environment, so you can just look into the environment
+and chane that as needed.
 
-As a side effect of this change, using this can help overcome a
-regression in
-buildroot that I have noticed:
-External paths are supposed to be absolute or relative, but a change
-pushed a few years ago, automatically change external relative path to
-absolute before generating the temporary files.
+ The rootfs is given on the kernel command line. This can be set either by
+U-Boot (usually) but sometimes is hardcoded in the device tree. In the latter
+case, you need to update the device tree. If the U-Boot boot script does it, it
+will generally set the rootfs based on where the kernel was found.
 
-Signed-off-by: Florent Viard <fviard@cxignited.com>
----
-Makefile | 3 +++
-1 file changed, 3 insertions(+)
+ Hope this helps.
 
-diff --git a/Makefile b/Makefile
-index c78c2cbcf6..f2c43ef40f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -170,6 +170,9 @@ export CDPATH :=
-BASE_DIR := $(CANONICAL_O)
-$(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+ Regards,
+ Arnout
 
-+# Include the global override file if one is provided
-+# This is useful, for example, to allow the user to permanently set
-BR2_EXTERNAL
-+-include $(TOPDIR)/global.mk
-
-# Handling of BR2_EXTERNAL.
-#
-
--- 
-2.17.1
-
-
-
--- 
-
-
-*
-CONFIDENTIALITY NOTICE:*?This message and its contents are 
-Confidential. If you received this message in error, do not use or rely 
-upon it. Instead, please inform the sender and then delete it.
-
-?
-
-*AVISO 
-DE CONFIDENCIALIDAD:?*Este mensaje y su contenido son de uso Confidencial.? 
-Si usted ha recibido este mensaje por equivocaci?n no lo use ni conf?e en 
-su contenido; asimismo, le pedimos notificar al remitente y borrar el 
-mensaje.
+> 
+> Many thanks for your help, and best regards!
+> Scott Whitney | Contractor - Software Engineering
+> scwhitn at amazon.com| o: xxx.xxx.xxx| m: 603.321.6662
+> a: 300 Riverpark Drive, North Reading, MA 01864
+> www.amazonrobotics.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
