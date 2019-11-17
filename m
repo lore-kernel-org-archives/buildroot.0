@@ -1,43 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Nov 2019 14:26:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lsof: fix static build
-Message-ID: <20191117132636.9709-1-fontaine.fabrice@gmail.com>
+From: Koen Martens <gmc@sonologic.nl>
+Date: Sun, 17 Nov 2019 14:37:55 +0100
+Subject: [Buildroot] SDL2 depends on shared libraries,
+ but Config.in depends on BR2_STATIC_LIBS ?
+Message-ID: <20191117133755.GB13372@coltrane>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TARGET_LDFLAGS which contains -static is not passed so build fails on:
+Hi,
 
-/home/buildroot/autobuild/instance-1/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -o lsof dfile.o dmnt.o dnode.o dproc.o dsock.o dstore.o arg.o main.o misc.o node.o print.o proc.o store.o usage.o util.o -L./lib -llsof  -ltirpc
-/home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/8.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/8.3.0/libgcc.a(unwind-dw2-fde-dip.o): in function `_Unwind_Find_registered_FDE':
-/home/buildroot/autobuild/instance-1/output-1/build/host-gcc-final-8.3.0/build/xtensa-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde.c:1040: undefined reference to `dl_iterate_phdr'
-collect2: error: ld returned 1 exit status
+I'm updating linuxconsoletools. However, I'm running into issues
+with test-pkg. There is an optional binary for force-feedback 
+testing that requires SDL2.
 
-Pass TARGET_LDFLAGS thanks to LSOF_CFGL
+SDL2 seems to require shared library support (in that it includes
+dlfcn.h somewhere along the line), however this is not declared
+in package/sdl2/Config.in. In fact, there is an odd comment 
+at the bottom of that file:
 
-Fixes:
- - http://autobuild.buildroot.org/results/0c228e0d3ea1ff2d728ddc906e242d40ed973222
+comment "sdl2 needs a toolchain w/ dynamic library"
+    depends on BR2_STATIC_LIBS
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/lsof/lsof.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Isn't it contradictory to say 'needs dynamic library' but then depend
+on BR2_STATIC_LIBS??
 
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 939df9dd8d..6aa829c2c0 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -33,7 +33,8 @@ define LSOF_CONFIGURE_CMDS
- 	(cd $(@D) ; \
- 		echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS)" \
- 		LSOF_INCLUDE="$(STAGING_DIR)/usr/include" LSOF_CFLAGS_OVERRIDE=1 \
--		LINUX_CLIB=-DGLIBCV=2 ./Configure linux)
-+		LINUX_CLIB=-DGLIBCV=2 LSOF_CFGL="$(TARGET_LDFLAGS)" \
-+		./Configure linux)
- 	$(LSOF_CONFIGURE_WCHAR_FIXUPS)
- 	$(LSOF_CONFIGURE_LOCALE_FIXUPS)
- endef
--- 
-2.24.0
+As a work-around, in my linuxconsoletools Config.in i've added
+'depends on BR2_SHARED_LIBS' to prevent the build failures
+with test-pkg, but that feels like an ugly way to fix this. It
+feels like SDL2 should declare its dependency on BR2_SHARED_LIBS
+instead of me declaring it?
+
+This has left me a bit confused.
+
+Cheers,
+
+Koen
