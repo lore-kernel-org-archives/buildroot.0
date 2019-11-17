@@ -1,193 +1,107 @@
-From: Florent VIARD (Mojix) <florent.viard@mojix.com>
-Date: Sun, 17 Nov 2019 19:15:43 +0100
-Subject: [Buildroot] [PATCH 1/1] core: load a global.mk file if it
- exists to override global vars
-In-Reply-To: <b1825789-a7c2-234d-5da6-41ddc34806ae@mind.be>
-References: <06c9840e-2577-dc81-c0ab-f9301b5bcce7@mojix.com>
- <b1825789-a7c2-234d-5da6-41ddc34806ae@mind.be>
-Message-ID: <2ff1fd16-a312-ecd3-de26-815d1c5c1038@mojix.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 17 Nov 2019 19:35:53 +0100
+Subject: [Buildroot] [PATCH] package/xvisor: unconditionally disable SSP
+In-Reply-To: <20191110184536.GA3419@scaer>
+References: <20191109164757.29565-1-eric.le.bihan.dev@free.fr>
+ <20191110184536.GA3419@scaer>
+Message-ID: <b141bfc1-fecd-9767-7cf5-4190701e9d45@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
 
-Thank you for your message.
 
-I didn't expect a change in the core to pass easily without a discussion :-)
+On 10/11/2019 19:45, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> This change looks a lot like what was done for kvm-unit-tests in c0ffd16e4.
+> What do you think of it?
 
-Here are my replies to your comments:
+ It's not entirely the same: kvm-unit-tests uses HOSTCC, which is broken on
+Arch. Since we can't fix the host compiler, that's the best we could do.
 
->> Example:
->> -- global.mk --
->> BR2_EXTERNAL = ext-myproject
->  It would be more logical to use $(TOPDIR)/ext-myproject here.
+ [I notice now that that commit didn't actually fix anything... I'll send a
+patch for it.]
 
-True, but that was just for the example to be short and non confusing,
-as anyway with or without $(TOPDIR) should be equivalent here.
+ Here, however, the target compiler does get used, so it's Buildroot's compiler
+that is broken. So I'd prefer to find a solution that fixes the compiler :-)
 
->> It can also probably be used for BR2_VERSION customization or to add
->  Why would you want to customize BR2_VERSION?
-
-As far as I know, there is no option for the user to define a custom
-version,
-and an os-release file with that info is always generated (hardcoded in
-Makefile).
-So, I guess, some users might be interested to tweak that for their
-cases without hacking the Makefile.
-
->> global variables to be used in custom config files.
->  Both of those can be set in any of the external .mk files, or in local.mk.
-
-In my case, I wanted this for the EXTERNAL case, but after a long time
-thinking of alternative that would be specific to externals,
-i came to the conclusion that it was nicer and cleaner to do something
-generic like that.
-
-(Ideas that I had were like, creating a new config file for external, or
-moving the temporary .br2_external... files out of the "output" dir)
-
-To be noted, external .mk files and local.mk are loaded later in the
-process, and local.mk location can also be in an "out of tree" config
-folder.
-
->> To give a little bit of context of the genesis of this change:
->> - I have a project using buildroot for a custom product.
->> - I have an "ext-myproject" folder at the root of TOPDIR that is an
->> external folder.
->> - All the configs, scripts or vendor specific packages are located
->> inside this external folder.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> On 2019-11-09 17:47 +0100, Eric Le Bihan spake thusly:
+>> Fixes:
+>> - http://autobuild.buildroot.net/results/5de37d3da17ca5cb17c0113d942ce8c22c0074e0
+>> - http://autobuild.buildroot.net/results/41b00d95ec4eb851abceaa7919aa1c533d4f16e8
+>> - http://autobuild.buildroot.net/results/119e22e8b03991ab9196e428a131f5a8ae2a2b2f
 >>
->> Like that, the project is kind of "out-of-tree", with everything located
->> in a specific dir, and the buildroot original file/folders stay clean.
->> So, it is more easy to merge updated versions.
->  That's not how external was expected to be used. If you include your external
-> inside the Buildroot tree, there's little point in making it external. You could
-> just as well create a directory package/mojix and put your custom packages
-> there, and configs/mojix_* and board/mojix for the rest.
->
->  And in this situation, you can in fact easily put the BR2_EXTERNAL =
-> ext-myproject in the Buildroot Makefile in your repo. Merging that with an
-> updated Buildroot is still going to be trivial.
->
->  The way an external is expected to be used is as follows:
->
-> - buildroot as a subdirectory (probably submodule) of the external;
-> - external includes a Makefile or other script to call into buildroot.
->
->  I'll append an example Makefile that I've used for some project. It would
-> actually be nice to include something like that in Buildroot, and more
-> importantly to add the above statements as proper documentation, but I've never
-> gotten around to that...
-
-I see that your are suggesting,? and it is not what I was thinking
-external were designed for.
-
-That being said, it is just my opinion, but I think that it is very nice
-and convenient how I was using it.
-
-In what you suggest, there are 2 things that I don't like very much:
-1) Having to hack a core element of buildroot (Makefile) to hardcode
-something.
-I think that a lambda user would be scared and not do that,
-and also, in 5 years, when someone else will take over my project,
-he might have a hard time figuring it out that there is a hack in the
-Makefile for the black magic to work.
-
-2) Having my custom things spilled all other the place in configs,
-package, board (or subfolder of it).
-It has also to be taken into account that there might be other "things"
-on the vendor folder side:
-Assets, scripts, templates, ...
-So, I like very much the concept of overlay, where you have the
-buildroot itself that is kind of pristine,
-and the vendor things that come cleanly with one or multiple nice
-"external" overlays.
-
-Sure, anyone can do higher level script or Makefile, but it is nice when
-things kind of work directly out of the box.
-
->> As a side effect of this change, using this can help overcome a
->> regression in
->> buildroot that I have noticed:
->> External paths are supposed to be absolute or relative, but a change
->> pushed a few years ago, automatically change external relative path to
->> absolute before generating the temporary files.
->  Err, that sounds like the right thing to do, so what exactly is the regression?
-> If there really is a regression, we'll want to fix it.
-
-The documentation coming from the external feature original implementation:
-
-https://buildroot.org/downloads/manual/manual.html#outside-br-custom
-
->> *Note.?*The path to a br2-external tree can be either absolute or
-relative. If it is passed as a relative path, it is important to note
-that it is interpreted relative to the main Buildroot source directory,
-*not* to the Buildroot output directory.
-
-The breaking change:
-
-https://patchwork.ozlabs.org/patch/715359/
-
-(That looks like to be a quick fix for an issue not looking at the root
-cause itself)
-
-Again, just my opinion, but the "absolute" path thing is quite bad.
-Today, you can set the external as relative, not noticing that it will
-be stored as absolute.
-You did as said in the document, and so set the external once with a call to
-BR2_EXTERNAL=ext-myproject make menuconfig
-
-One day in the future, you move files, like "copying a project", and the
-thing does not build anymore without apparent reason.
-
-And even for the case that you described, with the external out of
-TOPDIR, I think that in most cases it is probably cleaner to use a
-relative reference like:
-
-BR2_EXTERNAL=../../real-project-root
-than
-BR2_EXTERNAL=/home/marcel/tests/copy123/real-project-root
-
-
->  As noted, I've marked your patch as Rejected in patchwork. If others disagree
-> with me, we can still go back to [1] and set it to New again.
->
-:-)
->> Signed-off-by: Florent Viard <fviard@cxignited.com>
-
+>> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>> ---
+>>  ...MAKEFILE-Unconditionally-disable-SSP.patch | 31 +++++++++++++++++++
+>>  1 file changed, 31 insertions(+)
+>>  create mode 100644 package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
 >>
->>  The e-mail address in your Signed-off-by should be the same as the author
->> address (i.e. the From of the mail).
+>> diff --git a/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch b/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
+>> new file mode 100644
+>> index 0000000000..b69a745462
+>> --- /dev/null
+>> +++ b/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
+>> @@ -0,0 +1,31 @@
+>> +From f04d1b73a9060e8f09cf1173f89daab73d6c0a18 Mon Sep 17 00:00:00 2001
+>> +From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>> +Date: Sat, 9 Nov 2019 17:13:46 +0100
+>> +Subject: [PATCH] [MAKEFILE] Unconditionally disable SSP
+>> +
+>> +Though -nostdlib is passed in $(cflags), -fno-stack-protector must also be
+>> +passed to avoid linking errors related to undefined references to
+>> +'__stack_chk_guard' and '__stack_chk_fail' if toolchain enforces
+>> +-fstack-protector.
+>> +
+>> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>> +---
+>> + Makefile | 2 +-
+>> + 1 file changed, 1 insertion(+), 1 deletion(-)
+>> +
+>> +diff --git a/Makefile b/Makefile
+>> +index d6bcf519..de8e1043 100644
+>> +--- a/Makefile
+>> ++++ b/Makefile
+>> +@@ -137,7 +137,7 @@ cppflags+=$(cpu-cppflags)
+>> + cppflags+=$(board-cppflags)
+>> + cppflags+=$(libs-cppflags-y)
+>> + cc=$(CROSS_COMPILE)gcc
+>> +-cflags=-g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -D__VMM__
+>> ++cflags=-g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -D__VMM__ -fno-stack-protector
+
+ I think we should not add -fstack-protector in our toolchain-wrapper if
+-nostdlib of -ffreestanding is passed on the command line. It probably doesn't
+capture all cases (e.g. it's possible to build a simple file without
+-ffreestanding and then link it with -nostdlib, but the object file will already
+have stack protector in that case so it will still fail).
+
+ On the other hand, maybe the number of packages that suffer from this is so
+small that it's easier to fix packages. This patch does look pretty
+upstreamable. And apparently it was merged [1] though I don't see it in the repo...
+
+ Regards,
+ Arnout
+
+[1] https://github.com/xvisor/xvisor/pull/120
+
+>> + cflags+=$(board-cflags) 
+>> + cflags+=$(cpu-cflags) 
+>> + cflags+=$(libs-cflags-y) 
+>> +-- 
+>> +2.21.0
+>> +
+>> -- 
+>> 2.21.0
 >>
->>  This was line-wrapped. Did you use git send-email?
->>
-Sorry, I usually don't contribute to plain text mailing-list based
-project, too much a nightmare if you don't have all right conditions.
-I sent it with thunderbird that I tried to configure correctly, but I
-have the feeling that, on the way, there is the gmail server that mess
-with my messages.
-
-
-Florent
-
-
-
-
--- 
-
-
-*
-CONFIDENTIALITY NOTICE:*?This message and its contents are 
-Confidential. If you received this message in error, do not use or rely 
-upon it. Instead, please inform the sender and then delete it.
-
-?
-
-*AVISO 
-DE CONFIDENCIALIDAD:?*Este mensaje y su contenido son de uso Confidencial.? 
-Si usted ha recibido este mensaje por equivocaci?n no lo use ni conf?e en 
-su contenido; asimismo, le pedimos notificar al remitente y borrar el 
-mensaje.
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
