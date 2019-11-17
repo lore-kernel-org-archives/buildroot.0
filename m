@@ -1,107 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Nov 2019 19:35:53 +0100
-Subject: [Buildroot] [PATCH] package/xvisor: unconditionally disable SSP
-In-Reply-To: <20191110184536.GA3419@scaer>
-References: <20191109164757.29565-1-eric.le.bihan.dev@free.fr>
- <20191110184536.GA3419@scaer>
-Message-ID: <b141bfc1-fecd-9767-7cf5-4190701e9d45@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 17 Nov 2019 19:41:14 +0100
+Subject: [Buildroot] [PATCH] package/kvm-unit-tests: really fix build on
+ Arch Linux x86_64
+Message-ID: <20191117184114.1917-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On x86_64, we use the host compiler instead of the target compiler to
+build kvm-unit-tests, because it is built with -m32 and our target
+compiler doesn't support that.
 
+However, the compiler on Arch Linux is broken: it *always* builds with
+-fstack-protector, even when -ffreestanding is passed. However, when
+-fnostdlib is passed at link time (which is normally the case when
+building with -ffreestanding), it is not linked with the stack-protector
+library. This leads to a link time error:
 
-On 10/11/2019 19:45, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> This change looks a lot like what was done for kvm-unit-tests in c0ffd16e4.
-> What do you think of it?
+/usr/bin/ld: x86/realmode.o: in function `print_serial_u32':
+.../x86/realmode.c:104: undefined reference to `__stack_chk_fail'
 
- It's not entirely the same: kvm-unit-tests uses HOSTCC, which is broken on
-Arch. Since we can't fix the host compiler, that's the best we could do.
+Since the entire package is built with -ffreestanding, it doesn't
+support stack-protector at all. Therefore, simply pass
+-fno-stack-protector explicitly on x86_64 to work around the bug in Arch
+Linux.
 
- [I notice now that that commit didn't actually fix anything... I'll send a
-patch for it.]
+Commit c0ffd16e4 tried to do this, but got the condition wrong:
+-fno-stack-protector was passed in all cases *except* for x86_64. This
+commit fixes that, by inverting the condition and moving the
+--cross-prefix part to the else branch.
 
- Here, however, the target compiler does get used, so it's Buildroot's compiler
-that is broken. So I'd prefer to find a solution that fixes the compiler :-)
+Fixes: (no new autobuild failures yet)
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> On 2019-11-09 17:47 +0100, Eric Le Bihan spake thusly:
->> Fixes:
->> - http://autobuild.buildroot.net/results/5de37d3da17ca5cb17c0113d942ce8c22c0074e0
->> - http://autobuild.buildroot.net/results/41b00d95ec4eb851abceaa7919aa1c533d4f16e8
->> - http://autobuild.buildroot.net/results/119e22e8b03991ab9196e428a131f5a8ae2a2b2f
->>
->> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->> ---
->>  ...MAKEFILE-Unconditionally-disable-SSP.patch | 31 +++++++++++++++++++
->>  1 file changed, 31 insertions(+)
->>  create mode 100644 package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
->>
->> diff --git a/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch b/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
->> new file mode 100644
->> index 0000000000..b69a745462
->> --- /dev/null
->> +++ b/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
->> @@ -0,0 +1,31 @@
->> +From f04d1b73a9060e8f09cf1173f89daab73d6c0a18 Mon Sep 17 00:00:00 2001
->> +From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->> +Date: Sat, 9 Nov 2019 17:13:46 +0100
->> +Subject: [PATCH] [MAKEFILE] Unconditionally disable SSP
->> +
->> +Though -nostdlib is passed in $(cflags), -fno-stack-protector must also be
->> +passed to avoid linking errors related to undefined references to
->> +'__stack_chk_guard' and '__stack_chk_fail' if toolchain enforces
->> +-fstack-protector.
->> +
->> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->> +---
->> + Makefile | 2 +-
->> + 1 file changed, 1 insertion(+), 1 deletion(-)
->> +
->> +diff --git a/Makefile b/Makefile
->> +index d6bcf519..de8e1043 100644
->> +--- a/Makefile
->> ++++ b/Makefile
->> +@@ -137,7 +137,7 @@ cppflags+=$(cpu-cppflags)
->> + cppflags+=$(board-cppflags)
->> + cppflags+=$(libs-cppflags-y)
->> + cc=$(CROSS_COMPILE)gcc
->> +-cflags=-g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -D__VMM__
->> ++cflags=-g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -D__VMM__ -fno-stack-protector
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/kvm-unit-tests/kvm-unit-tests.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
- I think we should not add -fstack-protector in our toolchain-wrapper if
--nostdlib of -ffreestanding is passed on the command line. It probably doesn't
-capture all cases (e.g. it's possible to build a simple file without
--ffreestanding and then link it with -nostdlib, but the object file will already
-have stack protector in that case so it will still fail).
-
- On the other hand, maybe the number of packages that suffer from this is so
-small that it's easier to fix packages. This patch does look pretty
-upstreamable. And apparently it was merged [1] though I don't see it in the repo...
-
- Regards,
- Arnout
-
-[1] https://github.com/xvisor/xvisor/pull/120
-
->> + cflags+=$(board-cflags) 
->> + cflags+=$(cpu-cflags) 
->> + cflags+=$(libs-cflags-y) 
->> +-- 
->> +2.21.0
->> +
->> -- 
->> 2.21.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index bb08c0603d..2637066701 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -35,13 +35,14 @@ KVM_UNIT_TESTS_CONF_OPTS =\
+ # compiler. However, for x86-64, we use the host compiler, as
+ # kvm-unit-tests builds 32 bit code, which Buildroot toolchains for
+ # x86-64 cannot do.
+-ifneq ($(BR2_x86_64),y)
+-KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
++ifeq ($(BR2_x86_64),y)
+ # Arch Linux adds -fstack-protector even when building with -ffreestanding, but
+ # it doesn't link with the stack-protector library when -nostdlib is passed,
+ # which leads to a link error. Therefore, disable it explicitly to work around
+ # this bug in Arch Linux. https://bugs.archlinux.org/task/64270
+ KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
++else
++KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
+ endif
+ 
+ define KVM_UNIT_TESTS_CONFIGURE_CMDS
+-- 
+2.21.0
