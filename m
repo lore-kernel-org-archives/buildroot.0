@@ -1,50 +1,48 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Nov 2019 17:44:50 +0100
-Subject: [Buildroot] [PATCH v2,2/4] package/celt051: needs dynamic library
+Date: Sun, 17 Nov 2019 17:44:51 +0100
+Subject: [Buildroot] [PATCH v2,
+ 3/4] package/spice-protocol: bump to version 0.14.0
 In-Reply-To: <20191117164452.5361-1-fontaine.fabrice@gmail.com>
 References: <20191117164452.5361-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191117164452.5361-2-fontaine.fabrice@gmail.com>
+Message-ID: <20191117164452.5361-3-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-celt051 can't be built statically with opus as opus embeds its own celt
-version. So add a dynamic library dependency to celt051 (and not to
-opus, as celt051 is only used optionally by spice whereas opus is
-selected by 9 packages)
-
-This will fix static build of spice with opus and celt:
-
-/home/fabrice/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/7.4.0/../../../../i686-buildroot-linux-uclibc/bin/ld: /home/fabrice/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/libopus.a(vq.o): in function `renormalise_vector':
-vq.c:(.text+0x5ee): multiple definition of `renormalise_vector'; /home/fabrice/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/libcelt051.a(vq.o):vq.c:(.text+0x6e6): first defined here
-
-Fixes:
- - http://autobuild.buildroot.org/results/96c786f85d35f33508e9c71778043d16b87f72cd
+- This bump is needed for spice 0.14.2
+- Add license hash
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/celt051/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/spice-protocol/spice-protocol.hash | 5 ++++-
+ package/spice-protocol/spice-protocol.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/celt051/Config.in b/package/celt051/Config.in
-index e1513190db..e8d6661ed8 100644
---- a/package/celt051/Config.in
-+++ b/package/celt051/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_CELT051
- 	bool "celt051"
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBOGG
- 	help
- 	  The CELT ultra-low delay audio codec
-@@ -13,3 +14,6 @@ config BR2_PACKAGE_CELT051
- 	  Note: this is version 0.5.1.3 of celt.
- 
- 	  http://www.celt-codec.org/
+diff --git a/package/spice-protocol/spice-protocol.hash b/package/spice-protocol/spice-protocol.hash
+index e72bb2d712..c23135141a 100644
+--- a/package/spice-protocol/spice-protocol.hash
++++ b/package/spice-protocol/spice-protocol.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	20350bc4309039fdf0d29ee4fd0033cde27bccf33501e13b3c1befafde9d0c9c	spice-protocol-0.12.14.tar.bz2
++sha256	b6a4aa1ca32668790b45a494bbd000e9d05797b391d5a5d4b91adf1118216eac	spice-protocol-0.14.0.tar.bz2
 +
-+comment "celt051 needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
++# Hash for license file
++sha256	eb55ea746be694c449224c7ddce6340648b075fd377281712a19094e7fb7ef92	COPYING
+diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
+index 7392e9533d..f8c55c7b01 100644
+--- a/package/spice-protocol/spice-protocol.mk
++++ b/package/spice-protocol/spice-protocol.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPICE_PROTOCOL_VERSION = 0.12.14
++SPICE_PROTOCOL_VERSION = 0.14.0
+ SPICE_PROTOCOL_SOURCE = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
+ SPICE_PROTOCOL_SITE = http://www.spice-space.org/download/releases
+ SPICE_PROTOCOL_LICENSE = BSD-3-Clause
 -- 
 2.24.0
