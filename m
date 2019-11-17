@@ -1,70 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Nov 2019 20:45:19 +0100
-Subject: [Buildroot] [PATCH 1/2] package/gmpc: needs -lm
-In-Reply-To: <20191108222841.4ff8debf@gmx.net>
-References: <20191029214046.14722-1-fontaine.fabrice@gmail.com>
- <20191108220442.4b596996@windsurf> <20191108222841.4ff8debf@gmx.net>
-Message-ID: <c16fab60-ebf2-106e-962f-c2595472803d@mind.be>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sun, 17 Nov 2019 21:18:59 +0100
+Subject: [Buildroot] [PATCH v3 for-next 01/11] configs/qemu_m68k_q800:
+ remove host-qemu
+In-Reply-To: <20191117201909.12900-1-romain.naour@smile.fr>
+References: <20191117201909.12900-1-romain.naour@smile.fr>
+Message-ID: <20191117201909.12900-2-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Building upstream host-qemu for m68k_q800 is useless
+since it doesn't support the q800 machine:
 
+qemu-system-m68k: -M q800: unsupported machine type
 
-On 08/11/2019 22:28, Peter Seiderer wrote:
-> Hello Fabrice, Thomas,
-> 
-> On Fri, 8 Nov 2019 22:04:42 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
->> On Tue, 29 Oct 2019 22:40:45 +0100
->> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->>
->>> gmpc forgets to link with -lm:
->>>
->>> /home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/../../../../mips-linux-gnu/bin/ld: GmpcVolume.o: undefined reference to symbol 'ceil@@GLIBC_2.0'
->>> /home/buildroot/autobuild/instance-2/output-1/host/mips64el-buildroot-linux-gnu/sysroot/soft-float/el/lib64/libm.so.6: error adding symbols: DSO missing from command line
->>>
->>> Fixes:
->>>  - http://autobuild.buildroot.org/results/a79e0487135ad90530595d5c6ecc32f9c8cea7c4
->>>
->>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->>
->> We need to understand why this is happening now. This package has not
->> been modified since July 2017, but suddenly, on October 21, 2019, it
->> started failing like this. Why? Was there a change in one of the
->> dependencies, that is no longer linked with libm, and that causes this
->> problem ?
+This defconfig mush be used with the QEMU fork from [1]
+using q800-v2.11.0 branch.
 
- It started because of RELRO, I think.
+[1] https://github.com/vivier/qemu-m68k
 
-> 
-> Maybe the same cause/problem as in the libv4l case regarding libatomic,
-> evaluating vs. not evaluationg the *.la files (see [1])?
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ configs/qemu_m68k_q800_defconfig | 4 ----
+ 1 file changed, 4 deletions(-)
 
- And this one because of PIC_PIE.
-
- Regards,
- Arnout
-
-> 
-> Regards,
-> Peter
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2019-October/264928.html
-> 
->>
->> I think I already asked this in the past: when you fix an issue, don't
->> just fix the issue, but explain why the issue is happening, especially
->> in situations like these.
->>
->> Thanks!
->>
->> Thomas
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
+index ce264430fd..0dd90a97b3 100644
+--- a/configs/qemu_m68k_q800_defconfig
++++ b/configs/qemu_m68k_q800_defconfig
+@@ -23,7 +23,3 @@ BR2_LINUX_KERNEL_VMLINUX=y
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-
+-# host-qemu for gitlab testing
+-BR2_PACKAGE_HOST_QEMU=y
+-BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+-- 
+2.21.0
