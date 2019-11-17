@@ -1,67 +1,200 @@
 From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Sun, 17 Nov 2019 12:33:44 +0100
-Subject: [Buildroot] [PATCH 1/2] package/systemd: set machine id file
+Date: Sun, 17 Nov 2019 12:33:45 +0100
+Subject: [Buildroot] [PATCH 2/2] package/systemd: set systemd generators
  instalation as optional choice
-Message-ID: <20191117113345.159653-1-b.bilas@grinn-global.com>
+In-Reply-To: <20191117113345.159653-1-b.bilas@grinn-global.com>
+References: <20191117113345.159653-1-b.bilas@grinn-global.com>
+Message-ID: <20191117113345.159653-2-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In case of e.g writable systems there is no neccesity to have
-pre-installed empty machine-id file on target because systemd
-generates that automatically during system boot.
-Also in case of having empty machine-id file we are not able
-to use a service with ConditionFirstBoot because systemd recognizes
-machine-id file in system therefore we can't detect new system instance boots up.
-Set this option as enable by default to keep compatibility with old builds.
+Allow the user to choose which systemd generator should be installed
+on the target instead of installing all of them by default.
+That's usefull in case of when someone is using firstboot condition
+and doesn't want to have e.g getty services created automatically during
+system boot by systemd-getty-generator. Set them enabled by default to
+keep compatibility with old builds.
 
 Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/systemd/Config.in  | 13 +++++++++++++
- package/systemd/systemd.mk |  2 ++
- 2 files changed, 15 insertions(+)
+ package/systemd/Config.in  | 94 ++++++++++++++++++++++++++++++++++++++
+ package/systemd/systemd.mk | 56 +++++++++++++++++++++++
+ 2 files changed, 150 insertions(+)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index aef39abe27..fadc1a32c8 100644
+index fadc1a32c8..052b69f4de 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -112,6 +112,19 @@ config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
+@@ -112,6 +112,100 @@ config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
  	default "x64"   if BR2_x86_64
  	depends on BR2_PACKAGE_SYSTEMD_BOOT
  
-+config BR2_PACKAGE_SYSTEMD_MACHINEID_FILE
-+	bool "Install empty machine id file"
++menu systemd-generators
++
++config BR2_PACKAGE_SYSTEMD_DEBUG_GENERATOR
++	bool "systemd debug generator"
 +	default y
 +	help
-+	  The /etc/machine-id file contains the unique machine ID
-+	  of the local system that is set during installation or
-+	  boot. The machine ID is a single newline-terminated,
-+	  hexadecimal, 32-character, lowercase ID. When decoded from
-+	  hexadecimal, this corresponds to a 16-byte/128-bit value.
-+	  This ID may not be all zeros.
++	  systemd-debug-generator is for enabling a runtime debug
++	  shell and masking specific units at boot.
 +
-+	  https://www.freedesktop.org/software/systemd/man/machine-id.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-debug-generator.html
 +
- config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
- 	bool "HTTP server for journal events"
- 	select BR2_PACKAGE_LIBMICROHTTPD
++config BR2_PACKAGE_SYSTEMD_FSTAB_GENERATOR
++	bool "systemd fstab generator"
++	default y
++	help
++	  systemd-fstab-generator is a generator that translates
++	  /etc/fstab into native systemd units early at boot
++	  and when configuration of the system manager is reloaded.
++	  This will instantiate mount and swap units as necessary.
++
++	  https://www.freedesktop.org/software/systemd/man/systemd-fstab-generator.html
++
++config BR2_PACKAGE_SYSTEMD_GETTY_GENERATOR
++	bool "systemd getty generator"
++	default y
++	help
++	  systemd-getty-generator is a generator that automatically
++	  instantiates serial-getty at .service on the kernel
++	  console(s), if they can function as ttys and are not
++	  provided by the virtual console subsystem. It will also
++	  instantiate serial-getty at .service instances for
++	  virtualizer consoles, if execution in a virtualized
++	  environment is detected.
++
++	  https://www.freedesktop.org/software/systemd/man/systemd-getty-generator.html
++
++config BR2_PACKAGE_SYSTEMD_GPT_AUTO_GENERATOR
++	bool "systemd gpt auto generator"
++	default y
++	help
++	  systemd-gpt-auto-generator is a unit generator that
++	  automatically discovers root, /home/, /srv/, the EFI
++	  System Partition, the Extended Boot Loader Partition and
++	  swap partitions and creates mount and swap units for them,
++	  based on the partition type GUIDs of GUID partition tables
++	  (GPT). It implements the Discoverable Partitions
++	  Specification.
++
++	  https://www.freedesktop.org/software/systemd/man/systemd-gpt-auto-generator.html
++
++config BR2_PACKAGE_SYSTEMD_RC_LOCAL_GENERATOR
++	bool "systemd rc local generator"
++	default y
++	help
++	  systemd-rc-local-generator is a generator that checks
++	  whether /etc/rc.local exists and is executable,
++	  and if it is pulls the rc-local.service unit into the
++	  boot process.
++
++	  https://www.freedesktop.org/software/systemd/man/systemd-rc-local-generator.html
++
++config BR2_PACKAGE_SYSTEMD_RUN_GENERATOR
++	bool "systemd run generator"
++	default y
++	help
++	  systemd-run-generator is for invoking commands specified
++	  on the kernel command line as system service.
++
++	  https://www.freedesktop.org/software/systemd/man/systemd-run-generator.html
++
++config BR2_PACKAGE_SYSTEMD_SYSTEM_UPDATE_GENERATOR
++	bool "systemd system update generator"
++	default y
++	help
++	  systemd-system-update-generator is a generator that
++	  automatically redirects the boot process to
++	  system-update.target, if /system-update exists.
++
++	  https://www.freedesktop.org/software/systemd/man/systemd-system-update-generator.html
++
++config BR2_PACKAGE_SYSTEMD_SYSV_GENERATOR
++	bool "systemd sysv generator"
++	default y
++	help
++	  systemd-sysv-generator is a generator that creates wrapper
++	  .service units for SysV init scripts in /etc/init.d/* at
++	  boot and when configuration of the system manager is
++	  reloaded. This will allow systemd(1) to support them
++	  similarly to native units/
++
++	  https://www.freedesktop.org/software/systemd/man/systemd-system-update-generator.html
++
++endmenu
++
+ config BR2_PACKAGE_SYSTEMD_MACHINEID_FILE
+ 	bool "Install empty machine id file"
+ 	default y
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 92490eb86b..fc348fe120 100644
+index fc348fe120..32349980e3 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -461,9 +461,11 @@ define SYSTEMD_INSTALL_INIT_HOOK
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/remote-fs.target
+@@ -467,6 +467,62 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
  endef
+ endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_MACHINEID_FILE),y)
- define SYSTEMD_INSTALL_MACHINEID_HOOK
- 	touch $(TARGET_DIR)/etc/machine-id
- endef
++ifneq ($(BR2_PACKAGE_SYSTEMD_DEBUG_GENERATOR),y)
++define SYSTEMD_DISABLE_DEBUG_GENERATOR
++	rm -f $(TARGET_DIR)/usr/lib/systemd/system-generators/systemd-debug-generator
++endef
++SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_DISABLE_DEBUG_GENERATOR
 +endif
- 
++
++ifneq ($(BR2_PACKAGE_SYSTEMD_FSTAB_GENERATOR),y)
++define SYSTEMD_DISABLE_FSTAB_GENERATOR
++	rm -f $(TARGET_DIR)/usr/lib/systemd/system-generators/systemd-fstab-generator
++endef
++SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_DISABLE_FSTAB_GENERATOR
++endif
++
++ifneq ($(BR2_PACKAGE_SYSTEMD_GETTY_GENERATOR),y)
++define SYSTEMD_DISABLE_GETTY_GENERATOR
++	rm -f $(TARGET_DIR)/usr/lib/systemd/system-generators/systemd-getty-generator
++endef
++SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_DISABLE_GETTY_GENERATOR
++endif
++
++ifneq ($(BR2_PACKAGE_SYSTEMD_GPT_AUTO_GENERATOR),y)
++define SYSTEMD_DISABLE_GPT_AUTO_GENERATOR
++	rm -f $(TARGET_DIR)/usr/lib/systemd/system-generators/systemd-gpt-auto-generator
++endef
++SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_DISABLE_GPT_AUTO_GENERATOR
++endif
++
++ifneq ($(BR2_PACKAGE_SYSTEMD_RC_LOCAL_GENERATOR),y)
++define SYSTEMD_DISABLE_RC_LOCAL_GENERATOR
++	rm -f $(TARGET_DIR)/usr/lib/systemd/system-generators/systemd-rc-local-generator
++endef
++SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_DISABLE_RC_LOCAL_GENERATOR
++endif
++
++ifneq ($(BR2_PACKAGE_SYSTEMD_RUN_GENERATOR),y)
++define SYSTEMD_DISABLE_RUN_GENERATOR
++	rm -f $(TARGET_DIR)/usr/lib/systemd/system-generators/systemd-run-generator
++endef
++SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_DISABLE_RUN_GENERATOR
++endif
++
++ifneq ($(BR2_PACKAGE_SYSTEMD_SYSTEM_UPDATE_GENERATOR),y)
++define SYSTEMD_DISABLE_SYSTEMD_SYSTEM_UPDATE_GENERATOR
++	rm -f $(TARGET_DIR)/usr/lib/systemd/system-generators/systemd-system-update-generator
++endef
++SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_DISABLE_SYSTEMD_SYSTEM_UPDATE_GENERATOR
++endif
++
++ifneq ($(BR2_PACKAGE_SYSTEMD_SYSTEMD_SYSV_GENERATOR),y)
++define SYSTEMD_DISABLE_SYSTEMD_SYSV_GENERATOR
++	rm -f $(TARGET_DIR)/usr/lib/systemd/system-generators/systemd-sysv-generator
++endef
++SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_DISABLE_SYSTEMD_SYSV_GENERATOR
++endif
++
  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
  	SYSTEMD_INSTALL_TARGET_CRYPTSETUP \
+ 	SYSTEMD_INSTALL_TARGET_MACHINED \
 -- 
 2.24.0
