@@ -1,105 +1,87 @@
-From: Koen Martens <gmc@sonologic.nl>
-Date: Sun, 17 Nov 2019 14:38:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/linuxconsoletools: bump version to
- 1.7.0
-Message-ID: <20191117133838.GC13372@coltrane>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 17 Nov 2019 14:39:03 +0100
+Subject: [Buildroot] [PATCH 1/2] package/systemd: set machine id file
+ instalation as optional choice
+In-Reply-To: <20191117113345.159653-1-b.bilas@grinn-global.com>
+References: <20191117113345.159653-1-b.bilas@grinn-global.com>
+Message-ID: <0b8bd9be-3109-f998-5a44-cca063d1e207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version changed the (optional) dependency from sdl and
-sdl-config to sdl2 and pkg-config. Therefore, the patch that
-provided the correct path to sdl-config has been dropped and
-the dependency has been changed to BR2_PACKAGE_SDL2.
+ Hi Bartosz,
 
-Somehow, SDL2 fails to build without shared library support,
-but this is not explicitly depended on by SDL2, therefore
-a dependency to BR2_SHARED_LIBS was added to the force-
-feedback utility configuration option.
+On 17/11/2019 12:33, Bartosz Bilas wrote:
+> In case of e.g writable systems there is no neccesity to have
+                 writeable                    necessity
 
-Signed-off-by: Koen Martens <gmc@sonologic.nl>
----
- .../linuxconsoletools/0002-sdl-config.patch   | 20 -------------------
- package/linuxconsoletools/Config.in           |  3 ++-
- .../linuxconsoletools/linuxconsoletools.hash  |  2 +-
- .../linuxconsoletools/linuxconsoletools.mk    |  6 +++---
- 4 files changed, 6 insertions(+), 25 deletions(-)
- delete mode 100644 package/linuxconsoletools/0002-sdl-config.patch
+> pre-installed empty machine-id file on target because systemd
+> generates that automatically during system boot.
+> Also in case of having empty machine-id file we are not able
+> to use a service with ConditionFirstBoot because systemd recognizes
+> machine-id file in system therefore we can't detect new system instance boots up.
+> Set this option as enable by default to keep compatibility with old builds.
 
-diff --git a/package/linuxconsoletools/0002-sdl-config.patch b/package/linuxconsoletools/0002-sdl-config.patch
-deleted file mode 100644
-index c19c274a83..0000000000
---- a/package/linuxconsoletools/0002-sdl-config.patch
-+++ /dev/null
-@@ -1,20 +0,0 @@
--Specify sdl-config to use instead of using host sdl-config.
--
--Signed-off-by: Koen Martens <gmc@sonologic.nl>
--
--diff -Naur a/utils/Makefile b/utils/Makefile
----- a/utils/Makefile	2017-06-16 18:48:28.402824790 +0200
--+++ b/utils/Makefile	2017-06-16 18:48:53.898696647 +0200
--@@ -69,10 +69,10 @@
-- 	$(CC) $(CFLAGS) $(CPPFLAGS) -funsigned-char $^ $(LDFLAGS) -lm -o $@
-- 
-- ffmvforce.o: ffmvforce.c
---	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ -o $@ `sdl-config --cflags`
--+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ -o $@ `${SDL_CONFIG} --cflags`
-- 
-- ffmvforce: ffmvforce.o
---	$(CC) $^ -o $@ $(LDFLAGS) -g -lm `sdl-config --libs`
--+	$(CC) $^ -o $@ $(LDFLAGS) -g -lm `${SDL_CONFIG} --libs`
-- 
-- axbtnmap.o: axbtnmap.c axbtnmap.h
-- 
-diff --git a/package/linuxconsoletools/Config.in b/package/linuxconsoletools/Config.in
-index 76150278ae..8245dda500 100644
---- a/package/linuxconsoletools/Config.in
-+++ b/package/linuxconsoletools/Config.in
-@@ -28,7 +28,8 @@ config BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK
- 
- config BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK
- 	bool "force-feedback utilities"
--	select BR2_PACKAGE_SDL
-+	depends on BR2_SHARED_LIBS
-+	select BR2_PACKAGE_SDL2
- 	help
- 	  Build force-feedback driver utilities (fftest,
- 	  ffmvforce, ffset, ffcfstress).
-diff --git a/package/linuxconsoletools/linuxconsoletools.hash b/package/linuxconsoletools/linuxconsoletools.hash
-index d1bb5a39ef..caacf70e45 100644
---- a/package/linuxconsoletools/linuxconsoletools.hash
-+++ b/package/linuxconsoletools/linuxconsoletools.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	e9d6b05a6c57c7eb3ec7f9f017f46b20e4b55d5a02f930eff1823a13921c5934	linuxconsoletools-1.6.1.tar.bz2
-+sha256	95d112f06393806116341d593bda002c8bc44119c1538407623268fed90d8c34	linuxconsoletools-1.7.0.tar.bz2
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/linuxconsoletools/linuxconsoletools.mk b/package/linuxconsoletools/linuxconsoletools.mk
-index b22e136d33..ac8c7805ce 100644
---- a/package/linuxconsoletools/linuxconsoletools.mk
-+++ b/package/linuxconsoletools/linuxconsoletools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINUXCONSOLETOOLS_VERSION = 1.6.1
-+LINUXCONSOLETOOLS_VERSION = 1.7.0
- LINUXCONSOLETOOLS_SOURCE = linuxconsoletools-$(LINUXCONSOLETOOLS_VERSION).tar.bz2
- LINUXCONSOLETOOLS_SITE = https://downloads.sourceforge.net/project/linuxconsole
- LINUXCONSOLETOOLS_LICENSE = GPL-2.0+
-@@ -21,8 +21,8 @@ endif
- ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK),y)
- LINUXCONSOLETOOLS_MAKE_OPTS += \
- 	ENABLE_FORCEFEEDBACK=1 \
--	SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
--LINUXCONSOLETOOLS_DEPENDENCIES += sdl
-+	CFLAGS="--std=gnu99"
-+LINUXCONSOLETOOLS_DEPENDENCIES += sdl2 host-pkgconf
- endif
- 
- define LINUXCONSOLETOOLS_BUILD_CMDS
--- 
-2.17.1
+ Nice that you take a look at this! I'm immediately going to follow it up with
+more feature requests though :-)
+
+- If there is a writeable persistent partition, but /etc is not writeable, can
+we create a symlink and will systemd still create it correctly at first boot?
+
+- Maybe if BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is set, we should default it or
+even force it to no.
+
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> ---
+>  package/systemd/Config.in  | 13 +++++++++++++
+>  package/systemd/systemd.mk |  2 ++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index aef39abe27..fadc1a32c8 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -112,6 +112,19 @@ config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
+>  	default "x64"   if BR2_x86_64
+>  	depends on BR2_PACKAGE_SYSTEMD_BOOT
+>  
+> +config BR2_PACKAGE_SYSTEMD_MACHINEID_FILE
+> +	bool "Install empty machine id file"
+> +	default y
+> +	help
+> +	  The /etc/machine-id file contains the unique machine ID
+> +	  of the local system that is set during installation or
+> +	  boot. The machine ID is a single newline-terminated,
+> +	  hexadecimal, 32-character, lowercase ID. When decoded from
+> +	  hexadecimal, this corresponds to a 16-byte/128-bit value.
+> +	  This ID may not be all zeros.
+> +
+> +	  https://www.freedesktop.org/software/systemd/man/machine-id.html
+> +
+>  config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+>  	bool "HTTP server for journal events"
+>  	select BR2_PACKAGE_LIBMICROHTTPD
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 92490eb86b..fc348fe120 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -461,9 +461,11 @@ define SYSTEMD_INSTALL_INIT_HOOK
+>  		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/remote-fs.target
+>  endef
+>  
+> +ifeq ($(BR2_PACKAGE_SYSTEMD_MACHINEID_FILE),y)
+>  define SYSTEMD_INSTALL_MACHINEID_HOOK
+>  	touch $(TARGET_DIR)/etc/machine-id
+>  endef
+> +endif
+>  
+>  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+>  	SYSTEMD_INSTALL_TARGET_CRYPTSETUP \
+> 
