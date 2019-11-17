@@ -1,159 +1,93 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Sun, 17 Nov 2019 21:19:00 +0100
-Subject: [Buildroot] [PATCH v3 for-next 02/11] configs/qemu{x86,
- x86_64}: add a serial console
+Date: Sun, 17 Nov 2019 21:19:01 +0100
+Subject: [Buildroot] [PATCH v3 for-next 03/11] board/qemu/arm-versatile:
+ move arm-versatile nommu stuff to board/qemu/arm-versatile-nommu
 In-Reply-To: <20191117201909.12900-1-romain.naour@smile.fr>
 References: <20191117201909.12900-1-romain.naour@smile.fr>
-Message-ID: <20191117201909.12900-3-romain.naour@smile.fr>
+Message-ID: <20191117201909.12900-4-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current Buildroot defconfigs for qemu_x86 and qemu_x86_64
-instantiate a console on tty1, which appears on QEMU's
-graphical window. Add a console on the serial port (ttyS0) to
-be used later for gitlab testing.
-
-This change is need since the script used for gitlab testing
-needs to use a serial output with pexpect.
-
-This change is similar to the one made for raspberrypi [1] to
-handle HDMI and serial console:
-
-This requires three changes:
- 1. have two 'console=' entries in the kernel command line: tty1,
-    then ttyS0;
- 2. change BR2_TARGET_GENERIC_GETTY_PORT to "console", so it starts
-    a getty on the last console= passed to the kernel, ttyS0;
- 3. add a new getty on tty1 to the generated inittab.
-
-Step 2 is actually obtained by removing BR2_TARGET_GENERIC_GETTY_PORT
-entirely from the defconfigs, since "console" is the default value.
-
-Step 3 requires a post-build script since the Buildroot makefiles can
-configure only one console.
-
-Note: instead of simply adding a new getty on ttyS0 (which would
-work) this patch actually changes BR2_TARGET_GENERIC_GETTY_PORT to
-instantiate a console on UART, then adds back tty1 via
-post-build.sh. This is done only to avoid the "GENERIC_SERIAL" comment
-where we instantiate a console on QEMU graphical window, then
-instantiate a really-serial console on another line.
-
-The result is these two inittab lines:
-
-  console::respawn:/sbin/getty -L  console 0 vt100 # GENERIC_SERIAL
-  tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window
-
-[1] 20878a1017e2bf7eb8c5f870dc6d2641493cb0f9
+In order to indroduce automated gitlab testing for all qemu defconfig,
+split arm-versatile (MMU) and arm-versatile (noMMU) to a separate
+directory.
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- board/qemu/x86/post-build.sh    | 11 +++++++++++
- board/qemu/x86/readme.txt       |  2 +-
- board/qemu/x86_64/post-build.sh | 11 +++++++++++
- board/qemu/x86_64/readme.txt    |  2 +-
- configs/qemu_x86_64_defconfig   |  4 ++--
- configs/qemu_x86_defconfig      |  4 ++--
- 6 files changed, 28 insertions(+), 6 deletions(-)
- create mode 100755 board/qemu/x86/post-build.sh
- create mode 100755 board/qemu/x86_64/post-build.sh
+ .../linux-nommu.config => arm-versatile-nommu/linux.config}   | 0
+ .../patches/linux/versatile-nommu.patch                       | 0
+ board/qemu/{arm-versatile => arm-versatile-nommu}/readme.txt  | 4 ----
+ board/qemu/arm-versatile/readme.txt                           | 4 ----
+ configs/qemu_arm_versatile_nommu_defconfig                    | 4 ++--
+ 5 files changed, 2 insertions(+), 10 deletions(-)
+ rename board/qemu/{arm-versatile/linux-nommu.config => arm-versatile-nommu/linux.config} (100%)
+ rename board/qemu/{arm-versatile => arm-versatile-nommu}/patches/linux/versatile-nommu.patch (100%)
+ copy board/qemu/{arm-versatile => arm-versatile-nommu}/readme.txt (53%)
 
-diff --git a/board/qemu/x86/post-build.sh b/board/qemu/x86/post-build.sh
-new file mode 100755
-index 0000000000..bf83a002c2
---- /dev/null
-+++ b/board/qemu/x86/post-build.sh
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+
-+set -u
-+set -e
-+
-+# Add a console on tty1
-+if [ -e ${TARGET_DIR}/etc/inittab ]; then
-+    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
-+	sed -i '/GENERIC_SERIAL/a\
-+tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window' ${TARGET_DIR}/etc/inittab
-+fi
-diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
-index 42fc2439da..3bbafecf91 100644
---- a/board/qemu/x86/readme.txt
-+++ b/board/qemu/x86/readme.txt
-@@ -1,6 +1,6 @@
+diff --git a/board/qemu/arm-versatile/linux-nommu.config b/board/qemu/arm-versatile-nommu/linux.config
+similarity index 100%
+rename from board/qemu/arm-versatile/linux-nommu.config
+rename to board/qemu/arm-versatile-nommu/linux.config
+diff --git a/board/qemu/arm-versatile/patches/linux/versatile-nommu.patch b/board/qemu/arm-versatile-nommu/patches/linux/versatile-nommu.patch
+similarity index 100%
+rename from board/qemu/arm-versatile/patches/linux/versatile-nommu.patch
+rename to board/qemu/arm-versatile-nommu/patches/linux/versatile-nommu.patch
+diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile-nommu/readme.txt
+similarity index 53%
+copy from board/qemu/arm-versatile/readme.txt
+copy to board/qemu/arm-versatile-nommu/readme.txt
+index f3a9e1ab47..d25cc4dc00 100644
+--- a/board/qemu/arm-versatile/readme.txt
++++ b/board/qemu/arm-versatile-nommu/readme.txt
+@@ -1,9 +1,5 @@
  Run the emulation with:
  
--  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "rootwait root=/dev/vda" -net nic,model=virtio -net user
-+  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "rootwait root=/dev/vda console=tty1 console=ttyS0" -serial stdio -net nic,model=virtio -net user
+-  qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -drive file=output/images/rootfs.ext2,if=scsi,format=raw -append "rootwait root=/dev/sda console=ttyAMA0,115200" -serial stdio -net nic,model=rtl8139 -net user
+-
+-Or for the noMMU emulation:
+-
+   qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -append "console=ttyAMA0,115200" -serial stdio -net user -net nic,model=smc91c111
  
- Optionally add -smp N to emulate a SMP system with N CPUs.
+ The login prompt will appear in the terminal that started Qemu. The
+diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
+index f3a9e1ab47..e514cefe82 100644
+--- a/board/qemu/arm-versatile/readme.txt
++++ b/board/qemu/arm-versatile/readme.txt
+@@ -2,10 +2,6 @@ Run the emulation with:
  
-diff --git a/board/qemu/x86_64/post-build.sh b/board/qemu/x86_64/post-build.sh
-new file mode 100755
-index 0000000000..bf83a002c2
---- /dev/null
-+++ b/board/qemu/x86_64/post-build.sh
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+
-+set -u
-+set -e
-+
-+# Add a console on tty1
-+if [ -e ${TARGET_DIR}/etc/inittab ]; then
-+    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
-+	sed -i '/GENERIC_SERIAL/a\
-+tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window' ${TARGET_DIR}/etc/inittab
-+fi
-diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
-index 4a1c0c0ff5..93ac22a947 100644
---- a/board/qemu/x86_64/readme.txt
-+++ b/board/qemu/x86_64/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
+   qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -drive file=output/images/rootfs.ext2,if=scsi,format=raw -append "rootwait root=/dev/sda console=ttyAMA0,115200" -serial stdio -net nic,model=rtl8139 -net user
  
--  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "rootwait root=/dev/vda" -net nic,model=virtio -net user
-+  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "rootwait root=/dev/vda console=tty1 console=ttyS0" -serial stdio -net nic,model=virtio -net user
+-Or for the noMMU emulation:
+-
+-  qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -append "console=ttyAMA0,115200" -serial stdio -net user -net nic,model=smc91c111
+-
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
  
- Optionally add -smp N to emulate a SMP system with N CPUs.
+diff --git a/configs/qemu_arm_versatile_nommu_defconfig b/configs/qemu_arm_versatile_nommu_defconfig
+index ae4353d0a5..c4fefeef48 100644
+--- a/configs/qemu_arm_versatile_nommu_defconfig
++++ b/configs/qemu_arm_versatile_nommu_defconfig
+@@ -7,7 +7,7 @@ BR2_PACKAGE_HOST_ELF2FLT=y
+ # BR2_USE_MMU is not set
  
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index c3c0991fcc..f9d868d169 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -3,11 +3,11 @@ BR2_x86_64=y
+ # Patches
+-BR2_GLOBAL_PATCH_DIR="board/qemu/arm-versatile/patches"
++BR2_GLOBAL_PATCH_DIR="board/qemu/arm-versatile-nommu/patches"
  
- # System
- BR2_SYSTEM_DHCP="eth0"
--BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ # Busybox with hush
+ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
+@@ -29,7 +29,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-nommu.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile-nommu/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="versatile-pb"
  
--# Filesystem
-+# Filesystem / image
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/qemu/x86_64/post-build.sh"
- 
- # Linux headers same as kernel, a 4.19 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index 6d68b7d71f..cb68b5f4ff 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -4,11 +4,11 @@ BR2_x86_pentiumpro=y
- 
- # System
- BR2_SYSTEM_DHCP="eth0"
--BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- 
--# Filesystem
-+# Filesystem / image
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/qemu/x86/post-build.sh"
- 
- # Linux headers same as kernel, a 4.19 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
 -- 
 2.21.0
