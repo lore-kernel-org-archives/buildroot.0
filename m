@@ -1,11 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Nov 2019 17:03:28 +0100
-Subject: [Buildroot] [PATCH 02/11] package/connman: clarify license of
- client code
-In-Reply-To: <20191113185644.GK3419@scaer>
-References: <20191113151724.12155-1-peter@korsgaard.com>
- <20191113151724.12155-3-peter@korsgaard.com> <20191113185644.GK3419@scaer>
-Message-ID: <a0d91020-c605-db53-90a1-ced2d77e3134@mind.be>
+Date: Sun, 17 Nov 2019 17:06:26 +0100
+Subject: [Buildroot] USB on rock64
+In-Reply-To: <Jrdyl_Hac9BdPOhYDWt4FafgynThsUwezL988o5hous9u1y2phHJn7RMUehQbousCfsFYXHqbVjj4ZHFSvj2GApa6f2ZNcnkUFIkzlcb5io=@protonmail.com>
+References: <Jrdyl_Hac9BdPOhYDWt4FafgynThsUwezL988o5hous9u1y2phHJn7RMUehQbousCfsFYXHqbVjj4ZHFSvj2GApa6f2ZNcnkUFIkzlcb5io=@protonmail.com>
+Message-ID: <2f439898-5420-2413-3b4e-533ab124682a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,54 +12,72 @@ To: buildroot@busybox.net
 
 
 
-On 13/11/2019 19:56, Yann E. MORIN wrote:
-> Peter, All,
-> 
-> On 2019-11-13 16:17 +0100, Peter Korsgaard spake thusly:
->> While the core connman code is licensed under GPL-2.0, the client code is
->> GPL-2.0+ for compatibility with readline (which is GPL-3.0+).
->>
->> Extend the _LICENSE with this info to clarify that linking against
->> readline is OK licensing wise.
->>
->> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> 
-> Applied to master, thanks.
-> 
-> It's a pity they do not have a license file for it, though...
+On 14/11/2019 16:28, no-one-you-know wrote:
+> Hopefully it's OK to send generic questions here.
 
- The license file would be identical, because the GPL license files don't
-include the "or later" clause - that is only in the source files, and possibly
-in a README or similar.
+ It's OK, but don't expect answers :-)
+
+ It would have been a good idea to include the original contributer of the
+rock64_defconfig in Cc - I've done that now.
+
+> I've built an image (glibc/systemv/eudev) for my Rock64 and according to the
+> announcement on this mailing list USB should be working.
+> 
+> And according to dmesg and lsusb, it is (as far as I can tell):
+> 
+> # dmesg|grep -i usb
+> [??? 0.214216] usbcore: registered new interface driver usbfs
+> [??? 0.214315] usbcore: registered new interface driver hub
+> [??? 0.214416] usbcore: registered new device driver usb
+> [??? 0.370304] dwc2 ff580000.usb: ff580000.usb supply vusb_d not found, using
+> dummy regulator
+> [??? 0.371105] dwc2 ff580000.usb: Linked as a consumer to regulator.0
+> [??? 0.371660] dwc2 ff580000.usb: ff580000.usb supply vusb_a not found, using
+> dummy regulator
+> [??? 0.385485] dwc2 ff580000.usb: DWC OTG Controller
+> [??? 0.385935] dwc2 ff580000.usb: new USB bus registered, assigned bus number 1
+> [??? 0.386593] dwc2 ff580000.usb: irq 26, io mem 0xff580000
+> [??? 0.387932] hub 1-0:1.0: USB hub found
+> [??? 0.389294] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+> [??? 0.393296] ehci-platform ff5c0000.usb: EHCI Host Controller
+> [??? 0.393846] ehci-platform ff5c0000.usb: new USB bus registered, assigned bus
+> number 2
+> [??? 0.394921] ehci-platform ff5c0000.usb: irq 27, io mem 0xff5c0000
+> [??? 0.409477] ehci-platform ff5c0000.usb: USB 2.0 started, EHCI 1.00
+> [??? 0.410839] hub 2-0:1.0: USB hub found
+> [??? 0.412098] ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
+> [??? 0.414038] ohci-platform ff5d0000.usb: Generic Platform OHCI controller
+> [??? 0.414655] ohci-platform ff5d0000.usb: new USB bus registered, assigned bus
+> number 3
+> [??? 0.415676] ohci-platform ff5d0000.usb: irq 28, io mem 0xff5d0000
+> [??? 0.478393] hub 3-0:1.0: USB hub found
+> [??? 0.480137] usbcore: registered new interface driver usb-storage
+> [??? 0.590386] usbcore: registered new interface driver usbhid
+> [??? 0.590882] usbhid: USB HID core driver
+> 
+> # lsusb
+> Bus 003 Device 001: ID 1d6b:0001
+> Bus 002 Device 001: ID 1d6b:0002
+> Bus 001 Device 001: ID 1d6b:0002
+> 
+> But when I plug a USB flash drive in, nothing is detected.? Both lsusb and
+> re-running dmesg show no change - like nothing is there
+
+ Have you tried with other devices? USB3 flash drives don't always work well in
+USB2 ports (yes, they should, but they don't...). A mouse is often a much better
+device for testing.
 
  Regards,
  Arnout
 
 > 
-> Regards,
-> Yann E. MORIN.
+> Is this something I've left out of the 'target packages' selection?? How can I
+> troubleshoot this further?
 > 
->> ---
->>  package/connman/connman.mk | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
->> index 839bc7a0e2..7ca49726dd 100644
->> --- a/package/connman/connman.mk
->> +++ b/package/connman/connman.mk
->> @@ -39,6 +39,7 @@ define CONNMAN_INSTALL_INIT_SYSTEMD
->>  endef
->>  
->>  ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
->> +CONNMAN_LICENSE += , GPL-2.0+ (client)
->>  CONNMAN_CONF_OPTS += --enable-client
->>  CONNMAN_DEPENDENCIES += readline
->>  
->> -- 
->> 2.20.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+> Thanks
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
