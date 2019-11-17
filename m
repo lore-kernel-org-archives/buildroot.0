@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Nov 2019 16:40:11 +0100
-Subject: [Buildroot] [PATCH 1/5] package/spice: add optional gdk-pixbuf
- dependency
-In-Reply-To: <CAPi7W82gKs0tkx+QvxSHB36W56KpgbHxc38VbS+eV4MuejZ4sA@mail.gmail.com>
-References: <20191114191321.11789-1-fontaine.fabrice@gmail.com>
- <20191115202029.GH26360@scaer>
- <CAPi7W82gKs0tkx+QvxSHB36W56KpgbHxc38VbS+eV4MuejZ4sA@mail.gmail.com>
-Message-ID: <0890455a-b08d-a7e8-6ab8-c10103dca713@mind.be>
+Date: Sun, 17 Nov 2019 17:00:05 +0100
+Subject: [Buildroot] [PATCH 1/2] package/systemd: set machine id file
+ instalation as optional choice
+In-Reply-To: <CAFvCimUuDJUWzKPA-rX0rqcFNGgNARvD5gdLYqDjR+XVdbgUVA@mail.gmail.com>
+References: <20191117113345.159653-1-b.bilas@grinn-global.com>
+ <0b8bd9be-3109-f998-5a44-cca063d1e207@mind.be>
+ <CAFvCimUuDJUWzKPA-rX0rqcFNGgNARvD5gdLYqDjR+XVdbgUVA@mail.gmail.com>
+Message-ID: <6987e42b-89ad-cbf3-fd03-ee3ad74880b7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,74 +15,225 @@ To: buildroot@busybox.net
 
 
 
-On 15/11/2019 21:27, Fabrice Fontaine wrote:
-> Hi Yann,
+On 17/11/2019 15:19, J?r?my ROSEN wrote:
+> hmmm, I'm kinda torn on that one..
 > 
-> Le ven. 15 nov. 2019 ? 21:20, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
->>
->> Fabrice, All,
->>
->> On 2019-11-14 20:13 +0100, Fabrice Fontaine spake thusly:
->>> This dependency has been added in version 0.14.1 with
->>> https://gitlab.freedesktop.org/spice/spice-common/commit/d58a5b6a5a25134396661e1d805dfc567181e3af
->>>
->>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->>> ---
->>>  package/spice/spice.mk | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/package/spice/spice.mk b/package/spice/spice.mk
->>> index 16e57441a8..f5801ce0ff 100644
->>> --- a/package/spice/spice.mk
->>> +++ b/package/spice/spice.mk
->>> @@ -13,6 +13,7 @@ SPICE_INSTALL_STAGING = YES
->>>  SPICE_DEPENDENCIES = \
->>>       host-pkgconf \
->>>       jpeg \
->>> +     $(if $(BR2_PACKAGE_GDK_PIXBUF),gdk-pixbuf) \
->>
->> I see you've gine for conciseness here. However, I think we want to
->> handle this optional dependency like we handle the optional dependency
->> on opus, lines 53..56.
-> OK, I can send a v2 with this change however I've also think about it
-> and I can also send a v2 that disable tests in spice-common.
+> The only difference I see betweed no machine-id and an empty machine-id is
+> systemd-firstboot and ConditionFirstBoot
 
- Disabling tests is clearly better, even without the considerations below.
+ That's exactly the point I think.
 
-> This will
-> avoid this gdk-pixbuf dependency as well as the dynamic library
-> dependency (I'll move it to celt051). The only drawback is that I'll
-> have to add a hook to call autoreconf in subprojects/spice-common.
+ I assumed, however, that ConditionFirstBoot was evaluated by systemd-firstboot,
+but that's not the case then?
 
- Why? A toplevel AUTORECONF=YES seems to work fine.
+
+> if the file is empty or missing and systemd can write to it, systemd will set it
+> up (not sure what happens for Arnout's symlink, that's worth testing)
+> however, if the file exists but is empty we will skip systemd-firstboot
+> 
+> for context, systemd-firstboot does the following:
+> * set (unconditionnaly) a machine-id
+
+ Are you saying that if systemd-firstboot it not enabled, no machine-id will be
+generated?
+
+> * sets the locale (LANG= LC_MESSGES)
+> * sets the hostname
+> * sets the timezone
+> * sets the root password
+> 
+> systemd-firstboot can use values from its command line, but when launched on the
+> target, the point is usually to prompt the user for answers.
+> (as a side note, we can call it with --root=$DESTDIR once we have host-systemd)
+> 
+> So I would tend to consider systemd-firstboot as "an uncommon case" because
+> prompting?user on first boot is not something we see often in the embedded space
+> 
+> The good news is: we already know when systemd-firstboot is used because it's a
+> config option of the systemd package.
+> 
+> ConditionFirstBoot is a bit more useful for us.. it allows to easily run a
+> service only at first boot (or skip it on first boot)
+
+ Well, here are a few things you'd typically want to generate on first boot:
+
+- machine id;
+- ssh keys;
+- various certificates;
+- maybe a hashed root password based on a serial number of MAC address;
+- maybe a random or hashed hostname;
+- register on the phone-home server;
+- resize the data partition based on actual size of the eMMC.
+
+ None of them interactively, of course.
+
+ So apparently systemd-firstboot can only do the first one. That's indeed not
+very useful.
+
+
+> we also have a big clue if the system is meant to be read-only via the "remount
+> RW" option
+
+ Yeah, but it's just a clue. You can have a writeable machine ID without a
+remount RW option in a number of situations:
+
+- custom skeleton
+- fstab is overwritten by fs-overlay
+- /etc is (bind)-mounted to a writeable partition
+- /etc/machine-id is symlinked into a writeable partition
+- root is squashfs (so it's not writeable even if RW is on)
+
+
+> So, putting it all together
+> * if we use systemd-firstboot, we don't want a machine-id
+
+ ... at least, not an empty one :-)
+
+> * if we have a read-only rootfs, we want an empty machine-id
+> * in other cases, we can deal with both, but it's better to have no machine-id
+> * I don't think that the concept of first boot makes any sense with a read-only
+> rootfs...
+
+ With readonly *rootfs* it certainly does, but not without any persistent
+storage at all.
+
+> 
+> Could something like that be enough ? can we trust "remount RW" ?
+> maybe "remount RW" should be renamed "create a RW filesystem" and enable various
+> tweaks related to RO vs RW
+
+ As written above: no.
+
+
+ The problem is: we're not a distro. We leave too much freedom for the user to
+integrate things in various ways to be able to make assumptions about what is
+the right way to do things. So, the only thing we can do is to give a decent
+out-of-the-box experience, and let the user figure out how to tweak things -
+possibly adding a config option for a common situation that is easily handled in
+a generic way. The other thing we can do is to provide documentation about the
+proper way to integrate things in different scenarios.
+
+ I'm starting to agree that this option is maybe not that great.
+
+ Actually, come to think of it, maybe it's better to never create the machine-id
+at all. What is the effect (with a readonly rootfs) if machine-id doesn't exist?
+Does it block booting, does the boot take a little longer, or do we boot with a
+different machine-id all the time? And in the latter case, is there a real
+problem with that?
 
  Regards,
  Arnout
 
-> What do you think about this proposal?
->>
->> Regards,
->> Yann E. MORIN.
->>
->>>       libglib2 \
->>>       openssl \
->>>       pixman \
->>> --
->>> 2.23.0
->>>
->>
->> --
->> .-----------------.--------------------.------------------.--------------------.
->> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->> '------------------------------^-------^------------------^--------------------'
-> Best Regards,
 > 
-> Fabrice
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> my two cents...
 > 
+> 
+> Le?dim. 17 nov. 2019 ??14:39, Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>> a ?crit?:
+> 
+>     ?Hi Bartosz,
+> 
+>     On 17/11/2019 12:33, Bartosz Bilas wrote:
+>     > In case of e.g writable systems there is no neccesity to have
+>     ? ? ? ? ? ? ? ? ?writeable? ? ? ? ? ? ? ? ? ? necessity
+> 
+>     > pre-installed empty machine-id file on target because systemd
+>     > generates that automatically during system boot.
+>     > Also in case of having empty machine-id file we are not able
+>     > to use a service with ConditionFirstBoot because systemd recognizes
+>     > machine-id file in system therefore we can't detect new system instance
+>     boots up.
+>     > Set this option as enable by default to keep compatibility with old builds.
+> 
+>     ?Nice that you take a look at this! I'm immediately going to follow it up with
+>     more feature requests though :-)
+> 
+>     - If there is a writeable persistent partition, but /etc is not writeable, can
+>     we create a symlink and will systemd still create it correctly at first boot?
+> 
+>     - Maybe if BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is set, we should default it or
+>     even force it to no.
+> 
+> 
+>     ?Regards,
+>     ?Arnout
+> 
+>     >
+>     > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com
+>     <mailto:b.bilas@grinn-global.com>>
+>     > ---
+>     >? package/systemd/Config.in? | 13 +++++++++++++
+>     >? package/systemd/systemd.mk <http://systemd.mk> |? 2 ++
+>     >? 2 files changed, 15 insertions(+)
+>     >
+>     > diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+>     > index aef39abe27..fadc1a32c8 100644
+>     > --- a/package/systemd/Config.in
+>     > +++ b/package/systemd/Config.in
+>     > @@ -112,6 +112,19 @@ config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
+>     >? ? ? ?default "x64"? ?if BR2_x86_64
+>     >? ? ? ?depends on BR2_PACKAGE_SYSTEMD_BOOT
+>     >?
+>     > +config BR2_PACKAGE_SYSTEMD_MACHINEID_FILE
+>     > +? ? ?bool "Install empty machine id file"
+>     > +? ? ?default y
+>     > +? ? ?help
+>     > +? ? ? ?The /etc/machine-id file contains the unique machine ID
+>     > +? ? ? ?of the local system that is set during installation or
+>     > +? ? ? ?boot. The machine ID is a single newline-terminated,
+>     > +? ? ? ?hexadecimal, 32-character, lowercase ID. When decoded from
+>     > +? ? ? ?hexadecimal, this corresponds to a 16-byte/128-bit value.
+>     > +? ? ? ?This ID may not be all zeros.
+>     > +
+>     > +? ? ? ?https://www.freedesktop.org/software/systemd/man/machine-id.html
+>     > +
+>     >? config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+>     >? ? ? ?bool "HTTP server for journal events"
+>     >? ? ? ?select BR2_PACKAGE_LIBMICROHTTPD
+>     > diff --git a/package/systemd/systemd.mk <http://systemd.mk>
+>     b/package/systemd/systemd.mk <http://systemd.mk>
+>     > index 92490eb86b..fc348fe120 100644
+>     > --- a/package/systemd/systemd.mk <http://systemd.mk>
+>     > +++ b/package/systemd/systemd.mk <http://systemd.mk>
+>     > @@ -461,9 +461,11 @@ define SYSTEMD_INSTALL_INIT_HOOK
+>     >? ? ? ? ? ? ?
+>     ?$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/remote-fs.target
+>     >? endef
+>     >?
+>     > +ifeq ($(BR2_PACKAGE_SYSTEMD_MACHINEID_FILE),y)
+>     >? define SYSTEMD_INSTALL_MACHINEID_HOOK
+>     >? ? ? ?touch $(TARGET_DIR)/etc/machine-id
+>     >? endef
+>     > +endif
+>     >?
+>     >? SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+>     >? ? ? ?SYSTEMD_INSTALL_TARGET_CRYPTSETUP \
+>     >
+>     _______________________________________________
+>     buildroot mailing list
+>     buildroot at busybox.net <mailto:buildroot@busybox.net>
+>     http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+> 
+> -- 
+> SMILE? <http://www.smile.eu/>
+> 
+> 20 rue des Jardins
+> 92600 Asni?res-sur-Seine
+> 
+> 	
+> *J?r?my ROSEN*
+> Architecte technique
+> 
+> email?jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>?
+> phone? +33 6 88 25 87 42?
+> url?http://www.smile.eu <http://www.smile.eu/>
+> 
+> Twitter <https://twitter.com/GroupeSmile>?Facebook
+> <https://www.facebook.com/smileopensource>?LinkedIn
+> <https://www.linkedin.com/company/smile>?Github <https://github.com/Smile-SA>
+> 
+> 
+> D?couvrez l?univers Smile, rendez-vous sur smile.eu
+> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
