@@ -1,72 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Nov 2019 10:29:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dtc: fix license hashes
-In-Reply-To: <20191026184627.11203-1-fontaine.fabrice@gmail.com>
-References: <20191026184627.11203-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191117092923.GG32494@scaer>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sun, 17 Nov 2019 12:33:44 +0100
+Subject: [Buildroot] [PATCH 1/2] package/systemd: set machine id file
+ instalation as optional choice
+Message-ID: <20191117113345.159653-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+In case of e.g writable systems there is no neccesity to have
+pre-installed empty machine-id file on target because systemd
+generates that automatically during system boot.
+Also in case of having empty machine-id file we are not able
+to use a service with ConditionFirstBoot because systemd recognizes
+machine-id file in system therefore we can't detect new system instance boots up.
+Set this option as enable by default to keep compatibility with old builds.
 
-On 2019-10-26 20:46 +0200, Fabrice Fontaine spake thusly:
-> Update hash of license files and add BSD-2-Clause file, see
-> https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=25bb080c18d1a8a96760e26257bf8c80ec7fcab4
-> https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=702c1b6c0e73d2bcf24f0b8398aca6a940863e48
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/d3db8ddc096f09bb1728a0ba40b925fbf49c424b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ package/systemd/Config.in  | 13 +++++++++++++
+ package/systemd/systemd.mk |  2 ++
+ 2 files changed, 15 insertions(+)
 
-Committed once again, but to next this time, now that we bumped a second
-time. Thanks! ;-)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/dtc/dtc.hash | 5 +++--
->  package/dtc/dtc.mk   | 2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
-> index 3adfcc45a9..e4d6c02544 100644
-> --- a/package/dtc/dtc.hash
-> +++ b/package/dtc/dtc.hash
-> @@ -2,5 +2,6 @@
->  sha256 660b74039690fc37013660544d09191834efb58503c73c555c5513ba75ab031f  dtc-1.5.1.tar.xz
->  
->  # Hash for license files
-> -sha256 171ce1c292cf148a5be9ff95ce7e5c3d79a002721ab8e119eae3c0f5336d2b3d  README.license
-> -sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  GPL
-> +sha256 78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68  README.license
-> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  GPL
-> +sha256 6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  BSD-2-Clause
-> diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-> index ce094cfb86..0406ff7ca9 100644
-> --- a/package/dtc/dtc.mk
-> +++ b/package/dtc/dtc.mk
-> @@ -8,7 +8,7 @@ DTC_VERSION = 1.5.1
->  DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
->  DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
->  DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
-> -DTC_LICENSE_FILES = README.license GPL
-> +DTC_LICENSE_FILES = README.license GPL BSD-2-Clause
->  DTC_INSTALL_STAGING = YES
->  DTC_DEPENDENCIES = host-bison host-flex
->  HOST_DTC_DEPENDENCIES = host-bison host-flex
-> -- 
-> 2.23.0
-> 
-
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index aef39abe27..fadc1a32c8 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -112,6 +112,19 @@ config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
+ 	default "x64"   if BR2_x86_64
+ 	depends on BR2_PACKAGE_SYSTEMD_BOOT
+ 
++config BR2_PACKAGE_SYSTEMD_MACHINEID_FILE
++	bool "Install empty machine id file"
++	default y
++	help
++	  The /etc/machine-id file contains the unique machine ID
++	  of the local system that is set during installation or
++	  boot. The machine ID is a single newline-terminated,
++	  hexadecimal, 32-character, lowercase ID. When decoded from
++	  hexadecimal, this corresponds to a 16-byte/128-bit value.
++	  This ID may not be all zeros.
++
++	  https://www.freedesktop.org/software/systemd/man/machine-id.html
++
+ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+ 	bool "HTTP server for journal events"
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 92490eb86b..fc348fe120 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -461,9 +461,11 @@ define SYSTEMD_INSTALL_INIT_HOOK
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/remote-fs.target
+ endef
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_MACHINEID_FILE),y)
+ define SYSTEMD_INSTALL_MACHINEID_HOOK
+ 	touch $(TARGET_DIR)/etc/machine-id
+ endef
++endif
+ 
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_TARGET_CRYPTSETUP \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.0
