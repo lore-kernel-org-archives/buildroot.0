@@ -1,22 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 17 Nov 2019 13:06:28 +0000
-Subject: [Buildroot] [Bug 12256] package tar is outdated (1.29 is 3 years
- old)
-In-Reply-To: <bug-12256-163@https.bugs.busybox.net/>
-References: <bug-12256-163@https.bugs.busybox.net/>
-Message-ID: <bug-12256-163-5iwnVjNOqz@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Nov 2019 14:26:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lsof: fix static build
+Message-ID: <20191117132636.9709-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12256
+TARGET_LDFLAGS which contains -static is not passed so build fails on:
 
---- Comment #3 from Carlos Santos <unixmania@gmail.com> ---
-Please submit the patch using git send-email so it becomes visible on
-patchwork.
+/home/buildroot/autobuild/instance-1/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -o lsof dfile.o dmnt.o dnode.o dproc.o dsock.o dstore.o arg.o main.o misc.o node.o print.o proc.o store.o usage.o util.o -L./lib -llsof  -ltirpc
+/home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/8.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/8.3.0/libgcc.a(unwind-dw2-fde-dip.o): in function `_Unwind_Find_registered_FDE':
+/home/buildroot/autobuild/instance-1/output-1/build/host-gcc-final-8.3.0/build/xtensa-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde.c:1040: undefined reference to `dl_iterate_phdr'
+collect2: error: ld returned 1 exit status
 
+Pass TARGET_LDFLAGS thanks to LSOF_CFGL
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0c228e0d3ea1ff2d728ddc906e242d40ed973222
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/lsof/lsof.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 939df9dd8d..6aa829c2c0 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -33,7 +33,8 @@ define LSOF_CONFIGURE_CMDS
+ 	(cd $(@D) ; \
+ 		echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS)" \
+ 		LSOF_INCLUDE="$(STAGING_DIR)/usr/include" LSOF_CFLAGS_OVERRIDE=1 \
+-		LINUX_CLIB=-DGLIBCV=2 ./Configure linux)
++		LINUX_CLIB=-DGLIBCV=2 LSOF_CFGL="$(TARGET_LDFLAGS)" \
++		./Configure linux)
+ 	$(LSOF_CONFIGURE_WCHAR_FIXUPS)
+ 	$(LSOF_CONFIGURE_LOCALE_FIXUPS)
+ endef
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.24.0
