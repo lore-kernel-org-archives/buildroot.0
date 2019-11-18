@@ -1,33 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Nov 2019 14:01:08 +0100
-Subject: [Buildroot] [PATCH] package/intel-microcode: security bump to
- version 20191112
-In-Reply-To: <20191113161849.23872-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 13 Nov 2019 17:18:49 +0100")
-References: <20191113161849.23872-1-peter@korsgaard.com>
-Message-ID: <87wobxqqy3.fsf@dell.be.48ers.dk>
+Date: Mon, 18 Nov 2019 14:01:33 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/connman: clarify
+ license of client code
+Message-ID: <20191118125359.F0E1B812EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=74edc152b29ab1546ecad5495636e37c8a3561da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Contains mitigations for the following security vulnerabilities:
- > - CVE-2019-11135: Intel TSX Asynchronous Abort vulnerability:
- >   https://software.intel.com/security-software-guidance/insights/deep-dive-intel-transactional-synchronization-extensions-intel-tsx-asynchronous-abort
+While the core connman code is licensed under GPL-2.0, the client code is
+GPL-2.0+ for compatibility with readline (which is GPL-3.0+).
 
- > - CVE-2019-11139: Intel Xeon Scalable Processors Voltage Setting Modulation
- >   vulnerability:
- >   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00271.html
+Extend the _LICENSE with this info to clarify that linking against
+readline is OK licensing wise.
 
- > Release notes:
- > https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20191112
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 7d0ee8b4b8b162e010341f63821410100903370d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/connman/connman.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index b67d1c4b86..0431759440 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -39,6 +39,7 @@ define CONNMAN_INSTALL_INIT_SYSTEMD
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
++CONNMAN_LICENSE += , GPL-2.0+ (client)
+ CONNMAN_CONF_OPTS += --enable-client
+ CONNMAN_DEPENDENCIES += readline
+ 
