@@ -1,50 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Nov 2019 23:04:56 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ipsec-tools: add
- license information
-Message-ID: <20191119073224.C4DE58F2D5@busybox.osuosl.org>
+Date: Mon, 18 Nov 2019 23:06:30 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/lvm2: drop
+ optional readline dependency
+Message-ID: <20191119073224.CBD058F193@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73e6244a1b1ce66a46c290bd47ba3ba0ffec916d
+commit: https://git.buildroot.net/buildroot/commit/?id=a44834516b8b5afab5bb077779876d18ab2cf2ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-The tarball unfortunately does not include a dedicated license file, so
-instead use the main source file for the setkey command.
+lvm2 is licensed under GPL-2.0, which is not license compatible with
+readline (GPL-3.0+), so drop the optional dependency and add a comment
+explaining why.
+
+Notice: The readline support is only used when the raw lvm tool is called
+without arguments.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2dff01f24b07583221cf23e4d6213a14b9a33731)
+(cherry picked from commit be72d8c9e620d64a177c17a1611ecd9b3dfbdbcd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ipsec-tools/ipsec-tools.hash | 3 +++
- package/ipsec-tools/ipsec-tools.mk   | 2 ++
- 2 files changed, 5 insertions(+)
+ package/lvm2/lvm2.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/ipsec-tools/ipsec-tools.hash b/package/ipsec-tools/ipsec-tools.hash
-index b12bea9477..7a944eb8ee 100644
---- a/package/ipsec-tools/ipsec-tools.hash
-+++ b/package/ipsec-tools/ipsec-tools.hash
-@@ -1,3 +1,6 @@
- # From http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools/0.8.2/
- md5	d53ec14a0a3ece64e09e5e34b3350b41	ipsec-tools-0.8.2.tar.bz2
- sha1	7d92cae9fde59fb4f125636698c43b0a3df3d0f0	ipsec-tools-0.8.2.tar.bz2
-+
-+# Locally calculated
-+sha256	3f4af4aef0b2599928bee9875935b8fad8449ddbb98ea7da74c20c3dff5cdef7  src/setkey/setkey.c
-diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
-index 7ac6b5cb22..634d752661 100644
---- a/package/ipsec-tools/ipsec-tools.mk
-+++ b/package/ipsec-tools/ipsec-tools.mk
-@@ -7,6 +7,8 @@
- IPSEC_TOOLS_VERSION = 0.8.2
- IPSEC_TOOLS_SOURCE = ipsec-tools-$(IPSEC_TOOLS_VERSION).tar.bz2
- IPSEC_TOOLS_SITE = http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools/$(IPSEC_TOOLS_VERSION)
-+IPSEC_TOOLS_LICENSE = BSD-3-Clause
-+IPSEC_TOOLS_LICENSE_FILES = src/setkey/setkey.c
- IPSEC_TOOLS_INSTALL_STAGING = YES
- IPSEC_TOOLS_MAKE = $(MAKE1)
- IPSEC_TOOLS_DEPENDENCIES = openssl flex host-pkgconf host-flex host-bison
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 7fdb9a7e30..14575668a5 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -28,13 +28,8 @@ LVM2_DEPENDENCIES += host-pkgconf libaio
+ # take into account the toolchain passed at configure time.
+ LVM2_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
+ 
+-ifeq ($(BR2_PACKAGE_READLINE),y)
+-LVM2_DEPENDENCIES += readline
+-else
+-# v2.02.44: disable readline usage, or binaries are linked against provider
+-# of "tgetent" (=> ncurses) even if it's not used..
++# package/readline is GPL-3.0+, so not license compatible
+ LVM2_CONF_OPTS += --disable-readline
+-endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ LVM2_CONF_OPTS += --enable-selinux
