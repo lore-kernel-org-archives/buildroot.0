@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Nov 2019 14:11:31 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/chrony: use
+Date: Mon, 18 Nov 2019 14:10:19 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/chrony: use
  libedit for command line editing
-Message-ID: <20191118130956.9CCAD8F194@busybox.osuosl.org>
+Message-ID: <20191118131001.BA9CA8F19B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c487d922f6b24f226f2c81c8921c3b428811fee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a780b420c61f9efdaaa05af5d32f4cebebf4f819
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 chrony is licensed under GPL-2.0, which is not license compatible with
 readline (GPL-3.0+), so remove the optional readline handling and replace
