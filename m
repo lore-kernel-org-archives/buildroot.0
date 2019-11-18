@@ -1,57 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Nov 2019 13:58:23 +0100
-Subject: [Buildroot] [git commit] package/libressl: bump to version 3.0.2
-In-Reply-To: <87v9rhsgff.fsf@dell.be.48ers.dk>
-References: <20191107210345.AE0CB8E9EF@busybox.osuosl.org>
- <87zhgtsjiq.fsf@dell.be.48ers.dk>
- <20191118090655.16ea0e92@windsurf.home>
- <87v9rhsgff.fsf@dell.be.48ers.dk>
-Message-ID: <20191118135823.22f45429@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Nov 2019 13:58:51 +0100
+Subject: [Buildroot] [PATCH] package/qt5wayland: fix installation with
+ Qt 5.6
+In-Reply-To: <20191110234916.1473-1-unixmania@gmail.com> (unixmania's message
+ of "Sun, 10 Nov 2019 20:49:16 -0300")
+References: <20191110234916.1473-1-unixmania@gmail.com>
+Message-ID: <875zjhs5mc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Nov 2019 10:05:24 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
 
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:  
-> 
->  > On Mon, 18 Nov 2019 08:58:37 +0100
->  > Peter Korsgaard <peter@korsgaard.com> wrote:  
-> 
->  >> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:    
->  >>   
->  >> > commit: https://git.buildroot.net/buildroot/commit/?id=26f42106e8acfd336d8e902da96cd2ac9e63c09d
->  >> > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master    
->  >>   
->  >> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->  >> > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>    
->  >>   
->  >> > [Thomas: cherry-picked to master as it fixes a build issue with the
->  >> > musl C library:
->  >> >  output/build/libressl-2.9.2/crypto/compat/getprogname_linux.c: In function __getprogname__:
->  >> >  output/build/libressl-2.9.2/crypto/compat/getprogname_linux.c:32:2:
->  >> > error: #error "Cannot emulate getprogname"
->  >> >  #error "Cannot emulate getprogname"]    
->  >> 
->  >> Hmm, where do you see that? We also still have 2.9.2 on 2019.08.x and I
->  >> don't see any build issues on the autobuilders:
->  >> 
->  >> http://autobuild.buildroot.net/?reason=libressl-%  
-> 
->  > The autobuilders are not testing libressl. Selecting libressl is part
->  > of a choice, and therefore not randomized by our autobuilders.  
-> 
-> Ahh yes, true. So presumably this should also be cherry picked for
-> 2019.08.x?
+ > From: Carlos Santos <unixmania@gmail.com>
+ > Install QtWayland only if the latest Qt version is selected. It does not
+ > exist in version 5.6.
 
-Yes, I would assume it is needed for 2019.08.x as well, but I have not
-tested if the build issue was really present.
+ > Signed-off-by: Carlos Santos <unixmania@gmail.com>
 
-Thomas
+Committed to 2019.08.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
