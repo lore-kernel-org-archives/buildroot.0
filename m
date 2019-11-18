@@ -1,55 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Nov 2019 14:10:19 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/chrony: use
- libedit for command line editing
-Message-ID: <20191118131001.BA9CA8F19B@busybox.osuosl.org>
+Date: Mon, 18 Nov 2019 14:07:28 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/dropwatch:
+ license is GPL-2.0+
+Message-ID: <20191118131001.B294A8F198@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a780b420c61f9efdaaa05af5d32f4cebebf4f819
+commit: https://git.buildroot.net/buildroot/commit/?id=05328554ec70bf32060de05dd75e4b9e4b871d3b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-chrony is licensed under GPL-2.0, which is not license compatible with
-readline (GPL-3.0+), so remove the optional readline handling and replace
-with libedit instead.
+Dropwatch links with readline, which is GPL-3.0+, so not compatible with
+GPL-2.0.  When asked about this, upstream has clarified that the license
+really is GPL-2.0+:
 
-While we are at it, also explicitly disable the libedit backend when not
-available.
+https://github.com/nhorman/dropwatch/issues/14
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[yann.morin.1998 at free.fr: add a coomet as suggested by Baruc]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit baadfbcc02298d03b7d532cb37eb31b26322d68b)
+Cc: Baruch Siach <baruch@tkos.co.il>
+(cherry picked from commit c074fade2c5cfde60c26003c25c05471d1e00c0f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/chrony/chrony.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/dropwatch/dropwatch.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index b5821b238d..00709e6f83 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -13,6 +13,7 @@ CHRONY_CONF_OPTS = \
- 	--host-system=Linux \
- 	--host-machine=$(BR2_ARCH) \
- 	--prefix=/usr \
-+	--without-readline \
- 	--without-tomcrypt
- 
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
-@@ -34,10 +35,10 @@ else
- CHRONY_CONF_OPTS += --without-seccomp
- endif
- 
--ifeq ($(BR2_PACKAGE_READLINE),y)
--CHRONY_DEPENDENCIES += readline
-+ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-+CHRONY_DEPENDENCIES += libedit
- else
--CHRONY_CONF_OPTS += --disable-readline
-+CHRONY_CONF_OPTS += --without-editline --disable-readline
- endif
- 
- # If pps-tools is available, build it before so the package can use it
+diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
+index 1af61458e0..769b4d4d38 100644
+--- a/package/dropwatch/dropwatch.mk
++++ b/package/dropwatch/dropwatch.mk
+@@ -7,7 +7,9 @@
+ DROPWATCH_VERSION = 1.5.1
+ DROPWATCH_SITE = $(call github,nhorman,dropwatch,v$(DROPWATCH_VERSION))
+ DROPWATCH_DEPENDENCIES = libnl readline host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+-DROPWATCH_LICENSE = GPL-2.0
++# Until upstream updates their tree with a proper license
++# blurb: https://github.com/nhorman/dropwatch/issues/14
++DROPWATCH_LICENSE = GPL-2.0+
+ DROPWATCH_LICENSE_FILES = COPYING
+ # From git
+ DROPWATCH_AUTORECONF = YES
