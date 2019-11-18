@@ -1,36 +1,67 @@
-From: michal.lyszczek at bofc.pl <michal.lyszczek@bofc.pl>
-Date: Mon, 18 Nov 2019 19:11:13 +0100
-Subject: [Buildroot] USB on rock64
-In-Reply-To: <gYbwmuK12iczoJF4lBzTCVCt4DX12_SVF-aghiLMzD4CAwEAg1D8CIepuT9X89EJcalxmpDVDwN3nDwv50H-CLzPX1X-U3JZFtgbVmO_A5o=@protonmail.com>
-References: <Jrdyl_Hac9BdPOhYDWt4FafgynThsUwezL988o5hous9u1y2phHJn7RMUehQbousCfsFYXHqbVjj4ZHFSvj2GApa6f2ZNcnkUFIkzlcb5io=@protonmail.com>
- <2f439898-5420-2413-3b4e-533ab124682a@mind.be>
- <gYbwmuK12iczoJF4lBzTCVCt4DX12_SVF-aghiLMzD4CAwEAg1D8CIepuT9X89EJcalxmpDVDwN3nDwv50H-CLzPX1X-U3JZFtgbVmO_A5o=@protonmail.com>
-Message-ID: <20191118181113.3vi3zklvuibaxfk6@c-ml-p3510.redembedded.pl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 18 Nov 2019 19:06:45 +0000
+Subject: [Buildroot] [Bug 12326] New: network-manager build fails with
+ missing glib error
+Message-ID: <bug-12326-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello noone I know
-On 2019-11-18 14:16:28, no-one-you-know wrote:
-> > Have you tried with other devices? USB3 flash drives don't
-> > always work well in USB2 ports (yes, they should, but they
-> > don't...). A mouse is often a much better device for testing.
-> 
-> Hello - thanks for responding.
-> 
-> Yes, I tried with a USB2 flash drive and a USB keyboard.  Nothing
-> detected.  I'm reasonably confident it's the kernel rather than a
-> missing package because I used the same uboot/kernel with a
-> different rootfs and have the same behaviour.
+https://bugs.busybox.net/show_bug.cgi?id=12326
 
-I've just compiled rock64_defconfig from master and USB does ineed
-work, I checked USB3 and USB2 pendrives and keyboard but...
+            Bug ID: 12326
+           Summary: network-manager build fails with missing glib error
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: christian at paral.in
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Only 1 USB port seems to work - bottom USB2.0. I remember there
-were some issues with USB3 at the time I did the port, but cannot
-remember why the upper USB2 does not work, maybe some regulator is
-not enabled in default dtb?
+Buildroot 2019.11-rc1
+Network Manager 1.20.4
+Ubuntu 16.04.6 LTS Virtual Machine (on DigitalOcean)
 
-Try different USB port and see if that works.
+Build fails on network manager with:
+
+configure: error: Package requirements (gio-unix-2.0 >= 2.40 gmodule-2.0) were
+not met:
+
+Package 'gio-unix-2.0', required by 'virtual:world', not found
+Package 'gmodule-2.0', required by 'virtual:world', not found
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Reproduced on a colleague's desktop Ubuntu setup as well. Issue does not occur
+on earlier versions of Buildroot.
+
+Defconfig:
+
+BR2_x86_64=y
+BR2_x86_corei7=y
+BR2_CCACHE=y
+BR2_OPTIMIZE_2=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_KERNEL_HEADERS_5_3=y
+BR2_BINUTILS_VERSION_2_32_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_GCC_ENABLE_LTO=y
+BR2_GCC_ENABLE_GRAPHITE=y
+BR2_INIT_SYSTEMD=y
+BR2_SYSTEM_BIN_SH_BASH=y
+BR2_ENABLE_LOCALE_WHITELIST="C en_US en_US.UTF-8"
+BR2_GENERATE_LOCALE="en_US.UTF-8"
+BR2_PACKAGE_NETWORK_MANAGER=y
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
