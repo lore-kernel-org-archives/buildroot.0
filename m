@@ -1,71 +1,125 @@
-From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Mon, 18 Nov 2019 16:42:17 +0000
-Subject: [Buildroot] [PATCH v1] docs/manual/quickstart: Update output
- directory contents documentation.
-Message-ID: <20191118164217.14022-1-michael.drake@codethink.co.uk>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Mon, 18 Nov 2019 17:54:56 +0100
+Subject: [Buildroot] [Bug 12301] New: systemd-journal-gatewayd: config
+ options broken
+In-Reply-To: <1ac26a55-139e-294d-e5b4-7f3aeda3ac0f@mind.be>
+References: <bug-12301-163@https.bugs.busybox.net/>
+ <1ac26a55-139e-294d-e5b4-7f3aeda3ac0f@mind.be>
+Message-ID: <CAFvCimXCU9XaQ6=hWhjeeJ2aXWNWqM8RP9fXB8iGAVnSUGkN1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated the documentation for the output/host/ directory to mention
-that it contains the sysroot for the target toolchain, as well as the
-host tools required for running buildroot.
+I don't think it's a fallout of v243, i think it's a bug when adding that
+option.
 
-Updated the staging/ documentation to reflect that it is a link to
-the target toolchain sysroot in the host/ directory.
+the -Dremote option enables all three binaries (-upload, -gatwayd, -remote)
+and I don't see any way to enable them separately.
+* -upload allows the target to push log files to an http server
+* -gatewayd provides an http server on the target to provide the logs
+* -remote is used on the host to pull logs from the target or accept pushes
+from the target
 
-Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
----
- docs/manual/quickstart.txt | 28 +++++++++++++++-------------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+the description of the option is pretty clear : 'support for "journal over
+the network"'
 
-diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
-index 74158ae249..542b278603 100644
---- a/docs/manual/quickstart.txt
-+++ b/docs/manual/quickstart.txt
-@@ -87,15 +87,21 @@ This directory contains several subdirectories:
-   target). This directory contains one subdirectory for each of these
-   components.
- 
--* +staging/+ which contains a hierarchy similar to a root filesystem
--  hierarchy. This directory contains the headers and libraries of the
--  cross-compilation toolchain and all the userspace packages selected
--  for the target. However, this directory is 'not' intended to be
--  the root filesystem for the target: it contains a lot of development
--  files, unstripped binaries and libraries that make it far too big
--  for an embedded system. These development files are used to compile
--  libraries and applications for the target that depend on other
--  libraries.
-+* +host/+ contains both the tools built for the host, and the sysroot
-+  of the target toolchain. The former is an installation of tools
-+  compiled for the host that are needed for the proper execution of
-+  Buildroot, including the cross-compilation toolchain. The latter
-+  is a hierarchy similar to a root filesystem hierarchy. It contains
-+  the headers and libraries of all user-space packages that provide
-+  and install libraries used by other packages. However, this
-+  directory is 'not' intended to be the root filesystem for the target:
-+  it contains a lot of development files, unstripped binaries and
-+  libraries that make it far too big for an embedded system. These
-+  development files are used to compile libraries and applications for
-+  the target that depend on other libraries.
-+
-+* +staging/+ is a symlink to the target toolchain sysroot inside
-+  +host/+, which exists for backwards compatibility.
- 
- * +target/+ which contains 'almost' the complete root filesystem for
-   the target: everything needed is present except the device files in
-@@ -111,10 +117,6 @@ This directory contains several subdirectories:
-   development files (headers, etc.) are not present, the binaries are
-   stripped.
- 
--* +host/+ contains the installation of tools compiled for the host
--  that are needed for the proper execution of Buildroot, including the
--  cross-compilation toolchain.
--
- These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
- basic ones that allow to easily and quickly generate images fitting
- your needs, with all the features and applications you enabled.
+It does make sense to enable those three separately, but upstream does not
+support this. So we can
+1) drop the commit and stay with upstream granularity
+2) add our own patch to separate the three options
+
+I would recommend 1) for the next stable release, but i'm not sure how to
+deal with the long term
+
+The best approach is probably to push upstream to provide more granularity
+for the build system, but that is going to be quite a bit of work...
+
+
+Le mer. 30 oct. 2019 ? 22:07, Arnout Vandecappelle <arnout@mind.be> a
+?crit :
+
+>
+>
+> On 30/10/2019 14:02, bugzilla at busybox.net wrote:
+> > https://bugs.busybox.net/show_bug.cgi?id=12301
+> [snip]
+> > Commit 2dbce34b3a2c8fc1a854395f6c33df658371eae4 added a config option
+> > BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE to enable the systemd-journal-remote
+> > service.
+> >
+> > If it is selected the -Dremote=true flag gets explicitly set. If not it
+> is
+> > explicitly set to false.
+> >
+> > But as defined in the systemd config (see [0]) -Dremote=true is used to
+> enable
+> > systemd-journal-remote as well as systemd-journal-gatewayd. There is no
+> switch
+> > to only build one of them.
+>
+>  This is probably fallout from the bump to 243. James, could you have a
+> look?
+>
+>  Regards,
+>  Arnout
+>
+> >
+> > Further the default value of the -Dremote flag is true (see [1]).
+> >
+> > So previous to this commit both binaries are already built and installed
+> when
+> > BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY is set. I verfied this in my built
+> > 2019.05.1 image. Both binaries are there.
+> >
+> >
+> > As with this commit, when BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=Y and
+> > BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE=N is set -Dremote=false is explicitly
+> set
+> > and systemd builds neither of the binaries.
+> >
+> >
+> >
+> > So I would suggest to revert this commit as it breaks configs and adds no
+> > functionality.
+> > Also I would suggest to extend the description of
+> > BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY to include a mention of
+> > "systemd-journal-remote".
+> >
+> >
+> > Regards,
+> > Michael
+> >
+> > [0] https://github.com/systemd/systemd/blob/master/meson.build#L2207
+> > [1] https://github.com/systemd/systemd/blob/master/meson.build#L1253
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
 -- 
-2.20.1
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191118/367feb80/attachment.html>
