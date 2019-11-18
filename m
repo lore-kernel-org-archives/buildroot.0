@@ -1,74 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Nov 2019 21:15:31 +0100
-Subject: [Buildroot] [PATCH] package/libfcgi: bump to version 2.4.2
-In-Reply-To: <20191118125434.105949-1-louis.rannou@smile.fr>
-References: <20191118125434.105949-1-louis.rannou@smile.fr>
-Message-ID: <20191118211531.5322485f@windsurf.home>
+Date: Mon, 18 Nov 2019 21:16:26 +0100
+Subject: [Buildroot] [git commit] docs/manual/quickstart: update output
+ directory contents documentation
+Message-ID: <20191118200903.415878F1DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=728d6800bb0af0fcbd66db701412b1ad0572a5dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your contribution!
+Update the documentation for the output/host/ directory to mention
+that it contains the sysroot for the target toolchain, as well as the
+host tools required for running buildroot.
 
-On Mon, 18 Nov 2019 13:54:34 +0100
-Louis Rannou <louis.rannou@smile.fr> wrote:
+Update the staging/ documentation to reflect that it is a link to the
+target toolchain sysroot in the host/ directory.
 
-> FCGI is abandonned (https://repo.or.cz/fcgi2.git). Replace it by a maintained
-> fork (https://github.com/FastCGI-Archives/fcgi2).
-> 
-> Most of the patches are already in the latest version.
+Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/quickstart.txt | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-Ideally, it would be nice to have a more detailed description of the
-status of the patches, with for each patch that is removed, a link to
-the corresponding upstream commit.
-
-> diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
-> index 98aa2ecf8f..9c82bf1085 100644
-> --- a/package/libfcgi/libfcgi.hash
-> +++ b/package/libfcgi/libfcgi.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256	66fc45c6b36a21bf2fbbb68e90f780cc21a9da1fffbae75e76d2b4402d3f05b9	fcgi-2.4.0.tar.gz
-> +sha256	180ba6148fc56fedf60132600bdc444a5faf0618b1fede4d6462289b5d4cafff	libfcgi-2.4.2.tar.gz
-
-Are you sure about this hash ? Because when I applied your patch and
-try to build, I get:
-
-ERROR: libfcgi-2.4.2.tar.gz has wrong sha256 hash:
-ERROR: expected: 180ba6148fc56fedf60132600bdc444a5faf0618b1fede4d6462289b5d4cafff
-ERROR: got     : 1fe83501edfc3a7ec96bb1e69db3fd5ea1730135bd73ab152186fd0b437013bc
-
-Also, did you try building the reverse dependencies of libfcgi after
-this version bump? There's only 3 reverse dependencies, so it should be
-pretty easy to do a quick build. For example this defconfig:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.05.1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LUA=y
-BR2_PACKAGE_WSAPI_FCGI=y
-BR2_PACKAGE_BOINC=y
-BR2_PACKAGE_FCGIWRAP=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
+index 74158ae249..542b278603 100644
+--- a/docs/manual/quickstart.txt
++++ b/docs/manual/quickstart.txt
+@@ -87,15 +87,21 @@ This directory contains several subdirectories:
+   target). This directory contains one subdirectory for each of these
+   components.
+ 
+-* +staging/+ which contains a hierarchy similar to a root filesystem
+-  hierarchy. This directory contains the headers and libraries of the
+-  cross-compilation toolchain and all the userspace packages selected
+-  for the target. However, this directory is 'not' intended to be
+-  the root filesystem for the target: it contains a lot of development
+-  files, unstripped binaries and libraries that make it far too big
+-  for an embedded system. These development files are used to compile
+-  libraries and applications for the target that depend on other
+-  libraries.
++* +host/+ contains both the tools built for the host, and the sysroot
++  of the target toolchain. The former is an installation of tools
++  compiled for the host that are needed for the proper execution of
++  Buildroot, including the cross-compilation toolchain. The latter
++  is a hierarchy similar to a root filesystem hierarchy. It contains
++  the headers and libraries of all user-space packages that provide
++  and install libraries used by other packages. However, this
++  directory is 'not' intended to be the root filesystem for the target:
++  it contains a lot of development files, unstripped binaries and
++  libraries that make it far too big for an embedded system. These
++  development files are used to compile libraries and applications for
++  the target that depend on other libraries.
++
++* +staging/+ is a symlink to the target toolchain sysroot inside
++  +host/+, which exists for backwards compatibility.
+ 
+ * +target/+ which contains 'almost' the complete root filesystem for
+   the target: everything needed is present except the device files in
+@@ -111,10 +117,6 @@ This directory contains several subdirectories:
+   development files (headers, etc.) are not present, the binaries are
+   stripped.
+ 
+-* +host/+ contains the installation of tools compiled for the host
+-  that are needed for the proper execution of Buildroot, including the
+-  cross-compilation toolchain.
+-
+ These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
+ basic ones that allow to easily and quickly generate images fitting
+ your needs, with all the features and applications you enabled.
