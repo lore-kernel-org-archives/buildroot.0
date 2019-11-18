@@ -1,61 +1,52 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Mon, 18 Nov 2019 10:36:51 +0100
-Subject: [Buildroot] [PATCH 1/5] boot/optee-os: bump version to 3.7.0
-In-Reply-To: <0ab9971d-5da4-f3c9-d0d7-08ceb4b20c33@smile.fr>
-References: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
- <0ab9971d-5da4-f3c9-d0d7-08ceb4b20c33@smile.fr>
-Message-ID: <CAN5uoS_HYeUBtDZAySY8USYRtVwVtKpEPkH=m6DPmLx3sT6gDQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Nov 2019 10:42:02 +0100
+Subject: [Buildroot] [git commit] package/libressl: bump to version 3.0.2
+In-Reply-To: <87v9rhsgff.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Mon, 18 Nov 2019 10:05:24 +0100")
+References: <20191107210345.AE0CB8E9EF@busybox.osuosl.org>
+ <87zhgtsjiq.fsf@dell.be.48ers.dk>
+ <20191118090655.16ea0e92@windsurf.home>
+ <87v9rhsgff.fsf@dell.be.48ers.dk>
+Message-ID: <87r225seqd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Romain,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Sun, 17 Nov 2019 at 23:23, Romain Naour <romain.naour@smile.fr> wrote:
->
-> Hi Etienne,
->
-> Le 29/10/2019 ? 15:41, Etienne Carriere a ?crit :
-> > Bump OP-TEE OS package version to OP-TEE release 3.7.0.
-> >
-> > This adds host-python-pyelftools to optee-os dependencies
-> >
-> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > ---
->
-> There is a build issue with optee-os:
->
-> make[1]: Entering directory 'output/build/optee-os-3.7.0'
->   GEN     out/core/include/generated/arm32_sysreg.h
->   GEN     out/core/include/generated/arm32_sysreg.S
->   CHK     out/conf.mk
->   GEN     out/core/ta_pub_key.c
->   UPD     out/conf.mk
->   TOUCH   out/core/tee-pageable.bin
->   GEN     out/include/generated/arm32_user_sysreg.h
-> Traceback (most recent call last):
->   File "scripts/pem_to_pub_c.py", line 61, in <module>
->     main()
->   File "scripts/pem_to_pub_c.py", line 24, in main
->     from Crypto.PublicKey import RSA
-> ImportError: No module named 'Crypto'
-> mk/subdir.mk:159: recipe for target 'out/core/ta_pub_key.c' failed
->
-> I would add host-python-pycrypto in the dependencies.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+ >> On Mon, 18 Nov 2019 08:58:37 +0100
+ >> Peter Korsgaard <peter@korsgaard.com> wrote:
 
-I'm surprised as the patch adds host-python-pyelftools to
-OPTEE_OS_DEPENDENCIES which already specifies host-python-pycrypto:
+ >>> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:  
+ >>> 
+ >>> > commit: https://git.buildroot.net/buildroot/commit/?id=26f42106e8acfd336d8e902da96cd2ac9e63c09d
+ >>> > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master  
+ >>> 
+ >>> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+ >>> > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>  
+ >>> 
+ >>> > [Thomas: cherry-picked to master as it fixes a build issue with the
+ >>> > musl C library:
+ >>> >  output/build/libressl-2.9.2/crypto/compat/getprogname_linux.c: In function __getprogname__:
+ >>> >  output/build/libressl-2.9.2/crypto/compat/getprogname_linux.c:32:2:
+ >>> > error: #error "Cannot emulate getprogname"
+ >>> >  #error "Cannot emulate getprogname"]  
+ >>> 
+ >>> Hmm, where do you see that? We also still have 2.9.2 on 2019.08.x and I
+ >>> don't see any build issues on the autobuilders:
+ >>> 
+ >>> http://autobuild.buildroot.net/?reason=libressl-%
 
-> > -OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto
-> > +OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto host-python-pyelftools
+ >> The autobuilders are not testing libressl. Selecting libressl is part
+ >> of a choice, and therefore not randomized by our autobuilders.
 
-Did I miss something?
+ > Ahh yes, true. So presumably this should also be cherry picked for
+ > 2019.08.x?
 
-Regards,
-Etienne
+Verified. Committed to 2019.08.x, thanks.
 
->
-> Best regards,
-> Romain
+-- 
+Bye, Peter Korsgaard
