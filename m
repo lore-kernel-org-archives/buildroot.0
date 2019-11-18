@@ -1,37 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Nov 2019 13:42:21 +0100
-Subject: [Buildroot] 
- =?utf-8?q?=5BPATCH=5D_DEVELOPERS=3A_add_Fran=C3=A7oi?=
- =?utf-8?q?s_Perrad_as_contact_for_olimex=5Fimx233=5Folinuxino=5Fdefconfig?=
-In-Reply-To: <20191108221533.53322d99@windsurf> (Thomas Petazzoni's message of
- "Fri, 8 Nov 2019 22:15:33 +0100")
-References: <20190811120739.26539-11-thomas.petazzoni@bootlin.com>
- <20191108221533.53322d99@windsurf>
-Message-ID: <87mucts6du.fsf@dell.be.48ers.dk>
+Date: Mon, 18 Nov 2019 13:50:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jailhouse: python scripts needs
+ python-mako
+In-Reply-To: <20191109213352.13020-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 9 Nov 2019 22:33:52 +0100")
+References: <20191109213352.13020-1-fontaine.fabrice@gmail.com>
+Message-ID: <87imnhs60u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > On Sun, 11 Aug 2019 14:07:32 +0200
- > Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+ > jailhouse-config-create script needs python-mako, see
+ > https://github.com/siemens/jailhouse/commit/5c7f2c4c30f19aa7eb95dffa7b7bb92393c09ba7
 
- >> Fran?ois has regularly updated this defconfig in the last few years,
- >> so it makes sense to have him as a contact for it.
- >> 
- >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- >> Cc: Francois Perrad <francois.perrad@gadz.org>
- >> ---
- >> Fran?ois, could you reply with an Acked-by, if you're fine with this?
- >> Thanks!
- >> ---
- >> DEVELOPERS | 2 ++
- >> 1 file changed, 2 insertions(+)
+ > Moreover jailhouse-config-create needs host-python-mako to build
+ > jailhouse-config-collect
 
-Committed to 2019.02.x and 2019.08.x, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2019.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
