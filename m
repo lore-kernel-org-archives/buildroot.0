@@ -1,80 +1,85 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 18 Nov 2019 10:48:16 +0100
-Subject: [Buildroot] [PATCH 1/5] boot/optee-os: bump version to 3.7.0
-In-Reply-To: <CAN5uoS_HYeUBtDZAySY8USYRtVwVtKpEPkH=m6DPmLx3sT6gDQ@mail.gmail.com>
-References: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
- <0ab9971d-5da4-f3c9-d0d7-08ceb4b20c33@smile.fr>
- <CAN5uoS_HYeUBtDZAySY8USYRtVwVtKpEPkH=m6DPmLx3sT6gDQ@mail.gmail.com>
-Message-ID: <6eeec682-51a6-0ddd-310d-8bcda3d54557@smile.fr>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Mon, 18 Nov 2019 12:01:56 +0000
+Subject: [Buildroot] [PATCH] toolchain-external: Introduce gdb_copy
+ option
+In-Reply-To: <20191118091144.1407b93b@windsurf.home>
+References: <20191118080047.22036-1-Evgeniy.Didin@synopsys.com>,
+ <20191118091144.1407b93b@windsurf.home>
+Message-ID: <DM6PR12MB2876311450E0AA31BC3CA84CD94D0@DM6PR12MB2876.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Etienne,
+Hi Thomas,
 
-Le 18/11/2019 ? 10:36, Etienne Carriere a ?crit?:
-> Hello Romain,
-> 
-> On Sun, 17 Nov 2019 at 23:23, Romain Naour <romain.naour@smile.fr> wrote:
->>
->> Hi Etienne,
->>
->> Le 29/10/2019 ? 15:41, Etienne Carriere a ?crit :
->>> Bump OP-TEE OS package version to OP-TEE release 3.7.0.
->>>
->>> This adds host-python-pyelftools to optee-os dependencies
->>>
->>> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
->>> ---
->>
->> There is a build issue with optee-os:
->>
->> make[1]: Entering directory 'output/build/optee-os-3.7.0'
->>   GEN     out/core/include/generated/arm32_sysreg.h
->>   GEN     out/core/include/generated/arm32_sysreg.S
->>   CHK     out/conf.mk
->>   GEN     out/core/ta_pub_key.c
->>   UPD     out/conf.mk
->>   TOUCH   out/core/tee-pageable.bin
->>   GEN     out/include/generated/arm32_user_sysreg.h
->> Traceback (most recent call last):
->>   File "scripts/pem_to_pub_c.py", line 61, in <module>
->>     main()
->>   File "scripts/pem_to_pub_c.py", line 24, in main
->>     from Crypto.PublicKey import RSA
->> ImportError: No module named 'Crypto'
->> mk/subdir.mk:159: recipe for target 'out/core/ta_pub_key.c' failed
->>
->> I would add host-python-pycrypto in the dependencies.
-> 
-> I'm surprised as the patch adds host-python-pyelftools to
-> OPTEE_OS_DEPENDENCIES which already specifies host-python-pycrypto:
+Using prebuilt toolchain besides the speedup of build has another advantage - in most cases that toolchain was well tested
+and guaranteed to work stable. And without copything the prebuilt GDB debugger to target we need to build it from sources,
+which version is defined in package/gdb and most likely is different to prebuilt toolchain version. gdbserver ver. XXX may not be
+able to work with GDB ver. YYY.
 
-Ok
+In our case we have dynamically linked minimalistic GDB with only Libc components dependencies:
+--------------------------------8<--------------------------------
+ $ arc-linux-objdump  -hx gdb | grep  NEEDED
+  NEEDED               libdl.so.2
+  NEEDED               libstdc++.so.6
+  NEEDED               libm.so.6
+  NEEDED               libgcc_s.so.1
+  NEEDED               libc.so.6
+-------------------------------->8--------------------------------
 
-> 
->>> -OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto
->>> +OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto host-python-pyelftools
-> 
-> Did I miss something?
+In linaro/arm/mips toolchains there is no prebuilt GDB debugger,
+so I guess we should add additional  conditional "depends on BR2_arc".
+Will it be acceptable?
 
-The issue has been detected by the gitlab CI
-https://gitlab.com/buildroot.org/buildroot/-/jobs/352841047
-
-Are we sure to use the correct python interpreter ?
-Maybe we have to provide the path to output/host/bin/python otherwise it will
-use /usr/bin/python ?
 
 Best regards,
-Romain
+Evgeniy Didin
 
+________________________________
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Sent: Monday, November 18, 2019 11:11 AM
+To: Evgeniy Didin <didin@synopsys.com>
+Cc: buildroot at busybox.net <buildroot@busybox.net>; arc-buildroot at synopsys.com <arc-buildroot@synopsys.com>
+Subject: Re: [PATCH] toolchain-external: Introduce gdb_copy option
 
-> 
-> Regards,
-> Etienne
-> 
->>
->> Best regards,
->> Romain
+Hello,
+
+On Mon, 18 Nov 2019 11:00:47 +0300
+Evgeniy Didin <Evgeniy.Didin@synopsys.com> wrote:
+
+> Some prebuilt toolchains provide full gdb debugger for a target as
+> well as gdbserver. Lets add separate option for gdb the same way as
+> it was done for gdbserver. With this change there will be no need
+> to build gdb package, this will reduce build time.
+>
+> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: arc-buildroot at synopsys.com
+
+Thanks for your contribution and proposal. However, I'm wondering if
+this really works properly in the general case. Indeed, gdb is often
+linked against additional libraries: ncurses, expat, python, zlib,
+lzma, etc.
+
+Here you are only copying the gdb binary itself, but not the libraries
+it might depend on. But even if you were copying those libraries, they
+would potentially conflict with the ones built by Buildroot.
+
+So I'm not sure if there's really a good way to re-use a gdb built by
+an external toolchain.
+
+In your specific case, is the gdb binary statically linked ? Or at
+least statically linked against all libraries except the C library ?
+
+Best regards,
+
+Thomas
+--
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://urldefense.proofpoint.com/v2/url?u=https-3A__bootlin.com&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=vQk-RIbjwN0zvlwiMSpq3LYUTNf7Gqc4ujhosYITtAw&m=SXU3CLEFC_hZpwD_KK6WpxW8OHqUqDky3Xlk5lP1YnE&s=mzhhB4FhsPlQsOUtfTztvQS-aUwyPOSc36awKfu1hpU&e=
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191118/ca398614/attachment.html>
