@@ -1,28 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Nov 2019 22:15:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-hiredis: Bump to 1.0.1
-In-Reply-To: <20191118204216.1104-1-grzegorz@blach.pl>
-References: <20191118204216.1104-1-grzegorz@blach.pl>
-Message-ID: <20191118221537.2b2f15ad@windsurf.home>
+Date: Mon, 18 Nov 2019 22:16:12 +0100
+Subject: [Buildroot] [git commit] package/domoticz: fix build with jsoncpp
+Message-ID: <20191118210843.4CC608F226@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Nov 2019 20:42:16 +0000
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ee7acf2af338a863080cf1542538869d1296d53f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  package/python-hiredis/python-hiredis.hash | 4 ++--
->  package/python-hiredis/python-hiredis.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+domoticz embeds its own version of jsoncpp that can clash with upstream
+jsoncpp so retrieve upstream commit that fix this issue
 
-Applied to next, thanks.
+Build failures started after jsoncpp bumps from 1.8.4 to 1.9.1
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/a73406eb780a454369ea997654b6b4c6b3757a41
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...not-confuse-local-files-with-system-files.patch | 76 ++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+
+diff --git a/package/domoticz/0005-Fix-include-paths-to-not-confuse-local-files-with-system-files.patch b/package/domoticz/0005-Fix-include-paths-to-not-confuse-local-files-with-system-files.patch
+new file mode 100644
+index 0000000000..63da572b65
+--- /dev/null
++++ b/package/domoticz/0005-Fix-include-paths-to-not-confuse-local-files-with-system-files.patch
+@@ -0,0 +1,76 @@
++From 23f69284cb1ce1a98885b29a6126ebdbee735e7d Mon Sep 17 00:00:00 2001
++From: Daniel Wallner <14888585+danielwallner@users.noreply.github.com>
++Date: Thu, 17 Oct 2019 07:31:43 +0200
++Subject: [PATCH] Fix include paths to not confuse local files with system
++ files (json/json.h) (#3669)
++
++[Retrieved from:
++https://github.com/domoticz/domoticz/commit/23f69284cb1ce1a98885b29a6126ebdbee735e7d]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ hardware/1Wire/1WireForWindows.cpp   |  2 +-
++ hardware/plugins/PluginManager.cpp   | 16 ++++++++--------
++ hardware/plugins/PluginProtocols.cpp |  8 ++++----
++ 3 files changed, 13 insertions(+), 13 deletions(-)
++
++diff --git a/hardware/1Wire/1WireForWindows.cpp b/hardware/1Wire/1WireForWindows.cpp
++index cf0b42795d..2044882fb9 100644
++--- a/hardware/1Wire/1WireForWindows.cpp
+++++ b/hardware/1Wire/1WireForWindows.cpp
++@@ -4,7 +4,7 @@
++ #include "1WireForWindows.h"
++ #include "../../main/Logger.h"
++ #include <boost/optional.hpp>
++-#include "../json/json.h"
+++#include "../../json/json.h"
++ #include <WS2tcpip.h>
++ 
++ #define _1WIRE_SERVICE_PORT "1664"
++diff --git a/hardware/plugins/PluginManager.cpp b/hardware/plugins/PluginManager.cpp
++index 793934121e..4276fe2fbc 100644
++--- a/hardware/plugins/PluginManager.cpp
+++++ b/hardware/plugins/PluginManager.cpp
++@@ -14,14 +14,14 @@
++ #include "PluginMessages.h"
++ #include "PluginTransports.h"
++ 
++-#include "../main/Helper.h"
++-#include "../main/Logger.h"
++-#include "../main/SQLHelper.h"
++-#include "../main/WebServer.h"
++-#include "../main/mainworker.h"
++-#include "../main/EventSystem.h"
++-#include "../json/json.h"
++-#include "../main/localtime_r.h"
+++#include "../../main/Helper.h"
+++#include "../../main/Logger.h"
+++#include "../../main/SQLHelper.h"
+++#include "../../main/WebServer.h"
+++#include "../../main/mainworker.h"
+++#include "../../main/EventSystem.h"
+++#include "../../json/json.h"
+++#include "../../main/localtime_r.h"
++ #ifdef WIN32
++ #	include <direct.h>
++ #else
++diff --git a/hardware/plugins/PluginProtocols.cpp b/hardware/plugins/PluginProtocols.cpp
++index f19731e1a4..8b1ae4c3e7 100644
++--- a/hardware/plugins/PluginProtocols.cpp
+++++ b/hardware/plugins/PluginProtocols.cpp
++@@ -7,12 +7,12 @@
++ 
++ #include "PluginMessages.h"
++ #include "PluginProtocols.h"
++-#include "../main/Helper.h"
++-#include "../main/Logger.h"
++-#include "../webserver/Base64.h"
+++#include "../../main/Helper.h"
+++#include "../../main/Logger.h"
+++#include "../../webserver/Base64.h"
++ #include "icmp_header.hpp"
++ #include "ipv4_header.hpp"
++-#include "../json/json.h"
+++#include "../../json/json.h"
++ 
++ namespace Plugins {
++ 
