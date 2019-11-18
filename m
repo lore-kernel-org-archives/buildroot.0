@@ -1,125 +1,89 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Mon, 18 Nov 2019 17:54:56 +0100
-Subject: [Buildroot] [Bug 12301] New: systemd-journal-gatewayd: config
- options broken
-In-Reply-To: <1ac26a55-139e-294d-e5b4-7f3aeda3ac0f@mind.be>
-References: <bug-12301-163@https.bugs.busybox.net/>
- <1ac26a55-139e-294d-e5b4-7f3aeda3ac0f@mind.be>
-Message-ID: <CAFvCimXCU9XaQ6=hWhjeeJ2aXWNWqM8RP9fXB8iGAVnSUGkN1Q@mail.gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon, 18 Nov 2019 18:34:50 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/stm32mp157c_dk2: disable mkfs
+ metadata_csum and dir_index options
+In-Reply-To: <420d175c-4476-c7f7-1ce8-c468a9b1a2d2@mind.be>
+References: <20191103115017.788940-1-b.bilas@grinn-global.com>
+ <20191109152205.0bd1b924@windsurf>
+ <0a7b32f7-65bf-98dd-64cd-7a663518479a@grinn-global.com>
+ <420d175c-4476-c7f7-1ce8-c468a9b1a2d2@mind.be>
+Message-ID: <f9967508-6a9b-aaaf-cbe0-4250f4445b2d@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I don't think it's a fallout of v243, i think it's a bug when adding that
-option.
+Hello guys,
 
-the -Dremote option enables all three binaries (-upload, -gatwayd, -remote)
-and I don't see any way to enable them separately.
-* -upload allows the target to push log files to an http server
-* -gatewayd provides an http server on the target to provide the logs
-* -remote is used on the host to pull logs from the target or accept pushes
-from the target
-
-the description of the option is pretty clear : 'support for "journal over
-the network"'
-
-It does make sense to enable those three separately, but upstream does not
-support this. So we can
-1) drop the commit and stay with upstream granularity
-2) add our own patch to separate the three options
-
-I would recommend 1) for the next stable release, but i'm not sure how to
-deal with the long term
-
-The best approach is probably to push upstream to provide more granularity
-for the build system, but that is going to be quite a bit of work...
-
-
-Le mer. 30 oct. 2019 ? 22:07, Arnout Vandecappelle <arnout@mind.be> a
-?crit :
-
+On 17.11.2019 20:31, Arnout Vandecappelle wrote:
+>
+> On 09/11/2019 16:25, Bartosz Bilas wrote:
+>> Hello Thomas,
+>>
+>> On 09.11.2019 15:22, Thomas Petazzoni wrote:
+>>> Hello Bartosz,
+>>>
+>>> On Sun,? 3 Nov 2019 12:50:16 +0100
+>>> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+>>>
+>>>> To solve issue with non-possibilities to mount rootfs partition we
+>>>> should disable a new mkfs features such as metadata_csum and
+>>>> dir_index because there is incompatibility with these options.
+>>>>
+>>>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+>>>> ---
+>>>>  ? configs/stm32mp157c_dk2_defconfig | 1 +
+>>>>  ? 1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/configs/stm32mp157c_dk2_defconfig
+>>>> b/configs/stm32mp157c_dk2_defconfig
+>>>> index a1e61d752d..ba044e5e55 100644
+>>>> --- a/configs/stm32mp157c_dk2_defconfig
+>>>> +++ b/configs/stm32mp157c_dk2_defconfig
+>>>> @@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>>>>  ? BR2_TARGET_ROOTFS_EXT2=y
+>>>>  ? BR2_TARGET_ROOTFS_EXT2_4=y
+>>>>  ? BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>>>> +BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^64bit,^metadata_csum,^dir_index"
+>>> Are you sure it is necessary to disable those three options?
+>>>
+>>> Indeed, U-Boot ext4 write support clearly excludes filesystems that
+>>> have the metadata_csum option enabled:
+>>>
+>>>  ?? https://gitlab.denx.de/u-boot/u-boot/blob/master/fs/ext4/ext4_write.c#L880
+>>> However, there's nothing about the 64bit and dir_index options. How did
+>>> you conclude that they were causing problems? Did you try with just -O
+>>> ^metadata_csum ?
+>> I was talking with the maintainer of that board on U-Boot mailing list [1] and
+>> he said that I should disable those 2 options (dir_index and metada_csum) to
+>> have U-Boot working properly. I'm not sure about 64bit because I saw that was
+>> set by default in buildroot. I didn't check that with metadata_csum option only
+>> but I'll do that and let you know if it works.
+>   As explained in the help text of the option:
+>
+>            The default is "-O ^64bit", i.e. disable 64-bit filesystem
+>            support. This default value has been chosen because U-Boot
+>            versions before 2017.02 don't support this filesystem
+>            option: using it may make the filesystem unreadable by
+>            U-Boot.
+>
+>   Since this defconfig uses a more recent U-Boot, it's not necessary.
+>
+>   That said, if those two options should be disabled for U-Boot to work, it's
+> probably a good idea to add them to the defaults (i.e. all three options, like
+> you put in the defconfig here).
+I've checked if it worked with disabled metadata_csum option only and it 
+turns out that Thomas is right. Kernel is able to mount rootfs partition 
+properly even if I do any environment operation in U-Boot. So it means 
+that the default 64bit option is not necessary as well.
+>
+>   Regards,
+>   Arnout
 >
 >
-> On 30/10/2019 14:02, bugzilla at busybox.net wrote:
-> > https://bugs.busybox.net/show_bug.cgi?id=12301
-> [snip]
-> > Commit 2dbce34b3a2c8fc1a854395f6c33df658371eae4 added a config option
-> > BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE to enable the systemd-journal-remote
-> > service.
-> >
-> > If it is selected the -Dremote=true flag gets explicitly set. If not it
-> is
-> > explicitly set to false.
-> >
-> > But as defined in the systemd config (see [0]) -Dremote=true is used to
-> enable
-> > systemd-journal-remote as well as systemd-journal-gatewayd. There is no
-> switch
-> > to only build one of them.
 >
->  This is probably fallout from the bump to 243. James, could you have a
-> look?
->
->  Regards,
->  Arnout
->
-> >
-> > Further the default value of the -Dremote flag is true (see [1]).
-> >
-> > So previous to this commit both binaries are already built and installed
-> when
-> > BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY is set. I verfied this in my built
-> > 2019.05.1 image. Both binaries are there.
-> >
-> >
-> > As with this commit, when BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=Y and
-> > BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE=N is set -Dremote=false is explicitly
-> set
-> > and systemd builds neither of the binaries.
-> >
-> >
-> >
-> > So I would suggest to revert this commit as it breaks configs and adds no
-> > functionality.
-> > Also I would suggest to extend the description of
-> > BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY to include a mention of
-> > "systemd-journal-remote".
-> >
-> >
-> > Regards,
-> > Michael
-> >
-> > [0] https://github.com/systemd/systemd/blob/master/meson.build#L2207
-> > [1] https://github.com/systemd/systemd/blob/master/meson.build#L1253
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
--- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191118/367feb80/attachment.html>
+>   Regards,
+>   Arnout
+Best
+Bartek
