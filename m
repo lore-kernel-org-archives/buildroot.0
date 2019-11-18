@@ -1,53 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Nov 2019 10:42:16 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/libressl: bump to
- version 3.0.2
-Message-ID: <20191118093447.B1C3D8F14D@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 18 Nov 2019 10:48:16 +0100
+Subject: [Buildroot] [PATCH 1/5] boot/optee-os: bump version to 3.7.0
+In-Reply-To: <CAN5uoS_HYeUBtDZAySY8USYRtVwVtKpEPkH=m6DPmLx3sT6gDQ@mail.gmail.com>
+References: <f25cf981ca8a67c30ac2b994980a9f26aceb1dd2.1572355772.git.etienne.carriere@linaro.org>
+ <0ab9971d-5da4-f3c9-d0d7-08ceb4b20c33@smile.fr>
+ <CAN5uoS_HYeUBtDZAySY8USYRtVwVtKpEPkH=m6DPmLx3sT6gDQ@mail.gmail.com>
+Message-ID: <6eeec682-51a6-0ddd-310d-8bcda3d54557@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c18f255b9b4ec64da0fa11c7bc764817127520f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Hello Etienne,
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Le 18/11/2019 ? 10:36, Etienne Carriere a ?crit?:
+> Hello Romain,
+> 
+> On Sun, 17 Nov 2019 at 23:23, Romain Naour <romain.naour@smile.fr> wrote:
+>>
+>> Hi Etienne,
+>>
+>> Le 29/10/2019 ? 15:41, Etienne Carriere a ?crit :
+>>> Bump OP-TEE OS package version to OP-TEE release 3.7.0.
+>>>
+>>> This adds host-python-pyelftools to optee-os dependencies
+>>>
+>>> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+>>> ---
+>>
+>> There is a build issue with optee-os:
+>>
+>> make[1]: Entering directory 'output/build/optee-os-3.7.0'
+>>   GEN     out/core/include/generated/arm32_sysreg.h
+>>   GEN     out/core/include/generated/arm32_sysreg.S
+>>   CHK     out/conf.mk
+>>   GEN     out/core/ta_pub_key.c
+>>   UPD     out/conf.mk
+>>   TOUCH   out/core/tee-pageable.bin
+>>   GEN     out/include/generated/arm32_user_sysreg.h
+>> Traceback (most recent call last):
+>>   File "scripts/pem_to_pub_c.py", line 61, in <module>
+>>     main()
+>>   File "scripts/pem_to_pub_c.py", line 24, in main
+>>     from Crypto.PublicKey import RSA
+>> ImportError: No module named 'Crypto'
+>> mk/subdir.mk:159: recipe for target 'out/core/ta_pub_key.c' failed
+>>
+>> I would add host-python-pycrypto in the dependencies.
+> 
+> I'm surprised as the patch adds host-python-pyelftools to
+> OPTEE_OS_DEPENDENCIES which already specifies host-python-pycrypto:
 
-[Thomas: cherry-picked to master as it fixes a build issue with the
-musl C library:
- output/build/libressl-2.9.2/crypto/compat/getprogname_linux.c: In function ???getprogname???:
- output/build/libressl-2.9.2/crypto/compat/getprogname_linux.c:32:2: error: #error "Cannot emulate getprogname"
- #error "Cannot emulate getprogname"]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 26f42106e8acfd336d8e902da96cd2ac9e63c09d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Ok
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index e3e5dbe00b..fcecc2b434 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256 c4c78167fae325b47aebd8beb54b6041d6f6a56b3743f4bd5d79b15642f9d5d4  libressl-2.9.2.tar.gz
-+sha256 df7b172bf79b957dd27ef36dcaa1fb162562c0e8999e194aa8c1a3df2f15398e  libressl-3.0.2.tar.gz
- # Locally computed
- sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index 2d0f6fc50f..c2491bb3a9 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRESSL_VERSION = 2.9.2
-+LIBRESSL_VERSION = 3.0.2
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+> 
+>>> -OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto
+>>> +OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto host-python-pyelftools
+> 
+> Did I miss something?
+
+The issue has been detected by the gitlab CI
+https://gitlab.com/buildroot.org/buildroot/-/jobs/352841047
+
+Are we sure to use the correct python interpreter ?
+Maybe we have to provide the path to output/host/bin/python otherwise it will
+use /usr/bin/python ?
+
+Best regards,
+Romain
+
+
+> 
+> Regards,
+> Etienne
+> 
+>>
+>> Best regards,
+>> Romain
