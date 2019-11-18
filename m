@@ -1,59 +1,108 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Nov 2019 21:20:28 +0100
-Subject: [Buildroot] [git commit] package/redis: bump to 5.0.6
-Message-ID: <20191118201632.AC4228F1E6@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 18 Nov 2019 21:24:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/domoticz: fix build with jsoncpp
+Message-ID: <20191118202452.394708-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43683d2d9bf2cf3117033d25bd9b2c7d0328e4ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+domoticz embeds its own version of jsoncpp that can clash with upstream
+jsoncpp so retrieve upstream commit that fix this issue
 
-The release notes at
-https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES
-say:
+Build failures started after jsoncpp bumps from 1.8.4 to 1.9.1
 
-==
-Upgrade urgency CRITICAL: Only in case of exposed instances to untrusted users.
+Fixes:
+ - http://autobuild.buildroot.org/results/a73406eb780a454369ea997654b6b4c6b3757a41
 
-This Redis release, 5.0.6, is a bugfix and enhancement release. The most
-important bugfix is a corruption related to the HyperLogLog. A malformed
-HyperLogLog string could cause an invalid access to the memory. At a first
-glance the vulnerability appears to be not exploitable but just a DoS. The
-way to trigger the issue is complex, we'll not provide any information about
-how to do that for the users safety.
-==
-
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...onfuse-local-files-with-system-files.patch | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 package/domoticz/0005-Fix-include-paths-to-not-confuse-local-files-with-system-files.patch
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 391b227ed1..aca1109d30 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256 2139009799d21d8ff94fc40b7f36ac46699b9e1254086299f8d3b223ca54a375  redis-5.0.5.tar.gz
-+sha256 6624841267e142c5d5d5be292d705f8fb6070677687c5aad1645421a936d22b3  redis-5.0.6.tar.gz
- 
- # Locally calculated
- sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index a321eb9347..4ed90a749e 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 5.0.5
-+REDIS_VERSION = 5.0.6
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+diff --git a/package/domoticz/0005-Fix-include-paths-to-not-confuse-local-files-with-system-files.patch b/package/domoticz/0005-Fix-include-paths-to-not-confuse-local-files-with-system-files.patch
+new file mode 100644
+index 0000000000..63da572b65
+--- /dev/null
++++ b/package/domoticz/0005-Fix-include-paths-to-not-confuse-local-files-with-system-files.patch
+@@ -0,0 +1,76 @@
++From 23f69284cb1ce1a98885b29a6126ebdbee735e7d Mon Sep 17 00:00:00 2001
++From: Daniel Wallner <14888585+danielwallner@users.noreply.github.com>
++Date: Thu, 17 Oct 2019 07:31:43 +0200
++Subject: [PATCH] Fix include paths to not confuse local files with system
++ files (json/json.h) (#3669)
++
++[Retrieved from:
++https://github.com/domoticz/domoticz/commit/23f69284cb1ce1a98885b29a6126ebdbee735e7d]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ hardware/1Wire/1WireForWindows.cpp   |  2 +-
++ hardware/plugins/PluginManager.cpp   | 16 ++++++++--------
++ hardware/plugins/PluginProtocols.cpp |  8 ++++----
++ 3 files changed, 13 insertions(+), 13 deletions(-)
++
++diff --git a/hardware/1Wire/1WireForWindows.cpp b/hardware/1Wire/1WireForWindows.cpp
++index cf0b42795d..2044882fb9 100644
++--- a/hardware/1Wire/1WireForWindows.cpp
+++++ b/hardware/1Wire/1WireForWindows.cpp
++@@ -4,7 +4,7 @@
++ #include "1WireForWindows.h"
++ #include "../../main/Logger.h"
++ #include <boost/optional.hpp>
++-#include "../json/json.h"
+++#include "../../json/json.h"
++ #include <WS2tcpip.h>
++ 
++ #define _1WIRE_SERVICE_PORT "1664"
++diff --git a/hardware/plugins/PluginManager.cpp b/hardware/plugins/PluginManager.cpp
++index 793934121e..4276fe2fbc 100644
++--- a/hardware/plugins/PluginManager.cpp
+++++ b/hardware/plugins/PluginManager.cpp
++@@ -14,14 +14,14 @@
++ #include "PluginMessages.h"
++ #include "PluginTransports.h"
++ 
++-#include "../main/Helper.h"
++-#include "../main/Logger.h"
++-#include "../main/SQLHelper.h"
++-#include "../main/WebServer.h"
++-#include "../main/mainworker.h"
++-#include "../main/EventSystem.h"
++-#include "../json/json.h"
++-#include "../main/localtime_r.h"
+++#include "../../main/Helper.h"
+++#include "../../main/Logger.h"
+++#include "../../main/SQLHelper.h"
+++#include "../../main/WebServer.h"
+++#include "../../main/mainworker.h"
+++#include "../../main/EventSystem.h"
+++#include "../../json/json.h"
+++#include "../../main/localtime_r.h"
++ #ifdef WIN32
++ #	include <direct.h>
++ #else
++diff --git a/hardware/plugins/PluginProtocols.cpp b/hardware/plugins/PluginProtocols.cpp
++index f19731e1a4..8b1ae4c3e7 100644
++--- a/hardware/plugins/PluginProtocols.cpp
+++++ b/hardware/plugins/PluginProtocols.cpp
++@@ -7,12 +7,12 @@
++ 
++ #include "PluginMessages.h"
++ #include "PluginProtocols.h"
++-#include "../main/Helper.h"
++-#include "../main/Logger.h"
++-#include "../webserver/Base64.h"
+++#include "../../main/Helper.h"
+++#include "../../main/Logger.h"
+++#include "../../webserver/Base64.h"
++ #include "icmp_header.hpp"
++ #include "ipv4_header.hpp"
++-#include "../json/json.h"
+++#include "../../json/json.h"
++ 
++ namespace Plugins {
++ 
+-- 
+2.24.0
