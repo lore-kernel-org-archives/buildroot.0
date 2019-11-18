@@ -1,38 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Nov 2019 23:22:29 +0100
-Subject: [Buildroot] [PATCH v3] package/qemu: add host-python as an
- explicit dependency
-In-Reply-To: <20191115201908.8216-1-avraham.shukron@gmail.com>
-References: <20191112220534.531a470f@windsurf>
- <20191115201908.8216-1-avraham.shukron@gmail.com>
-Message-ID: <20191118232229.10a4f929@windsurf.home>
+Date: Mon, 18 Nov 2019 23:23:28 +0100
+Subject: [Buildroot] [PATCH 2/5] package/gdk-pixbuf: add gio to
+ Requires.private
+In-Reply-To: <20191114191321.11789-2-fontaine.fabrice@gmail.com>
+References: <20191114191321.11789-1-fontaine.fabrice@gmail.com>
+ <20191114191321.11789-2-fontaine.fabrice@gmail.com>
+Message-ID: <20191118232328.16f82be1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 15 Nov 2019 22:19:00 +0200
-Avi Shukron <avraham.shukron@gmail.com> wrote:
+On Thu, 14 Nov 2019 20:13:18 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> qemu requires python in its configre script. Yet host-python was
-> not listed as one of the package's dependencies. If no other package
-> requested host-python, then configuring this package will fail since
-> it won't find any executable named python in the host dir.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/96c786f85d35f33508e9c71778043d16b87f72cd
 > 
-> In order to reproduce this issue you must not have python2 installed
-> on your host machine.
-> 
-> Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
-> ---
-> Changes v2->v3:
-> - Depend directly on host-python3, since it is already a transitive
->   dependency of qemu
-> ---
->  package/qemu/qemu.mk | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to master, thanks.
+Since you sent a new version of the spice series, I marked this one as
+Superseded. Let me know if it still makes sense to have this patch or
+not.
+
+Thanks,
 
 Thomas
 -- 
