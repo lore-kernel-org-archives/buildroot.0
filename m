@@ -1,56 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Nov 2019 10:19:02 +0100
-Subject: [Buildroot] [git commit] package/dtc: fix license hashes
-Message-ID: <20191202083933.969F081233@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 18 Nov 2019 21:18:38 +0100
+Subject: [Buildroot] [git commit] package/rng-tools: needs autoreconf
+Message-ID: <20191202083933.9F510812EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4e0ce24baabd84033858bc238aa91850a720789
+commit: https://git.buildroot.net/buildroot/commit/?id=d685f5375f1d59a7548eae23ea1832b10b2be9da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of license files and add BSD-2-Clause file, see
-https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=25bb080c18d1a8a96760e26257bf8c80ec7fcab4
-https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=702c1b6c0e73d2bcf24f0b8398aca6a940863e48
+Commit b6606937d861cc4de60e40baec1cb6cdb61b2aab wrongly removed
+RNG_TOOLS_AUTORECONF=YES
 
 Fixes:
- - http://autobuild.buildroot.org/results/d3db8ddc096f09bb1728a0ba40b925fbf49c424b
- - http://autobuild.buildroot.org/results/799bddc1467413b1f202a8803e902c797f4f9c92
+ - http://autobuild.buildroot.org/results/a0a4631cc0252579b675a0c401a99239d0b97392
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ae0dabd8620cc5fb345096beecef681d19699cd4)
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Matt Weber <matt@thewebers.ws>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dtc/dtc.hash | 5 +++--
- package/dtc/dtc.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/rng-tools/rng-tools.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
-index 3adfcc45a9..e4d6c02544 100644
---- a/package/dtc/dtc.hash
-+++ b/package/dtc/dtc.hash
-@@ -2,5 +2,6 @@
- sha256 660b74039690fc37013660544d09191834efb58503c73c555c5513ba75ab031f  dtc-1.5.1.tar.xz
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index ce3f19753b..c5f3051aea 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -9,6 +9,8 @@ RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
+ RNG_TOOLS_LICENSE = GPL-2.0
+ RNG_TOOLS_LICENSE_FILES = COPYING
+ RNG_TOOLS_DEPENDENCIES = libsysfs jitterentropy-library host-pkgconf
++# From git
++RNG_TOOLS_AUTORECONF = YES
  
- # Hash for license files
--sha256 171ce1c292cf148a5be9ff95ce7e5c3d79a002721ab8e119eae3c0f5336d2b3d  README.license
--sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  GPL
-+sha256 78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68  README.license
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  GPL
-+sha256 6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  BSD-2-Clause
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index fd822846dc..add8e16647 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -8,7 +8,7 @@ DTC_VERSION = 1.5.1
- DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
- DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
- DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
--DTC_LICENSE_FILES = README.license GPL
-+DTC_LICENSE_FILES = README.license GPL BSD-2-Clause
- DTC_INSTALL_STAGING = YES
- DTC_DEPENDENCIES = host-bison host-flex
- HOST_DTC_DEPENDENCIES = host-bison host-flex
+ RNG_TOOLS_CONF_OPTS = \
+ 	--without-nistbeacon \
