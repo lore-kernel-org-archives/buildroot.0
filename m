@@ -1,38 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Nov 2019 13:58:41 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/qt5wayland: fix
- installation with Qt 5.6
-Message-ID: <20191118125121.6F0638F17D@busybox.osuosl.org>
+Date: Mon, 18 Nov 2019 14:00:30 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/ninja: invoke python3
+ explicitly to configure the package
+In-Reply-To: <20191111213154.19409-1-avraham.shukron@gmail.com> (Avi Shukron's
+ message of "Mon, 11 Nov 2019 23:31:45 +0200")
+References: <20191111213154.19409-1-avraham.shukron@gmail.com>
+Message-ID: <871ru5s5jl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16cac460d12264f6539e492ef9295051d9d52db0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Avi" == Avi Shukron <avraham.shukron@gmail.com> writes:
 
-Install QtWayland only if the latest Qt version is selected. It does not
-exist in version 5.6.
+ > ninja depends on python3 specifically, but the configure.py file
+ > simply uses "env python". Where no python is selected for the target
+ > you simply won't get a python symlink in $(HOST_DIR)/usr/bin, so the
+ > configure.py script fails to run since it can't find "python".
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 21783d8403f4f41bd97014768e08f9fc355adf87)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt5wayland/qt5wayland.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Notice that in order to reproduce the issue, you must not have
+ > python2 installed on your host machine.
 
-diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
-index 0bda596f3b..4790efc660 100644
---- a/package/qt5/qt5wayland/qt5wayland.mk
-+++ b/package/qt5/qt5wayland/qt5wayland.mk
-@@ -52,7 +52,7 @@ define QT5WAYLAND_INSTALL_COMPOSITOR
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Compositor.so* $(TARGET_DIR)/usr/lib
- endef
- endif
--ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5_VERSION_LATEST),yy)
- define QT5WAYLAND_INSTALL_COMPOSITOR_QMLS
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtWayland $(TARGET_DIR)/usr/qml/
- endef
+ > Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
+
+Committed to 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
