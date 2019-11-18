@@ -1,26 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Nov 2019 13:50:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jailhouse: python scripts needs
- python-mako
-In-Reply-To: <20191109213352.13020-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 9 Nov 2019 22:33:52 +0100")
-References: <20191109213352.13020-1-fontaine.fabrice@gmail.com>
-Message-ID: <87imnhs60u.fsf@dell.be.48ers.dk>
+Date: Mon, 18 Nov 2019 13:50:18 +0100
+Subject: [Buildroot] [PATCH] package/jailhouse: fix misc details in
+ Config.in
+In-Reply-To: <20191110132627.15985-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 10 Nov 2019 14:26:26 +0100")
+References: <20191110132627.15985-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87eey5s60l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > jailhouse-config-create script needs python-mako, see
- > https://github.com/siemens/jailhouse/commit/5c7f2c4c30f19aa7eb95dffa7b7bb92393c09ba7
+ > This commit fixes a number of small minor details in the jailhouse
+ > Config.in file:
 
- > Moreover jailhouse-config-create needs host-python-mako to build
- > jailhouse-config-collect
+ >  - The Config.in comment is in the middle of the main
+ >    BR2_PACKAGE_JAILHOUSE option and its sub-options, causing the
+ >    sub-options to not be indented properly in menuconfig
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >  - jailhouse was capitalized as Jailhouse, while all Buildroot
+ >    packages in menuconfig use small letters, so use "jailhouse"
+ >    everywhere
+
+ >  - no need to repeat "jailhouse" in the prompt of the sub-option for
+ >    helper scripts, since it is not properly indented under the main
+ >    jailhouse option.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2019.08.x, thanks.
 
