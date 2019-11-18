@@ -1,32 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Nov 2019 23:06:11 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/kodi: add hash
- for license file
-Message-ID: <20191119073232.806908F2ED@busybox.osuosl.org>
+Date: Mon, 18 Nov 2019 23:04:51 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/ipsec-tools: add
+ license information
+Message-ID: <20191119073232.6DD258F2ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ddd7b48ab8b4ee008d3d1db03d1963e06a0bfe8
+commit: https://git.buildroot.net/buildroot/commit/?id=fd1325d30284eecf963ed1bbc2b74de24b6d84fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+
+The tarball unfortunately does not include a dedicated license file, so
+instead use the main source file for the setkey command.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3f761492ac9bf425b57f6a54d09c77f9699f2609)
+(cherry picked from commit 2dff01f24b07583221cf23e4d6213a14b9a33731)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi/kodi.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/ipsec-tools/ipsec-tools.hash | 3 +++
+ package/ipsec-tools/ipsec-tools.mk   | 2 ++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index 8018c67a3a..2b2e5e64f9 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
-@@ -8,3 +8,5 @@ sha256 b6eb2d929ff56cb051152c32010afc5e7cf5fe8c5ae32dca412a2b46b6b57e34  2f12236
- sha256 312b3d15bc448d24e92f4b2e7248409525eccc4e75776026d805478e51c5ef3d  981488f.tar.gz
- # Locally computed - libdvdread
- sha256 e7179b2054163652596a56301c9f025515cb08c6d6310b42b897c3ad11c0199b  17d99db.tar.gz
-+# Locally computed
-+sha256 89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/ipsec-tools/ipsec-tools.hash b/package/ipsec-tools/ipsec-tools.hash
+index b12bea9477..7a944eb8ee 100644
+--- a/package/ipsec-tools/ipsec-tools.hash
++++ b/package/ipsec-tools/ipsec-tools.hash
+@@ -1,3 +1,6 @@
+ # From http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools/0.8.2/
+ md5	d53ec14a0a3ece64e09e5e34b3350b41	ipsec-tools-0.8.2.tar.bz2
+ sha1	7d92cae9fde59fb4f125636698c43b0a3df3d0f0	ipsec-tools-0.8.2.tar.bz2
++
++# Locally calculated
++sha256	3f4af4aef0b2599928bee9875935b8fad8449ddbb98ea7da74c20c3dff5cdef7  src/setkey/setkey.c
+diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
+index 7ac6b5cb22..634d752661 100644
+--- a/package/ipsec-tools/ipsec-tools.mk
++++ b/package/ipsec-tools/ipsec-tools.mk
+@@ -7,6 +7,8 @@
+ IPSEC_TOOLS_VERSION = 0.8.2
+ IPSEC_TOOLS_SOURCE = ipsec-tools-$(IPSEC_TOOLS_VERSION).tar.bz2
+ IPSEC_TOOLS_SITE = http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools/$(IPSEC_TOOLS_VERSION)
++IPSEC_TOOLS_LICENSE = BSD-3-Clause
++IPSEC_TOOLS_LICENSE_FILES = src/setkey/setkey.c
+ IPSEC_TOOLS_INSTALL_STAGING = YES
+ IPSEC_TOOLS_MAKE = $(MAKE1)
+ IPSEC_TOOLS_DEPENDENCIES = openssl flex host-pkgconf host-flex host-bison
