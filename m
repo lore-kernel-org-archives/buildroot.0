@@ -1,29 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Nov 2019 14:07:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: bump version to 12.1
-In-Reply-To: <874kz2tlx3.fsf@dell.be.48ers.dk>
-References: <20191115180831.10818-1-bernd.kuhls@t-online.de>
- <20191115211040.18362063@windsurf>
- <874kz2tlx3.fsf@dell.be.48ers.dk>
-Message-ID: <20191118140710.367022f4@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Nov 2019 14:08:17 +0100
+Subject: [Buildroot] [PATCH 03/11] package/dropwatch: license is GPL-2.0+
+In-Reply-To: <20191113151724.12155-4-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 13 Nov 2019 16:17:16 +0100")
+References: <20191113151724.12155-1-peter@korsgaard.com>
+ <20191113151724.12155-4-peter@korsgaard.com>
+Message-ID: <87o8x9qqm6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Nov 2019 19:09:12 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
->  > Applied to next, thanks.  
-> 
-> Given the bugfixes, I would think this is material for master - No?
+ > Dropwatch links with readline, which is GPL-3.0+, so not compatible with
+ > GPL-2.0.  When asked about this, upstream has clarified that the license
+ > really is GPL-2.0+:
 
-Indeed, it seems to be a bug-fix only release, so we should probably
-have it on master.
+ > https://github.com/nhorman/dropwatch/issues/14
 
-Thomas
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2019.08.x, thanks. 2019.02.x uses a different version, I
+will try to get some feedback from upstream if GPL-2.0+ also applies
+there.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
