@@ -1,75 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Nov 2019 13:37:05 +0100
-Subject: [Buildroot] [git commit] package/perl: bump to version 5.30.1
-Message-ID: <20191202083934.4925181429@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 18 Nov 2019 22:13:03 +0100
+Subject: [Buildroot] [git commit] package/python-hiredis: bump to 1.0.1
+Message-ID: <20191202083933.B055780DED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01134ca99a2c83932aee42984c81e51cc0428425
+commit: https://git.buildroot.net/buildroot/commit/?id=2069421e8cf45ba4d33e56c9f534cf04358dbe8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../perl/0001-fix-the-generated-subdirectory-Makefiles.patch |  2 ++
- package/perl/perl.hash                                       | 12 ++++++------
- package/perl/perl.mk                                         |  6 +++---
- 3 files changed, 11 insertions(+), 9 deletions(-)
+ package/python-hiredis/python-hiredis.hash | 4 ++--
+ package/python-hiredis/python-hiredis.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
-index 178c7baa5b..ae1ce06994 100644
---- a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
-+++ b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
-@@ -7,6 +7,8 @@ all variables used by BR must be propagated
- 
- similar to https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/commit/98e8532fffe5afa8186329acc44fb957427f1823
- 
-+see https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/pull/331, merged in EU-MM v7.35_08
-+
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- ---
-  cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm | 2 +-
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 4604d2715d..344e044460 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.28.2.tar.xz.{md5,sha1,sha256}.txt
--md5    6bb75770e9ba085b32bf13e4be71e4ac                                 perl-5.28.2.tar.xz
--sha1   e7be78eca9ac5596783e6abcf957408050a7b650                         perl-5.28.2.tar.xz
--sha256 0b0189bfa4b2da20e899b4bdd746ac402e8f746a58e4fcf5516484157f2aab07 perl-5.28.2.tar.xz
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.1.tar.xz.{md5,sha1,sha256}.txt
-+md5    f399f3aaee90ddcff5eadd3bccdaacc0                                 perl-5.30.1.tar.xz
-+sha1   4bc190b6ac368f573e6a028f91430f831d40d30a                         perl-5.30.1.tar.xz
-+sha256 7336cd3ed0535eb61b76a71350effcfa7c88b44faf37d64d70952ced5d38cd35 perl-5.30.1.tar.xz
- 
--# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.2.3/perl-cross-1.2.3.hash
--sha256 84583a1bb5f3a2c64d13d031386c114382e5c62955c6f84a27cec8318536627c perl-cross-1.2.3.tar.gz
-+# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.1/perl-cross-1.3.1.hash
-+sha256	edce0b0c2f725e2db3f203d6d8e9f3f7161256f5d1590551e40694f21200141d perl-cross-1.3.1.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index ecb21c4b85..0ab81ddb34 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -5,15 +5,15 @@
+diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
+index 2ab6766dda..1a013bb3a2 100644
+--- a/package/python-hiredis/python-hiredis.hash
++++ b/package/python-hiredis/python-hiredis.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/hiredis/json
+-md5	46bc0d51bda994611bae77c044b1398b  hiredis-1.0.0.tar.gz
+-sha256	e97c953f08729900a5e740f1760305434d62db9f281ac351108d6c4b5bf51795  hiredis-1.0.0.tar.gz
++md5	ad421ea848734c7be5c10689caa2a6f1  hiredis-1.0.1.tar.gz
++sha256	aa59dd63bb3f736de4fc2d080114429d5d369dfb3265f771778e8349d67a97a4  hiredis-1.0.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	70edfa6d3e11f9d7497c2c2f298d06f33b11d10f37f76605102c5ab3b1f28262  COPYING
+ sha256	dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
+diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
+index 780ec0c13d..435918feb6 100644
+--- a/package/python-hiredis/python-hiredis.mk
++++ b/package/python-hiredis/python-hiredis.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- # When updating the version here, also update utils/scancpan
--PERL_VERSION_MAJOR = 28
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
-+PERL_VERSION_MAJOR = 30
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.2.3
-+PERL_CROSS_VERSION = 1.3.1
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+-PYTHON_HIREDIS_VERSION = 1.0.0
++PYTHON_HIREDIS_VERSION = 1.0.1
+ PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
+-PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/9e/e0/c160dbdff032ffe68e4b3c576cba3db22d8ceffc9513ae63368296d1bcc8
++PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/7f/5c/62e5c6b811b4dcef4125b4a01f76db82c496d79299dd67053b8f9c0732c0
+ PYTHON_HIREDIS_SETUP_TYPE = setuptools
+ PYTHON_HIREDIS_LICENSE = BSD-3-Clause
+ PYTHON_HIREDIS_LICENSE_FILES = COPYING vendor/hiredis/COPYING
