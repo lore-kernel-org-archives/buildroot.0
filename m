@@ -1,70 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Nov 2019 21:46:32 +0100
-Subject: [Buildroot] [PATCH v2] [next,
- master] package/systemd: bump to v243.4
-In-Reply-To: <20191119202335.1845202-1-jeremy.rosen@smile.fr>
-References: <20191119202335.1845202-1-jeremy.rosen@smile.fr>
-Message-ID: <20191119204632.GM32494@scaer>
+From: Whitney, Scott <scwhitn@amazon.com>
+Date: Tue, 19 Nov 2019 21:25:09 +0000
+Subject: [Buildroot] How to create/install U-Boot and Linux to boot from
+ eMMC
+In-Reply-To: <55cec8fc-e640-3ac8-3a8b-d01dcd155b26@mind.be>
+References: <a78aeb5e102b46c5827b626bcc23c23c@EX13D04UEA001.ant.amazon.com>,
+ <55cec8fc-e640-3ac8-3a8b-d01dcd155b26@mind.be>
+Message-ID: <1574198708225.73934@amazon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?my, All,
+Thanks for the reply, Arnout,
 
-On 2019-11-19 21:23 +0100, J?r?my Rosen spake thusly:
-> upstream systemd-stable has started tagging point releses, so bump
-> to the latest
+Still have not had success with booting from eMMC, but even the TI FAE has had difficulty, so it may be that the early silicon we are using still has problems.
 
-To be noted: before this patch, we were using what has now been tagged
-as v243.3.
+I will keep your suggestions and Baruch's - but my supervisor indicates that booting from eMMC is not a big priority at the moment, and we'll likely be booting from SD card for the next year or so!  I have already proven that I can format/write to/read from eMMC partitions, so it's there for additional storage if the need arises.
 
-Regards,
-Yann E. MORIN.
+Best regards!
 
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-> ---
->  package/systemd/systemd.hash | 2 +-
->  package/systemd/systemd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-> index 46055aa035..4c126d3755 100644
-> --- a/package/systemd/systemd.hash
-> +++ b/package/systemd/systemd.hash
-> @@ -1,5 +1,5 @@
->  # sha256 locally computed
-> -sha256	d9cb11fab907292c61f66ef8ad2d9a68054c0e8856bd47cd2b0a12b2255da771  	systemd-243-78-gef677436aa.tar.gz
-> +sha256	281bc47aa6b173c3c6fa1bbc88aea84ecb014313aeb679c54f8885dd09e434be	systemd-243.4.tar.gz
->  sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
->  sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
->  sha256	3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf	README
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 92490eb86b..ebec9bdd91 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SYSTEMD_VERSION = 243-78-gef677436aa
-> +SYSTEMD_VERSION = 243.4
->  SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
->  SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README)
->  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
-> -- 
-> 2.24.0
-> 
+Scott Whitney
+
+________________________________________
+From: Arnout Vandecappelle <arnout@mind.be>
+Sent: Sunday, November 17, 2019 11:14 AM
+To: Whitney, Scott; buildroot at busybox.net
+Subject: Re: [Buildroot] How to create/install U-Boot and Linux to boot from eMMC
+
+On 11/11/2019 21:14, Whitney, Scott wrote:
+> Hi Buildroot community,
+>
+> I'm using Buildroot to successfully build U-Boot and a Linux image for an AM6548 Sitara processor.  I created sdcard.img in output/images using genimage, with the following configuration file:
+[snip]
+> Our board also has 8GB of eMMC memory.  I'd like to know how to use Buildroot to program boot/U-Boot and rootfs/Linux onto the eMMC so that we can boot directly from that without having to have an SD card installed.
+>
+> Can anyone provide instructions for partitioning, formatting, and installing an image suitable for booting from eMMC card?  I can have genimage create an eMMC.img file if the format needs to be different, but I'm just not sure what needs to be on the eMMC for this to work successfully.
+
+ Baruch gave you a complex answer. In general, though, you can flash the same
+image to eMMC that you used for the SD card, and it will just work.
+
+ Basically, you have to make sure that each step in the boot process finds the
+next one:
+
+ROM -> SPL -> U-Boot -> kernel -> rootfs
+
+ ROM should normally try the different boot devices and find the boot.vfat
+partition on eMMC.
+
+ SPL will generally use the information on where it booted from to decide where
+to load the next step, so it will load U-Boot from eMMC as well. Sometimes,
+however, the next step is hardcoded in SPL, so you should check that.
+
+ U-Boot will generally try different devices to find the kernel. What it does
+exactly depends on its environment, so you can just look into the environment
+and chane that as needed.
+
+ The rootfs is given on the kernel command line. This can be set either by
+U-Boot (usually) but sometimes is hardcoded in the device tree. In the latter
+case, you need to update the device tree. If the U-Boot boot script does it, it
+will generally set the rootfs based on where the kernel was found.
+
+ Hope this helps.
+
+ Regards,
+ Arnout
+
+>
+> Many thanks for your help, and best regards!
+> Scott Whitney | Contractor - Software Engineering
+> scwhitn at amazon.com| o: xxx.xxx.xxx| m: 603.321.6662
+> a: 300 Riverpark Drive, North Reading, MA 01864
+> www.amazonrobotics.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
