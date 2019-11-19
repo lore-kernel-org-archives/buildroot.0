@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2019 10:32:37 +0100
-Subject: [Buildroot] [PATCH 1/3] package/gettext-tiny: fix prefix in
- autopoint
-In-Reply-To: <65fdd6f7c3a5900df8ab25d291fe29293f95b43c.1573759321.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Thu, 14 Nov 2019 20:22:08 +0100")
+Date: Tue, 19 Nov 2019 10:32:44 +0100
+Subject: [Buildroot] [PATCH 2/3] package/gettext-tiny: fix gettext
+ wrapper
+In-Reply-To: <8c8ec4ace1add01c65a4d0e749cdec3661086a87.1573759321.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Thu, 14 Nov 2019 20:22:09 +0100")
 References: <cover.1573759321.git.yann.morin.1998@free.fr>
- <65fdd6f7c3a5900df8ab25d291fe29293f95b43c.1573759321.git.yann.morin.1998@free.fr>
-Message-ID: <87v9rgnrd6.fsf@dell.be.48ers.dk>
+ <8c8ec4ace1add01c65a4d0e749cdec3661086a87.1573759321.git.yann.morin.1998@free.fr>
+Message-ID: <87r224nrcz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,13 +15,10 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > gettext-tiny also installs a fake autopoint, but it still needs to be
- > pointed at the m4 macros, which the template autopoint expects to be in
- > @datadir@, where datadir is the traditional autotools datadir, derived
- > from datarootdir, itself derived from prefix.
+ > When a textdomain is specified, we ignore it twice: we shift args, and
+ > we printf ${2}, which would yield an empty printf.
 
- > So, pass prefix so all the locations are properly pointing to HOST_DIR,
- > instead of the default /usr/local.
+ > Fix that by not shifting, and just printf ${2}; this is nicer.
 
  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
  > Cc: Vadim Kochan <vadim4j@gmail.com>
