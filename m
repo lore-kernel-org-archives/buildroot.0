@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2019 10:32:22 +0100
+Date: Tue, 19 Nov 2019 10:32:14 +0100
 Subject: [Buildroot] [git commit branch/2019.08.x] package/gettext-tiny: fix
- gettext wrapper
-Message-ID: <20191119092616.739688F25B@busybox.osuosl.org>
+ prefix in autopoint
+Message-ID: <20191119092616.51EB28F34E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55e347999b8d12b1ed6a1703b054b4c9a31ee4e0
+commit: https://git.buildroot.net/buildroot/commit/?id=55e94e4242eacd0ae6a5c0c9deaa725f8f361d09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-When a textdomain is specified, we ignore it twice: we shift args, and
-we printf ${2}, which would yield an empty printf.
+gettext-tiny also installs a fake autopoint, but it still needs to be
+pointed at the m4 macros, which the template autopoint expects to be in
+@datadir@, where datadir is the traditional autotools datadir, derived
+from datarootdir, itself derived from prefix.
 
-Fix that by not shifting, and just printf ${2}; this is nicer.
+So, pass prefix so all the locations are properly pointing to HOST_DIR,
+instead of the default /usr/local.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Vadim Kochan <vadim4j@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b5afd8dfd5b3b6589441c37115cfb23aa31838f6)
+(cherry picked from commit 75a257f45e1f1da2c9ba4f5c4d1598234d0961a2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gettext-tiny/gettext-wrapper | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gettext-tiny/gettext-tiny.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gettext-tiny/gettext-wrapper b/package/gettext-tiny/gettext-wrapper
-index 3791a3a1aa..11424824c3 100644
---- a/package/gettext-tiny/gettext-wrapper
-+++ b/package/gettext-tiny/gettext-wrapper
-@@ -19,6 +19,6 @@ done
- case ${#} in
-     (0)   printf "missing arguments\n" >&2; return 1;;
-     (1)   printf "%s" "${1}";;
--    (2)   shift; printf "%s" "${2}";;
-+    (2)   printf "%s" "${2}";;
-     (*)   printf "too many arguments\n" >&2; return 1;;
- esac
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index 7db478d845..bcc4f12b5d 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
+@@ -52,6 +52,7 @@ HOST_GETTEXT_TINY_POST_PATCH_HOOKS += HOST_GETTEXT_TINY_COPY_EXTRA_FILES
+ define HOST_GETTEXT_TINY_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(HOST_CONFIGURE_OPTS) \
++		prefix=$(HOST_DIR) \
+ 		CFLAGS="$(HOST_CFLAGS) -fPIC" \
+ 		LIBINTL=NONE
+ 
