@@ -1,53 +1,100 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 19 Nov 2019 17:53:11 +0000
-Subject: [Buildroot] [Bug 12316] tzdata fails to install with empty "default
- local time"
-In-Reply-To: <bug-12316-163@https.bugs.busybox.net/>
-References: <bug-12316-163@https.bugs.busybox.net/>
-Message-ID: <bug-12316-163-9D5Bot419i@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Nov 2019 18:58:03 +0100
+Subject: [Buildroot] [PATCH 1/2] package/gmpc: needs -lm
+In-Reply-To: <56bd6374-c235-1fa8-4e1f-c7137068a92b@codethink.co.uk>
+References: <20191029214046.14722-1-fontaine.fabrice@gmail.com>
+ <20191108220442.4b596996@windsurf> <20191108222841.4ff8debf@gmx.net>
+ <c16fab60-ebf2-106e-962f-c2595472803d@mind.be>
+ <20191117212001.6907f54a@gmx.net> <20191117214818.4d68ae6f@gmx.net>
+ <df61ba8d-99d4-f16b-50ed-3e7ae28e4962@mind.be>
+ <20191118234238.363e7c04@gmx.net> <20191118234722.21f79c8f@windsurf.home>
+ <56bd6374-c235-1fa8-4e1f-c7137068a92b@codethink.co.uk>
+Message-ID: <CAPi7W83fDiF+iM4FZrPgAXvujqVXMHS66uCjs+s4=9R1F0qVhw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12316
+Dear all,
 
---- Comment #4 from Andrew Trapani <andrew.trapani@ontera.bio> ---
-I replied to the email, but it didn't respond here. Inconvenient....
+Le mar. 19 nov. 2019 ? 17:18, Thomas Preston
+<thomas.preston@codethink.co.uk> a ?crit :
+>
+> Hi Thomas Petazzoni, all,
+> Thanks for bringing this to my attention.
+>
+> On 18/11/2019 22:47, Thomas Petazzoni wrote:
+> > Adding Thomas Preston in the loop. Thomas: one of your patch causes
+> > some regression, see below.
+> >
+>
+> Before the pkgconf patch, `-lm` somehow made its way into the .la files:
+>
+>         gmpc-11.8.16-before-pkgconf-fix$ grep -lwr "\-lm"
+>         ltmain.sh.orig
+>         ltmain.sh
+>         src/libeggsmclient.la
+>         src/libeggdesktopfile.la
+>         m4/libtool.m4
+>         libtool
+>
+> In addition to this, there are lots of system include and libraries
+> littering the Makefile (which should be handled by --sysroot):
+>
+>         -L/mnt/output/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib
+>         -I/mnt/output/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include
+>
+> After the pkgconf patch, the gmpc build directory more closely resembles
+> building upstream gmpc - which doesn't seem to require `-lm`. So why does
+> it in buildroot?
+>
+> gmpc-11.8.16$ cat fedora.Dockerfile
+> FROM fedora:30
+> RUN dnf install -y @development-tools
+> RUN dnf install -y \
+>         gob2 \
+>         harfbuzz \
+>         harfbuzz-devel \
+>         intltool \
+>         libICE \
+>         libICE-devel \
+>         libmpd-devel \
+>         libSM \
+>         libSM-devel \
+>         libsoup-devel \
+>         libvala \
+>         libvala-devel \
+>         pkgconf \
+>         unique-devel \
+>         vala
+> WORKDIR /mnt
+> CMD "/bin/bash"
+>
+> $ docker build -t build-gmpc - < fedora.Dockerfile
+> $ docker run -it -v$PWD:/mnt build-gmpc ./configure --disable-mmkeys --disable-unique
+> $ docker run -it -v$PWD:/mnt build-gmpc make
+> $ ls -l src/gmpc
+> -rwxr-xr-x 1 root root 5818944 Nov 19 15:52 src/gmpc
+>
+> Seems to work, without a -lm in sight:
+>
+> $ grep -rw "\-lm"
+> ltmain.sh:        # a FreeBSD bug that causes programs to crash when -lm is
+> m4/libtool.m4:  AC_CHECK_LIB(m, cos, LIBM="$LIBM -lm")
+> m4/libtool.m4:  AC_CHECK_LIB(m, cos, LIBM="-lm")
+> libtool:          # a FreeBSD bug that causes programs to crash when -lm is
+>
+> So I don't understand two things:
+> 1. Where did `-lm` in the .la files come from before the pkgconf patch?
+> 2. Why does upsteam gmpc build without `-lm`?
+This one is easy: we're using the latest release of gmpc that is 8 years old.
+In this release, Math.ceil is used in
+https://github.com/DaveDavenport/gmpc/blob/release-11.8.16/src/Widgets/GmpcVolume.vala.
+Upstream removed this file 6 years ago through
+https://github.com/DaveDavenport/gmpc/commit/11a7d247757dd29b51c77fda7470921fd254aae8#diff-645d920fce926ffdadd85c93c2d2cda2.
+I assume that current gmpc does not use any math functions anymore.
 
-Thank Yann,
+Best Regards,
 
-(This is my first time with a patch)
-
-How to make sure it re-builds tzdata? Or maybe it worked?
-
-
-Looks like the "mbox" button gives me a .patch file on the webpage. Excellent
-
-I could add it to "br2-patches" and it gets used when I go to menuconfig:
-Applying patch:
-system-allow-not-setting-a-default-system-wide-time-zone.patch...
-patching file package/tz/tz.mk
-patching file package/tzdata/tzdata.mk
-Hunk #1 succeeded at 25 (offset -1 lines).
-Hunk #2 succeeded at 47 (offset -1 lines).
-patching file system/Config.in
-Hunk #1 succeeded at 481 (offset -13 lines).
-Removing intermediate container e9bde13f6ee5
- ---> 8bc39f5e0e49
-
-1. Copy ".patch" file into br2-patches
-2. Go to menuconfig.
-3. Note the patch is actually applied
-4. Go to System Configuration
-5. Modify "default local time"
-6. Change from "Etc/UTC" to empty.
-7. F6 to save and F9 to exit
-8. Note: No errors on save and exit
-9. Start the build and save all output to a file (stdout and stderr)
-10. Wasn't able to find "tzdata" in the output
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Fabrice
