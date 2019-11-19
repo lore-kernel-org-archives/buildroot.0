@@ -1,69 +1,70 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Tue, 19 Nov 2019 21:22:34 +0100
-Subject: [Buildroot] [PATCH] [next,
- master] package/systemd: bump to v243.3
-In-Reply-To: <20191119202037.1844422-1-jeremy.rosen@smile.fr>
-References: <20191119202037.1844422-1-jeremy.rosen@smile.fr>
-Message-ID: <CAFvCimWDB+rhhp=6Wri366JeybexyzNmBVPCh9OUm2=jyGBz1w@mail.gmail.com>
+Subject: [Buildroot] [PATCH] system: allow not setting a default,
+ system-wide time zone
+In-Reply-To: <b074a89e-682a-76a1-d704-36fb0634311b@mind.be>
+References: <20191116091004.23726-1-yann.morin.1998@free.fr>
+ <b074a89e-682a-76a1-d704-36fb0634311b@mind.be>
+Message-ID: <20191119202234.GL32494@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-oops, sent to early, sorry about that
+Arnout, All,
 
-Le mar. 19 nov. 2019 ? 21:21, J?r?my Rosen <jeremy.rosen@smile.fr> a ?crit :
+On 2019-11-17 15:41 +0100, Arnout Vandecappelle spake thusly:
+> On 16/11/2019 10:10, Yann E. MORIN wrote:
+> > It is valid that there is no system-wide default time zone defined, in
+> > which case Etc/UTC is assumed.
+> > 
+> > Fixes: #12316
+> > 
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > Cc: Martin Bark <martin@barkynet.com>
+> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Cc: Richard Braun <rbraun@sceen.net>
+> > Cc: Andrew Trapani <andrew.trapani@ontera.bio>
+> [snip]
+> > diff --git a/system/Config.in b/system/Config.in
+> > index c87266f431..c8c5be40e0 100644
+> > --- a/system/Config.in
+> > +++ b/system/Config.in
+> > @@ -494,6 +494,8 @@ config BR2_TARGET_LOCALTIME
+> >  	    Pacific/Wallis
+> >  	    ...
+> >  
+> > +	  Set to empty to not install a default time zone.
+> 
+>  Maybe we should then also change the default to empty?
 
-> upstream systemd-stable has started tagging point releses, so bump
-> to the latest
->
->
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-> ---
->  package/systemd/systemd.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-> index 46055aa035..4c126d3755 100644
-> --- a/package/systemd/systemd.hash
-> +++ b/package/systemd/systemd.hash
-> @@ -1,5 +1,5 @@
->  # sha256 locally computed
-> -sha256 d9cb11fab907292c61f66ef8ad2d9a68054c0e8856bd47cd2b0a12b2255da771
->       systemd-243-78-gef677436aa.tar.gz
-> +sha256 281bc47aa6b173c3c6fa1bbc88aea84ecb014313aeb679c54f8885dd09e434be
->       systemd-243.4.tar.gz
->  sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6
->       LICENSE.GPL2
->  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551
->       LICENSE.LGPL2.1
->  sha256 3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf
->       README
-> --
-> 2.24.0
->
->
+I disagree. I prefer there is an explicit default, which makes it
+obvious what it means, rather than use an implicit setting.
+
+> Then at least this use
+> case gets tested in the autobuilders. Oh, maybe adding a few possible values for
+> this config in genrandconfig would be nice as well...
+
+If you enable the randomisation in genrandconfig, then there is no
+longer any reason to set the default to empty, is there?
+
+>  BTW, I notice now that BR2_TARGET_TZ_ZONELIST is not used for uClibc (tz). Is
+> that expected? Maybe it should depend on !UCLIBC then?
+
+I think this should be done in a further patch. Having a value that is
+not used in the uClibc case is not a regression: it's been like that for
+years now, since 2014 with commit 337fbd549c.
+
+On the other hand, this patch fixes an existing issue (#12316).
+
+Regards,
+Yann E. MORIN.
 
 -- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191119/c5f9cca7/attachment.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
