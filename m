@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2019 10:32:44 +0100
-Subject: [Buildroot] [PATCH 2/3] package/gettext-tiny: fix gettext
- wrapper
-In-Reply-To: <8c8ec4ace1add01c65a4d0e749cdec3661086a87.1573759321.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Thu, 14 Nov 2019 20:22:09 +0100")
+Date: Tue, 19 Nov 2019 10:33:45 +0100
+Subject: [Buildroot] [PATCH 3/3] package/kodi: add missing host-gettext
+ dependency
+In-Reply-To: <9a12e61152e7f9944e986aa9f1c7483750e767c2.1573759321.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Thu, 14 Nov 2019 20:22:10 +0100")
 References: <cover.1573759321.git.yann.morin.1998@free.fr>
- <8c8ec4ace1add01c65a4d0e749cdec3661086a87.1573759321.git.yann.morin.1998@free.fr>
-Message-ID: <87r224nrcz.fsf@dell.be.48ers.dk>
+ <9a12e61152e7f9944e986aa9f1c7483750e767c2.1573759321.git.yann.morin.1998@free.fr>
+Message-ID: <87mucsnrba.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +15,18 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > When a textdomain is specified, we ignore it twice: we shift args, and
- > we printf ${2}, which would yield an empty printf.
+ > A sub-component of Kodi (cpluff) needs to be autoreconf-ed, and uses
+ > gettext, so calls to autopoint.
 
- > Fix that by not shifting, and just printf ${2}; this is nicer.
+ > Add a dependency to host-gettext to bring an appropriate variant that
+ > provides autotpoint (gettext-tiny's autopoint works like a charm, for
+ > the curious).
 
  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Vadim Kochan <vadim4j@gmail.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Committed to 2019.08.x (not in 2019.02.x), thanks.
+Committed to 2019.02.x and 2019.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
