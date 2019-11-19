@@ -1,61 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2019 08:53:57 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/oracle-mysql: use
- bundled GPL-2.0+ libreadline
-Message-ID: <20191119074656.52CBC8F2F5@busybox.osuosl.org>
+Date: Tue, 19 Nov 2019 08:55:47 +0100
+Subject: [Buildroot] [PATCH] toolchain/helpers: make sure we bail out
+ when kernel headers check fails
+In-Reply-To: <20191113214114.GB26360@scaer> (Yann E. MORIN's message of "Wed, 
+ 13 Nov 2019 22:41:14 +0100")
+References: <20191112202118.56136-1-thomas.petazzoni@bootlin.com>
+ <20191113214114.GB26360@scaer>
+Message-ID: <87d0dopaf0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=100f2745bd25c3cc952b2db00a24e379c8d195cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-oracle-mysql is licensed under GPL-2.0, which is not license compatible with
-modern readline (GPL-3.0+), so instead use the bundled older version
-(GPL-2.0+ licensed) of readline instead.
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 11e75a714567e2b02ddeb0bb40809a163619684a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mysql/Config.in              | 1 -
- package/oracle-mysql/oracle-mysql.mk | 4 ++--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ > On 2019-11-12 21:21 +0100, Thomas Petazzoni spake thusly:
+ >> In commit 6136765b23abd9faba610dd54ed276a777811575 ("toolchain:
+ >> generate check-headers program under $(BUILD_DIR)"), the
+ >> check_kernel_headers_version function was simplified to not check the
+ >> return value of the check-kernel-headers.sh script, assuming that
+ >> "make" does bail out on the first failing command.
+ >> 
+ >> However, check_kernel_headers_version when used in $(2)_CONFIGURE_CMDS
+ >> from pkg-toolchain-external.mk, is called in a sequence of commands,
+ >> where the return value of each command is not checked. Therefore, a
+ >> failure of check-kernel-headers.sh no longer aborts the build.
+ >> 
+ >> Since all other macros are using this principle of calling "exit 1",
+ >> we revert back to the same for check_kernel_headers_version, as it was
+ >> done prior to 6136765b23abd9faba610dd54ed276a777811575.
+ >> 
+ >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ >> Cc: Carlos Santos <unixmania@gmail.com>
 
-diff --git a/package/mysql/Config.in b/package/mysql/Config.in
-index d3f9f1f00d..ef4a9531a7 100644
---- a/package/mysql/Config.in
-+++ b/package/mysql/Config.in
-@@ -37,7 +37,6 @@ comment "mariadb needs a toolchain w/ dynamic library"
- config BR2_PACKAGE_ORACLE_MYSQL
- 	bool "oracle mysql"
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_HAS_MYSQL
- 	help
- 	  The MySQL Open Source Database System
-diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
-index 0275a8428f..326fbcc040 100644
---- a/package/oracle-mysql/oracle-mysql.mk
-+++ b/package/oracle-mysql/oracle-mysql.mk
-@@ -9,7 +9,7 @@ ORACLE_MYSQL_VERSION = $(ORACLE_MYSQL_VERSION_MAJOR).73
- ORACLE_MYSQL_SOURCE = mysql-$(ORACLE_MYSQL_VERSION).tar.gz
- ORACLE_MYSQL_SITE = http://dev.mysql.com/get/Downloads/MySQL-$(ORACLE_MYSQL_VERSION_MAJOR)
- ORACLE_MYSQL_INSTALL_STAGING = YES
--ORACLE_MYSQL_DEPENDENCIES = readline ncurses
-+ORACLE_MYSQL_DEPENDENCIES = ncurses
- ORACLE_MYSQL_AUTORECONF = YES
- ORACLE_MYSQL_LICENSE = GPL-2.0
- ORACLE_MYSQL_LICENSE_FILES = README COPYING
-@@ -33,7 +33,7 @@ ORACLE_MYSQL_CONF_OPTS = \
- 	--without-docs \
- 	--without-man \
- 	--without-libedit \
--	--without-readline \
-+	--with-readline \
- 	--with-low-memory \
- 	--enable-thread-safe-client \
- 	--with-unix-socket-path=$(MYSQL_SOCKET) \
+ > Applied to master, thanks.
+
+Committed to 2019.02.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
