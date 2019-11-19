@@ -1,36 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2019 09:05:35 +0100
-Subject: [Buildroot] [git commit] package/neardal: unconditionally use
- libedit
-In-Reply-To: <20191114214717.BFAE9814BC@busybox.osuosl.org> (Yann E. MORIN's
- message of "Thu, 14 Nov 2019 22:52:46 +0100")
-References: <20191114214717.BFAE9814BC@busybox.osuosl.org>
-Message-ID: <87zhgsnve8.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 19 Nov 2019 09:10:30 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/linuxconsoletools: bump
+ version to 1.7.0
+In-Reply-To: <20191119064211.GA32125@coltrane>
+References: <20191117135913.GD13372@coltrane>
+ <20191118223939.13b3f725@windsurf.home>
+ <20191119064211.GA32125@coltrane>
+Message-ID: <20191119091030.363beba3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On Tue, 19 Nov 2019 07:42:11 +0100
+Koen Martens <gmc@sonologic.nl> wrote:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=93e9b5378d8ed6c67caf0aa9aca18b65d0ce0b45
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> On Mon, Nov 18, 2019 at 10:39:39PM +0100, Thomas Petazzoni wrote:
+> > On Sun, 17 Nov 2019 14:59:13 +0100
+> > Koen Martens <gmc@sonologic.nl> wrote:  
+> > > This version changed the (optional) dependency from sdl and
+> > > sdl-config to sdl2 and pkg-config. Therefore, the patch that
+> > > provided the correct path to sdl-config has been dropped and
+> > > the dependency has been changed to BR2_PACKAGE_SDL2.
+> > > 
+> > > Somehow, SDL2 fails to build without shared library support,
+> > > but this is not explicitly depended on by SDL2, therefore
+> > > a dependency to BR2_SHARED_LIBS was added to the force-
+> > > feedback utility configuration option.
+> > > 
+> > > Signed-off-by: Koen Martens <gmc@sonologic.nl>
+> > > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> > > ---
+> > >  .../linuxconsoletools/0002-sdl-config.patch   | 20 -------------------  
+> > 
+> > Minor additional nit: ideally the commit log should explain why this
+> > patch is dropped.  
+> 
+> It does, please read the first paragraph.
 
- > neardal is licensed under LGPL-2.0, which is (most likely) not license
- > compatible with readline (GPL-3.0+), so always use the libedit backend.
+Indeed, my bad, sorry about that.
 
- > The choice is done by ./configure, which first checks for libedit, and
- > uses readline only as a fallback. Since we do build libedit before
- > neardal, that's what is going to be picked up.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > [yann.morin.1998 at free.fr:
- >   - add blurb about preference in ./configure
- > ]
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2019.02.x and 2019.08.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
