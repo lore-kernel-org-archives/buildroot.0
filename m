@@ -1,84 +1,108 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Tue, 19 Nov 2019 16:18:48 +0000
-Subject: [Buildroot] [PATCH 1/2] package/gmpc: needs -lm
-In-Reply-To: <20191118234722.21f79c8f@windsurf.home>
-References: <20191029214046.14722-1-fontaine.fabrice@gmail.com>
- <20191108220442.4b596996@windsurf> <20191108222841.4ff8debf@gmx.net>
- <c16fab60-ebf2-106e-962f-c2595472803d@mind.be>
- <20191117212001.6907f54a@gmx.net> <20191117214818.4d68ae6f@gmx.net>
- <df61ba8d-99d4-f16b-50ed-3e7ae28e4962@mind.be>
- <20191118234238.363e7c04@gmx.net> <20191118234722.21f79c8f@windsurf.home>
-Message-ID: <56bd6374-c235-1fa8-4e1f-c7137068a92b@codethink.co.uk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 19 Nov 2019 17:27:21 +0100
+Subject: [Buildroot] [git commit] package/spice: disable tests
+Message-ID: <20191119161949.6794E8F38B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas Petazzoni, all,
-Thanks for bringing this to my attention.
+commit: https://git.buildroot.net/buildroot/commit/?id=f581525812fa9dbe98b2c04c7207ba198418769c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 18/11/2019 22:47, Thomas Petazzoni wrote:
-> Adding Thomas Preston in the loop. Thomas: one of your patch causes
-> some regression, see below.
-> 
+By disabling tests, we'll remove the optional gdk-pixbuf dependency
 
-Before the pkgconf patch, `-lm` somehow made its way into the .la files:
+Fixes:
+ - http://autobuild.buildroot.org/results/96c786f85d35f33508e9c71778043d16b87f72cd
 
-	gmpc-11.8.16-before-pkgconf-fix$ grep -lwr "\-lm"
-	ltmain.sh.orig
-	ltmain.sh
-	src/libeggsmclient.la
-	src/libeggdesktopfile.la
-	m4/libtool.m4
-	libtool
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../spice/0001-configure.ac-add-enable-tests.patch | 54 ++++++++++++++++++++++
+ package/spice/spice.mk                             |  5 +-
+ 2 files changed, 58 insertions(+), 1 deletion(-)
 
-In addition to this, there are lots of system include and libraries
-littering the Makefile (which should be handled by --sysroot):
-
-	-L/mnt/output/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib
-	-I/mnt/output/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include
-
-After the pkgconf patch, the gmpc build directory more closely resembles
-building upstream gmpc - which doesn't seem to require `-lm`. So why does
-it in buildroot?
-
-gmpc-11.8.16$ cat fedora.Dockerfile
-FROM fedora:30
-RUN dnf install -y @development-tools
-RUN dnf install -y \
-        gob2 \
-        harfbuzz \
-        harfbuzz-devel \
-        intltool \
-        libICE \
-        libICE-devel \
-        libmpd-devel \
-        libSM \
-        libSM-devel \
-        libsoup-devel \
-        libvala \
-        libvala-devel \
-        pkgconf \
-        unique-devel \
-        vala
-WORKDIR /mnt
-CMD "/bin/bash"
-
-$ docker build -t build-gmpc - < fedora.Dockerfile
-$ docker run -it -v$PWD:/mnt build-gmpc ./configure --disable-mmkeys --disable-unique
-$ docker run -it -v$PWD:/mnt build-gmpc make
-$ ls -l src/gmpc
--rwxr-xr-x 1 root root 5818944 Nov 19 15:52 src/gmpc
-
-Seems to work, without a -lm in sight:
-
-$ grep -rw "\-lm"
-ltmain.sh:        # a FreeBSD bug that causes programs to crash when -lm is
-m4/libtool.m4:  AC_CHECK_LIB(m, cos, LIBM="$LIBM -lm")
-m4/libtool.m4:  AC_CHECK_LIB(m, cos, LIBM="-lm")
-libtool:          # a FreeBSD bug that causes programs to crash when -lm is
-
-So I don't understand two things:
-1. Where did `-lm` in the .la files come from before the pkgconf patch?
-2. Why does upsteam gmpc build without `-lm`?
+diff --git a/package/spice/0001-configure.ac-add-enable-tests.patch b/package/spice/0001-configure.ac-add-enable-tests.patch
+new file mode 100644
+index 0000000000..668dea1ca3
+--- /dev/null
++++ b/package/spice/0001-configure.ac-add-enable-tests.patch
+@@ -0,0 +1,54 @@
++From 1b6eaf5589a14763452cbe53382cc699cdeca141 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 15 Nov 2019 11:36:14 +0100
++Subject: [PATCH] configure.ac: add --enable-tests
++
++Allow the user to disable tests through --disable-tests, this is
++especially useful for example to disable gdk-pixbuf dependency
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/spice/spice-common/merge_requests/6]
++---
++ Makefile.am  | 6 +++++-
++ configure.ac | 7 +++++++
++ 2 files changed, 12 insertions(+), 1 deletion(-)
++
++diff --git a/subprojects/spice-common/Makefile.am b/subprojects/spice-common/Makefile.am
++index 5402499..00623a1 100644
++--- a/subprojects/spice-common/Makefile.am
+++++ b/subprojects/spice-common/Makefile.am
++@@ -1,7 +1,11 @@
++ NULL =
++ ACLOCAL_AMFLAGS = -I m4
++ 
++-SUBDIRS = python_modules common tests docs
+++SUBDIRS = python_modules common docs
+++
+++if ENABLE_TESTS
+++SUBDIRS += tests
+++endif
++ 
++ EXTRA_DIST =				\
++ 	meson.build			\
++diff --git a/subprojects/spice-common/configure.ac b/subprojects/spice-common/configure.ac
++index 9d10287..2dba7c8 100644
++--- a/subprojects/spice-common/configure.ac
+++++ b/subprojects/spice-common/configure.ac
++@@ -33,6 +33,13 @@ AC_SEARCH_LIBS(regcomp, [regex rx])
++ SPICE_CHECK_SYSDEPS
++ SPICE_EXTRA_CHECKS
++ 
+++AC_ARG_ENABLE([tests],
+++  AS_HELP_STRING([--enable-tests],
+++                 [Enable tests @<:@default=yes@:>@]),
+++  [],
+++  enable_tests="yes")
+++AM_CONDITIONAL(ENABLE_TESTS, test "x$enable_tests" = "xyes")
+++
++ AC_ARG_ENABLE([alignment-checks],
++   AS_HELP_STRING([--enable-alignment-checks],
++                  [Enable runtime checks for cast alignment @<:@default=no@:>@]),
++-- 
++2.23.0
++
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+index 16e57441a8..b663479920 100644
+--- a/package/spice/spice.mk
++++ b/package/spice/spice.mk
+@@ -17,6 +17,8 @@ SPICE_DEPENDENCIES = \
+ 	openssl \
+ 	pixman \
+ 	spice-protocol
++# We're patching subprojects/spice-common/configure.ac
++SPICE_AUTORECONF = YES
+ 
+ # We disable everything for now, because the dependency tree can become
+ # quite deep if we try to enable some features, and I have not tested that.
+@@ -25,7 +27,8 @@ SPICE_CONF_OPTS = \
+ 	--disable-opengl \
+ 	--disable-smartcard \
+ 	--without-sasl \
+-	--disable-manual
++	--disable-manual \
++	--disable-tests
+ 
+ SPICE_DEPENDENCIES += host-pkgconf
+ 
