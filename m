@@ -1,52 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2019 10:33:36 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/kodi: add missing
- host-gettext dependency
-Message-ID: <20191119092611.262988F33F@busybox.osuosl.org>
+Date: Tue, 19 Nov 2019 10:32:22 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/gettext-tiny: fix
+ gettext wrapper
+Message-ID: <20191119092616.739688F25B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2ab3e103ac66f611ca6795115e74f5e2da7337b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=55e347999b8d12b1ed6a1703b054b4c9a31ee4e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-A sub-component of Kodi (cpluff) needs to be autoreconf-ed, and uses
-gettext, so calls to autopoint:
+When a textdomain is specified, we ignore it twice: we shift args, and
+we printf ${2}, which would yield an empty printf.
 
-    [  2%] Performing autoreconf step for 'libcpluff'
-    autoreconf: Entering directory `.'
-    autoreconf: running: autopoint --force
-    Can't exec "autopoint": No such file or directory at [...]/host/share/autoconf/Auto4te/FileUtils.pm line 345.
-    autoreconf: failed to run autopoint: No such file or directory
-    autoreconf: autopoint is needed because this package uses Gettext
-    make[4]: *** [CMakeFiles/libcpluff.dir/build.make:121: build/cpluff/src/libcpluff-stamp/libcpluff-autoreconf] Error 1
-    make[3]: *** [CMakeFiles/Makefile2:615: CMakeFiles/libcpluff.dir/all] Error 2
-
-Add a dependency to host-gettext to bring an appropriate variant that
-provides autotpoint (gettext-tiny's autopoint works like a charm, for
-the curious).
+Fix that by not shifting, and just printf ${2}; this is nicer.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Vadim Kochan <vadim4j@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d90fc22ee3a3420fd5881416107f55447a900ea2)
+(cherry picked from commit b5afd8dfd5b3b6589441c37115cfb23aa31838f6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi/kodi.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/gettext-tiny/gettext-wrapper | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index db6ae2f5ca..3ba89abcc8 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -19,6 +19,7 @@ KODI_DEPENDENCIES = \
- 	freetype \
- 	gnutls \
- 	host-gawk \
-+	host-gettext \
- 	host-gperf \
- 	host-kodi-jsonschemabuilder \
- 	host-kodi-texturepacker \
+diff --git a/package/gettext-tiny/gettext-wrapper b/package/gettext-tiny/gettext-wrapper
+index 3791a3a1aa..11424824c3 100644
+--- a/package/gettext-tiny/gettext-wrapper
++++ b/package/gettext-tiny/gettext-wrapper
+@@ -19,6 +19,6 @@ done
+ case ${#} in
+     (0)   printf "missing arguments\n" >&2; return 1;;
+     (1)   printf "%s" "${1}";;
+-    (2)   shift; printf "%s" "${2}";;
++    (2)   printf "%s" "${2}";;
+     (*)   printf "too many arguments\n" >&2; return 1;;
+ esac
