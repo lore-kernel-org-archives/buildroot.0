@@ -1,29 +1,32 @@
-From: Koen Martens <gmc@sonologic.nl>
-Date: Tue, 19 Nov 2019 21:01:31 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/linuxconsoletools: bump
- version to 1.7.0
-In-Reply-To: <20191119091257.5ac42dda@windsurf.home>
-References: <20191117135913.GD13372@coltrane>
- <20191118223853.64c89953@windsurf.home> <20191119064433.GB32125@coltrane>
- <20191119091257.5ac42dda@windsurf.home>
-Message-ID: <9FB03717-0B18-4DFF-9887-59C04AC10E9A@sonologic.nl>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
+Date: Tue, 19 Nov 2019 21:20:37 +0100
+Subject: [Buildroot] [PATCH] [next,master] package/systemd: bump to v243.3
+Message-ID: <20191119202037.1844422-1-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+upstream systemd-stable has started tagging point releses, so bump
+to the latest
 
 
-On 19 November 2019 09:12:57 CET, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->Hello Koen,
->
->
->> I'll see if I can find some time to address your comments. Might be a
->week
->> or two before I find the time.
->
->OK, then I'll guess I'll try to apply the patch and do the fixup
->locally. Of course, I'll notify you if I do that.
+Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
+---
+ package/systemd/systemd.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Managed to arrange to work from home tomorrow, which saves me 2 hours, so will look at this tomorrow
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 46055aa035..4c126d3755 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256	d9cb11fab907292c61f66ef8ad2d9a68054c0e8856bd47cd2b0a12b2255da771  	systemd-243-78-gef677436aa.tar.gz
++sha256	281bc47aa6b173c3c6fa1bbc88aea84ecb014313aeb679c54f8885dd09e434be	systemd-243.4.tar.gz
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
+ sha256	3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf	README
+-- 
+2.24.0
