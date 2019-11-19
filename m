@@ -1,79 +1,147 @@
-From: Whitney, Scott <scwhitn@amazon.com>
-Date: Tue, 19 Nov 2019 21:25:09 +0000
-Subject: [Buildroot] How to create/install U-Boot and Linux to boot from
- eMMC
-In-Reply-To: <55cec8fc-e640-3ac8-3a8b-d01dcd155b26@mind.be>
-References: <a78aeb5e102b46c5827b626bcc23c23c@EX13D04UEA001.ant.amazon.com>,
- <55cec8fc-e640-3ac8-3a8b-d01dcd155b26@mind.be>
-Message-ID: <1574198708225.73934@amazon.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 19 Nov 2019 22:41:14 +0100
+Subject: [Buildroot] [PATCH v4 2/2] support/testing: add bmap_tools test
+In-Reply-To: <20191105125039.1443-2-nicolas.carrier@orolia.com>
+References: <20191105125039.1443-1-nicolas.carrier@orolia.com>
+ <20191105125039.1443-2-nicolas.carrier@orolia.com>
+Message-ID: <98f79f74-051b-154a-f44f-86e2078a33c9@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the reply, Arnout,
+Le 05/11/2019 ? 13:51, Nicolas Carrier a ?crit?:
+> This patch implements a simple test in which a dummy file system image
+> is created, then `bmaptool create` and `bmaptool copy` are used to copy
+> it to another file.
+> 
+> ---
+> 
+> Changes v3 -> v4:
+>   - no change
+> 
+> Changes v2 -> v3:
+>   - title changed to "support/testing: add bmap_tools test"
+>     I followed Arnout's suggestion, but if there's a veto on that I can still
+>     change...
+>   - added myself in the DEVELOPERS file for both test scripts
+>   - implemented genericity following Thomas' comment, i.e. without ABC, which
+>     results in a simpler, cleaner and shorter code (thank you btw ^^)
+>   - fixed all the defects reported by flake8
+>   - increased timeout to 20s
+> 
+> I saw that most of the python tests duplicate code between tests for v2 and v3.
+> I think we should factor that, even if only small portions of code are
+> concerned and, of course, I'm willing to do that if it's considered a good idea.
+> 
+> ---
+> 
+> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+> ---
+>  DEVELOPERS                                    |  2 +
+>  .../tests/package/sample_bmap_tools.sh        | 15 ++++++
+>  .../testing/tests/package/test_bmap_tools.py  | 47 +++++++++++++++++++
+>  3 files changed, 64 insertions(+)
+>  create mode 100755 support/testing/tests/package/sample_bmap_tools.sh
+>  create mode 100644 support/testing/tests/package/test_bmap_tools.py
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 947722a8c7..5a8888ab90 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1730,6 +1730,8 @@ F:	package/uacme/
+>  
+>  N:	Nicolas Carrier <nicolas.carrier@orolia.com>
+>  F:	package/bmap-tools/
+> +F:	support/testing/tests/package/sample_bmap_tools.sh
+> +F:	support/testing/tests/package/test_bmap_tools.py
+>  
+>  N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+>  F:	package/libgit2/
+> diff --git a/support/testing/tests/package/sample_bmap_tools.sh b/support/testing/tests/package/sample_bmap_tools.sh
+> new file mode 100755
+> index 0000000000..7c90368c17
+> --- /dev/null
+> +++ b/support/testing/tests/package/sample_bmap_tools.sh
+> @@ -0,0 +1,15 @@
+> +#!/bin/sh
+> +# simple test which creates a dummy file system image, then use bmaptool create
+> +# and bmaptool copy to copy it to another file
+> +
+> +set -xeu
+> +
+> +# create the necessary test files
+> +dd if=/dev/zero of=disk.img bs=2M count=1
+> +mkfs.ext4 disk.img
+> +fallocate -d disk.img
+> +dd if=/dev/zero of=copy.img bs=2M count=1
+> +
+> +# do a test copy of the file system image
+> +bmaptool create -o disk.img.bmap disk.img
+> +bmaptool copy disk.img copy.img
 
-Still have not had success with booting from eMMC, but even the TI FAE has had difficulty, so it may be that the early silicon we are using still has problems.
+bmaptool is able to use pbzip2, bzip2,
+gzip, pigz, xz, lzop, lz4, tar and unzip system programs for decompressing.
 
-I will keep your suggestions and Baruch's - but my supervisor indicates that booting from eMMC is not a big priority at the moment, and we'll likely be booting from SD card for the next year or so!  I have already proven that I can format/write to/read from eMMC partitions, so it's there for additional storage if the need arises.
+Maybe we can extend the test using different compressed file format.
 
-Best regards!
+Note: bmaptool can use ssh program for remote file transfers.
 
-Scott Whitney
+Best regards,
+Romain
 
-________________________________________
-From: Arnout Vandecappelle <arnout@mind.be>
-Sent: Sunday, November 17, 2019 11:14 AM
-To: Whitney, Scott; buildroot at busybox.net
-Subject: Re: [Buildroot] How to create/install U-Boot and Linux to boot from eMMC
-
-On 11/11/2019 21:14, Whitney, Scott wrote:
-> Hi Buildroot community,
->
-> I'm using Buildroot to successfully build U-Boot and a Linux image for an AM6548 Sitara processor.  I created sdcard.img in output/images using genimage, with the following configuration file:
-[snip]
-> Our board also has 8GB of eMMC memory.  I'd like to know how to use Buildroot to program boot/U-Boot and rootfs/Linux onto the eMMC so that we can boot directly from that without having to have an SD card installed.
->
-> Can anyone provide instructions for partitioning, formatting, and installing an image suitable for booting from eMMC card?  I can have genimage create an eMMC.img file if the format needs to be different, but I'm just not sure what needs to be on the eMMC for this to work successfully.
-
- Baruch gave you a complex answer. In general, though, you can flash the same
-image to eMMC that you used for the SD card, and it will just work.
-
- Basically, you have to make sure that each step in the boot process finds the
-next one:
-
-ROM -> SPL -> U-Boot -> kernel -> rootfs
-
- ROM should normally try the different boot devices and find the boot.vfat
-partition on eMMC.
-
- SPL will generally use the information on where it booted from to decide where
-to load the next step, so it will load U-Boot from eMMC as well. Sometimes,
-however, the next step is hardcoded in SPL, so you should check that.
-
- U-Boot will generally try different devices to find the kernel. What it does
-exactly depends on its environment, so you can just look into the environment
-and chane that as needed.
-
- The rootfs is given on the kernel command line. This can be set either by
-U-Boot (usually) but sometimes is hardcoded in the device tree. In the latter
-case, you need to update the device tree. If the U-Boot boot script does it, it
-will generally set the rootfs based on where the kernel was found.
-
- Hope this helps.
-
- Regards,
- Arnout
-
->
-> Many thanks for your help, and best regards!
-> Scott Whitney | Contractor - Software Engineering
-> scwhitn at amazon.com| o: xxx.xxx.xxx| m: 603.321.6662
-> a: 300 Riverpark Drive, North Reading, MA 01864
-> www.amazonrobotics.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+> diff --git a/support/testing/tests/package/test_bmap_tools.py b/support/testing/tests/package/test_bmap_tools.py
+> new file mode 100644
+> index 0000000000..7ea4057aba
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_bmap_tools.py
+> @@ -0,0 +1,47 @@
+> +import os
+> +import infra
+> +
+> +from infra.basetest import BRTest
+> +
+> +
+> +class TestBmapTools(BRTest):
+> +    __test__ = False
+> +    sample_script = "tests/package/sample_bmap_tools.sh"
+> +    copy_script = 'tests/package/copy-sample-script-to-target.sh'
+> +    config = f'''
+> +        {infra.basetest.BASIC_TOOLCHAIN_CONFIG}
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        BR2_PACKAGE_BMAP_TOOLS=y
+> +        BR2_ROOTFS_POST_BUILD_SCRIPT="{infra.filepath(copy_script)}"
+> +        BR2_ROOTFS_POST_SCRIPT_ARGS="{infra.filepath(sample_script)}"
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        BR2_PACKAGE_UTIL_LINUX=y
+> +        BR2_PACKAGE_UTIL_LINUX_FALLOCATE=y
+> +        BR2_PACKAGE_E2FSPROGS=y
+> +        BR2_PACKAGE_UTIL_LINUX_LIBUUID=y
+> +        '''
+> +
+> +    def login(self):
+> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+> +        self.emulator.boot(arch="armv5",
+> +                           kernel="builtin",
+> +                           options=["-initrd", cpio_file])
+> +        self.emulator.login()
+> +
+> +    def test_run(self):
+> +        self.login()
+> +        cmd = f"/root/{os.path.basename(self.sample_script)}"
+> +        _, exit_code = self.emulator.run(cmd, timeout=20)
+> +        self.assertEqual(exit_code, 0)
+> +
+> +
+> +class TestPy2BmapTools(TestBmapTools):
+> +    __test__ = True
+> +    config = f"""{TestBmapTools.config}
+> +    BR2_PACKAGE_PYTHON=y"""
+> +
+> +
+> +class TestPy3BmapTools(TestBmapTools):
+> +    __test__ = True
+> +    config = f"""{TestBmapTools.config}
+> +    BR2_PACKAGE_PYTHON3=y"""
+> 
