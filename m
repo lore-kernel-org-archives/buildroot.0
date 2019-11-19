@@ -1,37 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Nov 2019 17:35:30 +0100
-Subject: [Buildroot] [Next] package/python-bunch: new package
-In-Reply-To: <20191112210300.17792-1-matthew.weber@rockwellcollins.com>
-References: <20191112210300.17792-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20191119173530.09da9d6c@windsurf.home>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 19 Nov 2019 11:15:27 -0600
+Subject: [Buildroot] [next] utils/scanpypi: remind developer about updating
+ DEVELOPERS and Config.in
+Message-ID: <20191119171527.18570-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 Nov 2019 15:03:00 -0600
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ utils/scanpypi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/python-bunch/Config.in         |  6 ++++++
->  package/python-bunch/python-bunch.hash |  5 +++++
->  package/python-bunch/python-bunch.mk   | 14 ++++++++++++++
->  3 files changed, 25 insertions(+)
->  create mode 100644 package/python-bunch/Config.in
->  create mode 100644 package/python-bunch/python-bunch.hash
->  create mode 100644 package/python-bunch/python-bunch.mk
-
-The entry in the DEVELOPERS file was missing, so I've added that. Then
-I pushed, and realized the package was also not added to
-package/Config.in, so I did a follow-up commit to fix that. Both to the
-next branch, of course.
-
-Thanks,
-
-Thomas
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 55b3d1e61c..abb190a536 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -739,6 +739,8 @@ def main():
+             package.create_hash_file()
+ 
+             package.create_config_in()
++            print("NOTE: Remember to also make an update to the DEVELOPERS file")
++            print("      and include an entry for the pkg in packages/Config.in")
+             print()
+             # printing an empty line for visual confort
+     finally:
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
