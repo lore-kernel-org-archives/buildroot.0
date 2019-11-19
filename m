@@ -1,47 +1,103 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Nov 2019 21:37:51 +0100
-Subject: [Buildroot] [git commit] package/libffi: bump to version 3.3
-Message-ID: <20191202083934.6AFD57FAE7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 19 Nov 2019 17:30:48 +0100
+Subject: [Buildroot] [git commit] package/umtprd: new package
+Message-ID: <20191202083933.CB69180DED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fd660c2f41670cad8b270f56861f6e6190dd6c7
+commit: https://git.buildroot.net/buildroot/commit/?id=441599614e644361ef837569088bf48a61365c7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash for license file (update in year:
-https://github.com/libffi/libffi/commit/058aa4130445b4ef3c2f77f796c33506873031ca)
+uMTP-Responder is a lightweight USB Media Transfer Protocol (MTP)
+responder daemon for GNU/Linux.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+[Thomas: license is GPL-3.0+]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libffi/libffi.hash | 4 ++--
- package/libffi/libffi.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/umtprd/Config.in   | 11 +++++++++++
+ package/umtprd/umtprd.hash |  3 +++
+ package/umtprd/umtprd.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 36 insertions(+)
 
-diff --git a/package/libffi/libffi.hash b/package/libffi/libffi.hash
-index d8d2d2629a..496ae0d904 100644
---- a/package/libffi/libffi.hash
-+++ b/package/libffi/libffi.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256	db41cfb9ec8052fcd116a94c12237303c4447af4844d50e4fea7163661e31743  libffi-3.3-rc0.tar.gz
-+sha256	3f2f86094f5cf4c36cfe850d2fe029d01f5c2c2296619407c8ba0d8207da9a6b  libffi-3.3.tar.gz
- # License files, locally calculated
--sha256	0f4d7a0bfb83c37465d42dc305f124189196cc0cc2cc8d6f8461103682aebbc5  LICENSE
-+sha256	deaf3a42effb551a5b140fa9afefed183a27f1341c6d1bf430d106a5e6931fc0  LICENSE
-diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-index fb8e18a456..722a03dca0 100644
---- a/package/libffi/libffi.mk
-+++ b/package/libffi/libffi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 054f83ce5e..b1a20eaebe 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1807,6 +1807,7 @@ F:	package/yavta/
+ N:	Paul Cercueil <paul@crapouillou.net>
+ F:	package/libiio/
+ F:	package/lightning/
++F:	package/umtprd/
  
--LIBFFI_VERSION = 3.3-rc0
-+LIBFFI_VERSION = 3.3
- LIBFFI_SITE = $(call github,libffi,libffi,v$(LIBFFI_VERSION))
- LIBFFI_LICENSE = MIT
- LIBFFI_LICENSE_FILES = LICENSE
+ N:	Pedro Aguilar <paguilar@paguilar.org>
+ F:	package/libunistring/
+diff --git a/package/Config.in b/package/Config.in
+index fd30562ea5..48c5bcec39 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -551,6 +551,7 @@ endmenu
+ 	source "package/udev/Config.in"
+ 	source "package/udisks/Config.in"
+ 	source "package/uhubctl/Config.in"
++	source "package/umtprd/Config.in"
+ 	source "package/upower/Config.in"
+ 	source "package/usb_modeswitch/Config.in"
+ 	source "package/usb_modeswitch_data/Config.in"
+diff --git a/package/umtprd/Config.in b/package/umtprd/Config.in
+new file mode 100644
+index 0000000000..24bf119549
+--- /dev/null
++++ b/package/umtprd/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_UMTPRD
++	bool "umtprd"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
++	help
++	  Lightweight USB MTP responder daemon for GNU/Linux
++
++	  https://github.com/viveris/uMTP-Responder
++
++comment "umtprd needs a toolchain w/ threads, headers >= 3.15"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
+diff --git a/package/umtprd/umtprd.hash b/package/umtprd/umtprd.hash
+new file mode 100644
+index 0000000000..168b19e951
+--- /dev/null
++++ b/package/umtprd/umtprd.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256	e1301bdd89170cc2c679446c1cc5873feaacd061bf0ab547fc0a11670bae9163	umtprd-1.0.0.tar.gz
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	LICENSE
+diff --git a/package/umtprd/umtprd.mk b/package/umtprd/umtprd.mk
+new file mode 100644
+index 0000000000..63faae43b3
+--- /dev/null
++++ b/package/umtprd/umtprd.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# umtprd
++#
++################################################################################
++
++UMTPRD_VERSION = 1.0.0
++UMTPRD_SITE = https://github.com/viveris/uMTP-Responder/archive
++UMTPRD_LICENSE = GPL-3.0+
++UMTPRD_LICENSE_FILES = LICENSE
++
++define UMTPRD_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define UMTPRD_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/umtprd $(TARGET_DIR)/usr/sbin/umtprd
++endef
++
++$(eval $(generic-package))
