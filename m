@@ -1,104 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 19 Nov 2019 19:02:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cmocka: fix build on riscv64
-Message-ID: <20191119180259.401332-1-fontaine.fabrice@gmail.com>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Tue, 19 Nov 2019 18:31:35 +0000
+Subject: [Buildroot] [PATCH 1/2] package/gmpc: needs -lm
+In-Reply-To: <CAPi7W83fDiF+iM4FZrPgAXvujqVXMHS66uCjs+s4=9R1F0qVhw@mail.gmail.com>
+References: <20191029214046.14722-1-fontaine.fabrice@gmail.com>
+ <20191108220442.4b596996@windsurf> <20191108222841.4ff8debf@gmx.net>
+ <c16fab60-ebf2-106e-962f-c2595472803d@mind.be>
+ <20191117212001.6907f54a@gmx.net> <20191117214818.4d68ae6f@gmx.net>
+ <df61ba8d-99d4-f16b-50ed-3e7ae28e4962@mind.be>
+ <20191118234238.363e7c04@gmx.net> <20191118234722.21f79c8f@windsurf.home>
+ <56bd6374-c235-1fa8-4e1f-c7137068a92b@codethink.co.uk>
+ <CAPi7W83fDiF+iM4FZrPgAXvujqVXMHS66uCjs+s4=9R1F0qVhw@mail.gmail.com>
+Message-ID: <292afc07-784e-e938-dc0e-d9d8d4c0e3e3@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/30922c18150ea62aefe123d1b7cd1444efab963f
+On 19/11/2019 17:58, Fabrice Fontaine wrote:
+> Le mar. 19 nov. 2019 ? 17:18, Thomas Preston
+> <thomas.preston@codethink.co.uk> a ?crit :
+>> So I don't understand two things:
+>> 1. Where did `-lm` in the .la files come from before the pkgconf patch?
+>> 2. Why does upsteam gmpc build without `-lm`?
+> This one is easy: we're using the latest release of gmpc that is 8 years old.
+> In this release, Math.ceil is used in
+> https://github.com/DaveDavenport/gmpc/blob/release-11.8.16/src/Widgets/GmpcVolume.vala.
+> Upstream removed this file 6 years ago through
+> https://github.com/DaveDavenport/gmpc/commit/11a7d247757dd29b51c77fda7470921fd254aae8#diff-645d920fce926ffdadd85c93c2d2cda2.
+> I assume that current gmpc does not use any math functions anymore.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-Don-t-redefine-uintptr_t.patch       | 77 +++++++++++++++++++
- 1 file changed, 77 insertions(+)
- create mode 100644 package/cmocka/0001-Don-t-redefine-uintptr_t.patch
+Ah, when I said upstream I actually meant "the gmpc-11.8.16 tar from upstream",
+as opposed to building within the Buildroot environment. I should have been
+more clear.
 
-diff --git a/package/cmocka/0001-Don-t-redefine-uintptr_t.patch b/package/cmocka/0001-Don-t-redefine-uintptr_t.patch
-new file mode 100644
-index 0000000000..4123d8db22
---- /dev/null
-+++ b/package/cmocka/0001-Don-t-redefine-uintptr_t.patch
-@@ -0,0 +1,77 @@
-+From 28ce16b29911e5adc60140b572dee177adc7a178 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 18 Nov 2019 18:56:46 +0100
-+Subject: [PATCH] Don't redefine uintptr_t
-+
-+Add a call to check_type_size in ConfigureChecks.cmake and use it in
-+include/cmocka.h to avoid the following redefinition error on riscv64:
-+
-+In file included from /data/buildroot/buildroot-test/instance-0/output/build/cmocka-1.1.5/src/cmocka.c:62:
-+/data/buildroot/buildroot-test/instance-0/output/build/cmocka-1.1.5/include/cmocka.h:132:28: error: conflicting types for 'uintptr_t'
-+       typedef unsigned int uintptr_t;
-+                            ^~~~~~~~~
-+In file included from /data/buildroot/buildroot-test/instance-0/output/host/riscv64-buildroot-linux-musl/sysroot/usr/include/stdint.h:20,
-+                 from /data/buildroot/buildroot-test/instance-0/output/host/riscv64-buildroot-linux-musl/sysroot/usr/include/inttypes.h:9,
-+                 from /data/buildroot/buildroot-test/instance-0/output/build/cmocka-1.1.5/src/cmocka.c:27:
-+/data/buildroot/buildroot-test/instance-0/output/host/riscv64-buildroot-linux-musl/sysroot/usr/include/bits/alltypes.h:104:24: note: previous declaration of 'uintptr_t' was here
-+ typedef unsigned _Addr uintptr_t;
-+                        ^~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/30922c18150ea62aefe123d1b7cd1444efab963f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Reviewed-by: Andreas Schneider <asn@cryptomilk.org>
-+[Retrieved from:
-+https://gitlab.com/cmocka/cmocka/commit/28ce16b29911e5adc60140b572dee177adc7a178]
-+---
-+ ConfigureChecks.cmake | 3 +++
-+ config.h.cmake        | 4 ++++
-+ include/cmocka.h      | 2 +-
-+ 3 files changed, 8 insertions(+), 1 deletion(-)
-+
-+diff --git a/ConfigureChecks.cmake b/ConfigureChecks.cmake
-+index fe8da35..028774f 100644
-+--- a/ConfigureChecks.cmake
-++++ b/ConfigureChecks.cmake
-+@@ -70,6 +70,9 @@ if (HAVE_TIME_H)
-+     check_struct_has_member("struct timespec" tv_sec "time.h" HAVE_STRUCT_TIMESPEC)
-+ endif (HAVE_TIME_H)
-+ 
-++# TYPES
-++check_type_size(uintptr_t UINTPTR_T)
-++
-+ # FUNCTIONS
-+ check_function_exists(calloc HAVE_CALLOC)
-+ check_function_exists(exit HAVE_EXIT)
-+diff --git a/config.h.cmake b/config.h.cmake
-+index f8d79da..55fc69f 100644
-+--- a/config.h.cmake
-++++ b/config.h.cmake
-+@@ -75,6 +75,10 @@
-+ 
-+ #cmakedefine HAVE_STRUCT_TIMESPEC 1
-+ 
-++/***************************** TYPES *****************************/
-++
-++#cmakedefine HAVE_UINTPTR_T 1
-++
-+ /*************************** FUNCTIONS ***************************/
-+ 
-+ /* Define to 1 if you have the `calloc' function. */
-+diff --git a/include/cmocka.h b/include/cmocka.h
-+index 3e923dd..0aa557e 100644
-+--- a/include/cmocka.h
-++++ b/include/cmocka.h
-+@@ -120,7 +120,7 @@ typedef uintmax_t LargestIntegralType;
-+     ((LargestIntegralType)(value))
-+ 
-+ /* Smallest integral type capable of holding a pointer. */
-+-#if !defined(_UINTPTR_T) && !defined(_UINTPTR_T_DEFINED)
-++#if !defined(_UINTPTR_T) && !defined(_UINTPTR_T_DEFINED) && !defined(HAVE_UINTPTR_T)
-+ # if defined(_WIN32)
-+     /* WIN32 is an ILP32 platform */
-+     typedef unsigned int uintptr_t;
-+-- 
-+2.22.0
-+
--- 
-2.24.0
+There are no `-lm` flags:
+
+	gmpc-11.8.16$ grep -lwr "\-lm"
+	ltmain.sh
+	m4/libtool.m4
+	libtool
+
+But I can successfully build gmpc:
+
+	gmpc-11.8.16$ strings src/gmpc | grep ceil
+	lceil
+	rceil
+
+This is outside of buildroot.
+
+Maybe we should focus on building the latest development version of gmpc
+from github?
+
+To be clear, I don't think the pkgconf patch has caused a regression, I
+think that gmpc in buildroot is broken. Although, I'm still trying to
+build a solid case for this.
