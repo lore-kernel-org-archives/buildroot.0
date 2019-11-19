@@ -1,52 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2019 10:33:07 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/kodi: add missing
- host-gettext dependency
-Message-ID: <20191119092616.7F5FF8F34E@busybox.osuosl.org>
+Date: Tue, 19 Nov 2019 10:35:50 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/kodi: share the
+ download dir with helper programs
+Message-ID: <20191119092824.C3C9B8F351@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a87e6b73595e7883f585da36e21509fd184b4bc3
+commit: https://git.buildroot.net/buildroot/commit/?id=8dd537aeca14efd52ef570b1d1dc6f2f67c9ce2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-A sub-component of Kodi (cpluff) needs to be autoreconf-ed, and uses
-gettext, so calls to autopoint:
-
-    [  2%] Performing autoreconf step for 'libcpluff'
-    autoreconf: Entering directory `.'
-    autoreconf: running: autopoint --force
-    Can't exec "autopoint": No such file or directory at [...]/host/share/autoconf/Auto4te/FileUtils.pm line 345.
-    autoreconf: failed to run autopoint: No such file or directory
-    autoreconf: autopoint is needed because this package uses Gettext
-    make[4]: *** [CMakeFiles/libcpluff.dir/build.make:121: build/cpluff/src/libcpluff-stamp/libcpluff-autoreconf] Error 1
-    make[3]: *** [CMakeFiles/Makefile2:615: CMakeFiles/libcpluff.dir/all] Error 2
-
-Add a dependency to host-gettext to bring an appropriate variant that
-provides autotpoint (gettext-tiny's autopoint works like a charm, for
-the curious).
+The two helper programs TexturePackager and JsonSchemaBuilder are built
+out of the same source tree as Kodi, so to avoid downloading the same
+archive three times, let's them share the same download directory.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d90fc22ee3a3420fd5881416107f55447a900ea2)
+(cherry picked from commit ce9a16fdfe4702e18c143e720aa1da5788de2ea0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi/kodi.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 1 +
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 7b9a673eab..c40c1628a4 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -19,6 +19,7 @@ KODI_DEPENDENCIES = \
- 	freetype \
- 	gnutls \
- 	host-gawk \
-+	host-gettext \
- 	host-gperf \
- 	host-kodi-jsonschemabuilder \
- 	host-kodi-texturepacker \
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index fcf4888a9c..713d415fed 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -9,6 +9,7 @@
+ KODI_JSONSCHEMABUILDER_VERSION = 17.6-Krypton
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
++KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+ KODI_JSONSCHEMABUILDER_LICENSE = GPL-2.0
+ KODI_JSONSCHEMABUILDER_LICENSE_FILES = LICENSE.GPL
+ HOST_KODI_JSONSCHEMABUILDER_SUBDIR = tools/depends/native/JsonSchemaBuilder
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index 31e3580aed..bb35252b94 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -9,6 +9,7 @@
+ KODI_TEXTUREPACKER_VERSION = 17.6-Krypton
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
++KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+ KODI_TEXTUREPACKER_LICENSE = GPL-2.0
+ KODI_TEXTUREPACKER_LICENSE_FILES = LICENSE.GPL
+ HOST_KODI_TEXTUREPACKER_SUBDIR = tools/depends/native/TexturePacker
