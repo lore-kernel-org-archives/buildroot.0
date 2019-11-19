@@ -1,321 +1,92 @@
-From: Eugen.Hristev at microchip.com <Eugen.Hristev@microchip.com>
-Date: Tue, 19 Nov 2019 12:07:34 +0000
-Subject: [Buildroot] [PATCH] configs/atmel: update u-boot-at91 and bootstrap
- to tarballs
-Message-ID: <1574165229-11159-1-git-send-email-eugen.hristev@microchip.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Tue, 19 Nov 2019 09:18:31 -0300
+Subject: [Buildroot] [PATCH v3 next] package/tar: bump target version to
+ 1.32 (host is kept at 1.29)
+Message-ID: <20191119121831.2329-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Eugen Hristev <eugen.hristev@microchip.com>
+From: Luc Creti <luc.creti@atos.net>
 
-Use custom tarballs for U-boot-at91 and at91bootstrap instead
-of cloning the repositories.
+The host tar is used to create the archives in the VCS download backends
+(git, cvs, svn, hg...) and tar 1.30 and forward have changed the way
+they generate the archives.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+So, all the archives that have been generated before 1.30 was released
+are not bit-for-bit reproducible (even though the extracted content
+would be), so the hashes we have for those archives would not match.
+
+Hence host-tar must be kept at version 1.29.
+
+For the target variant, this is less important, so bump it to the latest
+version.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12256
+
+Signed-off-by: Luc Creti <luc.creti@atos.net>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 10 ++++------
- configs/atmel_sama5d2_xplained_mmc_defconfig     | 10 ++++------
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 10 ++++------
- configs/atmel_sama5d3_xplained_defconfig         | 10 ++++------
- configs/atmel_sama5d3_xplained_dev_defconfig     | 10 ++++------
- configs/atmel_sama5d3_xplained_mmc_defconfig     | 10 ++++------
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 10 ++++------
- configs/atmel_sama5d3xek_defconfig               |  8 ++++----
- configs/atmel_sama5d4_xplained_defconfig         | 10 ++++------
- configs/atmel_sama5d4_xplained_dev_defconfig     | 10 ++++------
- configs/atmel_sama5d4_xplained_mmc_defconfig     | 10 ++++------
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 10 ++++------
- 12 files changed, 48 insertions(+), 70 deletions(-)
+Changes v0->v1:
+  - Commit message rewritten based on comment from Yann E. MORIN
+Changes v1->v2:
+  - Title modified to enphasize that host-tar is kept at 1.29
+Changes v2->v3
+  - Add a comment in the .mk file that explains why the host-tar package
+    is kept at 1.29 and not bumped to any higher version
+  - Add missing spaces around '='
+  - Spell Author name as 'Luc Creti'
+---
+ package/tar/tar.hash |  2 +-
+ package/tar/tar.mk   | 13 +++++++++----
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-index 1d16708..0653ae8 100644
---- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-@@ -70,15 +70,13 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d27_som1_ek_mmc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/atmel_sama5d2_xplained_mmc_defconfig b/configs/atmel_sama5d2_xplained_mmc_defconfig
-index b9a3724..4418ab0 100644
---- a/configs/atmel_sama5d2_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_defconfig
-@@ -16,15 +16,13 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-index 8f5ffd9..4603244 100644
---- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-@@ -87,15 +87,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+diff --git a/package/tar/tar.hash b/package/tar/tar.hash
+index 60309bab8f..90beb26094 100644
+--- a/package/tar/tar.hash
++++ b/package/tar/tar.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking signature
+-sha256	402dcfd0022fd7a1f2c5611f5c61af1cd84910a760a44a688e18ddbff4e9f024	tar-1.29.tar.xz
++sha256	d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8	tar-1.32.tar.xz
+ sha256	9173f222464dd3676118408840da5990527062b5c7daf6487bed7c396c45bfb1	tar-1.29.cpio.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 6f609d7a02..e79e26f8c4 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -4,7 +4,12 @@
+ #
+ ################################################################################
  
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+-TAR_VERSION = 1.29
++# host-tar is used to create the archives in the VCS download backends and tar
++# 1.30 and forward have changed the archive format. So archives generated with
++# earlier versions are not bit-for-bit reproducible and the hashes would not
++# match. Hence host-tar must be kept at version 1.29.
++HOST_TAR_VERSION = 1.29
++TAR_VERSION = 1.32
+ TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
+ TAR_SITE = $(BR2_GNU_MIRROR)/tar
+ # busybox installs in /bin, so we need tar to install as well in /bin
+@@ -31,13 +36,13 @@ $(eval $(autotools-package))
  
-diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
-index b24cc8b..9e53218 100644
---- a/configs/atmel_sama5d3_xplained_defconfig
-+++ b/configs/atmel_sama5d3_xplained_defconfig
-@@ -15,15 +15,13 @@ BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
- BR2_TARGET_ROOTFS_UBI=y
- BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-index a2b0303..2689f2a 100644
---- a/configs/atmel_sama5d3_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-@@ -84,15 +84,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+ # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
+ # of needing tar to build tar.
+-HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
++HOST_TAR_SOURCE = tar-$(HOST_TAR_VERSION).cpio.gz
+ define HOST_TAR_EXTRACT_CMDS
+ 	mkdir -p $(@D)
+ 	cd $(@D) && \
+ 		$(call suitable-extractor,$(HOST_TAR_SOURCE)) $(TAR_DL_DIR)/$(HOST_TAR_SOURCE) | cpio -i --preserve-modification-time
+-	mv $(@D)/tar-$(TAR_VERSION)/* $(@D)
+-	rmdir $(@D)/tar-$(TAR_VERSION)
++	mv $(@D)/tar-$(HOST_TAR_VERSION)/* $(@D)
++	rmdir $(@D)/tar-$(HOST_TAR_VERSION)
+ endef
  
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- 
-diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
-index 259888e..0d34148 100644
---- a/configs/atmel_sama5d3_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
-@@ -15,15 +15,13 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index ef47bb3..5172228 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-@@ -86,15 +86,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- 
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- 
-diff --git a/configs/atmel_sama5d3xek_defconfig b/configs/atmel_sama5d3xek_defconfig
-index 95deb6f..a4082e4 100644
---- a/configs/atmel_sama5d3xek_defconfig
-+++ b/configs/atmel_sama5d3xek_defconfig
-@@ -23,14 +23,14 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
- 
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.10"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3xeknf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.8"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3xek_nandflash"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
-index 0ecb6a1..f862d41 100644
---- a/configs/atmel_sama5d4_xplained_defconfig
-+++ b/configs/atmel_sama5d4_xplained_defconfig
-@@ -19,15 +19,13 @@ BR2_TARGET_ROOTFS_UBI=y
- BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
- BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-index 8eb6f09..7a0966e 100644
---- a/configs/atmel_sama5d4_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-@@ -88,15 +88,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
- 
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- 
-diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
-index 2753a7a..ee4b12d 100644
---- a/configs/atmel_sama5d4_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
-@@ -16,15 +16,13 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index d948cfa..6f0c298 100644
---- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -87,15 +87,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- 
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- 
+ HOST_TAR_CONF_OPTS = --without-selinux
 -- 
-2.7.4
+2.18.1
