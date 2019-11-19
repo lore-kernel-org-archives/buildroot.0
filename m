@@ -1,92 +1,84 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Tue, 19 Nov 2019 09:18:31 -0300
-Subject: [Buildroot] [PATCH v3 next] package/tar: bump target version to
- 1.32 (host is kept at 1.29)
-Message-ID: <20191119121831.2329-1-unixmania@gmail.com>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Tue, 19 Nov 2019 16:18:48 +0000
+Subject: [Buildroot] [PATCH 1/2] package/gmpc: needs -lm
+In-Reply-To: <20191118234722.21f79c8f@windsurf.home>
+References: <20191029214046.14722-1-fontaine.fabrice@gmail.com>
+ <20191108220442.4b596996@windsurf> <20191108222841.4ff8debf@gmx.net>
+ <c16fab60-ebf2-106e-962f-c2595472803d@mind.be>
+ <20191117212001.6907f54a@gmx.net> <20191117214818.4d68ae6f@gmx.net>
+ <df61ba8d-99d4-f16b-50ed-3e7ae28e4962@mind.be>
+ <20191118234238.363e7c04@gmx.net> <20191118234722.21f79c8f@windsurf.home>
+Message-ID: <56bd6374-c235-1fa8-4e1f-c7137068a92b@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Luc Creti <luc.creti@atos.net>
+Hi Thomas Petazzoni, all,
+Thanks for bringing this to my attention.
 
-The host tar is used to create the archives in the VCS download backends
-(git, cvs, svn, hg...) and tar 1.30 and forward have changed the way
-they generate the archives.
+On 18/11/2019 22:47, Thomas Petazzoni wrote:
+> Adding Thomas Preston in the loop. Thomas: one of your patch causes
+> some regression, see below.
+> 
 
-So, all the archives that have been generated before 1.30 was released
-are not bit-for-bit reproducible (even though the extracted content
-would be), so the hashes we have for those archives would not match.
+Before the pkgconf patch, `-lm` somehow made its way into the .la files:
 
-Hence host-tar must be kept at version 1.29.
+	gmpc-11.8.16-before-pkgconf-fix$ grep -lwr "\-lm"
+	ltmain.sh.orig
+	ltmain.sh
+	src/libeggsmclient.la
+	src/libeggdesktopfile.la
+	m4/libtool.m4
+	libtool
 
-For the target variant, this is less important, so bump it to the latest
-version.
+In addition to this, there are lots of system include and libraries
+littering the Makefile (which should be handled by --sysroot):
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=12256
+	-L/mnt/output/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib
+	-I/mnt/output/host/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/include
 
-Signed-off-by: Luc Creti <luc.creti@atos.net>
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-Changes v0->v1:
-  - Commit message rewritten based on comment from Yann E. MORIN
-Changes v1->v2:
-  - Title modified to enphasize that host-tar is kept at 1.29
-Changes v2->v3
-  - Add a comment in the .mk file that explains why the host-tar package
-    is kept at 1.29 and not bumped to any higher version
-  - Add missing spaces around '='
-  - Spell Author name as 'Luc Creti'
----
- package/tar/tar.hash |  2 +-
- package/tar/tar.mk   | 13 +++++++++----
- 2 files changed, 10 insertions(+), 5 deletions(-)
+After the pkgconf patch, the gmpc build directory more closely resembles
+building upstream gmpc - which doesn't seem to require `-lm`. So why does
+it in buildroot?
 
-diff --git a/package/tar/tar.hash b/package/tar/tar.hash
-index 60309bab8f..90beb26094 100644
---- a/package/tar/tar.hash
-+++ b/package/tar/tar.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking signature
--sha256	402dcfd0022fd7a1f2c5611f5c61af1cd84910a760a44a688e18ddbff4e9f024	tar-1.29.tar.xz
-+sha256	d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8	tar-1.32.tar.xz
- sha256	9173f222464dd3676118408840da5990527062b5c7daf6487bed7c396c45bfb1	tar-1.29.cpio.gz
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 6f609d7a02..e79e26f8c4 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -4,7 +4,12 @@
- #
- ################################################################################
- 
--TAR_VERSION = 1.29
-+# host-tar is used to create the archives in the VCS download backends and tar
-+# 1.30 and forward have changed the archive format. So archives generated with
-+# earlier versions are not bit-for-bit reproducible and the hashes would not
-+# match. Hence host-tar must be kept at version 1.29.
-+HOST_TAR_VERSION = 1.29
-+TAR_VERSION = 1.32
- TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
- TAR_SITE = $(BR2_GNU_MIRROR)/tar
- # busybox installs in /bin, so we need tar to install as well in /bin
-@@ -31,13 +36,13 @@ $(eval $(autotools-package))
- 
- # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
- # of needing tar to build tar.
--HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
-+HOST_TAR_SOURCE = tar-$(HOST_TAR_VERSION).cpio.gz
- define HOST_TAR_EXTRACT_CMDS
- 	mkdir -p $(@D)
- 	cd $(@D) && \
- 		$(call suitable-extractor,$(HOST_TAR_SOURCE)) $(TAR_DL_DIR)/$(HOST_TAR_SOURCE) | cpio -i --preserve-modification-time
--	mv $(@D)/tar-$(TAR_VERSION)/* $(@D)
--	rmdir $(@D)/tar-$(TAR_VERSION)
-+	mv $(@D)/tar-$(HOST_TAR_VERSION)/* $(@D)
-+	rmdir $(@D)/tar-$(HOST_TAR_VERSION)
- endef
- 
- HOST_TAR_CONF_OPTS = --without-selinux
--- 
-2.18.1
+gmpc-11.8.16$ cat fedora.Dockerfile
+FROM fedora:30
+RUN dnf install -y @development-tools
+RUN dnf install -y \
+        gob2 \
+        harfbuzz \
+        harfbuzz-devel \
+        intltool \
+        libICE \
+        libICE-devel \
+        libmpd-devel \
+        libSM \
+        libSM-devel \
+        libsoup-devel \
+        libvala \
+        libvala-devel \
+        pkgconf \
+        unique-devel \
+        vala
+WORKDIR /mnt
+CMD "/bin/bash"
+
+$ docker build -t build-gmpc - < fedora.Dockerfile
+$ docker run -it -v$PWD:/mnt build-gmpc ./configure --disable-mmkeys --disable-unique
+$ docker run -it -v$PWD:/mnt build-gmpc make
+$ ls -l src/gmpc
+-rwxr-xr-x 1 root root 5818944 Nov 19 15:52 src/gmpc
+
+Seems to work, without a -lm in sight:
+
+$ grep -rw "\-lm"
+ltmain.sh:        # a FreeBSD bug that causes programs to crash when -lm is
+m4/libtool.m4:  AC_CHECK_LIB(m, cos, LIBM="$LIBM -lm")
+m4/libtool.m4:  AC_CHECK_LIB(m, cos, LIBM="-lm")
+libtool:          # a FreeBSD bug that causes programs to crash when -lm is
+
+So I don't understand two things:
+1. Where did `-lm` in the .la files come from before the pkgconf patch?
+2. Why does upsteam gmpc build without `-lm`?
