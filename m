@@ -1,45 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Nov 2019 09:10:30 +0100
+Date: Tue, 19 Nov 2019 09:12:57 +0100
 Subject: [Buildroot] [PATCH v2 1/1] package/linuxconsoletools: bump
  version to 1.7.0
-In-Reply-To: <20191119064211.GA32125@coltrane>
+In-Reply-To: <20191119064433.GB32125@coltrane>
 References: <20191117135913.GD13372@coltrane>
- <20191118223939.13b3f725@windsurf.home>
- <20191119064211.GA32125@coltrane>
-Message-ID: <20191119091030.363beba3@windsurf.home>
+ <20191118223853.64c89953@windsurf.home>
+ <20191119064433.GB32125@coltrane>
+Message-ID: <20191119091257.5ac42dda@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 19 Nov 2019 07:42:11 +0100
+Hello Koen,
+
+On Tue, 19 Nov 2019 07:44:33 +0100
 Koen Martens <gmc@sonologic.nl> wrote:
 
-> On Mon, Nov 18, 2019 at 10:39:39PM +0100, Thomas Petazzoni wrote:
-> > On Sun, 17 Nov 2019 14:59:13 +0100
-> > Koen Martens <gmc@sonologic.nl> wrote:  
-> > > This version changed the (optional) dependency from sdl and
-> > > sdl-config to sdl2 and pkg-config. Therefore, the patch that
-> > > provided the correct path to sdl-config has been dropped and
-> > > the dependency has been changed to BR2_PACKAGE_SDL2.
-> > > 
-> > > Somehow, SDL2 fails to build without shared library support,
-> > > but this is not explicitly depended on by SDL2, therefore
-> > > a dependency to BR2_SHARED_LIBS was added to the force-
-> > > feedback utility configuration option.
-> > > 
-> > > Signed-off-by: Koen Martens <gmc@sonologic.nl>
-> > > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > > ---
-> > >  .../linuxconsoletools/0002-sdl-config.patch   | 20 -------------------  
+> > I don't understand why you say that, because:
 > > 
-> > Minor additional nit: ideally the commit log should explain why this
-> > patch is dropped.  
+> > config BR2_PACKAGE_SDL2
+> >         bool "sdl2"
+> >         depends on !BR2_STATIC_LIBS  
 > 
-> It does, please read the first paragraph.
+> Well, it doesn't pick up that dependency is what i meant, so i need
+> to depend on it in this package explicitly as well.
 
-Indeed, my bad, sorry about that.
+OK, I guess I was confused by the formulation. Having to replicate
+those "depends on" is perfectly normal in the context of Buildroot, but
+your commit log made it sound like there was something unusual.
+
+
+> > This looks wrong because you're no longer passing TARGET_CFLAGS, so
+> > this should be:
+> > 
+> > 	CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+> > 
+> > (I think the option is -std, not --std).  
+> 
+> I'll see if I can find some time to address your comments. Might be a week
+> or two before I find the time.
+
+OK, then I'll guess I'll try to apply the patch and do the fixup
+locally. Of course, I'll notify you if I do that.
+
+> Meanwhile, I'm unsubscribing from the list again since it is just too
+> much. I'll resubscribe when I have a new patch ready.
+
+You don't have to unsubscribe each time: you can switch to nomail mode,
+i.e a mode where you are subscribed to the mailing list, but you do not
+receive all the e-mails. This allows you to send patches whenever you
+want, without being flooded by the admittedly significant mailing list
+traffic. Since we always Cc: contributors when replying to their
+patches, you would receive our replies even if you're in nomail mode.
+Just login to the mailman web interface, and you will be able to switch
+to nomail.
+
+Best regards,
 
 Thomas
 -- 
