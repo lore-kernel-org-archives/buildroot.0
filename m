@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2019 08:54:06 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/oracle-mysql: use
+Date: Tue, 19 Nov 2019 08:53:57 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/oracle-mysql: use
  bundled GPL-2.0+ libreadline
-Message-ID: <20191119074645.ED7D18F2C4@busybox.osuosl.org>
+Message-ID: <20191119074656.52CBC8F2F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddaeec1038f14a4e88fc465e38cd8a3ee40bf79b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=100f2745bd25c3cc952b2db00a24e379c8d195cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 oracle-mysql is licensed under GPL-2.0, which is not license compatible with
 modern readline (GPL-3.0+), so instead use the bundled older version
