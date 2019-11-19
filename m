@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Nov 2019 17:34:22 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-bunch: add to
- package/Config.in
-Message-ID: <20191119162721.A832C8F3A2@busybox.osuosl.org>
+Date: Tue, 19 Nov 2019 17:35:30 +0100
+Subject: [Buildroot] [Next] package/python-bunch: new package
+In-Reply-To: <20191112210300.17792-1-matthew.weber@rockwellcollins.com>
+References: <20191112210300.17792-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20191119173530.09da9d6c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fd8db02ef67bbd6b8fa853e957d32d036e291dc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 12 Nov 2019 15:03:00 -0600
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-This was missing from commit 8f15dd35ef659cffa6e6d25cde38c9a0248f2b5f.
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/python-bunch/Config.in         |  6 ++++++
+>  package/python-bunch/python-bunch.hash |  5 +++++
+>  package/python-bunch/python-bunch.mk   | 14 ++++++++++++++
+>  3 files changed, 25 insertions(+)
+>  create mode 100644 package/python-bunch/Config.in
+>  create mode 100644 package/python-bunch/python-bunch.hash
+>  create mode 100644 package/python-bunch/python-bunch.mk
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+The entry in the DEVELOPERS file was missing, so I've added that. Then
+I pushed, and realized the package was also not added to
+package/Config.in, so I did a follow-up commit to fix that. Both to the
+next branch, of course.
 
-diff --git a/package/Config.in b/package/Config.in
-index 48c5bcec39..36d2b31e2e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -854,6 +854,7 @@ menu "External python modules"
- 	source "package/python-bluezero/Config.in"
- 	source "package/python-bottle/Config.in"
- 	source "package/python-brotli/Config.in"
-+	source "package/python-bunch/Config.in"
- 	source "package/python-cached-property/Config.in"
- 	source "package/python-can/Config.in"
- 	source "package/python-cbor/Config.in"
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
