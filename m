@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2019 08:56:43 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/kodi: drop
+Date: Tue, 19 Nov 2019 08:56:37 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/kodi: drop
  readline dependency
-Message-ID: <20191119074953.502B5821B6@busybox.osuosl.org>
+Message-ID: <20191119075001.9E3598F317@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24acf3d9e3d44a1f1a1eb635a10111acf4e60f2f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=738503e67df3c9c883d73e4f32357a79626655e7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 {python-,}readline is (no longer) a required dependency of kodi, and
 readline (GPL-3.0+) is not license compatible with kodi (GPL-2.0), so drop
@@ -26,10 +26,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 3 deletions(-)
 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 279b4ead0d..28c56ac1b5 100644
+index 626038e8c8..5817b3a133 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -81,12 +81,10 @@ menuconfig BR2_PACKAGE_KODI
+@@ -74,12 +74,10 @@ menuconfig BR2_PACKAGE_KODI
  	select BR2_PACKAGE_PYTHON_BZIP2
  	select BR2_PACKAGE_PYTHON_CURSES
  	select BR2_PACKAGE_PYTHON_PYEXPAT
@@ -43,7 +43,7 @@ index 279b4ead0d..28c56ac1b5 100644
  	select BR2_PACKAGE_TAGLIB
  	select BR2_PACKAGE_TINYXML
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 590af15b7c..db6ae2f5ca 100644
+index 6e482e615c..7b9a673eab 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
 @@ -38,7 +38,6 @@ KODI_DEPENDENCIES = \
