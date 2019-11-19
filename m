@@ -1,20 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2019 10:35:50 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/kodi: share the
+Date: Tue, 19 Nov 2019 10:36:18 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/kodi: share the
  download dir with helper programs
-Message-ID: <20191119092824.C3C9B8F351@busybox.osuosl.org>
+Message-ID: <20191119092859.C92128F355@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8dd537aeca14efd52ef570b1d1dc6f2f67c9ce2f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8a51ac155c94831365cf630ebbfe55d2df0db3f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 The two helper programs TexturePackager and JsonSchemaBuilder are built
 out of the same source tree as Kodi, so to avoid downloading the same
-archive three times, let's them share the same download directory.
+archive three times, let them share the same download directory.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
