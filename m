@@ -1,56 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Nov 2019 23:07:54 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/mariadb: use
- bundled GPL-2.0+ libreadline
-Message-ID: <20191119073232.A62D88F2ED@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Nov 2019 08:47:52 +0100
+Subject: [Buildroot] [PATCH v2,1/4] package/spice: disable tests
+In-Reply-To: <20191118224703.3fb65955@windsurf.home>
+References: <20191117164452.5361-1-fontaine.fabrice@gmail.com>
+ <20191118224703.3fb65955@windsurf.home>
+Message-ID: <CAPi7W82J2ehtREVFUkdMcn9rwy2pvBEmAhDzmCcCkbD3=vWGGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cd23038d89073d7d9bf59c0e0f6ced0ca7efa01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Hi Thomas,
 
-mariadb is licensed under GPL-2.0, which is not license compatible with
-modern readline (GPL-3.0+), so instead use the bundled older version
-(GPL-2.0+ licensed) of readline instead.
+Le lun. 18 nov. 2019 ? 22:47, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Sun, 17 Nov 2019 17:44:49 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > By disabling tests, we'll remove the optional gdk-pixbuf dependency
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/96c786f85d35f33508e9c71778043d16b87f72cd
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> > Changes v1 -> v2 (after review of Yann E. Morin):
+> >  - Disable tests instead of adding and fixing gdk-pixbuf optional
+> >    dependency
+>
+> I've applied to next. However, your patch to upstream is not really
+> complete, or at least an additional patch is needed: when tests are
+> enabled, their configure.ac script should check if gdk-pixbuf is
+> available. And if it's not available, it should bail out, or disable
+> tests, but not allow the configure process to complete, and then have a
+> build failure when compiling.
+You applied only the first patch of the serie and you applied it on
+next even if it fixes a build failure on master. Was it intentional?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 29cdf119f33538fb90c36e42966c1a7693389190)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mariadb/mariadb.mk | 6 ++++--
- package/mysql/Config.in    | 1 -
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index c59235adb1..6d8441b256 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -19,8 +19,10 @@ MARIADB_DEPENDENCIES = \
- 	openssl \
- 	zlib \
- 	libaio \
--	libxml2 \
--	readline
-+	libxml2
-+
-+# use bundled GPL-2.0+ licensed readline as package/readline is GPL-3.0+
-+MARIADB_CONF_OPTS += -DWITH_READLINE=ON
- 
- # We won't need unit tests
- MARIADB_CONF_OPTS += -DWITH_UNIT_TESTS=0
-diff --git a/package/mysql/Config.in b/package/mysql/Config.in
-index 30a82cc91b..d3f9f1f00d 100644
---- a/package/mysql/Config.in
-+++ b/package/mysql/Config.in
-@@ -22,7 +22,6 @@ config BR2_PACKAGE_MARIADB
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_HAS_MYSQL
- 	help
- 	  MariaDB is one of the most popular database servers in the
+Fabrice
