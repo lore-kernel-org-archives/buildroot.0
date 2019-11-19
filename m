@@ -1,47 +1,56 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Tue, 19 Nov 2019 21:23:35 +0100
-Subject: [Buildroot] [PATCH v2] [next,
- master] package/systemd: bump to v243.4
-Message-ID: <20191119202335.1845202-1-jeremy.rosen@smile.fr>
+From: Trent Piepho <trent.piepho@synapse.com>
+Date: Tue, 19 Nov 2019 19:50:45 +0000
+Subject: [Buildroot] [PATCH] package/samba4: Do not force target python
+In-Reply-To: <20191118225825.76579d11@windsurf.home>
+References: <acf9214ffd0058cb896594d7c846a510a51dab86.camel@synapse.com>
+ <20191118225825.76579d11@windsurf.home>
+Message-ID: <b52c244bd498a96aed8d74bd73ff9d9312334d3a.camel@synapse.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-upstream systemd-stable has started tagging point releses, so bump
-to the latest
+On Mon, 2019-11-18 at 22:58 +0100, Thomas Petazzoni wrote:
+> On Thu, 14 Nov 2019 17:48:51 +0000
+> Trent Piepho <trent.piepho@synapse.com> wrote:
+> 
+> > Target python will no longer be selected by SAMBA4 and is instead
+> > selected by the SAMBA4_AD_DC option.  Samba will be built with/without
+> > python support based whether target python is enabled/disabled.  This is
+> > the same as other optional samba features, which are only enabled when
+> > the package they need is also enabled.
+> 
+> Well, there is a BR2_PACKAGE_SAMBA4_AD_DC condition in samba4.mk, which
+> I think we should use.
 
+I think there's a misunderstanding here.  I did this use existing
+config, so that when it is on, it will force "select" a python, since
+python is required for that feature.
 
-Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
----
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+But samba also has python support for reasons other than the domain
+controller feature.  There is a samba python module that other packages
+could use.
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 46055aa035..4c126d3755 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256	d9cb11fab907292c61f66ef8ad2d9a68054c0e8856bd47cd2b0a12b2255da771  	systemd-243-78-gef677436aa.tar.gz
-+sha256	281bc47aa6b173c3c6fa1bbc88aea84ecb014313aeb679c54f8885dd09e434be	systemd-243.4.tar.gz
- sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
- sha256	3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf	README
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 92490eb86b..ebec9bdd91 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSTEMD_VERSION = 243-78-gef677436aa
-+SYSTEMD_VERSION = 243.4
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
--- 
-2.24.0
+What I did, when the AD DC feature was not enable and python was not
+force selected, was to enable samba's python support automatically
+based on the existing status of target python.  A common pattern in
+buildroot for things like optional readline or ncurses support in a
+package.
+
+But having looked at it more, samba's python support beyond the AD DC
+feature might not be all that useful.  There is a python module, but
+nothing in buildroot uses it.  Fedora 31 has only two (non-samba)
+packages, freeipa and fleet-commander, that use it.  Neither is in
+buildroot.
+
+So perhaps I should just disable samba python support if AD DC is not
+on, since it's likely that no one will use it.
+
+I've also found that Fedora 31 has a requirement for the samba python
+module from the samba test package that contains the smbtorture
+program.  Buildroot has smbtorture has an optional samba feature
+already.  So perhaps it should also require python?  Or perhaps this is
+a mistake in the fedora packages?  Samba's build system certainly does
+not require python for smbtorture to build and I don't see, yet, how
+these programs would make any use of the samba python module.
