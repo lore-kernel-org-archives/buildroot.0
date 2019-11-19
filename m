@@ -1,30 +1,80 @@
-From: no-one-you-know <octomp@protonmail.com>
-Date: Tue, 19 Nov 2019 01:15:42 +0000
-Subject: [Buildroot] USB on rock64
-In-Reply-To: <20191118181113.3vi3zklvuibaxfk6@c-ml-p3510.redembedded.pl>
-References: <Jrdyl_Hac9BdPOhYDWt4FafgynThsUwezL988o5hous9u1y2phHJn7RMUehQbousCfsFYXHqbVjj4ZHFSvj2GApa6f2ZNcnkUFIkzlcb5io=@protonmail.com>
- <2f439898-5420-2413-3b4e-533ab124682a@mind.be>
- <gYbwmuK12iczoJF4lBzTCVCt4DX12_SVF-aghiLMzD4CAwEAg1D8CIepuT9X89EJcalxmpDVDwN3nDwv50H-CLzPX1X-U3JZFtgbVmO_A5o=@protonmail.com>
- <20191118181113.3vi3zklvuibaxfk6@c-ml-p3510.redembedded.pl>
-Message-ID: <_327ATNlLeGeTfyZzNSX9hYyYtKaGkmFJ9cdS27eHJ3yyuMZb9m226Y9QXX15Jm4vmVVAMCntRXajj8e06WP0qwx6lPYXM_yt8XaUeR7V28=@protonmail.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Mon, 18 Nov 2019 22:16:56 -0300
+Subject: [Buildroot] [PATCH v2 next] package/tar: bump target version to
+ 1.32 (host is kept at 1.29)
+Message-ID: <20191119011656.23740-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I've just compiled rock64_defconfig from master and USB does ineed
-> work, I checked USB3 and USB2 pendrives and keyboard but...
->
-> Only 1 USB port seems to work - bottom USB2.0. I remember there
-> were some issues with USB3 at the time I did the port, but cannot
-> remember why the upper USB2 does not work, maybe some regulator is
-> not enabled in default dtb?
->
-> Try different USB port and see if that works.
+From: LUC CRETI <luc.creti@atos.net>
 
-Weird, I get nothing on any port with a USB2 flash drive and a USB keyboard.
+The host tar is used to create the archives in the VCS download backends
+(git, cvs, svn, hg...) and tar 1.30 and forward have changed the way
+they generate the archives.
 
-I was using the 2018.08 version with quite a few different options set.  I'm assuming that when you compiled it you left everything default so I'll give that a go with the latest rc version and see what happens.
+So, all the archives that have been generated before 1.30 was released
+are not bit-for-bit reproducible (even though the extracted content
+would be), so the hashes we have for those archives would not match.
 
-Thanks for helping.
+Hence host-tar must be kept at version 1.29.
+
+For the target variant, this is less important, so bump it to the latest
+version.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12256
+
+Signed-off-by: LUC CRETI <luc.creti@atos.net>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+Commit message rewritten based on comment from Yann E. MORIN
+---
+ package/tar/tar.hash | 1 +
+ package/tar/tar.mk   | 9 +++++----
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/tar/tar.hash b/package/tar/tar.hash
+index 60309bab8f..c87be596b1 100644
+--- a/package/tar/tar.hash
++++ b/package/tar/tar.hash
+@@ -1,4 +1,5 @@
+ # Locally calculated after checking signature
+ sha256	402dcfd0022fd7a1f2c5611f5c61af1cd84910a760a44a688e18ddbff4e9f024	tar-1.29.tar.xz
++sha256	d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8	tar-1.32.tar.xz
+ sha256	9173f222464dd3676118408840da5990527062b5c7daf6487bed7c396c45bfb1	tar-1.29.cpio.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 6f609d7a02..87af8073f2 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-TAR_VERSION = 1.29
++HOST_TAR_VERSION=1.29
++TAR_VERSION = 1.32
+ TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
+ TAR_SITE = $(BR2_GNU_MIRROR)/tar
+ # busybox installs in /bin, so we need tar to install as well in /bin
+@@ -31,13 +32,13 @@ $(eval $(autotools-package))
+ 
+ # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
+ # of needing tar to build tar.
+-HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
++HOST_TAR_SOURCE = tar-$(HOST_TAR_VERSION).cpio.gz
+ define HOST_TAR_EXTRACT_CMDS
+ 	mkdir -p $(@D)
+ 	cd $(@D) && \
+ 		$(call suitable-extractor,$(HOST_TAR_SOURCE)) $(TAR_DL_DIR)/$(HOST_TAR_SOURCE) | cpio -i --preserve-modification-time
+-	mv $(@D)/tar-$(TAR_VERSION)/* $(@D)
+-	rmdir $(@D)/tar-$(TAR_VERSION)
++	mv $(@D)/tar-$(HOST_TAR_VERSION)/* $(@D)
++	rmdir $(@D)/tar-$(HOST_TAR_VERSION)
+ endef
+ 
+ HOST_TAR_CONF_OPTS = --without-selinux
+-- 
+2.18.1
