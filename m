@@ -1,103 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Nov 2019 17:30:48 +0100
-Subject: [Buildroot] [git commit branch/next] package/umtprd: new package
-Message-ID: <20191119162330.84B0D8F396@busybox.osuosl.org>
+Date: Tue, 19 Nov 2019 17:32:24 +0100
+Subject: [Buildroot] [PATCH v2] umtprd: Add package
+In-Reply-To: <20191113112136.24211-1-paul@crapouillou.net>
+References: <20191113112136.24211-1-paul@crapouillou.net>
+Message-ID: <20191119173224.439c01b6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=441599614e644361ef837569088bf48a61365c7b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Paul,
 
-uMTP-Responder is a lightweight USB Media Transfer Protocol (MTP)
-responder daemon for GNU/Linux.
+I've applied to next, after doing some small changes, see below.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-[Thomas: license is GPL-3.0+]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/umtprd/Config.in   | 11 +++++++++++
- package/umtprd/umtprd.hash |  3 +++
- package/umtprd/umtprd.mk   | 20 ++++++++++++++++++++
- 5 files changed, 36 insertions(+)
+On Wed, 13 Nov 2019 12:21:36 +0100
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 054f83ce5e..b1a20eaebe 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1807,6 +1807,7 @@ F:	package/yavta/
- N:	Paul Cercueil <paul@crapouillou.net>
- F:	package/libiio/
- F:	package/lightning/
-+F:	package/umtprd/
- 
- N:	Pedro Aguilar <paguilar@paguilar.org>
- F:	package/libunistring/
-diff --git a/package/Config.in b/package/Config.in
-index fd30562ea5..48c5bcec39 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -551,6 +551,7 @@ endmenu
- 	source "package/udev/Config.in"
- 	source "package/udisks/Config.in"
- 	source "package/uhubctl/Config.in"
-+	source "package/umtprd/Config.in"
- 	source "package/upower/Config.in"
- 	source "package/usb_modeswitch/Config.in"
- 	source "package/usb_modeswitch_data/Config.in"
-diff --git a/package/umtprd/Config.in b/package/umtprd/Config.in
-new file mode 100644
-index 0000000000..24bf119549
---- /dev/null
-+++ b/package/umtprd/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_UMTPRD
-+	bool "umtprd"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-+	help
-+	  Lightweight USB MTP responder daemon for GNU/Linux
-+
-+	  https://github.com/viveris/uMTP-Responder
-+
-+comment "umtprd needs a toolchain w/ threads, headers >= 3.15"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-diff --git a/package/umtprd/umtprd.hash b/package/umtprd/umtprd.hash
-new file mode 100644
-index 0000000000..168b19e951
---- /dev/null
-+++ b/package/umtprd/umtprd.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256	e1301bdd89170cc2c679446c1cc5873feaacd061bf0ab547fc0a11670bae9163	umtprd-1.0.0.tar.gz
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	LICENSE
-diff --git a/package/umtprd/umtprd.mk b/package/umtprd/umtprd.mk
-new file mode 100644
-index 0000000000..63faae43b3
---- /dev/null
-+++ b/package/umtprd/umtprd.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# umtprd
-+#
-+################################################################################
-+
-+UMTPRD_VERSION = 1.0.0
-+UMTPRD_SITE = https://github.com/viveris/uMTP-Responder/archive
-+UMTPRD_LICENSE = GPL-3.0+
-+UMTPRD_LICENSE_FILES = LICENSE
-+
-+define UMTPRD_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define UMTPRD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/umtprd $(TARGET_DIR)/usr/sbin/umtprd
-+endef
-+
-+$(eval $(generic-package))
+> uMTP-Responder is a lightweight USB Media Transfer Protocol (MTP)
+> responder daemon for GNU/Linux.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+
+The commit title should have been:
+
+	package/umtprd: new package
+
+> +UMTPRD_VERSION = 1.0.0
+> +UMTPRD_SITE = https://github.com/viveris/uMTP-Responder/archive
+> +UMTPRD_LICENSE = GPL-3.0
+
+The license really is GPL-3.0+, all source files have the "or later"
+option.
+
+Applied with those two issues fixed. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
