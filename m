@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2019 08:55:24 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] toolchain/helpers: make
+Date: Tue, 19 Nov 2019 08:55:18 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] toolchain/helpers: make
  sure we bail out when kernel headers check fails
-Message-ID: <20191119074815.68D658F302@busybox.osuosl.org>
+Message-ID: <20191119074820.1F8A38F306@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=988b45e57ee418937d7ddb7c600584e3b8764def
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=421fba09b59088bc453e44cc8d0cefea4836f28a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 In commit 6136765b23abd9faba610dd54ed276a777811575 ("toolchain:
 generate check-headers program under $(BUILD_DIR)"), the
@@ -38,7 +38,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index c936da8f29..3c30a8268e 100644
+index 6a4f7223c8..28ae059693 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
 @@ -163,7 +163,9 @@ copy_toolchain_sysroot = \
