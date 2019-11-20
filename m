@@ -1,162 +1,171 @@
 From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Wed, 20 Nov 2019 17:39:15 +0000
-Subject: [Buildroot] [RFC PATCH v3 01/30] pkgconf: Configure using
- pkgconf-personality
-In-Reply-To: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
-References: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
-Message-ID: <20191120173944.130142-2-thomas.preston@codethink.co.uk>
+Date: Wed, 20 Nov 2019 17:39:14 +0000
+Subject: [Buildroot] [RFC PATCH v3 00/30] Add Chromium Embedded Framework
+ library
+Message-ID: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The correct way to configure pkgconf when cross-compiling is to use
-pkgconf-personality, rather than using environment variables. The
-personality can be selected with a symbolic link mechanism, however in
-Buildroot we also want to configure the `--static` flag so we continue
-to use the pkg-config wrapper script and select personality via the
-flag.
+Hi all,
+Here's our third attempt at adding libcef to Buildroot. We've tried to
+address all feedback from the list, so thank you to everyone who has
+contributed to that. If there are any further clarifications, we'll
+respond directly.
 
-Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
----
- package/Makefile.in                   |  6 +-----
- package/pkgconf/host-pkg-config.in    |  9 ++++++++
- package/pkgconf/host.personality.in   |  6 ++++++
- package/pkgconf/pkg-config.in         | 15 +++++---------
- package/pkgconf/pkgconf.mk            | 30 +++++++++++++++++++++++----
- package/pkgconf/target.personality.in |  6 ++++++
- 6 files changed, 53 insertions(+), 19 deletions(-)
+Features:
+- cefsimple sample application
+- Widevine support
+- ARM cross compilation (tested on a Raspberry Pi)
+- Intel VA-API
+
+The branch is split up into the following sections:
+1. Buildroot changes to support libcef
+2. The libcef package itself
+3. libcef features, excluding V8 snapshot
+4. A series of host- packages required by the V8 snapshot feature
+5. The V8 snapshot feature
+
+Still in progress:
+- Testing using an external toolchain
+- Testing V8 Snapshot build. Not sure if this works outside our build
+  machine yet and it definitely doesn't work for ARM.
+
+Known bugs:
+- WebGL doesn't work on the ARM cross compile. We probably won't get
+  around to fixing this for the Raspberry Pi.
+
+Any more feedback would be greatly appreciated.
+
+Many thanks,
+Thomas Preston
+
+Changes since RFC v2 (high-level):
+- Updated to CEF 78.2.9+g4907ec5+chromium-78.0.3904.70
+- Now using bitbucket auto-archive feature
+- Moved staging variables closer to the definition where they are used
+- Using the new host-pkg-config wrapper based on pkgconf-personality
+  fixup (we fixed up qt5webengine too). We're aware there are some
+  problems with pkgconf breaking some other packages right now.
+- Wired up the Chromium `use_sysroot` and `target_sysroot` GN defines
+- Added "host" architecture to LLVM targets (Chromium needs to build
+  host binaries when cross compiling for ARM)
+- Tidied up clang flags
+- Added more comments describing `is_official_build` and the second
+  output build directory (for building libcef_dll_wrapper).
+- Removed cefclient because it has ancient dependencies
+- Split out features into separate commits
+- Moved patching to LIBCEF_PRE_PATCH_HOOKS
+- Utilise the toolchain unbundling BUILD.gn
+- Removed useless Python2 linking
+- Install libEGL.so and libGLESv2.so, which are required by the browser
+
+Joseph Kogut (1):
+  package/llvm: add config to build backend for host arch
+
+Matt Weber (2):
+  package/llvm: install target binary/debug tools
+  package/compiler-rt: new package
+
+Michael Drake (23):
+  package/libkrb5: Add host tools package.
+  package/compiler-rt: Fix to install the blacklist datafiles for
+    host-clang.
+  package/webp: Enable host package build.
+  package/Makefile.in: Provide TARGET_CROSS without path and trailing -
+  package/libcef: New package
+  package/libcef: Add option to enable VA-API HW acceleration.
+  package/libcef: Add proprietary codecs build option.
+  package/widevine: Add package for the widevine CDM library.
+  package/libcef: Widevine support depends on widevine package.
+  package/alsa-lib/alsa-lib: Add host package.
+  package/ffmpeg: Add host package.
+  package/libvpx: Add host package.
+  package/x11r7/xcb-util: Add host package.
+  package/x11r7/xlib_libXScrnSaver: Add host package.
+  package/x11r7/xlib_libXcomposite: Add host package.
+  package/x11r7/xlib_libXext: Add host package.
+  package/x11r7/xlib_libXi: Add host package.
+  package/x11r7/xlib_libXrandr: Add host package.
+  package/x11r7/xlib_libXtst: Add host package.
+  package/pciutils: Enable host package.
+  package/libdrm: Add host package.
+  package/mesa3d: Add host package.
+  package/libcef: Add v8 Snapshot option.
+
+Thomas Preston (4):
+  pkgconf: Configure using pkgconf-personality
+  package/qt5/qt5webengine: Use Buildroot's host-pkg-config wrapper
+  package/jpeg-turbo: Add host install
+  package/libcef: Add option to build cefsimple.
+
+ DEVELOPERS                                    |    1 +
+ package/Config.in                             |    3 +
+ package/Makefile.in                           |   12 +-
+ package/alsa-lib/alsa-lib.mk                  |    1 +
+ package/clang/clang.mk                        |    2 +-
+ package/compiler-rt/Config.in                 |   14 +
+ package/compiler-rt/compiler-rt.hash          |    2 +
+ package/compiler-rt/compiler-rt.mk            |   46 +
+ package/ffmpeg/ffmpeg.mk                      |   61 +
+ package/jpeg-turbo/jpeg-turbo.mk              |    2 +
+ ...et-pkg_config-wrapper-handle-sysroot.patch |   52 +
+ .../libcef/0002-stop-widevine-assert.patch    |   15 +
+ ...e-cef_use_gtk-for-cefclient-GTK-deps.patch |   57 +
+ package/libcef/Config.in                      |  149 +++
+ .../build/toolchain/linux/unbundle/BUILD.gn   |   49 +
+ package/libcef/libcef.license-files.inc       | 1131 +++++++++++++++++
+ package/libcef/libcef.mk                      |  447 +++++++
+ .../libcef/scripts/gather-license-files.sh    |   53 +
+ package/libcef/scripts/version.sh             |   48 +
+ package/libcef/templates/cef_version.h        |   70 +
+ package/libdrm/libdrm.mk                      |    6 +
+ package/libkrb5/libkrb5.mk                    |    1 +
+ package/libvpx/libvpx.mk                      |   29 +
+ package/lld/lld.mk                            |    2 +-
+ package/llvm/Config.in                        |    6 +
+ package/llvm/llvm.mk                          |   19 +-
+ package/mesa3d/mesa3d.mk                      |   18 +
+ package/pciutils/pciutils.mk                  |   19 +
+ package/pkgconf/host-pkg-config.in            |    9 +
+ package/pkgconf/host.personality.in           |    6 +
+ package/pkgconf/pkg-config.in                 |   15 +-
+ package/pkgconf/pkgconf.mk                    |   30 +-
+ package/pkgconf/target.personality.in         |    6 +
+ package/qt5/qt5webengine/host-pkg-config.in   |    6 -
+ package/qt5/qt5webengine/qt5webengine.mk      |    7 +-
+ package/webp/webp.mk                          |    5 +
+ package/widevine/Config.in                    |    6 +
+ package/widevine/widevine.mk                  |   38 +
+ package/x11r7/xcb-util/xcb-util.mk            |    2 +
+ .../xlib_libXScrnSaver/xlib_libXScrnSaver.mk  |    2 +
+ .../xlib_libXcomposite/xlib_libXcomposite.mk  |    2 +
+ package/x11r7/xlib_libXext/xlib_libXext.mk    |    2 +
+ package/x11r7/xlib_libXi/xlib_libXi.mk        |    7 +
+ .../x11r7/xlib_libXrandr/xlib_libXrandr.mk    |    2 +
+ package/x11r7/xlib_libXtst/xlib_libXtst.mk    |    7 +
+ 45 files changed, 2429 insertions(+), 38 deletions(-)
+ create mode 100644 package/compiler-rt/Config.in
+ create mode 100644 package/compiler-rt/compiler-rt.hash
+ create mode 100644 package/compiler-rt/compiler-rt.mk
+ create mode 100644 package/libcef/0001-pkg_config-Let-pkg_config-wrapper-handle-sysroot.patch
+ create mode 100644 package/libcef/0002-stop-widevine-assert.patch
+ create mode 100644 package/libcef/0003-BUILD.gn-Use-cef_use_gtk-for-cefclient-GTK-deps.patch
+ create mode 100644 package/libcef/Config.in
+ create mode 100644 package/libcef/build/toolchain/linux/unbundle/BUILD.gn
+ create mode 100644 package/libcef/libcef.license-files.inc
+ create mode 100644 package/libcef/libcef.mk
+ create mode 100755 package/libcef/scripts/gather-license-files.sh
+ create mode 100755 package/libcef/scripts/version.sh
+ create mode 100644 package/libcef/templates/cef_version.h
  create mode 100644 package/pkgconf/host-pkg-config.in
  create mode 100644 package/pkgconf/host.personality.in
  create mode 100644 package/pkgconf/target.personality.in
+ delete mode 100644 package/qt5/qt5webengine/host-pkg-config.in
+ create mode 100644 package/widevine/Config.in
+ create mode 100644 package/widevine/widevine.mk
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 285e2837ef..3b764baa47 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -286,11 +286,7 @@ TARGET_CONFIGURE_OPTS = \
- 
- HOST_MAKE_ENV = \
- 	PATH=$(BR_PATH) \
--	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--	PKG_CONFIG_SYSROOT_DIR="/" \
--	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
--	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
--	PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
-+	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY_HOST)"
- 
- HOST_CONFIGURE_OPTS = \
- 	$(HOST_MAKE_ENV) \
-diff --git a/package/pkgconf/host-pkg-config.in b/package/pkgconf/host-pkg-config.in
-new file mode 100644
-index 0000000000..9eaf6e0c19
---- /dev/null
-+++ b/package/pkgconf/host-pkg-config.in
-@@ -0,0 +1,9 @@
-+#!/bin/sh
-+# This is the Buildroot host pkgconf wrapper which is requried to allow host
-+# packages to query system cflags and system libs.
-+PKGCONFDIR=$(dirname $0)
-+BR2_PKGCONF_PERSONALITY=${BR2_PKGCONF_PERSONALITY:- at DEFAULT_HOST_PERSONALITY@}
-+exec ${PKGCONFDIR}/pkgconf \
-+	--keep-system-cflags \
-+	--keep-system-libs \
-+	--personality=$BR2_PKGCONF_PERSONALITY "$@"
-diff --git a/package/pkgconf/host.personality.in b/package/pkgconf/host.personality.in
-new file mode 100644
-index 0000000000..8099d26435
---- /dev/null
-+++ b/package/pkgconf/host.personality.in
-@@ -0,0 +1,6 @@
-+# Buildroot host pkgconf-personality
-+Triplet: @GNU_HOST_NAME@
-+SysrootDir: /
-+DefaultSearchPaths: @HOST_DIR@/usr/lib/pkgconfig:@HOST_DIR@/usr/share/pkgconfig
-+SystemIncludePaths: @HOST_DIR@/usr/include
-+SystemLibraryPaths: @HOST_DIR@/usr/lib
-diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
-index f411eb0926..c40cefbc2e 100644
---- a/package/pkgconf/pkg-config.in
-+++ b/package/pkgconf/pkg-config.in
-@@ -1,12 +1,7 @@
- #!/bin/sh
-+# This is the Buildroot pkgconf wrapper which is requried to build static
-+# libraries for the target. Normally personality can be selected using a symlink
-+# mechanism: triple-pkg-config -> pkgconf, with triple personality.
- PKGCONFDIR=$(dirname $0)
--DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
--DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
--DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/include
--DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib
--
--PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
--	PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} \
--	PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKG_CONFIG_SYSTEM_INCLUDE_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH}} \
--	PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKG_CONFIG_SYSTEM_LIBRARY_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH}} \
--	exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
-+BR2_PKGCONF_PERSONALITY=${BR2_PKGCONF_PERSONALITY:- at DEFAULT_TARGET_PERSONALITY@}
-+exec ${PKGCONFDIR}/pkgconf --personality=$BR2_PKGCONF_PERSONALITY @STATIC@ "$@"
-diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-index 1851ecfca4..28ea12be39 100644
---- a/package/pkgconf/pkgconf.mk
-+++ b/package/pkgconf/pkgconf.mk
-@@ -9,7 +9,11 @@ PKGCONF_SITE = https://distfiles.dereferenced.org/pkgconf
- PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.xz
- PKGCONF_LICENSE = pkgconf license
- PKGCONF_LICENSE_FILES = COPYING
-+PKGCONF_HOST_PERSONALITYD = $(HOST_DIR)/share/pkgconfig/personality.d
- 
-+HOST_PKGCONF_CONF_OPTS += --with-personality-dir=$(PKGCONF_HOST_PERSONALITYD)
-+
-+PKG_CONFIG_HOST_BINARY_HOST = $(HOST_DIR)/bin/host-pkg-config
- PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/bin/pkg-config
- 
- define PKGCONF_LINK_PKGCONFIG
-@@ -17,10 +21,28 @@ define PKGCONF_LINK_PKGCONFIG
- endef
- 
- define HOST_PKGCONF_INSTALL_WRAPPER
--	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
--		$(HOST_DIR)/bin/pkg-config
--	$(SED) 's, at STAGING_SUBDIR@,$(STAGING_SUBDIR),g' \
--		$(HOST_DIR)/bin/pkg-config
-+	mkdir -p $(PKGCONF_HOST_PERSONALITYD)
-+
-+	# Install pkgconf target personality
-+	sed -e 's, at STAGING_DIR@,$(STAGING_DIR),g' \
-+		-e 's, at GNU_TARGET_NAME@,$(GNU_TARGET_NAME),g' \
-+		$(PKGCONF_PKGDIR)/target.personality.in \
-+		> $(PKGCONF_HOST_PERSONALITYD)/$(GNU_TARGET_NAME).personality
-+	$(INSTALL) -m 0755 -D $(PKGCONF_PKGDIR)/pkg-config.in \
-+		$(PKG_CONFIG_HOST_BINARY)
-+	$(SED) 's, at DEFAULT_TARGET_PERSONALITY@,$(GNU_TARGET_NAME),g' \
-+		$(PKG_CONFIG_HOST_BINARY)
-+
-+	# Install pkgconf host personality
-+	sed -e 's, at HOST_DIR@,$(HOST_DIR),g' \
-+		-e 's, at GNU_HOST_NAME@,$(GNU_HOST_NAME),g' \
-+		$(PKGCONF_PKGDIR)/host.personality.in \
-+		> $(PKGCONF_HOST_PERSONALITYD)/$(GNU_HOST_NAME).personality
-+	$(INSTALL) -m 0755 -D $(PKGCONF_PKGDIR)/host-pkg-config.in \
-+		$(PKG_CONFIG_HOST_BINARY_HOST)
-+	$(SED) 's, at DEFAULT_HOST_PERSONALITY@,$(GNU_HOST_NAME),g' \
-+		$(PKG_CONFIG_HOST_BINARY_HOST)
-+
- endef
- 
- define HOST_PKGCONF_STATIC
-diff --git a/package/pkgconf/target.personality.in b/package/pkgconf/target.personality.in
-new file mode 100644
-index 0000000000..3959d833ee
---- /dev/null
-+++ b/package/pkgconf/target.personality.in
-@@ -0,0 +1,6 @@
-+# Buildroot target pkgconf-personality
-+Triplet: @GNU_TARGET_NAME@
-+SysrootDir: @STAGING_DIR@
-+DefaultSearchPaths: @STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig
-+SystemIncludePaths: @STAGING_DIR@/usr/include
-+SystemLibraryPaths: @STAGING_DIR@/usr/lib
 -- 
 2.20.1
