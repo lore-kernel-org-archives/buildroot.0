@@ -1,52 +1,46 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed, 20 Nov 2019 10:37:54 +0300
-Subject: [Buildroot] [PATCH 3/9] boot/arm-trusted-firmware: Add
- u-boot-dtb.bin support
-In-Reply-To: <20191120040725.32207-4-jerry.huang@nxp.com>
+Date: Wed, 20 Nov 2019 10:50:02 +0300
+Subject: [Buildroot] [PATCH 4/9] boot/arm-trusted-firmware: Add RCW
+ support
+In-Reply-To: <20191120040725.32207-5-jerry.huang@nxp.com>
 References: <20191120040725.32207-1-jerry.huang@nxp.com>
- <20191120040725.32207-4-jerry.huang@nxp.com>
-Message-ID: <20191120073754.ror57blke4sx2gup@bars>
+ <20191120040725.32207-5-jerry.huang@nxp.com>
+Message-ID: <20191120075002.rgn3ymmedtux5dg4@bars>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> NXP Layerscape platforms use u-boot-dtb.bin to boot the board.
-> 
-> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
-> ---
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
 > diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index e528686aa1..70d36fff73 100644
+> index 70d36fff73..6896d9a7aa 100644
 > --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
 > +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -70,7 +70,11 @@ endif
->  endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
+> @@ -95,6 +95,15 @@ endif
 >  
->  ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33),y)
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_BIN),y)
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/u-boot-dtb.bin
-> +else
->  ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/u-boot.bin
+>  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
+>  
+> +RCW_BOOT_MODE = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BOOT_MODE))
+> +ifneq ($(RCW_BOOT_MODE),)
+> +RCW_PATH = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BIN))
+> +RCW_FILE = $(lastword $(subst /, ,$(RCW_PATH)))
+> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BOOT_MODE=$(RCW_BOOT_MODE) RCW=$(BINARIES_DIR)/$(RCW_FILE)
+> +ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += pbl
+> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-rcw
 > +endif
->  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
->  endif
+> +
+>  ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
+>  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += fip
+>  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-openssl
 
-Hi Jerry, Thomas, and all
+Hi Jerry and all,
 
-Looks good, but probably we could make it a little bit more future-proof.
-What do you think about using the same pattern-based approach here as
-implemented in commit e4d276c357fdf9f19f99f8 (buildroot next branch)
-for ATF firmware images.
+Here arm-trusted-firmware build is modified when some host package
+with specific configuration is enabled in board config.
 
-In brief, to add option BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
-in arm-trusted-firmware Config.in and set its default value to u-boot.bin.
-Then u-boot-dtb.bin value could be specified in the board defconfig.
-
-Thoughts ? Comments ?
+Shouldn't it be the other way around ? To be more specific: another
+Config.in option for arm-trusted-firmware which pulls required build
+time dependencies, e.g. see Marvell DDR options or FIP options.
 
 Regards,
 Sergey
