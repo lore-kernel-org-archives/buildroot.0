@@ -1,57 +1,32 @@
 From: Changming Huang <jerry.huang@nxp.com>
-Date: Wed, 20 Nov 2019 12:07:21 +0800
-Subject: [Buildroot] [PATCH 5/9] package/freescale-qoriq: new package
- directory
-In-Reply-To: <20191120040725.32207-1-jerry.huang@nxp.com>
-References: <20191120040725.32207-1-jerry.huang@nxp.com>
-Message-ID: <20191120040725.32207-6-jerry.huang@nxp.com>
+Date: Wed, 20 Nov 2019 12:07:16 +0800
+Subject: [Buildroot] [PATCH 0/9] new board ls1028ardb introduced
+Message-ID: <20191120040725.32207-1-jerry.huang@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The freescale-qoriq directory is intended to contain all freescale
-QorIQ (including PowerPC and LayerScape serial) related packages,
-together with their download site and version info.
+The following nine patches is to enable LS1028ARDB board in Buildroot.
+
+NXP LS1028A silicon is based on Arm A72 core and  designed for industry,
+some key features are enabled:
+  TSN - Time Sensitive Network on Network interface
+  TSN/Swith - naive TSN Swith, support six ports
+  DP - display port for different resolution up to 4K
+
+The base for these patches is "next" branch, commitID: 5fd8db02ef
+
+1. Upgrade the RCW version to latest version supported via LSDK-19.09
+2. Use RCW binary for boot board
+3. Intruduce u-boot-dtb.bin for NXP Layerscape serial platform
+4. Introduce RCW to Arm-trusted-firmware
+5. Create one freescale-qoriq direcotry for all firmware hardware related 
+6. LS1028ARDB DP firmware is stored in freescale-qoriq
+7. New patches to eanble GPIO interrupt for eNETC and Micro-bus
+8. One standard directory for all Layerscape platform
+9. LS1028ARDB related scripts and default configurations
 
 Signed-off-by: Changming Huang <jerry.huang@nxp.com>
 ---
- package/Config.in                          | 1 +
- package/freescale-qoriq/Config.in          | 4 ++++
- package/freescale-qoriq/freescale-qoriq.mk | 1 +
- 3 files changed, 6 insertions(+)
- create mode 100644 package/freescale-qoriq/Config.in
- create mode 100644 package/freescale-qoriq/freescale-qoriq.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index fd30562ea5..e2f9d2ea23 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -447,6 +447,7 @@ endmenu
- 	source "package/flashrom/Config.in"
- 	source "package/fmtools/Config.in"
- 	source "package/freescale-imx/Config.in"
-+	source "package/freescale-qoriq/Config.in"
- 	source "package/fxload/Config.in"
- 	source "package/gadgetfs-test/Config.in"
- 	source "package/gcnano-binaries/Config.in"
-diff --git a/package/freescale-qoriq/Config.in b/package/freescale-qoriq/Config.in
-new file mode 100644
-index 0000000000..51497c588e
---- /dev/null
-+++ b/package/freescale-qoriq/Config.in
-@@ -0,0 +1,4 @@
-+menu "Freescale QorIQ libraries"
-+	depends on BR2_aarch64 || BR2_arm || BR2_powerpc64 || BR2_powerpc
-+
-+endmenu
-diff --git a/package/freescale-qoriq/freescale-qoriq.mk b/package/freescale-qoriq/freescale-qoriq.mk
-new file mode 100644
-index 0000000000..bbbbf3efbe
---- /dev/null
-+++ b/package/freescale-qoriq/freescale-qoriq.mk
-@@ -0,0 +1 @@
-+include $(sort $(wildcard package/freescale-qoriq/*/*.mk))
--- 
-2.17.1
