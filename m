@@ -1,46 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 22:32:47 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/linuxconsoletools: bump
- version to 1.7.0
-In-Reply-To: <20191120161408.GA28902@coltrane>
-References: <20191120161408.GA28902@coltrane>
-Message-ID: <20191120223247.4834b573@windsurf.home>
+Date: Wed, 20 Nov 2019 22:33:07 +0100
+Subject: [Buildroot] [git commit] package/rpcbind: add systemd as a
+ build-time dependency
+Message-ID: <20191120212641.8020C8F43A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Koen,
+commit: https://git.buildroot.net/buildroot/commit/?id=33da50f0142f9e062df136c8c3cdd67036791e1f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks a lot for the new iteration!
+When systemd support is enabled, systemd should be built before,
+otherwise the build fails with:
 
-On Wed, 20 Nov 2019 17:14:09 +0100
-Koen Martens <gmc@sonologic.nl> wrote:
+checking for SYSTEMD... no
+configure: error: libsystemd support requested but found
+package/pkg-generic.mk:228: recipe for target
 
-> This version changed the (optional) dependency from sdl and
-> sdl-config to sdl2 and pkg-config. Therefore, the patch
-> 0002-sdl-config.patch has been dropped and the dependency
-> has been changed to BR2_PACKAGE_SDL2.
-> 
-> Since SDL2 (required to build force-feedback utilities)
-> requires shared library support to compile, a dependency
-> on !BR2_STATIC_LIBS was added to the configuration option
-> that enables force-feedback utilities.
-> 
-> Signed-off-by: Koen Martens <gmc@sonologic.nl>
-> ---
->  .../linuxconsoletools/0002-sdl-config.patch   | 20 -------------------
->  package/linuxconsoletools/Config.in           |  6 +++++-
->  .../linuxconsoletools/linuxconsoletools.hash  |  2 +-
->  .../linuxconsoletools/linuxconsoletools.mk    |  6 +++---
->  4 files changed, 9 insertions(+), 25 deletions(-)
->  delete mode 100644 package/linuxconsoletools/0002-sdl-config.patch
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rpcbind/rpcbind.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index 0f5011e522..46e5b27d35 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -17,6 +17,7 @@ RPCBIND_CONF_OPTS += --with-rpcuser=root
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
++RPCBIND_DEPENDENCIES += systemd
+ else
+ RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
+ endif
