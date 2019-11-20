@@ -1,45 +1,64 @@
 From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Wed, 20 Nov 2019 17:39:22 +0000
-Subject: [Buildroot] [RFC PATCH v3 08/30] package/compiler-rt: Fix to
- install the blacklist datafiles for host-clang.
+Date: Wed, 20 Nov 2019 17:39:26 +0000
+Subject: [Buildroot] [RFC PATCH v3 12/30] package/libcef: Add option to
+ build cefsimple.
 In-Reply-To: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
 References: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
-Message-ID: <20191120173944.130142-9-thomas.preston@codethink.co.uk>
+Message-ID: <20191120173944.130142-13-thomas.preston@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Michael Drake <michael.drake@codethink.co.uk>
+This primitive browser is an example application which uses libcef.
 
+Cc: Patrick Glaser <pglaser@tesla.com>
+Cc: Jon duSaint <jdusaint@tesla.com>
+Cc: Enis Lavery <elavery@tesla.com>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/compiler-rt/compiler-rt.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/libcef/Config.in | 9 +++++++++
+ package/libcef/libcef.mk | 9 +++++++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
-index febd71b906..c41ebcd5c1 100644
---- a/package/compiler-rt/compiler-rt.mk
-+++ b/package/compiler-rt/compiler-rt.mk
-@@ -28,7 +28,18 @@ COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_STANDALONE_BUILD=OFF \
- # standalone.
- define COMPILER_RT_SETUP_RUNTIME_LIBS
- 	mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
-+	mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share
- 	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
-+	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share/asan_blacklist.txt \
-+	      $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share/asan_blacklist.txt
-+	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share/cfi_blacklist.txt \
-+	      $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share/cfi_blacklist.txt
-+	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share/dfsan_abilist.txt \
-+	      $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share/dfsan_abilist.txt
-+	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share/hwasan_blacklist.txt \
-+	      $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share/hwasan_blacklist.txt
-+	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share/msan_blacklist.txt \
-+	      $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share/msan_blacklist.txt
- endef
- COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
+diff --git a/package/libcef/Config.in b/package/libcef/Config.in
+index 6f091af5dd..d904c79e52 100644
+--- a/package/libcef/Config.in
++++ b/package/libcef/Config.in
+@@ -86,3 +86,12 @@ config BR2_PACKAGE_LIBCEF
+ 	  Google Chromium web browser.
  
+ 	  https://bitbucket.org/chromiumembedded/cef
++
++if BR2_PACKAGE_LIBCEF
++
++config BR2_PACKAGE_LIBCEF_CEFSIMPLE
++	bool "Enable libcef example application cefsimple."
++	help
++	  Enables libcef example application cefsimple.
++
++endif
+diff --git a/package/libcef/libcef.mk b/package/libcef/libcef.mk
+index 0555ba4590..fb40d0e40a 100644
+--- a/package/libcef/libcef.mk
++++ b/package/libcef/libcef.mk
+@@ -208,6 +208,15 @@ else
+ LIBCEF_GN_DEFINES += use_pulseaudio=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCEF_CEFSIMPLE),y)
++LIBCEF_BUILD_TARGETS += cefsimple
++define LIBCEF_INSTALL_CEFSIMPLE
++	$(INSTALL) -m 0755 -D -t $(TARGET_DIR)/usr/lib \
++		$(@D)/$(LIBCEF_BUILD_OUTPUT_DIR)/cefsimple
++endef
++LIBCEF_POST_INSTALL_TARGET_HOOKS += LIBCEF_INSTALL_CEFSIMPLE
++endif
++
+ # To build libcef, the CEF project source must be extracted in a
+ # `cef` directory inside the Chromium source tree.  We override
+ # the buildroot default extract commands to get the desired source
 -- 
 2.20.1
