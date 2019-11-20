@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 21:39:18 +0100
-Subject: [Buildroot] [git commit branch/next] linux: bump CIP kernel to
- version 4.19.82-cip14
-Message-ID: <20191120203148.2F6AC8F3D3@busybox.osuosl.org>
+Date: Wed, 20 Nov 2019 21:41:17 +0100
+Subject: [Buildroot] [PATCH 1/2] linux: change download method
+In-Reply-To: <20191120185854.23820-1-angelo@amarulasolutions.com>
+References: <20191120185854.23820-1-angelo@amarulasolutions.com>
+Message-ID: <20191120214117.476cb931@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0881d9d2dec47d4c214664f0116a93a4140d7949
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Angelo,
 
-This patch bumps Linux CIP version to 4.19.82-cip14.
+On Wed, 20 Nov 2019 19:58:53 +0100
+Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Downloading form https tarball is faster than clonig a git repo.
+> BR2_LINUX_KERNEL_CUSTOM_GIT can be used as a fallback mechanism
+> to downlad the CIP kernel with git.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  linux/Config.in | 4 ++--
+>  linux/linux.mk  | 3 ++-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f6572f5fad..8c5539c9ab 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -35,7 +35,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.3)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (4.19.75-cip11)"
-+	bool "Latest CIP SLTS version (4.19.82-cip14)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -123,7 +123,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.3.8" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "4.19.75-cip11" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "4.19.82-cip14" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+I've applied both patches to next, thanks. However, you had apparently
+based those patches on master, while they should have been based on
+next (they are improvements/version bumps). And also, the commit title
+should have mention that the change is related to the CIP kernel.
+Indeed "linux: change download method" is a bit vague as it doesn't say
+that it changes the download method for the CIP kernel. Ditto for the
+second patch. I tweaked the commit titles when applying.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
