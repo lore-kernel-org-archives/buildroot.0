@@ -1,31 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 22:34:37 +0100
-Subject: [Buildroot] [next] package/rpcbind: add systemd dependency when
- cfg for systemd
-In-Reply-To: <20191120150015.54771-1-matthew.weber@rockwellcollins.com>
-References: <20191120150015.54771-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20191120223437.2b501bcf@windsurf.home>
+Date: Wed, 20 Nov 2019 22:34:53 +0100
+Subject: [Buildroot] [git commit branch/next] support/testing: add
+ assertRunOk method to BRTest class
+Message-ID: <20191120220403.F376B8F488@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 Nov 2019 09:00:15 -0600
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=63966e56a3cd83df36c6357be9e48608e95dac54
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/rpcbind/rpcbind.mk | 1 +
->  1 file changed, 1 insertion(+)
+This method asserts that the given command ran successfully.
+The goal is for it to be used by the different tests when needed.
 
-As discussed in the thread, I've improved the commit log and applied to
-master.
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/infra/basetest.py | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index a176bc328a..023039f6af 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -84,3 +84,9 @@ class BRTest(BRConfigTest):
+         if self.emulator:
+             self.emulator.stop()
+         super(BRTest, self).tearDown()
++
++    # Run the given 'cmd' with a 'timeout' on the target and 
++    # assert that the command succeeded
++    def assertRunOk(self, cmd, timeout=-1):
++        _, exit_code = self.emulator.run(cmd, timeout)
++        self.assertEqual(exit_code, 0)
