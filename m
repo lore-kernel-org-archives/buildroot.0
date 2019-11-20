@@ -1,9 +1,10 @@
 From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Wed, 20 Nov 2019 17:39:32 +0000
-Subject: [Buildroot] [RFC PATCH v3 18/30] package/ffmpeg: Add host package.
+Date: Wed, 20 Nov 2019 17:39:30 +0000
+Subject: [Buildroot] [RFC PATCH v3 16/30] package/libcef: Widevine support
+ depends on widevine package.
 In-Reply-To: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
 References: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
-Message-ID: <20191120173944.130142-19-thomas.preston@codethink.co.uk>
+Message-ID: <20191120173944.130142-17-thomas.preston@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,103 +13,56 @@ To: buildroot@busybox.net
 
 From: Michael Drake <michael.drake@codethink.co.uk>
 
+Cc: Patrick Glaser <pglaser@tesla.com>
+Cc: Jon duSaint <jdusaint@tesla.com>
+Cc: Enis Lavery <elavery@tesla.com>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/ffmpeg/ffmpeg.mk | 61 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ ...devine-assert.patch => 0002-stop-widevine-assert.patch} | 0
+ package/libcef/Config.in                                   | 6 ++++++
+ package/libcef/libcef.mk                                   | 7 +++++++
+ 3 files changed, 13 insertions(+)
+ rename package/libcef/{0003-stop-widevine-assert.patch => 0002-stop-widevine-assert.patch} (100%)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 3dd2e3ef76..d20209d72b 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -56,6 +56,46 @@ FFMPEG_CONF_OPTS = \
- 	--disable-symver \
- 	--disable-doc
+diff --git a/package/libcef/0003-stop-widevine-assert.patch b/package/libcef/0002-stop-widevine-assert.patch
+similarity index 100%
+rename from package/libcef/0003-stop-widevine-assert.patch
+rename to package/libcef/0002-stop-widevine-assert.patch
+diff --git a/package/libcef/Config.in b/package/libcef/Config.in
+index 3344750b5b..e0a70e626c 100644
+--- a/package/libcef/Config.in
++++ b/package/libcef/Config.in
+@@ -95,6 +95,12 @@ config BR2_PACKAGE_LIBCEF_CEFSIMPLE
+ 	help
+ 	  Enables libcef example application cefsimple.
  
-+HOST_FFMPEG_CONF_OPTS = \
-+	--enable-avfilter \
-+	--disable-version3 \
-+	--enable-logging \
-+	--enable-optimizations \
-+	--disable-extra-warnings \
-+	--enable-avdevice \
-+	--enable-avcodec \
-+	--enable-avformat \
-+	--enable-network \
-+	--disable-gray \
-+	--enable-swscale-alpha \
-+	--disable-small \
-+	--enable-dct \
-+	--enable-fft \
-+	--enable-mdct \
-+	--enable-rdft \
-+	--disable-crystalhd \
-+	--disable-dxva2 \
-+	--enable-runtime-cpudetect \
-+	--disable-hardcoded-tables \
-+	--disable-mipsdsp \
-+	--disable-mipsdspr2 \
-+	--disable-msa \
-+	--enable-hwaccels \
-+	--disable-cuda \
-+	--disable-cuvid \
-+	--disable-nvenc \
-+	--disable-avisynth \
-+	--disable-frei0r \
-+	--disable-libopencore-amrnb \
-+	--disable-libopencore-amrwb \
-+	--disable-libdc1394 \
-+	--disable-libgsm \
-+	--disable-libilbc \
-+	--disable-libvo-amrwbenc \
-+	--disable-libxcb \
-+	--disable-symver \
-+	--disable-doc
++config BR2_PACKAGE_LIBCEF_WIDEVINE
++	bool "Enable Widevine support in libcef."
++	select BR2_PACKAGE_WIDEVINE
++	help
++	  Enables Widevine key system support.
 +
- FFMPEG_DEPENDENCIES += host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
-@@ -413,9 +453,12 @@ endif
- ifeq ($(BR2_X86_CPU_HAS_MMX),y)
- FFMPEG_CONF_OPTS += --enable-x86asm
- FFMPEG_DEPENDENCIES += host-nasm
-+HOST_FFMPEG_DEPENDENCIES += host-nasm
- else
- FFMPEG_CONF_OPTS += --disable-x86asm
- FFMPEG_CONF_OPTS += --disable-mmx
-+HOST_FFMPEG_CONF_OPTS += --disable-x86asm
-+HOST_FFMPEG_CONF_OPTS += --disable-mmx
+ config BR2_PACKAGE_LIBCEF_VAAPI
+ 	bool "Enable va-api support in libcef."
+ 	depends on BR2_x86_64
+diff --git a/package/libcef/libcef.mk b/package/libcef/libcef.mk
+index 7cc4888f44..0bd80f65d4 100644
+--- a/package/libcef/libcef.mk
++++ b/package/libcef/libcef.mk
+@@ -214,6 +214,13 @@ else
+ LIBCEF_GN_DEFINES += use_pulseaudio=false
  endif
  
- ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-@@ -560,9 +603,27 @@ define FFMPEG_CONFIGURE_CMDS
- 	)
- endef
- 
-+HOST_FFMPEG_CONF_ENV += CFLAGS="$(HOST_FFMPEG_CFLAGS)"
++ifeq ($(BR2_PACKAGE_LIBCEF_WIDEVINE),y)
++LIBCEF_GN_DEFINES += enable_widevine=true
++LIBCEF_DEPENDENCIES += widevine
++else
++LIBCEF_GN_DEFINES += enable_widevine=false
++endif
 +
-+# Override HOST_FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
-+define HOST_FFMPEG_CONFIGURE_CMDS
-+	(cd $(HOST_FFMPEG_SRCDIR) && rm -rf config.cache && \
-+	$(HOST_CONFIGURE_OPTS) \
-+	$(HOST_CONFIGURE_ARGS) \
-+	$(HOST_FFMPEG_CONF_ENV) \
-+	./configure \
-+		--prefix="$(HOST_DIR)" \
-+		--enable-shared --disable-static \
-+		--disable-doc \
-+		--disable-debug \
-+		$(HOST_FFMPEG_CONF_OPTS) \
-+	)
-+endef
-+
- define FFMPEG_REMOVE_EXAMPLE_SRC_FILES
- 	rm -rf $(TARGET_DIR)/usr/share/ffmpeg/examples
- endef
- FFMPEG_POST_INSTALL_TARGET_HOOKS += FFMPEG_REMOVE_EXAMPLE_SRC_FILES
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBCEF_VAAPI),y)
+ LIBCEF_GN_DEFINES += use_vaapi=true
+ LIBCEF_DEPENDENCIES += libva
 -- 
 2.20.1
