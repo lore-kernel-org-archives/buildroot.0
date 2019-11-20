@@ -1,44 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 21:39:18 +0100
-Subject: [Buildroot] [git commit] linux: bump CIP kernel to version
- 4.19.82-cip14
-Message-ID: <20191202083934.11DC78041D@busybox.osuosl.org>
+Date: Wed, 20 Nov 2019 22:34:53 +0100
+Subject: [Buildroot] [git commit] support/testing: add assertRunOk method to
+ BRTest class
+Message-ID: <20191202083934.2B57D806B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0881d9d2dec47d4c214664f0116a93a4140d7949
+commit: https://git.buildroot.net/buildroot/commit/?id=63966e56a3cd83df36c6357be9e48608e95dac54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps Linux CIP version to 4.19.82-cip14.
+This method asserts that the given command ran successfully.
+The goal is for it to be used by the different tests when needed.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/testing/infra/basetest.py | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f6572f5fad..8c5539c9ab 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -35,7 +35,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.3)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (4.19.75-cip11)"
-+	bool "Latest CIP SLTS version (4.19.82-cip14)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -123,7 +123,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.3.8" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "4.19.75-cip11" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "4.19.82-cip14" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index a176bc328a..023039f6af 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -84,3 +84,9 @@ class BRTest(BRConfigTest):
+         if self.emulator:
+             self.emulator.stop()
+         super(BRTest, self).tearDown()
++
++    # Run the given 'cmd' with a 'timeout' on the target and 
++    # assert that the command succeeded
++    def assertRunOk(self, cmd, timeout=-1):
++        _, exit_code = self.emulator.run(cmd, timeout)
++        self.assertEqual(exit_code, 0)
