@@ -1,42 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 21:16:36 +0100
-Subject: [Buildroot] [next] package/rpcbind: add systemd dependency when
- cfg for systemd
-In-Reply-To: <CANQCQpYebv2PrZOtt9RjKuzvvXJ_Vf8T_xfx2ZwEuzweDPmsZA@mail.gmail.com>
-References: <20191120150015.54771-1-matthew.weber@rockwellcollins.com>
- <20191120175923.1fe3f67a@windsurf.home>
- <CANQCQpYebv2PrZOtt9RjKuzvvXJ_Vf8T_xfx2ZwEuzweDPmsZA@mail.gmail.com>
-Message-ID: <20191120211636.606fa121@windsurf.home>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 20 Nov 2019 14:22:30 -0600
+Subject: [Buildroot] [PATCH next v8 3/6] package/pkg-generic: make
+ libtool .la files compatible with per-package directories
+In-Reply-To: <20191105164646.23820-4-thomas.petazzoni@bootlin.com>
+References: <20191105164646.23820-1-thomas.petazzoni@bootlin.com>
+ <20191105164646.23820-4-thomas.petazzoni@bootlin.com>
+Message-ID: <CANQCQpZMy5ftz3ZadNhmVH+bA1V11bJLSFPKRa-X-BLKUE3byw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 Nov 2019 11:13:11 -0600
-Matthew Weber <matthew.weber@collins.com> wrote:
+Thomas,
 
-> > The commit log is too short. Does it fix a build issue? Why does it
-> > need to have systemd built before? Is it using a library provided by
-> > systemd?  
-> 
-> When building using top level parallel build and the init system is
-> set to systemd, it is possible for the rpcbind package to build before
-> systemd.  This is an issue as rpcbind sets a library dependency
-> conditionally on systemd when "RPCBIND_CONF_OPTS +=
-> --with-systemdsystemunitdir=/usr/lib/systemd/system" is set.
+On Tue, Nov 5, 2019 at 10:47 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Libtool .la files unfortunately contain a number of absolute paths,
+> which now refer to per-package directories. Due to this, when building
+> package A, .la files may contain absolute paths referring to
+> directories in package B per-package sysroot. This causes some -L
+> flags referring to other sysroot from being added, which doesn't work
+> as the linker no longer realizes that such paths are within its
+> sysroot.
 
-So, this is really a bug, and should be fixed in master, and not in
-next. Do you agree?
+Building on this top level parallel make series and disabling the "pkg
+size and bin arch hooks" first (https://pastebin.com/nUb3Qsgs)
 
-Without top-level parallel build, you should be able to reproduce the
-same bug by running "make rpcbind" from a completely clean tree. Is it
-the case ?
+BR2_aarch64=y
+BR2_PER_PACKAGE_DIRECTORIES=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_NONE=y
+# BR2_TARGET_ENABLE_ROOT_LOGIN is not set
+# BR2_TARGET_GENERIC_GETTY is not set
+BR2_PACKAGE_ZLIB=y
+BR2_PACKAGE_LIBXSLT=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-Best regards,
+Then I do a 'make -s -j 32' .  Note the number of jobs doesn't seem to
+matter (still fails without -j set).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I get the following error and it looks like all the sysroot paths are
+valid but it can't find the standard lib....
+
+https://pastebin.com/2W1EKjwd
+
+Digging a bit more and I notice the failing build has an extra -L path
+stuck towards the end of the link line after "-lxml2".  I noticed this
+extra -L path goes away and the build is successful with zlib
+disabled.
+
+I haven't tested but I believe I had a build where the external
+toolchain includes zlib (bootlin buildroot internal build) and it
+doesn't appear to include this extra path.  I'm guessing the failure
+is related to how zlib builds with per pkg or a fixup when moving
+files around.  I did check the zlib.pc and it was clean (below).
+
+$ cat build/libzlib-1.2.11/zlib.pc
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+sharedlibdir=${libdir}
+includedir=${prefix}/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.11
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
+
+Ideas welcome :-)
+
+Regards,
+Matt
