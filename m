@@ -1,31 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 10:38:57 +0100
-Subject: [Buildroot] [EXT] Re: [PATCH 7/9] package/rcw: Enable IIC5_PMUX
- and CLK_OUT_PMUX for GPIO
-In-Reply-To: <VI1PR04MB5136E760A49DE331036F9F8DFE4F0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+Date: Wed, 20 Nov 2019 10:45:39 +0100
+Subject: [Buildroot] [PATCH 1/9] package/rcw: upgrade the rcw version to
+ LSDK-19.09
+In-Reply-To: <CANQCQpbZdy0q_qvRf8AWKu8wVFTNh8o9fjY7=UDeiKmU8zhnGw@mail.gmail.com>
 References: <20191120040725.32207-1-jerry.huang@nxp.com>
- <20191120040725.32207-8-jerry.huang@nxp.com>
- <20191120101451.34bd8120@windsurf.home>
- <VI1PR04MB5136E760A49DE331036F9F8DFE4F0@VI1PR04MB5136.eurprd04.prod.outlook.com>
-Message-ID: <20191120103857.52d575f0@windsurf.home>
+ <20191120040725.32207-2-jerry.huang@nxp.com>
+ <8ef6b0156f54102d837ecfc429ae810d@walle.cc>
+ <20191120103204.19a15798@windsurf.home>
+ <CANQCQpbZdy0q_qvRf8AWKu8wVFTNh8o9fjY7=UDeiKmU8zhnGw@mail.gmail.com>
+Message-ID: <20191120104539.37da1c64@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 Nov 2019 09:34:13 +0000
-Jerry Huang <jerry.huang@nxp.com> wrote:
+On Wed, 20 Nov 2019 03:38:40 -0600
+Matthew Weber <matthew.weber@collins.com> wrote:
 
-> > The patches modify only files in ls1028ardb/, and you apply them when the
-> > board name is ls1028ardb, so basically, you could just as well apply the patches
-> > unconditionally, no ?  
-> I can change it to apply the patch unconfitionally.
+> > True, rcw is very short and quite generic. Matt, what do you think?
+> 
+> Michael, good points, maybe we could append a prefix to make it
+> freescale-qoriq-rcw?
 
-OK, thanks. Please make sure to submit the patch to the upstream rcw
-project, so that ultimately, we can drop the patches.
-
-Thanks,
+Yes, freescale-qorqiq-rcw is good.
 
 Thomas
 -- 
