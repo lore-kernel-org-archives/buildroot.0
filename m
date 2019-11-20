@@ -1,43 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 14:54:04 +0100
-Subject: [Buildroot] Zynqmp ZCU-102 Xilinx
-In-Reply-To: <CADDW7LPbh8ep74a5kcu1CZQuaFxuUGyCUxuJT6uo6Y=m9ftmOA@mail.gmail.com>
-References: <CADDW7LPbh8ep74a5kcu1CZQuaFxuUGyCUxuJT6uo6Y=m9ftmOA@mail.gmail.com>
-Message-ID: <20191120145404.42a60ffc@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 20 Nov 2019 14:08:47 +0000
+Subject: [Buildroot] [Bug 12331] New: meson issue
+Message-ID: <bug-12331-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=12331
 
-On Wed, 20 Nov 2019 09:21:53 +0100
-Adrian martinez munera <adrianmartinezmunera@gmail.com> wrote:
+            Bug ID: 12331
+           Summary: meson issue
+           Product: buildroot
+           Version: 2019.02.7
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jpcartal at free.fr
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> I'm not sure if I have to write you by this mail.
-> 
-> I'm using buildroot to create a Linux image to my ZCU-102, adding EPICS.
+Meson script uses full path to python3 when executed which gives errors when
+the path is too long :
 
-You don't explain what EPICS is, but I googled a bit, and we don't have
-any Buildroot package for EPICS.
+$ cat host/bin/meson 
+#!/home/Dev/Ssd/buildroot/buildroot-2019.02.7/host/bin/python3
+# EASY-INSTALL-ENTRY-SCRIPT: 'meson==0.49.0','console_scripts','meson'
+__requires__ = 'meson==0.49.0'
+import re
+import sys
+from pkg_resources import load_entry_point
 
-> My first attempt are been build  a simple Linux image, without EPICS, but
-> it doesn't work.
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+    sys.exit(
+        load_entry_point('meson==0.49.0', 'console_scripts', 'meson')()
+    )
 
-"doesn't work" is very imprecise. There's no way we can help you
-without more details.
-
-What Buildroot version? What Buildroot configuration? What happens when
-you boot?
-
-Please provide your complete Buildroot configuration and the complete
-boot log.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
