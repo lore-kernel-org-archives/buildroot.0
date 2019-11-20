@@ -1,48 +1,38 @@
 From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Wed, 20 Nov 2019 17:39:24 +0000
-Subject: [Buildroot] [RFC PATCH v3 10/30] package/Makefile.in: Provide
- TARGET_CROSS without path and trailing -
+Date: Wed, 20 Nov 2019 17:39:18 +0000
+Subject: [Buildroot] [RFC PATCH v3 04/30] package/jpeg-turbo: Add host
+ install
 In-Reply-To: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
 References: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
-Message-ID: <20191120173944.130142-11-thomas.preston@codethink.co.uk>
+Message-ID: <20191120173944.130142-5-thomas.preston@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Michael Drake <michael.drake@codethink.co.uk>
-
-The LLVM/Clang toolchain takes the target triple as a `--target=`
-argument, rather than having separate binaries with different
-names for each target.
-
-This change exposes just the triple as TARGET_CROSS_TRIPLE.
-
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/Makefile.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/jpeg-turbo/jpeg-turbo.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 3b764baa47..94ec4dea61 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -192,11 +192,13 @@ TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
- endif
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 3735132b2e..6e78c39634 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -14,6 +14,7 @@ JPEG_TURBO_PROVIDES = jpeg
+ JPEG_TURBO_DEPENDENCIES = host-pkgconf
  
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--TARGET_CROSS = $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-
-+TARGET_CROSS_TRIPLE = $(GNU_TARGET_NAME)
- else
--TARGET_CROSS = $(HOST_DIR)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
-+TARGET_CROSS_TRIPLE = $(TOOLCHAIN_EXTERNAL_PREFIX)
- endif
+ JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
++HOST_JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=OFF
  
-+TARGET_CROSS = $(HOST_DIR)/bin/$(TARGET_CROSS_TRIPLE)-
-+
- # Define TARGET_xx variables for all common binutils/gcc
- TARGET_AR       = $(TARGET_CROSS)ar
- TARGET_AS       = $(TARGET_CROSS)as
+ ifeq ($(BR2_STATIC_LIBS),y)
+ JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
+@@ -38,3 +39,4 @@ endef
+ JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_USELESS_TOOLS
+ 
+ $(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.20.1
