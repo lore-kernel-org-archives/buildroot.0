@@ -1,77 +1,63 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 20 Nov 2019 20:44:44 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libv4l: link with libatomic
- when needed
-In-Reply-To: <d90c679a-a4f6-d825-63c8-ae90baf1ea73@codethink.co.uk>
-References: <20191030065303.22948-1-bernd.kuhls@t-online.de>
- <20191030065303.22948-2-bernd.kuhls@t-online.de>
- <20191030113040.474a31f9@windsurf>
- <20191030232618.5cd32feb@gmx.net>
- <d90c679a-a4f6-d825-63c8-ae90baf1ea73@codethink.co.uk>
-Message-ID: <20191120204444.0cd0b955@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 20 Nov 2019 20:47:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.2.5
+Message-ID: <20191120194707.4146-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello *,
+Release notes of this bugfix release:
+https://lists.freedesktop.org/archives/mesa-announce/2019-November/000557.html
 
-On Wed, 20 Nov 2019 14:46:03 +0000, Thomas Preston <thomas.preston@codethink.co.uk> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-> Hey,
->
-> On 30/10/2019 22:26, Peter Seiderer wrote:
-> > Adding the (missing?) '-L/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib'
-> > libtool command line parameter fixes the linking for the actual build...
-> >
-> > Any hint which (buildroot?) change triggered the remove of the link/library path removal?
-> >
->
-> As previously discussed [0], the missing `-L..` is because pkgconf no longer
-> returns "system" include or library directories with -I and -L  (see [1]).
-> These are already in the compiler's default search path and were causing
-> include-order related bugs when using -isystem.
->
-> However, it looks like that change has caused a problem here, where the output
-> from pkgconf is being passed to libtool to point it at the "system" library
-> directory in the sysroot.
->
-> I don't know enough about libtool yet, but I think there are a few ways around
-> this:
-> 1. Tell libtool where the sysroot is by some other mechanism
-> 2. Tell pkgconf that we want to keep the system lib directories, when it is
->    used to create arguments to libtool. The following argument will always
->    return -L, as expected above:
->
->         pkg-config --keep-system-libs
-
-The libv4l/libatomic case can be fixed by the following (hack):
-
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index a3bf099221..46c1ab9a48 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -16,7 +16,7 @@ LIBV4L_AUTORECONF = YES
- LIBV4L_DEPENDENCIES += host-gettext
-
- # fix uclibc-ng configure/compile
--LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-+LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99' PKG_CONFIG_SYSROOT_DIR=$(STAGING_DIR)
-
- # v4l-utils components have different licences, see v4l-utils.spec for details
- LIBV4L_LICENSE = GPL-2.0+ (utilities), LGPL-2.1+ (libraries)
-
-Regards,
-Peter
-
->
-> I'm looking into this, but someone with a more intimate knowledge of libtool +
-> pkg-autotools.mk, might be able to help here.
->
-> Thanks,
-> Thomas Preston
->
-> [0] http://lists.busybox.net/pipermail/buildroot/2019-November/266369.html
-> [1] http://lists.busybox.net/pipermail/buildroot/2019-October/263178.html
->
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 44dc131877..2deb063be2 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.2.4
++MESA3D_HEADERS_VERSION = 19.2.5
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 89b0a13196..c885e05a4d 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2019-November/000555.html
+-sha256 09000a0f7dbbd82e193b81a8f1bf0c118eab7ca975c0329181968596e548e30f  mesa-19.2.4.tar.xz
+-sha512 e8a0e90460f3153d730f8fb13f2c912a9826c05d2af9e22dc575bcd8885bf6a33c0af1c6659e81701ff097a132df88eead208e89dceb552b9da809ab543fa479  mesa-19.2.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-November/000557.html
++sha256 3d010a366b28d10bdd71e32091d8684baf1522e6466c5c5703667091b2108c8b  mesa-19.2.5.tar.xz
++sha512 881735c4fec07fb6557d01c2d5bb7971e2d4b2bedbb52fd1025dfb0222f8b1cbca080b6f849efe19ff514da8e6310fc6f0cde5b59fcc1c6a10e593876bcd6a38  mesa-19.2.5.tar.xz
+ 
+ # License
+ sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 6e7fa7692c..80b79af688 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.2.4
++MESA3D_VERSION = 19.2.5
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.20.1
