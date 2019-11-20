@@ -1,77 +1,56 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 20 Nov 2019 18:15:31 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ltp-testsuite: Backport 3 more
- musl related patches
-In-Reply-To: <20191120171401.14663-1-petr.vorel@gmail.com>
-References: <20191120171401.14663-1-petr.vorel@gmail.com>
-Message-ID: <20191120171531.GA14833@dell5510>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Wed, 20 Nov 2019 17:39:16 +0000
+Subject: [Buildroot] [RFC PATCH v3 02/30] package/qt5/qt5webengine: Use
+ Buildroot's host-pkg-config wrapper
+In-Reply-To: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
+References: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
+Message-ID: <20191120173944.130142-3-thomas.preston@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Buildroot now has a host package config wrapper to use pkgconf with
+the host enviornment, so qt5webengine should use that instead of its
+own one.
 
-> 0009-nfsv4-acl-Remove-unneeded-malloc-sizeof-FILE.patch is fixing
-> following reports (other 2 has not been reported due previous)
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+---
+ package/qt5/qt5webengine/host-pkg-config.in | 6 ------
+ package/qt5/qt5webengine/qt5webengine.mk    | 7 +------
+ 2 files changed, 1 insertion(+), 12 deletions(-)
+ delete mode 100644 package/qt5/qt5webengine/host-pkg-config.in
 
-> Fixes:
-> http://autobuild.buildroot.net/results/a38a5d8deaa365f73db427911df68dd10c6930a6
-> http://autobuild.buildroot.net/results/dfa173caea08876ab69dd959da146b75750cdd28
-> http://autobuild.buildroot.net/results/1e602f1574e9134a44d5d66838e7851b38e8069a
-> http://autobuild.buildroot.net/results/f1b4b129ec94795b2144b4501b4301fb20892e71
-
-Tested with following patch:
-
-build pc_x86_64_bios_defconfig changed to musl
-
-$ ./utils/test-pkg -p ltp-testsuite -a
-                             andes-nds32 [ 1/44]: OK
-                             arm-aarch64 [ 2/44]: OK
-                        br-aarch64-glibc [ 3/44]: OK
-                           br-arcle-hs38 [ 4/44]: OK
-                            br-arm-basic [ 5/44]: OK
-                  br-arm-cortex-a9-glibc [ 6/44]: OK
-                   br-arm-cortex-a9-musl [ 7/44]: OK
-                   br-arm-cortex-m4-full [ 8/44]: SKIPPED
-                             br-arm-full [ 9/44]: OK
-                    br-arm-full-nothread [10/44]: SKIPPED
-                      br-arm-full-static [11/44]: OK
-                br-i386-pentium-mmx-musl [12/44]: OK
-                   br-i386-pentium4-full [13/44]: OK
-                    br-microblazeel-full [14/44]: OK
-                      br-mipsel-o32-full [15/44]: OK
-                 br-mips32r6-el-hf-glibc [16/44]: OK
-                      br-mips64-n64-full [17/44]: OK
-                 br-mips64r6-el-hf-glibc [18/44]: OK
-                       br-m68k-5208-full [19/44]: SKIPPED
-                      br-m68k-68040-full [20/44]: SKIPPED
-                          br-nios2-glibc [21/44]: SKIPPED
-                      br-openrisc-uclibc [22/44]: OK
-                  br-powerpc-e500mc-full [23/44]: OK
-               br-powerpc-603e-basic-cpp [24/44]: OK
-             br-powerpc64le-power8-glibc [25/44]: OK
-               br-powerpc64-power7-glibc [26/44]: OK
-                              br-riscv32 [27/44]: OK
-                              br-riscv64 [28/44]: OK
-                             br-sh4-full [29/44]: OK
-                         br-sparc-uclibc [30/44]: SKIPPED
-                        br-sparc64-glibc [31/44]: OK
-                          br-xtensa-full [32/44]: OK
-                    br-x86-64-core2-full [33/44]: OK
-                          br-x86-64-musl [34/44]: OK
-                       linaro-aarch64-be [35/44]: OK
-                          linaro-aarch64 [36/44]: OK
-                              linaro-arm [37/44]: OK
-                     sourcery-arm-armv4t [38/44]: OK
-                            sourcery-arm [39/44]: OK
-                     sourcery-arm-thumb2 [40/44]: OK
-                           sourcery-mips [41/44]: OK
-                         sourcery-mips64 [42/44]: OK
-                          sourcery-nios2 [43/44]: SKIPPED
-                         sourcery-x86-64 [44/44]: OK
-44 builds, 7 skipped, 0 build failed, 0 legal-info failed
-
-Kind regards,
-Petr
+diff --git a/package/qt5/qt5webengine/host-pkg-config.in b/package/qt5/qt5webengine/host-pkg-config.in
+deleted file mode 100644
+index 86a980648b..0000000000
+--- a/package/qt5/qt5webengine/host-pkg-config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-#!/bin/sh
+-PKG_CONFIG_SYSROOT_DIR="/" \
+-PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+-PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+-PKG_CONFIG_LIBDIR="@HOST_DIR@/lib/pkgconfig:@HOST_DIR@/share/pkgconfig" \
+-exec @HOST_DIR@/bin/pkgconf "$@"
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+index 1d5ee8d819..95666f5469 100644
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -55,12 +55,7 @@ QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_PYTHON2_SYMLINK
+ QT5WEBENGINE_ENV += NINJAFLAGS="-j$(PARALLEL_JOBS)"
+ 
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-define QT5WEBENGINE_CREATE_HOST_PKG_CONFIG
+-	sed s%@HOST_DIR@%$(HOST_DIR)%g $(QT5WEBENGINE_PKGDIR)/host-pkg-config.in > $(@D)/host-bin/host-pkg-config
+-	chmod +x $(@D)/host-bin/host-pkg-config
+-endef
+-QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_CREATE_HOST_PKG_CONFIG
+-QT5WEBENGINE_ENV += GN_PKG_CONFIG_HOST=$(@D)/host-bin/host-pkg-config
++QT5WEBENGINE_ENV += GN_PKG_CONFIG_HOST=$(PKG_CONFIG_HOST_BINARY_HOST)
+ endif
+ 
+ define QT5WEBENGINE_CONFIGURE_CMDS
+-- 
+2.20.1
