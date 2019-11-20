@@ -1,48 +1,77 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 20 Nov 2019 20:36:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version to
- 0.102.1
-Message-ID: <20191120193616.21123-1-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 20 Nov 2019 20:44:44 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libv4l: link with libatomic
+ when needed
+In-Reply-To: <d90c679a-a4f6-d825-63c8-ae90baf1ea73@codethink.co.uk>
+References: <20191030065303.22948-1-bernd.kuhls@t-online.de>
+ <20191030065303.22948-2-bernd.kuhls@t-online.de>
+ <20191030113040.474a31f9@windsurf>
+ <20191030232618.5cd32feb@gmx.net>
+ <d90c679a-a4f6-d825-63c8-ae90baf1ea73@codethink.co.uk>
+Message-ID: <20191120204444.0cd0b955@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://lists.clamav.net/pipermail/clamav-announce/2019/000043.html
+Hello *,
 
-Fixes CVE-2019-15961.
+On Wed, 20 Nov 2019 14:46:03 +0000, Thomas Preston <thomas.preston@codethink.co.uk> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Hey,
+>
+> On 30/10/2019 22:26, Peter Seiderer wrote:
+> > Adding the (missing?) '-L/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib'
+> > libtool command line parameter fixes the linking for the actual build...
+> >
+> > Any hint which (buildroot?) change triggered the remove of the link/library path removal?
+> >
+>
+> As previously discussed [0], the missing `-L..` is because pkgconf no longer
+> returns "system" include or library directories with -I and -L  (see [1]).
+> These are already in the compiler's default search path and were causing
+> include-order related bugs when using -isystem.
+>
+> However, it looks like that change has caused a problem here, where the output
+> from pkgconf is being passed to libtool to point it at the "system" library
+> directory in the sysroot.
+>
+> I don't know enough about libtool yet, but I think there are a few ways around
+> this:
+> 1. Tell libtool where the sysroot is by some other mechanism
+> 2. Tell pkgconf that we want to keep the system lib directories, when it is
+>    used to create arguments to libtool. The following argument will always
+>    return -L, as expected above:
+>
+>         pkg-config --keep-system-libs
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index aaebfd104c..72ce1b1c44 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 48fe188c46c793c2d0cb5c81c106e4690251aff6dc8aa6575dc688343291bee1  clamav-0.102.0.tar.gz
-+sha256 0dbda8d0d990d068732966f13049d112a26dce62145d234383467c1d877dedd6  clamav-0.102.1.tar.gz
- sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 5caab1e0f6..a4059ae200 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.102.0
-+CLAMAV_VERSION = 0.102.1
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
--- 
-2.20.1
+The libv4l/libatomic case can be fixed by the following (hack):
+
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index a3bf099221..46c1ab9a48 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -16,7 +16,7 @@ LIBV4L_AUTORECONF = YES
+ LIBV4L_DEPENDENCIES += host-gettext
+
+ # fix uclibc-ng configure/compile
+-LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99' PKG_CONFIG_SYSROOT_DIR=$(STAGING_DIR)
+
+ # v4l-utils components have different licences, see v4l-utils.spec for details
+ LIBV4L_LICENSE = GPL-2.0+ (utilities), LGPL-2.1+ (libraries)
+
+Regards,
+Peter
+
+>
+> I'm looking into this, but someone with a more intimate knowledge of libtool +
+> pkg-autotools.mk, might be able to help here.
+>
+> Thanks,
+> Thomas Preston
+>
+> [0] http://lists.busybox.net/pipermail/buildroot/2019-November/266369.html
+> [1] http://lists.busybox.net/pipermail/buildroot/2019-October/263178.html
+>
