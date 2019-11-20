@@ -1,175 +1,207 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 22:38:25 +0100
-Subject: [Buildroot] [git commit branch/next] support/testing: add lxc test
-Message-ID: <20191120220404.0887F8F489@busybox.osuosl.org>
+Date: Wed, 20 Nov 2019 23:19:27 +0100
+Subject: [Buildroot] [PATCH 1/1] board: Add support for nautilus
+ chromebook
+In-Reply-To: <20191119213121.165863-1-swboyd@chromium.org>
+References: <20191119213121.165863-1-swboyd@chromium.org>
+Message-ID: <20191120231927.788e22af@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ca16b1feb6c52c98e8b3082c2a36503017b3c10
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Stephen,
 
-The test starts a simple container with an iperf3 server.
-The container is using the tini init system, with a shared rootfs.
-An iperf3 client is started from the host to check that the container
-is really up and running.
+Nice to see you here ! :-)
 
-Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .gitlab-ci.yml                                     |  1 +
- DEVELOPERS                                         |  4 ++
- support/testing/tests/package/test_lxc.py          | 56 ++++++++++++++++++++++
- .../tests/package/test_lxc/lxc-kernel.config       | 20 ++++++++
- .../test_lxc/rootfs-overlay/usr/bin/iperf3.sh      |  2 +
- .../usr/share/lxc/config/minimal-iperf3.conf       |  4 ++
- .../usr/share/lxc/config/minimal.conf              |  6 +++
- 7 files changed, 93 insertions(+)
+On Tue, 19 Nov 2019 13:31:21 -0800
+Stephen Boyd <swboyd@chromium.org> wrote:
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 1d71257a20..9ef93130a1 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -410,6 +410,7 @@ tests.package.test_luasocket.TestLuajitLuaSocket: { extends: .runtime_test }
- tests.package.test_luasyslog.TestLuaLuasyslog: { extends: .runtime_test }
- tests.package.test_luasyslog.TestLuajitLuasyslog: { extends: .runtime_test }
- tests.package.test_luvi.TestLuvi: { extends: .runtime_test }
-+tests.package.test_lxc.TestLxc: { extends: .runtime_test }
- tests.package.test_lzlib.TestLuaLzlib: { extends: .runtime_test }
- tests.package.test_openjdk.TestOpenJdk: { extends: .runtime_test }
- tests.package.test_perl.TestPerl: { extends: .runtime_test }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1d3dcc1f5d..22a66c1c0e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1805,6 +1805,10 @@ F:	package/google-breakpad/
- N:	Patrick Gerber <kpa_info@yahoo.fr>
- F:	package/yavta/
- 
-+N:	Patrick Havelange <patrick.havelange@essensium.com>
-+F:	support/testing/tests/package/test_lxc.py
-+F:	support/testing/tests/package/test_lxc/
-+
- N:	Paul Cercueil <paul@crapouillou.net>
- F:	package/libiio/
- F:	package/lightning/
-diff --git a/support/testing/tests/package/test_lxc.py b/support/testing/tests/package/test_lxc.py
-new file mode 100644
-index 0000000000..151bcf100b
---- /dev/null
-+++ b/support/testing/tests/package/test_lxc.py
-@@ -0,0 +1,56 @@
-+import os
-+
-+import infra.basetest
-+import pexpect
-+
-+class TestLxc(infra.basetest.BRTest):
-+    config = \
-+            """
-+            BR2_arm=y
-+            BR2_TOOLCHAIN_EXTERNAL=y
-+            BR2_LINUX_KERNEL=y
-+            BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+            BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.79"
-+            BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+            BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+            BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+            BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
-+            BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+            BR2_INIT_SYSTEMD=y
-+            BR2_PACKAGE_LXC=y
-+            BR2_PACKAGE_TINI=y
-+            BR2_PACKAGE_IPERF3=y
-+            BR2_ROOTFS_OVERLAY="{}"
-+            BR2_TARGET_ROOTFS_CPIO=y
-+            """.format(
-+            infra.filepath("tests/package/test_lxc/lxc-kernel.config"),
-+            infra.filepath("tests/package/test_lxc/rootfs-overlay"))
-+
-+    def run_ok(self, cmd):
-+        self.assertRunOk(cmd, 120)
-+
-+    def wait_boot(self):
-+        #the complete boot with systemd takes more time than what the default multipler permits
-+        self.emulator.timeout_multiplier *= 10
-+        self.emulator.login()
-+
-+    def setup_run_test_container(self):
-+        self.run_ok("lxc-create -n lxc_iperf3 -t none -f /usr/share/lxc/config/minimal-iperf3.conf")
-+        self.run_ok("lxc-start -l trace -n lxc_iperf3 -o /tmp/lxc.log -L /tmp/lxc.console.log")
-+        #need to wait for the container to be fully started
-+        self.run_ok("sleep 2")
-+        self.run_ok("iperf3 -c 192.168.1.2 -t 2")
-+        #if the test fails, just cat /tmp/*.log
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        kernel_file = os.path.join(self.builddir, "images", "zImage")
-+        dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
-+        self.emulator.boot(arch="armv7", kernel=kernel_file,
-+                           kernel_cmdline=[
-+                                        "console=ttyAMA0,115200"],
-+                           options=["-initrd", cpio_file,
-+                                        "-dtb", dtb_file,
-+                                        "-M", "vexpress-a9"])
-+        self.wait_boot()
-+        self.setup_run_test_container()
-diff --git a/support/testing/tests/package/test_lxc/lxc-kernel.config b/support/testing/tests/package/test_lxc/lxc-kernel.config
-new file mode 100644
-index 0000000000..32f8bdd65e
---- /dev/null
-+++ b/support/testing/tests/package/test_lxc/lxc-kernel.config
-@@ -0,0 +1,20 @@
-+CONFIG_FIX_EARLYCON_MEM=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_CGROUP_DEBUG=y
-+CONFIG_NETFILTER_XT_MATCH_CGROUP=y
-+CONFIG_SOCK_CGROUP_DATA=y
-+CONFIG_CGROUP_NET_PRIO=y
-+CONFIG_CGROUP_NET_CLASSID=y
-+CONFIG_NAMESPACES=y
-+CONFIG_IPC_NS=y
-+CONFIG_PID_NS=y
-+CONFIG_UTS_NS=y
-+CONFIG_USER_NS=y
-+CONFIG_NET_NS=y
-+CONFIG_BRIDGE=y
-+CONFIG_VETH=y
-diff --git a/support/testing/tests/package/test_lxc/rootfs-overlay/usr/bin/iperf3.sh b/support/testing/tests/package/test_lxc/rootfs-overlay/usr/bin/iperf3.sh
-new file mode 100755
-index 0000000000..7045ca4806
---- /dev/null
-+++ b/support/testing/tests/package/test_lxc/rootfs-overlay/usr/bin/iperf3.sh
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+iperf3 -s -1 > /tmp/iperf3.serv.log 2>&1
-diff --git a/support/testing/tests/package/test_lxc/rootfs-overlay/usr/share/lxc/config/minimal-iperf3.conf b/support/testing/tests/package/test_lxc/rootfs-overlay/usr/share/lxc/config/minimal-iperf3.conf
-new file mode 100644
-index 0000000000..41cc5311d6
---- /dev/null
-+++ b/support/testing/tests/package/test_lxc/rootfs-overlay/usr/share/lxc/config/minimal-iperf3.conf
-@@ -0,0 +1,4 @@
-+lxc.include = /usr/share/lxc/config/minimal.conf
-+lxc.hook.version = 1
-+lxc.hook.start-host = ip a add 192.168.1.1/24 dev lxc0
-+lxc.init.cmd = tini -g iperf3.sh
-diff --git a/support/testing/tests/package/test_lxc/rootfs-overlay/usr/share/lxc/config/minimal.conf b/support/testing/tests/package/test_lxc/rootfs-overlay/usr/share/lxc/config/minimal.conf
-new file mode 100644
-index 0000000000..7319821506
---- /dev/null
-+++ b/support/testing/tests/package/test_lxc/rootfs-overlay/usr/share/lxc/config/minimal.conf
-@@ -0,0 +1,6 @@
-+lxc.autodev = 0
-+lxc.net.0.type = veth
-+lxc.net.0.veth.pair = lxc0
-+lxc.net.0.name = eth0
-+lxc.net.0.flags = up
-+lxc.net.0.ipv4.address = 192.168.1.2/24
+> This adds support for the "Nautilus" chromebook, similar to how "Snow"
+> is supported. We drop the cgpt requirement in favor of using 'sgdisk'
+> and support a genimage config file instead of a custom partitioning
+> script. I also included a kernel configuration file based on a minimized
+> version pulled from a chromeos kernel running on the device.
+> 
+> Cc: Alex Suykov <alex.suykov@gmail.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+
+Thanks for this submission. Overall it looks pretty good, there are
+just a few minor details, see below.
+
+First, the commit title should be:
+
+	configs/chromebook_nautilus: new defconfig
+
+>  board/chromebook/nautilus/config            | 635 ++++++++++++++++++++
+>  board/chromebook/nautilus/genimage.cfg      |  17 +
+>  board/chromebook/nautilus/kernel.args       |   1 +
+>  board/chromebook/nautilus/mark_boot_once.sh |  16 +
+>  board/chromebook/nautilus/readme.txt        |  83 +++
+>  board/chromebook/nautilus/sign.sh           |  31 +
+>  configs/chromebook_nautilus_defconfig       |  15 +
+>  7 files changed, 798 insertions(+)
+
+Could you add an entry in the DEVELOPERS file to associate your
+name/email to the files being added (i.e both the defconfig and the
+board/ directory).
+
+> diff --git a/board/chromebook/nautilus/config b/board/chromebook/nautilus/config
+
+Can we name this linux.config instead ?
+
+This defconfig also seems pretty long, with lots of drivers enabled,
+many as modules. Do we need all of them? Looking at the list of
+modules, it seems unlikely all of these are needed/useful. So could you
+do a pass of cleanup ?
+
+> diff --git a/board/chromebook/nautilus/genimage.cfg b/board/chromebook/nautilus/genimage.cfg
+> new file mode 100644
+> index 000000000000..c4873e8b3670
+> --- /dev/null
+> +++ b/board/chromebook/nautilus/genimage.cfg
+> @@ -0,0 +1,17 @@
+> +image sdcard.img {
+> +	exec-post = "board/chromebook/nautilus/mark_boot_once.sh"
+
+Learned about this feature :) Could have been a post-image script, but
+OK, this exec-post mechanism also works.
+
+> +	hdimage {
+> +		gpt = "true"
+> +	}
+> +
+> +	partition kernel {
+> +		image = "Image.kpart"
+> +		bootable = "true"
+> +		partition-type-uuid = FE3A2A5D-4F32-41A7-B725-ACCC3285A309
+
+Just curious, the UUID needs to be exactly that one for the
+bootloader/firmware to pick up the kernel image from there ?
+
+
+> diff --git a/board/chromebook/nautilus/mark_boot_once.sh b/board/chromebook/nautilus/mark_boot_once.sh
+> new file mode 100755
+> index 000000000000..ea06a5b7cc73
+> --- /dev/null
+> +++ b/board/chromebook/nautilus/mark_boot_once.sh
+> @@ -0,0 +1,16 @@
+> +#!/bin/sh
+> +
+> +# This script marks the kernel partition as 'boot once'
+> +# so that depthcharge will pick it.
+> +
+> +img=$BINARIES_DIR/sdcard.img
+> +sgdisk=$HOST_DIR/sbin/sgdisk
+> +
+> +run() { echo "$@"; "$@"; }
+> +die() { echo "$@" >&2; exit 1; }
+> +
+> +test -x $sgdisk || die "sgdisk not found (host-gptfdisk has not been built?)"
+
+We generally don't do such checks, we assume that the configuration is
+correct, and therefore the necessary tools will be available.
+
+> +# Set succesful, priority, tries flags on kernel partition
+> +# cgpt args are '-S 0 -T 1 -P 15'
+> +run $sgdisk -A 1:=:0xe1f000000000004 $img
+
+While I understand the idea of your "run" wrapper, we don't have this
+anywhere in our other scripts, so I'd rather avoid it.
+
+> +The signing part is done by sign.sh script in this directory.
+> +
+
+by *the* sign.sh
+
+> +It does not really matter where rootfs is as long as the kernel is able
+
+where *the* rootfs is
+
+> +to find it, but this particular configuration assumes the kernel is on
+> +partition n and rootfs is on partition n+1.
+> +Make sure to check kernel.args if you change this.
+> +
+> +Making the boot media
+> +---------------------
+> +Start by configuring and building the images.
+> +
+> +	make chromebook_nautilus_defconfig
+> +	make menuconfig # if necessary
+> +	make
+> +
+> +The important files are:
+> +
+> +	Image.kpart (kernel partition, signed)
+> +	rootfs.tar
+> +	sdcard.img (SD card/USB image containing both kernel and rootfs)
+> +
+> +Write the image directly to some SD card or USB stick.
+> +WARNING: make sure there is nothing important on that device,
+> +and double-check the device name!
+> +
+> +	SD=/dev/mmcblk1		# may be /dev/sdX on some hosts
+> +	dd if=output/images/sdcard.img of=$SD
+
+Drop the SD variable here.
+
+
+> diff --git a/board/chromebook/nautilus/sign.sh b/board/chromebook/nautilus/sign.sh
+> new file mode 100755
+> index 000000000000..3b8c9c577b20
+> --- /dev/null
+> +++ b/board/chromebook/nautilus/sign.sh
+> @@ -0,0 +1,31 @@
+> +#!/bin/sh
+> +
+> +# This script creates a kernel partition containing the kernel bzImage
+> +# then signs it using futility from vboot-utils.
+> +# The resulting file is called Image.kpart.
+> +
+> +BOARD_DIR=$(dirname $0)
+> +futility=$HOST_DIR/bin/futility
+> +devkeys=$HOST_DIR/share/vboot/devkeys
+> +vmlinuz=$BINARIES_DIR/bzImage
+> +
+> +run() { echo "$@"; "$@"; }
+> +die() { echo "$@" >&2; exit 1; }
+> +test -f $vmlinuz || \
+> +	die "No kernel image found"
+> +test -x $futility || \
+> +	die "No futility found (host-vboot-utils has not been built?)"
+
+As said above, we probably don't need those checks. Just assume things
+have been built as they should be.
+
+
+> diff --git a/configs/chromebook_nautilus_defconfig b/configs/chromebook_nautilus_defconfig
+> new file mode 100644
+> index 000000000000..536e1fc96ad1
+> --- /dev/null
+> +++ b/configs/chromebook_nautilus_defconfig
+> @@ -0,0 +1,15 @@
+> +BR2_x86_64=y
+> +BR2_x86_core2=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+> +BR2_TARGET_GENERIC_GETTY_TERM="linux"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/chromebook/nautilus/sign.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/chromebook/nautilus/genimage.cfg"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/chromebook/nautilus/config"
+
+We want to use a specific kernel version that is know to have been
+tested, and not just "the latest kernel".
+
+Besides those small details, it really looks good. Could you send a v2
+with those details fixed?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
