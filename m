@@ -1,46 +1,49 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed, 20 Nov 2019 10:50:02 +0300
-Subject: [Buildroot] [PATCH 4/9] boot/arm-trusted-firmware: Add RCW
- support
-In-Reply-To: <20191120040725.32207-5-jerry.huang@nxp.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 20 Nov 2019 08:59:44 +0100
+Subject: [Buildroot] [PATCH 1/9] package/rcw: upgrade the rcw version to
+ LSDK-19.09
+In-Reply-To: <20191120040725.32207-2-jerry.huang@nxp.com>
 References: <20191120040725.32207-1-jerry.huang@nxp.com>
- <20191120040725.32207-5-jerry.huang@nxp.com>
-Message-ID: <20191120075002.rgn3ymmedtux5dg4@bars>
+ <20191120040725.32207-2-jerry.huang@nxp.com>
+Message-ID: <20191120085944.78aed103@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index 70d36fff73..6896d9a7aa 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -95,6 +95,15 @@ endif
->  
->  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
->  
-> +RCW_BOOT_MODE = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BOOT_MODE))
-> +ifneq ($(RCW_BOOT_MODE),)
-> +RCW_PATH = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BIN))
-> +RCW_FILE = $(lastword $(subst /, ,$(RCW_PATH)))
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BOOT_MODE=$(RCW_BOOT_MODE) RCW=$(BINARIES_DIR)/$(RCW_FILE)
-> +ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += pbl
-> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-rcw
-> +endif
-> +
->  ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
->  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += fip
->  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-openssl
+Hello Jerry,
 
-Hi Jerry and all,
+First of all, thanks a lot for this patch series, it is very nice to
+see NXP directly contributing to Buildroot some support for the LS1028
+platform. See below one question about this patch.
 
-Here arm-trusted-firmware build is modified when some host package
-with specific configuration is enabled in board config.
+On Wed, 20 Nov 2019 12:07:17 +0800
+Changming Huang <jerry.huang@nxp.com> wrote:
 
-Shouldn't it be the other way around ? To be more specific: another
-Config.in option for arm-trusted-firmware which pulls required build
-time dependencies, e.g. see Marvell DDR options or FIP options.
+> Change the RCW version to LSDK-19.09.
+> 
+> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+> ---
+>  package/rcw/rcw.hash | 3 +--
+>  package/rcw/rcw.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/rcw/rcw.hash b/package/rcw/rcw.hash
+> index 7de1ec659a..3fbb5d167f 100644
+> --- a/package/rcw/rcw.hash
+> +++ b/package/rcw/rcw.hash
+> @@ -1,3 +1,2 @@
+>  # Locally calculated
+> -sha256 1421ada9fec10b12ff21cd9ad82f0a835b191cb2dde80f03547764574b1346c3 rcw-LSDK-18.12.tar.gz
+> -sha256 a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd LICENSE
 
-Regards,
-Sergey
+Why are you removing the hash of the license file here ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
