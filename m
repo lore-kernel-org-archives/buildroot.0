@@ -1,60 +1,110 @@
-From: James Byrne <james.byrne@origamienergy.com>
-Date: Wed, 20 Nov 2019 15:55:28 +0000
-Subject: [Buildroot] [PATCH 1/1] package/ntp: remove host shell check
-Message-ID: <0102016e898693a5-82db32f2-a59d-42c1-996b-97661b367c25-000000@eu-west-1.amazonses.com>
+From: Koen Martens <gmc@sonologic.nl>
+Date: Wed, 20 Nov 2019 17:14:09 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/linuxconsoletools: bump version
+ to 1.7.0
+Message-ID: <20191120161408.GA28902@coltrane>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds a patch which removes the autoconf check for which shell is
-installed on the host and fixes the shell as '/bin/sh'. Since we are
-cross-compiling, we cannot assume that the target uses the same shell.
-Also, it can prevent builds being reproducible because a different host
-environment will result in a different target binary.
+This version changed the (optional) dependency from sdl and
+sdl-config to sdl2 and pkg-config. Therefore, the patch
+0002-sdl-config.patch has been dropped and the dependency
+has been changed to BR2_PACKAGE_SDL2.
 
-Signed-off-by: James Byrne <james.byrne@origamienergy.com>
+Since SDL2 (required to build force-feedback utilities)
+requires shared library support to compile, a dependency
+on !BR2_STATIC_LIBS was added to the configuration option
+that enables force-feedback utilities.
+
+Signed-off-by: Koen Martens <gmc@sonologic.nl>
 ---
- package/ntp/0003-force-sh.patch | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/ntp/0003-force-sh.patch
+ .../linuxconsoletools/0002-sdl-config.patch   | 20 -------------------
+ package/linuxconsoletools/Config.in           |  6 +++++-
+ .../linuxconsoletools/linuxconsoletools.hash  |  2 +-
+ .../linuxconsoletools/linuxconsoletools.mk    |  6 +++---
+ 4 files changed, 9 insertions(+), 25 deletions(-)
+ delete mode 100644 package/linuxconsoletools/0002-sdl-config.patch
 
-diff --git a/package/ntp/0003-force-sh.patch b/package/ntp/0003-force-sh.patch
-new file mode 100644
-index 0000000000..4c2628e04a
---- /dev/null
-+++ b/package/ntp/0003-force-sh.patch
-@@ -0,0 +1,30 @@
-+We're cross compiling, don't use the presence of shells on the host to decide
-+anything about the target...
+diff --git a/package/linuxconsoletools/0002-sdl-config.patch b/package/linuxconsoletools/0002-sdl-config.patch
+deleted file mode 100644
+index c19c274a83..0000000000
+--- a/package/linuxconsoletools/0002-sdl-config.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Specify sdl-config to use instead of using host sdl-config.
+-
+-Signed-off-by: Koen Martens <gmc@sonologic.nl>
+-
+-diff -Naur a/utils/Makefile b/utils/Makefile
+---- a/utils/Makefile	2017-06-16 18:48:28.402824790 +0200
+-+++ b/utils/Makefile	2017-06-16 18:48:53.898696647 +0200
+-@@ -69,10 +69,10 @@
+- 	$(CC) $(CFLAGS) $(CPPFLAGS) -funsigned-char $^ $(LDFLAGS) -lm -o $@
+- 
+- ffmvforce.o: ffmvforce.c
+--	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ -o $@ `sdl-config --cflags`
+-+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ -o $@ `${SDL_CONFIG} --cflags`
+- 
+- ffmvforce: ffmvforce.o
+--	$(CC) $^ -o $@ $(LDFLAGS) -g -lm `sdl-config --libs`
+-+	$(CC) $^ -o $@ $(LDFLAGS) -g -lm `${SDL_CONFIG} --libs`
+- 
+- axbtnmap.o: axbtnmap.c axbtnmap.h
+- 
+diff --git a/package/linuxconsoletools/Config.in b/package/linuxconsoletools/Config.in
+index 76150278ae..614099fdee 100644
+--- a/package/linuxconsoletools/Config.in
++++ b/package/linuxconsoletools/Config.in
+@@ -28,9 +28,13 @@ config BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK
+ 
+ config BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK
+ 	bool "force-feedback utilities"
+-	select BR2_PACKAGE_SDL
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_SDL2
+ 	help
+ 	  Build force-feedback driver utilities (fftest,
+ 	  ffmvforce, ffset, ffcfstress).
+ 
++comment "force-feedback utilities need a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
 +
-+diff --git a/sntp/libopts/m4/libopts.m4 b/sntp/libopts/m4/libopts.m4
-+--- a/sntp/libopts/m4/libopts.m4
-++++ b/sntp/libopts/m4/libopts.m4
-+@@ -112,22 +112,7 @@
-+   AC_CHECK_FUNCS([mmap canonicalize_file_name snprintf strdup strchr \
-+                  strrchr strsignal fchmod fstat chmod])
-+   AC_PROG_SED
-+-  [while :
-+-  do
-+-      POSIX_SHELL=`which bash`
-+-      test -x "$POSIX_SHELL" && break
-+-      POSIX_SHELL=`which dash`
-+-      test -x "$POSIX_SHELL" && break
-+-      POSIX_SHELL=/usr/xpg4/bin/sh
-+-      test -x "$POSIX_SHELL" && break
-+-      POSIX_SHELL=`/bin/sh -c '
-+-          exec 2>/dev/null
-+-          if ! true ; then exit 1 ; fi
-+-          echo /bin/sh'`
-+-      test -x "$POSIX_SHELL" && break
-+-      ]AC_MSG_ERROR([cannot locate a working POSIX shell])[
-+-  done]
-+-  AC_DEFINE_UNQUOTED([POSIX_SHELL], ["${POSIX_SHELL}"],
-++  AC_DEFINE_UNQUOTED([POSIX_SHELL], ["/bin/sh"],
-+            [define to a working POSIX compliant shell])
-+   AC_SUBST([POSIX_SHELL])
-+ ])
+ endif
+diff --git a/package/linuxconsoletools/linuxconsoletools.hash b/package/linuxconsoletools/linuxconsoletools.hash
+index d1bb5a39ef..caacf70e45 100644
+--- a/package/linuxconsoletools/linuxconsoletools.hash
++++ b/package/linuxconsoletools/linuxconsoletools.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	e9d6b05a6c57c7eb3ec7f9f017f46b20e4b55d5a02f930eff1823a13921c5934	linuxconsoletools-1.6.1.tar.bz2
++sha256	95d112f06393806116341d593bda002c8bc44119c1538407623268fed90d8c34	linuxconsoletools-1.7.0.tar.bz2
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/linuxconsoletools/linuxconsoletools.mk b/package/linuxconsoletools/linuxconsoletools.mk
+index b22e136d33..f26d874d96 100644
+--- a/package/linuxconsoletools/linuxconsoletools.mk
++++ b/package/linuxconsoletools/linuxconsoletools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUXCONSOLETOOLS_VERSION = 1.6.1
++LINUXCONSOLETOOLS_VERSION = 1.7.0
+ LINUXCONSOLETOOLS_SOURCE = linuxconsoletools-$(LINUXCONSOLETOOLS_VERSION).tar.bz2
+ LINUXCONSOLETOOLS_SITE = https://downloads.sourceforge.net/project/linuxconsole
+ LINUXCONSOLETOOLS_LICENSE = GPL-2.0+
+@@ -21,8 +21,8 @@ endif
+ ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK),y)
+ LINUXCONSOLETOOLS_MAKE_OPTS += \
+ 	ENABLE_FORCEFEEDBACK=1 \
+-	SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
+-LINUXCONSOLETOOLS_DEPENDENCIES += sdl
++	CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
++LINUXCONSOLETOOLS_DEPENDENCIES += sdl2 host-pkgconf
+ endif
+ 
+ define LINUXCONSOLETOOLS_BUILD_CMDS
 -- 
-2.24.0
+2.17.1
