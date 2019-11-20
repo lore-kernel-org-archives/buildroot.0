@@ -1,54 +1,79 @@
-From: Jerry Huang <jerry.huang@nxp.com>
-Date: Wed, 20 Nov 2019 10:22:58 +0000
-Subject: [Buildroot] [EXT] Re: [PATCH 7/9] package/rcw: Enable IIC5_PMUX
- and CLK_OUT_PMUX for GPIO
-In-Reply-To: <20191120103857.52d575f0@windsurf.home>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Wed, 20 Nov 2019 04:23:49 -0600
+Subject: [Buildroot] [External] Re: [PATCH 1/9] package/rcw: upgrade the
+ rcw version to LSDK-19.09
+In-Reply-To: <d4ad37bc14e611dc3ef2f4ff1ec8543b@walle.cc>
 References: <20191120040725.32207-1-jerry.huang@nxp.com>
- <20191120040725.32207-8-jerry.huang@nxp.com>
- <20191120101451.34bd8120@windsurf.home>
- <VI1PR04MB5136E760A49DE331036F9F8DFE4F0@VI1PR04MB5136.eurprd04.prod.outlook.com>
- <20191120103857.52d575f0@windsurf.home>
-Message-ID: <VI1PR04MB5136463A2E069F992EB4C80FFE4F0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+ <20191120040725.32207-2-jerry.huang@nxp.com>
+ <8ef6b0156f54102d837ecfc429ae810d@walle.cc>
+ <20191120103204.19a15798@windsurf.home>
+ <CANQCQpbZdy0q_qvRf8AWKu8wVFTNh8o9fjY7=UDeiKmU8zhnGw@mail.gmail.com>
+ <20191120104539.37da1c64@windsurf.home>
+ <CANQCQpYBjDv8-=hDyOGeCHMQymFqsu3St+9fCvhcgunVQs9UKw@mail.gmail.com>
+ <d4ad37bc14e611dc3ef2f4ff1ec8543b@walle.cc>
+Message-ID: <CANQCQpaJLTpfsUVHhtM63aqF807HF8re3egg7VRq56XBbrdHZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks a lot for your suggestion.
+Michael,
 
-Best Regards
-Jerry Huang
 
-> -----Original Message-----
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Sent: Wednesday, November 20, 2019 5:39 PM
-> To: Jerry Huang <jerry.huang@nxp.com>
-> Cc: buildroot at busybox.net
-> Subject: Re: [EXT] Re: [Buildroot] [PATCH 7/9] package/rcw: Enable IIC5_PMUX
-> and CLK_OUT_PMUX for GPIO
-> 
-> Caution: EXT Email
-> 
-> On Wed, 20 Nov 2019 09:34:13 +0000
-> Jerry Huang <jerry.huang@nxp.com> wrote:
-> 
-> > > The patches modify only files in ls1028ardb/, and you apply them
-> > > when the board name is ls1028ardb, so basically, you could just as
-> > > well apply the patches unconditionally, no ?
-> > I can change it to apply the patch unconfitionally.
-> 
-> OK, thanks. Please make sure to submit the patch to the upstream rcw project,
-> so that ultimately, we can drop the patches.
-> 
-> Thanks,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbootlin.c
-> om&amp;data=02%7C01%7Cjerry.huang%40nxp.com%7Cb7d1e0c04eef467887
-> dc08d76d9d7822%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637
-> 098395434083898&amp;sdata=JUgNCv0ZuKrsxcp%2F9rdqyK6ZFQ11Ic3NacjPuK
-> lB6hc%3D&amp;reserved=0
+On Wed, Nov 20, 2019 at 4:00 AM Michael Walle <michael@walle.cc> wrote:
+>
+> Hi,
+>
+> Am 2019-11-20 10:51, schrieb Matthew Weber:
+> > Changming,
+> >
+> > On Wed, Nov 20, 2019 at 3:45 AM Thomas Petazzoni
+> > <thomas.petazzoni@bootlin.com> wrote:
+> >>
+> >> On Wed, 20 Nov 2019 03:38:40 -0600
+> >> Matthew Weber <matthew.weber@collins.com> wrote:
+> >>
+> >> > > True, rcw is very short and quite generic. Matt, what do you think?
+> >> >
+> >> > Michael, good points, maybe we could append a prefix to make it
+> >> > freescale-qoriq-rcw?
+> >>
+> >> Yes, freescale-qorqiq-rcw is good.
+>
+> sounds good. but also see below.
+
+I see Changming's email about nesting this in the folder as well.  No
+issue with that as long as the maintainers support it (similar to
+freescale-imx)
+
+>
+> >>
+> >
+> > I can send a patch, however do you want to add this rename as a patch
+> > in your current layerscape devkit series as you touch lots of RCW
+> > variables?  Let me know your plan, I can send it but I don't want to
+> > do it in the middle of your work :).
+>
+> The RCW is really board dependent. I can imagine some OEMs are using the
+> ones from freescale, but most likely they won't fit their boards. For
+> example, we have our own RCW repository (although only binary for now)
+> for our board. Therefore, wouldn't it be better to have different rcw
+> config(s) in the board directories?
+
+On the next branch there is a patch applied that allows custom board
+rcws to meet that need.
+
+>
+> TBH I just had a quick look at the package makefile and saw that it
+> copies the RCWs to /usr/share. Most likely, you (also?) need them in a
+> flash/sdcard image, though.
+
+Agree, the package was originally setup to stage all the pieces the
+user needs to use the tool outside of the build from a deployed SDK
+for creating images (mainly a board bringup/hardware developer use
+case).  REcently a patch was applied to Next that allows customized
+boards and with Changming's patch you can stage pre-defined board rcw
+binaries for use.
+
+Matt
