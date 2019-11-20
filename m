@@ -1,10 +1,9 @@
 From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Wed, 20 Nov 2019 17:39:29 +0000
-Subject: [Buildroot] [RFC PATCH v3 15/30] package/widevine: Add package for
- the widevine CDM library.
+Date: Wed, 20 Nov 2019 17:39:32 +0000
+Subject: [Buildroot] [RFC PATCH v3 18/30] package/ffmpeg: Add host package.
 In-Reply-To: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
 References: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
-Message-ID: <20191120173944.130142-16-thomas.preston@codethink.co.uk>
+Message-ID: <20191120173944.130142-19-thomas.preston@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,86 +12,103 @@ To: buildroot@busybox.net
 
 From: Michael Drake <michael.drake@codethink.co.uk>
 
-Cc: Patrick Glaser <pglaser@tesla.com>
-Cc: Jon duSaint <jdusaint@tesla.com>
-Cc: Enis Lavery <elavery@tesla.com>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/Config.in            |  1 +
- package/widevine/Config.in   |  6 ++++++
- package/widevine/widevine.mk | 38 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 45 insertions(+)
- create mode 100644 package/widevine/Config.in
- create mode 100644 package/widevine/widevine.mk
+ package/ffmpeg/ffmpeg.mk | 61 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9cbb454a50..a27b9ad778 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1684,6 +1684,7 @@ menu "Networking"
- 	source "package/usbredir/Config.in"
- 	source "package/wampcc/Config.in"
- 	source "package/websocketpp/Config.in"
-+	source "package/widevine/Config.in"
- 	source "package/zeromq/Config.in"
- 	source "package/zmqpp/Config.in"
- 	source "package/zyre/Config.in"
-diff --git a/package/widevine/Config.in b/package/widevine/Config.in
-new file mode 100644
-index 0000000000..d730e6f9bd
---- /dev/null
-+++ b/package/widevine/Config.in
-@@ -0,0 +1,6 @@
-+menuconfig BR2_PACKAGE_WIDEVINE
-+	bool "widevine"
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  Proprietary content decryption module (CDM) for the digital
-+	  rights management (DRM) of internet content.
-diff --git a/package/widevine/widevine.mk b/package/widevine/widevine.mk
-new file mode 100644
-index 0000000000..a6e96ae99b
---- /dev/null
-+++ b/package/widevine/widevine.mk
-@@ -0,0 +1,38 @@
-+################################################################################
-+#
-+# Widevine
-+#
-+################################################################################
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 3dd2e3ef76..d20209d72b 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -56,6 +56,46 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-symver \
+ 	--disable-doc
+ 
++HOST_FFMPEG_CONF_OPTS = \
++	--enable-avfilter \
++	--disable-version3 \
++	--enable-logging \
++	--enable-optimizations \
++	--disable-extra-warnings \
++	--enable-avdevice \
++	--enable-avcodec \
++	--enable-avformat \
++	--enable-network \
++	--disable-gray \
++	--enable-swscale-alpha \
++	--disable-small \
++	--enable-dct \
++	--enable-fft \
++	--enable-mdct \
++	--enable-rdft \
++	--disable-crystalhd \
++	--disable-dxva2 \
++	--enable-runtime-cpudetect \
++	--disable-hardcoded-tables \
++	--disable-mipsdsp \
++	--disable-mipsdspr2 \
++	--disable-msa \
++	--enable-hwaccels \
++	--disable-cuda \
++	--disable-cuvid \
++	--disable-nvenc \
++	--disable-avisynth \
++	--disable-frei0r \
++	--disable-libopencore-amrnb \
++	--disable-libopencore-amrwb \
++	--disable-libdc1394 \
++	--disable-libgsm \
++	--disable-libilbc \
++	--disable-libvo-amrwbenc \
++	--disable-libxcb \
++	--disable-symver \
++	--disable-doc
 +
-+# Get latest version number from: https://dl.google.com/widevine-cdm/versions.txt
-+WIDEVINE_VERSION = 4.10.1440.19
+ FFMPEG_DEPENDENCIES += host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
+@@ -413,9 +453,12 @@ endif
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPTS += --enable-x86asm
+ FFMPEG_DEPENDENCIES += host-nasm
++HOST_FFMPEG_DEPENDENCIES += host-nasm
+ else
+ FFMPEG_CONF_OPTS += --disable-x86asm
+ FFMPEG_CONF_OPTS += --disable-mmx
++HOST_FFMPEG_CONF_OPTS += --disable-x86asm
++HOST_FFMPEG_CONF_OPTS += --disable-mmx
+ endif
+ 
+ ifeq ($(BR2_X86_CPU_HAS_SSE),y)
+@@ -560,9 +603,27 @@ define FFMPEG_CONFIGURE_CMDS
+ 	)
+ endef
+ 
++HOST_FFMPEG_CONF_ENV += CFLAGS="$(HOST_FFMPEG_CFLAGS)"
 +
-+ifeq ($(BR2_i386),y)
-+WIDEVINE_ARCH = ia32
-+else ifeq ($(BR2_x86_64),y)
-+WIDEVINE_ARCH = x64
-+endif
-+
-+WIDEVINE_SOURCE = $(WIDEVINE_VERSION)-linux-$(WIDEVINE_ARCH).zip
-+WIDEVINE_SITE = https://dl.google.com/widevine-cdm
-+WIDEVINE_LICENSE = Proprietary
-+WIDEVINE_LICENSE_FILES = LICENSE.txt
-+WIDEVINE_INSTALL_STAGING = YES
-+
-+define WIDEVINE_EXTRACT_CMDS
-+	$(UNZIP) $(WIDEVINE_DL_DIR)/$(WIDEVINE_SOURCE) -d $(@D)
++# Override HOST_FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
++define HOST_FFMPEG_CONFIGURE_CMDS
++	(cd $(HOST_FFMPEG_SRCDIR) && rm -rf config.cache && \
++	$(HOST_CONFIGURE_OPTS) \
++	$(HOST_CONFIGURE_ARGS) \
++	$(HOST_FFMPEG_CONF_ENV) \
++	./configure \
++		--prefix="$(HOST_DIR)" \
++		--enable-shared --disable-static \
++		--disable-doc \
++		--disable-debug \
++		$(HOST_FFMPEG_CONF_OPTS) \
++	)
 +endef
 +
-+define WIDEVINE_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 -t $(STAGING_DIR)/usr/lib \
-+			$(@D)/libwidevinecdm.so \
-+			$(@D)/manifest.json
-+endef
-+
-+define WIDEVINE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 -t $(TARGET_DIR)/usr/lib \
-+			$(@D)/libwidevinecdm.so \
-+			$(@D)/manifest.json
-+endef
-+
-+$(eval $(generic-package))
+ define FFMPEG_REMOVE_EXAMPLE_SRC_FILES
+ 	rm -rf $(TARGET_DIR)/usr/share/ffmpeg/examples
+ endef
+ FFMPEG_POST_INSTALL_TARGET_HOOKS += FFMPEG_REMOVE_EXAMPLE_SRC_FILES
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.20.1
