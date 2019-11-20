@@ -1,10 +1,10 @@
 From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Wed, 20 Nov 2019 17:39:41 +0000
-Subject: [Buildroot] [RFC PATCH v3 27/30] package/pciutils: Enable host
- package.
+Date: Wed, 20 Nov 2019 17:39:39 +0000
+Subject: [Buildroot] [RFC PATCH v3 25/30] package/x11r7/xlib_libXrandr: Add
+ host package.
 In-Reply-To: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
 References: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
-Message-ID: <20191120173944.130142-28-thomas.preston@codethink.co.uk>
+Message-ID: <20191120173944.130142-26-thomas.preston@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,44 +14,23 @@ To: buildroot@busybox.net
 From: Michael Drake <michael.drake@codethink.co.uk>
 
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/pciutils/pciutils.mk | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index 30d429e75a..b4bdbceefb 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -19,6 +19,8 @@ PCIUTILS_MAKE_OPTS = \
- 	AR=$(TARGET_AR) \
- 	DNS=no
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+index 23a0d974d0..a8080904af 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+@@ -11,6 +11,8 @@ XLIB_LIBXRANDR_LICENSE = MIT
+ XLIB_LIBXRANDR_LICENSE_FILES = COPYING
+ XLIB_LIBXRANDR_INSTALL_STAGING = YES
+ XLIB_LIBXRANDR_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXrender xorgproto
++HOST_XLIB_LIBXRANDR_DEPENDENCIES = host-xlib_libX11 host-xlib_libXext host-xlib_libXrender host-xorgproto
+ XLIB_LIBXRANDR_CONF_OPTS = --disable-malloc0returnsnull
  
-+HOST_PCIUTILS_MAKE_OPTS = HWDB=no ZLIB=no SHARED=no
-+
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- PCIUTILS_DEPENDENCIES += udev
- PCIUTILS_MAKE_OPTS += HWDB=yes
-@@ -71,4 +73,21 @@ define PCIUTILS_INSTALL_STAGING_CMDS
- 		install install-lib install-pcilib
- endef
- 
-+define HOST_PCIUTILS_CONFIGURE_CMDS
-+	$(SED) 's/wget --no-timestamping/wget/' $(PCIUTILS_DIR)/update-pciids.sh
-+	$(SED) 's/^STRIP/#STRIP/' $(PCIUTILS_DIR)/Makefile
-+endef
-+
-+define HOST_PCIUTILS_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_PCIUTILS_MAKE_OPTS) \
-+		PREFIX=""
-+endef
-+
-+define HOST_PCIUTILS_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) $(HOST_PCIUTILS_MAKE_OPTS) \
-+		PREFIX=$(HOST_DIR) SBINDIR=$(HOST_DIR)/bin \
-+		install install-lib install-pcilib
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.20.1
