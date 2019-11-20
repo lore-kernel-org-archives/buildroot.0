@@ -1,47 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 20 Nov 2019 14:08:47 +0000
-Subject: [Buildroot] [Bug 12331] New: meson issue
-Message-ID: <bug-12331-163@https.bugs.busybox.net/>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Wed, 20 Nov 2019 14:46:03 +0000
+Subject: [Buildroot] [PATCH 2/2] package/libv4l: link with libatomic
+ when needed
+In-Reply-To: <20191030232618.5cd32feb@gmx.net>
+References: <20191030065303.22948-1-bernd.kuhls@t-online.de>
+ <20191030065303.22948-2-bernd.kuhls@t-online.de>
+ <20191030113040.474a31f9@windsurf> <20191030232618.5cd32feb@gmx.net>
+Message-ID: <d90c679a-a4f6-d825-63c8-ae90baf1ea73@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12331
+Hey,
 
-            Bug ID: 12331
-           Summary: meson issue
-           Product: buildroot
-           Version: 2019.02.7
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: jpcartal at free.fr
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On 30/10/2019 22:26, Peter Seiderer wrote:
+> Adding the (missing?) '-L/home/seiderer/Work/Buildroot/build_sparc_qt5multimedia_001/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib'
+> libtool command line parameter fixes the linking for the actual build...
+> 
+> Any hint which (buildroot?) change triggered the remove of the link/library path removal?
+> 
 
-Meson script uses full path to python3 when executed which gives errors when
-the path is too long :
+As previously discussed [0], the missing `-L..` is because pkgconf no longer
+returns "system" include or library directories with -I and -L  (see [1]).
+These are already in the compiler's default search path and were causing
+include-order related bugs when using -isystem.
 
-$ cat host/bin/meson 
-#!/home/Dev/Ssd/buildroot/buildroot-2019.02.7/host/bin/python3
-# EASY-INSTALL-ENTRY-SCRIPT: 'meson==0.49.0','console_scripts','meson'
-__requires__ = 'meson==0.49.0'
-import re
-import sys
-from pkg_resources import load_entry_point
+However, it looks like that change has caused a problem here, where the output
+from pkgconf is being passed to libtool to point it at the "system" library
+directory in the sysroot.
 
-if __name__ == '__main__':
-    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
-    sys.exit(
-        load_entry_point('meson==0.49.0', 'console_scripts', 'meson')()
-    )
+I don't know enough about libtool yet, but I think there are a few ways around
+this:
+1. Tell libtool where the sysroot is by some other mechanism
+2. Tell pkgconf that we want to keep the system lib directories, when it is
+   used to create arguments to libtool. The following argument will always 
+   return -L, as expected above:
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+        pkg-config --keep-system-libs
+
+I'm looking into this, but someone with a more intimate knowledge of libtool +
+pkg-autotools.mk, might be able to help here.
+
+Thanks,
+Thomas Preston
+
+[0] http://lists.busybox.net/pipermail/buildroot/2019-November/266369.html
+[1] http://lists.busybox.net/pipermail/buildroot/2019-October/263178.html
