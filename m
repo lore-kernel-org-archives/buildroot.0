@@ -1,94 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 14:49:54 +0100
-Subject: [Buildroot] [PATCH] glibc: install glibc utils to target
-In-Reply-To: <20191120121643.21943-1-Nikita.Sobolev@synopsys.com>
-References: <20191120121643.21943-1-Nikita.Sobolev@synopsys.com>
-Message-ID: <20191120144954.449964c6@windsurf.home>
+Date: Wed, 20 Nov 2019 14:52:11 +0100
+Subject: [Buildroot] [PATCH] cpuburn-arm: new package
+In-Reply-To: <6ded876c79c3406bd7c6d0c89bc5c4d54c854d84.1574253923.git.baruch@tkos.co.il>
+References: <6ded876c79c3406bd7c6d0c89bc5c4d54c854d84.1574253923.git.baruch@tkos.co.il>
+Message-ID: <20191120145211.732b6142@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nikita,
+Hello,
 
-Thanks for the patch!
+On Wed, 20 Nov 2019 14:45:23 +0200
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-On Wed, 20 Nov 2019 15:16:43 +0300
-Nikita Sobolev <Nikita.Sobolev@synopsys.com> wrote:
+> cpuburn-arm burns CPU cycles to generate as much heat as possible.
+> Useful for stress testing.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-> index 7821251087..43d6445177 100644
-> --- a/package/glibc/Config.in
-> +++ b/package/glibc/Config.in
-> @@ -8,3 +8,18 @@ config BR2_PACKAGE_GLIBC
->  	help
->  	  https://www.gnu.org/software/libc/
->  endif
-> +
-> +if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+Commit title lacks package/, i.e package/cpuburn-arm: new package.
 
-This condition is redundant, since glibc/Config.in already starts with:
+> diff --git a/package/cpuburn-arm/Config.in b/package/cpuburn-arm/Config.in
+> new file mode 100644
+> index 000000000000..afea5aae0b69
+> --- /dev/null
+> +++ b/package/cpuburn-arm/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_CPUBURN_ARM_ARCH_SUPPORT
 
-if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+	..._ARCH_SUPPORTS
 
+> +	bool
+> +	default y
+> +	depends on BR2_cortex_a7 || BR2_cortex_a8 || BR2_cortex_a9 || \
+> +		BR2_cortex_a53
 
-> +config BR2_PACKAGE_GLIBC_UTILS
-> +	bool "Compile and install glibc utilities"
+I'm not sure we really need this option when it's only used in a single
+place, but if you do want the option, use this syntax:
 
-Just:
+	bool
+	default y if BR2_cortex_a7
+	default y if BR2_cortex_a8
+	default y if BR2_cortex_a9
+	default y if BR2_cortex_a53
 
-	bool "Install glibc utilities"
+Otherwise looks good. Probably not needed to send a new iteration just
+for my minor comments, they can be taken into account when applying.
 
-> +	depends on BR2_PACKAGE_GLIBC
-
-This is not needed.
-
-> +	depends on BR2_PACKAGE_BASH
-> +	help
-> +	  Enabling this option will compile and install the getconf,
-> +	  ldconfig and ldd glibc utilities for the target.
-> +
-> +comment "Glibc utilities need bash"
-
-Glibc -> glibc
-
-> +	depends on !BR2_PACKAGE_BASH
-> +
-> +endif
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 68c6670007..db82792c2e 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -143,10 +143,17 @@ ifeq ($(BR2_PACKAGE_GDB),y)
->  GLIBC_LIBS_LIB += libthread_db.so.*
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_GLIBC_UTILS),y)
-> +GLIBC_TARGET_UTILS_BIN = /build/posix/getconf /build/elf/ldconfig /build/elf/ldd
-
-Drop the leading slash in each entry, and maybe the build/ as well, so:
-
-GLIBC_TARGET_UTILS_BIN = posix/getconf elf/ldconfig elf/ldd
-
-> +endif
-> +
->  define GLIBC_INSTALL_TARGET_CMDS
->  	for libpattern in $(GLIBC_LIBS_LIB); do \
->  		$(call copy_toolchain_lib_root,$$libpattern) ; \
->  	done
-> +	for util in $(GLIBC_TARGET_UTILS_BIN); do \
-> +		$(INSTALL) -D -m 0755 $(@D)/$$util $(TARGET_DIR)/bin/ ;\
-> +	done
-
-Please use a make foreach loop instead, and a full destination path for
-the target:
-
-	$(foreach util,$(GLIBC_TARGET_UTILS_BIN), \
-		$(INSTALL) -D -m 0755 $(@D)/build/$(util) $(TARGET_DIR)/bin/$(notdir $(util))
-	)
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
