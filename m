@@ -1,36 +1,44 @@
-From: no-one-you-know <octomp@protonmail.com>
-Date: Tue, 19 Nov 2019 23:56:54 +0000
-Subject: [Buildroot] USB on rock64
-In-Reply-To: <20191119065437.n5spgsmskh74mozk@c-ml-p3510.redembedded.pl>
-References: <Jrdyl_Hac9BdPOhYDWt4FafgynThsUwezL988o5hous9u1y2phHJn7RMUehQbousCfsFYXHqbVjj4ZHFSvj2GApa6f2ZNcnkUFIkzlcb5io=@protonmail.com>
- <2f439898-5420-2413-3b4e-533ab124682a@mind.be>
- <gYbwmuK12iczoJF4lBzTCVCt4DX12_SVF-aghiLMzD4CAwEAg1D8CIepuT9X89EJcalxmpDVDwN3nDwv50H-CLzPX1X-U3JZFtgbVmO_A5o=@protonmail.com>
- <20191118181113.3vi3zklvuibaxfk6@c-ml-p3510.redembedded.pl>
- <_327ATNlLeGeTfyZzNSX9hYyYtKaGkmFJ9cdS27eHJ3yyuMZb9m226Y9QXX15Jm4vmVVAMCntRXajj8e06WP0qwx6lPYXM_yt8XaUeR7V28=@protonmail.com>
- <20191119065437.n5spgsmskh74mozk@c-ml-p3510.redembedded.pl>
-Message-ID: <j4bbB6bA67ndhP16U7YLfooFThNlH0-Ydsi9oluoYpQfU1S6mXwm6AzuyHzh7QitLDyT4AH5f1enD2wzVpp0gwtLYmVEQKFPU1SzOXCqMgo=@protonmail.com>
+From: Changming Huang <jerry.huang@nxp.com>
+Date: Wed, 20 Nov 2019 12:07:20 +0800
+Subject: [Buildroot] [PATCH 4/9] boot/arm-trusted-firmware: Add RCW support
+In-Reply-To: <20191120040725.32207-1-jerry.huang@nxp.com>
+References: <20191120040725.32207-1-jerry.huang@nxp.com>
+Message-ID: <20191120040725.32207-5-jerry.huang@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Default buildroot config for rock64 uses mainline kernel with
-> default arch's generic defconfig which is not tailored for rock64.
-> It might be possible that you have some newer revision than mine,
-> which is not fully supported in mainline kernel.
+NXP Layerscape platforms use RCW (Reset Configure Word) to
+setup clocking and IO allocations and then launches the next stage of boot.
+RCW needs ATF as well as uboot.
+BR2_PACKAGE_HOST_RCW_BOOT_MODE is used to determine if ATF is used for RCW.
 
-I think you must be right.  I just downloaded 2019.11rc and built a vanilla image with just "make rock64_defconfig && make" and I can't get anything out of the USB ports.
+Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+---
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> Couple of things to consider:
->
-> 1.  you might want to change kernel version to newest one, maybe
->     your board is better supported in newer kernel.
->
-> 2.  you can try and use kernel from ayufan that is made for rock64
->     (forked from official rockchip kernel repo) which surely will have
->     drivers mainline won't. He used to very actively support rock64 in
->     the past, I don't know how about now - last commit is 3 months old
->     (https://github.com/ayufan-rock64/linux-kernel)
-
-Thanks for the info and advice.  It's appreciated.
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 70d36fff73..6896d9a7aa 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -95,6 +95,15 @@ endif
+ 
+ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
+ 
++RCW_BOOT_MODE = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BOOT_MODE))
++ifneq ($(RCW_BOOT_MODE),)
++RCW_PATH = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BIN))
++RCW_FILE = $(lastword $(subst /, ,$(RCW_PATH)))
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BOOT_MODE=$(RCW_BOOT_MODE) RCW=$(BINARIES_DIR)/$(RCW_FILE)
++ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += pbl
++ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-rcw
++endif
++
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += fip
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-openssl
+-- 
+2.17.1
