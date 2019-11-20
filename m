@@ -1,10 +1,9 @@
 From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Wed, 20 Nov 2019 17:39:36 +0000
-Subject: [Buildroot] [RFC PATCH v3 22/30] package/x11r7/xlib_libXcomposite:
- Add host package.
+Date: Wed, 20 Nov 2019 17:39:42 +0000
+Subject: [Buildroot] [RFC PATCH v3 28/30] package/libdrm: Add host package.
 In-Reply-To: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
 References: <20191120173944.130142-1-thomas.preston@codethink.co.uk>
-Message-ID: <20191120173944.130142-23-thomas.preston@codethink.co.uk>
+Message-ID: <20191120173944.130142-29-thomas.preston@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,30 @@ To: buildroot@busybox.net
 From: Michael Drake <michael.drake@codethink.co.uk>
 
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
-Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libdrm/libdrm.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
-index 80e94fe37c..ac32113f48 100644
---- a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
-+++ b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
-@@ -11,5 +11,7 @@ XLIB_LIBXCOMPOSITE_LICENSE = MIT
- XLIB_LIBXCOMPOSITE_LICENSE_FILES = COPYING
- XLIB_LIBXCOMPOSITE_INSTALL_STAGING = YES
- XLIB_LIBXCOMPOSITE_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXfixes xorgproto
-+HOST_XLIB_LIBXCOMPOSITE_DEPENDENCIES = host-xlib_libX11 host-xlib_libXext host-xlib_libXfixes host-xorgproto
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index f7c9205744..c97dfbb083 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -18,6 +18,11 @@ LIBDRM_CONF_OPTS = \
+ 	-Dcairo-tests=false \
+ 	-Dmanpages=false
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++HOST_LIBDRM_CONF_OPTS = \
++	-Dcairo-tests=false \
++	-Dmanpages=false \
++	-Dintel=false
++
+ ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
+ LIBDRM_DEPENDENCIES += libatomic_ops
+ ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
+@@ -114,3 +119,4 @@ endif
+ endif
+ 
+ $(eval $(meson-package))
++$(eval $(host-meson-package))
 -- 
 2.20.1
