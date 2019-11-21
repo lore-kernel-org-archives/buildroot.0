@@ -1,54 +1,70 @@
-From: Jerry Huang <jerry.huang@nxp.com>
-Date: Thu, 21 Nov 2019 10:42:20 +0000
-Subject: [Buildroot] [EXT] Re: [PATCH v2 02/10]
- package/freescale-qoriq/fsl-qoriq-rcw: move rcw into freescale-qoriq and
- rename it
-In-Reply-To: <cf56bfbc478fb3ccf413f5d421f15477@walle.cc>
-References: <20191121102324.35225-1-jerry.huang@nxp.com>
- <20191121102324.35225-3-jerry.huang@nxp.com>
- <cf56bfbc478fb3ccf413f5d421f15477@walle.cc>
-Message-ID: <VI1PR04MB51363AD857A07CC924D90BA9FE4E0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+From: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+Date: Thu, 21 Nov 2019 15:31:20 +0300
+Subject: [Buildroot] [PATCH v2] glibc: install glibc utils to target
+Message-ID: <20191121123120.12443-1-Nikita.Sobolev@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Michael,
+With this patch we introduce an option for glibc, which
+installs getconf, ldconfig and ldd utilities on target, that
+may be useful in debugging. By default these utilities are
+built, but not installed to the target.
+ldd is a bash script, so it has bash dependency.
 
-Best Regards
-Jerry Huang
+Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+---
+Changes for v2:
+    - delete unnecessary dependences and conditional statements
+    - correct descriptions
+    - change loop used in script
+    - correct destination paths
 
-> -----Original Message-----
-> From: Michael Walle <michael@walle.cc>
-> Sent: Thursday, November 21, 2019 6:35 PM
-> To: Jerry Huang <jerry.huang@nxp.com>
-> Cc: buildroot at busybox.net; geomatsi at gmail.com;
-> matthew.weber at collins.com; thomas.petazzoni at bootlin.com
-> Subject: [EXT] Re: [PATCH v2 02/10] package/freescale-qoriq/fsl-qoriq-rcw: move
-> rcw into freescale-qoriq and rename it
-> 
-> Caution: EXT Email
-> 
-> Am 2019-11-21 11:23, schrieb Changming Huang:
-> > From: Jerry Huang <jerry.huang@nxp.com>
-> >
-> > Move package/rcw into package/freescale-qoriq, and rename it to
-> > fsl-qoriq-rcw.
-> >
-> > Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
-> > ---
-> > changes since v1:
-> > 1. new patch
-> > 2. move rcw to sub-directory freescale-qoriq 3. rename to
-> > fsl-qoriq-rcw
-> 
-> shouldn't be the naming consistent with the sub-directory? I know there is
-> already a freescale-imx and the packages are only named imx-*. On the other
-> hand, the variable names will be longer. Mhh.
-If keep the same with sub-directory, it is too long, so I use the short name "fsl" to replace "freescale".
-Actually, the FSL is used widely before freescale is merge into NXP.
+ package/glibc/Config.in | 10 ++++++++++
+ package/glibc/glibc.mk  |  7 +++++++
+ 2 files changed, 17 insertions(+)
 
-> [snip]
-> 
-> -michael
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 7821251087..323767fc8a 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -8,3 +8,13 @@ config BR2_PACKAGE_GLIBC
+ 	help
+ 	  https://www.gnu.org/software/libc/
+ endif
++
++config BR2_PACKAGE_GLIBC_UTILS
++	bool "Install glibc utilities"
++	depends on BR2_PACKAGE_BASH
++	help
++	  Enabling this option will compile and install the getconf,
++	  ldconfig and ldd glibc utilities for the target.
++
++comment "glibc utilities need bash"
++	depends on !BR2_PACKAGE_BASH
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 68c6670007..f3f9bc109b 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -143,10 +143,17 @@ ifeq ($(BR2_PACKAGE_GDB),y)
+ GLIBC_LIBS_LIB += libthread_db.so.*
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GLIBC_UTILS),y)
++GLIBC_TARGET_UTILS_BIN = posix/getconf elf/ldconfig elf/ldd
++endif
++
+ define GLIBC_INSTALL_TARGET_CMDS
+ 	for libpattern in $(GLIBC_LIBS_LIB); do \
+ 		$(call copy_toolchain_lib_root,$$libpattern) ; \
+ 	done
++	$(foreach util,$(GLIBC_TARGET_UTILS_BIN), \
++		$(INSTALL) -D -m 0755 $(@D)/build/$(util) $(TARGET_DIR)/bin/$(notdir $(util))
++	)
+ endef
+ 
+ $(eval $(autotools-package))
+-- 
+2.16.2
