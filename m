@@ -1,48 +1,68 @@
 From: Changming Huang <jerry.huang@nxp.com>
-Date: Thu, 21 Nov 2019 18:23:20 +0800
-Subject: [Buildroot] [PATCH v2 06/10] boot/arm-trusted-firmware: Add RCW
- support
+Date: Thu, 21 Nov 2019 18:23:19 +0800
+Subject: [Buildroot] [PATCH v2 05/10] boot/arm-trusted-firmware: Add option
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
 In-Reply-To: <20191121102324.35225-1-jerry.huang@nxp.com>
 References: <20191121102324.35225-1-jerry.huang@nxp.com>
-Message-ID: <20191121102324.35225-7-jerry.huang@nxp.com>
+Message-ID: <20191121102324.35225-6-jerry.huang@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NXP Layerscape platforms use RCW (Reset Configure Word) to
-setup clocking and IO allocations and then launches the next stage of boot.
-RCW needs ATF as well as uboot.
-Option BR2_PACKAGE_HOST_RCW_ATF is used to determine if ATF is used for RCW.
+From: Jerry Huang <jerry.huang@nxp.com>
 
-Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+Add option BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE to define the U-Boot BIN.
+The default setting is u-boot.bin, customer can change it to anything via defconfig.
+
+Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
 ---
 changes since v1:
-1. Use option BR2_PACKAGE_HOST_RCW_ATF as the condition for RCW used by ATF.
+1. add BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE for uboot binary file
+2. default of new option is u-boot.bin.
+3. use the new option for U-Boot BL33
 ---
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ boot/arm-trusted-firmware/Config.in               | 12 ++++++++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk |  3 ++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 2133d39e6d..2bca8109f1 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -92,6 +92,15 @@ endif
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 78c03019d5..3e83590776 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -124,6 +124,18 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+ 	  gets built before ATF, and that the appropriate BL33
+ 	  variable pointing to u-boot.bin is passed when building ATF.
  
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
- 
-+ifeq ($(BR2_PACKAGE_HOST_RCW_ATF),y)
-+RCW_BOOT_MODE = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BOOT_MODE))
-+RCW_PATH = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BIN))
-+RCW_FILE = $(lastword $(subst /, ,$(RCW_PATH)))
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BOOT_MODE=$(RCW_BOOT_MODE) RCW=$(BINARIES_DIR)/$(RCW_FILE)
-+ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += pbl
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-fsl-qoriq-rcw
++if BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
++
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
++	string "U-Boot BL33 Image for ATF"
++	default "u-boot.bin"
++	help
++	  The U-Boot BL33 image for ATF, u-boot.bin is the default setting,
++	  this setting can be changed to any U-Boot binary file that used,
++	  for example, u-boot-dtb.bin.
++
 +endif
 +
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += fip
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-openssl
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES
+ 	string "Additional ATF build variables"
+ 	help
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index e528686aa1..2133d39e6d 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -70,7 +70,8 @@ endif
+ endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
+ 
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33),y)
+-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/u-boot.bin
++ARM_TRUSTED_FIRMWARE_UBOOT_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE))
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UBOOT_BIN)
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
+ endif
+ 
 -- 
 2.17.1
