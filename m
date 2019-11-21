@@ -1,12 +1,12 @@
 From: Jerry Huang <jerry.huang@nxp.com>
-Date: Thu, 21 Nov 2019 11:04:35 +0000
+Date: Thu, 21 Nov 2019 11:09:52 +0000
 Subject: [Buildroot] [EXT] Re: [PATCH v2 07/10]
  package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
-In-Reply-To: <df827bb10ea801bcfd3f04a5093348bc@walle.cc>
+In-Reply-To: <bdf9c08ab88c1a965ec665023a52309d@walle.cc>
 References: <20191121102324.35225-1-jerry.huang@nxp.com>
  <20191121102324.35225-8-jerry.huang@nxp.com>
- <df827bb10ea801bcfd3f04a5093348bc@walle.cc>
-Message-ID: <VI1PR04MB5136130FC0E1239C21893881FE4E0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+ <bdf9c08ab88c1a965ec665023a52309d@walle.cc>
+Message-ID: <VI1PR04MB5136970EECFB9FD42650EDEAFE4E0@VI1PR04MB5136.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,7 +20,7 @@ Jerry Huang
 
 > -----Original Message-----
 > From: Michael Walle <michael@walle.cc>
-> Sent: Thursday, November 21, 2019 6:43 PM
+> Sent: Thursday, November 21, 2019 6:52 PM
 > To: Jerry Huang <jerry.huang@nxp.com>
 > Cc: buildroot at busybox.net; geomatsi at gmail.com;
 > matthew.weber at collins.com; thomas.petazzoni at bootlin.com
@@ -37,18 +37,10 @@ Jerry Huang
 > > Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
 > > ---
 > > changes since v1:
-> > 1. rename the package to fsl-qoriq-cadence-dp-fw
-> 
-> All other firmware's in buildroot have a "-firmware" suffix.
-Because the name is too long if I use the full name "freescale-qoriq-cadence-dp-firmware",
-So I used short name "fsl" prefix to replace freescale and "fw" suffix to release firmware.
-If necessary, I can use the full name, instead of short name.
-
-> > 2. update DEVELOPERS
-> > 3. add the hash of package
-> > 4. modify the context fo config file to package name 5. re-write the
-> > makefile according to rule of buildroot 6. add the license message in
-> > makefile
+> > 1. rename the package to fsl-qoriq-cadence-dp-fw 2. update DEVELOPERS
+> > 3. add the hash of package 4. modify the context fo config file to
+> > package name 5. re-write the makefile according to rule of buildroot
+> > 6. add the license message in makefile
 > > ---
 > >  DEVELOPERS                                    |  3 +++
 > >  package/freescale-qoriq/Config.in             |  2 ++
@@ -106,14 +98,14 @@ If necessary, I can use the full name, instead of short name.
 > >
 > xp.com%2Flgfiles%2Fsdk%2Flsdk1909%2Ffirmware-cadence-lsdk1909.bin&amp;
 > >
-> data=02%7C01%7Cjerry.huang%40nxp.com%7Ca71c7361a8eb40680c9908d76e
-> 6f8d1
+> data=02%7C01%7Cjerry.huang%40nxp.com%7C8af29f72a8524b1f700608d76e7
+> 0ce5
 > >
-> e%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6370992977061416
-> 81&amp;
+> c%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6370993030840248
+> 67&amp;
 > >
-> sdata=cjWdcvyCKsIcw5qV5x%2BJEvVCiFuMeyBNprHm582rkws%3D&amp;reser
-> ved=0
+> sdata=uSC8EhBphE5cLuUGjHWvGyRgNCs3kdPKUe3xBgAna3U%3D&amp;reserv
+> ed=0
 > > diff --git
 > > a/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp
 > > -fw.hash
@@ -161,12 +153,12 @@ If necessary, I can use the full name, instead of short name.
 > +nxp.com%2Flgfiles%2Fsdk%2Flsdk1909&amp;data=02%7C01%7Cjerry.huang%
 > 40n
 > >
-> +xp.com%7Ca71c7361a8eb40680c9908d76e6f8d1e%7C686ea1d3bc2b4c6fa92c
+> +xp.com%7C8af29f72a8524b1f700608d76e70ce5c%7C686ea1d3bc2b4c6fa92c
 > d99c5
 > >
-> +c301635%7C0%7C0%7C637099297706141681&amp;sdata=N1ZBA4m%2F%2F
-> CF7WjNa5j
-> > +XkfrnIastkxjHwoSO8G9%2BZcnk%3D&amp;reserved=0
+> +c301635%7C0%7C0%7C637099303084024867&amp;sdata=efvW3VQKOjQPq5
+> 5%2BMpeu
+> > +uARsbNMl0NV99IwR1ylN9vs%3D&amp;reserved=0
 > > +FSL_QORIQ_CADENCE_DP_FW_SOURCE =
 > > firmware-cadence-$(FSL_QORIQ_CADENCE_DP_FW_VERSION).bin
 > > +FSL_QORIQ_CADENCE_DP_FW_LICENSE = NXP-Binary-EULA
@@ -182,24 +174,12 @@ If necessary, I can use the full name, instead of short name.
 > URCE)
 > > --auto-accept;
 > > +endef
-> > +
-> > +define FSL_QORIQ_CADENCE_DP_FW_INSTALL_IMAGES_CMDS
-> > +     $(INSTALL) -D -m 0644
-> > $(@D)/firmware-cadence-lsdk1909/dp/ls1028a-dp-fw.bin
-> > $(BINARIES_DIR)/ls1028a-dp-fw.bin
-> > +endef
 > 
-> IMHO this should be also installed into the target filesystem. So the driver can
-> request the firmware binary. I know that this is not how NXP handles that at the
-> moment. But in the end, that should be the way to go, esp. since rockchip seems
-> to have the same/similar DP-PHY with a corresponding driver upstream and
-> they are already loading the firmware via request_firmware().
-Yes, this firmware can be into target filesystem, but the driver should be built as module.
-If driver is built-in Linux kernel, we need to load this firmware before starting kernel.
-Now ls1028ardb uses the build-in mode for DP driver, so I can't put it into target filesystem,
-And load it in uboot prompt before starting kernel.
+> There is already an FREESCALE_IMX_EXTRACT_HELPER macro. I guess that
+> should be renamed and used here.
+It is ok for me.
 
-> > +
-> > +$(eval $(generic-package))
-> 
+Hi, Thomas,
+How do you think about it?
+
 > -michael
