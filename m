@@ -1,45 +1,78 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 21 Nov 2019 22:37:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.3.12
-Message-ID: <20191121213733.23541-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 21 Nov 2019 22:42:14 +0100
+Subject: [Buildroot] [PATCH v3 for-next 08/11] board/qemu/*/launch.sh:
+ add qemu launch script
+In-Reply-To: <20191117201909.12900-9-romain.naour@smile.fr>
+References: <20191117201909.12900-1-romain.naour@smile.fr>
+ <20191117201909.12900-9-romain.naour@smile.fr>
+Message-ID: <9aabec73-3c04-70c5-af9f-3b35f9a1039f@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes of this bugfix release:
-https://www.php.net/ChangeLog-7.php#7.3.12
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Le 17/11/2019 ? 21:19, Romain Naour a ?crit?:
+> From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> 
+> It is not very convenient for Buildroot users to store
+> the Qemu command line in a readme.txt instead of a script
+> to be used as soon as the Qemu image has been created.
+> 
+> This patch replace the readme.txt file located in
+> board/qemu/<Qemu target>/ by a script (launch.sh).
+> 
+> This allow Buildroot user to start easily Qemu using
+> only one simple command:
+> 
+> $ ./board/qemu/aarch64-virt/launch.sh test/qemu_aarch64_virt/
+> 
+> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ---
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index debc14c64e..11ce109591 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 657cf6464bac28e9490c59c07a2cf7bb76c200f09cfadf6e44ea64e95fa01021  php-7.3.11.tar.xz
-+sha256 aafe5e9861ad828860c6af8c88cdc1488314785962328eb1783607c1fdd855df  php-7.3.12.tar.xz
- 
- # License file
- sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index b679531238..9589530101 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.3.11
-+PHP_VERSION = 7.3.12
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
--- 
-2.20.1
+
+> diff --git a/board/qemu/mips32r2-malta/launch.sh b/board/qemu/mips32r2-malta/launch.sh
+> new file mode 100755
+> index 0000000000..8069b59171
+> --- /dev/null
+> +++ b/board/qemu/mips32r2-malta/launch.sh
+> @@ -0,0 +1,2 @@
+> +#!/bin/env bash
+> +
+
+The content of this script is missing, it should be:
+
+ qemu-system-mips -M malta -kernel ${1:-output}/images/vmlinux -serial stdio
+-drive file=${1:-output}/images/rootfs.ext2,format=raw -append "rootwait
+root=/dev/hda" -net nic,model=pcnet -net user
+
+# The login prompt will appear in the terminal that started Qemu. The
+# graphical window is the framebuffer. No keyboard support has been
+# enabled.
+
+# Tested with QEMU 2.12.0
+
+It's fixed for v4.
+
+Best regards,
+Romain
+
+
+> diff --git a/board/qemu/mips32r2-malta/readme.txt b/board/qemu/mips32r2-malta/readme.txt
+> deleted file mode 100644
+> index 9ff3c4b810..0000000000
+> --- a/board/qemu/mips32r2-malta/readme.txt
+> +++ /dev/null
+> @@ -1,9 +0,0 @@
+> -Run the emulation with:
+> -
+> - qemu-system-mips -M malta -kernel output/images/vmlinux -serial stdio -drive file=output/images/rootfs.ext2,format=raw -append "rootwait root=/dev/hda" -net nic,model=pcnet -net user
+> -
+> -The login prompt will appear in the terminal that started Qemu. The
+> -graphical window is the framebuffer. No keyboard support has been
+> -enabled.
+> -
+> -Tested with QEMU 2.12.0
