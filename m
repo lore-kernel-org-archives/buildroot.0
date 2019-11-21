@@ -1,64 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 23:22:27 +0100
-Subject: [Buildroot] [PATCH v2 2/2] support/testing: add lxc test
-In-Reply-To: <20191120133952.22978-2-patrick.havelange@essensium.com>
-References: <20191120133952.22978-1-patrick.havelange@essensium.com>
- <20191120133952.22978-2-patrick.havelange@essensium.com>
-Message-ID: <20191120232227.7071626f@windsurf.home>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Thu, 21 Nov 2019 00:14:48 +0000
+Subject: [Buildroot] [PATCH v2] toolchain,
+ glibc: Allow ARC big endian glibc builds
+In-Reply-To: <20191105173502.11553-1-vgupta@synopsys.com>
+References: <CY4PR1201MB0120ABDDCAB8033A0268CDC1A17E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+ <20191105173502.11553-1-vgupta@synopsys.com>
+Message-ID: <f0b3f253-388b-4c21-d1cd-f1aca81223ae@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Patrick,
+ping ^ 2
 
-On Wed, 20 Nov 2019 14:39:52 +0100
-Patrick Havelange <patrick.havelange@essensium.com> wrote:
-
-> The test starts a simple container with an iperf3 server.
-> The container is using the tini init system, with a shared rootfs.
-> An iperf3 client is started from the host to check that the container
-> is really up and running.
+On 11/5/19 9:35 AM, Vineet Gupta wrote:
+> Apparently big endian glibc builds just work, if we let the endian
+> header allow that (which prev was #error).
 > 
-> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-
-I've applied to next, after doing some small changes. See below.
-
->  .gitlab-ci.yml                                |  1 +
->  support/testing/tests/package/test_lxc.py     | 56 +++++++++++++++++++
->  .../tests/package/test_lxc/kernel_config_frag | 20 +++++++
->  .../test_lxc_rootfs_overlay/usr/bin/iperf3.sh |  2 +
->  .../usr/share/lxc/config/minimal-iperf3.conf  |  4 ++
->  .../usr/share/lxc/config/minimal.conf         |  6 ++
->  6 files changed, 89 insertions(+)
-
-An entry in the DEVELOPERS file was missing, so I added it.
-
-> +            infra.filepath("tests/package/test_lxc/kernel_config_frag"),
-
-This file name was not really great. The other kernel config fragments
-in our tests were named like this:
-
-./conf/minimal-x86-qemu-kernel.config
-./conf/docker-compose-kernel.config
-./conf/f2fs-kernel-fragment.config
-./tests/core/squashfs-xattr-kernel.config
-
-So I renamed your to:
-
-./tests/package/test_lxc/lxc-kernel.config
-
-> +            infra.filepath("tests/package/test_lxc/test_lxc_rootfs_overlay"))
-
-Repeating the name of the test in the rootfs overlay subdirectory
-doesn't seem to be very useful. Also, the other overlays we have in the
-tests use rootfs-overlay, so I've switched to that as well.
-
-Applied to next with those changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> So this patch bumps glibc to version which fixes the header (this
+> hopefully will become arc-2019.09-release) and then enables arceb
+> in glibc toolchain builds
+> 
+> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+> ---
+> Changes since v1
+>   - Use BR2_arc iso BR2_arcle && BR2_arcbe
+> ---
+>  package/glibc/glibc.mk                  | 2 +-
+>  toolchain/toolchain-buildroot/Config.in | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index d46063c5d111..754408881397 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  ifeq ($(BR2_arc),y)
+> -GLIBC_VERSION =  arc-2019.03-release
+> +GLIBC_VERSION = ec681dddfa99894513c85da7d5d257b60d04f915
+>  GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
+>  else ifeq ($(BR2_RISCV_32),y)
+>  GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index c0612bf04176..327314585b8e 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -48,7 +48,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>  		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+>  		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
+>  		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
+> -		   (BR2_arcle && BR2_ARC_ATOMIC_EXT) || BR2_csky
+> +		   (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+> 
