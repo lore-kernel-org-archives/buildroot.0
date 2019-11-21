@@ -1,48 +1,95 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Thu, 21 Nov 2019 11:33:11 +0000
-Subject: [Buildroot] [PATCH 2/2] package/libv4l: link with libatomic
- when needed
-In-Reply-To: <20191120204444.0cd0b955@gmx.net>
-References: <20191030065303.22948-1-bernd.kuhls@t-online.de>
- <20191030065303.22948-2-bernd.kuhls@t-online.de>
- <20191030113040.474a31f9@windsurf> <20191030232618.5cd32feb@gmx.net>
- <d90c679a-a4f6-d825-63c8-ae90baf1ea73@codethink.co.uk>
- <20191120204444.0cd0b955@gmx.net>
-Message-ID: <ab35ee08-2fe1-0413-d801-bffdd7c3a601@codethink.co.uk>
+From: Michael Drake <michael.drake@codethink.co.uk>
+Date: Thu, 21 Nov 2019 11:59:01 +0000
+Subject: [Buildroot] [RFC PATCH v2 14/30] package/libcef: New package
+In-Reply-To: <5b9ab816-4082-7a14-71d6-9408bdcfe441@mind.be>
+References: <20191017152929.49153-1-michael.drake@codethink.co.uk>
+ <20191017152929.49153-15-michael.drake@codethink.co.uk>
+ <5b9ab816-4082-7a14-71d6-9408bdcfe441@mind.be>
+Message-ID: <ad3989db-7085-d4e6-90ce-9e2d60ec14eb@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/11/2019 19:44, Peter Seiderer wrote:
-> The libv4l/libatomic case can be fixed by the following (hack):
+Hi Arnout,
+
+Thank you for all the feedback!
+
+We've addressed most of your comments in v3 of the RFC.
+
+For the rest, I'll respond inline below.
+
+
+On 20/10/2019 00:55, Arnout Vandecappelle wrote:
+> On 17/10/2019 17:29, Michael Drake wrote:
+
+>> +
+>> +LIBCEF_LICENSE = GPL-2.0 or LGPL-3.0 or GPL-3.0 or GPL-3.0 with exception
 > 
-> diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-> index a3bf099221..46c1ab9a48 100644
-> --- a/package/libv4l/libv4l.mk
-> +++ b/package/libv4l/libv4l.mk
-> @@ -16,7 +16,7 @@ LIBV4L_AUTORECONF = YES
->  LIBV4L_DEPENDENCIES += host-gettext
+>  I haven't checked, but I'd be surprised if a packages with such a *load of
+> bundled dependencies only has those four licenses...
+
+True, we took our inspiration from the qt5webengine package, which is
+also based on the Chromium source tree, and already in Buildroot:
+
+https://github.com/buildroot/buildroot/blob/master/package/qt5/qt5webengine/qt5webengine.mk#L20
+
+Perhaps we need to generate a full list from the files listed in the
+package/libcef/libcef.license-files.inc file?
+
+>> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+>> +# Tell clang where the external toolchain is and to use it
+>> +LIBCEF_TARGET_CFLAGS += --gcc-toolchain=$(TOOLCHAIN_EXTERNAL_INSTALL_DIR) \
 > 
->  # fix uclibc-ng configure/compile
-> -LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-> +LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99' PKG_CONFIG_SYSROOT_DIR=$(STAGING_DIR)
+>  Can you explain why this --gcc-toolchain is needed? It can find it in $PATH, no?
+
+Without it, when building using an external toolchain, we see
+linking errors:
+
+[2852/24834] LINK ./chrome_sandbox
+FAILED: chrome_sandbox
+clang++ -Wl,--fatal-warnings -Wl,--build-id=sha1 -fPIC
+-Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -Wl,-z,defs -Wl,--as-needed
+-fuse-ld=lld -Wl,--icf=all -Wl,--color-diagnostics -flto=thin
+-Wl,--thinlto-jobs=8 -Wl,--thinlto-cache-dir=thinlto-cache
+-Wl,--thinlto-cache-policy,cache_size=10\%:cache_size_bytes=10g:cache_size_files=100000
+-Wl,--lto-O0 -fwhole-program-vtables -m64 -Wl,-O2 -Wl,--gc-sections
+-Wl,--gdb-index -rdynamic -nostdlib++
+--sysroot=../../../../host/x86_64-buildroot-linux-gnu/sysroot
+-fsanitize=cfi-vcall -fsanitize=cfi-icall -pie -Wl,--disable-new-dtags
+-Wno-unknown-warning-option --target=x86_64-tesla-linux-gnu -o
+"./chrome_sandbox" -Wl,--start-group @"./chrome_sandbox.rsp"
+-Wl,--end-group  -ldl -lpthread -lrt
+ld.lld: error: cannot open crtbeginS.o: No such file or directory
+ld.lld: error: unable to find library -lgcc
+ld.lld: error: unable to find library -lgcc
+ld.lld: error: cannot open crtendS.o: No such file or directory
+clang-9: error: linker command failed with exit code 1 (use -v to see
+invocation)
+
+>> +define LIBCEF_EXTRACT_CMDS
+>> +	# Extract Chromium source code
+>> +	tar -C $(@D) \
+>> +		--strip-components=1 \
+>> +		-xf $(LIBCEF_DL_DIR)/chromium-$(LIBCEF_CHROMIUM_VERSION).tar.xz
+>> +
+>> +	# Extract CEF to cef dir inside Chromium source code
+>> +	mkdir $(@D)/cef
+>> +	tar -C $(@D)/cef \
+>> +		--strip-components=1 \
+>> +		-xf $(LIBCEF_DL_DIR)/libcef-$(LIBCEF_VERSION).tar.gz
 > 
->  # v4l-utils components have different licences, see v4l-utils.spec for details
->  LIBV4L_LICENSE = GPL-2.0+ (utilities), LGPL-2.1+ (libraries)
-> 
+>  So Buildroot first extracts (with --strip-components=0) in the top directory,
+> then chromium gets extracted next to it, and then we extract libcef again in a
+> subdirectory... That sounds a bit like a roundabout approach, no?
 
-`PKG_CONFIG_SYSROOT_DIR=$(STAGING_DIR)` should already be set when we
-use the PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)". Which is set in
-TARGET_CONFIGURE_ENV.
+Actually, I think defining LIBCEF_EXTRACT_CMDS replaces the default
+Buildroot extraction commands.  We simply extract the Chromium source
+into the top level libcef output directory, and then extract the
+CEF source into a cef/ directory within that.  This is the source
+tree layout that the CEF project requires.
 
-Presumably setting PKG_CONFIG_SYSROOT_DIR here causes the system-libs
-`-L` flag to return, but I'm not sure why.
+Cheers,
 
-I'm building with the failing defconfig [0] to try and reproduce and
-investigate this.
-
-Thanks
-
-[0] http://autobuild.buildroot.net/results/089/08952dbf89bf3c49da7697943441cee411940420/defconfig
+Michael
