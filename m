@@ -1,34 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Nov 2019 22:22:04 +0100
-Subject: [Buildroot] [PATCH] package/libupnp18: bump to version 1.8.6
-In-Reply-To: <20191121075210.64613-1-joerg.krause@embedded.rocks>
-References: <20191121075210.64613-1-joerg.krause@embedded.rocks>
-Message-ID: <20191121222204.79fb966b@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 21 Nov 2019 22:37:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.3.12
+Message-ID: <20191121213733.23541-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 21 Nov 2019 08:52:10 +0100
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+Release notes of this bugfix release:
+https://www.php.net/ChangeLog-7.php#7.3.12
 
-> This version fixes a runtime issue which crashes gerbera:
-> https://github.com/gerbera/gerbera/issues/522
-> 
-> The issue has been reported upstream:
-> https://github.com/mrjimenez/pupnp/pull/122
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/libupnp18/libupnp18.hash | 6 +++---
->  package/libupnp18/libupnp18.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/php/php.hash b/package/php/php.hash
+index debc14c64e..11ce109591 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 657cf6464bac28e9490c59c07a2cf7bb76c200f09cfadf6e44ea64e95fa01021  php-7.3.11.tar.xz
++sha256 aafe5e9861ad828860c6af8c88cdc1488314785962328eb1783607c1fdd855df  php-7.3.12.tar.xz
+ 
+ # License file
+ sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index b679531238..9589530101 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.3.11
++PHP_VERSION = 7.3.12
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
