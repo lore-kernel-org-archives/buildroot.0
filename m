@@ -1,50 +1,78 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 21 Nov 2019 08:52:10 +0100
-Subject: [Buildroot] [PATCH] package/libupnp18: bump to version 1.8.6
-Message-ID: <20191121075210.64613-1-joerg.krause@embedded.rocks>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Thu, 21 Nov 2019 11:02:35 +0300
+Subject: [Buildroot] [EXT] Re: [PATCH 4/9] boot/arm-trusted-firmware:
+ Add RCW support
+In-Reply-To: <VI1PR04MB5136CEAD089D41B590E8A97EFE4F0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+References: <20191120040725.32207-1-jerry.huang@nxp.com>
+ <20191120040725.32207-5-jerry.huang@nxp.com>
+ <20191120075002.rgn3ymmedtux5dg4@bars>
+ <VI1PR04MB5136CEAD089D41B590E8A97EFE4F0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+Message-ID: <20191121080235.g4gli72bib2kdhs4@bars>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version fixes a runtime issue which crashes gerbera:
-https://github.com/gerbera/gerbera/issues/522
+> > > diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> > > b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> > > index 70d36fff73..6896d9a7aa 100644
+> > > --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> > > +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> > > @@ -95,6 +95,15 @@ endif
+> > >
+> > >  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
+> > >
+> > > +RCW_BOOT_MODE = $(call
+> > qstrip,$(BR2_PACKAGE_HOST_RCW_BOOT_MODE))
+> > > +ifneq ($(RCW_BOOT_MODE),)
+> > > +RCW_PATH = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BIN))
+> > > +RCW_FILE = $(lastword $(subst /, ,$(RCW_PATH)))
+> > > +ARM_TRUSTED_FIRMWARE_MAKE_OPTS +=
+> > BOOT_MODE=$(RCW_BOOT_MODE)
+> > > +RCW=$(BINARIES_DIR)/$(RCW_FILE)
+> > ARM_TRUSTED_FIRMWARE_MAKE_TARGETS +=
+> > > +pbl ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-rcw endif
+> > > +
+> > >  ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
+> > >  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += fip
+> > > ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-openssl
+> > 
+> > Hi Jerry and all,
+> > 
+> > Here arm-trusted-firmware build is modified when some host package with
+> > specific configuration is enabled in board config.
+> > 
+> > Shouldn't it be the other way around ? To be more specific: another Config.in
+> > option for arm-trusted-firmware which pulls required build time dependencies,
+> > e.g. see Marvell DDR options or FIP options.
+> 1. If use another Config.in option for arm-trusted-firmware like Marvell DDR , need to mv package/rcw to boot/ directory.
+> 2. Refer to FIP, add option like this BR2_PACKAGE_HOST_RCW_ATF in package/rcw/Config.in.host.
+> How do you think about the second way?
 
-The issue has been reported upstream:
-https://github.com/mrjimenez/pupnp/pull/122
+Hi Jerry, Thomas, and all
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/libupnp18/libupnp18.hash | 6 +++---
- package/libupnp18/libupnp18.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+I think Marvell DDR was not a good example. In this case ATF does not
+need any sources from RCW package, only its binary. So what about
+the same approach as for BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33 ?
+The idea is not to check whether RCW host package was selected, but
+to request RCW as a build dependency and then use its binary.
 
-diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
-index 9d44bbf41b..68aee9ba62 100644
---- a/package/libupnp18/libupnp18.hash
-+++ b/package/libupnp18/libupnp18.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.5/libupnp-1.8.5.tar.bz2.sha1
--sha1 4d687f8f7d6279fddc4c6faff7f5e3513e765d8a  libupnp-1.8.5.tar.bz2
-+# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.6/libupnp-1.8.6.tar.bz2.sha1
-+sha1 6132a949d7536dac835172609d1def1e7f2bd232  libupnp-1.8.6.tar.bz2
- # Locally computed:
--sha256	55c4c30543b4cdaff3ed3a1c72bf118173369e9009eeed0bbd6e2ae62c6f0e93	libupnp-1.8.5.tar.bz2
-+sha256	65faf240f8ccee50cc0e7fe7fb21dcd79f743fc227a9b652b091f50f6956c2c7	libupnp-1.8.6.tar.bz2
- sha256	c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3	COPYING
-diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
-index fef5fea809..ca82a54413 100644
---- a/package/libupnp18/libupnp18.mk
-+++ b/package/libupnp18/libupnp18.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUPNP18_VERSION = 1.8.5
-+LIBUPNP18_VERSION = 1.8.6
- LIBUPNP18_SOURCE = libupnp-$(LIBUPNP18_VERSION).tar.bz2
- LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP18_VERSION)
- LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
--- 
-2.24.0
+To be more specific, instead of checking BR2_PACKAGE_HOST_RCW_BOOT_MODE,
+just add BR2_TARGET_ARM_TRUSTED_FIRMWARE_FSL_QORIQ_RCW_BOOT_MODE
+and do the following in arm-trusted-firmware.mk:
+
+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FSL_QORIQ_RCW_BOOT_MODE),y)
+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-rcw
+ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += pbl
+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BOOT_MODE=... CW=...
+endif
+
+IIUC, you don't need to move host-rcw package to boot directory.
+Or you need more flexibility when selecting boot mode
+and CW params ?
+
+Thoughts ? Comments ?
+
+Regards,
+Sergey
