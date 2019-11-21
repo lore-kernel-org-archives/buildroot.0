@@ -1,11 +1,11 @@
 From: Michael Walle <michael@walle.cc>
-Date: Thu, 21 Nov 2019 11:42:47 +0100
+Date: Thu, 21 Nov 2019 11:51:46 +0100
 Subject: [Buildroot] [PATCH v2 07/10]
  package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
 In-Reply-To: <20191121102324.35225-8-jerry.huang@nxp.com>
 References: <20191121102324.35225-1-jerry.huang@nxp.com>
  <20191121102324.35225-8-jerry.huang@nxp.com>
-Message-ID: <df827bb10ea801bcfd3f04a5093348bc@walle.cc>
+Message-ID: <bdf9c08ab88c1a965ec665023a52309d@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,9 +21,6 @@ Am 2019-11-21 11:23, schrieb Changming Huang:
 > ---
 > changes since v1:
 > 1. rename the package to fsl-qoriq-cadence-dp-fw
-
-All other firmware's in buildroot have a "-firmware" suffix.
-
 > 2. update DEVELOPERS
 > 3. add the hash of package
 > 4. modify the context fo config file to package name
@@ -122,24 +119,8 @@ All other firmware's in buildroot have a "-firmware" suffix.
 > $(FSL_QORIQ_CADENCE_DP_FW_DL_DIR)/$(FSL_QORIQ_CADENCE_DP_FW_SOURCE)
 > --auto-accept;
 > +endef
-> +
-> +define FSL_QORIQ_CADENCE_DP_FW_INSTALL_IMAGES_CMDS
-> +	$(INSTALL) -D -m 0644
-> $(@D)/firmware-cadence-lsdk1909/dp/ls1028a-dp-fw.bin
-> $(BINARIES_DIR)/ls1028a-dp-fw.bin
-> +endef
 
-IMHO this should be also installed into the target filesystem. So the 
-driver can
-request the firmware binary. I know that this is not how NXP handles 
-that at the
-moment. But in the end, that should be the way to go, esp. since 
-rockchip seems
-to have the same/similar DP-PHY with a corresponding driver upstream and 
-they are
-already loading the firmware via request_firmware().
-
-> +
-> +$(eval $(generic-package))
+There is already an FREESCALE_IMX_EXTRACT_HELPER macro. I guess that 
+should be renamed and used here.
 
 -michael
