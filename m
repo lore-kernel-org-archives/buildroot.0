@@ -1,42 +1,97 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Thu, 21 Nov 2019 18:36:59 +0000
-Subject: [Buildroot] [PATCH] pkgconf: Always keep system libs
-Message-ID: <20191121183659.1804967-1-thomas.preston@codethink.co.uk>
+From: Tom Marcuzzi <tom.marcuzzi@orolia.com>
+Date: Thu, 21 Nov 2019 17:30:58 +0000
+Subject: [Buildroot] [PATCH 1/1] package/modsecurity2: new package
+Message-ID: <20191121172845.25958-1-tom.marcuzzi@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Normally pkgconf ignores the system include and system lib directories,
-which is useful because it allows the correct ordering of -I, -isystem
-and compiler default search paths. However, many packages use libtool,
-which relies on pkgconf to print the system libs dirs in order to locate
-the Libtool Archive (.la) files.
+From: Tom Marcuzzi <tom.marcuzzi@orolia.com>
 
-Instead of adding PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 to each of these
-packages, just allow system libs globally in the pkg-config wrapper.
-This allows libtool to find the .la files, and retains the correct
-include ordering.
-
-Fixes (at least):
-- http://autobuild.buildroot.org/results/a79e0487135ad90530595d5c6ecc32f9c8cea7c4/
-- http://autobuild.buildroot.net/results/089/08952dbf89bf3c49da7697943441cee411940420/
-
-Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+Signed-off-by: Tom Marcuzzi <tom.marcuzzi@orolia.com>
 ---
- package/pkgconf/pkg-config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/Config.in                      |  5 +++++
+ package/modsecurity2/Config.in         | 12 ++++++++++++
+ package/modsecurity2/modsecurity2.hash |  4 ++++
+ package/modsecurity2/modsecurity2.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 43 insertions(+)
+ create mode 100644 package/modsecurity2/Config.in
+ create mode 100644 package/modsecurity2/modsecurity2.hash
+ create mode 100644 package/modsecurity2/modsecurity2.mk
 
-diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
-index f411eb0926..e5a23a10f7 100644
---- a/package/pkgconf/pkg-config.in
-+++ b/package/pkgconf/pkg-config.in
-@@ -9,4 +9,4 @@ PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
- 	PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} \
- 	PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKG_CONFIG_SYSTEM_INCLUDE_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH}} \
- 	PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKG_CONFIG_SYSTEM_LIBRARY_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH}} \
--	exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
-+	exec ${PKGCONFDIR}/pkgconf --keep-system-libs @STATIC@ "$@"
+diff --git a/package/Config.in b/package/Config.in
+index f72c77b416..c056c210fb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1888,6 +1888,11 @@ menu "Networking applications"
+ 	source "package/aircrack-ng/Config.in"
+ 	source "package/aoetools/Config.in"
+ 	source "package/apache/Config.in"
++if BR2_PACKAGE_APACHE
++menu "External Apache modules"
++	source "package/modsecurity2/Config.in"
++endmenu
++endif
+ 	source "package/argus/Config.in"
+ 	source "package/arp-scan/Config.in"
+ 	source "package/arptables/Config.in"
+diff --git a/package/modsecurity2/Config.in b/package/modsecurity2/Config.in
+new file mode 100644
+index 0000000000..7d99a42552
+--- /dev/null
++++ b/package/modsecurity2/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_MODSECURITY2
++	bool "modsecurity2"
++	depends on BR2_PACKAGE_APACHE
++	select BR2_PACKAGE_LIBXML2
++	help
++	  ModSecurity is an open source, cross-platform web application
++	  firewall (WAF) module. Known as the "Swiss Army Knife" of
++	  WAFs, it enables web application defenders to gain visibility
++	  into HTTP(S) traffic and provides a power rules language and
++	  API to implement advanced protections.
++
++	  http://modsecurity.org
+diff --git a/package/modsecurity2/modsecurity2.hash b/package/modsecurity2/modsecurity2.hash
+new file mode 100644
+index 0000000000..c7f80c8957
+--- /dev/null
++++ b/package/modsecurity2/modsecurity2.hash
+@@ -0,0 +1,4 @@
++# From https://www.modsecurity.org/tarball/2.9.3/modsecurity-2.9.3.tar.gz.sha256
++sha256 4192019d169d3f1dd82cc4714db6986df54c6ceb4ee1c8f253de78d1a6b62118 modsecurity-2.9.3.tar.gz
++# Locally computed
++sha256 2c564f5a67e49e74c80e5a7dcacd1904e7408f1fd6a95218b38c04f012d94cb9 LICENSE
+diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
+new file mode 100644
+index 0000000000..05fe12fd0e
+--- /dev/null
++++ b/package/modsecurity2/modsecurity2.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# modsecurity2
++#
++################################################################################
++
++MODSECURITY2_VERSION = 2.9.3
++MODSECURITY2_SOURCE = modsecurity-$(MODSECURITY2_VERSION).tar.gz
++MODSECURITY2_SITE = https://www.modsecurity.org/tarball/$(MODSECURITY2_VERSION)
++MODSECURITY2_LICENSE = Apache-2.0
++MODSECURITY2_LICENSE_FILES = LICENSE
++MODSECURITY2_INSTALL_STAGING = YES
++
++MODSECURITY2_DEPENDENCIES += apache libxml2
++
++MODSECURITY2_CONF_OPTS += --with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
++	--with-libxml=$(STAGING_DIR)/usr \
++	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config \
++	--with-apu=$(STAGING_DIR)/usr/bin/apu-1-config \
++	--with-apxs=$(STAGING_DIR)/usr/bin/apxs
++
++$(eval $(autotools-package))
 -- 
-2.23.0
+2.17.1
