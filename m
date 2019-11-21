@@ -1,10 +1,11 @@
 From: Changming Huang <jerry.huang@nxp.com>
-Date: Thu, 21 Nov 2019 18:23:21 +0800
-Subject: [Buildroot] [PATCH v2 07/10]
- package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
+Date: Thu, 21 Nov 2019 18:23:22 +0800
+Subject: [Buildroot] [PATCH v2 08/10]
+ package/freescale-qoriq/fsl-qoriq-rcw:Enable IIC5_PMUX and CLK_OUT_PMUX for
+ GPIO
 In-Reply-To: <20191121102324.35225-1-jerry.huang@nxp.com>
 References: <20191121102324.35225-1-jerry.huang@nxp.com>
-Message-ID: <20191121102324.35225-8-jerry.huang@nxp.com>
+Message-ID: <20191121102324.35225-9-jerry.huang@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,98 +14,113 @@ To: buildroot@busybox.net
 
 From: Jerry Huang <jerry.huang@nxp.com>
 
-This package provides the firmware for LS1028ARDB DP (display port).
+Because GPIO is used as interrupt for eNETC PHY and Micro-bus,
+IIC5_PMUX and CLK_OUT_PMUX are enabled for GPIO.
 
 Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
 ---
-changes since v1:
-1. rename the package to fsl-qoriq-cadence-dp-fw
-2. update DEVELOPERS
-3. add the hash of package
-4. modify the context fo config file to package name
-5. re-write the makefile according to rule of buildroot
-6. add the license message in makefile
+changes sinve v1:
+1. change to unconditional for these two patches
 ---
- DEVELOPERS                                    |  3 +++
- package/freescale-qoriq/Config.in             |  2 ++
- .../fsl-qoriq-cadence-dp-fw/Config.in         |  5 ++++
- .../fsl-qoriq-cadence-dp-fw.hash              |  2 ++
- .../fsl-qoriq-cadence-dp-fw.mk                | 24 +++++++++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/Config.in
- create mode 100644 package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp-fw.hash
- create mode 100644 package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp-fw.mk
+ ...b-Enable-IIC5_PMUX-for-GPIO-function.patch | 42 +++++++++++++++++++
+ ...nable-CLK_OUT_PMUX-for-GPIO-function.patch | 40 ++++++++++++++++++
+ 2 files changed, 82 insertions(+)
+ create mode 100644 package/freescale-qoriq/fsl-qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
+ create mode 100644 package/freescale-qoriq/fsl-qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9fbe229eb7..b15115f507 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2545,3 +2545,6 @@ F:	package/qjson/
- F:	package/quazip/
- F:	package/shapelib/
- F:	package/tinc/
-+
-+N:	Changming Huang <jerry.huang@nxp.com>
-+F:	package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/
-diff --git a/package/freescale-qoriq/Config.in b/package/freescale-qoriq/Config.in
-index 51497c588e..89f575a344 100644
---- a/package/freescale-qoriq/Config.in
-+++ b/package/freescale-qoriq/Config.in
-@@ -1,4 +1,6 @@
- menu "Freescale QorIQ libraries"
- 	depends on BR2_aarch64 || BR2_arm || BR2_powerpc64 || BR2_powerpc
- 
-+source "package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/Config.in"
-+
- endmenu
-diff --git a/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/Config.in b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/Config.in
+diff --git a/package/freescale-qoriq/fsl-qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch b/package/freescale-qoriq/fsl-qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
 new file mode 100644
-index 0000000000..9259776750
+index 0000000000..21c6c84cbd
 --- /dev/null
-+++ b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_FSL_QORIQ_CADENCE_DP_FW
-+	bool "FSL QorIQ cadence DP firmware"
-+	help
-+	  FSL QorIQ cadence DP firmware, a resident EL3 firmware.
-+	  link: http://www.nxp.com/lgfiles/sdk/lsdk1909/firmware-cadence-lsdk1909.bin
-diff --git a/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp-fw.hash b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp-fw.hash
++++ b/package/freescale-qoriq/fsl-qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
+@@ -0,0 +1,42 @@
++From 33b403cee1fa215927bc65dc14baf35a2fdbe7b3 Mon Sep 17 00:00:00 2001
++From: Jerry Huang <jerry.huang@nxp.com>
++Date: Thu, 19 Sep 2019 12:12:20 +0800
++Subject: [PATCH 1/2] ls1028ardb: Enable IIC5_PMUX for GPIO function
++
++Set IIC5_PMUX = 1 to enable GPIO function.
++
++Signed-off-by: Jianchao Wang <jianchao.wang@nxp.com>
++Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
++---
++ ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw | 2 +-
++ ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw   | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
++index b46ea2e..5466a63 100644
++--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
+++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
++@@ -26,7 +26,7 @@ SYSCLK_FREQ=600
++ IIC2_PMUX=6
++ IIC3_PMUX=2
++ IIC4_PMUX=2
++-IIC5_PMUX=2
+++IIC5_PMUX=1
++ IIC6_PMUX=2
++ CLK_OUT_PMUX=2
++ EC1_SAI4_5_PMUX=5
++diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
++index 04e2208..1908d8c 100644
++--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
+++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
++@@ -26,7 +26,7 @@ SYSCLK_FREQ=600
++ IIC2_PMUX=6
++ IIC3_PMUX=2
++ IIC4_PMUX=2
++-IIC5_PMUX=2
+++IIC5_PMUX=1
++ IIC6_PMUX=3
++ CLK_OUT_PMUX=2
++ EC1_SAI4_5_PMUX=5
++--
++2.17.1
+diff --git a/package/freescale-qoriq/fsl-qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch b/package/freescale-qoriq/fsl-qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
 new file mode 100644
-index 0000000000..bee912bee1
+index 0000000000..4f00541d69
 --- /dev/null
-+++ b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp-fw.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 5871c5717be32f14a59624d5699d405e8ce9ae2e9c9ef86fd16e13d264a40e58  firmware-cadence-lsdk1909.bin
-diff --git a/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp-fw.mk b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp-fw.mk
-new file mode 100644
-index 0000000000..d0d112e25f
---- /dev/null
-+++ b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp-fw.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# fsl-qoriq-cadence-dp-fw
-+#
-+################################################################################
++++ b/package/freescale-qoriq/fsl-qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
+@@ -0,0 +1,40 @@
++From 4a3c9ea5d0c7bf8eec8cb6276d6f4d940f3946db Mon Sep 17 00:00:00 2001
++From: Jerry Huang <jerry.huang@nxp.com>
++Date: Thu, 19 Sep 2019 12:13:48 +0800
++Subject: [PATCH 2/2] ls1028ardb/rcw: Enable CLK_OUT_PMUX for GPIO function
 +
-+FSL_QORIQ_CADENCE_DP_FW_VERSION = lsdk1909
-+FSL_QORIQ_CADENCE_DP_FW_SITE = http://www.nxp.com/lgfiles/sdk/lsdk1909
-+FSL_QORIQ_CADENCE_DP_FW_SOURCE = firmware-cadence-$(FSL_QORIQ_CADENCE_DP_FW_VERSION).bin
-+FSL_QORIQ_CADENCE_DP_FW_LICENSE = NXP-Binary-EULA
-+FSL_QORIQ_CADENCE_DP_FW_LICENSE_FILES = COPYING
-+FSL_QORIQ_CADENCE_DP_FW_INSTALL_IMAGES = YES
-+FSL_QORIQ_CADENCE_DP_FW_INSTALL_TARGET = no
++Signed-off-by: Jianchao Wang <jianchao.wang@nxp.com>
++Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
++---
++ ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw | 2 +-
++ ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw   | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+define FSL_QORIQ_CADENCE_DP_FW_EXTRACT_CMDS
-+	cd $(@D); \
-+		sh $(FSL_QORIQ_CADENCE_DP_FW_DL_DIR)/$(FSL_QORIQ_CADENCE_DP_FW_SOURCE) --auto-accept;
-+endef
-+
-+define FSL_QORIQ_CADENCE_DP_FW_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/firmware-cadence-lsdk1909/dp/ls1028a-dp-fw.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
-+endef
-+
-+$(eval $(generic-package))
++diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
++index 5466a63..a5ed4d4 100644
++--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
+++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
++@@ -28,7 +28,7 @@ IIC3_PMUX=2
++ IIC4_PMUX=2
++ IIC5_PMUX=1
++ IIC6_PMUX=2
++-CLK_OUT_PMUX=2
+++CLK_OUT_PMUX=1
++ EC1_SAI4_5_PMUX=5
++ EC1_SAI3_6_PMUX=5
++ USB3_CLK_FSEL=39
++diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
++index 1908d8c..c930b83 100644
++--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
+++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
++@@ -28,7 +28,7 @@ IIC3_PMUX=2
++ IIC4_PMUX=2
++ IIC5_PMUX=1
++ IIC6_PMUX=3
++-CLK_OUT_PMUX=2
+++CLK_OUT_PMUX=1
++ EC1_SAI4_5_PMUX=5
++ EC1_SAI3_6_PMUX=5
++ USB3_CLK_FSEL=39
++--
++2.17.1
 -- 
 2.17.1
