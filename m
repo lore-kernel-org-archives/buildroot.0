@@ -1,49 +1,50 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Thu, 21 Nov 2019 11:15:52 +0100
-Subject: [Buildroot] [PATCH 2/2] package/postgresql: enable data checksums
- by default for initdb
-Message-ID: <20191121101552.6845-1-p.debruijn@unilogic.nl>
+From: Changming Huang <jerry.huang@nxp.com>
+Date: Thu, 21 Nov 2019 18:23:17 +0800
+Subject: [Buildroot] [PATCH v2 03/10] package/freescale-qoriq/fsl-qoriq-rcw:
+ upgrade the rcw version to LSDK-19.09
+In-Reply-To: <20191121102324.35225-1-jerry.huang@nxp.com>
+References: <20191121102324.35225-1-jerry.huang@nxp.com>
+Message-ID: <20191121102324.35225-4-jerry.huang@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Pascal de Bruijn <pmjdebruijn@pcode.nl>
+From: Jerry Huang <jerry.huang@nxp.com>
 
-This makes PostgreSQL as robust as possible by default
+Change the RCW version to LSDK-19.09.
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
 ---
- package/postgresql/S50postgresql      | 2 +-
- package/postgresql/postgresql.service | 2 +-
+changes since v1:
+1. add-back license hash
+---
+ package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.hash | 2 +-
+ package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/S50postgresql b/package/postgresql/S50postgresql
-index 3c0c520..ce72e12 100644
---- a/package/postgresql/S50postgresql
-+++ b/package/postgresql/S50postgresql
-@@ -7,7 +7,7 @@ umask 077
+diff --git a/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.hash b/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.hash
+index 7de1ec659a..413db80e6d 100644
+--- a/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.hash
++++ b/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 1421ada9fec10b12ff21cd9ad82f0a835b191cb2dde80f03547764574b1346c3 rcw-LSDK-18.12.tar.gz
++sha256 4dca8adeda48836b86aa459cc526dfbb4e0873492682c3c3a828a28b82b7b100 fsl-qoriq-rcw-LSDK-19.09.tar.gz
+ sha256 a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd LICENSE
+diff --git a/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk b/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk
+index a5f3854271..a2c3f4f8a6 100644
+--- a/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk
++++ b/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- if [ ! -f /var/lib/pgsql/PG_VERSION ]; then
- 	echo "Initializing postgresql data base..."
--	su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/pgsql -o --locale=en_US.UTF-8'
-+	su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/pgsql -o --locale=en_US.UTF-8 -o --data-checksums'
- 	echo "done"
- fi
- 
-diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
-index 4bbe742..2f5d2a9 100644
---- a/package/postgresql/postgresql.service
-+++ b/package/postgresql/postgresql.service
-@@ -17,7 +17,7 @@ StandardError=syslog
- SyslogIdentifier=postgres
- PIDFile=/var/lib/pgsql/postmaster.pid
- 
--ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql -o --locale=en_US.UTF-8; fi"
-+ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql -o --locale=en_US.UTF-8 -o --data-checksums; fi"
- ExecStart=/usr/bin/postgres -D /var/lib/pgsql
- ExecReload=/usr/bin/kill -HUP $MAINPID
- KillMode=mixed
+-FSL_QORIQ_RCW_VERSION = LSDK-18.12
++FSL_QORIQ_RCW_VERSION = LSDK-19.09
+ FSL_QORIQ_RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
+ FSL_QORIQ_RCW_SITE_METHOD = git
+ FSL_QORIQ_RCW_LICENSE = BSD-3-Clause
 -- 
-2.7.4
+2.17.1
