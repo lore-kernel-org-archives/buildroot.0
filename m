@@ -1,50 +1,52 @@
 From: Changming Huang <jerry.huang@nxp.com>
-Date: Thu, 21 Nov 2019 18:23:17 +0800
-Subject: [Buildroot] [PATCH v2 03/10] package/freescale-qoriq/fsl-qoriq-rcw:
- upgrade the rcw version to LSDK-19.09
-In-Reply-To: <20191121102324.35225-1-jerry.huang@nxp.com>
-References: <20191121102324.35225-1-jerry.huang@nxp.com>
-Message-ID: <20191121102324.35225-4-jerry.huang@nxp.com>
+Date: Thu, 21 Nov 2019 18:23:14 +0800
+Subject: [Buildroot] [PATCH v2 0/9] new board ls1028ardb introduced
+Message-ID: <20191121102324.35225-1-jerry.huang@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jerry Huang <jerry.huang@nxp.com>
-
-Change the RCW version to LSDK-19.09.
-
-Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
----
 changes since v1:
-1. add-back license hash
----
- package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.hash | 2 +-
- package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+1> According to the feedback from other guys, modify the codes
+2> create one new patch to move package/rcw to package/freescale-qoriq/
+patches detail in v2:
+0001-xxxx: is 0005-xxxx in v1, don't change
+0002-xxxx: new patch to move rcw to sub-direcotry "freescale-qoriq"
+0003-xxxx: is 0001-xxxx in v1, add-back license hash
+0004-xxxx: is 0002-xxxx in v1, add option BR2_PACKAGE_HOST_RCW_ATF
+0005-xxxx: is 0003-xxxx in v1, add option BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
+0006-xxxx: is 0004-xxxx in v1, use BR2_PACKAGE_HOST_RCW_ATF ATF
+0007-xxxx: is 0006-xxxx in v1, rename to fsl-qoriq-cadence-dp-fw, 
+	use the "fsl" to replace freescale, fw to replace firmware,
+	update DEVELOPERS
+	add license hash
+	rewrite makefile
+0008-xxxx: is 0007-xxxx in v1, change to unconditional for patches
+0009-xxxx: is 0008-xxxx in v1, use BR2_PACKAGE_FSL_QORIQ_CADENCE_DP_FW to DP
+0010-xxxx: is 0009-xxxx in v1, add new options
 
-diff --git a/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.hash b/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.hash
-index 7de1ec659a..413db80e6d 100644
---- a/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.hash
-+++ b/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 1421ada9fec10b12ff21cd9ad82f0a835b191cb2dde80f03547764574b1346c3 rcw-LSDK-18.12.tar.gz
-+sha256 4dca8adeda48836b86aa459cc526dfbb4e0873492682c3c3a828a28b82b7b100 fsl-qoriq-rcw-LSDK-19.09.tar.gz
- sha256 a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd LICENSE
-diff --git a/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk b/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk
-index a5f3854271..a2c3f4f8a6 100644
---- a/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk
-+++ b/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FSL_QORIQ_RCW_VERSION = LSDK-18.12
-+FSL_QORIQ_RCW_VERSION = LSDK-19.09
- FSL_QORIQ_RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
- FSL_QORIQ_RCW_SITE_METHOD = git
- FSL_QORIQ_RCW_LICENSE = BSD-3-Clause
--- 
-2.17.1
+---
+The following nine patches is to enable LS1028ARDB board in Buildroot.
+
+NXP LS1028A silicon is based on Arm A72 core and  designed for industry,
+some key features are enabled:
+  TSN - Time Sensitive Network on Network interface
+  TSN/Swith - naive TSN Swith, support six ports
+  DP - display port for different resolution up to 4K
+
+The base for these patches is "next" branch, commitID: 5fd8db02ef
+
+1. Upgrade the RCW version to latest version supported via LSDK-19.09
+2. Use RCW binary for boot board
+3. Intruduce u-boot-dtb.bin for NXP Layerscape serial platform
+4. Introduce RCW to Arm-trusted-firmware
+5. Create one freescale-qoriq direcotry for all firmware hardware related 
+6. LS1028ARDB DP firmware is stored in freescale-qoriq
+7. New patches to eanble GPIO interrupt for eNETC and Micro-bus
+8. One standard directory for all Layerscape platform
+9. LS1028ARDB related scripts and default configurations
+
+Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+---
