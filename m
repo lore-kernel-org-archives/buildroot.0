@@ -1,51 +1,65 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 22 Nov 2019 20:01:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
- version 2.26.2
-In-Reply-To: <87bltbv5zh.fsf@dell.be.48ers.dk>
-References: <20191110162503.3529982-1-aperez@igalia.com>
- <87bltbv5zh.fsf@dell.be.48ers.dk>
-Message-ID: <20191122200131.GB21149@momiji>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 22 Nov 2019 19:09:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/waylandpp: fix build with cmake <
+ 3.13
+Message-ID: <20191122180957.618327-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi there,
+Fixes:
+ - http://autobuild.buildroot.org/results/587fb44ea2272bd134262716870f5ad36a18661d
 
-On Sat, 16 Nov 2019 22:58:10 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
-> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
-> 
->  > This is a minor release which includes fixes for CVE-2019-8812 and
->  > CVE-2019-8814.
-> 
->  > This release also fixes the build with WebDriver disabled, making patch
->  > "0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch" unneeded
->  > (and therefore removed). There is also a performance improvement for
->  > a regression related to fallback font selection, and a couple of small
->  > fixes. The full release notes are available at:
-> 
->  >   https://wpewebkit.org/release/wpewebkit-2.26.2.html
-> 
->  > The detailed security advisory can be found at:
-> 
->  >   https://wpewebkit.org/security/WSA-2019-0006.html
-> 
->  > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> 
-> How about the corresponding bump of webkitgtk?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ke-Make-target_link_options-optional.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/waylandpp/0001-cmake-Make-target_link_options-optional.patch
 
-Here goes:
-
-  https://patchwork.ozlabs.org/patch/1199576/
-
-Best regards,
-?Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191122/7ce00e91/attachment.asc>
+diff --git a/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch b/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch
+new file mode 100644
+index 0000000000..a7746c1f36
+--- /dev/null
++++ b/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch
+@@ -0,0 +1,37 @@
++From a39c0c115e19150551c01b04a5e903376633e771 Mon Sep 17 00:00:00 2001
++From: Nils Christopher Brause <nilschrbrause@googlemail.com>
++Date: Fri, 22 Nov 2019 17:39:20 +0100
++Subject: [PATCH] [cmake] Make target_link_options optional, lowering the
++ required cmake version to 3.4.
++
++[Retrieved from:
++https://github.com/NilsBrause/waylandpp/commit/a39c0c115e19150551c01b04a5e903376633e771]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ CMakeLists.txt | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 386f8d8..47a412c 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -21,7 +21,7 @@
++ # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ 
++-cmake_minimum_required(VERSION 3.13)
+++cmake_minimum_required(VERSION 3.4)
++ project(waylandpp VERSION 0.2.7 LANGUAGES CXX)
++ 
++ # packages
++@@ -160,7 +160,9 @@ if(BUILD_LIBRARIES)
++     "include/wayland-client.hpp;include/wayland-util.hpp;${CMAKE_CURRENT_BINARY_DIR}/wayland-client-protocol.hpp;${CMAKE_CURRENT_BINARY_DIR}/wayland-version.hpp"
++     src/wayland-client.cpp src/wayland-util.cpp wayland-client-protocol.cpp wayland-client-protocol.hpp)
++   # Report undefined references only for the base library.
++-  target_link_options(wayland-client++ PRIVATE "-Wl,--no-undefined")
+++  if(${CMAKE_VERSION} VERSION_GREATER "3.14.0")
+++    target_link_options(wayland-client++ PRIVATE "-Wl,--no-undefined")
+++  endif()
++   define_library(wayland-client-extra++ "${WAYLAND_CLIENT_CFLAGS}" "${WAYLAND_CLIENT_LIBRARIES}"
++     "${CMAKE_CURRENT_BINARY_DIR}/wayland-client-protocol-extra.hpp"
++     wayland-client-protocol-extra.cpp wayland-client-protocol-extra.hpp wayland-client-protocol.hpp)
+-- 
+2.24.0
