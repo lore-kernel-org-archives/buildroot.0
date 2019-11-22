@@ -1,69 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2019 19:11:04 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/dhcp: fix
- autoreconf for libtool-enabled build
-Message-ID: <20191122182410.D1D8C8F4FF@busybox.osuosl.org>
+Date: Fri, 22 Nov 2019 20:53:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version
+ to 0.102.1
+In-Reply-To: <20191120193616.21123-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 20 Nov 2019 20:36:16 +0100")
+References: <20191120193616.21123-1-bernd.kuhls@t-online.de>
+Message-ID: <87wobrzo0o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61c0a5867e1e8cb55d2232a9f24de10008924a91
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Upstream provides two configure.ac versions, the default one does not
-use libtool. For libtool-enabled builds the default configure.ac calls
-https://gitlab.isc.org/isc-projects/dhcp/blob/master/configure.ac#L873
-https://gitlab.isc.org/isc-projects/dhcp/blob/master/config+lt
+ > Release notes:
+ > https://lists.clamav.net/pipermail/clamav-announce/2019/000043.html
 
-which copies configure.ac+lt to configure.ac and starts autoreconf.
+ > Fixes CVE-2019-15961.
 
-On host systems lacking autoreconf this causes a build error:
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-configure: WARNING: legacy configure is used but libtool is enabled. Trying to recover...
-/home/buildroot/autobuild/instance-2/output-1/build/dhcp-4.4.1/config+lt: 20:
- /home/buildroot/autobuild/instance-2/output-1/build/dhcp-4.4.1/config+lt: autoreconf: not found
-autoreconf failed
+For 2019.02.x and 2019.08.x I have instead bumped to 0.101.5, which
+also needs a system libmspack like for 0.102, so I've also cherry-picked
+the libmspack package addition.
 
-Fixes:
-http://autobuild.buildroot.net/results/16f/16f800dd844572336c2fbba3d123604405382a84/
-http://autobuild.buildroot.net/results/eac/eac1e7b25128476eccf40aece612e13a1e0637dc/
-http://autobuild.buildroot.net/results/8fc/8fcfe7b40af3ae42549351c70466b4dd388820e3/
-http://autobuild.buildroot.net/results/7ff/7ff82708b9dea09f1447f0ef94b9bb21fca73196/
-http://autobuild.buildroot.net/results/1c5/1c5f401ce7eef13f5ca4603ca8d7c67da249d7c9/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3817b798692a596531fea6700d40fb9fe9f04fa5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dhcp/dhcp.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 0abb0aebd7..5e0bcca71f 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -10,6 +10,12 @@ DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = MPL-2.0
- DHCP_LICENSE_FILES = LICENSE
- DHCP_DEPENDENCIES = bind
-+
-+# use libtool-enabled configure.ac
-+define DHCP_LIBTOOL_AUTORECONF
-+	cp $(@D)/configure.ac+lt $(@D)/configure.ac
-+endef
-+
- DHCP_CONF_ENV = \
- 	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
- 		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
-@@ -33,6 +39,8 @@ ifeq ($(BR2_STATIC_LIBS),y)
- DHCP_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/bind9-config --libs bind9`"
- DHCP_CONF_OPTS += --disable-libtool
- else
-+DHCP_POST_EXTRACT_HOOKS += DHCP_LIBTOOL_AUTORECONF
-+DHCP_AUTORECONF = YES
- DHCP_CONF_OPTS += --enable-libtool
- endif
- 
+-- 
+Bye, Peter Korsgaard
