@@ -1,73 +1,103 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 22 Nov 2019 17:53:30 +0100
-Subject: [Buildroot] [PATCH] package/perl: bump to version 5.30.1
-Message-ID: <20191122165330.22208-1-francois.perrad@gadz.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 22 Nov 2019 11:40:45 -0600
+Subject: [Buildroot] [PATCH] package/kvm-unit-tests: really fix build on
+ Arch Linux x86_64
+In-Reply-To: <20191117184114.1917-1-arnout@mind.be>
+References: <20191117184114.1917-1-arnout@mind.be>
+Message-ID: <CANQCQpbvccF8H3Tqgr1x_t1JR5TX4iOu8_poP39L5OorgiVNYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- ...01-fix-the-generated-subdirectory-Makefiles.patch |  2 ++
- package/perl/perl.hash                               | 12 ++++++------
- package/perl/perl.mk                                 |  6 +++---
- 3 files changed, 11 insertions(+), 9 deletions(-)
+On Sun, Nov 17, 2019 at 12:41 PM Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+>
+> On x86_64, we use the host compiler instead of the target compiler to
+> build kvm-unit-tests, because it is built with -m32 and our target
+> compiler doesn't support that.
+>
+> However, the compiler on Arch Linux is broken: it *always* builds with
+> -fstack-protector, even when -ffreestanding is passed. However, when
+> -fnostdlib is passed at link time (which is normally the case when
+> building with -ffreestanding), it is not linked with the stack-protector
+> library. This leads to a link time error:
+>
+> /usr/bin/ld: x86/realmode.o: in function `print_serial_u32':
+> .../x86/realmode.c:104: undefined reference to `__stack_chk_fail'
+>
+> Since the entire package is built with -ffreestanding, it doesn't
+> support stack-protector at all. Therefore, simply pass
+> -fno-stack-protector explicitly on x86_64 to work around the bug in Arch
+> Linux.
+>
+> Commit c0ffd16e4 tried to do this, but got the condition wrong:
+> -fno-stack-protector was passed in all cases *except* for x86_64. This
+> commit fixes that, by inverting the condition and moving the
+> --cross-prefix part to the else branch.
+>
+> Fixes: (no new autobuild failures yet)
 
-diff --git a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
-index 178c7baa5..ae1ce0699 100644
---- a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
-+++ b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
-@@ -7,6 +7,8 @@ all variables used by BR must be propagated
- 
- similar to https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/commit/98e8532fffe5afa8186329acc44fb957427f1823
- 
-+see https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/pull/331, merged in EU-MM v7.35_08
-+
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- ---
-  cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm | 2 +-
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 4604d2715..344e04446 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.28.2.tar.xz.{md5,sha1,sha256}.txt
--md5    6bb75770e9ba085b32bf13e4be71e4ac                                 perl-5.28.2.tar.xz
--sha1   e7be78eca9ac5596783e6abcf957408050a7b650                         perl-5.28.2.tar.xz
--sha256 0b0189bfa4b2da20e899b4bdd746ac402e8f746a58e4fcf5516484157f2aab07 perl-5.28.2.tar.xz
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.1.tar.xz.{md5,sha1,sha256}.txt
-+md5    f399f3aaee90ddcff5eadd3bccdaacc0                                 perl-5.30.1.tar.xz
-+sha1   4bc190b6ac368f573e6a028f91430f831d40d30a                         perl-5.30.1.tar.xz
-+sha256 7336cd3ed0535eb61b76a71350effcfa7c88b44faf37d64d70952ced5d38cd35 perl-5.30.1.tar.xz
- 
--# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.2.3/perl-cross-1.2.3.hash
--sha256 84583a1bb5f3a2c64d13d031386c114382e5c62955c6f84a27cec8318536627c perl-cross-1.2.3.tar.gz
-+# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.1/perl-cross-1.3.1.hash
-+sha256	edce0b0c2f725e2db3f203d6d8e9f3f7161256f5d1590551e40694f21200141d perl-cross-1.3.1.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index ecb21c4b8..0ab81ddb3 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -5,15 +5,15 @@
- ################################################################################
- 
- # When updating the version here, also update utils/scancpan
--PERL_VERSION_MAJOR = 28
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
-+PERL_VERSION_MAJOR = 30
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.2.3
-+PERL_CROSS_VERSION = 1.3.1
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+Fixes:
+http://autobuild.buildroot.net/results/ca9576721214ecdce5622f2b7ec4fd4fc3699ac0/
+
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/kvm-unit-tests/kvm-unit-tests.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+> index bb08c0603d..2637066701 100644
+> --- a/package/kvm-unit-tests/kvm-unit-tests.mk
+> +++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+> @@ -35,13 +35,14 @@ KVM_UNIT_TESTS_CONF_OPTS =\
+>  # compiler. However, for x86-64, we use the host compiler, as
+>  # kvm-unit-tests builds 32 bit code, which Buildroot toolchains for
+>  # x86-64 cannot do.
+> -ifneq ($(BR2_x86_64),y)
+> -KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
+> +ifeq ($(BR2_x86_64),y)
+>  # Arch Linux adds -fstack-protector even when building with -ffreestanding, but
+>  # it doesn't link with the stack-protector library when -nostdlib is passed,
+>  # which leads to a link error. Therefore, disable it explicitly to work around
+>  # this bug in Arch Linux. https://bugs.archlinux.org/task/64270
+>  KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
+> +else
+> +KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
+>  endif
+>
+>  define KVM_UNIT_TESTS_CONFIGURE_CMDS
+> --
+> 2.21.0
+>
+
+
 -- 
-2.20.1
+
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
