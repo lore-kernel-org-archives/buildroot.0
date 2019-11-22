@@ -1,62 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2019 21:06:42 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/redis: bump to
- 5.0.6
-Message-ID: <20191122215349.39CFD8F5EB@busybox.osuosl.org>
+Date: Fri, 22 Nov 2019 21:03:45 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] docs/manual/quickstart:
+ update output directory contents documentation
+Message-ID: <20191122215349.31BE98F5EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30e793a2785f1c227bc25a9b56b44aed2a0d341d
+commit: https://git.buildroot.net/buildroot/commit/?id=0dc41d7a1e9858327956ad18a85cf6edf5df5f06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-The release notes at
-https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES
-say:
+Update the documentation for the output/host/ directory to mention
+that it contains the sysroot for the target toolchain, as well as the
+host tools required for running buildroot.
 
-==
-Upgrade urgency CRITICAL: Only in case of exposed instances to untrusted users.
+Update the staging/ documentation to reflect that it is a link to the
+target toolchain sysroot in the host/ directory.
 
-This Redis release, 5.0.6, is a bugfix and enhancement release. The most
-important bugfix is a corruption related to the HyperLogLog. A malformed
-HyperLogLog string could cause an invalid access to the memory. At a first
-glance the vulnerability appears to be not exploitable but just a DoS. The
-way to trigger the issue is complex, we'll not provide any information about
-how to do that for the users safety.
-==
-
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 43683d2d9bf2cf3117033d25bd9b2c7d0328e4ab)
+(cherry picked from commit 728d6800bb0af0fcbd66db701412b1ad0572a5dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/quickstart.txt | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 391b227ed1..aca1109d30 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256 2139009799d21d8ff94fc40b7f36ac46699b9e1254086299f8d3b223ca54a375  redis-5.0.5.tar.gz
-+sha256 6624841267e142c5d5d5be292d705f8fb6070677687c5aad1645421a936d22b3  redis-5.0.6.tar.gz
+diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
+index 74158ae249..542b278603 100644
+--- a/docs/manual/quickstart.txt
++++ b/docs/manual/quickstart.txt
+@@ -87,15 +87,21 @@ This directory contains several subdirectories:
+   target). This directory contains one subdirectory for each of these
+   components.
  
- # Locally calculated
- sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index a321eb9347..4ed90a749e 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-* +staging/+ which contains a hierarchy similar to a root filesystem
+-  hierarchy. This directory contains the headers and libraries of the
+-  cross-compilation toolchain and all the userspace packages selected
+-  for the target. However, this directory is 'not' intended to be
+-  the root filesystem for the target: it contains a lot of development
+-  files, unstripped binaries and libraries that make it far too big
+-  for an embedded system. These development files are used to compile
+-  libraries and applications for the target that depend on other
+-  libraries.
++* +host/+ contains both the tools built for the host, and the sysroot
++  of the target toolchain. The former is an installation of tools
++  compiled for the host that are needed for the proper execution of
++  Buildroot, including the cross-compilation toolchain. The latter
++  is a hierarchy similar to a root filesystem hierarchy. It contains
++  the headers and libraries of all user-space packages that provide
++  and install libraries used by other packages. However, this
++  directory is 'not' intended to be the root filesystem for the target:
++  it contains a lot of development files, unstripped binaries and
++  libraries that make it far too big for an embedded system. These
++  development files are used to compile libraries and applications for
++  the target that depend on other libraries.
++
++* +staging/+ is a symlink to the target toolchain sysroot inside
++  +host/+, which exists for backwards compatibility.
  
--REDIS_VERSION = 5.0.5
-+REDIS_VERSION = 5.0.6
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+ * +target/+ which contains 'almost' the complete root filesystem for
+   the target: everything needed is present except the device files in
+@@ -111,10 +117,6 @@ This directory contains several subdirectories:
+   development files (headers, etc.) are not present, the binaries are
+   stripped.
+ 
+-* +host/+ contains the installation of tools compiled for the host
+-  that are needed for the proper execution of Buildroot, including the
+-  cross-compilation toolchain.
+-
+ These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
+ basic ones that allow to easily and quickly generate images fitting
+ your needs, with all the features and applications you enabled.
