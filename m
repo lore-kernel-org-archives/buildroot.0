@@ -1,111 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2019 23:13:43 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/spice: disable
- tests
-Message-ID: <20191122220809.D62668F63D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 22 Nov 2019 23:16:34 +0100
+Subject: [Buildroot] [PATCH] package/gcnano-binaries: Add package config
+ files
+In-Reply-To: <20191122150032.7239-1-scooby22@web.de>
+References: <20191122150032.7239-1-scooby22@web.de>
+Message-ID: <20191122231634.20f05e4f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84340154792b2e2c76e6a279e17242e1468725d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+Hello Jens,
 
-By disabling tests, we'll remove the optional gdk-pixbuf dependency
+On Fri, 22 Nov 2019 16:00:32 +0100
+Jens Kleintje <scooby22@web.de> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/96c786f85d35f33508e9c71778043d16b87f72cd
+> Qt needs the package config files for building.
+> 
+> Signed-off-by: Jens Kleintje <scooby22@web.de>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f581525812fa9dbe98b2c04c7207ba198418769c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../spice/0001-configure.ac-add-enable-tests.patch | 54 ++++++++++++++++++++++
- package/spice/spice.mk                             |  5 +-
- 2 files changed, 58 insertions(+), 1 deletion(-)
+Thanks for this patch, I like this approach better compared to removing
+the .pc file you're not interested in from the source directory, and
+then copying all the remaining ones. However...
 
-diff --git a/package/spice/0001-configure.ac-add-enable-tests.patch b/package/spice/0001-configure.ac-add-enable-tests.patch
-new file mode 100644
-index 0000000000..668dea1ca3
---- /dev/null
-+++ b/package/spice/0001-configure.ac-add-enable-tests.patch
-@@ -0,0 +1,54 @@
-+From 1b6eaf5589a14763452cbe53382cc699cdeca141 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 15 Nov 2019 11:36:14 +0100
-+Subject: [PATCH] configure.ac: add --enable-tests
-+
-+Allow the user to disable tests through --disable-tests, this is
-+especially useful for example to disable gdk-pixbuf dependency
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/spice/spice-common/merge_requests/6]
-+---
-+ Makefile.am  | 6 +++++-
-+ configure.ac | 7 +++++++
-+ 2 files changed, 12 insertions(+), 1 deletion(-)
-+
-+diff --git a/subprojects/spice-common/Makefile.am b/subprojects/spice-common/Makefile.am
-+index 5402499..00623a1 100644
-+--- a/subprojects/spice-common/Makefile.am
-++++ b/subprojects/spice-common/Makefile.am
-+@@ -1,7 +1,11 @@
-+ NULL =
-+ ACLOCAL_AMFLAGS = -I m4
-+ 
-+-SUBDIRS = python_modules common tests docs
-++SUBDIRS = python_modules common docs
-++
-++if ENABLE_TESTS
-++SUBDIRS += tests
-++endif
-+ 
-+ EXTRA_DIST =				\
-+ 	meson.build			\
-+diff --git a/subprojects/spice-common/configure.ac b/subprojects/spice-common/configure.ac
-+index 9d10287..2dba7c8 100644
-+--- a/subprojects/spice-common/configure.ac
-++++ b/subprojects/spice-common/configure.ac
-+@@ -33,6 +33,13 @@ AC_SEARCH_LIBS(regcomp, [regex rx])
-+ SPICE_CHECK_SYSDEPS
-+ SPICE_EXTRA_CHECKS
-+ 
-++AC_ARG_ENABLE([tests],
-++  AS_HELP_STRING([--enable-tests],
-++                 [Enable tests @<:@default=yes@:>@]),
-++  [],
-++  enable_tests="yes")
-++AM_CONDITIONAL(ENABLE_TESTS, test "x$enable_tests" = "xyes")
-++
-+ AC_ARG_ENABLE([alignment-checks],
-+   AS_HELP_STRING([--enable-alignment-checks],
-+                  [Enable runtime checks for cast alignment @<:@default=no@:>@]),
-+-- 
-+2.23.0
-+
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index 16e57441a8..b663479920 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -17,6 +17,8 @@ SPICE_DEPENDENCIES = \
- 	openssl \
- 	pixman \
- 	spice-protocol
-+# We're patching subprojects/spice-common/configure.ac
-+SPICE_AUTORECONF = YES
- 
- # We disable everything for now, because the dependency tree can become
- # quite deep if we try to enable some features, and I have not tested that.
-@@ -25,7 +27,8 @@ SPICE_CONF_OPTS = \
- 	--disable-opengl \
- 	--disable-smartcard \
- 	--without-sasl \
--	--disable-manual
-+	--disable-manual \
-+	--disable-tests
- 
- SPICE_DEPENDENCIES += host-pkgconf
- 
+> ---
+>  package/gcnano-binaries/gcnano-binaries.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
+> index 4bfb5ad952..b27571a08c 100644
+> --- a/package/gcnano-binaries/gcnano-binaries.mk
+> +++ b/package/gcnano-binaries/gcnano-binaries.mk
+> @@ -48,13 +48,20 @@ GCNANO_BINARIES_LIBRARIES = \
+> 
+>  GCNANO_BINARIES_USERLAND_SUBDIR = gcnano-userland-multi-$(GCNANO_BINARIES_USERLAND_VERSION)
+> 
+> +GCNANO_BINARIES_PKG_CONFIGS = egl gbm glesv1_cm glesv2 vg
+> +
+>  define GCNANO_BINARIES_INSTALL
+>  	$(foreach lib,$(GCNANO_BINARIES_LIBRARIES), \
+>  		$(INSTALL) -D -m 0755 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so \
+>  			$(1)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so ; \
+>  		cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).so* $(1)/usr/lib
+>  	)
+> +	mkdir -p $(1)/usr/include
+
+... this is not related to the pkg-config files at all, this is clearly
+a fix for a mistake in my previous patch. Ideally, it should be a
+separate patch.
+
+
+>  	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/include/* $(1)/usr/include/
+> +	$(foreach pkgconfig,$(GCNANO_BINARIES_PKG_CONFIGS), \
+> +		$(INSTALL) -D -m 0644 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/pkgconfig/$(pkgconfig).pc \
+> +			$(1)/usr/lib/pkgconfig/$(pkgconfig).pc
+> +	)
+>  endef
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
