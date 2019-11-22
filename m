@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2019 19:27:07 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] board/beaglebone: fix
+Date: Fri, 22 Nov 2019 19:24:07 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] board/beaglebone: fix
  boot on BeagleBone Black
-Message-ID: <20191122182402.1F2608B86A@busybox.osuosl.org>
+Message-ID: <20191122182411.A93278DF1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adc7cccde6d6b163eeed29441bebf42b7403ed7e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ce6bad8cbc60adf35879b1c7002fcd71521858cf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Commit 68b5b79b2f has set the getty port to the default console but left
 "ttyO0" in bootargs, in the U-Boot environment. Use "ttyS0", instead.
