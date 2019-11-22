@@ -1,28 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2019 21:10:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to 5.0.6
-In-Reply-To: <20191118152216.42274-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Mon, 18 Nov 2019 16:22:16 +0100")
-References: <20191118152216.42274-1-titouan.christophe@railnova.eu>
-Message-ID: <87sgmfzn8m.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Nov 2019 21:03:56 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual/quickstart:
+ update output directory contents documentation
+Message-ID: <20191122215315.9AD568F53B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fbb771c490500ae0a0eb26c4f233b1016df98964
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Update the documentation for the output/host/ directory to mention
+that it contains the sysroot for the target toolchain, as well as the
+host tools required for running buildroot.
 
-Committed to 2019.08.x, thanks.
+Update the staging/ documentation to reflect that it is a link to the
+target toolchain sysroot in the host/ directory.
 
-For 2019.02.x I will instead bump to the latest 4.x version.
+Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 728d6800bb0af0fcbd66db701412b1ad0572a5dc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/quickstart.txt | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-I see that there is also a 5.0.7 version that fixes issues as well. Care
-to send a patch bumping to 5.0.7?
-
-https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
+index 74158ae249..542b278603 100644
+--- a/docs/manual/quickstart.txt
++++ b/docs/manual/quickstart.txt
+@@ -87,15 +87,21 @@ This directory contains several subdirectories:
+   target). This directory contains one subdirectory for each of these
+   components.
+ 
+-* +staging/+ which contains a hierarchy similar to a root filesystem
+-  hierarchy. This directory contains the headers and libraries of the
+-  cross-compilation toolchain and all the userspace packages selected
+-  for the target. However, this directory is 'not' intended to be
+-  the root filesystem for the target: it contains a lot of development
+-  files, unstripped binaries and libraries that make it far too big
+-  for an embedded system. These development files are used to compile
+-  libraries and applications for the target that depend on other
+-  libraries.
++* +host/+ contains both the tools built for the host, and the sysroot
++  of the target toolchain. The former is an installation of tools
++  compiled for the host that are needed for the proper execution of
++  Buildroot, including the cross-compilation toolchain. The latter
++  is a hierarchy similar to a root filesystem hierarchy. It contains
++  the headers and libraries of all user-space packages that provide
++  and install libraries used by other packages. However, this
++  directory is 'not' intended to be the root filesystem for the target:
++  it contains a lot of development files, unstripped binaries and
++  libraries that make it far too big for an embedded system. These
++  development files are used to compile libraries and applications for
++  the target that depend on other libraries.
++
++* +staging/+ is a symlink to the target toolchain sysroot inside
++  +host/+, which exists for backwards compatibility.
+ 
+ * +target/+ which contains 'almost' the complete root filesystem for
+   the target: everything needed is present except the device files in
+@@ -111,10 +117,6 @@ This directory contains several subdirectories:
+   development files (headers, etc.) are not present, the binaries are
+   stripped.
+ 
+-* +host/+ contains the installation of tools compiled for the host
+-  that are needed for the proper execution of Buildroot, including the
+-  cross-compilation toolchain.
+-
+ These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
+ basic ones that allow to easily and quickly generate images fitting
+ your needs, with all the features and applications you enabled.
