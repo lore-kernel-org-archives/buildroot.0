@@ -1,27 +1,33 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Fri, 22 Nov 2019 09:37:12 +0000
-Subject: [Buildroot] Where the cross-compiler gets shared stuff
-In-Reply-To: <XnsAB0F51847D9ABfgotham@195.159.176.226>
-References: <XnsAB0F51847D9ABfgotham@195.159.176.226>
-Message-ID: <e077e558-7f14-5101-b566-bebf8cd6cd0c@codethink.co.uk>
+From: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Date: Fri, 22 Nov 2019 10:39:30 +0100
+Subject: [Buildroot] [PATCH] package/php: select SYSTEMD_TMPFILES for
+ PHP_SAPI_FPM
+Message-ID: <20191122093930.7933-1-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/11/2019 08:00, Frederick Gotham wrote:
-> So how are cross-compilers supposed to work? If they are installed properly, 
-> do you need to give them the "--sysroot" parameter?
+PrivateTmp=true requires SYSTEMD_TMPFILES otherwise the service will
+fail to start on boot.
 
-Check out toolchain/toolchain-wrapper.c, which hardcodes a number of toolchain
-arguments (including --sysroot). Cross compiler binaries are accessed via
-symlinks in $(HOST_DIR)/bin, some of which go through toolchain-wrapper.
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+---
+ package/php/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-$ ls -l output/host/bin/sparc-linux-*
-lrwxrwxrwx 1 tpreston tpreston 46 Nov 21 11:18 output/host/bin/sparc-linux-addr2line -> ../opt/ext-toolchain/bin/sparc-linux-addr2line
-lrwxrwxrwx 1 tpreston tpreston 39 Nov 21 11:18 output/host/bin/sparc-linux-ar -> ../opt/ext-toolchain/bin/sparc-linux-ar
-lrwxrwxrwx 1 tpreston tpreston 39 Nov 21 11:18 output/host/bin/sparc-linux-as -> ../opt/ext-toolchain/bin/sparc-linux-as
-lrwxrwxrwx 1 tpreston tpreston 17 Nov 21 11:18 output/host/bin/sparc-linux-c++ -> toolchain-wrapper
-lrwxrwxrwx 1 tpreston tpreston 48 Nov 21 11:18 output/host/bin/sparc-linux-c++.br_real -> ../opt/ext-toolchain/bin/sparc-linux-c++.br_real
-lrwxrwxrwx 1 tpreston tpreston 17 Nov 21 11:18 output/host/bin/sparc-linux-cc -> toolchain-wrapper
+diff --git a/package/php/Config.in b/package/php/Config.in
+index 2469573..b65438a 100644
+--- a/package/php/Config.in
++++ b/package/php/Config.in
+@@ -39,6 +39,7 @@ config BR2_PACKAGE_PHP_SAPI_CLI
+ 
+ config BR2_PACKAGE_PHP_SAPI_FPM
+ 	bool "FPM interface"
++	select BR2_PACKAGE_SYSTEMD_TMPFILES if BR2_PACKAGE_SYSTEMD
+ 	depends on BR2_USE_MMU
+ 	# "Sparc v8 and predecessors are not and will not be supported"
+ 	depends on !BR2_sparc
+-- 
+2.7.4
