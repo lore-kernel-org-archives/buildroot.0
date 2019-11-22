@@ -1,52 +1,76 @@
-From: Frederick Gotham <cauldwell.thomas@gmail.com>
-Date: Fri, 22 Nov 2019 08:00:48 -0000 (UTC)
-Subject: [Buildroot] Where the cross-compiler gets shared stuff
-Message-ID: <XnsAB0F51847D9ABfgotham@195.159.176.226>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Fri, 22 Nov 2019 12:11:05 +0300
+Subject: [Buildroot] [PATCH v2 05/10] boot/arm-trusted-firmware: Add
+ option BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
+In-Reply-To: <20191121102324.35225-6-jerry.huang@nxp.com>
+References: <20191121102324.35225-1-jerry.huang@nxp.com>
+ <20191121102324.35225-6-jerry.huang@nxp.com>
+Message-ID: <20191122091105.rndnuzqedkvylxnx@bars>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Typically, when a cross-compiler is installed properly on a computer, do you 
-need to explicitly invoke it with "--sysroot=/opt/targetfs", or is this 
-parameter already implied if the cross-compiler is properly installed? 
+On Thu, Nov 21, 2019 at 06:23:19PM +0800, Changming Huang wrote:
+> From: Jerry Huang <jerry.huang@nxp.com>
+> 
+> Add option BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE to define the U-Boot BIN.
+> The default setting is u-boot.bin, customer can change it to anything via defconfig.
+> 
+> Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
+> ---
+> changes since v1:
+> 1. add BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE for uboot binary file
+> 2. default of new option is u-boot.bin.
+> 3. use the new option for U-Boot BL33
+> ---
+>  boot/arm-trusted-firmware/Config.in               | 12 ++++++++++++
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk |  3 ++-
+>  2 files changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+> index 78c03019d5..3e83590776 100644
+> --- a/boot/arm-trusted-firmware/Config.in
+> +++ b/boot/arm-trusted-firmware/Config.in
+> @@ -124,6 +124,18 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+>  	  gets built before ATF, and that the appropriate BL33
+>  	  variable pointing to u-boot.bin is passed when building ATF.
+>  
+> +if BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+> +
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
+> +	string "U-Boot BL33 Image for ATF"
+> +	default "u-boot.bin"
+> +	help
+> +	  The U-Boot BL33 image for ATF, u-boot.bin is the default setting,
+> +	  this setting can be changed to any U-Boot binary file that used,
+> +	  for example, u-boot-dtb.bin.
+> +
+> +endif
+> +
+>  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES
+>  	string "Additional ATF build variables"
+>  	help
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> index e528686aa1..2133d39e6d 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> @@ -70,7 +70,8 @@ endif
+>  endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
+>  
+>  ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33),y)
+> -ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/u-boot.bin
+> +ARM_TRUSTED_FIRMWARE_UBOOT_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE))
+> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UBOOT_BIN)
+>  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
+>  endif
 
-Right now I'm working on an embedded Linux project, and I'm using Buildroot 
-to produce a minimalistic Linux installation with only the programs and 
-libraries I need. 
+Hello Jerry,
 
-I see that some 3rd party packages invoke the correct cross-compiler but they 
-don't give the "--sysroot" parameter. 
+Thanks for the update. This one looks good to me.
 
-For example, if we start off with the following native compilation command:
+Reviewed-by: Sergey Matyukevich <geomatsi@mail.com>
 
-    gcc main.c -o prog 
-
-Then a correct cross-compilation would be: 
-
-    CC = /opt/project/build/output/host/bin/x86_64-buildroot-linux-gnu-gcc 
-    SYSROOT = /opt/project/build/output/host/x86_64-buildroot-linux-
-gnu/sysroot 
-
-    $(CC) --sysroot=$(SYSROOT) main.c -o prog 
-
-I see however that some packages are leaving out the sysroot parameter, and 
-so they're just doing: 
-
-    $(CC) main.c -o prog 
-
-This predictably fails if the host and the target have different CPU's, for 
-example if my office PC is x86_64 and my target is embedded Linux ARM 
-aarch64. 
-
-On my current project though, the host and the target have the same CPU, and 
-so if you leave out the "--sysroot" parameter then the program ends up 
-linking with shared libraries installed on the host. Sometimes this happens 
-without any compiler warning or error! 
-
-So how are cross-compilers supposed to work? If they are installed properly, 
-do you need to give them the "--sysroot" parameter?
-
-Note that I'm prefering the use of "--sysroot" instead of using the following 
-two options: -I$(STAGING_DIR)/usr/include -L$(STAGING_DIR)/usr/lib.
+Regards,
+Sergey
