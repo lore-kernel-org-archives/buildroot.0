@@ -1,37 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 22 Nov 2019 12:05:51 +0100
-Subject: [Buildroot] [EXT] Re: [PATCH v2 07/10]
- package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
-In-Reply-To: <VI1PR04MB51367BB9692EC714A7667E70FE490@VI1PR04MB5136.eurprd04.prod.outlook.com>
-References: <20191121102324.35225-1-jerry.huang@nxp.com>
- <20191121102324.35225-8-jerry.huang@nxp.com>
- <bdf9c08ab88c1a965ec665023a52309d@walle.cc>
- <VI1PR04MB51367BB9692EC714A7667E70FE490@VI1PR04MB5136.eurprd04.prod.outlook.com>
-Message-ID: <20191122120551.5f8abe89@windsurf.home>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Fri, 22 Nov 2019 08:27:49 -0300
+Subject: [Buildroot] [PATCH v3 for-next 02/11] configs/qemu{x86,
+ x86_64}: add a serial console
+In-Reply-To: <20191117201909.12900-3-romain.naour@smile.fr>
+References: <20191117201909.12900-1-romain.naour@smile.fr>
+ <20191117201909.12900-3-romain.naour@smile.fr>
+Message-ID: <CAJ4jsafEwAY2+3ayL7n=bUHtng2FnROJDD=DgUny3BEhBL3H=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, Nov 17, 2019 at 5:19 PM Romain Naour <romain.naour@smile.fr> wrote:
+>
+> The current Buildroot defconfigs for qemu_x86 and qemu_x86_64
+> instantiate a console on tty1, which appears on QEMU's
+> graphical window. Add a console on the serial port (ttyS0) to
+> be used later for gitlab testing.
+>
+> This change is need since the script used for gitlab testing
+> needs to use a serial output with pexpect.
+>
+> This change is similar to the one made for raspberrypi [1] to
+> handle HDMI and serial console:
 
-On Fri, 22 Nov 2019 10:40:42 +0000
-Jerry Huang <jerry.huang@nxp.com> wrote:
+I think the serial console should be the default on all qemu
+defconfigs, since it best matches embedded devices.
 
-> > There is already an FREESCALE_IMX_EXTRACT_HELPER macro. I guess that
-> > should be renamed and used here.  
-> 
-> I changed this codes accordance with freescale-imx, create new option FREESCALE_QORIQ_EXTRACT_HELPER
-> Will post it to maillist marked "v3"
+In the long run it should be possible to configure additional ttys by
+means of a cleaner and standard mechanism. I even sketched it by meas
+of a BR2_TARGET_GETTY_PORTS list some time but lost it when moved to a
+new job. I will try to recreate it and submit a draft for review.
 
-Could you wait a bit before sending v3, so that some time is given for
-people to review the patch series? Maybe wait until Monday.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Carlos Santos <unixmania@gmail.com>
