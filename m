@@ -1,65 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2019 23:24:36 +0100
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 19.2.6
-Message-ID: <20191122222027.EC4098F692@busybox.osuosl.org>
+Date: Fri, 22 Nov 2019 23:28:03 +0100
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.3.x series
+Message-ID: <20191122222028.0A9CD8F4C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ee02eaaee90a7f1f00b44985624f466dc386a83
+commit: https://git.buildroot.net/buildroot/commit/?id=2e5d631f8f170ccd67338ae99d0a23ed74a4d3ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes of this bugfix release:
-https://lists.freedesktop.org/archives/mesa-announce/2019-November/000559.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index eee6acbe8e..e4d54aae6a 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/linux/Config.in b/linux/Config.in
+index a78a1761c9..17b16d94ec 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 19.2.5
-+MESA3D_HEADERS_VERSION = 19.2.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index c885e05a4d..d1dbfc603c 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2019-November/000557.html
--sha256 3d010a366b28d10bdd71e32091d8684baf1522e6466c5c5703667091b2108c8b  mesa-19.2.5.tar.xz
--sha512 881735c4fec07fb6557d01c2d5bb7971e2d4b2bedbb52fd1025dfb0222f8b1cbca080b6f849efe19ff514da8e6310fc6f0cde5b59fcc1c6a10e593876bcd6a38  mesa-19.2.5.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2019-November/000559.html
-+sha256 9d7b24fa60c82db34788196450042a55ce6cb2d70c7a8d5c31401619b6907797  mesa-19.2.6.tar.xz
-+sha512 2e961631ae8ea1cb64d87bede51432445a17d153244d8c76f5eb70cbdc8c069d3f08cac11928d85ce2730d772aff9b3aff089e5e552eb021fdcb65364bb685b6  mesa-19.2.6.tar.xz
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.3.11" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.3.12" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.19.75-cip11" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 79de759161..d50aaa0bc4 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,7 +1,7 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 6e7156946d1d72e24786d09a47511e44c3abe5d4da757f4f68f2da482880aeb7  linux-5.3.11.tar.xz
++sha256 53bff6f89dca19f928043fb0d3434bfb4b6abbb1bf18b907cb731188bdac97a0  linux-5.3.12.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 868b4a92619cb00ab142a20a67f000525b9605820d1b66faa4a183133eac0660  linux-4.19.84.tar.xz
+-sha256 86de4a24379a78d67fc08b2e249ccf7b689eb6c37fbe329fc3dfbe8ab4300603  linux-4.14.154.tar.xz
+-sha256 383fd43bd35251636232912ad52fbc844e3c8ab792cadb62b4aefe000bacbd88  linux-4.9.201.tar.xz
+-sha256 a78a85c4fb0c0835b01933765c984ab5ab190eac1d521338fb88b03a49641388  linux-4.4.201.tar.xz
++sha256 fdacceeae22d1a0467cae50c15e6e754bfb8bb8e8010623df0d8fd78f4adb929  linux-4.4.202.tar.xz
++sha256 8108ec1cd10fc40821c84e9f087dba10b1767aad66596f4a36925faef55e4ebf  linux-4.9.202.tar.xz
++sha256 77d61979556b81c95b81452fa10e1fe9368cbe2f9f80a13e4669b0464722e481  linux-4.14.155.tar.xz
++sha256 7bf435970aeeafd46263f49730087a61c4858d8b8fc5a4002ceac971b45f4fb7  linux-4.19.85.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 3c232b3218..191e387de0 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -305,11 +305,11 @@ endchoice
  
- # License
- sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 80b79af688..fff498e777 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 19.2.5
-+MESA3D_VERSION = 19.2.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.201"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.201"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.154"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.84"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.3.11"	if BR2_KERNEL_HEADERS_5_3
++	default "4.4.202"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.202"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.155"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.85"	if BR2_KERNEL_HEADERS_4_19
++	default "5.3.12"	if BR2_KERNEL_HEADERS_5_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
