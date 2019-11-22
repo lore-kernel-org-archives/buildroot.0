@@ -1,100 +1,63 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 22 Nov 2019 03:48:20 +0000
-Subject: [Buildroot] [PATCH v1 1/1] mbpfan: new package
-In-Reply-To: <20191122034820.3378-1-christian@paral.in>
-References: <20191122034820.3378-1-christian@paral.in>
-Message-ID: <20191122034820.3378-2-christian@paral.in>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 22 Nov 2019 06:25:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.2.6
+Message-ID: <20191122052536.24423-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds the "mbpfan" fan speed controller daemon for Macbook Pro
-laptops.
+Release notes of this bugfix release:
+https://lists.freedesktop.org/archives/mesa-announce/2019-November/000559.html
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/mbpfan/Config.in |  7 +++++++
- package/mbpfan/mbpfan.mk | 30 ++++++++++++++++++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/mbpfan/Config.in
- create mode 100644 package/mbpfan/mbpfan.mk
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 991be89849..7630312390 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -529,6 +529,7 @@ F:	package/docker-containerd/
- F:	package/docker-engine/
- F:	package/docker-proxy/
- F:	package/go/
-+F:	package/mbpfan/
- F:	package/mosh/
- F:	package/pkg-golang.mk
- F:	package/rtl8821au/
-diff --git a/package/Config.in b/package/Config.in
-index f72c77b416..937e296a2e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -480,6 +480,7 @@ endmenu
- 	source "package/luksmeta/Config.in"
- 	source "package/lvm2/Config.in"
- 	source "package/mali-t76x/Config.in"
-+	source "package/mbpfan/Config.in"
- 	source "package/mdadm/Config.in"
- 	source "package/mdevd/Config.in"
- 	source "package/memtest86/Config.in"
-diff --git a/package/mbpfan/Config.in b/package/mbpfan/Config.in
-new file mode 100644
-index 0000000000..b941af5fa0
---- /dev/null
-+++ b/package/mbpfan/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_MBPFAN
-+	bool "mbpfan"
-+	depends on BR2_USE_MMU
-+	help
-+	  mbpfan is a utility which controls the macbook pro fans.
-+
-+	  https://github.com/linux-on-mac/mbpfan
-diff --git a/package/mbpfan/mbpfan.mk b/package/mbpfan/mbpfan.mk
-new file mode 100644
-index 0000000000..0cb84603ca
---- /dev/null
-+++ b/package/mbpfan/mbpfan.mk
-@@ -0,0 +1,30 @@
-+148  ag from [...ralin/Documents/synrobo/skiff/]: ################################################################################
-+#
-+# mbpfan
-+#
-+################################################################################
-+
-+MBPFAN_VERSION = 2.2.0
-+MBPFAN_SITE = $(call github,linux-on-mac,mbpfan,v$(MBPFAN_VERSION))
-+MBPFAN_LICENSE = GPL-3.0+
-+MBPFAN_LICENSE_FILES = COPYING
-+
-+define MBPFAN_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-+endef
-+
-+define MBPFAN_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 $(@D)/bin/mbpfan $(TARGET_DIR)/usr/sbin/mbpfan
-+endef
-+
-+define MBPFAN_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 $(@D)/mbpfan.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/mbpfan.service
-+
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+
-+	ln -sf /usr/lib/systemd/system/mbpfan.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mbpfan.service
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 2deb063be2..f2817aa87f 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.2.5
++MESA3D_HEADERS_VERSION = 19.2.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index c885e05a4d..d1dbfc603c 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2019-November/000557.html
+-sha256 3d010a366b28d10bdd71e32091d8684baf1522e6466c5c5703667091b2108c8b  mesa-19.2.5.tar.xz
+-sha512 881735c4fec07fb6557d01c2d5bb7971e2d4b2bedbb52fd1025dfb0222f8b1cbca080b6f849efe19ff514da8e6310fc6f0cde5b59fcc1c6a10e593876bcd6a38  mesa-19.2.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-November/000559.html
++sha256 9d7b24fa60c82db34788196450042a55ce6cb2d70c7a8d5c31401619b6907797  mesa-19.2.6.tar.xz
++sha512 2e961631ae8ea1cb64d87bede51432445a17d153244d8c76f5eb70cbdc8c069d3f08cac11928d85ce2730d772aff9b3aff089e5e552eb021fdcb65364bb685b6  mesa-19.2.6.tar.xz
+ 
+ # License
+ sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 80b79af688..fff498e777 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.2.5
++MESA3D_VERSION = 19.2.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.17.1
+2.20.1
