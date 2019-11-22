@@ -1,75 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2019 21:03:56 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual/quickstart:
- update output directory contents documentation
-Message-ID: <20191122215315.9AD568F53B@busybox.osuosl.org>
+Date: Fri, 22 Nov 2019 22:59:15 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/redis: bump
+ version to 4.0.14
+Message-ID: <20191122215315.A98A18F53B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbb771c490500ae0a0eb26c4f233b1016df98964
+commit: https://git.buildroot.net/buildroot/commit/?id=fa8296ac64675d50c549ebe196e0509ef666a29c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Update the documentation for the output/host/ directory to mention
-that it contains the sysroot for the target toolchain, as well as the
-host tools required for running buildroot.
+Brings additional fixes to the 4.x series. From the release notes:
 
-Update the staging/ documentation to reflect that it is a link to the
-target toolchain sysroot in the host/ directory.
+https://raw.githubusercontent.com/antirez/redis/4.0/00-RELEASENOTES
 
-Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 728d6800bb0af0fcbd66db701412b1ad0572a5dc)
+================================================================================
+Redis 4.0.14     Released Mon Mar 18 17:22:10 CEST 2019
+================================================================================
+
+This release just backports a few fixes from Redis 5:
+
+3c62ad19 HyperLogLog: handle wrong offset in the base case.
+cc2b3a68 Fix hyperloglog corruption
+e10c79d3 redis-check-aof: fix potential overflow.
+6fa16f58 Fix mismatching keyspace notification classes
+64311052 Fix zlexrangespec mem-leak in genericZrangebylexCommand
+b0e86319 Make comment in #5911 stay inside 80 cols.
+39ccce03 Replicas aren't allowed to run the replicaof command
+
+================================================================================
+Redis 4.0.13     Released Wed Feb 20 17:25:31 CEST 2019
+================================================================================
+
+This release just backports a few fixes from Redis 5:
+
+60b2537f rewrite BRPOPLPUSH as RPOPLPUSH to propagate
+afc4b36c Don't treat unsupported protocols as fatal errors
+
+================================================================================
+Redis 4.0.12     Released Tue Dec 11 18:06:12 CEST 2018
+================================================================================
+
+This backports the following Redis 5 fixes back into Redis 4.
+Please check the Redis 5 changelog or see the full commit messages
+for more information. Note that there are important fixes to the AOF
+implementation so Redis 4.0.12 should be considered as a worthwhile
+upgrade in production environments where AOF is used and there is the
+idea of sticking with Redis 4 for some time.
+
+b6cd3b3c asyncCloseClientOnOutputBufferLimitReached(): don't free fake clients.
+e16402b0 Don't call sdscmp() with shared.maxstring or shared.minstring
+49d9f411 Fix stringmatchlen() read past buffer bug.
+97192e2d Merge pull request #5569 from maximebedard/backport-4497
+1908aba7 add linkClient(): adds the client and caches the list node.
+239b0857 networking: optimize unlinkClient() in freeClient()
+54b17f98 When replica kills a pending RDB save during SYNC, log it.
+b31c08db Move child termination to readSyncBulkPayload
+21971ac8 Prevent RDB autosave from overwriting full resync results
+3a91fcbc aof.c: improve indentation and change warning message.
+e6f287d5 AOF: discard if we lost EXEC when loading aof
+e0d4c66a Fix AOF comment to report the current behavior.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/quickstart.txt | 28 +++++++++++++++-------------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
-index 74158ae249..542b278603 100644
---- a/docs/manual/quickstart.txt
-+++ b/docs/manual/quickstart.txt
-@@ -87,15 +87,21 @@ This directory contains several subdirectories:
-   target). This directory contains one subdirectory for each of these
-   components.
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 0b4e25c61d..59c16e12ea 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha256 fc53e73ae7586bcdacb4b63875d1ff04f68c5474c1ddeda78f00e5ae2eed1bbb  redis-4.0.11.tar.gz
++sha256 1e1e18420a86cfb285933123b04a82e1ebda20bfb0a289472745a087587e93a7  redis-4.0.14.tar.gz
  
--* +staging/+ which contains a hierarchy similar to a root filesystem
--  hierarchy. This directory contains the headers and libraries of the
--  cross-compilation toolchain and all the userspace packages selected
--  for the target. However, this directory is 'not' intended to be
--  the root filesystem for the target: it contains a lot of development
--  files, unstripped binaries and libraries that make it far too big
--  for an embedded system. These development files are used to compile
--  libraries and applications for the target that depend on other
--  libraries.
-+* +host/+ contains both the tools built for the host, and the sysroot
-+  of the target toolchain. The former is an installation of tools
-+  compiled for the host that are needed for the proper execution of
-+  Buildroot, including the cross-compilation toolchain. The latter
-+  is a hierarchy similar to a root filesystem hierarchy. It contains
-+  the headers and libraries of all user-space packages that provide
-+  and install libraries used by other packages. However, this
-+  directory is 'not' intended to be the root filesystem for the target:
-+  it contains a lot of development files, unstripped binaries and
-+  libraries that make it far too big for an embedded system. These
-+  development files are used to compile libraries and applications for
-+  the target that depend on other libraries.
-+
-+* +staging/+ is a symlink to the target toolchain sysroot inside
-+  +host/+, which exists for backwards compatibility.
+ # Locally calculated
+ sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index da2307d693..783f2c5c44 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- * +target/+ which contains 'almost' the complete root filesystem for
-   the target: everything needed is present except the device files in
-@@ -111,10 +117,6 @@ This directory contains several subdirectories:
-   development files (headers, etc.) are not present, the binaries are
-   stripped.
- 
--* +host/+ contains the installation of tools compiled for the host
--  that are needed for the proper execution of Buildroot, including the
--  cross-compilation toolchain.
--
- These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
- basic ones that allow to easily and quickly generate images fitting
- your needs, with all the features and applications you enabled.
+-REDIS_VERSION = 4.0.11
++REDIS_VERSION = 4.0.14
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
