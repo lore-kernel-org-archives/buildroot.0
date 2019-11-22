@@ -1,103 +1,175 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 22 Nov 2019 11:40:45 -0600
-Subject: [Buildroot] [PATCH] package/kvm-unit-tests: really fix build on
- Arch Linux x86_64
-In-Reply-To: <20191117184114.1917-1-arnout@mind.be>
-References: <20191117184114.1917-1-arnout@mind.be>
-Message-ID: <CANQCQpbvccF8H3Tqgr1x_t1JR5TX4iOu8_poP39L5OorgiVNYA@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 22 Nov 2019 20:00:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to version
+ 2.26.2
+Message-ID: <20191122180013.2887730-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Nov 17, 2019 at 12:41 PM Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
->
-> On x86_64, we use the host compiler instead of the target compiler to
-> build kvm-unit-tests, because it is built with -m32 and our target
-> compiler doesn't support that.
->
-> However, the compiler on Arch Linux is broken: it *always* builds with
-> -fstack-protector, even when -ffreestanding is passed. However, when
-> -fnostdlib is passed at link time (which is normally the case when
-> building with -ffreestanding), it is not linked with the stack-protector
-> library. This leads to a link time error:
->
-> /usr/bin/ld: x86/realmode.o: in function `print_serial_u32':
-> .../x86/realmode.c:104: undefined reference to `__stack_chk_fail'
->
-> Since the entire package is built with -ffreestanding, it doesn't
-> support stack-protector at all. Therefore, simply pass
-> -fno-stack-protector explicitly on x86_64 to work around the bug in Arch
-> Linux.
->
-> Commit c0ffd16e4 tried to do this, but got the condition wrong:
-> -fno-stack-protector was passed in all cases *except* for x86_64. This
-> commit fixes that, by inverting the condition and moving the
-> --cross-prefix part to the else branch.
->
-> Fixes: (no new autobuild failures yet)
+This is a minor release which includes fixes for CVE-2019-8812 and
+CVE-2019-8814.
 
-Fixes:
-http://autobuild.buildroot.net/results/ca9576721214ecdce5622f2b7ec4fd4fc3699ac0/
+This release also fixes the build with WebDriver disabled and without
+X11, so "0001-GTK-ANGLE-s-eglplatform.h-is-build-broken-with-DENAB.patch"
+and "0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch" are not
+needed anymore (and therefore removed). There is also a performance
+improvement for a regression related to fallback font selection, and a
+couple of small fixes. The full release notes are available at:
 
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/kvm-unit-tests/kvm-unit-tests.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-> index bb08c0603d..2637066701 100644
-> --- a/package/kvm-unit-tests/kvm-unit-tests.mk
-> +++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-> @@ -35,13 +35,14 @@ KVM_UNIT_TESTS_CONF_OPTS =\
->  # compiler. However, for x86-64, we use the host compiler, as
->  # kvm-unit-tests builds 32 bit code, which Buildroot toolchains for
->  # x86-64 cannot do.
-> -ifneq ($(BR2_x86_64),y)
-> -KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
-> +ifeq ($(BR2_x86_64),y)
->  # Arch Linux adds -fstack-protector even when building with -ffreestanding, but
->  # it doesn't link with the stack-protector library when -nostdlib is passed,
->  # which leads to a link error. Therefore, disable it explicitly to work around
->  # this bug in Arch Linux. https://bugs.archlinux.org/task/64270
->  KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
-> +else
-> +KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
->  endif
->
->  define KVM_UNIT_TESTS_CONFIGURE_CMDS
-> --
-> 2.21.0
->
+  https://webkitgtk.org/2019/11/06/webkitgtk2.26.2-released.html
 
+The detailed security advisory can be found at:
 
+  https://webkitgtk.org/security/WSA-2019-0006.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...latform.h-is-build-broken-with-DENAB.patch | 40 --------------
+ ...uild-fails-with-ENABLE_WEBDRIVER-OFF.patch | 55 -------------------
+ package/webkitgtk/webkitgtk.hash              |  8 +--
+ package/webkitgtk/webkitgtk.mk                |  2 +-
+ 4 files changed, 5 insertions(+), 100 deletions(-)
+ delete mode 100644 package/webkitgtk/0001-GTK-ANGLE-s-eglplatform.h-is-build-broken-with-DENAB.patch
+ delete mode 100644 package/webkitgtk/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
+
+diff --git a/package/webkitgtk/0001-GTK-ANGLE-s-eglplatform.h-is-build-broken-with-DENAB.patch b/package/webkitgtk/0001-GTK-ANGLE-s-eglplatform.h-is-build-broken-with-DENAB.patch
+deleted file mode 100644
+index 1da78f2bf9..0000000000
+--- a/package/webkitgtk/0001-GTK-ANGLE-s-eglplatform.h-is-build-broken-with-DENAB.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From d1697f868e047f1355fed7b44dbcd6dda897c234 Mon Sep 17 00:00:00 2001
+-From: Adrian Perez de Castro <aperez@igalia.com>
+-Date: Thu, 19 Sep 2019 17:13:19 +0300
+-Subject: [PATCH xserver 1/1] [GTK] ANGLE's eglplatform.h is build broken with
+- -DENABLE_X11_PLATFORM=OFF https://bugs.webkit.org/show_bug.cgi?id=198621
+-
+-Reviewed by NOBODY (OOPS!).
+-
+-* PlatformGTK.cmake: Use WL_EGL_PLATFORM to prefer Wayland type
+-definitions with ENABLE_WAYLAND_TARGET, and USE_SYSTEM_EGL otherwise
+-when ENABLE_X11_TARGET is not enabled.
+-
+-Fetch from: https://bugs.webkit.org/show_bug.cgi?id=198621
+-Upstream-Status: Pending
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-
+----
+- Source/ThirdParty/ANGLE/ChangeLog         | 11 +++++++++++
+- Source/ThirdParty/ANGLE/PlatformGTK.cmake |  9 +++++++++
+- 2 files changed, 20 insertions(+)
+-
+-diff --git a/Source/ThirdParty/ANGLE/PlatformGTK.cmake b/Source/ThirdParty/ANGLE/PlatformGTK.cmake
+-index 74f35e29234..7229b0e09cc 100644
+---- a/Source/ThirdParty/ANGLE/PlatformGTK.cmake
+-+++ b/Source/ThirdParty/ANGLE/PlatformGTK.cmake
+-@@ -1,2 +1,11 @@
+- # Enable GLSL compiler output.
+- list(APPEND ANGLE_DEFINITIONS ANGLE_ENABLE_GLSL)
+-+
+-+if (ENABLE_WAYLAND_TARGET)
+-+    # Explicitly prefer the Wayland platform, otherwise if we are building
+-+    # in a system without X11 ANGLE will still try to use the X11 headers.
+-+    list(APPEND ANGLE_DEFINITIONS WL_EGL_PLATFORM)
+-+elseif (NOT ENABLE_X11_TARGET)
+-+    # Allow building ANGLE on platforms which may not provide X11 headers.
+-+    list(APPEND ANGLE_DEFINITIONS USE_SYSTEM_EGL)
+-+endif ()
+--- 
+-2.23.0
+-
+diff --git a/package/webkitgtk/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch b/package/webkitgtk/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
+deleted file mode 100644
+index b084ec9eb3..0000000000
+--- a/package/webkitgtk/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From fb0f978af0dd3923a1d3bcb6dccf610861e284d3 Mon Sep 17 00:00:00 2001
+-From: Adrian Perez de Castro <aperez@igalia.com>
+-Date: Tue, 8 Oct 2019 11:06:56 +0300
+-Subject: [PATCH xserver 2/2] [WPE][GTK] Build fails with ENABLE_WEBDRIVER=OFF
+- https://bugs.webkit.org/show_bug.cgi?id=202658
+-
+-Reviewed by NOBODY (OOPS!).
+-
+-* UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp: Add missing
+-ENABLE(WEBDRIVER_MOUSE_INTERACTIONS) and ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
+-preprocessor guards.
+-* UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp: Ditto.
+-
+-Fetch (and adapted) from: https://bugs.webkit.org/show_bug.cgi?id=202658
+-Upstream-Status: Pending
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-
+----
+- Source/WebKit/ChangeLog                              | 12 ++++++++++++
+- .../Automation/gtk/WebAutomationSessionGtk.cpp       |  4 ++++
+- .../Automation/wpe/WebAutomationSessionWPE.cpp       |  4 ++++
+- 3 files changed, 20 insertions(+)
+-
+-diff --git a/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp b/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp
+-index dd81d1d55ea..ee665c2e346 100644
+---- a/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp
+-+++ b/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp
+-@@ -34,6 +34,7 @@
+- namespace WebKit {
+- using namespace WebCore;
+- 
+-+#if ENABLE(WEBDRIVER_MOUSE_INTERACTIONS)
+- static unsigned modifiersToEventState(OptionSet<WebEvent::Modifier> modifiers)
+- {
+-     unsigned state = 0;
+-@@ -131,7 +132,9 @@ void WebAutomationSession::platformSimulateMouseInteraction(WebPageProxy& page,
+-         break;
+-     }
+- }
+-+#endif // ENABLE(WEBDRIVER_MOUSE_INTERACTIONS)
+- 
+-+#if ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
+- static void doKeyStrokeEvent(GdkEventType type, GtkWidget* widget, unsigned keyVal, unsigned state, bool doReleaseAfterPress = false)
+- {
+-     ASSERT(type == GDK_KEY_PRESS || type == GDK_KEY_RELEASE);
+-@@ -331,5 +334,6 @@ void WebAutomationSession::platformSimulateKeySequence(WebPageProxy& page, const
+-         p = g_utf8_next_char(p);
+-     } while (*p);
+- }
+-+#endif // ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
+- 
+- } // namespace WebKit
+--- 
+-2.23.0
+-
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 0cf0080e6e..71642ad144 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.26.0.tar.xz.sums
+-md5 08145bd6c1587230f135921c142bc150 webkitgtk-2.26.1.tar.xz
+-sha1 bd0432281c0463147ec06587c25f226a67acbb2d webkitgtk-2.26.1.tar.xz
+-sha256 6b4b21801d2b1008422a1075dbd6fb4ae8b5127503faf657cf9671289d9cd155 webkitgtk-2.26.1.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.26.2.tar.xz.sums
++md5 65e06fe73ee166447894aaea95038e3b webkitgtk-2.26.2.tar.xz
++sha1 5bd1ccb436c76fd1edb83afd5bec377de5655d45 webkitgtk-2.26.2.tar.xz
++sha256 6b80f0637a80818559ac8fd50db3b394f41cb61904fb9b3ed65fa51635806512 webkitgtk-2.26.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 6f72cdb528..1273c1afe8 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.26.1
++WEBKITGTK_VERSION = 2.26.2
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
-
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+2.24.0
