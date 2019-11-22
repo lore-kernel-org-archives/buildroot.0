@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2019 23:14:13 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/spice: disable
+Date: Fri, 22 Nov 2019 23:13:43 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/spice: disable
  tests
-Message-ID: <20191122220744.B65768F606@busybox.osuosl.org>
+Message-ID: <20191122220809.D62668F63D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d30fd0f6f45e6d0c52eb594d13b7847498833f91
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=84340154792b2e2c76e6a279e17242e1468725d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 By disabling tests, we'll remove the optional gdk-pixbuf dependency
 
