@@ -1,78 +1,51 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Thu, 21 Nov 2019 22:42:14 +0100
-Subject: [Buildroot] [PATCH v3 for-next 08/11] board/qemu/*/launch.sh:
- add qemu launch script
-In-Reply-To: <20191117201909.12900-9-romain.naour@smile.fr>
-References: <20191117201909.12900-1-romain.naour@smile.fr>
- <20191117201909.12900-9-romain.naour@smile.fr>
-Message-ID: <9aabec73-3c04-70c5-af9f-3b35f9a1039f@smile.fr>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 22 Nov 2019 03:48:19 +0000
+Subject: [Buildroot] [PATCH v1 0/1] Buildroot on Macintosh Laptops
+Message-ID: <20191122034820.3378-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This patch series adds the mbpfan macbook pro fan controller daemon.
 
-Le 17/11/2019 ? 21:19, Romain Naour a ?crit?:
-> From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> 
-> It is not very convenient for Buildroot users to store
-> the Qemu command line in a readme.txt instead of a script
-> to be used as soon as the Qemu image has been created.
-> 
-> This patch replace the readme.txt file located in
-> board/qemu/<Qemu target>/ by a script (launch.sh).
-> 
-> This allow Buildroot user to start easily Qemu using
-> only one simple command:
-> 
-> $ ./board/qemu/aarch64-virt/launch.sh test/qemu_aarch64_virt/
-> 
-> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
+I have successfully compiled and run Buildroot on my MacBook Pro 2013 Retina
+laptop. Additionally, I've achieved the following interesting points:
 
+ - Docker
+ - Inside an automatically configured container per-user:
+   - X server
+   - Plasma Desktop
+   - Systemd 
 
-> diff --git a/board/qemu/mips32r2-malta/launch.sh b/board/qemu/mips32r2-malta/launch.sh
-> new file mode 100755
-> index 0000000000..8069b59171
-> --- /dev/null
-> +++ b/board/qemu/mips32r2-malta/launch.sh
-> @@ -0,0 +1,2 @@
-> +#!/bin/env bash
-> +
+If anyone is interested in the above, I am available to answer questions at this
+early stage, and plan to publish more configuration files at a later date. If
+you are interested in running Buildroot on a Mac laptop:
 
-The content of this script is missing, it should be:
+ 1. Boot to recovery partition (Command-R)
+ 2. Create a new partition for the Buildroot setup
+ 3. Flash a ext4 image of the Buildroot root filesystem to the partition.
+ 4. Install refind with refind-install.sh --all-drivers
 
- qemu-system-mips -M malta -kernel ${1:-output}/images/vmlinux -serial stdio
--drive file=${1:-output}/images/rootfs.ext2,format=raw -append "rootwait
-root=/dev/hda" -net nic,model=pcnet -net user
+If building a system as a kernel + initrd (as SkiffOS does), you can simply copy
+two files to the partition - the initrd and the bzImage.
 
-# The login prompt will appear in the terminal that started Qemu. The
-# graphical window is the framebuffer. No keyboard support has been
-# enabled.
-
-# Tested with QEMU 2.12.0
-
-It's fixed for v4.
+Configurations for the kernel, buildroot, and all other necessary details can be
+found at: https://github.com/paralin/SkiffOS/tree/master/configs/apple/macbook
 
 Best regards,
-Romain
 
+Christian Stewart (1):
+  mbpfan: new package
 
-> diff --git a/board/qemu/mips32r2-malta/readme.txt b/board/qemu/mips32r2-malta/readme.txt
-> deleted file mode 100644
-> index 9ff3c4b810..0000000000
-> --- a/board/qemu/mips32r2-malta/readme.txt
-> +++ /dev/null
-> @@ -1,9 +0,0 @@
-> -Run the emulation with:
-> -
-> - qemu-system-mips -M malta -kernel output/images/vmlinux -serial stdio -drive file=output/images/rootfs.ext2,format=raw -append "rootwait root=/dev/hda" -net nic,model=pcnet -net user
-> -
-> -The login prompt will appear in the terminal that started Qemu. The
-> -graphical window is the framebuffer. No keyboard support has been
-> -enabled.
-> -
-> -Tested with QEMU 2.12.0
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/mbpfan/Config.in |  7 +++++++
+ package/mbpfan/mbpfan.mk | 30 ++++++++++++++++++++++++++++++
+ 4 files changed, 39 insertions(+)
+ create mode 100644 package/mbpfan/Config.in
+ create mode 100644 package/mbpfan/mbpfan.mk
+
+-- 
+2.17.1
