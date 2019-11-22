@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2019 20:51:20 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libmspack: new
+Date: Fri, 22 Nov 2019 20:33:22 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libmspack: new
  package
-Message-ID: <20191122194840.7C2CC8F581@busybox.osuosl.org>
+Message-ID: <20191122194851.1BF218F5A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b71c1f85b1208cbac733d74b1631283ad73ea3a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5e2b68e9335328f906e406c395cdbbaf99c63106
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Needed for upcoming clamav version bump to 0.102.0.
 
@@ -75,10 +75,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  5 files changed, 25 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index e6d1312bf4..e3641e6d90 100644
+index 3a56e37c8d..e7d79bdab3 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -309,6 +309,7 @@ F:	package/libilbc/
+@@ -339,6 +339,7 @@ F:	package/libilbc/
  F:	package/libldns/
  F:	package/libmicrohttpd/
  F:	package/libminiupnpc/
@@ -87,10 +87,10 @@ index e6d1312bf4..e3641e6d90 100644
  F:	package/libnpth/
  F:	package/libogg/
 diff --git a/package/Config.in b/package/Config.in
-index 5314e03f83..ce6745348a 100644
+index 710ed12be0..edee7199e0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1161,6 +1161,7 @@ endmenu
+@@ -1196,6 +1196,7 @@ endmenu
  
  menu "Compression and decompression"
  	source "package/libarchive/Config.in"
