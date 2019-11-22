@@ -1,12 +1,12 @@
 From: Jerry Huang <jerry.huang@nxp.com>
-Date: Fri, 22 Nov 2019 10:40:42 +0000
+Date: Fri, 22 Nov 2019 10:41:22 +0000
 Subject: [Buildroot] [EXT] Re: [PATCH v2 07/10]
  package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
-In-Reply-To: <bdf9c08ab88c1a965ec665023a52309d@walle.cc>
+In-Reply-To: <df827bb10ea801bcfd3f04a5093348bc@walle.cc>
 References: <20191121102324.35225-1-jerry.huang@nxp.com>
  <20191121102324.35225-8-jerry.huang@nxp.com>
- <bdf9c08ab88c1a965ec665023a52309d@walle.cc>
-Message-ID: <VI1PR04MB51367BB9692EC714A7667E70FE490@VI1PR04MB5136.eurprd04.prod.outlook.com>
+ <df827bb10ea801bcfd3f04a5093348bc@walle.cc>
+Message-ID: <VI1PR04MB5136DFF43998381493F98C16FE490@VI1PR04MB5136.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,7 +20,7 @@ Jerry Huang
 
 > -----Original Message-----
 > From: Michael Walle <michael@walle.cc>
-> Sent: Thursday, November 21, 2019 6:52 PM
+> Sent: Thursday, November 21, 2019 6:43 PM
 > To: Jerry Huang <jerry.huang@nxp.com>
 > Cc: buildroot at busybox.net; geomatsi at gmail.com;
 > matthew.weber at collins.com; thomas.petazzoni at bootlin.com
@@ -37,10 +37,17 @@ Jerry Huang
 > > Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
 > > ---
 > > changes since v1:
-> > 1. rename the package to fsl-qoriq-cadence-dp-fw 2. update DEVELOPERS
-> > 3. add the hash of package 4. modify the context fo config file to
-> > package name 5. re-write the makefile according to rule of buildroot
-> > 6. add the license message in makefile
+> > 1. rename the package to fsl-qoriq-cadence-dp-fw
+> 
+> All other firmware's in buildroot have a "-firmware" suffix.
+
+Will use suffix "-firmware" in v3.
+
+> > 2. update DEVELOPERS
+> > 3. add the hash of package
+> > 4. modify the context fo config file to package name 5. re-write the
+> > makefile according to rule of buildroot 6. add the license message in
+> > makefile
 > > ---
 > >  DEVELOPERS                                    |  3 +++
 > >  package/freescale-qoriq/Config.in             |  2 ++
@@ -98,14 +105,14 @@ Jerry Huang
 > >
 > xp.com%2Flgfiles%2Fsdk%2Flsdk1909%2Ffirmware-cadence-lsdk1909.bin&amp;
 > >
-> data=02%7C01%7Cjerry.huang%40nxp.com%7C8af29f72a8524b1f700608d76e7
-> 0ce5
+> data=02%7C01%7Cjerry.huang%40nxp.com%7Ca71c7361a8eb40680c9908d76e
+> 6f8d1
 > >
-> c%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6370993030840248
-> 67&amp;
+> e%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6370992977061416
+> 81&amp;
 > >
-> sdata=uSC8EhBphE5cLuUGjHWvGyRgNCs3kdPKUe3xBgAna3U%3D&amp;reserv
-> ed=0
+> sdata=cjWdcvyCKsIcw5qV5x%2BJEvVCiFuMeyBNprHm582rkws%3D&amp;reser
+> ved=0
 > > diff --git
 > > a/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp
 > > -fw.hash
@@ -153,12 +160,12 @@ Jerry Huang
 > +nxp.com%2Flgfiles%2Fsdk%2Flsdk1909&amp;data=02%7C01%7Cjerry.huang%
 > 40n
 > >
-> +xp.com%7C8af29f72a8524b1f700608d76e70ce5c%7C686ea1d3bc2b4c6fa92c
+> +xp.com%7Ca71c7361a8eb40680c9908d76e6f8d1e%7C686ea1d3bc2b4c6fa92c
 > d99c5
 > >
-> +c301635%7C0%7C0%7C637099303084024867&amp;sdata=efvW3VQKOjQPq5
-> 5%2BMpeu
-> > +uARsbNMl0NV99IwR1ylN9vs%3D&amp;reserved=0
+> +c301635%7C0%7C0%7C637099297706141681&amp;sdata=N1ZBA4m%2F%2F
+> CF7WjNa5j
+> > +XkfrnIastkxjHwoSO8G9%2BZcnk%3D&amp;reserved=0
 > > +FSL_QORIQ_CADENCE_DP_FW_SOURCE =
 > > firmware-cadence-$(FSL_QORIQ_CADENCE_DP_FW_VERSION).bin
 > > +FSL_QORIQ_CADENCE_DP_FW_LICENSE = NXP-Binary-EULA
@@ -174,11 +181,20 @@ Jerry Huang
 > URCE)
 > > --auto-accept;
 > > +endef
+> > +
+> > +define FSL_QORIQ_CADENCE_DP_FW_INSTALL_IMAGES_CMDS
+> > +     $(INSTALL) -D -m 0644
+> > $(@D)/firmware-cadence-lsdk1909/dp/ls1028a-dp-fw.bin
+> > $(BINARIES_DIR)/ls1028a-dp-fw.bin
+> > +endef
 > 
-> There is already an FREESCALE_IMX_EXTRACT_HELPER macro. I guess that
-> should be renamed and used here.
-
-I changed this codes accordance with freescale-imx, create new option FREESCALE_QORIQ_EXTRACT_HELPER
-Will post it to maillist marked "v3"
-
+> IMHO this should be also installed into the target filesystem. So the driver can
+> request the firmware binary. I know that this is not how NXP handles that at the
+> moment. But in the end, that should be the way to go, esp. since rockchip seems
+> to have the same/similar DP-PHY with a corresponding driver upstream and
+> they are already loading the firmware via request_firmware().
+> 
+> > +
+> > +$(eval $(generic-package))
+> 
 > -michael
