@@ -1,45 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 23 Nov 2019 18:41:21 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/whois: bump to version 5.5.3
-Message-ID: <20191123174121.720462-1-fontaine.fabrice@gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat, 23 Nov 2019 09:46:54 -0800
+Subject: [Buildroot] [PATCH 1/2] package/perl: add license hash
+Message-ID: <20191123174655.299426-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/whois/whois.hash | 4 ++--
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+From: Adam Duskett <Aduskett@gmail.com>
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index ca4c81b3f5..77d30b2cd0 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,5 +1,5 @@
--# From http://snapshot.debian.org/archive/debian/20190719T170739Z/pool/main/w/whois/whois_5.5.0.dsc
--sha256	64ec63339d7ad559cd6722bd3141a1e5787817bd921841a813ee17a0a34b6f3d	whois_5.5.0.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20191118T030126Z/pool/main/w/whois/whois_5.5.3.dsc
-+sha256	55c33f9c2a01c0cf1d6449ece63b0c26ef45aab63cf5f01c18459df0e341ab46	whois_5.5.3.tar.xz
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/perl/perl.hash | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 4604d2715d..c988ab752f 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -5,3 +5,8 @@ sha256 0b0189bfa4b2da20e899b4bdd746ac402e8f746a58e4fcf5516484157f2aab07 perl-5.2
  
- # Hash for license file:
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index 7d36ddc76c..1517d1e630 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WHOIS_VERSION = 5.5.0
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20190719T170739Z/pool/main/w/whois
-+WHOIS_VERSION = 5.5.3
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20191118T030126Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- WHOIS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
+ # Hashes from: https://github.com/arsv/perl-cross/releases/download/1.2.3/perl-cross-1.2.3.hash
+ sha256 84583a1bb5f3a2c64d13d031386c114382e5c62955c6f84a27cec8318536627c perl-cross-1.2.3.tar.gz
++
++# Locally calculated
++sha256 dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2 Artistic
++sha256 d77d235e41d54594865151f4751e835c5a82322b0e87ace266567c3391a4b912 Copying
++sha256 4a39adc445d79e213df5c2028c5432806dfcdfe69a5bc31ba5c83071a0097877 README
 -- 
-2.24.0
+2.23.0
