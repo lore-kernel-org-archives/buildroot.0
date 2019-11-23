@@ -1,69 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 Nov 2019 22:07:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tftpd: add license
-In-Reply-To: <20191123182855.966365-1-fontaine.fabrice@gmail.com>
-References: <20191123182855.966365-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191123210736.GY32494@scaer>
+Date: Sat, 23 Nov 2019 22:15:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tini: compile executable static
+In-Reply-To: <1574255351-23642-1-git-send-email-simon.rowe@citrix.com>
+References: <1574255351-23642-1-git-send-email-simon.rowe@citrix.com>
+Message-ID: <20191123211555.GZ32494@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Simon, All,
 
-On 2019-11-23 19:28 +0100, Fabrice Fontaine spake thusly:
-> Set tftpd license to BSD-like as the source code contains only:
-
-Well, tftpd.c contains the exact BSD-4-clause license.
-
-> Copyright 2001 H. Peter Anvin - All Rights Reserved
+On 2019-11-20 13:09 +0000, Simon Rowe spake thusly:
+> tini is intended to be used as the init process within containers and
+> therefore needs to be independent of the C runtime library.
 > 
-> This program is free software available under the same license
-> as the "OpenBSD" operating system, distributed at
-> http://www.openbsd.org/.
-> 
-> License: BSD
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
 > ---
->  package/tftpd/tftpd.hash | 3 +++
->  package/tftpd/tftpd.mk   | 2 ++
->  2 files changed, 5 insertions(+)
+>  package/tini/tini.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/tftpd/tftpd.hash b/package/tftpd/tftpd.hash
-> index 247b757fa6..cd865dcd24 100644
-> --- a/package/tftpd/tftpd.hash
-> +++ b/package/tftpd/tftpd.hash
-> @@ -1,2 +1,5 @@
->  # From https://www.kernel.org/pub/software/network/tftp/tftp-hpa/sha256sums.asc
->  sha256	afee361df96a2f88344e191f6a25480fd714e1d28d176c3f10cc43fa206b718b	tftp-hpa-5.2.tar.xz
-> +
-> +# Hash for license file
-> +sha256	08e400bfc2484d34b12fd2c13926cc8f609f1b5001c942b8bc47b80e7a709daa	tftpd/tftpd.h
-> diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-> index c42456afd1..911029505e 100644
-> --- a/package/tftpd/tftpd.mk
-> +++ b/package/tftpd/tftpd.mk
-> @@ -8,6 +8,8 @@ TFTPD_VERSION = 5.2
->  TFTPD_SOURCE = tftp-hpa-$(TFTPD_VERSION).tar.xz
->  TFTPD_SITE = $(BR2_KERNEL_MIRROR)/software/network/tftp/tftp-hpa
->  TFTPD_CONF_OPTS = --without-tcpwrappers
-> +TFTPD_LICENSE = BSD-like
-> +TFTPD_LICENSE_FILES = tftpd/tftpd.h
+> diff --git a/package/tini/tini.mk b/package/tini/tini.mk
+> index 5dd9877..986e612 100644
+> --- a/package/tini/tini.mk
+> +++ b/package/tini/tini.mk
+> @@ -10,6 +10,7 @@ TINI_LICENSE = MIT
+>  TINI_LICENSE_FILES = LICENSE
+>  
+>  TINI_CFLAGS = $(TARGET_CFLAGS) \
+> +	-static \
 
-In this case, I think it is reasonable to not provide a license file,
-but I would not mind that we list tftpd/tftpd.c either.
+That can't work as-is, because this would break with BR2_SHARED_LIBS=y,
+in which case only shared libraries are available.
 
-Care to respin, please?
+Furthermore, the commit message introducing tini explicitly states "it
+is not necessary to compile Tini statically for many non-docker
+container environments". So, what has changed since then?
+
+Besides, I would expect that the init process of a container would be
+provided inside the container, not come from the host system. As such,
+the init system of the container can be dynamically linked with the
+runtime of the container itself.
+
+In any case, this patch is incorrect in the shared-only setup, so I
+marked it as rejected for now. If you can provide a beter way to do what
+you need, then we can revisit it later with a different implementation
+(and more explanations on how this is used in the wild).
 
 Regards,
 Yann E. MORIN.
 
->  define TFTPD_INSTALL_TARGET_CMDS
->  	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
+>  	-DTINI_VERSION=\"$(TINI_VERSION)\" \
+>  	-DTINI_GIT=\"\"
+>  
 > -- 
-> 2.24.0
+> 1.8.3.1
 > 
 > _______________________________________________
 > buildroot mailing list
