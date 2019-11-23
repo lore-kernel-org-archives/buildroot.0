@@ -1,57 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Nov 2019 14:38:19 +0100
-Subject: [Buildroot] [PATCH v2,
- 2/4] package/celt051: needs dynamic library
-In-Reply-To: <20191117164452.5361-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 17 Nov 2019 17:44:50 +0100")
-References: <20191117164452.5361-1-fontaine.fabrice@gmail.com>
- <20191117164452.5361-2-fontaine.fabrice@gmail.com>
-Message-ID: <871rtyyapg.fsf@dell.be.48ers.dk>
+Date: Sat, 23 Nov 2019 14:27:09 +0100
+Subject: [Buildroot] [git commit] package/spice: security bump to version
+ 0.14.2
+Message-ID: <20191123133058.2E6228F4D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=808a54aa3b125a05541cbd5682417d3b1aad9c14
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > celt051 can't be built statically with opus as opus embeds its own celt
- > version. So add a dynamic library dependency to celt051 (and not to
- > opus, as celt051 is only used optionally by spice whereas opus is
- > selected by 9 packages)
+- Fix CVE-2019-3813: fix off-by-one error in group/slot boundary check
+- Add license hash
 
- > This will fix static build of spice with opus and celt:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/spice/spice.hash | 3 ++-
+ package/spice/spice.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
- > /home/fabrice/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/7.4.0/../../../../i686-buildroot-linux-uclibc/bin/ld: /home/fabrice/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/libopus.a(vq.o): in function `renormalise_vector':
- > vq.c:(.text+0x5ee): multiple definition of `renormalise_vector'; /home/fabrice/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/libcelt051.a(vq.o):vq.c:(.text+0x6e6): first defined here
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/96c786f85d35f33508e9c71778043d16b87f72cd
-
-So this is only really an issue for spice, if spice is built statically
-and both celt051 and opus are enabled?
-
-If so, then I would prefer to handle it in spice.mk instead,
-E.G. blacklist the celt51 + opus + static combination with a sensible
-comment, something like:
-
-ifeq ($(BR2_PACKAGE_CELT051),y)
-
-# opus embeds a copy of celt, causing multiple definitions of a number
-# of symbols when linked statically together with celt051, so disable
-# celt051 support for that combination
-ifeq ($(BR2_PACKAGE_OPUS)$(BR2_STATIC_LIBS),yy)
-SPICE_CONF_OPTS += --disable-celt051
-else
-SPICE_CONF_OPTS += --enable-celt051
-SPICE_DEPENDENCIES += celt051
-endif
-
-else
-SPICE_CONF_OPTS += --disable-celt051
-endif
-
-Care to send a patch doing something like that? Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/spice/spice.hash b/package/spice/spice.hash
+index 1a25926ab2..4243244129 100644
+--- a/package/spice/spice.hash
++++ b/package/spice/spice.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	1ead5de63d06eededed4017db37240f07bef0abffbaf621899647e7e685a1519	spice-0.14.1.tar.bz2
++sha256	b203b3882e06f4c7249a3150d90c84e1a90490d41ead255a3d2cede46f4a29a7	spice-0.14.2.tar.bz2
++sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+index b663479920..8c421abf2e 100644
+--- a/package/spice/spice.mk
++++ b/package/spice/spice.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPICE_VERSION = 0.14.1
++SPICE_VERSION = 0.14.2
+ SPICE_SOURCE = spice-$(SPICE_VERSION).tar.bz2
+ SPICE_SITE = http://www.spice-space.org/download/releases/spice-server
+ SPICE_LICENSE = LGPL-2.1+
