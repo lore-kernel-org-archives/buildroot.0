@@ -1,44 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Nov 2019 11:55:23 +0100
-Subject: [Buildroot] [PATCH-NEXT] package/fatcat: bump version to 1.1.0
-Message-ID: <20191123105524.4236-1-peter@korsgaard.com>
+Date: Sat, 23 Nov 2019 11:57:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
+ version 2.26.2
+In-Reply-To: <20191122180013.2887730-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Fri, 22 Nov 2019 20:00:13 +0200")
+References: <20191122180013.2887730-1-aperez@igalia.com>
+Message-ID: <87zhgmyi68.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tag now has a 'v' prefix, so handle that in the github macro.
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fatcat/fatcat.hash | 2 +-
- package/fatcat/fatcat.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > This is a minor release which includes fixes for CVE-2019-8812 and
+ > CVE-2019-8814.
 
-diff --git a/package/fatcat/fatcat.hash b/package/fatcat/fatcat.hash
-index a5a6f670ad..66823e2d9e 100644
---- a/package/fatcat/fatcat.hash
-+++ b/package/fatcat/fatcat.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 d44f6bb80d20ed50095ace9e71df8da98037db9f22cda76bdd9724d37df69130  fatcat-1.0.6.tar.gz
-+sha256 303efe2aa73cbfe6fbc5d8af346d0f2c70b3f996fc891e8859213a58b95ad88c  fatcat-1.1.0.tar.gz
- sha256 3ea03755e32cf7f5b12981de92a0fdad396448195fe0024990c9cbc388e9866c  LICENSE
-diff --git a/package/fatcat/fatcat.mk b/package/fatcat/fatcat.mk
-index e4f8d757b6..1a2e5aacae 100644
---- a/package/fatcat/fatcat.mk
-+++ b/package/fatcat/fatcat.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FATCAT_VERSION = 1.0.6
--FATCAT_SITE = $(call github,Gregwar,fatcat,$(FATCAT_VERSION))
-+FATCAT_VERSION = 1.1.0
-+FATCAT_SITE = $(call github,Gregwar,fatcat,v$(FATCAT_VERSION))
- FATCAT_LICENSE = MIT
- FATCAT_LICENSE_FILES = LICENSE
- 
+ > This release also fixes the build with WebDriver disabled and without
+ > X11, so "0001-GTK-ANGLE-s-eglplatform.h-is-build-broken-with-DENAB.patch"
+ > and "0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch" are not
+ > needed anymore (and therefore removed). There is also a performance
+ > improvement for a regression related to fallback font selection, and a
+ > couple of small fixes. The full release notes are available at:
+
+ >   https://webkitgtk.org/2019/11/06/webkitgtk2.26.2-released.html
+
+ > The detailed security advisory can be found at:
+
+ >   https://webkitgtk.org/security/WSA-2019-0006.html
+
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
