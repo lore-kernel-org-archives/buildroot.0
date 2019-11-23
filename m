@@ -1,34 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Nov 2019 09:47:24 +0100
-Subject: [Buildroot] [git commit] board/beelink_gs1: enable mdev and dhcp on
- eth0
-Message-ID: <20191202083934.B527B7FAE3@busybox.osuosl.org>
+Date: Sat, 23 Nov 2019 13:42:20 +0100
+Subject: [Buildroot] [git commit] package/glibc: install utilities into
+ their standard locations
+Message-ID: <20191202083934.5133B81DFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e26f5ad712a8264d97969910cba1d2ecfa57e2b7
+commit: https://git.buildroot.net/buildroot/commit/?id=e487649e2e67537d65b4ac9d19a942b3eb8a16a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Cl??ment P??ron <peron.clem@gmail.com>
+As pointed out by Carlos, ldconfig normally goes into /sbin, and getconf +
+ldd into /usr/bin, so do that here as well instead of installing everything
+to /bin.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/beelink_gs1_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ package/glibc/glibc.mk | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
-index c34bd4e860..80b111aee7 100644
---- a/configs/beelink_gs1_defconfig
-+++ b/configs/beelink_gs1_defconfig
-@@ -2,6 +2,9 @@
- BR2_aarch64=y
- BR2_ARM_FPU_VFPV4=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Beelink GS1"
-+# MDEV is required to autoload the ethernet driver module
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/beelink/gs1/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beelink/gs1/genimage.cfg"
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 5cb19aabb9..5da0b064a2 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -144,15 +144,20 @@ GLIBC_LIBS_LIB += libthread_db.so.*
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GLIBC_UTILS),y)
+-GLIBC_TARGET_UTILS_BIN = posix/getconf elf/ldconfig elf/ldd
++GLIBC_TARGET_UTILS_USR_BIN = posix/getconf elf/ldd
++GLIBC_TARGET_UTILS_SBIN = elf/ldconfig
++
+ endif
+ 
+ define GLIBC_INSTALL_TARGET_CMDS
+ 	for libpattern in $(GLIBC_LIBS_LIB); do \
+ 		$(call copy_toolchain_lib_root,$$libpattern) ; \
+ 	done
+-	$(foreach util,$(GLIBC_TARGET_UTILS_BIN), \
+-		$(INSTALL) -D -m 0755 $(@D)/build/$(util) $(TARGET_DIR)/bin/$(notdir $(util))
++	$(foreach util,$(GLIBC_TARGET_UTILS_USR_BIN), \
++		$(INSTALL) -D -m 0755 $(@D)/build/$(util) $(TARGET_DIR)/usr/bin/$(notdir $(util))
++	)
++	$(foreach util,$(GLIBC_TARGET_UTILS_SBIN), \
++		$(INSTALL) -D -m 0755 $(@D)/build/$(util) $(TARGET_DIR)/sbin/$(notdir $(util))
+ 	)
+ endef
+ 
