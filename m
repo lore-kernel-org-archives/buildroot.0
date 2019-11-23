@@ -1,78 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Nov 2019 17:33:23 +0100
-Subject: [Buildroot] [git commit] package/python-bunch: new package
-Message-ID: <20191202083933.DA073800C5@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 23 Nov 2019 21:37:51 +0100
+Subject: [Buildroot] [git commit] package/libffi: bump to version 3.3
+Message-ID: <20191202083934.6AFD57FAE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f15dd35ef659cffa6e6d25cde38c9a0248f2b5f
+commit: https://git.buildroot.net/buildroot/commit/?id=4fd660c2f41670cad8b270f56861f6e6190dd6c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[Thomas: add missing entry to DEVELOPERS file]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                             |  1 +
- package/python-bunch/Config.in         |  6 ++++++
- package/python-bunch/python-bunch.hash |  5 +++++
- package/python-bunch/python-bunch.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+Update hash for license file (update in year:
+https://github.com/libffi/libffi/commit/058aa4130445b4ef3c2f77f796c33506873031ca)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b1a20eaebe..19ea83df3b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1591,6 +1591,7 @@ F:	package/policycoreutils/
- F:	package/proftpd/
- F:	package/protobuf-c/
- F:	package/protobuf/
-+F:	package/python-bunch/
- F:	package/python-colorama/
- F:	package/python-flask-cors/
- F:	package/python-iptables/
-diff --git a/package/python-bunch/Config.in b/package/python-bunch/Config.in
-new file mode 100644
-index 0000000000..89eae742b8
---- /dev/null
-+++ b/package/python-bunch/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_BUNCH
-+	bool "python-bunch"
-+	help
-+	  A dot-accessible dictionary (a la JavaScript objects).
-+
-+	  http://github.com/dsc/bunch
-diff --git a/package/python-bunch/python-bunch.hash b/package/python-bunch/python-bunch.hash
-new file mode 100644
-index 0000000000..5cf2cece46
---- /dev/null
-+++ b/package/python-bunch/python-bunch.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/bunch/json
-+md5	0a829d64e95ed96defbcae2bf9061bb0  bunch-1.0.1.tar.gz
-+sha256	50c77a0fc0cb372dfe48b5e11937d5f70e743adbf42683f3a6d2857645a76aaa  bunch-1.0.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	57ca95c92059c8380625192462979bd32994aae3fcdf902ff6eb1e467eeb0469  LICENSE.txt
-diff --git a/package/python-bunch/python-bunch.mk b/package/python-bunch/python-bunch.mk
-new file mode 100644
-index 0000000000..18fdc223bb
---- /dev/null
-+++ b/package/python-bunch/python-bunch.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-bunch
-+#
-+################################################################################
-+
-+PYTHON_BUNCH_VERSION = 1.0.1
-+PYTHON_BUNCH_SOURCE = bunch-$(PYTHON_BUNCH_VERSION).tar.gz
-+PYTHON_BUNCH_SITE = https://files.pythonhosted.org/packages/ef/bf/a4cf1779a4ffb4f610903fa08e15d1f4a8a2f4e3353a02afbe097c5bf4a8
-+PYTHON_BUNCH_SETUP_TYPE = setuptools
-+PYTHON_BUNCH_LICENSE = MIT
-+PYTHON_BUNCH_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libffi/libffi.hash | 4 ++--
+ package/libffi/libffi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libffi/libffi.hash b/package/libffi/libffi.hash
+index d8d2d2629a..496ae0d904 100644
+--- a/package/libffi/libffi.hash
++++ b/package/libffi/libffi.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256	db41cfb9ec8052fcd116a94c12237303c4447af4844d50e4fea7163661e31743  libffi-3.3-rc0.tar.gz
++sha256	3f2f86094f5cf4c36cfe850d2fe029d01f5c2c2296619407c8ba0d8207da9a6b  libffi-3.3.tar.gz
+ # License files, locally calculated
+-sha256	0f4d7a0bfb83c37465d42dc305f124189196cc0cc2cc8d6f8461103682aebbc5  LICENSE
++sha256	deaf3a42effb551a5b140fa9afefed183a27f1341c6d1bf430d106a5e6931fc0  LICENSE
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index fb8e18a456..722a03dca0 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFFI_VERSION = 3.3-rc0
++LIBFFI_VERSION = 3.3
+ LIBFFI_SITE = $(call github,libffi,libffi,v$(LIBFFI_VERSION))
+ LIBFFI_LICENSE = MIT
+ LIBFFI_LICENSE_FILES = LICENSE
