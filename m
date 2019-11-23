@@ -1,50 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 23 Nov 2019 16:47:20 +0000
-Subject: [Buildroot] [Bug 12346] New: Python 3.8/GObject on 2019-11rc2
-Message-ID: <bug-12346-163@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 23 Nov 2019 17:54:09 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/libffi: bump to version 3.3
+Message-ID: <20191123165409.657143-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12346
+Update hash for license file (update in year:
+https://github.com/libffi/libffi/commit/058aa4130445b4ef3c2f77f796c33506873031ca)
 
-            Bug ID: 12346
-           Summary: Python 3.8/GObject on 2019-11rc2
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: info at hifiberry.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libffi/libffi.hash | 4 ++--
+ package/libffi/libffi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-The 201911 release have been upgraded to Python 3.8. However, the included
-python-gobject is incompatible with Python 3.8:
-
-Python 3.8.0 (default, Nov 23 2019, 09:12:01) 
-[GCC 8.3.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import gobject
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/lib/python3.8/site-packages/gobject/__init__.py", line 26, in
-<module>
-    from glib import spawn_async, idle_add, timeout_add, timeout_add_seconds, \
-  File "/usr/lib/python3.8/site-packages/glib/__init__.py", line 22, in
-<module>
-    from glib._glib import *
-SystemError: initialization of _glib raised unreported exception
-
-An alternative to python gobject would be python GI, but this requires
-introspection. As far as I understand this is not yet working.
-
+diff --git a/package/libffi/libffi.hash b/package/libffi/libffi.hash
+index d8d2d2629a..496ae0d904 100644
+--- a/package/libffi/libffi.hash
++++ b/package/libffi/libffi.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256	db41cfb9ec8052fcd116a94c12237303c4447af4844d50e4fea7163661e31743  libffi-3.3-rc0.tar.gz
++sha256	3f2f86094f5cf4c36cfe850d2fe029d01f5c2c2296619407c8ba0d8207da9a6b  libffi-3.3.tar.gz
+ # License files, locally calculated
+-sha256	0f4d7a0bfb83c37465d42dc305f124189196cc0cc2cc8d6f8461103682aebbc5  LICENSE
++sha256	deaf3a42effb551a5b140fa9afefed183a27f1341c6d1bf430d106a5e6931fc0  LICENSE
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index fb8e18a456..722a03dca0 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFFI_VERSION = 3.3-rc0
++LIBFFI_VERSION = 3.3
+ LIBFFI_SITE = $(call github,libffi,libffi,v$(LIBFFI_VERSION))
+ LIBFFI_LICENSE = MIT
+ LIBFFI_LICENSE_FILES = LICENSE
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.24.0
