@@ -1,77 +1,22 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 Nov 2019 13:49:00 +0100
-Subject: [Buildroot] [git commit branch/next] glibc: install glibc utils
- to target
-In-Reply-To: <20191123124040.GU32494@scaer>
-References: <20191123104533.B93648F470@busybox.osuosl.org>
- <CAJ4jsaf_Oi35Md=sKwP1u+OWf=a8J2wSeMJxA=NJejtsMONo5w@mail.gmail.com>
- <20191123124040.GU32494@scaer>
-Message-ID: <20191123124900.GV32494@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 23 Nov 2019 14:19:21 +0100
+Subject: [Buildroot] [next] package/rsyslog: bump to 8.1911.0
+In-Reply-To: <20191118212018.4043-1-matthew.weber@rockwellcollins.com> (Matt
+ Weber's message of "Mon, 18 Nov 2019 15:20:18 -0600")
+References: <20191118212018.4043-1-matthew.weber@rockwellcollins.com>
+Message-ID: <87eexyybl2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Re,
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
-On 2019-11-23 13:40 +0100, Yann E. MORIN spake thusly:
-> On 2019-11-23 08:17 -0300, Carlos Santos spake thusly:
-> > On Sat, Nov 23, 2019 at 7:53 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> > The usual path of these utilities on non-merged-usr systems (e.g. RHEL-6) is:
-> > 
-> >      [root at rhel-6-1 ~]# which getconf ldconfig ldd
-> >     /usr/bin/getconf
-> >     /sbin/ldconfig
-> >     /usr/bin/ldd
-> 
-> I also considered this before applying, and the locations on Ubuntu
-> (Debian) are the same as you report on RHEL.
+ > https://github.com/rsyslog/rsyslog/blob/v8-stable/ChangeLog
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-Actually, ldconfig is in /usr/sbin/ldconfig here, so the locations do
-not seem to be that traditional either.
-
-But that's been "fixed" now, so all is good I guess...
-
-Regards,
-Yann E. MORIN.
-
-> But in the end, I considered it was a minor issue, for a few reasons:
-> 
->  1. it not very important where a program lies, as long as it can be
->     found in the PATH
-> 
->  2. we mostly only care when there are two or more packages providing
->     those programs, and we want them all to install those in the same
->     location (so that we don't have two, say, ls in the PATH). But when
->     there is a single package that install programs, it is not so
->     important where it is installed (see 1.)
-> 
->  3. the code snippet was suggested by Thomas in v1 of the patchset, so
->     that is authoritative too ;-)
-> 
-> So I applied.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Committed to next, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
