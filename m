@@ -1,108 +1,111 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 Nov 2019 11:30:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ntp: remove host shell check
-In-Reply-To: <0102016e898693a5-82db32f2-a59d-42c1-996b-97661b367c25-000000@eu-west-1.amazonses.com>
-References: <0102016e898693a5-82db32f2-a59d-42c1-996b-97661b367c25-000000@eu-west-1.amazonses.com>
-Message-ID: <20191123103011.GQ32494@scaer>
+Date: Sat, 23 Nov 2019 11:44:51 +0100
+Subject: [Buildroot] [git commit] package/linux-serial-test: bump version
+Message-ID: <20191123103809.359E28F427@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=01d8b65dc733b399a0335ebdf22642b3a15a9883
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-11-20 15:55 +0000, James Byrne spake thusly:
-> This adds a patch which removes the autoconf check for which shell is
-> installed on the host and fixes the shell as '/bin/sh'. Since we are
-> cross-compiling, we cannot assume that the target uses the same shell.
-> Also, it can prevent builds being reproducible because a different host
-> environment will result in a different target binary.
-> 
-> Signed-off-by: James Byrne <james.byrne@origamienergy.com>
-> ---
->  package/ntp/0003-force-sh.patch | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/ntp/0003-force-sh.patch
-> 
-> diff --git a/package/ntp/0003-force-sh.patch b/package/ntp/0003-force-sh.patch
-> new file mode 100644
-> index 0000000000..4c2628e04a
-> --- /dev/null
-> +++ b/package/ntp/0003-force-sh.patch
-> @@ -0,0 +1,30 @@
-> +We're cross compiling, don't use the presence of shells on the host to decide
-> +anything about the target...
-> +
-> +diff --git a/sntp/libopts/m4/libopts.m4 b/sntp/libopts/m4/libopts.m4
-> +--- a/sntp/libopts/m4/libopts.m4
-> ++++ b/sntp/libopts/m4/libopts.m4
-> +@@ -112,22 +112,7 @@
-> +   AC_CHECK_FUNCS([mmap canonicalize_file_name snprintf strdup strchr \
-> +                  strrchr strsignal fchmod fstat chmod])
-> +   AC_PROG_SED
-> +-  [while :
-> +-  do
-> +-      POSIX_SHELL=`which bash`
-> +-      test -x "$POSIX_SHELL" && break
-> +-      POSIX_SHELL=`which dash`
-> +-      test -x "$POSIX_SHELL" && break
-> +-      POSIX_SHELL=/usr/xpg4/bin/sh
-> +-      test -x "$POSIX_SHELL" && break
-> +-      POSIX_SHELL=`/bin/sh -c '
-> +-          exec 2>/dev/null
-> +-          if ! true ; then exit 1 ; fi
-> +-          echo /bin/sh'`
-> +-      test -x "$POSIX_SHELL" && break
-> +-      ]AC_MSG_ERROR([cannot locate a working POSIX shell])[
-> +-  done]
-> +-  AC_DEFINE_UNQUOTED([POSIX_SHELL], ["${POSIX_SHELL}"],
-> ++  AC_DEFINE_UNQUOTED([POSIX_SHELL], ["/bin/sh"],
+This update fixes both the below mentioned build error when handling
+undefined baud rates, and makes the patch for MIPS obsolete.
 
-This is not nice, as this patch can't be upstreamed, and we'll have tio
-live with it for the eons to come.
+No other changes will be introduced with this update.
 
-What about using AC_CACHE_CHECK [0] to do the check, which can be
-overriden on the command line. For example:
+Fixes:
+http://autobuild.buildroot.net/results/ef77cbe220619050eb9d46c78ae79a94eea8aa8b
 
-    [
-    AC_CACHE_CHECK([for a posix-compliant shell], [ntp_ac_cv_posix_shell],
-    [while :
-    do
-        blablabla
-    done
-    ])
-    AC_DEFINE_UNQUOTED([POSIX_SHELL], ["${ntp_ac_cv_posix_shell}"],
-      [define to a working POSIX compliant shell])
-    ]
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...l-test.c-fix-missing-CMSPAR-define-on-MIP.patch | 54 ----------------------
+ package/linux-serial-test/linux-serial-test.hash   |  2 +-
+ package/linux-serial-test/linux-serial-test.mk     |  2 +-
+ 3 files changed, 2 insertions(+), 56 deletions(-)
 
-And then in ntp.mk we could do (in addition to the existing one, of
-course):
-
-    NTP_CONF_ENV = ntp_ac_cv_posix_shell=/bin/sh
-
-And such a patch will probably be more acceptable for upstream.
-
-[0] https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.69/autoconf.html#Caching-Results
-
-Regards,
-Yann E. MORIN.
-
-> +            [define to a working POSIX compliant shell])
-> +   AC_SUBST([POSIX_SHELL])
-> + ])
-> -- 
-> 2.24.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch b/package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch
+deleted file mode 100644
+index fe5a1c6813..0000000000
+--- a/package/linux-serial-test/0001-linux-serial-test.c-fix-missing-CMSPAR-define-on-MIP.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From c34767aa22623a21369f1464c52fc4635895223c Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 8 Nov 2019 18:25:35 +0100
+-Subject: [PATCH] linux-serial-test.c: fix missing CMSPAR define on MIPS
+-
+-This patch is an adaptation of
+-https://git.busybox.net/buildroot/diff/package/freerdp/0003-add-missing-define.patch?id=78cd32631e959e04b1a2f18be7b0757e21482438
+-
+-linux-serial-test.c uses CMSPAR, which is defined by glibc in
+-bits/termios.h.
+-
+-glibc has two flavours of bits/termios.h: a generic one and an
+-architecture-specific one. When installing, glibc will install the
+-architecture-specific file if it exists, otherwise it installs the
+-generic file. Only Alpha, MIPS, PPC and Sparc have their own
+-bits/termios.h.
+-
+-The generic bits/termios.h, as well as the Alpha, PPC and Sparc flavours
+-do define CMSPAR. However, the MIPS flavour does not define it.
+-
+-Define CMSPAR to the value from the generic value, which is also the
+-value known to the Linux kernel for MIPS.
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/1350cc46dcb285772b1a4c90aec6ba38fdb11e3c
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/cbrake/linux-serial-test/pull/20]
+----
+- linux-serial-test.c | 8 ++++++++
+- 1 file changed, 8 insertions(+)
+-
+-diff --git a/linux-serial-test.c b/linux-serial-test.c
+-index 5e7504e..0d4a919 100644
+---- a/linux-serial-test.c
+-+++ b/linux-serial-test.c
+-@@ -17,6 +17,14 @@
+- #include <linux/serial.h>
+- #include <errno.h>
+- 
+-+/* 
+-+ * glibc for MIPS has its own bits/termios.h which does not define
+-+ * CMSPAR, so we vampirise the value from the generic bits/termios.h
+-+ */
+-+#ifndef CMSPAR
+-+#define CMSPAR 010000000000
+-+#endif
+-+
+- // command line args
+- int _cl_baud = 0;
+- char *_cl_port = NULL;
+--- 
+-2.23.0
+-
+diff --git a/package/linux-serial-test/linux-serial-test.hash b/package/linux-serial-test/linux-serial-test.hash
+index e8844528b9..5cbf00a7e4 100644
+--- a/package/linux-serial-test/linux-serial-test.hash
++++ b/package/linux-serial-test/linux-serial-test.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  edbb3ec1f287ec0fb96bac4e6a580a024af1d16b767a15f3c1b0163ff518fb71  linux-serial-test-5d11b31d9c9807cd58e53a8628bc6402b6fe7fac.tar.gz
++sha256  bfc25088e960c18e151f978b13d893dbee9a3e377e062bd56caab1bd409e4dcb  linux-serial-test-13bea838f2a7573d2a68a6d95fc9d1f153b580be.tar.gz
+ sha256  a2a6760c2c6fa779a635e4a7ad00f668862ebcadb2a8a57d16662543e103e08c  LICENSES/MIT
+diff --git a/package/linux-serial-test/linux-serial-test.mk b/package/linux-serial-test/linux-serial-test.mk
+index 42894ed181..b0f5fe4ebf 100644
+--- a/package/linux-serial-test/linux-serial-test.mk
++++ b/package/linux-serial-test/linux-serial-test.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_SERIAL_TEST_VERSION = 5d11b31d9c9807cd58e53a8628bc6402b6fe7fac
++LINUX_SERIAL_TEST_VERSION = 13bea838f2a7573d2a68a6d95fc9d1f153b580be
+ LINUX_SERIAL_TEST_SITE = $(call github,cbrake,linux-serial-test,$(LINUX_SERIAL_TEST_VERSION))
+ LINUX_SERIAL_TEST_LICENSE = MIT
+ LINUX_SERIAL_TEST_LICENSE_FILES = LICENSES/MIT
