@@ -1,46 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Nov 2019 14:27:09 +0100
-Subject: [Buildroot] [git commit] package/spice: security bump to version
- 0.14.2
-Message-ID: <20191123133058.2E6228F4D3@busybox.osuosl.org>
+Date: Sat, 23 Nov 2019 14:26:41 +0100
+Subject: [Buildroot] [git commit] package/spice-protocol: bump to version
+ 0.14.0
+Message-ID: <20191123133058.25A9F8F6FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=808a54aa3b125a05541cbd5682417d3b1aad9c14
+commit: https://git.buildroot.net/buildroot/commit/?id=371e6adc154a958fdc8513317c148e09cf70afd4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2019-3813: fix off-by-one error in group/slot boundary check
+- This bump is needed for spice 0.14.2
 - Add license hash
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/spice/spice.hash | 3 ++-
- package/spice/spice.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/spice-protocol/spice-protocol.hash | 5 ++++-
+ package/spice-protocol/spice-protocol.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/spice/spice.hash b/package/spice/spice.hash
-index 1a25926ab2..4243244129 100644
---- a/package/spice/spice.hash
-+++ b/package/spice/spice.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	1ead5de63d06eededed4017db37240f07bef0abffbaf621899647e7e685a1519	spice-0.14.1.tar.bz2
-+sha256	b203b3882e06f4c7249a3150d90c84e1a90490d41ead255a3d2cede46f4a29a7	spice-0.14.2.tar.bz2
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index b663479920..8c421abf2e 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
+diff --git a/package/spice-protocol/spice-protocol.hash b/package/spice-protocol/spice-protocol.hash
+index e72bb2d712..c23135141a 100644
+--- a/package/spice-protocol/spice-protocol.hash
++++ b/package/spice-protocol/spice-protocol.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	20350bc4309039fdf0d29ee4fd0033cde27bccf33501e13b3c1befafde9d0c9c	spice-protocol-0.12.14.tar.bz2
++sha256	b6a4aa1ca32668790b45a494bbd000e9d05797b391d5a5d4b91adf1118216eac	spice-protocol-0.14.0.tar.bz2
++
++# Hash for license file
++sha256	eb55ea746be694c449224c7ddce6340648b075fd377281712a19094e7fb7ef92	COPYING
+diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
+index 7392e9533d..f8c55c7b01 100644
+--- a/package/spice-protocol/spice-protocol.mk
++++ b/package/spice-protocol/spice-protocol.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SPICE_VERSION = 0.14.1
-+SPICE_VERSION = 0.14.2
- SPICE_SOURCE = spice-$(SPICE_VERSION).tar.bz2
- SPICE_SITE = http://www.spice-space.org/download/releases/spice-server
- SPICE_LICENSE = LGPL-2.1+
+-SPICE_PROTOCOL_VERSION = 0.12.14
++SPICE_PROTOCOL_VERSION = 0.14.0
+ SPICE_PROTOCOL_SOURCE = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
+ SPICE_PROTOCOL_SITE = http://www.spice-space.org/download/releases
+ SPICE_PROTOCOL_LICENSE = BSD-3-Clause
