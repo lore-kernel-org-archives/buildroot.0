@@ -1,47 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Nov 2019 21:39:46 +0100
-Subject: [Buildroot] [git commit] package/whois: bump to version 5.5.3
-Message-ID: <20191202083934.9270B7F88E@busybox.osuosl.org>
+Date: Sat, 23 Nov 2019 21:38:57 +0100
+Subject: [Buildroot] [git commit] package/libidn2: bump to version 2.3.0
+Message-ID: <20191202083934.7C060812D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=293bed3977d65cf0cf3dbd68c4953e86b7e6149b
+commit: https://git.buildroot.net/buildroot/commit/?id=a25e67fe87644dfc6d25030dca152b7eb0f9c546
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/whois/whois.hash | 4 ++--
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libidn2/libidn2.hash | 2 +-
+ package/libidn2/libidn2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index ca4c81b3f5..77d30b2cd0 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
+diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
+index 3dae7f7590..2d2fcdfd15 100644
+--- a/package/libidn2/libidn2.hash
++++ b/package/libidn2/libidn2.hash
 @@ -1,5 +1,5 @@
--# From http://snapshot.debian.org/archive/debian/20190719T170739Z/pool/main/w/whois/whois_5.5.0.dsc
--sha256	64ec63339d7ad559cd6722bd3141a1e5787817bd921841a813ee17a0a34b6f3d	whois_5.5.0.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20191118T030126Z/pool/main/w/whois/whois_5.5.3.dsc
-+sha256	55c33f9c2a01c0cf1d6449ece63b0c26ef45aab63cf5f01c18459df0e341ab46	whois_5.5.3.tar.xz
+ # Calculated locally after checking signature
+-sha256	fc734732b506d878753ec6606982bf7b936e868c25c30ddb0d83f7d7056381fe	libidn2-2.2.0.tar.gz
++sha256	e1cb1db3d2e249a6a3eb6f0946777c2e892d5c5dc7bd91c74394fc3a01cab8b5	libidn2-2.3.0.tar.gz
  
- # Hash for license file:
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index 7d36ddc76c..1517d1e630 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
+ # Hash for license files:
+ sha256	73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76	COPYING
+diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
+index 5e05634942..3f87b9bb8c 100644
+--- a/package/libidn2/libidn2.mk
++++ b/package/libidn2/libidn2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WHOIS_VERSION = 5.5.0
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20190719T170739Z/pool/main/w/whois
-+WHOIS_VERSION = 5.5.3
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20191118T030126Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- WHOIS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
+-LIBIDN2_VERSION = 2.2.0
++LIBIDN2_VERSION = 2.3.0
+ LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
+ LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
