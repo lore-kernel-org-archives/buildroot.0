@@ -1,53 +1,142 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sat, 23 Nov 2019 21:01:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to version 5.0.7
-Message-ID: <20191123200142.29254-1-titouan.christophe@railnova.eu>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat, 23 Nov 2019 12:20:31 -0800
+Subject: [Buildroot] [PATCH v2 0/3] uwsgi: new package
+Message-ID: <20191123202034.1397950-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes announced upstream:
+From: Adam Duskett <Aduskett@gmail.com>
 
-Upgrade urgency HIGH: many issues fixed, some may have an impact.
-Redis 5.0.7 fixes a number of bugs, none is very critical, however
-there are a few that may have an impact. It's a good idea to upgrade.
-There are fixes in the area of replication from modules commands and
-callbacks, AOF fsync (non critical issue), memory leaks (very rare and small),
-streams beahvior (non critical), and a potential crash in commands
-processing multiple keys at the same time that is there for years, and happens
-very rarely, but is not impossible to trigger.
+This patch series is reasonably substantial. Below I have documented my thoughts.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The uWSGI project aims at developing a full stack for building hosting services.
+Application servers (for various programming languages and protocols), proxies,
+process managers and monitors are all implemented using a common API and a
+standard configuration style.Thanks to its pluggable architecture, it can be
+extended to support more platforms and languages.
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index aca1109d30..ac68e62814 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256 6624841267e142c5d5d5be292d705f8fb6070677687c5aad1645421a936d22b3  redis-5.0.6.tar.gz
-+sha256 61db74eabf6801f057fd24b590232f2f337d422280fd19486eca03be87d3a82b  redis-5.0.7.tar.gz
- 
- # Locally calculated
- sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 4ed90a749e..1729afe165 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 5.0.6
-+REDIS_VERSION = 5.0.7
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+The first patch set's the package directly as a python package because the main
+application is hard-coded to Python (This is the most common use case as far as
+I can tell.)
+
+The second patch allows a user to force building the libphp7.so file from PHP.
+This is necessary to enable PHP as the main application for uWSGI.
+
+The third and final patch changes the package to a dual-type. The first being
+generic if the application type isn't Python and the second as a python-type
+package. This change saves a substantial amount of space and build time if the
+user isn't using uWSGI as a Python server.
+
+The package itself requires Python to configure, build, and install, but it is
+not required to run, as such, this package is defined as a generic-package.
+Defining uWSGI as a generic package saves 29M of space with a Glibc target
+filing system (52M vs. 23M.) If however, the primary application type is Python,
+then the package is better suited to be a python-package because there is no
+longer any space saved, as Python is now on the target and staging directories.
+
+There are five patches currently required to properly cross-compile uWSGI,
+all but one of which are pending upstream:
+  1) add-plugin_base_dir-variable.patch
+    - uWSGI appends the full path of the plugin directory to the binary when
+      compiling, which results in plugins failing to load on the target filing
+      system.
+
+  2) add-a-xml2_config-environment-variable-for-cross-co.patch
+    - uWSGI calls out to xml2-config with no way to define a path for
+      xml2-config, thus resulting in the hosts xml2-config cflags and library
+      paths used, add the XML2_CONFIG environment variable which overwrites the
+      default xml2-config path.
+
+  3) add-a-pcre_config-environment-variable-for-cross-co.patch
+    - This patch is the same as the above, except the variable name is
+      PCRE_CONFIG.
+
+  4) adjust-python-library-header-paths-for-cross-compila.patch
+    - uWSGI calls sysconfig.get_config_var('LIBDIR') which return the host
+      header and library paths. To fix this, prefix the LIBDIR path with
+      _python_sysroot taken from the sysconfigdata module.
+
+  5) fix-building-with-uClibc.patch
+    - There are two issues building uwsgi with uClibc:
+      1) core/uwsgi.c includes <execinfo.h> when __GLIBC__  is defined,
+         but does not check if __UCLIBC__ is also defined.
+      2) plugins/router_basicauth/router_basicauth.c checks if
+         __GLIBC__ is defined for <crypt.h> and to enable a
+         workaround for a bug in Glibc-2.2.5, both of which do not apply to
+         uClibc. Adding a check for __UCLIBC__ for both of these conditions
+         fixes the issue.
+
+While PCRE is not technically required, the official documentation recommends
+always building with PCRE support, and many of the embedded plugins require
+PCRE to be present. As such, PCRE is a dependency.
+https://uwsgi-docs.readthedocs.io/en/latest/SNI.html?highlight=sni-regexp
+
+The "Main application type" prompt in the Config.in is to set the main_plugin
+variable in the buildroot.ini file. The main application plugin sets several
+dependencies, and this patchset includes support for PHP and Python.
+Other application types can be added in the future.
+
+There is a "buildroot.ini.in" file which is used to overwrite the default
+settings in buildconf/base.ini. The following settings that explicitly set:
+  - json: Allow a config file to be in JSON format
+  - pcre: Set to True
+  - ssl: Allow SSL connections
+  - xml: Allow a config file to be in XML format.
+  - yaml: Allow a config file to be in YAML format.
+  - main_plugin: The main plugin application type.
+  - plugin_dir: The plugin directory for the target.
+
+The .ini file does not have a standard value for each option; because of this,
+each option is a key/value pair with a colon set as a delimiter. A for loop
+set's each setting appropriately by splitting the key/value into two variables
+and running SED against the .ini file.
+
+Tested with every option enabled, with both PHP and Python set as the main application type:
+br-arm-full [1/6]: OK
+br-arm-cortex-a9-glibc [2/6]: OK
+br-arm-cortex-m4-full [3/6]: SKIPPED
+br-x86-64-musl [4/6]: OK
+br-arm-full-static [5/6]: SKIPPED
+sourcery-arm [6/6]: OK
+
+Changed v1 -> v2:
+  - Change 0005-fix-building-with-uClibc.patch upstream status to merged.
+  - For the first patch, keep the uwsgi package as a generic package.
+  - For the last patch, I no longer set the package as either python or generic,
+    instead, it's always a generic package. This makes the package file much
+    easier to read and maintain.
+
+Adam Duskett (3):
+  uwsgi: new package
+  package/php: add option to force building the shared library
+  package/uwsgi: add support for application types
+
+ DEVELOPERS                                    |   1 +
+ package/Config.in                             |   1 +
+ package/php/Config.in                         |   9 ++
+ package/php/php.mk                            |   4 +
+ .../0001-add-plugin_base_dir-variable.patch   |  47 ++++++++
+ ...ig-environment-variable-for-cross-co.patch |  60 ++++++++++
+ ...ig-environment-variable-for-cross-co.patch |  58 +++++++++
+ ...brary-header-paths-for-cross-compila.patch |  34 ++++++
+ .../uwsgi/0005-fix-building-with-uClibc.patch |  61 ++++++++++
+ package/uwsgi/Config.in                       |  94 +++++++++++++++
+ package/uwsgi/buildroot.ini.in                |   9 ++
+ package/uwsgi/uwsgi.hash                      |   3 +
+ package/uwsgi/uwsgi.mk                        | 110 ++++++++++++++++++
+ 13 files changed, 491 insertions(+)
+ create mode 100644 package/uwsgi/0001-add-plugin_base_dir-variable.patch
+ create mode 100644 package/uwsgi/0002-add-a-xml2_config-environment-variable-for-cross-co.patch
+ create mode 100644 package/uwsgi/0003-add-a-pcre_config-environment-variable-for-cross-co.patch
+ create mode 100644 package/uwsgi/0004-adjust-python-library-header-paths-for-cross-compila.patch
+ create mode 100644 package/uwsgi/0005-fix-building-with-uClibc.patch
+ create mode 100644 package/uwsgi/Config.in
+ create mode 100644 package/uwsgi/buildroot.ini.in
+ create mode 100644 package/uwsgi/uwsgi.hash
+ create mode 100644 package/uwsgi/uwsgi.mk
+
 -- 
-2.21.0
+2.23.0
