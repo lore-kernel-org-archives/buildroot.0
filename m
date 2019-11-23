@@ -1,76 +1,96 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 Nov 2019 10:44:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/waylandpp: fix build with cmake
- < 3.13
-In-Reply-To: <20191122180957.618327-1-fontaine.fabrice@gmail.com>
-References: <20191122180957.618327-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191123094437.GP32494@scaer>
+Date: Sat, 23 Nov 2019 11:30:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ntp: remove host shell check
+In-Reply-To: <0102016e898693a5-82db32f2-a59d-42c1-996b-97661b367c25-000000@eu-west-1.amazonses.com>
+References: <0102016e898693a5-82db32f2-a59d-42c1-996b-97661b367c25-000000@eu-west-1.amazonses.com>
+Message-ID: <20191123103011.GQ32494@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+James, All,
 
-On 2019-11-22 19:09 +0100, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/587fb44ea2272bd134262716870f5ad36a18661d
+On 2019-11-20 15:55 +0000, James Byrne spake thusly:
+> This adds a patch which removes the autoconf check for which shell is
+> installed on the host and fixes the shell as '/bin/sh'. Since we are
+> cross-compiling, we cannot assume that the target uses the same shell.
+> Also, it can prevent builds being reproducible because a different host
+> environment will result in a different target binary.
+> 
+> Signed-off-by: James Byrne <james.byrne@origamienergy.com>
+> ---
+>  package/ntp/0003-force-sh.patch | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 package/ntp/0003-force-sh.patch
+> 
+> diff --git a/package/ntp/0003-force-sh.patch b/package/ntp/0003-force-sh.patch
+> new file mode 100644
+> index 0000000000..4c2628e04a
+> --- /dev/null
+> +++ b/package/ntp/0003-force-sh.patch
+> @@ -0,0 +1,30 @@
+> +We're cross compiling, don't use the presence of shells on the host to decide
+> +anything about the target...
+> +
+> +diff --git a/sntp/libopts/m4/libopts.m4 b/sntp/libopts/m4/libopts.m4
+> +--- a/sntp/libopts/m4/libopts.m4
+> ++++ b/sntp/libopts/m4/libopts.m4
+> +@@ -112,22 +112,7 @@
+> +   AC_CHECK_FUNCS([mmap canonicalize_file_name snprintf strdup strchr \
+> +                  strrchr strsignal fchmod fstat chmod])
+> +   AC_PROG_SED
+> +-  [while :
+> +-  do
+> +-      POSIX_SHELL=`which bash`
+> +-      test -x "$POSIX_SHELL" && break
+> +-      POSIX_SHELL=`which dash`
+> +-      test -x "$POSIX_SHELL" && break
+> +-      POSIX_SHELL=/usr/xpg4/bin/sh
+> +-      test -x "$POSIX_SHELL" && break
+> +-      POSIX_SHELL=`/bin/sh -c '
+> +-          exec 2>/dev/null
+> +-          if ! true ; then exit 1 ; fi
+> +-          echo /bin/sh'`
+> +-      test -x "$POSIX_SHELL" && break
+> +-      ]AC_MSG_ERROR([cannot locate a working POSIX shell])[
+> +-  done]
+> +-  AC_DEFINE_UNQUOTED([POSIX_SHELL], ["${POSIX_SHELL}"],
+> ++  AC_DEFINE_UNQUOTED([POSIX_SHELL], ["/bin/sh"],
 
-Applied to master, thanks.
+This is not nice, as this patch can't be upstreamed, and we'll have tio
+live with it for the eons to come.
+
+What about using AC_CACHE_CHECK [0] to do the check, which can be
+overriden on the command line. For example:
+
+    [
+    AC_CACHE_CHECK([for a posix-compliant shell], [ntp_ac_cv_posix_shell],
+    [while :
+    do
+        blablabla
+    done
+    ])
+    AC_DEFINE_UNQUOTED([POSIX_SHELL], ["${ntp_ac_cv_posix_shell}"],
+      [define to a working POSIX compliant shell])
+    ]
+
+And then in ntp.mk we could do (in addition to the existing one, of
+course):
+
+    NTP_CONF_ENV = ntp_ac_cv_posix_shell=/bin/sh
+
+And such a patch will probably be more acceptable for upstream.
+
+[0] https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.69/autoconf.html#Caching-Results
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ke-Make-target_link_options-optional.patch | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/waylandpp/0001-cmake-Make-target_link_options-optional.patch
-> 
-> diff --git a/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch b/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch
-> new file mode 100644
-> index 0000000000..a7746c1f36
-> --- /dev/null
-> +++ b/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch
-> @@ -0,0 +1,37 @@
-> +From a39c0c115e19150551c01b04a5e903376633e771 Mon Sep 17 00:00:00 2001
-> +From: Nils Christopher Brause <nilschrbrause@googlemail.com>
-> +Date: Fri, 22 Nov 2019 17:39:20 +0100
-> +Subject: [PATCH] [cmake] Make target_link_options optional, lowering the
-> + required cmake version to 3.4.
-> +
-> +[Retrieved from:
-> +https://github.com/NilsBrause/waylandpp/commit/a39c0c115e19150551c01b04a5e903376633e771]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + CMakeLists.txt | 6 ++++--
-> + 1 file changed, 4 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index 386f8d8..47a412c 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -21,7 +21,7 @@
-> + # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-> + # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-> + 
-> +-cmake_minimum_required(VERSION 3.13)
-> ++cmake_minimum_required(VERSION 3.4)
-> + project(waylandpp VERSION 0.2.7 LANGUAGES CXX)
-> + 
-> + # packages
-> +@@ -160,7 +160,9 @@ if(BUILD_LIBRARIES)
-> +     "include/wayland-client.hpp;include/wayland-util.hpp;${CMAKE_CURRENT_BINARY_DIR}/wayland-client-protocol.hpp;${CMAKE_CURRENT_BINARY_DIR}/wayland-version.hpp"
-> +     src/wayland-client.cpp src/wayland-util.cpp wayland-client-protocol.cpp wayland-client-protocol.hpp)
-> +   # Report undefined references only for the base library.
-> +-  target_link_options(wayland-client++ PRIVATE "-Wl,--no-undefined")
-> ++  if(${CMAKE_VERSION} VERSION_GREATER "3.14.0")
-> ++    target_link_options(wayland-client++ PRIVATE "-Wl,--no-undefined")
-> ++  endif()
-> +   define_library(wayland-client-extra++ "${WAYLAND_CLIENT_CFLAGS}" "${WAYLAND_CLIENT_LIBRARIES}"
-> +     "${CMAKE_CURRENT_BINARY_DIR}/wayland-client-protocol-extra.hpp"
-> +     wayland-client-protocol-extra.cpp wayland-client-protocol-extra.hpp wayland-client-protocol.hpp)
+> +            [define to a working POSIX compliant shell])
+> +   AC_SUBST([POSIX_SHELL])
+> + ])
 > -- 
 > 2.24.0
 > 
