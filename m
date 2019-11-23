@@ -1,55 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Nov 2019 09:41:15 +0100
-Subject: [Buildroot] [git commit] package/postgresql: bump version to 12.1
-Message-ID: <20191123083358.DB6568F397@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 23 Nov 2019 10:43:30 +0100
+Subject: [Buildroot] [git commit] package/waylandpp: fix build with cmake <
+ 3.13
+Message-ID: <20191123093613.166358F3C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c870ce547884ba519c5c69d652f48b33f8fa202c
+commit: https://git.buildroot.net/buildroot/commit/?id=40eccec53317ae8f076f39a976c9685e62f839ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes of the bugfix release:
-https://www.postgresql.org/about/news/1994/
-https://www.postgresql.org/docs/current/release-12-1.html
+Fixes:
+ - http://autobuild.buildroot.org/results/587fb44ea2272bd134262716870f5ad36a18661d
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7a709f77c8099af97ed532ff4bd8c0cfdc26df09)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/postgresql/postgresql.hash | 8 ++++----
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...1-cmake-Make-target_link_options-optional.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 3230818fac..5acdc957f2 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,7 +1,7 @@
--# From https://ftp.postgresql.org/pub/source/v12.0/postgresql-12.0.tar.bz2.md5
--md5 87545416ef021eee8621d31a93fcc899  postgresql-12.0.tar.bz2
--# From https://ftp.postgresql.org/pub/source/v12.0/postgresql-12.0.tar.bz2.sha256
--sha256 cda2397215f758b793f741c86be05468257b0e6bcb1a6113882ab5d0df0855c6  postgresql-12.0.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v12.1/postgresql-12.1.tar.bz2.md5
-+md5 2ee1bd4ec5f49363a3f456f07e599b41  postgresql-12.1.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v12.1/postgresql-12.1.tar.bz2.sha256
-+sha256 a09bf3abbaf6763980d0f8acbb943b7629a8b20073de18d867aecdb7988483ed  postgresql-12.1.tar.bz2
- 
- # License file, Locally calculated
- sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 58f829ee00..858cd6975e 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 12.0
-+POSTGRESQL_VERSION = 12.1
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+diff --git a/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch b/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch
+new file mode 100644
+index 0000000000..a7746c1f36
+--- /dev/null
++++ b/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch
+@@ -0,0 +1,37 @@
++From a39c0c115e19150551c01b04a5e903376633e771 Mon Sep 17 00:00:00 2001
++From: Nils Christopher Brause <nilschrbrause@googlemail.com>
++Date: Fri, 22 Nov 2019 17:39:20 +0100
++Subject: [PATCH] [cmake] Make target_link_options optional, lowering the
++ required cmake version to 3.4.
++
++[Retrieved from:
++https://github.com/NilsBrause/waylandpp/commit/a39c0c115e19150551c01b04a5e903376633e771]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ CMakeLists.txt | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 386f8d8..47a412c 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -21,7 +21,7 @@
++ # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ 
++-cmake_minimum_required(VERSION 3.13)
+++cmake_minimum_required(VERSION 3.4)
++ project(waylandpp VERSION 0.2.7 LANGUAGES CXX)
++ 
++ # packages
++@@ -160,7 +160,9 @@ if(BUILD_LIBRARIES)
++     "include/wayland-client.hpp;include/wayland-util.hpp;${CMAKE_CURRENT_BINARY_DIR}/wayland-client-protocol.hpp;${CMAKE_CURRENT_BINARY_DIR}/wayland-version.hpp"
++     src/wayland-client.cpp src/wayland-util.cpp wayland-client-protocol.cpp wayland-client-protocol.hpp)
++   # Report undefined references only for the base library.
++-  target_link_options(wayland-client++ PRIVATE "-Wl,--no-undefined")
+++  if(${CMAKE_VERSION} VERSION_GREATER "3.14.0")
+++    target_link_options(wayland-client++ PRIVATE "-Wl,--no-undefined")
+++  endif()
++   define_library(wayland-client-extra++ "${WAYLAND_CLIENT_CFLAGS}" "${WAYLAND_CLIENT_LIBRARIES}"
++     "${CMAKE_CURRENT_BINARY_DIR}/wayland-client-protocol-extra.hpp"
++     wayland-client-protocol-extra.cpp wayland-client-protocol-extra.hpp wayland-client-protocol.hpp)
