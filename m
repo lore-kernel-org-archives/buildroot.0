@@ -1,48 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Nov 2019 21:37:51 +0100
-Subject: [Buildroot] [git commit branch/next] package/libffi: bump to
- version 3.3
-Message-ID: <20191123203328.11FCE8FAB7@busybox.osuosl.org>
+Date: Sat, 23 Nov 2019 21:37:44 +0100
+Subject: [Buildroot] [git commit branch/next] package/fatcat: bump version
+ to 1.1.0
+Message-ID: <20191123203328.089658FAB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fd660c2f41670cad8b270f56861f6e6190dd6c7
+commit: https://git.buildroot.net/buildroot/commit/?id=8e5c2ec556a909d3996717c97b2752abfa529322
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update hash for license file (update in year:
-https://github.com/libffi/libffi/commit/058aa4130445b4ef3c2f77f796c33506873031ca)
+The tag now has a 'v' prefix, so handle that in the github macro.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libffi/libffi.hash | 4 ++--
- package/libffi/libffi.mk   | 2 +-
+ package/fatcat/fatcat.hash | 2 +-
+ package/fatcat/fatcat.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libffi/libffi.hash b/package/libffi/libffi.hash
-index d8d2d2629a..496ae0d904 100644
---- a/package/libffi/libffi.hash
-+++ b/package/libffi/libffi.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256	db41cfb9ec8052fcd116a94c12237303c4447af4844d50e4fea7163661e31743  libffi-3.3-rc0.tar.gz
-+sha256	3f2f86094f5cf4c36cfe850d2fe029d01f5c2c2296619407c8ba0d8207da9a6b  libffi-3.3.tar.gz
- # License files, locally calculated
--sha256	0f4d7a0bfb83c37465d42dc305f124189196cc0cc2cc8d6f8461103682aebbc5  LICENSE
-+sha256	deaf3a42effb551a5b140fa9afefed183a27f1341c6d1bf430d106a5e6931fc0  LICENSE
-diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-index fb8e18a456..722a03dca0 100644
---- a/package/libffi/libffi.mk
-+++ b/package/libffi/libffi.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/fatcat/fatcat.hash b/package/fatcat/fatcat.hash
+index a5a6f670ad..66823e2d9e 100644
+--- a/package/fatcat/fatcat.hash
++++ b/package/fatcat/fatcat.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 d44f6bb80d20ed50095ace9e71df8da98037db9f22cda76bdd9724d37df69130  fatcat-1.0.6.tar.gz
++sha256 303efe2aa73cbfe6fbc5d8af346d0f2c70b3f996fc891e8859213a58b95ad88c  fatcat-1.1.0.tar.gz
+ sha256 3ea03755e32cf7f5b12981de92a0fdad396448195fe0024990c9cbc388e9866c  LICENSE
+diff --git a/package/fatcat/fatcat.mk b/package/fatcat/fatcat.mk
+index e4f8d757b6..1a2e5aacae 100644
+--- a/package/fatcat/fatcat.mk
++++ b/package/fatcat/fatcat.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBFFI_VERSION = 3.3-rc0
-+LIBFFI_VERSION = 3.3
- LIBFFI_SITE = $(call github,libffi,libffi,v$(LIBFFI_VERSION))
- LIBFFI_LICENSE = MIT
- LIBFFI_LICENSE_FILES = LICENSE
+-FATCAT_VERSION = 1.0.6
+-FATCAT_SITE = $(call github,Gregwar,fatcat,$(FATCAT_VERSION))
++FATCAT_VERSION = 1.1.0
++FATCAT_SITE = $(call github,Gregwar,fatcat,v$(FATCAT_VERSION))
+ FATCAT_LICENSE = MIT
+ FATCAT_LICENSE_FILES = LICENSE
+ 
