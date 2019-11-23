@@ -1,45 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 24 Nov 2019 00:05:28 +0100
-Subject: [Buildroot] [PATCH/next v2,1/1] package/tftpd: add license
-Message-ID: <20191123230528.968209-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 24 Nov 2019 00:18:48 +0100
+Subject: [Buildroot] [PATCH-NEXT] configs/orangepi_r1: bump kernel and
+ u-boot versions
+Message-ID: <20191123231848.13535-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Bump Linux to 5.3.12 and U-Boot to 2019.10.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Set license to BSD-4-Clause as specified in tftpd.c instead of
-   BSD-like
+ configs/orangepi_r1_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- package/tftpd/tftpd.hash | 3 +++
- package/tftpd/tftpd.mk   | 2 ++
- 2 files changed, 5 insertions(+)
-
-diff --git a/package/tftpd/tftpd.hash b/package/tftpd/tftpd.hash
-index 247b757fa6..c876b2edc2 100644
---- a/package/tftpd/tftpd.hash
-+++ b/package/tftpd/tftpd.hash
-@@ -1,2 +1,5 @@
- # From https://www.kernel.org/pub/software/network/tftp/tftp-hpa/sha256sums.asc
- sha256	afee361df96a2f88344e191f6a25480fd714e1d28d176c3f10cc43fa206b718b	tftp-hpa-5.2.tar.xz
-+
-+# Hash for license file
-+sha256	5efef82650b8ece733e37790fc70f05e426c9e1ef9640d4ebcb04867bd3f5e28	tftpd/tftpd.c
-diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index c42456afd1..57905fda05 100644
---- a/package/tftpd/tftpd.mk
-+++ b/package/tftpd/tftpd.mk
-@@ -8,6 +8,8 @@ TFTPD_VERSION = 5.2
- TFTPD_SOURCE = tftp-hpa-$(TFTPD_VERSION).tar.xz
- TFTPD_SITE = $(BR2_KERNEL_MIRROR)/software/network/tftp/tftp-hpa
- TFTPD_CONF_OPTS = --without-tcpwrappers
-+TFTPD_LICENSE = BSD-4-Clause
-+TFTPD_LICENSE_FILES = tftpd/tftpd.c
- 
- define TFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
+diff --git a/configs/orangepi_r1_defconfig b/configs/orangepi_r1_defconfig
+index 34a400e78c..b1d35f2998 100644
+--- a/configs/orangepi_r1_defconfig
++++ b/configs/orangepi_r1_defconfig
+@@ -1,13 +1,13 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_R1"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi R1"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.38"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.12"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-r1"
+@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_r1"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
-2.24.0
+2.20.1
