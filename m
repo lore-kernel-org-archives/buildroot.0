@@ -1,106 +1,86 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 Nov 2019 12:03:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/minicom: make default port and
- lock directory config options
-In-Reply-To: <0102016e8e961113-8b7cfd63-a693-49fd-93a3-70b7bb311860-000000@eu-west-1.amazonses.com>
-References: <0102016e8e961113-8b7cfd63-a693-49fd-93a3-70b7bb311860-000000@eu-west-1.amazonses.com>
-Message-ID: <20191123110346.GT32494@scaer>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sat, 23 Nov 2019 08:17:23 -0300
+Subject: [Buildroot] [git commit branch/next] glibc: install glibc utils
+ to target
+In-Reply-To: <20191123104533.B93648F470@busybox.osuosl.org>
+References: <20191123104533.B93648F470@busybox.osuosl.org>
+Message-ID: <CAJ4jsaf_Oi35Md=sKwP1u+OWf=a8J2wSeMJxA=NJejtsMONo5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
-
-On 2019-11-21 15:30 +0000, James Byrne spake thusly:
-> Minicom's configure script will set values for the default port and lock
-> directory based on the configuration of the host machine, which is not
-> useful for cross-compiling, so make them config options that can be set
-> to suit the target system.
-
-Thnks for this patch.
-
-However I wonder if it makes sense to have those configurable at all.
-
-The man page of minicom states, for the lock dir, that it default to
-/var/lock on Linux ("GNU/Linux systems use /var/lock"), so we should
-probably set that. The user can provide an override in a system-wide
-config file (in /etc/minicom/).
-
-Also, I think we should just set the default port (aka device in minicom
-terminology) do /dev/ttyS1, as written in the man page ("/dev/tty1 or
-/dev/ttyS1 for most people"). Ditto, users may override that with a
-system-wide config file.
-
-So...
-
-> Signed-off-by: James Byrne <james.byrne@origamienergy.com>
+On Sat, Nov 23, 2019 at 7:53 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> commit: https://git.buildroot.net/buildroot/commit/?id=c6cd512fe2e954b2ccc0412717c1c3380bc5f69b
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>
+> With this patch we introduce an option for glibc, which
+> installs getconf, ldconfig and ldd utilities on target, that
+> may be useful in debugging. By default these utilities are
+> built, but not installed to the target.
+> ldd is a bash script, so it has bash dependency.
+>
+> Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 > ---
->  package/minicom/Config.in  | 16 ++++++++++++++++
->  package/minicom/minicom.mk |  3 +++
->  2 files changed, 19 insertions(+)
-> 
-> diff --git a/package/minicom/Config.in b/package/minicom/Config.in
-> index efc4f1b709..cb25d5710e 100644
-> --- a/package/minicom/Config.in
-> +++ b/package/minicom/Config.in
-> @@ -14,3 +14,19 @@ config BR2_PACKAGE_MINICOM
->  comment "minicom needs a toolchain w/ wchar"
->  	depends on BR2_USE_MMU
->  	depends on !BR2_USE_WCHAR
+>  package/glibc/Config.in | 10 ++++++++++
+>  package/glibc/glibc.mk  |  7 +++++++
+>  2 files changed, 17 insertions(+)
+>
+> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+> index 7821251087..323767fc8a 100644
+> --- a/package/glibc/Config.in
+> +++ b/package/glibc/Config.in
+> @@ -8,3 +8,13 @@ config BR2_PACKAGE_GLIBC
+>         help
+>           https://www.gnu.org/software/libc/
+>  endif
 > +
-> +if BR2_PACKAGE_MINICOM
+> +config BR2_PACKAGE_GLIBC_UTILS
+> +       bool "Install glibc utilities"
+> +       depends on BR2_PACKAGE_BASH
+> +       help
+> +         Enabling this option will compile and install the getconf,
+> +         ldconfig and ldd glibc utilities for the target.
 > +
-> +config BR2_PACKAGE_MINICOM_DFL_PORT
-> +	string "Default port"
-> +	default "/dev/ttyS1"
-> +	help
-> +	  This option defines Minicom's default modem device.
-> +
-> +config BR2_PACKAGE_MINICOM_LOCK_DIR
-> +	string "Lock directory"
-> +	default "/var/lock"
-> +	help
-> +	  This option defines the com line lock directory.
-> +
+> +comment "glibc utilities need bash"
+> +       depends on !BR2_PACKAGE_BASH
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index c6acc43ff5..5cb19aabb9 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -143,10 +143,17 @@ ifeq ($(BR2_PACKAGE_GDB),y)
+>  GLIBC_LIBS_LIB += libthread_db.so.*
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_GLIBC_UTILS),y)
+> +GLIBC_TARGET_UTILS_BIN = posix/getconf elf/ldconfig elf/ldd
 > +endif
+> +
+>  define GLIBC_INSTALL_TARGET_CMDS
+>         for libpattern in $(GLIBC_LIBS_LIB); do \
+>                 $(call copy_toolchain_lib_root,$$libpattern) ; \
+>         done
+> +       $(foreach util,$(GLIBC_TARGET_UTILS_BIN), \
+> +               $(INSTALL) -D -m 0755 $(@D)/build/$(util) $(TARGET_DIR)/bin/$(notdir $(util))
 
-... I would remove those options, and...
+The usual path of these utilities on non-merged-usr systems (e.g. RHEL-6) is:
 
-> diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-> index 11d69d4d0e..7892b1f669 100644
-> --- a/package/minicom/minicom.mk
-> +++ b/package/minicom/minicom.mk
-> @@ -22,4 +22,7 @@ define MINICOM_MKDIR_M4
+     [root at rhel-6-1 ~]# which getconf ldconfig ldd
+    /usr/bin/getconf
+    /sbin/ldconfig
+    /usr/bin/ldd
+
+> +       )
 >  endef
->  MINICOM_POST_PATCH_HOOKS += MINICOM_MKDIR_M4
->  
-> +MINICOM_CONF_OPTS = --enable-dfl-port=$(BR2_PACKAGE_MINICOM_DFL_PORT) \
-> +	--enable-lock-dir=$(BR2_PACKAGE_MINICOM_LOCK_DIR)
-
-... just use the sane values here:
-
-    MINICOM_CONF_OPTS = \
-        --enable-dfl-port=/dev/ttyS1 \
-        --enable-lock-dir=/var/lock
-
-Regards,
-Yann E. MORIN.
-
+>
 >  $(eval $(autotools-package))
-> -- 
-> 2.24.0
-> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Carlos Santos <unixmania@gmail.com>
