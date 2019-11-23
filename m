@@ -1,55 +1,122 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Nov 2019 22:54:10 +0100
-Subject: [Buildroot] [git commit] boot/barebox: bump version to 2019.11.0
-Message-ID: <20191202083935.074C37FEF3@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 23 Nov 2019 22:19:34 +0100
+Subject: [Buildroot] [git commit] package/cpuburn-arm: new package
+Message-ID: <20191202083934.A4CDB7FAE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59fdcd7180ba0e752527e49b6aa316980e3d5847
+commit: https://git.buildroot.net/buildroot/commit/?id=ecaede1d8250d437170fe2626e89ba27e6e3df01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+cpuburn-arm burns CPU cycles to generate as much heat as possible.
+Useful for stress testing.
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 4512aa1852..b3344ce699 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2019.09.0"
-+	bool "2019.11.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2019.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2019.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 9bdcfb3284..1797358833 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# From https://www.barebox.org/download/barebox-2019.09.0.tar.bz2.md5
--md5 08fa404904cc95d8d0d34d4142351d09 barebox-2019.09.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2019.11.0.tar.bz2.md5
-+md5 45bf108b22de94a73dfe5c024c873486 barebox-2019.11.0.tar.bz2
- 
- # Locally calculated
--sha256 beab6bdba2466bece57d23834daf4f0d530a594efc11ca0ddb69372981e6e159 barebox-2019.09.0.tar.bz2
-+sha256 607165b96d98fcc114fbd07e4001e7b527739a543e7adbe019854fbd8c78777f barebox-2019.11.0.tar.bz2
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[yann.morin.1998 at free.fr:
+  - fix title  (Thomas)
+  - simplify and rename _ARCH_SUPPORTS  (Thomas)
+]
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/cpuburn-arm/Config.in        | 15 +++++++++++++++
+ package/cpuburn-arm/cpuburn-arm.hash |  3 +++
+ package/cpuburn-arm/cpuburn-arm.mk   | 31 +++++++++++++++++++++++++++++++
+ 5 files changed, 51 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 22a66c1c0e..a1c27a2ac6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -276,6 +276,7 @@ N:	Baruch Siach <baruch@tkos.co.il>
+ F:	board/solidrun/clearfog_gt_8k/
+ F:	configs/solidrun_clearfog_gt_8k_defconfig
+ F:	package/18xx-ti-utils/
++F:	package/cpuburn-arm/
+ F:	package/daemon/
+ F:	package/dropbear/
+ F:	package/ebtables/
+diff --git a/package/Config.in b/package/Config.in
+index c2b48a6cbe..9210ec0ac8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -418,6 +418,7 @@ endmenu
+ 	source "package/cbootimage/Config.in"
+ 	source "package/cc-tool/Config.in"
+ 	source "package/cdrkit/Config.in"
++	source "package/cpuburn-arm/Config.in"
+ 	source "package/cryptsetup/Config.in"
+ 	source "package/cwiid/Config.in"
+ 	source "package/dahdi-linux/Config.in"
+diff --git a/package/cpuburn-arm/Config.in b/package/cpuburn-arm/Config.in
+new file mode 100644
+index 0000000000..141904791d
+--- /dev/null
++++ b/package/cpuburn-arm/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_CPUBURN_ARM_ARCH_SUPPORTS
++	bool
++	default y if BR2_cortex_a7
++	default y if BR2_cortex_a8
++	default y if BR2_cortex_a9
++	default y if BR2_cortex_a53
++
++config BR2_PACKAGE_CPUBURN_ARM
++	bool "cpuburn-arm"
++	depends on BR2_PACKAGE_CPUBURN_ARM_ARCH_SUPPORTS
++	help
++	  Make ARM cores generate as much heat as possible. Supports
++	  Cortex A7/A8/A9/A53.
++
++	  https://github.com/ssvb/cpuburn-arm
+diff --git a/package/cpuburn-arm/cpuburn-arm.hash b/package/cpuburn-arm/cpuburn-arm.hash
+new file mode 100644
+index 0000000000..55f34f87f8
+--- /dev/null
++++ b/package/cpuburn-arm/cpuburn-arm.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 354381ec8c352e6c84875ac034004df44b0ed0ac097c400b8d2e47652815c3a2  cpuburn-arm-ad7e646700d14b81413297bda02fb7fe96613c3f.tar.gz
++sha256 47f10095a04d16c8d8d52598371fa01b6a6e87134083b9ec3c43d83ff8576f55  cpuburn-a7.S
+diff --git a/package/cpuburn-arm/cpuburn-arm.mk b/package/cpuburn-arm/cpuburn-arm.mk
+new file mode 100644
+index 0000000000..649ffd224b
+--- /dev/null
++++ b/package/cpuburn-arm/cpuburn-arm.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# cpuburn-arm
++#
++################################################################################
++
++CPUBURN_ARM_VERSION = ad7e646700d14b81413297bda02fb7fe96613c3f
++CPUBURN_ARM_SITE = $(call github,ssvb,cpuburn-arm,$(CPUBURN_ARM_VERSION))
++CPUBURN_ARM_LICENSE = MIT
++CPUBURN_ARM_LICENSE_FILES = cpuburn-a7.S
++
++ifeq ($(BR2_cortex_a7),y)
++CPUBURN_ARM_SRC = cpuburn-a7.S
++else ifeq ($(BR2_cortex_a8),y)
++CPUBURN_ARM_SRC = cpuburn-a8.S
++else ifeq ($(BR2_cortex_a9),y)
++CPUBURN_ARM_SRC = cpuburn-a9.S
++else ifeq ($(BR2_cortex_a53),y)
++CPUBURN_ARM_SRC = cpuburn-a53.S
++endif
++
++define CPUBURN_ARM_BUILD_CMDS
++	$(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/cpuburn \
++		$(@D)/$(CPUBURN_ARM_SRC)
++endef
++
++define CPUBURN_ARM_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/cpuburn $(TARGET_DIR)/usr/bin/cpuburn
++endef
++
++$(eval $(generic-package))
