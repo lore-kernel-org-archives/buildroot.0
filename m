@@ -1,103 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Nov 2019 17:30:48 +0100
-Subject: [Buildroot] [git commit] package/umtprd: new package
-Message-ID: <20191202083933.CB69180DED@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 23 Nov 2019 21:37:44 +0100
+Subject: [Buildroot] [git commit] package/fatcat: bump version to 1.1.0
+Message-ID: <20191202083934.627F47FAE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=441599614e644361ef837569088bf48a61365c7b
+commit: https://git.buildroot.net/buildroot/commit/?id=8e5c2ec556a909d3996717c97b2752abfa529322
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uMTP-Responder is a lightweight USB Media Transfer Protocol (MTP)
-responder daemon for GNU/Linux.
+The tag now has a 'v' prefix, so handle that in the github macro.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-[Thomas: license is GPL-3.0+]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/umtprd/Config.in   | 11 +++++++++++
- package/umtprd/umtprd.hash |  3 +++
- package/umtprd/umtprd.mk   | 20 ++++++++++++++++++++
- 5 files changed, 36 insertions(+)
+ package/fatcat/fatcat.hash | 2 +-
+ package/fatcat/fatcat.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 054f83ce5e..b1a20eaebe 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1807,6 +1807,7 @@ F:	package/yavta/
- N:	Paul Cercueil <paul@crapouillou.net>
- F:	package/libiio/
- F:	package/lightning/
-+F:	package/umtprd/
+diff --git a/package/fatcat/fatcat.hash b/package/fatcat/fatcat.hash
+index a5a6f670ad..66823e2d9e 100644
+--- a/package/fatcat/fatcat.hash
++++ b/package/fatcat/fatcat.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 d44f6bb80d20ed50095ace9e71df8da98037db9f22cda76bdd9724d37df69130  fatcat-1.0.6.tar.gz
++sha256 303efe2aa73cbfe6fbc5d8af346d0f2c70b3f996fc891e8859213a58b95ad88c  fatcat-1.1.0.tar.gz
+ sha256 3ea03755e32cf7f5b12981de92a0fdad396448195fe0024990c9cbc388e9866c  LICENSE
+diff --git a/package/fatcat/fatcat.mk b/package/fatcat/fatcat.mk
+index e4f8d757b6..1a2e5aacae 100644
+--- a/package/fatcat/fatcat.mk
++++ b/package/fatcat/fatcat.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- N:	Pedro Aguilar <paguilar@paguilar.org>
- F:	package/libunistring/
-diff --git a/package/Config.in b/package/Config.in
-index fd30562ea5..48c5bcec39 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -551,6 +551,7 @@ endmenu
- 	source "package/udev/Config.in"
- 	source "package/udisks/Config.in"
- 	source "package/uhubctl/Config.in"
-+	source "package/umtprd/Config.in"
- 	source "package/upower/Config.in"
- 	source "package/usb_modeswitch/Config.in"
- 	source "package/usb_modeswitch_data/Config.in"
-diff --git a/package/umtprd/Config.in b/package/umtprd/Config.in
-new file mode 100644
-index 0000000000..24bf119549
---- /dev/null
-+++ b/package/umtprd/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_UMTPRD
-+	bool "umtprd"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-+	help
-+	  Lightweight USB MTP responder daemon for GNU/Linux
-+
-+	  https://github.com/viveris/uMTP-Responder
-+
-+comment "umtprd needs a toolchain w/ threads, headers >= 3.15"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-diff --git a/package/umtprd/umtprd.hash b/package/umtprd/umtprd.hash
-new file mode 100644
-index 0000000000..168b19e951
---- /dev/null
-+++ b/package/umtprd/umtprd.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256	e1301bdd89170cc2c679446c1cc5873feaacd061bf0ab547fc0a11670bae9163	umtprd-1.0.0.tar.gz
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	LICENSE
-diff --git a/package/umtprd/umtprd.mk b/package/umtprd/umtprd.mk
-new file mode 100644
-index 0000000000..63faae43b3
---- /dev/null
-+++ b/package/umtprd/umtprd.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# umtprd
-+#
-+################################################################################
-+
-+UMTPRD_VERSION = 1.0.0
-+UMTPRD_SITE = https://github.com/viveris/uMTP-Responder/archive
-+UMTPRD_LICENSE = GPL-3.0+
-+UMTPRD_LICENSE_FILES = LICENSE
-+
-+define UMTPRD_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define UMTPRD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/umtprd $(TARGET_DIR)/usr/sbin/umtprd
-+endef
-+
-+$(eval $(generic-package))
+-FATCAT_VERSION = 1.0.6
+-FATCAT_SITE = $(call github,Gregwar,fatcat,$(FATCAT_VERSION))
++FATCAT_VERSION = 1.1.0
++FATCAT_SITE = $(call github,Gregwar,fatcat,v$(FATCAT_VERSION))
+ FATCAT_LICENSE = MIT
+ FATCAT_LICENSE_FILES = LICENSE
+ 
