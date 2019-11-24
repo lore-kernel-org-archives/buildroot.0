@@ -1,60 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 21:24:21 +0100
-Subject: [Buildroot] [git commit] linux: change CIP kernel download method
-Message-ID: <20191202083934.051F98041D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 24 Nov 2019 09:47:24 +0100
+Subject: [Buildroot] [git commit] board/beelink_gs1: enable mdev and dhcp on
+ eth0
+Message-ID: <20191202083934.B527B7FAE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=988d604bb7976fd1b50db87c99d22b928cf68bc6
+commit: https://git.buildroot.net/buildroot/commit/?id=e26f5ad712a8264d97969910cba1d2ecfa57e2b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Downloading from https a tarball is faster than cloning a git repo.
-If needed, BR2_LINUX_KERNEL_CUSTOM_GIT can be used as a fallback
-mechanism to downlad the CIP kernel with git.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Cl??ment P??ron <peron.clem@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 4 ++--
- linux/linux.mk  | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ configs/beelink_gs1_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index d26bf1b14a..f6572f5fad 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -35,7 +35,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.3)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.19.75-cip11)"
-+	bool "Latest CIP SLTS version (4.19.75-cip11)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -123,7 +123,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.3.8" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.19.75-cip11" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "4.19.75-cip11" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 89ac31c2e1..c45db4d24f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -30,7 +30,8 @@ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = svn
- else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
--LINUX_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git
-+LINUX_SOURCE = linux-cip-$(LINUX_VERSION).tar.gz
-+LINUX_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/snapshot
- else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
- # Since 4.12-rc1, -rc kernels are generated from cgit. This also works for
- # older -rc kernels.
+diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
+index c34bd4e860..80b111aee7 100644
+--- a/configs/beelink_gs1_defconfig
++++ b/configs/beelink_gs1_defconfig
+@@ -2,6 +2,9 @@
+ BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Beelink GS1"
++# MDEV is required to autoload the ethernet driver module
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/beelink/gs1/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beelink/gs1/genimage.cfg"
