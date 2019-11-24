@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Nov 2019 12:47:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rtai: add license
-In-Reply-To: <20191124093446.1023544-1-fontaine.fabrice@gmail.com>
-References: <20191124093446.1023544-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191124114732.GG32494@scaer>
+Date: Sun, 24 Nov 2019 14:34:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libftdi: add license
+In-Reply-To: <20191124100846.24884-1-fontaine.fabrice@gmail.com>
+References: <20191124100846.24884-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191124133408.GH32494@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +12,55 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-Thanks for looking into all those missing licensing terms. That's much
-appreciated. :-)
-
-On 2019-11-24 10:34 +0100, Fabrice Fontaine spake thusly:
+On 2019-11-24 11:08 +0100, Fabrice Fontaine spake thusly:
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/rtai/rtai.hash | 1 +
->  package/rtai/rtai.mk   | 2 ++
->  2 files changed, 3 insertions(+)
+>  package/libftdi/libftdi.hash | 5 +++++
+>  package/libftdi/libftdi.mk   | 2 ++
+>  2 files changed, 7 insertions(+)
 > 
-> diff --git a/package/rtai/rtai.hash b/package/rtai/rtai.hash
-> index f0afafbd7c..1a3e97559b 100644
-> --- a/package/rtai/rtai.hash
-> +++ b/package/rtai/rtai.hash
-> @@ -1,2 +1,3 @@
->  # Locally computed
->  sha256 13669da744a0ba411bdb8e47fa47b6e19171646ae42c8dbb2735d12e555fb1a3 rtai-4.0.1.tar.bz2
-> +sha256 3590a0b20d24116a646bfefb0cd5abf5fdbc43c22f66df190d83aeb085beb169 rtai-lab/scilab5/RTAI/license.txt
-> diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
-> index 90f2cc4c8d..d6450c5550 100644
-> --- a/package/rtai/rtai.mk
-> +++ b/package/rtai/rtai.mk
-> @@ -7,6 +7,8 @@
->  RTAI_VERSION = 4.0.1
->  RTAI_SOURCE = rtai-$(RTAI_VERSION).tar.bz2
->  RTAI_SITE = https://www.rtai.org/userfiles/downloads/RTAI
-> +RTAI_LICENSE = GPL-2.0+
-> +RTAI_LICENSE_FILES = rtai-lab/scilab5/RTAI/license.txt 
+> diff --git a/package/libftdi/libftdi.hash b/package/libftdi/libftdi.hash
+> index 5d9f8765db..8271ab277a 100644
+> --- a/package/libftdi/libftdi.hash
+> +++ b/package/libftdi/libftdi.hash
+> @@ -1,2 +1,7 @@
+>  # Locally computed (after checking the signature from http://www.intra2net.com/en/developer/libftdi/download.php)
+>  sha256  3176d5b5986438f33f5208e690a8bfe90941be501cc0a72118ce3d338d4b838e  libftdi-0.20.tar.gz
+> +
+> +# Hash for license files:
+> +sha256  6bd354f4b9beca001b1b5395be48cef1d749a3ed27dddb8114bf09eb0ab2d88c  LICENSE
+> +sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.GPL
+> +sha256  c340cbee4974bb96019e782f2279df016c92fb1e7f5299347e779d9acedbb991  COPYING.LIB
+> diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
+> index cdd77c2e68..90c100b061 100644
+> --- a/package/libftdi/libftdi.mk
+> +++ b/package/libftdi/libftdi.mk
+> @@ -6,6 +6,8 @@
+>  
+>  LIBFTDI_VERSION = 0.20
+>  LIBFTDI_SITE = http://www.intra2net.com/en/developer/libftdi/download
+> +LIBFTDI_LICENSE = LGPL-2.0 (libftdi), GPL-2.0 with exception (ftdipp)
+> +LIBFTDI_LICENSE_FILES = LICENSE COPYING.GPL COPYING.LIB
 
-You are referring to a license file in the rtai-lab/ sub-directory, but
-we explicitly disable building of rtai-lab altogether with
---disable-rtailab:
-    https://git.buildroot.org/buildroot/tree/package/rtai/rtai.mk#n27
+There are two issues here. First, the GPL only applies to the C++
+bindings, which are conditionally enabled with BR2_PACKAGE_LIBFTDI_CPP.
 
-And the GNUMakefile.am will not include the rtai-lab/ subdirectory
-when --disable-rtailab is used:
+Second, the COPYING.LIB is indeed the LGPL-2.0, but the source file for
+libftdi states LGPL-2.1-only, see:
 
-    if CONFIG_RTAI_LAB
-    OPTDIRS += rtai-lab
-    endif
+    http://developer.intra2net.com/git/?p=libftdi;a=blob;f=src/ftdi.c;h=988a9f192942a2a31bb038cc45451df0e0cb32d9;hb=HEAD#l7
 
-So this is probably not the correct license file we should be using.
+Furthermore, src/ftdi_stream.c also bears a notice of the MIT license,
+so the library itself is under both LGPL-2.1-only and MIT.
 
-The 'addons' subdir is conditional to CONFIG_RTAI_DRIVERS_SERIAL or
-CONFIG_RTAI_DRIVERS_16550A or CONFIG_RTAI_CPLUSPLUS or
-CONFIG_RTAI_COMEDI_LXRT or CONFIG_RTAI_RTDM, and they all default to
-'no' if not explicitly enabled, and we do not explicitly enable any of
-those.
-
-So, it seems only the 'base' subdir is used. And in that subdir, we can
-find a few files which bear a "GNU Lesser General Public License" notice
-too.
-
-So, the licensing terms are a bit more complicated than what this patch
-suggestes.
-
-Could you review this more in depth, and provide a commit log that
-explains all the resultant licenses and license files, please?
+I've fixed that all, and applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
->  RTAI_INSTALL_STAGING = YES
->  
->  # The <pkg>_CONFIG_SCRIPTS cannot apply here to the specificities of rtai-config
+>  LIBFTDI_DEPENDENCIES = libusb-compat libusb
+>  HOST_LIBFTDI_DEPENDENCIES = host-libusb-compat host-libusb
+>  LIBFTDI_INSTALL_STAGING = YES
 > -- 
 > 2.24.0
 > 
