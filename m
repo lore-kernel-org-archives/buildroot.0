@@ -1,65 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Nov 2019 14:29:18 +0100
-Subject: [Buildroot] [git commit] package/libftdi: add license
-Message-ID: <20191124132623.9C6348026F@busybox.osuosl.org>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sun, 24 Nov 2019 15:50:37 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/barebox: bump version to 2019.11.0
+Message-ID: <20191124145037.479647-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b0b15e90b03efb226985b04af322ab2b1eebf75
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The COPYING.LIB license file contains the test of the LGPL-2.0, but the
-source code itself explicitly refers to the GPL-2.1-only. Additionally,
-parts of the library (src/ftdi_stream.c) are under the MIT license.
-
-The C++ bindings are udner the GPL-2.0-only with an exception, which is
-expressed in the LICENSE file.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998 at free.fr:
-  - the library is under both GPL-2.1-only and MIT
-  - the GPL-2.0-only only applies to the C++ bindings
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/libftdi/libftdi.hash | 5 +++++
- package/libftdi/libftdi.mk   | 4 ++++
- 2 files changed, 9 insertions(+)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libftdi/libftdi.hash b/package/libftdi/libftdi.hash
-index 5d9f8765db..8271ab277a 100644
---- a/package/libftdi/libftdi.hash
-+++ b/package/libftdi/libftdi.hash
-@@ -1,2 +1,7 @@
- # Locally computed (after checking the signature from http://www.intra2net.com/en/developer/libftdi/download.php)
- sha256  3176d5b5986438f33f5208e690a8bfe90941be501cc0a72118ce3d338d4b838e  libftdi-0.20.tar.gz
-+
-+# Hash for license files:
-+sha256  6bd354f4b9beca001b1b5395be48cef1d749a3ed27dddb8114bf09eb0ab2d88c  LICENSE
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.GPL
-+sha256  c340cbee4974bb96019e782f2279df016c92fb1e7f5299347e779d9acedbb991  COPYING.LIB
-diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
-index cdd77c2e68..f5d557183f 100644
---- a/package/libftdi/libftdi.mk
-+++ b/package/libftdi/libftdi.mk
-@@ -6,6 +6,8 @@
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 4512aa1852..b3344ce699 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
- LIBFTDI_VERSION = 0.20
- LIBFTDI_SITE = http://www.intra2net.com/en/developer/libftdi/download
-+LIBFTDI_LICENSE = LGPL-2.1 (libftdi), MIT (libftdi)
-+LIBFTDI_LICENSE_FILES = LICENSE COPYING.LIB
- LIBFTDI_DEPENDENCIES = libusb-compat libusb
- HOST_LIBFTDI_DEPENDENCIES = host-libusb-compat host-libusb
- LIBFTDI_INSTALL_STAGING = YES
-@@ -16,6 +18,8 @@ LIBFTDI_CONF_OPTS = --without-examples
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2019.09.0"
++	bool "2019.11.0"
  
- # configure detect it automaticaly so we need to force it
- ifeq ($(BR2_PACKAGE_LIBFTDI_CPP),y)
-+LIBFTDI_LICENSE += , GPL-2.0 with exception (ftdipp)
-+LIBFTDI_LICENSE_FILES = COPYING.GPL
- LIBFTDI_DEPENDENCIES += boost
- LIBFTDI_CONF_OPTS += --enable-libftdipp
- else
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2019.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2019.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 9bdcfb3284..1797358833 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# From https://www.barebox.org/download/barebox-2019.09.0.tar.bz2.md5
+-md5 08fa404904cc95d8d0d34d4142351d09 barebox-2019.09.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2019.11.0.tar.bz2.md5
++md5 45bf108b22de94a73dfe5c024c873486 barebox-2019.11.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 beab6bdba2466bece57d23834daf4f0d530a594efc11ca0ddb69372981e6e159 barebox-2019.09.0.tar.bz2
++sha256 607165b96d98fcc114fbd07e4001e7b527739a543e7adbe019854fbd8c78777f barebox-2019.11.0.tar.bz2
+-- 
+2.24.0
