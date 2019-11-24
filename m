@@ -1,39 +1,38 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun, 24 Nov 2019 13:48:23 -0800
-Subject: [Buildroot] [PATCH/next v2 4/4] package/polkit: enable systemd
- login support
-In-Reply-To: <20191124214823.2570598-1-aduskett@gmail.com>
-References: <20191124214823.2570598-1-aduskett@gmail.com>
-Message-ID: <20191124214823.2570598-5-aduskett@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 24 Nov 2019 22:49:00 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/libkcapi: bump version to
+ 1.1.5
+In-Reply-To: <20191027142533.5e232a21@windsurf.dhcp.lyon.intranet> (Thomas
+ Petazzoni's message of "Sun, 27 Oct 2019 14:25:33 +0100")
+References: <20190831115005.19866-1-bernd.kuhls@t-online.de>
+ <20191027142533.5e232a21@windsurf.dhcp.lyon.intranet>
+Message-ID: <871rtxuer7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-If systemd-logind is selected, enable libsystemd-login support.
+ > On Sat, 31 Aug 2019 13:50:05 +0200
+ > Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/polkit/polkit.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ >> Removed patch applied upstream:
+ >> https://github.com/smuellerDD/libkcapi/commit/52620ec798a580b2053d16a42362e9926729eb30
+ >> 
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> ---
+ >> ...pi-hasher.c-fix-build-with-gcc-8.2.x.patch | 54 -------------------
+ >> package/libkcapi/libkcapi.hash                |  2 +-
+ >> package/libkcapi/libkcapi.mk                  |  2 +-
+ >> 3 files changed, 2 insertions(+), 56 deletions(-)
+ >> delete mode 100644 package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
 
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-index 4135a64d6b..5e04c0908c 100644
---- a/package/polkit/polkit.mk
-+++ b/package/polkit/polkit.mk
-@@ -26,4 +26,10 @@ else
- POLKIT_CONF_OPTS += --with-authfw=shadow
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
-+POLKIT_DEPENDENCIES += systemd
-+POLKIT_CONF_OPTS += \
-+	--enable-libsystemd-login=yes
-+endif
-+
- $(eval $(autotools-package))
+ > Applied to master, thanks.
+
+That apparently never happened, so I have instead applied it to next -
+Thanks.
+
 -- 
-2.23.0
+Bye, Peter Korsgaard
