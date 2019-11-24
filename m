@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 24 Nov 2019 10:34:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rtai: add license
-Message-ID: <20191124093446.1023544-1-fontaine.fabrice@gmail.com>
+Date: Sun, 24 Nov 2019 11:08:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libftdi: add license
+Message-ID: <20191124100846.24884-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rtai/rtai.hash | 1 +
- package/rtai/rtai.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+ package/libftdi/libftdi.hash | 5 +++++
+ package/libftdi/libftdi.mk   | 2 ++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/package/rtai/rtai.hash b/package/rtai/rtai.hash
-index f0afafbd7c..1a3e97559b 100644
---- a/package/rtai/rtai.hash
-+++ b/package/rtai/rtai.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256 13669da744a0ba411bdb8e47fa47b6e19171646ae42c8dbb2735d12e555fb1a3 rtai-4.0.1.tar.bz2
-+sha256 3590a0b20d24116a646bfefb0cd5abf5fdbc43c22f66df190d83aeb085beb169 rtai-lab/scilab5/RTAI/license.txt
-diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
-index 90f2cc4c8d..d6450c5550 100644
---- a/package/rtai/rtai.mk
-+++ b/package/rtai/rtai.mk
-@@ -7,6 +7,8 @@
- RTAI_VERSION = 4.0.1
- RTAI_SOURCE = rtai-$(RTAI_VERSION).tar.bz2
- RTAI_SITE = https://www.rtai.org/userfiles/downloads/RTAI
-+RTAI_LICENSE = GPL-2.0+
-+RTAI_LICENSE_FILES = rtai-lab/scilab5/RTAI/license.txt 
- RTAI_INSTALL_STAGING = YES
+diff --git a/package/libftdi/libftdi.hash b/package/libftdi/libftdi.hash
+index 5d9f8765db..8271ab277a 100644
+--- a/package/libftdi/libftdi.hash
++++ b/package/libftdi/libftdi.hash
+@@ -1,2 +1,7 @@
+ # Locally computed (after checking the signature from http://www.intra2net.com/en/developer/libftdi/download.php)
+ sha256  3176d5b5986438f33f5208e690a8bfe90941be501cc0a72118ce3d338d4b838e  libftdi-0.20.tar.gz
++
++# Hash for license files:
++sha256  6bd354f4b9beca001b1b5395be48cef1d749a3ed27dddb8114bf09eb0ab2d88c  LICENSE
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.GPL
++sha256  c340cbee4974bb96019e782f2279df016c92fb1e7f5299347e779d9acedbb991  COPYING.LIB
+diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
+index cdd77c2e68..90c100b061 100644
+--- a/package/libftdi/libftdi.mk
++++ b/package/libftdi/libftdi.mk
+@@ -6,6 +6,8 @@
  
- # The <pkg>_CONFIG_SCRIPTS cannot apply here to the specificities of rtai-config
+ LIBFTDI_VERSION = 0.20
+ LIBFTDI_SITE = http://www.intra2net.com/en/developer/libftdi/download
++LIBFTDI_LICENSE = LGPL-2.0 (libftdi), GPL-2.0 with exception (ftdipp)
++LIBFTDI_LICENSE_FILES = LICENSE COPYING.GPL COPYING.LIB
+ LIBFTDI_DEPENDENCIES = libusb-compat libusb
+ HOST_LIBFTDI_DEPENDENCIES = host-libusb-compat host-libusb
+ LIBFTDI_INSTALL_STAGING = YES
 -- 
 2.24.0
