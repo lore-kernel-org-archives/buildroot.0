@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Nov 2019 20:21:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix license hash
-In-Reply-To: <20191124190728.667661-1-fontaine.fabrice@gmail.com>
-References: <20191124190728.667661-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191124192119.GI32494@scaer>
+Date: Sun, 24 Nov 2019 20:28:00 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/libffi: fix build failure
+ with powerpc7
+In-Reply-To: <20191124090305.1015485-1-fontaine.fabrice@gmail.com>
+References: <20191124090305.1015485-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191124192800.GJ32494@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +13,86 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2019-11-24 20:07 +0100, Fabrice Fontaine spake thusly:
-> Bump to 243.4 forgot to update hash of README file
-> 
+On 2019-11-24 10:03 +0100, Fabrice Fontaine spake thusly:
 > Fixes:
->  - http://autobuild.buildroot.org/results/eae13046b90253cdb2bf260e10b316386dff4eb1
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>  - http://autobuild.buildroot.org/results/5c9dd8fb3b6a128882b6250f197c80232d8a3b53
 
-Applied to master, after adding a note about why README was changed.
-Thanks.
+Will that patch still be needed on the 3.3 version, that was applied to
+next? Does that build failure still hapen with version 3.3 on next?
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/systemd/systemd.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  ...pc.h-fix-build-failure-with-powerpc7.patch | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 package/libffi/0004-ffi_powerpc.h-fix-build-failure-with-powerpc7.patch
 > 
-> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-> index 4c126d3755..584198d14b 100644
-> --- a/package/systemd/systemd.hash
-> +++ b/package/systemd/systemd.hash
-> @@ -2,4 +2,4 @@
->  sha256	281bc47aa6b173c3c6fa1bbc88aea84ecb014313aeb679c54f8885dd09e434be	systemd-243.4.tar.gz
->  sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
->  sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
-> -sha256	3a3b3cbd0ef03c7045bfda9b61062bdc33ad4913b44a6b6147043f26d00b51bf	README
-> +sha256	ff5a9e3791e3a941a2d85b5ef7ad7c01441dd42f4c760bff2c8b086c7d764885	README
+> diff --git a/package/libffi/0004-ffi_powerpc.h-fix-build-failure-with-powerpc7.patch b/package/libffi/0004-ffi_powerpc.h-fix-build-failure-with-powerpc7.patch
+> new file mode 100644
+> index 0000000000..7ee1f1029e
+> --- /dev/null
+> +++ b/package/libffi/0004-ffi_powerpc.h-fix-build-failure-with-powerpc7.patch
+> @@ -0,0 +1,51 @@
+> +From f9d8f11d60cdc656a801e0d8116101beb22e117b Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sun, 24 Nov 2019 09:52:01 +0100
+> +Subject: [PATCH] ffi_powerpc.h: fix build failure with powerpc7
+> +
+> +Sicne commit 73dd43afc8a447ba98ea02e9aad4c6898dc77fb0, build on powerpc7
+> +fails on:
+> +
+> +In file included from ../src/powerpc/ffi.c:33:0:
+> +../src/powerpc/ffi_powerpc.h:61:9: error: '_Float128' is not supported on this target
+> + typedef _Float128 float128;
+> +         ^~~~~~~~~
+> +
+> +Fix this build failure by checking for __HAVE_FLOAT128 before using
+> +_Float128, as _Float128 is enabled only on specific conditions, see
+> +output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/include/bits/floatn.h:
+> +
+> + /* Defined to 1 if the current compiler invocation provides a
+> +    floating-point type with the IEEE 754 binary128 format, and this glibc
+> +    includes corresponding *f128 interfaces for it.  */
+> + #if defined _ARCH_PWR8 && defined __LITTLE_ENDIAN__ && (_CALL_ELF == 2) \
+> +     && defined __FLOAT128__ && !defined __NO_LONG_DOUBLE_MATH
+> + # define __HAVE_FLOAT128 1
+> + #else
+> + # define __HAVE_FLOAT128 0
+> + #endif
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/5c9dd8fb3b6a128882b6250f197c80232d8a3b53
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + src/powerpc/ffi_powerpc.h | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/powerpc/ffi_powerpc.h b/src/powerpc/ffi_powerpc.h
+> +index 5ee2a70..a5a786b 100644
+> +--- a/src/powerpc/ffi_powerpc.h
+> ++++ b/src/powerpc/ffi_powerpc.h
+> +@@ -57,7 +57,7 @@ typedef union
+> +   double d;
+> + } ffi_dblfl;
+> + 
+> +-#if defined(__FLOAT128_TYPE__)
+> ++#if defined(__FLOAT128_TYPE__) && defined(__HAVE_FLOAT128)
+> + typedef _Float128 float128;
+> + #elif defined(__FLOAT128__)
+> + typedef __float128 float128;
+> +-- 
+> +2.24.0
+> +
 > -- 
 > 2.24.0
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
