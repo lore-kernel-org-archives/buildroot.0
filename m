@@ -1,43 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Nov 2019 09:46:44 +0100
-Subject: [Buildroot] [PATCH v2 2/3] board/beelink_gs1: enable mdev and
- dhcp on eth0
-In-Reply-To: <20191027192131.6813-2-peron.clem@gmail.com> (=?utf-8?Q?=22Cl?=
- =?utf-8?Q?=C3=A9ment_P=C3=A9ron=22's?=
- message of "Sun, 27 Oct 2019 20:21:30 +0100")
-References: <20191027192131.6813-1-peron.clem@gmail.com>
- <20191027192131.6813-2-peron.clem@gmail.com>
-Message-ID: <87tv6tveyz.fsf@dell.be.48ers.dk>
+Date: Sun, 24 Nov 2019 09:47:24 +0100
+Subject: [Buildroot] [git commit branch/next] board/beelink_gs1: enable mdev
+ and dhcp on eth0
+Message-ID: <20191124083939.98A018B89C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Cl?ment" == Cl?ment P?ron <peron.clem@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e26f5ad712a8264d97969910cba1d2ecfa57e2b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Signed-off-by: Cl?ment P?ron <peron.clem@gmail.com>
- > ---
- >  configs/beelink_gs1_defconfig | 3 +++
- >  1 file changed, 3 insertions(+)
+Signed-off-by: Cl??ment P??ron <peron.clem@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/beelink_gs1_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
- > diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
- > index b3004ffe7a..b5b4238791 100644
- > --- a/configs/beelink_gs1_defconfig
- > +++ b/configs/beelink_gs1_defconfig
- > @@ -2,6 +2,9 @@
- >  BR2_aarch64=y
- >  BR2_ARM_FPU_VFPV4=y
- >  BR2_TARGET_GENERIC_ISSUE="Welcome to Beelink GS1"
- > +# MDEV is required to autoload the ethernet driver module
- > +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-
-If this is just about the network driver, then a simpler solution is to
-just use a linux kernel config fragment to build the STMMAC_ETH driver +
-allwinner support into the kernel instead of as a module. That way
-things like root on NFS would also automatically work.
-
-But Ok, that can be done later. Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
+index c34bd4e860..80b111aee7 100644
+--- a/configs/beelink_gs1_defconfig
++++ b/configs/beelink_gs1_defconfig
+@@ -2,6 +2,9 @@
+ BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Beelink GS1"
++# MDEV is required to autoload the ethernet driver module
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/beelink/gs1/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beelink/gs1/genimage.cfg"
