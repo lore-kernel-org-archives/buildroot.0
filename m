@@ -1,69 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Nov 2019 09:29:41 +0100
-Subject: [Buildroot] [PATCH/next v2,1/1] package/tftpd: add license
-In-Reply-To: <20191123230528.968209-1-fontaine.fabrice@gmail.com>
-References: <20191123230528.968209-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191124082941.GE32494@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 24 Nov 2019 09:44:33 +0100
+Subject: [Buildroot] [PATCH v2 1/3] board: add Beelink GS1 support
+In-Reply-To: <20191027192131.6813-1-peron.clem@gmail.com> (=?utf-8?Q?=22Cl?=
+ =?utf-8?Q?=C3=A9ment_P=C3=A9ron=22's?=
+ message of "Sun, 27 Oct 2019 20:21:29 +0100")
+References: <20191027192131.6813-1-peron.clem@gmail.com>
+Message-ID: <87y2w5vf2m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+>>>>> "Cl?ment" == Cl?ment P?ron <peron.clem@gmail.com> writes:
 
-On 2019-11-24 00:05 +0100, Fabrice Fontaine spake thusly:
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Cl?ment P?ron <peron.clem@gmail.com>
+ > ---
 
-Applied to master, thanks.
+ > Changes since v1:
+ >  - Add myself to DEVELOPPERS file
+ >  - Add U-boot and Linux version
 
-Regards,
-Yann E. MORIN.
+ > ATF patch is merged in v2.2 but tag is not pushed on github
 
-> ---
-> Changes v1 -> v2 (after review of Yann E. Morin):
->  - Set license to BSD-4-Clause as specified in tftpd.c instead of
->    BSD-like
-> 
->  package/tftpd/tftpd.hash | 3 +++
->  package/tftpd/tftpd.mk   | 2 ++
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/package/tftpd/tftpd.hash b/package/tftpd/tftpd.hash
-> index 247b757fa6..c876b2edc2 100644
-> --- a/package/tftpd/tftpd.hash
-> +++ b/package/tftpd/tftpd.hash
-> @@ -1,2 +1,5 @@
->  # From https://www.kernel.org/pub/software/network/tftp/tftp-hpa/sha256sums.asc
->  sha256	afee361df96a2f88344e191f6a25480fd714e1d28d176c3f10cc43fa206b718b	tftp-hpa-5.2.tar.xz
-> +
-> +# Hash for license file
-> +sha256	5efef82650b8ece733e37790fc70f05e426c9e1ef9640d4ebcb04867bd3f5e28	tftpd/tftpd.c
-> diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-> index c42456afd1..57905fda05 100644
-> --- a/package/tftpd/tftpd.mk
-> +++ b/package/tftpd/tftpd.mk
-> @@ -8,6 +8,8 @@ TFTPD_VERSION = 5.2
->  TFTPD_SOURCE = tftp-hpa-$(TFTPD_VERSION).tar.xz
->  TFTPD_SITE = $(BR2_KERNEL_MIRROR)/software/network/tftp/tftp-hpa
->  TFTPD_CONF_OPTS = --without-tcpwrappers
-> +TFTPD_LICENSE = BSD-4-Clause
-> +TFTPD_LICENSE_FILES = tftpd/tftpd.c
->  
->  define TFTPD_INSTALL_TARGET_CMDS
->  	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
-> -- 
-> 2.24.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I do see it now:
+
+https://github.com/ARM-software/arm-trusted-firmware/tree/v2.2
+
+So it would be good to send an update to move it to 2.2 after you have
+tested.
+
+ > U-Boot patch is accepted upstream will be available in 2020.01
+
+ >  DEVELOPERS                                    |   4 +
+ >  board/beelink/gs1/extlinux.conf               |   4 +
+ >  board/beelink/gs1/genimage.cfg                |  33 +++
+ >  ...er-common-use-r_wdog-instead-of-wdog.patch |  39 +++
+ >  ...01-arm-dts-sync-dts-for-Allwinner-H6.patch | 279 ++++++++++++++++++
+ >  board/beelink/gs1/post-build.sh               |   4 +
+ >  configs/beelink_gs1_defconfig                 |  39 +++
+
+A board/beelink/gs1/readme.txt with some basic information about how to
+use this would be nice. Care to send a followup patch with that?
+
+ > +++ b/configs/beelink_gs1_defconfig
+ > @@ -0,0 +1,39 @@
+ > +# Architecture
+ > +BR2_aarch64=y
+ > +BR2_ARM_FPU_VFPV4=y
+ > +BR2_TARGET_GENERIC_ISSUE="Welcome to Beelink GS1"
+ > +BR2_ROOTFS_POST_BUILD_SCRIPT="board/beelink/gs1/post-build.sh"
+ > +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ > +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beelink/gs1/genimage.cfg"
+ > +BR2_GLOBAL_PATCH_DIR="board/beelink/gs1/patches/"
+ > +
+ > +# Kernel Linux headers same as kernel, a 5.3 series
+ > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
+ > +BR2_LINUX_KERNEL=y
+ > +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+
+This still uses the default kernel version which will change over
+time. I added:
+
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.12"
+
+To explicitly use 5.3.12 and committed to next, thanks!
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
