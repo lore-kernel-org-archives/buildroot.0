@@ -1,83 +1,36 @@
-From: =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date: Sun, 24 Nov 2019 23:40:39 +0100
-Subject: [Buildroot] [PATCH v2 1/3] board: add Beelink GS1 support
-In-Reply-To: <87y2w5vf2m.fsf@dell.be.48ers.dk>
-References: <20191027192131.6813-1-peron.clem@gmail.com>
- <87y2w5vf2m.fsf@dell.be.48ers.dk>
-Message-ID: <CAJiuCcdtUZqmjy740t4B4es2RZaxs4a32e+DR6aXFJmV4mR6eA@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 25 Nov 2019 00:09:18 +0100
+Subject: [Buildroot] [PATCH] package/pkg-generic: fix space formatting
+Message-ID: <20191124230918.30221-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+This patch fixes a formatting issues where spaces were used instead of tabs.
 
-On Sun, 24 Nov 2019 at 09:44, Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Cl?ment" == Cl?ment P?ron <peron.clem@gmail.com> writes:
->
->  > Signed-off-by: Cl?ment P?ron <peron.clem@gmail.com>
->  > ---
->
->  > Changes since v1:
->  >  - Add myself to DEVELOPPERS file
->  >  - Add U-boot and Linux version
->
->  > ATF patch is merged in v2.2 but tag is not pushed on github
->
-> I do see it now:
->
-> https://github.com/ARM-software/arm-trusted-firmware/tree/v2.2
->
-> So it would be good to send an update to move it to 2.2 after you have
-> tested.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/pkg-generic.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-OK I will,
-
->
->  > U-Boot patch is accepted upstream will be available in 2020.01
->
->  >  DEVELOPERS                                    |   4 +
->  >  board/beelink/gs1/extlinux.conf               |   4 +
->  >  board/beelink/gs1/genimage.cfg                |  33 +++
->  >  ...er-common-use-r_wdog-instead-of-wdog.patch |  39 +++
->  >  ...01-arm-dts-sync-dts-for-Allwinner-H6.patch | 279 ++++++++++++++++++
->  >  board/beelink/gs1/post-build.sh               |   4 +
->  >  configs/beelink_gs1_defconfig                 |  39 +++
->
-> A board/beelink/gs1/readme.txt with some basic information about how to
-> use this would be nice. Care to send a followup patch with that?
-
-Ok,
-
-Regards,
-Clement
-
->
->  > +++ b/configs/beelink_gs1_defconfig
->  > @@ -0,0 +1,39 @@
->  > +# Architecture
->  > +BR2_aarch64=y
->  > +BR2_ARM_FPU_VFPV4=y
->  > +BR2_TARGET_GENERIC_ISSUE="Welcome to Beelink GS1"
->  > +BR2_ROOTFS_POST_BUILD_SCRIPT="board/beelink/gs1/post-build.sh"
->  > +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->  > +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beelink/gs1/genimage.cfg"
->  > +BR2_GLOBAL_PATCH_DIR="board/beelink/gs1/patches/"
->  > +
->  > +# Kernel Linux headers same as kernel, a 5.3 series
->  > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
->  > +BR2_LINUX_KERNEL=y
->  > +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
->
-> This still uses the default kernel version which will change over
-> time. I added:
->
-> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.12"
->
-> To explicitly use 5.3.12 and committed to next, thanks!
->
-> --
-> Bye, Peter Korsgaard
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index d7a678412e..88dca2c498 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -684,10 +684,10 @@ $(2)_INSTALL_TARGET		?= YES
+ $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
+ $(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
+ $(2)_TARGET_INSTALL_IMAGES =	$$($(2)_DIR)/.stamp_images_installed
+-$(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
++$(2)_TARGET_INSTALL_HOST =	$$($(2)_DIR)/.stamp_host_installed
+ $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
+ $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
+-$(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
++$(2)_TARGET_RSYNC =		$$($(2)_DIR)/.stamp_rsynced
+ $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
+ $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
+ $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
+-- 
+2.17.1
