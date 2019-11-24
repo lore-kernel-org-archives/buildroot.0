@@ -1,45 +1,56 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 24 Nov 2019 11:27:54 +0100
-Subject: [Buildroot] [PATCH for-next] package/terminology: bump to version
- 1.6.0
-Message-ID: <20191124102754.4390-1-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 24 Nov 2019 11:34:46 +0100
+Subject: [Buildroot] Buildroot 2019.11-rc3 released
+Message-ID: <87muclv9yx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See:
-https://www.enlightenment.org/news/2019-11-16-terminology-1.6.0
+Hi,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/terminology/terminology.hash | 4 ++--
- package/terminology/terminology.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Buildroot 2019.11-rc3 is released - Go download it at:
 
-diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
-index 64e7cd9aa2..ed386fb7b3 100644
---- a/package/terminology/terminology.hash
-+++ b/package/terminology/terminology.hash
-@@ -1,3 +1,3 @@
--# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.5.0.tar.xz.sha256sum
--sha256  de55e503b382bb7c42a7def04c5ef7bff01e3e1fb0b379a4591544899eab8a6c  terminology-1.5.0.tar.xz
-+# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.6.0.tar.xz.sha256sum
-+sha256  b95cb05653afe0dad77fc038a8d5276c02a9c08d64ac97ddf0cee8087d27bd77  terminology-1.6.0.tar.xz
- sha256  a907d434f4691990ed8f2826ff7546672e9934a26c798351da12ed544dadc628  COPYING
-diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
-index 590413e69c..add80825a7 100644
---- a/package/terminology/terminology.mk
-+++ b/package/terminology/terminology.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TERMINOLOGY_VERSION = 1.5.0
-+TERMINOLOGY_VERSION = 1.6.0
- TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
- TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
- TERMINOLOGY_LICENSE = BSD-2-Clause
+http://buildroot.net/downloads/buildroot-2019.11-rc3.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2019.11-rc3.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Another week, another release candidate.
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -sn 2019.11-rc2..
+
+    10  Fabrice Fontaine
+     6  Bernd Kuhls
+     2  Adam Duskett
+     2  Peter Korsgaard
+     2  Petr Vorel
+     2  Titouan Christophe
+     1  Adrian Perez de Castro
+     1  Arnout Vandecappelle (Essensium/Mind)
+     1  Avi Shukron
+     1  Bartosz Bilas
+     1  J?r?my Rosen
+     1  J?rg Krause
+     1  Matt Weber
+     1  Michael Drake
+     1  Thomas Petazzoni
+     1  Yegor Yefremov
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.11-rc3
+
+Expect the final 2019.11 release by the end of the month.
+
 -- 
-2.23.0
+Bye, Peter Korsgaard
