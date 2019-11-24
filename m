@@ -1,63 +1,108 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Nov 2019 18:13:39 +0100
-Subject: [Buildroot] [git commit] package/stunnel: bump to version 5.56
-Message-ID: <20191202083935.2E0528152E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 24 Nov 2019 22:48:31 +0100
+Subject: [Buildroot] [git commit] package/libkcapi: bump version to 1.1.5
+Message-ID: <20191202083934.E2B437FEF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02dda8f29b2bfee23af9a80a5fd429d76690f338
+commit: https://git.buildroot.net/buildroot/commit/?id=7b3895bca5637a72a098b9986cf171e35ea835a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes of the bugfix release:
- - https://www.stunnel.org/NEWS.html
+Removed patch applied upstream:
+https://github.com/smuellerDD/libkcapi/commit/52620ec798a580b2053d16a42362e9926729eb30
 
-Also:
- - rename COPYRIGHT.GPL to COPYRIGHT.md
- - rename COPYING to COPYING.md
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stunnel/stunnel.hash | 8 ++++----
- package/stunnel/stunnel.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ ...s-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch | 54 ----------------------
+ package/libkcapi/libkcapi.hash                     |  2 +-
+ package/libkcapi/libkcapi.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 56 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 7dde175563..b741b0e816 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
+diff --git a/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch b/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
+deleted file mode 100644
+index a4c352d30c..0000000000
+--- a/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From dcb02c1639c2ff05938c01eaa41286a2e2f8d698 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 20 Jan 2019 20:04:13 +0100
+-Subject: [PATCH] apps/kcapi-hasher.c: fix build with gcc 8.2.x
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/8355bc42238e885f7f11ed3d9d37fc55ebdead2b
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/smuellerDD/libkcapi/pull/76]
+----
+- apps/kcapi-hasher.c | 12 ++++++++----
+- 1 file changed, 8 insertions(+), 4 deletions(-)
+-
+-diff --git a/apps/kcapi-hasher.c b/apps/kcapi-hasher.c
+-index d6be685..7172b12 100644
+---- a/apps/kcapi-hasher.c
+-+++ b/apps/kcapi-hasher.c
+-@@ -357,16 +357,20 @@ out:
+- }
+- 
+- /*
+-- * GCC v8.1.0 introduced -Wstringop-truncation but it is not smart enough to
+-- * find that cursor string will be NULL-terminated after all paste() calls and
+-- * warns with:
+-+ * GCC v8.1.0 introduced -Wstringop-truncation and GCC v8.2.0 introduced
+-+ * -Wstringop-overflow but it is not smart enough to find that cursor string
+-+ * will be NULL-terminated after all paste() calls and warns with:
+-  * error: 'strncpy' destination unchanged after copying no bytes [-Werror=stringop-truncation]
+-  * error: 'strncpy' output truncated before terminating nul copying 5 bytes from a string of the same length [-Werror=stringop-truncation]
+-+ * error: 'strncpy' specified bound depends on the length of the source argument [-Werror=stringop-overflow=]
+-  */
+- #pragma GCC diagnostic push
+- #if GCC_VERSION >= 80100
+- #pragma GCC diagnostic ignored "-Wstringop-truncation"
+- #endif
+-+#if GCC_VERSION >= 80200
+-+#pragma GCC diagnostic ignored "-Wstringop-overflow"
+-+#endif
+- static char *paste(char *dst, const char *src, size_t size)
+- {
+- 	strncpy(dst, src, size);
+-@@ -417,7 +421,7 @@ static char *get_hmac_file(const char *filename, const char *checkdir)
+- 	strncpy(cursor, "\0", 1);
+- 	return checkfile;
+- }
+--#pragma GCC diagnostic pop /* -Wstringop-truncation */
+-+#pragma GCC diagnostic pop /* -Wstringop-truncation -Wstringop-overflow */
+- 
+- static int hash_files(const struct hash_params *params,
+- 		      char *filenames[], uint32_t files,
+--- 
+-2.14.1
+-
+diff --git a/package/libkcapi/libkcapi.hash b/package/libkcapi/libkcapi.hash
+index a9b42bf6e2..b3c2c749c3 100644
+--- a/package/libkcapi/libkcapi.hash
++++ b/package/libkcapi/libkcapi.hash
 @@ -1,5 +1,5 @@
--# From https://www.stunnel.org/downloads/stunnel-5.55.tar.gz.sha256
--sha256	90de69f41c58342549e74c82503555a6426961b29af3ed92f878192727074c62	stunnel-5.55.tar.gz
-+# From https://www.stunnel.org/downloads/stunnel-5.56.tar.gz.sha256
-+sha256	7384bfb356b9a89ddfee70b5ca494d187605bb516b4fff597e167f97e2236b22	stunnel-5.56.tar.gz
  # Locally calculated
--sha256	81d0b7244f44ef81dd0b299cf681037c5a42d468b8533e53aff6d1ac84c97dc8	COPYING
--sha256	1ee2b290e92c211b08df10e9fcaf32596cdb22b8eae731b18c2c074a4a83eebe	COPYRIGHT.GPL
-+sha256	f46e2613769e23e23348b6eb667dc85309da2252c8cc2016db92ad93d743aea4	COPYING.md
-+sha256	62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d	COPYRIGHT.md
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 261e331cfa..f8265c4cf4 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
+-sha256 9197f35aca270f97c544fe94dab379b44a2879a07eb78acd5d02c55924902763	libkcapi-1.1.4.tar.xz
++sha256 8a08dcbb4d05ede4357cdc9d61c7f2a7f2cd96b7ce2eb41b28e45b2e378267ad	libkcapi-1.1.5.tar.xz
+ sha256 c6b8402a68999b0f84560ab43cdf60f9ff33c4a9a8ced6a40db9d3b787ba5b4a	COPYING
+ sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING.gplv2
+ sha256 13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239	COPYING.bsd
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+index dceacc0016..60b3f94388 100644
+--- a/package/libkcapi/libkcapi.mk
++++ b/package/libkcapi/libkcapi.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).55
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).56
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = host-pkgconf openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
-@@ -14,7 +14,7 @@ STUNNEL_CONF_ENV = \
- 	ax_cv_check_cflags___fstack_protector=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no) \
- 	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- STUNNEL_LICENSE = GPL-2.0+
--STUNNEL_LICENSE_FILES = COPYING COPYRIGHT.GPL
-+STUNNEL_LICENSE_FILES = COPYING.md COPYRIGHT.md
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
- STUNNEL_DEPENDENCIES += systemd
+-LIBKCAPI_VERSION = 1.1.4
++LIBKCAPI_VERSION = 1.1.5
+ LIBKCAPI_SOURCE = libkcapi-$(LIBKCAPI_VERSION).tar.xz
+ LIBKCAPI_SITE = http://www.chronox.de/libkcapi
+ LIBKCAPI_AUTORECONF = YES
