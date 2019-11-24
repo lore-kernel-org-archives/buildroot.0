@@ -1,41 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 24 Nov 2019 19:02:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lzma: add license
-Message-ID: <20191124180239.32194-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 24 Nov 2019 19:42:18 +0100
+Subject: [Buildroot] [PATCH] pkgconf: Always keep system libs
+In-Reply-To: <20191121183659.1804967-1-thomas.preston@codethink.co.uk>
+References: <20191121183659.1804967-1-thomas.preston@codethink.co.uk>
+Message-ID: <20191124194218.024c82cf@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/lzma/lzma.hash | 3 +++
- package/lzma/lzma.mk   | 2 ++
- 2 files changed, 5 insertions(+)
+Hello Thomas,
 
-diff --git a/package/lzma/lzma.hash b/package/lzma/lzma.hash
-index e73517ca57..6055d7d986 100644
---- a/package/lzma/lzma.hash
-+++ b/package/lzma/lzma.hash
-@@ -1,2 +1,5 @@
- # Locally calculated
- sha256	02aa57f995d15b7acb7c2496d88a39fb0124ea00bf027cc61dd24eddb5942dff	lzma-4.32.7.tar.xz
-+sha256	231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c	COPYING.GPLv2
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING.GPLv3
-+sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	COPYING.LGPLv2.1
-diff --git a/package/lzma/lzma.mk b/package/lzma/lzma.mk
-index 1b4d7febb1..55ad1ae841 100644
---- a/package/lzma/lzma.mk
-+++ b/package/lzma/lzma.mk
-@@ -7,6 +7,8 @@
- LZMA_VERSION = 4.32.7
- LZMA_SOURCE = lzma-$(LZMA_VERSION).tar.xz
- LZMA_SITE = http://tukaani.org/lzma
-+LZMA_LICENSE = GPL-2.0+, LGPL-2.1+, GPL-3.0+ (tests)
-+LZMA_LICENSE_FILES = COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
- 
- $(eval $(host-autotools-package))
- 
--- 
-2.24.0
+On Thu, 21 Nov 2019 18:36:59 +0000, Thomas Preston <thomas.preston@codethink.co.uk> wrote:
+
+> Normally pkgconf ignores the system include and system lib directories,
+> which is useful because it allows the correct ordering of -I, -isystem
+> and compiler default search paths. However, many packages use libtool,
+> which relies on pkgconf to print the system libs dirs in order to locate
+> the Libtool Archive (.la) files.
+>
+> Instead of adding PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 to each of these
+> packages, just allow system libs globally in the pkg-config wrapper.
+> This allows libtool to find the .la files, and retains the correct
+> include ordering.
+>
+> Fixes (at least):
+> - http://autobuild.buildroot.org/results/a79e0487135ad90530595d5c6ecc32f9c8cea7c4/
+> - http://autobuild.buildroot.net/results/089/08952dbf89bf3c49da7697943441cee411940420/
+>
+> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+
+In favour of a general pgkconf solution (instead fixing individual packages) and
+tested for the libv4l and gmpc cases, you can add my
+
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+
+Only nitpick for the subject line s/Always/always/...
+
+Regards,
+Peter
+
+> ---
+>  package/pkgconf/pkg-config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+> index f411eb0926..e5a23a10f7 100644
+> --- a/package/pkgconf/pkg-config.in
+> +++ b/package/pkgconf/pkg-config.in
+> @@ -9,4 +9,4 @@ PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
+>  	PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} \
+>  	PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKG_CONFIG_SYSTEM_INCLUDE_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH}} \
+>  	PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKG_CONFIG_SYSTEM_LIBRARY_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH}} \
+> -	exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
+> +	exec ${PKGCONFDIR}/pkgconf --keep-system-libs @STATIC@ "$@"
