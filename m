@@ -1,44 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Nov 2019 21:38:57 +0100
-Subject: [Buildroot] [git commit] package/libidn2: bump to version 2.3.0
-Message-ID: <20191202083934.7C060812D3@busybox.osuosl.org>
+Date: Mon, 25 Nov 2019 15:11:39 +0100
+Subject: [Buildroot] [git commit] package/python-crontab: fix check-package
+ warning
+Message-ID: <20191202083935.1F7647FEF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a25e67fe87644dfc6d25030dca152b7eb0f9c546
+commit: https://git.buildroot.net/buildroot/commit/?id=2a9523cd998284aa8496a053250006993ff55c2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+
+package/python-crontab/Config.in:5: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+26 lines processed
+1 warnings generated
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libidn2/libidn2.hash | 2 +-
- package/libidn2/libidn2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-crontab/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
-index 3dae7f7590..2d2fcdfd15 100644
---- a/package/libidn2/libidn2.hash
-+++ b/package/libidn2/libidn2.hash
-@@ -1,5 +1,5 @@
- # Calculated locally after checking signature
--sha256	fc734732b506d878753ec6606982bf7b936e868c25c30ddb0d83f7d7056381fe	libidn2-2.2.0.tar.gz
-+sha256	e1cb1db3d2e249a6a3eb6f0946777c2e892d5c5dc7bd91c74394fc3a01cab8b5	libidn2-2.3.0.tar.gz
+diff --git a/package/python-crontab/Config.in b/package/python-crontab/Config.in
+index f97e00af5e..102dbbdb6b 100644
+--- a/package/python-crontab/Config.in
++++ b/package/python-crontab/Config.in
+@@ -2,7 +2,8 @@ config BR2_PACKAGE_PYTHON_CRONTAB
+ 	bool "python-crontab"
+ 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
+ 	help
+-	  Crontab module for reading and writing crontab files and accessing
+-	  the system cron automatically and simply using a direct API.
++	  Crontab module for reading and writing crontab files and
++	  accessing the system cron automatically and simply using
++	  a direct API.
  
- # Hash for license files:
- sha256	73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76	COPYING
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index 5e05634942..3f87b9bb8c 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIDN2_VERSION = 2.2.0
-+LIBIDN2_VERSION = 2.3.0
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+ 	  https://gitlab.com/doctormo/python-crontab/
