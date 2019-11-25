@@ -1,44 +1,48 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 25 Nov 2019 11:50:40 +0100
-Subject: [Buildroot] [PATCH] package/libnss: security bump to version 3.47.1
-Message-ID: <20191125105040.92059-1-giulio.benetti@benettiengineering.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Nov 2019 11:56:30 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-11-24
+In-Reply-To: <0d328fb7-d1a9-aef5-2846-82bd2d55bac9@railnova.eu>
+References: <5ddb8024.1c69fb81.357d6.9264SMTPIN_ADDED_MISSING@mx.google.com>
+ <0d328fb7-d1a9-aef5-2846-82bd2d55bac9@railnova.eu>
+Message-ID: <20191125115630.66ffb5f0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
-CVE-2019-11745: EncryptUpdate should use maxout, not block size
+Hello Titouan,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libnss/libnss.hash | 2 +-
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 25 Nov 2019 10:13:05 +0100
+Titouan Christophe <titouan.christophe@railnova.eu> wrote:
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 92d6fd3908..518d95d842 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_46_1_RTM/src/SHA256SUMS
--sha256	6cd0c4438b616bdacc0b5f25ff1506b0d07ee97ea6c95d514c5487200a155fa7  nss-3.47.tar.gz
-+sha256	1ae3d1cb1de345b258788f2ef6b10a460068034c3fd64f42427a183d8342a6fb  nss-3.47.1.tar.gz
- # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index ca1cde4c1c..747612c795 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.47
-+LIBNSS_VERSION = 3.47.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+> >               name              | found by |        link to release-monitoring.org        |   version    |   upstream
+> > -------------------------------+----------+----------------------------------------------+--------------+--------------
+> >                           redis |  DISTRO  | https://release-monitoring.org/project/04181 | 5.0.5        | 5.0.7
+> >   
+> 
+> This is lagging behind, Redis was already bumped to 5.0.6 one week ago, 
+> and to 5.0.7 over the week-end :)
+
+When a next branch exists, we use the next branch as the source of
+information for what is the current version of each package in
+Buildroot. We do this because typically, next is more "up to date" than
+master.
+
+However, in this specific case, redis was bumped to 5.0.7 in master,
+but not in next, so until next gets merged back into master, our
+tooling will think redis is at 5.0.5, because that's the version used
+in next.
+
+Perhaps this could be improved by grabbing both master and next, and
+retaining the highest version between both, for each package. But oh
+well, that's quite some additional complexity :/
+
+Best regards,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
