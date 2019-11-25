@@ -1,34 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Nov 2019 18:17:47 +0100
-Subject: [Buildroot] [git commit branch/next] package/gcnano-binaries:
- create directory before copying files
-Message-ID: <20191125171007.2F47082B3C@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 25 Nov 2019 18:18:00 +0100
+Subject: [Buildroot] [PATCH] package/libftdi: don't override license
+ files variable
+In-Reply-To: <20191125070319.22261-1-b.bilas@grinn-global.com>
+References: <20191125070319.22261-1-b.bilas@grinn-global.com>
+Message-ID: <20191125171800.GL32494@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5a6c8e6643f74e17e49a4254c18f8b41621c0e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Bartosz, All,
 
-The directory $(1)/usr/include may not exist before copy files.
+On 2019-11-25 08:03 +0100, Bartosz Bilas spake thusly:
+> Fixes:
+>   package/libftdi/libftdi.mk:22: conditional override of variable LIBFTDI_LICENSE_FILES
 
-Signed-off-by: Jens Kleintje <scooby22@web.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gcnano-binaries/gcnano-binaries.mk | 1 +
- 1 file changed, 1 insertion(+)
+Thanks for fixing my mess. :-)
 
-diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
-index 2913e664dc..b27571a08c 100644
---- a/package/gcnano-binaries/gcnano-binaries.mk
-+++ b/package/gcnano-binaries/gcnano-binaries.mk
-@@ -56,6 +56,7 @@ define GCNANO_BINARIES_INSTALL
- 			$(1)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so ; \
- 		cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).so* $(1)/usr/lib
- 	)
-+	mkdir -p $(1)/usr/include
- 	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/include/* $(1)/usr/include/
- 	$(foreach pkgconfig,$(GCNANO_BINARIES_PKG_CONFIGS), \
- 		$(INSTALL) -D -m 0644 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/pkgconfig/$(pkgconfig).pc \
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libftdi/libftdi.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
+> index cafa40eed4..257342622f 100644
+> --- a/package/libftdi/libftdi.mk
+> +++ b/package/libftdi/libftdi.mk
+> @@ -19,7 +19,7 @@ LIBFTDI_CONF_OPTS = --without-examples
+>  # configure detect it automaticaly so we need to force it
+>  ifeq ($(BR2_PACKAGE_LIBFTDI_CPP),y)
+>  LIBFTDI_LICENSE += , GPL-2.0 with exception (ftdipp)
+> -LIBFTDI_LICENSE_FILES = COPYING.GPL
+> +LIBFTDI_LICENSE_FILES += COPYING.GPL
+>  LIBFTDI_DEPENDENCIES += boost
+>  LIBFTDI_CONF_OPTS += --enable-libftdipp
+>  else
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
