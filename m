@@ -1,111 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Nov 2019 22:27:11 +0100
-Subject: [Buildroot] [git commit] package/linuxconsoletools: bump version to
- 1.7.0
-Message-ID: <20191202083934.1CB5D81429@busybox.osuosl.org>
+Date: Mon, 25 Nov 2019 20:45:10 +0100
+Subject: [Buildroot] [git commit] gitlab-ci.yml: regenerate after new
+ defconfig addition
+Message-ID: <20191202083935.4FA7D7FA91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3a4b092c82a9f87ccfa1b5c79acd36f3c5d4cdc
+commit: https://git.buildroot.net/buildroot/commit/?id=44649f6ce410e20998d959d66cb61b365531a3ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version changed the (optional) dependency from sdl and
-sdl-config to sdl2 and pkg-config. Therefore, the patch
-0002-sdl-config.patch has been dropped and the dependency
-has been changed to BR2_PACKAGE_SDL2.
+Fixes b68022c7cb17d27acc14ff64434413e8c93d7a56 ("board: add Beelink GS1 support")
 
-Since SDL2 (required to build force-feedback utilities)
-requires shared library support to compile, a dependency
-on !BR2_STATIC_LIBS was added to the configuration option
-that enables force-feedback utilities.
-
-Signed-off-by: Koen Martens <gmc@sonologic.nl>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linuxconsoletools/0002-sdl-config.patch  | 20 --------------------
- package/linuxconsoletools/Config.in              |  6 +++++-
- package/linuxconsoletools/linuxconsoletools.hash |  2 +-
- package/linuxconsoletools/linuxconsoletools.mk   |  6 +++---
- 4 files changed, 9 insertions(+), 25 deletions(-)
+ .gitlab-ci.yml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linuxconsoletools/0002-sdl-config.patch b/package/linuxconsoletools/0002-sdl-config.patch
-deleted file mode 100644
-index c19c274a83..0000000000
---- a/package/linuxconsoletools/0002-sdl-config.patch
-+++ /dev/null
-@@ -1,20 +0,0 @@
--Specify sdl-config to use instead of using host sdl-config.
--
--Signed-off-by: Koen Martens <gmc@sonologic.nl>
--
--diff -Naur a/utils/Makefile b/utils/Makefile
----- a/utils/Makefile	2017-06-16 18:48:28.402824790 +0200
--+++ b/utils/Makefile	2017-06-16 18:48:53.898696647 +0200
--@@ -69,10 +69,10 @@
-- 	$(CC) $(CFLAGS) $(CPPFLAGS) -funsigned-char $^ $(LDFLAGS) -lm -o $@
-- 
-- ffmvforce.o: ffmvforce.c
---	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ -o $@ `sdl-config --cflags`
--+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ -o $@ `${SDL_CONFIG} --cflags`
-- 
-- ffmvforce: ffmvforce.o
---	$(CC) $^ -o $@ $(LDFLAGS) -g -lm `sdl-config --libs`
--+	$(CC) $^ -o $@ $(LDFLAGS) -g -lm `${SDL_CONFIG} --libs`
-- 
-- axbtnmap.o: axbtnmap.c axbtnmap.h
-- 
-diff --git a/package/linuxconsoletools/Config.in b/package/linuxconsoletools/Config.in
-index 76150278ae..614099fdee 100644
---- a/package/linuxconsoletools/Config.in
-+++ b/package/linuxconsoletools/Config.in
-@@ -28,9 +28,13 @@ config BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK
- 
- config BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK
- 	bool "force-feedback utilities"
--	select BR2_PACKAGE_SDL
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_SDL2
- 	help
- 	  Build force-feedback driver utilities (fftest,
- 	  ffmvforce, ffset, ffcfstress).
- 
-+comment "force-feedback utilities need a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- endif
-diff --git a/package/linuxconsoletools/linuxconsoletools.hash b/package/linuxconsoletools/linuxconsoletools.hash
-index d1bb5a39ef..caacf70e45 100644
---- a/package/linuxconsoletools/linuxconsoletools.hash
-+++ b/package/linuxconsoletools/linuxconsoletools.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	e9d6b05a6c57c7eb3ec7f9f017f46b20e4b55d5a02f930eff1823a13921c5934	linuxconsoletools-1.6.1.tar.bz2
-+sha256	95d112f06393806116341d593bda002c8bc44119c1538407623268fed90d8c34	linuxconsoletools-1.7.0.tar.bz2
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/linuxconsoletools/linuxconsoletools.mk b/package/linuxconsoletools/linuxconsoletools.mk
-index b22e136d33..f26d874d96 100644
---- a/package/linuxconsoletools/linuxconsoletools.mk
-+++ b/package/linuxconsoletools/linuxconsoletools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINUXCONSOLETOOLS_VERSION = 1.6.1
-+LINUXCONSOLETOOLS_VERSION = 1.7.0
- LINUXCONSOLETOOLS_SOURCE = linuxconsoletools-$(LINUXCONSOLETOOLS_VERSION).tar.bz2
- LINUXCONSOLETOOLS_SITE = https://downloads.sourceforge.net/project/linuxconsole
- LINUXCONSOLETOOLS_LICENSE = GPL-2.0+
-@@ -21,8 +21,8 @@ endif
- ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK),y)
- LINUXCONSOLETOOLS_MAKE_OPTS += \
- 	ENABLE_FORCEFEEDBACK=1 \
--	SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
--LINUXCONSOLETOOLS_DEPENDENCIES += sdl
-+	CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-+LINUXCONSOLETOOLS_DEPENDENCIES += sdl2 host-pkgconf
- endif
- 
- define LINUXCONSOLETOOLS_BUILD_CMDS
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 9ef93130a1..22befa0427 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -161,6 +161,7 @@ beagleboardx15_defconfig: { extends: .defconfig }
+ beaglebone_defconfig: { extends: .defconfig }
+ beaglebone_qt5_defconfig: { extends: .defconfig }
+ beagleboneai_defconfig: { extends: .defconfig }
++beelink_gs1_defconfig: { extends: .defconfig }
+ chromebook_snow_defconfig: { extends: .defconfig }
+ ci20_defconfig: { extends: .defconfig }
+ csky_gx6605s_defconfig: { extends: .defconfig }
