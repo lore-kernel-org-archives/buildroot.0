@@ -1,12 +1,16 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 25 Nov 2019 18:03:37 +0100
-Subject: [Buildroot] [PATCH] package/stunnel: bump to version 5.56
-Message-ID: <1574701417-31355-1-git-send-email-pjtexier@koncepto.io>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Nov 2019 18:13:39 +0100
+Subject: [Buildroot] [git commit branch/next] package/stunnel: bump to
+ version 5.56
+Message-ID: <20191125170651.87FEB82AF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=02dda8f29b2bfee23af9a80a5fd429d76690f338
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Release notes of the bugfix release:
  - https://www.stunnel.org/NEWS.html
@@ -16,21 +20,14 @@ Also:
  - rename COPYING to COPYING.md
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: SKIPPED
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed
-
  package/stunnel/stunnel.hash | 8 ++++----
  package/stunnel/stunnel.mk   | 4 ++--
  2 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 7dde175..b741b0e 100644
+index 7dde175563..b741b0e816 100644
 --- a/package/stunnel/stunnel.hash
 +++ b/package/stunnel/stunnel.hash
 @@ -1,5 +1,5 @@
@@ -44,7 +41,7 @@ index 7dde175..b741b0e 100644
 +sha256	f46e2613769e23e23348b6eb667dc85309da2252c8cc2016db92ad93d743aea4	COPYING.md
 +sha256	62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d	COPYRIGHT.md
 diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 261e331..f8265c4 100644
+index 261e331cfa..f8265c4cf4 100644
 --- a/package/stunnel/stunnel.mk
 +++ b/package/stunnel/stunnel.mk
 @@ -5,7 +5,7 @@
@@ -65,5 +62,3 @@ index 261e331..f8265c4 100644
  
  ifeq ($(BR2_INIT_SYSTEMD),y)
  STUNNEL_DEPENDENCIES += systemd
--- 
-2.7.4
