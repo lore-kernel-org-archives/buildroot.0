@@ -1,71 +1,70 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 25 Nov 2019 19:54:05 +0100
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.3.x series
-Message-ID: <20191125185405.24810-1-bernd.kuhls@t-online.de>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon, 25 Nov 2019 11:38:48 -0800
+Subject: [Buildroot] [PATCH/next 1/3] python-pbr: new package
+Message-ID: <20191125193850.862709-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+From: Adam Duskett <aduskett@greenlots.com>
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 17b16d94ec..3fa0d7e7b2 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.3.12" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.3.13" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.75-cip11" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index d50aaa0bc4..3566c93266 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 53bff6f89dca19f928043fb0d3434bfb4b6abbb1bf18b907cb731188bdac97a0  linux-5.3.12.tar.xz
-+sha256 9f04e53f03d0ead6561195fb71aac18cbee419112ed54f9d4fc1515a5fa5c92f  linux-5.3.13.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 fdacceeae22d1a0467cae50c15e6e754bfb8bb8e8010623df0d8fd78f4adb929  linux-4.4.202.tar.xz
--sha256 8108ec1cd10fc40821c84e9f087dba10b1767aad66596f4a36925faef55e4ebf  linux-4.9.202.tar.xz
--sha256 77d61979556b81c95b81452fa10e1fe9368cbe2f9f80a13e4669b0464722e481  linux-4.14.155.tar.xz
--sha256 7bf435970aeeafd46263f49730087a61c4858d8b8fc5a4002ceac971b45f4fb7  linux-4.19.85.tar.xz
-+sha256 9262528aeaf5991c2008d7d9ea3994f9a548f000da39c0565a35f50863b4790a  linux-4.4.203.tar.xz
-+sha256 1cd950cfaff8ddcc11596d970ec622fa3cdbedd75d3e28ddd3a9383f3cb2a849  linux-4.9.203.tar.xz
-+sha256 f8889feb0cbd7df36ff35bd4c72c1e2010567621bfcb218fcfa501bc5c7787c0  linux-4.14.156.tar.xz
-+sha256 bf2cbba319d43d1bd9e876ac0b55ab83118d1a1e61cce3c929d5371f7567bff6  linux-4.19.86.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 191e387de0..5f1952731c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -305,11 +305,11 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.202"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.202"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.155"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.85"	if BR2_KERNEL_HEADERS_4_19
--	default "5.3.12"	if BR2_KERNEL_HEADERS_5_3
-+	default "4.4.203"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.203"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.156"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.86"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.3.13"	if BR2_KERNEL_HEADERS_5_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+PBR is a library that injects some useful and sensible default
+behaviors into a setuptools run.
+
+Signed-off-by: Adam Duskett <aduskett@greenlots.com>
+---
+ DEVELOPERS                         |  1 +
+ package/python-pbr/python-pbr.hash |  6 ++++++
+ package/python-pbr/python-pbr.mk   | 14 ++++++++++++++
+ 3 files changed, 21 insertions(+)
+ create mode 100644 package/python-pbr/python-pbr.hash
+ create mode 100644 package/python-pbr/python-pbr.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5837bbfab2..3149095d9e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -62,6 +62,7 @@ F:	package/python-daphne/
+ F:	package/python-django-enumfields/
+ F:	package/python-flask-sqlalchemy/
+ F:	package/python-mutagen/
++F:	package/python-pbr/
+ F:	package/python-pip/
+ F:	package/python-psycopg2/
+ F:	package/python-sqlalchemy/
+diff --git a/package/python-pbr/python-pbr.hash b/package/python-pbr/python-pbr.hash
+new file mode 100644
+index 0000000000..cca9de0178
+--- /dev/null
++++ b/package/python-pbr/python-pbr.hash
+@@ -0,0 +1,6 @@
++# md5, sha256 from https://pypi.org/pypi/pbr/json
++md5	477d2aa285ad97250a172b199f4060b7  pbr-5.4.3.tar.gz
++sha256	2c8e420cd4ed4cec4e7999ee47409e876af575d4c35a45840d59e8b5f3155ab8  pbr-5.4.3.tar.gz
++# Locally computed sha256 checksums
++sha256	5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  LICENSE
++sha256	eb4a8c8791f6caab1cf36df26db2b6f4e2ddda52657b060ff7f02abc63910aef  pbr/tests/testpackage/LICENSE.txt
+diff --git a/package/python-pbr/python-pbr.mk b/package/python-pbr/python-pbr.mk
+new file mode 100644
+index 0000000000..70a79d1628
+--- /dev/null
++++ b/package/python-pbr/python-pbr.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pbr
++#
++################################################################################
++
++PYTHON_PBR_VERSION = 5.4.3
++PYTHON_PBR_SOURCE = pbr-$(PYTHON_PBR_VERSION).tar.gz
++PYTHON_PBR_SITE = https://files.pythonhosted.org/packages/99/f1/7807d3409c79905a907f1c616d910c921b2a8e73c17b2969930318f44777
++PYTHON_PBR_SETUP_TYPE = setuptools
++PYTHON_PBR_LICENSE = BSD-3-Clause, Apache-2.0
++PYTHON_PBR_LICENSE_FILES = LICENSE pbr/tests/testpackage/LICENSE.txt
++
++$(eval $(host-python-package))
 -- 
-2.20.1
+2.23.0
