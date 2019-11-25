@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 25 Nov 2019 18:54:09 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/libmaxminddb: bump to version
- 1.4.2
-Message-ID: <20191125175409.1018600-1-fontaine.fabrice@gmail.com>
+Date: Mon, 25 Nov 2019 19:08:12 +0100
+Subject: [Buildroot] [PATCH/next v2,
+ 1/1] package/libmaxminddb: bump to version 1.4.2
+Message-ID: <20191125180812.1024149-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,6 +14,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix tarball hash
+
  .../0001-Add-disable-binaries.patch           | 53 -------------------
  package/libmaxminddb/libmaxminddb.hash        |  2 +-
  package/libmaxminddb/libmaxminddb.mk          |  7 ++-
@@ -80,13 +83,13 @@ index 0053cace71..0000000000
 -2.7.4
 -
 diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
-index 073458a351..c8a18e4ee4 100644
+index 073458a351..a3ca682c2a 100644
 --- a/package/libmaxminddb/libmaxminddb.hash
 +++ b/package/libmaxminddb/libmaxminddb.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
 -sha256	c0785521c7e5515f1169db90ed6e51bc2a5a000377d0fbad87e4d5a791a6e364	libmaxminddb-1.3.2.tar.gz
-+sha256	22e15ee6cac6da28e8845e4429e2de0037b177aa6d192780aabc1e76bc9a00b0	libmaxminddb-1.4.2.tar.gz
++sha256	dd582aa971be23dee960ec33c67fb5fd38affba508e6f00ea75959dbd5aad156	libmaxminddb-1.4.2.tar.gz
  sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	LICENSE
 diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
 index 25d4d3378f..18e2eaee7d 100644
