@@ -1,74 +1,35 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 25 Nov 2019 21:55:20 +0100
-Subject: [Buildroot] [PATCH v1] package/libdrm: fix nouveau tests compile
- for musl
-Message-ID: <20191125205520.9234-1-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Nov 2019 21:56:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lzma: add license
+In-Reply-To: <20191124180239.32194-1-fontaine.fabrice@gmail.com>
+References: <20191124180239.32194-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191125215606.7e9a5603@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add openembedded provided patch [2] to fix musl toolchain compile failures
-because of different ioctl() signatures, (int, int, ...) vs. (int, unsigned
-long, ...).
+On Sun, 24 Nov 2019 19:02:39 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
+>  LZMA_SITE = http://tukaani.org/lzma
+> +LZMA_LICENSE = GPL-2.0+, LGPL-2.1+, GPL-3.0+ (tests)
 
-  ../tests/nouveau/threaded.c:39:5: error: conflicting types for 'ioctl'
-  int ioctl(int fd, unsigned long request, ...)
+I think should be more specific. It seems like the lzmadec library is
+under LGPL-2.1+, while the programs are indeed under GPL-2.0+.
 
-[1] http://autobuild.buildroot.net/results/047f149a928ac2a17e25211a0a8a264ebae369ac
-[2] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-graphics/drm/libdrm/musl-ioctl.patch
+So perhaps it should be:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...uveau-threaded-adapt-ioctl-signature.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/libdrm/0006-tests-nouveau-threaded-adapt-ioctl-signature.patch
+LGPL-2.1+ (lzmadec library), GPL-2.0+ (programs), GPL-3.0+ (tests)
 
-diff --git a/package/libdrm/0006-tests-nouveau-threaded-adapt-ioctl-signature.patch b/package/libdrm/0006-tests-nouveau-threaded-adapt-ioctl-signature.patch
-new file mode 100644
-index 0000000000..80845709da
---- /dev/null
-+++ b/package/libdrm/0006-tests-nouveau-threaded-adapt-ioctl-signature.patch
-@@ -0,0 +1,37 @@
-+From 6c7b305869b941e52cb846cbed5e4a5c85d035d9 Mon Sep 17 00:00:00 2001
-+From: Ross Burton <ross.burton@intel.com>
-+Date: Mon, 18 Jun 2018 15:07:03 +0100
-+Subject: [PATCH] tests/nouveau/threaded: adapt ioctl signature
-+
-+POSIX says ioctl() has the signature (int, int, ...) but glibc has decided to
-+use (int, unsigned long int, ...) instead.
-+
-+Use a #ifdef to adapt the replacement function as appropriate.
-+
-+Signed-off-by: Ross Burton <ross.burton@intel.com>
-+
-+[Taken from https://raw.githubusercontent.com/openembedded/openembedded-core/master/meta/recipes-graphics/drm/libdrm/musl-ioctl.patch]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ tests/nouveau/threaded.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/tests/nouveau/threaded.c b/tests/nouveau/threaded.c
-+index 3669bcd..e1c27c0 100644
-+--- a/tests/nouveau/threaded.c
-++++ b/tests/nouveau/threaded.c
-+@@ -36,7 +36,11 @@ static int failed;
-+ 
-+ static int import_fd;
-+ 
-++#ifdef __GLIBC__
-+ int ioctl(int fd, unsigned long request, ...)
-++#else
-++int ioctl(int fd, int request, ...)
-++#endif
-+ {
-+ 	va_list va;
-+ 	int ret;
-+-- 
-+2.24.0
-+
+please double check by looking at the source files of the different
+parts of the package.
+
+Thanks!
+
+Thomas
 -- 
-2.24.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
