@@ -1,31 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 25 Nov 2019 19:09:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/perl-gdtextutil: add license
-Message-ID: <20191125180957.1024314-1-fontaine.fabrice@gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon, 25 Nov 2019 19:13:07 +0100
+Subject: [Buildroot] [PATCH/next] gitlab-ci: regenerate after new defconfig
+ addition
+Message-ID: <1574705587-7486-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dustismo.LICENSE states that license is GPL-2.0+
+Fixes b68022c7cb17d27acc14ff64434413e8c93d7a56 ("board: add Beelink GS1 support")
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/perl-gdtextutil/perl-gdtextutil.mk | 1 +
+ .gitlab-ci.yml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/perl-gdtextutil/perl-gdtextutil.mk b/package/perl-gdtextutil/perl-gdtextutil.mk
-index cd1617fbbd..d40ad5fd1c 100644
---- a/package/perl-gdtextutil/perl-gdtextutil.mk
-+++ b/package/perl-gdtextutil/perl-gdtextutil.mk
-@@ -7,6 +7,7 @@
- PERL_GDTEXTUTIL_VERSION = 0.86
- PERL_GDTEXTUTIL_SOURCE = GDTextUtil-$(PERL_GDTEXTUTIL_VERSION).tar.gz
- PERL_GDTEXTUTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MV/MVERB
-+PERL_GDTEXTUTIL_LICENSE = GPL-2.0+
- PERL_GDTEXTUTIL_LICENSE_FILES = Dustismo.LICENSE
- PERL_GDTEXTUTIL_DISTNAME = GDTextUtil
- 
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 9ef9313..22befa0 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -161,6 +161,7 @@ beagleboardx15_defconfig: { extends: .defconfig }
+ beaglebone_defconfig: { extends: .defconfig }
+ beaglebone_qt5_defconfig: { extends: .defconfig }
+ beagleboneai_defconfig: { extends: .defconfig }
++beelink_gs1_defconfig: { extends: .defconfig }
+ chromebook_snow_defconfig: { extends: .defconfig }
+ ci20_defconfig: { extends: .defconfig }
+ csky_gx6605s_defconfig: { extends: .defconfig }
 -- 
-2.24.0
+2.7.4
