@@ -1,28 +1,35 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 25 Nov 2019 20:48:22 +0100
-Subject: [Buildroot] [PATCH/next] gitlab-ci: regenerate after new
- defconfig addition
-In-Reply-To: <20191125204636.67bc004f@windsurf>
-References: <1574705587-7486-1-git-send-email-pjtexier@koncepto.io>
- <20191125204558.6a9f4e58@windsurf> <20191125204636.67bc004f@windsurf>
-Message-ID: <aed6f153-0295-b5b1-1311-08bf93e3d2b4@koncepto.io>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Mon, 25 Nov 2019 20:05:48 +0000
+Subject: [Buildroot] [PATCH 1/1] package/atk: add an upstream URL to
+ Config.in
+Message-ID: <20191125200548.18520-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
-Le 25/11/2019 ? 20:46, Thomas Petazzoni a ?crit?:
-> Sorry, I've applied to next, I used the wrong keyboard shortcut when
-> replying.
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+---
+ package/atk/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-No problem :)
-
-Thanks Thomas !
-
-Regards
+diff --git a/package/atk/Config.in b/package/atk/Config.in
+index c980614998..d9371b879b 100644
+--- a/package/atk/Config.in
++++ b/package/atk/Config.in
+@@ -7,6 +7,8 @@ config BR2_PACKAGE_ATK
+ 	help
+ 	  The ATK accessibility toolkit, needed to build GTK+-2.x.
+ 
++	  https://gitlab.gnome.org/GNOME/atk
++
+ comment "atk needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Pierre-Jean Texier
-Embedded Linux Engineer
-https://koncepto.io
+2.20.1
