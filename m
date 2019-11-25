@@ -1,34 +1,44 @@
-From: Jens Kleintje <scooby22@web.de>
-Date: Mon, 25 Nov 2019 11:14:26 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/gcnano-binaries: Create
- directory before copy files
-In-Reply-To: <20191125101426.10955-1-scooby22@web.de>
-References: <20191125101426.10955-1-scooby22@web.de>
-Message-ID: <20191125101426.10955-3-scooby22@web.de>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 25 Nov 2019 11:50:40 +0100
+Subject: [Buildroot] [PATCH] package/libnss: security bump to version 3.47.1
+Message-ID: <20191125105040.92059-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The directory $(1)/usr/include may not exist before copy files.
+Fixes the following security issues:
+CVE-2019-11745: EncryptUpdate should use maxout, not block size
 
-Signed-off-by: Jens Kleintje <scooby22@web.de>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/gcnano-binaries/gcnano-binaries.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libnss/libnss.hash | 2 +-
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
-index 2913e664dc..b27571a08c 100644
---- a/package/gcnano-binaries/gcnano-binaries.mk
-+++ b/package/gcnano-binaries/gcnano-binaries.mk
-@@ -56,6 +56,7 @@ define GCNANO_BINARIES_INSTALL
- 			$(1)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so ; \
- 		cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).so* $(1)/usr/lib
- 	)
-+	mkdir -p $(1)/usr/include
- 	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/include/* $(1)/usr/include/
- 	$(foreach pkgconfig,$(GCNANO_BINARIES_PKG_CONFIGS), \
- 		$(INSTALL) -D -m 0644 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/pkgconfig/$(pkgconfig).pc \
---
-2.17.1
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 92d6fd3908..518d95d842 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_46_1_RTM/src/SHA256SUMS
+-sha256	6cd0c4438b616bdacc0b5f25ff1506b0d07ee97ea6c95d514c5487200a155fa7  nss-3.47.tar.gz
++sha256	1ae3d1cb1de345b258788f2ef6b10a460068034c3fd64f42427a183d8342a6fb  nss-3.47.1.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index ca1cde4c1c..747612c795 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.47
++LIBNSS_VERSION = 3.47.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
+-- 
+2.20.1
