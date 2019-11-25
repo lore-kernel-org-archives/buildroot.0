@@ -1,70 +1,50 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 25 Nov 2019 10:22:21 +0100
-Subject: [Buildroot] [PATCH 2/2] package/postgresql: enable data
- checksums by default for initdb
-In-Reply-To: <20191121101552.6845-1-p.debruijn@unilogic.nl>
-References: <20191121101552.6845-1-p.debruijn@unilogic.nl>
-Message-ID: <20191125102221.14f54a75@gmx.net>
+From: Simon Rowe <simon.rowe@eu.citrix.com>
+Date: Mon, 25 Nov 2019 09:23:09 +0000
+Subject: [Buildroot] [PATCH 1/1] package/tini: compile executable static
+In-Reply-To: <20191123211555.GZ32494@scaer>
+References: <1574255351-23642-1-git-send-email-simon.rowe@citrix.com>
+ <20191123211555.GZ32494@scaer>
+Message-ID: <f361f14c-3a77-d769-1b5c-9a1a5fd8f3b3@eu.citrix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Pascal,
+On 23/11/2019 21:15, Yann E. MORIN wrote:
 
-On Thu, 21 Nov 2019 11:15:52 +0100, Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
+> That can't work as-is, because this would break with BR2_SHARED_LIBS=y,
+> in which case only shared libraries are available.
 
-> From: Pascal de Bruijn <pmjdebruijn@pcode.nl>
->
-> This makes PostgreSQL as robust as possible by default
->
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> ---
->  package/postgresql/S50postgresql      | 2 +-
->  package/postgresql/postgresql.service | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/postgresql/S50postgresql b/package/postgresql/S50postgresql
-> index 3c0c520..ce72e12 100644
-> --- a/package/postgresql/S50postgresql
-> +++ b/package/postgresql/S50postgresql
-> @@ -7,7 +7,7 @@ umask 077
->
->  if [ ! -f /var/lib/pgsql/PG_VERSION ]; then
->  	echo "Initializing postgresql data base..."
-> -	su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/pgsql -o --locale=en_US.UTF-8'
-> +	su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/pgsql -o --locale=en_US.UTF-8 -o --data-checksums'
+Thanks for pointing this out.
 
-Thanks for the patch, but I believe buildroot is about providing a very
-basic/minimum setup as starting point customized projects and the
-postgresql documentation states ([1]):
+> Furthermore, the commit message introducing tini explicitly states "it
+> is not necessary to compile Tini statically for many non-docker
+> container environments". So, what has changed since then?
+> 
+> Besides, I would expect that the init process of a container would be
+> provided inside the container, not come from the host system. As such,
+> the init system of the container can be dynamically linked with the
+> runtime of the container itself.
 
-	 Enabling checksums may incur a noticeable performance penalty.
+Passing --init to "docker run" takes whatever the executable docker-init 
+in the OS filesystem is and uses it as the process for pid 1 in the 
+container. If the OS is buildroot and the container uses glibc that 
+doesn't work.
 
-And I think not everyone (specially for embedded projects) will accept this
-performance vs. data security tradeoff..., same applies to your
-locale/en_US.UTF-8 suggestion (not everyone will be happy/use en_US and I
-hope no one will run a non-customized production project)...
+> In any case, this patch is incorrect in the shared-only setup, so I
+> marked it as rejected for now. If you can provide a beter way to do what
+> you need, then we can revisit it later with a different implementation
+> (and more explanations on how this is used in the wild).
 
-Regards,
-Peter
+I can add the static linking as an option. I would have done so but it 
+was suggested here
 
-[1] https://www.postgresql.org/docs/12/app-initdb.html
+http://lists.busybox.net/pipermail/buildroot/2017-October/204974.html
 
->  	echo "done"
->  fi
->
-> diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
-> index 4bbe742..2f5d2a9 100644
-> --- a/package/postgresql/postgresql.service
-> +++ b/package/postgresql/postgresql.service
-> @@ -17,7 +17,7 @@ StandardError=syslog
->  SyslogIdentifier=postgres
->  PIDFile=/var/lib/pgsql/postmaster.pid
->
-> -ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql -o --locale=en_US.UTF-8; fi"
-> +ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql -o --locale=en_US.UTF-8 -o --data-checksums; fi"
->  ExecStart=/usr/bin/postgres -D /var/lib/pgsql
->  ExecReload=/usr/bin/kill -HUP $MAINPID
->  KillMode=mixed
+that an init should always be statically linked.
+
+In summary I can make this optional and mutually exclusive with 
+BR2_SHARED_LIBS, would that be acceptable?
+
+Simon
