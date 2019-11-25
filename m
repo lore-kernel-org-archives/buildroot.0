@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 22:53:13 +0100
-Subject: [Buildroot] [git commit] configs/nanopi_neo: determine roofs
- partition size automatically
-Message-ID: <20191202083935.AE6A982884@busybox.osuosl.org>
+Date: Mon, 25 Nov 2019 18:17:24 +0100
+Subject: [Buildroot] [git commit] package/gcnano-binaries: install .pc files
+Message-ID: <20191202083935.378F1817DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4976b8450dd4f1389679a05567f03a33aca26d03
+commit: https://git.buildroot.net/buildroot/commit/?id=ee546d87bbea0059e1d33d1204090c33d9ac4e87
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Let genimage determine rootfs partition size based on the filesystem
-image size.
+Qt needs the package config files for building.
 
-Signed-off-by: Viktar Palstsiuk <viktar.palstsiuk@promwad.com>
+Signed-off-by: Jens Kleintje <scooby22@web.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/friendlyarm/nanopi-neo/genimage.cfg | 1 -
- configs/nanopi_neo_defconfig              | 2 --
- 2 files changed, 3 deletions(-)
+ package/gcnano-binaries/gcnano-binaries.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
-index ad43d31049..f6adc4af3e 100644
---- a/board/friendlyarm/nanopi-neo/genimage.cfg
-+++ b/board/friendlyarm/nanopi-neo/genimage.cfg
-@@ -29,6 +29,5 @@ image sdcard.img {
- 	partition rootfs {
- 		partition-type = 0x83
- 		image = "rootfs.ext4"
--		size = 32M
- 	}
- }
-diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
-index aa464917b5..838f4edad5 100644
---- a/configs/nanopi_neo_defconfig
-+++ b/configs/nanopi_neo_defconfig
-@@ -31,8 +31,6 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
- # Build an sdcard image
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
--BR2_TARGET_ROOTFS_EXT2_INODES=8192
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
+index 4bfb5ad952..2913e664dc 100644
+--- a/package/gcnano-binaries/gcnano-binaries.mk
++++ b/package/gcnano-binaries/gcnano-binaries.mk
+@@ -48,6 +48,8 @@ GCNANO_BINARIES_LIBRARIES = \
+ 
+ GCNANO_BINARIES_USERLAND_SUBDIR = gcnano-userland-multi-$(GCNANO_BINARIES_USERLAND_VERSION)
+ 
++GCNANO_BINARIES_PKG_CONFIGS = egl gbm glesv1_cm glesv2 vg
++
+ define GCNANO_BINARIES_INSTALL
+ 	$(foreach lib,$(GCNANO_BINARIES_LIBRARIES), \
+ 		$(INSTALL) -D -m 0755 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so \
+@@ -55,6 +57,10 @@ define GCNANO_BINARIES_INSTALL
+ 		cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).so* $(1)/usr/lib
+ 	)
+ 	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/include/* $(1)/usr/include/
++	$(foreach pkgconfig,$(GCNANO_BINARIES_PKG_CONFIGS), \
++		$(INSTALL) -D -m 0644 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/pkgconfig/$(pkgconfig).pc \
++			$(1)/usr/lib/pkgconfig/$(pkgconfig).pc
++	)
+ endef
+ 
+ define GCNANO_BINARIES_INSTALL_TARGET_CMDS
