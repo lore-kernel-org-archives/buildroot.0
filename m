@@ -1,43 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Nov 2019 22:59:35 +0100
-Subject: [Buildroot] [PATCH v2 05/10] boot/arm-trusted-firmware: Add
- option BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
-In-Reply-To: <20191121102324.35225-6-jerry.huang@nxp.com>
-References: <20191121102324.35225-1-jerry.huang@nxp.com>
- <20191121102324.35225-6-jerry.huang@nxp.com>
-Message-ID: <20191125225935.3d045f36@windsurf>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon, 25 Nov 2019 23:01:05 +0100
+Subject: [Buildroot] [PATCH/next] package/libubootenv: bump to version
+ 9294981
+Message-ID: <1574719265-14818-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 21 Nov 2019 18:23:19 +0800
-Changming Huang <jerry.huang@nxp.com> wrote:
+This includes the following changes:
 
-> From: Jerry Huang <jerry.huang@nxp.com>
-> 
-> Add option BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE to define the U-Boot BIN.
-> The default setting is u-boot.bin, customer can change it to anything via defconfig.
-> 
-> Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
-> ---
-> changes since v1:
-> 1. add BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE for uboot binary file
-> 2. default of new option is u-boot.bin.
-> 3. use the new option for U-Boot BL33
-> ---
->  boot/arm-trusted-firmware/Config.in               | 12 ++++++++++++
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk |  3 ++-
->  2 files changed, 14 insertions(+), 1 deletion(-)
+9294981 handle protected mmcblk_boot_ devices
+ac6d18a add missing includes
+8106b65 add .editorconfig file
 
-I have applied to next, after reworking the commit log and Config.in
-help text.
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks!
-
-Thomas
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index 81f72ad..36396ac 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 9c8b0e6d596b43127ccdf6b2d181dce597fb1f90211aa36c4d88b5c6a31ef026 libubootenv-3286c571c7e15be4b341e46986f1c0dc74730207.tar.gz
++sha256 38431bcbb93fa1a6065828947ca9f9510709b5ac57f8f700fd91473236885064 libubootenv-92949816720d7af2ac722016e7a5b9a85ff141bc.tar.gz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index b24008c..2c6abe8 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUBOOTENV_VERSION = 3286c571c7e15be4b341e46986f1c0dc74730207
++LIBUBOOTENV_VERSION = 92949816720d7af2ac722016e7a5b9a85ff141bc
+ LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
