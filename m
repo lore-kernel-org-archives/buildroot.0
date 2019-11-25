@@ -1,156 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Nov 2019 22:43:09 +0100
-Subject: [Buildroot] [git commit] package/libcgi: bump version to 1.3.0
-Message-ID: <20191202083934.BE4597FC8F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Nov 2019 18:13:39 +0100
+Subject: [Buildroot] [git commit] package/stunnel: bump to version 5.56
+Message-ID: <20191202083935.2E0528152E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00df4cdabf75938556bb1b17b1c104ff0f6a1de1
+commit: https://git.buildroot.net/buildroot/commit/?id=02dda8f29b2bfee23af9a80a5fd429d76690f338
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patches applied upstream:
-https://github.com/rafaelsteil/libcgi/commit/d7cf836905ab8a46034295023a1a5677dd4c7ce5
-https://github.com/rafaelsteil/libcgi/commit/58edd5089011f7d9846e9336670f90d135d1c580
+Release notes of the bugfix release:
+ - https://www.stunnel.org/NEWS.html
 
-Added upstream-provided md5 hash.
+Also:
+ - rename COPYRIGHT.GPL to COPYRIGHT.md
+ - rename COPYING to COPYING.md
 
-Upstream moved and renamed license file COPYING and added MIT license
-file:
-https://github.com/rafaelsteil/libcgi/commit/86e88b4b050fa5db1a5062e74429170e49dbde5a
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Acked-by: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-CMakeLists.txt-libcgi-is-in-C.patch       | 32 ----------------
- ...txt-don-t-force-the-build-of-a-shared-lib.patch | 44 ----------------------
- package/libcgi/libcgi.hash                         |  9 +++--
- package/libcgi/libcgi.mk                           |  6 +--
- 4 files changed, 9 insertions(+), 82 deletions(-)
+ package/stunnel/stunnel.hash | 8 ++++----
+ package/stunnel/stunnel.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libcgi/0001-CMakeLists.txt-libcgi-is-in-C.patch b/package/libcgi/0001-CMakeLists.txt-libcgi-is-in-C.patch
-deleted file mode 100644
-index 682bfe5d52..0000000000
---- a/package/libcgi/0001-CMakeLists.txt-libcgi-is-in-C.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 043f7a470e32c036f0fe933ec5cd2003087d6b2e Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 2 Sep 2017 23:50:42 +0200
--Subject: [PATCH] CMakeLists.txt: libcgi is in C
--
--By default, CMake checks that both C and C++ compilers are
--available. However, since libcgi is only C, there's no need for a C++
--compiler check. Therefore, this commit adjusts the project() variable
--definition to only require C language support.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Submitted-upstream: https://github.com/rafaelsteil/libcgi/pull/38
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index f98a99d..c599ca9 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -3,7 +3,7 @@
-- #
-- cmake_minimum_required(VERSION 2.8.8)
-- 
---project(cgi)
--+project(cgi C)
-- string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UC)
-- string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LC)
-- set(LIBPREFIX ${PROJECT_NAME})
---- 
--2.13.5
--
-diff --git a/package/libcgi/0002-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch b/package/libcgi/0002-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
-deleted file mode 100644
-index ebf91b0a62..0000000000
---- a/package/libcgi/0002-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 9bb9d67da0e4faf4bb3a47786dee127e66a49ed0 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sun, 3 Sep 2017 15:22:30 +0200
--Subject: [PATCH] CMakeLists.txt: don't force the build of a shared library
--
--Building a shared library doesn't work on all platforms, so instead,
--let CMake rely on the standard BUILD_SHARED_LIBS variable to decide
--whether a static or shared library should be built.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Submitted-upstream: https://github.com/rafaelsteil/libcgi/pull/39
-----
-- src/CMakeLists.txt | 7 ++++---
-- 1 file changed, 4 insertions(+), 3 deletions(-)
--
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index f32d22e..3bde408 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -23,17 +23,18 @@ set(CGI_SRC
-- )
-- 
-- # create binary
---add_library(${PROJECT_NAME}-shared SHARED ${CGI_SRC})
---set_target_properties(${PROJECT_NAME}-shared PROPERTIES
--+add_library(${PROJECT_NAME} ${CGI_SRC})
--+set_target_properties(${PROJECT_NAME} PROPERTIES
-- 	OUTPUT_NAME	${PROJECT_NAME}
-- 	SOVERSION	${PROJECT_VERSION_MAJOR}
-- 	VERSION		${PROJECT_VERSION}
-- )
-- 
-- # install binary
---install(TARGETS ${PROJECT_NAME}-shared
--+install(TARGETS ${PROJECT_NAME}
-- 	EXPORT ${PROJECT_NAME}-targets
-- 	LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
--+	ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-- )
-- 
-- # install cmake targets
---- 
--2.13.5
--
-diff --git a/package/libcgi/libcgi.hash b/package/libcgi/libcgi.hash
-index f071cc0aea..8760f91cf5 100644
---- a/package/libcgi/libcgi.hash
-+++ b/package/libcgi/libcgi.hash
-@@ -1,5 +1,8 @@
--# From https://github.com/rafaelsteil/libcgi/releases/download/v1.1/libcgi-1.1.tar.gz.sha256sum
--sha256  128445f2f828e84905d51bd53d11e2e08c489df3a07225ff9f198c1318092fe6  libcgi-1.1.tar.gz
-+# From https://github.com/rafaelsteil/libcgi/releases/download/v1.3.0/libcgi-1.3.0.tar.gz.md5
-+md5 6efdc968bdf986832b7e220d1b914e57  libcgi-1.3.0.tar.gz
-+# From https://github.com/rafaelsteil/libcgi/releases/download/v1.3.0/libcgi-1.3.0.tar.gz.sha256
-+sha256  d932f380b1a5dbfbddffaa76fac71bf505a9585d441c9ae86bfbf76033d9d8df  libcgi-1.3.0.tar.gz
- 
- # Hash for license file:
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1.txt
-+sha256  f32c31e26ec840753a8cd47cd2681e48be4cee853212d16a4b1d85ac4d677669  LICENSES/MIT.txt
-diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
-index d1e403fdf1..22163310d3 100644
---- a/package/libcgi/libcgi.mk
-+++ b/package/libcgi/libcgi.mk
-@@ -4,11 +4,11 @@
- #
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index 7dde175563..b741b0e816 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
+@@ -1,5 +1,5 @@
+-# From https://www.stunnel.org/downloads/stunnel-5.55.tar.gz.sha256
+-sha256	90de69f41c58342549e74c82503555a6426961b29af3ed92f878192727074c62	stunnel-5.55.tar.gz
++# From https://www.stunnel.org/downloads/stunnel-5.56.tar.gz.sha256
++sha256	7384bfb356b9a89ddfee70b5ca494d187605bb516b4fff597e167f97e2236b22	stunnel-5.56.tar.gz
+ # Locally calculated
+-sha256	81d0b7244f44ef81dd0b299cf681037c5a42d468b8533e53aff6d1ac84c97dc8	COPYING
+-sha256	1ee2b290e92c211b08df10e9fcaf32596cdb22b8eae731b18c2c074a4a83eebe	COPYRIGHT.GPL
++sha256	f46e2613769e23e23348b6eb667dc85309da2252c8cc2016db92ad93d743aea4	COPYING.md
++sha256	62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d	COPYRIGHT.md
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 261e331cfa..f8265c4cf4 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBCGI_VERSION = 1.1
-+LIBCGI_VERSION = 1.3.0
- LIBCGI_SITE = https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_VERSION)
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).55
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).56
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = host-pkgconf openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+@@ -14,7 +14,7 @@ STUNNEL_CONF_ENV = \
+ 	ax_cv_check_cflags___fstack_protector=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no) \
+ 	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ STUNNEL_LICENSE = GPL-2.0+
+-STUNNEL_LICENSE_FILES = COPYING COPYRIGHT.GPL
++STUNNEL_LICENSE_FILES = COPYING.md COPYRIGHT.md
  
- LIBCGI_INSTALL_STAGING = YES
--LIBCGI_LICENSE = LGPL-2.1+
--LIBCGI_LICENSE_FILES = COPYING
-+LIBCGI_LICENSE = LGPL-2.1+, MIT (base64.c)
-+LIBCGI_LICENSE_FILES = LICENSES/LGPL-2.1.txt LICENSES/MIT.txt
- 
- $(eval $(cmake-package))
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ STUNNEL_DEPENDENCIES += systemd
