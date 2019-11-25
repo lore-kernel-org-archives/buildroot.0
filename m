@@ -1,68 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Nov 2019 22:57:13 +0100
-Subject: [Buildroot] [git commit branch/next] boot/arm-trusted-firmware: add
+Date: Mon, 25 Nov 2019 22:59:35 +0100
+Subject: [Buildroot] [PATCH v2 05/10] boot/arm-trusted-firmware: Add
  option BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
-Message-ID: <20191125215122.AA295836DE@busybox.osuosl.org>
+In-Reply-To: <20191121102324.35225-6-jerry.huang@nxp.com>
+References: <20191121102324.35225-1-jerry.huang@nxp.com>
+ <20191121102324.35225-6-jerry.huang@nxp.com>
+Message-ID: <20191125225935.3d045f36@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ef18c3b810752d30b69c8cb8f96e76060893bd5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Thu, 21 Nov 2019 18:23:19 +0800
+Changming Huang <jerry.huang@nxp.com> wrote:
 
-Currently, when BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33 is
-enabled, the arm-trusted-firmware package assumes that the BL33 image
-provided by U-Boot is u-boot.bin. However for some platforms, the name
-may be different (for example u-boot-dtb.bin). To support such use
-cases, this commit adds a string option
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE to configure the
-U-Boot image name, which defaults to u-boot.bin to preserve backward
-compatibility.
+> From: Jerry Huang <jerry.huang@nxp.com>
+> 
+> Add option BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE to define the U-Boot BIN.
+> The default setting is u-boot.bin, customer can change it to anything via defconfig.
+> 
+> Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
+> ---
+> changes since v1:
+> 1. add BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE for uboot binary file
+> 2. default of new option is u-boot.bin.
+> 3. use the new option for U-Boot BL33
+> ---
+>  boot/arm-trusted-firmware/Config.in               | 12 ++++++++++++
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk |  3 ++-
+>  2 files changed, 14 insertions(+), 1 deletion(-)
 
-Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
-Reviewed-by: Sergey Matyukevich <geomatsi@mail.com>
-[Thomas: rewrite commit log and Config.in help text]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/arm-trusted-firmware/Config.in               | 11 +++++++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk |  3 ++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+I have applied to next, after reworking the commit log and Config.in
+help text.
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 78c03019d5..96861c3f4d 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -124,6 +124,17 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
- 	  gets built before ATF, and that the appropriate BL33
- 	  variable pointing to u-boot.bin is passed when building ATF.
- 
-+if BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
-+
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
-+	string "U-Boot BL33 image name"
-+	default "u-boot.bin"
-+	help
-+	  Name of the U-Boot BL33 image to include in ATF, it must
-+	  have been installed to BINARIES_DIR by the U-Boot package.
-+
-+endif
-+
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES
- 	string "Additional ATF build variables"
- 	help
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index e528686aa1..2133d39e6d 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -70,7 +70,8 @@ endif
- endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
- 
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33),y)
--ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/u-boot.bin
-+ARM_TRUSTED_FIRMWARE_UBOOT_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE))
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UBOOT_BIN)
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
- endif
- 
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
