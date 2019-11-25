@@ -1,86 +1,205 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Nov 2019 15:15:01 +0100
-Subject: [Buildroot] [git commit] package/jpeg-turbo: security bump to
- version 2.0.3
-Message-ID: <20191125140735.126A982A04@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Nov 2019 15:28:29 +0100
+Subject: [Buildroot] [PATCH/next v2 1/4] spidermonkey: new package
+In-Reply-To: <20191124214823.2570598-2-aduskett@gmail.com>
+References: <20191124214823.2570598-1-aduskett@gmail.com>
+ <20191124214823.2570598-2-aduskett@gmail.com>
+Message-ID: <20191125152829.0f5f72a8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae43087e62e1bf374378e9a83a65ef68681b7b03
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Adam,
 
-Fixes the following security vulnerabilities:
+Thanks a lot for this!
 
-- CVE-2019-2201: In generate_jsimd_ycc_rgb_convert_neon of
-  jsimd_arm64_neon.S, there is a possible out of bounds write due to a
-  missing bounds check.  This could lead to remote code execution in an
-  unprivileged process with no additional execution privileges needed.
+On Sun, 24 Nov 2019 13:48:20 -0800
+aduskett at gmail.com wrote:
 
-For more details, see the upstream bugtracker:
-https://github.com/libjpeg-turbo/libjpeg-turbo/issues/361
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Spidermonkey is Mozilla's JavaScript engine written in C and C++. It is used in
+> various Mozilla products, including Firefox, and is available under the MPL2.
+> 
+> There are 19 patches currently required to properly cross-compile spidermonkey:
 
-Additionally, it fixes a number of other issues.  From the release notes:
+You have 10 patches, not 19.
 
-- Fixed a regression in the SIMD feature detection code, introduced by the
-  AVX2 SIMD extensions (2.0 beta1[1]), that was known to cause an illegal
-  instruction exception, in rare cases, on CPUs that lack support for CPUID
-  leaf 07H (or on which the maximum CPUID leaf has been limited by way of a
-  BIOS setting.)
+Thanks a lot for writing down the details of why each patch is needed,
+this is very useful to have in the commit log.
 
-- The 4:4:0 (h1v2) fancy (smooth) chroma upsampling algorithm in the
-  decompressor now uses a similar bias pattern to that of the 4:2:2 (h2v1)
-  fancy chroma upsampling algorithm, rounding up or down the upsampled
-  result for alternate pixels rather than always rounding down.  This
-  ensures that, regardless of whether a 4:2:2 JPEG image is rotated or
-  transposed prior to decompression (in the frequency domain) or after
-  decompression (in the spatial domain), the final image will be similar.
 
-- Fixed a regression introduced by 2.0 beta1[15] whereby attempting to
-  generate a progressive JPEG image on an SSE2-capable CPU using a scan
-  script containing one or more scans with lengths divisible by 16 would
-  result in an error ("Missing Huffman code table entry") and an invalid
-  JPEG image.
+> diff --git a/package/spidermonkey/0004-fix-building-with-musl.patch b/package/spidermonkey/0004-fix-building-with-musl.patch
+> new file mode 100644
+> index 0000000000..8d8b10fb71
+> --- /dev/null
+> +++ b/package/spidermonkey/0004-fix-building-with-musl.patch
+> @@ -0,0 +1,133 @@
+> +From 0c9e8f586ba52a9aef5ed298e8315b2598b8fb72 Mon Sep 17 00:00:00 2001
+> +From: Khem Raj <raj.khem@gmail.com>
+> +Date: Sat, 25 May 2019 16:54:45 -0700
+> +Subject: [PATCH] fix building with musl
+> +
+> +The MIPS specific header <sgidefs.h> is not provided by musl
+> +linux kernel headers provide <asm/sgidefs.h> which has same definitions
 
-- Fixed an issue whereby tjDecodeYUV() and tjDecodeYUVPlanes() would throw
-  an error ("Invalid progressive parameters") or a warning ("Inconsistent
-  progression sequence") if passed a TurboJPEG instance that was previously
-  used to decompress a progressive JPEG image.
+This is doing a lot more than switching to asm/sgidefs.h. But well, OK
+you're not the author of the patch.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
- package/jpeg-turbo/jpeg-turbo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+> diff --git a/package/spidermonkey/Config.in b/package/spidermonkey/Config.in
+> new file mode 100644
+> index 0000000000..1a5e0e29a5
+> --- /dev/null
+> +++ b/package/spidermonkey/Config.in
+> @@ -0,0 +1,39 @@
+> +config BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS
+> +	bool
+> +	default y
+> +	depends on !BR2_nios2
+> +	depends on !BR2_aarch64_be
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index 56b3478ab6..ea6060f2b9 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.2/
--sha1 1cff52d50b81755d0bdcf9055eb22157f39a1695  libjpeg-turbo-2.0.2.tar.gz
--md5 79f76fbfb0c6109631332762d10e16d2  libjpeg-turbo-2.0.2.tar.gz
-+# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.3/
-+sha1 539363a444f92421c098a1a3e7cebfda48d4cfb3  libjpeg-turbo-2.0.3.tar.gz
-+md5  bd07fddf26f9def7bab02739eb655116 libjpeg-turbo-2.0.3.tar.gz
- # Locally computed
--sha256 acb8599fe5399af114287ee5907aea4456f8f2c1cc96d26c28aebfdf5ee82fed  libjpeg-turbo-2.0.2.tar.gz
-+sha256 4246de500544d4ee408ee57048aa4aadc6f165fc17f141da87669f20ed3241b7  libjpeg-turbo-2.0.3.tar.gz
- sha256 69e570a251515ced17d4492256d57c89db77ed949652f88a44c80c1ca9607920  LICENSE.md
- sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 3735132b2e..0c75cf1db5 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JPEG_TURBO_VERSION = 2.0.2
-+JPEG_TURBO_VERSION = 2.0.3
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
+It is generally better to have an explicit list of supported
+architectures, rather than a list of exclusions.
+
+> +
+> +config BR2_PACKAGE_SPIDERMONKEY_JIT_ARCH_SUPPORTS
+> +	bool
+> +	default y if BR2_aarch64  || BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64
+> +
+> +config BR2_PACKAGE_SPIDERMONKEY
+> +	bool "spidermonkey"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_USE_WCHAR
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # needs pthread_getattr_np()
+> +	depends on BR2_USE_MMU # fork in executable tools.
+> +	depends on !BR2_STATIC_LIBS # dlopen
+> +	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # No way to check for fenv support.
+> +	depends on BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS
+
+Alphabetic ordering.
+
+> +	select BR2_PACKAGE_HOST_PYTHON
+> +	select BR2_PACKAGE_HOST_PYTHON_SSL
+> +	select BR2_PACKAGE_LIBNSPR
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  SpiderMonkey is the code-name for Mozilla Firefox's C++
+> +	  implementation of JavaScript. It is intended to be embedded in
+> +	  other applications that provide host environments for
+> +	  JavaScript.
+> +
+> +	  https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey
+> +
+> +comment "spidermonkey needs a glibc or musl toolchain with C++, wchar, dynamic library, NPTL, gcc >= 4.9"
+> +	depends on BR2_TOOLCHAIN_USES_UCLIBC
+> +	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+> +	depends on BR2_USE_MMU || !BR2_USE_WCHAR
+> +	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+> +	!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
+
+This is not good. It should be:
+
+	depends on BR2_USE_MMU
+	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+	depends on !BR2_TOOLCHAIN_USES_UCLIBC || \
+		!BR2_INSTALL_LIBSTDCPP || \
+		BR2_STATIC_LIBS || \
+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+		!BR2_USE_WCHAR
+
+Also, please double check the gcc version dependency: you're using 4.9
+in some places, and 5 in another place.
+
+> diff --git a/package/spidermonkey/spidermonkey.mk b/package/spidermonkey/spidermonkey.mk
+> new file mode 100644
+> index 0000000000..583ccb803f
+> --- /dev/null
+> +++ b/package/spidermonkey/spidermonkey.mk
+> @@ -0,0 +1,58 @@
+> +################################################################################
+> +#
+> +# spidermonkey
+> +#
+> +################################################################################
+> +
+> +# Use a tarball with only the spidermonkey source code and a pre-setup
+> +# old-configure in src/js.This prevents having to use autoconf 2.13 and
+> +# makes the package much 31M instead of 257M
+> +SPIDERMONKEY_VERSION = 60.5.2
+> +SPIDERMONKEY_SOURCE = mozjs-$(SPIDERMONKEY_VERSION).tar.bz2
+> +SPIDERMONKEY_SITE = https://gentoo.osuosl.org/distfiles/9a
+> +SPIDERMONKEY_SUBDIR = js/src
+> +SPIDERMONKEY_LICENSE = MPL-2.0
+> +SPIDERMONKEY_INSTALL_STAGING = YES
+> +SPIDERMONKEY_LICENSE_FILES = moz.configure
+
+Could you put this line right after the _LICENSE line ? It makes sense
+to keep both together.
+
+> +SPIDERMONKEY_DEPENDENCIES = \
+> +	host-perl \
+> +	host-python \
+
+You really need to build our own version of Perl? You can't use the
+Perl provided by the system? Buildroot has a hard dependency on Perl,
+so you have the guarantee that a Perl interpreter is available.
+
+> +	host-zip \
+
+Just curious, what do you need from host-zip ?
+
+> +	libnspr \
+> +	zlib
+> +
+> +SPIDERMONKEY_CONF_ENV += \
+> +	PYTHON="$(HOST_DIR)/bin/python2"
+> +
+> +# spidermonkey mixes up target and host.
+> +# spidermonkey does not allow building against a system jemalloc,
+> +# as it causes a conflict with glibc.
+> +SPIDERMONKEY_CONF_OPTS = \
+> +	--host=$(GNU_HOST_NAME) \
+> +	--target=$(GNU_TARGET_NAME) \
+> +	--disable-jemalloc \
+> +	--disable-readline \
+
+This line should not be here but below in an else clause of the
+readline conditional [1].
+
+> +	--enable-shared-js \
+> +	--enable-ion \
+> +	--with-system-zlib \
+> +	--with-system-nspr \
+> +	--with-nspr-exec-prefix="$(STAGING_DIR)/usr"
+> +
+> +ifneq ($(BR2_PACKAGE_SPIDERMONKEY_JIT_ARCH_SUPPORTS),y)
+
+Better:
+
+ifeq ($(BR2_PACKAGE_SPIDERMONKEY_JIT_ARCH_SUPPORTS),y)
+SPIDERMONKEY_CONF_OPTS += --enable-ion
+else
+SPIDERMONKEY_CONF_OPTS += --disable-ion
+endif
+
+> +SPIDERMONKEY_CONF_OPTS += --disable-ion
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_READLINE),y)
+> +SPIDERMONKEY_CONF_OPTS += --enable-readline
+> +SPIDERMONKEY_DEPENDENCIES += readline
+
+[1] here.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
