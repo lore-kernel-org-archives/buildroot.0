@@ -1,33 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Nov 2019 21:50:18 +0100
-Subject: [Buildroot] [PATCH/next] test_lxc.py: fix code style
-In-Reply-To: <1574713802-20461-1-git-send-email-pjtexier@koncepto.io>
-References: <1574713802-20461-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20191125215018.32b1bd25@windsurf>
+Date: Mon, 25 Nov 2019 21:50:36 +0100
+Subject: [Buildroot] [PATCH/next v2,
+ 1/1] package/libmaxminddb: bump to version 1.4.2
+In-Reply-To: <20191125180812.1024149-1-fontaine.fabrice@gmail.com>
+References: <20191125180812.1024149-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191125215036.3e4ac0e2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 25 Nov 2019 21:30:01 +0100
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+On Mon, 25 Nov 2019 19:08:12 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fix these warnings:
+> - Remove patch (already in version)
+> - Retrieve official tarball to drop autoreconf
 > 
-> E122 continuation line missing indentation or outdented
-> E127 continuation line over-indented for visual indent
-> E265 block comment should start with '# '
-> E302 expected 2 blank lines, found 1
-> F401 'pexpect' imported but unused
-> 
-> Fixes:
->  - https://gitlab.com/buildroot.org/buildroot/-/jobs/360824861
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  support/testing/tests/package/test_lxc.py | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+> Changes v1 -> v2:
+>  - Fix tarball hash
 
 Applied to next, thanks.
 
