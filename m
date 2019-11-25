@@ -1,54 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 23:26:19 +0100
-Subject: [Buildroot] [git commit] package/php: add option for libargon2
- support
-Message-ID: <20191202083935.DED1380080@busybox.osuosl.org>
+Date: Mon, 25 Nov 2019 21:40:41 +0100
+Subject: [Buildroot] [git commit] support/testing: test_lxc.py: fix code
+ style
+Message-ID: <20191202083935.64AC97FA91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d229c12acd904313d026fdedaa63c03dc3a3dd4
+commit: https://git.buildroot.net/buildroot/commit/?id=bd18e74eeb734994c91e19f830e4c700b8aaba2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Fix these warnings:
+
+E122 continuation line missing indentation or outdented
+E127 continuation line over-indented for visual indent
+E265 block comment should start with '# '
+E302 expected 2 blank lines, found 1
+F401 'pexpect' imported but unused
+
+Fixes:
+ - https://gitlab.com/buildroot.org/buildroot/-/jobs/360824861
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php/Config.ext | 6 ++++++
- package/php/php.mk     | 5 +++++
- 2 files changed, 11 insertions(+)
+ support/testing/tests/package/test_lxc.py | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 0c6ed4b401..d5c723ca39 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -70,6 +70,12 @@ config BR2_PACKAGE_PHP_EXT_HASH
- 	help
- 	  HASH message digest framework
+diff --git a/support/testing/tests/package/test_lxc.py b/support/testing/tests/package/test_lxc.py
+index 151bcf100b..346247da08 100644
+--- a/support/testing/tests/package/test_lxc.py
++++ b/support/testing/tests/package/test_lxc.py
+@@ -1,7 +1,7 @@
+ import os
  
-+config BR2_PACKAGE_PHP_EXT_LIBARGON2
-+	bool "libargon2"
-+	select BR2_PACKAGE_LIBARGON2
-+	help
-+	  libargon2 support
+ import infra.basetest
+-import pexpect
 +
- config BR2_PACKAGE_PHP_EXT_LIBSODIUM
- 	bool "libsodium"
- 	select BR2_PACKAGE_LIBSODIUM
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 85bf2075ae..007b8a64c3 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -122,6 +122,11 @@ PHP_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_PHP_EXT_MBSTRING),--enable-mbstring) \
- 	$(if $(BR2_PACKAGE_PHP_EXT_PHAR),--enable-phar)
  
-+ifeq ($(BR2_PACKAGE_PHP_EXT_LIBARGON2),y)
-+PHP_CONF_OPTS += --with-password-argon2=$(STAGING_DIR)/usr
-+PHP_DEPENDENCIES += libargon2
-+endif
-+
- ifeq ($(BR2_PACKAGE_PHP_EXT_LIBSODIUM),y)
- PHP_CONF_OPTS += --with-sodium=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += libsodium
+ class TestLxc(infra.basetest.BRTest):
+     config = \
+@@ -23,24 +23,24 @@ class TestLxc(infra.basetest.BRTest):
+             BR2_ROOTFS_OVERLAY="{}"
+             BR2_TARGET_ROOTFS_CPIO=y
+             """.format(
+-            infra.filepath("tests/package/test_lxc/lxc-kernel.config"),
+-            infra.filepath("tests/package/test_lxc/rootfs-overlay"))
++              infra.filepath("tests/package/test_lxc/lxc-kernel.config"),
++              infra.filepath("tests/package/test_lxc/rootfs-overlay"))
+ 
+     def run_ok(self, cmd):
+         self.assertRunOk(cmd, 120)
+ 
+     def wait_boot(self):
+-        #the complete boot with systemd takes more time than what the default multipler permits
++        # the complete boot with systemd takes more time than what the default multipler permits
+         self.emulator.timeout_multiplier *= 10
+         self.emulator.login()
+ 
+     def setup_run_test_container(self):
+         self.run_ok("lxc-create -n lxc_iperf3 -t none -f /usr/share/lxc/config/minimal-iperf3.conf")
+         self.run_ok("lxc-start -l trace -n lxc_iperf3 -o /tmp/lxc.log -L /tmp/lxc.console.log")
+-        #need to wait for the container to be fully started
++        # need to wait for the container to be fully started
+         self.run_ok("sleep 2")
+         self.run_ok("iperf3 -c 192.168.1.2 -t 2")
+-        #if the test fails, just cat /tmp/*.log
++        # if the test fails, just cat /tmp/*.log
+ 
+     def test_run(self):
+         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+@@ -50,7 +50,7 @@ class TestLxc(infra.basetest.BRTest):
+                            kernel_cmdline=[
+                                         "console=ttyAMA0,115200"],
+                            options=["-initrd", cpio_file,
+-                                        "-dtb", dtb_file,
+-                                        "-M", "vexpress-a9"])
++                                    "-dtb", dtb_file,
++                                    "-M", "vexpress-a9"])
+         self.wait_boot()
+         self.setup_run_test_container()
