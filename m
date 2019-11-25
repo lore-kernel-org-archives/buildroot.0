@@ -1,26 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Nov 2019 21:50:36 +0100
-Subject: [Buildroot] [PATCH/next v2,
- 1/1] package/libmaxminddb: bump to version 1.4.2
-In-Reply-To: <20191125180812.1024149-1-fontaine.fabrice@gmail.com>
-References: <20191125180812.1024149-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191125215036.3e4ac0e2@windsurf>
+Date: Mon, 25 Nov 2019 21:50:22 +0100
+Subject: [Buildroot] [PATCH/next] basetest.py: fix code style
+In-Reply-To: <1574713802-20461-2-git-send-email-pjtexier@koncepto.io>
+References: <1574713802-20461-1-git-send-email-pjtexier@koncepto.io>
+ <1574713802-20461-2-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20191125215022.20f7e5ad@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 25 Nov 2019 19:08:12 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 25 Nov 2019 21:30:02 +0100
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-> - Remove patch (already in version)
-> - Retrieve official tarball to drop autoreconf
+> Fix these warnings:
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> W291 trailing whitespace
+> 
+> Fixes:
+>  - https://gitlab.com/buildroot.org/buildroot/-/jobs/360824861
+> 
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 > ---
-> Changes v1 -> v2:
->  - Fix tarball hash
+>  support/testing/infra/basetest.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to next, thanks.
 
