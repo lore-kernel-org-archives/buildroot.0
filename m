@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Nov 2019 21:50:22 +0100
-Subject: [Buildroot] [PATCH/next] basetest.py: fix code style
-In-Reply-To: <1574713802-20461-2-git-send-email-pjtexier@koncepto.io>
-References: <1574713802-20461-1-git-send-email-pjtexier@koncepto.io>
- <1574713802-20461-2-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20191125215022.20f7e5ad@windsurf>
+Date: Mon, 25 Nov 2019 21:51:49 +0100
+Subject: [Buildroot] [git commit] package/bcg729: update the upstream URL in
+ Config.in
+Message-ID: <20191125204401.56CE78354B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 25 Nov 2019 21:30:02 +0100
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=674a215ecc1b6e5b0ac56233a69f34e4926934a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix these warnings:
-> 
-> W291 trailing whitespace
-> 
-> Fixes:
->  - https://gitlab.com/buildroot.org/buildroot/-/jobs/360824861
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  support/testing/infra/basetest.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(404)' URL status in the package stats
+web page output.
 
-Applied to next, thanks.
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/bcg729/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/bcg729/Config.in b/package/bcg729/Config.in
+index 8e9bcfe66b..cb936ae158 100644
+--- a/package/bcg729/Config.in
++++ b/package/bcg729/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_BCG729
+ 	  Bcg729 is an opensource implementation of both encoder and
+ 	  decoder of the ITU G729 Annex A/B speech codec.
+ 
+-	  http://www.linphone.org/technical-corner/bcg729/overview
++	  https://www.linphone.org/technical-corner/bcg729
