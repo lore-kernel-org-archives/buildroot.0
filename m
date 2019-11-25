@@ -1,37 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Nov 2019 21:35:06 +0100
-Subject: [Buildroot] [PATCH/next v3 4/4] package/polkit: enable systemd
- login support
-In-Reply-To: <20191125175031.4086339-5-aduskett@gmail.com>
-References: <20191125175031.4086339-1-aduskett@gmail.com>
- <20191125175031.4086339-5-aduskett@gmail.com>
-Message-ID: <20191125213506.23a25ee0@windsurf>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Mon, 25 Nov 2019 20:36:58 +0000
+Subject: [Buildroot] [PATCH 1/1] package/bind: update the upstream URL in
+ Config.in
+Message-ID: <20191125203658.19575-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(404)' URL status in the package stats
+web page output.
 
-On Mon, 25 Nov 2019 09:50:31 -0800
-aduskett at gmail.com wrote:
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+---
+ package/bind/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
->  POLKIT_CONF_OPTS += --with-authfw=pam
-> @@ -26,6 +25,13 @@ else
->  POLKIT_CONF_OPTS += --with-authfw=shadow
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
-> +POLKIT_DEPENDENCIES += systemd
-
-systemd has an optional dependency on polkit, and here you are adding
-an optional dependency of polkit on systemd. This is not going to work
-well.
-
-Thomas
+diff --git a/package/bind/Config.in b/package/bind/Config.in
+index 6d4ee2e6d7..db10ceb304 100644
+--- a/package/bind/Config.in
++++ b/package/bind/Config.in
+@@ -22,7 +22,7 @@ config BR2_PACKAGE_BIND
+ 	  intended to be linked with applications requiring name
+ 	  service.
+ 
+-	  http://www.isc.org/sw/bind/
++	  https://www.isc.org/bind/
+ 
+ if BR2_PACKAGE_BIND
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
