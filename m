@@ -1,49 +1,53 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue, 26 Nov 2019 14:24:58 +0100
-Subject: [Buildroot] [PATCH v3] package/pkg-kconfig: fix reconfigure for
+Date: Tue, 26 Nov 2019 14:22:26 +0100
+Subject: [Buildroot] [PATCH v2] package/pkg-kconfig: fix reconfigure for
  kconfig packages
-Message-ID: <1574774698-17881-1-git-send-email-angelo@amarulasolutions.com>
+In-Reply-To: <20191126141838.74d804f8@windsurf>
+References: <1574771063-29218-1-git-send-email-angelo@amarulasolutions.com>
+ <20191126141838.74d804f8@windsurf>
+Message-ID: <CA+_SqVZMB3yr9ALL-M4Wb9cX7FNGUVxEmM0b2d8=vszT+uN67g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+On Tue, Nov 26, 2019 at 2:18 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Tue, 26 Nov 2019 13:24:23 +0100
+> Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+>
+> > From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> >
+> > Commit 4b81badbcc0b25678ac6627548160702731cf393
+> >
+> >     Currently, calling foo-reconfigure for a kconfig-based package will not
+> >     re-trigger the configuration (kconfig-wise) step for the package.
+> >
+> > already solved this problem, but it was lately regressed by
+> >
+> > Commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f
+>
+> Are you sure it was regressed ? When I read the code at commit
+> 4b81badbcc0b25678ac6627548160702731cf393, I don't see even back then
+> how linux-reconfigure would trigger a complete reconfiguration. Have
+> you actually verified that it was working as expected back at commit
+> 4b81badbcc0b25678ac6627548160702731cf393 ? Indeed, at commit
+> 4b81badbcc0b25678ac6627548160702731cf393, we were already only removing
+> the stamp_kconfig_fixup_done stamp file, so my understanding is rather
+> that commit 4b81badbcc0b25678ac6627548160702731cf393 doesn't implement
+> what the commit log says.
 
-Commit 4b81badbcc0b25678ac6627548160702731cf393
+Not tested that commit really, I guessed based on what the commit messages said.
 
-    Currently, calling foo-reconfigure for a kconfig-based package will not
-    re-trigger the configuration (kconfig-wise) step for the package.
+I'll rework the commit message .
 
-was supposed to solve this problem and lately we had
+Thanks!
 
-Commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f
-
-    infra/pkg-kconfig: do not rely on package's .config as a timestamp
-
-that introduced the .stamp_dotconfig file.
-
-For this reason, to trigger a kconfig package reconfigure is now
-necessary to remove the .stamp_dotconfig file.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/pkg-kconfig.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 86d7c14..f1931b8 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -175,7 +175,7 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
- $(1)-clean-for-reconfigure: $(1)-clean-kconfig-for-reconfigure
- 
- $(1)-clean-kconfig-for-reconfigure:
--	rm -f $$($(2)_DIR)/.stamp_kconfig_fixup_done
-+	rm -f $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
- 
- # Only enable the foo-*config targets when the package is actually enabled.
- # Note: the variable $(2)_KCONFIG_VAR is not related to the kconfig
--- 
-2.7.4
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
