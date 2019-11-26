@@ -1,53 +1,68 @@
 From: James Byrne <james.byrne@origamienergy.com>
-Date: Tue, 26 Nov 2019 11:24:36 +0000
-Subject: [Buildroot] [PATCH 1/1] package/ntp: remove host shell check
-In-Reply-To: <20191123103011.GQ32494@scaer>
+Date: Tue, 26 Nov 2019 11:33:01 +0000
+Subject: [Buildroot] [PATCH v2] package/ntp: override host shell check
+In-Reply-To: <0102016e898693a5-82db32f2-a59d-42c1-996b-97661b367c25-000000@eu-west-1.amazonses.com>
 References: <0102016e898693a5-82db32f2-a59d-42c1-996b-97661b367c25-000000@eu-west-1.amazonses.com>
- <20191123103011.GQ32494@scaer>
-Message-ID: <0102016ea774bea7-76dccffb-b6a8-4689-974e-22e8fa8189df-000000@eu-west-1.amazonses.com>
+Message-ID: <0102016ea77c74a6-7525be73-3836-4c75-ae25-c9197a85b768-000000@eu-west-1.amazonses.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Add a patch from the upstream AutoGen package that allows POSIX_SHELL to
+be taken from the environment, then define that to be '/bin/sh'.
 
-On 23/11/2019 10:30, Yann E. MORIN wrote:
-> This is not nice, as this patch can't be upstreamed, and we'll have tio
-> live with it for the eons to come.
-> 
-> What about using AC_CACHE_CHECK [0] to do the check, which can be
-> overriden on the command line. For example:
-> 
->      [
->      AC_CACHE_CHECK([for a posix-compliant shell], [ntp_ac_cv_posix_shell],
->      [while :
->      do
->          blablabla
->      done
->      ])
->      AC_DEFINE_UNQUOTED([POSIX_SHELL], ["${ntp_ac_cv_posix_shell}"],
->        [define to a working POSIX compliant shell])
->      ]
-> 
-> And then in ntp.mk we could do (in addition to the existing one, of
-> course):
-> 
->      NTP_CONF_ENV = ntp_ac_cv_posix_shell=/bin/sh
-> 
-> And such a patch will probably be more acceptable for upstream.
+Since we are cross-compiling, the original behaviour of detecting the
+host shell is not useful as we cannot assume that the target uses the
+same shell, and it can prevent builds being reproducible because a
+different host environment will result in a different target binary.
 
-Your comments prompted me to do some more digging, and it turns out that 
-the issue has been addressed in a later version of AutoGen, which is 
-where the issue comes from - see the change to libopts.def in:
+Signed-off-by: James Byrne <james.byrne@origamienergy.com>
 
-https://sourceforge.net/p/autogen/code/ci/e51f2a781500236b2ba92a4ccd854771a7c28b61/
+---
+Changes v1 -> v2:
+  - Simplify by using upstream AutoGen change
 
-I will resubmit a V2 patch based on pulling in this change, then if the 
-upstream ntp package is updated to use a newer version of AutoGen at 
-some point in the future, the patch can go away.
+Signed-off-by: James Byrne <james.byrne@origamienergy.com>
+---
+ package/ntp/0003-override-shell.patch | 14 ++++++++++++++
+ package/ntp/ntp.mk                    |  2 +-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+ create mode 100644 package/ntp/0003-override-shell.patch
 
-Regards,
-
-James
+diff --git a/package/ntp/0003-override-shell.patch b/package/ntp/0003-override-shell.patch
+new file mode 100644
+index 0000000000..823dedf028
+--- /dev/null
++++ b/package/ntp/0003-override-shell.patch
+@@ -0,0 +1,14 @@
++Pull in fix from upstream AutoGen package to accept POSIX_SHELL from the
++environment during the configure step
++
++diff --git a/sntp/libopts/m4/libopts.m4 b/sntp/libopts/m4/libopts.m4
++--- a/sntp/libopts/m4/libopts.m4
+++++ b/sntp/libopts/m4/libopts.m4
++@@ -114,6 +114,7 @@
++   AC_PROG_SED
++   [while :
++   do
+++      test -x "$POSIX_SHELL" && break
++       POSIX_SHELL=`which bash`
++       test -x "$POSIX_SHELL" && break
++       POSIX_SHELL=`which dash`
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index d53fcc5d0b..56050f4fe1 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -10,7 +10,7 @@ NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJO
+ NTP_DEPENDENCIES = host-pkgconf libevent
+ NTP_LICENSE = NTP
+ NTP_LICENSE_FILES = COPYRIGHT
+-NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
++NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no POSIX_SHELL=/bin/sh
+ NTP_CONF_OPTS = \
+ 	--with-shared \
+ 	--program-transform-name=s,,, \
+-- 
+2.24.0
