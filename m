@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 20:38:25 +0100
-Subject: [Buildroot] [git commit] package/dmraid: add an upstream URL to
+Date: Tue, 26 Nov 2019 21:09:43 +0100
+Subject: [Buildroot] [git commit] package/fmt: add an upstream URL to
  Config.in
-Message-ID: <20191126203656.1B45683820@busybox.osuosl.org>
+Message-ID: <20191126203656.70D948376F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81f4a636696cf79ed655052f630c54ab1f48d32a
+commit: https://git.buildroot.net/buildroot/commit/?id=fcbe5d93db547d61a56912af403c0a9a65d0aec1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add an upstream URL to the help text in Config.in. This
@@ -19,19 +19,18 @@ web page output.
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dmraid/Config.in | 2 ++
+ package/fmt/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
-index aa98c853a1..3c375f4c67 100644
---- a/package/dmraid/Config.in
-+++ b/package/dmraid/Config.in
-@@ -12,6 +12,8 @@ config BR2_PACKAGE_DMRAID
- 	  dmraid uses the Linux device-mapper to create devices with
- 	  respective mappings for the ATARAID sets discovered.
+diff --git a/package/fmt/Config.in b/package/fmt/Config.in
+index 69a6fb80a6..8643c9b5af 100644
+--- a/package/fmt/Config.in
++++ b/package/fmt/Config.in
+@@ -7,5 +7,7 @@ config BR2_PACKAGE_FMT
+ 	  used as a safe alternative to printf or as a fast alternative
+ 	  to IOStreams.
  
-+	  http://people.redhat.com/~heinzm/sw/dmraid/
++	  https://fmt.dev
 +
- comment "dmraid needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+ comment "fmt needs a toolchain w/ C++, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
