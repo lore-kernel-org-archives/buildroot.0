@@ -1,38 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Nov 2019 23:47:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fis: add an upstream URL to
- Config.in
-In-Reply-To: <87eexus6wv.fsf@dell.be.48ers.dk>
-References: <20191126144341.27186-1-mark@dibsco.co.uk>
- <20191126210534.168608da@windsurf> <87eexus6wv.fsf@dell.be.48ers.dk>
-Message-ID: <e4806204-2ff9-a6f6-7034-bde0aa329cd4@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 26 Nov 2019 22:53:25 +0000
+Subject: [Buildroot] [Bug 12361] New: Init system (systemd) kills login on
+ Raspberry Pi Zero
+Message-ID: <bug-12361-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=12361
+
+            Bug ID: 12361
+           Summary: Init system (systemd) kills login on Raspberry Pi Zero
+           Product: buildroot
+           Version: 2019.08.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: spynet314 at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
+Starting with a raspberrypi0_defconfig, then selecting 
+Toolchain/C library = glibc
+System configuration / Init system = systemd
+the device boots normally, but the welcome message and the login are shown
+twice.
+Trying to login with 'root', a password is then request, even if not set in the
+configuration.
+After entering 'root' and a blank password twice, the device block and it is no
+more possible to continue.
+
+Here's a piece of the bootlog:
+
+[   13.773714] bcm2835_v4l2: module is from the staging directory, the quality
+is unknown, you have been warned.
+[   13.835338] bcm2835_codec: module is from the staging directory, the quality
+is unknown, you have been warned.
+[   14.074354] bcm2835-codec bcm2835-codec: Device registered as /dev/video10
+[   14.143280] bcm2835-codec bcm2835-codec: Loaded V4L2 decode
+[   14.211667] bcm2835-codec bcm2835-codec: Device registered as /dev/video11
+[   14.283874] bcm2835-codec bcm2835-codec: Loaded V4L2 encode
+[   14.347166] bcm2835-codec bcm2835-codec: Device registered as /dev/video12
+[   14.422866] bcm2835-codec bcm2835-codec: Loaded V4L2 isp
 
 
-On 26/11/2019 21:45, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-> 
-> Hi,
-> 
->  > Just pointing to the source code itself is not that useful. Do we
->  > really need to keep this package? It seems like some completely
->  > outdated stuff. Who uses Redboot partition tables these days ?
-> 
->  > In fact, maybe fconfig could also be dropped, it's Redboot related as
->  > well.
-> 
->  > Arnout, Peter, what do you think?
-> 
-> I would personally not mind getting rid of them. It is probably getting
-> close to 15 years since I last used Redboot.
+Welcome to Buildroot
+Welcome to Buildroot
+buildroot login: buildroot login: root
+buildroot login: root
+Password:
+Password:
 
- If we're going to remove packages, now is an excellent time to do it: people
-have three months to complain about it.
 
- Regards,
- Arnout
+Thanks
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
