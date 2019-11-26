@@ -1,35 +1,32 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Tue, 26 Nov 2019 19:46:35 +0000
-Subject: [Buildroot] [PATCH 1/1] package/kexec-lite: add an upstream URL to
- Config.in
-Message-ID: <20191126194635.14298-1-mark@dibsco.co.uk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Nov 2019 21:01:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/copas: update the upstream URL
+ in Config.in
+In-Reply-To: <20191126124529.14814-1-mark@dibsco.co.uk>
+References: <20191126124529.14814-1-mark@dibsco.co.uk>
+Message-ID: <20191126210125.34cded14@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+On Tue, 26 Nov 2019 12:45:28 +0000
+Mark Corbin <mark@dibsco.co.uk> wrote:
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
----
- package/kexec-lite/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+> Update the upstream URL in the help text in Config.in. This
+> addresses the 'Invalid(406)' URL status in the package stats
+> web page output.
+> 
+> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+> ---
+>  package/copas/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
-index cd0e30f2dd..3e84f90d57 100644
---- a/package/kexec-lite/Config.in
-+++ b/package/kexec-lite/Config.in
-@@ -15,6 +15,8 @@ config BR2_PACKAGE_KEXEC_LITE
- 	  This package is a tiny implementation of the kexec userspace
- 	  components, for devicetree-based platforms.
- 
-+	  https://github.com/antonblanchard/kexec-lite
-+
- comment "kexec-lite needs a uClibc or glibc toolchain w/ wchar, dynamic library"
- 	depends on BR2_powerpc || BR2_powerpc64
- 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+Applied to master, thanks.
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
