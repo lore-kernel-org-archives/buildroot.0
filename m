@@ -1,68 +1,49 @@
-From: Jerry Huang <jerry.huang@nxp.com>
-Date: Tue, 26 Nov 2019 12:10:51 +0000
-Subject: [Buildroot] [EXT] Re: [PATCH v2 07/10]
- package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
-In-Reply-To: <55032876afb2531b2cd313343d39c817@walle.cc>
-References: <20191121102324.35225-1-jerry.huang@nxp.com>
- <20191121102324.35225-8-jerry.huang@nxp.com>
- <20191125231221.743cd7ed@windsurf>
- <VI1PR04MB513679F2B82773C7958DBA07FE450@VI1PR04MB5136.eurprd04.prod.outlook.com>
- <165d3a2c0b806e889efe738487d216bd@walle.cc>
- <20191126111259.3ae8feac@windsurf>
- <55032876afb2531b2cd313343d39c817@walle.cc>
-Message-ID: <VI1PR04MB5136D02E4C8E0CA4FF044FFEFE450@VI1PR04MB5136.eurprd04.prod.outlook.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Tue, 26 Nov 2019 13:24:23 +0100
+Subject: [Buildroot] [PATCH v2] package/pkg-kconfig: fix reconfigure for
+ kconfig packages
+Message-ID: <1574771063-29218-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
+Commit 4b81badbcc0b25678ac6627548160702731cf393
 
-Best Regards
-Jerry Huang
+    Currently, calling foo-reconfigure for a kconfig-based package will not
+    re-trigger the configuration (kconfig-wise) step for the package.
 
-> -----Original Message-----
-> From: Michael Walle <michael@walle.cc>
-> Sent: Tuesday, November 26, 2019 6:31 PM
-> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Jerry Huang <jerry.huang@nxp.com>; buildroot at busybox.net;
-> matthew.weber at collins.com; geomatsi at gmail.com
-> Subject: Re: [EXT] Re: [Buildroot] [PATCH v2 07/10]
-> package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
-> 
-> Caution: EXT Email
-> 
-> Am 2019-11-26 11:12, schrieb Thomas Petazzoni:
-> > On Tue, 26 Nov 2019 10:29:18 +0100
-> > Michael Walle <michael@walle.cc> wrote:
-> >
-> >> >> Final semi-colon not needed.
-> >> > Will use below command in v3:
-> >> > define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
-> >> >         $(call
-> >> >
-> NXP_QORIQ_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/
-> $(QORI
-> >> > Q_CADENCE_DP_FIRMWARE_SOURCE))
-> >> > endef
-> >>
-> >> please don't duplicate that piece of code.. it should really be
-> >> NXP_EXTRACT_HELPER. which leads to the cleanup of the freescale-imx
-> >> and nxp-qoriq directories. IMHO both should be named consistently.
-> >> Thomas? Matthew?
-> >
-> > What are you suggesting? A single package/nxp/ folder, with everything
-> > in there?
-> 
-> correct. that would also solve the NXP_EXTRACT_HELPER thing. which would
-> end up in package/nxp/helper.mk or something like that.
-So, first, create directory "package/nxp" and push all ls1028ardb codes (including qoriq-rcw, qoriq-cadence-dp-firmware).
-Then, move all packages under package/freescale-imx into package/nxp in One separate patch?
+already solved this problem, but it was lately regressed by
 
-> > If we do package/nxp-imx/ and package/nxp-qoirq/, then there is still
-> > the question of where to put this common NXP_EXTRACT_HELPER macro
-> 
-> yes. see above.
-> 
-> -michael
+Commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f
+
+    infra/pkg-kconfig: do not rely on package's .config as a timestamp
+
+that introduced the .stamp_dotconfig file.
+
+For this reason, to trigger a kconfig package reconfigure is now
+necessary to remove the .stamp_dotconfig file.
+
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/pkg-kconfig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 86d7c14..f1931b8 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -175,7 +175,7 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ $(1)-clean-for-reconfigure: $(1)-clean-kconfig-for-reconfigure
+ 
+ $(1)-clean-kconfig-for-reconfigure:
+-	rm -f $$($(2)_DIR)/.stamp_kconfig_fixup_done
++	rm -f $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
+ 
+ # Only enable the foo-*config targets when the package is actually enabled.
+ # Note: the variable $(2)_KCONFIG_VAR is not related to the kconfig
+-- 
+2.7.4
