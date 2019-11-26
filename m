@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 22:10:10 +0100
-Subject: [Buildroot] [git commit] package/hicolor-icon-theme: add an
- upstream URL to Config.in
-Message-ID: <20191126210245.49D3A8152E@busybox.osuosl.org>
+Date: Tue, 26 Nov 2019 21:47:37 +0100
+Subject: [Buildroot] [git commit] package/glib-networking: add an upstream
+ URL to Config.in
+Message-ID: <20191126210245.228718152E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d4407c00b0c43a4baee9699f0b07d061141c613
+commit: https://git.buildroot.net/buildroot/commit/?id=82b9f2c7f8385280bba3c16085a2f6516864e1d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add an upstream URL to the help text in Config.in. This
@@ -19,16 +19,19 @@ web page output.
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/hicolor-icon-theme/Config.in | 2 ++
+ package/glib-networking/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/hicolor-icon-theme/Config.in b/package/hicolor-icon-theme/Config.in
-index 10edbf8865..5ef2cd2267 100644
---- a/package/hicolor-icon-theme/Config.in
-+++ b/package/hicolor-icon-theme/Config.in
-@@ -7,3 +7,5 @@ config BR2_PACKAGE_HICOLOR_ICON_THEME
- 	  standard directory structure for storing icons of third-party
- 	  applications (i.e. the ones not available in usual icon
- 	  themes).
+diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
+index e9557309ee..22331255f7 100644
+--- a/package/glib-networking/Config.in
++++ b/package/glib-networking/Config.in
+@@ -9,6 +9,8 @@ config BR2_PACKAGE_GLIB_NETWORKING
+ 	help
+ 	  Network-related GIO modules for glib.
+ 
++	  https://gitlab.gnome.org/GNOME/glib-networking
 +
-+	  https://www.freedesktop.org/wiki/Software/icon-theme/
+ comment "glib-networking needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
