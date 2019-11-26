@@ -1,8 +1,8 @@
 From: Mark Corbin <mark@dibsco.co.uk>
-Date: Tue, 26 Nov 2019 15:35:05 +0000
-Subject: [Buildroot] [PATCH 1/1] package/gadgetfs-test: add an upstream URL
- to Config.in
-Message-ID: <20191126153505.31916-1-mark@dibsco.co.uk>
+Date: Tue, 26 Nov 2019 15:46:24 +0000
+Subject: [Buildroot] [PATCH 1/1] package/glib-networking: add an upstream
+ URL to Config.in
+Message-ID: <20191126154624.600-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,21 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 ---
- package/gadgetfs-test/Config.in | 2 ++
+ package/glib-networking/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/gadgetfs-test/Config.in b/package/gadgetfs-test/Config.in
-index ca14c91b41..c22134c4a5 100644
---- a/package/gadgetfs-test/Config.in
-+++ b/package/gadgetfs-test/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_GADGETFS_TEST
+diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
+index e9557309ee..22331255f7 100644
+--- a/package/glib-networking/Config.in
++++ b/package/glib-networking/Config.in
+@@ -9,6 +9,8 @@ config BR2_PACKAGE_GLIB_NETWORKING
  	help
- 	  Test program for gadgetfs from linux-usb.org
+ 	  Network-related GIO modules for glib.
  
-+	  https://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/GadgetFsTest/
++	  https://gitlab.gnome.org/GNOME/glib-networking
 +
- if BR2_PACKAGE_GADGETFS_TEST
- 
- config BR2_PACKAGE_GADGETFS_TEST_USE_AIO
+ comment "glib-networking needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
 -- 
 2.20.1
