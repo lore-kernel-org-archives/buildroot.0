@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 22:00:48 +0100
-Subject: [Buildroot] [git commit] package/gr-osmosdr: add an upstream URL to
+Date: Tue, 26 Nov 2019 22:10:01 +0100
+Subject: [Buildroot] [git commit] package/gtkperf: add an upstream URL to
  Config.in
-Message-ID: <20191126210245.385EE8152E@busybox.osuosl.org>
+Message-ID: <20191126210245.4057A8152E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08307bdc08a9f63d854af9da6f5840f466107758
+commit: https://git.buildroot.net/buildroot/commit/?id=9b35a66253cfa452e32cf22c2b4aa9b859956d90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add an upstream URL to the help text in Config.in. This
@@ -19,19 +19,16 @@ web page output.
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gr-osmosdr/Config.in | 2 ++
+ package/gtkperf/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
-index aa6ef0d4c2..f26380371f 100644
---- a/package/gr-osmosdr/Config.in
-+++ b/package/gr-osmosdr/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_GR_OSMOSDR
- 	help
- 	  GNU Radio block for interfacing with various radio hardware
- 
-+	  http://osmocom.org/projects/osmosdr
+diff --git a/package/gtkperf/Config.in b/package/gtkperf/Config.in
+index 78c35e72e7..a763e305c7 100644
+--- a/package/gtkperf/Config.in
++++ b/package/gtkperf/Config.in
+@@ -7,3 +7,5 @@ config BR2_PACKAGE_GTKPERF
+ 	  predefined GTK+ widgets
+ 	  e.g. (opening comboboxes, toggling buttons, scrolling text
+ 	  yms.) and this way define the speed of device/platform.
 +
- if BR2_PACKAGE_GR_OSMOSDR
- 
- config BR2_PACKAGE_GR_OSMOSDR_PYTHON
++	  http://gtkperf.sourceforge.net/
