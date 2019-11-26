@@ -1,176 +1,158 @@
-From: Jerry Huang <jerry.huang@nxp.com>
-Date: Tue, 26 Nov 2019 04:33:48 +0000
-Subject: [Buildroot] [EXT] Re: [PATCH v2 04/10]
- package/freescale-qoriq/fsl-qoriq-rcw: add target rcw binary support
-In-Reply-To: <20191125222345.3b7897ae@windsurf>
-References: <20191121102324.35225-1-jerry.huang@nxp.com>
- <20191121102324.35225-5-jerry.huang@nxp.com>
- <20191125222345.3b7897ae@windsurf>
-Message-ID: <VI1PR04MB513630C33602E753E726FB45FE450@VI1PR04MB5136.eurprd04.prod.outlook.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 26 Nov 2019 00:57:46 -0600
+Subject: [Buildroot] [next] support/testing: new opkg test case
+Message-ID: <20191126065746.39951-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- Validates an archive can be installed and removed
+- Builds an archives that uses postinst and prerm scripts
 
-Best Regards
-Jerry Huang
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ DEVELOPERS                                    |  1 +
+ support/testing/tests/package/test_opkg.py    | 63 +++++++++++++++++++
+ .../tests/package/test_opkg/post-build.sh     | 47 ++++++++++++++
+ 3 files changed, 111 insertions(+)
+ create mode 100644 support/testing/tests/package/test_opkg.py
+ create mode 100755 support/testing/tests/package/test_opkg/post-build.sh
 
-> -----Original Message-----
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Sent: Tuesday, November 26, 2019 5:24 AM
-> To: Jerry Huang <jerry.huang@nxp.com>
-> Cc: buildroot at busybox.net; michael at walle.cc; matthew.weber at collins.com;
-> geomatsi at gmail.com
-> Subject: [EXT] Re: [Buildroot] [PATCH v2 04/10]
-> package/freescale-qoriq/fsl-qoriq-rcw: add target rcw binary support
-> 
-> Caution: EXT Email
-> 
-> Hello,
-> 
-> I'm sorry, but I don't really grasp what this patch is trying to do.
-Hi, Thomas,
-This patch is to build the binary *.bin file which is used by QorIQ platforms booting with the QorIQ-RCW source codes.
-
-> On Thu, 21 Nov 2019 18:23:18 +0800
-> Changming Huang <jerry.huang@nxp.com> wrote:
-> 
-> > From: Jerry Huang <jerry.huang@nxp.com>
-> >
-> > For NXP QorIQ (PowerPC and Layerscape) platform, we need to specify
-> > the RCW file and build it to binary.
-> >
-> > Introduce BR2_PACKAGE_HOST_RCW_ATF to use ATF for RCW.
-> 
-> What does this mean ?
-Which is used by ATF for RCW, will move it to patch 07/10
-
-> 
-> > Introduce BR2_PACKAGE_HOST_RCW_BIN to specify the RCW binary file.
->
-> Hm, ok, but then it seems to be used to calculate from which directory "make" is
-> going to be invoked.
-This option is for RCW binary, including the path and file name, 
-for example: ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.bin
-the first word is the platform, last word is the binary file used.
-
-> 
-> > Introduce BR2_PACKAGE_HOST_RCW_BOOT_MODE to define the boot mode.
-> > Because the RCW binary can be stored in different media, for example:
-> > SD card - RCW locate in SD card, boot the board from SD card
-> > eMMC    - RCW locate in eMMC chip, boot the board from eMMC chip
-> > flexSPI - RCW locate in flexSPI, boot the board from flexSPI Nor/Nand flash
-> > QSPI    - RCW locate in QSPI flash, boot the board from QSPI flash
-> >
-> > Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
-> > ---
-> > changes since v1:
-> > 1. add option BR2_PACKAGE_HOST_RCW_ATF for ATF
-> > ---
-> >  .../freescale-qoriq/fsl-qoriq-rcw/Config.in.host  | 15 +++++++++++++++
-> >  .../fsl-qoriq-rcw/fsl-qoriq-rcw.mk                | 11 +++++++++++
-> >  2 files changed, 26 insertions(+)
-> >
-> > diff --git a/package/freescale-qoriq/fsl-qoriq-rcw/Config.in.host
-> > b/package/freescale-qoriq/fsl-qoriq-rcw/Config.in.host
-> > index a9253958d9..f55f2a6f3a 100644
-> > --- a/package/freescale-qoriq/fsl-qoriq-rcw/Config.in.host
-> > +++ b/package/freescale-qoriq/fsl-qoriq-rcw/Config.in.host
-> > @@ -25,4 +25,19 @@ config BR2_PACKAGE_HOST_RCW_CUSTOM_PATH
-> >         included for use in the SDK or with post scripts but no
-> >         RCW binary will not be generated.
-> >
-> > +config BR2_PACKAGE_HOST_RCW_ATF
-> > +     bool "atf for rcw"
-> > +     help
-> > +       When ATF is used for RCW, enable this option.
-> 
-> This option is not used in the code below.
-Will move it to patch 07/10.
-
-> 
-> > +
-> > +config BR2_PACKAGE_HOST_RCW_BIN
-> 
-> Should be named with a BR2_PACKAGE_HOST_FSL_QORIQ_RCW_ prefix.
-Sure,
-
-> 
-> > +     string "Custom RCW"
-> > +     help
-> > +       This option is used to specify the RCW binary file for board.
-> 
-> More details are needed. What happens when this option is empty? Which
-> values are typically needed? Your code assumes there's one slash in the value,
-> this should be explained.
-> 
-> > +config BR2_PACKAGE_HOST_RCW_BOOT_MODE
-> 
-> This option is not used in the .mk file
-Which is used by ATF for RCW, will vove it to patch 07/10.
-
-> 
-> > +     string "Boot mode"
-> > +     help
-> > +       Specify the boot mode, for example, sd, emmc, flexspi_nor.
-> > +
-> >  endif
-> > diff --git a/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk
-> > b/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk
-> > index a2c3f4f8a6..15c4024eb8 100644
-> > --- a/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk
-> > +++ b/package/freescale-qoriq/fsl-qoriq-rcw/fsl-qoriq-rcw.mk
-> > @@ -37,6 +37,17 @@ endef
-> >  define HOST_FSL_QORIQ_RCW_INSTALL_DELIVERY_FILE
-> >       $(INSTALL) -D -m 0644 $(@D)/PBL.bin $(BINARIES_DIR)/PBL.bin
-> > endef
-> > +else
-> 
-> Why is this part mutually exclusive with the
-> BR2_PACKAGE_HOST_RCW_CUSTOM_PATH option ? I'd like to understand what
-> they each try to do. If they are mutually exclusive, they should also be mutually
-> exclusive at the Config.in level. Could you please explain the different use cases
-> for rcw so that we can figure out the right way to handle this ?
-According to original scripts, R2_PACKAGE_HOST_RCW_CUSTOM_PATH is used for the RCW specified by customer.
-Add some special command is needed for this option.
-In order to use the source codes from NXP, some other commands are needed, so they are mutually exclusive.
-Then, I will add the mutually exclusive in config.in file.
-
-> 
-> > +RCW_BIN = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BIN))
-> > +RCW_PLATFORM = $(firstword $(subst /, ,$(RCW_BIN)))
-> 
-> Variables must be prefixed by the package name, not just RCW_.
-Sure,
-
-> 
-> > +
-> > +define HOST_FSL_QORIQ_RCW_BUILD_CMDS
-> > +     cd $(@D)/$(RCW_PLATFORM) && $(MAKE)
-> 
-> Should be:
-> 
->         $(MAKE) -C ...
-Will change it
-
-> > +endef
-> > +
-> > +define HOST_FSL_QORIQ_RCW_INSTALL_DELIVERY_FILE
-> > +     $(INSTALL) -D -m 0644 $(@D)/$(RCW_BIN) $(BINARIES_DIR)/
-> 
-> Complete destination path is needed, including the destination file name.
-Sure, will add the file name.
-> 
-> Thanks!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbootlin.c
-> om&amp;data=02%7C01%7Cjerry.huang%40nxp.com%7Ca3c1ca285da948a32
-> 78108d771edc2f5%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637
-> 103138304575881&amp;sdata=o1hb4D4YqQ58G0RH0siotPJsl7kp3HS0u4T5jMA
-> 7YR8%3D&amp;reserved=0
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 544e3ac1c3..541029ab0e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1625,6 +1625,7 @@ F:	package/wireless_tools/
+ F:	package/xen/
+ F:	support/testing/tests/package/br2-external/openjdk/
+ F:	support/testing/tests/package/test_openjdk.py
++F:	support/testing/tests/package/test_opkg.py
+ 
+ N:	Mauro Condarelli <mc5686@mclink.it>
+ F:	package/mc/
+diff --git a/support/testing/tests/package/test_opkg.py b/support/testing/tests/package/test_opkg.py
+new file mode 100644
+index 0000000000..06dba0c682
+--- /dev/null
++++ b/support/testing/tests/package/test_opkg.py
+@@ -0,0 +1,63 @@
++import os
++
++import infra.basetest
++
++
++class TestOpkg(infra.basetest.BRTest):
++    # The snmpd service is used as an example for this test of a set of files
++    # that can be archived up and deployed/removed to test opkg
++    #
++    # The post build script uses an ipk-build template and assembles the test
++    # package.
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_NETSNMP=y
++        # BR2_PACKAGE_NETSNMP_CLIENTS is not set
++        # BR2_PACKAGE_NETSNMP_ENABLE_MIBS is not set
++        BR2_PACKAGE_OPKG=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_HOST_OPKG_UTILS=y
++        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
++        """.format(infra.filepath("tests/package/test_opkg/post-build.sh"))
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # This test sequence tests the install and removal of a running
++        # service and configuration files.  It also exercises the postinst
++        # and prerm scripting provided in the package archive.
++
++        cmd = "opkg install example-snmpd-package_1.0_arm.ipk"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "opkg list-installed | grep example-snmpd-package"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        # Check that postinst script ran to start the services
++        cmd = "ps aux | grep [s]nmpd"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        # If successful, the prerm script ran to stop the service prior to
++        # the removal of the service scripting and files
++        cmd = "opkg remove example-snmpd-package"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        # Verify after package removal that the services is not running
++        cmd = "ps aux | grep [s]nmpd"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 1)
++
++        # This folder for configs is provided by the package install and
++        # should no longer be present after package removal
++        cmd = "ls /etc/snmp"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 1)
+diff --git a/support/testing/tests/package/test_opkg/post-build.sh b/support/testing/tests/package/test_opkg/post-build.sh
+new file mode 100755
+index 0000000000..1b85aa002a
+--- /dev/null
++++ b/support/testing/tests/package/test_opkg/post-build.sh
+@@ -0,0 +1,47 @@
++#!/usr/bin/env bash
++
++IPK_BUILD=${TARGET_DIR}/root/ipk-build
++
++# Pull the files for the snmpd service out of the target to create a install archive
++# and setup a basic configuration so that the startup script works.
++mkdir -p ${IPK_BUILD}/CONTROL \
++	${IPK_BUILD}/etc/init.d/ \
++	${IPK_BUILD}/usr/sbin \
++	${IPK_BUILD}/etc/snmp \
++	${IPK_BUILD}/etc/default
++mv -f ${TARGET_DIR}/etc/init.d/S59snmpd ${IPK_BUILD}/etc/init.d/
++mv -f ${TARGET_DIR}/usr/sbin/snmpd ${IPK_BUILD}/usr/sbin/
++echo "agentuser  nobody" > ${IPK_BUILD}/etc/snmp/snmpd.conf
++echo "SNMPDRUN=yes" > ${IPK_BUILD}/etc/default/snmpd
++
++# build the control file
++cat <<EOM >${IPK_BUILD}/CONTROL/control
++Package: example-snmpd-package
++Version: 1.0
++Architecture: arm
++Maintainer: user at domain.tld
++Section: extras
++Priority: optional
++Source: http://example.com
++Description: This is an example IPK package for installing snmpd
++EOM
++
++# preinst script is not created to run before the install for this test example
++
++# postinst script is ran after install completes to start the services
++cat <<EOM >${IPK_BUILD}/CONTROL/postinst
++#!/bin/sh
++/etc/init.d/S59snmpd start
++EOM
++chmod +x ${IPK_BUILD}/CONTROL/postinst
++
++# prerm script is ran before removal so that the services isn't in use
++cat <<EOM >${IPK_BUILD}/CONTROL/prerm
++#!/bin/sh
++/etc/init.d/S59snmpd stop
++EOM
++chmod +x ${IPK_BUILD}/CONTROL/prerm
++
++# build the archive from template and pkg files
++${HOST_DIR}/bin/opkg-build -Z gzip ${IPK_BUILD} ${TARGET_DIR}/root/
++rm -fr ${IPK_BUILD}
+-- 
+2.17.1
