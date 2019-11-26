@@ -1,67 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 22:51:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/perl-gdtextutil: add license
-In-Reply-To: <20191125180957.1024314-1-fontaine.fabrice@gmail.com>
-References: <20191125180957.1024314-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191126225102.7304a715@windsurf>
+Date: Tue, 26 Nov 2019 22:51:26 +0100
+Subject: [Buildroot] [git commit] package/libdrm: fix nouveau tests compile
+ for musl
+Message-ID: <20191126214333.E0A2981565@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=13f05cbfc0dc9bdc51ab1e0be9585afa2b9a885d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 25 Nov 2019 19:09:57 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Add openembedded provided patch [2] to fix musl toolchain compile failures
+because of different ioctl() signatures, (int, int, ...) vs. (int, unsigned
+long, ...).
 
-> Dustismo.LICENSE states that license is GPL-2.0+
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/perl-gdtextutil/perl-gdtextutil.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/perl-gdtextutil/perl-gdtextutil.mk b/package/perl-gdtextutil/perl-gdtextutil.mk
-> index cd1617fbbd..d40ad5fd1c 100644
-> --- a/package/perl-gdtextutil/perl-gdtextutil.mk
-> +++ b/package/perl-gdtextutil/perl-gdtextutil.mk
-> @@ -7,6 +7,7 @@
->  PERL_GDTEXTUTIL_VERSION = 0.86
->  PERL_GDTEXTUTIL_SOURCE = GDTextUtil-$(PERL_GDTEXTUTIL_VERSION).tar.gz
->  PERL_GDTEXTUTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MV/MVERB
-> +PERL_GDTEXTUTIL_LICENSE = GPL-2.0+
+Fixes:
 
-This is not correct. Dustismo.LICENSE contains the license for the
-Dustismo_Sans.ttf font file. The rest is licensed under the same terms
-as Perl. See the README file:
+  ../tests/nouveau/threaded.c:39:5: error: conflicting types for 'ioctl'
+  int ioctl(int fd, unsigned long request, ...)
 
-COPYRIGHT
+[1] http://autobuild.buildroot.net/results/047f149a928ac2a17e25211a0a8a264ebae369ac
+[2] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-graphics/drm/libdrm/musl-ioctl.patch
 
-    Copyright (c) 1999 Martien Verbruggen
-    mgjv at comdyn.com.au
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ts-nouveau-threaded-adapt-ioctl-signature.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-    This package is free software; you can redistribute it and/or
-    modify it under the same terms as Perl itself.
-
-Enclosed fonts: 
-
-    Dustismo Sans and Dustismo Roman
-    http://www.cheapskatefonts.com/
-    see Dustismo,LICENSE for original (GPL) license
-
-So I guess the right thing to do would be:
-
- - Include README in the license files
-
- - Set the license to:
-
-   Artistic or GPL-1.0+ (perl module), GPL-2.0+ (font)
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libdrm/0006-tests-nouveau-threaded-adapt-ioctl-signature.patch b/package/libdrm/0006-tests-nouveau-threaded-adapt-ioctl-signature.patch
+new file mode 100644
+index 0000000000..80845709da
+--- /dev/null
++++ b/package/libdrm/0006-tests-nouveau-threaded-adapt-ioctl-signature.patch
+@@ -0,0 +1,37 @@
++From 6c7b305869b941e52cb846cbed5e4a5c85d035d9 Mon Sep 17 00:00:00 2001
++From: Ross Burton <ross.burton@intel.com>
++Date: Mon, 18 Jun 2018 15:07:03 +0100
++Subject: [PATCH] tests/nouveau/threaded: adapt ioctl signature
++
++POSIX says ioctl() has the signature (int, int, ...) but glibc has decided to
++use (int, unsigned long int, ...) instead.
++
++Use a #ifdef to adapt the replacement function as appropriate.
++
++Signed-off-by: Ross Burton <ross.burton@intel.com>
++
++[Taken from https://raw.githubusercontent.com/openembedded/openembedded-core/master/meta/recipes-graphics/drm/libdrm/musl-ioctl.patch]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ tests/nouveau/threaded.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/tests/nouveau/threaded.c b/tests/nouveau/threaded.c
++index 3669bcd..e1c27c0 100644
++--- a/tests/nouveau/threaded.c
+++++ b/tests/nouveau/threaded.c
++@@ -36,7 +36,11 @@ static int failed;
++ 
++ static int import_fd;
++ 
+++#ifdef __GLIBC__
++ int ioctl(int fd, unsigned long request, ...)
+++#else
+++int ioctl(int fd, int request, ...)
+++#endif
++ {
++ 	va_list va;
++ 	int ret;
++-- 
++2.24.0
++
