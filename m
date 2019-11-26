@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 22:35:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iw: update the upstream URL in
- Config.in
-In-Reply-To: <20191126193632.12823-1-mark@dibsco.co.uk>
-References: <20191126193632.12823-1-mark@dibsco.co.uk>
-Message-ID: <20191126223551.7182a752@windsurf>
+Date: Tue, 26 Nov 2019 22:35:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/c-capnproto: add an upstream
+ URL to Config.in
+In-Reply-To: <20191126120645.8577-1-mark@dibsco.co.uk>
+References: <20191126120645.8577-1-mark@dibsco.co.uk>
+Message-ID: <20191126223557.5382a993@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Nov 2019 19:36:32 +0000
+On Tue, 26 Nov 2019 12:06:45 +0000
 Mark Corbin <mark@dibsco.co.uk> wrote:
 
-> Update the upstream URL in the help text in Config.in. This
-> addresses the 'Invalid(404)' URL status in the package stats
+> Add an upstream URL to the help text in Config.in. This
+> addresses the 'Missing' URL status in the package stats
 > web page output.
 > 
 > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 > ---
->  package/iw/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/c-capnproto/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 
 Applied to master, thanks.
 
