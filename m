@@ -1,53 +1,38 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 26 Nov 2019 23:38:47 +0100
-Subject: [Buildroot] [PATCH v1] package/libdrm: fix nouveau tests
- compile for musl
-In-Reply-To: <20191126225146.0581d8ec@windsurf>
-References: <20191125205520.9234-1-ps.report@gmx.net>
- <20191126225146.0581d8ec@windsurf>
-Message-ID: <20191126233847.3d33d888@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 26 Nov 2019 23:47:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fis: add an upstream URL to
+ Config.in
+In-Reply-To: <87eexus6wv.fsf@dell.be.48ers.dk>
+References: <20191126144341.27186-1-mark@dibsco.co.uk>
+ <20191126210534.168608da@windsurf> <87eexus6wv.fsf@dell.be.48ers.dk>
+Message-ID: <e4806204-2ff9-a6f6-7034-bde0aa329cd4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-
-On Tue, 26 Nov 2019 22:51:46 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> On Mon, 25 Nov 2019 21:55:20 +0100
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > Add openembedded provided patch [2] to fix musl toolchain compile failures
-> > because of different ioctl() signatures, (int, int, ...) vs. (int, unsigned
-> > long, ...).
-> >
-> > Fixes:
-> >
-> >   ../tests/nouveau/threaded.c:39:5: error: conflicting types for 'ioctl'
-> >   int ioctl(int fd, unsigned long request, ...)
-> >
-> > [1] http://autobuild.buildroot.net/results/047f149a928ac2a17e25211a0a8a264ebae369ac
-> > [2] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-graphics/drm/libdrm/musl-ioctl.patch
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  ...uveau-threaded-adapt-ioctl-signature.patch | 37 +++++++++++++++++++
-> >  1 file changed, 37 insertions(+)
-> >  create mode 100644 package/libdrm/0006-tests-nouveau-threaded-adapt-ioctl-signature.patch
->
-> Applied to master, thanks.
-
-And finally suggested upstream, see [1]...and the same for two more old ones, see [2] and [3]...
-
-Regards,
-Peter
-
-[1] https://gitlab.freedesktop.org/mesa/drm/merge_requests/30
-[2] https://gitlab.freedesktop.org/mesa/drm/merge_requests/27
-[3] https://gitlab.freedesktop.org/mesa/drm/merge_requests/28
 
 
->
-> Thomas
+On 26/11/2019 21:45, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+> 
+> Hi,
+> 
+>  > Just pointing to the source code itself is not that useful. Do we
+>  > really need to keep this package? It seems like some completely
+>  > outdated stuff. Who uses Redboot partition tables these days ?
+> 
+>  > In fact, maybe fconfig could also be dropped, it's Redboot related as
+>  > well.
+> 
+>  > Arnout, Peter, what do you think?
+> 
+> I would personally not mind getting rid of them. It is probably getting
+> close to 15 years since I last used Redboot.
+
+ If we're going to remove packages, now is an excellent time to do it: people
+have three months to complain about it.
+
+ Regards,
+ Arnout
