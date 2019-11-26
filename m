@@ -1,150 +1,199 @@
 From: Jerry Huang <jerry.huang@nxp.com>
-Date: Tue, 26 Nov 2019 07:34:16 +0000
-Subject: [Buildroot] [EXT] Re: [PATCH v2 06/10]
- boot/arm-trusted-firmware: Add RCW support
-In-Reply-To: <VI1PR04MB513683CAA0FCE4A542902D7AFE450@VI1PR04MB5136.eurprd04.prod.outlook.com>
+Date: Tue, 26 Nov 2019 08:09:38 +0000
+Subject: [Buildroot] [EXT] Re: [PATCH v2 07/10]
+ package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
+In-Reply-To: <20191125231221.743cd7ed@windsurf>
 References: <20191121102324.35225-1-jerry.huang@nxp.com>
- <20191121102324.35225-7-jerry.huang@nxp.com>
- <20191125230938.211426b3@windsurf>
- <VI1PR04MB513683CAA0FCE4A542902D7AFE450@VI1PR04MB5136.eurprd04.prod.outlook.com>
-Message-ID: <VI1PR04MB5136D82D297EBB06AF151EDFFE450@VI1PR04MB5136.eurprd04.prod.outlook.com>
+ <20191121102324.35225-8-jerry.huang@nxp.com>
+ <20191125231221.743cd7ed@windsurf>
+Message-ID: <VI1PR04MB513679F2B82773C7958DBA07FE450@VI1PR04MB5136.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I double check the "boot/arm-trusted-firmware/Config.in",
-There is one option BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES,
-I think it can be used to replace my previous mail mentioned: ARM_TRUSTED_FIRMWARE_EXTRA_OPTS.
-Add now this option is added to ARM_TRUSTED_FIRMWARE_MAKE_OPTS
 
-So in order to keep consistent with the context, two new options are defined:
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_ DEPENDENCIES
-
-ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS
-ARM_TRUSTED_FIRMWARE_DEPENDENCIES += BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_ DEPENDENCIES
 
 Best Regards
 Jerry Huang
 
 > -----Original Message-----
-> From: Jerry Huang
-> Sent: Tuesday, November 26, 2019 3:07 PM
-> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Sent: Tuesday, November 26, 2019 6:12 AM
+> To: Jerry Huang <jerry.huang@nxp.com>
 > Cc: buildroot at busybox.net; michael at walle.cc; matthew.weber at collins.com;
 > geomatsi at gmail.com
-> Subject: RE: [EXT] Re: [Buildroot] [PATCH v2 06/10] boot/arm-trusted-firmware:
-> Add RCW support
+> Subject: [EXT] Re: [Buildroot] [PATCH v2 07/10]
+> package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
 > 
-> Hi, Thomas,
-> Some comment in lines, please review them, thanks a lot.
+> Caution: EXT Email
 > 
-> Best Regards
-> Jerry Huang
+> Hello,
 > 
-> > -----Original Message-----
-> > From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Sent: Tuesday, November 26, 2019 6:10 AM
-> > To: Jerry Huang <jerry.huang@nxp.com>
-> > Cc: buildroot at busybox.net; michael at walle.cc;
-> > matthew.weber at collins.com; geomatsi at gmail.com
-> > Subject: [EXT] Re: [Buildroot] [PATCH v2 06/10]
-> > boot/arm-trusted-firmware: Add RCW support
+> On Thu, 21 Nov 2019 18:23:21 +0800
+> Changming Huang <jerry.huang@nxp.com> wrote:
+> 
+> > From: Jerry Huang <jerry.huang@nxp.com>
 > >
-> > Caution: EXT Email
+> > This package provides the firmware for LS1028ARDB DP (display port).
 > >
-> > Hello,
-> >
-> > On Thu, 21 Nov 2019 18:23:20 +0800
-> > Changming Huang <jerry.huang@nxp.com> wrote:
-> >
-> > > diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> > > b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> > > index 2133d39e6d..2bca8109f1 100644
-> > > --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> > > +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> > > @@ -92,6 +92,15 @@ endif
-> > >
-> > >  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
-> > >
-> > > +ifeq ($(BR2_PACKAGE_HOST_RCW_ATF),y)
-> >
-> > This option should be introduced by this patch.
-> Sure,
+> > Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
 > 
-> > Overall, I'm not super happy with how arm-trusted-firmware works. In
-> > some cases, it's a sub-option of arm-trusted-firmware that causes it
-> > to use some additional package (for example OPTEE as BL32, U-Boot as
-> > BL33), but sometimes it's the implicit fact of having another package
-> > enabled (mv-ddr-marvell, vexpress-firmware), that causes
-> arm-trusted-firmware to use it.
-> > Not great.
+> Overall, looks pretty good. Rename to nxp-qoriq-... if you decide to use the nxp
+> branding.
+Sure, I will rename it.
+
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 9fbe229eb7..b15115f507 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -2545,3 +2545,6 @@ F:      package/qjson/
+> >  F:   package/quazip/
+> >  F:   package/shapelib/
+> >  F:   package/tinc/
+> > +
+> > +N:   Changming Huang <jerry.huang@nxp.com>
+> 
+> Please sort your name at the right place in the DEVELOPERS file (alphabetic
+> ordering).
+sure
+
+> > diff --git a/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/Config.in
+> > b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/Config.in
+> > new file mode 100644
+> > index 0000000000..9259776750
+> > --- /dev/null
+> > +++ b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/Config.in
+> > @@ -0,0 +1,5 @@
+> > +config BR2_PACKAGE_FSL_QORIQ_CADENCE_DP_FW
+> > +     bool "FSL QorIQ cadence DP firmware"
+> 
+> Just:
+> 
+>         bool "fsl-qorirq-cadence-dp-fw
+Sure,
+
+> > +     help
+> > +       FSL QorIQ cadence DP firmware, a resident EL3 firmware.
+> > +       link:
+> > + https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww
 > >
-> > So I'm not sure how to proceed with RCW.
-> Yes, it uses some additional package for booting.
-> But, if it does not use them (U-Boot as BL33, OPTEE as BL32, RCW as BL2), what
-> can arm-trusted-firmware do?
+> + .nxp.com%2Flgfiles%2Fsdk%2Flsdk1909%2Ffirmware-cadence-lsdk1909.bin&
+> > +
+> amp;data=02%7C01%7Cjerry.huang%40nxp.com%7Ce1898ecb342d4abee75c0
+> 8d77
+> > +
+> 1f48c4c%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63710316744
+> 6779
+> > +
+> 441&amp;sdata=%2FM0R2H%2BoS5qxxyzQLATgP7ndtCyNkzyxkFxTHgNuk2o%3
+> D&amp
+> > + ;reserved=0
 > 
-> > > +RCW_BOOT_MODE = $(call
-> > qstrip,$(BR2_PACKAGE_HOST_RCW_BOOT_MODE))
-> > > +RCW_PATH = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BIN))
-> > > +RCW_FILE = $(lastword $(subst /, ,$(RCW_PATH)))
+> One empty line between the description and the upstream URL, and no
+> "link: " before the link. Also, pointing to the binary file itself is not useful, we
+> need an actual web page. If none exist, just don't provide an upstream URL.
+Remove this link
+
+> > diff --git
+> > a/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp
+> > -fw.hash
+> > b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp
+> > -fw.hash
+> > new file mode 100644
+> > index 0000000000..bee912bee1
+> > --- /dev/null
+> > +++ b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadenc
+> > +++ e-dp-fw.hash
+> > @@ -0,0 +1,2 @@
+> > +# Locally calculated
+> > +sha256
 > >
-> > Those variables names should be prefixed with the package name, i.e
-> > ARM_TRUSTED_FIRMWARE.
-> Sure,
+> +5871c5717be32f14a59624d5699d405e8ce9ae2e9c9ef86fd16e13d264a40e58
+> > +firmware-cadence-lsdk1909.bin
 > 
-> > > +ARM_TRUSTED_FIRMWARE_MAKE_OPTS +=
-> > BOOT_MODE=$(RCW_BOOT_MODE)
-> > > +RCW=$(BINARIES_DIR)/$(RCW_FILE)
+> Hash of the license file is missing.
+Will add the hash in v3
+
+> > diff --git
+> > a/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp
+> > -fw.mk
+> > b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadence-dp
+> > -fw.mk
+> > new file mode 100644
+> > index 0000000000..d0d112e25f
+> > --- /dev/null
+> > +++ b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/fsl-qoriq-cadenc
+> > +++ e-dp-fw.mk
+> > @@ -0,0 +1,24 @@
 > >
-> > These BOOT_MODE and RCW options are not supported in ATF upstream,
-> > apparently only in the NXP fork. I'm not sure we want explicit support
-> > for vendor-specific things. Should we look at providing an
-> > arm-trusted-firmware that can more easily be customized through options?
-> 
-> Maybe we can provide three options
-> ARM_TRUSTED_FIRMWARE_EXTRA_OPTS: the custom OPTS
-> ARM_TRUSTED_FIRMWARE_EXTRA_TARGETS: the custom TARGETS
-> ARM_TRUSTED_FIRMWARE_EXTRA_DEPENDENCIES: the custom dependency
-> 
-> Which are defined in defconfig file or empty, For example, NXP QorIQ:
-> ARM_TRUSTED_FIRMWARE_EXTRA_OPTS = " BOOT_MODE=sd
-> RCW=$(BINARIES_DIR)/ rcw_1300_sdboot.bin"
-> ARM_TRUSTED_FIRMWARE_EXTRA_TARGETS = " pbl"
-> ARM_TRUSTED_FIRMWARE_EXTRA_DEPENDENCIES = "host-qoriq-rcw"
-> Or Marvell DDR:
-> ARM_TRUSTED_FIRMWARE_EXTRA_OPTS = "
-> SCP_BL2=$(BINARIES_DIR)/scp-fw.bin"
-> ARM_TRUSTED_FIRMWARE_EXTRA_DEPENDENCIES = "mv-ddr-marvell"
-> 
-> we can use them as below without detecting the condition in ATF makefile:
-> ARM_TRUSTED_FIRMWARE_MAKE_OPTS +=
-> ARM_TRUSTED_FIRMWARE_EXTRA_OPTS
-> ARM_TRUSTED_FIRMWARE_MAKE_TARGETS +=
-> ARM_TRUSTED_FIRMWARE_EXTRA_TARGETS
-> ARM_TRUSTED_FIRMWARE_DEPENDENCIES +=
-> ARM_TRUSTED_FIRMWARE_EXTRA_DEPENDENCIES
-> 
-> We can put anything we want into these options, and the ATF makefile is very
-> clean.
-> 
-> How do you think about them?
-> 
-> > That's really an open discussion, I don't yet have a clear idea on how
-> > to handle that.
+> +###############################################################
+> ######
+> > +###########
+> > +#
+> > +# fsl-qoriq-cadence-dp-fw
+> > +#
 > >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fboot
-> > lin.c
-> om&amp;data=02%7C01%7Cjerry.huang%40nxp.com%7C74c02743671b4e18a
+> +###############################################################
+> ######
+> > +###########
+> > +
+> > +FSL_QORIQ_CADENCE_DP_FW_VERSION = lsdk1909
+> > +FSL_QORIQ_CADENCE_DP_FW_SITE =
+> > +https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.
 > >
-> b5c08d771f42b8f%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637
+> +nxp.com%2Flgfiles%2Fsdk%2Flsdk1909&amp;data=02%7C01%7Cjerry.huang%
+> 40n
 > >
-> 103165822614341&amp;sdata=rcEnN%2B%2FlfMpj0iwpikulfsCH0v813TaG86K
-> > GsE3eGTo%3D&amp;reserved=0
+> +xp.com%7Ce1898ecb342d4abee75c08d771f48c4c%7C686ea1d3bc2b4c6fa92c
+> d99c5
+> >
+> +c301635%7C0%7C0%7C637103167446779441&amp;sdata=pVGrODu3jQDZKQ
+> cKs1zXSq
+> > +ihEBQUw7Rq6C%2FRm%2Bn8FKU%3D&amp;reserved=0
+> > +FSL_QORIQ_CADENCE_DP_FW_SOURCE =
+> > +firmware-cadence-$(FSL_QORIQ_CADENCE_DP_FW_VERSION).bin
+> > +FSL_QORIQ_CADENCE_DP_FW_LICENSE = NXP-Binary-EULA
+> > +FSL_QORIQ_CADENCE_DP_FW_LICENSE_FILES = COPYING
+> > +FSL_QORIQ_CADENCE_DP_FW_INSTALL_IMAGES = YES
+> > +FSL_QORIQ_CADENCE_DP_FW_INSTALL_TARGET = no
+> 
+> Should be "NO" (upper_case)
+Will correct it
+
+> > +
+> > +define FSL_QORIQ_CADENCE_DP_FW_EXTRACT_CMDS
+> > +     cd $(@D); \
+> > +             sh
+> >
+> +$(FSL_QORIQ_CADENCE_DP_FW_DL_DIR)/$(FSL_QORIQ_CADENCE_DP_FW_S
+> OURCE)
+> > +--auto-accept;
+> 
+> Final semi-colon not needed.
+Will use below command in v3:
+define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
+        $(call NXP_QORIQ_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
+endef
+
+> > +endef
+> > +
+> > +define FSL_QORIQ_CADENCE_DP_FW_INSTALL_IMAGES_CMDS
+> > +     $(INSTALL) -D -m 0644
+> > +$(@D)/firmware-cadence-lsdk1909/dp/ls1028a-dp-fw.bin
+> > +$(BINARIES_DIR)/ls1028a-dp-fw.bin endef
+> > +
+> > +$(eval $(generic-package))
+> 
+> Thanks!
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbootlin.c
+> om&amp;data=02%7C01%7Cjerry.huang%40nxp.com%7Ce1898ecb342d4abee
+> 75c08d771f48c4c%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637
+> 103167446779441&amp;sdata=VhPk%2Bg9xWrIX%2B9RTaiC3r7KJdiChr2mQ1d
+> h56QLbRyA%3D&amp;reserved=0
