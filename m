@@ -1,47 +1,45 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Tue, 26 Nov 2019 09:55:41 +0100
-Subject: [Buildroot] [PATCH] package/glibc: install locale utility when nls
- is enabled
-Message-ID: <20191126085541.2688-1-p.debruijn@unilogic.nl>
+From: Viktar Palstsiuk <viktar.palstsiuk@promwad.com>
+Date: Tue, 26 Nov 2019 12:03:52 +0300
+Subject: [Buildroot] [PATCH 1/1] configs/nanopi_neo: deterine roofs
+ partition size automatically
+Message-ID: <20191126090352.11728-1-viktar.palstsiuk@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
----
- package/glibc/Config.in | 2 +-
- package/glibc/glibc.mk  | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+Let genimage determine rootfs partition size based on the filesystem image size
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index 323767f..b8c2573 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_GLIBC_UTILS
- 	depends on BR2_PACKAGE_BASH
- 	help
- 	  Enabling this option will compile and install the getconf,
--	  ldconfig and ldd glibc utilities for the target.
-+	  ldconfig, ldd and locale glibc utilities for the target.
- 
- comment "glibc utilities need bash"
- 	depends on !BR2_PACKAGE_BASH
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 5da0b06..e366134 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -146,7 +146,10 @@ endif
- ifeq ($(BR2_PACKAGE_GLIBC_UTILS),y)
- GLIBC_TARGET_UTILS_USR_BIN = posix/getconf elf/ldd
- GLIBC_TARGET_UTILS_SBIN = elf/ldconfig
-+endif
- 
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-+GLIBC_TARGET_UTILS_USR_BIN += locale/locale
- endif
- 
- define GLIBC_INSTALL_TARGET_CMDS
+Signed-off-by: Viktar Palstsiuk <viktar.palstsiuk@promwad.com>
+---
+ board/friendlyarm/nanopi-neo/genimage.cfg | 1 -
+ configs/nanopi_neo_defconfig              | 2 --
+ 2 files changed, 3 deletions(-)
+
+diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
+index ad43d31049..f6adc4af3e 100644
+--- a/board/friendlyarm/nanopi-neo/genimage.cfg
++++ b/board/friendlyarm/nanopi-neo/genimage.cfg
+@@ -29,6 +29,5 @@ image sdcard.img {
+ 	partition rootfs {
+ 		partition-type = 0x83
+ 		image = "rootfs.ext4"
+-		size = 32M
+ 	}
+ }
+diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
+index aa464917b5..838f4edad5 100644
+--- a/configs/nanopi_neo_defconfig
++++ b/configs/nanopi_neo_defconfig
+@@ -31,8 +31,6 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ # Build an sdcard image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+-BR2_TARGET_ROOTFS_EXT2_INODES=8192
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
-2.7.4
+2.17.1
