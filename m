@@ -1,43 +1,100 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 11:12:59 +0100
+From: Jerry Huang <jerry.huang@nxp.com>
+Date: Tue, 26 Nov 2019 10:13:42 +0000
 Subject: [Buildroot] [EXT] Re: [PATCH v2 07/10]
  package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
-In-Reply-To: <165d3a2c0b806e889efe738487d216bd@walle.cc>
+In-Reply-To: <551b5d3c9eb0c435110d1e0fbe634419@walle.cc>
 References: <20191121102324.35225-1-jerry.huang@nxp.com>
  <20191121102324.35225-8-jerry.huang@nxp.com>
  <20191125231221.743cd7ed@windsurf>
  <VI1PR04MB513679F2B82773C7958DBA07FE450@VI1PR04MB5136.eurprd04.prod.outlook.com>
- <165d3a2c0b806e889efe738487d216bd@walle.cc>
-Message-ID: <20191126111259.3ae8feac@windsurf>
+ <551b5d3c9eb0c435110d1e0fbe634419@walle.cc>
+Message-ID: <VI1PR04MB5136F0C5DF95608BF0C757C9FE450@VI1PR04MB5136.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Nov 2019 10:29:18 +0100
-Michael Walle <michael@walle.cc> wrote:
 
-> >> Final semi-colon not needed.  
-> > Will use below command in v3:
-> > define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
-> >         $(call
-> > NXP_QORIQ_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
-> > endef  
+
+Best Regards
+Jerry Huang
+
+> -----Original Message-----
+> From: Michael Walle <michael@walle.cc>
+> Sent: Tuesday, November 26, 2019 5:22 PM
+> To: Jerry Huang <jerry.huang@nxp.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>;
+> buildroot at busybox.net; matthew.weber at collins.com; geomatsi at gmail.com
+> Subject: Re: [EXT] Re: [Buildroot] [PATCH v2 07/10]
+> package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
 > 
-> please don't duplicate that piece of code.. it should really be
-> NXP_EXTRACT_HELPER. which leads to the cleanup of the freescale-imx
-> and nxp-qoriq directories. IMHO both should be named consistently.
-> Thomas? Matthew?
+> Caution: EXT Email
+> 
+> Am 2019-11-26 09:09, schrieb Jerry Huang:
+> > Best Regards
+> > Jerry Huang
+> >
+> >> -----Original Message-----
+> >> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> >> Sent: Tuesday, November 26, 2019 6:12 AM
+> >> To: Jerry Huang <jerry.huang@nxp.com>
+> >> Cc: buildroot at busybox.net; michael at walle.cc;
+> >> matthew.weber at collins.com; geomatsi at gmail.com
+> >> Subject: [EXT] Re: [Buildroot] [PATCH v2 07/10]
+> >> package/freescale-qoriq/fsl-qoriq-cadence-dp-fw: new package
+> >>
+> >> Caution: EXT Email
+> >>
+> >> Hello,
+> >>
+> >> On Thu, 21 Nov 2019 18:23:21 +0800
+> >> Changming Huang <jerry.huang@nxp.com> wrote:
+> >>
+> >> > From: Jerry Huang <jerry.huang@nxp.com>
+> >> >
+> >> > This package provides the firmware for LS1028ARDB DP (display port).
+> >> >
+> >> > Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
+> >>
+> >> Overall, looks pretty good. Rename to nxp-qoriq-... if you decide to
+> >> use the nxp branding.
+> > Sure, I will rename it.
+> >
+> >> > diff --git a/DEVELOPERS b/DEVELOPERS
+> >> > index 9fbe229eb7..b15115f507 100644
+> >> > --- a/DEVELOPERS
+> >> > +++ b/DEVELOPERS
+> >> > @@ -2545,3 +2545,6 @@ F:      package/qjson/
+> >> >  F:   package/quazip/
+> >> >  F:   package/shapelib/
+> >> >  F:   package/tinc/
+> >> > +
+> >> > +N:   Changming Huang <jerry.huang@nxp.com>
+> >>
+> >> Please sort your name at the right place in the DEVELOPERS file
+> >> (alphabetic
+> >> ordering).
+> > sure
+> >
+> >> > diff --git a/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/Config.in
+> >> > b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/Config.in
+> >> > new file mode 100644
+> >> > index 0000000000..9259776750
+> >> > --- /dev/null
+> >> > +++ b/package/freescale-qoriq/fsl-qoriq-cadence-dp-fw/Config.in
+> >> > @@ -0,0 +1,5 @@
+> >> > +config BR2_PACKAGE_FSL_QORIQ_CADENCE_DP_FW
+> >> > +     bool "FSL QorIQ cadence DP firmware"
+> >>
+> >> Just:
+> >>
+> >>         bool "fsl-qorirq-cadence-dp-fw
+> > Sure,
+> 
+> Sorry about being so pedantic about this.. but like I said before,
+> almost all (there is one exception, "murata-cyw-fw") firmware packages
+> have a -firmware suffix.
+Yes, it has been changed to " qoriq-cadence-dp-firmware " in v3
 
-What are you suggesting? A single package/nxp/ folder, with everything
-in there?
-
-If we do package/nxp-imx/ and package/nxp-qoirq/, then there is still
-the question of where to put this common NXP_EXTRACT_HELPER macro
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> -michael
