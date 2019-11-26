@@ -1,8 +1,8 @@
 From: Mark Corbin <mark@dibsco.co.uk>
-Date: Tue, 26 Nov 2019 18:54:19 +0000
-Subject: [Buildroot] [PATCH 1/1] package/gtkperf: add an upstream URL to
- Config.in
-Message-ID: <20191126185419.7673-1-mark@dibsco.co.uk>
+Date: Tue, 26 Nov 2019 19:01:44 +0000
+Subject: [Buildroot] [PATCH 1/1] package/hicolor-icon-theme: add an upstream
+ URL to Config.in
+Message-ID: <20191126190144.9069-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +15,18 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 ---
- package/gtkperf/Config.in | 2 ++
+ package/hicolor-icon-theme/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/gtkperf/Config.in b/package/gtkperf/Config.in
-index 78c35e72e7..a763e305c7 100644
---- a/package/gtkperf/Config.in
-+++ b/package/gtkperf/Config.in
-@@ -7,3 +7,5 @@ config BR2_PACKAGE_GTKPERF
- 	  predefined GTK+ widgets
- 	  e.g. (opening comboboxes, toggling buttons, scrolling text
- 	  yms.) and this way define the speed of device/platform.
+diff --git a/package/hicolor-icon-theme/Config.in b/package/hicolor-icon-theme/Config.in
+index 10edbf8865..5ef2cd2267 100644
+--- a/package/hicolor-icon-theme/Config.in
++++ b/package/hicolor-icon-theme/Config.in
+@@ -7,3 +7,5 @@ config BR2_PACKAGE_HICOLOR_ICON_THEME
+ 	  standard directory structure for storing icons of third-party
+ 	  applications (i.e. the ones not available in usual icon
+ 	  themes).
 +
-+	  http://gtkperf.sourceforge.net/
++	  https://www.freedesktop.org/wiki/Software/icon-theme/
 -- 
 2.20.1
