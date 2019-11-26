@@ -1,17 +1,17 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 20:38:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/doom-wad: add an upstream URL
- to Config.in
-In-Reply-To: <20191126132055.18467-1-mark@dibsco.co.uk>
-References: <20191126132055.18467-1-mark@dibsco.co.uk>
-Message-ID: <20191126203815.314615b0@windsurf>
+Date: Tue, 26 Nov 2019 20:38:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dmraid: add an upstream URL to
+ Config.in
+In-Reply-To: <20191126125431.17176-1-mark@dibsco.co.uk>
+References: <20191126125431.17176-1-mark@dibsco.co.uk>
+Message-ID: <20191126203833.1a1b8151@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Nov 2019 13:20:55 +0000
+On Tue, 26 Nov 2019 12:54:31 +0000
 Mark Corbin <mark@dibsco.co.uk> wrote:
 
 > Add an upstream URL to the help text in Config.in. This
@@ -20,7 +20,7 @@ Mark Corbin <mark@dibsco.co.uk> wrote:
 > 
 > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 > ---
->  package/doom-wad/Config.in | 2 ++
+>  package/dmraid/Config.in | 2 ++
 >  1 file changed, 2 insertions(+)
 
 Applied to master, thanks.
