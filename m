@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 22:51:46 +0100
-Subject: [Buildroot] [PATCH v1] package/libdrm: fix nouveau tests
- compile for musl
-In-Reply-To: <20191125205520.9234-1-ps.report@gmx.net>
-References: <20191125205520.9234-1-ps.report@gmx.net>
-Message-ID: <20191126225146.0581d8ec@windsurf>
+Date: Tue, 26 Nov 2019 22:37:05 +0100
+Subject: [Buildroot] [git commit branch/next] package/iproute2: bump to
+ version 5.4.0
+Message-ID: <20191126214403.B1BB2811AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 25 Nov 2019 21:55:20 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5a6c71d0e487738d3a6707b7a49d94b896a605c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Add openembedded provided patch [2] to fix musl toolchain compile failures
-> because of different ioctl() signatures, (int, int, ...) vs. (int, unsigned
-> long, ...).
-> 
-> Fixes:
-> 
->   ../tests/nouveau/threaded.c:39:5: error: conflicting types for 'ioctl'
->   int ioctl(int fd, unsigned long request, ...)
-> 
-> [1] http://autobuild.buildroot.net/results/047f149a928ac2a17e25211a0a8a264ebae369ac
-> [2] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-graphics/drm/libdrm/musl-ioctl.patch
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...uveau-threaded-adapt-ioctl-signature.patch | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/libdrm/0006-tests-nouveau-threaded-adapt-ioctl-signature.patch
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Tested-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/iproute2/iproute2.hash | 2 +-
+ package/iproute2/iproute2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index d130466440..41588488e6 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	cb1c1e45993a3bd2438543fd4332d70f1726a6e6ff97dc613a8258c993117b3f  iproute2-5.3.0.tar.xz
++sha256	fe97aa60a0d4c5ac830be18937e18dc3400ca713a33a89ad896ff1e3d46086ae  iproute2-5.4.0.tar.xz
+ sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 0efd4e62d3..6dc3fbd9c0 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 5.3.0
++IPROUTE2_VERSION = 5.4.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
