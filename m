@@ -1,158 +1,115 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 26 Nov 2019 00:57:46 -0600
-Subject: [Buildroot] [next] support/testing: new opkg test case
-Message-ID: <20191126065746.39951-1-matthew.weber@rockwellcollins.com>
+From: Jerry Huang <jerry.huang@nxp.com>
+Date: Tue, 26 Nov 2019 07:06:41 +0000
+Subject: [Buildroot] [EXT] Re: [PATCH v2 06/10]
+ boot/arm-trusted-firmware: Add RCW support
+In-Reply-To: <20191125230938.211426b3@windsurf>
+References: <20191121102324.35225-1-jerry.huang@nxp.com>
+ <20191121102324.35225-7-jerry.huang@nxp.com>
+ <20191125230938.211426b3@windsurf>
+Message-ID: <VI1PR04MB513683CAA0FCE4A542902D7AFE450@VI1PR04MB5136.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Validates an archive can be installed and removed
-- Builds an archives that uses postinst and prerm scripts
+Hi, Thomas,
+Some comment in lines, please review them, thanks a lot.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- DEVELOPERS                                    |  1 +
- support/testing/tests/package/test_opkg.py    | 63 +++++++++++++++++++
- .../tests/package/test_opkg/post-build.sh     | 47 ++++++++++++++
- 3 files changed, 111 insertions(+)
- create mode 100644 support/testing/tests/package/test_opkg.py
- create mode 100755 support/testing/tests/package/test_opkg/post-build.sh
+Best Regards
+Jerry Huang
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 544e3ac1c3..541029ab0e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1625,6 +1625,7 @@ F:	package/wireless_tools/
- F:	package/xen/
- F:	support/testing/tests/package/br2-external/openjdk/
- F:	support/testing/tests/package/test_openjdk.py
-+F:	support/testing/tests/package/test_opkg.py
- 
- N:	Mauro Condarelli <mc5686@mclink.it>
- F:	package/mc/
-diff --git a/support/testing/tests/package/test_opkg.py b/support/testing/tests/package/test_opkg.py
-new file mode 100644
-index 0000000000..06dba0c682
---- /dev/null
-+++ b/support/testing/tests/package/test_opkg.py
-@@ -0,0 +1,63 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestOpkg(infra.basetest.BRTest):
-+    # The snmpd service is used as an example for this test of a set of files
-+    # that can be archived up and deployed/removed to test opkg
-+    #
-+    # The post build script uses an ipk-build template and assembles the test
-+    # package.
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_NETSNMP=y
-+        # BR2_PACKAGE_NETSNMP_CLIENTS is not set
-+        # BR2_PACKAGE_NETSNMP_ENABLE_MIBS is not set
-+        BR2_PACKAGE_OPKG=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_PACKAGE_HOST_OPKG_UTILS=y
-+        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
-+        """.format(infra.filepath("tests/package/test_opkg/post-build.sh"))
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # This test sequence tests the install and removal of a running
-+        # service and configuration files.  It also exercises the postinst
-+        # and prerm scripting provided in the package archive.
-+
-+        cmd = "opkg install example-snmpd-package_1.0_arm.ipk"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = "opkg list-installed | grep example-snmpd-package"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+        # Check that postinst script ran to start the services
-+        cmd = "ps aux | grep [s]nmpd"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+        # If successful, the prerm script ran to stop the service prior to
-+        # the removal of the service scripting and files
-+        cmd = "opkg remove example-snmpd-package"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+        # Verify after package removal that the services is not running
-+        cmd = "ps aux | grep [s]nmpd"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 1)
-+
-+        # This folder for configs is provided by the package install and
-+        # should no longer be present after package removal
-+        cmd = "ls /etc/snmp"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 1)
-diff --git a/support/testing/tests/package/test_opkg/post-build.sh b/support/testing/tests/package/test_opkg/post-build.sh
-new file mode 100755
-index 0000000000..1b85aa002a
---- /dev/null
-+++ b/support/testing/tests/package/test_opkg/post-build.sh
-@@ -0,0 +1,47 @@
-+#!/usr/bin/env bash
-+
-+IPK_BUILD=${TARGET_DIR}/root/ipk-build
-+
-+# Pull the files for the snmpd service out of the target to create a install archive
-+# and setup a basic configuration so that the startup script works.
-+mkdir -p ${IPK_BUILD}/CONTROL \
-+	${IPK_BUILD}/etc/init.d/ \
-+	${IPK_BUILD}/usr/sbin \
-+	${IPK_BUILD}/etc/snmp \
-+	${IPK_BUILD}/etc/default
-+mv -f ${TARGET_DIR}/etc/init.d/S59snmpd ${IPK_BUILD}/etc/init.d/
-+mv -f ${TARGET_DIR}/usr/sbin/snmpd ${IPK_BUILD}/usr/sbin/
-+echo "agentuser  nobody" > ${IPK_BUILD}/etc/snmp/snmpd.conf
-+echo "SNMPDRUN=yes" > ${IPK_BUILD}/etc/default/snmpd
-+
-+# build the control file
-+cat <<EOM >${IPK_BUILD}/CONTROL/control
-+Package: example-snmpd-package
-+Version: 1.0
-+Architecture: arm
-+Maintainer: user at domain.tld
-+Section: extras
-+Priority: optional
-+Source: http://example.com
-+Description: This is an example IPK package for installing snmpd
-+EOM
-+
-+# preinst script is not created to run before the install for this test example
-+
-+# postinst script is ran after install completes to start the services
-+cat <<EOM >${IPK_BUILD}/CONTROL/postinst
-+#!/bin/sh
-+/etc/init.d/S59snmpd start
-+EOM
-+chmod +x ${IPK_BUILD}/CONTROL/postinst
-+
-+# prerm script is ran before removal so that the services isn't in use
-+cat <<EOM >${IPK_BUILD}/CONTROL/prerm
-+#!/bin/sh
-+/etc/init.d/S59snmpd stop
-+EOM
-+chmod +x ${IPK_BUILD}/CONTROL/prerm
-+
-+# build the archive from template and pkg files
-+${HOST_DIR}/bin/opkg-build -Z gzip ${IPK_BUILD} ${TARGET_DIR}/root/
-+rm -fr ${IPK_BUILD}
--- 
-2.17.1
+> -----Original Message-----
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Sent: Tuesday, November 26, 2019 6:10 AM
+> To: Jerry Huang <jerry.huang@nxp.com>
+> Cc: buildroot at busybox.net; michael at walle.cc; matthew.weber at collins.com;
+> geomatsi at gmail.com
+> Subject: [EXT] Re: [Buildroot] [PATCH v2 06/10] boot/arm-trusted-firmware: Add
+> RCW support
+> 
+> Caution: EXT Email
+> 
+> Hello,
+> 
+> On Thu, 21 Nov 2019 18:23:20 +0800
+> Changming Huang <jerry.huang@nxp.com> wrote:
+> 
+> > diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> > b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> > index 2133d39e6d..2bca8109f1 100644
+> > --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> > +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> > @@ -92,6 +92,15 @@ endif
+> >
+> >  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
+> >
+> > +ifeq ($(BR2_PACKAGE_HOST_RCW_ATF),y)
+> 
+> This option should be introduced by this patch.
+Sure,
+
+> Overall, I'm not super happy with how arm-trusted-firmware works. In some
+> cases, it's a sub-option of arm-trusted-firmware that causes it to use some
+> additional package (for example OPTEE as BL32, U-Boot as BL33), but
+> sometimes it's the implicit fact of having another package enabled
+> (mv-ddr-marvell, vexpress-firmware), that causes arm-trusted-firmware to use it.
+> Not great.
+> 
+> So I'm not sure how to proceed with RCW.
+Yes, it uses some additional package for booting.
+But, if it does not use them (U-Boot as BL33, OPTEE as BL32, RCW as BL2), what can arm-trusted-firmware do?
+
+> > +RCW_BOOT_MODE = $(call
+> qstrip,$(BR2_PACKAGE_HOST_RCW_BOOT_MODE))
+> > +RCW_PATH = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_BIN))
+> > +RCW_FILE = $(lastword $(subst /, ,$(RCW_PATH)))
+> 
+> Those variables names should be prefixed with the package name, i.e
+> ARM_TRUSTED_FIRMWARE.
+Sure,
+
+> > +ARM_TRUSTED_FIRMWARE_MAKE_OPTS +=
+> BOOT_MODE=$(RCW_BOOT_MODE)
+> > +RCW=$(BINARIES_DIR)/$(RCW_FILE)
+> 
+> These BOOT_MODE and RCW options are not supported in ATF upstream,
+> apparently only in the NXP fork. I'm not sure we want explicit support for
+> vendor-specific things. Should we look at providing an arm-trusted-firmware
+> that can more easily be customized through options?
+
+Maybe we can provide three options
+ARM_TRUSTED_FIRMWARE_EXTRA_OPTS: the custom OPTS
+ARM_TRUSTED_FIRMWARE_EXTRA_TARGETS: the custom TARGETS
+ARM_TRUSTED_FIRMWARE_EXTRA_DEPENDENCIES: the custom dependency
+
+Which are defined in defconfig file or empty,
+For example, NXP QorIQ:
+ARM_TRUSTED_FIRMWARE_EXTRA_OPTS = " BOOT_MODE=sd RCW=$(BINARIES_DIR)/ rcw_1300_sdboot.bin"
+ARM_TRUSTED_FIRMWARE_EXTRA_TARGETS = " pbl"
+ARM_TRUSTED_FIRMWARE_EXTRA_DEPENDENCIES = "host-qoriq-rcw"
+Or Marvell DDR:
+ARM_TRUSTED_FIRMWARE_EXTRA_OPTS = " SCP_BL2=$(BINARIES_DIR)/scp-fw.bin"
+ARM_TRUSTED_FIRMWARE_EXTRA_DEPENDENCIES = "mv-ddr-marvell"
+
+we can use them as below without detecting the condition in ATF makefile:
+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_TRUSTED_FIRMWARE_EXTRA_OPTS
+ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += ARM_TRUSTED_FIRMWARE_EXTRA_TARGETS
+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += ARM_TRUSTED_FIRMWARE_EXTRA_DEPENDENCIES
+
+We can put anything we want into these options, and the ATF makefile is very clean.
+
+How do you think about them?
+
+> That's really an open discussion, I don't yet have a clear idea on how to handle
+> that.
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbootlin.c
+> om&amp;data=02%7C01%7Cjerry.huang%40nxp.com%7C74c02743671b4e18a
+> b5c08d771f42b8f%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637
+> 103165822614341&amp;sdata=rcEnN%2B%2FlfMpj0iwpikulfsCH0v813TaG86K
+> GsE3eGTo%3D&amp;reserved=0
