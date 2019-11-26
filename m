@@ -1,65 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 26 Nov 2019 22:53:25 +0000
-Subject: [Buildroot] [Bug 12361] New: Init system (systemd) kills login on
- Raspberry Pi Zero
-Message-ID: <bug-12361-163@https.bugs.busybox.net/>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 26 Nov 2019 23:54:04 +0100
+Subject: [Buildroot] [PATCH] package/pkg-generic: fix reconfigure for
+ kconfig packages
+In-Reply-To: <20191125183248.2a9b409d@windsurf>
+References: <20191124231002.32255-1-angelo@amarulasolutions.com>
+ <20191125183248.2a9b409d@windsurf>
+Message-ID: <a0642eaa-fb56-84c2-b38c-09f174e0954b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12361
-
-            Bug ID: 12361
-           Summary: Init system (systemd) kills login on Raspberry Pi Zero
-           Product: buildroot
-           Version: 2019.08.2
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: spynet314 at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-Starting with a raspberrypi0_defconfig, then selecting 
-Toolchain/C library = glibc
-System configuration / Init system = systemd
-the device boots normally, but the welcome message and the login are shown
-twice.
-Trying to login with 'root', a password is then request, even if not set in the
-configuration.
-After entering 'root' and a blank password twice, the device block and it is no
-more possible to continue.
-
-Here's a piece of the bootlog:
-
-[   13.773714] bcm2835_v4l2: module is from the staging directory, the quality
-is unknown, you have been warned.
-[   13.835338] bcm2835_codec: module is from the staging directory, the quality
-is unknown, you have been warned.
-[   14.074354] bcm2835-codec bcm2835-codec: Device registered as /dev/video10
-[   14.143280] bcm2835-codec bcm2835-codec: Loaded V4L2 decode
-[   14.211667] bcm2835-codec bcm2835-codec: Device registered as /dev/video11
-[   14.283874] bcm2835-codec bcm2835-codec: Loaded V4L2 encode
-[   14.347166] bcm2835-codec bcm2835-codec: Device registered as /dev/video12
-[   14.422866] bcm2835-codec bcm2835-codec: Loaded V4L2 isp
 
 
-Welcome to Buildroot
-Welcome to Buildroot
-buildroot login: buildroot login: root
-buildroot login: root
-Password:
-Password:
+On 25/11/2019 18:32, Thomas Petazzoni wrote:
+> However, there seems to be some disagreement on IRC where
+> "foo-reconfigure" on a kconfig package implies that the configuration
+> of the package is completely regenerated, therefore losing any local
+> change that may have been done using "foo-menuconfig". We need to sort
+> out this disagreement before we can merge a patch like this.
 
+ The word "reconfigure" by itself could mean either option: run 'olddefconfig'
+on the current .config (which is what is done now), or recreate the .config from
+its inputs (which is what this patch makes it do).
 
-Thanks
+ I think the latter is a *lot* more useful than the former. The current
+situation is only useful if you're either modifying the .config directly
+(without foo-menuconfig), or if you're modifying the Kconfig files in an
+OVERRIDE_SRCDIR. Modifying the .config directly is clearly not something we need
+to support. Modifying Kconfig files in OVERRIDE_SRCDIR is something we should
+support, but even then it makes a lot of sense to reconstruct the .config from
+the inputs rather than trying to reuse the locally modified .config.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+ Bottom line: I think it's a good change (if done in pkg-kconfig like Thomas
+proposed).
+
+ It'll need to be mentioned in the release notes however.
+
+ Regards,
+ Arnout
