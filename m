@@ -1,45 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 15:29:04 +0100
-Subject: [Buildroot] [git commit] package/pkg-kconfig: handle
- KCONFIG_DEPENDENCIES with per-package directories
-Message-ID: <20191202083936.4A764813F0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Nov 2019 22:51:58 +0100
+Subject: [Buildroot] [git commit] package/libubootenv: bump to version
+ 9294981
+Message-ID: <20191202083935.A5BCC82884@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41ea76711356cd715d27820578510e9e0815e5e2
+commit: https://git.buildroot.net/buildroot/commit/?id=3e472fe8f9dffed0cd57c3bd1cc5d339ad6e0ca4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The pkg-kconfig infrastructure hijacks the regular chain of build
-steps to insert its own step to prepare the configuration of kconfig
-packages. This additional step may have dependencies of its own, such
-as host-flex, host-bison or toolchain.
+This includes the following changes:
 
-In the context of per-package directory support, those dependencies
-must be copied to the per-package directory of the current package
-prior to doing the config preparation. This commit implements this
-logic by adding a call to prepare-per-package-directory at the right
-spot.
+9294981 handle protected mmcblk_boot_ devices
+ac6d18a add missing includes
+8106b65 add .editorconfig file
 
-Reported-by: Andreas Naumann <anaumann@ultratronik.de>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-kconfig.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 86d7c14fdb..e435b95bcf 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -143,6 +143,7 @@ $(2)_KCONFIG_RULES = \
- # Since the file could be a defconfig file it needs to be expanded to a
- # full .config first.
- $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
-+	$$(call prepare-per-package-directory,$$($(2)_KCONFIG_DEPENDENCIES))
- 	$$(call kconfig-package-merge-config,$(2),$$(@D)/$$($(2)_KCONFIG_DOTCONFIG),\
- 		$$($(2)_KCONFIG_FRAGMENT_FILES))
- 	$$(Q)touch $$(@D)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index 81f72ad57c..36396ac732 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 9c8b0e6d596b43127ccdf6b2d181dce597fb1f90211aa36c4d88b5c6a31ef026 libubootenv-3286c571c7e15be4b341e46986f1c0dc74730207.tar.gz
++sha256 38431bcbb93fa1a6065828947ca9f9510709b5ac57f8f700fd91473236885064 libubootenv-92949816720d7af2ac722016e7a5b9a85ff141bc.tar.gz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index b24008ca33..2c6abe8794 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUBOOTENV_VERSION = 3286c571c7e15be4b341e46986f1c0dc74730207
++LIBUBOOTENV_VERSION = 92949816720d7af2ac722016e7a5b9a85ff141bc
+ LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
