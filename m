@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 22:09:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/glib-networking: add an
- upstream URL to Config.in
-In-Reply-To: <20191126154624.600-1-mark@dibsco.co.uk>
-References: <20191126154624.600-1-mark@dibsco.co.uk>
-Message-ID: <20191126220938.18e22d8e@windsurf>
+Date: Tue, 26 Nov 2019 22:09:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gqview: update the upstream URL
+ in Config.in
+In-Reply-To: <20191126155739.2623-1-mark@dibsco.co.uk>
+References: <20191126155739.2623-1-mark@dibsco.co.uk>
+Message-ID: <20191126220941.3378c69c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Nov 2019 15:46:24 +0000
+On Tue, 26 Nov 2019 15:57:39 +0000
 Mark Corbin <mark@dibsco.co.uk> wrote:
 
-> Add an upstream URL to the help text in Config.in. This
-> addresses the 'Missing' URL status in the package stats
+> Update the upstream URL in the help text in Config.in. This
+> addresses the 'Invalid(404)' URL status in the package stats
 > web page output.
 > 
 > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 > ---
->  package/glib-networking/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/gqview/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
