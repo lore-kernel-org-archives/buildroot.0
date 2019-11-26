@@ -1,46 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Nov 2019 22:53:48 +0100
-Subject: [Buildroot] [git commit] package/terminology: bump to version 1.6.0
-Message-ID: <20191202083934.F4099811BE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Nov 2019 22:36:17 +0100
+Subject: [Buildroot] [git commit] package/glibc: install locale utility only
+ when BR2_PACKAGE_GLIBC_UTILS=y
+Message-ID: <20191202083935.94D5F82884@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e5bae220ed6747b1a49420fc9efd60e49dacbe9
+commit: https://git.buildroot.net/buildroot/commit/?id=283c5d474ee23bd00c111bb3b21a2d2d0eb3f80b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See:
-https://www.enlightenment.org/news/2019-11-16-terminology-1.6.0
+Fixes: fb1ee93ca4378456774e1ae24fcf370417733a38
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/terminology/terminology.hash | 4 ++--
- package/terminology/terminology.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/glibc/glibc.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
-index 64e7cd9aa2..ed386fb7b3 100644
---- a/package/terminology/terminology.hash
-+++ b/package/terminology/terminology.hash
-@@ -1,3 +1,3 @@
--# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.5.0.tar.xz.sha256sum
--sha256  de55e503b382bb7c42a7def04c5ef7bff01e3e1fb0b379a4591544899eab8a6c  terminology-1.5.0.tar.xz
-+# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.6.0.tar.xz.sha256sum
-+sha256  b95cb05653afe0dad77fc038a8d5276c02a9c08d64ac97ddf0cee8087d27bd77  terminology-1.6.0.tar.xz
- sha256  a907d434f4691990ed8f2826ff7546672e9934a26c798351da12ed544dadc628  COPYING
-diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
-index 590413e69c..add80825a7 100644
---- a/package/terminology/terminology.mk
-+++ b/package/terminology/terminology.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index e366134026..4dc87e2f27 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -146,11 +146,10 @@ endif
+ ifeq ($(BR2_PACKAGE_GLIBC_UTILS),y)
+ GLIBC_TARGET_UTILS_USR_BIN = posix/getconf elf/ldd
+ GLIBC_TARGET_UTILS_SBIN = elf/ldconfig
+-endif
+-
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ GLIBC_TARGET_UTILS_USR_BIN += locale/locale
+ endif
++endif
  
--TERMINOLOGY_VERSION = 1.5.0
-+TERMINOLOGY_VERSION = 1.6.0
- TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
- TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
- TERMINOLOGY_LICENSE = BSD-2-Clause
+ define GLIBC_INSTALL_TARGET_CMDS
+ 	for libpattern in $(GLIBC_LIBS_LIB); do \
