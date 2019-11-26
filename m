@@ -1,41 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 12:51:05 +0100
-Subject: [Buildroot] [PATCH] linux: adding CIP RT
-In-Reply-To: <20191125225846.13484-1-angelo@amarulasolutions.com>
-References: <20191125225846.13484-1-angelo@amarulasolutions.com>
-Message-ID: <20191126125105.06cd2fcb@windsurf>
+Date: Tue, 26 Nov 2019 12:51:59 +0100
+Subject: [Buildroot] [git commit branch/next] package/glibc: install locale
+ utility when NLS is enabled
+Message-ID: <20191126114436.EB3DE8371D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fb1ee93ca4378456774e1ae24fcf370417733a38
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The .hash file should be updated with the hash of this kernel tarball.
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glibc/Config.in | 2 +-
+ package/glibc/glibc.mk  | 3 +++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-The commit log can be improved, we prefer using imperative sentence
-"add <foo>", "fix <bar>" rather than "adding <foo>", "fixing <bar>".
-
-Maybe:
-
-	linux: add option to select the CIP real-time kernel
-
-> -else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
-> +else ifneq ($(filter $(BR2_LINUX_KERNEL_LATEST_CIP_VERSION) $(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION),y),)
-
-Since it's a choice, this is sufficient:
-
-ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION)$(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION),y)
-
->  LINUX_SOURCE = linux-cip-$(LINUX_VERSION).tar.gz
->  LINUX_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/snapshot
->  else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 323767fc8a..b8c2573d96 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -14,7 +14,7 @@ config BR2_PACKAGE_GLIBC_UTILS
+ 	depends on BR2_PACKAGE_BASH
+ 	help
+ 	  Enabling this option will compile and install the getconf,
+-	  ldconfig and ldd glibc utilities for the target.
++	  ldconfig, ldd and locale glibc utilities for the target.
+ 
+ comment "glibc utilities need bash"
+ 	depends on !BR2_PACKAGE_BASH
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 5da0b064a2..e366134026 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -146,7 +146,10 @@ endif
+ ifeq ($(BR2_PACKAGE_GLIBC_UTILS),y)
+ GLIBC_TARGET_UTILS_USR_BIN = posix/getconf elf/ldd
+ GLIBC_TARGET_UTILS_SBIN = elf/ldconfig
++endif
+ 
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
++GLIBC_TARGET_UTILS_USR_BIN += locale/locale
+ endif
+ 
+ define GLIBC_INSTALL_TARGET_CMDS
