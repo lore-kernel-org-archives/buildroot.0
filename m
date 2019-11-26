@@ -1,64 +1,57 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 25 Nov 2019 23:58:46 +0100
-Subject: [Buildroot] [PATCH] linux: adding CIP RT
-Message-ID: <20191125225846.13484-1-angelo@amarulasolutions.com>
+From: Jerry Huang <jerry.huang@nxp.com>
+Date: Tue, 26 Nov 2019 02:49:28 +0000
+Subject: [Buildroot] [EXT] Re: [PATCH v2 01/10] package/freescale-qoriq:
+ new package directory
+In-Reply-To: <20191125221310.52424ae6@windsurf>
+References: <20191121102324.35225-1-jerry.huang@nxp.com>
+ <20191121102324.35225-2-jerry.huang@nxp.com>
+ <20191125221310.52424ae6@windsurf>
+Message-ID: <VI1PR04MB5136BAF6B40DC98CE4791D0FFE450@VI1PR04MB5136.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds Linux CIP RT, the PREEMPT_RT realtime variant maintained from
-the CIP team.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- linux/Config.in | 12 ++++++++++++
- linux/linux.mk  |  2 +-
- 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 8c5539c9ab..eacd53dafb 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -53,6 +53,17 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 
- 	  https://www.cip-project.org
- 
-+config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-+	bool "Latest CIP RT SLTS version (4.19.72-cip10-rt4)"
-+	help
-+	  Same as the CIP version, but this is the PREEMPT_RT realtime
-+	  variant.
-+
-+	  The CIP community plans to maintain 4.19 for security and
-+	  bug fixes for more than 10 years.
-+
-+	  https://www.cip-project.org
-+
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
- 	help
-@@ -124,6 +135,7 @@ config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.3.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.82-cip14" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "4.19.72-cip10-rt4" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c45db4d24f..befad98f2f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -29,7 +29,7 @@ LINUX_SITE_METHOD = hg
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = svn
--else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
-+else ifneq ($(filter $(BR2_LINUX_KERNEL_LATEST_CIP_VERSION) $(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION),y),)
- LINUX_SOURCE = linux-cip-$(LINUX_VERSION).tar.gz
- LINUX_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/snapshot
- else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
--- 
-2.17.1
+Best Regards
+Jerry Huang
+
+> -----Original Message-----
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Sent: Tuesday, November 26, 2019 5:13 AM
+> To: Jerry Huang <jerry.huang@nxp.com>
+> Cc: buildroot at busybox.net; michael at walle.cc; matthew.weber at collins.com;
+> geomatsi at gmail.com
+> Subject: [EXT] Re: [Buildroot] [PATCH v2 01/10] package/freescale-qoriq: new
+> package directory
+> 
+> Caution: EXT Email
+> 
+> On Thu, 21 Nov 2019 18:23:15 +0800
+> Changming Huang <jerry.huang@nxp.com> wrote:
+> 
+> > The freescale-qoriq directory is intended to contain all freescale
+> > QorIQ (including PowerPC and LayerScape serial) related packages,
+> > together with their download site and version info.
+> >
+> > Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+> 
+> So I think I read somewhere that you were suggested to use package/nxp-qoriq/
+> instead of package/freescale-qoriq/. This change is fine to me, so feel fee to do it
+> in your v3.
+[Jerry Huang] 
+Yes, I will do this change in v3.
+
+> Thanks,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbootlin.c
+> om&amp;data=02%7C01%7Cjerry.huang%40nxp.com%7C74086714ba394cd6b
+> 7cc08d771ec47f3%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637
+> 103131944681003&amp;sdata=3eDGrwaYCX99dBtZHMcGpG8ONM5pc8iSafW
+> RGHPO8DE%3D&amp;reserved=0
