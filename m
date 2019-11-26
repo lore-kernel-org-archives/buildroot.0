@@ -1,37 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 20:57:56 +0100
-Subject: [Buildroot] [git commit] package/cog: add an upstream URL to
- Config.in
-Message-ID: <20191126203656.3212683820@busybox.osuosl.org>
+Date: Tue, 26 Nov 2019 21:01:17 +0100
+Subject: [Buildroot] [git commit] package/ca-certificates: update the
+ upstream URL in Config.in
+Message-ID: <20191126203656.3D2148120D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f73e2a6c334d19d98ed99cf84ce3c460989fcc57
+commit: https://git.buildroot.net/buildroot/commit/?id=a9695f46111b6a68a4d9f80b2d4ec25d906b4d4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(404)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cog/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/ca-certificates/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cog/Config.in b/package/cog/Config.in
-index 768fcefaac..b25991d4ae 100644
---- a/package/cog/Config.in
-+++ b/package/cog/Config.in
-@@ -14,6 +14,8 @@ config BR2_PACKAGE_COG
- 	  not provide any chrome, and is suitable to be used
- 	  as a Web application container.
+diff --git a/package/ca-certificates/Config.in b/package/ca-certificates/Config.in
+index 6bb71820d2..cd9825a811 100644
+--- a/package/ca-certificates/Config.in
++++ b/package/ca-certificates/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_CA_CERTIFICATES
+ 	  Debian infrastructure and those shipped with Mozilla's
+ 	  browsers.
  
-+	  https://github.com/Igalia/cog
-+
- if BR2_PACKAGE_COG
- 
- config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
+-	  http://anonscm.debian.org/gitweb/?p=collab-maint/ca-certificates.git
++	  https://salsa.debian.org/debian/ca-certificates
