@@ -1,84 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Nov 2019 21:40:41 +0100
-Subject: [Buildroot] [git commit] support/testing: test_lxc.py: fix code
- style
-Message-ID: <20191202083935.64AC97FA91@busybox.osuosl.org>
+Date: Tue, 26 Nov 2019 22:55:10 +0100
+Subject: [Buildroot] [git commit] linux: add option to select the CIP
+ real-time kernel
+Message-ID: <20191202083935.BB30A80080@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd18e74eeb734994c91e19f830e4c700b8aaba2e
+commit: https://git.buildroot.net/buildroot/commit/?id=e9daff6249f163f5de1cbfbf5924c9e5b83f4761
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix these warnings:
+This patch adds Linux CIP RT, the PREEMPT_RT real-time variant maintained
+by the CIP team.
 
-E122 continuation line missing indentation or outdented
-E127 continuation line over-indented for visual indent
-E265 block comment should start with '# '
-E302 expected 2 blank lines, found 1
-F401 'pexpect' imported but unused
-
-Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/360824861
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_lxc.py | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ linux/Config.in | 12 ++++++++++++
+ linux/linux.mk  |  2 +-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_lxc.py b/support/testing/tests/package/test_lxc.py
-index 151bcf100b..346247da08 100644
---- a/support/testing/tests/package/test_lxc.py
-+++ b/support/testing/tests/package/test_lxc.py
-@@ -1,7 +1,7 @@
- import os
+diff --git a/linux/Config.in b/linux/Config.in
+index 8c5539c9ab..eacd53dafb 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -53,6 +53,17 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
  
- import infra.basetest
--import pexpect
+ 	  https://www.cip-project.org
+ 
++config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
++	bool "Latest CIP RT SLTS version (4.19.72-cip10-rt4)"
++	help
++	  Same as the CIP version, but this is the PREEMPT_RT realtime
++	  variant.
 +
- 
- class TestLxc(infra.basetest.BRTest):
-     config = \
-@@ -23,24 +23,24 @@ class TestLxc(infra.basetest.BRTest):
-             BR2_ROOTFS_OVERLAY="{}"
-             BR2_TARGET_ROOTFS_CPIO=y
-             """.format(
--            infra.filepath("tests/package/test_lxc/lxc-kernel.config"),
--            infra.filepath("tests/package/test_lxc/rootfs-overlay"))
-+              infra.filepath("tests/package/test_lxc/lxc-kernel.config"),
-+              infra.filepath("tests/package/test_lxc/rootfs-overlay"))
- 
-     def run_ok(self, cmd):
-         self.assertRunOk(cmd, 120)
- 
-     def wait_boot(self):
--        #the complete boot with systemd takes more time than what the default multipler permits
-+        # the complete boot with systemd takes more time than what the default multipler permits
-         self.emulator.timeout_multiplier *= 10
-         self.emulator.login()
- 
-     def setup_run_test_container(self):
-         self.run_ok("lxc-create -n lxc_iperf3 -t none -f /usr/share/lxc/config/minimal-iperf3.conf")
-         self.run_ok("lxc-start -l trace -n lxc_iperf3 -o /tmp/lxc.log -L /tmp/lxc.console.log")
--        #need to wait for the container to be fully started
-+        # need to wait for the container to be fully started
-         self.run_ok("sleep 2")
-         self.run_ok("iperf3 -c 192.168.1.2 -t 2")
--        #if the test fails, just cat /tmp/*.log
-+        # if the test fails, just cat /tmp/*.log
- 
-     def test_run(self):
-         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-@@ -50,7 +50,7 @@ class TestLxc(infra.basetest.BRTest):
-                            kernel_cmdline=[
-                                         "console=ttyAMA0,115200"],
-                            options=["-initrd", cpio_file,
--                                        "-dtb", dtb_file,
--                                        "-M", "vexpress-a9"])
-+                                    "-dtb", dtb_file,
-+                                    "-M", "vexpress-a9"])
-         self.wait_boot()
-         self.setup_run_test_container()
++	  The CIP community plans to maintain 4.19 for security and
++	  bug fixes for more than 10 years.
++
++	  https://www.cip-project.org
++
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+ 	help
+@@ -124,6 +135,7 @@ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "5.3.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.82-cip14" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "4.19.72-cip10-rt4" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c45db4d24f..762f8868b1 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -29,7 +29,7 @@ LINUX_SITE_METHOD = hg
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = svn
+-else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
++else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION)$(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION),y)
+ LINUX_SOURCE = linux-cip-$(LINUX_VERSION).tar.gz
+ LINUX_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/snapshot
+ else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
