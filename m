@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 22:09:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gr-osmosdr: add an upstream URL
- to Config.in
-In-Reply-To: <20191126161208.4152-1-mark@dibsco.co.uk>
-References: <20191126161208.4152-1-mark@dibsco.co.uk>
-Message-ID: <20191126220945.63050a17@windsurf>
+Date: Tue, 26 Nov 2019 22:00:41 +0100
+Subject: [Buildroot] [git commit] package/gqview: update the upstream URL in
+ Config.in
+Message-ID: <20191126210245.2E9A78152E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Nov 2019 16:12:08 +0000
-Mark Corbin <mark@dibsco.co.uk> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c56c3b290039f6e2f73831b1b0f516b7a54a25bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add an upstream URL to the help text in Config.in. This
-> addresses the 'Missing' URL status in the package stats
-> web page output.
-> 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-> ---
->  package/gr-osmosdr/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(404)' URL status in the package stats
+web page output.
 
-Applied to master, thanks.
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gqview/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gqview/Config.in b/package/gqview/Config.in
+index c1df40cc19..a654dc41fb 100644
+--- a/package/gqview/Config.in
++++ b/package/gqview/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_GQVIEW
+ 	help
+ 	  GQview is an image viewer for Unix operating systems
+ 
+-	  http://prdownloads.sourceforge.net/gqview
++	  http://gqview.sourceforge.net/
