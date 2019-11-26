@@ -1,71 +1,37 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 26 Nov 2019 22:35:03 +0100
-Subject: [Buildroot] [PATCH] package/glibc: install locale utility when
- nls is enabled
-In-Reply-To: <20191126085541.2688-1-p.debruijn@unilogic.nl>
-References: <20191126085541.2688-1-p.debruijn@unilogic.nl>
-Message-ID: <20191126223503.58c9d9a4@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Nov 2019 22:35:12 +0100
+Subject: [Buildroot] [git commit] package/c-capnproto: add an upstream URL
+ to Config.in
+Message-ID: <20191126212716.C0B378153C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Pascal,
+commit: https://git.buildroot.net/buildroot/commit/?id=572b0e6ba22ee9070597fa8db969a6b096e56dad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 26 Nov 2019 09:55:41 +0100, Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> ---
->  package/glibc/Config.in | 2 +-
->  package/glibc/glibc.mk  | 3 +++
->  2 files changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-> index 323767f..b8c2573 100644
-> --- a/package/glibc/Config.in
-> +++ b/package/glibc/Config.in
-> @@ -14,7 +14,7 @@ config BR2_PACKAGE_GLIBC_UTILS
->  	depends on BR2_PACKAGE_BASH
->  	help
->  	  Enabling this option will compile and install the getconf,
-> -	  ldconfig and ldd glibc utilities for the target.
-> +	  ldconfig, ldd and locale glibc utilities for the target.
->
->  comment "glibc utilities need bash"
->  	depends on !BR2_PACKAGE_BASH
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 5da0b06..e366134 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -146,7 +146,10 @@ endif
->  ifeq ($(BR2_PACKAGE_GLIBC_UTILS),y)
->  GLIBC_TARGET_UTILS_USR_BIN = posix/getconf elf/ldd
->  GLIBC_TARGET_UTILS_SBIN = elf/ldconfig
-> +endif
->
-> +ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-> +GLIBC_TARGET_UTILS_USR_BIN += locale/locale
->  endif
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/c-capnproto/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Short question regarding your patch: Why install the locale command
-only in case BR2_SYSTEM_ENABLE_NLS is enabled?
-
-Background: The postgresql initialize startup script emits the following
-warning:
-
-	performing post-bootstrap initialization ... sh: locale: not found
-	1970-01-01 00:10:13.173 UTC [398] WARNING:  no usable system locales were found
-
-Which can be fixed by:
-
-  - install the locale command (fixes 'sh: locale: not found')
-  - enabling some locales e.g. by BR2_GENERATE_LOCALE="C en_US" (fixes no usable system locales were found)
-
-No need to enable BR2_SYSTEM_ENABLE_NLS...
-
-Regards,
-Peter
-
->
->  define GLIBC_INSTALL_TARGET_CMDS
+diff --git a/package/c-capnproto/Config.in b/package/c-capnproto/Config.in
+index 293e4483cd..d1f3236af8 100644
+--- a/package/c-capnproto/Config.in
++++ b/package/c-capnproto/Config.in
+@@ -12,6 +12,8 @@ config BR2_PACKAGE_C_CAPNPROTO
+ 	  plugin for C. Requires regular Cap'n Proto and only
+ 	  provides serialization (no RPC).
+ 
++	  https://github.com/opensourcerouting/c-capnproto
++
+ comment "c-capnproto needs host and target gcc >= 5 w/ C++14, threads, atomic"
+ 	depends on BR2_USE_MMU
+ 	depends on!BR2_HOST_GCC_AT_LEAST_5 || \
