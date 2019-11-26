@@ -1,32 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 22:35:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/c-capnproto: add an upstream
- URL to Config.in
-In-Reply-To: <20191126120645.8577-1-mark@dibsco.co.uk>
-References: <20191126120645.8577-1-mark@dibsco.co.uk>
-Message-ID: <20191126223557.5382a993@windsurf>
+Date: Tue, 26 Nov 2019 22:36:17 +0100
+Subject: [Buildroot] [git commit branch/next] package/glibc: install locale
+ utility only when BR2_PACKAGE_GLIBC_UTILS=y
+Message-ID: <20191126212839.9F66D81549@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Nov 2019 12:06:45 +0000
-Mark Corbin <mark@dibsco.co.uk> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=283c5d474ee23bd00c111bb3b21a2d2d0eb3f80b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Add an upstream URL to the help text in Config.in. This
-> addresses the 'Missing' URL status in the package stats
-> web page output.
-> 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-> ---
->  package/c-capnproto/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+Fixes: fb1ee93ca4378456774e1ae24fcf370417733a38
 
-Applied to master, thanks.
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glibc/glibc.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index e366134026..4dc87e2f27 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -146,11 +146,10 @@ endif
+ ifeq ($(BR2_PACKAGE_GLIBC_UTILS),y)
+ GLIBC_TARGET_UTILS_USR_BIN = posix/getconf elf/ldd
+ GLIBC_TARGET_UTILS_SBIN = elf/ldconfig
+-endif
+-
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ GLIBC_TARGET_UTILS_USR_BIN += locale/locale
+ endif
++endif
+ 
+ define GLIBC_INSTALL_TARGET_CMDS
+ 	for libpattern in $(GLIBC_LIBS_LIB); do \
