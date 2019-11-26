@@ -1,45 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 16:59:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fconfig: update the upstream
- URL in Config.in
-In-Reply-To: <20191126143352.26682-1-mark@dibsco.co.uk>
-References: <20191126143352.26682-1-mark@dibsco.co.uk>
-Message-ID: <20191126165905.1bfb2046@windsurf>
+Date: Tue, 26 Nov 2019 16:59:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gadgetfs-test: add an upstream
+ URL to Config.in
+In-Reply-To: <20191126153505.31916-1-mark@dibsco.co.uk>
+References: <20191126153505.31916-1-mark@dibsco.co.uk>
+Message-ID: <20191126165956.70a85ba9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Nov 2019 14:33:52 +0000
+On Tue, 26 Nov 2019 15:35:05 +0000
 Mark Corbin <mark@dibsco.co.uk> wrote:
 
-> Update the upstream URL in the help text in Config.in. This
-> addresses the 'Invalid(Err)' URL status in the package stats
+> Add an upstream URL to the help text in Config.in. This
+> addresses the 'Missing' URL status in the package stats
 > web page output.
-> 
-> In this case we will use http://sources.buildroot.net/ as no
-> real upstream location can be found.
 > 
 > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 > ---
->  package/fconfig/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/gadgetfs-test/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/fconfig/Config.in b/package/fconfig/Config.in
-> index e7dd58a84a..ee14a2102a 100644
-> --- a/package/fconfig/Config.in
-> +++ b/package/fconfig/Config.in
-> @@ -3,4 +3,4 @@ config BR2_PACKAGE_FCONFIG
+> diff --git a/package/gadgetfs-test/Config.in b/package/gadgetfs-test/Config.in
+> index ca14c91b41..c22134c4a5 100644
+> --- a/package/gadgetfs-test/Config.in
+> +++ b/package/gadgetfs-test/Config.in
+> @@ -4,6 +4,8 @@ config BR2_PACKAGE_GADGETFS_TEST
 >  	help
->  	  fconfig - get/set RedBoot configuration parameters from Linux.
+>  	  Test program for gadgetfs from linux-usb.org
 >  
-> -	  http://andrzejekiert.ovh.org/software.html.en
-> +	  http://sources.buildroot.net/fconfig/
+> +	  https://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/GadgetFsTest/
 
-I don't think it makes a lot of sense to point to
-sources.buildroot.net, I think in such situation, we should just not
-have an upstream URL.
+Same here, I don't think this adds much value.
 
 Thomas
 -- 
