@@ -1,76 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 14:58:37 +0100
-Subject: [Buildroot] [PATCH v2] package/pkg-kconfig: fix reconfigure for
- kconfig packages
-In-Reply-To: <CA+_SqVYc-Rm3rw240LH37CVuZQaD6vt0iKvt=mQjeR4Pj3izug@mail.gmail.com>
-References: <1574771063-29218-1-git-send-email-angelo@amarulasolutions.com>
- <20191126141838.74d804f8@windsurf>
- <CA+_SqVZMB3yr9ALL-M4Wb9cX7FNGUVxEmM0b2d8=vszT+uN67g@mail.gmail.com>
- <20191126142916.1def6761@windsurf>
- <CA+_SqVYc-Rm3rw240LH37CVuZQaD6vt0iKvt=mQjeR4Pj3izug@mail.gmail.com>
-Message-ID: <20191126145837.3a28e202@windsurf>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Tue, 26 Nov 2019 13:58:42 +0000
+Subject: [Buildroot] [PATCH v3] pkgconf: always keep system libs
+Message-ID: <20191126135842.438939-1-thomas.preston@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Nov 2019 14:55:12 +0100
-Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+The previous change to pkgconf 9cc8680fe5, which tells it about the
+target sysroot system lib and include dirs so that they are not printed
+by default, introduced a regression where packages relying on libtool
+could no longer see Libtool Archive (.la) files in the system lib
+directory.
 
-> > Instead of just reworking the commit message, I think it would instead
-> > make sense to "git checkout 4b81badbcc0b25678ac6627548160702731cf393"
-> > and test what was the behavior back then.  
-> 
-> Checked out at 4b81badbcc0b25678ac6627548160702731cf393
-> 
-> $ make linux-reconfigure
-> umask 0022 && make -C /home/angelo/DEV/BUILDROOT/buildroot
-> O=/home/angelo/DEV/BUILDROOT/br_qemu_arm/. linux-reconfigure
-> rm -f /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.stamp_staging_installed
-> rm -f /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.stamp_target_installed
-> rm -f /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.stamp_images_installed
-> rm -f /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.stamp_host_installed
-> rm -f /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.stamp_built
-> rm -f /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.stamp_kconfig_fixup_done
-> rm -f /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.stamp_configured
-> /bin/sed -i -e "/\\<CONFIG_KERNEL_GZIP\\>/d"
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> echo 'CONFIG_KERNEL_GZIP=y' >>
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> /bin/sed -i -e "/\\<CONFIG_KERNEL_XZ\\>/d"
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> echo '# CONFIG_KERNEL_XZ is not set' >>
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> /bin/sed -i -e "/\\<CONFIG_CPU_LITTLE_ENDIAN\\>/d"
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> echo 'CONFIG_CPU_LITTLE_ENDIAN=y' >>
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> /bin/sed -i -e "/\\<CONFIG_AEABI\\>/d"
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> echo 'CONFIG_AEABI=y' >>
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> # As the kernel gets compiled before root filesystems are
-> # built, we create a fake cpio file. It'll be
-> # replaced later by the real cpio archive, and the kernel will be
-> # rebuilt using the linux-rebuild-with-initramfs target.
-> /bin/sed -i -e "/\\<CONFIG_DEVTMPFS\\>/d"
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> echo 'CONFIG_DEVTMPFS=y' >>
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> /bin/sed -i -e "/\\<CONFIG_DEVTMPFS_MOUNT\\>/d"
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> echo 'CONFIG_DEVTMPFS_MOUNT=y' >>
-> /home/angelo/DEV/BUILDROOT/br_qemu_arm/build/linux-4.7/.config
-> scripts/kconfig/conf  --olddefconfig Kconfig
+Since we still rely on pkgconf not printing the system include directory
+to allow the correct ordering of -I, -isystem and compiler default
+search paths, and it is still correct behaviour to tell pkgconf about the
+new system lib dir (in the target sysroot), we should not revert the
+previous change.
 
-So indeed, it only redoes the fixups, and does not regenerate the
-.config from scratch. So there was no regression introduced later, it's
-just that from the start, the -reconfigure behavior did not match what
-the commit log said.
+Instead, we should explicitly request pkgconf to print the system libs
+globally, so that all packages which rely on libtool can find the
+Libtool Archive files. For system lib directories, this is the same
+pkgconf behaviour as before the 9cc8680fe5 change.
 
-Thomas
+Fixes:
+- http://autobuild.buildroot.org/results/a79e0487135ad90530595d5c6ecc32f9c8cea7c4/
+- http://autobuild.buildroot.net/results/089/08952dbf89bf3c49da7697943441cee411940420/
+
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/pkgconf/pkg-config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+index f411eb0926..e5a23a10f7 100644
+--- a/package/pkgconf/pkg-config.in
++++ b/package/pkgconf/pkg-config.in
+@@ -9,4 +9,4 @@ PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} \
+ 	PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} \
+ 	PKG_CONFIG_SYSTEM_INCLUDE_PATH=${PKG_CONFIG_SYSTEM_INCLUDE_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_INCLUDE_PATH}} \
+ 	PKG_CONFIG_SYSTEM_LIBRARY_PATH=${PKG_CONFIG_SYSTEM_LIBRARY_PATH:-${DEFAULT_PKG_CONFIG_SYSTEM_LIBRARY_PATH}} \
+-	exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
++	exec ${PKGCONFDIR}/pkgconf --keep-system-libs @STATIC@ "$@"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0
