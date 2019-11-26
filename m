@@ -1,52 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 12:48:44 +0100
-Subject: [Buildroot] [PATCH] package/pkg-kconfig: fix reconfigure for
- kconfig packages
-In-Reply-To: <1574765013-15209-1-git-send-email-angelo@amarulasolutions.com>
-References: <1574765013-15209-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20191126124844.6f963100@windsurf>
+Date: Tue, 26 Nov 2019 12:51:05 +0100
+Subject: [Buildroot] [PATCH] linux: adding CIP RT
+In-Reply-To: <20191125225846.13484-1-angelo@amarulasolutions.com>
+References: <20191125225846.13484-1-angelo@amarulasolutions.com>
+Message-ID: <20191126125105.06cd2fcb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Nov 2019 11:43:33 +0100
-Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+Hello,
 
-> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> 
-> Kconfig based packages are not really reconfigured if the .config file is not
-> regenerated in the reconfigure target.
+The .hash file should be updated with the hash of this kernel tarball.
 
-I think the commit log could be improved, with at least a reference to
-4b81badbcc0b25678ac6627548160702731cf393, which says:
+The commit log can be improved, we prefer using imperative sentence
+"add <foo>", "fix <bar>" rather than "adding <foo>", "fixing <bar>".
 
-    Currently, calling foo-reconfigure for a kconfig-based package will not
-    re-trigger the configuration (kconfig-wise) step for the package.
+Maybe:
 
-However, the implementation consisted in removing just the
-.stamp_kconfig_fixup_done, so only the kconfig fixups get redone on
--reconfigure, not a full regeneration of the configuration.
+	linux: add option to select the CIP real-time kernel
 
-Right now the commit log is not really clear on what is happening
-today, why it is considered not good, and what is the new proposed
-behavior.
+> -else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
+> +else ifneq ($(filter $(BR2_LINUX_KERNEL_LATEST_CIP_VERSION) $(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION),y),)
 
->  $(1)-clean-kconfig-for-reconfigure:
->  	rm -f $$($(2)_DIR)/.stamp_kconfig_fixup_done
+Since it's a choice, this is sufficient:
 
-You can remove this line, it is no longer needed.
+ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION)$(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION),y)
 
-> +	rm -f $$($(2)_DIR)/.stamp_dotconfig
+>  LINUX_SOURCE = linux-cip-$(LINUX_VERSION).tar.gz
+>  LINUX_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/snapshot
+>  else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
 
-Use:
-
-	rm -rf $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
-
-instead.
-
-Thanks.
+Thanks,
 
 Thomas
 -- 
