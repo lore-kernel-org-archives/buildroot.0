@@ -1,48 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Nov 2019 22:45:56 +0100
-Subject: [Buildroot] [git commit] package/libgudev: bump version to 233
-Message-ID: <20191202083934.D102B81427@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Nov 2019 22:37:05 +0100
+Subject: [Buildroot] [git commit] package/iproute2: bump to version 5.4.0
+Message-ID: <20191202083935.9DE93810D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a17db95253400a8be3cdf3efb3a581c0a3cf2dfa
+commit: https://git.buildroot.net/buildroot/commit/?id=5a6c71d0e487738d3a6707b7a49d94b896a605c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-http://ftp.gnome.org/pub/GNOME/sources/libgudev/233/libgudev-233.news
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Tested-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgudev/libgudev.hash | 4 ++--
- package/libgudev/libgudev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/iproute2/iproute2.hash | 2 +-
+ package/iproute2/iproute2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgudev/libgudev.hash b/package/libgudev/libgudev.hash
-index 138ae93d71..bee394601e 100644
---- a/package/libgudev/libgudev.hash
-+++ b/package/libgudev/libgudev.hash
-@@ -1,5 +1,5 @@
--# From: http://ftp.gnome.org/pub/GNOME/sources/libgudev/232/libgudev-232.sha256sum
--sha256 ee4cb2b9c573cdf354f6ed744f01b111d4b5bed3503ffa956cefff50489c7860  libgudev-232.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/libgudev/233/libgudev-233.sha256sum
-+sha256 587c4970eb23f4e2deee2cb1fb7838c94a78c578f41ce12cac0a3f4a80dabb03  libgudev-233.tar.xz
- 
- # Hash for license file:
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libgudev/libgudev.mk b/package/libgudev/libgudev.mk
-index 50432c461e..63d592f9ac 100644
---- a/package/libgudev/libgudev.mk
-+++ b/package/libgudev/libgudev.mk
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index d130466440..41588488e6 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	cb1c1e45993a3bd2438543fd4332d70f1726a6e6ff97dc613a8258c993117b3f  iproute2-5.3.0.tar.xz
++sha256	fe97aa60a0d4c5ac830be18937e18dc3400ca713a33a89ad896ff1e3d46086ae  iproute2-5.4.0.tar.xz
+ sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 0efd4e62d3..6dc3fbd9c0 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGUDEV_VERSION = 232
-+LIBGUDEV_VERSION = 233
- LIBGUDEV_SOURCE = libgudev-$(LIBGUDEV_VERSION).tar.xz
- LIBGUDEV_SITE = http://ftp.gnome.org/pub/GNOME/sources/libgudev/$(LIBGUDEV_VERSION)
- LIBGUDEV_INSTALL_STAGING = YES
+-IPROUTE2_VERSION = 5.3.0
++IPROUTE2_VERSION = 5.4.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
