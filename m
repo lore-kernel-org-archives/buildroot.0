@@ -1,51 +1,51 @@
-From: Viktar Palstsiuk <viktar.palstsiuk@promwad.com>
-Date: Wed, 27 Nov 2019 14:12:56 +0300
-Subject: [Buildroot] [PATCH] configs/nanopi_neo: update kernel to 5.3 and
- u-boot to 2019.10
-Message-ID: <20191127111256.21502-1-viktar.palstsiuk@promwad.com>
+From: Michael Vetter <jubalh@iodoru.org>
+Date: Wed, 27 Nov 2019 13:52:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version 0.9.3
+Message-ID: <20191127125245.30093-1-jubalh@iodoru.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Viktar Palstsiuk <viktar.palstsiuk@promwad.com>
----
- configs/nanopi_neo_defconfig | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Changes:
 
-diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
-index 4696b445da..be98918c62 100644
---- a/configs/nanopi_neo_defconfig
-+++ b/configs/nanopi_neo_defconfig
-@@ -5,13 +5,13 @@ BR2_ARM_FPU_VFPV4=y
- BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
+  * PLAIN mechanism is used only when no other mechanisms are supported
+  * Legacy authentication is disabled by default, can be enabled with
+    connection flag XMPP_CONN_FLAG_LEGACY_AUTH
+  * Session is not established if it is optional
+  * Fixed a bug causing a reused connection not to cleanup properly
+  * Improved debug logging in OpenSSL module
+  * Few memory leaks fixed
+
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+---
+ package/libstrophe/libstrophe.hash | 2 +-
+ package/libstrophe/libstrophe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
+index 72eb386520..1e46a82bc9 100644
+--- a/package/libstrophe/libstrophe.hash
++++ b/package/libstrophe/libstrophe.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 158145bc1565a5fd0bbd7f57e3e15d768e58b8a460897ab5918a5a689d67ae6f  libstrophe-0.9.2.tar.gz
++sha256 8a3b79f62177ed59c01d4d4108357ff20bd933d53b845ee4e350d304c051a4fe  libstrophe-0.9.3.tar.gz
+ sha256 82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+index 7445caa67f..d5434f5033 100644
+--- a/package/libstrophe/libstrophe.mk
++++ b/package/libstrophe/libstrophe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
-+# Linux headers same as kernel, a 5.3 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
- 
- # Use a -rc kernel to get the DTS
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.13"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-neo"
-@@ -20,9 +20,10 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-neo"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
- 
+-LIBSTROPHE_VERSION = 0.9.2
++LIBSTROPHE_VERSION = 0.9.3
+ LIBSTROPHE_SITE = $(call github,strophe,libstrophe,$(LIBSTROPHE_VERSION))
+ LIBSTROPHE_DEPENDENCIES = openssl host-pkgconf
+ # Doesn't ship configure
 -- 
-2.17.1
+2.16.4
