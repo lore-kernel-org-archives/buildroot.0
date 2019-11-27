@@ -1,42 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Nov 2019 08:49:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gadgetfs-test: add an upstream
- URL to Config.in
-In-Reply-To: <20191126214723.20877de8@windsurf> (Thomas Petazzoni's message of
- "Tue, 26 Nov 2019 21:47:23 +0100")
-References: <20191126153505.31916-1-mark@dibsco.co.uk>
- <20191126165956.70a85ba9@windsurf> <20191126214723.20877de8@windsurf>
-Message-ID: <875zj5sqqw.fsf@dell.be.48ers.dk>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Wed, 27 Nov 2019 08:54:25 +0100
+Subject: [Buildroot] [PATCH] package/pkg-generic: fix reconfigure for
+ kconfig packages
+In-Reply-To: <a0642eaa-fb56-84c2-b38c-09f174e0954b@mind.be>
+References: <20191124231002.32255-1-angelo@amarulasolutions.com>
+ <20191125183248.2a9b409d@windsurf>
+ <a0642eaa-fb56-84c2-b38c-09f174e0954b@mind.be>
+Message-ID: <CA+_SqVaqhby1qo9DrvDrSF8XqZZ1CPQr0rF6wEsDbT--gjGWcQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+On Tue, Nov 26, 2019 at 11:54 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 25/11/2019 18:32, Thomas Petazzoni wrote:
+> > However, there seems to be some disagreement on IRC where
+> > "foo-reconfigure" on a kconfig package implies that the configuration
+> > of the package is completely regenerated, therefore losing any local
+> > change that may have been done using "foo-menuconfig". We need to sort
+> > out this disagreement before we can merge a patch like this.
+>
+>  The word "reconfigure" by itself could mean either option: run 'olddefconfig'
+> on the current .config (which is what is done now), or recreate the .config from
+> its inputs (which is what this patch makes it do).
+>
+>  I think the latter is a *lot* more useful than the former. The current
+> situation is only useful if you're either modifying the .config directly
+> (without foo-menuconfig), or if you're modifying the Kconfig files in an
+> OVERRIDE_SRCDIR. Modifying the .config directly is clearly not something we need
+> to support. Modifying Kconfig files in OVERRIDE_SRCDIR is something we should
+> support, but even then it makes a lot of sense to reconstruct the .config from
+> the inputs rather than trying to reuse the locally modified .config.
+>
+>  Bottom line: I think it's a good change (if done in pkg-kconfig like Thomas
+> proposed).
 
-Hi,
+FIY: https://patchwork.ozlabs.org/patch/1201052/
 
- >> >  	  Test program for gadgetfs from linux-usb.org
- >> >  
- >> > +	  https://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/GadgetFsTest/  
- >> 
- >> Same here, I don't think this adds much value.
+The latest iteration of the patch!
 
- > To me, this package is another candidate for removal. This is some
- > really old unmaintained stuff, I'm pretty sure there are much better
- > things these days to test USB gadget.
+Thanks!
 
- > Peter ?
-
-I believe so as well. The kernel has some example code under
-tools/usb. Gadgetfs is obsoleted by functionfs (2010), which works with
-the composite framework. The user space API to setup a composite device
-without a custom kernel driver using configfs is somewhat newer though
-(3.11). We have the libusbgx package to handle that.
-
-It may make sense to package https://github.com/kopasiak/gt, which is a
-command line tool built on top of libusbgx.
-
--- 
-Bye, Peter Korsgaard
+>
+>  It'll need to be mentioned in the release notes however.
+>
+>  Regards,
+>  Arnout
+>
