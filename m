@@ -1,76 +1,89 @@
-From: Tudor Holton <tudor@tudorholton.com>
-Date: Wed, 27 Nov 2019 16:31:31 +1100
-Subject: [Buildroot] [PATCH 1/1] package/openjdk: modify site from mirror to
- official repos
-Message-ID: <20191127053131.3344-1-tudor@tudorholton.com>
+From: Viktar Palstsiuk <viktar.palstsiuk@promwad.com>
+Date: Wed, 27 Nov 2019 09:36:46 +0300
+Subject: [Buildroot] [PATCH] configs/nanopi_neo: removing
+ post-build/post-image script
+Message-ID: <20191127063646.4188-1-viktar.palstsiuk@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Tudor Holton <buildroot@tudorholton.com>
-
-Since Java 11 (and possibly earlier), OpenJDK now has its own official repository 
-at hg.openjdk.java.net which is referenced in all OpenJDK documentation.  
-This patch brings buildroot into line with that source and allows consistent 
-patching both across projects and for patches specific to buildroot environments.
-
-Signed-off-by: Tudor Holton <buildroot@tudorholton.com>
+Signed-off-by: Viktar Palstsiuk <viktar.palstsiuk@promwad.com>
 ---
- DEVELOPERS                   | 3 +++
- package/openjdk/openjdk.hash | 2 +-
- package/openjdk/openjdk.mk   | 8 ++++----
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ board/friendlyarm/nanopi-neo/post-build.sh | 12 ------------
+ board/friendlyarm/nanopi-neo/post-image.sh | 15 ---------------
+ configs/nanopi_neo_defconfig               |  9 ++++++---
+ 3 files changed, 6 insertions(+), 30 deletions(-)
+ delete mode 100755 board/friendlyarm/nanopi-neo/post-build.sh
+ delete mode 100755 board/friendlyarm/nanopi-neo/post-image.sh
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 991be89849..7c9cebfb2f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2365,6 +2365,9 @@ F:	package/redis/
- N:	Trent Piepho <tpiepho@impinj.com>
- F:	package/libp11/
+diff --git a/board/friendlyarm/nanopi-neo/post-build.sh b/board/friendlyarm/nanopi-neo/post-build.sh
+deleted file mode 100755
+index 9759efb568..0000000000
+--- a/board/friendlyarm/nanopi-neo/post-build.sh
++++ /dev/null
+@@ -1,12 +0,0 @@
+-#!/bin/sh
+-# post-build.sh for Nanopi NEO, based on the Orange Pi PC
+-# 2013, Carlo Caione <carlo.caione@gmail.com>
+-# 2016, "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-BOARD_DIR="$( dirname "${0}" )"
+-MKIMAGE="${HOST_DIR}/bin/mkimage"
+-BOOT_CMD="${BOARD_DIR}/boot.cmd"
+-BOOT_CMD_H="${BINARIES_DIR}/boot.scr"
+-
+-# U-Boot script
+-"${MKIMAGE}" -C none -A arm -T script -d "${BOOT_CMD}" "${BOOT_CMD_H}"
+diff --git a/board/friendlyarm/nanopi-neo/post-image.sh b/board/friendlyarm/nanopi-neo/post-image.sh
+deleted file mode 100755
+index 740386ef82..0000000000
+--- a/board/friendlyarm/nanopi-neo/post-image.sh
++++ /dev/null
+@@ -1,15 +0,0 @@
+-#!/bin/sh
+-# post-image.sh for Nanopi NEO, based on the Orange Pi PC
+-
+-BOARD_DIR="$( dirname "${0}" )"
+-GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-genimage                               \
+-	--rootpath "${TARGET_DIR}"     \
+-	--tmppath "${GENIMAGE_TMP}"    \
+-	--inputpath "${BINARIES_DIR}"  \
+-	--outputpath "${BINARIES_DIR}" \
+-	--config "${GENIMAGE_CFG}"
+diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
+index 838f4edad5..4696b445da 100644
+--- a/configs/nanopi_neo_defconfig
++++ b/configs/nanopi_neo_defconfig
+@@ -4,8 +4,6 @@ BR2_ARM_FPU_VFPV4=y
  
-+N:	Tudor Holton <buildroot@tudorholton.com>
-+F:	package/openjdk/
+ BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/friendlyarm/nanopi-neo/post-image.sh"
+ 
+ # Linux headers same as kernel, a 4.10 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
+@@ -31,8 +29,13 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ # Build an sdcard image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo/boot.cmd"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo/genimage.cfg"
+ # BR2_TARGET_ROOTFS_TAR is not set
 +
- N:	Tzu-Jung Lee <roylee17@gmail.com>
- F:	package/dropwatch/
- F:	package/tstools/
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 00d080aa3f..beed7a34a2 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 5f73d86ed516173965b27754f1bb21374ccb1194a17c2d89d8018280ce5ffa78  openjdk-12.0.2+10.tar.gz
-+sha256 b2bcad35656b00928683416f3480ad00363b00993eb711c3e1886e4fe77eefeb  jdk-12.0.2+10.tar.gz
- sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index ea2555edcc..3081c2f895 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -7,7 +7,10 @@
- OPENJDK_VERSION_MAJOR = 12.0.2
- OPENJDK_VERSION_MINOR = 10
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
--OPENJDK_SITE = $(call github,AdoptOpenJDK,openjdk-jdk12u,jdk-$(OPENJDK_VERSION))
-+OPENJDK_PROJECT = jdk-updates
-+OPENJDK_RELEASE = jdk12u
-+OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
-+OPENJDK_SITE = https://hg.openjdk.java.net/$(OPENJDK_PROJECT)/$(OPENJDK_RELEASE)/archive
- OPENJDK_LICENSE = GPL-2.0+ with exception
- OPENJDK_LICENSE_FILES = LICENSE
- 
-@@ -83,9 +86,6 @@ OPENJDK_CONF_OPTS = \
- 	--with-native-debug-symbols=none \
- 	--without-version-pre \
- 	--with-sysroot=$(STAGING_DIR) \
--	--with-vendor-name="AdoptOpenJDK" \
--	--with-vendor-url="https://adoptopenjdk.net/" \
--	--with-vendor-version-string="AdoptOpenJDK" \
- 	--with-version-build="$(OPENJDK_VERSION_MAJOR)" \
- 	--with-version-string="$(OPENJDK_VERSION_MAJOR)"
- 
++# Additional tools
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
-2.20.1
+2.17.1
