@@ -1,53 +1,25 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 27 Nov 2019 08:54:25 +0100
-Subject: [Buildroot] [PATCH] package/pkg-generic: fix reconfigure for
- kconfig packages
-In-Reply-To: <a0642eaa-fb56-84c2-b38c-09f174e0954b@mind.be>
-References: <20191124231002.32255-1-angelo@amarulasolutions.com>
- <20191125183248.2a9b409d@windsurf>
- <a0642eaa-fb56-84c2-b38c-09f174e0954b@mind.be>
-Message-ID: <CA+_SqVaqhby1qo9DrvDrSF8XqZZ1CPQr0rF6wEsDbT--gjGWcQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 27 Nov 2019 07:57:00 +0000
+Subject: [Buildroot] [Bug 12361] Init system (systemd) kills login on
+ Raspberry Pi Zero
+In-Reply-To: <bug-12361-163@https.bugs.busybox.net/>
+References: <bug-12361-163@https.bugs.busybox.net/>
+Message-ID: <bug-12361-163-f7X7qMPc5M@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 26, 2019 at 11:54 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 25/11/2019 18:32, Thomas Petazzoni wrote:
-> > However, there seems to be some disagreement on IRC where
-> > "foo-reconfigure" on a kconfig package implies that the configuration
-> > of the package is completely regenerated, therefore losing any local
-> > change that may have been done using "foo-menuconfig". We need to sort
-> > out this disagreement before we can merge a patch like this.
->
->  The word "reconfigure" by itself could mean either option: run 'olddefconfig'
-> on the current .config (which is what is done now), or recreate the .config from
-> its inputs (which is what this patch makes it do).
->
->  I think the latter is a *lot* more useful than the former. The current
-> situation is only useful if you're either modifying the .config directly
-> (without foo-menuconfig), or if you're modifying the Kconfig files in an
-> OVERRIDE_SRCDIR. Modifying the .config directly is clearly not something we need
-> to support. Modifying Kconfig files in OVERRIDE_SRCDIR is something we should
-> support, but even then it makes a lot of sense to reconstruct the .config from
-> the inputs rather than trying to reuse the locally modified .config.
->
->  Bottom line: I think it's a good change (if done in pkg-kconfig like Thomas
-> proposed).
+https://bugs.busybox.net/show_bug.cgi?id=12361
 
-FIY: https://patchwork.ozlabs.org/patch/1201052/
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-The latest iteration of the patch!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Assignee|unassigned at buildroot.uclibc |ps.report at gmx.net
+                   |.org                        |
 
-Thanks!
-
->
->  It'll need to be mentioned in the release notes however.
->
->  Regards,
->  Arnout
->
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
