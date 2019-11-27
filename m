@@ -1,7 +1,7 @@
 From: Michael Vetter <jubalh@iodoru.org>
-Date: Wed, 27 Nov 2019 10:28:35 +0100
+Date: Wed, 27 Nov 2019 10:40:55 +0100
 Subject: [Buildroot] [PATCH 1/1] package/jasper: bump to 2.0.16
-Message-ID: <20191127102826.47f3b2d5@maitreya.fritz.box>
+Message-ID: <20191127094055.14977-1-jubalh@iodoru.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -42,17 +42,17 @@ index 036ebc88d7..7e9ce0ea90 100644
 +++ b/package/jasper/jasper.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256
-85266eea728f8b14365db9eaf1edc7be4c348704e562bb05095b9a077cf1a97b
-jasper-2.0.14.tar.gz +sha256
-f1d8b90f231184d99968f361884e2054a1714fdbbd9944ba1ae4ebdcc9bbfdb1
-jasper-2.0.16.tar.gz sha256
-4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81
-LICENSE diff --git a/package/jasper/jasper.mk
-b/package/jasper/jasper.mk index f1260f2a9c..287c358884 100644 ---
-a/package/jasper/jasper.mk +++ b/package/jasper/jasper.mk @@ -4,7 +4,7
-@@ #
-################################################################################ 
+-sha256 85266eea728f8b14365db9eaf1edc7be4c348704e562bb05095b9a077cf1a97b  jasper-2.0.14.tar.gz
++sha256 f1d8b90f231184d99968f361884e2054a1714fdbbd9944ba1ae4ebdcc9bbfdb1  jasper-2.0.16.tar.gz
+ sha256 4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index f1260f2a9c..287c358884 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
 -JASPER_VERSION = 2.0.14
 +JASPER_VERSION = 2.0.16
  JASPER_SITE = $(call github,mdadams,jasper,version-$(JASPER_VERSION))
