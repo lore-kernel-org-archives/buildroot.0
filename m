@@ -1,10 +1,10 @@
 From: Changming Huang <jerry.huang@nxp.com>
-Date: Wed, 27 Nov 2019 15:17:15 +0800
-Subject: [Buildroot] [PATCH v3 4/9] package/qoriq-rcw: add target rcw binary
- support
+Date: Wed, 27 Nov 2019 15:17:18 +0800
+Subject: [Buildroot] [PATCH v3 7/9] package/qoriq-rcw:Enable IIC5_PMUX and
+ CLK_OUT_PMUX for GPIO
 In-Reply-To: <20191127071720.15623-1-jerry.huang@nxp.com>
 References: <20191127071720.15623-1-jerry.huang@nxp.com>
-Message-ID: <20191127071720.15623-4-jerry.huang@nxp.com>
+Message-ID: <20191127071720.15623-7-jerry.huang@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,79 +13,116 @@ To: buildroot@busybox.net
 
 From: Jerry Huang <jerry.huang@nxp.com>
 
-For NXP QorIQ (PowerPC and Layerscape) platform,
-we need to specify the RCW file and build it to binary.
-
-Introduce BR2_PACKAGE_HOST_RCW_BIN to specify the RCW binary file.
-
-Introduce BR2_PACKAGE_HOST_RCW_BOOT_MODE to define the boot mode.
-Because the RCW binary can be stored in different media, for example:
-SD card - RCW locate in SD card, boot the board from SD card
-eMMC    - RCW locate in eMMC chip, boot the board from eMMC chip
-flexSPI - RCW locate in flexSPI, boot the board from flexSPI Nor/Nand flash
-QSPI    - RCW locate in QSPI flash, boot the board from QSPI flash
+Because GPIO is used as interrupt for eNETC PHY and Micro-bus,
+IIC5_PMUX and CLK_OUT_PMUX are enabled for GPIO.
 
 Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
 ---
-changes since v2:
-1. modify the patch descrition
-2. more detail for BR2_PACKAGE_HOST_QORIQ_RCW_BIN
-3. remove two options not used in this patch
-4. add the condition detection in makefile for QorIQ RCW 
+changes sinve v2:
+1. no changes.
 
-changes since v1:
-1. add option BR2_PACKAGE_HOST_RCW_ATF for ATF.
+changes sinve v1:
+1. change to unconditional for these two patches.
 ---
- package/nxp/qoriq-rcw/Config.in.host | 12 ++++++++++++
- package/nxp/qoriq-rcw/qoriq-rcw.mk   | 15 +++++++++++++++
- 2 files changed, 27 insertions(+)
+ ...b-Enable-IIC5_PMUX-for-GPIO-function.patch | 42 +++++++++++++++++++
+ ...nable-CLK_OUT_PMUX-for-GPIO-function.patch | 40 ++++++++++++++++++
+ 2 files changed, 82 insertions(+)
+ create mode 100644 package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
+ create mode 100644 package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
 
-diff --git a/package/nxp/qoriq-rcw/Config.in.host b/package/nxp/qoriq-rcw/Config.in.host
-index 8f78a40908..9bf55894e8 100644
---- a/package/nxp/qoriq-rcw/Config.in.host
-+++ b/package/nxp/qoriq-rcw/Config.in.host
-@@ -25,4 +25,16 @@ config BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH
- 	  included for use in the SDK or with post scripts but no
- 	  RCW binary will not be generated.
- 
-+config BR2_PACKAGE_HOST_QORIQ_RCW_BIN
-+	string "Custom RCW"
-+	depends on !BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH
-+	help
-+	  This option is used to specify the RCW binary file for board.
-+	  which is composed with platform/serdes_value/rcw_file, platform
-+	  is the platform name, serdes_value is the setting of the Serdes,
-+	  rcw_file is the file name of RCW, for example:
-+	  "ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.bin"
+diff --git a/package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch b/package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
+new file mode 100644
+index 0000000000..21c6c84cbd
+--- /dev/null
++++ b/package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
+@@ -0,0 +1,42 @@
++From 33b403cee1fa215927bc65dc14baf35a2fdbe7b3 Mon Sep 17 00:00:00 2001
++From: Jerry Huang <jerry.huang@nxp.com>
++Date: Thu, 19 Sep 2019 12:12:20 +0800
++Subject: [PATCH 1/2] ls1028ardb: Enable IIC5_PMUX for GPIO function
 +
-+	  If this option is empty, no rcw file is used.
++Set IIC5_PMUX = 1 to enable GPIO function.
 +
- endif
-diff --git a/package/nxp/qoriq-rcw/qoriq-rcw.mk b/package/nxp/qoriq-rcw/qoriq-rcw.mk
-index 7a0494adc6..bbd085f277 100644
---- a/package/nxp/qoriq-rcw/qoriq-rcw.mk
-+++ b/package/nxp/qoriq-rcw/qoriq-rcw.mk
-@@ -37,6 +37,21 @@ endef
- define HOST_QORIQ_RCW_INSTALL_DELIVERY_FILE
- 	$(INSTALL) -D -m 0644 $(@D)/PBL.bin $(BINARIES_DIR)/PBL.bin
- endef
-+else
-+QORIQ_RCW_PATH_FILE_BIN = $(call qstrip,$(BR2_PACKAGE_HOST_QORIQ_RCW_BIN))
++Signed-off-by: Jianchao Wang <jianchao.wang@nxp.com>
++Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
++---
++ ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw | 2 +-
++ ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw   | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+ifneq ($(QORIQ_RCW_PATH_FILE_BIN),)
-+QORIQ_RCW_PLATFORM = $(firstword $(subst /, ,$(QORIQ_RCW_PATH_FILE_BIN)))
-+QORIQ_RCW_FILE_BIN = $(lastword $(subst /, ,$(QORIQ_RCW_PATH_FILE_BIN)))
++diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
++index b46ea2e..5466a63 100644
++--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
+++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
++@@ -26,7 +26,7 @@ SYSCLK_FREQ=600
++ IIC2_PMUX=6
++ IIC3_PMUX=2
++ IIC4_PMUX=2
++-IIC5_PMUX=2
+++IIC5_PMUX=1
++ IIC6_PMUX=2
++ CLK_OUT_PMUX=2
++ EC1_SAI4_5_PMUX=5
++diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
++index 04e2208..1908d8c 100644
++--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
+++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
++@@ -26,7 +26,7 @@ SYSCLK_FREQ=600
++ IIC2_PMUX=6
++ IIC3_PMUX=2
++ IIC4_PMUX=2
++-IIC5_PMUX=2
+++IIC5_PMUX=1
++ IIC6_PMUX=3
++ CLK_OUT_PMUX=2
++ EC1_SAI4_5_PMUX=5
++--
++2.17.1
+diff --git a/package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch b/package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
+new file mode 100644
+index 0000000000..4f00541d69
+--- /dev/null
++++ b/package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
+@@ -0,0 +1,40 @@
++From 4a3c9ea5d0c7bf8eec8cb6276d6f4d940f3946db Mon Sep 17 00:00:00 2001
++From: Jerry Huang <jerry.huang@nxp.com>
++Date: Thu, 19 Sep 2019 12:13:48 +0800
++Subject: [PATCH 2/2] ls1028ardb/rcw: Enable CLK_OUT_PMUX for GPIO function
 +
-+define HOST_QORIQ_RCW_BUILD_CMDS
-+	$(MAKE) -C $(@D)/$(QORIQ_RCW_PLATFORM)
-+endef
++Signed-off-by: Jianchao Wang <jianchao.wang@nxp.com>
++Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
++---
++ ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw | 2 +-
++ ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw   | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+define HOST_QORIQ_RCW_INSTALL_DELIVERY_FILE
-+	$(INSTALL) -D -m 0644 $(@D)/$(QORIQ_RCW_PATH_FILE_BIN) $(BINARIES_DIR)/$(QORIQ_RCW_FILE_BIN)
-+endef
-+endif
- endif
- 
- # Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
++diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
++index 5466a63..a5ed4d4 100644
++--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
+++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
++@@ -28,7 +28,7 @@ IIC3_PMUX=2
++ IIC4_PMUX=2
++ IIC5_PMUX=1
++ IIC6_PMUX=2
++-CLK_OUT_PMUX=2
+++CLK_OUT_PMUX=1
++ EC1_SAI4_5_PMUX=5
++ EC1_SAI3_6_PMUX=5
++ USB3_CLK_FSEL=39
++diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
++index 1908d8c..c930b83 100644
++--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
+++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
++@@ -28,7 +28,7 @@ IIC3_PMUX=2
++ IIC4_PMUX=2
++ IIC5_PMUX=1
++ IIC6_PMUX=3
++-CLK_OUT_PMUX=2
+++CLK_OUT_PMUX=1
++ EC1_SAI4_5_PMUX=5
++ EC1_SAI3_6_PMUX=5
++ USB3_CLK_FSEL=39
++--
++2.17.1
 -- 
 2.17.1
