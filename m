@@ -1,8 +1,8 @@
 From: Tudor Holton <tudor@tudorholton.com>
-Date: Wed, 27 Nov 2019 16:39:45 +1100
+Date: Wed, 27 Nov 2019 16:31:31 +1100
 Subject: [Buildroot] [PATCH 1/1] package/openjdk: modify site from mirror to
  official repos
-Message-ID: <20191127053945.3897-1-tudor@tudorholton.com>
+Message-ID: <20191127053131.3344-1-tudor@tudorholton.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
