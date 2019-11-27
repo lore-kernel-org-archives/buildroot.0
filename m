@@ -1,92 +1,53 @@
 From: Changming Huang <jerry.huang@nxp.com>
-Date: Wed, 27 Nov 2019 15:17:12 +0800
-Subject: [Buildroot] [PATCH v3 1/9] package/nxp: new package directory
-Message-ID: <20191127071720.15623-1-jerry.huang@nxp.com>
+Date: Wed, 27 Nov 2019 15:17:14 +0800
+Subject: [Buildroot] [PATCH v3 3/9] package/qoriq-rcw: bump to version
+ LSDK-19.09
+In-Reply-To: <20191127071720.15623-1-jerry.huang@nxp.com>
+References: <20191127071720.15623-1-jerry.huang@nxp.com>
+Message-ID: <20191127071720.15623-3-jerry.huang@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The "nxp" directory is intended to contain all NXP
-QorIQ (including PowerPC and LayerScape serial) related packages,
-together with their download site and version info.
+From: Jerry Huang <jerry.huang@nxp.com>
 
-Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+Change the RCW version to LSDK-19.09.
+
+Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
 ---
 changes since v2:
-1. change the sub-direcotry to "nxp".
-2. add helper.mk macro to extract compressed file.
+1. change the hash value.
 
 changes since v1:
-no changes.
+1. add-back license hash.
 ---
- package/Config.in     |  1 +
- package/nxp/Config.in |  4 ++++
- package/nxp/helper.mk | 32 ++++++++++++++++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/nxp/Config.in
- create mode 100644 package/nxp/helper.mk
+ package/nxp/qoriq-rcw/qoriq-rcw.hash | 2 +-
+ package/nxp/qoriq-rcw/qoriq-rcw.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 37861387e8..c697962ac0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -494,6 +494,7 @@ endmenu
- 	source "package/nvidia-driver/Config.in"
- 	source "package/nvidia-tegra23/Config.in"
- 	source "package/nvme/Config.in"
-+	source "package/nxp/Config.in"
- 	source "package/ofono/Config.in"
- 	source "package/on2-8170-modules/Config.in"
- 	source "package/open2300/Config.in"
-diff --git a/package/nxp/Config.in b/package/nxp/Config.in
-new file mode 100644
-index 0000000000..575542c7ab
---- /dev/null
-+++ b/package/nxp/Config.in
-@@ -0,0 +1,4 @@
-+menu "NXP QorIQ libraries"
-+	depends on BR2_aarch64 || BR2_arm || BR2_powerpc64 || BR2_powerpc
-+
-+endmenu
-diff --git a/package/nxp/helper.mk b/package/nxp/helper.mk
-new file mode 100644
-index 0000000000..79e4236249
---- /dev/null
-+++ b/package/nxp/helper.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# helper
-+#
-+################################################################################
-+
-+# Helper for self-extracting binaries distributed by NXP.
-+#
-+# The --force option makes sure it doesn't fail if the source
-+# directory already exists. The --auto-accept skips the license check,
-+# as it is not needed in Buildroot because we have legal-info. Since
-+# there's a EULA in the binary file, we extract it in this macro, and
-+# it should therefore be added to the LICENSE_FILES variable of
-+# packages using this macro. Also, remember to set REDISTRIBUTE to
-+# "NO". Indeed, this is a legal minefield: the EULA specifies that the
-+# Board Support Package includes software and hardware (sic!) for
-+# which a separate license is needed...
-+#
-+# $(1): full path to the archive file
-+#
-+define NXP_EXTRACT_HELPER
-+	awk 'BEGIN      { start = 0; } \
-+	     /^EOEULA/  { start = 0; } \
-+	                { if (start) print; } \
-+	     /<<EOEULA/ { start = 1; }' \
-+	    $(1) > $(@D)/EULA
-+	cd $(@D) && sh $(1) --force --auto-accept
-+	find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
-+	rmdir $(@D)/$(basename $(notdir $(1)))
-+endef
-+
-+include $(sort $(wildcard package/nxp/*/*.mk))
+diff --git a/package/nxp/qoriq-rcw/qoriq-rcw.hash b/package/nxp/qoriq-rcw/qoriq-rcw.hash
+index e9708d960d..88460716f9 100644
+--- a/package/nxp/qoriq-rcw/qoriq-rcw.hash
++++ b/package/nxp/qoriq-rcw/qoriq-rcw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 1421ada9fec10b12ff21cd9ad82f0a835b191cb2dde80f03547764574b1346c3 qoriq-rcw-LSDK-18.12.tar.gz
++sha256 4a9ce5bb1733239bf1b740b705df20f90802b16114e24f3fd56c08a7ba4b56c2 qoriq-rcw-LSDK-19.09.tar.gz
+ sha256 a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd LICENSE
+diff --git a/package/nxp/qoriq-rcw/qoriq-rcw.mk b/package/nxp/qoriq-rcw/qoriq-rcw.mk
+index 3308f20192..7a0494adc6 100644
+--- a/package/nxp/qoriq-rcw/qoriq-rcw.mk
++++ b/package/nxp/qoriq-rcw/qoriq-rcw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QORIQ_RCW_VERSION = LSDK-18.12
++QORIQ_RCW_VERSION = LSDK-19.09
+ QORIQ_RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
+ QORIQ_RCW_SITE_METHOD = git
+ QORIQ_RCW_LICENSE = BSD-3-Clause
 -- 
 2.17.1
