@@ -1,62 +1,51 @@
-From: Michael Vetter <jubalh@iodoru.org>
-Date: Wed, 27 Nov 2019 10:40:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jasper: bump to 2.0.16
-Message-ID: <20191127094055.14977-1-jubalh@iodoru.org>
+From: Viktar Palstsiuk <viktar.palstsiuk@promwad.com>
+Date: Wed, 27 Nov 2019 14:12:56 +0300
+Subject: [Buildroot] [PATCH] configs/nanopi_neo: update kernel to 5.3 and
+ u-boot to 2019.10
+Message-ID: <20191127111256.21502-1-viktar.palstsiuk@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes:
-  * Fix assertion failure JPC_NOMINALGAIN (CVE-2016-9396) (#50)
-  * Fix build on Windows 10 (#162)
-  * Improve README
-  * Fix build with CMake 2.x
-  * Add missing dereference operators (#178, #157)
-  * Check data in jas_image (CVE-2018-19539) (#196)
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Viktar Palstsiuk <viktar.palstsiuk@promwad.com>
 ---
- DEVELOPERS                 | 3 +++
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
- 3 files changed, 5 insertions(+), 2 deletions(-)
+ configs/nanopi_neo_defconfig | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 991be89849..4adaac0c3d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1683,6 +1683,9 @@ F:	package/python-pyzmq/
- N:	Michael Trimarchi <michael@amarulasolutions.com>
- F:	package/python-spidev/
+diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
+index 4696b445da..be98918c62 100644
+--- a/configs/nanopi_neo_defconfig
++++ b/configs/nanopi_neo_defconfig
+@@ -5,13 +5,13 @@ BR2_ARM_FPU_VFPV4=y
+ BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
  
-+N:	Michael Vetter <jubalh@iodoru.org>
-+F:	package/jasper/
-+
- N:	Michael Walle <michael@walle.cc>
- F:	package/libavl/
+-# Linux headers same as kernel, a 4.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
++# Linux headers same as kernel, a 5.3 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
  
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index 036ebc88d7..7e9ce0ea90 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 85266eea728f8b14365db9eaf1edc7be4c348704e562bb05095b9a077cf1a97b  jasper-2.0.14.tar.gz
-+sha256 f1d8b90f231184d99968f361884e2054a1714fdbbd9944ba1ae4ebdcc9bbfdb1  jasper-2.0.16.tar.gz
- sha256 4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index f1260f2a9c..287c358884 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # Use a -rc kernel to get the DTS
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-neo"
+@@ -20,9 +20,10 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-neo"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
  
--JASPER_VERSION = 2.0.14
-+JASPER_VERSION = 2.0.16
- JASPER_SITE = $(call github,mdadams,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
 -- 
-2.16.4
+2.17.1
