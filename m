@@ -1,53 +1,85 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 27 Nov 2019 22:20:51 +0000
-Subject: [Buildroot] [Bug 11996] opencv3 SIGILL on Cortex-A5 with VFPv4-D16
-In-Reply-To: <bug-11996-163@https.bugs.busybox.net/>
-References: <bug-11996-163@https.bugs.busybox.net/>
-Message-ID: <bug-11996-163-RZL0JFcsXR@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 27 Nov 2019 23:27:23 +0100
+Subject: [Buildroot] [PATCH] package/network-manager: add missing dependency
+ on libglib2
+Message-ID: <20191127222724.353622-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11996
+Commit 7643ab05de860011e749aa720c92d5de150bee0a
+("package/network-manager: drop obsolete dependencies") was a bit too
+brutal in its dependency removal, as it forgot that removing dbus-glib
+as a dependency would make libglib2 no longer part of the dependencies
+of network-manager.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-So, I did a bit more research on this, but couldn't come to a useful
-conclusion. The handling of CPU optimizations in opencv3 is complicated.
-ENABLE_VFPV3 and ENABLE_NEON seem to be obsolete options, but the replacement
-CPU_BASELINE is not very clear.
+However, network-manager does require libglib2. From configure.ac:
 
-With a VFPv3-D16 case, I get:
+PKG_CHECK_MODULES(GLIB, [gio-unix-2.0 >= 2.37.6 gmodule-2.0],
+                  [AC_SUBST(LOG_DRIVER, '$(top_srcdir)/build-aux/tap-driver.sh')
+                   AC_SUBST(AM_TESTS_FD_REDIRECT, '--tap')],
+                  [PKG_CHECK_MODULES(GLIB, gio-unix-2.0 >= 2.40 gmodule-2.0)
+                   AC_SUBST(LOG_DRIVER, '$(top_srcdir)/build-aux/test-driver')])
 
---   CPU/HW features:
---     Baseline:
---       requested:                 DETECT
---       disabled:                  VFPV3 NEON
+So this commit re-adds libglib2 as a dependency, and propagates the
+appropriate "depends on". Nothing selects BR2_PACKAGE_NETWORK_MANAGER,
+so we don't have to propagate these additional "depends on" anywhere.
 
-which is quite expected.
+Fixes:
 
-When NEON is enabled as the FPU, I get:
+  http://autobuild.buildroot.net/results/2025b1bd721bb5c5fa6638ccf389d2fd8fd10339/
+  https://bugs.busybox.net/show_bug.cgi?id=12326
 
---   CPU/HW features:
---     Baseline:                    NEON
---       requested:                 DETECT
---       disabled:                  VFPV3 NEON
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Lubomir Rintel <lkundrak@v3.sk>
+Cc: Christian Stewart <christian@paral.in>
+---
+ package/network-manager/Config.in          | 8 ++++++--
+ package/network-manager/network-manager.mk | 2 +-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-So NEON seems to be detected, but it's also listed in the "disabled"
-features... which doesn't make a lot of sense.
-
-Then, if I use VFPv3 as the FPU, I get:
-
---   CPU/HW features:
---     Baseline:
---       requested:                 DETECT
---       disabled:                  VFPV3 NEON
-
-I.e, it doesn't detect that I have VFPv3.
-
-(Of course the tests above are after removing ENABLE_VFPV3/ENABLE_NEON).
-
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 1257e08e6f..e6a3f5f04f 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -7,8 +7,11 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	# Tested with 3.2, but may even work with earlier versions
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # CLOCK_BOOTTIME, IPTOS_CLASS_*
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_WCHAR # libglib2
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+@@ -60,8 +63,9 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
+ 
+ endif
+ 
+-comment "NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 3.2, dynamic library"
++comment "NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 3.2, dynamic library, wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_HAS_UDEV || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || \
+-		!BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS
++		!BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS || \
++		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index e913d69927..7de2c220fe 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -9,7 +9,7 @@ NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).4
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+-NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls \
++NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
+ 	libgcrypt wireless_tools util-linux host-intltool readline libndp
+ # Even though the COPYING file only contains the GPL-2.0 text, many
+ # parts of network-manager are under LGPL-2.0. See the "Legal" section
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.23.0
