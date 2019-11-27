@@ -1,73 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Nov 2019 21:34:03 +0100
-Subject: [Buildroot] [PATCH 1/2] package/{python,
- python3}: add mechanism to exclude .py files from removal
+Date: Wed, 27 Nov 2019 21:34:04 +0100
+Subject: [Buildroot] [PATCH 2/2] package/opencv3: ensure the python module
+ works when BR2_PACKAGE_PYTHON{, 3}_PYC_ONLY=y
 In-Reply-To: <20191127203404.291090-1-thomas.petazzoni@bootlin.com>
 References: <20191127203404.291090-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191127203404.291090-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20191127203404.291090-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When BR2_PACKAGE_PYTHON{,3}_PYC_ONLY=y, we force remove all .py files
-from the system, as they have all been byte-compiled into their .pyc
-variants.
+The OpenCV Python module does a fairly strange thing to read a few
+configuration details: it uses Python's execfile() to execute two .py
+files and access a few variables. However, execfile() only works with
+.py files and not .pyc files.
 
-However, it turns out that some packages (e.g: OpenCV) do some funky
-things with a few .py files: they pass them through Python's
-execfile() facility, which only works with .py files and not .pyc
-files. It is used by OpenCV for example to read two small
-configuration files.
+When BR2_PACKAGE_PYTHON{,3}_PYC_ONLY=y, the .py files are all removed,
+causing the OpenCV Python module to not work:
 
-In order to support such use cases, this commit introduces a very
-simple mechanism by which packages can exclude some path patterns from
-the .py removal. The mechanism is a simple global
-PYTHON{,3}_KEEP_PY_FILES, that packages can append to.
+  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 89, in <module>
+  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 58, in bootstrap
+  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 56, in load_first_config
+ImportError: OpenCV loader: missing configuration file: ['config.py']. Check OpenCV installation.
 
-This is necessary to be able to fix bug #12171.
+To fix this problem, this commit uses the newly introduced
+PYTHON{,3}_KEEP_PY_FILES mechanism, to ensure the important config*.py
+files are kept.
+
+Fixes:
+
+  https://bugs.busybox.net/show_bug.cgi?id=12171
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Due to this only being needed by OpenCV for now, I didn't think it was
-really needed to have a per-package variable, which then gets
-collected by the generic-package infrastructure into a global
-variable. We can always revisit if this gets more widely.
----
- package/python/python.mk   | 4 +++-
- package/python3/python3.mk | 4 +++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/opencv3/opencv3.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 8c2b195c91..dda9898f03 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -267,7 +267,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- define PYTHON_REMOVE_PY_FILES
--	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' \
-+		$(if $(PYTHON_KEEP_PY_FILES),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
-+		-print0 | \
- 		xargs -0 --no-run-if-empty rm -f
- endef
- PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index d6fda5c274..9a42c44ee4 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -285,7 +285,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
- define PYTHON3_REMOVE_PY_FILES
--	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' \
-+		$(if $(PYTHON3_KEEP_PY_FILES),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON3_KEEP_PY_FILES)) \) ) \
-+		-print0 | \
- 		xargs -0 --no-run-if-empty rm -f
- endef
- PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 83094ed78b..e5a0045e2d 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -328,6 +328,7 @@ OPENCV3_CONF_OPTS += \
+ 	-DPYTHON2_PACKAGES_PATH=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+ 	-DPYTHON2_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
+ OPENCV3_DEPENDENCIES += python
++PYTHON_KEEP_PY_FILES += usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/cv2/config*.py
+ else
+ OPENCV3_CONF_OPTS += \
+ 	-DBUILD_opencv_python2=OFF \
+@@ -339,6 +340,7 @@ OPENCV3_CONF_OPTS += \
+ 	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+ 	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
+ OPENCV3_DEPENDENCIES += python3
++PYTHON3_KEEP_PY_FILES += usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/cv2/config*.py
+ endif
+ OPENCV3_CONF_ENV += $(PKG_PYTHON_DISTUTILS_ENV)
+ OPENCV3_DEPENDENCIES += python-numpy
 -- 
 2.23.0
