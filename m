@@ -1,48 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 28 Nov 2019 19:50:56 +0100
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{4,
- 9}.x series
-Message-ID: <20191128185056.9280-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 28 Nov 2019 19:55:52 +0100
+Subject: [Buildroot] [PATCH] package/pkg-generic.mk: make HOST_<pkg>_DL_OPTS
+ inherit from <pkg>_DL_OPTS
+Message-ID: <20191128185552.236602-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Just like _SITE, _SOURCE, _SITE_METHOD, it is very likely that if
+<pkg>_DL_OPTS is defined, the same value should be used for
+HOST_<pkg>_DL_OPTS, so let's have the same inheritance logic than the
+one we have for other variables.
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 3566c93266..bf0624e75d 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256 9f04e53f03d0ead6561195fb71aac18cbee419112ed54f9d4fc1515a5fa5c92f  linux-5.3.13.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 9262528aeaf5991c2008d7d9ea3994f9a548f000da39c0565a35f50863b4790a  linux-4.4.203.tar.xz
--sha256 1cd950cfaff8ddcc11596d970ec622fa3cdbedd75d3e28ddd3a9383f3cb2a849  linux-4.9.203.tar.xz
-+sha256 47e3030d80b9a3b96cdefc008db57f9faa87e2d093437d941caec3ca9ed89924  linux-4.4.204.tar.xz
-+sha256 47a1987cb34182e625cac95f497a534461ff881b3bcb485b37507a086857bf50  linux-4.9.204.tar.xz
- sha256 f8889feb0cbd7df36ff35bd4c72c1e2010567621bfcb218fcfa501bc5c7787c0  linux-4.14.156.tar.xz
- sha256 bf2cbba319d43d1bd9e876ac0b55ab83118d1a1e61cce3c929d5371f7567bff6  linux-4.19.86.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5f1952731c..37b0db1de9 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -305,8 +305,8 @@ endchoice
+Fixes:
+
+  https://bugs.busybox.net/show_bug.cgi?id=12321
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-generic.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 7d6fa08418..7b3294a09a 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -541,6 +541,12 @@ ifndef $(2)_SITE_METHOD
+  endif
+ endif
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.203"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.203"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.204"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.204"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.14.156"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.19.86"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.3.13"	if BR2_KERNEL_HEADERS_5_3
++ifndef $(2)_DL_OPTS
++ ifdef $(3)_DL_OPTS
++  $(2)_DL_OPTS = $$($(3)_DL_OPTS)
++ endif
++endif
++
+ ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
+ BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+ endif
 -- 
-2.20.1
+2.23.0
