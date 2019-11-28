@@ -1,35 +1,35 @@
 From: Mark Corbin <mark@dibsco.co.uk>
-Date: Thu, 28 Nov 2019 12:28:52 +0000
-Subject: [Buildroot] [PATCH 1/1] package/libhid: update the upstream URL in
- Config.in
-Message-ID: <20191128122852.31052-1-mark@dibsco.co.uk>
+Date: Thu, 28 Nov 2019 12:38:31 +0000
+Subject: [Buildroot] [PATCH 1/1] package/libiscsi: update the upstream URL
+ in Config.in
+Message-ID: <20191128123831.1134-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(Err)' URL status in the package stats
-web page output.
+Update the upstream URL in the help text in Config.in. Removing
+the trailing comment from the URL line addresses the 'Missing'
+status in the package stats web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 ---
- package/libhid/Config.in | 2 +-
+ package/libiscsi/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libhid/Config.in b/package/libhid/Config.in
-index e6f2012860..ec66308061 100644
---- a/package/libhid/Config.in
-+++ b/package/libhid/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBHID
- 	help
- 	  Userspace library for accessing USB HID devices
+diff --git a/package/libiscsi/Config.in b/package/libiscsi/Config.in
+index 1e75071476..932f857858 100644
+--- a/package/libiscsi/Config.in
++++ b/package/libiscsi/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_LIBISCSI
+ 	  scsi tasks, but a sync layer is also provided for ease of use
+ 	  for simpler applications.
  
--	  http://libhid.alioth.debian.org
-+	  https://directory.fsf.org/wiki/Libhid
+-	  https://github.com/sahlberg/libiscsi  (no proper homepage)
++	  https://github.com/sahlberg/libiscsi
  
- comment "libhid needs a toolchain w/ threads"
+ comment "libiscsi needs a toolchain w/ threads"
  	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.20.1
