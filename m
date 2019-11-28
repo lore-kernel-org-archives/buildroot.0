@@ -1,7 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 27 Nov 2019 17:26:03 -0800
-Subject: [Buildroot] [PATCH v4 0/6] package/polkit: bump to version 0.116
-Message-ID: <20191128012609.3632661-1-aduskett@gmail.com>
+Date: Wed, 27 Nov 2019 17:26:05 -0800
+Subject: [Buildroot] [PATCH v4 2/6] package/polkit: support different
+ authentication frameworks
+In-Reply-To: <20191128012609.3632661-1-aduskett@gmail.com>
+References: <20191128012609.3632661-1-aduskett@gmail.com>
+Message-ID: <20191128012609.3632661-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,61 +13,37 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-In this patch series I have bumped polkit to version 0.116.
-I have also added the following:
-  - Two tests of which ensure that polkit is working properly on systems running
-    both init.d and systemd.
-  - Service files for both systemd and init.d
-  - A polkitd user upon which the polkitd daemon rely.
-  - Setting permissions to the proper directories for the polkit user.
+Use pam if available, otherwise use shadow.
 
-Adam Duskett (6):
-  package/polkit: bump to version 0.116
-  package/polkit: support different authentication frameworks
-  package/polkit: add systemd service file.
-  package/polkit: add init service file
-  polkit-rules-test-systemd: new test
-  polkit-rules-test-initd: new test
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/polkit/polkit.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
- DEVELOPERS                                    |   4 +
- .../0001-make-netgroup-support-optional.patch | 232 ++++++++++++++++++
- package/polkit/Config.in                      |  23 +-
- package/polkit/S50polkit                      |  15 ++
- package/polkit/polkit.hash                    |   2 +-
- package/polkit/polkit.mk                      |  39 ++-
- package/polkit/polkit.service                 |   7 +
- package/systemd/Config.in                     |  14 +-
- package/udisks/Config.in                      |  27 +-
- .../package/br2-external/polkit/Config.in     |   2 +
- .../package/br2-external/polkit/external.desc |   1 +
- .../package/br2-external/polkit/external.mk   |   1 +
- .../package/polkit-rules-test-initd/Config.in |   6 +
- .../polkit-rules-test-initd/hello-polkit.c    |   6 +
- .../hello-polkit.policy                       |  14 ++
- .../hello-polkit.rules                        |   6 +
- .../polkit-rules-test-initd.mk                |  31 +++
- .../polkit-rules-test-systemd/Config.in       |   6 +
- .../polkit-rules-test-systemd.mk              |  20 ++
- .../systemd-timesyncd-restart.rules           |   7 +
- .../tests/package/test_polkit_initd.py        |  53 ++++
- .../tests/package/test_polkit_systemd.py      |  51 ++++
- 22 files changed, 546 insertions(+), 21 deletions(-)
- create mode 100644 package/polkit/0001-make-netgroup-support-optional.patch
- create mode 100644 package/polkit/S50polkit
- create mode 100644 package/polkit/polkit.service
- create mode 100644 support/testing/tests/package/br2-external/polkit/Config.in
- create mode 100644 support/testing/tests/package/br2-external/polkit/external.desc
- create mode 100644 support/testing/tests/package/br2-external/polkit/external.mk
- create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/Config.in
- create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.c
- create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.policy
- create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.rules
- create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/polkit-rules-test-initd.mk
- create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/Config.in
- create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/polkit-rules-test-systemd.mk
- create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/systemd-timesyncd-restart.rules
- create mode 100644 support/testing/tests/package/test_polkit_initd.py
- create mode 100644 support/testing/tests/package/test_polkit_systemd.py
-
+diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
+index 507d1865fa..0c17e9bc27 100644
+--- a/package/polkit/polkit.mk
++++ b/package/polkit/polkit.mk
+@@ -13,13 +13,18 @@ POLKIT_INSTALL_STAGING = YES
+ 
+ POLKIT_DEPENDENCIES = libglib2 host-intltool expat spidermonkey
+ 
+-# We could also support --with-authfw=pam
+ POLKIT_CONF_OPTS = \
+-	--with-authfw=shadow \
+ 	--with-os-type=unknown \
+ 	--disable-man-pages \
+ 	--disable-examples \
+ 	--disable-libelogind \
+ 	--disable-libsystemd-login
+ 
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++POLKIT_CONF_OPTS += --with-authfw=pam
++else
++POLKIT_CONF_OPTS += --with-authfw=shadow
++endif
++
++
+ $(eval $(autotools-package))
 -- 
 2.23.0
