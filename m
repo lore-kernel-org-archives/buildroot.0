@@ -1,88 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Nov 2019 19:05:02 +0100
-Subject: [Buildroot] [PATCH] package/libselinux: fix build on old glibc with
- <fts.h> incompatible with LFS
-Message-ID: <20191128180502.230424-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 28 Nov 2019 19:11:27 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libselinux: fix build with fts.h
+In-Reply-To: <20191028111709.18054-1-fontaine.fabrice@gmail.com>
+References: <20191028111709.18054-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191128191127.0da72894@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glibc versions prior to 2.23 have a <fts.h> implementation that is not
-compatible with large file support, causing build failures such as:
+Hello Fabrice,
 
-In file included from selinux_restorecon.c:17:0:
-/home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
- # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+On Mon, 28 Oct 2019 12:17:09 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Prior to commit 3fce6f1c150dbe4be58d083008ca8dbe7257836e
-("package/libselinux: fix the build with Python 3.8"), we were not
-passing PKG_PYTHON_DISTUTILS_ENV in the environment. But with
-3fce6f1c150dbe4be58d083008ca8dbe7257836e, we are now passing the
-PKG_PYTHON_DISTUTILS_ENV variable, provided by pkg-python.mk, into the
-build environment. While this is part of fixing the build of
-libselinux with Python 3.8, it breaks the build because we are no
-longer filtering out the -D_FILE_OFFSET_BITS=64 option from
-CFLAGS. Indeed, while we do so at the beginning of libselinux.mk, it
-gets overridden later by the addition of $(PKG_PYTHON_DISTUTILS_ENV).
+> Commit 3fce6f1c150dbe4be58d083008ca8dbe7257836e added
+> PKG_PYTHON_DISTUTILS_ENV to LIBSELINUX_MAKE_OPTS which has the side
+> effect of adding CFLAGS without filtering out -D_FILE_OFFSET_BITS=64.
+> This raises the following build failure:
+> 
+> In file included from selinux_restorecon.c:17:0:
+> /accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+>  # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+>    ^
+> 
+> Fix this by adding a PKG_PYTHON_DISTUTILS_PYTHON_ENV to use it within
+> libselinux. This will avoid overriding CFLAGS and LDFLAGS
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/a9cd6f09725f39256c892584b4f533b2de96c410
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-To avoid this, we pass CFLAGS/LDFLAGS *after*
-$(PKG_PYTHON_DISTUTILS_ENV) has been added. In practice, the
-CFLAGS/LDFLAGS passed by $(PKG_PYTHON_DISTUTILS_ENV) are just
-$(TARGET_CFLAGS) and $(TARGET_LDFLAGS), so we are not missing anything
-specific.
+After thinking more about it, I'm not a big fan of this split of
+PKG_PYTHON_DISTUTILS_ENV, it's a bit artificial, only serves the
+purpose of libselinux, and is not done "symmetrically" for other
+PKG_PYTHON_* variables.
 
-Fixes:
+So I've proposed an alternate implementation:
+https://patchwork.ozlabs.org/patch/1202256/
 
-  http://autobuild.buildroot.net/results/ef6ff91086a094eb25b145d66d072c6d2fc60154/
+Best regards,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-This is an alternative solution compared to what Fabrice proposed in
-http://patchwork.ozlabs.org/patch/1185307/. In Fabrice's proposal, I
-am not a big fan of the split of PKG_PYTHON_DISTUTILS_ENV into two
-variables, the split is a bit arbitrary, and seems to serve only the
-case of libselinux.
-
-So for now, I think a solution that affects only libselinux.mk is
-probably more appropriate.
----
- package/libselinux/libselinux.mk | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index dd68ad9298..98db4fa89e 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -13,13 +13,10 @@ LIBSELINUX_DEPENDENCIES = libsepol pcre
- 
- LIBSELINUX_INSTALL_STAGING = YES
- 
--# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22.
- # Set SHLIBDIR to /usr/lib so it has the same value than LIBDIR, as a result
- # we won't have to use a relative path in 0002-revert-ln-relative.patch
- LIBSELINUX_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
--	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread" \
- 	ARCH=$(KERNEL_ARCH) \
- 	SHLIBDIR=/usr/lib
- 
-@@ -54,6 +51,14 @@ define LIBSELINUX_BUILD_PYTHON_BINDINGS
- endef
- endif # python || python3
- 
-+# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc
-+# 2.22. We set CFLAGS and LDFLAGS here because we want to win over the
-+# CFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
-+# when the python binding is enabled.
-+LIBSELINUX_MAKE_OPTS += \
-+	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
-+	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread" \
-+
- define LIBSELINUX_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(LIBSELINUX_MAKE_OPTS) all
+Thomas
 -- 
-2.23.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
