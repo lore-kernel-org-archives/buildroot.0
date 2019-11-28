@@ -1,37 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2019 16:42:19 +0100
-Subject: [Buildroot] [git commit] package/kf5: add an upstream URL to
+Date: Thu, 28 Nov 2019 16:44:59 +0100
+Subject: [Buildroot] [git commit] package/libass: update the upstream URL in
  Config.in
-Message-ID: <20191128154138.1A0B9810D3@busybox.osuosl.org>
+Message-ID: <20191128154138.29566810D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3da11f9d4ae8001d30775054e5fc34d619dfa97a
+commit: https://git.buildroot.net/buildroot/commit/?id=e3e69be0075558830f67489a2b52b2d0ff982435
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(405)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kf5/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libass/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kf5/Config.in b/package/kf5/Config.in
-index 2e50bce49e..aecbb932f5 100644
---- a/package/kf5/Config.in
-+++ b/package/kf5/Config.in
-@@ -6,6 +6,8 @@ menuconfig BR2_PACKAGE_KF5
- 	  This option enables the KF5 KDE Frameworks. Sub-options
- 	  allow to select which modules should be built.
+diff --git a/package/libass/Config.in b/package/libass/Config.in
+index 7690685187..c654d8212a 100644
+--- a/package/libass/Config.in
++++ b/package/libass/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_LIBASS
+ 	  libass is a portable subtitle renderer for the ASS/SSA
+ 	  (Advanced Substation Alpha/Substation Alpha) subtitle format
  
-+	  https://techbase.kde.org/KDE_Frameworks
-+
- if BR2_PACKAGE_KF5
- source "package/kf5/kf5-extra-cmake-modules/Config.in"
- source "package/kf5/kf5-kcoreaddons/Config.in"
+-	  http://code.google.com/p/libass/
++	  https://github.com/libass/libass
