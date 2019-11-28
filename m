@@ -1,35 +1,91 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Thu, 28 Nov 2019 15:08:44 +0000
-Subject: [Buildroot] [PATCH 1/1] package/mali-t76x: update the upstream URL
- in Config.in
-Message-ID: <20191128150844.15298-1-mark@dibsco.co.uk>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Thu, 28 Nov 2019 16:15:22 +0100
+Subject: [Buildroot] [PATCH] systemd: add option to enable
+ systemd-journal-remote
+In-Reply-To: <20191128092757.19886364@windsurf>
+References: <CAJPHfYNGkrW8MWGQyaWgehg_wAQ=3eoNWVZHEh=DyhbebJhJTA@mail.gmail.com>
+ <20191127214614.33d87ae0@windsurf>
+ <CAFvCimXHMv94tg4S-U5QLu4k26HZAtZXsVR3jjK2C4s+XOuX2g@mail.gmail.com>
+ <20191128092757.19886364@windsurf>
+Message-ID: <CAFvCimUcf=j+dza+CZbDwFnW3T_DNEk6uFt8njYT7dZYUT0nXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the upstream URL in the help text in Config.in. Removing
-the text from the beginning of the URL line addresses the 'Missing'
-URL status in the package stats web page output.
+Le jeu. 28 nov. 2019 ? 09:28, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
----
- package/mali-t76x/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Hello,
+>
+> On Thu, 28 Nov 2019 09:08:19 +0100
+> J?r?my ROSEN <jeremy.rosen@smile.fr> wrote:
+>
+> > Ok, as usuall some background knowledge
+> >
+> > systemd provides three binaries to deal with sending journal data over
+> the
+> > network
+> >
+> > * systemd-journald-gateway : a tiny HTTP server that provides the logs
+> > * systemd-journald-upload : a process to run periodically to push the
+> logs
+> > to a remote HTTP server
+> > * systemd-journald-remote : aprocess to run on the remorse computer (not
+> on
+> > the target) to receive data and/or to fetch data from the target
+> >
+> > All three options are selected together with -Dremote=true (which is the
+> > default). It would be nice to be able to select them individually, but
+> > upstream does not provide that option.
+> >
+> > gatewayd is a bit more tricky because it will detect if libmicrohttpd is
+> > available and only builds if it is.
+> >
+> > So, as a fix I would make BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY depend
+> > on BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
+> > Also, fix default values to match previous behaviour
+>
+> But if all of gateway, upload and remote are always built together when
+> -Dremote=true, what is the point of having fine-grained options for
+> each of gateway, upload and remote ? Just to install/enable (or not)
+> the correspond service file ?
+>
+> The usual "smaller for the embedded space" argument...
+I kinda agree that having it optional is a bit overkill (except maybe for
+gateway, because it pulls in libhttpd)
 
-diff --git a/package/mali-t76x/Config.in b/package/mali-t76x/Config.in
-index a85fa5b27e..2533f10002 100644
---- a/package/mali-t76x/Config.in
-+++ b/package/mali-t76x/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_MALI_T76X
- 	  Midgard T76X GPU. This package requires a kernel with the
- 	  ARM Mali Midgard GPU Kernel Drivers enabled.
- 
--	  Source: http://malideveloper.arm.com/resources/drivers/
-+	  http://malideveloper.arm.com/resources/drivers/
- 
- if BR2_PACKAGE_MALI_T76X
- 
+It's a choice we have to make.
+
+
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+
+
 -- 
-2.20.1
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191128/ae7f3f43/attachment.html>
