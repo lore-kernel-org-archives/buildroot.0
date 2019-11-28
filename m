@@ -1,32 +1,28 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Thu, 28 Nov 2019 16:23:56 +0000
-Subject: [Buildroot] [PATCH 1/1] package/metacity: add an upstream URL to
- Config.in
-Message-ID: <20191128162356.27077-1-mark@dibsco.co.uk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Nov 2019 17:35:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/collectd: rename --with-yajl
+In-Reply-To: <20191110205316.1713-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 10 Nov 2019 21:53:16 +0100")
+References: <20191110205316.1713-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a78ggdrq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
----
- package/metacity/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ > --with-yajl is not recognized so replace it by the correct
+ > --with-libyajl option
 
-diff --git a/package/metacity/Config.in b/package/metacity/Config.in
-index 833a091e7f..fc106a26b9 100644
---- a/package/metacity/Config.in
-+++ b/package/metacity/Config.in
-@@ -14,3 +14,5 @@ config BR2_PACKAGE_METACITY
- 	select BR2_PACKAGE_XLIB_LIBXFT
- 	help
- 	  Metacity is a window manager for the X Window System.
-+
-+	  https://wiki.gnome.org/Projects/Metacity
+ > The option is named --with-libyajl since a very long time (since at
+ > least version 4.8.0 and
+ > https://github.com/collectd/collectd/commit/f154fb21fbb1fee2f2262d421eca32e7e340f420)
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
