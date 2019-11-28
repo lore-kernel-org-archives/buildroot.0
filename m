@@ -1,34 +1,33 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Thu, 28 Nov 2019 16:00:55 +0000
-Subject: [Buildroot] [PATCH 4/7] package/matchbox-keyboard: add an upstream
- URL to Config.in
-In-Reply-To: <20191128160058.24118-1-mark@dibsco.co.uk>
-References: <20191128160058.24118-1-mark@dibsco.co.uk>
-Message-ID: <20191128160058.24118-4-mark@dibsco.co.uk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Nov 2019 17:08:25 +0100
+Subject: [Buildroot] [PATCH] package/postgresql: fix filesystem naming
+ consistency
+In-Reply-To: <2997576693-13830@mail.unilogic.nl> (Pascal de Bruijn's message
+ of "Thu, 28 Nov 2019 16:40:51 +0100")
+References: <2997576693-13830@mail.unilogic.nl>
+Message-ID: <87eexsgf0m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+>>>>> "Pascal" == Pascal de Bruijn <p.debruijn@unilogic.nl> writes:
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
----
- package/matchbox-keyboard/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+Hi,
 
-diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
-index 8bd2a7972c..b6753f3bec 100644
---- a/package/matchbox-keyboard/Config.in
-+++ b/package/matchbox-keyboard/Config.in
-@@ -6,3 +6,5 @@ config BR2_PACKAGE_MATCHBOX_KEYBOARD
- 	select BR2_PACKAGE_MATCHBOX_LIB
- 	help
- 	  Virtual Keyboard
-+
-+	  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/
+ >> - ? ? ? pgsql (the command line interpreter), which offers 
+ >> + ? ? ? psql (the command line interpreter), which offers 
+ 
+ > This doesn't seem to be related to the commit. Also, is the command 
+ > line tool really called psql ? 
+
+ > Yes, it's not directly related, but just a minor typo fix.
+
+ > The command is indeed called psql.
+
+Ok, could you send a separate patch just for that typo so we can apply
+it to master? The path change looks like next material to me.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
