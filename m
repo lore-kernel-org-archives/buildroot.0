@@ -1,58 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2019 20:08:42 +0100
-Subject: [Buildroot] [git commit] package/am33x-cm3: disable PIE
-Message-ID: <20191128190301.9E28081E0C@busybox.osuosl.org>
+Date: Thu, 28 Nov 2019 20:08:33 +0100
+Subject: [Buildroot] [git commit] package/am33x-cm3: disable SSP
+Message-ID: <20191128190301.952A581E0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=584312d16ffc0b19c820cadd71bb406822174ab4
+commit: https://git.buildroot.net/buildroot/commit/?id=c08c9f19a0665301559883672d44b97a9469e496
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
- - http://autobuild.buildroot.org/results/418a40b995e91bc66e692dfbc4b0521db3fa5fbb
+ - http://autobuild.buildroot.net/results/3a3a21f3c35ea025e9b93e09c2454aed0ad31034
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0003-Makefile-unconditionally-disable-PIE.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ ...0002-Makefile-unconditionally-disable-SSP.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/am33x-cm3/0003-Makefile-unconditionally-disable-PIE.patch b/package/am33x-cm3/0003-Makefile-unconditionally-disable-PIE.patch
+diff --git a/package/am33x-cm3/0002-Makefile-unconditionally-disable-SSP.patch b/package/am33x-cm3/0002-Makefile-unconditionally-disable-SSP.patch
 new file mode 100644
-index 0000000000..6be157932d
+index 0000000000..ed333bfe05
 --- /dev/null
-+++ b/package/am33x-cm3/0003-Makefile-unconditionally-disable-PIE.patch
-@@ -0,0 +1,33 @@
-+From 0e8c3c4851ce64268a8ae1810ef72594251d917d Mon Sep 17 00:00:00 2001
++++ b/package/am33x-cm3/0002-Makefile-unconditionally-disable-SSP.patch
+@@ -0,0 +1,35 @@
++From 6c3b05b74ccd49d8ba246bfef0c2e549b9f2bf7b Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 10 Nov 2019 21:57:12 +0100
-+Subject: [PATCH] Makefile: unconditionally disable PIE
++Date: Tue, 29 Oct 2019 16:14:18 +0100
++Subject: [PATCH] Makefile: unconditionally disable SSP
 +
-+Though -nostdlib is passed in $(CFLAGS), -fno-pie must also be passed to
-+avoid linking errors related to overlapping sections if toolchain
-+enforces PIE.
++Though -nostdlib is passed in $(CFLAGS), -fno-stack-protector must also be
++passed to avoid linking errors related to undefined references to
++'__stack_chk_guard' and '__stack_chk_fail' if toolchain enforces
++-fstack-protector.
 +
 +Fixes:
-+ - http://autobuild.buildroot.org/results/418a40b995e91bc66e692dfbc4b0521db3fa5fbb
++ - http://autobuild.buildroot.net/results/3a3a21f3c35ea025e9b93e09c2454aed0ad31034
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ Makefile | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
 +diff --git a/Makefile b/Makefile
-+index 5226006..fe3d844 100644
++index c3ec071..5226006 100644
 +--- a/Makefile
 ++++ b/Makefile
-+@@ -17,7 +17,7 @@ CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
++@@ -16,7 +16,8 @@ INCLUDES = $(SRCDIR)/include
++ CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
 + 	-Werror-implicit-function-declaration -Wstrict-prototypes \
 + 	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
-+ 	-Wempty-body -fno-strict-overflow -fno-stack-protector \
-+-	-g -I$(INCLUDES) -O2
-++	-fno-pie -g -I$(INCLUDES) -O2
++-	-Wempty-body -fno-strict-overflow  -g -I$(INCLUDES) -O2
+++	-Wempty-body -fno-strict-overflow -fno-stack-protector \
+++	-g -I$(INCLUDES) -O2
 + LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
 + 
 + EXECUTABLE=am335x-pm-firmware.elf
