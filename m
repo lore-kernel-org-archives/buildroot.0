@@ -1,8 +1,10 @@
 From: Mark Corbin <mark@dibsco.co.uk>
-Date: Thu, 28 Nov 2019 16:00:52 +0000
-Subject: [Buildroot] [PATCH 1/7] package/matchbox-common: add an upstream
+Date: Thu, 28 Nov 2019 16:00:55 +0000
+Subject: [Buildroot] [PATCH 4/7] package/matchbox-keyboard: add an upstream
  URL to Config.in
-Message-ID: <20191128160058.24118-1-mark@dibsco.co.uk>
+In-Reply-To: <20191128160058.24118-1-mark@dibsco.co.uk>
+References: <20191128160058.24118-1-mark@dibsco.co.uk>
+Message-ID: <20191128160058.24118-4-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +17,18 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 ---
- package/matchbox-common/Config.in | 2 ++
+ package/matchbox-keyboard/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/matchbox-common/Config.in b/package/matchbox-common/Config.in
-index 587a0694e8..3717a551f2 100644
---- a/package/matchbox-common/Config.in
-+++ b/package/matchbox-common/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_MATCHBOX_COMMON
+diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
+index 8bd2a7972c..b6753f3bec 100644
+--- a/package/matchbox-keyboard/Config.in
++++ b/package/matchbox-keyboard/Config.in
+@@ -6,3 +6,5 @@ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+ 	select BR2_PACKAGE_MATCHBOX_LIB
  	help
- 	  Common desktop folders and matchbox-session script.
- 
-+	  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-common/
+ 	  Virtual Keyboard
 +
- config BR2_PACKAGE_MATCHBOX_COMMON_PDA
- 	bool "PDA style app folder"
- 	depends on BR2_PACKAGE_MATCHBOX_COMMON
++	  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/
 -- 
 2.20.1
