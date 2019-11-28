@@ -1,69 +1,123 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 28 Nov 2019 22:23:58 +0100
-Subject: [Buildroot] [PATCH v1] package/libdrm: fix nouveau tests
- compile for musl
-In-Reply-To: <20191126233847.3d33d888@gmx.net>
-References: <20191125205520.9234-1-ps.report@gmx.net>
- <20191126225146.0581d8ec@windsurf>
- <20191126233847.3d33d888@gmx.net>
-Message-ID: <20191128222358.5245aaf6@gmx.net>
+Date: Thu, 28 Nov 2019 22:38:33 +0100
+Subject: [Buildroot] [PATCH] package/postgresql: fix filesystem naming
+ consistency
+In-Reply-To: <20191128111542.5132-1-p.debruijn@unilogic.nl>
+References: <20191128111542.5132-1-p.debruijn@unilogic.nl>
+Message-ID: <20191128223833.702e9baf@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello Pascal,
 
-On Tue, 26 Nov 2019 23:38:47 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+On Thu, 28 Nov 2019 12:15:42 +0100, Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
 
-> Hello Thomas,
+> Currently the service is called postgresql, but other filesystem
+> references are called pgsql, which is inconsistent and confusing.
 >
-> On Tue, 26 Nov 2019 22:51:46 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> Given that at least Debian uses postgresql in the filesystems
+> as well I would suggest moving the filesystem reference to align
+> with the service name as opposed to the other way around.
 >
-> > On Mon, 25 Nov 2019 21:55:20 +0100
-> > Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > > Add openembedded provided patch [2] to fix musl toolchain compile failures
-> > > because of different ioctl() signatures, (int, int, ...) vs. (int, unsigned
-> > > long, ...).
-> > >
-> > > Fixes:
-> > >
-> > >   ../tests/nouveau/threaded.c:39:5: error: conflicting types for 'ioctl'
-> > >   int ioctl(int fd, unsigned long request, ...)
-> > >
-> > > [1] http://autobuild.buildroot.net/results/047f149a928ac2a17e25211a0a8a264ebae369ac
-> > > [2] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-graphics/drm/libdrm/musl-ioctl.patch
-> > >
-> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > > ---
-> > >  ...uveau-threaded-adapt-ioctl-signature.patch | 37 +++++++++++++++++++
-> > >  1 file changed, 37 insertions(+)
-> > >  create mode 100644 package/libdrm/0006-tests-nouveau-threaded-adapt-ioctl-signature.patch
-> >
-> > Applied to master, thanks.
+> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+> ---
+>  package/postgresql/Config.in          | 2 +-
+>  package/postgresql/S50postgresql      | 8 ++++----
+>  package/postgresql/postgresql.mk      | 4 ++--
+>  package/postgresql/postgresql.service | 6 +++---
+>  4 files changed, 10 insertions(+), 10 deletions(-)
 >
-> And finally suggested upstream, see [1]...and the same for two more old ones, see [2] and [3]...
+> diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+> index e548d3c..2f677da 100644
+> --- a/package/postgresql/Config.in
+> +++ b/package/postgresql/Config.in
+> @@ -11,7 +11,7 @@ config BR2_PACKAGE_POSTGRESQL
+>  	  database system.
+>
+>  	  Enable the readline package to gain readline support in
+> -	  pgsql (the command line interpreter), which offers
+> +	  psql (the command line interpreter), which offers
 
-And as the way through gitlab merge requests seems to be the right one (instead
-of the mailing list), re-submitted two more old buildroot patches, see [4], [5]...
++1 for fixing this typo (which dates back to my initial submission from 2014)
+in a separate patch...
+
+>  	  command history and edit functions.
+>
+>  	  Enable the zlib package to gain builtin compression for
+> diff --git a/package/postgresql/S50postgresql b/package/postgresql/S50postgresql
+> index 1ece4fc..8d7ad34 100644
+> --- a/package/postgresql/S50postgresql
+> +++ b/package/postgresql/S50postgresql
+> @@ -5,20 +5,20 @@
+>
+>  umask 077
+>
+> -if [ ! -f /var/lib/pgsql/PG_VERSION ]; then
+> +if [ ! -f /var/lib/postgresql/PG_VERSION ]; then
+>  	echo "Initializing postgresql data base..."
+> -	su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/pgsql'
+> +	su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/postgresql'
+
+-1 for this change as /var/lib/pgsql is the suggested/common default location, see e.g. [1],
+and is saving 5 characters at many location from the script ;-)
 
 Regards,
 Peter
 
-[4] https://gitlab.freedesktop.org/mesa/drm/merge_requests/31
-[5] https://gitlab.freedesktop.org/mesa/drm/merge_requests/32
+[1] https://www.postgresql.org/docs/12/storage-file-layout.html
 
+>  	echo "done"
+>  fi
 >
-> Regards,
-> Peter
+>  start() {
+>  	printf "Starting postgresql: "
+> -	su - postgres -c '/usr/bin/pg_ctl start -w -D /var/lib/pgsql -l logfile'
+> +	su - postgres -c '/usr/bin/pg_ctl start -w -D /var/lib/postgresql -l logfile'
+>  	echo "OK"
+>  }
+>  stop() {
+>  	printf "Stopping postgresql: "
+> -	su - postgres -c '/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast'
+> +	su - postgres -c '/usr/bin/pg_ctl stop -D /var/lib/postgresql -m fast'
+>  	echo "OK"
+>  }
+>  restart() {
+> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+> index 858cd69..5a4ffe6 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -102,11 +102,11 @@ endif
+>  POSTGRESQL_CONF_ENV += CFLAGS="$(POSTGRESQL_CFLAGS)"
 >
-> [1] https://gitlab.freedesktop.org/mesa/drm/merge_requests/30
-> [2] https://gitlab.freedesktop.org/mesa/drm/merge_requests/27
-> [3] https://gitlab.freedesktop.org/mesa/drm/merge_requests/28
+>  define POSTGRESQL_USERS
+> -	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
+> +	postgres -1 postgres -1 * /var/lib/postgresql /bin/sh - PostgreSQL Server
+>  endef
 >
+>  define POSTGRESQL_INSTALL_TARGET_FIXUP
+> -	$(INSTALL) -dm 0700 $(TARGET_DIR)/var/lib/pgsql
+> +	$(INSTALL) -dm 0700 $(TARGET_DIR)/var/lib/postgresql
+>  	$(RM) -rf $(TARGET_DIR)/usr/lib/postgresql/pgxs
+>  endef
 >
-> >
-> > Thomas
+> diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
+> index 53e6f84..7698558 100644
+> --- a/package/postgresql/postgresql.service
+> +++ b/package/postgresql/postgresql.service
+> @@ -15,10 +15,10 @@ Group=postgres
+>  StandardOutput=syslog
+>  StandardError=syslog
+>  SyslogIdentifier=postgres
+> -PIDFile=/var/lib/pgsql/postmaster.pid
+> +PIDFile=/var/lib/postgresql/postmaster.pid
 >
+> -ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
+> -ExecStart=/usr/bin/postgres -D /var/lib/pgsql
+> +ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/postgresql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/postgresql; fi"
+> +ExecStart=/usr/bin/postgres -D /var/lib/postgresql
+>  ExecReload=/usr/bin/kill -HUP $MAINPID
+>  KillMode=mixed
+>  KillSignal=SIGINT
