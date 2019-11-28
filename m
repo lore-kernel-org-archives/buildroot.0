@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2019 16:42:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kf5: add an upstream URL to
- Config.in
-In-Reply-To: <20191128104820.14735-1-mark@dibsco.co.uk> (Mark Corbin's message
- of "Thu, 28 Nov 2019 10:48:20 +0000")
-References: <20191128104820.14735-1-mark@dibsco.co.uk>
-Message-ID: <87sgm8hurx.fsf@dell.be.48ers.dk>
+Date: Thu, 28 Nov 2019 16:44:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/leafnode2: update the upstream
+ URL in Config.in
+In-Reply-To: <20191128110718.17725-1-mark@dibsco.co.uk> (Mark Corbin's message
+ of "Thu, 28 Nov 2019 11:07:18 +0000")
+References: <20191128110718.17725-1-mark@dibsco.co.uk>
+Message-ID: <87o8wwhuoz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Mark" == Mark Corbin <mark@dibsco.co.uk> writes:
 
- > Add an upstream URL to the help text in Config.in. This
- > addresses the 'Missing' URL status in the package stats
+ > Update the upstream URL in the help text in Config.in. This
+ > addresses the 'Invalid(Err)' URL status in the package stats
  > web page output.
 
  > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
