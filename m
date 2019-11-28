@@ -1,9 +1,7 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu, 28 Nov 2019 15:01:58 -0800
-Subject: [Buildroot] [PATCH/next 2/2] package/grpc: bump to version 1.25.0
-In-Reply-To: <20191128230158.948387-1-aduskett@gmail.com>
-References: <20191128230158.948387-1-aduskett@gmail.com>
-Message-ID: <20191128230158.948387-2-aduskett@gmail.com>
+Date: Thu, 28 Nov 2019 15:18:03 -0800
+Subject: [Buildroot] [PATCH/next v2 1/1] package/grpc: bump to version 1.25.0
+Message-ID: <20191128231803.1351294-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,18 +24,21 @@ Tested with test-pkg, all tests passed:
  br-arm-cortex-a9-glibc [2/6]: OK
   br-arm-cortex-m4-full [3/6]: SKIPPED
          br-x86-64-musl [4/6]: OK
-     br-arm-full-static [5/6]: SKIPPED
-           sourcery-arm [6/6]: OK
+     br-arm-full-static [5/6]: SKIPP
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
+Changes v1 -> v2:
+  - Fix the hceck for BR2_TOOLCHAIN_GCC_AT_LEAST_5. It should have read ifneq
+    not ifeq.
+
  .../0001-target-build-using-host-plugin.patch |  4 +-
  ...the-availability-of-pthread_setname_.patch |  8 +-
  .../0004-Fix-gettid-naming-conflict.patch     | 36 --------
  .../grpc/0005-Rename-gettid-functions.patch   | 83 -------------------
  package/grpc/grpc.hash                        |  2 +-
- package/grpc/grpc.mk                          |  7 +-
- 6 files changed, 12 insertions(+), 128 deletions(-)
+ package/grpc/grpc.mk                          | 10 ++-
+ 6 files changed, 16 insertions(+), 127 deletions(-)
  delete mode 100644 package/grpc/0004-Fix-gettid-naming-conflict.patch
  delete mode 100644 package/grpc/0005-Rename-gettid-functions.patch
 
@@ -235,7 +236,7 @@ index 58f32c6b54..5201f72106 100644
 +sha256 ffbe61269160ea745e487f79b0fd06b6edd3d50c6d9123f053b5634737cf2f69 grpc-1.25.0.tar.gz
  sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
 diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 569db12089..eb496ad4ec 100644
+index 569db12089..bc0bee10b1 100644
 --- a/package/grpc/grpc.mk
 +++ b/package/grpc/grpc.mk
 @@ -4,7 +4,7 @@
@@ -247,17 +248,25 @@ index 569db12089..eb496ad4ec 100644
  GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
  GRPC_LICENSE = Apache-2.0
  GRPC_LICENSE_FILES = LICENSE
-@@ -43,7 +43,10 @@ GRPC_CFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
+@@ -43,11 +43,19 @@ GRPC_CFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
  GRPC_CXXFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
  endif
  
--ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
 +# Toolchains older than gcc5 will fail to compile with -0s due to:
 +# error: failure memory model cannot be stronger than success memory model for
 +# '__atomic_compare_exchange'
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180)$(BR2_TOOLCHAIN_GCC_AT_LEAST_5),yy)
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
  GRPC_CFLAGS += -O0
  GRPC_CXXFLAGS += -O0
  endif
+ 
++ifneq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y)
++GRPC_CFLAGS += -O0
++GRPC_CXXFLAGS += -O0
++endif
++
+ GRPC_CONF_OPTS += \
+ 	-DCMAKE_C_FLAGS="$(GRPC_CFLAGS)" \
+ 	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
 -- 
 2.23.0
