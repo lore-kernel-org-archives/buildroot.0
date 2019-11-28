@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2019 16:58:16 +0100
-Subject: [Buildroot] [PATCH 2/3] package/nodejs: use --with-arm-fpu
- option on ARM
-In-Reply-To: <20191127203648.291701-3-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Wed, 27 Nov 2019 21:36:47 +0100")
+Date: Thu, 28 Nov 2019 16:59:25 +0100
+Subject: [Buildroot] [PATCH 3/3] package/nodejs: properly pass
+ HOST_LDFLAGS when building host tools
+In-Reply-To: <20191127203648.291701-4-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Wed, 27 Nov 2019 21:36:48 +0100")
 References: <20191127203648.291701-1-thomas.petazzoni@bootlin.com>
- <20191127203648.291701-3-thomas.petazzoni@bootlin.com>
-Message-ID: <87mucggfhj.fsf@dell.be.48ers.dk>
+ <20191127203648.291701-4-thomas.petazzoni@bootlin.com>
+Message-ID: <87imn4gffm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,24 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > nodejs can use some FPU instructions on ARM, but it needs to know that
- > thanks to the --with-arm-fpu option. Without this, it may use the
- > wrong FPU setting, such as use VFPv3 even if only a VFPv3-D16 is
- > available. This has been reported as bug #12166, where the compiled
- > node binary had some floating point instructions using floating point
- > registers above 16 on a VFPv3-D16 system.
+ > After building host tools, we currently run a pass of patchelf to add
+ > the proper RPATH to these tools so that they are able to find the
+ > libraries they depend on.
 
- > This commit makes sure we pass the appropriate --with-arm-fpu value
- > when it makes sense. Note that NodeJS only has explicit support for a
- > subset of the FPUs, for the ones that are not explicitly supported, we
- > simply pass no --with-arm-fpu value.
+ > Unfortunately, the "torque" host tool is used during the build itself,
+ > before we have a chance to run "patchelf" on it. Since it is linked
+ > against libcrypto.so available in $(HOST_DIR)/lib, the build aborts
+ > because the RPATH is not set.
+
+ > To fix this, we make sure that $(HOST_LDFLAGS) are properly taken into
+ > account: since they contain the -Wl,-rpath option, the host tools will
+ > have the correct RPATH. This both fixes the build failure, and makes
+ > the patchelf hack no longer necessary.
 
  > Fixes:
 
- >   https://bugs.busybox.net/show_bug.cgi?id=12166
+ >   https://bugs.busybox.net/show_bug.cgi?id=12211
+ >   http://autobuild.buildroot.net/results/a1f5e336ddaf386ba08eb5a7a299a48e2bdfe2d9/
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
