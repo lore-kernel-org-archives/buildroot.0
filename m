@@ -1,93 +1,69 @@
-From: Louis Aussedat <aussedat.louis@gmail.com>
-Date: Thu, 28 Nov 2019 22:09:21 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/friendlyarm_nanopi_neo_plus2: use
- an extlinux instead of boot.cmd
-Message-ID: <20191128210921.5737-1-aussedat.louis@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 28 Nov 2019 22:23:58 +0100
+Subject: [Buildroot] [PATCH v1] package/libdrm: fix nouveau tests
+ compile for musl
+In-Reply-To: <20191126233847.3d33d888@gmx.net>
+References: <20191125205520.9234-1-ps.report@gmx.net>
+ <20191126225146.0581d8ec@windsurf>
+ <20191126233847.3d33d888@gmx.net>
+Message-ID: <20191128222358.5245aaf6@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This remove the file boot.cmd to use an extlinux.conf instead.
+Hello Thomas,
 
-Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
----
- board/friendlyarm/nanopi-neo-plus2/boot.cmd      | 6 ------
- board/friendlyarm/nanopi-neo-plus2/extlinux.conf | 4 ++++
- board/friendlyarm/nanopi-neo-plus2/genimage.cfg  | 2 +-
- board/friendlyarm/nanopi-neo-plus2/post-build.sh | 4 ++++
- configs/friendlyarm_nanopi_neo_plus2_defconfig   | 3 +--
- 5 files changed, 10 insertions(+), 9 deletions(-)
- delete mode 100644 board/friendlyarm/nanopi-neo-plus2/boot.cmd
- create mode 100644 board/friendlyarm/nanopi-neo-plus2/extlinux.conf
- create mode 100755 board/friendlyarm/nanopi-neo-plus2/post-build.sh
+On Tue, 26 Nov 2019 23:38:47 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 
-diff --git a/board/friendlyarm/nanopi-neo-plus2/boot.cmd b/board/friendlyarm/nanopi-neo-plus2/boot.cmd
-deleted file mode 100644
-index 227604a23d..0000000000
---- a/board/friendlyarm/nanopi-neo-plus2/boot.cmd
-+++ /dev/null
-@@ -1,6 +0,0 @@
--setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
--
--fatload mmc 0 $kernel_addr_r Image
--fatload mmc 0 $fdt_addr_r sun50i-h5-nanopi-neo-plus2.dtb
--
--booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/friendlyarm/nanopi-neo-plus2/extlinux.conf b/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
-new file mode 100644
-index 0000000000..fcb6f632c1
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
-@@ -0,0 +1,4 @@
-+label linux
-+  kernel /Image
-+  devicetree /sun50i-h5-nanopi-neo-plus2.dtb
-+  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-diff --git a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg b/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
-index a4c2a7a894..fb871abd43 100644
---- a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
-+++ b/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
-@@ -3,7 +3,7 @@ image boot.vfat {
- 		files = {
- 			"Image",
- 			"sun50i-h5-nanopi-neo-plus2.dtb",
--			"boot.scr"
-+			"extlinux"
- 		}
- 	}
- 	size = 64M
-diff --git a/board/friendlyarm/nanopi-neo-plus2/post-build.sh b/board/friendlyarm/nanopi-neo-plus2/post-build.sh
-new file mode 100755
-index 0000000000..ec20fca7d9
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo-plus2/post-build.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+BOARD_DIR="$(dirname $0)"
-+
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/configs/friendlyarm_nanopi_neo_plus2_defconfig b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-index c807b3100b..461e468cb6 100644
---- a/configs/friendlyarm_nanopi_neo_plus2_defconfig
-+++ b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-@@ -27,8 +27,6 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
--BR2_TARGET_UBOOT_BOOT_SCRIPT=y
--BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo-plus2/boot.cmd"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
-@@ -49,6 +47,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo-plus2/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo-plus2/post-build.sh"
- 
- # wireless firmware
- BR2_PACKAGE_LINUX_FIRMWARE=y
--- 
-2.24.0
+> Hello Thomas,
+>
+> On Tue, 26 Nov 2019 22:51:46 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>
+> > On Mon, 25 Nov 2019 21:55:20 +0100
+> > Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > > Add openembedded provided patch [2] to fix musl toolchain compile failures
+> > > because of different ioctl() signatures, (int, int, ...) vs. (int, unsigned
+> > > long, ...).
+> > >
+> > > Fixes:
+> > >
+> > >   ../tests/nouveau/threaded.c:39:5: error: conflicting types for 'ioctl'
+> > >   int ioctl(int fd, unsigned long request, ...)
+> > >
+> > > [1] http://autobuild.buildroot.net/results/047f149a928ac2a17e25211a0a8a264ebae369ac
+> > > [2] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-graphics/drm/libdrm/musl-ioctl.patch
+> > >
+> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > > ---
+> > >  ...uveau-threaded-adapt-ioctl-signature.patch | 37 +++++++++++++++++++
+> > >  1 file changed, 37 insertions(+)
+> > >  create mode 100644 package/libdrm/0006-tests-nouveau-threaded-adapt-ioctl-signature.patch
+> >
+> > Applied to master, thanks.
+>
+> And finally suggested upstream, see [1]...and the same for two more old ones, see [2] and [3]...
+
+And as the way through gitlab merge requests seems to be the right one (instead
+of the mailing list), re-submitted two more old buildroot patches, see [4], [5]...
+
+Regards,
+Peter
+
+[4] https://gitlab.freedesktop.org/mesa/drm/merge_requests/31
+[5] https://gitlab.freedesktop.org/mesa/drm/merge_requests/32
+
+>
+> Regards,
+> Peter
+>
+> [1] https://gitlab.freedesktop.org/mesa/drm/merge_requests/30
+> [2] https://gitlab.freedesktop.org/mesa/drm/merge_requests/27
+> [3] https://gitlab.freedesktop.org/mesa/drm/merge_requests/28
+>
+>
+> >
+> > Thomas
+>
