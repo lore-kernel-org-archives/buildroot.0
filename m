@@ -1,9 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 27 Nov 2019 17:26:08 -0800
-Subject: [Buildroot] [PATCH v4 5/6] polkit-rules-test-systemd: new test
+Date: Wed, 27 Nov 2019 17:26:09 -0800
+Subject: [Buildroot] [PATCH v4 6/6] polkit-rules-test-initd: new test
 In-Reply-To: <20191128012609.3632661-1-aduskett@gmail.com>
 References: <20191128012609.3632661-1-aduskett@gmail.com>
-Message-ID: <20191128012609.3632661-6-aduskett@gmail.com>
+Message-ID: <20191128012609.3632661-7-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,141 +13,159 @@ To: buildroot@busybox.net
 From: Adam Duskett <Aduskett@gmail.com>
 
 This test is a simple integration test of the polkit package on systems
-running systemd.
+not running systemd.
 
 It consists of the following:
-- The brtest user attempts to restart the systemd-timesyncd service and is
-  denied.
+- A simple hello world c application that outputs "Hello polkit!" is compiled
+  and installed to $(TARGET_DIR)/usr/bin/
 
-- A systemd-timesyncd-restart.rules file provided by polkit-rules-test-systemd
+- The brtest user attempts to run "pkexec hello-polkit" and is denied.
+
+- A hello-polkit.rules file provided by polkit-rules-test-initd
   is copied from /root/ to /etc/polkit-1/rules.d
 
-- The brtest user attempts to restart the systemd-timesyncd service and should
-  now succeed.
+- The brtest user attempts to run "pkexec hello-polkit" and should not succeed
+  with the output "Hello polkit!"
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- DEVELOPERS                                    |  2 +
- .../package/br2-external/polkit/Config.in     |  2 +
- .../package/br2-external/polkit/external.desc |  1 +
- .../package/br2-external/polkit/external.mk   |  1 +
- .../polkit-rules-test-systemd/Config.in       |  6 +++
- .../polkit-rules-test-systemd.mk              | 20 ++++++++
- .../systemd-timesyncd-restart.rules           |  7 +++
- .../tests/package/test_polkit_systemd.py      | 51 +++++++++++++++++++
- 8 files changed, 90 insertions(+)
- create mode 100644 support/testing/tests/package/br2-external/polkit/Config.in
- create mode 100644 support/testing/tests/package/br2-external/polkit/external.desc
- create mode 100644 support/testing/tests/package/br2-external/polkit/external.mk
- create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/Config.in
- create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/polkit-rules-test-systemd.mk
- create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/systemd-timesyncd-restart.rules
- create mode 100644 support/testing/tests/package/test_polkit_systemd.py
+ DEVELOPERS                                    |  1 +
+ .../package/polkit-rules-test-initd/Config.in |  6 +++
+ .../polkit-rules-test-initd/hello-polkit.c    |  6 +++
+ .../hello-polkit.policy                       | 14 +++++
+ .../hello-polkit.rules                        |  6 +++
+ .../polkit-rules-test-initd.mk                | 31 +++++++++++
+ .../tests/package/test_polkit_initd.py        | 53 +++++++++++++++++++
+ 7 files changed, 117 insertions(+)
+ create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/Config.in
+ create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.c
+ create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.policy
+ create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.rules
+ create mode 100644 support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/polkit-rules-test-initd.mk
+ create mode 100644 support/testing/tests/package/test_polkit_initd.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 00dd4d39e9..2c99ace54f 100644
+index 2c99ace54f..deeef53a2d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -76,6 +76,8 @@ F:	package/setools/
- F:	package/sngrep/
+@@ -77,6 +77,7 @@ F:	package/sngrep/
  F:	package/spidermonkey/
  F:	package/systemd/
-+F:	support/testing/tests/package/br2-external/polkit/
-+F:	support/testing/tests/package/test_polkit_systemd.py
+ F:	support/testing/tests/package/br2-external/polkit/
++F:	support/testing/tests/package/test_polkit_initd.py
+ F:	support/testing/tests/package/test_polkit_systemd.py
  
  N:	Adam Heinrich <adam@adamh.cz>
- F:	package/jack1/
-diff --git a/support/testing/tests/package/br2-external/polkit/Config.in b/support/testing/tests/package/br2-external/polkit/Config.in
+diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/Config.in b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/Config.in
 new file mode 100644
-index 0000000000..97309b9fca
+index 0000000000..f19fc2660d
 --- /dev/null
-+++ b/support/testing/tests/package/br2-external/polkit/Config.in
-@@ -0,0 +1,2 @@
-+source "$BR2_EXTERNAL_POLKIT_PATH/package/polkit-rules-test-initd/Config.in"
-+source "$BR2_EXTERNAL_POLKIT_PATH/package/polkit-rules-test-systemd/Config.in"
-diff --git a/support/testing/tests/package/br2-external/polkit/external.desc b/support/testing/tests/package/br2-external/polkit/external.desc
-new file mode 100644
-index 0000000000..ecef48692b
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/polkit/external.desc
-@@ -0,0 +1 @@
-+name: POLKIT
-diff --git a/support/testing/tests/package/br2-external/polkit/external.mk b/support/testing/tests/package/br2-external/polkit/external.mk
-new file mode 100644
-index 0000000000..64e369cce4
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/polkit/external.mk
-@@ -0,0 +1 @@
-+include $(sort $(wildcard $(BR2_EXTERNAL_POLKIT_PATH)/package/*/*.mk))
-diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/Config.in b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/Config.in
-new file mode 100644
-index 0000000000..662b991d3b
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/Config.in
++++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_POLKIT_RULES_TEST_SYSTEMD
-+	bool "polkit rules test for systemd"
++config BR2_PACKAGE_POLKIT_RULES_TEST_INITD
++	bool "polkit rules test for initd"
 +	depends on BR2_PACKAGE_POLKIT
 +	help
 +	  Simple test to ensure polkit is loading and enforcing rules
-+	  correctly using a rules file meant for systemd.
-diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/polkit-rules-test-systemd.mk b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/polkit-rules-test-systemd.mk
++	  correctly using initd.
+diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.c b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.c
 new file mode 100644
-index 0000000000..19a6be2b2f
+index 0000000000..cf5343cd75
 --- /dev/null
-+++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/polkit-rules-test-systemd.mk
-@@ -0,0 +1,20 @@
++++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.c
+@@ -0,0 +1,6 @@
++#include <stdio.h>
++
++int main(void){
++    printf("Hello polkit!\n");
++    return 0;
++}
+diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.policy b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.policy
+new file mode 100644
+index 0000000000..8220293175
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.policy
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE policyconfig PUBLIC
++ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
++ "http://www.freedesktop.org/software/polkit/policyconfig-1.dtd">
++<policyconfig>
++  <action id="org.freedesktop.policykit.pkexec.hello-polkit">
++    <message>Authentication is required to run the hello world test program</message>
++    <defaults>
++      <allow_inactive>no</allow_inactive>
++      <allow_active>no</allow_active>
++    </defaults>
++    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/hello-polkit</annotate>
++  </action>
++</policyconfig>
+diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.rules b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.rules
+new file mode 100644
+index 0000000000..a0a66f644d
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/hello-polkit.rules
+@@ -0,0 +1,6 @@
++polkit.addRule(function(action, subject) {
++   if (action.id == "org.freedesktop.policykit.pkexec.hello-polkit" &&
++       subject.user == "brtest") {
++       return polkit.Result.YES;
++   }
++});
+diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/polkit-rules-test-initd.mk b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/polkit-rules-test-initd.mk
+new file mode 100644
+index 0000000000..394c3e4405
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-initd/polkit-rules-test-initd.mk
+@@ -0,0 +1,31 @@
 +################################################################################
 +#
-+# polkit-rules-test-systemd
++# polkit-rules-test-initd
 +#
 +################################################################################
 +
-+POLKIT_RULES_TEST_SYSTEMD_DEPENDENCIES = polkit
++POLKIT_RULES_TEST_INITD_DEPENDENCIES = polkit
 +
-+define POLKIT_RULES_TEST_SYSTEMD_USERS
++define POLKIT_RULES_TEST_INITD_USERS
 +	brtest  -1  brtest  -1   =password  /home/brtest /bin/sh brtest
 +endef
 +
-+define POLKIT_RULES_TEST_SYSTEMD_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/etc/polkit-1/rules.d
++define POLKIT_RULES_TEST_INITD_BUILD_CMDS
++	$(INSTALL) -D $(POLKIT_RULES_TEST_INITD_PKGDIR)/hello-polkit.c $(@D)/hello-polkit.c
++	$(TARGET_CC) $(@D)/hello-polkit.c -o $(@D)/hello-polkit
++endef
 +
-+	$(INSTALL) -D $(POLKIT_RULES_TEST_SYSTEMD_PKGDIR)/systemd-timesyncd-restart.rules \
-+		$(TARGET_DIR)/root/systemd-timesyncd-restart.rules
++
++define POLKIT_RULES_TEST_INITD_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/share/polkit-1/actions/
++	$(INSTALL) -D $(@D)/hello-polkit $(TARGET_DIR)/usr/bin/hello-polkit
++
++	$(INSTALL) -D $(POLKIT_RULES_TEST_INITD_PKGDIR)/hello-polkit.policy \
++		$(TARGET_DIR)/usr/share/polkit-1/actions/hello-polkit.policy
++
++	$(INSTALL) -D $(POLKIT_RULES_TEST_INITD_PKGDIR)/hello-polkit.rules \
++		$(TARGET_DIR)/root/hello-polkit.rules
++
 +endef
 +
 +$(eval $(generic-package))
-diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/systemd-timesyncd-restart.rules b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/systemd-timesyncd-restart.rules
+diff --git a/support/testing/tests/package/test_polkit_initd.py b/support/testing/tests/package/test_polkit_initd.py
 new file mode 100644
-index 0000000000..9461195091
+index 0000000000..fe5acb23b5
 --- /dev/null
-+++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test-systemd/systemd-timesyncd-restart.rules
-@@ -0,0 +1,7 @@
-+polkit.addRule(function(action, subject) {
-+    if (action.id == "org.freedesktop.systemd1.manage-units" &&
-+        action.lookup("unit") == "systemd-timesyncd.service" &&
-+        subject.user == "brtest") {
-+        return polkit.Result.YES;
-+    }
-+});
-diff --git a/support/testing/tests/package/test_polkit_systemd.py b/support/testing/tests/package/test_polkit_systemd.py
-new file mode 100644
-index 0000000000..c9086e878e
---- /dev/null
-+++ b/support/testing/tests/package/test_polkit_systemd.py
-@@ -0,0 +1,51 @@
++++ b/support/testing/tests/package/test_polkit_initd.py
+@@ -0,0 +1,53 @@
 +import os
 +
 +import infra.basetest
 +
 +
-+class TestPolkitSystemd(infra.basetest.BRTest):
++class TestPolkitInitd(infra.basetest.BRTest):
 +    br2_external = [infra.filepath("tests/package/br2-external/polkit")]
 +    config = \
 +        """
 +        BR2_aarch64=y
 +        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_INIT_SYSTEMD=y
 +        BR2_JLEVEL=10
 +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
 +        BR2_LINUX_KERNEL=y
@@ -156,11 +174,11 @@ index 0000000000..c9086e878e
 +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
 +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
 +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_DBUS=y
 +        BR2_PACKAGE_POLKIT=y
-+        BR2_PACKAGE_SYSTEMD_POLKIT=y
 +        BR2_TARGET_ROOTFS_CPIO=y
 +        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        BR2_PACKAGE_POLKIT_RULES_TEST_SYSTEMD=y
++        BR2_PACKAGE_POLKIT_RULES_TEST_INITD=y
 +        """
 +
 +    def login(self):
@@ -175,17 +193,20 @@ index 0000000000..c9086e878e
 +    def test_run(self):
 +        self.login()
 +
-+        cmd = "su brtest -c '/bin/systemctl restart systemd-timesyncd.service'"
-+        _, exit_code = self.emulator.run(cmd, 10)
-+        self.assertEqual(exit_code, 1)
++        cmd = "su brtest -c 'pkexec hello-polkit'"
++        output, exit_code = self.emulator.run(cmd, 10)
++        print(output)
++        self.assertEqual(exit_code, 127)
++        self.assertEqual(output[0], "Error executing command as another user: Not authorized")
 +
-+
-+        cmd = "mv /root/systemd-timesyncd-restart.rules /etc/polkit-1/rules.d"
++        cmd = "mv /root/hello-polkit.rules /etc/polkit-1/rules.d/hello-polkit.rules"
 +        _, exit_code = self.emulator.run(cmd, 10)
 +        self.assertEqual(exit_code, 0)
 +        
-+        cmd = "su brtest -c '/bin/systemctl restart systemd-timesyncd.service'"
-+        _, exit_code = self.emulator.run(cmd, 10)
++        cmd = "su brtest -c 'pkexec hello-polkit'"
++        output, exit_code = self.emulator.run(cmd, 10)
++        print(output)
 +        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0], "Hello polkit!")
 -- 
 2.23.0
