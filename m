@@ -1,55 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2019 15:43:44 +0100
-Subject: [Buildroot] [PATCH] package/haproxy: security bump to version 2.0.10
-Message-ID: <20191128144344.26356-1-peter@korsgaard.com>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Thu, 28 Nov 2019 14:49:32 +0000
+Subject: [Buildroot] [PATCH 1/1] package/luasyslog: update the upstream URL
+ in Config.in
+Message-ID: <20191128144932.12669-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerabilities:
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(Err)' URL status in the package stats
+web page output.
 
-- CVE-2019-19330: The HTTP/2 implementation in HAProxy before 2.0.10
-  mishandles headers, as demonstrated by carriage return (CR, ASCII 0xd),
-  line feed (LF, ASCII 0xa), and the zero character (NUL, ASCII 0x0), aka
-  Intermediary Encapsulation Attacks.
-
-In addition, 2.0.6..10 fixes a number of bugs.  See the changelog for
-details:
-
-https://www.haproxy.org/download/2.0/src/CHANGELOG
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/luasyslog/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 0b4ecdc25c..87a29eeba1 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.0/src/haproxy-2.0.5.tar.gz.sha256
--sha256 3f2e0d40af66dd6df1dc2f6055d3de106ba62836d77b4c2e497a82a4bdbc5422 haproxy-2.0.5.tar.gz
-+# From: http://www.haproxy.org/download/2.0/src/haproxy-2.0.10.tar.gz.sha256
-+sha256 1d38ab3dd45e930b209e922a360ee8c636103e21e5b5a2656d3795401316a4ea haproxy-2.0.10.tar.gz
- # Locally computed:
- sha256	0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28	LICENSE
- sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 9d0ef5710f..9f6f2818ae 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/luasyslog/Config.in b/package/luasyslog/Config.in
+index 814e7ad37e..326fa6bf9b 100644
+--- a/package/luasyslog/Config.in
++++ b/package/luasyslog/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_LUASYSLOG
+ 	help
+ 	  Syslog logging for Lua.
  
- HAPROXY_VERSION_MAJOR = 2.0
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).10
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-	  http://lua.net-core.org/sputnik.lua?p=Telesto:About
++	  https://luarocks.org/modules/luarocks/luasyslog
 -- 
 2.20.1
