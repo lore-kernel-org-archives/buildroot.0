@@ -1,111 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Nov 2019 21:40:29 +0100
-Subject: [Buildroot] [git commit] package/librsync: bump to version 2.2.1
-Message-ID: <20191202083934.9A3BC8147E@busybox.osuosl.org>
+Date: Thu, 28 Nov 2019 20:11:52 +0100
+Subject: [Buildroot] [git commit] package/python-aiohttp-session: bump to
+ version 2.9.0
+Message-ID: <20191202083935.E9C437FF06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d66e515ea9a7d4d05ed42e2e146680c8a3f11cae
+commit: https://git.buildroot.net/buildroot/commit/?id=ffaa02949d83104c84e16656a2e716b6844f3138
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-librsync can be built statically through the standard cmake
-BUILD_SHARED_LIBS option since version 2.2.0 and
-https://github.com/librsync/librsync/commit/1ad3c7c600dc7231b0d3feb9bfcd83fa0ebe1051
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-CMakeLists-fix-build-with-old-compilers.patch | 39 ++++++++++++++++++++++
- package/librsync/Config.in                         |  4 ---
- package/librsync/librsync.hash                     |  2 +-
- package/librsync/librsync.mk                       |  2 +-
- 4 files changed, 41 insertions(+), 6 deletions(-)
+ package/python-aiohttp-session/python-aiohttp-session.hash | 4 ++--
+ package/python-aiohttp-session/python-aiohttp-session.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/librsync/0001-CMakeLists-fix-build-with-old-compilers.patch b/package/librsync/0001-CMakeLists-fix-build-with-old-compilers.patch
-new file mode 100644
-index 0000000000..76598c21f1
---- /dev/null
-+++ b/package/librsync/0001-CMakeLists-fix-build-with-old-compilers.patch
-@@ -0,0 +1,39 @@
-+From 77b78e01f83b65f3c38941f54f71beaaddcb6fc1 Mon Sep 17 00:00:00 2001
-+From: Pierre-Jean Texier <pjtexier@koncepto.io>
-+Date: Sat, 23 Nov 2019 16:51:46 +0100
-+Subject: [PATCH] CMakeLists: fix build with old compilers
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The librsync code uses some C99 constructs, but old compilers such
-+as gcc 4.7 don't default to -std=c99. This commit makes sure librsync
-+is built with -std=gnu99.
-+
-+Fixes:
-+
-+src/rabinkarp.h:82:5: error: ???for??? loop initial declarations are only allowed in C99 or C11 mode
-+     for (size_t i = len; i; i--) {
-+     ^
-+src/rabinkarp.h:82:5: note: use option -std=c99, -std=gnu99, -std=c11 or -std=gnu11 to compile your code
-+
-+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-+[Upstream status: https://github.com/librsync/librsync/pull/181]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index f810061..794d9c0 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -149,7 +149,7 @@ if (CMAKE_C_COMPILER_ID MATCHES "(Clang|Gnu|GNU)")
-+   # TODO: Set for MSVC and other compilers.
-+   # TODO: Set -Werror when the build is clean.
-+ 
-+-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
-++  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=gnu99")
-+ endif()
-+ 
-+ site_name(BUILD_HOSTNAME)
-diff --git a/package/librsync/Config.in b/package/librsync/Config.in
-index 6957ddcc0e..652f0cb276 100644
---- a/package/librsync/Config.in
-+++ b/package/librsync/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBRSYNC
- 	bool "librsync"
--	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_POPT
-@@ -10,6 +9,3 @@ config BR2_PACKAGE_LIBRSYNC
- 	  rsync utility and is used in rproxy.
- 
- 	  https://github.com/librsync/librsync
--
--comment "librsync needs a toolchain w/ dynamic library support"
--	depends on BR2_STATIC_LIBS
-diff --git a/package/librsync/librsync.hash b/package/librsync/librsync.hash
-index 95206c39a7..d00e5cd337 100644
---- a/package/librsync/librsync.hash
-+++ b/package/librsync/librsync.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 f701d2bab3d7471dfea60d29e9251f8bb7567222957f7195af55142cb207c653  librsync-2.1.0.tar.gz
-+sha256 b5ab8e2092b82b7d7bb9c1dd52e6a77083a89f8ad9b9309da611f490d0b49a71  librsync-2.2.1.tar.gz
- sha256 5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
-diff --git a/package/librsync/librsync.mk b/package/librsync/librsync.mk
-index 4e42f77344..82d9b9fe2e 100644
---- a/package/librsync/librsync.mk
-+++ b/package/librsync/librsync.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-aiohttp-session/python-aiohttp-session.hash b/package/python-aiohttp-session/python-aiohttp-session.hash
+index 794c272b0d..f10827b616 100644
+--- a/package/python-aiohttp-session/python-aiohttp-session.hash
++++ b/package/python-aiohttp-session/python-aiohttp-session.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp-session/json
+-md5	64ba16af01abad4fc1feaf16fba574c6  aiohttp-session-2.8.0.tar.gz
+-sha256	4975ad108341520a7107f5e4d482c6a9f2bbc367b9c9b08e7df524d353f5f0cb  aiohttp-session-2.8.0.tar.gz
++md5	993ec277ece4765472d0edc0f6c0bba3  aiohttp-session-2.9.0.tar.gz
++sha256	959413468b84e30e7ca09719617cfb0000066a2e0f6c20062d043433e82aeb74  aiohttp-session-2.9.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
+diff --git a/package/python-aiohttp-session/python-aiohttp-session.mk b/package/python-aiohttp-session/python-aiohttp-session.mk
+index 093459a9ca..8fcd8e21b9 100644
+--- a/package/python-aiohttp-session/python-aiohttp-session.mk
++++ b/package/python-aiohttp-session/python-aiohttp-session.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBRSYNC_VERSION = 2.1.0
-+LIBRSYNC_VERSION = 2.2.1
- LIBRSYNC_SITE = $(call github,librsync,librsync,v$(LIBRSYNC_VERSION))
- LIBRSYNC_LICENSE = LGPL-2.1+
- LIBRSYNC_LICENSE_FILES = COPYING
+-PYTHON_AIOHTTP_SESSION_VERSION = 2.8.0
++PYTHON_AIOHTTP_SESSION_VERSION = 2.9.0
+ PYTHON_AIOHTTP_SESSION_SOURCE = aiohttp-session-$(PYTHON_AIOHTTP_SESSION_VERSION).tar.gz
+-PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/a1/da/d49d017faadb5e2c754fce83e1bd3fbcea9d10bc970bc8df9471880463f0
++PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/f8/fe/53dfd35f5c7fcc7f2d0866cb29e722303e3fae7f749c1f3d4d11d361dc38
+ PYTHON_AIOHTTP_SESSION_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_SESSION_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_SESSION_LICENSE_FILES = LICENSE
