@@ -1,31 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2019 16:52:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version
- 0.9.3
-In-Reply-To: <20191127125245.30093-1-jubalh@iodoru.org> (Michael Vetter's
- message of "Wed, 27 Nov 2019 13:52:45 +0100")
-References: <20191127125245.30093-1-jubalh@iodoru.org>
-Message-ID: <87y2w0gfrb.fsf@dell.be.48ers.dk>
+Date: Thu, 28 Nov 2019 16:52:14 +0100
+Subject: [Buildroot] [git commit] package/libstrophe: bump to version 0.9.3
+Message-ID: <20191128154427.C905F8189F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=17bd85379a4c8a507231aba5546b4bb9042df7a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Changes:
- >   * PLAIN mechanism is used only when no other mechanisms are supported
- >   * Legacy authentication is disabled by default, can be enabled with
- >     connection flag XMPP_CONN_FLAG_LEGACY_AUTH
- >   * Session is not established if it is optional
- >   * Fixed a bug causing a reused connection not to cleanup properly
- >   * Improved debug logging in OpenSSL module
- >   * Few memory leaks fixed
+Changes:
 
- > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+  * PLAIN mechanism is used only when no other mechanisms are supported
+  * Legacy authentication is disabled by default, can be enabled with
+    connection flag XMPP_CONN_FLAG_LEGACY_AUTH
+  * Session is not established if it is optional
+  * Fixed a bug causing a reused connection not to cleanup properly
+  * Improved debug logging in OpenSSL module
+  * Few memory leaks fixed
 
-Committed, thanks.
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libstrophe/libstrophe.hash | 2 +-
+ package/libstrophe/libstrophe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
+index 72eb386520..1e46a82bc9 100644
+--- a/package/libstrophe/libstrophe.hash
++++ b/package/libstrophe/libstrophe.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 158145bc1565a5fd0bbd7f57e3e15d768e58b8a460897ab5918a5a689d67ae6f  libstrophe-0.9.2.tar.gz
++sha256 8a3b79f62177ed59c01d4d4108357ff20bd933d53b845ee4e350d304c051a4fe  libstrophe-0.9.3.tar.gz
+ sha256 82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+index 7445caa67f..d5434f5033 100644
+--- a/package/libstrophe/libstrophe.mk
++++ b/package/libstrophe/libstrophe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSTROPHE_VERSION = 0.9.2
++LIBSTROPHE_VERSION = 0.9.3
+ LIBSTROPHE_SITE = $(call github,strophe,libstrophe,$(LIBSTROPHE_VERSION))
+ LIBSTROPHE_DEPENDENCIES = openssl host-pkgconf
+ # Doesn't ship configure
