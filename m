@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2019 16:56:16 +0100
-Subject: [Buildroot] [PATCH 1/3] package/nodejs: properly pass the
- --with-arm-float-abi on ARM
-In-Reply-To: <20191127203648.291701-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Wed, 27 Nov 2019 21:36:46 +0100")
+Date: Thu, 28 Nov 2019 16:58:16 +0100
+Subject: [Buildroot] [PATCH 2/3] package/nodejs: use --with-arm-fpu
+ option on ARM
+In-Reply-To: <20191127203648.291701-3-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Wed, 27 Nov 2019 21:36:47 +0100")
 References: <20191127203648.291701-1-thomas.petazzoni@bootlin.com>
- <20191127203648.291701-2-thomas.petazzoni@bootlin.com>
-Message-ID: <87r21sgfkv.fsf@dell.be.48ers.dk>
+ <20191127203648.291701-3-thomas.petazzoni@bootlin.com>
+Message-ID: <87mucggfhj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,21 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > When commit 0064132ba032da39cefa4fffe59c31a71d1f1ddb introduced ARM64
- > support in nodejs.mk, it incorrectly kept the NODEJS_ARM_FP
- > definition. This variable is used to pass --with-arm-float-abi, which
- > in NodeJS's configure.py script is only used when --dest-cpu=arm, and
- > not when --dest-cpu=arm64.
+ > nodejs can use some FPU instructions on ARM, but it needs to know that
+ > thanks to the --with-arm-fpu option. Without this, it may use the
+ > wrong FPU setting, such as use VFPv3 even if only a VFPv3-D16 is
+ > available. This has been reported as bug #12166, where the compiled
+ > node binary had some floating point instructions using floating point
+ > registers above 16 on a VFPv3-D16 system.
 
- > So we are passing --with-arm-float-abi=<something> for ARM64, which
- > has no effect, and we are no longer passing it on ARM.
-
- > This commit fixes that by putting the NODEJS_ARM_FP definition back at
- > the right location.
+ > This commit makes sure we pass the appropriate --with-arm-fpu value
+ > when it makes sense. Note that NodeJS only has explicit support for a
+ > subset of the FPUs, for the ones that are not explicitly supported, we
+ > simply pass no --with-arm-fpu value.
 
  > Fixes:
 
- >    0064132ba032da39cefa4fffe59c31a71d1f1ddb
+ >   https://bugs.busybox.net/show_bug.cgi?id=12166
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
