@@ -1,148 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 23:07:57 +0100
-Subject: [Buildroot] [git commit] package/libargon2: new package
-Message-ID: <20191202083935.C5A1080080@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Nov 2019 20:12:06 +0100
+Subject: [Buildroot] [git commit] package/python-aiohttp: bump to version
+ 3.6.2
+Message-ID: <20191202083935.F3D5D80091@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4e5bd3cfe08f503412fa70c3712f5b5b56f15e3
+commit: https://git.buildroot.net/buildroot/commit/?id=429e5afbf8c561d7479697060a8e5ab3d038a117
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                         |  3 ++
- package/Config.in                                  |  1 +
- ...1-libargon2-dont-fail-on-existing-symlink.patch | 23 +++++++++++++
- package/libargon2/Config.in                        |  8 +++++
- package/libargon2/libargon2.hash                   |  3 ++
- package/libargon2/libargon2.mk                     | 40 ++++++++++++++++++++++
- 6 files changed, 78 insertions(+)
+ package/python-aiohttp/python-aiohttp.hash | 4 ++--
+ package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 544e3ac1c3..78387c0468 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1806,6 +1806,9 @@ F:	package/checksec/
- N:	Parnell Springmeyer <parnell@digitalmentat.com>
- F:	package/scrypt/
+diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+index bd9e2d7a62..fd02bc80d6 100644
+--- a/package/python-aiohttp/python-aiohttp.hash
++++ b/package/python-aiohttp/python-aiohttp.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp/json
+-md5	85fe5c9037256c58d4678148bd91b3f3  aiohttp-3.5.4.tar.gz
+-sha256	9c4c83f4fa1938377da32bc2d59379025ceeee8e24b89f72fcbccd8ca22dc9bf  aiohttp-3.5.4.tar.gz
++md5	ca40144c199a09fc1a141960cf6295f0  aiohttp-3.6.2.tar.gz
++sha256	259ab809ff0727d0e834ac5e8a283dc5e3e0ecc30c4d80b3cd17a4139ce1f326  aiohttp-3.6.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256	6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+index 7a142a6550..5a5964ed5f 100644
+--- a/package/python-aiohttp/python-aiohttp.mk
++++ b/package/python-aiohttp/python-aiohttp.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+N:	Pascal de Bruijn <p.debruijn@unilogic.nl>
-+F:	package/libargon2/
-+
- N:	Pascal Huerst <pascal.huerst@gmail.com>
- F:	package/google-breakpad/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 5f913316d8..37861387e8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1250,6 +1250,7 @@ menu "Crypto"
- 	source "package/cryptodev/Config.in"
- 	source "package/gcr/Config.in"
- 	source "package/gnutls/Config.in"
-+	source "package/libargon2/Config.in"
- 	source "package/libassuan/Config.in"
- 	source "package/libgcrypt/Config.in"
- 	source "package/libgpg-error/Config.in"
-diff --git a/package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch b/package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch
-new file mode 100644
-index 0000000000..43a6deb9f5
---- /dev/null
-+++ b/package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch
-@@ -0,0 +1,23 @@
-+From b997b9e7d4744020409223afddc7299a771eb52d Mon Sep 17 00:00:00 2001
-+From: Pascal de Bruijn <pmjdebruijn@pcode.nl>
-+Date: Thu, 7 Nov 2019 09:55:32 +0100
-+Subject: [PATCH] Don't fail on existing symlink
-+
-+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 837e7f7..7c116c9 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -238,7 +238,7 @@ install: $(RUN) libs
-+ 	$(INSTALL) -d $(INST_LIBRARY)
-+ 	$(INSTALL) -m 0644 $(LIBRARIES) $(INST_LIBRARY)
-+ ifdef LINKED_LIB_SH
-+-	cd $(INST_LIBRARY) && ln -s $(notdir $(LIB_SH) $(LINKED_LIB_SH))
-++	cd $(INST_LIBRARY) && ln -sf $(notdir $(LIB_SH) $(LINKED_LIB_SH))
-+ endif
-+ 	$(INSTALL) -d $(INST_BINARY)
-+ 	$(INSTALL) $(RUN) $(INST_BINARY)
-diff --git a/package/libargon2/Config.in b/package/libargon2/Config.in
-new file mode 100644
-index 0000000000..aea861ab4c
---- /dev/null
-+++ b/package/libargon2/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBARGON2
-+	bool "libargon2"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  A modern password hashing algorithm
-+
-+	  https://password-hashing.net/#argon2
-diff --git a/package/libargon2/libargon2.hash b/package/libargon2/libargon2.hash
-new file mode 100644
-index 0000000000..c524b42718
---- /dev/null
-+++ b/package/libargon2/libargon2.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 eaea0172c1f4ee4550d1b6c9ce01aab8d1ab66b4207776aa67991eb5872fdcd8  libargon2-20171227.tar.gz
-+sha256 220f8736a89ff51c92ef3d497f413b48e6cf1df3d6278bc909c6308c78e1718e  LICENSE
-diff --git a/package/libargon2/libargon2.mk b/package/libargon2/libargon2.mk
-new file mode 100644
-index 0000000000..e10343a15e
---- /dev/null
-+++ b/package/libargon2/libargon2.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# libargon2
-+#
-+################################################################################
-+
-+# 20190702 is not recognized by php7.3
-+LIBARGON2_VERSION = 20171227
-+LIBARGON2_SITE = $(call github,P-H-C,phc-winner-argon2,$(LIBARGON2_VERSION))
-+LIBARGON2_LICENSE = CC0-1.0 or Apache-2.0
-+LIBARGON2_LICENSE_FILES = LICENSE
-+LIBARGON2_INSTALL_STAGING = YES
-+
-+# GCC_TARGET_ARCH is not defined for all architectures, but libargon2
-+# only uses it to detect if some x86 optimizations can be used, and
-+# GCC_TARGET_ARCH is defined on x86.
-+ifneq ($(GCC_TARGET_ARCH),)
-+LIBARGON2_OPTS = OPTTARGET=$(GCC_TARGET_ARCH)
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-+LIBARGON2_OPTS += NO_THREADS=1
-+endif
-+
-+define LIBARGON2_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		$(LIBARGON2_OPTS)
-+endef
-+
-+define LIBARGON2_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		DESTDIR=$(STAGING_DIR) install
-+endef
-+
-+define LIBARGON2_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+-PYTHON_AIOHTTP_VERSION = 3.5.4
++PYTHON_AIOHTTP_VERSION = 3.6.2
+ PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+-PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/0f/58/c8b83f999da3b13e66249ea32f325be923791c0c10aee6cf16002a3effc1
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/00/94/f9fa18e8d7124d7850a5715a0b9c0584f7b9375d331d35e157cee50f27cc
+ PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
