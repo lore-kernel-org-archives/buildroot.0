@@ -1,8 +1,8 @@
 From: Mark Corbin <mark@dibsco.co.uk>
-Date: Thu, 28 Nov 2019 13:15:39 +0000
-Subject: [Buildroot] [PATCH 1/1] package/libvorbis: add an upstream URL to
- Config.in
-Message-ID: <20191128131539.7276-1-mark@dibsco.co.uk>
+Date: Thu, 28 Nov 2019 14:14:05 +0000
+Subject: [Buildroot] [PATCH 1/1] package/linux-fusion: add an upstream URL
+ to Config.in
+Message-ID: <20191128141405.9010-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +15,18 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 ---
- package/libvorbis/Config.in | 2 ++
+ package/linux-fusion/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/libvorbis/Config.in b/package/libvorbis/Config.in
-index 3d5b5d6d61..1b7cd6c3b2 100644
---- a/package/libvorbis/Config.in
-+++ b/package/libvorbis/Config.in
-@@ -13,3 +13,5 @@ config BR2_PACKAGE_LIBVORBIS
- 	  representations such as MPEG-4 (AAC), and similar to, but
- 	  higher performance than MPEG-1/2 audio layer 3, MPEG-4 audio
- 	  (TwinVQ), WMA and PAC.
+diff --git a/package/linux-fusion/Config.in b/package/linux-fusion/Config.in
+index ed8bd6ad48..14b4f946af 100644
+--- a/package/linux-fusion/Config.in
++++ b/package/linux-fusion/Config.in
+@@ -8,3 +8,5 @@ config BR2_PACKAGE_LINUX_FUSION
+ 	help
+ 	  DirectFB Communication Layer allowing multiple DirectFB
+ 	  applications to run concurrently
 +
-+	  https://xiph.org/vorbis/
++	  https://github.com/deniskropp/linux-fusion
 -- 
 2.20.1
