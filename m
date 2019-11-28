@@ -1,23 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Nov 2019 19:07:36 +0000
-Subject: [Buildroot] [Bug 12286] Can't import gobject in python 3.8
-In-Reply-To: <bug-12286-163@https.bugs.busybox.net/>
-References: <bug-12286-163@https.bugs.busybox.net/>
-Message-ID: <bug-12286-163-jol9fBu8wQ@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Nov 2019 20:08:51 +0100
+Subject: [Buildroot] [PATCH 1/2] package/am33x-cm3: disable SSP
+In-Reply-To: <20191110210920.5625-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 10 Nov 2019 22:09:19 +0100")
+References: <20191110210920.5625-1-fontaine.fabrice@gmail.com>
+Message-ID: <875zj3hl8c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12286
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
---- Comment #3 from info at hifiberry.com ---
-As Python2 support ends in less than 2 months, just disabling it on Python3
-won't really help as there should be no new software anymore that still uses
-Python2.
-What's the state of the introspection code?
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/3a3a21f3c35ea025e9b93e09c2454aed0ad31034
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
