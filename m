@@ -1,50 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 14:11:32 +0100
-Subject: [Buildroot] [git commit] package/perl-gdtextutil: add license
-Message-ID: <20191129130413.B75888281C@busybox.osuosl.org>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Fri, 29 Nov 2019 14:51:15 +0100
+Subject: [Buildroot] [PATCH/next] package/alsa-utils: bump to version 1.2.1
+Message-ID: <1575035475-30413-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ec2bee2355a26bc862894e68020c2475daf040f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Dustismo.LICENSE contains the license for the Dustismo_Sans.ttf font
-file. The rest is licensed under the same terms as Perl as specified
-in README
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/perl-gdtextutil/perl-gdtextutil.hash | 3 ++-
- package/perl-gdtextutil/perl-gdtextutil.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/alsa-utils/alsa-utils.hash | 2 +-
+ package/alsa-utils/alsa-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-gdtextutil/perl-gdtextutil.hash b/package/perl-gdtextutil/perl-gdtextutil.hash
-index f0e947f63c..add0717f1d 100644
---- a/package/perl-gdtextutil/perl-gdtextutil.hash
-+++ b/package/perl-gdtextutil/perl-gdtextutil.hash
-@@ -2,5 +2,6 @@
- md5    941ad06eadc86b47f3a32da405665c41 GDTextUtil-0.86.tar.gz
- sha256 886ecbf85cfe94f4135ee5689c4847a9ae783ecb99e6759e12c734f2dd6116bc GDTextUtil-0.86.tar.gz
+diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
+index d354e3c..2c55ce6 100644
+--- a/package/alsa-utils/alsa-utils.hash
++++ b/package/alsa-utils/alsa-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 5ddf2cbddb4bd1a4a2a6492a09c25898b08c3ad64893c3655be14194cf0a213a  alsa-utils-1.1.9.tar.bz2
++sha256 0b110ba71ef41d3009db1bc4dcae0cf79efb99cb5426fa19d0312470560a2c0d  alsa-utils-1.2.1.tar.bz2
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index b5d0d75..47f07bf 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# computed by scancpan
-+# Hash for license files
- sha256 710484e3a1196664bbe8a5ad5d53c528e01226eb20e2885a4e1131eb6c6565cd Dustismo.LICENSE
-+sha256 93ca7dd7f372c79e8ec1f849f2a418a67d195e4027c1b3e3dd8444fb30f3e97c README
-diff --git a/package/perl-gdtextutil/perl-gdtextutil.mk b/package/perl-gdtextutil/perl-gdtextutil.mk
-index cd1617fbbd..f91d9e9eb3 100644
---- a/package/perl-gdtextutil/perl-gdtextutil.mk
-+++ b/package/perl-gdtextutil/perl-gdtextutil.mk
-@@ -7,7 +7,8 @@
- PERL_GDTEXTUTIL_VERSION = 0.86
- PERL_GDTEXTUTIL_SOURCE = GDTextUtil-$(PERL_GDTEXTUTIL_VERSION).tar.gz
- PERL_GDTEXTUTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MV/MVERB
--PERL_GDTEXTUTIL_LICENSE_FILES = Dustismo.LICENSE
-+PERL_GDTEXTUTIL_LICENSE = Artistic or GPL-1.0+ (perl module), GPL-2.0+ (font)
-+PERL_GDTEXTUTIL_LICENSE_FILES = Dustismo.LICENSE README
- PERL_GDTEXTUTIL_DISTNAME = GDTextUtil
- 
- $(eval $(perl-package))
+-ALSA_UTILS_VERSION = 1.1.9
++ALSA_UTILS_VERSION = 1.2.1
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
+ ALSA_UTILS_LICENSE = GPL-2.0
+-- 
+2.7.4
