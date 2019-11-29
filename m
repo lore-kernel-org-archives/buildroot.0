@@ -1,7 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Fri, 29 Nov 2019 13:29:07 -0800
-Subject: [Buildroot] [PATCH/next 1/4] package/python-gitdb2: new package
-Message-ID: <20191129212910.2537303-1-aduskett@gmail.com>
+Date: Fri, 29 Nov 2019 13:29:10 -0800
+Subject: [Buildroot] [PATCH/next 4/4] support/testing: add gitpython test
+In-Reply-To: <20191129212910.2537303-1-aduskett@gmail.com>
+References: <20191129212910.2537303-1-aduskett@gmail.com>
+Message-ID: <20191129212910.2537303-4-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,96 +12,53 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-GitDB allows you to access bare git repositories for reading and writing.
-It aims at allowing full access to loose objects as well as packs with
-performance and scalability in mind. It operates exclusively on streams,
-allowing to handle large objects with a small memory footprint.
+Add a simple test case that imports the module.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-gitdb2/Config.in          | 13 +++++++++++++
- package/python-gitdb2/python-gitdb2.hash |  5 +++++
- package/python-gitdb2/python-gitdb2.mk   | 14 ++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/python-gitdb2/Config.in
- create mode 100644 package/python-gitdb2/python-gitdb2.hash
- create mode 100644 package/python-gitdb2/python-gitdb2.mk
+ .gitlab-ci.yml                                        |  1 +
+ .../testing/tests/package/sample_python_gitpython.py  |  2 ++
+ .../testing/tests/package/test_python_gitpython.py    | 11 +++++++++++
+ 3 files changed, 14 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_gitpython.py
+ create mode 100644 support/testing/tests/package/test_python_gitpython.py
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 16e8510b0a..7397c80a83 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -61,6 +61,7 @@ F:	package/python-channels-redis/
- F:	package/python-daphne/
- F:	package/python-django-enumfields/
- F:	package/python-flask-sqlalchemy/
-+F:	package/python-gitdb2/
- F:	package/python-mutagen/
- F:	package/python-pip/
- F:	package/python-psycopg2/
-diff --git a/package/Config.in b/package/Config.in
-index 37861387e8..15abe0871c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -923,6 +923,7 @@ menu "External python modules"
- 	source "package/python-future/Config.in"
- 	source "package/python-futures/Config.in"
- 	source "package/python-gobject/Config.in"
-+	source "package/python-gitdb2/Config.in"
- 	source "package/python-gunicorn/Config.in"
- 	source "package/python-h2/Config.in"
- 	source "package/python-hiredis/Config.in"
-diff --git a/package/python-gitdb2/Config.in b/package/python-gitdb2/Config.in
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index af41a94427..3b57af0aba 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -450,6 +450,7 @@ tests.package.test_python_cryptography.TestPythonPy2Cryptography: { extends: .ru
+ tests.package.test_python_cryptography.TestPythonPy3Cryptography: { extends: .runtime_test }
+ tests.package.test_python_gitdb2.TestPythonPy2Gitdb2: { extends: .runtime_test }
+ tests.package.test_python_gitdb2.TestPythonPy3Gitdb2: { extends: .runtime_test }
++tests.package.test_python_gitpython.TestPythonPy3GitPython: { extends: .runtime_test }
+ tests.package.test_python_incremental.TestPythonPy2Incremental: { extends: .runtime_test }
+ tests.package.test_python_incremental.TestPythonPy3Incremental: { extends: .runtime_test }
+ tests.package.test_python_passlib.TestPythonPy2Passlib: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/sample_python_gitpython.py b/support/testing/tests/package/sample_python_gitpython.py
 new file mode 100644
-index 0000000000..a5962e7b77
+index 0000000000..3ffd6843f3
 --- /dev/null
-+++ b/package/python-gitdb2/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_GITDB2
-+	bool "python-gitdb2"
-+	select BR2_PACKAGE_PYTHON_SMMAP2 # runtime
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON  # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3  # runtime
-+	help
-+	  GitDB allows you to access bare git repositories for reading
-+	  and writing. It aims at allowing full access to loose objects
-+	  as well as packs with performance and scalability in mind. It
-+	  operates exclusively on streams, allowing to handle large
-+	  objects with a small memory footprint.
++++ b/support/testing/tests/package/sample_python_gitpython.py
+@@ -0,0 +1,2 @@
++from git import *
 +
-+	  https://github.com/gitpython-developers/gitdb
-diff --git a/package/python-gitdb2/python-gitdb2.hash b/package/python-gitdb2/python-gitdb2.hash
+diff --git a/support/testing/tests/package/test_python_gitpython.py b/support/testing/tests/package/test_python_gitpython.py
 new file mode 100644
-index 0000000000..e97d25cf4f
+index 0000000000..651453c577
 --- /dev/null
-+++ b/package/python-gitdb2/python-gitdb2.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/gitdb2/json
-+md5	1a7ea3362e405f8a5634f7ee53636094  gitdb2-2.0.6.tar.gz
-+sha256	1b6df1433567a51a4a9c1a5a0de977aa351a405cc56d7d35f3388bad1f630350  gitdb2-2.0.6.tar.gz
-+# Locally computed sha256 checksums
-+sha256	efd29f596a08e8857e68e7694a50bcda72839792da7c3f041bcbff5f18009239  LICENSE
-diff --git a/package/python-gitdb2/python-gitdb2.mk b/package/python-gitdb2/python-gitdb2.mk
-new file mode 100644
-index 0000000000..d5293a2bd1
---- /dev/null
-+++ b/package/python-gitdb2/python-gitdb2.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-gitdb2
-+#
-+################################################################################
++++ b/support/testing/tests/package/test_python_gitpython.py
+@@ -0,0 +1,11 @@
++from tests.package.test_python import TestPythonPackageBase
 +
-+PYTHON_GITDB2_VERSION = 2.0.6
-+PYTHON_GITDB2_SOURCE = gitdb2-$(PYTHON_GITDB2_VERSION).tar.gz
-+PYTHON_GITDB2_SITE = https://files.pythonhosted.org/packages/c5/62/ed7205331e8d7cc377e2512cb32f8f8f075c0defce767551d0a76e102ce2
-+PYTHON_GITDB2_SETUP_TYPE = setuptools
-+PYTHON_GITDB2_LICENSE = Sebastian Thiel and contributors
-+PYTHON_GITDB2_LICENSE_FILES = LICENSE
 +
-+$(eval $(python-package))
++class TestPythonPy3GitPython(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_GITPYTHON=y
++        """
++    sample_scripts = ["tests/package/sample_python_gitpython.py"]
 -- 
 2.23.0
