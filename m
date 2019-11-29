@@ -1,34 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Nov 2019 18:17:47 +0100
-Subject: [Buildroot] [git commit] package/gcnano-binaries: create directory
- before copying files
-Message-ID: <20191202083935.3F5B0817DF@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Nov 2019 15:42:22 +0100
+Subject: [Buildroot] [git commit] docs/manual: add details about top-level
+ parallel build support
+Message-ID: <20191202083936.540657FA98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5a6c8e6643f74e17e49a4254c18f8b41621c0e8
+commit: https://git.buildroot.net/buildroot/commit/?id=532574b259c242a6b90440a1c6c8d73043f781e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The directory $(1)/usr/include may not exist before copy files.
-
-Signed-off-by: Jens Kleintje <scooby22@web.de>
+[Peter: change version reference to Buildroot 2020.02]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcnano-binaries/gcnano-binaries.mk | 1 +
- 1 file changed, 1 insertion(+)
+ docs/manual/common-usage.txt        | 47 +++++++++++++++++++++++++++++++++++++
+ docs/manual/faq-troubleshooting.txt |  3 +++
+ docs/manual/quickstart.txt          |  8 +++----
+ 3 files changed, 54 insertions(+), 4 deletions(-)
 
-diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
-index 2913e664dc..b27571a08c 100644
---- a/package/gcnano-binaries/gcnano-binaries.mk
-+++ b/package/gcnano-binaries/gcnano-binaries.mk
-@@ -56,6 +56,7 @@ define GCNANO_BINARIES_INSTALL
- 			$(1)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so ; \
- 		cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).so* $(1)/usr/lib
- 	)
-+	mkdir -p $(1)/usr/include
- 	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/include/* $(1)/usr/include/
- 	$(foreach pkgconfig,$(GCNANO_BINARIES_PKG_CONFIGS), \
- 		$(INSTALL) -D -m 0644 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/pkgconfig/$(pkgconfig).pc \
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index a87980d4a2..3fe7f69721 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -347,6 +347,53 @@ Refer to the help text of this script for more details:
+ utils/size-stats-compare -h
+ ----------------
+ 
++[[top-level-parallel-build]]
++=== Top-level parallel build
++
++.Note
++This section deals with a very experimental feature, which is known to
++break even in some non-unusual situations. Use at your own risk.
++
++Buildroot has always been capable of using parallel build on a per
++package basis: each package is built by Buildroot using +make -jN+ (or
++the equivalent invocation for non-make-based build systems). The level
++of parallelism is by default number of CPUs + 1, but it can be
++adjusted using the +BR2_JLEVEL+ configuration option.
++
++Until 2020.02, Buildroot was however building packages in a serial
++fashion: each package was built one after the other, without
++parallelization of the build between packages. As of 2020.02,
++Buildroot has experimental support for *top-level parallel build*,
++which allows some signicant build time savings by building packages
++that have no dependency relationship in parallel. This feature is
++however marked as experimental and is known not to work in some cases.
++
++In order to use top-level parallel build, one must:
++
++. Enable the option +BR2_PER_PACKAGE_DIRECTORIES+ in the Buildroot
++configuration
++
++. Use +make -jN+ when starting the Buildroot build
++
++Internally, the +BR2_PER_PACKAGE_DIRECTORIES+ will enable a mechanism
++called *per-package directories*, which will have the following
++effects:
++
++* Instead of a global _target_ directory and a global _host_ directory
++  common to all packages, per-package _target_ and _host_ directories
++  will be used, in +$(O)/per-package/<pkg>/target/+ and
++  +$(O)/per-package/<pkg>/host/+ respectively. Those folders will be
++  populated from the corresponding folders of the package dependencies
++  at the beginning of +<pkg>+ build. The compiler and all other tools
++  will therefore only be able to see and access files installed by
++  dependencies explicitly listed by +<pkg>+.
++
++* At the end of the build, the global _target_ and _host_ directories
++  will be populated, located in +$(O)/target+ and +$(O)/host+
++  respectively. This means that during the build, those folders will
++  be empty and it's only at the very end of the build that they will
++  be populated.
++
+ include::eclipse-integration.txt[]
+ 
+ include::advanced.txt[]
+diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+index b144c9e7f0..5adf3fa6ce 100644
+--- a/docs/manual/faq-troubleshooting.txt
++++ b/docs/manual/faq-troubleshooting.txt
+@@ -239,3 +239,6 @@ help reduce the build time:
+ 
+  * Buy new hardware. SSDs and lots of RAM are key to speeding up the
+    builds.
++
++ * Experiment with top-level parallel build, see
++   xref:top-level-parallel-build[].
+diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
+index 74158ae249..77b73ef116 100644
+--- a/docs/manual/quickstart.txt
++++ b/docs/manual/quickstart.txt
+@@ -60,10 +60,10 @@ To start the build process, simply run:
+  $ make
+ --------------------
+ 
+-You *should never* use +make -jN+ with Buildroot: top-level parallel
+-make is currently not supported. Instead, use the +BR2_JLEVEL+ option
+-to tell Buildroot to run the compilation of each individual package
+-with +make -jN+.
++By default, Buildroot does not support top-level parallel build, so
++running +make -jN+ is not necessary. There is however experimental
++support for top-level parallel build, see
++xref:top-level-parallel-build[].
+ 
+ The `make` command will generally perform the following steps:
+ 
