@@ -1,43 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 10:13:52 +0100
-Subject: [Buildroot] [PATCH 1/2] package/{python,
- python3}: add mechanism to exclude .py files from removal
-In-Reply-To: <20191129085623.67aee606@windsurf> (Thomas Petazzoni's message of
- "Fri, 29 Nov 2019 08:56:23 +0100")
-References: <20191127203404.291090-1-thomas.petazzoni@bootlin.com>
- <20191127203404.291090-2-thomas.petazzoni@bootlin.com>
- <87blsvf7bx.fsf@dell.be.48ers.dk> <20191129085623.67aee606@windsurf>
-Message-ID: <87eexrcaen.fsf@dell.be.48ers.dk>
+Date: Fri, 29 Nov 2019 10:32:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-multidict: bump to
+ version 4.6.1
+In-Reply-To: <20191128221409.19740-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Thu, 28 Nov 2019 15:14:09 -0700")
+References: <20191128221409.19740-1-james.hilliard1@gmail.com>
+Message-ID: <87a78fc9jz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
- > On Fri, 29 Nov 2019 08:52:02 +0100
- > Peter Korsgaard <peter@korsgaard.com> wrote:
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
- >> > Due to this only being needed by OpenCV for now, I didn't think it was
- >> > really needed to have a per-package variable, which then gets
- >> > collected by the generic-package infrastructure into a global
- >> > variable. We can always revisit if this gets more widely.  
- >> 
- >> I agree, but this does cause a check-package warning from opencv3.mk:
- >> 
- >> package/opencv3/opencv3.mk:331: possible typo: PYTHON_KEEP_PY_FILES -> *OPENCV3*
- >> package/opencv3/opencv3.mk:343: possible typo: PYTHON3_KEEP_PY_FILES -> *OPENCV3*
-
- > Gaah, check-package doesn't allow us from doing these nice hacks. We
- > could exclude this variable from the check-package check, but that's
- > really getting into doing a hack within the hack.
-
- > So I guess this really means we have to go with a per-package variable,
- > and a bit of logic in pkg-generic to collect these per-package
- > variables into a global one. Agreed?
-
-I am afraid so. Will you take care of it?
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
