@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 16:04:20 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/rpcbind: add
+Date: Fri, 29 Nov 2019 16:04:12 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/rpcbind: add
  systemd as a build-time dependency
-Message-ID: <20191129152940.07B218295C@busybox.osuosl.org>
+Message-ID: <20191129153902.8DA1582A1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51eade9d3c8d0dd9ccd081e9e8baecaa109e160b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=28638c222378f539ae58f6ebd2b83b62a9a3caa2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 When systemd support is enabled, systemd should be built before,
 otherwise the build fails with:
