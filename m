@@ -1,34 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 10:13:05 +0100
-Subject: [Buildroot] 
- =?utf-8?q?=5BPATCH=5D_package/wolfssl=3A_add_upstrea?=
- =?utf-8?q?m_security_fix_for_CVE-2019=E2=80=9318840?=
-In-Reply-To: <20191128153718.30599-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 28 Nov 2019 16:37:18 +0100")
-References: <20191128153718.30599-1-peter@korsgaard.com>
-Message-ID: <87imn3cafy.fsf@dell.be.48ers.dk>
+Date: Fri, 29 Nov 2019 09:47:29 +0100
+Subject: [Buildroot] [git commit] package/metacity: add an upstream URL to
+ Config.in
+Message-ID: <20191129090525.62D658219D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d6026cb1013347d1bf68245f9f9387fb2faec91e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following security vulnerability:
- > - CVE-2019-18840: In wolfSSL 4.1.0 through 4.2.0c, there are missing sanity
- >   checks of memory accesses in parsing ASN.1 certificate data while
- >   handshaking.  Specifically, there is a one-byte heap-based buffer overflow
- >   inside the DecodedCert structure in GetName in wolfcrypt/src/asn.c because
- >   the domain name location index is mishandled.  Because a pointer is
- >   overwritten, there is an invalid free.
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
- > For details, see the writeup:
- > https://medium.com/@social_62682/heap-overflow-in-wolfssl-cve-2019-18840-185d233c27de
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/metacity/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/metacity/Config.in b/package/metacity/Config.in
+index 833a091e7f..fc106a26b9 100644
+--- a/package/metacity/Config.in
++++ b/package/metacity/Config.in
+@@ -14,3 +14,5 @@ config BR2_PACKAGE_METACITY
+ 	select BR2_PACKAGE_XLIB_LIBXFT
+ 	help
+ 	  Metacity is a window manager for the X Window System.
++
++	  https://wiki.gnome.org/Projects/Metacity
