@@ -1,22 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 16:06:30 +0100
-Subject: [Buildroot] [next] package/rpcbind: add systemd dependency when
- cfg for systemd
-In-Reply-To: <20191120150015.54771-1-matthew.weber@rockwellcollins.com> (Matt
- Weber's message of "Wed, 20 Nov 2019 09:00:15 -0600")
-References: <20191120150015.54771-1-matthew.weber@rockwellcollins.com>
-Message-ID: <87wobi90y1.fsf@dell.be.48ers.dk>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Fri, 29 Nov 2019 15:20:25 +0000
+Subject: [Buildroot] [PATCH 1/1] package/mxsldr: update the upstream URL in
+ Config.in
+Message-ID: <20191129152025.9068-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+---
+ package/mxsldr/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2019.02.x and 2019.08.x, thanks.
-
+diff --git a/package/mxsldr/Config.in.host b/package/mxsldr/Config.in.host
+index a427e71cf7..0a02877c8b 100644
+--- a/package/mxsldr/Config.in.host
++++ b/package/mxsldr/Config.in.host
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_HOST_MXSLDR
+ 	  Freescale i.MX23 and i.MX28 SoC's through the Serial
+ 	  Download Protocol.
+ 
+-	  git://git.denx.de/mxsldr.git
++	  https://gitlab.denx.de/denx/mxsldr
 -- 
-Bye, Peter Korsgaard
+2.20.1
