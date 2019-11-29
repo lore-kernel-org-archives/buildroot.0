@@ -1,31 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Nov 2019 23:35:29 +0000
-Subject: [Buildroot] [Bug 12366] Gstreamer1 gst1-plugins-bad do not compile
- with RPI-Userland
-In-Reply-To: <bug-12366-163@https.bugs.busybox.net/>
-References: <bug-12366-163@https.bugs.busybox.net/>
-Message-ID: <bug-12366-163-1r5WzkCyvi@https.bugs.busybox.net/>
+From: a <anushka.parashar@tesco.com>
+Date: Thu, 28 Nov 2019 23:01:19 -0600 (CST)
+Subject: [Buildroot] Logs on console
+In-Reply-To: <20191128225535.42941a34@gmx.net>
+References: <1574658915896-0.post@n4.nabble.com>
+ <20191128225535.42941a34@gmx.net>
+Message-ID: <1575003679918-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12366
+Hi Peter,
 
-Peter Seiderer <ps.report@gmx.net> changed:
+I want everything to go in a file, I have an executable which runs my
+application, I just want that to get printed when the system starts. I have
+added it to inittab file already to run on startup.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |ps.report at gmx.net
-                   |.org                        |
-             Status|NEW                         |ASSIGNED
+<http://buildroot-busybox.2317881.n4.nabble.com/file/t2815/Screenshot_2019-11-29_at_10.png> 
+Screenshot_2019-11-29_at_10.png
+<http://buildroot-busybox.2317881.n4.nabble.com/file/t2815/Screenshot_2019-11-29_at_10.png>  
 
---- Comment #2 from Peter Seiderer <ps.report@gmx.net> ---
-Can confirm the failure, patch suggested:
+Every time when I run some commands on console messages like - random:fast
+init done, random: crng init done and some updates from network interfaces
+also appear telling which link went up or down.These updates are the most
+annoying ones, they definitely don't look good along with the output of my
+execitable.
 
-https://patchwork.ozlabs.org/patch/1202305/
+Please tell me how to suppress those and where in buildroot directory do we
+add those commands(to suppress them or to add them to any other file) so
+that they don't appear on the console.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
