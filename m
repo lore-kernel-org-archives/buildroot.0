@@ -1,153 +1,102 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Fri, 29 Nov 2019 21:37:46 +0100
-Subject: [Buildroot] [PATCH v4 3/6] package/polkit: add systemd service
- file.
-In-Reply-To: <CAFSsvmo+6As3imKtg3+HjSexNsW98TECvi2HYtUiRo7e8-JHqw@mail.gmail.com>
-References: <20191128012609.3632661-1-aduskett@gmail.com>
- <20191128012609.3632661-4-aduskett@gmail.com>
- <CAFvCimV2Ap2tQwredYZQ-Za7vhRzbKL-qT49hEo8_Z8+5wrG=A@mail.gmail.com>
- <CAFSsvmo+6As3imKtg3+HjSexNsW98TECvi2HYtUiRo7e8-JHqw@mail.gmail.com>
-Message-ID: <CAFvCimWajwrR2JZGsdP-NG58LsSp2LBFq-KaUU7ZyvC=o+N2KA@mail.gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Fri, 29 Nov 2019 12:38:40 -0800
+Subject: [Buildroot] [PATCH 1/2] package/python-smmap2: new package
+Message-ID: <20191129203841.2197088-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-at the bottom of the .service file, please add
+From: Adam Duskett <Aduskett@gmail.com>
 
-[Install}
-WantedBy=multi-user.target
+Smmap wraps an interface around mmap and tracks the mapped files as well as the
+amount of clients who use it. If the system runs out of resources, or if a
+memory limit is reached, it will automatically unload unused maps to allow
+continued operation.
 
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-smmap2/Config.in          | 10 ++++++++++
+ package/python-smmap2/python-smmap2.hash |  5 +++++
+ package/python-smmap2/python-smmap2.mk   | 14 ++++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/python-smmap2/Config.in
+ create mode 100644 package/python-smmap2/python-smmap2.hash
+ create mode 100644 package/python-smmap2/python-smmap2.mk
 
-
-Le ven. 29 nov. 2019 ? 21:34, Adam Duskett <aduskett@gmail.com> a ?crit :
-
-> I'm not sure what you mean by this, could you explain?
->
-> Thanks!
->
-> Adam
->
-> On Fri, Nov 29, 2019 at 1:11 AM J?r?my ROSEN <jeremy.rosen@smile.fr>
-> wrote:
->
->> Please add an [Install] section matching your initialisation routine...
->> This will simplify our migration to host-systemd
->> and is also more correct.
->>
->> Thx
->>
->> Le jeu. 28 nov. 2019 ? 02:26, <aduskett@gmail.com> a ?crit :
->>
->>> From: Adam Duskett <Aduskett@gmail.com>
->>>
->>> - Add polkit.service for systemd based systems.
->>> - Add a polkitd user upon which /usr/lib/polkit-1/polkitd relies.
->>> - Set appropriate directory permissions to allow the polkitd user to
->>>   access rules and actions.
->>> - Set appropriate default attributes for the pkexec binary.
->>>
->>> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->>> ---
->>>  package/polkit/polkit.mk      | 17 +++++++++++++++++
->>>  package/polkit/polkit.service |  7 +++++++
->>>  2 files changed, 24 insertions(+)
->>>  create mode 100644 package/polkit/polkit.service
->>>
->>> diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
->>> index 0c17e9bc27..b440cd2f1c 100644
->>> --- a/package/polkit/polkit.mk
->>> +++ b/package/polkit/polkit.mk
->>> @@ -26,5 +26,22 @@ else
->>>  POLKIT_CONF_OPTS += --with-authfw=shadow
->>>  endif
->>>
->>> +define POLKIT_USERS
->>> +       polkitd -1 polkitd -1 * - - - Polkit Daemon
->>> +endef
->>> +
->>> +define POLKIT_PERMISSIONS
->>> +       /etc/polkit-1 r 750 root polkitd - - - - -
->>> +       /usr/share/polkit-1 r 750 root polkitd - - - - -
->>> +       /usr/bin/pkexec f 4755 root root - - - - -
->>> +endef
->>> +
->>> +define POLKIT_INSTALL_INIT_SYSTEMD
->>> +       $(INSTALL) -D -m 644 package/polkit/polkit.service \
->>> +               $(TARGET_DIR)/usr/lib/systemd/system/polkit.service
->>> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->>> +       ln -sf ../../../../usr/lib/systemd/system/polkit.service \
->>> +
->>>  $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/polkit.service
->>> +endef
->>>
->>>  $(eval $(autotools-package))
->>> diff --git a/package/polkit/polkit.service
->>> b/package/polkit/polkit.service
->>> new file mode 100644
->>> index 0000000000..013e3684c5
->>> --- /dev/null
->>> +++ b/package/polkit/polkit.service
->>> @@ -0,0 +1,7 @@
->>> +[Unit]
->>> +Description=Authorization Manager
->>> +
->>> +[Service]
->>> +Type=dbus
->>> +BusName=org.freedesktop.PolicyKit1
->>> +ExecStart=/usr/lib/polkit-1/polkitd --no-debug
->>> --
->>> 2.23.0
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>
->>
->> --
->> [image: SMILE]  <http://www.smile.eu/>
->>
->> 20 rue des Jardins
->> 92600 Asni?res-sur-Seine
->> *J?r?my ROSEN*
->> Architecte technique
->>
->> [image: email] jeremy.rosen at smile.fr
->> [image: phone]  +33 6 88 25 87 42
->> [image: url] http://www.smile.eu
->>
->> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
->> <https://www.facebook.com/smileopensource> [image: LinkedIn]
->> <https://www.linkedin.com/company/smile> [image: Github]
->> <https://github.com/Smile-SA>
->>
->> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
->> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
->>
->
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 16e8510b0a..e422aa2651 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -64,6 +64,7 @@ F:	package/python-flask-sqlalchemy/
+ F:	package/python-mutagen/
+ F:	package/python-pip/
+ F:	package/python-psycopg2/
++F:	package/python-smmap2/
+ F:	package/python-sqlalchemy/
+ F:	package/python-sqlparse/
+ F:	package/python-visitor/
+diff --git a/package/Config.in b/package/Config.in
+index 37861387e8..a5b28de101 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1102,6 +1102,7 @@ menu "External python modules"
+ 	source "package/python-six/Config.in"
+ 	source "package/python-slob/Config.in"
+ 	source "package/python-smbus-cffi/Config.in"
++	source "package/python-smmap2/Config.in"
+ 	source "package/python-socketio/Config.in"
+ 	source "package/python-sortedcontainers/Config.in"
+ 	source "package/python-soupsieve/Config.in"
+diff --git a/package/python-smmap2/Config.in b/package/python-smmap2/Config.in
+new file mode 100644
+index 0000000000..21a3bdb613
+--- /dev/null
++++ b/package/python-smmap2/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_SMMAP2
++	bool "python-smmap2"
++	help
++	  Smmap wraps an interface around mmap and tracks the mapped
++	  files as well as the amount of clients who use it. If the
++	  system runs out of resources, or if a memory limit is reached,
++	  it will automatically unload unused maps to allow continued
++	  operation.
++
++	  https://github.com/gitpython-developers/smmap
+diff --git a/package/python-smmap2/python-smmap2.hash b/package/python-smmap2/python-smmap2.hash
+new file mode 100644
+index 0000000000..8a7ea42a5d
+--- /dev/null
++++ b/package/python-smmap2/python-smmap2.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/smmap2/json
++md5	1c59a985be5aa645c4c5a4e063a40dd5  smmap2-2.0.5.tar.gz
++sha256	29a9ffa0497e7f2be94ca0ed1ca1aa3cd4cf25a1f6b4f5f87f74b46ed91d609a  smmap2-2.0.5.tar.gz
++# Locally computed sha256 checksums
++sha256	88e9d93f708d110b328a834302dd1d5c6afbda530e7721d15d80b3511d86f235  LICENSE
+diff --git a/package/python-smmap2/python-smmap2.mk b/package/python-smmap2/python-smmap2.mk
+new file mode 100644
+index 0000000000..daf379fe1a
+--- /dev/null
++++ b/package/python-smmap2/python-smmap2.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-smmap2
++#
++################################################################################
++
++PYTHON_SMMAP2_VERSION = 2.0.5
++PYTHON_SMMAP2_SOURCE = smmap2-$(PYTHON_SMMAP2_VERSION).tar.gz
++PYTHON_SMMAP2_SITE = https://files.pythonhosted.org/packages/3b/ba/e49102b3e8ffff644edded25394b2d22ebe3e645f3f6a8139129c4842ffe
++PYTHON_SMMAP2_SETUP_TYPE = setuptools
++PYTHON_SMMAP2_LICENSE = BSD-3-Clause
++PYTHON_SMMAP2_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191129/b1e8ee61/attachment.html>
+2.23.0
