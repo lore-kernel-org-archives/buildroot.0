@@ -1,49 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Nov 2019 12:51:59 +0100
-Subject: [Buildroot] [git commit] package/glibc: install locale utility when
- NLS is enabled
-Message-ID: <20191202083935.8AA0E7FCED@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Nov 2019 15:13:45 +0100
+Subject: [Buildroot] [git commit] Makefile: allow top-level parallel build
+ with BR2_PER_PACKAGE_DIRECTORIES=y
+Message-ID: <20191202083936.39326811B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb1ee93ca4378456774e1ae24fcf370417733a38
+commit: https://git.buildroot.net/buildroot/commit/?id=d9a4c0c7ea0465034157a0e0660d9223095ca922
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/glibc/Config.in | 2 +-
- package/glibc/glibc.mk  | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+With per-package folder support, top-level parallel build becomes
+safe, so we can enclose the .NOTPARALLEL statement in a
+!BR2_PER_PACKAGE_DIRECTORIES condition.
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index 323767fc8a..b8c2573d96 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_GLIBC_UTILS
- 	depends on BR2_PACKAGE_BASH
- 	help
- 	  Enabling this option will compile and install the getconf,
--	  ldconfig and ldd glibc utilities for the target.
-+	  ldconfig, ldd and locale glibc utilities for the target.
- 
- comment "glibc utilities need bash"
- 	depends on !BR2_PACKAGE_BASH
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 5da0b064a2..e366134026 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -146,7 +146,10 @@ endif
- ifeq ($(BR2_PACKAGE_GLIBC_UTILS),y)
- GLIBC_TARGET_UTILS_USR_BIN = posix/getconf elf/ldd
- GLIBC_TARGET_UTILS_SBIN = elf/ldconfig
-+endif
- 
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-+GLIBC_TARGET_UTILS_USR_BIN += locale/locale
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 3b583abb83..93b981f8b3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -227,21 +227,12 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ -include $(BR2_CONFIG)
  endif
  
- define GLIBC_INSTALL_TARGET_CMDS
+-# Parallel execution of this Makefile is disabled because it changes
+-# the packages building order, that can be a problem for two reasons:
+-# - If a package has an unspecified optional dependency and that
+-#   dependency is present when the package is built, it is used,
+-#   otherwise it isn't (but compilation happily proceeds) so the end
+-#   result will differ if the order is swapped due to parallel
+-#   building.
+-# - Also changing the building order can be a problem if two packages
+-#   manipulate the same file in the target directory.
+-#
+-# Taking into account the above considerations, if you still want to execute
+-# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
+-# use the -j<jobs> option when building, e.g:
+-#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),)
++# Disable top-level parallel build if per-package directories is not
++# used. Indeed, per-package directories is necessary to guarantee
++# determinism and reproducibility with top-level parallel build.
+ .NOTPARALLEL:
++endif
+ 
+ # timezone and locale may affect build output
+ ifeq ($(BR2_REPRODUCIBLE),y)
