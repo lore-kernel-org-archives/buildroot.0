@@ -1,27 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 29 Nov 2019 13:08:22 +0000
-Subject: [Buildroot] [Bug 11416] check-uniq-files staging issue
-In-Reply-To: <bug-11416-163@https.bugs.busybox.net/>
-References: <bug-11416-163@https.bugs.busybox.net/>
-Message-ID: <bug-11416-163-2nd19xkZgq@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Nov 2019 14:11:17 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/lzma: add license
+In-Reply-To: <20191128201726.20439-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 28 Nov 2019 21:17:26 +0100")
+References: <20191128201726.20439-1-fontaine.fabrice@gmail.com>
+Message-ID: <87v9r2akui.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11416
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+ > - lzma program is licensed under GPL-2.0+
+ > - lzmadec program has not license information in source file
+ > - lzmainfo program is licensed under LGPL-2.1+
+ > - LzmaDecode.h is licensed under LGPL-2.1+ (or CPL) as stated in
+ >   src/sdk/7zip/Compress/LZMA_C/LzmaDecode.{c,h}, other sdk files have no
+ >   license information
+ > - lzmore and lzgrep scripts are licensed under GPL-2.0+
+ > - lzdiff script has no license information
+ > - basic and perms tests are licensed under GPL-3.0+
+ > - mkdtemp and test-lib.sh tests have no license information
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+What a mess :/
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-We removed check-uniq-files in commit 2496189a4207173e4cd5bbab90256f911175ee57
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Thomas Petazzoni):
+ >  - Add details in LZMA_LICENSE
+
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
