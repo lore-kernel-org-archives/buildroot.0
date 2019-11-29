@@ -1,41 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 Nov 2019 08:56:23 +0100
-Subject: [Buildroot] [PATCH 1/2] package/{python,
- python3}: add mechanism to exclude .py files from removal
-In-Reply-To: <87blsvf7bx.fsf@dell.be.48ers.dk>
-References: <20191127203404.291090-1-thomas.petazzoni@bootlin.com>
- <20191127203404.291090-2-thomas.petazzoni@bootlin.com>
- <87blsvf7bx.fsf@dell.be.48ers.dk>
-Message-ID: <20191129085623.67aee606@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Nov 2019 09:03:31 +0100
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{4,
+ 9}.x series
+In-Reply-To: <20191128185056.9280-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 28 Nov 2019 19:50:56 +0100")
+References: <20191128185056.9280-1-bernd.kuhls@t-online.de>
+Message-ID: <877e3jf6ss.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 29 Nov 2019 08:52:02 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
->  > Due to this only being needed by OpenCV for now, I didn't think it was
->  > really needed to have a per-package variable, which then gets
->  > collected by the generic-package infrastructure into a global
->  > variable. We can always revisit if this gets more widely.  
-> 
-> I agree, but this does cause a check-package warning from opencv3.mk:
-> 
-> package/opencv3/opencv3.mk:331: possible typo: PYTHON_KEEP_PY_FILES -> *OPENCV3*
-> package/opencv3/opencv3.mk:343: possible typo: PYTHON3_KEEP_PY_FILES -> *OPENCV3*
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Gaah, check-package doesn't allow us from doing these nice hacks. We
-could exclude this variable from the check-package check, but that's
-really getting into doing a hack within the hack.
+Committed, thanks.
 
-So I guess this really means we have to go with a per-package variable,
-and a bit of logic in pkg-generic to collect these per-package
-variables into a global one. Agreed?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
