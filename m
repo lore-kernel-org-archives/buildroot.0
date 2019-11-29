@@ -1,34 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 10:12:25 +0100
-Subject: [Buildroot] [git commit] package/libsexy: update the upstream URL
- in Config.in
-Message-ID: <20191129090526.5A17281350@busybox.osuosl.org>
+Date: Fri, 29 Nov 2019 10:13:52 +0100
+Subject: [Buildroot] [PATCH 1/2] package/{python,
+ python3}: add mechanism to exclude .py files from removal
+In-Reply-To: <20191129085623.67aee606@windsurf> (Thomas Petazzoni's message of
+ "Fri, 29 Nov 2019 08:56:23 +0100")
+References: <20191127203404.291090-1-thomas.petazzoni@bootlin.com>
+ <20191127203404.291090-2-thomas.petazzoni@bootlin.com>
+ <87blsvf7bx.fsf@dell.be.48ers.dk> <20191129085623.67aee606@windsurf>
+Message-ID: <87eexrcaen.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a79aa2392cf5bb97f0a3808e232ddd7a5a54bdc0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(500)' URL status in the package stats
-web page output.
+ > On Fri, 29 Nov 2019 08:52:02 +0100
+ > Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsexy/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> > Due to this only being needed by OpenCV for now, I didn't think it was
+ >> > really needed to have a per-package variable, which then gets
+ >> > collected by the generic-package infrastructure into a global
+ >> > variable. We can always revisit if this gets more widely.  
+ >> 
+ >> I agree, but this does cause a check-package warning from opencv3.mk:
+ >> 
+ >> package/opencv3/opencv3.mk:331: possible typo: PYTHON_KEEP_PY_FILES -> *OPENCV3*
+ >> package/opencv3/opencv3.mk:343: possible typo: PYTHON3_KEEP_PY_FILES -> *OPENCV3*
 
-diff --git a/package/libsexy/Config.in b/package/libsexy/Config.in
-index 5d1e710c44..a2a2cc820c 100644
---- a/package/libsexy/Config.in
-+++ b/package/libsexy/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBSEXY
- 	  GtkLabel by subclassing them and working around the
- 	  limitations of the widgets.
- 
--	  http://www.chipx86.com/wiki/Libsexy
-+	  https://blog.chipx86.com/tag/libsexy/
+ > Gaah, check-package doesn't allow us from doing these nice hacks. We
+ > could exclude this variable from the check-package check, but that's
+ > really getting into doing a hack within the hack.
+
+ > So I guess this really means we have to go with a per-package variable,
+ > and a bit of logic in pkg-generic to collect these per-package
+ > variables into a global one. Agreed?
+
+I am afraid so. Will you take care of it?
+
+-- 
+Bye, Peter Korsgaard
