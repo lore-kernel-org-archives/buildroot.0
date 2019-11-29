@@ -1,35 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 15:24:13 +0100
-Subject: [Buildroot] [PATCH next v8 3/6] package/pkg-generic: make
- libtool .la files compatible with per-package directories
-In-Reply-To: <20191105164646.23820-4-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Tue, 5 Nov 2019 17:46:42 +0100")
-References: <20191105164646.23820-1-thomas.petazzoni@bootlin.com>
- <20191105164646.23820-4-thomas.petazzoni@bootlin.com>
-Message-ID: <87eexqahgy.fsf@dell.be.48ers.dk>
+Date: Fri, 29 Nov 2019 15:13:45 +0100
+Subject: [Buildroot] [git commit branch/next] Makefile: allow top-level
+ parallel build with BR2_PER_PACKAGE_DIRECTORIES=y
+Message-ID: <20191129141626.797277FDB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d9a4c0c7ea0465034157a0e0660d9223095ca922
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Libtool .la files unfortunately contain a number of absolute paths,
- > which now refer to per-package directories. Due to this, when building
- > package A, .la files may contain absolute paths referring to
- > directories in package B per-package sysroot. This causes some -L
- > flags referring to other sysroot from being added, which doesn't work
- > as the linker no longer realizes that such paths are within its
- > sysroot.
+With per-package folder support, top-level parallel build becomes
+safe, so we can enclose the .NOTPARALLEL statement in a
+!BR2_PER_PACKAGE_DIRECTORIES condition.
 
- > To fix this, we introduce a replacement step of .la files in the
- > configure step, to make sure all paths refer to this package
- > per-package directory.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index 3b583abb83..93b981f8b3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -227,21 +227,12 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ -include $(BR2_CONFIG)
+ endif
+ 
+-# Parallel execution of this Makefile is disabled because it changes
+-# the packages building order, that can be a problem for two reasons:
+-# - If a package has an unspecified optional dependency and that
+-#   dependency is present when the package is built, it is used,
+-#   otherwise it isn't (but compilation happily proceeds) so the end
+-#   result will differ if the order is swapped due to parallel
+-#   building.
+-# - Also changing the building order can be a problem if two packages
+-#   manipulate the same file in the target directory.
+-#
+-# Taking into account the above considerations, if you still want to execute
+-# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
+-# use the -j<jobs> option when building, e.g:
+-#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),)
++# Disable top-level parallel build if per-package directories is not
++# used. Indeed, per-package directories is necessary to guarantee
++# determinism and reproducibility with top-level parallel build.
+ .NOTPARALLEL:
++endif
+ 
+ # timezone and locale may affect build output
+ ifeq ($(BR2_REPRODUCIBLE),y)
