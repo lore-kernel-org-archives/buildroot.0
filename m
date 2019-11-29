@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 16:57:59 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/kvm-unit-tests:
+Date: Fri, 29 Nov 2019 16:57:49 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/kvm-unit-tests:
  really fix build on Arch Linux x86_64
-Message-ID: <20191129155039.A81DE82A2A@busybox.osuosl.org>
+Message-ID: <20191129155044.E08A282A39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=865aa0dcbdb57e332c9b6aa77d2049e618388067
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=16b368d80e31b2eb7e3fc70d90eb9c04e3af7906
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 On x86_64, we use the host compiler instead of the target compiler to
 build kvm-unit-tests, because it is built with -m32 and our target
