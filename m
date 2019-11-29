@@ -1,69 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 10:50:40 +0100
-Subject: [Buildroot] [git commit] package/gst1-plugins-bad: remove
- rpi-userland extra include paths
-Message-ID: <20191129094353.D860F80F9B@busybox.osuosl.org>
+Date: Fri, 29 Nov 2019 10:53:58 +0100
+Subject: [Buildroot] [PATCH] package/pkg-generic.mk: make
+ HOST_<pkg>_DL_OPTS inherit from <pkg>_DL_OPTS
+In-Reply-To: <20191128185552.236602-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 28 Nov 2019 19:55:52 +0100")
+References: <20191128185552.236602-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87blsvatzd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73691c51f68a69b10c77bf50f688e58f89b5b196
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Fixes #12366 [1]
+ > Just like _SITE, _SOURCE, _SITE_METHOD, it is very likely that if
+ > <pkg>_DL_OPTS is defined, the same value should be used for
+ > HOST_<pkg>_DL_OPTS, so let's have the same inheritance logic than the
+ > one we have for other variables.
 
-The rpi-userland extra include paths where added with [2] including
-a rpi-userland dependency for the dispmanx option.
+ > Fixes:
 
-The dispmanx option was moved to gst1-plugins-base with commit [3],
-including the rpi-userland dependency, excluding the extra include
-paths.
+ >   https://bugs.busybox.net/show_bug.cgi?id=12321
 
-Tested gst1-plugins-base with dispmanx enabled compiles without
-failures. It seems to be safe to remove the extra includes from
-gst1-plugins-bad.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Fixes (from meson-log.txt):
+Given that this is only used by amd-catalyst in tree, I have applied it
+to master even though we are this close to release - Thanks.
 
-  Sanity check compile stderr:
-  arm-buildroot-linux-uclibcgnueabihf-gcc.br_real: error:
-  /.../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/IL:
-  No such file or directory
-  arm-buildroot-linux-uclibcgnueabihf-gcc.br_real: error:
-  /.../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/interface/vcos/pthreads:
-  No such file
-  arm-buildroot-linux-uclibcgnueabihf-gcc.br_real: error:
-  /.../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/interface/vmcs_host/linux:
-  No such file
-
-[1] https://bugs.busybox.net/show_bug.cgi?id=12366
-[2] https://git.buildroot.net/buildroot/commit/?id=962ffda68cd9b0c4ab6055c97c14e762a5439571
-[3] https://git.buildroot.net/buildroot/commit/?id=3f2aef56127fbe71378e6a2d55192a0835d962ab
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 856db88e49..b611b33eb3 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -64,14 +64,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 
- GST1_PLUGINS_BAD_DEPENDENCIES = gst1-plugins-base gstreamer1
- 
--ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
--# RPI has odd locations for several required headers.
--GST1_PLUGINS_BAD_CFLAGS=$(TARGET_CPPFLAGS) \
--	$(STAGING_DIR)/usr/include/IL \
--	$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
--	$(STAGING_DIR)/usr/include/interface/vmcs_host/linux
--endif
--
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),y)
- GST1_PLUGINS_BAD_CONF_OPTS += -Dwayland=enabled
- GST1_PLUGINS_BAD_DEPENDENCIES += wayland wayland-protocols
+-- 
+Bye, Peter Korsgaard
