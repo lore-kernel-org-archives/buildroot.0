@@ -1,112 +1,64 @@
 From: Michael Vetter <jubalh@iodoru.org>
-Date: Fri, 29 Nov 2019 11:12:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tiff: security bump to 4.1.0
-Message-ID: <20191129101238.9492-1-jubalh@iodoru.org>
+Date: Fri, 29 Nov 2019 11:28:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/prosody: bump to bugfix version
+ 0.11.3
+Message-ID: <20191129102805.17515-1-jubalh@iodoru.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerabilities:
-  * CVE-2018-12900
-  * CVE-2018-17000
-  * CVE-2019-6128
-  * CVE-2019-7663
-  * CVE-2019-14973
-  * CVE-2018-19210
+This is a bugfix release for the stable 0.11 branch. It is recommended
+for all users of 0.11.x to upgrade.
 
-Remove because contained upstream:
-0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch
+Important note for those upgrading: Previous releases did not
+automatically expire messages from group chat (MUC) archives, so if
+mod_muc_mam was loaded and enabled for a MUC, archives would grow
+indefinitely. This is not what most deployments want, therefore
+automatic expiry is now implemented and enabled with a default 7 day
+retention. You can configure this with the muc_log_expires_after
+configuration option, which can be set to "never" to restore the old
+behaviour and preserve any existing logs older than 7 days.
+
+For details see:
+https://prosody.im/doc/release/0.11.3
 
 Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 ---
- ...mory-leak-that-was-assigned-CVE-2019-6128.patch | 53 ----------------------
- package/tiff/tiff.hash                             |  2 +-
- package/tiff/tiff.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 55 deletions(-)
- delete mode 100644 package/tiff/0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch
+ package/prosody/prosody.hash | 8 ++++----
+ package/prosody/prosody.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/tiff/0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch b/package/tiff/0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch
-deleted file mode 100644
-index 638760b71e..0000000000
---- a/package/tiff/0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 0c74a9f49b8d7a36b17b54a7428b3526d20f88a8 Mon Sep 17 00:00:00 2001
--From: Scott Gayou <github.scott@gmail.com>
--Date: Wed, 23 Jan 2019 15:03:53 -0500
--Subject: [PATCH] Fix for simple memory leak that was assigned CVE-2019-6128.
--
--pal2rgb failed to free memory on a few errors. This was reported
--here: http://bugzilla.maptools.org/show_bug.cgi?id=2836.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://gitlab.com/libtiff/libtiff/commit/ae0bed1fe530a82faf2e9ea1775109dbf301a971]
-----
-- tools/pal2rgb.c | 7 ++++++-
-- 1 file changed, 6 insertions(+), 1 deletion(-)
--
--diff --git a/tools/pal2rgb.c b/tools/pal2rgb.c
--index 01d8502e..9492f1cf 100644
----- a/tools/pal2rgb.c
--+++ b/tools/pal2rgb.c
--@@ -118,12 +118,14 @@ main(int argc, char* argv[])
-- 	    shortv != PHOTOMETRIC_PALETTE) {
-- 		fprintf(stderr, "%s: Expecting a palette image.\n",
-- 		    argv[optind]);
--+		(void) TIFFClose(in);
-- 		return (-1);
-- 	}
-- 	if (!TIFFGetField(in, TIFFTAG_COLORMAP, &rmap, &gmap, &bmap)) {
-- 		fprintf(stderr,
-- 		    "%s: No colormap (not a valid palette image).\n",
-- 		    argv[optind]);
--+		(void) TIFFClose(in);
-- 		return (-1);
-- 	}
-- 	bitspersample = 0;
--@@ -131,11 +133,14 @@ main(int argc, char* argv[])
-- 	if (bitspersample != 8) {
-- 		fprintf(stderr, "%s: Sorry, can only handle 8-bit images.\n",
-- 		    argv[optind]);
--+		(void) TIFFClose(in);
-- 		return (-1);
-- 	}
-- 	out = TIFFOpen(argv[optind+1], "w");
---	if (out == NULL)
--+	if (out == NULL) {
--+		(void) TIFFClose(in);
-- 		return (-2);
--+	}
-- 	cpTags(in, out);
-- 	TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &imagewidth);
-- 	TIFFGetField(in, TIFFTAG_IMAGELENGTH, &imagelength);
---- 
--2.18.1
--
-diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
-index 21eb4bd37a..36f30c4418 100644
---- a/package/tiff/tiff.hash
-+++ b/package/tiff/tiff.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 2c52d11ccaf767457db0c46795d9c7d1a8d8f76f68b0b800a3dfe45786b996e4  tiff-4.0.10.tar.gz
-+sha256 5d29f32517dadb6dbcd1255ea5bbc93a2b54b94fbf83653b4d65c7d6775b8634  tiff-4.1.0.tar.gz
- sha256 fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7  COPYRIGHT
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index aef08b341d..b26900ac70 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index f3f9aa4777..d7d1d06eda 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,8 +1,8 @@
+ # Locally computed:
+-md5    b4529e0cf8e0ee82a2f677e404c3df35  prosody-0.11.2.tar.gz
+-sha1   0508cfc1c3c74a7eb8fdac2ed50435e190930f6a  prosody-0.11.2.tar.gz
+-sha256 8911f6dc29b9e0c4edf9e61dc23fa22d77bc42c4caf28b809ab843b2f08e4831  prosody-0.11.2.tar.gz
+-sha512 22e55a551a40c92f38a1ed1de5fdcad574d699d58c2e27f93c3d465b55487b8e923c2ba088daf93c7140cbafb0d429687e0b662c8bb1c1aba4b79ac1ea271cd1  prosody-0.11.2.tar.gz
++md5    2cf85cd8f7fc061916d97a169e850a0e  prosody-0.11.3.tar.gz
++sha1   87ec8039bf297ba9bc4da44b2ba42f4b035e73ca  prosody-0.11.3.tar.gz
++sha256 cfdabd6f42a9fc5db300221967c518c26bd4b6e62def721c1626894d6325bf87  prosody-0.11.3.tar.gz
++sha512 07239433c7c65184ca24d665c92b787ff9e4a5ee190ab90dede802ffd2cbd97855356d818858871e62284e9923f485b3468ab1baed5d3fb13aac0551a38967eb  prosody-0.11.3.tar.gz
+ 
+ # Hash for license file:
+ sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index c2111f6b83..05ea3d2e40 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TIFF_VERSION = 4.0.10
-+TIFF_VERSION = 4.1.0
- TIFF_SITE = http://download.osgeo.org/libtiff
- TIFF_LICENSE = tiff license
- TIFF_LICENSE_FILES = COPYRIGHT
+-PROSODY_VERSION = 0.11.2
++PROSODY_VERSION = 0.11.3
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
 -- 
 2.16.4
