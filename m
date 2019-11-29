@@ -1,56 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 15:13:45 +0100
-Subject: [Buildroot] [git commit] Makefile: allow top-level parallel build
- with BR2_PER_PACKAGE_DIRECTORIES=y
-Message-ID: <20191202083936.39326811B7@busybox.osuosl.org>
+Date: Fri, 29 Nov 2019 15:43:15 +0100
+Subject: [Buildroot] [git commit] docs/manual: document the effect of
+ per-package directory on variables
+Message-ID: <20191202083936.5BEF8802D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9a4c0c7ea0465034157a0e0660d9223095ca922
+commit: https://git.buildroot.net/buildroot/commit/?id=e8c8b41dc58cd0d8c7b0da649d0077645964b617
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With per-package folder support, top-level parallel build becomes
-safe, so we can enclose the .NOTPARALLEL statement in a
-!BR2_PER_PACKAGE_DIRECTORIES condition.
+As suggested by Arnout Vandecappelle, this commit adjusts the
+generic-package documentation to document the effect of per-package
+directory support on HOST_DIR, STAGING_DIR and TARGET_DIR.
 
+Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 19 +++++--------------
- 1 file changed, 5 insertions(+), 14 deletions(-)
+ docs/manual/adding-packages-generic.txt | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 3b583abb83..93b981f8b3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -227,21 +227,12 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
- -include $(BR2_CONFIG)
- endif
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index b2386f2c01..86300e7460 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -586,6 +586,13 @@ In the action definitions, you can use the following variables:
+ * +$(TARGET_CROSS)+ to get the cross-compilation toolchain prefix
  
--# Parallel execution of this Makefile is disabled because it changes
--# the packages building order, that can be a problem for two reasons:
--# - If a package has an unspecified optional dependency and that
--#   dependency is present when the package is built, it is used,
--#   otherwise it isn't (but compilation happily proceeds) so the end
--#   result will differ if the order is swapped due to parallel
--#   building.
--# - Also changing the building order can be a problem if two packages
--#   manipulate the same file in the target directory.
--#
--# Taking into account the above considerations, if you still want to execute
--# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
--# use the -j<jobs> option when building, e.g:
--#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
-+ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),)
-+# Disable top-level parallel build if per-package directories is not
-+# used. Indeed, per-package directories is necessary to guarantee
-+# determinism and reproducibility with top-level parallel build.
- .NOTPARALLEL:
-+endif
+ * Of course the +$(HOST_DIR)+, +$(STAGING_DIR)+ and +$(TARGET_DIR)+
+-  variables to install the packages properly.
++  variables to install the packages properly. Those variables point to
++  the global _host_, _staging_ and _target_ directories, unless
++  _per-package directory_ support is used, in which case they point to
++  the current package _host_, _staging_ and _target_ directories. In
++  both cases, it doesn't make any difference from the package point of
++  view: it should simply use +HOST_DIR+, +STAGING_DIR+ and
++  +TARGET_DIR+. See xref:top-level-parallel-build[] for more details
++  about _per-package directory_ support.
  
- # timezone and locale may affect build output
- ifeq ($(BR2_REPRODUCIBLE),y)
+ Finally, you can also use hooks. See xref:hooks[] for more information.
