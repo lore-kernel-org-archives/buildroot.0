@@ -1,52 +1,54 @@
 From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Fri, 29 Nov 2019 15:22:48 +0100
-Subject: [Buildroot] [PATCH 1/2] package/openvmtools: non-executable udev
- rules
-Message-ID: <20191129142248.6053-1-p.debruijn@unilogic.nl>
+Date: Fri, 29 Nov 2019 15:22:56 +0100
+Subject: [Buildroot] [PATCH 2/2] package/openvmtools: vmware disk timeout
+ udev rules fix
+Message-ID: <20191129142256.6104-1-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes: /usr/lib/udev/rules.d/99-vmware-scsi-udev.rules is marked executable.
+Fixes: Invalid value "/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'" for RUN (char 27: invalid substitution type), ignoring, but please fix
 
 Source: https://github.com/vmware/open-vm-tools/pull/376
 
 Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 ---
- .../0009-Set-permissions-on-rules-file.patch       | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
- create mode 100644 package/openvmtools/0009-Set-permissions-on-rules-file.patch
+ .../0010-Change-DEVPATH-to-devpath.patch           | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
 
-diff --git a/package/openvmtools/0009-Set-permissions-on-rules-file.patch b/package/openvmtools/0009-Set-permissions-on-rules-file.patch
+diff --git a/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch b/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
 new file mode 100644
-index 0000000..6a37c16
+index 0000000..5af694d
 --- /dev/null
-+++ b/package/openvmtools/0009-Set-permissions-on-rules-file.patch
-@@ -0,0 +1,23 @@
-+From c3ef6a8285132871ad10f9300d8afff55d8d6de2 Mon Sep 17 00:00:00 2001
++++ b/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
+@@ -0,0 +1,25 @@
++From 22f5d198b3b2f7e4debed83948ba1baf70d4749a Mon Sep 17 00:00:00 2001
 +From: puneetse <22071208+puneetse@users.noreply.github.com>
-+Date: Wed, 16 Oct 2019 10:09:38 -0700
-+Subject: [PATCH] Set permissions on rules file
++Date: Wed, 16 Oct 2019 10:04:41 -0700
++Subject: [PATCH] Change $DEVPATH to $devpath
 +
-+udevs rules should not be executable otherwise udev will log a warning in the journal
++$DEVPATH throws a warning by udev.
 +
 +Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 +---
-+ udev/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ udev/99-vmware-scsi-udev.rules | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/udev/Makefile.am b/udev/Makefile.am
-+index 68fbc3e27..8b9a4d716 100644
-+--- a/udev/Makefile.am
-++++ b/udev/Makefile.am
-+@@ -17,5 +17,5 @@
++diff --git a/udev/99-vmware-scsi-udev.rules b/udev/99-vmware-scsi-udev.rules
++index 053b59706..a605d80ef 100644
++--- a/udev/99-vmware-scsi-udev.rules
+++++ b/udev/99-vmware-scsi-udev.rules
++@@ -2,6 +2,6 @@
++ #
++ # This file is part of open-vm-tools
 + 
-+ install-data-local:
-+ 	$(INSTALL) -d $(DESTDIR)$(UDEVRULESDIR)
-+-	$(INSTALL) $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
-++	$(INSTALL) -m 0644 $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
++-ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="Virtual disk*", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'"
++-ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="VMware Virtual S", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'"
+++ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="Virtual disk*", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys/$devpath/device/timeout'"
+++ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="VMware Virtual S", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys/$devpath/device/timeout'"
 + 
 -- 
 2.7.4
