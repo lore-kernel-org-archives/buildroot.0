@@ -1,43 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2019 10:47:32 +0100
-Subject: [Buildroot] [PATCH 1/2] package/{python,
- python3}: add mechanism to exclude .py files from removal
-In-Reply-To: <20191129103955.095dcd3d@windsurf> (Thomas Petazzoni's message of
- "Fri, 29 Nov 2019 10:39:55 +0100")
-References: <20191127203404.291090-1-thomas.petazzoni@bootlin.com>
- <20191127203404.291090-2-thomas.petazzoni@bootlin.com>
- <87blsvf7bx.fsf@dell.be.48ers.dk> <20191129085623.67aee606@windsurf>
- <87eexrcaen.fsf@dell.be.48ers.dk> <20191129103955.095dcd3d@windsurf>
-Message-ID: <87k17jaua3.fsf@dell.be.48ers.dk>
+Date: Fri, 29 Nov 2019 10:51:42 +0100
+Subject: [Buildroot] [PATCH v1] package/gst1-plugins-bad: remove
+ rpi-userland extra include paths
+In-Reply-To: <20191128233017.3437-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Fri, 29 Nov 2019 00:30:17 +0100")
+References: <20191128233017.3437-1-ps.report@gmx.net>
+Message-ID: <87fti7au35.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > On Fri, 29 Nov 2019 10:13:52 +0100
- > Peter Korsgaard <peter@korsgaard.com> wrote:
+ > The rpi-userland extra include paths where added with [2] including
+ > a rpi-userland dependency for the dispmanx option.
 
- >> > Gaah, check-package doesn't allow us from doing these nice hacks. We
- >> > could exclude this variable from the check-package check, but that's
- >> > really getting into doing a hack within the hack.  
- >> 
- >> > So I guess this really means we have to go with a per-package variable,
- >> > and a bit of logic in pkg-generic to collect these per-package
- >> > variables into a global one. Agreed?  
- >> 
- >> I am afraid so. Will you take care of it?
+ > The dispmanx option was moved to gst1-plugins-base with commit [3],
+ > including the rpi-userland dependency, excluding the extra include
+ > paths.
 
- > Yes, I'll try to have a look.
+ > Tested gst1-plugins-base with dispmanx enabled compiles without
+ > failures. It seems to be save to remove the extra includes from
+ > gst1-plugins-bad.
 
-Thanks!
+ > Fixes (from meson-log.txt):
 
- > Not sure if it will be ready for the release, though.
+ >   Sanity check compile stderr:
+ >   arm-buildroot-linux-uclibcgnueabihf-gcc.br_real: error:
+ >   /.../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/IL:
+ >   No such file or directory
+ >   arm-buildroot-linux-uclibcgnueabihf-gcc.br_real: error:
+ >   /.../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/interface/vcos/pthreads:
+ >   No such file
+ >   arm-buildroot-linux-uclibcgnueabihf-gcc.br_real: error:
+ >   /.../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/interface/vmcs_host/linux:
+ >   No such file
 
-Ok. This has been broken for a _LONG_ time, so postponing it to
-2019.11.1 is probably not a big deal.
+ > [1] https://bugs.busybox.net/show_bug.cgi?id=12366
+
+You don't have any [1] references ;)
+
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
