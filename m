@@ -1,49 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Nov 2019 22:27:51 +0100
-Subject: [Buildroot] Compiling Python packages with C extensions with
- per-package directories
-In-Reply-To: <CALFsTFVNJi=CjuySUhgntAYjUvGpLUO78XoRH+bUtOH_1vw9=g@mail.gmail.com>
-References: <CALFsTFVv0esYx0XKRLpRidTSu9sV1AmxT0n-A_GTNGEEuHWTxQ@mail.gmail.com>
- <20191130210725.180ee73a@windsurf>
- <CALFsTFVNJi=CjuySUhgntAYjUvGpLUO78XoRH+bUtOH_1vw9=g@mail.gmail.com>
-Message-ID: <20191130222751.510a61f5@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Nov 2019 22:41:49 +0100
+Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to 1.13.4
+In-Reply-To: <20191130193031.1393182-1-christian@paral.in> (Christian
+ Stewart's message of "Sat, 30 Nov 2019 11:30:31 -0800")
+References: <20191130193031.1393182-1-christian@paral.in>
+Message-ID: <87d0d9xcrm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Asaf,
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-On Sat, 30 Nov 2019 22:57:47 +0200
-Asaf Kahlon <asafka7@gmail.com> wrote:
+ > go1.13.4 (released 2019/10/31) with fixes to the net/http and syscall packages.
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
-> Yeah, it looks like some of your additional patches will solve those issues.
-> 
-> Just out of curiosity, do we have any roadmap for merging those patches or any
-> "known issues" regarding this feature that have to be resolved?
+Committed, thanks.
 
-My plan was to send those additional patches once the core per-package
-support would be merged, which happened just a few days ago.
-
-I hope to be able to send those additional patches next week. Note that
-they don't fix all problems. For example, it is known that Qt5 is also
-broken with per-package support. Andreas had sent a patch series fixing
-this, but it was not trivial.
-
-Next week, I will also try to update
-https://elinux.org/Buildroot:Top_Level_Parallel_Build to keep track of
-the status: what is merged, what is fixed but not merged yet, and what
-are the remaining known issues.
-
-I will also send a patch to enable per-package support usage in the
-autobuilders. Not for all builds, but for a small fraction of the
-builds.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
