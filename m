@@ -1,58 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Nov 2019 19:53:17 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/webkitgtk: bump
- to version 2.26.1
-Message-ID: <20191130205831.B010282B99@busybox.osuosl.org>
+Date: Sat, 30 Nov 2019 19:53:33 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/webkitgtk: fix
+ build without WebDriver
+Message-ID: <20191130205831.BB38382B99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1af37eb06f3dfc5d0e9cc304f03a7a5c89f5a41
+commit: https://git.buildroot.net/buildroot/commit/?id=1b2bfc12478aa0a09d105f29350d359e53910fa6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Release notes:
-
-  https://webkitgtk.org/2019/09/23/webkitgtk2.26.1-released.html
-
-This is a bugfix release which fixes a few issues detected in 2.26.0
-and includes media playback improvements as well.
+Add "0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch", which is
+a slightly edited version of an upstream patch that fixes building
+WebKitGTK with ENABLE_WEBDRIVER=OFF.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6cf04ab783594c4c1e88c9194461a76161df8fba)
+(cherry picked from commit bd267c968ea6ac2b27c24aea0c21b4d15e8a8939)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 941e25a3bb..0cf0080e6e 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
- # From https://webkitgtk.org/releases/webkitgtk-2.26.0.tar.xz.sums
--md5 3a7054843cf9decbf824b8ffae794e65 webkitgtk-2.26.0.tar.xz
--sha1 e0c6f707bdf9edf3d444117736cb3c040eca78e7 webkitgtk-2.26.0.tar.xz
--sha256 d210c0ecd1a89a22c9f8f1f450334f3489c5c50159b3a5e14dd93d5f349dcced webkitgtk-2.26.0.tar.xz
-+md5 08145bd6c1587230f135921c142bc150 webkitgtk-2.26.1.tar.xz
-+sha1 bd0432281c0463147ec06587c25f226a67acbb2d webkitgtk-2.26.1.tar.xz
-+sha256 6b4b21801d2b1008422a1075dbd6fb4ae8b5127503faf657cf9671289d9cd155 webkitgtk-2.26.1.tar.xz
- 
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 0eef7cafcd..6f72cdb528 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.26.0
-+WEBKITGTK_VERSION = 2.26.1
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+diff --git a/package/webkitgtk/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch b/package/webkitgtk/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
+new file mode 100644
+index 0000000000..b084ec9eb3
+--- /dev/null
++++ b/package/webkitgtk/0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch
+@@ -0,0 +1,55 @@
++From fb0f978af0dd3923a1d3bcb6dccf610861e284d3 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Tue, 8 Oct 2019 11:06:56 +0300
++Subject: [PATCH xserver 2/2] [WPE][GTK] Build fails with ENABLE_WEBDRIVER=OFF
++ https://bugs.webkit.org/show_bug.cgi?id=202658
++
++Reviewed by NOBODY (OOPS!).
++
++* UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp: Add missing
++ENABLE(WEBDRIVER_MOUSE_INTERACTIONS) and ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
++preprocessor guards.
++* UIProcess/Automation/wpe/WebAutomationSessionWPE.cpp: Ditto.
++
++Fetch (and adapted) from: https://bugs.webkit.org/show_bug.cgi?id=202658
++Upstream-Status: Pending
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++
++---
++ Source/WebKit/ChangeLog                              | 12 ++++++++++++
++ .../Automation/gtk/WebAutomationSessionGtk.cpp       |  4 ++++
++ .../Automation/wpe/WebAutomationSessionWPE.cpp       |  4 ++++
++ 3 files changed, 20 insertions(+)
++
++diff --git a/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp b/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp
++index dd81d1d55ea..ee665c2e346 100644
++--- a/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp
+++++ b/Source/WebKit/UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp
++@@ -34,6 +34,7 @@
++ namespace WebKit {
++ using namespace WebCore;
++ 
+++#if ENABLE(WEBDRIVER_MOUSE_INTERACTIONS)
++ static unsigned modifiersToEventState(OptionSet<WebEvent::Modifier> modifiers)
++ {
++     unsigned state = 0;
++@@ -131,7 +132,9 @@ void WebAutomationSession::platformSimulateMouseInteraction(WebPageProxy& page,
++         break;
++     }
++ }
+++#endif // ENABLE(WEBDRIVER_MOUSE_INTERACTIONS)
++ 
+++#if ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
++ static void doKeyStrokeEvent(GdkEventType type, GtkWidget* widget, unsigned keyVal, unsigned state, bool doReleaseAfterPress = false)
++ {
++     ASSERT(type == GDK_KEY_PRESS || type == GDK_KEY_RELEASE);
++@@ -331,5 +334,6 @@ void WebAutomationSession::platformSimulateKeySequence(WebPageProxy& page, const
++         p = g_utf8_next_char(p);
++     } while (*p);
++ }
+++#endif // ENABLE(WEBDRIVER_KEYBOARD_INTERACTIONS)
++ 
++ } // namespace WebKit
++-- 
++2.23.0
++
