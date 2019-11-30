@@ -1,87 +1,15 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Nov 2019 09:46:27 +0100
-Subject: [Buildroot] [git commit] package/{pkg-generic, python,
- python3}: add mechanism to exclude .py files from removal
-Message-ID: <20191130095727.0A2A082123@busybox.osuosl.org>
+From: daggs <daggs@gmx.com>
+Date: Sat, 30 Nov 2019 14:41:35 +0100
+Subject: [Buildroot] rpi4 64 bit support
+Message-ID: <trinity-c09556f1-946a-41d7-9d67-92bb4e64460b-1575121295175@3c-app-mailcom-bs15>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56f3ed3fc1e1bee560e06b57237bd3d4af0def22
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Greetings,
 
-When BR2_PACKAGE_PYTHON{,3}_PYC_ONLY=y, we force remove all .py files
-from the system, as they have all been byte-compiled into their .pyc
-variants.
-
-However, it turns out that some packages (e.g: OpenCV) do some funky
-things with a few .py files: they pass them through Python's
-execfile() facility, which only works with .py files and not .pyc
-files. It is used by OpenCV for example to read two small
-configuration files.
-
-In order to support such use cases, this commit introduces a very
-simple mechanism by which packages can exclude some path patterns from
-the .py removal: a per-package <pkg>_KEEP_PY_FILES variable that is
-collected into a global PYTHON_KEEP_PY_FILES variable, then used by
-the python/python3 target-finalize hooks.
-
-This variable is intentionally not documented, this is really a hack
-that we ideally would like to see go away, and we'd rather not see its
-usage spread too much.
-
-This is necessary to be able to fix bug #12171.
-
-[Peter: check if PYTHON_KEEP_PY_FILES contains non-white space]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-generic.mk     | 1 +
- package/python/python.mk   | 4 +++-
- package/python3/python3.mk | 4 +++-
- 3 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 7b3294a09a..1709660ef2 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1060,6 +1060,7 @@ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
- endif
- TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
- ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
-+PYTHON_KEEP_PY_FILES += $$($(2)_KEEP_PY_FILES)
- 
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 8c2b195c91..a3f5ce2113 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -267,7 +267,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- define PYTHON_REMOVE_PY_FILES
--	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' \
-+		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
-+		-print0 | \
- 		xargs -0 --no-run-if-empty rm -f
- endef
- PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index d6fda5c274..a8a5464149 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -285,7 +285,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
- define PYTHON3_REMOVE_PY_FILES
--	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' \
-+		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
-+		-print0 | \
- 		xargs -0 --no-run-if-empty rm -f
- endef
- PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
+I have a rpi4 on the way to my house and I wanted to know what is the status of 64 bit env support on buildroot.
+I understand there are some issues with the mmc.
+am I right?
