@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Nov 2019 19:54:35 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/webkitgtk: bump
+Date: Sat, 30 Nov 2019 19:52:52 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/webkitgtk: bump
  to version 2.26.0
-Message-ID: <20191130205826.12C8082B77@busybox.osuosl.org>
+Message-ID: <20191130205831.A71E182B99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c1788348d7098a6ae725477671856c3682479fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=81d9d30fd713db24aa4f674ebed834ed45d0c4f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 This is a new major release which brings in many improvements and new
 features. For a complete list, please refer to the release notes:
