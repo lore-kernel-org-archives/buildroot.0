@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Nov 2019 09:09:49 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/postgresql: bump
+Date: Sat, 30 Nov 2019 09:07:57 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/postgresql: bump
  version to 11.6
-Message-ID: <20191130080314.9A9538212A@busybox.osuosl.org>
+Message-ID: <20191130080325.CBE66812BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93d8bfe59364382852284dd6118d479f3c6ab112
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4af05caa6dc26a9150f9de504d1d0bd5f3706a29
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes a large number of bugs. For details, see:
 https://www.postgresql.org/about/news/1994/
@@ -39,7 +39,7 @@ index 7a427e629e..4c78ad68b3 100644
  # License file, Locally calculated
  sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
 diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index f409849102..4209cde344 100644
+index 6ce8b3b6ce..62650d1998 100644
 --- a/package/postgresql/postgresql.mk
 +++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
