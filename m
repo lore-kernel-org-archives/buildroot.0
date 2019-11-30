@@ -1,54 +1,42 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 30 Nov 2019 21:20:05 +0200
-Subject: [Buildroot] Compiling Python packages with C extensions with
- per-package directories
-Message-ID: <CALFsTFVv0esYx0XKRLpRidTSu9sV1AmxT0n-A_GTNGEEuHWTxQ@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Sat, 30 Nov 2019 11:30:31 -0800
+Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to 1.13.4
+Message-ID: <20191130193031.1393182-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+go1.13.4 (released 2019/10/31) with fixes to the net/http and syscall packages.
 
-As now some work on per-package directories has been merged for the
-next release, I tried to play with it a little and encountered the
-following problem:
-When compiling a Python package with C sources, the compilation fails.
-An example from python-cryptography (same for python-cffi, and others):
-/home/asaf/repos/buildroot/output/per-package/python3/host/bin/i586-linux-gcc
--shared -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -Os -pthread
-build/temp.linux-x86_64-3.8/build/temp.linux-x86_64-3.8/_openssl.o
--L/home/asaf/repos/buildroot/output/per-package/python-cryptography/host/i586-buildroot-linux-gnu/sysroot/usr/lib
--lssl -lcrypto -o
-build/lib.linux-x86_64-3.8/cryptography/hazmat/bindings/_openssl.abi3.so
-/opt/host/bin/../lib/gcc/i586-buildroot-linux-gnu/8.3.0/../../../../i586-buildroot-linux-gnu/bin/ld:
-cannot find /lib/libc.so.6
-/opt/host/bin/../lib/gcc/i586-buildroot-linux-gnu/8.3.0/../../../../i586-buildroot-linux-gnu/bin/ld:
-cannot find /usr/lib/libc_nonshared.a
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-As one can notice - we used gcc from the python3 directory and not the
-one from python-cryptography. When trying to understand the problem, I
-did 2 things:
-* Replacing the compiler to the one from python-cryptography.
-* Replacing the "-L" part to the correspondent one from python3 directory.
-Each of the above (individually) fixes the problem, but I don't think
-the second option is good because it uses a compiler from another
-sysroot.
-I think the problem occurs since the _sysconfigdata file is installed
-when compiling Python and contains paths from the python3 directory,
-although it's used by many other Python packages (I also verified that
-by manually replacing relevant paths from the copy at
-python-cryptography).
-
-So, what do we want to do with this?
-I don't think we want to tweak the _sysconfigdata file for every
-python package (although it would lead to a more "correct" situation,
-in which every sysroot contains _sysconfidata with proper paths).
-In addition, I wonder why do we need to copy all the toolchain-related
-files for every single package? (Maybe a symlink can help?)
-Any other suggestions?
-
-Thanks,
-Asaf.
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 442a6f9ad2..90a0c2fbb8 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	4f7123044375d5c404280737fbd2d0b17064b66182a65919ffe20ffe8620e3df  go1.13.3.src.tar.gz
++sha256	95dbeab442ee2746b9acf0934c8e2fc26414a0565c008631b04addb8c02e7624  go1.13.4.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 64e831189f..dac740d968 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.13.3
++GO_VERSION = 1.13.4
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+-- 
+2.24.0
