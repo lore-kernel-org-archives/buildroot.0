@@ -1,40 +1,326 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Nov 2019 21:40:52 +0100
-Subject: [Buildroot] [git commit] support/testing: basetest.py: fix code
- style
-Message-ID: <20191202083935.6BE5F82884@busybox.osuosl.org>
+Date: Sat, 30 Nov 2019 23:07:33 +0100
+Subject: [Buildroot] [git commit] package/libglib2: bump to 2.62.3
+Message-ID: <20191202083936.66BF280012@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bda40089751ea9099389e2487c1b968218322c7c
+commit: https://git.buildroot.net/buildroot/commit/?id=01d3360eb682c99f48baa5961a0588a8113d581c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix these warnings:
+Changes include:
+ - Rename 0002-add-option-to-build-tests.patch to
+   0002-allow-explicit-disabling-of-tests.patch to work with 2.62.3.
 
-W291 trailing whitespace
+   Upstream now has an option called "installed_tests," which can be used to
+   prevent the unit tests from being built. However, the check only works for
+   cross-compiling and not host builds, which would mean that the tests still
+   build when compiling the host variant.
 
-Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/360824861
+   This conditional causes an error on older systems such as Debian8 or Centos7
+   because the command `objcopy --add-symbol` is used when building the test
+   "test_resources2," which is not available with the older version of objcopy
+   provided by those distributions.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+   Removing the conditionals and checking for just the installed_tests_enabled
+   option allows for a much simpler patch.
+
+ - Change -Dtests=false to -Dinstalled_tests=false in libglib2.mk as per the
+   above comment.
+
+           br-arm-full [1/6]: OK
+br-arm-cortex-a9-glibc [2/6]: OK
+ br-arm-cortex-m4-full [3/6]: SKIPPED
+        br-x86-64-musl [4/6]: OK
+    br-arm-full-static [5/6]: OK
+          sourcery-arm [6/6]: OK
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/infra/basetest.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../libglib2/0002-add-option-to-build-tests.patch  | 94 ----------------------
+ .../0002-allow-explicit-disabling-of-tests.patch   | 37 +++++++++
+ package/libglib2/0003-remove-cpp-requirement.patch | 30 +++----
+ ...o-format-nonliteral-to-compiler-arguments.patch |  2 +-
+ package/libglib2/libglib2.hash                     |  4 +-
+ package/libglib2/libglib2.mk                       |  5 +-
+ 6 files changed, 54 insertions(+), 118 deletions(-)
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index 023039f6af..5dc6034447 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -85,7 +85,7 @@ class BRTest(BRConfigTest):
-             self.emulator.stop()
-         super(BRTest, self).tearDown()
+diff --git a/package/libglib2/0002-add-option-to-build-tests.patch b/package/libglib2/0002-add-option-to-build-tests.patch
+deleted file mode 100644
+index 5caaaff6b2..0000000000
+--- a/package/libglib2/0002-add-option-to-build-tests.patch
++++ /dev/null
+@@ -1,94 +0,0 @@
+-From cdccbc6ec36243463613cb32d7058c26c3c51e16 Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <Aduskett@gmail.com>
+-Date: Wed, 18 Sep 2019 09:50:00 -0700
+-Subject: [PATCH] add option to build tests.
+-
+-Upstream won't build tests when cross-compiling. However; this means still
+-building the tests during a host build. Building the tests causes build
+-failures on older distributions such as CentOS 6 and Debian 7 because the
+-command `objcopy --add-symbol` is used when building the test
+-"test_resources2," which is not available with the older version of objcopy
+-provided by the distributions.
+-
+-Instead, add the option 'tests' which when set to false, enforces not
+-building any tests, even when building the host variant.
+-
+-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+----
+- gio/meson.build       |  1 -
+- glib/meson.build      |  3 +-
+- gobject/meson.build   |  1 -
+- meson.build           |  2 +-
+- meson_options.txt     |  5 +++++
+- 5 files changed, 6 insertions(+), 5 deletions(-)
+-
+-diff --git a/gio/meson.build b/gio/meson.build
+-index 9a9e621..6adc014 100644
+---- a/gio/meson.build
+-+++ b/gio/meson.build
+-@@ -1010,7 +1010,6 @@ endif
+- 
+- subdir('fam')
+- # Don???t build the tests unless we can run them (either natively or in an exe wrapper)
+--build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
+- if build_tests
+-     subdir('tests')
+- endif
+-diff --git a/glib/meson.build b/glib/meson.build
+-index 91a48f1..230d562 100644
+---- a/glib/meson.build
+-+++ b/glib/meson.build
+-@@ -458,8 +458,7 @@ if enable_systemtap
+-   )
+- endif
+- 
+--# Don???t build the tests unless we can run them (either natively or in an exe wrapper)
+--build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
+-+build_tests = get_option('tests')
+- if build_tests
+-   subdir('tests')
+- endif
+-diff --git a/gobject/meson.build b/gobject/meson.build
+-index c7805c5..fb5874d 100644
+---- a/gobject/meson.build
+-+++ b/gobject/meson.build
+-@@ -166,7 +166,6 @@ if enable_systemtap
+- endif
+- 
+- # Don???t build the tests unless we can run them (either natively or in an exe wrapper)
+--build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
+- if build_tests
+-   subdir('tests')
+- endif
+-diff --git a/meson.build b/meson.build
+-index 717d1bc..3124f28 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -2098,7 +2098,7 @@ subdir('gmodule')
+- subdir('gio')
+- subdir('fuzzing')
+- # Don???t build the tests unless we can run them (either natively or in an exe wrapper)
+--build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
+-+build_tests = get_option('tests')
+- if build_tests
+-   subdir('tests')
+- endif
+-diff --git a/meson_options.txt b/meson_options.txt
+-index 2c831e3..90468a7 100644
+---- a/meson_options.txt
+-+++ b/meson_options.txt
+-@@ -90,6 +90,11 @@ option('nls',
+-        yield: true,
+-        description : 'Enable native language support (translations)')
+- 
+-+option('tests',
+-+       type : 'boolean',
+-+       value : false,
+-+       description : 'Build tests')
+-+
+- option('oss_fuzz',
+-        type : 'feature',
+-        value : 'disabled',
+--- 
+-2.21.0
+-
+diff --git a/package/libglib2/0002-allow-explicit-disabling-of-tests.patch b/package/libglib2/0002-allow-explicit-disabling-of-tests.patch
+new file mode 100644
+index 0000000000..d6c62499c3
+--- /dev/null
++++ b/package/libglib2/0002-allow-explicit-disabling-of-tests.patch
+@@ -0,0 +1,37 @@
++From cdccbc6ec36243463613cb32d7058c26c3c51e16 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <Aduskett@gmail.com>
++Date: Wed, 18 Sep 2019 09:50:00 -0700
++Subject: [PATCH] allow explicit disabling of tests
++
++Upstream won't build tests when cross-compiling. However; this means still
++building the tests during a host build. Building the tests causes build
++failures on older distributions such as CentOS 6 and Debian 7 because the
++command `objcopy --add-symbol` is used when building the test
++"test_resources2," which is not available with the older version of objcopy
++provided by the distributions.
++
++Instead, remove the conditional checks which set build_tests and only check if
++installed_tests_enabled is passed.
++
++Signed-off-by: Adam Duskett <Aduskett@gmail.com>
++Refresh for 2.62.2
++---
++ meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 99806d0..3206603 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -77,7 +77,7 @@ installed_tests_template = files('template.test.in')
++ installed_tests_template_tap = files('template-tap.test.in')
++ 
++ # Don???t build the tests unless we can run them (either natively, in an exe wrapper, or by installing them for later use)
++-build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper()) or installed_tests_enabled
+++build_tests = installed_tests_enabled
++ 
++ add_project_arguments('-D_GNU_SOURCE', language: 'c')
++ 
++-- 
++2.23.0
++
+diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
+index 31a941bc7c..a96a94043c 100644
+--- a/package/libglib2/0003-remove-cpp-requirement.patch
++++ b/package/libglib2/0003-remove-cpp-requirement.patch
+@@ -12,9 +12,9 @@ Upstream status: Denied (Buildroot specific)
+ https://gitlab.gnome.org/GNOME/glib/issues/1748
+ ---
+  glib/glibconfig.h.in |  1 -
+- meson.build          | 18 +-----------------
++ meson.build          | 16 ----------------
+  tests/meson.build    |  5 -----
+- 3 files changed, 1 insertion(+), 23 deletions(-)
++ 3 files changed, 22 deletions(-)
  
--    # Run the given 'cmd' with a 'timeout' on the target and 
-+    # Run the given 'cmd' with a 'timeout' on the target and
-     # assert that the command succeeded
-     def assertRunOk(self, cmd, timeout=-1):
-         _, exit_code = self.emulator.run(cmd, timeout)
+ diff --git a/glib/glibconfig.h.in b/glib/glibconfig.h.in
+ index 7ef8c48..128e65d 100644
+@@ -29,15 +29,9 @@ index 7ef8c48..128e65d 100644
+  /* gcc-2.95.x supports both gnu style and ISO varargs, but if -ansi
+   * is passed ISO vararg support is turned off, and there is no work
+ diff --git a/meson.build b/meson.build
+-index 3124f28..642afb8 100644
++index 83774d0..99806d0 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -1,4 +1,4 @@
+--project('glib', 'c', 'cpp',
+-+project('glib', 'c',
+-   version : '2.62.0',
+-   # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+-   meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+  )
+  
+@@ -46,7 +40,7 @@ index 3124f28..642afb8 100644
+  
+  cc_can_run = not meson.is_cross_build() or meson.has_exe_wrapper()
+  
+-@@ -1487,20 +1486,6 @@ if g_have_iso_c_varargs
++@@ -1490,20 +1489,6 @@ if g_have_iso_c_varargs
+  #endif''')
+  endif
+  
+@@ -67,21 +61,21 @@ index 3124f28..642afb8 100644
+  g_have_gnuc_varargs = cc.compiles('''
+    void some_func (void) {
+      int a(int p1, int p2, int p3);
+-@@ -2096,7 +2081,6 @@ subdir('gobject')
++@@ -2101,7 +2086,6 @@ subdir('gobject')
+  subdir('gthread')
+  subdir('gmodule')
+  subdir('gio')
+ -subdir('fuzzing')
+- # Don???t build the tests unless we can run them (either natively or in an exe wrapper)
+- build_tests = get_option('tests')
+  if build_tests
++   subdir('tests')
++ endif
+ diff --git a/tests/meson.build b/tests/meson.build
+-index ce30442..2b31427 100644
++index e4ea226..7fd974c 100644
+ --- a/tests/meson.build
+ +++ b/tests/meson.build
+-@@ -48,11 +48,6 @@ tests = {
+-     'dependencies' : [libgmodule_dep],
+-     'export_dynamic' : true,
++@@ -56,11 +56,6 @@ tests = {
++     'source': 'module-test.c',
++     'c_args': ['-DMODULE_TYPE="plugin"'],
+    },
+ -  'cxx-test' : {
+ -    'source' : 'cxx-test.cpp',
+@@ -92,5 +86,5 @@ index ce30442..2b31427 100644
+  
+  test_extra_programs = {
+ -- 
+-2.21.0
++2.23.0
+ 
+diff --git a/package/libglib2/0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch b/package/libglib2/0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+index c6ae49fd39..f792ceba3f 100644
+--- a/package/libglib2/0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch
++++ b/package/libglib2/0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+@@ -15,7 +15,7 @@ diff --git a/meson.build b/meson.build
+ index 3c615b7..7cae4e8 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -369,6 +369,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
++@@ -372,6 +372,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+      '-Wno-cast-function-type',
+ +    '-Wno-format-nonliteral',
+      # Due to function casts through (void*) we cannot support -Wpedantic:
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index facb44ed34..e2293d6ca8 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.60/glib-2.60.6.sha256sum
+-sha256  6c257205a0a343b662c9961a58bb4ba1f1e31c82f5c6b909ec741194abc3da10  glib-2.62.0.tar.xz
++# https://download.gnome.org/sources/glib/2.62/glib-2.62.3.sha256sum
++sha256  4400adc9f0d3ffcfe8e84225210370ce3f9853afb81812ddadb685325aa655c4  glib-2.62.3.tar.xz
+ # License files, locally calculated
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 73ea27f4d1..9aaace2963 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGLIB2_VERSION_MAJOR = 2.62
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
+@@ -28,7 +28,6 @@ HOST_LIBGLIB2_CONF_OPTS = \
+ 	-Dxattr=false \
+ 	-Dinternal_pcre=false \
+ 	-Dinstalled_tests=false \
+-	-Dtests=false \
+ 	-Doss_fuzz=disabled
+ 
+ LIBGLIB2_DEPENDENCIES = \
+@@ -50,7 +49,7 @@ HOST_LIBGLIB2_DEPENDENCIES = \
+ LIBGLIB2_CONF_OPTS = \
+ 	-Dinternal_pcre=false \
+ 	-Dgio_module_dir=/usr/lib/gio/modules \
+-	-Dtests=false \
++	-Dinstalled_tests=false \
+ 	-Doss_fuzz=disabled
+ 
+ ifneq ($(BR2_ENABLE_LOCALE),y)
