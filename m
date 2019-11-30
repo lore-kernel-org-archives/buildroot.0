@@ -1,69 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Nov 2019 09:13:03 +0100
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4,
- 9}.x / 5.3.x series
-Message-ID: <20191130095727.00F2D8274F@busybox.osuosl.org>
+Date: Sat, 30 Nov 2019 09:46:27 +0100
+Subject: [Buildroot] [git commit] package/{pkg-generic, python,
+ python3}: add mechanism to exclude .py files from removal
+Message-ID: <20191130095727.0A2A082123@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b20487151af79563da763d0f053deb78ff63172a
+commit: https://git.buildroot.net/buildroot/commit/?id=56f3ed3fc1e1bee560e06b57237bd3d4af0def22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+When BR2_PACKAGE_PYTHON{,3}_PYC_ONLY=y, we force remove all .py files
+from the system, as they have all been byte-compiled into their .pyc
+variants.
+
+However, it turns out that some packages (e.g: OpenCV) do some funky
+things with a few .py files: they pass them through Python's
+execfile() facility, which only works with .py files and not .pyc
+files. It is used by OpenCV for example to read two small
+configuration files.
+
+In order to support such use cases, this commit introduces a very
+simple mechanism by which packages can exclude some path patterns from
+the .py removal: a per-package <pkg>_KEEP_PY_FILES variable that is
+collected into a global PYTHON_KEEP_PY_FILES variable, then used by
+the python/python3 target-finalize hooks.
+
+This variable is intentionally not documented, this is really a hack
+that we ideally would like to see go away, and we'd rather not see its
+usage spread too much.
+
+This is necessary to be able to fix bug #12171.
+
+[Peter: check if PYTHON_KEEP_PY_FILES contains non-white space]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/pkg-generic.mk     | 1 +
+ package/python/python.mk   | 4 +++-
+ package/python3/python3.mk | 4 +++-
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3fa0d7e7b2..f291f671b5 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 7b3294a09a..1709660ef2 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1060,6 +1060,7 @@ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ endif
+ TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
+ ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
++PYTHON_KEEP_PY_FILES += $$($(2)_KEEP_PY_FILES)
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.3.13" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.3.14" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.75-cip11" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index bf0624e75d..f8ef927c97 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 9f04e53f03d0ead6561195fb71aac18cbee419112ed54f9d4fc1515a5fa5c92f  linux-5.3.13.tar.xz
-+sha256 955712688c7256675383ec5be4ee044dbb59116a9a1f24e8689d12a6f95f7932  linux-5.3.14.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 47e3030d80b9a3b96cdefc008db57f9faa87e2d093437d941caec3ca9ed89924  linux-4.4.204.tar.xz
--sha256 47a1987cb34182e625cac95f497a534461ff881b3bcb485b37507a086857bf50  linux-4.9.204.tar.xz
-+sha256 fa1f8fe9c12e18e5cda18cf759b77ae9e778e1e9006d837426c955b75bd4eaa6  linux-4.4.205.tar.xz
-+sha256 98b9e8644706acc0cf51022372bb263b59a1d2bbe3ccd7ce6bd9bc7378c78b05  linux-4.9.205.tar.xz
- sha256 f8889feb0cbd7df36ff35bd4c72c1e2010567621bfcb218fcfa501bc5c7787c0  linux-4.14.156.tar.xz
- sha256 bf2cbba319d43d1bd9e876ac0b55ab83118d1a1e61cce3c929d5371f7567bff6  linux-4.19.86.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 37b0db1de9..a170cfa4fd 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -305,11 +305,11 @@ endchoice
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 8c2b195c91..a3f5ce2113 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -267,7 +267,9 @@ endif
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.204"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.204"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.205"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.205"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.14.156"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.19.86"	if BR2_KERNEL_HEADERS_4_19
--	default "5.3.13"	if BR2_KERNEL_HEADERS_5_3
-+	default "5.3.14"	if BR2_KERNEL_HEADERS_5_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ define PYTHON_REMOVE_PY_FILES
+-	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' \
++		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
++		-print0 | \
+ 		xargs -0 --no-run-if-empty rm -f
+ endef
+ PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index d6fda5c274..a8a5464149 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -285,7 +285,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ define PYTHON3_REMOVE_PY_FILES
+-	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' \
++		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
++		-print0 | \
+ 		xargs -0 --no-run-if-empty rm -f
+ endef
+ PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
