@@ -1,74 +1,38 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 30 Nov 2019 22:57:47 +0200
-Subject: [Buildroot] Compiling Python packages with C extensions with
- per-package directories
-In-Reply-To: <20191130210725.180ee73a@windsurf>
-References: <CALFsTFVv0esYx0XKRLpRidTSu9sV1AmxT0n-A_GTNGEEuHWTxQ@mail.gmail.com>
- <20191130210725.180ee73a@windsurf>
-Message-ID: <CALFsTFVNJi=CjuySUhgntAYjUvGpLUO78XoRH+bUtOH_1vw9=g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Nov 2019 22:06:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
+ version 2.26.2
+In-Reply-To: <20191122180013.2887730-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Fri, 22 Nov 2019 20:00:13 +0200")
+References: <20191122180013.2887730-1-aperez@igalia.com>
+Message-ID: <87h82lxeei.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-On Sat, Nov 30, 2019 at 10:07 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Asaf,
->
-> On Sat, 30 Nov 2019 21:20:05 +0200
-> Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> > As now some work on per-package directories has been merged for the
-> > next release, I tried to play with it a little and encountered the
-> > following problem:
-> > When compiling a Python package with C sources, the compilation fails.
->
-> I have this patch:
->
->   https://github.com/tpetazzoni/buildroot/commit/f2a92b1321bd0d63e5fad81b0cfc9ace910d17a0
->
-> which I believe should fix the problems you mention. My patch series
-> for per-package was just the core support. I have a number of
-> additional patches at
-> https://github.com/tpetazzoni/buildroot/commits/ppsh-v8-work that fix
-> some issues with per-package directories (but not all, of course).
+ > This is a minor release which includes fixes for CVE-2019-8812 and
+ > CVE-2019-8814.
 
-Yeah, it looks like some of your additional patches will solve those issues.
+ > This release also fixes the build with WebDriver disabled and without
+ > X11, so "0001-GTK-ANGLE-s-eglplatform.h-is-build-broken-with-DENAB.patch"
+ > and "0002-WPE-GTK-Build-fails-with-ENABLE_WEBDRIVER-OFF.patch" are not
+ > needed anymore (and therefore removed). There is also a performance
+ > improvement for a regression related to fallback font selection, and a
+ > couple of small fixes. The full release notes are available at:
 
-Just out of curiosity, do we have any roadmap for merging those patches or any
-"known issues" regarding this feature that have to be resolved?
+ >   https://webkitgtk.org/2019/11/06/webkitgtk2.26.2-released.html
 
->
->
-> > I don't think we want to tweak the _sysconfigdata file for every
-> > python package (although it would lead to a more "correct" situation,
-> > in which every sysroot contains _sysconfidata with proper paths).
-> > In addition, I wonder why do we need to copy all the toolchain-related
-> > files for every single package? (Maybe a symlink can help?)
->
-> We don't copy things for every single package, we do hard links. All
-> the per-package logic is based on making copy using hard links, so it
-> is very cheap.
->
-> My patch at
-> https://github.com/tpetazzoni/buildroot/commit/f2a92b1321bd0d63e5fad81b0cfc9ace910d17a0
-> indeed consists in tweaking the sysconfigdata on a per package basis.
-> Do not hesitate to let me know if you see any other solution. Ideally,
-> all the paths in sysconfigdata should be defined relatively to the
-> location of the sysconfidata file itself. I think I tried to do that
-> back then, but didn't succeed.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+ > The detailed security advisory can be found at:
 
-Thanks,
-Asaf.
+ >   https://webkitgtk.org/security/WSA-2019-0006.html
+
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+
+Committed to 2019.02.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
