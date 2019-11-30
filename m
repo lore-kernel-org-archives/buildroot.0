@@ -1,61 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Nov 2019 09:47:47 +0100
-Subject: [Buildroot] [git commit] package/opencv3: ensure the python module
- works when BR2_PACKAGE_PYTHON{, 3}_PYC_ONLY=y
-Message-ID: <20191130095727.18E6882819@busybox.osuosl.org>
+Date: Sat, 30 Nov 2019 09:13:03 +0100
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4,
+ 9}.x / 5.3.x series
+Message-ID: <20191130095727.00F2D8274F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d07c315f0c24903e03169c939b050618a9c3ba8b
+commit: https://git.buildroot.net/buildroot/commit/?id=b20487151af79563da763d0f053deb78ff63172a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The OpenCV Python module does a fairly strange thing to read a few
-configuration details: it uses Python's execfile() to execute two .py
-files and access a few variables. However, execfile() only works with
-.py files and not .pyc files.
-
-When BR2_PACKAGE_PYTHON{,3}_PYC_ONLY=y, the .py files are all removed,
-causing the OpenCV Python module to not work:
-
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 89, in <module>
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 58, in bootstrap
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 56, in load_first_config
-ImportError: OpenCV loader: missing configuration file: ['config.py']. Check OpenCV installation.
-
-To fix this problem, this commit uses the newly introduced
-<pkg>_KEEP_PY_FILES mechanism, to ensure the important config*.py
-files are kept.
-
-Fixes:
-
-  https://bugs.busybox.net/show_bug.cgi?id=12171
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv3/opencv3.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 83094ed78b..d38107f6e7 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -328,6 +328,7 @@ OPENCV3_CONF_OPTS += \
- 	-DPYTHON2_PACKAGES_PATH=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
- 	-DPYTHON2_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
- OPENCV3_DEPENDENCIES += python
-+OPENCV3_KEEP_PY_FILES += usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/cv2/config*.py
- else
- OPENCV3_CONF_OPTS += \
- 	-DBUILD_opencv_python2=OFF \
-@@ -339,6 +340,7 @@ OPENCV3_CONF_OPTS += \
- 	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
- 	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
- OPENCV3_DEPENDENCIES += python3
-+OPENCV3_KEEP_PY_FILES += usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/cv2/config*.py
- endif
- OPENCV3_CONF_ENV += $(PKG_PYTHON_DISTUTILS_ENV)
- OPENCV3_DEPENDENCIES += python-numpy
+diff --git a/linux/Config.in b/linux/Config.in
+index 3fa0d7e7b2..f291f671b5 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.3.13" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.3.14" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.19.75-cip11" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index bf0624e75d..f8ef927c97 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,7 +1,7 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 9f04e53f03d0ead6561195fb71aac18cbee419112ed54f9d4fc1515a5fa5c92f  linux-5.3.13.tar.xz
++sha256 955712688c7256675383ec5be4ee044dbb59116a9a1f24e8689d12a6f95f7932  linux-5.3.14.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 47e3030d80b9a3b96cdefc008db57f9faa87e2d093437d941caec3ca9ed89924  linux-4.4.204.tar.xz
+-sha256 47a1987cb34182e625cac95f497a534461ff881b3bcb485b37507a086857bf50  linux-4.9.204.tar.xz
++sha256 fa1f8fe9c12e18e5cda18cf759b77ae9e778e1e9006d837426c955b75bd4eaa6  linux-4.4.205.tar.xz
++sha256 98b9e8644706acc0cf51022372bb263b59a1d2bbe3ccd7ce6bd9bc7378c78b05  linux-4.9.205.tar.xz
+ sha256 f8889feb0cbd7df36ff35bd4c72c1e2010567621bfcb218fcfa501bc5c7787c0  linux-4.14.156.tar.xz
+ sha256 bf2cbba319d43d1bd9e876ac0b55ab83118d1a1e61cce3c929d5371f7567bff6  linux-4.19.86.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 37b0db1de9..a170cfa4fd 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -305,11 +305,11 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.204"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.204"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.205"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.205"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.156"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.19.86"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.3.13"	if BR2_KERNEL_HEADERS_5_3
++	default "5.3.14"	if BR2_KERNEL_HEADERS_5_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
