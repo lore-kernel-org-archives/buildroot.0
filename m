@@ -1,46 +1,68 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  1 Dec 2019 10:54:23 +0100
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{14,
- 19}.x series
-Message-ID: <20191201095423.29775-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 1 Dec 2019 11:05:39 +0100
+Subject: [Buildroot] [PATCH/next 1/3] package/solarus: bump to version
+ 1.6.2
+In-Reply-To: <20191201092823.1288313-1-fontaine.fabrice@gmail.com>
+References: <20191201092823.1288313-1-fontaine.fabrice@gmail.com>
+Message-ID: <c80bd416-8dfd-9fb1-4e4a-965dac2e5ed1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi Fabrice,
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index f8ef927c97..ba42b8357a 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -3,5 +3,5 @@ sha256 955712688c7256675383ec5be4ee044dbb59116a9a1f24e8689d12a6f95f7932  linux-5
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 fa1f8fe9c12e18e5cda18cf759b77ae9e778e1e9006d837426c955b75bd4eaa6  linux-4.4.205.tar.xz
- sha256 98b9e8644706acc0cf51022372bb263b59a1d2bbe3ccd7ce6bd9bc7378c78b05  linux-4.9.205.tar.xz
--sha256 f8889feb0cbd7df36ff35bd4c72c1e2010567621bfcb218fcfa501bc5c7787c0  linux-4.14.156.tar.xz
--sha256 bf2cbba319d43d1bd9e876ac0b55ab83118d1a1e61cce3c929d5371f7567bff6  linux-4.19.86.tar.xz
-+sha256 90fa769a052ecf34a0cab72cf013e19275dbb8cd01bbe52f1d465e2ed7537733  linux-4.14.157.tar.xz
-+sha256 a57221e8318e6fcaedb90b099d56352f9d6608fd367283bc7db84330856eda1d  linux-4.19.87.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a170cfa4fd..95748ea62c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -307,8 +307,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.205"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.205"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.156"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.86"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.14.157"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.87"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.3.14"	if BR2_KERNEL_HEADERS_5_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
--- 
-2.20.1
+Le 01/12/2019 ? 10:28, Fabrice Fontaine a ?crit?:
+> Switch to gitlab to retrieve latest version
+
+Here is a discussion about downloading archive from gitlab:
+https://gitlab.com/solarus-games/solarus/issues/1410
+
+Are you sure that the archive hash will be the same over the time?
+
+Also, there is no official release archive in gitlab:
+https://gitlab.com/solarus-games/solarus/releases
+
+The issue has been reported:
+https://gitlab.com/solarus-games/solarus-website-pages/issues/37
+https://gitlab.com/solarus-games/solarus-website-pages/issues/38
+
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/solarus/solarus.hash | 2 +-
+>  package/solarus/solarus.mk   | 6 +++---
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/solarus/solarus.hash b/package/solarus/solarus.hash
+> index dab8d1a1fa..596c0e3bdf 100644
+> --- a/package/solarus/solarus.hash
+> +++ b/package/solarus/solarus.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated
+> -sha256 d800fdf388f860732f2d40c8dd635c34fd1c452857f75bf9b3a421e3ef5ee751  solarus-1.6.0-src.tar.gz
+> +sha256 a752c26ef9d7a22c8b054d5e22967f5e24519b9b3b22aaff265224e8088c833f  solarus-1.6.2.tar.gz
+>  
+>  sha256 309875d925041d909bc705473d6c4b7905272aea15c1c2389088c26c161bae1f  license.txt
+> diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
+> index fd7bbea2c7..6f65a53fea 100644
+> --- a/package/solarus/solarus.mk
+> +++ b/package/solarus/solarus.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -SOLARUS_VERSION = 1.6.0
+> -SOLARUS_SITE = http://www.solarus-games.org/downloads/solarus
+> -SOLARUS_SOURCE = solarus-$(SOLARUS_VERSION)-src.tar.gz
+> +SOLARUS_VERSION = 1.6.2
+> +SOLARUS_SITE = \
+> +	https://gitlab.com/solarus-games/solarus/archive/v$(SOLARUS_VERSION)
+>  
+>  SOLARUS_LICENSE = GPL-3.0 (code), CC-BY-SA-4.0 (Solarus logos and icons), \
+>  	CC-BY-SA-3.0 (GUI icons)
+> 
