@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 1 Dec 2019 15:18:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openjdk: modify site from
- mirror to official repos
-In-Reply-To: <20191127053945.3897-1-tudor@tudorholton.com>
-References: <20191127053945.3897-1-tudor@tudorholton.com>
-Message-ID: <fa31990d-0f91-0eec-4b63-9d0f235daab2@mind.be>
+Date: Sun, 1 Dec 2019 15:41:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tini: compile executable static
+In-Reply-To: <f361f14c-3a77-d769-1b5c-9a1a5fd8f3b3@eu.citrix.com>
+References: <1574255351-23642-1-git-send-email-simon.rowe@citrix.com>
+ <20191123211555.GZ32494@scaer>
+ <f361f14c-3a77-d769-1b5c-9a1a5fd8f3b3@eu.citrix.com>
+Message-ID: <5e477792-65af-42f8-5302-55ac4df554f9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,91 +14,69 @@ To: buildroot@busybox.net
 
 
 
-On 27/11/2019 06:39, Tudor Holton wrote:
-> From: Tudor Holton <buildroot@tudorholton.com>
+On 25/11/2019 10:23, Simon Rowe wrote:
+> On 23/11/2019 21:15, Yann E. MORIN wrote:
 > 
-> Since Java 11 (and possibly earlier), OpenJDK now has its own official repository 
-> at hg.openjdk.java.net which is referenced in all OpenJDK documentation.  
-> This patch brings buildroot into line with that source and allows consistent 
-> patching both across projects and for patches specific to buildroot environments.
-
- I guess by switching to a different source repository, we're also loosing some
-modifications that were done by AdoptOpenJDK, right? So could you enumerate
-these changes (and possibly explain why they're not relevant/wanted for Buildroot)?
-
-
+>> That can't work as-is, because this would break with BR2_SHARED_LIBS=y,
+>> in which case only shared libraries are available.
 > 
-> Signed-off-by: Tudor Holton <buildroot@tudorholton.com>
-> ---
->  DEVELOPERS                   | 3 +++
->  package/openjdk/openjdk.hash | 2 +-
->  package/openjdk/openjdk.mk   | 8 ++++----
->  3 files changed, 8 insertions(+), 5 deletions(-)
+> Thanks for pointing this out.
+
+ Well, actually, we really should keep at least libc.a around even if
+BR2_SHARED_LIBS=y, because some packages (with no dependencies, and that don't
+use NSS - like tini) may still want to link statically.
+
+ In fact, I think we already keep libc.a around in all possible cases even if
+BR2_SHARED_LIBS=y, so I think this patch will work as is...
+
+
+>> Furthermore, the commit message introducing tini explicitly states "it
+>> is not necessary to compile Tini statically for many non-docker
+>> container environments". So, what has changed since then?
+
+ Maybe Christian can explain? I vaguely remember that discussion from a year
+ago. IIRC, Christian initially did exactly this: link tini statically, always.
+But then it turned out not to be needed.
+
+
+>> Besides, I would expect that the init process of a container would be
+>> provided inside the container, not come from the host system. 
+
+ No, the point of tini is exactly to avoid using the init inside the container -
+either because it's doing too much (e.g. full systemd) or because it doesn't
+exist (container image with just the application).
+
+>> As such,
+>> the init system of the container can be dynamically linked with the
+>> runtime of the container itself.
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 991be89849..7c9cebfb2f 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2365,6 +2365,9 @@ F:	package/redis/
->  N:	Trent Piepho <tpiepho@impinj.com>
->  F:	package/libp11/
->  
-> +N:	Tudor Holton <buildroot@tudorholton.com>
-> +F:	package/openjdk/
-> +
->  N:	Tzu-Jung Lee <roylee17@gmail.com>
->  F:	package/dropwatch/
->  F:	package/tstools/
-> diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-> index 00d080aa3f..beed7a34a2 100644
-> --- a/package/openjdk/openjdk.hash
-> +++ b/package/openjdk/openjdk.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256 5f73d86ed516173965b27754f1bb21374ccb1194a17c2d89d8018280ce5ffa78  openjdk-12.0.2+10.tar.gz
-> +sha256 b2bcad35656b00928683416f3480ad00363b00993eb711c3e1886e4fe77eefeb  jdk-12.0.2+10.tar.gz
->  sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-> index ea2555edcc..3081c2f895 100644
-> --- a/package/openjdk/openjdk.mk
-> +++ b/package/openjdk/openjdk.mk
-> @@ -7,7 +7,10 @@
->  OPENJDK_VERSION_MAJOR = 12.0.2
->  OPENJDK_VERSION_MINOR = 10
->  OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
-> -OPENJDK_SITE = $(call github,AdoptOpenJDK,openjdk-jdk12u,jdk-$(OPENJDK_VERSION))
-> +OPENJDK_PROJECT = jdk-updates
-> +OPENJDK_RELEASE = jdk12u
+> Passing --init to "docker run" takes whatever the executable docker-init in the
+> OS filesystem is and uses it as the process for pid 1 in the container. If the
+> OS is buildroot and the container uses glibc that doesn't work.
+> 
+>> In any case, this patch is incorrect in the shared-only setup, so I
+>> marked it as rejected for now. If you can provide a beter way to do what
+>> you need, then we can revisit it later with a different implementation
+>> (and more explanations on how this is used in the wild).
+> 
+> I can add the static linking as an option. I would have done so but it was
+> suggested here
+> 
+> http://lists.busybox.net/pipermail/buildroot/2017-October/204974.html
+> 
+> that an init should always be statically linked.
+> 
+> In summary I can make this optional and mutually exclusive with BR2_SHARED_LIBS,
+> would that be acceptable?
 
- Is it relevant to create variables for these? Just use them directly in the
-_SITE, like we do for most other packages.
+ Could you check with BR2_SHARED_LIBS=y and the current patch if it's possible
+to build tini for all cases? I.e., external toolchain, internal with musl,
+glibc, uClibc. If not, then you can make it conditional on !shared like this:
 
+	$(if $(BR2_SHARED_LIBS),,-static)
 
-> +OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
-> +OPENJDK_SITE = https://hg.openjdk.java.net/$(OPENJDK_PROJECT)/$(OPENJDK_RELEASE)/archive
-
- I suspect this is an autogenerated archive, right? Do you know how reliable it
-is w.r.t. changes in the hash? Long ago, we've had problems with github a couple
-of times, where suddenly the generated tarball would be slightly different and
-the existing hash would break.
-
- I realize that it's hard to know for sure if the tarball is consistent. But at
-least please check if there's nothing stupid like a download date embedded in it.
+ And of course, we still need an explanation why it is needed after all while
+before we thought it wasn't.
 
  Regards,
  Arnout
-
->  OPENJDK_LICENSE = GPL-2.0+ with exception
->  OPENJDK_LICENSE_FILES = LICENSE
->  
-> @@ -83,9 +86,6 @@ OPENJDK_CONF_OPTS = \
->  	--with-native-debug-symbols=none \
->  	--without-version-pre \
->  	--with-sysroot=$(STAGING_DIR) \
-> -	--with-vendor-name="AdoptOpenJDK" \
-> -	--with-vendor-url="https://adoptopenjdk.net/" \
-> -	--with-vendor-version-string="AdoptOpenJDK" \
->  	--with-version-build="$(OPENJDK_VERSION_MAJOR)" \
->  	--with-version-string="$(OPENJDK_VERSION_MAJOR)"
->  
-> 
