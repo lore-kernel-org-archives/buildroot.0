@@ -1,83 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  1 Dec 2019 10:28:22 +0100
-Subject: [Buildroot] [PATCH/next 2/3] package/solarus: luajit is optional,
- not mandatory
-In-Reply-To: <20191201092823.1288313-1-fontaine.fabrice@gmail.com>
-References: <20191201092823.1288313-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191201092823.1288313-2-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  1 Dec 2019 10:54:23 +0100
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{14,
+ 19}.x series
+Message-ID: <20191201095423.29775-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build with lua 5.1 has been fixed since version 1.6.1 and
-https://gitlab.com/solarus-games/solarus/commit/611f81a90d42692e986c78c67090541ffd1c5973
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/solarus/Config.in  |  9 ++++-----
- package/solarus/solarus.mk | 12 ++++++++++--
- 2 files changed, 14 insertions(+), 7 deletions(-)
+ linux/linux.hash                     | 4 ++--
+ package/linux-headers/Config.in.host | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/solarus/Config.in b/package/solarus/Config.in
-index 359ad15e02..290d5a756c 100644
---- a/package/solarus/Config.in
-+++ b/package/solarus/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_SOLARUS
- 	bool "solarus"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
- 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
-@@ -11,7 +11,6 @@ config BR2_PACKAGE_SOLARUS
- 	select BR2_PACKAGE_LIBOGG
- 	select BR2_PACKAGE_LIBPNG # runtime
- 	select BR2_PACKAGE_LIBVORBIS
--	select BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_OPENAL
- 	select BR2_PACKAGE_PHYSFS
- 	select BR2_PACKAGE_SDL2
-@@ -25,9 +24,9 @@ config BR2_PACKAGE_SOLARUS
- 	  http://www.solarus-games.org
- 	  https://github.com/solarus-games/solarus
- 
--comment "solarus needs OpenGL and a toolchain w/ C++, gcc >= 4.8, NPTL, dynamic library"
--	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+comment "solarus needs OpenGL, a Lua 5.1 interpreter and a toolchain w/ C++, gcc >= 4.8, NPTL, dynamic library"
- 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
--		|| !BR2_PACKAGE_HAS_LIBGL
-+		|| !BR2_PACKAGE_HAS_LIBGL \
-+		|| !(BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT)
-diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
-index 6f65a53fea..c17483d339 100644
---- a/package/solarus/solarus.mk
-+++ b/package/solarus/solarus.mk
-@@ -15,10 +15,18 @@ SOLARUS_LICENSE_FILES = license.txt
- # Install libsolarus.so
- SOLARUS_INSTALL_STAGING = YES
- 
--SOLARUS_DEPENDENCIES = libgl libmodplug libogg libvorbis luajit openal physfs sdl2 \
--	sdl2_image sdl2_ttf
-+SOLARUS_DEPENDENCIES = libgl libmodplug libogg libvorbis openal physfs sdl2 \
-+	sdl2_image sdl2_ttf \
-+	$(if $(BR2_PACKAGE_LUA_5_1),lua)
- 
- # Disable launcher GUI (requires Qt5)
- SOLARUS_CONF_OPTS = -DSOLARUS_GUI=OFF
- 
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+SOLARUS_CONF_OPTS += -DSOLARUS_USE_LUAJIT=ON
-+SOLARUS_DEPENDENCIES += luajit
-+else
-+SOLARUS_CONF_OPTS += -DSOLARUS_USE_LUAJIT=OFF
-+endif
-+
- $(eval $(cmake-package))
+diff --git a/linux/linux.hash b/linux/linux.hash
+index f8ef927c97..ba42b8357a 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -3,5 +3,5 @@ sha256 955712688c7256675383ec5be4ee044dbb59116a9a1f24e8689d12a6f95f7932  linux-5
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256 fa1f8fe9c12e18e5cda18cf759b77ae9e778e1e9006d837426c955b75bd4eaa6  linux-4.4.205.tar.xz
+ sha256 98b9e8644706acc0cf51022372bb263b59a1d2bbe3ccd7ce6bd9bc7378c78b05  linux-4.9.205.tar.xz
+-sha256 f8889feb0cbd7df36ff35bd4c72c1e2010567621bfcb218fcfa501bc5c7787c0  linux-4.14.156.tar.xz
+-sha256 bf2cbba319d43d1bd9e876ac0b55ab83118d1a1e61cce3c929d5371f7567bff6  linux-4.19.86.tar.xz
++sha256 90fa769a052ecf34a0cab72cf013e19275dbb8cd01bbe52f1d465e2ed7537733  linux-4.14.157.tar.xz
++sha256 a57221e8318e6fcaedb90b099d56352f9d6608fd367283bc7db84330856eda1d  linux-4.19.87.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index a170cfa4fd..95748ea62c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -307,8 +307,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "4.4.205"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.205"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.156"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.86"	if BR2_KERNEL_HEADERS_4_19
++	default "4.14.157"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.87"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.3.14"	if BR2_KERNEL_HEADERS_5_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 -- 
-2.24.0
+2.20.1
