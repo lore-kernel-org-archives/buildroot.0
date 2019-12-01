@@ -1,46 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Dec 2019 21:17:19 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/python-gobject: depend on
- python2
-In-Reply-To: <20191201183909.3756147-1-aduskett@gmail.com>
-References: <20191201183909.3756147-1-aduskett@gmail.com>
-Message-ID: <20191201211719.757d02ab@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 1 Dec 2019 21:55:37 +0100
+Subject: [Buildroot] [git commit] package/{pkg-generic, python,
+ python3}: rename .py file exclusion variable to not conflict
+Message-ID: <20191201205436.41B687FB5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  1 Dec 2019 10:39:08 -0800
-aduskett at gmail.com wrote:
-
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Version 2.86.6 of python-gobject is quite old and no longer works with
-> Python versions > 3.7. When importing a user will recieve the following error:
-> 
-> Traceback (most recent call last):
->   File "<stdin>", line 1, in <module>
->   File "/usr/lib/python3.8/site-packages/gobject/__init__.py", line 26, in
->   <module>
->   File "/usr/lib/python3.8/site-packages/glib/__init__.py", line 22, in <module>
-> SystemError: initialization of _glib raised unreported exception
-> 
-> Because new versions of python-gobject require gobject-introspection, which is
-> not currently available in Buildroot, add a dependency on python2 to prevent
-> users from receiving the above error.
-
-You forgot to add the reference to the bug being fixed, despite this
-being noted in my review of v1. No need to resend just for that though.
+commit: https://git.buildroot.net/buildroot/commit/?id=0f5ac40374c91e44af8c3806e848f8e62c42b140
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
+http://autobuild.buildroot.net/results/3b6/3b6280b0b7a9634b747db2865b21c6266007c725/
 
-  https://bugs.busybox.net/show_bug.cgi?id=12286
+The PYTHON_KEEP_PY_FILES global variable conflicts with the per-package
+<pkg>_KEEP_PY_FILES variable for the python package, causing make to
+complain:
 
-Best regards,
+package/zlib/zlib.mk:7: *** Recursive variable 'PYTHON_KEEP_PY_FILES' references itself (eventually).  Stop.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+As a workaround, rename the global variable to KEEP_PYTHON_PY_FILES so it
+cannot conflict with the per-package variable.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-generic.mk     | 2 +-
+ package/python/python.mk   | 2 +-
+ package/python3/python3.mk | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1709660ef2..635040c2a0 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1060,7 +1060,7 @@ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ endif
+ TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
+ ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
+-PYTHON_KEEP_PY_FILES += $$($(2)_KEEP_PY_FILES)
++KEEP_PYTHON_PY_FILES += $$($(2)_KEEP_PY_FILES)
+ 
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
+diff --git a/package/python/python.mk b/package/python/python.mk
+index a3f5ce2113..41a981e3d3 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -268,7 +268,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ define PYTHON_REMOVE_PY_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' \
+-		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
++		$(if $(strip $(KEEP_PYTHON_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(KEEP_PYTHON_PY_FILES)) \) ) \
+ 		-print0 | \
+ 		xargs -0 --no-run-if-empty rm -f
+ endef
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index a8a5464149..a6692c5257 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -286,7 +286,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ define PYTHON3_REMOVE_PY_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' \
+-		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
++		$(if $(strip $(KEEP_PYTHON_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(KEEP_PYTHON_PY_FILES)) \) ) \
+ 		-print0 | \
+ 		xargs -0 --no-run-if-empty rm -f
+ endef
