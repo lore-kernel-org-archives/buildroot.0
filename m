@@ -1,37 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Dec 2019 19:15:46 +0100
-Subject: [Buildroot] [git commit] package/mp4v2: update the upstream URL in
- Config.in
-Message-ID: <20191201180900.3DA248366F@busybox.osuosl.org>
+Date: Sun, 1 Dec 2019 19:14:56 +0100
+Subject: [Buildroot] [git commit] package/matchbox-lib: add an upstream URL
+ to Config.in
+Message-ID: <20191201180900.2381F8347A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abd4976515e04ed8d1768dd08ea1d80bcdd4fc51
+commit: https://git.buildroot.net/buildroot/commit/?id=45f5c12c4b2b9637f45a6004ba6c0e66edb3d313
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(405)' URL status in the package stats
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mp4v2/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/matchbox-lib/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mp4v2/Config.in b/package/mp4v2/Config.in
-index 42315a2272..490ebac9fd 100644
---- a/package/mp4v2/Config.in
-+++ b/package/mp4v2/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_MP4V2
- 	  The MP4v2 library provides functions to read, create, and
- 	  modify mp4 files.
- 
--	  https://code.google.com/p/mp4v2/
-+	  https://code.google.com/archive/p/mp4v2/
- 
- if BR2_PACKAGE_MP4V2
- 
+diff --git a/package/matchbox-lib/Config.in b/package/matchbox-lib/Config.in
+index d758ab35a8..98cdae730d 100644
+--- a/package/matchbox-lib/Config.in
++++ b/package/matchbox-lib/Config.in
+@@ -3,3 +3,5 @@ config BR2_PACKAGE_MATCHBOX_LIB
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	help
+ 	  Matchbox common functionality library.
++
++	  http://git.yoctoproject.org/cgit/cgit.cgi/libmatchbox
