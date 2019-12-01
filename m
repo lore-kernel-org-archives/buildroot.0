@@ -1,37 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Dec 2019 18:52:28 +0100
-Subject: [Buildroot] [git commit] package/opkg: update the upstream URL in
+Date: Sun, 1 Dec 2019 18:55:26 +0100
+Subject: [Buildroot] [git commit] package/oprofile: add an upstream URL to
  Config.in
-Message-ID: <20191201175208.756C683463@busybox.osuosl.org>
+Message-ID: <20191201175208.8E58682910@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10a67d886052f9bd5bbf7b459aa2e99bbafa78dc
+commit: https://git.buildroot.net/buildroot/commit/?id=c04dab6f6f5ff726aed5f724ffe82ef70551de89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(405)' URL status in the package stats
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opkg/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/oprofile/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/opkg/Config.in b/package/opkg/Config.in
-index 20f6fa2f53..1f6a39343f 100644
---- a/package/opkg/Config.in
-+++ b/package/opkg/Config.in
-@@ -17,7 +17,7 @@ config BR2_PACKAGE_OPKG
- 	  conforms to a subset of debian's policy manual regarding
- 	  control files.
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index d99a7e60c8..cce2cfdab8 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -39,6 +39,8 @@ config BR2_PACKAGE_OPROFILE
+ 	  interrupt handlers, kernel modules, the kernel, shared
+ 	  libraries, and applications.
  
--	  http://code.google.com/p/opkg/
-+	  https://code.google.com/archive/p/opkg/
- 
- if BR2_PACKAGE_OPKG
- 
++	  https://sourceforge.net/projects/oprofile/
++
+ comment "oprofile needs a toolchain w/ C++, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
