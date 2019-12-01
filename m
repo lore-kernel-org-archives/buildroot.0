@@ -1,37 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Dec 2019 18:59:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/prosody: bump to bugfix version
- 0.11.3
-In-Reply-To: <20191129102805.17515-1-jubalh@iodoru.org> (Michael Vetter's
- message of "Fri, 29 Nov 2019 11:28:05 +0100")
-References: <20191129102805.17515-1-jubalh@iodoru.org>
-Message-ID: <87y2vwq64q.fsf@dell.be.48ers.dk>
+Date: Sun, 1 Dec 2019 18:52:28 +0100
+Subject: [Buildroot] [git commit] package/opkg: update the upstream URL in
+ Config.in
+Message-ID: <20191201175208.756C683463@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=10a67d886052f9bd5bbf7b459aa2e99bbafa78dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This is a bugfix release for the stable 0.11 branch. It is recommended
- > for all users of 0.11.x to upgrade.
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(405)' URL status in the package stats
+web page output.
 
- > Important note for those upgrading: Previous releases did not
- > automatically expire messages from group chat (MUC) archives, so if
- > mod_muc_mam was loaded and enabled for a MUC, archives would grow
- > indefinitely. This is not what most deployments want, therefore
- > automatic expiry is now implemented and enabled with a default 7 day
- > retention. You can configure this with the muc_log_expires_after
- > configuration option, which can be set to "never" to restore the old
- > behaviour and preserve any existing logs older than 7 days.
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/opkg/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > For details see:
- > https://prosody.im/doc/release/0.11.3
-
- > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/opkg/Config.in b/package/opkg/Config.in
+index 20f6fa2f53..1f6a39343f 100644
+--- a/package/opkg/Config.in
++++ b/package/opkg/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_OPKG
+ 	  conforms to a subset of debian's policy manual regarding
+ 	  control files.
+ 
+-	  http://code.google.com/p/opkg/
++	  https://code.google.com/archive/p/opkg/
+ 
+ if BR2_PACKAGE_OPKG
+ 
