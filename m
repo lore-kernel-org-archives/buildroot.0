@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 1 Dec 2019 15:07:45 +0100
-Subject: [Buildroot] [PATCH] package/postgresql: fix filesystem naming
- consistency
-In-Reply-To: <3057858685-24792@mail.unilogic.nl>
-References: <3057858685-24792@mail.unilogic.nl>
-Message-ID: <b34b7020-ad95-4a3d-f9dc-25547198007f@mind.be>
+Date: Sun, 1 Dec 2019 15:18:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openjdk: modify site from
+ mirror to official repos
+In-Reply-To: <20191127053945.3897-1-tudor@tudorholton.com>
+References: <20191127053945.3897-1-tudor@tudorholton.com>
+Message-ID: <fa31990d-0f91-0eec-4b63-9d0f235daab2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,66 +13,91 @@ To: buildroot@busybox.net
 
 
 
-On 29/11/2019 09:32, Pascal de Bruijn wrote:
-> From:   Peter Seiderer <ps.report@gmx.net> 
-[snip]
->> -if [ ! -f /var/lib/pgsql/PG_VERSION ]; then 
->> +if [ ! -f /var/lib/postgresql/PG_VERSION ]; then 
->> ? ? ? echo "Initializing postgresql data base..." 
->> - ? ? su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/pgsql' 
->> + ? ? su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/postgresql' 
+On 27/11/2019 06:39, Tudor Holton wrote:
+> From: Tudor Holton <buildroot@tudorholton.com>
+> 
+> Since Java 11 (and possibly earlier), OpenJDK now has its own official repository 
+> at hg.openjdk.java.net which is referenced in all OpenJDK documentation.  
+> This patch brings buildroot into line with that source and allows consistent 
+> patching both across projects and for patches specific to buildroot environments.
+
+ I guess by switching to a different source repository, we're also loosing some
+modifications that were done by AdoptOpenJDK, right? So could you enumerate
+these changes (and possibly explain why they're not relevant/wanted for Buildroot)?
+
+
+> 
+> Signed-off-by: Tudor Holton <buildroot@tudorholton.com>
+> ---
+>  DEVELOPERS                   | 3 +++
+>  package/openjdk/openjdk.hash | 2 +-
+>  package/openjdk/openjdk.mk   | 8 ++++----
+>  3 files changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 991be89849..7c9cebfb2f 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2365,6 +2365,9 @@ F:	package/redis/
+>  N:	Trent Piepho <tpiepho@impinj.com>
+>  F:	package/libp11/
 >  
-> -1 for this change as /var/lib/pgsql is the suggested/common default location, see e.g. [1], 
-> and is saving 5 characters at many location from the script ;-) 
+> +N:	Tudor Holton <buildroot@tudorholton.com>
+> +F:	package/openjdk/
+> +
+>  N:	Tzu-Jung Lee <roylee17@gmail.com>
+>  F:	package/dropwatch/
+>  F:	package/tstools/
+> diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+> index 00d080aa3f..beed7a34a2 100644
+> --- a/package/openjdk/openjdk.hash
+> +++ b/package/openjdk/openjdk.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256 5f73d86ed516173965b27754f1bb21374ccb1194a17c2d89d8018280ce5ffa78  openjdk-12.0.2+10.tar.gz
+> +sha256 b2bcad35656b00928683416f3480ad00363b00993eb711c3e1886e4fe77eefeb  jdk-12.0.2+10.tar.gz
+>  sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+> index ea2555edcc..3081c2f895 100644
+> --- a/package/openjdk/openjdk.mk
+> +++ b/package/openjdk/openjdk.mk
+> @@ -7,7 +7,10 @@
+>  OPENJDK_VERSION_MAJOR = 12.0.2
+>  OPENJDK_VERSION_MINOR = 10
+>  OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+> -OPENJDK_SITE = $(call github,AdoptOpenJDK,openjdk-jdk12u,jdk-$(OPENJDK_VERSION))
+> +OPENJDK_PROJECT = jdk-updates
+> +OPENJDK_RELEASE = jdk12u
 
- More important than whether it is suggested by upstream, though: changing it
-now breaks existing installations. Indeed, anyone who has installed a system
-with existing current buildroot will have the databases in /var/ib/pgsql. After
-this change, upgrading the system to newer buildroot will result in the
-databases no longer being found and instead new databases are created...
-
- So, at least a "legacy" symlink pgsql->postgresql must be created. But even
-that is a bit iffy, because it's likely that the databases are not directly in
-the readonly rootfs, but symlinked to a (writeable) data partition. So the
-symlink must be created at runtime. But even then, you can't know if the user
-put the whole of /var/lib on the writeable partition, or just /var/lib/pgsql...
+ Is it relevant to create variables for these? Just use them directly in the
+_SITE, like we do for most other packages.
 
 
-> This comes down to:
-> Do you want to stick with an upstream recommendation even if it's ill considered...
-> Given this is a trivially avoided inconsistency.
+> +OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
+> +OPENJDK_SITE = https://hg.openjdk.java.net/$(OPENJDK_PROJECT)/$(OPENJDK_RELEASE)/archive
 
- It was trivially avoidable 5 years ago. Now, it is no longer trivial.
+ I suspect this is an autogenerated archive, right? Do you know how reliable it
+is w.r.t. changes in the hash? Long ago, we've had problems with github a couple
+of times, where suddenly the generated tarball would be slightly different and
+the existing hash would break.
 
-
-> The whole point of having consistent naming between service and related directories is that you don't even have to look in the documentation where things are.
-> 
-> 
-> 
-> On a sidenote, PostgreSQL does look for /etc/postgresql/postgresql.conf  regardless and not /etc/pgsql/pgsql.conf, so it's a bit of mess really...
-
- If these are the only reasons for changing the name, then I don't think it's
-worth the bother of breaking existing systems.
+ I realize that it's hard to know for sure if the tarball is consistent. But at
+least please check if there's nothing stupid like a download date embedded in it.
 
  Regards,
  Arnout
 
-> 
-> 
-> As far as I can tell Debian choose to fix this, and RedHat seems to have stuck with the upstream inconsistency as well.
-> 
-> 
-> So ultimately it's a bit of philosophical choice...
-> 
-> 
-> 
-> Regards,
-> Pascal de Bruijn
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  OPENJDK_LICENSE = GPL-2.0+ with exception
+>  OPENJDK_LICENSE_FILES = LICENSE
+>  
+> @@ -83,9 +86,6 @@ OPENJDK_CONF_OPTS = \
+>  	--with-native-debug-symbols=none \
+>  	--without-version-pre \
+>  	--with-sysroot=$(STAGING_DIR) \
+> -	--with-vendor-name="AdoptOpenJDK" \
+> -	--with-vendor-url="https://adoptopenjdk.net/" \
+> -	--with-vendor-version-string="AdoptOpenJDK" \
+>  	--with-version-build="$(OPENJDK_VERSION_MAJOR)" \
+>  	--with-version-string="$(OPENJDK_VERSION_MAJOR)"
+>  
 > 
