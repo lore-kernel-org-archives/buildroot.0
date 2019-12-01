@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Dec 2019 19:13:55 +0100
-Subject: [Buildroot] [git commit] package/linux-fusion: add an upstream URL
- to Config.in
-Message-ID: <20191201180859.EA6058366F@busybox.osuosl.org>
+Date: Sun, 1 Dec 2019 19:14:06 +0100
+Subject: [Buildroot] [git commit] package/matchbox-common: add an upstream
+ URL to Config.in
+Message-ID: <20191201180859.F29048366F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcc2a29f410728e485bfce739a63101ead5cce71
+commit: https://git.buildroot.net/buildroot/commit/?id=99eb6cfb242b4bfaf00f8b5389f902c3167a3eee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add an upstream URL to the help text in Config.in. This
@@ -19,16 +19,19 @@ web page output.
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-fusion/Config.in | 2 ++
+ package/matchbox-common/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/linux-fusion/Config.in b/package/linux-fusion/Config.in
-index ed8bd6ad48..14b4f946af 100644
---- a/package/linux-fusion/Config.in
-+++ b/package/linux-fusion/Config.in
-@@ -8,3 +8,5 @@ config BR2_PACKAGE_LINUX_FUSION
+diff --git a/package/matchbox-common/Config.in b/package/matchbox-common/Config.in
+index 587a0694e8..3717a551f2 100644
+--- a/package/matchbox-common/Config.in
++++ b/package/matchbox-common/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_MATCHBOX_COMMON
  	help
- 	  DirectFB Communication Layer allowing multiple DirectFB
- 	  applications to run concurrently
+ 	  Common desktop folders and matchbox-session script.
+ 
++	  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-common/
 +
-+	  https://github.com/deniskropp/linux-fusion
+ config BR2_PACKAGE_MATCHBOX_COMMON_PDA
+ 	bool "PDA style app folder"
+ 	depends on BR2_PACKAGE_MATCHBOX_COMMON
