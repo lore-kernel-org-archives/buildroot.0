@@ -1,47 +1,34 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 1 Dec 2019 10:43:33 -0800
-Subject: [Buildroot] [Bug 12286] Can't import gobject in python 3.8
-In-Reply-To: <bug-12286-163-jol9fBu8wQ@https.bugs.busybox.net/>
-References: <bug-12286-163@https.bugs.busybox.net/>
- <bug-12286-163-jol9fBu8wQ@https.bugs.busybox.net/>
-Message-ID: <CAFSsvmoDRYEMwgsG1YA49=6gh-znesLQxeDo8vOBFkdB88qMhg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 01 Dec 2019 19:52:04 +0100
+Subject: [Buildroot] [PATCH] package/postgresql: fix filesystem naming
+ consistency
+In-Reply-To: <b34b7020-ad95-4a3d-f9dc-25547198007f@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 1 Dec 2019 15:07:45 +0100")
+References: <3057858685-24792@mail.unilogic.nl>
+ <b34b7020-ad95-4a3d-f9dc-25547198007f@mind.be>
+Message-ID: <87v9qzq3or.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+Hello,
 
-On Thu, Nov 28, 2019 at 11:07 AM <bugzilla@busybox.net> wrote:
->
-> https://bugs.busybox.net/show_bug.cgi?id=12286
->
-> --- Comment #3 from info at hifiberry.com ---
-> As Python2 support ends in less than 2 months, just disabling it on Python3
-> won't really help as there should be no new software anymore that still uses
-> Python2.
-> What's the state of the introspection code?
->
-I have a patch series here:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=137614
+ >> The whole point of having consistent naming between service and
+ >> related directories is that you don't even have to look in the
+ >> documentation where things are.
+ >> 
+ >> On a sidenote, PostgreSQL does look for
+ >> /etc/postgresql/postgresql.conf regardless and not
+ >> /etc/pgsql/pgsql.conf, so it's a bit of mess really...
 
-There are currently issues with patch 4/5 which causes libglib2 to not
-build properly
-if python3 isn't built yet for the target. There are suggestions on
-how to fix the issue,
-however, I do not have the time to implement the changes.
+ >  If these are the only reasons for changing the name, then I don't think it's
+ > worth the bother of breaking existing systems.
 
-Other than that issue, I personally use gobject-introspection in my
-current projects and
-it works quite well! Any feedback would be appreciated!
+Agreed.
 
-Adam
-> --
-> You are receiving this mail because:
-> You are on the CC list for the bug.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
