@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Dec 2019 19:15:25 +0100
-Subject: [Buildroot] [PATCH 1/7] package/matchbox-common: add an
- upstream URL to Config.in
-In-Reply-To: <20191128160058.24118-1-mark@dibsco.co.uk> (Mark Corbin's message
- of "Thu, 28 Nov 2019 16:00:52 +0000")
-References: <20191128160058.24118-1-mark@dibsco.co.uk>
-Message-ID: <878snvrjya.fsf@dell.be.48ers.dk>
+Date: Sun, 01 Dec 2019 19:16:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/musl-fts: add an upstream URL
+ to Config.in
+In-Reply-To: <20191128175302.1268-1-mark@dibsco.co.uk> (Mark Corbin's message
+ of "Thu, 28 Nov 2019 17:53:02 +0000")
+References: <20191128175302.1268-1-mark@dibsco.co.uk>
+Message-ID: <874kyjrjws.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,7 +20,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 
-Committed all 7, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
