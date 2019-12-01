@@ -1,7 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun,  1 Dec 2019 10:39:08 -0800
-Subject: [Buildroot] [PATCH v2 1/2] package/python-gobject: depend on python2
-Message-ID: <20191201183909.3756147-1-aduskett@gmail.com>
+Date: Sun,  1 Dec 2019 10:39:09 -0800
+Subject: [Buildroot] [PATCH v2 2/2] support/testing: add python-gobject test
+In-Reply-To: <20191201183909.3756147-1-aduskett@gmail.com>
+References: <20191201183909.3756147-1-aduskett@gmail.com>
+Message-ID: <20191201183909.3756147-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +12,52 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Version 2.86.6 of python-gobject is quite old and no longer works with
-Python versions > 3.7. When importing a user will recieve the following error:
-
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/lib/python3.8/site-packages/gobject/__init__.py", line 26, in
-  <module>
-  File "/usr/lib/python3.8/site-packages/glib/__init__.py", line 22, in <module>
-SystemError: initialization of _glib raised unreported exception
-
-Because new versions of python-gobject require gobject-introspection, which is
-not currently available in Buildroot, add a dependency on python2 to prevent
-users from receiving the above error.
+Add a simple test case that imports the module.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v1 -> v2:
-  - Add missing depends on in the comment section of python-gobject/Config.in
-    (Thomas)
+ DEVELOPERS                                            |  1 +
+ .../testing/tests/package/sample_python_gobject.py    |  1 +
+ support/testing/tests/package/test_python_gobject.py  | 11 +++++++++++
+ 3 files changed, 13 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_gobject.py
+ create mode 100644 support/testing/tests/package/test_python_gobject.py
 
- package/python-gobject/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/python-gobject/Config.in b/package/python-gobject/Config.in
-index 475ff25185..36ddffebb0 100644
---- a/package/python-gobject/Config.in
-+++ b/package/python-gobject/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_GOBJECT
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_PACKAGE_PYTHON # Broken with python 3.8
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  Python bindings for the GLib/GObject library
-@@ -10,5 +11,6 @@ config BR2_PACKAGE_PYTHON_GOBJECT
- 	  https://wiki.gnome.org/action/show/Projects/PyGObject
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4adaac0c3d..c9fd98636e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -74,6 +74,7 @@ F:	package/semodule-utils/
+ F:	package/setools/
+ F:	package/sngrep/
+ F:	package/systemd/
++F:	support/testing/tests/package/test_python_gobject.py
  
- comment "python-gobject needs a toolchain w/ wchar, threads"
-+	depends on BR2_PACKAGE_PYTHON
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ N:	Adam Heinrich <adam@adamh.cz>
+ F:	package/jack1/
+diff --git a/support/testing/tests/package/sample_python_gobject.py b/support/testing/tests/package/sample_python_gobject.py
+new file mode 100644
+index 0000000000..84ebee7362
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_gobject.py
+@@ -0,0 +1 @@
++import gobject  # noqa
+diff --git a/support/testing/tests/package/test_python_gobject.py b/support/testing/tests/package/test_python_gobject.py
+new file mode 100644
+index 0000000000..0a59447adb
+--- /dev/null
++++ b/support/testing/tests/package/test_python_gobject.py
+@@ -0,0 +1,11 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy2Gobject(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON=y
++        BR2_PACKAGE_PYTHON_GOBJECT=y
++        """
++    sample_scripts = ["tests/package/sample_python_gobject.py"]
 -- 
 2.23.0
