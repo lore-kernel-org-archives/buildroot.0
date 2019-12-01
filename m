@@ -1,54 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Dec 2019 19:01:14 +0100
-Subject: [Buildroot] [git commit] package/openvmtools: udev rules files
- should not be executable
-Message-ID: <20191201180305.A556C8347B@busybox.osuosl.org>
+Date: Sun, 1 Dec 2019 19:06:25 +0100
+Subject: [Buildroot] [git commit] package/openvmtools: use correct variable
+ in udev rule RUN+=
+Message-ID: <20191201180305.AFADE83480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ad22f41b57fb244f2f396533d549f7d9eaa5a06
+commit: https://git.buildroot.net/buildroot/commit/?id=164963b80875b8d23062179bf2d92a9896a2a0a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-/usr/lib/udev/rules.d/99-vmware-scsi-udev.rules is marked executable,
-causing systemd to complain.
+DEVPATH is not a valid substitution in a RUN+=, devpath is:
+https://mirrors.edge.kernel.org/pub/linux/utils/kernel/hotplug/udev/udev.html
+
+So use that to get rid of the following warning:
+
+Invalid value "/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'" for RUN
+(char 27: invalid substitution type), ignoring, but please fix
 
 Source: https://github.com/vmware/open-vm-tools/pull/376
 
 Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Acked-by: J??r??my Rosen <jeremy.rosen@smile.fr>
+[Peter: extend description]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0009-Set-permissions-on-rules-file.patch       | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ .../0010-Change-DEVPATH-to-devpath.patch           | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/package/openvmtools/0009-Set-permissions-on-rules-file.patch b/package/openvmtools/0009-Set-permissions-on-rules-file.patch
+diff --git a/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch b/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
 new file mode 100644
-index 0000000000..6a37c1690d
+index 0000000000..5af694d8f2
 --- /dev/null
-+++ b/package/openvmtools/0009-Set-permissions-on-rules-file.patch
-@@ -0,0 +1,23 @@
-+From c3ef6a8285132871ad10f9300d8afff55d8d6de2 Mon Sep 17 00:00:00 2001
++++ b/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
+@@ -0,0 +1,25 @@
++From 22f5d198b3b2f7e4debed83948ba1baf70d4749a Mon Sep 17 00:00:00 2001
 +From: puneetse <22071208+puneetse@users.noreply.github.com>
-+Date: Wed, 16 Oct 2019 10:09:38 -0700
-+Subject: [PATCH] Set permissions on rules file
++Date: Wed, 16 Oct 2019 10:04:41 -0700
++Subject: [PATCH] Change $DEVPATH to $devpath
 +
-+udevs rules should not be executable otherwise udev will log a warning in the journal
++$DEVPATH throws a warning by udev.
 +
 +Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 +---
-+ udev/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ udev/99-vmware-scsi-udev.rules | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/udev/Makefile.am b/udev/Makefile.am
-+index 68fbc3e27..8b9a4d716 100644
-+--- a/udev/Makefile.am
-++++ b/udev/Makefile.am
-+@@ -17,5 +17,5 @@
++diff --git a/udev/99-vmware-scsi-udev.rules b/udev/99-vmware-scsi-udev.rules
++index 053b59706..a605d80ef 100644
++--- a/udev/99-vmware-scsi-udev.rules
+++++ b/udev/99-vmware-scsi-udev.rules
++@@ -2,6 +2,6 @@
++ #
++ # This file is part of open-vm-tools
 + 
-+ install-data-local:
-+ 	$(INSTALL) -d $(DESTDIR)$(UDEVRULESDIR)
-+-	$(INSTALL) $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
-++	$(INSTALL) -m 0644 $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
++-ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="Virtual disk*", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'"
++-ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="VMware Virtual S", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'"
+++ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="Virtual disk*", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys/$devpath/device/timeout'"
+++ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="VMware Virtual S", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys/$devpath/device/timeout'"
 + 
