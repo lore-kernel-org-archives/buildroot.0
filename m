@@ -1,72 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Dec 2019 21:55:37 +0100
-Subject: [Buildroot] [git commit] package/{pkg-generic, python,
- python3}: rename .py file exclusion variable to not conflict
-Message-ID: <20191201205436.41B687FB5D@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 01 Dec 2019 21:32:52 +0000
+Subject: [Buildroot] [Bug 12171] Python-opencv needs config.py and
+ config-3.7.py to run. Only the *.pyc is not enough.
+In-Reply-To: <bug-12171-163@https.bugs.busybox.net/>
+References: <bug-12171-163@https.bugs.busybox.net/>
+Message-ID: <bug-12171-163-1BuzitKgGk@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f5ac40374c91e44af8c3806e848f8e62c42b140
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=12171
 
-Fixes:
-http://autobuild.buildroot.net/results/3b6/3b6280b0b7a9634b747db2865b21c6266007c725/
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-The PYTHON_KEEP_PY_FILES global variable conflicts with the per-package
-<pkg>_KEEP_PY_FILES variable for the python package, causing make to
-complain:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-package/zlib/zlib.mk:7: *** Recursive variable 'PYTHON_KEEP_PY_FILES' references itself (eventually).  Stop.
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
+Merged for 2019.11, thanks
 
-As a workaround, rename the global variable to KEEP_PYTHON_PY_FILES so it
-cannot conflict with the per-package variable.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-generic.mk     | 2 +-
- package/python/python.mk   | 2 +-
- package/python3/python3.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 1709660ef2..635040c2a0 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1060,7 +1060,7 @@ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
- endif
- TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
- ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
--PYTHON_KEEP_PY_FILES += $$($(2)_KEEP_PY_FILES)
-+KEEP_PYTHON_PY_FILES += $$($(2)_KEEP_PY_FILES)
- 
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
-diff --git a/package/python/python.mk b/package/python/python.mk
-index a3f5ce2113..41a981e3d3 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -268,7 +268,7 @@ endif
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- define PYTHON_REMOVE_PY_FILES
- 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' \
--		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
-+		$(if $(strip $(KEEP_PYTHON_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(KEEP_PYTHON_PY_FILES)) \) ) \
- 		-print0 | \
- 		xargs -0 --no-run-if-empty rm -f
- endef
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index a8a5464149..a6692c5257 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -286,7 +286,7 @@ endif
- ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
- define PYTHON3_REMOVE_PY_FILES
- 	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' \
--		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
-+		$(if $(strip $(KEEP_PYTHON_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(KEEP_PYTHON_PY_FILES)) \) ) \
- 		-print0 | \
- 		xargs -0 --no-run-if-empty rm -f
- endef
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
