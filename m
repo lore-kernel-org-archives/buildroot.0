@@ -1,52 +1,45 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 1 Oct 2019 02:52:49 +0300
-Subject: [Buildroot] [PATCH v2 1/1] cmake: bump version to 3.15.3
-In-Reply-To: <CADvTj4qO6FZYmjgP2GBLcrf7P-k14JCz2jVvcTrFT4B1Tt5dbQ@mail.gmail.com>
-References: <20190929115731.128904-1-james.hilliard1@gmail.com>
- <20190930233542.6a084b17@windsurf.home>
- <CADvTj4qO6FZYmjgP2GBLcrf7P-k14JCz2jVvcTrFT4B1Tt5dbQ@mail.gmail.com>
-Message-ID: <20191001025249.GB13164@momiji>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat, 30 Nov 2019 19:06:55 -0800
+Subject: [Buildroot] [PATCH 1/2] package/python-gobject: depend on python2
+Message-ID: <20191201030656.3691270-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On Tue, 1 Oct 2019 00:38:47 +0200, James Hilliard <james.hilliard1@gmail.com> wrote:
-> On Mon, Sep 30, 2019, 11:35 PM Thomas Petazzoni <
-> thomas.petazzoni at bootlin.com> wrote:
-> 
-> > Hello James,
-> >
-> > On Sun, 29 Sep 2019 05:57:31 -0600
-> > James Hilliard <james.hilliard1@gmail.com> wrote:
-> >
-> > > Remove FindLibUV patch which is now upstream.
-> > >
-> > > Resync/reformat rename cmake rootfile patch for 3.15.3 with git format-patch.
-> > >
-> > > Set cmake version min to 3.10.
-> >
-> > What is the reasoning for changing the minimal CMake version to 3.10 ?
-> >
-> It's the minimum required by wpewebkit.
+Version 2.86.6 of python-gobject is quite old and no longer works with
+Python versions > 3.7. When importing a user will recieve the following error:
 
-CMake 3.10 is also needed by webkitgtk 2.26.x
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/lib/python3.8/site-packages/gobject/__init__.py", line 26, in
+  <module>
+  File "/usr/lib/python3.8/site-packages/glib/__init__.py", line 22, in <module>
+SystemError: initialization of _glib raised unreported exception
 
-We don't often bump build dependencies in WebKit [1], but this happens to
-be one of these occasions (and now that we have been able to, we would be
-able to use some new features at last!).
+Because new versions of python-gobject require gobject-introspection, which is
+not currently available in Buildroot, add a dependency on python2 to prevent
+users from receiving the above error.
 
-=)
-
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-[1] https://trac.webkit.org/wiki/WebKitGTK/DependenciesPolicy
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191001/d7288b48/attachment.asc>
+ package/python-gobject/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/python-gobject/Config.in b/package/python-gobject/Config.in
+index 475ff25185..fa801cd411 100644
+--- a/package/python-gobject/Config.in
++++ b/package/python-gobject/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_GOBJECT
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
++	depends on BR2_PACKAGE_PYTHON # Broken with python 3.8
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  Python bindings for the GLib/GObject library
+-- 
+2.23.0
