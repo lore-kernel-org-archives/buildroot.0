@@ -1,34 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Dec 2019 19:15:05 +0100
-Subject: [Buildroot] [git commit] package/matchbox-panel: add an upstream
- URL to Config.in
-Message-ID: <20191201180900.2B86E8366F@busybox.osuosl.org>
+Date: Sun, 1 Dec 2019 19:13:36 +0100
+Subject: [Buildroot] [git commit] package/luasql-sqlite3: update the
+ upstream URL in Config.in
+Message-ID: <20191201180859.E285F8366F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=484b687f79d06945c581cdaf709c2ecd8cbb3774
+commit: https://git.buildroot.net/buildroot/commit/?id=b27c5c1c0b0094cd0e5282e9588fa5ddb9632a96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(406)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/matchbox-panel/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/luasql-sqlite3/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/matchbox-panel/Config.in b/package/matchbox-panel/Config.in
-index 47bd10ad7e..1fc38336a5 100644
---- a/package/matchbox-panel/Config.in
-+++ b/package/matchbox-panel/Config.in
-@@ -4,3 +4,5 @@ config BR2_PACKAGE_MATCHBOX_PANEL
+diff --git a/package/luasql-sqlite3/Config.in b/package/luasql-sqlite3/Config.in
+index cc4d3d5450..3a1fc6ba60 100644
+--- a/package/luasql-sqlite3/Config.in
++++ b/package/luasql-sqlite3/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_LUASQL_SQLITE3
  	help
- 	  A flexible always present 'window bar' for holding
- 	  application launchers.
-+
-+	  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-panel/
+ 	  LuaSQL is a simple interface from Lua to a DBMS.
+ 
+-	  http://www.keplerproject.org/luasql
++	  http://keplerproject.github.io/luasql/
