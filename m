@@ -1,34 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Dec 2019 19:10:25 +0100
-Subject: [Buildroot] [git commit] package/openvmtools: only try to start
- vmtoolsd on vmware
-Message-ID: <20191201180305.B83CD8347B@busybox.osuosl.org>
+Date: Sun, 1 Dec 2019 19:01:14 +0100
+Subject: [Buildroot] [git commit] package/openvmtools: udev rules files
+ should not be executable
+Message-ID: <20191201180305.A556C8347B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89ebe8b4a12400435b9473b4ca7ea1240ff5f93e
+commit: https://git.buildroot.net/buildroot/commit/?id=7ad22f41b57fb244f2f396533d549f7d9eaa5a06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-adds ConditionVirtualization=vmware to vmtoolsd.service
+/usr/lib/udev/rules.d/99-vmware-scsi-udev.rules is marked executable,
+causing systemd to complain.
+
+Source: https://github.com/vmware/open-vm-tools/pull/376
 
 Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvmtools/vmtoolsd.service | 1 +
- 1 file changed, 1 insertion(+)
+ .../0009-Set-permissions-on-rules-file.patch       | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/package/openvmtools/vmtoolsd.service b/package/openvmtools/vmtoolsd.service
-index 17a4df44c2..cb97357ec2 100644
---- a/package/openvmtools/vmtoolsd.service
-+++ b/package/openvmtools/vmtoolsd.service
-@@ -1,6 +1,7 @@
- [Unit]
- Description=vmtoolsd for openvmtools
- After=syslog.target network.target
-+ConditionVirtualization=vmware
- 
- [Service]
- Type=forking
+diff --git a/package/openvmtools/0009-Set-permissions-on-rules-file.patch b/package/openvmtools/0009-Set-permissions-on-rules-file.patch
+new file mode 100644
+index 0000000000..6a37c1690d
+--- /dev/null
++++ b/package/openvmtools/0009-Set-permissions-on-rules-file.patch
+@@ -0,0 +1,23 @@
++From c3ef6a8285132871ad10f9300d8afff55d8d6de2 Mon Sep 17 00:00:00 2001
++From: puneetse <22071208+puneetse@users.noreply.github.com>
++Date: Wed, 16 Oct 2019 10:09:38 -0700
++Subject: [PATCH] Set permissions on rules file
++
++udevs rules should not be executable otherwise udev will log a warning in the journal
++
++Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
++---
++ udev/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/udev/Makefile.am b/udev/Makefile.am
++index 68fbc3e27..8b9a4d716 100644
++--- a/udev/Makefile.am
+++++ b/udev/Makefile.am
++@@ -17,5 +17,5 @@
++ 
++ install-data-local:
++ 	$(INSTALL) -d $(DESTDIR)$(UDEVRULESDIR)
++-	$(INSTALL) $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
+++	$(INSTALL) -m 0644 $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
++ 
