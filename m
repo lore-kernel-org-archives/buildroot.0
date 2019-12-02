@@ -1,46 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Dec 2019 22:22:29 +0100
-Subject: [Buildroot] [git commit] package/rabbitmq-c: security bump to
- version 0.10.0
-Message-ID: <20191202211933.6F3AB83A1B@busybox.osuosl.org>
+Date: Mon, 2 Dec 2019 22:25:38 +0100
+Subject: [Buildroot] [git commit] package/nss-mdns: disable tests
+Message-ID: <20191202211933.C623C83A1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63d0762ab72a3536ea2e07ac75327c7556ed72c1
+commit: https://git.buildroot.net/buildroot/commit/?id=a94e62aa6ee9c377ac5be3e467da3bebda1786be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add additional input validation to prevent integer overflow when parsing
-a frame header. This addresses CVE-2019-18609.
+Disable tests that depend on check and have been added in version 0.11
+with
+https://github.com/lathiat/nss-mdns/commit/7b649a32836af3578a2bb60aa713588f0d9f9a83
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rabbitmq-c/rabbitmq-c.hash | 2 +-
- package/rabbitmq-c/rabbitmq-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nss-mdns/nss-mdns.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/rabbitmq-c/rabbitmq-c.hash b/package/rabbitmq-c/rabbitmq-c.hash
-index 19fd1cf064..eb57626518 100644
---- a/package/rabbitmq-c/rabbitmq-c.hash
-+++ b/package/rabbitmq-c/rabbitmq-c.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 316c0d156452b488124806911a62e0c2aa8a546d38fc8324719cd29aaa493024 rabbitmq-c-0.9.0.tar.gz
-+sha256 6455efbaebad8891c59f274a852b75b5cc51f4d669dfc78d2ae7e6cc97fcd8c0 rabbitmq-c-0.10.0.tar.gz
- sha256 94a12c906acb31a66c2c8a6c1b6e46cab52bc5694c5ada2a06d86b05d3d3f422 LICENSE-MIT
-diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
-index 63e05099d9..e059ff706c 100644
---- a/package/rabbitmq-c/rabbitmq-c.mk
-+++ b/package/rabbitmq-c/rabbitmq-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
+index e399da6743..77ab6c1ede 100644
+--- a/package/nss-mdns/nss-mdns.mk
++++ b/package/nss-mdns/nss-mdns.mk
+@@ -9,6 +9,7 @@ NSS_MDNS_SITE = \
+ 	https://github.com/lathiat/nss-mdns/releases/download/v$(NSS_MDNS_VERSION)
+ NSS_MDNS_LICENSE = LGPL-2.1+
+ NSS_MDNS_LICENSE_FILES = LICENSE
++NSS_MDNS_CONF_OPTS = --disable-tests
  
--RABBITMQ_C_VERSION = 0.9.0
-+RABBITMQ_C_VERSION = 0.10.0
- RABBITMQ_C_SITE = $(call github,alanxz,rabbitmq-c,v$(RABBITMQ_C_VERSION))
- RABBITMQ_C_LICENSE = MIT
- RABBITMQ_C_LICENSE_FILES = LICENSE-MIT
+ # add mdns4_minimal / mdns around the dns provider if missing
+ define NSS_MDNS_INSTALL_CONFIG
