@@ -1,66 +1,47 @@
 From: Julien Olivain <juju@cotds.org>
-Date: Mon,  2 Dec 2019 21:03:00 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/imx8mpico: bump BSP components to
- 4.14.98_2.0.0
-Message-ID: <20191202200300.418055-1-juju@cotds.org>
+Date: Mon,  2 Dec 2019 21:03:33 +0100
+Subject: [Buildroot] [PATCH 1/1] board/freescale/common/imx: use nodtb
+ variant in uboot images for 8M
+Message-ID: <20191202200333.418111-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update Kernel, U-Boot and ATF to TechNexion BSP, based on NXP
-4.14.98_2.0.0 release.
+When using u-boot.bin, u-boot is using its builtin dtb which may not
+be suitable for all cases. For TechNexion Pico Pi i.MX8M and
+i.MX8MMini, this break the USB and UMS commands. Since those boards
+does not have SD card slots, a recovery serial download is needed at
+every update.
 
-This patch also remove BR2_TARGET_UBOOT_FORMAT_IMX in defconfig which
-is not needed for this platform.
+Using u-boot-nodtb.bin now fixes this issue.
 
 Signed-off-by: Julien Olivain <juju@cotds.org>
 ---
- configs/imx8mpico_defconfig | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ board/freescale/common/imx/imx8-bootloader-prepare.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/imx8mpico_defconfig b/configs/imx8mpico_defconfig
-index f22fad0730..5478f267fc 100644
---- a/configs/imx8mpico_defconfig
-+++ b/configs/imx8mpico_defconfig
-@@ -1,13 +1,13 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/pico-8m.dtb"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mq-pico-pi.dtb"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux,d69606b85de50b01e7c028ea2188308ab6612c80)/linux-d69606b85de50b01e7c028ea2188308ab6612c80.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux,9146d4dcb2dda0c7614f74f824cfb20d29bd85f8)/linux-9146d4dcb2dda0c7614f74f824cfb20d29bd85f8.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="tn_imx8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/pico-8m freescale/pico-8m-dcss-ili9881c"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-pico-pi freescale/imx8mq-pico-pi-dcss-ili9881c"
- BR2_PACKAGE_FREESCALE_IMX=y
- BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y
- BR2_PACKAGE_FIRMWARE_IMX=y
-@@ -18,16 +18,15 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.9.88_2.2.0_8qxp_beta2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-edm,2fb0ee63229919807737b83d49f5813f594939ac)/u-boot-edm-2fb0ee63229919807737b83d49f5813f594939ac.tar.gz"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pico-8m"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-edm,9a070a5b4460124054bc459edfc9d1b43e5403bb)/u-boot-edm-9a070a5b4460124054bc459edfc9d1b43e5403bb.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pico-imx8mq"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_SPL=y
+diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+index df528b0df5..cbf741af30 100755
+--- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+@@ -10,14 +10,14 @@ main ()
+ 
+ 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
+ 		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+-		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
++		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
+ 
+ 		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+ 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
+ 		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+-		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
++		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
+ 
 -- 
 2.23.0
