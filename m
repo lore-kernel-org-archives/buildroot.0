@@ -1,45 +1,134 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 02 Dec 2019 08:47:51 -0000
-Subject: [Buildroot] [git commit] package/libcurl: bump to 7.67.0
-Message-ID: <20191202083933.5FB5C80262@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rng-tools: bump to 6.8
+Message-ID: <20191202083933.4584A81336@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e51830407f67b72360aa0d55079aa8ea1cfbd700
+commit: https://git.buildroot.net/buildroot/commit/?id=b6606937d861cc4de60e40baec1cb6cdb61b2aab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Dropped autoreconf and non-standard pthread yield patches as they merged
+upstream.
+
+[Peter: really drop autoreconf]
+Signed-off-by: Matthew Weber <matthew.weber at rockwellcollins.com
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 6 ++----
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ .../0001-configure.ac-fix-autoreconf.patch         | 34 ----------------------
+ ...-replace-non-standard-pthread_yield-with-.patch | 33 ---------------------
+ package/rng-tools/rng-tools.hash                   |  2 +-
+ package/rng-tools/rng-tools.mk                     |  4 +--
+ 4 files changed, 2 insertions(+), 71 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 8f2d0c058c..b46ee52d04 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,3 @@
--# Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.66.0.tar.xz.asc
--# with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 dbb48088193016d079b97c5c3efde8efa56ada2ebf336e8a97d04eb8e2ed98c1  curl-7.66.0.tar.xz
-+# Locally calculated
-+sha256 f5d2e7320379338c3952dcc7566a140abb49edb575f9f99272455785c40e536c  curl-7.67.0.tar.xz
- sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 8384210d48..373befae13 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/rng-tools/0001-configure.ac-fix-autoreconf.patch b/package/rng-tools/0001-configure.ac-fix-autoreconf.patch
+deleted file mode 100644
+index 567a7a2891..0000000000
+--- a/package/rng-tools/0001-configure.ac-fix-autoreconf.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 1af1b4aab717a58da1dff8888c36c741b0f6ac03 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 5 Apr 2019 19:22:22 +0200
+-Subject: [PATCH] configure.ac: fix autoreconf
+-
+-Use foreign instead of gnu in AM_INIT_AUTOMAKE otherwise autoreconf will
+-fail on:
+-Makefile.am: error: required file './README' not found
+-
+-Upstream:
+-https://github.com/nhorman/rng-tools/commit/1af1b4aab717a58da1dff8888c36c741b0f6ac03
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index d00a6f1..26b4806 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -21,7 +21,7 @@ AC_INIT(rng-tools, 6.7, [Neil Horman <nhorman@tuxdriver.com>])
+- AC_PREREQ(2.52)
+- AC_CONFIG_SRCDIR([rngd.c])
+- AC_CANONICAL_TARGET
+--AM_INIT_AUTOMAKE([gnu])
+-+AM_INIT_AUTOMAKE([foreign])
+- AC_CONFIG_HEADERS([rng-tools-config.h])
+- AC_CONFIG_MACRO_DIRS([m4])
+- 
+--- 
+-2.17.1
+-
+diff --git a/package/rng-tools/0002-rngd_jitter-replace-non-standard-pthread_yield-with-.patch b/package/rng-tools/0002-rngd_jitter-replace-non-standard-pthread_yield-with-.patch
+deleted file mode 100644
+index 3ce6225fa5..0000000000
+--- a/package/rng-tools/0002-rngd_jitter-replace-non-standard-pthread_yield-with-.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 96f1f4d5d718834c1fde610cbed89cfa9a2206f1 Mon Sep 17 00:00:00 2001
+-From: Nicola Lunghi <25422924+nicola-lunghi@users.noreply.github.com>
+-Date: Wed, 5 Jun 2019 16:38:21 +0100
+-Subject: [PATCH] rngd_jitter: replace non standard pthread_yield with
+- sched_yield
+-
+-Upsteam commit:
+-https://github.com/nhorman/rng-tools/commit/96f1f4d5d718834c1fde610cbed89cfa9a2206f1
+-
+-[Original was Nicola's but it does not include a Signed-off-by]
+-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+-
+-
+----
+- rngd_jitter.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/rngd_jitter.c b/rngd_jitter.c
+-index 979e613..54070ae 100644
+---- a/rngd_jitter.c
+-+++ b/rngd_jitter.c
+-@@ -168,7 +168,7 @@ try_again:
+- 		} else if (request < need) {
+- 			if (request == -1) {
+- 				message(LOG_DAEMON|LOG_DEBUG, "failed read: %s\n", strerror(errno));
+--				pthread_yield();
+-+				sched_yield();
+- 			} else
+- 				message(LOG_DAEMON|LOG_DEBUG, "request of random data returns %ld less than need %ld\n",
+- 					request, need);
+--- 
+-2.17.1
+-
+diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
+index a0771034fe..5989d9f022 100644
+--- a/package/rng-tools/rng-tools.hash
++++ b/package/rng-tools/rng-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256	b85e3530dbf943b6da03ebecaf64d0a4febfcc4f562fc7f8d886483906b15f08  rng-tools-6.7.tar.gz
++sha256	93e548d4aaf2a1897d4b677f41d8473db1c7f57648adeca18cafa1907e410bb3  rng-tools-6.8.tar.gz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index fa23b3316f..ce3f19753b 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -4,14 +4,12 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.66.0
-+LIBCURL_VERSION = 7.67.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-RNG_TOOLS_VERSION = 6.7
++RNG_TOOLS_VERSION = 6.8
+ RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
+ RNG_TOOLS_LICENSE = GPL-2.0
+ RNG_TOOLS_LICENSE_FILES = COPYING
+ RNG_TOOLS_DEPENDENCIES = libsysfs jitterentropy-library host-pkgconf
+ 
+-RNG_TOOLS_AUTORECONF = YES
+-
+ RNG_TOOLS_CONF_OPTS = \
+ 	--without-nistbeacon \
+ 	--without-pkcs11
