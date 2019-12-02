@@ -1,45 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Dec 2019 22:23:58 +0100
-Subject: [Buildroot] [git commit] configs/warp7: Bump the kernel version
-Message-ID: <20191202211933.8803183A8F@busybox.osuosl.org>
+Date: Mon, 2 Dec 2019 22:22:19 +0100
+Subject: [Buildroot] [git commit] package/python-django: security bump to
+ version 2.2.8
+Message-ID: <20191202211933.68B0083A8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0e65f83e19b3b095de80ef1550d6501cfc57295
+commit: https://git.buildroot.net/buildroot/commit/?id=6340272e88db87a3917b69228997fcba1a9e37dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump the kernel to version 5.4.1
+Fixes the following security vulnerabilities:
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+- CVE-2019-19118: Privilege escalation in the Django admin
+
+Additionally, 2.2.8 (and 2.2.7) fixes a number of bugs and adds python 3.8
+support.
+
+For more details, see the release notes:
+https://docs.djangoproject.com/en/dev/releases/2.2.8/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/warp7_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
-index 0481c46c5c..96c723d9e5 100644
---- a/configs/warp7_defconfig
-+++ b/configs/warp7_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 0e6b7b2c63..965055f47d 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	796c175a2f94e938c60d84b4565216af  Django-2.2.6.tar.gz
+-sha256	a8ca1033acac9f33995eb2209a6bf18a4681c3e5269a878e9a7e0b7384ed1ca3  Django-2.2.6.tar.gz
++md5	57d965818410a4e00e2267eef66aa9c9  Django-2.2.8.tar.gz
++sha256	a4ad4f6f9c6a4b7af7e2deec8d0cbff28501852e5010d6c2dc695d3d1fae7ca0  Django-2.2.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 1c810b8af7..d541a2c07b 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 5.3 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.1"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+-PYTHON_DJANGO_VERSION = 2.2.6
++PYTHON_DJANGO_VERSION = 2.2.8
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c7/2c/bbd0fddf6a08456c3100b8e8b230f3288d4511985aa4e2368b0d115b5aae
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1c/aa/f618f346b895123be44739b276099a2b418b45b2b7afb5e1071403e8d2e9
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
