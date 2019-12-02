@@ -1,43 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 02 Dec 2019 08:47:50 -0000
-Subject: [Buildroot] [git commit] package/paho-mqtt-cpp: bump version to 1.1
-Message-ID: <20191202083932.6925D7FF06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dtc: install host libfdt headers
+ in a subdirectory
+Message-ID: <20191202083932.EFFA47F98A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d0ae2fa183f0503400fb073777c88d30750ca45
+commit: https://git.buildroot.net/buildroot/commit/?id=e381d823f6834fc1b9e5574febd7e4e737295e89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
+Installing the libfdt headers at $(HOST_DIR)/include interferes with the
+build of the kernel, as in beaglebone:
+
+2019-11-01T22:23:16 /usr/bin/make -f ./scripts/Makefile.build obj=scripts
+2019-11-01T22:23:16 /usr/bin/make -f ./scripts/Makefile.build obj=scripts/dtc need-builtin=
+2019-11-01T22:23:16 (cat /dev/null; ) > scripts/dtc/modules.order
+2019-11-01T22:23:16 /usr/bin/gcc -O2 -I/work/beaglebone/host/include -L/work/beaglebone/host/lib -Wl,-rpath,/work/beaglebone/host/lib -Wp,-MD,scripts/dtc/libfdt/.fdt_ro.o.d -Wall -Wmissing-prototypes -Wstrict-p>
+2019-11-01T22:23:16 scripts/dtc/libfdt/fdt_ro.c:92:10: error: redefinition of ???fdt_get_max_phandle???
+2019-11-01T22:23:16 uint32_t fdt_get_max_phandle(const void *fdt)
+2019-11-01T22:23:16 ^~~~~~~~~~~~~~~~~~~
+2019-11-01T22:23:16 In file included from scripts/dtc/libfdt/fdt_ro.c:54:
+2019-11-01T22:23:16 /work/beaglebone/host/include/libfdt.h:384:24: note: previous definition of ???fdt_get_max_phandle??? was here
+2019-11-01T22:23:16 static inline uint32_t fdt_get_max_phandle(const void *fdt)
+2019-11-01T22:23:16 ^~~~~~~~~~~~~~~~~~~
+2019-11-01T22:23:16 make[4]: *** [scripts/Makefile.host:107: scripts/dtc/libfdt/fdt_ro.o] Error 1
+2019-11-01T22:23:16 make[3]: *** [scripts/Makefile.build:544: scripts/dtc] Error 2
+2019-11-01T22:23:16 make[2]: *** [Makefile:1066: scripts] Error 2
+2019-11-01T22:23:16 make[1]: *** [package/pkg-generic.mk:241: /work/beaglebone/build/linux-4dae378bbe721277b08699d1d88ffae12acc9b09/.stamp_built] Error 2
+
+We cannot simply disable dtc support and patching the kernel makefiles
+is risky and error-prone, so let's just install the host-dtc headers at
+$(HOST_DIR)/include/libfdt to circumvent the problem.
+
+Packages that depend on those headers (e.g. host-qemu) must be updated
+to user the correct path but this is small change.
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/paho-mqtt-cpp/paho-mqtt-cpp.hash | 2 +-
- package/paho-mqtt-cpp/paho-mqtt-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dtc/dtc.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
-index b98e073556..e5406e0b81 100644
---- a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
-+++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  e97386d159b811e534b98d21e3f6881ab2b43678ec026da7525d5c21ebc292ff  paho-mqtt-cpp-1.0.1.tar.gz
-+sha256  cb0343349ed91ef51d0e76ae860d19435a730d3d355e57886bb090014cb70bbe  paho-mqtt-cpp-1.1.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
-diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
-index 246e076242..2cb65d9840 100644
---- a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
-+++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index a0fffa5b80..76106519e5 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -18,8 +18,11 @@ DTC_MAKE_OPTS = \
+ 	NO_PYTHON=1 \
+ 	NO_VALGRIND=1
  
--PAHO_MQTT_CPP_VERSION = 1.0.1
-+PAHO_MQTT_CPP_VERSION = 1.1
- PAHO_MQTT_CPP_SITE = $(call github,eclipse,paho.mqtt.cpp,v$(PAHO_MQTT_CPP_VERSION))
- PAHO_MQTT_CPP_LICENSE = EPL-1.0 or BSD-3-Clause
- PAHO_MQTT_CPP_LICENSE_FILES = epl-v10 edl-v10
++# For the host, we install headers in a special subdirectory to avoid
++# conflicts with the in-kernel libfdt copy.
+ HOST_DTC_MAKE_OPTS = \
+ 	PREFIX=$(HOST_DIR) \
++	INCLUDEDIR=$(HOST_DIR)/include/libfdt \
+ 	NO_PYTHON=1 \
+ 	NO_VALGRIND=1 \
+ 	NO_YAML=1
