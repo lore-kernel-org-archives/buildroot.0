@@ -1,52 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 02 Dec 2019 08:47:49 -0000
-Subject: [Buildroot] [git commit] configs/linksprite_pcduino: bump kernel
- and u-boot versions
-Message-ID: <20191202083931.C75538016A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: add pattern
+ based image copy for ATF
+Message-ID: <20191202083932.D48B2818A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0330c2df2f81fed3ed049928b9ad446f23f9fad2
+commit: https://git.buildroot.net/buildroot/commit/?id=e4d276c357fdf9f19f99f826cab63f373687f902
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump Linux to 5.3.8 and U-Boot to 2019.10.
+This adds support for different platforms where the binaries have
+different extensions.
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Michael Schenk <michael.schenk@noser.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/linksprite_pcduino_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ boot/arm-trusted-firmware/Config.in               | 7 +++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 +++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
-index dd9bcdc1f7..a8577b6e79 100644
---- a/configs/linksprite_pcduino_defconfig
-+++ b/configs/linksprite_pcduino_defconfig
-@@ -17,13 +17,13 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/linksprite/pcduino/post-image.sh"
- # For kernel modules autoloading
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index beb95fbf06..78c03019d5 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -135,4 +135,11 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
+ 	help
+ 	  Enable this option to build ATF with DEBUG=1.
  
--# Linux headers same as kernel, a 4.13 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
-+# Linux headers same as kernel, a 5.3 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES
++	string "Binary boot images"
++	default "*.bin"
++	help
++	  Names of generated image files that are installed in the
++	  output images/ directory.
++
+ endif
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index a7814e534a..e528686aa1 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -146,7 +146,9 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
+ endef
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.8"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
-@@ -37,7 +37,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
- BR2_TARGET_UBOOT_USE_DEFCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+ define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
+-	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
++	$(foreach f,$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES)), \
++		cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(f) $(BINARIES_DIR)/
++	)
+ 	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL)
+ 	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF)
+ endef
