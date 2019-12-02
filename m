@@ -1,45 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Dec 2019 15:26:01 +0100
-Subject: [Buildroot] [FYI] Bootlin external toolchains
-In-Reply-To: <CAMw6YJLJae0GcmrDmSY8FZ-uMj+WBybPkBaLQC1wkhooCjoKyQ@mail.gmail.com>
-References: <CAMw6YJLJae0GcmrDmSY8FZ-uMj+WBybPkBaLQC1wkhooCjoKyQ@mail.gmail.com>
-Message-ID: <20191202152601.4ab1c8cd@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 02 Dec 2019 15:03:03 +0000
+Subject: [Buildroot] [Bug 12376] New: python-scapy3k is deprecated
+Message-ID: <bug-12376-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=12376
 
-+Romain Naour in Cc.
+            Bug ID: 12376
+           Summary: python-scapy3k is deprecated
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: gabriel at potter.fr
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On Mon, 2 Dec 2019 02:47:15 +0200
-Vadim Kochan <vadim4j@gmail.com> wrote:
+The package python-scapy3k
+(https://github.com/buildroot/buildroot/blob/master/package/python-scapy3k/python-scapy3k.mk)
+is deprecated since python-scapy supports Python 3 (v2.4.0+).
 
-> Just in case if someone will be interested. I started Buildroot external
-> project which provides external toolchains from the Bootlin:
-> 
->     https://toolchains.bootlin.com
-> 
-> The git repo can be found at:
-> 
->     https://github.com/vkochan/buildroot-external-toolchain-bootlin
-
-An effort was started to package the Bootlin external toolchains in
-Buildroot itself, some time ago by engineers at Smile. We had some
-off-list discussion about this, but I don't think it was ever posted to
-the list. The idea back then was to have a script that generates all
-the packages, but the design was to have one package for each
-toolchain, so it really added a lot of packages.
-
-But I think we should really support these toolchains in Buildroot
-proper instead of having an external for them.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
