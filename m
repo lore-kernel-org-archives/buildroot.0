@@ -1,129 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Dec 2019 17:27:30 +0100
-Subject: [Buildroot] [git commit] package/bubblewrap: new package
-Message-ID: <20191202162015.118C483A1C@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  2 Dec 2019 18:55:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rabbitmq-c: security bump to
+ version 0.10.0
+Message-ID: <20191202175547.1306922-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f4bdc8fd1b05cc4f7d72afa9d7c951911fd3356
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add additional input validation to prevent integer overflow when parsing
+a frame header. This addresses CVE-2019-18609.
 
-Bubblewrap is a sandboxing tool based on kernel namespaces, typically
-used as lower-level infastructure by other end-user tools e.g. Flatpak.
-
-https://github.com/containers/bubblewrap
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-[Peter: needs mmu and !musl toolchain]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/bubblewrap/Config.in       | 13 +++++++++++++
- package/bubblewrap/bubblewrap.hash |  5 +++++
- package/bubblewrap/bubblewrap.mk   | 40 ++++++++++++++++++++++++++++++++++++++
- 5 files changed, 60 insertions(+)
+ package/rabbitmq-c/rabbitmq-c.hash | 2 +-
+ package/rabbitmq-c/rabbitmq-c.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e6c44b0671..a1f94df951 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -81,6 +81,7 @@ F:	package/jack1/
+diff --git a/package/rabbitmq-c/rabbitmq-c.hash b/package/rabbitmq-c/rabbitmq-c.hash
+index 19fd1cf064..eb57626518 100644
+--- a/package/rabbitmq-c/rabbitmq-c.hash
++++ b/package/rabbitmq-c/rabbitmq-c.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 316c0d156452b488124806911a62e0c2aa8a546d38fc8324719cd29aaa493024 rabbitmq-c-0.9.0.tar.gz
++sha256 6455efbaebad8891c59f274a852b75b5cc51f4d669dfc78d2ae7e6cc97fcd8c0 rabbitmq-c-0.10.0.tar.gz
+ sha256 94a12c906acb31a66c2c8a6c1b6e46cab52bc5694c5ada2a06d86b05d3d3f422 LICENSE-MIT
+diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
+index 63e05099d9..e059ff706c 100644
+--- a/package/rabbitmq-c/rabbitmq-c.mk
++++ b/package/rabbitmq-c/rabbitmq-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Adrian Perez de Castro <aperez@igalia.com>
- F:	package/brotli/
-+F:	package/bubblewrap/
- F:	package/cog/
- F:	package/libepoxy/
- F:	package/libwpe/
-diff --git a/package/Config.in b/package/Config.in
-index 37861387e8..9e2b78fe6a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2237,6 +2237,7 @@ menu "System tools"
- 	source "package/atop/Config.in"
- 	source "package/attr/Config.in"
- 	source "package/audit/Config.in"
-+	source "package/bubblewrap/Config.in"
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/circus/Config.in"
- 	source "package/coreutils/Config.in"
-diff --git a/package/bubblewrap/Config.in b/package/bubblewrap/Config.in
-new file mode 100644
-index 0000000000..b83f046c82
---- /dev/null
-+++ b/package/bubblewrap/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_BUBBLEWRAP
-+	bool "bubblewrap"
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # TEMP_FAILURE_RETRY
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBCAP
-+	help
-+	  Unprivileged sandbox tool based on Linux namespaces.
-+
-+	  https://github.com/projectatomic/bubblewrap
-+
-+comment "bubblewrap needs a glibc or uclibc toolchain"
-+	depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+	depends on BR2_USE_MMU
-diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
-new file mode 100644
-index 0000000000..c8177d00f5
---- /dev/null
-+++ b/package/bubblewrap/bubblewrap.hash
-@@ -0,0 +1,5 @@
-+# Locally computed:
-+sha256 c6a45f51794a908b76833b132471397a7413f07620af08e76c273d9f7b364dff bubblewrap-0.3.3.tar.xz
-+
-+# Hash for license files:
-+sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c COPYING
-diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
-new file mode 100644
-index 0000000000..83bbb1b234
---- /dev/null
-+++ b/package/bubblewrap/bubblewrap.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# bubblewrap
-+#
-+################################################################################
-+
-+BUBBLEWRAP_VERSION = 0.3.3
-+BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
-+BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
-+BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
-+
-+BUBBLEWRAP_LICENSE = LGPL-2.0+
-+BUBBLEWRAP_LICENSE_FILES = COPYING
-+
-+BUBBLEWRAP_CONF_OPTS = \
-+	--enable-require-userns=no \
-+	--disable-man \
-+	--disable-sudo \
-+	--with-priv-mode=none
-+
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+BUBBLEWRAP_CONF_OPTS += --with-bash-completion-dir=/usr/share/bash-completion/completions
-+else
-+BUBBLEWRAP_CONF_OPTS += --without-bash-completion-dir
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+BUBBLEWRAP_CONF_OPTS += --enable-selinux
-+BUBBLEWRAP_DEPENDENCIES += libselinux
-+else
-+BUBBLEWRAP_CONF_OPTS += --disable-selinux
-+endif
-+
-+# We need to mark bwrap as setuid, in case the kernel
-+# has user namespaces disabled for non-root users.
-+define BUBBLEWRAP_PERMISSIONS
-+	/usr/bin/bwrap f 1755 0 0 - - - - -
-+endef
-+
-+$(eval $(autotools-package))
+-RABBITMQ_C_VERSION = 0.9.0
++RABBITMQ_C_VERSION = 0.10.0
+ RABBITMQ_C_SITE = $(call github,alanxz,rabbitmq-c,v$(RABBITMQ_C_VERSION))
+ RABBITMQ_C_LICENSE = MIT
+ RABBITMQ_C_LICENSE_FILES = LICENSE-MIT
+-- 
+2.24.0
