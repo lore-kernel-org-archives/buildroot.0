@@ -1,90 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 02 Dec 2019 08:47:48 -0000
-Subject: [Buildroot] [git commit] arch/Config.in.arc: introduce the ARC
- optimized hs38 variant
-Message-ID: <20191202083932.5F7047FF3C@busybox.osuosl.org>
+Date: Mon, 02 Dec 2019 08:47:49 -0000
+Subject: [Buildroot] [git commit] package/python-future: new package
+Message-ID: <20191202083932.4EECD7F901@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f115b521a4c5715fae1c32a96fff90a102a59af
+commit: https://git.buildroot.net/buildroot/commit/?id=59db166dce69da5db25ce55c6cfabb8164c3f3a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This corresponds to -mcu=hs38 with mpy-option=9 (64-bit multiplier)
-
-Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in.arc | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-future/Config.in          |  7 +++++++
+ package/python-future/python-future.hash |  5 +++++
+ package/python-future/python-future.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
-diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-index c65bb01f1f..fdfafda31c 100644
---- a/arch/Config.in.arc
-+++ b/arch/Config.in.arc
-@@ -15,11 +15,17 @@ config BR2_archs38
- 	bool "ARC HS38"
- 	help
- 	  Generic ARC HS capable of running Linux, i.e. with MMU,
--	  caches and multiplier. Also it corresponds to the default
--	  configuration in older GNU toolchain versions.
-+	  caches and 32-bit multiplier. Also it corresponds to the
-+	  default configuration in older GNU toolchain versions.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 04401bb3eb..3a196b0943 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1394,6 +1394,7 @@ N:	Louis Aussedat <aussedat.louis@gmail.com>
+ F:	board/friendlyarm/nanopi-neo-plus2/
+ F:	configs/friendlyarm_nanopi_neo_plus2_defconfig
+ F:	package/python-dnspython/
++F:	package/python-future/
+ F:	package/python-huepy/
+ F:	package/python-tqdm/
  
--	  If you're not sure which version of ARC HS core you  build for
--	  keep this one.
-+config BR2_archs38_64mpy
-+	bool "ARC HS38 with 64-bit mpy"
+diff --git a/package/Config.in b/package/Config.in
+index e1df9326de..ec68f893aa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -914,6 +914,7 @@ menu "External python modules"
+ 	source "package/python-flask-sqlalchemy/Config.in"
+ 	source "package/python-flup/Config.in"
+ 	source "package/python-functools32/Config.in"
++	source "package/python-future/Config.in"
+ 	source "package/python-futures/Config.in"
+ 	source "package/python-gobject/Config.in"
+ 	source "package/python-gunicorn/Config.in"
+diff --git a/package/python-future/Config.in b/package/python-future/Config.in
+new file mode 100644
+index 0000000000..29303f334d
+--- /dev/null
++++ b/package/python-future/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_FUTURE
++	bool "python-future"
++	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  Fully featured ARC HS capable of running Linux, i.e. with
-+	  MMU, caches and 64-bit multiplier.
++	  Easy, clean, reliable Python 2/3 compatibility.
 +
-+	  If you're not sure which version of ARC HS core you build
-+	  for use this one.
- 
- config BR2_archs38_full
- 	bool "ARC HS38 with Quad MAC & FPU"
-@@ -43,7 +49,7 @@ endchoice
- # Choice of atomic instructions presence
- config BR2_ARC_ATOMIC_EXT
- 	bool "Atomic extension (LLOCK/SCOND instructions)"
--	default y if BR2_arc770d || BR2_archs38 || BR2_archs38_full || BR2_archs4x_rel31
-+	default y if BR2_arc770d || BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31
- 
- config BR2_ARCH
- 	default "arc"	if BR2_arcle
-@@ -61,12 +67,13 @@ config BR2_GCC_TARGET_CPU
- 	default "arc700" if BR2_arc750d
- 	default "arc700" if BR2_arc770d
- 	default "archs"	 if BR2_archs38
-+	default "hs38"	 if BR2_archs38_64mpy
- 	default "hs38_linux"	 if BR2_archs38_full
- 	default "hs4x_rel31"	 if BR2_archs4x_rel31
- 
- config BR2_READELF_ARCH_NAME
- 	default "ARCompact"	if BR2_arc750d || BR2_arc770d
--	default "ARCv2"		if BR2_archs38 || BR2_archs38_full || BR2_archs4x_rel31
-+	default "ARCv2"		if BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31
- 
- choice
- 	prompt "MMU Page Size"
-@@ -86,7 +93,7 @@ choice
- 
- config BR2_ARC_PAGE_SIZE_4K
- 	bool "4KB"
--	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_full || BR2_archs4x_rel31
-+	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31
- 
- config BR2_ARC_PAGE_SIZE_8K
- 	bool "8KB"
-@@ -96,7 +103,7 @@ config BR2_ARC_PAGE_SIZE_8K
- 
- config BR2_ARC_PAGE_SIZE_16K
- 	bool "16KB"
--	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_full || BR2_archs4x_rel31
-+	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31
- 
- endchoice
- 
++	  http://python-future.org
+diff --git a/package/python-future/python-future.hash b/package/python-future/python-future.hash
+new file mode 100644
+index 0000000000..c43018103e
+--- /dev/null
++++ b/package/python-future/python-future.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.python.org/pypi/future/json
++md5	e4579c836b9c025872efe230f6270349  future-0.18.2.tar.gz
++sha256	b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d  future-0.18.2.tar.gz
++# Locally computed sha256 checksums
++sha256	916e561392d48471b9c23437f56e2652f320cb3b119ceaa162edf41016f746b9  LICENSE.txt
+diff --git a/package/python-future/python-future.mk b/package/python-future/python-future.mk
+new file mode 100644
+index 0000000000..76f32180ac
+--- /dev/null
++++ b/package/python-future/python-future.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-future
++#
++################################################################################
++
++PYTHON_FUTURE_VERSION = 0.18.2
++PYTHON_FUTURE_SOURCE = future-$(PYTHON_FUTURE_VERSION).tar.gz
++PYTHON_FUTURE_SITE = https://files.pythonhosted.org/packages/45/0b/38b06fd9b92dc2b68d58b75f900e97884c45bedd2ff83203d933cf5851c9
++PYTHON_FUTURE_SETUP_TYPE = setuptools
++PYTHON_FUTURE_LICENSE = MIT
++PYTHON_FUTURE_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
