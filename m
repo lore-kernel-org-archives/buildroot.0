@@ -1,63 +1,45 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 2 Dec 2019 07:57:07 -0600
-Subject: [Buildroot] [PATCH 1/1] package/openjdk: modify site from
- mirror to official repos
-In-Reply-To: <3c9e68edd0b8700b3914ff63ff773ed0@tudorholton.com>
-References: <20191127053945.3897-1-tudor@tudorholton.com>
- <fa31990d-0f91-0eec-4b63-9d0f235daab2@mind.be>
- <3c9e68edd0b8700b3914ff63ff773ed0@tudorholton.com>
-Message-ID: <CANQCQpYkA+ZisfWXFLWtjfL3Xk6Mk4CZi6FBMFnkBP0ATqzKYA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Dec 2019 15:26:01 +0100
+Subject: [Buildroot] [FYI] Bootlin external toolchains
+In-Reply-To: <CAMw6YJLJae0GcmrDmSY8FZ-uMj+WBybPkBaLQC1wkhooCjoKyQ@mail.gmail.com>
+References: <CAMw6YJLJae0GcmrDmSY8FZ-uMj+WBybPkBaLQC1wkhooCjoKyQ@mail.gmail.com>
+Message-ID: <20191202152601.4ab1c8cd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tudor,
+Hello,
 
++Romain Naour in Cc.
 
+On Mon, 2 Dec 2019 02:47:15 +0200
+Vadim Kochan <vadim4j@gmail.com> wrote:
 
-On Mon, Dec 2, 2019 at 12:09 AM Tudor Holton <tudor@tudorholton.com> wrote:
->
-> On 2019-12-02 01:18, Arnout Vandecappelle wrote:
-> > On 27/11/2019 06:39, Tudor Holton wrote:
+> Just in case if someone will be interested. I started Buildroot external
+> project which provides external toolchains from the Bootlin:
+> 
+>     https://toolchains.bootlin.com
+> 
+> The git repo can be found at:
+> 
+>     https://github.com/vkochan/buildroot-external-toolchain-bootlin
 
-[snip]
+An effort was started to package the Bootlin external toolchains in
+Buildroot itself, some time ago by engineers at Smile. We had some
+off-list discussion about this, but I don't think it was ever posted to
+the list. The idea back then was to have a script that generates all
+the packages, but the design was to have one package for each
+toolchain, so it really added a lot of packages.
 
-> >> @@ -7,7 +7,10 @@
-> >>  OPENJDK_VERSION_MAJOR = 12.0.2
-> >>  OPENJDK_VERSION_MINOR = 10
-> >>  OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
-> >> -OPENJDK_SITE = $(call
-> >> github,AdoptOpenJDK,openjdk-jdk12u,jdk-$(OPENJDK_VERSION))
-> >> +OPENJDK_PROJECT = jdk-updates
-> >> +OPENJDK_RELEASE = jdk12u
-> >
-> >  Is it relevant to create variables for these? Just use them directly
-> > in the
-> > _SITE, like we do for most other packages.
-> >
-> >
->
-> This was inspired by a few other buildroot openjdk packages that have
-> been floating around the internet.
->
-> It's more a style choice, but also an understanding of the upstream
-> repos layout:
->
-> Since OpenJDK has multiple streams this may become needed later on.
-> Things like aarch32 aren't in jdk-updates (yet).  Config.in may
-> eventually be able to select the project and release, but I was trying
-> to keep this all as close to the current version as possible.  Don't
-> forget, also, that OpenJDK now has LTS releases, which I think would be
-> preferable, but there will always be a demand for newer releases also.
+But I think we should really support these toolchains in Buildroot
+proper instead of having an external for them.
 
-If you could, please verify the openjdk run-tests test case still
-passes after this site change.  From within your buildroot clone with
-this patchset applied, run the following.
+Best regards,
 
-./support/testing/run-tests -d ./dl/ -k -o test_dir
-tests.package.test_openjdk.TestOpenJdk
-
-Regards,
-Matt
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
