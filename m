@@ -1,45 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 02 Dec 2019 08:47:49 -0000
-Subject: [Buildroot] [git commit] package/modem-manager: bump to version
- 1.12.0
-Message-ID: <20191202083931.04EB081368@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/valijson: bump version to 0.2
+Message-ID: <20191202083930.E2F0C81368@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80d7b04c32b48797abe5a0a24fc59d292d754a75
+commit: https://git.buildroot.net/buildroot/commit/?id=d8e2876104be3f9f01613b17d3e60120883be1a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-Reviewed-by: Carlos Santos <unixmania@gmail.com>
+- Added hash of LICENSE file in valijson.hash
+- Updated hash of valijson tar file in valijson.hash file
+- Added option to set tests off which drops the curlpp dependency
+
+Signed-off-by: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/valijson/valijson.hash | 3 ++-
+ package/valijson/valijson.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index fc826a6121..b1fef98fe2 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  cbe174078dbdf3f746a55f0004353d3c27da2a31da553036d90fc7dc34a0169a  ModemManager-1.10.8.tar.xz
-+sha256  3daca86164145fffb589939433f596c13fa077c9a187c0d5820fdd5b4e4a6424  ModemManager-1.12.0.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index a5f3d63560..b5aa7914f6 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/valijson/valijson.hash b/package/valijson/valijson.hash
+index cd34ecb8c9..6f11000669 100644
+--- a/package/valijson/valijson.hash
++++ b/package/valijson/valijson.hash
+@@ -1,2 +1,3 @@
+ # Locally Computed:
+-sha256  d22c1f8fe27d43e5a27aad1d3cbe9f1318ec28ccfa913e615663ed2bd6a5d063  valijson-0.1.tar.gz
++sha256  77dbebb40dab2e834557c2fcc39122cdb2d0fe26bf591c2b3e0df5a316a45592  valijson-0.2.tar.gz
++sha256  1a0f99926a2dbec30eba3db820236d9953fbe3048976923ac24980e655fbe991  LICENSE
+diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
+index a804334732..31efeede34 100644
+--- a/package/valijson/valijson.mk
++++ b/package/valijson/valijson.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--MODEM_MANAGER_VERSION = 1.10.8
-+MODEM_MANAGER_VERSION = 1.12.0
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+-VALIJSON_VERSION = 0.1
++VALIJSON_VERSION = 0.2
+ VALIJSON_SITE = $(call github,tristanpenman,valijson,v$(VALIJSON_VERSION))
+ VALIJSON_LICENSE = BSD-2-Clause
+ VALIJSON_LICENSE_FILES = LICENSE
+ VALIJSON_INSTALL_STAGING = YES
+ VALIJSON_INSTALL_TARGET = NO
+ VALIJSON_DEPENDENCIES = boost
+-VALIJSON_CONF_OPTS = -DINSTALL_HEADERS=TRUE
++VALIJSON_CONF_OPTS = -Dvalijson_INSTALL_HEADERS=TRUE -Dvalijson_BUILD_TESTS=FALSE
+ 
+ $(eval $(cmake-package))
