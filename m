@@ -1,53 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 02 Dec 2019 08:47:49 -0000
-Subject: [Buildroot] [git commit] package/valijson: bump version to 0.2
-Message-ID: <20191202083930.E2F0C81368@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-six: bump to version 1.13.0
+Message-ID: <20191202083931.0EFE581368@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8e2876104be3f9f01613b17d3e60120883be1a1
+commit: https://git.buildroot.net/buildroot/commit/?id=425b56c437a26d04461f68f37249fb61fb43972b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Added hash of LICENSE file in valijson.hash
-- Updated hash of valijson tar file in valijson.hash file
-- Added option to set tests off which drops the curlpp dependency
+License changed due to a copyright year bump.
 
-Signed-off-by: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/valijson/valijson.hash | 3 ++-
- package/valijson/valijson.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/python-six/python-six.hash | 6 +++---
+ package/python-six/python-six.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/valijson/valijson.hash b/package/valijson/valijson.hash
-index cd34ecb8c9..6f11000669 100644
---- a/package/valijson/valijson.hash
-+++ b/package/valijson/valijson.hash
-@@ -1,2 +1,3 @@
- # Locally Computed:
--sha256  d22c1f8fe27d43e5a27aad1d3cbe9f1318ec28ccfa913e615663ed2bd6a5d063  valijson-0.1.tar.gz
-+sha256  77dbebb40dab2e834557c2fcc39122cdb2d0fe26bf591c2b3e0df5a316a45592  valijson-0.2.tar.gz
-+sha256  1a0f99926a2dbec30eba3db820236d9953fbe3048976923ac24980e655fbe991  LICENSE
-diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
-index a804334732..31efeede34 100644
---- a/package/valijson/valijson.mk
-+++ b/package/valijson/valijson.mk
-@@ -4,13 +4,13 @@
+diff --git a/package/python-six/python-six.hash b/package/python-six/python-six.hash
+index b7262b12b1..fe9a455c05 100644
+--- a/package/python-six/python-six.hash
++++ b/package/python-six/python-six.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/six/json
+-md5	9ae5d1feed8c0215f4ae4adcd9207fcb  six-1.12.0.tar.gz
+-sha256	d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73  six-1.12.0.tar.gz
++md5	e92c23c882c7d5564ce5773fe31b2771  six-1.13.0.tar.gz
++sha256	30f610279e8b2578cab6db20741130331735c781b56053c59c4076da27f06b66  six-1.13.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	e732f54da58f3e9cf0c48e8b512948936fcf7361bd58afa63a9a3c392bf794ad  LICENSE
++sha256	b7529b8c07171a78a8c36c3283905528e4812945d977d125eb926e8ccbf245b6  LICENSE
+diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
+index 95817fa34b..906c268d74 100644
+--- a/package/python-six/python-six.mk
++++ b/package/python-six/python-six.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--VALIJSON_VERSION = 0.1
-+VALIJSON_VERSION = 0.2
- VALIJSON_SITE = $(call github,tristanpenman,valijson,v$(VALIJSON_VERSION))
- VALIJSON_LICENSE = BSD-2-Clause
- VALIJSON_LICENSE_FILES = LICENSE
- VALIJSON_INSTALL_STAGING = YES
- VALIJSON_INSTALL_TARGET = NO
- VALIJSON_DEPENDENCIES = boost
--VALIJSON_CONF_OPTS = -DINSTALL_HEADERS=TRUE
-+VALIJSON_CONF_OPTS = -Dvalijson_INSTALL_HEADERS=TRUE -Dvalijson_BUILD_TESTS=FALSE
- 
- $(eval $(cmake-package))
+-PYTHON_SIX_VERSION = 1.12.0
++PYTHON_SIX_VERSION = 1.13.0
+ PYTHON_SIX_SOURCE = six-$(PYTHON_SIX_VERSION).tar.gz
+-PYTHON_SIX_SITE = https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca
++PYTHON_SIX_SITE = https://files.pythonhosted.org/packages/94/3e/edcf6fef41d89187df7e38e868b2dd2182677922b600e880baad7749c865
+ PYTHON_SIX_SETUP_TYPE = setuptools
+ PYTHON_SIX_LICENSE = MIT
+ PYTHON_SIX_LICENSE_FILES = LICENSE
