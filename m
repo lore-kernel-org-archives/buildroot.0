@@ -1,164 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 02 Dec 2019 08:47:51 -0000
-Subject: [Buildroot] [git commit] package/sdbusplus: new package
-Message-ID: <20191202083932.9A9DF7FF06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-txdbus: bump to 1.1.1
+Message-ID: <20191202083933.7437780725@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60590c3d573250585102a0a143d4c437309566c7
+commit: https://git.buildroot.net/buildroot/commit/?id=cf053cf414d9290b68f4737dcf457b62fbb43842
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A C++ library for interacting with sd-bus and a C++ bindings generator.
-
-The host build produces a code generation tool, sdbus++ while the
-target build gives libsdbusplus.
-
-The code generator requires host-python-pyyaml, host-python-inflection,
-and host-python-mako. Since it isn't built for the target, the target
-build does not require them.
-
-The host package includes a code and documentation generation program,
-which is useful for including in a buildroot SDK, even if no target
-package needs it, so make it a user-selectable host package.
-
-host-autoconf-archive is added as a dependency since configure.ac
-uses the AX_PKG_CHECK_MODULES macro.
-
-Signed-off-by: John Faith <jfaith@impinj.com>
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-[Thomas: use host-python3 when BR2_PACKAGE_PYTHON3=y]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/Config.in.host           |  1 +
- package/sdbusplus/Config.in      | 14 ++++++++++++++
- package/sdbusplus/Config.in.host | 10 ++++++++++
- package/sdbusplus/sdbusplus.hash |  5 +++++
- package/sdbusplus/sdbusplus.mk   | 32 ++++++++++++++++++++++++++++++++
- 7 files changed, 64 insertions(+)
+ package/python-txdbus/python-txdbus.hash | 4 ++--
+ package/python-txdbus/python-txdbus.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3a196b0943..2cb272d2d6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1237,6 +1237,7 @@ F:	package/dhcpcd/
+diff --git a/package/python-txdbus/python-txdbus.hash b/package/python-txdbus/python-txdbus.hash
+index 38760fada6..60740e29d2 100644
+--- a/package/python-txdbus/python-txdbus.hash
++++ b/package/python-txdbus/python-txdbus.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/txdbus/json
+-md5	f17c9204c7f56365c297ba68e6840900  txdbus-1.1.0.tar.gz
+-sha256	6ff57f42c58d935956024b3c6824c1019db7d233d0af86aa0573b73b63b0817c  txdbus-1.1.0.tar.gz
++sha256	eefcffa4efbf82ba11222f17f5989fe1b2b6ef57226ef896c4a7084c990ba217  txdbus-1.1.1.tar.gz
++md5	ce8a0e0a17cdbada725e3159802ae75f  txdbus-1.1.1.tar.gz
+diff --git a/package/python-txdbus/python-txdbus.mk b/package/python-txdbus/python-txdbus.mk
+index 08429baac8..d8e7a7bee9 100644
+--- a/package/python-txdbus/python-txdbus.mk
++++ b/package/python-txdbus/python-txdbus.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- N:	John Faith <jfaith@impinj.com>
- F:	package/python-inflection/
-+F:	package/sdbusplus/
+-PYTHON_TXDBUS_VERSION = 1.1.0
++PYTHON_TXDBUS_VERSION = 1.1.1
+ PYTHON_TXDBUS_SOURCE = txdbus-$(PYTHON_TXDBUS_VERSION).tar.gz
+-PYTHON_TXDBUS_SITE = https://files.pythonhosted.org/packages/8e/7c/0b8726b82943ae99dc71b8fe20e2e0beb7feb4ef61105865021a64f08b16
++PYTHON_TXDBUS_SITE = https://files.pythonhosted.org/packages/4a/68/dfd06f3f349999cbbb31eade239fe76fbff2d6a905eb7d20449666d1b2ce
+ PYTHON_TXDBUS_SETUP_TYPE = setuptools
+ PYTHON_TXDBUS_LICENSE = MIT
  
- N:	Jonathan Ben Avraham <yba@tkos.co.il>
- F:	arch/Config.in.xtensa
-diff --git a/package/Config.in b/package/Config.in
-index ec68f893aa..20c3eeb9c7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2287,6 +2287,7 @@ menu "System tools"
- 	source "package/s6-rc/Config.in"
- 	source "package/scrub/Config.in"
- 	source "package/scrypt/Config.in"
-+	source "package/sdbusplus/Config.in"
- 	source "package/smack/Config.in"
- 	source "package/start-stop-daemon/Config.in"
- 	source "package/supervisor/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index c0ac4fbbcc..758c268e00 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -66,6 +66,7 @@ menu "Host utilities"
- 	source "package/rustc/Config.in.host"
- 	source "package/s6-rc/Config.in.host"
- 	source "package/sam-ba/Config.in.host"
-+	source "package/sdbusplus/Config.in.host"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
- 	source "package/swig/Config.in.host"
-diff --git a/package/sdbusplus/Config.in b/package/sdbusplus/Config.in
-new file mode 100644
-index 0000000000..e278d17156
---- /dev/null
-+++ b/package/sdbusplus/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_SDBUSPLUS
-+	bool "sdbusplus"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_SYSTEMD
-+	help
-+	  A C++ library for sd-bus with a bindings and doc generator.
-+
-+	  This will build the target library.  See the host package for
-+	  the bindings and documentation generation program.
-+
-+	  https://github.com/openbmc/sdbusplus
-+
-+comment "sdbusplus needs systemd and a toolchain w/ C++"
-+	depends on !BR2_PACKAGE_SYSTEMD || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/sdbusplus/Config.in.host b/package/sdbusplus/Config.in.host
-new file mode 100644
-index 0000000000..cff9f20384
---- /dev/null
-+++ b/package/sdbusplus/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_SDBUSPLUS
-+	bool "host-sdbusplus"
-+	select BR2_PACKAGE_HOST_PKGCONF
-+	help
-+	  A C++ library for sd-bus with a bindings and doc generator.
-+
-+	  This will build the Python host side generation tool for bindings
-+	  and documentation.
-+
-+	  https://github.com/openbmc/sdbusplus
-diff --git a/package/sdbusplus/sdbusplus.hash b/package/sdbusplus/sdbusplus.hash
-new file mode 100644
-index 0000000000..b21d2ddd23
---- /dev/null
-+++ b/package/sdbusplus/sdbusplus.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha256  c67b8f3d9b74fd0d70eb6eec3b2ec2d496d0f169deedf6fc07dbff2c2f275d2b  sdbusplus-4212292bcf136d04b38ba5116aa568b0fa312798.tar.gz
-+
-+# License file, locally calculated
-+sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-diff --git a/package/sdbusplus/sdbusplus.mk b/package/sdbusplus/sdbusplus.mk
-new file mode 100644
-index 0000000000..976f987fad
---- /dev/null
-+++ b/package/sdbusplus/sdbusplus.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# sdbusplus
-+#
-+################################################################################
-+
-+SDBUSPLUS_VERSION = 4212292bcf136d04b38ba5116aa568b0fa312798
-+SDBUSPLUS_SITE = $(call github,openbmc,sdbusplus,$(SDBUSPLUS_VERSION))
-+SDBUSPLUS_DEPENDENCIES = host-autoconf-archive host-pkgconf systemd
-+HOST_SDBUSPLUS_DEPENDENCIES = \
-+	host-autoconf-archive \
-+	host-pkgconf \
-+	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python) \
-+	host-python-inflection \
-+	host-python-mako \
-+	host-python-pyyaml
-+SDBUSPLUS_CONF_OPTS = --disable-sdbuspp
-+HOST_SDBUSPLUS_CONF_OPTS = --disable-libsdbusplus
-+SDBUSPLUS_AUTORECONF = YES
-+SDBUSPLUS_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
-+SDBUSPLUS_INSTALL_STAGING = YES
-+SDBUSPLUS_LICENSE = Apache-2.0
-+SDBUSPLUS_LICENSE_FILES = LICENSE
-+
-+define SDBUSPLUS_CREATE_M4
-+    mkdir -p $(@D)/m4
-+endef
-+SDBUSPLUS_POST_PATCH_HOOKS += SDBUSPLUS_CREATE_M4
-+HOST_SDBUSPLUS_POST_PATCH_HOOKS += SDBUSPLUS_CREATE_M4
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
