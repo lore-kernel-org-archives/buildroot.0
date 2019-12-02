@@ -1,62 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Dec 2019 22:25:17 +0100
-Subject: [Buildroot] [git commit] package/nss-mdns: bump to version 0.14.1
-Message-ID: <20191202211933.AF6FA83A1B@busybox.osuosl.org>
+Date: Mon, 2 Dec 2019 22:23:58 +0100
+Subject: [Buildroot] [git commit] configs/warp7: Bump the kernel version
+Message-ID: <20191202211933.8803183A8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1776d0ea514a20bd0f609045b607abc776a4438
+commit: https://git.buildroot.net/buildroot/commit/?id=e0e65f83e19b3b095de80ef1550d6501cfc57295
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch site to https://github.com/lathiat/nss-mdns to retrieve latest
-version
+Bump the kernel to version 5.4.1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nss-mdns/Config.in     | 2 +-
- package/nss-mdns/nss-mdns.hash | 2 +-
- package/nss-mdns/nss-mdns.mk   | 5 +++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ configs/warp7_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nss-mdns/Config.in b/package/nss-mdns/Config.in
-index ad69e2aa4c..017e800309 100644
---- a/package/nss-mdns/Config.in
-+++ b/package/nss-mdns/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_NSS_MDNS
- 	  resolution by common Unix/Linux programs in the ad-hoc
- 	  mDNS domain .local.
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 0481c46c5c..96c723d9e5 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
--	  http://0pointer.de/lennart/projects/nss-mdns/
-+	  https://github.com/lathiat/nss-mdns
+-# Linux headers same as kernel, a 5.3 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
  
- comment "nss-mdns needs a glibc toolchain"
- 	depends on BR2_USE_MMU && BR2_PACKAGE_AVAHI_DAEMON
-diff --git a/package/nss-mdns/nss-mdns.hash b/package/nss-mdns/nss-mdns.hash
-index ac47e33cb4..9bcec08496 100644
---- a/package/nss-mdns/nss-mdns.hash
-+++ b/package/nss-mdns/nss-mdns.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	1e683c2e7c3921814706d62fbbd3e9cbf493a75fa00255e0e715508d8134fa6d	nss-mdns-0.10.tar.gz
-+sha256	a2094101b735cade45048764ea594bdae2bfa9399837f3c852a5b264416e9c8c	nss-mdns-0.14.1.tar.gz
- sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	LICENSE
-diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
-index 1512ea2e7f..e399da6743 100644
---- a/package/nss-mdns/nss-mdns.mk
-+++ b/package/nss-mdns/nss-mdns.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--NSS_MDNS_VERSION = 0.10
--NSS_MDNS_SITE = http://0pointer.de/lennart/projects/nss-mdns
-+NSS_MDNS_VERSION = 0.14.1
-+NSS_MDNS_SITE = \
-+	https://github.com/lathiat/nss-mdns/releases/download/v$(NSS_MDNS_VERSION)
- NSS_MDNS_LICENSE = LGPL-2.1+
- NSS_MDNS_LICENSE_FILES = LICENSE
- 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
