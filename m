@@ -1,50 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 02 Dec 2019 08:47:49 -0000
-Subject: [Buildroot] [git commit] package/qemu: search for host-dtc (libfdt)
- headers at the right place
-Message-ID: <20191202083933.0655881871@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beaglebone: use the new
+ BeagleBoard/BeagleBone kernel repository
+Message-ID: <20191202083931.6569B81367@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19197809d616d8c2dfdb5755c1455423b1b20955
+commit: https://git.buildroot.net/buildroot/commit/?id=5401d71e6169d379172885069138954b66e4c7c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libfdt headers are installed at $(HOST_DIR)/include/libfdt now, to
-prevent conflicts with the kernel dtc code. Pass that path to the qemu
-configure script, otherwise it uses its bundled copy of libfdt.
+The original source URL (http://beagleboard.org/source) now redirects to
+https://elinux.org/Beagleboard:BeagleBoneBlack_Rebuilding_Software_Image
+which points to an official kernel repository at GitHub.
+
+There are updated RT and non-RT kernel source trees. Use the last non-RT
+release (4.19.73-ti-r29) and the omap2plus defconfig.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qemu/qemu.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ configs/beaglebone_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index a91f9d3eeb..1a5c642726 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -246,9 +246,12 @@ endif
- endif
- HOST_QEMU_SYS_ARCH ?= $(HOST_QEMU_ARCH)
- 
-+HOST_QEMU_CFLAGS = $(HOST_CFLAGS)
-+
- ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
- HOST_QEMU_TARGETS += $(HOST_QEMU_SYS_ARCH)-softmmu
- HOST_QEMU_OPTS += --enable-system --enable-fdt
-+HOST_QEMU_CFLAGS += -I$(HOST_DIR)/include/libfdt
- HOST_QEMU_DEPENDENCIES += host-dtc
- else
- HOST_QEMU_OPTS += --disable-system
-@@ -297,7 +300,7 @@ define HOST_QEMU_CONFIGURE_CMDS
- 		--interp-prefix=$(STAGING_DIR) \
- 		--cc="$(HOSTCC)" \
- 		--host-cc="$(HOSTCC)" \
--		--extra-cflags="$(HOST_CFLAGS)" \
-+		--extra-cflags="$(HOST_QEMU_CFLAGS)" \
- 		--extra-ldflags="$(HOST_LDFLAGS)" \
- 		$(HOST_QEMU_OPTS)
- endef
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index ee97f80322..2de1bd0b32 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -7,8 +7,8 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4dae378bbe721277b08699d1d88ffae12acc9b09"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/beagleboard/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4.19.73-ti-r29"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
