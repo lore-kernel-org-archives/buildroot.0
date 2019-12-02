@@ -1,45 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 02 Dec 2019 08:47:48 -0000
-Subject: [Buildroot] [git commit] package/shadowsocks-libev: bump version to
- 3.3.3
-Message-ID: <20191202083932.B12B28081D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-huepy: fix build with
+ python3.8
+Message-ID: <20191202083932.B9B6A81228@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f3ffafdd4b880d65afa6738f862e4e96eef61a2
+commit: https://git.buildroot.net/buildroot/commit/?id=2be8b37a1e3448f27ace763c25bdf69641ce27f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Min Xu <xuminready@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/shadowsocks-libev/shadowsocks-libev.hash | 2 +-
- package/shadowsocks-libev/shadowsocks-libev.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+  - http://autobuild.buildroot.net/results/240c397a6479b98f30b63b5135bfb2e45281de7d
 
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
-index b8bc4379a9..76928ebb48 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.hash
-+++ b/package/shadowsocks-libev/shadowsocks-libev.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 65a67c355df1794dc0ef94d80d2d596fd590b13fdcd0a21bda28859c88924ce5 shadowsocks-libev-3.2.4.tar.gz
-+sha256 677356a5ed6b5ae9e32a898061db2587158ff27e245db03f4bde9b006ef12dc9 shadowsocks-libev-3.3.3.tar.gz
- 
- # License files, locally calculated
- sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index fcebe34a4b..4b0b963eef 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.mk
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHADOWSOCKS_LIBEV_VERSION = 3.2.4
-+SHADOWSOCKS_LIBEV_VERSION = 3.3.3
- SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
- SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
- SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
+Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python-huepy/0001-fix-import-with-python3.patch | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/python-huepy/0001-fix-import-with-python3.patch b/package/python-huepy/0001-fix-import-with-python3.patch
+new file mode 100644
+index 0000000000..e04eacb228
+--- /dev/null
++++ b/package/python-huepy/0001-fix-import-with-python3.patch
+@@ -0,0 +1,8 @@
++--- a/huepy/__init__.py
+++++ b/huepy/__init__.py
++@@ -1,4 +1,4 @@
++-from hue import COMMANDS
+++from .hue import COMMANDS
++ 
++ __all__ = list(COMMANDS.keys())
++ __version__ = '1.0.1'
