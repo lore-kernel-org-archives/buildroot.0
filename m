@@ -1,133 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 02 Dec 2019 08:47:48 -0000
-Subject: [Buildroot] [git commit] configs/raspberrypi*: bump kernel version
- to 1.20190925-1
-Message-ID: <20191202083931.59778802CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xr819-xradio: bump version to
+ aa01ba77
+Message-ID: <20191202083931.A4A3D7F9F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7644350ccdc97bba16c2db4b1cdf8ac90141dc1d
+commit: https://git.buildroot.net/buildroot/commit/?id=e713973296f3ebc2ce150657ac8f4b635e3e6695
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now based on 4.19.75 (from 4.19.66).
+Out-of-tree driver has been updated to work with Linux kernels v5.x.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/raspberrypi0_defconfig       | 2 +-
- configs/raspberrypi0w_defconfig      | 2 +-
- configs/raspberrypi2_defconfig       | 2 +-
- configs/raspberrypi3_64_defconfig    | 2 +-
- configs/raspberrypi3_defconfig       | 2 +-
- configs/raspberrypi3_qt5we_defconfig | 2 +-
- configs/raspberrypi4_defconfig       | 2 +-
- configs/raspberrypi_defconfig        | 2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
+ package/xr819-xradio/xr819-xradio.hash | 2 +-
+ package/xr819-xradio/xr819-xradio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index 7255f8d067..1600e219d1 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
+index 341747c5b5..393780fb30 100644
+--- a/package/xr819-xradio/xr819-xradio.hash
++++ b/package/xr819-xradio/xr819-xradio.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 7b78fc61d13a428a0d8a3d8dcffaa604d23b5a17c6e8e86d2e5e8372dcd17672 xr819-xradio-33f4b1c25eff0d9db7cbac19f36b130da9857f37.tar.gz
++sha256 2f61f2db78d46440819af2d8191f9b5ed2bb3e5404b739f68fb0af7917d0d222 xr819-xradio-aa01ba77b9360dd734b50f5b937960a50c5a0825.tar.gz
+ # Locally computed
+ sha256 db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73 LICENSE
+diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
+index edf423bc3c..ae3e4fbd34 100644
+--- a/package/xr819-xradio/xr819-xradio.mk
++++ b/package/xr819-xradio/xr819-xradio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B from the kernel sources: the zero is the same
-diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-index 57276aa8f7..ea5856e8c0 100644
---- a/configs/raspberrypi0w_defconfig
-+++ b/configs/raspberrypi0w_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 73f5f349d3..e6c38e74b7 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index 61cf730a19..de1cd10c22 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 744b16dca9..01aa239805 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index 7fd834c502..775eb9114e 100644
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-index ec29c13804..6eea0ca816 100644
---- a/configs/raspberrypi4_defconfig
-+++ b/configs/raspberrypi4_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 11107c44a9..969a92820e 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
+-XR819_XRADIO_VERSION = 33f4b1c25eff0d9db7cbac19f36b130da9857f37
++XR819_XRADIO_VERSION = aa01ba77b9360dd734b50f5b937960a50c5a0825
+ XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
+ XR819_XRADIO_LICENSE = GPL-2.0
+ XR819_XRADIO_LICENSE_FILES = LICENSE
