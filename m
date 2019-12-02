@@ -1,56 +1,63 @@
 From: Michael Vetter <jubalh@iodoru.org>
-Date: Mon,  2 Dec 2019 12:59:33 +0100
-Subject: [Buildroot] [PATCH 2/3] package/jasper: Apply fix for CVE-2018-19542
+Date: Mon,  2 Dec 2019 12:59:34 +0100
+Subject: [Buildroot] [PATCH 3/3] package/jasper: Apply fix for CVE-2018-19540
 In-Reply-To: <20191202115934.24216-1-jubalh@iodoru.org>
 References: <20191202115934.24216-1-jubalh@iodoru.org>
-Message-ID: <20191202115934.24216-2-jubalh@iodoru.org>
+Message-ID: <20191202115934.24216-3-jubalh@iodoru.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add 0002-check-null-in-jp2_decode.patch:
+Add 0003-test-asclen-CVE-2018-19540.patch:
+If txtdesc->asclen is < 1, the array index of
+txtdesc->ascdata will be negative which causes the heap based overflow.
 
-Patch was proposed upstream[1] but upstream is very inactive.
-Linux distributions use the same fix to patch their packages.
+Patch was proposed upstream[1] but upstream is very inactive. Linux
+distributions use the same fix to patch their packages.
 
-1: https://github.com/mdadams/jasper/pull/200
+1: https://github.com/mdadams/jasper/pull/198
 Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 ---
- ...2-check-null-in-jp2_decode-CVE-2018-19542.patch | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
- create mode 100644 package/jasper/0002-check-null-in-jp2_decode-CVE-2018-19542.patch
+ .../jasper/0003-test-asclen-CVE-2018-19540.patch   | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/jasper/0003-test-asclen-CVE-2018-19540.patch
 
-diff --git a/package/jasper/0002-check-null-in-jp2_decode-CVE-2018-19542.patch b/package/jasper/0002-check-null-in-jp2_decode-CVE-2018-19542.patch
+diff --git a/package/jasper/0003-test-asclen-CVE-2018-19540.patch b/package/jasper/0003-test-asclen-CVE-2018-19540.patch
 new file mode 100644
-index 0000000000..bfe07ee786
+index 0000000000..ea73d5d781
 --- /dev/null
-+++ b/package/jasper/0002-check-null-in-jp2_decode-CVE-2018-19542.patch
-@@ -0,0 +1,24 @@
-+From fc62d1b7164ded2405fd6a0604548b34a5a77462 Mon Sep 17 00:00:00 2001
-+From: Timothy Lyanguzov <timothy.lyanguzov@sap.com>
-+Date: Mon, 18 Mar 2019 16:46:24 +1300
-+Subject: [PATCH] Fix CVE-2018-19542: Check for NULL pointer in jp2_decode
++++ b/package/jasper/0003-test-asclen-CVE-2018-19540.patch
+@@ -0,0 +1,29 @@
++From e38454aa1a15b78c028a778fc8bfba3587e25c25 Mon Sep 17 00:00:00 2001
++From: Michael Vetter <jubalh@iodoru.org>
++Date: Fri, 15 Mar 2019 11:01:02 +0100
++Subject: [PATCH] Make sure asclen is at least 1
 +
++If txtdesc->asclen is < 1, the array index of txtdesc->ascdata will be negative which causes the heap based overflow.
++
++Regards CVE-2018-19540.
++Regards https://github.com/mdadams/jasper/issues/182 bug#3
++Fix by Markus Koschany <apo@debian.org>.
++From https://gist.github.com/apoleon/13598a45bf6522f6a79b77a629205823
 +Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 +---
-+ src/libjasper/jp2/jp2_dec.c | 3 +++
-+ 1 file changed, 3 insertions(+)
++ src/libjasper/base/jas_icc.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/src/libjasper/jp2/jp2_dec.c b/src/libjasper/jp2/jp2_dec.c
-+index 03b0eaf..a535c19 100644
-+--- a/src/libjasper/jp2/jp2_dec.c
-++++ b/src/libjasper/jp2/jp2_dec.c
-+@@ -388,6 +388,9 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
-+ 				jas_image_setcmpttype(dec->image, newcmptno, jp2_getct(jas_image_clrspc(dec->image), 0, channo + 1));
-+ 				}
-+ #endif
-++			} else {
-++				jas_eprintf("error: invalid MTYP in CMAP box\n");
-++				goto error;
-+ 			}
-+ 		}
-+ 	}
++diff --git a/src/libjasper/base/jas_icc.c b/src/libjasper/base/jas_icc.c
++index 4607930..762c0e8 100644
++--- a/src/libjasper/base/jas_icc.c
+++++ b/src/libjasper/base/jas_icc.c
++@@ -1104,6 +1104,8 @@ static int jas_icctxtdesc_input(jas_iccattrval_t *attrval, jas_stream_t *in,
++ 	if (jas_stream_read(in, txtdesc->ascdata, txtdesc->asclen) !=
++ 	  JAS_CAST(int, txtdesc->asclen))
++ 		goto error;
+++	if (txtdesc->asclen < 1)
+++		goto error;
++ 	txtdesc->ascdata[txtdesc->asclen - 1] = '\0';
++ 	if (jas_iccgetuint32(in, &txtdesc->uclangcode) ||
++ 	  jas_iccgetuint32(in, &txtdesc->uclen))
 -- 
 2.16.4
