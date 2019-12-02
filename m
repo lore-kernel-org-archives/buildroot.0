@@ -1,52 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Dec 2019 08:47:50 -0000
-Subject: [Buildroot] [git commit] package/protobuf: bump to 3.10.1
-Message-ID: <20191202083933.88B4C80725@busybox.osuosl.org>
+Date: Mon, 02 Dec 2019 08:47:51 -0000
+Subject: [Buildroot] [git commit] package/python-tinyrpc: bump to 1.0.4
+Message-ID: <20191202083933.6961D80DED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da418d33fff3a8e969b145d66f3dae8b0ea492f6
+commit: https://git.buildroot.net/buildroot/commit/?id=eb53f7ed4d07b1c003892876c9c707e88caf5350
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-tinyrpc/python-tinyrpc.hash | 5 ++---
+ package/python-tinyrpc/python-tinyrpc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index f869691689..edb5fb6f03 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	29a1db3b9bebcf054c540f13400563120ff29fbdd849b2c7a097ffe9d3d508eb  protobuf-cpp-3.9.1.tar.gz
-+sha256	e82ee5bdde198e0a1935e280748a86a7989474ea771418a2fd90f03e2e65b99b  protobuf-cpp-3.10.1.tar.gz
- sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 77b01b5b88..82e21df5f0 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works, as they share the same
- # version/site variables.
--PROTOBUF_VERSION = 3.9.1
-+PROTOBUF_VERSION = 3.10.1
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index de47cd28b7..fe883a96df 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	d07934c7e78d424e5f0f2182c2f3bed47214481005b9614a7480d6aaac97e7ef  protobuf-python-3.9.1.tar.gz
-+sha256	39c7a5e7e557b24fc324bec3a73054d277ed9b9b320b273564e04f862131e679  protobuf-python-3.10.1.tar.gz
- sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/python-tinyrpc/python-tinyrpc.hash b/package/python-tinyrpc/python-tinyrpc.hash
+index d01575c11c..b4bc7ae863 100644
+--- a/package/python-tinyrpc/python-tinyrpc.hash
++++ b/package/python-tinyrpc/python-tinyrpc.hash
+@@ -1,5 +1,4 @@
+ # md5, sha256 from https://pypi.org/pypi/tinyrpc/json
+-md5	b3a95133c65c7b5b5eb4f88c4713e909  tinyrpc-1.0.3.tar.gz
+-sha256	aa9f707a26cea5fd69af55fea28e8761f96b244e00efe3c8ccbeb233d5a9852e  tinyrpc-1.0.3.tar.gz
+-# Locally computed sha256 checksums
++sha256	4b41fab967fb1c978f573bf0d609a3b12cc3b6ed62bd3108f43f575563746396  tinyrpc-1.0.4.tar.gz
++md5	cd61e3cbc01ea940abc97d3a87abf4a7  tinyrpc-1.0.4.tar.gz
+ sha256	587f1ea174824613f4a7e0d7fb95fda000a7f58ca17df12416e014c9ee82e619  LICENSE
+diff --git a/package/python-tinyrpc/python-tinyrpc.mk b/package/python-tinyrpc/python-tinyrpc.mk
+index d589936d88..0ac0470f74 100644
+--- a/package/python-tinyrpc/python-tinyrpc.mk
++++ b/package/python-tinyrpc/python-tinyrpc.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TINYRPC_VERSION = 1.0.3
++PYTHON_TINYRPC_VERSION = 1.0.4
+ PYTHON_TINYRPC_SOURCE = tinyrpc-$(PYTHON_TINYRPC_VERSION).tar.gz
+-PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/21/7a/ff1a74256e1bcc04fbaa414c13a2bb79a29ac9918b25f2238592b991e3bc
++PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/9d/91/c639ba014aada92446516c5fc4b04f2cee3539ab2d0758a6a87a6da973cb
+ PYTHON_TINYRPC_SETUP_TYPE = setuptools
+ PYTHON_TINYRPC_LICENSE = MIT
+ PYTHON_TINYRPC_LICENSE_FILES = LICENSE
