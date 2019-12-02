@@ -1,51 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  2 Dec 2019 20:22:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kyua: bump to version 0.13
-Message-ID: <20191202192252.1484205-1-fontaine.fabrice@gmail.com>
+From: Julien Olivain <juju@cotds.org>
+Date: Mon,  2 Dec 2019 20:54:23 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/imx8mmpico: bump BSP components to
+ 4.14.98_2.0.0
+Message-ID: <20191202195423.417197-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-COPYING was renamed into LICENSE since version 0.12 and
-https://github.com/jmmv/kyua/commit/db509f9d9ece719bf8452d6ddbc842ae311b1bc2
+Update Kernel, U-Boot and ATF to TechNexion BSP, based on NXP
+4.14.98_2.0.0 release.
 
-So update KYUA_LICENSE_FILES and add hash for LICENSE file
+This patch also remove BR2_TARGET_UBOOT_FORMAT_IMX in defconfig which
+is not needed for this platform.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <juju@cotds.org>
 ---
- package/kyua/kyua.hash | 3 ++-
- package/kyua/kyua.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ configs/imx8mmpico_defconfig | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/kyua/kyua.hash b/package/kyua/kyua.hash
-index 298d0d85c6..66681692fc 100644
---- a/package/kyua/kyua.hash
-+++ b/package/kyua/kyua.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 2b8b64a458b642df75086eeb73e8073d105b8d9cff04c9b1a905b68bc8502560 kyua-0.11.tar.gz
-+sha256 db6e5d341d5cf7e49e50aa361243e19087a00ba33742b0855d2685c0b8e721d6 kyua-0.13.tar.gz
-+sha256 a6a8f43f6d2ed9b801978cc012cc816c4a9421a6dcea0579d3a40eab4b349674 LICENSE
-diff --git a/package/kyua/kyua.mk b/package/kyua/kyua.mk
-index 9e1c810ac4..5caa203917 100644
---- a/package/kyua/kyua.mk
-+++ b/package/kyua/kyua.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--KYUA_VERSION = 0.11
-+KYUA_VERSION = 0.13
- KYUA_SITE = https://github.com/jmmv/kyua/releases/download/kyua-$(KYUA_VERSION)
- KYUA_DEPENDENCIES = host-pkgconf atf lutok sqlite
- KYUA_CONF_OPTS = --without-doxygen --without-atf
- KYUA_LICENSE = BSD-3-Clause
--KYUA_LICENSE_FILES = COPYING
-+KYUA_LICENSE_FILES = LICENSE
- KYUA_CONF_ENV = \
- 	kyua_cv_attribute_noreturn=yes \
- 	kyua_cv_getcwd_dyn=yes \
+diff --git a/configs/imx8mmpico_defconfig b/configs/imx8mmpico_defconfig
+index d30dc0672a..f04946a8d1 100644
+--- a/configs/imx8mmpico_defconfig
++++ b/configs/imx8mmpico_defconfig
+@@ -4,7 +4,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mm-pico-pi.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux,7ff5de3f5d79c77ab7ecaa6e346ad0e7fb7f0570)/linux-7ff5de3f5d79c77ab7ecaa6e346ad0e7fb7f0570.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux,9146d4dcb2dda0c7614f74f824cfb20d29bd85f8)/linux-9146d4dcb2dda0c7614f74f824cfb20d29bd85f8.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="tn_imx8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-pico-pi freescale/imx8mm-pico-pi-ili9881c freescale/imx8mm-pico-pi-sn65dsi84-hj070na"
+@@ -18,16 +18,15 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-edm,d3391226ba25b1cc6cba7e6c15a2a7e09319b969)/u-boot-edm-d3391226ba25b1cc6cba7e6c15a2a7e09319b969.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-edm,9a070a5b4460124054bc459edfc9d1b43e5403bb)/u-boot-edm-9a070a5b4460124054bc459edfc9d1b43e5403bb.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pico-imx8mm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_SPL=y
 -- 
-2.24.0
+2.23.0
