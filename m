@@ -1,60 +1,35 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  2 Dec 2019 21:20:05 +0100
-Subject: [Buildroot] [PATCH 1/2] package/nss-mdns: bump to version 0.14.1
-Message-ID: <20191202202006.1805774-1-fontaine.fabrice@gmail.com>
+Date: Mon,  2 Dec 2019 21:20:06 +0100
+Subject: [Buildroot] [PATCH 2/2] package/nss-mdns: disable tests
+In-Reply-To: <20191202202006.1805774-1-fontaine.fabrice@gmail.com>
+References: <20191202202006.1805774-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191202202006.1805774-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch site to https://github.com/lathiat/nss-mdns to retrieve latest
-version
+Disable tests that depend on check and have been added in version 0.11
+with
+https://github.com/lathiat/nss-mdns/commit/7b649a32836af3578a2bb60aa713588f0d9f9a83
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nss-mdns/Config.in     | 2 +-
- package/nss-mdns/nss-mdns.hash | 2 +-
- package/nss-mdns/nss-mdns.mk   | 5 +++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/nss-mdns/nss-mdns.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/nss-mdns/Config.in b/package/nss-mdns/Config.in
-index ad69e2aa4c..017e800309 100644
---- a/package/nss-mdns/Config.in
-+++ b/package/nss-mdns/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_NSS_MDNS
- 	  resolution by common Unix/Linux programs in the ad-hoc
- 	  mDNS domain .local.
- 
--	  http://0pointer.de/lennart/projects/nss-mdns/
-+	  https://github.com/lathiat/nss-mdns
- 
- comment "nss-mdns needs a glibc toolchain"
- 	depends on BR2_USE_MMU && BR2_PACKAGE_AVAHI_DAEMON
-diff --git a/package/nss-mdns/nss-mdns.hash b/package/nss-mdns/nss-mdns.hash
-index ac47e33cb4..9bcec08496 100644
---- a/package/nss-mdns/nss-mdns.hash
-+++ b/package/nss-mdns/nss-mdns.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	1e683c2e7c3921814706d62fbbd3e9cbf493a75fa00255e0e715508d8134fa6d	nss-mdns-0.10.tar.gz
-+sha256	a2094101b735cade45048764ea594bdae2bfa9399837f3c852a5b264416e9c8c	nss-mdns-0.14.1.tar.gz
- sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	LICENSE
 diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
-index 1512ea2e7f..e399da6743 100644
+index e399da6743..77ab6c1ede 100644
 --- a/package/nss-mdns/nss-mdns.mk
 +++ b/package/nss-mdns/nss-mdns.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--NSS_MDNS_VERSION = 0.10
--NSS_MDNS_SITE = http://0pointer.de/lennart/projects/nss-mdns
-+NSS_MDNS_VERSION = 0.14.1
-+NSS_MDNS_SITE = \
-+	https://github.com/lathiat/nss-mdns/releases/download/v$(NSS_MDNS_VERSION)
+@@ -9,6 +9,7 @@ NSS_MDNS_SITE = \
+ 	https://github.com/lathiat/nss-mdns/releases/download/v$(NSS_MDNS_VERSION)
  NSS_MDNS_LICENSE = LGPL-2.1+
  NSS_MDNS_LICENSE_FILES = LICENSE
++NSS_MDNS_CONF_OPTS = --disable-tests
  
+ # add mdns4_minimal / mdns around the dns provider if missing
+ define NSS_MDNS_INSTALL_CONFIG
 -- 
 2.24.0
