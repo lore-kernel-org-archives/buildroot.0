@@ -1,42 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 02 Dec 2019 08:47:49 -0000
-Subject: [Buildroot] [git commit] configs/beaglebone: use the new
- BeagleBoard/BeagleBone kernel repository
-Message-ID: <20191202083931.6569B81367@busybox.osuosl.org>
+Date: Mon, 02 Dec 2019 08:47:50 -0000
+Subject: [Buildroot] [git commit] configs/raspberrypi3_64_defconfig: use
+ pi3-miniuart-bt device tree overlay
+Message-ID: <20191202083931.8795A813A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5401d71e6169d379172885069138954b66e4c7c1
+commit: https://git.buildroot.net/buildroot/commit/?id=e747d33bd9d319481a67a376c97e5100dd93f62a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The original source URL (http://beagleboard.org/source) now redirects to
-https://elinux.org/Beagleboard:BeagleBoneBlack_Rebuilding_Software_Image
-which points to an official kernel repository at GitHub.
+Use the pi3-miniuart-bt device tree overlay (as the 32bit raspberrypi3
+defconfig) instead of the enable_uart option.
 
-There are updated RT and non-RT kernel source trees. Use the last non-RT
-release (4.19.73-ti-r29) and the omap2plus defconfig.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/beaglebone_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ board/raspberrypi/post-image.sh   | 9 ---------
+ configs/raspberrypi3_64_defconfig | 3 +--
+ 2 files changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index ee97f80322..2de1bd0b32 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -7,8 +7,8 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4dae378bbe721277b08699d1d88ffae12acc9b09"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/beagleboard/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4.19.73-ti-r29"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index bf9af5dc60..bbeb0bc721 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -28,15 +28,6 @@ __EOF__
+ 
+ # enable 64bits support
+ arm_64bit=1
+-__EOF__
+-		fi
+-
+-		# Enable uart console
+-		if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+-			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+-
+-# enable rpi3 ttyS0 serial console
+-enable_uart=1
+ __EOF__
+ 		fi
+ 		;;
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index f9a6f5fe1f..27141f364e 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -22,7 +22,6 @@ BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
+-# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+ 
+ # Required tools to create the SD image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+@@ -36,4 +35,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --add-pi3-miniuart-bt-overlay"
