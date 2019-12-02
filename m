@@ -1,33 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Dec 2019 12:43:11 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: change email address for
- Alexander Lukichev
-Message-ID: <20191202114016.7105683885@busybox.osuosl.org>
+Date: Mon, 2 Dec 2019 12:47:18 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add Michael Vetter for
+ libstrophe
+Message-ID: <20191202114016.7BB4383908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a191ae4b9013de2a2ff2aa03b513836395d55055
+commit: https://git.buildroot.net/buildroot/commit/?id=cf36b7c3ac74ec20339aae2b843535a92c8b56a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index aea2b67171..2f561250fd 100644
+index 2f561250fd..e6c44b0671 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -114,7 +114,7 @@ F:	package/putty/
- N:	Alexander Kurz <akurz@blala.de>
- F:	package/minimodem/
+@@ -1702,6 +1702,7 @@ F:	package/python-spidev/
  
--N:	Alexander Lukichev <alexander.lukichev@espotel.com>
-+N:	Alexander Lukichev <alexander.lukichev@gmail.com>
- F:	package/openpgm/
+ N:	Michael Vetter <jubalh@iodoru.org>
+ F:	package/jasper/
++F:	package/libstrophe/
  
- N:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+ N:	Michael Walle <michael@walle.cc>
+ F:	package/libavl/
