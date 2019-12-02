@@ -1,91 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 02 Dec 2019 08:47:49 -0000
-Subject: [Buildroot] [git commit] package/python-pyaes: new package
-Message-ID: <20191202083931.5231380842@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/linksprite_pcduino: bump kernel
+ and u-boot versions
+Message-ID: <20191202083931.C75538016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=206eedd2405b192facd6bc0be07770c211aad42d
+commit: https://git.buildroot.net/buildroot/commit/?id=0330c2df2f81fed3ed049928b9ad446f23f9fad2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Bump Linux to 5.3.8 and U-Boot to 2019.10.
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/python-pyaes/Config.in         |  7 +++++++
- package/python-pyaes/python-pyaes.hash |  5 +++++
- package/python-pyaes/python-pyaes.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+ configs/linksprite_pcduino_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 33273ce6c8..503e9648d0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -256,6 +256,7 @@ F:	package/lua-ev/
- F:	package/orbit/
+diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
+index dd9bcdc1f7..a8577b6e79 100644
+--- a/configs/linksprite_pcduino_defconfig
++++ b/configs/linksprite_pcduino_defconfig
+@@ -17,13 +17,13 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/linksprite/pcduino/post-image.sh"
+ # For kernel modules autoloading
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
  
- N:	Bartosz Bilas <b.bilas@grinn-global.com>
-+F:	package/python-pyaes/
- F:	package/qt5/qt5scxml/
- F:	package/qt5/qt5webview/
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 5.3 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
  
-diff --git a/package/Config.in b/package/Config.in
-index f72c77b416..8b554e46d8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1006,6 +1006,7 @@ menu "External python modules"
- 	source "package/python-ptyprocess/Config.in"
- 	source "package/python-pudb/Config.in"
- 	source "package/python-py/Config.in"
-+	source "package/python-pyaes/Config.in"
- 	source "package/python-pyasn/Config.in"
- 	source "package/python-pyasn-modules/Config.in"
- 	source "package/python-pyasn1/Config.in"
-diff --git a/package/python-pyaes/Config.in b/package/python-pyaes/Config.in
-new file mode 100644
-index 0000000000..629fd82801
---- /dev/null
-+++ b/package/python-pyaes/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYAES
-+	bool "python-pyaes"
-+	help
-+	  Pure-Python Implementation of the AES block-cipher and
-+	  common modes of operation.
-+
-+	  https://github.com/ricmoo/pyaes
-diff --git a/package/python-pyaes/python-pyaes.hash b/package/python-pyaes/python-pyaes.hash
-new file mode 100644
-index 0000000000..25a15f1e19
---- /dev/null
-+++ b/package/python-pyaes/python-pyaes.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pyaes/json
-+md5	20fd5c6e29dcfdd08098e85a859a54ec  pyaes-1.6.1.tar.gz
-+sha256	02c1b1405c38d3c370b085fb952dd8bea3fadcee6411ad99f312cc129c536d8f  pyaes-1.6.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	1efe6c78b28b4203d397ea9b68bdc9c658d21cd9afaf8ae8223def83f2a7ebbd  LICENSE.txt
-diff --git a/package/python-pyaes/python-pyaes.mk b/package/python-pyaes/python-pyaes.mk
-new file mode 100644
-index 0000000000..a738d3c76a
---- /dev/null
-+++ b/package/python-pyaes/python-pyaes.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pyaes
-+#
-+################################################################################
-+
-+PYTHON_PYAES_VERSION = 1.6.1
-+PYTHON_PYAES_SOURCE = pyaes-$(PYTHON_PYAES_VERSION).tar.gz
-+PYTHON_PYAES_SITE = https://files.pythonhosted.org/packages/44/66/2c17bae31c906613795711fc78045c285048168919ace2220daa372c7d72
-+PYTHON_PYAES_SETUP_TYPE = distutils
-+PYTHON_PYAES_LICENSE = MIT
-+PYTHON_PYAES_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
+@@ -37,7 +37,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_USE_DEFCONFIG=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
