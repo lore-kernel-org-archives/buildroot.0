@@ -1,186 +1,321 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 02 Dec 2019 08:47:52 -0000
-Subject: [Buildroot] [git commit] package/gcnano-binaries: new package
-Message-ID: <20191202083933.2501881055@busybox.osuosl.org>
+Date: Mon, 02 Dec 2019 08:47:53 -0000
+Subject: [Buildroot] [git commit] configs/atmel: bump to linux4sam_6.2 and
+ at91bootstrap 3.9.0
+Message-ID: <20191202083932.CCB517FFDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af408cfa4d8c15b46f7fa117e7558c2ec3d1c430
+commit: https://git.buildroot.net/buildroot/commit/?id=26890e87cb669eb0da02153e12df7003b10de623
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-New package which provides the driver and binary blob libraries for
-the STM32MP157 vivante gcnano gpu. The precompiled libraries depend
-on wayland and libdrm.
+Update configs with latest linux4sam and at91bootstrap.
 
-Signed-off-by: Jens Kleintje <scooby22@web.de>
-[Thomas:
- - add missing dependency on glibc
- - add missing dependencies on threads (wayland, libdrm) and !static
-   (wayland)
- - introduce GCNANO_BINARIES_LIB_VERSION,
-   GCNANO_BINARIES_DRIVER_VERSION and GCNANO_BINARIES_USERLAND_VERSION
-   variables to simplify code a bit
- - greatly simplify the installation, by using more the available
-   libraries/files. This also avoids the installation of duplicate
-   release/debug libraries]
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                   |  3 ++
- package/Config.in                            |  1 +
- package/gcnano-binaries/Config.in            | 33 +++++++++++++
- package/gcnano-binaries/gcnano-binaries.hash |  3 ++
- package/gcnano-binaries/gcnano-binaries.mk   | 69 ++++++++++++++++++++++++++++
- 5 files changed, 109 insertions(+)
+ configs/atmel_sama5d2_xplained_mmc_defconfig     | 6 +++---
+ configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 6 +++---
+ configs/atmel_sama5d3_xplained_defconfig         | 6 +++---
+ configs/atmel_sama5d3_xplained_dev_defconfig     | 6 +++---
+ configs/atmel_sama5d3_xplained_mmc_defconfig     | 6 +++---
+ configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 6 +++---
+ configs/atmel_sama5d4_xplained_defconfig         | 6 +++---
+ configs/atmel_sama5d4_xplained_dev_defconfig     | 6 +++---
+ configs/atmel_sama5d4_xplained_mmc_defconfig     | 6 +++---
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 6 +++---
+ 10 files changed, 30 insertions(+), 30 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2cb272d2d6..054f83ce5e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1172,6 +1172,9 @@ F:	package/quota/
- N:	Jason Pruitt <jrspruitt@gmail.com>
- F:	package/librtlsdr/
+diff --git a/configs/atmel_sama5d2_xplained_mmc_defconfig b/configs/atmel_sama5d2_xplained_mmc_defconfig
+index 1ae1dcf4be..b9a37245b5 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d2_xplained_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.1)/linux-linux4sam_6.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_xplained"
+@@ -18,13 +18,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+index 2272fcd6ff..8f5ffd94fa 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+@@ -24,7 +24,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d2_xplained_mmc/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.1)/linux-linux4sam_6.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_xplained"
+@@ -89,13 +89,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
  
-+N:	Jens Kleintje <scooby22@web.de>
-+F:	package/gcnano-binaries/
-+
- N:	Jens Rosenboom <j.rosenboom@x-ion.de>
- F:	package/sl/
+diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
+index 31668518cc..b24cc8beed 100644
+--- a/configs/atmel_sama5d3_xplained_defconfig
++++ b/configs/atmel_sama5d3_xplained_defconfig
+@@ -5,7 +5,7 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.1)/linux-linux4sam_6.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
+@@ -17,13 +17,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
+index feac379701..a2b03036cf 100644
+--- a/configs/atmel_sama5d3_xplained_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_dev_defconfig
+@@ -20,7 +20,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.1)/linux-linux4sam_6.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
+@@ -86,13 +86,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
  
-diff --git a/package/Config.in b/package/Config.in
-index 20c3eeb9c7..fd30562ea5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -449,6 +449,7 @@ endmenu
- 	source "package/freescale-imx/Config.in"
- 	source "package/fxload/Config.in"
- 	source "package/gadgetfs-test/Config.in"
-+	source "package/gcnano-binaries/Config.in"
- 	source "package/gpm/Config.in"
- 	source "package/gpsd/Config.in"
- 	source "package/gptfdisk/Config.in"
-diff --git a/package/gcnano-binaries/Config.in b/package/gcnano-binaries/Config.in
-new file mode 100644
-index 0000000000..01e1aacf1d
---- /dev/null
-+++ b/package/gcnano-binaries/Config.in
-@@ -0,0 +1,33 @@
-+comment "gcnano-binaries needs a Linux kernel to be built"
-+	depends on BR2_arm
-+	depends on !BR2_LINUX_KERNEL
-+
-+comment "gcnano-binaries needs a glibc toolchain w/ threads, dynamic library"
-+	depends on BR2_arm
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_STATIC_LIBS
-+
-+config BR2_PACKAGE_GCNANO_BINARIES
-+	bool "gcnano-binaries"
-+	depends on BR2_arm
-+	depends on BR2_LINUX_KERNEL
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm, wayland
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_WAYLAND
-+	help
-+	  Driver and libaries for stm vivante gcnano gpu.
-+	  https://github.com/STMicroelectronics/gcnano-binaries/
-+
-+if BR2_PACKAGE_GCNANO_BINARIES
-+
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "gcnano-binaries"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "gcnano-binaries"
-+
-+endif
-diff --git a/package/gcnano-binaries/gcnano-binaries.hash b/package/gcnano-binaries/gcnano-binaries.hash
-new file mode 100644
-index 0000000000..e753f944a3
---- /dev/null
-+++ b/package/gcnano-binaries/gcnano-binaries.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 255db9c58627f5f54fd15263647cc97a55927363fec42e7c8d7486170a65d84d  gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed.tar.gz
-+sha256 7d209718473d18f69f75adb7caf9cb5d4b0a31da068756aa011bea617de3dc57  EULA
-diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
-new file mode 100644
-index 0000000000..4bfb5ad952
---- /dev/null
-+++ b/package/gcnano-binaries/gcnano-binaries.mk
-@@ -0,0 +1,69 @@
-+################################################################################
-+#
-+# gcnano-binaries
-+#
-+################################################################################
-+
-+GCNANO_BINARIES_LIB_VERSION = 6.2.4
-+GCNANO_BINARIES_DRIVER_VERSION = $(GCNANO_BINARIES_LIB_VERSION).p4
-+GCNANO_BINARIES_USERLAND_VERSION = $(GCNANO_BINARIES_LIB_VERSION).p4-20190626
-+GCNANO_BINARIES_VERSION = c01642ed5e18cf09ecd905af193e935cb3be95ed
-+GCNANO_BINARIES_SITE = $(call github,STMicroelectronics,gcnano-binaries,$(GCNANO_BINARIES_VERSION))
-+
-+GCNANO_BINARIES_LICENSE = MIT, Vivante End User Software License Terms
-+GCNANO_BINARIES_LICENSE_FILES = EULA
-+GCNANO_BINARIES_REDISTRIBUTE = NO
-+
-+GCNANO_BINARIES_DEPENDENCIES = linux wayland libdrm
-+
-+GCNANO_BINARIES_INSTALL_STAGING = YES
-+
-+GCNANO_BINARIES_PROVIDES = libegl libgles
-+
-+# The Github repository doesn't contain the source code as-is: it
-+# contains a tarball with the kernel driver source code, and a
-+# self-extractible binary for the user-space parts. So we extract both
-+# below, and also extract the EULA text from the self-extractible binary
-+define GCNANO_BINARIES_EXTRACT_HELPER
-+	tar --strip-components=1 -xJf $(@D)/gcnano-driver-$(GCNANO_BINARIES_DRIVER_VERSION).tar.xz -C $(@D)
-+	awk 'BEGIN      { start = 0; } \
-+		/^EOEULA/  { start = 0; } \
-+			{ if (start) print; } \
-+		/<<EOEULA/ { start = 1; }' \
-+		$(@D)/gcnano-userland-multi-$(GCNANO_BINARIES_USERLAND_VERSION).bin > $(@D)/EULA
-+	cd $(@D) && sh gcnano-userland-multi-$(GCNANO_BINARIES_USERLAND_VERSION).bin --auto-accept
-+endef
-+
-+GCNANO_BINARIES_POST_EXTRACT_HOOKS += GCNANO_BINARIES_EXTRACT_HELPER
-+
-+GCNANO_BINARIES_MODULE_MAKE_OPTS = \
-+	KERNEL_DIR=$(LINUX_DIR) \
-+	SOC_PLATFORM=st-st \
-+	AQROOT=$(@D) \
-+	DEBUG=0
-+
-+GCNANO_BINARIES_LIBRARIES = \
-+	gbm_viv libEGL libGAL libgbm libGLESv1_CM \
-+	libGLESv2 libGLSLC libOpenVG libVSC
-+
-+GCNANO_BINARIES_USERLAND_SUBDIR = gcnano-userland-multi-$(GCNANO_BINARIES_USERLAND_VERSION)
-+
-+define GCNANO_BINARIES_INSTALL
-+	$(foreach lib,$(GCNANO_BINARIES_LIBRARIES), \
-+		$(INSTALL) -D -m 0755 $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so \
-+			$(1)/usr/lib/$(lib).$(GCNANO_BINARIES_LIB_VERSION).multi.release.so ; \
-+		cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/lib/$(lib).so* $(1)/usr/lib
-+	)
-+	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/usr/include/* $(1)/usr/include/
-+endef
-+
-+define GCNANO_BINARIES_INSTALL_TARGET_CMDS
-+	$(call GCNANO_BINARIES_INSTALL,$(TARGET_DIR))
-+endef
-+
-+define GCNANO_BINARIES_INSTALL_STAGING_CMDS
-+	$(call GCNANO_BINARIES_INSTALL,$(STAGING_DIR))
-+endef
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
+diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
+index 3bba27d23a..259888ee54 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d3_xplained_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.1)/linux-linux4sam_6.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
+@@ -17,13 +17,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+index 6733288eff..ef47bb37d7 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d3_xplained_mmc/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.1)/linux-linux4sam_6.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
+@@ -88,13 +88,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ 
+diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
+index e72a9e7ad5..0ecb6a1e84 100644
+--- a/configs/atmel_sama5d4_xplained_defconfig
++++ b/configs/atmel_sama5d4_xplained_defconfig
+@@ -6,7 +6,7 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.1)/linux-linux4sam_6.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
+@@ -21,13 +21,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
+index 4aaf767412..8eb6f0989f 100644
+--- a/configs/atmel_sama5d4_xplained_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_dev_defconfig
+@@ -21,7 +21,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.1)/linux-linux4sam_6.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
+@@ -90,13 +90,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ 
+diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
+index 63314f9262..2753a7af09 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d4_xplained_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.1)/linux-linux4sam_6.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
+@@ -18,13 +18,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+index 828085c7b5..d948cfa0f0 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+@@ -24,7 +24,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d4_xplained_mmc/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.1)/linux-linux4sam_6.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
+@@ -89,13 +89,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.13"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ 
