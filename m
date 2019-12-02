@@ -1,46 +1,110 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Dec 2019 08:47:51 -0000
-Subject: [Buildroot] [git commit] package/python-txdbus: bump to 1.1.1
-Message-ID: <20191202083933.7437780725@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 02 Dec 2019 08:47:52 -0000
+Subject: [Buildroot] [git commit] package/rcw: add option to generate the RCW
+Message-ID: <20191202083932.81C607FE84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf053cf414d9290b68f4737dcf457b62fbb43842
+commit: https://git.buildroot.net/buildroot/commit/?id=d351bfb2bd39b6e15925a29ba7b81e630c5044dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-txdbus/python-txdbus.hash | 4 ++--
- package/python-txdbus/python-txdbus.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+When the rcw tools is built, it is probably to generate the RCW (Reset
+Configuration Word) of the target. So it makes sense to do this directly
+in the Buildroot infra and install it in the images directory, just like
+we do for e.g. device tree blobs.
 
-diff --git a/package/python-txdbus/python-txdbus.hash b/package/python-txdbus/python-txdbus.hash
-index 38760fada6..60740e29d2 100644
---- a/package/python-txdbus/python-txdbus.hash
-+++ b/package/python-txdbus/python-txdbus.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/txdbus/json
--md5	f17c9204c7f56365c297ba68e6840900  txdbus-1.1.0.tar.gz
--sha256	6ff57f42c58d935956024b3c6824c1019db7d233d0af86aa0573b73b63b0817c  txdbus-1.1.0.tar.gz
-+sha256	eefcffa4efbf82ba11222f17f5989fe1b2b6ef57226ef896c4a7084c990ba217  txdbus-1.1.1.tar.gz
-+md5	ce8a0e0a17cdbada725e3159802ae75f  txdbus-1.1.1.tar.gz
-diff --git a/package/python-txdbus/python-txdbus.mk b/package/python-txdbus/python-txdbus.mk
-index 08429baac8..d8e7a7bee9 100644
---- a/package/python-txdbus/python-txdbus.mk
-+++ b/package/python-txdbus/python-txdbus.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Add an option BR2_PACKAGE_HOST_RCW_CUSTOM_PATH that allows to specify
+the source for the RCW. And while we're at it, make it possible to
+specify multiple .rcw and .rcwi files, just like for device trees.
+
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+[Arnout:
+  * Reword help text and commit message
+  * Remove definition of RCW_DELIVERY_FILE
+  * Define and use RCW_FILES
+  * Enclose everything in ifneq($(RCW_FILES),)
+  * Enclose error in ifeq($(BR_BUILDING),y)
+  * Add actual error message
+  * Don't limit to only %.rcwi files
+  * Don't delete *.bin
+]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rcw/Config.in.host | 16 ++++++++++++++++
+ package/rcw/rcw.mk         | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
+
+diff --git a/package/rcw/Config.in.host b/package/rcw/Config.in.host
+index ba40f76de9..a9253958d9 100644
+--- a/package/rcw/Config.in.host
++++ b/package/rcw/Config.in.host
+@@ -10,3 +10,19 @@ config BR2_PACKAGE_HOST_RCW
+ 	  then use this toolset and examples.
  
--PYTHON_TXDBUS_VERSION = 1.1.0
-+PYTHON_TXDBUS_VERSION = 1.1.1
- PYTHON_TXDBUS_SOURCE = txdbus-$(PYTHON_TXDBUS_VERSION).tar.gz
--PYTHON_TXDBUS_SITE = https://files.pythonhosted.org/packages/8e/7c/0b8726b82943ae99dc71b8fe20e2e0beb7feb4ef61105865021a64f08b16
-+PYTHON_TXDBUS_SITE = https://files.pythonhosted.org/packages/4a/68/dfd06f3f349999cbbb31eade239fe76fbff2d6a905eb7d20449666d1b2ce
- PYTHON_TXDBUS_SETUP_TYPE = setuptools
- PYTHON_TXDBUS_LICENSE = MIT
+ 	  https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/
++
++if BR2_PACKAGE_HOST_RCW
++
++config BR2_PACKAGE_HOST_RCW_CUSTOM_PATH
++	string "RCW Source file paths"
++	help
++	  Space-separated list of .rcw and .rcwi files, that will be
++	  used to generate a RCW binary. The entire list of .rcwi files
++	  used by the .rcw file must be specified. There must be a
++	  single .rcw file in the list.
++
++	  This is optional. If left empty, the rcw package will be
++	  included for use in the SDK or with post scripts but no
++	  RCW binary will not be generated.
++
++endif
+diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
+index f4570b9bde..36d2da61b5 100644
+--- a/package/rcw/rcw.mk
++++ b/package/rcw/rcw.mk
+@@ -10,11 +10,41 @@ RCW_SITE_METHOD = git
+ RCW_LICENSE = BSD-3-Clause
+ RCW_LICENSE_FILES = LICENSE
  
++RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
++
++ifneq ($(RCW_FILES),)
++# Get the name of the custom rcw file from the custom list
++RCW_PROJECT = $(notdir $(filter %.rcw,$(RCW_FILES)))
++
++# Error if there are no or more than one .rcw file
++ifeq ($(BR_BUILDING),y)
++ifneq ($(words $(RCW_PROJECT)),1)
++$(error BR2_PACKAGE_HOST_RCW_CUSTOM_PATH must have exactly one .rcw file)
++endif
++endif
++
++define HOST_RCW_ADD_CUSTOM_RCW_FILES
++	mkdir -p $(@D)/custom_board/rcw
++	cp -f $(filter-out %.rcw,$(RCW_FILES)) $(@D)/custom_board
++	cp -f $(filter %.rcw,$(RCW_FILES)) $(@D)/custom_board/rcw
++endef
++HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
++
++define HOST_RCW_BUILD_CMDS
++	python $(@D)/rcw.py -i $(@D)/custom_board/rcw/$(RCW_PROJECT) -I $(@D)/custom_board -o $(@D)/PBL.bin
++endef
++
++define HOST_RCW_INSTALL_DELIVERY_FILE
++	$(INSTALL) -D -m 0644 $(@D)/PBL.bin $(BINARIES_DIR)/PBL.bin
++endef
++endif
++
+ # Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
+ # could use a post image or SDK to build/install PBL files.
+ define HOST_RCW_INSTALL_CMDS
+ 	mkdir -p  $(HOST_DIR)/share/rcw
+ 	cp -a $(@D)/* $(HOST_DIR)/share/rcw
++	$(HOST_RCW_INSTALL_DELIVERY_FILE)
+ endef
+ 
+ $(eval $(host-generic-package))
