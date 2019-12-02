@@ -1,55 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 02 Dec 2019 08:47:49 -0000
-Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: add pattern
- based image copy for ATF
-Message-ID: <20191202083932.D48B2818A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: search for host-dtc (libfdt)
+ headers at the right place
+Message-ID: <20191202083933.0655881871@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4d276c357fdf9f19f99f826cab63f373687f902
+commit: https://git.buildroot.net/buildroot/commit/?id=19197809d616d8c2dfdb5755c1455423b1b20955
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This adds support for different platforms where the binaries have
-different extensions.
+The libfdt headers are installed at $(HOST_DIR)/include/libfdt now, to
+prevent conflicts with the kernel dtc code. Pass that path to the qemu
+configure script, otherwise it uses its bundled copy of libfdt.
 
-Signed-off-by: Michael Schenk <michael.schenk@noser.com>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/arm-trusted-firmware/Config.in               | 7 +++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 +++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ package/qemu/qemu.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index beb95fbf06..78c03019d5 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -135,4 +135,11 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
- 	help
- 	  Enable this option to build ATF with DEBUG=1.
- 
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES
-+	string "Binary boot images"
-+	default "*.bin"
-+	help
-+	  Names of generated image files that are installed in the
-+	  output images/ directory.
-+
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index a91f9d3eeb..1a5c642726 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -246,9 +246,12 @@ endif
  endif
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index a7814e534a..e528686aa1 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -146,7 +146,9 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- endef
+ HOST_QEMU_SYS_ARCH ?= $(HOST_QEMU_ARCH)
  
- define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
--	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
-+	$(foreach f,$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES)), \
-+		cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(f) $(BINARIES_DIR)/
-+	)
- 	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL)
- 	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF)
++HOST_QEMU_CFLAGS = $(HOST_CFLAGS)
++
+ ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
+ HOST_QEMU_TARGETS += $(HOST_QEMU_SYS_ARCH)-softmmu
+ HOST_QEMU_OPTS += --enable-system --enable-fdt
++HOST_QEMU_CFLAGS += -I$(HOST_DIR)/include/libfdt
+ HOST_QEMU_DEPENDENCIES += host-dtc
+ else
+ HOST_QEMU_OPTS += --disable-system
+@@ -297,7 +300,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--interp-prefix=$(STAGING_DIR) \
+ 		--cc="$(HOSTCC)" \
+ 		--host-cc="$(HOSTCC)" \
+-		--extra-cflags="$(HOST_CFLAGS)" \
++		--extra-cflags="$(HOST_QEMU_CFLAGS)" \
+ 		--extra-ldflags="$(HOST_LDFLAGS)" \
+ 		$(HOST_QEMU_OPTS)
  endef
