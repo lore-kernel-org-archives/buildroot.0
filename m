@@ -1,94 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 02 Dec 2019 08:47:48 -0000
-Subject: [Buildroot] [git commit] package/python-esptool: new package
-Message-ID: <20191202083931.5A7DC81523@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php: add option to enable
+ libsodium support
+Message-ID: <20191202083931.9B2C27FCE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a581ed8b17c45499c3bb108cdae0cd663a4ddb8
+commit: https://git.buildroot.net/buildroot/commit/?id=0d842d5ded320a4351650c3633b6eb70a4f33243
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-esptool/Config.in           | 10 ++++++++++
- package/python-esptool/python-esptool.hash |  5 +++++
- package/python-esptool/python-esptool.mk   | 14 ++++++++++++++
- 5 files changed, 31 insertions(+)
+ package/php/Config.ext | 6 ++++++
+ package/php/php.mk     | 5 +++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 503e9648d0..342df993aa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -256,6 +256,7 @@ F:	package/lua-ev/
- F:	package/orbit/
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index c7f0332fd8..0c6ed4b401 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -70,6 +70,12 @@ config BR2_PACKAGE_PHP_EXT_HASH
+ 	help
+ 	  HASH message digest framework
  
- N:	Bartosz Bilas <b.bilas@grinn-global.com>
-+F:	package/python-esptool/
- F:	package/python-pyaes/
- F:	package/qt5/qt5scxml/
- F:	package/qt5/qt5webview/
-diff --git a/package/Config.in b/package/Config.in
-index 8b554e46d8..a9742ba953 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -902,6 +902,7 @@ menu "External python modules"
- 	source "package/python-engineio/Config.in"
- 	source "package/python-enum/Config.in"
- 	source "package/python-enum34/Config.in"
-+	source "package/python-esptool/Config.in"
- 	source "package/python-falcon/Config.in"
- 	source "package/python-fire/Config.in"
- 	source "package/python-flask/Config.in"
-diff --git a/package/python-esptool/Config.in b/package/python-esptool/Config.in
-new file mode 100644
-index 0000000000..08b84e3e08
---- /dev/null
-+++ b/package/python-esptool/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_ESPTOOL
-+	bool "python-esptool"
-+	select BR2_PACKAGE_PYTHON_ECDSA # runtime
-+	select BR2_PACKAGE_PYTHON_PYAES # runtime
-+	select BR2_PACKAGE_PYTHON_SERIAL # runtime
++config BR2_PACKAGE_PHP_EXT_LIBSODIUM
++	bool "libsodium"
++	select BR2_PACKAGE_LIBSODIUM
 +	help
-+	  A serial utility to communicate & flash code to Espressif
-+	  ESP8266 & ESP32 chips.
++	  libsodium support
 +
-+	  https://github.com/espressif/esptool
-diff --git a/package/python-esptool/python-esptool.hash b/package/python-esptool/python-esptool.hash
-new file mode 100644
-index 0000000000..b4dac7ed51
---- /dev/null
-+++ b/package/python-esptool/python-esptool.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/esptool/json
-+md5	d17b9293910773045b9de0d5caa0597d  esptool-2.8.tar.gz
-+sha256	1e4288d9f00e55ba36809cc79c493643c623bfa036d7b019a0ebe396284bc317  esptool-2.8.tar.gz
-+# Locally computed sha256 checksums
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/python-esptool/python-esptool.mk b/package/python-esptool/python-esptool.mk
-new file mode 100644
-index 0000000000..0cdc98ce16
---- /dev/null
-+++ b/package/python-esptool/python-esptool.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-esptool
-+#
-+################################################################################
+ config BR2_PACKAGE_PHP_EXT_MCRYPT
+ 	bool "mcrypt"
+ 	select BR2_PACKAGE_LIBMCRYPT
+diff --git a/package/php/php.mk b/package/php/php.mk
+index b679531238..85bf2075ae 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -122,6 +122,11 @@ PHP_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_PHP_EXT_MBSTRING),--enable-mbstring) \
+ 	$(if $(BR2_PACKAGE_PHP_EXT_PHAR),--enable-phar)
+ 
++ifeq ($(BR2_PACKAGE_PHP_EXT_LIBSODIUM),y)
++PHP_CONF_OPTS += --with-sodium=$(STAGING_DIR)/usr
++PHP_DEPENDENCIES += libsodium
++endif
 +
-+PYTHON_ESPTOOL_VERSION = 2.8
-+PYTHON_ESPTOOL_SOURCE = esptool-$(PYTHON_ESPTOOL_VERSION).tar.gz
-+PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/68/91/08c182f66fa3f12a96e754ae8ec7762abb2d778429834638f5746f81977a
-+PYTHON_ESPTOOL_SETUP_TYPE = setuptools
-+PYTHON_ESPTOOL_LICENSE = GPL-2.0+
-+PYTHON_ESPTOOL_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+ ifeq ($(BR2_PACKAGE_PHP_EXT_MCRYPT),y)
+ PHP_CONF_OPTS += --with-mcrypt=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += libmcrypt
