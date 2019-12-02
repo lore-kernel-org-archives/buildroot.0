@@ -1,27 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Dec 2019 22:26:26 +0100
-Subject: [Buildroot] [PATCH 2/2] package/nss-mdns: disable tests
-In-Reply-To: <20191202202006.1805774-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 2 Dec 2019 21:20:06 +0100")
-References: <20191202202006.1805774-1-fontaine.fabrice@gmail.com>
- <20191202202006.1805774-2-fontaine.fabrice@gmail.com>
-Message-ID: <87y2vupgfx.fsf@dell.be.48ers.dk>
+Date: Mon, 2 Dec 2019 22:22:44 +0100
+Subject: [Buildroot] [git commit] package/gr-osmosdr: bump to version 0.1.5
+Message-ID: <20191202211933.77A5283A1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=93013e9b85d3b0b0cf22832c1b6f616272c28311
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Disable tests that depend on check and have been added in version 0.11
- > with
- > https://github.com/lathiat/nss-mdns/commit/7b649a32836af3578a2bb60aa713588f0d9f9a83
+Add hash for license file
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gr-osmosdr/gr-osmosdr.hash | 3 ++-
+ package/gr-osmosdr/gr-osmosdr.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-This could have been merged with the 0.14.1 bump commit, but oh well -
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gr-osmosdr/gr-osmosdr.hash b/package/gr-osmosdr/gr-osmosdr.hash
+index 337f3ef86b..d82864d307 100644
+--- a/package/gr-osmosdr/gr-osmosdr.hash
++++ b/package/gr-osmosdr/gr-osmosdr.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated:
+-sha256 274960cd32bc8a7216eeed8967bf078efd6123332808b405ec42c24a7e426b7c gr-osmosdr-164a09fc11cec2d8b15b38e8b512fa542d6cecc7.tar.gz
++sha256 a5820e80465d895a9b4b73e0ff01924d6b612a9a390bbd3488177379a9539d00 gr-osmosdr-0.1.5.tar.gz
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
+diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
+index 9ed4ad3118..645c156e7a 100644
+--- a/package/gr-osmosdr/gr-osmosdr.mk
++++ b/package/gr-osmosdr/gr-osmosdr.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GR_OSMOSDR_VERSION = 164a09fc11cec2d8b15b38e8b512fa542d6cecc7
+-GR_OSMOSDR_SITE = $(call github,osmocom,gr-osmosdr,$(GR_OSMOSDR_VERSION))
++GR_OSMOSDR_VERSION = 0.1.5
++GR_OSMOSDR_SITE = $(call github,osmocom,gr-osmosdr,v$(GR_OSMOSDR_VERSION))
+ GR_OSMOSDR_LICENSE = GPL-3.0+
+ GR_OSMOSDR_LICENSE_FILES = COPYING
+ 
