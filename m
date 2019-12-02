@@ -1,59 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Dec 2019 22:22:19 +0100
-Subject: [Buildroot] [git commit] package/python-django: security bump to
- version 2.2.8
-Message-ID: <20191202211933.68B0083A8F@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  2 Dec 2019 23:23:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/isl: bump to version 0.22
+Message-ID: <20191202222320.1821510-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6340272e88db87a3917b69228997fcba1a9e37dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add hash for license file
 
-Fixes the following security vulnerabilities:
-
-- CVE-2019-19118: Privilege escalation in the Django admin
-
-Additionally, 2.2.8 (and 2.2.7) fixes a number of bugs and adds python 3.8
-support.
-
-For more details, see the release notes:
-https://docs.djangoproject.com/en/dev/releases/2.2.8/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/isl/isl.hash | 3 ++-
+ package/isl/isl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 0e6b7b2c63..965055f47d 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5	796c175a2f94e938c60d84b4565216af  Django-2.2.6.tar.gz
--sha256	a8ca1033acac9f33995eb2209a6bf18a4681c3e5269a878e9a7e0b7384ed1ca3  Django-2.2.6.tar.gz
-+md5	57d965818410a4e00e2267eef66aa9c9  Django-2.2.8.tar.gz
-+sha256	a4ad4f6f9c6a4b7af7e2deec8d0cbff28501852e5010d6c2dc695d3d1fae7ca0  Django-2.2.8.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 1c810b8af7..d541a2c07b 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/isl/isl.hash b/package/isl/isl.hash
+index 43e5a463af..40d04dca80 100644
+--- a/package/isl/isl.hash
++++ b/package/isl/isl.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256	0f35051cc030b87c673ac1f187de40e386a1482a0cfdf2c552dd6031b307ddc4	isl-0.18.tar.xz
++sha256	6c8bc56c477affecba9c59e2c9f026967ac8bad01b51bdd07916db40a517b9fa	isl-0.22.tar.xz
++sha256	3a2c398103f6bca0f50a9a9465deca9230b370b0212af5fdf31ed88a36215c30	LICENSE
+diff --git a/package/isl/isl.mk b/package/isl/isl.mk
+index b5f01c4c8d..a1a597d038 100644
+--- a/package/isl/isl.mk
++++ b/package/isl/isl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 2.2.6
-+PYTHON_DJANGO_VERSION = 2.2.8
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c7/2c/bbd0fddf6a08456c3100b8e8b230f3288d4511985aa4e2368b0d115b5aae
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1c/aa/f618f346b895123be44739b276099a2b418b45b2b7afb5e1071403e8d2e9
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+-ISL_VERSION = 0.18
++ISL_VERSION = 0.22
+ ISL_SOURCE = isl-$(ISL_VERSION).tar.xz
+ ISL_SITE = http://isl.gforge.inria.fr
+ ISL_LICENSE = MIT
+-- 
+2.24.0
