@@ -1,62 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 02 Dec 2019 08:47:50 -0000
-Subject: [Buildroot] [git commit] package/dtc: install host libfdt headers
- in a subdirectory
-Message-ID: <20191202083932.EFFA47F98A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgresql: bump version to 12.1
+Message-ID: <20191202083932.C49547FFDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e381d823f6834fc1b9e5574febd7e4e737295e89
+commit: https://git.buildroot.net/buildroot/commit/?id=7a709f77c8099af97ed532ff4bd8c0cfdc26df09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Installing the libfdt headers at $(HOST_DIR)/include interferes with the
-build of the kernel, as in beaglebone:
+Release notes of the bugfix release:
+https://www.postgresql.org/about/news/1994/
+https://www.postgresql.org/docs/current/release-12-1.html
 
-2019-11-01T22:23:16 /usr/bin/make -f ./scripts/Makefile.build obj=scripts
-2019-11-01T22:23:16 /usr/bin/make -f ./scripts/Makefile.build obj=scripts/dtc need-builtin=
-2019-11-01T22:23:16 (cat /dev/null; ) > scripts/dtc/modules.order
-2019-11-01T22:23:16 /usr/bin/gcc -O2 -I/work/beaglebone/host/include -L/work/beaglebone/host/lib -Wl,-rpath,/work/beaglebone/host/lib -Wp,-MD,scripts/dtc/libfdt/.fdt_ro.o.d -Wall -Wmissing-prototypes -Wstrict-p>
-2019-11-01T22:23:16 scripts/dtc/libfdt/fdt_ro.c:92:10: error: redefinition of ???fdt_get_max_phandle???
-2019-11-01T22:23:16 uint32_t fdt_get_max_phandle(const void *fdt)
-2019-11-01T22:23:16 ^~~~~~~~~~~~~~~~~~~
-2019-11-01T22:23:16 In file included from scripts/dtc/libfdt/fdt_ro.c:54:
-2019-11-01T22:23:16 /work/beaglebone/host/include/libfdt.h:384:24: note: previous definition of ???fdt_get_max_phandle??? was here
-2019-11-01T22:23:16 static inline uint32_t fdt_get_max_phandle(const void *fdt)
-2019-11-01T22:23:16 ^~~~~~~~~~~~~~~~~~~
-2019-11-01T22:23:16 make[4]: *** [scripts/Makefile.host:107: scripts/dtc/libfdt/fdt_ro.o] Error 1
-2019-11-01T22:23:16 make[3]: *** [scripts/Makefile.build:544: scripts/dtc] Error 2
-2019-11-01T22:23:16 make[2]: *** [Makefile:1066: scripts] Error 2
-2019-11-01T22:23:16 make[1]: *** [package/pkg-generic.mk:241: /work/beaglebone/build/linux-4dae378bbe721277b08699d1d88ffae12acc9b09/.stamp_built] Error 2
-
-We cannot simply disable dtc support and patching the kernel makefiles
-is risky and error-prone, so let's just install the host-dtc headers at
-$(HOST_DIR)/include/libfdt to circumvent the problem.
-
-Packages that depend on those headers (e.g. host-qemu) must be updated
-to user the correct path but this is small change.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dtc/dtc.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/postgresql/postgresql.hash | 8 ++++----
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index a0fffa5b80..76106519e5 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -18,8 +18,11 @@ DTC_MAKE_OPTS = \
- 	NO_PYTHON=1 \
- 	NO_VALGRIND=1
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 3230818fac..5acdc957f2 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,7 +1,7 @@
+-# From https://ftp.postgresql.org/pub/source/v12.0/postgresql-12.0.tar.bz2.md5
+-md5 87545416ef021eee8621d31a93fcc899  postgresql-12.0.tar.bz2
+-# From https://ftp.postgresql.org/pub/source/v12.0/postgresql-12.0.tar.bz2.sha256
+-sha256 cda2397215f758b793f741c86be05468257b0e6bcb1a6113882ab5d0df0855c6  postgresql-12.0.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.1/postgresql-12.1.tar.bz2.md5
++md5 2ee1bd4ec5f49363a3f456f07e599b41  postgresql-12.1.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.1/postgresql-12.1.tar.bz2.sha256
++sha256 a09bf3abbaf6763980d0f8acbb943b7629a8b20073de18d867aecdb7988483ed  postgresql-12.1.tar.bz2
  
-+# For the host, we install headers in a special subdirectory to avoid
-+# conflicts with the in-kernel libfdt copy.
- HOST_DTC_MAKE_OPTS = \
- 	PREFIX=$(HOST_DIR) \
-+	INCLUDEDIR=$(HOST_DIR)/include/libfdt \
- 	NO_PYTHON=1 \
- 	NO_VALGRIND=1 \
- 	NO_YAML=1
+ # License file, Locally calculated
+ sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 58f829ee00..858cd6975e 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 12.0
++POSTGRESQL_VERSION = 12.1
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
