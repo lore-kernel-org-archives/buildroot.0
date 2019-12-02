@@ -1,46 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Dec 2019 22:22:44 +0100
-Subject: [Buildroot] [git commit] package/gr-osmosdr: bump to version 0.1.5
-Message-ID: <20191202211933.77A5283A1B@busybox.osuosl.org>
+Date: Mon, 2 Dec 2019 22:24:26 +0100
+Subject: [Buildroot] [git commit] package/kyua: bump to version 0.13
+Message-ID: <20191202211933.95D0083A8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93013e9b85d3b0b0cf22832c1b6f616272c28311
+commit: https://git.buildroot.net/buildroot/commit/?id=059dc6887d3536f4f2c47be366a43390fc9d4be1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
+COPYING was renamed into LICENSE since version 0.12 and
+https://github.com/jmmv/kyua/commit/db509f9d9ece719bf8452d6ddbc842ae311b1bc2
+
+So update KYUA_LICENSE_FILES and add hash for LICENSE file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gr-osmosdr/gr-osmosdr.hash | 3 ++-
- package/gr-osmosdr/gr-osmosdr.mk   | 4 ++--
+ package/kyua/kyua.hash | 3 ++-
+ package/kyua/kyua.mk   | 4 ++--
  2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gr-osmosdr/gr-osmosdr.hash b/package/gr-osmosdr/gr-osmosdr.hash
-index 337f3ef86b..d82864d307 100644
---- a/package/gr-osmosdr/gr-osmosdr.hash
-+++ b/package/gr-osmosdr/gr-osmosdr.hash
+diff --git a/package/kyua/kyua.hash b/package/kyua/kyua.hash
+index 298d0d85c6..66681692fc 100644
+--- a/package/kyua/kyua.hash
++++ b/package/kyua/kyua.hash
 @@ -1,2 +1,3 @@
- # Locally calculated:
--sha256 274960cd32bc8a7216eeed8967bf078efd6123332808b405ec42c24a7e426b7c gr-osmosdr-164a09fc11cec2d8b15b38e8b512fa542d6cecc7.tar.gz
-+sha256 a5820e80465d895a9b4b73e0ff01924d6b612a9a390bbd3488177379a9539d00 gr-osmosdr-0.1.5.tar.gz
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
-diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
-index 9ed4ad3118..645c156e7a 100644
---- a/package/gr-osmosdr/gr-osmosdr.mk
-+++ b/package/gr-osmosdr/gr-osmosdr.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated
+-sha256 2b8b64a458b642df75086eeb73e8073d105b8d9cff04c9b1a905b68bc8502560 kyua-0.11.tar.gz
++sha256 db6e5d341d5cf7e49e50aa361243e19087a00ba33742b0855d2685c0b8e721d6 kyua-0.13.tar.gz
++sha256 a6a8f43f6d2ed9b801978cc012cc816c4a9421a6dcea0579d3a40eab4b349674 LICENSE
+diff --git a/package/kyua/kyua.mk b/package/kyua/kyua.mk
+index 9e1c810ac4..5caa203917 100644
+--- a/package/kyua/kyua.mk
++++ b/package/kyua/kyua.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--GR_OSMOSDR_VERSION = 164a09fc11cec2d8b15b38e8b512fa542d6cecc7
--GR_OSMOSDR_SITE = $(call github,osmocom,gr-osmosdr,$(GR_OSMOSDR_VERSION))
-+GR_OSMOSDR_VERSION = 0.1.5
-+GR_OSMOSDR_SITE = $(call github,osmocom,gr-osmosdr,v$(GR_OSMOSDR_VERSION))
- GR_OSMOSDR_LICENSE = GPL-3.0+
- GR_OSMOSDR_LICENSE_FILES = COPYING
- 
+-KYUA_VERSION = 0.11
++KYUA_VERSION = 0.13
+ KYUA_SITE = https://github.com/jmmv/kyua/releases/download/kyua-$(KYUA_VERSION)
+ KYUA_DEPENDENCIES = host-pkgconf atf lutok sqlite
+ KYUA_CONF_OPTS = --without-doxygen --without-atf
+ KYUA_LICENSE = BSD-3-Clause
+-KYUA_LICENSE_FILES = COPYING
++KYUA_LICENSE_FILES = LICENSE
+ KYUA_CONF_ENV = \
+ 	kyua_cv_attribute_noreturn=yes \
+ 	kyua_cv_getcwd_dyn=yes \
