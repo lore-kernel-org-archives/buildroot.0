@@ -1,33 +1,30 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Mon,  2 Dec 2019 08:18:59 -0300
-Subject: [Buildroot] [PATCH] board/pc/post-image-efi.sh: fail on any error
-Message-ID: <20191202111859.8874-1-unixmania@gmail.com>
+From: Michael Vetter <jubalh@iodoru.org>
+Date: Mon,  2 Dec 2019 12:22:44 +0100
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add Michael Vetter for
+ libstrophe
+Message-ID: <20191202112244.20483-1-jubalh@iodoru.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
-
-As alredy done in post-build.sh, to prevent hiding errors.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 ---
- board/pc/post-image-efi.sh | 2 ++
- 1 file changed, 2 insertions(+)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/pc/post-image-efi.sh b/board/pc/post-image-efi.sh
-index 178565f18b..a0df70a6ab 100755
---- a/board/pc/post-image-efi.sh
-+++ b/board/pc/post-image-efi.sh
-@@ -1,5 +1,7 @@
- #!/bin/sh
+diff --git a/DEVELOPERS b/DEVELOPERS
+index aea2b67171..82cdec5ff9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1702,6 +1702,7 @@ F:	package/python-spidev/
  
-+set -e
-+
- UUID=$(dumpe2fs "$BINARIES_DIR/rootfs.ext2" 2>/dev/null | sed -n 's/^Filesystem UUID: *\(.*\)/\1/p')
- sed -i "s/UUID_TMP/$UUID/g" "$BINARIES_DIR/efi-part/EFI/BOOT/grub.cfg"
- sed "s/UUID_TMP/$UUID/g" board/pc/genimage-efi.cfg > "$BINARIES_DIR/genimage-efi.cfg"
+ N:	Michael Vetter <jubalh@iodoru.org>
+ F:	package/jasper/
++F:	package/libstrophe/
+ 
+ N:	Michael Walle <michael@walle.cc>
+ F:	package/libavl/
 -- 
-2.18.1
+2.16.4
