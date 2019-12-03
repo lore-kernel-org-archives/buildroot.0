@@ -1,31 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Dec 2019 10:53:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to version 5.0.7
-In-Reply-To: <20191123200142.29254-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Sat, 23 Nov 2019 21:01:42 +0100")
-References: <20191123200142.29254-1-titouan.christophe@railnova.eu>
-Message-ID: <87k17dohuf.fsf@dell.be.48ers.dk>
+From: Jaafar Biyadi <jaafarbiyadi@gmail.com>
+Date: Tue, 3 Dec 2019 11:53:41 +0100
+Subject: [Buildroot] Missing PyQt5.QtQuick and PyQt5.QtQml on custom build
+ Raspberry Pi 3
+Message-ID: <CACHEUn8MsgF376h2oLog7ci3oHy=xFutFd1MMRsZCg_Zde0B9g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+Hello, I'm trying to build a system to run Python with PyQt5 using the
+QtQuick and QtQml submodules, but I cannot figure what's wrong with my
+config.
 
- > Changes announced upstream:
- > Upgrade urgency HIGH: many issues fixed, some may have an impact.
- > Redis 5.0.7 fixes a number of bugs, none is very critical, however
- > there are a few that may have an impact. It's a good idea to upgrade.
- > There are fixes in the area of replication from modules commands and
- > callbacks, AOF fsync (non critical issue), memory leaks (very rare and small),
- > streams beahvior (non critical), and a potential crash in commands
- > processing multiple keys at the same time that is there for years, and happens
- > very rarely, but is not impossible to trigger.
+I built all relevant package such as: Qt5 and Python-Qt5 and when running
+the system and testing a .qml file with qmlscene, it works however the
+QtQml & QtQuick modules are not found in python. What am I missing?
 
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+My config (with external toolchain): https://pastebin.com/5g1GhJgF
+Using buildroot-2019.11-rc3
 
-Committed to 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Thanks
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191203/1b12787c/attachment.html>
