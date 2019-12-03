@@ -1,35 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 3 Dec 2019 12:08:11 +0200
-Subject: [Buildroot] [PATCH v2,
- 3/4] package/spice-protocol: bump to version 0.14.0
-In-Reply-To: <87wobdoi1b.fsf@dell.be.48ers.dk>
-References: <20191117164452.5361-1-fontaine.fabrice@gmail.com>
- <20191117164452.5361-3-fontaine.fabrice@gmail.com>
- <87wobdoi1b.fsf@dell.be.48ers.dk>
-Message-ID: <20191203100811.moqjsegbp3aiultj@sapphire.tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 03 Dec 2019 11:17:43 +0100
+Subject: [Buildroot] [PATCH] package/faifa: fix incorrect library symlink
+In-Reply-To: <20191118211047.50199-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 18 Nov 2019 22:10:46 +0100")
+References: <20191118211047.50199-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87fti1ogqg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Tue, Dec 03, 2019 at 10:49:36AM +0100, Peter Korsgaard wrote:
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
-> 
->  > - This bump is needed for spice 0.14.2
->  > - Add license hash
-> 
->  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> Committed to 2019.02.x and 2019.08.x, thanks.
+ > As spotted in
+ > http://autobuild.buildroot.net/results/a61/a612cb7a85927d8cfe55c95c34d2901e7694fab0//diffoscope-results.txt,
+ > faifa installs a library symlink with an incorrect target, which was
+ > detected by the reproducible build logic, but is in fact wrong in any
+ > case:
 
-Not in 2019.02.x as of commit 7de477493571b9. This breaks spice, I presume.
+ > -lrwxrwxrwx 0 0 0 0 2019-11-07 19:38:04.000000 ./usr/lib/libfaifa.so
+ > -> /home/naourr/work/instance-3/output-1/target/usr/lib/libfaifa.so.0
+ > +lrwxrwxrwx 0 0 0 0 2019-11-07 19:38:04.000000 ./usr/lib/libfaifa.so
+ > -> /home/naourr/work/instance-3/output-2/target/usr/lib/libfaifa.so.0
 
-baruch
+ > In practice, this is not a problem at runtime, as the .so symlink is
+ > not used: the library soname is libfaifa.so.0. However, it still makes
+ > sense to fix.
+
+ > It is fixed by backporting an upstream commit. We considering bumping
+ > to a newer version, but the latest version requires a new dependency
+ > (libevent), so we preferred the backporting approach.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2019.02.x and 2019.08.x, thanks.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
