@@ -1,38 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:55:18 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/libbson: add an
- upstream URL to Config.in
-Message-ID: <20191203134706.3DD07846DC@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:55:06 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/leafnode2: update
+ the upstream URL in Config.in
+Message-ID: <20191203134706.26C6B846DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18dc8e4c294cbe95ed72519d81df364f54ef87e5
+commit: https://git.buildroot.net/buildroot/commit/?id=2924960d6636901a2cc4d132906eb78b0775f437
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(Err)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0f6a817c7e1ca0ef325ecc963d08c783829cb8b6)
+(cherry picked from commit 3e8f2056eacbe516d6c3e9c8a316bd2989488054)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libbson/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/leafnode2/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbson/Config.in b/package/libbson/Config.in
-index 4305ca9037..95f224e29e 100644
---- a/package/libbson/Config.in
-+++ b/package/libbson/Config.in
-@@ -5,5 +5,7 @@ config BR2_PACKAGE_LIBBSON
- 	  libbson is a library providing useful routines related to
- 	  building, parsing, and iterating BSON documents.
+diff --git a/package/leafnode2/Config.in b/package/leafnode2/Config.in
+index 93d3090a00..e244bdc45b 100644
+--- a/package/leafnode2/Config.in
++++ b/package/leafnode2/Config.in
+@@ -9,9 +9,9 @@ config BR2_PACKAGE_LEAFNODE2
  
-+	  http://mongoc.org/libbson/
-+
- comment "libbson needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 	  Leafnode-2 needs inetd, check chapter 14 of the documentation
+ 	  at:
+-	  http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/beta/leafnode-readme.txt
++	  http://krusty.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta/leafnode-readme.txt
+ 
+ 	  For example, you can add this line to inetd.conf:
+ 	  nntp    stream  tcp     nowait  news    /usr/sbin/leafnode
+ 
+-	  http://www.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
++	  http://krusty.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
