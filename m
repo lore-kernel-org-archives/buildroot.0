@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 3 Dec 2019 21:43:40 +0100
-Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run: make
- it Python 3.x compatible
-In-Reply-To: <20191203210038.348bd8bd@windsurf>
-References: <20191203165457.1100390-1-thomas.petazzoni@bootlin.com>
- <20191203171137.7aqw4tjmx24fgnqm@sapphire.tkos.co.il>
- <20191203210038.348bd8bd@windsurf>
-Message-ID: <4a12408c-4a2b-e312-e3f2-6f02f84ff6a0@mind.be>
+Date: Tue, 3 Dec 2019 21:46:28 +0100
+Subject: [Buildroot] [PATCHv2 1/2] configs/raspberrypi: change
+ deprecated pi3-miniuart-bt option to miniuart-bt
+In-Reply-To: <20191203211204.6c4951f4@gmx.net>
+References: <20191203132658.863709-1-arthur.courtel@smile.fr>
+ <20191203211204.6c4951f4@gmx.net>
+Message-ID: <d4430993-aaee-7cf4-9290-cb8547022fee@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +14,42 @@ To: buildroot@busybox.net
 
 
 
-On 03/12/2019 21:00, Thomas Petazzoni wrote:
-> Hello,
+On 03/12/2019 21:12, Peter Seiderer wrote:
+> Hello Arthur,
 > 
-> On Tue, 3 Dec 2019 19:11:37 +0200
-> Baruch Siach <baruch@tkos.co.il> wrote:
+> thanks for the patch, one nitpick below...
 > 
->>>  - The urlparse module no longer exists, it's not urllib.parse  
+> On Tue,  3 Dec 2019 14:26:57 +0100, Arthur Courtel <arthur.courtel@smile.fr> wrote:
+> 
+>> This option will be used in RPI4 config in order to have a working serial port on gpios.
+>> This change makes this option not only RPI3 specific.
 >>
->> s/not/now/
-> 
-> Indeed.
-> 
->>>  if sys.hexversion >= 0x3000000:
->>>      import configparser
->>>      import urllib.request as _urllib
->>> +    import urllib.parse as urlparse  
+>> Signed-off-by: Arthur Courtel <arthur.courtel@smile.fr>
+>> ---
+>>  board/raspberrypi/post-image.sh      | 8 ++++----
+>>  board/raspberrypi/readme.txt         | 2 +-
+>>  configs/raspberrypi3_64_defconfig    | 2 +-
+>>  configs/raspberrypi3_defconfig       | 2 +-
+>>  configs/raspberrypi3_qt5we_defconfig | 2 +-
+>>  configs/raspberrypi4_defconfig       | 2 +-
+>>  6 files changed, 9 insertions(+), 9 deletions(-)
 >>
->> Would that work with any Python 3.x?
-> 
-> https://docs.python.org/3/library/urllib.parse.html#module-urllib.parse
-> has some comments in the documentation of urllib.parse.urlparse() that
-> say:
-> 
-> """
-> Changed in version 3.2: Added IPv6 URL parsing capabilities.
-> """
-> 
-> So it means that urllib.parse.urlparse() was there at least before
-> Python 3.2, which means it was most likely there since Python 3.x.
+>> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+>> index bbeb0bc721..9dbd98ef9b 100755
+>> --- a/board/raspberrypi/post-image.sh
+>> +++ b/board/raspberrypi/post-image.sh
+>> @@ -10,13 +10,13 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+>>  for arg in "$@"
+>>  do
+>>  	case "${arg}" in
+>> -		--add-pi3-miniuart-bt-overlay)
+>> +		--add-miniuart-bt-overlay)
+> Maybe keep additional the legacy '--add-pi3-miniuart-bt-overlay' option for people
+> using old custom config files?
 
- And anyway, I think we generally should assume Python >= 3.4. Debian
-oldoldstable (jessie) has 3.4 already. Trying to support older versions will
-make our life unnecessarily difficult.
+ I don't think we need to do that. Everything in board/ is supposed to be
+internal. If you use one of our defconfigs as inspiration for your own custom
+config, you should copy all the support stuff as well.
 
  Regards,
  Arnout
