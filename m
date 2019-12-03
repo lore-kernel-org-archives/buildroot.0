@@ -1,22 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 03 Dec 2019 21:35:57 +0000
-Subject: [Buildroot] [Bug 12376] python-scapy3k is deprecated
-In-Reply-To: <bug-12376-163@https.bugs.busybox.net/>
-References: <bug-12376-163@https.bugs.busybox.net/>
-Message-ID: <bug-12376-163-cQ1ulE25Xb@https.bugs.busybox.net/>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 3 Dec 2019 22:38:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/musl: add an upstream URL to
+ Config.in
+In-Reply-To: <87y2vzdq97.fsf@dell.be.48ers.dk>
+References: <20191128175842.2633-1-mark@dibsco.co.uk>
+ <87y2vzdq97.fsf@dell.be.48ers.dk>
+Message-ID: <59f15822-25ca-6765-bb17-2b83e64b75f4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12376
 
---- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
-Thanks for this report. Feel free to send a patch to the mailing list to remove
-python-scapy3k. Make sure to also include legacy handling (i.e. move the option
-to Config.in.legacy and select BR2_PACKAGE_PYTHON_SCAPY from it).
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+On 29/11/2019 09:46, Peter Korsgaard wrote:
+>>>>>> "Mark" == Mark Corbin <mark@dibsco.co.uk> writes:
+> 
+>  > Add an upstream URL to the help text in Config.in. This
+>  > addresses the 'Missing' URL status in the package stats
+>  > web page output.
+> 
+>  > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+>  > ---
+>  >  package/musl/Config.in | 2 ++
+>  >  1 file changed, 2 insertions(+)
+> 
+>  > diff --git a/package/musl/Config.in b/package/musl/Config.in
+>  > index 67e9e78a14..69da615b63 100644
+>  > --- a/package/musl/Config.in
+>  > +++ b/package/musl/Config.in
+>  > @@ -8,3 +8,5 @@ config BR2_PACKAGE_MUSL
+>  >  		&& !(BR2_i386 || BR2_powerpc)
+>  >  	# Compatibility headers: cdefs.h, queue.h
+>  >  	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
+>  > +	help
+>  > +	  https://www.musl-libc.org/
+> 
+> It is a bit silly to have a help text for blind option, but OK - I guess
+> it doesn't harm.
+
+ I think we would be better off changing the pkg-stats scripts to not report
+this for options without any help text.
+
+ Regards,
+ Arnout
+
+> 
+> The user visible option is BR2_TOOLCHAIN_BUILDROOT_MUSL, which also
+> didn't have this URL so I added it there as well and committed, thanks.
+> 
