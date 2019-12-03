@@ -1,62 +1,35 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue, 3 Dec 2019 12:07:51 +0200
-Subject: [Buildroot] [FYI] Bootlin external toolchains
-In-Reply-To: <a9c40802-dfd5-67b5-6750-b0711f667280@smile.fr>
-References: <CAMw6YJLJae0GcmrDmSY8FZ-uMj+WBybPkBaLQC1wkhooCjoKyQ@mail.gmail.com>
- <20191202152601.4ab1c8cd@windsurf>
- <a9c40802-dfd5-67b5-6750-b0711f667280@smile.fr>
-Message-ID: <CAMw6YJKQ-Su+nKYJo3YZyEo5XxdgPEpdj-D22psgqib2dwnv_Q@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 3 Dec 2019 12:08:11 +0200
+Subject: [Buildroot] [PATCH v2,
+ 3/4] package/spice-protocol: bump to version 0.14.0
+In-Reply-To: <87wobdoi1b.fsf@dell.be.48ers.dk>
+References: <20191117164452.5361-1-fontaine.fabrice@gmail.com>
+ <20191117164452.5361-3-fontaine.fabrice@gmail.com>
+ <87wobdoi1b.fsf@dell.be.48ers.dk>
+Message-ID: <20191203100811.moqjsegbp3aiultj@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Hi Peter,
 
-On Tue, Dec 3, 2019 at 11:59 AM Romain Naour <romain.naour@smile.fr> wrote:
->
-> Hi Thomas, Vadim,
->
-> +Arthur Courtel in Cc.
->
-> Le 02/12/2019 ? 15:26, Thomas Petazzoni a ?crit :
-> > Hello,
-> >
-> > +Romain Naour in Cc.
-> >
-> > On Mon, 2 Dec 2019 02:47:15 +0200
-> > Vadim Kochan <vadim4j@gmail.com> wrote:
-> >
-> >> Just in case if someone will be interested. I started Buildroot external
-> >> project which provides external toolchains from the Bootlin:
-> >>
-> >>     https://toolchains.bootlin.com
-> >>
-> >> The git repo can be found at:
-> >>
-> >>     https://github.com/vkochan/buildroot-external-toolchain-bootlin
-> >
-> > An effort was started to package the Bootlin external toolchains in
-> > Buildroot itself, some time ago by engineers at Smile. We had some
-> > off-list discussion about this, but I don't think it was ever posted to
-> > the list. The idea back then was to have a script that generates all
-> > the packages, but the design was to have one package for each
-> > toolchain, so it really added a lot of packages.
-> >
-> > But I think we should really support these toolchains in Buildroot
-> > proper instead of having an external for them.
->
-> Agree.
->
-> Arthur will take a look at the script but it's very complicated script...
-> Maybe we need to discuss what we really want.
->
-> Best regards,
-> Romain
+On Tue, Dec 03, 2019 at 10:49:36AM +0100, Peter Korsgaard wrote:
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+> 
+>  > - This bump is needed for spice 0.14.2
+>  > - Add license hash
+> 
+>  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> 
+> Committed to 2019.02.x and 2019.08.x, thanks.
 
-May be it would be good to start with generic script which generates
-br2_fragment by specifying the path to the toolchain ?
+Not in 2019.02.x as of commit 7de477493571b9. This breaks spice, I presume.
 
-Regards,
-Vadim Kochan
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
