@@ -1,95 +1,38 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon,  2 Dec 2019 20:50:02 -0800
-Subject: [Buildroot] [PATCH v1 3/4] package/docker-engine: bump to 19.03.5
-In-Reply-To: <20191203045003.145746-1-christian@paral.in>
-References: <20191203045003.145746-1-christian@paral.in>
-Message-ID: <20191203045003.145746-3-christian@paral.in>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 03 Dec 2019 08:11:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cmocka: fix build on riscv64
+In-Reply-To: <CA+1k=2b+1WmbKM7QzKPPwM2RpWdD==4GBsmNUmGqjAP=WqZRTA@mail.gmail.com>
+ (Joel Carlson's message of "Mon, 2 Dec 2019 14:08:11 -0700")
+References: <20191119180259.401332-1-fontaine.fabrice@gmail.com>
+ <CA+1k=2b+1WmbKM7QzKPPwM2RpWdD==4GBsmNUmGqjAP=WqZRTA@mail.gmail.com>
+Message-ID: <87tv6hq3wx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- ...ix-faulty-runc-version-commit-scrape.patch | 45 -------------------
- package/docker-engine/docker-engine.hash      |  2 +-
- package/docker-engine/docker-engine.mk        |  2 +-
- 3 files changed, 2 insertions(+), 47 deletions(-)
- delete mode 100644 package/docker-engine/0001-Fix-faulty-runc-version-commit-scrape.patch
+>>>>> "Joel" == Joel Carlson <JoelsonCarl@gmail.com> writes:
 
-diff --git a/package/docker-engine/0001-Fix-faulty-runc-version-commit-scrape.patch b/package/docker-engine/0001-Fix-faulty-runc-version-commit-scrape.patch
-deleted file mode 100644
-index dc47a8f9ef..0000000000
---- a/package/docker-engine/0001-Fix-faulty-runc-version-commit-scrape.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 324e7be4b252c13002bca6a9d82e7b2e43664634 Mon Sep 17 00:00:00 2001
--From: Christian Stewart <christian@paral.in>
--Date: Mon, 26 Nov 2018 22:59:32 -0800
--Subject: [PATCH] Fix faulty runc version commit scrape
--
--This commit replaces faulty logic to determine the runc version commit hash.
--
--The original logic takes the second line of the output of "runc --version" and
--does not work if there are a different number of lines printed from the command
--than expected. The buildroot version of runc outputs two lines instead of the
--expected three, causing the error:
--
--unknown output format: runc version commit: ...
--
--This patch replaces this logic with a simple scan of the "runc --version"
--output, searching for the "runc version commit" prefixed line.
--
--Signed-off-by: Christian Stewart <christian@paral.in>
-----
-- daemon/info_unix.go | 9 +++++----
-- 1 file changed, 5 insertions(+), 4 deletions(-)
--
--diff --git a/daemon/info_unix.go b/daemon/info_unix.go
--index 60b2f99870..688a510796 100644
----- a/daemon/info_unix.go
--+++ b/daemon/info_unix.go
--@@ -32,10 +32,11 @@ func (daemon *Daemon) fillPlatformInfo(v *types.Info, sysInfo *sysinfo.SysInfo)
-- 	defaultRuntimeBinary := daemon.configStore.GetRuntime(v.DefaultRuntime).Path
-- 	if rv, err := exec.Command(defaultRuntimeBinary, "--version").Output(); err == nil {
-- 		parts := strings.Split(strings.TrimSpace(string(rv)), "\n")
---		if len(parts) == 3 {
---			parts = strings.Split(parts[1], ": ")
---			if len(parts) == 2 {
---				v.RuncCommit.ID = strings.TrimSpace(parts[1])
--+		for _, pt := range parts {
--+			ptKv := strings.Split(pt, ":")
--+			if strings.HasSuffix(strings.TrimSpace(ptKv[0]), "commit") {
--+				v.RuncCommit.ID = strings.TrimSpace(ptKv[1])
--+				break
-- 			}
-- 		}
-- 
---- 
--2.18.1
--
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index b89310f993..59c9204285 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	fa3a9e998627418d648495d06d168c4d26ed07859c9370d5fddbfd29c26d8592  docker-engine-18.09.9.tar.gz
-+sha256	bc5d1ac503e44593be8003ed0ad9c75bf0da535db19837a9338429c438bd4637  docker-engine-19.03.5.tar.gz
- sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 6a225ee5f0..24022f7107 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = 18.09.9
-+DOCKER_ENGINE_VERSION = 19.03.5
- DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+ > Hello,
+ > On Tue, Nov 19, 2019 at 11:02 AM Fabrice Fontaine
+ > <fontaine.fabrice@gmail.com> wrote:
+ >> 
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/30922c18150ea62aefe123d1b7cd1444efab963f
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+ > [snip]
+
+ > Reviewed-by: Joel Carlson <JoelsonCarl@gmail.com>
+ > Tested-by: Joel Carlson <JoelsonCarl@gmail.com>
+
+ > Tested to make sure it fixed the build issue on riscv64, and then used
+ > test-pkg -a to make sure all other architectures still compiled cmocka
+ > successfully.
+
+Committed, thanks.
+
 -- 
-2.24.0
+Bye, Peter Korsgaard
