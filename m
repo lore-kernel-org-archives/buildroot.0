@@ -1,62 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  3 Dec 2019 17:54:50 +0100
-Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run: add
- support for running parallel builds
-Message-ID: <20191203165450.1100336-1-thomas.petazzoni@bootlin.com>
+Date: Tue,  3 Dec 2019 17:54:57 +0100
+Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run: make it
+ Python 3.x compatible
+Message-ID: <20191203165457.1100390-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When BR2_PER_PACKAGE_DIRECTORIES=y in the generated configuration, we
-then use top-level parallel build on 50% of the builds. This will
-allow to give some testing exposure to this new functionality.
+With Python 3.7, the autobuild-run did not work due to the following
+issues:
+
+ - The urlparse module no longer exists, it's not urllib.parse
+
+ - 0022 is no longer recognized as an octal value, we must use 0o022,
+   which also works in Python 2.x
+
+ - reading the CSV file with the list of branches through the CSV
+   parser failed due to the lack of decoding, as urlopen_closing()
+   returns a stream of bytes and not strings. So we need to call
+   decode_bytes() on each element of the CSV array. Since the CSV file
+   is typically 3 or 4 lines long, we don't really need to optimize
+   things.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- scripts/autobuild-run | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ scripts/autobuild-run | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 7e3c7a0..5921edd 100755
+index 5921edd..e475ea8 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -266,6 +266,7 @@ class Builder:
-         self.upload = upload
-         self.buildpid = buildpid
-         self.debug = debug
-+        self.build_parallel = False
+@@ -145,14 +145,15 @@ from distutils.version import StrictVersion
+ import platform
+ from threading import Thread, Event
+ import datetime
+-import urlparse
  
-         # frequently needed directories
-         self.idir = "instance-%d" % self.instance
-@@ -480,6 +481,13 @@ class Builder:
-                "-C", self.srcdir, "BR2_DL_DIR=%s" % self.dldir,
-                "BR2_JLEVEL=%s" % self.njobs] \
-             + self.make_opts.split()
-+
-+        # when building in parallel, we use both -jX and BR2_JLEVEL=X,
-+        # trusting the make job server to properly throttle the total
-+        # number of processes.
-+        if self.build_parallel:
-+            cmd.append("-j%s" % self.njobs)
-+
-         sub = subprocess.Popen(cmd, stdout=f, stderr=f)
+ if sys.hexversion >= 0x3000000:
+     import configparser
+     import urllib.request as _urllib
++    import urllib.parse as urlparse
+ else:
+     import ConfigParser as configparser
+     import urllib2 as _urllib
++    import urlparse
  
-         # Setup hung build monitoring thread
-@@ -741,7 +749,12 @@ class Builder:
+ urlopen = _urllib.urlopen
+ urlopen_closing = lambda uri: contextlib.closing(urlopen(uri))
+@@ -307,8 +308,10 @@ class Builder:
+         list. This way, branches with a higher weight are more likely to
+         be selected.
+         """
++        csv_branches = []
+         with urlopen_closing(urlparse.urljoin(self.http_url, 'branches')) as r:
+-            csv_branches = r.readlines()
++            for l in r.readlines():
++                csv_branches.append(decode_bytes(l))
+         branches = []
+         for branch in csv.reader(csv_branches):
+             branches += [branch[0]] * int(branch[1])
+@@ -830,7 +833,7 @@ def main():
+     # Enforce the sanest umask here, to avoid buildroot doing it on its
+     # own and causing a double-make call, thus adding extraneous lines
+     # in case of failures.
+-    os.umask(0022)
++    os.umask(0o022)
  
-             # Check if the build test is supposed to be a reproducible test
-             with open(os.path.join(self.outputdir, ".config"), "r") as fconf:
--                reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-+                conf = fconf.read()
-+                reproducible = "BR2_REPRODUCIBLE=y\n" in conf
-+                per_package = "BR2_PER_PACKAGE_DIRECTORIES=y\n" in conf
-+
-+            self.build_parallel = per_package and randint(0, 1) == 0
-+
-             if reproducible:
-                 ret = self.do_reproducible_build()
-             else:
+     def sigterm_handler(signum, frame):
+         """Kill all children"""
 -- 
 2.23.0
