@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 17:36:25 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/haproxy: security
+Date: Tue, 3 Dec 2019 17:30:59 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/haproxy: security
  bump to version 1.9.13
-Message-ID: <20191203162905.5D5C5867D7@busybox.osuosl.org>
+Message-ID: <20191203162910.AA4588680E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7360fba5a59c29d629151c7c9e00114fa3ebee62
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e55ff17f17f6c497e4b4a893af04b1cda0681188
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes the following security vulnerabilities:
 
@@ -50,7 +50,7 @@ index be3451d83b..6060400de4 100644
  sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	doc/lgpl.txt
  sha256	ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7	doc/gpl.txt
 diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index e382f61f8e..aa440d7d66 100644
+index 36ac704222..2989d82c93 100644
 --- a/package/haproxy/haproxy.mk
 +++ b/package/haproxy/haproxy.mk
 @@ -5,7 +5,7 @@
