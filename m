@@ -1,49 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 13:22:25 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/libnss: security
- bump to version 3.47.1
-Message-ID: <20191203121443.7AD7F83CEC@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 13:24:17 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/bind: security
+ bump to version 9.11.13
+Message-ID: <20191203121616.619B683CF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28c41fce10be482c89745eede1d1b5e79e46bc23
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9232697502a80e8586ac67d74e3f4c928aee62a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issues:
-CVE-2019-11745: EncryptUpdate should use maxout, not block size
+Fixes the following security vulnerabilities:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+- CVE-2019-6477: TCP-pipelined queries can bypass tcp-clients limit
+
+For details, see the release notes:
+https://downloads.isc.org/isc/bind9/9.11.13/RELEASE-NOTES-bind-9.11.13.html
+
+(9.11.11..12 were not released)
+
+Upstream moved to a 2019-2020 signing key, so update comment in hash file.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f49de1c4d35a12364f00b931edccf831c51ff4c7)
+(cherry picked from commit 0432e5713a63142bdb4344b6fdfaa7adc1cd1d81)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 2 +-
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bind/bind.hash | 6 +++---
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 92d6fd3908..518d95d842 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 999c6602a8..53b5ce3a47 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
 @@ -1,4 +1,4 @@
- # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_46_1_RTM/src/SHA256SUMS
--sha256	6cd0c4438b616bdacc0b5f25ff1506b0d07ee97ea6c95d514c5487200a155fa7  nss-3.47.tar.gz
-+sha256	1ae3d1cb1de345b258788f2ef6b10a460068034c3fd64f42427a183d8342a6fb  nss-3.47.1.tar.gz
- # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index ca1cde4c1c..747612c795 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+-# Verified from https://ftp.isc.org/isc/bind9/9.11.10/bind-9.11.10.tar.gz.asc
+-# with key 156890685EA0DF6A1371EF2017CC5DB1F0088407
+-sha256 b2bb840cda20e6771ae8c054007b4ec12e1bb6aa6bfe79102890eb94956a70c3 bind-9.11.10.tar.gz
++# Verified from https://ftp.isc.org/isc/bind9/9.11.13/bind-9.11.13.tar.gz.asc
++# with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
++sha256 fd3f3cc9fcfcdaa752db35eb24598afa1fdcc2509d3227fc90a8631b7b400f7d bind-9.11.13.tar.gz
+ sha256 cd02c93b8dcda794f55dfd1231828d69633072a98eee4874f9cf732d22d9dcde COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 4ac81f1d24..efe4abde9c 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.47
-+LIBNSS_VERSION = 3.47.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-BIND_VERSION = 9.11.10
++BIND_VERSION = 9.11.13
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
