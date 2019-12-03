@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:57:33 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libstrophe: bump
+Date: Tue, 3 Dec 2019 14:57:25 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libstrophe: bump
  to version 0.9.3
-Message-ID: <20191203134920.472B584822@busybox.osuosl.org>
+Message-ID: <20191203134925.C797E848E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5379994e383355f17b94efd892c3ce8fa023caef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=64fdcb91a5965fa944eb14467e88e8c5186b0bf8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Changes:
 
