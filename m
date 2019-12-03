@@ -1,26 +1,32 @@
-From: Jan Kotas <jank@cadence.com>
-Date: Tue, 3 Dec 2019 04:18:12 -0500
-Subject: [Buildroot] [PATCH v2 0/3] boot/boot-wrapper-aarch64: bump and
- upgrade
-Message-ID: <20191203091815.22668-1-jank@cadence.com>
+From: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Date: Tue,  3 Dec 2019 10:38:13 +0100
+Subject: [Buildroot] [PATCH] package/postgresql: fix minor typo
+Message-ID: <20191203093813.4760-1-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series bumps the boot wrapper for aarch64 to the latest
-version. It also adds an option to use GICv3 (such as GIC-500).
-Handling of the DTB has been also improved.
+pgsql as a tool does not exist, it's called psql
 
-Jan Kotas (3):
-  boot/boot-wrapper-aarch64: bump version
-  boot/boot-wrapper-aarch64: improve dtb handling
-  boot/boot-wrapper-aarch64: add gicv3 support
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+---
+ package/postgresql/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- boot/boot-wrapper-aarch64/Config.in            |  5 +++++
- .../boot-wrapper-aarch64.mk                    | 18 +++++++-----------
- 2 files changed, 12 insertions(+), 11 deletions(-)
-
+diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+index e548d3c..2f677da 100644
+--- a/package/postgresql/Config.in
++++ b/package/postgresql/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_POSTGRESQL
+ 	  database system.
+ 
+ 	  Enable the readline package to gain readline support in
+-	  pgsql (the command line interpreter), which offers
++	  psql (the command line interpreter), which offers
+ 	  command history and edit functions.
+ 
+ 	  Enable the zlib package to gain builtin compression for
 -- 
-2.18.0
+2.7.4
