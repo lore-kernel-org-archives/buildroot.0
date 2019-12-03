@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Dec 2019 16:47:22 +0100
-Subject: [Buildroot] [PATCH 2/2] package/am33x-cm3: disable PIE
-In-Reply-To: <20191110210920.5625-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 10 Nov 2019 22:09:20 +0100")
-References: <20191110210920.5625-1-fontaine.fabrice@gmail.com>
- <20191110210920.5625-2-fontaine.fabrice@gmail.com>
-Message-ID: <87immxl8c5.fsf@dell.be.48ers.dk>
+Date: Tue, 03 Dec 2019 16:47:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/collectd: rename --with-yajl
+In-Reply-To: <20191110205316.1713-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 10 Nov 2019 21:53:16 +0100")
+References: <20191110205316.1713-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eexll8b7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/418a40b995e91bc66e692dfbc4b0521db3fa5fbb
+ > --with-yajl is not recognized so replace it by the correct
+ > --with-libyajl option
+
+ > The option is named --with-libyajl since a very long time (since at
+ > least version 4.8.0 and
+ > https://github.com/collectd/collectd/commit/f154fb21fbb1fee2f2262d421eca32e7e340f420)
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
