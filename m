@@ -1,50 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 10:44:50 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/spice-protocol:
- bump to version 0.14.0
-Message-ID: <20191203094329.B136483BDC@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 10:48:24 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/asterisk:
+ security bump to version 16.6.2
+Message-ID: <20191203094329.CB4A282B97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b333493b04f019aa40266345df0e7afc8b4069ca
+commit: https://git.buildroot.net/buildroot/commit/?id=766d0298980ca0c630f2d4c7f5ee7eb7956bba43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-- This bump is needed for spice 0.14.2
-- Add license hash
+Fixes the following security vulnerabilities:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+AST-2019-006: SIP request can change address of a SIP peer.
+A SIP request can be sent to Asterisk that can change a SIP peer???s IP
+address.  A REGISTER does not need to occur, and calls can be hijacked as a
+result.  The only thing that needs to be known is the peer???s name;
+authentication details such as passwords do not need to be known.  This
+vulnerability is only exploitable when the ???nat??? option is set to the
+default, or ???auto_force_rport???.
+
+https://downloads.asterisk.org/pub/security/AST-2019-006.pdf
+
+AST-2019-007: AMI user could execute system commands.
+A remote authenticated Asterisk Manager Interface (AMI) user without
+???system??? authorization could use a specially crafted ???Originate??? AMI request
+to execute arbitrary system commands.
+
+https://downloads.asterisk.org/pub/security/AST-2019-007.pdf
+
+AST-2019-008: Re-invite with T.38 and malformed SDP causes crash.
+If Asterisk receives a re-invite initiating T.38 faxing and has a port of 0
+and no c line in the SDP, a crash will occur.
+
+https://downloads.asterisk.org/pub/security/AST-2019-008.pdf
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 371e6adc154a958fdc8513317c148e09cf70afd4)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b3aaa725f1642bb3d2448b889b1674c7f79afcd9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/spice-protocol/spice-protocol.hash | 5 ++++-
- package/spice-protocol/spice-protocol.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/spice-protocol/spice-protocol.hash b/package/spice-protocol/spice-protocol.hash
-index e72bb2d712..c23135141a 100644
---- a/package/spice-protocol/spice-protocol.hash
-+++ b/package/spice-protocol/spice-protocol.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	20350bc4309039fdf0d29ee4fd0033cde27bccf33501e13b3c1befafde9d0c9c	spice-protocol-0.12.14.tar.bz2
-+sha256	b6a4aa1ca32668790b45a494bbd000e9d05797b391d5a5d4b91adf1118216eac	spice-protocol-0.14.0.tar.bz2
-+
-+# Hash for license file
-+sha256	eb55ea746be694c449224c7ddce6340648b075fd377281712a19094e7fb7ef92	COPYING
-diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
-index 7392e9533d..f8c55c7b01 100644
---- a/package/spice-protocol/spice-protocol.mk
-+++ b/package/spice-protocol/spice-protocol.mk
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 4cb4a42e19..26aa4b89b7 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  9323f1fd41416d2d997015b2199d5507847e54da64c2e24923d75f5c283c5e83  asterisk-16.6.1.tar.gz
++sha256  474cbc6f9dddee94616f8af8e097bc4d340dc9698c4165dc45be6e0be80ff725  asterisk-16.6.2.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 6f94f628a4..00070aadba 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SPICE_PROTOCOL_VERSION = 0.12.14
-+SPICE_PROTOCOL_VERSION = 0.14.0
- SPICE_PROTOCOL_SOURCE = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
- SPICE_PROTOCOL_SITE = http://www.spice-space.org/download/releases
- SPICE_PROTOCOL_LICENSE = BSD-3-Clause
+-ASTERISK_VERSION = 16.6.1
++ASTERISK_VERSION = 16.6.2
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
