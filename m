@@ -1,50 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 13:14:51 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/spice-protocol:
- bump to version 0.14.0
-Message-ID: <20191203120638.0120983BEF@busybox.osuosl.org>
+Date: Tue, 03 Dec 2019 13:15:04 +0100
+Subject: [Buildroot] [PATCH v2,
+ 3/4] package/spice-protocol: bump to version 0.14.0
+In-Reply-To: <20191203100811.moqjsegbp3aiultj@sapphire.tkos.co.il> (Baruch
+ Siach's message of "Tue, 3 Dec 2019 12:08:11 +0200")
+References: <20191117164452.5361-1-fontaine.fabrice@gmail.com>
+ <20191117164452.5361-3-fontaine.fabrice@gmail.com>
+ <87wobdoi1b.fsf@dell.be.48ers.dk>
+ <20191203100811.moqjsegbp3aiultj@sapphire.tkos.co.il>
+Message-ID: <87blspobav.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d569786995814f9095b5f1437144ad515a469ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-- This bump is needed for spice 0.14.2
-- Add license hash
+ > Hi Peter,
+ > On Tue, Dec 03, 2019 at 10:49:36AM +0100, Peter Korsgaard wrote:
+ >> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ >> 
+ >> > - This bump is needed for spice 0.14.2
+ >> > - Add license hash
+ >> 
+ >> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> 
+ >> Committed to 2019.02.x and 2019.08.x, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 371e6adc154a958fdc8513317c148e09cf70afd4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/spice-protocol/spice-protocol.hash | 5 ++++-
- package/spice-protocol/spice-protocol.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ > Not in 2019.02.x as of commit 7de477493571b9. This breaks spice, I presume.
 
-diff --git a/package/spice-protocol/spice-protocol.hash b/package/spice-protocol/spice-protocol.hash
-index e72bb2d712..c23135141a 100644
---- a/package/spice-protocol/spice-protocol.hash
-+++ b/package/spice-protocol/spice-protocol.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	20350bc4309039fdf0d29ee4fd0033cde27bccf33501e13b3c1befafde9d0c9c	spice-protocol-0.12.14.tar.bz2
-+sha256	b6a4aa1ca32668790b45a494bbd000e9d05797b391d5a5d4b91adf1118216eac	spice-protocol-0.14.0.tar.bz2
-+
-+# Hash for license file
-+sha256	eb55ea746be694c449224c7ddce6340648b075fd377281712a19094e7fb7ef92	COPYING
-diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
-index 7392e9533d..f8c55c7b01 100644
---- a/package/spice-protocol/spice-protocol.mk
-+++ b/package/spice-protocol/spice-protocol.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SPICE_PROTOCOL_VERSION = 0.12.14
-+SPICE_PROTOCOL_VERSION = 0.14.0
- SPICE_PROTOCOL_SOURCE = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
- SPICE_PROTOCOL_SITE = http://www.spice-space.org/download/releases
- SPICE_PROTOCOL_LICENSE = BSD-3-Clause
+Ups, indeed not - Fixed now, thanks!
+
+-- 
+Bye, Peter Korsgaard
