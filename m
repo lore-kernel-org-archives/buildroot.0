@@ -1,50 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 10:43:56 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/php: bump version
- to 7.3.12
-Message-ID: <20191203094329.A1BD483BDC@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 10:45:04 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/spice: security
+ bump to version 0.14.2
+Message-ID: <20191203094329.BC6F282B97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c36cd643207949c0863adcc6e6cf161572533607
+commit: https://git.buildroot.net/buildroot/commit/?id=fb8f02f27e9c90941610205d68c4abb741708bbe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Release notes of this bugfix release:
-https://www.php.net/ChangeLog-7.php#7.3.12
+- Fix CVE-2019-3813: fix off-by-one error in group/slot boundary check
+- Add license hash
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a7ba9c54b4f5cbb36386b366bfb5e5fd4ad2fe7a)
+(cherry picked from commit 808a54aa3b125a05541cbd5682417d3b1aad9c14)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/spice/spice.hash | 3 ++-
+ package/spice/spice.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index debc14c64e..11ce109591 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 657cf6464bac28e9490c59c07a2cf7bb76c200f09cfadf6e44ea64e95fa01021  php-7.3.11.tar.xz
-+sha256 aafe5e9861ad828860c6af8c88cdc1488314785962328eb1783607c1fdd855df  php-7.3.12.tar.xz
- 
- # License file
- sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 0213295c82..783f28c324 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/spice/spice.hash b/package/spice/spice.hash
+index 1a25926ab2..4243244129 100644
+--- a/package/spice/spice.hash
++++ b/package/spice/spice.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	1ead5de63d06eededed4017db37240f07bef0abffbaf621899647e7e685a1519	spice-0.14.1.tar.bz2
++sha256	b203b3882e06f4c7249a3150d90c84e1a90490d41ead255a3d2cede46f4a29a7	spice-0.14.2.tar.bz2
++sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+index b663479920..8c421abf2e 100644
+--- a/package/spice/spice.mk
++++ b/package/spice/spice.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.3.11
-+PHP_VERSION = 7.3.12
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-SPICE_VERSION = 0.14.1
++SPICE_VERSION = 0.14.2
+ SPICE_SOURCE = spice-$(SPICE_VERSION).tar.bz2
+ SPICE_SITE = http://www.spice-space.org/download/releases/spice-server
+ SPICE_LICENSE = LGPL-2.1+
