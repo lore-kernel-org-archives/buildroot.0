@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:52:30 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/ifenslave: update
- the upstream URL in Config.in
-Message-ID: <20191203134443.7149C84445@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:52:35 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/iw: update the
+ upstream URL in Config.in
+Message-ID: <20191203134443.7AC58800CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f39dd398c75cbbdc94705b1020357d49406113bd
+commit: https://git.buildroot.net/buildroot/commit/?id=b9bd3a9a9c6abac09fd20d2e6f952d898138eb0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Update the upstream URL in the help text in Config.in. This
@@ -18,19 +18,22 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 69559f08900981220aa6def883fd1bfbe221c99f)
+(cherry picked from commit c21d38568049b829f7a0b1836e6cd87e890161a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ifenslave/Config.in | 2 +-
+ package/iw/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ifenslave/Config.in b/package/ifenslave/Config.in
-index 2203284db0..d28e0f7c29 100644
---- a/package/ifenslave/Config.in
-+++ b/package/ifenslave/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_IFENSLAVE
+diff --git a/package/iw/Config.in b/package/iw/Config.in
+index fd73b20992..8a74e3b2ad 100644
+--- a/package/iw/Config.in
++++ b/package/iw/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_IW
  	help
- 	  Configure network interfaces for parallel routing (bonding)
+ 	  Utility for wireless devices using the mac80211 kernel stack
  
--	  http://anonscm.debian.org/cgit/collab-maint/ifenslave.git
-+	  https://salsa.debian.org/debian/ifenslave
+-	  http://wireless.kernel.org/en/users/Documentation/iw
++	  https://wireless.wiki.kernel.org/en/users/documentation/iw
+ 
+ comment "iw needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
