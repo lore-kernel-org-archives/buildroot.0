@@ -1,33 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 3 Dec 2019 22:44:26 +0100
-Subject: [Buildroot] [PATCH 1/1] board: Add support for nautilus
- chromebook
-In-Reply-To: <20191120231927.788e22af@windsurf.home>
-References: <20191119213121.165863-1-swboyd@chromium.org>
- <20191120231927.788e22af@windsurf.home>
-Message-ID: <2a455525-0306-1922-03a7-14394e7498a5@mind.be>
+From: Dario Binacchi <dariobin@libero.it>
+Date: Tue,  3 Dec 2019 22:36:22 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: allow to build u-boot.itb image
+Message-ID: <20191203213622.29133-1-dariobin@libero.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It allows you to add the u-boot.itb to the list of U-Boot images that
+can be created.
+Like the others, this one is also copied to the image folder.
 
+Signed-off-by: Dario Binacchi <dariobin@libero.it>
+---
+ boot/uboot/Config.in | 3 +++
+ boot/uboot/uboot.mk  | 5 +++++
+ 2 files changed, 8 insertions(+)
 
-On 20/11/2019 23:19, Thomas Petazzoni wrote:
->> +	partition kernel {
->> +		image = "Image.kpart"
->> +		bootable = "true"
->> +		partition-type-uuid = FE3A2A5D-4F32-41A7-B725-ACCC3285A309
-> Just curious, the UUID needs to be exactly that one for the
-> bootloader/firmware to pick up the kernel image from there ?
-
- Since nobody else responded to this: in GPT, the partition type UUID is the
-equivalent of the 1-byte partition type in good old MBR. In [1] you can find
-that this GUID is for Chrome OS kernel. So yes, I guess the bootloader searches
-for a partition with that GUID.
-
- Regards,
- Arnout
-
-[1] https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 68a915cdae..15cae8045a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -225,6 +225,9 @@ config BR2_TARGET_UBOOT_FORMAT_DTB_IMX
+ config BR2_TARGET_UBOOT_FORMAT_IMG
+ 	bool "u-boot.img"
+ 
++config BR2_TARGET_UBOOT_FORMAT_ITB
++	bool "u-boot.itb"
++
+ config BR2_TARGET_UBOOT_FORMAT_IMX
+ 	bool "u-boot.imx"
+ 
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 5e0f614024..0ebda6588c 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -85,6 +85,11 @@ UBOOT_BINS += u-boot.img
+ UBOOT_MAKE_TARGET += u-boot.img
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_FORMAT_ITB),y)
++UBOOT_BINS += u-boot.itb
++UBOOT_MAKE_TARGET += u-boot.itb
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
+ UBOOT_BINS += u-boot.imx
+ UBOOT_MAKE_TARGET += u-boot.imx
+-- 
+2.24.0
