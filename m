@@ -1,64 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 17:30:59 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/haproxy: security
- bump to version 1.9.13
-Message-ID: <20191203162910.AA4588680E@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 17:38:44 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libvorbis: add an
+ upstream URL to Config.in
+Message-ID: <20191203163030.86AF7867D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e55ff17f17f6c497e4b4a893af04b1cda0681188
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c372d860df9a7b176ffff832435514443c4a179f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security vulnerabilities:
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
-- CVE-2019-19330: The HTTP/2 implementation in HAProxy before 2.0.10
-  mishandles headers, as demonstrated by carriage return (CR, ASCII 0xd),
-  line feed (LF, ASCII 0xa), and the zero character (NUL, ASCII 0x0), aka
-  Intermediary Encapsulation Attacks (1.9.13)
-
-- CVE-2019-14241: HAProxy through 2.0.2 allows attackers to cause a denial
-  of service (ha_panic) via vectors related to
-  htx_manage_client_side_cookies in proto_htx.c (1.9.9)
-
-- CVE-2019-11323: HAProxy before 1.9.7 mishandles a reload with rotated
-  keys, which triggers use of uninitialized, and very predictable, HMAC
-  keys.  This is related to an include/types/ssl_sock.h error (1.9.7)
-
-In addition, a large number of non-security related bugs have been fixed.
-See the changelog for details:
-
-https://www.haproxy.org/download/1.9/src/CHANGELOG
-
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ab566a9acccc32658547c4028d1cd7447b7668b0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/haproxy.hash | 2 +-
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libvorbis/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index be3451d83b..6060400de4 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256	ad46312fa1e38763863807d2c9304551c28ad91cff83f0c21a36756913c1c8e1	haproxy-1.9.1.tar.gz
-+sha256	adae40f963b03df0917edc44681064627f77683dcf7db66ef030672ad6d00547	haproxy-1.9.13.tar.gz
- sha256	0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28	LICENSE
- sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	doc/lgpl.txt
- sha256	ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7	doc/gpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 36ac704222..2989d82c93 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HAPROXY_VERSION_MAJOR = 1.9
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).1
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).13
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+diff --git a/package/libvorbis/Config.in b/package/libvorbis/Config.in
+index 3d5b5d6d61..1b7cd6c3b2 100644
+--- a/package/libvorbis/Config.in
++++ b/package/libvorbis/Config.in
+@@ -13,3 +13,5 @@ config BR2_PACKAGE_LIBVORBIS
+ 	  representations such as MPEG-4 (AAC), and similar to, but
+ 	  higher performance than MPEG-1/2 audio layer 3, MPEG-4 audio
+ 	  (TwinVQ), WMA and PAC.
++
++	  https://xiph.org/vorbis/
