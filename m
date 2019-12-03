@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:54:12 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] system: allow not setting
+Date: Tue, 3 Dec 2019 14:54:22 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] system: allow not setting
  a default, system-wide time zone
-Message-ID: <20191203134601.984848447F@busybox.osuosl.org>
+Message-ID: <20191203134608.606DC845A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49128bb3ed765e65f0ea6db64e64e899b9fb1e70
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=266e095da16402f5514330407579e8e070a51567
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 It is valid that there is no system-wide default time zone defined, in
 which case Etc/UTC is assumed.
@@ -104,10 +104,10 @@ index e20c946208..75fa5eb67e 100644
  
  define HOST_TZDATA_BUILD_CMDS
 diff --git a/system/Config.in b/system/Config.in
-index 498b56e222..b1aebf4ef5 100644
+index af7d8566d3..ce3d6e772d 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -481,6 +481,8 @@ config BR2_TARGET_LOCALTIME
+@@ -492,6 +492,8 @@ config BR2_TARGET_LOCALTIME
  	    Pacific/Wallis
  	    ...
  
