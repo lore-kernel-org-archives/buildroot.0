@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 3 Dec 2019 22:38:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/musl: add an upstream URL to
- Config.in
-In-Reply-To: <87y2vzdq97.fsf@dell.be.48ers.dk>
-References: <20191128175842.2633-1-mark@dibsco.co.uk>
- <87y2vzdq97.fsf@dell.be.48ers.dk>
-Message-ID: <59f15822-25ca-6765-bb17-2b83e64b75f4@mind.be>
+Date: Tue, 3 Dec 2019 22:44:26 +0100
+Subject: [Buildroot] [PATCH 1/1] board: Add support for nautilus
+ chromebook
+In-Reply-To: <20191120231927.788e22af@windsurf.home>
+References: <20191119213121.165863-1-swboyd@chromium.org>
+ <20191120231927.788e22af@windsurf.home>
+Message-ID: <2a455525-0306-1922-03a7-14394e7498a5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +14,20 @@ To: buildroot@busybox.net
 
 
 
-On 29/11/2019 09:46, Peter Korsgaard wrote:
->>>>>> "Mark" == Mark Corbin <mark@dibsco.co.uk> writes:
-> 
->  > Add an upstream URL to the help text in Config.in. This
->  > addresses the 'Missing' URL status in the package stats
->  > web page output.
-> 
->  > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
->  > ---
->  >  package/musl/Config.in | 2 ++
->  >  1 file changed, 2 insertions(+)
-> 
->  > diff --git a/package/musl/Config.in b/package/musl/Config.in
->  > index 67e9e78a14..69da615b63 100644
->  > --- a/package/musl/Config.in
->  > +++ b/package/musl/Config.in
->  > @@ -8,3 +8,5 @@ config BR2_PACKAGE_MUSL
->  >  		&& !(BR2_i386 || BR2_powerpc)
->  >  	# Compatibility headers: cdefs.h, queue.h
->  >  	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
->  > +	help
->  > +	  https://www.musl-libc.org/
-> 
-> It is a bit silly to have a help text for blind option, but OK - I guess
-> it doesn't harm.
+On 20/11/2019 23:19, Thomas Petazzoni wrote:
+>> +	partition kernel {
+>> +		image = "Image.kpart"
+>> +		bootable = "true"
+>> +		partition-type-uuid = FE3A2A5D-4F32-41A7-B725-ACCC3285A309
+> Just curious, the UUID needs to be exactly that one for the
+> bootloader/firmware to pick up the kernel image from there ?
 
- I think we would be better off changing the pkg-stats scripts to not report
-this for options without any help text.
+ Since nobody else responded to this: in GPT, the partition type UUID is the
+equivalent of the 1-byte partition type in good old MBR. In [1] you can find
+that this GUID is for Chrome OS kernel. So yes, I guess the bootloader searches
+for a partition with that GUID.
 
  Regards,
  Arnout
 
-> 
-> The user visible option is BR2_TOOLCHAIN_BUILDROOT_MUSL, which also
-> didn't have this URL so I added it there as well and committed, thanks.
-> 
+[1] https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs
