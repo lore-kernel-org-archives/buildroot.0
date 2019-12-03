@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:51:38 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/gr-osmosdr: add
- an upstream URL to Config.in
-Message-ID: <20191203134337.7670384349@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:51:51 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ package/hicolor-icon-theme: add an upstream URL to Config.in
+Message-ID: <20191203134337.8B2C8842E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2dcdc9797699b292122b0dbe6edc4b0757bc5ac7
+commit: https://git.buildroot.net/buildroot/commit/?id=4883b1d95fe694ea69cb5dfb2b5185c54f52317a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Add an upstream URL to the help text in Config.in. This
@@ -18,22 +18,19 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 08307bdc08a9f63d854af9da6f5840f466107758)
+(cherry picked from commit 9d4407c00b0c43a4baee9699f0b07d061141c613)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gr-osmosdr/Config.in | 2 ++
+ package/hicolor-icon-theme/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
-index aa6ef0d4c2..f26380371f 100644
---- a/package/gr-osmosdr/Config.in
-+++ b/package/gr-osmosdr/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_GR_OSMOSDR
- 	help
- 	  GNU Radio block for interfacing with various radio hardware
- 
-+	  http://osmocom.org/projects/osmosdr
+diff --git a/package/hicolor-icon-theme/Config.in b/package/hicolor-icon-theme/Config.in
+index 10edbf8865..5ef2cd2267 100644
+--- a/package/hicolor-icon-theme/Config.in
++++ b/package/hicolor-icon-theme/Config.in
+@@ -7,3 +7,5 @@ config BR2_PACKAGE_HICOLOR_ICON_THEME
+ 	  standard directory structure for storing icons of third-party
+ 	  applications (i.e. the ones not available in usual icon
+ 	  themes).
 +
- if BR2_PACKAGE_GR_OSMOSDR
- 
- config BR2_PACKAGE_GR_OSMOSDR_PYTHON
++	  https://www.freedesktop.org/wiki/Software/icon-theme/
