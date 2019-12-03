@@ -1,77 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 11:05:49 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/faifa: fix
- incorrect library symlink
-Message-ID: <20191203120637.E8C4F83C43@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 13:14:51 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/spice-protocol:
+ bump to version 0.14.0
+Message-ID: <20191203120638.0120983BEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1074e1e02bc05a2ffa8463b613edff0c920c6794
+commit: https://git.buildroot.net/buildroot/commit/?id=0d569786995814f9095b5f1437144ad515a469ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-As spotted in
-http://autobuild.buildroot.net/results/a61/a612cb7a85927d8cfe55c95c34d2901e7694fab0//diffoscope-results.txt,
-faifa installs a library symlink with an incorrect target, which was
-detected by the reproducible build logic, but is in fact wrong in any
-case:
+- This bump is needed for spice 0.14.2
+- Add license hash
 
--lrwxrwxrwx   0        0        0        0 2019-11-07 19:38:04.000000 ./usr/lib/libfaifa.so -> /home/naourr/work/instance-3/output-1/target/usr/lib/libfaifa.so.0
-+lrwxrwxrwx   0        0        0        0 2019-11-07 19:38:04.000000 ./usr/lib/libfaifa.so -> /home/naourr/work/instance-3/output-2/target/usr/lib/libfaifa.so.0
-
-In practice, this is not a problem at runtime, as the .so symlink is
-not used: the library soname is libfaifa.so.0. However, it still makes
-sense to fix.
-
-It is fixed by backporting an upstream commit. We considered bumping
-to a newer version, but the latest version requires a new dependency
-(libevent), so we preferred the backporting approach.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 14c3e876d3a4865434e39faf4da0183ddf5a411d)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 371e6adc154a958fdc8513317c148e09cf70afd4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...le.in-fix-asbolute-symlink-of-libfaifa.so.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/spice-protocol/spice-protocol.hash | 5 ++++-
+ package/spice-protocol/spice-protocol.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/faifa/0003-Makefile.in-fix-asbolute-symlink-of-libfaifa.so.patch b/package/faifa/0003-Makefile.in-fix-asbolute-symlink-of-libfaifa.so.patch
-new file mode 100644
-index 0000000000..876d2a60f4
---- /dev/null
-+++ b/package/faifa/0003-Makefile.in-fix-asbolute-symlink-of-libfaifa.so.patch
-@@ -0,0 +1,32 @@
-+From d16abf61049947c451a6411a13fc15dda32feb47 Mon Sep 17 00:00:00 2001
-+From: Florian Fainelli <f.fainelli@gmail.com>
-+Date: Sat, 6 Sep 2014 11:23:02 -0700
-+Subject: [PATCH] Makefile.in: fix asbolute symlink of libfaifa.so
+diff --git a/package/spice-protocol/spice-protocol.hash b/package/spice-protocol/spice-protocol.hash
+index e72bb2d712..c23135141a 100644
+--- a/package/spice-protocol/spice-protocol.hash
++++ b/package/spice-protocol/spice-protocol.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	20350bc4309039fdf0d29ee4fd0033cde27bccf33501e13b3c1befafde9d0c9c	spice-protocol-0.12.14.tar.bz2
++sha256	b6a4aa1ca32668790b45a494bbd000e9d05797b391d5a5d4b91adf1118216eac	spice-protocol-0.14.0.tar.bz2
 +
-+Fixes #7
-+
-+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-+[Upstream: da2e279fd736d05bcd0ee6e4609c44fece017ba8]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index ba65bee..9dec7ee 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -98,9 +98,9 @@ install: installman strip
-+ 	$(INSTALL) -m0755 hpav_cfg $(DESTDIR)$(sbindir)
-+ 	$(INSTALL) -d $(DESTDIR)$(libdir)
-+ 	$(INSTALL) -m0644 $(LIB_SONAME) $(DESTDIR)$(libdir)
-+-	ln -sf $(DESTDIR)$(libdir)/$(LIB_SONAME) $(DESTDIR)$(libdir)/$(LIB_SHARED_SO)
-+ 	$(INSTALL) -d $(DESTDIR)$(includedir)/faifa
-+ 	cp $(HEADERS) $(DESTDIR)$(includedir)/faifa
-++	cd $(DESTDIR)$(libdir) && ln -sf $(LIB_SONAME) $(LIB_SHARED_SO)
-+ 
-+ strip:
-+ 	$(STRIP) $(APP)
-+-- 
-+2.23.0
-+
++# Hash for license file
++sha256	eb55ea746be694c449224c7ddce6340648b075fd377281712a19094e7fb7ef92	COPYING
+diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
+index 7392e9533d..f8c55c7b01 100644
+--- a/package/spice-protocol/spice-protocol.mk
++++ b/package/spice-protocol/spice-protocol.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPICE_PROTOCOL_VERSION = 0.12.14
++SPICE_PROTOCOL_VERSION = 0.14.0
+ SPICE_PROTOCOL_SOURCE = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
+ SPICE_PROTOCOL_SITE = http://www.spice-space.org/download/releases
+ SPICE_PROTOCOL_LICENSE = BSD-3-Clause
