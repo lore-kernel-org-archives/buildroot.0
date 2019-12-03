@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 3 Dec 2019 23:01:22 +0100
-Subject: [Buildroot] [PATCH] utils/genrandconfig: fix runtime issue with
- Python 3
-In-Reply-To: <20191203165137.1100010-1-thomas.petazzoni@bootlin.com>
-References: <20191203165137.1100010-1-thomas.petazzoni@bootlin.com>
-Message-ID: <2384d6b2-cf52-27d7-59bd-843273c3ddca@mind.be>
+Date: Tue, 3 Dec 2019 23:02:23 +0100
+Subject: [Buildroot] [PATCH] package/postgresql: fix minor typo
+In-Reply-To: <20191203093813.4760-1-p.debruijn@unilogic.nl>
+References: <20191203093813.4760-1-p.debruijn@unilogic.nl>
+Message-ID: <9e6b3b57-0b4a-a20f-5042-cbf4c2755e86@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +12,10 @@ To: buildroot@busybox.net
 
 
 
-On 03/12/2019 17:51, Thomas Petazzoni wrote:
-> With Python 3.7, genrandconfig fails with:
+On 03/12/2019 10:38, Pascal de Bruijn wrote:
+> pgsql as a tool does not exist, it's called psql
 > 
-> 'str' object has no attribute 'decode'
-> 
-> We are already working on str objects, and there is no need to decode
-> them, so we drop the call to decode_byte_list() and its definition as
-> it was only used there.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 
  Applied to master, thanks.
 
@@ -31,39 +23,20 @@ On 03/12/2019 17:51, Thomas Petazzoni wrote:
  Arnout
 
 > ---
-> This is of course very strange, as the decode_byte_list() function was
-> introduced specifically to handle Python 3.x. Does anyone has an
-> explanation?
-> ---
->  utils/genrandconfig | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
+>  package/postgresql/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/utils/genrandconfig b/utils/genrandconfig
-> index fb28f4d356..5b60bc21d6 100755
-> --- a/utils/genrandconfig
-> +++ b/utils/genrandconfig
-> @@ -39,14 +39,6 @@ def urlopen_closing(uri):
->      return contextlib.closing(_urllib.urlopen(uri))
+> diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+> index e548d3c..2f677da 100644
+> --- a/package/postgresql/Config.in
+> +++ b/package/postgresql/Config.in
+> @@ -11,7 +11,7 @@ config BR2_PACKAGE_POSTGRESQL
+>  	  database system.
 >  
+>  	  Enable the readline package to gain readline support in
+> -	  pgsql (the command line interpreter), which offers
+> +	  psql (the command line interpreter), which offers
+>  	  command history and edit functions.
 >  
-> -if sys.hexversion >= 0x3000000:
-> -    def decode_byte_list(bl):
-> -        return [b.decode() for b in bl]
-> -else:
-> -    def decode_byte_list(e):
-> -        return e
-> -
-> -
->  class SystemInfo:
->      DEFAULT_NEEDED_PROGS = ["make", "git", "gcc", "timeout"]
->      DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar", "diffoscope"]
-> @@ -128,7 +120,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
->      with open(toolchains_csv) as r:
->          # filter empty lines and comments
->          lines = [t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#']
-> -        toolchains = decode_byte_list(lines)
-> +        toolchains = lines
->      configs = []
->  
->      (_, _, _, _, hostarch) = os.uname()
+>  	  Enable the zlib package to gain builtin compression for
 > 
