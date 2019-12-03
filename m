@@ -1,36 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:47:42 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/doom-wad: add an
- upstream URL to Config.in
-Message-ID: <20191203134029.800D383FEF@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:21:13 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/minicom: make
+ default port and lock directory fixed defaults
+Message-ID: <20191203134029.7726384266@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8fceec9942be17c8204be161227910aa9ab3fc6
+commit: https://git.buildroot.net/buildroot/commit/?id=e55bfd6c9dd864ffbe6eb86554d557c5251c0081
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+Minicom's configure script will set values for the default port and lock
+directory based on the configuration of the host machine, which is not
+useful for cross-compiling or reproducible builds, so instead set them
+to sensible default values.
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: James Byrne <james.byrne@origamienergy.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e80874cd7f2093ad7aa3912620c44a6641373e6d)
+(cherry picked from commit eeaa4328004dff1a45483bfde1fb80cc03724c0b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/doom-wad/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/minicom/minicom.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/doom-wad/Config.in b/package/doom-wad/Config.in
-index 6f51cfb936..9ef4e3e5a2 100644
---- a/package/doom-wad/Config.in
-+++ b/package/doom-wad/Config.in
-@@ -7,3 +7,5 @@ config BR2_PACKAGE_DOOM_WAD
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index a3c58d2d4e..e42cd5c2ab 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -22,4 +22,8 @@ define MINICOM_MKDIR_M4
+ endef
+ MINICOM_POST_PATCH_HOOKS += MINICOM_MKDIR_M4
  
- 	  The wad file will be placed in the /usr/share/games/doom
- 	  directory.
++MINICOM_CONF_OPTS = \
++	--enable-dfl-port=/dev/ttyS1 \
++	--enable-lock-dir=/var/lock
 +
-+	  https://doomwiki.org/wiki/DOOM1.WAD
+ $(eval $(autotools-package))
