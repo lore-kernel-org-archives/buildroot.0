@@ -1,72 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 10:48:16 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/asterisk:
- security bump to version 16.6.2
-Message-ID: <20191203094345.ADD8683BF0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Dec 2019 10:52:18 +0100
+Subject: [Buildroot] [PATCH] package/cryptsetup: use libargon2 when
+ available
+In-Reply-To: <20191203092715.4605-1-p.debruijn@unilogic.nl>
+References: <20191203092715.4605-1-p.debruijn@unilogic.nl>
+Message-ID: <20191203105218.3c692f32@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7de477493571b94005524ec6cd8bf6391e212943
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Hello,
 
-Fixes the following security vulnerabilities:
+On Tue,  3 Dec 2019 10:27:15 +0100
+Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
 
-AST-2019-006: SIP request can change address of a SIP peer.
-A SIP request can be sent to Asterisk that can change a SIP peer???s IP
-address.  A REGISTER does not need to occur, and calls can be hijacked as a
-result.  The only thing that needs to be known is the peer???s name;
-authentication details such as passwords do not need to be known.  This
-vulnerability is only exploitable when the ???nat??? option is set to the
-default, or ???auto_force_rport???.
+> cryptsetup has an internal copy of libargon2, which is used by default,
+> but when libargon2 is available as a proper system library this is a
+> duplication.
+> 
+> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+> ---
+>  package/cryptsetup/cryptsetup.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+> index 7788bfb..2941328 100644
+> --- a/package/cryptsetup/cryptsetup.mk
+> +++ b/package/cryptsetup/cryptsetup.mk
+> @@ -29,6 +29,10 @@ else
+>  CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBARGON2),y)
+> +CRYPTSETUP_CONF_OPTS += --enable-libargon2
+> +endif
 
-https://downloads.asterisk.org/pub/security/AST-2019-006.pdf
+Then we want to use --disable-libargon2 when the libargon2 package is
+not enabled. If libargon2 is mandatory for crypsetup, then we always
+want to use the separate package rather than the internal copy from
+cryptsetup.
 
-AST-2019-007: AMI user could execute system commands.
-A remote authenticated Asterisk Manager Interface (AMI) user without
-???system??? authorization could use a specially crafted ???Originate??? AMI request
-to execute arbitrary system commands.
+Thanks,
 
-https://downloads.asterisk.org/pub/security/AST-2019-007.pdf
-
-AST-2019-008: Re-invite with T.38 and malformed SDP causes crash.
-If Asterisk receives a re-invite initiating T.38 faxing and has a port of 0
-and no c line in the SDP, a crash will occur.
-
-https://downloads.asterisk.org/pub/security/AST-2019-008.pdf
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b3aaa725f1642bb3d2448b889b1674c7f79afcd9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 4cb4a42e19..26aa4b89b7 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  9323f1fd41416d2d997015b2199d5507847e54da64c2e24923d75f5c283c5e83  asterisk-16.6.1.tar.gz
-+sha256  474cbc6f9dddee94616f8af8e097bc4d340dc9698c4165dc45be6e0be80ff725  asterisk-16.6.2.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 6f94f628a4..00070aadba 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 16.6.1
-+ASTERISK_VERSION = 16.6.2
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
