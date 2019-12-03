@@ -1,89 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 3 Dec 2019 19:11:37 +0200
-Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run: make
- it Python 3.x compatible
-In-Reply-To: <20191203165457.1100390-1-thomas.petazzoni@bootlin.com>
-References: <20191203165457.1100390-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191203171137.7aqw4tjmx24fgnqm@sapphire.tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  3 Dec 2019 18:55:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/e2tools: bump to version 0.0.16.4
+Message-ID: <20191203175512.1923587-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Add hash for license file
 
-On Tue, Dec 03, 2019 at 05:54:57PM +0100, Thomas Petazzoni wrote:
-> With Python 3.7, the autobuild-run did not work due to the following
-> issues:
-> 
->  - The urlparse module no longer exists, it's not urllib.parse
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/e2tools/e2tools.hash | 3 ++-
+ package/e2tools/e2tools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-s/not/now/
-
-> 
->  - 0022 is no longer recognized as an octal value, we must use 0o022,
->    which also works in Python 2.x
-> 
->  - reading the CSV file with the list of branches through the CSV
->    parser failed due to the lack of decoding, as urlopen_closing()
->    returns a stream of bytes and not strings. So we need to call
->    decode_bytes() on each element of the CSV array. Since the CSV file
->    is typically 3 or 4 lines long, we don't really need to optimize
->    things.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  scripts/autobuild-run | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index 5921edd..e475ea8 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -145,14 +145,15 @@ from distutils.version import StrictVersion
->  import platform
->  from threading import Thread, Event
->  import datetime
-> -import urlparse
->  
->  if sys.hexversion >= 0x3000000:
->      import configparser
->      import urllib.request as _urllib
-> +    import urllib.parse as urlparse
-
-Would that work with any Python 3.x?
-
->  else:
->      import ConfigParser as configparser
->      import urllib2 as _urllib
-> +    import urlparse
->  
->  urlopen = _urllib.urlopen
->  urlopen_closing = lambda uri: contextlib.closing(urlopen(uri))
-> @@ -307,8 +308,10 @@ class Builder:
->          list. This way, branches with a higher weight are more likely to
->          be selected.
->          """
-> +        csv_branches = []
->          with urlopen_closing(urlparse.urljoin(self.http_url, 'branches')) as r:
-> -            csv_branches = r.readlines()
-> +            for l in r.readlines():
-> +                csv_branches.append(decode_bytes(l))
->          branches = []
->          for branch in csv.reader(csv_branches):
->              branches += [branch[0]] * int(branch[1])
-> @@ -830,7 +833,7 @@ def main():
->      # Enforce the sanest umask here, to avoid buildroot doing it on its
->      # own and causing a double-make call, thus adding extraneous lines
->      # in case of failures.
-> -    os.umask(0022)
-> +    os.umask(0o022)
->  
->      def sigterm_handler(signum, frame):
->          """Kill all children"""
-
+diff --git a/package/e2tools/e2tools.hash b/package/e2tools/e2tools.hash
+index 4cec81e942..a109ff1bda 100644
+--- a/package/e2tools/e2tools.hash
++++ b/package/e2tools/e2tools.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 37bbd705170dff80720d68916f8d90803d71987e1b60f7149a285a7fcd539214  e2tools-3158ef18a903ca4a98b8fa220c9fc5c133d8bdf6.tar.gz
++sha256 1d06ca71f01483ad6d9a514e31466e7d2357b3465de2813d667a8b2f9638544e  e2tools-0.0.16.4.tar.gz
++sha256 0e79fd282723e1eb3f7381d41233a83ed20cf3e8c83aa53e6847bf7ffe781583  COPYING
+diff --git a/package/e2tools/e2tools.mk b/package/e2tools/e2tools.mk
+index 266d90911f..7c9ef0ffc7 100644
+--- a/package/e2tools/e2tools.mk
++++ b/package/e2tools/e2tools.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-E2TOOLS_VERSION = 3158ef18a903ca4a98b8fa220c9fc5c133d8bdf6
+-E2TOOLS_SITE = $(call github,ndim,e2tools,$(E2TOOLS_VERSION))
++E2TOOLS_VERSION = 0.0.16.4
++E2TOOLS_SITE = $(call github,ndim,e2tools,v$(E2TOOLS_VERSION))
+ 
+ # Source coming from GitHub, no configure included.
+ E2TOOLS_AUTORECONF = YES
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.24.0
