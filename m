@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:55:06 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/leafnode2: update
+Date: Tue, 3 Dec 2019 14:55:39 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/leafnode2: update
  the upstream URL in Config.in
-Message-ID: <20191203134706.26C6B846DD@busybox.osuosl.org>
+Message-ID: <20191203134737.3A0E08447E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2924960d6636901a2cc4d132906eb78b0775f437
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d3de723c621cc5129a412b00a9c29f5cbd90f2ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Update the upstream URL in the help text in Config.in. This
 addresses the 'Invalid(Err)' URL status in the package stats
