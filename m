@@ -1,39 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:47:51 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/dmraid: add an
- upstream URL to Config.in
-Message-ID: <20191203134029.8F4D784267@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:48:30 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/ca-certificates:
+ update the upstream URL in Config.in
+Message-ID: <20191203134029.AC2018426B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=957d144e61cde2294e3f5109bf8e32799723c79c
+commit: https://git.buildroot.net/buildroot/commit/?id=91b66680ee9dc3ec6f5f0cb06adc5d0d8bffaaf7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(404)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 81f4a636696cf79ed655052f630c54ab1f48d32a)
+(cherry picked from commit a9695f46111b6a68a4d9f80b2d4ec25d906b4d4c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dmraid/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/ca-certificates/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
-index aa98c853a1..3c375f4c67 100644
---- a/package/dmraid/Config.in
-+++ b/package/dmraid/Config.in
-@@ -12,6 +12,8 @@ config BR2_PACKAGE_DMRAID
- 	  dmraid uses the Linux device-mapper to create devices with
- 	  respective mappings for the ATARAID sets discovered.
+diff --git a/package/ca-certificates/Config.in b/package/ca-certificates/Config.in
+index 6bb71820d2..cd9825a811 100644
+--- a/package/ca-certificates/Config.in
++++ b/package/ca-certificates/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_CA_CERTIFICATES
+ 	  Debian infrastructure and those shipped with Mozilla's
+ 	  browsers.
  
-+	  http://people.redhat.com/~heinzm/sw/dmraid/
-+
- comment "dmraid needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+-	  http://anonscm.debian.org/gitweb/?p=collab-maint/ca-certificates.git
++	  https://salsa.debian.org/debian/ca-certificates
