@@ -1,61 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 15:00:47 +0100
+Date: Tue, 3 Dec 2019 15:00:30 +0100
 Subject: [Buildroot] [git commit branch/2019.02.x] package/nodejs: properly
- pass HOST_LDFLAGS when building host tools
-Message-ID: <20191203152550.1C56D8405C@busybox.osuosl.org>
+ pass the --with-arm-float-abi on ARM
+Message-ID: <20191203152550.07AAB850D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aec15539e13075cbf5a1cc4871cdc8d2d10015d0
+commit: https://git.buildroot.net/buildroot/commit/?id=7a3726e805f9c800cb53f90f86b3d74d5204f644
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-After building host tools, we currently run a pass of patchelf to add
-the proper RPATH to these tools so that they are able to find the
-libraries they depend on.
+When commit 0064132ba032da39cefa4fffe59c31a71d1f1ddb introduced ARM64
+support in nodejs.mk, it incorrectly kept the NODEJS_ARM_FP
+definition. This variable is used to pass --with-arm-float-abi, which
+in NodeJS's configure.py script is only used when --dest-cpu=arm, and
+not when --dest-cpu=arm64.
 
-Unfortunately, the "torque" host tool is used during the build itself,
-before we have a chance to run "patchelf" on it. Since it is linked
-against libcrypto.so available in $(HOST_DIR)/lib, the build aborts
-because the RPATH is not set.
+So we are passing --with-arm-float-abi=<something> for ARM64, which
+has no effect, and we are no longer passing it on ARM.
 
-To fix this, we make sure that $(HOST_LDFLAGS) are properly taken into
-account: since they contain the -Wl,-rpath option, the host tools will
-have the correct RPATH. This both fixes the build failure, and makes
-the patchelf hack no longer necessary.
+This commit fixes that by putting the NODEJS_ARM_FP definition back at
+the right location.
 
 Fixes:
 
-  https://bugs.busybox.net/show_bug.cgi?id=12211
-  http://autobuild.buildroot.net/results/a1f5e336ddaf386ba08eb5a7a299a48e2bdfe2d9/
+   0064132ba032da39cefa4fffe59c31a71d1f1ddb
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f4abcbe112a0a45b87545f32981be87212116e94)
+(cherry picked from commit 78c8d6902ddb17e7a9ae3eafdecec34ff5e20914)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/nodejs/nodejs.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 3bd6a1c4dd..583b2276e2 100644
+index 2cc8ecc829..b0d5c49dae 100644
 --- a/package/nodejs/nodejs.mk
 +++ b/package/nodejs/nodejs.mk
-@@ -72,6 +72,7 @@ define HOST_NODEJS_BUILD_CMDS
- 	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
- 		$(MAKE) -C $(@D) \
- 		$(HOST_CONFIGURE_OPTS) \
-+		LDFLAGS.host="$(HOST_LDFLAGS)" \
- 		NO_LOAD=cctest.target.mk \
- 		PATH=$(@D)/bin:$(BR_PATH)
- endef
-@@ -80,6 +81,7 @@ define HOST_NODEJS_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
- 		$(MAKE) -C $(@D) install \
- 		$(HOST_CONFIGURE_OPTS) \
-+		LDFLAGS.host="$(HOST_LDFLAGS)" \
- 		NO_LOAD=cctest.target.mk \
- 		PATH=$(@D)/bin:$(BR_PATH)
- endef
+@@ -94,10 +94,10 @@ else ifeq ($(BR2_mipsel),y)
+ NODEJS_CPU = mipsel
+ else ifeq ($(BR2_arm),y)
+ NODEJS_CPU = arm
+-else ifeq ($(BR2_aarch64),y)
+-NODEJS_CPU = arm64
+ # V8 needs to know what floating point ABI the target is using.
+ NODEJS_ARM_FP = $(GCC_TARGET_FLOAT_ABI)
++else ifeq ($(BR2_aarch64),y)
++NODEJS_CPU = arm64
+ endif
+ 
+ # MIPS architecture specific options
