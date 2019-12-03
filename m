@@ -1,31 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Dec 2019 14:57:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version
- 0.9.3
-In-Reply-To: <20191127125245.30093-1-jubalh@iodoru.org> (Michael Vetter's
- message of "Wed, 27 Nov 2019 13:52:45 +0100")
-References: <20191127125245.30093-1-jubalh@iodoru.org>
-Message-ID: <874kyhmrz4.fsf@dell.be.48ers.dk>
+From: Simon Rowe <simon.rowe@citrix.com>
+Date: Tue, 3 Dec 2019 13:59:47 +0000
+Subject: [Buildroot] [PATCH v2] package/tini: compile executable static
+In-Reply-To: <1574255351-23642-1-git-send-email-simon.rowe@citrix.com>
+References: <1574255351-23642-1-git-send-email-simon.rowe@citrix.com>
+Message-ID: <1575381587-102271-1-git-send-email-simon.rowe@citrix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
+One usecase for tini is as the init process for a container which has
+a single executable and no C runtime library. It therefore needs to be
+independent of any C runtime library within the container.
 
- > Changes:
- >   * PLAIN mechanism is used only when no other mechanisms are supported
- >   * Legacy authentication is disabled by default, can be enabled with
- >     connection flag XMPP_CONN_FLAG_LEGACY_AUTH
- >   * Session is not established if it is optional
- >   * Fixed a bug causing a reused connection not to cleanup properly
- >   * Improved debug logging in OpenSSL module
- >   * Few memory leaks fixed
+Tested with multiple toolchains and BR2_SHARED_LIBS=y.
 
- > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
 
-Committed to 2019.02.x and 2019.08.x, thanks.
+---
+Changes v1 -> v2:
+  - tested with other toolchains
+  - expanded reasoning for static linking
+---
+ package/tini/tini.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/package/tini/tini.mk b/package/tini/tini.mk
+index 5dd9877..986e612 100644
+--- a/package/tini/tini.mk
++++ b/package/tini/tini.mk
+@@ -10,6 +10,7 @@ TINI_LICENSE = MIT
+ TINI_LICENSE_FILES = LICENSE
+ 
+ TINI_CFLAGS = $(TARGET_CFLAGS) \
++	-static \
+ 	-DTINI_VERSION=\"$(TINI_VERSION)\" \
+ 	-DTINI_GIT=\"\"
+ 
 -- 
-Bye, Peter Korsgaard
+1.8.3.1
