@@ -1,54 +1,27 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 3 Dec 2019 23:49:05 +0100
-Subject: [Buildroot] [git commit] package/python-gobject: depend on python2
-Message-ID: <20191203224209.494CA873E6@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 03 Dec 2019 22:51:29 +0000
+Subject: [Buildroot] [Bug 12286] Can't import gobject in python 3.8
+In-Reply-To: <bug-12286-163@https.bugs.busybox.net/>
+References: <bug-12286-163@https.bugs.busybox.net/>
+Message-ID: <bug-12286-163-sx4JA28H9c@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a392d1678a0d63652e0a40f7a3aa5e8a249961d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=12286
 
-Version 2.86.6 of python-gobject is quite old and no longer works with
-Python versions > 3.7. When importing a user will recieve the following error:
+Arnout Vandecappelle <arnout@mind.be> changed:
 
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/lib/python3.8/site-packages/gobject/__init__.py", line 26, in
-  <module>
-  File "/usr/lib/python3.8/site-packages/glib/__init__.py", line 22, in <module>
-SystemError: initialization of _glib raised unreported exception
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-Because new versions of python-gobject require gobject-introspection, which is
-not currently available in Buildroot, add a dependency on python2 to prevent
-users from receiving the above error.
+--- Comment #4 from Arnout Vandecappelle <arnout@mind.be> ---
+"Fixed" by commit 4a392d1678 which excludes python-gobject for python3.
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=12286
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/python-gobject/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/python-gobject/Config.in b/package/python-gobject/Config.in
-index 475ff25185..36ddffebb0 100644
---- a/package/python-gobject/Config.in
-+++ b/package/python-gobject/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_GOBJECT
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_PACKAGE_PYTHON # Broken with python 3.8
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  Python bindings for the GLib/GObject library
-@@ -10,5 +11,6 @@ config BR2_PACKAGE_PYTHON_GOBJECT
- 	  https://wiki.gnome.org/action/show/Projects/PyGObject
- 
- comment "python-gobject needs a toolchain w/ wchar, threads"
-+	depends on BR2_PACKAGE_PYTHON
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
