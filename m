@@ -1,19 +1,36 @@
-From: a <anushka.parashar@tesco.com>
-Date: Tue, 3 Dec 2019 03:32:12 -0600 (CST)
-Subject: [Buildroot] UPX - compression of fs at target
-Message-ID: <1575365532631-0.post@n4.nabble.com>
+From: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Date: Tue,  3 Dec 2019 10:27:15 +0100
+Subject: [Buildroot] [PATCH] package/cryptsetup: use libargon2 when available
+Message-ID: <20191203092715.4605-1-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI, 
-How can I make use of UPX so that the final image, that buildroot builds,
-has libraries that are compresses even further by upx before creating the
-image so that the image size get reduced further.
+cryptsetup has an internal copy of libargon2, which is used by default,
+but when libargon2 is available as a proper system library this is a
+duplication.
 
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+---
+ package/cryptsetup/cryptsetup.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 7788bfb..2941328 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -29,6 +29,10 @@ else
+ CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBARGON2),y)
++CRYPTSETUP_CONF_OPTS += --enable-libargon2
++endif
++
+ HOST_CRYPTSETUP_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-lvm2 \
+-- 
+2.7.4
