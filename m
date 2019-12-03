@@ -1,38 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:50:29 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/fmt: add an
- upstream URL to Config.in
-Message-ID: <20191203134225.1366A842A4@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:50:58 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/fswebcam: update
+ the upstream URL in Config.in
+Message-ID: <20191203134255.9BCE7842D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98d7007b3ee065ede0dc3067471b94c4d3efed70
+commit: https://git.buildroot.net/buildroot/commit/?id=942348f204c3c70dfe4f4e9997fd4edc6da6554a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(Err)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fcbe5d93db547d61a56912af403c0a9a65d0aec1)
+(cherry picked from commit 44a2e4c2935a3c842ef8f569ced35090050945b6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fmt/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/fswebcam/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fmt/Config.in b/package/fmt/Config.in
-index 69a6fb80a6..8643c9b5af 100644
---- a/package/fmt/Config.in
-+++ b/package/fmt/Config.in
-@@ -7,5 +7,7 @@ config BR2_PACKAGE_FMT
- 	  used as a safe alternative to printf or as a fast alternative
- 	  to IOStreams.
+diff --git a/package/fswebcam/Config.in b/package/fswebcam/Config.in
+index d268454aae..fbd077bc37 100644
+--- a/package/fswebcam/Config.in
++++ b/package/fswebcam/Config.in
+@@ -15,7 +15,7 @@ config BR2_PACKAGE_FSWEBCAM
+ 	  stdio where it can be piped to something like ncftpput or
+ 	  scp.
  
-+	  https://fmt.dev
-+
- comment "fmt needs a toolchain w/ C++, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+-	  http://www.firestorm.cx/fswebcam/
++	  https://www.sanslogic.co.uk/fswebcam/
+ 
+ comment "fswebcam needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
