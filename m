@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 3 Dec 2019 23:53:06 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/libffi: fix build failure
- with powerpc7
-In-Reply-To: <20191124090305.1015485-1-fontaine.fabrice@gmail.com>
-References: <20191124090305.1015485-1-fontaine.fabrice@gmail.com>
-Message-ID: <20a72d62-aecb-be18-9bb7-2f69115e14ba@mind.be>
+Date: Wed, 4 Dec 2019 00:04:20 +0100
+Subject: [Buildroot] [Next] package/python-wsgiref: new package
+In-Reply-To: <20191113224429.30980-1-matthew.weber@rockwellcollins.com>
+References: <20191113224429.30980-1-matthew.weber@rockwellcollins.com>
+Message-ID: <0461df46-1b9b-baa1-4323-91e54d95c149@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,82 +12,83 @@ To: buildroot@busybox.net
 
 
 
-On 24/11/2019 10:03, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/5c9dd8fb3b6a128882b6250f197c80232d8a3b53
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 13/11/2019 23:44, Matt Weber wrote:
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
- Upstream merged a different fix [1] which TBH doesn't look as good... Could you
-check with upstream what is the better solution?
+ wsgiref has been in the Python standard library since Python 3.3 (and Python
+2.something as well, but I didn't find which one exactly). So this patch is not
+needed.
+
+ Marked as Rejected.
 
  Regards,
  Arnout
 
-[1]
-https://github.com/libffi/libffi/pull/532/commits/2138adb2a5b6a0bc2fe3518e0645eacc89b6f392
-
-
 > ---
->  ...pc.h-fix-build-failure-with-powerpc7.patch | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 package/libffi/0004-ffi_powerpc.h-fix-build-failure-with-powerpc7.patch
+>  package/Config.in                          |  1 +
+>  package/python-wsgiref/Config.in           |  6 ++++++
+>  package/python-wsgiref/python-wsgiref.hash |  3 +++
+>  package/python-wsgiref/python-wsgiref.mk   | 18 ++++++++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/python-wsgiref/Config.in
+>  create mode 100644 package/python-wsgiref/python-wsgiref.hash
+>  create mode 100644 package/python-wsgiref/python-wsgiref.mk
 > 
-> diff --git a/package/libffi/0004-ffi_powerpc.h-fix-build-failure-with-powerpc7.patch b/package/libffi/0004-ffi_powerpc.h-fix-build-failure-with-powerpc7.patch
+> diff --git a/package/Config.in b/package/Config.in
+> index e87b5a57d7..c150ee2473 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1133,6 +1133,7 @@ menu "External python modules"
+>  	source "package/python-wrapt/Config.in"
+>  	source "package/python-ws4py/Config.in"
+>  	source "package/python-wsaccel/Config.in"
+> +	source "package/python-wsgiref/Config.in"
+>  	source "package/python-wtforms/Config.in"
+>  	source "package/python-xlib/Config.in"
+>  	source "package/python-xlrd/Config.in"
+> diff --git a/package/python-wsgiref/Config.in b/package/python-wsgiref/Config.in
 > new file mode 100644
-> index 0000000000..7ee1f1029e
+> index 0000000000..2fde92cab0
 > --- /dev/null
-> +++ b/package/libffi/0004-ffi_powerpc.h-fix-build-failure-with-powerpc7.patch
-> @@ -0,0 +1,51 @@
-> +From f9d8f11d60cdc656a801e0d8116101beb22e117b Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 24 Nov 2019 09:52:01 +0100
-> +Subject: [PATCH] ffi_powerpc.h: fix build failure with powerpc7
+> +++ b/package/python-wsgiref/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_WSGIREF
+> +	bool "python-wsgiref"
+> +	help
+> +	  WSGI (PEP 333) Reference Library.
 > +
-> +Sicne commit 73dd43afc8a447ba98ea02e9aad4c6898dc77fb0, build on powerpc7
-> +fails on:
+> +	  http://cheeseshop.python.org/pypi/wsgiref
+> diff --git a/package/python-wsgiref/python-wsgiref.hash b/package/python-wsgiref/python-wsgiref.hash
+> new file mode 100644
+> index 0000000000..0c9a4fecd8
+> --- /dev/null
+> +++ b/package/python-wsgiref/python-wsgiref.hash
+> @@ -0,0 +1,3 @@
+> +# md5, sha256 from https://pypi.org/pypi/wsgiref/json
+> +md5	29b146e6ebd0f9fb119fe321f7bcf6cb  wsgiref-0.1.2.zip
+> +sha256	c7e610c800957046c04c8014aab8cce8f0b9f0495c8cd349e57c1f7cabf40e79  wsgiref-0.1.2.zip
+> diff --git a/package/python-wsgiref/python-wsgiref.mk b/package/python-wsgiref/python-wsgiref.mk
+> new file mode 100644
+> index 0000000000..e30f4c6a31
+> --- /dev/null
+> +++ b/package/python-wsgiref/python-wsgiref.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# python-wsgiref
+> +#
+> +################################################################################
 > +
-> +In file included from ../src/powerpc/ffi.c:33:0:
-> +../src/powerpc/ffi_powerpc.h:61:9: error: '_Float128' is not supported on this target
-> + typedef _Float128 float128;
-> +         ^~~~~~~~~
+> +PYTHON_WSGIREF_VERSION = 0.1.2
+> +PYTHON_WSGIREF_SOURCE = wsgiref-$(PYTHON_WSGIREF_VERSION).zip
+> +PYTHON_WSGIREF_SITE = https://files.pythonhosted.org/packages/41/9e/309259ce8dff8c596e8c26df86dbc4e848b9249fd36797fd60be456f03fc
+> +PYTHON_WSGIREF_SETUP_TYPE = setuptools
+> +PYTHON_WSGIREF_LICENSE = PSF or ZPL
 > +
-> +Fix this build failure by checking for __HAVE_FLOAT128 before using
-> +_Float128, as _Float128 is enabled only on specific conditions, see
-> +output/host/powerpc64-buildroot-linux-gnu/sysroot/usr/include/bits/floatn.h:
+> +define PYTHON_WSGIREF_EXTRACT_CMDS
+> +	$(UNZIP) -d $(@D) $(PYTHON_WSGIREF_DL_DIR)/$(PYTHON_WSGIREF_SOURCE)
+> +	mv $(@D)/wsgiref-$(PYTHON_WSGIREF_VERSION)/* $(@D)/
+> +endef
 > +
-> + /* Defined to 1 if the current compiler invocation provides a
-> +    floating-point type with the IEEE 754 binary128 format, and this glibc
-> +    includes corresponding *f128 interfaces for it.  */
-> + #if defined _ARCH_PWR8 && defined __LITTLE_ENDIAN__ && (_CALL_ELF == 2) \
-> +     && defined __FLOAT128__ && !defined __NO_LONG_DOUBLE_MATH
-> + # define __HAVE_FLOAT128 1
-> + #else
-> + # define __HAVE_FLOAT128 0
-> + #endif
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/5c9dd8fb3b6a128882b6250f197c80232d8a3b53
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/powerpc/ffi_powerpc.h | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/powerpc/ffi_powerpc.h b/src/powerpc/ffi_powerpc.h
-> +index 5ee2a70..a5a786b 100644
-> +--- a/src/powerpc/ffi_powerpc.h
-> ++++ b/src/powerpc/ffi_powerpc.h
-> +@@ -57,7 +57,7 @@ typedef union
-> +   double d;
-> + } ffi_dblfl;
-> + 
-> +-#if defined(__FLOAT128_TYPE__)
-> ++#if defined(__FLOAT128_TYPE__) && defined(__HAVE_FLOAT128)
-> + typedef _Float128 float128;
-> + #elif defined(__FLOAT128__)
-> + typedef __float128 float128;
-> +-- 
-> +2.24.0
-> +
+> +$(eval $(python-package))
 > 
