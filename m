@@ -1,39 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:56:34 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/liberation: add
- an upstream URL to Config.in
-Message-ID: <20191203134821.2DC7C8476D@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:56:32 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libdvdnav: update
+ the upstream URL in Config.in
+Message-ID: <20191203134821.257548476D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd5ec269c5fe3b8bbd157281ff14bb712a5762be
+commit: https://git.buildroot.net/buildroot/commit/?id=17c575265a78b7ca353fbfce0cc71fb3e312dee0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+Update the upstream URL in the help text in Config.in as it
+is pointing to an old page.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 26f2fd14625740cda698c07df15281337be048fe)
+(cherry picked from commit ad8a1f9aae560bfa79917eda29e74a671d87e658)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/liberation/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libdvdnav/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/liberation/Config.in b/package/liberation/Config.in
-index b68166f638..8d6b3e78d9 100644
---- a/package/liberation/Config.in
-+++ b/package/liberation/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_LIBERATION
- 	  three most commonly used fonts on Microsoft systems:
- 	  Times New Roman, Arial, and Courier New.
+diff --git a/package/libdvdnav/Config.in b/package/libdvdnav/Config.in
+index 8cfcb4a6de..77cba5f135 100644
+--- a/package/libdvdnav/Config.in
++++ b/package/libdvdnav/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_LIBDVDNAV
+ 	  DVD navigation features such as DVD menus, multiangle
+ 	  playback and even interactive DVD games.
  
-+	  https://github.com/liberationfonts/liberation-fonts
-+
- if BR2_PACKAGE_LIBERATION
+-	  http://www.mplayerhq.hu
++	  https://www.videolan.org/developers/libdvdnav.html
  
- config BR2_PACKAGE_LIBERATION_MONO
+ comment "libdvdnav needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
