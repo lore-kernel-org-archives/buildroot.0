@@ -1,27 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Dec 2019 08:32:59 +0100
-Subject: [Buildroot] [PATCH-NEXT] package/webrtc-audio-processing: bump
- to version 0.3.1
-In-Reply-To: <20191127091910.2977-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 27 Nov 2019 10:19:09 +0100")
-References: <20191127091910.2977-1-peter@korsgaard.com>
-Message-ID: <875zixq2xg.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Dec 2019 08:57:31 +0100
+Subject: [Buildroot] [PATCH v1 3/4] package/docker-engine: bump to
+ 19.03.5
+In-Reply-To: <20191203045003.145746-3-christian@paral.in>
+References: <20191203045003.145746-1-christian@paral.in>
+ <20191203045003.145746-3-christian@paral.in>
+Message-ID: <20191203085731.6d12aa82@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello Christian,
 
- > Drop 0001-configure.ac-fix-architecture-detection.patch as it is now
- > upstream.  Aarch64 is now supported, so update _ARCH_SUPPORTS to match.
+On Mon,  2 Dec 2019 20:50:02 -0800
+Christian Stewart <christian@paral.in> wrote:
 
- > Add a hash for the license file.
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  ...ix-faulty-runc-version-commit-scrape.patch | 45 -------------------
+>  package/docker-engine/docker-engine.hash      |  2 +-
+>  package/docker-engine/docker-engine.mk        |  2 +-
+>  3 files changed, 2 insertions(+), 47 deletions(-)
+>  delete mode 100644 package/docker-engine/0001-Fix-faulty-runc-version-commit-scrape.patch
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+A quick question: did you check that the test_docker_compose.py test we
+have in Buildroot continues to work with this series applied ?
 
-Committed, thanks.
+Thanks,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
