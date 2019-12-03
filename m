@@ -1,45 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 13:16:49 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/tftpd: add license
-Message-ID: <20191203120952.2490683C75@busybox.osuosl.org>
+Date: Tue, 03 Dec 2019 13:19:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libftdi: add license
+In-Reply-To: <20191124100846.24884-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 24 Nov 2019 11:08:46 +0100")
+References: <20191124100846.24884-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2vtmwii.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17219c5b0de783269252b1daacd4032fb42d78f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 964d31a99eaae4a5fe062596ed29f0095491c499)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tftpd/tftpd.hash | 3 +++
- package/tftpd/tftpd.mk   | 2 ++
- 2 files changed, 5 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/tftpd/tftpd.hash b/package/tftpd/tftpd.hash
-index 247b757fa6..c876b2edc2 100644
---- a/package/tftpd/tftpd.hash
-+++ b/package/tftpd/tftpd.hash
-@@ -1,2 +1,5 @@
- # From https://www.kernel.org/pub/software/network/tftp/tftp-hpa/sha256sums.asc
- sha256	afee361df96a2f88344e191f6a25480fd714e1d28d176c3f10cc43fa206b718b	tftp-hpa-5.2.tar.xz
-+
-+# Hash for license file
-+sha256	5efef82650b8ece733e37790fc70f05e426c9e1ef9640d4ebcb04867bd3f5e28	tftpd/tftpd.c
-diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index c42456afd1..57905fda05 100644
---- a/package/tftpd/tftpd.mk
-+++ b/package/tftpd/tftpd.mk
-@@ -8,6 +8,8 @@ TFTPD_VERSION = 5.2
- TFTPD_SOURCE = tftp-hpa-$(TFTPD_VERSION).tar.xz
- TFTPD_SITE = $(BR2_KERNEL_MIRROR)/software/network/tftp/tftp-hpa
- TFTPD_CONF_OPTS = --without-tcpwrappers
-+TFTPD_LICENSE = BSD-4-Clause
-+TFTPD_LICENSE_FILES = tftpd/tftpd.c
- 
- define TFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
+Committed to 2019.02.x and 2019.08.x, thanks (+ the followup fixes)
+
+-- 
+Bye, Peter Korsgaard
