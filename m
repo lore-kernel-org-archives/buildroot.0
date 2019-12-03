@@ -1,38 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:49:39 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/fmt: add an
- upstream URL to Config.in
-Message-ID: <20191203134126.81FDA84294@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:50:03 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/fastd: update the
+ upstream URL in Config.in
+Message-ID: <20191203134224.F1D81842A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bb993e7f7d013ab7c65d3d822e0ed52ae2d21f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=705259765c77e6fcc6142387732e33bf8a001545
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(404)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Acked-by: Alexander Dahl <post@lespocky.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fcbe5d93db547d61a56912af403c0a9a65d0aec1)
+(cherry picked from commit c468a7580f62ca951f4522de8ffa152c92920783)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fmt/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/fastd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fmt/Config.in b/package/fmt/Config.in
-index 69a6fb80a6..8643c9b5af 100644
---- a/package/fmt/Config.in
-+++ b/package/fmt/Config.in
-@@ -7,5 +7,7 @@ config BR2_PACKAGE_FMT
- 	  used as a safe alternative to printf or as a fast alternative
- 	  to IOStreams.
+diff --git a/package/fastd/Config.in b/package/fastd/Config.in
+index 47c76b5ad6..5ef6de8d78 100644
+--- a/package/fastd/Config.in
++++ b/package/fastd/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_FASTD
+ 	help
+ 	  Fast and Secure Tunneling Daemon
  
-+	  https://fmt.dev
-+
- comment "fmt needs a toolchain w/ C++, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+-	  https://projects.universe-factory.net/projects/fastd/wiki
++	  https://github.com/NeoRaider/fastd/wiki
+ 
+ if BR2_PACKAGE_FASTD
+ 
