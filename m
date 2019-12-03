@@ -1,45 +1,44 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Tue,  3 Dec 2019 13:31:54 +0100
-Subject: [Buildroot] [PATCH] package/cryptsetup: use external libargon2
-Message-ID: <20191203123154.8041-1-p.debruijn@unilogic.nl>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Dec 2019 14:09:29 +0100
+Subject: [Buildroot] Missing PyQt5.QtQuick and PyQt5.QtQml on custom
+ build Raspberry Pi 3
+In-Reply-To: <CACHEUn-YRb17+OqYfo09KpPyCitBP=4PyJDH_kgmkq0kXOnrqg@mail.gmail.com>
+References: <CACHEUn-YRb17+OqYfo09KpPyCitBP=4PyJDH_kgmkq0kXOnrqg@mail.gmail.com>
+Message-ID: <20191203140929.3a27e2a5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-don't use cryptsetup's intree libargon2
+Hello Jaafar,
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
----
- package/cryptsetup/Config.in     | 1 +
- package/cryptsetup/cryptsetup.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+On Tue, 3 Dec 2019 14:17:21 +0100
+Jaafar Biyadi <jaafarbiyadi@gmail.com> wrote:
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 14b897a..3f94847 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_JSON_C
-+	select BR2_PACKAGE_LIBARGON2
- 	help
- 	  This tool helps manipulate dm-crypt and luks partitions for
- 	  on-disk encryption.
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 7788bfb..5ed5013 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -14,7 +14,7 @@ CRYPTSETUP_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
- CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
- CRYPTSETUP_INSTALL_STAGING = YES
- CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
--CRYPTSETUP_CONF_OPTS += --enable-blkid
-+CRYPTSETUP_CONF_OPTS += --enable-blkid --enable-libargon2
- 
- # cryptsetup uses libgcrypt by default, but can be configured to use OpenSSL
- # or kernel crypto modules instead
+> Hello, I'm trying to build a system to run Python with PyQt5 using the
+> QtQuick and QtQml submodules, but I cannot figure what's wrong with my
+> config.
+> 
+> I built all relevant package such as: Qt5 and Python-Qt5 and when running
+> the system and testing a .qml file with qmlscene, it works however the
+> QtQml & QtQuick modules are not found in python. What am I missing?
+> 
+> My config (with external toolchain): https://pastebin.com/5g1GhJgF
+> Using buildroot-2019.11-rc3
+
+I think we have a bug report opened for this:
+
+  https://bugs.busybox.net/show_bug.cgi?id=12121
+
+And we have a proposal to fix it at:
+
+  http://patchwork.ozlabs.org/patch/1151846/
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
