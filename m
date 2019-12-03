@@ -1,70 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 15:45:01 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/nodejs: use
- --with-arm-fpu option on ARM
-Message-ID: <20191203152545.F4199848AE@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 15:48:49 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/nodejs: properly
+ pass HOST_LDFLAGS when building host tools
+Message-ID: <20191203152546.0930584CDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56bab59a5ef66c68a1a99a61336cfd52608c99f3
+commit: https://git.buildroot.net/buildroot/commit/?id=e956106bf252a75050eeb23874cefe23f85acd31
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-nodejs can use some FPU instructions on ARM, but it needs to know that
-thanks to the --with-arm-fpu option. Without this, it may use the
-wrong FPU setting, such as use VFPv3 even if only a VFPv3-D16 is
-available. This has been reported as bug #12166, where the compiled
-node binary had some floating point instructions using floating point
-registers above 16 on a VFPv3-D16 system.
+After building host tools, we currently run a pass of patchelf to add
+the proper RPATH to these tools so that they are able to find the
+libraries they depend on.
 
-This commit makes sure we pass the appropriate --with-arm-fpu value
-when it makes sense. Note that NodeJS only has explicit support for a
-subset of the FPUs, for the ones that are not explicitly supported, we
-simply pass no --with-arm-fpu value.
+Unfortunately, the "torque" host tool is used during the build itself,
+before we have a chance to run "patchelf" on it. Since it is linked
+against libcrypto.so available in $(HOST_DIR)/lib, the build aborts
+because the RPATH is not set.
+
+To fix this, we make sure that $(HOST_LDFLAGS) are properly taken into
+account: since they contain the -Wl,-rpath option, the host tools will
+have the correct RPATH. This both fixes the build failure, and makes
+the patchelf hack no longer necessary.
 
 Fixes:
 
-  https://bugs.busybox.net/show_bug.cgi?id=12166
+  https://bugs.busybox.net/show_bug.cgi?id=12211
+  http://autobuild.buildroot.net/results/a1f5e336ddaf386ba08eb5a7a299a48e2bdfe2d9/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f3c80d711c8954e408397f7a18fb9fdaaf42d773)
+(cherry picked from commit f4abcbe112a0a45b87545f32981be87212116e94)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ package/nodejs/nodejs.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 349205407f..09edf365a6 100644
+index 09edf365a6..c5490886aa 100644
 --- a/package/nodejs/nodejs.mk
 +++ b/package/nodejs/nodejs.mk
-@@ -100,6 +100,19 @@ else ifeq ($(BR2_arm),y)
- NODEJS_CPU = arm
- # V8 needs to know what floating point ABI the target is using.
- NODEJS_ARM_FP = $(GCC_TARGET_FLOAT_ABI)
-+# it also wants to know which FPU to use, but only has support for
-+# vfp, vfpv3, vfpv3-d16 and neon.
-+ifeq ($(BR2_ARM_FPU_VFPV2),y)
-+NODEJS_ARM_FPU = vfp
-+# vfpv4 is a superset of vfpv3
-+else ifeq ($(BR2_ARM_FPU_VFPV3)$(BR2_ARM_FPU_VFPV4),y)
-+NODEJS_ARM_FPU = vfpv3
-+# vfpv4-d16 is a superset of vfpv3-d16
-+else ifeq ($(BR2_ARM_FPU_VFPV3D16)$(BR2_ARM_FPU_VFPV4D16),y)
-+NODEJS_ARM_FPU = vfpv3-d16
-+else ifeq ($(BR2_ARM_FPU_NEON),y)
-+NODEJS_ARM_FPU = neon
-+endif
- else ifeq ($(BR2_aarch64),y)
- NODEJS_CPU = arm64
- endif
-@@ -136,6 +149,7 @@ define NODEJS_CONFIGURE_CMDS
- 		--prefix=/usr \
- 		--dest-cpu=$(NODEJS_CPU) \
- 		$(if $(NODEJS_ARM_FP),--with-arm-float-abi=$(NODEJS_ARM_FP)) \
-+		$(if $(NODEJS_ARM_FPU),--with-arm-fpu=$(NODEJS_ARM_FPU)) \
- 		$(if $(NODEJS_MIPS_ARCH_VARIANT),--with-mips-arch-variant=$(NODEJS_MIPS_ARCH_VARIANT)) \
- 		$(if $(NODEJS_MIPS_FPU_MODE),--with-mips-fpu-mode=$(NODEJS_MIPS_FPU_MODE)) \
- 		$(NODEJS_CONF_OPTS) \
+@@ -10,7 +10,7 @@ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+ 	libhttpparser libuv zlib nghttp2 \
+ 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
+-HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib host-patchelf
++HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib
+ NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
+ NODEJS_LICENSE_FILES = LICENSE
+ 
+@@ -72,16 +72,16 @@ define HOST_NODEJS_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ 		$(MAKE) -C $(@D) \
+ 		$(HOST_CONFIGURE_OPTS) \
++		LDFLAGS.host="$(HOST_LDFLAGS)" \
+ 		NO_LOAD=cctest.target.mk \
+ 		PATH=$(@D)/bin:$(BR_PATH)
+-
+-	$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib $(@D)/out/Release/torque
+ endef
+ 
+ define HOST_NODEJS_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ 		$(MAKE) -C $(@D) install \
+ 		$(HOST_CONFIGURE_OPTS) \
++		LDFLAGS.host="$(HOST_LDFLAGS)" \
+ 		NO_LOAD=cctest.target.mk \
+ 		PATH=$(@D)/bin:$(BR_PATH)
+ 
