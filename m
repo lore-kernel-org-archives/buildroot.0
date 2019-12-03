@@ -1,42 +1,43 @@
-From: Simon Rowe <simon.rowe@citrix.com>
-Date: Tue, 3 Dec 2019 13:59:47 +0000
-Subject: [Buildroot] [PATCH v2] package/tini: compile executable static
-In-Reply-To: <1574255351-23642-1-git-send-email-simon.rowe@citrix.com>
-References: <1574255351-23642-1-git-send-email-simon.rowe@citrix.com>
-Message-ID: <1575381587-102271-1-git-send-email-simon.rowe@citrix.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue,  3 Dec 2019 11:05:25 -0300
+Subject: [Buildroot] [PATCH] configs/wandboard: Bump the kernel version
+Message-ID: <20191203140525.19428-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-One usecase for tini is as the init process for a container which has
-a single executable and no C runtime library. It therefore needs to be
-independent of any C runtime library within the container.
+Bump the kernel version to 5.4.1.
 
-Tested with multiple toolchains and BR2_SHARED_LIBS=y.
-
-Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
-
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
-Changes v1 -> v2:
-  - tested with other toolchains
-  - expanded reasoning for static linking
----
- package/tini/tini.mk | 1 +
- 1 file changed, 1 insertion(+)
+ configs/wandboard_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tini/tini.mk b/package/tini/tini.mk
-index 5dd9877..986e612 100644
---- a/package/tini/tini.mk
-+++ b/package/tini/tini.mk
-@@ -10,6 +10,7 @@ TINI_LICENSE = MIT
- TINI_LICENSE_FILES = LICENSE
- 
- TINI_CFLAGS = $(TARGET_CFLAGS) \
-+	-static \
- 	-DTINI_VERSION=\"$(TINI_VERSION)\" \
- 	-DTINI_GIT=\"\"
- 
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index c3e04af53e..1f42707ef0 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+@@ -20,7 +20,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
 -- 
-1.8.3.1
+2.17.1
