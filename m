@@ -1,36 +1,34 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Tue,  3 Dec 2019 10:00:50 +0100
-Subject: [Buildroot] [PATCH] package/lvm2: install udev rules
-Message-ID: <20191203090050.4382-1-p.debruijn@unilogic.nl>
+From: Jan Kotas <jank@cadence.com>
+Date: Tue, 3 Dec 2019 04:18:13 -0500
+Subject: [Buildroot] [PATCH v2 1/3] boot/boot-wrapper-aarch64: bump version
+In-Reply-To: <20191203091815.22668-1-jank@cadence.com>
+References: <20191203091815.22668-1-jank@cadence.com>
+Message-ID: <20191203091815.22668-2-jank@cadence.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without the device-mapper udev rules, dm devices will not get a proper
-symlink like /dev/disk/by-label/LABEL, which in turn causes fstab
-LABEL= mounts to fails.
+This patch bumps the bootwrapper version to the latest.
 
-And by extension causes shenanigans with systemd, where it will
-unmount a manually mounted disk because it can't resolve the label.
-
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Jan Kotas <jank@cadence.com>
 ---
- package/lvm2/lvm2.mk | 1 +
- 1 file changed, 1 insertion(+)
+ boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 7fdb9a7..65576f4 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -19,6 +19,7 @@ LVM2_CONF_OPTS += \
- 	--enable-pkgconfig \
- 	--enable-cmdlib \
- 	--enable-dmeventd \
-+	--enable-udev_rules \
- 	--disable-nls \
- 	--disable-symvers
+diff --git a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+index cd6e1b7b7..3383cb58a 100644
+--- a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
++++ b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-BOOT_WRAPPER_AARCH64_VERSION = 4266507a84f8c06452109d38e0350d4759740694
++BOOT_WRAPPER_AARCH64_VERSION = fd74c8cbd0e17483d2299208cad9742bee605ca7
+ BOOT_WRAPPER_AARCH64_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
+ BOOT_WRAPPER_AARCH64_LICENSE = BSD-3-Clause
+ BOOT_WRAPPER_AARCH64_LICENSE_FILES = LICENSE.txt
 -- 
-2.7.4
+2.18.0
