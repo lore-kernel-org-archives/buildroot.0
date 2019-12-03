@@ -1,39 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:11:58 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/atk: add an
- upstream URL to Config.in
-Message-ID: <20191203130351.3396683FF0@busybox.osuosl.org>
+From: Simon Rowe <simon.rowe@eu.citrix.com>
+Date: Tue, 3 Dec 2019 13:14:38 +0000
+Subject: [Buildroot] [PATCH 1/1] package/tini: compile executable static
+In-Reply-To: <5e477792-65af-42f8-5302-55ac4df554f9@mind.be>
+References: <1574255351-23642-1-git-send-email-simon.rowe@citrix.com>
+ <20191123211555.GZ32494@scaer>
+ <f361f14c-3a77-d769-1b5c-9a1a5fd8f3b3@eu.citrix.com>
+ <5e477792-65af-42f8-5302-55ac4df554f9@mind.be>
+Message-ID: <a0e108bd-7bed-b161-c921-caf601f8a06f@eu.citrix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01e3bee2e44abd34d98f8f2ff664019219ba32de
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+On 01/12/2019 14:41, Arnout Vandecappelle wrote:
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+>   Could you check with BR2_SHARED_LIBS=y and the current patch if it's possible
+> to build tini for all cases? I.e., external toolchain, internal with musl,
+> glibc, uClibc. If not, then you can make it conditional on !shared like this:
+> 
+> 	$(if $(BR2_SHARED_LIBS),,-static)
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4daeedfc45b6baee5545fd0710c180037da3da49)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/atk/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+I've run the current patch with the following toolchains
 
-diff --git a/package/atk/Config.in b/package/atk/Config.in
-index c980614998..d9371b879b 100644
---- a/package/atk/Config.in
-+++ b/package/atk/Config.in
-@@ -7,6 +7,8 @@ config BR2_PACKAGE_ATK
- 	help
- 	  The ATK accessibility toolkit, needed to build GTK+-2.x.
- 
-+	  https://gitlab.gnome.org/GNOME/atk
-+
- comment "atk needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+* internal, only shared libraries, musl
+* internal, only shared libraries, uClibc
+* internal, only shared libraries, glibc
+* external, only shared libraries, musl
+
+and tini is built correctly.
+
+>   And of course, we still need an explanation why it is needed after all while
+> before we thought it wasn't.
+
+Does this need an expansion of the commit message or something elsewhere?
+
+Simon
