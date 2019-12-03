@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:52:14 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x]
- package/hicolor-icon-theme: add an upstream URL to Config.in
-Message-ID: <20191203134401.E1425842CB@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:52:30 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/ifenslave: update
+ the upstream URL in Config.in
+Message-ID: <20191203134443.7149C84445@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=077b46b5e55b713d3faf28f496e0332744574919
+commit: https://git.buildroot.net/buildroot/commit/?id=f39dd398c75cbbdc94705b1020357d49406113bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(404)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9d4407c00b0c43a4baee9699f0b07d061141c613)
+(cherry picked from commit 69559f08900981220aa6def883fd1bfbe221c99f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hicolor-icon-theme/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/ifenslave/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/hicolor-icon-theme/Config.in b/package/hicolor-icon-theme/Config.in
-index 10edbf8865..5ef2cd2267 100644
---- a/package/hicolor-icon-theme/Config.in
-+++ b/package/hicolor-icon-theme/Config.in
-@@ -7,3 +7,5 @@ config BR2_PACKAGE_HICOLOR_ICON_THEME
- 	  standard directory structure for storing icons of third-party
- 	  applications (i.e. the ones not available in usual icon
- 	  themes).
-+
-+	  https://www.freedesktop.org/wiki/Software/icon-theme/
+diff --git a/package/ifenslave/Config.in b/package/ifenslave/Config.in
+index 2203284db0..d28e0f7c29 100644
+--- a/package/ifenslave/Config.in
++++ b/package/ifenslave/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_IFENSLAVE
+ 	help
+ 	  Configure network interfaces for parallel routing (bonding)
+ 
+-	  http://anonscm.debian.org/cgit/collab-maint/ifenslave.git
++	  https://salsa.debian.org/debian/ifenslave
