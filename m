@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:47:09 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/dmraid: add an
+Date: Tue, 3 Dec 2019 14:47:04 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/doom-wad: add an
  upstream URL to Config.in
-Message-ID: <20191203133918.71C708405C@busybox.osuosl.org>
+Message-ID: <20191203133918.633C484080@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13d15eb360e8fc7f23d53291bbdf57afedff9bf8
+commit: https://git.buildroot.net/buildroot/commit/?id=a35b869e39593482e14b6b1f7d677c25c6b2cd14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Add an upstream URL to the help text in Config.in. This
@@ -18,22 +18,19 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 81f4a636696cf79ed655052f630c54ab1f48d32a)
+(cherry picked from commit e80874cd7f2093ad7aa3912620c44a6641373e6d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dmraid/Config.in | 2 ++
+ package/doom-wad/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
-index aa98c853a1..3c375f4c67 100644
---- a/package/dmraid/Config.in
-+++ b/package/dmraid/Config.in
-@@ -12,6 +12,8 @@ config BR2_PACKAGE_DMRAID
- 	  dmraid uses the Linux device-mapper to create devices with
- 	  respective mappings for the ATARAID sets discovered.
+diff --git a/package/doom-wad/Config.in b/package/doom-wad/Config.in
+index 6f51cfb936..9ef4e3e5a2 100644
+--- a/package/doom-wad/Config.in
++++ b/package/doom-wad/Config.in
+@@ -7,3 +7,5 @@ config BR2_PACKAGE_DOOM_WAD
  
-+	  http://people.redhat.com/~heinzm/sw/dmraid/
+ 	  The wad file will be placed in the /usr/share/games/doom
+ 	  directory.
 +
- comment "dmraid needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++	  https://doomwiki.org/wiki/DOOM1.WAD
