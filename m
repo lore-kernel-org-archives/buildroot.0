@@ -1,51 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 17:04:04 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/musl: add an
- upstream URL to Config.in
-Message-ID: <20191203160321.7A2DD867D1@busybox.osuosl.org>
+Date: Tue, 03 Dec 2019 17:37:07 +0100
+Subject: [Buildroot] [PATCH] package/haproxy: security bump to version
+ 2.0.10
+In-Reply-To: <20191128144344.26356-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 28 Nov 2019 15:43:44 +0100")
+References: <20191128144344.26356-1-peter@korsgaard.com>
+Message-ID: <87a789l618.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c4ce506cc6763ef57ef26757adde3db436edf40
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+ > Fixes the following security vulnerabilities:
+ > - CVE-2019-19330: The HTTP/2 implementation in HAProxy before 2.0.10
+ >   mishandles headers, as demonstrated by carriage return (CR, ASCII 0xd),
+ >   line feed (LF, ASCII 0xa), and the zero character (NUL, ASCII 0x0), aka
+ >   Intermediary Encapsulation Attacks.
 
-[Peter: also add URL to BR2_TOOLCHAIN_BUILDROOT_MUSL help]
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 53698c9f81f2c0672215f6f9cb3d851a4be2f5fc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/musl/Config.in                  | 2 ++
- toolchain/toolchain-buildroot/Config.in | 2 ++
- 2 files changed, 4 insertions(+)
+ > In addition, 2.0.6..10 fixes a number of bugs.  See the changelog for
+ > details:
 
-diff --git a/package/musl/Config.in b/package/musl/Config.in
-index 67e9e78a14..69da615b63 100644
---- a/package/musl/Config.in
-+++ b/package/musl/Config.in
-@@ -8,3 +8,5 @@ config BR2_PACKAGE_MUSL
- 		&& !(BR2_i386 || BR2_powerpc)
- 	# Compatibility headers: cdefs.h, queue.h
- 	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
-+	help
-+	  https://www.musl-libc.org/
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index c0612bf041..95d513004a 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -94,6 +94,8 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	  This option selects musl as the C library for the
- 	  cross-compilation toolchain.
- 
-+	  https://www.musl-libc.org/
-+
- endchoice
- 
- config BR2_TOOLCHAIN_BUILDROOT_LIBC
+ > https://www.haproxy.org/download/2.0/src/CHANGELOG
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+For 2019.02.x and 2019.08.x I have instead bumped to 1.9.13, which
+includes the same fix.
+
+-- 
+Bye, Peter Korsgaard
