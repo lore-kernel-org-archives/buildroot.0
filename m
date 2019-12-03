@@ -1,32 +1,24 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Tue,  3 Dec 2019 10:38:13 +0100
-Subject: [Buildroot] [PATCH] package/postgresql: fix minor typo
-Message-ID: <20191203093813.4760-1-p.debruijn@unilogic.nl>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 03 Dec 2019 10:49:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.3.12
+In-Reply-To: <20191121213733.23541-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 21 Nov 2019 22:37:33 +0100")
+References: <20191121213733.23541-1-bernd.kuhls@t-online.de>
+Message-ID: <871rtlpwmj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pgsql as a tool does not exist, it's called psql
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
----
- package/postgresql/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Release notes of this bugfix release:
+ > https://www.php.net/ChangeLog-7.php#7.3.12
 
-diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-index e548d3c..2f677da 100644
---- a/package/postgresql/Config.in
-+++ b/package/postgresql/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_POSTGRESQL
- 	  database system.
- 
- 	  Enable the readline package to gain readline support in
--	  pgsql (the command line interpreter), which offers
-+	  psql (the command line interpreter), which offers
- 	  command history and edit functions.
- 
- 	  Enable the zlib package to gain builtin compression for
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed to 2019.02.x and 2019.08.x, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
