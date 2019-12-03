@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 13:17:45 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/gob2: add license
-Message-ID: <20191203120946.C2F3C83C4A@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 13:17:34 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gob2: add license
+Message-ID: <20191203120952.2D15E83C75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66b2679de63e3905475329d4d39afb60f0292113
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=91f4735426079222c4e5bbbaa5ee54e54f521932
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 gob2 itself is GPL-2.0+, but it is a code generator. The code generated
 by gob2 id not covered by gob2's license, and this is made explicit in
