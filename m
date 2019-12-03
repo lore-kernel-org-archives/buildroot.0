@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 13:22:39 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libnss: security
+Date: Tue, 3 Dec 2019 13:22:25 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libnss: security
  bump to version 3.47.1
-Message-ID: <20191203121436.431DD83CDC@busybox.osuosl.org>
+Message-ID: <20191203121443.7AD7F83CEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ceb19ad4962ea76754ec4b7ffba87f32a222238
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=28c41fce10be482c89745eede1d1b5e79e46bc23
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Fixes the following security issues:
 CVE-2019-11745: EncryptUpdate should use maxout, not block size
@@ -35,7 +35,7 @@ index 92d6fd3908..518d95d842 100644
  # Locally calculated
  sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
 diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index b1c30cf07f..cf11deaf9e 100644
+index ca1cde4c1c..747612c795 100644
 --- a/package/libnss/libnss.mk
 +++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
