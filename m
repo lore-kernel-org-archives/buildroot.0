@@ -1,11 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 3 Dec 2019 22:15:47 +0100
-Subject: [Buildroot] [FYI] Bootlin external toolchains
-In-Reply-To: <a9c40802-dfd5-67b5-6750-b0711f667280@smile.fr>
-References: <CAMw6YJLJae0GcmrDmSY8FZ-uMj+WBybPkBaLQC1wkhooCjoKyQ@mail.gmail.com>
- <20191202152601.4ab1c8cd@windsurf>
- <a9c40802-dfd5-67b5-6750-b0711f667280@smile.fr>
-Message-ID: <09654893-fe44-76f0-da65-3f29bc758c6f@mind.be>
+Date: Tue, 3 Dec 2019 22:18:32 +0100
+Subject: [Buildroot] [PATCH] package/cryptsetup: use external libargon2
+In-Reply-To: <20191203123154.8041-1-p.debruijn@unilogic.nl>
+References: <20191203123154.8041-1-p.debruijn@unilogic.nl>
+Message-ID: <9986063a-45a5-9e61-8cf1-86321c3d7a8b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,74 +12,44 @@ To: buildroot@busybox.net
 
 
 
-On 03/12/2019 10:59, Romain Naour wrote:
-> Hi Thomas, Vadim,
+On 03/12/2019 13:31, Pascal de Bruijn wrote:
+> don't use cryptsetup's intree libargon2
 > 
-> +Arthur Courtel in Cc.
+> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+> ---
+>  package/cryptsetup/Config.in     | 1 +
+>  package/cryptsetup/cryptsetup.mk | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 > 
-> Le 02/12/2019 ? 15:26, Thomas Petazzoni a ?crit?:
->> Hello,
->>
->> +Romain Naour in Cc.
->>
->> On Mon, 2 Dec 2019 02:47:15 +0200
->> Vadim Kochan <vadim4j@gmail.com> wrote:
->>
->>> Just in case if someone will be interested. I started Buildroot external
->>> project which provides external toolchains from the Bootlin:
->>>
->>>     https://toolchains.bootlin.com
->>>
->>> The git repo can be found at:
->>>
->>>     https://github.com/vkochan/buildroot-external-toolchain-bootlin
->>
->> An effort was started to package the Bootlin external toolchains in
->> Buildroot itself, some time ago by engineers at Smile. We had some
->> off-list discussion about this, but I don't think it was ever posted to
->> the list. The idea back then was to have a script that generates all
->> the packages, but the design was to have one package for each
->> toolchain, so it really added a lot of packages.
->>
->> But I think we should really support these toolchains in Buildroot
->> proper instead of having an external for them.
-> 
-> Agree.
-> 
-> Arthur will take a look at the script but it's very complicated script...
-> Maybe we need to discuss what we really want.
+> diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+> index 14b897a..3f94847 100644
+> --- a/package/cryptsetup/Config.in
+> +++ b/package/cryptsetup/Config.in
+> @@ -10,6 +10,7 @@ config BR2_PACKAGE_CRYPTSETUP
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+>  	select BR2_PACKAGE_JSON_C
+> +	select BR2_PACKAGE_LIBARGON2
+>  	help
+>  	  This tool helps manipulate dm-crypt and luks partitions for
+>  	  on-disk encryption.
+> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+> index 7788bfb..5ed5013 100644
+> --- a/package/cryptsetup/cryptsetup.mk
+> +++ b/package/cryptsetup/cryptsetup.mk
+> @@ -14,7 +14,7 @@ CRYPTSETUP_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
+>  CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
+>  CRYPTSETUP_INSTALL_STAGING = YES
+>  CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
+> -CRYPTSETUP_CONF_OPTS += --enable-blkid
+> +CRYPTSETUP_CONF_OPTS += --enable-blkid --enable-libargon2
 
- I think this should be like scancpan/scanpypi, i.e. something that generates
-the toolchain-external-bootlin package but it's up to the user to fix up the
-final details.
-
- And then we can work on toolchains-builder to make sure it generates something
-that is easier for this scanbootlin script to parse.
-
- Alternatively, maybe even better, we can just update build.sh in
-toolchains-builder to generate all the pieces and then add an additional
-pipeline stage that collects the pieces into a package.
-
- Most importantly, though, I think we should take this gradually. Start with a
-manually constructed package, it doesn't even need to support all the different
-toolchains. We can bikeshed a bit on what that package looks like, and use that
-as input for how to script it.
-
- To kick off the bikeshedding, here's my opinion on what the package should look
-like.
-
-* It should be a single package, toolchain-external-bootlin. Maybe two (-stable
-and -bleeding-edge) but I think there'll be enough shared infrastructure to
-warrant creating a single package.
-
-* It should offer a choice in Config.in.options for libc and stable/bleeding-edge.
-
-* For now, it should be limited to *exactly* the same architecture suboptions as
-what the toolchain was built for. Later we can decide how to expand this to
-compatible options (e.g. the core-i7 toolchain will also work for core-avx2) -
-but I'm pretty sure that that is something that will require help from
-toolchain-builder itself.
-
+ You also need to add it to CRYPTSETUP_DEPENDENCIES.
 
  Regards,
  Arnout
+
+>  
+>  # cryptsetup uses libgcrypt by default, but can be configured to use OpenSSL
+>  # or kernel crypto modules instead
+> 
