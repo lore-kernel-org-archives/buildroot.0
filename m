@@ -1,36 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:47:17 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/copas: update the
- upstream URL in Config.in
-Message-ID: <20191203133918.7FA868405C@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:48:13 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/cog: add an
+ upstream URL to Config.in
+Message-ID: <20191203134029.A075684267@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4f8c828ffbc09d7e41e71dd356ab61ac9a9bd5d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c16545abda9e4163e4b09a4b6a3ed9e4525b485f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(406)' URL status in the package stats
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 89409f4073b7fd77d27f66328ad8964583804843)
+(cherry picked from commit f73e2a6c334d19d98ed99cf84ce3c460989fcc57)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/copas/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cog/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/copas/Config.in b/package/copas/Config.in
-index 2de1967102..347d86ddfc 100644
---- a/package/copas/Config.in
-+++ b/package/copas/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_COPAS
- 	  servers. But it also features timers and client support for
- 	  http(s), ftp and smtp requests.
+diff --git a/package/cog/Config.in b/package/cog/Config.in
+index 768fcefaac..b25991d4ae 100644
+--- a/package/cog/Config.in
++++ b/package/cog/Config.in
+@@ -14,6 +14,8 @@ config BR2_PACKAGE_COG
+ 	  not provide any chrome, and is suitable to be used
+ 	  as a Web application container.
  
--	  http://www.keplerproject.org/copas/
-+	  http://keplerproject.github.io/copas/
++	  https://github.com/Igalia/cog
++
+ if BR2_PACKAGE_COG
+ 
+ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
