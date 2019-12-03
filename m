@@ -1,51 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Dec 2019 10:52:18 +0100
-Subject: [Buildroot] [PATCH] package/cryptsetup: use libargon2 when
- available
-In-Reply-To: <20191203092715.4605-1-p.debruijn@unilogic.nl>
-References: <20191203092715.4605-1-p.debruijn@unilogic.nl>
-Message-ID: <20191203105218.3c692f32@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 03 Dec 2019 10:53:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/redis: bump to version 5.0.7
+In-Reply-To: <20191123200142.29254-1-titouan.christophe@railnova.eu> (Titouan
+ Christophe's message of "Sat, 23 Nov 2019 21:01:42 +0100")
+References: <20191123200142.29254-1-titouan.christophe@railnova.eu>
+Message-ID: <87k17dohuf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
-On Tue,  3 Dec 2019 10:27:15 +0100
-Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
+ > Changes announced upstream:
+ > Upgrade urgency HIGH: many issues fixed, some may have an impact.
+ > Redis 5.0.7 fixes a number of bugs, none is very critical, however
+ > there are a few that may have an impact. It's a good idea to upgrade.
+ > There are fixes in the area of replication from modules commands and
+ > callbacks, AOF fsync (non critical issue), memory leaks (very rare and small),
+ > streams beahvior (non critical), and a potential crash in commands
+ > processing multiple keys at the same time that is there for years, and happens
+ > very rarely, but is not impossible to trigger.
 
-> cryptsetup has an internal copy of libargon2, which is used by default,
-> but when libargon2 is available as a proper system library this is a
-> duplication.
-> 
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> ---
->  package/cryptsetup/cryptsetup.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-> index 7788bfb..2941328 100644
-> --- a/package/cryptsetup/cryptsetup.mk
-> +++ b/package/cryptsetup/cryptsetup.mk
-> @@ -29,6 +29,10 @@ else
->  CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBARGON2),y)
-> +CRYPTSETUP_CONF_OPTS += --enable-libargon2
-> +endif
+ > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
-Then we want to use --disable-libargon2 when the libargon2 package is
-not enabled. If libargon2 is mandatory for crypsetup, then we always
-want to use the separate package rather than the internal copy from
-cryptsetup.
+Committed to 2019.08.x, thanks.
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
