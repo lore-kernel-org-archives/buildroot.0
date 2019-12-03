@@ -1,66 +1,73 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  3 Dec 2019 19:05:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/alsa-lib: fix build without mixer
-Message-ID: <20191203180514.1931424-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 3 Dec 2019 20:36:17 +0100
+Subject: [Buildroot] [PATCH] utils/genrandconfig: fix runtime issue with
+ Python 3
+In-Reply-To: <20191203165137.1100010-1-thomas.petazzoni@bootlin.com>
+References: <20191203165137.1100010-1-thomas.petazzoni@bootlin.com>
+Message-ID: <1a56a5b4-e64b-3844-7352-d12c6407585b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/4d91c9f82a2a61c50c457a851073b85cc09ea345
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...c-ucm-main.c-fix-build-without-mixer.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/alsa-lib/0002-src-ucm-main.c-fix-build-without-mixer.patch
 
-diff --git a/package/alsa-lib/0002-src-ucm-main.c-fix-build-without-mixer.patch b/package/alsa-lib/0002-src-ucm-main.c-fix-build-without-mixer.patch
-new file mode 100644
-index 0000000000..4d3ad11175
---- /dev/null
-+++ b/package/alsa-lib/0002-src-ucm-main.c-fix-build-without-mixer.patch
-@@ -0,0 +1,39 @@
-+From 65eb51668f87668d994f260f36a6325f248cdff3 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 3 Dec 2019 18:56:40 +0100
-+Subject: [PATCH] src/ucm/main.c: fix build without mixer
-+
-+Commit 4ce38a5ff466d18039b2606938f866ea3a6c9f3c breaks the build without
-+mixer on:
-+
-+  CCLD     libasound.la
-+/home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/8.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: ucm/.libs/libucm.a(main.o): in function `snd_use_case_set':
-+main.c:(.text+0x185c): undefined reference to `snd_mixer_selem_id_parse'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/4d91c9f82a2a61c50c457a851073b85cc09ea345
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/alsa-project/alsa-lib/pull/15]
-+---
-+ src/ucm/main.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/ucm/main.c b/src/ucm/main.c
-+index d2078a23..61922f10 100644
-+--- a/src/ucm/main.c
-++++ b/src/ucm/main.c
-+@@ -2115,8 +2115,10 @@ int snd_use_case_parse_selem_id(snd_mixer_selem_id_t *dst,
-+ 				const char *ucm_id,
-+ 				const char *value)
-+ {
-++#ifdef BUILD_MIXER
-+ 	if (strcmp(ucm_id, "PlaybackMixerId") == 0 ||
-+ 	    strcmp(ucm_id, "CaptureMixerId") == 0)
-+ 		return snd_mixer_selem_id_parse(dst, value);
-++#endif
-+ 	return -EINVAL;
-+ }
-+-- 
-+2.24.0
-+
--- 
-2.24.0
+On 03/12/2019 17:51, Thomas Petazzoni wrote:
+> With Python 3.7, genrandconfig fails with:
+> 
+> 'str' object has no attribute 'decode'
+> 
+> We are already working on str objects, and there is no need to decode
+> them, so we drop the call to decode_byte_list() and its definition as
+> it was only used there.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> This is of course very strange, as the decode_byte_list() function was
+> introduced specifically to handle Python 3.x. Does anyone has an
+> explanation?
+
+ Just guessing here, but: originally this file was downloaded with
+urlopen_closing() instead of being read from a local file. Since we only use
+genrandconfig in the autobuilders in python2 (cfr. the shebang), nobody noticed
+that this broke when I switched to reading from file instead of URL two years
+ago (84929a53a4).
+
+ Regards,
+ Arnout
+
+> ---
+>  utils/genrandconfig | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
+> 
+> diff --git a/utils/genrandconfig b/utils/genrandconfig
+> index fb28f4d356..5b60bc21d6 100755
+> --- a/utils/genrandconfig
+> +++ b/utils/genrandconfig
+> @@ -39,14 +39,6 @@ def urlopen_closing(uri):
+>      return contextlib.closing(_urllib.urlopen(uri))
+>  
+>  
+> -if sys.hexversion >= 0x3000000:
+> -    def decode_byte_list(bl):
+> -        return [b.decode() for b in bl]
+> -else:
+> -    def decode_byte_list(e):
+> -        return e
+> -
+> -
+>  class SystemInfo:
+>      DEFAULT_NEEDED_PROGS = ["make", "git", "gcc", "timeout"]
+>      DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar", "diffoscope"]
+> @@ -128,7 +120,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
+>      with open(toolchains_csv) as r:
+>          # filter empty lines and comments
+>          lines = [t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#']
+> -        toolchains = decode_byte_list(lines)
+> +        toolchains = lines
+>      configs = []
+>  
+>      (_, _, _, _, hostarch) = os.uname()
+> 
