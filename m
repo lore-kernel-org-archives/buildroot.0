@@ -1,36 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:51:51 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x]
- package/hicolor-icon-theme: add an upstream URL to Config.in
-Message-ID: <20191203134337.8B2C8842E8@busybox.osuosl.org>
+From: Jaafar Biyadi <jaafarbiyadi@gmail.com>
+Date: Tue, 3 Dec 2019 15:51:23 +0100
+Subject: [Buildroot] Missing PyQt5.QtQuick and PyQt5.QtQml on custom
+ build Raspberry Pi 3
+In-Reply-To: <20191203140929.3a27e2a5@windsurf>
+References: <CACHEUn-YRb17+OqYfo09KpPyCitBP=4PyJDH_kgmkq0kXOnrqg@mail.gmail.com>
+ <20191203140929.3a27e2a5@windsurf>
+Message-ID: <CACHEUn_yPuWyV1AzEWhyJjWeL9hniOiJmHUuBmaLB8JEOwm38Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4883b1d95fe694ea69cb5dfb2b5185c54f52317a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Thank you very much for your email, I will check it out this evening.
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+Also I changed my email to jaafarbiyadi at gmail.com but this time I don't
+receive any email after posting the issue. Maybe it worked.
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9d4407c00b0c43a4baee9699f0b07d061141c613)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/hicolor-icon-theme/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/package/hicolor-icon-theme/Config.in b/package/hicolor-icon-theme/Config.in
-index 10edbf8865..5ef2cd2267 100644
---- a/package/hicolor-icon-theme/Config.in
-+++ b/package/hicolor-icon-theme/Config.in
-@@ -7,3 +7,5 @@ config BR2_PACKAGE_HICOLOR_ICON_THEME
- 	  standard directory structure for storing icons of third-party
- 	  applications (i.e. the ones not available in usual icon
- 	  themes).
-+
-+	  https://www.freedesktop.org/wiki/Software/icon-theme/
+Thanks anyway
+
+Best regards
+
+On Tue, Dec 3, 2019, 13:09 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
+
+> Hello Jaafar,
+>
+> On Tue, 3 Dec 2019 14:17:21 +0100
+> Jaafar Biyadi <jaafarbiyadi@gmail.com> wrote:
+>
+> > Hello, I'm trying to build a system to run Python with PyQt5 using the
+> > QtQuick and QtQml submodules, but I cannot figure what's wrong with my
+> > config.
+> >
+> > I built all relevant package such as: Qt5 and Python-Qt5 and when running
+> > the system and testing a .qml file with qmlscene, it works however the
+> > QtQml & QtQuick modules are not found in python. What am I missing?
+> >
+> > My config (with external toolchain): https://pastebin.com/5g1GhJgF
+> > Using buildroot-2019.11-rc3
+>
+> I think we have a bug report opened for this:
+>
+>   https://bugs.busybox.net/show_bug.cgi?id=12121
+>
+> And we have a proposal to fix it at:
+>
+>   http://patchwork.ozlabs.org/patch/1151846/
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191203/328b83b1/attachment.html>
