@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Dec 2019 16:34:31 +0100
-Subject: [Buildroot] [PATCH 1/3] package/nodejs: properly pass the
- --with-arm-float-abi on ARM
-In-Reply-To: <20191127203648.291701-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Wed, 27 Nov 2019 21:36:46 +0100")
+Date: Tue, 03 Dec 2019 16:34:36 +0100
+Subject: [Buildroot] [PATCH 3/3] package/nodejs: properly pass
+ HOST_LDFLAGS when building host tools
+In-Reply-To: <20191127203648.291701-4-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Wed, 27 Nov 2019 21:36:48 +0100")
 References: <20191127203648.291701-1-thomas.petazzoni@bootlin.com>
- <20191127203648.291701-2-thomas.petazzoni@bootlin.com>
-Message-ID: <87v9qxl8xk.fsf@dell.be.48ers.dk>
+ <20191127203648.291701-4-thomas.petazzoni@bootlin.com>
+Message-ID: <87r21ll8xf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,24 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > When commit 0064132ba032da39cefa4fffe59c31a71d1f1ddb introduced ARM64
- > support in nodejs.mk, it incorrectly kept the NODEJS_ARM_FP
- > definition. This variable is used to pass --with-arm-float-abi, which
- > in NodeJS's configure.py script is only used when --dest-cpu=arm, and
- > not when --dest-cpu=arm64.
+ > After building host tools, we currently run a pass of patchelf to add
+ > the proper RPATH to these tools so that they are able to find the
+ > libraries they depend on.
 
- > So we are passing --with-arm-float-abi=<something> for ARM64, which
- > has no effect, and we are no longer passing it on ARM.
+ > Unfortunately, the "torque" host tool is used during the build itself,
+ > before we have a chance to run "patchelf" on it. Since it is linked
+ > against libcrypto.so available in $(HOST_DIR)/lib, the build aborts
+ > because the RPATH is not set.
 
- > This commit fixes that by putting the NODEJS_ARM_FP definition back at
- > the right location.
+ > To fix this, we make sure that $(HOST_LDFLAGS) are properly taken into
+ > account: since they contain the -Wl,-rpath option, the host tools will
+ > have the correct RPATH. This both fixes the build failure, and makes
+ > the patchelf hack no longer necessary.
 
  > Fixes:
 
- >    0064132ba032da39cefa4fffe59c31a71d1f1ddb
+ >   https://bugs.busybox.net/show_bug.cgi?id=12211
+ >   http://autobuild.buildroot.net/results/a1f5e336ddaf386ba08eb5a7a299a48e2bdfe2d9/
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
