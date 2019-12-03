@@ -1,36 +1,26 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Tue,  3 Dec 2019 10:27:15 +0100
-Subject: [Buildroot] [PATCH] package/cryptsetup: use libargon2 when available
-Message-ID: <20191203092715.4605-1-p.debruijn@unilogic.nl>
+From: Jan Kotas <jank@cadence.com>
+Date: Tue, 3 Dec 2019 04:18:12 -0500
+Subject: [Buildroot] [PATCH v2 0/3] boot/boot-wrapper-aarch64: bump and
+ upgrade
+Message-ID: <20191203091815.22668-1-jank@cadence.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cryptsetup has an internal copy of libargon2, which is used by default,
-but when libargon2 is available as a proper system library this is a
-duplication.
+This patch series bumps the boot wrapper for aarch64 to the latest
+version. It also adds an option to use GICv3 (such as GIC-500).
+Handling of the DTB has been also improved.
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
----
- package/cryptsetup/cryptsetup.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Jan Kotas (3):
+  boot/boot-wrapper-aarch64: bump version
+  boot/boot-wrapper-aarch64: improve dtb handling
+  boot/boot-wrapper-aarch64: add gicv3 support
 
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 7788bfb..2941328 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -29,6 +29,10 @@ else
- CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBARGON2),y)
-+CRYPTSETUP_CONF_OPTS += --enable-libargon2
-+endif
-+
- HOST_CRYPTSETUP_DEPENDENCIES = \
- 	host-pkgconf \
- 	host-lvm2 \
+ boot/boot-wrapper-aarch64/Config.in            |  5 +++++
+ .../boot-wrapper-aarch64.mk                    | 18 +++++++-----------
+ 2 files changed, 12 insertions(+), 11 deletions(-)
+
 -- 
-2.7.4
+2.18.0
