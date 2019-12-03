@@ -1,39 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:54:56 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/kf5: add an
- upstream URL to Config.in
-Message-ID: <20191203134706.1EABF846DC@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:55:11 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libass: update
+ the upstream URL in Config.in
+Message-ID: <20191203134706.3103B846DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83e3b971dfce032be1f58a62229a18721c27247c
+commit: https://git.buildroot.net/buildroot/commit/?id=a7afa1626a428be562c58b6b2ac0041274d798af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(405)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3da11f9d4ae8001d30775054e5fc34d619dfa97a)
+(cherry picked from commit e3e69be0075558830f67489a2b52b2d0ff982435)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kf5/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libass/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kf5/Config.in b/package/kf5/Config.in
-index 2e50bce49e..aecbb932f5 100644
---- a/package/kf5/Config.in
-+++ b/package/kf5/Config.in
-@@ -6,6 +6,8 @@ menuconfig BR2_PACKAGE_KF5
- 	  This option enables the KF5 KDE Frameworks. Sub-options
- 	  allow to select which modules should be built.
+diff --git a/package/libass/Config.in b/package/libass/Config.in
+index 7690685187..c654d8212a 100644
+--- a/package/libass/Config.in
++++ b/package/libass/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_LIBASS
+ 	  libass is a portable subtitle renderer for the ASS/SSA
+ 	  (Advanced Substation Alpha/Substation Alpha) subtitle format
  
-+	  https://techbase.kde.org/KDE_Frameworks
-+
- if BR2_PACKAGE_KF5
- source "package/kf5/kf5-extra-cmake-modules/Config.in"
- source "package/kf5/kf5-kcoreaddons/Config.in"
+-	  http://code.google.com/p/libass/
++	  https://github.com/libass/libass
