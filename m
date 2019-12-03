@@ -1,36 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:56:29 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/libdvdread:
- update the upstream URL in Config.in
-Message-ID: <20191203134821.1C3F88476D@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:56:34 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/liberation: add
+ an upstream URL to Config.in
+Message-ID: <20191203134821.2DC7C8476D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=158657f809e8135ba369c642046b8550109ec504
+commit: https://git.buildroot.net/buildroot/commit/?id=bd5ec269c5fe3b8bbd157281ff14bb712a5762be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(404)' URL status in the package stats
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 620bb752b2e8c4b156e4e026348484e8a88c5e64)
+(cherry picked from commit 26f2fd14625740cda698c07df15281337be048fe)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libdvdread/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/liberation/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libdvdread/Config.in b/package/libdvdread/Config.in
-index 91bec83a40..3579054158 100644
---- a/package/libdvdread/Config.in
-+++ b/package/libdvdread/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBDVDREAD
- 	  libdvdread provides a simple foundation for reading
- 	  DVD-Video images.
+diff --git a/package/liberation/Config.in b/package/liberation/Config.in
+index b68166f638..8d6b3e78d9 100644
+--- a/package/liberation/Config.in
++++ b/package/liberation/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_LIBERATION
+ 	  three most commonly used fonts on Microsoft systems:
+ 	  Times New Roman, Arial, and Courier New.
  
--	  http://www.mplayerhq.hu/MPlayer/releases/dvdnav/
-+	  https://www.videolan.org/developers/libdvdnav.html
++	  https://github.com/liberationfonts/liberation-fonts
++
+ if BR2_PACKAGE_LIBERATION
+ 
+ config BR2_PACKAGE_LIBERATION_MONO
