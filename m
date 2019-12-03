@@ -1,40 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 13:19:25 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/libftdi: remove
- unused license
-Message-ID: <20191203121322.9788983CCA@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 13:19:30 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libftdi: don't
+ override license files variable
+Message-ID: <20191203121322.A217183CCA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6db947c0f7fceedd2dd26c74dfe788353b94f873
+commit: https://git.buildroot.net/buildroot/commit/?id=9893988f0634a33e000daebdbfc6617dfd64bb07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Commit 9b0b15e90b (package/libftdi: add license) was too hastily fixed,
-with confusion between libftdi and libftdi1. The MIT-licensed file is
-not present in libftdi; it is only in libftdi1.
+Fixes:
+  package/libftdi/libftdi.mk:22: conditional override of variable LIBFTDI_LICENSE_FILES
 
-Remove the unused MIT license from the list.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4a8f06e0f23facc9c648333a0a0f72cb8ca684e3)
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 080fadc115914e84113cc5f67853b65d8a5ce844)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/libftdi/libftdi.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
-index f5d557183f..cafa40eed4 100644
+index cafa40eed4..257342622f 100644
 --- a/package/libftdi/libftdi.mk
 +++ b/package/libftdi/libftdi.mk
-@@ -6,7 +6,7 @@
- 
- LIBFTDI_VERSION = 0.20
- LIBFTDI_SITE = http://www.intra2net.com/en/developer/libftdi/download
--LIBFTDI_LICENSE = LGPL-2.1 (libftdi), MIT (libftdi)
-+LIBFTDI_LICENSE = LGPL-2.1 (libftdi)
- LIBFTDI_LICENSE_FILES = LICENSE COPYING.LIB
- LIBFTDI_DEPENDENCIES = libusb-compat libusb
- HOST_LIBFTDI_DEPENDENCIES = host-libusb-compat host-libusb
+@@ -19,7 +19,7 @@ LIBFTDI_CONF_OPTS = --without-examples
+ # configure detect it automaticaly so we need to force it
+ ifeq ($(BR2_PACKAGE_LIBFTDI_CPP),y)
+ LIBFTDI_LICENSE += , GPL-2.0 with exception (ftdipp)
+-LIBFTDI_LICENSE_FILES = COPYING.GPL
++LIBFTDI_LICENSE_FILES += COPYING.GPL
+ LIBFTDI_DEPENDENCIES += boost
+ LIBFTDI_CONF_OPTS += --enable-libftdipp
+ else
