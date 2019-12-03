@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 13:18:53 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libftdi: add
+Date: Tue, 3 Dec 2019 13:19:22 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libftdi: add
  license
-Message-ID: <20191203121317.DDA2083CB0@busybox.osuosl.org>
+Message-ID: <20191203121322.8EAC783CCA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03f4da6730f2b095fd8dd0ccced0c334e519af46
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f27ac0bb3743321a074c385b812a9173d2a6b063
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 The COPYING.LIB license file contains the test of the LGPL-2.0, but the
 source code itself explicitly refers to the GPL-2.1-only. Additionally,
