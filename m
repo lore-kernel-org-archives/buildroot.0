@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 3 Dec 2019 22:18:32 +0100
-Subject: [Buildroot] [PATCH] package/cryptsetup: use external libargon2
-In-Reply-To: <20191203123154.8041-1-p.debruijn@unilogic.nl>
-References: <20191203123154.8041-1-p.debruijn@unilogic.nl>
-Message-ID: <9986063a-45a5-9e61-8cf1-86321c3d7a8b@mind.be>
+Date: Tue, 3 Dec 2019 22:25:25 +0100
+Subject: [Buildroot] UPX - compression of fs at target
+In-Reply-To: <1575365532631-0.post@n4.nabble.com>
+References: <1575365532631-0.post@n4.nabble.com>
+Message-ID: <be085da4-f44a-c565-27b5-6a60ce1cf091@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,44 +12,24 @@ To: buildroot@busybox.net
 
 
 
-On 03/12/2019 13:31, Pascal de Bruijn wrote:
-> don't use cryptsetup's intree libargon2
-> 
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> ---
->  package/cryptsetup/Config.in     | 1 +
->  package/cryptsetup/cryptsetup.mk | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-> index 14b897a..3f94847 100644
-> --- a/package/cryptsetup/Config.in
-> +++ b/package/cryptsetup/Config.in
-> @@ -10,6 +10,7 @@ config BR2_PACKAGE_CRYPTSETUP
->  	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
->  	select BR2_PACKAGE_JSON_C
-> +	select BR2_PACKAGE_LIBARGON2
->  	help
->  	  This tool helps manipulate dm-crypt and luks partitions for
->  	  on-disk encryption.
-> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-> index 7788bfb..5ed5013 100644
-> --- a/package/cryptsetup/cryptsetup.mk
-> +++ b/package/cryptsetup/cryptsetup.mk
-> @@ -14,7 +14,7 @@ CRYPTSETUP_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
->  CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
->  CRYPTSETUP_INSTALL_STAGING = YES
->  CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
-> -CRYPTSETUP_CONF_OPTS += --enable-blkid
-> +CRYPTSETUP_CONF_OPTS += --enable-blkid --enable-libargon2
+On 03/12/2019 10:32, a wrote:
+> HI, 
+> How can I make use of UPX so that the final image, that buildroot builds,
+> has libraries that are compresses even further by upx before creating the
+> image so that the image size get reduced further.
 
- You also need to add it to CRYPTSETUP_DEPENDENCIES.
+ I guess you could write a post-build script that runs upx on all executable
+files in ${TARGET_DIR}/bin and  ${TARGET_DIR}/usr/bin.
+
+ To get good results, I expect you need to combine it with BR2_STATIC_LIBS.
+Otherwise a large fraction of the total size will be in shared libraries instead
+of executables, and I don't think those can be compressed. And then, you'd
+probably also want to globally enable LTO - but Buildroot doesn't have good
+support for that at this time.
+
+ I expect that the net benefit will be limited though. You're going to be better
+off with a rootfs that is compressed at the filesystem level, e.g. squashfs or
+ubifs.
 
  Regards,
  Arnout
-
->  
->  # cryptsetup uses libgcrypt by default, but can be configured to use OpenSSL
->  # or kernel crypto modules instead
-> 
