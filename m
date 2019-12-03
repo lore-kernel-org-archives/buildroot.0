@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Dec 2019 20:58:36 +0100
-Subject: [Buildroot] [PATCH] utils/genrandconfig: fix runtime issue with
- Python 3
-In-Reply-To: <1a56a5b4-e64b-3844-7352-d12c6407585b@mind.be>
-References: <20191203165137.1100010-1-thomas.petazzoni@bootlin.com>
- <1a56a5b4-e64b-3844-7352-d12c6407585b@mind.be>
-Message-ID: <20191203205836.66e9c82a@windsurf>
+Date: Tue, 3 Dec 2019 21:00:38 +0100
+Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run: make
+ it Python 3.x compatible
+In-Reply-To: <20191203171137.7aqw4tjmx24fgnqm@sapphire.tkos.co.il>
+References: <20191203165457.1100390-1-thomas.petazzoni@bootlin.com>
+ <20191203171137.7aqw4tjmx24fgnqm@sapphire.tkos.co.il>
+Message-ID: <20191203210038.348bd8bd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 3 Dec 2019 20:36:17 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+On Tue, 3 Dec 2019 19:11:37 +0200
+Baruch Siach <baruch@tkos.co.il> wrote:
 
->  Just guessing here, but: originally this file was downloaded with
-> urlopen_closing() instead of being read from a local file.
+> >  - The urlparse module no longer exists, it's not urllib.parse  
+> 
+> s/not/now/
 
-Ah, that must be it!
+Indeed.
 
-> Since we only use genrandconfig in the autobuilders in python2 (cfr.
-> the shebang)
+> >  if sys.hexversion >= 0x3000000:
+> >      import configparser
+> >      import urllib.request as _urllib
+> > +    import urllib.parse as urlparse  
+> 
+> Would that work with any Python 3.x?
 
-I'm not sure why you say "in python2" ? The shebang in genrandconfig is:
+https://docs.python.org/3/library/urllib.parse.html#module-urllib.parse
+has some comments in the documentation of urllib.parse.urlparse() that
+say:
 
-#!/usr/bin/env python
+"""
+Changed in version 3.2: Added IPv6 URL parsing capabilities.
+"""
 
-and I indeed noticed the issue with Python 3.x because I started using
-genrandconfig on my updated Fedora system, which now uses Python 3.x as
-"python".
+So it means that urllib.parse.urlparse() was there at least before
+Python 3.2, which means it was most likely there since Python 3.x.
 
->, nobody noticed that this broke when I switched to
-> reading from file instead of URL two years ago (84929a53a4).
-
-Indeed. I'll update the commit log and resend.
-
-Thanks for the hint!
+Best regards,
 
 Thomas
 -- 
