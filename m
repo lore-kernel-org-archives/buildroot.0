@@ -1,30 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Dec 2019 13:20:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libftdi1: fix license
-In-Reply-To: <20191124180157.32084-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 24 Nov 2019 19:01:57 +0100")
-References: <20191124180157.32084-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tv6hmwgq.fsf@dell.be.48ers.dk>
+Date: Tue, 3 Dec 2019 13:18:58 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libftdi: remove
+ unused license
+Message-ID: <20191203121317.F135383CB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bfe7749fba7b6e1cf653816463988120cf5c60ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > The GPL only applies to the C++ bindings, which are conditionally
- > enabled with BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1.
+Commit 9b0b15e90b (package/libftdi: add license) was too hastily fixed,
+with confusion between libftdi and libftdi1. The MIT-licensed file is
+not present in libftdi; it is only in libftdi1.
 
- > The COPYING.LIB is indeed the LGPL-2.0, but the source file for
- > libftdi1 states LGPL-2.1-only, see src/ftdi.c
+Remove the unused MIT license from the list.
 
- > The src/ftdi_stream.c also bears a notice of the MIT license, so the
- > library itself is under both LGPL-2.1-only and MIT.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 4a8f06e0f23facc9c648333a0a0f72cb8ca684e3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libftdi/libftdi.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
+index f5d557183f..cafa40eed4 100644
+--- a/package/libftdi/libftdi.mk
++++ b/package/libftdi/libftdi.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBFTDI_VERSION = 0.20
+ LIBFTDI_SITE = http://www.intra2net.com/en/developer/libftdi/download
+-LIBFTDI_LICENSE = LGPL-2.1 (libftdi), MIT (libftdi)
++LIBFTDI_LICENSE = LGPL-2.1 (libftdi)
+ LIBFTDI_LICENSE_FILES = LICENSE COPYING.LIB
+ LIBFTDI_DEPENDENCIES = libusb-compat libusb
+ HOST_LIBFTDI_DEPENDENCIES = host-libusb-compat host-libusb
