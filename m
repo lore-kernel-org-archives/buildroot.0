@@ -1,94 +1,342 @@
-From: Arnout Vandecappelle <arnout@mind.be>
+From: Ludovic Desroches <ludovic.desroches@microchip.com>
 Date: Wed, 4 Dec 2019 00:04:20 +0100
-Subject: [Buildroot] [Next] package/python-wsgiref: new package
-In-Reply-To: <20191113224429.30980-1-matthew.weber@rockwellcollins.com>
-References: <20191113224429.30980-1-matthew.weber@rockwellcollins.com>
-Message-ID: <0461df46-1b9b-baa1-4323-91e54d95c149@mind.be>
+Subject: [Buildroot] [PATCH] configs/atmel: update u-boot-at91 and
+ bootstrap to tarballs
+In-Reply-To: <1574165229-11159-1-git-send-email-eugen.hristev@microchip.com>
+References: <1574165229-11159-1-git-send-email-eugen.hristev@microchip.com>
+Message-ID: <20191203230420.s6crs2qrlikaclnr@M43218.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Eugen,
 
+On Tue, Nov 19, 2019 at 01:07:34PM +0100, Eugen Hristev - M18282 wrote:
+> From: Eugen Hristev <eugen.hristev@microchip.com>
+> 
+> Use custom tarballs for U-boot-at91 and at91bootstrap instead
+> of cloning the repositories.
+> 
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 
-On 13/11/2019 23:44, Matt Weber wrote:
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
- wsgiref has been in the Python standard library since Python 3.3 (and Python
-2.something as well, but I didn't find which one exactly). So this patch is not
-needed.
-
- Marked as Rejected.
-
- Regards,
- Arnout
+A minor fix to do, see below.
+With that done:
+Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com>
 
 > ---
->  package/Config.in                          |  1 +
->  package/python-wsgiref/Config.in           |  6 ++++++
->  package/python-wsgiref/python-wsgiref.hash |  3 +++
->  package/python-wsgiref/python-wsgiref.mk   | 18 ++++++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-wsgiref/Config.in
->  create mode 100644 package/python-wsgiref/python-wsgiref.hash
->  create mode 100644 package/python-wsgiref/python-wsgiref.mk
+>  configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 10 ++++------
+>  configs/atmel_sama5d2_xplained_mmc_defconfig     | 10 ++++------
+>  configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 10 ++++------
+>  configs/atmel_sama5d3_xplained_defconfig         | 10 ++++------
+>  configs/atmel_sama5d3_xplained_dev_defconfig     | 10 ++++------
+>  configs/atmel_sama5d3_xplained_mmc_defconfig     | 10 ++++------
+>  configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 10 ++++------
+>  configs/atmel_sama5d3xek_defconfig               |  8 ++++----
+>  configs/atmel_sama5d4_xplained_defconfig         | 10 ++++------
+>  configs/atmel_sama5d4_xplained_dev_defconfig     | 10 ++++------
+>  configs/atmel_sama5d4_xplained_mmc_defconfig     | 10 ++++------
+>  configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 10 ++++------
+>  12 files changed, 48 insertions(+), 70 deletions(-)
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index e87b5a57d7..c150ee2473 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1133,6 +1133,7 @@ menu "External python modules"
->  	source "package/python-wrapt/Config.in"
->  	source "package/python-ws4py/Config.in"
->  	source "package/python-wsaccel/Config.in"
-> +	source "package/python-wsgiref/Config.in"
->  	source "package/python-wtforms/Config.in"
->  	source "package/python-xlib/Config.in"
->  	source "package/python-xlrd/Config.in"
-> diff --git a/package/python-wsgiref/Config.in b/package/python-wsgiref/Config.in
-> new file mode 100644
-> index 0000000000..2fde92cab0
-> --- /dev/null
-> +++ b/package/python-wsgiref/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_WSGIREF
-> +	bool "python-wsgiref"
-> +	help
-> +	  WSGI (PEP 333) Reference Library.
-> +
-> +	  http://cheeseshop.python.org/pypi/wsgiref
-> diff --git a/package/python-wsgiref/python-wsgiref.hash b/package/python-wsgiref/python-wsgiref.hash
-> new file mode 100644
-> index 0000000000..0c9a4fecd8
-> --- /dev/null
-> +++ b/package/python-wsgiref/python-wsgiref.hash
-> @@ -0,0 +1,3 @@
-> +# md5, sha256 from https://pypi.org/pypi/wsgiref/json
-> +md5	29b146e6ebd0f9fb119fe321f7bcf6cb  wsgiref-0.1.2.zip
-> +sha256	c7e610c800957046c04c8014aab8cce8f0b9f0495c8cd349e57c1f7cabf40e79  wsgiref-0.1.2.zip
-> diff --git a/package/python-wsgiref/python-wsgiref.mk b/package/python-wsgiref/python-wsgiref.mk
-> new file mode 100644
-> index 0000000000..e30f4c6a31
-> --- /dev/null
-> +++ b/package/python-wsgiref/python-wsgiref.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# python-wsgiref
-> +#
-> +################################################################################
-> +
-> +PYTHON_WSGIREF_VERSION = 0.1.2
-> +PYTHON_WSGIREF_SOURCE = wsgiref-$(PYTHON_WSGIREF_VERSION).zip
-> +PYTHON_WSGIREF_SITE = https://files.pythonhosted.org/packages/41/9e/309259ce8dff8c596e8c26df86dbc4e848b9249fd36797fd60be456f03fc
-> +PYTHON_WSGIREF_SETUP_TYPE = setuptools
-> +PYTHON_WSGIREF_LICENSE = PSF or ZPL
-> +
-> +define PYTHON_WSGIREF_EXTRACT_CMDS
-> +	$(UNZIP) -d $(@D) $(PYTHON_WSGIREF_DL_DIR)/$(PYTHON_WSGIREF_SOURCE)
-> +	mv $(@D)/wsgiref-$(PYTHON_WSGIREF_VERSION)/* $(@D)/
-> +endef
-> +
-> +$(eval $(python-package))
+> diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> index 1d16708..0653ae8 100644
+> --- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> +++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> @@ -70,15 +70,13 @@ BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d27_som1_ek_mmc"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> diff --git a/configs/atmel_sama5d2_xplained_mmc_defconfig b/configs/atmel_sama5d2_xplained_mmc_defconfig
+> index b9a3724..4418ab0 100644
+> --- a/configs/atmel_sama5d2_xplained_mmc_defconfig
+> +++ b/configs/atmel_sama5d2_xplained_mmc_defconfig
+> @@ -16,15 +16,13 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+> index 8f5ffd9..4603244 100644
+> --- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+> +++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+> @@ -87,15 +87,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>  
+>  # Bootloaders
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  
+> diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
+> index b24cc8b..9e53218 100644
+> --- a/configs/atmel_sama5d3_xplained_defconfig
+> +++ b/configs/atmel_sama5d3_xplained_defconfig
+> @@ -15,15 +15,13 @@ BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
+>  BR2_TARGET_ROOTFS_UBI=y
+>  BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_PACKAGE_HOST_SAM_BA=y
+> diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
+> index a2b0303..2689f2a 100644
+> --- a/configs/atmel_sama5d3_xplained_dev_defconfig
+> +++ b/configs/atmel_sama5d3_xplained_dev_defconfig
+> @@ -84,15 +84,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+>  
+>  # Bootloaders
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  
+> diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
+> index 259888e..0d34148 100644
+> --- a/configs/atmel_sama5d3_xplained_mmc_defconfig
+> +++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
+> @@ -15,15 +15,13 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+> index ef47bb3..5172228 100644
+> --- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+> +++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+> @@ -86,15 +86,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>  
+>  # Bootloaders
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  
+> diff --git a/configs/atmel_sama5d3xek_defconfig b/configs/atmel_sama5d3xek_defconfig
+> index 95deb6f..a4082e4 100644
+> --- a/configs/atmel_sama5d3xek_defconfig
+> +++ b/configs/atmel_sama5d3xek_defconfig
+> @@ -23,14 +23,14 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+>  
+>  # Bootloaders
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.10"
+
+I think this line can be removed.
+
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3xeknf_uboot"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.8"
+
+ditto
+
+Regards
+
+Ludovic
+
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3xek_nandflash"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+> diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
+> index 0ecb6a1..f862d41 100644
+> --- a/configs/atmel_sama5d4_xplained_defconfig
+> +++ b/configs/atmel_sama5d4_xplained_defconfig
+> @@ -19,15 +19,13 @@ BR2_TARGET_ROOTFS_UBI=y
+>  BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
+>  BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_PACKAGE_HOST_SAM_BA=y
+> diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
+> index 8eb6f09..7a0966e 100644
+> --- a/configs/atmel_sama5d4_xplained_dev_defconfig
+> +++ b/configs/atmel_sama5d4_xplained_dev_defconfig
+> @@ -88,15 +88,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
+>  
+>  # Bootloaders
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  
+> diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
+> index 2753a7a..ee4b12d 100644
+> --- a/configs/atmel_sama5d4_xplained_mmc_defconfig
+> +++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
+> @@ -16,15 +16,13 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+> index d948cfa..6f0c298 100644
+> --- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+> +++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+> @@ -87,15 +87,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>  
+>  # Bootloaders
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  
+> -- 
+> 2.7.4
 > 
