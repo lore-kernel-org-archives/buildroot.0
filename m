@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 15:48:49 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/nodejs: properly
+Date: Tue, 3 Dec 2019 15:00:47 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/nodejs: properly
  pass HOST_LDFLAGS when building host tools
-Message-ID: <20191203152546.0930584CDF@busybox.osuosl.org>
+Message-ID: <20191203152550.1C56D8405C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e956106bf252a75050eeb23874cefe23f85acd31
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=aec15539e13075cbf5a1cc4871cdc8d2d10015d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 After building host tools, we currently run a pass of patchelf to add
 the proper RPATH to these tools so that they are able to find the
@@ -36,38 +36,26 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 (cherry picked from commit f4abcbe112a0a45b87545f32981be87212116e94)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/nodejs/nodejs.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 09edf365a6..c5490886aa 100644
+index 3bd6a1c4dd..583b2276e2 100644
 --- a/package/nodejs/nodejs.mk
 +++ b/package/nodejs/nodejs.mk
-@@ -10,7 +10,7 @@ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
- 	libhttpparser libuv zlib nghttp2 \
- 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
--HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib host-patchelf
-+HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib
- NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
- NODEJS_LICENSE_FILES = LICENSE
- 
-@@ -72,16 +72,16 @@ define HOST_NODEJS_BUILD_CMDS
+@@ -72,6 +72,7 @@ define HOST_NODEJS_BUILD_CMDS
  	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
  		$(MAKE) -C $(@D) \
  		$(HOST_CONFIGURE_OPTS) \
 +		LDFLAGS.host="$(HOST_LDFLAGS)" \
  		NO_LOAD=cctest.target.mk \
  		PATH=$(@D)/bin:$(BR_PATH)
--
--	$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib $(@D)/out/Release/torque
  endef
- 
- define HOST_NODEJS_INSTALL_CMDS
+@@ -80,6 +81,7 @@ define HOST_NODEJS_INSTALL_CMDS
  	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
  		$(MAKE) -C $(@D) install \
  		$(HOST_CONFIGURE_OPTS) \
 +		LDFLAGS.host="$(HOST_LDFLAGS)" \
  		NO_LOAD=cctest.target.mk \
  		PATH=$(@D)/bin:$(BR_PATH)
- 
+ endef
