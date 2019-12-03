@@ -1,39 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:11:35 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/atk: add an
- upstream URL to Config.in
-Message-ID: <20191203130335.BB2FD83F96@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:11:49 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/bind: update the
+ upstream URL in Config.in
+Message-ID: <20191203130335.CD4C383F96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3d9c5d99547d51c9de7e5804f27c7aed2966601
+commit: https://git.buildroot.net/buildroot/commit/?id=29a20cdcd97ffb8353ae8cd0450ed09684417dae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(404)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4daeedfc45b6baee5545fd0710c180037da3da49)
+(cherry picked from commit e2bbf689bd97938901984c2e03102ec72acdc48f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/atk/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/bind/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/atk/Config.in b/package/atk/Config.in
-index c980614998..d9371b879b 100644
---- a/package/atk/Config.in
-+++ b/package/atk/Config.in
-@@ -7,6 +7,8 @@ config BR2_PACKAGE_ATK
- 	help
- 	  The ATK accessibility toolkit, needed to build GTK+-2.x.
+diff --git a/package/bind/Config.in b/package/bind/Config.in
+index 049a90cbaf..951dd23564 100644
+--- a/package/bind/Config.in
++++ b/package/bind/Config.in
+@@ -24,7 +24,7 @@ config BR2_PACKAGE_BIND
+ 	  intended to be linked with applications requiring name
+ 	  service.
  
-+	  https://gitlab.gnome.org/GNOME/atk
-+
- comment "atk needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+-	  http://www.isc.org/sw/bind/
++	  https://www.isc.org/bind/
+ 
+ if BR2_PACKAGE_BIND
+ 
