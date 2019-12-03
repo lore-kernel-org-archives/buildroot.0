@@ -1,101 +1,113 @@
 From: Arthur Courtel <arthur.courtel@smile.fr>
-Date: Tue,  3 Dec 2019 14:26:57 +0100
-Subject: [Buildroot] [PATCHv2 1/2] configs/raspberrypi: change deprecated
- pi3-miniuart-bt option to miniuart-bt
-Message-ID: <20191203132658.863709-1-arthur.courtel@smile.fr>
+Date: Tue,  3 Dec 2019 14:26:58 +0100
+Subject: [Buildroot] [PATCHv2 2/2] configs: add raspberrypi4 64bits defconfig
+In-Reply-To: <20191203132658.863709-1-arthur.courtel@smile.fr>
+References: <20191203132658.863709-1-arthur.courtel@smile.fr>
+Message-ID: <20191203132658.863709-2-arthur.courtel@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This option will be used in RPI4 config in order to have a working serial port on gpios.
-This change makes this option not only RPI3 specific.
+This configuration builds a 64bit image for RaspberryPi 4.
 
 Signed-off-by: Arthur Courtel <arthur.courtel@smile.fr>
 ---
- board/raspberrypi/post-image.sh      | 8 ++++----
- board/raspberrypi/readme.txt         | 2 +-
- configs/raspberrypi3_64_defconfig    | 2 +-
- configs/raspberrypi3_defconfig       | 2 +-
- configs/raspberrypi3_qt5we_defconfig | 2 +-
- configs/raspberrypi4_defconfig       | 2 +-
- 6 files changed, 9 insertions(+), 9 deletions(-)
+ .../raspberrypi/genimage-raspberrypi4-64.cfg  | 30 +++++++++++++++
+ board/raspberrypi4-64                         |  1 +
+ configs/raspberrypi4_64_defconfig             | 37 +++++++++++++++++++
+ 3 files changed, 68 insertions(+)
+ create mode 100644 board/raspberrypi/genimage-raspberrypi4-64.cfg
+ create mode 120000 board/raspberrypi4-64
+ create mode 100644 configs/raspberrypi4_64_defconfig
 
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index bbeb0bc721..9dbd98ef9b 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -10,13 +10,13 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
- for arg in "$@"
- do
- 	case "${arg}" in
--		--add-pi3-miniuart-bt-overlay)
-+		--add-miniuart-bt-overlay)
- 		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
--			echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
-+			echo "Adding 'dtoverlay=miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
- 			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
- 
--# fixes rpi3 ttyAMA0 serial console
--dtoverlay=pi3-miniuart-bt
-+# fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
-+dtoverlay=miniuart-bt
- __EOF__
- 		fi
- 		;;
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 69c9f9b20a..8b3de6d251 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -78,7 +78,7 @@ After building, you should obtain this tree:
- [1] Not all of them will be present, depending on the RaspberryPi
-     model you are using.
- 
--[2] Only for the Raspberry Pi 3/4 Models (overlay pi3-miniuart-bt is needed
-+[2] Only for the Raspberry Pi 3/4 Models (overlay miniuart-bt is needed
-     to enable the RPi3 serial console otherwise occupied by the bluetooth
-     chip). Alternative would be to disable the serial console in cmdline.txt
-     and /etc/inittab.
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index 27141f364e..b9a070fb82 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -35,4 +35,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --add-pi3-miniuart-bt-overlay"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --add-miniuart-bt-overlay"
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 01aa239805..530eb0ab3f 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -34,4 +34,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index 775eb9114e..21c5d1dc4c 100644
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -48,4 +48,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="360M"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay --gpu_mem_1024=200"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay --gpu_mem_1024=200"
-diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-index 6eea0ca816..a216463e28 100644
---- a/configs/raspberrypi4_defconfig
-+++ b/configs/raspberrypi4_defconfig
-@@ -35,4 +35,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
+diff --git a/board/raspberrypi/genimage-raspberrypi4-64.cfg b/board/raspberrypi/genimage-raspberrypi4-64.cfg
+new file mode 100644
+index 0000000000..3c480e98f0
+--- /dev/null
++++ b/board/raspberrypi/genimage-raspberrypi4-64.cfg
+@@ -0,0 +1,30 @@
++image boot.vfat {
++  vfat {
++    files = {
++      "bcm2711-rpi-4-b.dtb",
++      "rpi-firmware/cmdline.txt",
++      "rpi-firmware/config.txt",
++      "rpi-firmware/fixup4.dat",
++      "rpi-firmware/start4.elf",
++      "rpi-firmware/overlays",
++      "Image"
++    }
++  }
++  size = 32M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/raspberrypi4-64 b/board/raspberrypi4-64
+new file mode 120000
+index 0000000000..fcdafc81ed
+--- /dev/null
++++ b/board/raspberrypi4-64
+@@ -0,0 +1 @@
++raspberrypi
+\ No newline at end of file
+diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
+new file mode 100644
+index 0000000000..c88923d507
+--- /dev/null
++++ b/configs/raspberrypi4_64_defconfig
+@@ -0,0 +1,37 @@
++BR2_aarch64=y
++BR2_cortex_a72=y
++
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
++BR2_SYSTEM_DHCP="eth0"
++
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
++
++# Build the DTB from the kernel sources
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-4-b"
++
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
++
++# Required tools to create the SD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4-64/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4-64/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay --aarch64"
 -- 
 2.23.0
