@@ -1,45 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 13:16:41 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/tftpd: add license
-Message-ID: <20191203120946.B87A683C6A@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 13:17:45 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/gob2: add license
+Message-ID: <20191203120946.C2F3C83C4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e93d7f9ec19c31b15fd753c45561b43e8718b862
+commit: https://git.buildroot.net/buildroot/commit/?id=66b2679de63e3905475329d4d39afb60f0292113
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
+gob2 itself is GPL-2.0+, but it is a code generator. The code generated
+by gob2 id not covered by gob2's license, and this is made explicit in
+an accompanying license file.
+
+So we include both license files.
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - add COPYING.generated-code
+  - expand commit log accordingly
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 964d31a99eaae4a5fe062596ed29f0095491c499)
+(cherry picked from commit 9d1b48a1e56b54fce6d0b2b451d5f4dd829daf1b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tftpd/tftpd.hash | 3 +++
- package/tftpd/tftpd.mk   | 2 ++
- 2 files changed, 5 insertions(+)
+ package/gob2/gob2.hash | 2 ++
+ package/gob2/gob2.mk   | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/tftpd/tftpd.hash b/package/tftpd/tftpd.hash
-index 247b757fa6..c876b2edc2 100644
---- a/package/tftpd/tftpd.hash
-+++ b/package/tftpd/tftpd.hash
-@@ -1,2 +1,5 @@
- # From https://www.kernel.org/pub/software/network/tftp/tftp-hpa/sha256sums.asc
- sha256	afee361df96a2f88344e191f6a25480fd714e1d28d176c3f10cc43fa206b718b	tftp-hpa-5.2.tar.xz
-+
-+# Hash for license file
-+sha256	5efef82650b8ece733e37790fc70f05e426c9e1ef9640d4ebcb04867bd3f5e28	tftpd/tftpd.c
-diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index c42456afd1..57905fda05 100644
---- a/package/tftpd/tftpd.mk
-+++ b/package/tftpd/tftpd.mk
-@@ -8,6 +8,8 @@ TFTPD_VERSION = 5.2
- TFTPD_SOURCE = tftp-hpa-$(TFTPD_VERSION).tar.xz
- TFTPD_SITE = $(BR2_KERNEL_MIRROR)/software/network/tftp/tftp-hpa
- TFTPD_CONF_OPTS = --without-tcpwrappers
-+TFTPD_LICENSE = BSD-4-Clause
-+TFTPD_LICENSE_FILES = tftpd/tftpd.c
+diff --git a/package/gob2/gob2.hash b/package/gob2/gob2.hash
+index 3678bdd5c9..7edf518f34 100644
+--- a/package/gob2/gob2.hash
++++ b/package/gob2/gob2.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+ sha256 f7ee84c07ca88ae96e5a60461957cc4dd0aa69d61804433d1c85de3d50be8026  gob2-2.0.20.tar.xz
++sha256 b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
++sha256 7222386392eecf784e2f0c406f412f238cb6d25865a8447ae0947b32bb569889  COPYING.generated-code
+diff --git a/package/gob2/gob2.mk b/package/gob2/gob2.mk
+index fe60673821..d0cce8fb76 100644
+--- a/package/gob2/gob2.mk
++++ b/package/gob2/gob2.mk
+@@ -7,6 +7,8 @@
+ GOB2_VERSION = 2.0.20
+ GOB2_SOURCE = gob2-$(GOB2_VERSION).tar.xz
+ GOB2_SITE = http://ftp.5z.com/pub/gob
++GOB2_LICENSE = GPL-2.0+
++GOB2_LICENSE_FILES = COPYING COPYING.generated-code
+ HOST_GOB2_DEPENDENCIES = host-bison host-flex host-libglib2
  
- define TFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
+ $(eval $(host-autotools-package))
