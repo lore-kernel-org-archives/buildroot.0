@@ -1,30 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Dec 2019 13:17:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tftpd: add license
-In-Reply-To: <20191123182855.966365-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 23 Nov 2019 19:28:55 +0100")
-References: <20191123182855.966365-1-fontaine.fabrice@gmail.com>
-Message-ID: <877e3dob79.fsf@dell.be.48ers.dk>
+From: Jaafar Biyadi <jaafarbiyadi@gmail.com>
+Date: Tue, 3 Dec 2019 14:17:21 +0100
+Subject: [Buildroot] Missing PyQt5.QtQuick and PyQt5.QtQml on custom build
+ Raspberry Pi 3
+Message-ID: <CACHEUn-YRb17+OqYfo09KpPyCitBP=4PyJDH_kgmkq0kXOnrqg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hello, I'm trying to build a system to run Python with PyQt5 using the
+QtQuick and QtQml submodules, but I cannot figure what's wrong with my
+config.
 
- > Set tftpd license to BSD-like as the source code contains only:
- > Copyright 2001 H. Peter Anvin - All Rights Reserved
+I built all relevant package such as: Qt5 and Python-Qt5 and when running
+the system and testing a .qml file with qmlscene, it works however the
+QtQml & QtQuick modules are not found in python. What am I missing?
 
- > This program is free software available under the same license
- > as the "OpenBSD" operating system, distributed at
- > http://www.openbsd.org/.
+My config (with external toolchain): https://pastebin.com/5g1GhJgF
+Using buildroot-2019.11-rc3
 
- > License: BSD
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Thanks
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191203/0e4a15f5/attachment.html>
