@@ -1,51 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 17:02:11 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/musl: add an
- upstream URL to Config.in
-Message-ID: <20191203160316.458E7866E8@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 17:11:18 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/liblockfile: add
+ an upstream URL to Config.in
+Message-ID: <20191203160316.81852866E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c70bcafb9166057423f222d50309aeb79f2d5c7
+commit: https://git.buildroot.net/buildroot/commit/?id=61ff356e1c9e802d8496bbeb85f523124e9b9e93
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Add an upstream URL to the help text in Config.in. This
 addresses the 'Missing' URL status in the package stats
 web page output.
 
-[Peter: also add URL to BR2_TOOLCHAIN_BUILDROOT_MUSL help]
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 53698c9f81f2c0672215f6f9cb3d851a4be2f5fc)
+(cherry picked from commit 53996e2ed26d972862b64c90522fe0352426fee2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/musl/Config.in                  | 2 ++
- toolchain/toolchain-buildroot/Config.in | 2 ++
- 2 files changed, 4 insertions(+)
+ package/liblockfile/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/musl/Config.in b/package/musl/Config.in
-index 67e9e78a14..69da615b63 100644
---- a/package/musl/Config.in
-+++ b/package/musl/Config.in
-@@ -8,3 +8,5 @@ config BR2_PACKAGE_MUSL
- 		&& !(BR2_i386 || BR2_powerpc)
- 	# Compatibility headers: cdefs.h, queue.h
- 	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
-+	help
-+	  https://www.musl-libc.org/
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index beb17a218b..d8e39fdce1 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -94,6 +94,8 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	  This option selects musl as the C library for the
- 	  cross-compilation toolchain.
- 
-+	  https://www.musl-libc.org/
+diff --git a/package/liblockfile/Config.in b/package/liblockfile/Config.in
+index 88a9c338bb..83ffea86c8 100644
+--- a/package/liblockfile/Config.in
++++ b/package/liblockfile/Config.in
+@@ -2,3 +2,5 @@ config BR2_PACKAGE_LIBLOCKFILE
+ 	bool "liblockfile"
+ 	help
+ 	  NFS-safe locking library.
 +
- endchoice
- 
- config BR2_TOOLCHAIN_BUILDROOT_LIBC
++	  https://github.com/miquels/liblockfile
