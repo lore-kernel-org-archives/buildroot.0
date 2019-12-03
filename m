@@ -1,40 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:21:13 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/minicom: make
- default port and lock directory fixed defaults
-Message-ID: <20191203134029.7726384266@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:48:10 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/copas: update the
+ upstream URL in Config.in
+Message-ID: <20191203134029.981FB83FEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e55bfd6c9dd864ffbe6eb86554d557c5251c0081
+commit: https://git.buildroot.net/buildroot/commit/?id=f6e779e225c729c029154969cba16a6064a88277
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Minicom's configure script will set values for the default port and lock
-directory based on the configuration of the host machine, which is not
-useful for cross-compiling or reproducible builds, so instead set them
-to sensible default values.
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(406)' URL status in the package stats
+web page output.
 
-Signed-off-by: James Byrne <james.byrne@origamienergy.com>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit eeaa4328004dff1a45483bfde1fb80cc03724c0b)
+(cherry picked from commit 89409f4073b7fd77d27f66328ad8964583804843)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minicom/minicom.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/copas/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-index a3c58d2d4e..e42cd5c2ab 100644
---- a/package/minicom/minicom.mk
-+++ b/package/minicom/minicom.mk
-@@ -22,4 +22,8 @@ define MINICOM_MKDIR_M4
- endef
- MINICOM_POST_PATCH_HOOKS += MINICOM_MKDIR_M4
+diff --git a/package/copas/Config.in b/package/copas/Config.in
+index 2de1967102..347d86ddfc 100644
+--- a/package/copas/Config.in
++++ b/package/copas/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_COPAS
+ 	  servers. But it also features timers and client support for
+ 	  http(s), ftp and smtp requests.
  
-+MINICOM_CONF_OPTS = \
-+	--enable-dfl-port=/dev/ttyS1 \
-+	--enable-lock-dir=/var/lock
-+
- $(eval $(autotools-package))
+-	  http://www.keplerproject.org/copas/
++	  http://keplerproject.github.io/copas/
