@@ -1,39 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 14:51:20 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/glib-networking:
- add an upstream URL to Config.in
-Message-ID: <20191203134310.D5244842EB@busybox.osuosl.org>
+Date: Tue, 3 Dec 2019 14:51:23 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gqview: update
+ the upstream URL in Config.in
+Message-ID: <20191203134310.E062C842EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15804fa26b925f537f57b7e8d71863e13e4ee45a
+commit: https://git.buildroot.net/buildroot/commit/?id=69fcf43686c374c3a27cb10f77a55ca76ee27947
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(404)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 82b9f2c7f8385280bba3c16085a2f6516864e1d0)
+(cherry picked from commit c56c3b290039f6e2f73831b1b0f516b7a54a25bb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glib-networking/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/gqview/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
-index b84a739460..1a8ebe6c0b 100644
---- a/package/glib-networking/Config.in
-+++ b/package/glib-networking/Config.in
-@@ -9,6 +9,8 @@ config BR2_PACKAGE_GLIB_NETWORKING
+diff --git a/package/gqview/Config.in b/package/gqview/Config.in
+index c1df40cc19..a654dc41fb 100644
+--- a/package/gqview/Config.in
++++ b/package/gqview/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_GQVIEW
  	help
- 	  Network-related GIO modules for glib.
+ 	  GQview is an image viewer for Unix operating systems
  
-+	  https://gitlab.gnome.org/GNOME/glib-networking
-+
- comment "glib-networking needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-	  http://prdownloads.sourceforge.net/gqview
++	  http://gqview.sourceforge.net/
