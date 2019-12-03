@@ -1,36 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 17:03:03 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mii-diag: add an
+Date: Tue, 3 Dec 2019 17:02:11 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/musl: add an
  upstream URL to Config.in
-Message-ID: <20191203160316.64430864BD@busybox.osuosl.org>
+Message-ID: <20191203160316.458E7866E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f64ca70e19732352fe08d26a62a2ac3c92cf41c9
+commit: https://git.buildroot.net/buildroot/commit/?id=4c70bcafb9166057423f222d50309aeb79f2d5c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Add an upstream URL to the help text in Config.in. This
 addresses the 'Missing' URL status in the package stats
 web page output.
 
+[Peter: also add URL to BR2_TOOLCHAIN_BUILDROOT_MUSL help]
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit eeba8339ca704be5cef207a7ccce47b5b5d77907)
+(cherry picked from commit 53698c9f81f2c0672215f6f9cb3d851a4be2f5fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mii-diag/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/musl/Config.in                  | 2 ++
+ toolchain/toolchain-buildroot/Config.in | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/mii-diag/Config.in b/package/mii-diag/Config.in
-index ca48ba216f..37f3647bb9 100644
---- a/package/mii-diag/Config.in
-+++ b/package/mii-diag/Config.in
-@@ -3,3 +3,5 @@ config BR2_PACKAGE_MII_DIAG
- 	help
- 	  mii-diag allows you to manipulate the MII registers of
- 	  network cards.
+diff --git a/package/musl/Config.in b/package/musl/Config.in
+index 67e9e78a14..69da615b63 100644
+--- a/package/musl/Config.in
++++ b/package/musl/Config.in
+@@ -8,3 +8,5 @@ config BR2_PACKAGE_MUSL
+ 		&& !(BR2_i386 || BR2_powerpc)
+ 	# Compatibility headers: cdefs.h, queue.h
+ 	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
++	help
++	  https://www.musl-libc.org/
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index beb17a218b..d8e39fdce1 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -94,6 +94,8 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	  This option selects musl as the C library for the
+ 	  cross-compilation toolchain.
+ 
++	  https://www.musl-libc.org/
 +
-+	  https://launchpad.net/ubuntu/+source/mii-diag
+ endchoice
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_LIBC
