@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2019 17:38:30 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libpciaccess:
+Date: Tue, 3 Dec 2019 17:37:37 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libpciaccess:
  update help text in Config.in
-Message-ID: <20191203163030.6B800869D3@busybox.osuosl.org>
+Message-ID: <20191203163034.DB0E686BF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3a6113c5dec8881fdc73e95b76bf4785dda8798
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=519a7ed713aeef33ef99a73072867bb2c118a5e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Add a short package description. Add an upstream URL to address
 the 'Missing' URL status in the package stats web page output.
