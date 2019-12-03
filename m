@@ -1,44 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Dec 2019 14:09:29 +0100
-Subject: [Buildroot] Missing PyQt5.QtQuick and PyQt5.QtQml on custom
- build Raspberry Pi 3
-In-Reply-To: <CACHEUn-YRb17+OqYfo09KpPyCitBP=4PyJDH_kgmkq0kXOnrqg@mail.gmail.com>
-References: <CACHEUn-YRb17+OqYfo09KpPyCitBP=4PyJDH_kgmkq0kXOnrqg@mail.gmail.com>
-Message-ID: <20191203140929.3a27e2a5@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 3 Dec 2019 14:11:35 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/atk: add an
+ upstream URL to Config.in
+Message-ID: <20191203130335.BB2FD83F96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jaafar,
+commit: https://git.buildroot.net/buildroot/commit/?id=f3d9c5d99547d51c9de7e5804f27c7aed2966601
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-On Tue, 3 Dec 2019 14:17:21 +0100
-Jaafar Biyadi <jaafarbiyadi@gmail.com> wrote:
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
-> Hello, I'm trying to build a system to run Python with PyQt5 using the
-> QtQuick and QtQml submodules, but I cannot figure what's wrong with my
-> config.
-> 
-> I built all relevant package such as: Qt5 and Python-Qt5 and when running
-> the system and testing a .qml file with qmlscene, it works however the
-> QtQml & QtQuick modules are not found in python. What am I missing?
-> 
-> My config (with external toolchain): https://pastebin.com/5g1GhJgF
-> Using buildroot-2019.11-rc3
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4daeedfc45b6baee5545fd0710c180037da3da49)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/atk/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I think we have a bug report opened for this:
-
-  https://bugs.busybox.net/show_bug.cgi?id=12121
-
-And we have a proposal to fix it at:
-
-  http://patchwork.ozlabs.org/patch/1151846/
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/atk/Config.in b/package/atk/Config.in
+index c980614998..d9371b879b 100644
+--- a/package/atk/Config.in
++++ b/package/atk/Config.in
+@@ -7,6 +7,8 @@ config BR2_PACKAGE_ATK
+ 	help
+ 	  The ATK accessibility toolkit, needed to build GTK+-2.x.
+ 
++	  https://gitlab.gnome.org/GNOME/atk
++
+ comment "atk needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
