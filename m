@@ -1,66 +1,59 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 4 Dec 2019 17:49:50 +0100
-Subject: [Buildroot] [PATCH] package/pkg-meson: ensure the global
- cross-compilation.conf file is correct
-In-Reply-To: <20191204150225.33749-1-thomas.petazzoni@bootlin.com>
-References: <20191204150225.33749-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191204174950.5d2ab0fd@gmx.net>
+From: juju at cotds.org <juju@cotds.org>
+Date: Wed, 04 Dec 2019 18:24:51 +0100
+Subject: [Buildroot] 
+ =?utf-8?q?=5BPATCH_1/1=5D_configs/freescale=5Fimx8mq?=
+ =?utf-8?q?evk=3A_bump_BSP_components_to_4=2E14=2E98=5F2=2E0=2E0?=
+In-Reply-To: <CAOMZO5B7FZg93Z82hD-a-1oBCB6q5UQmNLEkj8bekyC5Uc8eOg@mail.gmail.com>
+References: <20191203203805.408448-1-juju@cotds.org>
+ <CAOMZO5B7FZg93Z82hD-a-1oBCB6q5UQmNLEkj8bekyC5Uc8eOg@mail.gmail.com>
+Message-ID: <7f7ce42627d79783827f1b347b9084da@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hi Fabio,
 
-On Wed,  4 Dec 2019 16:02:25 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On 2019-12-03 21:51, Fabio Estevam wrote:
+> Hi Julien,
+> 
+> On Tue, Dec 3, 2019 at 5:38 PM Julien Olivain <juju@cotds.org> wrote:
+>> 
+>> Update Kernel, U-Boot and ATF to NXP BSP version 
+>> rel_imx_4.14.98_2.0.0_ga
+> 
+> What about switching to imx_4.19.35_1.1.0 instead?
 
-> Currently, the cross-compilation.conf installed in
-> $(HOST_DIR)/etc/meson/cross-compilation.conf for use by the SDK is
-> generated in a post-install-staging hook of the toolchain package.
->
-> With per-package directory support enabled, this means that the
-> generated cross-compilation.conf contains references to the
-> per-package directory of the toolchain/ package, which is not want we
-> want:
+Some packages, like imx-gpu-viv are linked to the i.MX uboot/kernel/atf
+versions. For example i.MX BSP 4.14.78-1.0.0 uses 
+imx-gpu-viv-6.2.4.p2.3,
+but 4.19.35-1.1.0 uses imx-gpu-viv-6.4.0.p1.0, ... (One could eventually
+workaround this by using kernel-module-imx-gpu-viv, though). This is 
+also
+probably the case for other i.MX packages like imx-sc-firmware (with SC 
+RPC API
+version), and firmware-imx, and maybe others...
 
-Nitpick: s/not want we want/not what we want/
+On the other hand, some other board vendors are providing their own BSPs
+derived from older NXP BSPs (e.g. TechNexion latest BSP is still based 
+on
+4.14.98_2.0.0). So updating EVK board to 4.19.35_1.1.0 would probably 
+require
+an imx-gpu-viv update too, but would also probably break the TechNexion 
+PicoPi
+8M.
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+This means that, some of the i.MX defconfigs needs to be aligned 
+altogether,
+with those packages. My intent was to not update beyond the latest 
+TechNexion
+BSP version.
 
-Regards,
-Peter
+Maybe the correct long-term solution would be to add a "Custom Version" 
+option
+in KConfig, for those packages with kernel/uboot/atf dependencies?
 
->
-> [binaries]
-> c = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-gcc'
-> cpp = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-g++'
-> ar = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-ar'
-> strip = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-strip'
-> pkgconfig = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/usr/bin/pkg-config'
->
-> So instead, we generate this file in TOOLCHAIN_TARGET_FINALIZE_HOOKS,
-> so that the global paths are used:
->
-> [binaries]
-> c = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc'
-> cpp = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-g++'
-> ar = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-ar'
-> strip = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-strip'
-> pkgconfig = '/home/thomas/projets/buildroot/output/host/usr/bin/pkg-config'
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/pkg-meson.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index e7eea2aa58..085da219fe 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -205,4 +205,4 @@ define PKG_MESON_INSTALL_CROSS_CONF
->  	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
->  endef
->
-> -TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
-> +TOOLCHAIN_TARGET_FINALIZE_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
+Best regards,
+
+Julien.
