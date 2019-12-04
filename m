@@ -1,9 +1,8 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed,  4 Dec 2019 12:06:29 -0800
-Subject: [Buildroot] [PATCH 2/2] support/testing: add python-django test
-In-Reply-To: <20191204200629.686191-1-aduskett@gmail.com>
-References: <20191204200629.686191-1-aduskett@gmail.com>
-Message-ID: <20191204200629.686191-2-aduskett@gmail.com>
+Date: Wed,  4 Dec 2019 13:49:13 -0800
+Subject: [Buildroot] [PATCH 1/1] package/spidermonkey: depends on host gcc
+ >= 4.9
+Message-ID: <20191204214913.718567-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,82 +11,40 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <aduskett@greenlots.com>
 
-This test comprises of four simple steps:
-  1: Start a new simple project called testsite.
-  2: Run ./manage.py migrate on the new testsite.
-  3: Run ./manage.py runserver 0.0.0.0:1234 & sleep 30
-    - The sleep 30 is necessary as it may take several seconds for
-      the django server to fully start.
-  4: Run netstat to ensure the server opened port 1234.
+If GCC on the host is older than 4.9, during the configure stage an
+error is thrown such as:
+
+checking whether the host C compiler can be used... no
+ERROR: Only GCC 4.9 or newer is supported (found version 4.8.2).
+
+Depend on the host gcc version being >= 4.9
+
+Fixes:
+http://autobuild.buildroot.net/results/192661452fd522bf46b23d5a7a522eb853a984bf
 
 Signed-off-by: Adam Duskett <aduskett@greenlots.com>
 ---
- .gitlab-ci.yml                                |  1 +
- .../tests/package/sample_python_django.py     |  1 +
- .../tests/package/test_python_django.py       | 35 +++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 support/testing/tests/package/sample_python_django.py
- create mode 100644 support/testing/tests/package/test_python_django.py
+ package/spidermonkey/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 22befa0427..75b2fcb37c 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -448,6 +448,7 @@ tests.package.test_python_constantly.TestPythonPy3Constantly: { extends: .runtim
- tests.package.test_python_crossbar.TestPythonPy3Crossbar: { extends: .runtime_test }
- tests.package.test_python_cryptography.TestPythonPy2Cryptography: { extends: .runtime_test }
- tests.package.test_python_cryptography.TestPythonPy3Cryptography: { extends: .runtime_test }
-+tests.package.test_python_django.TestPythonPy3Django: { extends: .runtime_test }
- tests.package.test_python_incremental.TestPythonPy2Incremental: { extends: .runtime_test }
- tests.package.test_python_incremental.TestPythonPy3Incremental: { extends: .runtime_test }
- tests.package.test_python_passlib.TestPythonPy2Passlib: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/sample_python_django.py b/support/testing/tests/package/sample_python_django.py
-new file mode 100644
-index 0000000000..c2bad566a7
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_django.py
-@@ -0,0 +1 @@
-+import django  # noqa: F401
-diff --git a/support/testing/tests/package/test_python_django.py b/support/testing/tests/package/test_python_django.py
-new file mode 100644
-index 0000000000..3db9b96123
---- /dev/null
-+++ b/support/testing/tests/package/test_python_django.py
-@@ -0,0 +1,35 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonDjango(TestPythonPackageBase):
-+    config = TestPythonPackageBase.config
-+    sample_scripts = ["tests/package/sample_python_django.py"]
-+
-+    def run_sample_scripts(self):
-+        cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
-+        _, exit_code = self.emulator.run(cmd, timeout=30)
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py migrate"
-+        output, exit_code = self.emulator.run(cmd, timeout=30)
-+        self.assertIn("Operations to perform:", output[0])
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py runserver 0.0.0.0:1234 & "
-+        # give some time to setup the server
-+        cmd += "sleep 30"
-+        _, exit_code = self.emulator.run(cmd, timeout=35)
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+class TestPythonPy3Django(TestPythonDjango):
-+    __test__ = True
-+    config = TestPythonDjango.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_DJANGO=y
-+        BR2_PACKAGE_PYTHON3_SQLITE=y
-+        """
+diff --git a/package/spidermonkey/Config.in b/package/spidermonkey/Config.in
+index 284502f618..5f12110626 100644
+--- a/package/spidermonkey/Config.in
++++ b/package/spidermonkey/Config.in
+@@ -16,6 +16,7 @@ config BR2_PACKAGE_SPIDERMONKEY_JIT_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_SPIDERMONKEY
+ 	bool "spidermonkey"
++	depends on BR2_HOST_GCC_AT_LEAST_4_9
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+@@ -43,5 +44,6 @@ comment "spidermonkey needs a glibc or musl toolchain with C++, wchar, dynamic l
+ 		!BR2_INSTALL_LIBSTDCPP || \
+ 		BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
++		!BR2_HOST_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_USE_WCHAR
 -- 
 2.23.0
