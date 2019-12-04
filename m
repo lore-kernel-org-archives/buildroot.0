@@ -1,31 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Dec 2019 13:20:42 +0100
-Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run: add
- support for running parallel builds
-In-Reply-To: <20191203165450.1100336-1-thomas.petazzoni@bootlin.com>
-References: <20191203165450.1100336-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191204132042.1d3783d0@windsurf>
+Date: Wed, 4 Dec 2019 13:20:48 +0100
+Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run: make
+ it Python 3.x compatible
+In-Reply-To: <20191203165457.1100390-1-thomas.petazzoni@bootlin.com>
+References: <20191203165457.1100390-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20191204132048.1fc824b7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  3 Dec 2019 17:54:50 +0100
+On Tue,  3 Dec 2019 17:54:57 +0100
 Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> When BR2_PER_PACKAGE_DIRECTORIES=y in the generated configuration, we
-> then use top-level parallel build on 50% of the builds. This will
-> allow to give some testing exposure to this new functionality.
+> With Python 3.7, the autobuild-run did not work due to the following
+> issues:
+> 
+>  - The urlparse module no longer exists, it's not urllib.parse
+> 
+>  - 0022 is no longer recognized as an octal value, we must use 0o022,
+>    which also works in Python 2.x
+> 
+>  - reading the CSV file with the list of branches through the CSV
+>    parser failed due to the lack of decoding, as urlopen_closing()
+>    returns a stream of bytes and not strings. So we need to call
+>    decode_bytes() on each element of the CSV array. Since the CSV file
+>    is typically 3 or 4 lines long, we don't really need to optimize
+>    things.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  scripts/autobuild-run | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
+>  scripts/autobuild-run | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 
-Applied to buildroot-test. Of course, for now, it won't do anything
-until utils/genrandconfig in Buildroot is patched to use
-BR2_PER_PACKAGE_DIRECTORIES=y.
+Applied to buildroot-test, thanks.
 
 Thomas
 -- 
