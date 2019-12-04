@@ -1,51 +1,54 @@
 From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date: Wed, 4 Dec 2019 10:35:27 +0100
-Subject: [Buildroot] [PATCH 3/7] sysrepo: libnetconf2 is not needed
+Date: Wed, 4 Dec 2019 10:37:14 +0100
+Subject: [Buildroot] [PATCH 4/7] sysrepo: Optional support for C++ bindings
 In-Reply-To: <cover.1575456104.git.jan.kundrat@cesnet.cz>
 References: <cover.1575456104.git.jan.kundrat@cesnet.cz>
-Message-ID: <9ce249faace5681092cd55ca8a1a046479c66bc5.1575456104.git.jan.kundrat@cesnet.cz>
+Message-ID: <658112fad0f8e93c64403732be0ee1fd5ad99341.1575456104.git.jan.kundrat@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libnetconf2 library is a dependency of Netopeer2. Sysrepo does not
-have a NETCONF server or a NETCONF client, so it does not use this
-library.
-
 Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
 ---
- package/sysrepo/Config.in  | 1 -
- package/sysrepo/sysrepo.mk | 4 ++--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/sysrepo/Config.in  | 6 ++++++
+ package/sysrepo/sysrepo.mk | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
 diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
-index 18a09e0c57..df7f0fd68e 100644
+index df7f0fd68e..81571ff9b3 100644
 --- a/package/sysrepo/Config.in
 +++ b/package/sysrepo/Config.in
-@@ -8,7 +8,6 @@ config BR2_PACKAGE_SYSREPO
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # host-protobuf
- 	select BR2_PACKAGE_LIBAVL
- 	select BR2_PACKAGE_LIBEV
--	select BR2_PACKAGE_LIBNETCONF2
- 	select BR2_PACKAGE_LIBYANG
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_PCRE_UCP
+@@ -25,6 +25,12 @@ config BR2_PACKAGE_SYSREPO_EXAMPLES
+ 	help
+ 	  Enable sysrepo examples.
+ 
++config BR2_PACKAGE_SYSREPO_CPP
++	bool "Enable sysrepo C++ bindings"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	help
++	  Build the C++ wrapper around sysrepo.
++
+ endif
+ 
+ comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
 diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 49c908d62d..216e517526 100644
+index 216e517526..113ed7a929 100644
 --- a/package/sysrepo/sysrepo.mk
 +++ b/package/sysrepo/sysrepo.mk
-@@ -9,8 +9,8 @@ SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
- SYSREPO_INSTALL_STAGING = YES
- SYSREPO_LICENSE = Apache-2.0
- SYSREPO_LICENSE_FILES = LICENSE
--SYSREPO_DEPENDENCIES = libev libnetconf2 libavl libyang pcre protobuf-c host-sysrepo
--HOST_SYSREPO_DEPENDENCIES = host-libev host-libnetconf2 host-libavl host-libyang host-pcre host-protobuf-c
-+SYSREPO_DEPENDENCIES = libev libavl libyang pcre protobuf-c host-sysrepo
-+HOST_SYSREPO_DEPENDENCIES = host-libev host-libavl host-libyang host-pcre host-protobuf-c
+@@ -61,5 +61,12 @@ HOST_SYSREPO_CONF_OPTS = \
+ 	-DREPOSITORY_LOC=$(HOST_DIR)/etc/sysrepo \
+ 	-DSUBSCRIPTIONS_SOCKET_DIR=$(HOST_DIR)/var/run/sysrepo-subscriptions
  
- SYSREPO_CONF_OPTS = \
- 	-DIS_DEVELOPER_CONFIGURATION=OFF \
++ifdef BR2_PACKAGE_SYSREPO_CPP
++	SYSREPO_DEPENDENCIES += host-swig
++	HOST_SYSREPO_DEPENDENCIES += host-swig
++	SYSREPO_CONF_OPTS += -DGEN_LANGUAGE_BINDINGS=ON -DGEN_CPP_BINDINGS=ON -DGEN_PYTHON_BINDINGS=OFF -DGEN_JAVA_BINDINGS=OFF
++	HOST_SYSREPO_CONF_OPTS += -DGEN_LANGUAGE_BINDINGS=ON -DGEN_CPP_BINDINGS=ON -DGEN_PYTHON_BINDINGS=OFF -DGEN_JAVA_BINDINGS=OFF
++endif
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.21.0
