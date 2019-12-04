@@ -1,336 +1,297 @@
-From: Ludovic Desroches <ludovic.desroches@microchip.com>
-Date: Wed, 4 Dec 2019 11:56:22 +0100
-Subject: [Buildroot] [PATCH v2] configs/atmel: update u-boot-at91 and
- bootstrap to tarballs
-In-Reply-To: <1575454574-13667-1-git-send-email-eugen.hristev@microchip.com>
-References: <1575454574-13667-1-git-send-email-eugen.hristev@microchip.com>
-Message-ID: <20191204105622.fruzc22h4vfjv7tc@M43218.corp.atmel.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed,  4 Dec 2019 12:25:46 +0100
+Subject: [Buildroot] [PATCH] package/libnspr: bump to version 4.24
+Message-ID: <20191204112546.29507-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 04, 2019 at 11:16:45AM +0100, Eugen Hristev - M18282 wrote:
-> From: Eugen Hristev <eugen.hristev@microchip.com>
-> 
-> Use custom tarballs for U-boot-at91 and at91bootstrap instead
-> of cloning the repositories.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+All patches have been upstreamed so remove them.
 
-Thanks
-> ---
-> 
-> Changes in v2:
-> - Fixed change for sama5d3xek : it was wrongly done. do not update components
-> for this board (untested). just change to tarballs keeping the same version
-> (as intended for this commit ). Also remove custom version as requested
-> by Ludovic.
-> 
->  configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 10 ++++------
->  configs/atmel_sama5d2_xplained_mmc_defconfig     | 10 ++++------
->  configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 10 ++++------
->  configs/atmel_sama5d3_xplained_defconfig         | 10 ++++------
->  configs/atmel_sama5d3_xplained_dev_defconfig     | 10 ++++------
->  configs/atmel_sama5d3_xplained_mmc_defconfig     | 10 ++++------
->  configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 10 ++++------
->  configs/atmel_sama5d3xek_defconfig               | 10 ++++------
->  configs/atmel_sama5d4_xplained_defconfig         | 10 ++++------
->  configs/atmel_sama5d4_xplained_dev_defconfig     | 10 ++++------
->  configs/atmel_sama5d4_xplained_mmc_defconfig     | 10 ++++------
->  configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 10 ++++------
->  12 files changed, 48 insertions(+), 72 deletions(-)
-> 
-> diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-> index 1d16708..0653ae8 100644
-> --- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-> +++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-> @@ -70,15 +70,13 @@ BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d27_som1_ek_mmc"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> diff --git a/configs/atmel_sama5d2_xplained_mmc_defconfig b/configs/atmel_sama5d2_xplained_mmc_defconfig
-> index b9a3724..4418ab0 100644
-> --- a/configs/atmel_sama5d2_xplained_mmc_defconfig
-> +++ b/configs/atmel_sama5d2_xplained_mmc_defconfig
-> @@ -16,15 +16,13 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-> index 8f5ffd9..4603244 100644
-> --- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-> +++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-> @@ -87,15 +87,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->  
->  # Bootloaders
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  
-> diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
-> index b24cc8b..9e53218 100644
-> --- a/configs/atmel_sama5d3_xplained_defconfig
-> +++ b/configs/atmel_sama5d3_xplained_defconfig
-> @@ -15,15 +15,13 @@ BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
->  BR2_TARGET_ROOTFS_UBI=y
->  BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_PACKAGE_HOST_SAM_BA=y
-> diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-> index a2b0303..2689f2a 100644
-> --- a/configs/atmel_sama5d3_xplained_dev_defconfig
-> +++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-> @@ -84,15 +84,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
->  
->  # Bootloaders
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  
-> diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
-> index 259888e..0d34148 100644
-> --- a/configs/atmel_sama5d3_xplained_mmc_defconfig
-> +++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
-> @@ -15,15 +15,13 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-> index ef47bb3..5172228 100644
-> --- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-> +++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-> @@ -86,15 +86,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->  
->  # Bootloaders
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  
-> diff --git a/configs/atmel_sama5d3xek_defconfig b/configs/atmel_sama5d3xek_defconfig
-> index 95deb6f..338c23c 100644
-> --- a/configs/atmel_sama5d3xek_defconfig
-> +++ b/configs/atmel_sama5d3xek_defconfig
-> @@ -23,15 +23,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
->  
->  # Bootloaders
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.10"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.8.10.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3xeknf_uboot"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.8"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_5.8.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3xek_nandflash"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_TARGET_UBOOT_SPL=y
-> diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
-> index 0ecb6a1..f862d41 100644
-> --- a/configs/atmel_sama5d4_xplained_defconfig
-> +++ b/configs/atmel_sama5d4_xplained_defconfig
-> @@ -19,15 +19,13 @@ BR2_TARGET_ROOTFS_UBI=y
->  BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
->  BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_PACKAGE_HOST_SAM_BA=y
-> diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-> index 8eb6f09..7a0966e 100644
-> --- a/configs/atmel_sama5d4_xplained_dev_defconfig
-> +++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-> @@ -88,15 +88,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
->  
->  # Bootloaders
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  
-> diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
-> index 2753a7a..ee4b12d 100644
-> --- a/configs/atmel_sama5d4_xplained_mmc_defconfig
-> +++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
-> @@ -16,15 +16,13 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-> index d948cfa..6f0c298 100644
-> --- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-> +++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-> @@ -87,15 +87,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->  
->  # Bootloaders
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.2"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  
-> -- 
-> 2.7.4
-> 
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnspr/0001-nios2.patch      | 76 -------------------------
+ package/libnspr/0002-microblaze.patch | 81 ---------------------------
+ package/libnspr/0003-nds32.patch      | 73 ------------------------
+ package/libnspr/libnspr.hash          |  2 +-
+ package/libnspr/libnspr.mk            |  2 +-
+ 5 files changed, 2 insertions(+), 232 deletions(-)
+ delete mode 100644 package/libnspr/0001-nios2.patch
+ delete mode 100644 package/libnspr/0002-microblaze.patch
+ delete mode 100644 package/libnspr/0003-nds32.patch
+
+diff --git a/package/libnspr/0001-nios2.patch b/package/libnspr/0001-nios2.patch
+deleted file mode 100644
+index 52fbbfdddd..0000000000
+--- a/package/libnspr/0001-nios2.patch
++++ /dev/null
+@@ -1,76 +0,0 @@
+-Bug 1578360 - Add Nios-II support
+-
+-[Gustavo: update for nspr 4.10.9]
+-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+-[Fabrice: update for nspr 4.20]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Giulio: update for nspr 4.22]
+-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+-
+-diff -r 3af4891397ab -r 8487beb203e9 nspr/pr/include/md/_linux.cfg
+---- a/nspr/pr/include/md/_linux.cfg	Mon Aug 19 16:17:52 2019 +0200
+-+++ b/nspr/pr/include/md/_linux.cfg	Tue Sep 03 11:25:11 2019 +0200
+-@@ -1157,6 +1157,51 @@
+- #define PR_BYTES_PER_WORD_LOG2   2
+- #define PR_BYTES_PER_DWORD_LOG2  3
+- 
+-+#elif defined(__nios2__)
+-+
+-+#define IS_LITTLE_ENDIAN 1
+-+#undef  IS_BIG_ENDIAN
+-+
+-+#define PR_BYTES_PER_BYTE   1
+-+#define PR_BYTES_PER_SHORT  2
+-+#define PR_BYTES_PER_INT    4
+-+#define PR_BYTES_PER_INT64  8
+-+#define PR_BYTES_PER_LONG   4
+-+#define PR_BYTES_PER_FLOAT  4
+-+#define PR_BYTES_PER_DOUBLE 8
+-+#define PR_BYTES_PER_WORD   4
+-+#define PR_BYTES_PER_DWORD  8
+-+
+-+#define PR_BITS_PER_BYTE    8
+-+#define PR_BITS_PER_SHORT   16
+-+#define PR_BITS_PER_INT     32
+-+#define PR_BITS_PER_INT64   64
+-+#define PR_BITS_PER_LONG    32
+-+#define PR_BITS_PER_FLOAT   32
+-+#define PR_BITS_PER_DOUBLE  64
+-+#define PR_BITS_PER_WORD    32
+-+
+-+#define PR_BITS_PER_BYTE_LOG2   3
+-+#define PR_BITS_PER_SHORT_LOG2  4
+-+#define PR_BITS_PER_INT_LOG2    5
+-+#define PR_BITS_PER_INT64_LOG2  6
+-+#define PR_BITS_PER_LONG_LOG2   5
+-+#define PR_BITS_PER_FLOAT_LOG2  5
+-+#define PR_BITS_PER_DOUBLE_LOG2 6
+-+#define PR_BITS_PER_WORD_LOG2   5
+-+
+-+#define PR_ALIGN_OF_SHORT   2
+-+#define PR_ALIGN_OF_INT     4
+-+#define PR_ALIGN_OF_LONG    4
+-+#define PR_ALIGN_OF_INT64   4
+-+#define PR_ALIGN_OF_FLOAT   4
+-+#define PR_ALIGN_OF_DOUBLE  4
+-+#define PR_ALIGN_OF_POINTER 4
+-+#define PR_ALIGN_OF_WORD    4
+-+
+-+#define PR_BYTES_PER_WORD_LOG2   2
+-+#define PR_BYTES_PER_DWORD_LOG2  3
+-+
+- #else
+- 
+- #error "Unknown CPU architecture"
+-diff -r 3af4891397ab -r 8487beb203e9 nspr/pr/include/md/_linux.h
+---- a/nspr/pr/include/md/_linux.h	Mon Aug 19 16:17:52 2019 +0200
+-+++ b/nspr/pr/include/md/_linux.h	Tue Sep 03 11:25:11 2019 +0200
+-@@ -63,6 +63,8 @@
+- #define _PR_SI_ARCHITECTURE "riscv64"
+- #elif defined(__arc__)
+- #define _PR_SI_ARCHITECTURE "arc"
+-+#elif defined(__nios2__)
+-+#define _PR_SI_ARCHITECTURE "nios2"
+- #else
+- #error "Unknown CPU architecture"
+- #endif
+diff --git a/package/libnspr/0002-microblaze.patch b/package/libnspr/0002-microblaze.patch
+deleted file mode 100644
+index 6558882bd7..0000000000
+--- a/package/libnspr/0002-microblaze.patch
++++ /dev/null
+@@ -1,81 +0,0 @@
+-Bug 1578363 - Add Microblaze support
+-
+-[Gustavo: update for nspr 4.10.9]
+-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+-[Fabrice: update for nspr 4.20]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Giulio: update for nspr 4.22]
+-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+-
+-diff -r 8487beb203e9 -r ab7d5c504daf nspr/pr/include/md/_linux.cfg
+---- a/nspr/pr/include/md/_linux.cfg	Tue Sep 03 11:25:11 2019 +0200
+-+++ b/nspr/pr/include/md/_linux.cfg	Tue Sep 03 11:33:15 2019 +0200
+-@@ -1202,6 +1202,56 @@
+- #define PR_BYTES_PER_WORD_LOG2   2
+- #define PR_BYTES_PER_DWORD_LOG2  3
+- 
+-+#elif defined(__microblaze__)
+-+
+-+#if defined(__BIG_ENDIAN__)
+-+#define IS_BIG_ENDIAN 1
+-+#undef  IS_LITTLE_ENDIAN
+-+#else
+-+#define IS_LITTLE_ENDIAN 1
+-+#undef  IS_BIG_ENDIAN
+-+#endif
+-+
+-+#define PR_BYTES_PER_BYTE   1
+-+#define PR_BYTES_PER_SHORT  2
+-+#define PR_BYTES_PER_INT    4
+-+#define PR_BYTES_PER_INT64  8
+-+#define PR_BYTES_PER_LONG   4
+-+#define PR_BYTES_PER_FLOAT  4
+-+#define PR_BYTES_PER_DOUBLE 8
+-+#define PR_BYTES_PER_WORD   4
+-+#define PR_BYTES_PER_DWORD  8
+-+
+-+#define PR_BITS_PER_BYTE    8
+-+#define PR_BITS_PER_SHORT   16
+-+#define PR_BITS_PER_INT     32
+-+#define PR_BITS_PER_INT64   64
+-+#define PR_BITS_PER_LONG    32
+-+#define PR_BITS_PER_FLOAT   32
+-+#define PR_BITS_PER_DOUBLE  64
+-+#define PR_BITS_PER_WORD    32
+-+
+-+#define PR_BITS_PER_BYTE_LOG2   3
+-+#define PR_BITS_PER_SHORT_LOG2  4
+-+#define PR_BITS_PER_INT_LOG2    5
+-+#define PR_BITS_PER_INT64_LOG2  6
+-+#define PR_BITS_PER_LONG_LOG2   5
+-+#define PR_BITS_PER_FLOAT_LOG2  5
+-+#define PR_BITS_PER_DOUBLE_LOG2 6
+-+#define PR_BITS_PER_WORD_LOG2   5
+-+
+-+#define PR_ALIGN_OF_SHORT   2
+-+#define PR_ALIGN_OF_INT     4
+-+#define PR_ALIGN_OF_LONG    4
+-+#define PR_ALIGN_OF_INT64   4
+-+#define PR_ALIGN_OF_FLOAT   4
+-+#define PR_ALIGN_OF_DOUBLE  4
+-+#define PR_ALIGN_OF_POINTER 4
+-+#define PR_ALIGN_OF_WORD    4
+-+
+-+#define PR_BYTES_PER_WORD_LOG2   2
+-+#define PR_BYTES_PER_DWORD_LOG2  3
+-+
+- #else
+- 
+- #error "Unknown CPU architecture"
+-diff -r 8487beb203e9 -r ab7d5c504daf nspr/pr/include/md/_linux.h
+---- a/nspr/pr/include/md/_linux.h	Tue Sep 03 11:25:11 2019 +0200
+-+++ b/nspr/pr/include/md/_linux.h	Tue Sep 03 11:33:15 2019 +0200
+-@@ -65,6 +65,8 @@
+- #define _PR_SI_ARCHITECTURE "arc"
+- #elif defined(__nios2__)
+- #define _PR_SI_ARCHITECTURE "nios2"
+-+#elif defined(__microblaze__)
+-+#define _PR_SI_ARCHITECTURE "microblaze"
+- #else
+- #error "Unknown CPU architecture"
+- #endif
+diff --git a/package/libnspr/0003-nds32.patch b/package/libnspr/0003-nds32.patch
+deleted file mode 100644
+index 49d0d81aca..0000000000
+--- a/package/libnspr/0003-nds32.patch
++++ /dev/null
+@@ -1,73 +0,0 @@
+-Bug 1578364 - Add Nds32 support
+-
+-Signed-off-by: Nylon Chen <nylon7@andestech.com>
+-[Giulio: update for nspr 4.22]
+-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+-
+-diff -r ab7d5c504daf -r d212d80704a2 nspr/pr/include/md/_linux.cfg
+---- a/nspr/pr/include/md/_linux.cfg	Tue Sep 03 11:33:15 2019 +0200
+-+++ b/nspr/pr/include/md/_linux.cfg	Tue Sep 03 11:36:05 2019 +0200
+-@@ -1252,6 +1252,51 @@
+- #define PR_BYTES_PER_WORD_LOG2   2
+- #define PR_BYTES_PER_DWORD_LOG2  3
+- 
+-+#elif defined(__nds32__)
+-+
+-+#define IS_LITTLE_ENDIAN 1
+-+#undef  IS_BIG_ENDIAN
+-+
+-+#define PR_BYTES_PER_BYTE   1
+-+#define PR_BYTES_PER_SHORT  2
+-+#define PR_BYTES_PER_INT    4
+-+#define PR_BYTES_PER_INT64  8
+-+#define PR_BYTES_PER_LONG   4
+-+#define PR_BYTES_PER_FLOAT  4
+-+#define PR_BYTES_PER_DOUBLE 8
+-+#define PR_BYTES_PER_WORD   4
+-+#define PR_BYTES_PER_DWORD  8
+-+
+-+#define PR_BITS_PER_BYTE    8
+-+#define PR_BITS_PER_SHORT   16
+-+#define PR_BITS_PER_INT     32
+-+#define PR_BITS_PER_INT64   64
+-+#define PR_BITS_PER_LONG    32
+-+#define PR_BITS_PER_FLOAT   32
+-+#define PR_BITS_PER_DOUBLE  64
+-+#define PR_BITS_PER_WORD    32
+-+
+-+#define PR_BITS_PER_BYTE_LOG2   3
+-+#define PR_BITS_PER_SHORT_LOG2  4
+-+#define PR_BITS_PER_INT_LOG2    5
+-+#define PR_BITS_PER_INT64_LOG2  6
+-+#define PR_BITS_PER_LONG_LOG2   5
+-+#define PR_BITS_PER_FLOAT_LOG2  5
+-+#define PR_BITS_PER_DOUBLE_LOG2 6
+-+#define PR_BITS_PER_WORD_LOG2   5
+-+
+-+#define PR_ALIGN_OF_SHORT   2
+-+#define PR_ALIGN_OF_INT     4
+-+#define PR_ALIGN_OF_LONG    4
+-+#define PR_ALIGN_OF_INT64   4
+-+#define PR_ALIGN_OF_FLOAT   4
+-+#define PR_ALIGN_OF_DOUBLE  4
+-+#define PR_ALIGN_OF_POINTER 4
+-+#define PR_ALIGN_OF_WORD    4
+-+
+-+#define PR_BYTES_PER_WORD_LOG2   2
+-+#define PR_BYTES_PER_DWORD_LOG2  3
+-+
+- #else
+- 
+- #error "Unknown CPU architecture"
+-diff -r ab7d5c504daf -r d212d80704a2 nspr/pr/include/md/_linux.h
+---- a/nspr/pr/include/md/_linux.h	Tue Sep 03 11:33:15 2019 +0200
+-+++ b/nspr/pr/include/md/_linux.h	Tue Sep 03 11:36:05 2019 +0200
+-@@ -67,6 +67,8 @@
+- #define _PR_SI_ARCHITECTURE "nios2"
+- #elif defined(__microblaze__)
+- #define _PR_SI_ARCHITECTURE "microblaze"
+-+#elif defined(__nds32__)
+-+#define _PR_SI_ARCHITECTURE "nds32"
+- #else
+- #error "Unknown CPU architecture"
+- #endif
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+index 0317f20b19..0ec475f480 100644
+--- a/package/libnspr/libnspr.hash
++++ b/package/libnspr/libnspr.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.mozilla.org/pub/nspr/releases/v4.20/src/SHA256SUMS
+-sha256	4b9d821037faf5723da901515ed9cac8b23ef1ea3729022259777393453477a4  nspr-4.23.tar.gz
++sha256	90a59a0df6a11528749647fe18401cc7e03881e3e63c309f8c520ce06dd413d0  nspr-4.24.tar.gz
+ # Locally calculated
+ sha256	fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index f21f69a746..42b4350d90 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSPR_VERSION = 4.23
++LIBNSPR_VERSION = 4.24
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
+-- 
+2.20.1
