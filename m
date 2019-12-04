@@ -1,80 +1,50 @@
-From: Heiko Thiery <Heiko.Thiery@kontron.com>
-Date: Wed, 4 Dec 2019 12:29:41 +0000
-Subject: [Buildroot] [PATCH 5/7] sysrepo: Use a common repository
- location
-In-Reply-To: <b19aded0e3b221e21a629a3eba7deb8d7f54dfae.1575456104.git.jan.kundrat@cesnet.cz>
-References: <cover.1575456104.git.jan.kundrat@cesnet.cz>
- <b19aded0e3b221e21a629a3eba7deb8d7f54dfae.1575456104.git.jan.kundrat@cesnet.cz>
-Message-ID: <f13741d320d244eba9134fcae275d329@kontron.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed,  4 Dec 2019 14:49:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libepoxy: bump to version 1.5.4
+Message-ID: <20191204124950.998118-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jan,
+This release contains two minor improvements (smaller library size, and
+updates to the GL registry), plus a couple of build fixes which are not
+relevant for Buildroot (one for Solaris; another for unit tests, which
+we do not build):
 
-> -----Urspr?ngliche Nachricht-----
-> Von: Jan Kundr?t [mailto:jan.kundrat at cesnet.cz]
-> Gesendet: Mittwoch, 4. Dezember 2019 10:38
-> An: buildroot at buildroot.org
-> Cc: Heiko Thiery; Fabrice Fontaine
-> Betreff: [PATCH 5/7] sysrepo: Use a common repository location
-> 
-> Because the executables contain a hardcoded location to the on-disk repository
-> path, we take care to use a stable, shared location between the host-sysrepo
-> and sysrepo builds so that the host-side tools can install YANG modules and
-> have them available once the system boots on the target.
-> 
-> This means that other packages, such as the upcoming netopeer2-keystored or
-> the netopeer2-server, or really anything else which installs YANG modules into
-> sysrepo, can just call `sysrepoctl` from `host-sysrepo`, and the resulting
-> *target* image will have that module also available.
-> 
-> Also make sure that we prune the notification directory. "Notifications"
-> in this context refer to a persistent state of NETCONF-level notifications which
-> are created either by `sysrepoctl` for events such as module (de)installations,
-> and by third-party code. There is no value in leaking these events from the
-> build env into the target, and killing these causes in one fewer things to care
-> about.
-> 
-> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+  https://github.com/anholt/libepoxy/releases/tag/1.5.4
 
-Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/libepoxy/libepoxy.hash | 4 ++--
+ package/libepoxy/libepoxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> ---
->  package/sysrepo/sysrepo.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk index
-> 113ed7a929..2ef64d13e2 100644
-> --- a/package/sysrepo/sysrepo.mk
-> +++ b/package/sysrepo/sysrepo.mk
-> @@ -58,7 +58,7 @@ HOST_SYSREPO_CONF_OPTS = \
->  	-DCALL_TARGET_BINS_DIRECTLY=OFF \
->  	-DBUILD_EXAMPLES=OFF \
->  	-DBUILD_CPP_EXAMPLES=OFF \
-> -	-DREPOSITORY_LOC=$(HOST_DIR)/etc/sysrepo \
-> +	-DREPOSITORY_LOC=$(BASE_TARGET_DIR)/etc/sysrepo \
->  	-DSUBSCRIPTIONS_SOCKET_DIR=$(HOST_DIR)/var/run/sysrepo-
-> subscriptions
-> 
->  ifdef BR2_PACKAGE_SYSREPO_CPP
-> @@ -68,5 +68,12 @@ ifdef BR2_PACKAGE_SYSREPO_CPP
->  	HOST_SYSREPO_CONF_OPTS += -DGEN_LANGUAGE_BINDINGS=ON -
-> DGEN_CPP_BINDINGS=ON -DGEN_PYTHON_BINDINGS=OFF -
-> DGEN_JAVA_BINDINGS=OFF  endif
-> 
-> +# There's no point in keeping the logs around define
-> +SYSREPO_REMOVE_NOTIFICATION_LOG
-> +	rm -rf $(BASE_TARGET_DIR)/etc/sysrepo/data/notifications/
-> +endef
-> +
-> +SYSREPO_TARGET_FINALIZE_HOOKS +=
-> SYSREPO_REMOVE_NOTIFICATION_LOG
-> +
->  $(eval $(cmake-package))
->  $(eval $(host-cmake-package))
-> --
-> 2.21.0
-> 
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index d574a04455..a37e3949a6 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.3.sha256sum
+-sha256 002958c5528321edd53440235d3c44e71b5b1e09b9177e8daf677450b6c4433d  libepoxy-1.5.3.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.4.sha256sum
++sha256 0bd2cc681dfeffdef739cb29913f8c3caa47a88a451fd2bc6e606c02997289d2  libepoxy-1.5.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index deb3c1ecbb..efc23a7636 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBEPOXY_VERSION_MAJOR = 1.5
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).3
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).4
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
+-- 
+2.24.0
