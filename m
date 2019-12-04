@@ -1,50 +1,122 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed,  4 Dec 2019 13:49:13 -0800
-Subject: [Buildroot] [PATCH 1/1] package/spidermonkey: depends on host gcc
- >= 4.9
-Message-ID: <20191204214913.718567-1-aduskett@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed, 4 Dec 2019 22:52:05 +0100
+Subject: [Buildroot] [FYI] Bootlin external toolchains
+In-Reply-To: <09654893-fe44-76f0-da65-3f29bc758c6f@mind.be>
+References: <CAMw6YJLJae0GcmrDmSY8FZ-uMj+WBybPkBaLQC1wkhooCjoKyQ@mail.gmail.com>
+ <20191202152601.4ab1c8cd@windsurf>
+ <a9c40802-dfd5-67b5-6750-b0711f667280@smile.fr>
+ <09654893-fe44-76f0-da65-3f29bc758c6f@mind.be>
+Message-ID: <11b9e616-d8ce-ec5c-dbed-9180fa18a338@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <aduskett@greenlots.com>
+Hi Arnout, All,
 
-If GCC on the host is older than 4.9, during the configure stage an
-error is thrown such as:
+Le 03/12/2019 ? 22:15, Arnout Vandecappelle a ?crit?:
+> 
+> 
+> On 03/12/2019 10:59, Romain Naour wrote:
+>> Hi Thomas, Vadim,
+>>
+>> +Arthur Courtel in Cc.
+>>
+>> Le 02/12/2019 ? 15:26, Thomas Petazzoni a ?crit?:
+>>> Hello,
+>>>
+>>> +Romain Naour in Cc.
+>>>
+>>> On Mon, 2 Dec 2019 02:47:15 +0200
+>>> Vadim Kochan <vadim4j@gmail.com> wrote:
+>>>
+>>>> Just in case if someone will be interested. I started Buildroot external
+>>>> project which provides external toolchains from the Bootlin:
+>>>>
+>>>>     https://toolchains.bootlin.com
+>>>>
+>>>> The git repo can be found at:
+>>>>
+>>>>     https://github.com/vkochan/buildroot-external-toolchain-bootlin
+>>>
+>>> An effort was started to package the Bootlin external toolchains in
+>>> Buildroot itself, some time ago by engineers at Smile. We had some
+>>> off-list discussion about this, but I don't think it was ever posted to
+>>> the list. The idea back then was to have a script that generates all
+>>> the packages, but the design was to have one package for each
+>>> toolchain, so it really added a lot of packages.
+>>>
+>>> But I think we should really support these toolchains in Buildroot
+>>> proper instead of having an external for them.
+>>
+>> Agree.
+>>
+>> Arthur will take a look at the script but it's very complicated script...
+>> Maybe we need to discuss what we really want.
+> 
+>  I think this should be like scancpan/scanpypi, i.e. something that generates
+> the toolchain-external-bootlin package but it's up to the user to fix up the
+> final details.
+> 
+>  And then we can work on toolchains-builder to make sure it generates something
+> that is easier for this scanbootlin script to parse.
 
-checking whether the host C compiler can be used... no
-ERROR: Only GCC 4.9 or newer is supported (found version 4.8.2).
+The initial goal was to use toolchain bootlin as prebuilt external toolchain
+when no other prebuilt toolchain is available (Linaro, Mentor etc...).
+I would like to avoid letting the user fixing the final details.
 
-Depend on the host gcc version being >= 4.9
+> 
+>  Alternatively, maybe even better, we can just update build.sh in
+> toolchains-builder to generate all the pieces and then add an additional
+> pipeline stage that collects the pieces into a package.
 
-Fixes:
-http://autobuild.buildroot.net/results/192661452fd522bf46b23d5a7a522eb853a984bf
+The script evoked by Thomas showed that it was too difficult/complex to generate
+a toolchain packages from the files currently provided by toolchain-builder.
 
-Signed-off-by: Adam Duskett <aduskett@greenlots.com>
----
- package/spidermonkey/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+So, I'm agree that it would be better if toolchain-builder can provide such package.
 
-diff --git a/package/spidermonkey/Config.in b/package/spidermonkey/Config.in
-index 284502f618..5f12110626 100644
---- a/package/spidermonkey/Config.in
-+++ b/package/spidermonkey/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_SPIDERMONKEY_JIT_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_SPIDERMONKEY
- 	bool "spidermonkey"
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-@@ -43,5 +44,6 @@ comment "spidermonkey needs a glibc or musl toolchain with C++, wchar, dynamic l
- 		!BR2_INSTALL_LIBSTDCPP || \
- 		BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
-+		!BR2_HOST_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_USE_WCHAR
--- 
-2.23.0
+> 
+>  Most importantly, though, I think we should take this gradually. Start with a
+> manually constructed package, it doesn't even need to support all the different
+> toolchains. We can bikeshed a bit on what that package looks like, and use that
+> as input for how to script it.
+
+At least aarch64, arm and x86_64 should be included in the manually constructed
+package.
+
+> 
+>  To kick off the bikeshedding, here's my opinion on what the package should look
+> like.
+> 
+> * It should be a single package, toolchain-external-bootlin. Maybe two (-stable
+> and -bleeding-edge) but I think there'll be enough shared infrastructure to
+> warrant creating a single package.
+
+The most difficult part is to generate the dependencies (depends on) of the
+toolchain and its properties (select). That is why our experimental script
+create one package for each toolchain provided by toolchain Builder.
+
+Also if we can use a single a single package for the Bootlin toolchain package,
+it mean that we can also use a single package for the
+Linaro/ARM/Codescape/Codesourcery packages.
+
+> 
+> * It should offer a choice in Config.in.options for libc and stable/bleeding-edge.
+> 
+> * For now, it should be limited to *exactly* the same architecture suboptions as
+> what the toolchain was built for. Later we can decide how to expand this to
+> compatible options (e.g. the core-i7 toolchain will also work for core-avx2) -
+> but I'm pretty sure that that is something that will require help from
+> toolchain-builder itself.
+
+Indeed.
+
+Best regards,
+Romain
+
+> 
+> 
+>  Regards,
+>  Arnout
+> 
