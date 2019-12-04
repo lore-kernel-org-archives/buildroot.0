@@ -1,70 +1,109 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  4 Dec 2019 09:33:50 +0100
-Subject: [Buildroot] [PATCH 8/8] package/perl-http-date: bump to version 6.05
-In-Reply-To: <20191204083351.6134-1-francois.perrad@gadz.org>
-References: <20191204083351.6134-1-francois.perrad@gadz.org>
-Message-ID: <20191204083351.6134-8-francois.perrad@gadz.org>
+Date: Wed,  4 Dec 2019 09:38:45 +0100
+Subject: [Buildroot] [PATCH] package/luajit: switch to moonjit fork
+Message-ID: <20191204083845.6319-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-license lives now in its own file
+this fork is based on LuaJIT 2.1.0-beta3 which supports ARM64
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-http-date/Config.in           | 5 +++--
- package/perl-http-date/perl-http-date.hash | 6 +++---
- package/perl-http-date/perl-http-date.mk   | 6 +++---
- 3 files changed, 9 insertions(+), 8 deletions(-)
+ package/luajit/0001-no-bin-symlink.patch | 4 ++--
+ package/luajit/0002-install-inc.patch    | 2 +-
+ package/luajit/Config.in                 | 4 ++--
+ package/luajit/luajit.hash               | 6 +++---
+ package/luajit/luajit.mk                 | 5 ++---
+ 5 files changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/package/perl-http-date/Config.in b/package/perl-http-date/Config.in
-index 12524e6da..c5151f2ec 100644
---- a/package/perl-http-date/Config.in
-+++ b/package/perl-http-date/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PERL_HTTP_DATE
- 	bool "perl-http-date"
-+	select BR2_PACKAGE_PERL_TIMEDATE # runtime
- 	help
--	  date conversion routines.
-+	  HTTP::Date - date conversion routines.
+diff --git a/package/luajit/0001-no-bin-symlink.patch b/package/luajit/0001-no-bin-symlink.patch
+index dd1dfd89f..d32ec5ad6 100644
+--- a/package/luajit/0001-no-bin-symlink.patch
++++ b/package/luajit/0001-no-bin-symlink.patch
+@@ -6,7 +6,7 @@ Index: b/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -43,8 +43,7 @@
++@@ -44,8 +44,7 @@
+  INSTALL_MAN= $(INSTALL_SHARE)/man/man1
+  INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
+  
+@@ -16,7 +16,7 @@ Index: b/Makefile
+  INSTALL_ANAME= libluajit-$(ABIVER).a
+  INSTALL_SOSHORT1= libluajit-$(ABIVER).so
+  INSTALL_SOSHORT2= libluajit-$(ABIVER).so.$(MAJVER)
+-@@ -59,7 +58,6 @@
++@@ -60,7 +59,6 @@
+  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT1)
+  INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT2)
+  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
+diff --git a/package/luajit/0002-install-inc.patch b/package/luajit/0002-install-inc.patch
+index 86b766dfc..5f6547fc3 100644
+--- a/package/luajit/0002-install-inc.patch
++++ b/package/luajit/0002-install-inc.patch
+@@ -6,7 +6,7 @@ Index: b/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -32,7 +32,7 @@
++@@ -33,7 +33,7 @@
+  INSTALL_BIN=   $(DPREFIX)/bin
+  INSTALL_LIB=   $(DPREFIX)/$(MULTILIB)
+  INSTALL_SHARE= $(DPREFIX)/share
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index 88c5bcbf2..f4d600158 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_i386 || \
+ 		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
+-		BR2_powerpc || BR2_arm || BR2_armeb || \
++		BR2_powerpc || BR2_arm || BR2_armeb || BR2_aarch64 || \
+ 		((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT && \
+ 		!BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6)
+ 	# -m32 flag is used for 32bit builds and host-luajit has
+@@ -26,7 +26,7 @@ config BR2_PACKAGE_LUAJIT
+ 	  ABI-compatible to the standard Lua interpreter and can be
+ 	  deployed as a drop-in replacement.
  
--	  https://metacpan.org/release/HTTP-Date
-+	  https://github.com/libwww-perl/HTTP-Date
-diff --git a/package/perl-http-date/perl-http-date.hash b/package/perl-http-date/perl-http-date.hash
-index f74ca0cd8..7c1fa5b9c 100644
---- a/package/perl-http-date/perl-http-date.hash
-+++ b/package/perl-http-date/perl-http-date.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    52b7a0d5982d61be1edb217751d7daba HTTP-Date-6.02.tar.gz
--sha256 e8b9941da0f9f0c9c01068401a5e81341f0e3707d1c754f8e11f42a7e629e333 HTTP-Date-6.02.tar.gz
-+md5    2ecbb3aedf6aef062605191813ca3027 HTTP-Date-6.05.tar.gz
-+sha256 365d6294dfbd37ebc51def8b65b81eb79b3934ecbc95a2ec2d4d827efe6a922b HTTP-Date-6.05.tar.gz
+-	  http://luajit.org/
++	  https://github.com/moonjit/moonjit
  
- # computed by scancpan
--sha256 fad3a7732ff63e3521b94baea45d82a300edf8e0a5cf571ef2661c894e196632 README
-+sha256 305b71c4d2fd6380585689c5f1c620737a36a318ce0f9c772badce0fe293a44e LICENSE
-diff --git a/package/perl-http-date/perl-http-date.mk b/package/perl-http-date/perl-http-date.mk
-index 5dc91f31d..43583be30 100644
---- a/package/perl-http-date/perl-http-date.mk
-+++ b/package/perl-http-date/perl-http-date.mk
-@@ -4,11 +4,11 @@
+ if BR2_PACKAGE_LUAJIT
+ 
+diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
+index 7e2d87ebb..532ec0b29 100644
+--- a/package/luajit/luajit.hash
++++ b/package/luajit/luajit.hash
+@@ -1,5 +1,5 @@
+-# Hashes from: http://luajit.org/download.html
+-md5 48353202cbcacab84ee41a5a70ea0a2c    LuaJIT-2.0.5.tar.gz
++# Locally calculated
++sha256 c3de8e29aa617fc594c043f57636ab9ad71af2b4a3a513932b05f5cdaa4320b2  luajit-2.1.2.tar.gz
+ 
+ # Locally calculated
+-sha256 accb335aa3102f80d31caa2c2508fbcb795314106493519a367f13a87d0e87de  COPYRIGHT
++sha256 aa64a7706ded773011b933f4230d7b35ba662598197f82ac2c7bca62abdaa4d7  COPYRIGHT
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 5b08a42d9..68e6af4f5 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--PERL_HTTP_DATE_VERSION = 6.02
-+PERL_HTTP_DATE_VERSION = 6.05
- PERL_HTTP_DATE_SOURCE = HTTP-Date-$(PERL_HTTP_DATE_VERSION).tar.gz
--PERL_HTTP_DATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTTP_DATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_DATE_LICENSE = Artistic or GPL-1.0+
--PERL_HTTP_DATE_LICENSE_FILES = README
-+PERL_HTTP_DATE_LICENSE_FILES = LICENSE
- PERL_HTTP_DATE_DISTNAME = HTTP-Date
+-LUAJIT_VERSION = 2.0.5
+-LUAJIT_SOURCE = LuaJIT-$(LUAJIT_VERSION).tar.gz
+-LUAJIT_SITE = http://luajit.org/download
++LUAJIT_VERSION = 2.1.2
++LUAJIT_SITE = $(call github,moonjit,moonjit,$(LUAJIT_VERSION))
+ LUAJIT_LICENSE = MIT
+ LUAJIT_LICENSE_FILES = COPYRIGHT
  
- $(eval $(perl-package))
 -- 
 2.20.1
