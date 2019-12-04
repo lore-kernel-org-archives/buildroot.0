@@ -1,7 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed,  4 Dec 2019 12:06:28 -0800
-Subject: [Buildroot] [PATCH 1/2] package/python-django: bump to version 3.0
-Message-ID: <20191204200629.686191-1-aduskett@gmail.com>
+Date: Wed,  4 Dec 2019 12:06:29 -0800
+Subject: [Buildroot] [PATCH 2/2] support/testing: add python-django test
+In-Reply-To: <20191204200629.686191-1-aduskett@gmail.com>
+References: <20191204200629.686191-1-aduskett@gmail.com>
+Message-ID: <20191204200629.686191-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,61 +12,82 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <aduskett@greenlots.com>
 
-Other changes:
-  - Select BR2_PACKAGE_PYTHON_ASGIREF as a new runtime dependency.
-  - Select BR2_PACKAGE_PYTHON_SQLPARSE as a new runtime dependency.
+This test comprises of four simple steps:
+  1: Start a new simple project called testsite.
+  2: Run ./manage.py migrate on the new testsite.
+  3: Run ./manage.py runserver 0.0.0.0:1234 & sleep 30
+    - The sleep 30 is necessary as it may take several seconds for
+      the django server to fully start.
+  4: Run netstat to ensure the server opened port 1234.
 
 Signed-off-by: Adam Duskett <aduskett@greenlots.com>
 ---
- package/python-django/Config.in          | 3 +++
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 4 deletions(-)
+ .gitlab-ci.yml                                |  1 +
+ .../tests/package/sample_python_django.py     |  1 +
+ .../tests/package/test_python_django.py       | 35 +++++++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_django.py
+ create mode 100644 support/testing/tests/package/test_python_django.py
 
-diff --git a/package/python-django/Config.in b/package/python-django/Config.in
-index 0a2e308d31..6748d42e1a 100644
---- a/package/python-django/Config.in
-+++ b/package/python-django/Config.in
-@@ -3,8 +3,11 @@ config BR2_PACKAGE_PYTHON_DJANGO
- 	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON3_UNICODEDATA
- 	select BR2_PACKAGE_PYTHON3_PYEXPAT
-+	select BR2_PACKAGE_PYTHON_ASGIREF # runtime
- 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_SQLPARSE # runtime
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 22befa0427..75b2fcb37c 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -448,6 +448,7 @@ tests.package.test_python_constantly.TestPythonPy3Constantly: { extends: .runtim
+ tests.package.test_python_crossbar.TestPythonPy3Crossbar: { extends: .runtime_test }
+ tests.package.test_python_cryptography.TestPythonPy2Cryptography: { extends: .runtime_test }
+ tests.package.test_python_cryptography.TestPythonPy3Cryptography: { extends: .runtime_test }
++tests.package.test_python_django.TestPythonPy3Django: { extends: .runtime_test }
+ tests.package.test_python_incremental.TestPythonPy2Incremental: { extends: .runtime_test }
+ tests.package.test_python_incremental.TestPythonPy3Incremental: { extends: .runtime_test }
+ tests.package.test_python_passlib.TestPythonPy2Passlib: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/sample_python_django.py b/support/testing/tests/package/sample_python_django.py
+new file mode 100644
+index 0000000000..c2bad566a7
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_django.py
+@@ -0,0 +1 @@
++import django  # noqa: F401
+diff --git a/support/testing/tests/package/test_python_django.py b/support/testing/tests/package/test_python_django.py
+new file mode 100644
+index 0000000000..3db9b96123
+--- /dev/null
++++ b/support/testing/tests/package/test_python_django.py
+@@ -0,0 +1,35 @@
++from tests.package.test_python import TestPythonPackageBase
 +
- 	help
- 	  Django is a high-level Python Web framework that encourages
- 	  rapid development and clean, pragmatic design. It takes your
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 965055f47d..f2bd879e9d 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5	57d965818410a4e00e2267eef66aa9c9  Django-2.2.8.tar.gz
--sha256	a4ad4f6f9c6a4b7af7e2deec8d0cbff28501852e5010d6c2dc695d3d1fae7ca0  Django-2.2.8.tar.gz
-+md5	bd2aebfa7c1106755544f7f217d2acde  Django-3.0.tar.gz
-+sha256	d98c9b6e5eed147bc51f47c014ff6826bd1ab50b166956776ee13db5a58804ae  Django-3.0.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index d541a2c07b..4158669b14 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 2.2.8
-+PYTHON_DJANGO_VERSION = 3.0
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1c/aa/f618f346b895123be44739b276099a2b418b45b2b7afb5e1071403e8d2e9
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/f8/46/b3b8c61f867827fff2305db40659495dcd64fb35c399e75c53f23c113871
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
++
++class TestPythonDjango(TestPythonPackageBase):
++    config = TestPythonPackageBase.config
++    sample_scripts = ["tests/package/sample_python_django.py"]
++
++    def run_sample_scripts(self):
++        cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
++        _, exit_code = self.emulator.run(cmd, timeout=30)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py migrate"
++        output, exit_code = self.emulator.run(cmd, timeout=30)
++        self.assertIn("Operations to perform:", output[0])
++        self.assertEqual(exit_code, 0)
++
++        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py runserver 0.0.0.0:1234 & "
++        # give some time to setup the server
++        cmd += "sleep 30"
++        _, exit_code = self.emulator.run(cmd, timeout=35)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++class TestPythonPy3Django(TestPythonDjango):
++    __test__ = True
++    config = TestPythonDjango.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_DJANGO=y
++        BR2_PACKAGE_PYTHON3_SQLITE=y
++        """
 -- 
 2.23.0
