@@ -1,39 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Dec 2019 13:58:46 +0100
-Subject: [Buildroot] [PATCH] utils/genrandconfig: fix runtime issue with
- Python 3
-In-Reply-To: <8a33063f-ca07-6c59-58fe-27cd3c1894ed@mind.be>
-References: <20191203165137.1100010-1-thomas.petazzoni@bootlin.com>
- <1a56a5b4-e64b-3844-7352-d12c6407585b@mind.be>
- <20191203205836.66e9c82a@windsurf>
- <8a33063f-ca07-6c59-58fe-27cd3c1894ed@mind.be>
-Message-ID: <20191204135846.5ec63e41@windsurf>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Wed, 04 Dec 2019 14:00:50 +0100
+Subject: [Buildroot] [PATCH 6/7] libnetconf2: adjust dependencies
+In-Reply-To: <9d41e44617fd43d6be09f8b9da673643@kontron.com>
+References: <cover.1575456104.git.jan.kundrat@cesnet.cz>
+ <8c74f9fdebe7eef326420f5354f3ec8163930074.1575456104.git.jan.kundrat@cesnet.cz>
+ <9d41e44617fd43d6be09f8b9da673643@kontron.com>
+Message-ID: <6c981692-5631-4157-9ac7-c3f4da30e917@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 4 Dec 2019 13:52:48 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+> The intention was to be able to select the SSH/TLS support by 
+> providing/selecting the
+> dependent package.
+>
+> Do you think that is not reasonable?
 
-> > and I indeed noticed the issue with Python 3.x because I started using
-> > genrandconfig on my updated Fedora system, which now uses Python 3.x as
-> > "python".
-> >   
-> >> , nobody noticed that this broke when I switched to
-> >> reading from file instead of URL two years ago (84929a53a4).  
-> > 
-> > Indeed. I'll update the commit log and resend.  
-> 
->  Didn't I mention that I already merged it?
+I think that the code in current buildroot does not enforce this. I.e., in 
+case I have neither openssl nor libssh+server already selected, I will end 
+up with a libnetconf2 which cannot do anything. I think that that is 
+confusing.
 
-You did, but I saw it after replying to this e-mail :)
+There are other options, of course:
 
-Thanks!
+- We could add nested suboptions below BR2_PACKAGE_LIBNETCONF2 which would 
+pick  the corresponding depenency. That way, people would at least have a 
+hint that they should drill down within KConfig and notice that there are 
+two options. Both of these could be checked by default. Disadvantage: if 
+the libssh+server or openssl gets enabled later, there's a risk that these 
+two get out of sync.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+- We coud just add a hard dependency on both. That IMHO also makes sense 
+because I have a feeling that the majority of people actually want both 
+ways.
+
+Jan
