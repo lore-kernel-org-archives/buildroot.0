@@ -1,67 +1,39 @@
-From: Heiko Thiery <Heiko.Thiery@kontron.com>
-Date: Wed, 4 Dec 2019 12:53:26 +0000
-Subject: [Buildroot] [PATCH 6/7] libnetconf2: adjust dependencies
-In-Reply-To: <8c74f9fdebe7eef326420f5354f3ec8163930074.1575456104.git.jan.kundrat@cesnet.cz>
-References: <cover.1575456104.git.jan.kundrat@cesnet.cz>
- <8c74f9fdebe7eef326420f5354f3ec8163930074.1575456104.git.jan.kundrat@cesnet.cz>
-Message-ID: <9d41e44617fd43d6be09f8b9da673643@kontron.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 4 Dec 2019 13:58:46 +0100
+Subject: [Buildroot] [PATCH] utils/genrandconfig: fix runtime issue with
+ Python 3
+In-Reply-To: <8a33063f-ca07-6c59-58fe-27cd3c1894ed@mind.be>
+References: <20191203165137.1100010-1-thomas.petazzoni@bootlin.com>
+ <1a56a5b4-e64b-3844-7352-d12c6407585b@mind.be>
+ <20191203205836.66e9c82a@windsurf>
+ <8a33063f-ca07-6c59-58fe-27cd3c1894ed@mind.be>
+Message-ID: <20191204135846.5ec63e41@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jan,
+On Wed, 4 Dec 2019 13:52:48 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-> -----Urspr?ngliche Nachricht-----
-> Von: Jan Kundr?t [mailto:jan.kundrat at cesnet.cz]
-> Gesendet: Freitag, 17. M?rz 2017 19:30
-> An: buildroot at buildroot.org
-> Cc: Heiko Thiery; Fabrice Fontaine
-> Betreff: [PATCH 6/7] libnetconf2: adjust dependencies
+> > and I indeed noticed the issue with Python 3.x because I started using
+> > genrandconfig on my updated Fedora system, which now uses Python 3.x as
+> > "python".
+> >   
+> >> , nobody noticed that this broke when I switched to
+> >> reading from file instead of URL two years ago (84929a53a4).  
+> > 
+> > Indeed. I'll update the commit log and resend.  
 > 
-> This package needs at least one of these two options, or both:
-> 
-> - openssl
-> - libssh + the server option
-> 
-> Without these, it is not possible to produce a usable library, so let's reflect this
-> in the dependencies.
-> 
-> I'm not sure that there is so much value in this; I would actually prefer to have
-> both of these unconditionally enabled, but the package is already done in this
-> way, so be it.
+>  Didn't I mention that I already merged it?
 
-The intention was to be able to select the SSH/TLS support by providing/selecting the
-dependent package.
+You did, but I saw it after replying to this e-mail :)
 
-Do you think that is not reasonable?
+Thanks!
 
-> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
-> ---
->  package/libnetconf2/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libnetconf2/Config.in b/package/libnetconf2/Config.in
-> index 0a735b5ed6..6d4c9c71d1 100644
-> --- a/package/libnetconf2/Config.in
-> +++ b/package/libnetconf2/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBNETCONF2
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on !BR2_STATIC_LIBS
->  	depends on BR2_USE_MMU
-> +	depends on BR2_PACKAGE_LIBSSH_SERVER || BR2_PACKAGE_OPENSSL
->  	select BR2_PACKAGE_LIBYANG
->  	help
->  	  libnetconf2 is a NETCONF library in C intended for building @@ -13,3
-> +14,6 @@ config BR2_PACKAGE_LIBNETCONF2  comment "libnetconf2 needs a
-> toolchain w/ threads, dynamic libraray"
->  	depends on BR2_USE_MMU
->  	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +comment "libnetconf2 requires libssh w/ server support and/or openssl"
-> +	depends on !BR2_PACKAGE_LIBSSH_SERVER &&
-> !BR2_PACKAGE_OPENSSL
-> --
-> 2.21.0
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
