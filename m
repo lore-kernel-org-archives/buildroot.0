@@ -1,8 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  4 Dec 2019 09:33:43 +0100
-Subject: [Buildroot] [PATCH 1/8] package/perl-apache-logformat-compiler:
- bump to version 0.36
-Message-ID: <20191204083351.6134-1-francois.perrad@gadz.org>
+Date: Wed,  4 Dec 2019 09:33:44 +0100
+Subject: [Buildroot] [PATCH 2/8] package/perl-date-manip: bump to version
+ 6.79
+In-Reply-To: <20191204083351.6134-1-francois.perrad@gadz.org>
+References: <20191204083351.6134-1-francois.perrad@gadz.org>
+Message-ID: <20191204083351.6134-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,35 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../perl-apache-logformat-compiler.hash                       | 4 ++--
- .../perl-apache-logformat-compiler.mk                         | 2 +-
+ package/perl-date-manip/perl-date-manip.hash | 4 ++--
+ package/perl-date-manip/perl-date-manip.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.hash b/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.hash
-index 5466435c5..de33cfb17 100644
---- a/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.hash
-+++ b/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.hash
+diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
+index fbf3b5490..bb2e6efe7 100644
+--- a/package/perl-date-manip/perl-date-manip.hash
++++ b/package/perl-date-manip/perl-date-manip.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    cbb0bf041ade8a39f65eadbdf8a346c1 Apache-LogFormat-Compiler-0.35.tar.gz
--sha256 1654c0000a042a8af052616e30b91c1f0b95a720c8048b59168a8bd99b07271a Apache-LogFormat-Compiler-0.35.tar.gz
-+md5    a0cdfcd875cb2ee4dc9a2c24381eb55b Apache-LogFormat-Compiler-0.36.tar.gz
-+sha256 94509503ee74ea820183d070c11630ee5bc0fd8c12cb74fae953ed62e4a1ac17 Apache-LogFormat-Compiler-0.36.tar.gz
+-md5    3668485fe389e12e7376974290976eb4 Date-Manip-6.78.tar.gz
+-sha256 cb36084401f9e89999c7046811c83ac58ea44fc12827bf61ca1167a79e915db9 Date-Manip-6.78.tar.gz
++md5    a3b2c1129f02cc5ce5de59d506afab1a Date-Manip-6.79.tar.gz
++sha256 71a8c42ce4edbd46a3ca2a17a7218ceed958cd7ad0dfeb79389f23d0f466943a Date-Manip-6.79.tar.gz
  
  # computed by scancpan
- sha256 ab941cfc4794afa2113795b167177d1b25cbc77ebadd016e5727effc2cadd96b LICENSE
-diff --git a/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.mk b/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.mk
-index 59290f376..82ceb7979 100644
---- a/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.mk
-+++ b/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.mk
+ sha256 8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d LICENSE
+diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
+index 8154cd7a6..d930ee8c9 100644
+--- a/package/perl-date-manip/perl-date-manip.mk
++++ b/package/perl-date-manip/perl-date-manip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_APACHE_LOGFORMAT_COMPILER_VERSION = 0.35
-+PERL_APACHE_LOGFORMAT_COMPILER_VERSION = 0.36
- PERL_APACHE_LOGFORMAT_COMPILER_SOURCE = Apache-LogFormat-Compiler-$(PERL_APACHE_LOGFORMAT_COMPILER_VERSION).tar.gz
- PERL_APACHE_LOGFORMAT_COMPILER_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZEBURO
- PERL_APACHE_LOGFORMAT_COMPILER_DEPENDENCIES = host-perl-module-build-tiny
+-PERL_DATE_MANIP_VERSION = 6.78
++PERL_DATE_MANIP_VERSION = 6.79
+ PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
+ PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
+ PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
 -- 
 2.20.1
