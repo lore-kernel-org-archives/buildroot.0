@@ -1,50 +1,36 @@
 From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date: Wed, 04 Dec 2019 10:47:53 -0000
-Subject: [Buildroot] [PATCH 6/7] libnetconf2: adjust dependencies
+Date: Wed, 4 Dec 2019 11:17:27 +0100
+Subject: [Buildroot] [PATCH 7/7] Add me as a maintainer for the NETCONF stack
 In-Reply-To: <cover.1575456104.git.jan.kundrat@cesnet.cz>
 References: <cover.1575456104.git.jan.kundrat@cesnet.cz>
-Message-ID: <8c74f9fdebe7eef326420f5354f3ec8163930074.1575456104.git.jan.kundrat@cesnet.cz>
+Message-ID: <ec0bebfefa272b6535ca451f6a3fc9beb80681ee.1575456104.git.jan.kundrat@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package needs at least one of these two options, or both:
-
-- openssl
-- libssh + the server option
-
-Without these, it is not possible to produce a usable library, so let's
-reflect this in the dependencies.
-
-I'm not sure that there is so much value in this; I would actually
-prefer to have both of these unconditionally enabled, but the package is
-already done in this way, so be it.
+We've been using libyang, sysrepo, libnetconf2 and the Netopeer2 suite
+of software for more than two years, so let's make this official.
 
 Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
 ---
- package/libnetconf2/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libnetconf2/Config.in b/package/libnetconf2/Config.in
-index 0a735b5ed6..6d4c9c71d1 100644
---- a/package/libnetconf2/Config.in
-+++ b/package/libnetconf2/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBNETCONF2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_LIBSSH_SERVER || BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBYANG
- 	help
- 	  libnetconf2 is a NETCONF library in C intended for building
-@@ -13,3 +14,6 @@ config BR2_PACKAGE_LIBNETCONF2
- comment "libnetconf2 needs a toolchain w/ threads, dynamic libraray"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "libnetconf2 requires libssh w/ server support and/or openssl"
-+	depends on !BR2_PACKAGE_LIBSSH_SERVER && !BR2_PACKAGE_OPENSSL
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a1f94df951..7dc318f013 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1165,6 +1165,9 @@ F:	configs/orangepi_lite_defconfig
+ N:	Jan Kundr?t <jan.kundrat@cesnet.cz>
+ F:	configs/solidrun_clearfog_defconfig
+ F:	board/solidrun/clearfog/
++F:	package/libnetconf2/
++F:	package/libyang/
++F:	package/sysrepo/
+ 
+ N:	Jan Pedersen <jp@jp-embedded.com>
+ F:	package/zip/
 -- 
 2.21.0
