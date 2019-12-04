@@ -1,53 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Dec 2019 16:14:16 +0100
-Subject: [Buildroot] [PATCH 6/7] libnetconf2: adjust dependencies
-In-Reply-To: <8c74f9fdebe7eef326420f5354f3ec8163930074.1575456104.git.jan.kundrat@cesnet.cz>
+Date: Wed, 4 Dec 2019 16:16:37 +0100
+Subject: [Buildroot] [PATCH 1/7] libyang: Optional C++ bindings
+In-Reply-To: <f70195c8c44e4950257e1548b25083254362b266.1575456104.git.jan.kundrat@cesnet.cz>
 References: <cover.1575456104.git.jan.kundrat@cesnet.cz>
- <8c74f9fdebe7eef326420f5354f3ec8163930074.1575456104.git.jan.kundrat@cesnet.cz>
-Message-ID: <20191204161416.111467fc@windsurf>
+ <f70195c8c44e4950257e1548b25083254362b266.1575456104.git.jan.kundrat@cesnet.cz>
+Message-ID: <20191204161637.610e2d79@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 17 Mar 2017 19:29:53 +0100
+On Wed, 4 Oct 2017 07:48:35 +0200
 Jan Kundr?t <jan.kundrat@cesnet.cz> wrote:
 
-> This package needs at least one of these two options, or both:
-> 
-> - openssl
-> - libssh + the server option
-> 
-> Without these, it is not possible to produce a usable library, so let's
-> reflect this in the dependencies.
-> 
-> I'm not sure that there is so much value in this; I would actually
-> prefer to have both of these unconditionally enabled, but the package is
-> already done in this way, so be it.
-> 
-> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
-> ---
->  package/libnetconf2/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libnetconf2/Config.in b/package/libnetconf2/Config.in
-> index 0a735b5ed6..6d4c9c71d1 100644
-> --- a/package/libnetconf2/Config.in
-> +++ b/package/libnetconf2/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBNETCONF2
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on !BR2_STATIC_LIBS
->  	depends on BR2_USE_MMU
-> +	depends on BR2_PACKAGE_LIBSSH_SERVER || BR2_PACKAGE_OPENSSL
+> +if BR2_PACKAGE_LIBYANG
+> +
+> +config BR2_PACKAGE_LIBYANG_CPP
+> +	bool "Enable libyang C++ bindings"
 
-If one of these is really mandatory for the package to work in any
-meaningful way, then:
+Just:
 
-	select ONE_OPTION if !SECOND_OPTION
+	bool "enable C++ bindings"
 
-is preferred, so that it is more natural for users, and you don't need
-the Config.in comment.
+no need to repeat the package name.
+
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+
+I suppose you also need:
+
+	depends on BR2_INSTALL_LIBSTDCPP
+
+> +	help
+> +	  Build the C++ wrapper around libyang.
+
+You also need a Config.in comment to document the C++ and gcc >= 4.8
+dependencies.
+
+> diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+> index cfec08cd16..87a1a4ef7c 100644
+> --- a/package/libyang/libyang.mk
+> +++ b/package/libyang/libyang.mk
+> @@ -21,5 +21,12 @@ HOST_LIBYANG_CONF_OPTS = \
+>  	-DENABLE_VALGRIND_TESTS=OFF \
+>  	-DGEN_PYTHON_BINDINGS=OFF
+>  
+> +ifdef BR2_PACKAGE_LIBYANG_CPP
+
+should be:
+
+ifeq ($(BR2_PACKAGE_LIBYANG_CPP),y)
+
+> +	LIBYANG_DEPENDENCIES += host-swig
+> +	HOST_LIBYANG_DEPENDENCIES += host-swig
+> +	LIBYANG_CONF_OPTS += -DGEN_LANGUAGE_BINDINGS=ON -DGEN_CPP_BINDINGS=ON -DGEN_PYTHON_BINDINGS=OFF -DGEN_JAVA_BINDINGS=OFF
+> +	HOST_LIBYANG_CONF_OPTS += -DGEN_LANGUAGE_BINDINGS=ON -DGEN_CPP_BINDINGS=ON -DGEN_PYTHON_BINDINGS=OFF -DGEN_JAVA_BINDINGS=OFF
+
+This is not good: BR2_PACKAGE_LIBYANG_CPP is a target configuration
+option, it should not affect how the host variant of libyang is built.
+
+Unless you need the C++ bindings in host-libyang, just make
+BR2_PACKAGE_LIBYANG_CPP=y enable the C++ bindings in the target package.
+
+Best regards,
 
 Thomas
 -- 
