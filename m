@@ -1,109 +1,162 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  4 Dec 2019 09:38:45 +0100
-Subject: [Buildroot] [PATCH] package/luajit: switch to moonjit fork
-Message-ID: <20191204083845.6319-1-francois.perrad@gadz.org>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Wed, 4 Dec 2019 09:53:53 +0100
+Subject: [Buildroot] [PATCH] package/php: select SYSTEMD_TMPFILES for
+ PHP_SAPI_FPM
+In-Reply-To: <CAFvCimXVERj+Gd1y-NyVvcSKYsP0iDWrSG9UORE8j56ZK5Arog@mail.gmail.com>
+References: <20191122093930.7933-1-p.debruijn@unilogic.nl>
+ <20191125221009.4c31d0d6@windsurf>
+ <CAFvCimXVERj+Gd1y-NyVvcSKYsP0iDWrSG9UORE8j56ZK5Arog@mail.gmail.com>
+Message-ID: <CAFvCimX4eYVpcRqAFinCcU65qn3F8a-vE0O+1D1uzw0nPQMNMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this fork is based on LuaJIT 2.1.0-beta3 which supports ARM64
+Ok, for the special case of PHP, this has been fixed upstream with
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luajit/0001-no-bin-symlink.patch | 4 ++--
- package/luajit/0002-install-inc.patch    | 2 +-
- package/luajit/Config.in                 | 4 ++--
- package/luajit/luajit.hash               | 6 +++---
- package/luajit/luajit.mk                 | 5 ++---
- 5 files changed, 10 insertions(+), 11 deletions(-)
+https://github.com/systemd/systemd/pull/14207
 
-diff --git a/package/luajit/0001-no-bin-symlink.patch b/package/luajit/0001-no-bin-symlink.patch
-index dd1dfd89f..d32ec5ad6 100644
---- a/package/luajit/0001-no-bin-symlink.patch
-+++ b/package/luajit/0001-no-bin-symlink.patch
-@@ -6,7 +6,7 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -43,8 +43,7 @@
-+@@ -44,8 +44,7 @@
-  INSTALL_MAN= $(INSTALL_SHARE)/man/man1
-  INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
-  
-@@ -16,7 +16,7 @@ Index: b/Makefile
-  INSTALL_ANAME= libluajit-$(ABIVER).a
-  INSTALL_SOSHORT1= libluajit-$(ABIVER).so
-  INSTALL_SOSHORT2= libluajit-$(ABIVER).so.$(MAJVER)
--@@ -59,7 +58,6 @@
-+@@ -60,7 +59,6 @@
-  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT1)
-  INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT2)
-  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
-diff --git a/package/luajit/0002-install-inc.patch b/package/luajit/0002-install-inc.patch
-index 86b766dfc..5f6547fc3 100644
---- a/package/luajit/0002-install-inc.patch
-+++ b/package/luajit/0002-install-inc.patch
-@@ -6,7 +6,7 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -32,7 +32,7 @@
-+@@ -33,7 +33,7 @@
-  INSTALL_BIN=   $(DPREFIX)/bin
-  INSTALL_LIB=   $(DPREFIX)/$(MULTILIB)
-  INSTALL_SHARE= $(DPREFIX)/share
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index 88c5bcbf2..f4d600158 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_i386 || \
- 		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
--		BR2_powerpc || BR2_arm || BR2_armeb || \
-+		BR2_powerpc || BR2_arm || BR2_armeb || BR2_aarch64 || \
- 		((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT && \
- 		!BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6)
- 	# -m32 flag is used for 32bit builds and host-luajit has
-@@ -26,7 +26,7 @@ config BR2_PACKAGE_LUAJIT
- 	  ABI-compatible to the standard Lua interpreter and can be
- 	  deployed as a drop-in replacement.
- 
--	  http://luajit.org/
-+	  https://github.com/moonjit/moonjit
- 
- if BR2_PACKAGE_LUAJIT
- 
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index 7e2d87ebb..532ec0b29 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -1,5 +1,5 @@
--# Hashes from: http://luajit.org/download.html
--md5 48353202cbcacab84ee41a5a70ea0a2c    LuaJIT-2.0.5.tar.gz
-+# Locally calculated
-+sha256 c3de8e29aa617fc594c043f57636ab9ad71af2b4a3a513932b05f5cdaa4320b2  luajit-2.1.2.tar.gz
- 
- # Locally calculated
--sha256 accb335aa3102f80d31caa2c2508fbcb795314106493519a367f13a87d0e87de  COPYRIGHT
-+sha256 aa64a7706ded773011b933f4230d7b35ba662598197f82ac2c7bca62abdaa4d7  COPYRIGHT
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 5b08a42d9..68e6af4f5 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--LUAJIT_VERSION = 2.0.5
--LUAJIT_SOURCE = LuaJIT-$(LUAJIT_VERSION).tar.gz
--LUAJIT_SITE = http://luajit.org/download
-+LUAJIT_VERSION = 2.1.2
-+LUAJIT_SITE = $(call github,moonjit,moonjit,$(LUAJIT_VERSION))
- LUAJIT_LICENSE = MIT
- LUAJIT_LICENSE_FILES = COPYRIGHT
- 
+The official word from upstream is "yes tmpfiles is optional but it should
+always be here except for really tiny embedded systems"
+
+So we are good (tmpfile's default is activated)
+
+Ideally, we should backport that PR until upstream adds it to
+systemd-stable.
+
+BR
+J?r?my
+
+
+Le mar. 26 nov. 2019 ? 18:45, J?r?my ROSEN <jeremy.rosen@smile.fr> a ?crit :
+
+> systemd-tmpfiles is a small utility provided by systemd to do "file system
+> tweaks" early during the boot
+>
+> The primary use-case is to populate /run early so everything is ready when
+> the "real stuff" starts but it can do all sort of things
+> * create files
+> * remove files
+> * write to files
+> * adjust file permissions/ACL..
+> * create nodes in /dev
+>
+> systemd-tmpfiles avoids launching dozen of small processes/subshells for
+> small adjustment as it is don intraditionnal sysV startup files
+>
+> systemd-tmpfiles configuration is drop-in based so any package can add
+> file in the proper directory to be sure things are created/adjusted at boot
+> time.
+>
+> moreover systemd-tmpfiles is needed to be able to dynamically load modules
+> :
+> * at boot time, systemd will scan modules in /lib/modules (using modinfo)
+> to know all /dev nodes that unloaded modules can handle
+> * systemd-tmpfiles will create the corresponding nodes in /dev
+> * when a process opens the node, the kernel will block the process and
+> call udev
+> * udev will find the module to load (using modules.alias)
+> * once the module is loaded, the kernel will honor the open request and
+> unblock the process.
+>
+> systemd-tmpfiles is not an optional part of systemd. Buildroot configures
+> it that way, but packages are supposed to safely assume it's there on any
+> systemd-based system
+>
+> So I would consider it a bug to have systemd-tmpfiles be optional. I'd
+> rather see a patch removing that aspect entirely.
+>
+> Now... if we want to keep that option (which, again, I don't recommend)
+> yes. This patch looks good to me.
+>
+>
+>
+> Le lun. 25 nov. 2019 ? 22:10, Thomas Petazzoni <
+> thomas.petazzoni at bootlin.com> a ?crit :
+>
+>> Hello J?r?my,
+>>
+>> Do you have some feedback about this patch ?
+>>
+>> Thanks,
+>>
+>> Thomas
+>>
+>> On Fri, 22 Nov 2019 10:39:30 +0100
+>> Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
+>>
+>> > PrivateTmp=true requires SYSTEMD_TMPFILES otherwise the service will
+>> > fail to start on boot.
+>> >
+>> > Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+>> > ---
+>> >  package/php/Config.in | 1 +
+>> >  1 file changed, 1 insertion(+)
+>> >
+>> > diff --git a/package/php/Config.in b/package/php/Config.in
+>> > index 2469573..b65438a 100644
+>> > --- a/package/php/Config.in
+>> > +++ b/package/php/Config.in
+>> > @@ -39,6 +39,7 @@ config BR2_PACKAGE_PHP_SAPI_CLI
+>> >
+>> >  config BR2_PACKAGE_PHP_SAPI_FPM
+>> >       bool "FPM interface"
+>> > +     select BR2_PACKAGE_SYSTEMD_TMPFILES if BR2_PACKAGE_SYSTEMD
+>> >       depends on BR2_USE_MMU
+>> >       # "Sparc v8 and predecessors are not and will not be supported"
+>> >       depends on !BR2_sparc
+>>
+>>
+>>
+>> --
+>> Thomas Petazzoni, CTO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+>>
+>
+>
+> --
+> [image: SMILE]  <http://www.smile.eu/>
+>
+> 20 rue des Jardins
+> 92600 Asni?res-sur-Seine
+> *J?r?my ROSEN*
+> Architecte technique
+>
+> [image: email] jeremy.rosen at smile.fr
+> [image: phone]  +33 6 88 25 87 42
+> [image: url] http://www.smile.eu
+>
+> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+> <https://www.facebook.com/smileopensource> [image: LinkedIn]
+> <https://www.linkedin.com/company/smile> [image: Github]
+> <https://github.com/Smile-SA>
+>
+> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+>
+
+
 -- 
-2.20.1
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191204/df5ab6a5/attachment-0001.html>
