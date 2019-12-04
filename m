@@ -1,54 +1,161 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 04 Dec 2019 10:55:25 +0100
-Subject: [Buildroot] [PATCH v1 1/4] package/runc: bump to 1.0.0-rc9
-In-Reply-To: <20191203045003.145746-1-christian@paral.in> (Christian Stewart's
- message of "Mon, 2 Dec 2019 20:50:00 -0800")
-References: <20191203045003.145746-1-christian@paral.in>
-Message-ID: <87wobcjtyq.fsf@dell.be.48ers.dk>
+From: Arthur COURTEL <arthur.courtel@smile.fr>
+Date: Wed, 4 Dec 2019 10:55:50 +0100
+Subject: [Buildroot] [PATCHv2 2/2] configs: add raspberrypi4 64bits
+ defconfig
+In-Reply-To: <20191203211649.26f4425a@gmx.net>
+References: <20191203132658.863709-1-arthur.courtel@smile.fr>
+ <20191203132658.863709-2-arthur.courtel@smile.fr>
+ <20191203211649.26f4425a@gmx.net>
+Message-ID: <CAL=Sv2+SR8YFv6surffaoC7HHHAHhcv_x0YG55x+34hJd81dCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+Hello Peter,
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+Indeed it is needed.
+I don't know how i got a working serial on rpi4 without it...
+Thanks for the feedback, I will propose a V3 to fix that.
 
-According to https://github.com/opencontainers/runc/releases, this is a
-security bump so it should be marked as such and we presumably want to
-backport it to 2019.02.x even though that uses docker 18.09?
+Regards,
+Arthur
 
- > ---
- >  package/runc/runc.hash | 2 +-
- >  package/runc/runc.mk   | 2 +-
- >  2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, Dec 3, 2019 at 9:16 PM Peter Seiderer <ps.report@gmx.net> wrote:
 
- > diff --git a/package/runc/runc.hash b/package/runc/runc.hash
- > index 4f663affc4..3e8eff3cca 100644
- > --- a/package/runc/runc.hash
- > +++ b/package/runc/runc.hash
- > @@ -1,3 +1,3 @@
- >  # Locally computed
- > -sha256	efe4ff9bbe49b19074346d65c914d809c0a3e90d062ea9619fe240f931f0b700  runc-1.0.0-rc8.tar.gz
- > +sha256	2ec69c25df9f02c6fd38eb287145f8afba6772f809abe01df4534b5bfd68e8d4  runc-1.0.0-rc9.tar.gz
- >  sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
- > diff --git a/package/runc/runc.mk b/package/runc/runc.mk
- > index b858742905..acf61ab160 100644
- > --- a/package/runc/runc.mk
- > +++ b/package/runc/runc.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
- 
- > -RUNC_VERSION = 1.0.0-rc8
- > +RUNC_VERSION = 1.0.0-rc9
- >  RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- >  RUNC_LICENSE = Apache-2.0
- >  RUNC_LICENSE_FILES = LICENSE
- > -- 
- > 2.24.0
-
+> Hello Arthur,
+>
+> On Tue,  3 Dec 2019 14:26:58 +0100, Arthur Courtel <
+> arthur.courtel at smile.fr> wrote:
+>
+> > This configuration builds a 64bit image for RaspberryPi 4.
+> >
+> > Signed-off-by: Arthur Courtel <arthur.courtel@smile.fr>
+> > ---
+> >  .../raspberrypi/genimage-raspberrypi4-64.cfg  | 30 +++++++++++++++
+> >  board/raspberrypi4-64                         |  1 +
+> >  configs/raspberrypi4_64_defconfig             | 37 +++++++++++++++++++
+> >  3 files changed, 68 insertions(+)
+> >  create mode 100644 board/raspberrypi/genimage-raspberrypi4-64.cfg
+> >  create mode 120000 board/raspberrypi4-64
+> >  create mode 100644 configs/raspberrypi4_64_defconfig
+> >
+> > diff --git a/board/raspberrypi/genimage-raspberrypi4-64.cfg
+> b/board/raspberrypi/genimage-raspberrypi4-64.cfg
+> > new file mode 100644
+> > index 0000000000..3c480e98f0
+> > --- /dev/null
+> > +++ b/board/raspberrypi/genimage-raspberrypi4-64.cfg
+> > @@ -0,0 +1,30 @@
+> > +image boot.vfat {
+> > +  vfat {
+> > +    files = {
+> > +      "bcm2711-rpi-4-b.dtb",
+> > +      "rpi-firmware/cmdline.txt",
+> > +      "rpi-firmware/config.txt",
+> > +      "rpi-firmware/fixup4.dat",
+> > +      "rpi-firmware/start4.elf",
+> > +      "rpi-firmware/overlays",
+> > +      "Image"
+> > +    }
+> > +  }
+> > +  size = 32M
+> > +}
+> > +
+> > +image sdcard.img {
+> > +  hdimage {
+> > +  }
+> > +
+> > +  partition boot {
+> > +    partition-type = 0xC
+> > +    bootable = "true"
+> > +    image = "boot.vfat"
+> > +  }
+> > +
+> > +  partition rootfs {
+> > +    partition-type = 0x83
+> > +    image = "rootfs.ext4"
+> > +  }
+> > +}
+> > diff --git a/board/raspberrypi4-64 b/board/raspberrypi4-64
+> > new file mode 120000
+> > index 0000000000..fcdafc81ed
+> > --- /dev/null
+> > +++ b/board/raspberrypi4-64
+> > @@ -0,0 +1 @@
+> > +raspberrypi
+> > \ No newline at end of file
+> > diff --git a/configs/raspberrypi4_64_defconfig
+> b/configs/raspberrypi4_64_defconfig
+> > new file mode 100644
+> > index 0000000000..c88923d507
+> > --- /dev/null
+> > +++ b/configs/raspberrypi4_64_defconfig
+> > @@ -0,0 +1,37 @@
+> > +BR2_aarch64=y
+> > +BR2_cortex_a72=y
+> > +
+> > +BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> > +
+> > +BR2_SYSTEM_DHCP="eth0"
+> > +
+> > +# Linux headers same as kernel, a 4.19 series
+> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> > +
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call
+> github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
+> > +BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+> > +
+> > +# Build the DTB from the kernel sources
+> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-4-b"
+>
+> No chance to test myself for pi4 (because of lack of hardware yet), but I
+> believe
+> BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y is needed for an 64-bit kernel, see
+> [1] and [2] for pi3...
+>
+> Regards,
+> Peter
+>
+> [1]
+> https://git.buildroot.net/buildroot/commit/?id=2aa92335cdc5f71c2d09391dc49fcf3c7627d6f0
+> [2]
+> https://git.buildroot.net/buildroot/commit/?id=e747d33bd9d319481a67a376c97e5100dd93f62a
+>
+> > +
+> > +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> > +
+> > +BR2_PACKAGE_RPI_FIRMWARE=y
+> > +BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
+> > +
+> > +# Required tools to create the SD image
+> > +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> > +BR2_PACKAGE_HOST_GENIMAGE=y
+> > +BR2_PACKAGE_HOST_MTOOLS=y
+> > +
+> > +# Filesystem / image
+> > +BR2_TARGET_ROOTFS_EXT2=y
+> > +BR2_TARGET_ROOTFS_EXT2_4=y
+> > +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+> > +# BR2_TARGET_ROOTFS_TAR is not set
+> > +BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4-64/post-build.sh"
+> > +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4-64/post-image.sh"
+> > +BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay --aarch64"
+>
+>
 
 -- 
-Bye, Peter Korsgaard
+<http://www.smile.eu/>
+*Arthur COURTEL*
+Ing?nieur Etude et D?veloppement
+
+[image: email] arthur.courtel at smile.fr
+
+[image: eco] Pour la plan?te, n'imprimez ce mail que si c'est n?cessaire
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191204/1d902fdf/attachment.html>
