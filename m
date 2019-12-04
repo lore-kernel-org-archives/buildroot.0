@@ -1,34 +1,57 @@
 From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date: Wed, 4 Dec 2019 11:41:44 +0100
-Subject: [Buildroot] [PATCH 0/7] Improve sysrepo support
-Message-ID: <cover.1575456104.git.jan.kundrat@cesnet.cz>
+Date: Wed, 04 Dec 2019 10:47:22 -0000
+Subject: [Buildroot] [PATCH 1/7] libyang: Optional C++ bindings
+In-Reply-To: <cover.1575456104.git.jan.kundrat@cesnet.cz>
+References: <cover.1575456104.git.jan.kundrat@cesnet.cz>
+Message-ID: <f70195c8c44e4950257e1548b25083254362b266.1575456104.git.jan.kundrat@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series synces up current Buildroot support (thanks for
-submitting it, Heiko) with what I have been using for 2+ years. I still
-have a few pending patches for Netopeer2 in my queue, please expect them
-later this week.
+Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+---
+ package/libyang/Config.in  | 10 ++++++++++
+ package/libyang/libyang.mk |  7 +++++++
+ 2 files changed, 17 insertions(+)
 
-Jan Kundr?t (7):
-  libyang: Optional C++ bindings
-  sysrepo: fix a typo when installing with systemd
-  sysrepo: libnetconf2 is not needed
-  sysrepo: Optional support for C++ bindings
-  sysrepo: Use a common repository location
-  libnetconf2: adjust dependencies
-  Add me as a maintainer for the NETCONF stack
-
- DEVELOPERS                    |  3 +++
- package/libnetconf2/Config.in |  4 ++++
- package/libyang/Config.in     | 10 ++++++++++
- package/libyang/libyang.mk    |  7 +++++++
- package/sysrepo/Config.in     |  7 ++++++-
- package/sysrepo/sysrepo.mk    | 22 ++++++++++++++++++----
- 6 files changed, 48 insertions(+), 5 deletions(-)
-
+diff --git a/package/libyang/Config.in b/package/libyang/Config.in
+index fec1160a6f..fc598af8e1 100644
+--- a/package/libyang/Config.in
++++ b/package/libyang/Config.in
+@@ -10,5 +10,15 @@ config BR2_PACKAGE_LIBYANG
+ 
+ 	  https://github.com/CESNET/libyang
+ 
++if BR2_PACKAGE_LIBYANG
++
++config BR2_PACKAGE_LIBYANG_CPP
++	bool "Enable libyang C++ bindings"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	help
++	  Build the C++ wrapper around libyang.
++
++endif
++
+ comment "libyang needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+index cfec08cd16..87a1a4ef7c 100644
+--- a/package/libyang/libyang.mk
++++ b/package/libyang/libyang.mk
+@@ -21,5 +21,12 @@ HOST_LIBYANG_CONF_OPTS = \
+ 	-DENABLE_VALGRIND_TESTS=OFF \
+ 	-DGEN_PYTHON_BINDINGS=OFF
+ 
++ifdef BR2_PACKAGE_LIBYANG_CPP
++	LIBYANG_DEPENDENCIES += host-swig
++	HOST_LIBYANG_DEPENDENCIES += host-swig
++	LIBYANG_CONF_OPTS += -DGEN_LANGUAGE_BINDINGS=ON -DGEN_CPP_BINDINGS=ON -DGEN_PYTHON_BINDINGS=OFF -DGEN_JAVA_BINDINGS=OFF
++	HOST_LIBYANG_CONF_OPTS += -DGEN_LANGUAGE_BINDINGS=ON -DGEN_CPP_BINDINGS=ON -DGEN_PYTHON_BINDINGS=OFF -DGEN_JAVA_BINDINGS=OFF
++endif
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.21.0
