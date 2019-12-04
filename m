@@ -1,68 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Dec 2019 16:16:37 +0100
-Subject: [Buildroot] [PATCH 1/7] libyang: Optional C++ bindings
-In-Reply-To: <f70195c8c44e4950257e1548b25083254362b266.1575456104.git.jan.kundrat@cesnet.cz>
-References: <cover.1575456104.git.jan.kundrat@cesnet.cz>
- <f70195c8c44e4950257e1548b25083254362b266.1575456104.git.jan.kundrat@cesnet.cz>
-Message-ID: <20191204161637.610e2d79@windsurf>
+Date: Wed, 4 Dec 2019 16:18:08 +0100
+Subject: [Buildroot] Autobuilder Package Stats Page
+In-Reply-To: <2139527.4b9fbVHFrc@laptop>
+References: <1653501.gvH1ob0Lqs@laptop> <20191204155348.39878299@windsurf>
+ <2139527.4b9fbVHFrc@laptop>
+Message-ID: <20191204161808.077370d9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 4 Oct 2017 07:48:35 +0200
-Jan Kundr?t <jan.kundrat@cesnet.cz> wrote:
+On Wed, 04 Dec 2019 15:12:50 +0000
+Mark Corbin <mark@dibsco.co.uk> wrote:
 
-> +if BR2_PACKAGE_LIBYANG
-> +
-> +config BR2_PACKAGE_LIBYANG_CPP
-> +	bool "Enable libyang C++ bindings"
+> > When a "next" branch exists, the page is based on data from the next
+> > branch, so that we use the latest package versions known by Buildroot.
+> > However, all your URL-related changes have been merged to master, so
+> > they didn't show up in the refreshed statistics page.  
+> 
+> Do any changes made to 'master' normally get committed to 'next' too when it 
+> exists?
 
-Just:
-
-	bool "enable C++ bindings"
-
-no need to repeat the package name.
-
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-
-I suppose you also need:
-
-	depends on BR2_INSTALL_LIBSTDCPP
-
-> +	help
-> +	  Build the C++ wrapper around libyang.
-
-You also need a Config.in comment to document the C++ and gcc >= 4.8
-dependencies.
-
-> diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
-> index cfec08cd16..87a1a4ef7c 100644
-> --- a/package/libyang/libyang.mk
-> +++ b/package/libyang/libyang.mk
-> @@ -21,5 +21,12 @@ HOST_LIBYANG_CONF_OPTS = \
->  	-DENABLE_VALGRIND_TESTS=OFF \
->  	-DGEN_PYTHON_BINDINGS=OFF
->  
-> +ifdef BR2_PACKAGE_LIBYANG_CPP
-
-should be:
-
-ifeq ($(BR2_PACKAGE_LIBYANG_CPP),y)
-
-> +	LIBYANG_DEPENDENCIES += host-swig
-> +	HOST_LIBYANG_DEPENDENCIES += host-swig
-> +	LIBYANG_CONF_OPTS += -DGEN_LANGUAGE_BINDINGS=ON -DGEN_CPP_BINDINGS=ON -DGEN_PYTHON_BINDINGS=OFF -DGEN_JAVA_BINDINGS=OFF
-> +	HOST_LIBYANG_CONF_OPTS += -DGEN_LANGUAGE_BINDINGS=ON -DGEN_CPP_BINDINGS=ON -DGEN_PYTHON_BINDINGS=OFF -DGEN_JAVA_BINDINGS=OFF
-
-This is not good: BR2_PACKAGE_LIBYANG_CPP is a target configuration
-option, it should not affect how the host variant of libyang is built.
-
-Unless you need the C++ bindings in host-libyang, just make
-BR2_PACKAGE_LIBYANG_CPP=y enable the C++ bindings in the target package.
-
-Best regards,
+No. We only merge "next" back into "master" just after the release. We
+sometimes do cherry-pick some patches from master into next if they fix
+some build issues that affect the autobuilders on both the master and
+next branch, but for all other changes, we wait until next is merged
+back until master.
 
 Thomas
 -- 
