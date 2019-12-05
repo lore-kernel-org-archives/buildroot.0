@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 23:17:29 +0100
-Subject: [Buildroot] [PATCH] package/glibc: drop dependency of utilities
- on bash
-In-Reply-To: <20191203001405.12984-1-unixmania@gmail.com>
-References: <20191203001405.12984-1-unixmania@gmail.com>
-Message-ID: <20191205231729.2c16445c@windsurf>
+Date: Thu, 5 Dec 2019 23:17:52 +0100
+Subject: [Buildroot] [git commit] package/perl-apache-logformat-compiler:
+ bump to version 0.36
+Message-ID: <20191205221012.6CC8D813E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  2 Dec 2019 21:14:05 -0300
-unixmania at gmail.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1e7eb08a71f6d7efb777342c2f9754b15ecb93b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> The dependency was added because ldd uses bash-specific syntax to
-> localize messages. Add a post-patch hook, instead, to replace the
-> occurrences of $"foo" by "foo", simply, so the code becomes POSIX
-> sh compliant if bash is not selected.
-> 
-> Also set the configuration environment accordingly to replace the
-> /bin/bash hashbang by /bin/sh.
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../perl-apache-logformat-compiler.hash                               | 4 ++--
+ .../perl-apache-logformat-compiler/perl-apache-logformat-compiler.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I've applied, however I think it would be nice to have this mechanism
-supported upstream. It can probably be easily added using a check in
-configure.ac, and the proper autoconf replacement variable when
-generating elf/ldd.bash.
-
-Could you have a look into this ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.hash b/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.hash
+index 5466435c5a..de33cfb17b 100644
+--- a/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.hash
++++ b/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    cbb0bf041ade8a39f65eadbdf8a346c1 Apache-LogFormat-Compiler-0.35.tar.gz
+-sha256 1654c0000a042a8af052616e30b91c1f0b95a720c8048b59168a8bd99b07271a Apache-LogFormat-Compiler-0.35.tar.gz
++md5    a0cdfcd875cb2ee4dc9a2c24381eb55b Apache-LogFormat-Compiler-0.36.tar.gz
++sha256 94509503ee74ea820183d070c11630ee5bc0fd8c12cb74fae953ed62e4a1ac17 Apache-LogFormat-Compiler-0.36.tar.gz
+ 
+ # computed by scancpan
+ sha256 ab941cfc4794afa2113795b167177d1b25cbc77ebadd016e5727effc2cadd96b LICENSE
+diff --git a/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.mk b/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.mk
+index 59290f376e..82ceb7979f 100644
+--- a/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.mk
++++ b/package/perl-apache-logformat-compiler/perl-apache-logformat-compiler.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_APACHE_LOGFORMAT_COMPILER_VERSION = 0.35
++PERL_APACHE_LOGFORMAT_COMPILER_VERSION = 0.36
+ PERL_APACHE_LOGFORMAT_COMPILER_SOURCE = Apache-LogFormat-Compiler-$(PERL_APACHE_LOGFORMAT_COMPILER_VERSION).tar.gz
+ PERL_APACHE_LOGFORMAT_COMPILER_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZEBURO
+ PERL_APACHE_LOGFORMAT_COMPILER_DEPENDENCIES = host-perl-module-build-tiny
