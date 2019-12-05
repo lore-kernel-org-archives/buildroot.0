@@ -1,37 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Dec 2019 22:11:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/prosody: bump to bugfix version
- 0.11.3
-In-Reply-To: <20191129102805.17515-1-jubalh@iodoru.org> (Michael Vetter's
- message of "Fri, 29 Nov 2019 11:28:05 +0100")
-References: <20191129102805.17515-1-jubalh@iodoru.org>
-Message-ID: <87sglypjff.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Dec 2019 22:11:51 +0100
+Subject: [Buildroot] libdrm: buildroot patchstack - static linking
+In-Reply-To: <20191205215234.7058f6df@gmx.net>
+References: <20191205215234.7058f6df@gmx.net>
+Message-ID: <20191205221151.214db463@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
+On Thu, 5 Dec 2019 21:54:53 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
- > This is a bugfix release for the stable 0.11 branch. It is recommended
- > for all users of 0.11.x to upgrade.
+> some progress on up-streaming the buildroot libdrm patch stack:
+> 
+>  - 0001-Add-ARM-support-into-xf86drm.h.patch
+>    https://gitlab.freedesktop.org/mesa/drm/merge_requests/31
+>    Acked, but with one further question 'why not catch-all __ARM_ARCH?'
+>    Thomas - you touched the patch and added the comment, any further input?
 
- > Important note for those upgrading: Previous releases did not
- > automatically expire messages from group chat (MUC) archives, so if
- > mod_muc_mam was loaded and enabled for a MUC, archives would grow
- > indefinitely. This is not what most deployments want, therefore
- > automatic expiry is now implemented and enabled with a default 7 day
- > retention. You can configure this with the muc_log_expires_after
- > configuration option, which can be set to "never" to restore the old
- > behaviour and preserve any existing logs older than 7 days.
+Well, my comment explains it all: ldrex/strex only exist on ARM >= v6,
+but __ARM_ARCH is true for all ARM ISAs, including ARMv4 and ARMv5,
+which Buildroot supports, but don't provide ldrex/strex.
 
- > For details see:
- > https://prosody.im/doc/release/0.11.3
+>  - 0004-meson.build-enable-static-build.patch
+>    declined https://gitlab.freedesktop.org/mesa/drm/merge_requests/28
+>    'Closing the MR, but feel free to reopen if it turns out someone has
+>    a real need for this'
+> 
+>    Anyone out there using libdrm static linking?
 
- > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+But what is the cost for upstream to use the correct library() Meson
+macro/function instead of shared_library() ? It is shorter, and does
+the job. I'm not sure why upstream is reluctant to merge this.
 
-Committed to 2019.02.x and 2019.08.x, thanks.
+>  - 0005-tests-meson.build-disable-nouveau-tests-for-static-b.patch
+>    folded into previous one https://gitlab.freedesktop.org/mesa/drm/merge_requests/27
+>    and declined
 
+So, they basically say they don't want to support static linking at all?
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
