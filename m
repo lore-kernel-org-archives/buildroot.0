@@ -1,41 +1,25 @@
-From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu,  5 Dec 2019 17:15:15 +0000
-Subject: [Buildroot] [PATCH v1 28/30] package/libdrm: Add host package.
-In-Reply-To: <20191205171517.96639-1-michael.drake@codethink.co.uk>
-References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
-Message-ID: <20191205171517.96639-29-michael.drake@codethink.co.uk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 05 Dec 2019 19:32:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/perl-gdgraph: fix license
+In-Reply-To: <20191128204048.24531-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 28 Nov 2019 21:40:48 +0100")
+References: <20191128204048.24531-1-fontaine.fabrice@gmail.com>
+Message-ID: <87zhg6fwtb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
-Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
----
- package/libdrm/libdrm.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index f7c9205744..c97dfbb083 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -18,6 +18,11 @@ LIBDRM_CONF_OPTS = \
- 	-Dcairo-tests=false \
- 	-Dmanpages=false
- 
-+HOST_LIBDRM_CONF_OPTS = \
-+	-Dcairo-tests=false \
-+	-Dmanpages=false \
-+	-Dintel=false
-+
- ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
- LIBDRM_DEPENDENCIES += libatomic_ops
- ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
-@@ -114,3 +119,4 @@ endif
- endif
- 
- $(eval $(meson-package))
-+$(eval $(host-meson-package))
+ > Dustismo.LICENSE contains the license for the Dustismo_Sans.ttf font
+ > file. The rest is licensed under the same terms as Perl as specified
+ > in README so add README to license files and add GPL-2.0+ to license
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2019.02.x and 2019.08.x, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
