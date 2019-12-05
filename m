@@ -1,47 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 22:18:07 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/grpc: bump to version 1.25.0
-In-Reply-To: <20191205210155.2705242-1-aduskett@gmail.com>
-References: <20191205210155.2705242-1-aduskett@gmail.com>
-Message-ID: <20191205221807.3022cc5b@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 5 Dec 2019 22:25:14 +0100
+Subject: [Buildroot] libdrm: buildroot patchstack - static linking
+In-Reply-To: <20191205221151.214db463@windsurf>
+References: <20191205215234.7058f6df@gmx.net>
+ <20191205221151.214db463@windsurf>
+Message-ID: <20191205222514.4af1cd80@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  5 Dec 2019 13:01:55 -0800
-aduskett at gmail.com wrote:
+Hello Thomas,
 
-> -GRPC_VERSION = 1.23.0
-> +GRPC_VERSION = 1.25.0
->  GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
->  GRPC_LICENSE = Apache-2.0
->  GRPC_LICENSE_FILES = LICENSE
-> @@ -48,6 +48,14 @@ GRPC_CFLAGS += -O0
->  GRPC_CXXFLAGS += -O0
->  endif
->  
-> +# Toolchains older than gcc5 will fail to compile with -0s due to:
-> +# error: failure memory model cannot be stronger than success memory model for
-> +# '__atomic_compare_exchange'
-> +ifneq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y)
+On Thu, 5 Dec 2019 22:11:51 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Could also be:
+> On Thu, 5 Dec 2019 21:54:53 +0100
+> Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > some progress on up-streaming the buildroot libdrm patch stack:
+> >
+> >  - 0001-Add-ARM-support-into-xf86drm.h.patch
+> >    https://gitlab.freedesktop.org/mesa/drm/merge_requests/31
+> >    Acked, but with one further question 'why not catch-all __ARM_ARCH?'
+> >    Thomas - you touched the patch and added the comment, any further input?
+>
+> Well, my comment explains it all: ldrex/strex only exist on ARM >= v6,
+> but __ARM_ARCH is true for all ARM ISAs, including ARMv4 and ARMv5,
+> which Buildroot supports, but don't provide ldrex/strex.
 
-ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
+Thanks for backing-up my (already done) reply to the merge request (see link above),
+will add an additional comment to the change set...
 
-> +GRPC_CFLAGS += -O0
-> +GRPC_CXXFLAGS += -O0
+>
+> >  - 0004-meson.build-enable-static-build.patch
+> >    declined https://gitlab.freedesktop.org/mesa/drm/merge_requests/28
+> >    'Closing the MR, but feel free to reopen if it turns out someone has
+> >    a real need for this'
+> >
+> >    Anyone out there using libdrm static linking?
+>
+> But what is the cost for upstream to use the correct library() Meson
+> macro/function instead of shared_library() ? It is shorter, and does
+> the job. I'm not sure why upstream is reluctant to merge this.
 
-What happens when O2 or O3 are the default optimization flags? Does it
-build? If it does, what you're doing is a bit brutal, as you're forcing
-O0 even if O2 or O3 would work.
+Not sure about this change of mind (from Reviewed by to declined), the
+original comment:
 
-Best regards,
+	On a technical level, this MR is fine and we can merge it, but the thing
+	is that it adds to the maintenance burden (not much, sure) and limits
+	future features because they will need to work with static linking,
+	not to mention the usual problems that made everyone stop statically
+	linking (although one could argue that this last point would be our
+	users' choice, but should we give them a foot-gun and the choice to use it?).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+	Unless there's a need by anyone to support this, I think we shouldn't do
+	this "just because we can" :)
+
+>
+> >  - 0005-tests-meson.build-disable-nouveau-tests-for-static-b.patch
+> >    folded into previous one https://gitlab.freedesktop.org/mesa/drm/merge_requests/27
+> >    and declined
+>
+> So, they basically say they don't want to support static linking at all?
+
+	Closing the MR, but feel free to reopen if it turns out someone has a real need for this
+
+But open minded in case of a 'real world' example of usefulness of libdrm static linking...
+
+Regards,
+Peter
+
+>
+> Thomas
