@@ -1,63 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 21:48:00 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/opencv3: ensure
- the python module works when BR2_PACKAGE_PYTHON{, 3}_PYC_ONLY=y
-Message-ID: <20191205210733.EC1B78812B@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 22:09:36 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/opentyrian-data:
+ update the upstream URL in Config.in
+Message-ID: <20191205210734.45176880A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2c01b9a39837b9ff45b29504007e66025904b31
+commit: https://git.buildroot.net/buildroot/commit/?id=e1cf3f98d1691ca593a50b8d11ba04c798011698
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-The OpenCV Python module does a fairly strange thing to read a few
-configuration details: it uses Python's execfile() to execute two .py
-files and access a few variables. However, execfile() only works with
-.py files and not .pyc files.
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(405)' URL status in the package stats
+web page output.
 
-When BR2_PACKAGE_PYTHON{,3}_PYC_ONLY=y, the .py files are all removed,
-causing the OpenCV Python module to not work:
-
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 89, in <module>
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 58, in bootstrap
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 56, in load_first_config
-ImportError: OpenCV loader: missing configuration file: ['config.py']. Check OpenCV installation.
-
-To fix this problem, this commit uses the newly introduced
-<pkg>_KEEP_PY_FILES mechanism, to ensure the important config*.py
-files are kept.
-
-Fixes:
-
-  https://bugs.busybox.net/show_bug.cgi?id=12171
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d07c315f0c24903e03169c939b050618a9c3ba8b)
+(cherry picked from commit f06ae71f64642b5ebdb17f02a57d69cf846543a2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv3/opencv3.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/opentyrian-data/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 91efa5c912..f57c5e615a 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -328,6 +328,7 @@ OPENCV3_CONF_OPTS += \
- 	-DPYTHON2_PACKAGES_PATH=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
- 	-DPYTHON2_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
- OPENCV3_DEPENDENCIES += python
-+OPENCV3_KEEP_PY_FILES += usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/cv2/config*.py
- else
- OPENCV3_CONF_OPTS += \
- 	-DBUILD_opencv_python2=OFF \
-@@ -339,6 +340,7 @@ OPENCV3_CONF_OPTS += \
- 	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
- 	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
- OPENCV3_DEPENDENCIES += python3
-+OPENCV3_KEEP_PY_FILES += usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/cv2/config*.py
- endif
- OPENCV3_CONF_ENV += $(PKG_PYTHON_DISTUTILS_ENV)
- OPENCV3_DEPENDENCIES += python-numpy
+diff --git a/package/opentyrian-data/Config.in b/package/opentyrian-data/Config.in
+index dd3b0c1328..c0698c297c 100644
+--- a/package/opentyrian-data/Config.in
++++ b/package/opentyrian-data/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_OPENTYRIAN_DATA
+ 	  original Tyrian 2.1 data files, that have been released as
+ 	  Freeware in 2004, are compatible.
+ 
+-	  http://code.google.com/p/opentyrian/wiki/FAQ
++	  https://bitbucket.org/opentyrian/opentyrian/wiki/Home
