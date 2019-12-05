@@ -1,31 +1,70 @@
-From: Ben Edwards <ben@artfuldodge.io>
-Date: Thu, 05 Dec 2019 12:20:09 +0000
-Subject: [Buildroot] Errors when compiling uboot for rpi 3
-Message-ID: <1575547814.xk698xjfax.astroid@greyskull.none>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 5 Dec 2019 13:57:22 +0100
+Subject: [Buildroot] [PATCH v2 6/9] package/connman: adapt to preset-all
+In-Reply-To: <20191111172443.6874-7-jeremy.rosen@smile.fr>
+References: <20191111172443.6874-1-jeremy.rosen@smile.fr>
+ <20191111172443.6874-7-jeremy.rosen@smile.fr>
+Message-ID: <20191205125722.GG2539@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+J?r?my, All,
 
-I am very new to buildroot, so I am probably making some fundamental
-mistake. I have configured buildroot with the raspberrypi3 defconfig and
-then enabled uboot. The diff is
+On 2019-11-11 18:24 +0100, J?r?my Rosen spake thusly:
+> connman has two services
+> * connman.service which is the real daemon
+> * connman-wait-online.service which is a sync point for network-online.target
+> 
+> Only the first one was enabled. This adaptation enables both.
+> 
+> Not enabling connman-wait-online.service is probably a bug
 
---- configs/raspberrypi3_defconfig	2019-12-04 19:27:02.700303546 +0000
-+++ configs/raspberrypi3_defconfig	2019-12-05 11:15:07.073552770 +0000
-@@ -1,37 +1,26 @@
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rpi_3"
+If that was not installed so far, what would provide for the
+network-online.target instead? Or was that target always satisfied?
 
-I am using tag 2019.11 of buildroot. The uboot build log can be found @ https://pastebin.com/J7LagF5V
+BTW, you forgot your SoB line too.
 
-I've tried a few different bits like varying the uboot version etc, but
-nothing seems to help, judging by the errors it seems to be some kind of
-architecture mismatch, but I'm really new to the embedded space and
-would appreciate all the help I can get.
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Best,
-Ben
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/connman/connman.mk | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+> index 839bc7a0e2..d70eb1ac82 100644
+> --- a/package/connman/connman.mk
+> +++ b/package/connman/connman.mk
+> @@ -32,12 +32,6 @@ define CONNMAN_INSTALL_INIT_SYSV
+>  	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
+>  endef
+>  
+> -define CONNMAN_INSTALL_INIT_SYSTEMD
+> -	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> -	ln -fs ../../../../usr/lib/systemd/system/connman.service \
+> -		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
+> -endef
+> -
+>  ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
+>  CONNMAN_CONF_OPTS += --enable-client
+>  CONNMAN_DEPENDENCIES += readline
+> -- 
+> 2.24.0.rc1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
