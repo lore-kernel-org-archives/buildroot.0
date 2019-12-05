@@ -1,87 +1,82 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Thu, 5 Dec 2019 09:44:35 +0000
-Subject: [Buildroot] [PATCH v8 1/2] package/compiler-rt: new package
-In-Reply-To: <CANQCQpZ8NaqR44gnCSL0L=qCAng46kJ4JzONrFMCP5AsZQjMFQ@mail.gmail.com>
-References: <20191023214636.17284-1-matthew.weber@rockwellcollins.com>
- <CANQCQpZ8NaqR44gnCSL0L=qCAng46kJ4JzONrFMCP5AsZQjMFQ@mail.gmail.com>
-Message-ID: <5ba4bcdf-0c34-6e59-dc50-5b8c16a390b1@codethink.co.uk>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 5 Dec 2019 11:21:21 +0100
+Subject: [Buildroot] Zynqmp ZCU-102 Xilinx
+In-Reply-To: <CADDW7LPZ+oD9NzjqvbjVBDYj59K_6q1d8beoqwyQ==jFNTq=KA@mail.gmail.com>
+References: <CADDW7LPbh8ep74a5kcu1CZQuaFxuUGyCUxuJT6uo6Y=m9ftmOA@mail.gmail.com>
+ <d46c58a9-4b07-878f-b638-1a4d1554e9b1@lucaceresoli.net>
+ <CADDW7LPZ+oD9NzjqvbjVBDYj59K_6q1d8beoqwyQ==jFNTq=KA@mail.gmail.com>
+Message-ID: <6efe98a4-0570-32fa-c2f4-c692907815a4@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
-I have a few questions about your compiler-rt patch, see below.
+Hi Adrian,
 
-On 27/10/2019 19:31, Matthew Weber wrote:
-> On Wed, Oct 23, 2019 at 4:46 PM Matt Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->>
->> This patch adds support for the compiler-rt (CLANG runtime) library.
->> It builds a set of static libraries and installs them into the
->> CLANG/LLVM toolchain resource folder.
->>
->> diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
->> new file mode 100644
->> index 0000000000..3d2cbcbff5
->> --- /dev/null
->> +++ b/package/compiler-rt/compiler-rt.mk
->> @@ -0,0 +1,37 @@
->> +################################################################################
->> +#
->> +# compiler-rt
->> +#
->> +################################################################################
->> +
->> +# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
->> +# tied to the version of those tools
->> +COMPILER_RT_VERSION = 9.0.0
->> +COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
->> +COMPILER_RT_SITE = http://llvm.org/releases/$(COMPILER_RT_VERSION)
->> +COMPILER_RT_LICENSE = NCSA MIT
->> +COMPILER_RT_LICENSE_FILES = LICENSE.TXT
->> +COMPILER_RT_DEPENDENCIES = host-clang llvm
->> +
->> +COMPILER_RT_INSTALL_STAGING = YES
->> +COMPILER_RT_INSTALL_TARGET = NO
->> +
->> +COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_STANDALONE_BUILD=OFF \
->> +       -DCOMPILER_RT_STANDALONE_BUILD=ON \
->> +       -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
->> +       -DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config
->> +
+On 03/12/19 09:44, Adrian martinez munera wrote:
+> Hi Luca,
+> thanks for your answer!
+> How I said to Thomas, I'm trying to compile a Linux image to my ZCU-102
+> with EPICS (https://epics.anl.gov). But, as first step, I'd want build a
+> simple Linux image, all of this using Buildroot.?
+> Using yours steps, I've created a pmufw.bin with your builder and the
+> 'pm_cfg_obj.c', created by the Vivado project (xilpm library enabled).
+> Now I've a new two errors at the boot:
+> 1. boot console [cdns0] disabled
+> 2. The root file system is empty
 
-You set both:
+What do you mean by "The root file system is empty"? It has not been
+built? It has not been copied to the boot medium? It has not neeb
+mounted? ...
 
-    -DCOMPILER_RT_STANDALONE_BUILD=OFF
-    -DCOMPILER_RT_STANDALONE_BUILD=ON
+> *defconfig* file that I'm using:
+> 
+> BR2_aarch64=y
+> BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches/"
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+> BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git
+> <http://github.com/Xilinx/linux-xlnx.git>"
+> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2018.3"
+> BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
+> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
+> BR2_TARGET_ROOTFS_EXT2=y
+> BR2_TARGET_ROOTFS_EXT2_4=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.5"
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+> BR2_TARGET_UBOOT=y
+> BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/xilinx/u-boot-xlnx.git <http://github.com/xilinx/u-boot-xlnx.git>"
+> BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="228801a215909365ae1dcdd799034195ad7264f7"
+> BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_zcu102_rev1_0"
+> BR2_TARGET_UBOOT_NEEDS_DTC=y
+> BR2_TARGET_UBOOT_SPL=y
+> BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+> BR2_TARGET_UBOOT_ZYNQMP=y
+> BR2_TARGET_UBOOT_ZYNQMP_PMUFW="/home/adrian/Documents/ZCU-102/pmufw_builder/zynqmp-pmufw-builder/pmufw.bin"
+> BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> BR2_PACKAGE_HOST_GENIMAGE=y
+> BR2_PACKAGE_HOST_MTOOLS=y
 
-Presumably you just mean the second?
+Not sure what is the problem here, but I recommend using the same
+versions of kernel, PMUFW and U-Boot as the zcu106 defconfig. Xilinx
+versions of these software are known to not work properly if you mix
+these versions, at least this used to happen in the 2017.x~2018.x era.
+So try to use 2017.04 for the three components. If it works then you can
+try to upgrade them.
 
->> +# The installation of the target runtime libraries defaults to DESTDIR, however
->> +# host-clang resources directory needs a link so Clang can find the runtime
->> +# libraries in the same location they would be if built as part of the Clang
->> +# build. The "resources" directory is loosely documented and seems to be
->> +# assumed, as compiler-rt is usually build at the same time as Clang and not
->> +# standalone.
->> +define COMPILER_RT_SETUP_RUNTIME_LIBS
->> +       mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
->> +       ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
->> +       ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share
->> +endef
->> +COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
->> +
+Also enable debug prints in the PMUFW, they are useful in debugging boot
+issues.
 
-The second of those symlinks should only go up three directories.
-
-Also, why do you create symlinks into $(HOST_DIR) from a "target" package?
-Why not just add host-compiler-rt logic and depend on "host-compiler-rt"
-where appropriate? Then you could remove this define entirely. I'd also add:
-    
-    HOST_COMPILER_RT_CONF_OPTS = $(COMPILER_RT_CONF_OPTS)
-
-The default target is still the same. I'm testing this at the minute.
-
-Thanks,
-Thomas Preston
+-- 
+Luca
