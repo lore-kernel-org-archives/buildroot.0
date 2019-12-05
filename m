@@ -1,74 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 21:48:54 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/{pkg-generic,
- python, python3}: rename .py file exclusion variable to not conflict
-Message-ID: <20191205210557.5AD3B880F3@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 22:10:40 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/prosody: bump to
+ bugfix version 0.11.3
+Message-ID: <20191205210557.CC31D880F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e4ca1337072e013514cc95bdfc66c0bd2dd6bd2
+commit: https://git.buildroot.net/buildroot/commit/?id=f881dca8d92272a54200ca30e6f7edb8cb3f1164
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/3b6/3b6280b0b7a9634b747db2865b21c6266007c725/
+This is a bugfix release for the stable 0.11 branch. It is recommended
+for all users of 0.11.x to upgrade.
 
-The PYTHON_KEEP_PY_FILES global variable conflicts with the per-package
-<pkg>_KEEP_PY_FILES variable for the python package, causing make to
-complain:
+Important note for those upgrading: Previous releases did not
+automatically expire messages from group chat (MUC) archives, so if
+mod_muc_mam was loaded and enabled for a MUC, archives would grow
+indefinitely. This is not what most deployments want, therefore
+automatic expiry is now implemented and enabled with a default 7 day
+retention. You can configure this with the muc_log_expires_after
+configuration option, which can be set to "never" to restore the old
+behaviour and preserve any existing logs older than 7 days.
 
-package/zlib/zlib.mk:7: *** Recursive variable 'PYTHON_KEEP_PY_FILES' references itself (eventually).  Stop.
+For details see:
+https://prosody.im/doc/release/0.11.3
 
-As a workaround, rename the global variable to KEEP_PYTHON_PY_FILES so it
-cannot conflict with the per-package variable.
-
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0f5ac40374c91e44af8c3806e848f8e62c42b140)
+(cherry picked from commit 3a508f8564622c5cdaad75ef6afb3f027d24beb6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk     | 2 +-
- package/python/python.mk   | 2 +-
- package/python3/python3.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/prosody/prosody.hash | 8 ++++----
+ package/prosody/prosody.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f2442dc637..1ac7f7877e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1043,7 +1043,7 @@ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
- endif
- TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
- ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
--PYTHON_KEEP_PY_FILES += $$($(2)_KEEP_PY_FILES)
-+KEEP_PYTHON_PY_FILES += $$($(2)_KEEP_PY_FILES)
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index f3f9aa4777..d7d1d06eda 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,8 +1,8 @@
+ # Locally computed:
+-md5    b4529e0cf8e0ee82a2f677e404c3df35  prosody-0.11.2.tar.gz
+-sha1   0508cfc1c3c74a7eb8fdac2ed50435e190930f6a  prosody-0.11.2.tar.gz
+-sha256 8911f6dc29b9e0c4edf9e61dc23fa22d77bc42c4caf28b809ab843b2f08e4831  prosody-0.11.2.tar.gz
+-sha512 22e55a551a40c92f38a1ed1de5fdcad574d699d58c2e27f93c3d465b55487b8e923c2ba088daf93c7140cbafb0d429687e0b662c8bb1c1aba4b79ac1ea271cd1  prosody-0.11.2.tar.gz
++md5    2cf85cd8f7fc061916d97a169e850a0e  prosody-0.11.3.tar.gz
++sha1   87ec8039bf297ba9bc4da44b2ba42f4b035e73ca  prosody-0.11.3.tar.gz
++sha256 cfdabd6f42a9fc5db300221967c518c26bd4b6e62def721c1626894d6325bf87  prosody-0.11.3.tar.gz
++sha512 07239433c7c65184ca24d665c92b787ff9e4a5ee190ab90dede802ffd2cbd97855356d818858871e62284e9923f485b3468ab1baed5d3fb13aac0551a38967eb  prosody-0.11.3.tar.gz
  
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 3f9c510fde..29b9e363b1 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -263,7 +263,7 @@ endif
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- define PYTHON_REMOVE_PY_FILES
- 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' \
--		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
-+		$(if $(strip $(KEEP_PYTHON_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(KEEP_PYTHON_PY_FILES)) \) ) \
- 		-print0 | \
- 		xargs -0 --no-run-if-empty rm -f
- endef
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index f634b790ef..625c059135 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -281,7 +281,7 @@ endif
- ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
- define PYTHON3_REMOVE_PY_FILES
- 	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' \
--		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
-+		$(if $(strip $(KEEP_PYTHON_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(KEEP_PYTHON_PY_FILES)) \) ) \
- 		-print0 | \
- 		xargs -0 --no-run-if-empty rm -f
- endef
+ # Hash for license file:
+ sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index c2111f6b83..05ea3d2e40 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROSODY_VERSION = 0.11.2
++PROSODY_VERSION = 0.11.3
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
