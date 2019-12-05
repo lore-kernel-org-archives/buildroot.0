@@ -1,72 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 21:55:48 +0100
-Subject: [Buildroot] [PATCH] package/linux-tools: add hv_vss_daemon
-In-Reply-To: <20191205154428.7547-1-p.debruijn@unilogic.nl>
-References: <20191205154428.7547-1-p.debruijn@unilogic.nl>
-Message-ID: <20191205215548.374faeed@windsurf>
+Date: Thu, 5 Dec 2019 21:58:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/spidermonkey: depends on host
+ gcc >= 4.9
+In-Reply-To: <CAFSsvmoB=3gvY0-NaUFb09r73+0mx1z6ap=JED4-LLfBuD0-5w@mail.gmail.com>
+References: <20191204214913.718567-1-aduskett@gmail.com>
+ <CAFSsvmoB=3gvY0-NaUFb09r73+0mx1z6ap=JED4-LLfBuD0-5w@mail.gmail.com>
+Message-ID: <20191205215828.7258d035@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Pascal,
+On Wed, 4 Dec 2019 13:54:41 -0800
+Adam Duskett <aduskett@gmail.com> wrote:
 
-On Thu,  5 Dec 2019 16:44:28 +0100
-Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
-
-> hyperv integration services for snapshotting a running vm
+> Before this get's added I do want to make another suggestion:
 > 
-> hv_vss_daemon facilitates a FIFREEZE initiated from the hypervisor
+> Open embedded also has a patch that reverts the reliance on C++14
+> back to C++11, allowing the host GCC version to be >= 4.8.
 > 
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+> https://github.com/openembedded/meta-openembedded/blob/master/meta-oe/recipes-extended/mozjs/mozjs/fallback-to-2011-C%2B%2B-standard.patch
 
-Thanks for the patch, but I believe it was insufficiently tested :-/
+So what this patch seems to imply is that in fact gcc 4.9 is not really
+required by the spidermonkey code. If that's the case, then yes I
+believe having the patch is probably nicer than having to propagate the
+dependency.
 
-> diff --git a/package/linux-tools/linux-tool-hv_vss_daemon.mk.in b/package/linux-tools/linux-tool-hv_vss_daemon.mk.in
-> new file mode 100644
-> index 0000000..2de13a7
-> --- /dev/null
-> +++ b/package/linux-tools/linux-tool-hv_vss_daemon.mk.in
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# hv_vss_daemon
-> +#
-> +################################################################################
-> +
-> +LINUX_TOOLS += hv_vss_daemon
-> +
-> +HV_VSS_DAEMON_MAKE_OPTS = CROSS=$(TARGET_CROSS)
-
-This is not sufficient, with just this, the user-space program is
-compiled with the host compiler, and therefore the build fails with:
-
-ERROR: architecture for "/usr/sbin/hv_vss_daemon" is "Advanced Micro Devices X86-64", should be "ARM"
-
-To fix this, don't pass CROSS=, but just pass $(LINUX_MAKE_FLAGS), just
-like most other linux-tools makefiles are doing.
-
-> +define HV_VSS_DAEMON_INSTALL_INIT_SYSTEMD
-
-This cannot work, as it will never be called: hv-vss-daemon is not a
-package from the point of view of Buildroot. What is a package is
-"linux-tools".
-
-The reason why HV_VSS_DAEMON_INSTALL_TARGET_CMDS works is because we
-have some special logic in package/linux-tools/linux-tools.mk:
-
-LINUX_TOOLS_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-        $(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
-                $(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
-
-but there is nothing like this for _INSTALL_INIT_SYSTEMD, so I don't
-see how this variable could have ever been called.
-
-Did you actually test this, and verified that the systemd unit was
-installed as expected ?
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
