@@ -1,116 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 19:39:34 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/tiff: security
- bump to 4.1.0
-Message-ID: <20191205185702.D7C2387F6D@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 19:37:44 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/pkg-generic.mk:
+ make HOST_<pkg>_DL_OPTS inherit from <pkg>_DL_OPTS
+Message-ID: <20191205185702.C23B986998@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=903994bee2afb8f53a45f6d5d44d315e6125225a
+commit: https://git.buildroot.net/buildroot/commit/?id=2522619ef9f2dde0a351d2420e9e2db52816a09f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security vulnerabilities:
-  * CVE-2018-12900
-  * CVE-2018-17000
-  * CVE-2019-6128
-  * CVE-2019-7663
-  * CVE-2019-14973
-  * CVE-2018-19210
+Just like _SITE, _SOURCE, _SITE_METHOD, it is very likely that if
+<pkg>_DL_OPTS is defined, the same value should be used for
+HOST_<pkg>_DL_OPTS, so let's have the same inheritance logic than the
+one we have for other variables.
 
-Remove because contained upstream:
-0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch
+Fixes:
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+  https://bugs.busybox.net/show_bug.cgi?id=12321
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8b93ddb642cd4314306f7b464370d115322e0d1c)
+(cherry picked from commit 085f32c17b408fbac68d92232b42d49e883e1f69)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...mory-leak-that-was-assigned-CVE-2019-6128.patch | 53 ----------------------
- package/tiff/tiff.hash                             |  2 +-
- package/tiff/tiff.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 55 deletions(-)
+ package/pkg-generic.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/tiff/0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch b/package/tiff/0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch
-deleted file mode 100644
-index 638760b71e..0000000000
---- a/package/tiff/0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 0c74a9f49b8d7a36b17b54a7428b3526d20f88a8 Mon Sep 17 00:00:00 2001
--From: Scott Gayou <github.scott@gmail.com>
--Date: Wed, 23 Jan 2019 15:03:53 -0500
--Subject: [PATCH] Fix for simple memory leak that was assigned CVE-2019-6128.
--
--pal2rgb failed to free memory on a few errors. This was reported
--here: http://bugzilla.maptools.org/show_bug.cgi?id=2836.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://gitlab.com/libtiff/libtiff/commit/ae0bed1fe530a82faf2e9ea1775109dbf301a971]
-----
-- tools/pal2rgb.c | 7 ++++++-
-- 1 file changed, 6 insertions(+), 1 deletion(-)
--
--diff --git a/tools/pal2rgb.c b/tools/pal2rgb.c
--index 01d8502e..9492f1cf 100644
----- a/tools/pal2rgb.c
--+++ b/tools/pal2rgb.c
--@@ -118,12 +118,14 @@ main(int argc, char* argv[])
-- 	    shortv != PHOTOMETRIC_PALETTE) {
-- 		fprintf(stderr, "%s: Expecting a palette image.\n",
-- 		    argv[optind]);
--+		(void) TIFFClose(in);
-- 		return (-1);
-- 	}
-- 	if (!TIFFGetField(in, TIFFTAG_COLORMAP, &rmap, &gmap, &bmap)) {
-- 		fprintf(stderr,
-- 		    "%s: No colormap (not a valid palette image).\n",
-- 		    argv[optind]);
--+		(void) TIFFClose(in);
-- 		return (-1);
-- 	}
-- 	bitspersample = 0;
--@@ -131,11 +133,14 @@ main(int argc, char* argv[])
-- 	if (bitspersample != 8) {
-- 		fprintf(stderr, "%s: Sorry, can only handle 8-bit images.\n",
-- 		    argv[optind]);
--+		(void) TIFFClose(in);
-- 		return (-1);
-- 	}
-- 	out = TIFFOpen(argv[optind+1], "w");
---	if (out == NULL)
--+	if (out == NULL) {
--+		(void) TIFFClose(in);
-- 		return (-2);
--+	}
-- 	cpTags(in, out);
-- 	TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &imagewidth);
-- 	TIFFGetField(in, TIFFTAG_IMAGELENGTH, &imagelength);
---- 
--2.18.1
--
-diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
-index 21eb4bd37a..36f30c4418 100644
---- a/package/tiff/tiff.hash
-+++ b/package/tiff/tiff.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 2c52d11ccaf767457db0c46795d9c7d1a8d8f76f68b0b800a3dfe45786b996e4  tiff-4.0.10.tar.gz
-+sha256 5d29f32517dadb6dbcd1255ea5bbc93a2b54b94fbf83653b4d65c7d6775b8634  tiff-4.1.0.tar.gz
- sha256 fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7  COPYRIGHT
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index aef08b341d..b26900ac70 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3cb13176ed..cd8434e94d 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -538,6 +538,12 @@ ifndef $(2)_SITE_METHOD
+  endif
+ endif
  
--TIFF_VERSION = 4.0.10
-+TIFF_VERSION = 4.1.0
- TIFF_SITE = http://download.osgeo.org/libtiff
- TIFF_LICENSE = tiff license
- TIFF_LICENSE_FILES = COPYRIGHT
++ifndef $(2)_DL_OPTS
++ ifdef $(3)_DL_OPTS
++  $(2)_DL_OPTS = $$($(3)_DL_OPTS)
++ endif
++endif
++
+ ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
+ BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+ endif
