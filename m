@@ -1,53 +1,54 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Thu, 5 Dec 2019 15:55:23 -0600
-Subject: [Buildroot] [PATCH 1/2] package/pkg-python: use
- HOST_CONFIGURE_OPTS for distutils
-In-Reply-To: <67664440-bebe-d2c2-fd21-a88353ace045@mind.be>
-References: <20191111140643.2629-1-ryan.barnett@rockwellcollins.com>
- <CAMQcK5JFGOpe+=7fxq5cr7BVG9aiDjsEAVRgBq19-Zcxjgg7ow@mail.gmail.com>
- <67664440-bebe-d2c2-fd21-a88353ace045@mind.be>
-Message-ID: <CAMQcK5+sdVe7zOuPccasw1HMsBKzvqfUajemB9t5NXwcpOV+=Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Dec 2019 23:00:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/arptables: bump to version 0.0.5
+In-Reply-To: <20191204191144.2591797-1-fontaine.fabrice@gmail.com>
+References: <20191204191144.2591797-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191205230036.60a49509@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Hello,
 
-On Thu, Dec 5, 2019 at 3:45 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
-> On 04/12/2019 15:12, Ryan Barnett wrote:
-> > On Mon, Nov 11, 2019 at 8:06 AM Ryan Barnett
-> > <ryan.barnett@rockwellcollins.com> wrote:
-> >>
-> >> When building host python packages, we need to ensure that distutils
-> >> package types utilize HOST_CONFIGURE_OPTS. This ensures that the
-> >> correct linker and compiler environment variables are set to compile
-> >> utilizing the host directory.
-> >>
-> >> It was discovered that when compiling a host-python package, it was
-> >> using linking against the build machines library folder instead of the
-> >> host folder because LDFLAGS was not properly set and was improperly
-> >> detecting whether or not a shared or static library was present in the
-> >> host folder.
-> >
-> > Is there any feedback on this approach to compiling a host python
-> > distutils packages?
->
->  As such it seems like the right thing to do. However, it makes me wonder
->
-> - why this is not needed for setuptools;
->
-> - why we don't pass TARGET_CONFIGURE_OPTS in the environment for the target.
++Yann, Arnout, Peter in Cc.
 
-I will send a v2 where I combine the passing
-{TARGET|HOST}_CONFIGURE_OPTS into their respective environments. I
-will also send changing of the setuptools package type as well.
+On Wed,  4 Dec 2019 20:11:44 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-I'm not familiar with the setuptools build method for building with
-python but I would image that it doesn't hurt to pass _CONFIGURE_OPTS
-in the environment.
+> diff --git a/package/arptables/Config.in b/package/arptables/Config.in
+> index 873e791e81..aeb7250a72 100644
+> --- a/package/arptables/Config.in
+> +++ b/package/arptables/Config.in
+> @@ -1,7 +1,12 @@
+>  config BR2_PACKAGE_ARPTABLES
+> -	bool "arptables"
+> +	bool "arptables-legacy"
+
+We normally want to have the package Config.in option name match the
+package name, which would no longer be the case here.
+
+>  	depends on BR2_USE_MMU # needs fork()
+>  	help
+> -	  Tool to set up, maintain, and inspect the tables of ARP rules.
+> +	  Legacy tool to set up, maintain, and inspect the tables of ARP
+> +	  rules.
+>  
+> -	  http://ebtables.sourceforge.net
+> +	  A more uptodate client of the arptables tool is provided in
+> +	  the iptables package. The new tool was formerly known as
+> +	  arptables-compat.
+
+Arnout, Peter, Yann, considering the change to the package, does it
+make sense to rename it entirely to arptables-legacy ? Or should we
+take Fabrice's approach, i.e keep the package name as-is, and just as
+an exception change the option prompt ?
 
 Thanks,
--Ryan
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
