@@ -1,75 +1,56 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  5 Dec 2019 15:50:27 -0800
-Subject: [Buildroot] [PATCH v2 1/1] package/systemd: bump to version 244
-Message-ID: <20191205235027.3311948-1-aduskett@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 6 Dec 2019 00:51:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/arptables: bump to version 0.0.5
+In-Reply-To: <20191205230036.60a49509@windsurf>
+References: <20191204191144.2591797-1-fontaine.fabrice@gmail.com>
+ <20191205230036.60a49509@windsurf>
+Message-ID: <b1752377-17b8-1a85-c3bd-a962d0ca1dd0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
 
-Other changes:
-  - Update hash for README due to added licence directory tools/chromiumos.
-  - Add hash for tools/chromiumos/LICENSE
-  - Added BSD-3-Clause (tools/chromiumos) in systemd.mk due to the new
-    tools/chromiumos directory.
-  - Added tools/chromiumos/LICENSE to SYSTEMD_LICENSE_FILES in systemd.mk
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
-Changes v1 -> v2:
-  - Fixed license formatting (Thomas)
+On 05/12/2019 23:00, Thomas Petazzoni wrote:
+> Hello,
+> 
+> +Yann, Arnout, Peter in Cc.
+> 
+> On Wed,  4 Dec 2019 20:11:44 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> 
+>> diff --git a/package/arptables/Config.in b/package/arptables/Config.in
+>> index 873e791e81..aeb7250a72 100644
+>> --- a/package/arptables/Config.in
+>> +++ b/package/arptables/Config.in
+>> @@ -1,7 +1,12 @@
+>>  config BR2_PACKAGE_ARPTABLES
+>> -	bool "arptables"
+>> +	bool "arptables-legacy"
+> 
+> We normally want to have the package Config.in option name match the
+> package name, which would no longer be the case here.
+> 
+>>  	depends on BR2_USE_MMU # needs fork()
+>>  	help
+>> -	  Tool to set up, maintain, and inspect the tables of ARP rules.
+>> +	  Legacy tool to set up, maintain, and inspect the tables of ARP
+>> +	  rules.
+>>  
+>> -	  http://ebtables.sourceforge.net
+>> +	  A more uptodate client of the arptables tool is provided in
+>> +	  the iptables package. The new tool was formerly known as
+>> +	  arptables-compat.
+> 
+> Arnout, Peter, Yann, considering the change to the package, does it
+> make sense to rename it entirely to arptables-legacy ? Or should we
+> take Fabrice's approach, i.e keep the package name as-is, and just as
+> an exception change the option prompt ?
 
- package/systemd/0001-install-don-t-use-ln-relative.patch | 2 +-
- package/systemd/systemd.hash                             | 5 +++--
- package/systemd/systemd.mk                               | 6 +++---
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ I think going to the whole rename and legacy dance is a but too much for a
+simple change like this. So I'd apply Fabrice's patch as is.
 
-diff --git a/package/systemd/0001-install-don-t-use-ln-relative.patch b/package/systemd/0001-install-don-t-use-ln-relative.patch
-index 2bde36c774..9201724da1 100644
---- a/package/systemd/0001-install-don-t-use-ln-relative.patch
-+++ b/package/systemd/0001-install-don-t-use-ln-relative.patch
-@@ -33,7 +33,7 @@ diff --git a/meson.build b/meson.build
- index e5ceb1e169..9d3c746da4 100644
- --- a/meson.build
- +++ b/meson.build
--@@ -580,7 +580,7 @@ endforeach
-+@@ -591,7 +591,7 @@ endforeach
-  conf.set_quoted('TELINIT', get_option('telinit-path'))
-  
-  if run_command('ln', '--relative', '--help').returncode() != 0
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 584198d14b..7f5e561ca3 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,6 @@
- # sha256 locally computed
--sha256	281bc47aa6b173c3c6fa1bbc88aea84ecb014313aeb679c54f8885dd09e434be	systemd-243.4.tar.gz
-+sha256	8de7b4880599777768851560916b35d55c8db8d6791edaf80e2c4666331db2f6	systemd-244.tar.gz
- sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
--sha256	ff5a9e3791e3a941a2d85b5ef7ad7c01441dd42f4c760bff2c8b086c7d764885	README
-+sha256	ca008b0178b6390e874f6e4a890fbed482b0fb946159a3b1d370bd8d2327d9bc	README
-+sha256	83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275	tools/chromiumos/LICENSE
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index ebec9bdd91..fbf7d10f7e 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--SYSTEMD_VERSION = 243.4
-+SYSTEMD_VERSION = 244
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
--SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README)
--SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
-+SYSTEMD_LICENSE = BSD-3-Clause (tools/chromiumos), LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README)
-+SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
- SYSTEMD_INSTALL_STAGING = YES
- SYSTEMD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
--- 
-2.23.0
+ Regards,
+ Arnout
