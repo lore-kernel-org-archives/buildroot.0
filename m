@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:43:36 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/luasyslog: update
- the upstream URL in Config.in
-Message-ID: <20191205213908.6D4CD7FABE@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 22:43:48 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/luasql-sqlite3:
+ update the upstream URL in Config.in
+Message-ID: <20191205213908.7B00483B6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ee6c898d87f6ecece5e690da6c539cf70f80814
+commit: https://git.buildroot.net/buildroot/commit/?id=232b7774db9f9de6b1926fb84018ca52238ca05b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(Err)' URL status in the package stats
+addresses the 'Invalid(406)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0d9c7347f00fe2676553060f19fd50943728bf93)
+(cherry picked from commit b27c5c1c0b0094cd0e5282e9588fa5ddb9632a96)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luasyslog/Config.in | 2 +-
+ package/luasql-sqlite3/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/luasyslog/Config.in b/package/luasyslog/Config.in
-index 814e7ad37e..326fa6bf9b 100644
---- a/package/luasyslog/Config.in
-+++ b/package/luasyslog/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_LUASYSLOG
+diff --git a/package/luasql-sqlite3/Config.in b/package/luasql-sqlite3/Config.in
+index cc4d3d5450..3a1fc6ba60 100644
+--- a/package/luasql-sqlite3/Config.in
++++ b/package/luasql-sqlite3/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_LUASQL_SQLITE3
  	help
- 	  Syslog logging for Lua.
+ 	  LuaSQL is a simple interface from Lua to a DBMS.
  
--	  http://lua.net-core.org/sputnik.lua?p=Telesto:About
-+	  https://luarocks.org/modules/luarocks/luasyslog
+-	  http://www.keplerproject.org/luasql
++	  http://keplerproject.github.io/luasql/
