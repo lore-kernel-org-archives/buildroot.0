@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:45:00 +0100
+Date: Thu, 5 Dec 2019 22:45:47 +0100
 Subject: [Buildroot] [git commit branch/2019.08.x]
- package/matchbox-keyboard: add an upstream URL to Config.in
-Message-ID: <20191205213908.C0F4C7FD73@busybox.osuosl.org>
+ package/matchbox-startup-monitor: add an upstream URL to Config.in
+Message-ID: <20191205213908.EBD968138C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3614efaf3c9e2b5a1694415ac4d9e95971aa772
+commit: https://git.buildroot.net/buildroot/commit/?id=92efc3ffb4d63f3e1ed5194ca4a57f0d103d1de5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Add an upstream URL to the help text in Config.in. This
@@ -18,19 +18,19 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 381fb14bbd95c68c911065bb20c735cd9cb947ca)
+(cherry picked from commit 56fff9ef97fe231e2f118a1365ff000f9d77365e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/matchbox-keyboard/Config.in | 2 ++
+ package/matchbox-startup-monitor/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
-index 8bd2a7972c..b6753f3bec 100644
---- a/package/matchbox-keyboard/Config.in
-+++ b/package/matchbox-keyboard/Config.in
-@@ -6,3 +6,5 @@ config BR2_PACKAGE_MATCHBOX_KEYBOARD
- 	select BR2_PACKAGE_MATCHBOX_LIB
+diff --git a/package/matchbox-startup-monitor/Config.in b/package/matchbox-startup-monitor/Config.in
+index 9dce60ea12..be2fab4c1a 100644
+--- a/package/matchbox-startup-monitor/Config.in
++++ b/package/matchbox-startup-monitor/Config.in
+@@ -4,3 +4,5 @@ config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
+ 	select BR2_PACKAGE_STARTUP_NOTIFICATION
  	help
- 	  Virtual Keyboard
+ 	  Matchbox Panel Startup Monitor Applet.
 +
-+	  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-keyboard/
++	  http://git.yoctoproject.org/cgit.cgi/mb-applet-startup-monitor/
