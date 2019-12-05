@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 22:11:51 +0100
-Subject: [Buildroot] libdrm: buildroot patchstack - static linking
-In-Reply-To: <20191205215234.7058f6df@gmx.net>
-References: <20191205215234.7058f6df@gmx.net>
-Message-ID: <20191205221151.214db463@windsurf>
+Date: Thu, 5 Dec 2019 21:59:47 +0100
+Subject: [Buildroot] [git commit] package/openjdk: use official
+ hg.openjdk.java.net repository
+Message-ID: <20191205210350.28F03880AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 5 Dec 2019 21:54:53 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c55fe54d8ad44369147e7467fe7c38949b962ed7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> some progress on up-streaming the buildroot libdrm patch stack:
-> 
->  - 0001-Add-ARM-support-into-xf86drm.h.patch
->    https://gitlab.freedesktop.org/mesa/drm/merge_requests/31
->    Acked, but with one further question 'why not catch-all __ARM_ARCH?'
->    Thomas - you touched the patch and added the comment, any further input?
+Since Java 11 (and possibly earlier), OpenJDK now has its own official
+repository at hg.openjdk.java.net which is referenced in all OpenJDK
+documentation.  This patch brings buildroot into line with that
+source, reducing the opportunity for code injection, and allowing
+consistent patching both across projects and for patches specific to
+buildroot environments.
 
-Well, my comment explains it all: ldrex/strex only exist on ARM >= v6,
-but __ARM_ARCH is true for all ARM ISAs, including ARMv4 and ARMv5,
-which Buildroot supports, but don't provide ldrex/strex.
+diff -ru shows that the only changes between the downstream and upstream files at
+this point in time is the addition of a .hg_archive.txt file,  containing:
 
->  - 0004-meson.build-enable-static-build.patch
->    declined https://gitlab.freedesktop.org/mesa/drm/merge_requests/28
->    'Closing the MR, but feel free to reopen if it turns out someone has
->    a real need for this'
-> 
->    Anyone out there using libdrm static linking?
+repo: fd16c54261b32be1aaedd863b7e856801b7f8543
+node: 7b6accc7c009304dd2979ea16c1cb15bf749a1fc
+branch: default
+tag: jdk-12.0.2+10
+tag: jdk-12.0.2-ga
 
-But what is the cost for upstream to use the correct library() Meson
-macro/function instead of shared_library() ? It is shorter, and does
-the job. I'm not sure why upstream is reluctant to merge this.
+This does, however, change the hash for the tar.gz file (but not for the license).
 
->  - 0005-tests-meson.build-disable-nouveau-tests-for-static-b.patch
->    folded into previous one https://gitlab.freedesktop.org/mesa/drm/merge_requests/27
->    and declined
+With respect to the concern regarding upstream hash consistency, we have now been
+using these archives for just over a year (since OpenJDK 11) and we haven't seen an
+archive hash change in that time.  This was a vast improvement on the previous
+Mercurial forest.  /archive is exactly as is sounds.  It's an archive that doesn't
+change, which is why it effectively negates the need for a "downstream" mirror.
 
-So, they basically say they don't want to support static linking at all?
+Tests completed successfully (which is not surprising since there are no code changes here):
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+$ ./support/testing/run-tests -d ./dl/ -k -o test_dir tests.package.test_openjdk.TestOpenJdk
+14:35:25 TestOpenJdk                              Starting
+['Hello, World']
+['Test: Get JNI Version passed', 'Test: Read Native String Constant passed', 'Test: Write Java String to Native Library passed', 'Test: Write Java Char Array to Native Library passed', 'Test: Write String Member to Native Library passed', 'Test: Set String Member from Native Library passed', 'Test: Execeute Java Function from Native Library passed', 'Test: Instantiate Java Class passed', 'Test: Call Native Library to Set System Time passed']
+14:35:46 TestOpenJdk                              Cleaning up
