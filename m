@@ -1,36 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:44:08 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/linux-fusion: add
- an upstream URL to Config.in
-Message-ID: <20191205213908.8A84E80F3D@busybox.osuosl.org>
+Date: Thu, 05 Dec 2019 22:47:50 +0100
+Subject: [Buildroot] [git commit] package/{pkg-generic, python,
+ python3}: rename .py file exclusion variable to not conflict
+In-Reply-To: <20191201205436.41B687FB5D@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Sun, 1 Dec 2019 21:55:37 +0100")
+References: <20191201205436.41B687FB5D@busybox.osuosl.org>
+Message-ID: <877e3aphq1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96015cd5e56e459559c8499af534369864b23585
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=0f5ac40374c91e44af8c3806e848f8e62c42b140
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit dcc2a29f410728e485bfce739a63101ead5cce71)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-fusion/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/3b6/3b6280b0b7a9634b747db2865b21c6266007c725/
 
-diff --git a/package/linux-fusion/Config.in b/package/linux-fusion/Config.in
-index ed8bd6ad48..14b4f946af 100644
---- a/package/linux-fusion/Config.in
-+++ b/package/linux-fusion/Config.in
-@@ -8,3 +8,5 @@ config BR2_PACKAGE_LINUX_FUSION
- 	help
- 	  DirectFB Communication Layer allowing multiple DirectFB
- 	  applications to run concurrently
-+
-+	  https://github.com/deniskropp/linux-fusion
+ > The PYTHON_KEEP_PY_FILES global variable conflicts with the per-package
+ > <pkg>_KEEP_PY_FILES variable for the python package, causing make to
+ > complain:
+
+ > package/zlib/zlib.mk:7: *** Recursive variable 'PYTHON_KEEP_PY_FILES' references itself (eventually).  Stop.
+
+ > As a workaround, rename the global variable to KEEP_PYTHON_PY_FILES so it
+ > cannot conflict with the per-package variable.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2019.02.x and 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
