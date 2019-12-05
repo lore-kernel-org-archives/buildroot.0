@@ -1,63 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 21:48:44 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/opencv3: ensure
- the python module works when BR2_PACKAGE_PYTHON{, 3}_PYC_ONLY=y
-Message-ID: <20191205210557.498DA880A0@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 22:08:56 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/opkg: update the
+ upstream URL in Config.in
+Message-ID: <20191205210557.7BC8F880F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cedeb4ee9a94b682682699b699d65c2252eeb39e
+commit: https://git.buildroot.net/buildroot/commit/?id=d4f16d15c7267b43363653f96b9cb6673ce2a40c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-The OpenCV Python module does a fairly strange thing to read a few
-configuration details: it uses Python's execfile() to execute two .py
-files and access a few variables. However, execfile() only works with
-.py files and not .pyc files.
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(405)' URL status in the package stats
+web page output.
 
-When BR2_PACKAGE_PYTHON{,3}_PYC_ONLY=y, the .py files are all removed,
-causing the OpenCV Python module to not work:
-
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 89, in <module>
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 58, in bootstrap
-  File "usr/lib/python3.7/site-packages/cv2/__init__.py", line 56, in load_first_config
-ImportError: OpenCV loader: missing configuration file: ['config.py']. Check OpenCV installation.
-
-To fix this problem, this commit uses the newly introduced
-<pkg>_KEEP_PY_FILES mechanism, to ensure the important config*.py
-files are kept.
-
-Fixes:
-
-  https://bugs.busybox.net/show_bug.cgi?id=12171
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d07c315f0c24903e03169c939b050618a9c3ba8b)
+(cherry picked from commit 10a67d886052f9bd5bbf7b459aa2e99bbafa78dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv3/opencv3.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/opkg/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 416b422261..f720464543 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -324,6 +324,7 @@ OPENCV3_CONF_OPTS += \
- 	-DPYTHON2_PACKAGES_PATH=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
- 	-DPYTHON2_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
- OPENCV3_DEPENDENCIES += python
-+OPENCV3_KEEP_PY_FILES += usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/cv2/config*.py
- else
- OPENCV3_CONF_OPTS += \
- 	-DBUILD_opencv_python2=OFF \
-@@ -335,6 +336,7 @@ OPENCV3_CONF_OPTS += \
- 	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
- 	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
- OPENCV3_DEPENDENCIES += python3
-+OPENCV3_KEEP_PY_FILES += usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/cv2/config*.py
- endif
- OPENCV3_CONF_ENV += $(PKG_PYTHON_DISTUTILS_ENV)
- OPENCV3_DEPENDENCIES += python-numpy
+diff --git a/package/opkg/Config.in b/package/opkg/Config.in
+index 20f6fa2f53..1f6a39343f 100644
+--- a/package/opkg/Config.in
++++ b/package/opkg/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_OPKG
+ 	  conforms to a subset of debian's policy manual regarding
+ 	  control files.
+ 
+-	  http://code.google.com/p/opkg/
++	  https://code.google.com/archive/p/opkg/
+ 
+ if BR2_PACKAGE_OPKG
+ 
