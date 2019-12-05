@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:45:37 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x]
- package/matchbox-startup-monitor: add an upstream URL to Config.in
-Message-ID: <20191205213859.59C2E818E5@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 22:44:03 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/linux-fusion: add
+ an upstream URL to Config.in
+Message-ID: <20191205213859.0816A83D20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f4606ef89a3c2e2a02baf072dcbf2e8be591edb
+commit: https://git.buildroot.net/buildroot/commit/?id=cde14183c70e157fb1510fb4df7941a6b59e9763
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Add an upstream URL to the help text in Config.in. This
@@ -18,19 +18,19 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 56fff9ef97fe231e2f118a1365ff000f9d77365e)
+(cherry picked from commit dcc2a29f410728e485bfce739a63101ead5cce71)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/matchbox-startup-monitor/Config.in | 2 ++
+ package/linux-fusion/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/matchbox-startup-monitor/Config.in b/package/matchbox-startup-monitor/Config.in
-index 9dce60ea12..be2fab4c1a 100644
---- a/package/matchbox-startup-monitor/Config.in
-+++ b/package/matchbox-startup-monitor/Config.in
-@@ -4,3 +4,5 @@ config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
- 	select BR2_PACKAGE_STARTUP_NOTIFICATION
+diff --git a/package/linux-fusion/Config.in b/package/linux-fusion/Config.in
+index ed8bd6ad48..14b4f946af 100644
+--- a/package/linux-fusion/Config.in
++++ b/package/linux-fusion/Config.in
+@@ -8,3 +8,5 @@ config BR2_PACKAGE_LINUX_FUSION
  	help
- 	  Matchbox Panel Startup Monitor Applet.
+ 	  DirectFB Communication Layer allowing multiple DirectFB
+ 	  applications to run concurrently
 +
-+	  http://git.yoctoproject.org/cgit.cgi/mb-applet-startup-monitor/
++	  https://github.com/deniskropp/linux-fusion
