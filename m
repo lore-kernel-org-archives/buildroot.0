@@ -1,17 +1,15 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu,  5 Dec 2019 17:15:00 +0000
-Subject: [Buildroot] [PATCH v1 13/30] package/libcef: Add proprietary codecs
- build option.
+Date: Thu,  5 Dec 2019 17:15:02 +0000
+Subject: [Buildroot] [PATCH v1 15/30] package/libcef: Widevine support
+ depends on widevine package.
 In-Reply-To: <20191205171517.96639-1-michael.drake@codethink.co.uk>
 References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
-Message-ID: <20191205171517.96639-14-michael.drake@codethink.co.uk>
+Message-ID: <20191205171517.96639-16-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-This uses the Chromium bundled ffmpeg.
 
 Cc: Patrick Glaser <pglaser@tesla.com>
 Cc: Jon duSaint <jdusaint@tesla.com>
@@ -19,83 +17,76 @@ Cc: Enis Lavery <elavery@tesla.com>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/libcef/Config.in | 10 +++++++++-
- package/libcef/libcef.mk | 12 +++++++++---
- 2 files changed, 18 insertions(+), 4 deletions(-)
+ .../libcef/0003-stop-widevine-assert.patch    | 24 +++++++++++++++++++
+ package/libcef/Config.in                      |  6 +++++
+ package/libcef/libcef.mk                      |  7 ++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 package/libcef/0003-stop-widevine-assert.patch
 
+diff --git a/package/libcef/0003-stop-widevine-assert.patch b/package/libcef/0003-stop-widevine-assert.patch
+new file mode 100644
+index 0000000000..da511d8c01
+--- /dev/null
++++ b/package/libcef/0003-stop-widevine-assert.patch
+@@ -0,0 +1,24 @@
++From: Michael Drake <michael.drake@codethink.co.uk>
++Date: Thu, 31 Oct 2019 17:14:20 +0000
++Subject: [PATCH] CEF: Don't enforce Widevine.
++
++Allow the library to be built without Widevine support.
++
++Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
++Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
++
++diff --git a/BUILD.gn b/BUILD.gn
++index f5dd5cad..b37080cb 100644
++--- a/cef/BUILD.gn
+++++ b/cef/BUILD.gn
++@@ -246,9 +246,6 @@ assert(enable_basic_printing)
++ assert(enable_print_preview)
++ assert(!enable_service_discovery)
++ 
++-# Enable support for Widevine CDM.
++-assert(enable_widevine)
++-
++ if (is_clang) {
++   # Don't use the chrome style plugin.
++   assert(!clang_use_chrome_plugins)
++
 diff --git a/package/libcef/Config.in b/package/libcef/Config.in
-index b4f76e1dbe..67113dacd0 100644
+index 67113dacd0..bab584df30 100644
 --- a/package/libcef/Config.in
 +++ b/package/libcef/Config.in
-@@ -53,7 +53,7 @@ config BR2_PACKAGE_LIBCEF
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_COMPILER_RT
- 	select BR2_PACKAGE_DBUS
--	select BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_FFMPEG if !BR2_PACKAGE_LIBCEF_PROPRIETARY_CODECS
- 	select BR2_PACKAGE_FLAC
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_HARFBUZZ
-@@ -66,6 +66,7 @@ config BR2_PACKAGE_LIBCEF
- 	select BR2_PACKAGE_LIBGTK3_X11
- 	select BR2_PACKAGE_LIBKRB5
- 	select BR2_PACKAGE_LIBNSS
-+	select BR2_PACKAGE_LIBOPENH264 if BR2_PACKAGE_LIBCEF_PROPRIETARY_CODECS
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBXSLT
-@@ -101,4 +102,11 @@ config BR2_PACKAGE_LIBCEF_VAAPI
+@@ -95,6 +95,12 @@ config BR2_PACKAGE_LIBCEF_CEFSIMPLE
  	help
- 	  Enables VA-API-based hardware acceleration.
+ 	  Enables libcef example application cefsimple.
  
-+config BR2_PACKAGE_LIBCEF_PROPRIETARY_CODECS
-+	bool "Enable proprietary codecs in libcef"
++config BR2_PACKAGE_LIBCEF_WIDEVINE
++	bool "Enable Widevine support in libcef."
++	select BR2_PACKAGE_WIDEVINE
 +	help
-+	  Enable proprietary codecs in libcef. This uses
-+	  the ffmpeg bundled in Chromium, rather than the
-+	  ffmpeg buildroot package.
++	  Enables Widevine key system support.
 +
- endif
+ config BR2_PACKAGE_LIBCEF_VAAPI
+ 	bool "Enable va-api support in libcef."
+ 	depends on BR2_x86_64
 diff --git a/package/libcef/libcef.mk b/package/libcef/libcef.mk
-index bc616b6923..5508d34d13 100644
+index 5508d34d13..9d3b305451 100644
 --- a/package/libcef/libcef.mk
 +++ b/package/libcef/libcef.mk
-@@ -39,7 +39,6 @@ LIBCEF_DEPENDENCIES = \
- 	cairo \
- 	compiler-rt \
- 	dbus \
--	ffmpeg \
- 	flac \
- 	fontconfig \
- 	freetype \
-@@ -109,7 +108,6 @@ LIBCEF_GN_DEFINES = \
+@@ -220,6 +220,13 @@ else
+ LIBCEF_GN_DEFINES += use_pulseaudio=false
+ endif
  
- # Use Buildroot system libraries instead of Chromium third_party libraries
- LIBCEF_SYSTEM_LIBS = \
--	ffmpeg \
- 	flac \
- 	fontconfig \
- 	freetype \
-@@ -118,11 +116,19 @@ LIBCEF_SYSTEM_LIBS = \
- 	libwebp \
- 	libxml \
- 	libxslt \
--	openh264 \
- 	yasm
- 
- LIBCEF_BUILD_TARGETS = libcef.so chrome_sandbox
- 
-+ifeq ($(BR2_PACKAGE_LIBCEF_PROPRIETARY_CODECS),y)
-+LIBCEF_GN_DEFINES += \
-+	ffmpeg_branding=\"Chrome\" \
-+	proprietary_codecs=true
++ifeq ($(BR2_PACKAGE_LIBCEF_WIDEVINE),y)
++LIBCEF_GN_DEFINES += enable_widevine=true
++LIBCEF_DEPENDENCIES += widevine
 +else
-+LIBCEF_DEPENDENCIES += ffmpeg
-+LIBCEF_SYSTEM_LIBS += ffmpeg
++LIBCEF_GN_DEFINES += enable_widevine=false
 +endif
 +
- # We need to set our own flags in addition to the standard Buildroot ones.
- # Chromium may set warning flags that the LLVM toolchain in Buildroot
- # doesn't know about yet, because they use a bleeding edge toolchain.
+ ifeq ($(BR2_PACKAGE_LIBCEF_VAAPI),y)
+ LIBCEF_GN_DEFINES += use_vaapi=true
+ LIBCEF_DEPENDENCIES += libva
 -- 
 2.20.1
