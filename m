@@ -1,76 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 5 Dec 2019 22:45:04 +0100
-Subject: [Buildroot] [PATCH 1/2] package/pkg-python: use
- HOST_CONFIGURE_OPTS for distutils
-In-Reply-To: <CAMQcK5JFGOpe+=7fxq5cr7BVG9aiDjsEAVRgBq19-Zcxjgg7ow@mail.gmail.com>
-References: <20191111140643.2629-1-ryan.barnett@rockwellcollins.com>
- <CAMQcK5JFGOpe+=7fxq5cr7BVG9aiDjsEAVRgBq19-Zcxjgg7ow@mail.gmail.com>
-Message-ID: <67664440-bebe-d2c2-fd21-a88353ace045@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 5 Dec 2019 22:26:08 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/openvmtools: use
+ correct variable in udev rule RUN+=
+Message-ID: <20191205213858.CB6288137F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ac43d3604f526f29410474524882ba3e3fc77119
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
+DEVPATH is not a valid substitution in a RUN+=, devpath is:
+https://mirrors.edge.kernel.org/pub/linux/utils/kernel/hotplug/udev/udev.html
 
-On 04/12/2019 15:12, Ryan Barnett wrote:
-> On Mon, Nov 11, 2019 at 8:06 AM Ryan Barnett
-> <ryan.barnett@rockwellcollins.com> wrote:
->>
->> When building host python packages, we need to ensure that distutils
->> package types utilize HOST_CONFIGURE_OPTS. This ensures that the
->> correct linker and compiler environment variables are set to compile
->> utilizing the host directory.
->>
->> It was discovered that when compiling a host-python package, it was
->> using linking against the build machines library folder instead of the
->> host folder because LDFLAGS was not properly set and was improperly
->> detecting whether or not a shared or static library was present in the
->> host folder.
-> 
-> Is there any feedback on this approach to compiling a host python
-> distutils packages?
+So use that to get rid of the following warning:
 
- As such it seems like the right thing to do. However, it makes me wonder
+Invalid value "/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'" for RUN
+(char 27: invalid substitution type), ignoring, but please fix
 
-- why this is not needed for setuptools;
+Source: https://github.com/vmware/open-vm-tools/pull/376
 
-- why we don't pass TARGET_CONFIGURE_OPTS in the environment for the target.
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Acked-by: J??r??my Rosen <jeremy.rosen@smile.fr>
+[Peter: extend description]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 164963b80875b8d23062179bf2d92a9896a2a0a7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0010-Change-DEVPATH-to-devpath.patch           | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
- Regards,
- Arnout
-
-> 
-> Or is it preferred to explicitly pass the LDFLAGS variable in the DISTUTILS_ENV?
-> 
->> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
->> ---
->>  package/pkg-python.mk | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
->> index be1ce071df..8e4c7e5795 100644
->> --- a/package/pkg-python.mk
->> +++ b/package/pkg-python.mk
->> @@ -52,7 +52,8 @@ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
->>  # Host distutils-based packages
->>  HOST_PKG_PYTHON_DISTUTILS_ENV = \
->>         PATH=$(BR_PATH) \
->> -       PYTHONNOUSERSITE=1
->> +       PYTHONNOUSERSITE=1 \
->> +       $(HOST_CONFIGURE_OPTS)
->>
->>  HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
->>         --prefix=$(HOST_DIR)
->> --
->> 2.18.0
->>
-> 
-> Thanks,
-> -Ryan
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch b/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
+new file mode 100644
+index 0000000000..5af694d8f2
+--- /dev/null
++++ b/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
+@@ -0,0 +1,25 @@
++From 22f5d198b3b2f7e4debed83948ba1baf70d4749a Mon Sep 17 00:00:00 2001
++From: puneetse <22071208+puneetse@users.noreply.github.com>
++Date: Wed, 16 Oct 2019 10:04:41 -0700
++Subject: [PATCH] Change $DEVPATH to $devpath
++
++$DEVPATH throws a warning by udev.
++
++Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
++---
++ udev/99-vmware-scsi-udev.rules | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/udev/99-vmware-scsi-udev.rules b/udev/99-vmware-scsi-udev.rules
++index 053b59706..a605d80ef 100644
++--- a/udev/99-vmware-scsi-udev.rules
+++++ b/udev/99-vmware-scsi-udev.rules
++@@ -2,6 +2,6 @@
++ #
++ # This file is part of open-vm-tools
++ 
++-ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="Virtual disk*", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'"
++-ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="VMware Virtual S", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'"
+++ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="Virtual disk*", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys/$devpath/device/timeout'"
+++ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="VMware Virtual S", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys/$devpath/device/timeout'"
++ 
