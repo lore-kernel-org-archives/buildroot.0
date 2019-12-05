@@ -1,9 +1,10 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu,  5 Dec 2019 17:15:16 +0000
-Subject: [Buildroot] [PATCH v1 29/30] package/mesa3d: Add host package.
+Date: Thu,  5 Dec 2019 17:15:03 +0000
+Subject: [Buildroot] [PATCH v1 16/30] package/alsa-lib/alsa-lib: Add host
+ package.
 In-Reply-To: <20191205171517.96639-1-michael.drake@codethink.co.uk>
 References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
-Message-ID: <20191205171517.96639-30-michael.drake@codethink.co.uk>
+Message-ID: <20191205171517.96639-17-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +14,17 @@ To: buildroot@busybox.net
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/mesa3d/mesa3d.mk | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/alsa-lib/alsa-lib.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index fff498e777..1c0c592f61 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -13,6 +13,23 @@ MESA3D_LICENSE_FILES = docs/license.html
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 72e6c34282..026f0be07c 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -67,3 +67,4 @@ ALSA_LIB_CONF_ENV = \
+ 	LDFLAGS="$(TARGET_LDFLAGS) -lm"
  
- MESA3D_INSTALL_STAGING = YES
- 
-+HOST_MESA3D_DEPENDENCIES += \
-+	host-libdrm \
-+	host-libxcb \
-+	host-xlib_libX11 \
-+	host-xlib_libXext \
-+	host-xlib_libXfixes \
-+	host-xlib_libXrandr \
-+	host-xorgproto
-+
-+HOST_MESA3D_CONF_OPTS = \
-+	-Dplatforms=x11 \
-+	-Dgles2=true \
-+	-Dglx=xlib \
-+	-Dgallium-drivers= \
-+	-Dvulkan-drivers= \
-+	-Ddri-drivers=
-+
- MESA3D_PROVIDES =
- 
- MESA3D_DEPENDENCIES = \
-@@ -242,3 +259,4 @@ MESA3D_CONF_OPTS += -Dlmsensors=false
- endif
- 
- $(eval $(meson-package))
-+$(eval $(host-meson-package))
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.20.1
