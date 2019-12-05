@@ -1,45 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 21:59:47 +0100
-Subject: [Buildroot] [git commit] package/openjdk: use official
- hg.openjdk.java.net repository
-Message-ID: <20191205210350.28F03880AF@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 5 Dec 2019 22:09:08 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/oprofile: add an
+ upstream URL to Config.in
+Message-ID: <20191205210557.995B9880F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c55fe54d8ad44369147e7467fe7c38949b962ed7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=e9c0a9283761ab6e0344f1db9b9f143624bf7615
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Since Java 11 (and possibly earlier), OpenJDK now has its own official
-repository at hg.openjdk.java.net which is referenced in all OpenJDK
-documentation.  This patch brings buildroot into line with that
-source, reducing the opportunity for code injection, and allowing
-consistent patching both across projects and for patches specific to
-buildroot environments.
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
-diff -ru shows that the only changes between the downstream and upstream files at
-this point in time is the addition of a .hg_archive.txt file,  containing:
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c04dab6f6f5ff726aed5f724ffe82ef70551de89)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/oprofile/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-repo: fd16c54261b32be1aaedd863b7e856801b7f8543
-node: 7b6accc7c009304dd2979ea16c1cb15bf749a1fc
-branch: default
-tag: jdk-12.0.2+10
-tag: jdk-12.0.2-ga
-
-This does, however, change the hash for the tar.gz file (but not for the license).
-
-With respect to the concern regarding upstream hash consistency, we have now been
-using these archives for just over a year (since OpenJDK 11) and we haven't seen an
-archive hash change in that time.  This was a vast improvement on the previous
-Mercurial forest.  /archive is exactly as is sounds.  It's an archive that doesn't
-change, which is why it effectively negates the need for a "downstream" mirror.
-
-Tests completed successfully (which is not surprising since there are no code changes here):
-
-$ ./support/testing/run-tests -d ./dl/ -k -o test_dir tests.package.test_openjdk.TestOpenJdk
-14:35:25 TestOpenJdk                              Starting
-['Hello, World']
-['Test: Get JNI Version passed', 'Test: Read Native String Constant passed', 'Test: Write Java String to Native Library passed', 'Test: Write Java Char Array to Native Library passed', 'Test: Write String Member to Native Library passed', 'Test: Set String Member from Native Library passed', 'Test: Execeute Java Function from Native Library passed', 'Test: Instantiate Java Class passed', 'Test: Call Native Library to Set System Time passed']
-14:35:46 TestOpenJdk                              Cleaning up
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index d99a7e60c8..cce2cfdab8 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -39,6 +39,8 @@ config BR2_PACKAGE_OPROFILE
+ 	  interrupt handlers, kernel modules, the kernel, shared
+ 	  libraries, and applications.
+ 
++	  https://sourceforge.net/projects/oprofile/
++
+ comment "oprofile needs a toolchain w/ C++, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
