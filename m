@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Dec 2019 14:04:19 +0100
-Subject: [Buildroot] [PATCH v2 9/9] package/wpa_supplicant: adapt for
- preset-all
-In-Reply-To: <20191111172443.6874-10-jeremy.rosen@smile.fr>
+Date: Thu, 5 Dec 2019 14:07:43 +0100
+Subject: [Buildroot] [PATCH v2 2/9] use host-systemctl preset all to
+ enable units
+In-Reply-To: <20191111172443.6874-3-jeremy.rosen@smile.fr>
 References: <20191111172443.6874-1-jeremy.rosen@smile.fr>
- <20191111172443.6874-10-jeremy.rosen@smile.fr>
-Message-ID: <20191205130419.GJ2539@scaer>
+ <20191111172443.6874-3-jeremy.rosen@smile.fr>
+Message-ID: <20191205130743.GK2539@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,58 +14,31 @@ To: buildroot@busybox.net
 
 J?r?my, All,
 
+An additional comment, see below...
+
 On 2019-11-11 18:24 +0100, J?r?my Rosen spake thusly:
-> all services were installed but not enabled.
-> This change enables the service but not the templates
-> 
-> Enabling the templates creates weird links which are probably an
-> upstream bug.
+> since v234 upstream recommands using systemctl preset-all to enable units.
+[--SNIP--]
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index d1db60b5ef..dc2ed80e7d 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+[--SNIP--]
+> -define SYSTEMD_INSTALL_SERVICE_BOOT_CHECK
+> -	mkdir -p $(TARGET_DIR)/etc/systemd/system/boot-complete.target.requires
+> -	ln -sf ../../../../lib/systemd/system/systemd-boot-check-no-failures.service \
+> -		$(TARGET_DIR)/etc/systemd/system/boot-complete.target.requires/systemd-boot-check-no-failures.service
+> +define SYSTEMD_INSTALL_PRESET
+> +	$(INSTALL) -D -m 644 package/systemd/80-buildroot.preset $(TARGET_DIR)/usr/lib/systemd/system-preset/80-buildroot.preset
 
-Missing SoB line...
+We have a variable that refers to the directory of the package:
+    $(INSTALL) -D -m 644 $(SYSTEMD_PKGDIR)/80-buildroot.preset [...]
 
-> ---
->  package/wpa_supplicant/50-wpa_supplicant.preset | 4 ++++
->  package/wpa_supplicant/wpa_supplicant.mk        | 2 ++
->  2 files changed, 6 insertions(+)
->  create mode 100644 package/wpa_supplicant/50-wpa_supplicant.preset
-> 
-> diff --git a/package/wpa_supplicant/50-wpa_supplicant.preset b/package/wpa_supplicant/50-wpa_supplicant.preset
-> new file mode 100644
-> index 0000000000..9af8562c0e
-> --- /dev/null
-> +++ b/package/wpa_supplicant/50-wpa_supplicant.preset
-> @@ -0,0 +1,4 @@
-> +disable wpa_supplicant at .service
-
-In the commit log, you say "This change enables the service", but it
-looks like you are actually disabling it, no?
+Note that this comment is applicable to other patches in your series (at
+least the wpasuplicant one, for example).
 
 Regards,
 Yann E. MORIN.
-
-> +disable wpa_supplicant-nl80211 at .service
-> +disable wpa_supplicant-wired at .service
-> +
-> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-> index 9dcebca9bf..42b12b1fb4 100644
-> --- a/package/wpa_supplicant/wpa_supplicant.mk
-> +++ b/package/wpa_supplicant/wpa_supplicant.mk
-> @@ -227,6 +227,8 @@ define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
->  		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-nl80211 at .service
->  	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
->  		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-wired at .service
-> +	$(INSTALL) -D -m 644 package/wpa_supplicant/50-wpa_supplicant.preset \
-> +		$(TARGET_DIR)/usr/lib/systemd/system-preset/50-wpa_supplicant.preset
->  endef
->  
->  $(eval $(generic-package))
-> -- 
-> 2.24.0.rc1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
