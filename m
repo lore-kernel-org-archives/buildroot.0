@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:44:59 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/matchbox-fakekey:
- add an upstream URL to Config.in
-Message-ID: <20191205213908.B4A017F8E5@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 22:28:26 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/openvmtools: only
+ try to start vmtoolsd on vmware
+Message-ID: <20191205213908.539BA7FB4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29a07577c8665871356b0f4677f0a6661b374c7c
+commit: https://git.buildroot.net/buildroot/commit/?id=0a655a4c428ed5432e1da56d59ba187f855fbc75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+adds ConditionVirtualization=vmware to vmtoolsd.service
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 680d20cd4749d56cac5e41c844dbde90c32f2e97)
+(cherry picked from commit 89ebe8b4a12400435b9473b4ca7ea1240ff5f93e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/matchbox-fakekey/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/openvmtools/vmtoolsd.service | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/matchbox-fakekey/Config.in b/package/matchbox-fakekey/Config.in
-index 1a1f1341ec..0a8f628182 100644
---- a/package/matchbox-fakekey/Config.in
-+++ b/package/matchbox-fakekey/Config.in
-@@ -4,3 +4,5 @@ config BR2_PACKAGE_MATCHBOX_FAKEKEY
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	help
- 	  Library for simulating key press events under X11.
-+
-+	  http://git.yoctoproject.org/cgit/cgit.cgi/libfakekey/
+diff --git a/package/openvmtools/vmtoolsd.service b/package/openvmtools/vmtoolsd.service
+index 17a4df44c2..cb97357ec2 100644
+--- a/package/openvmtools/vmtoolsd.service
++++ b/package/openvmtools/vmtoolsd.service
+@@ -1,6 +1,7 @@
+ [Unit]
+ Description=vmtoolsd for openvmtools
+ After=syslog.target network.target
++ConditionVirtualization=vmware
+ 
+ [Service]
+ Type=forking
