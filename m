@@ -1,42 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 21:36:07 +0100
-Subject: [Buildroot] Errors when compiling uboot for rpi 3
-In-Reply-To: <1575547814.xk698xjfax.astroid@greyskull.none>
-References: <1575547814.xk698xjfax.astroid@greyskull.none>
-Message-ID: <20191205213607.58c3e098@windsurf>
+Date: Thu, 5 Dec 2019 21:37:01 +0100
+Subject: [Buildroot] [git commit] package/python-brotli: fix build failure
+ due to gcc bug 68485
+Message-ID: <20191205202840.BCD9F88059@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 05 Dec 2019 12:20:09 +0000
-Ben Edwards <ben@artfuldodge.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=dec2e0449d50d71219b4d94bc5547cce50a85163
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hi,
-> 
-> I am very new to buildroot, so I am probably making some fundamental
-> mistake. I have configured buildroot with the raspberrypi3 defconfig and
-> then enabled uboot. The diff is
-> 
-> --- configs/raspberrypi3_defconfig	2019-12-04 19:27:02.700303546 +0000
-> +++ configs/raspberrypi3_defconfig	2019-12-05 11:15:07.073552770 +0000
+The python-brotli package exhibits gcc bug 68485 when built for the
+Microblaze architecture with optimization enabled, which causes a build
+failure.
 
-This Buildroot defconfigs builds an ARM 32 bits system for the RaspberryPi.
+As done for other packages in Buildroot work around this gcc bug by
+setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
 
-> @@ -1,37 +1,26 @@
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rpi_3"
+Fixes:
 
-This U-Boot configuration apparently builds an ARM 64 bits bootloader
-for the RaspberryPi, and therefore uses some assembly code that cannot
-build with the ARM 32 compiler built as part of the
-raspberrypi3_defconfig.
+http://autobuild.buildroot.net/results/24b/24b23175ab27615fb377bb4d5f6c656dccf10a86/
 
-Best regards,
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-brotli/python-brotli.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-brotli/python-brotli.mk b/package/python-brotli/python-brotli.mk
+index 745255f413..2ec549ed0c 100644
+--- a/package/python-brotli/python-brotli.mk
++++ b/package/python-brotli/python-brotli.mk
+@@ -11,6 +11,14 @@ PYTHON_BROTLI_SETUP_TYPE = setuptools
+ PYTHON_BROTLI_LICENSE = MIT
+ PYTHON_BROTLI_LICENSE_FILES = LICENSE
+ 
++PYTHON_BROTLI_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++PYTHON_BROTLI_CFLAGS += -O0
++endif
++
++PYTHON_BROTLI_ENV = CFLAGS="$(PYTHON_BROTLI_CFLAGS)"
++
+ define PYTHON_BROTLI_EXTRACT_CMDS
+ 	$(UNZIP) -d $(@D) $(PYTHON_BROTLI_DL_DIR)/$(PYTHON_BROTLI_SOURCE)
+ 	mv $(@D)/Brotli-$(PYTHON_BROTLI_VERSION)/* $(@D)
