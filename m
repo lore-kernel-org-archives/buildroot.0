@@ -1,18 +1,18 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  5 Dec 2019 12:06:37 -0800
-Subject: [Buildroot] [PATCH 2/2] package/mender: bump to version 2.1.2
-In-Reply-To: <20191205200637.1404431-1-aduskett@gmail.com>
-References: <20191205200637.1404431-1-aduskett@gmail.com>
-Message-ID: <20191205200637.1404431-2-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Dec 2019 21:28:38 +0100
+Subject: [Buildroot] [git commit] package/mender: bump to version 2.1.2
+Message-ID: <20191205202044.A4E7B812A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=a991a6c83474e888fd7ed4bf6fc68dd8e180d916
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/mender/mender.hash | 2 +-
  package/mender/mender.mk   | 2 +-
@@ -42,5 +42,3 @@ index e085d542c9..fded7fa943 100644
  MENDER_SITE = https://github.com/mendersoftware/mender/archive
  MENDER_SOURCE = $(MENDER_VERSION).tar.gz
  MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
--- 
-2.23.0
