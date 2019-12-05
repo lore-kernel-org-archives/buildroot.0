@@ -1,11 +1,12 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 5 Dec 2019 11:21:21 +0100
+Date: Thu, 5 Dec 2019 11:23:11 +0100
 Subject: [Buildroot] Zynqmp ZCU-102 Xilinx
-In-Reply-To: <CADDW7LPZ+oD9NzjqvbjVBDYj59K_6q1d8beoqwyQ==jFNTq=KA@mail.gmail.com>
+In-Reply-To: <CADDW7LNm+aXWZ5JpqSPtkcFkhyixtHtdMf77s4ecNpx_aWe_6Q@mail.gmail.com>
 References: <CADDW7LPbh8ep74a5kcu1CZQuaFxuUGyCUxuJT6uo6Y=m9ftmOA@mail.gmail.com>
  <d46c58a9-4b07-878f-b638-1a4d1554e9b1@lucaceresoli.net>
  <CADDW7LPZ+oD9NzjqvbjVBDYj59K_6q1d8beoqwyQ==jFNTq=KA@mail.gmail.com>
-Message-ID: <6efe98a4-0570-32fa-c2f4-c692907815a4@lucaceresoli.net>
+ <CADDW7LNm+aXWZ5JpqSPtkcFkhyixtHtdMf77s4ecNpx_aWe_6Q@mail.gmail.com>
+Message-ID: <caee710a-47c3-10ce-e767-e8b12a6304f8@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,69 +15,50 @@ To: buildroot@busybox.net
 
 Hi Adrian,
 
-On 03/12/19 09:44, Adrian martinez munera wrote:
-> Hi Luca,
-> thanks for your answer!
-> How I said to Thomas, I'm trying to compile a Linux image to my ZCU-102
-> with EPICS (https://epics.anl.gov). But, as first step, I'd want build a
-> simple Linux image, all of this using Buildroot.?
-> Using yours steps, I've created a pmufw.bin with your builder and the
-> 'pm_cfg_obj.c', created by the Vivado project (xilpm library enabled).
-> Now I've a new two errors at the boot:
-> 1. boot console [cdns0] disabled
-> 2. The root file system is empty
+On 04/12/19 09:23, Adrian martinez munera wrote:
+[...]
+> Starting kernel ... ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] Booting Linux on physical CPU 0x0 ? ? ? ? ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] Linux version 4.14.0 (adrian at adrian) (gcc version 7.4.0
+> (Buildro9
+> [ ? ?0.000000] Boot CPU: AArch64 Processor [410fd034] ? ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] Machine model: ZynqMP ZCU102 Rev1.0 ? ? ? ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] earlycon: cdns0 at MMIO 0x00000000ff000000 (options
+> '115200n8') ?
+> [ ? ?0.000000] bootconsole [cdns0] enabled ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] efi: Getting EFI parameters from FDT: ? ? ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] efi: UEFI not found. ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] cma: Reserved 256 MiB at 0x0000000070000000 ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] psci: probing for conduit method from DT. ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] psci: PSCIv1.1 detected in firmware. ? ? ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] psci: Using standard PSCI v0.2 function IDs ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] psci: MIGRATE_INFO_TYPE not supported. ? ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] percpu: Embedded 21 pages/cpu @ffffffc87ff66000 s45080
+> r8192 d326
+> [ ? ?0.000000] Detected VIPT I-cache on CPU0 ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+> ? ? ? ?
+> [ ? ?0.000000] CPU features: enabling workaround for ARM erratum 845719
+> ? ? ? ?
+> [ ? ?0.000000] Built 1 zonelists, mobility grouping on.? Total pages:
+> 1034240 ?
+> [ ? ?0.000000] Kernel command line: earlycon clk_ignore_unused
+> root=/dev/mmcblkt
 
-What do you mean by "The root file system is empty"? It has not been
-built? It has not been copied to the boot medium? It has not neeb
-mounted? ...
-
-> *defconfig* file that I'm using:
-> 
-> BR2_aarch64=y
-> BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches/"
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-> BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
-> BR2_LINUX_KERNEL=y
-> BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git
-> <http://github.com/Xilinx/linux-xlnx.git>"
-> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2018.3"
-> BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
-> BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
-> BR2_TARGET_ROOTFS_EXT2=y
-> BR2_TARGET_ROOTFS_EXT2_4=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.5"
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
-> BR2_TARGET_UBOOT=y
-> BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/xilinx/u-boot-xlnx.git <http://github.com/xilinx/u-boot-xlnx.git>"
-> BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="228801a215909365ae1dcdd799034195ad7264f7"
-> BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_zcu102_rev1_0"
-> BR2_TARGET_UBOOT_NEEDS_DTC=y
-> BR2_TARGET_UBOOT_SPL=y
-> BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
-> BR2_TARGET_UBOOT_ZYNQMP=y
-> BR2_TARGET_UBOOT_ZYNQMP_PMUFW="/home/adrian/Documents/ZCU-102/pmufw_builder/zynqmp-pmufw-builder/pmufw.bin"
-> BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> BR2_PACKAGE_HOST_GENIMAGE=y
-> BR2_PACKAGE_HOST_MTOOLS=y
-
-Not sure what is the problem here, but I recommend using the same
-versions of kernel, PMUFW and U-Boot as the zcu106 defconfig. Xilinx
-versions of these software are known to not work properly if you mix
-these versions, at least this used to happen in the 2017.x~2018.x era.
-So try to use 2017.04 for the three components. If it works then you can
-try to upgrade them.
-
-Also enable debug prints in the PMUFW, they are useful in debugging boot
-issues.
+What is mmcblkt?
 
 -- 
 Luca
