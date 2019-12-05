@@ -1,50 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:06:23 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] {linux,
- linux-headers}: bump 4.{14, 19}.x series
-Message-ID: <20191205210734.0BB54880A7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Dec 2019 22:18:07 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/grpc: bump to version 1.25.0
+In-Reply-To: <20191205210155.2705242-1-aduskett@gmail.com>
+References: <20191205210155.2705242-1-aduskett@gmail.com>
+Message-ID: <20191205221807.3022cc5b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b303cc63de59dee973c455b8e433421287190f6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+On Thu,  5 Dec 2019 13:01:55 -0800
+aduskett at gmail.com wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit af712ca7ce9a36f68c64cd9306005dbc86bc1502)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> -GRPC_VERSION = 1.23.0
+> +GRPC_VERSION = 1.25.0
+>  GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+>  GRPC_LICENSE = Apache-2.0
+>  GRPC_LICENSE_FILES = LICENSE
+> @@ -48,6 +48,14 @@ GRPC_CFLAGS += -O0
+>  GRPC_CXXFLAGS += -O0
+>  endif
+>  
+> +# Toolchains older than gcc5 will fail to compile with -0s due to:
+> +# error: failure memory model cannot be stronger than success memory model for
+> +# '__atomic_compare_exchange'
+> +ifneq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 517a11cbfe..d4467b9171 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -4,5 +4,5 @@ sha256 56495f82314f0dfb84a3fe7fad78e17be69c4fd36ef46f2452458b2fa1e341f6  linux-5
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 fa1f8fe9c12e18e5cda18cf759b77ae9e778e1e9006d837426c955b75bd4eaa6  linux-4.4.205.tar.xz
- sha256 98b9e8644706acc0cf51022372bb263b59a1d2bbe3ccd7ce6bd9bc7378c78b05  linux-4.9.205.tar.xz
--sha256 f8889feb0cbd7df36ff35bd4c72c1e2010567621bfcb218fcfa501bc5c7787c0  linux-4.14.156.tar.xz
--sha256 bf2cbba319d43d1bd9e876ac0b55ab83118d1a1e61cce3c929d5371f7567bff6  linux-4.19.86.tar.xz
-+sha256 90fa769a052ecf34a0cab72cf013e19275dbb8cd01bbe52f1d465e2ed7537733  linux-4.14.157.tar.xz
-+sha256 a57221e8318e6fcaedb90b099d56352f9d6608fd367283bc7db84330856eda1d  linux-4.19.87.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5e279d4b19..be7ad580e0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -307,8 +307,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.205"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.205"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.156"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.86"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.14.157"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.87"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.1.21"	if BR2_KERNEL_HEADERS_5_1
- 	default "5.2.21"	if BR2_KERNEL_HEADERS_5_2
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Could also be:
+
+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
+
+> +GRPC_CFLAGS += -O0
+> +GRPC_CXXFLAGS += -O0
+
+What happens when O2 or O3 are the default optimization flags? Does it
+build? If it does, what you're doing is a bit brutal, as you're forcing
+O0 even if O2 or O3 would work.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
