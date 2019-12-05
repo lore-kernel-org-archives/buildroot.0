@@ -1,35 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 23:15:21 +0100
-Subject: [Buildroot] [PATCH 2/2] support/testing: add python-django test
-In-Reply-To: <20191204200629.686191-2-aduskett@gmail.com>
-References: <20191204200629.686191-1-aduskett@gmail.com>
- <20191204200629.686191-2-aduskett@gmail.com>
-Message-ID: <20191205231521.07355101@windsurf>
+Date: Thu, 5 Dec 2019 23:15:45 +0100
+Subject: [Buildroot] [git commit] package/glibc: drop dependency of
+ utilities on bash
+Message-ID: <20191205220733.4E4C78823B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  4 Dec 2019 12:06:29 -0800
-aduskett at gmail.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=862cda57e5e2110a432e9c7592d2f258913223fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> +    def run_sample_scripts(self):
-> +        cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
-> +        _, exit_code = self.emulator.run(cmd, timeout=30)
-> +        self.assertEqual(exit_code, 0)
+The dependency was added because ldd uses bash-specific syntax to
+localize messages. Add a post-patch hook, instead, to replace the
+occurrences of $"foo" by "foo", simply, so the code becomes POSIX
+sh compliant if bash is not selected.
 
-These last two lines can be simplified to:
+Also set the configuration environment accordingly to replace the
+/bin/bash hashbang by /bin/sh.
 
-	self.assertRunOk(cmd, timeout=30)
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glibc/Config.in |  4 ----
+ package/glibc/glibc.mk  | 11 ++++++++++-
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-so I used that in the 3 places where it was possible, and I've applied
-to master.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index b8c2573d96..7b2f246947 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -11,10 +11,6 @@ endif
+ 
+ config BR2_PACKAGE_GLIBC_UTILS
+ 	bool "Install glibc utilities"
+-	depends on BR2_PACKAGE_BASH
+ 	help
+ 	  Enabling this option will compile and install the getconf,
+ 	  ldconfig, ldd and locale glibc utilities for the target.
+-
+-comment "glibc utilities need bash"
+-	depends on !BR2_PACKAGE_BASH
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 8eafa55ae1..1b38f8aedb 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -74,10 +74,19 @@ endef
+ endif
+ 
+ GLIBC_CONF_ENV = \
+-	ac_cv_path_BASH_SHELL=/bin/bash \
++	ac_cv_path_BASH_SHELL=/bin/$(if $(BR2_PACKAGE_BASH),bash,sh) \
+ 	libc_cv_forced_unwind=yes \
+ 	libc_cv_ssp=no
+ 
++# POSIX shell does not support localization, so remove the corresponding
++# syntax from ldd if bash is not selected.
++ifeq ($(BR2_PACKAGE_BASH),)
++define GLIBC_LDD_NO_BASH
++	$(SED) 's/$$"/"/g' $(@D)/elf/ldd.bash.in
++endef
++GLIBC_POST_PATCH_HOOKS += GLIBC_LDD_NO_BASH
++endif
++
+ # Override the default library locations of /lib64/<abi> and
+ # /usr/lib64/<abi>/ for RISC-V.
+ ifeq ($(BR2_riscv),y)
