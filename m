@@ -1,32 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Dec 2019 20:05:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tiff: security bump to 4.1.0
-In-Reply-To: <20191129101238.9492-1-jubalh@iodoru.org> (Michael Vetter's
- message of "Fri, 29 Nov 2019 11:12:38 +0100")
-References: <20191129101238.9492-1-jubalh@iodoru.org>
-Message-ID: <87eexir3td.fsf@dell.be.48ers.dk>
+Date: Thu, 5 Dec 2019 19:28:51 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/perl-gdgraph: fix
+ license
+Message-ID: <20191205185702.BA31D87F6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9aff26ebe555324dea339b1c744f5e35d16173a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fixes the following security vulnerabilities:
- >   * CVE-2018-12900
- >   * CVE-2018-17000
- >   * CVE-2019-6128
- >   * CVE-2019-7663
- >   * CVE-2019-14973
- >   * CVE-2018-19210
+Dustismo.LICENSE contains the license for the Dustismo_Sans.ttf font
+file. The rest is licensed under the same terms as Perl as specified
+in README so add README to license files and add GPL-2.0+ to license
 
- > Remove because contained upstream:
- > 0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d0cf9d76ea0975af9f576a5674f1fa77e955ab9d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/perl-gdgraph/perl-gdgraph.hash | 3 ++-
+ package/perl-gdgraph/perl-gdgraph.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/perl-gdgraph/perl-gdgraph.hash b/package/perl-gdgraph/perl-gdgraph.hash
+index ea994519dd..c0b195eb2a 100644
+--- a/package/perl-gdgraph/perl-gdgraph.hash
++++ b/package/perl-gdgraph/perl-gdgraph.hash
+@@ -2,5 +2,6 @@
+ md5    38c6a188519e6272e9b2b722b315c3d8 GDGraph-1.54.tar.gz
+ sha256 b96f5c10b656c17d16ab65a1777c908297b028d3b6815f6d54b2337f006bfa4f GDGraph-1.54.tar.gz
+ 
+-# computed by scancpan
++# Hash for license files
+ sha256 710484e3a1196664bbe8a5ad5d53c528e01226eb20e2885a4e1131eb6c6565cd Dustismo.LICENSE
++sha256 f44630ad9101e40a101d906a07908c975a9b0742273cfb0c00a51d73afb53e7d README
+diff --git a/package/perl-gdgraph/perl-gdgraph.mk b/package/perl-gdgraph/perl-gdgraph.mk
+index 284dc9dc21..286902a66e 100644
+--- a/package/perl-gdgraph/perl-gdgraph.mk
++++ b/package/perl-gdgraph/perl-gdgraph.mk
+@@ -7,8 +7,8 @@
+ PERL_GDGRAPH_VERSION = 1.54
+ PERL_GDGRAPH_SOURCE = GDGraph-$(PERL_GDGRAPH_VERSION).tar.gz
+ PERL_GDGRAPH_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RUZ
+-PERL_GDGRAPH_LICENSE = Artistic or GPL-1.0+
+-PERL_GDGRAPH_LICENSE_FILES = Dustismo.LICENSE
++PERL_GDGRAPH_LICENSE = Artistic or GPL-1.0+ (perl module), GPL-2.0+ (font)
++PERL_GDGRAPH_LICENSE_FILES = Dustismo.LICENSE README
+ PERL_GDGRAPH_DISTNAME = GDGraph
+ 
+ $(eval $(perl-package))
