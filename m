@@ -1,28 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Dec 2019 22:37:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jasper: bump to 2.0.16
-In-Reply-To: <20191127094055.14977-1-jubalh@iodoru.org> (Michael Vetter's
- message of "Wed, 27 Nov 2019 10:40:55 +0100")
-References: <20191127094055.14977-1-jubalh@iodoru.org>
-Message-ID: <87blsmpi6t.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Dec 2019 22:28:01 +0100
+Subject: [Buildroot] [git commit] package/php: properly propagate libargon2
+ dependencies
+Message-ID: <20191205213429.E393488136@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ba34e47004756133f3199c0785ccb6c46530fe17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Changes:
- >   * Fix assertion failure JPC_NOMINALGAIN (CVE-2016-9396) (#50)
- >   * Fix build on Windows 10 (#162)
- >   * Improve README
- >   * Fix build with CMake 2.x
- >   * Add missing dereference operators (#178, #157)
- >   * Check data in jas_image (CVE-2018-19539) (#196)
- > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Fixes:
+ - http://autobuild.buildroot.org/results/72412a68da44d7ecc87656436a17542cafcf1f95
 
-Committed to 2019.02.x and 2019.08.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/php/Config.ext | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index d5c723ca39..6a9634391c 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -70,8 +70,14 @@ config BR2_PACKAGE_PHP_EXT_HASH
+ 	help
+ 	  HASH message digest framework
+ 
++comment "libargon2 needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_PHP_EXT_LIBARGON2
+ 	bool "libargon2"
++	depends on BR2_USE_MMU # libargon2
++	depends on !BR2_STATIC_LIBS # libargon2
+ 	select BR2_PACKAGE_LIBARGON2
+ 	help
+ 	  libargon2 support
