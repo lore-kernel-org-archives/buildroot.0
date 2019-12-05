@@ -1,44 +1,80 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Fri, 6 Dec 2019 01:04:43 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-12-04
-In-Reply-To: <5de8af52.1c69fb81.e1f2d.2900SMTPIN_ADDED_MISSING@mx.google.com>
-References: <5de8af52.1c69fb81.e1f2d.2900SMTPIN_ADDED_MISSING@mx.google.com>
-Message-ID: <CAMw6YJKL8jtNu650f0UAJj=7EE7MabmMcZUbBnQT24tvC6-q-A@mail.gmail.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Thu,  5 Dec 2019 17:11:02 -0600
+Subject: [Buildroot] [PATCH] package/pkg-python: use _CONFIGURE_OPTS for
+ build env
+Message-ID: <20191205231103.27778-1-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
+When building host or target python packages, we need to ensure that
+the build environment utilize {HOST|TARGET}_CONFIGURE_OPTS. This
+ensures that the correct linker and compiler environment variables are
+set to compile utilizing either the host or target folders.
 
-On Thu, Dec 5, 2019 at 9:18 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Recent build failures and runtime-tests failures
-> ================================================
->
-> This is the list of Buildroot build failures that occurred on
-> 2019-12-04, and for which you are a registered architecture developer,
-> package developer or defconfig developer. This list also include
-> runtime tests failures. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Results for the 'master' branch
-> -------------------------------
->
-> Build failures related to your packages:
->
->     arch     |             reason             |                                       url
-> -------------+--------------------------------+---------------------------------------------------------------------------------
->  powerpc64   | host-gettext-tiny-73fc3e7ef... | http://autobuild.buildroot.net/results/cd87788ffea5ae6c90f4302b21ecb928b69cf334
->
+It was discovered that when compiling a host-python package, it was
+using linking against the build machines library folder instead of the
+host folder because LDFLAGS was not properly set and was improperly
+detecting whether or not a shared or static library was present in the
+host folder.
 
-looks like it is due to the missing xzcat on the build server ?
+CC: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 
-Regards,
-Vadim Kochan
+---
+Changes v1 -> v2:
+  - Merged HOST/TARGET_CONFIGURE_OPTS to single commit (suggested by
+      Arnout)
+  - Added HOST/TARGET_CONFIGURE_OPTS to env for setuptools (suggested
+      by Arnout)
+---
+ package/pkg-python.mk | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index be1ce071df..4ded4fde83 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -27,9 +27,7 @@ endef
+ # Target distutils-based packages
+ PKG_PYTHON_DISTUTILS_ENV = \
+ 	PATH=$(BR_PATH) \
+-	CC="$(TARGET_CC)" \
+-	CFLAGS="$(TARGET_CFLAGS)" \
+-	LDFLAGS="$(TARGET_LDFLAGS)" \
++	$(TARGET_CONFIGURE_OPTS) \
+ 	LDSHARED="$(TARGET_CROSS)gcc -shared" \
+ 	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
+ 	PYTHONNOUSERSITE=1 \
+@@ -52,7 +50,8 @@ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
+ # Host distutils-based packages
+ HOST_PKG_PYTHON_DISTUTILS_ENV = \
+ 	PATH=$(BR_PATH) \
+-	PYTHONNOUSERSITE=1
++	PYTHONNOUSERSITE=1 \
++	$(HOST_CONFIGURE_OPTS)
+ 
+ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+ 	--prefix=$(HOST_DIR)
+@@ -61,6 +60,7 @@ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+ PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+ 	PATH=$(BR_PATH) \
++	$(TARGET_CONFIGURE_OPTS) \
+ 	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
+ 	PYTHONNOUSERSITE=1 \
+ 	_python_sysroot=$(STAGING_DIR) \
+@@ -82,7 +82,8 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+ # Host setuptools-based packages
+ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	PATH=$(BR_PATH) \
+-	PYTHONNOUSERSITE=1
++	PYTHONNOUSERSITE=1 \
++	$(HOST_CONFIGURE_OPTS)
+ 
+ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 	--prefix=$(HOST_DIR) \
+-- 
+2.18.0
