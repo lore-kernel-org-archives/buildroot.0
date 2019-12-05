@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:45:24 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/matchbox-panel:
- add an upstream URL to Config.in
-Message-ID: <20191205213859.4EFA67FD90@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 22:28:18 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/openvmtools: only
+ try to start vmtoolsd on vmware
+Message-ID: <20191205213858.D5EB683722@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c45d5f52e4f6a11bdef18cd44a5cbd2abe87695
+commit: https://git.buildroot.net/buildroot/commit/?id=c5756f02bd684a4d8011499a2cc3fef96856bb37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+adds ConditionVirtualization=vmware to vmtoolsd.service
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 484b687f79d06945c581cdaf709c2ecd8cbb3774)
+(cherry picked from commit 89ebe8b4a12400435b9473b4ca7ea1240ff5f93e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/matchbox-panel/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/openvmtools/vmtoolsd.service | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/matchbox-panel/Config.in b/package/matchbox-panel/Config.in
-index 47bd10ad7e..1fc38336a5 100644
---- a/package/matchbox-panel/Config.in
-+++ b/package/matchbox-panel/Config.in
-@@ -4,3 +4,5 @@ config BR2_PACKAGE_MATCHBOX_PANEL
- 	help
- 	  A flexible always present 'window bar' for holding
- 	  application launchers.
-+
-+	  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-panel/
+diff --git a/package/openvmtools/vmtoolsd.service b/package/openvmtools/vmtoolsd.service
+index 17a4df44c2..cb97357ec2 100644
+--- a/package/openvmtools/vmtoolsd.service
++++ b/package/openvmtools/vmtoolsd.service
+@@ -1,6 +1,7 @@
+ [Unit]
+ Description=vmtoolsd for openvmtools
+ After=syslog.target network.target
++ConditionVirtualization=vmware
+ 
+ [Service]
+ Type=forking
