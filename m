@@ -1,116 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 19:38:52 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/tiff: security
- bump to 4.1.0
-Message-ID: <20191205185717.548C487FA8@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 19:33:19 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/python-cchardet:
+ bump to version 2.1.5
+Message-ID: <20191205185717.3441287FA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e10963ce24891c19a17b20cd4692313acb64368
+commit: https://git.buildroot.net/buildroot/commit/?id=0dd2597fff13dcbeac306c71c91c9b366af1097d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Fixes the following security vulnerabilities:
-  * CVE-2018-12900
-  * CVE-2018-17000
-  * CVE-2019-6128
-  * CVE-2019-7663
-  * CVE-2019-14973
-  * CVE-2018-19210
-
-Remove because contained upstream:
-0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch
-
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8b93ddb642cd4314306f7b464370d115322e0d1c)
+(cherry picked from commit 2da1130670447e38d94609c076e99f55352c5da1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...mory-leak-that-was-assigned-CVE-2019-6128.patch | 53 ----------------------
- package/tiff/tiff.hash                             |  2 +-
- package/tiff/tiff.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 55 deletions(-)
+ package/python-cchardet/python-cchardet.hash | 4 ++--
+ package/python-cchardet/python-cchardet.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/tiff/0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch b/package/tiff/0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch
-deleted file mode 100644
-index 638760b71e..0000000000
---- a/package/tiff/0001-Fix-for-simple-memory-leak-that-was-assigned-CVE-2019-6128.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 0c74a9f49b8d7a36b17b54a7428b3526d20f88a8 Mon Sep 17 00:00:00 2001
--From: Scott Gayou <github.scott@gmail.com>
--Date: Wed, 23 Jan 2019 15:03:53 -0500
--Subject: [PATCH] Fix for simple memory leak that was assigned CVE-2019-6128.
--
--pal2rgb failed to free memory on a few errors. This was reported
--here: http://bugzilla.maptools.org/show_bug.cgi?id=2836.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://gitlab.com/libtiff/libtiff/commit/ae0bed1fe530a82faf2e9ea1775109dbf301a971]
-----
-- tools/pal2rgb.c | 7 ++++++-
-- 1 file changed, 6 insertions(+), 1 deletion(-)
--
--diff --git a/tools/pal2rgb.c b/tools/pal2rgb.c
--index 01d8502e..9492f1cf 100644
----- a/tools/pal2rgb.c
--+++ b/tools/pal2rgb.c
--@@ -118,12 +118,14 @@ main(int argc, char* argv[])
-- 	    shortv != PHOTOMETRIC_PALETTE) {
-- 		fprintf(stderr, "%s: Expecting a palette image.\n",
-- 		    argv[optind]);
--+		(void) TIFFClose(in);
-- 		return (-1);
-- 	}
-- 	if (!TIFFGetField(in, TIFFTAG_COLORMAP, &rmap, &gmap, &bmap)) {
-- 		fprintf(stderr,
-- 		    "%s: No colormap (not a valid palette image).\n",
-- 		    argv[optind]);
--+		(void) TIFFClose(in);
-- 		return (-1);
-- 	}
-- 	bitspersample = 0;
--@@ -131,11 +133,14 @@ main(int argc, char* argv[])
-- 	if (bitspersample != 8) {
-- 		fprintf(stderr, "%s: Sorry, can only handle 8-bit images.\n",
-- 		    argv[optind]);
--+		(void) TIFFClose(in);
-- 		return (-1);
-- 	}
-- 	out = TIFFOpen(argv[optind+1], "w");
---	if (out == NULL)
--+	if (out == NULL) {
--+		(void) TIFFClose(in);
-- 		return (-2);
--+	}
-- 	cpTags(in, out);
-- 	TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &imagewidth);
-- 	TIFFGetField(in, TIFFTAG_IMAGELENGTH, &imagelength);
---- 
--2.18.1
--
-diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
-index 21eb4bd37a..36f30c4418 100644
---- a/package/tiff/tiff.hash
-+++ b/package/tiff/tiff.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 2c52d11ccaf767457db0c46795d9c7d1a8d8f76f68b0b800a3dfe45786b996e4  tiff-4.0.10.tar.gz
-+sha256 5d29f32517dadb6dbcd1255ea5bbc93a2b54b94fbf83653b4d65c7d6775b8634  tiff-4.1.0.tar.gz
- sha256 fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7  COPYRIGHT
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index aef08b341d..b26900ac70 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-cchardet/python-cchardet.hash b/package/python-cchardet/python-cchardet.hash
+index 231804ee3c..d023457854 100644
+--- a/package/python-cchardet/python-cchardet.hash
++++ b/package/python-cchardet/python-cchardet.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/cchardet/json
+-md5	17af20af67cb18e958854e273d857a88  cchardet-2.1.4.tar.gz
+-sha256	cc9745e0400da4cfb49f075e7819f22473b66443f953427058fee2c7b9547cc0  cchardet-2.1.4.tar.gz
++md5	681af4e6546e47e2ae856057a8a7d105  cchardet-2.1.5.tar.gz
++sha256	240efe3f255f916769458343840b9c6403cf3192720bc5129792cbcb88bf72fb  cchardet-2.1.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256	107a29ccdd2d778aa2df5462f85dddfa099059abd22e064e07ec2cc9bafc37cd  COPYING
+diff --git a/package/python-cchardet/python-cchardet.mk b/package/python-cchardet/python-cchardet.mk
+index 9ac170c22d..58082538d0 100644
+--- a/package/python-cchardet/python-cchardet.mk
++++ b/package/python-cchardet/python-cchardet.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--TIFF_VERSION = 4.0.10
-+TIFF_VERSION = 4.1.0
- TIFF_SITE = http://download.osgeo.org/libtiff
- TIFF_LICENSE = tiff license
- TIFF_LICENSE_FILES = COPYRIGHT
+-PYTHON_CCHARDET_VERSION = 2.1.4
++PYTHON_CCHARDET_VERSION = 2.1.5
+ PYTHON_CCHARDET_SOURCE = cchardet-$(PYTHON_CCHARDET_VERSION).tar.gz
+-PYTHON_CCHARDET_SITE = https://files.pythonhosted.org/packages/74/64/3988d388315c1af3e24f447689dadf30edead43366fb2041cb103380b57f
++PYTHON_CCHARDET_SITE = https://files.pythonhosted.org/packages/73/25/73649708a30aa97124631bd088a22f1bf721d05d4e72fb9cc9bedb97de51
+ PYTHON_CCHARDET_SETUP_TYPE = setuptools
+ PYTHON_CCHARDET_LICENSE = MPL-1.1
+ PYTHON_CCHARDET_LICENSE_FILES = COPYING
