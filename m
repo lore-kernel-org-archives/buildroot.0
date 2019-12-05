@@ -1,65 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 21:28:31 +0100
-Subject: [Buildroot] [git commit] package/mender-artifact: bump to version
- 3.2.1
-Message-ID: <20191205202044.9B64D88023@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 21:32:58 +0100
+Subject: [Buildroot] [git commit] package/pkg-kconfig: fix reconfigure for
+ kconfig packages
+Message-ID: <20191205202438.BA4A48804F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c20a107c152a5dd2a5117899b9ccf34d0de85613
+commit: https://git.buildroot.net/buildroot/commit/?id=d1f1947af12fc47933c7ea8fa90fc40d423affd2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Other changes:
-  - Add a sha256sum for LIC_FILES_CHKSUM.sha256
-  - Remove duplicated license file vendor/github.com/stretchr/testify/LICENSE
+Commit 4b81badbcc0b25678ac6627548160702731cf393
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+    Currently, calling foo-reconfigure for a kconfig-based package will not
+    re-trigger the configuration (kconfig-wise) step for the package.
+
+was supposed to solve this problem and lately we had
+
+Commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f
+
+    infra/pkg-kconfig: do not rely on package's .config as a timestamp
+
+that introduced the .stamp_dotconfig file.
+
+For this reason, to trigger a kconfig package reconfigure is now
+necessary to remove the .stamp_dotconfig file.
+
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mender-artifact/mender-artifact.hash | 4 ++--
- package/mender-artifact/mender-artifact.mk   | 3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/pkg-kconfig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
-index 8a927d1ca3..74ea5686c1 100644
---- a/package/mender-artifact/mender-artifact.hash
-+++ b/package/mender-artifact/mender-artifact.hash
-@@ -1,5 +1,6 @@
- # Locally computed:
--sha256 2be8946b4febf44b1e37cbaa1d1286de895bae8c5c17a5c6165e9509a02f40dc 3.2.0.tar.gz
-+sha256 62233e415399a32f4397cf9e2dfc1447db58b7ebd71379ee779b360140d5ab08 3.2.1.tar.gz
-+sha256 68d145b900b4845834d49efe470d7e9ec7a3d9f175e72cb974f38c54b9172801 LIC_FILES_CHKSUM.sha256
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index e435b95bcf..e2d52ee8ed 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -176,7 +176,7 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ $(1)-clean-for-reconfigure: $(1)-clean-kconfig-for-reconfigure
  
- # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
- # following command:
-@@ -24,6 +25,5 @@ sha256 3525392c6db3b804af76980b2c560ee9ec1abdadd907d76a26091df7c78f3a25 vendor/g
- #
- # MIT licenses.
- sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f vendor/github.com/stretchr/testify/LICENSE
--sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f vendor/github.com/stretchr/testify/LICENSE
- sha256 da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7 vendor/github.com/urfave/cli/LICENSE
- sha256 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b vendor/github.com/sirupsen/logrus/LICENSE
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index 5ccaa31a9b..f4a606653f 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ $(1)-clean-kconfig-for-reconfigure:
+-	rm -f $$($(2)_DIR)/.stamp_kconfig_fixup_done
++	rm -f $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
  
--HOST_MENDER_ARTIFACT_VERSION = 3.2.0
-+HOST_MENDER_ARTIFACT_VERSION = 3.2.1
- HOST_MENDER_ARTIFACT_SITE = https://github.com/mendersoftware/mender-artifact/archive
- HOST_MENDER_ARTIFACT_SOURCE = $(HOST_MENDER_ARTIFACT_VERSION).tar.gz
- HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
-@@ -19,7 +19,6 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/github.com/remyoudompheng/go-liblzma/LICENSE \
- 	vendor/github.com/davecgh/go-spew/LICENSE \
- 	vendor/github.com/stretchr/testify/LICENSE \
--	vendor/github.com/stretchr/testify/LICENSE \
- 	vendor/github.com/urfave/cli/LICENSE \
- 	vendor/github.com/sirupsen/logrus/LICENSE
- HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
+ # Only enable the foo-*config targets when the package is actually enabled.
+ # Note: the variable $(2)_KCONFIG_VAR is not related to the kconfig
