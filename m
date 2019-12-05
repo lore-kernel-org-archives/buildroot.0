@@ -1,75 +1,49 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 5 Dec 2019 22:25:14 +0100
-Subject: [Buildroot] libdrm: buildroot patchstack - static linking
-In-Reply-To: <20191205221151.214db463@windsurf>
-References: <20191205215234.7058f6df@gmx.net>
- <20191205221151.214db463@windsurf>
-Message-ID: <20191205222514.4af1cd80@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Dec 2019 22:26:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/alsa-utils: fix build without
+ alsa mixer
+In-Reply-To: <20191204175437.2182278-1-fontaine.fabrice@gmail.com>
+References: <20191204175437.2182278-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191205222614.39585e4f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+On Wed,  4 Dec 2019 18:54:37 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On Thu, 5 Dec 2019 22:11:51 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> atopology is needed to build alsa-utils since version 1.2.1 and
+> https://github.com/alsa-project/alsa-utils/commit/c8fdd38c74de2e8b7b2b5a4576787d5e9b4ae807
+> 
+> However, atopology is not correctly detected if --disable-alsatest is
+> passed so force the detection of alsa-topology through
+> --enable-alsa-topology as suggested by upstream in
+> https://github.com/alsa-project/alsa-lib/pull/16
+> 
+> An other option would be to drop --disable-alsatest but I couldn't find
+> why it was set
 
-> On Thu, 5 Dec 2019 21:54:53 +0100
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > some progress on up-streaming the buildroot libdrm patch stack:
-> >
-> >  - 0001-Add-ARM-support-into-xf86drm.h.patch
-> >    https://gitlab.freedesktop.org/mesa/drm/merge_requests/31
-> >    Acked, but with one further question 'why not catch-all __ARM_ARCH?'
-> >    Thomas - you touched the patch and added the comment, any further input?
->
-> Well, my comment explains it all: ldrex/strex only exist on ARM >= v6,
-> but __ARM_ARCH is true for all ARM ISAs, including ARMv4 and ARMv5,
-> which Buildroot supports, but don't provide ldrex/strex.
+Prior to commit 2c03ec15307b567fd2250fe2a7981a89d19b87a9 (from 2002),
+--enable-alsatest would cause an AC_TRY_RUN test to be executed, which
+doesn't work in a cross-compiled environment.
 
-Thanks for backing-up my (already done) reply to the merge request (see link above),
-will add an additional comment to the change set...
+There is by the way a remainder from that in utils/alsa.m4:
 
->
-> >  - 0004-meson.build-enable-static-build.patch
-> >    declined https://gitlab.freedesktop.org/mesa/drm/merge_requests/28
-> >    'Closing the MR, but feel free to reopen if it turns out someone has
-> >    a real need for this'
-> >
-> >    Anyone out there using libdrm static linking?
->
-> But what is the cost for upstream to use the correct library() Meson
-> macro/function instead of shared_library() ? It is shorter, and does
-> the job. I'm not sure why upstream is reluctant to merge this.
+  AS_HELP_STRING([--disable-alsatest], [Do not try to compile and run a test Alsa program]),
 
-Not sure about this change of mind (from Reviewed by to declined), the
-original comment:
+See how it says "Do not try to compile and *run* a test Alsa program" ?
 
-	On a technical level, this MR is fine and we can merge it, but the thing
-	is that it adds to the maintenance burden (not much, sure) and limits
-	future features because they will need to work with static linking,
-	not to mention the usual problems that made everyone stop statically
-	linking (although one could argue that this last point would be our
-	users' choice, but should we give them a foot-gun and the choice to use it?).
+I think --disable-alsatest could be removed now. In addition, upstream
+seems to have improved yesterday the detection of the topology library
+in alsa-lib commit ad8527d81b09c4d0edd054b5b1468ce1c50b23cb. Could you
+try this instead ?
 
-	Unless there's a need by anyone to support this, I think we shouldn't do
-	this "just because we can" :)
+Thanks,
 
->
-> >  - 0005-tests-meson.build-disable-nouveau-tests-for-static-b.patch
-> >    folded into previous one https://gitlab.freedesktop.org/mesa/drm/merge_requests/27
-> >    and declined
->
-> So, they basically say they don't want to support static linking at all?
-
-	Closing the MR, but feel free to reopen if it turns out someone has a real need for this
-
-But open minded in case of a 'real world' example of usefulness of libdrm static linking...
-
-Regards,
-Peter
-
->
-> Thomas
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
