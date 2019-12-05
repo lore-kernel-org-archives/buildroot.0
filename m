@@ -1,70 +1,81 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu,  5 Dec 2019 17:14:53 +0000
-Subject: [Buildroot] [PATCH v1 06/30] package/llvm: add config to build
- backend for host arch
+Date: Thu,  5 Dec 2019 17:15:05 +0000
+Subject: [Buildroot] [PATCH v1 18/30] package/libvpx: Add host package.
 In-Reply-To: <20191205171517.96639-1-michael.drake@codethink.co.uk>
 References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
-Message-ID: <20191205171517.96639-7-michael.drake@codethink.co.uk>
+Message-ID: <20191205171517.96639-19-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Joseph Kogut <joseph.kogut@gmail.com>
-
-When cross-compiling for a different architecture to the host,
-LLVM only has target architecture support.  This change adds
-support for compiling for the host architecture as well.
-
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/llvm/Config.in | 6 ++++++
- package/llvm/llvm.mk   | 6 +++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/libvpx/libvpx.mk | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index 1d21d879da..ae96d30a64 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -28,6 +28,12 @@ config BR2_PACKAGE_LLVM
+diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+index aaef708416..c8debf27d5 100644
+--- a/package/libvpx/libvpx.mk
++++ b/package/libvpx/libvpx.mk
+@@ -15,11 +15,16 @@ LIBVPX_CONF_ENV = \
+ 	LD="$(TARGET_CC)" \
+ 	CROSS=$(GNU_TARGET_NAME)
  
- if BR2_PACKAGE_LLVM
- 
-+config BR2_PACKAGE_HOST_LLVM_HOST_ARCH
-+	string
-+	default "X86" if BR2_HOSTARCH = "x86" || BR2_HOSTARCH = "x86_64"
-+	default "AArch64" if BR2_HOSTARCH="aarch64"
-+	default "ARM" if BR2_HOSTARCH = "arm"
++HOST_LIBVPX_CONF_ENV = \
++	LD="$(HOST_CC)"
 +
- config BR2_PACKAGE_LLVM_AMDGPU
- 	bool "AMDGPU backend"
- 	help
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 2b2bcf336e..300ac3e300 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -42,7 +42,10 @@ LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
+ LIBVPX_CONF_OPTS = \
+ 	--disable-examples \
+ 	--disable-docs \
+ 	--disable-unit-tests
  
- # Build backend for target architecture. This include backends like AMDGPU.
- LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
--HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
-+HOST_LLVM_TARGETS_TO_BUILD = \
-+	$(LLVM_TARGETS_TO_BUILD) \
-+	$(call qstrip,$(BR2_PACKAGE_HOST_LLVM_HOST_ARCH))
-+HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(HOST_LLVM_TARGETS_TO_BUILD))"
- LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
++HOST_LIBVPX_CONF_OPTS = $(LIBVPX_CONF_OPTS)
++
+ # This is not a true autotools package.  It is based on the ffmpeg build system
+ define LIBVPX_CONFIGURE_CMDS
+ 	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
+@@ -35,10 +40,29 @@ define LIBVPX_CONFIGURE_CMDS
+ 	)
+ endef
  
- # LLVM target to use for native code generation. This is required for JIT generation.
-@@ -58,6 +61,7 @@ LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(LLVM_TARGET_ARCH)
- # output only $(LLVM_TARGET_ARCH) if not, and mesa3d won't build as
- # it thinks AMDGPU backend is not installed on the target.
- ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
-+HOST_LLVM_TARGETS_TO_BUILD += AMDGPU
- LLVM_TARGETS_TO_BUILD += AMDGPU
- endif
++define HOST_LIBVPX_CONFIGURE_CMDS
++	(cd $(HOST_LIBVPX_SRCDIR) && rm -rf config.cache && \
++	$(HOST_CONFIGURE_OPTS) \
++	$(HOST_CONFIGURE_ARGS) \
++	$(HOST_LIBVPX_CONF_ENV) \
++	./configure \
++		--target=generic-gnu \
++		--enable-pic \
++		--prefix="$(HOST_DIR)" \
++		--enable-shared --disable-static \
++		--disable-debug \
++		$(HOST_LIBVPX_CONF_OPTS) \
++	)
++endef
++
+ define LIBVPX_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
+ endef
  
++define HOST_LIBVPX_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(HOST_LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
++endef
++
+ define LIBVPX_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
+ endef
+@@ -47,4 +71,9 @@ define LIBVPX_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
+ endef
+ 
++define HOST_LIBVPX_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(HOST_LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 2.20.1
