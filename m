@@ -1,68 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:10:40 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/prosody: bump to
- bugfix version 0.11.3
-Message-ID: <20191205210557.CC31D880F4@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 22:07:53 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
+ linux-headers}: bump 4.{14, 19}.x series
+Message-ID: <20191205210557.6CD78880F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f881dca8d92272a54200ca30e6f7edb8cb3f1164
+commit: https://git.buildroot.net/buildroot/commit/?id=82bfb5ac01174634dc3bbb571139cd2d3f491a3a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-This is a bugfix release for the stable 0.11 branch. It is recommended
-for all users of 0.11.x to upgrade.
-
-Important note for those upgrading: Previous releases did not
-automatically expire messages from group chat (MUC) archives, so if
-mod_muc_mam was loaded and enabled for a MUC, archives would grow
-indefinitely. This is not what most deployments want, therefore
-automatic expiry is now implemented and enabled with a default 7 day
-retention. You can configure this with the muc_log_expires_after
-configuration option, which can be set to "never" to restore the old
-behaviour and preserve any existing logs older than 7 days.
-
-For details see:
-https://prosody.im/doc/release/0.11.3
-
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3a508f8564622c5cdaad75ef6afb3f027d24beb6)
+(cherry picked from commit af712ca7ce9a36f68c64cd9306005dbc86bc1502)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/prosody/prosody.hash | 8 ++++----
- package/prosody/prosody.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 4 ++--
+ package/linux-headers/Config.in.host | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
-index f3f9aa4777..d7d1d06eda 100644
---- a/package/prosody/prosody.hash
-+++ b/package/prosody/prosody.hash
-@@ -1,8 +1,8 @@
- # Locally computed:
--md5    b4529e0cf8e0ee82a2f677e404c3df35  prosody-0.11.2.tar.gz
--sha1   0508cfc1c3c74a7eb8fdac2ed50435e190930f6a  prosody-0.11.2.tar.gz
--sha256 8911f6dc29b9e0c4edf9e61dc23fa22d77bc42c4caf28b809ab843b2f08e4831  prosody-0.11.2.tar.gz
--sha512 22e55a551a40c92f38a1ed1de5fdcad574d699d58c2e27f93c3d465b55487b8e923c2ba088daf93c7140cbafb0d429687e0b662c8bb1c1aba4b79ac1ea271cd1  prosody-0.11.2.tar.gz
-+md5    2cf85cd8f7fc061916d97a169e850a0e  prosody-0.11.3.tar.gz
-+sha1   87ec8039bf297ba9bc4da44b2ba42f4b035e73ca  prosody-0.11.3.tar.gz
-+sha256 cfdabd6f42a9fc5db300221967c518c26bd4b6e62def721c1626894d6325bf87  prosody-0.11.3.tar.gz
-+sha512 07239433c7c65184ca24d665c92b787ff9e4a5ee190ab90dede802ffd2cbd97855356d818858871e62284e9923f485b3468ab1baed5d3fb13aac0551a38967eb  prosody-0.11.3.tar.gz
+diff --git a/linux/Config.in b/linux/Config.in
+index 7069a9bd22..81aa8528b0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
  
- # Hash for license file:
- sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index c2111f6b83..05ea3d2e40 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROSODY_VERSION = 0.11.2
-+PROSODY_VERSION = 0.11.3
- PROSODY_SITE = https://prosody.im/downloads/source
- PROSODY_LICENSE = MIT
- PROSODY_LICENSE_FILES = COPYING
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.19.86" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.19.87" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index ec2c2a18fa..bd451fba5d 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -2,5 +2,5 @@
+ sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
+ sha256 fa1f8fe9c12e18e5cda18cf759b77ae9e778e1e9006d837426c955b75bd4eaa6  linux-4.4.205.tar.xz
+ sha256 98b9e8644706acc0cf51022372bb263b59a1d2bbe3ccd7ce6bd9bc7378c78b05  linux-4.9.205.tar.xz
+-sha256 f8889feb0cbd7df36ff35bd4c72c1e2010567621bfcb218fcfa501bc5c7787c0  linux-4.14.156.tar.xz
+-sha256 bf2cbba319d43d1bd9e876ac0b55ab83118d1a1e61cce3c929d5371f7567bff6  linux-4.19.86.tar.xz
++sha256 90fa769a052ecf34a0cab72cf013e19275dbb8cd01bbe52f1d465e2ed7537733  linux-4.14.157.tar.xz
++sha256 a57221e8318e6fcaedb90b099d56352f9d6608fd367283bc7db84330856eda1d  linux-4.19.87.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 66564021e8..1cd9e577e3 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -289,8 +289,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "4.4.205"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.205"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.156"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.86"	if BR2_KERNEL_HEADERS_4_19
++	default "4.14.157"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.87"	if BR2_KERNEL_HEADERS_4_19
+ 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
