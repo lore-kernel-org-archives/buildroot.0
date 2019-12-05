@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 19:37:44 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/pkg-generic.mk:
+Date: Thu, 5 Dec 2019 19:37:32 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/pkg-generic.mk:
  make HOST_<pkg>_DL_OPTS inherit from <pkg>_DL_OPTS
-Message-ID: <20191205185702.C23B986998@busybox.osuosl.org>
+Message-ID: <20191205185717.3F3E387FAA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2522619ef9f2dde0a351d2420e9e2db52816a09f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6ea4a54722b23db24c9c8b62769813a116b67751
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Just like _SITE, _SOURCE, _SITE_METHOD, it is very likely that if
 <pkg>_DL_OPTS is defined, the same value should be used for
@@ -30,10 +30,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 3cb13176ed..cd8434e94d 100644
+index e14714cf40..d8129942e9 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -538,6 +538,12 @@ ifndef $(2)_SITE_METHOD
+@@ -540,6 +540,12 @@ ifndef $(2)_SITE_METHOD
   endif
  endif
  
