@@ -1,65 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:26:08 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/openvmtools: use
- correct variable in udev rule RUN+=
-Message-ID: <20191205213858.CB6288137F@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 22:44:36 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/matchbox-common:
+ add an upstream URL to Config.in
+Message-ID: <20191205213859.1519A80F82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac43d3604f526f29410474524882ba3e3fc77119
+commit: https://git.buildroot.net/buildroot/commit/?id=e5b7e576da0e945b67ccc14fa72386384250c93e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-DEVPATH is not a valid substitution in a RUN+=, devpath is:
-https://mirrors.edge.kernel.org/pub/linux/utils/kernel/hotplug/udev/udev.html
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
-So use that to get rid of the following warning:
-
-Invalid value "/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'" for RUN
-(char 27: invalid substitution type), ignoring, but please fix
-
-Source: https://github.com/vmware/open-vm-tools/pull/376
-
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Acked-by: J??r??my Rosen <jeremy.rosen@smile.fr>
-[Peter: extend description]
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 164963b80875b8d23062179bf2d92a9896a2a0a7)
+(cherry picked from commit 99eb6cfb242b4bfaf00f8b5389f902c3167a3eee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0010-Change-DEVPATH-to-devpath.patch           | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ package/matchbox-common/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch b/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
-new file mode 100644
-index 0000000000..5af694d8f2
---- /dev/null
-+++ b/package/openvmtools/0010-Change-DEVPATH-to-devpath.patch
-@@ -0,0 +1,25 @@
-+From 22f5d198b3b2f7e4debed83948ba1baf70d4749a Mon Sep 17 00:00:00 2001
-+From: puneetse <22071208+puneetse@users.noreply.github.com>
-+Date: Wed, 16 Oct 2019 10:04:41 -0700
-+Subject: [PATCH] Change $DEVPATH to $devpath
+diff --git a/package/matchbox-common/Config.in b/package/matchbox-common/Config.in
+index 587a0694e8..3717a551f2 100644
+--- a/package/matchbox-common/Config.in
++++ b/package/matchbox-common/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_MATCHBOX_COMMON
+ 	help
+ 	  Common desktop folders and matchbox-session script.
+ 
++	  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-common/
 +
-+$DEVPATH throws a warning by udev.
-+
-+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-+---
-+ udev/99-vmware-scsi-udev.rules | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/udev/99-vmware-scsi-udev.rules b/udev/99-vmware-scsi-udev.rules
-+index 053b59706..a605d80ef 100644
-+--- a/udev/99-vmware-scsi-udev.rules
-++++ b/udev/99-vmware-scsi-udev.rules
-+@@ -2,6 +2,6 @@
-+ #
-+ # This file is part of open-vm-tools
-+ 
-+-ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="Virtual disk*", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'"
-+-ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="VMware Virtual S", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'"
-++ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="Virtual disk*", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys/$devpath/device/timeout'"
-++ACTION=="add", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware*", ATTRS{model}=="VMware Virtual S", ENV{DEVTYPE}=="disk", RUN+="/bin/sh -c 'echo 180 >/sys/$devpath/device/timeout'"
-+ 
+ config BR2_PACKAGE_MATCHBOX_COMMON_PDA
+ 	bool "PDA style app folder"
+ 	depends on BR2_PACKAGE_MATCHBOX_COMMON
