@@ -1,81 +1,40 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu,  5 Dec 2019 17:15:05 +0000
-Subject: [Buildroot] [PATCH v1 18/30] package/libvpx: Add host package.
+Date: Thu,  5 Dec 2019 17:14:52 +0000
+Subject: [Buildroot] [PATCH v1 05/30] package/jpeg-turbo: Add host install
 In-Reply-To: <20191205171517.96639-1-michael.drake@codethink.co.uk>
 References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
-Message-ID: <20191205171517.96639-19-michael.drake@codethink.co.uk>
+Message-ID: <20191205171517.96639-6-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/libvpx/libvpx.mk | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/jpeg-turbo/jpeg-turbo.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index aaef708416..c8debf27d5 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
-@@ -15,11 +15,16 @@ LIBVPX_CONF_ENV = \
- 	LD="$(TARGET_CC)" \
- 	CROSS=$(GNU_TARGET_NAME)
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 0c75cf1db5..88c61dec94 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -14,6 +14,8 @@ JPEG_TURBO_PROVIDES = jpeg
+ JPEG_TURBO_DEPENDENCIES = host-pkgconf
  
-+HOST_LIBVPX_CONF_ENV = \
-+	LD="$(HOST_CC)"
-+
- LIBVPX_CONF_OPTS = \
- 	--disable-examples \
- 	--disable-docs \
- 	--disable-unit-tests
+ JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
++# x86 simd support improves performance but needs host-nasm, so just turn it off
++HOST_JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=OFF
  
-+HOST_LIBVPX_CONF_OPTS = $(LIBVPX_CONF_OPTS)
-+
- # This is not a true autotools package.  It is based on the ffmpeg build system
- define LIBVPX_CONFIGURE_CMDS
- 	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
-@@ -35,10 +40,29 @@ define LIBVPX_CONFIGURE_CMDS
- 	)
- endef
+ ifeq ($(BR2_STATIC_LIBS),y)
+ JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
+@@ -38,3 +40,4 @@ endef
+ JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_USELESS_TOOLS
  
-+define HOST_LIBVPX_CONFIGURE_CMDS
-+	(cd $(HOST_LIBVPX_SRCDIR) && rm -rf config.cache && \
-+	$(HOST_CONFIGURE_OPTS) \
-+	$(HOST_CONFIGURE_ARGS) \
-+	$(HOST_LIBVPX_CONF_ENV) \
-+	./configure \
-+		--target=generic-gnu \
-+		--enable-pic \
-+		--prefix="$(HOST_DIR)" \
-+		--enable-shared --disable-static \
-+		--disable-debug \
-+		$(HOST_LIBVPX_CONF_OPTS) \
-+	)
-+endef
-+
- define LIBVPX_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
- endef
- 
-+define HOST_LIBVPX_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(HOST_LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) all
-+endef
-+
- define LIBVPX_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
- endef
-@@ -47,4 +71,9 @@ define LIBVPX_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
- endef
- 
-+define HOST_LIBVPX_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(HOST_LIBVPX_MAKE_ENV) $(MAKE) -C $(@D) install
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+ $(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.20.1
