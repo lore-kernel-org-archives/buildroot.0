@@ -1,40 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Dec 2019 10:30:48 +0100
-Subject: [Buildroot] [git commit] utils/genrandconfig: test per-package
- directories
-Message-ID: <20191205092342.898C787EAA@busybox.osuosl.org>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Thu,  5 Dec 2019 10:42:38 +0100
+Subject: [Buildroot] [PATCH RFC 1/1] package/rauc: select fw_printenv for
+ uboot based systems
+Message-ID: <20191205094238.69841-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6bbb785774af9d3925040ca61efcb388e832f74
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When operating on a uboot based system, rauc interacts with
+the bootloader environment using fw_printenv and fw_setenv [1].
 
-Now that the support for per-package directories has been merged, it
-is time to get some exposure for it in the autobuilders, so let's
-build 1 out of 15 builds with this feature enabled, at least as an
-initial step.
+These commands should therefore be present on the target if
+the system being built uses uboot.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+[1] See:
+https://github.com/rauc/rauc/blob/v1.2/src/bootchooser.c#L21-L22
+https://github.com/rauc/rauc/blob/v1.2/src/bootchooser.c#L644-L645
+
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- utils/genrandconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+Note: we should maybe do the same for EFI, Grub and Barebox, but
+      I'm not familiar with these ones.
+---
+ package/rauc/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index c221ebd670..5b60bc21d6 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -341,6 +341,10 @@ def gen_config(args):
-     # Allow hosts with old certificates to download over https
-     configlines.append("BR2_WGET=\"wget --passive-ftp -nd -t 3 --no-check-certificate\"\n")
- 
-+    # Per-package folder
-+    if randint(0, 15) == 0:
-+        configlines.append("BR2_PER_PACKAGE_DIRECTORIES=y\n")
-+
-     # Amend the configuration with a few things.
-     if randint(0, 20) == 0:
-         configlines.append("BR2_ENABLE_DEBUG=y\n")
+diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+index 4a1516a595..676ff42b51 100644
+--- a/package/rauc/Config.in
++++ b/package/rauc/Config.in
+@@ -7,6 +7,8 @@ config BR2_PACKAGE_RAUC
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_SQUASHFS # run-time dependency
++	select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # run-time dependency
++	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT
+ 	help
+ 	  RAUC is the Robust Auto-Update Controller developed by
+ 	  Pengutronix. It supports updating embedded Linux
+-- 
+2.21.0
