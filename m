@@ -1,43 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 21:33:50 +0100
-Subject: [Buildroot] [PATCH v3] package/pkg-kconfig: fix reconfigure for
- kconfig packages
-In-Reply-To: <1574774698-17881-1-git-send-email-angelo@amarulasolutions.com>
-References: <1574774698-17881-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20191205213350.292bf71a@windsurf>
+Date: Thu, 5 Dec 2019 21:34:08 +0100
+Subject: [Buildroot] [PATCH 1/2] package/mender-artifact: bump to
+ version 3.2.1
+In-Reply-To: <20191205200637.1404431-1-aduskett@gmail.com>
+References: <20191205200637.1404431-1-aduskett@gmail.com>
+Message-ID: <20191205213408.5fcb1e54@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Nov 2019 14:24:58 +0100
-Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+On Thu,  5 Dec 2019 12:06:36 -0800
+aduskett at gmail.com wrote:
 
-> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Commit 4b81badbcc0b25678ac6627548160702731cf393
+> Other changes:
+>   - Add a sha256sum for LIC_FILES_CHKSUM.sha256
+>   - Remove duplicated license file vendor/github.com/stretchr/testify/LICENSE
 > 
->     Currently, calling foo-reconfigure for a kconfig-based package will not
->     re-trigger the configuration (kconfig-wise) step for the package.
-> 
-> was supposed to solve this problem and lately we had
-> 
-> Commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f
-> 
->     infra/pkg-kconfig: do not rely on package's .config as a timestamp
-> 
-> that introduced the .stamp_dotconfig file.
-> 
-> For this reason, to trigger a kconfig package reconfigure is now
-> necessary to remove the .stamp_dotconfig file.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
->  package/pkg-kconfig.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/mender-artifact/mender-artifact.hash | 4 ++--
+>  package/mender-artifact/mender-artifact.mk   | 3 +--
+>  2 files changed, 3 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
+Both applied to master. Thanks!
 
 Thomas
 -- 
