@@ -1,44 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 23:18:13 +0100
-Subject: [Buildroot] [git commit] package/perl-mail-dkim: bump to version
- 0.58
-Message-ID: <20191205221012.C2A6980E2B@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 23:18:01 +0100
+Subject: [Buildroot] [git commit] package/perl-file-slurp: bump to version
+ 9999.29
+Message-ID: <20191205221012.8BE5F813E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90b23e1eca63e6adf7f365f87b561b02c6bc205f
+commit: https://git.buildroot.net/buildroot/commit/?id=2a5719560748c788fe7e17aa34058702df6c72a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-mail-dkim/perl-mail-dkim.hash | 4 ++--
- package/perl-mail-dkim/perl-mail-dkim.mk   | 2 +-
+ package/perl-file-slurp/perl-file-slurp.hash | 4 ++--
+ package/perl-file-slurp/perl-file-slurp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
-index afa8aba500..86a6384799 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.hash
-+++ b/package/perl-mail-dkim/perl-mail-dkim.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/perl-file-slurp/perl-file-slurp.hash b/package/perl-file-slurp/perl-file-slurp.hash
+index 4e065b850c..5fc123851f 100644
+--- a/package/perl-file-slurp/perl-file-slurp.hash
++++ b/package/perl-file-slurp/perl-file-slurp.hash
+@@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    a27333a8f3295c6a15e351cd3f725d92 Mail-DKIM-0.57.tar.gz
--sha256 6b535354408e842eada8f4a118f7c990ee21284145229685e128414d2c87ae3a Mail-DKIM-0.57.tar.gz
-+md5    9b03bcd334cbf22a93fd94af9935e11b Mail-DKIM-0.58.tar.gz
-+sha256 0a43a42b528a435f9e393171bf8ca1dc0cb54092f1d120d6299e615c0c55f331 Mail-DKIM-0.58.tar.gz
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
-index f532068c4b..d331fe9d64 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.mk
-+++ b/package/perl-mail-dkim/perl-mail-dkim.mk
+-md5    659d52a0169aea7d3728ebab3e198ef5 File-Slurp-9999.28.tar.gz
+-sha256 0587ce010bcb79db9e744f14b5498be97bf2c7f2474d971916d92f0a10827cee File-Slurp-9999.28.tar.gz
++md5    603483824746ab4b1958bf7cf956c57a File-Slurp-9999.29.tar.gz
++sha256 0e6e47e0bba639e37e51fdc7a43b187cd90ac642e4baa13a7185bc6c223e19c7 File-Slurp-9999.29.tar.gz
+ 
+ # computed by scancpan
+ sha256 2281c2e5a690ac7f227fd9934b3d0b9abc419fd514f001d421f2f854203d92b4 README.md
+diff --git a/package/perl-file-slurp/perl-file-slurp.mk b/package/perl-file-slurp/perl-file-slurp.mk
+index 7446d4e10a..c1a64a7b24 100644
+--- a/package/perl-file-slurp/perl-file-slurp.mk
++++ b/package/perl-file-slurp/perl-file-slurp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MAIL_DKIM_VERSION = 0.57
-+PERL_MAIL_DKIM_VERSION = 0.58
- PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
- PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
- PERL_MAIL_DKIM_DISTNAME = Mail-DKIM
+-PERL_FILE_SLURP_VERSION = 9999.28
++PERL_FILE_SLURP_VERSION = 9999.29
+ PERL_FILE_SLURP_SOURCE = File-Slurp-$(PERL_FILE_SLURP_VERSION).tar.gz
+ PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPOEIRAB
+ PERL_FILE_SLURP_LICENSE = Artistic or GPL-1.0+
