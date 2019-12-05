@@ -1,54 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 19:28:40 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/perl-gdgraph: fix
- license
-Message-ID: <20191205185717.12D4487FA8@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 19:38:24 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/libglob: add an
+ upstream URL to Config.in
+Message-ID: <20191205185717.494E887FAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdf6f28ecf2d8c8ac45b394c906f9485ea37d9b6
+commit: https://git.buildroot.net/buildroot/commit/?id=ce9c880d316efd5831ab7ae6149ab27069230e10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Dustismo.LICENSE contains the license for the Dustismo_Sans.ttf font
-file. The rest is licensed under the same terms as Perl as specified
-in README so add README to license files and add GPL-2.0+ to license
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d0cf9d76ea0975af9f576a5674f1fa77e955ab9d)
+(cherry picked from commit 813b9c34cfc3af2f92bc2c4cf3f6ccfc591c5373)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-gdgraph/perl-gdgraph.hash | 3 ++-
- package/perl-gdgraph/perl-gdgraph.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/libglob/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/perl-gdgraph/perl-gdgraph.hash b/package/perl-gdgraph/perl-gdgraph.hash
-index ea994519dd..c0b195eb2a 100644
---- a/package/perl-gdgraph/perl-gdgraph.hash
-+++ b/package/perl-gdgraph/perl-gdgraph.hash
-@@ -2,5 +2,6 @@
- md5    38c6a188519e6272e9b2b722b315c3d8 GDGraph-1.54.tar.gz
- sha256 b96f5c10b656c17d16ab65a1777c908297b028d3b6815f6d54b2337f006bfa4f GDGraph-1.54.tar.gz
- 
--# computed by scancpan
-+# Hash for license files
- sha256 710484e3a1196664bbe8a5ad5d53c528e01226eb20e2885a4e1131eb6c6565cd Dustismo.LICENSE
-+sha256 f44630ad9101e40a101d906a07908c975a9b0742273cfb0c00a51d73afb53e7d README
-diff --git a/package/perl-gdgraph/perl-gdgraph.mk b/package/perl-gdgraph/perl-gdgraph.mk
-index 284dc9dc21..286902a66e 100644
---- a/package/perl-gdgraph/perl-gdgraph.mk
-+++ b/package/perl-gdgraph/perl-gdgraph.mk
-@@ -7,8 +7,8 @@
- PERL_GDGRAPH_VERSION = 1.54
- PERL_GDGRAPH_SOURCE = GDGraph-$(PERL_GDGRAPH_VERSION).tar.gz
- PERL_GDGRAPH_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RUZ
--PERL_GDGRAPH_LICENSE = Artistic or GPL-1.0+
--PERL_GDGRAPH_LICENSE_FILES = Dustismo.LICENSE
-+PERL_GDGRAPH_LICENSE = Artistic or GPL-1.0+ (perl module), GPL-2.0+ (font)
-+PERL_GDGRAPH_LICENSE_FILES = Dustismo.LICENSE README
- PERL_GDGRAPH_DISTNAME = GDGraph
- 
- $(eval $(perl-package))
+diff --git a/package/libglob/Config.in b/package/libglob/Config.in
+index 029ed6a1d3..7ae2bfd250 100644
+--- a/package/libglob/Config.in
++++ b/package/libglob/Config.in
+@@ -2,3 +2,5 @@ config BR2_PACKAGE_LIBGLOB
+ 	bool "libglob"
+ 	help
+ 	  OpenBSD implementation of glob(3).
++
++	  https://github.com/void-linux/libglob
