@@ -1,22 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Dec 2019 19:33:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-cchardet: bump to
- version 2.1.5
-In-Reply-To: <20191128222118.25491-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Thu, 28 Nov 2019 15:21:18 -0700")
-References: <20191128222118.25491-1-james.hilliard1@gmail.com>
-Message-ID: <87muc6fwqa.fsf@dell.be.48ers.dk>
+Date: Thu, 05 Dec 2019 19:37:56 +0100
+Subject: [Buildroot] [PATCH] package/pkg-generic.mk: make
+ HOST_<pkg>_DL_OPTS inherit from <pkg>_DL_OPTS
+In-Reply-To: <20191128185552.236602-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 28 Nov 2019 19:55:52 +0100")
+References: <20191128185552.236602-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87immufwjf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > Just like _SITE, _SOURCE, _SITE_METHOD, it is very likely that if
+ > <pkg>_DL_OPTS is defined, the same value should be used for
+ > HOST_<pkg>_DL_OPTS, so let's have the same inheritance logic than the
+ > one we have for other variables.
 
-Committed to 2019.08.x, thanks.
+ > Fixes:
+
+ >   https://bugs.busybox.net/show_bug.cgi?id=12321
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2019.02.x and 2019.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
