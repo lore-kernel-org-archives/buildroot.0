@@ -1,13 +1,15 @@
 From: Tudor Holton <tudor@tudorholton.com>
-Date: Thu,  5 Dec 2019 16:57:04 +1100
+Date: Thu,  5 Dec 2019 16:58:28 +1100
 Subject: [Buildroot] [PATCH 1/1] modify site from adoptopenjdk mirror to
  official hg.openjdk.java.net repository
-Message-ID: <20191205055704.14170-1-tudor@tudorholton.com>
+Message-ID: <20191205055828.14257-1-tudor@tudorholton.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+From: Tudor Holton <buildroot@tudorholton.com>
 
 Since Java 11 (and possibly earlier), OpenJDK now has its own official
 repository at hg.openjdk.java.net which is referenced in all OpenJDK documentation.
@@ -45,7 +47,7 @@ Ran 1 test in 20.614s
 
 OK
 
-Signed-off-by: Tudor Holton <tudor@tudorholton.com>
+Signed-off-by: Tudor Holton <buildroot@tudorholton.com>
 ---
  DEVELOPERS                   | 3 +++
  package/openjdk/openjdk.hash | 2 +-
