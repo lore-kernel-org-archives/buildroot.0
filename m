@@ -1,48 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 19:37:32 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/pkg-generic.mk:
- make HOST_<pkg>_DL_OPTS inherit from <pkg>_DL_OPTS
-Message-ID: <20191205185717.3F3E387FAA@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 19:28:40 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/perl-gdgraph: fix
+ license
+Message-ID: <20191205185717.12D4487FA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ea4a54722b23db24c9c8b62769813a116b67751
+commit: https://git.buildroot.net/buildroot/commit/?id=fdf6f28ecf2d8c8ac45b394c906f9485ea37d9b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Just like _SITE, _SOURCE, _SITE_METHOD, it is very likely that if
-<pkg>_DL_OPTS is defined, the same value should be used for
-HOST_<pkg>_DL_OPTS, so let's have the same inheritance logic than the
-one we have for other variables.
+Dustismo.LICENSE contains the license for the Dustismo_Sans.ttf font
+file. The rest is licensed under the same terms as Perl as specified
+in README so add README to license files and add GPL-2.0+ to license
 
-Fixes:
-
-  https://bugs.busybox.net/show_bug.cgi?id=12321
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 085f32c17b408fbac68d92232b42d49e883e1f69)
+(cherry picked from commit d0cf9d76ea0975af9f576a5674f1fa77e955ab9d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/perl-gdgraph/perl-gdgraph.hash | 3 ++-
+ package/perl-gdgraph/perl-gdgraph.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index e14714cf40..d8129942e9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -540,6 +540,12 @@ ifndef $(2)_SITE_METHOD
-  endif
- endif
+diff --git a/package/perl-gdgraph/perl-gdgraph.hash b/package/perl-gdgraph/perl-gdgraph.hash
+index ea994519dd..c0b195eb2a 100644
+--- a/package/perl-gdgraph/perl-gdgraph.hash
++++ b/package/perl-gdgraph/perl-gdgraph.hash
+@@ -2,5 +2,6 @@
+ md5    38c6a188519e6272e9b2b722b315c3d8 GDGraph-1.54.tar.gz
+ sha256 b96f5c10b656c17d16ab65a1777c908297b028d3b6815f6d54b2337f006bfa4f GDGraph-1.54.tar.gz
  
-+ifndef $(2)_DL_OPTS
-+ ifdef $(3)_DL_OPTS
-+  $(2)_DL_OPTS = $$($(3)_DL_OPTS)
-+ endif
-+endif
-+
- ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
- BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
- endif
+-# computed by scancpan
++# Hash for license files
+ sha256 710484e3a1196664bbe8a5ad5d53c528e01226eb20e2885a4e1131eb6c6565cd Dustismo.LICENSE
++sha256 f44630ad9101e40a101d906a07908c975a9b0742273cfb0c00a51d73afb53e7d README
+diff --git a/package/perl-gdgraph/perl-gdgraph.mk b/package/perl-gdgraph/perl-gdgraph.mk
+index 284dc9dc21..286902a66e 100644
+--- a/package/perl-gdgraph/perl-gdgraph.mk
++++ b/package/perl-gdgraph/perl-gdgraph.mk
+@@ -7,8 +7,8 @@
+ PERL_GDGRAPH_VERSION = 1.54
+ PERL_GDGRAPH_SOURCE = GDGraph-$(PERL_GDGRAPH_VERSION).tar.gz
+ PERL_GDGRAPH_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RUZ
+-PERL_GDGRAPH_LICENSE = Artistic or GPL-1.0+
+-PERL_GDGRAPH_LICENSE_FILES = Dustismo.LICENSE
++PERL_GDGRAPH_LICENSE = Artistic or GPL-1.0+ (perl module), GPL-2.0+ (font)
++PERL_GDGRAPH_LICENSE_FILES = Dustismo.LICENSE README
+ PERL_GDGRAPH_DISTNAME = GDGraph
+ 
+ $(eval $(perl-package))
