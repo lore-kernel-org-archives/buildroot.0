@@ -1,10 +1,9 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu,  5 Dec 2019 17:15:10 +0000
-Subject: [Buildroot] [PATCH v1 23/30] package/x11r7/xlib_libXext: Add host
- package.
+Date: Thu,  5 Dec 2019 17:15:16 +0000
+Subject: [Buildroot] [PATCH v1 29/30] package/mesa3d: Add host package.
 In-Reply-To: <20191205171517.96639-1-michael.drake@codethink.co.uk>
 References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
-Message-ID: <20191205171517.96639-24-michael.drake@codethink.co.uk>
+Message-ID: <20191205171517.96639-30-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +13,41 @@ To: buildroot@busybox.net
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/x11r7/xlib_libXext/xlib_libXext.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mesa3d/mesa3d.mk | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXext/xlib_libXext.mk b/package/x11r7/xlib_libXext/xlib_libXext.mk
-index c63a3b23cc..90f6357e80 100644
---- a/package/x11r7/xlib_libXext/xlib_libXext.mk
-+++ b/package/x11r7/xlib_libXext/xlib_libXext.mk
-@@ -11,6 +11,8 @@ XLIB_LIBXEXT_LICENSE = MIT
- XLIB_LIBXEXT_LICENSE_FILES = COPYING
- XLIB_LIBXEXT_INSTALL_STAGING = YES
- XLIB_LIBXEXT_DEPENDENCIES = xlib_libX11 xorgproto
-+HOST_XLIB_LIBXEXT_DEPENDENCIES = host-xlib_libX11 host-xorgproto
- XLIB_LIBXEXT_CONF_OPTS = --disable-malloc0returnsnull
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index fff498e777..1c0c592f61 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -13,6 +13,23 @@ MESA3D_LICENSE_FILES = docs/license.html
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ MESA3D_INSTALL_STAGING = YES
+ 
++HOST_MESA3D_DEPENDENCIES += \
++	host-libdrm \
++	host-libxcb \
++	host-xlib_libX11 \
++	host-xlib_libXext \
++	host-xlib_libXfixes \
++	host-xlib_libXrandr \
++	host-xorgproto
++
++HOST_MESA3D_CONF_OPTS = \
++	-Dplatforms=x11 \
++	-Dgles2=true \
++	-Dglx=xlib \
++	-Dgallium-drivers= \
++	-Dvulkan-drivers= \
++	-Ddri-drivers=
++
+ MESA3D_PROVIDES =
+ 
+ MESA3D_DEPENDENCIES = \
+@@ -242,3 +259,4 @@ MESA3D_CONF_OPTS += -Dlmsensors=false
+ endif
+ 
+ $(eval $(meson-package))
++$(eval $(host-meson-package))
 -- 
 2.20.1
