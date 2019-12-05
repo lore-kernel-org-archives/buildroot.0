@@ -1,39 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:44:36 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/matchbox-common:
- add an upstream URL to Config.in
-Message-ID: <20191205213859.1519A80F82@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 22:25:57 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/openvmtools: udev
+ rules files should not be executable
+Message-ID: <20191205213858.BF23781344@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5b7e576da0e945b67ccc14fa72386384250c93e
+commit: https://git.buildroot.net/buildroot/commit/?id=21b730c5191fce64901a1b61aa13832aa274c525
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+/usr/lib/udev/rules.d/99-vmware-scsi-udev.rules is marked executable,
+causing systemd to complain.
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Source: https://github.com/vmware/open-vm-tools/pull/376
+
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 99eb6cfb242b4bfaf00f8b5389f902c3167a3eee)
+(cherry picked from commit 7ad22f41b57fb244f2f396533d549f7d9eaa5a06)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/matchbox-common/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ .../0009-Set-permissions-on-rules-file.patch       | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/package/matchbox-common/Config.in b/package/matchbox-common/Config.in
-index 587a0694e8..3717a551f2 100644
---- a/package/matchbox-common/Config.in
-+++ b/package/matchbox-common/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_MATCHBOX_COMMON
- 	help
- 	  Common desktop folders and matchbox-session script.
- 
-+	  http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-common/
+diff --git a/package/openvmtools/0009-Set-permissions-on-rules-file.patch b/package/openvmtools/0009-Set-permissions-on-rules-file.patch
+new file mode 100644
+index 0000000000..6a37c1690d
+--- /dev/null
++++ b/package/openvmtools/0009-Set-permissions-on-rules-file.patch
+@@ -0,0 +1,23 @@
++From c3ef6a8285132871ad10f9300d8afff55d8d6de2 Mon Sep 17 00:00:00 2001
++From: puneetse <22071208+puneetse@users.noreply.github.com>
++Date: Wed, 16 Oct 2019 10:09:38 -0700
++Subject: [PATCH] Set permissions on rules file
 +
- config BR2_PACKAGE_MATCHBOX_COMMON_PDA
- 	bool "PDA style app folder"
- 	depends on BR2_PACKAGE_MATCHBOX_COMMON
++udevs rules should not be executable otherwise udev will log a warning in the journal
++
++Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
++---
++ udev/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/udev/Makefile.am b/udev/Makefile.am
++index 68fbc3e27..8b9a4d716 100644
++--- a/udev/Makefile.am
+++++ b/udev/Makefile.am
++@@ -17,5 +17,5 @@
++ 
++ install-data-local:
++ 	$(INSTALL) -d $(DESTDIR)$(UDEVRULESDIR)
++-	$(INSTALL) $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
+++	$(INSTALL) -m 0644 $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
++ 
