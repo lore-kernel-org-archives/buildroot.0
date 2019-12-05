@@ -1,47 +1,70 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu,  5 Dec 2019 17:14:56 +0000
-Subject: [Buildroot] [PATCH v1 09/30] package/Makefile.in: Provide
- TARGET_CROSS without path and trailing -
+Date: Thu,  5 Dec 2019 17:14:53 +0000
+Subject: [Buildroot] [PATCH v1 06/30] package/llvm: add config to build
+ backend for host arch
 In-Reply-To: <20191205171517.96639-1-michael.drake@codethink.co.uk>
 References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
-Message-ID: <20191205171517.96639-10-michael.drake@codethink.co.uk>
+Message-ID: <20191205171517.96639-7-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The LLVM/Clang toolchain takes the target triple as a `--target=`
-argument, rather than having separate binaries with different
-names for each target.
+From: Joseph Kogut <joseph.kogut@gmail.com>
 
-This change exposes just the triple as TARGET_CROSS_TRIPLE.
+When cross-compiling for a different architecture to the host,
+LLVM only has target architecture support.  This change adds
+support for compiling for the host architecture as well.
 
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/Makefile.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/llvm/Config.in | 6 ++++++
+ package/llvm/llvm.mk   | 6 +++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 47808292b0..273e9de5d9 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -192,11 +192,13 @@ TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
- endif
+diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+index 1d21d879da..ae96d30a64 100644
+--- a/package/llvm/Config.in
++++ b/package/llvm/Config.in
+@@ -28,6 +28,12 @@ config BR2_PACKAGE_LLVM
  
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--TARGET_CROSS = $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-
-+TARGET_CROSS_TRIPLE = $(GNU_TARGET_NAME)
- else
--TARGET_CROSS = $(HOST_DIR)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
-+TARGET_CROSS_TRIPLE = $(TOOLCHAIN_EXTERNAL_PREFIX)
- endif
+ if BR2_PACKAGE_LLVM
  
-+TARGET_CROSS = $(HOST_DIR)/bin/$(TARGET_CROSS_TRIPLE)-
++config BR2_PACKAGE_HOST_LLVM_HOST_ARCH
++	string
++	default "X86" if BR2_HOSTARCH = "x86" || BR2_HOSTARCH = "x86_64"
++	default "AArch64" if BR2_HOSTARCH="aarch64"
++	default "ARM" if BR2_HOSTARCH = "arm"
 +
- # Define TARGET_xx variables for all common binutils/gcc
- TARGET_AR       = $(TARGET_CROSS)ar
- TARGET_AS       = $(TARGET_CROSS)as
+ config BR2_PACKAGE_LLVM_AMDGPU
+ 	bool "AMDGPU backend"
+ 	help
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 2b2bcf336e..300ac3e300 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -42,7 +42,10 @@ LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
+ 
+ # Build backend for target architecture. This include backends like AMDGPU.
+ LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+-HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
++HOST_LLVM_TARGETS_TO_BUILD = \
++	$(LLVM_TARGETS_TO_BUILD) \
++	$(call qstrip,$(BR2_PACKAGE_HOST_LLVM_HOST_ARCH))
++HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(HOST_LLVM_TARGETS_TO_BUILD))"
+ LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
+ 
+ # LLVM target to use for native code generation. This is required for JIT generation.
+@@ -58,6 +61,7 @@ LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(LLVM_TARGET_ARCH)
+ # output only $(LLVM_TARGET_ARCH) if not, and mesa3d won't build as
+ # it thinks AMDGPU backend is not installed on the target.
+ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
++HOST_LLVM_TARGETS_TO_BUILD += AMDGPU
+ LLVM_TARGETS_TO_BUILD += AMDGPU
+ endif
+ 
 -- 
 2.20.1
