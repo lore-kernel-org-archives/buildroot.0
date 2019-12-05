@@ -1,44 +1,87 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Thu,  5 Dec 2019 10:42:38 +0100
-Subject: [Buildroot] [PATCH RFC 1/1] package/rauc: select fw_printenv for
- uboot based systems
-Message-ID: <20191205094238.69841-1-titouan.christophe@railnova.eu>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Thu, 5 Dec 2019 09:44:35 +0000
+Subject: [Buildroot] [PATCH v8 1/2] package/compiler-rt: new package
+In-Reply-To: <CANQCQpZ8NaqR44gnCSL0L=qCAng46kJ4JzONrFMCP5AsZQjMFQ@mail.gmail.com>
+References: <20191023214636.17284-1-matthew.weber@rockwellcollins.com>
+ <CANQCQpZ8NaqR44gnCSL0L=qCAng46kJ4JzONrFMCP5AsZQjMFQ@mail.gmail.com>
+Message-ID: <5ba4bcdf-0c34-6e59-dc50-5b8c16a390b1@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When operating on a uboot based system, rauc interacts with
-the bootloader environment using fw_printenv and fw_setenv [1].
+Hi Matt,
+I have a few questions about your compiler-rt patch, see below.
 
-These commands should therefore be present on the target if
-the system being built uses uboot.
+On 27/10/2019 19:31, Matthew Weber wrote:
+> On Wed, Oct 23, 2019 at 4:46 PM Matt Weber
+> <matthew.weber@rockwellcollins.com> wrote:
+>>
+>> This patch adds support for the compiler-rt (CLANG runtime) library.
+>> It builds a set of static libraries and installs them into the
+>> CLANG/LLVM toolchain resource folder.
+>>
+>> diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
+>> new file mode 100644
+>> index 0000000000..3d2cbcbff5
+>> --- /dev/null
+>> +++ b/package/compiler-rt/compiler-rt.mk
+>> @@ -0,0 +1,37 @@
+>> +################################################################################
+>> +#
+>> +# compiler-rt
+>> +#
+>> +################################################################################
+>> +
+>> +# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
+>> +# tied to the version of those tools
+>> +COMPILER_RT_VERSION = 9.0.0
+>> +COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
+>> +COMPILER_RT_SITE = http://llvm.org/releases/$(COMPILER_RT_VERSION)
+>> +COMPILER_RT_LICENSE = NCSA MIT
+>> +COMPILER_RT_LICENSE_FILES = LICENSE.TXT
+>> +COMPILER_RT_DEPENDENCIES = host-clang llvm
+>> +
+>> +COMPILER_RT_INSTALL_STAGING = YES
+>> +COMPILER_RT_INSTALL_TARGET = NO
+>> +
+>> +COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_STANDALONE_BUILD=OFF \
+>> +       -DCOMPILER_RT_STANDALONE_BUILD=ON \
+>> +       -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
+>> +       -DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config
+>> +
 
-[1] See:
-https://github.com/rauc/rauc/blob/v1.2/src/bootchooser.c#L21-L22
-https://github.com/rauc/rauc/blob/v1.2/src/bootchooser.c#L644-L645
+You set both:
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
-Note: we should maybe do the same for EFI, Grub and Barebox, but
-      I'm not familiar with these ones.
----
- package/rauc/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+    -DCOMPILER_RT_STANDALONE_BUILD=OFF
+    -DCOMPILER_RT_STANDALONE_BUILD=ON
 
-diff --git a/package/rauc/Config.in b/package/rauc/Config.in
-index 4a1516a595..676ff42b51 100644
---- a/package/rauc/Config.in
-+++ b/package/rauc/Config.in
-@@ -7,6 +7,8 @@ config BR2_PACKAGE_RAUC
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_SQUASHFS # run-time dependency
-+	select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # run-time dependency
-+	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT
- 	help
- 	  RAUC is the Robust Auto-Update Controller developed by
- 	  Pengutronix. It supports updating embedded Linux
--- 
-2.21.0
+Presumably you just mean the second?
+
+>> +# The installation of the target runtime libraries defaults to DESTDIR, however
+>> +# host-clang resources directory needs a link so Clang can find the runtime
+>> +# libraries in the same location they would be if built as part of the Clang
+>> +# build. The "resources" directory is loosely documented and seems to be
+>> +# assumed, as compiler-rt is usually build at the same time as Clang and not
+>> +# standalone.
+>> +define COMPILER_RT_SETUP_RUNTIME_LIBS
+>> +       mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
+>> +       ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
+>> +       ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share
+>> +endef
+>> +COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
+>> +
+
+The second of those symlinks should only go up three directories.
+
+Also, why do you create symlinks into $(HOST_DIR) from a "target" package?
+Why not just add host-compiler-rt logic and depend on "host-compiler-rt"
+where appropriate? Then you could remove this define entirely. I'd also add:
+    
+    HOST_COMPILER_RT_CONF_OPTS = $(COMPILER_RT_CONF_OPTS)
+
+The default target is still the same. I'm testing this at the minute.
+
+Thanks,
+Thomas Preston
