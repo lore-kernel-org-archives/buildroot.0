@@ -1,69 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 22:15:15 +0100
-Subject: [Buildroot] [PATCH 1/1] modify site from adoptopenjdk mirror to
- official hg.openjdk.java.net repository
-In-Reply-To: <20191205055828.14257-1-tudor@tudorholton.com>
-References: <20191205055828.14257-1-tudor@tudorholton.com>
-Message-ID: <20191205221515.30e00913@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 5 Dec 2019 21:47:30 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/{pkg-generic,
+ python, python3}: add mechanism to exclude .py files from removal
+Message-ID: <20191205210733.E3DAE8812B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=82792cd06ca231e3c1dc2b66cefb0316136408d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-The commit title should have been something like:
+When BR2_PACKAGE_PYTHON{,3}_PYC_ONLY=y, we force remove all .py files
+from the system, as they have all been byte-compiled into their .pyc
+variants.
 
-	package/openjdk: use official hg.openjdk.java.net repository
+However, it turns out that some packages (e.g: OpenCV) do some funky
+things with a few .py files: they pass them through Python's
+execfile() facility, which only works with .py files and not .pyc
+files. It is used by OpenCV for example to read two small
+configuration files.
 
-On Thu,  5 Dec 2019 16:58:28 +1100
-Tudor Holton <tudor@tudorholton.com> wrote:
+In order to support such use cases, this commit introduces a very
+simple mechanism by which packages can exclude some path patterns from
+the .py removal: a per-package <pkg>_KEEP_PY_FILES variable that is
+collected into a global PYTHON_KEEP_PY_FILES variable, then used by
+the python/python3 target-finalize hooks.
 
-> From: Tudor Holton <buildroot@tudorholton.com>
-> 
-> Since Java 11 (and possibly earlier), OpenJDK now has its own official
-> repository at hg.openjdk.java.net which is referenced in all OpenJDK documentation.
-> This patch brings buildroot into line with that source, reducing the opportunity
-> for code injection, and allowing consistent patching both across projects and for
-> patches specific to buildroot environments.
-> 
-> diff -ru shows that the only changes between the downstream and upstream files at
-> this point in time is the addition of a .hg_archive.txt file,  containing:
-> 
-> repo: fd16c54261b32be1aaedd863b7e856801b7f8543
-> node: 7b6accc7c009304dd2979ea16c1cb15bf749a1fc
-> branch: default
-> tag: jdk-12.0.2+10
-> tag: jdk-12.0.2-ga
-> 
-> This does, however, change the hash for the tar.gz file (but not for the license).
-> 
-> With respect to the concern regarding upstream hash consistency, we have now been
-> using these archives for just over a year (since OpenJDK 11) and we haven't seen an
-> archive hash change in that time.  This was a vast improvement on the previous
-> Mercurial forest.  /archive is exactly as is sounds.  It's an archive that doesn't
-> change, which is why it effectively negates the need for a "downstream" mirror.
-> 
-> Tests completed successfully (which is not surprising since there are no code changes here):
-> 
-> $ ./support/testing/run-tests -d ./dl/ -k -o test_dir tests.package.test_openjdk.TestOpenJdk
-> 14:35:25 TestOpenJdk                              Starting
-> ['Hello, World']
-> ['Test: Get JNI Version passed', 'Test: Read Native String Constant passed', 'Test: Write Java String to Native Library passed', 'Test: Write Java Char Array to Native Library passed', 'Test: Write String Member to Native Library passed', 'Test: Set String Member from Native Library passed', 'Test: Execeute Java Function from Native Library passed', 'Test: Instantiate Java Class passed', 'Test: Call Native Library to Set System Time passed']
-> 14:35:46 TestOpenJdk                              Cleaning up
-> .
-> ----------------------------------------------------------------------
-> Ran 1 test in 20.614s
-> 
-> OK
-> 
-> Signed-off-by: Tudor Holton <buildroot@tudorholton.com>
+This variable is intentionally not documented, this is really a hack
+that we ideally would like to see go away, and we'd rather not see its
+usage spread too much.
 
-I've applied after fixing the commit title. Thanks!
+This is necessary to be able to fix bug #12171.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[Peter: check if PYTHON_KEEP_PY_FILES contains non-white space]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 56f3ed3fc1e1bee560e06b57237bd3d4af0def22)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-generic.mk     | 1 +
+ package/python/python.mk   | 4 +++-
+ package/python3/python3.mk | 4 +++-
+ 3 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index d8129942e9..0a3c721c9f 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1059,6 +1059,7 @@ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ endif
+ TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
+ ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
++PYTHON_KEEP_PY_FILES += $$($(2)_KEEP_PY_FILES)
+ 
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 4b82cdcce3..3f9c510fde 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -262,7 +262,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ define PYTHON_REMOVE_PY_FILES
+-	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' \
++		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
++		-print0 | \
+ 		xargs -0 --no-run-if-empty rm -f
+ endef
+ PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 8d042954df..f634b790ef 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -280,7 +280,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ define PYTHON3_REMOVE_PY_FILES
+-	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' \
++		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
++		-print0 | \
+ 		xargs -0 --no-run-if-empty rm -f
+ endef
+ PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
