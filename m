@@ -1,39 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:08:56 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/opkg: update the
+Date: Thu, 5 Dec 2019 22:08:58 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/ortp: update the
  upstream URL in Config.in
-Message-ID: <20191205210557.7BC8F880F2@busybox.osuosl.org>
+Message-ID: <20191205210557.8987B880F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4f16d15c7267b43363653f96b9cb6673ce2a40c
+commit: https://git.buildroot.net/buildroot/commit/?id=eb9713823eeaa12c197cba39721e41b5f30038c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(405)' URL status in the package stats
+addresses the 'Invalid(404)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 10a67d886052f9bd5bbf7b459aa2e99bbafa78dc)
+(cherry picked from commit c3c12bd9a3dec29dfe718e1639365313588001ff)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opkg/Config.in | 2 +-
+ package/ortp/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/opkg/Config.in b/package/opkg/Config.in
-index 20f6fa2f53..1f6a39343f 100644
---- a/package/opkg/Config.in
-+++ b/package/opkg/Config.in
-@@ -17,7 +17,7 @@ config BR2_PACKAGE_OPKG
- 	  conforms to a subset of debian's policy manual regarding
- 	  control files.
+diff --git a/package/ortp/Config.in b/package/ortp/Config.in
+index 788eaf4bbb..052ff1d397 100644
+--- a/package/ortp/Config.in
++++ b/package/ortp/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_ORTP
+ 	help
+ 	  oRTP, a Real-time Transport Protocol (RTP,RFC3550) library
  
--	  http://code.google.com/p/opkg/
-+	  https://code.google.com/archive/p/opkg/
+-	  http://www.linphone.org/eng/documentation/dev/ortp.html
++	  https://www.linphone.org/technical-corner/ortp
  
- if BR2_PACKAGE_OPKG
- 
+ comment "ortp needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
