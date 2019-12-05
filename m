@@ -1,74 +1,87 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 5 Dec 2019 23:13:42 +0100
-Subject: [Buildroot] [PATCH] package/pkg-meson: ensure the global
- cross-compilation.conf file is correct
-In-Reply-To: <20191204150225.33749-1-thomas.petazzoni@bootlin.com>
-References: <20191204150225.33749-1-thomas.petazzoni@bootlin.com>
-Message-ID: <3e183413-d866-dc02-c846-3948dc5cb34c@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Dec 2019 23:02:14 +0100
+Subject: [Buildroot] [git commit] support/testing: add python-django test
+Message-ID: <20191205220559.B426888221@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=8583b2c6d878ea890081d354170f90c564d7d846
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This test comprises of four simple steps:
+  1: Start a new simple project called testsite.
+  2: Run ./manage.py migrate on the new testsite.
+  3: Run ./manage.py runserver 0.0.0.0:1234 & sleep 30
+    - The sleep 30 is necessary as it may take several seconds for
+      the django server to fully start.
+  4: Run netstat to ensure the server opened port 1234.
 
-On 04/12/2019 16:02, Thomas Petazzoni wrote:
-> Currently, the cross-compilation.conf installed in
-> $(HOST_DIR)/etc/meson/cross-compilation.conf for use by the SDK is
-> generated in a post-install-staging hook of the toolchain package.
-> 
-> With per-package directory support enabled, this means that the
-> generated cross-compilation.conf contains references to the
-> per-package directory of the toolchain/ package, which is not want we
-> want:
-> 
-> [binaries]
-> c = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-gcc'
-> cpp = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-g++'
-> ar = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-ar'
-> strip = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-strip'
-> pkgconfig = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/usr/bin/pkg-config'
-> 
-> So instead, we generate this file in TOOLCHAIN_TARGET_FINALIZE_HOOKS,
-> so that the global paths are used:
-> 
-> [binaries]
-> c = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc'
-> cpp = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-g++'
-> ar = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-ar'
-> strip = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-strip'
-> pkgconfig = '/home/thomas/projets/buildroot/output/host/usr/bin/pkg-config'
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/pkg-meson.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index e7eea2aa58..085da219fe 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -205,4 +205,4 @@ define PKG_MESON_INSTALL_CROSS_CONF
->  	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
->  endef
->  
-> -TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
-> +TOOLCHAIN_TARGET_FINALIZE_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
+Signed-off-by: Adam Duskett <aduskett@greenlots.com>
+[Thomas: use self.assertRunOk() when appropriate]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml                                     |  1 +
+ .../testing/tests/package/sample_python_django.py  |  1 +
+ .../testing/tests/package/test_python_django.py    | 32 ++++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
 
- Note that this essentially reverts [1].
-
- The case for that patch was not terribly strong, so it should be OK. But then
-again, the case for this patch is not that strong either.
-
- Note that pkg-cmake has the same issue. And a number of other packages as well,
-e.g. the Python sysconfig refers to the Python per-package dirs.
-
- If we really want to do it fully correctly, we'd need to run something like the
-relocate-sdk.sh on every per-package copy...
-
- Regards,
- Arnout
-
-[1]
-https://git.buildroot.org/buildroot/commit/?id=ccc9e05990a44d8db5825c07ed61d405ebb40caa
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 22befa0427..75b2fcb37c 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -448,6 +448,7 @@ tests.package.test_python_constantly.TestPythonPy3Constantly: { extends: .runtim
+ tests.package.test_python_crossbar.TestPythonPy3Crossbar: { extends: .runtime_test }
+ tests.package.test_python_cryptography.TestPythonPy2Cryptography: { extends: .runtime_test }
+ tests.package.test_python_cryptography.TestPythonPy3Cryptography: { extends: .runtime_test }
++tests.package.test_python_django.TestPythonPy3Django: { extends: .runtime_test }
+ tests.package.test_python_incremental.TestPythonPy2Incremental: { extends: .runtime_test }
+ tests.package.test_python_incremental.TestPythonPy3Incremental: { extends: .runtime_test }
+ tests.package.test_python_passlib.TestPythonPy2Passlib: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/sample_python_django.py b/support/testing/tests/package/sample_python_django.py
+new file mode 100644
+index 0000000000..c2bad566a7
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_django.py
+@@ -0,0 +1 @@
++import django  # noqa: F401
+diff --git a/support/testing/tests/package/test_python_django.py b/support/testing/tests/package/test_python_django.py
+new file mode 100644
+index 0000000000..eb93d4fca9
+--- /dev/null
++++ b/support/testing/tests/package/test_python_django.py
+@@ -0,0 +1,32 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonDjango(TestPythonPackageBase):
++    config = TestPythonPackageBase.config
++    sample_scripts = ["tests/package/sample_python_django.py"]
++
++    def run_sample_scripts(self):
++        cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
++        self.assertRunOk(cmd, timeout=30)
++
++        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py migrate"
++        output, exit_code = self.emulator.run(cmd, timeout=30)
++        self.assertIn("Operations to perform:", output[0])
++        self.assertEqual(exit_code, 0)
++
++        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py runserver 0.0.0.0:1234 & "
++        # give some time to setup the server
++        cmd += "sleep 30"
++        self.assertRunOk(cmd, timeout=35)
++
++        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
++        self.assertRunOk(cmd)
++
++class TestPythonPy3Django(TestPythonDjango):
++    __test__ = True
++    config = TestPythonDjango.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_DJANGO=y
++        BR2_PACKAGE_PYTHON3_SQLITE=y
++        """
