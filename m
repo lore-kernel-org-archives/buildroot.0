@@ -1,56 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:24:26 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/openvmtools: udev
- rules files should not be executable
-Message-ID: <20191205213908.377D481024@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 22:43:36 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/luasyslog: update
+ the upstream URL in Config.in
+Message-ID: <20191205213908.6D4CD7FABE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6e06a51efee0020ef0b5412ef6b9de927ee96ff
+commit: https://git.buildroot.net/buildroot/commit/?id=6ee6c898d87f6ecece5e690da6c539cf70f80814
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-/usr/lib/udev/rules.d/99-vmware-scsi-udev.rules is marked executable,
-causing systemd to complain.
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(Err)' URL status in the package stats
+web page output.
 
-Source: https://github.com/vmware/open-vm-tools/pull/376
-
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7ad22f41b57fb244f2f396533d549f7d9eaa5a06)
+(cherry picked from commit 0d9c7347f00fe2676553060f19fd50943728bf93)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0009-Set-permissions-on-rules-file.patch       | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ package/luasyslog/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openvmtools/0009-Set-permissions-on-rules-file.patch b/package/openvmtools/0009-Set-permissions-on-rules-file.patch
-new file mode 100644
-index 0000000000..6a37c1690d
---- /dev/null
-+++ b/package/openvmtools/0009-Set-permissions-on-rules-file.patch
-@@ -0,0 +1,23 @@
-+From c3ef6a8285132871ad10f9300d8afff55d8d6de2 Mon Sep 17 00:00:00 2001
-+From: puneetse <22071208+puneetse@users.noreply.github.com>
-+Date: Wed, 16 Oct 2019 10:09:38 -0700
-+Subject: [PATCH] Set permissions on rules file
-+
-+udevs rules should not be executable otherwise udev will log a warning in the journal
-+
-+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-+---
-+ udev/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/udev/Makefile.am b/udev/Makefile.am
-+index 68fbc3e27..8b9a4d716 100644
-+--- a/udev/Makefile.am
-++++ b/udev/Makefile.am
-+@@ -17,5 +17,5 @@
-+ 
-+ install-data-local:
-+ 	$(INSTALL) -d $(DESTDIR)$(UDEVRULESDIR)
-+-	$(INSTALL) $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
-++	$(INSTALL) -m 0644 $(srcdir)/99-vmware-scsi-udev.rules $(DESTDIR)$(UDEVRULESDIR)
-+ 
+diff --git a/package/luasyslog/Config.in b/package/luasyslog/Config.in
+index 814e7ad37e..326fa6bf9b 100644
+--- a/package/luasyslog/Config.in
++++ b/package/luasyslog/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_LUASYSLOG
+ 	help
+ 	  Syslog logging for Lua.
+ 
+-	  http://lua.net-core.org/sputnik.lua?p=Telesto:About
++	  https://luarocks.org/modules/luarocks/luasyslog
