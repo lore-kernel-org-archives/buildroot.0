@@ -1,50 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 21:37:01 +0100
-Subject: [Buildroot] [git commit] package/python-brotli: fix build failure
+Date: Thu, 5 Dec 2019 21:37:11 +0100
+Subject: [Buildroot] [PATCH] package/python-brotli: fix build failure
  due to gcc bug 68485
-Message-ID: <20191205202840.BCD9F88059@busybox.osuosl.org>
+In-Reply-To: <20191205111650.76395-1-giulio.benetti@benettiengineering.com>
+References: <20191205111650.76395-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20191205213711.3c0a54ae@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dec2e0449d50d71219b4d94bc5547cce50a85163
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  5 Dec 2019 12:16:50 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-The python-brotli package exhibits gcc bug 68485 when built for the
-Microblaze architecture with optimization enabled, which causes a build
-failure.
+> The python-brotli package exhibits gcc bug 68485 when built for the
+> Microblaze architecture with optimization enabled, which causes a build
+> failure.
+> 
+> As done for other packages in Buildroot work around this gcc bug by
+> setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
+> 
+> Fixes:
+> 
+> http://autobuild.buildroot.net/results/24b/24b23175ab27615fb377bb4d5f6c656dccf10a86/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/python-brotli/python-brotli.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-As done for other packages in Buildroot work around this gcc bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
+Applied to master, thanks.
 
-Fixes:
-
-http://autobuild.buildroot.net/results/24b/24b23175ab27615fb377bb4d5f6c656dccf10a86/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-brotli/python-brotli.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/python-brotli/python-brotli.mk b/package/python-brotli/python-brotli.mk
-index 745255f413..2ec549ed0c 100644
---- a/package/python-brotli/python-brotli.mk
-+++ b/package/python-brotli/python-brotli.mk
-@@ -11,6 +11,14 @@ PYTHON_BROTLI_SETUP_TYPE = setuptools
- PYTHON_BROTLI_LICENSE = MIT
- PYTHON_BROTLI_LICENSE_FILES = LICENSE
- 
-+PYTHON_BROTLI_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
-+PYTHON_BROTLI_CFLAGS += -O0
-+endif
-+
-+PYTHON_BROTLI_ENV = CFLAGS="$(PYTHON_BROTLI_CFLAGS)"
-+
- define PYTHON_BROTLI_EXTRACT_CMDS
- 	$(UNZIP) -d $(@D) $(PYTHON_BROTLI_DL_DIR)/$(PYTHON_BROTLI_SOURCE)
- 	mv $(@D)/Brotli-$(PYTHON_BROTLI_VERSION)/* $(@D)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
