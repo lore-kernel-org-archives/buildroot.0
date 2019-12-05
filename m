@@ -1,47 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 23:18:05 +0100
-Subject: [Buildroot] [git commit] package/perl-http-entity-parser: bump to
- version 0.22
-Message-ID: <20191205221012.9AA7680136@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 23:18:28 +0100
+Subject: [Buildroot] [git commit] package/perl-http-date: bump to version
+ 6.05
+Message-ID: <20191205221012.F1B5D8120E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62104f6f951c707c2da57cf1b4c9ee2e7eb3dfc9
+commit: https://git.buildroot.net/buildroot/commit/?id=37d618c099cff7bc0ef5805b1a3e83b3baaee2dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+license lives now in its own file
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-http-entity-parser/perl-http-entity-parser.hash | 4 ++--
- package/perl-http-entity-parser/perl-http-entity-parser.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-http-date/Config.in           | 5 +++--
+ package/perl-http-date/perl-http-date.hash | 6 +++---
+ package/perl-http-date/perl-http-date.mk   | 6 +++---
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/perl-http-entity-parser/perl-http-entity-parser.hash b/package/perl-http-entity-parser/perl-http-entity-parser.hash
-index cb6657413a..6e0dccba93 100644
---- a/package/perl-http-entity-parser/perl-http-entity-parser.hash
-+++ b/package/perl-http-entity-parser/perl-http-entity-parser.hash
+diff --git a/package/perl-http-date/Config.in b/package/perl-http-date/Config.in
+index 12524e6dac..c5151f2ec2 100644
+--- a/package/perl-http-date/Config.in
++++ b/package/perl-http-date/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PERL_HTTP_DATE
+ 	bool "perl-http-date"
++	select BR2_PACKAGE_PERL_TIMEDATE # runtime
+ 	help
+-	  date conversion routines.
++	  HTTP::Date - date conversion routines.
+ 
+-	  https://metacpan.org/release/HTTP-Date
++	  https://github.com/libwww-perl/HTTP-Date
+diff --git a/package/perl-http-date/perl-http-date.hash b/package/perl-http-date/perl-http-date.hash
+index f74ca0cd83..7c1fa5b9c3 100644
+--- a/package/perl-http-date/perl-http-date.hash
++++ b/package/perl-http-date/perl-http-date.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    50e8418bfe27ab26818ca6e264052c95 HTTP-Entity-Parser-0.21.tar.gz
--sha256 c14d3e42bdb0845eb412640ca5e396cbd52d3a9a616a5974a32a52cab487f8d8 HTTP-Entity-Parser-0.21.tar.gz
-+md5    d8256c95119a3ddc6f4a88e59b67f0ec HTTP-Entity-Parser-0.22.tar.gz
-+sha256 93fe1cf2a2b4e6834bf0c1abd0d3bf28c614e8582ff10e6e0426f46a81eed6c8 HTTP-Entity-Parser-0.22.tar.gz
+-md5    52b7a0d5982d61be1edb217751d7daba HTTP-Date-6.02.tar.gz
+-sha256 e8b9941da0f9f0c9c01068401a5e81341f0e3707d1c754f8e11f42a7e629e333 HTTP-Date-6.02.tar.gz
++md5    2ecbb3aedf6aef062605191813ca3027 HTTP-Date-6.05.tar.gz
++sha256 365d6294dfbd37ebc51def8b65b81eb79b3934ecbc95a2ec2d4d827efe6a922b HTTP-Date-6.05.tar.gz
  
  # computed by scancpan
- sha256 79c2a066104e71602785fd815c5aea6f7db78c19451d68521380083f9c2a8805 LICENSE
-diff --git a/package/perl-http-entity-parser/perl-http-entity-parser.mk b/package/perl-http-entity-parser/perl-http-entity-parser.mk
-index 6d814b2f53..1638d5b1db 100644
---- a/package/perl-http-entity-parser/perl-http-entity-parser.mk
-+++ b/package/perl-http-entity-parser/perl-http-entity-parser.mk
-@@ -4,7 +4,7 @@
+-sha256 fad3a7732ff63e3521b94baea45d82a300edf8e0a5cf571ef2661c894e196632 README
++sha256 305b71c4d2fd6380585689c5f1c620737a36a318ce0f9c772badce0fe293a44e LICENSE
+diff --git a/package/perl-http-date/perl-http-date.mk b/package/perl-http-date/perl-http-date.mk
+index 5dc91f31de..43583be303 100644
+--- a/package/perl-http-date/perl-http-date.mk
++++ b/package/perl-http-date/perl-http-date.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_HTTP_ENTITY_PARSER_VERSION = 0.21
-+PERL_HTTP_ENTITY_PARSER_VERSION = 0.22
- PERL_HTTP_ENTITY_PARSER_SOURCE = HTTP-Entity-Parser-$(PERL_HTTP_ENTITY_PARSER_VERSION).tar.gz
- PERL_HTTP_ENTITY_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZEBURO
- PERL_HTTP_ENTITY_PARSER_DEPENDENCIES = host-perl-module-build-tiny
+-PERL_HTTP_DATE_VERSION = 6.02
++PERL_HTTP_DATE_VERSION = 6.05
+ PERL_HTTP_DATE_SOURCE = HTTP-Date-$(PERL_HTTP_DATE_VERSION).tar.gz
+-PERL_HTTP_DATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_HTTP_DATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_DATE_LICENSE = Artistic or GPL-1.0+
+-PERL_HTTP_DATE_LICENSE_FILES = README
++PERL_HTTP_DATE_LICENSE_FILES = LICENSE
+ PERL_HTTP_DATE_DISTNAME = HTTP-Date
+ 
+ $(eval $(perl-package))
