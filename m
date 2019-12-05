@@ -1,36 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 22:09:14 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/netperf: update
- the upstream URL in Config.in
-Message-ID: <20191205210557.A5CEB880A0@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 21:48:54 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/{pkg-generic,
+ python, python3}: rename .py file exclusion variable to not conflict
+Message-ID: <20191205210557.5AD3B880F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7118b372a16e1e7be744510e4418a5ca7b54a43
+commit: https://git.buildroot.net/buildroot/commit/?id=8e4ca1337072e013514cc95bdfc66c0bd2dd6bd2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(Err)' URL status in the package stats
-web page output.
+Fixes:
+http://autobuild.buildroot.net/results/3b6/3b6280b0b7a9634b747db2865b21c6266007c725/
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+The PYTHON_KEEP_PY_FILES global variable conflicts with the per-package
+<pkg>_KEEP_PY_FILES variable for the python package, causing make to
+complain:
+
+package/zlib/zlib.mk:7: *** Recursive variable 'PYTHON_KEEP_PY_FILES' references itself (eventually).  Stop.
+
+As a workaround, rename the global variable to KEEP_PYTHON_PY_FILES so it
+cannot conflict with the per-package variable.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 08f2c31c054e5fa57baef1b476e46b3b8dc9853b)
+(cherry picked from commit 0f5ac40374c91e44af8c3806e848f8e62c42b140)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/netperf/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-generic.mk     | 2 +-
+ package/python/python.mk   | 2 +-
+ package/python3/python3.mk | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/netperf/Config.in b/package/netperf/Config.in
-index 2f36b1b0da..a935fde507 100644
---- a/package/netperf/Config.in
-+++ b/package/netperf/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_NETPERF
- 	help
- 	  Network performance benchmark tool
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f2442dc637..1ac7f7877e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1043,7 +1043,7 @@ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ endif
+ TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
+ ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
+-PYTHON_KEEP_PY_FILES += $$($(2)_KEEP_PY_FILES)
++KEEP_PYTHON_PY_FILES += $$($(2)_KEEP_PY_FILES)
  
--	  http://www.netperf.org/
-+	  https://hewlettpackard.github.io/netperf/
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 3f9c510fde..29b9e363b1 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -263,7 +263,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ define PYTHON_REMOVE_PY_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' \
+-		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
++		$(if $(strip $(KEEP_PYTHON_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(KEEP_PYTHON_PY_FILES)) \) ) \
+ 		-print0 | \
+ 		xargs -0 --no-run-if-empty rm -f
+ endef
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index f634b790ef..625c059135 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -281,7 +281,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ define PYTHON3_REMOVE_PY_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' \
+-		$(if $(strip $(PYTHON_KEEP_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(PYTHON_KEEP_PY_FILES)) \) ) \
++		$(if $(strip $(KEEP_PYTHON_PY_FILES)),-not \( $(call finddirclauses,$(TARGET_DIR),$(KEEP_PYTHON_PY_FILES)) \) ) \
+ 		-print0 | \
+ 		xargs -0 --no-run-if-empty rm -f
+ endef
