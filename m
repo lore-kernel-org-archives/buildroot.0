@@ -1,28 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Dec 2019 19:32:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/oniguruma: security bump to
- version 6.9.4
-In-Reply-To: <20191129080951.33195-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 29 Nov 2019 09:09:51 +0100")
-References: <20191129080951.33195-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9qufwsj.fsf@dell.be.48ers.dk>
+Date: Thu, 05 Dec 2019 19:32:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/most: update the upstream URL
+ in Config.in
+In-Reply-To: <20191128164906.30486-1-mark@dibsco.co.uk> (Mark Corbin's message
+ of "Thu, 28 Nov 2019 16:49:06 +0000")
+References: <20191128164906.30486-1-mark@dibsco.co.uk>
+Message-ID: <87r21ifws9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Mark" == Mark Corbin <mark@dibsco.co.uk> writes:
 
- > - Retrieve official tarball to drop autoreconf
- > - Fixed CVE-2019-19012
- > - Fixed CVE-2019-19203 (Does not affect UTF-8, UTF-16 and UTF-32
- >   encodings)
- > - Fixed CVE-2019-19204 (Affects only PosixBasic, Emacs and Grep
- >   syntaxes)
- > - Fixed CVE-2019-19246
+ > Update the upstream URL in the help text in Config.in. This
+ > addresses the 'Invalid(Err)' URL status in the package stats
+ > web page output.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 
 Committed to 2019.08.x, thanks.
 
