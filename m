@@ -1,56 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2019 21:37:52 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/lzma: add license
-Message-ID: <20191205203043.C7C2B88096@busybox.osuosl.org>
+Date: Thu, 5 Dec 2019 21:44:48 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
+ linux-headers}: bump 4.{4, 9}.x / 5.3.x series
+Message-ID: <20191205203720.1902B880A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c145ccc0d79fcd2aa4242cf01410b0776c7c28b1
+commit: https://git.buildroot.net/buildroot/commit/?id=fe6814bce7312d359f383c6a5f1c89a9e775debf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-- lzma program is licensed under GPL-2.0+
-- lzmadec program has no license information in source file
-- lzmainfo program is licensed under LGPL-2.1+
-- LzmaDecode.h is licensed under LGPL-2.1+ (or CPL) as stated in
-  src/sdk/7zip/Compress/LZMA_C/LzmaDecode.{c,h}, other sdk files have no
-  license information
-- lzmore and lzgrep scripts are licensed under GPL-2.0+
-- lzdiff script has no license information
-- basic and perms tests are licensed under GPL-3.0+
-- mkdtemp and test-lib.sh tests have no license information
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ea107efc97fa7202d8af59e4040937b09e5e2b05)
+[Peter: drop 5.3.x bump]
+(cherry picked from commit b20487151af79563da763d0f053deb78ff63172a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lzma/lzma.hash | 3 +++
- package/lzma/lzma.mk   | 2 ++
- 2 files changed, 5 insertions(+)
+ linux/linux.hash                     | 4 ++--
+ package/linux-headers/Config.in.host | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lzma/lzma.hash b/package/lzma/lzma.hash
-index e73517ca57..6055d7d986 100644
---- a/package/lzma/lzma.hash
-+++ b/package/lzma/lzma.hash
-@@ -1,2 +1,5 @@
- # Locally calculated
- sha256	02aa57f995d15b7acb7c2496d88a39fb0124ea00bf027cc61dd24eddb5942dff	lzma-4.32.7.tar.xz
-+sha256	231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c	COPYING.GPLv2
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING.GPLv3
-+sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	COPYING.LGPLv2.1
-diff --git a/package/lzma/lzma.mk b/package/lzma/lzma.mk
-index 1b4d7febb1..095382d174 100644
---- a/package/lzma/lzma.mk
-+++ b/package/lzma/lzma.mk
-@@ -7,6 +7,8 @@
- LZMA_VERSION = 4.32.7
- LZMA_SOURCE = lzma-$(LZMA_VERSION).tar.xz
- LZMA_SITE = http://tukaani.org/lzma
-+LZMA_LICENSE = LGPL-2.1+ (lzmadec library, lzmainfo, LzmaDecode), GPL-2.0+ (lzma program, lzgrep and lzmore scripts), GPL-3.0+ (tests)
-+LZMA_LICENSE_FILES = COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 511646e577..ec2c2a18fa 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
+-sha256 47e3030d80b9a3b96cdefc008db57f9faa87e2d093437d941caec3ca9ed89924  linux-4.4.204.tar.xz
+-sha256 47a1987cb34182e625cac95f497a534461ff881b3bcb485b37507a086857bf50  linux-4.9.204.tar.xz
++sha256 fa1f8fe9c12e18e5cda18cf759b77ae9e778e1e9006d837426c955b75bd4eaa6  linux-4.4.205.tar.xz
++sha256 98b9e8644706acc0cf51022372bb263b59a1d2bbe3ccd7ce6bd9bc7378c78b05  linux-4.9.205.tar.xz
+ sha256 f8889feb0cbd7df36ff35bd4c72c1e2010567621bfcb218fcfa501bc5c7787c0  linux-4.14.156.tar.xz
+ sha256 bf2cbba319d43d1bd9e876ac0b55ab83118d1a1e61cce3c929d5371f7567bff6  linux-4.19.86.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7c738ba9a1..66564021e8 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -287,8 +287,8 @@ endchoice
  
- $(eval $(host-autotools-package))
- 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.204"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.204"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.205"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.205"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.156"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.19.86"	if BR2_KERNEL_HEADERS_4_19
+ 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
