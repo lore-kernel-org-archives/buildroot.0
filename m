@@ -1,35 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Dec 2019 21:34:08 +0100
-Subject: [Buildroot] [PATCH 1/2] package/mender-artifact: bump to
- version 3.2.1
-In-Reply-To: <20191205200637.1404431-1-aduskett@gmail.com>
-References: <20191205200637.1404431-1-aduskett@gmail.com>
-Message-ID: <20191205213408.5fcb1e54@windsurf>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Thu,  5 Dec 2019 14:25:54 -0600
+Subject: [Buildroot] [PATCH 1/1] check-kernel-headers: allow safe version
+ mismatches
+Message-ID: <20191205202554.18273-1-vfazio@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  5 Dec 2019 12:06:36 -0800
-aduskett at gmail.com wrote:
+Previously, if toolchain headers were versioned ahead of the latest
+selectable Buildroot toolchain header version, packages could not be
+built because of an explicit equality check. This forced the user to
+either advance the Buildroot repository or to rebuild their toolchain
+with a selectable, but older, version of headers.
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Other changes:
->   - Add a sha256sum for LIC_FILES_CHKSUM.sha256
->   - Remove duplicated license file vendor/github.com/stretchr/testify/LICENSE
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/mender-artifact/mender-artifact.hash | 4 ++--
->  package/mender-artifact/mender-artifact.mk   | 3 +--
->  2 files changed, 3 insertions(+), 4 deletions(-)
+Now, we allow a toolchain's headers to outpace the latest selectable
+Buildroot toolchain header version. The header version dependencies in
+package configurations use "at least" version semantics, so newer
+toolchains still meet the requirement.
 
-Both applied to master. Thanks!
+Suggested-by: Aaron Sierra <asierra@xes-inc.com>
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+---
+ support/scripts/check-kernel-headers.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+index 9d23c00feb..093df46510 100755
+--- a/support/scripts/check-kernel-headers.sh
++++ b/support/scripts/check-kernel-headers.sh
+@@ -33,7 +33,7 @@ int main(int argc __attribute__((unused)),
+          char** argv __attribute__((unused)))
+ {
+     if((LINUX_VERSION_CODE & ~0xFF)
+-        != KERNEL_VERSION(${HDR_M},${HDR_m},0))
++        < KERNEL_VERSION(${HDR_M},${HDR_m},0))
+     {
+         printf("Incorrect selection of kernel headers: ");
+         printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.24.0
