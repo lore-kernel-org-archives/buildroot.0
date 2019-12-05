@@ -1,40 +1,37 @@
 From: Michael Drake <michael.drake@codethink.co.uk>
-Date: Thu,  5 Dec 2019 17:14:52 +0000
-Subject: [Buildroot] [PATCH v1 05/30] package/jpeg-turbo: Add host install
+Date: Thu,  5 Dec 2019 17:15:08 +0000
+Subject: [Buildroot] [PATCH v1 21/30] package/x11r7/xlib_libXcomposite: Add
+ host package.
 In-Reply-To: <20191205171517.96639-1-michael.drake@codethink.co.uk>
 References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
-Message-ID: <20191205171517.96639-6-michael.drake@codethink.co.uk>
+Message-ID: <20191205171517.96639-22-michael.drake@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-
 Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
 Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 ---
- package/jpeg-turbo/jpeg-turbo.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 0c75cf1db5..88c61dec94 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -14,6 +14,8 @@ JPEG_TURBO_PROVIDES = jpeg
- JPEG_TURBO_DEPENDENCIES = host-pkgconf
+diff --git a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
+index 80e94fe37c..f790d6fd3a 100644
+--- a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
++++ b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
+@@ -11,5 +11,11 @@ XLIB_LIBXCOMPOSITE_LICENSE = MIT
+ XLIB_LIBXCOMPOSITE_LICENSE_FILES = COPYING
+ XLIB_LIBXCOMPOSITE_INSTALL_STAGING = YES
+ XLIB_LIBXCOMPOSITE_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXfixes xorgproto
++HOST_XLIB_LIBXCOMPOSITE_DEPENDENCIES = \
++	host-xlib_libX11 \
++	host-xlib_libXext \
++	host-xlib_libXfixes \
++	host-xorgproto
  
- JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
-+# x86 simd support improves performance but needs host-nasm, so just turn it off
-+HOST_JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=OFF
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
-@@ -38,3 +40,4 @@ endef
- JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_USELESS_TOOLS
- 
- $(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.20.1
