@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Dec 2019 12:25:05 +0100
-Subject: [Buildroot] [PATCH v2 3/9] fix tty handling
-In-Reply-To: <20191111172443.6874-4-jeremy.rosen@smile.fr>
+Date: Thu, 5 Dec 2019 12:33:58 +0100
+Subject: [Buildroot] [PATCH v2 2/9] use host-systemctl preset all to
+ enable units
+In-Reply-To: <20191111172443.6874-3-jeremy.rosen@smile.fr>
 References: <20191111172443.6874-1-jeremy.rosen@smile.fr>
- <20191111172443.6874-4-jeremy.rosen@smile.fr>
-Message-ID: <20191205112505.GC2539@scaer>
+ <20191111172443.6874-3-jeremy.rosen@smile.fr>
+Message-ID: <20191205113358.GD2539@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,103 +15,70 @@ To: buildroot@busybox.net
 J?r?my, All,
 
 On 2019-11-11 18:24 +0100, J?r?my Rosen spake thusly:
-> Handling of tty is a bit tricky, we need to aggressively disable what
-> systemd does with tty1 then update for what buildroot wants to do
-> 
-> Rework the whole tty generation to work with presets
-> 
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-> ---
->  .../0002-allow-an-empty-DefaultInstance.patch | 28 +++++++++++++++++++
->  package/systemd/80-buildroot.preset           |  5 ++--
->  package/systemd/systemd.mk                    | 26 +++++++++++++----
->  3 files changed, 50 insertions(+), 9 deletions(-)
->  create mode 100644 package/systemd/0002-allow-an-empty-DefaultInstance.patch
-> 
-> diff --git a/package/systemd/0002-allow-an-empty-DefaultInstance.patch b/package/systemd/0002-allow-an-empty-DefaultInstance.patch
-> new file mode 100644
-> index 0000000000..0cb4ffa985
-> --- /dev/null
-> +++ b/package/systemd/0002-allow-an-empty-DefaultInstance.patch
-> @@ -0,0 +1,28 @@
-> +From 087a91c29b9fd67bda9d4199789842263545cd12 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-> +Date: Sat, 2 Nov 2019 00:03:54 +0100
-> +Subject: [PATCH] allow an empty DefaultInstance= in configuration files
-> +
-> +It is currently possible to override the DefaultInstance via drop-ins but
-> +not remove it completely. Allow to do that by specifying an empty
-> +DefaultInstance=
+> since v234 upstream recommands using systemctl preset-all to enable units.
+[--SNIP--]
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index aef39abe27..58c7696d65 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>  	select BR2_PACKAGE_KMOD_TOOLS
+>  	select BR2_TARGET_TZ_INFO
+>  	select BR2_NEEDS_HOST_UTF8_LOCALE
+> +	select BR2_PACKAGE_HOST_SYSTEMD
 
-As discussed on IRC: add a pointer to the upstream commit.
-Plus: add you own SoB line (upstream don't do SoBs, but we do, even on
-back-ported patches.
+Here you select a symbol that no longer exists in your v2, but if you
+follow what I suggest in my reply to the previous patch, you'll have to
+keep it as it is here (but add a comment why it is needed, like we do
+in eudev and host-eudev):
 
-> +
+    select BR2_PACKAGE_HOST_SYSTEMD # for systemctl, during target-finalize
+
+and...
+
+[--SNIP--]
 > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index dc2ed80e7d..fc782d0af7 100644
+> index d1db60b5ef..dc2ed80e7d 100644
 > --- a/package/systemd/systemd.mk
 > +++ b/package/systemd/systemd.mk
-> @@ -429,22 +429,36 @@ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
->  # systemd needs getty.service for VTs and serial-getty.service for serial ttys
->  # note that console-getty.service should be used on /dev/console as it should not have dependencies
->  # also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
-> +#
-> +# systemd defaults to only have getty at tty.service enabled 
-> +# * DefaultInstance=tty1 in getty at service
-> +# * no DefaultInstance in serial-getty at .service
-> +# * WantedBy=getty.target in console-getty.service
-> +# * console-getty is not enabled because of 90-systemd.preset
-> +# We want "systemctl preset-all" to do the right thing, even when run on the target after boot
-> +# * remove the default instance of getty at .service via a drop-in in /usr/lib
-> +# * set a new DefaultInstance for getty at .service instead, if needed
-> +# * set a new DefaultInstance for serial-getty at .service, if needed
-> +# * override the systemd-provided preset for console-getty.service if needed
->  define SYSTEMD_INSTALL_SERVICE_TTY
-> +	mkdir $(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d;\
-> +	echo [Install] > $(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d/buildroot-console.conf;\
-> +	echo DefaultInstance= >> $(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d/buildroot-console.conf;\
->  	if [ $(BR2_TARGET_GENERIC_GETTY_PORT) = "console" ]; \
->  	then \
->  		TARGET="console-getty.service"; \
-> -		LINK_NAME="console-getty.service"; \
-> +		echo enable console-getty.service > $(TARGET_DIR)/usr/lib/systemd/system-preset/81-buildroot-tty.preset;\
+> @@ -12,6 +12,7 @@ SYSTEMD_INSTALL_STAGING = YES
+>  SYSTEMD_DEPENDENCIES = \
+>  	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
+>  	host-gperf \
+> +	host-systemd \
 
-Please use printf, not echo.
+... you'll have to remove this build-order dependency.
 
->  	elif echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'tty[0-9]*$$'; \
->  	then \
->  		TARGET="getty at .service"; \
-> -		LINK_NAME="getty@$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)).service"; \
-> +		echo [Install] > $(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d/buildroot-console.conf;\
-> +		echo DefaultInstance=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)) >> $(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d/buildroot-console.conf;\
+[--SNIP--]
+> +define SYSTEMD_PRESET_ALL
+> +	$(HOST_DIR)/bin/systemctl --root=$(TARGET_DIR) preset-all
+> +endef
+> +SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_PRESET_ALL
 
-    printf '[Install]\nDefaultInstance=%s\n' \
-        "$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))" \
-        >$(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d/buildroot-console.conf; \
+As I already noted in my previous review, and as we discussed on IRC:
+this actually changes the current behaviour of a few packages, which so
+far installed their unit files but did not explicitly enable them.
 
->  	else \
->  		TARGET="serial-getty at .service"; \
-> -		LINK_NAME="serial-getty@$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)).service"; \
-> +		mkdir $(TARGET_DIR)/usr/lib/systemd/system/serial-getty at .service.d;\
-> +		echo [Install] > $(TARGET_DIR)/usr/lib/systemd/system/serial-getty at .service.d/buildroot-console.conf;\
-> +		echo DefaultInstance=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)) >> $(TARGET_DIR)/usr/lib/systemd/system/serial-getty at .service.d/buildroot-console.conf;\
+With this patch, these units are now enabled by default.
 
-Ditto.
+This is an acceptable change in behaviour: installing units but not
+enabling them is probably on oversight, as no such package have
+explanations why this is so, neither in their .mk, nor in the commit
+log introducing the unit installation (or the package as a whole).
 
-I'm pretty pleased with all the big comment, and the code
-simplifications. :-)
+This change of behaviour should however be explained prominently in
+the commit log.
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
 
->  	fi; \
-> -	mkdir -p $(TARGET_DIR)/etc/systemd/system/getty.target.wants/; \
-> -	ln -fs ../../../../lib/systemd/system/$${TARGET} \
-> -		$(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${LINK_NAME}; \
->  	if [ $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE)) -gt 0 ] ; \
->  	then \
->  		$(SED) 's,115200,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE),' $(TARGET_DIR)/lib/systemd/system/$${TARGET}; \
+> +
+> +
+>  SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
+>  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
+>  
 > -- 
 > 2.24.0.rc1
 > 
