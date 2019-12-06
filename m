@@ -1,71 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2019 09:21:04 +0100
+Date: Fri, 6 Dec 2019 09:21:10 +0100
 Subject: [Buildroot] [git commit branch/2019.02.x] package/jasper: Apply fix
- for CVE-2018-19541
-Message-ID: <20191206082858.2E4D98830A@busybox.osuosl.org>
+ for CVE-2018-19540
+Message-ID: <20191206082858.3EB348830A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3566998816efe449f7e274926bdc4eb1457e1c3a
+commit: https://git.buildroot.net/buildroot/commit/?id=c2a4de160d2f8f547b78b6e0c33e5ddc29af9bda
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Add 0001-verify-data-range-CVE-2018-19541.patch:
-We need to verify the data is in the expected range. Otherwise we get
-problems later.
+Add 0003-test-asclen-CVE-2018-19540.patch:
+If txtdesc->asclen is < 1, the array index of
+txtdesc->ascdata will be negative which causes the heap based overflow.
 
 Patch was proposed upstream[1] but upstream is very inactive. Linux
 distributions use the same fix to patch their packages.
 
-1: https://github.com/mdadams/jasper/pull/211
+1: https://github.com/mdadams/jasper/pull/198
 Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fddee3cf7436bd39d08c30a83a15ee9687e88401)
+(cherry picked from commit 332a851a08153887f68c97f49c7fbdc163f24e5b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-verify-data-range-CVE-2018-19541.patch    | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ .../jasper/0003-test-asclen-CVE-2018-19540.patch   | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/jasper/0001-verify-data-range-CVE-2018-19541.patch b/package/jasper/0001-verify-data-range-CVE-2018-19541.patch
+diff --git a/package/jasper/0003-test-asclen-CVE-2018-19540.patch b/package/jasper/0003-test-asclen-CVE-2018-19540.patch
 new file mode 100644
-index 0000000000..35b4299dcf
+index 0000000000..9401da511b
 --- /dev/null
-+++ b/package/jasper/0001-verify-data-range-CVE-2018-19541.patch
-@@ -0,0 +1,35 @@
-+From 24fc4d6f01d2d4c8297d1bebec02360f796e01c2 Mon Sep 17 00:00:00 2001
++++ b/package/jasper/0003-test-asclen-CVE-2018-19540.patch
+@@ -0,0 +1,29 @@
++From e38454aa1a15b78c028a778fc8bfba3587e25c25 Mon Sep 17 00:00:00 2001
 +From: Michael Vetter <jubalh@iodoru.org>
-+Date: Mon, 4 Nov 2019 18:17:44 +0100
-+Subject: [PATCH] Verify range data in jp2_pclr_getdata
++Date: Fri, 15 Mar 2019 11:01:02 +0100
++Subject: [PATCH] Make sure asclen is at least 1
 +
-+This fixes CVE-2018-19541.
-+We need to verify the data is in the expected range. Otherwise we get
-+problems later.
++If txtdesc->asclen is < 1, the array index of txtdesc->ascdata will be negative which causes the heap based overflow.
 +
-+This is a better fix for https://github.com/mdadams/jasper/pull/199
-+which caused segfaults under certain circumstances.
-+
-+Patch by Adam Majer <adam.majer@suse.de>
++Regards CVE-2018-19540.
++Regards https://github.com/mdadams/jasper/issues/182 bug#3
++Fix by Markus Koschany <apo@debian.org>.
++From https://gist.github.com/apoleon/13598a45bf6522f6a79b77a629205823
 +Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 +---
-+ src/libjasper/jp2/jp2_cod.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
++ src/libjasper/base/jas_icc.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/src/libjasper/jp2/jp2_cod.c b/src/libjasper/jp2/jp2_cod.c
-+index 890e6ad..0f8d804 100644
-+--- a/src/libjasper/jp2/jp2_cod.c
-++++ b/src/libjasper/jp2/jp2_cod.c
-+@@ -855,6 +855,12 @@ static int jp2_pclr_getdata(jp2_box_t *box, jas_stream_t *in)
-+ 	  jp2_getuint8(in, &pclr->numchans)) {
-+ 		return -1;
-+ 	}
-++
-++    // verify in range data as per I.5.3.4 - Palette box
-++    if (pclr->numchans < 1 || pclr->numlutents < 1 || pclr->numlutents > 1024) {
-++        return -1;
-++    }
-++
-+ 	lutsize = pclr->numlutents * pclr->numchans;
-+ 	if (!(pclr->lutdata = jas_alloc2(lutsize, sizeof(int_fast32_t)))) {
-+ 		return -1;
++diff --git a/src/libjasper/base/jas_icc.c b/src/libjasper/base/jas_icc.c
++index 4607930..762c0e8 100644
++--- a/src/libjasper/base/jas_icc.c
+++++ b/src/libjasper/base/jas_icc.c
++@@ -1104,6 +1104,8 @@ static int jas_icctxtdesc_input(jas_iccattrval_t *attrval, jas_stream_t *in,
++ 	if (jas_stream_read(in, txtdesc->ascdata, txtdesc->asclen) !=
++ 	  JAS_CAST(int, txtdesc->asclen))
++ 		goto error;
+++	if (txtdesc->asclen < 1)
+++		goto error;
++ 	txtdesc->ascdata[txtdesc->asclen - 1] = '\0';
++ 	if (jas_iccgetuint32(in, &txtdesc->uclangcode) ||
++ 	  jas_iccgetuint32(in, &txtdesc->uclen))
