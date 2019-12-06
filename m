@@ -1,29 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Dec 2019 23:49:25 +0100
-Subject: [Buildroot] [PATCH] package/luajit: switch to moonjit fork
-In-Reply-To: <20191204083845.6319-1-francois.perrad@gadz.org>
-References: <20191204083845.6319-1-francois.perrad@gadz.org>
-Message-ID: <20191206234925.072bca51@windsurf.home>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Fri,  6 Dec 2019 15:46:45 -0800
+Subject: [Buildroot] [PATCH v6 2/6] package/polkit: support different
+ authentication frameworks
+In-Reply-To: <20191206234649.3972927-1-aduskett@gmail.com>
+References: <20191206234649.3972927-1-aduskett@gmail.com>
+Message-ID: <20191206234649.3972927-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  4 Dec 2019 09:38:45 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+From: Adam Duskett <Aduskett@gmail.com>
 
-> this fork is based on LuaJIT 2.1.0-beta3 which supports ARM64
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Use pam if available, otherwise use shadow.
 
-Thanks for the patch! You forgot to explain in the commit log why the
-hash of the license has changed. So I improved the commit log with some
-explanation about this, after doing a diff between the old and new
-COPYRIGHT files, and applied to master. Thanks!
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/polkit/polkit.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
+index 507d1865fa..7791d23d19 100644
+--- a/package/polkit/polkit.mk
++++ b/package/polkit/polkit.mk
+@@ -13,13 +13,17 @@ POLKIT_INSTALL_STAGING = YES
+ 
+ POLKIT_DEPENDENCIES = libglib2 host-intltool expat spidermonkey
+ 
+-# We could also support --with-authfw=pam
+ POLKIT_CONF_OPTS = \
+-	--with-authfw=shadow \
+ 	--with-os-type=unknown \
+ 	--disable-man-pages \
+ 	--disable-examples \
+ 	--disable-libelogind \
+ 	--disable-libsystemd-login
+ 
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++POLKIT_CONF_OPTS += --with-authfw=pam
++else
++POLKIT_CONF_OPTS += --with-authfw=shadow
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0
