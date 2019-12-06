@@ -1,45 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Dec 2019 10:00:57 +0100
-Subject: [Buildroot] [PATCH] package/pkg-meson: ensure the global
- cross-compilation.conf file is correct
-In-Reply-To: <74d445b1-0c5b-95d0-652b-7f403e9ccff0@mind.be>
-References: <20191204150225.33749-1-thomas.petazzoni@bootlin.com>
- <3e183413-d866-dc02-c846-3948dc5cb34c@mind.be>
- <20191206085900.6df9f25a@windsurf>
- <74d445b1-0c5b-95d0-652b-7f403e9ccff0@mind.be>
-Message-ID: <20191206100057.56544d6f@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 06 Dec 2019 10:01:14 +0100
+Subject: [Buildroot] [PATCH 1/2] package/python-gobject: depend on
+ python2
+In-Reply-To: <20191201030656.3691270-1-aduskett@gmail.com> (aduskett's message
+ of "Sat, 30 Nov 2019 19:06:55 -0800")
+References: <20191201030656.3691270-1-aduskett@gmail.com>
+Message-ID: <87immtn7z9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 6 Dec 2019 09:58:15 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
-> >> And a number of other packages as well,
-> >> e.g. the Python sysconfig refers to the Python per-package dirs.  
-> > 
-> > For sysconfig, I have a pending patch that I will submit soon to fix
-> > the problem. It is in fact worse for sysconfig because if you don't
-> > tweak it during the build, the build simply fails. While for the global
-> > meson cross-compilation.conf, it is less dramatic as it is not used by
-> > Buildroot itself, just provided as a convenience.  
-> 
->  Just to be entirely clear: it actually works as long as you keep the build
-> directory around, it just doesn't work in the context of the SDK, right?
+ > From: Adam Duskett <Aduskett@gmail.com>
+ > Version 2.86.6 of python-gobject is quite old and no longer works with
+ > Python versions > 3.7. When importing a user will recieve the following error:
 
-A final pass in staging-finalize will be needed indeed to fixup the
-sysconfigdata for the SDK.
+ > Traceback (most recent call last):
+ >   File "<stdin>", line 1, in <module>
+ >   File "/usr/lib/python3.8/site-packages/gobject/__init__.py", line 26, in
+ >   <module>
+ >   File "/usr/lib/python3.8/site-packages/glib/__init__.py", line 22, in <module>
+ > SystemError: initialization of _glib raised unreported exception
 
-I think I tried to come up with a solution that involved using relative
-paths, but didn't get it to work. But it's been a while I looked into
-this, so I don't remember exactly.
+ > Because new versions of python-gobject require gobject-introspection, which is
+ > not currently available in Buildroot, add a dependency on python2 to prevent
+ > users from receiving the above error.
 
-Best regards,
+ > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Thomas
+Committed to 2019.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
