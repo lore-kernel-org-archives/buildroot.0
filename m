@@ -1,44 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Dec 2019 23:35:13 +0100
-Subject: [Buildroot] [PATCH] package/pkg-python: use _CONFIGURE_OPTS for
- build env
-In-Reply-To: <20191205231103.27778-1-ryan.barnett@rockwellcollins.com>
-References: <20191205231103.27778-1-ryan.barnett@rockwellcollins.com>
-Message-ID: <20191206233513.5f6260d7@windsurf.home>
+Date: Fri, 6 Dec 2019 23:39:12 +0100
+Subject: [Buildroot] [PATCH 1/2] package/linux-tools: add hyperv
+ integration services
+In-Reply-To: <3684154963-32001@mail.unilogic.nl>
+References: <20191206151600.2ea6979e@windsurf>
+ <3684154963-32001@mail.unilogic.nl>
+Message-ID: <20191206233912.04fa99b1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  5 Dec 2019 17:11:02 -0600
-Ryan Barnett <ryan.barnett@rockwellcollins.com> wrote:
+Hello,
 
-> When building host or target python packages, we need to ensure that
-> the build environment utilize {HOST|TARGET}_CONFIGURE_OPTS. This
-> ensures that the correct linker and compiler environment variables are
-> set to compile utilizing either the host or target folders.
-> 
-> It was discovered that when compiling a host-python package, it was
-> using linking against the build machines library folder instead of the
-> host folder because LDFLAGS was not properly set and was improperly
-> detecting whether or not a shared or static library was present in the
-> host folder.
-> 
-> CC: Arnout Vandecappelle <arnout@mind.be>
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - Merged HOST/TARGET_CONFIGURE_OPTS to single commit (suggested by
->       Arnout)
->   - Added HOST/TARGET_CONFIGURE_OPTS to env for setuptools (suggested
->       by Arnout)
-> ---
->  package/pkg-python.mk | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
+It is very difficult to reply to your e-mails, because the plain text
+version of your e-mail does not properly quote the text you're replying
+to. Could you fix your e-mail client to only send plain text e-mails to
+the mailing list, and to properly quote the text you're replying to ?
 
-Applied to master, thanks.
+On Fri, 6 Dec 2019 15:24:31 +0100
+Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
+
+> > + ? ? ? Relevant kernel configuration options: 
+> > + ? ? ? HYPERV (HYPERVISOR_GUEST X86_LOCAL_APIC ACPI X86)   
+>  
+> It's not clear what are those options between parenthesis. 
+> 
+> 
+> As stated they are all kernel configuration options, the options between the parenthesis are just dependancies of the dependancy.
+
+I think we shouldn't list the dependencies of dependencies. They risk
+changing from kernel versions to others. Just list that it needs
+CONFIG_HYPERV and CONFIG_HYPVER_UTILS.
+
+> Did you see my reply on your previous version of the patch, which says 
+> that these two variables will never be used, because HV_FCOPY_DAEMON is 
+> not a Buildroot package ? 
+> 
+> I actually modified linux-tools.mk to make that work.
+
+Indeed, I missed it. It should be part of a separate, preliminary patch
+in your series.
+
+Could you take into account the few comments that I have given, and
+send an updated version of the patch series ?
+
+Thanks!
 
 Thomas
 -- 
