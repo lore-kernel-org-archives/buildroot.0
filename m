@@ -1,34 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Dec 2019 22:18:07 +0100
-Subject: [Buildroot] [PATCH 1/3] toolchain,
- glibc: Allow ARC big endian glibc builds
-In-Reply-To: <20191206193924.18777-2-vgupta@synopsys.com>
+Date: Fri, 6 Dec 2019 22:19:18 +0100
+Subject: [Buildroot] [PATCH 2/3] binutils/ARC: move ARC specific code
+ together
+In-Reply-To: <20191206193924.18777-3-vgupta@synopsys.com>
 References: <20191206193924.18777-1-vgupta@synopsys.com>
- <20191206193924.18777-2-vgupta@synopsys.com>
-Message-ID: <20191206221807.6a33e36c@windsurf.home>
+ <20191206193924.18777-3-vgupta@synopsys.com>
+Message-ID: <20191206221918.1c05e316@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  6 Dec 2019 11:39:22 -0800
+On Fri,  6 Dec 2019 11:39:23 -0800
 Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
 
-> From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-> 
-> Apparently big endian glibc builds just work, if we let the endian
-> header allow that (which prev was #error).
-> 
-> The current ARC glibc version in buildroot arc-2019.09-rc1 already
-> contains that fix.
+> That way ARC specific version update needs to be done in 1 place only
 > 
 > Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
 > ---
->  toolchain/toolchain-buildroot/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/binutils/binutils.mk | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+> index a19d6940f7c1..ecc78b81e59f 100644
+> --- a/package/binutils/binutils.mk
+> +++ b/package/binutils/binutils.mk
+> @@ -8,14 +8,11 @@
+>  # If not, we do like other packages
+>  BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
+>  ifeq ($(BINUTILS_VERSION),)
+> -ifeq ($(BR2_arc),y)
+> -BINUTILS_VERSION = arc-2019.09-rc1
+> -else
+>  BINUTILS_VERSION = 2.32
+>  endif
+> -endif # BINUTILS_VERSION
+>  
+> -ifeq ($(BINUTILS_VERSION),arc-2019.09-rc1)
+> +ifeq ($(BR2_arc),y)
 
-Applied to master with an improved commit title/log. Thanks!
+This is not going to work well with your PATCH 3/3 (on which I have
+comments). Indeed, BR2_arc=y does not necessarily imply that we want to
+use the ARC-specific binutils version.
+
+You can however use ifeq ($(BR2_BINUTILS_VERSION_ARC),y) instead.
+
+Best regards,
 
 Thomas
 -- 
