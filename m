@@ -1,36 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Dec 2019 09:59:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cmocka: fix build on riscv64
-In-Reply-To: <CA+1k=2b+1WmbKM7QzKPPwM2RpWdD==4GBsmNUmGqjAP=WqZRTA@mail.gmail.com>
- (Joel Carlson's message of "Mon, 2 Dec 2019 14:08:11 -0700")
-References: <20191119180259.401332-1-fontaine.fabrice@gmail.com>
- <CA+1k=2b+1WmbKM7QzKPPwM2RpWdD==4GBsmNUmGqjAP=WqZRTA@mail.gmail.com>
-Message-ID: <87r21hn81r.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Dec 2019 10:00:24 +0100
+Subject: [Buildroot] [PATCH] utils/genrandconfig: fix runtime issue with
+ Python 3
+In-Reply-To: <20191203165137.1100010-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Tue, 3 Dec 2019 17:51:37 +0100")
+References: <20191203165137.1100010-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87muc5n80n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joel" == Joel Carlson <JoelsonCarl@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Hello,
- > On Tue, Nov 19, 2019 at 11:02 AM Fabrice Fontaine
- > <fontaine.fabrice@gmail.com> wrote:
- >> 
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/30922c18150ea62aefe123d1b7cd1444efab963f
- >> 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > With Python 3.7, genrandconfig fails with:
+ > 'str' object has no attribute 'decode'
 
- > [snip]
+ > We are already working on str objects, and there is no need to decode
+ > them, so we drop the call to decode_byte_list() and its definition as
+ > it was only used there.
 
- > Reviewed-by: Joel Carlson <JoelsonCarl@gmail.com>
- > Tested-by: Joel Carlson <JoelsonCarl@gmail.com>
-
- > Tested to make sure it fixed the build issue on riscv64, and then used
- > test-pkg -a to make sure all other architectures still compiled cmocka
- > successfully.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Committed to 2019.11.x, thanks.
 
