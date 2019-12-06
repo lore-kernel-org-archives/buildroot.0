@@ -1,42 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Dec 2019 09:01:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/spidermonkey: depends on host
- gcc >= 4.9
-In-Reply-To: <349fd5c7-0116-119d-e928-44cf004facc2@mind.be>
-References: <20191204214913.718567-1-aduskett@gmail.com>
- <CAFSsvmoB=3gvY0-NaUFb09r73+0mx1z6ap=JED4-LLfBuD0-5w@mail.gmail.com>
- <20191205215828.7258d035@windsurf>
- <349fd5c7-0116-119d-e928-44cf004facc2@mind.be>
-Message-ID: <20191206090143.75788ff5@windsurf>
+Date: Fri, 6 Dec 2019 09:03:49 +0100
+Subject: [Buildroot] [EXT] Re: [PATCH v3 8/9] board/nxp/common/ls: Add
+ standard post image script for Layerscape processors
+In-Reply-To: <VI1PR04MB51364FD5ED1B5C4A749AF1EDFE5F0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+References: <20191127073028.34651-1-jerry.huang@nxp.com>
+ <20191127073028.34651-2-jerry.huang@nxp.com>
+ <CA+h21hqg2eEg6pDthun89J76z90KD_qrMBtdj94cPZUhjrq16A@mail.gmail.com>
+ <VI1PR04MB51364FD5ED1B5C4A749AF1EDFE5F0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+Message-ID: <20191206090349.21ee534f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 6 Dec 2019 00:02:44 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+On Fri, 6 Dec 2019 07:23:17 +0000
+Jerry Huang <jerry.huang@nxp.com> wrote:
 
-> > So what this patch seems to imply is that in fact gcc 4.9 is not really
-> > required by the spidermonkey code. If that's the case, then yes I
-> > believe having the patch is probably nicer than having to propagate the
-> > dependency.  
-> 
->  As I understand it, spidermonkey *does* use C++14 features (hence the need for
-> target GCC 4.9+). However, it also builds host tools which need only C++11
-> features, but the test is applied to host and target compiler indiscriminately.
-> The patch doesn't make a correct distinction between host and target, it just
-> generally lowers the minimum C++ version.
+> > > +       # build the itb image
+> > > +       cp board/nxp/$(plat_name)/kernel.its ${BINARIES_DIR}/kernel.its
+> > > +       cd ${BINARIES_DIR}/
+> > > +       /usr/bin/mkimage -f kernel.its kernel.itb  
+> > 
+> > Why does mkimage have the full path specified here?  
+> Use the mkimage at host machine.
 
-Ah, that's not good indeed.
-
->  Now, given that they assume C++14 support is available, it's relatively likely
-> that they'll start using those features in future versions. At that point.
-> things will anyway break and we need this condition. So I'd say, byte the bullet
-> now and require hsot and target GCC >= 4.9.
-
-Fair enough. We need to resurrect the patch then, because I changed its
-state to Changes Requested yesterday.
+And that is not correct because nothing guarantees you that there is an
+mkimage installed in /usr/bin/mkimage. You can only rely on the mkimage
+built by Buildroot.
 
 Thomas
 -- 
