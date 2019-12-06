@@ -1,30 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Dec 2019 22:31:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 19.2.7
-In-Reply-To: <20191206184746.18787-1-bernd.kuhls@t-online.de>
-References: <20191206184746.18787-1-bernd.kuhls@t-online.de>
-Message-ID: <20191206223137.5a716a6e@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 06 Dec 2019 21:47:47 +0000
+Subject: [Buildroot] [Bug 12386] carriage return issue when "make menuconfig"
+In-Reply-To: <bug-12386-163@https.bugs.busybox.net/>
+References: <bug-12386-163@https.bugs.busybox.net/>
+Message-ID: <bug-12386-163-cQi5V4pFXw@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  6 Dec 2019 19:47:46 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12386
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
->  package/mesa3d/mesa3d.hash               | 6 +++---
->  package/mesa3d/mesa3d.mk                 | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+Helllo Daniel,
 
-Applied to master, thanks.
+would suspect something with your (local) git configuration options,
+check the output from:
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
