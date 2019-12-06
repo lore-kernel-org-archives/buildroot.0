@@ -1,56 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Dec 2019 00:51:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/arptables: bump to version 0.0.5
-In-Reply-To: <20191205230036.60a49509@windsurf>
-References: <20191204191144.2591797-1-fontaine.fabrice@gmail.com>
- <20191205230036.60a49509@windsurf>
-Message-ID: <b1752377-17b8-1a85-c3bd-a962d0ca1dd0@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 06 Dec 2019 02:23:49 +0000
+Subject: [Buildroot] [Bug 12386] New: carriage return issue when "make
+ menuconfig"
+Message-ID: <bug-12386-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=12386
 
+            Bug ID: 12386
+           Summary: carriage return issue when "make menuconfig"
+           Product: buildroot
+           Version: 2019.11
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: lida_mail at 163.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On 05/12/2019 23:00, Thomas Petazzoni wrote:
-> Hello,
-> 
-> +Yann, Arnout, Peter in Cc.
-> 
-> On Wed,  4 Dec 2019 20:11:44 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
->> diff --git a/package/arptables/Config.in b/package/arptables/Config.in
->> index 873e791e81..aeb7250a72 100644
->> --- a/package/arptables/Config.in
->> +++ b/package/arptables/Config.in
->> @@ -1,7 +1,12 @@
->>  config BR2_PACKAGE_ARPTABLES
->> -	bool "arptables"
->> +	bool "arptables-legacy"
-> 
-> We normally want to have the package Config.in option name match the
-> package name, which would no longer be the case here.
-> 
->>  	depends on BR2_USE_MMU # needs fork()
->>  	help
->> -	  Tool to set up, maintain, and inspect the tables of ARP rules.
->> +	  Legacy tool to set up, maintain, and inspect the tables of ARP
->> +	  rules.
->>  
->> -	  http://ebtables.sourceforge.net
->> +	  A more uptodate client of the arptables tool is provided in
->> +	  the iptables package. The new tool was formerly known as
->> +	  arptables-compat.
-> 
-> Arnout, Peter, Yann, considering the change to the package, does it
-> make sense to rename it entirely to arptables-legacy ? Or should we
-> take Fabrice's approach, i.e keep the package name as-is, and just as
-> an exception change the option prompt ?
+Created attachment 8301
+  --> https://bugs.busybox.net/attachment.cgi?id=8301&action=edit
+build log
 
- I think going to the whole rename and legacy dance is a but too much for a
-simple change like this. So I'd apply Fabrice's patch as is.
+It seems that script file include "carriage return".
+I can't build image's on linux environment.
 
- Regards,
- Arnout
+Following branches has been checked.
+
+* 2018.08.x
+  2018.11.x
+  2019.02.x
+  2019.05.x
+  2019.08.x
+  2019.11.x
+  master     --> git 17638bc3ada60c7cedc71f4a546c7b75fae6113e
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
