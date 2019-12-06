@@ -1,38 +1,110 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Dec 2019 09:51:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cmocka: fix build on riscv64
-In-Reply-To: <CA+1k=2b+1WmbKM7QzKPPwM2RpWdD==4GBsmNUmGqjAP=WqZRTA@mail.gmail.com>
- (Joel Carlson's message of "Mon, 2 Dec 2019 14:08:11 -0700")
-References: <20191119180259.401332-1-fontaine.fabrice@gmail.com>
- <CA+1k=2b+1WmbKM7QzKPPwM2RpWdD==4GBsmNUmGqjAP=WqZRTA@mail.gmail.com>
-Message-ID: <87h82don0p.fsf@dell.be.48ers.dk>
+Date: Fri, 6 Dec 2019 09:49:43 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/cmocka: fix build
+ on riscv64
+Message-ID: <20191206084322.7A1958834C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joel" == Joel Carlson <JoelsonCarl@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7779481b12ff2bfe7243a42629c111e2392ad0db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
- > Hello,
- > On Tue, Nov 19, 2019 at 11:02 AM Fabrice Fontaine
- > <fontaine.fabrice@gmail.com> wrote:
- >> 
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/30922c18150ea62aefe123d1b7cd1444efab963f
- >> 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/30922c18150ea62aefe123d1b7cd1444efab963f
 
- > [snip]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Joel Carlson <JoelsonCarl@gmail.com>
+Tested-by: Joel Carlson <JoelsonCarl@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5e321ccf07ca0cd1388f1f78e2cf8d7054c4279f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cmocka/0001-Don-t-redefine-uintptr_t.patch | 77 ++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
- > Reviewed-by: Joel Carlson <JoelsonCarl@gmail.com>
- > Tested-by: Joel Carlson <JoelsonCarl@gmail.com>
-
- > Tested to make sure it fixed the build issue on riscv64, and then used
- > test-pkg -a to make sure all other architectures still compiled cmocka
- > successfully.
-
-Committed to 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cmocka/0001-Don-t-redefine-uintptr_t.patch b/package/cmocka/0001-Don-t-redefine-uintptr_t.patch
+new file mode 100644
+index 0000000000..4123d8db22
+--- /dev/null
++++ b/package/cmocka/0001-Don-t-redefine-uintptr_t.patch
+@@ -0,0 +1,77 @@
++From 28ce16b29911e5adc60140b572dee177adc7a178 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 18 Nov 2019 18:56:46 +0100
++Subject: [PATCH] Don't redefine uintptr_t
++
++Add a call to check_type_size in ConfigureChecks.cmake and use it in
++include/cmocka.h to avoid the following redefinition error on riscv64:
++
++In file included from /data/buildroot/buildroot-test/instance-0/output/build/cmocka-1.1.5/src/cmocka.c:62:
++/data/buildroot/buildroot-test/instance-0/output/build/cmocka-1.1.5/include/cmocka.h:132:28: error: conflicting types for 'uintptr_t'
++       typedef unsigned int uintptr_t;
++                            ^~~~~~~~~
++In file included from /data/buildroot/buildroot-test/instance-0/output/host/riscv64-buildroot-linux-musl/sysroot/usr/include/stdint.h:20,
++                 from /data/buildroot/buildroot-test/instance-0/output/host/riscv64-buildroot-linux-musl/sysroot/usr/include/inttypes.h:9,
++                 from /data/buildroot/buildroot-test/instance-0/output/build/cmocka-1.1.5/src/cmocka.c:27:
++/data/buildroot/buildroot-test/instance-0/output/host/riscv64-buildroot-linux-musl/sysroot/usr/include/bits/alltypes.h:104:24: note: previous declaration of 'uintptr_t' was here
++ typedef unsigned _Addr uintptr_t;
++                        ^~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/30922c18150ea62aefe123d1b7cd1444efab963f
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Reviewed-by: Andreas Schneider <asn@cryptomilk.org>
++[Retrieved from:
++https://gitlab.com/cmocka/cmocka/commit/28ce16b29911e5adc60140b572dee177adc7a178]
++---
++ ConfigureChecks.cmake | 3 +++
++ config.h.cmake        | 4 ++++
++ include/cmocka.h      | 2 +-
++ 3 files changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/ConfigureChecks.cmake b/ConfigureChecks.cmake
++index fe8da35..028774f 100644
++--- a/ConfigureChecks.cmake
+++++ b/ConfigureChecks.cmake
++@@ -70,6 +70,9 @@ if (HAVE_TIME_H)
++     check_struct_has_member("struct timespec" tv_sec "time.h" HAVE_STRUCT_TIMESPEC)
++ endif (HAVE_TIME_H)
++ 
+++# TYPES
+++check_type_size(uintptr_t UINTPTR_T)
+++
++ # FUNCTIONS
++ check_function_exists(calloc HAVE_CALLOC)
++ check_function_exists(exit HAVE_EXIT)
++diff --git a/config.h.cmake b/config.h.cmake
++index f8d79da..55fc69f 100644
++--- a/config.h.cmake
+++++ b/config.h.cmake
++@@ -75,6 +75,10 @@
++ 
++ #cmakedefine HAVE_STRUCT_TIMESPEC 1
++ 
+++/***************************** TYPES *****************************/
+++
+++#cmakedefine HAVE_UINTPTR_T 1
+++
++ /*************************** FUNCTIONS ***************************/
++ 
++ /* Define to 1 if you have the `calloc' function. */
++diff --git a/include/cmocka.h b/include/cmocka.h
++index 3e923dd..0aa557e 100644
++--- a/include/cmocka.h
+++++ b/include/cmocka.h
++@@ -120,7 +120,7 @@ typedef uintmax_t LargestIntegralType;
++     ((LargestIntegralType)(value))
++ 
++ /* Smallest integral type capable of holding a pointer. */
++-#if !defined(_UINTPTR_T) && !defined(_UINTPTR_T_DEFINED)
+++#if !defined(_UINTPTR_T) && !defined(_UINTPTR_T_DEFINED) && !defined(HAVE_UINTPTR_T)
++ # if defined(_WIN32)
++     /* WIN32 is an ILP32 platform */
++     typedef unsigned int uintptr_t;
++-- 
++2.22.0
++
