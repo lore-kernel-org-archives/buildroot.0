@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Dec 2019 08:59:00 +0100
-Subject: [Buildroot] [PATCH] package/pkg-meson: ensure the global
- cross-compilation.conf file is correct
-In-Reply-To: <3e183413-d866-dc02-c846-3948dc5cb34c@mind.be>
-References: <20191204150225.33749-1-thomas.petazzoni@bootlin.com>
- <3e183413-d866-dc02-c846-3948dc5cb34c@mind.be>
-Message-ID: <20191206085900.6df9f25a@windsurf>
+Date: Fri, 6 Dec 2019 09:01:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/spidermonkey: depends on host
+ gcc >= 4.9
+In-Reply-To: <349fd5c7-0116-119d-e928-44cf004facc2@mind.be>
+References: <20191204214913.718567-1-aduskett@gmail.com>
+ <CAFSsvmoB=3gvY0-NaUFb09r73+0mx1z6ap=JED4-LLfBuD0-5w@mail.gmail.com>
+ <20191205215828.7258d035@windsurf>
+ <349fd5c7-0116-119d-e928-44cf004facc2@mind.be>
+Message-ID: <20191206090143.75788ff5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Thu, 5 Dec 2019 23:13:42 +0100
+On Fri, 6 Dec 2019 00:02:44 +0100
 Arnout Vandecappelle <arnout@mind.be> wrote:
 
-> > -TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
-> > +TOOLCHAIN_TARGET_FINALIZE_HOOKS += PKG_MESON_INSTALL_CROSS_CONF  
+> > So what this patch seems to imply is that in fact gcc 4.9 is not really
+> > required by the spidermonkey code. If that's the case, then yes I
+> > believe having the patch is probably nicer than having to propagate the
+> > dependency.  
 > 
->  Note that this essentially reverts [1].
+>  As I understand it, spidermonkey *does* use C++14 features (hence the need for
+> target GCC 4.9+). However, it also builds host tools which need only C++11
+> features, but the test is applied to host and target compiler indiscriminately.
+> The patch doesn't make a correct distinction between host and target, it just
+> generally lowers the minimum C++ version.
 
-Yes, true.
+Ah, that's not good indeed.
 
->  The case for that patch was not terribly strong, so it should be OK. But then
-> again, the case for this patch is not that strong either.
+>  Now, given that they assume C++14 support is available, it's relatively likely
+> that they'll start using those features in future versions. At that point.
+> things will anyway break and we need this condition. So I'd say, byte the bullet
+> now and require hsot and target GCC >= 4.9.
 
-Well, the case for my patch is that it allows to produce a meson
-cross-compilation.conf that has correct and usable values at the end of
-the build.
-
->  Note that pkg-cmake has the same issue. And a number of other packages as well,
-> e.g. the Python sysconfig refers to the Python per-package dirs.
-
-For sysconfig, I have a pending patch that I will submit soon to fix
-the problem. It is in fact worse for sysconfig because if you don't
-tweak it during the build, the build simply fails. While for the global
-meson cross-compilation.conf, it is less dramatic as it is not used by
-Buildroot itself, just provided as a convenience.
+Fair enough. We need to resurrect the patch then, because I changed its
+state to Changes Requested yesterday.
 
 Thomas
 -- 
