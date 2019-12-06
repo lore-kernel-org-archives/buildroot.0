@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  6 Dec 2019 19:40:20 +0100
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{3, 4}.x series
-Message-ID: <20191206184020.15112-1-bernd.kuhls@t-online.de>
+Date: Fri,  6 Dec 2019 19:47:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.2.7
+Message-ID: <20191206184746.18787-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,65 +11,50 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index d1ebfee130..13bd21a62c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index f2817aa87f..ecd1a323d6 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.4.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.4.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.82-cip14" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.72-cip10-rt4" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index dfd66461d2..5eb4307bf5 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 955712688c7256675383ec5be4ee044dbb59116a9a1f24e8689d12a6f95f7932  linux-5.3.14.tar.xz
--sha256 a7d48bb324d53e421ffbe4da40087b3c0c5112707e5f3d827c30118542c74fd9  linux-5.4.1.tar.xz
-+sha256 cec8aaea89feac4a3555f1e4b90000244ff7c5e7640db242a7de796a006d1197  linux-5.3.15.tar.xz
-+sha256 32f98256877ca6b016715ffffcf184f1603df9e17a324787f252cd602e03a557  linux-5.4.2.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 fa1f8fe9c12e18e5cda18cf759b77ae9e778e1e9006d837426c955b75bd4eaa6  linux-4.4.205.tar.xz
--sha256 98b9e8644706acc0cf51022372bb263b59a1d2bbe3ccd7ce6bd9bc7378c78b05  linux-4.9.205.tar.xz
--sha256 90fa769a052ecf34a0cab72cf013e19275dbb8cd01bbe52f1d465e2ed7537733  linux-4.14.157.tar.xz
--sha256 a57221e8318e6fcaedb90b099d56352f9d6608fd367283bc7db84330856eda1d  linux-4.19.87.tar.xz
-+sha256 5da5e16fe08fa506f8f74aa4f17be22b52c0f513e9a3f7e7ae22fc53597ad493  linux-4.4.206.tar.xz
-+sha256 1df27899a9bc4dd874f3830ab9e7b638f0026dffd67a2e230444e5d2805ccad6  linux-4.9.206.tar.xz
-+sha256 0d49ec72e273f6fc7462ad56849b2285f13fd5f4185e8f932a0074fc2eca1bb3  linux-4.14.158.tar.xz
-+sha256 c1923b6bd166e6dd07be860c15f59e8273aaa8692bc2a1fce1d31b826b9b3fbe  linux-4.19.88.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a42d29ce2d..2574792afb 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -313,12 +313,12 @@ endchoice
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.2.6
++MESA3D_HEADERS_VERSION = 19.2.7
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index d1dbfc603c..66e91a9c03 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2019-November/000559.html
+-sha256 9d7b24fa60c82db34788196450042a55ce6cb2d70c7a8d5c31401619b6907797  mesa-19.2.6.tar.xz
+-sha512 2e961631ae8ea1cb64d87bede51432445a17d153244d8c76f5eb70cbdc8c069d3f08cac11928d85ce2730d772aff9b3aff089e5e552eb021fdcb65364bb685b6  mesa-19.2.6.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-December/000562.html
++sha256 e3799fb7896fd9ed2f90f651fb907b95cdebfbd494968ff116e6bf1be143579e  mesa-19.2.7.tar.xz
++sha512 87a82664381432e956ee23dc92bec5accf667606232e38d9458d67132c16fdc44584f65671293b83f00c58ad7742b80e942a5d1bd66d457705be60aaaf35395b  mesa-19.2.7.tar.xz
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.205"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.205"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.157"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.87"	if BR2_KERNEL_HEADERS_4_19
--	default "5.3.14"	if BR2_KERNEL_HEADERS_5_3
--	default "5.4.1"		if BR2_KERNEL_HEADERS_5_4
-+	default "4.4.206"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.206"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.158"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.88"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.3.15"	if BR2_KERNEL_HEADERS_5_3
-+	default "5.4.2"		if BR2_KERNEL_HEADERS_5_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ # License
+ sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index fff498e777..4204e186f5 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.2.6
++MESA3D_VERSION = 19.2.7
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.20.1
