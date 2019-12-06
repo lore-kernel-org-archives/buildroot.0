@@ -1,48 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2019 09:40:37 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/rabbitmq-c:
- security bump to version 0.10.0
-Message-ID: <20191206084025.B187A83B2F@busybox.osuosl.org>
+Date: Fri, 06 Dec 2019 09:51:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cmocka: fix build on riscv64
+In-Reply-To: <CA+1k=2b+1WmbKM7QzKPPwM2RpWdD==4GBsmNUmGqjAP=WqZRTA@mail.gmail.com>
+ (Joel Carlson's message of "Mon, 2 Dec 2019 14:08:11 -0700")
+References: <20191119180259.401332-1-fontaine.fabrice@gmail.com>
+ <CA+1k=2b+1WmbKM7QzKPPwM2RpWdD==4GBsmNUmGqjAP=WqZRTA@mail.gmail.com>
+Message-ID: <87h82don0p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0071438097dd8b1589fd1b261e4eccb2aae9dee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+>>>>> "Joel" == Joel Carlson <JoelsonCarl@gmail.com> writes:
 
-Add additional input validation to prevent integer overflow when parsing
-a frame header. This addresses CVE-2019-18609.
+ > Hello,
+ > On Tue, Nov 19, 2019 at 11:02 AM Fabrice Fontaine
+ > <fontaine.fabrice@gmail.com> wrote:
+ >> 
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/30922c18150ea62aefe123d1b7cd1444efab963f
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 63d0762ab72a3536ea2e07ac75327c7556ed72c1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rabbitmq-c/rabbitmq-c.hash | 2 +-
- package/rabbitmq-c/rabbitmq-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > [snip]
 
-diff --git a/package/rabbitmq-c/rabbitmq-c.hash b/package/rabbitmq-c/rabbitmq-c.hash
-index 19fd1cf064..eb57626518 100644
---- a/package/rabbitmq-c/rabbitmq-c.hash
-+++ b/package/rabbitmq-c/rabbitmq-c.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 316c0d156452b488124806911a62e0c2aa8a546d38fc8324719cd29aaa493024 rabbitmq-c-0.9.0.tar.gz
-+sha256 6455efbaebad8891c59f274a852b75b5cc51f4d669dfc78d2ae7e6cc97fcd8c0 rabbitmq-c-0.10.0.tar.gz
- sha256 94a12c906acb31a66c2c8a6c1b6e46cab52bc5694c5ada2a06d86b05d3d3f422 LICENSE-MIT
-diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
-index 63e05099d9..e059ff706c 100644
---- a/package/rabbitmq-c/rabbitmq-c.mk
-+++ b/package/rabbitmq-c/rabbitmq-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RABBITMQ_C_VERSION = 0.9.0
-+RABBITMQ_C_VERSION = 0.10.0
- RABBITMQ_C_SITE = $(call github,alanxz,rabbitmq-c,v$(RABBITMQ_C_VERSION))
- RABBITMQ_C_LICENSE = MIT
- RABBITMQ_C_LICENSE_FILES = LICENSE-MIT
+ > Reviewed-by: Joel Carlson <JoelsonCarl@gmail.com>
+ > Tested-by: Joel Carlson <JoelsonCarl@gmail.com>
+
+ > Tested to make sure it fixed the build issue on riscv64, and then used
+ > test-pkg -a to make sure all other architectures still compiled cmocka
+ > successfully.
+
+Committed to 2019.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
