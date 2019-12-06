@@ -1,31 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Dec 2019 09:21:59 +0100
-Subject: [Buildroot] [PATCH 3/3] package/jasper: Apply fix for
- CVE-2018-19540
-In-Reply-To: <20191202115934.24216-3-jubalh@iodoru.org> (Michael Vetter's
- message of "Mon, 2 Dec 2019 12:59:34 +0100")
-References: <20191202115934.24216-1-jubalh@iodoru.org>
- <20191202115934.24216-3-jubalh@iodoru.org>
-Message-ID: <87tv6dood4.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 6 Dec 2019 09:25:13 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Daniel Nystrom
+Message-ID: <20191206081655.A0E9A882B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f9eb59a88ad2d0658069edfaf4c39b48911d8abd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add 0003-test-asclen-CVE-2018-19540.patch:
- > If txtdesc->asclen is < 1, the array index of
- > txtdesc-> ascdata will be negative which causes the heap based overflow.
+<daniel.nystrom@timeterminal.se>: host ASPMX.L.GOOGLE.COM[172.217.218.26] said:
+    550-5.1.1 The email account that you tried to reach does not exist. Please
+    try 550-5.1.1 double-checking the recipient's email address for typos or
+    550-5.1.1 unnecessary spaces. Learn more at 550 5.1.1
+    https://support.google.com/mail/?p=NoSuchUser o14si10209151edi.116 - gsmtp
+    (in reply to RCPT TO command)
 
- > Patch was proposed upstream[1] but upstream is very inactive. Linux
- > distributions use the same fix to patch their packages.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
- > 1: https://github.com/mdadams/jasper/pull/198
- > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-
-Committed to 2019.02.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 95c3486286..e9546a7299 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -620,9 +620,6 @@ F:	package/log4cpp/
+ N:	Daniel Nicoletti <dantti12@gmail.com>
+ F:	package/cutelyst/
+ 
+-N:	Daniel Nystr??m <daniel.nystrom@timeterminal.se>
+-F:	package/e2tools/
+-
+ N:	Daniel Price <daniel.price@gmail.com>
+ F:	package/nodejs/
+ F:	package/redis/
