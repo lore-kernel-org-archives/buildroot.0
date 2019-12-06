@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2019 09:53:54 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/postgresql: fix
+Date: Fri, 6 Dec 2019 09:53:49 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/postgresql: fix
  minor typo
-Message-ID: <20191206084532.AB01088371@busybox.osuosl.org>
+Message-ID: <20191206084539.D165883CC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80ad08f868bcbbc528da655f677bf1ad0edcbeb4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=be5648cf76f3272e6f1ecb9cd968c8e11ea7febc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 pgsql as a tool does not exist, it's called psql
 
