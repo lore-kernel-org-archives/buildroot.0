@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Dec 2019 23:35:01 +0100
-Subject: [Buildroot] [PATCH 4/4] package/python-daphne: bump to version
- 2.4.0
-In-Reply-To: <20191205221515.3121562-4-aduskett@gmail.com>
-References: <20191205221515.3121562-1-aduskett@gmail.com>
- <20191205221515.3121562-4-aduskett@gmail.com>
-Message-ID: <20191206233501.364b40c8@windsurf.home>
+Date: Fri, 6 Dec 2019 23:35:13 +0100
+Subject: [Buildroot] [PATCH] package/pkg-python: use _CONFIGURE_OPTS for
+ build env
+In-Reply-To: <20191205231103.27778-1-ryan.barnett@rockwellcollins.com>
+References: <20191205231103.27778-1-ryan.barnett@rockwellcollins.com>
+Message-ID: <20191206233513.5f6260d7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  5 Dec 2019 14:15:15 -0800
-aduskett at gmail.com wrote:
+On Thu,  5 Dec 2019 17:11:02 -0600
+Ryan Barnett <ryan.barnett@rockwellcollins.com> wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
+> When building host or target python packages, we need to ensure that
+> the build environment utilize {HOST|TARGET}_CONFIGURE_OPTS. This
+> ensures that the correct linker and compiler environment variables are
+> set to compile utilizing either the host or target folders.
 > 
-> Other changes:
->   - Update hash for PKG-INFO due to a version bump in the file.
->   - select BR2_PACKAGE_PYTHON_TWISTED_TLS as a runtime dependency.
->   - Update 0001-remove-pytest-runner-requirement.patch to work with the new
->     version.
+> It was discovered that when compiling a host-python package, it was
+> using linking against the build machines library folder instead of the
+> host folder because LDFLAGS was not properly set and was improperly
+> detecting whether or not a shared or static library was present in the
+> host folder.
 > 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> CC: Arnout Vandecappelle <arnout@mind.be>
+> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+> 
 > ---
->  .../0001-remove-pytest-runner-requirement.patch             | 2 +-
->  package/python-daphne/Config.in                             | 1 +
->  package/python-daphne/python-daphne.hash                    | 6 +++---
->  package/python-daphne/python-daphne.mk                      | 4 ++--
->  4 files changed, 7 insertions(+), 6 deletions(-)
+> Changes v1 -> v2:
+>   - Merged HOST/TARGET_CONFIGURE_OPTS to single commit (suggested by
+>       Arnout)
+>   - Added HOST/TARGET_CONFIGURE_OPTS to env for setuptools (suggested
+>       by Arnout)
+> ---
+>  package/pkg-python.mk | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
