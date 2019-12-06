@@ -1,52 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2019 09:24:08 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/python-django:
- bump to version 2.2.6
-Message-ID: <20191206081754.E791B80469@busybox.osuosl.org>
+Date: Fri, 6 Dec 2019 09:21:07 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/jasper: Apply fix
+ for CVE-2018-19542
+Message-ID: <20191206082858.361BD8830C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ba7e57b187f7d0df8b073b981c843f2efae5585
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f0cefee9fc1f756f4ec12171662fabc1256c3544
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 27973707f794bcc1e3c2be6728e1fc6a55b40b37)
+Add 0002-check-null-in-jp2_decode.patch:
+
+Patch was proposed upstream[1] but upstream is very inactive.
+Linux distributions use the same fix to patch their packages.
+
+1: https://github.com/mdadams/jasper/pull/200
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 61703b82cdcbd32dd27e8a8f2de31dfa45e6a2b1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...2-check-null-in-jp2_decode-CVE-2018-19542.patch | 24 ++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index b89ee907d3..0e6b7b2c63 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5	b32e396c354880742d85a7628a0bdd5a  Django-2.2.4.tar.gz
--sha256	16a5d54411599780ac9dfe3b9b38f90f785c51259a584e0b24b6f14a7f69aae8  Django-2.2.4.tar.gz
-+md5	796c175a2f94e938c60d84b4565216af  Django-2.2.6.tar.gz
-+sha256	a8ca1033acac9f33995eb2209a6bf18a4681c3e5269a878e9a7e0b7384ed1ca3  Django-2.2.6.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 7dbf7a38fd..1c810b8af7 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 2.2.4
-+PYTHON_DJANGO_VERSION = 2.2.6
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/19/11/3449a2071df9427e7a5c4dddee2462e88840dd968a9b0c161097154fcb0c
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c7/2c/bbd0fddf6a08456c3100b8e8b230f3288d4511985aa4e2368b0d115b5aae
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+diff --git a/package/jasper/0002-check-null-in-jp2_decode-CVE-2018-19542.patch b/package/jasper/0002-check-null-in-jp2_decode-CVE-2018-19542.patch
+new file mode 100644
+index 0000000000..515a6162cd
+--- /dev/null
++++ b/package/jasper/0002-check-null-in-jp2_decode-CVE-2018-19542.patch
+@@ -0,0 +1,24 @@
++From fc62d1b7164ded2405fd6a0604548b34a5a77462 Mon Sep 17 00:00:00 2001
++From: Timothy Lyanguzov <timothy.lyanguzov@sap.com>
++Date: Mon, 18 Mar 2019 16:46:24 +1300
++Subject: [PATCH] Fix CVE-2018-19542: Check for NULL pointer in jp2_decode
++
++Signed-off-by: Michael Vetter <jubalh@iodoru.org>
++---
++ src/libjasper/jp2/jp2_dec.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/libjasper/jp2/jp2_dec.c b/src/libjasper/jp2/jp2_dec.c
++index 03b0eaf..a535c19 100644
++--- a/src/libjasper/jp2/jp2_dec.c
+++++ b/src/libjasper/jp2/jp2_dec.c
++@@ -388,6 +388,9 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
++ 				jas_image_setcmpttype(dec->image, newcmptno, jp2_getct(jas_image_clrspc(dec->image), 0, channo + 1));
++ 				}
++ #endif
+++			} else {
+++				jas_eprintf("error: invalid MTYP in CMAP box\n");
+++				goto error;
++ 			}
++ 		}
++ 	}
