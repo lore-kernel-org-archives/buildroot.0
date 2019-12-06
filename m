@@ -1,65 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2019 09:57:46 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/jasper: Apply fix
- for CVE-2018-19540
-Message-ID: <20191206085334.73F7981121@busybox.osuosl.org>
+Date: Fri, 6 Dec 2019 09:58:03 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/python-django:
+ security bump to version 2.2.8
+Message-ID: <20191206085334.7DDAF81121@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6958a76a81a07b87581bbb4ce2545c90b2977a48
+commit: https://git.buildroot.net/buildroot/commit/?id=3fc727fb6b215f270d1031366f0637252bc66fd3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Add 0003-test-asclen-CVE-2018-19540.patch:
-If txtdesc->asclen is < 1, the array index of
-txtdesc->ascdata will be negative which causes the heap based overflow.
+Fixes the following security vulnerabilities:
 
-Patch was proposed upstream[1] but upstream is very inactive. Linux
-distributions use the same fix to patch their packages.
+- CVE-2019-19118: Privilege escalation in the Django admin
 
-1: https://github.com/mdadams/jasper/pull/198
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Additionally, 2.2.8 (and 2.2.7) fixes a number of bugs and adds python 3.8
+support.
+
+For more details, see the release notes:
+https://docs.djangoproject.com/en/dev/releases/2.2.8/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 332a851a08153887f68c97f49c7fbdc163f24e5b)
+(cherry picked from commit 6340272e88db87a3917b69228997fcba1a9e37dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../jasper/0003-test-asclen-CVE-2018-19540.patch   | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/jasper/0003-test-asclen-CVE-2018-19540.patch b/package/jasper/0003-test-asclen-CVE-2018-19540.patch
-new file mode 100644
-index 0000000000..9401da511b
---- /dev/null
-+++ b/package/jasper/0003-test-asclen-CVE-2018-19540.patch
-@@ -0,0 +1,29 @@
-+From e38454aa1a15b78c028a778fc8bfba3587e25c25 Mon Sep 17 00:00:00 2001
-+From: Michael Vetter <jubalh@iodoru.org>
-+Date: Fri, 15 Mar 2019 11:01:02 +0100
-+Subject: [PATCH] Make sure asclen is at least 1
-+
-+If txtdesc->asclen is < 1, the array index of txtdesc->ascdata will be negative which causes the heap based overflow.
-+
-+Regards CVE-2018-19540.
-+Regards https://github.com/mdadams/jasper/issues/182 bug#3
-+Fix by Markus Koschany <apo@debian.org>.
-+From https://gist.github.com/apoleon/13598a45bf6522f6a79b77a629205823
-+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-+---
-+ src/libjasper/base/jas_icc.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/libjasper/base/jas_icc.c b/src/libjasper/base/jas_icc.c
-+index 4607930..762c0e8 100644
-+--- a/src/libjasper/base/jas_icc.c
-++++ b/src/libjasper/base/jas_icc.c
-+@@ -1104,6 +1104,8 @@ static int jas_icctxtdesc_input(jas_iccattrval_t *attrval, jas_stream_t *in,
-+ 	if (jas_stream_read(in, txtdesc->ascdata, txtdesc->asclen) !=
-+ 	  JAS_CAST(int, txtdesc->asclen))
-+ 		goto error;
-++	if (txtdesc->asclen < 1)
-++		goto error;
-+ 	txtdesc->ascdata[txtdesc->asclen - 1] = '\0';
-+ 	if (jas_iccgetuint32(in, &txtdesc->uclangcode) ||
-+ 	  jas_iccgetuint32(in, &txtdesc->uclen))
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 0e6b7b2c63..965055f47d 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	796c175a2f94e938c60d84b4565216af  Django-2.2.6.tar.gz
+-sha256	a8ca1033acac9f33995eb2209a6bf18a4681c3e5269a878e9a7e0b7384ed1ca3  Django-2.2.6.tar.gz
++md5	57d965818410a4e00e2267eef66aa9c9  Django-2.2.8.tar.gz
++sha256	a4ad4f6f9c6a4b7af7e2deec8d0cbff28501852e5010d6c2dc695d3d1fae7ca0  Django-2.2.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 1c810b8af7..d541a2c07b 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 2.2.6
++PYTHON_DJANGO_VERSION = 2.2.8
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c7/2c/bbd0fddf6a08456c3100b8e8b230f3288d4511985aa4e2368b0d115b5aae
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1c/aa/f618f346b895123be44739b276099a2b418b45b2b7afb5e1071403e8d2e9
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
