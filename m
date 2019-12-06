@@ -1,71 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2019 09:20:41 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/jasper: Apply fix
- for CVE-2018-19541
-Message-ID: <20191206081754.B2AC0882F4@busybox.osuosl.org>
+Date: Fri, 6 Dec 2019 09:24:14 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/python-django:
+ security bump to version 2.2.8
+Message-ID: <20191206081755.09C2380469@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b368f93a0200332ce6dc6ad9dabdaf486a8cc740
+commit: https://git.buildroot.net/buildroot/commit/?id=27f5ca9d60ce0874034bf46594871902016e2bef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Add 0001-verify-data-range-CVE-2018-19541.patch:
-We need to verify the data is in the expected range. Otherwise we get
-problems later.
+Fixes the following security vulnerabilities:
 
-Patch was proposed upstream[1] but upstream is very inactive. Linux
-distributions use the same fix to patch their packages.
+- CVE-2019-19118: Privilege escalation in the Django admin
 
-1: https://github.com/mdadams/jasper/pull/211
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Additionally, 2.2.8 (and 2.2.7) fixes a number of bugs and adds python 3.8
+support.
+
+For more details, see the release notes:
+https://docs.djangoproject.com/en/dev/releases/2.2.8/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fddee3cf7436bd39d08c30a83a15ee9687e88401)
+(cherry picked from commit 6340272e88db87a3917b69228997fcba1a9e37dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-verify-data-range-CVE-2018-19541.patch    | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/jasper/0001-verify-data-range-CVE-2018-19541.patch b/package/jasper/0001-verify-data-range-CVE-2018-19541.patch
-new file mode 100644
-index 0000000000..35b4299dcf
---- /dev/null
-+++ b/package/jasper/0001-verify-data-range-CVE-2018-19541.patch
-@@ -0,0 +1,35 @@
-+From 24fc4d6f01d2d4c8297d1bebec02360f796e01c2 Mon Sep 17 00:00:00 2001
-+From: Michael Vetter <jubalh@iodoru.org>
-+Date: Mon, 4 Nov 2019 18:17:44 +0100
-+Subject: [PATCH] Verify range data in jp2_pclr_getdata
-+
-+This fixes CVE-2018-19541.
-+We need to verify the data is in the expected range. Otherwise we get
-+problems later.
-+
-+This is a better fix for https://github.com/mdadams/jasper/pull/199
-+which caused segfaults under certain circumstances.
-+
-+Patch by Adam Majer <adam.majer@suse.de>
-+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-+---
-+ src/libjasper/jp2/jp2_cod.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/src/libjasper/jp2/jp2_cod.c b/src/libjasper/jp2/jp2_cod.c
-+index 890e6ad..0f8d804 100644
-+--- a/src/libjasper/jp2/jp2_cod.c
-++++ b/src/libjasper/jp2/jp2_cod.c
-+@@ -855,6 +855,12 @@ static int jp2_pclr_getdata(jp2_box_t *box, jas_stream_t *in)
-+ 	  jp2_getuint8(in, &pclr->numchans)) {
-+ 		return -1;
-+ 	}
-++
-++    // verify in range data as per I.5.3.4 - Palette box
-++    if (pclr->numchans < 1 || pclr->numlutents < 1 || pclr->numlutents > 1024) {
-++        return -1;
-++    }
-++
-+ 	lutsize = pclr->numlutents * pclr->numchans;
-+ 	if (!(pclr->lutdata = jas_alloc2(lutsize, sizeof(int_fast32_t)))) {
-+ 		return -1;
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 0e6b7b2c63..965055f47d 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	796c175a2f94e938c60d84b4565216af  Django-2.2.6.tar.gz
+-sha256	a8ca1033acac9f33995eb2209a6bf18a4681c3e5269a878e9a7e0b7384ed1ca3  Django-2.2.6.tar.gz
++md5	57d965818410a4e00e2267eef66aa9c9  Django-2.2.8.tar.gz
++sha256	a4ad4f6f9c6a4b7af7e2deec8d0cbff28501852e5010d6c2dc695d3d1fae7ca0  Django-2.2.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 1c810b8af7..d541a2c07b 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 2.2.6
++PYTHON_DJANGO_VERSION = 2.2.8
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c7/2c/bbd0fddf6a08456c3100b8e8b230f3288d4511985aa4e2368b0d115b5aae
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1c/aa/f618f346b895123be44739b276099a2b418b45b2b7afb5e1071403e8d2e9
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
