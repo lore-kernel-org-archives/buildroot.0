@@ -1,44 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Dec 2019 23:34:54 +0100
-Subject: [Buildroot] [PATCH 3/4] package/python-twisted: add config for
- HTTP2 support
-In-Reply-To: <20191205221515.3121562-3-aduskett@gmail.com>
+Date: Fri, 6 Dec 2019 23:35:01 +0100
+Subject: [Buildroot] [PATCH 4/4] package/python-daphne: bump to version
+ 2.4.0
+In-Reply-To: <20191205221515.3121562-4-aduskett@gmail.com>
 References: <20191205221515.3121562-1-aduskett@gmail.com>
- <20191205221515.3121562-3-aduskett@gmail.com>
-Message-ID: <20191206233454.6ba82bbc@windsurf.home>
+ <20191205221515.3121562-4-aduskett@gmail.com>
+Message-ID: <20191206233501.364b40c8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  5 Dec 2019 14:15:14 -0800
+On Thu,  5 Dec 2019 14:15:15 -0800
 aduskett at gmail.com wrote:
 
 > From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Add an option that selects all of the necessary python packages to ensure that
-> twisted has HTTP2 support.
+> Other changes:
+>   - Update hash for PKG-INFO due to a version bump in the file.
+>   - select BR2_PACKAGE_PYTHON_TWISTED_TLS as a runtime dependency.
+>   - Update 0001-remove-pytest-runner-requirement.patch to work with the new
+>     version.
 > 
 > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
->  package/python-twisted/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
-> index f3d94c544e..767e690e5f 100644
-> --- a/package/python-twisted/Config.in
-> +++ b/package/python-twisted/Config.in
-> @@ -15,6 +15,11 @@ config BR2_PACKAGE_PYTHON_TWISTED
->  
->  if BR2_PACKAGE_PYTHON_TWISTED
->  
-> +config BR2_PACKAGE_PYTHON_TWISTED_HTTP2
-> +	bool "HTTP2 support"
-> +	select BR2_PACKAGE_PYTHON_PRIORITY # runtime
-> +	select BR2_PACKAGE_PYTHON_H2 # runtime
+>  .../0001-remove-pytest-runner-requirement.patch             | 2 +-
+>  package/python-daphne/Config.in                             | 1 +
+>  package/python-daphne/python-daphne.hash                    | 6 +++---
+>  package/python-daphne/python-daphne.mk                      | 4 ++--
+>  4 files changed, 7 insertions(+), 6 deletions(-)
 
-Alphabetic ordering was not correct, so I fixed that and applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
