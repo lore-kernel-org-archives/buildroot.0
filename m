@@ -1,39 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Dec 2019 23:20:45 +0100
-Subject: [Buildroot] [git commit] package/python-twisted: add config for
- HTTP2 support
-Message-ID: <20191206222413.C0905884C6@busybox.osuosl.org>
+Date: Fri, 6 Dec 2019 23:32:30 +0100
+Subject: [Buildroot] [git commit] package/python-daphne: bump to version
+ 2.4.0
+Message-ID: <20191206222413.D1B6B884B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6dce8f59df2912a32ec5066aec2fa2f5b272cbd
+commit: https://git.buildroot.net/buildroot/commit/?id=ee62fad783ca680ea617222bc9bc26d7c058afb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an option that selects all of the necessary python packages to
-ensure that twisted has HTTP2 support.
+Other changes:
+  - Update hash for PKG-INFO due to a version bump in the file.
+  - select BR2_PACKAGE_PYTHON_TWISTED_TLS as a runtime dependency.
+  - Update 0001-remove-pytest-runner-requirement.patch to work with the new
+    version.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-twisted/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/python-daphne/0001-remove-pytest-runner-requirement.patch | 2 +-
+ package/python-daphne/Config.in                                   | 1 +
+ package/python-daphne/python-daphne.hash                          | 6 +++---
+ package/python-daphne/python-daphne.mk                            | 4 ++--
+ 4 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
-index 805f1bc5d6..4e24a3f71a 100644
---- a/package/python-twisted/Config.in
-+++ b/package/python-twisted/Config.in
-@@ -15,6 +15,11 @@ config BR2_PACKAGE_PYTHON_TWISTED
+diff --git a/package/python-daphne/0001-remove-pytest-runner-requirement.patch b/package/python-daphne/0001-remove-pytest-runner-requirement.patch
+index c471d60e8c..30acf201d6 100644
+--- a/package/python-daphne/0001-remove-pytest-runner-requirement.patch
++++ b/package/python-daphne/0001-remove-pytest-runner-requirement.patch
+@@ -17,7 +17,7 @@ index 64e94f1..4e3abb0 100755
+ @@ -23,7 +23,6 @@ setup(
+      packages=find_packages() + ["twisted.plugins"],
+      include_package_data=True,
+-     install_requires=["twisted>=18.7", "autobahn>=0.18", "asgiref~=3.0"],
++     install_requires=["twisted[tls]>=18.7", "autobahn>=0.18", "asgiref~=3.2"],
+ -    setup_requires=["pytest-runner"],
+      extras_require={
+          "tests": ["hypothesis~=3.88", "pytest~=3.10", "pytest-asyncio~=0.8"]
+diff --git a/package/python-daphne/Config.in b/package/python-daphne/Config.in
+index 896bcfe421..601b2e1db8 100644
+--- a/package/python-daphne/Config.in
++++ b/package/python-daphne/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_DAPHNE
+ 	select BR2_PACKAGE_PYTHON_ASGIREF # runtime
+ 	select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
+ 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
++	select BR2_PACKAGE_PYTHON_TWISTED_TLS # runtime
+ 	help
+ 	  Daphne is a HTTP, HTTP2 and WebSocket protocol server for
+ 	  ASGI and ASGI-HTTP, developed to power Django Channels.
+diff --git a/package/python-daphne/python-daphne.hash b/package/python-daphne/python-daphne.hash
+index 71439a77e1..17c13e12c1 100644
+--- a/package/python-daphne/python-daphne.hash
++++ b/package/python-daphne/python-daphne.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/daphne/json
+-md5	cac7352d0ebdde4f0cc245ae0b0682f8  daphne-2.3.0.tar.gz
+-sha256	2329b7a74b5559f7ea012879c10ba945c3a53df7d8d2b5932a904e3b4c9abcc2  daphne-2.3.0.tar.gz
++md5	1e8c391395ade46abe8cca84e3a9746a  daphne-2.4.0.tar.gz
++sha256	5af4d83c8ecf11a4d8ed65ced02d8336d52d90d213dfcd184d07222d36da433c  daphne-2.4.0.tar.gz
+ # Locally computed sha256
+-sha256 55d7d6117493d69de1c7c211b947b910a715030366f1b636d28cf6891dfc1f3d PKG-INFO
++sha256 d0916b2b91afac6090fc01501e895a3cea81141d4b10c702db9e0a057ca5a563 PKG-INFO
+diff --git a/package/python-daphne/python-daphne.mk b/package/python-daphne/python-daphne.mk
+index 278bfec29f..3d625c85ec 100644
+--- a/package/python-daphne/python-daphne.mk
++++ b/package/python-daphne/python-daphne.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_PYTHON_TWISTED
- 
-+config BR2_PACKAGE_PYTHON_TWISTED_HTTP2
-+	bool "HTTP2 support"
-+	select BR2_PACKAGE_PYTHON_H2 # runtime
-+	select BR2_PACKAGE_PYTHON_PRIORITY # runtime
-+
- config BR2_PACKAGE_PYTHON_TWISTED_TLS
- 	bool "TLS support"
- 	depends on BR2_INSTALL_LIBSTDCPP # python-{pyopenssl,service-identity}
+-PYTHON_DAPHNE_VERSION = 2.3.0
++PYTHON_DAPHNE_VERSION = 2.4.0
+ PYTHON_DAPHNE_SOURCE = daphne-$(PYTHON_DAPHNE_VERSION).tar.gz
+-PYTHON_DAPHNE_SITE = https://files.pythonhosted.org/packages/7b/f1/994f55248e27059e160f9d07bf5d325a9891b99daf1eb775a14110e91e5b
++PYTHON_DAPHNE_SITE = https://files.pythonhosted.org/packages/c6/66/05ace288000d323831a9fab1e68a5625b117b7c8aca408404d33330f3906
+ PYTHON_DAPHNE_SETUP_TYPE = setuptools
+ # https://github.com/django/daphne/blob/master/LICENSE
+ PYTHON_DAPHNE_LICENSE = BSD-3-Clause
