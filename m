@@ -1,30 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Dec 2019 09:58:57 +0100
-Subject: [Buildroot] [PATCH 1/3] package/jasper: Apply fix for
- CVE-2018-19541
-In-Reply-To: <20191202115934.24216-1-jubalh@iodoru.org> (Michael Vetter's
- message of "Mon, 2 Dec 2019 12:59:32 +0100")
-References: <20191202115934.24216-1-jubalh@iodoru.org>
-Message-ID: <87zhg5n832.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Dec 2019 09:59:16 +0100
+Subject: [Buildroot] [PATCH] package/python-django: security bump to
+ version 2.2.8
+In-Reply-To: <20191202122354.1700-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 2 Dec 2019 13:23:54 +0100")
+References: <20191202122354.1700-1-peter@korsgaard.com>
+Message-ID: <87v9qtn82j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Add 0001-verify-data-range-CVE-2018-19541.patch:
- > We need to verify the data is in the expected range. Otherwise we get
- > problems later.
+ > Fixes the following security vulnerabilities:
+ > - CVE-2019-19118: Privilege escalation in the Django admin
 
- > Patch was proposed upstream[1] but upstream is very inactive. Linux
- > distributions use the same fix to patch their packages.
+ > Additionally, 2.2.8 (and 2.2.7) fixes a number of bugs and adds python 3.8
+ > support.
 
- > 1: https://github.com/mdadams/jasper/pull/211
- > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+ > For more details, see the release notes:
+ > https://docs.djangoproject.com/en/dev/releases/2.2.8/
 
-Committed all 3 to 2019.11.x as well, thanks.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2019.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
