@@ -1,45 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Dec 2019 12:07:31 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/rauc: select
- fw_printenv for uboot based systems
-Message-ID: <20191207110229.B9DAA88438@busybox.osuosl.org>
+Date: Sat, 7 Dec 2019 12:06:41 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/python-brotli:
+ fix build failure due to gcc bug 68485
+Message-ID: <20191207110229.B127788436@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9dc8cf5c760ef17fa5c731f9f2c1165d219e697
+commit: https://git.buildroot.net/buildroot/commit/?id=1353e0cb4ae5feff4bc1cc7ac79dd1b74a9aa228
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-When operating on a uboot based system, rauc interacts with
-the bootloader environment using fw_printenv and fw_setenv [1].
+The python-brotli package exhibits gcc bug 68485 when built for the
+Microblaze architecture with optimization enabled, which causes a build
+failure.
 
-These commands should therefore be present on the target if
-the system being built uses uboot.
+As done for other packages in Buildroot work around this gcc bug by
+setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
 
-[1] See:
-https://github.com/rauc/rauc/blob/v1.2/src/bootchooser.c#L21-L22
-https://github.com/rauc/rauc/blob/v1.2/src/bootchooser.c#L644-L645
+Fixes:
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+http://autobuild.buildroot.net/results/24b/24b23175ab27615fb377bb4d5f6c656dccf10a86/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ccf67ebe3b93bf659e64e4e933f2e0bac148a141)
+(cherry picked from commit dec2e0449d50d71219b4d94bc5547cce50a85163)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rauc/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-brotli/python-brotli.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/rauc/Config.in b/package/rauc/Config.in
-index 4a1516a595..676ff42b51 100644
---- a/package/rauc/Config.in
-+++ b/package/rauc/Config.in
-@@ -7,6 +7,8 @@ config BR2_PACKAGE_RAUC
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_SQUASHFS # run-time dependency
-+	select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # run-time dependency
-+	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT
- 	help
- 	  RAUC is the Robust Auto-Update Controller developed by
- 	  Pengutronix. It supports updating embedded Linux
+diff --git a/package/python-brotli/python-brotli.mk b/package/python-brotli/python-brotli.mk
+index 745255f413..2ec549ed0c 100644
+--- a/package/python-brotli/python-brotli.mk
++++ b/package/python-brotli/python-brotli.mk
+@@ -11,6 +11,14 @@ PYTHON_BROTLI_SETUP_TYPE = setuptools
+ PYTHON_BROTLI_LICENSE = MIT
+ PYTHON_BROTLI_LICENSE_FILES = LICENSE
+ 
++PYTHON_BROTLI_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++PYTHON_BROTLI_CFLAGS += -O0
++endif
++
++PYTHON_BROTLI_ENV = CFLAGS="$(PYTHON_BROTLI_CFLAGS)"
++
+ define PYTHON_BROTLI_EXTRACT_CMDS
+ 	$(UNZIP) -d $(@D) $(PYTHON_BROTLI_DL_DIR)/$(PYTHON_BROTLI_SOURCE)
+ 	mv $(@D)/Brotli-$(PYTHON_BROTLI_VERSION)/* $(@D)
