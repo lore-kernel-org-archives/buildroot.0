@@ -1,54 +1,145 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Dec 2019 14:12:17 +0100
-Subject: [Buildroot] [PATCH 1/3] package/bubblewrap: new package
-In-Reply-To: <20191206012259.GB1574913@momiji> (Adrian Perez de Castro's
- message of "Fri, 6 Dec 2019 01:22:59 +0200")
-References: <20190920153106.2274596-1-aperez@igalia.com>
- <20190920153106.2274596-2-aperez@igalia.com>
- <87pnh6puhv.fsf@dell.be.48ers.dk> <20191206012259.GB1574913@momiji>
-Message-ID: <87o8wkl1ou.fsf@dell.be.48ers.dk>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Sat, 7 Dec 2019 14:28:21 +0100
+Subject: [Buildroot] [PATCH v2 8/9] package/network-manager: adapt to
+ preset-all
+In-Reply-To: <05e9a453-9df0-8ad8-8797-5fb25816642c@mind.be>
+References: <20191111172443.6874-1-jeremy.rosen@smile.fr>
+ <20191111172443.6874-9-jeremy.rosen@smile.fr>
+ <20191205130151.GI2539@scaer> <05e9a453-9df0-8ad8-8797-5fb25816642c@mind.be>
+Message-ID: <CAFvCimX9jzqLZ6mKtZ2=Q3JFApjQU0EWkQ+kOT1fBNauXsjkGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+the alias to nm-dispatcher is provided by upstream and is available in BR.
 
-Hi,
+The alias there is a question
+is dbus-org.freedesktop.NetworkManager.service.
+That one is not in debian, but it is in RH. I'll leave it to be safe...
 
- >> Committed with these fixes, thanks.
+Le jeu. 5 d?c. 2019 ? 23:29, Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
- > \o/
+>
+>
+> On 05/12/2019 14:01, Yann E. MORIN wrote:
+> > J?r?my, Nathaniel, All,
+> >
+> > On 2019-11-11 18:24 +0100, J?r?my Rosen spake thusly:
+> >> NM has three services
+> >> * NetworkManger.service : the main daemon
+> >> * NetworkManger-dispatcher.service : a daemon handling network callbacks
+> >> * NetworkManager-wait-online.service : sync of other services with
+> network-online
+> >>
+> >> Only the first two were activated. We now also enable
+> >> wait-online. Not enabling it was probably a bug.
+> >>
+> >> Note that buildroot adds an alias dbus-org.freedesktop.NetworkManager
+> >> Adding an alias that is not known upstream is not clean,
+> >> but I left it for backward compatibility
+> >
+> > Nathaniel, do you remember why you added that alias back in the day?
+> > (yes, it's been 5 years now...)
+> >
+> > I was not able to find any conlusive explanations with a cursory
+> > duckduckgo search...
+>
+>  My Fedora 30 has this symlink as well. I couldn't trace what generates it
+> though.
+>
+> $ ls -l /etc/systemd/system/dbus-org.*
+> lrwxrwxrwx. 1 root root 41 Oct 25  2018
+> /etc/systemd/system/dbus-org.bluez.service ->
+> /usr/lib/systemd/system/bluetooth.service
+> lrwxrwxrwx. 1 root root 41 Oct 25  2018
+> /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service ->
+> /usr/lib/systemd/system/firewalld.service
+> lrwxrwxrwx. 1 root root 44 Oct 25  2018
+> /etc/systemd/system/dbus-org.freedesktop.Avahi.service ->
+> /usr/lib/systemd/system/avahi-daemon.service
+> lrwxrwxrwx. 1 root root 44 Oct 25  2018
+> /etc/systemd/system/dbus-org.freedesktop.ModemManager1.service ->
+> /usr/lib/systemd/system/ModemManager.service
+> lrwxrwxrwx. 1 root root 46 Oct 25  2018
+> /etc/systemd/system/dbus-org.freedesktop.NetworkManager.service ->
+> /usr/lib/systemd/system/NetworkManager.service
+> lrwxrwxrwx. 1 root root 57 Oct 25  2018
+> /etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service ->
+> /usr/lib/systemd/system/NetworkManager-dispatcher.service
+> lrwxrwxrwx. 1 root root 41 Oct 25  2018
+> /etc/systemd/system/dbus-org.freedesktop.timedate1.service ->
+> /usr/lib/systemd/system/timedatex.service
+>
+>  Regards,
+>  Arnout
+>
+> >
+> > Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> >> ---
+> >>  package/network-manager/network-manager.mk | 7 -------
+> >>  1 file changed, 7 deletions(-)
+> >>
+> >> diff --git a/package/network-manager/network-manager.mk
+> b/package/network-manager/network-manager.mk
+> >> index e913d69927..9ec205cc04 100644
+> >> --- a/package/network-manager/network-manager.mk
+> >> +++ b/package/network-manager/network-manager.mk
+> >> @@ -88,16 +88,9 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSV
+> >>  endef
+> >>
+> >>  define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
+> >> -    mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> >> -
+> >>      ln -sf /usr/lib/systemd/system/NetworkManager.service \
+> >>
+> $(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
+> >>
+> >> -    ln -sf /usr/lib/systemd/system/NetworkManager.service \
+> >> -
+> $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager.service
+> >> -
+> >> -    ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
+> >> -
+> $(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+> >>  endef
+> >>
+> >>  $(eval $(autotools-package))
+> >> --
+> >> 2.24.0.rc1
+> >>
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at busybox.net
+> >> http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+>
 
-;)
-
- > I will post a follow patch updating to version 0.4.0 when I manage to get a
- > little bit of spare time, so we can support the package on Musl as well.
-
-Great, thanks.
-
-
- >> I wonder what kernel namespacing options are required and/or
- >> recommended? For required options we should add logic in linux/linux.mk
- >> to enable them, and for optional/recommended options it would be good to
- >> mention them in the help text.
-
- > Mount namespaces are mandatory (I think those cannot be disabled in the kernel
- > config, I'll have to check to be sure), while User, IPC, PID, Network, and UTS
- > namespaces are optional.
-
-Ok. Perhaps we should mention something about that in the help text?
-
-
- > Side note: If User namespaces are enabled in the kernel, we could
- > avoid installing the ?bwrap? binary setuid root, is this something
- > desirable?
-
-I believe so, but there is no simple way to detect that at build time,
-so the only thing we can do is to add a sub option to install the bwrap
-binary suid or not (default to y) with a help text describing the user
-namespace dependency.
 
 -- 
-Bye, Peter Korsgaard
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191207/0e442066/attachment.html>
