@@ -1,33 +1,40 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  7 Dec 2019 22:27:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ytree: fix license
-Message-ID: <20191207212720.1301402-1-fontaine.fabrice@gmail.com>
+Date: Sat,  7 Dec 2019 22:36:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/zlog: bump to version 1.2.14
+Message-ID: <20191207213637.1303652-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-License is GPL-2.0+ not GPL-2.0 as specified in files that contain
-license information: tilde.{h,c} and xmalloc.{h,c}
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ytree/ytree.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/zlog/zlog.hash | 2 +-
+ package/zlog/zlog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ytree/ytree.mk b/package/ytree/ytree.mk
-index d9716f93ba..379be1e8e0 100644
---- a/package/ytree/ytree.mk
-+++ b/package/ytree/ytree.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/zlog/zlog.hash b/package/zlog/zlog.hash
+index 699f75c38e..b9f254056b 100644
+--- a/package/zlog/zlog.hash
++++ b/package/zlog/zlog.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 b150ff725e5f9e839f41c0f3d2e8f0e3cc303aa51194be0bc34a3c3299acc059 zlog-ccf8c36e918d6f3c7e6fe9e36eedf8583014c5c9.tar.gz
++sha256 05a6533e32f313eeaf134a761481a5cbc586c5dc85ba9ee6771c7458daaeb031 zlog-1.2.14.tar.gz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
+diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
+index fedce12cbb..d9aeae7c7f 100644
+--- a/package/zlog/zlog.mk
++++ b/package/zlog/zlog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- YTREE_VERSION = 1.99pl2
- YTREE_SITE = https://www.han.de/~werner
--YTREE_LICENSE = GPL-2.0
-+YTREE_LICENSE = GPL-2.0+
- YTREE_LICENSE_FILES = COPYING
- YTREE_DEPENDENCIES = ncurses
- 
+-ZLOG_VERSION = ccf8c36e918d6f3c7e6fe9e36eedf8583014c5c9
++ZLOG_VERSION = 1.2.14
+ ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
+ ZLOG_LICENSE = LGPL-2.1
+ ZLOG_LICENSE_FILES = COPYING
 -- 
 2.24.0
