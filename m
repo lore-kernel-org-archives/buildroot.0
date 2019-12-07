@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Dec 2019 12:12:50 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: remove Daniel
+Date: Sat, 7 Dec 2019 12:12:55 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] DEVELOPERS: remove Daniel
  Nystrom
-Message-ID: <20191207110724.5E7F28852A@busybox.osuosl.org>
+Message-ID: <20191207110728.DBB658853A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d64409f391d297ae957bdd7f9fcafcdf33c224d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fa96726ef07ec2e80fe987557ce06480240fe393
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 <daniel.nystrom@timeterminal.se>: host ASPMX.L.GOOGLE.COM[172.217.218.26] said:
     550-5.1.1 The email account that you tried to reach does not exist. Please
@@ -27,10 +27,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 3 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3c08eb0434..58adad5c16 100644
+index a44c95d043..a641f6cdf2 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -557,9 +557,6 @@ F:	package/log4cpp/
+@@ -593,9 +593,6 @@ F:	package/log4cpp/
  N:	Daniel Nicoletti <dantti12@gmail.com>
  F:	package/cutelyst/
  
