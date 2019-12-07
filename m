@@ -1,51 +1,42 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Sat,  7 Dec 2019 19:00:46 +0100
-Subject: [Buildroot] [PATCH v3 10/13] package/sysrepo: update to new systemd
+Date: Sat,  7 Dec 2019 19:00:48 +0100
+Subject: [Buildroot] [PATCH v3 12/13] package/rauc: add a WantedBy section
+ to the unit
 In-Reply-To: <20191207180049.3245578-1-jeremy.rosen@smile.fr>
 References: <20191207180049.3245578-1-jeremy.rosen@smile.fr>
-Message-ID: <20191207180049.3245578-11-jeremy.rosen@smile.fr>
+Message-ID: <20191207180049.3245578-13-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sysrepo provides it's own services so just remove the section
+upstream-provided service has no WantedBy, which means that rauc won't
+be enabled by default
 
-Also fix sysrepo not installing the files in the correct directory
+Add a WantedBy instead of manually creating the symlink so the user can
+enable/disable the unit properly
 
 Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 ---
- package/sysrepo/sysrepo.mk | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ package/rauc/rauc.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 8676158a19..c9c9ad2ddc 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
-@@ -24,7 +24,7 @@ SYSREPO_CONF_OPTS = \
- 	-DCALL_SYSREPOCFG_BIN=$(HOST_DIR)/bin/sysrepocfg \
- 	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_SYSREPO_EXAMPLES),ON,OFF) \
- 	$(if $(BR2_INIT_SYSTEMD),-DWITH_SYSTEMD=ON) \
--	$(if $(BR2_INIT_SYSTEMD),-DSYSTEMD_UNIT_DIR=usr/lib/systemd/system)
-+	$(if $(BR2_INIT_SYSTEMD),-DSYSTEMD_UNIT_DIR=/usr/lib/systemd/system)
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index f3434e9c9a..7b35154f56 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -31,9 +31,8 @@ RAUC_DEPENDENCIES += systemd
+ endif
  
- # On ARM, this is needed to prevent unaligned memory access with an optimized
- # build .. https://github.com/sysrepo/sysrepo/issues/947
-@@ -41,14 +41,6 @@ define SYSREPO_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S51sysrepo-plugind
+ define RAUC_INSTALL_INIT_SYSTEMD
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -sf ../../../../lib/systemd/system/rauc.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rauc.service
++	mkdir $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d;\
++	printf '[Install]\nWantedBy=multi-user.target\n' > $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d/buildroot-enable.conf;
  endef
  
--define SYSREPO_INSTALL_INIT_SYSTEMD
--	mkdir -p $(TARGET_DIR)/etc/systemd/systemd/multi-user.target.wants
--	ln -fs ../../../../usr/lib/systemd/system/sysrepod.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -fs ../../../../usr/lib/systemd/system/sysrepo-plugind.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--endef
--
- HOST_SYSREPO_CONF_OPTS = \
- 	-DGEN_PYTHON2_TESTS=OFF \
- 	-DENABLE_TESTS=OFF \
+ HOST_RAUC_DEPENDENCIES = \
 -- 
 2.24.0
