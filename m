@@ -1,51 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Dec 2019 11:56:10 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/pkg-kconfig: fix
- reconfigure for kconfig packages
-Message-ID: <20191207110236.D4CF1884B6@busybox.osuosl.org>
+Date: Sat, 7 Dec 2019 12:08:18 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/rauc: select
+ fw_printenv for uboot based systems
+Message-ID: <20191207110236.DE57F884B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38932bac776abd23f3c7bcbe56b8956c1da11ddb
+commit: https://git.buildroot.net/buildroot/commit/?id=77b267d946c4851b55fc8b1044fa7f063b816298
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-Commit 4b81badbcc0b25678ac6627548160702731cf393
+When operating on a uboot based system, rauc interacts with
+the bootloader environment using fw_printenv and fw_setenv [1].
 
-    Currently, calling foo-reconfigure for a kconfig-based package will not
-    re-trigger the configuration (kconfig-wise) step for the package.
+These commands should therefore be present on the target if
+the system being built uses uboot.
 
-was supposed to solve this problem and lately we had
+[1] See:
+https://github.com/rauc/rauc/blob/v1.2/src/bootchooser.c#L21-L22
+https://github.com/rauc/rauc/blob/v1.2/src/bootchooser.c#L644-L645
 
-Commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f
-
-    infra/pkg-kconfig: do not rely on package's .config as a timestamp
-
-that introduced the .stamp_dotconfig file.
-
-For this reason, to trigger a kconfig package reconfigure is now
-necessary to remove the .stamp_dotconfig file.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d1f1947af12fc47933c7ea8fa90fc40d423affd2)
+(cherry picked from commit ccf67ebe3b93bf659e64e4e933f2e0bac148a141)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-kconfig.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rauc/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 86d7c14fdb..f1931b87c6 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -175,7 +175,7 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
- $(1)-clean-for-reconfigure: $(1)-clean-kconfig-for-reconfigure
- 
- $(1)-clean-kconfig-for-reconfigure:
--	rm -f $$($(2)_DIR)/.stamp_kconfig_fixup_done
-+	rm -f $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
- 
- # Only enable the foo-*config targets when the package is actually enabled.
- # Note: the variable $(2)_KCONFIG_VAR is not related to the kconfig
+diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+index 456f8f382c..5091dc72a5 100644
+--- a/package/rauc/Config.in
++++ b/package/rauc/Config.in
+@@ -7,6 +7,8 @@ config BR2_PACKAGE_RAUC
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_DBUS # run-time dependency
+ 	select BR2_PACKAGE_SQUASHFS # run-time dependency
++	select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # run-time dependency
++	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT
+ 	help
+ 	  RAUC is the Robust Auto-Update Controller developed by
+ 	  Pengutronix. It supports updating embedded Linux
