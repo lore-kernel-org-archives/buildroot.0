@@ -1,50 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Dec 2019 12:14:29 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/mosquitto: bump
- to v1.6.8
-Message-ID: <20191207110737.ECC4D8855A@busybox.osuosl.org>
+Date: Sat, 7 Dec 2019 12:12:59 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] DEVELOPERS: remove Daniel
+ Nystrom
+Message-ID: <20191207110737.E12178855A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df3c60e9f7332d133ed15c2bbebbc44273a39f51
+commit: https://git.buildroot.net/buildroot/commit/?id=b5c78f42e4be5a3fde288680c1d8971213c97f85
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-This is a bugfix release, see:
-https://mosquitto.org/blog/2019/11/version-1-6-8-released/
+<daniel.nystrom@timeterminal.se>: host ASPMX.L.GOOGLE.COM[172.217.218.26] said:
+    550-5.1.1 The email account that you tried to reach does not exist. Please
+    try 550-5.1.1 double-checking the recipient's email address for typos or
+    550-5.1.1 unnecessary spaces. Learn more at 550 5.1.1
+    https://support.google.com/mail/?p=NoSuchUser o14si10209151edi.116 - gsmtp
+    (in reply to RCPT TO command)
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b4a848e4f4418918eaa5402ff8403535d439c77f)
+(cherry picked from commit f9eb59a88ad2d0658069edfaf4c39b48911d8abd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 14975d1fb3..ba7fd3c03c 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 bcd31a8fbbd053fee328986fadd8666d3058357ded56b9782f7d4f19931d178e  mosquitto-1.6.7.tar.gz
-+sha256 7df23c81ca37f0e070574fe74414403cf25183016433d07add6134366fb45df6  mosquitto-1.6.8.tar.gz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4adaac0c3d..5c80a21af7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -610,9 +610,6 @@ F:	package/log4cpp/
+ N:	Daniel Nicoletti <dantti12@gmail.com>
+ F:	package/cutelyst/
  
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 533d44a088..d0ffffd1d6 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.6.7
-+MOSQUITTO_VERSION = 1.6.8
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-N:	Daniel Nystr??m <daniel.nystrom@timeterminal.se>
+-F:	package/e2tools/
+-
+ N:	Daniel Price <daniel.price@gmail.com>
+ F:	package/nodejs/
+ F:	package/redis/
