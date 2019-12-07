@@ -1,42 +1,43 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Sat,  7 Dec 2019 19:00:48 +0100
-Subject: [Buildroot] [PATCH v3 12/13] package/rauc: add a WantedBy section
- to the unit
+Date: Sat,  7 Dec 2019 19:00:49 +0100
+Subject: [Buildroot] [PATCH v3 13/13] package/alsa-utils: add a WantedBy
+ section to the unit
 In-Reply-To: <20191207180049.3245578-1-jeremy.rosen@smile.fr>
 References: <20191207180049.3245578-1-jeremy.rosen@smile.fr>
-Message-ID: <20191207180049.3245578-13-jeremy.rosen@smile.fr>
+Message-ID: <20191207180049.3245578-14-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-upstream-provided service has no WantedBy, which means that rauc won't
-be enabled by default
-
-Add a WantedBy instead of manually creating the symlink so the user can
-enable/disable the unit properly
+This allows the user to enable/disable manually the unit.
+It is enabled by default
 
 Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 ---
- package/rauc/rauc.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/alsa-utils/alsa-utils.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index f3434e9c9a..7b35154f56 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -31,9 +31,8 @@ RAUC_DEPENDENCIES += systemd
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 47f07bf7a2..d06af231bf 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -90,11 +90,10 @@ define ALSA_UTILS_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service
+ 	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-state.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/sound.target.wants
+-	ln -sf ../../../../lib/systemd/system/alsa-restore.service \
+-		$(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-restore.service
+-	ln -sf ../../../../lib/systemd/system/alsa-state.service \
+-		$(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-state.service
++	mkdir $(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service.d;\
++	printf '[Install]\nWantedBy=multi-user.target\n' > $(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service.d/buildroot-enable.conf;\
++	mkdir $(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service.d;\
++	printf '[Install]\nWantedBy=multi-user.target\n' > $(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service.d/buildroot-enable.conf;
+ endef
  endif
  
- define RAUC_INSTALL_INIT_SYSTEMD
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../../lib/systemd/system/rauc.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rauc.service
-+	mkdir $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d;\
-+	printf '[Install]\nWantedBy=multi-user.target\n' > $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d/buildroot-enable.conf;
- endef
- 
- HOST_RAUC_DEPENDENCIES = \
 -- 
 2.24.0
