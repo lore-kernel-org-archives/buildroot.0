@@ -1,113 +1,111 @@
 From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Sat, 7 Dec 2019 12:40:49 +0100
-Subject: [Buildroot] [PATCH v2 2/9] use host-systemctl preset all to
- enable units
-In-Reply-To: <CAFvCimVWuAkUD5uuoqvdgGjAob51BuVvaPNQm7yJAr9A9-P2XA@mail.gmail.com>
+Date: Sat, 7 Dec 2019 13:19:45 +0100
+Subject: [Buildroot] [PATCH v2 6/9] package/connman: adapt to preset-all
+In-Reply-To: <20191205125722.GG2539@scaer>
 References: <20191111172443.6874-1-jeremy.rosen@smile.fr>
- <20191111172443.6874-3-jeremy.rosen@smile.fr>
- <20191205130743.GK2539@scaer>
- <CAFvCimVWuAkUD5uuoqvdgGjAob51BuVvaPNQm7yJAr9A9-P2XA@mail.gmail.com>
-Message-ID: <CAFvCimXJqBdonTjMpfFxAZtwwzCeZKYkuxPDPLFunoF6tmLDRg@mail.gmail.com>
+ <20191111172443.6874-7-jeremy.rosen@smile.fr>
+ <20191205125722.GG2539@scaer>
+Message-ID: <CAFvCimUSuA9DfMmJ2A9Uk1wBCfdJF7zta1-bRgf=XYOs+mg_Og@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-to be a bit more precise : I'll fix the lines I touch in all recipes, I
-just don't want to expand beyond that
+The network-online is a bit complicated...
 
-Le sam. 7 d?c. 2019 ? 12:39, J?r?my ROSEN <jeremy.rosen@smile.fr> a ?crit :
+* network-managers provide XXX-wait-online.service
+   * block until "the network is up" (whatever that means for that
+particular NM)
+   * WantedBy= and Before= network-online.target
+* systemd provides network-online.target, which is thus always available,
+but not started as part of the boot process
+* any daemon that wants to be started after the network is up has Wants=
+and After= network-online.target
 
-> Are you sure you want me to do that ?
+So, technically, with systemd the network is not configured at boot time.
+It is configured before we start a
+daemon that needs the network.
+
+Now, if no NM provide any XXX-wait-online.service, network-online.target
+will be started right away, it will not
+wait for the network to be up and the dependant services too early.
+
+This is consistent with the network-online.target semantic which is "the
+point during the boot where either the
+network is up or the network has failed"
+If there is no NM at all, there is no network, so network-online triggers
+immediately.
+
+Le jeu. 5 d?c. 2019 ? 13:57, Yann E. MORIN <yann.morin.1998@free.fr> a
+?crit :
+
+> J?r?my, All,
 >
-> I mean... I'll use SYSTEMD_PKGDIR in the systemd recipe, but for all the
-> others I rather leave the
-> code as it was previously. Yes it's cleaner but it's an independent fix (I
-> don't touch those lines in
-> the first place)
+> On 2019-11-11 18:24 +0100, J?r?my Rosen spake thusly:
+> > connman has two services
+> > * connman.service which is the real daemon
+> > * connman-wait-online.service which is a sync point for
+> network-online.target
+> >
+> > Only the first one was enabled. This adaptation enables both.
+> >
+> > Not enabling connman-wait-online.service is probably a bug
 >
-> the general replacement packages/xxx => XXX_PKGDIR is also needed in other
-> places in these recipes
-> that have nothing to do with systemd, so it would be a half fix at best.
+> If that was not installed so far, what would provide for the
+> network-online.target instead? Or was that target always satisfied?
 >
-> Moreover, those are tricky to test since it means compiling in lots of
-> packages.
+> BTW, you forgot your SoB line too.
 >
-> I'd rather keep this cleanup as a separate thing, it's probably better
-> done with some sort of automated tool
+> Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 >
-> Le jeu. 5 d?c. 2019 ? 14:07, Yann E. MORIN <yann.morin.1998@free.fr> a
-> ?crit :
+> Regards,
+> Yann E. MORIN.
 >
->> J?r?my, All,
->>
->> An additional comment, see below...
->>
->> On 2019-11-11 18:24 +0100, J?r?my Rosen spake thusly:
->> > since v234 upstream recommands using systemctl preset-all to enable
->> units.
->> [--SNIP--]
->> > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
->> > index d1db60b5ef..dc2ed80e7d 100644
->> > --- a/package/systemd/systemd.mk
->> > +++ b/package/systemd/systemd.mk
->> [--SNIP--]
->> > -define SYSTEMD_INSTALL_SERVICE_BOOT_CHECK
->> > -     mkdir -p
->> $(TARGET_DIR)/etc/systemd/system/boot-complete.target.requires
->> > -     ln -sf
->> ../../../../lib/systemd/system/systemd-boot-check-no-failures.service \
->> > -
->>  $(TARGET_DIR)/etc/systemd/system/boot-complete.target.requires/systemd-boot-check-no-failures.service
->> > +define SYSTEMD_INSTALL_PRESET
->> > +     $(INSTALL) -D -m 644 package/systemd/80-buildroot.preset
->> $(TARGET_DIR)/usr/lib/systemd/system-preset/80-buildroot.preset
->>
->> We have a variable that refers to the directory of the package:
->>     $(INSTALL) -D -m 644 $(SYSTEMD_PKGDIR)/80-buildroot.preset [...]
->>
->> Note that this comment is applicable to other patches in your series (at
->> least the wpasuplicant one, for example).
->>
->> Regards,
->> Yann E. MORIN.
->>
->> --
->>
->> .-----------------.--------------------.------------------.--------------------.
->> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
->> conspiracy: |
->> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->>      |
->> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There
->> is no  |
->> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->>  conspiracy.  |
->>
->> '------------------------------^-------^------------------^--------------------'
->>
->
+> > ---
+> >  package/connman/connman.mk | 6 ------
+> >  1 file changed, 6 deletions(-)
+> >
+> > diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+> > index 839bc7a0e2..d70eb1ac82 100644
+> > --- a/package/connman/connman.mk
+> > +++ b/package/connman/connman.mk
+> > @@ -32,12 +32,6 @@ define CONNMAN_INSTALL_INIT_SYSV
+> >       $(INSTALL) -m 0755 -D package/connman/S45connman
+> $(TARGET_DIR)/etc/init.d/S45connman
+> >  endef
+> >
+> > -define CONNMAN_INSTALL_INIT_SYSTEMD
+> > -     mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> > -     ln -fs ../../../../usr/lib/systemd/system/connman.service \
+> > -
+>  $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
+> > -endef
+> > -
+> >  ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
+> >  CONNMAN_CONF_OPTS += --enable-client
+> >  CONNMAN_DEPENDENCIES += readline
+> > --
+> > 2.24.0.rc1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
 >
 > --
-> [image: SMILE]  <http://www.smile.eu/>
 >
-> 20 rue des Jardins
-> 92600 Asni?res-sur-Seine
-> *J?r?my ROSEN*
-> Architecte technique
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
 >
-> [image: email] jeremy.rosen at smile.fr
-> [image: phone]  +33 6 88 25 87 42
-> [image: url] http://www.smile.eu
->
-> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-> <https://www.facebook.com/smileopensource> [image: LinkedIn]
-> <https://www.linkedin.com/company/smile> [image: Github]
-> <https://github.com/Smile-SA>
->
-> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+> '------------------------------^-------^------------------^--------------------'
 >
 
 
@@ -132,4 +130,4 @@ Architecte technique
 <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191207/7155ec11/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191207/d5cf99b6/attachment.html>
