@@ -1,65 +1,84 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Sat, 7 Dec 2019 14:31:13 +0100
-Subject: [Buildroot] [PATCH v2 9/9] package/wpa_supplicant: adapt for
- preset-all
-In-Reply-To: <20191205130419.GJ2539@scaer>
-References: <20191111172443.6874-1-jeremy.rosen@smile.fr>
- <20191111172443.6874-10-jeremy.rosen@smile.fr>
- <20191205130419.GJ2539@scaer>
-Message-ID: <CAFvCimULLYTKgxwZe5c_TZuPb9i6x6UG=hnN=K=mnkxj32qqag@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 7 Dec 2019 14:31:25 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] Update for 2019.08.3
+Message-ID: <20191207132317.1CD328805A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > ---
-> >  package/wpa_supplicant/50-wpa_supplicant.preset | 4 ++++
-> >  package/wpa_supplicant/wpa_supplicant.mk        | 2 ++
-> >  2 files changed, 6 insertions(+)
-> >  create mode 100644 package/wpa_supplicant/50-wpa_supplicant.preset
-> >
-> > diff --git a/package/wpa_supplicant/50-wpa_supplicant.preset
-> b/package/wpa_supplicant/50-wpa_supplicant.preset
-> > new file mode 100644
-> > index 0000000000..9af8562c0e
-> > --- /dev/null
-> > +++ b/package/wpa_supplicant/50-wpa_supplicant.preset
-> > @@ -0,0 +1,4 @@
-> > +disable wpa_supplicant at .service
->
-> In the commit log, you say "This change enables the service", but it
-> looks like you are actually disabling it, no?
->
-> My terminology is not completely clear, but I just checked and the patch
-is correct
+commit: https://git.buildroot.net/buildroot/commit/?id=21e50b5598625bda1f6f98566113cce1dba976ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
-* I now enable (implicitely) the non-template services
-* I explicitely disable the templated services
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 41 +++++++++++++++++++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 43 insertions(+), 2 deletions(-)
 
-I will clarify the commit messages
-(I am also trying to fix this in upstream systemd, but it's tricky to get
-right)
-
--- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191207/bd80421f/attachment.html>
+diff --git a/CHANGES b/CHANGES
+index ae1730d1e6..b0d9697dad 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,44 @@
++2019.08.3, released December 7th, 2019
++
++	Important / security related fixes.
++
++	Infrastructure: Make HOST_<pkg>_DL_OPTS inherit from
++	<pkg>_DL_OPTS by default, just like it is done for a number of
++	other package variables
++
++	Add <pkg>_KEEP_PY_FILES to exclude specific python .py files
++	from the removal done by BR2_PACKAGE_PYTHON{,3}_PYC_ONLY for
++	the (rare) case where the .py files are needed at runtime
++	rather than .pyc.
++
++	Fix <pkg>-reconfigure handling for packages using the kconfig
++	infrastructure.
++
++	Toolchain: ensure external toolchain kernel headers version
++	check correctly stop the build on mismatch
++
++	Deconfigs: beaglebone: fix boot issue
++
++	Updated/fixed packages: am33x-cm3, asterisk, bind, chrony,
++	clamav, cmocka, collectd, connman, dhcp, dropwatch, faifa,
++	gettext-tiny, gob2, haproxy, intel-microcode, ipsec-tools,
++	jailhouse, jasper, jpeg-turbo, kodi, kvm-unit-tests, libftdi,
++	libftdi1, libnss, libressl, libstrophe, libsvgtiny, lvm2,
++	lzma, mariadb, minicom, mosquitto, neardal, ninja, nodejs,
++	oniguruma, openvmtools, oracle-mysql, perl-gdgraph,
++	perl-gdtextutil, php, postgresql, prosody, python-cchardet,
++	python-django, qt5wayland, rabbitmq, rauc, redis, rpcbind,
++	socat, spice, spice-protocol, tftpd, tiff, webkitgtk
++
++	New packages: libmspack
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#12166: Compiling nodejs for SAMA5D3 always crash with illegal inst..
++	#12171: Python-opencv needs config.py and config-3.7.py to run..
++	#12211: host-nodejs 10.15.3 package fail to build
++	#12316: tzdata fails to install with empty "default local time"
++
+ 2019.08.2, released November 9th, 2019
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 9b0291372f..98f5b1ac3e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2019.08.2
++export BR2_VERSION := 2019.08.3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1573328000
++BR2_VERSION_EPOCH = 1575725000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
