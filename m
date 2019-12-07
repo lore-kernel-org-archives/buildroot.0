@@ -1,50 +1,72 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat,  7 Dec 2019 21:40:42 +0100
-Subject: [Buildroot] [PATCH v1] acsccid: needs locale
-Message-ID: <20191207204042.28294-1-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 7 Dec 2019 21:19:07 +0100
+Subject: [Buildroot] [git commit] Update for 2019.02.8
+Message-ID: <20191207203604.7F410886B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needs locale/iconv since the bump from 1.1.4 to 1.1.7 [1]
-including upstream commit [2].
+commit: https://git.buildroot.net/buildroot/commit/?id=2c251bca19fc39134d68f1cd64c9da00421b17d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-  http://autobuild.buildroot.net/results/829b69ca27671bd4612f39733149ea278f5f6b2d
-
-  ifdhandler.c:60:10: fatal error: iconv.h: No such file or directory
-   #include <iconv.h>
-
-[1] https://git.buildroot.net/buildroot/commit/?id=6c6a37b2901459425ebe83e30123e4c9a2e7b6cf
-[2] https://github.com/acshk/acsccid/commit/5672d821ba96deb6c0c11060e4de0c9dab9b21c7
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit aaa1437b110f886ee24757595542f715a77d702a)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/acsccid/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ CHANGES | 40 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/acsccid/Config.in b/package/acsccid/Config.in
-index 90624ee797..90bf63a0c4 100644
---- a/package/acsccid/Config.in
-+++ b/package/acsccid/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ACSCCID
- 	bool "acsccid"
-+	depends on BR2_ENABLE_LOCALE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pcsc-lite, libusb
- 	depends on BR2_USE_MMU # pcsc-lite
- 	depends on !BR2_STATIC_LIBS # pcsc-lite
-@@ -13,7 +14,7 @@ config BR2_PACKAGE_ACSCCID
+diff --git a/CHANGES b/CHANGES
+index b87c36f0b3..3c3fc1d768 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -657,6 +657,46 @@
+ 	#11761: Building custom kernel 5.1-rc3 or later breaks on objtool
+ 	#11816: Only selected coreutils binaries are installed
  
- 	  http://acsccid.sourceforge.net/
++2019.02.8, released December 7th, 2019
++
++	Important / security related fixes.
++
++	Infrastructure: Make HOST_<pkg>_DL_OPTS inherit from
++	<pkg>_DL_OPTS by default, just like it is done for a number of
++	other package variables
++
++	Add <pkg>_KEEP_PY_FILES to exclude specific python .py files
++	from the removal done by BR2_PACKAGE_PYTHON{,3}_PYC_ONLY for
++	the (rare) case where the .py files are needed at runtime
++	rather than .pyc.
++
++	Fix <pkg>-reconfigure handling for packages using the kconfig
++	infrastructure.
++
++	Toolchain: ensure external toolchain kernel headers version
++	check correctly stop the build on mismatch
++
++	Deconfigs: beaglebone: fix boot issue
++
++	Updated/fixed packages: am33x-cm3, asterisk, bind, chrony,
++	clamav, collectd, connman, faifa, gob2, haproxy,
++	intel-microcode, ipsec-tools, jasper, jpeg-turbo, kodi,
++	kvm-unit-tests, libftdi, libftdi1, libnss, libstrophe,
++	libsvgtiny, lvm2, lzma, mariadb, minicom, neardal, nodejs,
++	opencv3, openvmtools, oracle-mysql, perl-gdgraph,
++	perl-gdtextutil, php, postgresql, prosody, python-django,
++	rabbitmq-c, rauc, redis, rpcbind, socat, spice,
++	spice-protocol, tftpd, tiff, webkitgtk
++
++	New packages: libmspack
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#12166: Compiling nodejs for SAMA5D3 always crash with illegal inst..
++	#12171: Python-opencv needs config.py and config-3.7.py to run..
++	#12211: host-nodejs 10.15.3 package fail to build
++	#12316: tzdata fails to install with empty "default local time"
++
+ 2019.02.7, Released November 10th, 2019
  
--comment "acsccid needs a toolchain w/ threads, dynamic library"
-+comment "acsccid needs a toolchain w/ threads, dynamic library, locale"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+	depends on !BR2_ENABLE_LOCALE || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
--- 
-2.24.0
+ 	Important / security related fixes.
