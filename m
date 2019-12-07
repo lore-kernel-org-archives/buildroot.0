@@ -1,96 +1,118 @@
-From: Nathaniel Roach <nroach44@nroach44.id.au>
-Date: Sun, 8 Dec 2019 00:01:15 +0800
-Subject: [Buildroot] [PATCH v2 8/9] package/network-manager: adapt to
- preset-all
-In-Reply-To: <816469ae-5aa4-2c09-ee4b-80d8f684c1cd@nroach44.id.au>
-References: <816469ae-5aa4-2c09-ee4b-80d8f684c1cd@nroach44.id.au>
-Message-ID: <26ebed76-a543-cd7f-de37-5ce696cc182f@nroach44.id.au>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 7 Dec 2019 17:42:28 +0100
+Subject: [Buildroot] [PATCH v2 2/9] use host-systemctl preset all to
+ enable units
+In-Reply-To: <CAFvCimVWuAkUD5uuoqvdgGjAob51BuVvaPNQm7yJAr9A9-P2XA@mail.gmail.com>
+References: <20191111172443.6874-1-jeremy.rosen@smile.fr>
+ <20191111172443.6874-3-jeremy.rosen@smile.fr>
+ <20191205130743.GK2539@scaer>
+ <CAFvCimVWuAkUD5uuoqvdgGjAob51BuVvaPNQm7yJAr9A9-P2XA@mail.gmail.com>
+Message-ID: <20191207164228.GM2539@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(Resending to list as my address has changed and I finally got around to 
-sorting it out)
+J?r?my, All,
 
-Hi Yann, J?r?my,
+Please, do not top-post, please...
 
-On 5/12/19 9:01 pm, Yann E. MORIN wrote:
-> J?r?my, Nathaniel, All,
->
-> On 2019-11-11 18:24 +0100, J?r?my Rosen spake thusly:
->> NM has three services
->> * NetworkManger.service : the main daemon
->> * NetworkManger-dispatcher.service : a daemon handling network callbacks
->> * NetworkManager-wait-online.service : sync of other services with 
->> network-online
->>
->> Only the first two were activated. We now also enable
->> wait-online. Not enabling it was probably a bug.
->>
->> Note that buildroot adds an alias dbus-org.freedesktop.NetworkManager
->> Adding an alias that is not known upstream is not clean,
->> but I left it for backward compatibility
-> Nathaniel, do you remember why you added that alias back in the day?
-> (yes, it's been 5 years now...)
->
-> I was not able to find any conlusive explanations with a cursory
-> duckduckgo search...
->
-> Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
->
-> Regards,
-> Yann E. MORIN.
+On 2019-12-07 12:39 +0100, J?r?my ROSEN spake thusly:
+> Are you sure you want me to do that ?
+> I mean... I'll use SYSTEMD_PKGDIR in the systemd recipe, but for all the others I rather leave the?
 
-I couldn't tell you for certain what the reason was, but it was likely 
-copied from Debian.
+No, it is just about the usage _you_ are introducing. Of course, I
+am not suggesting that you change the existing ones, unless you are
+actually touching that code too.
 
-My current machine has it (through no manual intervention of my own):
+Regards,
+Yann E. MORIN.
 
-ls -la /etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-lrwxrwxrwx 1 root root 53 Dec 28? 2018 
-/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service -> 
-/lib/systemd/system/NetworkManager-dispatcher.service
+> code as it was previously. Yes it's cleaner but it's an independent?fix (I don't touch those lines in
+> the first place)
+> the general replacement packages/xxx => XXX_PKGDIR is also needed in other places in these recipes
+> that have nothing to do with systemd, so it would be a half fix at best.
+> Moreover, those are tricky to test since it means compiling in lots of packages.
+> I'd rather keep this cleanup as a separate thing, it's probably better done with some sort of automated tool
+> Le?jeu. 5 d?c. 2019 ??14:07, Yann E. MORIN < [1]yann.morin.1998@free.fr> a ?crit?:
+> 
+>   J?r?my, All,
+> 
+>   An additional comment, see below...
+> 
+>   On 2019-11-11 18:24 +0100, J?r?my Rosen spake thusly:
+>   > since v234 upstream recommands using systemctl preset-all to enable units.
+>   [--SNIP--]
+>   > diff --git a/package/systemd/ [2]systemd.mk b/package/systemd/ [3]systemd.mk
+>   > index d1db60b5ef..dc2ed80e7d 100644
+>   > --- a/package/systemd/ [4]systemd.mk
+>   > +++ b/package/systemd/ [5]systemd.mk
+>   [--SNIP--]
+>   > -define SYSTEMD_INSTALL_SERVICE_BOOT_CHECK
+>   > -? ? ?mkdir -p $(TARGET_DIR)/etc/systemd/system/boot-complete.target.requires
+>   > -? ? ?ln -sf ../../../../lib/systemd/system/systemd-boot-check-no-failures.service \
+>   > -? ? ? ? ? ?
+>   ?$(TARGET_DIR)/etc/systemd/system/boot-complete.target.requires/systemd-boot-check-no-failures.service
+>   > +define SYSTEMD_INSTALL_PRESET
+>   > +? ? ?$(INSTALL) -D -m 644 package/systemd/80-buildroot.preset
+>   $(TARGET_DIR)/usr/lib/systemd/system-preset/80-buildroot.preset
+> 
+>   We have a variable that refers to the directory of the package:
+>   ? ? $(INSTALL) -D -m 644 $(SYSTEMD_PKGDIR)/80-buildroot.preset [...]
+> 
+>   Note that this comment is applicable to other patches in your series (at
+>   least the wpasuplicant one, for example).
+> 
+>   Regards,
+>   Yann E. MORIN.
+> 
+>   --
+>   .-----------------.--------------------.------------------.--------------------.
+>   |? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>   | +33 662 376 056 | Software? Designer | \ / CAMPAIGN? ? ?|? ___? ? ? ? ? ?
+>   ? ?|
+>   | +33 561 099 427 `------------.-------:? X? AGAINST? ? ? |? \e/? There is no? |
+>   | [6]http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? ?v? ?conspiracy.? |
+>   '------------------------------^-------^------------------^--------------------'
+> 
+> --
+> 
+> +-----------------------------------------------------------------------------------------------------------------------+
+> |                               | J?r?my ROSEN                                                                |
+> | [7]3D"SMILE"[8] ?        | Architecte technique                                                                  |
+> |                               | [9]3D"email" ? [10]jeremy.rosen at smile.fr?                                   |
+> | 20 rue des Jardins            | [11]3D"phone" ? +33 6 88 25 87 42?                                          |
+> | 92600 Asni?res-sur-Seine | [12]3D"url" ? [13]http://www.smile.eu                                            |
+> |                               | [14]3D"Twitter" ? [15]3D"Facebook" ? [16]3D"LinkedIn" ? [17]3D"Github" |
+> +-----------------------------------------------------------------------------------------------------------------------+
+> 
+> [18]3D"D?couvrez
+> 
+> Links:
+> 1. mailto:yann.morin.1998 at free.fr
+> 2. http://systemd.mk
+> 3. http://systemd.mk
+> 4. http://systemd.mk
+> 5. http://systemd.mk
+> 6. http://ymorin.is-a-geek.org/
+> 7. http://www.smile.eu/
+> 8. http://www.smile.eu/
+> 9. Image: http://ftp.smile.fr/client/Communication/signature/img/mail.png
+> 10. mailto:jeremy.rosen at smile.fr
+> 11. Image: http://ftp.smile.fr/client/Communication/signature/img/phone.png
+> 12. Image: http://ftp.smile.fr/client/Communication/signature/img/web.png
+> 13. http://www.smile.eu/
+> 14. https://twitter.com/GroupeSmile
+> 15. https://www.facebook.com/smileopensource
+> 16. https://www.linkedin.com/company/smile
+> 17. https://github.com/Smile-SA
+> 18. https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature
 
-cat /etc/issue
-Debian GNU/Linux 10 \n \l
-
-I /suspect/ I also tried setting NetworkManager-wait-online.service in 
-multi-user.target.wants and I think it caused a hang. If it's working 
-fine now there should be no issue turning it on.
-
-
-Cheers.
-
->> ---
->> package/network-manager/network-manager.mk | 7 -------
->> 1 file changed, 7 deletions(-)
->>
->> diff --git a/package/network-manager/network-manager.mk 
->> b/package/network-manager/network-manager.mk
->> index e913d69927..9ec205cc04 100644
->> --- a/package/network-manager/network-manager.mk
->> +++ b/package/network-manager/network-manager.mk
->> @@ -88,16 +88,9 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSV
->> endef
->> define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
->> - mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->> -
->> ln -sf /usr/lib/systemd/system/NetworkManager.service \
->> $(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
->> - ln -sf /usr/lib/systemd/system/NetworkManager.service \
->> - 
->> $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager.service
->> -
->> - ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
->> - 
->> $(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
->> endef
->> $(eval $(autotools-package))
->> -- 2.24.0.rc1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
