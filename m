@@ -1,42 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Dec 2019 12:12:59 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] DEVELOPERS: remove Daniel
- Nystrom
-Message-ID: <20191207110737.E12178855A@busybox.osuosl.org>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sat,  7 Dec 2019 14:32:24 +0300
+Subject: [Buildroot] [PATCH 1/1] configs/linksprite_pcduino: add
+ host-openssl for kernel build
+Message-ID: <20191207113224.2635748-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5c78f42e4be5a3fde288680c1d8971213c97f85
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+Updated kernel version for pcDuino board requires host-openssl
+to build successfully. This commit adds the required option:
+    BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 
-<daniel.nystrom@timeterminal.se>: host ASPMX.L.GOOGLE.COM[172.217.218.26] said:
-    550-5.1.1 The email account that you tried to reach does not exist. Please
-    try 550-5.1.1 double-checking the recipient's email address for typos or
-    550-5.1.1 unnecessary spaces. Learn more at 550 5.1.1
-    https://support.google.com/mail/?p=NoSuchUser o14si10209151edi.116 - gsmtp
-    (in reply to RCPT TO command)
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/371286142
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f9eb59a88ad2d0658069edfaf4c39b48911d8abd)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ configs/linksprite_pcduino_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4adaac0c3d..5c80a21af7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -610,9 +610,6 @@ F:	package/log4cpp/
- N:	Daniel Nicoletti <dantti12@gmail.com>
- F:	package/cutelyst/
+diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
+index a8577b6e79..5a00e57281 100644
+--- a/configs/linksprite_pcduino_defconfig
++++ b/configs/linksprite_pcduino_defconfig
+@@ -28,6 +28,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/linksprite/pcduino/linux-extras.config"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  
--N:	Daniel Nystr??m <daniel.nystrom@timeterminal.se>
--F:	package/e2tools/
--
- N:	Daniel Price <daniel.price@gmail.com>
- F:	package/nodejs/
- F:	package/redis/
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+-- 
+2.24.0
