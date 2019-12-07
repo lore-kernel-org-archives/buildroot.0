@@ -1,89 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Dec 2019 21:12:08 +0100
-Subject: [Buildroot] Buildroot 2019.02.8 released
-Message-ID: <87fthvlwtj.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  7 Dec 2019 21:29:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nss-pam-ldapd: bump to version
+ 0.9.11
+Message-ID: <20191207202949.785569-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/nss-pam-ldapd/nss-pam-ldapd.hash | 6 +++---
+ package/nss-pam-ldapd/nss-pam-ldapd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
-
-Buildroot 2019.02.8 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2019.02.8.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2019.02.8.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2019.02.8 is a bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2019.02.7 release. The 2019.02.x series is
-supported until March 2020.
-
-- Infrastructure: Make HOST_<pkg>_DL_OPTS inherit from
-  <pkg>_DL_OPTS by default, just like it is done for a number of
-  other package variables
-
-  Add <pkg>_KEEP_PY_FILES to exclude specific python .py files
-  from the removal done by BR2_PACKAGE_PYTHON{,3}_PYC_ONLY for
-  the (rare) case where the .py files are needed at runtime
-  rather than .pyc.
-
-  Fix <pkg>-reconfigure handling for packages using the kconfig
-  infrastructure.
-
-- Toolchain: ensure external toolchain kernel headers version check
-  correctly stop the build on mismatch
-
-- Security fixes for asterisk, bind, clamav, haproxy, intel-microcode,
-  jasper, jpeg-turbo, libnss, oniguruma, python-django, rabbitmq-c,
-  spice, tiff, webkitgtk
-
-- Fixes for download/compilation/runtime/license issues in am33x-cm3,
-  chrony, collectd, connman, faifa, gob2, ipsec-tools, kodi,
-  kvm-unit-tests, libftdi, libftdi1, libstrophe, libsvgtiny, lvm2, lzma,
-  mariadb, minicom, neardal, nodejs, opencv3, openvmtools, oracle-mysql,
-  perl-gdgraph, perl-gdtextutil, php, postgresql, prosody, rauc, redis,
-  rpcbind, socat, spice, tftpd
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.8
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2019.02.7..
-
-    57  Mark Corbin
-    22  Peter Korsgaard
-    17  Fabrice Fontaine
-    11  Bernd Kuhls
-    11  Thomas Petazzoni
-     7  Michael Vetter
-     4  Adrian Perez de Castro
-     4  Pascal de Bruijn
-     4  Yann E. MORIN
-     1  Angelo Compagnucci
-     1  Arnout Vandecappelle (Essensium/Mind)
-     1  Bartosz Bilas
-     1  Carlos Santos
-     1  Giulio Benetti
-     1  James Byrne
-     1  Matt Weber
-     1  Michael Drake
-     1  Titouan Christophe
-
+diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.hash b/package/nss-pam-ldapd/nss-pam-ldapd.hash
+index a4d189c1d4..47864c4fe7 100644
+--- a/package/nss-pam-ldapd/nss-pam-ldapd.hash
++++ b/package/nss-pam-ldapd/nss-pam-ldapd.hash
+@@ -1,5 +1,5 @@
+-# From https://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-0.9.8.tar.gz.md5
+-md5 8c99fdc54f4bf9aca8c5f53fdb1403ff  nss-pam-ldapd-0.9.8.tar.gz
++# From https://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-0.9.11.tar.gz.md5
++md5 91df9d46a548aa7aa95d0e7c672215d0  nss-pam-ldapd-0.9.8.tar.gz
+ # Locally computed:
+-sha256 ef7362e7f2003da8c7beb7bcc03c30494acf712625aaac8badc6e7eb16f3453f  nss-pam-ldapd-0.9.8.tar.gz
++sha256 d0d71be06d1a90940b7566ce00cef1a465aae7171d5d062785506a83411ecab6  nss-pam-ldapd-0.9.11.tar.gz
+ sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.mk b/package/nss-pam-ldapd/nss-pam-ldapd.mk
+index c094db96ac..15b3c4b95e 100644
+--- a/package/nss-pam-ldapd/nss-pam-ldapd.mk
++++ b/package/nss-pam-ldapd/nss-pam-ldapd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NSS_PAM_LDAPD_VERSION = 0.9.8
++NSS_PAM_LDAPD_VERSION = 0.9.11
+ NSS_PAM_LDAPD_SITE = http://arthurdejong.org/nss-pam-ldapd
+ NSS_PAM_LDAPD_LICENSE = LGPL-2.1+
+ NSS_PAM_LDAPD_LICENSE_FILES = COPYING
 -- 
-Bye, Peter Korsgaard
+2.24.0
