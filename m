@@ -1,133 +1,72 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Sat, 7 Dec 2019 13:19:45 +0100
-Subject: [Buildroot] [PATCH v2 6/9] package/connman: adapt to preset-all
-In-Reply-To: <20191205125722.GG2539@scaer>
-References: <20191111172443.6874-1-jeremy.rosen@smile.fr>
- <20191111172443.6874-7-jeremy.rosen@smile.fr>
- <20191205125722.GG2539@scaer>
-Message-ID: <CAFvCimUSuA9DfMmJ2A9Uk1wBCfdJF7zta1-bRgf=XYOs+mg_Og@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 7 Dec 2019 13:47:02 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{3, 4}.x series
+Message-ID: <20191207123854.1FCE4885A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The network-online is a bit complicated...
+commit: https://git.buildroot.net/buildroot/commit/?id=3871d8f6787b1467749a2431a51f68bc94645318
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-* network-managers provide XXX-wait-online.service
-   * block until "the network is up" (whatever that means for that
-particular NM)
-   * WantedBy= and Before= network-online.target
-* systemd provides network-online.target, which is thus always available,
-but not started as part of the boot process
-* any daemon that wants to be started after the network is up has Wants=
-and After= network-online.target
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2135e3da387a938f316557ab87a55a8b4a2acaba)
+[Peter: drop 5.x bump]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 8 ++++----
+ package/linux-headers/Config.in.host | 8 ++++----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-So, technically, with systemd the network is not configured at boot time.
-It is configured before we start a
-daemon that needs the network.
-
-Now, if no NM provide any XXX-wait-online.service, network-online.target
-will be started right away, it will not
-wait for the network to be up and the dependant services too early.
-
-This is consistent with the network-online.target semantic which is "the
-point during the boot where either the
-network is up or the network has failed"
-If there is no NM at all, there is no network, so network-online triggers
-immediately.
-
-Le jeu. 5 d?c. 2019 ? 13:57, Yann E. MORIN <yann.morin.1998@free.fr> a
-?crit :
-
-> J?r?my, All,
->
-> On 2019-11-11 18:24 +0100, J?r?my Rosen spake thusly:
-> > connman has two services
-> > * connman.service which is the real daemon
-> > * connman-wait-online.service which is a sync point for
-> network-online.target
-> >
-> > Only the first one was enabled. This adaptation enables both.
-> >
-> > Not enabling connman-wait-online.service is probably a bug
->
-> If that was not installed so far, what would provide for the
-> network-online.target instead? Or was that target always satisfied?
->
-> BTW, you forgot your SoB line too.
->
-> Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
->
-> Regards,
-> Yann E. MORIN.
->
-> > ---
-> >  package/connman/connman.mk | 6 ------
-> >  1 file changed, 6 deletions(-)
-> >
-> > diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-> > index 839bc7a0e2..d70eb1ac82 100644
-> > --- a/package/connman/connman.mk
-> > +++ b/package/connman/connman.mk
-> > @@ -32,12 +32,6 @@ define CONNMAN_INSTALL_INIT_SYSV
-> >       $(INSTALL) -m 0755 -D package/connman/S45connman
-> $(TARGET_DIR)/etc/init.d/S45connman
-> >  endef
-> >
-> > -define CONNMAN_INSTALL_INIT_SYSTEMD
-> > -     mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> > -     ln -fs ../../../../usr/lib/systemd/system/connman.service \
-> > -
->  $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
-> > -endef
-> > -
-> >  ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
-> >  CONNMAN_CONF_OPTS += --enable-client
-> >  CONNMAN_DEPENDENCIES += readline
-> > --
-> > 2.24.0.rc1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
-
-
--- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191207/d5cf99b6/attachment.html>
+diff --git a/linux/Config.in b/linux/Config.in
+index 81aa8528b0..c5a3f9eda7 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.19.87" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.19.88" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index bd451fba5d..9e5dc6a019 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
+-sha256 fa1f8fe9c12e18e5cda18cf759b77ae9e778e1e9006d837426c955b75bd4eaa6  linux-4.4.205.tar.xz
+-sha256 98b9e8644706acc0cf51022372bb263b59a1d2bbe3ccd7ce6bd9bc7378c78b05  linux-4.9.205.tar.xz
+-sha256 90fa769a052ecf34a0cab72cf013e19275dbb8cd01bbe52f1d465e2ed7537733  linux-4.14.157.tar.xz
+-sha256 a57221e8318e6fcaedb90b099d56352f9d6608fd367283bc7db84330856eda1d  linux-4.19.87.tar.xz
++sha256 5da5e16fe08fa506f8f74aa4f17be22b52c0f513e9a3f7e7ae22fc53597ad493  linux-4.4.206.tar.xz
++sha256 1df27899a9bc4dd874f3830ab9e7b638f0026dffd67a2e230444e5d2805ccad6  linux-4.9.206.tar.xz
++sha256 0d49ec72e273f6fc7462ad56849b2285f13fd5f4185e8f932a0074fc2eca1bb3  linux-4.14.158.tar.xz
++sha256 c1923b6bd166e6dd07be860c15f59e8273aaa8692bc2a1fce1d31b826b9b3fbe  linux-4.19.88.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1cd9e577e3..17a27075c2 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -287,10 +287,10 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.205"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.205"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.157"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.87"	if BR2_KERNEL_HEADERS_4_19
++	default "4.4.206"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.206"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.158"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.88"	if BR2_KERNEL_HEADERS_4_19
+ 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
