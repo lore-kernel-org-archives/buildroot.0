@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Dec 2019 11:55:58 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/pkg-kconfig: fix
+Date: Sat, 7 Dec 2019 11:56:10 +0100
+Subject: [Buildroot] [git commit branch/2019.08.x] package/pkg-kconfig: fix
  reconfigure for kconfig packages
-Message-ID: <20191207110229.A83DC88430@busybox.osuosl.org>
+Message-ID: <20191207110236.D4CF1884B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfbaa5bc62ea630a1b8f922a06c9f9c2ebde8fde
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=38932bac776abd23f3c7bcbe56b8956c1da11ddb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
 
 Commit 4b81badbcc0b25678ac6627548160702731cf393
 
