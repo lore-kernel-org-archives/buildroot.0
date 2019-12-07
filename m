@@ -1,45 +1,34 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat,  7 Dec 2019 11:49:38 -0800
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to 1.13.5
-Message-ID: <20191207194938.3774652-1-christian@paral.in>
+Date: Sat,  7 Dec 2019 11:51:52 -0800
+Subject: [Buildroot] [PATCH v1 1/1] package/pkg-golang: enable trimpath
+ option for reproducible builds
+Message-ID: <20191207195152.3781664-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-go1.13.5 (released 2019/12/04) includes fixes to the go command, the runtime,
-the linker, and the net/http package.
-
-https://github.com/golang/go/issues?q=milestone%3AGo1.13.5
+The -trimpath option removes absolute build paths from the target binary. This
+results in more consistent / reproducible builds across different systems with
+varying paths to Buildroot.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-golang.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 90a0c2fbb8..7d92c80f2b 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	95dbeab442ee2746b9acf0934c8e2fc26414a0565c008631b04addb8c02e7624  go1.13.4.src.tar.gz
-+sha256	27d356e2a0b30d9983b60a788cf225da5f914066b37a6b4f69d457ba55a626ff  go1.13.5.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index dac740d968..2f5e384316 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index e47de17aba..98f903604c 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -61,6 +61,7 @@ $(2)_WORKSPACE ?= _gopath
+ $(2)_BUILD_OPTS += \
+ 	-ldflags "$$($(2)_LDFLAGS)" \
+ 	-tags "$$($(2)_TAGS)" \
++  -trimpath \
+ 	-p $(PARALLEL_JOBS)
  
--GO_VERSION = 1.13.4
-+GO_VERSION = 1.13.5
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ # Target packages need the Go compiler on the host.
 -- 
 2.24.0
