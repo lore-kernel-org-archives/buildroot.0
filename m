@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Dec 2019 12:14:41 +0100
-Subject: [Buildroot] [git commit branch/2019.08.x] package/mosquitto: bump
+Date: Sat, 7 Dec 2019 12:14:29 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/mosquitto: bump
  to v1.6.8
-Message-ID: <20191207110728.E39BB8853A@busybox.osuosl.org>
+Message-ID: <20191207110737.ECC4D8855A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2a479d479876ee18595bb832099154fe9e8356c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=df3c60e9f7332d133ed15c2bbebbc44273a39f51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 This is a bugfix release, see:
 https://mosquitto.org/blog/2019/11/version-1-6-8-released/
