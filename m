@@ -1,24 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Dec 2019 12:15:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: bump to v1.6.8
-In-Reply-To: <20191206205556.138901-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Fri, 6 Dec 2019 21:55:56 +0100")
-References: <20191206205556.138901-1-titouan.christophe@railnova.eu>
-Message-ID: <87wob8l73d.fsf@dell.be.48ers.dk>
+Date: Sat, 7 Dec 2019 12:12:50 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: remove Daniel
+ Nystrom
+Message-ID: <20191207110724.5E7F28852A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2d64409f391d297ae957bdd7f9fcafcdf33c224d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > This is a bugfix release, see:
- > https://mosquitto.org/blog/2019/11/version-1-6-8-released/
+<daniel.nystrom@timeterminal.se>: host ASPMX.L.GOOGLE.COM[172.217.218.26] said:
+    550-5.1.1 The email account that you tried to reach does not exist. Please
+    try 550-5.1.1 double-checking the recipient's email address for typos or
+    550-5.1.1 unnecessary spaces. Learn more at 550 5.1.1
+    https://support.google.com/mail/?p=NoSuchUser o14si10209151edi.116 - gsmtp
+    (in reply to RCPT TO command)
 
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f9eb59a88ad2d0658069edfaf4c39b48911d8abd)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Committed to 2019.11.x and 2019.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3c08eb0434..58adad5c16 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -557,9 +557,6 @@ F:	package/log4cpp/
+ N:	Daniel Nicoletti <dantti12@gmail.com>
+ F:	package/cutelyst/
+ 
+-N:	Daniel Nystr??m <daniel.nystrom@timeterminal.se>
+-F:	package/e2tools/
+-
+ N:	Daniel Price <daniel.price@gmail.com>
+ F:	package/nodejs/
+ F:	package/redis/
