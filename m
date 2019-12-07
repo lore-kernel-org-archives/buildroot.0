@@ -1,73 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Dec 2019 18:38:36 +0100
-Subject: [Buildroot] [git commit] Update for 2019.08.3
-Message-ID: <20191207185558.E460088559@busybox.osuosl.org>
+Date: Sat, 7 Dec 2019 20:03:59 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2019.08.3
+Message-ID: <20191207185559.03865812A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f75fbbec1edb90d23e1b3d09ee3a434bf898144
+commit: https://git.buildroot.net/buildroot/commit/?id=fbb5c4671f87d5cd33726ef258ea6efd5fcd7594
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 21e50b5598625bda1f6f98566113cce1dba976ae)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ docs/website/news.html | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index f2b34b9a98..b87c36f0b3 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -168,6 +168,47 @@
- 	#12276: make clean/distclean does not remove BR2_DL_DIR and BR2_HOST_DIR
- 	#12281: Custom configuration fails to build (based on raspberrypi3_..
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 5b67ca67b1..bdf95439d1 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,28 @@
+ <h2>News</h2>
+ <ul class="timeline">
  
-+2019.08.3, released December 7th, 2019
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2019.08.3 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>7 December 2019</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2019.08.3 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2019.08.2 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.08.3">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-December/268515.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2019.08.3.tar.bz2">2019.08.3 release</a>.</p>
 +
-+	Important / security related fixes.
++	  <p>Notice that the 2019.08.x series is now end of life. Please migrate to
++	  the 2019.02 or 2019.11 series instead.</p>
++      </div>
++    </div>
++  </li>
 +
-+	Infrastructure: Make HOST_<pkg>_DL_OPTS inherit from
-+	<pkg>_DL_OPTS by default, just like it is done for a number of
-+	other package variables
-+
-+	Add <pkg>_KEEP_PY_FILES to exclude specific python .py files
-+	from the removal done by BR2_PACKAGE_PYTHON{,3}_PYC_ONLY for
-+	the (rare) case where the .py files are needed at runtime
-+	rather than .pyc.
-+
-+	Fix <pkg>-reconfigure handling for packages using the kconfig
-+	infrastructure.
-+
-+	Toolchain: ensure external toolchain kernel headers version
-+	check correctly stop the build on mismatch
-+
-+	Deconfigs: beaglebone: fix boot issue
-+
-+	Updated/fixed packages: am33x-cm3, asterisk, bind, chrony,
-+	clamav, cmocka, collectd, connman, dhcp, dropwatch, faifa,
-+	gettext-tiny, gob2, haproxy, intel-microcode, ipsec-tools,
-+	jailhouse, jasper, jpeg-turbo, kodi, kvm-unit-tests, libftdi,
-+	libftdi1, libnss, libressl, libstrophe, libsvgtiny, lvm2,
-+	lzma, mariadb, minicom, mosquitto, neardal, ninja, nodejs,
-+	oniguruma, openvmtools, oracle-mysql, perl-gdgraph,
-+	perl-gdtextutil, php, postgresql, prosody, python-cchardet,
-+	python-django, qt5wayland, rabbitmq, rauc, redis, rpcbind,
-+	socat, spice, spice-protocol, tftpd, tiff, webkitgtk
-+
-+	New packages: libmspack
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12166: Compiling nodejs for SAMA5D3 always crash with illegal inst..
-+	#12171: Python-opencv needs config.py and config-3.7.py to run..
-+	#12211: host-nodejs 10.15.3 package fail to build
-+	#12316: tzdata fails to install with empty "default local time"
-+
- 2019.08.2, released November 9th, 2019
- 
- 	Important / security related fixes.
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
