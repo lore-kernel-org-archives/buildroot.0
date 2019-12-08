@@ -1,65 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 23:06:09 +0100
-Subject: [Buildroot] [git commit] package/shairport-sync: make libdaemon an
- optional dependency
-Message-ID: <20191208221346.4AF1288F27@busybox.osuosl.org>
+Date: Sun, 8 Dec 2019 23:17:23 +0100
+Subject: [Buildroot] [git commit] package/shairport-sync: add dbus option
+Message-ID: <20191208221346.722FF88D2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be8f4a73abbf6a4648254cc8d52672d8a213e341
+commit: https://git.buildroot.net/buildroot/commit/?id=21a893130451706518627189185b21759971a59c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 3.3 libdaemon is an optional dependency.
+Shairport Sync added DBus support in version 3.2.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/shairport-sync/Config.in         | 2 --
- package/shairport-sync/shairport-sync.mk | 7 ++++++-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/shairport-sync/Config.in         | 14 ++++++++++++++
+ package/shairport-sync/shairport-sync.mk |  5 +++++
+ 2 files changed, 19 insertions(+)
 
 diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
-index 5df4c194c0..085a9ec77d 100644
+index 87f38a940d..750767e567 100644
 --- a/package/shairport-sync/Config.in
 +++ b/package/shairport-sync/Config.in
-@@ -1,12 +1,10 @@
- config BR2_PACKAGE_SHAIRPORT_SYNC
- 	bool "shairport-sync"
--	depends on BR2_USE_MMU # libdaemon
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_ALSA_LIB_MIXER
- 	select BR2_PACKAGE_LIBCONFIG
--	select BR2_PACKAGE_LIBDAEMON
- 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
- 	select BR2_PACKAGE_POPT
+@@ -26,6 +26,20 @@ config BR2_PACKAGE_SHAIRPORT_SYNC_CONVOLUTION
  	help
+ 	  Enable audio DSP convolution support.
+ 
++config BR2_PACKAGE_SHAIRPORT_SYNC_DBUS
++	bool "dbus support"
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  Enable support for support for the MPRIS and native
++	  Shairport Sync D-Bus interface.
++
++comment "shairport-sync dbus support needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR
+ 	bool "libsoxr support"
+ 	select BR2_PACKAGE_LIBSOXR
 diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index d7c8baa30c..3d9e909879 100644
+index 1ca56e9f0a..a20570f915 100644
 --- a/package/shairport-sync/shairport-sync.mk
 +++ b/package/shairport-sync/shairport-sync.mk
-@@ -9,7 +9,7 @@ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VE
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
- SHAIRPORT_SYNC_LICENSE_FILES = LICENSES
--SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig libdaemon popt host-pkgconf
-+SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig popt host-pkgconf
- 
- # git clone, no configure
- SHAIRPORT_SYNC_AUTORECONF = YES
-@@ -33,6 +33,11 @@ else
- SHAIRPORT_SYNC_CONF_OPTS += --with-tinysvcmdns
+@@ -56,6 +56,11 @@ SHAIRPORT_SYNC_DEPENDENCIES += libsndfile
+ SHAIRPORT_SYNC_CONF_OPTS += --with-convolution
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBDAEMON),y)
-+SHAIRPORT_SYNC_DEPENDENCIES += libdaemon
-+SHAIRPORT_SYNC_CONF_OPTS += --with-libdaemon
++ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_DBUS),y)
++SHAIRPORT_SYNC_DEPENDENCIES += libglib2
++SHAIRPORT_SYNC_CONF_OPTS += --with-dbus-interface --with-mpris-interface
 +endif
 +
- # OpenSSL or mbedTLS
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SHAIRPORT_SYNC_DEPENDENCIES += openssl
+ ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR),y)
+ SHAIRPORT_SYNC_DEPENDENCIES += libsoxr
+ SHAIRPORT_SYNC_CONF_OPTS += --with-soxr
