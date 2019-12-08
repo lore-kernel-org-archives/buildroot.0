@@ -1,44 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Dec 2019 08:33:41 +0100
-Subject: [Buildroot] [git commit] package/emlog: bump to version 0.70
-Message-ID: <20191208073534.C8C0E886A5@busybox.osuosl.org>
+Date: Sun, 8 Dec 2019 08:37:09 +0100
+Subject: [Buildroot] [git commit] package/nss-pam-ldapd: bump to version
+ 0.9.11
+Message-ID: <20191208073534.DF0F78871F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbc22e0f95103f1a303f7bb74858ebccd0a42504
+commit: https://git.buildroot.net/buildroot/commit/?id=fed5602f89844882cae8d4660a497b199a9d1455
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/emlog/emlog.hash | 3 ++-
- package/emlog/emlog.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/nss-pam-ldapd/nss-pam-ldapd.hash | 6 +++---
+ package/nss-pam-ldapd/nss-pam-ldapd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/emlog/emlog.hash b/package/emlog/emlog.hash
-index ba0a201acb..ddc61a88e8 100644
---- a/package/emlog/emlog.hash
-+++ b/package/emlog/emlog.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 9f791a00c86215306597b761ef5c5ad267efee5f01efbe23cfcc04e583aa402d  emlog-0.60.tar.gz
-+sha256 76082cf981b0865c8a1b300d4641c790a6556461901bbb63700df38300277271  emlog-0.70.tar.gz
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/emlog/emlog.mk b/package/emlog/emlog.mk
-index 42e3c9dd7b..8759f82c7c 100644
---- a/package/emlog/emlog.mk
-+++ b/package/emlog/emlog.mk
+diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.hash b/package/nss-pam-ldapd/nss-pam-ldapd.hash
+index a4d189c1d4..47864c4fe7 100644
+--- a/package/nss-pam-ldapd/nss-pam-ldapd.hash
++++ b/package/nss-pam-ldapd/nss-pam-ldapd.hash
+@@ -1,5 +1,5 @@
+-# From https://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-0.9.8.tar.gz.md5
+-md5 8c99fdc54f4bf9aca8c5f53fdb1403ff  nss-pam-ldapd-0.9.8.tar.gz
++# From https://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-0.9.11.tar.gz.md5
++md5 91df9d46a548aa7aa95d0e7c672215d0  nss-pam-ldapd-0.9.8.tar.gz
+ # Locally computed:
+-sha256 ef7362e7f2003da8c7beb7bcc03c30494acf712625aaac8badc6e7eb16f3453f  nss-pam-ldapd-0.9.8.tar.gz
++sha256 d0d71be06d1a90940b7566ce00cef1a465aae7171d5d062785506a83411ecab6  nss-pam-ldapd-0.9.11.tar.gz
+ sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.mk b/package/nss-pam-ldapd/nss-pam-ldapd.mk
+index c094db96ac..15b3c4b95e 100644
+--- a/package/nss-pam-ldapd/nss-pam-ldapd.mk
++++ b/package/nss-pam-ldapd/nss-pam-ldapd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EMLOG_VERSION = 0.60
-+EMLOG_VERSION = 0.70
- EMLOG_SITE = $(call github,nicupavel,emlog,emlog-$(EMLOG_VERSION))
- EMLOG_LICENSE = GPL-2.0
- EMLOG_LICENSE_FILES = COPYING
+-NSS_PAM_LDAPD_VERSION = 0.9.8
++NSS_PAM_LDAPD_VERSION = 0.9.11
+ NSS_PAM_LDAPD_SITE = http://arthurdejong.org/nss-pam-ldapd
+ NSS_PAM_LDAPD_LICENSE = LGPL-2.1+
+ NSS_PAM_LDAPD_LICENSE_FILES = COPYING
