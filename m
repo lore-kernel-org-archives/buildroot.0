@@ -1,43 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 14:47:58 +0100
-Subject: [Buildroot] [git commit] package/lua-curl: bump to version 0.3.11
-Message-ID: <20191208140400.4F079888EF@busybox.osuosl.org>
+Date: Sun, 8 Dec 2019 14:48:04 +0100
+Subject: [Buildroot] [git commit] package/lua-resty-http: bump to version
+ 0.15
+Message-ID: <20191208140400.580CC888EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6207b5da36aebe0ec30158f37c9b039d3e1b7663
+commit: https://git.buildroot.net/buildroot/commit/?id=45b0ed05ab135268caeec33e136843134f2cb19f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-curl/lua-curl.hash | 4 ++--
- package/lua-curl/lua-curl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lua-resty-http/Config.in           | 2 +-
+ package/lua-resty-http/lua-resty-http.hash | 2 +-
+ package/lua-resty-http/lua-resty-http.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua-curl/lua-curl.hash b/package/lua-curl/lua-curl.hash
-index 471af2ffa3..33cc68e32e 100644
---- a/package/lua-curl/lua-curl.hash
-+++ b/package/lua-curl/lua-curl.hash
+diff --git a/package/lua-resty-http/Config.in b/package/lua-resty-http/Config.in
+index 4697c90dfb..7f90b51b7c 100644
+--- a/package/lua-resty-http/Config.in
++++ b/package/lua-resty-http/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_LUA_RESTY_HTTP
+ 	help
+ 	  Lua HTTP client cosocket driver for OpenResty / ngx_lua.
+ 
+-	  http://github.com/pintsized/lua-resty-http
++	  https://github.com/ledgetech/lua-resty-http
+diff --git a/package/lua-resty-http/lua-resty-http.hash b/package/lua-resty-http/lua-resty-http.hash
+index e8318ab413..4aacc097c7 100644
+--- a/package/lua-resty-http/lua-resty-http.hash
++++ b/package/lua-resty-http/lua-resty-http.hash
 @@ -1,3 +1,3 @@
  # computed by luarocks/buildroot
--sha256 c548d2fc5891b8eda16ea056426584474532fc22dabe4d35b459770ffb340413  lua-curl-0.3.10-1.src.rock
--sha256 3049265c5c05a5e2a40eb28dbf3fe46a51cd03e5f62cc1a419e352130e278e02  Lua-cURLv3-0.3.10/LICENSE
-+sha256 01578439ba90338abba86ec77641a4998450dbc42c06cff41eeefa119a6962bc  lua-curl-0.3.11-1.src.rock
-+sha256 3049265c5c05a5e2a40eb28dbf3fe46a51cd03e5f62cc1a419e352130e278e02  Lua-cURLv3-0.3.11/LICENSE
-diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
-index d887cb511e..3a0f1c69bf 100644
---- a/package/lua-curl/lua-curl.mk
-+++ b/package/lua-curl/lua-curl.mk
+-sha256 e31b96c622f539d69a9e84febf06d9a1df0f55aa3bfd904dd7c4ac6ed64fe3fe  lua-resty-http-0.13-0.src.rock
++sha256 df913a055ddc2f029017602732c7a497225f4e0df1bcc6858e13f9f4d9524184  lua-resty-http-0.15-0.src.rock
+ sha256 407e4b1412d8afa317dc703a1d318866c3de87d78899402125cbd90548c6057d  lua-resty-http/LICENSE
+diff --git a/package/lua-resty-http/lua-resty-http.mk b/package/lua-resty-http/lua-resty-http.mk
+index 6494ad104d..61f33c2bdc 100644
+--- a/package/lua-resty-http/lua-resty-http.mk
++++ b/package/lua-resty-http/lua-resty-http.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_CURL_VERSION_UPSTREAM = 0.3.10
-+LUA_CURL_VERSION_UPSTREAM = 0.3.11
- LUA_CURL_VERSION = $(LUA_CURL_VERSION_UPSTREAM)-1
- LUA_CURL_SUBDIR = Lua-cURLv3-$(LUA_CURL_VERSION_UPSTREAM)
- LUA_CURL_LICENSE = MIT
+-LUA_RESTY_HTTP_VERSION = 0.13-0
++LUA_RESTY_HTTP_VERSION = 0.15-0
+ LUA_RESTY_HTTP_SUBDIR = lua-resty-http
+ LUA_RESTY_HTTP_LICENSE = BSD-2-Clause
+ LUA_RESTY_HTTP_LICENSE_FILES = $(LUA_RESTY_HTTP_SUBDIR)/LICENSE
