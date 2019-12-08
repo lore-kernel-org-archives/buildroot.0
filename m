@@ -1,77 +1,66 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Sun,  8 Dec 2019 19:58:22 +0100
-Subject: [Buildroot] [PATCH] package/apitrace: Fix build under uClibc/musl
-Message-ID: <20191208185822.163008-1-paul@crapouillou.net>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sun, 8 Dec 2019 11:04:16 -0800
+Subject: [Buildroot] [PATCH v6 1/6] package/polkit: bump to version 0.116
+In-Reply-To: <20191208160213.030635f6@windsurf.home>
+References: <20191206234649.3972927-1-aduskett@gmail.com>
+ <20191208160213.030635f6@windsurf.home>
+Message-ID: <CAFSsvmqCnXXkjMtJiPOpHx0E8Xv4fHcOuNw3qSSn52i9F-6yPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch which has been merged upstream
-(PR: https://github.com/apitrace/apitrace/pull/644) which allows
-apitrace to be compiled under uClibc and musl.
+Hello;
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- .../0001-dlsym-Fix-build-under-uClibc.patch   | 30 +++++++++++++++++++
- package/apitrace/Config.in                    |  6 ++--
- 2 files changed, 32 insertions(+), 4 deletions(-)
- create mode 100644 package/apitrace/0001-dlsym-Fix-build-under-uClibc.patch
+On Sun, Dec 8, 2019 at 7:02 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Fri,  6 Dec 2019 15:46:44 -0800
+> aduskett at gmail.com wrote:
+>
+> > From: Adam Duskett <Aduskett@gmail.com>
+> >
+> > Other changes:
+> >   - Add spidermonkey as a dependency.
+> >   - Add 0001-make-netgroup-support-optional.patch to allow building on musl.
+> >   - Add a runtime dependency on dbus.
+> >   - Add --disable-libelongind.
+> >   - Add --disable-libsystemd-login.
+> >   - Update dependencies for systemd pam support.
+> >   - Update dependencies for udisks.
+> >
+> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> > ---
+> > changes v1 -> v6:
+> >   - Add depends on BR2_HOST_GCC_AT_LEAST_4_9 to the following:
+> >     - package/polkit/Config.in
+> >     - package/systemd/Config.in
+> >     - package/udisks/Config.in
+>
+> To do the same as systemd, I changed the "depends on BR2_PACKAGE_DBUS"
+> to a "select BR2_PACKAGE_DBUS", made a few minor tweaks, and applied to
+> master. Thanks a lot for taking care of this difficult package!
+>
+> One direction that would be nice to look at is to enable spidermonkey
+> and then polkit on uClibc. Regarding the fenv issue, perhaps we could
+> have a boolean that says whether uClibc provides fenv support for the
+> current architecture, and then treat this as an architecture dependency
+> inside BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS ? How many architectures
+> have sufficient fenv support in uClibc for spidermonkey ?
+>
+Not many, Yann and I had a conversation about this earlier and it
+doesn't seem worth it.
 
-diff --git a/package/apitrace/0001-dlsym-Fix-build-under-uClibc.patch b/package/apitrace/0001-dlsym-Fix-build-under-uClibc.patch
-new file mode 100644
-index 0000000000..73286c4cbf
---- /dev/null
-+++ b/package/apitrace/0001-dlsym-Fix-build-under-uClibc.patch
-@@ -0,0 +1,30 @@
-+From 189a3b8397c61ba262a2221885e38dc514c59d94 Mon Sep 17 00:00:00 2001
-+From: Paul Cercueil <paul@crapouillou.net>
-+Date: Sat, 7 Dec 2019 00:00:57 +0100
-+Subject: [PATCH] dlsym: Fix build under uClibc
-+
-+uClibc defines the __GLIBC__ macro too (I know, right?), so verify that
-+__UCLIBC__ is not defined before we can use glibc-specific internal
-+functions.
-+
-+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-+---
-+ wrappers/dlsym.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/wrappers/dlsym.cpp b/wrappers/dlsym.cpp
-+index 2eda082a..5ab8465b 100644
-+--- a/wrappers/dlsym.cpp
-++++ b/wrappers/dlsym.cpp
-+@@ -34,7 +34,7 @@
-+ #include "os.hpp"
-+ 
-+ 
-+-#ifdef __GLIBC__
-++#if defined(__GLIBC__) && !defined(__UCLIBC__)
-+ 
-+ 
-+ #include <dlfcn.h>
-+-- 
-+2.24.0
-+
-diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
-index c1be619f1b..45b4c307bb 100644
---- a/package/apitrace/Config.in
-+++ b/package/apitrace/Config.in
-@@ -1,11 +1,9 @@
--comment "apitrace needs a glibc toolchain w/ C++, gcc >= 4.9"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+comment "apitrace needs a toolchain w/ C++, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_PACKAGE_APITRACE
- 	bool "apitrace"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_USES_GLIBC # uses glibc specific __libc_dlsym
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_LIBPNG
--- 
-2.24.0
+Perhaps instead we could put the same effort into a variable that
+checks for uclibc fts support.
+That way selinux can be enabled with uclibc:
+
+For reference: https://patchwork.ozlabs.org/patch/787786/
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+Adam
