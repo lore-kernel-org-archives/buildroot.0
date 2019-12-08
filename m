@@ -1,42 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 23:23:30 +0100
-Subject: [Buildroot] [PATCH 2/5] package/shairport-sync: make libdaemon
- an optional dependency
-In-Reply-To: <20191203105341.1232360-2-joerg.krause@embedded.rocks>
+Date: Sun, 8 Dec 2019 23:23:34 +0100
+Subject: [Buildroot] [PATCH 3/5] package/shairport-sync: add audio DSP
+ convolution option
+In-Reply-To: <20191203105341.1232360-3-joerg.krause@embedded.rocks>
 References: <20191203105341.1232360-1-joerg.krause@embedded.rocks>
- <20191203105341.1232360-2-joerg.krause@embedded.rocks>
-Message-ID: <20191208232330.172a8263@windsurf.home>
+ <20191203105341.1232360-3-joerg.krause@embedded.rocks>
+Message-ID: <20191208232334.6df27d04@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  3 Dec 2019 11:53:38 +0100
+On Tue,  3 Dec 2019 11:53:39 +0100
 J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
->  SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
->  SHAIRPORT_SYNC_LICENSE_FILES = LICENSES
-> -SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig libdaemon popt host-pkgconf
-> +SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig popt host-pkgconf
->  
->  # git clone, no configure
->  SHAIRPORT_SYNC_AUTORECONF = YES
-> @@ -33,6 +33,11 @@ else
->  SHAIRPORT_SYNC_CONF_OPTS += --with-tinysvcmdns
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBDAEMON),y)
-> +SHAIRPORT_SYNC_DEPENDENCIES += libdaemon
-> +SHAIRPORT_SYNC_CONF_OPTS += --with-libdaemon
-> +endif
+> Already in version 3.1, shairport-sync added audio DSP convolution support. This
+> optional feature requires the sndfile library.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/shairport-sync/Config.in         | 6 ++++++
+>  package/shairport-sync/shairport-sync.mk | 5 +++++
+>  2 files changed, 11 insertions(+)
 
-I've applied, but it would be nice to make shairport-sync follow the
-same convention as other packages: explicitly pass --without-<foo> when
-the relevant dependencies are not available (not just for
---with-libdaemon, but similarly for other features).
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
