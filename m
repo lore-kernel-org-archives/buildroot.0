@@ -1,22 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Dec 2019 08:52:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qpdf: fix license
-In-Reply-To: <20191207222914.1341949-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 7 Dec 2019 23:29:14 +0100")
-References: <20191207222914.1341949-1-fontaine.fabrice@gmail.com>
-Message-ID: <878snnjltj.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Dec 2019 08:53:11 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/linksprite_pcduino: add
+ host-openssl for kernel build
+In-Reply-To: <20191207113224.2635748-1-geomatsi@gmail.com> (Sergey
+ Matyukevich's message of "Sat, 7 Dec 2019 14:32:24 +0300")
+References: <20191207113224.2635748-1-geomatsi@gmail.com>
+Message-ID: <874kybjlso.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
 
- > qpdf is also licensed under Apache-2.0 since version 7.0.0 and
- > https://github.com/qpdf/qpdf/commit/07c8bb2843f1a975a27d396da33d813a1537ee3a
+ > Updated kernel version for pcDuino board requires host-openssl
+ > to build successfully. This commit adds the required option:
+ >     BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/371286142
+
+ > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
 Committed, thanks.
 
