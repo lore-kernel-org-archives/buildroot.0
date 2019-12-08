@@ -1,37 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Dec 2019 08:40:48 +0100
-Subject: [Buildroot] [git commit] package/pkg-golang: enable trimpath option
- for reproducible builds
-Message-ID: <20191208073535.0B7E388720@busybox.osuosl.org>
+Date: Sun, 08 Dec 2019 08:51:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ytree: fix license
+In-Reply-To: <20191207212720.1301402-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 7 Dec 2019 22:27:20 +0100")
+References: <20191207212720.1301402-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h82bjlv8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=687230730dfb2bab9a54506867786c0bd1b985f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-The -trimpath option (introduced in go 1.13) removes absolute build paths
-from the target binary.  This results in more consistent / reproducible
-builds across different systems with varying paths to Buildroot.
+ > License is GPL-2.0+ not GPL-2.0 as specified in files that contain
+ > license information: tilde.{h,c} and xmalloc.{h,c}
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-[Peter: mention that this is a go 1.13+ feature]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-golang.mk | 1 +
- 1 file changed, 1 insertion(+)
+ytree is messy. I have been in contact with the upstream developer to
+clarify this, and he ended up releasing a 2.0 tarball with no code
+changes, just the clarification that it is released under GPL-2.0+. That
+tarball unfortunately had some issues (including having a GPL-3.0 COPYING
+file rather than 2.0), which I pointed out but never heard back.
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index e47de17aba..2494ce028c 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -61,6 +61,7 @@ $(2)_WORKSPACE ?= _gopath
- $(2)_BUILD_OPTS += \
- 	-ldflags "$$($(2)_LDFLAGS)" \
- 	-tags "$$($(2)_TAGS)" \
-+	-trimpath \
- 	-p $(PARALLEL_JOBS)
+I have just redownloaded the 2.0 tarball, and I see the COPYING file has
+been silently changed to 2.0, so perhaps a nicer solution would be to
+combine this license change with the bump to 2.0?
+
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/ytree/ytree.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+
+ > diff --git a/package/ytree/ytree.mk b/package/ytree/ytree.mk
+ > index d9716f93ba..379be1e8e0 100644
+ > --- a/package/ytree/ytree.mk
+ > +++ b/package/ytree/ytree.mk
+ > @@ -6,7 +6,7 @@
  
- # Target packages need the Go compiler on the host.
+ >  YTREE_VERSION = 1.99pl2
+ >  YTREE_SITE = https://www.han.de/~werner
+ > -YTREE_LICENSE = GPL-2.0
+ > +YTREE_LICENSE = GPL-2.0+
+ >  YTREE_LICENSE_FILES = COPYING
+ >  YTREE_DEPENDENCIES = ncurses
+ 
+ > -- 
+ > 2.24.0
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+Bye, Peter Korsgaard
