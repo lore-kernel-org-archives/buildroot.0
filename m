@@ -1,42 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 13:58:11 +0100
-Subject: [Buildroot] [git commit] package/xl2tp: bump to version 1.3.15
-Message-ID: <20191208132020.2AE8C82DA2@busybox.osuosl.org>
+Date: Sun, 8 Dec 2019 13:58:32 +0100
+Subject: [Buildroot] [git commit] package/ytree: bump to version 2.00
+Message-ID: <20191208132020.376437F88E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f90905ef41aa3df6a6d0eafc8f31ee77d776fc6d
+commit: https://git.buildroot.net/buildroot/commit/?id=f3ee9c4337f75c2fdcaeab2484639044505f0ea2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License is GPL-2.0+ not GPL-2.0 as specified in files that contain
+license information: tilde.{h,c} and xmalloc.{h,c}
+
+Release 2.00 also added a comment about this in CHANGES and README
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xl2tp/xl2tp.hash | 2 +-
- package/xl2tp/xl2tp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ytree/ytree.hash | 2 +-
+ package/ytree/ytree.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xl2tp/xl2tp.hash b/package/xl2tp/xl2tp.hash
-index 8fa607f00e..8cf6522833 100644
---- a/package/xl2tp/xl2tp.hash
-+++ b/package/xl2tp/xl2tp.hash
+diff --git a/package/ytree/ytree.hash b/package/ytree/ytree.hash
+index 3405c22d37..34ec8fefda 100644
+--- a/package/ytree/ytree.hash
++++ b/package/ytree/ytree.hash
 @@ -1,3 +1,3 @@
- # locally computed
--sha256  ff5a0806fecc58c7b9cbc625117a4521c0546522a5f5951ffb6eebdab998610f  xl2tp-1.3.14.tar.gz
-+sha256  0d149bf9d2f7d838806e6a36fd7a676d03bf246d2b7869e16c945330e13b922e  xl2tp-1.3.15.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
-index 6d40779a06..b40eb2fd18 100644
---- a/package/xl2tp/xl2tp.mk
-+++ b/package/xl2tp/xl2tp.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+-sha256 9d14e173183676bfb5da93ff90909547aa19f888504e45058a91f3bbd9d9112d  ytree-1.99pl2.tar.gz
++sha256 da8ecaf8e15f8b0d3077ea88da8db9cd607f72ed2a51e91a24d6ef3ff017c6bf  ytree-2.00.tar.gz
+ sha256 eb6bf7204569b4fe8eaf9d4dffc57e44047c5efb5deba1b2d99069ddbc99d031  COPYING
+diff --git a/package/ytree/ytree.mk b/package/ytree/ytree.mk
+index d9716f93ba..5a90264f42 100644
+--- a/package/ytree/ytree.mk
++++ b/package/ytree/ytree.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XL2TP_VERSION = 1.3.14
-+XL2TP_VERSION = 1.3.15
- XL2TP_SITE = $(call github,xelerance,xl2tpd,v$(XL2TP_VERSION))
- XL2TP_DEPENDENCIES = libpcap
- XL2TP_LICENSE = GPL-2.0
+-YTREE_VERSION = 1.99pl2
++YTREE_VERSION = 2.00
+ YTREE_SITE = https://www.han.de/~werner
+-YTREE_LICENSE = GPL-2.0
++YTREE_LICENSE = GPL-2.0+
+ YTREE_LICENSE_FILES = COPYING
+ YTREE_DEPENDENCIES = ncurses
+ 
