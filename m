@@ -1,40 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 22:50:23 +0100
-Subject: [Buildroot] [PATCH 1/8] package/bitcoin: depends on
- !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-In-Reply-To: <20191208162725.2561301-1-fontaine.fabrice@gmail.com>
-References: <20191208162725.2561301-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191208225023.250dae90@windsurf.home>
+Date: Sun, 8 Dec 2019 22:51:01 +0100
+Subject: [Buildroot] [git commit] package/sysrepo: fix a typo when
+ installing with systemd
+Message-ID: <20191208214238.AEDBF7FF60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  8 Dec 2019 17:27:18 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=22a0151179abd7ac36f60b9ac802c5b902f470f3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Obviously, bitcoin depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735, not on
-> BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> 
-> Fixes:
->  - No autobuilder failure
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/bitcoin/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
+Acked-by: Heiko Thiery <heiko.thiery at kontron.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sysrepo/sysrepo.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Wow, this is really bad :-/ And it's something that I changed when
-applying the original patch, so it's entirely my fault :-/
-
-Thanks for noticing and fixing it. I've applied your entire series.
-Thanks a lot.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index 8676158a19..49c908d62d 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
+@@ -42,7 +42,7 @@ define SYSREPO_INSTALL_INIT_SYSV
+ endef
+ 
+ define SYSREPO_INSTALL_INIT_SYSTEMD
+-	mkdir -p $(TARGET_DIR)/etc/systemd/systemd/multi-user.target.wants
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -fs ../../../../usr/lib/systemd/system/sysrepod.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -fs ../../../../usr/lib/systemd/system/sysrepo-plugind.service \
