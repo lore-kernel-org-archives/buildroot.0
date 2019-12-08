@@ -1,9 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun,  8 Dec 2019 12:19:28 -0800
-Subject: [Buildroot] [PATCH 06/11] libsemanage: bump version to 3.0
+Date: Sun,  8 Dec 2019 12:19:29 -0800
+Subject: [Buildroot] [PATCH 07/11] package/checkpolicy: bump version to 3.0
 In-Reply-To: <20191208201933.3832327-1-aduskett@gmail.com>
 References: <20191208201933.3832327-1-aduskett@gmail.com>
-Message-ID: <20191208201933.3832327-6-aduskett@gmail.com>
+Message-ID: <20191208201933.3832327-7-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,35 +14,35 @@ From: Adam Duskett <Aduskett@gmail.com>
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libsemanage/libsemanage.hash | 2 +-
- package/libsemanage/libsemanage.mk   | 4 ++--
+ package/checkpolicy/checkpolicy.hash | 2 +-
+ package/checkpolicy/checkpolicy.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
-index 871ed192c4..85dafeb44d 100644
---- a/package/libsemanage/libsemanage.hash
-+++ b/package/libsemanage/libsemanage.hash
+diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
+index 9e77b9b027..264e21b8f3 100644
+--- a/package/checkpolicy/checkpolicy.hash
++++ b/package/checkpolicy/checkpolicy.hash
 @@ -1,5 +1,5 @@
- # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 2576349d344492e73b468059767268dec1dabd8c35f3c7222c3ec2448737bc1c libsemanage-2.9.tar.gz
-+sha256 a497b0720d54eac427f1f3f618eed417e50ed8f4e47ed0f7a1d391bd416e84cf libsemanage-3.0.tar.gz
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 a946c32b284532447857e4c48830f8816867c61220c8c08bdd32e6f691335f8e  checkpolicy-2.9.tar.gz
++sha256 c88c719a141dd5c1202d49c378c7f063349d630522d5e04dc6e0c53da81aa4f8  checkpolicy-3.0.tar.gz
  
  # Hash for license file
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index fd90346049..407c66b9cb 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
+ sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+index 8f1ec72549..3b055df489 100644
+--- a/package/checkpolicy/checkpolicy.mk
++++ b/package/checkpolicy/checkpolicy.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBSEMANAGE_VERSION = 2.9
--LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
-+LIBSEMANAGE_VERSION = 3.0
-+LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
- LIBSEMANAGE_LICENSE = LGPL-2.1+
- LIBSEMANAGE_LICENSE_FILES = COPYING
- LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux bzip2
+-CHECKPOLICY_VERSION = 2.9
+-CHECKPOLICY_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
++CHECKPOLICY_VERSION = 3.0
++CHECKPOLICY_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
+ CHECKPOLICY_LICENSE = GPL-2.0
+ CHECKPOLICY_LICENSE_FILES = COPYING
+ 
 -- 
 2.23.0
