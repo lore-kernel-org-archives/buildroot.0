@@ -1,96 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 14:33:09 +0100
-Subject: [Buildroot] [git commit] package/libv4l: fix musl build
-Message-ID: <20191208132651.31C5087EAA@busybox.osuosl.org>
+Date: Sun, 8 Dec 2019 14:42:10 +0100
+Subject: [Buildroot] [git commit] package/matchbox-desktop: remove
+ unrecognized option
+Message-ID: <20191208133343.0746F888D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a33f5e73df7f0a12d11a3a542d7f158b9ce0684
+commit: https://git.buildroot.net/buildroot/commit/?id=4022d0d28b87c57789a1a53759bf54c1a1246443
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/bf8/bf88f89bdb966ef54938e4274114d4afe5668b1f/
+--enable-expat is not a recognized option so remove it
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ....h-add-missing-includes-to-fix-musl-build.patch | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ package/matchbox-desktop/matchbox-desktop.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libv4l/0001-keymap.h-add-missing-includes-to-fix-musl-build.patch b/package/libv4l/0001-keymap.h-add-missing-includes-to-fix-musl-build.patch
-new file mode 100644
-index 0000000000..238f8fc377
---- /dev/null
-+++ b/package/libv4l/0001-keymap.h-add-missing-includes-to-fix-musl-build.patch
-@@ -0,0 +1,68 @@
-+From baba68cdcb44fc11d0ba8ce2c13eb5b06bbd9b33 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Wed, 30 Oct 2019 07:15:23 +0100
-+Subject: [PATCH] keymap.h: add missing includes to fix musl build
-+
-+Needed to fix these build errors:
-+
-+In file included from keymap.c:13:0:
-+keymap.h:23:2: error: unknown type name 'u_int32_t'
-+  u_int32_t scancode;
-+
-+keymap.h:36:1: error: unknown type name 'error_t'
-+ error_t parse_keymap(char *fname, struct keymap **keymap, bool verbose);
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+Patch was not sent upstream due to broken mailing list setup:
-+
-+<majordomo@vger.kernel.org>: host vger.kernel.org[209.132.180.67] said: 553
-+    5.7.1 Hello [xx.xx.xx.xx], for your MAIL FROM address
-+    <bernd.kuhls@t-online.de> policy analysis reported: Your address is not
-+    liked source for email (in reply to MAIL FROM command)
-+
-+Hello [xx.xx.xx.xx], for your MAIL FROM address <berndkuhls@hotmail.com>
-+ policy analysis reported: Your address is not liked source for email 
-+
-+ utils/common/keymap.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/utils/common/keymap.h b/utils/common/keymap.h
-+index f2b29632..bb1edce9 100644
-+--- a/utils/common/keymap.h
-++++ b/utils/common/keymap.h
-+@@ -1,4 +1,8 @@
-+ /* SPDX-License-Identifier: GPL-2.0 */
-++
-++#include <argp.h>
-++#include <sys/types.h>
-++
-+ #ifndef __KEYMAP_H
-+ #define __KEYMAP_H
-+ 
-+diff -uNr v4l-utils-1.18.0.orig/utils/ir-ctl/keymap.h v4l-utils-1.18.0/utils/ir-ctl/keymap.h
-+--- v4l-utils-1.18.0.orig/utils/ir-ctl/keymap.h	2019-09-22 11:22:54.000000000 +0200
-++++ v4l-utils-1.18.0/utils/ir-ctl/keymap.h	2019-10-30 07:06:18.250548011 +0100
-+@@ -1,4 +1,8 @@
-+ /* SPDX-License-Identifier: GPL-2.0 */
-++
-++#include <argp.h>
-++#include <sys/types.h>
-++
-+ #ifndef __KEYMAP_H
-+ #define __KEYMAP_H
-+ 
-+diff -uNr v4l-utils-1.18.0.orig/utils/keytable/keymap.h v4l-utils-1.18.0/utils/keytable/keymap.h
-+--- v4l-utils-1.18.0.orig/utils/keytable/keymap.h	2019-09-22 11:22:54.000000000 +0200
-++++ v4l-utils-1.18.0/utils/keytable/keymap.h	2019-10-30 07:06:56.218816126 +0100
-+@@ -1,4 +1,8 @@
-+ /* SPDX-License-Identifier: GPL-2.0 */
-++
-++#include <argp.h>
-++#include <sys/types.h>
-++
-+ #ifndef __KEYMAP_H
-+ #define __KEYMAP_H
-+ 
-+-- 
-+2.20.1
+diff --git a/package/matchbox-desktop/matchbox-desktop.mk b/package/matchbox-desktop/matchbox-desktop.mk
+index 81b13c079c..9054dd80c6 100644
+--- a/package/matchbox-desktop/matchbox-desktop.mk
++++ b/package/matchbox-desktop/matchbox-desktop.mk
+@@ -11,7 +11,6 @@ MATCHBOX_DESKTOP_SITE = http://downloads.yoctoproject.org/releases/matchbox/matc
+ MATCHBOX_DESKTOP_LICENSE = GPL-2.0+
+ MATCHBOX_DESKTOP_LICENSE_FILES = COPYING
+ MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib zlib
+-MATCHBOX_DESKTOP_CONF_OPTS = --enable-expat
+ 
+ # The bundled configure script does not properly replace LIBADD_DL, so
+ # we force an autoreconf even if we don't have any patches touching
