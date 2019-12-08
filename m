@@ -1,40 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  8 Dec 2019 10:06:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xl2tp: bump to version 1.3.15
-Message-ID: <20191208090600.1359073-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 08 Dec 2019 10:09:35 +0100
+Subject: [Buildroot] [PATCH] Revert "package/dialog: bump version to
+ 1.3-20190808"
+In-Reply-To: <20191206133802.127863-1-paul@crapouillou.net> (Paul Cercueil's
+ message of "Fri, 6 Dec 2019 14:38:02 +0100")
+References: <20191206133802.127863-1-paul@crapouillou.net>
+Message-ID: <87zhg3i3ow.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/xl2tp/xl2tp.hash | 2 +-
- package/xl2tp/xl2tp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
 
-diff --git a/package/xl2tp/xl2tp.hash b/package/xl2tp/xl2tp.hash
-index 8fa607f00e..8cf6522833 100644
---- a/package/xl2tp/xl2tp.hash
-+++ b/package/xl2tp/xl2tp.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  ff5a0806fecc58c7b9cbc625117a4521c0546522a5f5951ffb6eebdab998610f  xl2tp-1.3.14.tar.gz
-+sha256  0d149bf9d2f7d838806e6a36fd7a676d03bf246d2b7869e16c945330e13b922e  xl2tp-1.3.15.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
-index 6d40779a06..b40eb2fd18 100644
---- a/package/xl2tp/xl2tp.mk
-+++ b/package/xl2tp/xl2tp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XL2TP_VERSION = 1.3.14
-+XL2TP_VERSION = 1.3.15
- XL2TP_SITE = $(call github,xelerance,xl2tpd,v$(XL2TP_VERSION))
- XL2TP_DEPENDENCIES = libpcap
- XL2TP_LICENSE = GPL-2.0
+ > The 1.3-20190808 version looks extremely buggy.
+ > For instance, if you try to open a dialog using this command:
+ > dialog --no-shadow --msgbox "test test test" 10 32
+
+ > - the --no-shadow attribute doesn't seem to work anymore, since the
+ >   frame will sill have a shadow,
+ > - the text shown within the frame won't be "test test test" as expected,
+ >   but "testtesttest".
+
+ > These bugs make the program completely unusable, so revert to the last
+ > known good version.
+
+Funky. I gave it a try (using qemu_arm_versatile_defconfig with sourcery
+codebench toolchain) and I indeed see the shadow but the text is
+rendered correctly:
+
+http://peter.korsgaard.com/dialog.png
+
+And with the revert the shadow is indeed gone:
+
+http://peter.korsgaard.com/dialog-old.png
+
+
+Interesting enough, dialog on my (Debian, 1.3-20190211-1) laptop behaves
+like the new version, so it also unconditionally adds the frame:
+
+http://peter.korsgaard.com/dialog-debian.png
+
+So I am not sure where you got the corrupted testtesttest from? What is
+your TERM variable set to?
+
+Anyway, I am OK with reverting, but it would be great if you could also:
+
+- Contact upstream to get it fixed in future releases
+- Add a runtime test for it
+
 -- 
-2.24.0
+Bye, Peter Korsgaard
