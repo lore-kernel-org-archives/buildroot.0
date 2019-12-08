@@ -1,10 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun,  8 Dec 2019 12:19:25 -0800
-Subject: [Buildroot] [PATCH 03/11] package/refpolicy: bump version to
- 2.20190609
+Date: Sun,  8 Dec 2019 12:19:26 -0800
+Subject: [Buildroot] [PATCH 04/11] package/libsepol: bump version to 3.0
 In-Reply-To: <20191208201933.3832327-1-aduskett@gmail.com>
 References: <20191208201933.3832327-1-aduskett@gmail.com>
-Message-ID: <20191208201933.3832327-3-aduskett@gmail.com>
+Message-ID: <20191208201933.3832327-4-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +14,35 @@ From: Adam Duskett <Aduskett@gmail.com>
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/refpolicy/refpolicy.hash | 2 +-
- package/refpolicy/refpolicy.mk   | 4 ++--
+ package/libsepol/libsepol.hash | 2 +-
+ package/libsepol/libsepol.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
-index 856d8cb8a2..0c77b626cc 100644
---- a/package/refpolicy/refpolicy.hash
-+++ b/package/refpolicy/refpolicy.hash
+diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
+index 83eb63213e..a43d387a4f 100644
+--- a/package/libsepol/libsepol.hash
++++ b/package/libsepol/libsepol.hash
 @@ -1,5 +1,5 @@
- # From https://github.com/SELinuxProject/refpolicy/releases
--sha256 ed620dc91c4e09eee6271b373f7c61a364a82ea57bd2dc86ca1f7075304e2843  refpolicy-2.20190201.tar.bz2
-+sha256 67bd1213e9d014ada15512028bb7f35ef6610c2d209cc5117b8577474aa6147f  refpolicy-2.20190609.tar.bz2
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 a34b12b038d121e3e459b1cbaca3c9202e983137819c16baf63658390e3f1d5d  libsepol-2.9.tar.gz
++sha256 5b7ae1881909f1048b06f7a0c364c5c8a86ec12e0ec76e740fe9595a6033eb79  libsepol-3.0.tar.gz
  
- # Locally computed
- sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 1c3b1bc541..bc4eed815b 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -4,9 +4,9 @@
+ # Hash for license file
+ sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index 58b9b9c374..59ff2640df 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--REFPOLICY_VERSION = 2.20190201
-+REFPOLICY_VERSION = 2.20190609
- REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
--REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20190201
-+REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20190609
- REFPOLICY_LICENSE = GPL-2.0
- REFPOLICY_LICENSE_FILES = COPYING
- REFPOLICY_INSTALL_STAGING = YES
+-LIBSEPOL_VERSION = 2.9
+-LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
++LIBSEPOL_VERSION = 3.0
++LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
+ LIBSEPOL_LICENSE = LGPL-2.1+
+ LIBSEPOL_LICENSE_FILES = COPYING
+ 
 -- 
 2.23.0
