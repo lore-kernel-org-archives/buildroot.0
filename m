@@ -1,31 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 14:31:18 +0100
-Subject: [Buildroot] [PATCH] package/libnss: bump to version 3.48
-In-Reply-To: <20191208110650.106092-1-giulio.benetti@benettiengineering.com>
-References: <20191208110650.106092-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20191208143118.40d45596@windsurf.home>
+Date: Sun, 8 Dec 2019 14:31:26 +0100
+Subject: [Buildroot] [git commit] package/acsccid: needs iconv
+Message-ID: <20191208132259.D221B88374@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  8 Dec 2019 12:06:50 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f9bcd91e5c7f4631c14971ef29047cbd534c577a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  # Need to pass down TARGET_CFLAGS and TARGET_LDFLAGS
->  define LIBNSS_FIXUP_LINUX_MK
-> -	echo 'OS_CFLAGS += $(LIBNSS_CFLAGS)' >> $(@D)/nss/coreconf/Linux.mk
-> +	echo 'OS_CFLAGS += $(LIBNSS_CFLAGS) -D__USE_POSIX' >> $(@D)/nss/coreconf/Linux.mk
+Upstream commit
+https://github.com/acshk/acsccid/commit/5672d821ba96deb6c0c11060e4de0c9dab9b21c7
+added "include <iconv.h>"
 
-Defining __USE_POSIX shouldn't be done, it's defined internally by
-<features.h> when _POSIX_SOURCE is defined. So I dropped this patch of
-your patch, and applied to master.
+Fixes:
+http://autobuild.buildroot.net/results/04e/04eac264718a47c550bb48b3c36314751fb4de91/
 
-Thanks!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/acsccid/Config.in  | 1 +
+ package/acsccid/acsccid.mk | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/acsccid/Config.in b/package/acsccid/Config.in
+index 90624ee797..74dd6de295 100644
+--- a/package/acsccid/Config.in
++++ b/package/acsccid/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_ACSCCID
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pcsc-lite, libusb
+ 	depends on BR2_USE_MMU # pcsc-lite
+ 	depends on !BR2_STATIC_LIBS # pcsc-lite
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_PCSC_LITE
+ 	# Even though there is a --disable-libusb option, it has in
+ 	# fact no effect, and acsccid really requires libusb.
+diff --git a/package/acsccid/acsccid.mk b/package/acsccid/acsccid.mk
+index abb25ac3be..28a31b95a3 100644
+--- a/package/acsccid/acsccid.mk
++++ b/package/acsccid/acsccid.mk
+@@ -13,4 +13,8 @@ ACSCCID_INSTALL_STAGING = YES
+ ACSCCID_DEPENDENCIES = pcsc-lite host-flex host-pkgconf libusb
+ ACSCCID_CONF_OPTS = --enable-usbdropdir=/usr/lib/pcsc/drivers
+ 
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++ACSCCID_DEPENDENCIES += libiconv
++endif
++
+ $(eval $(autotools-package))
