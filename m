@@ -1,13 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 20:57:11 +0100
-Subject: [Buildroot] [PATCH v6 3/6] package/polkit: add systemd service
- file.
-In-Reply-To: <CAFSsvmpVed=XG6=f46OY3UUCXEk3zgK67KK-93wLTKFHBvjedQ@mail.gmail.com>
+Date: Sun, 8 Dec 2019 20:58:47 +0100
+Subject: [Buildroot] [PATCH v6 1/6] package/polkit: bump to version 0.116
+In-Reply-To: <CAFSsvmqCnXXkjMtJiPOpHx0E8Xv4fHcOuNw3qSSn52i9F-6yPg@mail.gmail.com>
 References: <20191206234649.3972927-1-aduskett@gmail.com>
- <20191206234649.3972927-3-aduskett@gmail.com>
- <20191208160419.22f9d23d@windsurf.home>
- <CAFSsvmpVed=XG6=f46OY3UUCXEk3zgK67KK-93wLTKFHBvjedQ@mail.gmail.com>
-Message-ID: <20191208205711.32a72740@windsurf.home>
+ <20191208160213.030635f6@windsurf.home>
+ <CAFSsvmqCnXXkjMtJiPOpHx0E8Xv4fHcOuNw3qSSn52i9F-6yPg@mail.gmail.com>
+Message-ID: <20191208205847.76c05a1f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,44 +14,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 8 Dec 2019 10:46:58 -0800
+On Sun, 8 Dec 2019 11:04:16 -0800
 Adam Duskett <aduskett@gmail.com> wrote:
 
-> > Why aren't you using the one from polkit itself? There is one in
-> > data/polkit.service.in, which gets compiled to polkit.service, and
-> > apparently installed if HAVE_SYSTEMD is enabled. There also a D-Bus
-> > service file at data/org.freedesktop.PolicyKit1.service.in.  
-> I guess I could.
-> 
+> > One direction that would be nice to look at is to enable spidermonkey
+> > and then polkit on uClibc. Regarding the fenv issue, perhaps we could
+> > have a boolean that says whether uClibc provides fenv support for the
+> > current architecture, and then treat this as an architecture dependency
+> > inside BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS ? How many architectures
+> > have sufficient fenv support in uClibc for spidermonkey ?
 > >  
-> > > - Add a polkitd user upon which /usr/lib/polkit-1/polkitd relies.
-> > > - Set appropriate directory permissions to allow the polkitd user to
-> > >   access rules and actions.
-> > > - Set appropriate default attributes for the pkexec binary.  
-> >
-> > These could be done separately from the systemd service file addition.
-> >  
-> No, they can't. The user is required to access those particular
-> directories during
-> the service startup.
+> Not many, Yann and I had a conversation about this earlier and it
+> doesn't seem worth it.
 
-They can be added before, as a separate patch. Note that if I hadn't
-come up with the systemd unit question, I would have applied as-is.
+OK.
 
-> I don't have time to make a new patch set, so I am going to just mark the entire
-> patch series as rejected and move on.
-> 
-> If anybody else wants to resurrect this patch series they may do so.
+> Perhaps instead we could put the same effort into a variable that
+> checks for uclibc fts support.
+> That way selinux can be enabled with uclibc:
 
-That's a bit said. What you've done is very good, it includes
-additional test cases.
+SELinux can already be enabled on uClibc. I added the musl-fts package,
+and used it in libselinux to make it available for uClibc/musl.
 
-I'm surprised you're giving up at v6. polkit was a complicated topic,
-other folks tried in the past, and gave up way before they reached the
-point where you are now, which is essentially very close to what can be
-merged.
-
-Best regards,
+When you're grumpy, please verify your claims :-)
 
 Thomas
 -- 
