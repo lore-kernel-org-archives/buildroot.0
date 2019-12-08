@@ -1,57 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 23:06:25 +0100
-Subject: [Buildroot] [git commit] package/shairport-sync: add audio DSP
- convolution option
-Message-ID: <20191208221346.6707188F27@busybox.osuosl.org>
+Date: Sun, 8 Dec 2019 23:05:42 +0100
+Subject: [Buildroot] [git commit] package/shairport-sync: bump to version
+ 3.3.5
+Message-ID: <20191208221346.3DB1F88F27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e4acf980b48607a0d6ef98e6d229f6609e82af3
+commit: https://git.buildroot.net/buildroot/commit/?id=da9bf180ddf33b255fe6216e5b87b324a7d003fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Already in version 3.1, shairport-sync added audio DSP convolution support. This
-optional feature requires the sndfile library.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/shairport-sync/Config.in         | 6 ++++++
- package/shairport-sync/shairport-sync.mk | 5 +++++
- 2 files changed, 11 insertions(+)
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
-index 085a9ec77d..87f38a940d 100644
---- a/package/shairport-sync/Config.in
-+++ b/package/shairport-sync/Config.in
-@@ -20,6 +20,12 @@ config BR2_PACKAGE_SHAIRPORT_SYNC
- 
- if BR2_PACKAGE_SHAIRPORT_SYNC
- 
-+config BR2_PACKAGE_SHAIRPORT_SYNC_CONVOLUTION
-+	bool "convolution support"
-+	select BR2_PACKAGE_LIBSNDFILE
-+	help
-+	  Enable audio DSP convolution support.
-+
- config BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR
- 	bool "libsoxr support"
- 	select BR2_PACKAGE_LIBSOXR
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 9b5611af16..b072fad045 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a8f580fa8eb71172f6237c0cdbf23287b27f41f5399f5addf8cd0115a47a4b2b  shairport-sync-3.3.2.tar.gz
++sha256  9757dd7f19c0bc28cb06a6753305c3ed89da2d271d069b36d1b12173309c1459  shairport-sync-3.3.5.tar.gz
+ sha256  1daaa904985807b7f9f2fa91f6b19f3faadf8df4e813f7451a691f89a6965e3f  LICENSES
 diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 3d9e909879..1ca56e9f0a 100644
+index b5f57faac1..d7c8baa30c 100644
 --- a/package/shairport-sync/shairport-sync.mk
 +++ b/package/shairport-sync/shairport-sync.mk
-@@ -51,6 +51,11 @@ SHAIRPORT_SYNC_CONF_LIBS += -lz
- endif
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_CONVOLUTION),y)
-+SHAIRPORT_SYNC_DEPENDENCIES += libsndfile
-+SHAIRPORT_SYNC_CONF_OPTS += --with-convolution
-+endif
-+
- ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR),y)
- SHAIRPORT_SYNC_DEPENDENCIES += libsoxr
- SHAIRPORT_SYNC_CONF_OPTS += --with-soxr
+-SHAIRPORT_SYNC_VERSION = 3.3.2
++SHAIRPORT_SYNC_VERSION = 3.3.5
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
