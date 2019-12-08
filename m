@@ -1,48 +1,42 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  8 Dec 2019 11:54:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ytree: bump to version 2.00
-Message-ID: <20191208105453.1623707-1-fontaine.fabrice@gmail.com>
+Date: Sun,  8 Dec 2019 12:00:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jailhouse: bump to version 0.11
+Message-ID: <20191208110032.1623910-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-License is GPL-2.0+ not GPL-2.0 as specified in files that contain
-license information: tilde.{h,c} and xmalloc.{h,c}
-
-Release 2.00 also added a comment about this in CHANGES and README
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ytree/ytree.hash | 2 +-
- package/ytree/ytree.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/jailhouse/jailhouse.hash | 3 ++-
+ package/jailhouse/jailhouse.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/ytree/ytree.hash b/package/ytree/ytree.hash
-index 3405c22d37..34ec8fefda 100644
---- a/package/ytree/ytree.hash
-+++ b/package/ytree/ytree.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 9d14e173183676bfb5da93ff90909547aa19f888504e45058a91f3bbd9d9112d  ytree-1.99pl2.tar.gz
-+sha256 da8ecaf8e15f8b0d3077ea88da8db9cd607f72ed2a51e91a24d6ef3ff017c6bf  ytree-2.00.tar.gz
- sha256 eb6bf7204569b4fe8eaf9d4dffc57e44047c5efb5deba1b2d99069ddbc99d031  COPYING
-diff --git a/package/ytree/ytree.mk b/package/ytree/ytree.mk
-index d9716f93ba..5a90264f42 100644
---- a/package/ytree/ytree.mk
-+++ b/package/ytree/ytree.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/jailhouse/jailhouse.hash b/package/jailhouse/jailhouse.hash
+index 6deb184d58..9fb4d599da 100644
+--- a/package/jailhouse/jailhouse.hash
++++ b/package/jailhouse/jailhouse.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 27fb262a3b42ba263f2a5a815127d2a9275f2f81e00e782591babb69d4f0465a  jailhouse-0.10.tar.gz
++sha256 8de2406f455db07794cc750238ce57bc897673ba2b68c56fc9ae2d8079142b33  jailhouse-0.11.tar.gz
++sha256 3aafb31a2436178323663e00511f16d58fc36ea654b1457532e79d017205efd8  COPYING
+diff --git a/package/jailhouse/jailhouse.mk b/package/jailhouse/jailhouse.mk
+index aab232eb92..1aa7851707 100644
+--- a/package/jailhouse/jailhouse.mk
++++ b/package/jailhouse/jailhouse.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--YTREE_VERSION = 1.99pl2
-+YTREE_VERSION = 2.00
- YTREE_SITE = https://www.han.de/~werner
--YTREE_LICENSE = GPL-2.0
-+YTREE_LICENSE = GPL-2.0+
- YTREE_LICENSE_FILES = COPYING
- YTREE_DEPENDENCIES = ncurses
- 
+-JAILHOUSE_VERSION = 0.10
++JAILHOUSE_VERSION = 0.11
+ JAILHOUSE_SITE = $(call github,siemens,jailhouse,v$(JAILHOUSE_VERSION))
+ JAILHOUSE_LICENSE = GPL-2.0
+ JAILHOUSE_LICENSE_FILES = COPYING
 -- 
 2.24.0
