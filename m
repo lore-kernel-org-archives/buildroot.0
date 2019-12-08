@@ -1,31 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 22:48:54 +0100
-Subject: [Buildroot] [git commit] package/bitcoin: disable benchmarks
-Message-ID: <20191208214104.B748288D1F@busybox.osuosl.org>
+Date: Sun, 8 Dec 2019 22:48:46 +0100
+Subject: [Buildroot] [git commit] package/bitcoin: add host-pkgconf
+ dependency
+Message-ID: <20191208214104.A77667F901@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff7dd7062caa4ba84e169a9defe3feb86e80b7aa
+commit: https://git.buildroot.net/buildroot/commit/?id=b8f91e6a989178ca3b9f458e0c80aa2330deb65d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+pkg-config can used to retrieve openssl and libevent dependencies
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bitcoin/bitcoin.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/bitcoin/bitcoin.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-index 7335c10187..7373bf4106 100644
+index eefde1df96..7335c10187 100644
 --- a/package/bitcoin/bitcoin.mk
 +++ b/package/bitcoin/bitcoin.mk
-@@ -11,6 +11,7 @@ BITCOIN_LICENSE = MIT
+@@ -9,7 +9,7 @@ BITCOIN_SITE = $(call github,bitcoin,bitcoin,v$(BITCOIN_VERSION))
+ BITCOIN_AUTORECONF = YES
+ BITCOIN_LICENSE = MIT
  BITCOIN_LICENSE_FILES = COPYING
- BITCOIN_DEPENDENCIES = host-pkgconf boost openssl libevent
+-BITCOIN_DEPENDENCIES = boost openssl libevent
++BITCOIN_DEPENDENCIES = host-pkgconf boost openssl libevent
  BITCOIN_CONF_OPTS = \
-+	--disable-bench \
  	--disable-wallet \
  	--disable-tests \
- 	--with-boost-libdir=$(STAGING_DIR)/usr/lib/ \
