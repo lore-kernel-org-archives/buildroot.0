@@ -1,65 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 22:59:11 +0100
-Subject: [Buildroot] [PATCH 4/7] sysrepo: Optional support for C++
- bindings
-In-Reply-To: <658112fad0f8e93c64403732be0ee1fd5ad99341.1575456104.git.jan.kundrat@cesnet.cz>
+Date: Sun, 8 Dec 2019 23:03:20 +0100
+Subject: [Buildroot] [PATCH 5/7] sysrepo: Use a common repository
+ location
+In-Reply-To: <b19aded0e3b221e21a629a3eba7deb8d7f54dfae.1575456104.git.jan.kundrat@cesnet.cz>
 References: <cover.1575456104.git.jan.kundrat@cesnet.cz>
- <658112fad0f8e93c64403732be0ee1fd5ad99341.1575456104.git.jan.kundrat@cesnet.cz>
-Message-ID: <20191208225911.3d781d15@windsurf.home>
+ <b19aded0e3b221e21a629a3eba7deb8d7f54dfae.1575456104.git.jan.kundrat@cesnet.cz>
+Message-ID: <20191208230320.3d65b55d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 4 Dec 2019 10:37:14 +0100
+On Wed, 4 Dec 2019 10:37:37 +0100
 Jan Kundr?t <jan.kundrat@cesnet.cz> wrote:
 
-> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
-> ---
->  package/sysrepo/Config.in  | 6 ++++++
->  package/sysrepo/sysrepo.mk | 7 +++++++
->  2 files changed, 13 insertions(+)
-> 
-> diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
-> index df7f0fd68e..81571ff9b3 100644
-> --- a/package/sysrepo/Config.in
-> +++ b/package/sysrepo/Config.in
-> @@ -25,6 +25,12 @@ config BR2_PACKAGE_SYSREPO_EXAMPLES
->  	help
->  	  Enable sysrepo examples.
->  
-> +config BR2_PACKAGE_SYSREPO_CPP
-> +	bool "Enable sysrepo C++ bindings"
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-> +	help
-> +	  Build the C++ wrapper around sysrepo.
-> +
->  endif
->  
->  comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
 > diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-> index 216e517526..113ed7a929 100644
+> index 113ed7a929..2ef64d13e2 100644
 > --- a/package/sysrepo/sysrepo.mk
 > +++ b/package/sysrepo/sysrepo.mk
-> @@ -61,5 +61,12 @@ HOST_SYSREPO_CONF_OPTS = \
->  	-DREPOSITORY_LOC=$(HOST_DIR)/etc/sysrepo \
->  	-DSUBSCRIPTIONS_SOCKET_DIR=$(HOST_DIR)/var/run/sysrepo-subscriptions
->  
-> +ifdef BR2_PACKAGE_SYSREPO_CPP
+> @@ -58,7 +58,7 @@ HOST_SYSREPO_CONF_OPTS = \
+>  	-DCALL_TARGET_BINS_DIRECTLY=OFF \
+>  	-DBUILD_EXAMPLES=OFF \
+>  	-DBUILD_CPP_EXAMPLES=OFF \
+> -	-DREPOSITORY_LOC=$(HOST_DIR)/etc/sysrepo \
+> +	-DREPOSITORY_LOC=$(BASE_TARGET_DIR)/etc/sysrepo \
 
-ifeq ($(BR2_PACKAGE_SYSREPO_CPP),y)
+I suppose you're using $(BASE_TARGET_DIR) here instead of $(TARGET_DIR)
+to work around issues with per-package directory support ?
 
-> +	SYSREPO_DEPENDENCIES += host-swig
-> +	HOST_SYSREPO_DEPENDENCIES += host-swig
-> +	SYSREPO_CONF_OPTS += -DGEN_LANGUAGE_BINDINGS=ON -DGEN_CPP_BINDINGS=ON -DGEN_PYTHON_BINDINGS=OFF -DGEN_JAVA_BINDINGS=OFF
-> +	HOST_SYSREPO_CONF_OPTS += -DGEN_LANGUAGE_BINDINGS=ON -DGEN_CPP_BINDINGS=ON -DGEN_PYTHON_BINDINGS=OFF -DGEN_JAVA_BINDINGS=OFF
+Unfortunately, using $(BASE_TARGET_DIR) is not really a good option.
+Indeed, if any host-sysrepo tool gets used during the build, it will
+point to $(BASE_TARGET_DIR), which is with per-package directory
+support enabled, is completely empty during the build. It only gets
+populated at the very end of the build, in target-finalize.
 
-This has the same problem as your patch on libyang C++ bindings:
-BR2_PACKAGE_SYSREPO_CPP is an option that affects the target package,
-so it should not have an effect on the host package.
+With per-package directory, we cannot have a hardcoded path to the
+target, it really needs to be dynamic. Can the sysrepoctl tool use an
+environment variable for example ?
 
-Best regards,
+> +# There's no point in keeping the logs around
+> +define SYSREPO_REMOVE_NOTIFICATION_LOG
+> +	rm -rf $(BASE_TARGET_DIR)/etc/sysrepo/data/notifications/
+
+Here, you can definitely use $(TARGET_DIR), because when the
+target-finalize hooks are executed, TARGET_DIR is defined to
+BASE_TARGET_DIR.
 
 Thomas
 -- 
