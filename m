@@ -1,66 +1,75 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 8 Dec 2019 11:04:16 -0800
-Subject: [Buildroot] [PATCH v6 1/6] package/polkit: bump to version 0.116
-In-Reply-To: <20191208160213.030635f6@windsurf.home>
-References: <20191206234649.3972927-1-aduskett@gmail.com>
- <20191208160213.030635f6@windsurf.home>
-Message-ID: <CAFSsvmqCnXXkjMtJiPOpHx0E8Xv4fHcOuNw3qSSn52i9F-6yPg@mail.gmail.com>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Sun, 8 Dec 2019 20:28:09 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/systemd: bump to version 244
+In-Reply-To: <20191208165419.31d0e265@windsurf.home>
+References: <20191205235027.3311948-1-aduskett@gmail.com>
+ <20191208165419.31d0e265@windsurf.home>
+Message-ID: <CAFvCimU9NrKcsE23H=svJn5AL0ZCA-6o2Y0LgxT44XjJ7K3=-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+Darn, I wanted to have the host-systemd in before bumping...
 
-On Sun, Dec 8, 2019 at 7:02 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Fri,  6 Dec 2019 15:46:44 -0800
+Oh well, I'll check everything up :)
+
+Le dim. 8 d?c. 2019 ? 16:54, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
+
+> On Thu,  5 Dec 2019 15:50:27 -0800
 > aduskett at gmail.com wrote:
 >
 > > From: Adam Duskett <Aduskett@gmail.com>
 > >
 > > Other changes:
-> >   - Add spidermonkey as a dependency.
-> >   - Add 0001-make-netgroup-support-optional.patch to allow building on musl.
-> >   - Add a runtime dependency on dbus.
-> >   - Add --disable-libelongind.
-> >   - Add --disable-libsystemd-login.
-> >   - Update dependencies for systemd pam support.
-> >   - Update dependencies for udisks.
+> >   - Update hash for README due to added licence directory
+> tools/chromiumos.
+> >   - Add hash for tools/chromiumos/LICENSE
+> >   - Added BSD-3-Clause (tools/chromiumos) in systemd.mk due to the new
+> >     tools/chromiumos directory.
+> >   - Added tools/chromiumos/LICENSE to SYSTEMD_LICENSE_FILES in
+> systemd.mk
 > >
 > > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > > ---
-> > changes v1 -> v6:
-> >   - Add depends on BR2_HOST_GCC_AT_LEAST_4_9 to the following:
-> >     - package/polkit/Config.in
-> >     - package/systemd/Config.in
-> >     - package/udisks/Config.in
+> > Changes v1 -> v2:
+> >   - Fixed license formatting (Thomas)
 >
-> To do the same as systemd, I changed the "depends on BR2_PACKAGE_DBUS"
-> to a "select BR2_PACKAGE_DBUS", made a few minor tweaks, and applied to
-> master. Thanks a lot for taking care of this difficult package!
+> Applied to master, thanks.
 >
-> One direction that would be nice to look at is to enable spidermonkey
-> and then polkit on uClibc. Regarding the fenv issue, perhaps we could
-> have a boolean that says whether uClibc provides fenv support for the
-> current architecture, and then treat this as an architecture dependency
-> inside BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS ? How many architectures
-> have sufficient fenv support in uClibc for spidermonkey ?
->
-Not many, Yann and I had a conversation about this earlier and it
-doesn't seem worth it.
-
-Perhaps instead we could put the same effort into a variable that
-checks for uclibc fts support.
-That way selinux can be enabled with uclibc:
-
-For reference: https://patchwork.ozlabs.org/patch/787786/
 > Thomas
 > --
 > Thomas Petazzoni, CTO, Bootlin
 > Embedded Linux and Kernel engineering
 > https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-Adam
+
+-- 
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191208/7a068016/attachment.html>
