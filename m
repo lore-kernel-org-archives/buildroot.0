@@ -1,233 +1,106 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sun,  8 Dec 2019 21:25:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/avro: new package
-Message-ID: <20191208202503.220908-1-titouan.christophe@railnova.eu>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 8 Dec 2019 21:13:51 +0100
+Subject: [Buildroot] [git commit] configs/raspberrypi: change deprecated
+ pi3-miniuart-bt option to miniuart-bt
+Message-ID: <20191208204240.73B3988DC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Avro is a data serialization system, somewhat similar to protobuff or
-cap'n proto. Unlike them however, Avro schemas can be distributed in
-json files to be loaded at runtime, rather than language-specific
-generated code to use at compile time.
+commit: https://git.buildroot.net/buildroot/commit/?id=ada40afb3244a81fe221d82c849cf0eb32af9d08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+The pi3-minuart-bt Device Tree overlay has been renamed to
+miniuart-bt, as it is useful/usable for other platforms than the
+RPi3. So we use this DT overlay and rename the
+--add-pi3-miniuart-bt-overlay option to --add-miniuart-bt-overlay
+accordingly.
+
+Signed-off-by: Arthur Courtel <arthur.courtel@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/avro/Config.in                        | 20 ++++++++++
- .../avro/avro-c/0001-Compile-on-musl.patch    | 39 +++++++++++++++++++
- package/avro/avro-c/Config.in                 |  4 ++
- package/avro/avro-c/avro-c.mk                 | 18 +++++++++
- package/avro/avro-py3/Config.in               |  3 ++
- package/avro/avro-py3/avro-py3.mk             | 17 ++++++++
- package/avro/avro.hash                        |  7 ++++
- package/avro/avro.mk                          | 14 +++++++
- 10 files changed, 124 insertions(+)
- create mode 100644 package/avro/Config.in
- create mode 100644 package/avro/avro-c/0001-Compile-on-musl.patch
- create mode 100644 package/avro/avro-c/Config.in
- create mode 100644 package/avro/avro-c/avro-c.mk
- create mode 100644 package/avro/avro-py3/Config.in
- create mode 100644 package/avro/avro-py3/avro-py3.mk
- create mode 100644 package/avro/avro.hash
- create mode 100644 package/avro/avro.mk
+ board/raspberrypi/post-image.sh      | 8 ++++----
+ board/raspberrypi/readme.txt         | 2 +-
+ configs/raspberrypi3_64_defconfig    | 2 +-
+ configs/raspberrypi3_defconfig       | 2 +-
+ configs/raspberrypi3_qt5we_defconfig | 2 +-
+ configs/raspberrypi4_defconfig       | 2 +-
+ 6 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d5fd6e0e93..d4a002c886 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2392,6 +2392,7 @@ F:	package/fbgrab/
- N:	Titouan Christophe <titouan.christophe@railnova.eu>
- F:	package/mosquitto/
- F:	package/redis/
-+F:	package/avro/
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index bbeb0bc721..9dbd98ef9b 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -10,13 +10,13 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+ for arg in "$@"
+ do
+ 	case "${arg}" in
+-		--add-pi3-miniuart-bt-overlay)
++		--add-miniuart-bt-overlay)
+ 		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+-			echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
++			echo "Adding 'dtoverlay=miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
+ 			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
  
- N:	Trent Piepho <tpiepho@impinj.com>
- F:	package/libp11/
-diff --git a/package/Config.in b/package/Config.in
-index 9e2b78fe6a..19f4f2d1ab 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1707,6 +1707,7 @@ menu "Other"
- 	source "package/argp-standalone/Config.in"
- 	source "package/armadillo/Config.in"
- 	source "package/atf/Config.in"
-+	source "package/avro/Config.in"
- 	source "package/bctoolbox/Config.in"
- 	source "package/bdwgc/Config.in"
- 	source "package/boost/Config.in"
-diff --git a/package/avro/Config.in b/package/avro/Config.in
-new file mode 100644
-index 0000000000..fbaa34d5b0
---- /dev/null
-+++ b/package/avro/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_AVRO
-+	bool "avro"
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  Apache Avro is a data serialization system.
-+	  Avro provides:
-+	  - Rich data structures.
-+	  - A compact, fast, binary data format.
-+	  - A container file, to store persistent data.
-+	  - Remote procedure call (RPC).
-+	  - Simple integration with dynamic languages.
-+	  - Code generation is not required to read or write data
-+	    files nor to use or implement RPC protocols.
-+	  - Code generation as an optional optimization,
-+	    only worth implementing for statically typed languages.
-+
-+if BR2_PACKAGE_AVRO
-+source "package/avro/avro-c/Config.in"
-+source "package/avro/avro-py3/Config.in"
-+endif
-diff --git a/package/avro/avro-c/0001-Compile-on-musl.patch b/package/avro/avro-c/0001-Compile-on-musl.patch
-new file mode 100644
-index 0000000000..188a3ac790
---- /dev/null
-+++ b/package/avro/avro-c/0001-Compile-on-musl.patch
-@@ -0,0 +1,39 @@
-+From 55a5ad94c77896eb25e2c7ed024d78a0a2c09007 Mon Sep 17 00:00:00 2001
-+From: Titouan Christophe <titouan.christophe@railnova.eu>
-+Date: Sun, 8 Dec 2019 01:55:59 +0100
-+Subject: [PATCH 1/1] Allow avro C to be built on musl based systems.
-+
-+The type `ssize_t` is defined in sys/types.h, and nowhere else
-+in the musl standard C library, so it should be included for the
-+compilation to succeed.
-+
-+This fixes several errors like:
-+
-+    In file included from src/generic.c:29:0:
-+    src/generic.c: In function 'avro_generic_value_new':
-+    src/avro_generic_internal.h:63:39:
-+        error: 'ssize_t' undeclared (first use in this function);
-+               did you mean 'size_t'?
-+
-+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-+[Upstream status: https://github.com/apache/avro/pull/740]
-+---
-+ lang/c/src/avro_generic_internal.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/lang/c/src/avro_generic_internal.h b/lang/c/src/avro_generic_internal.h
-+index 709403c0..9843ed65 100644
-+--- a/lang/c/src/avro_generic_internal.h
-++++ b/lang/c/src/avro_generic_internal.h
-+@@ -24,6 +24,8 @@ extern "C" {
-+ #define CLOSE_EXTERN
-+ #endif
-+ 
-++#include <sys/types.h>
-++
-+ #include "avro/generic.h"
-+ #include "avro/schema.h"
-+ #include "avro/value.h"
-+-- 
-+2.21.0
-+
-diff --git a/package/avro/avro-c/Config.in b/package/avro/avro-c/Config.in
-new file mode 100644
-index 0000000000..b6dc40a1d0
---- /dev/null
-+++ b/package/avro/avro-c/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_AVRO_C
-+	bool "c language bindings and avroappend, avrocat, avromod, avropipe"
-+	default y
-+	select BR2_PACKAGE_JANSSON
-diff --git a/package/avro/avro-c/avro-c.mk b/package/avro/avro-c/avro-c.mk
-new file mode 100644
-index 0000000000..77ba2764fa
---- /dev/null
-+++ b/package/avro/avro-c/avro-c.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# avro-c
-+#
-+################################################################################
-+
-+AVRO_C_VERSION = $(AVRO_VERSION)
-+AVRO_C_SITE = $(AVRO_SITE)
-+AVRO_C_SOURCE = $(AVRO_SOURCE)
-+AVRO_C_DL_SUBDIR = $(AVRO_DL_SUBDIR)
-+AVRO_C_LICENSE_FILES = $(AVRO_LICENSE_FILES)
-+AVRO_C_LICENSE = $(AVRO_LICENSE)
-+
-+AVRO_C_INSTALL_STAGING = YES
-+AVRO_C_SUBDIR = lang/c
-+AVRO_C_DEPENDENCIES = jansson
-+
-+$(eval $(cmake-package))
-diff --git a/package/avro/avro-py3/Config.in b/package/avro/avro-py3/Config.in
-new file mode 100644
-index 0000000000..d6ab981b2c
---- /dev/null
-+++ b/package/avro/avro-py3/Config.in
-@@ -0,0 +1,3 @@
-+config BR2_PACKAGE_AVRO_PY3
-+	bool "python3 language bindings and avro"
-+	depends on BR2_PACKAGE_PYTHON3
-diff --git a/package/avro/avro-py3/avro-py3.mk b/package/avro/avro-py3/avro-py3.mk
-new file mode 100644
-index 0000000000..0f0596c1e7
---- /dev/null
-+++ b/package/avro/avro-py3/avro-py3.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# avro-py3
-+#
-+################################################################################
-+
-+AVRO_PY3_VERSION = $(AVRO_VERSION)
-+AVRO_PY3_SITE = $(AVRO_SITE)
-+AVRO_PY3_SOURCE = $(AVRO_SOURCE)
-+AVRO_PY3_DL_SUBDIR = $(AVRO_DL_SUBDIR)
-+AVRO_PY3_LICENSE_FILES = $(AVRO_LICENSE_FILES)
-+AVRO_PY3_LICENSE = $(AVRO_LICENSE)
-+
-+AVRO_PY3_SUBDIR = lang/py3
-+AVRO_PY3_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
-diff --git a/package/avro/avro.hash b/package/avro/avro.hash
-new file mode 100644
-index 0000000000..57d871ca56
---- /dev/null
-+++ b/package/avro/avro.hash
-@@ -0,0 +1,7 @@
-+# Locally calculated after checking signature from key
-+# CEF487F848109B4C8B8AC18DE4AE0EB72D112483
-+sha256 11335cd0bc230e60ec55ca56bdf22c723b7e83f812dbe9b4d734ccdf17d4e8c6  avro-src-1.9.1.tar.gz
-+
-+# License files
-+sha256 6cfbabf86855b02809016458b172ba0eae4812a5ab72e045b0939dfc44dd9f56  LICENSE.txt
-+sha256 3f2d808d11c9e5b82f5a77757538c787cbc09c838c235424fd726577c54adbf9  NOTICE.txt
-diff --git a/package/avro/avro.mk b/package/avro/avro.mk
-new file mode 100644
-index 0000000000..deea56ff81
---- /dev/null
-+++ b/package/avro/avro.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# avro
-+#
-+################################################################################
-+
-+AVRO_VERSION = 1.9.1
-+AVRO_SITE = https://www-eu.apache.org/dist/avro/avro-$(AVRO_VERSION)
-+AVRO_SOURCE = avro-src-$(AVRO_VERSION).tar.gz
-+AVRO_DL_SUBDIR = avro
-+AVRO_LICENSE = Apache-2.0
-+AVRO_LICENSE_FILES = LICENSE.txt NOTICE.txt
-+
-+include $(sort $(wildcard package/avro/avro-*/avro-*.mk))
--- 
-2.21.0
+-# fixes rpi3 ttyAMA0 serial console
+-dtoverlay=pi3-miniuart-bt
++# fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
++dtoverlay=miniuart-bt
+ __EOF__
+ 		fi
+ 		;;
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index 69c9f9b20a..8b3de6d251 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -78,7 +78,7 @@ After building, you should obtain this tree:
+ [1] Not all of them will be present, depending on the RaspberryPi
+     model you are using.
+ 
+-[2] Only for the Raspberry Pi 3/4 Models (overlay pi3-miniuart-bt is needed
++[2] Only for the Raspberry Pi 3/4 Models (overlay miniuart-bt is needed
+     to enable the RPi3 serial console otherwise occupied by the bluetooth
+     chip). Alternative would be to disable the serial console in cmdline.txt
+     and /etc/inittab.
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 27141f364e..b9a070fb82 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -35,4 +35,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --add-pi3-miniuart-bt-overlay"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --add-miniuart-bt-overlay"
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 01aa239805..530eb0ab3f 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -34,4 +34,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
+diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+index 775eb9114e..21c5d1dc4c 100644
+--- a/configs/raspberrypi3_qt5we_defconfig
++++ b/configs/raspberrypi3_qt5we_defconfig
+@@ -48,4 +48,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="360M"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay --gpu_mem_1024=200"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay --gpu_mem_1024=200"
+diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
+index 6eea0ca816..a216463e28 100644
+--- a/configs/raspberrypi4_defconfig
++++ b/configs/raspberrypi4_defconfig
+@@ -35,4 +35,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
