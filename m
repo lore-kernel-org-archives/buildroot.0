@@ -1,20 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 23:24:23 +0100
-Subject: [Buildroot] [PATCH 4/5] package/shairport-sync: add dbus option
-In-Reply-To: <20191203105341.1232360-4-joerg.krause@embedded.rocks>
+Date: Sun, 8 Dec 2019 23:24:47 +0100
+Subject: [Buildroot] [PATCH 5/5] package/shairport-sync: add mqtt option
+In-Reply-To: <20191203105341.1232360-5-joerg.krause@embedded.rocks>
 References: <20191203105341.1232360-1-joerg.krause@embedded.rocks>
- <20191203105341.1232360-4-joerg.krause@embedded.rocks>
-Message-ID: <20191208232423.206f981a@windsurf.home>
+ <20191203105341.1232360-5-joerg.krause@embedded.rocks>
+Message-ID: <20191208232447.362391c7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  3 Dec 2019 11:53:40 +0100
+On Tue,  3 Dec 2019 11:53:41 +0100
 J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-> Shairport Sync added DBus support in version 3.2.
+> Shairport Sync added support for the MQTT protocol in version 3.2. For
+> full MQTT support Avahi and DBus support are required.
 > 
 > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
@@ -23,25 +24,21 @@ J?rg Krause <joerg.krause@embedded.rocks> wrote:
 >  2 files changed, 16 insertions(+)
 > 
 > diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
-> index 87f38a940d..6325e9d30d 100644
+> index 6325e9d30d..185fb3cff1 100644
 > --- a/package/shairport-sync/Config.in
 > +++ b/package/shairport-sync/Config.in
-> @@ -26,6 +26,17 @@ config BR2_PACKAGE_SHAIRPORT_SYNC_CONVOLUTION
->  	help
->  	  Enable audio DSP convolution support.
+> @@ -49,6 +49,17 @@ config BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR
+>  	  can be heard in some circumstances. Libsoxr allows this
+>  	  interpolation to be done much more smoothly and subtly.
 >  
-> +config BR2_PACKAGE_SHAIRPORT_SYNC_DBUS
-> +	bool "dbus support"
-> +	depends on BR2_USE_WCHAR # libglib2 -> gettext
+> +config BR2_PACKAGE_SHAIRPORT_SYNC_MQTT
+> +	bool "mqtt support"
+> +	depends on !BR2_STATIC_LIBS # avahi
 
-No need to repeat the full comment, just "# libglib2" is sufficient.
+Ditto, some dependencies from avahi were missing, such as the
+BR2_USE_MMU dependency.
 
-However, you forgot the other dependencies from libglib2: yes the
-thread dependency was already implied by the dependency of
-shairport-sync on NPTL, but the BR2_USE_MMU dependency was missing. So
-I've replicated both, to keep things simple.
-
-Thanks!
+Applied after fixing this. Thanks!
 
 Thomas
 -- 
