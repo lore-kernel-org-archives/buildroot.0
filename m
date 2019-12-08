@@ -1,31 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Dec 2019 08:42:49 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/pkg-golang: enable trimpath
- option for reproducible builds
-In-Reply-To: <20191207195707.3798442-1-christian@paral.in> (Christian
- Stewart's message of "Sat, 7 Dec 2019 11:57:07 -0800")
-References: <20191207195707.3798442-1-christian@paral.in>
-Message-ID: <87lfrnjm9y.fsf@dell.be.48ers.dk>
+Date: Sun, 8 Dec 2019 08:33:41 +0100
+Subject: [Buildroot] [git commit] package/emlog: bump to version 0.70
+Message-ID: <20191208073534.C8C0E886A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=dbc22e0f95103f1a303f7bb74858ebccd0a42504
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The -trimpath option removes absolute build paths from the target binary. This
- > results in more consistent / reproducible builds across different systems with
- > varying paths to Buildroot.
+Add hash for license file
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
- > ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/emlog/emlog.hash | 3 ++-
+ package/emlog/emlog.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
- > v1 -> v2:
- >  - Fixed indentation on trimpath
-
-Committed after extending the commit message to clarify that this is a
-new feature in go 1.13, so we shouldn't backport this to 2019.02.x.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/emlog/emlog.hash b/package/emlog/emlog.hash
+index ba0a201acb..ddc61a88e8 100644
+--- a/package/emlog/emlog.hash
++++ b/package/emlog/emlog.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 9f791a00c86215306597b761ef5c5ad267efee5f01efbe23cfcc04e583aa402d  emlog-0.60.tar.gz
++sha256 76082cf981b0865c8a1b300d4641c790a6556461901bbb63700df38300277271  emlog-0.70.tar.gz
++sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/emlog/emlog.mk b/package/emlog/emlog.mk
+index 42e3c9dd7b..8759f82c7c 100644
+--- a/package/emlog/emlog.mk
++++ b/package/emlog/emlog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EMLOG_VERSION = 0.60
++EMLOG_VERSION = 0.70
+ EMLOG_SITE = $(call github,nicupavel,emlog,emlog-$(EMLOG_VERSION))
+ EMLOG_LICENSE = GPL-2.0
+ EMLOG_LICENSE_FILES = COPYING
