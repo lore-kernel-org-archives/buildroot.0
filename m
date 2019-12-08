@@ -1,38 +1,65 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 8 Dec 2019 23:16:32 +0100
-Subject: [Buildroot] [PATCH] package/libnss: bump to version 3.48
-In-Reply-To: <20191208143118.40d45596@windsurf.home>
-References: <20191208110650.106092-1-giulio.benetti@benettiengineering.com>
- <20191208143118.40d45596@windsurf.home>
-Message-ID: <3f7850fc-2335-61e2-bcfe-8b9cfe88f340@benettiengineering.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 8 Dec 2019 23:06:09 +0100
+Subject: [Buildroot] [git commit] package/shairport-sync: make libdaemon an
+ optional dependency
+Message-ID: <20191208221346.4AF1288F27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/8/19 2:31 PM, Thomas Petazzoni wrote:
-> On Sun,  8 Dec 2019 12:06:50 +0100
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->>   # Need to pass down TARGET_CFLAGS and TARGET_LDFLAGS
->>   define LIBNSS_FIXUP_LINUX_MK
->> -	echo 'OS_CFLAGS += $(LIBNSS_CFLAGS)' >> $(@D)/nss/coreconf/Linux.mk
->> +	echo 'OS_CFLAGS += $(LIBNSS_CFLAGS) -D__USE_POSIX' >> $(@D)/nss/coreconf/Linux.mk
-> 
-> Defining __USE_POSIX shouldn't be done, it's defined internally by
-> <features.h> when _POSIX_SOURCE is defined. So I dropped this patch of
-> your patch, and applied to master.
+commit: https://git.buildroot.net/buildroot/commit/?id=be8f4a73abbf6a4648254cc8d52672d8a213e341
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-__USE_POSIX was only a testing and I've left it behind.
-Thank you for removing it.
+Since version 3.3 libdaemon is an optional dependency.
 
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/shairport-sync/Config.in         | 2 --
+ package/shairport-sync/shairport-sync.mk | 7 ++++++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-> Thanks!
-> 
-> Thomas
-> 
+diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
+index 5df4c194c0..085a9ec77d 100644
+--- a/package/shairport-sync/Config.in
++++ b/package/shairport-sync/Config.in
+@@ -1,12 +1,10 @@
+ config BR2_PACKAGE_SHAIRPORT_SYNC
+ 	bool "shairport-sync"
+-	depends on BR2_USE_MMU # libdaemon
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_ALSA_LIB_MIXER
+ 	select BR2_PACKAGE_LIBCONFIG
+-	select BR2_PACKAGE_LIBDAEMON
+ 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
+ 	select BR2_PACKAGE_POPT
+ 	help
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index d7c8baa30c..3d9e909879 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -9,7 +9,7 @@ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VE
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
+ SHAIRPORT_SYNC_LICENSE_FILES = LICENSES
+-SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig libdaemon popt host-pkgconf
++SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig popt host-pkgconf
+ 
+ # git clone, no configure
+ SHAIRPORT_SYNC_AUTORECONF = YES
+@@ -33,6 +33,11 @@ else
+ SHAIRPORT_SYNC_CONF_OPTS += --with-tinysvcmdns
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBDAEMON),y)
++SHAIRPORT_SYNC_DEPENDENCIES += libdaemon
++SHAIRPORT_SYNC_CONF_OPTS += --with-libdaemon
++endif
++
+ # OpenSSL or mbedTLS
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SHAIRPORT_SYNC_DEPENDENCIES += openssl
