@@ -1,36 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 22:19:51 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/freescale_imx8mqevk: bump BSP
- components to 4.14.98_2.0.0
-In-Reply-To: <20191203203805.408448-1-juju@cotds.org>
-References: <20191203203805.408448-1-juju@cotds.org>
-Message-ID: <20191208221951.1ff39468@windsurf.home>
+Date: Sun, 8 Dec 2019 22:22:08 +0100
+Subject: [Buildroot] [git commit] boot/uboot: add option to build u-boot.itb
+ image
+Message-ID: <20191208211349.6F7E288DDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  3 Dec 2019 21:38:05 +0100
-Julien Olivain <juju@cotds.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=cde2f0ce6dad73f97d24b396dfc5c50e031795ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Update Kernel, U-Boot and ATF to NXP BSP version rel_imx_4.14.98_2.0.0_ga
-> 
-> Signed-off-by: Julien Olivain <juju@cotds.org>
-> ---
->  configs/freescale_imx8mqevk_defconfig | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+It allows you to add the u-boot.itb to the list of U-Boot images that
+can be created. Like the others, this one is also copied to the image
+folder.
 
-Applied to master, thanks.
+Signed-off-by: Dario Binacchi <dariobin@libero.it>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/uboot/Config.in | 3 +++
+ boot/uboot/uboot.mk  | 5 +++++
+ 2 files changed, 8 insertions(+)
 
-Fabio: I saw your comment about bumping to 4.19. It obviously makes
-sense to upgrade to 4.19 when possible, but since bumping to a slightly
-newer 4.14 also makes sense on its own, I've applied Julien's patch.
-But of course, bumping to 4.19 needs to be done at some point in the
-future.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 68a915cdae..15cae8045a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -225,6 +225,9 @@ config BR2_TARGET_UBOOT_FORMAT_DTB_IMX
+ config BR2_TARGET_UBOOT_FORMAT_IMG
+ 	bool "u-boot.img"
+ 
++config BR2_TARGET_UBOOT_FORMAT_ITB
++	bool "u-boot.itb"
++
+ config BR2_TARGET_UBOOT_FORMAT_IMX
+ 	bool "u-boot.imx"
+ 
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 5e0f614024..0ebda6588c 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -85,6 +85,11 @@ UBOOT_BINS += u-boot.img
+ UBOOT_MAKE_TARGET += u-boot.img
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_FORMAT_ITB),y)
++UBOOT_BINS += u-boot.itb
++UBOOT_MAKE_TARGET += u-boot.itb
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
+ UBOOT_BINS += u-boot.imx
+ UBOOT_MAKE_TARGET += u-boot.imx
