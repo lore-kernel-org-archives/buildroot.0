@@ -1,49 +1,233 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun,  8 Dec 2019 12:19:32 -0800
-Subject: [Buildroot] [PATCH 10/11] package/semodule-utils: bump version to
- 3.0
-In-Reply-To: <20191208201933.3832327-1-aduskett@gmail.com>
-References: <20191208201933.3832327-1-aduskett@gmail.com>
-Message-ID: <20191208201933.3832327-10-aduskett@gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Sun,  8 Dec 2019 21:25:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/avro: new package
+Message-ID: <20191208202503.220908-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Avro is a data serialization system, somewhat similar to protobuff or
+cap'n proto. Unlike them however, Avro schemas can be distributed in
+json files to be loaded at runtime, rather than language-specific
+generated code to use at compile time.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- package/semodule-utils/semodule-utils.hash | 2 +-
- package/semodule-utils/semodule-utils.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/avro/Config.in                        | 20 ++++++++++
+ .../avro/avro-c/0001-Compile-on-musl.patch    | 39 +++++++++++++++++++
+ package/avro/avro-c/Config.in                 |  4 ++
+ package/avro/avro-c/avro-c.mk                 | 18 +++++++++
+ package/avro/avro-py3/Config.in               |  3 ++
+ package/avro/avro-py3/avro-py3.mk             | 17 ++++++++
+ package/avro/avro.hash                        |  7 ++++
+ package/avro/avro.mk                          | 14 +++++++
+ 10 files changed, 124 insertions(+)
+ create mode 100644 package/avro/Config.in
+ create mode 100644 package/avro/avro-c/0001-Compile-on-musl.patch
+ create mode 100644 package/avro/avro-c/Config.in
+ create mode 100644 package/avro/avro-c/avro-c.mk
+ create mode 100644 package/avro/avro-py3/Config.in
+ create mode 100644 package/avro/avro-py3/avro-py3.mk
+ create mode 100644 package/avro/avro.hash
+ create mode 100644 package/avro/avro.mk
 
-diff --git a/package/semodule-utils/semodule-utils.hash b/package/semodule-utils/semodule-utils.hash
-index 386b442618..c1a4ef1b9b 100644
---- a/package/semodule-utils/semodule-utils.hash
-+++ b/package/semodule-utils/semodule-utils.hash
-@@ -1,5 +1,5 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 8083679ee634570f6e9a18632f2c2862b9134fa308b689b2e1952a369ae5d907 semodule-utils-2.9.tar.gz
-+sha256 14ee2db21f36766ffbbb65770f8e7236d21675db9f0f5d40f50974711da598cf semodule-utils-3.0.tar.gz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d5fd6e0e93..d4a002c886 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2392,6 +2392,7 @@ F:	package/fbgrab/
+ N:	Titouan Christophe <titouan.christophe@railnova.eu>
+ F:	package/mosquitto/
+ F:	package/redis/
++F:	package/avro/
  
- # Hash for license file
- sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/semodule-utils/semodule-utils.mk b/package/semodule-utils/semodule-utils.mk
-index 7102dbc5e0..ec1759ece1 100644
---- a/package/semodule-utils/semodule-utils.mk
-+++ b/package/semodule-utils/semodule-utils.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SEMODULE_UTILS_VERSION = 2.9
--SEMODULE_UTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
-+SEMODULE_UTILS_VERSION = 3.0
-+SEMODULE_UTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
- SEMODULE_UTILS_LICENSE = GPL-2.0
- SEMODULE_UTILS_LICENSE_FILES = COPYING
- SEMODULE_UTILS_DEPENDENCIES = libsepol
+ N:	Trent Piepho <tpiepho@impinj.com>
+ F:	package/libp11/
+diff --git a/package/Config.in b/package/Config.in
+index 9e2b78fe6a..19f4f2d1ab 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1707,6 +1707,7 @@ menu "Other"
+ 	source "package/argp-standalone/Config.in"
+ 	source "package/armadillo/Config.in"
+ 	source "package/atf/Config.in"
++	source "package/avro/Config.in"
+ 	source "package/bctoolbox/Config.in"
+ 	source "package/bdwgc/Config.in"
+ 	source "package/boost/Config.in"
+diff --git a/package/avro/Config.in b/package/avro/Config.in
+new file mode 100644
+index 0000000000..fbaa34d5b0
+--- /dev/null
++++ b/package/avro/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_AVRO
++	bool "avro"
++	depends on !BR2_STATIC_LIBS
++	help
++	  Apache Avro is a data serialization system.
++	  Avro provides:
++	  - Rich data structures.
++	  - A compact, fast, binary data format.
++	  - A container file, to store persistent data.
++	  - Remote procedure call (RPC).
++	  - Simple integration with dynamic languages.
++	  - Code generation is not required to read or write data
++	    files nor to use or implement RPC protocols.
++	  - Code generation as an optional optimization,
++	    only worth implementing for statically typed languages.
++
++if BR2_PACKAGE_AVRO
++source "package/avro/avro-c/Config.in"
++source "package/avro/avro-py3/Config.in"
++endif
+diff --git a/package/avro/avro-c/0001-Compile-on-musl.patch b/package/avro/avro-c/0001-Compile-on-musl.patch
+new file mode 100644
+index 0000000000..188a3ac790
+--- /dev/null
++++ b/package/avro/avro-c/0001-Compile-on-musl.patch
+@@ -0,0 +1,39 @@
++From 55a5ad94c77896eb25e2c7ed024d78a0a2c09007 Mon Sep 17 00:00:00 2001
++From: Titouan Christophe <titouan.christophe@railnova.eu>
++Date: Sun, 8 Dec 2019 01:55:59 +0100
++Subject: [PATCH 1/1] Allow avro C to be built on musl based systems.
++
++The type `ssize_t` is defined in sys/types.h, and nowhere else
++in the musl standard C library, so it should be included for the
++compilation to succeed.
++
++This fixes several errors like:
++
++    In file included from src/generic.c:29:0:
++    src/generic.c: In function 'avro_generic_value_new':
++    src/avro_generic_internal.h:63:39:
++        error: 'ssize_t' undeclared (first use in this function);
++               did you mean 'size_t'?
++
++Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
++[Upstream status: https://github.com/apache/avro/pull/740]
++---
++ lang/c/src/avro_generic_internal.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/lang/c/src/avro_generic_internal.h b/lang/c/src/avro_generic_internal.h
++index 709403c0..9843ed65 100644
++--- a/lang/c/src/avro_generic_internal.h
+++++ b/lang/c/src/avro_generic_internal.h
++@@ -24,6 +24,8 @@ extern "C" {
++ #define CLOSE_EXTERN
++ #endif
++ 
+++#include <sys/types.h>
+++
++ #include "avro/generic.h"
++ #include "avro/schema.h"
++ #include "avro/value.h"
++-- 
++2.21.0
++
+diff --git a/package/avro/avro-c/Config.in b/package/avro/avro-c/Config.in
+new file mode 100644
+index 0000000000..b6dc40a1d0
+--- /dev/null
++++ b/package/avro/avro-c/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_AVRO_C
++	bool "c language bindings and avroappend, avrocat, avromod, avropipe"
++	default y
++	select BR2_PACKAGE_JANSSON
+diff --git a/package/avro/avro-c/avro-c.mk b/package/avro/avro-c/avro-c.mk
+new file mode 100644
+index 0000000000..77ba2764fa
+--- /dev/null
++++ b/package/avro/avro-c/avro-c.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# avro-c
++#
++################################################################################
++
++AVRO_C_VERSION = $(AVRO_VERSION)
++AVRO_C_SITE = $(AVRO_SITE)
++AVRO_C_SOURCE = $(AVRO_SOURCE)
++AVRO_C_DL_SUBDIR = $(AVRO_DL_SUBDIR)
++AVRO_C_LICENSE_FILES = $(AVRO_LICENSE_FILES)
++AVRO_C_LICENSE = $(AVRO_LICENSE)
++
++AVRO_C_INSTALL_STAGING = YES
++AVRO_C_SUBDIR = lang/c
++AVRO_C_DEPENDENCIES = jansson
++
++$(eval $(cmake-package))
+diff --git a/package/avro/avro-py3/Config.in b/package/avro/avro-py3/Config.in
+new file mode 100644
+index 0000000000..d6ab981b2c
+--- /dev/null
++++ b/package/avro/avro-py3/Config.in
+@@ -0,0 +1,3 @@
++config BR2_PACKAGE_AVRO_PY3
++	bool "python3 language bindings and avro"
++	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/avro/avro-py3/avro-py3.mk b/package/avro/avro-py3/avro-py3.mk
+new file mode 100644
+index 0000000000..0f0596c1e7
+--- /dev/null
++++ b/package/avro/avro-py3/avro-py3.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# avro-py3
++#
++################################################################################
++
++AVRO_PY3_VERSION = $(AVRO_VERSION)
++AVRO_PY3_SITE = $(AVRO_SITE)
++AVRO_PY3_SOURCE = $(AVRO_SOURCE)
++AVRO_PY3_DL_SUBDIR = $(AVRO_DL_SUBDIR)
++AVRO_PY3_LICENSE_FILES = $(AVRO_LICENSE_FILES)
++AVRO_PY3_LICENSE = $(AVRO_LICENSE)
++
++AVRO_PY3_SUBDIR = lang/py3
++AVRO_PY3_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
+diff --git a/package/avro/avro.hash b/package/avro/avro.hash
+new file mode 100644
+index 0000000000..57d871ca56
+--- /dev/null
++++ b/package/avro/avro.hash
+@@ -0,0 +1,7 @@
++# Locally calculated after checking signature from key
++# CEF487F848109B4C8B8AC18DE4AE0EB72D112483
++sha256 11335cd0bc230e60ec55ca56bdf22c723b7e83f812dbe9b4d734ccdf17d4e8c6  avro-src-1.9.1.tar.gz
++
++# License files
++sha256 6cfbabf86855b02809016458b172ba0eae4812a5ab72e045b0939dfc44dd9f56  LICENSE.txt
++sha256 3f2d808d11c9e5b82f5a77757538c787cbc09c838c235424fd726577c54adbf9  NOTICE.txt
+diff --git a/package/avro/avro.mk b/package/avro/avro.mk
+new file mode 100644
+index 0000000000..deea56ff81
+--- /dev/null
++++ b/package/avro/avro.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# avro
++#
++################################################################################
++
++AVRO_VERSION = 1.9.1
++AVRO_SITE = https://www-eu.apache.org/dist/avro/avro-$(AVRO_VERSION)
++AVRO_SOURCE = avro-src-$(AVRO_VERSION).tar.gz
++AVRO_DL_SUBDIR = avro
++AVRO_LICENSE = Apache-2.0
++AVRO_LICENSE_FILES = LICENSE.txt NOTICE.txt
++
++include $(sort $(wildcard package/avro/avro-*/avro-*.mk))
 -- 
-2.23.0
+2.21.0
