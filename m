@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 13:58:43 +0100
-Subject: [Buildroot] [git commit] package/jailhouse: bump to version 0.11
-Message-ID: <20191208132020.43E1A83673@busybox.osuosl.org>
+Date: Sun, 8 Dec 2019 13:58:03 +0100
+Subject: [Buildroot] [git commit] package/drbd-utils: bump to version 9.11.0
+Message-ID: <20191208132020.207D7887BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f3ff7b044529ed74a3c418fee5aa1ba384c880c
+commit: https://git.buildroot.net/buildroot/commit/?id=3caa89202e2198fec3e97e62b383d29ef8408c93
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add hash for license file
@@ -16,29 +16,29 @@ Add hash for license file
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jailhouse/jailhouse.hash | 3 ++-
- package/jailhouse/jailhouse.mk   | 2 +-
+ package/drbd-utils/drbd-utils.hash | 3 ++-
+ package/drbd-utils/drbd-utils.mk   | 2 +-
  2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/jailhouse/jailhouse.hash b/package/jailhouse/jailhouse.hash
-index 6deb184d58..9fb4d599da 100644
---- a/package/jailhouse/jailhouse.hash
-+++ b/package/jailhouse/jailhouse.hash
+diff --git a/package/drbd-utils/drbd-utils.hash b/package/drbd-utils/drbd-utils.hash
+index bcbed1ee8a..884d6790ec 100644
+--- a/package/drbd-utils/drbd-utils.hash
++++ b/package/drbd-utils/drbd-utils.hash
 @@ -1,2 +1,3 @@
- # Locally computed:
--sha256 27fb262a3b42ba263f2a5a815127d2a9275f2f81e00e782591babb69d4f0465a  jailhouse-0.10.tar.gz
-+sha256 8de2406f455db07794cc750238ce57bc897673ba2b68c56fc9ae2d8079142b33  jailhouse-0.11.tar.gz
-+sha256 3aafb31a2436178323663e00511f16d58fc36ea654b1457532e79d017205efd8  COPYING
-diff --git a/package/jailhouse/jailhouse.mk b/package/jailhouse/jailhouse.mk
-index aab232eb92..1aa7851707 100644
---- a/package/jailhouse/jailhouse.mk
-+++ b/package/jailhouse/jailhouse.mk
+ # Locally calculated
+-sha256 11299b555b703440ef0af2c74b69cf6dfb833e050b87cfdc3b93d0b71d8820a6  drbd-utils-9.2.0.tar.gz
++sha256 e07d156ce6e3d93ac1b69fa9bf8695038e6e5edfb2c80c91a1098d1477478ecb  drbd-utils-9.11.0.tar.gz
++sha256 1ca3e8f71b7de618968e7ea9fe47822d9e704dc476aef8544033abedec355225  COPYING
+diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
+index bb28729b40..55ac9d9dc0 100644
+--- a/package/drbd-utils/drbd-utils.mk
++++ b/package/drbd-utils/drbd-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JAILHOUSE_VERSION = 0.10
-+JAILHOUSE_VERSION = 0.11
- JAILHOUSE_SITE = $(call github,siemens,jailhouse,v$(JAILHOUSE_VERSION))
- JAILHOUSE_LICENSE = GPL-2.0
- JAILHOUSE_LICENSE_FILES = COPYING
+-DRBD_UTILS_VERSION = 9.2.0
++DRBD_UTILS_VERSION = 9.11.0
+ DRBD_UTILS_SITE = http://www.linbit.com/downloads/drbd/utils
+ DRBD_UTILS_LICENSE = GPL-2.0+
+ DRBD_UTILS_LICENSE_FILES = COPYING
