@@ -1,24 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Dec 2019 08:33:50 +0100
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to 1.13.5
-In-Reply-To: <20191207194938.3774652-1-christian@paral.in> (Christian
- Stewart's message of "Sat, 7 Dec 2019 11:49:38 -0800")
-References: <20191207194938.3774652-1-christian@paral.in>
-Message-ID: <87blsjl19d.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Dec 2019 08:35:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/emlog: bump to version 0.70
+In-Reply-To: <20191207195005.653558-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 7 Dec 2019 20:50:05 +0100")
+References: <20191207195005.653558-1-fontaine.fabrice@gmail.com>
+Message-ID: <877e37l17a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > go1.13.5 (released 2019/12/04) includes fixes to the go command, the runtime,
- > the linker, and the net/http package.
-
- > https://github.com/golang/go/issues?q=milestone%3AGo1.13.5
-
- > Signed-off-by: Christian Stewart <christian@paral.in>
+ > Add hash for license file
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
