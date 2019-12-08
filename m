@@ -1,63 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 22:18:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-scapy3k: remove package
-In-Reply-To: <20191203232832.70247-1-gabriel@potter.fr>
-References: <20191203232832.70247-1-gabriel@potter.fr>
-Message-ID: <20191208221836.121c8e71@windsurf.home>
+Date: Sun, 8 Dec 2019 22:18:54 +0100
+Subject: [Buildroot] [git commit] configs/freescale_imx8mqevk: bump BSP
+ components to 4.14.98_2.0.0
+Message-ID: <20191208211025.EEE908121D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  3 Dec 2019 23:28:32 +0000
-gpotter2 <gabriel@potter.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c3c0c4f0e85cf458f3c99ae28e25a3fd1e9de57c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Scapy3k is deprecated since Scapy supports Python 3.
-> Scapy should be used instead
-> 
-> See https://bugs.busybox.net/show_bug.cgi?id=12376
-> 
-> Signed-off-by: Gabriel Potter <gabriel@potter.fr>
-> ---
->  Config.in.legacy                           |  6 ++++++
->  package/Config.in                          |  1 -
->  package/python-scapy3k/Config.in           |  9 ---------
->  package/python-scapy3k/python-scapy3k.hash |  2 --
->  package/python-scapy3k/python-scapy3k.mk   | 12 ------------
->  5 files changed, 6 insertions(+), 24 deletions(-)
->  delete mode 100644 package/python-scapy3k/Config.in
->  delete mode 100644 package/python-scapy3k/python-scapy3k.hash
->  delete mode 100644 package/python-scapy3k/python-scapy3k.mk
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 02886bff36..dfe7683a42 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,12 @@ endif
->  
->  comment "Legacy options removed in 2020.02"
->  
-> +config BR2_PACKAGE_PYTHON_SCAPY3K
-> +	bool "scapy3k was removed"
-> +	select BR2_LEGACY
+Update Kernel, U-Boot and ATF to NXP BSP version rel_imx_4.14.98_2.0.0_ga
 
-I've added a:
+Signed-off-by: Julien Olivain <juju@cotds.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/freescale_imx8mqevk_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-	select BR2_PACKAGE_PYTHON_SCAPY
-
-here.
-
-> +	help
-> +	  scapy3k has been deprecated since Scapy gained Python 3 support. Use BR2_PACKAGE_PYTHON_SCAPY instead
-
-This line was too long ("make check-package" warns about it), and I've
-rephrased slightly.
-
-Applied with those changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
+index 7e96ee7fc0..7989b60570 100644
+--- a/configs/freescale_imx8mqevk_defconfig
++++ b/configs/freescale_imx8mqevk_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8mq-evk.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8mq-evk"
+@@ -20,14 +20,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
