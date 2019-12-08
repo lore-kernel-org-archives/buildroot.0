@@ -1,54 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Dec 2019 14:48:04 +0100
-Subject: [Buildroot] [git commit] package/lua-resty-http: bump to version
- 0.15
-Message-ID: <20191208140400.580CC888EF@busybox.osuosl.org>
+Date: Sun, 8 Dec 2019 15:12:56 +0100
+Subject: [Buildroot] [git commit] package/sysdig: disable all bundled
+ dependencies
+Message-ID: <20191208140428.73CE088910@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45b0ed05ab135268caeec33e136843134f2cb19f
+commit: https://git.buildroot.net/buildroot/commit/?id=56aef8f66b02821851e340e8122734ecbe392b8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Disable all dependencies through -DUSE_BUNDLED_DEPS=OFF instead of
+disabling them one by one
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-resty-http/Config.in           | 2 +-
- package/lua-resty-http/lua-resty-http.hash | 2 +-
- package/lua-resty-http/lua-resty-http.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/sysdig/sysdig.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/package/lua-resty-http/Config.in b/package/lua-resty-http/Config.in
-index 4697c90dfb..7f90b51b7c 100644
---- a/package/lua-resty-http/Config.in
-+++ b/package/lua-resty-http/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_LUA_RESTY_HTTP
- 	help
- 	  Lua HTTP client cosocket driver for OpenResty / ngx_lua.
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+index 9ac990e3e2..c604032cf4 100644
+--- a/package/sysdig/sysdig.mk
++++ b/package/sysdig/sysdig.mk
+@@ -8,10 +8,7 @@ SYSDIG_VERSION = 0.23.1
+ SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
+ SYSDIG_LICENSE = GPL-2.0
+ SYSDIG_LICENSE_FILES = COPYING
+-SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
+-	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF -DUSE_BUNDLED_CURL=OFF \
+-	-DUSE_BUNDLED_NCURSES=OFF -DUSE_BUNDLED_OPENSSL=OFF \
+-	-DUSE_BUNDLED_JQ=OFF -DUSE_BUNDLED_B64=OFF
++SYSDIG_CONF_OPTS = -DENABLE_DKMS=OFF -DUSE_BUNDLED_DEPS=OFF
+ SYSDIG_DEPENDENCIES = zlib luajit jsoncpp libcurl ncurses openssl jq libb64 elfutils
+ SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
  
--	  http://github.com/pintsized/lua-resty-http
-+	  https://github.com/ledgetech/lua-resty-http
-diff --git a/package/lua-resty-http/lua-resty-http.hash b/package/lua-resty-http/lua-resty-http.hash
-index e8318ab413..4aacc097c7 100644
---- a/package/lua-resty-http/lua-resty-http.hash
-+++ b/package/lua-resty-http/lua-resty-http.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 e31b96c622f539d69a9e84febf06d9a1df0f55aa3bfd904dd7c4ac6ed64fe3fe  lua-resty-http-0.13-0.src.rock
-+sha256 df913a055ddc2f029017602732c7a497225f4e0df1bcc6858e13f9f4d9524184  lua-resty-http-0.15-0.src.rock
- sha256 407e4b1412d8afa317dc703a1d318866c3de87d78899402125cbd90548c6057d  lua-resty-http/LICENSE
-diff --git a/package/lua-resty-http/lua-resty-http.mk b/package/lua-resty-http/lua-resty-http.mk
-index 6494ad104d..61f33c2bdc 100644
---- a/package/lua-resty-http/lua-resty-http.mk
-+++ b/package/lua-resty-http/lua-resty-http.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_RESTY_HTTP_VERSION = 0.13-0
-+LUA_RESTY_HTTP_VERSION = 0.15-0
- LUA_RESTY_HTTP_SUBDIR = lua-resty-http
- LUA_RESTY_HTTP_LICENSE = BSD-2-Clause
- LUA_RESTY_HTTP_LICENSE_FILES = $(LUA_RESTY_HTTP_SUBDIR)/LICENSE
