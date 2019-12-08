@@ -1,48 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Dec 2019 08:52:37 +0100
-Subject: [Buildroot] [git commit] package/qpdf: fix license
-Message-ID: <20191208074522.EB9D88871C@busybox.osuosl.org>
+Date: Sun, 8 Dec 2019 08:53:04 +0100
+Subject: [Buildroot] [git commit] configs/linksprite_pcduino: add
+ host-openssl for kernel build
+Message-ID: <20191208074523.04AE68871C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=984bdfb0276e313c770061c7793fa8b30f34f04a
+commit: https://git.buildroot.net/buildroot/commit/?id=c6683f175493e864836a46f2aa46d5af75483d93
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-qpdf is also licensed under Apache-2.0 since version 7.0.0 and
-https://github.com/qpdf/qpdf/commit/07c8bb2843f1a975a27d396da33d813a1537ee3a
+Updated kernel version for pcDuino board requires host-openssl
+to build successfully. This commit adds the required option:
+    BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/371286142
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qpdf/qpdf.hash | 1 +
- package/qpdf/qpdf.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ configs/linksprite_pcduino_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
-index 825d2048e6..0ab4e0af4e 100644
---- a/package/qpdf/qpdf.hash
-+++ b/package/qpdf/qpdf.hash
-@@ -1,4 +1,5 @@
- # From https://sourceforge.net/projects/qpdf/files/qpdf/8.4.0/qpdf-8.4.0.sha512/download
- sha512	13225c6285311e8fe89970971b082b9613e70d474ee71dd5572f1ae268234d366c2c9c7bf427c4758a746a1a27ecc0127d31044ab501dbc08885c8aa0a514028  qpdf-8.4.0.tar.gz
- # Locally computed:
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
- sha256  fb929ac30decb4dc3a2eea2bec6c43296a797c5d2d602deb3784ee39430583d5  Artistic-2.0
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index 6ed3195733..728ecc9289 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
-@@ -7,8 +7,8 @@
- QPDF_VERSION = 8.4.0
- QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
- QPDF_INSTALL_STAGING = YES
--QPDF_LICENSE = Artistic-2.0
--QPDF_LICENSE_FILES = Artistic-2.0
-+QPDF_LICENSE = Apache-2.0 or Artistic-2.0
-+QPDF_LICENSE_FILES = LICENSE.txt Artistic-2.0
- QPDF_DEPENDENCIES = pcre zlib jpeg
+diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
+index a8577b6e79..5a00e57281 100644
+--- a/configs/linksprite_pcduino_defconfig
++++ b/configs/linksprite_pcduino_defconfig
+@@ -28,6 +28,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/linksprite/pcduino/linux-extras.config"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  
- QPDF_CONF_OPTS = --without-random
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
