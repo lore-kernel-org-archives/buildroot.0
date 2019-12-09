@@ -1,150 +1,66 @@
-From: Louis Aussedat <aussedat.louis@gmail.com>
-Date: Mon,  9 Dec 2019 22:59:23 +0100
-Subject: [Buildroot] [PATCH 3/3] package/libnfc: add configs to select which
- driver to support
-In-Reply-To: <20191209215923.28945-1-aussedat.louis@gmail.com>
-References: <20191209215923.28945-1-aussedat.louis@gmail.com>
-Message-ID: <20191209215923.28945-3-aussedat.louis@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 09 Dec 2019 22:04:46 +0000
+Subject: [Buildroot] [Bug 12391] New: CMake-based host package fails to
+ include output/host/include
+Message-ID: <bug-12391-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, arygon and pn53x_usb are activated,
-to keep old configuration.
+https://bugs.busybox.net/show_bug.cgi?id=12391
 
-Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
----
- package/libnfc/Config.in | 55 ++++++++++++++++++++++++++++++++++++++--
- package/libnfc/libnfc.mk | 40 +++++++++++++++++++++++++++--
- 2 files changed, 91 insertions(+), 4 deletions(-)
+            Bug ID: 12391
+           Summary: CMake-based host package fails to include
+                    output/host/include
+           Product: buildroot
+           Version: 2019.08.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: thirtythreeforty at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
-index c8fe251459..9a1c8103ec 100644
---- a/package/libnfc/Config.in
-+++ b/package/libnfc/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_LIBNFC
- 	bool "libnfc"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
--	select BR2_PACKAGE_LIBUSB
--	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
- 	  Public platform independent Near Field Communication (NFC)
- 	  library.
-@@ -11,6 +9,59 @@ config BR2_PACKAGE_LIBNFC
- 
- if BR2_PACKAGE_LIBNFC
- 
-+config BR2_PACKAGE_LIBNFC_ACR122_PCSC
-+	bool "acr122_pcsc driver"
-+	default ""
-+	select BR2_PACKAGE_PCSC_LITE
-+	help
-+	  support for acr112_pcsc driver
-+
-+config BR2_PACKAGE_LIBNFC_ACR122_USB
-+	bool "acr122_usb driver"
-+	default ""
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	help
-+	  support for acr122_usb driver
-+
-+config BR2_PACKAGE_LIBNFC_ACR122S
-+	bool "acr122s driver"
-+	default ""
-+	help
-+	  support for acr122s driver
-+
-+config BR2_PACKAGE_LIBNFC_ARYGON
-+	bool "arygon driver"
-+	default y
-+	help
-+	  support for arygon driver
-+
-+config BR2_PACKAGE_LIBNFC_PN532_I2C
-+	bool "pn532_i2c driver"
-+	default ""
-+	help
-+	  support for pn532_i2c driver
-+
-+config BR2_PACKAGE_LIBNFC_PN532_SPI
-+	bool "pn532_spi driver"
-+	default ""
-+	help
-+	  support for pn532_spi driver
-+
-+config BR2_PACKAGE_LIBNFC_PN532_UART
-+	bool "pn532_uart driver"
-+	default ""
-+	help
-+	  support for pn532_uart driver
-+
-+config BR2_PACKAGE_LIBNFC_PN53X_USB
-+	bool "pn53x_usb driver"
-+	default y
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	help
-+	  support for pn53x_usb driver
-+
- config BR2_PACKAGE_LIBNFC_EXAMPLES
- 	bool "build libnfc examples"
- 	select BR2_PACKAGE_READLINE
-diff --git a/package/libnfc/libnfc.mk b/package/libnfc/libnfc.mk
-index b13fd69d82..ca8700484b 100644
---- a/package/libnfc/libnfc.mk
-+++ b/package/libnfc/libnfc.mk
-@@ -12,10 +12,46 @@ LIBNFC_LICENSE_FILES = COPYING
- LIBNFC_AUTORECONF = YES
- LIBNFC_INSTALL_STAGING = YES
- 
--LIBNFC_DEPENDENCIES = host-pkgconf libusb libusb-compat
-+LIBNFC_DEPENDENCIES = host-pkgconf
- 
- # N.B. The acr122 driver requires pcsc-lite.
--LIBNFC_CONF_OPTS = --with-drivers=arygon,pn53x_usb
-+ifeq ($(BR2_PACKAGE_LIBNFC_ACR122_PCSC),y)
-+LIBNFC_DRIVER_LIST += acr122_pcsc
-+LIBNFC_DEPENDENCIES += pcsc-lite
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNFC_ACR122_USB),y)
-+LIBNFC_DRIVER_LIST += acr122_usb
-+LIBNFC_DEPENDENCIES += libusb libusb-compat
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNFC_ACR122S),y)
-+LIBNFC_DRIVER_LIST += acr122s
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNFC_ARYGON),y)
-+LIBNFC_DRIVER_LIST += arygon
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNFC_PN532_I2C),y)
-+LIBNFC_DRIVER_LIST += pn532_i2c
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNFC_PN532_SPI),y)
-+LIBNFC_DRIVER_LIST += pn532_spi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNFC_PN532_UART),y)
-+LIBNFC_DRIVER_LIST += pn532_uart
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNFC_PN53X_USB),y)
-+LIBNFC_DRIVER_LIST += pn53x_usb
-+LIBNFC_DEPENDENCIES += libusb libusb-compat
-+endif
-+
-+LIBNFC_CONF_OPTS = \
-+	--with-drivers=$(subst $(space),$(comma),$(strip $(LIBNFC_DRIVER_LIST)))
- 
- ifeq ($(BR2_PACKAGE_LIBNFC_EXAMPLES),y)
- LIBNFC_CONF_OPTS += --enable-example
+Created attachment 8311
+  --> https://bugs.busybox.net/attachment.cgi?id=8311&action=edit
+Work-in-progress package to replicate the issue
+
+I am struggling to package a new version of mfgtools.  My work-in-progress is
+attached; ideally you can extract this into your working directory and
+replicate my error.
+
+mfgtools depends on bzlib.h while building.  The compiler (/usr/bin/gcc) cannot
+find the bzlib.h file, which at first doesn't make sense... it's in
+output/host/include where bzip2 puts it.
+
+/home/ghilliard/Code/buildroot/output/build/host-mfgtools-1.3.102/libuuu/buffer.cpp:43:10:
+fatal error: bzlib.h: No such file or directory
+ #include "bzlib.h"
+          ^~~~~~~~~
+
+The problem is that even though Buildroot passes
+-Imy/buildroot/output/host/include into CMake, CMake detects this as an
+"implicit include directory" because GCC reports it as such (I think GCC
+notices that it has "system" include files, but honestly I am not exactly sure
+about its logic).  Then, when the compiler is actually called, this include is
+omitted by CMake. Without the include, the compiler doesn't implicitly include
+the directory at all, and the build fails.
+
+This hasn't been hit before because there are no bzip2-dependant host packages
+in the tree that are built with CMake.  I do not think this is specific to
+mfgtools; rather, it will be hit by the first package that does all of the
+following:
+
+- Be a host package
+- Use CMake to build
+- Include a file in output/host/include, not one of its subdirectories
+
 -- 
-2.24.0
+You are receiving this mail because:
+You are on the CC list for the bug.
