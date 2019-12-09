@@ -1,46 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Dec 2019 22:24:27 +0100
-Subject: [Buildroot] [git commit] configs/wandboard: Bump the kernel version
- to 5.4.1
-Message-ID: <20191209211733.D812C88F7A@busybox.osuosl.org>
+Date: Mon, 09 Dec 2019 22:40:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lirc-tools: use single quote
+ with SETUPTOOLS_ENV
+In-Reply-To: <20191209171027.22631-1-ryan.barnett@rockwellcollins.com> (Ryan
+ Barnett's message of "Mon, 9 Dec 2019 11:10:26 -0600")
+References: <20191209171027.22631-1-ryan.barnett@rockwellcollins.com>
+Message-ID: <871rtdi3e1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5837f90a7162d3e14213d11fb98df9f3a13571a0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Ryan" == Ryan Barnett <ryan.barnett@rockwellcollins.com> writes:
 
-Bump the kernel version to 5.4.1.
+ > With the change to pkg-python to use TARGET_CONFIGURE_OPTS in
+ > PKG_PYTHON_SETUPTOOLS_ENV in commit 1745fcde74, the
+ > LIRC_TOOLS_MAKE_ENV is incorrect as it sets the SETUPTOOLS_ENV using
+ > double quotes. This causes issues because the
+ > PKG_PYTHON_SETUPTOOLS_ENV contain double quotes as well. This causes a
+ > build error such as:
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/wandboard_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ >   /bin/sh: -I/home/naourr/work/instance-0/output-1/host/include
+ >           CXXFLAGS_FOR_BUILD=-O2: No such file or directory
 
-diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
-index c3e04af53e..1f42707ef0 100644
---- a/configs/wandboard_defconfig
-+++ b/configs/wandboard_defconfig
-@@ -3,8 +3,8 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
--# Linux headers same as kernel, a 4.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-@@ -20,7 +20,7 @@ BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.1"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
+ > Fix this by using single quotes with PKG_PYTHON_SETUPTOOLS_ENV instead
+ > of double quotes.
+
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/f7a9c02add9bde563c7289f7c0be2cb7aefd96b8
+
+ > Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
