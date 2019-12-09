@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  9 Dec 2019 21:04:46 +0100
-Subject: [Buildroot] [PATCH v1 04/11] gst1-plugins-bad: bump version to
+Date: Mon,  9 Dec 2019 21:04:44 +0100
+Subject: [Buildroot] [PATCH v1 02/11] gst1-plugins-base: bump version to
  1.16.2
 In-Reply-To: <20191209200453.2461-1-ps.report@gmx.net>
 References: <20191209200453.2461-1-ps.report@gmx.net>
-Message-ID: <20191209200453.2461-4-ps.report@gmx.net>
+Message-ID: <20191209200453.2461-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash | 4 ++--
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-index 4d434e6047..7b59b4dbec 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-@@ -1,4 +1,4 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.16.1.tar.xz.sha256sum
--sha256 56481c95339b8985af13bac19b18bc8da7118c2a7d9440ed70e7dcd799c2adb5 gst-plugins-bad-1.16.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.16.2.tar.xz.sha256sum
-+sha256 f1cb7aa2389569a5343661aae473f0a940a90b872001824bc47fa8072a041e74 gst-plugins-bad-1.16.2.tar.xz
- sha256 0b12e4d1cd5db5f8a0c04fc98a1d8c3acc533097b6198d6644420da78d460223 COPYING
- sha256 cf9b86bcf2d298e8cf5b9d8982f9dab296465b002fdfa0347357a0732f961e03 COPYING.LIB
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index b611b33eb3..1d4ba62bd2 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+index d7e16e7d61..2074c0272b 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.16.1.tar.xz.sha256sum
+-sha256 5c3cc489933d0597087c9bc6ba251c93693d64554bcc563539a084fa2d5fcb2b gst-plugins-base-1.16.1.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.16.2.tar.xz.sha256sum
++sha256 b13e73e2fe74a4166552f9577c3dcb24bed077021b9c7fa600d910ec6987816a gst-plugins-base-1.16.2.tar.xz
+ sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 21a29cbea2..1781a5d461 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_BAD_VERSION = 1.16.1
-+GST1_PLUGINS_BAD_VERSION = 1.16.2
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
+-GST1_PLUGINS_BASE_VERSION = 1.16.1
++GST1_PLUGINS_BASE_VERSION = 1.16.2
+ GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
+ GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST1_PLUGINS_BASE_INSTALL_STAGING = YES
 -- 
 2.24.0
