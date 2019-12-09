@@ -1,22 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Dec 2019 22:24:45 +0100
-Subject: [Buildroot] [PATCH] configs/wandboard: Bump the kernel version
-In-Reply-To: <20191203140525.19428-1-festevam@gmail.com> (Fabio Estevam's
- message of "Tue, 3 Dec 2019 11:05:25 -0300")
-References: <20191203140525.19428-1-festevam@gmail.com>
-Message-ID: <875zipi44i.fsf@dell.be.48ers.dk>
+Date: Mon, 9 Dec 2019 22:24:27 +0100
+Subject: [Buildroot] [git commit] configs/wandboard: Bump the kernel version
+ to 5.4.1
+Message-ID: <20191209211733.D812C88F7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5837f90a7162d3e14213d11fb98df9f3a13571a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Bump the kernel version to 5.4.1.
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Bump the kernel version to 5.4.1.
 
-Committed, thanks.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/wandboard_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index c3e04af53e..1f42707ef0 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+@@ -20,7 +20,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
