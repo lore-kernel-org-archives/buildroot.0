@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  9 Dec 2019 21:04:44 +0100
-Subject: [Buildroot] [PATCH v1 02/11] gst1-plugins-base: bump version to
- 1.16.2
+Date: Mon,  9 Dec 2019 21:04:52 +0100
+Subject: [Buildroot] [PATCH v1 10/11] gstreamer1-editing-services: bump
+ version to 1.16.2
 In-Reply-To: <20191209200453.2461-1-ps.report@gmx.net>
 References: <20191209200453.2461-1-ps.report@gmx.net>
-Message-ID: <20191209200453.2461-2-ps.report@gmx.net>
+Message-ID: <20191209200453.2461-10-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash | 4 ++--
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk   | 2 +-
+ .../gstreamer1-editing-services.hash                          | 4 ++--
+ .../gstreamer1-editing-services.mk                            | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-index d7e16e7d61..2074c0272b 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.16.1.tar.xz.sha256sum
--sha256 5c3cc489933d0597087c9bc6ba251c93693d64554bcc563539a084fa2d5fcb2b gst-plugins-base-1.16.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.16.2.tar.xz.sha256sum
-+sha256 b13e73e2fe74a4166552f9577c3dcb24bed077021b9c7fa600d910ec6987816a gst-plugins-base-1.16.2.tar.xz
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+index 2912ed1bc7..8724f39498 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+@@ -1,5 +1,5 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.16.1.tar.xz.sha256sum
+-sha256 c884878f9e6ddac96e4f174654d12fe52e3d48eaaec27a80767c0d56cb2f6780 gstreamer-editing-services-1.16.1.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.16.2.tar.xz.sha256sum
++sha256 0e06a6191a0c6c16e16272bf2573cecaeb245f10629486ad940a299bef700c16 gstreamer-editing-services-1.16.2.tar.xz
+ 
+ # Hashes for license files:
  sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 21a29cbea2..1781a5d461 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+index 51e411ba81..e2bb747d0a 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_BASE_VERSION = 1.16.1
-+GST1_PLUGINS_BASE_VERSION = 1.16.2
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+-GSTREAMER1_EDITING_SERVICES_VERSION = 1.16.1
++GSTREAMER1_EDITING_SERVICES_VERSION = 1.16.2
+ GSTREAMER1_EDITING_SERVICES_SOURCE = gstreamer-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
+ GSTREAMER1_EDITING_SERVICES_SITE = http://gstreamer.freedesktop.org/src/gstreamer-editing-services
+ GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
 -- 
 2.24.0
