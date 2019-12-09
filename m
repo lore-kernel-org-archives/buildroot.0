@@ -1,48 +1,150 @@
 From: Louis Aussedat <aussedat.louis@gmail.com>
-Date: Mon,  9 Dec 2019 22:59:22 +0100
-Subject: [Buildroot] [PATCH 2/3] package/python-tqdm: bump to version 4.40.1
+Date: Mon,  9 Dec 2019 22:59:23 +0100
+Subject: [Buildroot] [PATCH 3/3] package/libnfc: add configs to select which
+ driver to support
 In-Reply-To: <20191209215923.28945-1-aussedat.louis@gmail.com>
 References: <20191209215923.28945-1-aussedat.louis@gmail.com>
-Message-ID: <20191209215923.28945-2-aussedat.louis@gmail.com>
+Message-ID: <20191209215923.28945-3-aussedat.louis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+By default, arygon and pn53x_usb are activated,
+to keep old configuration.
+
 Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
 ---
- package/python-tqdm/python-tqdm.hash | 4 ++--
- package/python-tqdm/python-tqdm.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libnfc/Config.in | 55 ++++++++++++++++++++++++++++++++++++++--
+ package/libnfc/libnfc.mk | 40 +++++++++++++++++++++++++++--
+ 2 files changed, 91 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-tqdm/python-tqdm.hash b/package/python-tqdm/python-tqdm.hash
-index 63dea98cf2..8a61b29ad7 100644
---- a/package/python-tqdm/python-tqdm.hash
-+++ b/package/python-tqdm/python-tqdm.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/project/tqdm
--md5	84f1744e2cc097d9e824a2e201cca4a6  tqdm-4.37.0.tar.gz
--sha256	fca09992116d6dc3ad9789cf601a254081eb40d5c14c1863ab6cd10e15c2cb26  tqdm-4.37.0.tar.gz
-+md5	285af1f905f4c375f03a86a667047950  tqdm-4.40.1.tar.gz
-+sha256	e405d16c98fcf30725d0c9d493ed07302a18846b5452de5253030ccd18996f87  tqdm-4.40.1.tar.gz
- # Locally computed sha256 checksums
- sha256	1bbf12d09d437844527b3cdaba01d379dac651b5cbb5ebb0d764274684d2680b  LICENCE
-diff --git a/package/python-tqdm/python-tqdm.mk b/package/python-tqdm/python-tqdm.mk
-index 3aa562e22e..4ff4696e65 100644
---- a/package/python-tqdm/python-tqdm.mk
-+++ b/package/python-tqdm/python-tqdm.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
+index c8fe251459..9a1c8103ec 100644
+--- a/package/libnfc/Config.in
++++ b/package/libnfc/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_LIBNFC
+ 	bool "libnfc"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+-	select BR2_PACKAGE_LIBUSB
+-	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	help
+ 	  Public platform independent Near Field Communication (NFC)
+ 	  library.
+@@ -11,6 +9,59 @@ config BR2_PACKAGE_LIBNFC
  
--PYTHON_TQDM_VERSION = 4.37.0
-+PYTHON_TQDM_VERSION = 4.40.1
- PYTHON_TQDM_SOURCE = tqdm-$(PYTHON_TQDM_VERSION).tar.gz
--PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/cc/7b/5878d4e1b01a2eb802f78ea277f2385072681cabefc8fb4fbdee28dd1869
-+PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/4c/45/830c5c4bfaba60ef7d356a53c7751a86c81d148a16fda0daf3ac5ca8e288
- PYTHON_TQDM_SETUP_TYPE = setuptools
- PYTHON_TQDM_LICENSE = MPL-2.0, MIT
- PYTHON_TQDM_LICENSE_FILES = LICENCE
+ if BR2_PACKAGE_LIBNFC
+ 
++config BR2_PACKAGE_LIBNFC_ACR122_PCSC
++	bool "acr122_pcsc driver"
++	default ""
++	select BR2_PACKAGE_PCSC_LITE
++	help
++	  support for acr112_pcsc driver
++
++config BR2_PACKAGE_LIBNFC_ACR122_USB
++	bool "acr122_usb driver"
++	default ""
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
++	help
++	  support for acr122_usb driver
++
++config BR2_PACKAGE_LIBNFC_ACR122S
++	bool "acr122s driver"
++	default ""
++	help
++	  support for acr122s driver
++
++config BR2_PACKAGE_LIBNFC_ARYGON
++	bool "arygon driver"
++	default y
++	help
++	  support for arygon driver
++
++config BR2_PACKAGE_LIBNFC_PN532_I2C
++	bool "pn532_i2c driver"
++	default ""
++	help
++	  support for pn532_i2c driver
++
++config BR2_PACKAGE_LIBNFC_PN532_SPI
++	bool "pn532_spi driver"
++	default ""
++	help
++	  support for pn532_spi driver
++
++config BR2_PACKAGE_LIBNFC_PN532_UART
++	bool "pn532_uart driver"
++	default ""
++	help
++	  support for pn532_uart driver
++
++config BR2_PACKAGE_LIBNFC_PN53X_USB
++	bool "pn53x_usb driver"
++	default y
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
++	help
++	  support for pn53x_usb driver
++
+ config BR2_PACKAGE_LIBNFC_EXAMPLES
+ 	bool "build libnfc examples"
+ 	select BR2_PACKAGE_READLINE
+diff --git a/package/libnfc/libnfc.mk b/package/libnfc/libnfc.mk
+index b13fd69d82..ca8700484b 100644
+--- a/package/libnfc/libnfc.mk
++++ b/package/libnfc/libnfc.mk
+@@ -12,10 +12,46 @@ LIBNFC_LICENSE_FILES = COPYING
+ LIBNFC_AUTORECONF = YES
+ LIBNFC_INSTALL_STAGING = YES
+ 
+-LIBNFC_DEPENDENCIES = host-pkgconf libusb libusb-compat
++LIBNFC_DEPENDENCIES = host-pkgconf
+ 
+ # N.B. The acr122 driver requires pcsc-lite.
+-LIBNFC_CONF_OPTS = --with-drivers=arygon,pn53x_usb
++ifeq ($(BR2_PACKAGE_LIBNFC_ACR122_PCSC),y)
++LIBNFC_DRIVER_LIST += acr122_pcsc
++LIBNFC_DEPENDENCIES += pcsc-lite
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNFC_ACR122_USB),y)
++LIBNFC_DRIVER_LIST += acr122_usb
++LIBNFC_DEPENDENCIES += libusb libusb-compat
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNFC_ACR122S),y)
++LIBNFC_DRIVER_LIST += acr122s
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNFC_ARYGON),y)
++LIBNFC_DRIVER_LIST += arygon
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNFC_PN532_I2C),y)
++LIBNFC_DRIVER_LIST += pn532_i2c
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNFC_PN532_SPI),y)
++LIBNFC_DRIVER_LIST += pn532_spi
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNFC_PN532_UART),y)
++LIBNFC_DRIVER_LIST += pn532_uart
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNFC_PN53X_USB),y)
++LIBNFC_DRIVER_LIST += pn53x_usb
++LIBNFC_DEPENDENCIES += libusb libusb-compat
++endif
++
++LIBNFC_CONF_OPTS = \
++	--with-drivers=$(subst $(space),$(comma),$(strip $(LIBNFC_DRIVER_LIST)))
+ 
+ ifeq ($(BR2_PACKAGE_LIBNFC_EXAMPLES),y)
+ LIBNFC_CONF_OPTS += --enable-example
 -- 
 2.24.0
