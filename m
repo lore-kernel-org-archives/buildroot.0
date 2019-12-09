@@ -1,309 +1,249 @@
-From: juju at cotds.org <juju@cotds.org>
-Date: Mon, 09 Dec 2019 20:49:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: new package
-In-Reply-To: <CAKcgs2xnyRrN_QM6Mj_QmROc_7YD2OcN6XbqFJ-MoA63f++erw@mail.gmail.com>
+From: Julien Olivain <juju@cotds.org>
+Date: Mon,  9 Dec 2019 21:03:24 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/fluidsynth: new package
+In-Reply-To: <20191205203336.27806-1-juju@cotds.org>
 References: <20191205203336.27806-1-juju@cotds.org>
- <CAKcgs2xnyRrN_QM6Mj_QmROc_7YD2OcN6XbqFJ-MoA63f++erw@mail.gmail.com>
-Message-ID: <9e31505427643d29af44278e3e7cd801@cotds.org>
+Message-ID: <20191209200324.11065-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gilles,
+FluidSynth is a real-time software synthesizer based on the
+SoundFont 2 specifications and has reached widespread
+distribution. FluidSynth itself does not have a graphical
+user interface, but due to its powerful API several
+applications utilize it and it has even found its way onto
+embedded systems and is used in some mobile apps.
 
-Thanks for your review! I agree with all your comments, and I'll post
-an updated version of the patch.
+http://www.fluidsynth.org/
 
-Best regards,
+Signed-off-by: Julien Olivain <juju@cotds.org>
+---
+Changes v1 -> v2:
+Included all Gilles' comments:
+  - Add comments for dependencies
+  - Clarified "float" option
+  - Removed useless "thread" option
+  - Add LICENSE file hash
+  - Removed "v" in VERSION
+  - Fixed LICENSE to LGPL-2.1+
 
-Julien.
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/fluidsynth/Config.in       | 91 ++++++++++++++++++++++++++++++
+ package/fluidsynth/fluidsynth.hash |  3 +
+ package/fluidsynth/fluidsynth.mk   | 68 ++++++++++++++++++++++
+ 5 files changed, 164 insertions(+)
+ create mode 100644 package/fluidsynth/Config.in
+ create mode 100644 package/fluidsynth/fluidsynth.hash
+ create mode 100644 package/fluidsynth/fluidsynth.mk
 
-
-On 2019-12-08 08:54, Gilles Talis wrote:
-> Hello Julien,
-> 
-> thanks for your contribution.
-> A few comments below
-> Thanks.
-> Gilles.
-> 
-> 
-> Le jeu. 5 d?c. 2019 ? 21:33, Julien Olivain <juju@cotds.org> a ?crit :
->> 
->> FluidSynth is a real-time software synthesizer based on the
->> SoundFont 2 specifications and has reached widespread
->> distribution. FluidSynth itself does not have a graphical
->> user interface, but due to its powerful API several
->> applications utilize it and it has even found its way onto
->> embedded systems and is used in some mobile apps.
->> 
->> http://www.fluidsynth.org/
->> 
->> Signed-off-by: Julien Olivain <juju@cotds.org>
->> ---
->>  DEVELOPERS                         |  1 +
->>  package/Config.in                  |  1 +
->>  package/fluidsynth/Config.in       | 97 
->> ++++++++++++++++++++++++++++++
->>  package/fluidsynth/fluidsynth.hash |  2 +
->>  package/fluidsynth/fluidsynth.mk   | 74 +++++++++++++++++++++++
->>  5 files changed, 175 insertions(+)
->>  create mode 100644 package/fluidsynth/Config.in
->>  create mode 100644 package/fluidsynth/fluidsynth.hash
->>  create mode 100644 package/fluidsynth/fluidsynth.mk
->> 
->> diff --git a/DEVELOPERS b/DEVELOPERS
->> index a030be7890..33b828daed 100644
->> --- a/DEVELOPERS
->> +++ b/DEVELOPERS
->> @@ -1347,6 +1347,7 @@ F:        board/technexion/imx8mmpico/
->>  F:     board/technexion/imx8mpico/
->>  F:     configs/imx8mmpico_defconfig
->>  F:     configs/imx8mpico_defconfig
->> +F:     package/fluidsynth/
->> 
->>  N:     Julien Viard de Galbert <julien@vdg.name>
->>  F:     package/dieharder/
->> diff --git a/package/Config.in b/package/Config.in
->> index 9e2b78fe6a..30dc329add 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -23,6 +23,7 @@ menu "Audio and video applications"
->>         source "package/ffmpeg/Config.in"
->>         source "package/flac/Config.in"
->>         source "package/flite/Config.in"
->> +       source "package/fluidsynth/Config.in"
->>         source "package/gmrender-resurrect/Config.in"
->>         source "package/gstreamer/Config.in"
->>         source "package/gstreamer1/Config.in"
->> diff --git a/package/fluidsynth/Config.in 
->> b/package/fluidsynth/Config.in
->> new file mode 100644
->> index 0000000000..b50aa11ee7
->> --- /dev/null
->> +++ b/package/fluidsynth/Config.in
->> @@ -0,0 +1,97 @@
->> +config BR2_PACKAGE_FLUIDSYNTH
->> +       bool "fluidsynth"
->> +       depends on BR2_USE_WCHAR
->> +       depends on BR2_TOOLCHAIN_HAS_THREADS
->> +       depends on BR2_USE_MMU
-> It might be interesting to mention that these dependencies are brought
-> up by libglib2
-> e.g. depends on BR2_USE_WCHAR # libglib2
-> 
->> +       select BR2_PACKAGE_LIBGLIB2
->> +       help
->> +         FluidSynth is a real-time software synthesizer based on the
->> +         SoundFont 2 specifications and has reached widespread
->> +         distribution. FluidSynth itself does not have a graphical
->> +         user interface, but due to its powerful API several
->> +         applications utilize it and it has even found its way onto
->> +         embedded systems and is used in some mobile apps.
->> +
->> +         http://www.fluidsynth.org/
->> +
->> +if BR2_PACKAGE_FLUIDSYNTH
->> +
->> +comment "Output support"
->> +
->> +config BR2_PACKAGE_FLUIDSYNTH_ALSA_LIB
->> +       bool "alsa"
->> +       default y
->> +       select BR2_PACKAGE_ALSA_LIB
->> +       help
->> +         Enable alsa support.
->> +
->> +config BR2_PACKAGE_FLUIDSYNTH_JACK2
->> +       bool "jack2"
->> +       # See: https://sourceware.org/bugzilla/show_bug.cgi?id=19908
->> +       depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
->> +       depends on !BR2_STATIC_LIBS
->> +       depends on BR2_INSTALL_LIBSTDCPP
->> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
->> +       select BR2_PACKAGE_JACK2
->> +       help
->> +         Enable jack support.
->> +
->> +comment "jack support needs a toolchain w/ dynamic library"
->> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
->> +       depends on BR2_STATIC_LIBS
->> +
->> +config BR2_PACKAGE_FLUIDSYNTH_LIBSNDFILE
->> +       bool "libsndfile"
->> +       select BR2_PACKAGE_LIBSNDFILE
->> +       help
->> +         Enable libsndfile support, for writing output to WAV files.
->> +
->> +config BR2_PACKAGE_FLUIDSYNTH_PORTAUDIO
->> +       bool "portaudio"
->> +       select BR2_PACKAGE_PORTAUDIO
->> +       help
->> +         Enable portaudio support.
->> +
->> +config BR2_PACKAGE_FLUIDSYNTH_PULSEAUDIO
->> +       bool "pulseaudio"
->> +       # See: https://sourceware.org/bugzilla/show_bug.cgi?id=19908
->> +       depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
->> +       depends on !BR2_STATIC_LIBS
->> +       select BR2_PACKAGE_PULSEAUDIO
->> +       help
->> +         Enable PulseAudio support.
->> +
->> +comment "pulseaudio support needs a toolchain w/ dynamic library"
->> +       depends on BR2_STATIC_LIBS
->> +
->> +comment "Misc options"
->> +
->> +config BR2_PACKAGE_FLUIDSYNTH_DBUS
->> +       bool "dbus"
->> +       select BR2_PACKAGE_DBUS
->> +       help
->> +         Enable dbus support.
->> +
->> +config BR2_PACKAGE_FLUIDSYNTH_FLOATS
->> +       bool "floats"
-> I would change the name here. "floats" is pretty vague.
-> what about "32-bit single precision float" ?
-> 
->> +       help
->> +         Enable 32-bit single precision float support, instead of
->> +         64-bit double precision floats for DSP samples.
->> +
->> +config BR2_PACKAGE_FLUIDSYNTH_READLINE
->> +       bool "readline"
->> +       select BR2_PACKAGE_READLINE
->> +       help
->> +         Enable readline support, for better line editing in 
->> FluidSynth
->> +         shell.
->> +
->> +config BR2_PACKAGE_FLUIDSYNTH_THREADS
->> +       bool "threads"
->> +       default y
->> +       help
->> +         Enable multi-thread support.
-> The package needs a toolchain with threads support.
-> Do we need this option? I would just enable it all the time in the 
-> recipe.
-> 
->> +
->> +endif # BR2_PACKAGE_FLUIDSYNTH
->> +
->> +comment "fluidsynth needs a toolchain w/ threads, wchar"
->> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
->> diff --git a/package/fluidsynth/fluidsynth.hash 
->> b/package/fluidsynth/fluidsynth.hash
->> new file mode 100644
->> index 0000000000..d28073bb3d
->> --- /dev/null
->> +++ b/package/fluidsynth/fluidsynth.hash
->> @@ -0,0 +1,2 @@
->> +# Locally computed
->> +sha256 
->> 526addc6d8445035840d3af7282d3ba89567df209d28e183da04a1a877da2da3  
->> fluidsynth-v2.1.0.tar.gz
-> The hash for the license file is missing.
-> 
->> diff --git a/package/fluidsynth/fluidsynth.mk 
->> b/package/fluidsynth/fluidsynth.mk
->> new file mode 100644
->> index 0000000000..ef1ac8ed85
->> --- /dev/null
->> +++ b/package/fluidsynth/fluidsynth.mk
->> @@ -0,0 +1,74 @@
->> +################################################################################
->> +#
->> +# fluidsynth
->> +#
->> +################################################################################
->> +
->> +FLUIDSYNTH_VERSION = v2.1.0
-> I would move the "v" to FLUIDSYNTH_SITE for better version tracking
-> with release-monitoring.org
-> https://release-monitoring.org/project/10437/
-> 
->> +FLUIDSYNTH_SITE = $(call 
->> github,FluidSynth,fluidsynth,$(FLUIDSYNTH_VERSION))
-> As mentioned just above, please add "v" in front of 
-> $(FLUIDSYNTH_VERSION)
-> 
->> +FLUIDSYNTH_LICENSE = LGPLv2+
-> It is LGPL-2.1+
-> 
->> +FLUIDSYNTH_LICENSE_FILES = LICENSE
->> +FLUIDSYNTH_DEPENDENCIES = libglib2
->> +
->> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_ALSA_LIB),y)
->> +FLUIDSYNTH_CONF_OPTS += -Denable-alsa=1
->> +FLUIDSYNTH_DEPENDENCIES += alsa-lib
->> +else
->> +FLUIDSYNTH_CONF_OPTS += -Denable-alsa=0
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_DBUS),y)
->> +FLUIDSYNTH_CONF_OPTS += -Denable-dbus=1
->> +FLUIDSYNTH_DEPENDENCIES += dbus
->> +else
->> +FLUIDSYNTH_CONF_OPTS += -Denable-dbus=0
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_FLOATS),y)
->> +FLUIDSYNTH_CONF_OPTS += -Denable-floats=1
->> +else
->> +FLUIDSYNTH_CONF_OPTS += -Denable-floats=0
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_JACK2),y)
->> +FLUIDSYNTH_CONF_OPTS += -Denable-jack=1
->> +FLUIDSYNTH_DEPENDENCIES += jack2
->> +else
->> +FLUIDSYNTH_CONF_OPTS += -Denable-jack=0
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_LIBSNDFILE),y)
->> +FLUIDSYNTH_CONF_OPTS += -Denable-libsndfile=1
->> +FLUIDSYNTH_DEPENDENCIES += libsndfile
->> +else
->> +FLUIDSYNTH_CONF_OPTS += -Denable-libsndfile=0
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_PORTAUDIO),y)
->> +FLUIDSYNTH_CONF_OPTS += -Denable-portaudio=1
->> +FLUIDSYNTH_DEPENDENCIES += portaudio
->> +else
->> +FLUIDSYNTH_CONF_OPTS += -Denable-portaudio=0
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_PULSEAUDIO),y)
->> +FLUIDSYNTH_CONF_OPTS += -Denable-pulseaudio=1
->> +FLUIDSYNTH_DEPENDENCIES += pulseaudio
->> +else
->> +FLUIDSYNTH_CONF_OPTS += -Denable-pulseaudio=0
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_READLINE),y)
->> +FLUIDSYNTH_CONF_OPTS += -Denable-readline=1
->> +FLUIDSYNTH_DEPENDENCIES += readline
->> +else
->> +FLUIDSYNTH_CONF_OPTS += -Denable-readline=0
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_THREADS),y)
->> +FLUIDSYNTH_CONF_OPTS += -Denable-threads=1
->> +else
->> +FLUIDSYNTH_CONF_OPTS += -Denable-threads=0
->> +endif
-> As mentioned above, I would enable this option aways.
-> 
->> +
->> +$(eval $(cmake-package))
->> --
->> 2.23.0
->> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 61bcd99d43..d0cfec3bac 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1352,6 +1352,7 @@ F:	board/technexion/imx8mmpico/
+ F:	board/technexion/imx8mpico/
+ F:	configs/imx8mmpico_defconfig
+ F:	configs/imx8mpico_defconfig
++F:	package/fluidsynth/
+ 
+ N:	Julien Viard de Galbert <julien@vdg.name>
+ F:	package/dieharder/
+diff --git a/package/Config.in b/package/Config.in
+index 307583d01f..962d2f2612 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -23,6 +23,7 @@ menu "Audio and video applications"
+ 	source "package/ffmpeg/Config.in"
+ 	source "package/flac/Config.in"
+ 	source "package/flite/Config.in"
++	source "package/fluidsynth/Config.in"
+ 	source "package/gmrender-resurrect/Config.in"
+ 	source "package/gstreamer/Config.in"
+ 	source "package/gstreamer1/Config.in"
+diff --git a/package/fluidsynth/Config.in b/package/fluidsynth/Config.in
+new file mode 100644
+index 0000000000..6e319a80bb
+--- /dev/null
++++ b/package/fluidsynth/Config.in
+@@ -0,0 +1,91 @@
++config BR2_PACKAGE_FLUIDSYNTH
++	bool "fluidsynth"
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  FluidSynth is a real-time software synthesizer based on the
++	  SoundFont 2 specifications and has reached widespread
++	  distribution. FluidSynth itself does not have a graphical
++	  user interface, but due to its powerful API several
++	  applications utilize it and it has even found its way onto
++	  embedded systems and is used in some mobile apps.
++
++	  http://www.fluidsynth.org/
++
++if BR2_PACKAGE_FLUIDSYNTH
++
++comment "Output support"
++
++config BR2_PACKAGE_FLUIDSYNTH_ALSA_LIB
++	bool "alsa"
++	default y
++	select BR2_PACKAGE_ALSA_LIB
++	help
++	  Enable alsa support.
++
++config BR2_PACKAGE_FLUIDSYNTH_JACK2
++	bool "jack2"
++	# See: https://sourceware.org/bugzilla/show_bug.cgi?id=19908
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
++	depends on !BR2_STATIC_LIBS # jack2
++	depends on BR2_INSTALL_LIBSTDCPP # jack2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # jack2
++	select BR2_PACKAGE_JACK2
++	help
++	  Enable jack support.
++
++comment "jack support needs a toolchain w/ dynamic library"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_STATIC_LIBS
++
++config BR2_PACKAGE_FLUIDSYNTH_LIBSNDFILE
++	bool "libsndfile"
++	select BR2_PACKAGE_LIBSNDFILE
++	help
++	  Enable libsndfile support, for writing output to WAV files.
++
++config BR2_PACKAGE_FLUIDSYNTH_PORTAUDIO
++	bool "portaudio"
++	select BR2_PACKAGE_PORTAUDIO
++	help
++	  Enable portaudio support.
++
++config BR2_PACKAGE_FLUIDSYNTH_PULSEAUDIO
++	bool "pulseaudio"
++	# See: https://sourceware.org/bugzilla/show_bug.cgi?id=19908
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
++	depends on !BR2_STATIC_LIBS # pulseaudio
++	select BR2_PACKAGE_PULSEAUDIO
++	help
++	  Enable PulseAudio support.
++
++comment "pulseaudio support needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
++comment "Misc options"
++
++config BR2_PACKAGE_FLUIDSYNTH_DBUS
++	bool "dbus"
++	select BR2_PACKAGE_DBUS
++	help
++	  Enable dbus support.
++
++config BR2_PACKAGE_FLUIDSYNTH_FLOATS
++	bool "32-bit single precision float"
++	help
++	  Enable 32-bit single precision float support, instead of
++	  64-bit double precision floats for DSP samples.
++
++config BR2_PACKAGE_FLUIDSYNTH_READLINE
++	bool "readline"
++	select BR2_PACKAGE_READLINE
++	help
++	  Enable readline support, for better line editing in FluidSynth
++	  shell.
++
++endif # BR2_PACKAGE_FLUIDSYNTH
++
++comment "fluidsynth needs a toolchain w/ threads, wchar"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+new file mode 100644
+index 0000000000..5c5c226cbc
+--- /dev/null
++++ b/package/fluidsynth/fluidsynth.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 526addc6d8445035840d3af7282d3ba89567df209d28e183da04a1a877da2da3  fluidsynth-2.1.0.tar.gz
++sha256 9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+new file mode 100644
+index 0000000000..4ef0a6f40d
+--- /dev/null
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -0,0 +1,68 @@
++################################################################################
++#
++# fluidsynth
++#
++################################################################################
++
++FLUIDSYNTH_VERSION = 2.1.0
++FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
++FLUIDSYNTH_LICENSE = LGPL-2.1+
++FLUIDSYNTH_LICENSE_FILES = LICENSE
++FLUIDSYNTH_DEPENDENCIES = libglib2
++
++ifeq ($(BR2_PACKAGE_FLUIDSYNTH_ALSA_LIB),y)
++FLUIDSYNTH_CONF_OPTS += -Denable-alsa=1
++FLUIDSYNTH_DEPENDENCIES += alsa-lib
++else
++FLUIDSYNTH_CONF_OPTS += -Denable-alsa=0
++endif
++
++ifeq ($(BR2_PACKAGE_FLUIDSYNTH_DBUS),y)
++FLUIDSYNTH_CONF_OPTS += -Denable-dbus=1
++FLUIDSYNTH_DEPENDENCIES += dbus
++else
++FLUIDSYNTH_CONF_OPTS += -Denable-dbus=0
++endif
++
++ifeq ($(BR2_PACKAGE_FLUIDSYNTH_FLOATS),y)
++FLUIDSYNTH_CONF_OPTS += -Denable-floats=1
++else
++FLUIDSYNTH_CONF_OPTS += -Denable-floats=0
++endif
++
++ifeq ($(BR2_PACKAGE_FLUIDSYNTH_JACK2),y)
++FLUIDSYNTH_CONF_OPTS += -Denable-jack=1
++FLUIDSYNTH_DEPENDENCIES += jack2
++else
++FLUIDSYNTH_CONF_OPTS += -Denable-jack=0
++endif
++
++ifeq ($(BR2_PACKAGE_FLUIDSYNTH_LIBSNDFILE),y)
++FLUIDSYNTH_CONF_OPTS += -Denable-libsndfile=1
++FLUIDSYNTH_DEPENDENCIES += libsndfile
++else
++FLUIDSYNTH_CONF_OPTS += -Denable-libsndfile=0
++endif
++
++ifeq ($(BR2_PACKAGE_FLUIDSYNTH_PORTAUDIO),y)
++FLUIDSYNTH_CONF_OPTS += -Denable-portaudio=1
++FLUIDSYNTH_DEPENDENCIES += portaudio
++else
++FLUIDSYNTH_CONF_OPTS += -Denable-portaudio=0
++endif
++
++ifeq ($(BR2_PACKAGE_FLUIDSYNTH_PULSEAUDIO),y)
++FLUIDSYNTH_CONF_OPTS += -Denable-pulseaudio=1
++FLUIDSYNTH_DEPENDENCIES += pulseaudio
++else
++FLUIDSYNTH_CONF_OPTS += -Denable-pulseaudio=0
++endif
++
++ifeq ($(BR2_PACKAGE_FLUIDSYNTH_READLINE),y)
++FLUIDSYNTH_CONF_OPTS += -Denable-readline=1
++FLUIDSYNTH_DEPENDENCIES += readline
++else
++FLUIDSYNTH_CONF_OPTS += -Denable-readline=0
++endif
++
++$(eval $(cmake-package))
+-- 
+2.23.0
