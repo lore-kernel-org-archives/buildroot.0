@@ -1,33 +1,38 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  9 Dec 2019 23:27:44 +0100
-Subject: [Buildroot] [PATCH 1/3] package/dante: remove --without-pam
-Message-ID: <20191209222746.3440986-1-fontaine.fabrice@gmail.com>
+Date: Mon,  9 Dec 2019 23:27:45 +0100
+Subject: [Buildroot] [PATCH 2/3] package/dante: add optional libminiupnpc
+ dependency
+In-Reply-To: <20191209222746.3440986-1-fontaine.fabrice@gmail.com>
+References: <20191209222746.3440986-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191209222746.3440986-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---without-pam was wrongly put back by commit
-6d8abc7c1aca00a8ee514b38d88744ccd9ec194f
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dante/dante.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/dante/dante.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-index 0bd036d37e..0668042bd8 100644
+index 0668042bd8..35b785dc70 100644
 --- a/package/dante/dante.mk
 +++ b/package/dante/dante.mk
-@@ -12,7 +12,7 @@ DANTE_LICENSE_FILES = LICENSE
- # 0002-compiler.m4-do-not-remove-g-flag.patch touches a m4 file
- DANTE_AUTORECONF = YES
+@@ -14,6 +14,13 @@ DANTE_AUTORECONF = YES
  
--DANTE_CONF_OPTS += --disable-client --disable-preload --without-pam
-+DANTE_CONF_OPTS += --disable-client --disable-preload
+ DANTE_CONF_OPTS += --disable-client --disable-preload
  
++ifeq ($(BR2_PACKAGE_LIBMINIUPNPC),y)
++DANTE_DEPENDENCIES += libminiupnpc
++DANTE_CONF_OPTS += --with-upnp
++else
++DANTE_CONF_OPTS += --without-upnp
++endif
++
  ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
  DANTE_DEPENDENCIES += linux-pam
+ DANTE_CONF_OPTS += --with-pam
 -- 
 2.24.0
