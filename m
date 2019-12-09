@@ -1,52 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Dec 2019 16:59:22 +0100
-Subject: [Buildroot] [FYI] Bootlin external toolchains
-In-Reply-To: <09654893-fe44-76f0-da65-3f29bc758c6f@mind.be>
-References: <CAMw6YJLJae0GcmrDmSY8FZ-uMj+WBybPkBaLQC1wkhooCjoKyQ@mail.gmail.com>
- <20191202152601.4ab1c8cd@windsurf>
- <a9c40802-dfd5-67b5-6750-b0711f667280@smile.fr>
- <09654893-fe44-76f0-da65-3f29bc758c6f@mind.be>
-Message-ID: <20191209165922.335b2af1@windsurf>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Mon, 9 Dec 2019 10:23:24 -0600
+Subject: [Buildroot] [PATCH] package/pkg-python: use _CONFIGURE_OPTS for
+ build env
+In-Reply-To: <20191209165331.39589bbe@windsurf>
+References: <20191205231103.27778-1-ryan.barnett@rockwellcollins.com>
+ <20191206233513.5f6260d7@windsurf.home> <87sglwl1wi.fsf@dell.be.48ers.dk>
+ <20191209165331.39589bbe@windsurf>
+Message-ID: <CAMQcK5+y-qT+0geazmxOH+OyOK4fks-PVUFjKR_MdRLjTBnJ1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Tue, 3 Dec 2019 22:15:47 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+On Mon, Dec 9, 2019 at 9:54 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Sat, 07 Dec 2019 14:07:41 +0100
+> Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >  >> package/pkg-python.mk | 11 ++++++-----
+> >  >> 1 file changed, 6 insertions(+), 5 deletions(-)
+> >
+> >  > Applied to master, thanks.
+> >
+> > Hmm, this seems to confuse lirc-tools:
+> >
+> > http://autobuild.buildroot.net/results/f7a/f7a9c02add9bde563c7289f7c0be2cb7aefd96b8/build-end.log
+>
+> I think this sort of change was pretty likely to cause some build
+> breakage, so it's good to merge it early.
+>
+> Ryan, will you take a look at this issue ?
 
->  To kick off the bikeshedding, here's my opinion on what the package should look
-> like.
-> 
-> * It should be a single package, toolchain-external-bootlin. Maybe two (-stable
-> and -bleeding-edge) but I think there'll be enough shared infrastructure to
-> warrant creating a single package.
+Yes - I'm taking a look at it. Looks like it is due to using double
+quotes when using PKG_PYTHON_SETUPTOOLS_ENV.
 
-Agreed. My initial start of work in this area looked exactly like this:
-a single package. See
-https://github.com/tpetazzoni/buildroot/commit/58413ab16c6b203dca48db182e74e59ae73c958a.
-Note: this commit is far from being something that works. If I had
-something that worked, I would have submitted it.
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+index e468f2a25d..d66f4e9925 100644
+--- a/package/lirc-tools/lirc-tools.mk
++++ b/package/lirc-tools/lirc-tools.mk
+@@ -47,7 +47,7 @@ endif
 
-> * It should offer a choice in Config.in.options for libc and stable/bleeding-edge.
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ LIRC_TOOLS_DEPENDENCIES += python3 host-python3-setuptools
+-LIRC_TOOLS_MAKE_ENV += SETUPTOOLS_ENV="$(PKG_PYTHON_SETUPTOOLS_ENV)"
++LIRC_TOOLS_MAKE_ENV += SETUPTOOLS_ENV='$(PKG_PYTHON_SETUPTOOLS_ENV)'
+ endif
 
-See commit above :-)
+ define LIRC_TOOLS_INSTALL_INIT_SYSV
 
-> * For now, it should be limited to *exactly* the same architecture suboptions as
-> what the toolchain was built for. Later we can decide how to expand this to
-> compatible options (e.g. the core-i7 toolchain will also work for core-avx2) -
-> but I'm pretty sure that that is something that will require help from
-> toolchain-builder itself.
-
-Pretty much what I did, yes :-)
+Working on testing out the change to see if it will build correctly.
 
 Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-Ryan
