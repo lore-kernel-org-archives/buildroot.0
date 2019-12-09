@@ -1,93 +1,48 @@
 From: Louis Aussedat <aussedat.louis@gmail.com>
-Date: Mon,  9 Dec 2019 22:59:21 +0100
-Subject: [Buildroot] [PATCH 1/3] configs/friendlyarm_nanopi_neo_plus2: use
- an extlinux instead of boot.cmd
-Message-ID: <20191209215923.28945-1-aussedat.louis@gmail.com>
+Date: Mon,  9 Dec 2019 22:59:22 +0100
+Subject: [Buildroot] [PATCH 2/3] package/python-tqdm: bump to version 4.40.1
+In-Reply-To: <20191209215923.28945-1-aussedat.louis@gmail.com>
+References: <20191209215923.28945-1-aussedat.louis@gmail.com>
+Message-ID: <20191209215923.28945-2-aussedat.louis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This remove the file boot.cmd to use an extlinux.conf instead.
-
 Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
 ---
- board/friendlyarm/nanopi-neo-plus2/boot.cmd      | 6 ------
- board/friendlyarm/nanopi-neo-plus2/extlinux.conf | 4 ++++
- board/friendlyarm/nanopi-neo-plus2/genimage.cfg  | 2 +-
- board/friendlyarm/nanopi-neo-plus2/post-build.sh | 4 ++++
- configs/friendlyarm_nanopi_neo_plus2_defconfig   | 3 +--
- 5 files changed, 10 insertions(+), 9 deletions(-)
- delete mode 100644 board/friendlyarm/nanopi-neo-plus2/boot.cmd
- create mode 100644 board/friendlyarm/nanopi-neo-plus2/extlinux.conf
- create mode 100755 board/friendlyarm/nanopi-neo-plus2/post-build.sh
+ package/python-tqdm/python-tqdm.hash | 4 ++--
+ package/python-tqdm/python-tqdm.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/friendlyarm/nanopi-neo-plus2/boot.cmd b/board/friendlyarm/nanopi-neo-plus2/boot.cmd
-deleted file mode 100644
-index 227604a23d..0000000000
---- a/board/friendlyarm/nanopi-neo-plus2/boot.cmd
-+++ /dev/null
-@@ -1,6 +0,0 @@
--setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
--
--fatload mmc 0 $kernel_addr_r Image
--fatload mmc 0 $fdt_addr_r sun50i-h5-nanopi-neo-plus2.dtb
--
--booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/friendlyarm/nanopi-neo-plus2/extlinux.conf b/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
-new file mode 100644
-index 0000000000..fcb6f632c1
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
-@@ -0,0 +1,4 @@
-+label linux
-+  kernel /Image
-+  devicetree /sun50i-h5-nanopi-neo-plus2.dtb
-+  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-diff --git a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg b/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
-index a4c2a7a894..fb871abd43 100644
---- a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
-+++ b/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
-@@ -3,7 +3,7 @@ image boot.vfat {
- 		files = {
- 			"Image",
- 			"sun50i-h5-nanopi-neo-plus2.dtb",
--			"boot.scr"
-+			"extlinux"
- 		}
- 	}
- 	size = 64M
-diff --git a/board/friendlyarm/nanopi-neo-plus2/post-build.sh b/board/friendlyarm/nanopi-neo-plus2/post-build.sh
-new file mode 100755
-index 0000000000..ec20fca7d9
---- /dev/null
-+++ b/board/friendlyarm/nanopi-neo-plus2/post-build.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+BOARD_DIR="$(dirname $0)"
-+
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/configs/friendlyarm_nanopi_neo_plus2_defconfig b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-index c807b3100b..461e468cb6 100644
---- a/configs/friendlyarm_nanopi_neo_plus2_defconfig
-+++ b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-@@ -27,8 +27,6 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
--BR2_TARGET_UBOOT_BOOT_SCRIPT=y
--BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo-plus2/boot.cmd"
+diff --git a/package/python-tqdm/python-tqdm.hash b/package/python-tqdm/python-tqdm.hash
+index 63dea98cf2..8a61b29ad7 100644
+--- a/package/python-tqdm/python-tqdm.hash
++++ b/package/python-tqdm/python-tqdm.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/project/tqdm
+-md5	84f1744e2cc097d9e824a2e201cca4a6  tqdm-4.37.0.tar.gz
+-sha256	fca09992116d6dc3ad9789cf601a254081eb40d5c14c1863ab6cd10e15c2cb26  tqdm-4.37.0.tar.gz
++md5	285af1f905f4c375f03a86a667047950  tqdm-4.40.1.tar.gz
++sha256	e405d16c98fcf30725d0c9d493ed07302a18846b5452de5253030ccd18996f87  tqdm-4.40.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	1bbf12d09d437844527b3cdaba01d379dac651b5cbb5ebb0d764274684d2680b  LICENCE
+diff --git a/package/python-tqdm/python-tqdm.mk b/package/python-tqdm/python-tqdm.mk
+index 3aa562e22e..4ff4696e65 100644
+--- a/package/python-tqdm/python-tqdm.mk
++++ b/package/python-tqdm/python-tqdm.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Kernel
- BR2_LINUX_KERNEL=y
-@@ -49,6 +47,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo-plus2/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo-plus2/post-build.sh"
- 
- # wireless firmware
- BR2_PACKAGE_LINUX_FIRMWARE=y
+-PYTHON_TQDM_VERSION = 4.37.0
++PYTHON_TQDM_VERSION = 4.40.1
+ PYTHON_TQDM_SOURCE = tqdm-$(PYTHON_TQDM_VERSION).tar.gz
+-PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/cc/7b/5878d4e1b01a2eb802f78ea277f2385072681cabefc8fb4fbdee28dd1869
++PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/4c/45/830c5c4bfaba60ef7d356a53c7751a86c81d148a16fda0daf3ac5ca8e288
+ PYTHON_TQDM_SETUP_TYPE = setuptools
+ PYTHON_TQDM_LICENSE = MPL-2.0, MIT
+ PYTHON_TQDM_LICENSE_FILES = LICENCE
 -- 
 2.24.0
