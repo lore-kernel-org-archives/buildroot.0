@@ -1,57 +1,64 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 9 Dec 2019 11:03:08 -0800
-Subject: [Buildroot] [PATCH v6 1/6] package/polkit: bump to version 0.116
-In-Reply-To: <20191208205847.76c05a1f@windsurf.home>
-References: <20191206234649.3972927-1-aduskett@gmail.com>
- <20191208160213.030635f6@windsurf.home>
- <CAFSsvmqCnXXkjMtJiPOpHx0E8Xv4fHcOuNw3qSSn52i9F-6yPg@mail.gmail.com>
- <20191208205847.76c05a1f@windsurf.home>
-Message-ID: <CAFSsvmopSyRoAriDm-5yKuh4pJYEvBbe1HmaL8jsoC9AaaMjdA@mail.gmail.com>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Mon,  9 Dec 2019 20:15:53 +0100
+Subject: [Buildroot] [PATCH 1/2] SDL_mixer: Add option to prefer Tremor over
+ libvorbis
+Message-ID: <20191209191554.821230-1-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+Add a menu option to set the Vorbis decoding library to Tremor instead
+of libvorbis.
 
-On Sun, Dec 8, 2019 at 11:58 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Sun, 8 Dec 2019 11:04:16 -0800
-> Adam Duskett <aduskett@gmail.com> wrote:
->
-> > > One direction that would be nice to look at is to enable spidermonkey
-> > > and then polkit on uClibc. Regarding the fenv issue, perhaps we could
-> > > have a boolean that says whether uClibc provides fenv support for the
-> > > current architecture, and then treat this as an architecture dependency
-> > > inside BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS ? How many architectures
-> > > have sufficient fenv support in uClibc for spidermonkey ?
-> > >
-> > Not many, Yann and I had a conversation about this earlier and it
-> > doesn't seem worth it.
->
-> OK.
->
-> > Perhaps instead we could put the same effort into a variable that
-> > checks for uclibc fts support.
-> > That way selinux can be enabled with uclibc:
->
-> SELinux can already be enabled on uClibc. I added the musl-fts package,
-> and used it in libselinux to make it available for uClibc/musl.
->
-> When you're grumpy, please verify your claims :-)
->
-I'm aware of the option, but I don't agree with it. It's built into
-uClibc and requiring
-an extra package is not nice in my opinion.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ package/sdl_mixer/Config.in    | 13 +++++++++++++
+ package/sdl_mixer/sdl_mixer.mk |  5 +++++
+ 2 files changed, 18 insertions(+)
 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Adam
+diff --git a/package/sdl_mixer/Config.in b/package/sdl_mixer/Config.in
+index 42dfe63c0a..94fcda7a0e 100644
+--- a/package/sdl_mixer/Config.in
++++ b/package/sdl_mixer/Config.in
+@@ -9,3 +9,16 @@ config BR2_PACKAGE_SDL_MIXER
+ 	  SMPEG MP3 libraries.
+ 
+ 	  http://www.libsdl.org/projects/SDL_mixer/
++
++if BR2_PACKAGE_SDL_MIXER
++
++config BR2_PACKAGE_SDL_MIXER_USE_TREMOR
++	bool "Prefer Tremor for Vorbis decoding"
++	select BR2_PACKAGE_TREMOR
++	help
++	  Prefer Tremor over libvorbis for Vorbis decoding.
++	  Tremor is a fixed-point implementation of an Ogg Vorbis
++	  decoder. Choose this option if the target CPU has no
++	  FPU.
++
++endif
+diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
+index 9183a4aa8c..3159d0dee1 100644
+--- a/package/sdl_mixer/sdl_mixer.mk
++++ b/package/sdl_mixer/sdl_mixer.mk
+@@ -35,11 +35,16 @@ else
+ SDL_MIXER_CONF_OPTS += --disable-music-mp3-mad-gpl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SDL_MIXER_USE_TREMOR),y)
++SDL_MIXER_CONF_OPTS += --enable-music-ogg-tremor
++SDL_MIXER_DEPENDENCIES += tremor
++else
+ ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+ SDL_MIXER_CONF_OPTS += --enable-music-ogg
+ SDL_MIXER_DEPENDENCIES += libvorbis
+ else
+ SDL_MIXER_CONF_OPTS += --disable-music-ogg
+ endif
++endif
+ 
+ $(eval $(autotools-package))
+-- 
+2.24.0
