@@ -1,66 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 09 Dec 2019 22:04:46 +0000
-Subject: [Buildroot] [Bug 12391] New: CMake-based host package fails to
- include output/host/include
-Message-ID: <bug-12391-163@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  9 Dec 2019 23:27:44 +0100
+Subject: [Buildroot] [PATCH 1/3] package/dante: remove --without-pam
+Message-ID: <20191209222746.3440986-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12391
+--without-pam was wrongly put back by commit
+6d8abc7c1aca00a8ee514b38d88744ccd9ec194f
 
-            Bug ID: 12391
-           Summary: CMake-based host package fails to include
-                    output/host/include
-           Product: buildroot
-           Version: 2019.08.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: thirtythreeforty at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/dante/dante.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Created attachment 8311
-  --> https://bugs.busybox.net/attachment.cgi?id=8311&action=edit
-Work-in-progress package to replicate the issue
-
-I am struggling to package a new version of mfgtools.  My work-in-progress is
-attached; ideally you can extract this into your working directory and
-replicate my error.
-
-mfgtools depends on bzlib.h while building.  The compiler (/usr/bin/gcc) cannot
-find the bzlib.h file, which at first doesn't make sense... it's in
-output/host/include where bzip2 puts it.
-
-/home/ghilliard/Code/buildroot/output/build/host-mfgtools-1.3.102/libuuu/buffer.cpp:43:10:
-fatal error: bzlib.h: No such file or directory
- #include "bzlib.h"
-          ^~~~~~~~~
-
-The problem is that even though Buildroot passes
--Imy/buildroot/output/host/include into CMake, CMake detects this as an
-"implicit include directory" because GCC reports it as such (I think GCC
-notices that it has "system" include files, but honestly I am not exactly sure
-about its logic).  Then, when the compiler is actually called, this include is
-omitted by CMake. Without the include, the compiler doesn't implicitly include
-the directory at all, and the build fails.
-
-This hasn't been hit before because there are no bzip2-dependant host packages
-in the tree that are built with CMake.  I do not think this is specific to
-mfgtools; rather, it will be hit by the first package that does all of the
-following:
-
-- Be a host package
-- Use CMake to build
-- Include a file in output/host/include, not one of its subdirectories
-
+diff --git a/package/dante/dante.mk b/package/dante/dante.mk
+index 0bd036d37e..0668042bd8 100644
+--- a/package/dante/dante.mk
++++ b/package/dante/dante.mk
+@@ -12,7 +12,7 @@ DANTE_LICENSE_FILES = LICENSE
+ # 0002-compiler.m4-do-not-remove-g-flag.patch touches a m4 file
+ DANTE_AUTORECONF = YES
+ 
+-DANTE_CONF_OPTS += --disable-client --disable-preload --without-pam
++DANTE_CONF_OPTS += --disable-client --disable-preload
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ DANTE_DEPENDENCIES += linux-pam
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.24.0
