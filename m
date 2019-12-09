@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Dec 2019 22:44:01 +0100
-Subject: [Buildroot] [git commit] gst1-plugins-base: bump version to 1.16.2
-Message-ID: <20191209213716.72E4F88FFD@busybox.osuosl.org>
+Date: Mon, 9 Dec 2019 22:44:45 +0100
+Subject: [Buildroot] [git commit] gst1-vaapi: bump version to 1.16.2
+Message-ID: <20191209213716.A58B588FFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e9523cd62c0faf1939745b6e67df5427ca4eb2b
+commit: https://git.buildroot.net/buildroot/commit/?id=9a5b010faefe9da989e0243d4c4449d2976ce05f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash | 4 ++--
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk   | 2 +-
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 4 ++--
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-index d7e16e7d61..2074c0272b 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+index 20564b7088..f9bec2483a 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.16.1.tar.xz.sha256sum
--sha256 5c3cc489933d0597087c9bc6ba251c93693d64554bcc563539a084fa2d5fcb2b gst-plugins-base-1.16.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.16.2.tar.xz.sha256sum
-+sha256 b13e73e2fe74a4166552f9577c3dcb24bed077021b9c7fa600d910ec6987816a gst-plugins-base-1.16.2.tar.xz
- sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 21a29cbea2..1781a5d461 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+-# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.16.1.tar.xz.sha256sum
+-sha256 cb570f6f1e78cb364fbe3c4fb8751824ee9db0c942ba61b62380b9b5abb7603a gstreamer-vaapi-1.16.1.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.16.2.tar.xz.sha256sum
++sha256 191de7b0ab64a85dd0875c990721e7be95518f60e2a9106beca162004ed7c601 gstreamer-vaapi-1.16.2.tar.xz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LIB
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+index 1e8865b756..00a6ec5e0e 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_BASE_VERSION = 1.16.1
-+GST1_PLUGINS_BASE_VERSION = 1.16.2
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+-GST1_VAAPI_VERSION = 1.16.1
++GST1_VAAPI_VERSION = 1.16.2
+ GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
+ GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
+ GST1_VAAPI_LICENSE = LGPL-2.1+
