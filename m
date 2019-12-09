@@ -1,43 +1,93 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Dec 2019 22:44:45 +0100
-Subject: [Buildroot] [git commit] gst1-vaapi: bump version to 1.16.2
-Message-ID: <20191209213716.A58B588FFC@busybox.osuosl.org>
+From: Louis Aussedat <aussedat.louis@gmail.com>
+Date: Mon,  9 Dec 2019 22:59:21 +0100
+Subject: [Buildroot] [PATCH 1/3] configs/friendlyarm_nanopi_neo_plus2: use
+ an extlinux instead of boot.cmd
+Message-ID: <20191209215923.28945-1-aussedat.louis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a5b010faefe9da989e0243d4c4449d2976ce05f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This remove the file boot.cmd to use an extlinux.conf instead.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
 ---
- package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 4 ++--
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/friendlyarm/nanopi-neo-plus2/boot.cmd      | 6 ------
+ board/friendlyarm/nanopi-neo-plus2/extlinux.conf | 4 ++++
+ board/friendlyarm/nanopi-neo-plus2/genimage.cfg  | 2 +-
+ board/friendlyarm/nanopi-neo-plus2/post-build.sh | 4 ++++
+ configs/friendlyarm_nanopi_neo_plus2_defconfig   | 3 +--
+ 5 files changed, 10 insertions(+), 9 deletions(-)
+ delete mode 100644 board/friendlyarm/nanopi-neo-plus2/boot.cmd
+ create mode 100644 board/friendlyarm/nanopi-neo-plus2/extlinux.conf
+ create mode 100755 board/friendlyarm/nanopi-neo-plus2/post-build.sh
 
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-index 20564b7088..f9bec2483a 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.16.1.tar.xz.sha256sum
--sha256 cb570f6f1e78cb364fbe3c4fb8751824ee9db0c942ba61b62380b9b5abb7603a gstreamer-vaapi-1.16.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.16.2.tar.xz.sha256sum
-+sha256 191de7b0ab64a85dd0875c990721e7be95518f60e2a9106beca162004ed7c601 gstreamer-vaapi-1.16.2.tar.xz
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LIB
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index 1e8865b756..00a6ec5e0e 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/friendlyarm/nanopi-neo-plus2/boot.cmd b/board/friendlyarm/nanopi-neo-plus2/boot.cmd
+deleted file mode 100644
+index 227604a23d..0000000000
+--- a/board/friendlyarm/nanopi-neo-plus2/boot.cmd
++++ /dev/null
+@@ -1,6 +0,0 @@
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-fatload mmc 0 $kernel_addr_r Image
+-fatload mmc 0 $fdt_addr_r sun50i-h5-nanopi-neo-plus2.dtb
+-
+-booti $kernel_addr_r - $fdt_addr_r
+diff --git a/board/friendlyarm/nanopi-neo-plus2/extlinux.conf b/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
+new file mode 100644
+index 0000000000..fcb6f632c1
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
+@@ -0,0 +1,4 @@
++label linux
++  kernel /Image
++  devicetree /sun50i-h5-nanopi-neo-plus2.dtb
++  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+diff --git a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg b/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
+index a4c2a7a894..fb871abd43 100644
+--- a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
++++ b/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
+@@ -3,7 +3,7 @@ image boot.vfat {
+ 		files = {
+ 			"Image",
+ 			"sun50i-h5-nanopi-neo-plus2.dtb",
+-			"boot.scr"
++			"extlinux"
+ 		}
+ 	}
+ 	size = 64M
+diff --git a/board/friendlyarm/nanopi-neo-plus2/post-build.sh b/board/friendlyarm/nanopi-neo-plus2/post-build.sh
+new file mode 100755
+index 0000000000..ec20fca7d9
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo-plus2/post-build.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++BOARD_DIR="$(dirname $0)"
++
++install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
+diff --git a/configs/friendlyarm_nanopi_neo_plus2_defconfig b/configs/friendlyarm_nanopi_neo_plus2_defconfig
+index c807b3100b..461e468cb6 100644
+--- a/configs/friendlyarm_nanopi_neo_plus2_defconfig
++++ b/configs/friendlyarm_nanopi_neo_plus2_defconfig
+@@ -27,8 +27,6 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
+-BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+-BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo-plus2/boot.cmd"
  
--GST1_VAAPI_VERSION = 1.16.1
-+GST1_VAAPI_VERSION = 1.16.2
- GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
- GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
- GST1_VAAPI_LICENSE = LGPL-2.1+
+ # Kernel
+ BR2_LINUX_KERNEL=y
+@@ -49,6 +47,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo-plus2/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo-plus2/post-build.sh"
+ 
+ # wireless firmware
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+-- 
+2.24.0
