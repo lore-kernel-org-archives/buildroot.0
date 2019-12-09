@@ -1,49 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Dec 2019 22:40:31 +0100
-Subject: [Buildroot] [git commit] package/lirc-tools: use single quote with
- SETUPTOOLS_ENV
-Message-ID: <20191209213259.E64CA88F9B@busybox.osuosl.org>
+Date: Mon, 09 Dec 2019 22:45:21 +0100
+Subject: [Buildroot] [PATCH v1 01/11] gstreamer1: bump version to 1.16.2
+In-Reply-To: <20191209200453.2461-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Mon, 9 Dec 2019 21:04:43 +0100")
+References: <20191209200453.2461-1-ps.report@gmx.net>
+Message-ID: <87wob5golq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8192ff796a7e851f128ddbd7394dd8337942df52
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-With the change to pkg-python to use TARGET_CONFIGURE_OPTS in
-PKG_PYTHON_SETUPTOOLS_ENV in commit 1745fcde74, the
-LIRC_TOOLS_MAKE_ENV is incorrect as it sets the SETUPTOOLS_ENV using
-double quotes. This causes issues because the
-PKG_PYTHON_SETUPTOOLS_ENV contain double quotes as well. This causes a
-build error such as:
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-  /bin/sh: -I/home/naourr/work/instance-0/output-1/host/include
-          CXXFLAGS_FOR_BUILD=-O2: No such file or directory
+Committed series, thanks.
 
-Fix this by using single quotes with PKG_PYTHON_SETUPTOOLS_ENV instead
-of double quotes.
-
-Fixes:
-  http://autobuild.buildroot.net/results/f7a9c02add9bde563c7289f7c0be2cb7aefd96b8
-
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lirc-tools/lirc-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-index e468f2a25d..d66f4e9925 100644
---- a/package/lirc-tools/lirc-tools.mk
-+++ b/package/lirc-tools/lirc-tools.mk
-@@ -47,7 +47,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- LIRC_TOOLS_DEPENDENCIES += python3 host-python3-setuptools
--LIRC_TOOLS_MAKE_ENV += SETUPTOOLS_ENV="$(PKG_PYTHON_SETUPTOOLS_ENV)"
-+LIRC_TOOLS_MAKE_ENV += SETUPTOOLS_ENV='$(PKG_PYTHON_SETUPTOOLS_ENV)'
- endif
- 
- define LIRC_TOOLS_INSTALL_INIT_SYSV
+-- 
+Bye, Peter Korsgaard
