@@ -1,64 +1,80 @@
 From: Paul Cercueil <paul@crapouillou.net>
-Date: Mon,  9 Dec 2019 20:15:53 +0100
-Subject: [Buildroot] [PATCH 1/2] SDL_mixer: Add option to prefer Tremor over
- libvorbis
-Message-ID: <20191209191554.821230-1-paul@crapouillou.net>
+Date: Mon,  9 Dec 2019 20:15:54 +0100
+Subject: [Buildroot] [PATCH 2/2] SDL_mixer: Add support for libmodplug
+In-Reply-To: <20191209191554.821230-1-paul@crapouillou.net>
+References: <20191209191554.821230-1-paul@crapouillou.net>
+Message-ID: <20191209191554.821230-2-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a menu option to set the Vorbis decoding library to Tremor instead
-of libvorbis.
+Add support for playing back tracker modules using libmodplug.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- package/sdl_mixer/Config.in    | 13 +++++++++++++
- package/sdl_mixer/sdl_mixer.mk |  5 +++++
- 2 files changed, 18 insertions(+)
+ .../0003-Fix-include-of-modplug.h.patch       | 33 +++++++++++++++++++
+ package/sdl_mixer/sdl_mixer.mk                |  7 ++++
+ 2 files changed, 40 insertions(+)
+ create mode 100644 package/sdl_mixer/0003-Fix-include-of-modplug.h.patch
 
-diff --git a/package/sdl_mixer/Config.in b/package/sdl_mixer/Config.in
-index 42dfe63c0a..94fcda7a0e 100644
---- a/package/sdl_mixer/Config.in
-+++ b/package/sdl_mixer/Config.in
-@@ -9,3 +9,16 @@ config BR2_PACKAGE_SDL_MIXER
- 	  SMPEG MP3 libraries.
- 
- 	  http://www.libsdl.org/projects/SDL_mixer/
+diff --git a/package/sdl_mixer/0003-Fix-include-of-modplug.h.patch b/package/sdl_mixer/0003-Fix-include-of-modplug.h.patch
+new file mode 100644
+index 0000000000..841cef4ef5
+--- /dev/null
++++ b/package/sdl_mixer/0003-Fix-include-of-modplug.h.patch
+@@ -0,0 +1,33 @@
++From fb8e7c535a88838cc8ae364cd2a099df6316d3b0 Mon Sep 17 00:00:00 2001
++From: Paul Cercueil <paul@crapouillou.net>
++Date: Tue, 30 Apr 2019 23:12:15 +0200
++Subject: [PATCH] Fix include of modplug.h
 +
-+if BR2_PACKAGE_SDL_MIXER
++The include path should be <libmodplug/modplug.h>, since the library
++doesn't provide any specific include path in its pkg-config file.
 +
-+config BR2_PACKAGE_SDL_MIXER_USE_TREMOR
-+	bool "Prefer Tremor for Vorbis decoding"
-+	select BR2_PACKAGE_TREMOR
-+	help
-+	  Prefer Tremor over libvorbis for Vorbis decoding.
-+	  Tremor is a fixed-point implementation of an Ogg Vorbis
-+	  decoder. Choose this option if the target CPU has no
-+	  FPU.
++This patch was obtained from this bug report:
++https://bugzilla.libsdl.org/show_bug.cgi?id=4893
 +
-+endif
++Signed-off-by: Paul Cercueil <paul@crapouillou.net>
++
++---
++ music_modplug.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/music_modplug.h b/music_modplug.h
++index 92cbafd..49abbb0 100644
++--- a/music_modplug.h
+++++ b/music_modplug.h
++@@ -1,6 +1,7 @@
++ #ifdef MODPLUG_MUSIC
++ 
++-#include "modplug.h"
+++#include <libmodplug/modplug.h>
+++
++ #include "SDL_rwops.h"
++ #include "SDL_audio.h"
++ #include "SDL_mixer.h"
++-- 
++2.21.0.593.g511ec345e18
++
 diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
-index 9183a4aa8c..3159d0dee1 100644
+index 3159d0dee1..1692054bd4 100644
 --- a/package/sdl_mixer/sdl_mixer.mk
 +++ b/package/sdl_mixer/sdl_mixer.mk
-@@ -35,11 +35,16 @@ else
+@@ -35,6 +35,13 @@ else
  SDL_MIXER_CONF_OPTS += --disable-music-mp3-mad-gpl
  endif
  
-+ifeq ($(BR2_PACKAGE_SDL_MIXER_USE_TREMOR),y)
-+SDL_MIXER_CONF_OPTS += --enable-music-ogg-tremor
-+SDL_MIXER_DEPENDENCIES += tremor
++ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
++SDL_MIXER_CONF_OPTS += --enable-music-mod-modplug
++SDL_MIXER_DEPENDENCIES += libmodplug
 +else
- ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
- SDL_MIXER_CONF_OPTS += --enable-music-ogg
- SDL_MIXER_DEPENDENCIES += libvorbis
- else
- SDL_MIXER_CONF_OPTS += --disable-music-ogg
- endif
++SDL_MIXER_CONF_OPTS += --disable-music-mod-modplug
 +endif
- 
- $(eval $(autotools-package))
++
+ ifeq ($(BR2_PACKAGE_SDL_MIXER_USE_TREMOR),y)
+ SDL_MIXER_CONF_OPTS += --enable-music-ogg-tremor
+ SDL_MIXER_DEPENDENCIES += tremor
 -- 
 2.24.0
