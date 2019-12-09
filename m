@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Dec 2019 22:44:21 +0100
-Subject: [Buildroot] [git commit] gst1-plugins-ugly: bump version to 1.16.2
-Message-ID: <20191209213716.8D80F88FFC@busybox.osuosl.org>
+Date: Mon, 9 Dec 2019 22:44:36 +0100
+Subject: [Buildroot] [git commit] gst1-libav: bump version to 1.16.2
+Message-ID: <20191209213716.9CFAD88FFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2efda9cd02e408e8977483744981986f059c2acb
+commit: https://git.buildroot.net/buildroot/commit/?id=2eec32ba2ae8ae160414c2cc65ad6b33ade34544
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
+ package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
+ package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-index c9a7d9da10..e5df44ab90 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
+index bd2535c642..15e4d859ee 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.hash
++++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.16.1.tar.xz.sha256sum
--sha256 4bf913b2ca5195ac3b53b5e3ade2dc7c45d2258507552ddc850c5fa425968a1d gst-plugins-ugly-1.16.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.16.2.tar.xz.sha256sum
-+sha256 5500415b865e8b62775d4742cbb9f37146a50caecfc0e7a6fc0160d3c560fbca gst-plugins-ugly-1.16.2.tar.xz
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index b4b6de0685..284516f7d1 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+-# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.16.1.tar.xz.sha256sum
+-sha256 e8a5748ae9a4a7be9696512182ea9ffa6efe0be9b7976916548e9d4381ca61c4 gst-libav-1.16.1.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.16.2.tar.xz.sha256sum
++sha256 c724f612700c15a933c7356fbeabb0bb9571fb5538f8b1b54d4d2d94188deef2 gst-libav-1.16.2.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 0c1d3e6f4a..fdd4d6cc2e 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_UGLY_VERSION = 1.16.1
-+GST1_PLUGINS_UGLY_VERSION = 1.16.2
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+-GST1_LIBAV_VERSION = 1.16.1
++GST1_LIBAV_VERSION = 1.16.2
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
+ 
