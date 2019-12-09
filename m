@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  9 Dec 2019 21:04:47 +0100
-Subject: [Buildroot] [PATCH v1 05/11] gst1-plugins-ugly: bump version to
+Date: Mon,  9 Dec 2019 21:04:51 +0100
+Subject: [Buildroot] [PATCH v1 09/11] gst1-rtsp-server: bump version to
  1.16.2
 In-Reply-To: <20191209200453.2461-1-ps.report@gmx.net>
 References: <20191209200453.2461-1-ps.report@gmx.net>
-Message-ID: <20191209200453.2461-5-ps.report@gmx.net>
+Message-ID: <20191209200453.2461-9-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-index c9a7d9da10..e5df44ab90 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.16.1.tar.xz.sha256sum
--sha256 4bf913b2ca5195ac3b53b5e3ade2dc7c45d2258507552ddc850c5fa425968a1d gst-plugins-ugly-1.16.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.16.2.tar.xz.sha256sum
-+sha256 5500415b865e8b62775d4742cbb9f37146a50caecfc0e7a6fc0160d3c560fbca gst-plugins-ugly-1.16.2.tar.xz
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index b4b6de0685..284516f7d1 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+index 52ef8a4311..f3dca615cf 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+@@ -1,4 +1,4 @@
+-# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.16.1.tar.xz.sha256sum
+-sha256 b0abacad2f86f60d63781d2b24443c5668733e8b08664bbef94124906d700144 gst-rtsp-server-1.16.1.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.16.2.tar.xz.sha256sum
++sha256 de07a2837b3b04820ce68264a4909f70c221b85dbff0cede7926e9cdbb1dc26e gst-rtsp-server-1.16.2.tar.xz
+ sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
+ sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING.LIB
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+index 476aa55cb5..df873ad732 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_UGLY_VERSION = 1.16.1
-+GST1_PLUGINS_UGLY_VERSION = 1.16.2
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+-GST1_RTSP_SERVER_VERSION = 1.16.1
++GST1_RTSP_SERVER_VERSION = 1.16.2
+ GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
+ GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
+ GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
 -- 
 2.24.0
