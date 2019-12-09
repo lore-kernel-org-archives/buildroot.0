@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Dec 2019 22:44:36 +0100
-Subject: [Buildroot] [git commit] gst1-libav: bump version to 1.16.2
-Message-ID: <20191209213716.9CFAD88FFC@busybox.osuosl.org>
+Date: Mon, 9 Dec 2019 22:44:08 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-good: bump version to 1.16.2
+Message-ID: <20191209213716.7BC3188FFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2eec32ba2ae8ae160414c2cc65ad6b33ade34544
+commit: https://git.buildroot.net/buildroot/commit/?id=e988b9d821b17ee35957e5e79c89ac8f089cf10d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index bd2535c642..15e4d859ee 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index a7e008e1dc..075338b14b 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.16.1.tar.xz.sha256sum
--sha256 e8a5748ae9a4a7be9696512182ea9ffa6efe0be9b7976916548e9d4381ca61c4 gst-libav-1.16.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.16.2.tar.xz.sha256sum
-+sha256 c724f612700c15a933c7356fbeabb0bb9571fb5538f8b1b54d4d2d94188deef2 gst-libav-1.16.2.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 0c1d3e6f4a..fdd4d6cc2e 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.16.1.tar.xz.sha256sum
+-sha256 9fbabe69018fcec707df0b71150168776040cde6c1a26bb5a82a136755fa8f1f gst-plugins-good-1.16.1.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.16.2.tar.xz.sha256sum
++sha256 40bb3bafda25c0b739c8fc36e48380fccf61c4d3f83747e97ac3f9b0171b1319 gst-plugins-good-1.16.2.tar.xz
+ sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index e11f9c213e..6709f14cca 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_LIBAV_VERSION = 1.16.1
-+GST1_LIBAV_VERSION = 1.16.2
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
- 
+-GST1_PLUGINS_GOOD_VERSION = 1.16.1
++GST1_PLUGINS_GOOD_VERSION = 1.16.2
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
