@@ -1,48 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Dec 2019 09:04:10 +0100
-Subject: [Buildroot] [git commit] package/python-tqdm: bump to version 4.40.1
-Message-ID: <20191210075709.DC85B88FFB@busybox.osuosl.org>
+Date: Tue, 10 Dec 2019 10:29:02 +0100
+Subject: [Buildroot] [PATCH 1/2] SDL_mixer: Add option to prefer Tremor
+ over libvorbis
+In-Reply-To: <20191209191554.821230-1-paul@crapouillou.net> (Paul Cercueil's
+ message of "Mon, 9 Dec 2019 20:15:53 +0100")
+References: <20191209191554.821230-1-paul@crapouillou.net>
+Message-ID: <87blsgh6ld.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbaec513e46bf8e70701f30d4d7b8b0e06275453
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
 
-Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-tqdm/python-tqdm.hash | 4 ++--
- package/python-tqdm/python-tqdm.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > Add a menu option to set the Vorbis decoding library to Tremor instead
+ > of libvorbis.
 
-diff --git a/package/python-tqdm/python-tqdm.hash b/package/python-tqdm/python-tqdm.hash
-index 63dea98cf2..8a61b29ad7 100644
---- a/package/python-tqdm/python-tqdm.hash
-+++ b/package/python-tqdm/python-tqdm.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/project/tqdm
--md5	84f1744e2cc097d9e824a2e201cca4a6  tqdm-4.37.0.tar.gz
--sha256	fca09992116d6dc3ad9789cf601a254081eb40d5c14c1863ab6cd10e15c2cb26  tqdm-4.37.0.tar.gz
-+md5	285af1f905f4c375f03a86a667047950  tqdm-4.40.1.tar.gz
-+sha256	e405d16c98fcf30725d0c9d493ed07302a18846b5452de5253030ccd18996f87  tqdm-4.40.1.tar.gz
- # Locally computed sha256 checksums
- sha256	1bbf12d09d437844527b3cdaba01d379dac651b5cbb5ebb0d764274684d2680b  LICENCE
-diff --git a/package/python-tqdm/python-tqdm.mk b/package/python-tqdm/python-tqdm.mk
-index 3aa562e22e..4ff4696e65 100644
---- a/package/python-tqdm/python-tqdm.mk
-+++ b/package/python-tqdm/python-tqdm.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+ > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+ > ---
+ >  package/sdl_mixer/Config.in    | 13 +++++++++++++
+ >  package/sdl_mixer/sdl_mixer.mk |  5 +++++
+ >  2 files changed, 18 insertions(+)
+
+ > diff --git a/package/sdl_mixer/Config.in b/package/sdl_mixer/Config.in
+ > index 42dfe63c0a..94fcda7a0e 100644
+ > --- a/package/sdl_mixer/Config.in
+ > +++ b/package/sdl_mixer/Config.in
+ > @@ -9,3 +9,16 @@ config BR2_PACKAGE_SDL_MIXER
+ >  	  SMPEG MP3 libraries.
  
--PYTHON_TQDM_VERSION = 4.37.0
-+PYTHON_TQDM_VERSION = 4.40.1
- PYTHON_TQDM_SOURCE = tqdm-$(PYTHON_TQDM_VERSION).tar.gz
--PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/cc/7b/5878d4e1b01a2eb802f78ea277f2385072681cabefc8fb4fbdee28dd1869
-+PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/4c/45/830c5c4bfaba60ef7d356a53c7751a86c81d148a16fda0daf3ac5ca8e288
- PYTHON_TQDM_SETUP_TYPE = setuptools
- PYTHON_TQDM_LICENSE = MPL-2.0, MIT
- PYTHON_TQDM_LICENSE_FILES = LICENCE
+ >  	  http://www.libsdl.org/projects/SDL_mixer/
+ > +
+ > +if BR2_PACKAGE_SDL_MIXER
+ > +
+ > +config BR2_PACKAGE_SDL_MIXER_USE_TREMOR
+ > +	bool "Prefer Tremor for Vorbis decoding"
+ > +	select BR2_PACKAGE_TREMOR
+ > +	help
+ > +	  Prefer Tremor over libvorbis for Vorbis decoding.
+ > +	  Tremor is a fixed-point implementation of an Ogg Vorbis
+ > +	  decoder. Choose this option if the target CPU has no
+ > +	  FPU.
+ > +
+ > +endif
+ > diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
+ > index 9183a4aa8c..3159d0dee1 100644
+ > --- a/package/sdl_mixer/sdl_mixer.mk
+ > +++ b/package/sdl_mixer/sdl_mixer.mk
+ > @@ -35,11 +35,16 @@ else
+ >  SDL_MIXER_CONF_OPTS += --disable-music-mp3-mad-gpl
+ >  endif
+ 
+ > +ifeq ($(BR2_PACKAGE_SDL_MIXER_USE_TREMOR),y)
+ > +SDL_MIXER_CONF_OPTS += --enable-music-ogg-tremor
+ > +SDL_MIXER_DEPENDENCIES += tremor
+ > +else
+ >  ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+
+Do we need an explicit option for this? Can't we just check for
+BR2_PACKAGE_TREMOR here? I doubt there is any situations where tremor is
+enabled but the user doesn't want to use it.
+
+-- 
+Bye, Peter Korsgaard
