@@ -1,10 +1,10 @@
 From: Gary Bisson <bisson.gary@gmail.com>
-Date: Tue, 10 Dec 2019 12:08:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/freescale-imx: update SITE to
- use NXP url
-In-Reply-To: <20191202200500.418195-1-juju@cotds.org>
-References: <20191202200500.418195-1-juju@cotds.org>
-Message-ID: <CADCpmyPKy+3_4fkkN8DSH4_2PO6Oxvbxg2pTJVzp0gx7Mt9wFg@mail.gmail.com>
+Date: Tue, 10 Dec 2019 12:16:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/firmware-imx:
+ bump version to 8.1.1
+In-Reply-To: <20191202200601.418280-1-juju@cotds.org>
+References: <20191202200601.418280-1-juju@cotds.org>
+Message-ID: <CADCpmyNmhhH1UYm3H57hPm2HjfsGSwo9f+zRY-Tm_G0yyEoQkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,15 @@ To: buildroot@busybox.net
 
 Hi Julien,
 
-Thanks for this contribution.
+Le lun. 2 d?c. 2019 ? 21:06, Julien Olivain <juju@cotds.org> a ?crit :
+>
+> This version is aligned with i.MX NXP BSP components version
+> rel_imx_4.14.98_2.0.0_ga
 
-Le lun. 2 d?c. 2019 ? 21:05, Julien Olivain <juju@cotds.org> a ?crit :
->
-> NXP BSPs has been using the nxp.com URL for a while:
-> http://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale/commit/conf/layer.conf?id=d6abbbc1ce0882bdc82e03b1868eeba1a50a7bd3
->
-> It's  unclear for how long the freescale.com redirect will be
-> maintained. This patch update the FREESCALE_IMX_SITE variable
-> to point directly to the NXP site.
->
-> Signed-off-by: Julien Olivain <juju@cotds.org>
-
-Reviewed-by: Gary Bisson <bisson.gary@gmail.com>
+Why not update to latest version 8.3 [1] (4.14.98_2.1.0 BSP from last July)?
+Any known issue with it?
 
 Regards,
 Gary
+
+[1] https://source.codeaurora.org/external/imx/meta-fsl-bsp-release/tree/imx/meta-bsp/recipes-bsp/firmware-imx/firmware-imx_8.3.bb?h=rel_imx_4.14.98_2.1.0
