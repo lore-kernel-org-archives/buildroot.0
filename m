@@ -1,139 +1,263 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Dec 2019 00:04:56 +0100
-Subject: [Buildroot] [FYI] Bootlin external toolchains
-In-Reply-To: <11b9e616-d8ce-ec5c-dbed-9180fa18a338@smile.fr>
-References: <CAMw6YJLJae0GcmrDmSY8FZ-uMj+WBybPkBaLQC1wkhooCjoKyQ@mail.gmail.com>
- <20191202152601.4ab1c8cd@windsurf>
- <a9c40802-dfd5-67b5-6750-b0711f667280@smile.fr>
- <09654893-fe44-76f0-da65-3f29bc758c6f@mind.be>
- <11b9e616-d8ce-ec5c-dbed-9180fa18a338@smile.fr>
-Message-ID: <048916d9-4188-52b0-db41-d1b87e06ddb9@mind.be>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Tue, 10 Dec 2019 08:07:54 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/fluidsynth: new package
+In-Reply-To: <20191209200324.11065-1-juju@cotds.org>
+References: <20191205203336.27806-1-juju@cotds.org>
+ <20191209200324.11065-1-juju@cotds.org>
+Message-ID: <CAKcgs2wQ58QZpevXeaQWj=Vtd5OdT5QNzGYXtiZZxQmRd4TJOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Julien, all,
 
+New version looks good to me.
 
-On 04/12/2019 22:52, Romain Naour wrote:
-> Hi Arnout, All,
-> 
-> Le 03/12/2019 ? 22:15, Arnout Vandecappelle a ?crit?:
->>
->>
->> On 03/12/2019 10:59, Romain Naour wrote:
->>> Hi Thomas, Vadim,
->>>
->>> +Arthur Courtel in Cc.
->>>
->>> Le 02/12/2019 ? 15:26, Thomas Petazzoni a ?crit?:
->>>> Hello,
->>>>
->>>> +Romain Naour in Cc.
->>>>
->>>> On Mon, 2 Dec 2019 02:47:15 +0200
->>>> Vadim Kochan <vadim4j@gmail.com> wrote:
->>>>
->>>>> Just in case if someone will be interested. I started Buildroot external
->>>>> project which provides external toolchains from the Bootlin:
->>>>>
->>>>>     https://toolchains.bootlin.com
->>>>>
->>>>> The git repo can be found at:
->>>>>
->>>>>     https://github.com/vkochan/buildroot-external-toolchain-bootlin
->>>>
->>>> An effort was started to package the Bootlin external toolchains in
->>>> Buildroot itself, some time ago by engineers at Smile. We had some
->>>> off-list discussion about this, but I don't think it was ever posted to
->>>> the list. The idea back then was to have a script that generates all
->>>> the packages, but the design was to have one package for each
->>>> toolchain, so it really added a lot of packages.
->>>>
->>>> But I think we should really support these toolchains in Buildroot
->>>> proper instead of having an external for them.
->>>
->>> Agree.
->>>
->>> Arthur will take a look at the script but it's very complicated script...
->>> Maybe we need to discuss what we really want.
->>
->>  I think this should be like scancpan/scanpypi, i.e. something that generates
->> the toolchain-external-bootlin package but it's up to the user to fix up the
->> final details.
->>
->>  And then we can work on toolchains-builder to make sure it generates something
->> that is easier for this scanbootlin script to parse.
-> 
-> The initial goal was to use toolchain bootlin as prebuilt external toolchain
-> when no other prebuilt toolchain is available (Linaro, Mentor etc...).
-> I would like to avoid letting the user fixing the final details.
+Le lun. 9 d?c. 2019 ? 21:03, Julien Olivain <juju@cotds.org> a ?crit :
+>
+> FluidSynth is a real-time software synthesizer based on the
+> SoundFont 2 specifications and has reached widespread
+> distribution. FluidSynth itself does not have a graphical
+> user interface, but due to its powerful API several
+> applications utilize it and it has even found its way onto
+> embedded systems and is used in some mobile apps.
+>
+> http://www.fluidsynth.org/
+>
+> Signed-off-by: Julien Olivain <juju@cotds.org>
+> ---
+> Changes v1 -> v2:
+> Included all Gilles' comments:
+>   - Add comments for dependencies
+>   - Clarified "float" option
+>   - Removed useless "thread" option
+>   - Add LICENSE file hash
+>   - Removed "v" in VERSION
+>   - Fixed LICENSE to LGPL-2.1+
+>
+> ---
+>  DEVELOPERS                         |  1 +
+>  package/Config.in                  |  1 +
+>  package/fluidsynth/Config.in       | 91 ++++++++++++++++++++++++++++++
+>  package/fluidsynth/fluidsynth.hash |  3 +
+>  package/fluidsynth/fluidsynth.mk   | 68 ++++++++++++++++++++++
+>  5 files changed, 164 insertions(+)
+>  create mode 100644 package/fluidsynth/Config.in
+>  create mode 100644 package/fluidsynth/fluidsynth.hash
+>  create mode 100644 package/fluidsynth/fluidsynth.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 61bcd99d43..d0cfec3bac 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1352,6 +1352,7 @@ F:        board/technexion/imx8mmpico/
+>  F:     board/technexion/imx8mpico/
+>  F:     configs/imx8mmpico_defconfig
+>  F:     configs/imx8mpico_defconfig
+> +F:     package/fluidsynth/
+>
+>  N:     Julien Viard de Galbert <julien@vdg.name>
+>  F:     package/dieharder/
+> diff --git a/package/Config.in b/package/Config.in
+> index 307583d01f..962d2f2612 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -23,6 +23,7 @@ menu "Audio and video applications"
+>         source "package/ffmpeg/Config.in"
+>         source "package/flac/Config.in"
+>         source "package/flite/Config.in"
+> +       source "package/fluidsynth/Config.in"
+>         source "package/gmrender-resurrect/Config.in"
+>         source "package/gstreamer/Config.in"
+>         source "package/gstreamer1/Config.in"
+> diff --git a/package/fluidsynth/Config.in b/package/fluidsynth/Config.in
+> new file mode 100644
+> index 0000000000..6e319a80bb
+> --- /dev/null
+> +++ b/package/fluidsynth/Config.in
+> @@ -0,0 +1,91 @@
+> +config BR2_PACKAGE_FLUIDSYNTH
+> +       bool "fluidsynth"
+> +       depends on BR2_USE_WCHAR # libglib2
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> +       depends on BR2_USE_MMU # libglib2
+> +       select BR2_PACKAGE_LIBGLIB2
+> +       help
+> +         FluidSynth is a real-time software synthesizer based on the
+> +         SoundFont 2 specifications and has reached widespread
+> +         distribution. FluidSynth itself does not have a graphical
+> +         user interface, but due to its powerful API several
+> +         applications utilize it and it has even found its way onto
+> +         embedded systems and is used in some mobile apps.
+> +
+> +         http://www.fluidsynth.org/
+> +
+> +if BR2_PACKAGE_FLUIDSYNTH
+> +
+> +comment "Output support"
+> +
+> +config BR2_PACKAGE_FLUIDSYNTH_ALSA_LIB
+> +       bool "alsa"
+> +       default y
+> +       select BR2_PACKAGE_ALSA_LIB
+> +       help
+> +         Enable alsa support.
+> +
+> +config BR2_PACKAGE_FLUIDSYNTH_JACK2
+> +       bool "jack2"
+> +       # See: https://sourceware.org/bugzilla/show_bug.cgi?id=19908
+> +       depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+> +       depends on !BR2_STATIC_LIBS # jack2
+> +       depends on BR2_INSTALL_LIBSTDCPP # jack2
+> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4 # jack2
+> +       select BR2_PACKAGE_JACK2
+> +       help
+> +         Enable jack support.
+> +
+> +comment "jack support needs a toolchain w/ dynamic library"
+> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> +       depends on BR2_STATIC_LIBS
+> +
+> +config BR2_PACKAGE_FLUIDSYNTH_LIBSNDFILE
+> +       bool "libsndfile"
+> +       select BR2_PACKAGE_LIBSNDFILE
+> +       help
+> +         Enable libsndfile support, for writing output to WAV files.
+> +
+> +config BR2_PACKAGE_FLUIDSYNTH_PORTAUDIO
+> +       bool "portaudio"
+> +       select BR2_PACKAGE_PORTAUDIO
+> +       help
+> +         Enable portaudio support.
+> +
+> +config BR2_PACKAGE_FLUIDSYNTH_PULSEAUDIO
+> +       bool "pulseaudio"
+> +       # See: https://sourceware.org/bugzilla/show_bug.cgi?id=19908
+> +       depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+> +       depends on !BR2_STATIC_LIBS # pulseaudio
+> +       select BR2_PACKAGE_PULSEAUDIO
+> +       help
+> +         Enable PulseAudio support.
+> +
+> +comment "pulseaudio support needs a toolchain w/ dynamic library"
+> +       depends on BR2_STATIC_LIBS
+> +
+> +comment "Misc options"
+> +
+> +config BR2_PACKAGE_FLUIDSYNTH_DBUS
+> +       bool "dbus"
+> +       select BR2_PACKAGE_DBUS
+> +       help
+> +         Enable dbus support.
+> +
+> +config BR2_PACKAGE_FLUIDSYNTH_FLOATS
+> +       bool "32-bit single precision float"
+> +       help
+> +         Enable 32-bit single precision float support, instead of
+> +         64-bit double precision floats for DSP samples.
+> +
+> +config BR2_PACKAGE_FLUIDSYNTH_READLINE
+> +       bool "readline"
+> +       select BR2_PACKAGE_READLINE
+> +       help
+> +         Enable readline support, for better line editing in FluidSynth
+> +         shell.
+> +
+> +endif # BR2_PACKAGE_FLUIDSYNTH
+> +
+> +comment "fluidsynth needs a toolchain w/ threads, wchar"
+> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+> new file mode 100644
+> index 0000000000..5c5c226cbc
+> --- /dev/null
+> +++ b/package/fluidsynth/fluidsynth.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256 526addc6d8445035840d3af7282d3ba89567df209d28e183da04a1a877da2da3  fluidsynth-2.1.0.tar.gz
+> +sha256 9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+> diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+> new file mode 100644
+> index 0000000000..4ef0a6f40d
+> --- /dev/null
+> +++ b/package/fluidsynth/fluidsynth.mk
+> @@ -0,0 +1,68 @@
+> +################################################################################
+> +#
+> +# fluidsynth
+> +#
+> +################################################################################
+> +
+> +FLUIDSYNTH_VERSION = 2.1.0
+> +FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+> +FLUIDSYNTH_LICENSE = LGPL-2.1+
+> +FLUIDSYNTH_LICENSE_FILES = LICENSE
+> +FLUIDSYNTH_DEPENDENCIES = libglib2
+> +
+> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_ALSA_LIB),y)
+> +FLUIDSYNTH_CONF_OPTS += -Denable-alsa=1
+> +FLUIDSYNTH_DEPENDENCIES += alsa-lib
+> +else
+> +FLUIDSYNTH_CONF_OPTS += -Denable-alsa=0
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_DBUS),y)
+> +FLUIDSYNTH_CONF_OPTS += -Denable-dbus=1
+> +FLUIDSYNTH_DEPENDENCIES += dbus
+> +else
+> +FLUIDSYNTH_CONF_OPTS += -Denable-dbus=0
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_FLOATS),y)
+> +FLUIDSYNTH_CONF_OPTS += -Denable-floats=1
+> +else
+> +FLUIDSYNTH_CONF_OPTS += -Denable-floats=0
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_JACK2),y)
+> +FLUIDSYNTH_CONF_OPTS += -Denable-jack=1
+> +FLUIDSYNTH_DEPENDENCIES += jack2
+> +else
+> +FLUIDSYNTH_CONF_OPTS += -Denable-jack=0
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_LIBSNDFILE),y)
+> +FLUIDSYNTH_CONF_OPTS += -Denable-libsndfile=1
+> +FLUIDSYNTH_DEPENDENCIES += libsndfile
+> +else
+> +FLUIDSYNTH_CONF_OPTS += -Denable-libsndfile=0
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_PORTAUDIO),y)
+> +FLUIDSYNTH_CONF_OPTS += -Denable-portaudio=1
+> +FLUIDSYNTH_DEPENDENCIES += portaudio
+> +else
+> +FLUIDSYNTH_CONF_OPTS += -Denable-portaudio=0
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_PULSEAUDIO),y)
+> +FLUIDSYNTH_CONF_OPTS += -Denable-pulseaudio=1
+> +FLUIDSYNTH_DEPENDENCIES += pulseaudio
+> +else
+> +FLUIDSYNTH_CONF_OPTS += -Denable-pulseaudio=0
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FLUIDSYNTH_READLINE),y)
+> +FLUIDSYNTH_CONF_OPTS += -Denable-readline=1
+> +FLUIDSYNTH_DEPENDENCIES += readline
+> +else
+> +FLUIDSYNTH_CONF_OPTS += -Denable-readline=0
+> +endif
+> +
+> +$(eval $(cmake-package))
+> --
+> 2.23.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
- Er, looks like we have a bit of a disconnect here...
-
- In my view, the bootlin toolchains should be made available exactly like the
-other external toolchains (Linaro, Mentor, ...): as a menuconfig choice. But we
-can build a script that creates the corresponding Config.in and .mk file, and
-commit the result into git. That script doesn't need to be fully automated, the
-output can be manually adapted before committing.
-
-
->>  Alternatively, maybe even better, we can just update build.sh in
->> toolchains-builder to generate all the pieces and then add an additional
->> pipeline stage that collects the pieces into a package.
-> 
-> The script evoked by Thomas showed that it was too difficult/complex to generate
-> a toolchain packages from the files currently provided by toolchain-builder.
-> 
-> So, I'm agree that it would be better if toolchain-builder can provide such package.
-> 
->>
->>  Most importantly, though, I think we should take this gradually. Start with a
->> manually constructed package, it doesn't even need to support all the different
->> toolchains. We can bikeshed a bit on what that package looks like, and use that
->> as input for how to script it.
-> 
-> At least aarch64, arm and x86_64 should be included in the manually constructed
-> package.
-> 
->>
->>  To kick off the bikeshedding, here's my opinion on what the package should look
->> like.
->>
->> * It should be a single package, toolchain-external-bootlin. Maybe two (-stable
->> and -bleeding-edge) but I think there'll be enough shared infrastructure to
->> warrant creating a single package.
-> 
-> The most difficult part is to generate the dependencies (depends on) of the
-> toolchain and its properties (select). That is why our experimental script
-> create one package for each toolchain provided by toolchain Builder.
-
- That's why starting with something that is constructed manually is a good idea.
-We can reason about how to solve the issues with hidden helper symbols etc.
-
-
-> Also if we can use a single a single package for the Bootlin toolchain package,
-> it mean that we can also use a single package for the
-> Linaro/ARM/Codescape/Codesourcery packages.
-
- Er, no. We've factored all the commonalities between those packages into
-external-toolchain-package.
-
- Or maybe you mean that the 3 arm toolchains and the 4 linaro toolchains could
-be merged? Yes, that's probably true.
-
-
->> * It should offer a choice in Config.in.options for libc and stable/bleeding-edge.
->>
->> * For now, it should be limited to *exactly* the same architecture suboptions as
->> what the toolchain was built for. Later we can decide how to expand this to
->> compatible options (e.g. the core-i7 toolchain will also work for core-avx2) -
->> but I'm pretty sure that that is something that will require help from
->> toolchain-builder itself.
-> 
-> Indeed.
-
-
- Regards,
- Arnout
+Reviewed-by: Gilles Talis <gilles.talis@gmail.com>
