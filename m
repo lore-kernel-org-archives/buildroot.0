@@ -1,43 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Dec 2019 14:31:11 +0100
-Subject: [Buildroot] [PATCH] package/libnss: fix build failure on
- powerpc without <sys/auxv.h>
-In-Reply-To: <3e33365c-5e48-b5c7-f67f-74e60c93d4c8@benettiengineering.com>
-References: <20191210121322.120920-1-giulio.benetti@benettiengineering.com>
- <20191210140949.72b3cf96@windsurf>
- <3e33365c-5e48-b5c7-f67f-74e60c93d4c8@benettiengineering.com>
-Message-ID: <20191210143111.0051e59f@windsurf>
+From: rscr <rafacrespiramon@gmail.com>
+Date: Tue, 10 Dec 2019 07:58:53 -0600 (CST)
+Subject: [Buildroot] Custom tarball and .config file
+In-Reply-To: <20191210141145.5969eb63@windsurf>
+References: <1575964472511-0.post@n4.nabble.com>
+ <20191210141145.5969eb63@windsurf>
+Message-ID: <1575986333615-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi, 
 
-On Tue, 10 Dec 2019 14:23:02 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+I am new on Linux and buildroot, so it is possible I have misunderstood many
+things. I will try to explain:
 
-> > I'm not really a big fan of solutions that simply consist in "it wants
-> > this file, this file is not available, so let's make it ignore it",
-> > without a deeper investigation.  
-> 
-> Upstream already use this solution in the same file, i.e. arm/aarch64:
-> https://hg.mozilla.org/projects/nss/file/tip/lib/freebl/blinit.c#l100
-> 
-> and only if <sys/auxv.h> is present then they probe with getauxval() to 
-> check which HWCAP_ is present, otherwise they consider(i.e.) 
-> arm_neon_support not present, that is not true in any case. But at the 
-> time of this writing they seem to consider this enough, probably they 
-> will improve it later.
+For testing purposes, I'm using a local linux source, downloaded from the
+raspberry's github: linux-rpi-4.19.y
 
-OK, if this is indeed used on other architectures, then I guess doing
-the same on PowerPC doesn't hurt. Thanks for the additional explanation!
+I have added to the linux source a kernel driver that I am testing ( If I
+build the kernel out of buildroot it builds correct )
 
-Best regards,
+Now I want to use that linux kernel on Buildroot, so I tar the source, and I
+set:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="file://home/tec/rcr/tools/src/linux-rpi-4.19.y.tar.gz"
+
+
+This is my buildroot's kernel configuration
+
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="/home/tec/rcr/projects/cp4/rscr_br2_extree/configs/ibLinux_defconfig"
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+
+Now my q?estion:
+
+*How can I configure my custom kernel in buildroot, in order to select the
+device drivers I have added? If I run linux-menuconfig does not appear the
+driver on the Device Drivers menu. It seems it is pointing to another linux
+source*
+
+Kind Regards, 
+
+Rafa
+
+
+
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
