@@ -1,73 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Dec 2019 13:25:00 +0100
-Subject: [Buildroot] [PATCH] package/pkg-generic.mk,
- support/scripts/fix-rpath: fix per-package regexp
-Message-ID: <20191211122500.1261296-1-thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 10 Dec 2019 10:31:17 +0100
+Subject: [Buildroot] [git commit] SDL_mixer: Add support for libmodplug
+Message-ID: <20191211141815.102BA890D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit c4e6d5c8be6ada8e7c60950e3b499c55d48761cb ("core: implement
-per-package SDK and target") had a mistake on the regexp that is used
-to match $(PER_PACKAGE_DIR)/<something>/, and due to this, the regexp
-was never matched.
+commit: https://git.buildroot.net/buildroot/commit/?id=78a2456e32d26d33c93eebf52d01875b21bddfd8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The + sign in [^/]+ which was suggested by Yann E. Morin during the
-review of the per-package patch series (instead of [^/]*) needs to be
-escaped to be taken into account correctly. Without this, the regexp
-doesn't match, and the replacement is not done, causing:
+Add support for playing back tracker modules using libmodplug.
 
- (1) For the libtool fixup in pkg-generic.mk, the lack of replacement
-     causes libtool .la files to not be tweaked as expected, which it
-     turn causes build failures reported by the autobuilder.
-
- (2) For the fix-rpath, the RPATH of host binaries in the SDK were not
-     correct.
-
-Interestingly, we have the same regexp in
-support/scripts/check-host-rpath, but here the + sign does not need to
-be escaped.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/d4d996f3923699e266afd40cc7180de0f7257d99/ (libsvg-cairo)
-  http://autobuild.buildroot.net/results/56330f86872f67a2ce328e09b4c7b12aa835a432/ (bind)
-  http://autobuild.buildroot.net/results/9e0fc42d2c9f856b92954b08019b83ce668ef289/ (ibrcommon)
-  and probably a number of other similar issues
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk    | 2 +-
- support/scripts/fix-rpath | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../sdl_mixer/0003-Fix-include-of-modplug.h.patch  | 33 ++++++++++++++++++++++
+ package/sdl_mixer/sdl_mixer.mk                     |  7 +++++
+ 2 files changed, 40 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6d598cfd9d..3904a1c4db 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -145,7 +145,7 @@ endif
- ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
- define fixup-libtool-files
- 	$(Q)find $(2)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
--		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]+/:$(PER_PACKAGE_DIR)/$(1)/:g"
-+		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$(1)/:g"
- endef
+diff --git a/package/sdl_mixer/0003-Fix-include-of-modplug.h.patch b/package/sdl_mixer/0003-Fix-include-of-modplug.h.patch
+new file mode 100644
+index 0000000000..841cef4ef5
+--- /dev/null
++++ b/package/sdl_mixer/0003-Fix-include-of-modplug.h.patch
+@@ -0,0 +1,33 @@
++From fb8e7c535a88838cc8ae364cd2a099df6316d3b0 Mon Sep 17 00:00:00 2001
++From: Paul Cercueil <paul@crapouillou.net>
++Date: Tue, 30 Apr 2019 23:12:15 +0200
++Subject: [PATCH] Fix include of modplug.h
++
++The include path should be <libmodplug/modplug.h>, since the library
++doesn't provide any specific include path in its pkg-config file.
++
++This patch was obtained from this bug report:
++https://bugzilla.libsdl.org/show_bug.cgi?id=4893
++
++Signed-off-by: Paul Cercueil <paul@crapouillou.net>
++
++---
++ music_modplug.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/music_modplug.h b/music_modplug.h
++index 92cbafd..49abbb0 100644
++--- a/music_modplug.h
+++++ b/music_modplug.h
++@@ -1,6 +1,7 @@
++ #ifdef MODPLUG_MUSIC
++ 
++-#include "modplug.h"
+++#include <libmodplug/modplug.h>
+++
++ #include "SDL_rwops.h"
++ #include "SDL_audio.h"
++ #include "SDL_mixer.h"
++-- 
++2.21.0.593.g511ec345e18
++
+diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
+index 9183a4aa8c..81ace86498 100644
+--- a/package/sdl_mixer/sdl_mixer.mk
++++ b/package/sdl_mixer/sdl_mixer.mk
+@@ -35,6 +35,13 @@ else
+ SDL_MIXER_CONF_OPTS += --disable-music-mp3-mad-gpl
  endif
  
-diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-index 9fc9ef8514..3e67e770e5 100755
---- a/support/scripts/fix-rpath
-+++ b/support/scripts/fix-rpath
-@@ -141,7 +141,7 @@ main() {
-         # the per-package host directory is not within ${rootdir}. So,
-         # we rewrite all RPATHs pointing to per-package directories so
-         # that they point to the global host directry.
--        changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]+/host@${HOST_DIR}@")
-+        changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
-         if test "${rpath}" != "${changed_rpath}" ; then
-             ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
-         fi
--- 
-2.23.0
++ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
++SDL_MIXER_CONF_OPTS += --enable-music-mod-modplug
++SDL_MIXER_DEPENDENCIES += libmodplug
++else
++SDL_MIXER_CONF_OPTS += --disable-music-mod-modplug
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+ SDL_MIXER_CONF_OPTS += --enable-music-ogg
+ SDL_MIXER_DEPENDENCIES += libvorbis
