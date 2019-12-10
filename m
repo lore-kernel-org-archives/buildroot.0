@@ -1,36 +1,91 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 10 Dec 2019 18:40:04 +0100
-Subject: [Buildroot] [PATCH] package/lua-msgpack-native: fix build with
- moonjit
-Message-ID: <20191210174004.25479-1-francois.perrad@gadz.org>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Tue, 10 Dec 2019 15:20:45 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-12-09
+In-Reply-To: <20191210071814.D362187B3D@hemlock.osuosl.org>
+References: <20191210071814.D362187B3D@hemlock.osuosl.org>
+Message-ID: <CAJ4jsaceHWQxOBT=mCgLF1YFhp=BMjCJAs-Vnobs+=PSuAeFTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-compatibility with Lua 5.0 was removed in LuaJIT/moonjit 2.1.x
-(Lua 5.1.x and LuaJIT 2.0.x have this compatibility)
+On Tue, Dec 10, 2019 at 4:18 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 
-see http://autobuild.buildroot.org/results/4e4/4e428df01def186cb034a1774f6c00e2e7c9468c/build-end.log
+>     arm      |      modem-manager-1.12.0      | NOK | http://autobuild.buildroot.net/results/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a |
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua-msgpack-native/lua-msgpack-native.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This should have been solved by
 
-diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
-index acd3a0e1c..b3ca7aef4 100644
---- a/package/lua-msgpack-native/lua-msgpack-native.mk
-+++ b/package/lua-msgpack-native/lua-msgpack-native.mk
-@@ -11,7 +11,7 @@ LUA_MSGPACK_NATIVE_LICENSE = Apache-2.0
- LUA_MSGPACK_NATIVE_LICENSE_FILES = LICENSE.txt
- 
- define LUA_MSGPACK_NATIVE_BUILD_CMDS
--	$(TARGET_CC) $(TARGET_CFLAGS) -fPIC -shared -o $(@D)/msgpack.so $(@D)/mp.c
-+	$(TARGET_CC) $(TARGET_CFLAGS) -DluaL_reg=luaL_Reg -fPIC -shared -o $(@D)/msgpack.so $(@D)/mp.c
- endef
- 
- define LUA_MSGPACK_NATIVE_INSTALL_TARGET_CMDS
+    https://patchwork.ozlabs.org/patch/1186596/
+
+which was left behind.
+
+Even with that patch applied it fails with
+
+2019-12-10T15:13:20 Making all in test
+2019-12-10T15:13:20 CCLD     mmsmspdu
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+../src/.libs/libhelpers.a(mm-modem-helpers.o): in function
+`mm_3gpp_cesq_response_to_signal_info':
+2019-12-10T15:13:20 mm-modem-helpers.c:(.text+0x3e38): undefined
+reference to `mm_signal_new'
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+mm-modem-helpers.c:(.text+0x3e44): undefined reference to
+`mm_signal_set_rssi'
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+mm-modem-helpers.c:(.text+0x3e5c): undefined reference to
+`mm_signal_new'
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+mm-modem-helpers.c:(.text+0x3e68): undefined reference to
+`mm_signal_set_rscp'
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+mm-modem-helpers.c:(.text+0x3e88): undefined reference to
+`mm_signal_new'
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+mm-modem-helpers.c:(.text+0x3e98): undefined reference to
+`mm_signal_set_ecio'
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+mm-modem-helpers.c:(.text+0x3eb0): undefined reference to
+`mm_signal_new'
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+mm-modem-helpers.c:(.text+0x3ebc): undefined reference to
+`mm_signal_set_rsrq'
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+mm-modem-helpers.c:(.text+0x3edc): undefined reference to
+`mm_signal_new'
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+mm-modem-helpers.c:(.text+0x3eec): undefined reference to
+`mm_signal_set_rsrp'
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+../src/.libs/libhelpers.a(mm-modem-helpers.o): in function
+`mm_parse_cclk_response':
+2019-12-10T15:13:20 mm-modem-helpers.c:(.text+0x7484): undefined
+reference to `mm_network_timezone_new'
+2019-12-10T15:13:20
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+mm-modem-helpers.c:(.text+0x7494): undefined reference to
+`mm_network_timezone_set_offset'
+2019-12-10T15:13:20 collect2: error: ld returned 1 exit status
+2019-12-10T15:13:20 make[4]: *** [Makefile:541: mmsmspdu] Error 1
+2019-12-10T15:13:20 make[3]: *** [Makefile:509: all-recursive] Error 1
+2019-12-10T15:13:20 make[2]: *** [Makefile:441: all] Error 2
+2019-12-10T15:13:20 make[1]: *** [package/pkg-generic.mk:260:
+/work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/build/modem-manager-1.12.0/.stamp_built]
+Error 2
+2019-12-10T15:13:20 make: *** [Makefile:23: _all] Error 2
+
 -- 
-2.20.1
+Carlos Santos <unixmania@gmail.com>
