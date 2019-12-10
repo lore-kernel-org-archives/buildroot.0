@@ -1,28 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Dec 2019 09:04:59 +0100
-Subject: [Buildroot] [PATCH 2/3] package/python-tqdm: bump to version
- 4.40.1
-In-Reply-To: <20191209215923.28945-2-aussedat.louis@gmail.com> (Louis
- Aussedat's message of "Mon, 9 Dec 2019 22:59:22 +0100")
-References: <20191209215923.28945-1-aussedat.louis@gmail.com>
- <20191209215923.28945-2-aussedat.louis@gmail.com>
-Message-ID: <87k174hahg.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Dec 2019 09:05:30 +0100
+Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump
+ version
+In-Reply-To: <20191209223114.99264-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Mon, 9 Dec 2019 23:31:14 +0100")
+References: <20191209223114.99264-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87fthshagl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Louis" == Louis Aussedat <aussedat.louis@gmail.com> writes:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
- > Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
- > ---
- >  package/python-tqdm/python-tqdm.hash | 4 ++--
- >  package/python-tqdm/python-tqdm.mk   | 4 ++--
- >  2 files changed, 4 insertions(+), 4 deletions(-)
+ > For A64 frequency stability.
+ > git shortlog --invert-grep --grep=travis --no-merges
+ > a5e38ca3f05f0f74fdd5e85a711c964383ad23df..
+ > Vasily Khoruzhick (1):
+ >       Set GPU clock to 432MHz on A64
 
-Wen patches are not related to the same issue, then please do not send
-them as a single series.
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Committed, thanks.
 
