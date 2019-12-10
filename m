@@ -1,41 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Dec 2019 23:10:22 +0100
-Subject: [Buildroot] [PATCH] package/libuio: add missing dependency on
- host-pkgconf
-Message-ID: <20191210221022.948846-1-thomas.petazzoni@bootlin.com>
+Date: Tue, 10 Dec 2019 23:18:15 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/libffi: fix build failure
+ with powerpc7
+In-Reply-To: <20a72d62-aecb-be18-9bb7-2f69115e14ba@mind.be>
+References: <20191124090305.1015485-1-fontaine.fabrice@gmail.com>
+ <20a72d62-aecb-be18-9bb7-2f69115e14ba@mind.be>
+Message-ID: <20191210231815.5756578e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-configure fails if the pkgconfig.m4 macros are not available during
-this package autoreconf:
+Hello Fabrice,
 
-./configure: line 12003: syntax error near unexpected token `PKGCONF,'
-./configure: line 12003: `   PKG_CHECK_MODULES(PKGCONF, glib-2.0)
+On Tue, 3 Dec 2019 23:53:06 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Fixes:
+> On 24/11/2019 10:03, Fabrice Fontaine wrote:
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/5c9dd8fb3b6a128882b6250f197c80232d8a3b53
+> > 
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>  
+> 
+>  Upstream merged a different fix [1] which TBH doesn't look as good... Could you
+> check with upstream what is the better solution?
+> 
+>  Regards,
+>  Arnout
+> 
+> [1]
+> https://github.com/libffi/libffi/pull/532/commits/2138adb2a5b6a0bc2fe3518e0645eacc89b6f392
 
-  http://autobuild.buildroot.net/results/9be944e35090bf270fbc9572423466be9af7b1f2/
+Fabrice, have you had the chance to check with upstream what is the
+most correct fix?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libuio/libuio.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Also, your commit title says it fixes it for powerpc7, but the issue
+also appears with older powerpc platforms, and indeed the upstream
+commit says it fixes the issue for powerpc7 and older platforms.
 
-diff --git a/package/libuio/libuio.mk b/package/libuio/libuio.mk
-index 13429ec0f1..b6e8e7e774 100644
---- a/package/libuio/libuio.mk
-+++ b/package/libuio/libuio.mk
-@@ -10,7 +10,7 @@ LIBUIO_SITE = $(call github,Linutronix,libuio,$(LIBUIO_VERSION))
- LIBUIO_LICENSE = LGPL-2.1 (library), GPL-2.0 (programs)
- LIBUIO_LICENSE_FILES = COPYING
- LIBUIO_CONF_OPTS = --with-glib=no --without-werror
--LIBUIO_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-+LIBUIO_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-pkgconf
- LIBUIO_LIBS = $(TARGET_NLS_LIBS)
- LIBUIO_INSTALL_STAGING = YES
- 
+Since the issue pops up quite a lot in the autobuilders, it would be
+nice if we could finalize this patch and merge it.
+
+Thanks,
+
+Thomas
 -- 
-2.23.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
