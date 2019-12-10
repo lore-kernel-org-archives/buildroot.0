@@ -1,48 +1,41 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 10 Dec 2019 14:09:29 -0800
-Subject: [Buildroot] [PATCH 05/12] arch/arch.mk.xtensa: fix usage of
- arch-xtensa-overlay-extract
-In-Reply-To: <20191210215952.902477-6-thomas.petazzoni@bootlin.com>
-References: <20191210215952.902477-1-thomas.petazzoni@bootlin.com>
- <20191210215952.902477-6-thomas.petazzoni@bootlin.com>
-Message-ID: <CAMo8BfJ+K64q0zL+Oq6suPv8JYB=nRdw=4u2=GCza=Tr-WnCyw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 10 Dec 2019 23:10:22 +0100
+Subject: [Buildroot] [PATCH] package/libuio: add missing dependency on
+ host-pkgconf
+Message-ID: <20191210221022.948846-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 10, 2019 at 2:00 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> arch-xtensa-overlay-extract was used in gcc, linux, uboot, binutils
-> and gdb without properly accouting for the package dependencies that
-> may be needed to extract the overlay tarball.
->
-> This commit fixes that by introducing an
-> ARCH_XTENSA_OVERLAY_EXTRACT_DEPENDENCIES variable in arch.mk.xtensa,
-> and then use it where appropriate in gcc, linux, uboot, binutils and
-> gdb.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> Note: if this is preferred, we could avoid adding the
-> ARCH_XTENSA_OVERLAY_EXTRACT_DEPENDENCIES variable, and directly call
-> extractor-pkg-dependency from each of gcc, linux, uboot, binutils and
-> gdb. Having an intermediate variable felt a bit simpler/cleaner, but I
-> wouldn't mind changing it.
-> ---
->  arch/arch.mk.xtensa                    | 2 ++
->  boot/uboot/uboot.mk                    | 1 +
->  linux/linux.mk                         | 1 +
->  package/binutils/binutils.mk           | 2 ++
->  package/gcc/gcc-final/gcc-final.mk     | 1 +
->  package/gcc/gcc-initial/gcc-initial.mk | 1 +
->  package/gdb/gdb.mk                     | 2 ++
->  7 files changed, 10 insertions(+)
+configure fails if the pkgconfig.m4 macros are not available during
+this package autoreconf:
 
-Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
+./configure: line 12003: syntax error near unexpected token `PKGCONF,'
+./configure: line 12003: `   PKG_CHECK_MODULES(PKGCONF, glib-2.0)
 
+Fixes:
+
+  http://autobuild.buildroot.net/results/9be944e35090bf270fbc9572423466be9af7b1f2/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libuio/libuio.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libuio/libuio.mk b/package/libuio/libuio.mk
+index 13429ec0f1..b6e8e7e774 100644
+--- a/package/libuio/libuio.mk
++++ b/package/libuio/libuio.mk
+@@ -10,7 +10,7 @@ LIBUIO_SITE = $(call github,Linutronix,libuio,$(LIBUIO_VERSION))
+ LIBUIO_LICENSE = LGPL-2.1 (library), GPL-2.0 (programs)
+ LIBUIO_LICENSE_FILES = COPYING
+ LIBUIO_CONF_OPTS = --with-glib=no --without-werror
+-LIBUIO_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++LIBUIO_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-pkgconf
+ LIBUIO_LIBS = $(TARGET_NLS_LIBS)
+ LIBUIO_INSTALL_STAGING = YES
+ 
 -- 
-Thanks.
--- Max
+2.23.0
