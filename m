@@ -1,27 +1,71 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Tue, 10 Dec 2019 12:16:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/firmware-imx:
- bump version to 8.1.1
-In-Reply-To: <20191202200601.418280-1-juju@cotds.org>
-References: <20191202200601.418280-1-juju@cotds.org>
-Message-ID: <CADCpmyNmhhH1UYm3H57hPm2HjfsGSwo9f+zRY-Tm_G0yyEoQkg@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 10 Dec 2019 13:13:22 +0100
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure on powerpc
+ without <sys/auxv.h>
+Message-ID: <20191210121322.120920-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien,
+Add patch to fix build failure on PowerPc without <sys/auxv.h>. The patch
+inserts #if statements to include or note <sys/auxv.h> prior it exists.
 
-Le lun. 2 d?c. 2019 ? 21:06, Julien Olivain <juju@cotds.org> a ?crit :
->
-> This version is aligned with i.MX NXP BSP components version
-> rel_imx_4.14.98_2.0.0_ga
+Fixes:
+http://autobuild.buildroot.net/results/8bf95bd8a0aec8c53889308ab1e00d0a94f53d57/
 
-Why not update to latest version 8.3 [1] (4.14.98_2.1.0 BSP from last July)?
-Any known issue with it?
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ ...Fix-PowerPc-build-sys-auxv.h-failure.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/libnss/0004-Bug-1602743-Fix-PowerPc-build-sys-auxv.h-failure.patch
 
-Regards,
-Gary
-
-[1] https://source.codeaurora.org/external/imx/meta-fsl-bsp-release/tree/imx/meta-bsp/recipes-bsp/firmware-imx/firmware-imx_8.3.bb?h=rel_imx_4.14.98_2.1.0
+diff --git a/package/libnss/0004-Bug-1602743-Fix-PowerPc-build-sys-auxv.h-failure.patch b/package/libnss/0004-Bug-1602743-Fix-PowerPc-build-sys-auxv.h-failure.patch
+new file mode 100644
+index 0000000000..c8f12d777a
+--- /dev/null
++++ b/package/libnss/0004-Bug-1602743-Fix-PowerPc-build-sys-auxv.h-failure.patch
+@@ -0,0 +1,40 @@
++From efe0fd875c80ff6e3a05db6c5e15b07c173530a6 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Tue, 10 Dec 2019 13:06:01 +0100
++Subject: [PATCH] Bug 1602743 - Fix PowerPc build sys/auxv.h failure
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/lib/freebl/blinit.c | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/nss/lib/freebl/blinit.c b/nss/lib/freebl/blinit.c
++index 959109b60..f0654595d 100644
++--- a/nss/lib/freebl/blinit.c
+++++ b/nss/lib/freebl/blinit.c
++@@ -357,7 +357,9 @@ ppc_crypto_support()
++ 
++ #if defined(__powerpc__)
++ 
+++#if (__has_include(<sys/auxv.h>))
++ #include <sys/auxv.h>
+++#endif
++ 
++ // Defines from cputable.h in Linux kernel - PPC, letting us build on older kernels
++ #ifndef PPC_FEATURE2_VEC_CRYPTO
++@@ -368,8 +370,11 @@ static void
++ CheckPPCSupport()
++ {
++     char *disable_hw_crypto = PR_GetEnvSecure("NSS_DISABLE_PPC_GHASH");
+++    long hwcaps = 0;
++ 
++-    long hwcaps = getauxval(AT_HWCAP2);
+++#if (__has_include(<sys/auxv.h>))
+++    hwcaps = getauxval(AT_HWCAP2);
+++#endif
++ 
++     ppc_crypto_support_ = hwcaps & PPC_FEATURE2_VEC_CRYPTO && disable_hw_crypto == NULL;
++ }
++-- 
++2.20.1
++
+-- 
+2.20.1
