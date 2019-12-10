@@ -1,62 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Dec 2019 23:05:17 +0100
-Subject: [Buildroot] Issue with host packages and DL_TOOLS_DEPENDENCIES
-Message-ID: <20191210230517.25be6a63@windsurf.home>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 10 Dec 2019 14:09:29 -0800
+Subject: [Buildroot] [PATCH 05/12] arch/arch.mk.xtensa: fix usage of
+ arch-xtensa-overlay-extract
+In-Reply-To: <20191210215952.902477-6-thomas.petazzoni@bootlin.com>
+References: <20191210215952.902477-1-thomas.petazzoni@bootlin.com>
+ <20191210215952.902477-6-thomas.petazzoni@bootlin.com>
+Message-ID: <CAMo8BfJ+K64q0zL+Oq6suPv8JYB=nRdw=4u2=GCza=Tr-WnCyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, Dec 10, 2019 at 2:00 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> arch-xtensa-overlay-extract was used in gcc, linux, uboot, binutils
+> and gdb without properly accouting for the package dependencies that
+> may be needed to extract the overlay tarball.
+>
+> This commit fixes that by introducing an
+> ARCH_XTENSA_OVERLAY_EXTRACT_DEPENDENCIES variable in arch.mk.xtensa,
+> and then use it where appropriate in gcc, linux, uboot, binutils and
+> gdb.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> Note: if this is preferred, we could avoid adding the
+> ARCH_XTENSA_OVERLAY_EXTRACT_DEPENDENCIES variable, and directly call
+> extractor-pkg-dependency from each of gcc, linux, uboot, binutils and
+> gdb. Having an intermediate variable felt a bit simpler/cleaner, but I
+> wouldn't mind changing it.
+> ---
+>  arch/arch.mk.xtensa                    | 2 ++
+>  boot/uboot/uboot.mk                    | 1 +
+>  linux/linux.mk                         | 1 +
+>  package/binutils/binutils.mk           | 2 ++
+>  package/gcc/gcc-final/gcc-final.mk     | 1 +
+>  package/gcc/gcc-initial/gcc-initial.mk | 1 +
+>  package/gdb/gdb.mk                     | 2 ++
+>  7 files changed, 10 insertions(+)
 
-While working on
-https://patchwork.ozlabs.org/project/buildroot/list/?series=147671, I
-realized that we have an issue with how DL_TOOLS_DEPENDENCIES is
-calculated and host packages.
+Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
 
-Here is a snippet of code from package/pkg-generic.mk, inside
-inner-generic-package:
-
-ifeq ($$($$($(2)_KCONFIG_VAR)),y)
-[...]
-ifeq ($$($(2)_SITE_METHOD),svn)
-DL_TOOLS_DEPENDENCIES += svn
-else ifeq ($$($(2)_SITE_METHOD),git)
-DL_TOOLS_DEPENDENCIES += git
-else ifeq ($$($(2)_SITE_METHOD),bzr)
-DL_TOOLS_DEPENDENCIES += bzr
-else ifeq ($$($(2)_SITE_METHOD),scp)
-DL_TOOLS_DEPENDENCIES += scp ssh
-else ifeq ($$($(2)_SITE_METHOD),hg)
-DL_TOOLS_DEPENDENCIES += hg
-else ifeq ($$($(2)_SITE_METHOD),cvs)
-DL_TOOLS_DEPENDENCIES += cvs
-endif # SITE_METHOD
-
-DL_TOOLS_DEPENDENCIES += $$(call extractor-system-dependency,$$($(2)_SOURCE))
-[...]
-endif
-
-So it means that the DL_TOOLS_DEPENDENCIES calculation is inside the
-KCONFIG_VAR_$(2) condition, which means it is only true for target
-packages (and a few lucky host packages that have a corresponding
-Config.in option).
-
-Due to this, if you have a host package that needs a given extractor,
-or bzr, or svn, then it is not listed in DL_TOOLS_DEPENDENCIES, and
-will not be checked by the support/dependencies/ logic.
-
-We would need to recursively take into account the dependencies of the
-current package while calculating this, so that host packages are
-properly accounted for.
-
-What do you think ?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks.
+-- Max
