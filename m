@@ -1,54 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Dec 2019 14:30:24 +0100
-Subject: [Buildroot] autotools, autorefconf,
- libtoolize and non-existing m4 directory
-In-Reply-To: <f4bfdbacb2180b054d3e290355dc1ed8@walle.cc>
-References: <c9d71c066a825c04278c1b57df673fb6@walle.cc>
- <20191210140438.001cfca7@windsurf>
- <f4bfdbacb2180b054d3e290355dc1ed8@walle.cc>
-Message-ID: <20191210143024.7b3a8bb6@windsurf>
+Date: Tue, 10 Dec 2019 14:31:11 +0100
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure on
+ powerpc without <sys/auxv.h>
+In-Reply-To: <3e33365c-5e48-b5c7-f67f-74e60c93d4c8@benettiengineering.com>
+References: <20191210121322.120920-1-giulio.benetti@benettiengineering.com>
+ <20191210140949.72b3cf96@windsurf>
+ <3e33365c-5e48-b5c7-f67f-74e60c93d4c8@benettiengineering.com>
+Message-ID: <20191210143111.0051e59f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 10 Dec 2019 14:21:06 +0100
-Michael Walle <michael@walle.cc> wrote:
+Hello,
 
-> > This is simple, and works just fine.  
+On Tue, 10 Dec 2019 14:23:02 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+
+> > I'm not really a big fan of solutions that simply consist in "it wants
+> > this file, this file is not available, so let's make it ignore it",
+> > without a deeper investigation.  
 > 
-> Correct, that would work, actually, we already had that construct in the
-> recipe. But as I've already said, this behaviour is very different than
-> on the host. Esp. if you'd use "aclocal -i"; which I don't know if it is
-> used at all. Currently there are many workarounds, all are fine. My
-> intention was to make you aware of this bug; or if you already knew it,
-> your opinion on it. Eg. aclocal is handling the first include path in a
-> special way, but buildroot already occupies that slot.
+> Upstream already use this solution in the same file, i.e. arm/aarch64:
+> https://hg.mozilla.org/projects/nss/file/tip/lib/freebl/blinit.c#l100
+> 
+> and only if <sys/auxv.h> is present then they probe with getauxval() to 
+> check which HWCAP_ is present, otherwise they consider(i.e.) 
+> arm_neon_support not present, that is not true in any case. But at the 
+> time of this writing they seem to consider this enough, probably they 
+> will improve it later.
 
-No, I was not aware that the first include path is handled in a special
-way, and that because Buildroot uses that slot, the m4/ directory no
-longer gets created automatically.
-
-In fact, aclocal's man page says:
-
-       --install
-              copy third-party files to the first -I directory
-
-So indeed that's I guess how the m4/ directory gets created.
-
-Perhaps we should use:
-
-       --system-acdir=DIR
-              directory holding third-party system-wide files
-
-instead? Could you try that in the definition of $(AUTORECONF), instead
-of the -I options?
-
-In fact, it is quite worrying that aclocal -i -I/foo/bar copies stuff
-to /foo/bar. Indeed, we clearly don't want aclocal to clutter
-$(ACLOCAL_DIR) or $(ACLOCAL_HOST_DIR) with additional files by effect
-of running autoreconf.
+OK, if this is indeed used on other architectures, then I guess doing
+the same on PowerPC doesn't hurt. Thanks for the additional explanation!
 
 Best regards,
 
