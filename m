@@ -1,42 +1,31 @@
-From: rscr <rafacrespiramon@gmail.com>
-Date: Tue, 10 Dec 2019 01:54:32 -0600 (CST)
-Subject: [Buildroot] Custom tarball and .config file
-Message-ID: <1575964472511-0.post@n4.nabble.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 10 Dec 2019 09:03:56 +0100
+Subject: [Buildroot] [PATCH 1/3] configs/friendlyarm_nanopi_neo_plus2:
+ use an extlinux instead of boot.cmd
+In-Reply-To: <20191209215923.28945-1-aussedat.louis@gmail.com> (Louis
+ Aussedat's message of "Mon, 9 Dec 2019 22:59:21 +0100")
+References: <20191209215923.28945-1-aussedat.louis@gmail.com>
+Message-ID: <87o8wghaj7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello, 
+>>>>> "Louis" == Louis Aussedat <aussedat.louis@gmail.com> writes:
 
-I am trying to use my Custom Tarball and I would like to use the
-bcmrpi_defconfig as a base config for creating my custom linux config file. 
+ > This remove the file boot.cmd to use an extlinux.conf instead.
+ > Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+ > ---
+ >  board/friendlyarm/nanopi-neo-plus2/boot.cmd      | 6 ------
+ >  board/friendlyarm/nanopi-neo-plus2/extlinux.conf | 4 ++++
+ >  board/friendlyarm/nanopi-neo-plus2/genimage.cfg  | 2 +-
+ >  board/friendlyarm/nanopi-neo-plus2/post-build.sh | 4 ++++
+ >  configs/friendlyarm_nanopi_neo_plus2_defconfig   | 3 +--
+ >  5 files changed, 10 insertions(+), 9 deletions(-)
 
-Here are the paths I am using.
+This is not really any significant improvement in code size, but OK -
+Committed, thanks.
 
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="file://home/tec/rcr/tools/src/linux-rpi-4.19.y.tar.gz"
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="/home/tec/rcr/projects/cp4/rscr_br2_extree/configs/ibLinux_defconfig"
-
-I can build an image with that BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION and
-the bcmrpi_defconfig, but now I would like to use my own .config based on
-bcmrpi
- 
-1) Is there any way of using "make linux-menuconfig" pointing to my
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION path instead of  the /dl/linux
-sources?
-
-2) Is there any way of doing something like "make bcmrpi_defconfig", "make
-linux-menuconfig"...just as for  the buildroot defconfig file?
-
-Kind Regards, 
-
-Rafa
-
-
-
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+-- 
+Bye, Peter Korsgaard
