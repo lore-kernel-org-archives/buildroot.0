@@ -1,50 +1,46 @@
-From: Michael Walle <michael@walle.cc>
-Date: Tue, 10 Dec 2019 11:34:51 +0100
-Subject: [Buildroot] autotools, autorefconf,
- libtoolize and non-existing m4 directory
-Message-ID: <c9d71c066a825c04278c1b57df673fb6@walle.cc>
+From: Christian Kellermann <christian.kellermann@solectrix.de>
+Date: Tue, 10 Dec 2019 11:43:12 +0100
+Subject: [Buildroot] [PATCH] package/python-pylibftdi: bump version to 0.18.1
+Message-ID: <20191210104312.548521-1-christian.kellermann@solectrix.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Hi Peter,
+Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
+---
+ package/python-pylibftdi/python-pylibftdi.hash | 4 ++--
+ package/python-pylibftdi/python-pylibftdi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-we have a package [1] where:
-  - we have AC_CONFIG_MACRO_DIR([m4]) in configure.ac
-  - we have ACLOCAL_AMFLAGS = -I m4 in Makefile.am
-  - we do *not* have an m4/ subdirectory (there is actually a commit
-    that introduces an empty m4/ directory, but that should not be
-    necessary)
-
-We now do trigger a bug where autoreconf from the host works perfectly
-and the autoreconf of busybox do not. Here is our first analysis:
-  - originating from [2], there was an upstream patch which degrades the
-    absence of a local m4 directory from fatal to just a warning in the
-    aclocal step.
-  - the current aclocal script treats just the _first_ include directory
-    that way. Ie. it assumes, that the local m4/ is the first one in
-    @user_includes, see [3]
-  - buildroot sets the first one by its own in the automake package,
-    see [4], because it supplies the first include already in the
-    "$(ACLOCAL)"
-
-Is this behaviour intended? There is also an install option to aclocal
-which uses first directory in the list.
-
-Unfortunately, I cannot come up with a solution other than:
-   ACLOCAL_AMFLAGS = -I m4 $(SOME_OTHER_FLAGS)
-and buildroot would set its own include path in SOME_OTHER_FLAGS. But
-I'd guess that will break many packages. So maybe the current behaviour
-is the lesser evil. But it does not really work like on the host system.
-
--michael
-
-
-[1] https://github.com/kontron/keapi
-[2] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=565663#50
-[3] 
-http://git.savannah.gnu.org/cgit/automake.git/tree/bin/aclocal.in?id=5ae02cc829c8efe8afcf72467d0147444feab651#n439
-[4] 
-https://git.buildroot.net/buildroot/tree/package/automake/automake.mk?id=c699f5ab5a9d86d4416647a3ba9405476bf6bb9b#n35
+diff --git a/package/python-pylibftdi/python-pylibftdi.hash b/package/python-pylibftdi/python-pylibftdi.hash
+index 0826ee43db..ead3c9652a 100644
+--- a/package/python-pylibftdi/python-pylibftdi.hash
++++ b/package/python-pylibftdi/python-pylibftdi.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pylibftdi/json
+-md5	40e05f3bd486b7003ac90c27fdcb013a  pylibftdi-0.18.0.tar.gz
+-sha256	f6655fbb6b9543bc1ed11570a18369a11402509c4375fff4aaad6f95205b333d  pylibftdi-0.18.0.tar.gz
++md5	c48e442cef7b1e865b4d96ab92f509ad pylibftdi-0.18.1.tar.gz
++sha256	bdd04076933959b20b3c8b4fb8be7882d3362675f259e7eeb23ebff03b81859d  pylibftdi-0.18.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	581b6a16b3aaf23c4f7caee5defa099af833a95916e57ef24d7c12f893a0c160  LICENSE.txt
+diff --git a/package/python-pylibftdi/python-pylibftdi.mk b/package/python-pylibftdi/python-pylibftdi.mk
+index c587d8e57c..2f5614867d 100644
+--- a/package/python-pylibftdi/python-pylibftdi.mk
++++ b/package/python-pylibftdi/python-pylibftdi.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYLIBFTDI_VERSION = 0.18.0
++PYTHON_PYLIBFTDI_VERSION = 0.18.1
+ PYTHON_PYLIBFTDI_SOURCE = pylibftdi-$(PYTHON_PYLIBFTDI_VERSION).tar.gz
+-PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/e6/2c/22d38c873f7c83a7b48df25744763d94e638ba2ee158d40a176748e21b60
++PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/50/9b/1e1cdb9715bacfb83e5eaf5e69f4e2fbd92d61f43c5e185cc3935ec01b28
+ PYTHON_PYLIBFTDI_LICENSE = MIT
+ PYTHON_PYLIBFTDI_LICENSE_FILES = LICENSE.txt
+ PYTHON_PYLIBFTDI_DEPENDENCIES = libftdi
+-- 
+2.23.0
