@@ -1,83 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Dec 2019 12:18:36 +0100
-Subject: [Buildroot] [PATCH] package/git: security bump to version 2.24.1
-Message-ID: <20191211111836.25423-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 11 Dec 2019 13:25:00 +0100
+Subject: [Buildroot] [PATCH] package/pkg-generic.mk,
+ support/scripts/fix-rpath: fix per-package regexp
+Message-ID: <20191211122500.1261296-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerabilities:
+Commit c4e6d5c8be6ada8e7c60950e3b499c55d48761cb ("core: implement
+per-package SDK and target") had a mistake on the regexp that is used
+to match $(PER_PACKAGE_DIR)/<something>/, and due to this, the regexp
+was never matched.
 
-* CVE-2019-1348:
-   The --export-marks option of git fast-import is exposed also via
-   the in-stream command feature export-marks=... and it allows
-   overwriting arbitrary paths.
+The + sign in [^/]+ which was suggested by Yann E. Morin during the
+review of the per-package patch series (instead of [^/]*) needs to be
+escaped to be taken into account correctly. Without this, the regexp
+doesn't match, and the replacement is not done, causing:
 
- * CVE-2019-1349:
-   When submodules are cloned recursively, under certain circumstances
-   Git could be fooled into using the same Git directory twice. We now
-   require the directory to be empty.
+ (1) For the libtool fixup in pkg-generic.mk, the lack of replacement
+     causes libtool .la files to not be tweaked as expected, which it
+     turn causes build failures reported by the autobuilder.
 
- * CVE-2019-1350:
-   Incorrect quoting of command-line arguments allowed remote code
-   execution during a recursive clone in conjunction with SSH URLs.
+ (2) For the fix-rpath, the RPATH of host binaries in the SDK were not
+     correct.
 
- * CVE-2019-1351:
-   While the only permitted drive letters for physical drives on
-   Windows are letters of the US-English alphabet, this restriction
-   does not apply to virtual drives assigned via subst <letter>:
-   <path>. Git mistook such paths for relative paths, allowing writing
-   outside of the worktree while cloning.
+Interestingly, we have the same regexp in
+support/scripts/check-host-rpath, but here the + sign does not need to
+be escaped.
 
- * CVE-2019-1352:
-   Git was unaware of NTFS Alternate Data Streams, allowing files
-   inside the .git/ directory to be overwritten during a clone.
+Fixes:
 
- * CVE-2019-1353:
-   When running Git in the Windows Subsystem for Linux (also known as
-   "WSL") while accessing a working directory on a regular Windows
-   drive, none of the NTFS protections were active.
+  http://autobuild.buildroot.net/results/d4d996f3923699e266afd40cc7180de0f7257d99/ (libsvg-cairo)
+  http://autobuild.buildroot.net/results/56330f86872f67a2ce328e09b4c7b12aa835a432/ (bind)
+  http://autobuild.buildroot.net/results/9e0fc42d2c9f856b92954b08019b83ce668ef289/ (ibrcommon)
+  and probably a number of other similar issues
 
- * CVE-2019-1354:
-   Filenames on Linux/Unix can contain backslashes. On Windows,
-   backslashes are directory separators. Git did not use to refuse to
-   write out tracked files with such filenames.
-
- * CVE-2019-1387:
-   Recursive clones are currently affected by a vulnerability that is
-   caused by too-lax validation of submodule names, allowing very
-   targeted attacks via remote code execution in recursive clones.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
+ package/pkg-generic.mk    | 2 +-
+ support/scripts/fix-rpath | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 40cd8a169f..74bf334b78 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,4 +1,4 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 9f71d61973626d8b28c4cdf8e2484b4bf13870ed643fed982d68b2cfd754371b  git-2.24.0.tar.xz
-+sha256 723f24dce8fdd621a308b6187553fce7d5244205c065fe0a3aebd0b7c3f88562  git-2.24.1.tar.xz
- sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 4fec24bf27..a5c8669fc9 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6d598cfd9d..3904a1c4db 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -145,7 +145,7 @@ endif
+ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+ define fixup-libtool-files
+ 	$(Q)find $(2)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+-		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]+/:$(PER_PACKAGE_DIR)/$(1)/:g"
++		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$(1)/:g"
+ endef
+ endif
  
--GIT_VERSION = 2.24.0
-+GIT_VERSION = 2.24.1
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+index 9fc9ef8514..3e67e770e5 100755
+--- a/support/scripts/fix-rpath
++++ b/support/scripts/fix-rpath
+@@ -141,7 +141,7 @@ main() {
+         # the per-package host directory is not within ${rootdir}. So,
+         # we rewrite all RPATHs pointing to per-package directories so
+         # that they point to the global host directry.
+-        changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]+/host@${HOST_DIR}@")
++        changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
+         if test "${rpath}" != "${changed_rpath}" ; then
+             ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
+         fi
 -- 
-2.20.1
+2.23.0
