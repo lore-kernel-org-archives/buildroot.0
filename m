@@ -1,94 +1,96 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 10 Dec 2019 18:51:43 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-sockjs: new package
-Message-ID: <20191211015143.28688-1-james.hilliard1@gmail.com>
+Date: Tue, 10 Dec 2019 19:02:52 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-debugtoolbar: new
+ package
+Message-ID: <20191211020252.41788-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-SockJS server implementation for aiohttp.
+debugtoolbar for aiohttp.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-sockjs/Config.in          |  8 ++++++++
- package/python-sockjs/python-sockjs.hash |  5 +++++
- package/python-sockjs/python-sockjs.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/python-sockjs/Config.in
- create mode 100644 package/python-sockjs/python-sockjs.hash
- create mode 100644 package/python-sockjs/python-sockjs.mk
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-aiohttp-debugtoolbar/Config.in      |  9 +++++++++
+ .../python-aiohttp-debugtoolbar.hash               |  5 +++++
+ .../python-aiohttp-debugtoolbar.mk                 | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/python-aiohttp-debugtoolbar/Config.in
+ create mode 100644 package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash
+ create mode 100644 package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 61bcd99d43..edeff34d13 100644
+index 61bcd99d43..303893bc85 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1144,6 +1144,7 @@ F:	package/python-brotli/
- F:	package/python-cchardet/
- F:	package/python-multidict/
- F:	package/python-pycares/
-+F:	package/python-sockjs/
- F:	package/python-terminaltables/
- F:	package/python-yarl/
- 
+@@ -1131,6 +1131,7 @@ F:	package/python-aioconsole/
+ F:	package/python-aiodns/
+ F:	package/python-aiohttp/
+ F:	package/python-aiohttp-cors/
++F:	package/python-aiohttp-debugtoolbar/
+ F:	package/python-aiohttp-jinja2/
+ F:	package/python-aiohttp-remotes/
+ F:	package/python-aiohttp-security/
 diff --git a/package/Config.in b/package/Config.in
-index 307583d01f..f813c2cc10 100644
+index 307583d01f..e550fd938d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1102,6 +1102,7 @@ menu "External python modules"
- 	source "package/python-slob/Config.in"
- 	source "package/python-smbus-cffi/Config.in"
- 	source "package/python-socketio/Config.in"
-+	source "package/python-sockjs/Config.in"
- 	source "package/python-sortedcontainers/Config.in"
- 	source "package/python-soupsieve/Config.in"
- 	source "package/python-spidev/Config.in"
-diff --git a/package/python-sockjs/Config.in b/package/python-sockjs/Config.in
+@@ -826,6 +826,7 @@ menu "External python modules"
+ 	source "package/python-aiodns/Config.in"
+ 	source "package/python-aiohttp/Config.in"
+ 	source "package/python-aiohttp-cors/Config.in"
++	source "package/python-aiohttp-debugtoolbar/Config.in"
+ 	source "package/python-aiohttp-jinja2/Config.in"
+ 	source "package/python-aiohttp-remotes/Config.in"
+ 	source "package/python-aiohttp-security/Config.in"
+diff --git a/package/python-aiohttp-debugtoolbar/Config.in b/package/python-aiohttp-debugtoolbar/Config.in
 new file mode 100644
-index 0000000000..583d7ec741
+index 0000000000..b22d2cf946
 --- /dev/null
-+++ b/package/python-sockjs/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SOCKJS
-+	bool "python-sockjs"
++++ b/package/python-aiohttp-debugtoolbar/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_AIOHTTP_DEBUGTOOLBAR
++	bool "python-aiohttp-debugtoolbar"
 +	depends on BR2_PACKAGE_PYTHON3
 +	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
++	select BR2_PACKAGE_PYTHON_AIOHTTP_JINJA2 # runtime
 +	help
-+	  SockJS server implementation for aiohttp.
++	  debugtoolbar for aiohttp.
 +
-+	  https://github.com/aio-libs/sockjs/
-diff --git a/package/python-sockjs/python-sockjs.hash b/package/python-sockjs/python-sockjs.hash
++	  https://github.com/aio-libs/aiohttp_debugtoolbar
+diff --git a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash
 new file mode 100644
-index 0000000000..55ea9dc644
+index 0000000000..655c46da3c
 --- /dev/null
-+++ b/package/python-sockjs/python-sockjs.hash
++++ b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/sockjs/json
-+md5	369417bd103f841f236a8623ea29353c  sockjs-0.10.0.tar.gz
-+sha256	005a820387bb4611b59341eac091b05d4204050dd42e4ea6cfb83607e23e2f06  sockjs-0.10.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/aiohttp_debugtoolbar/json
++md5	26b26163f3fbeb16ac67197902330942  aiohttp-debugtoolbar-0.5.0.tar.gz
++sha256	697c9cfac4017d532e26a8c05f14c1a43b3b147f53460daacb0ed144401df441  aiohttp-debugtoolbar-0.5.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	7be23c071df0314fadeba6077a3830340a5121ad88bfa66b0c095051a766e141  LICENSE.txt
-diff --git a/package/python-sockjs/python-sockjs.mk b/package/python-sockjs/python-sockjs.mk
++sha256	94d638be2cb4f186cc62bb567455837757547c15f1b350863aaf05a38843b542  LICENSE
+diff --git a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk
 new file mode 100644
-index 0000000000..e0f58e2b61
+index 0000000000..27eadd2173
 --- /dev/null
-+++ b/package/python-sockjs/python-sockjs.mk
++++ b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-sockjs
++# python-aiohttp-debugtoolbar
 +#
 +################################################################################
 +
-+PYTHON_SOCKJS_VERSION = 0.10.0
-+PYTHON_SOCKJS_SOURCE = sockjs-$(PYTHON_SOCKJS_VERSION).tar.gz
-+PYTHON_SOCKJS_SITE = https://files.pythonhosted.org/packages/35/0e/6aa4f3283b064b04a0c7f3859c8c2c0b736c05cfb07853b6d94073c1bf63
-+PYTHON_SOCKJS_SETUP_TYPE = setuptools
-+PYTHON_SOCKJS_LICENSE = Apache-2.0
-+PYTHON_SOCKJS_LICENSE_FILES = LICENSE.txt
++PYTHON_AIOHTTP_DEBUGTOOLBAR_VERSION = 0.5.0
++PYTHON_AIOHTTP_DEBUGTOOLBAR_SOURCE = aiohttp-debugtoolbar-$(PYTHON_AIOHTTP_DEBUGTOOLBAR_VERSION).tar.gz
++PYTHON_AIOHTTP_DEBUGTOOLBAR_SITE = https://files.pythonhosted.org/packages/08/b1/b629499450a84e68b53d000e6150ae4dace68ae589c5ac36b6541777c8d3
++PYTHON_AIOHTTP_DEBUGTOOLBAR_SETUP_TYPE = setuptools
++PYTHON_AIOHTTP_DEBUGTOOLBAR_LICENSE = Apache-2.0
++PYTHON_AIOHTTP_DEBUGTOOLBAR_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
