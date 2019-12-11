@@ -1,40 +1,47 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Wed, 11 Dec 2019 21:27:16 +0100
-Subject: [Buildroot] [PATCH] package/libostree: bump to version 2019.6
-Message-ID: <20191211202716.5713-1-marcus.folkesson@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 11 Dec 2019 23:31:56 +0100
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure due to
+ missing host getopt
+In-Reply-To: <20191210122431.122066-1-giulio.benetti@benettiengineering.com>
+References: <20191210122431.122066-1-giulio.benetti@benettiengineering.com>
+Message-ID: <58b985f5-ca9d-8c22-44e1-0754890e61b8@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 12/10/19 1:24 PM, Giulio Benetti wrote:
+> Add host-gengetopt to dependencies since this package require it to
+> generate host install program(nsintall).
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/16449ffc1a5036f020ba5bfea06a52b581b71473/
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index 8d943a2ded..374f278f42 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 9568156d147865f0f744373288039dbde784c0cf1de37fdd2cacf4e950790875  libostree-2019.5.tar.xz
-+sha256 5482b8fc179c6d2861acb176a1c379e4d02f709bffa92e63f5360f65e57219ae  libostree-2019.6.tar.xz
- sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index e10bde68db..bdbe6b5aba 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOSTREE_VERSION_MAJOR = 2019.5
-+LIBOSTREE_VERSION_MAJOR = 2019.6
- LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR)
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION_MAJOR)
+This patch doesn't work. I need to test on RHEL 7.4, the only place 
+where it happens.
+
+Best regards
 -- 
-2.24.0
+Giulio Benetti
+Benetti Engineering sas
+
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   package/libnss/libnss.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+> index ae49dbe1b2..a7fedaa2cd 100644
+> --- a/package/libnss/libnss.mk
+> +++ b/package/libnss/libnss.mk
+> @@ -9,7 +9,7 @@ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+>   LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+>   LIBNSS_DISTDIR = dist
+>   LIBNSS_INSTALL_STAGING = YES
+> -LIBNSS_DEPENDENCIES = libnspr sqlite zlib
+> +LIBNSS_DEPENDENCIES = libnspr sqlite zlib host-gengetopt
+>   LIBNSS_LICENSE = MPL-2.0
+>   LIBNSS_LICENSE_FILES = nss/COPYING
+>   
+> 
