@@ -1,51 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Dec 2019 23:18:15 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/libffi: fix build failure
- with powerpc7
-In-Reply-To: <20a72d62-aecb-be18-9bb7-2f69115e14ba@mind.be>
-References: <20191124090305.1015485-1-fontaine.fabrice@gmail.com>
- <20a72d62-aecb-be18-9bb7-2f69115e14ba@mind.be>
-Message-ID: <20191210231815.5756578e@windsurf.home>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 10 Dec 2019 18:37:37 -0700
+Subject: [Buildroot] [PATCH 1/2] package/python-logstash: new package
+Message-ID: <20191211013738.16566-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Python logging handler for Logstash.
 
-On Tue, 3 Dec 2019 23:53:06 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-logstash/Config.in            |  6 ++++++
+ package/python-logstash/python-logstash.hash |  5 +++++
+ package/python-logstash/python-logstash.mk   | 13 +++++++++++++
+ 5 files changed, 26 insertions(+)
+ create mode 100644 package/python-logstash/Config.in
+ create mode 100644 package/python-logstash/python-logstash.hash
+ create mode 100644 package/python-logstash/python-logstash.mk
 
-> On 24/11/2019 10:03, Fabrice Fontaine wrote:
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/5c9dd8fb3b6a128882b6250f197c80232d8a3b53
-> > 
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>  
-> 
->  Upstream merged a different fix [1] which TBH doesn't look as good... Could you
-> check with upstream what is the better solution?
-> 
->  Regards,
->  Arnout
-> 
-> [1]
-> https://github.com/libffi/libffi/pull/532/commits/2138adb2a5b6a0bc2fe3518e0645eacc89b6f392
-
-Fabrice, have you had the chance to check with upstream what is the
-most correct fix?
-
-Also, your commit title says it fixes it for powerpc7, but the issue
-also appears with older powerpc platforms, and indeed the upstream
-commit says it fixes the issue for powerpc7 and older platforms.
-
-Since the issue pops up quite a lot in the autobuilders, it would be
-nice if we could finalize this patch and merge it.
-
-Thanks,
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 61bcd99d43..c8be10dc92 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1142,6 +1142,7 @@ F:	package/python-aiorwlock/
+ F:	package/python-async-timeout/
+ F:	package/python-brotli/
+ F:	package/python-cchardet/
++F:	package/python-logstash/
+ F:	package/python-multidict/
+ F:	package/python-pycares/
+ F:	package/python-terminaltables/
+diff --git a/package/Config.in b/package/Config.in
+index 307583d01f..cf004fec63 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -963,6 +963,7 @@ menu "External python modules"
+ 	source "package/python-libusb1/Config.in"
+ 	source "package/python-lmdb/Config.in"
+ 	source "package/python-logbook/Config.in"
++	source "package/python-logstash/Config.in"
+ 	source "package/python-lxml/Config.in"
+ 	source "package/python-m2r/Config.in"
+ 	source "package/python-mad/Config.in"
+diff --git a/package/python-logstash/Config.in b/package/python-logstash/Config.in
+new file mode 100644
+index 0000000000..9d225db810
+--- /dev/null
++++ b/package/python-logstash/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_LOGSTASH
++	bool "python-logstash"
++	help
++	  Python logging handler for Logstash.
++
++	  https://github.com/vklochan/python-logstash
+diff --git a/package/python-logstash/python-logstash.hash b/package/python-logstash/python-logstash.hash
+new file mode 100644
+index 0000000000..ba11c7ffaa
+--- /dev/null
++++ b/package/python-logstash/python-logstash.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/python-logstash/json
++md5	26fafa0ea306025fb7644d70cb38982a  python-logstash-0.4.6.tar.gz
++sha256	10943e5df83f592b4d61b63ad1afff855ccc8c9467f78718f0a59809ba1fe68c  python-logstash-0.4.6.tar.gz
++# Locally computed sha256 checksums
++sha256	fea6a5c634ac9d9e047151675adc197c16f45bfba3c26ab113f48fb9fa717fff  LICENSE
+diff --git a/package/python-logstash/python-logstash.mk b/package/python-logstash/python-logstash.mk
+new file mode 100644
+index 0000000000..68930bb1f9
+--- /dev/null
++++ b/package/python-logstash/python-logstash.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-logstash
++#
++################################################################################
++
++PYTHON_LOGSTASH_VERSION = 0.4.6
++PYTHON_LOGSTASH_SITE = https://files.pythonhosted.org/packages/4e/8d/7ff2e8e8e2613e7bb7654790480bb4cf51a55721371adbb631b16cb16dce
++PYTHON_LOGSTASH_SETUP_TYPE = distutils
++PYTHON_LOGSTASH_LICENSE = MIT
++PYTHON_LOGSTASH_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
