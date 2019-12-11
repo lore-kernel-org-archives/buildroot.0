@@ -1,58 +1,83 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Wed, 11 Dec 2019 11:29:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/avro: new package
-In-Reply-To: <CAKcgs2zA9NHEePquvM7FVoOn38f46d4YCPbhM8xzsG6m_xsCSw@mail.gmail.com>
-References: <20191208202503.220908-1-titouan.christophe@railnova.eu>
- <CAKcgs2zA9NHEePquvM7FVoOn38f46d4YCPbhM8xzsG6m_xsCSw@mail.gmail.com>
-Message-ID: <51da0c00-7d19-f466-dc13-f11aa6e19e6f@railnova.eu>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Dec 2019 12:18:36 +0100
+Subject: [Buildroot] [PATCH] package/git: security bump to version 2.24.1
+Message-ID: <20191211111836.25423-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gilles and all,
+Fixes the following security vulnerabilities:
 
-On 12/10/19 8:46 PM, Gilles Talis wrote:
-> Hello Christophe,
-> 
-> Thanks for your contribution
-> 
-> I would be very interested to have other people's opinion on this one,
-> but I think it'd be neater to follow the protobuf "architecture":
-> - one package for protobuf
-> - one package for python-protobuf
-> 
-> Similarly, you could create:
-> - one package for avro-c
-> - one package for python-avro
-> (another package for avro-cpp eventually
+* CVE-2019-1348:
+   The --export-marks option of git fast-import is exposed also via
+   the in-stream command feature export-marks=... and it allows
+   overwriting arbitrary paths.
 
-Because I used the single archive (see your next remark below), I draw 
-inspiration from the alsa-lib package, which provides both the C lib and 
-a python package.
+ * CVE-2019-1349:
+   When submodules are cloned recursively, under certain circumstances
+   Git could be fooled into using the same Git directory twice. We now
+   require the directory to be empty.
 
-> 
-> Moreover, these packages seem to have been nicely separated upstream:
-> - avro-c: https://www-eu.apache.org/dist/avro/avro-1.9.1/c/avro-c-1.9.1.tar.gz
-> - avro-python3:
-> https://www-eu.apache.org/dist/avro/avro-1.9.1/py3/avro-python3-1.9.1.tar.gz
-> 
+ * CVE-2019-1350:
+   Incorrect quoting of command-line arguments allowed remote code
+   execution during a recursive clone in conjunction with SSH URLs.
 
-Shame on me, I did not even notice that these nicely separated archives 
-were distributed upstream. I'll change that and send a new version.
+ * CVE-2019-1351:
+   While the only permitted drive letters for physical drives on
+   Windows are letters of the US-English alphabet, this restriction
+   does not apply to virtual drives assigned via subst <letter>:
+   <path>. Git mistook such paths for relative paths, allowing writing
+   outside of the worktree while cloning.
 
-Using these separated archives would therefore make much more sense in 
-their respective "sections" (python-avro, etc...)
+ * CVE-2019-1352:
+   Git was unaware of NTFS Alternate Data Streams, allowing files
+   inside the .git/ directory to be overwritten during a clone.
 
-> I have not run an exact diff between the avro-src-xxx.tar.gz and the
-> other source packages, but if they match, I would recommend using the
-> "protobuf" method.
-> 
-> Thanks
-> Gilles.
-> 
+ * CVE-2019-1353:
+   When running Git in the Windows Subsystem for Linux (also known as
+   "WSL") while accessing a working directory on a regular Windows
+   drive, none of the NTFS protections were active.
 
-Thanks for your review !
+ * CVE-2019-1354:
+   Filenames on Linux/Unix can contain backslashes. On Windows,
+   backslashes are directory separators. Git did not use to refuse to
+   write out tracked files with such filenames.
 
-Titouan
+ * CVE-2019-1387:
+   Recursive clones are currently affected by a vulnerability that is
+   caused by too-lax validation of submodule names, allowing very
+   targeted attacks via remote code execution in recursive clones.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 40cd8a169f..74bf334b78 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,4 +1,4 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 9f71d61973626d8b28c4cdf8e2484b4bf13870ed643fed982d68b2cfd754371b  git-2.24.0.tar.xz
++sha256 723f24dce8fdd621a308b6187553fce7d5244205c065fe0a3aebd0b7c3f88562  git-2.24.1.tar.xz
+ sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 4fec24bf27..a5c8669fc9 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.24.0
++GIT_VERSION = 2.24.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
+-- 
+2.20.1
