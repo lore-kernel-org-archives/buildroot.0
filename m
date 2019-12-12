@@ -1,38 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Dec 2019 08:45:18 +0100
-Subject: [Buildroot] [git commit] package/dante: add optional libminiupnpc
- dependency
-Message-ID: <20191212074101.5902F81E02@busybox.osuosl.org>
+Date: Thu, 12 Dec 2019 08:43:50 +0100
+Subject: [Buildroot] [git commit] package/dante: remove --without-pam
+Message-ID: <20191212074101.4B1FB887B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcd7b1ce3f3b4ff1c624facafe2de1d302614e14
+commit: https://git.buildroot.net/buildroot/commit/?id=525c22c9831aeb2c3a4ac4d59c117b429a682941
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+--without-pam was wrongly put back when next was merged into master for
+2019.02 in commit 13c43455a05b (Merge branch 'next')
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Peter: mention next merge]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dante/dante.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/dante/dante.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-index 0668042bd8..35b785dc70 100644
+index 0bd036d37e..0668042bd8 100644
 --- a/package/dante/dante.mk
 +++ b/package/dante/dante.mk
-@@ -14,6 +14,13 @@ DANTE_AUTORECONF = YES
+@@ -12,7 +12,7 @@ DANTE_LICENSE_FILES = LICENSE
+ # 0002-compiler.m4-do-not-remove-g-flag.patch touches a m4 file
+ DANTE_AUTORECONF = YES
  
- DANTE_CONF_OPTS += --disable-client --disable-preload
+-DANTE_CONF_OPTS += --disable-client --disable-preload --without-pam
++DANTE_CONF_OPTS += --disable-client --disable-preload
  
-+ifeq ($(BR2_PACKAGE_LIBMINIUPNPC),y)
-+DANTE_DEPENDENCIES += libminiupnpc
-+DANTE_CONF_OPTS += --with-upnp
-+else
-+DANTE_CONF_OPTS += --without-upnp
-+endif
-+
  ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
  DANTE_DEPENDENCIES += linux-pam
- DANTE_CONF_OPTS += --with-pam
