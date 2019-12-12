@@ -1,37 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Dec 2019 17:14:58 +0100
-Subject: [Buildroot] [PATCH 1/2] SDL_mixer: Add option to prefer Tremor
- over libvorbis
-In-Reply-To: <1576166814.3.0@crapouillou.net> (Paul Cercueil's message of
- "Thu, 12 Dec 2019 17:06:54 +0100")
-References: <20191209191554.821230-1-paul@crapouillou.net>
- <1576166814.3.0@crapouillou.net>
-Message-ID: <87y2vhh665.fsf@dell.be.48ers.dk>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Thu, 12 Dec 2019 17:56:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/firmware-imx:
+ bump version to 8.1.1
+In-Reply-To: <6627ce775a5fcc6480467df7d9e265ba@cotds.org>
+References: <20191202200601.418280-1-juju@cotds.org>
+ <CADCpmyNmhhH1UYm3H57hPm2HjfsGSwo9f+zRY-Tm_G0yyEoQkg@mail.gmail.com>
+ <6627ce775a5fcc6480467df7d9e265ba@cotds.org>
+Message-ID: <CADCpmyMEX0FObK8KGRqt+0hzK1Y2OnYYpe2d5OXL0kB0g3bhRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
+Hi Julien,
 
-Hi,
+Le mar. 10 d?c. 2019 ? 22:18, Julien Olivain <juju@cotds.org> a ?crit :
+>
+> Hi Gary,
+>
+> On 2019-12-10 12:16, Gary Bisson wrote:
+> > Hi Julien,
+> >
+> > Le lun. 2 d?c. 2019 ? 21:06, Julien Olivain <juju@cotds.org> a ?crit :
+> >>
+> >> This version is aligned with i.MX NXP BSP components version
+> >> rel_imx_4.14.98_2.0.0_ga
+> >
+> > Why not update to latest version 8.3 [1] (4.14.98_2.1.0 BSP from last
+> > July)?
+> > Any known issue with it?
+> >
+> > Regards,
+> > Gary
+> >
+> > [1]
+> > https://source.codeaurora.org/external/imx/meta-fsl-bsp-release/tree/imx/meta-bsp/recipes-bsp/firmware-imx/firmware-imx_8.3.bb?h=rel_imx_4.14.98_2.1.0
+>
+> I will give the same answer I gave to Fabio [1], for
+> freescale_imx8mqevk_defconfig.
+>
+>  From experience, aligning FSL/NXP component version altogether will
+> reduce the risk of unexpected behaviors. Sometimes, an update in a
+> firmware has its counterpart somewhere else (kernel, lib...). This is
+> why I'm suggesting this specific version, to stay on
+> rel_imx_4.14.98_2.0.0_ga.
+>
+> Some time ago, all FSL components were tagged with same BSP release
+> name. So updating all the packages at once was easier.
 
- >> > +ifeq ($(BR2_PACKAGE_SDL_MIXER_USE_TREMOR),y)
- >> > +SDL_MIXER_CONF_OPTS += --enable-music-ogg-tremor
- >> > +SDL_MIXER_DEPENDENCIES += tremor
- >> > +else
- >> >  ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
- >> 
- >> Do we need an explicit option for this? Can't we just check for
- >> BR2_PACKAGE_TREMOR here? I doubt there is any situations where
- >> tremor is
- >> enabled but the user doesn't want to use it.
+Ok, sounds reasonable indeed.
 
- > That's up to you really. I can send a v2 with the Config.in option
- > removed.
-
-Yes please - Thanks.
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Gary
