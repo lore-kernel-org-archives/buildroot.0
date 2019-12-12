@@ -1,57 +1,159 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Thu, 12 Dec 2019 07:16:17 -0300
-Subject: [Buildroot] [PATCH] libqmi: bump to version 1.24.2
-In-Reply-To: <20191212091457.1943616-1-aleksander@aleksander.es>
-References: <20191212091457.1943616-1-aleksander@aleksander.es>
-Message-ID: <CAJ4jsacbKNaiwBmn6b-hGvmcxFg9BkxUWi7eqQhgVh5F=xRYnw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 12 Dec 2019 11:19:20 +0100
+Subject: [Buildroot] [PATCH v4 01/13] new recipe : host-systemd
+In-Reply-To: <20191212075400.1499536-2-jeremy.rosen@smile.fr>
+References: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
+ <20191212075400.1499536-2-jeremy.rosen@smile.fr>
+Message-ID: <20191212111920.297bdca6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 12, 2019 at 6:15 AM Aleksander Morgado
-<aleksander@aleksander.es> wrote:
->
-> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> ---
->
-> Hey!
->
-> There was a patch suggested for libqmi 1.24.0 in buildroot that didn't get merged yet, but it is no longer required with 1.24.2 as it was already included upstream, so please make sure it's dropped:
-> https://patchwork.ozlabs.org/patch/1186596/
->
-> Cheers!
->
-> ---
->  package/libqmi/libqmi.hash | 2 +-
->  package/libqmi/libqmi.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-> index b0a703f3bd..6936fa6de9 100644
-> --- a/package/libqmi/libqmi.hash
-> +++ b/package/libqmi/libqmi.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed:
-> -sha256 aeb69f90c273467cce246176cba0967c6413f1995a976992770a597c4fe28c79  libqmi-1.24.0.tar.xz
-> +sha256 4ae4e476f960dbc0d04b1c0368776eb78edffd4421f3e4c074bb2bfb6375b282  libqmi-1.24.2.tar.xz
->  sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-> index 62aa176e4f..51ddd2745f 100644
-> --- a/package/libqmi/libqmi.mk
-> +++ b/package/libqmi/libqmi.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -LIBQMI_VERSION = 1.24.0
-> +LIBQMI_VERSION = 1.24.2
->  LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
->  LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
->  LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
-> --
-> 2.24.0
+Hello,
 
-Tested-by: Carlos Santos <unixmania@gmail.com>
+Thanks for this work, very useful!
+
+On Thu, 12 Dec 2019 08:53:48 +0100
+J?r?my Rosen <jeremy.rosen@smile.fr> wrote:
+
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 8f1d6fc0c0..81761b33a4 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -199,7 +199,6 @@ config BR2_PACKAGE_SYSTEMD_HOSTNAMED
+>  config BR2_PACKAGE_SYSTEMD_HWDB
+>  	bool "enable hwdb installation"
+>  	default y
+> -	select BR2_PACKAGE_HOST_EUDEV # for udevadm, during target-finalize
+>  	help
+>  	  Enables hardware database installation to /usr/lib/udev/hwdb.d
+>  
+> diff --git a/package/systemd/Config.in.host b/package/systemd/Config.in.host
+> new file mode 100644
+> index 0000000000..219f24239e
+> --- /dev/null
+> +++ b/package/systemd/Config.in.host
+> @@ -0,0 +1,3 @@
+> +# Select this if you need host systemd tools (e.g. systemctl)
+> +config BR2_PACKAGE_HOST_SYSTEMD
+> +	bool
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index a292a7512b..ad16b58ceb 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -204,6 +204,11 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_HWDB),y)
+>  SYSTEMD_CONF_OPTS += -Dhwdb=true
+> +define SYSTEMD_BUILD_HWDB
+> +	$(HOST_DIR)/bin/udevadm hwdb --update --root $(TARGET_DIR)
+> +endef
+
+I think this change could be a separate patch, no? Or is the udevadm
+binary installed by host-systemd conflicting with the one installed by
+host-eudev ?
+
+Should be explained in the commit log.
+
+> +SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_BUILD_HWDB
+> +
+>  else
+>  SYSTEMD_CONF_OPTS += -Dhwdb=false
+>  endif
+> @@ -551,3 +556,96 @@ SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
+>  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
+>  
+>  $(eval $(meson-package))
+
+We normally have both meson-package and host-meson-package macro
+invocations at the end of .mk files.
+
+> +#
+> +# Host-systemd configuration
+> +#
+> +#Options tweaked for buildroot
+> +HOST_SYSTEMD_CONF_OPTS= \
+> +	-Dsplit-bin=true \
+> +	-Dsplit-usr=false \
+> +	--prefix=/usr \
+
+This should really be:
+
+	--prefix=$(HOST_DIR)
+
+> +	--libdir=lib \
+> +	--sysconfdir=/etc \
+> +	--localstatedir=/var
+
+But in fact, all these options are already passed by the
+host-meson-package infrastructure. Why are you overriding them ?
+
+> +#disable everything else
+
+Space after #
+
+> +HOST_SYSTEMD_CONF_OPTS+= \
+
+Space before +=
+
+
+> +HOST_SYSTEMD_DEPENDENCIES = \
+> +	host-util-linux \
+> +	host-patchelf \
+> +	host-libcap \
+> +	host-gperf
+> +
+> +# Fix RPATH After installation
+> +# * systemd provides a install_rpath instruction to meson because the binaries need to link with
+> +#   libsystemd which is not in a standard path
+> +# * meson can only replace the RPATH, not append to it
+> +# * the original rpatch is thus lost.
+
+rpatch -> rpath
+
+> +# * the original path had been tweaked by buildroot vial LD_FLAGS to add $(HOST_DIR)/lib
+
+vial -> via
+
+LD_FLAGS -> LDFLAGS
+
+> +# * thus re-tweak rpath after the installation for all binaries that need it
+
+I must admit I don't really understand what's going on here. Can't you
+simply do something like this:
+
+HOST_SYSTEMD_CONF_ENV = \
+	LDFLAGS="$(HOST_LDFLAGS) -Wl,-rpath,$(HOST_DIR)/lib/systemd"
+
+and that's it ?
+
+> +#buildroot detects incorrect RPATH, so adding new binaries should be safe (it won't compile
+> +#unless properly integrated).
+
+Space after #, and lines are too long.
+
+> +HOST_SYSTEMD_HOST_TOOLS = \
+> +	systemd-analyze  systemd-mount systemctl udevadm
+> +
+> +define HOST_SYSTEMD_FIX_RPATH
+> +	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
+> +		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
+> +	)
+> +endef
+> +
+> +HOST_SYSTEMD_POST_INSTALL_HOOKS +=  HOST_SYSTEMD_FIX_RPATH
+> +HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+
+With the correct --prefix=$(HOST_DIR) passed by the default
+host-meson-package infrastructure, this DESTDIR=$(HOST_DIR) should no
+longer be necessary.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
