@@ -1,68 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Dec 2019 11:14:38 +0100
-Subject: [Buildroot] [PATCH v4 00/13] use host-systemd to enable units
-In-Reply-To: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
-References: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
-Message-ID: <20191212111438.562923cb@windsurf>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Thu, 12 Dec 2019 07:16:17 -0300
+Subject: [Buildroot] [PATCH] libqmi: bump to version 1.24.2
+In-Reply-To: <20191212091457.1943616-1-aleksander@aleksander.es>
+References: <20191212091457.1943616-1-aleksander@aleksander.es>
+Message-ID: <CAJ4jsacbKNaiwBmn6b-hGvmcxFg9BkxUWi7eqQhgVh5F=xRYnw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello J?r?my,
+On Thu, Dec 12, 2019 at 6:15 AM Aleksander Morgado
+<aleksander@aleksander.es> wrote:
+>
+> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+> ---
+>
+> Hey!
+>
+> There was a patch suggested for libqmi 1.24.0 in buildroot that didn't get merged yet, but it is no longer required with 1.24.2 as it was already included upstream, so please make sure it's dropped:
+> https://patchwork.ozlabs.org/patch/1186596/
+>
+> Cheers!
+>
+> ---
+>  package/libqmi/libqmi.hash | 2 +-
+>  package/libqmi/libqmi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+> index b0a703f3bd..6936fa6de9 100644
+> --- a/package/libqmi/libqmi.hash
+> +++ b/package/libqmi/libqmi.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed:
+> -sha256 aeb69f90c273467cce246176cba0967c6413f1995a976992770a597c4fe28c79  libqmi-1.24.0.tar.xz
+> +sha256 4ae4e476f960dbc0d04b1c0368776eb78edffd4421f3e4c074bb2bfb6375b282  libqmi-1.24.2.tar.xz
+>  sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+> diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+> index 62aa176e4f..51ddd2745f 100644
+> --- a/package/libqmi/libqmi.mk
+> +++ b/package/libqmi/libqmi.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -LIBQMI_VERSION = 1.24.0
+> +LIBQMI_VERSION = 1.24.2
+>  LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+>  LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+>  LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+> --
+> 2.24.0
 
-I have a very minor comment, no need to resend just for that: I'd like
-the commit titles to be a bit nicer. See below for some suggestions.
-
-On Thu, 12 Dec 2019 08:53:47 +0100
-J?r?my Rosen <jeremy.rosen@smile.fr> wrote:
-
-> J?r?my Rosen (13):
->   new recipe : host-systemd
-
-Should be:
-
-	package/systemd: add host variant
-
->   use host-systemctl preset all to enable units
-
-	package/systemd: use host-systemctl preset-all to enable units
-
->   fix tty handling
-
-	package/systemd: fix tty handling
-
->   fix trivial packages with buildroot-provided services
-
-	package: rely on systemctl preset-all for buildroot-provided services
-
->   fix trivial cases, upstream-provided services
-
-	package: rely on systemctl preset-all for upstream-provided services
-
->   package/connman: adapt to preset-all
-
-	package/commman: adapt to systemctl preset-all
-
->   package/linuxptp adapt to preset-all
->   package/network-manager: adapt to preset-all
->   package/wpa_supplicant: adapt for preset-all
-
-Ditto for those ones.
-
->   package/sysrepo: update to new systemd
->   package/syslog-ng: implement default using DefaultInstance
->   package/rauc: add a WantedBy section to the unit
->   package/alsa-utils: add a WantedBy section to the unit
-
-In those last three ones, perhaps have "systemd" somewhere in the
-commit title.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Tested-by: Carlos Santos <unixmania@gmail.com>
