@@ -1,155 +1,164 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Thu, 12 Dec 2019 13:41:42 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/avro-c: new package
-In-Reply-To: <20191212124143.220947-1-titouan.christophe@railnova.eu>
-References: <20191212124143.220947-1-titouan.christophe@railnova.eu>
-Message-ID: <20191212124143.220947-2-titouan.christophe@railnova.eu>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Thu, 12 Dec 2019 09:58:25 -0300
+Subject: [Buildroot] [PATCH] modem-manager: bump to version 1.12.2
+In-Reply-To: <CAAP7ucLxYCT=+j+2dEhLBKAuB74gjDdyA5Obz4Rk=LvgNaxXtw@mail.gmail.com>
+References: <20191212093325.2178579-1-aleksander@aleksander.es>
+ <CAJ4jsafsOvYMfXBpMipUSz69G=+PHLV59UzN1FvGnYyrr2L1RQ@mail.gmail.com>
+ <CAAP7ucLxYCT=+j+2dEhLBKAuB74gjDdyA5Obz4Rk=LvgNaxXtw@mail.gmail.com>
+Message-ID: <CAJ4jsadmZEQwQdt0tr=apUw-pJN5zxJBsN1ZDksYFHnn8F1A5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- DEVELOPERS                                |  1 +
- package/Config.in                         |  1 +
- package/avro-c/0001-Compile-on-musl.patch | 39 +++++++++++++++++++++++
- package/avro-c/Config.in                  | 20 ++++++++++++
- package/avro-c/avro-c.hash                |  6 ++++
- package/avro-c/avro-c.mk                  | 14 ++++++++
- 6 files changed, 81 insertions(+)
- create mode 100644 package/avro-c/0001-Compile-on-musl.patch
- create mode 100644 package/avro-c/Config.in
- create mode 100644 package/avro-c/avro-c.hash
- create mode 100644 package/avro-c/avro-c.mk
+On Thu, Dec 12, 2019 at 7:50 AM Aleksander Morgado
+<aleksander@aleksander.es> wrote:
+>
+> Hey!
+>
+> > >
+> > > Also include a patch that solves build issues detected in 1.12.0, e.g.:
+> > > http://lists.busybox.net/pipermail/buildroot/2019-December/268817.html
+> > > http://autobuild.buildroot.net/results/5ac390b2a813cadb4cb180d61bb05f6fe4407155/build-end.log
+> > >
+> > > Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+> > > ---
+> > >
+> > > Hey!
+> > >
+> > > This version bump to 1.12.2 also includes a patch required to build correctly when using strict library link ordering. Adding this patch requires triggering autoreconf. The patch is already included in the upstream MM repo, so the next 1.12.4 release will also include it (whenever that is, not scheduled yet).
+> > >
+> > > Cheers!
+> > >
+> > > ---
+> > >  ...ix-order-of-linked-libs-in-test-apps.patch | 40 +++++++++++++++++++
+> > >  package/modem-manager/modem-manager.hash      |  2 +-
+> > >  package/modem-manager/modem-manager.mk        |  5 ++-
+> > >  3 files changed, 45 insertions(+), 2 deletions(-)
+> > >  create mode 100644 package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch
+> > >
+> > > diff --git a/package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch b/package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch
+> > > new file mode 100644
+> > > index 0000000000..d58960ce57
+> > > --- /dev/null
+> > > +++ b/package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch
+> > > @@ -0,0 +1,40 @@
+> > > +From 52cfd6788e4d12f3c2ea302e66bcc80c5efd80ee Mon Sep 17 00:00:00 2001
+> > > +From: Aleksander Morgado <aleksander@aleksander.es>
+> > > +Date: Wed, 11 Dec 2019 16:09:25 +0100
+> > > +Subject: [PATCH] build: fix order of linked libs in test apps
+> > > +
+> > > +Solving build issues with truly strict linkers, as in:
+> > > +http://lists.busybox.net/pipermail/buildroot/2019-December/268817.html
+> > > +
+> > > +Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+> > > +---
+> > > + test/Makefile.am | 4 ++--
+> > > + 1 file changed, 2 insertions(+), 2 deletions(-)
+> > > +
+> > > +diff --git a/test/Makefile.am b/test/Makefile.am
+> > > +index ba737bc5..20e2a068 100644
+> > > +--- a/test/Makefile.am
+> > > ++++ b/test/Makefile.am
+> > > +@@ -87,8 +87,8 @@ mmsmspdu_CPPFLAGS = \
+> > > +
+> > > + mmsmspdu_LDADD = \
+> > > +       $(MM_LIBS) \
+> > > +-      $(top_builddir)/src/libhelpers.la \
+> > > +       $(top_builddir)/libmm-glib/libmm-glib.la \
+> > > ++      $(top_builddir)/src/libhelpers.la \
+> > > +       $(NULL)
+> > > +
+> > > + ################################################################################
+> > > +@@ -112,8 +112,8 @@ mmsmsmonitor_CPPFLAGS = \
+> > > +
+> > > + mmsmsmonitor_LDADD = \
+> > > +       $(MM_LIBS) \
+> > > +-      $(top_builddir)/src/libhelpers.la \
+> > > +       $(top_builddir)/libmm-glib/libmm-glib.la \
+> > > ++      $(top_builddir)/src/libhelpers.la \
+> > > +       $(NULL)
+> > > +
+> > > + ################################################################################
+> > > +--
+> > > +2.24.0
+> > > +
+> > > diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+> > > index b1fef98fe2..a3925bb4a2 100644
+> > > --- a/package/modem-manager/modem-manager.hash
+> > > +++ b/package/modem-manager/modem-manager.hash
+> > > @@ -1,4 +1,4 @@
+> > >  # Locally computed
+> > > -sha256  3daca86164145fffb589939433f596c13fa077c9a187c0d5820fdd5b4e4a6424  ModemManager-1.12.0.tar.xz
+> > > +sha256  4f76d2bdd0ed6780837cdde886eaf535f9770f9daa1ff92e63658d06aa5d25ea  ModemManager-1.12.2.tar.xz
+> > >  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> > >  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+> > > diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+> > > index b5aa7914f6..8aa9f36766 100644
+> > > --- a/package/modem-manager/modem-manager.mk
+> > > +++ b/package/modem-manager/modem-manager.mk
+> > > @@ -4,7 +4,7 @@
+> > >  #
+> > >  ################################################################################
+> > >
+> > > -MODEM_MANAGER_VERSION = 1.12.0
+> > > +MODEM_MANAGER_VERSION = 1.12.2
+> > >  MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+> > >  MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+> > >  MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+> > > @@ -13,6 +13,9 @@ MODEM_MANAGER_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
+> > >  MODEM_MANAGER_INSTALL_STAGING = YES
+> > >  MODEM_MANAGER_CONF_OPTS = --disable-more-warnings
+> > >
+> > > +# 0001-build-fix-order-of-linked-libs-in-test-apps.patch
+> > > +MODEM_MANAGER_AUTORECONF = YES
+> > > +
+> > >  ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
+> > >  MODEM_MANAGER_DEPENDENCIES += libqmi
+> > >  MODEM_MANAGER_CONF_OPTS += --with-qmi
+> > > --
+> > > 2.24.0
+> >
+> > I still see an error similar to the one in
+> > http://autobuild.buildroot.net/results/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/
+> > in a clean build after applying the patch to bump libqmi o 1.24.2 and
+> > this one:
+> >
+>
+> Did you run autoreconf in srcdir after applying the patch manually?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 66964d035d..639bd21904 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2399,6 +2399,7 @@ N:	Timo Ketola <timo.ketola@exertus.fi>
- F:	package/fbgrab/
- 
- N:	Titouan Christophe <titouan.christophe@railnova.eu>
-+F:	package/avro-c/
- F:	package/mosquitto/
- F:	package/redis/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 405732bc7a..29eaf043cd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1708,6 +1708,7 @@ menu "Other"
- 	source "package/argp-standalone/Config.in"
- 	source "package/armadillo/Config.in"
- 	source "package/atf/Config.in"
-+	source "package/avro-c/Config.in"
- 	source "package/bctoolbox/Config.in"
- 	source "package/bdwgc/Config.in"
- 	source "package/boost/Config.in"
-diff --git a/package/avro-c/0001-Compile-on-musl.patch b/package/avro-c/0001-Compile-on-musl.patch
-new file mode 100644
-index 0000000000..2f1b0f62db
---- /dev/null
-+++ b/package/avro-c/0001-Compile-on-musl.patch
-@@ -0,0 +1,39 @@
-+From 55a5ad94c77896eb25e2c7ed024d78a0a2c09007 Mon Sep 17 00:00:00 2001
-+From: Titouan Christophe <titouan.christophe@railnova.eu>
-+Date: Sun, 8 Dec 2019 01:55:59 +0100
-+Subject: [PATCH 1/1] Allow avro C to be built on musl based systems.
-+
-+The type `ssize_t` is defined in sys/types.h, and nowhere else
-+in the musl standard C library, so it should be included for the
-+compilation to succeed.
-+
-+This fixes several errors like:
-+
-+    In file included from src/generic.c:29:0:
-+    src/generic.c: In function 'avro_generic_value_new':
-+    src/avro_generic_internal.h:63:39:
-+        error: 'ssize_t' undeclared (first use in this function);
-+               did you mean 'size_t'?
-+
-+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-+[Upstream status: https://github.com/apache/avro/pull/740]
-+---
-+ src/avro_generic_internal.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/avro_generic_internal.h b/src/avro_generic_internal.h
-+index 709403c0..9843ed65 100644
-+--- a/src/avro_generic_internal.h
-++++ b/src/avro_generic_internal.h
-+@@ -24,6 +24,8 @@ extern "C" {
-+ #define CLOSE_EXTERN
-+ #endif
-+ 
-++#include <sys/types.h>
-++
-+ #include "avro/generic.h"
-+ #include "avro/schema.h"
-+ #include "avro/value.h"
-+-- 
-+2.21.0
-+
-diff --git a/package/avro-c/Config.in b/package/avro-c/Config.in
-new file mode 100644
-index 0000000000..a21446186a
---- /dev/null
-+++ b/package/avro-c/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_AVRO_C
-+	bool "avro"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_JANSSON
-+	help
-+	  Select this option to install the Avro C language bindings,
-+	  and the command line tools avroappend, avrocat, avromod and
-+	  avropipe.
-+
-+	  Apache Avro is a data serialization system.
-+	  Avro provides:
-+	  - Rich data structures.
-+	  - A compact, fast, binary data format.
-+	  - A container file, to store persistent data.
-+	  - Remote procedure call (RPC).
-+	  - Simple integration with dynamic languages.
-+	  - Code generation is not required to read or write data
-+	    files nor to use or implement RPC protocols.
-+	  - Code generation as an optional optimization,
-+	    only worth implementing for statically typed languages.
-diff --git a/package/avro-c/avro-c.hash b/package/avro-c/avro-c.hash
-new file mode 100644
-index 0000000000..239cb36f57
---- /dev/null
-+++ b/package/avro-c/avro-c.hash
-@@ -0,0 +1,6 @@
-+# From https://www-eu.apache.org/dist/avro/avro-1.9.1/c/avro-c-1.9.1.tar.gz.sha512
-+sha512 68b1f44f870c9b6f0b2380da9e34d91148ff4398cb300f4bdd4e3e1ad00820acd9084b73232b00d4cd4935fb992b41dc65afdafcbea14a3d87259608688df904  avro-c-1.9.1.tar.gz
-+
-+# License files
-+sha256 d62488d6ba17132e92c23c03c80bfedc848267f96ab36489fec860f76cf6819a  LICENSE
-+sha256 92f7a23b4d6f91c27f5dc089fa2f30c9b4b13ac5b7cf872b351752463e7f9d4d  NOTICE
-diff --git a/package/avro-c/avro-c.mk b/package/avro-c/avro-c.mk
-new file mode 100644
-index 0000000000..2ca01ecef5
---- /dev/null
-+++ b/package/avro-c/avro-c.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# avro-c
-+#
-+################################################################################
-+
-+AVRO_C_VERSION = 1.9.1
-+AVRO_C_SITE = https://www-eu.apache.org/dist/avro/avro-$(AVRO_C_VERSION)/c
-+AVRO_C_LICENSE = Apache-2.0
-+AVRO_C_LICENSE_FILES = LICENSE NOTICE
-+AVRO_C_INSTALL_STAGING = YES
-+AVRO_C_DEPENDENCIES = jansson
-+
-+$(eval $(cmake-package))
+2019-12-12T07:30:18 Applying
+0001-build-fix-order-of-linked-libs-in-test-apps.patch using patch:
+2019-12-12T07:30:18 patching file test/Makefile.am
+2019-12-12T07:30:18 >>> modem-manager 1.12.2 Updating config.sub and
+config.guess
+2019-12-12T07:30:18 for file in config.guess config.sub; do for i in
+$(find /work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/build/modem-manager-1.12.2
+-name $file); do cp support/gnuconfig/$file $i; done; done
+2019-12-12T07:30:18 >>> modem-manager 1.12.2 Configuring
+2019-12-12T07:30:18 >>> modem-manager 1.12.2 Autoreconfiguring
+
+> Not sure how that would be done when rebuilding using the
+> br-reproduce-build setup.
+
+I don't use br-reproduce-build setup. I just applied the patches on
+buildroot using git am ran a build using the same defconfig of build
+0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a.
+
+> Can you tell me what's the value of mmsmspdu_DEPENDENCIES in the
+> "test/Makefile" file you have in your build? It should be something
+> like this:
+> mmsmspdu_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+>         $(top_builddir)/libmm-glib/libmm-glib.la \
+>         $(top_builddir)/src/libhelpers.la
+>
+>
+> (i.e. libmm-glib.la listed before libhelpers.la)
+
+mmsmspdu_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+        $(top_builddir)/libmm-glib/libmm-glib.la \
+        $(top_builddir)/src/libhelpers.la
+
 -- 
-2.23.0
+Carlos Santos <unixmania@gmail.com>
