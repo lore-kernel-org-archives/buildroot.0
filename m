@@ -1,47 +1,29 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 11 Dec 2019 23:31:56 +0100
-Subject: [Buildroot] [PATCH] package/libnss: fix build failure due to
- missing host getopt
-In-Reply-To: <20191210122431.122066-1-giulio.benetti@benettiengineering.com>
-References: <20191210122431.122066-1-giulio.benetti@benettiengineering.com>
-Message-ID: <58b985f5-ca9d-8c22-44e1-0754890e61b8@benettiengineering.com>
+From: rscr <rafacrespiramon@gmail.com>
+Date: Thu, 12 Dec 2019 00:59:37 -0600 (CST)
+Subject: [Buildroot] Custom tarball and .config file
+In-Reply-To: <1575986333615-0.post@n4.nabble.com>
+References: <1575964472511-0.post@n4.nabble.com>
+ <20191210141145.5969eb63@windsurf> <1575986333615-0.post@n4.nabble.com>
+Message-ID: <1576133977989-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/10/19 1:24 PM, Giulio Benetti wrote:
-> Add host-gengetopt to dependencies since this package require it to
-> generate host install program(nsintall).
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/16449ffc1a5036f020ba5bfea06a52b581b71473/
+Hello, 
 
-This patch doesn't work. I need to test on RHEL 7.4, the only place 
-where it happens.
+I have realised that in /dl directory I had an old linux kernel version that
+I was not cleaned with "distclean", so I think buildroot was using all time
+that version, which did not include the kernel driver yet.
 
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+So first I will clean correctly the /dl directory and I will try again
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   package/libnss/libnss.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-> index ae49dbe1b2..a7fedaa2cd 100644
-> --- a/package/libnss/libnss.mk
-> +++ b/package/libnss/libnss.mk
-> @@ -9,7 +9,7 @@ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
->   LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
->   LIBNSS_DISTDIR = dist
->   LIBNSS_INSTALL_STAGING = YES
-> -LIBNSS_DEPENDENCIES = libnspr sqlite zlib
-> +LIBNSS_DEPENDENCIES = libnspr sqlite zlib host-gengetopt
->   LIBNSS_LICENSE = MPL-2.0
->   LIBNSS_LICENSE_FILES = nss/COPYING
->   
-> 
+Kind Regards, 
+
+Rafa
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
