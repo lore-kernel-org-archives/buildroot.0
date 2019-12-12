@@ -1,42 +1,54 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Thu, 12 Dec 2019 08:53:59 +0100
-Subject: [Buildroot] [PATCH v4 12/13] package/rauc: add a WantedBy section
- to the unit
+Date: Thu, 12 Dec 2019 08:53:55 +0100
+Subject: [Buildroot] [PATCH v4 08/13] package/network-manager: adapt to
+ preset-all
 In-Reply-To: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
 References: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
-Message-ID: <20191212075400.1499536-13-jeremy.rosen@smile.fr>
+Message-ID: <20191212075400.1499536-9-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-upstream-provided service has no WantedBy, which means that rauc won't
-be enabled by default
+NM has three services
+* NetworkManger.service : the main daemon
+* NetworkManger-dispatcher.service : a daemon handling network callbacks
+* NetworkManager-wait-online.service : sync of other services with network-online
 
-Add a WantedBy instead of manually creating the symlink so the user can
-enable/disable the unit properly
+Only the first two were activated. We now also enable
+wait-online. Not enabling it was probably a bug.
 
+Note that buildroot adds an alias dbus-org.freedesktop.NetworkManager
+Adding an alias that is not known upstream is not clean,
+but I left it for backward compatibility
+
+Reviewed-by: Yann E.MORIN <yann.morin.1998@free.fr>
 Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 ---
- package/rauc/rauc.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/network-manager/network-manager.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index f3434e9c9a..7b35154f56 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -31,9 +31,8 @@ RAUC_DEPENDENCIES += systemd
- endif
- 
- define RAUC_INSTALL_INIT_SYSTEMD
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../../lib/systemd/system/rauc.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rauc.service
-+	mkdir $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d;\
-+	printf '[Install]\nWantedBy=multi-user.target\n' > $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d/buildroot-enable.conf;
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 7de2c220fe..56b768cdef 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -88,16 +88,9 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSV
  endef
  
- HOST_RAUC_DEPENDENCIES = \
+ define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-
+ 	ln -sf /usr/lib/systemd/system/NetworkManager.service \
+ 		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
+ 
+-	ln -sf /usr/lib/systemd/system/NetworkManager.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager.service
+-
+-	ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
+-		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+ endef
+ 
+ $(eval $(autotools-package))
 -- 
 2.24.0
