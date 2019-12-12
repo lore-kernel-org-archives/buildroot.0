@@ -1,57 +1,68 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 12 Dec 2019 11:08:18 +0100
-Subject: [Buildroot] [RFC PATCH] autotools: do not overwrite first
- include path
-In-Reply-To: <20191212085748.13802-1-michael@walle.cc>
-References: <20191212085748.13802-1-michael@walle.cc>
-Message-ID: <e0d4cf57-a035-1b59-1aa2-5ce0122587ca@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 12 Dec 2019 11:14:38 +0100
+Subject: [Buildroot] [PATCH v4 00/13] use host-systemd to enable units
+In-Reply-To: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
+References: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
+Message-ID: <20191212111438.562923cb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello J?r?my,
 
-On 12/12/19 9:57 AM, Michael Walle wrote:
-> The first include path is special in aclocal. For example it is the path
-> for the --install option. Also, the first include is treated in a
-> special way if it doesn't exists. This might be the case if there is the
-> following construct:
-> 
->    configure.ac: AC_CONFIG_MACRO_DIR([m4])
->    Makefile.am: ACLOCAL_AMFLAGS="-I m4"
-> 
-> If the package doesn't have local macros, the m4/ directory might not
-> exist. aclocal will then just issue a warning instead of aborting the
-> execution with a fatal error. See discussion here:
->    https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=565663
-> 
-> Don't use the "-I" option in aclocal. Instead use ACLOCAL_PATH to pass
-> the system-wide include dirs.
-> 
-> As a side effect this should fix the use of $(ACLOCAL) alone. Up until
-> now, $(ACLOCAL) didn't include the ACLOCAL_HOST_DIR system include path.
-> 
-> autoreconf will pass the "-I" options to every tool it runs. So move the
-> argument to each individual tool except aclocal.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+I have a very minor comment, no need to resend just for that: I'd like
+the commit titles to be a bit nicer. See below for some suggestions.
 
-I made a test by removing the $(pkg)_POST_PATCH_HOOKS for the following 
-packages:
+On Thu, 12 Dec 2019 08:53:47 +0100
+J?r?my Rosen <jeremy.rosen@smile.fr> wrote:
 
-- atest
-- davici
-- libscsi
-- ltrace
-- minicom
-- open-lldp
-- openpgm
-- pdbg
+> J?r?my Rosen (13):
+>   new recipe : host-systemd
 
-The result is that all this packages still build without this hook.
+Should be:
 
---
-Heiko
+	package/systemd: add host variant
+
+>   use host-systemctl preset all to enable units
+
+	package/systemd: use host-systemctl preset-all to enable units
+
+>   fix tty handling
+
+	package/systemd: fix tty handling
+
+>   fix trivial packages with buildroot-provided services
+
+	package: rely on systemctl preset-all for buildroot-provided services
+
+>   fix trivial cases, upstream-provided services
+
+	package: rely on systemctl preset-all for upstream-provided services
+
+>   package/connman: adapt to preset-all
+
+	package/commman: adapt to systemctl preset-all
+
+>   package/linuxptp adapt to preset-all
+>   package/network-manager: adapt to preset-all
+>   package/wpa_supplicant: adapt for preset-all
+
+Ditto for those ones.
+
+>   package/sysrepo: update to new systemd
+>   package/syslog-ng: implement default using DefaultInstance
+>   package/rauc: add a WantedBy section to the unit
+>   package/alsa-utils: add a WantedBy section to the unit
+
+In those last three ones, perhaps have "systemd" somewhere in the
+commit title.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
