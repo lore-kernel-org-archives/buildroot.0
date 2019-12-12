@@ -1,63 +1,53 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Thu, 12 Dec 2019 14:14:47 +0100
-Subject: [Buildroot] [PATCH] modem-manager: bump to version 1.12.2
-In-Reply-To: <CAJ4jsadmZEQwQdt0tr=apUw-pJN5zxJBsN1ZDksYFHnn8F1A5A@mail.gmail.com>
-References: <20191212093325.2178579-1-aleksander@aleksander.es>
- <CAJ4jsafsOvYMfXBpMipUSz69G=+PHLV59UzN1FvGnYyrr2L1RQ@mail.gmail.com>
- <CAAP7ucLxYCT=+j+2dEhLBKAuB74gjDdyA5Obz4Rk=LvgNaxXtw@mail.gmail.com>
- <CAJ4jsadmZEQwQdt0tr=apUw-pJN5zxJBsN1ZDksYFHnn8F1A5A@mail.gmail.com>
-Message-ID: <CAAP7ucJR+0h_pJfD63eOvWiYqtHT1GyRpBtpjSPqMtw_gPhudw@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 12 Dec 2019 10:24:37 -0300
+Subject: [Buildroot] [PATCH] configs/imx7d-sdb: Bump U-Boot and kernel
+ versions
+Message-ID: <20191212132437.12001-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > >
-> > > I still see an error similar to the one in
-> > > http://autobuild.buildroot.net/results/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/
-> > > in a clean build after applying the patch to bump libqmi o 1.24.2 and
-> > > this one:
-> > >
-> >
-> > Did you run autoreconf in srcdir after applying the patch manually?
->
-> 2019-12-12T07:30:18 Applying
-> 0001-build-fix-order-of-linked-libs-in-test-apps.patch using patch:
-> 2019-12-12T07:30:18 patching file test/Makefile.am
-> 2019-12-12T07:30:18 >>> modem-manager 1.12.2 Updating config.sub and
-> config.guess
-> 2019-12-12T07:30:18 for file in config.guess config.sub; do for i in
-> $(find /work/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/build/modem-manager-1.12.2
-> -name $file); do cp support/gnuconfig/$file $i; done; done
-> 2019-12-12T07:30:18 >>> modem-manager 1.12.2 Configuring
-> 2019-12-12T07:30:18 >>> modem-manager 1.12.2 Autoreconfiguring
->
-> > Not sure how that would be done when rebuilding using the
-> > br-reproduce-build setup.
->
-> I don't use br-reproduce-build setup. I just applied the patches on
-> buildroot using git am ran a build using the same defconfig of build
-> 0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a.
->
-> > Can you tell me what's the value of mmsmspdu_DEPENDENCIES in the
-> > "test/Makefile" file you have in your build? It should be something
-> > like this:
-> > mmsmspdu_DEPENDENCIES = $(am__DEPENDENCIES_1) \
-> >         $(top_builddir)/libmm-glib/libmm-glib.la \
-> >         $(top_builddir)/src/libhelpers.la
-> >
-> >
-> > (i.e. libmm-glib.la listed before libhelpers.la)
->
-> mmsmspdu_DEPENDENCIES = $(am__DEPENDENCIES_1) \
->         $(top_builddir)/libmm-glib/libmm-glib.la \
->         $(top_builddir)/src/libhelpers.la
->
+Bump kernel to 5.4.1 version and U-Boot to 2019.10.
 
-Oh, this is very strange then. Could you run the build with V=s to see
-the full compilation commands?
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/imx7d-sdb_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
+index b9983e34a4..e855384075 100644
+--- a/configs/imx7d-sdb_defconfig
++++ b/configs/imx7d-sdb_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 5.2 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
+@@ -22,7 +22,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ 
+ # Filesystem
 -- 
-Aleksander
-https://aleksander.es
+2.17.1
