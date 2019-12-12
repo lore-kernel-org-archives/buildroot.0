@@ -1,66 +1,50 @@
-From: Michael Walle <michael@walle.cc>
-Date: Thu, 12 Dec 2019 09:57:48 +0100
-Subject: [Buildroot] [RFC PATCH] autotools: do not overwrite first include
- path
-Message-ID: <20191212085748.13802-1-michael@walle.cc>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Thu, 12 Dec 2019 10:14:57 +0100
+Subject: [Buildroot] [PATCH] libqmi: bump to version 1.24.2
+Message-ID: <20191212091457.1943616-1-aleksander@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The first include path is special in aclocal. For example it is the path
-for the --install option. Also, the first include is treated in a
-special way if it doesn't exists. This might be the case if there is the
-following construct:
-
-  configure.ac: AC_CONFIG_MACRO_DIR([m4])
-  Makefile.am: ACLOCAL_AMFLAGS="-I m4"
-
-If the package doesn't have local macros, the m4/ directory might not
-exist. aclocal will then just issue a warning instead of aborting the
-execution with a fatal error. See discussion here:
-  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=565663
-
-Don't use the "-I" option in aclocal. Instead use ACLOCAL_PATH to pass
-the system-wide include dirs.
-
-As a side effect this should fix the use of $(ACLOCAL) alone. Up until
-now, $(ACLOCAL) didn't include the ACLOCAL_HOST_DIR system include path.
-
-autoreconf will pass the "-I" options to every tool it runs. So move the
-argument to each individual tool except aclocal.
-
-Signed-off-by: Michael Walle <michael@walle.cc>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
 ---
- package/autoconf/autoconf.mk | 6 +++---
- package/automake/automake.mk | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index e5f474c72d..336ac59b42 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -21,6 +21,6 @@ HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
- $(eval $(host-autotools-package))
- 
- # variables used by other packages
--AUTOCONF = $(HOST_DIR)/bin/autoconf
--AUTOHEADER = $(HOST_DIR)/bin/autoheader
--AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-+AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-+AUTOHEADER = $(HOST_DIR)/bin/autoheader -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-+AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 270337712e..b34a8eb717 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -32,4 +32,4 @@ $(eval $(host-autotools-package))
- # variables used by other packages
- AUTOMAKE = $(HOST_DIR)/bin/automake
- ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
--ACLOCAL = $(HOST_DIR)/bin/aclocal -I $(ACLOCAL_DIR)
-+ACLOCAL = ACLOCAL_PATH="$(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)" $(HOST_DIR)/bin/aclocal
--- 
-2.20.1
+Hey!
+
+There was a patch suggested for libqmi 1.24.0 in buildroot that didn't get merged yet, but it is no longer required with 1.24.2 as it was already included upstream, so please make sure it's dropped:
+https://patchwork.ozlabs.org/patch/1186596/
+
+Cheers!
+
+---
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index b0a703f3bd..6936fa6de9 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256	aeb69f90c273467cce246176cba0967c6413f1995a976992770a597c4fe28c79  libqmi-1.24.0.tar.xz
++sha256	4ae4e476f960dbc0d04b1c0368776eb78edffd4421f3e4c074bb2bfb6375b282  libqmi-1.24.2.tar.xz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 62aa176e4f..51ddd2745f 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+
+-LIBQMI_VERSION = 1.24.0
++LIBQMI_VERSION = 1.24.2
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+--
+2.24.0
