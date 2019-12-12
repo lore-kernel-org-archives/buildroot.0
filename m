@@ -1,51 +1,66 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Thu, 12 Dec 2019 08:53:57 +0100
-Subject: [Buildroot] [PATCH v4 10/13] package/sysrepo: update to new systemd
-In-Reply-To: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
-References: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
-Message-ID: <20191212075400.1499536-11-jeremy.rosen@smile.fr>
+From: Michael Walle <michael@walle.cc>
+Date: Thu, 12 Dec 2019 09:57:48 +0100
+Subject: [Buildroot] [RFC PATCH] autotools: do not overwrite first include
+ path
+Message-ID: <20191212085748.13802-1-michael@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sysrepo provides it's own services so just remove the section
+The first include path is special in aclocal. For example it is the path
+for the --install option. Also, the first include is treated in a
+special way if it doesn't exists. This might be the case if there is the
+following construct:
 
-Also fix sysrepo not installing the files in the correct directory
+  configure.ac: AC_CONFIG_MACRO_DIR([m4])
+  Makefile.am: ACLOCAL_AMFLAGS="-I m4"
 
-Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
+If the package doesn't have local macros, the m4/ directory might not
+exist. aclocal will then just issue a warning instead of aborting the
+execution with a fatal error. See discussion here:
+  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=565663
+
+Don't use the "-I" option in aclocal. Instead use ACLOCAL_PATH to pass
+the system-wide include dirs.
+
+As a side effect this should fix the use of $(ACLOCAL) alone. Up until
+now, $(ACLOCAL) didn't include the ACLOCAL_HOST_DIR system include path.
+
+autoreconf will pass the "-I" options to every tool it runs. So move the
+argument to each individual tool except aclocal.
+
+Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/sysrepo/sysrepo.mk | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ package/autoconf/autoconf.mk | 6 +++---
+ package/automake/automake.mk | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 216e517526..f693ff70da 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
-@@ -24,7 +24,7 @@ SYSREPO_CONF_OPTS = \
- 	-DCALL_SYSREPOCFG_BIN=$(HOST_DIR)/bin/sysrepocfg \
- 	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_SYSREPO_EXAMPLES),ON,OFF) \
- 	$(if $(BR2_INIT_SYSTEMD),-DWITH_SYSTEMD=ON) \
--	$(if $(BR2_INIT_SYSTEMD),-DSYSTEMD_UNIT_DIR=usr/lib/systemd/system)
-+	$(if $(BR2_INIT_SYSTEMD),-DSYSTEMD_UNIT_DIR=/usr/lib/systemd/system)
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index e5f474c72d..336ac59b42 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -21,6 +21,6 @@ HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
+ $(eval $(host-autotools-package))
  
- # On ARM, this is needed to prevent unaligned memory access with an optimized
- # build .. https://github.com/sysrepo/sysrepo/issues/947
-@@ -41,14 +41,6 @@ define SYSREPO_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S51sysrepo-plugind
- endef
- 
--define SYSREPO_INSTALL_INIT_SYSTEMD
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -fs ../../../../usr/lib/systemd/system/sysrepod.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -fs ../../../../usr/lib/systemd/system/sysrepo-plugind.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--endef
--
- HOST_SYSREPO_CONF_OPTS = \
- 	-DGEN_PYTHON2_TESTS=OFF \
- 	-DENABLE_TESTS=OFF \
+ # variables used by other packages
+-AUTOCONF = $(HOST_DIR)/bin/autoconf
+-AUTOHEADER = $(HOST_DIR)/bin/autoheader
+-AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
++AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
++AUTOHEADER = $(HOST_DIR)/bin/autoheader -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
++AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index 270337712e..b34a8eb717 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -32,4 +32,4 @@ $(eval $(host-autotools-package))
+ # variables used by other packages
+ AUTOMAKE = $(HOST_DIR)/bin/automake
+ ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+-ACLOCAL = $(HOST_DIR)/bin/aclocal -I $(ACLOCAL_DIR)
++ACLOCAL = ACLOCAL_PATH="$(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)" $(HOST_DIR)/bin/aclocal
 -- 
-2.24.0
+2.20.1
