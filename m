@@ -1,45 +1,42 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Thu, 12 Dec 2019 08:53:53 +0100
-Subject: [Buildroot] [PATCH v4 06/13] package/connman: adapt to preset-all
+Date: Thu, 12 Dec 2019 08:53:59 +0100
+Subject: [Buildroot] [PATCH v4 12/13] package/rauc: add a WantedBy section
+ to the unit
 In-Reply-To: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
 References: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
-Message-ID: <20191212075400.1499536-7-jeremy.rosen@smile.fr>
+Message-ID: <20191212075400.1499536-13-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-connman has two services
-* connman.service which is the real daemon
-* connman-wait-online.service which is a sync point for network-online.target
+upstream-provided service has no WantedBy, which means that rauc won't
+be enabled by default
 
-Only the first one was enabled. This adaptation enables both.
+Add a WantedBy instead of manually creating the symlink so the user can
+enable/disable the unit properly
 
-Not enabling connman-wait-online.service is probably a bug
-
-Signed-off-by:J?r?my Rosen <jeremy.rosen@smile.fr>
-Reviewed-by: Yann E.MORIN <yann.morin.1998@free.fr>
+Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 ---
- package/connman/connman.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/rauc/rauc.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 7ca49726dd..2cbf3fe752 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -32,12 +32,6 @@ define CONNMAN_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index f3434e9c9a..7b35154f56 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -31,9 +31,8 @@ RAUC_DEPENDENCIES += systemd
+ endif
+ 
+ define RAUC_INSTALL_INIT_SYSTEMD
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -sf ../../../../lib/systemd/system/rauc.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rauc.service
++	mkdir $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d;\
++	printf '[Install]\nWantedBy=multi-user.target\n' > $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d/buildroot-enable.conf;
  endef
  
--define CONNMAN_INSTALL_INIT_SYSTEMD
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -fs ../../../../usr/lib/systemd/system/connman.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
--endef
--
- ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
- CONNMAN_LICENSE += , GPL-2.0+ (client)
- CONNMAN_CONF_OPTS += --enable-client
+ HOST_RAUC_DEPENDENCIES = \
 -- 
 2.24.0
