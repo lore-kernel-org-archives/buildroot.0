@@ -1,9 +1,9 @@
 From: Jan Kiszka <jan.kiszka@siemens.com>
-Date: Thu, 12 Dec 2019 19:44:39 +0100
-Subject: [Buildroot] [PATCH 3/4] package/xenomai: Bump version to 3.0.10
+Date: Thu, 12 Dec 2019 19:44:40 +0100
+Subject: [Buildroot] [PATCH 4/4] package/xenomai: Clean up wrappers cleanup
 In-Reply-To: <cover.1576176280.git.jan.kiszka@siemens.com>
 References: <cover.1576176280.git.jan.kiszka@siemens.com>
-Message-ID: <30b25e0bbb143d8a5df7aff5c8caddef094b5afa.1576176280.git.jan.kiszka@siemens.com>
+Message-ID: <793ca84fe21573b09f3a0e47572b16b90dd9e8ee.1576176280.git.jan.kiszka@siemens.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,37 @@ To: buildroot@busybox.net
 
 From: Jan Kiszka <jan.kiszka@siemens.com>
 
+There is no posix.wrappers anymore, but cobalt and modechk. Those only
+play a role when building in combination with wrap-link.sh.
+
 Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 ---
- package/xenomai/xenomai.hash | 2 +-
- package/xenomai/xenomai.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xenomai/xenomai.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
-index 83994384eb..31a925f2c4 100644
---- a/package/xenomai/xenomai.hash
-+++ b/package/xenomai/xenomai.hash
-@@ -1,2 +1,2 @@
- # Locally computed;
--sha256 be7a7a453a8d1f0763ed5feb3bee159fe60b8a42326b0ff564e94184bd4d0734  xenomai-v3.0.9.tar.bz2
-+sha256 de72ef7a4522bf9ba5f72a674acac35a92eb38823d3631201a33bea958d9fb7d  xenomai-v3.0.10.tar.bz2
 diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index 1d38cffa30..ac823407f2 100644
+index ac823407f2..fe0268b14c 100644
 --- a/package/xenomai/xenomai.mk
 +++ b/package/xenomai/xenomai.mk
-@@ -6,7 +6,7 @@
+@@ -68,6 +68,9 @@ define XENOMAI_REMOVE_UNNEEDED_FILES
+ 	for i in xeno xeno-config xeno-info wrap-link.sh ; do \
+ 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+ 	done
++	for i in cobalt modechk ; do \
++		rm -f $(TARGET_DIR)/usr/lib/$$i.wrappers ; \
++	done
+ 	for i in autotune corectl hdb rtnet nomaccfg rtcfg rtifconfig \
+ 		rtiwconfig rtping rtroute tdmacfg rtps slackspot version; do \
+ 		rm -f $(TARGET_DIR)/usr/sbin/$$i ; \
+@@ -127,9 +130,6 @@ XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
+ define XENOMAI_REMOVE_SKINS
+ 	for i in $(XENOMAI_REMOVE_LIBS_LIST) ; do \
+ 		rm -f $(TARGET_DIR)/usr/lib/lib$$i.* ; \
+-		if [ $$i == "posix" ] ; then \
+-			rm -f $(TARGET_DIR)/usr/lib/posix.wrappers ; \
+-		fi ; \
+ 	done
+ endef
  
- XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
- ifeq ($(XENOMAI_VERSION),)
--XENOMAI_VERSION = v3.0.9
-+XENOMAI_VERSION = v3.0.10
- else
- BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
- endif
 -- 
 2.16.4
