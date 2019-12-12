@@ -1,109 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Dec 2019 21:59:25 +0100
-Subject: [Buildroot] [git commit] package/xdg-dbus-proxy: new package
-Message-ID: <20191212205048.4704B8A37B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 12 Dec 2019 22:04:59 +0100
+Subject: [Buildroot] [git commit] package/libqmi: bump to version 1.24.2
+Message-ID: <20191212212143.C82F28A38A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ec950348c1e6254dafdc36570ae8a1e527f5bc1
+commit: https://git.buildroot.net/buildroot/commit/?id=519706da2609e12e07ecd08fcf374df276569704
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xdg-dbus-proxy is a filtering proxy for D-Bus connections, which can
-be used to limit access to a set of services. Typically it is used in
-combination with containers to provide them with access to certain
-services running outside the container.
-
-https://github.com/flatpak/xdg-dbus-proxy
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-[Peter: license is LGPL-2.1+]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Tested-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/xdg-dbus-proxy/Config.in           | 14 ++++++++++++++
- package/xdg-dbus-proxy/xdg-dbus-proxy.hash |  5 +++++
- package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 17 +++++++++++++++++
- 5 files changed, 38 insertions(+)
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 66964d035d..8d11ad8a31 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -91,6 +91,7 @@ F:	package/webkitgtk/
- F:	package/woff2/
- F:	package/wpebackend-fdo/
- F:	package/wpewebkit/
-+F:	package/xdg-dbus-proxy/
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index b0a703f3bd..6936fa6de9 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256	aeb69f90c273467cce246176cba0967c6413f1995a976992770a597c4fe28c79  libqmi-1.24.0.tar.xz
++sha256	4ae4e476f960dbc0d04b1c0368776eb78edffd4421f3e4c074bb2bfb6375b282  libqmi-1.24.2.tar.xz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 62aa176e4f..51ddd2745f 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Adrien Gallou??t <adrien@gallouet.fr>
- F:	package/bird/
-diff --git a/package/Config.in b/package/Config.in
-index 405732bc7a..4bac3aabff 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2314,6 +2314,7 @@ menu "System tools"
- 	source "package/tpm2-totp/Config.in"
- 	source "package/unscd/Config.in"
- 	source "package/util-linux/Config.in"
-+	source "package/xdg-dbus-proxy/Config.in"
- 	source "package/xen/Config.in"
- 	source "package/xvisor/Config.in"
- endmenu
-diff --git a/package/xdg-dbus-proxy/Config.in b/package/xdg-dbus-proxy/Config.in
-new file mode 100644
-index 0000000000..94c144fad7
---- /dev/null
-+++ b/package/xdg-dbus-proxy/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_XDG_DBUS_PROXY
-+	bool "xdg-dbus-proxy"
-+	depends on BR2_USE_WCHAR # libglib2 -> gettext
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  Filtering proxy for D-Bus connections.
-+
-+	  https://github.com/flatpak/xdg-dbus-proxy
-+
-+comment "xdg-dbus-proxy needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-new file mode 100644
-index 0000000000..37bda78436
---- /dev/null
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-@@ -0,0 +1,5 @@
-+# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.2
-+sha256 1749d6f9f46dcc9edc87725641cf56cf91dcad1b01707891ea0850c1000c520f xdg-dbus-proxy-0.1.2.tar.xz
-+
-+# Hash for license files:
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-new file mode 100644
-index 0000000000..1b056c36f0
---- /dev/null
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# bubblewrap
-+#
-+################################################################################
-+
-+XDG_DBUS_PROXY_VERSION = 0.1.2
-+XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
-+XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
-+XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
-+
-+XDG_DBUS_PROXY_LICENSE = LGPL-2.1+
-+XDG_DBUS_PROXY_LICENSE_FILES = COPYING
-+
-+XDG_DBUS_PROXY_CONF_OPTS = --disable-man
-+
-+$(eval $(autotools-package))
+-LIBQMI_VERSION = 1.24.0
++LIBQMI_VERSION = 1.24.2
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
