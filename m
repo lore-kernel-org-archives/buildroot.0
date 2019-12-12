@@ -1,58 +1,111 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 12 Dec 2019 09:23:04 +0000
-Subject: [Buildroot] uClibc building fails: was [RE: [arc-buildroot]
- [autobuild.buildroot.net] Your daily results for 2019-12-11]
-Message-ID: <CY4PR1201MB0120A08931AEE94D5DC5F8BEA1550@CY4PR1201MB0120.namprd12.prod.outlook.com>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Thu, 12 Dec 2019 10:33:25 +0100
+Subject: [Buildroot] [PATCH] modem-manager: bump to version 1.12.2
+Message-ID: <20191212093325.2178579-1-aleksander@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Also include a patch that solves build issues detected in 1.12.0, e.g.:
+http://lists.busybox.net/pipermail/buildroot/2019-December/268817.html
+http://autobuild.buildroot.net/results/5ac390b2a813cadb4cb180d61bb05f6fe4407155/build-end.log
 
->     arc      |         uclibc-1.0.32          | http://autobuild.buildroot.net/results/d1b45b78b94387a7b15be7caec64847bd04af0f1/
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+---
 
-That uClibc failure seem to be due to missing en_US.UTF-8 locale on the host.
-We faced this while trying to build uClibc in Docker container with Ubuntu 18.04,
-see https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/issues/207.
+Hey!
 
-What really happens is:
------------------------------------->8--------------------------------
-$ install -d libubacktrace/arc
-make -C extra/locale locale_headers
-gcc ../../extra/locale/gen_wc8bit.c  -o ../..//extra/locale/gen_wc8bit    -Os  -D__UCLIBC_GEN_LOCALE -I../..// -DCTYPE_PACKED=1 -DDO_WIDE_CHAR=1
-echo "/home/auto_user/arc_gnu/uclibc-ng/extra/locale/../../extra/locale/charmaps/ASCII.pairs" > ../..//extra/locale/codesets.txt
-echo ".../uclibc-ng/extra/locale/../../extra/locale/charmaps/ISO-8859-1.pairs" >> ../..//extra/locale/codesets.txt
-../..//extra/locale/gen_wc8bit `cat ../..//extra/locale/codesets.txt` > ../..//extra/locale/c8tables.h
-Makefile.in:163: recipe for target '../..//extra/locale/c8tables.h' failed
-make[1]: *** [../..//extra/locale/c8tables.h] Error 1
-Makefile.in:185: recipe for target 'headers' failed
-make: *** [headers] Error 2
------------------------------------->8--------------------------------
+This version bump to 1.12.2 also includes a patch required to build correctly when using strict library link ordering. Adding this patch requires triggering autoreconf. The patch is already included in the upstream MM repo, so the next 1.12.4 release will also include it (whenever that is, not scheduled yet).
 
-This happens because on a previous step gen_wc8bit didn't create proper c8tables.h:
------------------------------------->8--------------------------------
-$ ./gen_wc8bit cat codesets.txt
-could not find a UTF8 locale ... please enable en_US.UTF-8
+Cheers!
 
-$ cat ./extra/locale/c8tables.h
-could not find a UTF8 locale ... please enable en_US.UTF-8
------------------------------------->8--------------------------------
+---
+ ...ix-order-of-linked-libs-in-test-apps.patch | 40 +++++++++++++++++++
+ package/modem-manager/modem-manager.hash      |  2 +-
+ package/modem-manager/modem-manager.mk        |  5 ++-
+ 3 files changed, 45 insertions(+), 2 deletions(-)
+ create mode 100644 package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch
 
-And the solution is as simple as installation of the locale.
-On Debian/Ubuntu this could be done this way:
------------------------------------->8--------------------------------
-$ sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
-$ locale-gen
------------------------------------->8--------------------------------
+diff --git a/package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch b/package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch
+new file mode 100644
+index 0000000000..d58960ce57
+--- /dev/null
++++ b/package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch
+@@ -0,0 +1,40 @@
++From 52cfd6788e4d12f3c2ea302e66bcc80c5efd80ee Mon Sep 17 00:00:00 2001
++From: Aleksander Morgado <aleksander@aleksander.es>
++Date: Wed, 11 Dec 2019 16:09:25 +0100
++Subject: [PATCH] build: fix order of linked libs in test apps
++
++Solving build issues with truly strict linkers, as in:
++http://lists.busybox.net/pipermail/buildroot/2019-December/268817.html
++
++Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
++---
++ test/Makefile.am | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/test/Makefile.am b/test/Makefile.am
++index ba737bc5..20e2a068 100644
++--- a/test/Makefile.am
+++++ b/test/Makefile.am
++@@ -87,8 +87,8 @@ mmsmspdu_CPPFLAGS = \
++
++ mmsmspdu_LDADD = \
++ 	$(MM_LIBS) \
++-	$(top_builddir)/src/libhelpers.la \
++ 	$(top_builddir)/libmm-glib/libmm-glib.la \
+++	$(top_builddir)/src/libhelpers.la \
++ 	$(NULL)
++
++ ################################################################################
++@@ -112,8 +112,8 @@ mmsmsmonitor_CPPFLAGS = \
++
++ mmsmsmonitor_LDADD = \
++ 	$(MM_LIBS) \
++-	$(top_builddir)/src/libhelpers.la \
++ 	$(top_builddir)/libmm-glib/libmm-glib.la \
+++	$(top_builddir)/src/libhelpers.la \
++ 	$(NULL)
++
++ ################################################################################
++--
++2.24.0
++
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index b1fef98fe2..a3925bb4a2 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  3daca86164145fffb589939433f596c13fa077c9a187c0d5820fdd5b4e4a6424  ModemManager-1.12.0.tar.xz
++sha256  4f76d2bdd0ed6780837cdde886eaf535f9770f9daa1ff92e63658d06aa5d25ea  ModemManager-1.12.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index b5aa7914f6..8aa9f36766 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
 
-From here http://autobuild.buildroot.net/results/d1b45b78b94387a7b15be7caec64847bd04af0f1/submitter
-it looks like that's some Bootlin owned machine:
------------------------------------->8--------------------------------
-Thomas Petazzoni (Bootlin server)
------------------------------------->8--------------------------------
+-MODEM_MANAGER_VERSION = 1.12.0
++MODEM_MANAGER_VERSION = 1.12.2
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+@@ -13,6 +13,9 @@ MODEM_MANAGER_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
+ MODEM_MANAGER_INSTALL_STAGING = YES
+ MODEM_MANAGER_CONF_OPTS = --disable-more-warnings
 
-Any possibility to check what's wrong with locales there?
-
--Alexey
++# 0001-build-fix-order-of-linked-libs-in-test-apps.patch
++MODEM_MANAGER_AUTORECONF = YES
++
+ ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
+ MODEM_MANAGER_DEPENDENCIES += libqmi
+ MODEM_MANAGER_CONF_OPTS += --with-qmi
+--
+2.24.0
