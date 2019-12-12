@@ -1,42 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Dec 2019 21:45:42 +0100
-Subject: [Buildroot] [PATCH 0/4] package/xenomai: Fixes, updates,
- enhancements
-In-Reply-To: <cover.1576176280.git.jan.kiszka@siemens.com>
+Date: Thu, 12 Dec 2019 21:48:20 +0100
+Subject: [Buildroot] [PATCH 1/4] package/xenomai: Smokey's not a skin
+In-Reply-To: <f23ad7759ce2abdebafcf0464cf15145e163285b.1576176280.git.jan.kiszka@siemens.com>
 References: <cover.1576176280.git.jan.kiszka@siemens.com>
-Message-ID: <20191212214542.35e7b751@windsurf>
+ <f23ad7759ce2abdebafcf0464cf15145e163285b.1576176280.git.jan.kiszka@siemens.com>
+Message-ID: <20191212214820.1c84b011@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jan,
-
-On Thu, 12 Dec 2019 19:44:36 +0100
+On Thu, 12 Dec 2019 19:44:37 +0100
 Jan Kiszka <jan.kiszka@siemens.com> wrote:
 
-> Just a couple of improvements I came across while building me a virtual
-> ppc32 test target.
+> From: Jan Kiszka <jan.kiszka@siemens.com>
 > 
-> Jan
+> That's a testsuite tool.
 > 
-> PS: @CC, sorry, had to send twice as the list is not open.
+> Rename XENOMAI_REMOVE_SKIN_LIST at this chance as it's cleaning
+> libraries.
 
-Thanks a lot for sending those patches, it's nice to see patches from
-you on our Xenomai package! I have a few comments/questions on the
-patches, I'll reply individually to the patches.
+I am confused, aren't psos, rtai, uitron, vxworks and al. called
+"skins" in the Xenomai speak ?
 
-> Jan Kiszka (4):
->   package/xenomai: Smokey's not a skin
->   package/xenomai: Pull from git
->   package/xenomai: Bump version to 3.0.10
->   package/xenomai: Clean up wrappers cleanup
+Ideally, this variable rename should be done in a separate patch, since
+it's independent from the smokey option removal.
 
-A minor nit: we typically don't capitalize commit titles in Buildroot,
-i.e "pull from git" and not "Pull from git". I know, that's arbitrary,
-people like it one way or the other, we simply have more or less a
-convention.
+> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+> ---
+>  package/xenomai/Config.in  |  5 -----
+>  package/xenomai/xenomai.mk | 23 ++++++++++-------------
+>  2 files changed, 10 insertions(+), 18 deletions(-)
+> 
+> diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+> index 83ba8ca162..0cb0b343de 100644
+> --- a/package/xenomai/Config.in
+> +++ b/package/xenomai/Config.in
+> @@ -170,11 +170,6 @@ config BR2_PACKAGE_XENOMAI_RTAI_SKIN
+>  	help
+>  	  This option allows to install the RTAI Xenomai skin
+>  
+> -config BR2_PACKAGE_XENOMAI_SMOKEY_SKIN
+> -	bool "Smokey skin"
+> -	help
+> -	  This option allows to install the Smokey Xenomai skin
+
+We normally want to have Config.in.legacy handling when removing
+options, but in this case, the options was in fact not really doing
+anything useful, so I believe it's OK to just drop it like you did.
+
+Thanks!
 
 Thomas
 -- 
