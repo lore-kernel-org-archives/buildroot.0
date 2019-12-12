@@ -1,56 +1,116 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 12 Dec 2019 22:39:00 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/pango: needs libfribidi
-In-Reply-To: <20191212223448.7e1dc8ba@windsurf.home>
-References: <20191209205224.2762-1-ps.report@gmx.net>
- <20191209205224.2762-2-ps.report@gmx.net>
- <20191212223448.7e1dc8ba@windsurf.home>
-Message-ID: <20191212223900.08123555@gmx.net>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Thu, 12 Dec 2019 23:59:24 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/avro-c: new package
+In-Reply-To: <CAKcgs2z14-aa9GppZWOS6iO8G-MNeaL2bTa383QUicXPSHV2Mw@mail.gmail.com>
+References: <20191212124143.220947-1-titouan.christophe@railnova.eu>
+ <20191212124143.220947-2-titouan.christophe@railnova.eu>
+ <CAKcgs2z14-aa9GppZWOS6iO8G-MNeaL2bTa383QUicXPSHV2Mw@mail.gmail.com>
+Message-ID: <1f2a799f-7b76-fd38-3674-180dbdb7fa23@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Good evening Gilles,
 
-On Thu, 12 Dec 2019 22:34:48 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Thank you again for reviewing this series thoroughly.
 
-> On Mon,  9 Dec 2019 21:52:24 +0100
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > Fixes:
-> >   http://autobuild.buildroot.net/results/f16fda910da23dfe5f8ac1cb51f9dbcec444b516
-> >
-> >   subprocess.CalledProcessError: Command '['git', 'clone', 'https://github.com/fribidi/fribidi.git', 'fribidi']' returned non-zero exit status 128.
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->
-> This commit title really was too short, especially we like to
-> understand since when this problem is occurring. So I've added the
-> following paragraph:
->
->     Since commit 5cce413eb11ac75f5c48ed351896c5d1c33961d5 ("package/pango:
->     bump to version 1.44.6"), pango needs libfribidi. Through the Meson
->     subprojects mechanism, it tries to download it by itself if not
->     available. But in Buildroot, we definitely want to use the separate
->     libfribidi package, so let's add it as a dependency of pango.
+On 12/12/19 9:49 PM, Gilles Talis wrote:
+> Hello Titouan, all,
+> 
+> Thanks for taking my first set of comments into account.
+> Please find new ones.
+> 
+> Le jeu. 12 d?c. 2019 ? 13:42, Titouan Christophe
+> <titouan.christophe@railnova.eu> a ?crit :
 
-+2
+[snip]
 
->
-> A side question is: is here a way to tell Meson to never ever download
-> subprojects by itself, and instead bail out loudly ?
+> $ ./utils/check-package package/avro-c/* returns the following warning
+> package/avro-c/0001-Compile-on-musl.patch:4: generate your patches
+> with 'git format-patch -N'
+> 79 lines processed
+> 1 warnings generated
+> Can you please fix it?
+> 
 
-Will investigate...
+My bad, I use `make check-package`; which only looks for .mk, .hash and 
+Config files; hence why I did not see this warning.
 
->
-> I've applied with the improved commit log. Thanks!
+>> +
+>> diff --git a/package/avro-c/Config.in b/package/avro-c/Config.in
+>> new file mode 100644
+>> index 0000000000..a21446186a
+>> --- /dev/null
+>> +++ b/package/avro-c/Config.in
+>> @@ -0,0 +1,20 @@
+>> +config BR2_PACKAGE_AVRO_C
+>> +       bool "avro"
+> I would go for "avro-c"
+> 
+>> +       depends on !BR2_STATIC_LIBS
+> A comment at the end or beginning of the file mentioning that the
+> package needs a library with dynamic library would be nice
+> If you could also quickly explain why the package can't be statically
+> compiled, that'd be great.
 
-Thanks.
+It looks to me that avro-c unconditionally builds shared libs when not 
+compiling for Windows 
+(https://github.com/apache/avro/blob/release-1.9.1/lang/c/src/CMakeLists.txt#L91-L99), 
+regardless the value of BUILD_SHARED_LIBS (see 
+https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_cmake_based_packages 
+and https://cmake.org/cmake/help/latest/command/add_library.html).
 
-Regards,
-Peter
+Unless static support is really needed, I wouldn't engage myself in a 
+CMake fight for now.
 
->
-> Thomas
+[snip]
+
+>> diff --git a/package/avro-c/avro-c.mk b/package/avro-c/avro-c.mk
+>> new file mode 100644
+>> index 0000000000..2ca01ecef5
+>> --- /dev/null
+>> +++ b/package/avro-c/avro-c.mk
+>> @@ -0,0 +1,14 @@
+>> +################################################################################
+>> +#
+>> +# avro-c
+>> +#
+>> +################################################################################
+>> +
+>> +AVRO_C_VERSION = 1.9.1
+> If you plan to update avro-c and python-avro at the same time, sharing
+> the same version variable would be handy
+> 
+>> +AVRO_C_SITE = https://www-eu.apache.org/dist/avro/avro-$(AVRO_C_VERSION)/c
+>> +AVRO_C_LICENSE = Apache-2.0
+>> +AVRO_C_LICENSE_FILES = LICENSE NOTICE
+> It should only be LICENSE
+>> +AVRO_C_INSTALL_STAGING = YES
+>> +AVRO_C_DEPENDENCIES = jansson
+> zib, snappy and lzma are non-required dependencies. Do you want to
+> make them dependencies for this package if they are enabled?
+
+Indeed, thank you for pointing it out.
+
+> 
+>> +
+>> +$(eval $(cmake-package))
+>> --
+>> 2.23.0
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> Thanks
+> Gilles.
+> 
+
+I'll resend a new version soon.
+
+Best regards,
+
+Titouan
