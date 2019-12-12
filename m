@@ -1,77 +1,56 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Thu, 12 Dec 2019 17:06:54 +0100
-Subject: [Buildroot] [PATCH 1/2] SDL_mixer: Add option to prefer Tremor
- over libvorbis
-In-Reply-To: <87blsgh6ld.fsf@dell.be.48ers.dk>
-References: <20191209191554.821230-1-paul@crapouillou.net>
- <Paul Cercueil's	message of "Mon, 9 Dec 2019 20:15:53 +0100">
-Message-ID: <1576166814.3.0@crapouillou.net>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Thu, 12 Dec 2019 13:10:42 -0300
+Subject: [Buildroot] [PATCH v2] modem-manager: bump to version 1.12.2
+In-Reply-To: <20191212140147.2972668-1-aleksander@aleksander.es>
+References: <20191212140147.2972668-1-aleksander@aleksander.es>
+Message-ID: <CAJ4jsacqKtr2wDty6hQYxs0=tMLJQRoiswgNqKKUfovBbz=G8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+On Thu, Dec 12, 2019 at 11:01 AM Aleksander Morgado
+<aleksander@aleksander.es> wrote:
+>
+> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+> ---
+>
+> Hey!
+>
+> This new v2 patch drops the patch that was modifying the link order of some libraries, because the correct fix was already included in the 1.12.2 release.
+>
+> Cheers!
+>
+> ---
+>  package/modem-manager/modem-manager.hash | 2 +-
+>  package/modem-manager/modem-manager.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+> index b1fef98fe2..a3925bb4a2 100644
+> --- a/package/modem-manager/modem-manager.hash
+> +++ b/package/modem-manager/modem-manager.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed
+> -sha256  3daca86164145fffb589939433f596c13fa077c9a187c0d5820fdd5b4e4a6424  ModemManager-1.12.0.tar.xz
+> +sha256  4f76d2bdd0ed6780837cdde886eaf535f9770f9daa1ff92e63658d06aa5d25ea  ModemManager-1.12.2.tar.xz
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+> index b5aa7914f6..2f198a355a 100644
+> --- a/package/modem-manager/modem-manager.mk
+> +++ b/package/modem-manager/modem-manager.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -MODEM_MANAGER_VERSION = 1.12.0
+> +MODEM_MANAGER_VERSION = 1.12.2
+>  MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+>  MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+>  MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+> --
+> 2.24.0
 
-
-Le mar., d?c. 10, 2019 at 10:29, Peter Korsgaard <peter@korsgaard.com> 
-a ?crit :
->>>>>>  "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
-> 
->  > Add a menu option to set the Vorbis decoding library to Tremor 
-> instead
->  > of libvorbis.
-> 
->  > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->  > ---
->  >  package/sdl_mixer/Config.in    | 13 +++++++++++++
->  >  package/sdl_mixer/sdl_mixer.mk |  5 +++++
->  >  2 files changed, 18 insertions(+)
-> 
->  > diff --git a/package/sdl_mixer/Config.in 
-> b/package/sdl_mixer/Config.in
->  > index 42dfe63c0a..94fcda7a0e 100644
->  > --- a/package/sdl_mixer/Config.in
->  > +++ b/package/sdl_mixer/Config.in
->  > @@ -9,3 +9,16 @@ config BR2_PACKAGE_SDL_MIXER
->  >  	  SMPEG MP3 libraries.
-> 
->  >  	  http://www.libsdl.org/projects/SDL_mixer/
->  > +
->  > +if BR2_PACKAGE_SDL_MIXER
->  > +
->  > +config BR2_PACKAGE_SDL_MIXER_USE_TREMOR
->  > +	bool "Prefer Tremor for Vorbis decoding"
->  > +	select BR2_PACKAGE_TREMOR
->  > +	help
->  > +	  Prefer Tremor over libvorbis for Vorbis decoding.
->  > +	  Tremor is a fixed-point implementation of an Ogg Vorbis
->  > +	  decoder. Choose this option if the target CPU has no
->  > +	  FPU.
->  > +
->  > +endif
->  > diff --git a/package/sdl_mixer/sdl_mixer.mk 
-> b/package/sdl_mixer/sdl_mixer.mk
->  > index 9183a4aa8c..3159d0dee1 100644
->  > --- a/package/sdl_mixer/sdl_mixer.mk
->  > +++ b/package/sdl_mixer/sdl_mixer.mk
->  > @@ -35,11 +35,16 @@ else
->  >  SDL_MIXER_CONF_OPTS += --disable-music-mp3-mad-gpl
->  >  endif
-> 
->  > +ifeq ($(BR2_PACKAGE_SDL_MIXER_USE_TREMOR),y)
->  > +SDL_MIXER_CONF_OPTS += --enable-music-ogg-tremor
->  > +SDL_MIXER_DEPENDENCIES += tremor
->  > +else
->  >  ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
-> 
-> Do we need an explicit option for this? Can't we just check for
-> BR2_PACKAGE_TREMOR here? I doubt there is any situations where tremor 
-> is
-> enabled but the user doesn't want to use it.
-
-That's up to you really. I can send a v2 with the Config.in option 
-removed.
-
--Paul
+Tested-by: Carlos Santos <unixmania@gmail.com>
