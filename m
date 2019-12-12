@@ -1,56 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Dec 2019 21:24:35 +0100
-Subject: [Buildroot] [git commit] Revert "support/download/git: rename local
- refs to avoid confusing Git warning"
-Message-ID: <20191212201628.A0F3F8122A@busybox.osuosl.org>
+Date: Thu, 12 Dec 2019 21:25:31 +0100
+Subject: [Buildroot] [git commit] package/modem-manager: bump to version
+ 1.12.2
+Message-ID: <20191212201701.8C2128A2CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbee5c8e91b5d54c5344f44bfc9927bc7e0e4fc1
+commit: https://git.buildroot.net/buildroot/commit/?id=58abfbc95573f6fcee0b6d4db29f1ee9d14259d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 6f35d967564863ab150eabf32ca462889bf1e049.
-
-Repeat after me: on the master branch you will not work. On the master
-branch you will not work.
-
-This definitely shouldn't have been pushed. Sorry about that.
-
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Tested-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/download/git | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/git b/support/download/git
-index c243b8aa9f..075f665bbf 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -122,14 +122,14 @@ _git fetch origin -t
- # below, if there is an issue anyway. Since most of the cset we're gonna
- # have to clone are not such special refs, consign the output to oblivion
- # so as not to alarm unsuspecting users, but still trace it as a warning.
--if ! _git fetch origin "'${cset}:buildroot-${cset}'" >/dev/null 2>&1; then
-+if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
-     printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
- fi
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index b1fef98fe2..a3925bb4a2 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  3daca86164145fffb589939433f596c13fa077c9a187c0d5820fdd5b4e4a6424  ModemManager-1.12.0.tar.xz
++sha256  4f76d2bdd0ed6780837cdde886eaf535f9770f9daa1ff92e63658d06aa5d25ea  ModemManager-1.12.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index b5aa7914f6..2f198a355a 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Check that the changeset does exist. If it does not, re-cloning from
- # scratch won't help, so we don't want to trash the repository for a
- # missing commit. We just exit without going through the ERR trap.
--if ! _git rev-parse --quiet --verify "'buildroot-${cset}^{commit}'" >/dev/null 2>&1; then
-+if ! _git rev-parse --quiet --verify "'${cset}^{commit}'" >/dev/null 2>&1; then
-     printf "Commit '%s' does not exist in this repository.\n" "${cset}"
-     exit 1
- fi
-@@ -162,7 +162,7 @@ _git submodule --quiet foreach "'${cmd}'"
- 
- # Checkout the required changeset, so that we can update the required
- # submodules.
--_git checkout -f -q "'buildroot-${cset}'"
-+_git checkout -f -q "'${cset}'"
- 
- # Get rid of now-untracked directories (in case a git operation was
- # interrupted in a previous run, or to get rid of empty directories
+-MODEM_MANAGER_VERSION = 1.12.0
++MODEM_MANAGER_VERSION = 1.12.2
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
