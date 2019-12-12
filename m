@@ -1,9 +1,9 @@
 From: Jan Kiszka <jan.kiszka@siemens.com>
-Date: Thu, 12 Dec 2019 19:44:38 +0100
-Subject: [Buildroot] [PATCH 2/4] package/xenomai: Pull from git
+Date: Thu, 12 Dec 2019 19:44:37 +0100
+Subject: [Buildroot] [PATCH 1/4] package/xenomai: Smokey's not a skin
 In-Reply-To: <cover.1576176280.git.jan.kiszka@siemens.com>
 References: <cover.1576176280.git.jan.kiszka@siemens.com>
-Message-ID: <5404679c83c28260c53e2fc54cdbeafda2929914.1576176280.git.jan.kiszka@siemens.com>
+Message-ID: <f23ad7759ce2abdebafcf0464cf15145e163285b.1576176280.git.jan.kiszka@siemens.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +12,79 @@ To: buildroot@busybox.net
 
 From: Jan Kiszka <jan.kiszka@siemens.com>
 
-This allows to pick also git revisions via XENOMAI_VERSION.
+That's a testsuite tool.
+
+Rename XENOMAI_REMOVE_SKIN_LIST at this chance as it's cleaning
+libraries.
 
 Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 ---
- package/xenomai/xenomai.hash |  2 +-
- package/xenomai/xenomai.mk   | 10 ++++++++--
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ package/xenomai/Config.in  |  5 -----
+ package/xenomai/xenomai.mk | 23 ++++++++++-------------
+ 2 files changed, 10 insertions(+), 18 deletions(-)
 
-diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
-index 0fc560f978..83994384eb 100644
---- a/package/xenomai/xenomai.hash
-+++ b/package/xenomai/xenomai.hash
-@@ -1,2 +1,2 @@
- # Locally computed;
--sha256 9e4b879ee48e6423f76cba5882f41d129164fe977119080ff41ef531ee50dc4e  xenomai-3.0.9.tar.bz2
-+sha256 be7a7a453a8d1f0763ed5feb3bee159fe60b8a42326b0ff564e94184bd4d0734  xenomai-v3.0.9.tar.bz2
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index 83ba8ca162..0cb0b343de 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -170,11 +170,6 @@ config BR2_PACKAGE_XENOMAI_RTAI_SKIN
+ 	help
+ 	  This option allows to install the RTAI Xenomai skin
+ 
+-config BR2_PACKAGE_XENOMAI_SMOKEY_SKIN
+-	bool "Smokey skin"
+-	help
+-	  This option allows to install the Smokey Xenomai skin
+-
+ config BR2_PACKAGE_XENOMAI_UITRON_SKIN
+ 	bool "uITRON skin"
+ 	help
 diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index f25adf747b..1d38cffa30 100644
+index 16c486eb34..f25adf747b 100644
 --- a/package/xenomai/xenomai.mk
 +++ b/package/xenomai/xenomai.mk
-@@ -6,12 +6,12 @@
- 
- XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
- ifeq ($(XENOMAI_VERSION),)
--XENOMAI_VERSION = 3.0.9
-+XENOMAI_VERSION = v3.0.9
- else
- BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+@@ -73,7 +73,7 @@ XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_UNNEEDED_FILES
+ ifeq ($(BR2_PACKAGE_XENOMAI_TESTSUITE),)
+ define XENOMAI_REMOVE_TESTSUITE
+ 	rm -rf $(TARGET_DIR)/usr/share/xenomai/
+-	for i in clocktest gpiotest latency spitest switchtest \
++	for i in clocktest gpiotest latency smokey spitest switchtest \
+ 		xeno-test-run-wrapper dohell xeno-test-run xeno-test ; do \
+ 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+ 	done
+@@ -109,24 +109,21 @@ endef
+ XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_ANALOGY
  endif
  
--XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
-+XENOMAI_SITE = https://gitlab.denx.de/Xenomai/xenomai/-/archive/$(XENOMAI_VERSION)
- XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
- XENOMAI_LICENSE = GPL-2.0+ with exception (headers), LGPL-2.1+ (libraries), GPL-2.0+ (kernel), GFDL-1.2+ (docs), GPL-2.0 (ipipe patch, can driver)
- # GFDL is not included but refers to gnu.org
-@@ -28,6 +28,12 @@ XENOMAI_INSTALL_STAGING = YES
- XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
- XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
+-XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_NATIVE_SKIN),,alchemy)
+-XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_POSIX_SKIN),,posix)
+-XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_PSOS_SKIN),,psos)
+-XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_RTAI_SKIN),,rtai)
+-XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_SMOKEY_SKIN),,smokey)
+-XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_UITRON_SKIN),,uitron)
+-XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)
+-XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
++XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_NATIVE_SKIN),,alchemy)
++XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_POSIX_SKIN),,posix)
++XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_PSOS_SKIN),,psos)
++XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_RTAI_SKIN),,rtai)
++XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_TESTSUITE),,smokey)
++XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_UITRON_SKIN),,uitron)
++XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)
++XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
  
-+define XENOMAI_BOOTSTRAP
-+	(cd $(@D); ./scripts/bootstrap)
-+endef
-+
-+XENOMAI_PRE_CONFIGURE_HOOKS += XENOMAI_BOOTSTRAP
-+
- XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
+ define XENOMAI_REMOVE_SKINS
+-	for i in $(XENOMAI_REMOVE_SKIN_LIST) ; do \
++	for i in $(XENOMAI_REMOVE_LIBS_LIST) ; do \
+ 		rm -f $(TARGET_DIR)/usr/lib/lib$$i.* ; \
+ 		if [ $$i == "posix" ] ; then \
+ 			rm -f $(TARGET_DIR)/usr/lib/posix.wrappers ; \
+ 		fi ; \
+-		if [ $$i == "smokey" ] ; then \
+-			rm -f $(TARGET_DIR)/usr/bin/smokey* ; \
+-		fi ; \
+ 	done
+ endef
  
- ifeq ($(BR2_PACKAGE_XENOMAI_MERCURY),y)
 -- 
 2.16.4
