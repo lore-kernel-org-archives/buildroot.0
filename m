@@ -1,49 +1,47 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Thu, 12 Dec 2019 15:01:47 +0100
-Subject: [Buildroot] [PATCH v2] modem-manager: bump to version 1.12.2
-Message-ID: <20191212140147.2972668-1-aleksander@aleksander.es>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu, 12 Dec 2019 07:05:55 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-multidict: bump to version
+ 4.7.1
+Message-ID: <20191212140555.23006-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
+ package/python-multidict/python-multidict.hash | 4 ++--
+ package/python-multidict/python-multidict.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Hey!
-
-This new v2 patch drops the patch that was modifying the link order of some libraries, because the correct fix was already included in the 1.12.2 release.
-
-Cheers!
-
----
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index b1fef98fe2..a3925bb4a2 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  3daca86164145fffb589939433f596c13fa077c9a187c0d5820fdd5b4e4a6424  ModemManager-1.12.0.tar.xz
-+sha256  4f76d2bdd0ed6780837cdde886eaf535f9770f9daa1ff92e63658d06aa5d25ea  ModemManager-1.12.2.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index b5aa7914f6..2f198a355a 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
+index 1e7b704626..d60bd64442 100644
+--- a/package/python-multidict/python-multidict.hash
++++ b/package/python-multidict/python-multidict.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/multidict/json
+-md5	bee3828781685758410fa0fbcda8c88e  multidict-4.6.1.tar.gz
+-sha256	5159c4975931a1a78bf6602bbebaa366747fce0a56cb2111f44789d2c45e379f  multidict-4.6.1.tar.gz
++md5	3d0ee14d81ed3db30f6bbd22a1a60d76  multidict-4.7.1.tar.gz
++sha256	d7b6da08538302c5245cd3103f333655ba7f274915f1f5121c4f4b5fbdb3febe  multidict-4.7.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
+diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
+index e3df5a64bf..ccf78b688f 100644
+--- a/package/python-multidict/python-multidict.mk
++++ b/package/python-multidict/python-multidict.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
-
--MODEM_MANAGER_VERSION = 1.12.0
-+MODEM_MANAGER_VERSION = 1.12.2
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
---
-2.24.0
+ 
+-PYTHON_MULTIDICT_VERSION = 4.6.1
++PYTHON_MULTIDICT_VERSION = 4.7.1
+ PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
+-PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/8a/74/61547af55c077b8d2e3648c2af74c08fa1e382665b290468db7ba54db2ea
++PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/34/68/38290d44ea34dae6d52719f0c94bd09951387cec75e36cdce6805b5f27e9
+ PYTHON_MULTIDICT_SETUP_TYPE = setuptools
+ PYTHON_MULTIDICT_LICENSE = Apache-2.0
+ PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
+-- 
+2.20.1
