@@ -1,52 +1,44 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Thu, 12 Dec 2019 08:53:56 +0100
-Subject: [Buildroot] [PATCH v4 09/13] package/wpa_supplicant: adapt for
- preset-all
+Date: Thu, 12 Dec 2019 08:53:58 +0100
+Subject: [Buildroot] [PATCH v4 11/13] package/syslog-ng: implement default
+ using DefaultInstance
 In-Reply-To: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
 References: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
-Message-ID: <20191212075400.1499536-10-jeremy.rosen@smile.fr>
+Message-ID: <20191212075400.1499536-12-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-all services were installed but not enabled.
-This change enables the non-templated service
-but disables  the templated ones
+Instead of using a manual symlink we use add a DefaultInstance= to the
+config file
 
-Enabling the templates creates weird links which are probably an
-upstream bug.
+This is how upstream wants us to do it and allows systemctl preset to
+correctly restore it if needed
 
 Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 ---
- package/wpa_supplicant/50-wpa_supplicant.preset | 4 ++++
- package/wpa_supplicant/wpa_supplicant.mk        | 2 ++
- 2 files changed, 6 insertions(+)
- create mode 100644 package/wpa_supplicant/50-wpa_supplicant.preset
+ package/syslog-ng/syslog-ng.mk | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/wpa_supplicant/50-wpa_supplicant.preset b/package/wpa_supplicant/50-wpa_supplicant.preset
-new file mode 100644
-index 0000000000..9af8562c0e
---- /dev/null
-+++ b/package/wpa_supplicant/50-wpa_supplicant.preset
-@@ -0,0 +1,4 @@
-+disable wpa_supplicant at .service
-+disable wpa_supplicant-nl80211 at .service
-+disable wpa_supplicant-wired at .service
-+
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 9dcebca9bf..4f95ea6276 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -227,6 +227,8 @@ define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-nl80211 at .service
- 	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-wired at .service
-+	$(INSTALL) -D -m 644 $(WPA_SUPPLICANT_PKGDIR)/50-wpa_supplicant.preset \
-+		$(TARGET_DIR)/usr/lib/systemd/system-preset/50-wpa_supplicant.preset
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index fc44777d16..98b5a38deb 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -105,11 +105,8 @@ endef
+ # By default syslog-ng installs a .service that requires a config file at
+ # /etc/default, so provide one with the default values.
+ define SYSLOG_NG_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -m 0644 -D package/syslog-ng/syslog-ng at default \
+-		$(TARGET_DIR)/etc/default/syslog-ng at default
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -sf ../../../../usr/lib/systemd/system/syslog-ng at .service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/syslog-ng at default.service
++	mkdir $(TARGET_DIR)/usr/lib/systemd/system/syslog-ng at .service.d;\
++	printf '[Install]\nDefaultInstance=default\n' > $(TARGET_DIR)/usr/lib/systemd/system/syslog-ng at .service.d/buildroot-default-instance.conf;
  endef
  
- $(eval $(generic-package))
+ # By default syslog-ng installs a number of sample configuration
 -- 
 2.24.0
