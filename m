@@ -1,142 +1,86 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Thu, 12 Dec 2019 11:50:07 +0100
-Subject: [Buildroot] [PATCH] modem-manager: bump to version 1.12.2
-In-Reply-To: <CAJ4jsafsOvYMfXBpMipUSz69G=+PHLV59UzN1FvGnYyrr2L1RQ@mail.gmail.com>
-References: <20191212093325.2178579-1-aleksander@aleksander.es>
- <CAJ4jsafsOvYMfXBpMipUSz69G=+PHLV59UzN1FvGnYyrr2L1RQ@mail.gmail.com>
-Message-ID: <CAAP7ucLxYCT=+j+2dEhLBKAuB74gjDdyA5Obz4Rk=LvgNaxXtw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 12 Dec 2019 13:02:53 +0100
+Subject: [Buildroot] Per-package breaks -reconfigure, -rebuild, -reinstall
+Message-ID: <20191212130253.2cb543ba@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey!
+Hello,
 
-> >
-> > Also include a patch that solves build issues detected in 1.12.0, e.g.:
-> > http://lists.busybox.net/pipermail/buildroot/2019-December/268817.html
-> > http://autobuild.buildroot.net/results/5ac390b2a813cadb4cb180d61bb05f6fe4407155/build-end.log
-> >
-> > Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> > ---
-> >
-> > Hey!
-> >
-> > This version bump to 1.12.2 also includes a patch required to build correctly when using strict library link ordering. Adding this patch requires triggering autoreconf. The patch is already included in the upstream MM repo, so the next 1.12.4 release will also include it (whenever that is, not scheduled yet).
-> >
-> > Cheers!
-> >
-> > ---
-> >  ...ix-order-of-linked-libs-in-test-apps.patch | 40 +++++++++++++++++++
-> >  package/modem-manager/modem-manager.hash      |  2 +-
-> >  package/modem-manager/modem-manager.mk        |  5 ++-
-> >  3 files changed, 45 insertions(+), 2 deletions(-)
-> >  create mode 100644 package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch
-> >
-> > diff --git a/package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch b/package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch
-> > new file mode 100644
-> > index 0000000000..d58960ce57
-> > --- /dev/null
-> > +++ b/package/modem-manager/0001-build-fix-order-of-linked-libs-in-test-apps.patch
-> > @@ -0,0 +1,40 @@
-> > +From 52cfd6788e4d12f3c2ea302e66bcc80c5efd80ee Mon Sep 17 00:00:00 2001
-> > +From: Aleksander Morgado <aleksander@aleksander.es>
-> > +Date: Wed, 11 Dec 2019 16:09:25 +0100
-> > +Subject: [PATCH] build: fix order of linked libs in test apps
-> > +
-> > +Solving build issues with truly strict linkers, as in:
-> > +http://lists.busybox.net/pipermail/buildroot/2019-December/268817.html
-> > +
-> > +Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> > +---
-> > + test/Makefile.am | 4 ++--
-> > + 1 file changed, 2 insertions(+), 2 deletions(-)
-> > +
-> > +diff --git a/test/Makefile.am b/test/Makefile.am
-> > +index ba737bc5..20e2a068 100644
-> > +--- a/test/Makefile.am
-> > ++++ b/test/Makefile.am
-> > +@@ -87,8 +87,8 @@ mmsmspdu_CPPFLAGS = \
-> > +
-> > + mmsmspdu_LDADD = \
-> > +       $(MM_LIBS) \
-> > +-      $(top_builddir)/src/libhelpers.la \
-> > +       $(top_builddir)/libmm-glib/libmm-glib.la \
-> > ++      $(top_builddir)/src/libhelpers.la \
-> > +       $(NULL)
-> > +
-> > + ################################################################################
-> > +@@ -112,8 +112,8 @@ mmsmsmonitor_CPPFLAGS = \
-> > +
-> > + mmsmsmonitor_LDADD = \
-> > +       $(MM_LIBS) \
-> > +-      $(top_builddir)/src/libhelpers.la \
-> > +       $(top_builddir)/libmm-glib/libmm-glib.la \
-> > ++      $(top_builddir)/src/libhelpers.la \
-> > +       $(NULL)
-> > +
-> > + ################################################################################
-> > +--
-> > +2.24.0
-> > +
-> > diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-> > index b1fef98fe2..a3925bb4a2 100644
-> > --- a/package/modem-manager/modem-manager.hash
-> > +++ b/package/modem-manager/modem-manager.hash
-> > @@ -1,4 +1,4 @@
-> >  # Locally computed
-> > -sha256  3daca86164145fffb589939433f596c13fa077c9a187c0d5820fdd5b4e4a6424  ModemManager-1.12.0.tar.xz
-> > +sha256  4f76d2bdd0ed6780837cdde886eaf535f9770f9daa1ff92e63658d06aa5d25ea  ModemManager-1.12.2.tar.xz
-> >  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> >  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> > diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> > index b5aa7914f6..8aa9f36766 100644
-> > --- a/package/modem-manager/modem-manager.mk
-> > +++ b/package/modem-manager/modem-manager.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >
-> > -MODEM_MANAGER_VERSION = 1.12.0
-> > +MODEM_MANAGER_VERSION = 1.12.2
-> >  MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
-> >  MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
-> >  MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
-> > @@ -13,6 +13,9 @@ MODEM_MANAGER_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
-> >  MODEM_MANAGER_INSTALL_STAGING = YES
-> >  MODEM_MANAGER_CONF_OPTS = --disable-more-warnings
-> >
-> > +# 0001-build-fix-order-of-linked-libs-in-test-apps.patch
-> > +MODEM_MANAGER_AUTORECONF = YES
-> > +
-> >  ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
-> >  MODEM_MANAGER_DEPENDENCIES += libqmi
-> >  MODEM_MANAGER_CONF_OPTS += --with-qmi
-> > --
-> > 2.24.0
->
-> I still see an error similar to the one in
-> http://autobuild.buildroot.net/results/0ae6ca0b278ca1903057ff6ac31b1b70e8638b9a/
-> in a clean build after applying the patch to bump libqmi o 1.24.2 and
-> this one:
->
+After working a bit with per-package enabled builds, I realized that
+the current implementation breaks our -reconfigure, -rebuild and
+-reinstall targets.
 
-Did you run autoreconf in srcdir after applying the patch manually?
-Not sure how that would be done when rebuilding using the
-br-reproduce-build setup.
+Let me explain the situation. Package "zulu" has a make-level dependency
+on package "host-pkgconf". You do a build with both host-pkgconf and
+zulu. host-pkgconf gets installed in
+output/per-package/host-pkgconf/host, and then when zulu is built, the
+host-pkgconf installation is rsync'ed into
+output/per-package/zulu/host. In the host-finalize step, we create
+output/host by rsync'ing output/per-package/host-pkgconf/host into
+output/host, and then output/per-package/zulu/host into output/host.
 
-Can you tell me what's the value of mmsmspdu_DEPENDENCIES in the
-"test/Makefile" file you have in your build? It should be something
-like this:
-mmsmspdu_DEPENDENCIES = $(am__DEPENDENCIES_1) \
-        $(top_builddir)/libmm-glib/libmm-glib.la \
-        $(top_builddir)/src/libhelpers.la
+Everything is fine, the result is correct, we're happy.
 
+Now, I make some dummy change in output/build/host-pkgconf-<version>/,
+and issue "make host-pkgconf-rebuild all".
 
-(i.e. libmm-glib.la listed before libhelpers.la)
+What happens is:
 
+ (1) host-pkgconf gets rebuilt
 
---
-Aleksander
-https://aleksander.es
+ (2) host-pkgconf gets reinstalled in
+     output/per-package/host-pkgconf/host
+
+ (3) host-finalize rsync output/per-package/host-pkgconf/host and
+     output/per-package/zulu/host into output/host.
+
+At the end, what we have in output/host is the old version of
+host-pkgconf, which comes from output/per-package/zulu/host, and not
+the new one with my change, which is only in
+output/per-package/host-pkgconf/host/.
+
+This clearly breaks the current semantic of the -reconfigure, -rebuild
+and -reinstall targets.
+
+The question is how to we solve this ?
+
+During the last Buildroot Developers meeting, we discussed that instead
+of accumulating dependencies of package A *and* installing package A in
+the same per-package folder, it should perhaps be split, like:
+
+  output/per-package/foo/host-dependencies <- where we rsync the dependencies
+  output/per-package/foo/host <- where we install foo
+
+(and ditto for target, of course)
+
+This would allow the final rsync to create the global target and global
+host directories to only copy from each per-package directory what was
+installed by this package.
+
+I see two ways of implementing this:
+
+ (1) During the configure and build steps, HOST_DIR points to
+     $(PER_PACKAGE_DIR)/pkg/host-dependencies and TARGET_DIR to
+     $(PER_PACKAGE_DIR)/pkg/target-dependencies. Then then during the
+     installation steps, HOST_DIR points to $(PER_PACKAGE_DIR)/pkg/host
+     and TARGET_DIR to $(PER_PACKAGE_DIR)/pkg/target. The drawback that
+     I see is that I'm sure some package do some funky stuff in their
+     install step, and if the target or host folder is empty things
+     will go wrong.
+
+ (2) Keep the logic as it is today, but using the "installed file list"
+     logic to extract from $(PER_PACKAGE_DIR)/pkg/{host,target} was has
+     really been installed by *that* package specifically.
+
+What do you think ? Do you have other ideas or suggestions ?
+
+Thomas
+
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
