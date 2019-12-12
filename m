@@ -1,43 +1,51 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@smile.fr>
-Date: Thu, 12 Dec 2019 08:54:00 +0100
-Subject: [Buildroot] [PATCH v4 13/13] package/alsa-utils: add a WantedBy
- section to the unit
+Date: Thu, 12 Dec 2019 08:53:57 +0100
+Subject: [Buildroot] [PATCH v4 10/13] package/sysrepo: update to new systemd
 In-Reply-To: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
 References: <20191212075400.1499536-1-jeremy.rosen@smile.fr>
-Message-ID: <20191212075400.1499536-14-jeremy.rosen@smile.fr>
+Message-ID: <20191212075400.1499536-11-jeremy.rosen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allows the user to enable/disable manually the unit.
-It is enabled by default
+sysrepo provides it's own services so just remove the section
+
+Also fix sysrepo not installing the files in the correct directory
 
 Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 ---
- package/alsa-utils/alsa-utils.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/sysrepo/sysrepo.mk | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 52022e32ab..84f6db3784 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -90,11 +90,10 @@ define ALSA_UTILS_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service
- 	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-state.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/sound.target.wants
--	ln -sf ../../../../lib/systemd/system/alsa-restore.service \
--		$(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-restore.service
--	ln -sf ../../../../lib/systemd/system/alsa-state.service \
--		$(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-state.service
-+	mkdir $(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service.d;\
-+	printf '[Install]\nWantedBy=multi-user.target\n' > $(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service.d/buildroot-enable.conf;\
-+	mkdir $(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service.d;\
-+	printf '[Install]\nWantedBy=multi-user.target\n' > $(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service.d/buildroot-enable.conf;
- endef
- endif
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index 216e517526..f693ff70da 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
+@@ -24,7 +24,7 @@ SYSREPO_CONF_OPTS = \
+ 	-DCALL_SYSREPOCFG_BIN=$(HOST_DIR)/bin/sysrepocfg \
+ 	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_SYSREPO_EXAMPLES),ON,OFF) \
+ 	$(if $(BR2_INIT_SYSTEMD),-DWITH_SYSTEMD=ON) \
+-	$(if $(BR2_INIT_SYSTEMD),-DSYSTEMD_UNIT_DIR=usr/lib/systemd/system)
++	$(if $(BR2_INIT_SYSTEMD),-DSYSTEMD_UNIT_DIR=/usr/lib/systemd/system)
  
+ # On ARM, this is needed to prevent unaligned memory access with an optimized
+ # build .. https://github.com/sysrepo/sysrepo/issues/947
+@@ -41,14 +41,6 @@ define SYSREPO_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S51sysrepo-plugind
+ endef
+ 
+-define SYSREPO_INSTALL_INIT_SYSTEMD
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../../../../usr/lib/systemd/system/sysrepod.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../../../../usr/lib/systemd/system/sysrepo-plugind.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-endef
+-
+ HOST_SYSREPO_CONF_OPTS = \
+ 	-DGEN_PYTHON2_TESTS=OFF \
+ 	-DENABLE_TESTS=OFF \
 -- 
 2.24.0
