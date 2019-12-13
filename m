@@ -1,42 +1,39 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 13 Dec 2019 23:04:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/memtool: bump to version 2018.03.0
-Message-ID: <20191213220452.18674-1-fontaine.fabrice@gmail.com>
+Date: Fri, 13 Dec 2019 23:09:11 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ljsyscall: fix build with aarch64
+Message-ID: <20191213220912.18906-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+luajit supports aarch64 since commit
+2ca0accc21a090874ac6e97670b47153a1f0a0b5
+
+However this raise a build failure with ljsyscall because aarch64
+directory does not exist so use arm64 instead
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3a0bd14349b3cab3e09d0b8b24ddab66dfab91ff
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/memtool/memtool.hash | 3 ++-
- package/memtool/memtool.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/ljsyscall/ljsyscall.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/memtool/memtool.hash b/package/memtool/memtool.hash
-index 95df1aaf85..da4880bd35 100644
---- a/package/memtool/memtool.hash
-+++ b/package/memtool/memtool.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256  58309d356cb9b45a241cb602ca3850891a70ddaa93ced51d1cced78e14767680  memtool-2016.10.0.tar.xz
-+sha256  87cb7175266ff3a00a9c1f541c4c6c93693ffbe8dcc0d97a60d13c45ff860900  memtool-2018.03.0.tar.xz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/memtool/memtool.mk b/package/memtool/memtool.mk
-index c236cab8ba..75e378311a 100644
---- a/package/memtool/memtool.mk
-+++ b/package/memtool/memtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMTOOL_VERSION = 2016.10.0
-+MEMTOOL_VERSION = 2018.03.0
- MEMTOOL_SITE = http://public.pengutronix.de/software/memtool
- MEMTOOL_SOURCE = memtool-$(MEMTOOL_VERSION).tar.xz
- MEMTOOL_LICENSE = GPL-2.0
+diff --git a/package/ljsyscall/ljsyscall.mk b/package/ljsyscall/ljsyscall.mk
+index 30b5cde22a..12dfbcb4ae 100644
+--- a/package/ljsyscall/ljsyscall.mk
++++ b/package/ljsyscall/ljsyscall.mk
+@@ -18,6 +18,8 @@ else ifeq ($(BR2_powerpc),y)
+ LJSYSCALL_ARCH = ppc
+ else ifeq ($(BR2_arm)$(BR2_armeb),y)
+ LJSYSCALL_ARCH = arm
++else ifeq ($(BR2_aarch64),y)
++LJSYSCALL_ARCH = arm64
+ else ifeq ($(BR2_mips)$(BR2_mipsel),y)
+ LJSYSCALL_ARCH = mips
+ else
 -- 
 2.24.0
