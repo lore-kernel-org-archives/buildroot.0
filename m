@@ -1,40 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Dec 2019 21:05:06 +0100
-Subject: [Buildroot] [git commit] package/gpsd: remove bogus select of
- BR2_PACKAGE_GPSD_NTP_SHM
-Message-ID: <20191213195656.AFC098A4A0@busybox.osuosl.org>
+From: daggs <daggs@gmx.com>
+Date: Fri, 13 Dec 2019 22:04:54 +0100
+Subject: [Buildroot] no ssh in openrc or systemv init
+Message-ID: <trinity-2a8770a7-9cff-4ac4-b4cc-0af73aba197f-1576271094139@3c-app-mailcom-bs02>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c727b23cdf223eb88d9ebaba828308689b6cd182
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Greetings,
 
-In commit 57f85e52a7b29363e76735930bc1bb51a38718ac ("package/gpsd:
-unconditionally enable NTP time hinting support"), the option
-BR2_PACKAGE_GPSD_NTP_SHM was removed, because NTP time hinting support
-is now enabled unconditionally.
+I'm trying to build a rpi4 image based on this config:
+BR2_arm=y
+BR2_cortex_a72=y
+BR2_ARM_FPU_NEON_VFPV4=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_INIT_OPENRC=y
+BR2_TARGET_GENERIC_ROOT_PASSWD="123456"
+BR2_SYSTEM_DHCP="eth0"
+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2711-rpi-4-b"
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_PACKAGE_RPI_FIRMWARE=y
+BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
+BR2_PACKAGE_DROPBEAR=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
 
-However, in one place, a select of this option was kept, which is
-obviously no longer needed.
+for some reason when using systemv or openrc init , I have no ssh.
+the busybox init works well.
+am I missing some config to make it work on openrc?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gpsd/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+Thanks,
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 22f7e6e1d9..ea0dea3ba6 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -46,7 +46,6 @@ comment "profiling support not available with uClibc-based toolchain"
- 
- config BR2_PACKAGE_GPSD_PPS
- 	bool "PPS time syncing support"
--	select BR2_PACKAGE_GPSD_NTP_SHM
- 
- config BR2_PACKAGE_GPSD_USER
- 	bool "GPSD privilege revocation user"
+Dagg.
