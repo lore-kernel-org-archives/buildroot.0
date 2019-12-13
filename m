@@ -1,46 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 13 Dec 2019 16:25:45 +0100
-Subject: [Buildroot] [PATCH] package/easy-rsa: select the appropriate option
- for openssl binary
-Message-ID: <20191213152546.1376732-1-thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 Dec 2019 16:27:31 +0100
+Subject: [Buildroot] [PATCH] package/dialog: bump version to 1.3-20191210
+Message-ID: <20191213152732.18418-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since openssl was converted to a virtual package,
-BR2_PACKAGE_OPENSSL_BIN no longer exists: it was renamed to
-BR2_PACKAGE_LIBOPENSSL_BIN, but easy-rsa was not changed accordingly.
+Fixes a number of regressions in 1.3-20190808:
 
-easy-rsa needs to take into account the two providers of openssl, and
-select the appropriate suboptions depending on which openssl
-implementation was chosen.
+- Menu shadows are not longer (erroneously) drawn with --no-shadow
+- Spaces in menu fields are now correctly handled on uClibc-ng
 
-Ideally, we would probably need a more elaborate option that ensures
-easy-rsa doesn't have to know the details of which openssl
-implementation is selected, but practically speaking with just two
-providers of openssl at the moment, the proposed solution is good
-enough.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/easy-rsa/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/dialog/dialog.hash | 2 +-
+ package/dialog/dialog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/easy-rsa/Config.in b/package/easy-rsa/Config.in
-index 883d679e98..56db64a590 100644
---- a/package/easy-rsa/Config.in
-+++ b/package/easy-rsa/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_EASY_RSA
- 	bool "easy-rsa"
- 	select BR2_PACKAGE_OPENSSL # runtime
--	select BR2_PACKAGE_OPENSSL_BIN
-+	select BR2_PACKAGE_LIBOPENSSL_BIN if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBRESSL_BIN if BR2_PACKAGE_LIBRESSL
- 	help
- 	  Simple shell based CA utility
+diff --git a/package/dialog/dialog.hash b/package/dialog/dialog.hash
+index 98e2229ce8..e1768588d8 100644
+--- a/package/dialog/dialog.hash
++++ b/package/dialog/dialog.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 886e12f2cf3df36cde65f32f6ae52bc598eb2599a611b1d8ce5dfdea599e47e2  dialog-1.3-20190808.tgz
++sha256 10f7c02ee5dea311e61b0d3e29eb6e18bcedd6fb6672411484c1a37729cbd7a6  dialog-1.3-20191210.tgz
+ # Locally computed
+ sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
+index ae3d2d466a..f3b66bae09 100644
+--- a/package/dialog/dialog.mk
++++ b/package/dialog/dialog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-DIALOG_VERSION = 1.3-20190808
++DIALOG_VERSION = 1.3-20191210
+ DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
+ DIALOG_SITE = https://invisible-mirror.net/archives/dialog
+ DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
 -- 
-2.23.0
+2.20.1
