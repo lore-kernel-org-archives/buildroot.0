@@ -1,36 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Dec 2019 16:20:26 +0100
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-bad: drop
- bogus select
-Message-ID: <20191213151212.A6AF188DAE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 13 Dec 2019 16:21:54 +0100
+Subject: [Buildroot] [PATCH] package/syslog-ng: remove bogus select
+Message-ID: <20191213152154.1372083-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8393212437b80a3fdac2bd83b2d015241fa28cfb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The eventlog package was removed as part of commit
+5e0b1f9c2386e9184256b10ca19a6a7e4f4865cc ("package/eventlog: remove
+package"). It used to be a separate package, but it is now part of
+syslog-ng itself, which is why the eventlog package was removed.
 
-BR2_PACKAGE_WEBRTC does not exist, and we already select
-BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING, which is the package really
-needed by the webrtcdsp plugin.
+But commit 5e0b1f9c2386e9184256b10ca19a6a7e4f4865cc forgot to drop the
+select BR2_PACKAGE_EVENTLOG, so let's fix this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in | 1 -
+ package/syslog-ng/Config.in | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index e79f266ad0..08952f70cb 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -584,7 +584,6 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
--	select BR2_PACKAGE_WEBRTC
- 	help
- 	  WebRTC echo-cancellation, gain control and noise suppression
- 
+diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
+index fbc236221a..a537115616 100644
+--- a/package/syslog-ng/Config.in
++++ b/package/syslog-ng/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_SYSLOG_NG
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-	select BR2_PACKAGE_EVENTLOG
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_OPENSSL
+-- 
+2.23.0
