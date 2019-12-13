@@ -1,37 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Dec 2019 16:02:21 +0100
-Subject: [Buildroot] [git commit] package/efl: drop invalid select
- BR2_PACKAGE_XLIB_LIBXP
-Message-ID: <20191213145642.3A8158A479@busybox.osuosl.org>
+Date: Fri, 13 Dec 2019 16:07:22 +0100
+Subject: [Buildroot] PATCH 2019.11 stable release,
+ glibc/gcc busybox incompatible
+In-Reply-To: <TY2PR02MB3727097C4CD9FC2CE591C5C1C9540@TY2PR02MB3727.apcprd02.prod.outlook.com>
+ (zhou qi's message of "Fri, 13 Dec 2019 14:55:39 +0000")
+References: <TY2PR02MB3727097C4CD9FC2CE591C5C1C9540@TY2PR02MB3727.apcprd02.prod.outlook.com>
+Message-ID: <87d0csgt79.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=286b06e9d4fe26f0b5f8787b4afeb5a851f9d03e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "zhou" == zhou qi <atmgnd@outlook.com> writes:
 
-The option BR2_PACKAGE_XLIB_LIBXP does not exist, but is select by
-efl/Config.in since the package was introduced. Since all xlib_*
-dependency in the .mk file each have a corresponding select in the
-Config.in file, we simply drop this bogus dependency.
+ > I may found a bug of 2019.11 release, plz someone (developers) test it.
+ > I found use the 2019.11 release to build i386 image have following error for busybox/gcc
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/efl/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ > I downloaded 2019.11 stable release from https://buildroot.org/downloads/buildroot-2019.11.tar.gz
+ > And use the following command to build a simple i386 image.
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 3e7097df74..98b5b0731a 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -166,7 +166,6 @@ config BR2_PACKAGE_EFL_X_XLIB
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
- 	select BR2_PACKAGE_XLIB_LIBXINERAMA
--	select BR2_PACKAGE_XLIB_LIBXP
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
- 	select BR2_PACKAGE_XLIB_LIBXRENDER
- 	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
+ >   1.  make pc_x86_64_defconfig
+ >   2.  make menuconfig
+ > # chang arch to i386, change libc to glibc save the config, then type
+
+I take it you have left the CPU variant alone, E.G. still nocona?
+
+ >   1.  make
+
+ > use qemu to test:
+ > sudo ~/opt/qemu-4.1.1/bin/qemu-system-x86_64 --enable-kvm output/images/disk.img -m 512 -boot d -usb -device usb-tablet -soundhw sb16 -monitor stdio -cpu qemu64 -vga std
+
+On what hardware and OS are you running this?
+
+-- 
+Bye, Peter Korsgaard
