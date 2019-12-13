@@ -1,49 +1,42 @@
-From: daggs <daggs@gmx.com>
-Date: Fri, 13 Dec 2019 22:04:54 +0100
-Subject: [Buildroot] no ssh in openrc or systemv init
-Message-ID: <trinity-2a8770a7-9cff-4ac4-b4cc-0af73aba197f-1576271094139@3c-app-mailcom-bs02>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 13 Dec 2019 23:04:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/memtool: bump to version 2018.03.0
+Message-ID: <20191213220452.18674-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Add hash for license file
 
-I'm trying to build a rpi4 image based on this config:
-BR2_arm=y
-BR2_cortex_a72=y
-BR2_ARM_FPU_NEON_VFPV4=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_OPENRC=y
-BR2_TARGET_GENERIC_ROOT_PASSWD="123456"
-BR2_SYSTEM_DHCP="eth0"
-BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2711-rpi-4-b"
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_PACKAGE_RPI_FIRMWARE=y
-BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
-BR2_PACKAGE_DROPBEAR=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/memtool/memtool.hash | 3 ++-
+ package/memtool/memtool.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-for some reason when using systemv or openrc init , I have no ssh.
-the busybox init works well.
-am I missing some config to make it work on openrc?
-
-Thanks,
-
-Dagg.
+diff --git a/package/memtool/memtool.hash b/package/memtool/memtool.hash
+index 95df1aaf85..da4880bd35 100644
+--- a/package/memtool/memtool.hash
++++ b/package/memtool/memtool.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256  58309d356cb9b45a241cb602ca3850891a70ddaa93ced51d1cced78e14767680  memtool-2016.10.0.tar.xz
++sha256  87cb7175266ff3a00a9c1f541c4c6c93693ffbe8dcc0d97a60d13c45ff860900  memtool-2018.03.0.tar.xz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/memtool/memtool.mk b/package/memtool/memtool.mk
+index c236cab8ba..75e378311a 100644
+--- a/package/memtool/memtool.mk
++++ b/package/memtool/memtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MEMTOOL_VERSION = 2016.10.0
++MEMTOOL_VERSION = 2018.03.0
+ MEMTOOL_SITE = http://public.pengutronix.de/software/memtool
+ MEMTOOL_SOURCE = memtool-$(MEMTOOL_VERSION).tar.xz
+ MEMTOOL_LICENSE = GPL-2.0
+-- 
+2.24.0
