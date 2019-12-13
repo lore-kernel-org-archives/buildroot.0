@@ -1,46 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Dec 2019 16:27:31 +0100
-Subject: [Buildroot] [PATCH] package/dialog: bump version to 1.3-20191210
-Message-ID: <20191213152732.18418-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 13 Dec 2019 16:28:47 +0100
+Subject: [Buildroot] [PATCH] package/openpowerlink: drop bogus select
+Message-ID: <20191213152847.1377137-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a number of regressions in 1.3-20190808:
+There is no option BR2_PACKAGE_OPENPOWERLINK_PCAP_DAEMON, and we never
+had any option named like this, so it seems like a leftover from
+previous iterations of the openpowerlink patch series. Since the
+option does not exist, the select doesn't do anything, and we can
+simply drop it.
 
-- Menu shadows are not longer (erroneously) drawn with --no-shadow
-- Spaces in menu fields are now correctly handled on uClibc-ng
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dialog/dialog.hash | 2 +-
- package/dialog/dialog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openpowerlink/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/dialog/dialog.hash b/package/dialog/dialog.hash
-index 98e2229ce8..e1768588d8 100644
---- a/package/dialog/dialog.hash
-+++ b/package/dialog/dialog.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256 886e12f2cf3df36cde65f32f6ae52bc598eb2599a611b1d8ce5dfdea599e47e2  dialog-1.3-20190808.tgz
-+sha256 10f7c02ee5dea311e61b0d3e29eb6e18bcedd6fb6672411484c1a37729cbd7a6  dialog-1.3-20191210.tgz
- # Locally computed
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index ae3d2d466a..f3b66bae09 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DIALOG_VERSION = 1.3-20190808
-+DIALOG_VERSION = 1.3-20191210
- DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
- DIALOG_SITE = https://invisible-mirror.net/archives/dialog
- DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
+diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
+index 68ea751954..1a3dd62acd 100644
+--- a/package/openpowerlink/Config.in
++++ b/package/openpowerlink/Config.in
+@@ -50,7 +50,6 @@ config BR2_PACKAGE_OPENPOWERLINK_STACK_MONOLITHIC_USER_STACK_LIB
+ config BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB
+ 	bool "user-space pcap daemon"
+ 	select BR2_PACKAGE_LIBPCAP
+-	select BR2_PACKAGE_OPENPOWERLINK_PCAP_DAEMON
+ 	help
+ 	  Compile openPOWERLINK application library which contains the
+ 	  interface to a Linux user space driver, and the Linux user
 -- 
-2.20.1
+2.23.0
