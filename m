@@ -1,26 +1,54 @@
-From: Christian Kellermann <christian.kellermann@solectrix.de>
-Date: Fri, 13 Dec 2019 09:42:50 +0100
-Subject: [Buildroot] [PATCH] python-pylibftdi: Fix LICENSE hash
-Message-ID: <20191213084250.85816-1-christian.kellermann@solectrix.de>
+From: rscr <rafacrespiramon@gmail.com>
+Date: Fri, 13 Dec 2019 06:27:33 -0600 (CST)
+Subject: [Buildroot] Custom tarball and .config file
+In-Reply-To: <1576133977989-0.post@n4.nabble.com>
+References: <1575964472511-0.post@n4.nabble.com>
+ <20191210141145.5969eb63@windsurf> <1575986333615-0.post@n4.nabble.com>
+ <1576133977989-0.post@n4.nabble.com>
+Message-ID: <1576240053124-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/python-pylibftdi/python-pylibftdi.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello, 
 
-diff --git a/package/python-pylibftdi/python-pylibftdi.hash b/package/python-pylibftdi/python-pylibftdi.hash
-index ead3c9652a..62dac5cbbf 100644
---- a/package/python-pylibftdi/python-pylibftdi.hash
-+++ b/package/python-pylibftdi/python-pylibftdi.hash
-@@ -2,4 +2,4 @@
- md5	c48e442cef7b1e865b4d96ab92f509ad pylibftdi-0.18.1.tar.gz
- sha256	bdd04076933959b20b3c8b4fb8be7882d3362675f259e7eeb23ebff03b81859d  pylibftdi-0.18.1.tar.gz
- # Locally computed sha256 checksums
--sha256	581b6a16b3aaf23c4f7caee5defa099af833a95916e57ef24d7c12f893a0c160  LICENSE.txt
-+sha256  0e40132339e1ef7d17d93837fbc273d1e87302e9295162bd19c9161e5700ddcc  LICENSE.txt
--- 
-2.23.0
+I don't know what I am doing wrong, but I am still not able to configure the
+kernel through "linux-menuconfig". I* would like to use the bcmrpi_defconfig
+as base and add my kernel driver as <M>. How can I achieve it? *
+
+My steps:
+
+a) I've got my kernel source (linux-rpi-4.19.y) in /home/tec/rcr/tools/src
+with the driver.c, Makefile and Kconfig edited (I can build the kernel
+source outside of buildroot)
+b) Tar the kernel source
+c) I go into buildroot's directory. I've myproject_defconfig file into
+br2_external so I run:
+make BR2_EXTERNAL=~/rcr/projects/cp4/rscr_br2_extree myproject_defconfig
+make menuconfig
+
+myproject_defconfig.myproject_defconfig
+<http://buildroot-busybox.2317881.n4.nabble.com/file/t2824/myproject_defconfig.myproject_defconfig>  
+
+e) Once the buildroot config is done, I run:
+make linux-menuconfig
+
+I get the following error:
+
+make[2]: *** No rule to make target 'bcmrpi_defconfig'.  Stop.
+linux/linux.mk:565: recipe for target
+'/home/ibercomp/rcr/projects/cp4/buildroot/output/build/linux-custom/.stamp_dotconfig'
+failed
+
+
+What I am doing wrong?
+
+Kind Regards
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
