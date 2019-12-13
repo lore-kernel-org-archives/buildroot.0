@@ -1,54 +1,43 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Fri, 13 Dec 2019 00:47:25 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/python-avro: new package
-In-Reply-To: <b3e3517a-3be6-caa1-d00d-32facf9e9adf@railnova.eu>
-References: <20191212124143.220947-1-titouan.christophe@railnova.eu>
- <20191212124143.220947-3-titouan.christophe@railnova.eu>
- <CAKcgs2xukFUxUWfn8_k6UDYod5ds9VP8X4mqro9scKev9rpy=w@mail.gmail.com>
- <b3e3517a-3be6-caa1-d00d-32facf9e9adf@railnova.eu>
-Message-ID: <c7c2774f-fbd3-7f1c-acc0-9545beea0d93@railnova.eu>
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Fri, 13 Dec 2019 07:24:31 +0100
+Subject: [Buildroot] [PATCH 1/4] package/xenomai: Smokey's not a skin
+In-Reply-To: <20191212214820.1c84b011@windsurf>
+References: <cover.1576176280.git.jan.kiszka@siemens.com>
+ <f23ad7759ce2abdebafcf0464cf15145e163285b.1576176280.git.jan.kiszka@siemens.com>
+ <20191212214820.1c84b011@windsurf>
+Message-ID: <2a94d986-e9d9-d87b-0e12-4f61da232a84@siemens.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/13/19 12:37 AM, Titouan Christophe wrote:
-> Hello,
+On 12.12.19 21:48, Thomas Petazzoni wrote:
+> On Thu, 12 Dec 2019 19:44:37 +0100
+> Jan Kiszka <jan.kiszka@siemens.com> wrote:
 > 
-> On 12/12/19 9:55 PM, Gilles Talis wrote:
->> Hello Titouan, all
+>> From: Jan Kiszka <jan.kiszka@siemens.com>
 >>
->> Le jeu. 12 d?c. 2019 ? 13:41, Titouan Christophe
->> <titouan.christophe@railnova.eu> a ?crit :
+>> That's a testsuite tool.
+>>
+>> Rename XENOMAI_REMOVE_SKIN_LIST at this chance as it's cleaning
+>> libraries.
 > 
-> [snip]
-> 
->>> diff --git a/package/python-avro/python-avro.mk 
->>> b/package/python-avro/python-avro.mk
->>> new file mode 100644
->>> index 0000000000..08a25f0c84
->>> --- /dev/null
->>> +++ b/package/python-avro/python-avro.mk
->>> @@ -0,0 +1,14 @@
->>> +################################################################################ 
->>>
->>> +#
->>> +# python-avro
->>> +#
->>> +################################################################################ 
->>>
->>> +
->>> +PYTHON_AVRO_VERSION = 1.9.1
->> As mentioned, you could benefit from using the same package version as
->> avro-c... or not.
-> 
-> I don't see examples of other pkgs doing this kind of cross-pkg version 
-> reference, do you have one in mind ? (apart from "plugins" packages, 
-> like all the QT5 modules; as it was the case in the v1 of this Avro 
-> series).
+> I am confused, aren't psos, rtai, uitron, vxworks and al. called
+> "skins" in the Xenomai speak ?
 
-Actually, protobuf and python-protobuf do this. Unless this was a 
-mistake in the first place, I will do the same in Avro for consistency.
+Yes, they are and remain so.
 
-Titouan
+> 
+> Ideally, this variable rename should be done in a separate patch, since
+> it's independent from the smokey option removal.
+
+We still use XENOMAI_REMOVE_LIBS_LIST to remove the smokey *lib* when
+the testsuite is disabled. Therefore, XENOMAI_REMOVE_SKIN_LIST ws not an
+appropriate name. Same context, therefore same patch.
+
+Jan
+
+-- 
+Siemens AG, Corporate Technology, CT RDA IOT SES-DE
+Corporate Competence Center Embedded Linux
