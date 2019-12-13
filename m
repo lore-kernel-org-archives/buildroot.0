@@ -1,30 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Dec 2019 21:05:31 +0100
-Subject: [Buildroot] [PATCH] package/gpsd: remove bogus select of
- BR2_PACKAGE_GPSD_NTP_SHM
-In-Reply-To: <20191213153044.1382229-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 13 Dec 2019 16:30:43 +0100")
-References: <20191213153044.1382229-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87immkf0tw.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Dec 2019 21:04:48 +0100
+Subject: [Buildroot] [git commit] package/openpowerlink: drop bogus select
+Message-ID: <20191213195656.A5B508A4EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=76a6f1285d270b46ee79ce67a5a006cacd53b2ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > In commit 57f85e52a7b29363e76735930bc1bb51a38718ac ("package/gpsd:
- > unconditionally enable NTP time hinting support"), the option
- > BR2_PACKAGE_GPSD_NTP_SHM was removed, because NTP time hinting support
- > is now enabled unconditionally.
+There is no option BR2_PACKAGE_OPENPOWERLINK_PCAP_DAEMON, and we never
+had any option named like this, so it seems like a leftover from
+previous iterations of the openpowerlink patch series. Since the
+option does not exist, the select doesn't do anything, and we can
+simply drop it.
 
- > However, in one place, a select of this option was kept, which is
- > obviously no longer needed.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openpowerlink/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
+index 68ea751954..1a3dd62acd 100644
+--- a/package/openpowerlink/Config.in
++++ b/package/openpowerlink/Config.in
+@@ -50,7 +50,6 @@ config BR2_PACKAGE_OPENPOWERLINK_STACK_MONOLITHIC_USER_STACK_LIB
+ config BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB
+ 	bool "user-space pcap daemon"
+ 	select BR2_PACKAGE_LIBPCAP
+-	select BR2_PACKAGE_OPENPOWERLINK_PCAP_DAEMON
+ 	help
+ 	  Compile openPOWERLINK application library which contains the
+ 	  interface to a Linux user space driver, and the Linux user
