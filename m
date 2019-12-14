@@ -1,47 +1,34 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 14 Dec 2019 12:38:17 +0100
-Subject: [Buildroot] [PATCH 2/2] package/apitrace: needs wchar
-In-Reply-To: <20191214113817.1017079-1-fontaine.fabrice@gmail.com>
-References: <20191214113817.1017079-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191214113817.1017079-2-fontaine.fabrice@gmail.com>
+From: Avraham Shukron <avraham.shukron@gmail.com>
+Date: Sat, 14 Dec 2019 15:34:25 +0200
+Subject: [Buildroot] Pine64: setting the console to be over HMDI
+Message-ID: <CAJX3zAsBo9Den0HdrWFrADZvFvubnmxWjL1FKu5cKUnaBFrGqg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-apitrace uses its own version of gtest which depends on wchar since
-version 8.0 and
-https://github.com/apitrace/apitrace/commit/85cf7c8b86129699246574dfeec846e88a3f88a2
+Hi!
 
-Moreover, apitrace also uses wcslen in trace_writer.cpp since at least
-version 8.0 and
-https://github.com/apitrace/apitrace/commit/5e9a2b11b248aaa2f6f353bbcf9f600d65bcaf51
+I have the pine64 which I want to make as my media center using
+Kodi/Buildroot.
+I use systemd as the init system.
 
-Fixes:
- - http://autobuild.buildroot.org/results/5f27556ccc9daec578fe1bf2ed516ca9921ed474
+I managed to build and flash the board. I see it boots with U-Boot boot
+output, but when control is passed to linux there's nothing on the screen
+other than a blinking cursor on the corner.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/apitrace/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+The board is up and running, I can tell that since CTRL+ALT+DEL resets the
+board, which is enabled by a systemd service.
 
-diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
-index 45b4c307bb..08313c4891 100644
---- a/package/apitrace/Config.in
-+++ b/package/apitrace/Config.in
-@@ -1,8 +1,10 @@
--comment "apitrace needs a toolchain w/ C++, gcc >= 4.9"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+comment "apitrace needs a toolchain w/ C++, wchar, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_PACKAGE_APITRACE
- 	bool "apitrace"
-+	depends on BR2_USE_WCHAR
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
--- 
-2.24.0
+Kodi itself is also installed, but its unit is WantedBy: multi-user.target
+
+I have two questions:
+1. How do I configure the console to be over HDMI and USB keyboard instead
+of serial interface?
+2. Why kodi is not started - at least in a visible manner?
+
+Thanks!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191214/0fbbfe15/attachment.html>
