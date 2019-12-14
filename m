@@ -1,41 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Dec 2019 16:20:19 +0100
-Subject: [Buildroot] [git commit] package/webrtc-audio-processing: needs
- host-pkgconf
-Message-ID: <20191214151244.ED88F8A5AD@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 14 Dec 2019 16:25:37 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ljsyscall: fix build with
+ aarch64
+In-Reply-To: <20191213220912.18906-1-fontaine.fabrice@gmail.com>
+References: <20191213220912.18906-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191214162537.062b00ee@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2bac55d30a0e963940df1ea936a824ed720c151
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 13 Dec 2019 23:09:11 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-configure fails if the pkgconfig.m4 macros are not available during
-this package autoreconf:
+> luajit supports aarch64 since commit
+> 2ca0accc21a090874ac6e97670b47153a1f0a0b5
+> 
+> However this raise a build failure with ljsyscall because aarch64
+> directory does not exist so use arm64 instead
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/3a0bd14349b3cab3e09d0b8b24ddab66dfab91ff
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/ljsyscall/ljsyscall.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-./configure: line 11829: syntax error near unexpected token `GNUSTL,'
-./configure: line 11829: `  PKG_CHECK_MODULES(GNUSTL, gnustl)'
+Both patches applied to master. Thanks!
 
-Fixes:
- - http://autobuild.buildroot.org/results/9cbdfb76ea38864fce1acca88714c48c41c77255
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/webrtc-audio-processing/webrtc-audio-processing.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/webrtc-audio-processing/webrtc-audio-processing.mk b/package/webrtc-audio-processing/webrtc-audio-processing.mk
-index 7edeaf961f..ff84a802d1 100644
---- a/package/webrtc-audio-processing/webrtc-audio-processing.mk
-+++ b/package/webrtc-audio-processing/webrtc-audio-processing.mk
-@@ -10,6 +10,7 @@ WEBRTC_AUDIO_PROCESSING_SITE = http://freedesktop.org/software/pulseaudio/webrtc
- WEBRTC_AUDIO_PROCESSING_INSTALL_STAGING = YES
- WEBRTC_AUDIO_PROCESSING_LICENSE = BSD-3-Clause
- WEBRTC_AUDIO_PROCESSING_LICENSE_FILES = COPYING
-+WEBRTC_AUDIO_PROCESSING_DEPENDENCIES = host-pkgconf
- # 0001-Proper-detection-of-cxxabi.h-and-execinfo.h.patch
- WEBRTC_AUDIO_PROCESSING_AUTORECONF = YES
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
