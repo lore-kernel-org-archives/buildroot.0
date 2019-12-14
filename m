@@ -1,40 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 14 Dec 2019 12:00:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cups-filters: bump to version 1.26.0
-Message-ID: <20191214110036.895955-1-fontaine.fabrice@gmail.com>
+Date: Sat, 14 Dec 2019 12:38:16 +0100
+Subject: [Buildroot] [PATCH 1/2] package/apitrace: needs host-python3
+Message-ID: <20191214113817.1017079-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+apitrace needs host-python3 since version 9.0 and
+https://github.com/apitrace/apitrace/commit/78078e9025efa898f6e5402e306abdd205c7b2c0
+
+Fixes:
+ - http://autobuild.buildroot.org/results/5f27556ccc9daec578fe1bf2ed516ca9921ed474
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cups-filters/cups-filters.hash | 2 +-
- package/cups-filters/cups-filters.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/apitrace/apitrace.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-index 205cf99da3..9e24abe393 100644
---- a/package/cups-filters/cups-filters.hash
-+++ b/package/cups-filters/cups-filters.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 397ba572d32b269ac70827f5c0f77878f857d5ab39de3fd0e801a00663037148  cups-filters-1.25.11.tar.gz
-+sha256 ff8679fcd0c31c25d229262c7ad100ba161ef6b2aa455a2df673dd74ef93f488  cups-filters-1.26.0.tar.gz
- sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 6a1adbed63..3bb33d963c 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
+index f9886d33c1..e6f8a2b1c5 100644
+--- a/package/apitrace/apitrace.mk
++++ b/package/apitrace/apitrace.mk
+@@ -9,7 +9,7 @@ APITRACE_SITE = $(call github,apitrace,apitrace,$(APITRACE_VERSION))
+ APITRACE_LICENSE = MIT
+ APITRACE_LICENSE_FILES = LICENSE
  
--CUPS_FILTERS_VERSION = 1.25.11
-+CUPS_FILTERS_VERSION = 1.26.0
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
+-APITRACE_DEPENDENCIES = host-python libpng
++APITRACE_DEPENDENCIES = host-python3 libpng
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ APITRACE_DEPENDENCIES += xlib_libX11
 -- 
 2.24.0
