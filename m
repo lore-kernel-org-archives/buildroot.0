@@ -1,41 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 15:26:37 +0100
-Subject: [Buildroot] [git commit] package/ljsyscall: fix build with aarch64
-Message-ID: <20191214141929.AAA9F8A523@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 14 Dec 2019 15:52:16 +0100
+Subject: [Buildroot] PATCH 2019.11 stable release,
+ glibc/gcc busybox incompatible
+In-Reply-To: <TY2PR02MB3727225FD240605F44F32D6DC9540@TY2PR02MB3727.apcprd02.prod.outlook.com>
+ (zhou qi's message of "Fri, 13 Dec 2019 15:41:17 +0000")
+References: <TY2PR02MB3727097C4CD9FC2CE591C5C1C9540@TY2PR02MB3727.apcprd02.prod.outlook.com>
+ <87d0csgt79.fsf@dell.be.48ers.dk>
+ <TY2PR02MB3727BA639496E684AE9AF4F2C9540@TY2PR02MB3727.apcprd02.prod.outlook.com>
+ <TY2PR02MB3727225FD240605F44F32D6DC9540@TY2PR02MB3727.apcprd02.prod.outlook.com>
+Message-ID: <87eex7ez8f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac31b3465ff07b1b5422d1d951b4f7a88e8d5b82
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "zhou" == zhou qi <atmgnd@outlook.com> writes:
 
-luajit supports aarch64 since commit
-2ca0accc21a090874ac6e97670b47153a1f0a0b5
+ > And Yes, the CPU variant or E.G.
+ > Only arch to i386, libc to glibc
 
-However this raise a build failure with ljsyscall because aarch64
-directory does not exist so use arm64 instead
+Interesting. I can reproduce it as well, but only with
+-enable-kvm. Without -enable-kvm it works fine here. Maybe it is a bug
+in kvm?
 
-Fixes:
- - http://autobuild.buildroot.org/results/3a0bd14349b3cab3e09d0b8b24ddab66dfab91ff
+Notice that we do have a dedicated i386 qemu defconfig
+(qemu_x86_defconfig). I just tried building that with glibc and that
+runs without issues here with/without -enable-kvm.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ljsyscall/ljsyscall.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/ljsyscall/ljsyscall.mk b/package/ljsyscall/ljsyscall.mk
-index 30b5cde22a..12dfbcb4ae 100644
---- a/package/ljsyscall/ljsyscall.mk
-+++ b/package/ljsyscall/ljsyscall.mk
-@@ -18,6 +18,8 @@ else ifeq ($(BR2_powerpc),y)
- LJSYSCALL_ARCH = ppc
- else ifeq ($(BR2_arm)$(BR2_armeb),y)
- LJSYSCALL_ARCH = arm
-+else ifeq ($(BR2_aarch64),y)
-+LJSYSCALL_ARCH = arm64
- else ifeq ($(BR2_mips)$(BR2_mipsel),y)
- LJSYSCALL_ARCH = mips
- else
+-- 
+Bye, Peter Korsgaard
