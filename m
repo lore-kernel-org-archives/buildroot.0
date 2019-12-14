@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 22:30:10 +0100
-Subject: [Buildroot] [PATCH 1/2] package/python-frozenlist: new package
-In-Reply-To: <20191211061834.95150-1-james.hilliard1@gmail.com>
+Date: Sat, 14 Dec 2019 22:30:15 +0100
+Subject: [Buildroot] [PATCH 2/2] package/python-aiosignal: new package
+In-Reply-To: <20191211061834.95150-2-james.hilliard1@gmail.com>
 References: <20191211061834.95150-1-james.hilliard1@gmail.com>
-Message-ID: <20191214223010.293b3126@windsurf.home>
+ <20191211061834.95150-2-james.hilliard1@gmail.com>
+Message-ID: <20191214223015.300d3056@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 10 Dec 2019 23:18:33 -0700
+On Tue, 10 Dec 2019 23:18:34 -0700
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> A list-like structure which implements
-> collections.abc.MutableSequence.
+> aiosignal: a list of registered asynchronous callbacks.
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  DEVELOPERS                                       |  1 +
->  package/Config.in                                |  1 +
->  package/python-frozenlist/Config.in              |  8 ++++++++
->  package/python-frozenlist/python-frozenlist.hash |  5 +++++
->  package/python-frozenlist/python-frozenlist.mk   | 14 ++++++++++++++
+>  DEVELOPERS                                     |  1 +
+>  package/Config.in                              |  1 +
+>  package/python-aiosignal/Config.in             |  8 ++++++++
+>  package/python-aiosignal/python-aiosignal.hash |  5 +++++
+>  package/python-aiosignal/python-aiosignal.mk   | 14 ++++++++++++++
 >  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-frozenlist/Config.in
->  create mode 100644 package/python-frozenlist/python-frozenlist.hash
->  create mode 100644 package/python-frozenlist/python-frozenlist.mk
+>  create mode 100644 package/python-aiosignal/Config.in
+>  create mode 100644 package/python-aiosignal/python-aiosignal.hash
+>  create mode 100644 package/python-aiosignal/python-aiosignal.mk
 
 Applied to master, thanks.
 
