@@ -1,96 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 22:27:53 +0100
-Subject: [Buildroot] [git commit] package/python-aiozipkin: new package
-Message-ID: <20191214212006.C2F648A5DB@busybox.osuosl.org>
+Date: Sat, 14 Dec 2019 22:15:08 +0100
+Subject: [Buildroot] [git commit] package/python-janus: new package
+Message-ID: <20191214212006.94AC68A5DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c60cbaa78b1797b1d57054fc9e5b3dce76b59d4
+commit: https://git.buildroot.net/buildroot/commit/?id=4410aafcfbee7452346cec32bf1dd74a45d272bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Distributed tracing instrumentation for asyncio application
-with zipkin.
+Mixed sync-async queue to interoperate between asyncio
+tasks and classic threads.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/python-aiozipkin/Config.in             |  9 +++++++++
- package/python-aiozipkin/python-aiozipkin.hash |  5 +++++
- package/python-aiozipkin/python-aiozipkin.mk   | 14 ++++++++++++++
- 5 files changed, 30 insertions(+)
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-janus/Config.in         |  8 ++++++++
+ package/python-janus/python-janus.hash |  5 +++++
+ package/python-janus/python-janus.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c8ca32cf62..d9b4864b9f 100644
+index 5fa4015fdb..5702f80e6d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1144,6 +1144,7 @@ F:	package/python-aiomonitor/
- F:	package/python-aiojobs/
- F:	package/python-aiorwlock/
- F:	package/python-aiosignal/
-+F:	package/python-aiozipkin/
- F:	package/python-async-lru/
+@@ -1147,6 +1147,7 @@ F:	package/python-async-lru/
  F:	package/python-async-timeout/
  F:	package/python-brotli/
+ F:	package/python-cchardet/
++F:	package/python-janus/
+ F:	package/python-logstash/
+ F:	package/python-multidict/
+ F:	package/python-pycares/
 diff --git a/package/Config.in b/package/Config.in
-index b961b74c33..f304a8fbd3 100644
+index 96957ef8fd..b5fed9ea70 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -839,6 +839,7 @@ menu "External python modules"
- 	source "package/python-aioredis/Config.in"
- 	source "package/python-aiorwlock/Config.in"
- 	source "package/python-aiosignal/Config.in"
-+	source "package/python-aiozipkin/Config.in"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-argh/Config.in"
- 	source "package/python-arrow/Config.in"
-diff --git a/package/python-aiozipkin/Config.in b/package/python-aiozipkin/Config.in
+@@ -954,6 +954,7 @@ menu "External python modules"
+ 	source "package/python-ipython-genutils/Config.in"
+ 	source "package/python-iso8601/Config.in"
+ 	source "package/python-itsdangerous/Config.in"
++	source "package/python-janus/Config.in"
+ 	source "package/python-jaraco-classes/Config.in"
+ 	source "package/python-jaraco-functools/Config.in"
+ 	source "package/python-jedi/Config.in"
+diff --git a/package/python-janus/Config.in b/package/python-janus/Config.in
 new file mode 100644
-index 0000000000..643fc9a4da
+index 0000000000..a1ba0463f9
 --- /dev/null
-+++ b/package/python-aiozipkin/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_AIOZIPKIN
-+	bool "python-aiozipkin"
++++ b/package/python-janus/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_JANUS
++	bool "python-janus"
 +	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
 +	help
-+	  Distributed tracing instrumentation for asyncio application
-+	  with zipkin.
++	  Mixed sync-async queue to interoperate between asyncio
++	  tasks and classic threads.
 +
-+	  https://github.com/aio-libs/aiozipkin
-diff --git a/package/python-aiozipkin/python-aiozipkin.hash b/package/python-aiozipkin/python-aiozipkin.hash
++	  https://github.com/aio-libs/janus/
+diff --git a/package/python-janus/python-janus.hash b/package/python-janus/python-janus.hash
 new file mode 100644
-index 0000000000..8034381751
+index 0000000000..5098769901
 --- /dev/null
-+++ b/package/python-aiozipkin/python-aiozipkin.hash
++++ b/package/python-janus/python-janus.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/aiozipkin/json
-+md5	01766aa607ae121d2cbb3ebf15a8cd0b  aiozipkin-0.6.0.tar.gz
-+sha256	7270cdaff81f4a6ea70de48b3e4597629c3beef76740bfe6f7c9b58b45b67c73  aiozipkin-0.6.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/janus/json
++md5	26283b122439fbca4ae1db18ff839b7c  janus-0.4.0.tar.gz
++sha256	cfc221683160b91b35bae1917e2957b78dad10a2e634f4f8ed119ed72e2a88ef  janus-0.4.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	9b42fe3a288996988c552e387e7877be7525a1649e62086aedd6b32d3cb56365  LICENSE
-diff --git a/package/python-aiozipkin/python-aiozipkin.mk b/package/python-aiozipkin/python-aiozipkin.mk
++sha256	8b177cccb6ddec12a9fc97bd49e7e2bbcd92464625624bd8bdbfad799ae606e9  LICENSE
+diff --git a/package/python-janus/python-janus.mk b/package/python-janus/python-janus.mk
 new file mode 100644
-index 0000000000..2f5b54be6c
+index 0000000000..f718d0c19d
 --- /dev/null
-+++ b/package/python-aiozipkin/python-aiozipkin.mk
++++ b/package/python-janus/python-janus.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-aiozipkin
++# python-janus
 +#
 +################################################################################
 +
-+PYTHON_AIOZIPKIN_VERSION = 0.6.0
-+PYTHON_AIOZIPKIN_SOURCE = aiozipkin-$(PYTHON_AIOZIPKIN_VERSION).tar.gz
-+PYTHON_AIOZIPKIN_SITE = https://files.pythonhosted.org/packages/8d/14/33c79497c3082dd93172f834e4f3d1d6d0eb9b957b6885c919ca73462ed6
-+PYTHON_AIOZIPKIN_SETUP_TYPE = setuptools
-+PYTHON_AIOZIPKIN_LICENSE = Apache-2.0
-+PYTHON_AIOZIPKIN_LICENSE_FILES = LICENSE
++PYTHON_JANUS_VERSION = 0.4.0
++PYTHON_JANUS_SOURCE = janus-$(PYTHON_JANUS_VERSION).tar.gz
++PYTHON_JANUS_SITE = https://files.pythonhosted.org/packages/e2/39/41fd545b99eac81d47fe346b8c78c09a3b187ce2fd9f3c9656dfe035e39a
++PYTHON_JANUS_SETUP_TYPE = setuptools
++PYTHON_JANUS_LICENSE = Apache-2.0
++PYTHON_JANUS_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
