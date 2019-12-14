@@ -1,35 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 22:00:46 +0100
-Subject: [Buildroot] [PATCH] package/glibc: bump version for post-2.30
- security fixes
-In-Reply-To: <20191213135552.27664-1-peter@korsgaard.com>
-References: <20191213135552.27664-1-peter@korsgaard.com>
-Message-ID: <20191214220046.3674aa74@windsurf.home>
+Date: Sat, 14 Dec 2019 22:04:31 +0100
+Subject: [Buildroot] [PATCH v6 1/6] package/polkit: bump to version 0.116
+In-Reply-To: <CAFSsvmopSyRoAriDm-5yKuh4pJYEvBbe1HmaL8jsoC9AaaMjdA@mail.gmail.com>
+References: <20191206234649.3972927-1-aduskett@gmail.com>
+ <20191208160213.030635f6@windsurf.home>
+ <CAFSsvmqCnXXkjMtJiPOpHx0E8Xv4fHcOuNw3qSSn52i9F-6yPg@mail.gmail.com>
+ <20191208205847.76c05a1f@windsurf.home>
+ <CAFSsvmopSyRoAriDm-5yKuh4pJYEvBbe1HmaL8jsoC9AaaMjdA@mail.gmail.com>
+Message-ID: <20191214220431.6c9e4fcf@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 13 Dec 2019 14:55:52 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Mon, 9 Dec 2019 11:03:08 -0800
+Adam Duskett <aduskett@gmail.com> wrote:
 
-> Fixes the following security vulnerability:
-> 
-> - CVE-2019-19126: ld.so failed to ignore the LD_PREFER_MAP_32BIT_EXEC
->   environment variable during program execution after a security
->   transition, allowing local attackers to restrict the possible mapping
->   addresses for loaded libraries and thus bypass ASLR for a setuid
->   program.  Reported by Marcin Ko?cielnicki.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  .../glibc.hash                                                  | 2 +-
->  package/glibc/glibc.mk                                          | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->  rename package/glibc/{2.30-1-gbe9a328c93834648e0bec106a1f86357d1a8c7e1 => 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91}/glibc.hash (70%)
+> > SELinux can already be enabled on uClibc. I added the musl-fts package,
+> > and used it in libselinux to make it available for uClibc/musl.
+> >
+> > When you're grumpy, please verify your claims :-)
+>
+> I'm aware of the option, but I don't agree with it. It's built into
+> uClibc and requiring
+> an extra package is not nice in my opinion.
 
-Applied to master, thanks.
+The <fts.h> API is deprecated, and very few packages use it. It doesn't
+make a lot of sense to force everybody to have it in uClibc, just for
+the sake of a few packages.
+
+Alternatively, we could add a separate option to enable FTS support in
+uClibc when needed, but this stuff always gets annoying with uClibc
+external toolchains that may or may not have FTS support enabled.
+
+The musl-fts solution is easy. It works for musl, it works for uClibc,
+regardless of the uClibc configuration.
+
+Best regards,
 
 Thomas
 -- 
