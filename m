@@ -1,86 +1,69 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 15 Dec 2019 00:26:00 +0100
-Subject: [Buildroot] [PATCH 2/4] package/tpm2-totp: bump to version 0.2.0
+Date: Sun, 15 Dec 2019 00:26:01 +0100
+Subject: [Buildroot] [PATCH 3/4] package/tpm2-abrmd: bump to version 2.3.0
 In-Reply-To: <20191214232602.3337220-1-fontaine.fabrice@gmail.com>
 References: <20191214232602.3337220-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191214232602.3337220-2-fontaine.fabrice@gmail.com>
+Message-ID: <20191214232602.3337220-3-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix build failure with musl
+Drop dbus dependency as it is not needed since version 2.2.0 and
+https://github.com/tpm2-software/tpm2-abrmd/commit/c1d42c9ebefbfe36255603aca065944836c14610
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-src-libtpm2-totp.c-include-endian.h.patch | 34 +++++++++++++++++++
- package/tpm2-totp/tpm2-totp.hash              |  2 +-
- package/tpm2-totp/tpm2-totp.mk                |  2 +-
- 3 files changed, 36 insertions(+), 2 deletions(-)
- create mode 100644 package/tpm2-totp/0001-src-libtpm2-totp.c-include-endian.h.patch
+ package/tpm2-abrmd/Config.in       | 5 ++---
+ package/tpm2-abrmd/tpm2-abrmd.hash | 2 +-
+ package/tpm2-abrmd/tpm2-abrmd.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/tpm2-totp/0001-src-libtpm2-totp.c-include-endian.h.patch b/package/tpm2-totp/0001-src-libtpm2-totp.c-include-endian.h.patch
-new file mode 100644
-index 0000000000..5887af36b6
---- /dev/null
-+++ b/package/tpm2-totp/0001-src-libtpm2-totp.c-include-endian.h.patch
-@@ -0,0 +1,34 @@
-+From a69c50fc2b8c35814e195eacb01f0d60feb54dd1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 14 Dec 2019 19:26:32 +0100
-+Subject: [PATCH] src/libtpm2-totp.c: include <endian.h>
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fix the following build failure with musl:
-+
-+src/libtpm2-totp.c: In function ?tpm2totp_calculate?:
-+src/libtpm2-totp.c:826:11: warning: implicit declaration of function ?htobe64? [-Wimplicit-function-declaration]
-+     tmp = htobe64(tmp);
-+           ^~~~~~~
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/tpm2-software/tpm2-totp/commit/a69c50fc2b8c35814e195eacb01f0d60feb54dd1]
-+---
-+ src/libtpm2-totp.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/libtpm2-totp.c b/src/libtpm2-totp.c
-+index a364b7a..2d3f00d 100644
-+--- a/src/libtpm2-totp.c
-++++ b/src/libtpm2-totp.c
-+@@ -8,6 +8,7 @@
-+ 
-+ #include <tpm2-totp.h>
-+ 
-++#include <endian.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-diff --git a/package/tpm2-totp/tpm2-totp.hash b/package/tpm2-totp/tpm2-totp.hash
-index 0449f9513a..417b583b17 100644
---- a/package/tpm2-totp/tpm2-totp.hash
-+++ b/package/tpm2-totp/tpm2-totp.hash
+diff --git a/package/tpm2-abrmd/Config.in b/package/tpm2-abrmd/Config.in
+index db0ea66112..4931641af4 100644
+--- a/package/tpm2-abrmd/Config.in
++++ b/package/tpm2-abrmd/Config.in
+@@ -1,10 +1,9 @@
+ config BR2_PACKAGE_TPM2_ABRMD
+ 	bool "tpm2-abrmd"
+ 	depends on BR2_USE_WCHAR # libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+-	depends on BR2_USE_MMU # dbus, libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
+ 	depends on !BR2_STATIC_LIBS # tpm2-tss
+-	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_TPM2_TSS
+ 	help
+diff --git a/package/tpm2-abrmd/tpm2-abrmd.hash b/package/tpm2-abrmd/tpm2-abrmd.hash
+index 61a75c0d1b..cff3266bc8 100644
+--- a/package/tpm2-abrmd/tpm2-abrmd.hash
++++ b/package/tpm2-abrmd/tpm2-abrmd.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256 2ce2a518c96540942b0e78bc73efaefb76a2784b7e2dd1b3f14e7d31d97b33b7  tpm2-totp-0.1.2.tar.gz
-+sha256 4bcb8b8ff320727f707841d839c242149649ad07edbced94f2984ade26a69d6c  tpm2-totp-0.2.0.tar.gz
- sha256 67bc21a0bff2b0890307cfaa883bd3f5337f461eb6d8a612a015cea6d704e9ed  LICENSE
-diff --git a/package/tpm2-totp/tpm2-totp.mk b/package/tpm2-totp/tpm2-totp.mk
-index ca557388e6..bf298071e1 100644
---- a/package/tpm2-totp/tpm2-totp.mk
-+++ b/package/tpm2-totp/tpm2-totp.mk
-@@ -4,7 +4,7 @@
+-sha256 ff0ed283b0300cd784d6bf2b042e167020f8443602974e53b924e9fd98a4b515  tpm2-abrmd-2.0.3.tar.gz
++sha256 63cb59be1fd21e6ae233c37a0aa4a59883a4885a7bfd2c7e69979c5048518d50  tpm2-abrmd-2.3.0.tar.gz
+ sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
+diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
+index 31f19f5d01..42f41b6ba8 100644
+--- a/package/tpm2-abrmd/tpm2-abrmd.mk
++++ b/package/tpm2-abrmd/tpm2-abrmd.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--TPM2_TOTP_VERSION = 0.1.2
-+TPM2_TOTP_VERSION = 0.2.0
- TPM2_TOTP_SITE = https://github.com/tpm2-software/tpm2-totp/releases/download/v$(TPM2_TOTP_VERSION)
- TPM2_TOTP_LICENSE = BSD-3-Clause
- TPM2_TOTP_LICENSE_FILES = LICENSE
+-TPM2_ABRMD_VERSION = 2.0.3
++TPM2_ABRMD_VERSION = 2.3.0
+ TPM2_ABRMD_SITE = https://github.com/tpm2-software/tpm2-abrmd/releases/download/$(TPM2_ABRMD_VERSION)
+ TPM2_ABRMD_LICENSE = BSD-2-Clause
+ TPM2_ABRMD_LICENSE_FILES = LICENSE
+ TPM2_ABRMD_INSTALL_STAGING = YES
+-TPM2_ABRMD_DEPENDENCIES = dbus libglib2 tpm2-tss host-pkgconf
++TPM2_ABRMD_DEPENDENCIES = libglib2 tpm2-tss host-pkgconf
+ 
+ # -fstack-protector-all and FORTIFY_SOURCE=2 is used by
+ # default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
 -- 
 2.24.0
