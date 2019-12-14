@@ -1,36 +1,78 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 14 Dec 2019 23:55:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libkrb5: needs host-pkgconf for
- libedit
-Message-ID: <20191214225506.3334271-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 14 Dec 2019 23:55:27 +0100
+Subject: [Buildroot] [PATCH 3/3] package/libnfc: add configs to select
+ which driver to support
+In-Reply-To: <20191209215923.28945-3-aussedat.louis@gmail.com>
+References: <20191209215923.28945-1-aussedat.louis@gmail.com>
+ <20191209215923.28945-3-aussedat.louis@gmail.com>
+Message-ID: <20191214235527.59cc91e7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-pkgconf is needed to find libedit
+Hello Louis,
 
-Fixes:
- - http://autobuild.buildroot.org/results/45eee300788f46975d292b21eead97f9e9a8b5d8
+On Mon,  9 Dec 2019 22:59:23 +0100
+Louis Aussedat <aussedat.louis@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libkrb5/libkrb5.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> By default, arygon and pn53x_usb are activated,
+> to keep old configuration.
 
-diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-index 7c199129a3..44a20b3707 100644
---- a/package/libkrb5/libkrb5.mk
-+++ b/package/libkrb5/libkrb5.mk
-@@ -41,7 +41,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBEDIT),y)
- LIBKRB5_CONF_OPTS += --with-libedit
--LIBKRB5_DEPENDENCIES += libedit
-+LIBKRB5_DEPENDENCIES += host-pkgconf libedit
- else
- LIBKRB5_CONF_OPTS += --without-libedit
- endif
+I've improved a bit the commit log:
+
+    package/libnfc: add sub-options to enable individual drivers
+    
+    Until now, the arygon and pn53x_usb were unconditionally enabled, and
+    there were no options to choose other drivers. Therefore, we had
+    sub-options for each individual driver, keeping arygon and pn53x_usb
+    enabled by default to preserve backward compatibility.
+    
+    Also, due to this, the BR2_TOOLCHAIN_HAS_THREADS dependency on the
+    libnfc package is no longer needed, and is only needed for some of the
+    sub-options.
+
+Also, see below some comments.
+
+> diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
+> index c8fe251459..9a1c8103ec 100644
+> --- a/package/libnfc/Config.in
+> +++ b/package/libnfc/Config.in
+> @@ -1,8 +1,6 @@
+>  config BR2_PACKAGE_LIBNFC
+>  	bool "libnfc"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+
+This dependency was no longer needed, as it was due to libusb, so it
+has to be moved down to the sub-options that select libusb.
+
+> -	select BR2_PACKAGE_LIBUSB
+> -	select BR2_PACKAGE_LIBUSB_COMPAT
+>  	help
+>  	  Public platform independent Near Field Communication (NFC)
+>  	  library.
+> @@ -11,6 +9,59 @@ config BR2_PACKAGE_LIBNFC
+>  
+>  if BR2_PACKAGE_LIBNFC
+>  
+> +config BR2_PACKAGE_LIBNFC_ACR122_PCSC
+> +	bool "acr122_pcsc driver"
+> +	default ""
+
+default "" doesn't make much sense for a boolean option, and the
+default value for a boolean is to be disabled, so there is nothing to
+do. I just removed all default "" lines.
+
+> +	select BR2_PACKAGE_PCSC_LITE
+
+You can't select options like this: you need to replicate their
+dependencies.
+
+I fixed up the above issues, and applied to master. Thanks!
+
+Thomas
 -- 
-2.24.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
