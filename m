@@ -1,96 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 22:07:23 +0100
-Subject: [Buildroot] [git commit] package/python-aiohttp-debugtoolbar: new
- package
-Message-ID: <20191214212006.6E74E8A5DB@busybox.osuosl.org>
+Date: Sat, 14 Dec 2019 22:17:53 +0100
+Subject: [Buildroot] [git commit] package/python-frozenlist: new package
+Message-ID: <20191214212006.A5BE28A5DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4d5ca2e41f30af5e179f8abaec6904c4e79de64
+commit: https://git.buildroot.net/buildroot/commit/?id=c241b8ba2dc17b04d42472807737f2b1c2993e37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-debugtoolbar for aiohttp.
+A list-like structure which implements
+collections.abc.MutableSequence.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/python-aiohttp-debugtoolbar/Config.in              |  9 +++++++++
- .../python-aiohttp-debugtoolbar.hash                       |  5 +++++
- .../python-aiohttp-debugtoolbar.mk                         | 14 ++++++++++++++
- 5 files changed, 30 insertions(+)
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/python-frozenlist/Config.in              |  8 ++++++++
+ package/python-frozenlist/python-frozenlist.hash |  5 +++++
+ package/python-frozenlist/python-frozenlist.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index fde0776dc0..ee84a6d987 100644
+index 5702f80e6d..e9f1f4539d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1132,6 +1132,7 @@ F:	package/python-aioconsole/
- F:	package/python-aiodns/
- F:	package/python-aiohttp/
- F:	package/python-aiohttp-cors/
-+F:	package/python-aiohttp-debugtoolbar/
- F:	package/python-aiohttp-jinja2/
- F:	package/python-aiohttp-remotes/
- F:	package/python-aiohttp-security/
+@@ -1147,6 +1147,7 @@ F:	package/python-async-lru/
+ F:	package/python-async-timeout/
+ F:	package/python-brotli/
+ F:	package/python-cchardet/
++F:	package/python-frozenlist/
+ F:	package/python-janus/
+ F:	package/python-logstash/
+ F:	package/python-multidict/
 diff --git a/package/Config.in b/package/Config.in
-index 7dc0df8857..635d8d50b2 100644
+index b5fed9ea70..1d251ea26d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -826,6 +826,7 @@ menu "External python modules"
- 	source "package/python-aiodns/Config.in"
- 	source "package/python-aiohttp/Config.in"
- 	source "package/python-aiohttp-cors/Config.in"
-+	source "package/python-aiohttp-debugtoolbar/Config.in"
- 	source "package/python-aiohttp-jinja2/Config.in"
- 	source "package/python-aiohttp-remotes/Config.in"
- 	source "package/python-aiohttp-security/Config.in"
-diff --git a/package/python-aiohttp-debugtoolbar/Config.in b/package/python-aiohttp-debugtoolbar/Config.in
+@@ -923,6 +923,7 @@ menu "External python modules"
+ 	source "package/python-flask-login/Config.in"
+ 	source "package/python-flask-sqlalchemy/Config.in"
+ 	source "package/python-flup/Config.in"
++	source "package/python-frozenlist/Config.in"
+ 	source "package/python-functools32/Config.in"
+ 	source "package/python-future/Config.in"
+ 	source "package/python-futures/Config.in"
+diff --git a/package/python-frozenlist/Config.in b/package/python-frozenlist/Config.in
 new file mode 100644
-index 0000000000..b22d2cf946
+index 0000000000..67a58b40ca
 --- /dev/null
-+++ b/package/python-aiohttp-debugtoolbar/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_AIOHTTP_DEBUGTOOLBAR
-+	bool "python-aiohttp-debugtoolbar"
++++ b/package/python-frozenlist/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_FROZENLIST
++	bool "python-frozenlist"
 +	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
-+	select BR2_PACKAGE_PYTHON_AIOHTTP_JINJA2 # runtime
 +	help
-+	  debugtoolbar for aiohttp.
++	  A list-like structure which implements
++	  collections.abc.MutableSequence.
 +
-+	  https://github.com/aio-libs/aiohttp_debugtoolbar
-diff --git a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash
++	  https://github.com/aio-libs/frozenlist
+diff --git a/package/python-frozenlist/python-frozenlist.hash b/package/python-frozenlist/python-frozenlist.hash
 new file mode 100644
-index 0000000000..655c46da3c
+index 0000000000..4a006586d2
 --- /dev/null
-+++ b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash
++++ b/package/python-frozenlist/python-frozenlist.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/aiohttp_debugtoolbar/json
-+md5	26b26163f3fbeb16ac67197902330942  aiohttp-debugtoolbar-0.5.0.tar.gz
-+sha256	697c9cfac4017d532e26a8c05f14c1a43b3b147f53460daacb0ed144401df441  aiohttp-debugtoolbar-0.5.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/frozenlist/json
++md5	7d493070a7fe12b6be753585c1995abe  frozenlist-1.0.0.tar.gz
++sha256	d1076a40cd1bef6edf148cc05aecce52a11c9bbd2a3d60ce37cc07e03c8dc6c7  frozenlist-1.0.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	94d638be2cb4f186cc62bb567455837757547c15f1b350863aaf05a38843b542  LICENSE
-diff --git a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk
++sha256	6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
+diff --git a/package/python-frozenlist/python-frozenlist.mk b/package/python-frozenlist/python-frozenlist.mk
 new file mode 100644
-index 0000000000..27eadd2173
+index 0000000000..1d36b4df51
 --- /dev/null
-+++ b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk
++++ b/package/python-frozenlist/python-frozenlist.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-aiohttp-debugtoolbar
++# python-frozenlist
 +#
 +################################################################################
 +
-+PYTHON_AIOHTTP_DEBUGTOOLBAR_VERSION = 0.5.0
-+PYTHON_AIOHTTP_DEBUGTOOLBAR_SOURCE = aiohttp-debugtoolbar-$(PYTHON_AIOHTTP_DEBUGTOOLBAR_VERSION).tar.gz
-+PYTHON_AIOHTTP_DEBUGTOOLBAR_SITE = https://files.pythonhosted.org/packages/08/b1/b629499450a84e68b53d000e6150ae4dace68ae589c5ac36b6541777c8d3
-+PYTHON_AIOHTTP_DEBUGTOOLBAR_SETUP_TYPE = setuptools
-+PYTHON_AIOHTTP_DEBUGTOOLBAR_LICENSE = Apache-2.0
-+PYTHON_AIOHTTP_DEBUGTOOLBAR_LICENSE_FILES = LICENSE
++PYTHON_FROZENLIST_VERSION = 1.0.0
++PYTHON_FROZENLIST_SOURCE = frozenlist-$(PYTHON_FROZENLIST_VERSION).tar.gz
++PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/85/32/12f1247bf4915b74a00264aa0033745ee871759daee47499641bd13aeee7
++PYTHON_FROZENLIST_SETUP_TYPE = setuptools
++PYTHON_FROZENLIST_LICENSE = Apache-2.0
++PYTHON_FROZENLIST_LICENSE_FILES = LICENSE.txt
 +
 +$(eval $(python-package))
