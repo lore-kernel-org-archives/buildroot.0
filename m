@@ -1,93 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 22:10:16 +0100
-Subject: [Buildroot] [git commit] package/python-async-lru: new package
-Message-ID: <20191214212006.856CE8A5DB@busybox.osuosl.org>
+Date: Sat, 14 Dec 2019 22:02:02 +0100
+Subject: [Buildroot] [git commit] package/python-sockjs: new package
+Message-ID: <20191214212006.656988A6A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fec6cfcd57aee0e629f8b1968d24229d160ac07
+commit: https://git.buildroot.net/buildroot/commit/?id=48c6632c4a7960f45e710eeed364ad8cefa426f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Simple lru_cache for asyncio.
+SockJS server implementation for aiohttp.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/python-async-lru/Config.in             |  7 +++++++
- package/python-async-lru/python-async-lru.hash |  5 +++++
- package/python-async-lru/python-async-lru.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-sockjs/Config.in          |  8 ++++++++
+ package/python-sockjs/python-sockjs.hash |  5 +++++
+ package/python-sockjs/python-sockjs.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index d2e9d9e1c6..5fa4015fdb 100644
+index 8d11ad8a31..fde0776dc0 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1143,6 +1143,7 @@ F:	package/python-aiologstash/
- F:	package/python-aiomonitor/
- F:	package/python-aiojobs/
- F:	package/python-aiorwlock/
-+F:	package/python-async-lru/
- F:	package/python-async-timeout/
- F:	package/python-brotli/
- F:	package/python-cchardet/
+@@ -1147,6 +1147,7 @@ F:	package/python-cchardet/
+ F:	package/python-logstash/
+ F:	package/python-multidict/
+ F:	package/python-pycares/
++F:	package/python-sockjs/
+ F:	package/python-terminaltables/
+ F:	package/python-yarl/
+ 
 diff --git a/package/Config.in b/package/Config.in
-index bcd7f68466..96957ef8fd 100644
+index 4bac3aabff..7dc0df8857 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -843,6 +843,7 @@ menu "External python modules"
- 	source "package/python-arrow/Config.in"
- 	source "package/python-asgiref/Config.in"
- 	source "package/python-asn1crypto/Config.in"
-+	source "package/python-async-lru/Config.in"
- 	source "package/python-async-timeout/Config.in"
- 	source "package/python-attrs/Config.in"
- 	source "package/python-autobahn/Config.in"
-diff --git a/package/python-async-lru/Config.in b/package/python-async-lru/Config.in
+@@ -1104,6 +1104,7 @@ menu "External python modules"
+ 	source "package/python-slob/Config.in"
+ 	source "package/python-smbus-cffi/Config.in"
+ 	source "package/python-socketio/Config.in"
++	source "package/python-sockjs/Config.in"
+ 	source "package/python-sortedcontainers/Config.in"
+ 	source "package/python-soupsieve/Config.in"
+ 	source "package/python-spidev/Config.in"
+diff --git a/package/python-sockjs/Config.in b/package/python-sockjs/Config.in
 new file mode 100644
-index 0000000000..794f504e5e
+index 0000000000..583d7ec741
 --- /dev/null
-+++ b/package/python-async-lru/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_ASYNC_LRU
-+	bool "python-async-lru"
++++ b/package/python-sockjs/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_SOCKJS
++	bool "python-sockjs"
 +	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
 +	help
-+	  Simple lru_cache for asyncio.
++	  SockJS server implementation for aiohttp.
 +
-+	  https://github.com/aio-libs/async_lru
-diff --git a/package/python-async-lru/python-async-lru.hash b/package/python-async-lru/python-async-lru.hash
++	  https://github.com/aio-libs/sockjs/
+diff --git a/package/python-sockjs/python-sockjs.hash b/package/python-sockjs/python-sockjs.hash
 new file mode 100644
-index 0000000000..6fa61e0e12
+index 0000000000..55ea9dc644
 --- /dev/null
-+++ b/package/python-async-lru/python-async-lru.hash
++++ b/package/python-sockjs/python-sockjs.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/async_lru/json
-+md5	69bed62927426353513e68aec77989ab  async_lru-1.0.2.tar.gz
-+sha256	baa898027619f5cc31b7966f96f00e4fc0df43ba206a8940a5d1af5336a477cb  async_lru-1.0.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/sockjs/json
++md5	369417bd103f841f236a8623ea29353c  sockjs-0.10.0.tar.gz
++sha256	005a820387bb4611b59341eac091b05d4204050dd42e4ea6cfb83607e23e2f06  sockjs-0.10.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	ea65975679bc2093be925d520358e41096bd96fddedee3e929160a5faadcf573  LICENSE
-diff --git a/package/python-async-lru/python-async-lru.mk b/package/python-async-lru/python-async-lru.mk
++sha256	7be23c071df0314fadeba6077a3830340a5121ad88bfa66b0c095051a766e141  LICENSE.txt
+diff --git a/package/python-sockjs/python-sockjs.mk b/package/python-sockjs/python-sockjs.mk
 new file mode 100644
-index 0000000000..adaa8f628d
+index 0000000000..e0f58e2b61
 --- /dev/null
-+++ b/package/python-async-lru/python-async-lru.mk
++++ b/package/python-sockjs/python-sockjs.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-async-lru
++# python-sockjs
 +#
 +################################################################################
 +
-+PYTHON_ASYNC_LRU_VERSION = 1.0.2
-+PYTHON_ASYNC_LRU_SOURCE = async_lru-$(PYTHON_ASYNC_LRU_VERSION).tar.gz
-+PYTHON_ASYNC_LRU_SITE = https://files.pythonhosted.org/packages/7e/c1/a3d6207deaaeb582d16dc9a0fd217f192efc9487ce59897131cf9a2bdc1c
-+PYTHON_ASYNC_LRU_SETUP_TYPE = setuptools
-+PYTHON_ASYNC_LRU_LICENSE = MIT
-+PYTHON_ASYNC_LRU_LICENSE_FILES = LICENSE
++PYTHON_SOCKJS_VERSION = 0.10.0
++PYTHON_SOCKJS_SOURCE = sockjs-$(PYTHON_SOCKJS_VERSION).tar.gz
++PYTHON_SOCKJS_SITE = https://files.pythonhosted.org/packages/35/0e/6aa4f3283b064b04a0c7f3859c8c2c0b736c05cfb07853b6d94073c1bf63
++PYTHON_SOCKJS_SETUP_TYPE = setuptools
++PYTHON_SOCKJS_LICENSE = Apache-2.0
++PYTHON_SOCKJS_LICENSE_FILES = LICENSE.txt
 +
 +$(eval $(python-package))
