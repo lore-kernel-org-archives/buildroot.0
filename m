@@ -1,94 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 22:02:02 +0100
-Subject: [Buildroot] [git commit] package/python-sockjs: new package
-Message-ID: <20191214212006.656988A6A5@busybox.osuosl.org>
+Date: Sat, 14 Dec 2019 22:26:34 +0100
+Subject: [Buildroot] [git commit] package/python-aiosignal: new package
+Message-ID: <20191214212006.B25098A5DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48c6632c4a7960f45e710eeed364ad8cefa426f7
+commit: https://git.buildroot.net/buildroot/commit/?id=b578e0fcb4dfb604f1777f4b8434f2db4b1d9948
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-SockJS server implementation for aiohttp.
+aiosignal: a list of registered asynchronous callbacks.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-sockjs/Config.in          |  8 ++++++++
- package/python-sockjs/python-sockjs.hash |  5 +++++
- package/python-sockjs/python-sockjs.mk   | 14 ++++++++++++++
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/python-aiosignal/Config.in             |  8 ++++++++
+ package/python-aiosignal/python-aiosignal.hash |  5 +++++
+ package/python-aiosignal/python-aiosignal.mk   | 14 ++++++++++++++
  5 files changed, 29 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 8d11ad8a31..fde0776dc0 100644
+index e9f1f4539d..c8ca32cf62 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1147,6 +1147,7 @@ F:	package/python-cchardet/
- F:	package/python-logstash/
- F:	package/python-multidict/
- F:	package/python-pycares/
-+F:	package/python-sockjs/
- F:	package/python-terminaltables/
- F:	package/python-yarl/
- 
+@@ -1143,6 +1143,7 @@ F:	package/python-aiologstash/
+ F:	package/python-aiomonitor/
+ F:	package/python-aiojobs/
+ F:	package/python-aiorwlock/
++F:	package/python-aiosignal/
+ F:	package/python-async-lru/
+ F:	package/python-async-timeout/
+ F:	package/python-brotli/
 diff --git a/package/Config.in b/package/Config.in
-index 4bac3aabff..7dc0df8857 100644
+index 1d251ea26d..b961b74c33 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1104,6 +1104,7 @@ menu "External python modules"
- 	source "package/python-slob/Config.in"
- 	source "package/python-smbus-cffi/Config.in"
- 	source "package/python-socketio/Config.in"
-+	source "package/python-sockjs/Config.in"
- 	source "package/python-sortedcontainers/Config.in"
- 	source "package/python-soupsieve/Config.in"
- 	source "package/python-spidev/Config.in"
-diff --git a/package/python-sockjs/Config.in b/package/python-sockjs/Config.in
+@@ -838,6 +838,7 @@ menu "External python modules"
+ 	source "package/python-aiomonitor/Config.in"
+ 	source "package/python-aioredis/Config.in"
+ 	source "package/python-aiorwlock/Config.in"
++	source "package/python-aiosignal/Config.in"
+ 	source "package/python-alsaaudio/Config.in"
+ 	source "package/python-argh/Config.in"
+ 	source "package/python-arrow/Config.in"
+diff --git a/package/python-aiosignal/Config.in b/package/python-aiosignal/Config.in
 new file mode 100644
-index 0000000000..583d7ec741
+index 0000000000..6b7753defd
 --- /dev/null
-+++ b/package/python-sockjs/Config.in
++++ b/package/python-aiosignal/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SOCKJS
-+	bool "python-sockjs"
++config BR2_PACKAGE_PYTHON_AIOSIGNAL
++	bool "python-aiosignal"
 +	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
++	select BR2_PACKAGE_PYTHON_FROZENLIST # runtime
 +	help
-+	  SockJS server implementation for aiohttp.
++	  aiosignal: a list of registered asynchronous callbacks.
 +
-+	  https://github.com/aio-libs/sockjs/
-diff --git a/package/python-sockjs/python-sockjs.hash b/package/python-sockjs/python-sockjs.hash
++	  https://github.com/aio-libs/aiosignal
+diff --git a/package/python-aiosignal/python-aiosignal.hash b/package/python-aiosignal/python-aiosignal.hash
 new file mode 100644
-index 0000000000..55ea9dc644
+index 0000000000..17c69c8144
 --- /dev/null
-+++ b/package/python-sockjs/python-sockjs.hash
++++ b/package/python-aiosignal/python-aiosignal.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/sockjs/json
-+md5	369417bd103f841f236a8623ea29353c  sockjs-0.10.0.tar.gz
-+sha256	005a820387bb4611b59341eac091b05d4204050dd42e4ea6cfb83607e23e2f06  sockjs-0.10.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/aiosignal/json
++md5	0831ab9e46799842ed84529dbaa86196  aiosignal-1.0.0.tar.gz
++sha256	7cd33cbe05bc2d83e77f80d688b4717e424d15eecf6d65384e173b2873e62f13  aiosignal-1.0.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	7be23c071df0314fadeba6077a3830340a5121ad88bfa66b0c095051a766e141  LICENSE.txt
-diff --git a/package/python-sockjs/python-sockjs.mk b/package/python-sockjs/python-sockjs.mk
++sha256	6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
+diff --git a/package/python-aiosignal/python-aiosignal.mk b/package/python-aiosignal/python-aiosignal.mk
 new file mode 100644
-index 0000000000..e0f58e2b61
+index 0000000000..14b4264620
 --- /dev/null
-+++ b/package/python-sockjs/python-sockjs.mk
++++ b/package/python-aiosignal/python-aiosignal.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-sockjs
++# python-aiosignal
 +#
 +################################################################################
 +
-+PYTHON_SOCKJS_VERSION = 0.10.0
-+PYTHON_SOCKJS_SOURCE = sockjs-$(PYTHON_SOCKJS_VERSION).tar.gz
-+PYTHON_SOCKJS_SITE = https://files.pythonhosted.org/packages/35/0e/6aa4f3283b064b04a0c7f3859c8c2c0b736c05cfb07853b6d94073c1bf63
-+PYTHON_SOCKJS_SETUP_TYPE = setuptools
-+PYTHON_SOCKJS_LICENSE = Apache-2.0
-+PYTHON_SOCKJS_LICENSE_FILES = LICENSE.txt
++PYTHON_AIOSIGNAL_VERSION = 1.0.0
++PYTHON_AIOSIGNAL_SOURCE = aiosignal-$(PYTHON_AIOSIGNAL_VERSION).tar.gz
++PYTHON_AIOSIGNAL_SITE = https://files.pythonhosted.org/packages/ca/b7/5ae01ed039ea51cc8280d87b8a1269ba2f1343d7466c1e50c618558352e5
++PYTHON_AIOSIGNAL_SETUP_TYPE = setuptools
++PYTHON_AIOSIGNAL_LICENSE = Apache-2.0
++PYTHON_AIOSIGNAL_LICENSE_FILES = LICENSE.txt
 +
 +$(eval $(python-package))
