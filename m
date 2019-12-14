@@ -1,35 +1,81 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 13 Dec 2019 22:34:30 +0000
-Subject: [Buildroot] [Bug 12196] duma package
-In-Reply-To: <bug-12196-163@https.bugs.busybox.net/>
-References: <bug-12196-163@https.bugs.busybox.net/>
-Message-ID: <bug-12196-163-IVQVj8jzR3@https.bugs.busybox.net/>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Fri, 13 Dec 2019 19:46:09 -0800
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: prefix sysroot in
+ mariadb_config
+Message-ID: <20191214034609.12829-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12196
+This patch adds @CMAKE_SYSROOT@ to mariadb_config.c.in. Without it,
+mariadb_config incorrectly returns host paths for include paths and
+library paths.
 
---- Comment #6 from Arnout Vandecappelle <arnout@mind.be> ---
-Really weird... This is the disassembly around the faulting instruction:
+This also removes mariadb_config from the target like is done for
+mysql_config.
 
-   0xb6e04694 <+672>:   b       0xb6e046dc <__gettextparse+744>
-   0xb6e04698 <+676>:   b       0xb6e046dc <__gettextparse+744>
-=> 0xb6e0469c <+680>:   b       0xb6e04ab8 <__gettextparse+1732>
-   0xb6e046a0 <+684>:   b       0xb6e04a94 <__gettextparse+1696>
-   0xb6e046a4 <+688>:   b       0xb6e049fc <__gettextparse+1544>
-   0xb6e046a8 <+692>:   b       0xb6e049e4 <__gettextparse+1520>
+Reported-by: Alexey Lukyanchuk <skif@skif-web.ru>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+---
+ ...3-add-sysroot-path-to-mariadb_config.patch | 28 +++++++++++++++++++
+ package/mariadb/mariadb.mk                    |  5 ++--
+ 2 files changed, 31 insertions(+), 2 deletions(-)
+ create mode 100644 package/mariadb/0003-add-sysroot-path-to-mariadb_config.patch
 
-
-So it's in the middle of a switch table, simple relative branch instruction
-0xea000105. The instructions that it jumps to all look pretty normal as well.
-
-However, duma does do weird things with the code. It is possible that the real
-fault is hidden by some exception handling within duma itself... gdb isn't able
-to print a proper backtrace, so that could be an indication...
-
+diff --git a/package/mariadb/0003-add-sysroot-path-to-mariadb_config.patch b/package/mariadb/0003-add-sysroot-path-to-mariadb_config.patch
+new file mode 100644
+index 0000000000..5eca8ec402
+--- /dev/null
++++ b/package/mariadb/0003-add-sysroot-path-to-mariadb_config.patch
+@@ -0,0 +1,28 @@
++From 7e1b6aafeb9fe6558da7506b304c0efb5ea82281 Mon Sep 17 00:00:00 2001
++From: Ryan Coe <bluemrp9@gmail.com>
++Date: Fri, 13 Dec 2019 17:13:26 -0800
++Subject: [PATCH 1/1] add sysroot path to mariadb_config
++
++Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
++---
++ libmariadb/mariadb_config/mariadb_config.c.in | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libmariadb/mariadb_config/mariadb_config.c.in b/libmariadb/mariadb_config/mariadb_config.c.in
++index 703c9466a1d9214a85f3638d2e3b4ecfef0c7bd6..f5513333e670373f060a3c2574d1d42facfd0337 100644
++--- a/libmariadb/mariadb_config/mariadb_config.c.in
+++++ b/libmariadb/mariadb_config/mariadb_config.c.in
++@@ -5,8 +5,8 @@
++ 
++ static char *mariadb_progname;
++ 
++-#define INCLUDE "-I at CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@ -I at CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@/mysql"
++-#define LIBS    "-L at CMAKE_INSTALL_PREFIX@/@INSTALL_LIBDIR@/ -lmariadb"
+++#define INCLUDE "-I at CMAKE_SYSROOT@/@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@ -I at CMAKE_SYSROOT@/@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@/mysql"
+++#define LIBS    "-L at CMAKE_SYSROOT@/@CMAKE_INSTALL_PREFIX@/@INSTALL_LIBDIR@/ -lmariadb"
++ #define LIBS_SYS "@extra_dynamic_LDFLAGS@"
++ #define CFLAGS  INCLUDE
++ #define VERSION "@MARIADB_CLIENT_VERSION@"
++-- 
++2.24.1
++
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 82e3c16daf..d08909d35c 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -126,11 +126,12 @@ define MARIADB_INSTALL_INIT_SYSTEMD
+ endef
+ endif
+ 
+-# We don't need mysql_config on the target as it's only useful in staging
+-# We also don't need the test suite on the target
++# We don't need mysql_config or mariadb_config on the target as it's
++# only useful in staging. We also don't need the test suite on the target.
+ define MARIADB_POST_INSTALL
+ 	mkdir -p $(TARGET_DIR)/var/lib/mysql
+ 	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
++	$(RM) $(TARGET_DIR)/usr/bin/mariadb_config
+ 	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
+ endef
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.24.1
