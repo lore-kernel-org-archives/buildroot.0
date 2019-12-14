@@ -1,37 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 22:30:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-aiozipkin: new package
-In-Reply-To: <20191211062928.107541-1-james.hilliard1@gmail.com>
-References: <20191211062928.107541-1-james.hilliard1@gmail.com>
-Message-ID: <20191214223018.1a742938@windsurf.home>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 14 Dec 2019 22:37:14 +0100
+Subject: [Buildroot] [PATCH 03/12] package/pkg-utils.mk: rework
+ implementation of extractor-system-dependency
+In-Reply-To: <20191210215952.902477-4-thomas.petazzoni@bootlin.com>
+References: <20191210215952.902477-1-thomas.petazzoni@bootlin.com>
+ <20191210215952.902477-4-thomas.petazzoni@bootlin.com>
+Message-ID: <65eac3bd-f2c5-124c-7448-541b8b0a525b@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 10 Dec 2019 23:29:28 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
-
-> Distributed tracing instrumentation for asyncio application
-> with zipkin.
+Le 10/12/2019 ? 22:59, Thomas Petazzoni a ?crit?:
+> Now that we have the EXTRACTOR_PKG_DEPENDENCY.* variables available,
+> we can use them to implement extractor-system-dependency: if for a
+> given archive type, the corresponding EXTRACTOR_PKG_DEPENDENCY.<type>
+> variable is empty, then it means we need the corresponding extractor
+> tool to be provided by the system.
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Following this, EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS is no
+> longer used, so we can drop it from support/dependencies/.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  DEVELOPERS                                     |  1 +
->  package/Config.in                              |  1 +
->  package/python-aiozipkin/Config.in             |  9 +++++++++
->  package/python-aiozipkin/python-aiozipkin.hash |  5 +++++
->  package/python-aiozipkin/python-aiozipkin.mk   | 14 ++++++++++++++
->  5 files changed, 30 insertions(+)
->  create mode 100644 package/python-aiozipkin/Config.in
->  create mode 100644 package/python-aiozipkin/python-aiozipkin.hash
->  create mode 100644 package/python-aiozipkin/python-aiozipkin.mk
+>  package/pkg-utils.mk                     | 4 ++--
+>  support/dependencies/check-host-lzip.mk  | 1 -
+>  support/dependencies/check-host-xzcat.mk | 1 -
+>  3 files changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index 35a441e0aa..d324934dba 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -62,8 +62,8 @@ extractor-pkg-dependency = $(EXTRACTOR_PKG_DEPENDENCY$(suffix $(1)))
+>  # $(firstword) is used here because the extractor can have arguments,
+>  # like ZCAT="gzip -d -c", and to check for the dependency we only want
+>  # 'gzip'.
+> -extractor-system-dependency = $(firstword $(INFLATE$(filter-out \
+> -	$(EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS),$(suffix $(1)))))
+> +extractor-system-dependency = $(if $(EXTRACTOR_PKG_DEPENDENCY$(suffix $(1))),,\
 
-Applied to master, thanks.
+I would add a "." after EXTRACTOR_PKG_DEPENDENCY because we want to use
+"EXTRACTOR_PKG_DEPENDENCY.$(suffix $(1))"
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+Romain
+
+
+> +	$(firstword $(INFLATE$(suffix $(1)))))
+>  
+>  # check-deprecated-variable -- throw an error on deprecated variables
+>  # example:
+> diff --git a/support/dependencies/check-host-lzip.mk b/support/dependencies/check-host-lzip.mk
+> index cdd784058c..98a4f42388 100644
+> --- a/support/dependencies/check-host-lzip.mk
+> +++ b/support/dependencies/check-host-lzip.mk
+> @@ -1,5 +1,4 @@
+>  ifeq (,$(call suitable-host-package,lzip,$(LZCAT)))
+>  BR2_LZIP_HOST_DEPENDENCY = host-lzip
+> -EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .lz
+>  LZCAT = $(HOST_DIR)/bin/lzip -d -c
+>  endif
+> diff --git a/support/dependencies/check-host-xzcat.mk b/support/dependencies/check-host-xzcat.mk
+> index e5d72f95dd..9a78a8f38a 100644
+> --- a/support/dependencies/check-host-xzcat.mk
+> +++ b/support/dependencies/check-host-xzcat.mk
+> @@ -3,6 +3,5 @@
+>  
+>  ifeq (,$(call suitable-host-package,xzcat,$(XZCAT)))
+>  BR2_XZCAT_HOST_DEPENDENCY = host-xz
+> -EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .xz .lzma
+>  XZCAT = $(HOST_DIR)/bin/xzcat
+>  endif
+> 
