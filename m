@@ -1,34 +1,38 @@
-From: Avraham Shukron <avraham.shukron@gmail.com>
-Date: Sat, 14 Dec 2019 15:34:25 +0200
-Subject: [Buildroot] Pine64: setting the console to be over HMDI
-Message-ID: <CAJX3zAsBo9Den0HdrWFrADZvFvubnmxWjL1FKu5cKUnaBFrGqg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 14 Dec 2019 15:12:37 +0100
+Subject: [Buildroot] [git commit] package/libp11: add host-pkgconf
+ dependency for host variant
+Message-ID: <20191214140357.2EF56816C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+commit: https://git.buildroot.net/buildroot/commit/?id=471281df124d14bd9b1af98b25bb48361c84be37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I have the pine64 which I want to make as my media center using
-Kodi/Buildroot.
-I use systemd as the init system.
+host-pkgconf is needed to find host-openssl
 
-I managed to build and flash the board. I see it boots with U-Boot boot
-output, but when control is passed to linux there's nothing on the screen
-other than a blinking cursor on the corner.
+Fixes:
+ - http://autobuild.buildroot.org/results/05adf424050cb56f74ae4106b3c9b61f8daff7d2
 
-The board is up and running, I can tell that since CTRL+ALT+DEL resets the
-board, which is enabled by a systemd service.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libp11/libp11.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Kodi itself is also installed, but its unit is WantedBy: multi-user.target
-
-I have two questions:
-1. How do I configure the console to be over HDMI and USB keyboard instead
-of serial interface?
-2. Why kodi is not started - at least in a visible manner?
-
-Thanks!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191214/0fbbfe15/attachment.html>
+diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
+index cf3e78d2dd..90c582571e 100644
+--- a/package/libp11/libp11.mk
++++ b/package/libp11/libp11.mk
+@@ -20,7 +20,7 @@ ifeq ($(BR2_PACKAGE_P11_KIT),y)
+ LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
+ endif
+ 
+-HOST_LIBP11_DEPENDENCIES = host-openssl
++HOST_LIBP11_DEPENDENCIES = host-pkgconf host-openssl
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
