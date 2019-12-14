@@ -1,46 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 22:04:31 +0100
-Subject: [Buildroot] [PATCH v6 1/6] package/polkit: bump to version 0.116
-In-Reply-To: <CAFSsvmopSyRoAriDm-5yKuh4pJYEvBbe1HmaL8jsoC9AaaMjdA@mail.gmail.com>
-References: <20191206234649.3972927-1-aduskett@gmail.com>
- <20191208160213.030635f6@windsurf.home>
- <CAFSsvmqCnXXkjMtJiPOpHx0E8Xv4fHcOuNw3qSSn52i9F-6yPg@mail.gmail.com>
- <20191208205847.76c05a1f@windsurf.home>
- <CAFSsvmopSyRoAriDm-5yKuh4pJYEvBbe1HmaL8jsoC9AaaMjdA@mail.gmail.com>
-Message-ID: <20191214220431.6c9e4fcf@windsurf.home>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 14 Dec 2019 22:12:54 +0100
+Subject: [Buildroot] [PATCH 01/12] package/pkg-utils.mk: rename
+ extractor-dependency to extractor-system-dependency
+In-Reply-To: <20191210215952.902477-2-thomas.petazzoni@bootlin.com>
+References: <20191210215952.902477-1-thomas.petazzoni@bootlin.com>
+ <20191210215952.902477-2-thomas.petazzoni@bootlin.com>
+Message-ID: <1fa571a1-ee69-d66f-7b0c-6c36a9bb0028@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 9 Dec 2019 11:03:08 -0800
-Adam Duskett <aduskett@gmail.com> wrote:
+Le 10/12/2019 ? 22:59, Thomas Petazzoni a ?crit?:
+> The extractor-dependency macro returns which system-provided tools are
+> needed to be able to extract the archive passed as argument. The
+> result of this macro is added to DL_TOOLS_DEPENDENCIES so that the
+> logic in support/dependencies/ verifies that the necessary tools are
+> provided by the system.
+> 
+> However, we are going to add another macro, extractor-pkg-dependency,
+> which says which Buildroot packages are needed to extract the archive
+> passed as argument. Indeed, for those archive types, if the extractor
+> is not provided system-wide, we build it as a host Buildroot package.
+> 
+> To clarify the distinction between the upcoming
+> extractor-pkg-dependency and existing extractor-dependency, we rename
+> the latter to extractor-system-dependency.
+> 
+> We take this opportunity to extend the documentation of this macro.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-> > SELinux can already be enabled on uClibc. I added the musl-fts package,
-> > and used it in libselinux to make it available for uClibc/musl.
-> >
-> > When you're grumpy, please verify your claims :-)
->
-> I'm aware of the option, but I don't agree with it. It's built into
-> uClibc and requiring
-> an extra package is not nice in my opinion.
-
-The <fts.h> API is deprecated, and very few packages use it. It doesn't
-make a lot of sense to force everybody to have it in uClibc, just for
-the sake of a few packages.
-
-Alternatively, we could add a separate option to enable FTS support in
-uClibc when needed, but this stuff always gets annoying with uClibc
-external toolchains that may or may not have FTS support enabled.
-
-The musl-fts solution is easy. It works for musl, it works for uClibc,
-regardless of the uClibc configuration.
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 
 Best regards,
+Romain
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+> ---
+>  package/pkg-generic.mk |  2 +-
+>  package/pkg-utils.mk   | 14 +++++++++-----
+>  2 files changed, 10 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 6d598cfd9d..5ad8f1d894 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -1098,7 +1098,7 @@ else ifeq ($$($(2)_SITE_METHOD),cvs)
+>  DL_TOOLS_DEPENDENCIES += cvs
+>  endif # SITE_METHOD
+>  
+> -DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+> +DL_TOOLS_DEPENDENCIES += $$(call extractor-system-dependency,$$($(2)_SOURCE))
+>  
+>  # Ensure all virtual targets are PHONY. Listed alphabetically.
+>  .PHONY:	$(1) \
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index d38971caf6..0f916d81d8 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -46,11 +46,15 @@ INFLATE.tar  = cat
+>  # suitable-extractor(filename): returns extractor based on suffix
+>  suitable-extractor = $(INFLATE$(suffix $(1)))
+>  
+> -# extractor-dependency(filename): returns extractor for 'filename' if the
+> -# extractor is a dependency. If we build the extractor return nothing.
+> -# $(firstword) is used here because the extractor can have arguments, like
+> -# ZCAT="gzip -d -c", and to check for the dependency we only want 'gzip'.
+> -extractor-dependency = $(firstword $(INFLATE$(filter-out \
+> +# extractor-system-dependency(filename): returns the name of the tool
+> +# needed to extract 'filename', and is meant to be used with
+> +# DL_TOOLS_DEPENDENCIES, in order to check that the necesary tool is
+> +# provided by the system Buildroot runs on.
+> +#
+> +# $(firstword) is used here because the extractor can have arguments,
+> +# like ZCAT="gzip -d -c", and to check for the dependency we only want
+> +# 'gzip'.
+> +extractor-system-dependency = $(firstword $(INFLATE$(filter-out \
+>  	$(EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS),$(suffix $(1)))))
+>  
+>  # check-deprecated-variable -- throw an error on deprecated variables
+> 
