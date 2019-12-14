@@ -1,56 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 22:42:08 +0100
-Subject: [Buildroot] [PATCH 02/12] package/pkg-utils.mk: add
- extractor-pkg-dependency macro
-In-Reply-To: <07d07f0f-bb5f-20c9-a8db-61f9bdd496ae@smile.fr>
+Date: Sat, 14 Dec 2019 22:43:20 +0100
+Subject: [Buildroot] [PATCH 03/12] package/pkg-utils.mk: rework
+ implementation of extractor-system-dependency
+In-Reply-To: <65eac3bd-f2c5-124c-7448-541b8b0a525b@smile.fr>
 References: <20191210215952.902477-1-thomas.petazzoni@bootlin.com>
- <20191210215952.902477-3-thomas.petazzoni@bootlin.com>
- <07d07f0f-bb5f-20c9-a8db-61f9bdd496ae@smile.fr>
-Message-ID: <20191214224208.3f2d382c@windsurf.home>
+ <20191210215952.902477-4-thomas.petazzoni@bootlin.com>
+ <65eac3bd-f2c5-124c-7448-541b8b0a525b@smile.fr>
+Message-ID: <20191214224320.19b7f0fc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 14 Dec 2019 22:20:21 +0100
+On Sat, 14 Dec 2019 22:37:14 +0100
 Romain Naour <romain.naour@smile.fr> wrote:
 
 > > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> > index 0f916d81d8..35a441e0aa 100644
+> > index 35a441e0aa..d324934dba 100644
 > > --- a/package/pkg-utils.mk
 > > +++ b/package/pkg-utils.mk
-> > @@ -46,6 +46,14 @@ INFLATE.tar  = cat
-> >  # suitable-extractor(filename): returns extractor based on suffix
-> >  suitable-extractor = $(INFLATE$(suffix $(1)))
-> >    
+> > @@ -62,8 +62,8 @@ extractor-pkg-dependency = $(EXTRACTOR_PKG_DEPENDENCY$(suffix $(1)))
+> >  # $(firstword) is used here because the extractor can have arguments,
+> >  # like ZCAT="gzip -d -c", and to check for the dependency we only want
+> >  # 'gzip'.
+> > -extractor-system-dependency = $(firstword $(INFLATE$(filter-out \
+> > -	$(EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS),$(suffix $(1)))))
+> > +extractor-system-dependency = $(if $(EXTRACTOR_PKG_DEPENDENCY$(suffix $(1))),,\  
 > 
-> What about gzip ?
-> 
-> EXTRACTOR_PKG_DEPENDENCY.gz   = $(BR2_GZIP_HOST_DEPENDENCY)
-> EXTRACTOR_PKG_DEPENDENCY.tgz  = $(BR2_GZIP_HOST_DEPENDENCY)
+> I would add a "." after EXTRACTOR_PKG_DEPENDENCY because we want to use
+> "EXTRACTOR_PKG_DEPENDENCY.$(suffix $(1))"
 
-Because oddly enough, we are today not taking into account  the
-dependency on gzip when extracting tarballs.
+You're absolutely right. Now I wonder how it could have worked with my
+code. I did quite a bit of testing, verifying the values of a number of
+internal variables in various situations to make sure it was all
+working well.
 
-We do take it into account only in:
-
-ifneq ($$(filter cvs git svn,$$($(2)_SITE_METHOD)),)
-$(2)_DOWNLOAD_DEPENDENCIES += \
-        $(BR2_GZIP_HOST_DEPENDENCY) \
-        $(BR2_TAR_HOST_DEPENDENCY)
-endif
-
-i.e, when we fetch from a version control system, and create our own
-tarball locally.
-
-But if we download directly from http/ftp a .tar.gz or .tgz, we don't
-rely on BR2_GZIP_HOST_DEPENDENCY, and simply assume we can use the one
-from the host machine.
-
-This should be fixed, I agree, but it's already broken today I believe.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
