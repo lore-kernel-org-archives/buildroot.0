@@ -1,28 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 15:26:43 +0100
-Subject: [Buildroot] [git commit] package/ljsyscall: add hash for license
- file
-Message-ID: <20191214141929.B5CF88A523@busybox.osuosl.org>
+Date: Sat, 14 Dec 2019 15:26:37 +0100
+Subject: [Buildroot] [git commit] package/ljsyscall: fix build with aarch64
+Message-ID: <20191214141929.AAA9F8A523@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbb4f64b0c709bb9bc27bf2e135dc91ef4394471
+commit: https://git.buildroot.net/buildroot/commit/?id=ac31b3465ff07b1b5422d1d951b4f7a88e8d5b82
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+luajit supports aarch64 since commit
+2ca0accc21a090874ac6e97670b47153a1f0a0b5
+
+However this raise a build failure with ljsyscall because aarch64
+directory does not exist so use arm64 instead
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3a0bd14349b3cab3e09d0b8b24ddab66dfab91ff
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ljsyscall/ljsyscall.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/ljsyscall/ljsyscall.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/ljsyscall/ljsyscall.hash b/package/ljsyscall/ljsyscall.hash
-index cb3bea455c..6fd7f6a519 100644
---- a/package/ljsyscall/ljsyscall.hash
-+++ b/package/ljsyscall/ljsyscall.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 6e29503609bd966fed33dec1a1571b36bbdbc37bf1a828af6722ed0ead192ff1  ljsyscall-0.12.tar.gz
-+sha256 c8e21d8e74afbe26c2c8e69b42327d3b48e602117f9ef7b22c31ddca6f46b1f2  COPYRIGHT
+diff --git a/package/ljsyscall/ljsyscall.mk b/package/ljsyscall/ljsyscall.mk
+index 30b5cde22a..12dfbcb4ae 100644
+--- a/package/ljsyscall/ljsyscall.mk
++++ b/package/ljsyscall/ljsyscall.mk
+@@ -18,6 +18,8 @@ else ifeq ($(BR2_powerpc),y)
+ LJSYSCALL_ARCH = ppc
+ else ifeq ($(BR2_arm)$(BR2_armeb),y)
+ LJSYSCALL_ARCH = arm
++else ifeq ($(BR2_aarch64),y)
++LJSYSCALL_ARCH = arm64
+ else ifeq ($(BR2_mips)$(BR2_mipsel),y)
+ LJSYSCALL_ARCH = mips
+ else
