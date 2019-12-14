@@ -1,52 +1,55 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sat, 14 Dec 2019 22:55:43 +0100
-Subject: [Buildroot] [PATCH 04/12] package/pkg-generic.mk: use
- extractor-pkg-dependency macro
-In-Reply-To: <20191210215952.902477-5-thomas.petazzoni@bootlin.com>
-References: <20191210215952.902477-1-thomas.petazzoni@bootlin.com>
- <20191210215952.902477-5-thomas.petazzoni@bootlin.com>
-Message-ID: <efe749be-c7ea-9d1b-2177-bb30a2527ad0@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 14 Dec 2019 22:55:57 +0100
+Subject: [Buildroot] [PATCH 3/3] package/dante: bump to version 1.4.2
+In-Reply-To: <20191209222746.3440986-3-fontaine.fabrice@gmail.com>
+References: <20191209222746.3440986-1-fontaine.fabrice@gmail.com>
+ <20191209222746.3440986-3-fontaine.fabrice@gmail.com>
+Message-ID: <20191214225557.7dbf4e51@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 10/12/2019 ? 22:59, Thomas Petazzoni a ?crit?:
-> Instead of manually calculating the EXTRACT_DEPENDENCIES value based
-> on the archive extension, let's use the newly introduced
-> extractor-pkg-dependency macro.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Hello Fabrice,
 
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+On Mon,  9 Dec 2019 23:27:46 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Best regards,
-Romain
+> +As a result, $ERRVALFILE does not contain the expected values because
+> +the expected value is not on the same line than gaierrval:
+> +
+> + gaierrval: 
+> + # 130 "conftest.c" 3 4
+> +           -3
 
-> ---
->  package/pkg-generic.mk | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 5ad8f1d894..45a9a133bb 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -644,15 +644,7 @@ $(2)_EXTRACT_DEPENDENCIES += $$(BR2_TAR_HOST_DEPENDENCY)
->  endif
->  
->  ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
-> -ifneq ($$(filter .xz .lzma,$$(suffix $$($(2)_SOURCE))),)
-> -$(2)_EXTRACT_DEPENDENCIES += $$(BR2_XZCAT_HOST_DEPENDENCY)
-> -endif
-> -endif
-> -
-> -ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
-> -ifneq ($$(filter .lz,$$(suffix $$($(2)_SOURCE))),)
-> -$(2)_EXTRACT_DEPENDENCIES += $$(BR2_LZIP_HOST_DEPENDENCY)
-> -endif
-> +$(2)_EXTRACT_DEPENDENCIES += $$(call extractor-pkg-dependency,$$($(2)_SOURCE))
->  endif
->  
->  ifeq ($$(BR2_CCACHE),y)
-> 
+I am not seeing this issue here, the relevant part of the .i file looks
+like this:
+
+# 129 "conftest.c" 2
+int
+main ()
+{
+
+
+gaierrval: -11
+
+
+
+  ;
+  return 0;
+}
+
+It's quite odd that you get this # 130 conftest.c line in the middle of
+the .c file dump. What are we doing differently ? Is it a compiler
+version issue ?
+
+Which toolchain are you using when you're having the issue ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
