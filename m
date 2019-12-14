@@ -1,53 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Dec 2019 21:44:23 +0100
-Subject: [Buildroot] [git commit] package/python-subprocess32: add
- PYTHON_SUBPROCESS32_CONFIGURE_CMDS
-Message-ID: <20191214203545.461CA8A5CB@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 14 Dec 2019 21:48:05 +0100
+Subject: [Buildroot] [PATCH v3 for-next 00/11] gitlab Qemu runtime
+ testing
+In-Reply-To: <20191117201909.12900-1-romain.naour@smile.fr>
+References: <20191117201909.12900-1-romain.naour@smile.fr>
+Message-ID: <4ae261dd-e9f5-0212-eafd-c642c21d27bf@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55e9290603b21e3b88085cba2349eb8af6b7535b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Since commit 1745fcde740057951dcc5429f3bfabd103b764a1,
-python-subprocess32 fails to build because it runs configure with
-incorrect arguments so add a PYTHON_SUBPROCESS32_CONFIGURE_CMDS
+Le 17/11/2019 ? 21:18, Romain Naour a ?crit?:
+> This new iteration take into account the previous review with
+> some additional rework.
+> 
+> This series start by removing useless host-qemu build for
+> m68k_q800, enable serial console for x86/x86_64 and some
+> refactoring for csky and arm-versatile.
+> 
+> Replace the readme.txt file by a bash script that ease starting
+> Qemu. Then a new comment is added to each Qemu defconfig files in
+> order to provide the path to this new script.
+> This path help to link each Qemu defconfig with it's own script.
+> 
+> Add new python script to be used by gitlab to start Qemu when
+> a Qemu defconfig is built.
+> 
+> Finally add this new python script to .gitlab-ci.yml.
+> 
+> http://lists.busybox.net/pipermail/buildroot/2019-May/249432.html
+> 
 
-Fixes:
- - http://autobuild.buildroot.org/results/dcf944129392ee6cacc106e096d8d3adfa4447bb
+I discussed about this series with Jeremy and he suggest to add the Qemu command
+line into the Qemu's defconfig file (add a new Kconfig option).
+With that, we can even add a new Makefile target "make run-qemu" to start Qemu
+when the Qemu command line is set in the defconfig (this would avoid adding
+several launch.sh script).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-subprocess32/python-subprocess32.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Thought ?
 
-diff --git a/package/python-subprocess32/python-subprocess32.mk b/package/python-subprocess32/python-subprocess32.mk
-index ee591e6a6b..fb8a47f974 100644
---- a/package/python-subprocess32/python-subprocess32.mk
-+++ b/package/python-subprocess32/python-subprocess32.mk
-@@ -11,4 +11,21 @@ PYTHON_SUBPROCESS32_SETUP_TYPE = setuptools
- PYTHON_SUBPROCESS32_LICENSE = Python-2.0
- PYTHON_SUBPROCESS32_LICENSE_FILES = LICENSE
- 
-+# The configure step needs to be run outside of the setup.py since it isn't
-+# run correctly for cross-compiling
-+define PYTHON_SUBPROCESS32_CONFIGURE_CMDS
-+	(cd $(@D) && \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_CONFIGURE_ARGS) \
-+	./configure \
-+		--target=$(GNU_TARGET_NAME) \
-+		--host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--exec-prefix=/usr \
-+		--sysconfdir=/etc \
-+		--program-prefix="" \
-+	)
-+endef
-+
- $(eval $(python-package))
+Best regards,
+Romain
