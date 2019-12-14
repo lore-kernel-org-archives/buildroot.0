@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Sat, 14 Dec 2019 22:12:54 +0100
-Subject: [Buildroot] [PATCH 01/12] package/pkg-utils.mk: rename
- extractor-dependency to extractor-system-dependency
-In-Reply-To: <20191210215952.902477-2-thomas.petazzoni@bootlin.com>
+Date: Sat, 14 Dec 2019 22:20:21 +0100
+Subject: [Buildroot] [PATCH 02/12] package/pkg-utils.mk: add
+ extractor-pkg-dependency macro
+In-Reply-To: <20191210215952.902477-3-thomas.petazzoni@bootlin.com>
 References: <20191210215952.902477-1-thomas.petazzoni@bootlin.com>
- <20191210215952.902477-2-thomas.petazzoni@bootlin.com>
-Message-ID: <1fa571a1-ee69-d66f-7b0c-6c36a9bb0028@smile.fr>
+ <20191210215952.902477-3-thomas.petazzoni@bootlin.com>
+Message-ID: <07d07f0f-bb5f-20c9-a8db-61f9bdd496ae@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,72 +13,55 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Le 10/12/2019 ? 22:59, Thomas Petazzoni a ?crit?:
-> The extractor-dependency macro returns which system-provided tools are
-> needed to be able to extract the archive passed as argument. The
-> result of this macro is added to DL_TOOLS_DEPENDENCIES so that the
-> logic in support/dependencies/ verifies that the necessary tools are
-> provided by the system.
+> To extract some archive types, if the extracting tool is not available
+> on the system where Buildroot runs on, we build it using a Buildroot
+> host package.
 > 
-> However, we are going to add another macro, extractor-pkg-dependency,
-> which says which Buildroot packages are needed to extract the archive
-> passed as argument. Indeed, for those archive types, if the extractor
-> is not provided system-wide, we build it as a host Buildroot package.
+> Such dependencies are currently explicitly handled by the
+> inner-generic-package macro, but in fact we also need to handle them
+> in all places where the "suitable-extractor" macro is invoked, and
+> some packages invoke it directly. Otherwise, such packages may be
+> missing a dependency to the appropriate host Buildroot package
+> building the extracting tool they need. An example is gettext-tiny,
+> whose source code is a gzip-compressed tarball, but in addition
+> manually extracts a xz-compressed tarball.
 > 
-> To clarify the distinction between the upcoming
-> extractor-pkg-dependency and existing extractor-dependency, we rename
-> the latter to extractor-system-dependency.
-> 
-> We take this opportunity to extend the documentation of this macro.
+> This extractor-pkg-dependency macro will be used in follow-up commits
+> to ensure all the packages that use suitable-extractor properly add
+> the correct dependencies.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/pkg-utils.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index 0f916d81d8..35a441e0aa 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -46,6 +46,14 @@ INFLATE.tar  = cat
+>  # suitable-extractor(filename): returns extractor based on suffix
+>  suitable-extractor = $(INFLATE$(suffix $(1)))
+>  
 
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+What about gzip ?
+
+EXTRACTOR_PKG_DEPENDENCY.gz   = $(BR2_GZIP_HOST_DEPENDENCY)
+EXTRACTOR_PKG_DEPENDENCY.tgz  = $(BR2_GZIP_HOST_DEPENDENCY)
 
 Best regards,
 Romain
 
 
-> ---
->  package/pkg-generic.mk |  2 +-
->  package/pkg-utils.mk   | 14 +++++++++-----
->  2 files changed, 10 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 6d598cfd9d..5ad8f1d894 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -1098,7 +1098,7 @@ else ifeq ($$($(2)_SITE_METHOD),cvs)
->  DL_TOOLS_DEPENDENCIES += cvs
->  endif # SITE_METHOD
->  
-> -DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
-> +DL_TOOLS_DEPENDENCIES += $$(call extractor-system-dependency,$$($(2)_SOURCE))
->  
->  # Ensure all virtual targets are PHONY. Listed alphabetically.
->  .PHONY:	$(1) \
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index d38971caf6..0f916d81d8 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -46,11 +46,15 @@ INFLATE.tar  = cat
->  # suitable-extractor(filename): returns extractor based on suffix
->  suitable-extractor = $(INFLATE$(suffix $(1)))
->  
-> -# extractor-dependency(filename): returns extractor for 'filename' if the
-> -# extractor is a dependency. If we build the extractor return nothing.
-> -# $(firstword) is used here because the extractor can have arguments, like
-> -# ZCAT="gzip -d -c", and to check for the dependency we only want 'gzip'.
-> -extractor-dependency = $(firstword $(INFLATE$(filter-out \
-> +# extractor-system-dependency(filename): returns the name of the tool
-> +# needed to extract 'filename', and is meant to be used with
-> +# DL_TOOLS_DEPENDENCIES, in order to check that the necesary tool is
-> +# provided by the system Buildroot runs on.
-> +#
-> +# $(firstword) is used here because the extractor can have arguments,
-> +# like ZCAT="gzip -d -c", and to check for the dependency we only want
-> +# 'gzip'.
-> +extractor-system-dependency = $(firstword $(INFLATE$(filter-out \
->  	$(EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS),$(suffix $(1)))))
->  
->  # check-deprecated-variable -- throw an error on deprecated variables
+> +EXTRACTOR_PKG_DEPENDENCY.lzma = $(BR2_XZCAT_HOST_DEPENDENCY)
+> +EXTRACTOR_PKG_DEPENDENCY.xz   = $(BR2_XZCAT_HOST_DEPENDENCY)
+> +EXTRACTOR_PKG_DEPENDENCY.lz   = $(BR2_LZIP_HOST_DEPENDENCY)
+> +
+> +# extractor-pkg-dependency(filename): returns a Buildroot package
+> +# dependency needed to extract file based on suffix
+> +extractor-pkg-dependency = $(EXTRACTOR_PKG_DEPENDENCY$(suffix $(1)))
+> +
+>  # extractor-system-dependency(filename): returns the name of the tool
+>  # needed to extract 'filename', and is meant to be used with
+>  # DL_TOOLS_DEPENDENCIES, in order to check that the necesary tool is
 > 
