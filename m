@@ -1,44 +1,104 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 15 Dec 2019 18:36:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: fix build without python3
-Message-ID: <20191215173629.516288-1-fontaine.fabrice@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sun, 15 Dec 2019 09:36:49 -0800
+Subject: [Buildroot] [PATCH 1/2] package/libsemanage: add option to
+ manually define policy version
+In-Reply-To: <20191215125026.1c484b08@windsurf.home>
+References: <20191215011517.1977342-1-aduskett@gmail.com>
+ <20191215011517.1977342-2-aduskett@gmail.com>
+ <20191215125026.1c484b08@windsurf.home>
+Message-ID: <CAFSsvmpeWRW+3KShMpB_hq=cn0ETgdabR__Gh7vSGeTZuKt45g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python3 is mandatory since version 4.11 and
-https://gitlab.com/samba-team/samba/commit/63d20d7822ead1626f7cb41fdbae6c9300893314
+On Sun, Dec 15, 2019 at 3:50 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Adam,
+>
+> Thanks for this patch. With the explanations of the commit log and the
+> cover letter, I understand a bit better what's going on.
+>
+> On Sat, 14 Dec 2019 17:15:16 -0800
+> aduskett at gmail.com wrote:
+>
+> > +if BR2_PACKAGE_LIBSEMANAGE
+> > +
+> > +config BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION
+> > +     bool "Manually specify the policy version"
+> > +     help
+> > +       Manually specify the policy version to build.
+>
+> Do we really need this boolean ? Why not always have the option BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION ?
+>
+> > +if BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION
+> > +
+> > +config BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION
+> > +     int "maximum policy version"
+> > +     default 25
+> > +     range 25 31
+> > +     help
+> > +       The maximum SELinux policy version your kernel supports.
+> > +
+> > +       Here's a handy table to help you choose:
+> > +       kernel version   SElinux policy max version
+> > +       <= 2.6.x         25
+> > +       > 2.6 <= 3.5     26
+> > +       > 3.5 <= 3.14    28 (27 and 28 were added@the same time)
+> > +       > 3.14 <= 4.3    29
+> > +       > 4.3 <= 4.13    30
+> > +       > 4.13 <= 5.5    31
+>
+> I think on top of PATCH 1/2, another patch could be added to make
+> things a little bit smarter in terms of defaults:
+>
+>         default 31 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+>         default 30 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+>         default 29 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+>         default 28 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+>         default 26 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_2_6
+>         default 25
+>
+I'm not sure I like this, as toolchain header versions can be
+misleading, but it's up
+to you.
 
-The only way to build samba4 without python3 is to disable python
-bindings through --disable-python option
+> This would at least allow the default value to be a bit more sensible
+> than just using "25", which is ancient.
+>
+> > +# This default value may be overwritten by setting the policy-version = line in
+> > +# /etc/semanage/semanage.conf.
+> > +LIBSEMANAGE_MAX_POLICY_VERSION = 31
+>
+> Here, what you're basically doing is assuming that if
+> BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION is not enabled, we
+> default to "31". But "31" may be wrong. That's why I suggest to drop BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION and always have a BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION option.
+>
+I made it like this as a fallback. If you want to use the max, then
+you don't have to select anything.
+Although that could be misleading.
 
-Fixes:
- - http://autobuild.buildroot.org/results/c4bb3d41fa07e38f0360a563bdcb4a368740cfe5
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/samba4/samba4.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 201328fe4b..05df0d4efc 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -31,10 +31,9 @@ SAMBA4_PYTHON = \
- 	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
- SAMBA4_DEPENDENCIES += host-python3 python3
- else
--SAMBA4_PYTHON = \
--	PYTHON="$(HOST_DIR)/bin/python2" \
--	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config"
--SAMBA4_DEPENDENCIES += host-python python
-+SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python2" 
-+SAMBA4_DEPENDENCIES += host-python
-+SAMBA4_CONF_OPTS += --disable-python
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
--- 
-2.24.0
+> > +ifeq ($(BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION),y)
+> > +LIBSEMANAGE_MAX_POLICY_VERSION = $(BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION)
+> > +endif
+> > +
+> > +define LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY
+> > +     $(SED) "/policy-version = /c\policy-version = $(LIBSEMANAGE_MAX_POLICY_VERSION)" \
+> > +             $(TARGET_DIR)/etc/selinux/semanage.conf
+> > +endef
+> > +LIBSEMANAGE_POST_INSTALL_TARGET_HOOKS += LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY
+> > +HOST_LIBSEMANAGE_POST_INSTALL_HOOKS += LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY
+>
+> The host hook is not appropriate: it tweaks a file in $(TARGET_DIR),
+> which is not good.
+>
+Yeah,  my bad.
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
