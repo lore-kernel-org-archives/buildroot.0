@@ -1,68 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2019 21:36:26 +0100
-Subject: [Buildroot] [git commit] package/xdg-dbus-proxy: add patch to
- support building with musl
-Message-ID: <20191215202817.8FB2A8B535@busybox.osuosl.org>
+Date: Sun, 15 Dec 2019 21:30:19 +0100
+Subject: [Buildroot] [git commit] package/webkitgtk: select libseccomp when
+ sandbox is enabled
+Message-ID: <20191215202817.7FF638B571@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26113da140cb765797beca5ff03f9cffb9917bd8
+commit: https://git.buildroot.net/buildroot/commit/?id=c061ee3a0a03e06d48038673dc2f6da296401e14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Import "0001-Fix-musl-compilation-by-adding-TEMP_FAILURE_RETRY.patch"
-from the upstream repository, which allows building against the musl
-libc (or any other which does not define the TEMP_FAILURE_RETRY macro).
-The patch has been accepted upstream, but no releases have been made yet
-which include the fix.
+Select BR2_PACKAGE_LIBSECCOMP when the sandboxing support is enabled
+during configuration.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-compilation-by-adding-TEMP_FAILURE_RETRY.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/webkitgtk/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/xdg-dbus-proxy/0001-Fix-musl-compilation-by-adding-TEMP_FAILURE_RETRY.patch b/package/xdg-dbus-proxy/0001-Fix-musl-compilation-by-adding-TEMP_FAILURE_RETRY.patch
-new file mode 100644
-index 0000000000..e531f58923
---- /dev/null
-+++ b/package/xdg-dbus-proxy/0001-Fix-musl-compilation-by-adding-TEMP_FAILURE_RETRY.patch
-@@ -0,0 +1,36 @@
-+From 645c45f0334bb1d6e31b5927cece5e446f129cbb Mon Sep 17 00:00:00 2001
-+From: Danilo Spinella <danyspin97@protonmail.com>
-+Date: Sat, 7 Dec 2019 00:05:21 +0100
-+Subject: [PATCH] Fix musl compilation by adding TEMP_FAILURE_RETRY
-+
-+Fetch from: https://github.com/flatpak/xdg-dbus-proxy/pull/13
-+Upstream-Status: Accepted
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+
-+---
-+ dbus-proxy.c | 9 +++++++++
-+ 1 file changed, 9 insertions(+)
-+
-+diff --git a/dbus-proxy.c b/dbus-proxy.c
-+index 163df21..4b07931 100644
-+--- a/dbus-proxy.c
-++++ b/dbus-proxy.c
-+@@ -30,6 +30,15 @@
-+ #include <errno.h>
-+ 
-+ #include "flatpak-proxy.h"
-++// Taken from glibc unistd.h
-++#ifndef TEMP_FAILURE_RETRY
-++# define TEMP_FAILURE_RETRY(expression) \
-++  (__extension__                                                              \
-++    ({ long int __result;                                                     \
-++       do __result = (long int) (expression);                                 \
-++       while (__result == -1L && errno == EINTR);                             \
-++       __result; }))
-++#endif
-+ 
-+ static const char *argv0;
-+ static GList *proxies;
-+-- 
-+2.24.1
-+
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 87de91f554..3ac76f9886 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -61,6 +61,7 @@ config BR2_PACKAGE_WEBKITGTK_SANDBOX
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # libseccomp
+ 	select BR2_PACKAGE_BUBBLEWRAP # runtime
+ 	select BR2_PACKAGE_XDG_DBUS_PROXY # runtime
++	select BR2_PACKAGE_LIBSECCOMP
+ 	help
+ 	  Enable sandboxing of the processes used for network operation,
+ 	  disk access, and Web content rendering.
