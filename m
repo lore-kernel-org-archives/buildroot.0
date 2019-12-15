@@ -1,83 +1,141 @@
 From: Ryan Coe <bluemrp9@gmail.com>
-Date: Sun, 15 Dec 2019 13:33:26 -0800
-Subject: [Buildroot] [PATCH v2 3/3] package/mariadb: prefix sysroot in
- mariadb_config
-In-Reply-To: <20191215213326.10863-1-bluemrp9@gmail.com>
-References: <20191215213326.10863-1-bluemrp9@gmail.com>
-Message-ID: <20191215213326.10863-3-bluemrp9@gmail.com>
+Date: Sun, 15 Dec 2019 13:39:59 -0800
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: bump version to 10.4.10
+In-Reply-To: <20191215131347.5084106f@windsurf.home>
+References: <20191202192214.2906-1-bluemrp9@gmail.com>
+ <20191215131347.5084106f@windsurf.home>
+Message-ID: <6f16f4a0-fcd4-6dd1-4a1e-8c99b3a769d9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds @CMAKE_SYSROOT@ to mariadb_config.c.in. Without it,
-mariadb_config incorrectly returns host paths for include paths and
-library paths.
+Thomas,
 
-This also removes mariadb_config from the target like is done for
-mysql_config.
+On 12/15/19 4:13 AM, Thomas Petazzoni wrote:
+> Hello Ryan,
+>
+> Thanks a lot for the patch. However, I have a few comments/questions.
+>
+> On Mon,  2 Dec 2019 11:22:14 -0800
+> Ryan Coe <bluemrp9@gmail.com> wrote:
+>
+>> Patch 0002-fix-build-error-with-newer-cmake.patch has been removed as it
+>> has been applied upstream.
+>>
+>> Patch 0002-add-check-for-pam-tool-directory.patch has been added to avoid
+>> an error occurring in the mysql_install_db script.
+>>
+>> The startup scripts have been changed to log to /var/log/mysql.
+> This change to /var/log/mysql seems completely unrelated from the
+> version bump, so it should be a separate patch.
+>
+>> diff --git a/package/mariadb/0002-add-check-for-pam-tool-directory.patch b/package/mariadb/0002-add-check-for-pam-tool-directory.patch
+>> new file mode 100644
+>> index 0000000000..d7636eda55
+>> --- /dev/null
+>> +++ b/package/mariadb/0002-add-check-for-pam-tool-directory.patch
+>> @@ -0,0 +1,40 @@
+>> +From 70276eca42890820e36c66876c4a7768c68a271f Mon Sep 17 00:00:00 2001
+>> +From: Ryan Coe <bluemrp9@gmail.com>
+>> +Date: Sat, 28 Sep 2019 11:07:56 -0700
+>> +Subject: [PATCH] add check for pam tool directory in mysql_install_db
+>> +
+>> +Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+>> +---
+>> + scripts/mysql_install_db.sh | 15 +++++++++------
+>> + 1 file changed, 9 insertions(+), 6 deletions(-)
+>> +
+>> +diff --git a/scripts/mysql_install_db.sh b/scripts/mysql_install_db.sh
+>> +index 253cad72e0bcb69dfddf60576fe8d96bf1ab8a92..08f11b707f73ea500aa65f24a11ccf53d18bb7a2 100644
+>> +--- a/scripts/mysql_install_db.sh
+>> ++++ b/scripts/mysql_install_db.sh
+>> +@@ -480,13 +480,16 @@ done
+>> +
+>> + if test -n "$user"
+> There is already a condition on "$user" being empty or not empty. Isn't
+> there a way to have $user empty so that the below logic doesn't trigger?
+>
+>> diff --git a/package/mariadb/S97mysqld b/package/mariadb/S97mysqld
+>> index 62357fa8c4..0cfde76bcd 100644
+>> --- a/package/mariadb/S97mysqld
+>> +++ b/package/mariadb/S97mysqld
+>> @@ -5,7 +5,9 @@
+>>   
+>>   MYSQL_LIB="/var/lib/mysql"
+>>   MYSQL_RUN="/run/mysql"
+>> -MYSQL_PID="$MYSQL_RUN/mysqld.pid"
+>> +MYSQL_PIDFILE="$MYSQL_RUN/mysqld.pid"
+> Renaming MYSQL_PID to MYSQL_PIDFILE is unrelated to the version bump,
+> it should be a separate patch.
+>
+>> +MYSQL_LOG="/var/log/mysql"
+>> +MYSQL_LOGFILE="$MYSQL_LOG/mysqld.log"
+> As mentioned above, changing to /var/log/mysql seems unrelated to the
+> version bump, it should be a separate patch.
+>
+>>   MYSQL_BIN="/usr/bin"
+>>   
+>>   wait_for_ready() {
+>> @@ -21,7 +23,7 @@ wait_for_ready() {
+>>   }
+>>   
+>>   start() {
+>> -	if [ `ls -1 $MYSQL_LIB | wc -l` = 0 ] ; then
+>> +	if [ "`ls -1 $MYSQL_LIB 2> /dev/null | wc -l`" = "0" ] ; then
+> Why is this change needed? Is it related to the version bump ?
+This is to prevent an error message from being shown if the directory 
+does not exist.
+>
+>>   		printf "Creating mysql system tables ... "
+>>   		$MYSQL_BIN/mysql_install_db --basedir=/usr --user=mysql \
+>>   			--datadir=$MYSQL_LIB > /dev/null 2>&1
+>> @@ -36,19 +38,22 @@ start() {
+>>   	# so create a subdirectory for mysql.
+>>   	install -d -o mysql -g root -m 0755 $MYSQL_RUN
+>>   
+>> +	# Also create logging directory as user mysql.
+>> +	install -d -o mysql -g root -m 0755 $MYSQL_LOG
+> This should go with the move to the logs in /var/log/syslog, in a
+> separate patch.
+>
+>> +
+>>   	# We don't use start-stop-daemon because mysqld has its own
+>>   	# wrapper script.
+>>   	printf "Starting mysql ... "
+>> -	$MYSQL_BIN/mysqld_safe --pid-file=$MYSQL_PID --user=mysql \
+>> -		> /dev/null 2>&1 &
+>> +	$MYSQL_BIN/mysqld_safe --pid-file=$MYSQL_PIDFILE --user=mysql \
+>> +		--log-error=$MYSQL_LOGFILE > /dev/null 2>&1 &
+> Ditto.
+>
+>>   	wait_for_ready
+>>   	[ $? = 0 ] && echo "OK" || echo "FAIL"
+>>   }
+>>   
+>>   stop() {
+>>   	printf "Stopping mysql ... "
+>> -	if [ -f $MYSQL_PID ]; then
+>> -		kill `cat $MYSQL_PID` > /dev/null 2>&1
+>> +	if [ -f "$MYSQL_PIDFILE" ]; then
+>> +		kill `cat $MYSQL_PIDFILE` > /dev/null 2>&1
+> This should go in the patch renaming the PID file, separately from the
+> version bump.
+>
+>>   [Service]
+>>   ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
+>> -ExecStart=/usr/bin/mysqld_safe
+>> +ExecStartPre=install -d -o mysql -g root -m 0755 /var/log/mysql
+>> +ExecStart=/usr/bin/mysqld_safe --pid-file=/var/run/mysql/mysqld.pid --log-error=/var/log/mysql/mysqld.log
+> This should go in the patch moving the logs to /var/log/mysql.
+>
+> Could you rework your patch by splitting it up? And also investigate if
+> the $user variable can be made empty so that patch
+> 0002-add-check-for-pam-tool-directory.patch would not be needed?
+>
+> Thanks!
+>
+> Thomas
 
-Reported-by: Alexey Lukyanchuk <skif@skif-web.ru>
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- ...2-add-sysroot-path-to-mariadb_config.patch | 28 +++++++++++++++++++
- package/mariadb/mariadb.mk                    |  5 ++--
- 2 files changed, 31 insertions(+), 2 deletions(-)
- create mode 100644 package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch
-
-diff --git a/package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch b/package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch
-new file mode 100644
-index 0000000000..5eca8ec402
---- /dev/null
-+++ b/package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch
-@@ -0,0 +1,28 @@
-+From 7e1b6aafeb9fe6558da7506b304c0efb5ea82281 Mon Sep 17 00:00:00 2001
-+From: Ryan Coe <bluemrp9@gmail.com>
-+Date: Fri, 13 Dec 2019 17:13:26 -0800
-+Subject: [PATCH 1/1] add sysroot path to mariadb_config
-+
-+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-+---
-+ libmariadb/mariadb_config/mariadb_config.c.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/libmariadb/mariadb_config/mariadb_config.c.in b/libmariadb/mariadb_config/mariadb_config.c.in
-+index 703c9466a1d9214a85f3638d2e3b4ecfef0c7bd6..f5513333e670373f060a3c2574d1d42facfd0337 100644
-+--- a/libmariadb/mariadb_config/mariadb_config.c.in
-++++ b/libmariadb/mariadb_config/mariadb_config.c.in
-+@@ -5,8 +5,8 @@
-+ 
-+ static char *mariadb_progname;
-+ 
-+-#define INCLUDE "-I at CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@ -I at CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@/mysql"
-+-#define LIBS    "-L at CMAKE_INSTALL_PREFIX@/@INSTALL_LIBDIR@/ -lmariadb"
-++#define INCLUDE "-I at CMAKE_SYSROOT@/@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@ -I at CMAKE_SYSROOT@/@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@/mysql"
-++#define LIBS    "-L at CMAKE_SYSROOT@/@CMAKE_INSTALL_PREFIX@/@INSTALL_LIBDIR@/ -lmariadb"
-+ #define LIBS_SYS "@extra_dynamic_LDFLAGS@"
-+ #define CFLAGS  INCLUDE
-+ #define VERSION "@MARIADB_CLIENT_VERSION@"
-+-- 
-+2.24.1
-+
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 6ad4a8e6a7..6f8f59f282 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -129,11 +129,12 @@ define MARIADB_INSTALL_INIT_SYSTEMD
- endef
- endif
- 
--# We don't need mysql_config on the target as it's only useful in staging
--# We also don't need the test suite on the target
-+# We don't need mysql_config or mariadb_config on the target as it's
-+# only useful in staging. We also don't need the test suite on the target.
- define MARIADB_POST_INSTALL
- 	mkdir -p $(TARGET_DIR)/var/lib/mysql
- 	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
-+	$(RM) $(TARGET_DIR)/usr/bin/mariadb_config
- 	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
- endef
- 
--- 
-2.24.1
+Sent a v2 for the series.? Thanks.
