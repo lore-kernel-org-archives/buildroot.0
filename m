@@ -1,67 +1,36 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sun, 15 Dec 2019 20:42:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xdg-dbus-proxy: add patch to
- support building with musl
-Message-ID: <20191215184246.3600021-1-aperez@igalia.com>
+Date: Sun, 15 Dec 2019 20:46:05 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-12-14
+In-Reply-To: <20191215071825.1CD502034B@silver.osuosl.org>
+References: <20191215071825.1CD502034B@silver.osuosl.org>
+Message-ID: <20191215204605.GB218613@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Import "0001-Fix-musl-compilation-by-adding-TEMP_FAILURE_RETRY.patch"
-from the upstream repository, which allows building against the musl
-libc (or any other which does not define the TEMP_FAILURE_RETRY macro).
-The patch has been accepted upstream, but no releases have been made yet
-which include the fix.
+Hi there,
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- ...ilation-by-adding-TEMP_FAILURE_RETRY.patch | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/xdg-dbus-proxy/0001-Fix-musl-compilation-by-adding-TEMP_FAILURE_RETRY.patch
+On Sun, 15 Dec 2019 07:18:18 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/package/xdg-dbus-proxy/0001-Fix-musl-compilation-by-adding-TEMP_FAILURE_RETRY.patch b/package/xdg-dbus-proxy/0001-Fix-musl-compilation-by-adding-TEMP_FAILURE_RETRY.patch
-new file mode 100644
-index 0000000000..e531f58923
---- /dev/null
-+++ b/package/xdg-dbus-proxy/0001-Fix-musl-compilation-by-adding-TEMP_FAILURE_RETRY.patch
-@@ -0,0 +1,36 @@
-+From 645c45f0334bb1d6e31b5927cece5e446f129cbb Mon Sep 17 00:00:00 2001
-+From: Danilo Spinella <danyspin97@protonmail.com>
-+Date: Sat, 7 Dec 2019 00:05:21 +0100
-+Subject: [PATCH] Fix musl compilation by adding TEMP_FAILURE_RETRY
-+
-+Fetch from: https://github.com/flatpak/xdg-dbus-proxy/pull/13
-+Upstream-Status: Accepted
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+
-+---
-+ dbus-proxy.c | 9 +++++++++
-+ 1 file changed, 9 insertions(+)
-+
-+diff --git a/dbus-proxy.c b/dbus-proxy.c
-+index 163df21..4b07931 100644
-+--- a/dbus-proxy.c
-++++ b/dbus-proxy.c
-+@@ -30,6 +30,15 @@
-+ #include <errno.h>
-+ 
-+ #include "flatpak-proxy.h"
-++// Taken from glibc unistd.h
-++#ifndef TEMP_FAILURE_RETRY
-++# define TEMP_FAILURE_RETRY(expression) \
-++  (__extension__                                                              \
-++    ({ long int __result;                                                     \
-++       do __result = (long int) (expression);                                 \
-++       while (__result == -1L && errno == EINTR);                             \
-++       __result; }))
-++#endif
-+ 
-+ static const char *argv0;
-+ static GList *proxies;
-+-- 
-+2.24.1
-+
--- 
-2.24.1
+> Detail of failures
+> ------------------
+>
+> [...]
+>
+>    x86_64    |      xdg-dbus-proxy-0.1.2      | NOK | http://autobuild.buildroot.net/results/075660f70d984fe18f10ee4674b0e6caa91bfaca |     
+
+This is due to the TEMP_FAILURE_RETRY not being available in Musl. Fix
+submitted here: https://patchwork.ozlabs.org/patch/1209996/
+
+Cheers,
+?Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191215/2d173549/attachment.asc>
