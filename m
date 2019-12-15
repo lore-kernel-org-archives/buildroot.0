@@ -1,43 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 15 Dec 2019 11:19:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: bump to version 1.72.0
-Message-ID: <20191215101902.3488595-1-fontaine.fabrice@gmail.com>
+Date: Sun, 15 Dec 2019 11:29:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jimtcl: bump to version 0.79
+Message-ID: <20191215102925.3490766-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- Switch site from debian to github official mirror
+- Add hash for license file
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/boost/boost.hash | 4 ++--
- package/boost/boost.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/jimtcl/jimtcl.hash | 5 +++--
+ package/jimtcl/jimtcl.mk   | 5 ++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-index b3a6f7ec39..0348f40461 100644
---- a/package/boost/boost.hash
-+++ b/package/boost/boost.hash
-@@ -1,5 +1,5 @@
--# From http://www.boost.org/users/history/version_1_71_0.html
--sha256 d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee  boost_1_71_0.tar.bz2
-+# From http://www.boost.org/users/history/version_1_72_0.html
-+sha256 59c9b274bc451cf91a9ba1dd2c7fdcaf5d60b1b3aa83f2c9fa143417cc660722  boost_1_72_0.tar.bz2
- 
- # Locally computed
- sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 3bd1e8d2c7..322429a10c 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/jimtcl/jimtcl.hash b/package/jimtcl/jimtcl.hash
+index 223dbcf57e..21d75c4f42 100644
+--- a/package/jimtcl/jimtcl.hash
++++ b/package/jimtcl/jimtcl.hash
+@@ -1,2 +1,3 @@
+-# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/j/jimtcl/jimtcl_0.75-1.dsc
+-sha256	432ad29b98f33efd018d9e1d49a5d07a5efc523c5660983733f7e30d9b2b76cb	jimtcl_0.75.orig.tar.xz
++# Locally computed
++sha256	ab8204cd03b946f5149e1273af9c86d8e73b146084a0fbeb1d4f41a75b0b3411	jimtcl-0.79.tar.gz
++sha256	419f1146334e57fb258d6c957d1f94d43455ec0d24b1b54c4447e5f61a353950	LICENSE
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 389a72ab83..643a87d5c4 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--BOOST_VERSION = 1.71.0
-+BOOST_VERSION = 1.72.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
- BOOST_SITE = https://dl.bintray.com/boostorg/release/$(BOOST_VERSION)/source
- BOOST_INSTALL_STAGING = YES
+-JIMTCL_VERSION = 0.75
+-JIMTCL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/j/jimtcl
+-JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.xz
++JIMTCL_VERSION = 0.79
++JIMTCL_SITE = $(call github,msteveb,jimtcl,$(JIMTCL_VERSION))
+ JIMTCL_INSTALL_STAGING = YES
+ JIMTCL_LICENSE = BSD-2-Clause
+ JIMTCL_LICENSE_FILES = LICENSE
 -- 
 2.24.0
