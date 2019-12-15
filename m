@@ -1,33 +1,76 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sun, 15 Dec 2019 20:54:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: select libseccomp when
- sandbox is enabled
-Message-ID: <20191215185401.3843763-1-aperez@igalia.com>
+Date: Sun, 15 Dec 2019 20:55:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add option to enable
+ sandboxing support
+In-Reply-To: <20191215204816.GD218613@momiji>
+References: <20191214142216.2609541-1-aperez@igalia.com>
+ <20191214212150.6c81132b@windsurf.home> <20191215204816.GD218613@momiji>
+Message-ID: <20191215205532.GB230839@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select BR2_PACKAGE_LIBSECCOMP when the sandboxing support is enabled
-during configuration.
+Hello,
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/webkitgtk/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On Sun, 15 Dec 2019 20:48:16 +0200, Adrian Perez de Castro <aperez@igalia.com> wrote:
+> Hi Thomas,
+> 
+> On Sat, 14 Dec 2019 21:21:50 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> > On Sat, 14 Dec 2019 16:22:16 +0200
+> > Adrian Perez de Castro <aperez@igalia.com> wrote:
+> > 
+> > > Add an option to enable WebKit's sandbox, which uses kernel
+> > > namespaces to isolate the processes used for Web content rendering
+> > > (WebKitWebProcess) and network/disk access (WebKitNetworkProcess).
+> > > 
+> > > The reason to have an option is that it needs additional dependencies
+> > > (bubblewrap, xdg-dbus-proxy, libseccomp), and that some users may
+> > > choose to deploy alternative solution (for example: putting all
+> > > of WebKit inside its own container, using systemd-nspawn or the
+> > > like).
+> > > 
+> > > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> > > ---
+> > >  package/wpewebkit/Config.in    | 14 ++++++++++++++
+> > >  package/wpewebkit/wpewebkit.mk | 14 ++++++++++++--
+> > >  2 files changed, 26 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+> > > index f1460db20e..37a3065761 100644
+> > > --- a/package/wpewebkit/Config.in
+> > > +++ b/package/wpewebkit/Config.in
+> > > @@ -63,6 +63,20 @@ config BR2_PACKAGE_WPEWEBKIT
+> > >  
+> > >  if BR2_PACKAGE_WPEWEBKIT
+> > >  
+> > > +config BR2_PACKAGE_WPEWEBKIT_SANDBOX
+> > > +	bool "sandboxing support"
+> > > +	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
+> > > +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # libseccomp
+> > > +	select BR2_PACKAGE_BUBBLEWRAP # runtime
+> > > +	select BR2_PACKAGE_XDG_DBUS_PROXY # runtime
+> > 
+> > Didn't you forgot a:
+> > 
+> > 	select BR2_PACKAGE_LIBSECCOMP
+> > 
+> > here ? No need to resend just for that, can be fixed when applying.
+> 
+> Good catch, this ?select? is indeed missing. Please add it when applying.
+> 
+> (Side note: I have noticed that the WebKitGTK package has the same issue,
+> I'll submit a patch.)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 87de91f554..3ac76f9886 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -61,6 +61,7 @@ config BR2_PACKAGE_WEBKITGTK_SANDBOX
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # libseccomp
- 	select BR2_PACKAGE_BUBBLEWRAP # runtime
- 	select BR2_PACKAGE_XDG_DBUS_PROXY # runtime
-+	select BR2_PACKAGE_LIBSECCOMP
- 	help
- 	  Enable sandboxing of the processes used for network operation,
- 	  disk access, and Web content rendering.
--- 
-2.24.1
+Submitted: https://patchwork.ozlabs.org/patch/1209998/
+
+Cheers,
+?Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191215/6d3b3b6d/attachment.asc>
