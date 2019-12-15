@@ -1,68 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Dec 2019 13:28:47 +0100
-Subject: [Buildroot] [PATCH/next 1/3] package/solarus: bump to version
- 1.6.2
-In-Reply-To: <20191201092823.1288313-1-fontaine.fabrice@gmail.com>
-References: <20191201092823.1288313-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191215132847.3c6f256b@windsurf.home>
+Date: Sun, 15 Dec 2019 13:44:16 +0100
+Subject: [Buildroot] [git commit] package/openal: switch to github mirror
+Message-ID: <20191215123536.423958B523@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  1 Dec 2019 10:28:21 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=94d4f06ca2feb215369c5af1747a50744189543a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> -SOLARUS_VERSION = 1.6.0
-> -SOLARUS_SITE = http://www.solarus-games.org/downloads/solarus
-> -SOLARUS_SOURCE = solarus-$(SOLARUS_VERSION)-src.tar.gz
-> +SOLARUS_VERSION = 1.6.2
-> +SOLARUS_SITE = \
-> +	https://gitlab.com/solarus-games/solarus/archive/v$(SOLARUS_VERSION)
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openal/openal.hash | 2 +-
+ package/openal/openal.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-Here, this URL doesn't work, it downloads a blurb of HTML. To get an
-actual tarball, I need to do the following change:
-
-diff --git a/package/solarus/solarus.hash b/package/solarus/solarus.hash
-index 596c0e3bdf..3c14b92b1b 100644
---- a/package/solarus/solarus.hash
-+++ b/package/solarus/solarus.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+index 219e334e6e..a133808cae 100644
+--- a/package/openal/openal.hash
++++ b/package/openal/openal.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256 a752c26ef9d7a22c8b054d5e22967f5e24519b9b3b22aaff265224e8088c833f  solarus-1.6.2.tar.gz
-+sha256 a752c26ef9d7a22c8b054d5e22967f5e24519b9b3b22aaff265224e8088c833f  solarus-v1.6.2.tar.gz
- 
- sha256 309875d925041d909bc705473d6c4b7905272aea15c1c2389088c26c161bae1f  license.txt
-diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
-index 6f65a53fea..b8965f3c5e 100644
---- a/package/solarus/solarus.mk
-+++ b/package/solarus/solarus.mk
-@@ -5,8 +5,9 @@
+-sha256 5c2f87ff5188b95e0dc4769719a9d89ce435b8322b4478b95dd4b427fe84b2e9  openal-soft-1.19.1.tar.bz2
++sha256 9f3536ab2bb7781dbafabc6a61e0b34b17edd16bd6c2eaf2ae71bc63078f98c7  openal-1.19.1.tar.gz
+ sha256 d808ce217e5b611854da622b57ec29fe545584c48bc5352fae72a4b6e5074a15  COPYING
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+index e15cf320c0..8e761a8d9b 100644
+--- a/package/openal/openal.mk
++++ b/package/openal/openal.mk
+@@ -5,8 +5,7 @@
  ################################################################################
  
- SOLARUS_VERSION = 1.6.2
-+SOLARUS_SOURCE = solarus-v$(SOLARUS_VERSION).tar.gz
- SOLARUS_SITE = \
--       https://gitlab.com/solarus-games/solarus/archive/v$(SOLARUS_VERSION)
-+       https://gitlab.com/solarus-games/solarus/-/archive/v$(SOLARUS_VERSION)
- 
- SOLARUS_LICENSE = GPL-3.0 (code), CC-BY-SA-4.0 (Solarus logos and icons), \
-        CC-BY-SA-3.0 (GUI icons)
-
-But then, the hash doesn't match:
-
-ERROR: solarus-v1.6.2.tar.gz has wrong sha256 hash:
-ERROR: expected: a752c26ef9d7a22c8b054d5e22967f5e24519b9b3b22aaff265224e8088c833f
-ERROR: got     : cec4da0fb041dec3ec1f1cba79c40a519e994b562d582cd56e37fc444c8c656c
-
-Could you double check ?
-
-Also, you had some comments on PATCH 2/3, so I guess a v2 for this
-series is needed. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ OPENAL_VERSION = 1.19.1
+-OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
+-OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
++OPENAL_SITE = $(call github,kcat,openal-soft,openal-soft-$(OPENAL_VERSION))
+ OPENAL_LICENSE = LGPL-2.0+
+ OPENAL_LICENSE_FILES = COPYING
+ OPENAL_INSTALL_STAGING = YES
