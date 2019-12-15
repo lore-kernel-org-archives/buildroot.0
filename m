@@ -1,240 +1,141 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Dec 2019 13:10:19 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libsemanage: allow the user to
- specify a kernel version
-In-Reply-To: <20191215011517.1977342-3-aduskett@gmail.com>
-References: <20191215011517.1977342-1-aduskett@gmail.com>
- <20191215011517.1977342-3-aduskett@gmail.com>
-Message-ID: <20191215131019.2a593276@windsurf.home>
+Date: Sun, 15 Dec 2019 13:13:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: bump version to 10.4.10
+In-Reply-To: <20191202192214.2906-1-bluemrp9@gmail.com>
+References: <20191202192214.2906-1-bluemrp9@gmail.com>
+Message-ID: <20191215131347.5084106f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Ryan,
 
-On Sat, 14 Dec 2019 17:15:17 -0800
-aduskett at gmail.com wrote:
+Thanks a lot for the patch. However, I have a few comments/questions.
 
+On Mon,  2 Dec 2019 11:22:14 -0800
+Ryan Coe <bluemrp9@gmail.com> wrote:
 
-> diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
-> index 814bf293d7..6c3e269579 100644
-> --- a/package/libsemanage/Config.in
-> +++ b/package/libsemanage/Config.in
-> @@ -44,7 +44,12 @@ config BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION
+> Patch 0002-fix-build-error-with-newer-cmake.patch has been removed as it
+> has been applied upstream.
+> 
+> Patch 0002-add-check-for-pam-tool-directory.patch has been added to avoid
+> an error occurring in the mysql_install_db script.
+> 
+> The startup scripts have been changed to log to /var/log/mysql.
+
+This change to /var/log/mysql seems completely unrelated from the
+version bump, so it should be a separate patch.
+
+> diff --git a/package/mariadb/0002-add-check-for-pam-tool-directory.patch b/package/mariadb/0002-add-check-for-pam-tool-directory.patch
+> new file mode 100644
+> index 0000000000..d7636eda55
+> --- /dev/null
+> +++ b/package/mariadb/0002-add-check-for-pam-tool-directory.patch
+> @@ -0,0 +1,40 @@
+> +From 70276eca42890820e36c66876c4a7768c68a271f Mon Sep 17 00:00:00 2001
+> +From: Ryan Coe <bluemrp9@gmail.com>
+> +Date: Sat, 28 Sep 2019 11:07:56 -0700
+> +Subject: [PATCH] add check for pam tool directory in mysql_install_db
+> +
+> +Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> +---
+> + scripts/mysql_install_db.sh | 15 +++++++++------
+> + 1 file changed, 9 insertions(+), 6 deletions(-)
+> +
+> +diff --git a/scripts/mysql_install_db.sh b/scripts/mysql_install_db.sh
+> +index 253cad72e0bcb69dfddf60576fe8d96bf1ab8a92..08f11b707f73ea500aa65f24a11ccf53d18bb7a2 100644
+> +--- a/scripts/mysql_install_db.sh
+> ++++ b/scripts/mysql_install_db.sh
+> +@@ -480,13 +480,16 @@ done
+> + 
+> + if test -n "$user"
+
+There is already a condition on "$user" being empty or not empty. Isn't
+there a way to have $user empty so that the below logic doesn't trigger?
+
+> diff --git a/package/mariadb/S97mysqld b/package/mariadb/S97mysqld
+> index 62357fa8c4..0cfde76bcd 100644
+> --- a/package/mariadb/S97mysqld
+> +++ b/package/mariadb/S97mysqld
+> @@ -5,7 +5,9 @@
 >  
->  endif # BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION
+>  MYSQL_LIB="/var/lib/mysql"
+>  MYSQL_RUN="/run/mysql"
+> -MYSQL_PID="$MYSQL_RUN/mysqld.pid"
+> +MYSQL_PIDFILE="$MYSQL_RUN/mysqld.pid"
+
+Renaming MYSQL_PID to MYSQL_PIDFILE is unrelated to the version bump,
+it should be a separate patch.
+
+> +MYSQL_LOG="/var/log/mysql"
+> +MYSQL_LOGFILE="$MYSQL_LOG/mysqld.log"
+
+As mentioned above, changing to /var/log/mysql seems unrelated to the
+version bump, it should be a separate patch.
+
+>  MYSQL_BIN="/usr/bin"
 >  
-> -endif # BR2_PACKAGE_LIBSEMANAGE
-> +config BR2_PACKAGE_LIBSEMANAGE_KERNEL_VERSION
-> +	string "Kernel version being built"
-> +	help
-> +	  The version of the kernel being built. This version must be in
-> +	  the standard X.X format (IE: 4.0 or 5.2.1)
-> +endif
-
-I don't understand how this option articulates with the options added
-in PATCH 1/2.
-
-In my opinion, this PATCH 2/2 should in fact make the
-BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION option added in PATCH 1/2
-invisible when BR2_LINUX_KERNEL=y, by adding a:
-
-	depends on !BR2_LINUX_KERNEL
-
-and then libsemanage.mk has two possibilities:
-
- (1) BR2_LINUX_KERNEL=y, in which case you add "linux" to
-     LIBSEMANAGE_DEPENDENCIES and use LINUX_VERSION_PROBED to know the
-     kernel version
-
- (2) BR2_LINUX_KERNEL is not set, in which case
-     BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION defines the maximum
-     policy version, as is done in PATCH 1/2.
-
-Yes it means that when the user is building his kernel manually,
-outside of Buildroot, he is on his own to provide the appropriate
-maximum SELinux policy version supported. But that's perfectly OK, just
-like he is on his own to make sure that his kernel has the right
-configuration options to have systemd work, for example.
-
-> +function get_max_kernel_policy_version(){
-> +  LIBSEMANAGE_LINUX_VERSION="${1}"
-> +  # Only the major and minor versions are needed. Sub minor version bumps do not
-> +  # receive SELinux policy version bump updates.
-> +  LIBSEMANAGE_LINUX_VERSION_MAJOR=$(echo ${LIBSEMANAGE_LINUX_VERSION} | cut -d"." -f1)
-> +  LIBSEMANAGE_LINUX_VERSION_MINOR=$(echo ${LIBSEMANAGE_LINUX_VERSION} | cut -d"." -f2)
-
-You don't necessarily have to follow the naming convention of Buildroot
-makefile variables in this shell script. Actually, it makes it a bit
-difficult to read, perhaps just:
-
-	major=$(echo ${1} | cut -d. -f1)
-	minor=$(echo ${1} | cut -d. -f2)
-
-> +  # Default maximum policy version
-> +  MAX_POLICY_VERSION="31"
-> +  # <= 2.6.x
-> +  if [ ${LIBSEMANAGE_LINUX_VERSION_MAJOR} -eq 2 ]; then
-> +    MAX_POLICY_VERSION="25"
-> +  fi
-> +
-> +  # > 2.6 <= 3.5
-
-Less or equal to 3.5
-
-> +  if [ ${LIBSEMANAGE_LINUX_VERSION_MAJOR} -eq 3 -a ${LIBSEMANAGE_LINUX_VERSION_MINOR} -le 4 ]; then
-
-... but less or equal to 3.4
-
-> +    MAX_POLICY_VERSION="26"
-> +  fi
-> +
-> +  # > 3.5 <= 3.14
-
-Less than or equal to 3.14
-
-> +  if [ ${LIBSEMANAGE_LINUX_VERSION_MAJOR} -eq 3 -a ${LIBSEMANAGE_LINUX_VERSION_MINOR} -lt 14 ]; then
-
-.. but strictly less than 3.14
-
-> +    MAX_POLICY_VERSION="28"
-> +  fi
-> +
-> +  # > 3.14
-
-Strictly greater than 3.14...
-
-> +  if [ ${LIBSEMANAGE_LINUX_VERSION_MAJOR} -eq 3 -a ${LIBSEMANAGE_LINUX_VERSION_MINOR} -ge 14 ]; then
-
-... but greater or equal to 3.14
-
-> +    MAX_POLICY_VERSION="29"
-> +  fi
-> +
-> +  # > 4.0 < 4.3
-> +  if [ ${LIBSEMANAGE_LINUX_VERSION_MAJOR} -eq 4 -a ${LIBSEMANAGE_LINUX_VERSION_MINOR} -lt 3 ]; then
-> +    MAX_POLICY_VERSION="29"
-> +  fi
-> +
-> +  # > 4.3
-
-Strictly greater than 4.3
-
-> +  if [ ${LIBSEMANAGE_LINUX_VERSION_MAJOR} -eq 4 -a ${LIBSEMANAGE_LINUX_VERSION_MINOR} -ge 3 ]; then
-
-.. but greater or equal
-
-> +    MAX_POLICY_VERSION="30"
-> +  fi
-> +
-> +  # > 4.13
-> +  if [ ${LIBSEMANAGE_LINUX_VERSION_MAJOR} -eq 4 -a ${LIBSEMANAGE_LINUX_VERSION_MINOR} -ge 13 ]; then
-> +    MAX_POLICY_VERSION="31"
-> +  fi
-> +
-> +  # > 5.0 <= 5.5
-
-I don't see the point of having a max defined to 5.5, just for now
-assume that all versions > 5.0 will support policy version 31.
-
-Also, you don't handle the case of 5.0, your condition says that policy
-version 31 is supported > 5.0, so only starting from 5.1, but still
-your condition below will match 5.0.
-
-> +  if [ ${LIBSEMANAGE_LINUX_VERSION_MAJOR} -eq 5 -a ${LIBSEMANAGE_LINUX_VERSION_MINOR} -lt 5 ]; then
-> +    MAX_POLICY_VERSION="31"
-> +  fi
-
-This can be rewritten like this:
-
-case 1 in
-$((major == 2)))
-	echo 25;;
-$((major == 3 && $minor <= 4)))
-	echo 26;;
-$((major == 3 && $minor <= 14)))
-	echo 28;;
-$((major == 3 && $minor > 14)))
-	echo 29;;
-$((major == 4 && $minor <= 3)))
-	echo 29;;
-$((major == 4 && $minor <= 13)))
-	echo 30;;
-$((major == 4 && $minor > 13)))
-	echo 31;
-$((major >= 5)))
-	echo 31;;
-esac
-
-a bit more compact isn't it? Of course, you'll have to set the shebang
-to /bin/bash.
-
-
-> diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-> index d260e449eb..57c58a5570 100644
-> --- a/package/libsemanage/libsemanage.mk
-> +++ b/package/libsemanage/libsemanage.mk
-> @@ -25,14 +25,56 @@ LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
->  # This default value may be overwrriten by setting the policy-version = line in
->  # /etc/semanage/semanage.conf.
->  LIBSEMANAGE_MAX_POLICY_VERSION = 31
-> +
-> +# If a kernel version is specified, get the maximum supported policy version
-> +# of that kernel.
-> +LIBSEMANAGE_KERNEL_VERSION = $(call qstrip,$(BR2_PACKAGE_LIBSEMANAGE_KERNEL_VERSION))
-> +ifneq ($(LIBSEMANAGE_KERNEL_VERSION),)
-> +LIBSEMANAGE_MAX_KERNEL_POLICY_VERSION := \
-> +	$(shell package/libsemanage/get-kernel-max-policy-version.sh \
-> +	"get_max_kernel_policy_version" \
-> +	$(BR2_PACKAGE_LIBSEMANAGE_KERNEL_VERSION))
-> +LIBSEMANAGE_MAX_POLICY_VERSION = $(LIBSEMANAGE_MAX_KERNEL_POLICY_VERSION)
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION),y)
->  LIBSEMANAGE_MAX_POLICY_VERSION = $(BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION)
-> +
-> +# If a kernel version is specified, check if the policy version set by the user
-> +# is lower or greater than the maximum supported policy version in the kernel.
-> +# If the policy is lower, display a warning.
-> +# If the policy is greater, throw an error.
-> +ifneq ($(LIBSEMANAGE_KERNEL_VERSION),)
-> +LIBSEMANAGE_MANUAL_POLICY_VERSION_CHECK := \
-> +	$(shell package/libsemanage/get-kernel-max-policy-version.sh \
-> +	"policy_version_check" \
-> +	$(LIBSEMANAGE_MAX_KERNEL_POLICY_VERSION) \
-> +	$(BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION))
-
-This is no longer needed: if BR2_LINUX_KERNEL=y, you know what the
-kernel version is, and the user should no longer enter a manual version.
-
-> +ifeq ($(LIBSEMANAGE_MANUAL_POLICY_VERSION_CHECK),lt)
-> +$(warning \
-> +	The policy version set for libsemanage $(BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION) \
-> +	is lower than the maximum policy version supported by the kernel being built: \
-> +	$(LIBSEMANAGE_MAX_KERNEL_POLICY_VERSION). It is HIGHLY recommended that you set the \
-> +	policy version to $(LIBSEMANAGE_MAX_KERNEL_POLICY_VERSION)! \
-> +	)
-> +endif
-> +
-> +ifeq ($(LIBSEMANAGE_MANUAL_POLICY_VERSION_CHECK),gt)
-> +$(error \
-> +	The policy version set for libsemanage $(BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION) \
-> +	is higher than the maximum policy version supported by the kernel being built: \
-> +	$(LIBSEMANAGE_MAX_KERNEL_POLICY_VERSION). \
-> +	)
->  endif
-> +endif # ifeq ($(LIBSEMANAGE_KERNEL_VERSION),y)
-> +endif # ($(BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION),y)
+>  wait_for_ready() {
+> @@ -21,7 +23,7 @@ wait_for_ready() {
+>  }
 >  
->  define LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY
->  	$(SED) "/policy-version = /c\policy-version = $(LIBSEMANAGE_MAX_POLICY_VERSION)" \
->  		$(TARGET_DIR)/etc/selinux/semanage.conf
->  endef
-> +
+>  start() {
+> -	if [ `ls -1 $MYSQL_LIB | wc -l` = 0 ] ; then
+> +	if [ "`ls -1 $MYSQL_LIB 2> /dev/null | wc -l`" = "0" ] ; then
 
-Spurious new line added.
+Why is this change needed? Is it related to the version bump ?
+
+>  		printf "Creating mysql system tables ... "
+>  		$MYSQL_BIN/mysql_install_db --basedir=/usr --user=mysql \
+>  			--datadir=$MYSQL_LIB > /dev/null 2>&1
+> @@ -36,19 +38,22 @@ start() {
+>  	# so create a subdirectory for mysql.
+>  	install -d -o mysql -g root -m 0755 $MYSQL_RUN
+>  
+> +	# Also create logging directory as user mysql.
+> +	install -d -o mysql -g root -m 0755 $MYSQL_LOG
+
+This should go with the move to the logs in /var/log/syslog, in a
+separate patch.
+
+> +
+>  	# We don't use start-stop-daemon because mysqld has its own
+>  	# wrapper script.
+>  	printf "Starting mysql ... "
+> -	$MYSQL_BIN/mysqld_safe --pid-file=$MYSQL_PID --user=mysql \
+> -		> /dev/null 2>&1 &  
+> +	$MYSQL_BIN/mysqld_safe --pid-file=$MYSQL_PIDFILE --user=mysql \
+> +		--log-error=$MYSQL_LOGFILE > /dev/null 2>&1 &
+
+Ditto.
+
+>  	wait_for_ready
+>  	[ $? = 0 ] && echo "OK" || echo "FAIL"
+>  }
+>  
+>  stop() {
+>  	printf "Stopping mysql ... "
+> -	if [ -f $MYSQL_PID ]; then
+> -		kill `cat $MYSQL_PID` > /dev/null 2>&1
+> +	if [ -f "$MYSQL_PIDFILE" ]; then
+> +		kill `cat $MYSQL_PIDFILE` > /dev/null 2>&1
+
+This should go in the patch renaming the PID file, separately from the
+version bump.
+
+>  [Service]
+>  ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
+> -ExecStart=/usr/bin/mysqld_safe
+> +ExecStartPre=install -d -o mysql -g root -m 0755 /var/log/mysql
+> +ExecStart=/usr/bin/mysqld_safe --pid-file=/var/run/mysql/mysqld.pid --log-error=/var/log/mysql/mysqld.log
+
+This should go in the patch moving the logs to /var/log/mysql.
+
+Could you rework your patch by splitting it up? And also investigate if
+the $user variable can be made empty so that patch
+0002-add-check-for-pam-tool-directory.patch would not be needed?
 
 Thanks!
 
