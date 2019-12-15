@@ -1,143 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Dec 2019 13:13:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mariadb: bump version to 10.4.10
-In-Reply-To: <20191202192214.2906-1-bluemrp9@gmail.com>
-References: <20191202192214.2906-1-bluemrp9@gmail.com>
-Message-ID: <20191215131347.5084106f@windsurf.home>
+Date: Sun, 15 Dec 2019 13:28:47 +0100
+Subject: [Buildroot] [PATCH/next 1/3] package/solarus: bump to version
+ 1.6.2
+In-Reply-To: <20191201092823.1288313-1-fontaine.fabrice@gmail.com>
+References: <20191201092823.1288313-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191215132847.3c6f256b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ryan,
+On Sun,  1 Dec 2019 10:28:21 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Thanks a lot for the patch. However, I have a few comments/questions.
+> -SOLARUS_VERSION = 1.6.0
+> -SOLARUS_SITE = http://www.solarus-games.org/downloads/solarus
+> -SOLARUS_SOURCE = solarus-$(SOLARUS_VERSION)-src.tar.gz
+> +SOLARUS_VERSION = 1.6.2
+> +SOLARUS_SITE = \
+> +	https://gitlab.com/solarus-games/solarus/archive/v$(SOLARUS_VERSION)
 
-On Mon,  2 Dec 2019 11:22:14 -0800
-Ryan Coe <bluemrp9@gmail.com> wrote:
+Here, this URL doesn't work, it downloads a blurb of HTML. To get an
+actual tarball, I need to do the following change:
 
-> Patch 0002-fix-build-error-with-newer-cmake.patch has been removed as it
-> has been applied upstream.
-> 
-> Patch 0002-add-check-for-pam-tool-directory.patch has been added to avoid
-> an error occurring in the mysql_install_db script.
-> 
-> The startup scripts have been changed to log to /var/log/mysql.
+diff --git a/package/solarus/solarus.hash b/package/solarus/solarus.hash
+index 596c0e3bdf..3c14b92b1b 100644
+--- a/package/solarus/solarus.hash
++++ b/package/solarus/solarus.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 a752c26ef9d7a22c8b054d5e22967f5e24519b9b3b22aaff265224e8088c833f  solarus-1.6.2.tar.gz
++sha256 a752c26ef9d7a22c8b054d5e22967f5e24519b9b3b22aaff265224e8088c833f  solarus-v1.6.2.tar.gz
+ 
+ sha256 309875d925041d909bc705473d6c4b7905272aea15c1c2389088c26c161bae1f  license.txt
+diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
+index 6f65a53fea..b8965f3c5e 100644
+--- a/package/solarus/solarus.mk
++++ b/package/solarus/solarus.mk
+@@ -5,8 +5,9 @@
+ ################################################################################
+ 
+ SOLARUS_VERSION = 1.6.2
++SOLARUS_SOURCE = solarus-v$(SOLARUS_VERSION).tar.gz
+ SOLARUS_SITE = \
+-       https://gitlab.com/solarus-games/solarus/archive/v$(SOLARUS_VERSION)
++       https://gitlab.com/solarus-games/solarus/-/archive/v$(SOLARUS_VERSION)
+ 
+ SOLARUS_LICENSE = GPL-3.0 (code), CC-BY-SA-4.0 (Solarus logos and icons), \
+        CC-BY-SA-3.0 (GUI icons)
 
-This change to /var/log/mysql seems completely unrelated from the
-version bump, so it should be a separate patch.
+But then, the hash doesn't match:
 
-> diff --git a/package/mariadb/0002-add-check-for-pam-tool-directory.patch b/package/mariadb/0002-add-check-for-pam-tool-directory.patch
-> new file mode 100644
-> index 0000000000..d7636eda55
-> --- /dev/null
-> +++ b/package/mariadb/0002-add-check-for-pam-tool-directory.patch
-> @@ -0,0 +1,40 @@
-> +From 70276eca42890820e36c66876c4a7768c68a271f Mon Sep 17 00:00:00 2001
-> +From: Ryan Coe <bluemrp9@gmail.com>
-> +Date: Sat, 28 Sep 2019 11:07:56 -0700
-> +Subject: [PATCH] add check for pam tool directory in mysql_install_db
-> +
-> +Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-> +---
-> + scripts/mysql_install_db.sh | 15 +++++++++------
-> + 1 file changed, 9 insertions(+), 6 deletions(-)
-> +
-> +diff --git a/scripts/mysql_install_db.sh b/scripts/mysql_install_db.sh
-> +index 253cad72e0bcb69dfddf60576fe8d96bf1ab8a92..08f11b707f73ea500aa65f24a11ccf53d18bb7a2 100644
-> +--- a/scripts/mysql_install_db.sh
-> ++++ b/scripts/mysql_install_db.sh
-> +@@ -480,13 +480,16 @@ done
-> + 
-> + if test -n "$user"
+ERROR: solarus-v1.6.2.tar.gz has wrong sha256 hash:
+ERROR: expected: a752c26ef9d7a22c8b054d5e22967f5e24519b9b3b22aaff265224e8088c833f
+ERROR: got     : cec4da0fb041dec3ec1f1cba79c40a519e994b562d582cd56e37fc444c8c656c
 
-There is already a condition on "$user" being empty or not empty. Isn't
-there a way to have $user empty so that the below logic doesn't trigger?
+Could you double check ?
 
-> diff --git a/package/mariadb/S97mysqld b/package/mariadb/S97mysqld
-> index 62357fa8c4..0cfde76bcd 100644
-> --- a/package/mariadb/S97mysqld
-> +++ b/package/mariadb/S97mysqld
-> @@ -5,7 +5,9 @@
->  
->  MYSQL_LIB="/var/lib/mysql"
->  MYSQL_RUN="/run/mysql"
-> -MYSQL_PID="$MYSQL_RUN/mysqld.pid"
-> +MYSQL_PIDFILE="$MYSQL_RUN/mysqld.pid"
-
-Renaming MYSQL_PID to MYSQL_PIDFILE is unrelated to the version bump,
-it should be a separate patch.
-
-> +MYSQL_LOG="/var/log/mysql"
-> +MYSQL_LOGFILE="$MYSQL_LOG/mysqld.log"
-
-As mentioned above, changing to /var/log/mysql seems unrelated to the
-version bump, it should be a separate patch.
-
->  MYSQL_BIN="/usr/bin"
->  
->  wait_for_ready() {
-> @@ -21,7 +23,7 @@ wait_for_ready() {
->  }
->  
->  start() {
-> -	if [ `ls -1 $MYSQL_LIB | wc -l` = 0 ] ; then
-> +	if [ "`ls -1 $MYSQL_LIB 2> /dev/null | wc -l`" = "0" ] ; then
-
-Why is this change needed? Is it related to the version bump ?
-
->  		printf "Creating mysql system tables ... "
->  		$MYSQL_BIN/mysql_install_db --basedir=/usr --user=mysql \
->  			--datadir=$MYSQL_LIB > /dev/null 2>&1
-> @@ -36,19 +38,22 @@ start() {
->  	# so create a subdirectory for mysql.
->  	install -d -o mysql -g root -m 0755 $MYSQL_RUN
->  
-> +	# Also create logging directory as user mysql.
-> +	install -d -o mysql -g root -m 0755 $MYSQL_LOG
-
-This should go with the move to the logs in /var/log/syslog, in a
-separate patch.
-
-> +
->  	# We don't use start-stop-daemon because mysqld has its own
->  	# wrapper script.
->  	printf "Starting mysql ... "
-> -	$MYSQL_BIN/mysqld_safe --pid-file=$MYSQL_PID --user=mysql \
-> -		> /dev/null 2>&1 &  
-> +	$MYSQL_BIN/mysqld_safe --pid-file=$MYSQL_PIDFILE --user=mysql \
-> +		--log-error=$MYSQL_LOGFILE > /dev/null 2>&1 &
-
-Ditto.
-
->  	wait_for_ready
->  	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  }
->  
->  stop() {
->  	printf "Stopping mysql ... "
-> -	if [ -f $MYSQL_PID ]; then
-> -		kill `cat $MYSQL_PID` > /dev/null 2>&1
-> +	if [ -f "$MYSQL_PIDFILE" ]; then
-> +		kill `cat $MYSQL_PIDFILE` > /dev/null 2>&1
-
-This should go in the patch renaming the PID file, separately from the
-version bump.
-
->  [Service]
->  ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
-> -ExecStart=/usr/bin/mysqld_safe
-> +ExecStartPre=install -d -o mysql -g root -m 0755 /var/log/mysql
-> +ExecStart=/usr/bin/mysqld_safe --pid-file=/var/run/mysql/mysqld.pid --log-error=/var/log/mysql/mysqld.log
-
-This should go in the patch moving the logs to /var/log/mysql.
-
-Could you rework your patch by splitting it up? And also investigate if
-the $user variable can be made empty so that patch
-0002-add-check-for-pam-tool-directory.patch would not be needed?
-
-Thanks!
+Also, you had some comments on PATCH 2/3, so I guess a v2 for this
+series is needed. Thanks!
 
 Thomas
 -- 
