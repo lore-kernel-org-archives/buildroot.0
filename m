@@ -1,28 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2019 08:59:00 +0100
-Subject: [Buildroot] [git commit] package/libscrypt: add hash for license
- file
-Message-ID: <20191215075136.B45288B4D5@busybox.osuosl.org>
+Date: Sun, 15 Dec 2019 08:59:13 +0100
+Subject: [Buildroot] [git commit] package/libkrb5: needs host-pkgconf for
+ libedit
+Message-ID: <20191215075136.BC1DF8B499@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ebf93b4f946d2e55749963f87f095b480584615
+commit: https://git.buildroot.net/buildroot/commit/?id=6812e466f9a23c4021750b2f6c726c252116bdec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+host-pkgconf is needed to find libedit
+
+Fixes:
+ - http://autobuild.buildroot.org/results/45eee300788f46975d292b21eead97f9e9a8b5d8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libscrypt/libscrypt.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/libkrb5/libkrb5.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libscrypt/libscrypt.hash b/package/libscrypt/libscrypt.hash
-index 4e35489492..fda63d1c0d 100644
---- a/package/libscrypt/libscrypt.hash
-+++ b/package/libscrypt/libscrypt.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256	68e377e79745c10d489b759b970e52d819dbb80dd8ca61f8c975185df3f457d3	libscrypt-1.21.tar.gz
-+sha256	aacbfd9e19e5b38ea09616cebf0751ef0cc7b6a19ea0fd78f4b0598b2c503394	LICENSE
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index 7c199129a3..44a20b3707 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -41,7 +41,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+ LIBKRB5_CONF_OPTS += --with-libedit
+-LIBKRB5_DEPENDENCIES += libedit
++LIBKRB5_DEPENDENCIES += host-pkgconf libedit
+ else
+ LIBKRB5_CONF_OPTS += --without-libedit
+ endif
