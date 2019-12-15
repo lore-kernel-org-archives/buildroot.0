@@ -1,115 +1,114 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 15 Dec 2019 10:40:48 +0100
-Subject: [Buildroot] [PATCH v3 2/2] package/python-avro: new package
-In-Reply-To: <20191214174206.161446-3-titouan.christophe@railnova.eu>
-References: <20191214174206.161446-1-titouan.christophe@railnova.eu>
- <20191214174206.161446-3-titouan.christophe@railnova.eu>
-Message-ID: <CAKcgs2xKa-Q9b3Xfb-E5jDirfyo04rztgKdrigo88_uV1G09NQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 15 Dec 2019 11:04:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/boost: boost-thread needs a
+ toolchain without bug 64735
+Message-ID: <20191215100425.3339162-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Titouan, all
+boost-thread needs std::current_exception since version 1.71.0 and
+https://github.com/boostorg/exception/commit/386f5507cb8ec99c03ca535bea4f8bd61e0de910
 
-Le sam. 14 d?c. 2019 ? 18:42, Titouan Christophe
-<titouan.christophe@railnova.eu> a ?crit :
->
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> ---
->  DEVELOPERS                           |  1 +
->  package/Config.in                    |  1 +
->  package/python-avro/Config.in        | 20 ++++++++++++++++++++
->  package/python-avro/python-avro.hash |  5 +++++
->  package/python-avro/python-avro.mk   | 14 ++++++++++++++
->  5 files changed, 41 insertions(+)
->  create mode 100644 package/python-avro/Config.in
->  create mode 100644 package/python-avro/python-avro.hash
->  create mode 100644 package/python-avro/python-avro.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 4468373a73..e7a8a8d3aa 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2402,6 +2402,7 @@ F:        package/fbgrab/
->  N:     Titouan Christophe <titouan.christophe@railnova.eu>
->  F:     package/avro-c/
->  F:     package/mosquitto/
-> +F:     package/python-avro/
->  F:     package/redis/
->
->  N:     Trent Piepho <tpiepho@impinj.com>
-> diff --git a/package/Config.in b/package/Config.in
-> index fa4e98403c..f43f64357b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -845,6 +845,7 @@ menu "External python modules"
->         source "package/python-attrs/Config.in"
->         source "package/python-autobahn/Config.in"
->         source "package/python-automat/Config.in"
-> +       source "package/python-avro/Config.in"
->         source "package/python-babel/Config.in"
->         source "package/python-backcall/Config.in"
->         source "package/python-backports-abc/Config.in"
-> diff --git a/package/python-avro/Config.in b/package/python-avro/Config.in
-> new file mode 100644
-> index 0000000000..e1d7fc832c
-> --- /dev/null
-> +++ b/package/python-avro/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_PYTHON_AVRO
-> +       bool "python-avro"
-> +       depends on BR2_PACKAGE_PYTHON3
-> +       help
-> +         Select this option to install the Avro Python3 language
-> +         bindings, and the `avro` command line tool
-> +
-> +         Apache Avro is a data serialization system.
-> +         Avro provides:
-> +         - Rich data structures.
-> +         - A compact, fast, binary data format.
-> +         - A container file, to store persistent data.
-> +         - Remote procedure call (RPC).
-> +         - Simple integration with dynamic languages.
-> +         - Code generation is not required to read or write data
-> +           files nor to use or implement RPC protocols.
-> +         - Code generation as an optional optimization,
-> +           only worth implementing for statically typed languages.
-> +
-> +         http://avro.apache.org/
-> diff --git a/package/python-avro/python-avro.hash b/package/python-avro/python-avro.hash
-> new file mode 100644
-> index 0000000000..f63b37ee0a
-> --- /dev/null
-> +++ b/package/python-avro/python-avro.hash
-> @@ -0,0 +1,5 @@
-> +# From https://www-eu.apache.org/dist/avro/avro-1.9.1/py3/avro-python3-1.9.1.tar.gz.sha512
-> +sha512 771ce6e5ca6315f5b9108cb4f5dd9488575cc3433ffdd744f96ce7989763728259c89475319fd9c411ed6b65c996b762548c50a697eb1fba9ab024112ca17daa  avro-python3-1.9.1.tar.gz
-> +
-> +# License files
-> +sha256 c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  avro/LICENSE
-> diff --git a/package/python-avro/python-avro.mk b/package/python-avro/python-avro.mk
-> new file mode 100644
-> index 0000000000..3f9140e946
-> --- /dev/null
-> +++ b/package/python-avro/python-avro.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-avro
-> +#
-> +################################################################################
-> +
-> +PYTHON_AVRO_VERSION = $(AVRO_C_VERSION)
-> +PYTHON_AVRO_SITE = https://www-eu.apache.org/dist/avro/avro-1.9.1/py3
-> +PYTHON_AVRO_SOURCE = avro-python3-$(PYTHON_AVRO_VERSION).tar.gz
-> +PYTHON_AVRO_LICENSE = Apache-2.0
-> +PYTHON_AVRO_LICENSE_FILES = avro/LICENSE
-> +PYTHON_AVRO_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
-> --
-> 2.23.0
->
-Reviewed-by: Gilles Talis <gilles.talis@gmail.com>
+std::current_exception depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 as a
+result, gnuradio fails to build on:
+
+[ 12%] Building CXX object gnuradio-runtime/lib/pmt/CMakeFiles/gnuradio-pmt.dir/pmt_pool.cc.o
+In file included from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/detail/exception_ptr.hpp:15:0,
+                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception_ptr.hpp:9,
+                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/thread/exceptional_ptr.hpp:10,
+                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/thread/future.hpp:34,
+                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/thread.hpp:24,
+                 from /home/test/autobuild/run/instance-2/output-1/build/gnuradio-3.7.13.5/gnuradio-runtime/include/pmt/pmt_pool.h:27,
+                 from /home/test/autobuild/run/instance-2/output-1/build/gnuradio-3.7.13.5/gnuradio-runtime/lib/pmt/pmt.cc:31:
+/home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp: In function 'std::string boost::current_exception_diagnostic_information(bool)':
+/home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp:49:26: error: 'current_exception' is not a member of 'std'
+         else if (auto* p=std::current_exception().__cxa_exception_type())
+                          ^
+So add this dependency on boost-thread and gnuradio (the only reverse
+dependency of boost-thread that does not already depends on
+!BR2_TOOLCHAIN_HAS_GCC_BUG_64735)
+
+Finally, add this dependency on gqrx as it is a reverse dependency of
+gnuradio
+
+Fixes:
+ - http://autobuild.buildroot.org/results/c384205cf50929c320d90b620f2390837721d9f9
+ - http://autobuild.buildroot.org/results/47440354b336b943b74b72fa303b079dc962bfd0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/boost/Config.in    | 4 ++++
+ package/gnuradio/Config.in | 4 ++++
+ package/gqrx/Config.in     | 4 ++++
+ 3 files changed, 12 insertions(+)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 392d7424fb..1a48eae807 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -304,12 +304,16 @@ config BR2_PACKAGE_BOOST_TEST
+ 
+ config BR2_PACKAGE_BOOST_THREAD
+ 	bool "boost-thread"
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
+ 	select BR2_PACKAGE_BOOST_ATOMIC if !BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  Portable C++ multi-threading. C++11, C++14.
+ 
++comment "boost-thread needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++
+ config BR2_PACKAGE_BOOST_TIMER
+ 	bool "boost-timer"
+ 	select BR2_PACKAGE_BOOST_CHRONO
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 80f6a1c535..442b86c692 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -4,6 +4,9 @@ comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+ 
++comment "gnuradio needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++
+ config BR2_PACKAGE_GNURADIO
+ 	bool "gnuradio"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -12,6 +15,7 @@ config BR2_PACKAGE_GNURADIO
+ 	depends on BR2_USE_MMU # use fork()
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on !BR2_PACKAGE_PYTHON3
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
+index b0d7e7b9f3..990d594c6a 100644
+--- a/package/gqrx/Config.in
++++ b/package/gqrx/Config.in
+@@ -8,6 +8,9 @@ comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
+ comment "gqrx needs qt5"
+ 	depends on !BR2_PACKAGE_QT5
+ 
++comment "gqrx needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++
+ config BR2_PACKAGE_GQRX
+ 	bool "gqrx"
+ 	depends on BR2_USE_MMU # gnuradio
+@@ -18,6 +21,7 @@ config BR2_PACKAGE_GQRX
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on !BR2_PACKAGE_PYTHON3
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # gnuradio
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+-- 
+2.24.0
