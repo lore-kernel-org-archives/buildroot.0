@@ -1,76 +1,45 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sun, 15 Dec 2019 20:55:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add option to enable
- sandboxing support
-In-Reply-To: <20191215204816.GD218613@momiji>
-References: <20191214142216.2609541-1-aperez@igalia.com>
- <20191214212150.6c81132b@windsurf.home> <20191215204816.GD218613@momiji>
-Message-ID: <20191215205532.GB230839@momiji>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 15 Dec 2019 20:25:51 +0100
+Subject: [Buildroot] [PATCH] package/wireguard: bump version to 0.0.20191212
+Message-ID: <20191215192551.18633-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+For details of the changes, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2019-December/004764.html
 
-On Sun, 15 Dec 2019 20:48:16 +0200, Adrian Perez de Castro <aperez@igalia.com> wrote:
-> Hi Thomas,
-> 
-> On Sat, 14 Dec 2019 21:21:50 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> > On Sat, 14 Dec 2019 16:22:16 +0200
-> > Adrian Perez de Castro <aperez@igalia.com> wrote:
-> > 
-> > > Add an option to enable WebKit's sandbox, which uses kernel
-> > > namespaces to isolate the processes used for Web content rendering
-> > > (WebKitWebProcess) and network/disk access (WebKitNetworkProcess).
-> > > 
-> > > The reason to have an option is that it needs additional dependencies
-> > > (bubblewrap, xdg-dbus-proxy, libseccomp), and that some users may
-> > > choose to deploy alternative solution (for example: putting all
-> > > of WebKit inside its own container, using systemd-nspawn or the
-> > > like).
-> > > 
-> > > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> > > ---
-> > >  package/wpewebkit/Config.in    | 14 ++++++++++++++
-> > >  package/wpewebkit/wpewebkit.mk | 14 ++++++++++++--
-> > >  2 files changed, 26 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-> > > index f1460db20e..37a3065761 100644
-> > > --- a/package/wpewebkit/Config.in
-> > > +++ b/package/wpewebkit/Config.in
-> > > @@ -63,6 +63,20 @@ config BR2_PACKAGE_WPEWEBKIT
-> > >  
-> > >  if BR2_PACKAGE_WPEWEBKIT
-> > >  
-> > > +config BR2_PACKAGE_WPEWEBKIT_SANDBOX
-> > > +	bool "sandboxing support"
-> > > +	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
-> > > +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # libseccomp
-> > > +	select BR2_PACKAGE_BUBBLEWRAP # runtime
-> > > +	select BR2_PACKAGE_XDG_DBUS_PROXY # runtime
-> > 
-> > Didn't you forgot a:
-> > 
-> > 	select BR2_PACKAGE_LIBSECCOMP
-> > 
-> > here ? No need to resend just for that, can be fixed when applying.
-> 
-> Good catch, this ?select? is indeed missing. Please add it when applying.
-> 
-> (Side note: I have noticed that the WebKitGTK package has the same issue,
-> I'll submit a patch.)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Submitted: https://patchwork.ozlabs.org/patch/1209998/
-
-Cheers,
-?Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191215/6d3b3b6d/attachment.asc>
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 9ad434f54d..66ebf41dc6 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2019-October/004594.html
+-sha256 93573193c9c1c22fde31eb1729ad428ca39da77a603a3d81561a9816ccecfa8e  WireGuard-0.0.20191012.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2019-December/004764.html
++sha256 b0d718380f7a8822b2f12d75e462fa4eafa3a77871002981f367cd4fe2a1b071  WireGuard-0.0.20191212.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index a494160423..3c604b3014 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_VERSION = 0.0.20191012
++WIREGUARD_VERSION = 0.0.20191212
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
+-- 
+2.20.1
