@@ -1,47 +1,91 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 15 Dec 2019 11:29:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jimtcl: bump to version 0.79
-Message-ID: <20191215102925.3490766-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 15 Dec 2019 12:50:26 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libsemanage: add option to
+ manually define policy version
+In-Reply-To: <20191215011517.1977342-2-aduskett@gmail.com>
+References: <20191215011517.1977342-1-aduskett@gmail.com>
+ <20191215011517.1977342-2-aduskett@gmail.com>
+Message-ID: <20191215125026.1c484b08@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Switch site from debian to github official mirror
-- Add hash for license file
+Hello Adam,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/jimtcl/jimtcl.hash | 5 +++--
- package/jimtcl/jimtcl.mk   | 5 ++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Thanks for this patch. With the explanations of the commit log and the
+cover letter, I understand a bit better what's going on.
 
-diff --git a/package/jimtcl/jimtcl.hash b/package/jimtcl/jimtcl.hash
-index 223dbcf57e..21d75c4f42 100644
---- a/package/jimtcl/jimtcl.hash
-+++ b/package/jimtcl/jimtcl.hash
-@@ -1,2 +1,3 @@
--# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/j/jimtcl/jimtcl_0.75-1.dsc
--sha256	432ad29b98f33efd018d9e1d49a5d07a5efc523c5660983733f7e30d9b2b76cb	jimtcl_0.75.orig.tar.xz
-+# Locally computed
-+sha256	ab8204cd03b946f5149e1273af9c86d8e73b146084a0fbeb1d4f41a75b0b3411	jimtcl-0.79.tar.gz
-+sha256	419f1146334e57fb258d6c957d1f94d43455ec0d24b1b54c4447e5f61a353950	LICENSE
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index 389a72ab83..643a87d5c4 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--JIMTCL_VERSION = 0.75
--JIMTCL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/j/jimtcl
--JIMTCL_SOURCE = jimtcl_$(JIMTCL_VERSION).orig.tar.xz
-+JIMTCL_VERSION = 0.79
-+JIMTCL_SITE = $(call github,msteveb,jimtcl,$(JIMTCL_VERSION))
- JIMTCL_INSTALL_STAGING = YES
- JIMTCL_LICENSE = BSD-2-Clause
- JIMTCL_LICENSE_FILES = LICENSE
+On Sat, 14 Dec 2019 17:15:16 -0800
+aduskett at gmail.com wrote:
+
+> +if BR2_PACKAGE_LIBSEMANAGE
+> +
+> +config BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION
+> +	bool "Manually specify the policy version"
+> +	help
+> +	  Manually specify the policy version to build.
+
+Do we really need this boolean ? Why not always have the option BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION ?
+
+> +if BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION
+> +
+> +config BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION
+> +	int "maximum policy version"
+> +	default 25
+> +	range 25 31
+> +	help
+> +	  The maximum SELinux policy version your kernel supports.
+> +
+> +	  Here's a handy table to help you choose:
+> +	  kernel version   SElinux policy max version
+> +	  <= 2.6.x         25
+> +	  > 2.6 <= 3.5     26
+> +	  > 3.5 <= 3.14    28 (27 and 28 were added@the same time)
+> +	  > 3.14 <= 4.3    29
+> +	  > 4.3 <= 4.13    30
+> +	  > 4.13 <= 5.5    31
+
+I think on top of PATCH 1/2, another patch could be added to make
+things a little bit smarter in terms of defaults:
+
+	default 31 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+	default 30 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+	default 29 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+	default 28 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+	default 26 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_2_6
+	default 25
+
+This would@least allow the default value to be a bit more sensible
+than just using "25", which is ancient.
+
+> +# This default value may be overwrriten by setting the policy-version = line in
+> +# /etc/semanage/semanage.conf.
+> +LIBSEMANAGE_MAX_POLICY_VERSION = 31
+
+Here, what you're basically doing is assuming that if
+BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION is not enabled, we
+default to "31". But "31" may be wrong. That's why I suggest to drop BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION and always have a BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION option.
+
+> +ifeq ($(BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION),y)
+> +LIBSEMANAGE_MAX_POLICY_VERSION = $(BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION)
+> +endif
+> +
+> +define LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY
+> +	$(SED) "/policy-version = /c\policy-version = $(LIBSEMANAGE_MAX_POLICY_VERSION)" \
+> +		$(TARGET_DIR)/etc/selinux/semanage.conf
+> +endef
+> +LIBSEMANAGE_POST_INSTALL_TARGET_HOOKS += LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY
+> +HOST_LIBSEMANAGE_POST_INSTALL_HOOKS += LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY
+
+The host hook is not appropriate: it tweaks a file in $(TARGET_DIR),
+which is not good.
+
+Best regards,
+
+Thomas
 -- 
-2.24.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
