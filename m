@@ -1,32 +1,54 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 16 Dec 2019 21:48:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pathlib2: select
- python-scandir
-Message-ID: <20191216194815.5436-1-asafka7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 16 Dec 2019 21:00:01 +0100
+Subject: [Buildroot] [PATCH 1/1] system: update lib64/32 symlink
+ creation for mips64n32 and gcc >= 5.1.0
+In-Reply-To: <CAAXf6LV6pD5u8cx2ycebBn+KOhM6XuSMpnb8kiioZuonvB_URA@mail.gmail.com>
+References: <20191216152223.20718-1-patrickdepinguin@gmail.com>
+ <20191216162628.63672ab7@windsurf.home>
+ <CAAXf6LV6pD5u8cx2ycebBn+KOhM6XuSMpnb8kiioZuonvB_URA@mail.gmail.com>
+Message-ID: <20191216210001.377aaf7a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-scandir is a runtime dependency of pathlib2.
+Hello,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-pathlib2/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, 16 Dec 2019 18:34:53 +0100
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-diff --git a/package/python-pathlib2/Config.in b/package/python-pathlib2/Config.in
-index e28de4c12e..ca948c271f 100644
---- a/package/python-pathlib2/Config.in
-+++ b/package/python-pathlib2/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_PATHLIB2
- 	bool "python-pathlib2"
- 	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_SCANDIR # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
- 	  Object-oriented filesystem paths.
+> > >     16073  
+> > access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/lib64/mips64-octeon-linux-gnu/7.3.0/crt1.o",
+> > R_OK) = -1 ENOENT (No such file or directory)  
+> > >     16073  
+> > access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/lib64/crt1.o",
+> > R_OK) = -1 ENOENT (No such file or directory)  
+> > >     16073  
+> > access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/usr/lib64/mips64-octeon-linux-gnu/7.3.0/crt1.o",
+> > R_OK) = -1 ENOENT (No such file or directory)  
+> > >     16073  
+> > access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/usr/lib64/crt1.o",
+> > R_OK) = -1 ENOENT (No such file or directory)
+> >
+> > And then in lib64/ itself.
+> >
+> > Which means the lib32 symbolic link is in fact useless ?
+> >  
+> 
+> In this case this was Octeon3 which has hardfloat and uses lib32-fp instead
+> of lib32. But the problem should be analogous for Octeon2 (no hardfloat,
+> with libdir lib32).
+
+Right, but it means that this lib32/ symlink doesn't work for all
+toolchains, some toolchains would need a lib32-fp/ symlink... but by
+luck they also look under lib64/, even if the user-space is 32-bit.
+
+I'm not suggesting we need to change anything to the patch itself, only
+perhaps to the comments and/or commit log, just to clarify the issue.
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
