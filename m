@@ -1,10 +1,8 @@
 From: Eugen.Hristev at microchip.com <Eugen.Hristev@microchip.com>
 Date: Mon, 16 Dec 2019 15:06:34 +0000
-Subject: [Buildroot] [PATCH v2 2/2] boot/at91bootstrap3: implement custom
- tarball
-In-Reply-To: <1576508766-25676-1-git-send-email-eugen.hristev@microchip.com>
-References: <1576508766-25676-1-git-send-email-eugen.hristev@microchip.com>
-Message-ID: <1576508766-25676-2-git-send-email-eugen.hristev@microchip.com>
+Subject: [Buildroot] [PATCH v2 1/2] configs/atmel: fix at91bootstrap custom
+ tarball call function
+Message-ID: <1576508766-25676-1-git-send-email-eugen.hristev@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,79 +11,181 @@ To: buildroot@busybox.net
 
 From: Eugen Hristev <eugen.hristev@microchip.com>
 
-Implement possibility to take AT91Bootstrap as a custom tarball.
+The function was wrong, missing '$'. Also aligned with tar.gz. name rule in
+hash file.
 
+Fixes: 806409533202 ("configs/atmel: use tarballs to fetch U-Boot and at91bootstrap")
 Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
-Changes in v2:
-- use BR_NO_CHECK_HASH_FOR += $(AT91BOOTSTRAP3_SOURCE)
+ configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 2 +-
+ configs/atmel_sama5d2_xplained_mmc_defconfig     | 2 +-
+ configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 2 +-
+ configs/atmel_sama5d3_xplained_defconfig         | 2 +-
+ configs/atmel_sama5d3_xplained_dev_defconfig     | 2 +-
+ configs/atmel_sama5d3_xplained_mmc_defconfig     | 2 +-
+ configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 2 +-
+ configs/atmel_sama5d3xek_defconfig               | 2 +-
+ configs/atmel_sama5d4_xplained_defconfig         | 2 +-
+ configs/atmel_sama5d4_xplained_dev_defconfig     | 2 +-
+ configs/atmel_sama5d4_xplained_mmc_defconfig     | 2 +-
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 2 +-
+ 12 files changed, 12 insertions(+), 12 deletions(-)
 
- boot/at91bootstrap3/Config.in         |  8 ++++++++
- boot/at91bootstrap3/at91bootstrap3.mk | 17 ++++++++++++++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
-
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index c3fc9d35d4..faab7635da 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -27,8 +27,15 @@ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	  This option allows Buildroot to get the AT91 Bootstrap 3
- 	  source code from a Git repository.
- 
-+config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
-+	bool "Custom tarball"
-+
- endchoice
- 
-+config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom AT91Bootstrap tarball"
-+	depends on BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
-+
- if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL
-@@ -47,6 +54,7 @@ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
- 	default "v3.9.0" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-+	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
- 
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
- 	string "custom patch dir"
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index 685be5bbd7..9dcbac8d28 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -6,7 +6,13 @@
- 
- AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
- 
--ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
-+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL),y)
-+# Handle custom AT91Bootstrap tarballs as specified by the configuration
-+AT91BOOTSTRAP3_TARBALL = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION))
-+AT91BOOTSTRAP3_SITE = $(patsubst %/,%,$(dir $(AT91BOOTSTRAP3_TARBALL)))
-+AT91BOOTSTRAP3_SOURCE = $(notdir $(AT91BOOTSTRAP3_TARBALL))
-+BR_NO_CHECK_HASH_FOR += $(AT91BOOTSTRAP3_SOURCE)
-+else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
- AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
- AT91BOOTSTRAP3_SITE_METHOD = git
- BR_NO_CHECK_HASH_FOR += $(AT91BOOTSTRAP3_SOURCE)
-@@ -54,6 +60,15 @@ AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
- # Must be before we call to kconfig-package
- ifeq ($(BR_BUILDING),y)
- 
-+#
-+# Check custom tarball option
-+#
-+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL),y)
-+ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION)),)
-+$(error No custom AT91Bootstrap3 tarball specified. Check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION setting)
-+endif # qstrip BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION
-+endif # BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
-+
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
- # We must use the user-supplied kconfig value, because
- # AT91BOOTSTRAP3_KCONFIG_DEFCONFIG will at least contain
+diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+index 0653ae8f5c..c1f39ba2ee 100644
+--- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
++++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+@@ -71,7 +71,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/atmel_sama5d2_xplained_mmc_defconfig b/configs/atmel_sama5d2_xplained_mmc_defconfig
+index 4418ab0d07..2c73cc4c27 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_defconfig
+@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+index 4603244a82..057a86eab7 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+@@ -88,7 +88,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # Bootloaders
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
+index 9e53218370..65304a2e42 100644
+--- a/configs/atmel_sama5d3_xplained_defconfig
++++ b/configs/atmel_sama5d3_xplained_defconfig
+@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_UBI=y
+ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
+index 2689f2a40d..0d9a541d09 100644
+--- a/configs/atmel_sama5d3_xplained_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_dev_defconfig
+@@ -85,7 +85,7 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+ # Bootloaders
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
+index 0d341482a1..3fd5f1dde0 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
+@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+index 517222824d..97d2d6477c 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+@@ -87,7 +87,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # Bootloaders
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/atmel_sama5d3xek_defconfig b/configs/atmel_sama5d3xek_defconfig
+index db3fe7b93a..63417eae7c 100644
+--- a/configs/atmel_sama5d3xek_defconfig
++++ b/configs/atmel_sama5d3xek_defconfig
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+ # Bootloaders
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.8.10)/at91bootstrap-v3.8.10.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.8.10)/at91bootstrap3-v3.8.10.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3xeknf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
+index f862d41b1e..319f31956d 100644
+--- a/configs/atmel_sama5d4_xplained_defconfig
++++ b/configs/atmel_sama5d4_xplained_defconfig
+@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
+ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
+index 7a0966ecd3..41c24fe9be 100644
+--- a/configs/atmel_sama5d4_xplained_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_dev_defconfig
+@@ -89,7 +89,7 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
+ # Bootloaders
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
+index ee4b12d79b..ed294c35a1 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
+@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+index 6f0c298a8f..09c9de5fbd 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+@@ -88,7 +88,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # Bootloaders
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -- 
 2.17.1
