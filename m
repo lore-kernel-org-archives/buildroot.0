@@ -1,71 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Dec 2019 10:02:09 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libsemanage: add option to
- manually define policy version
-In-Reply-To: <CAFSsvmpeWRW+3KShMpB_hq=cn0ETgdabR__Gh7vSGeTZuKt45g@mail.gmail.com>
-References: <20191215011517.1977342-1-aduskett@gmail.com>
- <20191215011517.1977342-2-aduskett@gmail.com>
- <20191215125026.1c484b08@windsurf.home>
- <CAFSsvmpeWRW+3KShMpB_hq=cn0ETgdabR__Gh7vSGeTZuKt45g@mail.gmail.com>
-Message-ID: <20191216100209.38e41ead@windsurf.home>
+Date: Mon, 16 Dec 2019 10:31:18 +0100
+Subject: [Buildroot] [PATCH] board/pc/post-build.sh: fix typo in grub
+ boot.img path
+Message-ID: <20191216093119.1747699-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 15 Dec 2019 09:36:49 -0800
-Adam Duskett <aduskett@gmail.com> wrote:
+Commit 3468ef16fa55610bae3bacefaf816231a20cfab0
+("configs/pc_x86_64_efi: use genimage GPT partition table support")
+had a small typo on the path to grub boot.img file: i387-pc instead of
+i386-pc, which causes a build failure.
 
-> > I think on top of PATCH 1/2, another patch could be added to make
-> > things a little bit smarter in terms of defaults:
-> >
-> >         default 31 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
-> >         default 30 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-> >         default 29 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-> >         default 28 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-> >         default 26 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_2_6
-> >         default 25
-> >  
-> I'm not sure I like this, as toolchain header versions can be
-> misleading, but it's up to you.
+Fixes:
 
-I don't see how they can be misleading. These options really state
-which kernel headers version is used, and it's a rather good hint of
-the minimal kernel version that runs on the target HW.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/378314412
 
-> > Here, what you're basically doing is assuming that if
-> > BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION is not enabled, we
-> > default to "31". But "31" may be wrong. That's why I suggest to drop BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION and always have a BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION option.
-> >  
-> I made it like this as a fallback. If you want to use the max, then
-> you don't have to select anything. Although that could be misleading.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Alexandre PAYEN <alexandre.payen@smile.fr>
+Cc: Carlos Santos <casantos@datacom.com.br>
+---
+ board/pc/post-build.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm not sure using the latest and greatest as the fallback is really
-the safe option.
-
-> > > +ifeq ($(BR2_PACKAGE_LIBSEMANAGE_POLICY_MANUAL_VERSION),y)
-> > > +LIBSEMANAGE_MAX_POLICY_VERSION = $(BR2_PACKAGE_LIBSEMANAGE_POLICY_MAX_VERSION)
-> > > +endif
-> > > +
-> > > +define LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY
-> > > +     $(SED) "/policy-version = /c\policy-version = $(LIBSEMANAGE_MAX_POLICY_VERSION)" \
-> > > +             $(TARGET_DIR)/etc/selinux/semanage.conf
-> > > +endef
-> > > +LIBSEMANAGE_POST_INSTALL_TARGET_HOOKS += LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY
-> > > +HOST_LIBSEMANAGE_POST_INSTALL_HOOKS += LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY  
-> >
-> > The host hook is not appropriate: it tweaks a file in $(TARGET_DIR),
-> > which is not good.
-
-I saw your new iteration, which adds a separate hook for the host
-variant. So we need to set this for both the host and target variants
-of libsemanage ?
-
-Thanks,
-
-Thomas
+diff --git a/board/pc/post-build.sh b/board/pc/post-build.sh
+index 552d488160..ed37b3b87e 100755
+--- a/board/pc/post-build.sh
++++ b/board/pc/post-build.sh
+@@ -11,5 +11,5 @@ else
+     cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
+ 
+     # Copy grub 1st stage to binaries, required for genimage
+-    cp -f "$HOST_DIR/lib/grub/i387-pc/boot.img" "$BINARIES_DIR"
++    cp -f "$HOST_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
+ fi
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0
