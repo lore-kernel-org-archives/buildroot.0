@@ -1,158 +1,120 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 16 Dec 2019 14:06:52 -0600
-Subject: [Buildroot] [PATCH] ebtables: add option to install save/restore
- utils
-Message-ID: <20191216200652.4416-1-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 16 Dec 2019 21:14:41 +0100
+Subject: [Buildroot] [git commit] package/coreutils: bump version to 8.31
+Message-ID: <20191216200839.D44098B674@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: David Owens <david.owens@rockwellcollins.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=60063c380b38397526ea594fa1f39f9f5b956e56
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds an option to include the tools on target that allow
-the saving and restoring of ebtables. The upstream save utility is
-replaced in this commit as it depended on perl which is not always
-possible on an embedded system. The commit used to replace this
-script seems to note it as a common approach across a few distros.
+Added license hash.
+Added patch to fix build error with uclibc.
 
-Signed-off-by: David Owens <david.owens@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Release notes:
+https://lists.gnu.org/archive/html/coreutils/2019-03/msg00042.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-ebtables-save-perl-script-with-bash.patch | 75 +++++++++++++++++++
- package/ebtables/Config.in                    | 10 +++
- package/ebtables/ebtables.mk                  | 11 +++
- 3 files changed, 96 insertions(+)
- create mode 100644 package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch
+ .../0002-strtod_fix_clash_with_strtold.patch       | 64 ++++++++++++++++++++++
+ package/coreutils/coreutils.hash                   |  4 +-
+ package/coreutils/coreutils.mk                     |  2 +-
+ 3 files changed, 68 insertions(+), 2 deletions(-)
 
-diff --git a/package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch b/package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch
+diff --git a/package/coreutils/0002-strtod_fix_clash_with_strtold.patch b/package/coreutils/0002-strtod_fix_clash_with_strtold.patch
 new file mode 100644
-index 0000000000..687eb6a373
+index 0000000000..7033d3b856
 --- /dev/null
-+++ b/package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch
-@@ -0,0 +1,75 @@
-+From 73536d15c80be96049289d96fc32122467c56b1d Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Mon, 16 Dec 2019 13:27:30 -0600
-+Subject: [PATCH] ebtables: replace ebtables-save perl script with bash rewrite
++++ b/package/coreutils/0002-strtod_fix_clash_with_strtold.patch
+@@ -0,0 +1,64 @@
++From 0562b040fa17f1722ba2b3096067b45d0582ca53 Mon Sep 17 00:00:00 2001
++From: Paul Eggert <eggert@cs.ucla.edu>
++Date: Mon, 11 Mar 2019 16:40:29 -0700
++Subject: [PATCH] strtod: fix clash with strtold
 +
-+Fedora provides a bash replacement for the default ebtables-save perl
-+script. Using it allows the ebtables run-time dependency on perl to
-+be replaced with a runtime dependency on bash - which is lower
-+overhead and more likely to be present on typical embedded systems
-+already.
++Problem reported for RHEL 5 by Jesse Caldwell (Bug#34817).
++* lib/strtod.c (compute_minus_zero, minus_zero):
++Simplify by remving the macro / external variable,
++and having just a function.  User changed.  This avoids
++the need for an external variable that might clash.
 +
-+  https://bugzilla.redhat.com/show_bug.cgi?id=746040
-+  http://pkgs.fedoraproject.org/cgit/rpms/ebtables.git/tree/ebtables-save
++Upstream-Status: Backport [rhel5]
 +
-+Upstream:
-+https://github.com/openembedded/meta-openembedded/commit/7f723007364ba79de05447671e83d4eefb3097dc
++Signed-off-by: Oleksandr Kravchuk <open.source@oleksandr-kravchuk.com>
 +
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++Downloaded from
++http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-core/coreutils/coreutils/strtod_fix_clash_with_strtold.patch
++
++This patch was committed to gnulib:
++http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=patch;h=3bd82a82cf4ba693d2c31c7b95aaec4e56dc92a4
++and will be included in the next release of coreutils.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ ebtables-save.sh | 43 +++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 43 insertions(+)
-+ create mode 100644 ebtables-save.sh
++ ChangeLog    |  9 +++++++++
++ lib/strtod.c | 11 +++++------
++ 2 files changed, 14 insertions(+), 6 deletions(-)
 +
-+diff --git a/ebtables-save.sh b/ebtables-save.sh
-+new file mode 100644
-+index 0000000..2d7fc4e
-+--- /dev/null
-++++ b/ebtables-save.sh
-+@@ -0,0 +1,43 @@
-++#!/bin/bash
-++
-++EBTABLES="/sbin/ebtables"
-++
-++[ -x "$EBTABLES" ] || exit 1
-++
-++echo "# Generated by ebtables-save v1.0 on $(date)"
-++
-++cnt=""
-++[ "x$EBTABLES_SAVE_COUNTER" = "xyes" ] && cnt="--Lc"
-++
-++for table_name in $(grep -E '^ebtable_' /proc/modules | cut -f1 -d' ' | sed s/ebtable_//); do
-++    table=$($EBTABLES -t $table_name -L $cnt)
-++    [ $? -eq 0 ] || { echo "$table"; exit -1; }
-++
-++    chain=""
-++    rules=""
-++    while read line; do
-++	[ -z "$line" ] && continue
-++
-++	case "$line" in 
-++	    Bridge\ table:\ *)
-++		echo "*${line:14}"
-++		;;
-++	    Bridge\ chain:\ *)
-++		chain="${line:14}"
-++		chain="${chain%%,*}"
-++		policy="${line##*policy: }"
-++		echo ":$chain $policy"
-++		;;
-++	    *)
-++		if [ "$cnt" = "--Lc" ]; then
-++		    line=${line/, pcnt \=/ -c}
-++		    line=${line/-- bcnt \=/}
-++		fi
-++		rules="$rules-A $chain $line\n"
-++		;;
-++	esac
-++    done <<EOF
-++$table
-++EOF
-++    echo -e $rules
-++done
++diff --git a/lib/strtod.c b/lib/strtod.c
++index b9eaa51b4..69b1564e1 100644
++--- a/lib/strtod.c
+++++ b/lib/strtod.c
++@@ -294,16 +294,15 @@ parse_number (const char *nptr,
++    ICC 10.0 has a bug when optimizing the expression -zero.
++    The expression -MIN * MIN does not work when cross-compiling
++    to PowerPC on Mac OS X 10.5.  */
++-#if defined __hpux || defined __sgi || defined __ICC
++ static DOUBLE
++-compute_minus_zero (void)
+++minus_zero (void)
++ {
+++#if defined __hpux || defined __sgi || defined __ICC
++   return -MIN * MIN;
++-}
++-# define minus_zero compute_minus_zero ()
++ #else
++-DOUBLE minus_zero = -0.0;
+++  return -0.0;
++ #endif
+++}
++ 
++ /* Convert NPTR to a DOUBLE.  If ENDPTR is not NULL, a pointer to the
++    character after the last one used in the number is put in *ENDPTR.  */
++@@ -479,6 +478,6 @@ STRTOD (const char *nptr, char **endptr)
++   /* Special case -0.0, since at least ICC miscompiles negation.  We
++      can't use copysign(), as that drags in -lm on some platforms.  */
++   if (!num && negative)
++-    return minus_zero;
+++    return minus_zero ();
++   return negative ? -num : num;
++ }
 +-- 
-+2.17.1
++2.20.1
 +
-diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
-index 3f7566a607..3c0a2703a3 100644
---- a/package/ebtables/Config.in
-+++ b/package/ebtables/Config.in
-@@ -5,3 +5,13 @@ config BR2_PACKAGE_EBTABLES
- 	  Ethernet bridge frame table administration
+diff --git a/package/coreutils/coreutils.hash b/package/coreutils/coreutils.hash
+index d55e25a86f..31dfbd73a9 100644
+--- a/package/coreutils/coreutils.hash
++++ b/package/coreutils/coreutils.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 e831b3a86091496cdba720411f9748de81507798f6130adeaef872d206e1b057  coreutils-8.30.tar.xz
++sha256 ff7a9c918edce6b4f4b2725e3f9b37b0c4d193531cac49a48b56c4d0d3a9e9fd  coreutils-8.31.tar.xz
++# Locally computed
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 55aa92e753..d312197e7e 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://ebtables.netfilter.org/
-+
-+if BR2_PACKAGE_EBTABLES
-+config BR2_PACKAGE_EBTABLES_UTILS
-+	bool "ebtables utils"
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_PACKAGE_BASH # runtime
-+	help
-+	  Include the save/restore tools
-+
-+endif
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index aae0c91a10..3b0d4c13a3 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -17,6 +17,16 @@ define EBTABLES_BUILD_CMDS
- 		CFLAGS="$(TARGET_CFLAGS) $(EBTABLES_K64U32)" -C $(@D)
- endef
- 
-+ifeq ($(BR2_PACKAGE_EBTABLES_UTILS),y)
-+EBTABLES_DEPENDENCIES = bash
-+define EBTABLES_INSTALL_TARGET_UTILS
-+	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables-restore \
-+		$(TARGET_DIR)/sbin/ebtables-restore
-+	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables-save.sh \
-+		$(TARGET_DIR)/sbin/ebtables-save
-+endef
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- define EBTABLES_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/static \
-@@ -33,6 +43,7 @@ define EBTABLES_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
- 		$(TARGET_DIR)/sbin/ebtables
- 	$(INSTALL) -m 0644 -D $(@D)/ethertypes $(TARGET_DIR)/etc/ethertypes
-+	$(EBTABLES_INSTALL_TARGET_UTILS)
- endef
- endif
- 
--- 
-2.17.1
+-COREUTILS_VERSION = 8.30
++COREUTILS_VERSION = 8.31
+ COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
+ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
+ COREUTILS_LICENSE = GPL-3.0+
