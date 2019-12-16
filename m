@@ -1,50 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Dec 2019 22:46:31 +0100
-Subject: [Buildroot] [git commit] package/solarus: bump to version 1.6.2
-Message-ID: <20191216214247.542848B802@busybox.osuosl.org>
+Date: Mon, 16 Dec 2019 22:51:32 +0100
+Subject: [Buildroot] [git commit] package/solarus: disable tests
+Message-ID: <20191216214247.6544B8B802@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4ebe265760ec1181ec76655954a1c27f5f06770
+commit: https://git.buildroot.net/buildroot/commit/?id=480708da03742fe341bd0b4b17c89a2a7636e2dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch to gitlab to retrieve latest version
+Set -DSOLARUS_TESTS=OFF to disable tests (option added in version 1.6.1
+with:
+https://gitlab.com/solarus-games/solarus/commit/1829189c6050e36086b12c3806932e8657265467)
 
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/solarus/solarus.hash | 2 +-
- package/solarus/solarus.mk   | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/solarus/solarus.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/solarus/solarus.hash b/package/solarus/solarus.hash
-index dab8d1a1fa..3092b13507 100644
---- a/package/solarus/solarus.hash
-+++ b/package/solarus/solarus.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 d800fdf388f860732f2d40c8dd635c34fd1c452857f75bf9b3a421e3ef5ee751  solarus-1.6.0-src.tar.gz
-+sha256 c14cd97bad6e12310b938d90abd4e8ebdd0abb403cdcc015d5add82dfc5a085b  solarus-v1.6.2.tar.bz2
- 
- sha256 309875d925041d909bc705473d6c4b7905272aea15c1c2389088c26c161bae1f  license.txt
 diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
-index fd7bbea2c7..c1c2519693 100644
+index d522128c33..6f5853e909 100644
 --- a/package/solarus/solarus.mk
 +++ b/package/solarus/solarus.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
+@@ -20,7 +20,9 @@ SOLARUS_DEPENDENCIES = libgl libmodplug libogg libvorbis openal physfs sdl2 \
+ 	sdl2_image sdl2_ttf
  
--SOLARUS_VERSION = 1.6.0
--SOLARUS_SITE = http://www.solarus-games.org/downloads/solarus
--SOLARUS_SOURCE = solarus-$(SOLARUS_VERSION)-src.tar.gz
-+SOLARUS_VERSION = 1.6.2
-+SOLARUS_SITE = \
-+	https://gitlab.com/solarus-games/solarus/-/archive/v$(SOLARUS_VERSION)
-+SOLARUS_SOURCE = solarus-v$(SOLARUS_VERSION).tar.bz2
+ # Disable launcher GUI (requires Qt5)
+-SOLARUS_CONF_OPTS = -DSOLARUS_GUI=OFF
++SOLARUS_CONF_OPTS = \
++	-DSOLARUS_GUI=OFF \
++	-DSOLARUS_TESTS=OFF
  
- SOLARUS_LICENSE = GPL-3.0 (code), CC-BY-SA-4.0 (Solarus logos and icons), \
- 	CC-BY-SA-3.0 (GUI icons)
+ ifeq ($(BR2_PACKAGE_LUAJIT),y)
+ SOLARUS_CONF_OPTS += -DSOLARUS_USE_LUAJIT=ON
