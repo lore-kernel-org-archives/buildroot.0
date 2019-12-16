@@ -1,40 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Dec 2019 10:38:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: bump
- version to 1.20.6
-In-Reply-To: <20191206183440.14737-1-bernd.kuhls@t-online.de>
-References: <20191206183440.14737-1-bernd.kuhls@t-online.de>
-Message-ID: <20191216103811.67f909e1@windsurf.home>
+From: Alexey Lukyanchuk <skif@skif-web.ru>
+Date: Mon, 16 Dec 2019 12:38:03 +0300
+Subject: [Buildroot] [PATCH 1/1] package/openipmi: install to staging dir
+Message-ID: <20191216093803.4957-1-skif@skif-web.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  6 Dec 2019 19:34:40 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Needed for packages which depend from openipmi
 
-> Removed patches 0006 & 0007 which were applied upstream as single
-> commit on the server-1.20-branch branch:
-> https://gitlab.freedesktop.org/xorg/xserver/commit/07efd81b819f21046afc0bb7e19a6cdf7f3c7ea9
-> 
-> Updated upstream URL for patch 0001.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+---
+ package/openipmi/openipmi.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-I have no idea if the version bump is the reason for that, but we are
-seeing a build failure of the xserver at:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/378314334
-
-1407 In file included from xf86Init.c:81:
-1408 ../../../include/glxvndabi.h:64:10: fatal error: GL/glxproto.h: No such file or directory
-1409  #include <GL/glxproto.h>
-
-Best regards,
-
-Thomas
+diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
+index 9590b446ef..ca8fa77342 100644
+--- a/package/openipmi/openipmi.mk
++++ b/package/openipmi/openipmi.mk
+@@ -10,6 +10,7 @@ OPENIPMI_SOURCE = OpenIPMI-$(OPENIPMI_VERSION).tar.gz
+ OPENIPMI_LICENSE = LGPL-2.0+, GPL-2.0+, BSD-3-Clause
+ OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
+ OPENIPMI_DEPENDENCIES = popt ncurses readline host-pkgconf
++OPENIPMI_INSTALL_STAGING = YES
+ # Patching Makefile.am
+ OPENIPMI_AUTORECONF = YES
+ OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0
