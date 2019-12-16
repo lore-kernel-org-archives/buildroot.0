@@ -1,41 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Dec 2019 22:11:08 +0100
-Subject: [Buildroot] [git commit] configs/beaglebone: kernel builds needs
- host-openssl
-Message-ID: <20191216210523.C2FC78B538@busybox.osuosl.org>
+Date: Mon, 16 Dec 2019 22:13:53 +0100
+Subject: [Buildroot] [git commit] package/python-bluezero: Bump to version
+ 0.3.0
+Message-ID: <20191216210523.E028088551@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38912a61beb6ba9cc9d106e9544c6f8a4a5bee2d
+commit: https://git.buildroot.net/buildroot/commit/?id=fafce8fa42828f0b1a145f8bc3e8f009091850cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-
-514 scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
-515  #include <openssl/bio.h>
-
-Seen at:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/378314247
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/beaglebone_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-bluezero/python-bluezero.hash | 4 ++--
+ package/python-bluezero/python-bluezero.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index f8b7cc66ab..5d6b680d29 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -11,6 +11,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,4.19.7
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
+diff --git a/package/python-bluezero/python-bluezero.hash b/package/python-bluezero/python-bluezero.hash
+index e1adcf5672..738688d7a9 100644
+--- a/package/python-bluezero/python-bluezero.hash
++++ b/package/python-bluezero/python-bluezero.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/bluezero/json
+-md5	b13fd84a5fe98ce9526a6f513c9131b1  bluezero-0.2.0.tar.gz
+-sha256	d16eb9ac048665a974ad0db312b23bfd528423000b7b2983566b853d5e0d19b6  bluezero-0.2.0.tar.gz
++md5	eeb444ecaf7c6bd2613d8ff0eb92d0ac  bluezero-0.3.0.tar.gz
++sha256	7ebe7243169b5c7600941cb6aa31bc3f8b475c22f5ac32a94d2b0200d5faf684  bluezero-0.3.0.tar.gz
+diff --git a/package/python-bluezero/python-bluezero.mk b/package/python-bluezero/python-bluezero.mk
+index 1271b997a9..97b1aeb78d 100644
+--- a/package/python-bluezero/python-bluezero.mk
++++ b/package/python-bluezero/python-bluezero.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BLUEZERO_VERSION = 0.2.0
++PYTHON_BLUEZERO_VERSION = 0.3.0
+ PYTHON_BLUEZERO_SOURCE = bluezero-$(PYTHON_BLUEZERO_VERSION).tar.gz
+-PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/9c/76/8f5250e119be8aff4f7ac3acb9d91589909d8650152fdf6758bfb01f9576
++PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/e4/d8/c5451133c0773a0378cadb6c014d7f03b5786da1d39af2f9eaa8028e6662
+ PYTHON_BLUEZERO_SETUP_TYPE = setuptools
+ PYTHON_BLUEZERO_LICENSE = MIT
+ 
