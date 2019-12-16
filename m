@@ -1,47 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Dec 2019 09:25:14 +0100
-Subject: [Buildroot] [PATCH] package/python-validators: bump version to
- 0.14.1
-Message-ID: <20191216082514.25477-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 16 Dec 2019 09:33:59 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/mariadb: bump version to
+ 10.4.11
+In-Reply-To: <20191215213326.10863-1-bluemrp9@gmail.com>
+References: <20191215213326.10863-1-bluemrp9@gmail.com>
+Message-ID: <20191216093359.7b3307eb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-validators/python-validators.hash | 4 ++--
- package/python-validators/python-validators.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello Ryan,
 
-diff --git a/package/python-validators/python-validators.hash b/package/python-validators/python-validators.hash
-index 7e23afdfb7..f3c92f89a6 100644
---- a/package/python-validators/python-validators.hash
-+++ b/package/python-validators/python-validators.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/validators/json
--md5	7df330955d51859489690e452131d780  validators-0.14.0.tar.gz
--sha256	f0ac832212e3ee2e9b10e156f19b106888cf1429c291fbc5297aae87685014ae  validators-0.14.0.tar.gz
-+md5	016484275dba8fd5c4cfd82dada490e2  validators-0.14.1.tar.gz
-+sha256	0bfe836a1af37bb266d71ec1e98b530c38ce11bc7fbe0c4c96ef7b1532d019e5  validators-0.14.1.tar.gz
- # Locally computed sha256 checksums
- sha256	a7fd9d761c7ca1c6508b9baf030f6e21f5752d1caea3e49a270634aa9ef01e6f  LICENSE
-diff --git a/package/python-validators/python-validators.mk b/package/python-validators/python-validators.mk
-index 8caba2a1b7..a8e99c86a5 100644
---- a/package/python-validators/python-validators.mk
-+++ b/package/python-validators/python-validators.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_VALIDATORS_VERSION = 0.14.0
-+PYTHON_VALIDATORS_VERSION = 0.14.1
- PYTHON_VALIDATORS_SOURCE = validators-$(PYTHON_VALIDATORS_VERSION).tar.gz
--PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/b2/b7/5fc43b7dba2a35362b2f5ce39dbee835c48898e2458910c3af810240fbaa
-+PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/72/8a/f99287daae8cfef938e6eec785f6e259bf6bad93269d5398bb546d5b1563
- PYTHON_VALIDATORS_SETUP_TYPE = setuptools
- PYTHON_VALIDATORS_LICENSE = BSD
- PYTHON_VALIDATORS_LICENSE_FILES = LICENSE
+Thanks for the update. A few questions below.
+
+On Sun, 15 Dec 2019 13:33:24 -0800
+Ryan Coe <bluemrp9@gmail.com> wrote:
+
+> diff --git a/package/mariadb/S97mysqld b/package/mariadb/S97mysqld
+> index 62357fa8c4..270eea51dd 100644
+> --- a/package/mariadb/S97mysqld
+> +++ b/package/mariadb/S97mysqld
+> @@ -23,12 +23,13 @@ wait_for_ready() {
+>  start() {
+>  	if [ `ls -1 $MYSQL_LIB | wc -l` = 0 ] ; then
+>  		printf "Creating mysql system tables ... "
+> -		$MYSQL_BIN/mysql_install_db --basedir=/usr --user=mysql \
+> +		$MYSQL_BIN/mysql_install_db --basedir=/usr \
+>  			--datadir=$MYSQL_LIB > /dev/null 2>&1
+>  		if [ $? != 0 ]; then
+>  			echo "FAIL"
+>  			exit 1
+>  		fi
+> +		chown -R mysql:mysql /var/lib/mysql
+
+Is this change related to the version bump ?
+
+> diff --git a/package/mariadb/mysqld.service b/package/mariadb/mysqld.service
+> index cd308310c6..3eaef173e1 100644
+> --- a/package/mariadb/mysqld.service
+> +++ b/package/mariadb/mysqld.service
+> @@ -2,7 +2,7 @@
+>  Description=MySQL database server
+>  
+>  [Service]
+> -ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
+> +ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql && chown -R mysql:mysql /var/lib/mysql'
+
+So before this, the database files were owned by root? How could have
+the mysqld daemon, which runs as the mysql user, use them? Isn't this
+change a bug fix, that is completely independent of the version bump,
+and should come before the version bump, and even be backported to
+stable versions of Buildroot ?
+
+Thanks,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
