@@ -1,28 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Dec 2019 09:36:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: fix build with uclibc
-In-Reply-To: <20191215173431.516170-1-fontaine.fabrice@gmail.com>
-References: <20191215173431.516170-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191216093645.341f8e56@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 Dec 2019 09:59:19 +0100
+Subject: [Buildroot] [PATCH] package/lrzip: needs C++
+Message-ID: <20191216085920.30717-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 15 Dec 2019 18:34:31 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Fixes:
+http://autobuild.buildroot.net/results/e40/e40653aa895bb47d20ad237c8a5ae3f6b76f3f67/
 
-> Fixes:
->  - autobuild.buildroot.org/results/9507739b3d5d51024ee9c60b74c2f85d5004e7e2
+libzpaq is written in C++ (and unconditionally built), so depend on C++
+support.
 
-URL should start with http://autobuild.buildroot.org and not just
-autobuild.buildroot.org, otherwise it's not picked up by our statistics.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lrzip/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-No need to resend, can be fixed when applying.
-
-Thomas
+diff --git a/package/lrzip/Config.in b/package/lrzip/Config.in
+index 92540a5036..885b84dbb0 100644
+--- a/package/lrzip/Config.in
++++ b/package/lrzip/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LRZIP
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_BZIP2
+@@ -17,6 +18,7 @@ config BR2_PACKAGE_LRZIP
+ 
+ 	  https://github.com/ckolivas/lrzip
+ 
+-comment "lrzip needs a toolchain w/ wchar, threads"
++comment "lrzip needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
