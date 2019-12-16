@@ -1,31 +1,36 @@
-From: Alexey Lukyanchuk <skif@skif-web.ru>
-Date: Mon, 16 Dec 2019 12:38:03 +0300
-Subject: [Buildroot] [PATCH 1/1] package/openipmi: install to staging dir
-Message-ID: <20191216093803.4957-1-skif@skif-web.ru>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 16 Dec 2019 10:40:09 +0100
+Subject: [Buildroot] [PATCH] configs/licheepi_zero: U-Boot needs pylibfdt
+Message-ID: <20191216094010.1749054-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for packages which depend from openipmi
+Like all Allwinner platforms, building the licheepi_zero U-Boot
+configuration requires pylibfdt.
 
-Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/378314331
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openipmi/openipmi.mk | 1 +
+ configs/licheepi_zero_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
-index 9590b446ef..ca8fa77342 100644
---- a/package/openipmi/openipmi.mk
-+++ b/package/openipmi/openipmi.mk
-@@ -10,6 +10,7 @@ OPENIPMI_SOURCE = OpenIPMI-$(OPENIPMI_VERSION).tar.gz
- OPENIPMI_LICENSE = LGPL-2.0+, GPL-2.0+, BSD-3-Clause
- OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
- OPENIPMI_DEPENDENCIES = popt ncurses readline host-pkgconf
-+OPENIPMI_INSTALL_STAGING = YES
- # Patching Makefile.am
- OPENIPMI_AUTORECONF = YES
- OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
+diff --git a/configs/licheepi_zero_defconfig b/configs/licheepi_zero_defconfig
+index 8bb21292ca..fd875d5f4c 100644
+--- a/configs/licheepi_zero_defconfig
++++ b/configs/licheepi_zero_defconfig
+@@ -39,6 +39,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="LicheePi_Zero"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
 -- 
 2.23.0
