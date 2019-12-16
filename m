@@ -1,40 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Dec 2019 10:31:18 +0100
-Subject: [Buildroot] [PATCH] board/pc/post-build.sh: fix typo in grub
- boot.img path
-Message-ID: <20191216093119.1747699-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 16 Dec 2019 10:38:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: bump
+ version to 1.20.6
+In-Reply-To: <20191206183440.14737-1-bernd.kuhls@t-online.de>
+References: <20191206183440.14737-1-bernd.kuhls@t-online.de>
+Message-ID: <20191216103811.67f909e1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 3468ef16fa55610bae3bacefaf816231a20cfab0
-("configs/pc_x86_64_efi: use genimage GPT partition table support")
-had a small typo on the path to grub boot.img file: i387-pc instead of
-i386-pc, which causes a build failure.
+On Fri,  6 Dec 2019 19:34:40 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Fixes:
+> Removed patches 0006 & 0007 which were applied upstream as single
+> commit on the server-1.20-branch branch:
+> https://gitlab.freedesktop.org/xorg/xserver/commit/07efd81b819f21046afc0bb7e19a6cdf7f3c7ea9
+> 
+> Updated upstream URL for patch 0001.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/378314412
+I have no idea if the version bump is the reason for that, but we are
+seeing a build failure of the xserver at:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexandre PAYEN <alexandre.payen@smile.fr>
-Cc: Carlos Santos <casantos@datacom.com.br>
----
- board/pc/post-build.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/378314334
 
-diff --git a/board/pc/post-build.sh b/board/pc/post-build.sh
-index 552d488160..ed37b3b87e 100755
---- a/board/pc/post-build.sh
-+++ b/board/pc/post-build.sh
-@@ -11,5 +11,5 @@ else
-     cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
- 
-     # Copy grub 1st stage to binaries, required for genimage
--    cp -f "$HOST_DIR/lib/grub/i387-pc/boot.img" "$BINARIES_DIR"
-+    cp -f "$HOST_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
- fi
+1407 In file included from xf86Init.c:81:
+1408 ../../../include/glxvndabi.h:64:10: fatal error: GL/glxproto.h: No such file or directory
+1409  #include <GL/glxproto.h>
+
+Best regards,
+
+Thomas
 -- 
-2.23.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
