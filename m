@@ -1,63 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Dec 2019 09:33:59 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/mariadb: bump version to
- 10.4.11
-In-Reply-To: <20191215213326.10863-1-bluemrp9@gmail.com>
-References: <20191215213326.10863-1-bluemrp9@gmail.com>
-Message-ID: <20191216093359.7b3307eb@windsurf.home>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 16 Dec 2019 10:35:14 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2019-12-15
+In-Reply-To: <20191216071727.A4D8285E60@fraxinus.osuosl.org>
+References: <20191216071727.A4D8285E60@fraxinus.osuosl.org>
+Message-ID: <20191216103514.GB262389@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ryan,
+On Mon, 16 Dec 2019 07:17:17 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Thanks for the update. A few questions below.
+> [...]
+>
+>     arm      |      xdg-dbus-proxy-0.1.2      | NOK | http://autobuild.buildroot.net/results/817c5893652fb12ded187d86d6003d3e81f3f695 |     
 
-On Sun, 15 Dec 2019 13:33:24 -0800
-Ryan Coe <bluemrp9@gmail.com> wrote:
+This is the same as a failure from yesterday [1] due to TEMP_FAILURE_RETRY
+not being present in Musl, and has been already fixed [2].
 
-> diff --git a/package/mariadb/S97mysqld b/package/mariadb/S97mysqld
-> index 62357fa8c4..270eea51dd 100644
-> --- a/package/mariadb/S97mysqld
-> +++ b/package/mariadb/S97mysqld
-> @@ -23,12 +23,13 @@ wait_for_ready() {
->  start() {
->  	if [ `ls -1 $MYSQL_LIB | wc -l` = 0 ] ; then
->  		printf "Creating mysql system tables ... "
-> -		$MYSQL_BIN/mysql_install_db --basedir=/usr --user=mysql \
-> +		$MYSQL_BIN/mysql_install_db --basedir=/usr \
->  			--datadir=$MYSQL_LIB > /dev/null 2>&1
->  		if [ $? != 0 ]; then
->  			echo "FAIL"
->  			exit 1
->  		fi
-> +		chown -R mysql:mysql /var/lib/mysql
+Cheers,
+?Adri?n
 
-Is this change related to the version bump ?
-
-> diff --git a/package/mariadb/mysqld.service b/package/mariadb/mysqld.service
-> index cd308310c6..3eaef173e1 100644
-> --- a/package/mariadb/mysqld.service
-> +++ b/package/mariadb/mysqld.service
-> @@ -2,7 +2,7 @@
->  Description=MySQL database server
->  
->  [Service]
-> -ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
-> +ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql && chown -R mysql:mysql /var/lib/mysql'
-
-So before this, the database files were owned by root? How could have
-the mysqld daemon, which runs as the mysql user, use them? Isn't this
-change a bug fix, that is completely independent of the version bump,
-and should come before the version bump, and even be backported to
-stable versions of Buildroot ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+---
+[1] http://autobuild.buildroot.net/results/075660f70d984fe18f10ee4674b0e6caa91bfaca
+[2] https://patchwork.ozlabs.org/patch/1209996/
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191216/bed5f771/attachment.asc>
