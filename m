@@ -1,54 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Dec 2019 10:45:14 +0100
-Subject: [Buildroot] [PATCH v2] boot/at91bootstrap3: bump to version
- 3.9.0
-In-Reply-To: <20191024112430.at6l2alidwxxx4do@M43218.corp.atmel.com>
-References: <1571765902-878-1-git-send-email-pjtexier@koncepto.io>
- <1571765902-878-2-git-send-email-pjtexier@koncepto.io>
- <20191024112430.at6l2alidwxxx4do@M43218.corp.atmel.com>
-Message-ID: <20191216104514.7a9fe980@windsurf.home>
+Date: Mon, 16 Dec 2019 10:47:01 +0100
+Subject: [Buildroot] [PATCH v3] configs/atmel: update u-boot-at91 and
+ bootstrap to tarballs
+In-Reply-To: <1575459437-7302-1-git-send-email-eugen.hristev@microchip.com>
+References: <1575459437-7302-1-git-send-email-eugen.hristev@microchip.com>
+Message-ID: <20191216104701.0f3af055@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Pierre-Jean,
+Hello Eugen,
 
-On Thu, 24 Oct 2019 11:23:34 +0000
-<Ludovic.Desroches@microchip.com> wrote:
+On Wed, 4 Dec 2019 11:37:47 +0000
+<Eugen.Hristev@microchip.com> wrote:
 
-> > diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
-> > index ecfda3b..93f495f 100644
-> > --- a/boot/at91bootstrap3/at91bootstrap3.hash
-> > +++ b/boot/at91bootstrap3/at91bootstrap3.hash
-> > @@ -1,2 +1,2 @@
-> >  # Locally calculated
-> > -sha256	a5a10579598d47475696fab56c086225b0f4b710299e2dc9e0f9b6f72ed98be8  at91bootstrap3-v3.8.13.tar.gz
-> > +sha256	9960b0d18fe42feee566d4c52efa0d7c8251685bf9acfdf343f30a27951ada1e  at91bootstrap3-v3.9.0.tar.gz  
-> 
-> I don't have the same:
-> e23e6df23b79ca81e412cb73a1f48bd95df8d46c7d52a1d073c2ed9d4f3a1a71
-> /home/ldesroches/Downloads/at91bootstrap-3.9.0.tar.gz
-> 
-> I downloaded it 2 times, can you check again?
+> diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> index 1d16708..0653ae8 100644
+> --- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> +++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> @@ -70,15 +70,13 @@ BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap-v3.9.0.tar.gz"
 
-Indeed, I also don't see the correct hash:
+In fact, there is no option BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL,
+so this simply doesn't work.
 
-ERROR: at91bootstrap3-v3.9.0.tar.gz has wrong sha256 hash:
-ERROR: expected: 9960b0d18fe42feee566d4c52efa0d7c8251685bf9acfdf343f30a27951ada1e
-ERROR: got     : e23e6df23b79ca81e412cb73a1f48bd95df8d46c7d52a1d073c2ed9d4f3a1a71
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+I see two options:
 
-I'm seeing the same hash as Ludovic here.
+ (1) Revert back to downloading from Git
 
-Pierre-Jean, could you double check ? Do you still have in your
-download folder the tarball with the
-9960b0d18fe42feee566d4c52efa0d7c8251685bf9acfdf343f30a27951ada1e hash ?
-If so, please don't delete it, and instead use it to compare it with
-the current tarball that you can get by downloading from Github.
+ (2) Add support for the custom tarball option in
+     at91bootstrap3/Config.in and at91bootstrap3/at91bootstrap3.mk.
 
-Best regards,
+I think option (2) is the most appropriate, since we have this custom
+tarball option for Linux, U-Boot, etc. already.
+
+Could you take care of implementing this option, or should we do it ?
+
+Thanks!
 
 Thomas
 -- 
