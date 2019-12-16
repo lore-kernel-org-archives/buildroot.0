@@ -1,42 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Dec 2019 11:01:49 +0100
-Subject: [Buildroot] [git commit] board/pc/post-build.sh: fix typo in grub
- boot.img path
-Message-ID: <20191216095348.D3D748B632@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 16 Dec 2019 11:05:48 +0100
+Subject: [Buildroot] [PATCH] configs/beaglebone: kernel builds needs
+ host-openssl
+Message-ID: <20191216100548.1752628-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afcdf9f5c5bdbdaa21d79d2eb9fd6953e0877611
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit 3468ef16fa55610bae3bacefaf816231a20cfab0
-("configs/pc_x86_64_efi: use genimage GPT partition table support")
-had a small typo on the path to grub boot.img file: i387-pc instead of
-i386-pc, which causes a build failure.
-
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/378314412
+514 scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+515  #include <openssl/bio.h>
+
+Seen at:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/378314247
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexandre PAYEN <alexandre.payen@smile.fr>
-Cc: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/pc/post-build.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/beaglebone_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/pc/post-build.sh b/board/pc/post-build.sh
-index 552d488160..ed37b3b87e 100755
---- a/board/pc/post-build.sh
-+++ b/board/pc/post-build.sh
-@@ -11,5 +11,5 @@ else
-     cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
- 
-     # Copy grub 1st stage to binaries, required for genimage
--    cp -f "$HOST_DIR/lib/grub/i387-pc/boot.img" "$BINARIES_DIR"
-+    cp -f "$HOST_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
- fi
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index f8b7cc66ab..5d6b680d29 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -11,6 +11,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,4.19.7
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+-- 
+2.23.0
