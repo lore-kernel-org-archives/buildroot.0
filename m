@@ -1,96 +1,173 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Dec 2019 23:00:31 +0100
-Subject: [Buildroot] [PATCH v2 1/5] package/pkg-utils.mk: rename
- extractor-dependency to extractor-system-dependency
-In-Reply-To: <20191216153118.1844417-2-thomas.petazzoni@bootlin.com>
-References: <20191216153118.1844417-1-thomas.petazzoni@bootlin.com>
- <20191216153118.1844417-2-thomas.petazzoni@bootlin.com>
-Message-ID: <20191216220031.GB2256@scaer>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 16 Dec 2019 16:08:32 -0600
+Subject: [Buildroot] [PATCH v2] ebtables: add option to install save/restore
+ utils
+Message-ID: <20191216220832.6792-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: David Owens <david.owens@rockwellcollins.com>
 
-On 2019-12-16 16:31 +0100, Thomas Petazzoni spake thusly:
-> The extractor-dependency macro returns which system-provided tools are
-> needed to be able to extract the archive passed as argument. The
-> result of this macro is added to DL_TOOLS_DEPENDENCIES so that the
-> logic in support/dependencies/ verifies that the necessary tools are
-> provided by the system.
-> 
-> However, we are going to add another macro, extractor-pkg-dependency,
-> which says which Buildroot packages are needed to extract the archive
-> passed as argument. Indeed, for those archive types, if the extractor
-> is not provided system-wide, we build it as a host Buildroot package.
-> 
-> To clarify the distinction between the upcoming
-> extractor-pkg-dependency and existing extractor-dependency, we rename
-> the latter to extractor-system-dependency.
-> 
-> We take this opportunity to extend the documentation of this macro.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Reviewed-by: Romain Naour <romain.naour@smile.fr>
+This patch adds an option to include the tools on target that allow
+the saving and restoring of ebtables. The upstream save utility is
+replaced in this commit as it depended on perl which is not always
+possible on an embedded system. The commit used to replace this
+script seems to note it as a common approach across a few distros.
 
-Applied to master, thanks.
+Signed-off-by: David Owens <david.owens@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+Changes
+v1 -> v2
+ - Split out the save and restore so that only when saving bash is
+   a dependency
+---
+ ...-ebtables-save-perl-script-with-bash.patch | 75 +++++++++++++++++++
+ package/ebtables/Config.in                    | 15 ++++
+ package/ebtables/ebtables.mk                  | 16 ++++
+ 3 files changed, 106 insertions(+)
+ create mode 100644 package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-generic.mk |  2 +-
->  package/pkg-utils.mk   | 14 +++++++++-----
->  2 files changed, 10 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 3904a1c4db..fd1817a86c 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -1098,7 +1098,7 @@ else ifeq ($$($(2)_SITE_METHOD),cvs)
->  DL_TOOLS_DEPENDENCIES += cvs
->  endif # SITE_METHOD
->  
-> -DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
-> +DL_TOOLS_DEPENDENCIES += $$(call extractor-system-dependency,$$($(2)_SOURCE))
->  
->  # Ensure all virtual targets are PHONY. Listed alphabetically.
->  .PHONY:	$(1) \
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index d38971caf6..0f916d81d8 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -46,11 +46,15 @@ INFLATE.tar  = cat
->  # suitable-extractor(filename): returns extractor based on suffix
->  suitable-extractor = $(INFLATE$(suffix $(1)))
->  
-> -# extractor-dependency(filename): returns extractor for 'filename' if the
-> -# extractor is a dependency. If we build the extractor return nothing.
-> -# $(firstword) is used here because the extractor can have arguments, like
-> -# ZCAT="gzip -d -c", and to check for the dependency we only want 'gzip'.
-> -extractor-dependency = $(firstword $(INFLATE$(filter-out \
-> +# extractor-system-dependency(filename): returns the name of the tool
-> +# needed to extract 'filename', and is meant to be used with
-> +# DL_TOOLS_DEPENDENCIES, in order to check that the necesary tool is
-> +# provided by the system Buildroot runs on.
-> +#
-> +# $(firstword) is used here because the extractor can have arguments,
-> +# like ZCAT="gzip -d -c", and to check for the dependency we only want
-> +# 'gzip'.
-> +extractor-system-dependency = $(firstword $(INFLATE$(filter-out \
->  	$(EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS),$(suffix $(1)))))
->  
->  # check-deprecated-variable -- throw an error on deprecated variables
-> -- 
-> 2.23.0
-> 
-
+diff --git a/package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch b/package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch
+new file mode 100644
+index 0000000000..687eb6a373
+--- /dev/null
++++ b/package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch
+@@ -0,0 +1,75 @@
++From 73536d15c80be96049289d96fc32122467c56b1d Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Mon, 16 Dec 2019 13:27:30 -0600
++Subject: [PATCH] ebtables: replace ebtables-save perl script with bash rewrite
++
++Fedora provides a bash replacement for the default ebtables-save perl
++script. Using it allows the ebtables run-time dependency on perl to
++be replaced with a runtime dependency on bash - which is lower
++overhead and more likely to be present on typical embedded systems
++already.
++
++  https://bugzilla.redhat.com/show_bug.cgi?id=746040
++  http://pkgs.fedoraproject.org/cgit/rpms/ebtables.git/tree/ebtables-save
++
++Upstream:
++https://github.com/openembedded/meta-openembedded/commit/7f723007364ba79de05447671e83d4eefb3097dc
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ ebtables-save.sh | 43 +++++++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 43 insertions(+)
++ create mode 100644 ebtables-save.sh
++
++diff --git a/ebtables-save.sh b/ebtables-save.sh
++new file mode 100644
++index 0000000..2d7fc4e
++--- /dev/null
+++++ b/ebtables-save.sh
++@@ -0,0 +1,43 @@
+++#!/bin/bash
+++
+++EBTABLES="/sbin/ebtables"
+++
+++[ -x "$EBTABLES" ] || exit 1
+++
+++echo "# Generated by ebtables-save v1.0 on $(date)"
+++
+++cnt=""
+++[ "x$EBTABLES_SAVE_COUNTER" = "xyes" ] && cnt="--Lc"
+++
+++for table_name in $(grep -E '^ebtable_' /proc/modules | cut -f1 -d' ' | sed s/ebtable_//); do
+++    table=$($EBTABLES -t $table_name -L $cnt)
+++    [ $? -eq 0 ] || { echo "$table"; exit -1; }
+++
+++    chain=""
+++    rules=""
+++    while read line; do
+++	[ -z "$line" ] && continue
+++
+++	case "$line" in 
+++	    Bridge\ table:\ *)
+++		echo "*${line:14}"
+++		;;
+++	    Bridge\ chain:\ *)
+++		chain="${line:14}"
+++		chain="${chain%%,*}"
+++		policy="${line##*policy: }"
+++		echo ":$chain $policy"
+++		;;
+++	    *)
+++		if [ "$cnt" = "--Lc" ]; then
+++		    line=${line/, pcnt \=/ -c}
+++		    line=${line/-- bcnt \=/}
+++		fi
+++		rules="$rules-A $chain $line\n"
+++		;;
+++	esac
+++    done <<EOF
+++$table
+++EOF
+++    echo -e $rules
+++done
++-- 
++2.17.1
++
+diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
+index 3f7566a607..f5fdd47927 100644
+--- a/package/ebtables/Config.in
++++ b/package/ebtables/Config.in
+@@ -5,3 +5,18 @@ config BR2_PACKAGE_EBTABLES
+ 	  Ethernet bridge frame table administration
+ 
+ 	  http://ebtables.netfilter.org/
++
++if BR2_PACKAGE_EBTABLES
++config BR2_PACKAGE_EBTABLES_UTILS_SAVE
++	bool "ebtables save"
++	depends on BR2_PACKAGE_BASH # runtime
++	help
++	  Include the save tool
++
++config BR2_PACKAGE_EBTABLES_UTILS_RESTORE
++	bool "ebtables restore"
++	depends on !BR2_STATIC_LIBS
++	help
++	  Include the restore tool
++
++endif
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+index aae0c91a10..04298a531a 100644
+--- a/package/ebtables/ebtables.mk
++++ b/package/ebtables/ebtables.mk
+@@ -17,6 +17,20 @@ define EBTABLES_BUILD_CMDS
+ 		CFLAGS="$(TARGET_CFLAGS) $(EBTABLES_K64U32)" -C $(@D)
+ endef
+ 
++ifeq ($(BR2_PACKAGE_EBTABLES_UTILS_SAVE),y)
++EBTABLES_DEPENDENCIES = bash
++define EBTABLES_INSTALL_TARGET_UTILS_SAVE
++	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables-save.sh \
++		$(TARGET_DIR)/sbin/ebtables-save
++endef
++endif
++ifeq ($(BR2_PACKAGE_EBTABLES_UTILS_RESTORE),y)
++define EBTABLES_INSTALL_TARGET_UTILS_RESTORE
++	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables-restore \
++		$(TARGET_DIR)/sbin/ebtables-restore
++endef
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ define EBTABLES_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/static \
+@@ -33,6 +47,8 @@ define EBTABLES_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
+ 		$(TARGET_DIR)/sbin/ebtables
+ 	$(INSTALL) -m 0644 -D $(@D)/ethertypes $(TARGET_DIR)/etc/ethertypes
++	$(EBTABLES_INSTALL_TARGET_UTILS_RESTORE)
++	$(EBTABLES_INSTALL_TARGET_UTILS_SAVE)
+ endef
+ endif
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
