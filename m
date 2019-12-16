@@ -1,67 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Dec 2019 16:31:15 +0100
-Subject: [Buildroot] [PATCH v2 3/5] package/pkg-utils.mk: rework
- implementation of extractor-system-dependency
+Date: Mon, 16 Dec 2019 16:31:17 +0100
+Subject: [Buildroot] [PATCH v2 5/5] package/pkg-generic.mk: also apply
+ extractor-pkg-dependency to <pkg>_EXTRA_DOWNLOADS
 In-Reply-To: <20191216153118.1844417-1-thomas.petazzoni@bootlin.com>
 References: <20191216153118.1844417-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191216153118.1844417-4-thomas.petazzoni@bootlin.com>
+Message-ID: <20191216153118.1844417-6-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we have the EXTRACTOR_PKG_DEPENDENCY.* variables available,
-we can use them to implement extractor-system-dependency: if for a
-given archive type, the corresponding EXTRACTOR_PKG_DEPENDENCY.<type>
-variable is empty, then it means we need the corresponding extractor
-tool to be provided by the system.
+For now, the extractor dependencies were only calculated for
+<pkg>_SOURCE, so if the package manually downloads another file using
+<pkg>_EXTRA_DOWNLOADS and then extracts it with $(call
+suitable-extractor), we are missing the corresponding dependency on
+the appropriate extracting tool.
 
-Following this, EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS is no
-longer used, so we can drop it from support/dependencies/.
+Since the vast majority of <pkg>_EXTRA_DOWNLOADS are compressed files
+that will be uncompressed at build time, it makes sense to derive the
+corresponding extractor dependencies directly in the common package
+infrastructure, rather than having each and every package using
+<pkg>_EXTRA_DOWNLOADS making this effort.
 
+On a system without xzcat, before this patch:
+
+$ make printvars VARS=HOST_GETTEXT_TINY_EXTRACT_DEPENDENCIES
+HOST_GETTEXT_TINY_EXTRACT_DEPENDENCIES=host-tar
+
+After this patch:
+
+$ make printvars VARS=HOST_GETTEXT_TINY_EXTRACT_DEPENDENCIES
+HOST_GETTEXT_TINY_EXTRACT_DEPENDENCIES=host-tar    host-xz
+
+This commit most notably fixes the build of host-gettext-tiny on
+systems without xzcat, and with per-package support enabled. Indeed,
+the main _SOURCE for gettext-tiny is a .gz file, but it has a .xz file
+in its _EXTRA_DOWNLOADS, which is then extracted. Except that xzcat
+being missing from the dependencies, it is not built.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/83c6d47c06334bef27791a59bdd491b1de124c49/
+
+Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-utils.mk                     | 4 ++--
- support/dependencies/check-host-lzip.mk  | 1 -
- support/dependencies/check-host-xzcat.mk | 1 -
- 3 files changed, 2 insertions(+), 4 deletions(-)
+ package/pkg-generic.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 35a441e0aa..d324934dba 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -62,8 +62,8 @@ extractor-pkg-dependency = $(EXTRACTOR_PKG_DEPENDENCY$(suffix $(1)))
- # $(firstword) is used here because the extractor can have arguments,
- # like ZCAT="gzip -d -c", and to check for the dependency we only want
- # 'gzip'.
--extractor-system-dependency = $(firstword $(INFLATE$(filter-out \
--	$(EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS),$(suffix $(1)))))
-+extractor-system-dependency = $(if $(EXTRACTOR_PKG_DEPENDENCY$(suffix $(1))),,\
-+	$(firstword $(INFLATE$(suffix $(1)))))
- 
- # check-deprecated-variable -- throw an error on deprecated variables
- # example:
-diff --git a/support/dependencies/check-host-lzip.mk b/support/dependencies/check-host-lzip.mk
-index cdd784058c..98a4f42388 100644
---- a/support/dependencies/check-host-lzip.mk
-+++ b/support/dependencies/check-host-lzip.mk
-@@ -1,5 +1,4 @@
- ifeq (,$(call suitable-host-package,lzip,$(LZCAT)))
- BR2_LZIP_HOST_DEPENDENCY = host-lzip
--EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .lz
- LZCAT = $(HOST_DIR)/bin/lzip -d -c
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6c0105a1e1..268d999efb 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -644,7 +644,9 @@ $(2)_EXTRACT_DEPENDENCIES += $$(BR2_TAR_HOST_DEPENDENCY)
  endif
-diff --git a/support/dependencies/check-host-xzcat.mk b/support/dependencies/check-host-xzcat.mk
-index e5d72f95dd..9a78a8f38a 100644
---- a/support/dependencies/check-host-xzcat.mk
-+++ b/support/dependencies/check-host-xzcat.mk
-@@ -3,6 +3,5 @@
  
- ifeq (,$(call suitable-host-package,xzcat,$(XZCAT)))
- BR2_XZCAT_HOST_DEPENDENCY = host-xz
--EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .xz .lzma
- XZCAT = $(HOST_DIR)/bin/xzcat
+ ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+-$(2)_EXTRACT_DEPENDENCIES += $$(call extractor-pkg-dependency,$$($(2)_SOURCE))
++$(2)_EXTRACT_DEPENDENCIES += \
++	$$(foreach dl,$$($(2)_ALL_DOWNLOADS),\
++		$$(call extractor-pkg-dependency,$$(notdir $$(dl))))
  endif
+ 
+ ifeq ($$(BR2_CCACHE),y)
 -- 
 2.23.0
