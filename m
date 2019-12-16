@@ -1,173 +1,99 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 16 Dec 2019 16:08:32 -0600
-Subject: [Buildroot] [PATCH v2] ebtables: add option to install save/restore
- utils
-Message-ID: <20191216220832.6792-1-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 16 Dec 2019 23:28:08 +0100
+Subject: [Buildroot] [git commit] package/python-smmap2: new package
+Message-ID: <20191216221921.08D0D8B83A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: David Owens <david.owens@rockwellcollins.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=30968cfd83ae44ba1ca4d7094d47c4b91d3ffcdd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds an option to include the tools on target that allow
-the saving and restoring of ebtables. The upstream save utility is
-replaced in this commit as it depended on perl which is not always
-possible on an embedded system. The commit used to replace this
-script seems to note it as a common approach across a few distros.
+Smmap wraps an interface around mmap and tracks the mapped files as
+well as the amount of clients who use it. If the system runs out of
+resources, or if a memory limit is reached, it will automatically
+unload unused maps to allow continued operation.
 
-Signed-off-by: David Owens <david.owens@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes
-v1 -> v2
- - Split out the save and restore so that only when saving bash is
-   a dependency
----
- ...-ebtables-save-perl-script-with-bash.patch | 75 +++++++++++++++++++
- package/ebtables/Config.in                    | 15 ++++
- package/ebtables/ebtables.mk                  | 16 ++++
- 3 files changed, 106 insertions(+)
- create mode 100644 package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-smmap2/Config.in          | 10 ++++++++++
+ package/python-smmap2/python-smmap2.hash |  5 +++++
+ package/python-smmap2/python-smmap2.mk   | 14 ++++++++++++++
+ 5 files changed, 31 insertions(+)
 
-diff --git a/package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch b/package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5b7b3c80fc..30fcf69970 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -65,6 +65,7 @@ F:	package/python-flask-sqlalchemy/
+ F:	package/python-mutagen/
+ F:	package/python-pip/
+ F:	package/python-psycopg2/
++F:	package/python-smmap2/
+ F:	package/python-sqlalchemy/
+ F:	package/python-sqlparse/
+ F:	package/python-visitor/
+diff --git a/package/Config.in b/package/Config.in
+index 5a4be6ee2c..c7f8389809 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1110,6 +1110,7 @@ menu "External python modules"
+ 	source "package/python-six/Config.in"
+ 	source "package/python-slob/Config.in"
+ 	source "package/python-smbus-cffi/Config.in"
++	source "package/python-smmap2/Config.in"
+ 	source "package/python-socketio/Config.in"
+ 	source "package/python-sockjs/Config.in"
+ 	source "package/python-sortedcontainers/Config.in"
+diff --git a/package/python-smmap2/Config.in b/package/python-smmap2/Config.in
 new file mode 100644
-index 0000000000..687eb6a373
+index 0000000000..21a3bdb613
 --- /dev/null
-+++ b/package/ebtables/0003-replace-ebtables-save-perl-script-with-bash.patch
-@@ -0,0 +1,75 @@
-+From 73536d15c80be96049289d96fc32122467c56b1d Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Mon, 16 Dec 2019 13:27:30 -0600
-+Subject: [PATCH] ebtables: replace ebtables-save perl script with bash rewrite
-+
-+Fedora provides a bash replacement for the default ebtables-save perl
-+script. Using it allows the ebtables run-time dependency on perl to
-+be replaced with a runtime dependency on bash - which is lower
-+overhead and more likely to be present on typical embedded systems
-+already.
-+
-+  https://bugzilla.redhat.com/show_bug.cgi?id=746040
-+  http://pkgs.fedoraproject.org/cgit/rpms/ebtables.git/tree/ebtables-save
-+
-+Upstream:
-+https://github.com/openembedded/meta-openembedded/commit/7f723007364ba79de05447671e83d4eefb3097dc
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ ebtables-save.sh | 43 +++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 43 insertions(+)
-+ create mode 100644 ebtables-save.sh
-+
-+diff --git a/ebtables-save.sh b/ebtables-save.sh
-+new file mode 100644
-+index 0000000..2d7fc4e
-+--- /dev/null
-++++ b/ebtables-save.sh
-+@@ -0,0 +1,43 @@
-++#!/bin/bash
-++
-++EBTABLES="/sbin/ebtables"
-++
-++[ -x "$EBTABLES" ] || exit 1
-++
-++echo "# Generated by ebtables-save v1.0 on $(date)"
-++
-++cnt=""
-++[ "x$EBTABLES_SAVE_COUNTER" = "xyes" ] && cnt="--Lc"
-++
-++for table_name in $(grep -E '^ebtable_' /proc/modules | cut -f1 -d' ' | sed s/ebtable_//); do
-++    table=$($EBTABLES -t $table_name -L $cnt)
-++    [ $? -eq 0 ] || { echo "$table"; exit -1; }
-++
-++    chain=""
-++    rules=""
-++    while read line; do
-++	[ -z "$line" ] && continue
-++
-++	case "$line" in 
-++	    Bridge\ table:\ *)
-++		echo "*${line:14}"
-++		;;
-++	    Bridge\ chain:\ *)
-++		chain="${line:14}"
-++		chain="${chain%%,*}"
-++		policy="${line##*policy: }"
-++		echo ":$chain $policy"
-++		;;
-++	    *)
-++		if [ "$cnt" = "--Lc" ]; then
-++		    line=${line/, pcnt \=/ -c}
-++		    line=${line/-- bcnt \=/}
-++		fi
-++		rules="$rules-A $chain $line\n"
-++		;;
-++	esac
-++    done <<EOF
-++$table
-++EOF
-++    echo -e $rules
-++done
-+-- 
-+2.17.1
-+
-diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
-index 3f7566a607..f5fdd47927 100644
---- a/package/ebtables/Config.in
-+++ b/package/ebtables/Config.in
-@@ -5,3 +5,18 @@ config BR2_PACKAGE_EBTABLES
- 	  Ethernet bridge frame table administration
- 
- 	  http://ebtables.netfilter.org/
-+
-+if BR2_PACKAGE_EBTABLES
-+config BR2_PACKAGE_EBTABLES_UTILS_SAVE
-+	bool "ebtables save"
-+	depends on BR2_PACKAGE_BASH # runtime
++++ b/package/python-smmap2/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_SMMAP2
++	bool "python-smmap2"
 +	help
-+	  Include the save tool
++	  Smmap wraps an interface around mmap and tracks the mapped
++	  files as well as the amount of clients who use it. If the
++	  system runs out of resources, or if a memory limit is reached,
++	  it will automatically unload unused maps to allow continued
++	  operation.
 +
-+config BR2_PACKAGE_EBTABLES_UTILS_RESTORE
-+	bool "ebtables restore"
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  Include the restore tool
++	  https://github.com/gitpython-developers/smmap
+diff --git a/package/python-smmap2/python-smmap2.hash b/package/python-smmap2/python-smmap2.hash
+new file mode 100644
+index 0000000000..8a7ea42a5d
+--- /dev/null
++++ b/package/python-smmap2/python-smmap2.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/smmap2/json
++md5	1c59a985be5aa645c4c5a4e063a40dd5  smmap2-2.0.5.tar.gz
++sha256	29a9ffa0497e7f2be94ca0ed1ca1aa3cd4cf25a1f6b4f5f87f74b46ed91d609a  smmap2-2.0.5.tar.gz
++# Locally computed sha256 checksums
++sha256	88e9d93f708d110b328a834302dd1d5c6afbda530e7721d15d80b3511d86f235  LICENSE
+diff --git a/package/python-smmap2/python-smmap2.mk b/package/python-smmap2/python-smmap2.mk
+new file mode 100644
+index 0000000000..daf379fe1a
+--- /dev/null
++++ b/package/python-smmap2/python-smmap2.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-smmap2
++#
++################################################################################
 +
-+endif
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index aae0c91a10..04298a531a 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -17,6 +17,20 @@ define EBTABLES_BUILD_CMDS
- 		CFLAGS="$(TARGET_CFLAGS) $(EBTABLES_K64U32)" -C $(@D)
- endef
- 
-+ifeq ($(BR2_PACKAGE_EBTABLES_UTILS_SAVE),y)
-+EBTABLES_DEPENDENCIES = bash
-+define EBTABLES_INSTALL_TARGET_UTILS_SAVE
-+	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables-save.sh \
-+		$(TARGET_DIR)/sbin/ebtables-save
-+endef
-+endif
-+ifeq ($(BR2_PACKAGE_EBTABLES_UTILS_RESTORE),y)
-+define EBTABLES_INSTALL_TARGET_UTILS_RESTORE
-+	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables-restore \
-+		$(TARGET_DIR)/sbin/ebtables-restore
-+endef
-+endif
++PYTHON_SMMAP2_VERSION = 2.0.5
++PYTHON_SMMAP2_SOURCE = smmap2-$(PYTHON_SMMAP2_VERSION).tar.gz
++PYTHON_SMMAP2_SITE = https://files.pythonhosted.org/packages/3b/ba/e49102b3e8ffff644edded25394b2d22ebe3e645f3f6a8139129c4842ffe
++PYTHON_SMMAP2_SETUP_TYPE = setuptools
++PYTHON_SMMAP2_LICENSE = BSD-3-Clause
++PYTHON_SMMAP2_LICENSE_FILES = LICENSE
 +
- ifeq ($(BR2_STATIC_LIBS),y)
- define EBTABLES_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/static \
-@@ -33,6 +47,8 @@ define EBTABLES_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
- 		$(TARGET_DIR)/sbin/ebtables
- 	$(INSTALL) -m 0644 -D $(@D)/ethertypes $(TARGET_DIR)/etc/ethertypes
-+	$(EBTABLES_INSTALL_TARGET_UTILS_RESTORE)
-+	$(EBTABLES_INSTALL_TARGET_UTILS_SAVE)
- endef
- endif
- 
--- 
-2.17.1
++$(eval $(python-package))
