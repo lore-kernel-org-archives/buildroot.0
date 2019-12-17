@@ -1,67 +1,100 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Dec 2019 22:09:48 +0100
-Subject: [Buildroot] [git commit] package/pkg-utils.mk: rework
- implementation of extractor-system-dependency
-Message-ID: <20191217210914.3682E8B84D@busybox.osuosl.org>
+Date: Tue, 17 Dec 2019 22:19:48 +0100
+Subject: [Buildroot] [PATCH v2 0/5] Ensure extractor dependencies are
+ taken into account
+In-Reply-To: <20191216153118.1844417-1-thomas.petazzoni@bootlin.com>
+References: <20191216153118.1844417-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20191217211948.GB4247@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e42840e2ae1a4279b00e0db6b197ca6f3a0df3a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Now that we have the EXTRACTOR_PKG_DEPENDENCY.* variables available,
-we can use them to implement extractor-system-dependency: if for a
-given archive type, the corresponding EXTRACTOR_PKG_DEPENDENCY.<type>
-variable is empty, then it means we need the corresponding extractor
-tool to be provided by the system.
+On 2019-12-16 16:31 +0100, Thomas Petazzoni spake thusly:
+> The starting point for this series is to fix the following build
+> failure:
+> 
+>   http://autobuild.buildroot.net/results/83c/83c6d47c06334bef27791a59bdd491b1de124c49/build-end.log
 
-Following this, EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS is no
-longer used, so we can drop it from support/dependencies/.
+After a slow start yesterday evening, I now applied the rest of the
+series to master. Thanks!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/pkg-utils.mk                     | 4 ++--
- support/dependencies/check-host-lzip.mk  | 1 -
- support/dependencies/check-host-xzcat.mk | 1 -
- 3 files changed, 2 insertions(+), 4 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 35a441e0aa..d324934dba 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -62,8 +62,8 @@ extractor-pkg-dependency = $(EXTRACTOR_PKG_DEPENDENCY$(suffix $(1)))
- # $(firstword) is used here because the extractor can have arguments,
- # like ZCAT="gzip -d -c", and to check for the dependency we only want
- # 'gzip'.
--extractor-system-dependency = $(firstword $(INFLATE$(filter-out \
--	$(EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS),$(suffix $(1)))))
-+extractor-system-dependency = $(if $(EXTRACTOR_PKG_DEPENDENCY$(suffix $(1))),,\
-+	$(firstword $(INFLATE$(suffix $(1)))))
- 
- # check-deprecated-variable -- throw an error on deprecated variables
- # example:
-diff --git a/support/dependencies/check-host-lzip.mk b/support/dependencies/check-host-lzip.mk
-index cdd784058c..98a4f42388 100644
---- a/support/dependencies/check-host-lzip.mk
-+++ b/support/dependencies/check-host-lzip.mk
-@@ -1,5 +1,4 @@
- ifeq (,$(call suitable-host-package,lzip,$(LZCAT)))
- BR2_LZIP_HOST_DEPENDENCY = host-lzip
--EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .lz
- LZCAT = $(HOST_DIR)/bin/lzip -d -c
- endif
-diff --git a/support/dependencies/check-host-xzcat.mk b/support/dependencies/check-host-xzcat.mk
-index e5d72f95dd..9a78a8f38a 100644
---- a/support/dependencies/check-host-xzcat.mk
-+++ b/support/dependencies/check-host-xzcat.mk
-@@ -3,6 +3,5 @@
- 
- ifeq (,$(call suitable-host-package,xzcat,$(XZCAT)))
- BR2_XZCAT_HOST_DEPENDENCY = host-xz
--EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .xz .lzma
- XZCAT = $(HOST_DIR)/bin/xzcat
- endif
+> The problem is the following:
+> 
+>  - The _SOURCE for gettext-tiny is a .tar.gz
+> 
+>  - In addition to this _SOURCE tarball, we also extract the
+>    gettext-gnu source code, which is a .tar.xz
+> 
+>  - Extracting .tar.xz may require building host-xzcat, is xzcat is not
+>    available system-wide
+> 
+>  - The build fails because host-xzcat is not added in the dependencies
+>    of gettext-tiny. Indeed, while generic-package takes care of adding
+>    the extract dependencies needed for _SOURCE, it does not know about
+>    other extract dependencies.
+> 
+> This issue appears in
+> http://autobuild.buildroot.net/results/83c/83c6d47c06334bef27791a59bdd491b1de124c49/build-end.log
+> because BR2_PER_PACKAGE_DIRECTORIES=y and therefore any missing
+> dependency is immediately visible. But in theory, it could appear
+> without per-package support.
+> 
+> This series solves that by introducing an extractor-pkg-dependency
+> that returns the list of packages that must be added to
+> <pkg>_EXTRACT_DEPENDENCIES to extract the archive passed as
+> argument. It is then used in package/pkg-generic.mk to replace the
+> existing logic to calculate <pkg>_EXTRACT_DEPENDENCIES, and extended
+> to take into account the extractor dependencies needed by
+> _EXTRA_DOWNLOADS instead of just _SOURCE.
+> 
+> We also rename extractor-dependency to extractor-system-dependency to
+> clarify its difference from extractor-pkg-dependency, and we rework
+> the implementation of extractor-system-dependency.
+> 
+> Changes since v1:
+> 
+>  - Instead of fixing manually individual packages, directly derive
+>    extractor dependencies of EXTRA_DOWNLOADS files inside the
+>    generic-package infrastructure. Suggested by Yann. This allowed to
+>    greatly removed the number of patches in the series.
+> 
+>  - Added Reviewed-by from Romain Naour on patches 1 and 4.
+> 
+> Best regards,
+> 
+> Thomas Petazzoni
+> 
+> Thomas Petazzoni (5):
+>   package/pkg-utils.mk: rename extractor-dependency to
+>     extractor-system-dependency
+>   package/pkg-utils.mk: add extractor-pkg-dependency macro
+>   package/pkg-utils.mk: rework implementation of
+>     extractor-system-dependency
+>   package/pkg-generic.mk: use extractor-pkg-dependency macro
+>   package/pkg-generic.mk: also apply extractor-pkg-dependency to
+>     <pkg>_EXTRA_DOWNLOADS
+> 
+>  package/pkg-generic.mk                   | 14 ++++----------
+>  package/pkg-utils.mk                     | 24 ++++++++++++++++++------
+>  support/dependencies/check-host-lzip.mk  |  1 -
+>  support/dependencies/check-host-xzcat.mk |  1 -
+>  4 files changed, 22 insertions(+), 18 deletions(-)
+> 
+> -- 
+> 2.23.0
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
