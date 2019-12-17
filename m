@@ -1,53 +1,59 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 17 Dec 2019 15:18:55 -0300
-Subject: [Buildroot] [PATCH 2/2] configs/imx8qxpmek: Update to 4.14.98
- components
-In-Reply-To: <20191217181855.3508-1-festevam@gmail.com>
-References: <20191217181855.3508-1-festevam@gmail.com>
-Message-ID: <20191217181855.3508-2-festevam@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 17 Dec 2019 20:07:45 +0100
+Subject: [Buildroot] [PATCH v2] package/gst1-plugins-bad: wayland plugin
+ needs libdrm
+Message-ID: <20191217190745.3727-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump kernel, ATF and U-Boot to the versions found in the NXP BSP 4.14.98.
+Fixes:
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+  Run-time dependency wayland-client found: YES 1.17.0
+  Run-time dependency libdrm found: NO (tried pkgconfig)
+  gst-libs/gst/wayland/meson.build:3:0: ERROR: Dependency "libdrm" not found, tried pkgconfig
+
+[1] http://autobuild.buildroot.net/results/e06fbed25fc8369c2ff1f3d89b8800766e365ea3
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- configs/freescale_imx8qxpmek_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Changes v1 -> v2:
+  - changed from depends to select libdrm as the alternative patch which
+    removes the wayland plugin dependency did not please upstream
+    (see [2] and [3]) with the argument all wayland implementation do/will
+    depend on libdrm
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 2 ++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/configs/freescale_imx8qxpmek_defconfig b/configs/freescale_imx8qxpmek_defconfig
-index 33e2a50dd7..82f433f6cf 100644
---- a/configs/freescale_imx8qxpmek_defconfig
-+++ b/configs/freescale_imx8qxpmek_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qxp-mek.dtb"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8qxp-mek"
-@@ -22,14 +22,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qxp"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qx"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qxp_mek"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 08952f70cb..393950ef2f 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -555,6 +555,8 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
+ 	bool "wayland"
+ 	default y
+ 	depends on BR2_PACKAGE_WAYLAND
++	depends on BR2_TOOLCHAIN_HAS_THREADS #  libdrm -> libpthread-stubs
++	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ 	help
+ 	  Wayland Video Sink
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 1d4ba62bd2..259f00cdbb 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -66,7 +66,7 @@ GST1_PLUGINS_BAD_DEPENDENCIES = gst1-plugins-base gstreamer1
+ 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dwayland=enabled
+-GST1_PLUGINS_BAD_DEPENDENCIES += wayland wayland-protocols
++GST1_PLUGINS_BAD_DEPENDENCIES += libdrm wayland wayland-protocols
+ else
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dwayland=disabled
+ endif
 -- 
-2.17.1
+2.24.0
