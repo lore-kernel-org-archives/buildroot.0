@@ -1,44 +1,76 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 17 Dec 2019 20:46:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5virtualkeyboard: add an
- upstream URL to Config.in
-In-Reply-To: <20191217141058.27335-1-mark@dibsco.co.uk>
-References: <20191217141058.27335-1-mark@dibsco.co.uk>
-Message-ID: <20191217204630.5e25340a@gmx.net>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Tue, 17 Dec 2019 14:02:39 -0600
+Subject: [Buildroot] [RFC/PATCH] download/git: support Git LFS
+In-Reply-To: <20180427125419.787ee93e.john@metanate.com>
+Message-ID: <20191217200239.GA18361@vfazio1.xes-mad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mark,
+> On Fri, 27 Apr 2018 11:17:34 +0100
+> John Keeping <john@metanate.com> wrote:
+> 
+> > On Thu, 26 Apr 2018 22:24:40 +0200
+> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > 
+> > > On 2018-04-26 18:36 +0100, John Keeping spake thusly:  
+> > > > Git Large File Storage replaces large files with text pointers in
+> > > > the Git repository while storing the contents on a remote server.
+> > > > If a repository is using this extension, then git-lfs must be used
+> > > > to checkout the large files before the source archive is
+> > > > generated.
+> > > > 
+> > > > Signed-off-by: John Keeping <john@metanate.com>
+> > > > ---
+> > > > Currently this relies on git-lfs being installed on the host
+> > > > system and I'm not sure if that's considered acceptable or
+> > > > not.    
+> > > 
+> > > I think that would be acceptable, but would require a dependency
+> > > check, basically, something like
+> > > 
+> > >   - support/depenencies/check-host-git.mk :
+> > > 
+> > >         ifeq (,$(call suitable-host-package,git,$(GIT) $(if
+> > > $(BR2_GIT_NEEDS_LFS).lfs))) $(error You need a git that supports
+> > > git-lfs) endif
+> > > 
+> > >   - support/depenencies/check-host-git.sh
+> > > 
+> > >         #!/bin/sh
+> > > 
+> > >         GIT="${1}"
+> > >         LFS="${2}"
+> > > 
+> > >         # If LFS not required, any git is OK
+> > >         if [ -z "${LFS}" ]; then
+> > >             echo "${GIT}"
+> > >             exit 0
+> > >         fi
+> > > 
+> > >         # Test LFS
+> > >         if ${GIT} help lfs >/dev/null 2>&1; then
+> > >             # Works!
+> > >             echo "${GIT}"
+> > >             exit 0
+> > >         fi
+> > > 
+> > >         exit 1
+> > > 
+> > > Now, all you have, is to find a way to synthetise
+> > > BR2_GIT_NEEDS_LFS. ;-)  
+> > 
+> > This makes sense, I'll add this check for v2.
+> 
+> Actually, it looks like adding "git-lfs" to DL_TOOLS_DEPENDENCIES works
+> and it's a lot simpler.  What do you think about handling it that way?
+> 
+> 
+> Regards,
+> John
 
-On Tue, 17 Dec 2019 14:10:58 +0000, Mark Corbin <mark@dibsco.co.uk> wrote:
+Can we revive this discussion? I don't see this implemented yet and I know our organization could really use this functionality.
 
-> Add an upstream URL to the help text in Config.in. This
-> addresses the 'Missing' URL status in the package stats
-> web page output.
->
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-> ---
->  package/qt5/qt5virtualkeyboard/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
-> index 3a60c27332..8e9cacd3c8 100644
-> --- a/package/qt5/qt5virtualkeyboard/Config.in
-> +++ b/package/qt5/qt5virtualkeyboard/Config.in
-> @@ -14,6 +14,8 @@ config BR2_PACKAGE_QT5VIRTUALKEYBOARD
->  	  consists of a C++ backend supporting custom input methods as
->  	  well as a UI frontend implemented in QML.
->
-> +	  https://doc.qt.io/qt-5/qtvirtualkeyboard-index.html
-> +
->  if BR2_PACKAGE_QT5VIRTUALKEYBOARD
->
->  config BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
+- Vincent
