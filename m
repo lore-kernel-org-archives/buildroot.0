@@ -1,45 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 17 Dec 2019 21:12:02 +0100
-Subject: [Buildroot] [PATCH 2/2] package/apitrace: needs MMU
-In-Reply-To: <20191217201202.643563-1-fontaine.fabrice@gmail.com>
-References: <20191217201202.643563-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191217201202.643563-2-fontaine.fabrice@gmail.com>
+From: Julien Olivain <juju@cotds.org>
+Date: Tue, 17 Dec 2019 21:26:15 +0100
+Subject: [Buildroot] [PATCH 1/1] board/freescale/common/imx: use nodtb
+ variant in uboot images for 8M
+In-Reply-To: <20191216225703.7c5b06e2@windsurf.home>
+References: <20191202200333.418111-1-juju@cotds.org>
+ <20191216225703.7c5b06e2@windsurf.home>
+Message-ID: <ecf09f2326ad59894f401505159e0c96@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-apitrace uses its own version of gtest which needs fork() since
-version 8.0 and
-https://github.com/apitrace/apitrace/commit/85cf7c8b86129699246574dfeec846e88a3f88a2
+Hi Thomas,
 
-Moreover, apitrace also uses fork in ./lib/os/os_posix.cpp
+I will send an updated version of the patch with more details in
+the commit log.
 
-Fixes:
- - http://autobuild.buildroot.org/results/1165ed62d9ae3dbdc13590c39bb55edd9a444567
+On 2019-12-16 22:57, Thomas Petazzoni wrote:
+> Hello Julien,
+> 
+> +Fabio in Cc.
+> 
+> On Mon,  2 Dec 2019 21:03:33 +0100
+> Julien Olivain <juju@cotds.org> wrote:
+> 
+>> When using u-boot.bin, u-boot is using its builtin dtb which may not
+>> be suitable for all cases. For TechNexion Pico Pi i.MX8M and
+>> i.MX8MMini, this break the USB and UMS commands. Since those boards
+>> does not have SD card slots, a recovery serial download is needed at
+>> every update.
+> 
+> Could you give more details? If it doesn't use a built-in DTB, which
+> DTB gets used?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/apitrace/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+Basically, without this patch, the U-Boot DTB is included twice (once in
+builtin u-boot.bin image, and a second time in the boot FIT image).
 
-diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
-index 116a864681..abd7ae00ee 100644
---- a/package/apitrace/Config.in
-+++ b/package/apitrace/Config.in
-@@ -1,10 +1,12 @@
- comment "apitrace needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_PACKAGE_APITRACE
- 	bool "apitrace"
-+	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--- 
-2.24.0
+> How does using the built-in DTB breaks USB and UMS ?
+
+Since the second correct DTB is ignored, the default embedded one
+is used, which is for another board (fsl-imx8mm-evk), which produce
+some initialization errors on non-EVK boards.
+
+> Thanks,
+> 
+> Thomas
+
+Best regards,
+
+Julien.
