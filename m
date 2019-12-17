@@ -1,52 +1,78 @@
 From: Julien Olivain <juju@cotds.org>
-Date: Tue, 17 Dec 2019 21:26:15 +0100
-Subject: [Buildroot] [PATCH 1/1] board/freescale/common/imx: use nodtb
+Date: Tue, 17 Dec 2019 21:37:12 +0100
+Subject: [Buildroot] [PATCH v2 1/1] board/freescale/common/imx: use nodtb
  variant in uboot images for 8M
-In-Reply-To: <20191216225703.7c5b06e2@windsurf.home>
+In-Reply-To: <20191202200333.418111-1-juju@cotds.org>
 References: <20191202200333.418111-1-juju@cotds.org>
- <20191216225703.7c5b06e2@windsurf.home>
-Message-ID: <ecf09f2326ad59894f401505159e0c96@cotds.org>
+Message-ID: <20191217203712.50491-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+In board/freescale/common/imx/imx8-bootloader-prepare.sh, when
+invoking mkimage_fit_atf.sh, the U-Boot DTB is passed as parameter, to
+be included in the FIT image. This parameter usually comes from
+BR2_ROOTFS_POST_SCRIPT_ARGS config option. The variable
+BL33=u-boot.bin set in the invocation uses the u-boot image which is
+including its embedded DTB. This means the U-Boot DTB is included
+twice.
 
-I will send an updated version of the patch with more details in
-the commit log.
+The upstream script mkimage_fit_atf.sh plus its Buildroot patch are
+meant to use by default the nodtb variant and use the DTB in a
+separate image. See [1] and [2].
 
-On 2019-12-16 22:57, Thomas Petazzoni wrote:
-> Hello Julien,
-> 
-> +Fabio in Cc.
-> 
-> On Mon,  2 Dec 2019 21:03:33 +0100
-> Julien Olivain <juju@cotds.org> wrote:
-> 
->> When using u-boot.bin, u-boot is using its builtin dtb which may not
->> be suitable for all cases. For TechNexion Pico Pi i.MX8M and
->> i.MX8MMini, this break the USB and UMS commands. Since those boards
->> does not have SD card slots, a recovery serial download is needed at
->> every update.
-> 
-> Could you give more details? If it doesn't use a built-in DTB, which
-> DTB gets used?
+The U-Boot default DTB which will be included in u-boot.bin image is
+selected with U-Boot CONFIG_DEFAULT_DEVICE_TREE, or DEVICE_TREE
+variable when invoking "make". If one of those option is not aligned
+to the BR2_ROOTFS_POST_SCRIPT_ARGS config option, it's possible the
+two included U-Boot DTBs are different. If such case happens, the
+built-in DTB is always used, regardless of the other one, selected
+with BR2_ROOTFS_POST_SCRIPT_ARGS.
 
-Basically, without this patch, the U-Boot DTB is included twice (once in
-builtin u-boot.bin image, and a second time in the boot FIT image).
+For example, this case happens for TechNexion Pico Pi i.MX8M and
+i.MX8MMini. Since the U-Boot defconfig assumes the nodtb version will
+be used, it does not set the default DTB. The u-boot.bin will include
+the fsl-imx8mm-evk instead. Including the wrong board DTB breaks the
+USB and UMS commands (and possibly others). Since those boards does
+not have SD card slots, a recovery serial download is needed at every
+update.
 
-> How does using the built-in DTB breaks USB and UMS ?
+This patch make sure that only the separate U-Boot DTB will be
+included in the FIT image by using the nodtb variant.
 
-Since the second correct DTB is ignored, the default embedded one
-is used, which is for another board (fsl-imx8mm-evk), which produce
-some initialization errors on non-EVK boards.
+[1] https://source.codeaurora.org/external/imx/imx-mkimage/tree/iMX8M/mkimage_fit_atf.sh?h=rel_imx_4.14.98_2.0.0_ga#n35
+[2] https://git.busybox.net/buildroot/tree/package/imx-mkimage/0001-add-support-for-overriding-bl32-and-bl33-not-only-bl.patch?h=2019.11#n42
 
-> Thanks,
-> 
-> Thomas
+Signed-off-by: Julien Olivain <juju@cotds.org>
+---
+Changes v1 -> v2:
+  - Add more details in the commit log
+---
+ board/freescale/common/imx/imx8-bootloader-prepare.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-
-Julien.
+diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+index df528b0df5..cbf741af30 100755
+--- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+@@ -10,14 +10,14 @@ main ()
+ 
+ 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
+ 		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+-		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
++		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
+ 
+ 		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+ 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
+ 		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+-		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
++		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
+ 
+-- 
+2.23.0
