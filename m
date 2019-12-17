@@ -1,64 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 17 Dec 2019 20:31:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openocd: selects jimtcl
-Message-ID: <20191217193118.581852-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 17 Dec 2019 20:45:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qt-webkit-kiosk: add an
+ upstream URL to Config.in
+In-Reply-To: <20191217135737.25806-1-mark@dibsco.co.uk>
+References: <20191217135737.25806-1-mark@dibsco.co.uk>
+Message-ID: <20191217204549.0632dd3d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Selects jimtcl instead of using the bundled one
+Hello Mark,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/openocd/Config.in  |  1 +
- package/openocd/openocd.mk | 10 +++-------
- 2 files changed, 4 insertions(+), 7 deletions(-)
+On Tue, 17 Dec 2019 13:57:37 +0000, Mark Corbin <mark@dibsco.co.uk> wrote:
 
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index abba07e889..448872061b 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_OPENOCD
- 	bool "openocd"
-+	select BR2_PACKAGE_JIMTCL
- 	help
- 	  OpenOCD - Open On-Chip Debugger
- 
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index d35ed77cd1..29e4f4b31f 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -11,18 +11,13 @@ OPENOCD_LICENSE = GPL-2.0+
- OPENOCD_LICENSE_FILES = COPYING
- # 0002-configure-enable-build-on-uclinux.patch patches configure.ac
- OPENOCD_AUTORECONF = YES
--
--# The bundled jimtcl really wants to find a existing $CXX, so feed it
--# false when we do not have one.
--OPENOCD_CONF_ENV = \
--	$(if $(BR2_INSTALL_LIBSTDCPP),,CXX=false) \
--	CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-+OPENOCD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
- 
- OPENOCD_CONF_OPTS = \
- 	--oldincludedir=$(STAGING_DIR)/usr/include \
- 	--includedir=$(STAGING_DIR)/usr/include \
- 	--disable-doxygen-html \
--	--with-jim-shared=no \
-+	--disable-internal-jimtcl \
- 	--disable-shared \
- 	--enable-dummy \
- 	--disable-werror
-@@ -32,6 +27,7 @@ OPENOCD_CONF_OPTS = \
- 
- OPENOCD_DEPENDENCIES = \
- 	host-pkgconf \
-+	jimtcl \
- 	$(if $(BR2_PACKAGE_LIBFTDI1),libftdi1) \
- 	$(if $(BR2_PACKAGE_LIBUSB),libusb) \
- 	$(if $(BR2_PACKAGE_LIBUSB_COMPAT),libusb-compat) \
--- 
-2.24.0
+> Add an upstream URL to the help text in Config.in. This
+> addresses the 'Missing' URL status in the package stats
+> web page output.
+>
+> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+> ---
+>  package/qt-webkit-kiosk/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
+> index 71f7daaa26..46688a227b 100644
+> --- a/package/qt-webkit-kiosk/Config.in
+> +++ b/package/qt-webkit-kiosk/Config.in
+> @@ -14,6 +14,8 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK
+>  	help
+>  	  Simple kiosk-mode browser powered by Qt5Webkit
+>
+> +	  https://github.com/sergey-dryabzhinsky/qt-webkit-kiosk
+> +
+>  if BR2_PACKAGE_QT_WEBKIT_KIOSK
+>
+>  config BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
