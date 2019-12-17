@@ -1,78 +1,84 @@
-From: Julien Olivain <juju@cotds.org>
-Date: Tue, 17 Dec 2019 21:37:12 +0100
-Subject: [Buildroot] [PATCH v2 1/1] board/freescale/common/imx: use nodtb
- variant in uboot images for 8M
-In-Reply-To: <20191202200333.418111-1-juju@cotds.org>
-References: <20191202200333.418111-1-juju@cotds.org>
-Message-ID: <20191217203712.50491-1-juju@cotds.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 17 Dec 2019 21:49:05 +0100
+Subject: [Buildroot] [PATCH 02/12] package/pkg-utils.mk: add
+ extractor-pkg-dependency macro
+In-Reply-To: <20191214224208.3f2d382c@windsurf.home>
+References: <20191210215952.902477-1-thomas.petazzoni@bootlin.com>
+ <20191210215952.902477-3-thomas.petazzoni@bootlin.com>
+ <07d07f0f-bb5f-20c9-a8db-61f9bdd496ae@smile.fr>
+ <20191214224208.3f2d382c@windsurf.home>
+Message-ID: <20191217204905.GA4247@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In board/freescale/common/imx/imx8-bootloader-prepare.sh, when
-invoking mkimage_fit_atf.sh, the U-Boot DTB is passed as parameter, to
-be included in the FIT image. This parameter usually comes from
-BR2_ROOTFS_POST_SCRIPT_ARGS config option. The variable
-BL33=u-boot.bin set in the invocation uses the u-boot image which is
-including its embedded DTB. This means the U-Boot DTB is included
-twice.
+Thomas, Romain, All,
 
-The upstream script mkimage_fit_atf.sh plus its Buildroot patch are
-meant to use by default the nodtb variant and use the DTB in a
-separate image. See [1] and [2].
+On 2019-12-14 22:42 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 14 Dec 2019 22:20:21 +0100
+> Romain Naour <romain.naour@smile.fr> wrote:
+> 
+> > > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> > > index 0f916d81d8..35a441e0aa 100644
+> > > --- a/package/pkg-utils.mk
+> > > +++ b/package/pkg-utils.mk
+> > > @@ -46,6 +46,14 @@ INFLATE.tar  = cat
+> > >  # suitable-extractor(filename): returns extractor based on suffix
+> > >  suitable-extractor = $(INFLATE$(suffix $(1)))
+> > >    
+> > 
+> > What about gzip ?
+> > 
+> > EXTRACTOR_PKG_DEPENDENCY.gz   = $(BR2_GZIP_HOST_DEPENDENCY)
+> > EXTRACTOR_PKG_DEPENDENCY.tgz  = $(BR2_GZIP_HOST_DEPENDENCY)
+> 
+> Because oddly enough, we are today not taking into account  the
+> dependency on gzip when extracting tarballs.
+> 
+> We do take it into account only in:
+> 
+> ifneq ($$(filter cvs git svn,$$($(2)_SITE_METHOD)),)
+> $(2)_DOWNLOAD_DEPENDENCIES += \
+>         $(BR2_GZIP_HOST_DEPENDENCY) \
+>         $(BR2_TAR_HOST_DEPENDENCY)
+> endif
+> 
+> i.e, when we fetch from a version control system, and create our own
+> tarball locally.
+> 
+> But if we download directly from http/ftp a .tar.gz or .tgz, we don't
+> rely on BR2_GZIP_HOST_DEPENDENCY, and simply assume we can use the one
+> from the host machine.
+> 
+> This should be fixed, I agree, but it's already broken today I believe.
 
-The U-Boot default DTB which will be included in u-boot.bin image is
-selected with U-Boot CONFIG_DEFAULT_DEVICE_TREE, or DEVICE_TREE
-variable when invoking "make". If one of those option is not aligned
-to the BR2_ROOTFS_POST_SCRIPT_ARGS config option, it's possible the
-two included U-Boot DTBs are different. If such case happens, the
-built-in DTB is always used, regardless of the other one, selected
-with BR2_ROOTFS_POST_SCRIPT_ARGS.
+In fact no. We need to build our own host-gzip only to create archives,
+because some host have pigz instead of gzip, and this creates
+non-reproducible archives.
 
-For example, this case happens for TechNexion Pico Pi i.MX8M and
-i.MX8MMini. Since the U-Boot defconfig assumes the nodtb version will
-be used, it does not set the default DTB. The u-boot.bin will include
-the fsl-imx8mm-evk instead. Including the wrong board DTB breaks the
-USB and UMS commands (and possibly others). Since those boards does
-not have SD card slots, a recovery serial download is needed at every
-update.
+However, decompressing with gzip or pigz is exactly the same; we do not
+need our own host-gzip, and we can rely on the system-provided gzip,
+whether that be gzip of pigz.
 
-This patch make sure that only the separate U-Boot DTB will be
-included in the FIT image by using the nodtb variant.
+So, the current state of affairs is, AFAICS, correct.
 
-[1] https://source.codeaurora.org/external/imx/imx-mkimage/tree/iMX8M/mkimage_fit_atf.sh?h=rel_imx_4.14.98_2.0.0_ga#n35
-[2] https://git.busybox.net/buildroot/tree/package/imx-mkimage/0001-add-support-for-overriding-bl32-and-bl33-not-only-bl.patch?h=2019.11#n42
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Julien Olivain <juju@cotds.org>
----
-Changes v1 -> v2:
-  - Add more details in the commit log
----
- board/freescale/common/imx/imx8-bootloader-prepare.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index df528b0df5..cbf741af30 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -10,14 +10,14 @@ main ()
- 
- 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
- 		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
--		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
-+		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
- 		rm -f ${BINARIES_DIR}/u-boot.its
- 
- 		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
- 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
- 		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
--		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
-+		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
- 		rm -f ${BINARIES_DIR}/u-boot.its
- 
 -- 
-2.23.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
