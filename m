@@ -1,44 +1,78 @@
-From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Tue, 17 Dec 2019 13:32:53 -0800
-Subject: [Buildroot] [PATCH v2] binutils/ARC: cleanup
-In-Reply-To: <20191206221918.1c05e316@windsurf.home>
-References: <20191206221918.1c05e316@windsurf.home>
-Message-ID: <20191217213253.12446-1-vgupta@synopsys.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 17 Dec 2019 23:11:34 +0100
+Subject: [Buildroot] [PATCH v1] package/zip: fix musl compile
+Message-ID: <20191217221134.2619-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove special handling for ARC - as it is not needed for cksy etc.
+For musl toolchain timezone.c needs time.h include.
 
-A nice side benefit is that the ARC specific version now only needs to
-be specified in single place (vs 3 currently) in binutils/Config.in.host
+Fixes:
+  http://autobuild.buildroot.net/results/77346a2cdb9eeef661527fb9566019f3cd1b82c9
 
-Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+  In file included from util.c:28:
+  timezone.c: In function 'mktime':
+  timezone.c:644:18: error: dereferencing pointer to incomplete type 'struct tm'
+       save_isdst = tm->tm_isdst;
+
+  timezone.c:661:11: warning: implicit declaration of function 'localtime'; did you mean 'dostime'? [-Wimplicit-function-declaration]
+       ltm = localtime(&then);
+
+  timezone.c:661:9: warning: assignment to 'struct tm *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+       ltm = localtime(&then);
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/binutils/binutils.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ ...ne.c-needs-time.h-fixes-musl-compile.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index a19d6940f7c1..3ae5561d67d3 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -8,14 +8,10 @@
- # If not, we do like other packages
- BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
- ifeq ($(BINUTILS_VERSION),)
--ifeq ($(BR2_arc),y)
--BINUTILS_VERSION = arc-2019.09-rc1
--else
- BINUTILS_VERSION = 2.32
- endif
--endif # BINUTILS_VERSION
- 
--ifeq ($(BINUTILS_VERSION),arc-2019.09-rc1)
-+ifeq ($(BR2_BINUTILS_VERSION_ARC),y)
- BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
- BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
- BINUTILS_FROM_GIT = y
+diff --git a/package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch b/package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch
+new file mode 100644
+index 0000000000..bdaa638f61
+--- /dev/null
++++ b/package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch
+@@ -0,0 +1,38 @@
++From 68abba9fb2ed114ac35712756b1f7700a865c498 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 17 Dec 2019 21:25:01 +0100
++Subject: [PATCH] timezone.c: needs time.h (fixes musl compile)
++
++Fixes:
++
++  In file included from util.c:28:
++  timezone.c: In function 'mktime':
++  timezone.c:644:18: error: dereferencing pointer to incomplete type 'struct tm'
++       save_isdst = tm->tm_isdst;
++
++  timezone.c:661:11: warning: implicit declaration of function 'localtime'; did you mean 'dostime'? [-Wimplicit-function-declaration]
++       ltm = localtime(&then);
++
++  timezone.c:661:9: warning: assignment to 'struct tm *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
++       ltm = localtime(&then);
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ timezone.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/timezone.c b/timezone.c
++index 485ec02..18aecbd 100644
++--- a/timezone.c
+++++ b/timezone.c
++@@ -41,6 +41,7 @@
++ #include "timezone.h"
++ #include <ctype.h>
++ #include <errno.h>
+++#include <time.h>
++ 
++ #ifdef IZTZ_DEFINESTDGLOBALS
++ long timezone = 0;
++-- 
++2.24.0
++
 -- 
-2.20.1
+2.24.0
