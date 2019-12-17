@@ -1,30 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 17 Dec 2019 15:38:59 +0000
-Subject: [Buildroot] [Bug 12411] Kernel zImage is actually a uImage
-In-Reply-To: <bug-12411-163@https.bugs.busybox.net/>
-References: <bug-12411-163@https.bugs.busybox.net/>
-Message-ID: <bug-12411-163-TLotE7YfSI@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Dec 2019 17:49:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-ecdsa: bump to version
+ 0.13.3
+In-Reply-To: <20191012084739.19673-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Sat, 12 Oct 2019 11:47:37 +0300")
+References: <20191012084739.19673-1-asafka7@gmail.com>
+Message-ID: <874kxy3nis.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12411
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
-Bradley Gamble <bradley.gamble@ncipher.com> changed:
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |INVALID
-             Status|NEW                         |RESOLVED
+Committed to 2019.02.x after adjusting the commit message to make it
+clear that this is a security fix, thanks.
 
---- Comment #2 from Bradley Gamble <bradley.gamble@ncipher.com> ---
-Looks like this is actually a bug specific to the Linux kernel rather than
-Buildroot - I've created a separate a bug in their Bugzilla stream with more
-details.
-https://bugzilla.kernel.org/show_bug.cgi?id=205889
+In the future, please mention when version bumps contain security fixes,
+thanks. In this case the release notes were literally:
+
+Fix CVE-2019-14853 - possible DoS caused by malformed signature decoding
+Fix CVE-2019-14859 - signature malleability caused by insufficient checks of DER encoding
+
+Also harden key decoding from string and DER encodings.
+
+https://github.com/warner/python-ecdsa/releases/tag/python-ecdsa-0.13.3
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
