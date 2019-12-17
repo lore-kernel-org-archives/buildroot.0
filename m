@@ -1,42 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Dec 2019 23:37:39 +0100
-Subject: [Buildroot] [PATCH/next 2/4] support/testing: add gitdb2 test
-In-Reply-To: <20191129212910.2537303-2-aduskett@gmail.com>
-References: <20191129212910.2537303-1-aduskett@gmail.com>
- <20191129212910.2537303-2-aduskett@gmail.com>
-Message-ID: <20191216233739.2509a879@windsurf.home>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Mon, 16 Dec 2019 16:03:49 -0800
+Subject: [Buildroot] [PATCH v2 2/3] package/mariadb: update startup
+ scripts
+In-Reply-To: <20191216093535.08ca160d@windsurf.home>
+References: <20191215213326.10863-1-bluemrp9@gmail.com>
+ <20191215213326.10863-2-bluemrp9@gmail.com>
+ <20191216093535.08ca160d@windsurf.home>
+Message-ID: <145ed763-08f3-c71d-e306-8b16586d6f1d@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 29 Nov 2019 13:29:08 -0800
-aduskett at gmail.com wrote:
+Thomas,
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Add a simple test case that imports the module.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-
-I've applied to master, after tweaking one thing.
-
-> diff --git a/support/testing/tests/package/sample_python_gitdb2.py b/support/testing/tests/package/sample_python_gitdb2.py
-> new file mode 100644
-> index 0000000000..b5c43cd858
-> --- /dev/null
-> +++ b/support/testing/tests/package/sample_python_gitdb2.py
-> @@ -0,0 +1,4 @@
-> +# Taken from smmap/test/test_tutorial.py
-
-This really smells like a bad copy/paste from the python-smmap2 test
-script, so I dropped this line :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On 12/16/19 12:35 AM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Sun, 15 Dec 2019 13:33:25 -0800
+> Ryan Coe <bluemrp9@gmail.com> wrote:
+>
+>> The init scripts have been modified to create a directory under
+>> /var/log/mysql and specify mysqld to use it for logging. The directory
+>> test to call mysql_install_db has been redirected to /dev/null to prevent
+>> an error message from showing if /var/lib/mysql does not exist.
+>>
+>> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> A commit title that says "update startup scripts" is a good hint that
+> the splitting of changes is not good. It hints that you're doing
+> several things at once in the same commit, which are unrelated to each
+> other.
+>
+> There are (at least?) three independent changes here:
+>
+>   - Redirection of stderr when listing $MYSQL_LIB
+>
+>   - Rename of the MYSQL_PID variable
+>
+>   - Move the logs to /var/log/mysql
+>
+> Three independent changes should lead to three independent commits.
+I will re-submit.
+>
+> Thanks!
+>
+> Thomas
