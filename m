@@ -1,32 +1,55 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Tue, 17 Dec 2019 12:25:06 +0000
-Subject: [Buildroot] [PATCH 1/1] package/pimd: update the upstream URL in
- Config.in
-Message-ID: <20191217122506.15746-1-mark@dibsco.co.uk>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Tue, 17 Dec 2019 09:44:12 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-12-16
+In-Reply-To: <5df88115.1c69fb81.d3f43.681eSMTPIN_ADDED_MISSING@mx.google.com>
+References: <5df88115.1c69fb81.d3f43.681eSMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <CAJ4jsadBGESKw4XvA5a5pXuX2duKEgE6ZtBBjPo-MH_RnH-fLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(404)' URL status in the package stats
-web page output.
+On Tue, Dec 17, 2019 at 4:17 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Recent build failures and runtime-tests failures
+> ================================================
+>
+> This is the list of Buildroot build failures that occurred on
+> 2019-12-16, and for which you are a registered architecture developer,
+> package developer or defconfig developer. This list also include
+> runtime tests failures. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Results for the 'master' branch
+> -------------------------------
+>
+> Build failures related to your packages:
+>
+>     arch     |             reason             |                                       url
+> -------------+--------------------------------+---------------------------------------------------------------------------------
+>     arm      |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/13f5e37b47b255da4158bec34e5459136f7e60d4
+>     arm      |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/1c26db2509c79e00c0de1165945277eaa57b149f
+> microblazeel |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/b7b6b7b7aca79e847b442cbd2305427d91fe5d70
+> microblazeel |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/1cd5a82a0e799aa5027e2e2c03b246332cc3a15d
+> microblazeel |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/d7ec878907f714377c83e9a496e97cbf9382d787
+>     arm      |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/1c7f0c1b3ce4871cd87bd6059b1f0a6dc4e74a9c
+> microblazeel |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/196b81d580325607c8da90beeb79e1f6b8ab8b47
+>     arm      |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/f90f7b4ac710b56686635f8ae27059c11b963e47
+>
+>
+>
+> --
+> http://autobuild.buildroot.net
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
----
- package/pimd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is because of a test that needs C++. I'm testing a patch to
+circumvent the problem while ask for definitive solution from
+upstream.
 
-diff --git a/package/pimd/Config.in b/package/pimd/Config.in
-index d6a579bda2..718f84f4f8 100644
---- a/package/pimd/Config.in
-+++ b/package/pimd/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_PIMD
- 	  pimd is a lightweight stand-alone PIM-SM v2 multicast routing
- 	  daemon.
- 
--	  http://troglobit.com/project/pimd/
-+	  http://troglobit.com/projects/pimd/
 -- 
-2.20.1
+Carlos Santos <unixmania@gmail.com>
