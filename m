@@ -1,76 +1,46 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Tue, 17 Dec 2019 14:02:39 -0600
-Subject: [Buildroot] [RFC/PATCH] download/git: support Git LFS
-In-Reply-To: <20180427125419.787ee93e.john@metanate.com>
-Message-ID: <20191217200239.GA18361@vfazio1.xes-mad.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 17 Dec 2019 21:12:01 +0100
+Subject: [Buildroot] [PATCH 1/2] package/apitrace: needs threads
+Message-ID: <20191217201202.643563-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Fri, 27 Apr 2018 11:17:34 +0100
-> John Keeping <john@metanate.com> wrote:
-> 
-> > On Thu, 26 Apr 2018 22:24:40 +0200
-> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > 
-> > > On 2018-04-26 18:36 +0100, John Keeping spake thusly:  
-> > > > Git Large File Storage replaces large files with text pointers in
-> > > > the Git repository while storing the contents on a remote server.
-> > > > If a repository is using this extension, then git-lfs must be used
-> > > > to checkout the large files before the source archive is
-> > > > generated.
-> > > > 
-> > > > Signed-off-by: John Keeping <john@metanate.com>
-> > > > ---
-> > > > Currently this relies on git-lfs being installed on the host
-> > > > system and I'm not sure if that's considered acceptable or
-> > > > not.    
-> > > 
-> > > I think that would be acceptable, but would require a dependency
-> > > check, basically, something like
-> > > 
-> > >   - support/depenencies/check-host-git.mk :
-> > > 
-> > >         ifeq (,$(call suitable-host-package,git,$(GIT) $(if
-> > > $(BR2_GIT_NEEDS_LFS).lfs))) $(error You need a git that supports
-> > > git-lfs) endif
-> > > 
-> > >   - support/depenencies/check-host-git.sh
-> > > 
-> > >         #!/bin/sh
-> > > 
-> > >         GIT="${1}"
-> > >         LFS="${2}"
-> > > 
-> > >         # If LFS not required, any git is OK
-> > >         if [ -z "${LFS}" ]; then
-> > >             echo "${GIT}"
-> > >             exit 0
-> > >         fi
-> > > 
-> > >         # Test LFS
-> > >         if ${GIT} help lfs >/dev/null 2>&1; then
-> > >             # Works!
-> > >             echo "${GIT}"
-> > >             exit 0
-> > >         fi
-> > > 
-> > >         exit 1
-> > > 
-> > > Now, all you have, is to find a way to synthetise
-> > > BR2_GIT_NEEDS_LFS. ;-)  
-> > 
-> > This makes sense, I'll add this check for v2.
-> 
-> Actually, it looks like adding "git-lfs" to DL_TOOLS_DEPENDENCIES works
-> and it's a lot simpler.  What do you think about handling it that way?
-> 
-> 
-> Regards,
-> John
+apitrace uses its own version of gtest which depends on threads since
+version 8.0 and
+https://github.com/apitrace/apitrace/commit/85cf7c8b86129699246574dfeec846e88a3f88a2
 
-Can we revive this discussion? I don't see this implemented yet and I know our organization could really use this functionality.
+Moreover, apitrace also uses std::thread in lib/os/os_thread.hpp
 
-- Vincent
+Fixes:
+ - http://autobuild.buildroot.org/results/03c4939fdfb7366c1835df946c4e869cd2b87b9f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/apitrace/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
+index 08313c4891..116a864681 100644
+--- a/package/apitrace/Config.in
++++ b/package/apitrace/Config.in
+@@ -1,5 +1,6 @@
+-comment "apitrace needs a toolchain w/ C++, wchar, gcc >= 4.9"
++comment "apitrace needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_PACKAGE_APITRACE
+@@ -7,6 +8,7 @@ config BR2_PACKAGE_APITRACE
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBPNG
+ 	help
+-- 
+2.24.0
