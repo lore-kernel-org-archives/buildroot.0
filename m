@@ -1,34 +1,32 @@
 From: Mark Corbin <mark@dibsco.co.uk>
-Date: Tue, 17 Dec 2019 12:17:53 +0000
-Subject: [Buildroot] [PATCH 1/1] package/perl-sys-cpu: add an upstream URL
- to Config.in
-Message-ID: <20191217121753.14399-1-mark@dibsco.co.uk>
+Date: Tue, 17 Dec 2019 12:25:06 +0000
+Subject: [Buildroot] [PATCH 1/1] package/pimd: update the upstream URL in
+ Config.in
+Message-ID: <20191217122506.15746-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(404)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 ---
- package/perl-sys-cpu/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/pimd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/perl-sys-cpu/Config.in b/package/perl-sys-cpu/Config.in
-index 8306b371dc..70cfded8ff 100644
---- a/package/perl-sys-cpu/Config.in
-+++ b/package/perl-sys-cpu/Config.in
-@@ -5,5 +5,7 @@ config BR2_PACKAGE_PERL_SYS_CPU
- 	  Perl module for getting information about the system CPU
- 	  (Sys::CPU).
+diff --git a/package/pimd/Config.in b/package/pimd/Config.in
+index d6a579bda2..718f84f4f8 100644
+--- a/package/pimd/Config.in
++++ b/package/pimd/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_PIMD
+ 	  pimd is a lightweight stand-alone PIM-SM v2 multicast routing
+ 	  daemon.
  
-+	  http://search.cpan.org/dist/Sys-CPU/
-+
- comment "perl-sys-cpu needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
+-	  http://troglobit.com/project/pimd/
++	  http://troglobit.com/projects/pimd/
 -- 
 2.20.1
