@@ -1,42 +1,32 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 18 Dec 2019 06:31:33 -0700
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.52.1
-Message-ID: <20191218133133.31830-1-james.hilliard1@gmail.com>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Wed, 18 Dec 2019 13:37:17 +0000
+Subject: [Buildroot] [PATCH 1/1] package/tftpd: add an upstream URL to
+ Config.in
+Message-ID: <20191218133717.28343-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 26b1fc9bb2..461e908b4a 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.52.0/meson-0.52.0.tar.gz.asc
--sha256 d60f75f0dedcc4fd249dbc7519d6f3ce6df490033d276ef1cf27453ef4938d32 meson-0.52.0.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.52.1/meson-0.52.1.tar.gz.asc
-+sha256 0c277472e49950a5537e3de3e60c57b80dbf425788470a1a8ed27446128fc035 meson-0.52.1.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index c708532c6d..d409ae7b52 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 0.52.0
-+MESON_VERSION = 0.52.1
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+---
+ package/tftpd/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/tftpd/Config.in b/package/tftpd/Config.in
+index ea5cb303f9..b9e1eff7a3 100644
+--- a/package/tftpd/Config.in
++++ b/package/tftpd/Config.in
+@@ -6,3 +6,5 @@ config BR2_PACKAGE_TFTPD
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
+ 	  HPA's Trivial File Transfer Protocol (tftp) server.
++
++	  http://freshmeat.sourceforge.net/projects/tftp-hpa
 -- 
 2.20.1
