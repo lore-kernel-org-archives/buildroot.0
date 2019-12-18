@@ -1,54 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Dec 2019 23:26:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tcping: update the upstream URL
- in Config.in
-In-Reply-To: <20191218132736.8052-1-mark@dibsco.co.uk>
-References: <20191218132736.8052-1-mark@dibsco.co.uk>
-Message-ID: <20191218232627.5d977ac3@windsurf>
+Date: Wed, 18 Dec 2019 23:27:22 +0100
+Subject: [Buildroot] [git commit] configs/imx6-sabresd: bump kernel version
+Message-ID: <20191218221833.D6E8B8C9C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mark,
+commit: https://git.buildroot.net/buildroot/commit/?id=3646633dd342fea5f7e2b4733300ab23653cd323
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Dec 2019 13:27:36 +0000
-Mark Corbin <mark@dibsco.co.uk> wrote:
+Bump the kernel version to 5.4.2.
 
-> Update the upstream URL in the help text in Config.in. This
-> addresses the 'Invalid(Err)' URL status in the package stats
-> web page output.
-> 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-> ---
->  package/tcping/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/tcping/Config.in b/package/tcping/Config.in
-> index e72df096c3..241561ce10 100644
-> --- a/package/tcping/Config.in
-> +++ b/package/tcping/Config.in
-> @@ -11,4 +11,4 @@ config BR2_PACKAGE_TCPING
->  	  desired port is reachable and then start connection
->  	  establishment.
->  
-> -	  http://linuxco.de/tcping/tcping.html
-> +	  https://web.archive.org/web/20171102193822/linuxco.de/tcping/tcping.html
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/imx6-sabresd_defconfig     | 6 +++---
+ configs/imx6-sabresd_qt5_defconfig | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-The tcping we have in Buildroot, in version 1.3.5 is from Marc
-Kirchner, and he now has a Github at
-https://github.com/mkirchner/tcping, where he has both the 1.3.5 and
-even a newer 1.3.6 release.
-
-So it seems like the best course of action for this package is to
-switch to using this Github repository as the upstream (and of course
-not just update Config.in, but also the .mk file and the version).
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
+index 0d070e47f8..98f11c7ef1 100644
+--- a/configs/imx6-sabresd_defconfig
++++ b/configs/imx6-sabresd_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 5.3 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 8fbc2beb5b..795f770e4f 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 5.3 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ # Additional features needed for packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
