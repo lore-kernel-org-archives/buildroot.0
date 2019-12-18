@@ -1,99 +1,74 @@
-From: Avraham Shukron <avraham.shukron@gmail.com>
-Date: Wed, 18 Dec 2019 22:29:11 +0200
-Subject: [Buildroot] [PATCH] pine64_defconfig: switch ATF to mainline
- and bump to latest
-In-Reply-To: <20191218193033.32388-1-avraham.shukron@gmail.com>
-References: <20191218193033.32388-1-avraham.shukron@gmail.com>
-Message-ID: <CAJX3zAs=UVjv7dA9K-ZDGMuvBr=nzkjqtNC9Cg9XWL3B1n5HdA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 18 Dec 2019 21:39:04 +0100
+Subject: [Buildroot] [PATCH 0/5] package: add host-coreutils (branch
+ yem/host-coreutils)
+Message-ID: <cover.1576701539.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please ignore this patch.
-I'll rework the commit message and submit a new series with some other
-bumps.
+Hello All!
 
-On Wed, Dec 18, 2019 at 9:31 PM Avi Shukron <avraham.shukron@gmail.com>
-wrote:
+This series introduces host-coreutils, to be built by packages that need
+it, when the host system does not have a recent-enough version.
 
-> For a while now that sun50i_a64 is supported in the mainline ATF
-> repo.
->
-> Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
-> ---
->  configs/pine64_defconfig | 43 ++++++++++++++--------------------------
->  1 file changed, 15 insertions(+), 28 deletions(-)
->
-> diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
-> index d2e3a360fa..05084b347d 100644
-> --- a/configs/pine64_defconfig
-> +++ b/configs/pine64_defconfig
-> @@ -1,19 +1,22 @@
->  BR2_aarch64=y
-> -BR2_cortex_a53=y
->  BR2_ARM_FPU_VFPV4=y
-> -
-> -# Linux headers same as kernel, a 5.0 series
->  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
-> -
-> -# Firmware
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pine64/genimage.cfg"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-pine64"
-> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="
-> https://github.com/apritzel/arm-trusted-firmware.git"
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
->
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-> -
-> -# Bootloader
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> @@ -28,22 +31,6 @@ BR2_TARGET_UBOOT_SPL=y
->  BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
->  BR2_TARGET_UBOOT_BOOT_SCRIPT=y
->  BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/pine64/pine64/boot.cmd"
-> -
-> -# Kernel
-> -BR2_LINUX_KERNEL=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
-> -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> -BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-pine64"
-> -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> -
-> -# Filesystem
-> -BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64"
-> -BR2_TARGET_ROOTFS_EXT2=y
-> -BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
->  BR2_PACKAGE_HOST_GENIMAGE=y
->  BR2_PACKAGE_HOST_MTOOLS=y
-> -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> -BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pine64/genimage.cfg"
-> --
-> 2.20.1
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191218/4484b31b/attachment.html>
+For example, support ofr ln --relative is getting more and more present
+in a lot of packages, like systemd. realpath is also required.
+
+Add a new dependency check, and if the hsot lacks the required features,
+build host-coreutils for those packages that strictly require it.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit d8c86be9cd70d7e821b9571a237a1a20243f5d58
+
+  support/testing: fix python-gitdb2 test (2019-12-18 21:12:22 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to b22ede353f1065e52c6098cc1750386a5ac12fda
+
+  package/libsepol: add dependency on host-coreutils for ln --relative (2019-12-18 21:35:26 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/coreutils: introduce a host variant
+      core/dependencies: check if we need to build our own host-coreutils
+      package/systemd: add dependency on host-coreutils
+      package/libselinux: add dependency on host-coreutils for ln --relative
+      package/libsepol: add dependency on host-coreutils for ln --relative
+
+ package/coreutils/coreutils.mk                     | 14 ++++
+ package/libselinux/0002-revert-ln-relative.patch   | 26 -------
+ ...emove-ln-relative-usage-in-install-pywrap.patch | 27 --------
+ package/libselinux/libselinux.mk                   |  2 +-
+ package/libsepol/0002-revert-ln-relative.patch     | 29 --------
+ package/libsepol/libsepol.mk                       |  2 +-
+ .../0001-install-don-t-use-ln-relative.patch       | 80 ----------------------
+ package/systemd/systemd.mk                         |  2 +
+ support/dependencies/check-host-coreutils.mk       |  6 ++
+ support/dependencies/check-host-coreutils.sh       | 12 ++++
+ 10 files changed, 36 insertions(+), 164 deletions(-)
+ delete mode 100644 package/libselinux/0002-revert-ln-relative.patch
+ delete mode 100644 package/libselinux/0005-Remove-ln-relative-usage-in-install-pywrap.patch
+ delete mode 100644 package/libsepol/0002-revert-ln-relative.patch
+ delete mode 100644 package/systemd/0001-install-don-t-use-ln-relative.patch
+ create mode 100644 support/dependencies/check-host-coreutils.mk
+ create mode 100755 support/dependencies/check-host-coreutils.sh
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
