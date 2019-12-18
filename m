@@ -1,7 +1,7 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 18 Dec 2019 18:42:10 +0300
-Subject: [Buildroot] [PATCH] arch/arc: Accommodate 16 KiB MMU pages
-Message-ID: <20191218154210.36336-1-abrodkin@synopsys.com>
+Date: Wed, 18 Dec 2019 18:55:55 +0300
+Subject: [Buildroot] [PATCH v2] arch/arc: Accommodate 16 KiB MMU pages
+Message-ID: <20191218155555.45617-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,8 +22,8 @@ allocated pages and thus make executable broken.
 
 Simplest example:
 ------------------------------------>8-----------------------------------
-$?arc-linux-gcc test.c
-$?arc-linux-readelf --segments a.out
+$ arc-linux-gcc test.c
+$ arc-linux-readelf --segments a.out
 
 Program Headers:
   Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
@@ -35,8 +35,8 @@ Program Headers:
 Fortunately we may override default page size settings with "max-page-size"
 linker option this way:
 ------------------------------------>8-----------------------------------
-$?arc-linux-gcc test.c -Wl,-z,max-page-size=16384
-$?arc-linux-readelf --segments a.out
+$ arc-linux-gcc test.c -Wl,-z,max-page-size=16384
+$ arc-linux-readelf --segments a.out
 Elf file type is EXEC (Executable file)
 Entry point 0x102c4
 There are 8 program headers, starting at offset 52
@@ -52,11 +52,18 @@ Which we implement with that change.
 
 Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 ---
+
+Changes v1 -> v2:
+
+ * Obviously we want to append lenker settings to the wrapper
+   but not overwrite atomic option if is set as these are orthogonal
+   things.
+
  arch/arch.mk.arc | 12 +++++++++++-
  1 file changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
-index 5fcffb7f4b..8a1167f6bb 100644
+index 5fcffb7f4b..d45299144c 100644
 --- a/arch/arch.mk.arc
 +++ b/arch/arch.mk.arc
 @@ -1,4 +1,14 @@
@@ -71,7 +78,7 @@ index 5fcffb7f4b..8a1167f6bb 100644
 +# By default MAXPAGESIZE for ARC is 8196 so for larger MMU pages
 +# it needs to be overridden.
 +ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
-+ARCH_TOOLCHAIN_WRAPPER_OPTS = -Wl,-z,max-page-size=16384
++ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384
 +endif
 +
 +endif
