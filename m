@@ -1,86 +1,74 @@
-From: Julien Olivain <juju@cotds.org>
-Date: Wed, 18 Dec 2019 22:22:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/imx-sc-firmware: bump to
- version 1.2.1
-In-Reply-To: <CAOMZO5CTpqORMwjZi5681X7h1pngWZJzF-VZHvaVHkEe4CYq1g@mail.gmail.com>
-References: <20191218130429.847805-1-juju@cotds.org>
- <CAOMZO5D_Dh2sgweJ+0U_os-jP3igeVbO2XJmeesZTdoQDe86gA@mail.gmail.com>
- <94f6389ba7bd24a86cdec3e8295fddad@cotds.org>
- <CAOMZO5CTpqORMwjZi5681X7h1pngWZJzF-VZHvaVHkEe4CYq1g@mail.gmail.com>
-Message-ID: <bb1e9dbdd73a1e0b8fead464ddf9fa83@cotds.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 18 Dec 2019 22:34:20 +0100
+Subject: [Buildroot] [RFC v1 0/2] package/qt5: bump latest version to
+ 5.13.2/5.14.0
+Message-ID: <20191218213422.21057-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio, All,
+Send as RFC (do-not-apply) as the buildroot developer days
+decision was to stay with 5.12.x (LTS), see [1] and the
+bump the version later (see [2]).
 
-On 2019-12-18 14:27, Fabio Estevam wrote:
-> On Wed, Dec 18, 2019 at 10:23 AM Julien Olivain <juju@cotds.org> wrote:
-> 
->> As per:
->> https://source.codeaurora.org/external/imx/meta-fsl-bsp-release/tree/imx/meta-bsp/recipes-bsp/imx-sc-firmware?h=sumo-4.14.98-2.0.0_ga
->> 
->> For 4.14.98_2.0.0_ga, imx-sc-firmware is 1.2.1.
->> imx-sc-firmware is 1.2.2 is for 4.14.98_2.2.0.
->> 
->> Since the rest of the components are on 4.14.98_2.0.0_ga, I would 
->> really
->> suggest 1.2.1.
-> 
-> Correct, the NXP Release Notes on the web is for 4.14.98_2.2.0.
-> 
-> So using 1.2.1 is fine then.
-> 
-> Shouldn't IMX_SC_FIRMWARE_VERSION be passed via board defconfig 
-> instead?
-> 
-> Currently we are forcing the same IMX_SC_FIRMWARE_VERSION for all imx8
-> boards, which is not ideal because we may have imx8 boards running
-> 4.14.78, others 4.14.98, others 4.19.35, etc
-> 
-> We cannot force all of them to be using the same kernel versions, so I
-> think we should allow the possibility to pass IMX_SC_FIRMWARE_VERSION
-> via board defconfig.
-> 
-> What do you think?
+[1] https://elinux.org/Buildroot:DeveloperDaysFOSDEM2019#Qt5_versions_to_support:_keep_5.6_or_a_newer_LTS.3F
+[2] http://lists.busybox.net/pipermail/buildroot/2019-July/254317.html
 
-   I agree with you that we can't really force a single version for all
-boards. Exposing a choice of version (like for Kernel, U-Boot, ATF)
-seems a good trade-of (this is what I had in mind in [1]).
+Peter Seiderer (2):
+  package/qt5: bump latest version to 5.13.2
+  package/qt5: bump latest version to 5.14.0
 
-   For i.MX packages, several packages are in that case: I think mainly
-about imx-sc-firmware, firmware-imx and imx-gpu-viv.
+ package/qt5/Config.in                         |   4 +-
+ package/qt5/qt5.mk                            |   4 +-
+ package/qt5/qt53d/qt53d.hash                  |   4 +-
+ ...tbase-Fix-build-error-when-using-EGL.patch |   0
+ ...le-conversion-enable-for-microblaze.patch} |  24 +-
+ .../qt5base/{5.12.5 => 5.14.0}/qt5base.hash   |   4 +-
+ package/qt5/qt5canvas3d/Config.in             |   5 +
+ package/qt5/qt5canvas3d/qt5canvas3d.hash      |   3 -
+ package/qt5/qt5canvas3d/qt5canvas3d.mk        |   5 +-
+ package/qt5/qt5charts/qt5charts.hash          |   4 +-
+ .../{5.12.5 => 5.14.0}/qt5connectivity.hash   |   4 +-
+ ...gtexture-fix-debug-build-with-uclibc.patch |  20 +-
+ .../qt5/qt5declarative/qt5declarative.hash    |   4 +-
+ .../qt5graphicaleffects.hash                  |   4 +-
+ .../qt5/qt5imageformats/qt5imageformats.hash  |   4 +-
+ package/qt5/qt5location/qt5location.hash      |   4 +-
+ package/qt5/qt5multimedia/qt5multimedia.hash  |   4 +-
+ .../qt5quickcontrols/qt5quickcontrols.hash    |   4 +-
+ .../{5.12.5 => 5.14.0}/qt5quickcontrols2.hash |   4 +-
+ package/qt5/qt5script/qt5script.hash          |   4 +-
+ package/qt5/qt5scxml/qt5scxml.hash            |   4 +-
+ package/qt5/qt5sensors/qt5sensors.hash        |   4 +-
+ .../{5.12.5 => 5.14.0}/qt5serialbus.hash      |   4 +-
+ .../{5.12.5 => 5.14.0}/qt5serialport.hash     |   4 +-
+ package/qt5/qt5svg/qt5svg.hash                |   4 +-
+ ...-designer-tool-fixes-configure-error.patch |  44 +++
+ package/qt5/qt5tools/qt5tools.hash            |   4 +-
+ .../qt5virtualkeyboard.hash                   |   4 +-
+ package/qt5/qt5wayland/qt5wayland.hash        |   4 +-
+ package/qt5/qt5webchannel/qt5webchannel.hash  |   4 +-
+ .../{5.12.5 => 5.14.0}/qt5webengine.hash      | 292 +++++++++++-------
+ package/qt5/qt5webengine/chromium-latest.inc  | 221 ++++++++-----
+ package/qt5/qt5websockets/qt5websockets.hash  |   4 +-
+ package/qt5/qt5webview/qt5webview.hash        |   4 +-
+ .../{5.12.5 => 5.14.0}/qt5x11extras.hash      |   4 +-
+ .../qt5/qt5xmlpatterns/qt5xmlpatterns.hash    |   4 +-
+ 36 files changed, 440 insertions(+), 282 deletions(-)
+ rename package/qt5/qt5base/{5.12.5 => 5.14.0}/0001-qtbase-Fix-build-error-when-using-EGL.patch (100%)
+ rename package/qt5/qt5base/{5.12.5/0002-double-conversion-enable-for-microblaze.patch => 5.14.0/0004-double-conversion-enable-for-microblaze.patch} (59%)
+ rename package/qt5/qt5base/{5.12.5 => 5.14.0}/qt5base.hash (73%)
+ rename package/qt5/qt5connectivity/{5.12.5 => 5.14.0}/qt5connectivity.hash (65%)
+ rename package/qt5/qt5declarative/{5.12.5 => 5.14.0}/0001-qsgtexture-fix-debug-build-with-uclibc.patch (73%)
+ rename package/qt5/qt5quickcontrols2/{5.12.5 => 5.14.0}/qt5quickcontrols2.hash (54%)
+ rename package/qt5/qt5serialbus/{5.12.5 => 5.14.0}/qt5serialbus.hash (60%)
+ rename package/qt5/qt5serialport/{5.12.5 => 5.14.0}/qt5serialport.hash (65%)
+ create mode 100644 package/qt5/qt5tools/5.14.0/0001-Disable-designer-tool-fixes-configure-error.patch
+ rename package/qt5/qt5virtualkeyboard/{5.12.5 => 5.14.0}/qt5virtualkeyboard.hash (70%)
+ rename package/qt5/qt5webengine/{5.12.5 => 5.14.0}/qt5webengine.hash (68%)
+ rename package/qt5/qt5x11extras/{5.12.5 => 5.14.0}/qt5x11extras.hash (65%)
 
-   The only problem I see right now is that from one version to
-another, the build recipe might slightly change. We saw that recently
-in [2]. This means we can't have a single recipe and a free
-_CUSTOM_VERSION config option.
-
-What about having a KConfig "choice" list of few supported versions,
-also showing NXP BSP name, to help i.MX defconfig maintainers to
-select the right version ? That would allow the package recipe to
-adjust commands for a given version.
-
-For example, for the imx-sc-firmware, the list of choices would be:
-- 1.1.4 (4.14.78_1.0.0)
-- 1.2.1 (4.14.98_2.0.0)
-- 1.2.2 (4.19.35_1.0.0)
-- 1.2.7.1 (4.19.35_1.1.0)
-
-What do you think about this approach?
-
-If you agree, I could give a try to write patches for
-imx-sc-firmware package, to see how it goes...
-
-> Thanks
-
-Best regards,
-
-Julien.
-
-[1] 
-http://lists.busybox.net/pipermail/buildroot/2019-December/268135.html
-[2] 
-http://lists.busybox.net/pipermail/buildroot/2019-December/269280.html
+-- 
+2.24.0
