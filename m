@@ -1,22 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Dec 2019 10:14:54 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: bump CIP RT kernel to version
- 4.19.82-cip14-rt5
-In-Reply-To: <1576567199-10685-2-git-send-email-angelo@amarulasolutions.com>
- (Angelo Compagnucci's message of "Tue, 17 Dec 2019 08:19:59 +0100")
-References: <1576567199-10685-1-git-send-email-angelo@amarulasolutions.com>
- <1576567199-10685-2-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <87mubq0zch.fsf@dell.be.48ers.dk>
+Date: Wed, 18 Dec 2019 10:15:15 +0100
+Subject: [Buildroot] [PATCH] package/lrzip: needs C++
+In-Reply-To: <20191216085920.30717-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 16 Dec 2019 09:59:19 +0100")
+References: <20191216085920.30717-1-peter@korsgaard.com>
+Message-ID: <87imme0zbw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > This patch bumps Linux CIP RT version to 4.19.82-cip14-rt5.
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/e40/e40653aa895bb47d20ad237c8a5ae3f6b76f3f67/
+
+ > libzpaq is written in C++ (and unconditionally built), so depend on C++
+ > support.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
