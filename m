@@ -1,46 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Dec 2019 10:13:47 +0100
-Subject: [Buildroot] [git commit] package/lrzip: needs C++
-Message-ID: <20191218090636.3CDD28B916@busybox.osuosl.org>
+Date: Wed, 18 Dec 2019 10:13:56 +0100
+Subject: [Buildroot] [git commit] package/iozone: bump to version 3_488
+Message-ID: <20191218090636.451558B916@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f29c8de40f34dc67697158351a84d2ec9f93990c
+commit: https://git.buildroot.net/buildroot/commit/?id=99eb4068e42e69bad3112c1c3e8fc7c2b1cb245d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/e40/e40653aa895bb47d20ad237c8a5ae3f6b76f3f67/
-
-libzpaq is written in C++ (and unconditionally built), so depend on C++
-support.
-
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lrzip/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/iozone/iozone.hash | 2 +-
+ package/iozone/iozone.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lrzip/Config.in b/package/lrzip/Config.in
-index 92540a5036..885b84dbb0 100644
---- a/package/lrzip/Config.in
-+++ b/package/lrzip/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LRZIP
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_BZIP2
-@@ -17,6 +18,7 @@ config BR2_PACKAGE_LRZIP
+diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
+index 29dba67b32..8522486297 100644
+--- a/package/iozone/iozone.hash
++++ b/package/iozone/iozone.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	2c488a7ccddd624fd557af16e71442c367b131d6178e1b4023bbd532bacdda59	iozone3_487.tar
++sha256	960265163d93f15f7ad352f726d4837c5dd794fff357c743fdb56cbcf4abca04	iozone3_488.tar
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+index 00573d933d..adc5a66955 100644
+--- a/package/iozone/iozone.mk
++++ b/package/iozone/iozone.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/ckolivas/lrzip
- 
--comment "lrzip needs a toolchain w/ wchar, threads"
-+comment "lrzip needs a toolchain w/ wchar, threads, C++"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP
+-IOZONE_VERSION = 3_487
++IOZONE_VERSION = 3_488
+ IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
+ IOZONE_SITE = http://www.iozone.org/src/current
+ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
