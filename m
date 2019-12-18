@@ -1,46 +1,46 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 18 Dec 2019 17:19:57 +0100
-Subject: [Buildroot] [PATCH] package/kf5/kf5-kcoreaddons: don't treat ld
- warnings as errors
-Message-ID: <20191218161957.110979-1-giulio.benetti@benettiengineering.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 18 Dec 2019 18:27:41 +0100
+Subject: [Buildroot] [git commit] package/sysrepo: fix install path for
+ systemd units
+Message-ID: <20191218172934.22F888B913@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Microblaze ld emits warnings like:
-'
-FDE encoding in
-CMakeFiles/KF5CoreAddons.dir/KF5CoreAddons_autogen/mocs_compilation.cpp.o(.eh_frame)
-prevents .eh_frame_hdr table being created
-'
-Since '-Wl,--fatal-warnings' is passed by default, build fails, so don't
-treat warnings as errors by appending "-Wl,--no-fatal-warnings" to
-CMAKE_SHARED_LINKER_FLAGS that is previously defined in package
-dependency kf5-extra-cmake-modules.
+commit: https://git.buildroot.net/buildroot/commit/?id=873e6573d3fec87ab497523fa361351fd82e7c8e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/f19/f198c86930535c50393e17fc7a70fb4f27b096ee/
+The relative paths currently used to install the systemd units causes an
+incorrect installation, where units are installed in (notice the double
+usr in the paths):
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+    target/usr/usr/lib/systemd/system/sysrepod.service
+    staging/usr/usr/lib/systemd/system/sysrepod.service
+
+Fix that by using an absolute path.
+
+Signed-off-by: J??r??my Rosen <jeremy.rosen@smile.fr>
+[yann.morin.1998 at free.fr:
+  - split into its own commit
+  - expand commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/sysrepo/sysrepo.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-index 164bad1225..5b3e9acd90 100644
---- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-+++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-@@ -21,4 +21,9 @@ endif
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index 216e517526..cc4f8e406f 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
+@@ -24,7 +24,7 @@ SYSREPO_CONF_OPTS = \
+ 	-DCALL_SYSREPOCFG_BIN=$(HOST_DIR)/bin/sysrepocfg \
+ 	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_SYSREPO_EXAMPLES),ON,OFF) \
+ 	$(if $(BR2_INIT_SYSTEMD),-DWITH_SYSTEMD=ON) \
+-	$(if $(BR2_INIT_SYSTEMD),-DSYSTEMD_UNIT_DIR=usr/lib/systemd/system)
++	$(if $(BR2_INIT_SYSTEMD),-DSYSTEMD_UNIT_DIR=/usr/lib/systemd/system)
  
- KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
- 
-+ifeq ($(BR2_microblaze),y)
-+# Microblaze ld emits warnings, make warnings not to be treated as errors
-+KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
-+endif
-+
- $(eval $(cmake-package))
--- 
-2.20.1
+ # On ARM, this is needed to prevent unaligned memory access with an optimized
+ # build .. https://github.com/sysrepo/sysrepo/issues/947
