@@ -1,8 +1,8 @@
 From: Mark Corbin <mark@dibsco.co.uk>
-Date: Wed, 18 Dec 2019 11:23:44 +0000
-Subject: [Buildroot] [PATCH 1/1] package/rpcbind: add an upstream URL to
+Date: Wed, 18 Dec 2019 11:39:38 +0000
+Subject: [Buildroot] [PATCH 1/1] package/setserial: add an upstream URL to
  Config.in
-Message-ID: <20191218112344.9830-1-mark@dibsco.co.uk>
+Message-ID: <20191218113938.11819-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,18 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 ---
- package/rpcbind/Config.in | 2 ++
+ package/setserial/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/rpcbind/Config.in b/package/rpcbind/Config.in
-index ced2d40944..9cde7bba39 100644
---- a/package/rpcbind/Config.in
-+++ b/package/rpcbind/Config.in
-@@ -9,6 +9,8 @@ config BR2_PACKAGE_RPCBIND
- 	  The rpcbind utility is a server that converts RPC program
- 	  numbers into universal addresses.
- 
-+	  https://sourceforge.net/projects/rpcbind/
-+
- comment "rpcbind needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/setserial/Config.in b/package/setserial/Config.in
+index 4ff2477e84..1182cb063b 100644
+--- a/package/setserial/Config.in
++++ b/package/setserial/Config.in
+@@ -4,3 +4,5 @@ config BR2_PACKAGE_SETSERIAL
  	depends on BR2_USE_MMU
+ 	help
+ 	  Setserial : configuration of serial ports
++
++	  http://setserial.sourceforge.net/
 -- 
 2.20.1
