@@ -1,53 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Wed, 18 Dec 2019 18:33:22 +0100
-Subject: [Buildroot] [git commit] package/network-manager: adapt to
- systemctl preset-all
-Message-ID: <20191218172934.7C0A78806D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/syslog-ng: implement systemd
+ enablement using DefaultInstance
+Message-ID: <20191218172934.937508806D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb075916f411915eefa056385862b7d6a793005c
+commit: https://git.buildroot.net/buildroot/commit/?id=54ea03ccd7d68bcf846a7cb8fa58b9fb3ac0b914
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NM has three services
-* NetworkManger.service : the main daemon
-* NetworkManger-dispatcher.service : a daemon handling network callbacks
-* NetworkManager-wait-online.service : sync of other services with network-online
+Instead of using a manual symlink we use add a DefaultInstance= to the
+config file
 
-Only the first two were activated. We now also enable
-wait-online. Not enabling it was probably a bug.
-
-Note that buildroot adds an alias dbus-org.freedesktop.NetworkManager
-Adding an alias that is not known upstream is not clean,
-but I left it for backward compatibility
+This is how upstream wants us to do it and allows systemctl preset to
+correctly restore it if needed
 
 Signed-off-by: J??r??my Rosen <jeremy.rosen@smile.fr>
+[yann.morin.1998 at free.fr:
+  - split long line
+  - no need for continued line (no use for ';\' )
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/network-manager/network-manager.mk | 7 -------
- 1 file changed, 7 deletions(-)
+ package/syslog-ng/syslog-ng.mk | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 7de2c220fe..56b768cdef 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -88,16 +88,9 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSV
- endef
- 
- define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index fc44777d16..68260172a2 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -105,11 +105,9 @@ endef
+ # By default syslog-ng installs a .service that requires a config file at
+ # /etc/default, so provide one with the default values.
+ define SYSLOG_NG_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -m 0644 -D package/syslog-ng/syslog-ng at default \
+-		$(TARGET_DIR)/etc/default/syslog-ng at default
 -	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--
- 	ln -sf /usr/lib/systemd/system/NetworkManager.service \
- 		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
- 
--	ln -sf /usr/lib/systemd/system/NetworkManager.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager.service
--
--	ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
--		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+-	ln -sf ../../../../usr/lib/systemd/system/syslog-ng at .service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/syslog-ng at default.service
++	mkdir $(TARGET_DIR)/usr/lib/systemd/system/syslog-ng at .service.d
++	printf '[Install]\nDefaultInstance=default\n' \
++		>$(TARGET_DIR)/usr/lib/systemd/system/syslog-ng at .service.d/buildroot-default-instance.conf
  endef
  
- $(eval $(autotools-package))
+ # By default syslog-ng installs a number of sample configuration
