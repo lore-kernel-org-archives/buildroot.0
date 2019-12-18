@@ -1,83 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Dec 2019 23:13:09 +0100
-Subject: [Buildroot] [RFC v1 1/2] package/qt5: bump latest version to
- 5.13.2
-In-Reply-To: <20191218213422.21057-2-ps.report@gmx.net>
-References: <20191218213422.21057-1-ps.report@gmx.net>
- <20191218213422.21057-2-ps.report@gmx.net>
-Message-ID: <20191218231309.4d45fe8b@windsurf>
+Date: Wed, 18 Dec 2019 23:15:04 +0100
+Subject: [Buildroot] [PATCH] package/lua-msgpack-native: fix build with
+ moonjit
+In-Reply-To: <20191210174004.25479-1-francois.perrad@gadz.org>
+References: <20191210174004.25479-1-francois.perrad@gadz.org>
+Message-ID: <20191218231504.26a30aa2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, 10 Dec 2019 18:40:04 +0100
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Thanks again for all this qt5 maintenance work. Really good to have qt5
-bumped to a more recent version. A few comment below.
+> compatibility with Lua 5.0 was removed in LuaJIT/moonjit 2.1.x
+> (Lua 5.1.x and LuaJIT 2.0.x have this compatibility)
+> 
+> see http://autobuild.buildroot.org/results/4e4/4e428df01def186cb034a1774f6c00e2e7c9468c/build-end.log
 
-On Wed, 18 Dec 2019 22:34:21 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+This should have been:
 
-> qt5base:
->  - removed 0005-Fix-dependency_libs-entry-of-.la-files.patch (upstream
->    applied/taken from???)
+Fixes:
 
-What is this ???
+  http://autobuild.buildroot.org/results/4e428df01def186cb034a1774f6c00e2e7c9468c/
 
-
-> diff --git a/package/qt5/qt5canvas3d/Config.in b/package/qt5/qt5canvas3d/Config.in
-> index 04c04730bd..281055a232 100644
-> --- a/package/qt5/qt5canvas3d/Config.in
-> +++ b/package/qt5/qt5canvas3d/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_QT5CANVAS3D
->  	bool "qt5canvas3d"
-> +	depends on !BR2_PACKAGE_QT5_VERSION_LATEST
->  	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
->  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
->  	select BR2_PACKAGE_QT5DECLARATIVE
-> @@ -13,6 +14,10 @@ config BR2_PACKAGE_QT5CANVAS3D
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/lua-msgpack-native/lua-msgpack-native.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
+> index acd3a0e1c..b3ca7aef4 100644
+> --- a/package/lua-msgpack-native/lua-msgpack-native.mk
+> +++ b/package/lua-msgpack-native/lua-msgpack-native.mk
+> @@ -11,7 +11,7 @@ LUA_MSGPACK_NATIVE_LICENSE = Apache-2.0
+>  LUA_MSGPACK_NATIVE_LICENSE_FILES = LICENSE.txt
 >  
->  	  http://doc.qt.io/qt-5/qtcanvas3d-index.html
->  
-> +comment "qt5scxml removed with qt-5.13"
-> +        depends on BR2_PACKAGE_QT5_VERSION_LATEST
+>  define LUA_MSGPACK_NATIVE_BUILD_CMDS
+> -	$(TARGET_CC) $(TARGET_CFLAGS) -fPIC -shared -o $(@D)/msgpack.so $(@D)/mp.c
+> +	$(TARGET_CC) $(TARGET_CFLAGS) -DluaL_reg=luaL_Reg -fPIC -shared -o $(@D)/msgpack.so $(@D)/mp.c
 
-You are in qt5canvas3d, not qt5scxml.
-
-Should we word the comment like this:
-
-comment "qt5canvas3d only available with Qt LTS 5.6"
-
-instead ?
-
-> +
->  comment "qt5canvas3d needs an OpenGL-capable backend"
-> +        depends on !BR2_PACKAGE_QT5_VERSION_LATEST
-
-Indentation issue.
-
-> diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.mk b/package/qt5/qt5canvas3d/qt5canvas3d.mk
-> index b550ff00f2..1566f30e37 100644
-> --- a/package/qt5/qt5canvas3d/qt5canvas3d.mk
-> +++ b/package/qt5/qt5canvas3d/qt5canvas3d.mk
-> @@ -10,10 +10,7 @@ QT5CANVAS3D_SOURCE = qtcanvas3d-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5CANVAS3D_VERSI
->  QT5CANVAS3D_DEPENDENCIES = qt5base qt5declarative
->  QT5CANVAS3D_INSTALL_STAGING = YES
->  
-> -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> -QT5CANVAS3D_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools)
-> -QT5CANVAS3D_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3
-> -else
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),)
-
-Remove the conditional entirely ?
-
->  QT5CANVAS3D_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0
->  QT5CANVAS3D_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3
->  endif
+I've added a comment in the .mk file to explain this, as it is a bit
+weird, and then I've applied to master.
 
 Thanks!
 
