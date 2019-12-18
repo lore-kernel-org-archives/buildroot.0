@@ -1,89 +1,44 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 18 Dec 2019 06:04:59 -0700
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: add missing
- dependencies/plugins
-Message-ID: <20191218130459.85796-1-james.hilliard1@gmail.com>
+From: Julien Olivain <juju@cotds.org>
+Date: Wed, 18 Dec 2019 14:07:49 +0100
+Subject: [Buildroot] [PATCH 2/2] configs/imx8qxpmek: Update to 4.14.98
+ components
+In-Reply-To: <CAOMZO5DhbKvUz3ZH7Pm1D3CtJ+h7-JCqeLSJP1U-Pa8FhjXNfQ@mail.gmail.com>
+References: <20191217181855.3508-1-festevam@gmail.com>
+ <20191217181855.3508-2-festevam@gmail.com>
+ <CAOMZO5DhbKvUz3ZH7Pm1D3CtJ+h7-JCqeLSJP1U-Pa8FhjXNfQ@mail.gmail.com>
+Message-ID: <cea508acd46cf9109f1ccb553ad8b429@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added missing required and optional dependencies.
-Provide option to enable gstreamer plugin.
+Hi Fabio,
 
-Fixes:
-http://autobuild.buildroot.net/results/9671ad63b1ae147a6f660337cb4b3dc38209067c/build-end.log
-http://autobuild.buildroot.net/results/0e80841fe9937d7a5142035c2a41158166bcf8df/build-end.log
+On 2019-12-17 20:10, Fabio Estevam wrote:
+> On Tue, Dec 17, 2019 at 3:19 PM Fabio Estevam <festevam@gmail.com> 
+> wrote:
+>> 
+>> Bump kernel, ATF and U-Boot to the versions found in the NXP BSP 
+>> 4.14.98.
+>> 
+>> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> 
+> Please discard this patch, sorry.
+> 
+> I am getting a boot hang with this one applied.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/pipewire/Config.in   | 14 ++++++++++++++
- package/pipewire/pipewire.mk | 22 ++++++++++++++++++++--
- 2 files changed, 34 insertions(+), 2 deletions(-)
+Apparently, we experience here what I described earlier, in [1].
+Updating U-Boot, Kernel and ATF will also need to realign 
+imx-sc-firmware
+to the same BSP version. When also applying patch [2] on top of yours,
+I was able to boot the board again.
 
-diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
-index ca23e6cff0..72d534d412 100644
---- a/package/pipewire/Config.in
-+++ b/package/pipewire/Config.in
-@@ -1,7 +1,9 @@
- menuconfig BR2_PACKAGE_PIPEWIRE
- 	bool "pipewire"
-+	depends on BR2_PACKAGE_HAS_UDEV # libudev
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
- 	depends on BR2_USE_MMU # dbus
-+	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_DBUS
- 	help
- 	  PipeWire is a server and user space API to deal with
-@@ -12,3 +14,15 @@ menuconfig BR2_PACKAGE_PIPEWIRE
- comment "pipewire needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+menuconfig BR2_PACKAGE_PIPEWIRE_GSTREAMER
-+	bool "pipewire gstreamer plugins"
-+	depends on BR2_PACKAGE_PIPEWIRE
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	help
-+	  Build GStreamer plugins
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index 7717095535..32e28d24e4 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -9,8 +9,26 @@ PIPEWIRE_SITE = $(call github,PipeWire,pipewire,$(PIPEWIRE_VERSION))
- PIPEWIRE_LICENSE = LGPL-2.1+
- PIPEWIRE_LICENSE_FILES = LICENSE LGPL
- PIPEWIRE_INSTALL_STAGING = YES
--PIPEWIRE_DEPENDENCIES = host-pkgconf dbus
--PIPEWIRE_CONF_OPTS = -Dgstreamer=disabled
-+PIPEWIRE_DEPENDENCIES = host-pkgconf alsa-lib dbus udev
-+
-+ifeq ($(BR2_PACKAGE_FFMPEG),y)
-+PIPEWIRE_DEPENDENCIES += ffmpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SBC),y)
-+PIPEWIRE_DEPENDENCIES += sbc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SDL2),y)
-+PIPEWIRE_DEPENDENCIES += sdl2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PIPEWIRE_GSTREAMER),y)
-+PIPEWIRE_CONF_OPTS += -Dgstreamer=enabled
-+PIPEWIRE_DEPENDENCIES += libglib2 gst1-plugins-base
-+else
-+PIPEWIRE_CONF_OPTS += -Dgstreamer=disabled
-+endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- PIPEWIRE_CONF_OPTS += -Dsystemd=true
--- 
-2.20.1
+Best regards,
+
+Julien.
+
+[1] 
+http://lists.busybox.net/pipermail/buildroot/2019-December/268824.html
+[2] 
+http://lists.busybox.net/pipermail/buildroot/2019-December/269334.html
