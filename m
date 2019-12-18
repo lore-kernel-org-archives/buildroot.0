@@ -1,53 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Wed, 18 Dec 2019 18:33:22 +0100
-Subject: [Buildroot] [git commit] package/linuxptp adapt to systemctl
+Subject: [Buildroot] [git commit] package/wpa_supplicant: adapt to systemctl
  preset-all
-Message-ID: <20191218172934.787C0812A7@busybox.osuosl.org>
+Message-ID: <20191218172934.855EC8806D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c561bcbf5f752d258dc08ec8e3d8160f894d592a
+commit: https://git.buildroot.net/buildroot/commit/?id=c27708e148794fd107935e69edbd60d4b7ad6f10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-linuxptp has two services
-* linuxptp.service : the actual daemon
-* linuxptp-system-clock.service : sync the linux clock to the phc clock
+All services were installed but not enabled.
 
-The first was enabled, the second was not, we now enable both
+This change enables the non-templated service but disables the
+templated ones.
 
-The second has an incorrect (though harmless) WantedBy : there is an
-explicit Wants= in linuxptp.service
+Enabling the templates creates weird links which are probably an
+upstream bug.
 
 Signed-off-by: J??r??my Rosen <jeremy.rosen@smile.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/linuxptp/linuxptp-system-clock.service | 1 -
- package/linuxptp/linuxptp.mk                   | 3 ---
- 2 files changed, 4 deletions(-)
+ package/wpa_supplicant/50-wpa_supplicant.preset | 4 ++++
+ package/wpa_supplicant/wpa_supplicant.mk        | 2 ++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/linuxptp/linuxptp-system-clock.service b/package/linuxptp/linuxptp-system-clock.service
-index a4436a34a7..57beec4579 100644
---- a/package/linuxptp/linuxptp-system-clock.service
-+++ b/package/linuxptp/linuxptp-system-clock.service
-@@ -8,4 +8,3 @@ Restart=always
- 
- [Install]
- WantedBy=multi-user.target
--WantedBy=linuxptp.service
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index c304ff6d6e..97e4af7be7 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -42,9 +42,6 @@ define LINUXPTP_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/systemd/system/linuxptp.service
- 	$(INSTALL) -D -m 644 $(LINUXPTP_PKGDIR)/linuxptp-system-clock.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/linuxptp-system-clock.service
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../../usr/lib/systemd/system/linuxptp.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/linuxptp.service
+diff --git a/package/wpa_supplicant/50-wpa_supplicant.preset b/package/wpa_supplicant/50-wpa_supplicant.preset
+new file mode 100644
+index 0000000000..9af8562c0e
+--- /dev/null
++++ b/package/wpa_supplicant/50-wpa_supplicant.preset
+@@ -0,0 +1,4 @@
++disable wpa_supplicant at .service
++disable wpa_supplicant-nl80211 at .service
++disable wpa_supplicant-wired at .service
++
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 9dcebca9bf..4f95ea6276 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -227,6 +227,8 @@ define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-nl80211 at .service
+ 	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-wired at .service
++	$(INSTALL) -D -m 644 $(WPA_SUPPLICANT_PKGDIR)/50-wpa_supplicant.preset \
++		$(TARGET_DIR)/usr/lib/systemd/system-preset/50-wpa_supplicant.preset
  endef
  
  $(eval $(generic-package))
