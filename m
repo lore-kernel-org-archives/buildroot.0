@@ -1,32 +1,23 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Wed, 18 Dec 2019 13:27:36 +0000
-Subject: [Buildroot] [PATCH 1/1] package/tcping: update the upstream URL in
- Config.in
-Message-ID: <20191218132736.8052-1-mark@dibsco.co.uk>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 18 Dec 2019 10:28:45 -0300
+Subject: [Buildroot] [PATCH 1/1] package/imx-sc-firmware: bump to
+ version 1.2.1
+In-Reply-To: <20191218130429.847805-1-juju@cotds.org>
+References: <20191218130429.847805-1-juju@cotds.org>
+Message-ID: <CAOMZO5B9SCsaEtzhUWE1tWF91kh2Udr7VHU9v+pDXC=6na9Fog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(Err)' URL status in the package stats
-web page output.
+On Wed, Dec 18, 2019 at 10:05 AM Julien Olivain <juju@cotds.org> wrote:
+>
+> This version is aligned with i.MX NXP BSP components version
+> rel_imx_4.14.98_2.0.0_ga
+>
+> This patch also add the hash file.
+>
+> Signed-off-by: Julien Olivain <juju@cotds.org>
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
----
- package/tcping/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/tcping/Config.in b/package/tcping/Config.in
-index e72df096c3..241561ce10 100644
---- a/package/tcping/Config.in
-+++ b/package/tcping/Config.in
-@@ -11,4 +11,4 @@ config BR2_PACKAGE_TCPING
- 	  desired port is reachable and then start connection
- 	  establishment.
- 
--	  http://linuxco.de/tcping/tcping.html
-+	  https://web.archive.org/web/20171102193822/linuxco.de/tcping/tcping.html
--- 
-2.20.1
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
