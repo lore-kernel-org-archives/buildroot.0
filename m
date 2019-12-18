@@ -1,8 +1,8 @@
 From: Mark Corbin <mark@dibsco.co.uk>
-Date: Wed, 18 Dec 2019 14:02:55 +0000
-Subject: [Buildroot] [PATCH 1/1] package/usbmount: update the upstream URL
- in Config.in
-Message-ID: <20191218140255.18913-1-mark@dibsco.co.uk>
+Date: Wed, 18 Dec 2019 14:24:16 +0000
+Subject: [Buildroot] [PATCH 1/1] package/w_scan: update the upstream URL in
+ Config.in
+Message-ID: <20191218142416.16195-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,18 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 ---
- package/usbmount/Config.in | 2 +-
+ package/w_scan/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/usbmount/Config.in b/package/usbmount/Config.in
-index f87bd911f2..8ce0ce7613 100644
---- a/package/usbmount/Config.in
-+++ b/package/usbmount/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_USBMOUNT
- 	  devices when they are plugged in, and unmounts them when
- 	  they are removed.
+diff --git a/package/w_scan/Config.in b/package/w_scan/Config.in
+index 01dbbae122..b41bc546d5 100644
+--- a/package/w_scan/Config.in
++++ b/package/w_scan/Config.in
+@@ -11,4 +11,4 @@ config BR2_PACKAGE_W_SCAN
+ 	  capable of creating channels.conf files (in different output
+ 	  formats !) as well as initial tuning data for scan.
  
--	  http://usbmount.alioth.debian.org/
-+	  https://wiki.debian.org/usbmount
- 
- comment "usbmount requires udev to be enabled"
- 	depends on !BR2_PACKAGE_HAS_UDEV
+-	  http://wirbel.htpc-forum.de/w_scan/index_en.html
++	  https://www.gen2vdr.de/wirbel/w_scan/index_en.html
 -- 
 2.20.1
