@@ -1,25 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Dec 2019 23:23:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.52.1
-In-Reply-To: <20191218133133.31830-1-james.hilliard1@gmail.com>
-References: <20191218133133.31830-1-james.hilliard1@gmail.com>
-Message-ID: <20191218232334.78d1b512@windsurf>
+Date: Wed, 18 Dec 2019 23:26:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tcping: update the upstream URL
+ in Config.in
+In-Reply-To: <20191218132736.8052-1-mark@dibsco.co.uk>
+References: <20191218132736.8052-1-mark@dibsco.co.uk>
+Message-ID: <20191218232627.5d977ac3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 18 Dec 2019 06:31:33 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Hello Mark,
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+On Wed, 18 Dec 2019 13:27:36 +0000
+Mark Corbin <mark@dibsco.co.uk> wrote:
+
+> Update the upstream URL in the help text in Config.in. This
+> addresses the 'Invalid(Err)' URL status in the package stats
+> web page output.
+> 
+> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 > ---
->  package/meson/meson.hash | 4 ++--
->  package/meson/meson.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/tcping/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/tcping/Config.in b/package/tcping/Config.in
+> index e72df096c3..241561ce10 100644
+> --- a/package/tcping/Config.in
+> +++ b/package/tcping/Config.in
+> @@ -11,4 +11,4 @@ config BR2_PACKAGE_TCPING
+>  	  desired port is reachable and then start connection
+>  	  establishment.
+>  
+> -	  http://linuxco.de/tcping/tcping.html
+> +	  https://web.archive.org/web/20171102193822/linuxco.de/tcping/tcping.html
 
-Applied to master, thanks.
+The tcping we have in Buildroot, in version 1.3.5 is from Marc
+Kirchner, and he now has a Github at
+https://github.com/mkirchner/tcping, where he has both the 1.3.5 and
+even a newer 1.3.6 release.
+
+So it seems like the best course of action for this package is to
+switch to using this Github repository as the upstream (and of course
+not just update Config.in, but also the .mk file and the version).
+
+Thanks!
 
 Thomas
 -- 
