@@ -1,48 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Dec 2019 23:15:54 +0100
-Subject: [Buildroot] [git commit] package/polkit: add polkitd user and
- appropriate permissions
-Message-ID: <20191218220729.6DBF38C99C@busybox.osuosl.org>
+Date: Wed, 18 Dec 2019 23:22:29 +0100
+Subject: [Buildroot] [git commit] package/kf5/kf5-kcoreaddons: don't treat
+ ld warnings as errors
+Message-ID: <20191218221343.813ED8C9AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2df6cf470397eae801e7f6ba9bfee88316a579b7
+commit: https://git.buildroot.net/buildroot/commit/?id=cc53d5357d84ff9b78d76e45ce216061df8a37c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The polkit daemon requires a polkitd user with permission to access the
-following directories:
-  - /etc/polkit-1
-  - /usr/share/polkit-1
+Microblaze ld emits warnings like:
+'
+FDE encoding in
+CMakeFiles/KF5CoreAddons.dir/KF5CoreAddons_autogen/mocs_compilation.cpp.o(.eh_frame)
+prevents .eh_frame_hdr table being created
+'
+Since '-Wl,--fatal-warnings' is passed by default, build fails, so don't
+treat warnings as errors by appending "-Wl,--no-fatal-warnings" to
+CMAKE_SHARED_LINKER_FLAGS that is previously defined in package
+dependency kf5-extra-cmake-modules.
 
-The /usr/bin/pkexec file must be owned by owned by root with the
-permissions 4755 or else the error "pkexec must be setuid root" is
-thrown when it's ran.
+Fixes:
+http://autobuild.buildroot.net/results/f19/f198c86930535c50393e17fc7a70fb4f27b096ee/
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/polkit/polkit.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-index a98c138356..bc9e3580ab 100644
---- a/package/polkit/polkit.mk
-+++ b/package/polkit/polkit.mk
-@@ -29,4 +29,14 @@ else
- POLKIT_CONF_OPTS += --with-authfw=shadow
- endif
+diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+index 164bad1225..5b3e9acd90 100644
+--- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
++++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+@@ -21,4 +21,9 @@ endif
  
-+define POLKIT_USERS
-+	polkitd -1 polkitd -1 * - - - Polkit Daemon
-+endef
+ KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
+ 
++ifeq ($(BR2_microblaze),y)
++# Microblaze ld emits warnings, make warnings not to be treated as errors
++KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
++endif
 +
-+define POLKIT_PERMISSIONS
-+	/etc/polkit-1 r 750 root polkitd - - - - -
-+	/usr/share/polkit-1 r 750 root polkitd - - - - -
-+	/usr/bin/pkexec f 4755 root root - - - - -
-+endef
-+
- $(eval $(autotools-package))
+ $(eval $(cmake-package))
