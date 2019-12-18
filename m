@@ -1,51 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 18 Dec 2019 21:39:03 +0100
-Subject: [Buildroot] [PATCH 1/5] package/coreutils: introduce a host variant
+Date: Wed, 18 Dec 2019 21:39:04 +0100
+Subject: [Buildroot] [PATCH 2/5] core/dependencies: check if we need to
+ build our own host-coreutils
 In-Reply-To: <cover.1576701539.git.yann.morin.1998@free.fr>
 References: <cover.1576701539.git.yann.morin.1998@free.fr>
-Message-ID: <447ec97983b75938b041918f436ba1ab5657093b.1576701539.git.yann.morin.1998@free.fr>
+Message-ID: <eb8d3816d6cf3097e6584ff4cb7ac50db83a0b30.1576701539.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-More and more packages are now depending on ln --relative, some require
-realpath, both of which only got introduced in "recent" versions of
-coreutils; older distros had a separate realpath, though, but that is
-not in the list of our required dependencies, and was not installed by
-default.
-
-So, we introduce a minimal host variant of coreutils to provide those
-programs.
-
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/coreutils/coreutils.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ support/dependencies/check-host-coreutils.mk |  6 ++++++
+ support/dependencies/check-host-coreutils.sh | 12 ++++++++++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 support/dependencies/check-host-coreutils.mk
+ create mode 100755 support/dependencies/check-host-coreutils.sh
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index d312197e7e..a8137d1687 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -148,4 +148,18 @@ endef
- endif
- COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_FIX_CHROOT_LOCATION
- 
-+# Explicitly install ln and realpath, which we *are* insterested in.
-+# A lot of other programs still get installed, however, but disabling
-+# them does not gain much at build time, and is a loooong list that is
-+# difficult to maintain...
-+HOST_COREUTILS_CONF_OPTS = \
-+	--disable-acl \
-+	--disable-libcap \
-+	--disable-rpath \
-+	--disable-single-binary \
-+	--disable-xattr \
-+	--without-gmp \
-+	--enable-install-program=ln,realpath
+diff --git a/support/dependencies/check-host-coreutils.mk b/support/dependencies/check-host-coreutils.mk
+new file mode 100644
+index 0000000000..87a3f446ea
+--- /dev/null
++++ b/support/dependencies/check-host-coreutils.mk
+@@ -0,0 +1,6 @@
++# Check whether the host's coreutils are up to date enough
++# to provide 'ln --relative' and 'realpath'.
 +
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++ifeq (,$(call suitable-host-package,coreutils))
++BR2_COREUTILS_HOST_DEPENDENCY = host-coreutils
++endif
+diff --git a/support/dependencies/check-host-coreutils.sh b/support/dependencies/check-host-coreutils.sh
+new file mode 100755
+index 0000000000..4d36d74933
+--- /dev/null
++++ b/support/dependencies/check-host-coreutils.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
++
++# Exit on the first error
++set -e
++
++# Does ln supports the --relative/-r option?
++ln --relative --help >/dev/null 2>&1
++
++# Does realpath exist?
++realpath --help >/dev/null 2>&1
++
++echo OK
 -- 
 2.20.1
