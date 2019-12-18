@@ -1,68 +1,103 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 18 Dec 2019 17:03:20 -0300
-Subject: [Buildroot] [PATCH] configs/imx6-sabresd: Bump kernel version
-Message-ID: <20191218200320.12073-1-festevam@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 18 Dec 2019 21:18:42 +0100
+Subject: [Buildroot] [PATCH 1/3] package/perl-crypt-openssl-aes: new package
+Message-ID: <20191218201845.846-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump the kernel version to 5.4.2.
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Standard generated with utils/scancpan, manually updating _LICENSE and
+adding openssl dependency.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- configs/imx6-sabresd_defconfig     | 6 +++---
- configs/imx6-sabresd_qt5_defconfig | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ DEVELOPERS                                        |  1 +
+ package/Config.in                                 |  1 +
+ package/perl-crypt-openssl-aes/Config.in          | 11 +++++++++++
+ .../perl-crypt-openssl-aes.hash                   |  6 ++++++
+ .../perl-crypt-openssl-aes.mk                     | 15 +++++++++++++++
+ 5 files changed, 34 insertions(+)
+ create mode 100644 package/perl-crypt-openssl-aes/Config.in
+ create mode 100644 package/perl-crypt-openssl-aes/perl-crypt-openssl-aes.hash
+ create mode 100644 package/perl-crypt-openssl-aes/perl-crypt-openssl-aes.mk
 
-diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
-index 0d070e47f8..98f11c7ef1 100644
---- a/configs/imx6-sabresd_defconfig
-+++ b/configs/imx6-sabresd_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Linux headers same as kernel, a 5.3 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.2"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index 8fbc2beb5b..795f770e4f 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Linux headers same as kernel, a 5.3 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- # Additional features needed for packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.2"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d9b4864b9f..19c66948f8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2329,6 +2329,7 @@ F:	package/opkg-utils/
+ F:	package/perl-convert-asn1/
+ F:	package/perl-crypt-blowfish/
+ F:	package/perl-crypt-cbc/
++F:	package/perl-crypt-openssl-aes/
+ F:	package/perl-digest-md5/
+ F:	package/perl-mime-base64-urlsafe/
+ F:	package/perl-mojolicious-plugin-authentication/
+diff --git a/package/Config.in b/package/Config.in
+index f304a8fbd3..fc5228447a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -705,6 +705,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-cookie-baker/Config.in"
+ 	source "package/perl-crypt-blowfish/Config.in"
+ 	source "package/perl-crypt-cbc/Config.in"
++	source "package/perl-crypt-openssl-aes/Config.in"
+ 	source "package/perl-crypt-openssl-random/Config.in"
+ 	source "package/perl-crypt-openssl-rsa/Config.in"
+ 	source "package/perl-data-dump/Config.in"
+diff --git a/package/perl-crypt-openssl-aes/Config.in b/package/perl-crypt-openssl-aes/Config.in
+new file mode 100644
+index 0000000000..ab408d0a2c
+--- /dev/null
++++ b/package/perl-crypt-openssl-aes/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PERL_CRYPT_OPENSSL_AES
++	bool "perl-crypt-openssl-aes"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_OPENSSL
++	help
++	  A Perl wrapper around OpenSSL's AES library.
++
++	  https://metacpan.org/release/Crypt-OpenSSL-AES
++
++comment "perl-crypt-openssl-aes needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-crypt-openssl-aes/perl-crypt-openssl-aes.hash b/package/perl-crypt-openssl-aes/perl-crypt-openssl-aes.hash
+new file mode 100644
+index 0000000000..07064dfbbe
+--- /dev/null
++++ b/package/perl-crypt-openssl-aes/perl-crypt-openssl-aes.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    269db65cbf580c3174471a2cbc9a9d95 Crypt-OpenSSL-AES-0.02.tar.gz
++sha256 b66fab514edf97fc32f58da257582704a210c2b35e297d5c31b7fa2ffd08e908 Crypt-OpenSSL-AES-0.02.tar.gz
++
++# computed by scancpan
++sha256 a60b8c187cc5d90f7a43adc6be3c127abaa4c739e1e7fdcff16be358533d037f README
+diff --git a/package/perl-crypt-openssl-aes/perl-crypt-openssl-aes.mk b/package/perl-crypt-openssl-aes/perl-crypt-openssl-aes.mk
+new file mode 100644
+index 0000000000..c05f3a9c3d
+--- /dev/null
++++ b/package/perl-crypt-openssl-aes/perl-crypt-openssl-aes.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# perl-crypt-openssl-aes
++#
++################################################################################
++
++PERL_CRYPT_OPENSSL_AES_VERSION = 0.02
++PERL_CRYPT_OPENSSL_AES_SOURCE = Crypt-OpenSSL-AES-$(PERL_CRYPT_OPENSSL_AES_VERSION).tar.gz
++PERL_CRYPT_OPENSSL_AES_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TT/TTAR
++PERL_CRYPT_OPENSSL_AES_LICENSE = Artistic or GPL-1.0+
++PERL_CRYPT_OPENSSL_AES_LICENSE_FILES = README
++PERL_CRYPT_OPENSSL_AES_DISTNAME = Crypt-OpenSSL-AES
++PERL_CRYPT_OPENSSL_AES_DEPENDENCIES = openssl
++
++$(eval $(perl-package))
 -- 
-2.17.1
+2.23.0
