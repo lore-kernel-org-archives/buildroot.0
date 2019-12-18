@@ -1,47 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Dec 2019 10:13:40 +0100
-Subject: [Buildroot] [git commit] package/wireguard: bump version to
- 0.0.20191212
-Message-ID: <20191218090635.D24E58B916@busybox.osuosl.org>
+Date: Wed, 18 Dec 2019 10:13:47 +0100
+Subject: [Buildroot] [git commit] package/lrzip: needs C++
+Message-ID: <20191218090636.3CDD28B916@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37cab1a4209a8308702c2d8c15d19db511b6bb9c
+commit: https://git.buildroot.net/buildroot/commit/?id=f29c8de40f34dc67697158351a84d2ec9f93990c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details of the changes, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2019-December/004764.html
+Fixes:
+http://autobuild.buildroot.net/results/e40/e40653aa895bb47d20ad237c8a5ae3f6b76f3f67/
+
+libzpaq is written in C++ (and unconditionally built), so depend on C++
+support.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lrzip/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 9ad434f54d..66ebf41dc6 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2019-October/004594.html
--sha256 93573193c9c1c22fde31eb1729ad428ca39da77a603a3d81561a9816ccecfa8e  WireGuard-0.0.20191012.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2019-December/004764.html
-+sha256 b0d718380f7a8822b2f12d75e462fa4eafa3a77871002981f367cd4fe2a1b071  WireGuard-0.0.20191212.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index a494160423..3c604b3014 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lrzip/Config.in b/package/lrzip/Config.in
+index 92540a5036..885b84dbb0 100644
+--- a/package/lrzip/Config.in
++++ b/package/lrzip/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LRZIP
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_BZIP2
+@@ -17,6 +18,7 @@ config BR2_PACKAGE_LRZIP
  
--WIREGUARD_VERSION = 0.0.20191012
-+WIREGUARD_VERSION = 0.0.20191212
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+ 	  https://github.com/ckolivas/lrzip
+ 
+-comment "lrzip needs a toolchain w/ wchar, threads"
++comment "lrzip needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP
