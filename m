@@ -1,47 +1,237 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 18 Dec 2019 19:42:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-yieldfrom: bump to version
- 1.0.5
-Message-ID: <20191218174259.12812-1-asafka7@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 18 Dec 2019 18:48:47 +0100
+Subject: [Buildroot] [PATCH v5 00/13] use host-systemd to enable units
+In-Reply-To: <20191216103052.35220-1-jeremy.rosen@smile.fr>
+References: <20191216103052.35220-1-jeremy.rosen@smile.fr>
+Message-ID: <20191218174847.GD4247@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-yieldfrom/python-yieldfrom.hash | 4 ++--
- package/python-yieldfrom/python-yieldfrom.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+J?r?my, All,
 
-diff --git a/package/python-yieldfrom/python-yieldfrom.hash b/package/python-yieldfrom/python-yieldfrom.hash
-index ec7f58e007..7730a1e578 100644
---- a/package/python-yieldfrom/python-yieldfrom.hash
-+++ b/package/python-yieldfrom/python-yieldfrom.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/yieldfrom/json
--md5	98182ff0e861458e9e3dfaa0d47a47af  yieldfrom-1.0.4.tar.gz
--sha256	09c4e32402ec1c098e66ef5e25e036134f0e84f72ff5817641728707a168f5b3  yieldfrom-1.0.4.tar.gz
-+md5	fd94120625ac1e69bb5946d5e63182da  yieldfrom-1.0.5.tar.gz
-+sha256	eb75e58641410f06083f85013a438f28bceaabfe5af9c3206d5049362c37aca0  yieldfrom-1.0.5.tar.gz
- # Locally computed sha256 checksums
- sha256	b3092d61cce29e25f3799285495095d220e5e015b88c1c70e1e72dae052f21e8  LICENSE
-diff --git a/package/python-yieldfrom/python-yieldfrom.mk b/package/python-yieldfrom/python-yieldfrom.mk
-index 2576a8ced3..c926936ae8 100644
---- a/package/python-yieldfrom/python-yieldfrom.mk
-+++ b/package/python-yieldfrom/python-yieldfrom.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_YIELDFROM_VERSION = 1.0.4
-+PYTHON_YIELDFROM_VERSION = 1.0.5
- PYTHON_YIELDFROM_SOURCE = yieldfrom-$(PYTHON_YIELDFROM_VERSION).tar.gz
--PYTHON_YIELDFROM_SITE = https://files.pythonhosted.org/packages/6e/d2/dc48e4cc6bbe48afd022da745f981cf0437ab7e658de9078bf56747b1d73
-+PYTHON_YIELDFROM_SITE = https://files.pythonhosted.org/packages/4d/f9/395917f574ace618eb234bcbae8df3fabaa9624532d96d1fbd3a20678b1e
- PYTHON_YIELDFROM_SETUP_TYPE = setuptools
- PYTHON_YIELDFROM_LICENSE = MIT
- PYTHON_YIELDFROM_LICENSE_FILES = LICENSE
+On 2019-12-16 11:30 +0100, J?r?my Rosen spake thusly:
+> As discussed during the buildroot dev days, upstream systemd now relies
+> on systemctl to enable units at install time.
+> 
+> The patch bumping systemd to v243 in buildroot did add the logic to
+> handle that through Makefiles.
+> 
+> This patch adds support for compiling host-systemd and using it to
+> enable all units.
+
+Thanks for working this difficult series. I have it all applied to
+master now. :-)
+
+However, I did quite a few changes:
+
+35c11a027c package/systemd: add host variant
+      - reformatting in commit log
+      - declare host variant after target variant
+      - simplify comments
+      - slight reordering of variable (HOST_SYSTEMD_NINJA_ENV moved)
+      - reformatting for mutli-line variable (HOST_SYSTEMD_HOST_TOOLS)
+      - don't split HOST_SYSTEMD_CONF_OPTS in two sets
+
+873e6573d3 package/sysrepo: fix install path for systemd units
+      - split into its own commit
+      - expand commit log
+
+231ad359bc package/systemd: use host-systemctl preset all to enable units
+      - also remove the hwdb sources on fs generation
+      - fix check-package errors
+      - few typoes and reformatting in commit log
+
+6c3944a057 package/systemd: fix tty handling
+      - fold long lines
+      - drop spurious empty lines removals
+
+3e092163e5 package: rely on systemctl preset-all for buildroot-provided services
+      [untouched]
+
+1640fca208 package: rely on systemctl preset-all for upstream-provided services
+      - fix check-package errors
+
+f7869ef30f package/connman: adapt to systemctl preset-all
+      - fix check-package errors
+
+c561bcbf5f package/linuxptp adapt to systemctl preset-all
+eb075916f4 package/network-manager: adapt to systemctl preset-all
+      [untouched]
+
+54ea03ccd7 package/syslog-ng: implement systemd enablement using DefaultInstance
+      - split long line
+      - no need for continued line (no use for ';\' )
+
+c27708e148 package/wpa_supplicant: adapt to systemctl preset-all
+      [untouched]
+
+583cb5b6e6 package/rauc: add a WantedBy section to the systemd unit file
+      - split long line
+      - no need for continued line (no use for ';\' )
+
+4974f7941f package/alsa-utils: add a WantedBy section to the systemd unit file
+      - split logn lines
+      - no need for continued line (no use for ';\' )
+
+Please review the whole new set, and watch the autobuilders now! ;-)
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> * 0001-new-recipe-host-systemd.patch
+> I might have missed some build-dependencies. Please review carefully
+> 
+> * 0002-use-host-systemctl-preset-all-to-enable-units.patch
+> Use the previous patch to simplify the systemd recipe
+> 
+> * 0003-fix-tty-handling.patch
+> TTY handling is tricky. Separate it in its own patch
+> 
+> Everything else deals with updating the packages
+> 
+> 
+> version 5:
+> * rework all commit messages
+> * minor typos in systemd.mk
+> * removal of host_eudev is now in patch #2
+> * add a big explanation of the RPATH trick in patch #1
+> 
+> J?r?my Rosen (13):
+>   package/systemd: add host variant
+>   package/systemd: use host-systemctl preset all to enable units
+>   package/systemd: fix tty handling
+>   package: rely on systemctl preset-all for buildroot-provided services
+>   package: rely on systemctl preset-all for upstream-provided services
+>   package/connman: adapt to systemctl preset-all
+>   package/linuxptp adapt to systemctl preset-all
+>   package/network-manager: adapt to systemctl preset-all
+>   package/wpa_supplicant: adapt to systemctl preset-all
+>   package/sysrepo: adapt to systemctl preset-all
+>   package/syslog-ng: implement systemd enablement using DefaultInstance
+>   package/rauc: add a WantedBy section to the systemd unit file
+>   package/alsa-utils: add a WantedBy section to the systemd unit file
+> 
+>  docs/manual/adding-packages-generic.txt       |   4 +
+>  package/Config.in.host                        |   1 +
+>  package/acpid/acpid.mk                        |   3 -
+>  package/alsa-utils/alsa-utils.mk              |   9 +-
+>  package/apache/apache.mk                      |   3 -
+>  package/audit/audit.mk                        |   4 -
+>  package/avahi/avahi.mk                        |   8 -
+>  package/babeld/babeld.mk                      |   5 -
+>  package/bandwidthd/bandwidthd.mk              |   5 -
+>  package/bind/bind.mk                          |   5 -
+>  package/bluez5_utils/bluez5_utils.mk          |   8 -
+>  package/boinc/boinc.mk                        |   5 -
+>  package/brltty/brltty.mk                      |   4 -
+>  package/chrony/chrony.mk                      |   3 -
+>  package/collectd/collectd.mk                  |   3 -
+>  package/connman/connman.mk                    |   6 -
+>  package/darkhttpd/darkhttpd.mk                |   3 -
+>  package/dcron/dcron.mk                        |   3 -
+>  package/dhcp/dhcp.mk                          |   5 -
+>  package/dhcpcd/dhcpcd.mk                      |   3 -
+>  package/docker-engine/docker-engine.mk        |   3 -
+>  package/domoticz/domoticz.mk                  |   3 -
+>  package/dropbear/dropbear.mk                  |   3 -
+>  package/exim/exim.mk                          |   3 -
+>  package/fail2ban/fail2ban.mk                  |   3 -
+>  package/freescale-imx/imx-uuc/imx-uuc.mk      |   3 -
+>  package/gerbera/gerbera.mk                    |   6 -
+>  package/haveged/haveged.mk                    |   3 -
+>  package/i2pd/i2pd.mk                          |   3 -
+>  package/ifupdown-scripts/ifupdown-scripts.mk  |   3 -
+>  package/igd2-for-linux/igd2-for-linux.mk      |   3 -
+>  package/inadyn/inadyn.mk                      |   3 -
+>  .../input-event-daemon/input-event-daemon.mk  |   3 -
+>  package/iputils/iputils.mk                    |  16 --
+>  package/irqbalance/irqbalance.mk              |   3 -
+>  package/iucode-tool/iucode-tool.mk            |   3 -
+>  package/kodi/kodi.mk                          |   5 -
+>  package/lighttpd/lighttpd.mk                  |   6 -
+>  .../linuxptp/linuxptp-system-clock.service    |   1 -
+>  package/linuxptp/linuxptp.mk                  |   3 -
+>  package/lldpd/lldpd.mk                        |   6 -
+>  package/mariadb/mariadb.mk                    |   3 -
+>  package/mender/mender.mk                      |   3 -
+>  package/mini-snmpd/mini-snmpd.mk              |   3 -
+>  package/minidlna/minidlna.mk                  |   5 -
+>  package/minissdpd/minissdpd.mk                |   3 -
+>  package/mosquitto/mosquitto.mk                |   3 -
+>  package/motion/motion.mk                      |   3 -
+>  package/netplug/netplug.mk                    |   3 -
+>  package/network-manager/network-manager.mk    |   7 -
+>  package/nfs-utils/nfs-utils.mk                |  16 --
+>  package/nginx/nginx.mk                        |   5 -
+>  package/nss-pam-ldapd/nss-pam-ldapd.mk        |   3 -
+>  package/ntp/ntp.mk                            |   3 -
+>  package/ofono/ofono.mk                        |   6 -
+>  package/olsr/olsr.mk                          |   3 -
+>  package/openntpd/openntpd.mk                  |   3 -
+>  package/openssh/openssh.mk                    |   3 -
+>  package/openvmtools/openvmtools.mk            |   3 -
+>  package/oracle-mysql/oracle-mysql.mk          |   3 -
+>  package/pcsc-lite/pcsc-lite.mk                |   6 -
+>  package/php/php.mk                            |   3 -
+>  package/postgresql/postgresql.mk              |   3 -
+>  package/proftpd/proftpd.mk                    |   3 -
+>  package/psplash/psplash.mk                    |   6 -
+>  package/ptpd/ptpd.mk                          |   3 -
+>  package/ptpd2/ptpd2.mk                        |   3 -
+>  package/pulseaudio/pulseaudio.mk              |   3 -
+>  package/python-web2py/python-web2py.mk        |   3 -
+>  package/rabbitmq-server/rabbitmq-server.mk    |   5 -
+>  package/rauc/rauc.mk                          |   5 +-
+>  package/redis/redis.mk                        |   3 -
+>  package/rng-tools/rng-tools.mk                |   3 -
+>  package/rpcbind/rpcbind.mk                    |   3 -
+>  package/rsyslog/rsyslog.mk                    |  14 --
+>  package/rygel/rygel.mk                        |   3 -
+>  package/samba4/samba4.mk                      |   7 -
+>  package/sane-backends/sane-backends.mk        |   6 -
+>  package/squid/squid.mk                        |   3 -
+>  package/sshguard/sshguard.mk                  |   3 -
+>  package/supervisor/supervisor.mk              |   3 -
+>  package/suricata/suricata.mk                  |   3 -
+>  package/sysklogd/sysklogd.mk                  |   5 -
+>  package/syslog-ng/syslog-ng.mk                |   7 +-
+>  package/sysrepo/sysrepo.mk                    |  10 +-
+>  .../systemd-bootchart/systemd-bootchart.mk    |   6 -
+>  package/systemd/80-buildroot.preset           |   4 +
+>  package/systemd/Config.in                     |   2 +-
+>  package/systemd/Config.in.host                |   3 +
+>  package/systemd/systemd.mk                    | 225 ++++++++++--------
+>  package/tcf-agent/tcf-agent.mk                |   3 -
+>  package/thttpd/thttpd.mk                      |   3 -
+>  package/ti-gfx/ti-gfx.mk                      |   3 -
+>  package/tinyhttpd/tinyhttpd.mk                |   3 -
+>  package/transmission/transmission.mk          |   3 -
+>  package/triggerhappy/triggerhappy.mk          |   3 -
+>  package/upmpdcli/upmpdcli.mk                  |   3 -
+>  .../wpa_supplicant/50-wpa_supplicant.preset   |   4 +
+>  package/wpa_supplicant/wpa_supplicant.mk      |   2 +
+>  99 files changed, 155 insertions(+), 484 deletions(-)
+>  create mode 100644 package/systemd/80-buildroot.preset
+>  create mode 100644 package/systemd/Config.in.host
+>  create mode 100644 package/wpa_supplicant/50-wpa_supplicant.preset
+> 
+> -- 
+> 2.24.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
