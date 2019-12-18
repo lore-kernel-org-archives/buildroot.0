@@ -1,37 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 18 Dec 2019 22:06:01 +0100
-Subject: [Buildroot] [git commit] package/tftpd: add an upstream URL to
- Config.in
-Message-ID: <20191218205810.AC0F98C5F4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 18 Dec 2019 22:20:10 +0100
+Subject: [Buildroot] [git commit] package/lua-msgpack-native: fix build with
+ moonjit
+Message-ID: <20191218211132.2A4628C5FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23ac8317a65ca74d931887415a793e36bbd243f4
+commit: https://git.buildroot.net/buildroot/commit/?id=01fea71cc1a08d854341bfb6117efe8ca0dbb19c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+compatibility with Lua 5.0 was removed in LuaJIT/moonjit 2.1.x
+(Lua 5.1.x and LuaJIT 2.0.x have this compatibility)
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-[yann.morin.1998 at free.fr:
-  - use the git tree instead of the 8-year old freshmeat webpage
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Fixes:
+
+  http://autobuild.buildroot.org/results/4e428df01def186cb034a1774f6c00e2e7c9468c/
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Thomas: add comment on .mk file]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tftpd/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/lua-msgpack-native/lua-msgpack-native.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/tftpd/Config.in b/package/tftpd/Config.in
-index ea5cb303f9..d4e81e70bc 100644
---- a/package/tftpd/Config.in
-+++ b/package/tftpd/Config.in
-@@ -6,3 +6,5 @@ config BR2_PACKAGE_TFTPD
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	help
- 	  HPA's Trivial File Transfer Protocol (tftp) server.
-+
-+	  https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
+diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
+index acd3a0e1c9..4a7e672cfa 100644
+--- a/package/lua-msgpack-native/lua-msgpack-native.mk
++++ b/package/lua-msgpack-native/lua-msgpack-native.mk
+@@ -10,8 +10,12 @@ LUA_MSGPACK_NATIVE_DEPENDENCIES = luainterpreter
+ LUA_MSGPACK_NATIVE_LICENSE = Apache-2.0
+ LUA_MSGPACK_NATIVE_LICENSE_FILES = LICENSE.txt
+ 
++# lua-msgpack-native uses the old Lua 5.0 API with luaL_reg, but it is
++# no longer provided by LuaJit 2.1, so we have to alias luaL_reg to
++# luaL_Reg.
+ define LUA_MSGPACK_NATIVE_BUILD_CMDS
+-	$(TARGET_CC) $(TARGET_CFLAGS) -fPIC -shared -o $(@D)/msgpack.so $(@D)/mp.c
++	$(TARGET_CC) $(TARGET_CFLAGS) -DluaL_reg=luaL_Reg -fPIC \
++		-shared -o $(@D)/msgpack.so $(@D)/mp.c
+ endef
+ 
+ define LUA_MSGPACK_NATIVE_INSTALL_TARGET_CMDS
