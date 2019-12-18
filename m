@@ -1,74 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 18 Dec 2019 21:39:07 +0100
-Subject: [Buildroot] [PATCH 5/5] package/libsepol: add dependency on
- host-coreutils for ln --relative
-In-Reply-To: <cover.1576701539.git.yann.morin.1998@free.fr>
-References: <cover.1576701539.git.yann.morin.1998@free.fr>
-Message-ID: <b22ede353f1065e52c6098cc1750386a5ac12fda.1576701539.git.yann.morin.1998@free.fr>
+Date: Wed, 18 Dec 2019 21:47:11 +0100
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: fix
+ license hashes
+Message-ID: <20191218203948.601BD8C584@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- .../libsepol/0002-revert-ln-relative.patch    | 29 -------------------
- package/libsepol/libsepol.mk                  |  2 +-
- 2 files changed, 1 insertion(+), 30 deletions(-)
- delete mode 100644 package/libsepol/0002-revert-ln-relative.patch
+commit: https://git.buildroot.net/buildroot/commit/?id=1bea3e32418c7264ec2b70588976a234e9aa9cdc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libsepol/0002-revert-ln-relative.patch b/package/libsepol/0002-revert-ln-relative.patch
-deleted file mode 100644
-index 40dabc38de..0000000000
---- a/package/libsepol/0002-revert-ln-relative.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 16b2b0e21e10727065042a1baabd1a887757c65c Mon Sep 17 00:00:00 2001
--From: Adam Duskett <aduskett@gmail.com>
--Date: Mon, 9 Oct 2017 16:29:36 -0400
--Subject: [PATCH] Makefile: revert libsepol: use ln --relative to create .so symlinks
--
--This reverts 71393a181d63c9baae5fe8dcaeb9411d1f253998
--
--ln --relative is too recent to be available in all distributions,
--especially enterprise-grade distros that can stick around as long as
--they are maintained (up to 10 years in some cases?).
--
--For the sake of Buildroot, revert the upstream patch.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Update for 2.8 (with assumption that SHLIBDIR=LIBDIR)]
--
--diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
----- libsepol-2.7.orig/src/Makefile	2018-01-15 21:37:12.821831315 +0100
--+++ libsepol-2.7/src/Makefile	2018-01-15 21:38:03.838497434 +0100
--@@ -92,7 +92,7 @@
-- endif
--	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
--	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
---	$(LN) -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
--+	cd $(DESTDIR)$(LIBDIR) && ln -sf $(LIBSO) $(TARGET)
-- 
-- relabel:
-- 	/sbin/restorecon $(LIBINSTALL)/$(LIBSO)
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index 58b9b9c374..62b0744aa3 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -11,7 +11,7 @@ LIBSEPOL_LICENSE_FILES = COPYING
- 
- LIBSEPOL_INSTALL_STAGING = YES
- LIBSEPOL_DEPENDENCIES = host-flex
--HOST_LIBSEPOL_DEPENDENCIES = host-flex
-+HOST_LIBSEPOL_DEPENDENCIES = $(BR2_COREUTILS_HOST_DEPENDENCY) host-flex
- 
- LIBSEPOL_MAKE_FLAGS = $(TARGET_CONFIGURE_OPTS)
- 
--- 
-2.20.1
+License files were updated since the previous version.
+This patch update to the new license hashes. It also fixes the
+"make legal-info" command failure due to the hash mismatch.
+
+Fixes:
+  - http://autobuild.buildroot.org/results/d9d/d9d82dd6727b82a643cbb75ca33b88a4636bd5fe
+
+Signed-off-by: Julien Olivain <juju@cotds.org>
+[yann.morin.1998 at free.fr: add autobuilder reference]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index 6d99ec0077..85f203311f 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+ sha256 c115d5d0d115fc14754671bd2428f672f9f99677988588accef2fbca2c3f749c  firmware-imx-8.1.1.bin
+-sha256 fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
+-sha256 78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
++sha256 69d19847bac9af7f9e832170a15138f5ef144d8064413434114d75a68982cc9c  EULA
++sha256 6467f2e81d06b19fe541de49bdba32a9a205e8d1c230220fe24247b48672cb46  COPYING
