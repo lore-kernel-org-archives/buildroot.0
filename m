@@ -1,46 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Wed, 18 Dec 2019 18:33:22 +0100
-Subject: [Buildroot] [git commit] package/connman: adapt to systemctl
- preset-all
-Message-ID: <20191218172934.657918806D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rauc: add a WantedBy section to
+ the systemd unit file
+Message-ID: <20191218172934.A0178812A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7869ef30f0194ee5ce5db5ba49239bc2e1b9725
+commit: https://git.buildroot.net/buildroot/commit/?id=583cb5b6e6864a4daddee48d6ddbf0a04a265cfd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-connman has two services
-* connman.service which is the real daemon
-* connman-wait-online.service which is a sync point for network-online.target
+upstream-provided service has no WantedBy, which means that rauc won't
+be enabled by default
 
-Only the first one was enabled. This adaptation enables both.
-
-Not enabling connman-wait-online.service is probably a bug
+Add a WantedBy instead of manually creating the symlink so the user can
+enable/disable the unit properly
 
 Signed-off-by: J??r??my Rosen <jeremy.rosen@smile.fr>
-[yann.morin.1998 at free.fr: fix check-package errors]
+[yann.morin.1998 at free.fr:
+  - split long line
+  - no need for continued line (no use for ';\' )
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/connman/connman.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/rauc/rauc.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 7ca49726dd..2cbf3fe752 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -32,12 +32,6 @@ define CONNMAN_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index f3434e9c9a..5a208e07ae 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -31,9 +31,9 @@ RAUC_DEPENDENCIES += systemd
+ endif
+ 
+ define RAUC_INSTALL_INIT_SYSTEMD
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -sf ../../../../lib/systemd/system/rauc.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rauc.service
++	mkdir $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d
++	printf '[Install]\nWantedBy=multi-user.target\n' \
++		>$(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d/buildroot-enable.conf
  endef
  
--define CONNMAN_INSTALL_INIT_SYSTEMD
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -fs ../../../../usr/lib/systemd/system/connman.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
--endef
--
- ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
- CONNMAN_LICENSE += , GPL-2.0+ (client)
- CONNMAN_CONF_OPTS += --enable-client
+ HOST_RAUC_DEPENDENCIES = \
