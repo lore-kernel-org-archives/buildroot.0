@@ -1,49 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 18 Dec 2019 18:33:22 +0100
-Subject: [Buildroot] [git commit] package/syslog-ng: implement systemd
- enablement using DefaultInstance
-Message-ID: <20191218172934.937508806D@busybox.osuosl.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Wed, 18 Dec 2019 19:42:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-yieldfrom: bump to version
+ 1.0.5
+Message-ID: <20191218174259.12812-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54ea03ccd7d68bcf846a7cb8fa58b9fb3ac0b914
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Instead of using a manual symlink we use add a DefaultInstance= to the
-config file
-
-This is how upstream wants us to do it and allows systemctl preset to
-correctly restore it if needed
-
-Signed-off-by: J??r??my Rosen <jeremy.rosen@smile.fr>
-[yann.morin.1998 at free.fr:
-  - split long line
-  - no need for continued line (no use for ';\' )
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/syslog-ng/syslog-ng.mk | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ package/python-yieldfrom/python-yieldfrom.hash | 4 ++--
+ package/python-yieldfrom/python-yieldfrom.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index fc44777d16..68260172a2 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -105,11 +105,9 @@ endef
- # By default syslog-ng installs a .service that requires a config file at
- # /etc/default, so provide one with the default values.
- define SYSLOG_NG_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -m 0644 -D package/syslog-ng/syslog-ng at default \
--		$(TARGET_DIR)/etc/default/syslog-ng at default
--	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../../../../usr/lib/systemd/system/syslog-ng at .service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/syslog-ng at default.service
-+	mkdir $(TARGET_DIR)/usr/lib/systemd/system/syslog-ng at .service.d
-+	printf '[Install]\nDefaultInstance=default\n' \
-+		>$(TARGET_DIR)/usr/lib/systemd/system/syslog-ng at .service.d/buildroot-default-instance.conf
- endef
+diff --git a/package/python-yieldfrom/python-yieldfrom.hash b/package/python-yieldfrom/python-yieldfrom.hash
+index ec7f58e007..7730a1e578 100644
+--- a/package/python-yieldfrom/python-yieldfrom.hash
++++ b/package/python-yieldfrom/python-yieldfrom.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/yieldfrom/json
+-md5	98182ff0e861458e9e3dfaa0d47a47af  yieldfrom-1.0.4.tar.gz
+-sha256	09c4e32402ec1c098e66ef5e25e036134f0e84f72ff5817641728707a168f5b3  yieldfrom-1.0.4.tar.gz
++md5	fd94120625ac1e69bb5946d5e63182da  yieldfrom-1.0.5.tar.gz
++sha256	eb75e58641410f06083f85013a438f28bceaabfe5af9c3206d5049362c37aca0  yieldfrom-1.0.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b3092d61cce29e25f3799285495095d220e5e015b88c1c70e1e72dae052f21e8  LICENSE
+diff --git a/package/python-yieldfrom/python-yieldfrom.mk b/package/python-yieldfrom/python-yieldfrom.mk
+index 2576a8ced3..c926936ae8 100644
+--- a/package/python-yieldfrom/python-yieldfrom.mk
++++ b/package/python-yieldfrom/python-yieldfrom.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # By default syslog-ng installs a number of sample configuration
+-PYTHON_YIELDFROM_VERSION = 1.0.4
++PYTHON_YIELDFROM_VERSION = 1.0.5
+ PYTHON_YIELDFROM_SOURCE = yieldfrom-$(PYTHON_YIELDFROM_VERSION).tar.gz
+-PYTHON_YIELDFROM_SITE = https://files.pythonhosted.org/packages/6e/d2/dc48e4cc6bbe48afd022da745f981cf0437ab7e658de9078bf56747b1d73
++PYTHON_YIELDFROM_SITE = https://files.pythonhosted.org/packages/4d/f9/395917f574ace618eb234bcbae8df3fabaa9624532d96d1fbd3a20678b1e
+ PYTHON_YIELDFROM_SETUP_TYPE = setuptools
+ PYTHON_YIELDFROM_LICENSE = MIT
+ PYTHON_YIELDFROM_LICENSE_FILES = LICENSE
+-- 
+2.20.1
