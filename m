@@ -1,56 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Dec 2019 19:05:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tcllib: update the upstream URL
- in Config.in
-In-Reply-To: <20191218131441.7151-1-mark@dibsco.co.uk>
-References: <20191218131441.7151-1-mark@dibsco.co.uk>
-Message-ID: <20191219180509.GL26395@scaer>
+Date: Thu, 19 Dec 2019 19:16:14 +0100
+Subject: [Buildroot] [git commit] package/xenomai: clean up wrappers cleanup
+Message-ID: <20191219180847.8E3958D1EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=09340603c7d855e54006239d4c421d0d25214903
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-12-18 13:14 +0000, Mark Corbin spake thusly:
-> Update the upstream URL in the help text in Config.in. This
-> addresses the 'Invalid(Err)' URL status in the package stats
-> web page output.
-> 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+There is no posix.wrappers anymore, but cobalt and modechk. Those only
+play a role when building in combination with wrap-link.sh.
 
-Applied to master, thanks.
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/xenomai/xenomai.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/tcllib/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/tcllib/Config.in b/package/tcllib/Config.in
-> index b0a4ad060e..3a307b9aee 100644
-> --- a/package/tcllib/Config.in
-> +++ b/package/tcllib/Config.in
-> @@ -8,4 +8,4 @@ config BR2_PACKAGE_TCLLIB
->  	  is to collect commonly used function into a single library,
->  	  which users can rely on to be available and stable
->  
-> -	  http://tcl.activestate.com/software/tcllib/
-> +	  https://www.tcl.tk/software/tcllib/
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 40f9b4af78..2577172e32 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -62,6 +62,9 @@ define XENOMAI_REMOVE_UNNEEDED_FILES
+ 	for i in xeno xeno-config xeno-info wrap-link.sh ; do \
+ 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+ 	done
++	for i in cobalt modechk ; do \
++		rm -f $(TARGET_DIR)/usr/lib/$$i.wrappers ; \
++	done
+ 	for i in autotune corectl hdb rtnet nomaccfg rtcfg rtifconfig \
+ 		rtiwconfig rtping rtroute tdmacfg rtps slackspot version; do \
+ 		rm -f $(TARGET_DIR)/usr/sbin/$$i ; \
+@@ -121,9 +124,6 @@ XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
+ define XENOMAI_REMOVE_LIBS
+ 	for i in $(XENOMAI_REMOVE_LIBS_LIST) ; do \
+ 		rm -f $(TARGET_DIR)/usr/lib/lib$$i.* ; \
+-		if [ $$i == "posix" ] ; then \
+-			rm -f $(TARGET_DIR)/usr/lib/posix.wrappers ; \
+-		fi ; \
+ 	done
+ endef
+ 
