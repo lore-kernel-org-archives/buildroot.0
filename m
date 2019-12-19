@@ -1,40 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Dec 2019 22:21:49 +0100
-Subject: [Buildroot] [git commit] package/openrc: install sysv-rcs file
-Message-ID: <20191219211329.188958D2C1@busybox.osuosl.org>
+Date: Thu, 19 Dec 2019 22:24:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openrc: install sysv-rcs file
+In-Reply-To: <20191219205036.GO26395@scaer>
+References: <20191219190135.7013-1-aduskett@gmail.com>
+ <20191219214429.757aff57@windsurf> <20191219205036.GO26395@scaer>
+Message-ID: <20191219212449.GP26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3945226a7e29c9f811fbe145ea792b18f3a5daa2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Adam, All,
 
-package/openrc has the file sysv-rcs which starts sysvinit services
-not written for openrc. However, currently it is not installed to
-the target.
+On 2019-12-19 21:50 +0100, Yann E. MORIN spake thusly:
+> On 2019-12-19 21:44 +0100, Thomas Petazzoni spake thusly:
+> > On Thu, 19 Dec 2019 11:01:35 -0800
+> > aduskett at gmail.com wrote:
+> > 
+> > > From: Adam Duskett <aduskett@greenlots.com>
+> > > 
+> > > package/openrc has the file sysv-rcs which starts sysvinit services
+> > > not written for openrc. However, currently it is not installed to
+> > > the target.
+> > > 
+> > > Install this file to $(TARGET_DIR)/etc/init.d during the
+> > > target_install step.
+> > > 
+> > > Signed-off-by: Adam Duskett <aduskett@greenlots.com>
+> > Michal had what seems like a more elaborate solution:
+> >   http://patchwork.ozlabs.org/patch/1098590/
+> We already have 162044407b (package/skeleton-init-openrc: add support
+> for starting sysv scripts) which was edited by me, but I missed the fact
+> that the script was not installed.
+> 
+> Adam, care to investigate what is different between our script, and the
+> one from the package itself?
+> 
+> I am all in favour of dropping our script, if upstream has a functional
+> one.
 
-Install this file to $(TARGET_DIR)/etc/init.d during the
-target_install step.
+In fact, upstream does not have such a script. It is just that we forgot
+to install our own script.
 
-Signed-off-by: Adam Duskett <aduskett@greenlots.com>
-[yann.morin.1998 at free.fr: use full-path for destination, not just dir]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/openrc/openrc.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Applied to master, changed the destination to a full path, and not just
+the directory, and pushed. Thanks.
 
-diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index 387962d4d5..3f6453cef5 100644
---- a/package/openrc/openrc.mk
-+++ b/package/openrc/openrc.mk
-@@ -35,6 +35,8 @@ endef
- 
- define OPENRC_INSTALL_TARGET_CMDS
- 	$(MAKE) $(OPENRC_MAKE_OPTS) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+	$(INSTALL) -D -m 0755 $(OPENRC_PKGDIR)/sysv-rcs \
-+		$(TARGET_DIR)/etc/init.d/sysv-rcs
- endef
- 
- ifeq ($(BR2_PACKAGE_NETIFRC),y)
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
