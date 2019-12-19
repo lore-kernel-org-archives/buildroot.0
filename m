@@ -1,85 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Dec 2019 18:11:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tcping: bump to version 1.3.6
-In-Reply-To: <20191219152012.26391-1-mark@dibsco.co.uk>
-References: <20191219152012.26391-1-mark@dibsco.co.uk>
-Message-ID: <20191219171131.GG26395@scaer>
+Date: Thu, 19 Dec 2019 18:16:30 +0100
+Subject: [Buildroot] [git commit] package/glibc: hide "glibc utils" if glibc
+ is not selected
+Message-ID: <20191219170852.A61708CA61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=8d49b9522a943196604b89ca28ac782fd411b9de
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-12-19 15:20 +0000, Mark Corbin spake thusly:
-> Switched to latest version on GitHub as linuxco.de is no longer
-> active. The appropriate entry for tcping on release-monitoring.org
-> has been updated and a new mapping has been added for the Buildroot
-> project.
-> 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+BR2_PACKAGE_GLIBC_UTILS config must not exist if we use other libc than glibc
 
-Applied to master, thanks.
+Signed-off-by: Arthur Courtel <arthur.courtel@smile.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/glibc/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/tcping/Config.in   | 2 +-
->  package/tcping/tcping.hash | 5 +++--
->  package/tcping/tcping.mk   | 6 +++---
->  3 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/tcping/Config.in b/package/tcping/Config.in
-> index e72df096c3..c963e681de 100644
-> --- a/package/tcping/Config.in
-> +++ b/package/tcping/Config.in
-> @@ -11,4 +11,4 @@ config BR2_PACKAGE_TCPING
->  	  desired port is reachable and then start connection
->  	  establishment.
->  
-> -	  http://linuxco.de/tcping/tcping.html
-> +	  https://github.com/mkirchner/tcping
-> diff --git a/package/tcping/tcping.hash b/package/tcping/tcping.hash
-> index de42775cc1..49f6e5ba0b 100644
-> --- a/package/tcping/tcping.hash
-> +++ b/package/tcping/tcping.hash
-> @@ -1,2 +1,3 @@
-> -# Locally calculated after checking pgp signature
-> -sha256	1ad52e904094d12b225ac4a0bc75297555e931c11a1501445faa548ff5ecdbd0	tcping-1.3.5.tar.gz
-> +# Locally calculated
-> +sha256	a731f0e48ff931d7b2a0e896e4db40867043740fe901dd225780f2164fdbdcf3	tcping-1.3.6.tar.gz
-> +sha256	4a35620e27ddb8de27898e4206c8f93633d877c1e128e98e95a035f760d94428	LICENSE
-> diff --git a/package/tcping/tcping.mk b/package/tcping/tcping.mk
-> index 7edf45ebba..5eaf702ef0 100644
-> --- a/package/tcping/tcping.mk
-> +++ b/package/tcping/tcping.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -TCPING_VERSION = 1.3.5
-> -TCPING_SITE = http://linuxco.de/tcping
-> -TCPING_LICENSE = GPL-3.0+
-> +TCPING_VERSION = 1.3.6
-> +TCPING_SITE = $(call github,mkirchner,tcping,$(TCPING_VERSION))
-> +TCPING_LICENSE = MIT
->  TCPING_LICENSE_FILES = LICENSE
->  
->  define TCPING_BUILD_CMDS
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 7b2f246947..cc178468b5 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -7,10 +7,11 @@ config BR2_PACKAGE_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP if BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
+ 	help
+ 	  https://www.gnu.org/software/libc/
+-endif
+ 
+ config BR2_PACKAGE_GLIBC_UTILS
+ 	bool "Install glibc utilities"
+ 	help
+ 	  Enabling this option will compile and install the getconf,
+ 	  ldconfig, ldd and locale glibc utilities for the target.
++
++endif # BR2_TOOLCHAIN_BUILDROOT_GLIBC
