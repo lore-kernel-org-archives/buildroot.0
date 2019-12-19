@@ -1,39 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Dec 2019 21:44:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openrc: install sysv-rcs file
-In-Reply-To: <20191219190135.7013-1-aduskett@gmail.com>
-References: <20191219190135.7013-1-aduskett@gmail.com>
-Message-ID: <20191219214429.757aff57@windsurf>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Thu, 19 Dec 2019 20:49:26 +0000
+Subject: [Buildroot] [PATCH 1/1] package/wsapi: update the upstream URL in
+ Config.in
+Message-ID: <20191219204926.24980-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 19 Dec 2019 11:01:35 -0800
-aduskett at gmail.com wrote:
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(406)' URL status in the package stats
+web page output.
 
-> From: Adam Duskett <aduskett@greenlots.com>
-> 
-> package/openrc has the file sysv-rcs which starts sysvinit services
-> not written for openrc. However, currently it is not installed to
-> the target.
-> 
-> Install this file to $(TARGET_DIR)/etc/init.d during the
-> target_install step.
-> 
-> Signed-off-by: Adam Duskett <aduskett@greenlots.com>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+---
+ package/wsapi/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Michal had what seems like a more elaborate solution:
-
-  http://patchwork.ozlabs.org/patch/1098590/
-
-Michal, could you comment ?
-
-Thanks!
-
-Thomas
+diff --git a/package/wsapi/Config.in b/package/wsapi/Config.in
+index 72e2dcd8e0..e758e8e0a6 100644
+--- a/package/wsapi/Config.in
++++ b/package/wsapi/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_WSAPI
+ 	help
+ 	  API that abstracts the web server from Lua web applications.
+ 
+-	  http://www.keplerproject.org/wsapi
++	  https://keplerproject.github.io/wsapi/
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
