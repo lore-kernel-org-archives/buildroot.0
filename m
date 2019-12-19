@@ -1,87 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Dec 2019 17:50:14 +0100
-Subject: [Buildroot] [PATCH v5 00/13] use host-systemd to enable units
-In-Reply-To: <CAFvCimVGu5Bv3GFUmaQtkBjUHbWFoSbagCLsp3_Mb+yztJLH5g@mail.gmail.com>
-References: <20191216103052.35220-1-jeremy.rosen@smile.fr>
- <20191218174847.GD4247@scaer>
- <CAFvCimVGu5Bv3GFUmaQtkBjUHbWFoSbagCLsp3_Mb+yztJLH5g@mail.gmail.com>
-Message-ID: <20191219165014.GE26395@scaer>
+Date: Thu, 19 Dec 2019 18:04:49 +0100
+Subject: [Buildroot] [git commit] package/systemd: bump to 244.1
+Message-ID: <20191219165559.DC9408CA4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?my, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=9bdeb0b3444fbe521da9d4283714e281584f4fb8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-12-19 14:50 +0100, J?r?my ROSEN spake thusly:
-> Ok, my bad for having you work on it that much, I have still lot to learn about all?
-> those conventions?
+Signed-off-by: J??r??my Rosen <jeremy.rosen@smile.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Well, what I did was mostly cosmetics, so that did not warrant a respin.
-
-> One specific point I don't agree with below, but it's just a detail at this point
-> 
->   35c11a027c package/systemd: add host variant
->   ? ? ? - reformatting in commit log
->   ? ? ? - declare host variant after target variant
->   ? ? ? - simplify comments
->   ? ? ? - slight reordering of variable (HOST_SYSTEMD_NINJA_ENV moved)
->   ? ? ? - reformatting for mutli-line variable (HOST_SYSTEMD_HOST_TOOLS)
->   ? ? ? - don't split HOST_SYSTEMD_CONF_OPTS in two sets
-> 
-> well, it's applied now, but I did that in a very specific way
-> * Variables I specifically set were in the first set
-> * Disabling all optional features was in the second set
-> The point was to help maintainability.
-
-We almost never do that in Buildroot (I was about to say 'never', but we
-may or may not have a few cases), but overall, it is not needed. We only
-do additive settings for those parts that are conditional, which is not
-the case here.
-
-Still, the two sets are properly separated, with all the =yes first, and
-the =false last.
-
-> Apart from that, nothing suspicious on my side
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> thx a lot
-> --
-> 
-> +---------------------------------------------------------------------------------------------------------------------+
-> |                               | J?r?my ROSEN                                                              |
-> | [1]3D"SMILE"[2] ?        | Architecte technique                                                                |
-> |                               | [3]3D"email" ? [4]jeremy.rosen at smile.fr?                                  |
-> | 20 rue des Jardins            | [5]3D"phone" ? +33 6 88 25 87 42?                                         |
-> | 92600 Asni?res-sur-Seine | [6]3D"url" ? [7]http://www.smile.eu                                            |
-> |                               | [8]3D"Twitter" ? [9]3D"Facebook" ? [10]3D"LinkedIn" ? [11]3D"Github" |
-> +---------------------------------------------------------------------------------------------------------------------+
-> 
-> [12]3D"D?couvrez
-> 
-> Links:
-> 1. http://www.smile.eu/
-> 2. http://www.smile.eu/
-> 3. Image: http://ftp.smile.fr/client/Communication/signature/img/mail.png
-> 4. mailto:jeremy.rosen at smile.fr
-> 5. Image: http://ftp.smile.fr/client/Communication/signature/img/phone.png
-> 6. Image: http://ftp.smile.fr/client/Communication/signature/img/web.png
-> 7. http://www.smile.eu/
-> 8. https://twitter.com/GroupeSmile
-> 9. https://www.facebook.com/smileopensource
-> 10. https://www.linkedin.com/company/smile
-> 11. https://github.com/Smile-SA
-> 12. https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 7f5e561ca3..5d3a8e83b1 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256	8de7b4880599777768851560916b35d55c8db8d6791edaf80e2c4666331db2f6	systemd-244.tar.gz
++sha256	06e604e5484ec03ff763ae680c8b52c33fedcce95a773944f27816fde68503d7	systemd-244.1.tar.gz
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
+ sha256	ca008b0178b6390e874f6e4a890fbed482b0fb946159a3b1d370bd8d2327d9bc	README
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index cfe4e2a108..c9fd8c6f04 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 244
++SYSTEMD_VERSION = 244.1
+ SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
