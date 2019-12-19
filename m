@@ -1,37 +1,36 @@
-From: Arthur Courtel <arthur.courtel@smile.fr>
-Date: Thu, 19 Dec 2019 12:10:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/glibc: hide "glibc utils" if glibc
- is not selected
-Message-ID: <20191219111024.308479-1-arthur.courtel@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 Dec 2019 14:43:44 +0100
+Subject: [Buildroot] [PATCH 1/2] package/wavpack: security bump to
+ version 5.2.0
+In-Reply-To: <20191218222319.1259596-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 18 Dec 2019 23:23:18 +0100")
+References: <20191218222319.1259596-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mubo2zxr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PACKAGE_GLIBC_UTILS config must not exist if we use other libc than glibc
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Arthur Courtel <arthur.courtel@smile.fr>
----
- package/glibc/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > - Switch to github to get latest version
+ > - Drop patches (already in version)
+ > - Fix CVE-2018-19840: The function WavpackPackInit in pack_utils.c in
+ >   libwavpack.a in WavPack through 5.1.0 allows attackers to cause a
+ >   denial-of-service (resource exhaustion caused by an infinite loop) via
+ >   a crafted wav audio file because WavpackSetConfiguration64 mishandles
+ >   a sample rate of zero.
+ > - Fix CVE-2018-19841: The function WavpackVerifySingleBlock in
+ >   open_utils.c in libwavpack.a in WavPack through 5.1.0 allows attackers
+ >   to cause a denial-of-service (out-of-bounds read and application
+ >   crash) via a crafted WavPack Lossless Audio file, as demonstrated by
+ >   wvunpack.
+ > - Add hash for license file
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index 7b2f246947..cc178468b5 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -7,10 +7,11 @@ config BR2_PACKAGE_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP if BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
- 	help
- 	  https://www.gnu.org/software/libc/
--endif
- 
- config BR2_PACKAGE_GLIBC_UTILS
- 	bool "Install glibc utilities"
- 	help
- 	  Enabling this option will compile and install the getconf,
- 	  ldconfig, ldd and locale glibc utilities for the target.
-+
-+endif # BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.23.0
+Bye, Peter Korsgaard
