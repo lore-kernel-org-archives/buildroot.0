@@ -1,60 +1,61 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Thu, 19 Dec 2019 14:50:26 +0100
-Subject: [Buildroot] [PATCH v5 00/13] use host-systemd to enable units
-In-Reply-To: <20191218174847.GD4247@scaer>
-References: <20191216103052.35220-1-jeremy.rosen@smile.fr>
- <20191218174847.GD4247@scaer>
-Message-ID: <CAFvCimVGu5Bv3GFUmaQtkBjUHbWFoSbagCLsp3_Mb+yztJLH5g@mail.gmail.com>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Thu, 19 Dec 2019 15:20:12 +0000
+Subject: [Buildroot] [PATCH 1/1] package/tcping: bump to version 1.3.6
+Message-ID: <20191219152012.26391-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, my bad for having you work on it that much, I have still lot to learn
-about all
-those conventions
+Switched to latest version on GitHub as linuxco.de is no longer
+active. The appropriate entry for tcping on release-monitoring.org
+has been updated and a new mapping has been added for the Buildroot
+project.
 
-One specific point I don't agree with below, but it's just a detail at this
-point
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+---
+ package/tcping/Config.in   | 2 +-
+ package/tcping/tcping.hash | 5 +++--
+ package/tcping/tcping.mk   | 6 +++---
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
->
-> 35c11a027c package/systemd: add host variant
->       - reformatting in commit log
->       - declare host variant after target variant
->       - simplify comments
->       - slight reordering of variable (HOST_SYSTEMD_NINJA_ENV moved)
->       - reformatting for mutli-line variable (HOST_SYSTEMD_HOST_TOOLS)
->       - don't split HOST_SYSTEMD_CONF_OPTS in two sets
->
-well, it's applied now, but I did that in a very specific way
-
-* Variables I specifically set were in the first set
-* Disabling all optional features was in the second set
-
-The point was to help maintainability.
-
-Apart from that, nothing suspicious on my side
-thx a lot
+diff --git a/package/tcping/Config.in b/package/tcping/Config.in
+index e72df096c3..c963e681de 100644
+--- a/package/tcping/Config.in
++++ b/package/tcping/Config.in
+@@ -11,4 +11,4 @@ config BR2_PACKAGE_TCPING
+ 	  desired port is reachable and then start connection
+ 	  establishment.
+ 
+-	  http://linuxco.de/tcping/tcping.html
++	  https://github.com/mkirchner/tcping
+diff --git a/package/tcping/tcping.hash b/package/tcping/tcping.hash
+index de42775cc1..49f6e5ba0b 100644
+--- a/package/tcping/tcping.hash
++++ b/package/tcping/tcping.hash
+@@ -1,2 +1,3 @@
+-# Locally calculated after checking pgp signature
+-sha256	1ad52e904094d12b225ac4a0bc75297555e931c11a1501445faa548ff5ecdbd0	tcping-1.3.5.tar.gz
++# Locally calculated
++sha256	a731f0e48ff931d7b2a0e896e4db40867043740fe901dd225780f2164fdbdcf3	tcping-1.3.6.tar.gz
++sha256	4a35620e27ddb8de27898e4206c8f93633d877c1e128e98e95a035f760d94428	LICENSE
+diff --git a/package/tcping/tcping.mk b/package/tcping/tcping.mk
+index 7edf45ebba..5eaf702ef0 100644
+--- a/package/tcping/tcping.mk
++++ b/package/tcping/tcping.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-TCPING_VERSION = 1.3.5
+-TCPING_SITE = http://linuxco.de/tcping
+-TCPING_LICENSE = GPL-3.0+
++TCPING_VERSION = 1.3.6
++TCPING_SITE = $(call github,mkirchner,tcping,$(TCPING_VERSION))
++TCPING_LICENSE = MIT
+ TCPING_LICENSE_FILES = LICENSE
+ 
+ define TCPING_BUILD_CMDS
 -- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191219/23d99010/attachment.html>
+2.20.1
