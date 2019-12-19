@@ -1,49 +1,44 @@
-From: Jan Kiszka <jan.kiszka@siemens.com>
-Date: Thu, 19 Dec 2019 09:24:34 +0100
-Subject: [Buildroot] [PATCH v2 4/4] package/xenomai: clean up wrappers
- cleanup
-In-Reply-To: <cover.1576743874.git.jan.kiszka@siemens.com>
-References: <cover.1576743874.git.jan.kiszka@siemens.com>
-Message-ID: <740557da18601121db22a52afb494063a7184bc6.1576743874.git.jan.kiszka@siemens.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Thu, 19 Dec 2019 06:40:36 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2019-12-18
+In-Reply-To: <5dfb241d.1c69fb81.46f7.fa0eSMTPIN_ADDED_MISSING@mx.google.com>
+References: <5dfb241d.1c69fb81.46f7.fa0eSMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <CAJ4jsaemuhXj2mECfob7jD9DZB2uLORzyngwN9SBVSB+fyTgFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jan Kiszka <jan.kiszka@siemens.com>
+On Thu, Dec 19, 2019 at 4:17 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Recent build failures and runtime-tests failures
+> ================================================
+>
+> This is the list of Buildroot build failures that occurred on
+> 2019-12-18, and for which you are a registered architecture developer,
+> package developer or defconfig developer. This list also include
+> runtime tests failures. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Results for the 'master' branch
+> -------------------------------
+>
+> Build failures related to your packages:
+>
+>     arch     |             reason             |                                       url
+> -------------+--------------------------------+---------------------------------------------------------------------------------
+>   nds32le    |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/675967adaf1e03114b773275c9c8a6865a0f9f25
+> microblazeel |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/935c7cb31ccbb42af019a560435abb64ee5d8e80
+> microblazeel |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/19381b8ce06619df29731a9951fad153bc2d859c
 
-There is no posix.wrappers anymore, but cobalt and modechk. Those only
-play a role when building in combination with wrap-link.sh.
+Patch already sent: https://patchwork.ozlabs.org/patch/1211385/
+Bug reported upstream: https://github.com/tpm2-software/tpm2-tss/issues/1508
 
-Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
----
- package/xenomai/xenomai.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index df7ca69f45..d7fc0e42ed 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -70,6 +70,9 @@ define XENOMAI_REMOVE_UNNEEDED_FILES
- 	for i in xeno xeno-config xeno-info wrap-link.sh ; do \
- 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
- 	done
-+	for i in cobalt modechk ; do \
-+		rm -f $(TARGET_DIR)/usr/lib/$$i.wrappers ; \
-+	done
- 	for i in autotune corectl hdb rtnet nomaccfg rtcfg rtifconfig \
- 		rtiwconfig rtping rtroute tdmacfg rtps slackspot version; do \
- 		rm -f $(TARGET_DIR)/usr/sbin/$$i ; \
-@@ -129,9 +132,6 @@ XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
- define XENOMAI_REMOVE_SKINS
- 	for i in $(XENOMAI_REMOVE_LIBS_LIST) ; do \
- 		rm -f $(TARGET_DIR)/usr/lib/lib$$i.* ; \
--		if [ $$i == "posix" ] ; then \
--			rm -f $(TARGET_DIR)/usr/lib/posix.wrappers ; \
--		fi ; \
- 	done
- endef
- 
 -- 
-2.16.4
+Carlos Santos <unixmania@gmail.com>
