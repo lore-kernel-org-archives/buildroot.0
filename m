@@ -1,35 +1,40 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Thu, 19 Dec 2019 21:00:31 +0000
-Subject: [Buildroot] [PATCH 1/1] package/x265: update the upstream URL in
- Config.in
-Message-ID: <20191219210031.26512-1-mark@dibsco.co.uk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 19 Dec 2019 22:21:49 +0100
+Subject: [Buildroot] [git commit] package/openrc: install sysv-rcs file
+Message-ID: <20191219211329.188958D2C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(Err)' URL status in the package stats
-web page output.
+commit: https://git.buildroot.net/buildroot/commit/?id=3945226a7e29c9f811fbe145ea792b18f3a5daa2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+package/openrc has the file sysv-rcs which starts sysvinit services
+not written for openrc. However, currently it is not installed to
+the target.
+
+Install this file to $(TARGET_DIR)/etc/init.d during the
+target_install step.
+
+Signed-off-by: Adam Duskett <aduskett@greenlots.com>
+[yann.morin.1998 at free.fr: use full-path for destination, not just dir]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x265/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openrc/openrc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/x265/Config.in b/package/x265/Config.in
-index cc39d6c6a9..180931db66 100644
---- a/package/x265/Config.in
-+++ b/package/x265/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_X265
- 	  General Public License (GPL) 2 license or a commercial
- 	  license, similar to the x264 project.
+diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
+index 387962d4d5..3f6453cef5 100644
+--- a/package/openrc/openrc.mk
++++ b/package/openrc/openrc.mk
+@@ -35,6 +35,8 @@ endef
  
--	  http://x265.org
-+	  https://bitbucket.org/multicoreware/x265/wiki/Home
+ define OPENRC_INSTALL_TARGET_CMDS
+ 	$(MAKE) $(OPENRC_MAKE_OPTS) DESTDIR=$(TARGET_DIR) -C $(@D) install
++	$(INSTALL) -D -m 0755 $(OPENRC_PKGDIR)/sysv-rcs \
++		$(TARGET_DIR)/etc/init.d/sysv-rcs
+ endef
  
- if BR2_PACKAGE_X265
- 
--- 
-2.20.1
+ ifeq ($(BR2_PACKAGE_NETIFRC),y)
