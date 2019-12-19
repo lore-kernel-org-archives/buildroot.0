@@ -1,38 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 19 Dec 2019 20:28:01 +0100
-Subject: [Buildroot] [PATCH 3/3] package/pipewire: add xlib_libX11 optional
- dependency
-In-Reply-To: <20191219192801.1264354-1-fontaine.fabrice@gmail.com>
-References: <20191219192801.1264354-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191219192801.1264354-3-fontaine.fabrice@gmail.com>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Thu, 19 Dec 2019 20:16:48 +0000
+Subject: [Buildroot] [PATCH 1/1] package/wsapi-fcgi: update the upstream URL
+ in Config.in
+Message-ID: <20191219201648.21441-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xlib_libX11 is an optional dependeny of spa, see:
-https://github.com/PipeWire/pipewire/blob/0.2.7/spa/meson.build
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(406)' URL status in the package stats
+web page output.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 ---
- package/pipewire/pipewire.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/wsapi-fcgi/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index aa3fdc489d..df159c5ef4 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -27,6 +27,10 @@ ifeq ($(BR2_PACKAGE_SDL2),y)
- PIPEWIRE_DEPENDENCIES += sdl2
- endif
+diff --git a/package/wsapi-fcgi/Config.in b/package/wsapi-fcgi/Config.in
+index 73ef8cb00c..657ae78c66 100644
+--- a/package/wsapi-fcgi/Config.in
++++ b/package/wsapi-fcgi/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_WSAPI_FCGI
+ 	  applications. This is the rock that contains the FCGI module
+ 	  lfcgi.
  
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+PIPEWIRE_DEPENDENCIES += xlib_libX11
-+endif
-+
- ifeq ($(BR2_PACKAGE_PIPEWIRE_GSTREAMER),y)
- PIPEWIRE_CONF_OPTS += -Dgstreamer=enabled
- PIPEWIRE_DEPENDENCIES += libglib2 gstreamer1 gst1-plugins-base
+-	  http://www.keplerproject.org/wsapi
++	  https://luarocks.org/modules/mascarenhas/wsapi-fcgi
 -- 
-2.24.0
+2.20.1
