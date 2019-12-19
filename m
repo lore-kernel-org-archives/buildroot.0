@@ -1,39 +1,33 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu, 19 Dec 2019 11:01:35 -0800
-Subject: [Buildroot] [PATCH 1/1] package/openrc: install sysv-rcs file
-Message-ID: <20191219190135.7013-1-aduskett@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 19 Dec 2019 20:27:59 +0100
+Subject: [Buildroot] [PATCH 1/3] package/pipewire: fix comment in Config.in
+Message-ID: <20191219192801.1264354-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <aduskett@greenlots.com>
+Commit ac92146ebb7627378c0a8c92f6490e55333eb6bb forgot to update
+comment with udev dependency
 
-package/openrc has the file sysv-rcs which starts sysvinit services
-not written for openrc. However, currently it is not installed to
-the target.
-
-Install this file to $(TARGET_DIR)/etc/init.d during the
-target_install step.
-
-Signed-off-by: Adam Duskett <aduskett@greenlots.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/openrc/openrc.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/pipewire/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index 387962d4d5..c7c8b0461a 100644
---- a/package/openrc/openrc.mk
-+++ b/package/openrc/openrc.mk
-@@ -35,6 +35,8 @@ endef
+diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+index 80e28d3614..57e70d65f8 100644
+--- a/package/pipewire/Config.in
++++ b/package/pipewire/Config.in
+@@ -30,6 +30,6 @@ comment "pipewire gstreamer support needs a toolchain w/ wchar, threads"
  
- define OPENRC_INSTALL_TARGET_CMDS
- 	$(MAKE) $(OPENRC_MAKE_OPTS) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+	$(INSTALL) -D -m 0755 $(OPENRC_PKGDIR)/sysv-rcs \
-+		$(TARGET_DIR)/etc/init.d/
- endef
+ endif
  
- ifeq ($(BR2_PACKAGE_NETIFRC),y)
+-comment "pipewire needs a toolchain w/ threads"
++comment "pipewire needs udev and a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-2.24.1
+2.24.0
