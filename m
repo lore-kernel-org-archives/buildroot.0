@@ -1,67 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Dec 2019 18:23:38 +0100
-Subject: [Buildroot] [PATCH] package/libssh: security bump to version
- 0.9.3
-In-Reply-To: <20191219080151.14616-1-peter@korsgaard.com>
-References: <20191219080151.14616-1-peter@korsgaard.com>
-Message-ID: <20191219172338.GJ26395@scaer>
+Date: Thu, 19 Dec 2019 18:54:32 +0100
+Subject: [Buildroot] [PATCH v2 4/4] package/xenomai: clean up wrappers
+ cleanup
+In-Reply-To: <740557da18601121db22a52afb494063a7184bc6.1576743874.git.jan.kiszka@siemens.com>
+References: <cover.1576743874.git.jan.kiszka@siemens.com>
+ <740557da18601121db22a52afb494063a7184bc6.1576743874.git.jan.kiszka@siemens.com>
+Message-ID: <20191219175432.GK26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Jan, All,
 
-On 2019-12-19 09:01 +0100, Peter Korsgaard spake thusly:
-> Fixes the following security vulnerabilities:
+On 2019-12-19 09:24 +0100, Jan Kiszka spake thusly:
+> From: Jan Kiszka <jan.kiszka@siemens.com>
 > 
-> - CVE-2019-14889: Unsanitized location in scp could lead to unwanted command
->   execution.
-> 
-> And adds various hardening improvements.  For details, see the announcement:
-> 
-> https://www.libssh.org/2019/12/10/libssh-0-9-3-and-libssh-0-8-8-security-release/
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> There is no posix.wrappers anymore, but cobalt and modechk. Those only
+> play a role when building in combination with wrap-link.sh.
 
-Applied to master, thanks.
+If that change already existed with the current 3.0.9, then this patch
+should come before current patch 2.
+
+If the change was done in 3.0.10, then this patch should be folded with
+patch 2, which introduces 3.0.10.
+
+In any case, it must come before the patch that introduces the from-git
+posibility, which should be last.
+
+No need to respin if there only re-ordering; just reply and I can do th
+reordering appropriately.
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 > ---
->  package/libssh/libssh.hash | 4 ++--
->  package/libssh/libssh.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/xenomai/xenomai.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-> index 2f5708ddac..ca296701bf 100644
-> --- a/package/libssh/libssh.hash
-> +++ b/package/libssh/libssh.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
-> -# https://www.libssh.org/files/0.9/libssh-0.9.0.tar.xz.asc
-> +# https://www.libssh.org/files/0.9/libssh-0.9.3.tar.xz.asc
->  # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
-> -sha256 25303c2995e663cd169fdd902bae88106f48242d7e96311d74f812023482c7a5  libssh-0.9.0.tar.xz
-> +sha256 2c8b5f894dced58b3d629f16f3afa6562c20b4bdc894639163cf657833688f0c  libssh-0.9.3.tar.xz
->  sha256 1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-> diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-> index b8464ed2bf..161040b346 100644
-> --- a/package/libssh/libssh.mk
-> +++ b/package/libssh/libssh.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
+> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+> index df7ca69f45..d7fc0e42ed 100644
+> --- a/package/xenomai/xenomai.mk
+> +++ b/package/xenomai/xenomai.mk
+> @@ -70,6 +70,9 @@ define XENOMAI_REMOVE_UNNEEDED_FILES
+>  	for i in xeno xeno-config xeno-info wrap-link.sh ; do \
+>  		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+>  	done
+> +	for i in cobalt modechk ; do \
+> +		rm -f $(TARGET_DIR)/usr/lib/$$i.wrappers ; \
+> +	done
+>  	for i in autotune corectl hdb rtnet nomaccfg rtcfg rtifconfig \
+>  		rtiwconfig rtping rtroute tdmacfg rtps slackspot version; do \
+>  		rm -f $(TARGET_DIR)/usr/sbin/$$i ; \
+> @@ -129,9 +132,6 @@ XENOMAI_REMOVE_LIBS_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
+>  define XENOMAI_REMOVE_SKINS
+>  	for i in $(XENOMAI_REMOVE_LIBS_LIST) ; do \
+>  		rm -f $(TARGET_DIR)/usr/lib/lib$$i.* ; \
+> -		if [ $$i == "posix" ] ; then \
+> -			rm -f $(TARGET_DIR)/usr/lib/posix.wrappers ; \
+> -		fi ; \
+>  	done
+>  endef
 >  
->  LIBSSH_VERSION_MAJOR = 0.9
-> -LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).0
-> +LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).3
->  LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
->  LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
->  LIBSSH_LICENSE = LGPL-2.1
 > -- 
-> 2.20.1
+> 2.16.4
 > 
 > _______________________________________________
 > buildroot mailing list
