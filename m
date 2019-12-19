@@ -1,96 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Dec 2019 18:20:56 +0100
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{14,
- 19}.x / 5.{3, 4}.x series
-In-Reply-To: <20191219081325.15975-1-peter@korsgaard.com>
-References: <20191219081325.15975-1-peter@korsgaard.com>
-Message-ID: <20191219172056.GI26395@scaer>
+Date: Thu, 19 Dec 2019 18:21:17 +0100
+Subject: [Buildroot] [git commit] package/libssh: security bump to version
+ 0.9.3
+Message-ID: <20191219171400.3D92D8CA70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7f723e4ea3510dd9ab90ab7ddd08dadf349495a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-12-19 09:13 +0100, Peter Korsgaard spake thusly:
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes the following security vulnerabilities:
 
-Applied to master, thanks.
+- CVE-2019-14889: Unsanitized location in scp could lead to unwanted command
+  execution.
 
-Regards,
-Yann E. MORIN.
+And adds various hardening improvements.  For details, see the announcement:
 
-> ---
->  linux/Config.in                      | 2 +-
->  linux/linux.hash                     | 8 ++++----
->  package/linux-headers/Config.in.host | 8 ++++----
->  3 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 77f3f248d8..93e89a0702 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -128,7 +128,7 @@ endif
->  
->  config BR2_LINUX_KERNEL_VERSION
->  	string
-> -	default "5.4.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-> +	default "5.4.5" if BR2_LINUX_KERNEL_LATEST_VERSION
->  	default "4.19.88-cip16" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
->  	default "4.19.82-cip14-rt5" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
->  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-> diff --git a/linux/linux.hash b/linux/linux.hash
-> index 940c85bd42..0cecb00ef1 100644
-> --- a/linux/linux.hash
-> +++ b/linux/linux.hash
-> @@ -1,11 +1,11 @@
->  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-> -sha256 cec8aaea89feac4a3555f1e4b90000244ff7c5e7640db242a7de796a006d1197  linux-5.3.15.tar.xz
-> -sha256 32f98256877ca6b016715ffffcf184f1603df9e17a324787f252cd602e03a557  linux-5.4.2.tar.xz
-> +sha256 20f14917c4f33122cfa12963a7d3180fe6f4685cacfe984553b2b5b4ad20638c  linux-5.3.18.tar.xz
-> +sha256 568e9f27fbba86131c2e2849f296d54216e2ed3e8c4d8aa78a93b417cab23ec0  linux-5.4.5.tar.xz
->  # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
->  sha256 5da5e16fe08fa506f8f74aa4f17be22b52c0f513e9a3f7e7ae22fc53597ad493  linux-4.4.206.tar.xz
->  sha256 1df27899a9bc4dd874f3830ab9e7b638f0026dffd67a2e230444e5d2805ccad6  linux-4.9.206.tar.xz
-> -sha256 0d49ec72e273f6fc7462ad56849b2285f13fd5f4185e8f932a0074fc2eca1bb3  linux-4.14.158.tar.xz
-> -sha256 c1923b6bd166e6dd07be860c15f59e8273aaa8692bc2a1fce1d31b826b9b3fbe  linux-4.19.88.tar.xz
-> +sha256 e8d42d3a1b85d180141e9bc11c4a0e87f8a413c0e989b0f24c1b7c40f8a826f2  linux-4.14.159.tar.xz
-> +sha256 29d86c0a6daf169ec0b4b42a12f8d55dc894c52bd901f876f52a05906a5cf7fd  linux-4.19.90.tar.xz
->  # Locally computed
->  sha256 6d60ce76bce2e1938f64027d12b1988c95245751feb635adfc551a021d5b3f26  linux-cip-4.19.88-cip16.tar.gz
->  sha256 74ec782e11344e5c5db8e48899b464e296ef37acfb43ce7dfb01c09ea8d3e959  linux-cip-4.19.82-cip14-rt5.tar.gz
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index 2574792afb..29213e40f8 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -315,10 +315,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
->  	string
->  	default "4.4.206"	if BR2_KERNEL_HEADERS_4_4
->  	default "4.9.206"	if BR2_KERNEL_HEADERS_4_9
-> -	default "4.14.158"	if BR2_KERNEL_HEADERS_4_14
-> -	default "4.19.88"	if BR2_KERNEL_HEADERS_4_19
-> -	default "5.3.15"	if BR2_KERNEL_HEADERS_5_3
-> -	default "5.4.2"		if BR2_KERNEL_HEADERS_5_4
-> +	default "4.14.159"	if BR2_KERNEL_HEADERS_4_14
-> +	default "4.19.90"	if BR2_KERNEL_HEADERS_4_19
-> +	default "5.3.18"	if BR2_KERNEL_HEADERS_5_3
-> +	default "5.4.5"		if BR2_KERNEL_HEADERS_5_4
->  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
->  	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
->  	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+https://www.libssh.org/2019/12/10/libssh-0-9-3-and-libssh-0-8-8-security-release/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libssh/libssh.hash | 4 ++--
+ package/libssh/libssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
+index 2f5708ddac..ca296701bf 100644
+--- a/package/libssh/libssh.hash
++++ b/package/libssh/libssh.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.libssh.org/files/0.9/libssh-0.9.0.tar.xz.asc
++# https://www.libssh.org/files/0.9/libssh-0.9.3.tar.xz.asc
+ # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
+-sha256 25303c2995e663cd169fdd902bae88106f48242d7e96311d74f812023482c7a5  libssh-0.9.0.tar.xz
++sha256 2c8b5f894dced58b3d629f16f3afa6562c20b4bdc894639163cf657833688f0c  libssh-0.9.3.tar.xz
+ sha256 1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index b8464ed2bf..161040b346 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBSSH_VERSION_MAJOR = 0.9
+-LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).0
++LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).3
+ LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+ LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
+ LIBSSH_LICENSE = LGPL-2.1
