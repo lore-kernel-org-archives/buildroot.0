@@ -1,44 +1,52 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Thu, 19 Dec 2019 06:40:36 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2019-12-18
-In-Reply-To: <5dfb241d.1c69fb81.46f7.fa0eSMTPIN_ADDED_MISSING@mx.google.com>
-References: <5dfb241d.1c69fb81.46f7.fa0eSMTPIN_ADDED_MISSING@mx.google.com>
-Message-ID: <CAJ4jsaemuhXj2mECfob7jD9DZB2uLORzyngwN9SBVSB+fyTgFw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 Dec 2019 12:11:07 +0100
+Subject: [Buildroot] [PATCH v3 for-next 00/11] gitlab Qemu runtime
+ testing
+In-Reply-To: <99a9e061-7fca-c7c0-683b-49845067ba8f@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 18 Dec 2019 23:50:53 +0100")
+References: <20191117201909.12900-1-romain.naour@smile.fr>
+ <4ae261dd-e9f5-0212-eafd-c642c21d27bf@smile.fr>
+ <99a9e061-7fca-c7c0-683b-49845067ba8f@mind.be>
+Message-ID: <87k16s4lkk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 19, 2019 at 4:17 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Recent build failures and runtime-tests failures
-> ================================================
->
-> This is the list of Buildroot build failures that occurred on
-> 2019-12-18, and for which you are a registered architecture developer,
-> package developer or defconfig developer. This list also include
-> runtime tests failures. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Results for the 'master' branch
-> -------------------------------
->
-> Build failures related to your packages:
->
->     arch     |             reason             |                                       url
-> -------------+--------------------------------+---------------------------------------------------------------------------------
->   nds32le    |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/675967adaf1e03114b773275c9c8a6865a0f9f25
-> microblazeel |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/935c7cb31ccbb42af019a560435abb64ee5d8e80
-> microblazeel |         tpm2-tss-2.3.2         | http://autobuild.buildroot.net/results/19381b8ce06619df29731a9951fad153bc2d859c
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Patch already sent: https://patchwork.ozlabs.org/patch/1211385/
-Bug reported upstream: https://github.com/tpm2-software/tpm2-tss/issues/1508
+Hi,
+
+ >> I discussed about this series with Jeremy and he suggest to add the Qemu command
+ >> line into the Qemu's defconfig file (add a new Kconfig option).
+ >> With that, we can even add a new Makefile target "make run-qemu" to start Qemu
+ >> when the Qemu command line is set in the defconfig (this would avoid adding
+ >> several launch.sh script).
+
+ > So something like
+
+ > config BR2_PACKAGE_HOST_QEMU_LAUNCH_ARGS
+ > 	string "qemu launch command"
+ > 	help
+ > 	  Command to launch qemu. If this is defined, 'make run-qemu' can be
+ > 	  used to build everything and launch qemu.
+
+
+ > HOST_QEMU_LAUNCH_ARGS = $(call qstrip,$(BR2_PACKAGE_HOST_QEMU_LAUNCH_ARGS))
+ > ifneq ($(HOST_QEMU_LAUNCH_ARGS),)
+ > run-qemu: world
+ > 	$(Q)$(HOST_QEMU) <kernel args> <rootfs args> $(HOST_QEMU_LAUNCH_ARGS)
+ > endif
+
+ > Looks like a good idea indeed!
+
+Cute. The kernel arguments (-kernel path/to/kernel/image) could indeed
+probably be standardized, but we do some to have quite some variation in
+the rootfs arguments.
+
+But OK, we could start with just including the rootfs argument in
+_LAUNCH_ARGS.
 
 -- 
-Carlos Santos <unixmania@gmail.com>
+Bye, Peter Korsgaard
