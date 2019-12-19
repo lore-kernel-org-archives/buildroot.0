@@ -1,72 +1,24 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Dec 2019 09:13:24 +0100
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{14, 19}.x / 5.{3,
- 4}.x series
-Message-ID: <20191219081325.15975-1-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 19 Dec 2019 08:23:18 +0000
+Subject: [Buildroot] [Bug 12416] qt5webengine should not use WEBENGINE_CONFIG
+In-Reply-To: <bug-12416-163@https.bugs.busybox.net/>
+References: <bug-12416-163@https.bugs.busybox.net/>
+Message-ID: <bug-12416-163-17gbqibPDi@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=12416
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 77f3f248d8..93e89a0702 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.4.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.4.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.88-cip16" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.82-cip14-rt5" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 940c85bd42..0cecb00ef1 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,11 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 cec8aaea89feac4a3555f1e4b90000244ff7c5e7640db242a7de796a006d1197  linux-5.3.15.tar.xz
--sha256 32f98256877ca6b016715ffffcf184f1603df9e17a324787f252cd602e03a557  linux-5.4.2.tar.xz
-+sha256 20f14917c4f33122cfa12963a7d3180fe6f4685cacfe984553b2b5b4ad20638c  linux-5.3.18.tar.xz
-+sha256 568e9f27fbba86131c2e2849f296d54216e2ed3e8c4d8aa78a93b417cab23ec0  linux-5.4.5.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 5da5e16fe08fa506f8f74aa4f17be22b52c0f513e9a3f7e7ae22fc53597ad493  linux-4.4.206.tar.xz
- sha256 1df27899a9bc4dd874f3830ab9e7b638f0026dffd67a2e230444e5d2805ccad6  linux-4.9.206.tar.xz
--sha256 0d49ec72e273f6fc7462ad56849b2285f13fd5f4185e8f932a0074fc2eca1bb3  linux-4.14.158.tar.xz
--sha256 c1923b6bd166e6dd07be860c15f59e8273aaa8692bc2a1fce1d31b826b9b3fbe  linux-4.19.88.tar.xz
-+sha256 e8d42d3a1b85d180141e9bc11c4a0e87f8a413c0e989b0f24c1b7c40f8a826f2  linux-4.14.159.tar.xz
-+sha256 29d86c0a6daf169ec0b4b42a12f8d55dc894c52bd901f876f52a05906a5cf7fd  linux-4.19.90.tar.xz
- # Locally computed
- sha256 6d60ce76bce2e1938f64027d12b1988c95245751feb635adfc551a021d5b3f26  linux-cip-4.19.88-cip16.tar.gz
- sha256 74ec782e11344e5c5db8e48899b464e296ef37acfb43ce7dfb01c09ea8d3e959  linux-cip-4.19.82-cip14-rt5.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2574792afb..29213e40f8 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -315,10 +315,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.206"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.206"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.158"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.88"	if BR2_KERNEL_HEADERS_4_19
--	default "5.3.15"	if BR2_KERNEL_HEADERS_5_3
--	default "5.4.2"		if BR2_KERNEL_HEADERS_5_4
-+	default "4.14.159"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.90"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.3.18"	if BR2_KERNEL_HEADERS_5_3
-+	default "5.4.5"		if BR2_KERNEL_HEADERS_5_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Assignee|unassigned at buildroot.uclibc |ps.report at gmx.net
+                   |.org                        |
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
