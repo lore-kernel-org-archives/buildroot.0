@@ -1,32 +1,39 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Thu, 19 Dec 2019 20:36:26 +0000
-Subject: [Buildroot] [PATCH 1/1] package/wsapi-xavante: update the upstream
- URL in Config.in
-Message-ID: <20191219203626.23360-1-mark@dibsco.co.uk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Dec 2019 21:44:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openrc: install sysv-rcs file
+In-Reply-To: <20191219190135.7013-1-aduskett@gmail.com>
+References: <20191219190135.7013-1-aduskett@gmail.com>
+Message-ID: <20191219214429.757aff57@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(406)' URL status in the package stats
-web page output.
+On Thu, 19 Dec 2019 11:01:35 -0800
+aduskett at gmail.com wrote:
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
----
- package/wsapi-xavante/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> From: Adam Duskett <aduskett@greenlots.com>
+> 
+> package/openrc has the file sysv-rcs which starts sysvinit services
+> not written for openrc. However, currently it is not installed to
+> the target.
+> 
+> Install this file to $(TARGET_DIR)/etc/init.d during the
+> target_install step.
+> 
+> Signed-off-by: Adam Duskett <aduskett@greenlots.com>
 
-diff --git a/package/wsapi-xavante/Config.in b/package/wsapi-xavante/Config.in
-index 7079ad4eda..7af23b84e4 100644
---- a/package/wsapi-xavante/Config.in
-+++ b/package/wsapi-xavante/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_WSAPI_XAVANTE
- 	  applications. This is the rock that contains the Xavante
- 	  adapter and launcher.
- 
--	  http://www.keplerproject.org/wsapi
-+	  https://keplerproject.github.io/wsapi/
+Michal had what seems like a more elaborate solution:
+
+  http://patchwork.ozlabs.org/patch/1098590/
+
+Michal, could you comment ?
+
+Thanks!
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
