@@ -1,40 +1,91 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 19 Dec 2019 23:10:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/duktape: bump to version 2.5.0
-Message-ID: <20191219221037.1285195-1-fontaine.fabrice@gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Thu, 19 Dec 2019 16:04:37 -0800
+Subject: [Buildroot] [PATCH 1/1] package/openrc: cleanup sysv-rcs script
+Message-ID: <20191220000437.475219-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/duktape/duktape.hash | 2 +-
- package/duktape/duktape.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: Adam Duskett <aduskett@greenlots.com>
 
-diff --git a/package/duktape/duktape.hash b/package/duktape/duktape.hash
-index c5c4682696..b50ae7329c 100644
---- a/package/duktape/duktape.hash
-+++ b/package/duktape/duktape.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	4b022e040f10d6ead4fd3d0c865ca97d1679fc39307d4d3fa4a7f463ee4b9658	duktape-2.4.0.tar.gz
-+sha256	810e1dab50dfd3040cac4bb18b96d749a5fdebfd898a7bfe74512044c1a89880	duktape-2.5.0.tar.gz
- sha256	5b42d02dbd084fd6d7e61d93f52e02b596f25400e54e0f86d5780045e5b754c8	LICENSE.txt
-diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
-index 30efaf5fa1..0047571883 100644
---- a/package/duktape/duktape.mk
-+++ b/package/duktape/duktape.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Currently, the sysv-rcs script has two issues:
+  - The return code of each RCS script is not checked.
+  - The output does not match the formatting of the other openrc
+    init scripts.
+
+Modify the script in the following ways to fix both issues:
+  - Remove the "einfo "Starting sysv rc scripts"" at the top of the
+    start function in favor of "einfo "Starting $i" in the loop
+    itself.
+
+  - Add a "> /dev/null" to the end of $i start; this suppresses
+    stdout while still allowing for stderr messages to print to the
+    terminal.
+
+  - add an "eend $? to both the start and stop functions, this
+    allows for openrc to show if an RCS script returned 0 or
+    not.
+
+The following is the startup output of OpenRC on a minimal system
+with S01syslogd modified to exit with a return code 1 for testing
+purposes:
+
+Before:
+ * Adding static routes ...
+ [ ok ]
+Starting default runlevel
+ * Starting sysv rc scripts
+Starting syslogd: OK
+Starting klogd: OK
+Running sysctl: OK
+
+After:
+ * Adding static routes ...
+ [ ok ]
+Starting default runlevel
+ * Starting /etc/init.d/S01syslogd ...
+ [ !! ]
+ * Starting /etc/init.d/S02klogd ...
+ [ ok ]
+ * Starting /etc/init.d/S02sysctl ...
+ [ ok ]
+
+Signed-off-by: Adam Duskett <aduskett@greenlots.com>
+---
+ package/openrc/sysv-rcs | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/openrc/sysv-rcs b/package/openrc/sysv-rcs
+index 606a73d2b4..1564cbe603 100755
+--- a/package/openrc/sysv-rcs
++++ b/package/openrc/sysv-rcs
+@@ -7,19 +7,21 @@ depend() {
+ }
  
--DUKTAPE_VERSION = 2.4.0
-+DUKTAPE_VERSION = 2.5.0
- DUKTAPE_SITE = $(call github,svaarala,duktape-releases,v$(DUKTAPE_VERSION))
- DUKTAPE_LICENSE = MIT
- DUKTAPE_LICENSE_FILES = LICENSE.txt
+ start() {
+-    einfo "Starting sysv rc scripts"
+     for i in /etc/init.d/S??*; do
+         # Ignore dangling symlinks (if any).
+         [ -e "$i" ] || continue
+-        $i start
++        einfo "Starting $i"
++        $i start > /dev/null
++        eend $?
+     done
+ }
+ 
+ stop() {
+-    einfo "Stopping sysv rc scripts"
+     for i in $(ls -r /etc/init.d/S??*); do
+         # Ignore dangling symlinks (if any).
+         [ -e "$i" ] || continue
+-        $i stop
++        einfo "Stopping $i"
++        $i stop > /dev/null
++        eend $?
+     done
+ }
 -- 
-2.24.0
+2.24.1
