@@ -1,75 +1,68 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 20 Dec 2019 21:12:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libqmi: add Libs.Private to
- qmi-glib.pc
-In-Reply-To: <20191030084048.11194-1-fontaine.fabrice@gmail.com>
-References: <20191030084048.11194-1-fontaine.fabrice@gmail.com>
-Message-ID: <ae52396b-25b3-f269-1108-1f6f83a2c45f@benettiengineering.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 20 Dec 2019 21:27:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jq: bump to git version
+ a97638713ad3 (still 1.6-based)
+Message-ID: <20191220202728.14001-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-On 10/30/19 9:40 AM, Fabrice Fontaine wrote:
-> This will fix a static build failure with modem-manager and libmbim
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/9c6b8ec2b9cc31f1ab460532c378731ab455210c
+jq 1.6 has a severe performance regression compared to 1.5. The problem is
+reported [1] and fixed [2] upstream, but there are different commits and
+later subsequent fixes on top of them that make it cumbersome to patch
+specifically.
 
-I can't reproduce this build failure and so can't test your patch to fix 
-it. Basically it builds correctly.
-Can you double check?
+Instead, bump to a recent git version.
 
-Thank you
-Best regards
+[1] https://github.com/stedolan/jq/issues/1826
+[2] https://github.com/stedolan/jq/pull/1834
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/jq/jq.hash | 2 +-
+ package/jq/jq.mk   | 7 +++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+
+Note: when I wrote the patch initially, I chose latest master.
+Now when I'm preparing it for upstreaming, there are a few more commits on
+master. I'm _not_ including them now as we did not test with it.
+
+
+diff --git a/package/jq/jq.hash b/package/jq/jq.hash
+index 449619b024..2cddda32c6 100644
+--- a/package/jq/jq.hash
++++ b/package/jq/jq.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5de8c8e29aaa3fb9cc6b47bb27299f271354ebb72514e3accadc7d38b5bbaa72  jq-1.6.tar.gz
++sha256  3002cf80d871728562989b4a47d90a7301fe049a4e1d69836b99108f198dac06  jq-a97638713ad30653d424f136018098c4b0e5c71b.tar.gz
+ sha256  111136aebcbfa68b6b0084e582b30e981da76adcff84eab6f9be32a1f38c5bf1  COPYING
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index bf96f0cecb..3d22306537 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
+@@ -4,12 +4,15 @@
+ #
+ ################################################################################
+ 
+-JQ_VERSION = 1.6
+-JQ_SITE = https://github.com/stedolan/jq/releases/download/jq-$(JQ_VERSION)
++JQ_VERSION = a97638713ad30653d424f136018098c4b0e5c71b
++JQ_SITE = $(call github,stedolan,jq,$(JQ_VERSION))
+ JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
+ JQ_LICENSE_FILES = COPYING
+ JQ_INSTALL_STAGING = YES
+ 
++# currently using git version directly
++JQ_AUTORECONF = YES
++
+ # uses c99 specific features
+ # _GNU_SOURCE added to fix gcc6+ host compilation
+ # (https://github.com/stedolan/jq/issues/1598)
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->   ...0001-qmi-glib.pc.in-add-Libs.Private.patch | 31 +++++++++++++++++++
->   1 file changed, 31 insertions(+)
->   create mode 100644 package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
-> 
-> diff --git a/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch b/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
-> new file mode 100644
-> index 0000000000..46f32baab4
-> --- /dev/null
-> +++ b/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
-> @@ -0,0 +1,31 @@
-> +From c816e407b974f72d45f1878427cbeea448b3477a Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Wed, 30 Oct 2019 09:29:59 +0100
-> +Subject: [PATCH] qmi-glib.pc.in: add Libs.Private
-> +
-> +Add @MBIM_LIBS@ to Libs.Private in qmi-glib.pc.in so applications
-> +linking statically with qmi-glib (such as modem-manager) will retrieve
-> +these dependencies
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/9c6b8ec2b9cc31f1ab460532c378731ab455210c
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status:
-> +https://gitlab.freedesktop.org/mobile-broadband/libqmi/merge_requests/75]
-> +---
-> + data/pkg-config/qmi-glib.pc.in | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/data/pkg-config/qmi-glib.pc.in b/data/pkg-config/qmi-glib.pc.in
-> +index d334494..1d5054f 100644
-> +--- a/data/pkg-config/qmi-glib.pc.in
-> ++++ b/data/pkg-config/qmi-glib.pc.in
-> +@@ -9,3 +9,4 @@ Version: @VERSION@
-> + Requires: glib-2.0 gobject-2.0 gio-2.0
-> + Cflags: -I${includedir}/libqmi-glib
-> + Libs: -L${libdir} -lqmi-glib
-> ++Libs.Private: @MBIM_LIBS@
-> +--
-> +2.23.0
-> +
-> 
+2.23.0
