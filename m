@@ -1,52 +1,71 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 20 Dec 2019 17:05:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dropbear: group post-extract
- hooks with their call site
-In-Reply-To: <20191220164734.61ac625e@windsurf>
-References: <20191220153405.19108-1-patrickdepinguin@gmail.com>
- <20191220164734.61ac625e@windsurf>
-Message-ID: <CAAXf6LW-0rqF6rrc-sPY-YdU3NH2BFd6wGcxLV=CnPLS2T4q4A@mail.gmail.com>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Fri, 20 Dec 2019 17:04:38 +0100
+Subject: [Buildroot] [PATCH] sdl2: add patch to fix busy-loop in C library
+Message-ID: <20191220160438.102444-1-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El vie., 20 dic. 2019 a las 16:47, Thomas Petazzoni
-(<thomas.petazzoni@bootlin.com>) escribi?:
->
-> On Fri, 20 Dec 2019 16:34:04 +0100
-> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
->
-> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >
-> > The organization of dropbear.mk was no longer very clear: for some
-> > post-extract blocks, the block was separated from the place where it was
-> > enabled, but for others they were grouped.
-> >
-> > Regroup all blocks with their call site.
-> >
-> > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> > ---
-> >  package/dropbear/dropbear.mk | 31 ++++++++++++++-----------------
-> >  1 file changed, 14 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-> > index 7cbc16bc3d..8e09786bf0 100644
-> > --- a/package/dropbear/dropbear.mk
-> > +++ b/package/dropbear/dropbear.mk
-> > @@ -70,21 +70,26 @@ endif
-> >  define DROPBEAR_ENABLE_REVERSE_DNS
-> >       echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
-> >  endef
-> > +ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),)
-> > +DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
-> > +endif
->
-> The hook definition should be within the condition as well, and
-> similarly for the other cases.
->
-> Thanks!
->
+For some obscure reason, the order in which the libdrm/libgbm libraries
+are loaded matters.
 
-OK, thanks, v2 coming up...
+Without this fix, the first call to check_modesetting() will work and
+load then unload all symbols properly, but the second call to this
+function will lock up as soon as dlopen() is called on libdrm.
+
+Swapping the order in which the libdrm and libgbm libraries are loaded
+is enough to fix (or work around?) this issue.
+
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ .../sdl2/0002-fix-busy-loop-in-dlopen.patch   | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/sdl2/0002-fix-busy-loop-in-dlopen.patch
+
+diff --git a/package/sdl2/0002-fix-busy-loop-in-dlopen.patch b/package/sdl2/0002-fix-busy-loop-in-dlopen.patch
+new file mode 100644
+index 0000000000..984a80d9c1
+--- /dev/null
++++ b/package/sdl2/0002-fix-busy-loop-in-dlopen.patch
+@@ -0,0 +1,37 @@
++
++# HG changeset patch
++# User Paul Cercueil <paul@crapouillou.net>
++# Date 1576820863 28800
++# Node ID 4f5bef55183c677d12a7da8f3392879ed50670a3
++# Parent  01f16d7f36cb9f4fa02016e57fbe915fdea71cc8
++kmsdrm: Fix busy-loop within libc's dlopen()
++For some obscure reason, the order in which the libdrm/libgbm libraries
++are loaded matters.
++
++Without this fix, the first call to check_modesetting() will work and
++load then unload all symbols properly, but the second call to this
++function will lock up as soon as dlopen() is called on libdrm.
++
++Swapping the order in which the libdrm and libgbm libraries are loaded
++is enough to fix (or work around?) this issue.
++
++Fixes #4891:
++https://bugzilla.libsdl.org/show_bug.cgi?id=4891
++
++Signed-off-by: Paul Cercueil <paul@crapouillou.net>
++
++diff -r 01f16d7f36cb -r 4f5bef55183c src/video/kmsdrm/SDL_kmsdrmdyn.c
++--- a/src/video/kmsdrm/SDL_kmsdrmdyn.c	Thu Dec 19 21:45:44 2019 -0800
+++++ b/src/video/kmsdrm/SDL_kmsdrmdyn.c	Thu Dec 19 21:47:43 2019 -0800
++@@ -50,8 +50,8 @@
++ #endif
++ 
++ static kmsdrmdynlib kmsdrmlibs[] = {
++-    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC},
++-    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM}
+++    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM},
+++    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC}
++ };
++ 
++ static void *
++
+-- 
+2.24.0
