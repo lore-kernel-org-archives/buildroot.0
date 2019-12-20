@@ -1,47 +1,34 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 19 Dec 2019 18:28:30 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-multidict: bump to version
- 4.7.2
-Message-ID: <20191220012830.68504-1-james.hilliard1@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 19 Dec 2019 22:34:42 -0300
+Subject: [Buildroot] [PATCH] configs/imx6-sabresd_qt5: Select videotestsrc
+ plugin
+Message-ID: <20191220013442.8231-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-multidict/python-multidict.hash | 4 ++--
- package/python-multidict/python-multidict.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+The videotestsrc Gstreamer plugin is very useful for testing.
 
-diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
-index d60bd64442..0a6315280b 100644
---- a/package/python-multidict/python-multidict.hash
-+++ b/package/python-multidict/python-multidict.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/multidict/json
--md5	3d0ee14d81ed3db30f6bbd22a1a60d76  multidict-4.7.1.tar.gz
--sha256	d7b6da08538302c5245cd3103f333655ba7f274915f1f5121c4f4b5fbdb3febe  multidict-4.7.1.tar.gz
-+md5	6e021381611e08839c2820b9778a8e85  multidict-4.7.2.tar.gz
-+sha256	d4dafdcfbf0ac80fc5f00603f0ce43e487c654ae34a656e4749f175d9832b1b5  multidict-4.7.2.tar.gz
- # Locally computed sha256 checksums
- sha256	a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
-diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
-index ccf78b688f..ddf8086dfb 100644
---- a/package/python-multidict/python-multidict.mk
-+++ b/package/python-multidict/python-multidict.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Enable it by default.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/imx6-sabresd_qt5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 795f770e4f..d5369b34fc 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -93,6 +93,7 @@ BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2_PROBE=y
+ BR2_PACKAGE_GST1_PLUGINS_BAD=y
+ BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS=y
+ BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_KMS=y
++BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
  
--PYTHON_MULTIDICT_VERSION = 4.7.1
-+PYTHON_MULTIDICT_VERSION = 4.7.2
- PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
--PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/34/68/38290d44ea34dae6d52719f0c94bd09951387cec75e36cdce6805b5f27e9
-+PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/ec/1b/a117d6cb4403f2b64633606e3767f65fa8897b7db6efe14391c7b96cf2f6
- PYTHON_MULTIDICT_SETUP_TYPE = setuptools
- PYTHON_MULTIDICT_LICENSE = Apache-2.0
- PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
+ # For automatic kernel module loading
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
 -- 
-2.20.1
+2.17.1
