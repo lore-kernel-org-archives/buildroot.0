@@ -1,41 +1,75 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 20 Dec 2019 19:11:52 +0000
-Subject: [Buildroot] [Bug 12431] New: ethernet no detected on nanopi neo 2
-Message-ID: <bug-12431-163@https.bugs.busybox.net/>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri, 20 Dec 2019 21:12:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libqmi: add Libs.Private to
+ qmi-glib.pc
+In-Reply-To: <20191030084048.11194-1-fontaine.fabrice@gmail.com>
+References: <20191030084048.11194-1-fontaine.fabrice@gmail.com>
+Message-ID: <ae52396b-25b3-f269-1108-1f6f83a2c45f@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12431
+Hi Fabrice,
 
-            Bug ID: 12431
-           Summary: ethernet no detected on nanopi neo 2
-           Product: buildroot
-           Version: 2019.11
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: xavier.de.ceulaer at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On 10/30/19 9:40 AM, Fabrice Fontaine wrote:
+> This will fix a static build failure with modem-manager and libmbim
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/9c6b8ec2b9cc31f1ab460532c378731ab455210c
 
-Hello,
+I can't reproduce this build failure and so can't test your patch to fix 
+it. Basically it builds correctly.
+Can you double check?
 
-i have create image sdcard with friendly nanopi neo defconfig, the ethernet
-card is not detected, eth0 configured in dhcp in config.
-
-
-
-all compilation is ok.
-
-sorry for my very bad english.
-
+Thank you
+Best regards
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Giulio Benetti
+Benetti Engineering sas
+
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   ...0001-qmi-glib.pc.in-add-Libs.Private.patch | 31 +++++++++++++++++++
+>   1 file changed, 31 insertions(+)
+>   create mode 100644 package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
+> 
+> diff --git a/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch b/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
+> new file mode 100644
+> index 0000000000..46f32baab4
+> --- /dev/null
+> +++ b/package/libqmi/0001-qmi-glib.pc.in-add-Libs.Private.patch
+> @@ -0,0 +1,31 @@
+> +From c816e407b974f72d45f1878427cbeea448b3477a Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Wed, 30 Oct 2019 09:29:59 +0100
+> +Subject: [PATCH] qmi-glib.pc.in: add Libs.Private
+> +
+> +Add @MBIM_LIBS@ to Libs.Private in qmi-glib.pc.in so applications
+> +linking statically with qmi-glib (such as modem-manager) will retrieve
+> +these dependencies
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/9c6b8ec2b9cc31f1ab460532c378731ab455210c
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status:
+> +https://gitlab.freedesktop.org/mobile-broadband/libqmi/merge_requests/75]
+> +---
+> + data/pkg-config/qmi-glib.pc.in | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/data/pkg-config/qmi-glib.pc.in b/data/pkg-config/qmi-glib.pc.in
+> +index d334494..1d5054f 100644
+> +--- a/data/pkg-config/qmi-glib.pc.in
+> ++++ b/data/pkg-config/qmi-glib.pc.in
+> +@@ -9,3 +9,4 @@ Version: @VERSION@
+> + Requires: glib-2.0 gobject-2.0 gio-2.0
+> + Cflags: -I${includedir}/libqmi-glib
+> + Libs: -L${libdir} -lqmi-glib
+> ++Libs.Private: @MBIM_LIBS@
+> +--
+> +2.23.0
+> +
+> 
