@@ -1,90 +1,107 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 21 Dec 2019 10:00:33 +0100
-Subject: [Buildroot] [PATCH 1/1]
- toolchain/toolchain-external/toolchain-external-codesourcery-arm: disable
- SSP
-In-Reply-To: <4d7dcf0f-322d-5421-cb54-e2c9aaf9f364@benettiengineering.com>
-References: <20191028130838.23254-1-fontaine.fabrice@gmail.com>
- <4d7dcf0f-322d-5421-cb54-e2c9aaf9f364@benettiengineering.com>
-Message-ID: <CAPi7W830NGNhpNeaOLjm8LNp__x6v=aJtdBeGGm4U88wdn11dg@mail.gmail.com>
+From: Louis Aussedat <aussedat.louis@gmail.com>
+Date: Sat, 21 Dec 2019 10:58:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libpam-nfc: new package
+Message-ID: <20191221095858.8680-1-aussedat.louis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Giulio,
+Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/libpam-nfc/Config.in       |  7 +++++++
+ package/libpam-nfc/libpam-nfc.hash |  3 +++
+ package/libpam-nfc/libpam-nfc.mk   | 31 ++++++++++++++++++++++++++++++
+ 5 files changed, 43 insertions(+)
+ create mode 100644 package/libpam-nfc/Config.in
+ create mode 100644 package/libpam-nfc/libpam-nfc.hash
+ create mode 100644 package/libpam-nfc/libpam-nfc.mk
 
-Le ven. 20 d?c. 2019 ? 17:33, Giulio Benetti
-<giulio.benetti@benettiengineering.com> a ?crit :
->
-> Hi Fabrice,
->
-> On 10/28/19 2:08 PM, Fabrice Fontaine wrote:
-> > This toolchain does not support -fstack-protector-strong:
-> > SSP option -fstack-protector-strong not available in this toolchain, please select another SSP level
-> >
-> > As there is no way to add a !BR2_SSP_STRONG dependency without creating a
-> > Kconfig recursive dependency, just remove BR2_TOOLCHAIN_HAS_SSP
-> >
-> > Fixes:
-> >   - http://autobuild.buildroot.net/results/78dc6428ffaa529fdad8e9c8aaec49ded5f0209a
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> I've tried applying this patch against autobuilder's buildroot but
-> Buildroot recognizes that this toolchain is still capable of SSP and
-> gives this error:
-> "SSP support available in this toolchain, please enable
-> BR2_TOOLCHAIN_EXTERNAL_HAS_SSP"
->
-> The same is with your patch on top of master branch.
->
-> Can you please verify and dig into this problem?
-Indeed, this patch does not fix the issue as toolchain/helpers.mk
-raises an error because it detects that -fstack-protector is supported
-through:
-
-    __HAS_SSP=`echo 'void main(){}' | $${__CROSS_CC} -Werror
--fstack-protector -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp
->/dev/null 2>&1 && echo y` ; \
-    if [ "$(BR2_TOOLCHAIN_HAS_SSP)" != "y" -a "$${__HAS_SSP}" = "y" ] ; then \
-        echo "SSP support available in this toolchain, please enable
-BR2_TOOLCHAIN_EXTERNAL_HAS_SSP" ; \
-        exit 1 ; \
-    fi ; \
-
-So I assume the correct way to fix this autobuilder failure is to
-patch utils/genrandconfig to avoid this configuration setup with this
-toolchain.
-The quickest solution would be to update the fixup_config function to
-reject BR2_SSP_STRONG with BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM but
-this does not seem very generic.
->
-> Thank you very much
-> Best regards
-> --
-> Giulio Benetti
-> Benetti Engineering sas
-Best Regards,
-
-Fabrice
->
-> > ---
-> >   .../toolchain-external-codesourcery-arm/Config.in                | 1 -
-> >   1 file changed, 1 deletion(-)
-> >
-> > diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
-> > index bdbe2acaea..f80e54ff06 100644
-> > --- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
-> > +++ b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
-> > @@ -8,7 +8,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
-> >       depends on !BR2_cortex_a12 && !BR2_cortex_a17 && !BR2_ARM_CPU_ARMV8A
-> >       depends on !BR2_STATIC_LIBS
-> >       select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-> > -     select BR2_TOOLCHAIN_HAS_SSP
-> >       select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> >       select BR2_INSTALL_LIBSTDCPP
-> >       select BR2_HOSTARCH_NEEDS_IA32_LIBS
-> >
->
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 770888fb23..b367114e1b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1428,6 +1428,7 @@ F:	package/ti-sgx-um/
+ N:	Louis Aussedat <aussedat.louis@gmail.com>
+ F:	board/friendlyarm/nanopi-neo-plus2/
+ F:	configs/friendlyarm_nanopi_neo_plus2_defconfig
++F:	package/libpam-nfc
+ F:	package/python-dnspython/
+ F:	package/python-future/
+ F:	package/python-huepy/
+diff --git a/package/Config.in b/package/Config.in
+index 4480259af5..b1bbb240e5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1801,6 +1801,7 @@ menu "Other"
+ 	source "package/linux-pam/Config.in"
+ if BR2_PACKAGE_LINUX_PAM
+ comment "linux-pam plugins"
++	source "package/libpam-nfc/Config.in"
+ 	source "package/libpam-radius-auth/Config.in"
+ 	source "package/libpam-tacplus/Config.in"
+ endif
+diff --git a/package/libpam-nfc/Config.in b/package/libpam-nfc/Config.in
+new file mode 100644
+index 0000000000..5baa5d76f5
+--- /dev/null
++++ b/package/libpam-nfc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBPAM_NFC
++	bool "libpam-nfc"
++    select BR2_PACKAGE_LIBNFC
++	help
++	  NFC-based PAM authentification module.
++
++	  https://github.com/nfc-tools/pam_nfc
+diff --git a/package/libpam-nfc/libpam-nfc.hash b/package/libpam-nfc/libpam-nfc.hash
+new file mode 100644
+index 0000000000..27896ef4b1
+--- /dev/null
++++ b/package/libpam-nfc/libpam-nfc.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256  f44273944f1ecc78b10b65147328860836b60fe4bb8c39819e32199f2870d48b  libpam-nfc-bb762e0e649195110e015ffb605c4375e927c437.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/libpam-nfc/libpam-nfc.mk b/package/libpam-nfc/libpam-nfc.mk
+new file mode 100644
+index 0000000000..fc1eb72b47
+--- /dev/null
++++ b/package/libpam-nfc/libpam-nfc.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# libpam-nfc
++#
++################################################################################
++
++LIBPAM_NFC_VERSION = bb762e0e649195110e015ffb605c4375e927c437
++LIBPAM_NFC_SITE = $(call github,nfc-tools,pam_nfc,$(LIBPAM_NFC_VERSION))
++LIBPAM_NFC_LICENSE = GPL-2.0
++LIBPAM_NFC_LICENSE_FILES = COPYING
++LIBPAM_NFC_DEPENDENCIES = linux-pam libnfc
++# Fetching from github, we need to generate the configure script
++LIBPAM_NFC_AUTORECONF = YES
++LIBPAM_NFC_INSTALL_STAGING = YES
++
++LIBPAM_NFC_CONF_OPTS = \
++	--with-pam-dir=/lib/security
++
++# libpam breaks with parallel build, but is very fast to build.
++# build single threaded.
++define LIBPAM_NFC_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
++endef
++
++# Autoreconf requires an existing m4 directory
++define LIBPAM_NFC_MKDIR_M4
++	mkdir -p $(@D)/m4
++endef
++LIBPAM_NFC_PRE_CONFIGURE_HOOKS += LIBPAM_NFC_MKDIR_M4
++
++$(eval $(autotools-package))
+-- 
+2.24.0
