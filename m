@@ -1,107 +1,92 @@
-From: Louis Aussedat <aussedat.louis@gmail.com>
-Date: Sat, 21 Dec 2019 10:58:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpam-nfc: new package
-Message-ID: <20191221095858.8680-1-aussedat.louis@gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sat, 21 Dec 2019 12:12:18 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/qt5/qt5webengine: fix build error
+Message-ID: <20191221111218.26960-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
----
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/libpam-nfc/Config.in       |  7 +++++++
- package/libpam-nfc/libpam-nfc.hash |  3 +++
- package/libpam-nfc/libpam-nfc.mk   | 31 ++++++++++++++++++++++++++++++
- 5 files changed, 43 insertions(+)
- create mode 100644 package/libpam-nfc/Config.in
- create mode 100644 package/libpam-nfc/libpam-nfc.hash
- create mode 100644 package/libpam-nfc/libpam-nfc.mk
+This commit adds a patch from upstream chromium [1].
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 770888fb23..b367114e1b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1428,6 +1428,7 @@ F:	package/ti-sgx-um/
- N:	Louis Aussedat <aussedat.louis@gmail.com>
- F:	board/friendlyarm/nanopi-neo-plus2/
- F:	configs/friendlyarm_nanopi_neo_plus2_defconfig
-+F:	package/libpam-nfc
- F:	package/python-dnspython/
- F:	package/python-future/
- F:	package/python-huepy/
-diff --git a/package/Config.in b/package/Config.in
-index 4480259af5..b1bbb240e5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1801,6 +1801,7 @@ menu "Other"
- 	source "package/linux-pam/Config.in"
- if BR2_PACKAGE_LINUX_PAM
- comment "linux-pam plugins"
-+	source "package/libpam-nfc/Config.in"
- 	source "package/libpam-radius-auth/Config.in"
- 	source "package/libpam-tacplus/Config.in"
- endif
-diff --git a/package/libpam-nfc/Config.in b/package/libpam-nfc/Config.in
+Fixes:
+  ../../3rdparty/chromium/third_party/skia/third_party/skcms/skcms.cc:1909:16:
+  note: in definition of macro 'NS'
+  #define NS(id) id
+
+[1] https://chromium.googlesource.com/chromium/src/+/a8c8396fd20d98666d517c45b358c63736e345ef
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+v1 -> v2:
+ - keep gcc 4.8 as a minimum required version (suggested by Giulio Benetti)
+ ..._config-Fixes-when-use_sysroot-false.patch | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 package/qt5/qt5webengine/5.12.5/0001-pkg_config-Fixes-when-use_sysroot-false.patch
+
+diff --git a/package/qt5/qt5webengine/5.12.5/0001-pkg_config-Fixes-when-use_sysroot-false.patch b/package/qt5/qt5webengine/5.12.5/0001-pkg_config-Fixes-when-use_sysroot-false.patch
 new file mode 100644
-index 0000000000..5baa5d76f5
+index 0000000000..a0fdad4da3
 --- /dev/null
-+++ b/package/libpam-nfc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBPAM_NFC
-+	bool "libpam-nfc"
-+    select BR2_PACKAGE_LIBNFC
-+	help
-+	  NFC-based PAM authentification module.
++++ b/package/qt5/qt5webengine/5.12.5/0001-pkg_config-Fixes-when-use_sysroot-false.patch
+@@ -0,0 +1,57 @@
++From cc35cac78c053c14da01d6b1e5b05b0615360148 Mon Sep 17 00:00:00 2001
++From: Tom Anderson <thomasanderson@chromium.org>
++Date: Thu, 2 Aug 2018 01:59:28 +0000
++Subject: [PATCH] pkg_config: Fixes when use_sysroot=false
 +
-+	  https://github.com/nfc-tools/pam_nfc
-diff --git a/package/libpam-nfc/libpam-nfc.hash b/package/libpam-nfc/libpam-nfc.hash
-new file mode 100644
-index 0000000000..27896ef4b1
---- /dev/null
-+++ b/package/libpam-nfc/libpam-nfc.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  f44273944f1ecc78b10b65147328860836b60fe4bb8c39819e32199f2870d48b  libpam-nfc-bb762e0e649195110e015ffb605c4375e927c437.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/libpam-nfc/libpam-nfc.mk b/package/libpam-nfc/libpam-nfc.mk
-new file mode 100644
-index 0000000000..fc1eb72b47
---- /dev/null
-+++ b/package/libpam-nfc/libpam-nfc.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# libpam-nfc
-+#
-+################################################################################
++This CL introduces 2 changes to the behavior of pkg_config when
++use_sysroot=false:
 +
-+LIBPAM_NFC_VERSION = bb762e0e649195110e015ffb605c4375e927c437
-+LIBPAM_NFC_SITE = $(call github,nfc-tools,pam_nfc,$(LIBPAM_NFC_VERSION))
-+LIBPAM_NFC_LICENSE = GPL-2.0
-+LIBPAM_NFC_LICENSE_FILES = COPYING
-+LIBPAM_NFC_DEPENDENCIES = linux-pam libnfc
-+# Fetching from github, we need to generate the configure script
-+LIBPAM_NFC_AUTORECONF = YES
-+LIBPAM_NFC_INSTALL_STAGING = YES
++1. The path is not made relative to the build directory.  This fixes the case
++where your src directory may be mounted at different locations.
 +
-+LIBPAM_NFC_CONF_OPTS = \
-+	--with-pam-dir=/lib/security
++2. -I is used instead of -isystem.  When -isystem is used, dep files do not
++reference the system header files.  This is OK when using the sysroot because
++the CR_SYSROOT_HASH macro contains the sysroot revision so any source files will
++be rebuilt when the sysroot updates.
 +
-+# libpam breaks with parallel build, but is very fast to build.
-+# build single threaded.
-+define LIBPAM_NFC_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
-+endef
++R=dpranke
 +
-+# Autoreconf requires an existing m4 directory
-+define LIBPAM_NFC_MKDIR_M4
-+	mkdir -p $(@D)/m4
-+endef
-+LIBPAM_NFC_PRE_CONFIGURE_HOOKS += LIBPAM_NFC_MKDIR_M4
++Change-Id: Ia3d7df51880205fee888923283b76078ccb3112f
++Reviewed-on: https://chromium-review.googlesource.com/1159689
++Reviewed-by: Dirk Pranke <dpranke@chromium.org>
++Commit-Queue: Thomas Anderson <thomasanderson@chromium.org>
++Cr-Original-Commit-Position: refs/heads/master@{#580030}
++Cr-Mirrored-From: https://chromium.googlesource.com/chromium/src
++Cr-Mirrored-Commit: a8c8396fd20d98666d517c45b358c63736e345ef
++Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
++---
++ src/3rdparty/chromium/build/config/linux/pkg_config.gni | 12 ++++++++----
++ 1 file changed, 8 insertions(+), 4 deletions(-)
 +
-+$(eval $(autotools-package))
++diff --git a/src/3rdparty/chromium/build/config/linux/pkg_config.gni b/src/3rdparty/chromium/build/config/linux/pkg_config.gni
++index 53ee353af..428e44ac0 100644
++--- a/src/3rdparty/chromium/build/config/linux/pkg_config.gni
+++++ b/src/3rdparty/chromium/build/config/linux/pkg_config.gni
++@@ -103,11 +103,15 @@ template("pkg_config") {
++     pkgresult = exec_script(pkg_config_script, args, "value")
++     cflags = pkgresult[1]
++ 
++-    # We want the system include paths to use -isystem instead of -I to suppress
++-    # warnings in those headers.
++     foreach(include, pkgresult[0]) {
++-      include_relativized = rebase_path(include, root_build_dir)
++-      cflags += [ "-isystem$include_relativized" ]
+++      if (use_sysroot) {
+++        # We want the system include paths to use -isystem instead of -I to
+++        # suppress warnings in those headers.
+++        include_relativized = rebase_path(include, root_build_dir)
+++        cflags += [ "-isystem$include_relativized" ]
+++      } else {
+++        cflags += [ "-I$include" ]
+++      }
++     }
++ 
++     if (!defined(invoker.ignore_libs) || !invoker.ignore_libs) {
++-- 
++2.21.0
++
 -- 
-2.24.0
+2.24.1
