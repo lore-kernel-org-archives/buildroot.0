@@ -1,18 +1,18 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Dec 2019 23:10:27 +0100
-Subject: [Buildroot] [git commit] package/pipewire: add xlib_libX11 optional
+Date: Sat, 21 Dec 2019 23:10:21 +0100
+Subject: [Buildroot] [git commit] package/pipewire: add libva optional
  dependency
-Message-ID: <20191221220507.94A518D3EE@busybox.osuosl.org>
+Message-ID: <20191221220507.89AE68D3CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61cfc867aee3b6b058e3dcd9ebf35fd5a32f5cc4
+commit: https://git.buildroot.net/buildroot/commit/?id=a5e8050124579c17e3f8614283827b4b4e214714
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xlib_libX11 is an optional dependeny of spa, see:
+libva is an optional dependency of spa, see:
 https://github.com/PipeWire/pipewire/blob/0.2.7/spa/meson.build
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
@@ -22,17 +22,17 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 4 insertions(+)
 
 diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index aa3fdc489d..df159c5ef4 100644
+index ed98ff7f3b..aa3fdc489d 100644
 --- a/package/pipewire/pipewire.mk
 +++ b/package/pipewire/pipewire.mk
-@@ -27,6 +27,10 @@ ifeq ($(BR2_PACKAGE_SDL2),y)
- PIPEWIRE_DEPENDENCIES += sdl2
+@@ -15,6 +15,10 @@ ifeq ($(BR2_PACKAGE_FFMPEG),y)
+ PIPEWIRE_DEPENDENCIES += ffmpeg
  endif
  
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+PIPEWIRE_DEPENDENCIES += xlib_libX11
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++PIPEWIRE_DEPENDENCIES += libva
 +endif
 +
- ifeq ($(BR2_PACKAGE_PIPEWIRE_GSTREAMER),y)
- PIPEWIRE_CONF_OPTS += -Dgstreamer=enabled
- PIPEWIRE_DEPENDENCIES += libglib2 gstreamer1 gst1-plugins-base
+ ifeq ($(BR2_PACKAGE_SBC),y)
+ PIPEWIRE_DEPENDENCIES += sbc
+ endif
