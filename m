@@ -1,101 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Dec 2019 22:22:42 +0100
-Subject: [Buildroot] [git commit] package/genimage: add patch to support
- vfat volume-label
-Message-ID: <20191221212320.354B08D318@busybox.osuosl.org>
+Date: Sat, 21 Dec 2019 22:28:41 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5webengine: fix build error
+ due to bogus use of -isystem
+Message-ID: <20191221212320.3F5F08D31A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aeb517522fc60747caa340cc0f2500fc94106b63
+commit: https://git.buildroot.net/buildroot/commit/?id=6cfe21ae90ccd88254bf5240b2b29d74794f45fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Import "0001-image-vfat-Add-label-option-to-set-volume-name.patch" from
-the upstream repository. The changes made to the README.rst file had to
-be removed from the patch so that the package can be compiled in
-buildroot. The patch has been accepted upstream, but no releases have
-been made yet which includes the feature.
+This commit adds a patch from upstream chromium[1] that allows passing
+-I instead of -isystem to CFLAGS.
 
-Signed-off-by: Dario Binacchi <dariobin@libero.it>
+Fixes:
+  In file included from /usr/lib/gcc/x86_64-pc-linux-gnu/6.1.0/include/g++-v6/bits/stl_algo.h:59:0,
+                  from /usr/lib/gcc/x86_64-pc-linux-gnu/6.1.0/include/g++-v6/algorithm:62,
+                  from /usr/include/qt5/QtCore/qglobal.h:85,
+                  from /usr/include/qt5/QtCore/qalgorithms.h:37,
+                  from /usr/include/qt5/QtCore/qlist.h:37,
+                  from /usr/include/qt5/QtCore/qstringlist.h:34,
+                  from /usr/include/qt5/QtCore/QStringList:1,
+                  from base/http/requestparser.cpp:32:
+/usr/lib/gcc/x86_64-pc-linux-gnu/6.1.0/include/g++-v6/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
+  #include_next <stdlib.h>
+
+[1] https://chromium.googlesource.com/chromium/src/+/a8c8396fd20d98666d517c45b358c63736e345ef
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+[Thomas: improved commit log with comments from Giulio.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-vfat-Add-label-option-to-set-volume-name.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ ...1-pkg_config-Fixes-when-use_sysroot-false.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/package/genimage/0001-image-vfat-Add-label-option-to-set-volume-name.patch b/package/genimage/0001-image-vfat-Add-label-option-to-set-volume-name.patch
+diff --git a/package/qt5/qt5webengine/5.12.5/0001-pkg_config-Fixes-when-use_sysroot-false.patch b/package/qt5/qt5webengine/5.12.5/0001-pkg_config-Fixes-when-use_sysroot-false.patch
 new file mode 100644
-index 0000000000..a77b8260a0
+index 0000000000..a0fdad4da3
 --- /dev/null
-+++ b/package/genimage/0001-image-vfat-Add-label-option-to-set-volume-name.patch
-@@ -0,0 +1,69 @@
-+From c1a165731298b96175b9b0dd80ad088dc8b33dc1 Mon Sep 17 00:00:00 2001
-+From: Florent Viard <fviard@cxignited.com>
-+Date: Sun, 27 Oct 2019 23:48:16 +0100
-+Subject: [PATCH] image-vfat: Add label option to set volume name.
++++ b/package/qt5/qt5webengine/5.12.5/0001-pkg_config-Fixes-when-use_sysroot-false.patch
+@@ -0,0 +1,57 @@
++From cc35cac78c053c14da01d6b1e5b05b0615360148 Mon Sep 17 00:00:00 2001
++From: Tom Anderson <thomasanderson@chromium.org>
++Date: Thu, 2 Aug 2018 01:59:28 +0000
++Subject: [PATCH] pkg_config: Fixes when use_sysroot=false
 +
-+Signed-off-by: Florent Viard <fviard@cxignited.com>
-+[dariobin at libero.it: remove README.rst changes]
-+Signed-off-by: Dario Binacchi <dariobin@libero.it>
++This CL introduces 2 changes to the behavior of pkg_config when
++use_sysroot=false:
++
++1. The path is not made relative to the build directory.  This fixes the case
++where your src directory may be mounted at different locations.
++
++2. -I is used instead of -isystem.  When -isystem is used, dep files do not
++reference the system header files.  This is OK when using the sysroot because
++the CR_SYSROOT_HASH macro contains the sysroot revision so any source files will
++be rebuilt when the sysroot updates.
++
++R=dpranke
++
++Change-Id: Ia3d7df51880205fee888923283b76078ccb3112f
++Reviewed-on: https://chromium-review.googlesource.com/1159689
++Reviewed-by: Dirk Pranke <dpranke@chromium.org>
++Commit-Queue: Thomas Anderson <thomasanderson@chromium.org>
++Cr-Original-Commit-Position: refs/heads/master@{#580030}
++Cr-Mirrored-From: https://chromium.googlesource.com/chromium/src
++Cr-Mirrored-Commit: a8c8396fd20d98666d517c45b358c63736e345ef
++Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 +---
-+ image-vfat.c | 18 ++++++++++++++++--
-+ 1 file changed, 16 insertions(+), 2 deletions(-)
++ src/3rdparty/chromium/build/config/linux/pkg_config.gni | 12 ++++++++----
++ 1 file changed, 8 insertions(+), 4 deletions(-)
 +
-+diff --git a/image-vfat.c b/image-vfat.c
-+index f16242c..3ea7288 100644
-+--- a/image-vfat.c
-++++ b/image-vfat.c
-+@@ -27,14 +27,20 @@ static int vfat_generate(struct image *image)
-+ 	int ret;
-+ 	struct partition *part;
-+ 	char *extraargs = cfg_getstr(image->imagesec, "extraargs");
-++	char *label = cfg_getstr(image->imagesec, "label");
-++
-++	if (label && label[0] != '\0')
-++		xasprintf(&label, "-n '%s'", label);
-++	else
-++		label = "";
++diff --git a/src/3rdparty/chromium/build/config/linux/pkg_config.gni b/src/3rdparty/chromium/build/config/linux/pkg_config.gni
++index 53ee353af..428e44ac0 100644
++--- a/src/3rdparty/chromium/build/config/linux/pkg_config.gni
+++++ b/src/3rdparty/chromium/build/config/linux/pkg_config.gni
++@@ -103,11 +103,15 @@ template("pkg_config") {
++     pkgresult = exec_script(pkg_config_script, args, "value")
++     cflags = pkgresult[1]
 + 
-+ 	ret = systemp(image, "%s if=/dev/zero of=\"%s\" seek=%lld count=0 bs=1 2>/dev/null",
-+ 			get_opt("dd"), imageoutfile(image), image->size);
-+ 	if (ret)
-+ 		return ret;
++-    # We want the system include paths to use -isystem instead of -I to suppress
++-    # warnings in those headers.
++     foreach(include, pkgresult[0]) {
++-      include_relativized = rebase_path(include, root_build_dir)
++-      cflags += [ "-isystem$include_relativized" ]
+++      if (use_sysroot) {
+++        # We want the system include paths to use -isystem instead of -I to
+++        # suppress warnings in those headers.
+++        include_relativized = rebase_path(include, root_build_dir)
+++        cflags += [ "-isystem$include_relativized" ]
+++      } else {
+++        cflags += [ "-I$include" ]
+++      }
++     }
 + 
-+-	ret = systemp(image, "%s %s '%s'", get_opt("mkdosfs"),
-+-			extraargs, imageoutfile(image));
-++	ret = systemp(image, "%s %s %s '%s'", get_opt("mkdosfs"),
-++			extraargs, label, imageoutfile(image));
-+ 	if (ret)
-+ 		return ret;
-+ 
-+@@ -72,11 +78,18 @@ static int vfat_generate(struct image *image)
-+ 
-+ static int vfat_setup(struct image *image, cfg_t *cfg)
-+ {
-++	char *label = cfg_getstr(image->imagesec, "label");
-++
-+ 	if (!image->size) {
-+ 		image_error(image, "no size given or must not be zero\n");
-+ 		return -EINVAL;
-+ 	}
-+ 
-++	if (label && strlen(label) > 11) {
-++		image_error(image, "vfat volume name cannot be longer than 11 characters\n");
-++		return -EINVAL;
-++	}
-++
-+ 	return 0;
-+ }
-+ 
-+@@ -112,6 +125,7 @@ static cfg_opt_t file_opts[] = {
-+ 
-+ static cfg_opt_t vfat_opts[] = {
-+ 	CFG_STR("extraargs", "", CFGF_NONE),
-++	CFG_STR("label", "", CFGF_NONE),
-+ 	CFG_STR_LIST("files", 0, CFGF_NONE),
-+ 	CFG_SEC("file", file_opts, CFGF_MULTI | CFGF_TITLE),
-+ 	CFG_END()
++     if (!defined(invoker.ignore_libs) || !invoker.ignore_libs) {
 +-- 
-+2.24.0
++2.21.0
 +
