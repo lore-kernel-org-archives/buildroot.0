@@ -1,64 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Dec 2019 22:59:59 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/sysrepo: bump to version
- 1.3.21
-In-Reply-To: <20191220135345.16045-4-heiko.thiery@gmail.com>
-References: <20191220135345.16045-1-heiko.thiery@gmail.com>
- <20191220135345.16045-4-heiko.thiery@gmail.com>
-Message-ID: <20191221225959.579c6830@windsurf>
+Date: Sat, 21 Dec 2019 23:02:36 +0100
+Subject: [Buildroot] [git commit] package/openrc: cleanup sysv-rcs script
+Message-ID: <20191221215334.D2B7A8D399@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bc66a64193741900863cabc38d45dad264c7acef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 20 Dec 2019 14:53:45 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+Currently, the sysv-rcs script has two issues:
+  - The return code of each RCS script is not checked.
+  - The output does not match the formatting of the other openrc
+    init scripts.
 
-> From: Heiko Thiery <heiko.thiery@kontron.com>
-> 
-> This Sysrepo is a complete rewrite of the older versions.
-> 
-> Thus several changes are made in the package to support this new version.
-> 
-> - several cmake config options dropped
-> - no systemd service scripts availble in upstream version
-> - no sysrepod daemon available
-> - drop patches that are no longer needed
-> - add new patch
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+Modify the script in the following ways to fix both issues:
+  - Remove the "einfo "Starting sysv rc scripts"" at the top of the
+    start function in favor of "einfo "Starting $i" in the loop
+    itself.
 
-Thanks for the patch. It indeed does simplify quite a few things.
+  - Add a "> /dev/null" to the end of $i start; this suppresses
+    stdout while still allowing for stderr messages to print to the
+    terminal.
 
->  SYSREPO_CONF_OPTS = \
-> -	-DIS_DEVELOPER_CONFIGURATION=OFF \
-> -	-DGEN_PYTHON2_TESTS=OFF \
-> -	-DENABLE_TESTS=OFF \
-> -	-DGEN_CPP_BINDINGS=OFF \
-> -	-DGEN_LANGUAGE_BINDINGS=OFF \
-> -	-DGEN_PYTHON_BINDINGS=OFF \
-> -	-DBUILD_CPP_EXAMPLES=OFF \
-> -	-DCALL_SYSREPOCTL_BIN=$(HOST_DIR)/bin/sysrepoctl \
-> -	-DCALL_SYSREPOCFG_BIN=$(HOST_DIR)/bin/sysrepocfg \
-> +	-DCMAKE_BUILD_TYPE=Release \
+  - add an "eend $? to both the start and stop functions, this
+    allows for openrc to show if an RCS script returned 0 or
+    not.
 
-Any reason for passing this ? The cmake-package infrastructure already
-passes it:
+The following is the startup output of OpenRC on a minimal system
+with S01syslogd modified to exit with a return code 1 for testing
+purposes:
 
--e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#'
+Before:
+ * Adding static routes ...
+ [ ok ]
+Starting default runlevel
+ * Starting sysv rc scripts
+Starting syslogd: OK
+Starting klogd: OK
+Running sysctl: OK
 
-so it's already in the $(HOST_DIR)/share/buildroot/toolchainfile.cmake
-CMake toolchain file.
+After:
+ * Adding static routes ...
+ [ ok ]
+Starting default runlevel
+ * Starting /etc/init.d/S01syslogd ...
+ [ !! ]
+ * Starting /etc/init.d/S02klogd ...
+ [ ok ]
+ * Starting /etc/init.d/S02sysctl ...
+ [ ok ]
 
-Have you encountered a specific issue that makes it needed ?
+Signed-off-by: Adam Duskett <aduskett@greenlots.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openrc/sysv-rcs | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/openrc/sysv-rcs b/package/openrc/sysv-rcs
+index 606a73d2b4..1564cbe603 100755
+--- a/package/openrc/sysv-rcs
++++ b/package/openrc/sysv-rcs
+@@ -7,19 +7,21 @@ depend() {
+ }
+ 
+ start() {
+-    einfo "Starting sysv rc scripts"
+     for i in /etc/init.d/S??*; do
+         # Ignore dangling symlinks (if any).
+         [ -e "$i" ] || continue
+-        $i start
++        einfo "Starting $i"
++        $i start > /dev/null
++        eend $?
+     done
+ }
+ 
+ stop() {
+-    einfo "Stopping sysv rc scripts"
+     for i in $(ls -r /etc/init.d/S??*); do
+         # Ignore dangling symlinks (if any).
+         [ -e "$i" ] || continue
+-        $i stop
++        einfo "Stopping $i"
++        $i stop > /dev/null
++        eend $?
+     done
+ }
