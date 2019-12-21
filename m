@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Dec 2019 23:10:21 +0100
-Subject: [Buildroot] [git commit] package/pipewire: add libva optional
- dependency
-Message-ID: <20191221220507.89AE68D3CC@busybox.osuosl.org>
+Date: Sat, 21 Dec 2019 23:10:09 +0100
+Subject: [Buildroot] [git commit] package/pipewire: fix comment in Config.in
+Message-ID: <20191221220507.801B78D3EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5e8050124579c17e3f8614283827b4b4e214714
+commit: https://git.buildroot.net/buildroot/commit/?id=acba13db99c21d40ce556e984d800c8a0b68bff3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libva is an optional dependency of spa, see:
-https://github.com/PipeWire/pipewire/blob/0.2.7/spa/meson.build
+Commit ac92146ebb7627378c0a8c92f6490e55333eb6bb forgot to update
+comment with udev dependency
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pipewire/pipewire.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/pipewire/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index ed98ff7f3b..aa3fdc489d 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -15,6 +15,10 @@ ifeq ($(BR2_PACKAGE_FFMPEG),y)
- PIPEWIRE_DEPENDENCIES += ffmpeg
+diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+index 80e28d3614..57e70d65f8 100644
+--- a/package/pipewire/Config.in
++++ b/package/pipewire/Config.in
+@@ -30,6 +30,6 @@ comment "pipewire gstreamer support needs a toolchain w/ wchar, threads"
+ 
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBVA),y)
-+PIPEWIRE_DEPENDENCIES += libva
-+endif
-+
- ifeq ($(BR2_PACKAGE_SBC),y)
- PIPEWIRE_DEPENDENCIES += sbc
- endif
+-comment "pipewire needs a toolchain w/ threads"
++comment "pipewire needs udev and a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
