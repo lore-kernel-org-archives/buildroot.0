@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Dec 2019 22:02:05 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/dante: remove
+Date: Sun, 22 Dec 2019 22:01:55 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/dante: remove
  --without-pam
-Message-ID: <20191222205359.AFB428D7B2@busybox.osuosl.org>
+Message-ID: <20191222205406.2ACF88D7B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eee8a46704986dc008047fe02d1e342fa17b51f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=99b339c22d27ede9369776388b0b1b89ce4fc8a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 --without-pam was wrongly put back when next was merged into master for
 2019.02 in commit 13c43455a05b (Merge branch 'next')
