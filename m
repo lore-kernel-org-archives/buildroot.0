@@ -1,34 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 22:37:59 +0100
-Subject: [Buildroot] [PATCH 1/2] package/qpdf: bump to version 9.1.0
-In-Reply-To: <20191222104929.2197066-1-fontaine.fabrice@gmail.com>
-References: <20191222104929.2197066-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191222223759.055769dd@windsurf>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 22 Dec 2019 22:40:43 +0100
+Subject: [Buildroot] [PATCH] support/download/svn: generate reproducible
+ svn archives
+In-Reply-To: <20191222223650.1f44d3ca@windsurf>
+References: <20191222213148.13762-1-heiko.thiery@gmail.com>
+ <20191222223650.1f44d3ca@windsurf>
+Message-ID: <CAEyMn7aZgVT2hmb8O4duNFeD4_x2_jkChOj9Cv3MAtVXZhQNLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 22 Dec 2019 11:49:28 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hi,
 
-> - Add host-pkgconf dependency as it is used since version 9.0.0 and
->   https://github.com/qpdf/qpdf/commit/12400475283f5081ea55f52a764e43f14032f6ba
-> - C++11 is mandatory since version 9.1.0 and
->   https://github.com/qpdf/qpdf/commit/653ce3550d18a07194a4c3bb9b4a3d260ed842cd
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/qpdf/Config.in | 6 ++++--
->  package/qpdf/qpdf.hash | 4 ++--
->  package/qpdf/qpdf.mk   | 4 ++--
->  3 files changed, 8 insertions(+), 6 deletions(-)
+Am So., 22. Dez. 2019 um 22:36 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> On Sun, 22 Dec 2019 22:31:49 +0100
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> > To generate a reproducible archive from a svn repository mainly the same
+> > aproach is done like for the archives from a git repository.
+> >
+> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+>
+> Thanks. Could you check whether the tarballs that are now produced by
+> this are identical to the tarballs we already have on
+> sources.buildroot.org ?
 
-Both patches applied to master. Thanks!
+I checked this for the fis package and unfortunately this is not the
+case. Do you expect to have the same hashes?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
