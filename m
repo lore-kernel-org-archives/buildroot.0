@@ -1,82 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 21:56:21 +0100
-Subject: [Buildroot] [git commit] arch/arc: Accommodate 16 KiB MMU pages
-Message-ID: <20191222204938.8C2A28B4A1@busybox.osuosl.org>
+Date: Sun, 22 Dec 2019 21:55:36 +0100
+Subject: [Buildroot] [git commit] linux: Set MMU page size for ARC processors
+Message-ID: <20191222204938.813258D7A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d024d369b82d2d3d9d4d75489c19e9488202bca0
+commit: https://git.buildroot.net/buildroot/commit/?id=d7a771816d938f9d8d04b24fd07d2f3f52e73f99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ARC processors are known for its configurability and one of those
-configurable things is MMU page size which might be set to any
-power of two from 4 KiB to 16 MiB, though in the Linux kernel we
-only support 4, 8 and 16 KiB due to practical considerations.
+ARC processors have configurable size of MMU page. This configuration
+happens during ASIC design and couldn't be changed in final silicone
+not to mention runtime changes.
 
-And the most used setting is 8 KiB thus GNU LD assumes maximum
-page size is 8 KiB by default and while this works for smaller
-pages (it's OK to align segments by larger value it will be still
-peoperly aligned) this breaks execution of user-space apps on HW
-with larger pages because Elf sections might very well span across
-allocated pages and thus make executable broken.
+Given PAGE_SIZE macro is used a lot throughout the Linux kernel sources
+we just hardcode a required value during the kernel configuration.
 
-Simplest example:
------------------------------------->8-----------------------------------
-$ arc-linux-gcc test.c
-$ arc-linux-readelf --segments a.out
+We used to support different MMU page sizes for ARC in Buildroot for
+quite some time now but so far we only tweaked uClibc on the matter.
+That left us with the kernel configured with whatever was in used defconfig.
 
-Program Headers:
-  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
-...
-  LOAD           0x000000 0x00010000 0x00010000 0x003e8 0x003e8 R E 0x2000 <-- See
-  LOAD           0x001f24 0x00013f24 0x00013f24 0x000f0 0x0010c RW  0x2000
------------------------------------->8-----------------------------------
+In most of real cases that's OK because typically we're building firmware
+for a particular ASIC which is supposed to have a unique kernel defconfig.
+But if we're dealing with FPGA-based boards or even simlators like
+Synopsys DesignWare nSIM or QEMU it's possible to have dfferent MMU page
+size configured in that target mostly for the sake of testing.
 
-Fortunately we may override default page size settings with "max-page-size"
-linker option this way:
------------------------------------->8-----------------------------------
-$ arc-linux-gcc test.c -Wl,-z,max-page-size=16384
-$ arc-linux-readelf --segments a.out
-Elf file type is EXEC (Executable file)
-Entry point 0x102c4
-There are 8 program headers, starting at offset 52
-
-Program Headers:
-  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
-...
-  LOAD           0x000000 0x00010000 0x00010000 0x003e8 0x003e8 R E 0x4000 <-- See
-  LOAD           0x001f24 0x00015f24 0x00015f24 0x000f0 0x0010c RW  0x4000
------------------------------------->8-----------------------------------
-
-Which we implement with that change.
+And so we're trying to solve 2 problems here:
+ 1. Make sure both user-space (via libc settings) and the Linux kernel
+    are "on the same page", i.e. expect to use the same MMU page size.
+ 2. Simplify process of testing different page sizes.
+    As now we first need to set page size in Buildroot and then in the
+    kernel via "make linux-configure" or via Kconfig fragment.
 
 Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-[yann.morin.1998 at free.fr: fix comment: s/8196/8192/]
+[yann.morin.1998 at free.fr: simplify the conditions]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- arch/arch.mk.arc | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ linux/linux.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
-index 5fcffb7f4b..9c04a85a8d 100644
---- a/arch/arch.mk.arc
-+++ b/arch/arch.mk.arc
-@@ -1,4 +1,14 @@
-+ifeq ($(BR2_arc),y)
-+
- # -matomic is always required when the ARC core has the atomic extensions
--ifeq ($(BR2_arc)$(BR2_ARC_ATOMIC_EXT),yy)
-+ifeq ($(BR2_ARC_ATOMIC_EXT),y)
- ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
- endif
-+
-+# By default MAXPAGESIZE for ARC is 8192 so for larger MMU pages
-+# it needs to be overridden.
-+ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
-+ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384
-+endif
-+
-+endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 762f8868b1..6e9d11dd38 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -319,6 +319,18 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
+ 	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR,$(@D)/.config))
++	$(if $(BR2_ARC_PAGE_SIZE_4K),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
++	$(if $(BR2_ARC_PAGE_SIZE_8K),
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
++	$(if $(BR2_ARC_PAGE_SIZE_16K),
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
+ 	$(if $(BR2_TARGET_ROOTFS_CPIO),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
+ 	# As the kernel gets compiled before root filesystems are
