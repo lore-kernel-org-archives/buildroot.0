@@ -1,46 +1,84 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 16:01:53 +0100
-Subject: [Buildroot] [git commit] package/openocd: use host-jimtcl for host
- variant
-Message-ID: <20191222145255.EAC738D697@busybox.osuosl.org>
+Date: Sun, 22 Dec 2019 16:05:26 +0100
+Subject: [Buildroot] [PATCH 1/2] package/jimtcl: add host variant
+In-Reply-To: <20191222140237.2389908-1-fontaine.fabrice@gmail.com>
+References: <20191222140237.2389908-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191222150526.GF26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=931cb4d1e13a50282614f470e6c7c2f61dc7179b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-This will fix a build failure raised by commit
-06aa2995350922197c6db0a46e39ac5c37d5a49e which dropped patch on embedded
-jimtcl
+On 2019-12-22 15:02 +0100, Fabrice Fontaine spake thusly:
+> host-jimtcl is needed for host-openocd
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/bd140b5f433d4272f3efd43ff840e13e4301c4db
+Applied to master, after:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/openocd/openocd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+  - reformatting the build commands: spawning a sub-shell is useless,
+    and it's better to use '&&' to chain commands. I know you duplicated
+    the existing code, but better not to propagate the kinks from days
+    past;
 
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 29e4f4b31f..7887f3a6dc 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -97,12 +97,12 @@ HOST_OPENOCD_CONF_OPTS = \
- 	--oldincludedir=$(HOST_DIR)/include \
- 	--includedir=$(HOST_DIR)/include \
- 	--disable-doxygen-html \
--	--with-jim-shared=no \
-+	--disable-internal-jimtcl \
- 	--disable-shared \
- 	--enable-dummy \
- 	--disable-werror
- 
--HOST_OPENOCD_DEPENDENCIES = host-libftdi host-libusb host-libusb-compat
-+HOST_OPENOCD_DEPENDENCIES = host-jimtcl host-libftdi host-libusb host-libusb-compat
- 
- # Avoid documentation rebuild. On PowerPC64(le), we patch the
- # configure script. Due to this, the version.texi files gets
+  - adding the post-patch hook to update config.{guess,sub}
+
+Thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/jimtcl/jimtcl.mk | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+> index 643a87d5c4..795f20883c 100644
+> --- a/package/jimtcl/jimtcl.mk
+> +++ b/package/jimtcl/jimtcl.mk
+> @@ -78,4 +78,27 @@ define JIMTCL_INSTALL_TARGET_CMDS
+>  	$(JIMTCL_LINK_TCLSH)
+>  endef
+>  
+> +define HOST_JIMTCL_CONFIGURE_CMDS
+> +	(cd $(@D); \
+> +		$(HOST_CONFIGURE_OPTS) \
+> +		CCACHE=none \
+> +		./configure --prefix=$(HOST_DIR) \
+> +		--shared \
+> +	)
+> +endef
+> +
+> +define HOST_JIMTCL_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define HOST_JIMTCL_INSTALL_CMDS
+> +	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
+> +		cp -a $(@D)/$$i $(HOST_DIR)/usr/include/ || exit 1 ; \
+> +	done;
+> +	$(INSTALL) -m 0755 -D $(@D)/libjim.so.$(JIMTCL_VERSION) \
+> +		$(HOST_DIR)/usr/lib/libjim.so.$(JIMTCL_VERSION)
+> +	ln -sf libjim.so.$(JIMTCL_VERSION) $(HOST_DIR)/usr/lib/libjim.so
+> +endef
+> +
+>  $(eval $(generic-package))
+> +$(eval $(host-generic-package))
+> -- 
+> 2.24.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
