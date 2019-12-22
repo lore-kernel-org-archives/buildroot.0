@@ -1,44 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 14:06:09 +0100
-Subject: [Buildroot] [PATCH 1/2] firmware-imx: Fix the ahab-container
- name
-In-Reply-To: <20191217181855.3508-1-festevam@gmail.com>
-References: <20191217181855.3508-1-festevam@gmail.com>
-Message-ID: <20191222140609.2a163cdd@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Dec 2019 14:06:17 +0100
+Subject: [Buildroot] [git commit] package/libnfc: drop leftover comment
+Message-ID: <20191222125713.957D08D57E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 17 Dec 2019 15:18:54 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=891801fbb395cb41025e5f92caa4e4716ab50362
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> After the firmware-imx bump to version 8.1.1 the following
-> error is observed when building freescale_imx8qxpmek_defconfig:
-> 
-> >> firmware-imx 8.1.1 Installing to images directory  
-> # SECO firmware is needed when generating imx8-boot-sd.bin which
-> # is done in post-image script.
-> cp /home/fabio/buildroot/output/build/firmware-imx-8.1.1/firmware/seco/ahab-container.img
-> /home/fabio/buildroot/output/images/ahab-container.img
-> cp: cannot stat
-> '/home/fabio/buildroot/output/build/firmware-imx-8.1.1/firmware/seco/ahab-container.img':
-> No such file or directory
-> 
-> In the firmware-imx-8.1.1 (and newer) the i.MX8QXP container image was
-> renamed to mx8qx-ahab-container.img, so fix it accordingly.
-> 
-> Fixes: 3ec818769d51 ("package/freescale-imx/firmware-imx: bump version to 8.1.1")
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  package/freescale-imx/firmware-imx/firmware-imx.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+In commit 1a49188a694 (package/libnfc: add sub-options to enable
+individual drivers), the dependency on threads was moved down to
+the individual drivers that need it, and libnfc as a whole lost
+that dependency.
 
-Applied to master, thanks.
+However, the global comment was not removed. Do so now.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libnfc/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
+index 014ab94ce8..14084dc889 100644
+--- a/package/libnfc/Config.in
++++ b/package/libnfc/Config.in
+@@ -75,6 +75,3 @@ config BR2_PACKAGE_LIBNFC_EXAMPLES
+ 	select BR2_PACKAGE_READLINE
+ 
+ endif
+-
+-comment "libnfc needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
