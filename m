@@ -1,103 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 14:16:29 +0100
-Subject: [Buildroot] [git commit] package/libpam-nfc: new package
-Message-ID: <20191222130754.07410804F8@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 22 Dec 2019 14:18:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/alsa-lib: add
+ BR2_PACKAGE_ALSA_LIB_UCM
+Message-ID: <20191222131817.2334170-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3077766252e0f54ae63fef3b22a57588e6053cb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ucm needs mixer since version 1.2.1 and
+https://github.com/alsa-project/alsa-lib/commit/5c88b183718ce3df11bc4753c76d95f3e9de6c7e
 
-Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+So add a BR2_PACKAGE_ALSA_LIB_UCM option that selects
+BR2_PACKAGE_ALSA_LIB_MIXER and selects this new option in
+BR2_PACKAGE_ALSA_UTILS_ALSAUCM to avoid a build failure
+
+Fixes:
+ - http://autobuild.buildroot.org/results/aaa615d4e38d100bb9001ecdf7357e755ef42a87
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/libpam-nfc/Config.in       |  7 +++++++
- package/libpam-nfc/libpam-nfc.hash |  3 +++
- package/libpam-nfc/libpam-nfc.mk   | 28 ++++++++++++++++++++++++++++
- 5 files changed, 40 insertions(+)
+ package/alsa-lib/Config.in   | 5 +++++
+ package/alsa-lib/alsa-lib.mk | 3 +++
+ package/alsa-utils/Config.in | 1 +
+ 3 files changed, 9 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d2089e2672..a67dca3e6f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1429,6 +1429,7 @@ N:	Louis Aussedat <aussedat.louis@gmail.com>
- F:	board/friendlyarm/nanopi-neo-plus2/
- F:	configs/friendlyarm_nanopi_neo_plus2_defconfig
- F:	package/mfoc
-+F:	package/libpam-nfc
- F:	package/python-dnspython/
- F:	package/python-future/
- F:	package/python-huepy/
-diff --git a/package/Config.in b/package/Config.in
-index 2bfec09702..9f12470b22 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1805,6 +1805,7 @@ menu "Other"
- 	source "package/linux-pam/Config.in"
- if BR2_PACKAGE_LINUX_PAM
- comment "linux-pam plugins"
-+	source "package/libpam-nfc/Config.in"
- 	source "package/libpam-radius-auth/Config.in"
- 	source "package/libpam-tacplus/Config.in"
+diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
+index 995d379167..94c37a7f03 100644
+--- a/package/alsa-lib/Config.in
++++ b/package/alsa-lib/Config.in
+@@ -66,6 +66,11 @@ config BR2_PACKAGE_ALSA_LIB_SEQ
+ 	bool "seq"
+ 	default y
+ 
++config BR2_PACKAGE_ALSA_LIB_UCM
++	bool "ucm"
++	select BR2_PACKAGE_ALSA_LIB_MIXER
++	default y
++
+ config BR2_PACKAGE_ALSA_LIB_ALISP
+ 	bool "alisp"
+ 	default y
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 72e6c34282..954cbfb241 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -45,6 +45,9 @@ endif
+ ifneq ($(BR2_PACKAGE_ALSA_LIB_SEQ),y)
+ ALSA_LIB_CONF_OPTS += --disable-seq
  endif
-diff --git a/package/libpam-nfc/Config.in b/package/libpam-nfc/Config.in
-new file mode 100644
-index 0000000000..ce3a3eeb19
---- /dev/null
-+++ b/package/libpam-nfc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBPAM_NFC
-+	bool "libpam-nfc"
-+	select BR2_PACKAGE_LIBNFC
-+	help
-+	  NFC-based PAM authentification module.
-+
-+	  https://github.com/nfc-tools/pam_nfc
-diff --git a/package/libpam-nfc/libpam-nfc.hash b/package/libpam-nfc/libpam-nfc.hash
-new file mode 100644
-index 0000000000..27896ef4b1
---- /dev/null
-+++ b/package/libpam-nfc/libpam-nfc.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  f44273944f1ecc78b10b65147328860836b60fe4bb8c39819e32199f2870d48b  libpam-nfc-bb762e0e649195110e015ffb605c4375e927c437.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/libpam-nfc/libpam-nfc.mk b/package/libpam-nfc/libpam-nfc.mk
-new file mode 100644
-index 0000000000..fc283c8777
---- /dev/null
-+++ b/package/libpam-nfc/libpam-nfc.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# libpam-nfc
-+#
-+################################################################################
-+
-+LIBPAM_NFC_VERSION = bb762e0e649195110e015ffb605c4375e927c437
-+LIBPAM_NFC_SITE = $(call github,nfc-tools,pam_nfc,$(LIBPAM_NFC_VERSION))
-+LIBPAM_NFC_LICENSE = GPL-2.0
-+LIBPAM_NFC_LICENSE_FILES = COPYING
-+LIBPAM_NFC_DEPENDENCIES = linux-pam libnfc
-+# Fetching from github, we need to generate the configure script
-+LIBPAM_NFC_AUTORECONF = YES
-+LIBPAM_NFC_INSTALL_STAGING = YES
-+
-+LIBPAM_NFC_CONF_OPTS = \
-+	--with-pam-dir=/lib/security
-+
-+# libpam breaks with parallel build, but is very fast to build.
-+LIBPAM_NFC_MAKE = $(MAKE1)
-+
-+# Autoreconf requires an existing m4 directory
-+define LIBPAM_NFC_MKDIR_M4
-+	mkdir -p $(@D)/m4
-+endef
-+LIBPAM_NFC_PRE_CONFIGURE_HOOKS += LIBPAM_NFC_MKDIR_M4
-+
-+$(eval $(autotools-package))
++ifneq ($(BR2_PACKAGE_ALSA_LIB_UCM),y)
++ALSA_LIB_CONF_OPTS += --disable-ucm
++endif
+ ifneq ($(BR2_PACKAGE_ALSA_LIB_ALISP),y)
+ ALSA_LIB_CONF_OPTS += --disable-alisp
+ endif
+diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+index 012f28aef4..2d7062b0ca 100644
+--- a/package/alsa-utils/Config.in
++++ b/package/alsa-utils/Config.in
+@@ -41,6 +41,7 @@ comment "alsamixer needs a toolchain w/ wchar"
+ 
+ config BR2_PACKAGE_ALSA_UTILS_ALSAUCM
+ 	bool "alsaucm"
++	select BR2_PACKAGE_ALSA_LIB_UCM
+ 
+ config BR2_PACKAGE_ALSA_UTILS_ALSATPLG
+ 	bool "alsatplg"
+-- 
+2.24.0
