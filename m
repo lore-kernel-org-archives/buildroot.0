@@ -1,74 +1,108 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 22 Dec 2019 12:58:40 +0100
-Subject: [Buildroot] [git commit] package/kf5-kcoreaddons: fix
- check-package warnings
-In-Reply-To: <20191222103746.GV26395@scaer>
-References: <20191222094810.736238D4B7@busybox.osuosl.org>
- <54507372-d73f-2f05-456c-9efe819eda0d@benettiengineering.com>
- <20191222103746.GV26395@scaer>
-Message-ID: <ebdf3d7c-66c0-fbb1-4988-e748b03303d2@benettiengineering.com>
+From: Louis Aussedat <aussedat.louis@gmail.com>
+Date: Sun, 22 Dec 2019 13:05:00 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/libpam-nfc: new package
+Message-ID: <20191222120500.32583-1-aussedat.louis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/22/19 11:37 AM, Yann E. MORIN wrote:
-> Giulio, All,
-> 
-> On 2019-12-22 11:23 +0100, Giulio Benetti spake thusly:
->> On 12/22/19 10:57 AM, Yann E. MORIN wrote:
->>> commit: https://git.buildroot.net/buildroot/commit/?id=f7e750e8f514f84bf2f4fc99976dd11f19c8ecbc
->>> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->>>
->>> KF5_KCOREADDONS_CONF_OPTS is set both outside and inside the
->>> conditional block, so the value set outside would be lost if
->>> the condition were to be true.
->>>
->>> Use append-assignement in this case, as reported by check-package.
->>>
->>> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
->>
->> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> 
-> Thanks, but that was a commit, so your reviewed-by tag won't be
-> stored... :-/
+Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+---
+Changes v1 -> v2:
+  - Use LIBPAM_NFC_MAKE instead of LIBPAM_NFC_BUILD_CMDS (suggested by Yann E. MORIN)
+  - Fix tabulation in Config.in
 
-Oops, right.
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/libpam-nfc/Config.in       |  7 +++++++
+ package/libpam-nfc/libpam-nfc.hash |  3 +++
+ package/libpam-nfc/libpam-nfc.mk   | 28 ++++++++++++++++++++++++++++
+ 5 files changed, 40 insertions(+)
+ create mode 100644 package/libpam-nfc/Config.in
+ create mode 100644 package/libpam-nfc/libpam-nfc.hash
+ create mode 100644 package/libpam-nfc/libpam-nfc.mk
 
-Thanks for fixing
-Best regards
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 770888fb23..b367114e1b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1428,6 +1428,7 @@ F:	package/ti-sgx-um/
+ N:	Louis Aussedat <aussedat.louis@gmail.com>
+ F:	board/friendlyarm/nanopi-neo-plus2/
+ F:	configs/friendlyarm_nanopi_neo_plus2_defconfig
++F:	package/libpam-nfc
+ F:	package/python-dnspython/
+ F:	package/python-future/
+ F:	package/python-huepy/
+diff --git a/package/Config.in b/package/Config.in
+index 4480259af5..b1bbb240e5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1801,6 +1801,7 @@ menu "Other"
+ 	source "package/linux-pam/Config.in"
+ if BR2_PACKAGE_LINUX_PAM
+ comment "linux-pam plugins"
++	source "package/libpam-nfc/Config.in"
+ 	source "package/libpam-radius-auth/Config.in"
+ 	source "package/libpam-tacplus/Config.in"
+ endif
+diff --git a/package/libpam-nfc/Config.in b/package/libpam-nfc/Config.in
+new file mode 100644
+index 0000000000..ce3a3eeb19
+--- /dev/null
++++ b/package/libpam-nfc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBPAM_NFC
++	bool "libpam-nfc"
++	select BR2_PACKAGE_LIBNFC
++	help
++	  NFC-based PAM authentification module.
++
++	  https://github.com/nfc-tools/pam_nfc
+diff --git a/package/libpam-nfc/libpam-nfc.hash b/package/libpam-nfc/libpam-nfc.hash
+new file mode 100644
+index 0000000000..27896ef4b1
+--- /dev/null
++++ b/package/libpam-nfc/libpam-nfc.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256  f44273944f1ecc78b10b65147328860836b60fe4bb8c39819e32199f2870d48b  libpam-nfc-bb762e0e649195110e015ffb605c4375e927c437.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/libpam-nfc/libpam-nfc.mk b/package/libpam-nfc/libpam-nfc.mk
+new file mode 100644
+index 0000000000..fc283c8777
+--- /dev/null
++++ b/package/libpam-nfc/libpam-nfc.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# libpam-nfc
++#
++################################################################################
++
++LIBPAM_NFC_VERSION = bb762e0e649195110e015ffb605c4375e927c437
++LIBPAM_NFC_SITE = $(call github,nfc-tools,pam_nfc,$(LIBPAM_NFC_VERSION))
++LIBPAM_NFC_LICENSE = GPL-2.0
++LIBPAM_NFC_LICENSE_FILES = COPYING
++LIBPAM_NFC_DEPENDENCIES = linux-pam libnfc
++# Fetching from github, we need to generate the configure script
++LIBPAM_NFC_AUTORECONF = YES
++LIBPAM_NFC_INSTALL_STAGING = YES
++
++LIBPAM_NFC_CONF_OPTS = \
++	--with-pam-dir=/lib/security
++
++# libpam breaks with parallel build, but is very fast to build.
++LIBPAM_NFC_MAKE = $(MAKE1)
++
++# Autoreconf requires an existing m4 directory
++define LIBPAM_NFC_MKDIR_M4
++	mkdir -p $(@D)/m4
++endef
++LIBPAM_NFC_PRE_CONFIGURE_HOOKS += LIBPAM_NFC_MKDIR_M4
++
++$(eval $(autotools-package))
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> Regards,
-> Yann E. MORIN.
-> 
->> Best regards
->> -- 
->> Giulio Benetti
->> Benetti Engineering sas
->>
->>> ---
->>>   package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
->>> index 5b3e9acd90..76be8876cc 100644
->>> --- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
->>> +++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
->>> @@ -23,7 +23,7 @@ KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
->>>   ifeq ($(BR2_microblaze),y)
->>>   # Microblaze ld emits warnings, make warnings not to be treated as errors
->>> -KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
->>> +KF5_KCOREADDONS_CONF_OPTS += -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
->>>   endif
->>>   $(eval $(cmake-package))
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>
-> 
+2.24.0
