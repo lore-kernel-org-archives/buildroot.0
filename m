@@ -1,54 +1,32 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 22 Dec 2019 15:53:28 +0100
-Subject: [Buildroot] [PATCH 2/3] package/perl-math-bigint: new package
-In-Reply-To: <CAAXf6LUeE+hyit0otH4KtgM=0jO757Jry_KUSpTnXeH5OA7obA@mail.gmail.com>
-References: <20191218201845.846-1-patrickdepinguin@gmail.com>
- <20191218201845.846-2-patrickdepinguin@gmail.com>
- <CAB0FRsstnQ_nNhd-CHk3ZKJNbtOW3NSEgiPWjSdEGK8vEQcoPw@mail.gmail.com>
- <CAAXf6LU-zg05NszgCjvobzyCk_urdg=rf8QA6B047vt6_=rSKA@mail.gmail.com>
- <CAAXf6LUeE+hyit0otH4KtgM=0jO757Jry_KUSpTnXeH5OA7obA@mail.gmail.com>
-Message-ID: <CAB0FRssp_TaetHU+qBw+kH-J+avRDWjoCv-Cowf2mRzPytg37g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Dec 2019 16:01:26 +0100
+Subject: [Buildroot] [git commit] package/genimage: add patch to support
+ vfat volume-label
+In-Reply-To: <20191221212320.354B08D318@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 21 Dec 2019 22:22:42 +0100")
+References: <20191221212320.354B08D318@busybox.osuosl.org>
+Message-ID: <8736dc2ym1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dim. 22 d?c. 2019 ? 14:32, Thomas De Schampheleire <
-patrickdepinguin@gmail.com> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
->
->
-> On Sun, Dec 22, 2019, 14:27 Thomas De Schampheleire <
-> patrickdepinguin at gmail.com> wrote:
->
->> Hi Fran?ois,
->>
->> On Sun, Dec 22, 2019, 13:07 Fran?ois Perrad <francois.perrad@gadz.org>
->> wrote:
->>
->>>
->>> Math::BigInt is a core module.
->>> Perl 5.30.1 includes the version 1.999816.
->>> From my point of view, this package is useless.
->>>
->>
->>
->> How do you know this?
->> The cpan page does not give such detail, it seems.
->> https://metacpan.org/pod/Math::BigInt
->> And what about math-prime-util?
->>
->> Do you know since which perl release this is a core package?
->>
->
-> And also: can we make scancpan detect this?
->
+ > commit: https://git.buildroot.net/buildroot/commit/?id=aeb517522fc60747caa340cc0f2500fc94106b63
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-scancpan already detects and skips core dependencies of a module.
-I will add a warning when the top module is itself a core module.
+ > Import "0001-image-vfat-Add-label-option-to-set-volume-name.patch" from
+ > the upstream repository. The changes made to the README.rst file had to
+ > be removed from the patch so that the package can be compiled in
+ > buildroot. The patch has been accepted upstream, but no releases have
+ > been made yet which includes the feature.
 
-Fran?ois
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191222/054bb23e/attachment.html>
+ > Signed-off-by: Dario Binacchi <dariobin@libero.it>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Why? What is this required for? When is the next genimage version expected?
+
+-- 
+Bye, Peter Korsgaard
