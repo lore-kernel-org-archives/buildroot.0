@@ -1,43 +1,23 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 22 Dec 2019 17:40:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysdig: reorder selects
- alphabetically
-Message-ID: <20191222164039.3266485-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 22 Dec 2019 16:50:14 +0000
+Subject: [Buildroot] [Bug 12426] NodeJS slow startup performance (~30s)
+In-Reply-To: <bug-12426-163@https.bugs.busybox.net/>
+References: <bug-12426-163@https.bugs.busybox.net/>
+Message-ID: <bug-12426-163-BloHq1GSET@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/sysdig/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=12426
 
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 672c44d211..c37d8d05cc 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -7,15 +7,15 @@ config BR2_PACKAGE_SYSDIG
- 	depends on !BR2_STATIC_LIBS # luajit, elfutils
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
--	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_LUAJIT
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_JQ
- 	select BR2_PACKAGE_JSONCPP
-+	select BR2_PACKAGE_LIBB64
- 	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_JQ
--	select BR2_PACKAGE_LIBB64
--	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Sysdig is open source, system-level exploration:
- 	  capture system state and activity from a running Linux
+--- Comment #5 from Peter Korsgaard <jacmet@uclibc.org> ---
+Is this only at first startup or does running nodejs multiple times each time
+take ~30s on the RPI? What storage are you using? The prebuilt nodejs
+presumably bundles a bunch of dependencies statically, whereas the Buildroot
+one uses dynamic linking
+
 -- 
-2.24.0
+You are receiving this mail because:
+You are on the CC list for the bug.
