@@ -1,27 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 23:09:53 +0100
-Subject: [Buildroot] [PATCH] package/raspi-gpio: bump to revision 4edfde1
-In-Reply-To: <1577049192-31946-1-git-send-email-pjtexier@koncepto.io>
-References: <1577049192-31946-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20191222230953.4c2407c6@windsurf>
+Date: Sun, 22 Dec 2019 23:11:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sysdig: reorder selects
+ alphabetically
+In-Reply-To: <20191222164039.3266485-1-fontaine.fabrice@gmail.com>
+References: <20191222164039.3266485-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191222231111.4bc21ac1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 22 Dec 2019 22:13:12 +0100
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+On Sun, 22 Dec 2019 17:40:39 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> This includes the following changes:
-> 
-> 4edfde1 Update raw output to show pull registers on 2711
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/raspi-gpio/raspi-gpio.hash | 2 +-
->  package/raspi-gpio/raspi-gpio.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/sysdig/Config.in | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
