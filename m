@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 23:08:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-crc16: update the
- upstream URL in Config.in
-In-Reply-To: <20191217125105.20528-1-mark@dibsco.co.uk>
-References: <20191217125105.20528-1-mark@dibsco.co.uk>
-Message-ID: <20191222230847.782a1ffd@windsurf>
+Date: Sun, 22 Dec 2019 23:09:34 +0100
+Subject: [Buildroot] [PATCH] package/libglib2: bump version to 2.62.4
+In-Reply-To: <20191222194513.2590465-1-aduskett@gmail.com>
+References: <20191222194513.2590465-1-aduskett@gmail.com>
+Message-ID: <20191222230934.48cc8175@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 17 Dec 2019 12:51:05 +0000
-Mark Corbin <mark@dibsco.co.uk> wrote:
+On Sun, 22 Dec 2019 11:45:12 -0800
+aduskett at gmail.com wrote:
 
-> Update the upstream URL in the help text in Config.in. This
-> addresses the 'Invalid(404)' URL status in the package stats
-> web page output.
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 > ---
->  package/python-crc16/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/libglib2/0003-remove-cpp-requirement.patch          | 6 +++---
+>  ...04-Add-Wno-format-nonliteral-to-compiler-arguments.patch | 2 +-
+>  package/libglib2/libglib2.hash                              | 4 ++--
+>  package/libglib2/libglib2.mk                                | 2 +-
+>  4 files changed, 7 insertions(+), 7 deletions(-)
 
-Applied to master, thanks.
+This patch was missing your SoB, but it was applied by Yann. Thanks!
 
 Thomas
 -- 
