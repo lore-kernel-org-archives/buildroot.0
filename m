@@ -1,81 +1,81 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 22 Dec 2019 17:21:44 +0100
-Subject: [Buildroot] [PATCH 3/5] package/perl-math-bigint: remove it
+Date: Sun, 22 Dec 2019 17:21:46 +0100
+Subject: [Buildroot] [PATCH 5/5] package/perl-net-ping: remove it
 In-Reply-To: <20191222162146.1947-1-francois.perrad@gadz.org>
 References: <20191222162146.1947-1-francois.perrad@gadz.org>
-Message-ID: <20191222162146.1947-3-francois.perrad@gadz.org>
+Message-ID: <20191222162146.1947-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Math::BigInt is a Perl core module
+Net::Ping is a Perl core module
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                              |  1 -
- package/perl-math-bigint/Config.in             |  6 ------
- package/perl-math-bigint/perl-math-bigint.hash |  6 ------
- package/perl-math-bigint/perl-math-bigint.mk   | 14 --------------
+ package/Config.in                        |  1 -
+ package/perl-net-ping/Config.in          |  6 ------
+ package/perl-net-ping/perl-net-ping.hash |  6 ------
+ package/perl-net-ping/perl-net-ping.mk   | 14 --------------
  4 files changed, 27 deletions(-)
- delete mode 100644 package/perl-math-bigint/Config.in
- delete mode 100644 package/perl-math-bigint/perl-math-bigint.hash
- delete mode 100644 package/perl-math-bigint/perl-math-bigint.mk
+ delete mode 100644 package/perl-net-ping/Config.in
+ delete mode 100644 package/perl-net-ping/perl-net-ping.hash
+ delete mode 100644 package/perl-net-ping/perl-net-ping.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 233b8402e..b164a5a7e 100644
+index 8ab40f666..cbcb7cef7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -750,7 +750,6 @@ menu "Perl libraries/modules"
- 	source "package/perl-lwp-mediatypes/Config.in"
- 	source "package/perl-mail-dkim/Config.in"
- 	source "package/perl-mailtools/Config.in"
--	source "package/perl-math-bigint/Config.in"
- 	source "package/perl-math-prime-util/Config.in"
- 	source "package/perl-mime-base64/Config.in"
- 	source "package/perl-mime-base64-urlsafe/Config.in"
-diff --git a/package/perl-math-bigint/Config.in b/package/perl-math-bigint/Config.in
+@@ -760,7 +760,6 @@ menu "Perl libraries/modules"
+ 	source "package/perl-moo/Config.in"
+ 	source "package/perl-net-dns/Config.in"
+ 	source "package/perl-net-http/Config.in"
+-	source "package/perl-net-ping/Config.in"
+ 	source "package/perl-net-snmp/Config.in"
+ 	source "package/perl-net-ssh2/Config.in"
+ 	source "package/perl-net-ssleay/Config.in"
+diff --git a/package/perl-net-ping/Config.in b/package/perl-net-ping/Config.in
 deleted file mode 100644
-index 89722e7b1..000000000
---- a/package/perl-math-bigint/Config.in
+index 21239a095..000000000
+--- a/package/perl-net-ping/Config.in
 +++ /dev/null
 @@ -1,6 +0,0 @@
--config BR2_PACKAGE_PERL_MATH_BIGINT
--	bool "perl-math-bigint"
+-config BR2_PACKAGE_PERL_NET_PING
+-	bool "perl-net-ping"
 -	help
--	  Pure Perl module to test Math::BigInt with scalars.
+-	  check a remote host for reachability.
 -
--	  https://metacpan.org/release/Math-BigInt
-diff --git a/package/perl-math-bigint/perl-math-bigint.hash b/package/perl-math-bigint/perl-math-bigint.hash
+-	  https://metacpan.org/release/Net-Ping
+diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
 deleted file mode 100644
-index ad3d66bbf..000000000
---- a/package/perl-math-bigint/perl-math-bigint.hash
+index 2842827c8..000000000
+--- a/package/perl-net-ping/perl-net-ping.hash
 +++ /dev/null
 @@ -1,6 +0,0 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5    a6e5a6c391b453e04c2b60506e1b5342 Math-BigInt-1.999818.tar.gz
--sha256 b27634356ce2af9b7c0123ac8395a89a32fb15aeae82fcd39de8156cad278c15 Math-BigInt-1.999818.tar.gz
+-md5    eb90f86dcc31126e88be02ecb62d5303 Net-Ping-2.72.tar.gz
+-sha256 555af602f54229cd81fef7da1a81516800f3155c6dc4d07dc71be1de3253dd6a Net-Ping-2.72.tar.gz
 -
 -# computed by scancpan
--sha256 b857edab549ac6893e2df5e1ec768ee46b62bcf1607a55e876f4d23f079eacce LICENSE
-diff --git a/package/perl-math-bigint/perl-math-bigint.mk b/package/perl-math-bigint/perl-math-bigint.mk
+-sha256 9441a22309a2b40ff1282ac1906c137f07f5e521e7b1ec162b251f6006051b47 README
+diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
 deleted file mode 100644
-index 156c6ce38..000000000
---- a/package/perl-math-bigint/perl-math-bigint.mk
+index b422c4eab..000000000
+--- a/package/perl-net-ping/perl-net-ping.mk
 +++ /dev/null
 @@ -1,14 +0,0 @@
 -################################################################################
 -#
--# perl-math-bigint
+-# perl-net-ping
 -#
 -################################################################################
 -
--PERL_MATH_BIGINT_VERSION = 1.999818
--PERL_MATH_BIGINT_SOURCE = Math-BigInt-$(PERL_MATH_BIGINT_VERSION).tar.gz
--PERL_MATH_BIGINT_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PJ/PJACKLAM
--PERL_MATH_BIGINT_LICENSE = Artistic or GPL-1.0+
--PERL_MATH_BIGINT_LICENSE_FILES = LICENSE
--PERL_MATH_BIGINT_DISTNAME = Math-BigInt
+-PERL_NET_PING_VERSION = 2.72
+-PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
+-PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+-PERL_NET_PING_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_PING_LICENSE_FILES = README
+-PERL_NET_PING_DISTNAME = Net-Ping
 -
 -$(eval $(perl-package))
 -- 
