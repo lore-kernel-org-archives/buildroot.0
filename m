@@ -1,46 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 22:58:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/perl-sys-cpu: add an upstream
- URL to Config.in
-In-Reply-To: <20191217121753.14399-1-mark@dibsco.co.uk>
-References: <20191217121753.14399-1-mark@dibsco.co.uk>
-Message-ID: <20191222225817.491b7c31@windsurf>
+Date: Sun, 22 Dec 2019 23:08:12 +0100
+Subject: [Buildroot] [git commit] package/python-dpkt: update the upstream
+ URL in Config.in
+Message-ID: <20191222215908.838348DA8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 17 Dec 2019 12:17:53 +0000
-Mark Corbin <mark@dibsco.co.uk> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fc37106579b5a1a5f5e53098ddff0c72cb597d1e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add an upstream URL to the help text in Config.in. This
-> addresses the 'Missing' URL status in the package stats
-> web page output.
-> 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-> ---
->  package/perl-sys-cpu/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/perl-sys-cpu/Config.in b/package/perl-sys-cpu/Config.in
-> index 8306b371dc..70cfded8ff 100644
-> --- a/package/perl-sys-cpu/Config.in
-> +++ b/package/perl-sys-cpu/Config.in
-> @@ -5,5 +5,7 @@ config BR2_PACKAGE_PERL_SYS_CPU
->  	  Perl module for getting information about the system CPU
->  	  (Sys::CPU).
->  
-> +	  http://search.cpan.org/dist/Sys-CPU/
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(405)' URL status in the package stats
+web page output.
 
-I've applied, but there is a high chance of this change going away the
-next time this package is re-generated/updated with our scancpan
-utility.
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-dpkt/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-dpkt/Config.in b/package/python-dpkt/Config.in
+index f1e4ddff15..d8e3388d7e 100644
+--- a/package/python-dpkt/Config.in
++++ b/package/python-dpkt/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_PYTHON_DPKT
+ 	  Fast, simple packet creation / parsing, with definitions
+ 	  for the basic TCP/IP protocols.
+ 
+-	  http://code.google.com/p/dpkt/
++	  https://github.com/kbandla/dpkt
