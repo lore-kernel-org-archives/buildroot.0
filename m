@@ -1,49 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 13:50:26 +0100
-Subject: [Buildroot] [PATCH] package/openocd: bump to version 104a5cb
-In-Reply-To: <20191217232657.6582-1-fhunleth@troodon-software.com>
-References: <20191217232657.6582-1-fhunleth@troodon-software.com>
-Message-ID: <20191222135026.75c9cffa@windsurf>
+Date: Sun, 22 Dec 2019 13:52:25 +0100
+Subject: [Buildroot] [git commit] package/zip: fix musl compile
+Message-ID: <20191222124344.967968D563@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Frank,
+commit: https://git.buildroot.net/buildroot/commit/?id=376d2e8564822cc9bea8644859532949b2f87b05
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 17 Dec 2019 18:26:57 -0500
-Frank Hunleth <fhunleth@troodon-software.com> wrote:
+For musl toolchain timezone.c needs time.h include.
 
-> The OpenOCD project hasn't made a release since January 2017. Much work
-> has happened since then and now. This bumps the version to the latest
-> commit and removes a patch that has been applied upstream.
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Fixes:
+  http://autobuild.buildroot.net/results/77346a2cdb9eeef661527fb9566019f3cd1b82c9
 
-Overall, it certainly looks good to bump OpenOCD, since indeed the
-project is essentially no longer tagging any "official" release.
+  In file included from util.c:28:
+  timezone.c: In function 'mktime':
+  timezone.c:644:18: error: dereferencing pointer to incomplete type 'struct tm'
+       save_isdst = tm->tm_isdst;
 
-However, there a few changes that I'd like to see:
+  timezone.c:661:11: warning: implicit declaration of function 'localtime'; did you mean 'dostime'? [-Wimplicit-function-declaration]
+       ltm = localtime(&then);
 
- - Sync with Fabrice Fontaine, who posted a patch that drops the
-   internal jimctl usage, and instead uses our jimtcl package.
+  timezone.c:661:9: warning: assignment to 'struct tm *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+       ltm = localtime(&then);
 
- - Create a separate package for libjaylink, and use it in OpenOCD.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...imezone.c-needs-time.h-fixes-musl-compile.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
- - Thanks to the above two points, drop the OPENOCD_GITSUBMODULES = YES
-   variable.
-
- - Perhaps use the Git mirror at https://repo.or.cz/w/openocd.git,
-   which is accessible over https://, and therefore will work better
-   for some users behind corporate firewalls.
-
-Could you rework your submission according to these suggestions?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch b/package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch
+new file mode 100644
+index 0000000000..bdaa638f61
+--- /dev/null
++++ b/package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch
+@@ -0,0 +1,38 @@
++From 68abba9fb2ed114ac35712756b1f7700a865c498 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 17 Dec 2019 21:25:01 +0100
++Subject: [PATCH] timezone.c: needs time.h (fixes musl compile)
++
++Fixes:
++
++  In file included from util.c:28:
++  timezone.c: In function 'mktime':
++  timezone.c:644:18: error: dereferencing pointer to incomplete type 'struct tm'
++       save_isdst = tm->tm_isdst;
++
++  timezone.c:661:11: warning: implicit declaration of function 'localtime'; did you mean 'dostime'? [-Wimplicit-function-declaration]
++       ltm = localtime(&then);
++
++  timezone.c:661:9: warning: assignment to 'struct tm *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
++       ltm = localtime(&then);
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ timezone.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/timezone.c b/timezone.c
++index 485ec02..18aecbd 100644
++--- a/timezone.c
+++++ b/timezone.c
++@@ -41,6 +41,7 @@
++ #include "timezone.h"
++ #include <ctype.h>
++ #include <errno.h>
+++#include <time.h>
++ 
++ #ifdef IZTZ_DEFINESTDGLOBALS
++ long timezone = 0;
++-- 
++2.24.0
++
