@@ -1,12 +1,15 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 22 Dec 2019 11:27:57 -0300
-Subject: [Buildroot] [PATCH 2/2] configs/imx8qxpmek: Update to 4.14.98
- components
-In-Reply-To: <20191222140638.7812b531@windsurf>
-References: <20191217181855.3508-1-festevam@gmail.com>
- <20191217181855.3508-2-festevam@gmail.com>
- <20191222140638.7812b531@windsurf>
-Message-ID: <CAOMZO5CL6xoGUcsRJJY=dep8+6wMMk1uT9qymQJNCSuPk+2gzg@mail.gmail.com>
+Date: Sun, 22 Dec 2019 11:31:12 -0300
+Subject: [Buildroot] [PATCH 1/1] package/imx-sc-firmware: bump to
+ version 1.2.1
+In-Reply-To: <20191222142421.13cd522c@windsurf>
+References: <20191218130429.847805-1-juju@cotds.org>
+ <CAOMZO5D_Dh2sgweJ+0U_os-jP3igeVbO2XJmeesZTdoQDe86gA@mail.gmail.com>
+ <94f6389ba7bd24a86cdec3e8295fddad@cotds.org>
+ <CAOMZO5CTpqORMwjZi5681X7h1pngWZJzF-VZHvaVHkEe4CYq1g@mail.gmail.com>
+ <bb1e9dbdd73a1e0b8fead464ddf9fa83@cotds.org>
+ <20191222142421.13cd522c@windsurf>
+Message-ID: <CAOMZO5DY2haaYR9nF1BcZwYM9hVgm-q+bu_bAfDsYXwdegjS+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +18,16 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Sun, Dec 22, 2019 at 10:06 AM Thomas Petazzoni
+On Sun, Dec 22, 2019 at 10:24 AM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
->
-> On Tue, 17 Dec 2019 15:18:55 -0300
-> Fabio Estevam <festevam@gmail.com> wrote:
->
-> > Bump kernel, ATF and U-Boot to the versions found in the NXP BSP 4.14.98.
-> >
-> > Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> > ---
-> >  configs/freescale_imx8qxpmek_defconfig | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> I've marked this patch as Changes Requested. Can you send a new
-> iteration once the issues are resolved?
 
-As you already applied Julien's patch:
-package/freescale-imx/imx-sc-firmware: bump to version 1.2.1
+> One question is: how does it work if one wants to use the upstream
+> Linux kernel?
 
-It is safe to apply this one now as Julien's patch fixed the boot issue.
+I have been successfully using the NXP components from 4.19.35_1.1.0
+NXP BSP (sc-firmware, AT-F, linux-firmware) with mainline kernel.
+
+I plan to generate targets to boot  i.mx8 boards with mainline U-Boot
+and mainline kernel.
 
 Thanks
