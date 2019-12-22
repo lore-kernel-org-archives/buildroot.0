@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Dec 2019 21:31:35 +0100
-Subject: [Buildroot] [PATCH] package/pkg-python: use _CONFIGURE_OPTS for
- build env
-In-Reply-To: <20191205231103.27778-1-ryan.barnett@rockwellcollins.com> (Ryan
- Barnett's message of "Thu, 5 Dec 2019 17:11:02 -0600")
-References: <20191205231103.27778-1-ryan.barnett@rockwellcollins.com>
-Message-ID: <874kxsyue0.fsf@dell.be.48ers.dk>
+Date: Sun, 22 Dec 2019 21:31:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lirc-tools: use single quote
+ with SETUPTOOLS_ENV
+In-Reply-To: <20191209171027.22631-1-ryan.barnett@rockwellcollins.com> (Ryan
+ Barnett's message of "Mon, 9 Dec 2019 11:10:26 -0600")
+References: <20191209171027.22631-1-ryan.barnett@rockwellcollins.com>
+Message-ID: <87zhfkxftb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +14,23 @@ To: buildroot@busybox.net
 
 >>>>> "Ryan" == Ryan Barnett <ryan.barnett@rockwellcollins.com> writes:
 
- > When building host or target python packages, we need to ensure that
- > the build environment utilize {HOST|TARGET}_CONFIGURE_OPTS. This
- > ensures that the correct linker and compiler environment variables are
- > set to compile utilizing either the host or target folders.
+ > With the change to pkg-python to use TARGET_CONFIGURE_OPTS in
+ > PKG_PYTHON_SETUPTOOLS_ENV in commit 1745fcde74, the
+ > LIRC_TOOLS_MAKE_ENV is incorrect as it sets the SETUPTOOLS_ENV using
+ > double quotes. This causes issues because the
+ > PKG_PYTHON_SETUPTOOLS_ENV contain double quotes as well. This causes a
+ > build error such as:
 
- > It was discovered that when compiling a host-python package, it was
- > using linking against the build machines library folder instead of the
- > host folder because LDFLAGS was not properly set and was improperly
- > detecting whether or not a shared or static library was present in the
- > host folder.
+ >   /bin/sh: -I/home/naourr/work/instance-0/output-1/host/include
+ >           CXXFLAGS_FOR_BUILD=-O2: No such file or directory
 
- > CC: Arnout Vandecappelle <arnout@mind.be>
+ > Fix this by using single quotes with PKG_PYTHON_SETUPTOOLS_ENV instead
+ > of double quotes.
+
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/f7a9c02add9bde563c7289f7c0be2cb7aefd96b8
+
  > Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-
- > ---
- > Changes v1 -> v2:
- >   - Merged HOST/TARGET_CONFIGURE_OPTS to single commit (suggested by
- >       Arnout)
- >   - Added HOST/TARGET_CONFIGURE_OPTS to env for setuptools (suggested
- >       by Arnout)
 
 Committed to 2019.02.x and 2019.11.x, thanks.
 
