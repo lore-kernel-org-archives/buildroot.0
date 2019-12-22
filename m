@@ -1,136 +1,103 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sun, 22 Dec 2019 07:18:07 -0300
-Subject: [Buildroot] [PATCH] package/wolfssl: bump to version 4.3.0
-Message-ID: <20191222101807.5936-1-sergio.prado@e-labworks.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Dec 2019 11:45:43 +0100
+Subject: [Buildroot] [git commit] package/dropbear: group post-extract hooks
+ with their call site
+Message-ID: <20191222103820.62E9D8D540@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch already applied upstream (refactored on commit c06efb6c1fda0)
+commit: https://git.buildroot.net/buildroot/commit/?id=8b37745d3cc87f1d49a9a2232bc94f2695b44aea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+The organization of dropbear.mk was no longer very clear: for some
+post-extract blocks, the block was separated from the place where it was
+enabled, but for others they were grouped.
+
+Regroup all blocks with their call site and inside the condition, if
+present.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...e-location-index-hasn-t-exceed-maxim.patch | 84 -------------------
- package/wolfssl/wolfssl.hash                  |  2 +-
- package/wolfssl/wolfssl.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 86 deletions(-)
- delete mode 100644 package/wolfssl/0001-Check-domain-name-location-index-hasn-t-exceed-maxim.patch
+ package/dropbear/dropbear.mk | 32 ++++++++++++++------------------
+ 1 file changed, 14 insertions(+), 18 deletions(-)
 
-diff --git a/package/wolfssl/0001-Check-domain-name-location-index-hasn-t-exceed-maxim.patch b/package/wolfssl/0001-Check-domain-name-location-index-hasn-t-exceed-maxim.patch
-deleted file mode 100644
-index 758992e148bf..000000000000
---- a/package/wolfssl/0001-Check-domain-name-location-index-hasn-t-exceed-maxim.patch
-+++ /dev/null
-@@ -1,84 +0,0 @@
--From 52f28bd5149360f8e3bf8ca13d3fb9a77283df7c Mon Sep 17 00:00:00 2001
--From: Sean Parkinson <sean@wolfssl.com>
--Date: Wed, 6 Nov 2019 08:28:09 +1000
--Subject: [PATCH] Check domain name location index hasn't exceed maximum before
-- setting
--
--[CVE-2019?18840]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- wolfcrypt/src/asn.c | 30 ++++++++++++++++++++----------
-- 1 file changed, 20 insertions(+), 10 deletions(-)
--
--diff --git a/wolfcrypt/src/asn.c b/wolfcrypt/src/asn.c
--index 637f4c355..d3793b7b3 100644
----- a/wolfcrypt/src/asn.c
--+++ b/wolfcrypt/src/asn.c
--@@ -5117,8 +5117,10 @@ static int GetName(DecodedCert* cert, int nameType)
--                 XMEMCPY(&full[idx], &cert->source[cert->srcIdx], strLen);
--                 idx += strLen;
--             #if defined(OPENSSL_EXTRA)
---                /* store order that DN was parsed */
---                dName->loc[count++] = id;
--+                if (count < DOMAIN_COMPONENT_MAX) {
--+                    /* store order that DN was parsed */
--+                    dName->loc[count++] = id;
--+                }
--             #endif
--             }
-- 
--@@ -5191,8 +5193,10 @@ static int GetName(DecodedCert* cert, int nameType)
--                 XMEMCPY(&full[idx], &cert->source[cert->srcIdx], strLen);
--                 idx += strLen;
--             #if defined(OPENSSL_EXTRA)
---                /* store order that DN was parsed */
---                dName->loc[count++] = id;
--+                if (count < DOMAIN_COMPONENT_MAX) {
--+                    /* store order that DN was parsed */
--+                    dName->loc[count++] = id;
--+                }
--             #endif
--             }
-- 
--@@ -5276,8 +5280,10 @@ static int GetName(DecodedCert* cert, int nameType)
--                     XMEMCPY(&full[idx], &cert->source[cert->srcIdx], adv);
--                     idx += adv;
--                 #if defined(OPENSSL_EXTRA)
---                    /* store order that DN was parsed */
---                    dName->loc[count++] = ASN_EMAIL_NAME;
--+                    if (count < DOMAIN_COMPONENT_MAX) {
--+                        /* store order that DN was parsed */
--+                        dName->loc[count++] = ASN_EMAIL_NAME;
--+                    }
--                 #endif
--                 }
--             }
--@@ -5298,8 +5304,10 @@ static int GetName(DecodedCert* cert, int nameType)
--                             dName->uidLen = adv;
-- 
--                             #ifdef OPENSSL_EXTRA
---                            /* store order that DN was parsed */
---                            dName->loc[count++] = ASN_USER_ID;
--+                            if (count < DOMAIN_COMPONENT_MAX) {
--+                                /* store order that DN was parsed */
--+                                dName->loc[count++] = ASN_USER_ID;
--+                            }
--                             #endif
--                         #endif /* OPENSSL_EXTRA */
--                             break;
--@@ -5315,8 +5323,10 @@ static int GetName(DecodedCert* cert, int nameType)
--                             dcnum++;
-- 
--                             #ifdef OPENSSL_EXTRA
---                            /* store order that DN was parsed */
---                            dName->loc[count++] = ASN_DOMAIN_COMPONENT;
--+                            if (count < DOMAIN_COMPONENT_MAX) {
--+                                /* store order that DN was parsed */
--+                                dName->loc[count++] = ASN_DOMAIN_COMPONENT;
--+                            }
--                             #endif
--                         #endif /* OPENSSL_EXTRA */
--                             break;
---- 
--2.20.1
--
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index c1b7972c5b24..5509552ca4e3 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256 3562af485c26cd7abe94d9404fbfc0c5c9bceb4aab29b81ebf5e6c2467507e12 wolfssl-4.2.0-stable.tar.gz
-+sha256 6896f8ad6c44aff3e583006eeee839600848a0e37118ebbb7514eca9409ae08b  wolfssl-4.3.0-stable.tar.gz
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 23e5e3f600..1070a410b9 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -56,6 +56,7 @@ endef
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
+ endif
  
- # Hash for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index f8ec4bd1ba98..8834a0f46826 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
+ define DROPBEAR_DISABLE_LEGACY_CRYPTO
+ 	echo '#define DROPBEAR_3DES 0'                  >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_ENABLE_CBC_MODE 0'       >> $(@D)/localoptions.h
+@@ -63,28 +64,32 @@ define DROPBEAR_DISABLE_LEGACY_CRYPTO
+ 	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_DH_GROUP1 0'             >> $(@D)/localoptions.h
+ endef
+-ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_LEGACY_CRYPTO
+ endif
  
--WOLFSSL_VERSION = 4.2.0-stable
-+WOLFSSL_VERSION = 4.3.0-stable
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION))
- WOLFSSL_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),)
+ define DROPBEAR_ENABLE_REVERSE_DNS
+ 	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
+ endef
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
++endif
  
--- 
-2.17.1
++ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
++DROPBEAR_CONF_OPTS += --disable-zlib --enable-bundled-libtom
++else
+ define DROPBEAR_BUILD_FEATURED
+ 	echo '#define DROPBEAR_SMALL_CODE 0'            >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_TWOFISH128 1'            >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_TWOFISH256 1'            >> $(@D)/localoptions.h
+ endef
+-
+-define DROPBEAR_DISABLE_STANDALONE
+-	echo '#define NON_INETD_MODE 0'                 >> $(@D)/localoptions.h
+-endef
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
++DROPBEAR_DEPENDENCIES += zlib libtomcrypt
++DROPBEAR_CONF_OPTS += --disable-bundled-libtom
++endif
+ 
+ define DROPBEAR_CUSTOM_PATH
+ 	echo '#define DEFAULT_PATH $(BR2_SYSTEM_DEFAULT_PATH)' >>$(@D)/localoptions.h
+ endef
+-
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_CUSTOM_PATH
+ 
+ define DROPBEAR_INSTALL_INIT_SYSTEMD
+@@ -98,21 +103,12 @@ define DROPBEAR_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50dropbear
+ endef
+ else
++define DROPBEAR_DISABLE_STANDALONE
++	echo '#define NON_INETD_MODE 0'                 >> $(@D)/localoptions.h
++endef
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),)
+-DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
+-endif
+-
+-ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
+-DROPBEAR_CONF_OPTS += --disable-zlib --enable-bundled-libtom
+-else
+-DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
+-DROPBEAR_DEPENDENCIES += zlib libtomcrypt
+-DROPBEAR_CONF_OPTS += --disable-bundled-libtom
+-endif
+-
+ ifneq ($(BR2_PACKAGE_DROPBEAR_WTMP),y)
+ DROPBEAR_CONF_OPTS += --disable-wtmp
+ endif
