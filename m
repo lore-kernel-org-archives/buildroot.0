@@ -1,61 +1,46 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 22 Dec 2019 19:39:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pathlib2: select
- python-scandir
-In-Reply-To: <20191222144200.048e1559@windsurf>
-References: <20191216194815.5436-1-asafka7@gmail.com>
- <20191222144200.048e1559@windsurf>
-Message-ID: <CALFsTFWKxZkoyyxJETMsO1966tm5OGr8aWSWYCX6p4bk9+_fLQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 22 Dec 2019 18:02:03 +0000
+Subject: [Buildroot] [Bug 12426] NodeJS slow startup performance (~30s)
+In-Reply-To: <bug-12426-163@https.bugs.busybox.net/>
+References: <bug-12426-163@https.bugs.busybox.net/>
+Message-ID: <bug-12426-163-jj4xzTuJgf@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=12426
 
-On Sun, Dec 22, 2019 at 3:42 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon, 16 Dec 2019 21:48:15 +0200
-> Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> > scandir is a runtime dependency of pathlib2.
-> >
-> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> > ---
-> >  package/python-pathlib2/Config.in | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/package/python-pathlib2/Config.in b/package/python-pathlib2/Config.in
-> > index e28de4c12e..ca948c271f 100644
-> > --- a/package/python-pathlib2/Config.in
-> > +++ b/package/python-pathlib2/Config.in
-> > @@ -1,6 +1,7 @@
-> >  config BR2_PACKAGE_PYTHON_PATHLIB2
-> >       bool "python-pathlib2"
-> >       depends on BR2_PACKAGE_PYTHON
-> > +     select BR2_PACKAGE_PYTHON_SCANDIR # runtime
->
-> I see this in the setup.py:
->
->     extras_require={
->         ':python_version<"3.5"': ['scandir'],
->         },
->
-> Doesn't that mean that it is needed only if the Python version is < 3.5 ?
+--- Comment #6 from Eric Higgins <erichiggins@gmail.com> ---
+All subsequent runs of nodejs are just as slow to start.
 
-Yeah that's true, but pathlib2 can be chosen only for python 2,
-so we can say for sure it's needed.
+Storage is a class 10 microSD.
 
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Actually, the prebuilt nodejs binaries are also dynamically linked. I found
+this out the hard way because I was using uClibc-ng and the prebuilt expects
+glibc.
 
-Regards,
-Asaf.
+
+(prebuilt)
+# file /usr/local/lib/nodejs/node-v10.18.0-linux-armv6l/bin/node
+
+/usr/local/lib/nodejs/node-v10.18.0-linux-armv6l/bin/node: ELF 32-bit LSB
+executable, ARM, EABI5 version 1 (GNU/Linux), dynamically linked, interpreter
+/lib/ld-linux-armhf.so.3, for GNU/Linux 3.16.42, with debug_info, not stripped
+
+
+(compiled by buildroot)
+# file /usr/bin/node 
+
+/usr/bin/node: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV),
+dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
+
+
+For what it's worth, the flags they use for armv6l are available here:
+
+https://github.com/nodejs/unofficial-builds/tree/master/recipes/armv6l
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
