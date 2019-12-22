@@ -1,96 +1,47 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sun, 22 Dec 2019 19:12:03 -0300
-Subject: [Buildroot] [PATCH] [PATCH] package/tio: new package
-Message-ID: <20191222221203.1990-1-sergio.prado@e-labworks.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Dec 2019 23:12:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/alsa-lib: add
+ BR2_PACKAGE_ALSA_LIB_UCM
+In-Reply-To: <20191222131817.2334170-1-fontaine.fabrice@gmail.com>
+References: <20191222131817.2334170-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191222231250.38a6a303@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"tio" is a simple TTY terminal application which features a
-straightforward commandline interface to easily connect to
-TTY devices for basic input/output.
+On Sun, 22 Dec 2019 14:18:17 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- DEVELOPERS            |  1 +
- package/Config.in     |  1 +
- package/tio/Config.in |  8 ++++++++
- package/tio/tio.hash  |  5 +++++
- package/tio/tio.mk    | 13 +++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/tio/Config.in
- create mode 100644 package/tio/tio.hash
- create mode 100644 package/tio/tio.mk
+> ucm needs mixer since version 1.2.1 and
+> https://github.com/alsa-project/alsa-lib/commit/5c88b183718ce3df11bc4753c76d95f3e9de6c7e
+> 
+> So add a BR2_PACKAGE_ALSA_LIB_UCM option that selects
+> BR2_PACKAGE_ALSA_LIB_MIXER and selects this new option in
+> BR2_PACKAGE_ALSA_UTILS_ALSAUCM to avoid a build failure
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/aaa615d4e38d100bb9001ecdf7357e755ef42a87
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d2089e2672ce..d66f9a3bdd25 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2213,6 +2213,7 @@ F:	package/libgdiplus/
- F:	package/pimd/
- F:	package/snort/
- F:	package/stella/
-+F:	package/tio/
- F:	package/traceroute/
- F:	package/tunctl/
- F:	package/ubus/
-diff --git a/package/Config.in b/package/Config.in
-index 2bfec097025c..3acc93620910 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -546,6 +546,7 @@ endmenu
- 	source "package/ti-sgx-um/Config.in"
- 	source "package/ti-uim/Config.in"
- 	source "package/ti-utils/Config.in"
-+	source "package/tio/Config.in"
- 	source "package/triggerhappy/Config.in"
- 	source "package/uboot-tools/Config.in"
- 	source "package/ubus/Config.in"
-diff --git a/package/tio/Config.in b/package/tio/Config.in
-new file mode 100644
-index 000000000000..6c748c5d12a1
---- /dev/null
-+++ b/package/tio/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_TIO
-+	bool "tio"
-+	help
-+	  "tio" is a simple TTY terminal application which features a
-+	  straightforward commandline interface to easily connect to
-+	  TTY devices for basic input/output.
-+
-+	  https://tio.github.io/
-diff --git a/package/tio/tio.hash b/package/tio/tio.hash
-new file mode 100644
-index 000000000000..3053bd1bf085
---- /dev/null
-+++ b/package/tio/tio.hash
-@@ -0,0 +1,5 @@
-+# Locally computed:
-+sha256 a8f5ed6994cacb96780baa416b19e5a6d7d67e8c162a8ea4fd9eccd64984ae44  tio-1.32.tar.xz
-+
-+# Hash for license files:
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/tio/tio.mk b/package/tio/tio.mk
-new file mode 100644
-index 000000000000..dcddea7fd9b9
---- /dev/null
-+++ b/package/tio/tio.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# tio
-+#
-+################################################################################
-+
-+TIO_VERSION = 1.32
-+TIO_SOURCE = tio-$(TIO_VERSION).tar.xz
-+TIO_SITE = https://github.com/tio/tio/releases/download/v$(TIO_VERSION)
-+TIO_LICENSE = GPLv2
-+TIO_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+Thanks, applied, with one change. See below.
+
+> +config BR2_PACKAGE_ALSA_LIB_UCM
+> +	bool "ucm"
+> +	select BR2_PACKAGE_ALSA_LIB_MIXER
+> +	default y
+
+The correct order is to have the "default" line before the "select".
+This is reported by "make check-package". Of course, this is not a
+kconfig rule, just a Buildroot best practice to keep things consistent
+between packages.
+
+Thanks!
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
