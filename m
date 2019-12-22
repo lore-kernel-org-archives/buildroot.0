@@ -1,129 +1,76 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 11:47:56 +0100
-Subject: [Buildroot] [PATCHv2 1/1] package/dropbear: group post-extract
- hooks with their call site
-In-Reply-To: <20191220160510.21030-1-patrickdepinguin@gmail.com>
-References: <20191220160510.21030-1-patrickdepinguin@gmail.com>
-Message-ID: <20191222104756.GY26395@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 22 Dec 2019 11:49:28 +0100
+Subject: [Buildroot] [PATCH 1/2] package/qpdf: bump to version 9.1.0
+Message-ID: <20191222104929.2197066-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+- Add host-pkgconf dependency as it is used since version 9.0.0 and
+  https://github.com/qpdf/qpdf/commit/12400475283f5081ea55f52a764e43f14032f6ba
+- C++11 is mandatory since version 9.1.0 and
+  https://github.com/qpdf/qpdf/commit/653ce3550d18a07194a4c3bb9b4a3d260ed842cd
 
-On 2019-12-20 17:05 +0100, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> The organization of dropbear.mk was no longer very clear: for some
-> post-extract blocks, the block was separated from the place where it was
-> enabled, but for others they were grouped.
-> 
-> Regroup all blocks with their call site and inside the condition, if
-> present.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/qpdf/Config.in | 6 ++++--
+ package/qpdf/qpdf.hash | 4 ++--
+ package/qpdf/qpdf.mk   | 4 ++--
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/dropbear/dropbear.mk | 32 ++++++++++++++------------------
->  1 file changed, 14 insertions(+), 18 deletions(-)
-> 
-> v2: move blocks inside condition (ThomasP)
-> 
-> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-> index 7cbc16bc3d..7d1aa5f480 100644
-> --- a/package/dropbear/dropbear.mk
-> +++ b/package/dropbear/dropbear.mk
-> @@ -56,6 +56,7 @@ endef
->  DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
->  endif
->  
-> +ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
->  define DROPBEAR_DISABLE_LEGACY_CRYPTO
->  	echo '#define DROPBEAR_3DES 0'                  >> $(@D)/localoptions.h
->  	echo '#define DROPBEAR_ENABLE_CBC_MODE 0'       >> $(@D)/localoptions.h
-> @@ -63,28 +64,32 @@ define DROPBEAR_DISABLE_LEGACY_CRYPTO
->  	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
->  	echo '#define DROPBEAR_DH_GROUP1 0'             >> $(@D)/localoptions.h
->  endef
-> -ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
->  DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_LEGACY_CRYPTO
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),)
->  define DROPBEAR_ENABLE_REVERSE_DNS
->  	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
->  endef
-> +DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
-> +endif
->  
-> +ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
-> +DROPBEAR_CONF_OPTS += --disable-zlib --enable-bundled-libtom
-> +else
->  define DROPBEAR_BUILD_FEATURED
->  	echo '#define DROPBEAR_SMALL_CODE 0'            >> $(@D)/localoptions.h
->  	echo '#define DROPBEAR_TWOFISH128 1'            >> $(@D)/localoptions.h
->  	echo '#define DROPBEAR_TWOFISH256 1'            >> $(@D)/localoptions.h
->  endef
-> -
-> -define DROPBEAR_DISABLE_STANDALONE
-> -	echo '#define NON_INETD_MODE 0'                 >> $(@D)/localoptions.h
-> -endef
-> +DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
-> +DROPBEAR_DEPENDENCIES += zlib libtomcrypt
-> +DROPBEAR_CONF_OPTS += --disable-bundled-libtom
-> +endif
->  
->  define DROPBEAR_CUSTOM_PATH
->  	echo '#define DEFAULT_PATH $(BR2_SYSTEM_DEFAULT_PATH)' >>$(@D)/localoptions.h
->  endef
-> -
->  DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_CUSTOM_PATH
->  
->  define DROPBEAR_INSTALL_INIT_SYSTEMD
-> @@ -101,21 +106,12 @@ define DROPBEAR_INSTALL_INIT_SYSV
->  		$(TARGET_DIR)/etc/init.d/S50dropbear
->  endef
->  else
-> +define DROPBEAR_DISABLE_STANDALONE
-> +	echo '#define NON_INETD_MODE 0'                 >> $(@D)/localoptions.h
-> +endef
->  DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),)
-> -DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
-> -DROPBEAR_CONF_OPTS += --disable-zlib --enable-bundled-libtom
-> -else
-> -DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
-> -DROPBEAR_DEPENDENCIES += zlib libtomcrypt
-> -DROPBEAR_CONF_OPTS += --disable-bundled-libtom
-> -endif
-> -
->  ifneq ($(BR2_PACKAGE_DROPBEAR_WTMP),y)
->  DROPBEAR_CONF_OPTS += --disable-wtmp
->  endif
-> -- 
-> 2.23.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/qpdf/Config.in b/package/qpdf/Config.in
+index 3a4fa6072c..7550e1547a 100644
+--- a/package/qpdf/Config.in
++++ b/package/qpdf/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_QPDF
+ 	bool "qpdf"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_JPEG
+ 	help
+@@ -13,5 +14,6 @@ config BR2_PACKAGE_QPDF
+ 
+ 	  http://qpdf.sourceforge.net/
+ 
+-comment "qpdf needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "qpdf needs a toolchain w/ C++, gcc >= 4.7"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
+index 0ab4e0af4e..48b8c77f1e 100644
+--- a/package/qpdf/qpdf.hash
++++ b/package/qpdf/qpdf.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/qpdf/files/qpdf/8.4.0/qpdf-8.4.0.sha512/download
+-sha512	13225c6285311e8fe89970971b082b9613e70d474ee71dd5572f1ae268234d366c2c9c7bf427c4758a746a1a27ecc0127d31044ab501dbc08885c8aa0a514028  qpdf-8.4.0.tar.gz
++# From https://sourceforge.net/projects/qpdf/files/qpdf/9.1.0/qpdf-9.1.0.sha512/download
++sha512	7561ffc366dbce9df58cc85ff18480b28b0d46de04733ba463139188bee95690f92cf0960a328619f0c9f34ce865598db490fa1c6aaa76ee87d2c034a5f7f57e  qpdf-9.1.0.tar.gz
+ # Locally computed:
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+ sha256  fb929ac30decb4dc3a2eea2bec6c43296a797c5d2d602deb3784ee39430583d5  Artistic-2.0
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index 7dfc7acd70..217bff8055 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-QPDF_VERSION = 8.4.0
++QPDF_VERSION = 9.1.0
+ QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
+ QPDF_INSTALL_STAGING = YES
+ QPDF_LICENSE = Apache-2.0 or Artistic-2.0
+ QPDF_LICENSE_FILES = LICENSE.txt Artistic-2.0
+-QPDF_DEPENDENCIES = zlib jpeg
++QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
+ 
+ QPDF_CONF_OPTS = --without-random
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.0
