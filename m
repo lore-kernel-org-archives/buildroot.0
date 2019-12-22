@@ -1,135 +1,149 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 22 Dec 2019 23:33:53 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/boost: boost-thread needs a toolchain without bug 64735
-Message-ID: <20191222223353.3981922-1-fontaine.fabrice@gmail.com>
+Date: Sun, 22 Dec 2019 23:34:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openblas: bump to version 0.3.7
+Message-ID: <20191222223443.3982071-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-boost-thread needs std::current_exception since version 1.71.0 and
-https://github.com/boostorg/exception/commit/386f5507cb8ec99c03ca535bea4f8bd61e0de910
-
-std::current_exception depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 as a
-result, gnuradio fails to build on:
-
-[ 12%] Building CXX object gnuradio-runtime/lib/pmt/CMakeFiles/gnuradio-pmt.dir/pmt_pool.cc.o
-In file included from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/detail/exception_ptr.hpp:15:0,
-                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception_ptr.hpp:9,
-                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/thread/exceptional_ptr.hpp:10,
-                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/thread/future.hpp:34,
-                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/thread.hpp:24,
-                 from /home/test/autobuild/run/instance-2/output-1/build/gnuradio-3.7.13.5/gnuradio-runtime/include/pmt/pmt_pool.h:27,
-                 from /home/test/autobuild/run/instance-2/output-1/build/gnuradio-3.7.13.5/gnuradio-runtime/lib/pmt/pmt.cc:31:
-/home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp: In function 'std::string boost::current_exception_diagnostic_information(bool)':
-/home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp:49:26: error: 'current_exception' is not a member of 'std'
-         else if (auto* p=std::current_exception().__cxa_exception_type())
-                          ^
-So add this dependency on boost-thread, boost-log and gnuradio (the only
-reverse dependencies of boost-thread that does not already depends on
-!BR2_TOOLCHAIN_HAS_GCC_BUG_64735)
-
-Finally, add this dependency on gqrx as it is a reverse dependency of
-gnuradio
-
-Fixes:
- - http://autobuild.buildroot.org/results/c384205cf50929c320d90b620f2390837721d9f9
- - http://autobuild.buildroot.org/results/47440354b336b943b74b72fa303b079dc962bfd0
+Remove both patches (already in version)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Also update boost-log option
+ ...0001-Makefile.arm-remove-march-flags.patch | 55 -------------------
+ ...-argument-of-CPU_ISSET-for-glibc-2-5.patch | 36 ------------
+ package/openblas/openblas.hash                |  2 +-
+ package/openblas/openblas.mk                  |  2 +-
+ 4 files changed, 2 insertions(+), 93 deletions(-)
+ delete mode 100644 package/openblas/0001-Makefile.arm-remove-march-flags.patch
+ delete mode 100644 package/openblas/0002-Correct-argument-of-CPU_ISSET-for-glibc-2-5.patch
 
- package/boost/Config.in    | 8 ++++++++
- package/gnuradio/Config.in | 4 ++++
- package/gqrx/Config.in     | 4 ++++
- 3 files changed, 16 insertions(+)
-
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 392d7424fb..a053b776fd 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -202,6 +202,7 @@ comment "boost-locale needs a toolchain w/ dynamic library"
- config BR2_PACKAGE_BOOST_LOG
- 	bool "boost-log"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
- 	select BR2_PACKAGE_BOOST_ATOMIC
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
-@@ -214,6 +215,9 @@ config BR2_PACKAGE_BOOST_LOG
- comment "boost-log needs a toolchain w/ NPTL"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/openblas/0001-Makefile.arm-remove-march-flags.patch b/package/openblas/0001-Makefile.arm-remove-march-flags.patch
+deleted file mode 100644
+index db975de59d..0000000000
+--- a/package/openblas/0001-Makefile.arm-remove-march-flags.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From e6c498f68b61057fb5505e41c3858c2b5d223227 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sun, 7 Aug 2016 23:20:00 +0200
+-Subject: [PATCH] Makefile.arm: remove -march flags
+-
+-The provided -march flags, especially for ARMv5 and ARMv6 may not
+-necessarily match the needed ones: for ARMv5, it might be armv5,
+-armv5te, armv5t, etc. If the wrong one is used, the incorrect toolchain
+-sysroot can be used in a multilib toolchain.
+-
+-Therefore, let the user building OpenBLAS pass the appropriate -march
+-flag.
+-
+-The other flags, such as -mfpu=vfp or -mfloat-abi=hard are kept, as they
+-are actually required for the build to proceed (OpenBLAS uses VFP
+-instructions, and assume an EABIhf ABI).
+-
+-[Peter: update for v0.2.20]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- Makefile.arm | 13 ++++---------
+- 1 file changed, 4 insertions(+), 9 deletions(-)
+-
+-diff --git a/Makefile.arm b/Makefile.arm
+-index eedd39b7..b5d80f8e 100644
+---- a/Makefile.arm
+-+++ b/Makefile.arm
+-@@ -1,7 +1,7 @@
+- ifeq ($(CORE), $(filter $(CORE),ARMV7 CORTEXA9 CORTEXA15))
+- ifeq ($(OSNAME), Android)
+--CCOMMON_OPT += -mfpu=neon  -march=armv7-a
+--FCOMMON_OPT += -mfpu=neon  -march=armv7-a
+-+CCOMMON_OPT += -mfpu=neon
+-+FCOMMON_OPT += -mfpu=neon
+- else
+- CCOMMON_OPT += -mfpu=vfpv3 -march=armv7-a
+- FCOMMON_OPT += -mfpu=vfpv3 -march=armv7-a
+-@@ -9,11 +9,6 @@ endif
+- endif
+- 
+- ifeq ($(CORE), ARMV6)
+--CCOMMON_OPT += -mfpu=vfp -march=armv6
+--FCOMMON_OPT += -mfpu=vfp -march=armv6
+--endif
+--
+--ifeq ($(CORE), ARMV5)
+--CCOMMON_OPT += -march=armv5
+--FCOMMON_OPT += -march=armv5
+-+CCOMMON_OPT += -mfpu=vfp
+-+FCOMMON_OPT += -mfpu=vfp
+- endif
+--- 
+-2.11.0
+-
+diff --git a/package/openblas/0002-Correct-argument-of-CPU_ISSET-for-glibc-2-5.patch b/package/openblas/0002-Correct-argument-of-CPU_ISSET-for-glibc-2-5.patch
+deleted file mode 100644
+index cf15c6b8ed..0000000000
+--- a/package/openblas/0002-Correct-argument-of-CPU_ISSET-for-glibc-2-5.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From b43c8382c885551b0f230c8493e79bf04d94e366 Mon Sep 17 00:00:00 2001
+-From: Martin Kroeker <martin@ruby.chemie.uni-freiburg.de>
+-Date: Wed, 1 May 2019 10:46:46 +0200
+-Subject: [PATCH] Correct argument of CPU_ISSET for glibc <2.5
+-
+-fixes #2104
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/xianyi/OpenBLAS/commit/b43c8382c885551b0f230c8493e79bf04d94e366]
+----
+- driver/others/memory.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/driver/others/memory.c b/driver/others/memory.c
+-index ac8545f35..db14cde02 100644
+---- a/driver/others/memory.c
+-+++ b/driver/others/memory.c
+-@@ -229,7 +229,7 @@ int get_num_procs(void) {
+-   n=0;
+-   #if !__GLIBC_PREREQ(2, 6)
+-   for (i=0;i<nums;i++)
+--     if (CPU_ISSET(i,cpuset)) n++;
+-+     if (CPU_ISSET(i,&cpuset)) n++;
+-   nums=n;
+-   #else
+-   nums = CPU_COUNT(sizeof(cpuset),&cpuset);
+-@@ -1772,7 +1772,7 @@ int get_num_procs(void) {
+-   n=0;
+-   #if !__GLIBC_PREREQ(2, 6)
+-   for (i=0;i<nums;i++)
+--     if (CPU_ISSET(i,cpuset)) n++;
+-+     if (CPU_ISSET(i,&cpuset)) n++;
+-   nums=n;
+-   #else
+-   nums = CPU_COUNT(sizeof(cpuset),&cpuset);
+diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
+index a167d88fa9..5b1fb17fa7 100644
+--- a/package/openblas/openblas.hash
++++ b/package/openblas/openblas.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 e64c8fe083832ffbc1459ab6c72f71d53afd3b36e8497c922a15a06b72e9002f  openblas-0.3.6.tar.gz
++sha256 bde136122cef3dd6efe2de1c6f65c10955bbb0cc01a520c2342f5287c28f9379  openblas-0.3.7.tar.gz
+ sha256 190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index c2e9e77794..f068402269 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+comment "boost-log needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_BOOST_MATH
- 	bool "boost-math"
- 	help
-@@ -304,12 +308,16 @@ config BR2_PACKAGE_BOOST_TEST
- 
- config BR2_PACKAGE_BOOST_THREAD
- 	bool "boost-thread"
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
- 	select BR2_PACKAGE_BOOST_ATOMIC if !BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	select BR2_PACKAGE_BOOST_CHRONO
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	help
- 	  Portable C++ multi-threading. C++11, C++14.
- 
-+comment "boost-thread needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_BOOST_TIMER
- 	bool "boost-timer"
- 	select BR2_PACKAGE_BOOST_CHRONO
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 80f6a1c535..442b86c692 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -4,6 +4,9 @@ comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 
-+comment "gnuradio needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_GNURADIO
- 	bool "gnuradio"
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -12,6 +15,7 @@ config BR2_PACKAGE_GNURADIO
- 	depends on BR2_USE_MMU # use fork()
- 	depends on BR2_USE_WCHAR # boost
- 	depends on !BR2_PACKAGE_PYTHON3
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
-diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-index b0d7e7b9f3..990d594c6a 100644
---- a/package/gqrx/Config.in
-+++ b/package/gqrx/Config.in
-@@ -8,6 +8,9 @@ comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
- comment "gqrx needs qt5"
- 	depends on !BR2_PACKAGE_QT5
- 
-+comment "gqrx needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_GQRX
- 	bool "gqrx"
- 	depends on BR2_USE_MMU # gnuradio
-@@ -18,6 +21,7 @@ config BR2_PACKAGE_GQRX
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_QT5
- 	depends on !BR2_PACKAGE_PYTHON3
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # gnuradio
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
- 	select BR2_PACKAGE_BOOST_SYSTEM
+-OPENBLAS_VERSION = 0.3.6
++OPENBLAS_VERSION = 0.3.7
+ OPENBLAS_SITE = $(call github,xianyi,OpenBLAS,v$(OPENBLAS_VERSION))
+ OPENBLAS_LICENSE = BSD-3-Clause
+ OPENBLAS_LICENSE_FILES = LICENSE
 -- 
 2.24.0
