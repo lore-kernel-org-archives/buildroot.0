@@ -1,149 +1,82 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 12:01:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cereal: new package
-In-Reply-To: <20191220144804.28307-1-patrickdepinguin@gmail.com>
-References: <20191220144804.28307-1-patrickdepinguin@gmail.com>
-Message-ID: <20191222110105.GZ26395@scaer>
+Date: Sun, 22 Dec 2019 12:05:34 +0100
+Subject: [Buildroot] [PATCH] package/open2300: add hash file
+In-Reply-To: <CAEyMn7aQSNzWDyPLi_g3mn+9Ze5ZxDYJ+mWp4m4TTMHUY6jrxg@mail.gmail.com>
+References: <20191222083707.3448-1-heiko.thiery@gmail.com>
+ <20191222105754.188b7bd2@windsurf> <20191222100801.GR26395@scaer>
+ <CAEyMn7aQSNzWDyPLi_g3mn+9Ze5ZxDYJ+mWp4m4TTMHUY6jrxg@mail.gmail.com>
+Message-ID: <20191222110534.GA26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Heiko, All,
 
-On 2019-12-20 15:48 +0100, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+On 2019-12-22 11:56 +0100, Heiko Thiery spake thusly:
+> Am So., 22. Dez. 2019 um 11:08 Uhr schrieb Yann E. MORIN
+> <yann.morin.1998@free.fr>:
+> > On 2019-12-22 10:57 +0100, Thomas Petazzoni spake thusly:
+> > > On Sun, 22 Dec 2019 09:37:08 +0100
+> > > Heiko Thiery <heiko.thiery@gmail.com> wrote:
+> > > > - add sha256 tarball hash
+> > > > - add sha256 license hash
+> > > The source code for this package is fetched from Subversion. Are the
+> > > tarballs we create out of SVN repositories reproducible ? I guess so,
+> > > but let's loop in Yann Morin for some additional feedback on this.
+> > Seeing the dance we do in the git backend, and that we don't do it in
+> > the svn backend, I doubt the svn backend is reproducible...
+> >
+> > Yet, I just checked, and I indeed get the same sha256 as Heiko provided
+> > in this patch...
+> >
+> > Which prompted me in lookig at it. And we are not getting it from the
+> > svn repository, for the good reason that the repository is dead and
+> > off-line.
+> >
+> > Instead, we're getting in from s.b.o instead, and thus the reason why
+> > the sha256 is reproducible...
+> >
+> > Dang... :-(
+> >
+> > So I suggest we do indeed add this hash, because in the end, that's
+> > s.b.o providing it, so it is stable.
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  DEVELOPERS                 |  1 +
->  package/Config.in          |  1 +
->  package/cereal/Config.in   | 20 ++++++++++++++++++++
->  package/cereal/cereal.hash |  3 +++
->  package/cereal/cereal.mk   | 17 +++++++++++++++++
->  5 files changed, 42 insertions(+)
->  create mode 100644 package/cereal/Config.in
->  create mode 100644 package/cereal/cereal.hash
->  create mode 100644 package/cereal/cereal.mk
-> 
-> NOTE: cereal is bundling external packages like rapidjson and rapidxml.
-> The LICENSE file only declares the license for cereal. I opened an issue for
-> that [1], not sure what you want to do meanwhile in CEREAL_LICENSE.
-> [1] https://github.com/USCiLab/cereal/issues/609
+> Sorry, I didn't want to create this work ;-/ I just wanted to do some
+> cleanup for the stats. So I picked a simple package to improve.
 
-They have to be listedin _LICENSE and _LICENSE_FILES.
+No problem. It was nice that you picked it up, because that made us
+notice the problem! :-)
 
-  - rapidxml:
-    - dual-licensed boost or MIT
-    - include/cereal/external/rapidxml/license.txt
+> I was not aware that special handling is needed for making builds
+> reproducible at this point.
 
-  - rapidjson:
-    - MIT
-    - upstream has a license.txt file, but it is not carried in the
-      copy bundled in cereal :-(
-    - include/cereal/external/rapidjson/rapidjson.h
+Yeah... Reproducibility is not a given. :-(
 
-  - base64:
-    - seems to be zlib license
-    - upstream has a LICENSE file, but it is not carried in the copy
-      bundled in cereal :-(
-    - include/cereal/external/base64.hpp
+The subversion backend would need some love for that, so if you have a
+bit of time on your hnads, that's be nice if you could tackle it (if
+you're interested).
 
-Can you verify this, and respin an updated patch, please?
+> By the way ... what does s.b.o mean?
+
+Sources.Buildroot.Org, our fallback mirror:
+
+    http://sources.buildroot.org/
 
 Regards,
 Yann E. MORIN.
 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index d9b4864b9f..a48af96961 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2325,6 +2325,7 @@ F:	package/civetweb/
->  
->  N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->  F:	docs/manual/
-> +F:	package/cereal/
->  F:	package/opkg-utils/
->  F:	package/perl-convert-asn1/
->  F:	package/perl-crypt-blowfish/
-> diff --git a/package/Config.in b/package/Config.in
-> index f304a8fbd3..5fb969da8a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1721,6 +1721,7 @@ menu "Other"
->  	source "package/boost/Config.in"
->  	source "package/c-capnproto/Config.in"
->  	source "package/capnproto/Config.in"
-> +	source "package/cereal/Config.in"
->  	source "package/clang/Config.in"
->  	source "package/clapack/Config.in"
->  	source "package/classpath/Config.in"
-> diff --git a/package/cereal/Config.in b/package/cereal/Config.in
-> new file mode 100644
-> index 0000000000..3ac463c4fc
-> --- /dev/null
-> +++ b/package/cereal/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_CEREAL
-> +	bool "cereal"
-> +	depends on BR2_USE_WCHAR
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-> +	help
-> +	  cereal is a header-only C++11 serialization library.
-> +	  cereal takes arbitrary data types and reversibly turns them
-> +	  into different representations, such as compact binary
-> +	  encodings, XML or JSON. cereal was designed to be fast,
-> +	  light-weight, and easy to extend - it has no external
-> +	  dependencies and can be easily bundled with other code or used
-> +	  standalone.
-> +
-> +	  https://github.com/USCiLab/cereal
-> +
-> +comment "cereal needs a toolchain w/ C++, gcc >= 4.7, threads, wchar"
-> +	depends on !BR2_INSTALL_LIBSTDCPP  || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-> diff --git a/package/cereal/cereal.hash b/package/cereal/cereal.hash
-> new file mode 100644
-> index 0000000000..0dd598ff12
-> --- /dev/null
-> +++ b/package/cereal/cereal.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed
-> +sha256 329ea3e3130b026c03a4acc50e168e7daff4e6e661bc6a7dfec0d77b570851d5  cereal-1.3.0.tar.gz
-> +sha256 18fd7618c44c9fe28b5f54cd19747df3c0472ed33e8507fea571e2acf6e72f34  LICENSE
-> diff --git a/package/cereal/cereal.mk b/package/cereal/cereal.mk
-> new file mode 100644
-> index 0000000000..991eee76a2
-> --- /dev/null
-> +++ b/package/cereal/cereal.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# cereal
-> +#
-> +################################################################################
-> +
-> +CEREAL_VERSION = 1.3.0
-> +CEREAL_SITE = $(call github,USCiLab,cereal,v$(CEREAL_VERSION))
-> +CEREAL_LICENSE = BSD-3-Clause
-> +CEREAL_LICENSE_FILES = LICENSE
-> +CEREAL_INSTALL_STAGING = YES
-> +CEREAL_INSTALL_TARGET = NO
-> +CEREAL_CONF_OPTS = \
-> +	-DTHREAD_SAFE=ON \
-> +	-DJUST_INSTALL_CEREAL=ON
-> +
-> +$(eval $(cmake-package))
-> -- 
-> 2.23.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > --
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
