@@ -1,42 +1,33 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 22 Dec 2019 14:32:08 +0100
-Subject: [Buildroot] [PATCH 2/3] package/perl-math-bigint: new package
-In-Reply-To: <CAAXf6LU-zg05NszgCjvobzyCk_urdg=rf8QA6B047vt6_=rSKA@mail.gmail.com>
-References: <20191218201845.846-1-patrickdepinguin@gmail.com>
- <20191218201845.846-2-patrickdepinguin@gmail.com>
- <CAB0FRsstnQ_nNhd-CHk3ZKJNbtOW3NSEgiPWjSdEGK8vEQcoPw@mail.gmail.com>
- <CAAXf6LU-zg05NszgCjvobzyCk_urdg=rf8QA6B047vt6_=rSKA@mail.gmail.com>
-Message-ID: <CAAXf6LUeE+hyit0otH4KtgM=0jO757Jry_KUSpTnXeH5OA7obA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Dec 2019 14:39:00 +0100
+Subject: [Buildroot] [git commit] package/openipmi: install to staging dir
+Message-ID: <20191222133004.6C15A8D69A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 22, 2019, 14:27 Thomas De Schampheleire <
-patrickdepinguin@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3c5912b2ec727bb0337cdbc63d59a3a0f4e3bdf3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hi Fran?ois,
->
-> On Sun, Dec 22, 2019, 13:07 Fran?ois Perrad <francois.perrad@gadz.org>
-> wrote:
->
->>
->> Math::BigInt is a core module.
->> Perl 5.30.1 includes the version 1.999816.
->> From my point of view, this package is useless.
->>
->
->
-> How do you know this?
-> The cpan page does not give such detail, it seems.
-> https://metacpan.org/pod/Math::BigInt
-> And what about math-prime-util?
->
-> Do you know since which perl release this is a core package?
->
+Needed for packages which depend on openipmi.
 
-And also: can we make scancpan detect this?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191222/a281fff7/attachment.html>
+Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openipmi/openipmi.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
+index 9590b446ef..ca8fa77342 100644
+--- a/package/openipmi/openipmi.mk
++++ b/package/openipmi/openipmi.mk
+@@ -10,6 +10,7 @@ OPENIPMI_SOURCE = OpenIPMI-$(OPENIPMI_VERSION).tar.gz
+ OPENIPMI_LICENSE = LGPL-2.0+, GPL-2.0+, BSD-3-Clause
+ OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
+ OPENIPMI_DEPENDENCIES = popt ncurses readline host-pkgconf
++OPENIPMI_INSTALL_STAGING = YES
+ # Patching Makefile.am
+ OPENIPMI_AUTORECONF = YES
+ OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
