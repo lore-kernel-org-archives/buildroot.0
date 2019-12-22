@@ -1,82 +1,82 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 22 Dec 2019 17:21:46 +0100
-Subject: [Buildroot] [PATCH 5/5] package/perl-net-ping: remove it
-In-Reply-To: <20191222162146.1947-1-francois.perrad@gadz.org>
-References: <20191222162146.1947-1-francois.perrad@gadz.org>
-Message-ID: <20191222162146.1947-5-francois.perrad@gadz.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Dec 2019 17:24:48 +0100
+Subject: [Buildroot] [PATCH 1/3] package/usb_modeswitch: fix license
+In-Reply-To: <20191222110646.2201048-1-fontaine.fabrice@gmail.com>
+References: <20191222110646.2201048-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191222162448.GH26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Net::Ping is a Perl core module
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in                        |  1 -
- package/perl-net-ping/Config.in          |  6 ------
- package/perl-net-ping/perl-net-ping.hash |  6 ------
- package/perl-net-ping/perl-net-ping.mk   | 14 --------------
- 4 files changed, 27 deletions(-)
- delete mode 100644 package/perl-net-ping/Config.in
- delete mode 100644 package/perl-net-ping/perl-net-ping.hash
- delete mode 100644 package/perl-net-ping/perl-net-ping.mk
+Fabrice, All,
 
-diff --git a/package/Config.in b/package/Config.in
-index 8ab40f666..cbcb7cef7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -760,7 +760,6 @@ menu "Perl libraries/modules"
- 	source "package/perl-moo/Config.in"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
--	source "package/perl-net-ping/Config.in"
- 	source "package/perl-net-snmp/Config.in"
- 	source "package/perl-net-ssh2/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
-diff --git a/package/perl-net-ping/Config.in b/package/perl-net-ping/Config.in
-deleted file mode 100644
-index 21239a095..000000000
---- a/package/perl-net-ping/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_PERL_NET_PING
--	bool "perl-net-ping"
--	help
--	  check a remote host for reachability.
--
--	  https://metacpan.org/release/Net-Ping
-diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
-deleted file mode 100644
-index 2842827c8..000000000
---- a/package/perl-net-ping/perl-net-ping.hash
-+++ /dev/null
-@@ -1,6 +0,0 @@
--# retrieved by scancpan from http://cpan.metacpan.org/
--md5    eb90f86dcc31126e88be02ecb62d5303 Net-Ping-2.72.tar.gz
--sha256 555af602f54229cd81fef7da1a81516800f3155c6dc4d07dc71be1de3253dd6a Net-Ping-2.72.tar.gz
--
--# computed by scancpan
--sha256 9441a22309a2b40ff1282ac1906c137f07f5e521e7b1ec162b251f6006051b47 README
-diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
-deleted file mode 100644
-index b422c4eab..000000000
---- a/package/perl-net-ping/perl-net-ping.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# perl-net-ping
--#
--################################################################################
--
--PERL_NET_PING_VERSION = 2.72
--PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
--PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
--PERL_NET_PING_LICENSE = Artistic or GPL-1.0+
--PERL_NET_PING_LICENSE_FILES = README
--PERL_NET_PING_DISTNAME = Net-Ping
--
--$(eval $(perl-package))
+On 2019-12-22 12:06 +0100, Fabrice Fontaine spake thusly:
+> dispatcher.c is licensed under BSD-2-Clause
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Series aplied, thanks. However, I did a few changes, see belos:
+
+  - I merged patches 1 and 2 to gether, as I did not see the point of
+    adding tweaking the licensing info twice;
+
+  - speakign of the licensing info, I simplified the license list: we
+    usually only list parts of the package affected by the different
+    licenses, when those parts are optional or clearly separated (like
+    libs vs. programs), which is not the case here; we do not
+    differentiate based on the source files affecte by the licenses;
+
+  - I added the md5 hash provided by upstream. md5 is a weak hash, but
+    it is provided by upstream, so we want to carry it.
+
+Thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/usb_modeswitch/usb_modeswitch.hash | 1 +
+>  package/usb_modeswitch/usb_modeswitch.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
+> index 3cbd370e2c..0b180f9789 100644
+> --- a/package/usb_modeswitch/usb_modeswitch.hash
+> +++ b/package/usb_modeswitch/usb_modeswitch.hash
+> @@ -1,3 +1,4 @@
+>  # Locally calculated
+>  sha256	abffac09c87eacd78e101545967dc25af7e989745b4276756d45dbf4008a2ea6  usb-modeswitch-2.5.2.tar.bz2
+>  sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+> +sha256	929bfd332292f8cd33e4401b5cedea3e93ebe6efa99e1d3626884cacb59ff208  dispatcher.c
+> diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+> index 9832d3c808..5b60a3c5dc 100644
+> --- a/package/usb_modeswitch/usb_modeswitch.mk
+> +++ b/package/usb_modeswitch/usb_modeswitch.mk
+> @@ -8,8 +8,8 @@ USB_MODESWITCH_VERSION = 2.5.2
+>  USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+>  USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+>  USB_MODESWITCH_DEPENDENCIES = libusb
+> -USB_MODESWITCH_LICENSE = GPL-2.0+
+> -USB_MODESWITCH_LICENSE_FILES = COPYING
+> +USB_MODESWITCH_LICENSE = BSD-2-Clause (dispatcher.c), GPL-2.0+ (usb_modeswitch{.c,.h,.sh,_dispatcher.tcl})
+> +USB_MODESWITCH_LICENSE_FILES = COPYING dispatcher.c
+>  # Package does not build in parallel due to improper make rules
+>  USB_MODESWITCH_MAKE = $(MAKE1)
+>  
+> -- 
+> 2.24.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
