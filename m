@@ -1,67 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 17:33:38 +0100
-Subject: [Buildroot] [PATCH 1/5] utils/scancpan: warn when a module is a
- perl core module
-In-Reply-To: <20191222162146.1947-1-francois.perrad@gadz.org>
-References: <20191222162146.1947-1-francois.perrad@gadz.org>
-Message-ID: <20191222163338.GI26395@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 22 Dec 2019 17:40:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sysdig: reorder selects
+ alphabetically
+Message-ID: <20191222164039.3266485-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/sysdig/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-On 2019-12-22 17:21 +0100, Francois Perrad spake thusly:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-
-This change does need to be explained in the commit log:
-
-  - Why is it bad that we have a pacakge that is a core module?
-  - Does it cause any issue? If so, which one?
-
-Also, when you do removes package, the least is to add in Cc the people
-that initially added the package, so they have a chance to chime in and
-explain why they wanted to add it in the first place, and so they can
-confirm that the core module does indeed work for them.
-
-I'll mark the whole series as Changes Requested in Patchowrk. Please
-respin with explanations, and Cc original packagers.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  utils/scancpan | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/utils/scancpan b/utils/scancpan
-> index ac5fd5159..dbd8dab6d 100755
-> --- a/utils/scancpan
-> +++ b/utils/scancpan
-> @@ -611,6 +611,9 @@ sub fetch {
->      unless ($dist{$name} && !$top) {
->          say qq{fetch ${name}} unless $quiet;
->          my $result = $mcpan->release( distribution => $name );
-> +        my $main_module = $result->{main_module};
-> +        push @info, qq{[$name] $main_module is a core module}
-> +            if $top && Module::CoreList::is_core( $main_module, undef, $] );
->          $dist{$name} = $result;
->          $license_files{$name} = {};
->          eval {
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 672c44d211..c37d8d05cc 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -7,15 +7,15 @@ config BR2_PACKAGE_SYSDIG
+ 	depends on !BR2_STATIC_LIBS # luajit, elfutils
+ 	depends on BR2_USE_WCHAR # elfutils
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+-	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_LUAJIT
++	select BR2_PACKAGE_ELFUTILS
++	select BR2_PACKAGE_JQ
+ 	select BR2_PACKAGE_JSONCPP
++	select BR2_PACKAGE_LIBB64
+ 	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LUAJIT
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_JQ
+-	select BR2_PACKAGE_LIBB64
+-	select BR2_PACKAGE_ELFUTILS
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Sysdig is open source, system-level exploration:
+ 	  capture system state and activity from a running Linux
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.0
