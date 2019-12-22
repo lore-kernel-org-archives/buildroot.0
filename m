@@ -1,54 +1,154 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 22 Dec 2019 12:00:00 +0100
-Subject: [Buildroot] [PATCH] package/open2300: add hash file
-In-Reply-To: <20191222105754.188b7bd2@windsurf>
-References: <20191222083707.3448-1-heiko.thiery@gmail.com>
- <20191222105754.188b7bd2@windsurf>
-Message-ID: <CAEyMn7an_j9Uwh-6SKSz6R6ekDMkH4QJavexEeEWGQGW=tEx5w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Dec 2019 12:01:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cereal: new package
+In-Reply-To: <20191220144804.28307-1-patrickdepinguin@gmail.com>
+References: <20191220144804.28307-1-patrickdepinguin@gmail.com>
+Message-ID: <20191222110105.GZ26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am So., 22. Dez. 2019 um 10:57 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> On Sun, 22 Dec 2019 09:37:08 +0100
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > - add sha256 tarball hash
-> > - add sha256 license hash
-> >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> > ---
-> >  package/open2300/open2300.hash | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >  create mode 100644 package/open2300/open2300.hash
-> >
-> > diff --git a/package/open2300/open2300.hash b/package/open2300/open2300.hash
-> > new file mode 100644
-> > index 0000000000..913cccf4d2
-> > --- /dev/null
-> > +++ b/package/open2300/open2300.hash
-> > @@ -0,0 +1,2 @@
->
-> We need a comment at the top of the file that says where the hashes come from.
+Thomas, All,
 
-is a simple "# Locally generated" ok?
+On 2019-12-20 15:48 +0100, Thomas De Schampheleire spake thusly:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  DEVELOPERS                 |  1 +
+>  package/Config.in          |  1 +
+>  package/cereal/Config.in   | 20 ++++++++++++++++++++
+>  package/cereal/cereal.hash |  3 +++
+>  package/cereal/cereal.mk   | 17 +++++++++++++++++
+>  5 files changed, 42 insertions(+)
+>  create mode 100644 package/cereal/Config.in
+>  create mode 100644 package/cereal/cereal.hash
+>  create mode 100644 package/cereal/cereal.mk
+> 
+> NOTE: cereal is bundling external packages like rapidjson and rapidxml.
+> The LICENSE file only declares the license for cereal. I opened an issue for
+> that [1], not sure what you want to do meanwhile in CEREAL_LICENSE.
+> [1] https://github.com/USCiLab/cereal/issues/609
 
-I will update the patch.
+They have to be listedin _LICENSE and _LICENSE_FILES.
 
-> > +sha256       f4239d2f16d52156586d06be38f06a3eb58168377e243a8de8720b66e33ddb8f  open2300-12.tar.gz
->
-> The source code for this package is fetched from Subversion. Are the
-> tarballs we create out of SVN repositories reproducible ? I guess so,
-> but let's loop in Yann Morin for some additional feedback on this.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+  - rapidxml:
+    - dual-licensed boost or MIT
+    - include/cereal/external/rapidxml/license.txt
+
+  - rapidjson:
+    - MIT
+    - upstream has a license.txt file, but it is not carried in the
+      copy bundled in cereal :-(
+    - include/cereal/external/rapidjson/rapidjson.h
+
+  - base64:
+    - seems to be zlib license
+    - upstream has a LICENSE file, but it is not carried in the copy
+      bundled in cereal :-(
+    - include/cereal/external/base64.hpp
+
+Can you verify this, and respin an updated patch, please?
+
+Regards,
+Yann E. MORIN.
+
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index d9b4864b9f..a48af96961 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2325,6 +2325,7 @@ F:	package/civetweb/
+>  
+>  N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>  F:	docs/manual/
+> +F:	package/cereal/
+>  F:	package/opkg-utils/
+>  F:	package/perl-convert-asn1/
+>  F:	package/perl-crypt-blowfish/
+> diff --git a/package/Config.in b/package/Config.in
+> index f304a8fbd3..5fb969da8a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1721,6 +1721,7 @@ menu "Other"
+>  	source "package/boost/Config.in"
+>  	source "package/c-capnproto/Config.in"
+>  	source "package/capnproto/Config.in"
+> +	source "package/cereal/Config.in"
+>  	source "package/clang/Config.in"
+>  	source "package/clapack/Config.in"
+>  	source "package/classpath/Config.in"
+> diff --git a/package/cereal/Config.in b/package/cereal/Config.in
+> new file mode 100644
+> index 0000000000..3ac463c4fc
+> --- /dev/null
+> +++ b/package/cereal/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_CEREAL
+> +	bool "cereal"
+> +	depends on BR2_USE_WCHAR
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+> +	help
+> +	  cereal is a header-only C++11 serialization library.
+> +	  cereal takes arbitrary data types and reversibly turns them
+> +	  into different representations, such as compact binary
+> +	  encodings, XML or JSON. cereal was designed to be fast,
+> +	  light-weight, and easy to extend - it has no external
+> +	  dependencies and can be easily bundled with other code or used
+> +	  standalone.
+> +
+> +	  https://github.com/USCiLab/cereal
+> +
+> +comment "cereal needs a toolchain w/ C++, gcc >= 4.7, threads, wchar"
+> +	depends on !BR2_INSTALL_LIBSTDCPP  || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> diff --git a/package/cereal/cereal.hash b/package/cereal/cereal.hash
+> new file mode 100644
+> index 0000000000..0dd598ff12
+> --- /dev/null
+> +++ b/package/cereal/cereal.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256 329ea3e3130b026c03a4acc50e168e7daff4e6e661bc6a7dfec0d77b570851d5  cereal-1.3.0.tar.gz
+> +sha256 18fd7618c44c9fe28b5f54cd19747df3c0472ed33e8507fea571e2acf6e72f34  LICENSE
+> diff --git a/package/cereal/cereal.mk b/package/cereal/cereal.mk
+> new file mode 100644
+> index 0000000000..991eee76a2
+> --- /dev/null
+> +++ b/package/cereal/cereal.mk
+> @@ -0,0 +1,17 @@
+> +################################################################################
+> +#
+> +# cereal
+> +#
+> +################################################################################
+> +
+> +CEREAL_VERSION = 1.3.0
+> +CEREAL_SITE = $(call github,USCiLab,cereal,v$(CEREAL_VERSION))
+> +CEREAL_LICENSE = BSD-3-Clause
+> +CEREAL_LICENSE_FILES = LICENSE
+> +CEREAL_INSTALL_STAGING = YES
+> +CEREAL_INSTALL_TARGET = NO
+> +CEREAL_CONF_OPTS = \
+> +	-DTHREAD_SAFE=ON \
+> +	-DJUST_INSTALL_CEREAL=ON
+> +
+> +$(eval $(cmake-package))
+> -- 
+> 2.23.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
