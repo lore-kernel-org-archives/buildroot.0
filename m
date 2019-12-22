@@ -1,37 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 22 Dec 2019 14:19:52 +0100
-Subject: [Buildroot] [git commit] package/rpcbind: add an upstream URL to
- Config.in
-Message-ID: <20191222131048.DDBFE8D5E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/spidev_test: update the upstream
+ URL in Config.in
+Message-ID: <20191222131049.106EC8D5BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14dabed5ef0512fdaa7e76531ae8747d7cd94184
+commit: https://git.buildroot.net/buildroot/commit/?id=3661a3e3a9a788de8240078a4a344b9edb1fa9ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(404)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rpcbind/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/spidev_test/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rpcbind/Config.in b/package/rpcbind/Config.in
-index ced2d40944..9cde7bba39 100644
---- a/package/rpcbind/Config.in
-+++ b/package/rpcbind/Config.in
-@@ -9,6 +9,8 @@ config BR2_PACKAGE_RPCBIND
- 	  The rpcbind utility is a server that converts RPC program
- 	  numbers into universal addresses.
+diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
+index 0d8214cc29..44990c66b6 100644
+--- a/package/spidev_test/Config.in
++++ b/package/spidev_test/Config.in
+@@ -14,4 +14,4 @@ config BR2_PACKAGE_SPIDEV_TEST
+ 	  This means you won't have quad-pumped SPI support if your
+ 	  toolchain is too old.
  
-+	  https://sourceforge.net/projects/rpcbind/
-+
- comment "rpcbind needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
+-	  https://www.kernel.org/doc/Documentation/spi/spidev_test.c
++	  https://www.kernel.org/doc/html/latest/spi/index.html
