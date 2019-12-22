@@ -1,59 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 13:53:32 +0100
-Subject: [Buildroot] [PATCH] package/openocd: bump to version 104a5cb
-In-Reply-To: <20191222135026.75c9cffa@windsurf>
-References: <20191217232657.6582-1-fhunleth@troodon-software.com>
- <20191222135026.75c9cffa@windsurf>
-Message-ID: <20191222135332.40d50d24@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Dec 2019 14:00:38 +0100
+Subject: [Buildroot] [PATCH] package/open2300: add hash file
+In-Reply-To: <CAEyMn7ap+MRO=-fUv5uH8fOvZ9_MqHc9pb0hQuHhfyfajVpNsg@mail.gmail.com>
+References: <20191222083707.3448-1-heiko.thiery@gmail.com>
+ <20191222105754.188b7bd2@windsurf> <20191222100801.GR26395@scaer>
+ <CAEyMn7aQSNzWDyPLi_g3mn+9Ze5ZxDYJ+mWp4m4TTMHUY6jrxg@mail.gmail.com>
+ <20191222110534.GA26395@scaer>
+ <CAEyMn7ap+MRO=-fUv5uH8fOvZ9_MqHc9pb0hQuHhfyfajVpNsg@mail.gmail.com>
+Message-ID: <20191222130038.GC26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 22 Dec 2019 13:50:26 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Heiko, All,
 
-> Hello Frank,
+On 2019-12-22 13:50 +0100, Heiko Thiery spake thusly:
+> Am So., 22. Dez. 2019 um 12:05 Uhr schrieb Yann E. MORIN
+> <yann.morin.1998@free.fr>:
+> > The subversion backend would need some love for that, so if you have a
+> > bit of time on your hnads, that's be nice if you could tackle it (if
+> > you're interested).
 > 
-> On Tue, 17 Dec 2019 18:26:57 -0500
-> Frank Hunleth <fhunleth@troodon-software.com> wrote:
-> 
-> > The OpenOCD project hasn't made a release since January 2017. Much work
-> > has happened since then and now. This bumps the version to the latest
-> > commit and removes a patch that has been applied upstream.
-> > 
-> > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>  
-> 
-> Overall, it certainly looks good to bump OpenOCD, since indeed the
-> project is essentially no longer tagging any "official" release.
-> 
-> However, there a few changes that I'd like to see:
-> 
->  - Sync with Fabrice Fontaine, who posted a patch that drops the
->    internal jimctl usage, and instead uses our jimtcl package.
+> If I will get the time I can take a look on. Is this implemented in
+> the dl-wrapper and co? And should it be treated like the git one?
 
-In the mean time, the patch from Fabrice has been merged, so the
-internal jimtcl of OpenOCD is no longer needed.
+It's handled in each backend. See for example how it's done in the git
+backend, in support/download/git, lines 181 thhrough 196.
 
-My following points remain valid, though.
+Regards,
+Yann E. MORIN.
 
-> 
->  - Create a separate package for libjaylink, and use it in OpenOCD.
-> 
->  - Thanks to the above two points, drop the OPENOCD_GITSUBMODULES = YES
->    variable.
-> 
->  - Perhaps use the Git mirror at https://repo.or.cz/w/openocd.git,
->    which is accessible over https://, and therefore will work better
->    for some users behind corporate firewalls.
-> 
-> Could you rework your submission according to these suggestions?
+> > > By the way ... what does s.b.o mean?
+> >
+> > Sources.Buildroot.Org, our fallback mirror:
+> >
+> >     http://sources.buildroot.org/
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > > > Regards,
+> > > > Yann E. MORIN.
+> > > >
+> > > > --
+> > > > .-----------------.--------------------.------------------.--------------------.
+> > > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > > > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > > > '------------------------------^-------^------------------^--------------------'
+> >
+> > --
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
