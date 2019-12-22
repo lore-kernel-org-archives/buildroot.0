@@ -1,38 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Dec 2019 21:30:42 +0100
-Subject: [Buildroot] [PATCH] package/gdb: Disable gdbserver if full gdb
- is enabled for ARC
-In-Reply-To: <20191202134125.2545-1-Evgeniy.Didin@synopsys.com> (Evgeniy
- Didin's message of "Mon, 2 Dec 2019 16:41:25 +0300")
-References: <20191202134125.2545-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <878sn4yufh.fsf@dell.be.48ers.dk>
+Date: Sun, 22 Dec 2019 21:31:35 +0100
+Subject: [Buildroot] [PATCH] package/pkg-python: use _CONFIGURE_OPTS for
+ build env
+In-Reply-To: <20191205231103.27778-1-ryan.barnett@rockwellcollins.com> (Ryan
+ Barnett's message of "Thu, 5 Dec 2019 17:11:02 -0600")
+References: <20191205231103.27778-1-ryan.barnett@rockwellcollins.com>
+Message-ID: <874kxsyue0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Evgeniy" == Evgeniy Didin <Evgeniy.Didin@synopsys.com> writes:
+>>>>> "Ryan" == Ryan Barnett <ryan.barnett@rockwellcollins.com> writes:
 
- > With recent update of ARC toolchain to arc-2019.09-eng/rc1 versions
- > GDB package builds started to fail in autobuilder:
- >  http://autobuild.buildroot.net/results/bc5/bc52d0012944e15dee30a6e00a92f23c87d0dfda//
+ > When building host or target python packages, we need to ensure that
+ > the build environment utilize {HOST|TARGET}_CONFIGURE_OPTS. This
+ > ensures that the correct linker and compiler environment variables are
+ > set to compile utilizing either the host or target folders.
 
- > This error was caused by 73cc72729a18 ("Move gnulib to top level")
- > commit in binutils-gdb master branch and appears in ARC case because
- > arc-2019.09 GDB is based on binutils-gdb master branch and includes
- > this commit.
+ > It was discovered that when compiling a host-python package, it was
+ > using linking against the build machines library folder instead of the
+ > host folder because LDFLAGS was not properly set and was improperly
+ > detecting whether or not a shared or static library was present in the
+ > host folder.
 
- > More information about this bug can be found there:
- > https://sourceware.org/bugzilla/show_bug.cgi?id=24729
- > https://sourceware.org/bugzilla/show_bug.cgi?id=25171
- > https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/issues/30
+ > CC: Arnout Vandecappelle <arnout@mind.be>
+ > Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 
- > Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: arc-buildroot at synopsys.com
+ > ---
+ > Changes v1 -> v2:
+ >   - Merged HOST/TARGET_CONFIGURE_OPTS to single commit (suggested by
+ >       Arnout)
+ >   - Added HOST/TARGET_CONFIGURE_OPTS to env for setuptools (suggested
+ >       by Arnout)
 
-Committed to 2019.11.x, thanks.
+Committed to 2019.02.x and 2019.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
