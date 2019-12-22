@@ -1,44 +1,101 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sun, 22 Dec 2019 22:13:12 +0100
-Subject: [Buildroot] [PATCH] package/raspi-gpio: bump to revision 4edfde1
-Message-ID: <1577049192-31946-1-git-send-email-pjtexier@koncepto.io>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Dec 2019 22:18:49 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/avro-c: new package
+In-Reply-To: <20191214174206.161446-2-titouan.christophe@railnova.eu>
+References: <20191214174206.161446-1-titouan.christophe@railnova.eu>
+ <20191214174206.161446-2-titouan.christophe@railnova.eu>
+Message-ID: <20191222211849.GM26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This includes the following changes:
+Titouan, All,
 
-4edfde1 Update raw output to show pull registers on 2711
+On 2019-12-14 18:42 +0100, Titouan Christophe spake thusly:
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> ---
+[--SNIP--]
+> diff --git a/package/avro-c/0001-Compile-on-musl.patch b/package/avro-c/0001-Compile-on-musl.patch
+> new file mode 100644
+> index 0000000000..d6df6e83c2
+> --- /dev/null
+> +++ b/package/avro-c/0001-Compile-on-musl.patch
+> @@ -0,0 +1,39 @@
+> +From 4ada709e44e26a329d11359f10ab208ce758d863 Mon Sep 17 00:00:00 2001
+> +From: Titouan Christophe <titouan.christophe@railnova.eu>
+> +Date: Sun, 8 Dec 2019 01:55:59 +0100
+> +Subject: [PATCH] Allow avro C to be built on musl based systems.
+> +
+> +The type 'ssize_t' is defined in sys/types.h, and nowhere else
+> +in the musl standard C library, so it should be included for the
+> +compilation to succeed.
+> +
+> +This fixes several errors like:
+> +
+> +    In file included from src/generic.c:29:0:
+> +    src/generic.c: In function 'avro_generic_value_new':
+> +    src/avro_generic_internal.h:63:39:
+> +        error: 'ssize_t' undeclared (first use in this function);
+> +               did you mean 'size_t'?
+> +
+> +Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> +[Upstream status: https://github.com/apache/avro/pull/740]
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- package/raspi-gpio/raspi-gpio.hash | 2 +-
- package/raspi-gpio/raspi-gpio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Which has been accepted now. :-)
 
-diff --git a/package/raspi-gpio/raspi-gpio.hash b/package/raspi-gpio/raspi-gpio.hash
-index 8a808b6..41d885f 100644
---- a/package/raspi-gpio/raspi-gpio.hash
-+++ b/package/raspi-gpio/raspi-gpio.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 8f3fb411746d339d69adc398497892883c11d2d715ccbe6d8b0b5a401da73bd5  raspi-gpio-2eaa8b8755a550e34d07c898b90b0d9b3d66fd81.tar.gz
-+sha256 2526dcec1e5a171b13c44b1fb6f2faed5ec849f08021278e2be09bc18264a2fd  raspi-gpio-4edfde183ff3ac9ed66cdc015ae25e45f3a5502d.tar.gz
- sha256 6e02227e1fb942687163996678d94add7911890c50025912d0ae7ee66d256bb2  LICENSE
-diff --git a/package/raspi-gpio/raspi-gpio.mk b/package/raspi-gpio/raspi-gpio.mk
-index f841c98..d124108 100644
---- a/package/raspi-gpio/raspi-gpio.mk
-+++ b/package/raspi-gpio/raspi-gpio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RASPI_GPIO_VERSION = 2eaa8b8755a550e34d07c898b90b0d9b3d66fd81
-+RASPI_GPIO_VERSION = 4edfde183ff3ac9ed66cdc015ae25e45f3a5502d
- RASPI_GPIO_SITE = $(call github,RPi-Distro,raspi-gpio,$(RASPI_GPIO_VERSION))
- RASPI_GPIO_LICENSE = BSD-3-Clause
- RASPI_GPIO_LICENSE_FILES = LICENSE
+[--SNIP--]
+> diff --git a/package/avro-c/avro-c.mk b/package/avro-c/avro-c.mk
+> new file mode 100644
+> index 0000000000..01fc97f33d
+> --- /dev/null
+> +++ b/package/avro-c/avro-c.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# avro-c
+> +#
+> +################################################################################
+> +
+> +AVRO_C_VERSION = 1.9.1
+> +AVRO_C_SITE = https://www-eu.apache.org/dist/avro/avro-$(AVRO_C_VERSION)/c
+> +AVRO_C_LICENSE = Apache-2.0
+> +AVRO_C_LICENSE_FILES = LICENSE
+> +AVRO_C_INSTALL_STAGING = YES
+> +AVRO_C_DEPENDENCIES = jansson
+
+It also use pkg-config, so needs host-pkgconf.
+
+> +ifeq ($(BR2_PACKAGE_SNAPPY),y)
+> +AVRO_C_DEPENDENCIES += snappy
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZLIB),y)
+> +AVRO_C_DEPENDENCIES += zlib
+> +endif
+
+While you are at it at adding compression libraries, avro-c may also
+optionally use liblzma, so may depend on xz.
+
+Care to respin, please?
+
+Regards,
+Yann E. MORIN.
+
+> +$(eval $(cmake-package))
+> -- 
+> 2.23.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
