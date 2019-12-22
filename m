@@ -1,77 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Dec 2019 19:13:17 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/pkg-python: use
- _CONFIGURE_OPTS in the build environment
-Message-ID: <20191222204327.52A8F8D6D7@busybox.osuosl.org>
+Date: Sun, 22 Dec 2019 21:31:02 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/lirc-tools: use
+ single quote with SETUPTOOLS_ENV
+Message-ID: <20191222204328.39F398D6D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13a812e53695ef0923119cf80461820225233bfc
+commit: https://git.buildroot.net/buildroot/commit/?id=da57f0a742542e86382954f7ca9b6a0846f15ae8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-When building host or target python packages, we need to ensure that
-the build environment utilize {HOST|TARGET}_CONFIGURE_OPTS. This
-ensures that the correct linker and compiler environment variables are
-set to compile utilizing either the host or target folders.
+With the change to pkg-python to use TARGET_CONFIGURE_OPTS in
+PKG_PYTHON_SETUPTOOLS_ENV in commit 1745fcde74, the
+LIRC_TOOLS_MAKE_ENV is incorrect as it sets the SETUPTOOLS_ENV using
+double quotes. This causes issues because the
+PKG_PYTHON_SETUPTOOLS_ENV contain double quotes as well. This causes a
+build error such as:
 
-It was discovered that when compiling a host-python package, it was
-using linking against the build machines library folder instead of the
-host folder because LDFLAGS was not properly set and was improperly
-detecting whether or not a shared or static library was present in the
-host folder.
+  /bin/sh: -I/home/naourr/work/instance-0/output-1/host/include
+          CXXFLAGS_FOR_BUILD=-O2: No such file or directory
 
-CC: Arnout Vandecappelle <arnout@mind.be>
+Fix this by using single quotes with PKG_PYTHON_SETUPTOOLS_ENV instead
+of double quotes.
+
+Fixes:
+  http://autobuild.buildroot.net/results/f7a9c02add9bde563c7289f7c0be2cb7aefd96b8
+
 Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1745fcde740057951dcc5429f3bfabd103b764a1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8192ff796a7e851f128ddbd7394dd8337942df52)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-python.mk | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ package/lirc-tools/lirc-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index be1ce071df..4ded4fde83 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -27,9 +27,7 @@ endef
- # Target distutils-based packages
- PKG_PYTHON_DISTUTILS_ENV = \
- 	PATH=$(BR_PATH) \
--	CC="$(TARGET_CC)" \
--	CFLAGS="$(TARGET_CFLAGS)" \
--	LDFLAGS="$(TARGET_LDFLAGS)" \
-+	$(TARGET_CONFIGURE_OPTS) \
- 	LDSHARED="$(TARGET_CROSS)gcc -shared" \
- 	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
- 	PYTHONNOUSERSITE=1 \
-@@ -52,7 +50,8 @@ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
- # Host distutils-based packages
- HOST_PKG_PYTHON_DISTUTILS_ENV = \
- 	PATH=$(BR_PATH) \
--	PYTHONNOUSERSITE=1
-+	PYTHONNOUSERSITE=1 \
-+	$(HOST_CONFIGURE_OPTS)
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+index e468f2a25d..d66f4e9925 100644
+--- a/package/lirc-tools/lirc-tools.mk
++++ b/package/lirc-tools/lirc-tools.mk
+@@ -47,7 +47,7 @@ endif
  
- HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
- 	--prefix=$(HOST_DIR)
-@@ -61,6 +60,7 @@ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
- PKG_PYTHON_SETUPTOOLS_ENV = \
- 	_PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
- 	PATH=$(BR_PATH) \
-+	$(TARGET_CONFIGURE_OPTS) \
- 	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
- 	PYTHONNOUSERSITE=1 \
- 	_python_sysroot=$(STAGING_DIR) \
-@@ -82,7 +82,8 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
- # Host setuptools-based packages
- HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
- 	PATH=$(BR_PATH) \
--	PYTHONNOUSERSITE=1
-+	PYTHONNOUSERSITE=1 \
-+	$(HOST_CONFIGURE_OPTS)
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ LIRC_TOOLS_DEPENDENCIES += python3 host-python3-setuptools
+-LIRC_TOOLS_MAKE_ENV += SETUPTOOLS_ENV="$(PKG_PYTHON_SETUPTOOLS_ENV)"
++LIRC_TOOLS_MAKE_ENV += SETUPTOOLS_ENV='$(PKG_PYTHON_SETUPTOOLS_ENV)'
+ endif
  
- HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
- 	--prefix=$(HOST_DIR) \
+ define LIRC_TOOLS_INSTALL_INIT_SYSV
