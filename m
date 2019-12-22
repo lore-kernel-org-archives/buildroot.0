@@ -1,39 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Dec 2019 22:01:55 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/dante: remove
- --without-pam
-Message-ID: <20191222205406.2ACF88D7B5@busybox.osuosl.org>
+Date: Sun, 22 Dec 2019 22:05:15 +0100
+Subject: [Buildroot] [git commit] package/genimage: add patch to support
+ vfat volume-label
+In-Reply-To: <20191222215735.7565a31c@windsurf> (Thomas Petazzoni's message of
+ "Sun, 22 Dec 2019 21:57:35 +0100")
+References: <20191221212320.354B08D318@busybox.osuosl.org>
+ <8736dc2ym1.fsf@dell.be.48ers.dk> <20191222211222.5ae8664e@windsurf>
+ <87pnggyunx.fsf@dell.be.48ers.dk> <20191222215735.7565a31c@windsurf>
+Message-ID: <87eewwxe9g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99b339c22d27ede9369776388b0b1b89ce4fc8a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
---without-pam was wrongly put back when next was merged into master for
-2019.02 in commit 13c43455a05b (Merge branch 'next')
+ > On Sun, 22 Dec 2019 21:25:38 +0100
+ > Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Peter: mention next merge]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 525c22c9831aeb2c3a4ac4d59c117b429a682941)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dante/dante.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> > Well, it's just a new feature that someone needs. We normally don't
+ >> > take feature patches, but this one is a backport from upstream.
+ >> > genimage also does new releases fairly infrequently, so waiting for the
+ >> > next release is not necessarily nice. The patch was short enough, taken
+ >> > directly from upstream, so I said "ok, let's take, it will anyway go
+ >> > away the next time we bump".  
+ >> 
+ >> OK, but we indeed don't take feature patches unless there is a good
+ >> reason for it, and this commit is just syntactical sugar over adding -n
+ >> <label> to extraargs, E.G.:
+ >> 
+ >> image foo.fat {
+ >> vfat {
+ >> extraargs = "-n MYLABEL"
+ >> ..
+ >> }
 
-diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-index 0bd036d37e..0668042bd8 100644
---- a/package/dante/dante.mk
-+++ b/package/dante/dante.mk
-@@ -12,7 +12,7 @@ DANTE_LICENSE_FILES = LICENSE
- # 0002-compiler.m4-do-not-remove-g-flag.patch touches a m4 file
- DANTE_AUTORECONF = YES
- 
--DANTE_CONF_OPTS += --disable-client --disable-preload --without-pam
-+DANTE_CONF_OPTS += --disable-client --disable-preload
- 
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- DANTE_DEPENDENCIES += linux-pam
+ > True, I didn't know about extraargs. Really, I hesitated a bit because
+ > of our usual policy, but then I said "meh, it's small, it's a backport
+ > from upstream, let's not be too annoying". I can revert if needed, I
+ > don't feel very strongly about this at all.
+
+No, lets leave it - It is low risk, I just wondered why we were doing
+things differently from what we normally do and if I was missing
+something.
+
+-- 
+Bye, Peter Korsgaard
