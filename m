@@ -1,26 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 22 Dec 2019 18:28:37 +0000
-Subject: [Buildroot] [Bug 12426] NodeJS slow startup performance (~30s)
-In-Reply-To: <bug-12426-163@https.bugs.busybox.net/>
-References: <bug-12426-163@https.bugs.busybox.net/>
-Message-ID: <bug-12426-163-XdYZo90G85@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Dec 2019 19:30:15 +0100
+Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to 1.13.5
+In-Reply-To: <20191207194938.3774652-1-christian@paral.in> (Christian
+ Stewart's message of "Sat, 7 Dec 2019 11:49:38 -0800")
+References: <20191207194938.3774652-1-christian@paral.in>
+Message-ID: <87v9q81adk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12426
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
---- Comment #7 from Peter Korsgaard <jacmet@uclibc.org> ---
-(In reply to Eric Higgins from comment #6)
+ > go1.13.5 (released 2019/12/04) includes fixes to the go command, the runtime,
+ > the linker, and the net/http package.
 
-Yes, both builds dynamically link to libc, but the unofficial builds probably
-statically link to openssl / libuv / zlib / ..
+ > https://github.com/golang/go/issues?q=milestone%3AGo1.13.5
 
-Thanks for the link to their Dockerfile, but I don't seem to find where they
-run ./configure?
+ > Signed-off-by: Christian Stewart <christian@paral.in>
+
+Committed to 2019.11.x, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
