@@ -1,43 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 10:57:54 +0100
-Subject: [Buildroot] [PATCH] package/open2300: add hash file
-In-Reply-To: <20191222083707.3448-1-heiko.thiery@gmail.com>
-References: <20191222083707.3448-1-heiko.thiery@gmail.com>
-Message-ID: <20191222105754.188b7bd2@windsurf>
+Date: Sun, 22 Dec 2019 10:58:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wsapi-fcgi: update the upstream
+ URL in Config.in
+In-Reply-To: <20191219201648.21441-1-mark@dibsco.co.uk>
+References: <20191219201648.21441-1-mark@dibsco.co.uk>
+Message-ID: <20191222105808.51df8608@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 22 Dec 2019 09:37:08 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+On Thu, 19 Dec 2019 20:16:48 +0000
+Mark Corbin <mark@dibsco.co.uk> wrote:
 
-> - add sha256 tarball hash
-> - add sha256 license hash
+> Update the upstream URL in the help text in Config.in. This
+> addresses the 'Invalid(406)' URL status in the package stats
+> web page output.
 > 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 > ---
->  package/open2300/open2300.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/open2300/open2300.hash
-> 
-> diff --git a/package/open2300/open2300.hash b/package/open2300/open2300.hash
-> new file mode 100644
-> index 0000000000..913cccf4d2
-> --- /dev/null
-> +++ b/package/open2300/open2300.hash
-> @@ -0,0 +1,2 @@
+>  package/wsapi-fcgi/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-We need a comment at the top of the file that says where the hashes come from.
-
-> +sha256	f4239d2f16d52156586d06be38f06a3eb58168377e243a8de8720b66e33ddb8f  open2300-12.tar.gz
-
-The source code for this package is fetched from Subversion. Are the
-tarballs we create out of SVN repositories reproducible ? I guess so,
-but let's loop in Yann Morin for some additional feedback on this.
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
