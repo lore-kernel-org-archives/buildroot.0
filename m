@@ -1,67 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 21:55:36 +0100
-Subject: [Buildroot] [git commit] linux: Set MMU page size for ARC processors
-Message-ID: <20191222204938.813258D7A8@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Dec 2019 22:00:53 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libuio: add
+ missing dependency on host-pkgconf
+Message-ID: <20191222205152.5DB9D8D7AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7a771816d938f9d8d04b24fd07d2f3f52e73f99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=c4716d8ad6508d6e71ab92d6790b17afd575fbbc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-ARC processors have configurable size of MMU page. This configuration
-happens during ASIC design and couldn't be changed in final silicone
-not to mention runtime changes.
+configure fails if the pkgconfig.m4 macros are not available during
+this package autoreconf:
 
-Given PAGE_SIZE macro is used a lot throughout the Linux kernel sources
-we just hardcode a required value during the kernel configuration.
+./configure: line 12003: syntax error near unexpected token `PKGCONF,'
+./configure: line 12003: `   PKG_CHECK_MODULES(PKGCONF, glib-2.0)
 
-We used to support different MMU page sizes for ARC in Buildroot for
-quite some time now but so far we only tweaked uClibc on the matter.
-That left us with the kernel configured with whatever was in used defconfig.
+Fixes:
 
-In most of real cases that's OK because typically we're building firmware
-for a particular ASIC which is supposed to have a unique kernel defconfig.
-But if we're dealing with FPGA-based boards or even simlators like
-Synopsys DesignWare nSIM or QEMU it's possible to have dfferent MMU page
-size configured in that target mostly for the sake of testing.
+  http://autobuild.buildroot.net/results/9be944e35090bf270fbc9572423466be9af7b1f2/
 
-And so we're trying to solve 2 problems here:
- 1. Make sure both user-space (via libc settings) and the Linux kernel
-    are "on the same page", i.e. expect to use the same MMU page size.
- 2. Simplify process of testing different page sizes.
-    As now we first need to set page size in Buildroot and then in the
-    kernel via "make linux-configure" or via Kconfig fragment.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-[yann.morin.1998 at free.fr: simplify the conditions]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 548b423493c3a79291fb4bf5c8aa711e4c19d91c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/libuio/libuio.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 762f8868b1..6e9d11dd38 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -319,6 +319,18 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
- 	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR,$(@D)/.config))
-+	$(if $(BR2_ARC_PAGE_SIZE_4K),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
-+	$(if $(BR2_ARC_PAGE_SIZE_8K),
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
-+	$(if $(BR2_ARC_PAGE_SIZE_16K),
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
- 	$(if $(BR2_TARGET_ROOTFS_CPIO),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
- 	# As the kernel gets compiled before root filesystems are
+diff --git a/package/libuio/libuio.mk b/package/libuio/libuio.mk
+index 13429ec0f1..b6e8e7e774 100644
+--- a/package/libuio/libuio.mk
++++ b/package/libuio/libuio.mk
+@@ -10,7 +10,7 @@ LIBUIO_SITE = $(call github,Linutronix,libuio,$(LIBUIO_VERSION))
+ LIBUIO_LICENSE = LGPL-2.1 (library), GPL-2.0 (programs)
+ LIBUIO_LICENSE_FILES = COPYING
+ LIBUIO_CONF_OPTS = --with-glib=no --without-werror
+-LIBUIO_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++LIBUIO_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-pkgconf
+ LIBUIO_LIBS = $(TARGET_NLS_LIBS)
+ LIBUIO_INSTALL_STAGING = YES
+ 
