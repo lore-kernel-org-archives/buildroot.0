@@ -1,36 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Dec 2019 21:27:41 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/sysrepo: fix a
- typo when installing with systemd
-Message-ID: <20191222204328.1077E8D6D7@busybox.osuosl.org>
+Date: Sun, 22 Dec 2019 19:37:00 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/qpdf: remove pcre
+ dependency
+Message-ID: <20191222204327.74A368D6ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f3fb5bcc946c4f9a769c727737ba971617e57cf
+commit: https://git.buildroot.net/buildroot/commit/?id=fcacf9e97f939e7748efbac99ddba4353c0c248d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Acked-by: Heiko Thiery <heiko.thiery at kontron.com
+pcre is not needed since version 7.0.0 and
+https://github.com/qpdf/qpdf/commit/9a96e233b051b31289c84f90a321583887b1400a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 22a0151179abd7ac36f60b9ac802c5b902f470f3)
+(cherry picked from commit 84a7e647aecad74a00af75637bc11181bce467bf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sysrepo/sysrepo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qpdf/Config.in | 1 -
+ package/qpdf/qpdf.mk   | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 8676158a19..49c908d62d 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
-@@ -42,7 +42,7 @@ define SYSREPO_INSTALL_INIT_SYSV
- endef
+diff --git a/package/qpdf/Config.in b/package/qpdf/Config.in
+index 87a3192c5e..3a4fa6072c 100644
+--- a/package/qpdf/Config.in
++++ b/package/qpdf/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_QPDF
+ 	bool "qpdf"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_JPEG
+ 	help
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index 728ecc9289..7dfc7acd70 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
+@@ -9,7 +9,7 @@ QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
+ QPDF_INSTALL_STAGING = YES
+ QPDF_LICENSE = Apache-2.0 or Artistic-2.0
+ QPDF_LICENSE_FILES = LICENSE.txt Artistic-2.0
+-QPDF_DEPENDENCIES = pcre zlib jpeg
++QPDF_DEPENDENCIES = zlib jpeg
  
- define SYSREPO_INSTALL_INIT_SYSTEMD
--	mkdir -p $(TARGET_DIR)/etc/systemd/systemd/multi-user.target.wants
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 	ln -fs ../../../../usr/lib/systemd/system/sysrepod.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 	ln -fs ../../../../usr/lib/systemd/system/sysrepo-plugind.service \
+ QPDF_CONF_OPTS = --without-random
+ 
