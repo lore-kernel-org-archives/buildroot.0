@@ -1,87 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 12:05:34 +0100
-Subject: [Buildroot] [PATCH] package/open2300: add hash file
-In-Reply-To: <CAEyMn7aQSNzWDyPLi_g3mn+9Ze5ZxDYJ+mWp4m4TTMHUY6jrxg@mail.gmail.com>
-References: <20191222083707.3448-1-heiko.thiery@gmail.com>
- <20191222105754.188b7bd2@windsurf> <20191222100801.GR26395@scaer>
- <CAEyMn7aQSNzWDyPLi_g3mn+9Ze5ZxDYJ+mWp4m4TTMHUY6jrxg@mail.gmail.com>
-Message-ID: <20191222110534.GA26395@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 22 Dec 2019 12:06:44 +0100
+Subject: [Buildroot] [PATCH 1/3] package/usb_modeswitch: fix license
+Message-ID: <20191222110646.2201048-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+dispatcher.c is licensed under BSD-2-Clause
 
-On 2019-12-22 11:56 +0100, Heiko Thiery spake thusly:
-> Am So., 22. Dez. 2019 um 11:08 Uhr schrieb Yann E. MORIN
-> <yann.morin.1998@free.fr>:
-> > On 2019-12-22 10:57 +0100, Thomas Petazzoni spake thusly:
-> > > On Sun, 22 Dec 2019 09:37:08 +0100
-> > > Heiko Thiery <heiko.thiery@gmail.com> wrote:
-> > > > - add sha256 tarball hash
-> > > > - add sha256 license hash
-> > > The source code for this package is fetched from Subversion. Are the
-> > > tarballs we create out of SVN repositories reproducible ? I guess so,
-> > > but let's loop in Yann Morin for some additional feedback on this.
-> > Seeing the dance we do in the git backend, and that we don't do it in
-> > the svn backend, I doubt the svn backend is reproducible...
-> >
-> > Yet, I just checked, and I indeed get the same sha256 as Heiko provided
-> > in this patch...
-> >
-> > Which prompted me in lookig at it. And we are not getting it from the
-> > svn repository, for the good reason that the repository is dead and
-> > off-line.
-> >
-> > Instead, we're getting in from s.b.o instead, and thus the reason why
-> > the sha256 is reproducible...
-> >
-> > Dang... :-(
-> >
-> > So I suggest we do indeed add this hash, because in the end, that's
-> > s.b.o providing it, so it is stable.
-> 
-> Sorry, I didn't want to create this work ;-/ I just wanted to do some
-> cleanup for the stats. So I picked a simple package to improve.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/usb_modeswitch/usb_modeswitch.hash | 1 +
+ package/usb_modeswitch/usb_modeswitch.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-No problem. It was nice that you picked it up, because that made us
-notice the problem! :-)
-
-> I was not aware that special handling is needed for making builds
-> reproducible at this point.
-
-Yeah... Reproducibility is not a given. :-(
-
-The subversion backend would need some love for that, so if you have a
-bit of time on your hnads, that's be nice if you could tackle it (if
-you're interested).
-
-> By the way ... what does s.b.o mean?
-
-Sources.Buildroot.Org, our fallback mirror:
-
-    http://sources.buildroot.org/
-
-Regards,
-Yann E. MORIN.
-
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-
+diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
+index 3cbd370e2c..0b180f9789 100644
+--- a/package/usb_modeswitch/usb_modeswitch.hash
++++ b/package/usb_modeswitch/usb_modeswitch.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256	abffac09c87eacd78e101545967dc25af7e989745b4276756d45dbf4008a2ea6  usb-modeswitch-2.5.2.tar.bz2
+ sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256	929bfd332292f8cd33e4401b5cedea3e93ebe6efa99e1d3626884cacb59ff208  dispatcher.c
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 9832d3c808..5b60a3c5dc 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -8,8 +8,8 @@ USB_MODESWITCH_VERSION = 2.5.2
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
+-USB_MODESWITCH_LICENSE = GPL-2.0+
+-USB_MODESWITCH_LICENSE_FILES = COPYING
++USB_MODESWITCH_LICENSE = BSD-2-Clause (dispatcher.c), GPL-2.0+ (usb_modeswitch{.c,.h,.sh,_dispatcher.tcl})
++USB_MODESWITCH_LICENSE_FILES = COPYING dispatcher.c
+ # Package does not build in parallel due to improper make rules
+ USB_MODESWITCH_MAKE = $(MAKE1)
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.0
