@@ -1,36 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 14:06:17 +0100
-Subject: [Buildroot] [git commit] package/libnfc: drop leftover comment
-Message-ID: <20191222125713.957D08D57E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Dec 2019 14:06:38 +0100
+Subject: [Buildroot] [PATCH 2/2] configs/imx8qxpmek: Update to 4.14.98
+ components
+In-Reply-To: <20191217181855.3508-2-festevam@gmail.com>
+References: <20191217181855.3508-1-festevam@gmail.com>
+ <20191217181855.3508-2-festevam@gmail.com>
+Message-ID: <20191222140638.7812b531@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=891801fbb395cb41025e5f92caa4e4716ab50362
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 17 Dec 2019 15:18:55 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-In commit 1a49188a694 (package/libnfc: add sub-options to enable
-individual drivers), the dependency on threads was moved down to
-the individual drivers that need it, and libnfc as a whole lost
-that dependency.
+> Bump kernel, ATF and U-Boot to the versions found in the NXP BSP 4.14.98.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  configs/freescale_imx8qxpmek_defconfig | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-However, the global comment was not removed. Do so now.
+I've marked this patch as Changes Requested. Can you send a new
+iteration once the issues are resolved?
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libnfc/Config.in | 3 ---
- 1 file changed, 3 deletions(-)
+Thanks!
 
-diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
-index 014ab94ce8..14084dc889 100644
---- a/package/libnfc/Config.in
-+++ b/package/libnfc/Config.in
-@@ -75,6 +75,3 @@ config BR2_PACKAGE_LIBNFC_EXAMPLES
- 	select BR2_PACKAGE_READLINE
- 
- endif
--
--comment "libnfc needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
