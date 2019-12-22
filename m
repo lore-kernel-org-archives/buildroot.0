@@ -1,17 +1,17 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 10:58:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wsapi-xavante: update the
- upstream URL in Config.in
-In-Reply-To: <20191219203626.23360-1-mark@dibsco.co.uk>
-References: <20191219203626.23360-1-mark@dibsco.co.uk>
-Message-ID: <20191222105811.565cd241@windsurf>
+Date: Sun, 22 Dec 2019 10:58:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wsapi: update the upstream URL
+ in Config.in
+In-Reply-To: <20191219204926.24980-1-mark@dibsco.co.uk>
+References: <20191219204926.24980-1-mark@dibsco.co.uk>
+Message-ID: <20191222105815.6199b056@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 19 Dec 2019 20:36:26 +0000
+On Thu, 19 Dec 2019 20:49:26 +0000
 Mark Corbin <mark@dibsco.co.uk> wrote:
 
 > Update the upstream URL in the help text in Config.in. This
@@ -20,7 +20,7 @@ Mark Corbin <mark@dibsco.co.uk> wrote:
 > 
 > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 > ---
->  package/wsapi-xavante/Config.in | 2 +-
+>  package/wsapi/Config.in | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
