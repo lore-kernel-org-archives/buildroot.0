@@ -1,32 +1,65 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 22 Dec 2019 11:38:46 -0300
-Subject: [Buildroot] [PATCH 1/1] package/imx-sc-firmware: bump to
- version 1.2.1
-In-Reply-To: <877e2o2zv6.fsf@dell.be.48ers.dk>
-References: <20191218130429.847805-1-juju@cotds.org>
- <CAOMZO5D_Dh2sgweJ+0U_os-jP3igeVbO2XJmeesZTdoQDe86gA@mail.gmail.com>
- <94f6389ba7bd24a86cdec3e8295fddad@cotds.org>
- <CAOMZO5CTpqORMwjZi5681X7h1pngWZJzF-VZHvaVHkEe4CYq1g@mail.gmail.com>
- <bb1e9dbdd73a1e0b8fead464ddf9fa83@cotds.org>
- <20191222142421.13cd522c@windsurf>
- <877e2o2zv6.fsf@dell.be.48ers.dk>
-Message-ID: <CAOMZO5C04MKwFgxe+BEC_TfVyQCFR0VORuHEfGCco-xh1Qp9mw@mail.gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 22 Dec 2019 15:49:44 +0100
+Subject: [Buildroot] [PATCH 2/3] package/perl-math-bigint: new package
+In-Reply-To: <CAAXf6LU-zg05NszgCjvobzyCk_urdg=rf8QA6B047vt6_=rSKA@mail.gmail.com>
+References: <20191218201845.846-1-patrickdepinguin@gmail.com>
+ <20191218201845.846-2-patrickdepinguin@gmail.com>
+ <CAB0FRsstnQ_nNhd-CHk3ZKJNbtOW3NSEgiPWjSdEGK8vEQcoPw@mail.gmail.com>
+ <CAAXf6LU-zg05NszgCjvobzyCk_urdg=rf8QA6B047vt6_=rSKA@mail.gmail.com>
+Message-ID: <CAB0FRsvybWys8NP+KbN2U5qKTj=XyysfnrR7KjOb1k4+71is2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Le dim. 22 d?c. 2019 ? 14:27, Thomas De Schampheleire <
+patrickdepinguin@gmail.com> a ?crit :
 
-On Sun, Dec 22, 2019 at 11:34 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+> Hi Fran?ois,
+>
+> On Sun, Dec 22, 2019, 13:07 Fran?ois Perrad <francois.perrad@gadz.org>
+> wrote:
+>
+>>
+>> Math::BigInt is a core module.
+>> Perl 5.30.1 includes the version 1.999816.
+>> From my point of view, this package is useless.
+>>
+>
+>
+> How do you know this?
+>
 
-> Agreed, presumably these crazy version dependencies between components
-> will get sorted out once the platform becomes a bit more mature?
+Perl comes with the module Module::CoreList which contains all these data,
+and the utility `corelist`.
 
-Yes, I hope so too.
 
-Currently it is painful to handle all these dependencies and hope we
-can make progress on this front.
+> The cpan page does not give such detail, it seems.
+> https://metacpan.org/pod/Math::BigInt
+> And what about math-prime-util?
+>
+>
+$ corelist Math::Prime::Util
 
-Thanks
+Data for 2017-09-22
+Math::Prime::Util was not in CORE (or so I think)
+
+
+> Do you know since which perl release this is a core package?
+>
+>
+$ corelist Math::BigInt
+
+Data for 2017-09-22
+Math::BigInt was first released with perl 5
+
+Fran?ois
+
+
+> Thanks
+> Thomas
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191222/b2bbff90/attachment.html>
