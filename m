@@ -1,58 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 12:07:16 +0100
-Subject: [Buildroot] [PATCH] package/open2300: add hash file
-In-Reply-To: <CAEyMn7an_j9Uwh-6SKSz6R6ekDMkH4QJavexEeEWGQGW=tEx5w@mail.gmail.com>
-References: <20191222083707.3448-1-heiko.thiery@gmail.com>
- <20191222105754.188b7bd2@windsurf>
- <CAEyMn7an_j9Uwh-6SKSz6R6ekDMkH4QJavexEeEWGQGW=tEx5w@mail.gmail.com>
-Message-ID: <20191222110716.GB26395@scaer>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sun, 22 Dec 2019 12:58:40 +0100
+Subject: [Buildroot] [git commit] package/kf5-kcoreaddons: fix
+ check-package warnings
+In-Reply-To: <20191222103746.GV26395@scaer>
+References: <20191222094810.736238D4B7@busybox.osuosl.org>
+ <54507372-d73f-2f05-456c-9efe819eda0d@benettiengineering.com>
+ <20191222103746.GV26395@scaer>
+Message-ID: <ebdf3d7c-66c0-fbb1-4988-e748b03303d2@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+On 12/22/19 11:37 AM, Yann E. MORIN wrote:
+> Giulio, All,
+> 
+> On 2019-12-22 11:23 +0100, Giulio Benetti spake thusly:
+>> On 12/22/19 10:57 AM, Yann E. MORIN wrote:
+>>> commit: https://git.buildroot.net/buildroot/commit/?id=f7e750e8f514f84bf2f4fc99976dd11f19c8ecbc
+>>> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>
+>>> KF5_KCOREADDONS_CONF_OPTS is set both outside and inside the
+>>> conditional block, so the value set outside would be lost if
+>>> the condition were to be true.
+>>>
+>>> Use append-assignement in this case, as reported by check-package.
+>>>
+>>> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>>
+>> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> 
+> Thanks, but that was a commit, so your reviewed-by tag won't be
+> stored... :-/
 
-On 2019-12-22 12:00 +0100, Heiko Thiery spake thusly:
-> Am So., 22. Dez. 2019 um 10:57 Uhr schrieb Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com>:
-> > On Sun, 22 Dec 2019 09:37:08 +0100
-> > Heiko Thiery <heiko.thiery@gmail.com> wrote:
-> > > - add sha256 tarball hash
-> > > - add sha256 license hash
-> > We need a comment at the top of the file that says where the hashes come from.
-> is a simple "# Locally generated" ok?
+Oops, right.
 
-Yes, that's all that is needed. If you got the value from elsewhere,
-that would need to eb said as well (e.g. in the mailing list archive for
-the announcement mail, for example...)
-
-> I will update the patch.
-
-No need to respin, it can be done manualy when applying.
-
-Regards,
-Yann E. MORIN.
-
-> > > +sha256       f4239d2f16d52156586d06be38f06a3eb58168377e243a8de8720b66e33ddb8f  open2300-12.tar.gz
-> >
-> > The source code for this package is fetched from Subversion. Are the
-> > tarballs we create out of SVN repositories reproducible ? I guess so,
-> > but let's loop in Yann Morin for some additional feedback on this.
-> >
-> > Thanks,
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-
+Thanks for fixing
+Best regards
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Giulio Benetti
+Benetti Engineering sas
+
+> Regards,
+> Yann E. MORIN.
+> 
+>> Best regards
+>> -- 
+>> Giulio Benetti
+>> Benetti Engineering sas
+>>
+>>> ---
+>>>   package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+>>> index 5b3e9acd90..76be8876cc 100644
+>>> --- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+>>> +++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+>>> @@ -23,7 +23,7 @@ KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
+>>>   ifeq ($(BR2_microblaze),y)
+>>>   # Microblaze ld emits warnings, make warnings not to be treated as errors
+>>> -KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
+>>> +KF5_KCOREADDONS_CONF_OPTS += -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
+>>>   endif
+>>>   $(eval $(cmake-package))
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>
+> 
