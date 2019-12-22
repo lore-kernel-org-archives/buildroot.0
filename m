@@ -1,21 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 22 Dec 2019 19:53:47 +0000
-Subject: [Buildroot] [Bug 12426] NodeJS slow startup performance (~30s)
-In-Reply-To: <bug-12426-163@https.bugs.busybox.net/>
-References: <bug-12426-163@https.bugs.busybox.net/>
-Message-ID: <bug-12426-163-JiyhgrB73V@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Dec 2019 21:07:53 +0100
+Subject: [Buildroot] [PATCH 1/2] package/matchbox-desktop: remove
+ unrecognized option
+In-Reply-To: <20191208144232.07282f59@windsurf.home> (Thomas Petazzoni's
+ message of "Sun, 8 Dec 2019 14:42:32 +0100")
+References: <20191030092245.10235-1-fontaine.fabrice@gmail.com>
+ <20191208144232.07282f59@windsurf.home>
+Message-ID: <8736dc15uu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12426
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
---- Comment #8 from Eric Higgins <erichiggins@gmail.com> ---
-I don't see them running ./configure either. My guess is that they are passing
-in flags and options as env variables instead?
+ > On Wed, 30 Oct 2019 10:22:44 +0100
+ > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+ >> --enable-expat is not a recognized option so remove it
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> ---
+ >> package/matchbox-desktop/matchbox-desktop.mk | 1 -
+ >> 1 file changed, 1 deletion(-)
+
+Committed to 2019.02.x and 2019.11.x, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
