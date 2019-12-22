@@ -1,48 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 14:42:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-pathlib2: select
- python-scandir
-In-Reply-To: <20191216194815.5436-1-asafka7@gmail.com>
-References: <20191216194815.5436-1-asafka7@gmail.com>
-Message-ID: <20191222144200.048e1559@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 22 Dec 2019 15:02:36 +0100
+Subject: [Buildroot] [PATCH 1/2] package/jimtcl: add host variant
+Message-ID: <20191222140237.2389908-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 16 Dec 2019 21:48:15 +0200
-Asaf Kahlon <asafka7@gmail.com> wrote:
+host-jimtcl is needed for host-openocd
 
-> scandir is a runtime dependency of pathlib2.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/python-pathlib2/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/python-pathlib2/Config.in b/package/python-pathlib2/Config.in
-> index e28de4c12e..ca948c271f 100644
-> --- a/package/python-pathlib2/Config.in
-> +++ b/package/python-pathlib2/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_PYTHON_PATHLIB2
->  	bool "python-pathlib2"
->  	depends on BR2_PACKAGE_PYTHON
-> +	select BR2_PACKAGE_PYTHON_SCANDIR # runtime
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/jimtcl/jimtcl.mk | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-I see this in the setup.py:
-
-    extras_require={
-        ':python_version<"3.5"': ['scandir'],
-        },
-
-Doesn't that mean that it is needed only if the Python version is < 3.5 ?
-
-Best regards,
-
-Thomas
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 643a87d5c4..795f20883c 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -78,4 +78,27 @@ define JIMTCL_INSTALL_TARGET_CMDS
+ 	$(JIMTCL_LINK_TCLSH)
+ endef
+ 
++define HOST_JIMTCL_CONFIGURE_CMDS
++	(cd $(@D); \
++		$(HOST_CONFIGURE_OPTS) \
++		CCACHE=none \
++		./configure --prefix=$(HOST_DIR) \
++		--shared \
++	)
++endef
++
++define HOST_JIMTCL_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_JIMTCL_INSTALL_CMDS
++	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
++		cp -a $(@D)/$$i $(HOST_DIR)/usr/include/ || exit 1 ; \
++	done;
++	$(INSTALL) -m 0755 -D $(@D)/libjim.so.$(JIMTCL_VERSION) \
++		$(HOST_DIR)/usr/lib/libjim.so.$(JIMTCL_VERSION)
++	ln -sf libjim.so.$(JIMTCL_VERSION) $(HOST_DIR)/usr/lib/libjim.so
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.24.0
