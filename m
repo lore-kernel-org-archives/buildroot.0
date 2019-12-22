@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Dec 2019 22:00:53 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libuio: add
+Date: Sun, 22 Dec 2019 22:00:44 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libuio: add
  missing dependency on host-pkgconf
-Message-ID: <20191222205152.5DB9D8D7AA@busybox.osuosl.org>
+Message-ID: <20191222205157.4A7FA8D7AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4716d8ad6508d6e71ab92d6790b17afd575fbbc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8e1c7b5ad6156d505c97455ca4c3d2fbc0daaf03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 configure fails if the pkgconfig.m4 macros are not available during
 this package autoreconf:
