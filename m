@@ -1,108 +1,120 @@
-From: Louis Aussedat <aussedat.louis@gmail.com>
-Date: Sun, 22 Dec 2019 13:05:00 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/libpam-nfc: new package
-Message-ID: <20191222120500.32583-1-aussedat.louis@gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 22 Dec 2019 13:07:40 +0100
+Subject: [Buildroot] [PATCH 2/3] package/perl-math-bigint: new package
+In-Reply-To: <20191218201845.846-2-patrickdepinguin@gmail.com>
+References: <20191218201845.846-1-patrickdepinguin@gmail.com>
+ <20191218201845.846-2-patrickdepinguin@gmail.com>
+Message-ID: <CAB0FRsstnQ_nNhd-CHk3ZKJNbtOW3NSEgiPWjSdEGK8vEQcoPw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
----
-Changes v1 -> v2:
-  - Use LIBPAM_NFC_MAKE instead of LIBPAM_NFC_BUILD_CMDS (suggested by Yann E. MORIN)
-  - Fix tabulation in Config.in
+Math::BigInt is a core module.
+Perl 5.30.1 includes the version 1.999816.
+From my point of view, this package is useless.
 
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/libpam-nfc/Config.in       |  7 +++++++
- package/libpam-nfc/libpam-nfc.hash |  3 +++
- package/libpam-nfc/libpam-nfc.mk   | 28 ++++++++++++++++++++++++++++
- 5 files changed, 40 insertions(+)
- create mode 100644 package/libpam-nfc/Config.in
- create mode 100644 package/libpam-nfc/libpam-nfc.hash
- create mode 100644 package/libpam-nfc/libpam-nfc.mk
+Fran?ois
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 770888fb23..b367114e1b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1428,6 +1428,7 @@ F:	package/ti-sgx-um/
- N:	Louis Aussedat <aussedat.louis@gmail.com>
- F:	board/friendlyarm/nanopi-neo-plus2/
- F:	configs/friendlyarm_nanopi_neo_plus2_defconfig
-+F:	package/libpam-nfc
- F:	package/python-dnspython/
- F:	package/python-future/
- F:	package/python-huepy/
-diff --git a/package/Config.in b/package/Config.in
-index 4480259af5..b1bbb240e5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1801,6 +1801,7 @@ menu "Other"
- 	source "package/linux-pam/Config.in"
- if BR2_PACKAGE_LINUX_PAM
- comment "linux-pam plugins"
-+	source "package/libpam-nfc/Config.in"
- 	source "package/libpam-radius-auth/Config.in"
- 	source "package/libpam-tacplus/Config.in"
- endif
-diff --git a/package/libpam-nfc/Config.in b/package/libpam-nfc/Config.in
-new file mode 100644
-index 0000000000..ce3a3eeb19
---- /dev/null
-+++ b/package/libpam-nfc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBPAM_NFC
-+	bool "libpam-nfc"
-+	select BR2_PACKAGE_LIBNFC
-+	help
-+	  NFC-based PAM authentification module.
-+
-+	  https://github.com/nfc-tools/pam_nfc
-diff --git a/package/libpam-nfc/libpam-nfc.hash b/package/libpam-nfc/libpam-nfc.hash
-new file mode 100644
-index 0000000000..27896ef4b1
---- /dev/null
-+++ b/package/libpam-nfc/libpam-nfc.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  f44273944f1ecc78b10b65147328860836b60fe4bb8c39819e32199f2870d48b  libpam-nfc-bb762e0e649195110e015ffb605c4375e927c437.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/libpam-nfc/libpam-nfc.mk b/package/libpam-nfc/libpam-nfc.mk
-new file mode 100644
-index 0000000000..fc283c8777
---- /dev/null
-+++ b/package/libpam-nfc/libpam-nfc.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# libpam-nfc
-+#
-+################################################################################
-+
-+LIBPAM_NFC_VERSION = bb762e0e649195110e015ffb605c4375e927c437
-+LIBPAM_NFC_SITE = $(call github,nfc-tools,pam_nfc,$(LIBPAM_NFC_VERSION))
-+LIBPAM_NFC_LICENSE = GPL-2.0
-+LIBPAM_NFC_LICENSE_FILES = COPYING
-+LIBPAM_NFC_DEPENDENCIES = linux-pam libnfc
-+# Fetching from github, we need to generate the configure script
-+LIBPAM_NFC_AUTORECONF = YES
-+LIBPAM_NFC_INSTALL_STAGING = YES
-+
-+LIBPAM_NFC_CONF_OPTS = \
-+	--with-pam-dir=/lib/security
-+
-+# libpam breaks with parallel build, but is very fast to build.
-+LIBPAM_NFC_MAKE = $(MAKE1)
-+
-+# Autoreconf requires an existing m4 directory
-+define LIBPAM_NFC_MKDIR_M4
-+	mkdir -p $(@D)/m4
-+endef
-+LIBPAM_NFC_PRE_CONFIGURE_HOOKS += LIBPAM_NFC_MKDIR_M4
-+
-+$(eval $(autotools-package))
--- 
-2.24.0
+Le mer. 18 d?c. 2019 ? 21:15, Thomas De Schampheleire <
+patrickdepinguin@gmail.com> a ?crit :
+
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>
+> Standard generated with utils/scancpan.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  DEVELOPERS                                     |  1 +
+>  package/Config.in                              |  1 +
+>  package/perl-math-bigint/Config.in             |  6 ++++++
+>  package/perl-math-bigint/perl-math-bigint.hash |  6 ++++++
+>  package/perl-math-bigint/perl-math-bigint.mk   | 14 ++++++++++++++
+>  5 files changed, 28 insertions(+)
+>  create mode 100644 package/perl-math-bigint/Config.in
+>  create mode 100644 package/perl-math-bigint/perl-math-bigint.hash
+>  create mode 100644 package/perl-math-bigint/perl-math-bigint.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 19c66948f8..92105aae98 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2331,6 +2331,7 @@ F:        package/perl-crypt-blowfish/
+>  F:     package/perl-crypt-cbc/
+>  F:     package/perl-crypt-openssl-aes/
+>  F:     package/perl-digest-md5/
+> +F:     package/perl-math-bigint/
+>  F:     package/perl-mime-base64-urlsafe/
+>  F:     package/perl-mojolicious-plugin-authentication/
+>  F:     package/perl-net-ping/
+> diff --git a/package/Config.in b/package/Config.in
+> index fc5228447a..6d10df8561 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -755,6 +755,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-lwp-mediatypes/Config.in"
+>         source "package/perl-mail-dkim/Config.in"
+>         source "package/perl-mailtools/Config.in"
+> +       source "package/perl-math-bigint/Config.in"
+>         source "package/perl-mime-base64/Config.in"
+>         source "package/perl-mime-base64-urlsafe/Config.in"
+>         source "package/perl-mime-tools/Config.in"
+> diff --git a/package/perl-math-bigint/Config.in
+> b/package/perl-math-bigint/Config.in
+> new file mode 100644
+> index 0000000000..89722e7b10
+> --- /dev/null
+> +++ b/package/perl-math-bigint/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PERL_MATH_BIGINT
+> +       bool "perl-math-bigint"
+> +       help
+> +         Pure Perl module to test Math::BigInt with scalars.
+> +
+> +         https://metacpan.org/release/Math-BigInt
+> diff --git a/package/perl-math-bigint/perl-math-bigint.hash
+> b/package/perl-math-bigint/perl-math-bigint.hash
+> new file mode 100644
+> index 0000000000..ad3d66bbf8
+> --- /dev/null
+> +++ b/package/perl-math-bigint/perl-math-bigint.hash
+> @@ -0,0 +1,6 @@
+> +# retrieved by scancpan from http://cpan.metacpan.org/
+> +md5    a6e5a6c391b453e04c2b60506e1b5342 Math-BigInt-1.999818.tar.gz
+> +sha256 b27634356ce2af9b7c0123ac8395a89a32fb15aeae82fcd39de8156cad278c15
+> Math-BigInt-1.999818.tar.gz
+> +
+> +# computed by scancpan
+> +sha256 b857edab549ac6893e2df5e1ec768ee46b62bcf1607a55e876f4d23f079eacce
+> LICENSE
+> diff --git a/package/perl-math-bigint/perl-math-bigint.mk
+> b/package/perl-math-bigint/perl-math-bigint.mk
+> new file mode 100644
+> index 0000000000..156c6ce38d
+> --- /dev/null
+> +++ b/package/perl-math-bigint/perl-math-bigint.mk
+> @@ -0,0 +1,14 @@
+>
+> +################################################################################
+> +#
+> +# perl-math-bigint
+> +#
+>
+> +################################################################################
+> +
+> +PERL_MATH_BIGINT_VERSION = 1.999818
+> +PERL_MATH_BIGINT_SOURCE = Math-BigInt-$(PERL_MATH_BIGINT_VERSION).tar.gz
+> +PERL_MATH_BIGINT_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PJ/PJACKLAM
+> +PERL_MATH_BIGINT_LICENSE = Artistic or GPL-1.0+
+> +PERL_MATH_BIGINT_LICENSE_FILES = LICENSE
+> +PERL_MATH_BIGINT_DISTNAME = Math-BigInt
+> +
+> +$(eval $(perl-package))
+> --
+> 2.23.0
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191222/48a4ce3f/attachment.html>
