@@ -1,46 +1,30 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 22 Dec 2019 22:31:49 +0100
-Subject: [Buildroot] [PATCH] support/download/svn: generate reproducible svn
- archives
-Message-ID: <20191222213148.13762-1-heiko.thiery@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Dec 2019 22:36:50 +0100
+Subject: [Buildroot] [PATCH] support/download/svn: generate reproducible
+ svn archives
+In-Reply-To: <20191222213148.13762-1-heiko.thiery@gmail.com>
+References: <20191222213148.13762-1-heiko.thiery@gmail.com>
+Message-ID: <20191222223650.1f44d3ca@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To generate a reproducible archive from a svn repository mainly the same
-aproach is done like for the archives from a git repository.
+On Sun, 22 Dec 2019 22:31:49 +0100
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- support/download/svn | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+> To generate a reproducible archive from a svn repository mainly the same
+> aproach is done like for the archives from a git repository.
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
-diff --git a/support/download/svn b/support/download/svn
-index 542b25c0a2..505cdd58b1 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -38,4 +38,19 @@ _svn() {
- 
- _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
- 
--tar czf "${output}" "${basename}"
-+# Generate the archive, sort with the C locale so that it is reproducible.
-+# We do not want the .svn dir; we keep other .svn files, in case they are the
-+# only files in their directory.
-+find "${basename}" -not -type d \
-+       -and -not -path "./.svn/*" >"${output}.list"
-+LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
-+
-+# Create GNU-format tarballs, since that's the format of the tarballs on
-+# sources.buildroot.org and used in the *.hash files
-+tar cf - --transform="s#^\./#${basename}/#" \
-+         --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-+         -T "${output}.list.sorted" >"${output}.tar"
-+gzip -6 -n <"${output}.tar" >"${output}"
-+
-+rm -f "${output}.list"
-+rm -f "${output}.list.sorted"
+Thanks. Could you check whether the tarballs that are now produced by
+this are identical to the tarballs we already have on
+sources.buildroot.org ?
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
