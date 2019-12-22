@@ -1,46 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 22 Dec 2019 15:02:37 +0100
-Subject: [Buildroot] [PATCH 2/2] package/openocd: use host-jimtcl for host
- variant
-In-Reply-To: <20191222140237.2389908-1-fontaine.fabrice@gmail.com>
-References: <20191222140237.2389908-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191222140237.2389908-2-fontaine.fabrice@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 22 Dec 2019 11:27:57 -0300
+Subject: [Buildroot] [PATCH 2/2] configs/imx8qxpmek: Update to 4.14.98
+ components
+In-Reply-To: <20191222140638.7812b531@windsurf>
+References: <20191217181855.3508-1-festevam@gmail.com>
+ <20191217181855.3508-2-festevam@gmail.com>
+ <20191222140638.7812b531@windsurf>
+Message-ID: <CAOMZO5CL6xoGUcsRJJY=dep8+6wMMk1uT9qymQJNCSuPk+2gzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will fix a build failure raised by commit
-06aa2995350922197c6db0a46e39ac5c37d5a49e which dropped patch on embedded
-jimtcl
+Hi Thomas,
 
-Fixes:
- - http://autobuild.buildroot.org/results/bd140b5f433d4272f3efd43ff840e13e4301c4db
+On Sun, Dec 22, 2019 at 10:06 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Tue, 17 Dec 2019 15:18:55 -0300
+> Fabio Estevam <festevam@gmail.com> wrote:
+>
+> > Bump kernel, ATF and U-Boot to the versions found in the NXP BSP 4.14.98.
+> >
+> > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> > ---
+> >  configs/freescale_imx8qxpmek_defconfig | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> I've marked this patch as Changes Requested. Can you send a new
+> iteration once the issues are resolved?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/openocd/openocd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+As you already applied Julien's patch:
+package/freescale-imx/imx-sc-firmware: bump to version 1.2.1
 
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 29e4f4b31f..7887f3a6dc 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -97,12 +97,12 @@ HOST_OPENOCD_CONF_OPTS = \
- 	--oldincludedir=$(HOST_DIR)/include \
- 	--includedir=$(HOST_DIR)/include \
- 	--disable-doxygen-html \
--	--with-jim-shared=no \
-+	--disable-internal-jimtcl \
- 	--disable-shared \
- 	--enable-dummy \
- 	--disable-werror
- 
--HOST_OPENOCD_DEPENDENCIES = host-libftdi host-libusb host-libusb-compat
-+HOST_OPENOCD_DEPENDENCIES = host-jimtcl host-libftdi host-libusb host-libusb-compat
- 
- # Avoid documentation rebuild. On PowerPC64(le), we patch the
- # configure script. Due to this, the version.texi files gets
--- 
-2.24.0
+It is safe to apply this one now as Julien's patch fixed the boot issue.
+
+Thanks
