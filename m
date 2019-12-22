@@ -1,29 +1,50 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 22 Dec 2019 09:37:08 +0100
-Subject: [Buildroot] [PATCH] package/open2300: add hash file
-Message-ID: <20191222083707.3448-1-heiko.thiery@gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sun, 22 Dec 2019 06:01:02 -0300
+Subject: [Buildroot] [PATCH] package/snort: bump to version 2.9.15
+In-Reply-To: <20191221221944.013a16df@windsurf>
+References: <20191221153545.7732-1-sergio.prado@e-labworks.com>
+ <20191221221944.013a16df@windsurf>
+Message-ID: <CANu7NGs8qyQ5seNgACCkKDmtgYX9UWsvr3HQ9dGxtpjLCME1OQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add sha256 tarball hash
-- add sha256 license hash
+Hi Thomas,
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- package/open2300/open2300.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/open2300/open2300.hash
+Em s?b., 21 de dez. de 2019 ?s 18:19, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> escreveu:
+>
+> On Sat, 21 Dec 2019 12:35:45 -0300
+> Sergio Prado <sergio.prado@e-labworks.com> wrote:
+>
+> > Also adds a patch that fixes a build error when cross-compiling
+> > on a Fedora host machine.
+> >
+> > Fixes:
+> >
+http://autobuild.buildroot.net/results/47a367c2c5cbf13079b0e60ad7ebe3dbd05756d4
+> >
+http://autobuild.buildroot.net/results/837e43b085ac30fb8545c67352403ceb7de59976
+> >
+http://autobuild.buildroot.net/results/a69df3959b45620f811c18744aa661caa479aef4
+> > many more...
+> >
+> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+>
+> Thanks, but we want to have separate patches for fixing the build issue
+> (which exists with Snort 2.9.14.1) and for bumping the Snort version.
+>
+> Is there anything that prevents from using your patch dropping the
+> Fedora-specific check on 2.9.14.1 ?
 
-diff --git a/package/open2300/open2300.hash b/package/open2300/open2300.hash
-new file mode 100644
-index 0000000000..913cccf4d2
---- /dev/null
-+++ b/package/open2300/open2300.hash
-@@ -0,0 +1,2 @@
-+sha256	f4239d2f16d52156586d06be38f06a3eb58168377e243a8de8720b66e33ddb8f  open2300-12.tar.gz
-+sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
--- 
-2.20.1
+No, the Fedora-specific check applies to 2.9.14.1 as well. I will separate
+the patches and resend.
+
+Thanks!
+
+Sergio Prado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191222/a2dd4aab/attachment.html>
