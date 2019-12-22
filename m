@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 14:08:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-pypcap: update the
- upstream URL in Config.in
-In-Reply-To: <20191217135121.24464-1-mark@dibsco.co.uk>
-References: <20191217135121.24464-1-mark@dibsco.co.uk>
-Message-ID: <20191222140812.3bc23c9e@windsurf>
+Date: Sun, 22 Dec 2019 14:08:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qt-webkit-kiosk: add an
+ upstream URL to Config.in
+In-Reply-To: <20191217135737.25806-1-mark@dibsco.co.uk>
+References: <20191217135737.25806-1-mark@dibsco.co.uk>
+Message-ID: <20191222140819.12cc324c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 17 Dec 2019 13:51:21 +0000
+On Tue, 17 Dec 2019 13:57:37 +0000
 Mark Corbin <mark@dibsco.co.uk> wrote:
 
-> Update the upstream URL in the help text in Config.in. This
-> addresses the 'Invalid(405)' URL status in the package stats
+> Add an upstream URL to the help text in Config.in. This
+> addresses the 'Missing' URL status in the package stats
 > web page output.
 > 
 > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 > ---
->  package/python-pypcap/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/qt-webkit-kiosk/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 
 Applied to master, thanks.
 
