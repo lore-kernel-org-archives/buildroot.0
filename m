@@ -1,43 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 22 Dec 2019 12:06:46 +0100
-Subject: [Buildroot] [PATCH 3/3] package/usb_modeswitch_data: bump to
- version 20191128
-In-Reply-To: <20191222110646.2201048-1-fontaine.fabrice@gmail.com>
-References: <20191222110646.2201048-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191222110646.2201048-3-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Dec 2019 12:07:16 +0100
+Subject: [Buildroot] [PATCH] package/open2300: add hash file
+In-Reply-To: <CAEyMn7an_j9Uwh-6SKSz6R6ekDMkH4QJavexEeEWGQGW=tEx5w@mail.gmail.com>
+References: <20191222083707.3448-1-heiko.thiery@gmail.com>
+ <20191222105754.188b7bd2@windsurf>
+ <CAEyMn7an_j9Uwh-6SKSz6R6ekDMkH4QJavexEeEWGQGW=tEx5w@mail.gmail.com>
+Message-ID: <20191222110716.GB26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/usb_modeswitch_data/usb_modeswitch_data.hash | 2 +-
- package/usb_modeswitch_data/usb_modeswitch_data.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Heiko, All,
 
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.hash b/package/usb_modeswitch_data/usb_modeswitch_data.hash
-index f35fd69a8b..d2518e32d9 100644
---- a/package/usb_modeswitch_data/usb_modeswitch_data.hash
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	ce413ef2a50e648e9c81bc3ea6110e7324a8bf981034fc9ec4467d3562563c2c  usb-modeswitch-data-20170806.tar.bz2
-+sha256	3f039b60791c21c7cb15c7986cac89650f076dc274798fa242231b910785eaf9  usb-modeswitch-data-20191128.tar.bz2
- sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-index 80ecd33d85..a3a98ad7e7 100644
---- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--USB_MODESWITCH_DATA_VERSION = 20170806
-+USB_MODESWITCH_DATA_VERSION = 20191128
- USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
- USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
+On 2019-12-22 12:00 +0100, Heiko Thiery spake thusly:
+> Am So., 22. Dez. 2019 um 10:57 Uhr schrieb Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com>:
+> > On Sun, 22 Dec 2019 09:37:08 +0100
+> > Heiko Thiery <heiko.thiery@gmail.com> wrote:
+> > > - add sha256 tarball hash
+> > > - add sha256 license hash
+> > We need a comment at the top of the file that says where the hashes come from.
+> is a simple "# Locally generated" ok?
+
+Yes, that's all that is needed. If you got the value from elsewhere,
+that would need to eb said as well (e.g. in the mailing list archive for
+the announcement mail, for example...)
+
+> I will update the patch.
+
+No need to respin, it can be done manualy when applying.
+
+Regards,
+Yann E. MORIN.
+
+> > > +sha256       f4239d2f16d52156586d06be38f06a3eb58168377e243a8de8720b66e33ddb8f  open2300-12.tar.gz
+> >
+> > The source code for this package is fetched from Subversion. Are the
+> > tarballs we create out of SVN repositories reproducible ? I guess so,
+> > but let's loop in Yann Morin for some additional feedback on this.
+> >
+> > Thanks,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+
 -- 
-2.24.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
