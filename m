@@ -1,30 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 22:36:50 +0100
-Subject: [Buildroot] [PATCH] support/download/svn: generate reproducible
- svn archives
-In-Reply-To: <20191222213148.13762-1-heiko.thiery@gmail.com>
-References: <20191222213148.13762-1-heiko.thiery@gmail.com>
-Message-ID: <20191222223650.1f44d3ca@windsurf>
+Date: Sun, 22 Dec 2019 22:35:28 +0100
+Subject: [Buildroot] [git commit] package/qpdf: add optional gnutls
+ dependency
+Message-ID: <20191222212800.EE1898DA7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 22 Dec 2019 22:31:49 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=958fa56ebf0f56e49b97baa1c47d0df703366280
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> To generate a reproducible archive from a svn repository mainly the same
-> aproach is done like for the archives from a git repository.
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+gnutls is an optional dependency since version 9.1.0 and
+https://github.com/qpdf/qpdf/commit/88bedb41fe82df312d62e364a5a216b62fc8807c
 
-Thanks. Could you check whether the tarballs that are now produced by
-this are identical to the tarballs we already have on
-sources.buildroot.org ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qpdf/qpdf.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index 217bff8055..5d28a8007a 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
+@@ -13,4 +13,11 @@ QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
+ 
+ QPDF_CONF_OPTS = --without-random
+ 
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++QPDF_CONF_OPTS += --enable-crypto-gnutls
++QPDF_DEPENDENCIES += gnutls
++else
++QPDF_CONF_OPTS += --disable-crypto-gnutls
++endif
++
+ $(eval $(autotools-package))
