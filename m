@@ -1,33 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 22 Dec 2019 11:33:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rygel: drop autoreconf
-Message-ID: <20191222103342.2182120-1-fontaine.fabrice@gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sun, 22 Dec 2019 07:33:01 -0300
+Subject: [Buildroot] [PATCH] package/snort: fix error when building on a
+ Fedora host machine
+In-Reply-To: <20191222110445.0118f795@windsurf>
+References: <20191222091707.31637-1-sergio.prado@e-labworks.com>
+ <20191222110445.0118f795@windsurf>
+Message-ID: <CANu7NGuG0qApcJkZh=_kKcTHkH84Axg2smBbvJhJfiym=Jgo5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-autoreconf is not needed since bump to version 0.36.2 in commit
-76f86c409d016851d4d63216ada969e6cd81dd56
+Hi Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/rygel/rygel.mk | 2 --
- 1 file changed, 2 deletions(-)
+> Applied to master, thanks. Could you report this bug to the upstream
+> Snort developers, so that they can implement a solution that works well
+even
+> in cross-compilation situations ?
 
-diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
-index 5ffb6a9400..d87beda8c9 100644
---- a/package/rygel/rygel.mk
-+++ b/package/rygel/rygel.mk
-@@ -17,8 +17,6 @@ RYGEL_DEPENDENCIES = \
- 	sqlite \
- 	$(TARGET_NLS_DEPENDENCIES)
- RYGEL_INSTALL_STAGING = YES
--# We're patching configure.ac
--RYGEL_AUTORECONF = YES
- 
- RYGEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- RYGEL_CONF_OPTS += \
--- 
-2.24.0
+Reported:
+
+https://lists.snort.org/pipermail/snort-devel/2019-December/011390.html
+
+Thanks!
+
+Sergio Prado
+Embedded Labworks
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191222/eebd4903/attachment.html>
