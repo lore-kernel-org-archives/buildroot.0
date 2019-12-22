@@ -1,27 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 10:58:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x265: update the upstream URL
- in Config.in
-In-Reply-To: <20191219210031.26512-1-mark@dibsco.co.uk>
-References: <20191219210031.26512-1-mark@dibsco.co.uk>
-Message-ID: <20191222105824.313fc942@windsurf>
+Date: Sun, 22 Dec 2019 10:58:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/minissdpd: bump to version
+ 1.5-20190824
+In-Reply-To: <20191219220120.1280847-1-fontaine.fabrice@gmail.com>
+References: <20191219220120.1280847-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191222105830.49f7e676@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 19 Dec 2019 21:00:31 +0000
-Mark Corbin <mark@dibsco.co.uk> wrote:
+On Thu, 19 Dec 2019 23:01:20 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Update the upstream URL in the help text in Config.in. This
-> addresses the 'Invalid(Err)' URL status in the package stats
-> web page output.
+> Update hash of license file (update in year)
 > 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/x265/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/minissdpd/minissdpd.hash | 4 ++--
+>  package/minissdpd/minissdpd.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
