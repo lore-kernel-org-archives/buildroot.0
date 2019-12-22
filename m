@@ -1,32 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 22:30:08 +0100
-Subject: [Buildroot] [PATCH] package/wolfssl: bump to version 4.3.0
-In-Reply-To: <20191222101807.5936-1-sergio.prado@e-labworks.com>
-References: <20191222101807.5936-1-sergio.prado@e-labworks.com>
-Message-ID: <20191222223008.4c472b08@windsurf>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 22 Dec 2019 22:31:49 +0100
+Subject: [Buildroot] [PATCH] support/download/svn: generate reproducible svn
+ archives
+Message-ID: <20191222213148.13762-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 22 Dec 2019 07:18:07 -0300
-Sergio Prado <sergio.prado@e-labworks.com> wrote:
+To generate a reproducible archive from a svn repository mainly the same
+aproach is done like for the archives from a git repository.
 
-> Remove patch already applied upstream (refactored on commit c06efb6c1fda0)
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
->  ...e-location-index-hasn-t-exceed-maxim.patch | 84 -------------------
->  package/wolfssl/wolfssl.hash                  |  2 +-
->  package/wolfssl/wolfssl.mk                    |  2 +-
->  3 files changed, 2 insertions(+), 86 deletions(-)
->  delete mode 100644 package/wolfssl/0001-Check-domain-name-location-index-hasn-t-exceed-maxim.patch
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ support/download/svn | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/support/download/svn b/support/download/svn
+index 542b25c0a2..505cdd58b1 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -38,4 +38,19 @@ _svn() {
+ 
+ _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
+ 
+-tar czf "${output}" "${basename}"
++# Generate the archive, sort with the C locale so that it is reproducible.
++# We do not want the .svn dir; we keep other .svn files, in case they are the
++# only files in their directory.
++find "${basename}" -not -type d \
++       -and -not -path "./.svn/*" >"${output}.list"
++LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
++
++# Create GNU-format tarballs, since that's the format of the tarballs on
++# sources.buildroot.org and used in the *.hash files
++tar cf - --transform="s#^\./#${basename}/#" \
++         --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
++         -T "${output}.list.sorted" >"${output}.tar"
++gzip -6 -n <"${output}.tar" >"${output}"
++
++rm -f "${output}.list"
++rm -f "${output}.list.sorted"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
