@@ -1,46 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 14:21:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/spidev_test: update the
- upstream URL in Config.in
-In-Reply-To: <20191218121634.531-1-mark@dibsco.co.uk>
-References: <20191218121634.531-1-mark@dibsco.co.uk>
-Message-ID: <20191222142126.3667a602@windsurf>
+Date: Sun, 22 Dec 2019 14:21:49 +0100
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-sc-firmware:
+ bump to version 1.2.1
+Message-ID: <20191222131330.8CE9D8D5ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 18 Dec 2019 12:16:34 +0000
-Mark Corbin <mark@dibsco.co.uk> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b74eaecb2232c4d2b717f867218ad731da836cbc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Update the upstream URL in the help text in Config.in. This
-> addresses the 'Invalid(404)' URL status in the package stats
-> web page output.
-> 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-> ---
->  package/spidev_test/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
-> index 0d8214cc29..44990c66b6 100644
-> --- a/package/spidev_test/Config.in
-> +++ b/package/spidev_test/Config.in
-> @@ -14,4 +14,4 @@ config BR2_PACKAGE_SPIDEV_TEST
->  	  This means you won't have quad-pumped SPI support if your
->  	  toolchain is too old.
->  
-> -	  https://www.kernel.org/doc/Documentation/spi/spidev_test.c
-> +	  https://www.kernel.org/doc/html/latest/spi/index.html
+This version is aligned with i.MX NXP BSP components version
+rel_imx_4.14.98_2.0.0_ga
 
-This is not really a very useful upstream URL, but since there is
-really no real upstream URL for this tool, I applied your patch as-is.
+This patch also add the hash file.
 
-Best regards,
+Signed-off-by: Julien Olivain <juju@cotds.org>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash | 4 ++++
+ package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
+new file mode 100644
+index 0000000000..013201911b
+--- /dev/null
++++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256 c7b8fe249ba529d85bfe8540e073b73e4fcdf65ee56022c319e53e0065ff1549  imx-sc-firmware-1.2.1.bin
++sha256 69d19847bac9af7f9e832170a15138f5ef144d8064413434114d75a68982cc9c  EULA
++sha256 6467f2e81d06b19fe541de49bdba32a9a205e8d1c230220fe24247b48672cb46  COPYING
+diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+index fac20d0c6f..cb4e046b8a 100644
+--- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
++++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMX_SC_FIRMWARE_VERSION = 1.0
++IMX_SC_FIRMWARE_VERSION = 1.2.1
+ IMX_SC_FIRMWARE_SITE = $(FREESCALE_IMX_SITE)
+ IMX_SC_FIRMWARE_SOURCE = imx-sc-firmware-$(IMX_SC_FIRMWARE_VERSION).bin
+ 
