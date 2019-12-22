@@ -1,97 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 11:28:28 +0100
-Subject: [Buildroot] [PATCH] sdl2: add patch to fix busy-loop in C
- library
-In-Reply-To: <20191220160438.102444-1-paul@crapouillou.net>
-References: <20191220160438.102444-1-paul@crapouillou.net>
-Message-ID: <20191222102828.GT26395@scaer>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sun, 22 Dec 2019 11:23:07 +0100
+Subject: [Buildroot] [git commit] package/kf5-kcoreaddons: fix
+ check-package warnings
+In-Reply-To: <20191222094810.736238D4B7@busybox.osuosl.org>
+References: <20191222094810.736238D4B7@busybox.osuosl.org>
+Message-ID: <54507372-d73f-2f05-456c-9efe819eda0d@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paul, All,
+Hi Yann,
 
-On 2019-12-20 17:04 +0100, Paul Cercueil spake thusly:
-> For some obscure reason, the order in which the libdrm/libgbm libraries
-> are loaded matters.
+On 12/22/19 10:57 AM, Yann E. MORIN wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=f7e750e8f514f84bf2f4fc99976dd11f19c8ecbc
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> Without this fix, the first call to check_modesetting() will work and
-> load then unload all symbols properly, but the second call to this
-> function will lock up as soon as dlopen() is called on libdrm.
+> KF5_KCOREADDONS_CONF_OPTS is set both outside and inside the
+> conditional block, so the value set outside would be lost if
+> the condition were to be true.
 > 
-> Swapping the order in which the libdrm and libgbm libraries are loaded
-> is enough to fix (or work around?) this issue.
+> Use append-assignement in this case, as reported by check-package.
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Applied to master, after adding a URL to the upstream commit.
-Thanks!
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Regards,
-Yann E. MORIN.
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
 
 > ---
->  .../sdl2/0002-fix-busy-loop-in-dlopen.patch   | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/sdl2/0002-fix-busy-loop-in-dlopen.patch
+>   package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/sdl2/0002-fix-busy-loop-in-dlopen.patch b/package/sdl2/0002-fix-busy-loop-in-dlopen.patch
-> new file mode 100644
-> index 0000000000..984a80d9c1
-> --- /dev/null
-> +++ b/package/sdl2/0002-fix-busy-loop-in-dlopen.patch
-> @@ -0,0 +1,37 @@
-> +
-> +# HG changeset patch
-> +# User Paul Cercueil <paul@crapouillou.net>
-> +# Date 1576820863 28800
-> +# Node ID 4f5bef55183c677d12a7da8f3392879ed50670a3
-> +# Parent  01f16d7f36cb9f4fa02016e57fbe915fdea71cc8
-> +kmsdrm: Fix busy-loop within libc's dlopen()
-> +For some obscure reason, the order in which the libdrm/libgbm libraries
-> +are loaded matters.
-> +
-> +Without this fix, the first call to check_modesetting() will work and
-> +load then unload all symbols properly, but the second call to this
-> +function will lock up as soon as dlopen() is called on libdrm.
-> +
-> +Swapping the order in which the libdrm and libgbm libraries are loaded
-> +is enough to fix (or work around?) this issue.
-> +
-> +Fixes #4891:
-> +https://bugzilla.libsdl.org/show_bug.cgi?id=4891
-> +
-> +Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> +
-> +diff -r 01f16d7f36cb -r 4f5bef55183c src/video/kmsdrm/SDL_kmsdrmdyn.c
-> +--- a/src/video/kmsdrm/SDL_kmsdrmdyn.c	Thu Dec 19 21:45:44 2019 -0800
-> ++++ b/src/video/kmsdrm/SDL_kmsdrmdyn.c	Thu Dec 19 21:47:43 2019 -0800
-> +@@ -50,8 +50,8 @@
-> + #endif
-> + 
-> + static kmsdrmdynlib kmsdrmlibs[] = {
-> +-    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC},
-> +-    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM}
-> ++    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM},
-> ++    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC}
-> + };
-> + 
-> + static void *
-> +
-> -- 
-> 2.24.0
-> 
+> diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+> index 5b3e9acd90..76be8876cc 100644
+> --- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+> +++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+> @@ -23,7 +23,7 @@ KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
+>   
+>   ifeq ($(BR2_microblaze),y)
+>   # Microblaze ld emits warnings, make warnings not to be treated as errors
+> -KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
+> +KF5_KCOREADDONS_CONF_OPTS += -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
+>   endif
+>   
+>   $(eval $(cmake-package))
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> 
