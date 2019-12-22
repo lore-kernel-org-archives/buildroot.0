@@ -1,128 +1,65 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 22 Dec 2019 14:23:14 +0100
-Subject: [Buildroot] [PATCH] package/cctz: new package
-Message-ID: <20191222132314.15130-1-gilles.talis@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Dec 2019 14:24:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/imx-sc-firmware: bump to
+ version 1.2.1
+In-Reply-To: <bb1e9dbdd73a1e0b8fead464ddf9fa83@cotds.org>
+References: <20191218130429.847805-1-juju@cotds.org>
+ <CAOMZO5D_Dh2sgweJ+0U_os-jP3igeVbO2XJmeesZTdoQDe86gA@mail.gmail.com>
+ <94f6389ba7bd24a86cdec3e8295fddad@cotds.org>
+ <CAOMZO5CTpqORMwjZi5681X7h1pngWZJzF-VZHvaVHkEe4CYq1g@mail.gmail.com>
+ <bb1e9dbdd73a1e0b8fead464ddf9fa83@cotds.org>
+Message-ID: <20191222142421.13cd522c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CCTZ is a C++ library for translating between absolute
-and civil times using the rules of a time zone.
+Hello,
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/cctz/Config.in | 29 +++++++++++++++++++++++++++++
- package/cctz/cctz.hash |  3 +++
- package/cctz/cctz.mk   | 27 +++++++++++++++++++++++++++
- 5 files changed, 61 insertions(+)
- create mode 100644 package/cctz/Config.in
- create mode 100644 package/cctz/cctz.hash
- create mode 100644 package/cctz/cctz.mk
+On Wed, 18 Dec 2019 22:22:08 +0100
+Julien Olivain <juju@cotds.org> wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d2089e2672..57fcab3ea7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -983,6 +983,7 @@ F:	configs/qemu_*
- N:	Gilles Talis <gilles.talis@gmail.com>
- F:	board/freescale/imx8mmevk/
- F:	configs/freescale_imx8mmevk_defconfig
-+F:	package/cctz/
- F:	package/fdk-aac/
- F:	package/httping/
- F:	package/iozone/
-diff --git a/package/Config.in b/package/Config.in
-index 2bfec09702..3c8fc32dd9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1728,6 +1728,7 @@ menu "Other"
- 	source "package/boost/Config.in"
- 	source "package/c-capnproto/Config.in"
- 	source "package/capnproto/Config.in"
-+	source "package/cctz/Config.in"
- 	source "package/clang/Config.in"
- 	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
-diff --git a/package/cctz/Config.in b/package/cctz/Config.in
-new file mode 100644
-index 0000000000..73a0f9f7e7
---- /dev/null
-+++ b/package/cctz/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_PACKAGE_CCTZ
-+	bool "cctz"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	select BR2_TARGET_TZ_INFO # runtime dependency
-+	help
-+	  CCTZ is a C++ library for translating between absolute
-+	  and civil times using the rules of a time zone.
-+
-+	  https://github.com/google/cctz
-+
-+if BR2_PACKAGE_CCTZ
-+
-+config BR2_PACKAGE_CCTZ_INSTALL_TOOLS
-+	bool "Install tools"
-+	help
-+	  This option allows installing CCTZ tools.
-+
-+config BR2_PACKAGE_CCTZ_INSTALL_EXAMPLES
-+	bool "Install example programs"
-+	help
-+	  This option allows installing CCTZ example programs.
-+
-+endif
-+
-+comment "cctz needs a toolchain w/ C++, threads, gcc >= 4.8"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/cctz/cctz.hash b/package/cctz/cctz.hash
-new file mode 100644
-index 0000000000..fe8897c501
---- /dev/null
-+++ b/package/cctz/cctz.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256 8615b20d4e33e02a271c3b93a3b208e3d7d5d66880f5f6208b03426e448f32db cctz-2.3.tar.gz
-+sha256 c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747 LICENSE.txt
-diff --git a/package/cctz/cctz.mk b/package/cctz/cctz.mk
-new file mode 100644
-index 0000000000..bcc80bad47
---- /dev/null
-+++ b/package/cctz/cctz.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# cctz
-+#
-+################################################################################
-+
-+CCTZ_VERSION = 2.3
-+CCTZ_SITE = $(call github,google,cctz,v$(CCTZ_VERSION))
-+CCTZ_LICENSE = Apache-2.0
-+CCTZ_LICENSE_FILES = LICENSE.txt
-+CCTZ_INSTALL_STAGING = YES
-+
-+CCTZ_CONF_OPTS = -DBUILD_TESTING=OFF
-+
-+ifeq ($(BR2_PACKAGE_CCTZ_INSTALL_TOOLS),y)
-+CCTZ_CONF_OPTS += -DBUILD_TOOLS=ON
-+else
-+CCTZ_CONF_OPTS += -DBUILD_TOOLS=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CCTZ_INSTALL_EXAMPLES),y)
-+CCTZ_CONF_OPTS += -DBUILD_EXAMPLES=ON
-+else
-+CCTZ_CONF_OPTS += -DBUILD_EXAMPLES=OFF
-+endif
-+
-+$(eval $(cmake-package))
+>    I agree with you that we can't really force a single version for all
+> boards. Exposing a choice of version (like for Kernel, U-Boot, ATF)
+> seems a good trade-of (this is what I had in mind in [1]).
+
+> 
+>    For i.MX packages, several packages are in that case: I think mainly
+> about imx-sc-firmware, firmware-imx and imx-gpu-viv.
+> 
+>    The only problem I see right now is that from one version to
+> another, the build recipe might slightly change. We saw that recently
+> in [2]. This means we can't have a single recipe and a free
+> _CUSTOM_VERSION config option.
+> 
+> What about having a KConfig "choice" list of few supported versions,
+> also showing NXP BSP name, to help i.MX defconfig maintainers to
+> select the right version ? That would allow the package recipe to
+> adjust commands for a given version.
+> 
+> For example, for the imx-sc-firmware, the list of choices would be:
+> - 1.1.4 (4.14.78_1.0.0)
+> - 1.2.1 (4.14.98_2.0.0)
+> - 1.2.2 (4.19.35_1.0.0)
+> - 1.2.7.1 (4.19.35_1.1.0)
+> 
+> What do you think about this approach?
+
+In general, we don't really like to have too much version selection for
+components, because it makes the maintenance difficult, and it is also
+more difficult for users as they have to know which version to use.
+
+However, for the specific case of this firmware package, I don't really
+see any other option than what you're proposing.
+
+One question is: how does it work if one wants to use the upstream
+Linux kernel?
+
+Best regards,
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
