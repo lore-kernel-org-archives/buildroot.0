@@ -1,37 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Dec 2019 10:54:48 +0100
-Subject: [Buildroot] [git commit] package/x265: update the upstream URL in
- Config.in
-Message-ID: <20191222094551.40B088D4AF@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Dec 2019 10:57:14 +0100
+Subject: [Buildroot] [git commit] package/kf5-kcoreaddons: fix check-package
+ warnings
+Message-ID: <20191222094810.736238D4B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2dc43f8fa96168259da7a26c67da6dc5e72d789c
+commit: https://git.buildroot.net/buildroot/commit/?id=f7e750e8f514f84bf2f4fc99976dd11f19c8ecbc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(Err)' URL status in the package stats
-web page output.
+KF5_KCOREADDONS_CONF_OPTS is set both outside and inside the
+conditional block, so the value set outside would be lost if
+the condition were to be true.
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Use append-assignement in this case, as reported by check-package.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x265/Config.in | 2 +-
+ package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x265/Config.in b/package/x265/Config.in
-index cc39d6c6a9..180931db66 100644
---- a/package/x265/Config.in
-+++ b/package/x265/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_X265
- 	  General Public License (GPL) 2 license or a commercial
- 	  license, similar to the x264 project.
+diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+index 5b3e9acd90..76be8876cc 100644
+--- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
++++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+@@ -23,7 +23,7 @@ KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
  
--	  http://x265.org
-+	  https://bitbucket.org/multicoreware/x265/wiki/Home
+ ifeq ($(BR2_microblaze),y)
+ # Microblaze ld emits warnings, make warnings not to be treated as errors
+-KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
++KF5_KCOREADDONS_CONF_OPTS += -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
+ endif
  
- if BR2_PACKAGE_X265
- 
+ $(eval $(cmake-package))
