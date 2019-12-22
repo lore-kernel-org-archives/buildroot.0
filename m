@@ -1,71 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 11:37:46 +0100
-Subject: [Buildroot] [git commit] package/kf5-kcoreaddons: fix
- check-package warnings
-In-Reply-To: <54507372-d73f-2f05-456c-9efe819eda0d@benettiengineering.com>
-References: <20191222094810.736238D4B7@busybox.osuosl.org>
- <54507372-d73f-2f05-456c-9efe819eda0d@benettiengineering.com>
-Message-ID: <20191222103746.GV26395@scaer>
+Date: Sun, 22 Dec 2019 11:38:42 +0100
+Subject: [Buildroot] [git commit] package/rygel: drop autoreconf
+Message-ID: <20191222102943.4A94B8D512@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1d2c4081f0c07f30e648c74513165a814781c9c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-12-22 11:23 +0100, Giulio Benetti spake thusly:
-> On 12/22/19 10:57 AM, Yann E. MORIN wrote:
-> >commit: https://git.buildroot.net/buildroot/commit/?id=f7e750e8f514f84bf2f4fc99976dd11f19c8ecbc
-> >branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> >
-> >KF5_KCOREADDONS_CONF_OPTS is set both outside and inside the
-> >conditional block, so the value set outside would be lost if
-> >the condition were to be true.
-> >
-> >Use append-assignement in this case, as reported by check-package.
-> >
-> >Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> 
-> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+autoreconf is not needed since bump to version 0.36.2 in commit
+76f86c409d016851d4d63216ada969e6cd81dd56
 
-Thanks, but that was a commit, so your reviewed-by tag won't be
-stored... :-/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/rygel/rygel.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> Best regards
-> -- 
-> Giulio Benetti
-> Benetti Engineering sas
-> 
-> >---
-> >  package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> >diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-> >index 5b3e9acd90..76be8876cc 100644
-> >--- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-> >+++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-> >@@ -23,7 +23,7 @@ KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
-> >  ifeq ($(BR2_microblaze),y)
-> >  # Microblaze ld emits warnings, make warnings not to be treated as errors
-> >-KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
-> >+KF5_KCOREADDONS_CONF_OPTS += -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
-> >  endif
-> >  $(eval $(cmake-package))
-> >_______________________________________________
-> >buildroot mailing list
-> >buildroot at busybox.net
-> >http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
+index 5ffb6a9400..d87beda8c9 100644
+--- a/package/rygel/rygel.mk
++++ b/package/rygel/rygel.mk
+@@ -17,8 +17,6 @@ RYGEL_DEPENDENCIES = \
+ 	sqlite \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ RYGEL_INSTALL_STAGING = YES
+-# We're patching configure.ac
+-RYGEL_AUTORECONF = YES
+ 
+ RYGEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ RYGEL_CONF_OPTS += \
