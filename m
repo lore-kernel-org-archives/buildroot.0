@@ -1,69 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 14:00:38 +0100
-Subject: [Buildroot] [PATCH] package/open2300: add hash file
-In-Reply-To: <CAEyMn7ap+MRO=-fUv5uH8fOvZ9_MqHc9pb0hQuHhfyfajVpNsg@mail.gmail.com>
-References: <20191222083707.3448-1-heiko.thiery@gmail.com>
- <20191222105754.188b7bd2@windsurf> <20191222100801.GR26395@scaer>
- <CAEyMn7aQSNzWDyPLi_g3mn+9Ze5ZxDYJ+mWp4m4TTMHUY6jrxg@mail.gmail.com>
- <20191222110534.GA26395@scaer>
- <CAEyMn7ap+MRO=-fUv5uH8fOvZ9_MqHc9pb0hQuHhfyfajVpNsg@mail.gmail.com>
-Message-ID: <20191222130038.GC26395@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Dec 2019 14:05:18 +0100
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: fix
+ the ahab-container name
+Message-ID: <20191222125631.65B317FEBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=571b8ca09563ffa97a1d0df2fa076530426ab8da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-12-22 13:50 +0100, Heiko Thiery spake thusly:
-> Am So., 22. Dez. 2019 um 12:05 Uhr schrieb Yann E. MORIN
-> <yann.morin.1998@free.fr>:
-> > The subversion backend would need some love for that, so if you have a
-> > bit of time on your hnads, that's be nice if you could tackle it (if
-> > you're interested).
-> 
-> If I will get the time I can take a look on. Is this implemented in
-> the dl-wrapper and co? And should it be treated like the git one?
+After the firmware-imx bump to version 8.1.1 the following
+error is observed when building freescale_imx8qxpmek_defconfig:
 
-It's handled in each backend. See for example how it's done in the git
-backend, in support/download/git, lines 181 thhrough 196.
+>> firmware-imx 8.1.1 Installing to images directory
+cp /home/fabio/buildroot/output/build/firmware-imx-8.1.1/firmware/seco/ahab-container.img
+/home/fabio/buildroot/output/images/ahab-container.img
+cp: cannot stat
+'/home/fabio/buildroot/output/build/firmware-imx-8.1.1/firmware/seco/ahab-container.img':
+No such file or directory
 
-Regards,
-Yann E. MORIN.
+In the firmware-imx-8.1.1 (and newer) the i.MX8QXP container image was
+renamed to mx8qx-ahab-container.img, so fix it accordingly.
 
-> > > By the way ... what does s.b.o mean?
-> >
-> > Sources.Buildroot.Org, our fallback mirror:
-> >
-> >     http://sources.buildroot.org/
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > > > Regards,
-> > > > Yann E. MORIN.
-> > > >
-> > > > --
-> > > > .-----------------.--------------------.------------------.--------------------.
-> > > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > > > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > > > '------------------------------^-------^------------------^--------------------'
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
+Fixes: 3ec818769d51 ("package/freescale-imx/firmware-imx: bump version to 8.1.1")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 59af3f9b96..c9040e1853 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -50,7 +50,7 @@ FIRMWARE_IMX_INSTALL_IMAGES = YES
+ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+ 	# SECO firmware is needed when generating imx8-boot-sd.bin which
+ 	# is done in post-image script.
+-	cp $(@D)/firmware/seco/ahab-container.img \
++	cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
+ 		$(BINARIES_DIR)/ahab-container.img
+ endef
+ else
