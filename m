@@ -1,120 +1,96 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 22 Dec 2019 13:07:40 +0100
-Subject: [Buildroot] [PATCH 2/3] package/perl-math-bigint: new package
-In-Reply-To: <20191218201845.846-2-patrickdepinguin@gmail.com>
-References: <20191218201845.846-1-patrickdepinguin@gmail.com>
- <20191218201845.846-2-patrickdepinguin@gmail.com>
-Message-ID: <CAB0FRsstnQ_nNhd-CHk3ZKJNbtOW3NSEgiPWjSdEGK8vEQcoPw@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 22 Dec 2019 13:50:00 +0100
+Subject: [Buildroot] [PATCH] package/open2300: add hash file
+In-Reply-To: <20191222110534.GA26395@scaer>
+References: <20191222083707.3448-1-heiko.thiery@gmail.com>
+ <20191222105754.188b7bd2@windsurf> <20191222100801.GR26395@scaer>
+ <CAEyMn7aQSNzWDyPLi_g3mn+9Ze5ZxDYJ+mWp4m4TTMHUY6jrxg@mail.gmail.com>
+ <20191222110534.GA26395@scaer>
+Message-ID: <CAEyMn7ap+MRO=-fUv5uH8fOvZ9_MqHc9pb0hQuHhfyfajVpNsg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Math::BigInt is a core module.
-Perl 5.30.1 includes the version 1.999816.
-From my point of view, this package is useless.
+Hi,
 
-Fran?ois
+Am So., 22. Dez. 2019 um 12:05 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
+>
+> Heiko, All,
+>
+> On 2019-12-22 11:56 +0100, Heiko Thiery spake thusly:
+> > Am So., 22. Dez. 2019 um 11:08 Uhr schrieb Yann E. MORIN
+> > <yann.morin.1998@free.fr>:
+> > > On 2019-12-22 10:57 +0100, Thomas Petazzoni spake thusly:
+> > > > On Sun, 22 Dec 2019 09:37:08 +0100
+> > > > Heiko Thiery <heiko.thiery@gmail.com> wrote:
+> > > > > - add sha256 tarball hash
+> > > > > - add sha256 license hash
+> > > > The source code for this package is fetched from Subversion. Are the
+> > > > tarballs we create out of SVN repositories reproducible ? I guess so,
+> > > > but let's loop in Yann Morin for some additional feedback on this.
+> > > Seeing the dance we do in the git backend, and that we don't do it in
+> > > the svn backend, I doubt the svn backend is reproducible...
+> > >
+> > > Yet, I just checked, and I indeed get the same sha256 as Heiko provided
+> > > in this patch...
+> > >
+> > > Which prompted me in lookig at it. And we are not getting it from the
+> > > svn repository, for the good reason that the repository is dead and
+> > > off-line.
+> > >
+> > > Instead, we're getting in from s.b.o instead, and thus the reason why
+> > > the sha256 is reproducible...
+> > >
+> > > Dang... :-(
+> > >
+> > > So I suggest we do indeed add this hash, because in the end, that's
+> > > s.b.o providing it, so it is stable.
+> >
+> > Sorry, I didn't want to create this work ;-/ I just wanted to do some
+> > cleanup for the stats. So I picked a simple package to improve.
+>
+> No problem. It was nice that you picked it up, because that made us
+> notice the problem! :-)
+>
+> > I was not aware that special handling is needed for making builds
+> > reproducible at this point.
+>
+> Yeah... Reproducibility is not a given. :-(
+>
+> The subversion backend would need some love for that, so if you have a
+> bit of time on your hnads, that's be nice if you could tackle it (if
+> you're interested).
 
-Le mer. 18 d?c. 2019 ? 21:15, Thomas De Schampheleire <
-patrickdepinguin@gmail.com> a ?crit :
+If I will get the time I can take a look on. Is this implemented in
+the dl-wrapper and co? And should it be treated like the git one?
 
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> > By the way ... what does s.b.o mean?
 >
-> Standard generated with utils/scancpan.
+> Sources.Buildroot.Org, our fallback mirror:
 >
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  DEVELOPERS                                     |  1 +
->  package/Config.in                              |  1 +
->  package/perl-math-bigint/Config.in             |  6 ++++++
->  package/perl-math-bigint/perl-math-bigint.hash |  6 ++++++
->  package/perl-math-bigint/perl-math-bigint.mk   | 14 ++++++++++++++
->  5 files changed, 28 insertions(+)
->  create mode 100644 package/perl-math-bigint/Config.in
->  create mode 100644 package/perl-math-bigint/perl-math-bigint.hash
->  create mode 100644 package/perl-math-bigint/perl-math-bigint.mk
+>     http://sources.buildroot.org/
 >
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 19c66948f8..92105aae98 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2331,6 +2331,7 @@ F:        package/perl-crypt-blowfish/
->  F:     package/perl-crypt-cbc/
->  F:     package/perl-crypt-openssl-aes/
->  F:     package/perl-digest-md5/
-> +F:     package/perl-math-bigint/
->  F:     package/perl-mime-base64-urlsafe/
->  F:     package/perl-mojolicious-plugin-authentication/
->  F:     package/perl-net-ping/
-> diff --git a/package/Config.in b/package/Config.in
-> index fc5228447a..6d10df8561 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -755,6 +755,7 @@ menu "Perl libraries/modules"
->         source "package/perl-lwp-mediatypes/Config.in"
->         source "package/perl-mail-dkim/Config.in"
->         source "package/perl-mailtools/Config.in"
-> +       source "package/perl-math-bigint/Config.in"
->         source "package/perl-mime-base64/Config.in"
->         source "package/perl-mime-base64-urlsafe/Config.in"
->         source "package/perl-mime-tools/Config.in"
-> diff --git a/package/perl-math-bigint/Config.in
-> b/package/perl-math-bigint/Config.in
-> new file mode 100644
-> index 0000000000..89722e7b10
-> --- /dev/null
-> +++ b/package/perl-math-bigint/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PERL_MATH_BIGINT
-> +       bool "perl-math-bigint"
-> +       help
-> +         Pure Perl module to test Math::BigInt with scalars.
-> +
-> +         https://metacpan.org/release/Math-BigInt
-> diff --git a/package/perl-math-bigint/perl-math-bigint.hash
-> b/package/perl-math-bigint/perl-math-bigint.hash
-> new file mode 100644
-> index 0000000000..ad3d66bbf8
-> --- /dev/null
-> +++ b/package/perl-math-bigint/perl-math-bigint.hash
-> @@ -0,0 +1,6 @@
-> +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    a6e5a6c391b453e04c2b60506e1b5342 Math-BigInt-1.999818.tar.gz
-> +sha256 b27634356ce2af9b7c0123ac8395a89a32fb15aeae82fcd39de8156cad278c15
-> Math-BigInt-1.999818.tar.gz
-> +
-> +# computed by scancpan
-> +sha256 b857edab549ac6893e2df5e1ec768ee46b62bcf1607a55e876f4d23f079eacce
-> LICENSE
-> diff --git a/package/perl-math-bigint/perl-math-bigint.mk
-> b/package/perl-math-bigint/perl-math-bigint.mk
-> new file mode 100644
-> index 0000000000..156c6ce38d
-> --- /dev/null
-> +++ b/package/perl-math-bigint/perl-math-bigint.mk
-> @@ -0,0 +1,14 @@
+> Regards,
+> Yann E. MORIN.
 >
-> +################################################################################
-> +#
-> +# perl-math-bigint
-> +#
+> > > Regards,
+> > > Yann E. MORIN.
+> > >
+> > > --
+> > > .-----------------.--------------------.------------------.--------------------.
+> > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > > '------------------------------^-------^------------------^--------------------'
 >
-> +################################################################################
-> +
-> +PERL_MATH_BIGINT_VERSION = 1.999818
-> +PERL_MATH_BIGINT_SOURCE = Math-BigInt-$(PERL_MATH_BIGINT_VERSION).tar.gz
-> +PERL_MATH_BIGINT_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PJ/PJACKLAM
-> +PERL_MATH_BIGINT_LICENSE = Artistic or GPL-1.0+
-> +PERL_MATH_BIGINT_LICENSE_FILES = LICENSE
-> +PERL_MATH_BIGINT_DISTNAME = Math-BigInt
-> +
-> +$(eval $(perl-package))
 > --
-> 2.23.0
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191222/48a4ce3f/attachment.html>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
