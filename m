@@ -1,94 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 11:15:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpam-nfc: new package
-In-Reply-To: <20191221095858.8680-1-aussedat.louis@gmail.com>
-References: <20191221095858.8680-1-aussedat.louis@gmail.com>
-Message-ID: <20191222101544.GS26395@scaer>
+Date: Sun, 22 Dec 2019 11:27:05 +0100
+Subject: [Buildroot] [git commit] sdl2: add patch to fix busy-loop in C
+ library
+Message-ID: <20191222101823.CCB488D4FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Louis, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c84d36db7bc5d3bdd69ba90964a31f8f304b21de
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-12-21 10:58 +0100, Louis Aussedat spake thusly:
-> Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
-[--SNIP--]
-> diff --git a/package/libpam-nfc/Config.in b/package/libpam-nfc/Config.in
-> new file mode 100644
-> index 0000000000..5baa5d76f5
-> --- /dev/null
-> +++ b/package/libpam-nfc/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBPAM_NFC
-> +	bool "libpam-nfc"
-> +    select BR2_PACKAGE_LIBNFC
+For some obscure reason, the order in which the libdrm/libgbm libraries
+are loaded matters.
 
-Leading TAB, not spaces; run:  make check-package
+Without this fix, the first call to check_modesetting() will work and
+load then unload all symbols properly, but the second call to this
+function will lock up as soon as dlopen() is called on libdrm.
 
-> +	help
-> +	  NFC-based PAM authentification module.
-> +
-> +	  https://github.com/nfc-tools/pam_nfc
-[--SNIP--]
-> diff --git a/package/libpam-nfc/libpam-nfc.mk b/package/libpam-nfc/libpam-nfc.mk
-> new file mode 100644
-> index 0000000000..fc1eb72b47
-> --- /dev/null
-> +++ b/package/libpam-nfc/libpam-nfc.mk
-> @@ -0,0 +1,31 @@
-> +################################################################################
-> +#
-> +# libpam-nfc
-> +#
-> +################################################################################
-> +
-> +LIBPAM_NFC_VERSION = bb762e0e649195110e015ffb605c4375e927c437
-> +LIBPAM_NFC_SITE = $(call github,nfc-tools,pam_nfc,$(LIBPAM_NFC_VERSION))
-> +LIBPAM_NFC_LICENSE = GPL-2.0
-> +LIBPAM_NFC_LICENSE_FILES = COPYING
-> +LIBPAM_NFC_DEPENDENCIES = linux-pam libnfc
-> +# Fetching from github, we need to generate the configure script
-> +LIBPAM_NFC_AUTORECONF = YES
-> +LIBPAM_NFC_INSTALL_STAGING = YES
-> +
-> +LIBPAM_NFC_CONF_OPTS = \
-> +	--with-pam-dir=/lib/security
-> +
-> +# libpam breaks with parallel build, but is very fast to build.
-> +# build single threaded.
-> +define LIBPAM_NFC_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
+Swapping the order in which the libdrm and libgbm libraries are loaded
+is enough to fix (or work around?) this issue.
 
-What about:
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+[yann.morin.1998 at free.fr: add upstream commit URL]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/sdl2/0002-fix-busy-loop-in-dlopen.patch | 41 +++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-    LIBPAM_NFC_MAKE = $(MAKE1)
-
-Regards,
-Yann E. MORIN.
-
-> +endef
-> +
-> +# Autoreconf requires an existing m4 directory
-> +define LIBPAM_NFC_MKDIR_M4
-> +	mkdir -p $(@D)/m4
-> +endef
-> +LIBPAM_NFC_PRE_CONFIGURE_HOOKS += LIBPAM_NFC_MKDIR_M4
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.24.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/sdl2/0002-fix-busy-loop-in-dlopen.patch b/package/sdl2/0002-fix-busy-loop-in-dlopen.patch
+new file mode 100644
+index 0000000000..e335f95b7e
+--- /dev/null
++++ b/package/sdl2/0002-fix-busy-loop-in-dlopen.patch
+@@ -0,0 +1,41 @@
++
++# HG changeset patch
++# User Paul Cercueil <paul@crapouillou.net>
++# Date 1576820863 28800
++# Node ID 4f5bef55183c677d12a7da8f3392879ed50670a3
++# Parent  01f16d7f36cb9f4fa02016e57fbe915fdea71cc8
++kmsdrm: Fix busy-loop within libc's dlopen()
++For some obscure reason, the order in which the libdrm/libgbm libraries
++are loaded matters.
++
++Without this fix, the first call to check_modesetting() will work and
++load then unload all symbols properly, but the second call to this
++function will lock up as soon as dlopen() is called on libdrm.
++
++Swapping the order in which the libdrm and libgbm libraries are loaded
++is enough to fix (or work around?) this issue.
++
++Fixes #4891:
++https://bugzilla.libsdl.org/show_bug.cgi?id=4891
++
++Upstream: https://hg.libsdl.org/SDL/rev/4f5bef55183c
++
++Signed-off-by: Paul Cercueil <paul@crapouillou.net>
++[yann.morin.1998 at free.fr: add upstream commit URL]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++
++diff -r 01f16d7f36cb -r 4f5bef55183c src/video/kmsdrm/SDL_kmsdrmdyn.c
++--- a/src/video/kmsdrm/SDL_kmsdrmdyn.c	Thu Dec 19 21:45:44 2019 -0800
+++++ b/src/video/kmsdrm/SDL_kmsdrmdyn.c	Thu Dec 19 21:47:43 2019 -0800
++@@ -50,8 +50,8 @@
++ #endif
++ 
++ static kmsdrmdynlib kmsdrmlibs[] = {
++-    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC},
++-    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM}
+++    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM},
+++    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC}
++ };
++ 
++ static void *
++
