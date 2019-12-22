@@ -1,9 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 16:05:26 +0100
-Subject: [Buildroot] [PATCH 1/2] package/jimtcl: add host variant
-In-Reply-To: <20191222140237.2389908-1-fontaine.fabrice@gmail.com>
+Date: Sun, 22 Dec 2019 16:05:48 +0100
+Subject: [Buildroot] [PATCH 2/2] package/openocd: use host-jimtcl for
+ host variant
+In-Reply-To: <20191222140237.2389908-2-fontaine.fabrice@gmail.com>
 References: <20191222140237.2389908-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191222150526.GF26395@scaer>
+ <20191222140237.2389908-2-fontaine.fabrice@gmail.com>
+Message-ID: <20191222150548.GG26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +15,43 @@ To: buildroot@busybox.net
 Fabrice, All,
 
 On 2019-12-22 15:02 +0100, Fabrice Fontaine spake thusly:
-> host-jimtcl is needed for host-openocd
+> This will fix a build failure raised by commit
+> 06aa2995350922197c6db0a46e39ac5c37d5a49e which dropped patch on embedded
+> jimtcl
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/bd140b5f433d4272f3efd43ff840e13e4301c4db
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to master, after:
-
-  - reformatting the build commands: spawning a sub-shell is useless,
-    and it's better to use '&&' to chain commands. I know you duplicated
-    the existing code, but better not to propagate the kinks from days
-    past;
-
-  - adding the post-patch hook to update config.{guess,sub}
-
-Thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/jimtcl/jimtcl.mk | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
+>  package/openocd/openocd.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-> index 643a87d5c4..795f20883c 100644
-> --- a/package/jimtcl/jimtcl.mk
-> +++ b/package/jimtcl/jimtcl.mk
-> @@ -78,4 +78,27 @@ define JIMTCL_INSTALL_TARGET_CMDS
->  	$(JIMTCL_LINK_TCLSH)
->  endef
+> diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+> index 29e4f4b31f..7887f3a6dc 100644
+> --- a/package/openocd/openocd.mk
+> +++ b/package/openocd/openocd.mk
+> @@ -97,12 +97,12 @@ HOST_OPENOCD_CONF_OPTS = \
+>  	--oldincludedir=$(HOST_DIR)/include \
+>  	--includedir=$(HOST_DIR)/include \
+>  	--disable-doxygen-html \
+> -	--with-jim-shared=no \
+> +	--disable-internal-jimtcl \
+>  	--disable-shared \
+>  	--enable-dummy \
+>  	--disable-werror
 >  
-> +define HOST_JIMTCL_CONFIGURE_CMDS
-> +	(cd $(@D); \
-> +		$(HOST_CONFIGURE_OPTS) \
-> +		CCACHE=none \
-> +		./configure --prefix=$(HOST_DIR) \
-> +		--shared \
-> +	)
-> +endef
-> +
-> +define HOST_JIMTCL_BUILD_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define HOST_JIMTCL_INSTALL_CMDS
-> +	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
-> +		cp -a $(@D)/$$i $(HOST_DIR)/usr/include/ || exit 1 ; \
-> +	done;
-> +	$(INSTALL) -m 0755 -D $(@D)/libjim.so.$(JIMTCL_VERSION) \
-> +		$(HOST_DIR)/usr/lib/libjim.so.$(JIMTCL_VERSION)
-> +	ln -sf libjim.so.$(JIMTCL_VERSION) $(HOST_DIR)/usr/lib/libjim.so
-> +endef
-> +
->  $(eval $(generic-package))
-> +$(eval $(host-generic-package))
+> -HOST_OPENOCD_DEPENDENCIES = host-libftdi host-libusb host-libusb-compat
+> +HOST_OPENOCD_DEPENDENCIES = host-jimtcl host-libftdi host-libusb host-libusb-compat
+>  
+>  # Avoid documentation rebuild. On PowerPC64(le), we patch the
+>  # configure script. Due to this, the version.texi files gets
 > -- 
 > 2.24.0
 > 
