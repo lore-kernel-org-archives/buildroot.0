@@ -1,63 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2019 16:01:00 +0100
-Subject: [Buildroot] [git commit] package/jimtcl: add host variant
-Message-ID: <20191222145255.D65B58D6B1@busybox.osuosl.org>
+Date: Sun, 22 Dec 2019 16:01:53 +0100
+Subject: [Buildroot] [git commit] package/openocd: use host-jimtcl for host
+ variant
+Message-ID: <20191222145255.EAC738D697@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f98c1447f87af3a87e8710f5cd8c31644e4d8074
+commit: https://git.buildroot.net/buildroot/commit/?id=931cb4d1e13a50282614f470e6c7c2f61dc7179b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-host-jimtcl is needed for host-openocd
+This will fix a build failure raised by commit
+06aa2995350922197c6db0a46e39ac5c37d5a49e which dropped patch on embedded
+jimtcl
+
+Fixes:
+ - http://autobuild.buildroot.org/results/bd140b5f433d4272f3efd43ff840e13e4301c4db
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998 at free.fr:
-  - call hook to update config.{guess,sub}
-  - reformat the build commands
-]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/jimtcl/jimtcl.mk | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ package/openocd/openocd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index 643a87d5c4..e712dff0be 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -42,6 +42,7 @@ endif
- # Buildroot, so update config.guess / config.sub like we do in
- # pkg-autotools.mk
- JIMTCL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
-+HOST_JIMTCL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index 29e4f4b31f..7887f3a6dc 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -97,12 +97,12 @@ HOST_OPENOCD_CONF_OPTS = \
+ 	--oldincludedir=$(HOST_DIR)/include \
+ 	--includedir=$(HOST_DIR)/include \
+ 	--disable-doxygen-html \
+-	--with-jim-shared=no \
++	--disable-internal-jimtcl \
+ 	--disable-shared \
+ 	--enable-dummy \
+ 	--disable-werror
  
- # jimtcl really wants to find a existing $CXX, so feed it false
- # when we do not have one.
-@@ -78,4 +79,25 @@ define JIMTCL_INSTALL_TARGET_CMDS
- 	$(JIMTCL_LINK_TCLSH)
- endef
+-HOST_OPENOCD_DEPENDENCIES = host-libftdi host-libusb host-libusb-compat
++HOST_OPENOCD_DEPENDENCIES = host-jimtcl host-libftdi host-libusb host-libusb-compat
  
-+define HOST_JIMTCL_CONFIGURE_CMDS
-+	cd $(@D) && \
-+		$(HOST_CONFIGURE_OPTS) \
-+		CCACHE=none \
-+		./configure --prefix=$(HOST_DIR) --shared
-+endef
-+
-+define HOST_JIMTCL_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define HOST_JIMTCL_INSTALL_CMDS
-+	for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
-+		cp -a $(@D)/$$i $(HOST_DIR)/usr/include/ || exit 1 ; \
-+	done;
-+	$(INSTALL) -m 0755 -D $(@D)/libjim.so.$(JIMTCL_VERSION) \
-+		$(HOST_DIR)/usr/lib/libjim.so.$(JIMTCL_VERSION)
-+	ln -sf libjim.so.$(JIMTCL_VERSION) $(HOST_DIR)/usr/lib/libjim.so
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+ # Avoid documentation rebuild. On PowerPC64(le), we patch the
+ # configure script. Due to this, the version.texi files gets
