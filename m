@@ -1,40 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 09:12:03 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/openpowerlink:
- drop bogus select
-Message-ID: <20191223080346.EC4C28DEEF@busybox.osuosl.org>
+Date: Mon, 23 Dec 2019 09:11:34 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/easy-rsa: select
+ the appropriate option for openssl binary
+Message-ID: <20191223080346.E40888DEED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=918a312bc3cf9936223b9e4db073ca12dbbcf8a7
+commit: https://git.buildroot.net/buildroot/commit/?id=09fb9713058e210ad0cded4f9272f8a1b15cb113
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-There is no option BR2_PACKAGE_OPENPOWERLINK_PCAP_DAEMON, and we never
-had any option named like this, so it seems like a leftover from
-previous iterations of the openpowerlink patch series. Since the
-option does not exist, the select doesn't do anything, and we can
-simply drop it.
+Since openssl was converted to a virtual package,
+BR2_PACKAGE_OPENSSL_BIN no longer exists: it was renamed to
+BR2_PACKAGE_LIBOPENSSL_BIN, but easy-rsa was not changed accordingly.
+
+easy-rsa needs to take into account the two providers of openssl, and
+select the appropriate suboptions depending on which openssl
+implementation was chosen.
+
+Ideally, we would probably need a more elaborate option that ensures
+easy-rsa doesn't have to know the details of which openssl
+implementation is selected, but practically speaking with just two
+providers of openssl at the moment, the proposed solution is good
+enough.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 76a6f1285d270b46ee79ce67a5a006cacd53b2ad)
+(cherry picked from commit ef3f8ba99e9703383445e9fb0c2406d0b954c0b4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openpowerlink/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/easy-rsa/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
-index 68ea751954..1a3dd62acd 100644
---- a/package/openpowerlink/Config.in
-+++ b/package/openpowerlink/Config.in
-@@ -50,7 +50,6 @@ config BR2_PACKAGE_OPENPOWERLINK_STACK_MONOLITHIC_USER_STACK_LIB
- config BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB
- 	bool "user-space pcap daemon"
- 	select BR2_PACKAGE_LIBPCAP
--	select BR2_PACKAGE_OPENPOWERLINK_PCAP_DAEMON
+diff --git a/package/easy-rsa/Config.in b/package/easy-rsa/Config.in
+index 883d679e98..56db64a590 100644
+--- a/package/easy-rsa/Config.in
++++ b/package/easy-rsa/Config.in
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_EASY_RSA
+ 	bool "easy-rsa"
+ 	select BR2_PACKAGE_OPENSSL # runtime
+-	select BR2_PACKAGE_OPENSSL_BIN
++	select BR2_PACKAGE_LIBOPENSSL_BIN if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBRESSL_BIN if BR2_PACKAGE_LIBRESSL
  	help
- 	  Compile openPOWERLINK application library which contains the
- 	  interface to a Linux user space driver, and the Linux user
+ 	  Simple shell based CA utility
+ 
