@@ -1,43 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 19:12:28 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/freescale-imx:
- update SITE to use NXP url
-Message-ID: <20191223180352.C3EEF8DFCE@busybox.osuosl.org>
+Date: Mon, 23 Dec 2019 19:14:38 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/lrzip: needs C++
+Message-ID: <20191223180551.075738DFD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de15ccc6d65b4e4c14b7c916d733f3fe77fe1df6
+commit: https://git.buildroot.net/buildroot/commit/?id=be4c40ee5e15300a255f6a5f3e23ac74b285d15c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-NXP BSPs has been using the nxp.com URL for a while:
-http://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale/commit/conf/layer.conf?id=d6abbbc1ce0882bdc82e03b1868eeba1a50a7bd3
+Fixes:
+http://autobuild.buildroot.net/results/e40/e40653aa895bb47d20ad237c8a5ae3f6b76f3f67/
 
-It's  unclear for how long the freescale.com redirect will be
-maintained. This patch update the FREESCALE_IMX_SITE variable
-to point directly to the NXP site.
+libzpaq is written in C++ (and unconditionally built), so depend on C++
+support.
 
-Signed-off-by: Julien Olivain <juju@cotds.org>
-Reviewed-by: Gary Bisson <bisson.gary@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0b598be9b6b906235e56466f69c1648bdb55d549)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f29c8de40f34dc67697158351a84d2ec9f93990c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/freescale-imx.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lrzip/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
-index e8ca77f17b..84a1725cc1 100644
---- a/package/freescale-imx/freescale-imx.mk
-+++ b/package/freescale-imx/freescale-imx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lrzip/Config.in b/package/lrzip/Config.in
+index 92540a5036..885b84dbb0 100644
+--- a/package/lrzip/Config.in
++++ b/package/lrzip/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LRZIP
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_BZIP2
+@@ -17,6 +18,7 @@ config BR2_PACKAGE_LRZIP
  
--FREESCALE_IMX_SITE = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO
-+FREESCALE_IMX_SITE = http://www.nxp.com/lgfiles/NMG/MAD/YOCTO
+ 	  https://github.com/ckolivas/lrzip
  
- # Helper for self-extracting binaries distributed by Freescale.
- #
+-comment "lrzip needs a toolchain w/ wchar, threads"
++comment "lrzip needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP
