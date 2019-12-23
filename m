@@ -1,29 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Dec 2019 20:54:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-pycares: bump to version
- 3.1.0
-In-Reply-To: <20191223150117.18522-1-james.hilliard1@gmail.com>
-References: <20191223150117.18522-1-james.hilliard1@gmail.com>
-Message-ID: <20191223205456.785d148b@windsurf>
+Date: Mon, 23 Dec 2019 20:56:42 +0100
+Subject: [Buildroot] [git commit] board/freescale/imx6-sabresd: Remove
+ unneeded CONFIG_VIDEO_CODA fragment
+Message-ID: <20191223195041.BDA238E04A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Dec 2019 08:01:17 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=857c365fc4938d53e298d7938d5ab135bbb88a7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-pycares/python-pycares.hash | 4 ++--
->  package/python-pycares/python-pycares.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Since kernel commit a5a56f07c272 ("ARM: imx_v6_v7_defconfig: Select the
+coda driver as module") the VPU coda driver is selected as module, so it can
+be safely removed from linux_qt5.fragment.
 
-Applied to master, thanks.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/freescale/imx6-sabresd/linux_qt5.fragment | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/freescale/imx6-sabresd/linux_qt5.fragment b/board/freescale/imx6-sabresd/linux_qt5.fragment
+index d4f26b163c..ffa5f63eab 100644
+--- a/board/freescale/imx6-sabresd/linux_qt5.fragment
++++ b/board/freescale/imx6-sabresd/linux_qt5.fragment
+@@ -2,4 +2,3 @@
+ # ondemand governor with a mainline kernel.
+ # CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
+ CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
+-CONFIG_VIDEO_CODA=m
