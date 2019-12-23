@@ -1,40 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 23:14:16 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/kf5-kcoreaddons:
- fix check-package warnings
-Message-ID: <20191223220606.E8A938E0D9@busybox.osuosl.org>
+Date: Mon, 23 Dec 2019 23:14:01 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ package/kf5/kf5-kcoreaddons: make passing CXXFLAGS to cmake clearer
+Message-ID: <20191223220606.D8BEE8E0D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=849d1498216fc38904b143b78d0d4d60d3c6efe1
+commit: https://git.buildroot.net/buildroot/commit/?id=351a17368d1b338419a8dc889af79559882fb7b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-KF5_KCOREADDONS_CONF_OPTS is set both outside and inside the
-conditional block, so the value set outside would be lost if
-the condition were to be true.
+Better to keep final assignment to *_CONF_OPTS after all assignements to
+KF5_KCOREADDONS_CXXFLAGS have been done. So move _CONF_OPTS assignment
+after -latomic assignment.
 
-Use append-assignement in this case, as reported by check-package.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f7e750e8f514f84bf2f4fc99976dd11f19c8ecbc)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6a55afa7b8f0cb095e276f5d041eac17c6260c40)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-index 5b3e9acd90..76be8876cc 100644
+index ea6aac4ec6..164bad1225 100644
 --- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
 +++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-@@ -23,7 +23,7 @@ KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
+@@ -14,10 +14,11 @@ KF5_KCOREADDONS_DEPENDENCIES = kf5-extra-cmake-modules qt5tools
+ KF5_KCOREADDONS_INSTALL_STAGING = YES
  
- ifeq ($(BR2_microblaze),y)
- # Microblaze ld emits warnings, make warnings not to be treated as errors
--KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
-+KF5_KCOREADDONS_CONF_OPTS += -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-fatal-warnings"
+ KF5_KCOREADDONS_CXXFLAGS = $(TARGET_CXXFLAGS)
+-KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ KF5_KCOREADDONS_CXXFLAGS += -latomic
  endif
  
++KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
++
  $(eval $(cmake-package))
