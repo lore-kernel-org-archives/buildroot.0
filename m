@@ -1,29 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Dec 2019 23:17:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libffi: fix build failure on
- power7 and older
-In-Reply-To: <CAPi7W82ANuDdNBnSQPw5TT=HDRFP76fqadrk9nTBBfwnpRCxew@mail.gmail.com>
-References: <20191223213610.142006-1-fontaine.fabrice@gmail.com>
- <20191223224442.6c62aafa@windsurf>
- <CAPi7W82ANuDdNBnSQPw5TT=HDRFP76fqadrk9nTBBfwnpRCxew@mail.gmail.com>
-Message-ID: <20191223231710.2a89a960@windsurf>
+Date: Mon, 23 Dec 2019 23:19:46 +0100
+Subject: [Buildroot] [PATCH] support/download/svn: generate reproducible
+ svn archives
+In-Reply-To: <87zhfiu28h.fsf@dell.be.48ers.dk>
+References: <20191222213148.13762-1-heiko.thiery@gmail.com>
+ <20191222223650.1f44d3ca@windsurf>
+ <CAEyMn7aZgVT2hmb8O4duNFeD4_x2_jkChOj9Cv3MAtVXZhQNLQ@mail.gmail.com>
+ <20191222225727.7e8f88d4@windsurf> <20191223171658.GN26395@scaer>
+ <87zhfiu28h.fsf@dell.be.48ers.dk>
+Message-ID: <20191223231946.3f57ebe1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Dec 2019 22:49:28 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello,
 
-> > I just applied your previous patch tonight, so I guess this one needs
-> > to replace the previous one, no ?  
-> Nope, both patches are needed.
-> The previous one for _Float128 (not sent yet upstream) and this one
-> for __int128 (from upstream).
++Alex in Cc. Alex, there's an open2300 question for you below.
 
-OK, thanks for the clarification. This float128/int128 stuff is quite
-confusing.
+On Mon, 23 Dec 2019 23:05:34 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
+
+>  > In practice, we have only two: fis and open2300. The other packages that
+>  > may use svn are those where the user would set the version, so they
+>  > would anyway be excluded from the hash check.  
+> 
+> Talking about those two packages, weren't we going to remove them? They
+> are both very old and haven't been updated since they were added.
+
+That's indeed another way. For the "fis" package, I think this is
+reasonable, as even the use-case is very obsolete (RedBoot stuff). For
+open2300, I'm not sure.
+
+Alex: is open2300 still relevant today? You introduced this package in
+Buildroot many years ago.
 
 Thomas
 -- 
