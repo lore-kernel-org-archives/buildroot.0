@@ -1,49 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Dec 2019 20:42:34 +0100
-Subject: [Buildroot] [git commit] package/python-pycares: bump to version
- 3.1.0
-Message-ID: <20191223194200.7E9D08E022@busybox.osuosl.org>
+Date: Mon, 23 Dec 2019 20:51:00 +0100
+Subject: [Buildroot] [git commit] package/libtomcrypt: add security patch
+ for CVE-2019-17362
+Message-ID: <20191223194200.8CF688295D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71323def347fb75154c2ba3227cb15d54a24fecd
+commit: https://git.buildroot.net/buildroot/commit/?id=62b34ed33ba4f2ee17046aa4d38a13840597f636
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+CVE-2019-17362:
+"The der_decode_utf8_string function (in der_decode_utf8_string.c) does not
+properly detect certain invalid UTF-8 sequences.  This allows
+context-dependent attackers to cause a denial of service (out-of-bounds read
+and crash) or read information from other memory locations via carefully
+crafted DER-encoded data."
+
+Details:
+https://github.com/libtom/libtomcrypt/issues/507
+https://nvd.nist.gov/vuln/detail/CVE-2019-17362
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pycares/python-pycares.hash | 4 ++--
- package/python-pycares/python-pycares.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libtomcrypt/0001-fix-CVE-2019-17362.patch | 29 +++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
-index dfe7ca723d..63f5d88aeb 100644
---- a/package/python-pycares/python-pycares.hash
-+++ b/package/python-pycares/python-pycares.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycares/json
--md5	8a53781dd26db01ffe0b3358877bebbd  pycares-3.0.0.tar.gz
--sha256	b253f5dcaa0ac7076b79388a3ac80dd8f3bd979108f813baade40d3a9b8bf0bd  pycares-3.0.0.tar.gz
-+md5	9d71bb8654cd2f7f34bdfe0ba641b59c  pycares-3.1.0.tar.gz
-+sha256	663c000625725d3a63466a674df4ee7f62bf8ca1ae8a0b87a6411eb811e0e794  pycares-3.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256	427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
-diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
-index 3698ec64f5..ecac40fd2d 100644
---- a/package/python-pycares/python-pycares.mk
-+++ b/package/python-pycares/python-pycares.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYCARES_VERSION = 3.0.0
-+PYTHON_PYCARES_VERSION = 3.1.0
- PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
--PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/85/de/cd46a73e43e206a6ad1e9cf9cc893c3ed1b21caf57f1e0a8d9a119d290eb
-+PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/50/39/d7d4e85041e95c12ccca220663328709da81f75f5e86d76049f0937e9f83
- PYTHON_PYCARES_SETUP_TYPE = setuptools
- PYTHON_PYCARES_LICENSE = MIT
- PYTHON_PYCARES_LICENSE_FILES = LICENSE
+diff --git a/package/libtomcrypt/0001-fix-CVE-2019-17362.patch b/package/libtomcrypt/0001-fix-CVE-2019-17362.patch
+new file mode 100644
+index 0000000000..91e2145853
+--- /dev/null
++++ b/package/libtomcrypt/0001-fix-CVE-2019-17362.patch
+@@ -0,0 +1,29 @@
++From 25c26a3b7a9ad8192ccc923e15cf62bf0108ef94 Mon Sep 17 00:00:00 2001
++From: werew <werew@ret2libc.com>
++Date: Thu, 3 Oct 2019 19:57:10 +0200
++Subject: [PATCH] Fixes #507
++
++Fix a vulnerability in der_decode_utf8_string as specified here:
++https://github.com/libtom/libtomcrypt/issues/507
++
++[for import into Buildroot]
++Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++
++
++---
++ src/pk/asn1/der/utf8/der_decode_utf8_string.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/pk/asn1/der/utf8/der_decode_utf8_string.c b/src/pk/asn1/der/utf8/der_decode_utf8_string.c
++index 94555b99f..d3ed82bea 100644
++--- a/src/pk/asn1/der/utf8/der_decode_utf8_string.c
+++++ b/src/pk/asn1/der/utf8/der_decode_utf8_string.c
++@@ -65,7 +65,7 @@ int der_decode_utf8_string(const unsigned char *in,  unsigned long inlen,
++       /* count number of bytes */
++       for (z = 0; (tmp & 0x80) && (z <= 4); z++, tmp = (tmp << 1) & 0xFF);
++ 
++-      if (z > 4 || (x + (z - 1) > inlen)) {
+++      if (z == 1 || z > 4 || (x + (z - 1) > inlen)) {
++          return CRYPT_INVALID_PACKET;
++       }
++ 
