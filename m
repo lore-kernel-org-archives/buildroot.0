@@ -1,39 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 09:04:39 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/efl: drop invalid
- select BR2_PACKAGE_XLIB_LIBXP
-Message-ID: <20191223075851.A6CFA8DEBC@busybox.osuosl.org>
+Date: Mon, 23 Dec 2019 09:03:24 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libfribidi:
+ enable host build
+Message-ID: <20191223075903.8C7048DEC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3ae7227eb92ba2ecbe44f70201e2719600e1074
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a6a2420a95911bbbf757d81d03c3e8f7cda5672d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-The option BR2_PACKAGE_XLIB_LIBXP does not exist, but is select by
-efl/Config.in since the package was introduced. Since all xlib_*
-dependency in the .mk file each have a corresponding select in the
-Config.in file, we simply drop this bogus dependency.
-
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 286b06e9d4fe26f0b5f8787b4afeb5a851f9d03e)
+(cherry picked from commit 4bfa49d1957e1381324a8c532739ee46f18063cd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efl/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/libfribidi/libfribidi.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 05be5aae56..2eb3a10733 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -168,7 +168,6 @@ config BR2_PACKAGE_EFL_X_XLIB
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
- 	select BR2_PACKAGE_XLIB_LIBXINERAMA
--	select BR2_PACKAGE_XLIB_LIBXP
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
- 	select BR2_PACKAGE_XLIB_LIBXRENDER
- 	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
+diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
+index 4394623592..0e17be6db0 100644
+--- a/package/libfribidi/libfribidi.mk
++++ b/package/libfribidi/libfribidi.mk
+@@ -13,3 +13,4 @@ LIBFRIBIDI_INSTALL_STAGING = YES
+ LIBFRIBIDI_DEPENDENCIES = host-pkgconf
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
