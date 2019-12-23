@@ -1,66 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 09:03:32 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/pango: add
- dependency on libfribidi
-Message-ID: <20191223075903.956F38D7B4@busybox.osuosl.org>
+Date: Mon, 23 Dec 2019 09:04:29 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x]
+ package/python-pyasn-modules: select correct option
+Message-ID: <20191223075903.B024B8D7B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb4f870cc72944e8f1dde99f81c2dd9c9c23912b
+commit: https://git.buildroot.net/buildroot/commit/?id=9e590e4e4b438dd39310435d407e484964018f5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Since commit 5cce413eb11ac75f5c48ed351896c5d1c33961d5 ("package/pango:
-bump to version 1.44.6"), pango needs libfribidi. Through the Meson
-subprojects mechanism, it tries to download it by itself if not
-available. But in Buildroot, we definitely want to use the separate
-libfribidi package, so let's add it as a dependency of pango.
+BR2_PACKAGE_PYASN does not exist, it is BR2_PACKAGE_PYTHON_PYASN that
+should be selected.
 
-Fixes:
-  http://autobuild.buildroot.net/results/f16fda910da23dfe5f8ac1cb51f9dbcec444b516
-
-  subprocess.CalledProcessError: Command '['git', 'clone', 'https://github.com/fribidi/fribidi.git', 'fribidi']' returned non-zero exit status 128.
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 861b74b1c5b07361eb6cf0d9c1b42a0a38bfc25a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 31d4248554e9dd9a97fc0d83f8a216ddaa6fa64e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pango/Config.in | 1 +
- package/pango/pango.mk  | 2 ++
- 2 files changed, 3 insertions(+)
+ package/python-pyasn-modules/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pango/Config.in b/package/pango/Config.in
-index cdf8b54171..e810598eef 100644
---- a/package/pango/Config.in
-+++ b/package/pango/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_PANGO
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
- 	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBFRIBIDI
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_FONTCONFIG
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 33e7825896..48edd18b05 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -19,6 +19,7 @@ PANGO_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES) \
- 	host-pkgconf \
- 	libglib2 \
-+	libfribidi \
- 	cairo \
- 	harfbuzz \
- 	fontconfig \
-@@ -26,6 +27,7 @@ PANGO_DEPENDENCIES = \
- HOST_PANGO_DEPENDENCIES = \
- 	host-pkgconf \
- 	host-libglib2 \
-+	host-libfribidi \
- 	host-cairo \
- 	host-harfbuzz \
- 	host-fontconfig \
+diff --git a/package/python-pyasn-modules/Config.in b/package/python-pyasn-modules/Config.in
+index 387020d9d6..cedd68b34e 100644
+--- a/package/python-pyasn-modules/Config.in
++++ b/package/python-pyasn-modules/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_PYASN_MODULES
+ 	bool "python-pyasn-modules"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_PYASN # runtime
++	select BR2_PACKAGE_PYTHON_PYASN # runtime
+ 	help
+ 	  A collection of ASN.1-based protocols modules.
+ 
