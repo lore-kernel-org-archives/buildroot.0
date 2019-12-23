@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 19:12:34 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/freescale-imx:
+Date: Mon, 23 Dec 2019 19:12:28 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/freescale-imx:
  update SITE to use NXP url
-Message-ID: <20191223180346.24ED48DFCB@busybox.osuosl.org>
+Message-ID: <20191223180352.C3EEF8DFCE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ce722049b3bd757d2c151025ccd8fa6b1c9afd9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=de15ccc6d65b4e4c14b7c916d733f3fe77fe1df6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 NXP BSPs has been using the nxp.com URL for a while:
 http://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale/commit/conf/layer.conf?id=d6abbbc1ce0882bdc82e03b1868eeba1a50a7bd3
