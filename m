@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 23:20:56 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/wavpack: security
+Date: Mon, 23 Dec 2019 23:17:45 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/wavpack: security
  bump to version 5.2.0
-Message-ID: <20191223221148.C47928E0E6@busybox.osuosl.org>
+Message-ID: <20191223221155.E2E518E0ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01d7619978cc0ffbe942735f8dcfd40edbcea96b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=60eedb398839bf80d40d444cf24d2a375d2a15ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 - Switch to github to get latest version
 - Drop patches (already in version)
