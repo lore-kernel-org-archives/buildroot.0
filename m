@@ -1,48 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 19:14:38 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/lrzip: needs C++
-Message-ID: <20191223180551.075738DFD1@busybox.osuosl.org>
+Date: Mon, 23 Dec 2019 19:15:08 +0100
+Subject: [Buildroot] [PATCH] package/lrzip: needs C++
+In-Reply-To: <20191216085920.30717-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 16 Dec 2019 09:59:19 +0100")
+References: <20191216085920.30717-1-peter@korsgaard.com>
+Message-ID: <874kxqvrgz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be4c40ee5e15300a255f6a5f3e23ac74b285d15c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/e40/e40653aa895bb47d20ad237c8a5ae3f6b76f3f67/
+ > Fixes:
+ > http://autobuild.buildroot.net/results/e40/e40653aa895bb47d20ad237c8a5ae3f6b76f3f67/
 
-libzpaq is written in C++ (and unconditionally built), so depend on C++
-support.
+ > libzpaq is written in C++ (and unconditionally built), so depend on C++
+ > support.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f29c8de40f34dc67697158351a84d2ec9f93990c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lrzip/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/package/lrzip/Config.in b/package/lrzip/Config.in
-index 92540a5036..885b84dbb0 100644
---- a/package/lrzip/Config.in
-+++ b/package/lrzip/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LRZIP
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_BZIP2
-@@ -17,6 +18,7 @@ config BR2_PACKAGE_LRZIP
- 
- 	  https://github.com/ckolivas/lrzip
- 
--comment "lrzip needs a toolchain w/ wchar, threads"
-+comment "lrzip needs a toolchain w/ wchar, threads, C++"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP
+Committed to 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
