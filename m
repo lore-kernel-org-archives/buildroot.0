@@ -1,26 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 18:59:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libkrb5: needs host-pkgconf for
- libedit
-In-Reply-To: <20191214225506.3334271-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 14 Dec 2019 23:55:06 +0100")
-References: <20191214225506.3334271-1-fontaine.fabrice@gmail.com>
-Message-ID: <87lfr2vs70.fsf@dell.be.48ers.dk>
+Date: Mon, 23 Dec 2019 19:01:16 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] configs/licheepi_zero:
+ U-Boot needs pylibfdt
+Message-ID: <20191223175228.5C4C68DFBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=66add2443fbf066bca05df08f1e561c9714c95db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
- > host-pkgconf is needed to find libedit
- > Fixes:
- >  - http://autobuild.buildroot.org/results/45eee300788f46975d292b21eead97f9e9a8b5d8
+Like all Allwinner platforms, building the licheepi_zero U-Boot
+configuration requires pylibfdt.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
 
-Committed to 2019.02.x and 2019.11.x, thanks.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/378314331
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f2c11f1434874cef61a9cdf128959c16dd7898be)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/licheepi_zero_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/licheepi_zero_defconfig b/configs/licheepi_zero_defconfig
+index 8bb21292ca..fd875d5f4c 100644
+--- a/configs/licheepi_zero_defconfig
++++ b/configs/licheepi_zero_defconfig
+@@ -39,6 +39,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="LicheePi_Zero"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
