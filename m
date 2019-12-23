@@ -1,54 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Dec 2019 23:41:07 +0100
-Subject: [Buildroot] [PATCH v2] boot/at91bootstrap3: bump to version
- 3.9.0
-In-Reply-To: <0aa88f02-2da6-f6bd-6c21-b25b1df2af25@koncepto.io>
-References: <1571765902-878-1-git-send-email-pjtexier@koncepto.io>
- <1571765902-878-2-git-send-email-pjtexier@koncepto.io>
- <20191024112430.at6l2alidwxxx4do@M43218.corp.atmel.com>
- <20191216104514.7a9fe980@windsurf.home>
- <0aa88f02-2da6-f6bd-6c21-b25b1df2af25@koncepto.io>
-Message-ID: <20191223234107.36ef57e2@windsurf>
+Date: Mon, 23 Dec 2019 23:22:30 +0100
+Subject: [Buildroot] [git commit] boot/at91bootstrap3: implement custom
+ tarball download
+Message-ID: <20191223223341.ADEF98E131@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Pierre-Jean,
+commit: https://git.buildroot.net/buildroot/commit/?id=1fc1a2946a165533b7bb69335208d60d50794553
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 16 Dec 2019 18:33:23 +0100
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+Implement possibility to download AT91Bootstrap from a custom tarball
+URL.
 
-> > Pierre-Jean, could you double check ? Do you still have in your
-> > download folder the tarball with the
-> > 9960b0d18fe42feee566d4c52efa0d7c8251685bf9acfdf343f30a27951ada1e hash ?
-> > If so, please don't delete it, and instead use it to compare it with
-> > the current tarball that you can get by downloading from Github.  
-> 
-> Interesting, yes, I still have the tarball (from 22/10/2019), see after:
-> 
-> $: ls -l dl/at91bootstrap3
-> total 452
-> -rw-r--r--  1 pjtexier pjtexier 450749 oct.  22 18:35 
-> at91bootstrap3-v3.9.0.tar.gz
-> drwxr-xr-x 12 pjtexier pjtexier   4096 oct.  22 18:31 git
-> -rw-r--r--  1 pjtexier pjtexier    512 oct.  22 18:35 git.readme
-> 
-> and the hash is:
-> 
-> $: sha256sum dl/at91bootstrap3/at91bootstrap3-v3.9.0.tar.gz
-> 9960b0d18fe42feee566d4c52efa0d7c8251685bf9acfdf343f30a27951ada1e 
-> dl/at91bootstrap3/at91bootstrap3-v3.9.0.tar.gz
-> 
-> I will check the difference ;)
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/at91bootstrap3/Config.in         |  8 ++++++++
+ boot/at91bootstrap3/at91bootstrap3.mk | 13 ++++++++++++-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-Any news on this ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index c3fc9d35d4..faab7635da 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -27,8 +27,15 @@ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	  This option allows Buildroot to get the AT91 Bootstrap 3
+ 	  source code from a Git repository.
+ 
++config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
++	bool "Custom tarball"
++
+ endchoice
+ 
++config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION
++	string "URL of custom AT91Bootstrap tarball"
++	depends on BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
++
+ if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL
+@@ -47,6 +54,7 @@ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	default "v3.9.0" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
++	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
+ 	string "custom patch dir"
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 685be5bbd7..48c3a918a1 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -6,7 +6,12 @@
+ 
+ AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
+ 
+-ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
++ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL),y)
++AT91BOOTSTRAP3_TARBALL = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION))
++AT91BOOTSTRAP3_SITE = $(patsubst %/,%,$(dir $(AT91BOOTSTRAP3_TARBALL)))
++AT91BOOTSTRAP3_SOURCE = $(notdir $(AT91BOOTSTRAP3_TARBALL))
++BR_NO_CHECK_HASH_FOR += $(AT91BOOTSTRAP3_SOURCE)
++else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
+ AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
+ AT91BOOTSTRAP3_SITE_METHOD = git
+ BR_NO_CHECK_HASH_FOR += $(AT91BOOTSTRAP3_SOURCE)
+@@ -78,6 +83,12 @@ $(error No custom at91bootstrap3 repository version specified. Check your BR2_TA
+ endif
+ endif
+ 
++ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL),y)
++ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION)),)
++$(error No custom AT91Bootstrap3 tarball specified. Check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION setting)
++endif # qstrip BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION
++endif # BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
++
+ endif # BR_BUILDING
+ 
+ $(eval $(kconfig-package))
