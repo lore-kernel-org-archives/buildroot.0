@@ -1,28 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 09:29:43 +0100
-Subject: [Buildroot] [PATCH] package/gpsd: remove bogus select of
- BR2_PACKAGE_GPSD_NTP_SHM
-In-Reply-To: <20191213153044.1382229-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 13 Dec 2019 16:30:43 +0100")
-References: <20191213153044.1382229-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87blrzwiko.fsf@dell.be.48ers.dk>
+Date: Mon, 23 Dec 2019 09:31:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libp11: add host-pkgconf
+ dependency for host variant
+In-Reply-To: <20191214090229.164853-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 14 Dec 2019 10:02:29 +0100")
+References: <20191214090229.164853-1-fontaine.fabrice@gmail.com>
+Message-ID: <877e2nwiia.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > In commit 57f85e52a7b29363e76735930bc1bb51a38718ac ("package/gpsd:
- > unconditionally enable NTP time hinting support"), the option
- > BR2_PACKAGE_GPSD_NTP_SHM was removed, because NTP time hinting support
- > is now enabled unconditionally.
+ > host-pkgconf is needed to find host-openssl
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/05adf424050cb56f74ae4106b3c9b61f8daff7d2
 
- > However, in one place, a select of this option was kept, which is
- > obviously no longer needed.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2019.11.x, thanks.
 
