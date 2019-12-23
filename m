@@ -1,58 +1,113 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 10:07:04 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/glibc: bump
- version for post-2.30 security fixes
-Message-ID: <20191223122045.D581C8DF9E@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 23 Dec 2019 15:26:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cereal: new package
+Message-ID: <20191223142605.29188-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d91cba1cefbd108d5b73508bccb40e78e5422c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Fixes the following security vulnerability:
-
-- CVE-2019-19126: ld.so failed to ignore the LD_PREFER_MAP_32BIT_EXEC
-  environment variable during program execution after a security
-  transition, allowing local attackers to restrict the possible mapping
-  addresses for loaded libraries and thus bypass ASLR for a setuid
-  program.  Reported by Marcin Ko??cielnicki.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bda95544b90af692fe9a33234caaa9f77b9a1e9e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- .../glibc.hash                                                          | 2 +-
- package/glibc/glibc.mk                                                  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/cereal/Config.in   | 20 ++++++++++++++++++++
+ package/cereal/cereal.hash |  3 +++
+ package/cereal/cereal.mk   | 17 +++++++++++++++++
+ 5 files changed, 42 insertions(+)
+ create mode 100644 package/cereal/Config.in
+ create mode 100644 package/cereal/cereal.hash
+ create mode 100644 package/cereal/cereal.mk
 
-diff --git a/package/glibc/2.30-1-gbe9a328c93834648e0bec106a1f86357d1a8c7e1/glibc.hash b/package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash
-similarity index 70%
-rename from package/glibc/2.30-1-gbe9a328c93834648e0bec106a1f86357d1a8c7e1/glibc.hash
-rename to package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash
-index 276cd6f7c0..4283ea04b4 100644
---- a/package/glibc/2.30-1-gbe9a328c93834648e0bec106a1f86357d1a8c7e1/glibc.hash
-+++ b/package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  5abb12ac8b756ec900c9d800860041a7920c6b335338af1cba15bab20d54119f  glibc-2.30-1-gbe9a328c93834648e0bec106a1f86357d1a8c7e1.tar.gz
-+sha256  fe1ca8099bc2cda997d8a585f1a512e59df56c52c9c7363a4058da2725c8f4a9  glibc-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91.tar.gz
+NOTE: cereal is bundling external packages like rapidjson and rapidxml.
+The LICENSE file only declares the license for cereal. I opened an issue for
+that [1], not sure what you want to do meanwhile in CEREAL_LICENSE.
+[1] https://github.com/USCiLab/cereal/issues/609
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d9b4864b9f..a48af96961 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2325,6 +2325,7 @@ F:	package/civetweb/
  
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index fd25162920..0e72b2035d 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -16,7 +16,7 @@ GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
- else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--GLIBC_VERSION = 2.30-1-gbe9a328c93834648e0bec106a1f86357d1a8c7e1
-+GLIBC_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
+ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ F:	docs/manual/
++F:	package/cereal/
+ F:	package/opkg-utils/
+ F:	package/perl-convert-asn1/
+ F:	package/perl-crypt-blowfish/
+diff --git a/package/Config.in b/package/Config.in
+index f304a8fbd3..5fb969da8a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1721,6 +1721,7 @@ menu "Other"
+ 	source "package/boost/Config.in"
+ 	source "package/c-capnproto/Config.in"
+ 	source "package/capnproto/Config.in"
++	source "package/cereal/Config.in"
+ 	source "package/clang/Config.in"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
+diff --git a/package/cereal/Config.in b/package/cereal/Config.in
+new file mode 100644
+index 0000000000..3ac463c4fc
+--- /dev/null
++++ b/package/cereal/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_CEREAL
++	bool "cereal"
++	depends on BR2_USE_WCHAR
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	help
++	  cereal is a header-only C++11 serialization library.
++	  cereal takes arbitrary data types and reversibly turns them
++	  into different representations, such as compact binary
++	  encodings, XML or JSON. cereal was designed to be fast,
++	  light-weight, and easy to extend - it has no external
++	  dependencies and can be easily bundled with other code or used
++	  standalone.
++
++	  https://github.com/USCiLab/cereal
++
++comment "cereal needs a toolchain w/ C++, gcc >= 4.7, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP  || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/cereal/cereal.hash b/package/cereal/cereal.hash
+new file mode 100644
+index 0000000000..0dd598ff12
+--- /dev/null
++++ b/package/cereal/cereal.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 329ea3e3130b026c03a4acc50e168e7daff4e6e661bc6a7dfec0d77b570851d5  cereal-1.3.0.tar.gz
++sha256 18fd7618c44c9fe28b5f54cd19747df3c0472ed33e8507fea571e2acf6e72f34  LICENSE
+diff --git a/package/cereal/cereal.mk b/package/cereal/cereal.mk
+new file mode 100644
+index 0000000000..991eee76a2
+--- /dev/null
++++ b/package/cereal/cereal.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# cereal
++#
++################################################################################
++
++CEREAL_VERSION = 1.3.0
++CEREAL_SITE = $(call github,USCiLab,cereal,v$(CEREAL_VERSION))
++CEREAL_LICENSE = BSD-3-Clause
++CEREAL_LICENSE_FILES = LICENSE
++CEREAL_INSTALL_STAGING = YES
++CEREAL_INSTALL_TARGET = NO
++CEREAL_CONF_OPTS = \
++	-DTHREAD_SAFE=ON \
++	-DJUST_INSTALL_CEREAL=ON
++
++$(eval $(cmake-package))
+-- 
+2.23.0
