@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 19:02:36 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libgit2: security
- bump to version 0.28.4
-Message-ID: <20191223180013.895D18DFC8@busybox.osuosl.org>
+Date: Mon, 23 Dec 2019 19:08:06 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libgit2: security
+ bump to version 0.27.10
+Message-ID: <20191223180003.CE7EE8DFC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46f255212669c4504c0db161cd9b30d59759a91b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5f2e1f3fbe0e8a5c13dc849eded3f7c0b7c5692c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes the following CVE:
 
@@ -65,9 +65,6 @@ libgit2 is not affected by these git CVE:
   recursive submodule clones manually are encouraged to review
   their implementation for this vulnerability.
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 818f2be00bc23180943b91e69d8cf820a6cf4bfb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/libgit2/libgit2.hash | 2 +-
@@ -75,24 +72,24 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index f445e4cf0f..d4912c0327 100644
+index 2d06c26d2d..8b3d57eadd 100644
 --- a/package/libgit2/libgit2.hash
 +++ b/package/libgit2/libgit2.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256	ee5344730fe11ce7c86646e19c2d257757be293f5a567548d398fb3af8b8e53b  libgit2-0.28.3.tar.gz
-+sha256	30f3877469d09f2e4a21be933b4e2800560d16646028dd800744dc5f7fb0c749  libgit2-0.28.4.tar.gz
+-sha256	adf17310b590e6e7618f070c742b5ee028aeeed2c60099bc4190c386b5060de1  libgit2-0.27.9.tar.gz
++sha256	f6fd26378ff71bd7a4b17b576c82c774a2e9c2d6b74b24718a8fb29551e1c4a5  libgit2-0.27.10.tar.gz
  sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
 diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index e4d887d9b2..909fcb83f0 100644
+index 25a93d72f3..e797ca5185 100644
 --- a/package/libgit2/libgit2.mk
 +++ b/package/libgit2/libgit2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGIT2_VERSION = 0.28.3
-+LIBGIT2_VERSION = 0.28.4
+-LIBGIT2_VERSION = 0.27.9
++LIBGIT2_VERSION = 0.27.10
  LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
  LIBGIT2_LICENSE = GPL-2.0 with linking exception
  LIBGIT2_LICENSE_FILES = COPYING
