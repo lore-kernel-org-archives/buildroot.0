@@ -1,47 +1,115 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 23 Dec 2019 08:01:17 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-pycares: bump to version
- 3.1.0
-Message-ID: <20191223150117.18522-1-james.hilliard1@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 23 Dec 2019 16:10:59 +0100
+Subject: [Buildroot] [PATCHv2 1/1] package/cereal: new package
+Message-ID: <20191223151100.31067-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-pycares/python-pycares.hash | 4 ++--
- package/python-pycares/python-pycares.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
-index dfe7ca723d..63f5d88aeb 100644
---- a/package/python-pycares/python-pycares.hash
-+++ b/package/python-pycares/python-pycares.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycares/json
--md5	8a53781dd26db01ffe0b3358877bebbd  pycares-3.0.0.tar.gz
--sha256	b253f5dcaa0ac7076b79388a3ac80dd8f3bd979108f813baade40d3a9b8bf0bd  pycares-3.0.0.tar.gz
-+md5	9d71bb8654cd2f7f34bdfe0ba641b59c  pycares-3.1.0.tar.gz
-+sha256	663c000625725d3a63466a674df4ee7f62bf8ca1ae8a0b87a6411eb811e0e794  pycares-3.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256	427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
-diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
-index 3698ec64f5..ecac40fd2d 100644
---- a/package/python-pycares/python-pycares.mk
-+++ b/package/python-pycares/python-pycares.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/cereal/Config.in   | 20 ++++++++++++++++++++
+ package/cereal/cereal.hash |  6 ++++++
+ package/cereal/cereal.mk   | 18 ++++++++++++++++++
+ 5 files changed, 46 insertions(+)
+ create mode 100644 package/cereal/Config.in
+ create mode 100644 package/cereal/cereal.hash
+ create mode 100644 package/cereal/cereal.mk
+
+
+v2: update license info with bundled dependencies (Yann)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d9b4864b9f..a48af96961 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2325,6 +2325,7 @@ F:	package/civetweb/
  
--PYTHON_PYCARES_VERSION = 3.0.0
-+PYTHON_PYCARES_VERSION = 3.1.0
- PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
--PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/85/de/cd46a73e43e206a6ad1e9cf9cc893c3ed1b21caf57f1e0a8d9a119d290eb
-+PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/50/39/d7d4e85041e95c12ccca220663328709da81f75f5e86d76049f0937e9f83
- PYTHON_PYCARES_SETUP_TYPE = setuptools
- PYTHON_PYCARES_LICENSE = MIT
- PYTHON_PYCARES_LICENSE_FILES = LICENSE
+ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ F:	docs/manual/
++F:	package/cereal/
+ F:	package/opkg-utils/
+ F:	package/perl-convert-asn1/
+ F:	package/perl-crypt-blowfish/
+diff --git a/package/Config.in b/package/Config.in
+index f304a8fbd3..5fb969da8a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1721,6 +1721,7 @@ menu "Other"
+ 	source "package/boost/Config.in"
+ 	source "package/c-capnproto/Config.in"
+ 	source "package/capnproto/Config.in"
++	source "package/cereal/Config.in"
+ 	source "package/clang/Config.in"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
+diff --git a/package/cereal/Config.in b/package/cereal/Config.in
+new file mode 100644
+index 0000000000..3ac463c4fc
+--- /dev/null
++++ b/package/cereal/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_CEREAL
++	bool "cereal"
++	depends on BR2_USE_WCHAR
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	help
++	  cereal is a header-only C++11 serialization library.
++	  cereal takes arbitrary data types and reversibly turns them
++	  into different representations, such as compact binary
++	  encodings, XML or JSON. cereal was designed to be fast,
++	  light-weight, and easy to extend - it has no external
++	  dependencies and can be easily bundled with other code or used
++	  standalone.
++
++	  https://github.com/USCiLab/cereal
++
++comment "cereal needs a toolchain w/ C++, gcc >= 4.7, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP  || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/cereal/cereal.hash b/package/cereal/cereal.hash
+new file mode 100644
+index 0000000000..ddaf54e7b4
+--- /dev/null
++++ b/package/cereal/cereal.hash
+@@ -0,0 +1,6 @@
++# Locally computed
++sha256 329ea3e3130b026c03a4acc50e168e7daff4e6e661bc6a7dfec0d77b570851d5  cereal-1.3.0.tar.gz
++sha256 18fd7618c44c9fe28b5f54cd19747df3c0472ed33e8507fea571e2acf6e72f34  LICENSE
++sha256 d9e523e8736ac0c68064c7ad312a222f285e82bf6c96a1b1c2cadaffff9fc64f  include/cereal/external/base64.hpp
++sha256 7fb69c707f0ed3a8b59b8f949f0928a9cc06d67bc15d599094693703ff70ea26  include/cereal/external/rapidjson/rapidjson.h
++sha256 794bf3b2ecf5cf0c740ac6c524d66ce6284c4b1de1f983d21a242b8abbeb9720  include/cereal/external/rapidxml/license.txt
+diff --git a/package/cereal/cereal.mk b/package/cereal/cereal.mk
+new file mode 100644
+index 0000000000..3811fdf32f
+--- /dev/null
++++ b/package/cereal/cereal.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# cereal
++#
++################################################################################
++
++CEREAL_VERSION = 1.3.0
++CEREAL_SITE = $(call github,USCiLab,cereal,v$(CEREAL_VERSION))
++# For licensing, see also: https://github.com/USCiLab/cereal/issues/609
++CEREAL_LICENSE = BSD-3-Clause (cereal), Zlib (base64.hpp), MIT (rapidjson), BSL-1.0 or MIT (rapidxml)
++CEREAL_LICENSE_FILES = LICENSE include/cereal/external/base64.hpp include/cereal/external/rapidjson/rapidjson.h include/cereal/external/rapidxml/license.txt
++CEREAL_INSTALL_STAGING = YES
++CEREAL_INSTALL_TARGET = NO
++CEREAL_CONF_OPTS = \
++	-DTHREAD_SAFE=ON \
++	-DJUST_INSTALL_CEREAL=ON
++
++$(eval $(cmake-package))
 -- 
-2.20.1
+2.24.1
