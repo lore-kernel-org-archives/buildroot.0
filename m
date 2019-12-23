@@ -1,32 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Dec 2019 23:46:13 +0100
-Subject: [Buildroot] [PATCH] package/libnss: fix build failure on
- powerpc without <sys/auxv.h>
-In-Reply-To: <20191210121322.120920-1-giulio.benetti@benettiengineering.com>
-References: <20191210121322.120920-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20191223234613.127b4e2c@windsurf>
+Date: Mon, 23 Dec 2019 23:51:56 +0100
+Subject: [Buildroot] [PATCH/next] modem-manager: fix order of libraries
+ when linking
+In-Reply-To: <20191115094741.59903-1-aleksander@aleksander.es>
+References: <20191115094741.59903-1-aleksander@aleksander.es>
+Message-ID: <20191223235156.4882439f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 10 Dec 2019 13:13:22 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+Hello Aleksander,
 
-> Add patch to fix build failure on PowerPc without <sys/auxv.h>. The patch
-> inserts #if statements to include or note <sys/auxv.h> prior it exists.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/8bf95bd8a0aec8c53889308ab1e00d0a94f53d57/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  ...Fix-PowerPc-build-sys-auxv.h-failure.patch | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 package/libnss/0004-Bug-1602743-Fix-PowerPc-build-sys-auxv.h-failure.patch
+On Fri, 15 Nov 2019 10:47:41 +0100
+Aleksander Morgado <aleksander@aleksander.es> wrote:
 
-Applied to master, thanks.
+> Fixes the following build failure:
+>   http://autobuild.buildroot.net/results/2386d296fd00fca506053d213806200f4bca80d7/build-end.log
+> 
+> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+
+In the mean time, modem-manager was bumped to 1.12.2, and we haven't
+seen any build failures. Was this patch merged upstream perhaps?
+
+Thanks,
 
 Thomas
 -- 
