@@ -1,87 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Dec 2019 20:34:40 +0100
-Subject: [Buildroot] [PATCH 1/1] pakcage/libasio: new package
-In-Reply-To: <20191130232931.2482617-1-aduskett@gmail.com>
-References: <20191130232931.2482617-1-aduskett@gmail.com>
-Message-ID: <20191223203440.5b9bb215@windsurf>
+Date: Mon, 23 Dec 2019 20:51:07 +0100
+Subject: [Buildroot] [git commit] package/python-autobahn: bump to version
+ 19.11.1
+Message-ID: <20191223194200.9B0D18295D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=60308ef387a01a22f29cf5bae79f974a24fea5fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Minor nit: pakcage -> package in the commit title. See below for more
-comments.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Sat, 30 Nov 2019 15:29:31 -0800
-aduskett at gmail.com wrote:
-
-
-> diff --git a/package/libasio/0002-fix-static-linking-with-openssl-support.patch b/package/libasio/0002-fix-static-linking-with-openssl-support.patch
-> new file mode 100644
-> index 0000000000..e450212938
-> --- /dev/null
-> +++ b/package/libasio/0002-fix-static-linking-with-openssl-support.patch
-> @@ -0,0 +1,30 @@
-> +From 70f76fdcd127d1bd59b43f46267a21949c552026 Mon Sep 17 00:00:00 2001
-> +From: Adam Duskett <Aduskett@gmail.com>
-> +Date: Sat, 30 Nov 2019 14:17:10 -0800
-> +Subject: [PATCH] fix static linking with openssl support
-> +
-> +Dynamic builds of libcrypto would also include libz, but during static builds
-> +this is not true. Always specifying -lz fixes building against static builds of
-> +openssl.
-> +
-> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> +---
-> + asio/configure.ac | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/asio/configure.ac b/asio/configure.ac
-> +index 2e20b84..ca74108 100644
-> +--- a/asio/configure.ac
-> ++++ b/asio/configure.ac
-> +@@ -60,7 +60,7 @@ AC_CHECK_HEADER([openssl/ssl.h],,
-> + ],[])
-> + 
-> + if test x$OPENSSL_FOUND != xno; then
-> +-  LIBS="$LIBS -lssl -lcrypto"
-> ++  LIBS="$LIBS -lssl -lcrypto -lz"
-
-It is a bit sad that this is forced in all builds. We generally handle
-this either by using pkg-config in the .ac file (best) or
-alternatively, by using pkg-config in the .mk file, and passing the
-appropriate LIBS option in <pkg>_CONF_ENV.
-
-However, this library is a header-only library, so it doesn't really
-need to link with OpenSSL or bother with static linking issues. Only
-the examples/tests need that.
-
-So I'd say that a better solution is a patch that adds
---disable-examples/--disable-tests options, and then uses them.
-
-> diff --git a/package/libasio/Config.in b/package/libasio/Config.in
-> new file mode 100644
-> index 0000000000..8689018d8a
-> --- /dev/null
-> +++ b/package/libasio/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_LIBASIO
-> +	bool "libasio"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_USE_WCHAR
-> +	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-
-Could you explain this dependency? Indeed, this dependency is already
-part of BR2_TOOLCHAIN_HAS_GCC_BUG_64735. 
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 4020daa6b9..1dc6c1eeaf 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5	8900783822b570e0395c4bade08e0d51  autobahn-19.10.1.tar.gz
+-sha256	734385b00547448b3f30a752cbfd2900d15924d77dc4a1699b8bce1ea8899f39  autobahn-19.10.1.tar.gz
++md5	472d965c75dba0f8cb5f3b9f9001ed1b  autobahn-19.11.1.tar.gz
++sha256	201b9879b49c6e259d4126dbafe9e3c73807de0c242d50065fbebc62c6ccb181  autobahn-19.11.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index 9296492649..6c5c608b9a 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AUTOBAHN_VERSION = 19.10.1
++PYTHON_AUTOBAHN_VERSION = 19.11.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/8d/bb/024c4e669f0b82bc895f95c10105156db0543648db8305390730c4078edf
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/3f/f4/e907b172d3c1d912b8da57560b8b298ebad22f900f8a412002247716328a
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
