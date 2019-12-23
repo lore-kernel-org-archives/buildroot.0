@@ -1,31 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 09:03:24 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libfribidi:
- enable host build
-Message-ID: <20191223075903.8C7048DEC1@busybox.osuosl.org>
+Date: Mon, 23 Dec 2019 09:04:22 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/efl: drop invalid
+ select BR2_PACKAGE_XLIB_LIBXP
+Message-ID: <20191223075903.A76A38D7B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6a2420a95911bbbf757d81d03c3e8f7cda5672d
+commit: https://git.buildroot.net/buildroot/commit/?id=1f906d44b99b73f99577d7d8192db194e859877c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+The option BR2_PACKAGE_XLIB_LIBXP does not exist, but is select by
+efl/Config.in since the package was introduced. Since all xlib_*
+dependency in the .mk file each have a corresponding select in the
+Config.in file, we simply drop this bogus dependency.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4bfa49d1957e1381324a8c532739ee46f18063cd)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 286b06e9d4fe26f0b5f8787b4afeb5a851f9d03e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfribidi/libfribidi.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/efl/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
-index 4394623592..0e17be6db0 100644
---- a/package/libfribidi/libfribidi.mk
-+++ b/package/libfribidi/libfribidi.mk
-@@ -13,3 +13,4 @@ LIBFRIBIDI_INSTALL_STAGING = YES
- LIBFRIBIDI_DEPENDENCIES = host-pkgconf
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 3e7097df74..98b5b0731a 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -166,7 +166,6 @@ config BR2_PACKAGE_EFL_X_XLIB
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA
+-	select BR2_PACKAGE_XLIB_LIBXP
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER
+ 	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
