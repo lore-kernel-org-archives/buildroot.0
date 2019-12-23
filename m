@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 10:05:32 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x]
+Date: Mon, 23 Dec 2019 10:05:14 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x]
  package/python-subprocess32: add PYTHON_SUBPROCESS32_CONFIGURE_CMDS
-Message-ID: <20191223085710.4D2B48DF6B@busybox.osuosl.org>
+Message-ID: <20191223085715.0077B8DF6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54f30bf6368268a3fed87b01a2be0ed54aff2686
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=11a70c7f1000d56077a731da2775d97b46fd5fd5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Since commit 1745fcde740057951dcc5429f3bfabd103b764a1,
 python-subprocess32 fails to build because it runs configure with
@@ -28,7 +28,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 17 insertions(+)
 
 diff --git a/package/python-subprocess32/python-subprocess32.mk b/package/python-subprocess32/python-subprocess32.mk
-index d6c57fb8bd..c635196e90 100644
+index ee591e6a6b..fb8a47f974 100644
 --- a/package/python-subprocess32/python-subprocess32.mk
 +++ b/package/python-subprocess32/python-subprocess32.mk
 @@ -11,4 +11,21 @@ PYTHON_SUBPROCESS32_SETUP_TYPE = setuptools
