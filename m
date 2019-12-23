@@ -1,96 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Dec 2019 22:05:14 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/libsemanage: add option to
- manually define policy version
-In-Reply-To: <20191215180003.2162894-1-aduskett@gmail.com>
-References: <20191215180003.2162894-1-aduskett@gmail.com>
-Message-ID: <20191223220514.1dd1fcaf@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 23 Dec 2019 22:36:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libffi: fix build failure on power7
+ and older
+Message-ID: <20191223213610.142006-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+Fixes:
+ - http://autobuild.buildroot.org/results/3ab73995b8393592c0b147670d8ff7f8ebc8c79c
 
-On Sun, 15 Dec 2019 10:00:03 -0800
-aduskett at gmail.com wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ix-build-failure-on-power7-and-older.patch | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/libffi/0005-powerpc-fix-build-failure-on-power7-and-older.patch
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> The semodule package derives the maximum SELinux policy version from
-> the libsemanage library.
-> 
-> By default, libsemanage returns the highest supported policy version that
-> libsepol supports found in include/sepol/policydb/policydb.h and not just from
-> the Kernel. However, if the maximum supported SELinux policy version supported
-> by the Kernel is lower than the maximum supported policy version from
-> libsemanage, if a user attempts to build a policy using the semodule program,
-> semodule fails when creating a policy with the error:
->   "policydb version X does not match my version range 15-X."
-> 
-> This default value may be overwrriten by setting the policy-version = line in
-> /etc/semanage/semanage.conf.
-> 
-> Create an option that allows a user to overwrite the default policy version to
-> ensure that semodule works on older kernels.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-
-So, I had a more serious look into this. I have some implementation
-details which I fixed up locally, but then had some second thoughts.
-
-The thing that made me wonder is that you are adding an option for the
-*target* version of libsemanage, but it also affects libsemanage on the
-host. But what if you don't have libsemanage on the target? I think it
-is not mandatory to have it on the target. In this case, how would you
-select the policy version ?
-
-Ideally, the selection of the policy version should be chosen together
-with the policy itself, or somewhere close to where the policy
-compilation happens.
-
-And it turns out we already have such an option that exists in Buildroot:
-
-config BR2_PACKAGE_REFPOLICY_POLICY_VERSION
-        string "Policy version"
-        default "30"
-
-why don't we use this version ?
-
-It's used in refpolicy.mk to create the build.conf:
-
-define REFPOLICY_CONFIGURE_CMDS
-        $(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = $(REFPOLICY_POLICY_VERSION)" \
-                $(@D)/build.conf
-
-How does this interacts with libsemanage ?
-
-I nevertheless give my minor implementation details below.
-
-> +define LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY_TARGET
-> +	$(SED) "/policy-version = /c\policy-version = $(LIBSEMANAGE_MAX_POLICY_VERSION)" \
-> +		$(TARGET_DIR)/etc/selinux/semanage.conf
-
-This command can go directly in LIBSEMANAGE_INSTALL_TARGET_CMDS.
-
-> +endef
-> +define LIBSEMANAGE_SET_SEMANAGE_MAX_POLICY_HOST
-> +	$(SED) "/policy-version = /c\policy-version = $(LIBSEMANAGE_MAX_POLICY_VERSION)" \
-> +		$(HOST_DIR)/etc/selinux/semanage.conf
-
-This command can go directly in HOST_LIBSEMANAGE_INSTALL_CMDS. The name
-of the hook was not very well chosen in any case, as we prefer to have
-HOST_ as a prefix rather than a suffix.
-
-Again, these are minor details that I had fixed locally. It's really
-the more fundamental questions above that makes me wonder what is the
-right solution.
-
-Thanks!
-
-Thomas
+diff --git a/package/libffi/0005-powerpc-fix-build-failure-on-power7-and-older.patch b/package/libffi/0005-powerpc-fix-build-failure-on-power7-and-older.patch
+new file mode 100644
+index 0000000000..d0b91dda68
+--- /dev/null
++++ b/package/libffi/0005-powerpc-fix-build-failure-on-power7-and-older.patch
+@@ -0,0 +1,39 @@
++From 01a75ed76ea7e57f1b7a5c183e2b1e890e6aa0fd Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyfox@gentoo.org>
++Date: Thu, 28 Nov 2019 12:42:41 +0000
++Subject: [PATCH] powerpc: fix build failure on power7 and older (#532)
++
++Build failure looks as:
++```
++libtool: compile:  powerpc-unknown-linux-gnu-gcc \
++    -O2 -mcpu=powerpc -mtune=powerpc -pipe ... -c src/powerpc/ffi.c ...
++In file included from src/powerpc/ffi.c:33:
++src/powerpc/ffi_powerpc.h:65:9: error: '__int128' is not supported on this target
++   65 | typedef __int128 float128;
++      |         ^~~~~~~~
++```
++
++The fix avoids using __int128 in favour of aligned char[16].
++
++Closes: https://github.com/libffi/libffi/issues/531
++Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
++[Retrieved from:
++https://github.com/libffi/libffi/commit/01a75ed76ea7e57f1b7a5c183e2b1e890e6aa0fd]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/powerpc/ffi_powerpc.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/powerpc/ffi_powerpc.h b/src/powerpc/ffi_powerpc.h
++index 5ee2a709..8e2f2f0e 100644
++--- a/src/powerpc/ffi_powerpc.h
+++++ b/src/powerpc/ffi_powerpc.h
++@@ -62,7 +62,7 @@ typedef _Float128 float128;
++ #elif defined(__FLOAT128__)
++ typedef __float128 float128;
++ #else
++-typedef __int128 float128;
+++typedef char float128[16] __attribute__((aligned(16)));
++ #endif
++ 
++ void FFI_HIDDEN ffi_closure_SYSV (void);
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.24.0
