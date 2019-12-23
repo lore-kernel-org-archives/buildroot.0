@@ -1,69 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Dec 2019 18:16:58 +0100
-Subject: [Buildroot] [PATCH] support/download/svn: generate reproducible
- svn archives
-In-Reply-To: <20191222225727.7e8f88d4@windsurf>
-References: <20191222213148.13762-1-heiko.thiery@gmail.com>
- <20191222223650.1f44d3ca@windsurf>
- <CAEyMn7aZgVT2hmb8O4duNFeD4_x2_jkChOj9Cv3MAtVXZhQNLQ@mail.gmail.com>
- <20191222225727.7e8f88d4@windsurf>
-Message-ID: <20191223171658.GN26395@scaer>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Mon, 23 Dec 2019 18:23:55 +0100
+Subject: [Buildroot] [PATCH v4 0/2] new Avro packages
+Message-ID: <20191223172357.68914-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Heiko, All,
+Apache Avro is a data serialization system, somewhat similar to protobuff or
+cap'n proto. Unlike them however, Avro schemas can be distributed in JSON
+files to be loaded at runtime, rather than language-specific generated code
+to use at compile time, even though the latter is also possible with Avro.
 
-On 2019-12-22 22:57 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 22 Dec 2019 22:40:43 +0100
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
-> 
-> > > Thanks. Could you check whether the tarballs that are now produced by
-> > > this are identical to the tarballs we already have on
-> > > sources.buildroot.org ?  
-> > 
-> > I checked this for the fis package and unfortunately this is not the
-> > case. Do you expect to have the same hashes?
-> 
-> Probably not, because with your change we now generate the tarballs
-> differently.
-> 
-> Normally, it is annoying because it means the hash has changed,
-> breaking the build for older Buildroot users, if we update the tarballs
-> on sources.buildroot.org.
-> 
-> However, in this case, current Buildroot does not have any hash (as far
-> as I can see) for Subversion-fetched packages. So we could introduce
-> your change and update the tarballs on sources.buildroot.org at the
-> same time, and then introduce hashes in those packages.
-> 
-> Peter, Yann, what do you think ?
+http://avro.apache.org/
 
-I am 100% on-line with regenerating the tarballs so they are reproducible,
-even if that means updating s.b.o.
+This series adds 2 packages for the Avro serialization format:
+* 1 package for the C language bindings and files manipulation utilities
+* 1 package for the Python3 language bindings, and a file manipulation utility
 
-> We have only very few Subversion-fetched packages, I think we should
-> keep it simple.
+There are also Avro bindings for other languages such as C++, C#, Java,
+Javascript, Perl, PHP or Ruby. However, because I am not familiar with these
+ones and not using them, they are not part of this initial series.
+---
+Changes v1->v2:
+* Use per-language archives from upstream
+* Split new packages in multiple patches
+* Keep my DEVELOPERS packages in alphabetical order
 
-In practice, we have only two: fis and open2300. The other packages that
-may use svn are those where the user would set the version, so they
-would anyway be excluded from the hash check.
+Changes v2->v3:
+* avro-c depends on zlib, snappy if they are enabled
+* NOTICE is not part of the license files
+* fix musl patch format for avro-c
+* display the prompt "avro-c" in menuconfig and add comment for shared libs
+* add upstream url in Config.in
 
-Regards,
-Yann E. MORIN.
+Changes v3->v4:
+* Update upstream patch status
+* avro-c needs host-pkgconf
+* avro-c depends on xz when selected, enabling the lzma compression codec
+---
+Titouan Christophe (2):
+  package/avro-c: new package
+  package/python-avro: new package
 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+ DEVELOPERS                                |  2 ++
+ package/Config.in                         |  2 ++
+ package/avro-c/0001-Compile-on-musl.patch | 40 +++++++++++++++++++++++
+ package/avro-c/Config.in                  | 25 ++++++++++++++
+ package/avro-c/avro-c.hash                |  5 +++
+ package/avro-c/avro-c.mk                  | 26 +++++++++++++++
+ package/python-avro/Config.in             | 20 ++++++++++++
+ package/python-avro/python-avro.hash      |  5 +++
+ package/python-avro/python-avro.mk        | 14 ++++++++
+ 9 files changed, 139 insertions(+)
+ create mode 100644 package/avro-c/0001-Compile-on-musl.patch
+ create mode 100644 package/avro-c/Config.in
+ create mode 100644 package/avro-c/avro-c.hash
+ create mode 100644 package/avro-c/avro-c.mk
+ create mode 100644 package/python-avro/Config.in
+ create mode 100644 package/python-avro/python-avro.hash
+ create mode 100644 package/python-avro/python-avro.mk
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.23.0
