@@ -1,39 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 23:07:27 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/tftpd: add an
- upstream URL to Config.in
-Message-ID: <20191223220025.2A73A8E0C3@busybox.osuosl.org>
+Date: Mon, 23 Dec 2019 23:07:20 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/w_scan: update
+ the upstream URL in Config.in
+Message-ID: <20191223220025.10A3A8E0C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a5313ccf4bbabd5678383f2f53f54d9dd6b9aaa
+commit: https://git.buildroot.net/buildroot/commit/?id=4234ff4cc4d1545c88e1d3c591e8cb0a475599fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
+Update the upstream URL in the help text in Config.in. This
+addresses the 'Invalid(Err)' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-[yann.morin.1998 at free.fr:
-  - use the git tree instead of the 8-year old freshmeat webpage
-]
+[yann.morin.1998 at free.fr: use offical (de) homepage]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 23ac8317a65ca74d931887415a793e36bbd243f4)
+(cherry picked from commit 2ca152fb7025a423a73cc45ebf53a3d102de0e28)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tftpd/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/w_scan/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tftpd/Config.in b/package/tftpd/Config.in
-index ea5cb303f9..d4e81e70bc 100644
---- a/package/tftpd/Config.in
-+++ b/package/tftpd/Config.in
-@@ -6,3 +6,5 @@ config BR2_PACKAGE_TFTPD
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	help
- 	  HPA's Trivial File Transfer Protocol (tftp) server.
-+
-+	  https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
+diff --git a/package/w_scan/Config.in b/package/w_scan/Config.in
+index 01dbbae122..d5471200ad 100644
+--- a/package/w_scan/Config.in
++++ b/package/w_scan/Config.in
+@@ -11,4 +11,4 @@ config BR2_PACKAGE_W_SCAN
+ 	  capable of creating channels.conf files (in different output
+ 	  formats !) as well as initial tuning data for scan.
+ 
+-	  http://wirbel.htpc-forum.de/w_scan/index_en.html
++	  https://www.gen2vdr.de/wirbel/w_scan/index2.html
