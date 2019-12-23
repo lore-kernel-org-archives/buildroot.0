@@ -1,26 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Dec 2019 23:09:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tftpd: add an upstream URL to
- Config.in
-In-Reply-To: <20191218133717.28343-1-mark@dibsco.co.uk> (Mark Corbin's message
- of "Wed, 18 Dec 2019 13:37:17 +0000")
-References: <20191218133717.28343-1-mark@dibsco.co.uk>
-Message-ID: <87mubiu22i.fsf@dell.be.48ers.dk>
+Date: Mon, 23 Dec 2019 23:07:27 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/tftpd: add an
+ upstream URL to Config.in
+Message-ID: <20191223220025.2A73A8E0C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mark" == Mark Corbin <mark@dibsco.co.uk> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4a5313ccf4bbabd5678383f2f53f54d9dd6b9aaa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Add an upstream URL to the help text in Config.in. This
- > addresses the 'Missing' URL status in the package stats
- > web page output.
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
- > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+[yann.morin.1998 at free.fr:
+  - use the git tree instead of the 8-year old freshmeat webpage
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 23ac8317a65ca74d931887415a793e36bbd243f4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tftpd/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tftpd/Config.in b/package/tftpd/Config.in
+index ea5cb303f9..d4e81e70bc 100644
+--- a/package/tftpd/Config.in
++++ b/package/tftpd/Config.in
+@@ -6,3 +6,5 @@ config BR2_PACKAGE_TFTPD
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
+ 	  HPA's Trivial File Transfer Protocol (tftp) server.
++
++	  https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
