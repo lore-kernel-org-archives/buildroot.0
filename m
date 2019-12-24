@@ -1,38 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 13:45:57 +0100
-Subject: [Buildroot] [PATCH] package/fontconfig: Fix UUIDD dependency
-In-Reply-To: <20191224112330.14173-1-michael@amarulasolutions.com>
-References: <20191224112330.14173-1-michael@amarulasolutions.com>
-Message-ID: <20191224134557.43cadbf2@windsurf>
+Date: Tue, 24 Dec 2019 13:47:00 +0100
+Subject: [Buildroot] [git commit] package/quota: add autoreconf
+Message-ID: <20191224123757.772108E1AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael,
+commit: https://git.buildroot.net/buildroot/commit/?id=4f1ff8d7dd3ddcf48b9ac600e12509d2d729a6cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 24 Dec 2019 12:23:30 +0100
-Michael Trimarchi <michael@amarulasolutions.com> wrote:
+Commit feef4b733c4e5a6ee89d1554d29786304be7a720 added a patch on
+configure.ac but forgot to set QUOTA_AUTORECONF=YES
 
-> The build with BR2_PACKAGE_XORG7 and BR2_PACKAGE_OPENJDK
-> was failing for missing include of uuid support.
-> The BR2_PACKAGE_UTIL_LINUX_UUIDD select automatically
-> BR2_PACKAGE_UTIL_LINUX_LIBUUID but the first one is needed
-> 
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/15f2dbfbafc91719ad1f5209811300ddaa5cec91
 
-Thanks for your patch! Could you give some more details about the
-configuration that is failing and the exact error you are getting ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/quota/quota.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Indeed, fontconfig does not fail to build in the autobuilders, so I'd
-like to understand what is the exact issue, and make sure we are doing
-the right fix.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 8c7563d289..aafce0d1e9 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -9,6 +9,8 @@ QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(Q
+ QUOTA_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-nfs-utils
+ QUOTA_LICENSE = GPL-2.0+
+ QUOTA_LICENSE_FILES = COPYING
++# We're patching configure.ac
++QUOTA_AUTORECONF = YES
+ QUOTA_LIBS = $(TARGET_NLS_LIBS)
+ QUOTA_CONF_OPTS = --disable-pie
+ 
