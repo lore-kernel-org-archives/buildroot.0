@@ -1,65 +1,97 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 24 Dec 2019 17:02:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/librsvg: add libcroco to
- Requires.private
-Message-ID: <20191224160243.1310468-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 24 Dec 2019 18:53:49 +0100
+Subject: [Buildroot] [PATCH] lua-codegen: new package
+In-Reply-To: <20190905080839.11940-1-francois.perrad@gadz.org>
+References: <20190905080839.11940-1-francois.perrad@gadz.org>
+Message-ID: <4a4d2b07-d72c-f0b0-68b2-a2d0e3ebf1fc@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will fix a static build failure with imagemagick
+Hi Francois,
 
-Fixes:
- - http://autobuild.buildroot.org/results/42f4b4881569779162d3efe4628b934f965913b9
+please use "package/lua-codegen: new package" as first line commit log.
+And please provide a little description of the package in commit log.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ....in-add-libcroco-to-Requires.Private.patch | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
+On 9/5/19 10:08 AM, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>   package/Config.in                    |  1 +
+>   package/lua-codegen/Config.in        |  6 ++++++
+>   package/lua-codegen/lua-codegen.hash |  3 +++
+>   package/lua-codegen/lua-codegen.mk   | 12 ++++++++++++
+>   4 files changed, 22 insertions(+)
+>   create mode 100644 package/lua-codegen/Config.in
+>   create mode 100644 package/lua-codegen/lua-codegen.hash
+>   create mode 100644 package/lua-codegen/lua-codegen.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 710ed12be..8b5719d46 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -617,6 +617,7 @@ menu "Lua libraries/modules"
+>   	source "package/lua-cjson/Config.in"
+>   	source "package/lua-coat/Config.in"
+>   	source "package/lua-coatpersistent/Config.in"
+> +	source "package/lua-codegen/Config.in"
+>   	source "package/lua-compat53/Config.in"
+>   	source "package/lua-cqueues/Config.in"
+>   	source "package/lua-csnappy/Config.in"
+> diff --git a/package/lua-codegen/Config.in b/package/lua-codegen/Config.in
+> new file mode 100644
+> index 000000000..bc0ca3d14
+> --- /dev/null
+> +++ b/package/lua-codegen/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_LUA_CODEGEN
+> +	bool "lua-codegen"
+> +	help
+> +	  a template engine.
 
-diff --git a/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch b/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
-new file mode 100644
-index 0000000000..0eea5b995b
---- /dev/null
-+++ b/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
-@@ -0,0 +1,35 @@
-+From 322b415f92d4dcd36824eef83bd617bac6e5c8c7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 24 Dec 2019 16:38:35 +0100
-+Subject: [PATCH] librsvg.pc.in: add libcroco to Requires.private
-+
-+libcroco is a mandatory dependency since version 2.35.0 so add it to
-+Requires.Private to fix a static build failure with imagemagick
-+
-+This patch is not upstreamable as librsvg no longer depends on libcroco
-+since version 2.47.1. It now does all CSS processing using Rust crates
-+from Mozilla Servo.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/42f4b4881569779162d3efe4628b934f965913b9
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ librsvg.pc.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/librsvg.pc.in b/librsvg.pc.in
-+index a451de05..4b09984a 100644
-+--- a/librsvg.pc.in
-++++ b/librsvg.pc.in
-+@@ -10,6 +10,6 @@ Name: librsvg
-+ Description: library that renders svg files
-+ Version: @VERSION@
-+ Requires: glib-2.0 gio-2.0 gdk-pixbuf-2.0 cairo
-+-Requires.private:
-++Requires.private: libcroco-0.6
-+ Libs: -L${libdir} -lrsvg- at RSVG_API_MAJOR_VERSION@ -lm
-+ Cflags: -I${includedir}/librsvg- at RSVG_API_VERSION@
-+-- 
-+2.24.0
-+
+Here let's use capital "A template engine", but please improve a little 
+bit the description above.
+
+> +
+> +	  https://fperrad.frama.io/lua-CodeGen
+> diff --git a/package/lua-codegen/lua-codegen.hash b/package/lua-codegen/lua-codegen.hash
+> new file mode 100644
+> index 000000000..0b49a5a78
+> --- /dev/null
+> +++ b/package/lua-codegen/lua-codegen.hash
+> @@ -0,0 +1,3 @@
+> +# computed by luarocks/buildroot
+> +sha256 c09126d7f5d0fa9c867ee9108eb5961dab111320ee35e5f842317f6058e922ec  lua-codegen-0.3.3-1.src.rock
+> +sha256 f09265c450c3a59558ecc552ea4ba61e5a74dec995738eec545d121718833a80  lua-CodeGen-0.3.3/COPYRIGHT
+> diff --git a/package/lua-codegen/lua-codegen.mk b/package/lua-codegen/lua-codegen.mk
+> new file mode 100644
+> index 000000000..caa9008e5
+> --- /dev/null
+> +++ b/package/lua-codegen/lua-codegen.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# lua-codegen
+> +#
+> +################################################################################
+> +
+> +LUA_CODEGEN_VERSION = 0.3.3-1
+> +LUA_CODEGEN_NAME_UPSTREAM = lua-CodeGen
+> +LUA_CODEGEN_LICENSE = MIT
+> +LUA_CODEGEN_LICENSE_FILES = $(LUA_CODEGEN_SUBDIR)/COPYRIGHT
+> +
+> +$(eval $(luarocks-package))
+> 
+
+For the rest, it builds correctly and it looks ok to me, so:
+
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Maybe it should be enough if you provide those 2 little descriptions 
+answering inline without submit a v2.
+
+Best regards
 -- 
-2.24.0
+Giulio Benetti
+Benetti Engineering sas
