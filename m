@@ -1,49 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 15:00:59 +0100
-Subject: [Buildroot] [git commit] package/ecryptfs-utils: add optional
- dependency on linux-pam
-Message-ID: <20191224140121.8466A8E265@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 24 Dec 2019 17:10:32 +0300
+Subject: [Buildroot] [PATCH] arch/arc: Explicitly set "max-page-size" for
+ GNU LD
+Message-ID: <20191224141032.34544-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ba786d22c714293c14ba13f44fdc282406987d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Back in the day we relied on a default value that used to be 8KiB
+and it worked perfectly fine for ARC's default 8KiB page as well as
+4 KiB ones, but not for 16 KiB, see [1] for more details.
 
-If linux-pam is enabled, we want to build pam_ecryptfs.so and install
-it into /lib/security/.
+So that we fixed by setting "max-page-size" if 16KiB pages are in use by
+commit d024d369b82d2 ("arch/arc: Accommodate 16 KiB MMU pages").
 
-Signed-off-by: Yi Zheng <goodmenzy@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+But as Yann very rightfully mentioned here [2] we should be setting this
+thing explicitly for all page sizes because:
+ 1. Defaults might change unexpectedly
+ 2. Explicitly set stuff is better understood
+ 3. We act similarly to all settings but not only addressing some corner cases
+
+[1] https://git.buildroot.org/buildroot/commit/?id=d024d369b82d2d3d9d4d75489c19e9488202bca0
+[2] https://patchwork.ozlabs.org/patch/1212544/#2330647
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ecryptfs-utils/ecryptfs-utils.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ arch/arch.mk.arc | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
-index eb3194b6d0..326ff4f2dd 100644
---- a/package/ecryptfs-utils/ecryptfs-utils.mk
-+++ b/package/ecryptfs-utils/ecryptfs-utils.mk
-@@ -11,13 +11,20 @@ ECRYPTFS_UTILS_LICENSE = GPL-2.0+
- ECRYPTFS_UTILS_LICENSE_FILES = COPYING
+diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
+index 9c04a85a8d..7eb1b95aa7 100644
+--- a/arch/arch.mk.arc
++++ b/arch/arch.mk.arc
+@@ -5,8 +5,15 @@ ifeq ($(BR2_ARC_ATOMIC_EXT),y)
+ ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
+ endif
  
- ECRYPTFS_UTILS_DEPENDENCIES = keyutils libnss host-intltool
--ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap --disable-pam
-+ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
- 
- #Needed for build system to find pk11func.h and libnss3.so
- ECRYPTFS_UTILS_CONF_ENV = \
- 	NSS_CFLAGS="-I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr" \
- 	NSS_LIBS="-lnss3"
- 
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+ECRYPTFS_UTILS_CONF_OPTS += --enable-pam
-+ECRYPTFS_UTILS_DEPENDENCIES += linux-pam
-+else
-+ECRYPTFS_UTILS_CONF_OPTS += --disable-pam
+-# By default MAXPAGESIZE for ARC is 8192 so for larger MMU pages
+-# it needs to be overridden.
++# Explicitly set LD's "max-page-size" instead of relying on some defaults
++ifeq ($(BR2_ARC_PAGE_SIZE_4K),y)
++ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=4096
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- ECRYPTFS_UTILS_CONF_OPTS += --enable-openssl
- ECRYPTFS_UTILS_DEPENDENCIES += openssl
++ifeq ($(BR2_ARC_PAGE_SIZE_8K),y)
++ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=8192
++endif
++
+ ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
+ ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384
+ endif
+-- 
+2.16.2
