@@ -1,35 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 15:22:00 +0100
-Subject: [Buildroot] [PATCH] package/libfcgi: bump to version 2.4.2
-In-Reply-To: <20191126214201.95129-1-louis.rannou@smile.fr>
-References: <Re: [Buildroot] [PATCH] package/libfcgi: bump to version 2.4.2>
- <20191126214201.95129-1-louis.rannou@smile.fr>
-Message-ID: <20191224152200.614b852a@windsurf>
+Date: Tue, 24 Dec 2019 15:30:14 +0100
+Subject: [Buildroot] [git commit] package/ntp: override host shell check
+Message-ID: <20191224142319.A32A48E274@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Nov 2019 22:42:01 +0100
-Louis Rannou <louis.rannou@smile.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=88f79481878c7adf9642e208c72dea7fe367bee8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> FCGI is abandonned (https://repo.or.cz/fcgi2.git). Replace it by a maintained
-> fork (https://github.com/FastCGI-Archives/fcgi2).
-> 
-> Patchs status:
-> 0001-eof.patch -> fixed by commit 122e55cc354dd4a78849aed8d36c61ed9edeaeb2
-> 0002-link-against-libfcgi-la.patch -> included in commit 2a575066bcbdadfc161d46ef816a45f6edf9d529
-> 0004-make-autoreconfable.patch -> fixed in commits 854643b36e87cf1262da2eb82b3f10b56185131b and ad30485fa12be4415d57422702ee4f64a09b7bea
-> 0006-fix-CVE-2012-6687.patch -> applied in commit 5c15a7bb5260bc83715090c9fd386d704c139671
-> 
-> Signed-off-by: Louis Rannou <louis.rannou@smile.fr>
-> ---
+Add a patch from the upstream AutoGen package that allows POSIX_SHELL
+to be taken from the environment, then define that to be '/bin/sh'.
 
-Applied to master, thanks.
+Since we are cross-compiling, the original behaviour of detecting the
+host shell is not useful as we cannot assume that the target uses the
+same shell, and it can prevent builds being reproducible because a
+different host environment will result in a different target binary.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: James Byrne <james.byrne@origamienergy.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ntp/0003-override-shell.patch | 20 ++++++++++++++++++++
+ package/ntp/ntp.mk                    |  2 +-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/package/ntp/0003-override-shell.patch b/package/ntp/0003-override-shell.patch
+new file mode 100644
+index 0000000000..0161e6520a
+--- /dev/null
++++ b/package/ntp/0003-override-shell.patch
+@@ -0,0 +1,20 @@
++sntp/libopts/m4/libopts.m4: allow override shell with POSIX_SHELL
++
++Pull in fix from upstream AutoGen [1] to accept POSIX_SHELL from the
++environment during the configure step.
++
++[1] http://git.savannah.gnu.org/cgit/autogen.git/commit/?id=db064b9a252f3ef3d8db25411ea0edb0ff8ea758
++
++Signed-off-by: James Byrne <james.byrne@origamienergy.com>
++
++diff --git a/sntp/libopts/m4/libopts.m4 b/sntp/libopts/m4/libopts.m4
++--- a/sntp/libopts/m4/libopts.m4
+++++ b/sntp/libopts/m4/libopts.m4
++@@ -114,6 +114,7 @@
++   AC_PROG_SED
++   [while :
++   do
+++      test -x "$POSIX_SHELL" && break
++       POSIX_SHELL=`which bash`
++       test -x "$POSIX_SHELL" && break
++       POSIX_SHELL=`which dash`
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index fb138a8fba..4cede8b154 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -10,7 +10,7 @@ NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJO
+ NTP_DEPENDENCIES = host-pkgconf libevent
+ NTP_LICENSE = NTP
+ NTP_LICENSE_FILES = COPYRIGHT
+-NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
++NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no POSIX_SHELL=/bin/sh
+ NTP_CONF_OPTS = \
+ 	--with-shared \
+ 	--program-transform-name=s,,, \
