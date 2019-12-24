@@ -1,37 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 13:53:02 +0100
-Subject: [Buildroot] [git commit] package/fluidsynth: alsa support needs
- rawmidi and seq
-Message-ID: <20191224124353.4F2348E1CB@busybox.osuosl.org>
+Date: Tue, 24 Dec 2019 13:51:52 +0100
+Subject: [Buildroot] [git commit] package/apitrace: needs dynamic library
+Message-ID: <20191224124353.38E448E1CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fa9476853e3b1d88bed4b30162c3026b303548f
+commit: https://git.buildroot.net/buildroot/commit/?id=6d3318ae7d07b1e26a557521b15276a4be1a567f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+apitrace uses dlfcn.h in lib/os/os_backtrace.cpp if _Unwind_Backtrace
+symbol is found in unwind.h. dlfcn.h is also used in 9 other source
+files
+
 Fixes:
- - http://autobuild.buildroot.org/results/8c8149a7cf87f24271fa6af8a6c81d2dfe241bbe
- - http://autobuild.buildroot.org/results/d7b05205b0bb45d927b5bb462e06fd8c345ebc42
+ - http://autobuild.buildroot.org/results/4d60477cc46e4071dd3da21abfe7082e0d12cee2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fluidsynth/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/apitrace/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/fluidsynth/Config.in b/package/fluidsynth/Config.in
-index c4818c3790..c1cb923489 100644
---- a/package/fluidsynth/Config.in
-+++ b/package/fluidsynth/Config.in
-@@ -23,6 +23,8 @@ config BR2_PACKAGE_FLUIDSYNTH_ALSA_LIB
- 	default y
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
-+	select BR2_PACKAGE_ALSA_LIB_SEQ
- 	help
- 	  Enable alsa support.
+diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
+index abd7ae00ee..263eec5e7d 100644
+--- a/package/apitrace/Config.in
++++ b/package/apitrace/Config.in
+@@ -1,7 +1,7 @@
+-comment "apitrace needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
++comment "apitrace needs a toolchain w/ C++, wchar, dynamic library, threads, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
  
+ config BR2_PACKAGE_APITRACE
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_APITRACE
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
