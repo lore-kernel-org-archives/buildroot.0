@@ -1,55 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 14:34:14 +0100
-Subject: [Buildroot] [git commit] boot/barebox: bump version to 2019.12.0
-Message-ID: <20191224132526.BBB638E1F1@busybox.osuosl.org>
+Date: Tue, 24 Dec 2019 14:36:23 +0100
+Subject: [Buildroot] [PATCH] package/fontconfig: Fix UUIDD dependency
+In-Reply-To: <CAOf5uw=cG3nm8mWfVyuauDoTzE6i0XAvQ_K=bocyEdbJmFAV3Q@mail.gmail.com>
+References: <20191224112330.14173-1-michael@amarulasolutions.com>
+ <20191224134557.43cadbf2@windsurf>
+ <CAOf5uw=cG3nm8mWfVyuauDoTzE6i0XAvQ_K=bocyEdbJmFAV3Q@mail.gmail.com>
+Message-ID: <20191224143623.2cbdcf55@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78d50430ae4a01bda8084977346c1f91bd7ec720
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 24 Dec 2019 13:56:37 +0100
+Michael Nazzareno Trimarchi <michael@amarulasolutions.com> wrote:
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+> > Indeed, fontconfig does not fail to build in the autobuilders, so I'd
+> > like to understand what is the exact issue, and make sure we are doing
+> > the right fix.  
+> 
+> Give time to build from clean again. I will send you the log
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index b3344ce699..bdec2b8e50 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2019.11.0"
-+	bool "2019.12.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2019.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2019.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 1797358833..42561ea571 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# From https://www.barebox.org/download/barebox-2019.11.0.tar.bz2.md5
--md5 45bf108b22de94a73dfe5c024c873486 barebox-2019.11.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2019.12.0.tar.bz2.md5
-+md5 2d25158ccffaa843c9e4943bbe820ce2 barebox-2019.12.0.tar.bz2
- 
- # Locally calculated
--sha256 607165b96d98fcc114fbd07e4001e7b527739a543e7adbe019854fbd8c78777f barebox-2019.11.0.tar.bz2
-+sha256 fb77afc5c1a9783b8e1a9bb6c617973f5c0ed4c6f8e079f96cb7e7e0818a7a90 barebox-2019.12.0.tar.bz2
+Could you also share the .config, or even better, a minimal
+configuration that exhibits the issue ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
