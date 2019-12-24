@@ -1,35 +1,42 @@
-From: Vladimir Oltean <olteanv@gmail.com>
-Date: Tue, 24 Dec 2019 14:47:41 +0200
-Subject: [Buildroot] [PATCH v3 9/9] configs/nxp_ls1028ardb*: new board
-In-Reply-To: <20191127071720.15623-9-jerry.huang@nxp.com>
-References: <20191127071720.15623-1-jerry.huang@nxp.com>
- <20191127071720.15623-9-jerry.huang@nxp.com>
-Message-ID: <CA+h21hqX-R2ks1ACMXyS9kMFBKcgLU68Z-yoiB82fb3dvfF7WA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 24 Dec 2019 13:50:13 +0100
+Subject: [Buildroot] [git commit] package/log4cplus: bump to version 2.0.5
+Message-ID: <20191224124116.9FE898E1B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jerry,
+commit: https://git.buildroot.net/buildroot/commit/?id=335df9d983b401b8579781ab7d519d6e2f577b51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 27 Nov 2019 at 09:18, Changming Huang <jerry.huang@nxp.com> wrote:
->
-> This is to support Freescale/NXP LS1028ARDB in Buildroot.
-> The board is setup to track the Linux at 4.19 via NXP LSDK-19.09.
->
-> The target will build uboot and RCW binary with arm-trusted-firmware support.
->
-> board/nxp/ls1028ardb/: scripts related with ls1028ardb
-> nxp_ls1028ardb-64b-emmc_defconfig: defconfig boot from emmc chip on board
-> nxp_ls1028ardb-64b_defconfig: defconfig boot from SD card
-> nxp_ls1028ardb-64b-xspi_defconfig: defconfig boot from FlexSPI chip on board
->
-> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
-> ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/log4cplus/log4cplus.hash | 2 +-
+ package/log4cplus/log4cplus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-It looks like this series has stagnated. Do you think you can repost a
-v4 with the feedback received so far?
-
-Thanks,
--Vladimir
+diff --git a/package/log4cplus/log4cplus.hash b/package/log4cplus/log4cplus.hash
+index ea95cc46eb..43ff401da6 100644
+--- a/package/log4cplus/log4cplus.hash
++++ b/package/log4cplus/log4cplus.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  faf15f3651e2d0f9f9cf2c1bfcb38ec4962f22f4a671410453a27c0976da5e36  log4cplus-2.0.4.tar.xz
++sha256  6046f0867ce4734f298418c7b7db0d35c27403090bb751d98e6e76aa4935f1af  log4cplus-2.0.5.tar.xz
+ sha256  91d7e42ff80e74c4c94e5ad353375fa0358cd0abbf43f5fe957097cdbd4e2c4d  LICENSE
+diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
+index d3a19b6b9b..eadc5ec948 100644
+--- a/package/log4cplus/log4cplus.mk
++++ b/package/log4cplus/log4cplus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LOG4CPLUS_VERSION = 2.0.4
++LOG4CPLUS_VERSION = 2.0.5
+ LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
+ LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
+ LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
