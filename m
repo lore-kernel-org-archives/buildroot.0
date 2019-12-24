@@ -1,40 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 24 Dec 2019 09:08:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/log4cplus; bump to version 2.0.5
-Message-ID: <20191224080843.583326-1-fontaine.fabrice@gmail.com>
+From: kamath.ben at gmail.com <kamath.ben@gmail.com>
+Date: Tue, 24 Dec 2019 00:55:31 -0800
+Subject: [Buildroot] [PATCH 1/1] package/lapack: bump to version 3.9.0
+Message-ID: <20191224085531.30820-1-kamath.ben@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/log4cplus/log4cplus.hash | 2 +-
- package/log4cplus/log4cplus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: Benjamin Kamath <kamath.ben@gmail.com>
 
-diff --git a/package/log4cplus/log4cplus.hash b/package/log4cplus/log4cplus.hash
-index ea95cc46eb..43ff401da6 100644
---- a/package/log4cplus/log4cplus.hash
-+++ b/package/log4cplus/log4cplus.hash
+Most recent release hosted on Github instead of previous location
+
+Signed-off-by: Benjamin Kamath <kamath.ben@gmail.com>
+---
+ package/lapack/lapack.hash | 2 +-
+ package/lapack/lapack.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/lapack/lapack.hash b/package/lapack/lapack.hash
+index 395087e199..bac7210c29 100644
+--- a/package/lapack/lapack.hash
++++ b/package/lapack/lapack.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256  faf15f3651e2d0f9f9cf2c1bfcb38ec4962f22f4a671410453a27c0976da5e36  log4cplus-2.0.4.tar.xz
-+sha256  6046f0867ce4734f298418c7b7db0d35c27403090bb751d98e6e76aa4935f1af  log4cplus-2.0.5.tar.xz
- sha256  91d7e42ff80e74c4c94e5ad353375fa0358cd0abbf43f5fe957097cdbd4e2c4d  LICENSE
-diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
-index d3a19b6b9b..eadc5ec948 100644
---- a/package/log4cplus/log4cplus.mk
-+++ b/package/log4cplus/log4cplus.mk
-@@ -4,7 +4,7 @@
+-sha256 deb22cc4a6120bff72621155a9917f485f96ef8319ac074a7afbc68aab88bcf6  lapack-3.8.0.tar.gz
++sha256 106087f1bb5f46afdfba7f569d0cbe23dacb9a07cd24733765a0e89dbe1ad573  lapack-3.9.0.tar.gz
+ sha256 d56bd4441b999b80c88df04faf0d8b3d7d3b2bd781cf91242c4188e8a6d0f8be  LICENSE
+diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
+index 3b59214e4b..41774f6167 100644
+--- a/package/lapack/lapack.mk
++++ b/package/lapack/lapack.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--LOG4CPLUS_VERSION = 2.0.4
-+LOG4CPLUS_VERSION = 2.0.5
- LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
- LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
- LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
+-LAPACK_VERSION = 3.8.0
++LAPACK_VERSION = 3.9.0
+ LAPACK_LICENSE = BSD-3-Clause
+ LAPACK_LICENSE_FILES = LICENSE
+-LAPACK_SITE = http://www.netlib.org/lapack
++LAPACK_SITE = $(call github,Reference-LAPACK,lapack,v$(LAPACK_VERSION))
+ LAPACK_INSTALL_STAGING = YES
+ LAPACK_SUPPORTS_IN_SOURCE_BUILD = NO
+ LAPACK_CONF_OPTS = -DLAPACKE=ON -DCBLAS=ON
 -- 
-2.24.0
+2.20.1
