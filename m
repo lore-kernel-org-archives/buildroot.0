@@ -1,31 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 13:55:15 +0100
-Subject: [Buildroot] [PATCH v2, 1/1] package/dante: bump to version 1.4.2
-In-Reply-To: <20191224094701.612213-1-fontaine.fabrice@gmail.com>
-References: <20191224094701.612213-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191224135515.5bef1c47@windsurf>
+Date: Tue, 24 Dec 2019 13:55:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: alsa support needs
+ rawmidi and seq
+In-Reply-To: <20191224100637.915534-1-fontaine.fabrice@gmail.com>
+References: <20191224100637.915534-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191224135521.451291db@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 24 Dec 2019 10:47:01 +0100
+On Tue, 24 Dec 2019 11:06:37 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - Add hash for license file
-> - Drop second patch (not needed anymore as the sed expression s/-g//g
->   has been replaced by s/-g //g)
-> - This bump fixes the build failure with latest libminiupnpc
-> 
 > Fixes:
->  - http://autobuild.buildroot.org/results/8a92d5257ba3e6fd0ad56ddb0afad8b6edd40ae3
+>  - http://autobuild.buildroot.org/results/8c8149a7cf87f24271fa6af8a6c81d2dfe241bbe
+>  - http://autobuild.buildroot.org/results/d7b05205b0bb45d927b5bb462e06fd8c345ebc42
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Changes v1 -> v2:
->  - Drop second patch (not needed anymore)
->  - Drop third patch (issue is not reproduced by Thomas)
+>  package/fluidsynth/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 
 Applied to master, thanks.
 
