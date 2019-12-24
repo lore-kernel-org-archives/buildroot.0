@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 24 Dec 2019 16:07:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dante: fix configure error
-Message-ID: <20191224150709.932615-1-fontaine.fabrice@gmail.com>
+Date: Tue, 24 Dec 2019 16:09:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/apitrace: fix build on uclibc
+Message-ID: <20191224150918.933173-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,54 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/9be8a0d5af85370ecb52bcd315aa73cacbc95abc
+ - http://autobuild.buildroot.org/results/d5a12c35ecd712c54aa0cd64f9db54bdcc66eafd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...m4-Remove-getaddrinfo-too-low-checks.patch | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/dante/0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch
+ ...t-libc-that-don-t-have-RTLD_DEEPBIND.patch | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/apitrace/0002-Support-libc-that-don-t-have-RTLD_DEEPBIND.patch
 
-diff --git a/package/dante/0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch b/package/dante/0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch
+diff --git a/package/apitrace/0002-Support-libc-that-don-t-have-RTLD_DEEPBIND.patch b/package/apitrace/0002-Support-libc-that-don-t-have-RTLD_DEEPBIND.patch
 new file mode 100644
-index 0000000000..af23d46d11
+index 0000000000..e34357428a
 --- /dev/null
-+++ b/package/dante/0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch
-@@ -0,0 +1,35 @@
-+osdep.m4: Remove getaddrinfo() too low checks
++++ b/package/apitrace/0002-Support-libc-that-don-t-have-RTLD_DEEPBIND.patch
+@@ -0,0 +1,25 @@
++From d495d15e20bf655afa3be62ada792e8dfc8d29b6 Mon Sep 17 00:00:00 2001
++From: Gleb Mazovetskiy <glex.spb@gmail.com>
++Date: Fri, 13 Dec 2019 13:39:19 +0000
++Subject: [PATCH] Support libc that don't have RTLD_DEEPBIND
 +
-+dante runs AC_PREPROC_IFELSE then it fills $ERRVALFILE by running the
-+following command:
-+
-+cat conftest.i | grep gaierrval: >>$2
-+
-+As a result, $ERRVALFILE does not contain the expected values because
-+the expected value is not on the same line than gaierrval:
-+
-+ gaierrval: 
-+ # 130 "conftest.c" 3 4
-+           -3
-+
-+So drop these checks
-+
++[Retrieved from: https://github.com/apitrace/apitrace/pull/646]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ dispatch/glproc_gl.cpp | 3 +++
++ 1 file changed, 3 insertions(+)
 +
-+diff -Nuar dante-1.4.2-orig/osdep.m4 dante-1.4.2/osdep.m4
-+--- dante-1.4.2-orig/osdep.m4	2019-12-09 21:28:38.936003218 +0100
-++++ dante-1.4.2/osdep.m4	2019-12-09 21:49:48.764019371 +0100
-+@@ -956,13 +956,7 @@
-+ unset UNIQUEVALS UNIQUESYMBOLS
-+ if test -s $ERRVALFILE; then
-+     UNIQUEVALS=`sort $ERRVALFILE | uniq | wc -l | awk '{ print $1 }'`
-+-    if test $UNIQUEVALS -le 1; then
-+-        AC_MSG_FAILURE([error: getaddrinfo() error value count too low])
-+-    fi
-+     UNIQUESYMBOLS=`cat $ERRVALFILE | wc -l | awk '{ print $1 }'`
-+-    if test $UNIQUESYMBOLS -le 1; then
-+-        AC_MSG_FAILURE([error: getaddrinfo() error symbol count too low])
-+-    fi
++diff --git a/dispatch/glproc_gl.cpp b/dispatch/glproc_gl.cpp
++index 5d7903a0c..456fcc42e 100644
++--- a/dispatch/glproc_gl.cpp
+++++ b/dispatch/glproc_gl.cpp
++@@ -148,6 +148,9 @@ _getPrivateProcAddress(const char *procName)
 + 
-+     if test $ERRNOCNT -ne $UNIQUESYMBOLS; then
-+ 	AC_MSG_FAILURE([internal error: errno symbol count mismatch])
++ #else
++ 
+++#ifndef RTLD_DEEPBIND
+++#define RTLD_DEEPBIND 0
+++#endif
++ 
++ static inline void
++ logSymbol(const char *name, void *ptr) {
 -- 
 2.24.0
