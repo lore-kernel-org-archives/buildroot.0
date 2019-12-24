@@ -1,95 +1,123 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue, 24 Dec 2019 18:53:49 +0100
-Subject: [Buildroot] [PATCH] lua-codegen: new package
-In-Reply-To: <20190905080839.11940-1-francois.perrad@gadz.org>
-References: <20190905080839.11940-1-francois.perrad@gadz.org>
-Message-ID: <4a4d2b07-d72c-f0b0-68b2-a2d0e3ebf1fc@benettiengineering.com>
+Date: Tue, 24 Dec 2019 19:03:36 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/frotz: new package
+In-Reply-To: <20190912184013.17316-2-huth@tuxfamily.org>
+References: <20190912184013.17316-1-huth@tuxfamily.org>
+ <20190912184013.17316-2-huth@tuxfamily.org>
+Message-ID: <ab8d50c3-3158-6691-ee14-fc9abdf1db0f@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
+Hi Thomas,
 
-please use "package/lua-codegen: new package" as first line commit log.
-And please provide a little description of the package in commit log.
-
-On 9/5/19 10:08 AM, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->   package/Config.in                    |  1 +
->   package/lua-codegen/Config.in        |  6 ++++++
->   package/lua-codegen/lua-codegen.hash |  3 +++
->   package/lua-codegen/lua-codegen.mk   | 12 ++++++++++++
->   4 files changed, 22 insertions(+)
->   create mode 100644 package/lua-codegen/Config.in
->   create mode 100644 package/lua-codegen/lua-codegen.hash
->   create mode 100644 package/lua-codegen/lua-codegen.mk
+On 9/12/19 8:40 PM, Thomas Huth wrote:
+> Frotz is an interpreter for old Infocom adventures and other Z-code games.
 > 
+> Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+> ---
+>   DEVELOPERS               |  1 +
+>   package/Config.in        |  1 +
+>   package/frotz/Config.in  | 10 ++++++++++
+>   package/frotz/frotz.hash |  5 +++++
+>   package/frotz/frotz.mk   | 29 +++++++++++++++++++++++++++++
+>   5 files changed, 46 insertions(+)
+>   create mode 100644 package/frotz/Config.in
+>   create mode 100644 package/frotz/frotz.hash
+>   create mode 100644 package/frotz/frotz.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 7604cfe2b7..c8805fef7b 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2229,6 +2229,7 @@ F:	toolchain/
+>   
+>   N:	Thomas Huth <huth@tuxfamily.org>
+>   F:	package/ascii-invaders/
+> +F:	package/frotz/
+>   
+>   N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>   F:	arch/Config.in.arm
 > diff --git a/package/Config.in b/package/Config.in
-> index 710ed12be..8b5719d46 100644
+> index 7d915ea4d7..92ec3ca66e 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -617,6 +617,7 @@ menu "Lua libraries/modules"
->   	source "package/lua-cjson/Config.in"
->   	source "package/lua-coat/Config.in"
->   	source "package/lua-coatpersistent/Config.in"
-> +	source "package/lua-codegen/Config.in"
->   	source "package/lua-compat53/Config.in"
->   	source "package/lua-cqueues/Config.in"
->   	source "package/lua-csnappy/Config.in"
-> diff --git a/package/lua-codegen/Config.in b/package/lua-codegen/Config.in
+> @@ -252,6 +252,7 @@ menu "Games"
+>   	source "package/doom-wad/Config.in"
+>   	source "package/flare-engine/Config.in"
+>   	source "package/flare-game/Config.in"
+> +	source "package/frotz/Config.in"
+>   	source "package/gnuchess/Config.in"
+>   	source "package/lbreakout2/Config.in"
+>   	source "package/ltris/Config.in"
+> diff --git a/package/frotz/Config.in b/package/frotz/Config.in
 > new file mode 100644
-> index 000000000..bc0ca3d14
+> index 0000000000..59b6d0007d
 > --- /dev/null
-> +++ b/package/lua-codegen/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_LUA_CODEGEN
-> +	bool "lua-codegen"
+> +++ b/package/frotz/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_FROTZ
+> +	bool "frotz"
+> +	select BR2_PACKAGE_NCURSES
 > +	help
-> +	  a template engine.
-
-Here let's use capital "A template engine", but please improve a little 
-bit the description above.
-
+> +	  Frotz is an interpreter for old Infocom adventure games and
+> +	  other Z-code games. Note that frotz can not be run as root.
+> +	  You must add a normal user to your buildroot configuration to
+> +	  be able to use it.
 > +
-> +	  https://fperrad.frama.io/lua-CodeGen
-> diff --git a/package/lua-codegen/lua-codegen.hash b/package/lua-codegen/lua-codegen.hash
+> +	  https://661.org/proj/if/frotz/
+> diff --git a/package/frotz/frotz.hash b/package/frotz/frotz.hash
 > new file mode 100644
-> index 000000000..0b49a5a78
+> index 0000000000..8bb15eab03
 > --- /dev/null
-> +++ b/package/lua-codegen/lua-codegen.hash
-> @@ -0,0 +1,3 @@
-> +# computed by luarocks/buildroot
-> +sha256 c09126d7f5d0fa9c867ee9108eb5961dab111320ee35e5f842317f6058e922ec  lua-codegen-0.3.3-1.src.rock
-> +sha256 f09265c450c3a59558ecc552ea4ba61e5a74dec995738eec545d121718833a80  lua-CodeGen-0.3.3/COPYRIGHT
-> diff --git a/package/lua-codegen/lua-codegen.mk b/package/lua-codegen/lua-codegen.mk
+> +++ b/package/frotz/frotz.hash
+> @@ -0,0 +1,5 @@
+> +# Locally calculated
+> +sha512 c3aeb1bca227db7b759be880c1fe14e3d46c79eae3f2891d2472ff1e1b17b2153b2e400d537d54dce68011079e230fe8176ebb7547b2ecbc30e44f2b7423c285  frotz-2.44.tar.bz2
+> +
+> +# Hash for license file
+> +sha512 aee80b1f9f7f4a8a00dcf6e6ce6c41988dcaedc4de19d9d04460cbfb05d99829ffe8f9d038468eabbfba4d65b38e8dbef5ecf5eb8a1b891d9839cda6c48ee957  COPYING
+> diff --git a/package/frotz/frotz.mk b/package/frotz/frotz.mk
 > new file mode 100644
-> index 000000000..caa9008e5
+> index 0000000000..97e2eaf21f
 > --- /dev/null
-> +++ b/package/lua-codegen/lua-codegen.mk
-> @@ -0,0 +1,12 @@
+> +++ b/package/frotz/frotz.mk
+> @@ -0,0 +1,29 @@
 > +################################################################################
 > +#
-> +# lua-codegen
+> +# Frotz
 > +#
 > +################################################################################
 > +
-> +LUA_CODEGEN_VERSION = 0.3.3-1
-> +LUA_CODEGEN_NAME_UPSTREAM = lua-CodeGen
-> +LUA_CODEGEN_LICENSE = MIT
-> +LUA_CODEGEN_LICENSE_FILES = $(LUA_CODEGEN_SUBDIR)/COPYRIGHT
+> +FROTZ_VERSION = 2.44
+> +FROTZ_SOURCE = frotz-$(FROTZ_VERSION).tar.bz2
+> +FROTZ_SITE = https://gitlab.com/DavidGriffith/frotz/-/archive/$(FROTZ_VERSION)
+> +FROTZ_DEPENDENCIES = ncurses
+> +FROTZ_LICENSE = GPL-2.0+
+> +FROTZ_LICENSE_FILES = COPYING
 > +
-> +$(eval $(luarocks-package))
+> +define FROTZ_POST_EXTRACT_FIXUP
+> +	( sed -i 's/$	ar rc/	\$$\(AR\) rc/g' $(@D)/Makefile ; \
+> +	  sed -i 's/$	ranlib/	\$$\(RANLIB\)/g' $(@D)/Makefile ; \
+> +	  sed -i 's/$	strip/	\$$\(STRIP\)/g' $(@D)/Makefile )
+> +endef
+
+Here you should provide a patch(and send it upstream) instead of this hack.
+
+> +FROTZ_POST_EXTRACT_HOOKS += FROTZ_POST_EXTRACT_FIXUP
+> +
+> +define FROTZ_BUILD_CMDS
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) PREFIX=/usr CONFIG_DIR=/etc -C $(@D)
+> +endef
+> +
+> +define FROTZ_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/frotz $(TARGET_DIR)/usr/bin/frotz
+> +endef
+> +
+> +$(eval $(generic-package))
 > 
-
-For the rest, it builds correctly and it looks ok to me, so:
-
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Maybe it should be enough if you provide those 2 little descriptions 
-answering inline without submit a v2.
 
 Best regards
 -- 
