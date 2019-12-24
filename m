@@ -1,39 +1,65 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Tue, 24 Dec 2019 16:37:02 +0100
-Subject: [Buildroot] [PATCH v2] boot/at91bootstrap3: bump to version
- 3.9.0
-In-Reply-To: <20191223234107.36ef57e2@windsurf>
-References: <1571765902-878-1-git-send-email-pjtexier@koncepto.io>
- <1571765902-878-2-git-send-email-pjtexier@koncepto.io>
- <20191024112430.at6l2alidwxxx4do@M43218.corp.atmel.com>
- <20191216104514.7a9fe980@windsurf.home>
- <0aa88f02-2da6-f6bd-6c21-b25b1df2af25@koncepto.io>
- <20191223234107.36ef57e2@windsurf>
-Message-ID: <05ae09a7-00e6-fe42-cc05-2667e7a08e7c@koncepto.io>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 24 Dec 2019 17:02:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/librsvg: add libcroco to
+ Requires.private
+Message-ID: <20191224160243.1310468-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+This will fix a static build failure with imagemagick
 
-Le 23/12/2019 ? 23:41, Thomas Petazzoni a ?crit?:
-> Any news on this ?
+Fixes:
+ - http://autobuild.buildroot.org/results/42f4b4881569779162d3efe4628b934f965913b9
 
-Sorry for the delay, I started to investigate but I still have one more 
-thing to check, I'll finish this Thursday ;)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ....in-add-libcroco-to-Requires.Private.patch | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
 
-Thanks,
-
-Pierre-Jean
-
-> 
-> Thanks!
-> 
-> Thomas
-
+diff --git a/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch b/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
+new file mode 100644
+index 0000000000..0eea5b995b
+--- /dev/null
++++ b/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
+@@ -0,0 +1,35 @@
++From 322b415f92d4dcd36824eef83bd617bac6e5c8c7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 24 Dec 2019 16:38:35 +0100
++Subject: [PATCH] librsvg.pc.in: add libcroco to Requires.private
++
++libcroco is a mandatory dependency since version 2.35.0 so add it to
++Requires.Private to fix a static build failure with imagemagick
++
++This patch is not upstreamable as librsvg no longer depends on libcroco
++since version 2.47.1. It now does all CSS processing using Rust crates
++from Mozilla Servo.
++
++Fixes:
++ - http://autobuild.buildroot.org/results/42f4b4881569779162d3efe4628b934f965913b9
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ librsvg.pc.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/librsvg.pc.in b/librsvg.pc.in
++index a451de05..4b09984a 100644
++--- a/librsvg.pc.in
+++++ b/librsvg.pc.in
++@@ -10,6 +10,6 @@ Name: librsvg
++ Description: library that renders svg files
++ Version: @VERSION@
++ Requires: glib-2.0 gio-2.0 gdk-pixbuf-2.0 cairo
++-Requires.private:
+++Requires.private: libcroco-0.6
++ Libs: -L${libdir} -lrsvg- at RSVG_API_MAJOR_VERSION@ -lm
++ Cflags: -I${includedir}/librsvg- at RSVG_API_VERSION@
++-- 
++2.24.0
++
 -- 
-Pierre-Jean Texier
-Embedded Linux Engineer
-https://koncepto.io
+2.24.0
