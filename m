@@ -1,30 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 14:36:23 +0100
-Subject: [Buildroot] [PATCH] package/fontconfig: Fix UUIDD dependency
-In-Reply-To: <CAOf5uw=cG3nm8mWfVyuauDoTzE6i0XAvQ_K=bocyEdbJmFAV3Q@mail.gmail.com>
-References: <20191224112330.14173-1-michael@amarulasolutions.com>
- <20191224134557.43cadbf2@windsurf>
- <CAOf5uw=cG3nm8mWfVyuauDoTzE6i0XAvQ_K=bocyEdbJmFAV3Q@mail.gmail.com>
-Message-ID: <20191224143623.2cbdcf55@windsurf>
+Date: Tue, 24 Dec 2019 14:37:17 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/barebox: bump version to 2019.12.0
+In-Reply-To: <20191224132913.453832-1-b.bilas@grinn-global.com>
+References: <20191224132913.453832-1-b.bilas@grinn-global.com>
+Message-ID: <20191224143717.0b39a1e7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 24 Dec 2019 13:56:37 +0100
-Michael Nazzareno Trimarchi <michael@amarulasolutions.com> wrote:
+On Tue, 24 Dec 2019 14:29:13 +0100
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-> > Indeed, fontconfig does not fail to build in the autobuilders, so I'd
-> > like to understand what is the exact issue, and make sure we are doing
-> > the right fix.  
-> 
-> Give time to build from clean again. I will send you the log
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> ---
+>  boot/barebox/Config.in    | 4 ++--
+>  boot/barebox/barebox.hash | 6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-Could you also share the .config, or even better, a minimal
-configuration that exhibits the issue ?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
