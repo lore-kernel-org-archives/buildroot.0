@@ -1,28 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 14:37:17 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/barebox: bump version to 2019.12.0
-In-Reply-To: <20191224132913.453832-1-b.bilas@grinn-global.com>
-References: <20191224132913.453832-1-b.bilas@grinn-global.com>
-Message-ID: <20191224143717.0b39a1e7@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 24 Dec 2019 15:38:32 +0200
+Subject: [Buildroot] [PATCH] [PATCH] package/tio: new package
+In-Reply-To: <20191224141451.521e9123@windsurf>
+References: <20191222221203.1990-1-sergio.prado@e-labworks.com>
+ <20191223055102.lfw56utpgqalw2we@sapphire.tkos.co.il>
+ <20191224141451.521e9123@windsurf>
+Message-ID: <87h81p4zdz.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 24 Dec 2019 14:29:13 +0100
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+Hi Thomas,
 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> ---
->  boot/barebox/Config.in    | 4 ++--
->  boot/barebox/barebox.hash | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
+On Tue, Dec 24 2019, Thomas Petazzoni wrote:
+> On Mon, 23 Dec 2019 07:51:02 +0200
+> Baruch Siach <baruch@tkos.co.il> wrote:
+>
+>> > +TIO_LICENSE = GPLv2  
+>> 
+>> The LICENSE file has the "or any later version" language. Also, we prefer the 
+>> SPDX license identifiers. So "GPL-2.0+".
+>
+> Fixed when applying.
+>
+>> > +TIO_LICENSE_FILES = COPYING  
+>> 
+>> Should also add "LICENSE".
+>
+> There was no file named "LICENSE" in the source code, so I'm not sure
+> what your suggestion was. Did you suggest to add README instead maybe ?
 
-Applied to master, thanks.
+Is see this here:
 
-Thomas
+  https://github.com/tio/tio/blob/master/LICENSE
+
+According to the log this file has been there since 2016.
+
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
