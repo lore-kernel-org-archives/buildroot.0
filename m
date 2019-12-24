@@ -1,57 +1,127 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Tue, 24 Dec 2019 13:56:37 +0100
-Subject: [Buildroot] [PATCH] package/fontconfig: Fix UUIDD dependency
-In-Reply-To: <20191224134557.43cadbf2@windsurf>
-References: <20191224112330.14173-1-michael@amarulasolutions.com>
- <20191224134557.43cadbf2@windsurf>
-Message-ID: <CAOf5uw=cG3nm8mWfVyuauDoTzE6i0XAvQ_K=bocyEdbJmFAV3Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 24 Dec 2019 14:06:48 +0100
+Subject: [Buildroot] [git commit] package/cctz: new package
+Message-ID: <20191224125934.7AFB38E1D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+commit: https://git.buildroot.net/buildroot/commit/?id=1be68a1df62b24493ecbd24bdf118d7e43a71bf6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Dec 24, 2019 at 1:45 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Michael,
->
-> On Tue, 24 Dec 2019 12:23:30 +0100
-> Michael Trimarchi <michael@amarulasolutions.com> wrote:
->
-> > The build with BR2_PACKAGE_XORG7 and BR2_PACKAGE_OPENJDK
-> > was failing for missing include of uuid support.
-> > The BR2_PACKAGE_UTIL_LINUX_UUIDD select automatically
-> > BR2_PACKAGE_UTIL_LINUX_LIBUUID but the first one is needed
-> >
-> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
->
-> Thanks for your patch! Could you give some more details about the
-> configuration that is failing and the exact error you are getting ?
->
-> Indeed, fontconfig does not fail to build in the autobuilders, so I'd
-> like to understand what is the exact issue, and make sure we are doing
-> the right fix.
+CCTZ is a C++ library for translating between absolute
+and civil times using the rules of a time zone.
 
-Give time to build from clean again. I will send you the log
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/cctz/Config.in | 29 +++++++++++++++++++++++++++++
+ package/cctz/cctz.hash |  3 +++
+ package/cctz/cctz.mk   | 27 +++++++++++++++++++++++++++
+ 5 files changed, 61 insertions(+)
 
-Michael
-
->
-> Thanks a lot!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-
-
--- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8850463130..c86fd5931f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -983,6 +983,7 @@ F:	configs/qemu_*
+ N:	Gilles Talis <gilles.talis@gmail.com>
+ F:	board/freescale/imx8mmevk/
+ F:	configs/freescale_imx8mmevk_defconfig
++F:	package/cctz/
+ F:	package/fdk-aac/
+ F:	package/httping/
+ F:	package/iozone/
+diff --git a/package/Config.in b/package/Config.in
+index de0091629f..df4265ead3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1729,6 +1729,7 @@ menu "Other"
+ 	source "package/boost/Config.in"
+ 	source "package/c-capnproto/Config.in"
+ 	source "package/capnproto/Config.in"
++	source "package/cctz/Config.in"
+ 	source "package/clang/Config.in"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
+diff --git a/package/cctz/Config.in b/package/cctz/Config.in
+new file mode 100644
+index 0000000000..73a0f9f7e7
+--- /dev/null
++++ b/package/cctz/Config.in
+@@ -0,0 +1,29 @@
++config BR2_PACKAGE_CCTZ
++	bool "cctz"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	select BR2_TARGET_TZ_INFO # runtime dependency
++	help
++	  CCTZ is a C++ library for translating between absolute
++	  and civil times using the rules of a time zone.
++
++	  https://github.com/google/cctz
++
++if BR2_PACKAGE_CCTZ
++
++config BR2_PACKAGE_CCTZ_INSTALL_TOOLS
++	bool "Install tools"
++	help
++	  This option allows installing CCTZ tools.
++
++config BR2_PACKAGE_CCTZ_INSTALL_EXAMPLES
++	bool "Install example programs"
++	help
++	  This option allows installing CCTZ example programs.
++
++endif
++
++comment "cctz needs a toolchain w/ C++, threads, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/cctz/cctz.hash b/package/cctz/cctz.hash
+new file mode 100644
+index 0000000000..fe8897c501
+--- /dev/null
++++ b/package/cctz/cctz.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256 8615b20d4e33e02a271c3b93a3b208e3d7d5d66880f5f6208b03426e448f32db cctz-2.3.tar.gz
++sha256 c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747 LICENSE.txt
+diff --git a/package/cctz/cctz.mk b/package/cctz/cctz.mk
+new file mode 100644
+index 0000000000..bcc80bad47
+--- /dev/null
++++ b/package/cctz/cctz.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# cctz
++#
++################################################################################
++
++CCTZ_VERSION = 2.3
++CCTZ_SITE = $(call github,google,cctz,v$(CCTZ_VERSION))
++CCTZ_LICENSE = Apache-2.0
++CCTZ_LICENSE_FILES = LICENSE.txt
++CCTZ_INSTALL_STAGING = YES
++
++CCTZ_CONF_OPTS = -DBUILD_TESTING=OFF
++
++ifeq ($(BR2_PACKAGE_CCTZ_INSTALL_TOOLS),y)
++CCTZ_CONF_OPTS += -DBUILD_TOOLS=ON
++else
++CCTZ_CONF_OPTS += -DBUILD_TOOLS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_CCTZ_INSTALL_EXAMPLES),y)
++CCTZ_CONF_OPTS += -DBUILD_EXAMPLES=ON
++else
++CCTZ_CONF_OPTS += -DBUILD_EXAMPLES=OFF
++endif
++
++$(eval $(cmake-package))
