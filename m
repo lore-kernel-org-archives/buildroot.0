@@ -1,29 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 14:59:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libfcgi: update the upstream
- URL in Config.in
-In-Reply-To: <20191128120627.27878-1-mark@dibsco.co.uk>
-References: <20191128120627.27878-1-mark@dibsco.co.uk>
-Message-ID: <20191224145909.4ad5c5d8@windsurf>
+Date: Tue, 24 Dec 2019 15:08:30 +0100
+Subject: [Buildroot] [PATCH] package/fontconfig: Fix UUIDD dependency
+In-Reply-To: <CAOf5uwmcedGDiFR5mXAT16siS0XTd=mYW8dwR20_y8BwNWAzAg@mail.gmail.com>
+References: <20191224112330.14173-1-michael@amarulasolutions.com>
+ <20191224134557.43cadbf2@windsurf>
+ <CAOf5uw=cG3nm8mWfVyuauDoTzE6i0XAvQ_K=bocyEdbJmFAV3Q@mail.gmail.com>
+ <20191224143623.2cbdcf55@windsurf>
+ <CAOf5uwmcedGDiFR5mXAT16siS0XTd=mYW8dwR20_y8BwNWAzAg@mail.gmail.com>
+Message-ID: <20191224150830.64614643@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 28 Nov 2019 12:06:26 +0000
-Mark Corbin <mark@dibsco.co.uk> wrote:
+On Tue, 24 Dec 2019 14:39:12 +0100
+Michael Nazzareno Trimarchi <michael@amarulasolutions.com> wrote:
 
-> Update the upstream URL in the help text in Config.in. This
-> addresses the 'Invalid(Err)' URL status in the package stats
-> web page output.
-> 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-> ---
->  package/libfcgi/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> I created the config in two steps. Now I'm thinking that was only
+> happen after I have added the XORG
+> and OPENJDK. I have added this two components without re-build from
+> scratch. Basically libconfig was looking for uuid and fail
+> to find in the filesystem. I was thinking looking at the config.in
+> that the right thing to do is adding
+> that one instead of LIBUIID. I'm checking now
 
-Applied to master, thanks.
+This feels like you did some partial build: util-linux was first build
+with libuuid, and then you enabled something that needed libuuid,
+without doing a full rebuild, or at least without forcing the rebuild
+of util-linux.
 
 Thomas
 -- 
