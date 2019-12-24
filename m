@@ -1,32 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 13:55:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: alsa support needs
- rawmidi and seq
-In-Reply-To: <20191224100637.915534-1-fontaine.fabrice@gmail.com>
-References: <20191224100637.915534-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191224135521.451291db@windsurf>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Tue, 24 Dec 2019 13:56:37 +0100
+Subject: [Buildroot] [PATCH] package/fontconfig: Fix UUIDD dependency
+In-Reply-To: <20191224134557.43cadbf2@windsurf>
+References: <20191224112330.14173-1-michael@amarulasolutions.com>
+ <20191224134557.43cadbf2@windsurf>
+Message-ID: <CAOf5uw=cG3nm8mWfVyuauDoTzE6i0XAvQ_K=bocyEdbJmFAV3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 24 Dec 2019 11:06:37 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hi Thomas
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/8c8149a7cf87f24271fa6af8a6c81d2dfe241bbe
->  - http://autobuild.buildroot.org/results/d7b05205b0bb45d927b5bb462e06fd8c345ebc42
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/fluidsynth/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+On Tue, Dec 24, 2019 at 1:45 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Michael,
+>
+> On Tue, 24 Dec 2019 12:23:30 +0100
+> Michael Trimarchi <michael@amarulasolutions.com> wrote:
+>
+> > The build with BR2_PACKAGE_XORG7 and BR2_PACKAGE_OPENJDK
+> > was failing for missing include of uuid support.
+> > The BR2_PACKAGE_UTIL_LINUX_UUIDD select automatically
+> > BR2_PACKAGE_UTIL_LINUX_LIBUUID but the first one is needed
+> >
+> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+>
+> Thanks for your patch! Could you give some more details about the
+> configuration that is failing and the exact error you are getting ?
+>
+> Indeed, fontconfig does not fail to build in the autobuilders, so I'd
+> like to understand what is the exact issue, and make sure we are doing
+> the right fix.
 
-Applied to master, thanks.
+Give time to build from clean again. I will send you the log
 
-Thomas
+Michael
+
+>
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
+| COO  -  Founder                                      Cruquiuskade 47 |
+| +31(0)851119172                                 Amsterdam 1018 AM NL |
+|                  [`as] http://www.amarulasolutions.com               |
