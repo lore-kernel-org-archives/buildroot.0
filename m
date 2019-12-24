@@ -1,67 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 15:30:14 +0100
-Subject: [Buildroot] [git commit] package/ntp: override host shell check
-Message-ID: <20191224142319.A32A48E274@busybox.osuosl.org>
+Date: Tue, 24 Dec 2019 15:33:03 +0100
+Subject: [Buildroot] [PATCH v2] package/ntp: override host shell check
+In-Reply-To: <0102016ea77c74a6-7525be73-3836-4c75-ae25-c9197a85b768-000000@eu-west-1.amazonses.com>
+References: <0102016e898693a5-82db32f2-a59d-42c1-996b-97661b367c25-000000@eu-west-1.amazonses.com>
+ <0102016ea77c74a6-7525be73-3836-4c75-ae25-c9197a85b768-000000@eu-west-1.amazonses.com>
+Message-ID: <20191224153303.5bd1d49e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88f79481878c7adf9642e208c72dea7fe367bee8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 26 Nov 2019 11:33:01 +0000
+James Byrne <james.byrne@origamienergy.com> wrote:
 
-Add a patch from the upstream AutoGen package that allows POSIX_SHELL
-to be taken from the environment, then define that to be '/bin/sh'.
+> Add a patch from the upstream AutoGen package that allows POSIX_SHELL to
+> be taken from the environment, then define that to be '/bin/sh'.
+> 
+> Since we are cross-compiling, the original behaviour of detecting the
+> host shell is not useful as we cannot assume that the target uses the
+> same shell, and it can prevent builds being reproducible because a
+> different host environment will result in a different target binary.
+> 
+> Signed-off-by: James Byrne <james.byrne@origamienergy.com>
+> 
+> ---
+> Changes v1 -> v2:
+>   - Simplify by using upstream AutoGen change
 
-Since we are cross-compiling, the original behaviour of detecting the
-host shell is not useful as we cannot assume that the target uses the
-same shell, and it can prevent builds being reproducible because a
-different host environment will result in a different target binary.
+Applied to master, thanks. Could you talk with the upstream NTP
+developers to get this change merged ?
 
-Signed-off-by: James Byrne <james.byrne@origamienergy.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ntp/0003-override-shell.patch | 20 ++++++++++++++++++++
- package/ntp/ntp.mk                    |  2 +-
- 2 files changed, 21 insertions(+), 1 deletion(-)
+Thanks!
 
-diff --git a/package/ntp/0003-override-shell.patch b/package/ntp/0003-override-shell.patch
-new file mode 100644
-index 0000000000..0161e6520a
---- /dev/null
-+++ b/package/ntp/0003-override-shell.patch
-@@ -0,0 +1,20 @@
-+sntp/libopts/m4/libopts.m4: allow override shell with POSIX_SHELL
-+
-+Pull in fix from upstream AutoGen [1] to accept POSIX_SHELL from the
-+environment during the configure step.
-+
-+[1] http://git.savannah.gnu.org/cgit/autogen.git/commit/?id=db064b9a252f3ef3d8db25411ea0edb0ff8ea758
-+
-+Signed-off-by: James Byrne <james.byrne@origamienergy.com>
-+
-+diff --git a/sntp/libopts/m4/libopts.m4 b/sntp/libopts/m4/libopts.m4
-+--- a/sntp/libopts/m4/libopts.m4
-++++ b/sntp/libopts/m4/libopts.m4
-+@@ -114,6 +114,7 @@
-+   AC_PROG_SED
-+   [while :
-+   do
-++      test -x "$POSIX_SHELL" && break
-+       POSIX_SHELL=`which bash`
-+       test -x "$POSIX_SHELL" && break
-+       POSIX_SHELL=`which dash`
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index fb138a8fba..4cede8b154 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -10,7 +10,7 @@ NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJO
- NTP_DEPENDENCIES = host-pkgconf libevent
- NTP_LICENSE = NTP
- NTP_LICENSE_FILES = COPYRIGHT
--NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
-+NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no POSIX_SHELL=/bin/sh
- NTP_CONF_OPTS = \
- 	--with-shared \
- 	--program-transform-name=s,,, \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
