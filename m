@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 15:08:30 +0100
-Subject: [Buildroot] [PATCH] package/fontconfig: Fix UUIDD dependency
-In-Reply-To: <CAOf5uwmcedGDiFR5mXAT16siS0XTd=mYW8dwR20_y8BwNWAzAg@mail.gmail.com>
-References: <20191224112330.14173-1-michael@amarulasolutions.com>
- <20191224134557.43cadbf2@windsurf>
- <CAOf5uw=cG3nm8mWfVyuauDoTzE6i0XAvQ_K=bocyEdbJmFAV3Q@mail.gmail.com>
- <20191224143623.2cbdcf55@windsurf>
- <CAOf5uwmcedGDiFR5mXAT16siS0XTd=mYW8dwR20_y8BwNWAzAg@mail.gmail.com>
-Message-ID: <20191224150830.64614643@windsurf>
+Date: Tue, 24 Dec 2019 15:09:12 +0100
+Subject: [Buildroot] [PATCH] [PATCH] package/tio: new package
+In-Reply-To: <87h81p4zdz.fsf@tarshish>
+References: <20191222221203.1990-1-sergio.prado@e-labworks.com>
+ <20191223055102.lfw56utpgqalw2we@sapphire.tkos.co.il>
+ <20191224141451.521e9123@windsurf> <87h81p4zdz.fsf@tarshish>
+Message-ID: <20191224150912.3c0e0d7a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 24 Dec 2019 14:39:12 +0100
-Michael Nazzareno Trimarchi <michael@amarulasolutions.com> wrote:
+On Tue, 24 Dec 2019 15:38:32 +0200
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-> I created the config in two steps. Now I'm thinking that was only
-> happen after I have added the XORG
-> and OPENJDK. I have added this two components without re-build from
-> scratch. Basically libconfig was looking for uuid and fail
-> to find in the filesystem. I was thinking looking at the config.in
-> that the right thing to do is adding
-> that one instead of LIBUIID. I'm checking now
+> > There was no file named "LICENSE" in the source code, so I'm not sure
+> > what your suggestion was. Did you suggest to add README instead maybe ?  
+> 
+> Is see this here:
+> 
+>   https://github.com/tio/tio/blob/master/LICENSE
+> 
+> According to the log this file has been there since 2016.
 
-This feels like you did some partial build: util-linux was first build
-with libuuid, and then you enabled something that needed libuuid,
-without doing a full rebuild, or at least without forcing the rebuild
-of util-linux.
+It is not in the tarball as far as I can see:
+
+$ tar tvf tio-1.32.tar.xz | grep LICENSE
+$
 
 Thomas
 -- 
