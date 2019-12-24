@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Dec 2019 14:56:04 +0100
-Subject: [Buildroot] [PATCH 1/1 next] package/linux-firmware: Add
- options for ar301[12] bluetooth firmware.
-In-Reply-To: <20191129163144.26318-1-nicolas.cavallari@green-communications.fr>
-References: <20191129163144.26318-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20191224145604.124351f1@windsurf>
+Date: Tue, 24 Dec 2019 14:57:10 +0100
+Subject: [Buildroot] [git commit] package/mali-t76x: update the upstream URL
+ in Config.in
+Message-ID: <20191224134935.1FF1A8E260@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 29 Nov 2019 17:31:44 +0100
-Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7cc6df7a69ee040ef6d374d5558a0fafe43db2ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This add two options for firmwares used by the ath3k firmware loader
-> driver.
-> 
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Update the upstream URL in the help text in Config.in. Removing
+the text from the beginning of the URL line addresses the 'Missing'
+URL status in the package stats web page output.
 
-Thanks, I've applied, but after doing two changes:
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mali-t76x/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- (1) Split into two commits, one for the AR3011 firmware and one for
- the AR3012 firmware. These are independent things, so they should be
- added by two independent commits
-
- (2) Add the hash of the additional license file you're using for
- AR3012, LICENSE.QualcommAtheros_ar3k
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mali-t76x/Config.in b/package/mali-t76x/Config.in
+index a85fa5b27e..2533f10002 100644
+--- a/package/mali-t76x/Config.in
++++ b/package/mali-t76x/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_MALI_T76X
+ 	  Midgard T76X GPU. This package requires a kernel with the
+ 	  ARM Mali Midgard GPU Kernel Drivers enabled.
+ 
+-	  Source: http://malideveloper.arm.com/resources/drivers/
++	  http://malideveloper.arm.com/resources/drivers/
+ 
+ if BR2_PACKAGE_MALI_T76X
+ 
