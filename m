@@ -1,69 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Dec 2019 23:24:11 +0100
-Subject: [Buildroot] [PATCH] package/busybox/udhcpc.script: fix network
- interface tag comments
-In-Reply-To: <20191208233756.GA30928@fifth.space>
-References: <20191208233756.GA30928@fifth.space>
-Message-ID: <20191225232411.3645a98c@windsurf>
+Date: Wed, 25 Dec 2019 23:29:03 +0100
+Subject: [Buildroot] [PATCH] package/lvm2: install udev rules
+In-Reply-To: <20191203090050.4382-1-p.debruijn@unilogic.nl>
+References: <20191203090050.4382-1-p.debruijn@unilogic.nl>
+Message-ID: <20191225232903.6325bb98@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Quentin,
+Hello Pascal,
 
-On Mon, 9 Dec 2019 00:37:56 +0100
-Quentin Rameau <quinq@fifth.space> wrote:
+On Tue,  3 Dec 2019 10:00:50 +0100
+Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
 
-> Per Linux man-pages resolv.conf(5): "Lines that contain a semicolon (;)
-> or hash character (#) in the first column are treated as comments."
+> Without the device-mapper udev rules, dm devices will not get a proper
+> symlink like /dev/disk/by-label/LABEL, which in turn causes fstab
+> LABEL= mounts to fails.
+> 
+> And by extension causes shenanigans with systemd, where it will
+> unmount a manually mounted disk because it can't resolve the label.
+> 
+> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+> ---
+>  package/lvm2/lvm2.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+> index 7fdb9a7..65576f4 100644
+> --- a/package/lvm2/lvm2.mk
+> +++ b/package/lvm2/lvm2.mk
+> @@ -19,6 +19,7 @@ LVM2_CONF_OPTS += \
+>  	--enable-pkgconfig \
+>  	--enable-cmdlib \
+>  	--enable-dmeventd \
+> +	--enable-udev_rules \
 
-Thanks a lot for your patch! Could you resend it with a "Signed-off-by"
-tag with your name/e-mail at the end of the commit log?
+Why should this be done unconditionally ? Shouldn't instead this be:
 
-Also, I think the commit log should be a bit more verbose, as it took
-me some time to reconstruct what is the problem that you're trying to
-solve.
+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+LVM2_CONF_OPTS += --enable-udev_rules
+endif
 
-A better commit log is probably:
-
-"""
-
-Commit 584f418ec1ae3f0b5e09c10133c82578d78a3e03 ("busybox:
-udhcpc.script: fix resolv.conf handling with multiple interfaces")
-added some logic in udhcpc.script to "tag" the lines in resolv.conf
-according to the network interface they come from, in order to only
-remove the relevant lines when an interface goes down.
-
-Due to this, the resolv.conf file looks like this:
-
-nameserver 1.1.1.1 # eth0
-nameserver 2.2.2.2 # eth1
-
-However, resolv.conf(5) states that:
-
-       Lines that contain a semicolon (;) or hash character (#) in the first column are treated
-       as comments.
-
-So, it seems like comments starting in the middle of the line are not
-standard. This commit changes the logic in udhcpc.script to put the
-network interface "tag" and the nameserver directive on two separate
-lines:
-
-# eth0
-nameserver 1.1.1.1
-# eth1
-nameserver 2.2.2.2
-
-and adjust the logic to delete the appropriate lines when the interface
-goes down.
-"""
-
-It would be even better if you could describe if you noticed a
-practical problem with this. In the commit from 2013, the author (Peter
-Korsgaard) said he checked the glibc and uClibc implementation. Did you
-encounter a problem with the musl C library ?
+instead ?
 
 Thanks!
 
