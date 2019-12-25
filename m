@@ -1,26 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 23:04:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/librsvg: add libcroco to
- Requires.private
-In-Reply-To: <20191224160243.1310468-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 24 Dec 2019 17:02:43 +0100")
-References: <20191224160243.1310468-1-fontaine.fabrice@gmail.com>
-Message-ID: <874kxoqcyy.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Dec 2019 23:04:36 +0100
+Subject: [Buildroot] [PATCHv2 1/1] package/cereal: new package
+In-Reply-To: <20191223151100.31067-1-patrickdepinguin@gmail.com>
+References: <20191223151100.31067-1-patrickdepinguin@gmail.com>
+Message-ID: <20191225230436.168fbe79@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+On Mon, 23 Dec 2019 16:10:59 +0100
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
- > This will fix a static build failure with imagemagick
- > Fixes:
- >  - http://autobuild.buildroot.org/results/42f4b4881569779162d3efe4628b934f965913b9
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  DEVELOPERS                 |  1 +
+>  package/Config.in          |  1 +
+>  package/cereal/Config.in   | 20 ++++++++++++++++++++
+>  package/cereal/cereal.hash |  6 ++++++
+>  package/cereal/cereal.mk   | 18 ++++++++++++++++++
+>  5 files changed, 46 insertions(+)
+>  create mode 100644 package/cereal/Config.in
+>  create mode 100644 package/cereal/cereal.hash
+>  create mode 100644 package/cereal/cereal.mk
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Applied to master, thanks.
 
-Committed to 2019.02.x and 2019.11.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
