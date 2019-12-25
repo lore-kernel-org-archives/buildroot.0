@@ -1,40 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:34:00 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/qt-webkit-kiosk:
- add an upstream URL to Config.in
-Message-ID: <20191225212549.428E58E451@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Dec 2019 22:36:03 +0100
+Subject: [Buildroot] [PATCH] arch/arc: Explicitly set "max-page-size"
+ for GNU LD
+In-Reply-To: <20191224141032.34544-1-abrodkin@synopsys.com>
+References: <20191224141032.34544-1-abrodkin@synopsys.com>
+Message-ID: <20191225223603.360a7ffa@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71320bc30bf39164f1e2c5596134958e6a7e17b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+On Tue, 24 Dec 2019 17:10:32 +0300
+Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+> Back in the day we relied on a default value that used to be 8KiB
+> and it worked perfectly fine for ARC's default 8KiB page as well as
+> 4 KiB ones, but not for 16 KiB, see [1] for more details.
+> 
+> So that we fixed by setting "max-page-size" if 16KiB pages are in use by
+> commit d024d369b82d2 ("arch/arc: Accommodate 16 KiB MMU pages").
+> 
+> But as Yann very rightfully mentioned here [2] we should be setting this
+> thing explicitly for all page sizes because:
+>  1. Defaults might change unexpectedly
+>  2. Explicitly set stuff is better understood
+>  3. We act similarly to all settings but not only addressing some corner cases
+> 
+> [1] https://git.buildroot.org/buildroot/commit/?id=d024d369b82d2d3d9d4d75489c19e9488202bca0
+> [2] https://patchwork.ozlabs.org/patch/1212544/#2330647
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a7edcb7a7c7240fa8e5e876f2a115d21cf700b8e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt-webkit-kiosk/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+I have applied to master, with one change (see below), and I have one
+suggestion (see below as well).
 
-diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
-index 71f7daaa26..46688a227b 100644
---- a/package/qt-webkit-kiosk/Config.in
-+++ b/package/qt-webkit-kiosk/Config.in
-@@ -14,6 +14,8 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK
- 	help
- 	  Simple kiosk-mode browser powered by Qt5Webkit
- 
-+	  https://github.com/sergey-dryabzhinsky/qt-webkit-kiosk
-+
- if BR2_PACKAGE_QT_WEBKIT_KIOSK
- 
- config BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS
+
+> -# By default MAXPAGESIZE for ARC is 8192 so for larger MMU pages
+> -# it needs to be overridden.
+> +# Explicitly set LD's "max-page-size" instead of relying on some defaults
+> +ifeq ($(BR2_ARC_PAGE_SIZE_4K),y)
+> +ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=4096
+> +endif
+> +
+> +ifeq ($(BR2_ARC_PAGE_SIZE_8K),y)
+> +ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=8192
+> +endif
+> +
+>  ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
+>  ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384
+>  endif
+
+Since these options are mutually exclusive:
+
+ifeq ($(BR2_ARC_PAGE_SIZE_4K),y)
+ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=4096
+else ifeq ($(BR2_ARC_PAGE_SIZE_8K),y)
+ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=8192
+else ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
+ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384
+endif
+
+is a bit more compact, so I changed to use this before committing.
+
+Also, we already have an option called BR2_ARC_PAGE_SIZE, which
+contains 4K, 8K or 16K, so I thought if we could use it here as well. I
+think we can, but I'd like to hear from Yann about this, because it
+uses bash arithmetic, which I'm not sure we're allowed to use:
+
+ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=$(shell echo $$(($(patsubst %K,%,$(BR2_ARC_PAGE_SIZE)) * 1024)))
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
