@@ -1,27 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:40:18 +0100
-Subject: [Buildroot] [git commit] package/ebtables: drop useless
- EBTABLES_SUBDIR variable
-In-Reply-To: <20191222211654.3B3238D9DB@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sun, 22 Dec 2019 22:25:58 +0100")
-References: <20191222211654.3B3238D9DB@busybox.osuosl.org>
-Message-ID: <87tv5oqe2l.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Dec 2019 22:44:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libtomcrypt: add security patch
+ for CVE-2019-17362
+In-Reply-To: <20191223150338.20370-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Mon, 23 Dec 2019 16:03:37 +0100")
+References: <20191223150338.20370-1-patrickdepinguin@gmail.com>
+Message-ID: <87pngcqdw8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=d6febe48c82d0a65e17aab1eadfb70921e40c354
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > CVE-2019-17362:
+ > "The der_decode_utf8_string function (in der_decode_utf8_string.c) does not
+ > properly detect certain invalid UTF-8 sequences.  This allows
+ > context-dependent attackers to cause a denial of service (out-of-bounds read
+ > and crash) or read information from other memory locations via carefully
+ > crafted DER-encoded data."
 
- > This variable is never defined, so it is empty. Using it makes the
- > code needlessly more complicated than it needs to be, so let's drop
- > it.
+ > Details:
+ > https://github.com/libtom/libtomcrypt/issues/507
+ > https://nvd.nist.gov/vuln/detail/CVE-2019-17362
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
 Committed to 2019.02.x and 2019.11.x, thanks.
 
