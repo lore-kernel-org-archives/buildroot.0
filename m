@@ -1,20 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 20:56:27 +0100
+Date: Wed, 25 Dec 2019 20:56:55 +0100
 Subject: [Buildroot] [git commit branch/2019.02.x] package/python-django:
- bump to version 2.2.6
-Message-ID: <20191225194924.1F0A88E3DE@busybox.osuosl.org>
+ security bump to version 2.2.9
+Message-ID: <20191225194924.376378E390@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8354cf6993d845f33dc652199edcacdc6e3fa350
+commit: https://git.buildroot.net/buildroot/commit/?id=485d4443b533617cf5763a472b9aa3a4ca07deae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 27973707f794bcc1e3c2be6728e1fc6a55b40b37)
+Fixes the following security vulnerability:
+
+- CVE-2019-19844: Potential account hijack via password reset form
+  By submitting a suitably crafted email address making use of Unicode
+  characters, that compared equal to an existing user email when lower-cased
+  for comparison, an attacker could be sent a password reset token for the
+  matched account
+
+In addition, a number of bugs have been fixed.  For details, see the release
+notes:
+https://docs.djangoproject.com/en/dev/releases/2.2.9/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b164fbfc5bd66b37fae9711f73eaa06bf56381e7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/python-django/python-django.hash | 4 ++--
@@ -22,31 +33,31 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index b89ee907d3..0e6b7b2c63 100644
+index 965055f47d..5d1e6c40e7 100644
 --- a/package/python-django/python-django.hash
 +++ b/package/python-django/python-django.hash
 @@ -1,5 +1,5 @@
  # md5, sha256 from https://pypi.org/pypi/django/json
--md5	b32e396c354880742d85a7628a0bdd5a  Django-2.2.4.tar.gz
--sha256	16a5d54411599780ac9dfe3b9b38f90f785c51259a584e0b24b6f14a7f69aae8  Django-2.2.4.tar.gz
-+md5	796c175a2f94e938c60d84b4565216af  Django-2.2.6.tar.gz
-+sha256	a8ca1033acac9f33995eb2209a6bf18a4681c3e5269a878e9a7e0b7384ed1ca3  Django-2.2.6.tar.gz
+-md5	57d965818410a4e00e2267eef66aa9c9  Django-2.2.8.tar.gz
+-sha256	a4ad4f6f9c6a4b7af7e2deec8d0cbff28501852e5010d6c2dc695d3d1fae7ca0  Django-2.2.8.tar.gz
++md5	a9a6555d166196e502b69715341f7ad4  Django-2.2.9.tar.gz
++sha256	662a1ff78792e3fd77f16f71b1f31149489434de4b62a74895bd5d6534e635a5  Django-2.2.9.tar.gz
  # Locally computed sha256 checksums
  sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
 diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 7dbf7a38fd..1c810b8af7 100644
+index d541a2c07b..d5b2c1585f 100644
 --- a/package/python-django/python-django.mk
 +++ b/package/python-django/python-django.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 2.2.4
-+PYTHON_DJANGO_VERSION = 2.2.6
+-PYTHON_DJANGO_VERSION = 2.2.8
++PYTHON_DJANGO_VERSION = 2.2.9
  PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
  # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/19/11/3449a2071df9427e7a5c4dddee2462e88840dd968a9b0c161097154fcb0c
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c7/2c/bbd0fddf6a08456c3100b8e8b230f3288d4511985aa4e2368b0d115b5aae
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1c/aa/f618f346b895123be44739b276099a2b418b45b2b7afb5e1071403e8d2e9
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/2c/0d/2aa8e58c791d2aa65658fa26f2b035a9da13a6a34d1b2d991912c8a33729
  PYTHON_DJANGO_LICENSE = BSD-3-Clause
  PYTHON_DJANGO_LICENSE_FILES = LICENSE
  PYTHON_DJANGO_SETUP_TYPE = setuptools
