@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:26:16 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/sdl2: add patch
+Date: Wed, 25 Dec 2019 22:26:06 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/sdl2: add patch
  to fix busy-loop in C library
-Message-ID: <20191225211714.87B428E449@busybox.osuosl.org>
+Message-ID: <20191225211720.7635F8E44C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0439e6da4532a04bcf4aad76c95a7ec71996d8c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=feedccd012dff0e4124fb14168cbb66e2f7cbd02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 For some obscure reason, the order in which the libdrm/libgbm libraries
 are loaded matters.
