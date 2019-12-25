@@ -1,36 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:42:17 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/python-crc16:
- update the upstream URL in Config.in
-Message-ID: <20191225214909.A28F58E474@busybox.osuosl.org>
+Date: Wed, 25 Dec 2019 22:55:48 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/mali-t76x: update
+ the upstream URL in Config.in
+Message-ID: <20191225214909.D5BD08E474@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e606f7da9b8083a833022b80b5455160f3b2221c
+commit: https://git.buildroot.net/buildroot/commit/?id=d2b17a9c38ef793179ebd26eff9d8dcd77515560
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(404)' URL status in the package stats
-web page output.
+Update the upstream URL in the help text in Config.in. Removing
+the text from the beginning of the URL line addresses the 'Missing'
+URL status in the package stats web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ff0d2dd1f2382d2602024e7008c9e6fd3255d67c)
+(cherry picked from commit 7cc6df7a69ee040ef6d374d5558a0fafe43db2ee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-crc16/Config.in | 2 +-
+ package/mali-t76x/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-crc16/Config.in b/package/python-crc16/Config.in
-index 3fd8da7a85..b7a10b66ad 100644
---- a/package/python-crc16/Config.in
-+++ b/package/python-crc16/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_PYTHON_CRC16
- 	  or transmission. There are many variants of CRC and CRC16,
- 	  in particular.
+diff --git a/package/mali-t76x/Config.in b/package/mali-t76x/Config.in
+index a85fa5b27e..2533f10002 100644
+--- a/package/mali-t76x/Config.in
++++ b/package/mali-t76x/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_MALI_T76X
+ 	  Midgard T76X GPU. This package requires a kernel with the
+ 	  ARM Mali Midgard GPU Kernel Drivers enabled.
  
--	  http://pycrc16.googlecode.com/
-+	  https://code.google.com/archive/p/pycrc16/
+-	  Source: http://malideveloper.arm.com/resources/drivers/
++	  http://malideveloper.arm.com/resources/drivers/
+ 
+ if BR2_PACKAGE_MALI_T76X
+ 
