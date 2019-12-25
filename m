@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 20:59:05 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/wsapi: update the
+Date: Wed, 25 Dec 2019 20:59:18 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/wsapi: update the
  upstream URL in Config.in
-Message-ID: <20191225194954.6D33F8E3E5@busybox.osuosl.org>
+Message-ID: <20191225195021.35A118E3E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bef3e3cfe55f3cab6937a1902e397e80684a61d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a2e3f0e085bcbde9a8943903b0b18c46f12bc48b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Update the upstream URL in the help text in Config.in. This
 addresses the 'Invalid(406)' URL status in the package stats
