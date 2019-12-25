@@ -1,36 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:41:27 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/pimd: update the
- upstream URL in Config.in
-Message-ID: <20191225214909.900758E522@busybox.osuosl.org>
+Date: Wed, 25 Dec 2019 22:45:41 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x]
+ board/freescale/imx6-sabresd: Fix the Qt5 display names
+Message-ID: <20191225214909.BC5A48E474@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6b8116c11c3c798e92e242470215e88f3cfae46
+commit: https://git.buildroot.net/buildroot/commit/?id=cc1fec6aa3b41a0fe9abd8841e468a9b01529b06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(404)' URL status in the package stats
-web page output.
+The correct syntax that Qt5 understands for display names is
+"HDMI1" and "LVDS1", so fix it accordingly.
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 47e0aec2c9a92155a0995012e9e0263077b1f419)
+(cherry picked from commit aac5060d5d54efd5cca907d4b7fa9f8918f0db7f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pimd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/freescale/imx6-sabresd/rootfs_overlay/root/sabresd.json | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pimd/Config.in b/package/pimd/Config.in
-index d6a579bda2..718f84f4f8 100644
---- a/package/pimd/Config.in
-+++ b/package/pimd/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_PIMD
- 	  pimd is a lightweight stand-alone PIM-SM v2 multicast routing
- 	  daemon.
- 
--	  http://troglobit.com/project/pimd/
-+	  http://troglobit.com/projects/pimd/
+diff --git a/board/freescale/imx6-sabresd/rootfs_overlay/root/sabresd.json b/board/freescale/imx6-sabresd/rootfs_overlay/root/sabresd.json
+index d5d063af87..fe92ce5b29 100644
+--- a/board/freescale/imx6-sabresd/rootfs_overlay/root/sabresd.json
++++ b/board/freescale/imx6-sabresd/rootfs_overlay/root/sabresd.json
+@@ -4,11 +4,11 @@
+   "pbuffers": true,
+   "outputs": [
+     {
+-      "name": "HDMI-1",
++      "name": "HDMI1",
+       "mode": "off"
+     },
+     {
+-      "name": "LVDS-1",
++      "name": "LVDS1",
+       "mode": "1024x768"
+     }
+   ]
