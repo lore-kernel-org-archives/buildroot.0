@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 21:00:29 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/x265: update the
+Date: Wed, 25 Dec 2019 21:00:53 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/x265: update the
  upstream URL in Config.in
-Message-ID: <20191225195133.01A2C8E3F6@busybox.osuosl.org>
+Message-ID: <20191225195140.D1D468E3FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=137b2233b65e2244f9762c4df744b71ddb8700f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=aa85d7fa2c5c22210c183b8fad8b2bafba111050
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Update the upstream URL in the help text in Config.in. This
 addresses the 'Invalid(Err)' URL status in the package stats
