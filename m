@@ -1,34 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:44:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libtomcrypt: add security patch
- for CVE-2019-17362
-In-Reply-To: <20191223150338.20370-1-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Mon, 23 Dec 2019 16:03:37 +0100")
-References: <20191223150338.20370-1-patrickdepinguin@gmail.com>
-Message-ID: <87pngcqdw8.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Dec 2019 22:46:20 +0100
+Subject: [Buildroot] [PATCH 1/2] board/imx6-sabresd: Fix the Qt5 display
+ names
+In-Reply-To: <20191223122253.8238-1-festevam@gmail.com> (Fabio Estevam's
+ message of "Mon, 23 Dec 2019 09:22:52 -0300")
+References: <20191223122253.8238-1-festevam@gmail.com>
+Message-ID: <87lfr0qdsj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > CVE-2019-17362:
- > "The der_decode_utf8_string function (in der_decode_utf8_string.c) does not
- > properly detect certain invalid UTF-8 sequences.  This allows
- > context-dependent attackers to cause a denial of service (out-of-bounds read
- > and crash) or read information from other memory locations via carefully
- > crafted DER-encoded data."
+ > The correct syntax that Qt5 understands for display names is
+ > "HDMI1" and "LVDS1", so fix it accordingly.
 
- > Details:
- > https://github.com/libtom/libtomcrypt/issues/507
- > https://nvd.nist.gov/vuln/detail/CVE-2019-17362
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-
-Committed to 2019.02.x and 2019.11.x, thanks.
+Committed to 2019.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
