@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 20:59:31 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/wsapi-xavante:
+Date: Wed, 25 Dec 2019 20:59:41 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/wsapi-xavante:
  update the upstream URL in Config.in
-Message-ID: <20191225195021.4F5D68E3E9@busybox.osuosl.org>
+Message-ID: <20191225195045.D5ACD8A29D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bb4e83ec4ffd34cb2996823243cf54739405d03
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c4754ed2ef6ffc704b4bd816f798cf78713ae847
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Update the upstream URL in the help text in Config.in. This
 addresses the 'Invalid(406)' URL status in the package stats
