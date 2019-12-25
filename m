@@ -1,124 +1,68 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Tue, 31 Dec 2019 17:31:19 -0600
-Subject: [Buildroot] [PATCH] package/libnss: fix build failure due to HW
- PPC Crypto bug
-In-Reply-To: <08c5d316-d21b-f361-1506-af6a3bdd46e0@xes-inc.com>
-References: <20191227165427.107111-1-giulio.benetti@benettiengineering.com>
- <20191231180736.09a5add2@windsurf>
- <496f5949-570f-2678-6bcd-67660692479b@benettiengineering.com>
- <08c5d316-d21b-f361-1506-af6a3bdd46e0@xes-inc.com>
-Message-ID: <a45613d1-5d52-9c80-8b79-a1eda19e83f0@xes-inc.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 25 Dec 2019 23:03:23 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/librsvg: add
+ libcroco to Requires.private
+Message-ID: <20200107082346.64F217F8E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=4a5717757fcb23b405b5eb55d0170620aff6b16a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-On 12/31/19 4:49 PM, Vincent Fazio wrote:
-> Gang,
->
-> Just going to toss my $.02 in...
->
-> On 12/31/19 3:24 PM, Giulio Benetti wrote:
->> Hi Thomas,
->>
->> On 12/31/19 6:07 PM, Thomas Petazzoni wrote:
->>> On Fri, 27 Dec 2019 17:54:27 +0100
->>> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
->>>
->>>> diff --git 
->>>> a/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch 
->>>> b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch 
->>>>
->>>> new file mode 100644
->>>> index 0000000000..0b891b5ebc
->>>> --- /dev/null
->>>> +++ 
->>>> b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch 
->>>>
->>>> @@ -0,0 +1,37 @@
->>>> +From 09b3776a924736049693a118d5a8d883e8c794ca Mon Sep 17 00:00:00 
->>>> 2001
->>>> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>>> +Date: Fri, 27 Dec 2019 17:41:04 +0100
->>>> +Subject: [PATCH] Bug 1606119 - Fix PPC HW Crypto build failure
->>>> +
->>>> +Only Big Endian Altivec functions are used, not Little Endian 
->>>> ones, so
->>>> +let's change check if USE_PPC_CRYPTO by changing to IS_BIG_ENDIAN
->>>> +instead of IS_LITTLE_ENDIAN.
->>>> +
->>>> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>>
->>> I don't understand the reasoning here. From a quick look, the undefined
->>> symbols reported in the build log come from the file
->>> ./nss/lib/freebl/gcm-ppc.c.
->>>
->>> This file is included in the build in nss/lib/freebl/Makefile if
->>> CPU_ARCH=ppc.
->>>
->>> However CPU_ARCH=ppc is only set in nss/coreconf/Linux.mk as follows:
->>>
->>> ifeq (,$(filter-out ppc64 ppc64le,$(OS_TEST)))
->>> ???????? CPU_ARCH??????? = ppc
->>> ifeq ($(USE_64),1)
->>> ???????? ARCHFLAG??????? = -m64
->>> endif
->>>
->>> In libnss.mk, we pass OS_TEST=$(LIBNSS_ARCH), which basically is the
->>> value of $(BR2_ARCH), which is powerpc64 or powerpc64le in Buildroot.
->>>
->>> So, regardless of whether we are big endian PPC64 or little endian
->>> PPC64, the gcm-ppc.c file will not be included in the build.
->>>
->>> Am I missing something ? Could you explain a bit better how you came to
->>> the conclusion you have in this patch ?
->>
->> The point is that gcm-ppc.c gets compiled, but inside it there's an 
->> #if defined(USE_PPC_CRYPTO) on top of the file, that is defined in 
->> gsm.h only #if __powerpc64__ and LITTLE_ENDIAN. But inside gcm-ppc.c 
->> they use _be() Altivec functions. Basically they have inverted 
->> LITTLE_ENDIAN with BIB_ENDIAN, since they use Big Endian only Altivec 
->> functions in gcm-ppc.c so the only wrong piece of code is in gcm.h, 
->> where USE_PPC_CRYPTO is defined.
->>
-> I assume you mean this in gcm_HashMult_hw:
->
-> ??????? /* clang needs the following cast away from const; maybe a bug 
-> in 7.0.0 */
-> ??????? v = (vec_u64)vec_xl_be(0, (unsigned char *)buf);
->
-> It should be fine to call endian specific functions if you know how 
-> the data is stored.
->
->> Need only to invert the condition by which USE_PPC_CRYPTO is defined: 
->> BIG_ENDIAN instead of LITTLE_ENDIAN.
->>
->> Best regards
->
-> Based on the below commit, it was tested on a POWER8, presumably in LE 
-> mode, so I'd be hesitant to switch any endian checks:
-> https://hg.mozilla.org/projects/nss/rev/3d7e509d6d20ecd607a28fa6ce42e4ffd9c51443 
->
->
-> The bigger issue may be that 'vec_xl_be' wasn't introduced until GCC 8 
-> and the toolchain used in the failed build is GCC 7, so that function 
-> is not available in altivec.h:
-> https://github.com/gcc-mirror/gcc/commit/f7b0548e5eba54b637977e3df4d4daf0cabe474d 
->
->
-> So if we stick with nss-3.48, the package should likely depend on 
-> BR2_TOOLCHAIN_GCC_AT_LEAST_8.
-Or don't utilize PPC hardware accelerated instructions by undefining 
-USE_PPC_CRYPTO... which is probably the saner option :-). This would 
-give the semblance that the compile worked as expected since the hashing 
-function will now be available, but Thomas' concern re CPU_ARCH and the 
-future inclusion of ppc specific source is still valid.
+This will fix a static build failure with imagemagick
 
+Fixes:
+ - http://autobuild.buildroot.org/results/42f4b4881569779162d3efe4628b934f965913b9
 
--- 
-Vincent Fazio
-Embedded Software Engineer - Linux
-Extreme Engineering Solutions, Inc
-http://www.xes-inc.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 062423d51ad8251584e1b85a118d9c5abae8280a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...vg.pc.in-add-libcroco-to-Requires.Private.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch b/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
+new file mode 100644
+index 0000000000..0eea5b995b
+--- /dev/null
++++ b/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
+@@ -0,0 +1,35 @@
++From 322b415f92d4dcd36824eef83bd617bac6e5c8c7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 24 Dec 2019 16:38:35 +0100
++Subject: [PATCH] librsvg.pc.in: add libcroco to Requires.private
++
++libcroco is a mandatory dependency since version 2.35.0 so add it to
++Requires.Private to fix a static build failure with imagemagick
++
++This patch is not upstreamable as librsvg no longer depends on libcroco
++since version 2.47.1. It now does all CSS processing using Rust crates
++from Mozilla Servo.
++
++Fixes:
++ - http://autobuild.buildroot.org/results/42f4b4881569779162d3efe4628b934f965913b9
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ librsvg.pc.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/librsvg.pc.in b/librsvg.pc.in
++index a451de05..4b09984a 100644
++--- a/librsvg.pc.in
+++++ b/librsvg.pc.in
++@@ -10,6 +10,6 @@ Name: librsvg
++ Description: library that renders svg files
++ Version: @VERSION@
++ Requires: glib-2.0 gio-2.0 gdk-pixbuf-2.0 cairo
++-Requires.private:
+++Requires.private: libcroco-0.6
++ Libs: -L${libdir} -lrsvg- at RSVG_API_MAJOR_VERSION@ -lm
++ Cflags: -I${includedir}/librsvg- at RSVG_API_VERSION@
++-- 
++2.24.0
++
