@@ -1,38 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:41:19 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/perl-sys-cpu: add
- an upstream URL to Config.in
-Message-ID: <20191225214909.884298E522@busybox.osuosl.org>
+Date: Wed, 25 Dec 2019 22:39:39 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/ebtables: drop
+ useless EBTABLES_SUBDIR variable
+Message-ID: <20191225214909.802B38E523@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1dd41ba9d6ce2ff1275e1ecfab683e0d969dd50
+commit: https://git.buildroot.net/buildroot/commit/?id=60f717542731935e3fe06b8dade747ab7886ef5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+This variable is never defined, so it is empty. Using it makes the
+code needlessly more complicated than it needs to be, so let's drop
+it.
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6c74afc1287df5b1a3ebe5eae51c7eadf46ca145)
+(cherry picked from commit d6febe48c82d0a65e17aab1eadfb70921e40c354)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-sys-cpu/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/ebtables/ebtables.mk | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/perl-sys-cpu/Config.in b/package/perl-sys-cpu/Config.in
-index 8306b371dc..70cfded8ff 100644
---- a/package/perl-sys-cpu/Config.in
-+++ b/package/perl-sys-cpu/Config.in
-@@ -5,5 +5,7 @@ config BR2_PACKAGE_PERL_SYS_CPU
- 	  Perl module for getting information about the system CPU
- 	  (Sys::CPU).
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+index aae0c91a10..7b2264703c 100644
+--- a/package/ebtables/ebtables.mk
++++ b/package/ebtables/ebtables.mk
+@@ -19,19 +19,15 @@ endef
  
-+	  http://search.cpan.org/dist/Sys-CPU/
-+
- comment "perl-sys-cpu needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
+ ifeq ($(BR2_STATIC_LIBS),y)
+ define EBTABLES_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/static \
+-		$(TARGET_DIR)/sbin/ebtables
++	$(INSTALL) -m 0755 -D $(@D)/static $(TARGET_DIR)/sbin/ebtables
+ endef
+ else
+ define EBTABLES_INSTALL_TARGET_CMDS
+-	for so in $(@D)/$(EBTABLES_SUBDIR)/*.so \
+-		$(@D)/$(EBTABLES_SUBDIR)/extensions/*.so; \
+-		do \
++	for so in $(@D)/*.so $(@D)/extensions/*.so; do \
+ 		$(INSTALL) -m 0755 -D $${so} \
+ 			$(TARGET_DIR)/lib/ebtables/`basename $${so}` || exit 1; \
+ 	done
+-	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
+-		$(TARGET_DIR)/sbin/ebtables
++	$(INSTALL) -m 0755 -D $(@D)/ebtables $(TARGET_DIR)/sbin/ebtables
+ 	$(INSTALL) -m 0644 -D $(@D)/ethertypes $(TARGET_DIR)/etc/ethertypes
+ endef
+ endif
