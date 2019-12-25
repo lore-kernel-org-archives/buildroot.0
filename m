@@ -1,63 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Dec 2019 22:06:25 +0100
-Subject: [Buildroot] [git commit] package/dante: fix configure error
-Message-ID: <20191225205733.7DABC8E436@busybox.osuosl.org>
+Date: Wed, 25 Dec 2019 22:06:16 +0100
+Subject: [Buildroot] [git commit] package/librsvg: add libcroco to
+ Requires.private
+Message-ID: <20191225205733.752F68E443@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a68ad177e9a11c02e489aee62b36d9d25c3f5493
+commit: https://git.buildroot.net/buildroot/commit/?id=062423d51ad8251584e1b85a118d9c5abae8280a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This will fix a static build failure with imagemagick
+
 Fixes:
- - http://autobuild.buildroot.org/results/9be8a0d5af85370ecb52bcd315aa73cacbc95abc
+ - http://autobuild.buildroot.org/results/42f4b4881569779162d3efe4628b934f965913b9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...sdep-m4-Remove-getaddrinfo-too-low-checks.patch | 35 ++++++++++++++++++++++
+ ...vg.pc.in-add-libcroco-to-Requires.Private.patch | 35 ++++++++++++++++++++++
  1 file changed, 35 insertions(+)
 
-diff --git a/package/dante/0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch b/package/dante/0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch
+diff --git a/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch b/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
 new file mode 100644
-index 0000000000..af23d46d11
+index 0000000000..0eea5b995b
 --- /dev/null
-+++ b/package/dante/0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch
++++ b/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
 @@ -0,0 +1,35 @@
-+osdep.m4: Remove getaddrinfo() too low checks
++From 322b415f92d4dcd36824eef83bd617bac6e5c8c7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 24 Dec 2019 16:38:35 +0100
++Subject: [PATCH] librsvg.pc.in: add libcroco to Requires.private
 +
-+dante runs AC_PREPROC_IFELSE then it fills $ERRVALFILE by running the
-+following command:
++libcroco is a mandatory dependency since version 2.35.0 so add it to
++Requires.Private to fix a static build failure with imagemagick
 +
-+cat conftest.i | grep gaierrval: >>$2
++This patch is not upstreamable as librsvg no longer depends on libcroco
++since version 2.47.1. It now does all CSS processing using Rust crates
++from Mozilla Servo.
 +
-+As a result, $ERRVALFILE does not contain the expected values because
-+the expected value is not on the same line than gaierrval:
-+
-+ gaierrval: 
-+ # 130 "conftest.c" 3 4
-+           -3
-+
-+So drop these checks
++Fixes:
++ - http://autobuild.buildroot.org/results/42f4b4881569779162d3efe4628b934f965913b9
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ librsvg.pc.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff -Nuar dante-1.4.2-orig/osdep.m4 dante-1.4.2/osdep.m4
-+--- dante-1.4.2-orig/osdep.m4	2019-12-09 21:28:38.936003218 +0100
-++++ dante-1.4.2/osdep.m4	2019-12-09 21:49:48.764019371 +0100
-+@@ -956,13 +956,7 @@
-+ unset UNIQUEVALS UNIQUESYMBOLS
-+ if test -s $ERRVALFILE; then
-+     UNIQUEVALS=`sort $ERRVALFILE | uniq | wc -l | awk '{ print $1 }'`
-+-    if test $UNIQUEVALS -le 1; then
-+-        AC_MSG_FAILURE([error: getaddrinfo() error value count too low])
-+-    fi
-+     UNIQUESYMBOLS=`cat $ERRVALFILE | wc -l | awk '{ print $1 }'`
-+-    if test $UNIQUESYMBOLS -le 1; then
-+-        AC_MSG_FAILURE([error: getaddrinfo() error symbol count too low])
-+-    fi
-+ 
-+     if test $ERRNOCNT -ne $UNIQUESYMBOLS; then
-+ 	AC_MSG_FAILURE([internal error: errno symbol count mismatch])
++diff --git a/librsvg.pc.in b/librsvg.pc.in
++index a451de05..4b09984a 100644
++--- a/librsvg.pc.in
+++++ b/librsvg.pc.in
++@@ -10,6 +10,6 @@ Name: librsvg
++ Description: library that renders svg files
++ Version: @VERSION@
++ Requires: glib-2.0 gio-2.0 gdk-pixbuf-2.0 cairo
++-Requires.private:
+++Requires.private: libcroco-0.6
++ Libs: -L${libdir} -lrsvg- at RSVG_API_MAJOR_VERSION@ -lm
++ Cflags: -I${includedir}/librsvg- at RSVG_API_VERSION@
++-- 
++2.24.0
++
