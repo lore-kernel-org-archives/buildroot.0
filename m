@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 18:09:14 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libssh: security
+Date: Wed, 25 Dec 2019 18:08:31 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libssh: security
  bump to version 0.9.3
-Message-ID: <20191225170049.DF2048E355@busybox.osuosl.org>
+Message-ID: <20191225170055.B0ACA8E371@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a4fc9288c2a7dd8cc11e1e2c62c2414069ea93f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=85329cd089039b4a000352a95003623f830359fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes the following security vulnerabilities:
 
@@ -43,7 +43,7 @@ index 2f5708ddac..ca296701bf 100644
 +sha256 2c8b5f894dced58b3d629f16f3afa6562c20b4bdc894639163cf657833688f0c  libssh-0.9.3.tar.xz
  sha256 1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
 diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index d5f22c29a0..ce0defa473 100644
+index b8464ed2bf..161040b346 100644
 --- a/package/libssh/libssh.mk
 +++ b/package/libssh/libssh.mk
 @@ -5,7 +5,7 @@
