@@ -1,100 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 25 Dec 2019 16:13:51 +0100
-Subject: [Buildroot] Potential lurking issue with host rpaths
-Message-ID: <20191225151351.GO26395@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 25 Dec 2019 18:07:54 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
+ linux-headers}: bump 4.{14, 19}.x / 5.{3, 4}.x series
+Message-ID: <20191225165856.1F5AC8E356@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout, Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b38c13760a0c555d9ef188db3fb93d7dbc80c5ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Consider the following situation for packages 'bar' and 'libfoo':
-  - upstream bar has an optional dependency on libfoo
-  - in Buildroot, host-bar does not depend on host-libfoo, because
-    we do not need that dependency [0]
-  - a third package (whatever, not in the dependency chain of host-bar)
-    brings in host-libfoo into the build.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ce0f527950b4d698de4f3f36276ec14cd49e1b89)
+[Peter: drop 5.x bump]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 4 ++--
+ package/linux-headers/Config.in.host | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-Now, let's look at what happens:
-
-- without PPD
-  - libfoo not installed on the host system
-    - host-libfoo built before host-bar
-      - bar links to libfoo
-        - bar has an RPATH for another lib
-          => OK
-        - bar does not have an RPATH for another lib
-          -> check-host-rpath errors out for host-bar
-          => OK
-    - host-libfoo built after host-bar
-      -> bar not linked to libfoo
-      => OK
-
-  - libfoo installed on the host system
-    - host-libfoo built before host-bar
-      - bar links to host-libfoo
-        - bar has an RPATH for another lib
-          => OK
-        - bar does not have an RPATH for another lib
-          -> check-host-rpath errors out for host-bar
-          => OK
-    - host-libfoo built after host-bar
-      - bar links to system libfoo
-        - bar has an RPATH for another lib
-          -> check-host-rpath OK for both host-bar and host-libfoo
-          -> error at runtime: bar uses host-libfoo instead of system
-             libfoo
-          => KO, MISSED
-        - bar does not have an RPATH for another lib
-          -> check-host-rpath errors out for host-libfoo
-          => OK [1]
-
-
-- with PPD
-  - libfoo not installed on the host system
-    -> bar never linked to libfoo
-    => OK
-
-  - libfoo installed on the host system
-    -> bar always linked to system libfoo
-      - bar has an RPATH for another lib
-        -> check-host-rpath OK for host-bar
-        -> error at runtime: bar uses host-libfoo instead of system
-           libfoo, *but* only once the final, complete host directory
-           has been aggregated
-        => KO, MISSED
-      - bar does not have an RPATH for another lib
-        -> check-host-rpath OK for host-bar
-        => OK
-
-
-So, in either case (PPD or no PPD), we do have an issue with optional
-dependencies for host packages...
-
-
-Now, the questions:
-  - are those two issues for real, or did I miss something?
-  - is they are real, how can we fix them?
-
-
-[0] for example host-systemd does not depend on host-libselinux, because
-    we only need systemctl, but systemd will always also build nspawn,
-    which may link with libselinux if present.
-
-[1] check-host-rpath errors out for host-libfoo instead of host-bar, so
-    for the wrong package, but at least it errors out and we can notice
-    the issue.
-
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/linux/Config.in b/linux/Config.in
+index c5a3f9eda7..ec7e08684d 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.19.88" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.19.90" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 9e5dc6a019..8d1c69b493 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -2,5 +2,5 @@
+ sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
+ sha256 5da5e16fe08fa506f8f74aa4f17be22b52c0f513e9a3f7e7ae22fc53597ad493  linux-4.4.206.tar.xz
+ sha256 1df27899a9bc4dd874f3830ab9e7b638f0026dffd67a2e230444e5d2805ccad6  linux-4.9.206.tar.xz
+-sha256 0d49ec72e273f6fc7462ad56849b2285f13fd5f4185e8f932a0074fc2eca1bb3  linux-4.14.158.tar.xz
+-sha256 c1923b6bd166e6dd07be860c15f59e8273aaa8692bc2a1fce1d31b826b9b3fbe  linux-4.19.88.tar.xz
++sha256 e8d42d3a1b85d180141e9bc11c4a0e87f8a413c0e989b0f24c1b7c40f8a826f2  linux-4.14.159.tar.xz
++sha256 29d86c0a6daf169ec0b4b42a12f8d55dc894c52bd901f876f52a05906a5cf7fd  linux-4.19.90.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 17a27075c2..580d3bc6b8 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -289,8 +289,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "4.4.206"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.206"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.158"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.88"	if BR2_KERNEL_HEADERS_4_19
++	default "4.14.159"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.90"	if BR2_KERNEL_HEADERS_4_19
+ 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
