@@ -1,57 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Dec 2019 22:09:52 +0100
-Subject: [Buildroot] [git commit] arch/arc: explicitly set "max-page-size"
- for GNU LD
-Message-ID: <20191225212141.69F7E8E459@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 25 Dec 2019 22:32:52 +0100
+Subject: [Buildroot] [PATCH v1] package/zip: fix musl compile
+In-Reply-To: <20191217221134.2619-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Tue, 17 Dec 2019 23:11:34 +0100")
+References: <20191217221134.2619-1-ps.report@gmx.net>
+Message-ID: <8736d8rszf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cc2c6d19ab2e1bb4634f26f9318da9b07df5fff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Back in the day we relied on a default value that used to be 8KiB
-and it worked perfectly fine for ARC's default 8KiB page as well as
-4 KiB ones, but not for 16 KiB, see [1] for more details.
+ > For musl toolchain timezone.c needs time.h include.
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/77346a2cdb9eeef661527fb9566019f3cd1b82c9
 
-So that we fixed by setting "max-page-size" if 16KiB pages are in use by
-commit d024d369b82d2 ("arch/arc: Accommodate 16 KiB MMU pages").
+ >   In file included from util.c:28:
+ >   timezone.c: In function 'mktime':
+ >   timezone.c:644:18: error: dereferencing pointer to incomplete type 'struct tm'
+ >        save_isdst = tm->tm_isdst;
 
-But as Yann very rightfully mentioned here [2] we should be setting this
-thing explicitly for all page sizes because:
- 1. Defaults might change unexpectedly
- 2. Explicitly set stuff is better understood
- 3. We act similarly to all settings but not only addressing some corner cases
+ >   timezone.c:661:11: warning: implicit declaration of function 'localtime'; did you mean 'dostime'? [-Wimplicit-function-declaration]
+ >        ltm = localtime(&then);
 
-[1] https://git.buildroot.org/buildroot/commit/?id=d024d369b82d2d3d9d4d75489c19e9488202bca0
-[2] https://patchwork.ozlabs.org/patch/1212544/#2330647
+ >   timezone.c:661:9: warning: assignment to 'struct tm *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+ >        ltm = localtime(&then);
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- arch/arch.mk.arc | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
-index 9c04a85a8d..32b818b0e0 100644
---- a/arch/arch.mk.arc
-+++ b/arch/arch.mk.arc
-@@ -5,9 +5,12 @@ ifeq ($(BR2_ARC_ATOMIC_EXT),y)
- ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
- endif
- 
--# By default MAXPAGESIZE for ARC is 8192 so for larger MMU pages
--# it needs to be overridden.
--ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
-+# Explicitly set LD's "max-page-size" instead of relying on some defaults
-+ifeq ($(BR2_ARC_PAGE_SIZE_4K),y)
-+ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=4096
-+else ifeq ($(BR2_ARC_PAGE_SIZE_8K),y)
-+ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=8192
-+else ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
- ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384
- endif
- 
+Committed to 2019.02.x and 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
