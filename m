@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:36:01 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/rpcbind: add an
- upstream URL to Config.in
-Message-ID: <20191225214909.564AD8E522@busybox.osuosl.org>
+Date: Wed, 25 Dec 2019 22:41:19 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/perl-sys-cpu: add
+ an upstream URL to Config.in
+Message-ID: <20191225214909.884298E522@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3b7a212809cdc54827ea51aacfa76c71c3e9279
+commit: https://git.buildroot.net/buildroot/commit/?id=e1dd41ba9d6ce2ff1275e1ecfab683e0d969dd50
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Add an upstream URL to the help text in Config.in. This
@@ -18,22 +18,21 @@ web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 14dabed5ef0512fdaa7e76531ae8747d7cd94184)
+(cherry picked from commit 6c74afc1287df5b1a3ebe5eae51c7eadf46ca145)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpcbind/Config.in | 2 ++
+ package/perl-sys-cpu/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/rpcbind/Config.in b/package/rpcbind/Config.in
-index ced2d40944..9cde7bba39 100644
---- a/package/rpcbind/Config.in
-+++ b/package/rpcbind/Config.in
-@@ -9,6 +9,8 @@ config BR2_PACKAGE_RPCBIND
- 	  The rpcbind utility is a server that converts RPC program
- 	  numbers into universal addresses.
+diff --git a/package/perl-sys-cpu/Config.in b/package/perl-sys-cpu/Config.in
+index 8306b371dc..70cfded8ff 100644
+--- a/package/perl-sys-cpu/Config.in
++++ b/package/perl-sys-cpu/Config.in
+@@ -5,5 +5,7 @@ config BR2_PACKAGE_PERL_SYS_CPU
+ 	  Perl module for getting information about the system CPU
+ 	  (Sys::CPU).
  
-+	  https://sourceforge.net/projects/rpcbind/
++	  http://search.cpan.org/dist/Sys-CPU/
 +
- comment "rpcbind needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
+ comment "perl-sys-cpu needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
