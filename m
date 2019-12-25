@@ -1,36 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:36:39 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/spidev_test:
- update the upstream URL in Config.in
-Message-ID: <20191225214903.2A4C08E460@busybox.osuosl.org>
+Date: Wed, 25 Dec 2019 22:41:14 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/perl-sys-cpu: add
+ an upstream URL to Config.in
+Message-ID: <20191225214903.445A98E4E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02d32a41fdab04f0fcc8747e5c3305b891b08143
+commit: https://git.buildroot.net/buildroot/commit/?id=0b8b8382c02f321276bc6c41e8015a32cbe719ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(404)' URL status in the package stats
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3661a3e3a9a788de8240078a4a344b9edb1fa9ca)
+(cherry picked from commit 6c74afc1287df5b1a3ebe5eae51c7eadf46ca145)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/spidev_test/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/perl-sys-cpu/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
-index 0d8214cc29..44990c66b6 100644
---- a/package/spidev_test/Config.in
-+++ b/package/spidev_test/Config.in
-@@ -14,4 +14,4 @@ config BR2_PACKAGE_SPIDEV_TEST
- 	  This means you won't have quad-pumped SPI support if your
- 	  toolchain is too old.
+diff --git a/package/perl-sys-cpu/Config.in b/package/perl-sys-cpu/Config.in
+index 8306b371dc..70cfded8ff 100644
+--- a/package/perl-sys-cpu/Config.in
++++ b/package/perl-sys-cpu/Config.in
+@@ -5,5 +5,7 @@ config BR2_PACKAGE_PERL_SYS_CPU
+ 	  Perl module for getting information about the system CPU
+ 	  (Sys::CPU).
  
--	  https://www.kernel.org/doc/Documentation/spi/spidev_test.c
-+	  https://www.kernel.org/doc/html/latest/spi/index.html
++	  http://search.cpan.org/dist/Sys-CPU/
++
+ comment "perl-sys-cpu needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
