@@ -1,68 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:43:46 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libtomcrypt: add
- security patch for CVE-2019-17362
-Message-ID: <20191225214909.B3FF58E523@busybox.osuosl.org>
+Date: Wed, 25 Dec 2019 22:54:48 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x]
+ board/freescale/common/imx: use nodtb variant in uboot images for 8M
+Message-ID: <20191225214909.CD6E88E522@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b72f0ff61208b29e81cb005e9c0b0fa69e2c190
+commit: https://git.buildroot.net/buildroot/commit/?id=8245a1ff5956a9d90a645386749bfefdd972fb81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-CVE-2019-17362:
-"The der_decode_utf8_string function (in der_decode_utf8_string.c) does not
-properly detect certain invalid UTF-8 sequences.  This allows
-context-dependent attackers to cause a denial of service (out-of-bounds read
-and crash) or read information from other memory locations via carefully
-crafted DER-encoded data."
+In board/freescale/common/imx/imx8-bootloader-prepare.sh, when
+invoking mkimage_fit_atf.sh, the U-Boot DTB is passed as parameter, to
+be included in the FIT image. This parameter usually comes from
+BR2_ROOTFS_POST_SCRIPT_ARGS config option. The variable
+BL33=u-boot.bin set in the invocation uses the u-boot image which is
+including its embedded DTB. This means the U-Boot DTB is included
+twice.
 
-Details:
-https://github.com/libtom/libtomcrypt/issues/507
-https://nvd.nist.gov/vuln/detail/CVE-2019-17362
+The upstream script mkimage_fit_atf.sh plus its Buildroot patch are
+meant to use by default the nodtb variant and use the DTB in a
+separate image. See [1] and [2].
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+The U-Boot default DTB which will be included in u-boot.bin image is
+selected with U-Boot CONFIG_DEFAULT_DEVICE_TREE, or DEVICE_TREE
+variable when invoking "make". If one of those option is not aligned
+to the BR2_ROOTFS_POST_SCRIPT_ARGS config option, it's possible the
+two included U-Boot DTBs are different. If such case happens, the
+built-in DTB is always used, regardless of the other one, selected
+with BR2_ROOTFS_POST_SCRIPT_ARGS.
+
+For example, this case happens for TechNexion Pico Pi i.MX8M and
+i.MX8MMini. Since the U-Boot defconfig assumes the nodtb version will
+be used, it does not set the default DTB. The u-boot.bin will include
+the fsl-imx8mm-evk instead. Including the wrong board DTB breaks the
+USB and UMS commands (and possibly others). Since those boards does
+not have SD card slots, a recovery serial download is needed at every
+update.
+
+This patch make sure that only the separate U-Boot DTB will be
+included in the FIT image by using the nodtb variant.
+
+[1] https://source.codeaurora.org/external/imx/imx-mkimage/tree/iMX8M/mkimage_fit_atf.sh?h=rel_imx_4.14.98_2.0.0_ga#n35
+[2] https://git.busybox.net/buildroot/tree/package/imx-mkimage/0001-add-support-for-overriding-bl32-and-bl33-not-only-bl.patch?h=2019.11#n42
+
+Signed-off-by: Julien Olivain <juju@cotds.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 62b34ed33ba4f2ee17046aa4d38a13840597f636)
+(cherry picked from commit d130f0a83700b52ba51ebde22885f0f9e577ee29)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libtomcrypt/0001-fix-CVE-2019-17362.patch | 29 +++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ board/freescale/common/imx/imx8-bootloader-prepare.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libtomcrypt/0001-fix-CVE-2019-17362.patch b/package/libtomcrypt/0001-fix-CVE-2019-17362.patch
-new file mode 100644
-index 0000000000..91e2145853
---- /dev/null
-+++ b/package/libtomcrypt/0001-fix-CVE-2019-17362.patch
-@@ -0,0 +1,29 @@
-+From 25c26a3b7a9ad8192ccc923e15cf62bf0108ef94 Mon Sep 17 00:00:00 2001
-+From: werew <werew@ret2libc.com>
-+Date: Thu, 3 Oct 2019 19:57:10 +0200
-+Subject: [PATCH] Fixes #507
-+
-+Fix a vulnerability in der_decode_utf8_string as specified here:
-+https://github.com/libtom/libtomcrypt/issues/507
-+
-+[for import into Buildroot]
-+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+
-+
-+---
-+ src/pk/asn1/der/utf8/der_decode_utf8_string.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/pk/asn1/der/utf8/der_decode_utf8_string.c b/src/pk/asn1/der/utf8/der_decode_utf8_string.c
-+index 94555b99f..d3ed82bea 100644
-+--- a/src/pk/asn1/der/utf8/der_decode_utf8_string.c
-++++ b/src/pk/asn1/der/utf8/der_decode_utf8_string.c
-+@@ -65,7 +65,7 @@ int der_decode_utf8_string(const unsigned char *in,  unsigned long inlen,
-+       /* count number of bytes */
-+       for (z = 0; (tmp & 0x80) && (z <= 4); z++, tmp = (tmp << 1) & 0xFF);
-+ 
-+-      if (z > 4 || (x + (z - 1) > inlen)) {
-++      if (z == 1 || z > 4 || (x + (z - 1) > inlen)) {
-+          return CRYPT_INVALID_PACKET;
-+       }
-+ 
+diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+index df528b0df5..cbf741af30 100755
+--- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+@@ -10,14 +10,14 @@ main ()
+ 
+ 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
+ 		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+-		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
++		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
+ 
+ 		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+ 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
+ 		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+-		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
++		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
+ 
