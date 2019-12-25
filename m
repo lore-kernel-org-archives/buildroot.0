@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:27:15 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/rygel: drop
+Date: Wed, 25 Dec 2019 22:27:00 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/rygel: drop
  autoreconf
-Message-ID: <20191225211817.972468E452@busybox.osuosl.org>
+Message-ID: <20191225211821.465748E455@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=225df33f3b6d563439ae759b8c4822cbb6aacb96
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d34dea2de9e13e4019b08b4f9f231ed42afd3797
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 autoreconf is not needed since bump to version 0.36.2 in commit
 76f86c409d016851d4d63216ada969e6cd81dd56
