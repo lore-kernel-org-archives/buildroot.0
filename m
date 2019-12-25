@@ -1,40 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:33:49 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/qt-webkit-kiosk:
- add an upstream URL to Config.in
-Message-ID: <20191225212539.9AA5D8E461@busybox.osuosl.org>
+Date: Wed, 25 Dec 2019 22:31:32 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/zip: fix musl
+ compile
+Message-ID: <20191225212539.83B4D8E461@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2790598f503ad16a8b4d3381d3f524db9c238b5c
+commit: https://git.buildroot.net/buildroot/commit/?id=90e00050779c3b14cc21eadd6f5f9380f880acd1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Add an upstream URL to the help text in Config.in. This
-addresses the 'Missing' URL status in the package stats
-web page output.
+For musl toolchain timezone.c needs time.h include.
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Fixes:
+  http://autobuild.buildroot.net/results/77346a2cdb9eeef661527fb9566019f3cd1b82c9
+
+  In file included from util.c:28:
+  timezone.c: In function 'mktime':
+  timezone.c:644:18: error: dereferencing pointer to incomplete type 'struct tm'
+       save_isdst = tm->tm_isdst;
+
+  timezone.c:661:11: warning: implicit declaration of function 'localtime'; did you mean 'dostime'? [-Wimplicit-function-declaration]
+       ltm = localtime(&then);
+
+  timezone.c:661:9: warning: assignment to 'struct tm *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+       ltm = localtime(&then);
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a7edcb7a7c7240fa8e5e876f2a115d21cf700b8e)
+(cherry picked from commit 376d2e8564822cc9bea8644859532949b2f87b05)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt-webkit-kiosk/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ ...imezone.c-needs-time.h-fixes-musl-compile.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
-index 71b4f8346a..13ed9bd22b 100644
---- a/package/qt-webkit-kiosk/Config.in
-+++ b/package/qt-webkit-kiosk/Config.in
-@@ -15,6 +15,8 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK
- 	help
- 	  Simple kiosk-mode browser powered by Qt5Webkit
- 
-+	  https://github.com/sergey-dryabzhinsky/qt-webkit-kiosk
+diff --git a/package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch b/package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch
+new file mode 100644
+index 0000000000..bdaa638f61
+--- /dev/null
++++ b/package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch
+@@ -0,0 +1,38 @@
++From 68abba9fb2ed114ac35712756b1f7700a865c498 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 17 Dec 2019 21:25:01 +0100
++Subject: [PATCH] timezone.c: needs time.h (fixes musl compile)
 +
- if BR2_PACKAGE_QT_WEBKIT_KIOSK
- 
- config BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS
++Fixes:
++
++  In file included from util.c:28:
++  timezone.c: In function 'mktime':
++  timezone.c:644:18: error: dereferencing pointer to incomplete type 'struct tm'
++       save_isdst = tm->tm_isdst;
++
++  timezone.c:661:11: warning: implicit declaration of function 'localtime'; did you mean 'dostime'? [-Wimplicit-function-declaration]
++       ltm = localtime(&then);
++
++  timezone.c:661:9: warning: assignment to 'struct tm *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
++       ltm = localtime(&then);
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ timezone.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/timezone.c b/timezone.c
++index 485ec02..18aecbd 100644
++--- a/timezone.c
+++++ b/timezone.c
++@@ -41,6 +41,7 @@
++ #include "timezone.h"
++ #include <ctype.h>
++ #include <errno.h>
+++#include <time.h>
++ 
++ #ifdef IZTZ_DEFINESTDGLOBALS
++ long timezone = 0;
++-- 
++2.24.0
++
