@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 19:04:20 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/tcllib: update
+Date: Wed, 25 Dec 2019 19:04:12 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/tcllib: update
  the upstream URL in Config.in
-Message-ID: <20191225175543.030C78E391@busybox.osuosl.org>
+Message-ID: <20191225175548.1F4B68E394@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01fbdb8b3238de87dab0d46153d78e46ef07fa6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1df28c980b161f06b109b7c83ee7b9a0dc9dfc5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Update the upstream URL in the help text in Config.in. This
 addresses the 'Invalid(Err)' URL status in the package stats
