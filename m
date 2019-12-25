@@ -1,60 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:55:31 +0100
-Subject: [Buildroot] [PATCH v2 1/1] board/freescale/common/imx: use
- nodtb variant in uboot images for 8M
-In-Reply-To: <20191217203712.50491-1-juju@cotds.org> (Julien Olivain's message
- of "Tue, 17 Dec 2019 21:37:12 +0100")
-References: <20191202200333.418111-1-juju@cotds.org>
- <20191217203712.50491-1-juju@cotds.org>
-Message-ID: <87d0ccqdd8.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Dec 2019 22:35:47 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/rpcbind: add an
+ upstream URL to Config.in
+Message-ID: <20191225214903.1947F8E4E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Julien" == Julien Olivain <juju@cotds.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2d0c1d142694fdd4ddeb39ac9c4eb24bc14b1e8f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > In board/freescale/common/imx/imx8-bootloader-prepare.sh, when
- > invoking mkimage_fit_atf.sh, the U-Boot DTB is passed as parameter, to
- > be included in the FIT image. This parameter usually comes from
- > BR2_ROOTFS_POST_SCRIPT_ARGS config option. The variable
- > BL33=u-boot.bin set in the invocation uses the u-boot image which is
- > including its embedded DTB. This means the U-Boot DTB is included
- > twice.
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
- > The upstream script mkimage_fit_atf.sh plus its Buildroot patch are
- > meant to use by default the nodtb variant and use the DTB in a
- > separate image. See [1] and [2].
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 14dabed5ef0512fdaa7e76531ae8747d7cd94184)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rpcbind/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > The U-Boot default DTB which will be included in u-boot.bin image is
- > selected with U-Boot CONFIG_DEFAULT_DEVICE_TREE, or DEVICE_TREE
- > variable when invoking "make". If one of those option is not aligned
- > to the BR2_ROOTFS_POST_SCRIPT_ARGS config option, it's possible the
- > two included U-Boot DTBs are different. If such case happens, the
- > built-in DTB is always used, regardless of the other one, selected
- > with BR2_ROOTFS_POST_SCRIPT_ARGS.
-
- > For example, this case happens for TechNexion Pico Pi i.MX8M and
- > i.MX8MMini. Since the U-Boot defconfig assumes the nodtb version will
- > be used, it does not set the default DTB. The u-boot.bin will include
- > the fsl-imx8mm-evk instead. Including the wrong board DTB breaks the
- > USB and UMS commands (and possibly others). Since those boards does
- > not have SD card slots, a recovery serial download is needed at every
- > update.
-
- > This patch make sure that only the separate U-Boot DTB will be
- > included in the FIT image by using the nodtb variant.
-
- > [1] https://source.codeaurora.org/external/imx/imx-mkimage/tree/iMX8M/mkimage_fit_atf.sh?h=rel_imx_4.14.98_2.0.0_ga#n35
- > [2] https://git.busybox.net/buildroot/tree/package/imx-mkimage/0001-add-support-for-overriding-bl32-and-bl33-not-only-bl.patch?h=2019.11#n42
-
- > Signed-off-by: Julien Olivain <juju@cotds.org>
- > ---
- > Changes v1 -> v2:
- >   - Add more details in the commit log
-
-Committed to 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rpcbind/Config.in b/package/rpcbind/Config.in
+index ced2d40944..9cde7bba39 100644
+--- a/package/rpcbind/Config.in
++++ b/package/rpcbind/Config.in
+@@ -9,6 +9,8 @@ config BR2_PACKAGE_RPCBIND
+ 	  The rpcbind utility is a server that converts RPC program
+ 	  numbers into universal addresses.
+ 
++	  https://sourceforge.net/projects/rpcbind/
++
+ comment "rpcbind needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
