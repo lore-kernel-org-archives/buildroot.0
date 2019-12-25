@@ -1,36 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:32:52 +0100
-Subject: [Buildroot] [PATCH v1] package/zip: fix musl compile
-In-Reply-To: <20191217221134.2619-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Tue, 17 Dec 2019 23:11:34 +0100")
-References: <20191217221134.2619-1-ps.report@gmx.net>
-Message-ID: <8736d8rszf.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Dec 2019 22:33:49 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/qt-webkit-kiosk:
+ add an upstream URL to Config.in
+Message-ID: <20191225212539.9AA5D8E461@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2790598f503ad16a8b4d3381d3f524db9c238b5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > For musl toolchain timezone.c needs time.h include.
- > Fixes:
- >   http://autobuild.buildroot.net/results/77346a2cdb9eeef661527fb9566019f3cd1b82c9
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
+web page output.
 
- >   In file included from util.c:28:
- >   timezone.c: In function 'mktime':
- >   timezone.c:644:18: error: dereferencing pointer to incomplete type 'struct tm'
- >        save_isdst = tm->tm_isdst;
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a7edcb7a7c7240fa8e5e876f2a115d21cf700b8e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt-webkit-kiosk/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
- >   timezone.c:661:11: warning: implicit declaration of function 'localtime'; did you mean 'dostime'? [-Wimplicit-function-declaration]
- >        ltm = localtime(&then);
-
- >   timezone.c:661:9: warning: assignment to 'struct tm *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
- >        ltm = localtime(&then);
-
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
+index 71b4f8346a..13ed9bd22b 100644
+--- a/package/qt-webkit-kiosk/Config.in
++++ b/package/qt-webkit-kiosk/Config.in
+@@ -15,6 +15,8 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK
+ 	help
+ 	  Simple kiosk-mode browser powered by Qt5Webkit
+ 
++	  https://github.com/sergey-dryabzhinsky/qt-webkit-kiosk
++
+ if BR2_PACKAGE_QT_WEBKIT_KIOSK
+ 
+ config BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS
