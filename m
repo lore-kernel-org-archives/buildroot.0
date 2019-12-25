@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 23:01:33 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ntp: override
+Date: Wed, 25 Dec 2019 23:00:27 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/ntp: override
  host shell check
-Message-ID: <20191225215320.322438E442@busybox.osuosl.org>
+Message-ID: <20191225215325.D1B288E52C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=763c4abfec3fd3af66a411dd53b7c5d6521a0196
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cf3170e2ebcd96930a685056cbc031afed313e27
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Add a patch from the upstream AutoGen package that allows POSIX_SHELL
 to be taken from the environment, then define that to be '/bin/sh'.
