@@ -1,43 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 19:05:09 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/openrc: install
- sysv-rcs file
-Message-ID: <20191225175643.3271D8E397@busybox.osuosl.org>
+Date: Wed, 25 Dec 2019 19:07:11 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/qt5/qt5webengine: fix build
+ error
+In-Reply-To: <20191221111218.26960-1-b.bilas@grinn-global.com> (Bartosz
+ Bilas's message of "Sat, 21 Dec 2019 12:12:18 +0100")
+References: <20191221111218.26960-1-b.bilas@grinn-global.com>
+Message-ID: <87o8vws2i8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a656f6723b1ff43cbed0ddfa5441d51ab8200156
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Bartosz" == Bartosz Bilas <b.bilas@grinn-global.com> writes:
 
-package/openrc has the file sysv-rcs which starts sysvinit services
-not written for openrc. However, currently it is not installed to
-the target.
+ > This commit adds a patch from upstream chromium [1].
+ > Fixes:
+ >   ../../3rdparty/chromium/third_party/skia/third_party/skcms/skcms.cc:1909:16:
+ >   note: in definition of macro 'NS'
+ >   #define NS(id) id
 
-Install this file to $(TARGET_DIR)/etc/init.d during the
-target_install step.
+ > [1] https://chromium.googlesource.com/chromium/src/+/a8c8396fd20d98666d517c45b358c63736e345ef
 
-Signed-off-by: Adam Duskett <aduskett@greenlots.com>
-[yann.morin.1998 at free.fr: use full-path for destination, not just dir]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3945226a7e29c9f811fbe145ea792b18f3a5daa2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openrc/openrc.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+ > ---
+ > v1 -> v2:
+ >  - keep gcc 4.8 as a minimum required version (suggested by Giulio Benetti)
 
-diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index 387962d4d5..3f6453cef5 100644
---- a/package/openrc/openrc.mk
-+++ b/package/openrc/openrc.mk
-@@ -35,6 +35,8 @@ endef
- 
- define OPENRC_INSTALL_TARGET_CMDS
- 	$(MAKE) $(OPENRC_MAKE_OPTS) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+	$(INSTALL) -D -m 0755 $(OPENRC_PKGDIR)/sysv-rcs \
-+		$(TARGET_DIR)/etc/init.d/sysv-rcs
- endef
- 
- ifeq ($(BR2_PACKAGE_NETIFRC),y)
+Committed to 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
