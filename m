@@ -1,36 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 22:33:20 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/python-pypcap:
- update the upstream URL in Config.in
-Message-ID: <20191225212549.394CF8E451@busybox.osuosl.org>
+Date: Wed, 25 Dec 2019 22:34:00 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/qt-webkit-kiosk:
+ add an upstream URL to Config.in
+Message-ID: <20191225212549.428E58E451@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3988ff551a846090e55557492fc412f9357011a1
+commit: https://git.buildroot.net/buildroot/commit/?id=71320bc30bf39164f1e2c5596134958e6a7e17b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Update the upstream URL in the help text in Config.in. This
-addresses the 'Invalid(405)' URL status in the package stats
+Add an upstream URL to the help text in Config.in. This
+addresses the 'Missing' URL status in the package stats
 web page output.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a2d09a16f0da90adc8577fff1c727a029916c778)
+(cherry picked from commit a7edcb7a7c7240fa8e5e876f2a115d21cf700b8e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pypcap/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qt-webkit-kiosk/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-pypcap/Config.in b/package/python-pypcap/Config.in
-index 9b71575c0b..9b410ecc2b 100644
---- a/package/python-pypcap/Config.in
-+++ b/package/python-pypcap/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_PYTHON_PYPCAP
- 	  The pypcap module is an object-oriented wrapper of the C
- 	  libpcap library.
+diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
+index 71f7daaa26..46688a227b 100644
+--- a/package/qt-webkit-kiosk/Config.in
++++ b/package/qt-webkit-kiosk/Config.in
+@@ -14,6 +14,8 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK
+ 	help
+ 	  Simple kiosk-mode browser powered by Qt5Webkit
  
--	  https://code.google.com/p/pypcap/
-+	  https://github.com/dugsong/pypcap
++	  https://github.com/sergey-dryabzhinsky/qt-webkit-kiosk
++
+ if BR2_PACKAGE_QT_WEBKIT_KIOSK
+ 
+ config BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS
