@@ -1,71 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 22:34:27 +0100
-Subject: [Buildroot] [PATCH] package/at91bootstrap3: fix hash
-In-Reply-To: <38659ae6-b7d6-3ddb-37d4-4c677f99ef99@koncepto.io>
-References: <1577393383-29831-1-git-send-email-pjtexier@koncepto.io>
- <20191226215951.7e821c22@windsurf>
- <38659ae6-b7d6-3ddb-37d4-4c677f99ef99@koncepto.io>
-Message-ID: <20191226223427.6fd04909@windsurf>
+Date: Thu, 26 Dec 2019 22:45:54 +0100
+Subject: [Buildroot] [PATCH] package/google-breakpad: fix build on modern
+ hosts
+Message-ID: <20191226214555.1227797-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since glibc 2.30, a tgkill() function is exposed by the C library, but
+google-breakpad has its own internal definition of it, which now
+conflicts. This causes build failures on modern build machines (when
+building google-breakpad for the host).
 
-+Yann.
+This commit adds a patch that simply renames the internal tgkill()
+function to BreakpadTgkill() to avoid the naming conflict.
 
-On Thu, 26 Dec 2019 22:16:50 +0100
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+We do that instead of a configure.ac change to avoid having to
+autoreconf this package, and because the fix is anyway not
+upstreamable as upstream simply dropped the internal tgkill()
+implementation, but using that would break building google-breakpad on
+older systems.
 
-> No, I don't understand :/, this seems strange.
-> I can see a difference on the size (441K vs 444K) for sure, but not 
-> really differences on the files in the archive.
-> 
-> You can download the bogus archive here:
->   - https://jirafeau.net/f.php?h=1j8hLl-Y
+Fixes:
 
-Thanks. Diffoscope reports some useful information:
+  http://autobuild.buildroot.net/results/bc2ae827b830d23094c8b70e5b34911d060295a3/ (host)
+  http://autobuild.buildroot.net/results/21257e5a87f41487c6bf4db4e15ce49f1af1ac1e/ (target)
 
-??? filetype from file(1)
-? @@ -1 +1 @@
-? -POSIX tar archive (GNU)
-? +POSIX tar archive
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-handler-exception_handler.cc-rename.patch | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/google-breakpad/0003-src-client-linux-handler-exception_handler.cc-rename.patch
 
-And indeed, after uncompressing the archives:
-
-$ file at91bootstrap3-v3.9.0.tar.bad at91bootstrap3-v3.9.0.tar.good
-at91bootstrap3-v3.9.0.tar.bad:  POSIX tar archive (GNU)
-at91bootstrap3-v3.9.0.tar.good: POSIX tar archive
-
-So, what I think happened is that your at91bootstrap3-v3.9.0.tar.gz is
-the result from using the Buildroot feature to fetch from a Git
-repository and then creating a .tar.gz archive (we create them in GNU
-format). Which is different from the .tar.gz created by Github.
-
-And indeed, if I configure the at91bootstrap3 package like this:
-
-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.9.0"
-
-The tarball I get has the original hash you provided:
-
-at91bootstrap3-v3.9.0.tar.gz: OK (sha256: 9960b0d18fe42feee566d4c52efa0d7c8251685bf9acfdf343f30a27951ada1e)
-
-So basically, there is a naming conflict between the name of the
-tarball that we retrieve directly from Github, and the name of the
-tarball we produce locally by cloning the Git repository + creating the
-tarball.
-
-I'll apply your patch to fix the immediate issue, but I guess we have a
-larger issue here.
-
-Best regards,
-
-Thomas
+diff --git a/package/google-breakpad/0003-src-client-linux-handler-exception_handler.cc-rename.patch b/package/google-breakpad/0003-src-client-linux-handler-exception_handler.cc-rename.patch
+new file mode 100644
+index 0000000000..579e7f3457
+--- /dev/null
++++ b/package/google-breakpad/0003-src-client-linux-handler-exception_handler.cc-rename.patch
+@@ -0,0 +1,59 @@
++From 2fa414c8655c421e7eb0bb1719928babb0ecf7c6 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Thu, 26 Dec 2019 22:21:33 +0100
++Subject: [PATCH] src/client/linux/handler/exception_handler.cc: rename tgkill
++ to BreakpadTgkill()
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Since glibc 2.30, a tgkill() function was added in the C library, and
++its definition obviously conflicts with the internal definition of
++google-breakpad, causing build failures:
++
++src/client/linux/handler/exception_handler.cc:109:12: error: ?int tgkill(pid_t, pid_t, int)? was declared ?extern? and later ?static? [-fpermissive]
++  109 | static int tgkill(pid_t tgid, pid_t tid, int sig) {
++      |            ^~~~~~
++In file included from /usr/include/signal.h:374,
++                 from ./src/client/linux/handler/exception_handler.h:33,
++                 from src/client/linux/handler/exception_handler.cc:66:
++/usr/include/bits/signal_ext.h:29:12: note: previous declaration of ?int tgkill(__pid_t, __pid_t, int)?
++   29 | extern int tgkill (__pid_t __tgid, __pid_t __tid, int __signal);
++      |            ^~~~~~
++
++Upstream google-breakpad simply dropped the use of the internal
++tgkill() in commit
++https://chromium.googlesource.com/breakpad/breakpad/+/7e3c165000d44fa153a3270870ed500bc8bbb461. However,
++this is not realistic for Buildroot, since we do support old systems
++where the system C library will not necessarily provide tgkill().
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/client/linux/handler/exception_handler.cc | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/client/linux/handler/exception_handler.cc b/src/client/linux/handler/exception_handler.cc
++index b63f973b..b4c279b8 100644
++--- a/src/client/linux/handler/exception_handler.cc
+++++ b/src/client/linux/handler/exception_handler.cc
++@@ -106,7 +106,7 @@
++ #endif
++ 
++ // A wrapper for the tgkill syscall: send a signal to a specific thread.
++-static int tgkill(pid_t tgid, pid_t tid, int sig) {
+++static int BreakpadTgkill(pid_t tgid, pid_t tid, int sig) {
++   return syscall(__NR_tgkill, tgid, tid, sig);
++   return 0;
++ }
++@@ -387,7 +387,7 @@ void ExceptionHandler::SignalHandler(int sig, siginfo_t* info, void* uc) {
++     // In order to retrigger it, we have to queue a new signal by calling
++     // kill() ourselves.  The special case (si_pid == 0 && sig == SIGABRT) is
++     // due to the kernel sending a SIGABRT from a user request via SysRQ.
++-    if (tgkill(getpid(), syscall(__NR_gettid), sig) < 0) {
+++    if (BreakpadTgkill(getpid(), syscall(__NR_gettid), sig) < 0) {
++       // If we failed to kill ourselves (e.g. because a sandbox disallows us
++       // to do so), we instead resort to terminating our process. This will
++       // result in an incorrect exit code.
++-- 
++2.24.1
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.24.1
