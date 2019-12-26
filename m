@@ -1,68 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Dec 2019 23:03:48 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/librsvg: add
- libcroco to Requires.private
-Message-ID: <20191226204540.914CE8E645@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Dec 2019 21:59:51 +0100
+Subject: [Buildroot] [PATCH] package/at91bootstrap3: fix hash
+In-Reply-To: <1577393383-29831-1-git-send-email-pjtexier@koncepto.io>
+References: <1577393383-29831-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20191226215951.7e821c22@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=579aeeab8f3400703e8122cf9d600739bc5ed1b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+On Thu, 26 Dec 2019 21:49:43 +0100
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-This will fix a static build failure with imagemagick
+> When at91bootstrap3 was bumped to 3.9.0 in commit 513899e471890f4eb677066876890d43ea91b25e,
+> an incorrect hash was set.
+> 
+> However, after some checks on the archive with the wrong hash, it appears that it is identical to
+> the one with the good hash.
+> 
+> Fixes:
+> 
+> ERROR: at91bootstrap3-v3.9.0.tar.gz has wrong sha256 hash:
+> ERROR: expected: 9960b0d18fe42feee566d4c52efa0d7c8251685bf9acfdf343f30a27951ada1e
+> ERROR: got     : e23e6df23b79ca81e412cb73a1f48bd95df8d46c7d52a1d073c2ed9d4f3a1a71
+> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+> 
+> Reported-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 
-Fixes:
- - http://autobuild.buildroot.org/results/42f4b4881569779162d3efe4628b934f965913b9
+Did you figure out how you got this bogus archive ? There are really no
+differences ? Could you put the bogus archive online somewhere ?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 062423d51ad8251584e1b85a118d9c5abae8280a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...vg.pc.in-add-libcroco-to-Requires.Private.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+Thanks!
 
-diff --git a/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch b/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
-new file mode 100644
-index 0000000000..0eea5b995b
---- /dev/null
-+++ b/package/librsvg/0001-librsvg.pc.in-add-libcroco-to-Requires.Private.patch
-@@ -0,0 +1,35 @@
-+From 322b415f92d4dcd36824eef83bd617bac6e5c8c7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 24 Dec 2019 16:38:35 +0100
-+Subject: [PATCH] librsvg.pc.in: add libcroco to Requires.private
-+
-+libcroco is a mandatory dependency since version 2.35.0 so add it to
-+Requires.Private to fix a static build failure with imagemagick
-+
-+This patch is not upstreamable as librsvg no longer depends on libcroco
-+since version 2.47.1. It now does all CSS processing using Rust crates
-+from Mozilla Servo.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/42f4b4881569779162d3efe4628b934f965913b9
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ librsvg.pc.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/librsvg.pc.in b/librsvg.pc.in
-+index a451de05..4b09984a 100644
-+--- a/librsvg.pc.in
-++++ b/librsvg.pc.in
-+@@ -10,6 +10,6 @@ Name: librsvg
-+ Description: library that renders svg files
-+ Version: @VERSION@
-+ Requires: glib-2.0 gio-2.0 gdk-pixbuf-2.0 cairo
-+-Requires.private:
-++Requires.private: libcroco-0.6
-+ Libs: -L${libdir} -lrsvg- at RSVG_API_MAJOR_VERSION@ -lm
-+ Cflags: -I${includedir}/librsvg- at RSVG_API_VERSION@
-+-- 
-+2.24.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
