@@ -1,89 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 13:40:32 +0100
-Subject: [Buildroot] [git commit] package/boost: propagate boost-thread
- dependency on a toolchain without bug 64735
-Message-ID: <20191226123229.ADDE28E5B8@busybox.osuosl.org>
+Date: Thu, 26 Dec 2019 13:41:36 +0100
+Subject: [Buildroot] [git commit] package/gmrender-resurrect: bump to
+ version 0.0.8
+Message-ID: <20191226123229.CA8568E5B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e45825446054617a70bee145a91e0b74068bec71
+commit: https://git.buildroot.net/buildroot/commit/?id=90125a6fcb394c55cca6732efed1a30e0e23de9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit d7e49f5f42881f8781e7a8add6e0114af0bd9511 does not fully propagate
-the dependency on a toolchain without bug 64735 to reverse dependencies
-of boost-thread
-
-Fixes:
- - http://autobuild.buildroot.org/results/2b0ca8ce4df7496dcc7d078fae2114d75bd0a455
+libupnp18 is supported since
+https://github.com/hzeller/gmrender-resurrect/commit/cc96edeb70fa2938a4d963524261142132ece540
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/boost/Config.in | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ package/gmrender-resurrect/Config.in               | 2 +-
+ package/gmrender-resurrect/gmrender-resurrect.hash | 2 +-
+ package/gmrender-resurrect/gmrender-resurrect.mk   | 8 +++++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index a053b776fd..121650b8bc 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -101,7 +101,7 @@ comment "boost-contract needs a toolchain w/ NPTL"
- config BR2_PACKAGE_BOOST_COROUTINE
- 	bool "boost-coroutine"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context, boost-thread
- 	select BR2_PACKAGE_BOOST_CHRONO
- 	select BR2_PACKAGE_BOOST_CONTEXT
- 	select BR2_PACKAGE_BOOST_SYSTEM
-@@ -189,6 +189,7 @@ config BR2_PACKAGE_BOOST_LOCALE
- 	# https://svn.boost.org/trac/boost/ticket/9685 for more
- 	# details.
- 	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_ICU)
-+	depends on !(BR2_TOOLCHAIN_HAS_GCC_BUG_64735 && BR2_PACKAGE_ICU) # boost-thread
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD if BR2_PACKAGE_ICU
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-@@ -199,6 +200,10 @@ comment "boost-locale needs a toolchain w/ dynamic library"
- 	depends on BR2_PACKAGE_ICU
- 	depends on BR2_STATIC_LIBS
- 
-+comment "boost-locale needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_PACKAGE_ICU
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_BOOST_LOG
- 	bool "boost-log"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-@@ -327,16 +332,21 @@ config BR2_PACKAGE_BOOST_TIMER
- 
- config BR2_PACKAGE_BOOST_TYPE_ERASURE
- 	bool "boost-type_erasure"
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
+diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
+index db655ad7f4..e7424e3b22 100644
+--- a/package/gmrender-resurrect/Config.in
++++ b/package/gmrender-resurrect/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
+ 	depends on BR2_USE_MMU # gstreamer1
+ 	select BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
+-	select BR2_PACKAGE_LIBUPNP
++	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
  	help
- 	  Runtime polymorphism based on concepts.
+ 	  UPnP (DLNA) media renderer based on gstreamer
  
-+comment "boost-type_erasure needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_BOOST_WAVE
- 	bool "boost-wave"
- 	# limitation of assembler for coldfire
- 	# error: Tried to convert PC relative branch to absolute jump
- 	depends on !BR2_m68k_cf
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_SYSTEM
-@@ -347,4 +357,7 @@ config BR2_PACKAGE_BOOST_WAVE
- 	  preprocessor functionality packed behind an easy to use
- 	  iterator interface.
+diff --git a/package/gmrender-resurrect/gmrender-resurrect.hash b/package/gmrender-resurrect/gmrender-resurrect.hash
+index 85d6ad4629..dc474be612 100644
+--- a/package/gmrender-resurrect/gmrender-resurrect.hash
++++ b/package/gmrender-resurrect/gmrender-resurrect.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 79dba7cbd275098026a16829597b7013ab71a9cca4c9762af6f210637099c39a  gmrender-resurrect-a7b0b1b9ca482d2d34ac62c2f2dc0cf0dfbb702b.tar.gz
++sha256 1f0cef76e4543879c9cd31cad73d6c4f778b965884c586405efcf63f2bdbb06f  gmrender-resurrect-0.0.8.tar.gz
+ sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
+diff --git a/package/gmrender-resurrect/gmrender-resurrect.mk b/package/gmrender-resurrect/gmrender-resurrect.mk
+index 432ed8424e..e25be39493 100644
+--- a/package/gmrender-resurrect/gmrender-resurrect.mk
++++ b/package/gmrender-resurrect/gmrender-resurrect.mk
+@@ -4,13 +4,15 @@
+ #
+ ################################################################################
  
-+comment "boost-wave needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- endif
+-GMRENDER_RESURRECT_VERSION = a7b0b1b9ca482d2d34ac62c2f2dc0cf0dfbb702b
+-GMRENDER_RESURRECT_SITE = $(call github,hzeller,gmrender-resurrect,$(GMRENDER_RESURRECT_VERSION))
++GMRENDER_RESURRECT_VERSION = 0.0.8
++GMRENDER_RESURRECT_SITE = $(call github,hzeller,gmrender-resurrect,v$(GMRENDER_RESURRECT_VERSION))
+ # Original distribution does not have default configure,
+ # so we need to autoreconf:
+ GMRENDER_RESURRECT_AUTORECONF = YES
+ GMRENDER_RESURRECT_LICENSE = GPL-2.0+
+ GMRENDER_RESURRECT_LICENSE_FILES = COPYING
+-GMRENDER_RESURRECT_DEPENDENCIES = gstreamer1 libupnp
++GMRENDER_RESURRECT_DEPENDENCIES = \
++	gstreamer1 \
++	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
+ 
+ $(eval $(autotools-package))
