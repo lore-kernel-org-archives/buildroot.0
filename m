@@ -1,45 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 21:46:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libffi: fix build failure on
- power7 and older
-In-Reply-To: <20191223213610.142006-1-fontaine.fabrice@gmail.com>
-References: <20191223213610.142006-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191226214657.63247cac@windsurf>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Thu, 26 Dec 2019 21:49:43 +0100
+Subject: [Buildroot] [PATCH] package/at91bootstrap3: fix hash
+Message-ID: <1577393383-29831-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+When at91bootstrap3 was bumped to 3.9.0 in commit 513899e471890f4eb677066876890d43ea91b25e,
+an incorrect hash was set.
 
-On Mon, 23 Dec 2019 22:36:10 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+However, after some checks on the archive with the wrong hash, it appears that it is identical to
+the one with the good hash.
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/3ab73995b8393592c0b147670d8ff7f8ebc8c79c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ix-build-failure-on-power7-and-older.patch | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/libffi/0005-powerpc-fix-build-failure-on-power7-and-older.patch
+Fixes:
 
-Despite your recent PowerPC fixes for libffi, we still have failures:
+ERROR: at91bootstrap3-v3.9.0.tar.gz has wrong sha256 hash:
+ERROR: expected: 9960b0d18fe42feee566d4c52efa0d7c8251685bf9acfdf343f30a27951ada1e
+ERROR: got     : e23e6df23b79ca81e412cb73a1f48bd95df8d46c7d52a1d073c2ed9d4f3a1a71
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-http://autobuild.buildroot.net/?reason=libffi-3.3
+Reported-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-../src/powerpc/ffi_linux64.c: In function 'ffi_prep_args64':
-../src/powerpc/ffi_linux64.c:550:34: error: assignment to expression with array type
-                 *vec_base.f128++ = **p_argv.f128;
-                                  ^
-
-Do you have any idea ?
-
-Thanks,
-
-Thomas
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index 93f495f..b2ad624 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	9960b0d18fe42feee566d4c52efa0d7c8251685bf9acfdf343f30a27951ada1e  at91bootstrap3-v3.9.0.tar.gz
++sha256	e23e6df23b79ca81e412cb73a1f48bd95df8d46c7d52a1d073c2ed9d4f3a1a71  at91bootstrap3-v3.9.0.tar.gz
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
