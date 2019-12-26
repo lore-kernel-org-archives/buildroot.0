@@ -1,61 +1,106 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 26 Dec 2019 17:40:50 +0100
-Subject: [Buildroot] [PATCH] package/libsoundtouch: bump to version 2.1.2
-In-Reply-To: <1569750166-6261-1-git-send-email-gilles.talis@gmail.com>
-References: <1569750166-6261-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <392a88ae-a2c7-b1b7-a9d9-cc404c7c4bf5@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 26 Dec 2019 17:47:48 +0100
+Subject: [Buildroot] [PATCH v3,
+ 1/1] package/ecryptfs-utils: fix parallel build
+Message-ID: <20191226164748.28083-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gilles,
+Build randomly fails since December 2017 on:
 
-On 9/29/19 11:42 AM, Gilles Talis wrote:
-> - Updated download site and download method
-> - Added hash for license file
-> 
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-> ---
->   package/libsoundtouch/libsoundtouch.hash | 5 ++++-
->   package/libsoundtouch/libsoundtouch.mk   | 5 ++---
->   2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/libsoundtouch/libsoundtouch.hash b/package/libsoundtouch/libsoundtouch.hash
-> index af0c362..4e9d3dc 100644
-> --- a/package/libsoundtouch/libsoundtouch.hash
-> +++ b/package/libsoundtouch/libsoundtouch.hash
-> @@ -1,2 +1,5 @@
->   # Locally computed
-> -sha256 c805e7a72b7758a8986b71e73d2f94a8c79c66c1246fa2af1743c4282702e096  libsoundtouch-010a91a59071c7fefd316fca62c0d980ec85b4b1.tar.gz
-> +sha256 3a431facf019f37cc2da112156226d686e941b15d6327f3a41d7ca21dfaf8e94  libsoundtouch-2.1.2.tar.gz
-> +
-> +# Hash for license file
-> +sha256 6b73f6327136a924821ec044bbd9f17cf8677faf2f2a2b1366a9fff6188c9688  COPYING.TXT
-> diff --git a/package/libsoundtouch/libsoundtouch.mk b/package/libsoundtouch/libsoundtouch.mk
-> index c4ac930..d6ac129 100644
-> --- a/package/libsoundtouch/libsoundtouch.mk
-> +++ b/package/libsoundtouch/libsoundtouch.mk
-> @@ -4,9 +4,8 @@
->   #
->   ################################################################################
->   
-> -LIBSOUNDTOUCH_VERSION = 010a91a59071c7fefd316fca62c0d980ec85b4b1
-> -LIBSOUNDTOUCH_SITE = https://freeswitch.org/stash/scm/sd/libsoundtouch.git
-> -LIBSOUNDTOUCH_SITE_METHOD = git
-> +LIBSOUNDTOUCH_VERSION = 2.1.2
-> +LIBSOUNDTOUCH_SITE = https://gitlab.com/soundtouch/soundtouch/-/archive/$(LIBSOUNDTOUCH_VERSION)
->   LIBSOUNDTOUCH_LICENSE = LGPL-2.1+
->   LIBSOUNDTOUCH_LICENSE_FILES = COPYING.TXT
->   LIBSOUNDTOUCH_AUTORECONF = YES
-> 
+make[5]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/ecryptfs-utils-111/src/utils'
+ /bin/mkdir -p '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
+  /bin/bash ../../libtool   --mode=install /usr/bin/install -c mount.ecryptfs umount.ecryptfs mount.ecryptfs_private '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
+libtool: install: /usr/bin/install -c mount.ecryptfs /home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs
+/usr/bin/install: cannot create regular file '/home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs': File exists
+Makefile:832: recipe for target 'install-rootsbinPROGRAMS' failed
+make[5]: *** [install-rootsbinPROGRAMS] Error 1
 
-I've built it successfully and this looks good to me, so:
+Fixes:
+ - http://autobuild.buildroot.org/results/2063bd18830ef02dca0bed889c43639009bc688e
 
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v2 -> v3 (after review of Thomas Petazzoni):
+ - Update Makefile.in instead of Makefile.am to avoid running autoreconf
+   which depends on AM_GLIB_GNU_GETTEXT
 
-Best regards
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Fix parallel build issue instead of disabling it
+
+ .../0003-fix-parallel-build-issue.patch       | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/ecryptfs-utils/0003-fix-parallel-build-issue.patch
+
+diff --git a/package/ecryptfs-utils/0003-fix-parallel-build-issue.patch b/package/ecryptfs-utils/0003-fix-parallel-build-issue.patch
+new file mode 100644
+index 0000000000..e2aa740d55
+--- /dev/null
++++ b/package/ecryptfs-utils/0003-fix-parallel-build-issue.patch
+@@ -0,0 +1,61 @@
++fix parallel build issue
++
++Build randomly fails since December 2017 on buildroot
++(http://autobuild.buildroot.org/?reason=ecryptfs-utils-111):
++
++make[5]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/ecryptfs-utils-111/src/utils'
++  /bin/mkdir -p '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
++  /bin/bash ../../libtool   --mode=install /usr/bin/install -c mount.ecryptfs umount.ecryptfs mount.ecryptfs_private '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
++libtool: install: /usr/bin/install -c mount.ecryptfs /home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs
++/usr/bin/install: cannot create regular file '/home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs': File exists
++Makefile:832: recipe for target 'install-rootsbinPROGRAMS' failed
++make[5]: *** [install-rootsbinPROGRAMS] Error 1
++
++As spotted by Thomas Petazzoni, build failure happens because of the
++following line in src/utils/Makefile.am:
++
++install-exec-hook:      install-rootsbinPROGRAMS
++        -rm -f "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
++        $(LN_S) "mount.ecryptfs_private" "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
++
++The install-exec-hook target should not have a dependency on
++install-rootsbinPROGRAMS.
++
++From https://www.gnu.org/software/automake/manual/html_node/Extending.html#Extending:
++
++"""
++In contrast, some rules also have a way to run another rule, called a
++hook; hooks are always executed after the main rule?s work is done. The
++hook is named after the principal target, with ?-hook? appended. The
++targets allowing hooks are install-data, install-exec, uninstall, dist,
++and distcheck.
++
++For instance, here is how to create a hard link to an installed program:
++
++install-exec-hook:
++        ln $(DESTDIR)$(bindir)/program$(EXEEXT) \
++           $(DESTDIR)$(bindir)/proglink$(EXEEXT)
++
++"""
++
++So, they explicitly say that these hooks are run after the main rule
++work is done, which means the dependency on install-rootsbinPROGRAMS is
++not needed. And the example they use to illustrate is *exactly* the
++situation of ecryptfs-utils: creating a link to a program that was
++installed.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://bugs.launchpad.net/ecryptfs/+bug/1857622]
++
++diff -Nuar ecryptfs-utils-111-orig/src/utils/Makefile.in ecryptfs-utils-111/src/utils/Makefile.in
++--- ecryptfs-utils-111-orig/src/utils/Makefile.in	2019-12-26 15:14:16.656146065 +0100
+++++ ecryptfs-utils-111/src/utils/Makefile.in	2019-12-26 17:36:07.108496164 +0100
++@@ -1522,7 +1522,7 @@
++ .PRECIOUS: Makefile
++ 
++ 
++-install-exec-hook:	install-rootsbinPROGRAMS
+++install-exec-hook:
++ 	-rm -f "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
++ 	$(LN_S) "mount.ecryptfs_private" "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
++ 
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.24.0
