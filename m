@@ -1,39 +1,29 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Thu, 26 Dec 2019 22:16:50 +0100
-Subject: [Buildroot] [PATCH] package/at91bootstrap3: fix hash
-In-Reply-To: <20191226215951.7e821c22@windsurf>
-References: <1577393383-29831-1-git-send-email-pjtexier@koncepto.io>
- <20191226215951.7e821c22@windsurf>
-Message-ID: <38659ae6-b7d6-3ddb-37d4-4c677f99ef99@koncepto.io>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 26 Dec 2019 22:32:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libtirpc: Bump to version 1.2.5
+In-Reply-To: <20191226181121.6e29aac3@windsurf>
+References: <20191220174537.27562-1-petr.vorel@gmail.com>
+ <20191221224315.4aa53ae3@windsurf> <20191222103227.GA2948708@x230>
+ <20191226181121.6e29aac3@windsurf>
+Message-ID: <20191226213243.GB3632@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+> > Thanks a lot for merge and sorry to keep small errors in my patches.
+> > BTW I tried hard to search + google SHA1 hash on sourceforge, please where it is?
+> > (for next time)
 
-Le 26/12/2019 ? 21:59, Thomas Petazzoni a ?crit?:
-> Did you figure out how you got this bogus archive ? There are really no
-> differences ? Could you put the bogus archive online somewhere ?
+> Go to https://sourceforge.net/projects/libtirpc/files/libtirpc/1.2.5/
 
-No, I don't understand :/, this seems strange.
-I can see a difference on the size (441K vs 444K) for sure, but not 
-really differences on the files in the archive.
+> Next to each file there is an "i" inside a circle, on the right-most
+> column of the table of files. Click on it, and you'll see the MD5 and
+> SHA1.
+Thanks a lot, Thomas!
 
-You can download the bogus archive here:
-  - https://jirafeau.net/f.php?h=1j8hLl-Y
+> And, yes, the SourceForge UI sucks :-)
++1.
 
-Thanks !
-
-Pierre-Jean
-
-> 
-> Thanks!
-> 
-> Thomas
-
--- 
-Pierre-Jean Texier
-Embedded Linux Engineer
-https://koncepto.io
+Petr
