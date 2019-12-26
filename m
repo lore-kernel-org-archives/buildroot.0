@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 23:23:17 +0100
-Subject: [Buildroot] [PATCH] package/at91bootstrap3: fix hash
-In-Reply-To: <1577393383-29831-1-git-send-email-pjtexier@koncepto.io>
-References: <1577393383-29831-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20191226232317.684ff7c9@windsurf>
+Date: Thu, 26 Dec 2019 23:23:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: bump to
+ version 1.2.3
+In-Reply-To: <20191226215700.210070-1-fontaine.fabrice@gmail.com>
+References: <20191226215700.210070-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191226232321.56b599b9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 26 Dec 2019 21:49:43 +0100
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+On Thu, 26 Dec 2019 22:57:00 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> When at91bootstrap3 was bumped to 3.9.0 in commit 513899e471890f4eb677066876890d43ea91b25e,
-> an incorrect hash was set.
-> 
-> However, after some checks on the archive with the wrong hash, it appears that it is identical to
-> the one with the good hash.
+> This bump fixes the build failure with boost 1.72 thanks to
+> https://github.com/arvidn/libtorrent/commit/48fa5343b5d99416ba9606f5f52fba58b93dffe6
 > 
 > Fixes:
+>  - http://autobuild.buildroot.net/results/7d494bff409bbf39ea59df7a2d1cfb3018b4d9a6
 > 
-> ERROR: at91bootstrap3-v3.9.0.tar.gz has wrong sha256 hash:
-> ERROR: expected: 9960b0d18fe42feee566d4c52efa0d7c8251685bf9acfdf343f30a27951ada1e
-> ERROR: got     : e23e6df23b79ca81e412cb73a1f48bd95df8d46c7d52a1d073c2ed9d4f3a1a71
-> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-> 
-> Reported-by: Ludovic Desroches <ludovic.desroches@microchip.com>
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
+>  package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master with an improved commit log. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
