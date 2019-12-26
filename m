@@ -1,106 +1,70 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 26 Dec 2019 23:09:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libffi: fix build on powerpc64 with
- no __int128
-Message-ID: <20191226220920.261056-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Dec 2019 23:14:36 +0100
+Subject: [Buildroot] [PATCH] package/gnupg: fix TAR path in gpg-zip script
+Message-ID: <20191226221437.1301418-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.net/results/cb69d82ad1d41f6ea13d289ec2226d9bd5b67984
+gnupg installs a shell script called gpg-zip, which contains a
+reference to the 'tar' program. Unfortunately, the location of the tar
+program is determined at build time, and is therefore incorrect on the
+target. This causes runtime issues, but also potentially leaks some
+host paths into the target, causing BR2_REPRODUCIBLE=y failures.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+gnupg has a --with-tar option, but it doesn't work properly as the
+implementation of the GNUPG_CHECK_USTAR m4 macro in m4/tar-ustar.m4 is
+incomplete:
+
+ - If --with-tar is passed, AC_PATH_PROG is not called, so the TAR
+   variable is not defined and AC_SUBST([TAR]) is not called, so the
+   @TAR@ replacement in tools/gpg-zip.in is replaced by the empty
+   string.
+
+ - If --with-tar is passed, the check that this tar version support
+   the ustar format is not executed, so the HAVE_USTAR automake
+   conditional is never defined. There is unfortunately no way to
+   determine if the target tar supports ustar or not, but since even
+   the Busybox variant apparently does, we can probably assume all tar
+   versions that Buildroot can build support the ustar format.
+
+Fixing this logic is a bit cumbersome, gnupg 1.4.x is not really
+maintained anymore and fixing the logic would require an AUTORECONF =
+YES.
+
+So we just opt with a very simple solution: replace TAR=something by
+TAR=/bin/tar, through a post-install target hook. We only do this if
+gpg-zip is installed, since its installation is optional. Note that
+the logic is still not ideal, because the installation (or not) of
+gpg-zip depends on whether the system/host tar has ustar format or
+not.
+
+Fixes the gpg-zip reproducibility issue reported in:
+
+  http://autobuild.buildroot.net/results/d1c/d1c5ad34ba928edfbb5901eb936c7e4457cc9083//diffoscope-results.txt
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...6-Address-platforms-with-no-__int128.patch | 28 +++++++++++++
- ...y-to-help-platforms-with-no-__int128.patch | 42 +++++++++++++++++++
- 2 files changed, 70 insertions(+)
- create mode 100644 package/libffi/0006-Address-platforms-with-no-__int128.patch
- create mode 100644 package/libffi/0007-powerpc64-Use-memcpy-to-help-platforms-with-no-__int128.patch
+ package/gnupg/gnupg.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libffi/0006-Address-platforms-with-no-__int128.patch b/package/libffi/0006-Address-platforms-with-no-__int128.patch
-new file mode 100644
-index 0000000000..012c6f0dae
---- /dev/null
-+++ b/package/libffi/0006-Address-platforms-with-no-__int128.patch
-@@ -0,0 +1,28 @@
-+From 6663047f56c2932a6b10a790f4ac6666dd181326 Mon Sep 17 00:00:00 2001
-+From: Anthony Green <green@moxielogic.com>
-+Date: Fri, 29 Nov 2019 07:00:35 -0500
-+Subject: [PATCH] Address platforms with no __int128.
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index bedcf6c985..617def884e 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -79,5 +79,11 @@ endef
+ GNUPG_POST_INSTALL_TARGET_HOOKS += GNUPG_REMOVE_GPGSPLIT
+ endif
+ 
++define GNUPG_FIXUP_GPG_ZIP
++	test -f $(TARGET_DIR)/usr/bin/gpg-zip && \
++		$(SED) 's%^TAR=.*%TAR=/bin/tar%' $(TARGET_DIR)/usr/bin/gpg-zip
++endef
++GNUPG_POST_INSTALL_TARGET_HOOKS += GNUPG_FIXUP_GPG_ZIP
 +
-+[Retrieved from:
-+https://github.com/libffi/libffi/commit/6663047f56c2932a6b10a790f4ac6666dd181326]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/powerpc/ffi_linux64.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/powerpc/ffi_linux64.c b/src/powerpc/ffi_linux64.c
-+index de0d0337..73647701 100644
-+--- a/src/powerpc/ffi_linux64.c
-++++ b/src/powerpc/ffi_linux64.c
-+@@ -547,9 +547,9 @@ ffi_prep_args64 (extended_cif *ecif, unsigned long *const stack)
-+               if (next_arg.ul == gpr_end.ul)
-+                 next_arg.ul = rest.ul;
-+               if (vecarg_count < NUM_VEC_ARG_REGISTERS64 && i < nfixedargs)
-+-                *vec_base.f128++ = **p_argv.f128;
-++		memcpy (vec_base.f128++, *p_argv.f128, sizeof (float128));
-+               else
-+-                *next_arg.f128 = **p_argv.f128;
-++		memcpy (next_arg.f128, *p_argv.f128, sizeof (float128));
-+               if (++next_arg.f128 == gpr_end.f128)
-+                 next_arg.f128 = rest.f128;
-+               vecarg_count++;
-diff --git a/package/libffi/0007-powerpc64-Use-memcpy-to-help-platforms-with-no-__int128.patch b/package/libffi/0007-powerpc64-Use-memcpy-to-help-platforms-with-no-__int128.patch
-new file mode 100644
-index 0000000000..53036707d2
---- /dev/null
-+++ b/package/libffi/0007-powerpc64-Use-memcpy-to-help-platforms-with-no-__int128.patch
-@@ -0,0 +1,42 @@
-+From e50b9ef8b910fa642ef158f6642e60d54d7ad740 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sat, 7 Dec 2019 02:34:14 -0800
-+Subject: [PATCH] powerpc64: Use memcpy to help platforms with no __int128.
-+ (#534)
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+[Retrieved from:
-+https://github.com/libffi/libffi/commit/e50b9ef8b910fa642ef158f6642e60d54d7ad740]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/powerpc/ffi_linux64.c | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/powerpc/ffi_linux64.c b/src/powerpc/ffi_linux64.c
-+index 73647701..4d50878e 100644
-+--- a/src/powerpc/ffi_linux64.c
-++++ b/src/powerpc/ffi_linux64.c
-+@@ -680,9 +680,9 @@ ffi_prep_args64 (extended_cif *ecif, unsigned long *const stack)
-+                     {
-+                       if (vecarg_count < NUM_VEC_ARG_REGISTERS64
-+                           && i < nfixedargs)
-+-                        *vec_base.f128++ = *arg.f128++;
-++		        memcpy (vec_base.f128++, arg.f128, sizeof (float128));
-+                       else
-+-                        *next_arg.f128 = *arg.f128++;
-++		        memcpy (next_arg.f128, arg.f128++, sizeof (float128));
-+                       if (++next_arg.f128 == gpr_end.f128)
-+                         next_arg.f128 = rest.f128;
-+                       vecarg_count++;
-+@@ -986,9 +986,9 @@ ffi_closure_helper_LINUX64 (ffi_cif *cif,
-+                   do
-+                     {
-+                       if (pvec < end_pvec && i < nfixedargs)
-+-                        *to.f128 = *pvec++;
-++		        memcpy (to.f128, pvec++, sizeof (float128));
-+                       else
-+-                        *to.f128 = *from.f128;
-++		        memcpy (to.f128, from.f128, sizeof (float128));
-+                       to.f128++;
-+                       from.f128++;
-+                     }
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-2.24.0
+2.24.1
