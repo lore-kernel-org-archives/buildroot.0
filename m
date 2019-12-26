@@ -1,65 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 20:38:43 +0100
-Subject: [Buildroot] [git commit] board/icorem6: fix the Qt5 display name
-Message-ID: <20191226192937.ABB518E5E3@busybox.osuosl.org>
+Date: Thu, 26 Dec 2019 20:44:22 +0100
+Subject: [Buildroot] [PATCH] board/icorem6: Fix the Qt5 display name
+In-Reply-To: <20191226133227.12023-1-festevam@gmail.com>
+References: <20191226133227.12023-1-festevam@gmail.com>
+Message-ID: <20191226204422.65a5762e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=623fc9eabf7721efecc6e566bbcc3b2ffa8c590e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 26 Dec 2019 10:32:27 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-The correct syntax that Qt5 understands for display names is
-"LVDS1", so fix it accordingly.
+> The correct syntax that Qt5 understands for display names is
+> "LVDS1", so fix it accordingly.
+> 
+> Reported-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  .../icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json      | 2 +-
+>  .../icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json      | 2 +-
+>  board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json    | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
-Reported-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Reviewed-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json | 2 +-
- board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json | 2 +-
- board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json         | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
-index 963c7c0031..3bfe4a2362 100644
---- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
-+++ b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
-@@ -4,7 +4,7 @@
-   "pbuffers": true,
-   "outputs": [
-     {
--      "name": "LVDS-1",
-+      "name": "LVDS1",
-       "mode": "1280x800"
-     }
-   ]
-diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
-index 36700affda..ea5ce6f97a 100644
---- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
-+++ b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
-@@ -4,7 +4,7 @@
-   "pbuffers": true,
-   "outputs": [
-     {
--      "name": "LVDS-1",
-+      "name": "LVDS1",
-       "mode": "1280x480"
-     }
-   ]
-diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
-index ac139a3eaf..b4fa359b64 100644
---- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
-+++ b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
-@@ -4,7 +4,7 @@
-   "pbuffers": true,
-   "outputs": [
-     {
--      "name": "LVDS-1",
-+      "name": "LVDS1",
-       "mode": "800x480"
-     }
-   ]
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
