@@ -1,30 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 13:45:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: propagate boost-thread
- dependency on a toolchain without bug 64735
-In-Reply-To: <20191226110404.2623366-1-fontaine.fabrice@gmail.com>
-References: <20191226110404.2623366-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191226134504.1b63bc21@windsurf>
+Date: Thu, 26 Dec 2019 13:45:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bitcoin: fix build with boost
+ 1.72
+In-Reply-To: <20191226112720.3169094-1-fontaine.fabrice@gmail.com>
+References: <20191226112720.3169094-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191226134508.5e4ea205@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 26 Dec 2019 12:04:04 +0100
+On Thu, 26 Dec 2019 12:27:20 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Commit d7e49f5f42881f8781e7a8add6e0114af0bd9511 does not fully propagate
-> the dependency on a toolchain without bug 64735 to reverse dependencies
-> of boost-thread
-> 
 > Fixes:
->  - http://autobuild.buildroot.org/results/2b0ca8ce4df7496dcc7d078fae2114d75bd0a455
+>  - http://autobuild.buildroot.org/results/6b4d9877aa416b788b94fe44b2673149aae4af43
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/boost/Config.in | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
+>  ...sing-header-bootlegged-by-boost-1-72.patch | 28 +++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>  create mode 100644 package/bitcoin/0001-http-add-missing-header-bootlegged-by-boost-1-72.patch
 
 Applied to master, thanks.
 
