@@ -1,66 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 09:38:59 +0100
-Subject: [Buildroot] [git commit] package/moarvm: fix build with uclibc
-Message-ID: <20191226082945.1755F8E590@busybox.osuosl.org>
+Date: Thu, 26 Dec 2019 09:39:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/luvi: fix build with aarch64
+In-Reply-To: <20191226082447.2130430-1-fontaine.fabrice@gmail.com>
+References: <20191226082447.2130430-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191226093919.5c9dffc7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d3d2bdfbf3379c6f4ba56cd172fc72599a12ffd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 26 Dec 2019 09:24:47 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/b88e55dde1acab967023ae49bb1722eadb9cc6ab
+> aarch64 is a supported architecture of luajit since switch to moonjit
+> fork in commit 2ca0accc21a090874ac6e97670b47153a1f0a0b5 so manage this
+> new target in luvi.mk to avoid an "unknown architecture" build failure
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ae610141b488d7ca8ea9db0575dec8f5eb13650c
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/luvi/luvi.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...load_unix.c-don-t-use-RTLD_DI_LINKMAP-wit.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/moarvm/0001-dynload-dynload_unix.c-don-t-use-RTLD_DI_LINKMAP-wit.patch b/package/moarvm/0001-dynload-dynload_unix.c-don-t-use-RTLD_DI_LINKMAP-wit.patch
-new file mode 100644
-index 0000000000..326423679c
---- /dev/null
-+++ b/package/moarvm/0001-dynload-dynload_unix.c-don-t-use-RTLD_DI_LINKMAP-wit.patch
-@@ -0,0 +1,38 @@
-+From a83f1fd053aadd2e849df80f67b69ba7298341f3 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 25 Dec 2019 20:37:57 +0100
-+Subject: [PATCH] dynload/dynload_unix.c: don't use RTLD_DI_LINKMAP with uclibc
-+
-+RTLD_DI_LINKMAP is not defined on uclibc so check that __UCLIBC__ is not
-+defined before using it otherwise build fails on:
-+
-+dynload_unix.c:93:19: error: 'RTLD_DI_LINKMAP' undeclared (first use in this function); did you mean 'RTLD_BINDING_MASK'?
-+   if(dlinfo(pLib, RTLD_DI_LINKMAP, &p) == 0) {
-+                   ^~~~~~~~~~~~~~~
-+                   RTLD_BINDING_MASK
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/b88e55dde1acab967023ae49bb1722eadb9cc6ab
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/MoarVM/dyncall/pull/6]
-+---
-+ dynload/dynload_unix.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/3rdparty/dyncall/dynload/dynload_unix.c b/3rdparty/dyncall/dynload/dynload_unix.c
-+index adfd351..129a1e5 100644
-+--- a/3rdparty/dyncall/dynload/dynload_unix.c
-++++ b/3rdparty/dyncall/dynload/dynload_unix.c
-+@@ -82,7 +82,7 @@ void dlFreeLibrary(DLLib* pLib)
-+ /* that: check for RTLD_DI_LINKMAP (#define for dlinfo()), or if GNU C Lib */
-+ /* is used (where RTLD_DI_LINKMAP is an enum), or by OS (dlinfo comes from */
-+ /* Solaris), etc. */
-+-#if defined(RTLD_DI_LINKMAP) || defined(OS_SunOS) || defined(__GLIBC__) /* @@@ dlinfo() was introduced in glibc 2.3.3 (in 2003), somehow check for that, also */
-++#if defined(RTLD_DI_LINKMAP) || defined(OS_SunOS) || (defined(__GLIBC__) && !defined(__UCLIBC__)) /* @@@ dlinfo() was introduced in glibc 2.3.3 (in 2003), somehow check for that, also */
-+ 
-+ #include <link.h>
-+ 
-+-- 
-+2.24.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
