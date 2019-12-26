@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 23:23:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: bump to
- version 1.2.3
-In-Reply-To: <20191226215700.210070-1-fontaine.fabrice@gmail.com>
-References: <20191226215700.210070-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191226232321.56b599b9@windsurf>
+Date: Thu, 26 Dec 2019 23:23:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libffi: fix build on powerpc64
+ with no __int128
+In-Reply-To: <20191226220920.261056-1-fontaine.fabrice@gmail.com>
+References: <20191226220920.261056-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191226232341.014679b4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 26 Dec 2019 22:57:00 +0100
+On Thu, 26 Dec 2019 23:09:20 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> This bump fixes the build failure with boost 1.72 thanks to
-> https://github.com/arvidn/libtorrent/commit/48fa5343b5d99416ba9606f5f52fba58b93dffe6
-> 
 > Fixes:
->  - http://autobuild.buildroot.net/results/7d494bff409bbf39ea59df7a2d1cfb3018b4d9a6
+>  - http://autobuild.buildroot.net/results/cb69d82ad1d41f6ea13d289ec2226d9bd5b67984
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
->  package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  ...6-Address-platforms-with-no-__int128.patch | 28 +++++++++++++
+>  ...y-to-help-platforms-with-no-__int128.patch | 42 +++++++++++++++++++
+>  2 files changed, 70 insertions(+)
+>  create mode 100644 package/libffi/0006-Address-platforms-with-no-__int128.patch
+>  create mode 100644 package/libffi/0007-powerpc64-Use-memcpy-to-help-platforms-with-no-__int128.patch
 
-Applied to master, thanks.
+I wonder how many fixes will be needed to make libffi build on PowerPC! :-)
+
+Applied to master. Thanks!
 
 Thomas
 -- 
