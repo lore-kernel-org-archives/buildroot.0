@@ -1,29 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 26 Dec 2019 20:05:59 +0000
-Subject: [Buildroot] [Bug 12121] PyQt5.QtSerialPort and other modules not
- being built.
-In-Reply-To: <bug-12121-163@https.bugs.busybox.net/>
-References: <bug-12121-163@https.bugs.busybox.net/>
-Message-ID: <bug-12121-163-CD7yYhUApw@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Dec 2019 21:43:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/boost: bump to version 1.72.0
+In-Reply-To: <20191215101902.3488595-1-fontaine.fabrice@gmail.com>
+References: <20191215101902.3488595-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191226214320.0335a75b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12121
+On Sun, 15 Dec 2019 11:19:02 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/boost/boost.hash | 4 ++--
+>  package/boost/boost.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+I think this Boost update has broken libtorrent-rasterbar:
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks for the bug report. This has been fixed in commit
-https://git.buildroot.org/buildroot/commit/?id=2320dec34c87d28ab7ab3f445e3f6e429023f01f.
+  http://autobuild.buildroot.net/?reason=libtorrent-rasterbar-1.2.2
 
+Could you have a look ?
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
