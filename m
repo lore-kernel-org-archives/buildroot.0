@@ -1,49 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 23:22:10 +0100
-Subject: [Buildroot] [git commit] package/libtorrent-rasterbar: bump to
- version 1.2.3
-Message-ID: <20191226221301.4011F7FD5F@busybox.osuosl.org>
+Date: Thu, 26 Dec 2019 23:22:14 +0100
+Subject: [Buildroot] [git commit] package/libffi: fix build on powerpc64
+ with no __int128
+Message-ID: <20191226221301.535EA8E65B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e599a2c1a34cecfbbbc87c6a11fae470ab2efee
+commit: https://git.buildroot.net/buildroot/commit/?id=c92791dc516406ba23cb0bb703850ade7441c095
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bump fixes the build failure with boost 1.72 thanks to
-https://github.com/arvidn/libtorrent/commit/48fa5343b5d99416ba9606f5f52fba58b93dffe6
-
 Fixes:
- - http://autobuild.buildroot.net/results/7d494bff409bbf39ea59df7a2d1cfb3018b4d9a6
+ - http://autobuild.buildroot.net/results/cb69d82ad1d41f6ea13d289ec2226d9bd5b67984
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
- package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0006-Address-platforms-with-no-__int128.patch  | 28 +++++++++++++++
+ ...memcpy-to-help-platforms-with-no-__int128.patch | 42 ++++++++++++++++++++++
+ 2 files changed, 70 insertions(+)
 
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-index 5e81754aba..92e8a3690b 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 e579261d7f0acbe82e9b4ce703cb721627cb8075023f8a26405992f489bc6202 libtorrent-rasterbar-1.2.2.tar.gz
-+sha256 1582fdbbd0449bcfe4ffae2ccb9e5bf0577459a32bb25604e01accb847da1a2d libtorrent-rasterbar-1.2.3.tar.gz
- sha256 f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8 COPYING
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-index b512cc6037..e81440d7c3 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTORRENT_RASTERBAR_VERSION = 1.2.2
-+LIBTORRENT_RASTERBAR_VERSION = 1.2.3
- LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
- LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
- LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
+diff --git a/package/libffi/0006-Address-platforms-with-no-__int128.patch b/package/libffi/0006-Address-platforms-with-no-__int128.patch
+new file mode 100644
+index 0000000000..012c6f0dae
+--- /dev/null
++++ b/package/libffi/0006-Address-platforms-with-no-__int128.patch
+@@ -0,0 +1,28 @@
++From 6663047f56c2932a6b10a790f4ac6666dd181326 Mon Sep 17 00:00:00 2001
++From: Anthony Green <green@moxielogic.com>
++Date: Fri, 29 Nov 2019 07:00:35 -0500
++Subject: [PATCH] Address platforms with no __int128.
++
++[Retrieved from:
++https://github.com/libffi/libffi/commit/6663047f56c2932a6b10a790f4ac6666dd181326]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/powerpc/ffi_linux64.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/powerpc/ffi_linux64.c b/src/powerpc/ffi_linux64.c
++index de0d0337..73647701 100644
++--- a/src/powerpc/ffi_linux64.c
+++++ b/src/powerpc/ffi_linux64.c
++@@ -547,9 +547,9 @@ ffi_prep_args64 (extended_cif *ecif, unsigned long *const stack)
++               if (next_arg.ul == gpr_end.ul)
++                 next_arg.ul = rest.ul;
++               if (vecarg_count < NUM_VEC_ARG_REGISTERS64 && i < nfixedargs)
++-                *vec_base.f128++ = **p_argv.f128;
+++		memcpy (vec_base.f128++, *p_argv.f128, sizeof (float128));
++               else
++-                *next_arg.f128 = **p_argv.f128;
+++		memcpy (next_arg.f128, *p_argv.f128, sizeof (float128));
++               if (++next_arg.f128 == gpr_end.f128)
++                 next_arg.f128 = rest.f128;
++               vecarg_count++;
+diff --git a/package/libffi/0007-powerpc64-Use-memcpy-to-help-platforms-with-no-__int128.patch b/package/libffi/0007-powerpc64-Use-memcpy-to-help-platforms-with-no-__int128.patch
+new file mode 100644
+index 0000000000..53036707d2
+--- /dev/null
++++ b/package/libffi/0007-powerpc64-Use-memcpy-to-help-platforms-with-no-__int128.patch
+@@ -0,0 +1,42 @@
++From e50b9ef8b910fa642ef158f6642e60d54d7ad740 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Sat, 7 Dec 2019 02:34:14 -0800
++Subject: [PATCH] powerpc64: Use memcpy to help platforms with no __int128.
++ (#534)
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++[Retrieved from:
++https://github.com/libffi/libffi/commit/e50b9ef8b910fa642ef158f6642e60d54d7ad740]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/powerpc/ffi_linux64.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/powerpc/ffi_linux64.c b/src/powerpc/ffi_linux64.c
++index 73647701..4d50878e 100644
++--- a/src/powerpc/ffi_linux64.c
+++++ b/src/powerpc/ffi_linux64.c
++@@ -680,9 +680,9 @@ ffi_prep_args64 (extended_cif *ecif, unsigned long *const stack)
++                     {
++                       if (vecarg_count < NUM_VEC_ARG_REGISTERS64
++                           && i < nfixedargs)
++-                        *vec_base.f128++ = *arg.f128++;
+++		        memcpy (vec_base.f128++, arg.f128, sizeof (float128));
++                       else
++-                        *next_arg.f128 = *arg.f128++;
+++		        memcpy (next_arg.f128, arg.f128++, sizeof (float128));
++                       if (++next_arg.f128 == gpr_end.f128)
++                         next_arg.f128 = rest.f128;
++                       vecarg_count++;
++@@ -986,9 +986,9 @@ ffi_closure_helper_LINUX64 (ffi_cif *cif,
++                   do
++                     {
++                       if (pvec < end_pvec && i < nfixedargs)
++-                        *to.f128 = *pvec++;
+++		        memcpy (to.f128, pvec++, sizeof (float128));
++                       else
++-                        *to.f128 = *from.f128;
+++		        memcpy (to.f128, from.f128, sizeof (float128));
++                       to.f128++;
++                       from.f128++;
++                     }
