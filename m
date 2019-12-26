@@ -1,81 +1,98 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Thu, 26 Dec 2019 14:39:41 +0100
-Subject: [Buildroot] [PATCH] board/icorem6: Fix the Qt5 display name
-In-Reply-To: <20191226133227.12023-1-festevam@gmail.com>
-References: <20191226133227.12023-1-festevam@gmail.com>
-Message-ID: <CAOf5uw=TDJShmAhBvK5R6uWpAAWAmR8X3ENyjtc8T8kcR4KxaA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Dec 2019 15:49:01 +0100
+Subject: [Buildroot] Potential lurking issue with host rpaths
+In-Reply-To: <20191225151351.GO26395@scaer>
+References: <20191225151351.GO26395@scaer>
+Message-ID: <20191226154901.66683ec5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI
+Hello,
 
-On Thu, Dec 26, 2019 at 2:32 PM Fabio Estevam <festevam@gmail.com> wrote:
->
-> The correct syntax that Qt5 understands for display names is
-> "LVDS1", so fix it accordingly.
->
-> Reported-by: Michael Trimarchi <michael@amarulasolutions.com>
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  .../icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json      | 2 +-
->  .../icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json      | 2 +-
->  board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json    | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
-> index 963c7c0031..3bfe4a2362 100644
-> --- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
-> +++ b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
-> @@ -4,7 +4,7 @@
->    "pbuffers": true,
->    "outputs": [
->      {
-> -      "name": "LVDS-1",
-> +      "name": "LVDS1",
->        "mode": "1280x800"
->      }
->    ]
-> diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
-> index 36700affda..ea5ce6f97a 100644
-> --- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
-> +++ b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
-> @@ -4,7 +4,7 @@
->    "pbuffers": true,
->    "outputs": [
->      {
-> -      "name": "LVDS-1",
-> +      "name": "LVDS1",
->        "mode": "1280x480"
->      }
->    ]
-> diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
-> index ac139a3eaf..b4fa359b64 100644
-> --- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
-> +++ b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
-> @@ -4,7 +4,7 @@
->    "pbuffers": true,
->    "outputs": [
->      {
-> -      "name": "LVDS-1",
-> +      "name": "LVDS1",
->        "mode": "800x480"
->      }
->    ]
-> --
+On Wed, 25 Dec 2019 16:13:51 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Reviewed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> - without PPD
+>   - libfoo not installed on the host system
+>     - host-libfoo built before host-bar
+>       - bar links to libfoo
+>         - bar has an RPATH for another lib
+>           => OK  
+>         - bar does not have an RPATH for another lib
+>           -> check-host-rpath errors out for host-bar
+>           => OK  
+>     - host-libfoo built after host-bar
+>       -> bar not linked to libfoo
+>       => OK  
+> 
+>   - libfoo installed on the host system
+>     - host-libfoo built before host-bar
+>       - bar links to host-libfoo
+>         - bar has an RPATH for another lib
+>           => OK  
+>         - bar does not have an RPATH for another lib
+>           -> check-host-rpath errors out for host-bar
+>           => OK  
+>     - host-libfoo built after host-bar
+>       - bar links to system libfoo
+>         - bar has an RPATH for another lib
+>           -> check-host-rpath OK for both host-bar and host-libfoo
+>           -> error at runtime: bar uses host-libfoo instead of system  
+>              libfoo
+>           => KO, MISSED  
 
-Michael
+True, but I'm not sure what we can do here. The only thing we can do is
+to add all the appropriate --disable-<foo> options to make sure host-bar
+doesn't link with any optional library that we don't have as a
+dependency.
 
-> 2.17.1
->
+> - with PPD
+>   - libfoo not installed on the host system
+>     -> bar never linked to libfoo
+>     => OK  
+> 
+>   - libfoo installed on the host system
+>     -> bar always linked to system libfoo  
+>       - bar has an RPATH for another lib
+>         -> check-host-rpath OK for host-bar
+>         -> error at runtime: bar uses host-libfoo instead of system  
+>            libfoo, *but* only once the final, complete host directory
+>            has been aggregated
+>         => KO, MISSED  
 
+Absolutely. This is indeed a weird thing with the PPD stuff: during the
+build of Buildroot, we are never using what is going to be the final
+SDK. I'm not sure what we can do about it though, except as suggested
+above, ensures we have as much as possible the appropriate
+--disable-<foo>, but obviously this is never going to be perfect: new
+optional dependencies are going to be added by upstream, and we will
+not notice them.
 
+A (crazy?) idea is perhaps to check against which libraries host
+binaries/libraries end up being linked with. They should only be linked
+against:
+
+ - Other libraries in HOST_DIR
+
+ - A small reduced set of system libraries, which we could have a
+   whitelist (libc, libm, librt, libgcc_s, libatomic, etc.).
+
+If one of our host program links against something else from the host
+system, then it is not good, and we should error out. At least this
+would allow us to *detect* such issues, and hopefully thanks to that
+add the appropriate --disable-<foo> options where needed. The user
+would also be clearly notified that there is something not good going
+on with one of the host packages.
+
+Other ideas ?
+
+Best regards,
+
+Thomas
 -- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
