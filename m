@@ -1,56 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 13:40:43 +0100
-Subject: [Buildroot] [git commit] package/bitcoin: fix build with boost 1.72
-Message-ID: <20191226123229.B6A448E58F@busybox.osuosl.org>
+Date: Thu, 26 Dec 2019 13:40:32 +0100
+Subject: [Buildroot] [git commit] package/boost: propagate boost-thread
+ dependency on a toolchain without bug 64735
+Message-ID: <20191226123229.ADDE28E5B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3563f44dc38e396a20cc70cea650c583e204a93
+commit: https://git.buildroot.net/buildroot/commit/?id=e45825446054617a70bee145a91e0b74068bec71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Commit d7e49f5f42881f8781e7a8add6e0114af0bd9511 does not fully propagate
+the dependency on a toolchain without bug 64735 to reverse dependencies
+of boost-thread
+
 Fixes:
- - http://autobuild.buildroot.org/results/6b4d9877aa416b788b94fe44b2673149aae4af43
+ - http://autobuild.buildroot.org/results/2b0ca8ce4df7496dcc7d078fae2114d75bd0a455
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...d-missing-header-bootlegged-by-boost-1-72.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ package/boost/Config.in | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/package/bitcoin/0001-http-add-missing-header-bootlegged-by-boost-1-72.patch b/package/bitcoin/0001-http-add-missing-header-bootlegged-by-boost-1-72.patch
-new file mode 100644
-index 0000000000..84e0cf2570
---- /dev/null
-+++ b/package/bitcoin/0001-http-add-missing-header-bootlegged-by-boost-1-72.patch
-@@ -0,0 +1,28 @@
-+From a5929130223973636f3fd25fbfaf2953f2ec96a9 Mon Sep 17 00:00:00 2001
-+From: Jan Beich <jbeich@FreeBSD.org>
-+Date: Fri, 25 Oct 2019 13:05:17 +0000
-+Subject: [PATCH] http: add missing header bootlegged by boost < 1.72
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index a053b776fd..121650b8bc 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -101,7 +101,7 @@ comment "boost-contract needs a toolchain w/ NPTL"
+ config BR2_PACKAGE_BOOST_COROUTINE
+ 	bool "boost-coroutine"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context, boost-thread
+ 	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_CONTEXT
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+@@ -189,6 +189,7 @@ config BR2_PACKAGE_BOOST_LOCALE
+ 	# https://svn.boost.org/trac/boost/ticket/9685 for more
+ 	# details.
+ 	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_ICU)
++	depends on !(BR2_TOOLCHAIN_HAS_GCC_BUG_64735 && BR2_PACKAGE_ICU) # boost-thread
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD if BR2_PACKAGE_ICU
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -199,6 +200,10 @@ comment "boost-locale needs a toolchain w/ dynamic library"
+ 	depends on BR2_PACKAGE_ICU
+ 	depends on BR2_STATIC_LIBS
+ 
++comment "boost-locale needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_PACKAGE_ICU
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 +
-+httpserver.cpp:74:10: error: no template named 'deque' in namespace 'std'
-+    std::deque<std::unique_ptr<WorkItem>> queue;
-+    ~~~~~^
+ config BR2_PACKAGE_BOOST_LOG
+ 	bool "boost-log"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+@@ -327,16 +332,21 @@ config BR2_PACKAGE_BOOST_TIMER
+ 
+ config BR2_PACKAGE_BOOST_TYPE_ERASURE
+ 	bool "boost-type_erasure"
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	help
+ 	  Runtime polymorphism based on concepts.
+ 
++comment "boost-type_erasure needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 +
-+[Retrieved from:
-+https://github.com/bitcoin/bitcoin/commit/a5929130223973636f3fd25fbfaf2953f2ec96a9]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/httpserver.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
+ config BR2_PACKAGE_BOOST_WAVE
+ 	bool "boost-wave"
+ 	# limitation of assembler for coldfire
+ 	# error: Tried to convert PC relative branch to absolute jump
+ 	depends on !BR2_m68k_cf
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+@@ -347,4 +357,7 @@ config BR2_PACKAGE_BOOST_WAVE
+ 	  preprocessor functionality packed behind an easy to use
+ 	  iterator interface.
+ 
++comment "boost-wave needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 +
-+diff --git a/src/httpserver.cpp b/src/httpserver.cpp
-+index 81137771871f..d9c711332358 100644
-+--- a/src/httpserver.cpp
-++++ b/src/httpserver.cpp
-+@@ -15,6 +15,7 @@
-+ #include <sync.h>
-+ #include <ui_interface.h>
-+ 
-++#include <deque>
-+ #include <memory>
-+ #include <stdio.h>
-+ #include <stdlib.h>
+ endif
