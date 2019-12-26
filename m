@@ -1,68 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 26 Dec 2019 10:00:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gmrender-resurrect: bump to version
- 0.0.8
-Message-ID: <20191226090054.2198511-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Dec 2019 11:03:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/quota: fix NLS build
+In-Reply-To: <20191226085938.2198391-1-fontaine.fabrice@gmail.com>
+References: <20191226085938.2198391-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191226110305.40906ef7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libupnp18 is supported since
-https://github.com/hzeller/gmrender-resurrect/commit/cc96edeb70fa2938a4d963524261142132ece540
+Hello Fabrice,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gmrender-resurrect/Config.in               | 2 +-
- package/gmrender-resurrect/gmrender-resurrect.hash | 2 +-
- package/gmrender-resurrect/gmrender-resurrect.mk   | 8 +++++---
- 3 files changed, 7 insertions(+), 5 deletions(-)
+On Thu, 26 Dec 2019 09:59:38 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
-index db655ad7f4..e7424e3b22 100644
---- a/package/gmrender-resurrect/Config.in
-+++ b/package/gmrender-resurrect/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
- 	depends on BR2_USE_MMU # gstreamer1
- 	select BR2_PACKAGE_GSTREAMER1
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
--	select BR2_PACKAGE_LIBUPNP
-+	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
- 	help
- 	  UPnP (DLNA) media renderer based on gstreamer
- 
-diff --git a/package/gmrender-resurrect/gmrender-resurrect.hash b/package/gmrender-resurrect/gmrender-resurrect.hash
-index 85d6ad4629..dc474be612 100644
---- a/package/gmrender-resurrect/gmrender-resurrect.hash
-+++ b/package/gmrender-resurrect/gmrender-resurrect.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 79dba7cbd275098026a16829597b7013ab71a9cca4c9762af6f210637099c39a  gmrender-resurrect-a7b0b1b9ca482d2d34ac62c2f2dc0cf0dfbb702b.tar.gz
-+sha256 1f0cef76e4543879c9cd31cad73d6c4f778b965884c586405efcf63f2bdbb06f  gmrender-resurrect-0.0.8.tar.gz
- sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
-diff --git a/package/gmrender-resurrect/gmrender-resurrect.mk b/package/gmrender-resurrect/gmrender-resurrect.mk
-index 432ed8424e..e0251967dc 100644
---- a/package/gmrender-resurrect/gmrender-resurrect.mk
-+++ b/package/gmrender-resurrect/gmrender-resurrect.mk
-@@ -4,13 +4,15 @@
- #
- ################################################################################
- 
--GMRENDER_RESURRECT_VERSION = a7b0b1b9ca482d2d34ac62c2f2dc0cf0dfbb702b
--GMRENDER_RESURRECT_SITE = $(call github,hzeller,gmrender-resurrect,$(GMRENDER_RESURRECT_VERSION))
-+GMRENDER_RESURRECT_VERSION = 0.0.8
-+GMRENDER_RESURRECT_SITE = $(call github,hzeller,gmrender-resurrect,v$(GMRENDER_RESURRECT_VERSION))
- # Original distribution does not have default configure,
- # so we need to autoreconf:
- GMRENDER_RESURRECT_AUTORECONF = YES
- GMRENDER_RESURRECT_LICENSE = GPL-2.0+
- GMRENDER_RESURRECT_LICENSE_FILES = COPYING
--GMRENDER_RESURRECT_DEPENDENCIES = gstreamer1 libupnp
-+GMRENDER_RESURRECT_DEPENDENCIES = \
-+	gstreamer1 \
-+	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18) 
- 
- $(eval $(autotools-package))
+> Fixes:
+>  - http://autobuild.buildroot.org/results/9e40a5b97dcd52cdfbd11688426ecad70390d56b
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...l-AM_MKINSTALLDIRS-to-substitute-MKI.patch | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 package/quota/0002-configure.ac-call-AM_MKINSTALLDIRS-to-substitute-MKI.patch
+> 
+> diff --git a/package/quota/0002-configure.ac-call-AM_MKINSTALLDIRS-to-substitute-MKI.patch b/package/quota/0002-configure.ac-call-AM_MKINSTALLDIRS-to-substitute-MKI.patch
+> new file mode 100644
+> index 0000000000..a8cf7eebcc
+> --- /dev/null
+> +++ b/package/quota/0002-configure.ac-call-AM_MKINSTALLDIRS-to-substitute-MKI.patch
+> @@ -0,0 +1,37 @@
+> +From 48fb73784875fa654f6179c5f71756d898a6b6f5 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Thu, 26 Dec 2019 09:43:32 +0100
+> +Subject: [PATCH] configure.ac: call AM_MKINSTALLDIRS to substitute
+> + @MKINSTALLDIRS@
+> +
+> +MKINSTALLDIRS is obsolete and doesn't get automatically called.
+> +
+> +Force call AM_MKINSTALLDIRS() macro to substitute every @MKINSTALLDIRS@
+> +occurence in *.in files.
+
+When I looked at the build issue, my first thought was that
+"QUOTA_GETTEXTIZE = YES" was missing, but I did not test this. Did you
+test with GETTEXTIZE = YES ?
+
+Thanks,
+
+Thomas
 -- 
-2.24.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
