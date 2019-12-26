@@ -1,42 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 20:43:56 +0100
-Subject: [Buildroot] [git commit] package/dav1d: bump to version 0.5.2
-Message-ID: <20191226194455.B19D28E60D@busybox.osuosl.org>
+Date: Thu, 26 Dec 2019 20:44:00 +0100
+Subject: [Buildroot] [git commit] package/ecryptfs-utils: fix parallel build
+Message-ID: <20191226194455.BA9728E60D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f48a8329513e2fe8668613b88619e697875429fd
+commit: https://git.buildroot.net/buildroot/commit/?id=1a283db1c678f19c71c3ed3196f05348ef9767d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Build randomly fails since December 2017 on:
+
+make[5]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/ecryptfs-utils-111/src/utils'
+ /bin/mkdir -p '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
+  /bin/bash ../../libtool   --mode=install /usr/bin/install -c mount.ecryptfs umount.ecryptfs mount.ecryptfs_private '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
+libtool: install: /usr/bin/install -c mount.ecryptfs /home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs
+/usr/bin/install: cannot create regular file '/home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs': File exists
+Makefile:832: recipe for target 'install-rootsbinPROGRAMS' failed
+make[5]: *** [install-rootsbinPROGRAMS] Error 1
+
+Fixes:
+ - http://autobuild.buildroot.org/results/2063bd18830ef02dca0bed889c43639009bc688e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dav1d/dav1d.hash | 2 +-
- package/dav1d/dav1d.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0003-fix-parallel-build-issue.patch            | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index b8f29af160..a2f2ea4dfc 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 0214d201a338e8418f805b68f9ad277e33d79c18594dee6eaf6dcd74db2674a9  dav1d-0.5.1.tar.bz2
-+sha256 1780199d71e62a82ca1bfca2d71da5c599c7e1edc68c72f6fc3c0c25ce1880b7  dav1d-0.5.2.tar.bz2
- sha256 b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 1de2fdd979..150c40f099 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DAV1D_VERSION = 0.5.1
-+DAV1D_VERSION = 0.5.2
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
- DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
+diff --git a/package/ecryptfs-utils/0003-fix-parallel-build-issue.patch b/package/ecryptfs-utils/0003-fix-parallel-build-issue.patch
+new file mode 100644
+index 0000000000..e2aa740d55
+--- /dev/null
++++ b/package/ecryptfs-utils/0003-fix-parallel-build-issue.patch
+@@ -0,0 +1,61 @@
++fix parallel build issue
++
++Build randomly fails since December 2017 on buildroot
++(http://autobuild.buildroot.org/?reason=ecryptfs-utils-111):
++
++make[5]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/ecryptfs-utils-111/src/utils'
++  /bin/mkdir -p '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
++  /bin/bash ../../libtool   --mode=install /usr/bin/install -c mount.ecryptfs umount.ecryptfs mount.ecryptfs_private '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
++libtool: install: /usr/bin/install -c mount.ecryptfs /home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs
++/usr/bin/install: cannot create regular file '/home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs': File exists
++Makefile:832: recipe for target 'install-rootsbinPROGRAMS' failed
++make[5]: *** [install-rootsbinPROGRAMS] Error 1
++
++As spotted by Thomas Petazzoni, build failure happens because of the
++following line in src/utils/Makefile.am:
++
++install-exec-hook:      install-rootsbinPROGRAMS
++        -rm -f "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
++        $(LN_S) "mount.ecryptfs_private" "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
++
++The install-exec-hook target should not have a dependency on
++install-rootsbinPROGRAMS.
++
++From https://www.gnu.org/software/automake/manual/html_node/Extending.html#Extending:
++
++"""
++In contrast, some rules also have a way to run another rule, called a
++hook; hooks are always executed after the main rule???s work is done. The
++hook is named after the principal target, with ???-hook??? appended. The
++targets allowing hooks are install-data, install-exec, uninstall, dist,
++and distcheck.
++
++For instance, here is how to create a hard link to an installed program:
++
++install-exec-hook:
++        ln $(DESTDIR)$(bindir)/program$(EXEEXT) \
++           $(DESTDIR)$(bindir)/proglink$(EXEEXT)
++
++"""
++
++So, they explicitly say that these hooks are run after the main rule
++work is done, which means the dependency on install-rootsbinPROGRAMS is
++not needed. And the example they use to illustrate is *exactly* the
++situation of ecryptfs-utils: creating a link to a program that was
++installed.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://bugs.launchpad.net/ecryptfs/+bug/1857622]
++
++diff -Nuar ecryptfs-utils-111-orig/src/utils/Makefile.in ecryptfs-utils-111/src/utils/Makefile.in
++--- ecryptfs-utils-111-orig/src/utils/Makefile.in	2019-12-26 15:14:16.656146065 +0100
+++++ ecryptfs-utils-111/src/utils/Makefile.in	2019-12-26 17:36:07.108496164 +0100
++@@ -1522,7 +1522,7 @@
++ .PRECIOUS: Makefile
++ 
++ 
++-install-exec-hook:	install-rootsbinPROGRAMS
+++install-exec-hook:
++ 	-rm -f "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
++ 	$(LN_S) "mount.ecryptfs_private" "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
++ 
