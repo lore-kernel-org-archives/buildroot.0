@@ -1,21 +1,24 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 26 Dec 2019 12:27:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bitcoin: fix build with boost 1.72
-Message-ID: <20191226112720.3169094-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Dec 2019 13:40:43 +0100
+Subject: [Buildroot] [git commit] package/bitcoin: fix build with boost 1.72
+Message-ID: <20191226123229.B6A448E58F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=c3563f44dc38e396a20cc70cea650c583e204a93
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes:
  - http://autobuild.buildroot.org/results/6b4d9877aa416b788b94fe44b2673149aae4af43
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...sing-header-bootlegged-by-boost-1-72.patch | 28 +++++++++++++++++++
+ ...d-missing-header-bootlegged-by-boost-1-72.patch | 28 ++++++++++++++++++++++
  1 file changed, 28 insertions(+)
- create mode 100644 package/bitcoin/0001-http-add-missing-header-bootlegged-by-boost-1-72.patch
 
 diff --git a/package/bitcoin/0001-http-add-missing-header-bootlegged-by-boost-1-72.patch b/package/bitcoin/0001-http-add-missing-header-bootlegged-by-boost-1-72.patch
 new file mode 100644
@@ -51,5 +54,3 @@ index 0000000000..84e0cf2570
 + #include <memory>
 + #include <stdio.h>
 + #include <stdlib.h>
--- 
-2.24.0
