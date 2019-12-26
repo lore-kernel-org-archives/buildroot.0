@@ -1,26 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2019 20:44:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/quota: drop QUOTA_LIBS
-In-Reply-To: <20191226150510.3415063-1-fontaine.fabrice@gmail.com>
-References: <20191226150510.3415063-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191226204426.1717a8ca@windsurf>
+Date: Thu, 26 Dec 2019 20:44:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dav1d: bump to version 0.5.2
+In-Reply-To: <20191226150819.3415268-1-fontaine.fabrice@gmail.com>
+References: <20191226150819.3415268-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191226204430.497a8ec3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 26 Dec 2019 16:05:10 +0100
+On Thu, 26 Dec 2019 16:08:19 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Drop QUOTA_LIBS as this variable is always set to $(TARGET_NLS_LIBS)
-> since bump to version 4.05 in commit
-> 540797f95553b0b5cbdd314e4bb0d3b136935b0a
-> 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/quota/quota.mk | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  package/dav1d/dav1d.hash | 2 +-
+>  package/dav1d/dav1d.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
