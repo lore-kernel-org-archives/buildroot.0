@@ -1,106 +1,123 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 26 Dec 2019 17:47:48 +0100
-Subject: [Buildroot] [PATCH v3,
- 1/1] package/ecryptfs-utils: fix parallel build
-Message-ID: <20191226164748.28083-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 26 Dec 2019 18:05:04 +0100
+Subject: [Buildroot] [PATCH] arch/arc: Explicitly set "max-page-size"
+ for GNU LD
+In-Reply-To: <20191225223603.360a7ffa@windsurf>
+References: <20191224141032.34544-1-abrodkin@synopsys.com>
+ <20191225223603.360a7ffa@windsurf>
+Message-ID: <20191226170504.GP26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build randomly fails since December 2017 on:
+Thomas, Alexey, All,
 
-make[5]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/ecryptfs-utils-111/src/utils'
- /bin/mkdir -p '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
-  /bin/bash ../../libtool   --mode=install /usr/bin/install -c mount.ecryptfs umount.ecryptfs mount.ecryptfs_private '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
-libtool: install: /usr/bin/install -c mount.ecryptfs /home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs
-/usr/bin/install: cannot create regular file '/home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs': File exists
-Makefile:832: recipe for target 'install-rootsbinPROGRAMS' failed
-make[5]: *** [install-rootsbinPROGRAMS] Error 1
+On 2019-12-25 22:36 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 24 Dec 2019 17:10:32 +0300
+> Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
+> > Back in the day we relied on a default value that used to be 8KiB
+> > and it worked perfectly fine for ARC's default 8KiB page as well as
+> > 4 KiB ones, but not for 16 KiB, see [1] for more details.
+> > 
+> > So that we fixed by setting "max-page-size" if 16KiB pages are in use by
+> > commit d024d369b82d2 ("arch/arc: Accommodate 16 KiB MMU pages").
+> > 
+> > But as Yann very rightfully mentioned here [2] we should be setting this
+> > thing explicitly for all page sizes because:
+> >  1. Defaults might change unexpectedly
+> >  2. Explicitly set stuff is better understood
+> >  3. We act similarly to all settings but not only addressing some corner cases
+> > 
+> > [1] https://git.buildroot.org/buildroot/commit/?id=d024d369b82d2d3d9d4d75489c19e9488202bca0
+> > [2] https://patchwork.ozlabs.org/patch/1212544/#2330647
+> > 
+> > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> 
+> > -# By default MAXPAGESIZE for ARC is 8192 so for larger MMU pages
+> > -# it needs to be overridden.
+> > +# Explicitly set LD's "max-page-size" instead of relying on some defaults
+> > +ifeq ($(BR2_ARC_PAGE_SIZE_4K),y)
+> > +ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=4096
+> > +endif
+> > +
+> > +ifeq ($(BR2_ARC_PAGE_SIZE_8K),y)
+> > +ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=8192
+> > +endif
+> > +
+> >  ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
+> >  ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384
+> >  endif
+> 
+> Since these options are mutually exclusive:
+> 
+> ifeq ($(BR2_ARC_PAGE_SIZE_4K),y)
+> ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=4096
+> else ifeq ($(BR2_ARC_PAGE_SIZE_8K),y)
+> ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=8192
+> else ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
+> ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384
+> endif
+> 
+> is a bit more compact, so I changed to use this before committing.
 
-Fixes:
- - http://autobuild.buildroot.org/results/2063bd18830ef02dca0bed889c43639009bc688e
+Agreed.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v2 -> v3 (after review of Thomas Petazzoni):
- - Update Makefile.in instead of Makefile.am to avoid running autoreconf
-   which depends on AM_GLIB_GNU_GETTEXT
+> Also, we already have an option called BR2_ARC_PAGE_SIZE, which
+> contains 4K, 8K or 16K, so I thought if we could use it here as well. I
+> think we can, but I'd like to hear from Yann about this, because it
+> uses bash arithmetic, which I'm not sure we're allowed to use:
+> 
+> ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=$(shell echo $$(($(patsubst %K,%,$(BR2_ARC_PAGE_SIZE)) * 1024)))
 
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Fix parallel build issue instead of disabling it
+We can do bash arithmetics, because we are guaranteed we use bash as our
+shell, see: https://git.buildroot.org/buildroot/tree/Makefile#n30
 
- .../0003-fix-parallel-build-issue.patch       | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/ecryptfs-utils/0003-fix-parallel-build-issue.patch
+But BR2_ARC_PAGE_SIZE is a string, so it is double-quoted, which would
+break the above.
 
-diff --git a/package/ecryptfs-utils/0003-fix-parallel-build-issue.patch b/package/ecryptfs-utils/0003-fix-parallel-build-issue.patch
-new file mode 100644
-index 0000000000..e2aa740d55
---- /dev/null
-+++ b/package/ecryptfs-utils/0003-fix-parallel-build-issue.patch
-@@ -0,0 +1,61 @@
-+fix parallel build issue
-+
-+Build randomly fails since December 2017 on buildroot
-+(http://autobuild.buildroot.org/?reason=ecryptfs-utils-111):
-+
-+make[5]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/ecryptfs-utils-111/src/utils'
-+  /bin/mkdir -p '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
-+  /bin/bash ../../libtool   --mode=install /usr/bin/install -c mount.ecryptfs umount.ecryptfs mount.ecryptfs_private '/home/buildroot/autobuild/instance-2/output-1/target/sbin'
-+libtool: install: /usr/bin/install -c mount.ecryptfs /home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs
-+/usr/bin/install: cannot create regular file '/home/buildroot/autobuild/instance-2/output-1/target/sbin/mount.ecryptfs': File exists
-+Makefile:832: recipe for target 'install-rootsbinPROGRAMS' failed
-+make[5]: *** [install-rootsbinPROGRAMS] Error 1
-+
-+As spotted by Thomas Petazzoni, build failure happens because of the
-+following line in src/utils/Makefile.am:
-+
-+install-exec-hook:      install-rootsbinPROGRAMS
-+        -rm -f "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
-+        $(LN_S) "mount.ecryptfs_private" "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
-+
-+The install-exec-hook target should not have a dependency on
-+install-rootsbinPROGRAMS.
-+
-+From https://www.gnu.org/software/automake/manual/html_node/Extending.html#Extending:
-+
-+"""
-+In contrast, some rules also have a way to run another rule, called a
-+hook; hooks are always executed after the main rule?s work is done. The
-+hook is named after the principal target, with ?-hook? appended. The
-+targets allowing hooks are install-data, install-exec, uninstall, dist,
-+and distcheck.
-+
-+For instance, here is how to create a hard link to an installed program:
-+
-+install-exec-hook:
-+        ln $(DESTDIR)$(bindir)/program$(EXEEXT) \
-+           $(DESTDIR)$(bindir)/proglink$(EXEEXT)
-+
-+"""
-+
-+So, they explicitly say that these hooks are run after the main rule
-+work is done, which means the dependency on install-rootsbinPROGRAMS is
-+not needed. And the example they use to illustrate is *exactly* the
-+situation of ecryptfs-utils: creating a link to a program that was
-+installed.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://bugs.launchpad.net/ecryptfs/+bug/1857622]
-+
-+diff -Nuar ecryptfs-utils-111-orig/src/utils/Makefile.in ecryptfs-utils-111/src/utils/Makefile.in
-+--- ecryptfs-utils-111-orig/src/utils/Makefile.in	2019-12-26 15:14:16.656146065 +0100
-++++ ecryptfs-utils-111/src/utils/Makefile.in	2019-12-26 17:36:07.108496164 +0100
-+@@ -1522,7 +1522,7 @@
-+ .PRECIOUS: Makefile
-+ 
-+ 
-+-install-exec-hook:	install-rootsbinPROGRAMS
-++install-exec-hook:
-+ 	-rm -f "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
-+ 	$(LN_S) "mount.ecryptfs_private" "$(DESTDIR)/$(rootsbindir)/umount.ecryptfs_private"
-+ 
+I was also contemplating a similar solution, but I was not too happy
+with this trick to drop the suffix. I would have prefered something
+like:
+
+    config BR2_ARC_PAGE_SIZE_KB
+        int
+        default 4 if BR2_ARC_PAGE_SIZE_4K
+        default 8 if BR2_ARC_PAGE_SIZE_8K
+        default 16 if BR2_ARC_PAGE_SIZE_16K
+
+and then:
+
+    ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=$(shell echo $$(($(BR2_ARC_PAGE_SIZE)*1024)))
+
+and in package/uclibc/uclibc.mk:
+
+    UCLIBC_ARC_PAGE_SIZE = CONFIG_ARC_PAGE_SIZE_$(BR2_ARC_PAGE_SIZE)K
+
+... and even that intermediate variable could have been dropped
+altogether, to directly write:
+
+        $(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_$(BR2_ARC_PAGE_SIZE)K,$(@D)/.config)
+
+And that would have been a bit nicer, I believe.
+
+Regards,
+Yann E. MORIN.
+
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
 -- 
-2.24.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
