@@ -1,36 +1,31 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 27 Dec 2019 14:17:04 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/strace: drop default in Config.in
-Message-ID: <20191227131704.540027-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri, 27 Dec 2019 15:35:48 +0100
+Subject: [Buildroot] [PATCH] package/ecryptfs-utils: fix typo in Config.in
+ comment
+Message-ID: <20191227143548.83674-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit d52e98655fb6b00606ffe5294051ff0581c464bf wrongly sets a default
-value for strace so drop it
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Drop default
+ package/ecryptfs-utils/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- package/strace/Config.in | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/package/strace/Config.in b/package/strace/Config.in
-index d286ec0793..5b33dad392 100644
---- a/package/strace/Config.in
-+++ b/package/strace/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_STRACE
- 	# needs at least kernel headers 4.0 on nios2
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
- 	depends on !BR2_nds32 && !BR2_RISCV_32
--	default n
- 	help
- 	  A useful diagnostic, instructional, and debugging tool.
- 	  Allows you to track what system calls a program makes
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 68a659d33d..0c39f48d08 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -28,7 +28,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 
+ 	  http://ecryptfs.org
+ 
+-comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
++comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynamic library"
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
 -- 
-2.24.0
+2.20.1
