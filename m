@@ -1,115 +1,105 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 27 Dec 2019 22:37:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: replace -02 when
- BR2_TOOLCHAIN_HAS_GCC_BUG_90620
-In-Reply-To: <CAPi7W80y1gc4359Sg1SaHQbkWwvvvSdwg25Wz29ewVrsQ2rviQ@mail.gmail.com>
-References: <20191227200853.1471986-1-fontaine.fabrice@gmail.com>
- <3524c102-c20c-f86d-c58a-0932a27f1bb6@benettiengineering.com>
- <CAPi7W80y1gc4359Sg1SaHQbkWwvvvSdwg25Wz29ewVrsQ2rviQ@mail.gmail.com>
-Message-ID: <0f470898-64ca-ce3c-4b60-b4cd56ede624@benettiengineering.com>
+Date: Fri, 27 Dec 2019 22:40:59 +0100
+Subject: [Buildroot] [PATCH v3] package/qt5base: fix building with
+ correct optimization
+In-Reply-To: <20191125112614.93405-1-giulio.benetti@benettiengineering.com>
+References: <20191125112614.93405-1-giulio.benetti@benettiengineering.com>
+Message-ID: <c61b8d4e-e09b-1db9-6f0d-26701a66fb44@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
++Fabrice.
 
-On 12/27/19 10:24 PM, Fabrice Fontaine wrote:
-> Hi Giulio,
+On 11/25/19 12:26 PM, Giulio Benetti wrote:
+> Qt5 has predefined optimization flags depending if you're building for
+> size, for debug etc. These flags are defined in
+> mkspecs/common/gcc-base.conf:
 > 
-> Le ven. 27 d?c. 2019 ? 21:22, Giulio Benetti
-> <giulio.benetti@benettiengineering.com> a ?crit :
->>
->> Hi Fabrice,
->>
->> I've already sent a patch for this:
->> https://patchwork.ozlabs.org/patch/1200350/
->>
->> It uses qmake.conf.in instead of hacking gcc-base.conf and most of all
->> it allows to have correct optimization flags according to Buildroot.
->>
->> Since you have seen the problem, can you please review my patch?
-> I missed your patch, I'll set mine as Not Applicable as I tested yours
-> and it is better and fixes the build failure. You can add my
-> Tested-by: (I can't find your patch in my mailbox).
+> QMAKE_CFLAGS_OPTIMIZE      = -O2
+> QMAKE_CFLAGS_OPTIMIZE_FULL = -O3
+> QMAKE_CFLAGS_OPTIMIZE_DEBUG = -Og
+> QMAKE_CFLAGS_OPTIMIZE_SIZE = -Os
+> 
+> Then, in the same file, they use them to set
+> QMAKE_CFLAGS_RELEASE/QMAKE_CXXFLAGS_RELEASE:
+> 
+> QMAKE_CFLAGS_RELEASE       += $$QMAKE_CFLAGS_OPTIMIZE
+> QMAKE_CXXFLAGS_RELEASE    += $$QMAKE_CFLAGS_RELEASE
+> 
+> At this point there is our chance to override QMAKE_CFLAGS_OPTIMIZE_* in
+> qmake.conf, but it's too late, because QMAKE_CFLAGS_RELEASE is already
+> set(i.e. -O2) so trying to add or remove QMAKE_CFLAGS_OPTIMIZE(that is
+> reset now on) from QMAKE_CLAGS_RELEASE in
+> common/features/default_post.prf won't work:
+> 
+> optimize_size {
+>      !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_SIZE)  {
+>          QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+>          QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+>          QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
+>          QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
+>      }
+> } else: optimize_full {
+>      !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_FULL)  {
+>          QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+>          QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+>          QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
+>          QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
+>      }
+> }
+> 
+> So let's reset:
+> QMAKE_CFLAGS_RELEASE
+> QMAKE_CFLAGS_DEBUG
+> QMAKE_CXXFLAGS_RELEASE
+> QMAKE_CXXFLAGS_DEBUG
+> in our qmake.conf.in since the only assignment done in
+> mkspecs/common/gcc-base.conf only regards optimization.
+> 
+> This package is also affected by BR2_TOOLCHAIN_HAS_GCC_BUG_90620 and
+> it's been worked around by appending -O0 to CFLAGS/CXXFLAGS. This bug
+> prevented workaround to work overriding optimization flags, so solving
+> this also solves workaround problem.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/ada/adaa9b4bcc6f9d2b5e82c479859a07e8abf5cf13/
+> http://autobuild.buildroot.net/results/a83/a83bdd1f3bf309c07abebe871b017c331ed36e67/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Thank you very much!
+According to: https://patchwork.ozlabs.org/patch/1215790/
 
-Best regards
+Tested-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
 -- 
 Giulio Benetti
 Benetti Engineering sas
 
->>
->> Best regards
->> --
->> Giulio Benetti
->> Benetti Engineering sas
->>
->> On 12/27/19 9:08 PM, Fabrice Fontaine wrote:
->>> This will fix the following build failure with qt5location:
->>>
->>> /home/buildroot/autobuild/run/instance-1/output-1/host/bin/microblazeel-linux-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -O0 --sysroot=/home/buildroot/autobuild/run/instance-1/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot -O2 -std=c++1z -fvisibility=hidden -fvisibility-inlines-hidden -fno-exceptions -Wall -W -Wvla -Wdate-time -Wshift-overflow=2 -Wduplicated-cond -Wno-stringop-overflow -D_REENTRANT -fPIC -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT -DQT_BUILD_POSITIONING_LIB -DQT_BUILDING_QT -DQT_NO_CAST_TO_ASCII -DQT_ASCII_CAST_WARNINGS -DQT_MOC_COMPAT -DQT_USE_QSTRINGBUILDER -DQT_DEPRECATED_WARNINGS -DQT_DISABLE_DEPRECATED_BEFORE=0x050000 -DQT_NO_EXCEPTIONS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_NO_DEBUG -DQT_CORE_LIB -I. -I../3rdparty/clipper -I../3rdparty/clip2tri -I../../include -I../../include/QtPositioning -I../../include/QtPositioning/5.12.5 -I../../include/QtPositioning/5.12.5/QtPositioning -I/home/buildroot/autob
->>>    uild/run/instance-1/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/5.12.5 -I/home/buildroot/autobuild/run/instance-1/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/5.12.5/QtCore -I/home/buildroot/autobuild/run/instance-1/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/include/qt5 -I/home/buildroot/autobuild/run/instance-1/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore -I.moc -I/home/buildroot/autobuild/run/instance-1/output-1/host/mkspecs/devices/linux-buildroot-g++ -o .obj/qgeoaddress.o qgeoaddress.cpp
->>>
->>> qgeoaddress.cpp: In function 'QString formattedAddress(const QGeoAddress&, const QString&)':
->>> qgeoaddress.cpp:285:1: error: VOIDmode on an output
->>>    }
->>>    ^
->>> (insn 849 12033 850 87 (parallel [
->>>               (const_int 0 [0])
->>>               (reg:SI 970)
->>>               (mem/v:SI (reg/f:SI 3694 [ D.102094.d ]) [-1  S4 A32])
->>>               (reg:SI 970)
->>>               (reg:SI 3527)
->>>               (const_int 0 [0])
->>>               (const_int 32773 [0x8005])
->>>               (const_int 0 [0])
->>>               (clobber (scratch:SI))
->>>           ]) "/home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/microblazeel-buildroot-linux-uclibc/include/c++/7.4.0/bits/atomic_base.h":304 85 {atomic_compare_and_swapsi}
->>>        (nil))
->>> qgeoaddress.cpp:285:1: internal compiler error: in do_output_reload, at reload1.c:7978
->>>
->>> Fixes:
->>>    - http://autobuild.buildroot.org/results/a593cfffbf05132e945d7d6efa5888a2646d5486
->>>
->>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->>> ---
->>>    package/qt5/qt5base/qt5base.mk | 6 ++++++
->>>    1 file changed, 6 insertions(+)
->>>
->>> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
->>> index 1a152be94b..8d4dd49871 100644
->>> --- a/package/qt5/qt5base/qt5base.mk
->>> +++ b/package/qt5/qt5base/qt5base.mk
->>> @@ -40,6 +40,11 @@ QT5BASE_CXXFLAGS = $(TARGET_CXXFLAGS)
->>>    ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_90620),y)
->>>    QT5BASE_CFLAGS += -O0
->>>    QT5BASE_CXXFLAGS += -O0
->>> +
->>> +# This allows to replace -O2 which overrides -O0
->>> +define QT5BASE_CONFIGURE_REPLACE_O2
->>> +     $(SED) 's,^QMAKE_CFLAGS_OPTIMIZE\s*=.*,QMAKE_CFLAGS_OPTIMIZE = -O0,' $(@D)/mkspecs/common/gcc-base.conf
->>> +endef
->>>    endif
->>>
->>>    ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->>> @@ -349,6 +354,7 @@ define QT5BASE_CONFIGURE_CMDS
->>>        touch $(QT5BASE_ARCH_CONFIG_FILE)
->>>        $(QT5BASE_CONFIGURE_ARCH_CONFIG)
->>>        $(QT5BASE_CONFIGURE_HOSTCC)
->>> +     $(QT5BASE_CONFIGURE_REPLACE_O2)
->>>        (cd $(@D); \
->>>                $(TARGET_MAKE_ENV) \
->>>                PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->>>
->>
-> Best Regards,
+> ---
+> V1->V2:
+> * rewritten entire commit log
+> V2->V3:
+> * rewritten entire commit log again trying to explain better
+> ---
+>   package/qt5/qt5base/qmake.conf.in | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
-> Fabrice
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
+> index 2eb564e172..ae25b2e20f 100644
+> --- a/package/qt5/qt5base/qmake.conf.in
+> +++ b/package/qt5/qt5base/qmake.conf.in
+> @@ -19,6 +19,10 @@ QMAKE_CFLAGS_OPTIMIZE       =
+>   QMAKE_CFLAGS_OPTIMIZE_DEBUG =
+>   QMAKE_CFLAGS_OPTIMIZE_FULL  =
+>   QMAKE_CFLAGS_OPTIMIZE_SIZE  =
+> +QMAKE_CFLAGS_DEBUG =
+> +QMAKE_CXXFLAGS_DEBUG =
+> +QMAKE_CFLAGS_RELEASE =
+> +QMAKE_CXXFLAGS_RELEASE =
+>   CONFIG                 += nostrip
+>   
+>   QMAKE_LIBS             += -lrt -lpthread -ldl
 > 
