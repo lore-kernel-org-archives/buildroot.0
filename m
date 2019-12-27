@@ -1,105 +1,45 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 27 Dec 2019 22:40:59 +0100
-Subject: [Buildroot] [PATCH v3] package/qt5base: fix building with
- correct optimization
-In-Reply-To: <20191125112614.93405-1-giulio.benetti@benettiengineering.com>
-References: <20191125112614.93405-1-giulio.benetti@benettiengineering.com>
-Message-ID: <c61b8d4e-e09b-1db9-6f0d-26701a66fb44@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 27 Dec 2019 22:54:29 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/alsamixergui: fix build with latest alsa-lib
+Message-ID: <20191227215429.2326216-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-+Fabrice.
+alsa-lib created a separated libatopology library since version 1.2.1:
+https://github.com/alsa-project/alsa-lib/commit/75d393a563efb578c79364a277087c6326267f52
 
-On 11/25/19 12:26 PM, Giulio Benetti wrote:
-> Qt5 has predefined optimization flags depending if you're building for
-> size, for debug etc. These flags are defined in
-> mkspecs/common/gcc-base.conf:
-> 
-> QMAKE_CFLAGS_OPTIMIZE      = -O2
-> QMAKE_CFLAGS_OPTIMIZE_FULL = -O3
-> QMAKE_CFLAGS_OPTIMIZE_DEBUG = -Og
-> QMAKE_CFLAGS_OPTIMIZE_SIZE = -Os
-> 
-> Then, in the same file, they use them to set
-> QMAKE_CFLAGS_RELEASE/QMAKE_CXXFLAGS_RELEASE:
-> 
-> QMAKE_CFLAGS_RELEASE       += $$QMAKE_CFLAGS_OPTIMIZE
-> QMAKE_CXXFLAGS_RELEASE    += $$QMAKE_CFLAGS_RELEASE
-> 
-> At this point there is our chance to override QMAKE_CFLAGS_OPTIMIZE_* in
-> qmake.conf, but it's too late, because QMAKE_CFLAGS_RELEASE is already
-> set(i.e. -O2) so trying to add or remove QMAKE_CFLAGS_OPTIMIZE(that is
-> reset now on) from QMAKE_CLAGS_RELEASE in
-> common/features/default_post.prf won't work:
-> 
-> optimize_size {
->      !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_SIZE)  {
->          QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
->          QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
->          QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
->          QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
->      }
-> } else: optimize_full {
->      !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_FULL)  {
->          QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
->          QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
->          QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
->          QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
->      }
-> }
-> 
-> So let's reset:
-> QMAKE_CFLAGS_RELEASE
-> QMAKE_CFLAGS_DEBUG
-> QMAKE_CXXFLAGS_RELEASE
-> QMAKE_CXXFLAGS_DEBUG
-> in our qmake.conf.in since the only assignment done in
-> mkspecs/common/gcc-base.conf only regards optimization.
-> 
-> This package is also affected by BR2_TOOLCHAIN_HAS_GCC_BUG_90620 and
-> it's been worked around by appending -O0 to CFLAGS/CXXFLAGS. This bug
-> prevented workaround to work overriding optimization flags, so solving
-> this also solves workaround problem.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/ada/adaa9b4bcc6f9d2b5e82c479859a07e8abf5cf13/
-> http://autobuild.buildroot.net/results/a83/a83bdd1f3bf309c07abebe871b017c331ed36e67/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+However, atopology is not correctly detected when cross-compiling so
+pass ac_cv_lib_atopology_snd_tplg_new=yes
 
-According to: https://patchwork.ozlabs.org/patch/1215790/
+Fixes:
+ - http://autobuild.buildroot.org/results/564c1561e83e0c064f3859d25e68dec96640e060
 
-Tested-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Set ac_cv_lib_atopology_snd_tplg_new=yes instead of 
+ --disable-alsatest --enable-alsa-topology
 
+ package/alsamixergui/alsamixergui.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/alsamixergui/alsamixergui.mk b/package/alsamixergui/alsamixergui.mk
+index 24e2497f3b..c8e9ce4f73 100644
+--- a/package/alsamixergui/alsamixergui.mk
++++ b/package/alsamixergui/alsamixergui.mk
+@@ -14,7 +14,8 @@ ALSAMIXERGUI_AUTORECONF = YES
+ ALSAMIXERGUI_CONF_ENV = \
+ 	ac_cv_lib_fltk_numericsort=yes \
+ 	ac_cv_lib_fltk_fl_numericsort=yes \
+-	ac_cv_lib_asound_snd_ctl_open=yes
++	ac_cv_lib_asound_snd_ctl_open=yes \
++	ac_cv_lib_atopology_snd_tplg_new=yes
+ 
+ ALSAMIXERGUI_DEPENDENCIES = fltk alsa-lib
+ 
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> ---
-> V1->V2:
-> * rewritten entire commit log
-> V2->V3:
-> * rewritten entire commit log again trying to explain better
-> ---
->   package/qt5/qt5base/qmake.conf.in | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
-> index 2eb564e172..ae25b2e20f 100644
-> --- a/package/qt5/qt5base/qmake.conf.in
-> +++ b/package/qt5/qt5base/qmake.conf.in
-> @@ -19,6 +19,10 @@ QMAKE_CFLAGS_OPTIMIZE       =
->   QMAKE_CFLAGS_OPTIMIZE_DEBUG =
->   QMAKE_CFLAGS_OPTIMIZE_FULL  =
->   QMAKE_CFLAGS_OPTIMIZE_SIZE  =
-> +QMAKE_CFLAGS_DEBUG =
-> +QMAKE_CXXFLAGS_DEBUG =
-> +QMAKE_CFLAGS_RELEASE =
-> +QMAKE_CXXFLAGS_RELEASE =
->   CONFIG                 += nostrip
->   
->   QMAKE_LIBS             += -lrt -lpthread -ldl
-> 
+2.24.0
