@@ -1,74 +1,92 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Fri, 27 Dec 2019 12:54:17 +0530
-Subject: [Buildroot] [PATCH v3 0/3] Support 32-bit code generation for
- Armv8 targets
-In-Reply-To: <20190205104512.23718-1-kostap@marvell.com>
-References: <20190205104512.23718-1-kostap@marvell.com>
-Message-ID: <CAMty3ZCvG9-Ahd+awg-1ozNnOXavOf8-U91BTwCZHrvJDnH5MQ@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 27 Dec 2019 09:00:21 +0000
+Subject: [Buildroot] [arc-buildroot] [PATCH] arch/arc: Explicitly set
+ "max-page-size" for GNU LD
+In-Reply-To: <20191226170504.GP26395@scaer>
+References: <20191224141032.34544-1-abrodkin@synopsys.com>
+ <20191225223603.360a7ffa@windsurf> <20191226170504.GP26395@scaer>
+Message-ID: <CY4PR1201MB0120748B829AE787E4B3A097A12A0@CY4PR1201MB0120.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Yann, Thomas,
 
-On Tue, Feb 5, 2019 at 4:15 PM <kostap@marvell.com> wrote:
->
-> From: Konstantin Porotchkin <kostap@marvell.com>
->
-> This patch set adds support for building images for SoC that make usage
-> of Armv8 application CPUs and Cortex-M/Cortex-R service CPUs.
-> The application CPU cross-toolchain is unable to generate 32-bit THUMB
-> code, therefore usage of secondary toolchain is needed.
-> The required pre-built toolchain is taken from ARM developers site and
-> installed in host filesystem only.
-> The patch set makes use of dual toolchain for adding support for Marvell
-> Armada 3700 SoC that uses both Cortex-A53 and Cortex-M3 CPUs for running
-> system firmware.
->
-> V3 changes:
-> patch #1 (arm-gnu-rm-toolchain)
-> - Move the toolchain from installation folder to host FS instead of copy it
-> - Add symbolic links in $(HOST_DIR)/bin to the toolchain executables
-> - Add source files information (download link, license)
-> - Change the hash values from localy calculated sha256 to md5 provided by ARM
-> patch #2 (a3700-utils-marvell) - no changes
-> patch #3 (a3700 boot image build support)
-> - Use the $(HOST_DIR)/bin/* links instead of installation path for CROSS_CM3
->
-> V2 changes:
-> patch #1 (arm-gnu-rm-toolchain)
-> - Remove Config.in.host
-> - Remove custom extract command
-> - Set installation path to $(HOST_DIR)/opt//opt/gcc-arm-none-eabi
-> - Update commit message according to review notes
-> patch #2 (a3700-utils-marvell) - no changes
-> patch #3 (a3700 boot image build support)
-> - Update CROSS_CM3 path in arm-trusted-firmware to reflect patch #1 changes
->
-> Konstantin Porotchkin (3):
->   package/arm-gnu-rm-toolchain: new package
->   boot: a3700-utils-marvell: Add Armada-3700 utilities
->   boot: arm-trusted-firmware: add support for Marvell Armada 3700
->
->  boot/Config.in                                |  1 +
->  boot/a3700-utils-marvell/Config.in            | 46 +++++++++++++++++++
->  .../a3700-utils-marvell.hash                  |  2 +
->  .../a3700-utils-marvell.mk                    | 28 +++++++++++
->  .../arm-trusted-firmware.mk                   |  7 +++
->  .../arm-gnu-rm-toolchain.hash                 |  3 ++
->  .../arm-gnu-rm-toolchain.mk                   | 28 +++++++++++
->  7 files changed, 115 insertions(+)
->  create mode 100644 boot/a3700-utils-marvell/Config.in
->  create mode 100644 boot/a3700-utils-marvell/a3700-utils-marvell.hash
->  create mode 100644 boot/a3700-utils-marvell/a3700-utils-marvell.mk
->  create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
->  create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+[snip]
 
-Any chance of picking or reviewing these changes? rockchip rk3399 do
-require similar arm32 dependency for ATF. Let us know if you need any
-help so-that on this regard.
+> > > -# By default MAXPAGESIZE for ARC is 8192 so for larger MMU pages
+> > > -# it needs to be overridden.
+> > > +# Explicitly set LD's "max-page-size" instead of relying on some defaults
+> > > +ifeq ($(BR2_ARC_PAGE_SIZE_4K),y)
+> > > +ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=4096
+> > > +endif
+> > > +
+> > > +ifeq ($(BR2_ARC_PAGE_SIZE_8K),y)
+> > > +ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=8192
+> > > +endif
+> > > +
+> > >  ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
+> > >  ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384
+> > >  endif
+> >
+> > Since these options are mutually exclusive:
+> >
+> > ifeq ($(BR2_ARC_PAGE_SIZE_4K),y)
+> > ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=4096
+> > else ifeq ($(BR2_ARC_PAGE_SIZE_8K),y)
+> > ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=8192
+> > else ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
+> > ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384
+> > endif
+> >
+> > is a bit more compact, so I changed to use this before committing.
+> 
+> Agreed.
+> 
+> > Also, we already have an option called BR2_ARC_PAGE_SIZE, which
+> > contains 4K, 8K or 16K, so I thought if we could use it here as well. I
+> > think we can, but I'd like to hear from Yann about this, because it
+> > uses bash arithmetic, which I'm not sure we're allowed to use:
+> >
+> > ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=$(shell echo $$(($(patsubst
+> %K,%,$(BR2_ARC_PAGE_SIZE)) * 1024)))
+> 
+> We can do bash arithmetics, because we are guaranteed we use bash as our
+> shell, see: https://urldefense.proofpoint.com/v2/url?u=https-
+> 3A__git.buildroot.org_buildroot_tree_Makefile-
+> 23n30&d=DwIBaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=G0xH-
+> XYcb2iYOg2bibx_AguTrgrtfR3aD7pVbOW09Q0&s=_K73mNAFEXxJcdkCnKJRzs-VXkSvcFKryO2ZYmXj1LI&e=
+> 
+> But BR2_ARC_PAGE_SIZE is a string, so it is double-quoted, which would
+> break the above.
+> 
+> I was also contemplating a similar solution, but I was not too happy
+> with this trick to drop the suffix. I would have prefered something
+> like:
+> 
+>     config BR2_ARC_PAGE_SIZE_KB
+>         int
+>         default 4 if BR2_ARC_PAGE_SIZE_4K
+>         default 8 if BR2_ARC_PAGE_SIZE_8K
+>         default 16 if BR2_ARC_PAGE_SIZE_16K
+> 
+> and then:
+> 
+>     ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=$(shell echo $$(($(BR2_ARC_PAGE_SIZE)*1024)))
+> 
+> and in package/uclibc/uclibc.mk:
+> 
+>     UCLIBC_ARC_PAGE_SIZE = CONFIG_ARC_PAGE_SIZE_$(BR2_ARC_PAGE_SIZE)K
+> 
+> ... and even that intermediate variable could have been dropped
+> altogether, to directly write:
+> 
+>         $(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_$(BR2_ARC_PAGE_SIZE)K,$(@D)/.config)
+> 
+> And that would have been a bit nicer, I believe.
 
+Agree. So, Yann [as usually] are you OK if I implement that improvement?
 
-Jagan.
+-Alexey
