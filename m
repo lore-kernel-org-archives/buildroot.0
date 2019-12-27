@@ -1,85 +1,72 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 27 Dec 2019 21:22:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: replace -02 when
- BR2_TOOLCHAIN_HAS_GCC_BUG_90620
-In-Reply-To: <20191227200853.1471986-1-fontaine.fabrice@gmail.com>
-References: <20191227200853.1471986-1-fontaine.fabrice@gmail.com>
-Message-ID: <3524c102-c20c-f86d-c58a-0932a27f1bb6@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 27 Dec 2019 21:45:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tio: fix termio redefinition
+Message-ID: <20191227204520.1500501-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Fixes:
+ - http://autobuild.buildroot.org/results/1a7418b9cd11374a250f7509d5bddcc864375e1c
 
-I've already sent a patch for this:
-https://patchwork.ozlabs.org/patch/1200350/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...tspeed2.c-fix-redefinition-of-termio.patch | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/tio/0001-src-setspeed2.c-fix-redefinition-of-termio.patch
 
-It uses qmake.conf.in instead of hacking gcc-base.conf and most of all 
-it allows to have correct optimization flags according to Buildroot.
-
-Since you have seen the problem, can you please review my patch?
-
-Best regards
+diff --git a/package/tio/0001-src-setspeed2.c-fix-redefinition-of-termio.patch b/package/tio/0001-src-setspeed2.c-fix-redefinition-of-termio.patch
+new file mode 100644
+index 0000000000..de47290a0d
+--- /dev/null
++++ b/package/tio/0001-src-setspeed2.c-fix-redefinition-of-termio.patch
+@@ -0,0 +1,45 @@
++From 7a84120f7bfbe698fa8050953b7a3e7a7dc63ca0 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 27 Dec 2019 17:41:14 +0100
++Subject: [PATCH] src/setspeed2.c: fix redefinition of termio
++
++Include ioctls.h and termbits.h from asm-generic instead of asm to avoid
++the following build failure:
++
++In file included from setspeed2.c:24:0:
++/home/naourr/work/instance-0/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/asm/termbits.h:17:8: error: redefinition of 'struct termio'
++ struct termio {
++        ^~~~~~
++In file included from /home/naourr/work/instance-0/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/sys/ioctl.h:29:0,
++                 from setspeed2.c:22:
++/home/naourr/work/instance-0/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/bits/ioctl-types.h:36:8: note: originally defined here
++ struct termio
++        ^~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1a7418b9cd11374a250f7509d5bddcc864375e1c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/tio/tio/pull/98]
++---
++ src/setspeed2.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/setspeed2.c b/src/setspeed2.c
++index 0adf695..6d82e66 100644
++--- a/src/setspeed2.c
+++++ b/src/setspeed2.c
++@@ -20,8 +20,8 @@
++  */
++ 
++ #include <sys/ioctl.h>
++-#include <asm/ioctls.h>
++-#include <asm/termbits.h>
+++#include <asm-generic/ioctls.h>
+++#include <asm-generic/termbits.h>
++ 
++ int setspeed2(int fd, int baudrate)
++ {
++-- 
++2.24.0
++
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-On 12/27/19 9:08 PM, Fabrice Fontaine wrote:
-> This will fix the following build failure with qt5location:
-> 
-> /home/buildroot/autobuild/run/instance-1/output-1/host/bin/microblazeel-linux-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -O0 --sysroot=/home/buildroot/autobuild/run/instance-1/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot -O2 -std=c++1z -fvisibility=hidden -fvisibility-inlines-hidden -fno-exceptions -Wall -W -Wvla -Wdate-time -Wshift-overflow=2 -Wduplicated-cond -Wno-stringop-overflow -D_REENTRANT -fPIC -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT -DQT_BUILD_POSITIONING_LIB -DQT_BUILDING_QT -DQT_NO_CAST_TO_ASCII -DQT_ASCII_CAST_WARNINGS -DQT_MOC_COMPAT -DQT_USE_QSTRINGBUILDER -DQT_DEPRECATED_WARNINGS -DQT_DISABLE_DEPRECATED_BEFORE=0x050000 -DQT_NO_EXCEPTIONS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_NO_DEBUG -DQT_CORE_LIB -I. -I../3rdparty/clipper -I../3rdparty/clip2tri -I../../include -I../../include/QtPositioning -I../../include/QtPositioning/5.12.5 -I../../include/QtPositioning/5.12.5/QtPositioning -I/home/buildroot/autob
->   uild/run/instance-1/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/5.12.5 -I/home/buildroot/autobuild/run/instance-1/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/5.12.5/QtCore -I/home/buildroot/autobuild/run/instance-1/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/include/qt5 -I/home/buildroot/autobuild/run/instance-1/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore -I.moc -I/home/buildroot/autobuild/run/instance-1/output-1/host/mkspecs/devices/linux-buildroot-g++ -o .obj/qgeoaddress.o qgeoaddress.cpp
-> 
-> qgeoaddress.cpp: In function 'QString formattedAddress(const QGeoAddress&, const QString&)':
-> qgeoaddress.cpp:285:1: error: VOIDmode on an output
->   }
->   ^
-> (insn 849 12033 850 87 (parallel [
->              (const_int 0 [0])
->              (reg:SI 970)
->              (mem/v:SI (reg/f:SI 3694 [ D.102094.d ]) [-1  S4 A32])
->              (reg:SI 970)
->              (reg:SI 3527)
->              (const_int 0 [0])
->              (const_int 32773 [0x8005])
->              (const_int 0 [0])
->              (clobber (scratch:SI))
->          ]) "/home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/microblazeel-buildroot-linux-uclibc/include/c++/7.4.0/bits/atomic_base.h":304 85 {atomic_compare_and_swapsi}
->       (nil))
-> qgeoaddress.cpp:285:1: internal compiler error: in do_output_reload, at reload1.c:7978
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/a593cfffbf05132e945d7d6efa5888a2646d5486
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->   package/qt5/qt5base/qt5base.mk | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 1a152be94b..8d4dd49871 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -40,6 +40,11 @@ QT5BASE_CXXFLAGS = $(TARGET_CXXFLAGS)
->   ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_90620),y)
->   QT5BASE_CFLAGS += -O0
->   QT5BASE_CXXFLAGS += -O0
-> +
-> +# This allows to replace -O2 which overrides -O0
-> +define QT5BASE_CONFIGURE_REPLACE_O2
-> +	$(SED) 's,^QMAKE_CFLAGS_OPTIMIZE\s*=.*,QMAKE_CFLAGS_OPTIMIZE = -O0,' $(@D)/mkspecs/common/gcc-base.conf
-> +endef
->   endif
->   
->   ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
-> @@ -349,6 +354,7 @@ define QT5BASE_CONFIGURE_CMDS
->   	touch $(QT5BASE_ARCH_CONFIG_FILE)
->   	$(QT5BASE_CONFIGURE_ARCH_CONFIG)
->   	$(QT5BASE_CONFIGURE_HOSTCC)
-> +	$(QT5BASE_CONFIGURE_REPLACE_O2)
->   	(cd $(@D); \
->   		$(TARGET_MAKE_ENV) \
->   		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-> 
+2.24.0
