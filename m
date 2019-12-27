@@ -1,76 +1,96 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 27 Dec 2019 15:43:23 +0100
-Subject: [Buildroot] [PATCH 2/3] package/libnspr: enable building with xtensa
+Date: Fri, 27 Dec 2019 15:43:24 +0100
+Subject: [Buildroot] [PATCH 3/3] package/libnspr: remove
+ BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
 In-Reply-To: <20191227144324.84759-1-giulio.benetti@benettiengineering.com>
 References: <20191227144324.84759-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20191227144324.84759-3-giulio.benetti@benettiengineering.com>
+Message-ID: <20191227144324.84759-4-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to support Xtensa architecture building.
+Since all architectures supported by Buildroot are supported by libnspr
+BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT makes no sense anymore, so let's remove
+it all around.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
-Patch pending upstream:
-https://bugzilla.mozilla.org/show_bug.cgi?id=1606092
----
- ...6092_Add_support_for_building_xtensa.patch | 33 +++++++++++++++++++
- package/libnspr/Config.in                     |  1 -
- 2 files changed, 33 insertions(+), 1 deletion(-)
- create mode 100644 package/libnspr/0001-Bug_1606092_Add_support_for_building_xtensa.patch
+ package/ecryptfs-utils/Config.in | 2 --
+ package/libnspr/Config.in        | 7 -------
+ package/libnss/Config.in         | 2 --
+ package/spidermonkey/Config.in   | 1 -
+ 4 files changed, 12 deletions(-)
 
-diff --git a/package/libnspr/0001-Bug_1606092_Add_support_for_building_xtensa.patch b/package/libnspr/0001-Bug_1606092_Add_support_for_building_xtensa.patch
-new file mode 100644
-index 0000000000..73a70277b6
---- /dev/null
-+++ b/package/libnspr/0001-Bug_1606092_Add_support_for_building_xtensa.patch
-@@ -0,0 +1,33 @@
-+# HG changeset patch
-+# User Giulio Benetti <giuliobenetti@micronovasrl.com>
-+# Date 1577456724 -3600
-+#      Fri Dec 27 15:25:24 2019 +0100
-+# Node ID 1a3d96917971ea13432116f41ace8a9e19ef7f97
-+# Parent  b9c2a7602ab0a1c0c890db6cf4c3b1f1e6e243c1
-+Bug 1606092 - Add support for building Xtensa
-+
-+diff -r b9c2a7602ab0 -r 1a3d96917971 nspr/pr/include/md/_linux.cfg
-+--- a/nspr/pr/include/md/_linux.cfg	Mon Dec 02 19:24:25 2019 +0100
-++++ b/nspr/pr/include/md/_linux.cfg	Fri Dec 27 15:25:24 2019 +0100
-+@@ -1157,7 +1157,8 @@
-+ #define PR_BYTES_PER_WORD_LOG2   2
-+ #define PR_BYTES_PER_DWORD_LOG2  3
-+ 
-+-#elif defined(__nios2__) || defined(__microblaze__) || defined(__nds32__)
-++#elif defined(__nios2__) || defined(__microblaze__) || defined(__nds32__) || \
-++      defined(__xtensa__)
-+ 
-+ #if defined(__microblaze__) && defined(__BIG_ENDIAN__)
-+ #define IS_BIG_ENDIAN 1
-+diff -r b9c2a7602ab0 -r 1a3d96917971 nspr/pr/include/md/_linux.h
-+--- a/nspr/pr/include/md/_linux.h	Mon Dec 02 19:24:25 2019 +0100
-++++ b/nspr/pr/include/md/_linux.h	Fri Dec 27 15:25:24 2019 +0100
-+@@ -69,6 +69,8 @@
-+ #define _PR_SI_ARCHITECTURE "microblaze"
-+ #elif defined(__nds32__)
-+ #define _PR_SI_ARCHITECTURE "nds32"
-++#elif defined(__xtensa__)
-++#define _PR_SI_ARCHITECTURE "xtensa"
-+ #else
-+ #error "Unknown CPU architecture"
-+ #endif
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 0c39f48d08..08210f05eb 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on BR2_USE_WCHAR # gettext
+ 	depends on BR2_USE_MMU # keyutils
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+-	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+ 	depends on !BR2_MIPS_NABI32 # libnss
+ 	depends on !BR2_STATIC_LIBS # libnss, keyutils
+ 	select BR2_PACKAGE_KEYUTILS
+@@ -29,7 +28,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	  http://ecryptfs.org
+ 
+ comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynamic library"
+-	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+ 		BR2_STATIC_LIBS
 diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
-index 57fcbdf6be..c1be7151e0 100644
+index c1be7151e0..de8dd0a06b 100644
 --- a/package/libnspr/Config.in
 +++ b/package/libnspr/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
- 	def_bool y
--	depends on !BR2_xtensa
+@@ -1,8 +1,3 @@
+-config BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+-	def_bool y
+-
+-if BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+-
+ config BR2_PACKAGE_LIBNSPR
+ 	bool "libnspr"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -17,5 +12,3 @@ config BR2_PACKAGE_LIBNSPR
  
- if BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ comment "libnspr needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-
+-endif
+diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+index 599c9a6536..90bf75f476 100644
+--- a/package/libnss/Config.in
++++ b/package/libnss/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBNSS
+ 	bool "libnss"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+-	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBNSPR
+ 	select BR2_PACKAGE_SQLITE
+@@ -16,5 +15,4 @@ config BR2_PACKAGE_LIBNSS
+ 	  http://www.mozilla.org/projects/security/pki/nss/
  
+ comment "libnss needs a toolchain w/ threads, dynamic library"
+-	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/spidermonkey/Config.in b/package/spidermonkey/Config.in
+index 5f12110626..150b941c94 100644
+--- a/package/spidermonkey/Config.in
++++ b/package/spidermonkey/Config.in
+@@ -8,7 +8,6 @@ config BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS
+ 	default y if BR2_riscv
+ 	default y if BR2_sh4 || BR2_sh4a
+ 	default y if BR2_sparc || BR2_sparc64
+-	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
+ 
+ config BR2_PACKAGE_SPIDERMONKEY_JIT_ARCH_SUPPORTS
+ 	bool
 -- 
 2.20.1
