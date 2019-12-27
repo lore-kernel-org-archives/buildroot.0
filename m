@@ -1,34 +1,58 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Fri, 27 Dec 2019 15:35:34 +0000
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: add an upstream URL to Config.in
-Message-ID: <20191227153534.8266-1-mark@dibsco.co.uk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 27 Dec 2019 16:43:20 +0100
+Subject: [Buildroot] [arc-buildroot] [PATCH] arch/arc: Explicitly set
+ "max-page-size" for GNU LD
+In-Reply-To: <CY4PR1201MB0120748B829AE787E4B3A097A12A0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+References: <20191224141032.34544-1-abrodkin@synopsys.com>
+ <20191225223603.360a7ffa@windsurf> <20191226170504.GP26395@scaer>
+ <CY4PR1201MB0120748B829AE787E4B3A097A12A0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+Message-ID: <20191227154320.GQ26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an upstream URL to the help text in Config.in. This
-addresses the issue where an incorrect URL is displayed
-on the package stats web page.
+Alexey, All,
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
----
- boot/uboot/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+On 2019-12-27 09:00 +0000, Alexey Brodkin spake thusly:
+[--SNIP--]
+> > I was also contemplating a similar solution, but I was not too happy
+> > with this trick to drop the suffix. I would have prefered something
+> > like:
+> > 
+> >     config BR2_ARC_PAGE_SIZE_KB
+> >         int
+> >         default 4 if BR2_ARC_PAGE_SIZE_4K
+> >         default 8 if BR2_ARC_PAGE_SIZE_8K
+> >         default 16 if BR2_ARC_PAGE_SIZE_16K
+> > 
+> > and then:
+> > 
+> >     ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=$(shell echo $$(($(BR2_ARC_PAGE_SIZE)*1024)))
+> > 
+> > and in package/uclibc/uclibc.mk:
+> > 
+> >     UCLIBC_ARC_PAGE_SIZE = CONFIG_ARC_PAGE_SIZE_$(BR2_ARC_PAGE_SIZE)K
+> > 
+> > ... and even that intermediate variable could have been dropped
+> > altogether, to directly write:
+> > 
+> >         $(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_$(BR2_ARC_PAGE_SIZE)K,$(@D)/.config)
+> > 
+> > And that would have been a bit nicer, I believe.
+> 
+> Agree. So, Yann [as usually] are you OK if I implement that improvement?
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 15cae8045a..42f2090787 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -3,6 +3,8 @@ config BR2_TARGET_UBOOT
- 	help
- 	  Build "Das U-Boot" Boot Monitor
- 
-+	  https://www.denx.de/wiki/U-Boot
-+
- if BR2_TARGET_UBOOT
- choice
- 	prompt "Build system"
+As you wish! ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
