@@ -1,45 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Dec 2019 12:27:45 +0100
-Subject: [Buildroot] [PATCH/next 2/4] support/testing: add gitdb2 test
-In-Reply-To: <20191129212910.2537303-2-aduskett@gmail.com>
-References: <20191129212910.2537303-1-aduskett@gmail.com>
- <20191129212910.2537303-2-aduskett@gmail.com>
-Message-ID: <20191228122745.445e679a@windsurf>
+Date: Sat, 28 Dec 2019 12:29:38 +0100
+Subject: [Buildroot] [git commit] package/strace: drop default in Config.in
+Message-ID: <20191228112021.B44588E474@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=29e464a1ea6bb683c3a0acc2999ffeb54aff158b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 29 Nov 2019 13:29:08 -0800
-aduskett at gmail.com wrote:
+Commit d52e98655fb6b00606ffe5294051ff0581c464bf wrongly sets a default
+value for strace so drop it
 
-> new file mode 100644
-> index 0000000000..b5c43cd858
-> --- /dev/null
-> +++ b/support/testing/tests/package/sample_python_gitdb2.py
-> @@ -0,0 +1,4 @@
-> +# Taken from smmap/test/test_tutorial.py
-> +
-> +from gitdb import *
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/strace/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-This causes a flake8 warning:
-
-support/testing/tests/package/sample_python_gitdb2.py:1:1: F403 'from gitdb import *' used; unable to detect undefined names
-
-See https://lintlyci.github.io/Flake8Rules/rules/F403.html for more
-details about this, and
-https://gitlab.com/buildroot.org/buildroot/-/jobs/389451584 for the
-GitlabCI job that reported this.
-
-Could you have a look ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index d286ec0793..5b33dad392 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_STRACE
+ 	# needs at least kernel headers 4.0 on nios2
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
+ 	depends on !BR2_nds32 && !BR2_RISCV_32
+-	default n
+ 	help
+ 	  A useful diagnostic, instructional, and debugging tool.
+ 	  Allows you to track what system calls a program makes
