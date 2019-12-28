@@ -1,40 +1,64 @@
 From: Julien Olivain <juju@cotds.org>
-Date: Sat, 28 Dec 2019 18:39:10 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/nitrogen8m: add u-boot-nodtb.bin
- custom target
-Message-ID: <20191228173910.227339-1-juju@cotds.org>
+Date: Sat, 28 Dec 2019 18:45:54 +0100
+Subject: [Buildroot] =?utf-8?q?Build_of_nitrogen8m=5Fdefconfig_broken?=
+In-Reply-To: <20191228123341.27f8b251@windsurf>
+References: <20191228123341.27f8b251@windsurf>
+Message-ID: <be3d67b0dc8b66a331fa1bf4e92a3ab5@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Recent change introduced in [1] use the "nodtb" variant of u-boot
-image. This broke the nitrogen8m_defconfig which was not including the
-generation of this U-Boot image. This patch add this target.
+Hi Thomas,
 
-[1] https://git.buildroot.org/buildroot/commit/?id=d130f0a83700b52ba51ebde22885f0f9e577ee29
+On 2019-12-28 12:33, Thomas Petazzoni wrote:
+> Hello,
+> 
+> The build of nitrogen8m_defconfig is broken:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/389451762
+> 
+> I'm not sure since when. Maybe since some recent changes from Julien on
+> i.MX8 support?
+> 
+> It fails like this:
+> 
+> 550 ERROR:
+> /builds/buildroot.org/buildroot/output/images/u-boot-nodtb.bin file
+> NOT found
+> 551 Error:
+> /builds/buildroot.org/buildroot/output/images/u-boot.its:0.0 syntax
+> error
+> 552 FATAL ERROR: Unable to parse input tree
+> 553 /builds/buildroot.org/buildroot/output/host/bin/mkimage: Can't
+> open /builds/buildroot.org/buildroot/output/images/u-boot.itb.tmp: No
+> such file or directory
+> 554 Platform:	i.MX8M (mScale)
+> 555 Using FIT image
+> 556 SIGNED HDMI
+> FW:	/builds/buildroot.org/buildroot/output/images/signed_hdmi_imx8m.bin
+> 557 LOADER
+> IMAGE:	/builds/buildroot.org/buildroot/output/images/u-boot-spl-ddr.bin 
+> start addr: 0x007e1000
+> 558 SECOND LOADER
+> IMAGE:	/builds/buildroot.org/buildroot/output/images/u-boot.itb start
+> addr: 0x40200000 offset: 0x00060000
+> 559 
+> Output:		/builds/buildroot.org/buildroot/output/images/imx8-boot-sd.bin
+> 560 /builds/buildroot.org/buildroot/output/images/u-boot.itb: Can't
+> open: No such file or directory
+> 561 Makefile:734: recipe for target 'target-finalize' failed
+> 
+> Could one of you have a look ?
 
-Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/389451762
+It was, indeed, one of my recent change. I posted a patch to fix this 
+issue:
+https://patchwork.ozlabs.org/patch/1215852/
 
-Signed-off-by: Julien Olivain <juju@cotds.org>
----
- configs/nitrogen8m_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+However, I don't have access to the nitrogen8m board. Can somebody test
+this patch, to check it is still booting correctly?
 
-diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index 9b758f0b97..4ca7e60700 100644
---- a/configs/nitrogen8m_defconfig
-+++ b/configs/nitrogen8m_defconfig
-@@ -40,6 +40,8 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-imx_v2017.03_4.9.51_imx8m_ga
- BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/b661d854.tar.gz"
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_SPL=y
- 
--- 
-2.24.1
+Thanks,
+
+Julien.
