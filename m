@@ -1,40 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Dec 2019 12:33:41 +0100
-Subject: [Buildroot] Build of nitrogen8m_defconfig broken
-Message-ID: <20191228123341.27f8b251@windsurf>
+Date: Sat, 28 Dec 2019 12:35:20 +0100
+Subject: [Buildroot] [PATCH v3 2/4] configs/qemu_arm_vexpress_tz:
+ Armv7-A emulation with TrustZone services
+In-Reply-To: <20190322095818.19914-2-etienne.carriere@linaro.org>
+References: <20190322095818.19914-1-etienne.carriere@linaro.org>
+ <20190322095818.19914-2-etienne.carriere@linaro.org>
+Message-ID: <20191228123520.5e0c9e81@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Etienne,
 
-The build of nitrogen8m_defconfig is broken:
+On Fri, 22 Mar 2019 10:58:16 +0100
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/389451762
+>  board/qemu/arm-vexpress-tz/linux.fragment |   3 +
+>  board/qemu/arm-vexpress-tz/post-build.sh  |  10 ++
+>  board/qemu/arm-vexpress-tz/readme.txt     | 135 ++++++++++++++++++++++
+>  board/qemu/arm-vexpress-tz/u-boot.config  |   7 ++
+>  configs/qemu_arm_vexpress_tz_defconfig    |  47 ++++++++
+>  5 files changed, 202 insertions(+)
 
-I'm not sure since when. Maybe since some recent changes from Julien on
-i.MX8 support?
+This defconfig causes a build failure, reported at
+https://gitlab.com/buildroot.org/buildroot/-/jobs/389451835, like this:
 
-It fails like this:
+486 Traceback (most recent call last):
+487   File "scripts/pem_to_pub_c.py", line 61, in <module>
+488     main()
+489   File "scripts/pem_to_pub_c.py", line 24, in main
+490     from Crypto.PublicKey import RSA
+491 ImportError: No module named 'Crypto'
 
-550 ERROR: /builds/buildroot.org/buildroot/output/images/u-boot-nodtb.bin file NOT found
-551 Error: /builds/buildroot.org/buildroot/output/images/u-boot.its:0.0 syntax error
-552 FATAL ERROR: Unable to parse input tree
-553 /builds/buildroot.org/buildroot/output/host/bin/mkimage: Can't open /builds/buildroot.org/buildroot/output/images/u-boot.itb.tmp: No such file or directory
-554 Platform:	i.MX8M (mScale)
-555 Using FIT image
-556 SIGNED HDMI FW:	/builds/buildroot.org/buildroot/output/images/signed_hdmi_imx8m.bin
-557 LOADER IMAGE:	/builds/buildroot.org/buildroot/output/images/u-boot-spl-ddr.bin start addr: 0x007e1000
-558 SECOND LOADER IMAGE:	/builds/buildroot.org/buildroot/output/images/u-boot.itb start addr: 0x40200000 offset: 0x00060000
-559 Output:		/builds/buildroot.org/buildroot/output/images/imx8-boot-sd.bin
-560 /builds/buildroot.org/buildroot/output/images/u-boot.itb: Can't open: No such file or directory
-561 Makefile:734: recipe for target 'target-finalize' failed
+Could you have a look ?
 
-Could one of you have a look ?
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
