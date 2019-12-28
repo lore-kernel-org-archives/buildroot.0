@@ -1,67 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 28 Dec 2019 11:40:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iputils: fix static build with
- libidn2
-Message-ID: <20191228104023.3606670-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Dec 2019 12:27:45 +0100
+Subject: [Buildroot] [PATCH/next 2/4] support/testing: add gitdb2 test
+In-Reply-To: <20191129212910.2537303-2-aduskett@gmail.com>
+References: <20191129212910.2537303-1-aduskett@gmail.com>
+ <20191129212910.2537303-2-aduskett@gmail.com>
+Message-ID: <20191228122745.445e679a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/82d4738711a009959436fa419bd78c7a9540d33e
+Hello Adam,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ....build-fix-static-build-with-libidn2.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/iputils/0001-meson.build-fix-static-build-with-libidn2.patch
+On Fri, 29 Nov 2019 13:29:08 -0800
+aduskett at gmail.com wrote:
 
-diff --git a/package/iputils/0001-meson.build-fix-static-build-with-libidn2.patch b/package/iputils/0001-meson.build-fix-static-build-with-libidn2.patch
-new file mode 100644
-index 0000000000..851d043784
---- /dev/null
-+++ b/package/iputils/0001-meson.build-fix-static-build-with-libidn2.patch
-@@ -0,0 +1,39 @@
-+From 5bb4432b8c194620c28a45a069de1b3dad692ac9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 28 Dec 2019 11:24:12 +0100
-+Subject: [PATCH] meson.build: fix static build with libidn2
-+
-+libidn2 can optionnaly depends on libunistring so use dependency
-+function instead of cc.find_library ro retrieve this dependency and
-+avoid the following build failure when building statically:
-+
-+FAILED: ping
-+/home/buildroot/autobuild/run/instance-1/output-1/host/bin/arm-linux-gcc  -o ping 'ping at exe/ping.c.o' 'ping at exe/ping_common.c.o' 'ping at exe/ping6_common.c.o' -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -static -Wl,--start-group libcommon.a -lm -lcap -lidn2 /home/buildroot/autobuild/run/instance-1/output-1/host/usr/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libssl.a /home/buildroot/autobuild/run/instance-1/output-1/host/usr/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libz.a /home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/lib/libatomic.a -lpthread /home/buildroot/autobuild/run/instance-1/output-1/host/usr/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a -lresolv -Wl,--end-group '-Wl,-rpath,$ORIGIN/' -Wl,-rpath-link,/home/buildroot/autobuild/run/instance-1/output-1/build/iputils-20190709/build/
-+/home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/7.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/run/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libidn2.a(lookup.o): in function `idn2_lookup_u8':
-+lookup.c:(.text+0x7c): undefined reference to `u8_strlen'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/82d4738711a009959436fa419bd78c7a9540d33e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/iputils/iputils/pull/245]
-+---
-+ meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 53c65b2..905cb96 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -130,7 +130,7 @@ endif
-+ 
-+ opt = get_option('USE_IDN')
-+ if opt == true
-+-	idn_dep = cc.find_library('idn2', required : false)
-++	idn_dep = dependency('libidn2', required : false)
-+ 	if idn_dep.found()
-+ 		add_project_arguments('-DUSE_IDN', language : 'c')
-+ 		conf.set('USE_IDN', 1,
-+-- 
-+2.24.0
-+
+> new file mode 100644
+> index 0000000000..b5c43cd858
+> --- /dev/null
+> +++ b/support/testing/tests/package/sample_python_gitdb2.py
+> @@ -0,0 +1,4 @@
+> +# Taken from smmap/test/test_tutorial.py
+> +
+> +from gitdb import *
+
+This causes a flake8 warning:
+
+support/testing/tests/package/sample_python_gitdb2.py:1:1: F403 'from gitdb import *' used; unable to detect undefined names
+
+See https://lintlyci.github.io/Flake8Rules/rules/F403.html for more
+details about this, and
+https://gitlab.com/buildroot.org/buildroot/-/jobs/389451584 for the
+GitlabCI job that reported this.
+
+Could you have a look ?
+
+Thanks!
+
+Thomas
 -- 
-2.24.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
