@@ -1,15 +1,23 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Dec 2019 14:14:52 +0100
-Subject: [Buildroot] [PATCH 1/2] package/mesa3d: XvMC needs x11
-Message-ID: <20191229131453.327907-1-fontaine.fabrice@gmail.com>
+Date: Sun, 29 Dec 2019 14:14:53 +0100
+Subject: [Buildroot] [PATCH 2/2] package/mesa3d: x11 needs EGL,
+ GLX or a vulkan driver
+In-Reply-To: <20191229131453.327907-1-fontaine.fabrice@gmail.com>
+References: <20191229131453.327907-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191229131453.327907-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Selects BR2_PACKAGE_MESA3D_NEEDS_X11 hidden option to enable x11
-platform if the user selects BR2_PACKAGE_MESA3D_XVMC
+As specified in meson.build, x11 platform needs EGL, GLX or a vulkan
+driver:
+
+if with_platform_x11
+  if with_any_vk or with_egl or (with_glx == 'dri' and with_dri_platform == 'drm')
+    pre_args += '-DHAVE_X11_PLATFORM'
+  endif
 
 Fixes:
  - http://autobuild.buildroot.org/results/e044609e603ca68695d842d08809fdcb35bc8127
@@ -20,16 +28,16 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 455091eb9d..844360950c 100644
+index 844360950c..373fe7004c 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -260,6 +260,7 @@ config BR2_PACKAGE_MESA3D_XVMC
+@@ -87,6 +87,7 @@ config BR2_PACKAGE_MESA3D_NEEDS_X11
+ 	bool
  	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
- 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	select BR2_PACKAGE_MESA3D_NEEDS_X11
- 	select BR2_PACKAGE_XLIB_LIBXV
- 	select BR2_PACKAGE_XLIB_LIBXVMC
- 	help
+ 	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_MESA3D_OPENGL_EGL if !(BR2_PACKAGE_MESA3D_OPENGL_GLX || BR2_PACKAGE_MESA3D_VULKAN_DRIVER)
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
 -- 
 2.24.0
