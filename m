@@ -1,131 +1,117 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Dec 2019 19:16:27 +0100
-Subject: [Buildroot] [PATCH v4 2/2] package/python-avro: new package
-In-Reply-To: <20191223172357.68914-3-titouan.christophe@railnova.eu>
-References: <20191223172357.68914-1-titouan.christophe@railnova.eu>
- <20191223172357.68914-3-titouan.christophe@railnova.eu>
-Message-ID: <20191229181627.GB26395@scaer>
+From: Julien Olivain <juju@cotds.org>
+Date: Sun, 29 Dec 2019 19:58:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fluid-soundfont: new package
+Message-ID: <20191229185823.211745-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Titouan, All,
+FluidR3 is the third release of Frank Wen's pro-quality GM/GS
+soundfont. The soundfont has lots of excellent samples, including all
+the GM instruments along side with the GS instruments that are
+recycled and reprogrammed versions of the GM presets.
 
-On 2019-12-23 18:23 +0100, Titouan Christophe spake thusly:
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> Reviewed-by: Gilles Talis <gilles.talis@gmail.com>
+This package contains Fluid General Midi (GM) soundfont in soundfont
+2.0 (.sf2) format.
 
-Applied to master, thanks.
+This soundfont can be used with a software synthesizer, like
+FluidSynth.
 
-Could you please follow-up with a run-time test for it, please?
-See for example: support/testing/tests/package/sample_python_txtorcon.py
-(or others that are more expressive, if you feel so inclined).
+Signed-off-by: Julien Olivain <juju@cotds.org>
+---
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/fluid-soundfont/Config.in            | 16 +++++++++++++++
+ package/fluid-soundfont/fluid-soundfont.hash |  3 +++
+ package/fluid-soundfont/fluid-soundfont.mk   | 21 ++++++++++++++++++++
+ 5 files changed, 42 insertions(+)
+ create mode 100644 package/fluid-soundfont/Config.in
+ create mode 100644 package/fluid-soundfont/fluid-soundfont.hash
+ create mode 100644 package/fluid-soundfont/fluid-soundfont.mk
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  DEVELOPERS                           |  1 +
->  package/Config.in                    |  1 +
->  package/python-avro/Config.in        | 20 ++++++++++++++++++++
->  package/python-avro/python-avro.hash |  5 +++++
->  package/python-avro/python-avro.mk   | 14 ++++++++++++++
->  5 files changed, 41 insertions(+)
->  create mode 100644 package/python-avro/Config.in
->  create mode 100644 package/python-avro/python-avro.hash
->  create mode 100644 package/python-avro/python-avro.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index a6d04bfaf3..a3e071a5d3 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2420,6 +2420,7 @@ F:	package/fbgrab/
->  N:	Titouan Christophe <titouan.christophe@railnova.eu>
->  F:	package/avro-c/
->  F:	package/mosquitto/
-> +F:	package/python-avro/
->  F:	package/redis/
->  
->  N:	Trent Piepho <tpiepho@impinj.com>
-> diff --git a/package/Config.in b/package/Config.in
-> index 582a93d8cd..949db3cca2 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -854,6 +854,7 @@ menu "External python modules"
->  	source "package/python-attrs/Config.in"
->  	source "package/python-autobahn/Config.in"
->  	source "package/python-automat/Config.in"
-> +	source "package/python-avro/Config.in"
->  	source "package/python-babel/Config.in"
->  	source "package/python-backcall/Config.in"
->  	source "package/python-backports-abc/Config.in"
-> diff --git a/package/python-avro/Config.in b/package/python-avro/Config.in
-> new file mode 100644
-> index 0000000000..e1d7fc832c
-> --- /dev/null
-> +++ b/package/python-avro/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_PYTHON_AVRO
-> +	bool "python-avro"
-> +	depends on BR2_PACKAGE_PYTHON3
-> +	help
-> +	  Select this option to install the Avro Python3 language
-> +	  bindings, and the `avro` command line tool
-> +
-> +	  Apache Avro is a data serialization system.
-> +	  Avro provides:
-> +	  - Rich data structures.
-> +	  - A compact, fast, binary data format.
-> +	  - A container file, to store persistent data.
-> +	  - Remote procedure call (RPC).
-> +	  - Simple integration with dynamic languages.
-> +	  - Code generation is not required to read or write data
-> +	    files nor to use or implement RPC protocols.
-> +	  - Code generation as an optional optimization,
-> +	    only worth implementing for statically typed languages.
-> +
-> +	  http://avro.apache.org/
-> diff --git a/package/python-avro/python-avro.hash b/package/python-avro/python-avro.hash
-> new file mode 100644
-> index 0000000000..f63b37ee0a
-> --- /dev/null
-> +++ b/package/python-avro/python-avro.hash
-> @@ -0,0 +1,5 @@
-> +# From https://www-eu.apache.org/dist/avro/avro-1.9.1/py3/avro-python3-1.9.1.tar.gz.sha512
-> +sha512 771ce6e5ca6315f5b9108cb4f5dd9488575cc3433ffdd744f96ce7989763728259c89475319fd9c411ed6b65c996b762548c50a697eb1fba9ab024112ca17daa  avro-python3-1.9.1.tar.gz
-> +
-> +# License files
-> +sha256 c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  avro/LICENSE
-> diff --git a/package/python-avro/python-avro.mk b/package/python-avro/python-avro.mk
-> new file mode 100644
-> index 0000000000..3f9140e946
-> --- /dev/null
-> +++ b/package/python-avro/python-avro.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-avro
-> +#
-> +################################################################################
-> +
-> +PYTHON_AVRO_VERSION = $(AVRO_C_VERSION)
-> +PYTHON_AVRO_SITE = https://www-eu.apache.org/dist/avro/avro-1.9.1/py3
-> +PYTHON_AVRO_SOURCE = avro-python3-$(PYTHON_AVRO_VERSION).tar.gz
-> +PYTHON_AVRO_LICENSE = Apache-2.0
-> +PYTHON_AVRO_LICENSE_FILES = avro/LICENSE
-> +PYTHON_AVRO_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
-> -- 
-> 2.23.0
-> 
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1931b3e942..7308439f06 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1369,6 +1369,7 @@ F:	board/technexion/imx8mmpico/
+ F:	board/technexion/imx8mpico/
+ F:	configs/imx8mmpico_defconfig
+ F:	configs/imx8mpico_defconfig
++F:	package/fluid-soundfont/
+ F:	package/fluidsynth/
+ 
+ N:	Julien Viard de Galbert <julien@vdg.name>
+diff --git a/package/Config.in b/package/Config.in
+index 6aac0f7e26..888373422f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -23,6 +23,7 @@ menu "Audio and video applications"
+ 	source "package/ffmpeg/Config.in"
+ 	source "package/flac/Config.in"
+ 	source "package/flite/Config.in"
++	source "package/fluid-soundfont/Config.in"
+ 	source "package/fluidsynth/Config.in"
+ 	source "package/gmrender-resurrect/Config.in"
+ 	source "package/gstreamer/Config.in"
+diff --git a/package/fluid-soundfont/Config.in b/package/fluid-soundfont/Config.in
+new file mode 100644
+index 0000000000..67f5ea1113
+--- /dev/null
++++ b/package/fluid-soundfont/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_FLUID_SOUNDFONT
++	bool "fluid-soundfont"
++	help
++	  FluidR3 is the third release of Frank Wen's pro-quality
++	  GM/GS soundfont.  The soundfont has lots of excellent
++	  samples, including all the GM instruments along side with
++	  the GS instruments that are recycled and reprogrammed
++	  versions of the GM presets.
++
++	  This package contains Fluid General Midi (GM) soundfont in
++	  soundfont 2.0 (.sf2) format.
++
++	  This soundfont can be used with the FluidSynth real-time
++	  software synthesizer.
++
++	  http://www.hammersound.net
+diff --git a/package/fluid-soundfont/fluid-soundfont.hash b/package/fluid-soundfont/fluid-soundfont.hash
+new file mode 100644
+index 0000000000..7aaac60084
+--- /dev/null
++++ b/package/fluid-soundfont/fluid-soundfont.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 2621acaa1c78e4abdb24bdd163230cc577e61276936d6aa6e3180582142f0343  fluid-soundfont_3.1.orig.tar.gz
++sha256 8ef830b65c97a976b86e34bb5fde08d99dfb1db13c4149b5b20bc837ac6c4568  COPYING
+diff --git a/package/fluid-soundfont/fluid-soundfont.mk b/package/fluid-soundfont/fluid-soundfont.mk
+new file mode 100644
+index 0000000000..f8fd986ced
+--- /dev/null
++++ b/package/fluid-soundfont/fluid-soundfont.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# fluid-soundfont
++#
++################################################################################
++
++FLUID_SOUNDFONT_VERSION = 3.1
++FLUID_SOUNDFONT_SOURCE = fluid-soundfont_$(FLUID_SOUNDFONT_VERSION).orig.tar.gz
++# The http://www.hammersound.net archive site seems unreliable (show HTTP 500
++# error), and also publish the file in the sfArk format, which is inconvenient
++# to be used in automated build. We use here the Debian mirror publishing the
++# file in a more convenient format (inative sf2 in a tar.gz archive).
++FLUID_SOUNDFONT_SITE = http://http.debian.net/debian/pool/main/f/fluid-soundfont
++FLUID_SOUNDFONT_LICENSE = MIT
++FLUID_SOUNDFONT_LICENSE_FILES = COPYING
++
++define FLUID_SOUNDFONT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/FluidR3_GM.sf2 $(TARGET_DIR)/usr/share/soundfonts/FluidR3_GM.sf2
++endef
++
++$(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.1
