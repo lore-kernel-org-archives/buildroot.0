@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Dec 2019 23:03:33 +0100
-Subject: [Buildroot] [PATCH v2 1/2] download/git: fetch all refs from
- the remote
-In-Reply-To: <20190624113224.22685-1-john@metanate.com>
+Date: Sun, 29 Dec 2019 23:12:08 +0100
+Subject: [Buildroot] [PATCH v2 2/2] download/git: ban branch references
+In-Reply-To: <20190624113224.22685-2-john@metanate.com>
 References: <20190624123027.485c128f@donbot>
  <20190624113224.22685-1-john@metanate.com>
-Message-ID: <20191229220333.GG26395@scaer>
+ <20190624113224.22685-2-john@metanate.com>
+Message-ID: <20191229221208.GH26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,91 +14,81 @@ To: buildroot@busybox.net
 
 John, All,
 
-I am very sorry that I did not come back to your new iteration sooner...
-
 On 2019-06-24 12:32 +0100, John Keeping spake thusly:
-> Instead of fetching branches and tags then following up with another
-> request in case the specified version is a special branch like a pull
-> request, simply mirror the remote repository and fetch all of its refs.
+> As described in the manual, using a branch name as a version is not
+> supported.  However, nothing enforces this so it is easy to specify a
+> branch name either accidentally or because new developers have not read
+> through the manual.
 > 
-> This allows using a raw commit hash pointing to anything reachable on
-> the remote (for example a commit in a pull request which is not yet in a
-> branch), even if the server has not set allowReachableSHA1InWant.
-> 
-> There is one subtlety to this which is that Git will not let us update
-> the ref of a branch which is checked out.  Ideally we would just detach
-> HEAD to bypass this problem, but that doesn't work in an empty
-> repository when we are on an unborn branch.  Instead, we create an
-> unborn branch of our own pointing to a ref which is very unlikely to
-> exist.
+> For Git it is reasonably easy to catch most violations of this rule and
+> fail the fetch phase.  We now only accept tags or raw commit hashes;
+> it's possible that there are other special refs which are known to be
+> stable and this can be extended to support those in the future if
+> required.
 > 
 > Signed-off-by: John Keeping <john@metanate.com>
 > ---
->  support/download/git | 25 ++++++++++++-------------
->  1 file changed, 12 insertions(+), 13 deletions(-)
+>  support/download/git | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
 > diff --git a/support/download/git b/support/download/git
-> index 075f665bbf..02bf01bb95 100755
+> index 02bf01bb95..5b5be92d15 100755
 > --- a/support/download/git
 > +++ b/support/download/git
-> @@ -111,20 +111,19 @@ fi
+> @@ -133,6 +133,20 @@ if ! _git rev-parse --quiet --verify "'${cset}^{commit}'" >/dev/null 2>&1; then
+>      exit 1
+>  fi
 >  
->  _git remote set-url origin "'${uri}'"
->  
-> +# We will use an explicit refspec, so we don't want any automatic
-> +# mapping from Git. This will fail if the key doesn't exist and we don't
-> +# want to delete the repository in that case so we ignore errors from
-> +# this command.
-> +_git config --unset-all remote.origin.fetch || true
-> +
->  printf "Fetching all references\n"
-> -_git fetch origin
-> -_git fetch origin -t
-> -
-> -# Try to get the special refs exposed by some forges (pull-requests for
-> -# github, changes for gerrit...). There is no easy way to know whether
-> -# the cset the user passed us is such a special ref or a tag or a sha1
-> -# or whatever else. We'll eventually fail at checking out that cset,
-> -# below, if there is an issue anyway. Since most of the cset we're gonna
-> -# have to clone are not such special refs, consign the output to oblivion
-> -# so as not to alarm unsuspecting users, but still trace it as a warning.
-> -if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
+> +# Check that the specified version is not a branch. We expect a tag or
+> +# raw commit hash, and accept some special refs as above. Using a branch
+> +# is forbidden because these are mutable references.
+> +case "$(_git rev-parse --symbolic-full-name "${cset}" 2>/dev/null)" in
+> +    refs/tags/*)
+> +        : ok
+> +        ;;
+> +    refs/*)
+> +        printf >&2 "Refusing to use Git branch '%s'.\n" "${cset}"
+> +        exit 1
 
-Removing that line would make me oh!-so-happy... :-)
+Sorry, but as I previously explained, this breaks on _existing_ git
+cached repositories. I'll repeat my previous example:
 
-But...
+For example, I have a local git clone of linux-firmware, which has:
 
-> -    printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
-> -fi
-> +# We can't update a checked-out branch and if we've just created a new
-> +# repo there aren't any commits to checkout a detached head, so we point
-> +# HEAD at a ref which really shouldn't exist, creating a temporary
-> +# unborn branch.
-> +_git symbolic-ref HEAD refs/buildroot-invalid-branch
-> +_git fetch --prune origin +refs/*:refs/*
+    $ git branch
+    * 1baa34868b2c0a004dc595b20678145e3fff83e7
+      44d4fca9922a252a0bd81f6307bcc072a78da54a
+      d87753369b82c5f362250c197d04a1e1ef5bf698
 
-... this one makes me raise an eyebrow. If we --prune, that would mean
-we may drop branches, and thus objects, that are not on the current
-remote.
+    $ git rev-parse --symbolic-full-name 1baa34868b2c0a004dc595b20678145e3fff83e7
+    warning: refname '1baa34868b2c0a004dc595b20678145e3fff83e7' is ambiguous.
+    Git normally never creates a ref that ends with 40 hex characters
+    because it will be ignored when you just specify 40-hex. These refs
+    may be created by mistake. For example,
 
-Consider that the remote of the git cache may change arbitrarily between
-two runs. For example, if I have two configurations, one which uses a
-linux kernel from (say) the rpi fork on github, and the other uses the
-linux4sam for (also on github), then a build of the second may drop
-branches of the first, and if the user has auto-gc, objects may also get
-dropped too, so when I later rebuild the rpi config, I may need to fetch
-objects that were removed from the git cache...
+      git checkout -b $br $(git rev-parse ...)
 
-That's not so nice in the long run, because the git cache is explicitly
-made to keep stuff locally as much as possible.
+    where "$br" is somehow empty and a 40-hex ref is created. Please
+    examine these refs and maybe delete them. Turn this message off by
+    running "git config advice.objectNameWarning false"
+    refs/heads/1baa34868b2c0a004dc595b20678145e3fff83e7
 
-Did I miss something?
+    $ git rev-parse --symbolic-full-name 1baa34868b2c0a004dc595b20678145e3fff83e7 2>/dev/null
+    refs/heads/1baa34868b2c0a004dc595b20678145e3fff83e7
+
+So if we were oto use 1baa34868b2c0a004dc595b20678145e3fff83e7 (which we
+did in the past), that would match the error path, which is not good.
 
 Regards,
 Yann E. MORIN.
 
->  # Check that the changeset does exist. If it does not, re-cloning from
->  # scratch won't help, so we don't want to trash the repository for a
+> +        ;;
+> +    # Anything else is not a ref, must be a raw hash which is ok.
+> +esac
+> +
+>  # The new cset we want to checkout might have different submodules, or
+>  # have sub-dirs converted to/from a submodule. So we would need to
+>  # deregister _current_ submodules before we checkout.
 > -- 
 > 2.22.0
 > 
