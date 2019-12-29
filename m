@@ -1,123 +1,163 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Dec 2019 22:16:18 +0100
-Subject: [Buildroot] [PATCH] support/download/git: rename local refs to
- avoid confusing Git warning
-In-Reply-To: <20191212144302.1300824-1-thomas.petazzoni@bootlin.com>
-References: <20191212144302.1300824-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191229211618.GE26395@scaer>
+Date: Sun, 29 Dec 2019 22:40:08 +0100
+Subject: [Buildroot] [PATCH v2 3/4] package/xenomai: allow to pull git
+ revisions
+In-Reply-To: <4615b16355bc243960961d8b5203e9b6bc1587b5.1576743874.git.jan.kiszka@siemens.com>
+References: <cover.1576743874.git.jan.kiszka@siemens.com>
+ <4615b16355bc243960961d8b5203e9b6bc1587b5.1576743874.git.jan.kiszka@siemens.com>
+Message-ID: <20191229214008.GF26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Jan, All,
 
-On 2019-12-12 15:43 +0100, Thomas Petazzoni spake thusly:
-> Running "git fetch origin ${cset}:${cset}" to create a local ref
-> ${cset} from the remote ref ${cset} causes Git to issue a warning like
-> the below, when the version is a full commit hash:
+On 2019-12-19 09:24 +0100, Jan Kiszka spake thusly:
+> From: Jan Kiszka <jan.kiszka@siemens.com>
 > 
-> ===
+> Default remains the latest stable release, expressed by
+> BR2_PACKAGE_XENOMAI_USE_RELEASE=y and an empty
+> BR2_PACKAGE_XENOMAI_VERSION.
 > 
-> warning: refname '49eb4ecb1ef9879ebc6789a1bdb536ab2b1d9871' is ambiguous.
-> Git normally never creates a ref that ends with 40 hex characters
-> because it will be ignored when you just specify 40-hex. These refs
-> may be created by mistake. For example,
+> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+
+So I'm coming back to this remaining patch in your series. Sorry it took
+so long since last time I worked on the series...
+
+> ---
+>  package/xenomai/Config.in  | 23 ++++++++++++++++++++++-
+>  package/xenomai/xenomai.mk | 10 +++++++++-
+>  2 files changed, 31 insertions(+), 2 deletions(-)
 > 
->   git switch -c $br $(git rev-parse ...)
-> 
-> where "$br" is somehow empty and a 40-hex ref is created. Please
-> examine these refs and maybe delete them. Turn this message off by
-> running "git config advice.objectNameWarning false"
-> 
-> ===
-> 
-> This warning is very confusing for users, and is caused by the fact
-> that Git doesn't like our local ref name to look like a commit hash.
-> 
-> So, this commit proposes to fix the issue by having the local ref
-> named buildroot-${cset}, i.e
-> buildroot-${version-specified-by-the-package}.
+> diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+> index 0cb0b343de..f42c7c9c69 100644
+> --- a/package/xenomai/Config.in
+> +++ b/package/xenomai/Config.in
+> @@ -41,8 +41,21 @@ config BR2_PACKAGE_XENOMAI
+>  
+>  if BR2_PACKAGE_XENOMAI
+>  
+> +choice
+> +	prompt "Xenomai origin"
+> +	default BR2_PACKAGE_XENOMAI_USE_RELEASE
+> +
+> +config BR2_PACKAGE_XENOMAI_USE_RELEASE
+> +	bool "Release"
+> +
+> +config BR2_PACKAGE_XENOMAI_USE_GIT
+> +	bool "Git"
+> +
+> +endchoice
+> +
+>  config BR2_PACKAGE_XENOMAI_VERSION
+> -	string "Custom Xenomai version"
+> +	string "Xenomai version"
+> +	depends on BR2_PACKAGE_XENOMAI_USE_RELEASE
+>  	help
+>  	  Manually select Xenomai version. If left empty, the default
+>  	  version will be used.
+> @@ -53,6 +66,14 @@ config BR2_PACKAGE_XENOMAI_VERSION
+>  	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
+>  	  Kernel -> Linux Kernel Extensions menu.
+>  
+> +config BR2_PACKAGE_XENOMAI_GIT_REVISION
+> +	string "Xenomai Git revision"
+> +	depends on BR2_PACKAGE_XENOMAI_USE_GIT
+> +	help
+> +	  This option allows Buildroot to get a custom revision from
+> +	  the Xenomai Git repository. This can be a SHA, a tag, or
+> +	  even a branch (floating revision).
 
-I was ready to push, when I remembered we had run-time tests for the git
-backend, so I ran them.
+So I know that you are (probably, hopefully) mimicking that construct
+from other packages, but I don't see why the same symbol can't be used
+for both a release version of a git reference; the telling-apart part is
+the choice above anyway, so:
 
-Sorry, but that does not pass muster:
+    config BR2_PACKAGE_XENOMAI_VERSION
+        bool "Xenomai version"
+        help
+          If downloading a release, leave empty for the default version,
+          or specify a valid release version.
 
-    $ ./support/testing/run-tests -o $(pwd)/test-it -k tests.download.test_git
-    22:05:07 TestGitRefs                              Starting
-    22:05:57 TestGitRefs                              Cleaning up
-    E22:05:57 TestGitHash                              Starting
-    22:06:53 TestGitHash                              Cleaning up
-    .
-    ======================================================================
-    ERROR: test_run (tests.download.test_git.TestGitRefs)
-    ----------------------------------------------------------------------
-    Traceback (most recent call last):
-      File "/home/ymorin/dev/buildroot/buildroot/support/testing/tests/download/test_git.py", line 69, in test_run
-        self.check_download("git-partial-sha1-branch-head")
-      File "/home/ymorin/dev/buildroot/buildroot/support/testing/tests/download/test_git.py", line 48, in check_download
-        env)
-      File "/home/ymorin/dev/buildroot/buildroot/support/testing/infra/builder.py", line 75, in build
-        raise SystemError("Build failed")
-    SystemError: Build failed
+          If downloading from git, this can be any commit-ish (e.g.
+          a tag, or a hash).
 
-    ----------------------------------------------------------------------
-    Ran 2 tests in 106.080s
+(Note that I explicitly dropped the reference to using a branch name:
+that is not supported and should not be doocumented at all.)
 
-    FAILED (errors=1)
+>  choice
+>  	prompt "Xenomai core"
+>  	default BR2_PACKAGE_XENOMAI_MERCURY
+> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+> index 3813af707d..df7ca69f45 100644
+> --- a/package/xenomai/xenomai.mk
+> +++ b/package/xenomai/xenomai.mk
+> @@ -4,15 +4,23 @@
+>  #
+>  ################################################################################
+>  
+> +ifeq ($(BR2_PACKAGE_XENOMAI_USE_GIT),y)
+> +XENOMAI_REV = $(call qstrip,$(BR2_PACKAGE_XENOMAI_GIT_REVISION))
 
-The same tests are passing on master, though.
+We really want that there *is* a variable named _VERSION because it is
+used in a lot of places, like naming the build directory. It is also
+dumped in the json generated by 'make show-info'.
 
-I've marked your patch as changes requested, then.
+And with the above comment, this can be rewrittent as:
+
+    XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+    XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
+    ifeq ($(BR2_PACKAGE_XENOMAI_USE_RELEASE),y)
+    ifeq ($(XENOMAI_VERSION),)
+    XENOMAI_VERSION = 3.0.10
+    else
+    BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+    endif
+    XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
+    else
+    XENOMAI_SITE = https://gitlab.denx.de/Xenomai/xenomai/-/archive/$(XENOMAI_VERSION)
+    BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+    XENOMAI_AUTORECONF = YES
+    endif
+
+Note that those are simply-expanded variable; that is, their values are
+only final at the moment they are eventualyl expanded, so we can define
+XENOMAI_VERSION after XENOMAI_SOURCE, even if the former is used to
+define the latter.
+
+Care to give that a spin and resubmit an updated patch, please?
 
 Regards,
 Yann E. MORIN.
 
-> The generated tarballs are exactly identical, nothing changes, it is
-> really just internally the local ref we are using to checkout the
-> correct version that is different. And it avoids the confusing
-> warning.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  support/download/git | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/support/download/git b/support/download/git
-> index 075f665bbf..c243b8aa9f 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -122,14 +122,14 @@ _git fetch origin -t
->  # below, if there is an issue anyway. Since most of the cset we're gonna
->  # have to clone are not such special refs, consign the output to oblivion
->  # so as not to alarm unsuspecting users, but still trace it as a warning.
-> -if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
-> +if ! _git fetch origin "'${cset}:buildroot-${cset}'" >/dev/null 2>&1; then
->      printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
->  fi
->  
->  # Check that the changeset does exist. If it does not, re-cloning from
->  # scratch won't help, so we don't want to trash the repository for a
->  # missing commit. We just exit without going through the ERR trap.
-> -if ! _git rev-parse --quiet --verify "'${cset}^{commit}'" >/dev/null 2>&1; then
-> +if ! _git rev-parse --quiet --verify "'buildroot-${cset}^{commit}'" >/dev/null 2>&1; then
->      printf "Commit '%s' does not exist in this repository.\n" "${cset}"
->      exit 1
->  fi
-> @@ -162,7 +162,7 @@ _git submodule --quiet foreach "'${cmd}'"
->  
->  # Checkout the required changeset, so that we can update the required
->  # submodules.
-> -_git checkout -f -q "'${cset}'"
-> +_git checkout -f -q "'buildroot-${cset}'"
->  
->  # Get rid of now-untracked directories (in case a git operation was
->  # interrupted in a previous run, or to get rid of empty directories
+> +XENOMAI_SITE = https://gitlab.denx.de/Xenomai/xenomai/-/archive/$(XENOMAI_REV)
+> +XENOMAI_SOURCE = xenomai-$(XENOMAI_REV).tar.bz2
+> +XENOMAI_AUTORECONF = YES
+> +BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+> +else
+>  XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+>  ifeq ($(XENOMAI_VERSION),)
+>  XENOMAI_VERSION = 3.0.10
+>  else
+>  BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+>  endif
+> -
+>  XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
+>  XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
+> +endif
+> +
+>  XENOMAI_LICENSE = GPL-2.0+ with exception (headers), LGPL-2.1+ (libraries), GPL-2.0+ (kernel), GFDL-1.2+ (docs), GPL-2.0 (ipipe patch, can driver)
+>  # GFDL is not included but refers to gnu.org
+>  XENOMAI_LICENSE_FILES = debian/copyright include/COPYING kernel/cobalt/COPYING \
 > -- 
-> 2.23.0
+> 2.16.4
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
