@@ -1,71 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Dec 2019 11:19:13 +0100
-Subject: [Buildroot] [PATCH v3,
- 1/1] package/i2pd: fix static build with atomic
-In-Reply-To: <20191227131332.539681-1-fontaine.fabrice@gmail.com>
-References: <20191227131332.539681-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191229101913.GX26395@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 29 Dec 2019 14:14:52 +0100
+Subject: [Buildroot] [PATCH 1/2] package/mesa3d: XvMC needs x11
+Message-ID: <20191229131453.327907-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Selects BR2_PACKAGE_MESA3D_NEEDS_X11 hidden option to enable x11
+platform if the user selects BR2_PACKAGE_MESA3D_XVMC
 
-On 2019-12-27 14:13 +0100, Fabrice Fontaine spake thusly:
-> Use HAVE_CXX_ATOMICS_WITHOUT_LIB and HAVE_CXX_ATOMICS64_WITHOUT_LIB
-> variables to tell i2pd to check for atomic library and add it in
-> $(REQUIRED_LIBRARIES) if needed
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/dfffe21fab65b3fc81f449004a6771fd00efbc57
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/e044609e603ca68695d842d08809fdcb35bc8127
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mesa3d/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v2 -> v3:
->  - Add missing backslash
-> 
-> Changes v1 -> v2 (after review of Thomas Petazzoni and Arnout
-> Vandecappelle):
->  - Use i2pd variables instead of CMAKE_REQUIRED_LIBRARIES
-> 
->  package/i2pd/i2pd.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
-> index de975d66a4..a064057f1f 100644
-> --- a/package/i2pd/i2pd.mk
-> +++ b/package/i2pd/i2pd.mk
-> @@ -22,7 +22,9 @@ I2PD_CONF_OPTS += -DWITH_GUI=OFF
->  I2PD_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
->  
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -I2PD_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-> +I2PD_CONF_OPTS += \
-> +	-DHAVE_CXX_ATOMICS_WITHOUT_LIB=OFF \
-> +	-DHAVE_CXX_ATOMICS64_WITHOUT_LIB=OFF
->  endif
->  
->  ifeq ($(BR2_STATIC_LIBS),y)
-> -- 
-> 2.24.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 455091eb9d..844360950c 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -260,6 +260,7 @@ config BR2_PACKAGE_MESA3D_XVMC
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
++	select BR2_PACKAGE_MESA3D_NEEDS_X11
+ 	select BR2_PACKAGE_XLIB_LIBXV
+ 	select BR2_PACKAGE_XLIB_LIBXVMC
+ 	help
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.0
