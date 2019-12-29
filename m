@@ -1,168 +1,196 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Dec 2019 22:40:08 +0100
-Subject: [Buildroot] [PATCH v2 3/4] package/xenomai: allow to pull git
- revisions
-In-Reply-To: <4615b16355bc243960961d8b5203e9b6bc1587b5.1576743874.git.jan.kiszka@siemens.com>
-References: <cover.1576743874.git.jan.kiszka@siemens.com>
- <4615b16355bc243960961d8b5203e9b6bc1587b5.1576743874.git.jan.kiszka@siemens.com>
-Message-ID: <20191229214008.GF26395@scaer>
+From: Avi Shukron <avraham.shukron@gmail.com>
+Date: Sun, 29 Dec 2019 23:48:20 +0200
+Subject: [Buildroot] [PATCH] New board: pine64+
+Message-ID: <20191229214821.15301-1-avraham.shukron@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jan, All,
+The pine64+ is a variant of the original pine64 with 1/2 GB RAM and
+GbE phy.
 
-On 2019-12-19 09:24 +0100, Jan Kiszka spake thusly:
-> From: Jan Kiszka <jan.kiszka@siemens.com>
-> 
-> Default remains the latest stable release, expressed by
-> BR2_PACKAGE_XENOMAI_USE_RELEASE=y and an empty
-> BR2_PACKAGE_XENOMAI_VERSION.
-> 
-> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+The pine64+ has a distinct dts file in both mainline kernel and uboot,
+thus it cannot be supported with the existing pine64_defconfig.
 
-So I'm coming back to this remaining patch in your series. Sorry it took
-so long since last time I worked on the series...
+The board is added with mainline ATF, Uboot and kernel support, all at
+the latest (or almost) version.
 
-> ---
->  package/xenomai/Config.in  | 23 ++++++++++++++++++++++-
->  package/xenomai/xenomai.mk | 10 +++++++++-
->  2 files changed, 31 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-> index 0cb0b343de..f42c7c9c69 100644
-> --- a/package/xenomai/Config.in
-> +++ b/package/xenomai/Config.in
-> @@ -41,8 +41,21 @@ config BR2_PACKAGE_XENOMAI
->  
->  if BR2_PACKAGE_XENOMAI
->  
-> +choice
-> +	prompt "Xenomai origin"
-> +	default BR2_PACKAGE_XENOMAI_USE_RELEASE
-> +
-> +config BR2_PACKAGE_XENOMAI_USE_RELEASE
-> +	bool "Release"
-> +
-> +config BR2_PACKAGE_XENOMAI_USE_GIT
-> +	bool "Git"
-> +
-> +endchoice
-> +
->  config BR2_PACKAGE_XENOMAI_VERSION
-> -	string "Custom Xenomai version"
-> +	string "Xenomai version"
-> +	depends on BR2_PACKAGE_XENOMAI_USE_RELEASE
->  	help
->  	  Manually select Xenomai version. If left empty, the default
->  	  version will be used.
-> @@ -53,6 +66,14 @@ config BR2_PACKAGE_XENOMAI_VERSION
->  	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
->  	  Kernel -> Linux Kernel Extensions menu.
->  
-> +config BR2_PACKAGE_XENOMAI_GIT_REVISION
-> +	string "Xenomai Git revision"
-> +	depends on BR2_PACKAGE_XENOMAI_USE_GIT
-> +	help
-> +	  This option allows Buildroot to get a custom revision from
-> +	  the Xenomai Git repository. This can be a SHA, a tag, or
-> +	  even a branch (floating revision).
+The new defconfig for the board was tested and booted successfully with
+serial console access + console output to HDMI. Network interface eth0
+is working properly and configured with DHCP at boot time.
 
-So I know that you are (probably, hopefully) mimicking that construct
-from other packages, but I don't see why the same symbol can't be used
-for both a release version of a git reference; the telling-apart part is
-the choice above anyway, so:
+Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
+---
+ board/pine64/pine64-plus/boot.cmd     |  6 +++
+ board/pine64/pine64-plus/genimage.cfg | 39 +++++++++++++++++++
+ board/pine64/pine64-plus/readme.txt   | 55 +++++++++++++++++++++++++++
+ configs/pine64_plus_defconfig         | 35 +++++++++++++++++
+ 4 files changed, 135 insertions(+)
+ create mode 100644 board/pine64/pine64-plus/boot.cmd
+ create mode 100644 board/pine64/pine64-plus/genimage.cfg
+ create mode 100644 board/pine64/pine64-plus/readme.txt
+ create mode 100644 configs/pine64_plus_defconfig
 
-    config BR2_PACKAGE_XENOMAI_VERSION
-        bool "Xenomai version"
-        help
-          If downloading a release, leave empty for the default version,
-          or specify a valid release version.
-
-          If downloading from git, this can be any commit-ish (e.g.
-          a tag, or a hash).
-
-(Note that I explicitly dropped the reference to using a branch name:
-that is not supported and should not be doocumented at all.)
-
->  choice
->  	prompt "Xenomai core"
->  	default BR2_PACKAGE_XENOMAI_MERCURY
-> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-> index 3813af707d..df7ca69f45 100644
-> --- a/package/xenomai/xenomai.mk
-> +++ b/package/xenomai/xenomai.mk
-> @@ -4,15 +4,23 @@
->  #
->  ################################################################################
->  
-> +ifeq ($(BR2_PACKAGE_XENOMAI_USE_GIT),y)
-> +XENOMAI_REV = $(call qstrip,$(BR2_PACKAGE_XENOMAI_GIT_REVISION))
-
-We really want that there *is* a variable named _VERSION because it is
-used in a lot of places, like naming the build directory. It is also
-dumped in the json generated by 'make show-info'.
-
-And with the above comment, this can be rewrittent as:
-
-    XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
-    XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
-    ifeq ($(BR2_PACKAGE_XENOMAI_USE_RELEASE),y)
-    ifeq ($(XENOMAI_VERSION),)
-    XENOMAI_VERSION = 3.0.10
-    else
-    BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
-    endif
-    XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
-    else
-    XENOMAI_SITE = https://gitlab.denx.de/Xenomai/xenomai/-/archive/$(XENOMAI_VERSION)
-    BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
-    XENOMAI_AUTORECONF = YES
-    endif
-
-Note that those are simply-expanded variable; that is, their values are
-only final at the moment they are eventualyl expanded, so we can define
-XENOMAI_VERSION after XENOMAI_SOURCE, even if the former is used to
-define the latter.
-
-Care to give that a spin and resubmit an updated patch, please?
-
-Regards,
-Yann E. MORIN.
-
-> +XENOMAI_SITE = https://gitlab.denx.de/Xenomai/xenomai/-/archive/$(XENOMAI_REV)
-> +XENOMAI_SOURCE = xenomai-$(XENOMAI_REV).tar.bz2
-> +XENOMAI_AUTORECONF = YES
-> +BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
-> +else
->  XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
->  ifeq ($(XENOMAI_VERSION),)
->  XENOMAI_VERSION = 3.0.10
->  else
->  BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
->  endif
-> -
->  XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
->  XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
-> +endif
-> +
->  XENOMAI_LICENSE = GPL-2.0+ with exception (headers), LGPL-2.1+ (libraries), GPL-2.0+ (kernel), GFDL-1.2+ (docs), GPL-2.0 (ipipe patch, can driver)
->  # GFDL is not included but refers to gnu.org
->  XENOMAI_LICENSE_FILES = debian/copyright include/COPYING kernel/cobalt/COPYING \
-> -- 
-> 2.16.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/board/pine64/pine64-plus/boot.cmd b/board/pine64/pine64-plus/boot.cmd
+new file mode 100644
+index 0000000000..511111e2ee
+--- /dev/null
++++ b/board/pine64/pine64-plus/boot.cmd
+@@ -0,0 +1,6 @@
++setenv bootargs console=tty0 console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++
++fatload mmc 0 $kernel_addr_r Image
++fatload mmc 0 $fdt_addr_r sun50i-a64-pine64-plus.dtb
++
++booti $kernel_addr_r - $fdt_addr_r
+diff --git a/board/pine64/pine64-plus/genimage.cfg b/board/pine64/pine64-plus/genimage.cfg
+new file mode 100644
+index 0000000000..60dac9d882
+--- /dev/null
++++ b/board/pine64/pine64-plus/genimage.cfg
+@@ -0,0 +1,39 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"Image",
++			"sun50i-a64-pine64-plus.dtb",
++			"boot.scr"
++		}
++	}
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition spl {
++		in-partition-table = "no"
++		image = "sunxi-spl.bin"
++		offset = 8192
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot.itb"
++		offset = 40K
++		size = 1M # 1MB - 40K
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/pine64/pine64-plus/readme.txt b/board/pine64/pine64-plus/readme.txt
+new file mode 100644
+index 0000000000..40d56755b8
+--- /dev/null
++++ b/board/pine64/pine64-plus/readme.txt
+@@ -0,0 +1,55 @@
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the Pine64+. With the current configuration
++it will bring-up the board, and allow access through the UART0 serial console.
++The console will also output to the HDMI port, but login is provided only
++through the serial port. The pine64 wiki (link below) will provide details
++about the pin locations for UART0.
++
++If you wish to use the login console over the HDMI port you'll need:
++1. A USB keyboard.
++2. Edit the `bootargs` entry in `boot.cmd` and swap the order of the `console`
++arguments so that `console=tty0` will be the last console.
++Please notice that you have to rebuild uboot and then re-create the SD image
++for the change to take effect.
++
++If you want to be able to use the keyboard in u-boot, make sure you connect
++it to the *bottom* USB port of the board (the upper one is OTG in Device mode
++during u-boot)
++
++You'll have a eth0 network interface available and configured using DHCP, but
++ssh access is not enabled in the default configuration.
++
++Pine64 link:
++https://www.pine64.org/devices/single-board-computers/pine-a64/
++
++Wiki link:
++http://linux-sunxi.org/Pine64
++
++This configuration uses U-Boot mainline and kernel mainline.
++
++How to build
++============
++
++    $ make pine64_plus_defconfig
++
++    $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo sync
++
++Insert the micro SDcard in your Pine64 and power it up. The console
++is on UART0, 115200 8N1, or using HDMI screen + USB keyboard.
+diff --git a/configs/pine64_plus_defconfig b/configs/pine64_plus_defconfig
+new file mode 100644
+index 0000000000..d1b267b64e
+--- /dev/null
++++ b/configs/pine64_plus_defconfig
+@@ -0,0 +1,35 @@
++BR2_aarch64=y
++BR2_ARM_FPU_VFPV4=y
++BR2_CCACHE=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64+"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pine64-plus/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-pine64-plus"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="100M"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pine64_plus"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/pine64/pine64-plus/boot.cmd"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
