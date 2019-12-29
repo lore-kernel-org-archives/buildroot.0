@@ -1,75 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Dec 2019 10:24:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: fix gallium nouveau driver
- with gcc 4.9
-Message-ID: <20191229092414.85255-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 29 Dec 2019 10:26:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fbterm: update the upstream URL
+ in Config.in
+In-Reply-To: <20191227174749.12906-1-mark@dibsco.co.uk>
+References: <20191227174749.12906-1-mark@dibsco.co.uk>
+Message-ID: <20191229092634.GU26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/599dc3478ed65d36fbf9f5e9625691dfa813b530
+Mark, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ers-nouveau-codegen-nv50_ir_ra.cpp-p.patch | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
+On 2019-12-27 17:47 +0000, Mark Corbin spake thusly:
+> Update the upstream URL in the help text in Config.in. This
+> addresses the 'Invalid(405)' URL status in the package stats
+> web page output.
+> 
+> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 
-diff --git a/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch b/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-new file mode 100644
-index 0000000000..73e75993de
---- /dev/null
-+++ b/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-@@ -0,0 +1,47 @@
-+From f2ce27b761eeca301a109856f20ed9a8eb06796d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 28 Dec 2019 21:49:43 +0100
-+Subject: [PATCH] src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: prefix
-+ isinf with std::
-+
-+Prefix isinf with std:: to fix the following build failure with gcc 4.9:
-+
-+../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: In member function 'bool nv50_ir::GCRA::simplify()':
-+../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1350:29: error: 'isinf' was not declared in this scope
-+          if (isinf(bestScore)) {
-+                             ^
-+../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1350:29: note: suggested alternative:
-+In file included from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/random:38:0,
-+                 from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/bits/stl_algo.h:66,
-+                 from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/algorithm:62,
-+                 from ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:26:
-+/data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/cmath:621:5: note:   'std::isinf'
-+     isinf(_Tp __x)
-+     ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/599dc3478ed65d36fbf9f5e9625691dfa813b530
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3227]
-+---
-+ src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
-+index 6df2664da22..e81fb117213 100644
-+--- a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
-++++ b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
-+@@ -1345,7 +1345,7 @@ GCRA::simplify()
-+                bestMaxReg = it->maxReg;
-+             }
-+          }
-+-         if (isinf(bestScore)) {
-++         if (std::isinf(bestScore)) {
-+             ERROR("no viable spill candidates left\n");
-+             return false;
-+          }
-+-- 
-+2.24.0
-+
+Applied to master, along with the uboot, zd1211-fw, and ympd ones.
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/fbterm/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/fbterm/Config.in b/package/fbterm/Config.in
+> index 3ab8bdb4d4..083167088a 100644
+> --- a/package/fbterm/Config.in
+> +++ b/package/fbterm/Config.in
+> @@ -10,7 +10,7 @@ config BR2_PACKAGE_FBTERM
+>  	  fbterm is a fast terminal emulator for Linux with frame buffer
+>  	  device or VESA video card.
+>  
+> -	  http://code.google.com/p/fbterm/
+> +	  https://code.google.com/archive/p/fbterm/
+>  
+>  comment "fbterm needs a toolchain w/ C++, wchar, locale"
+>  	depends on BR2_USE_MMU
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.24.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
