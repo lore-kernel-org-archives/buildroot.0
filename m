@@ -1,55 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Dec 2019 10:41:29 +0100
-Subject: [Buildroot] [PATCH] package/ecryptfs-utils: fix typo in
- Config.in comment
-In-Reply-To: <20191227143548.83674-1-giulio.benetti@benettiengineering.com>
-References: <20191227143548.83674-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20191229094129.GV26395@scaer>
+Date: Sun, 29 Dec 2019 10:54:51 +0100
+Subject: [Buildroot] [git commit] package/libnspr: allow building for Arc
+ Architecture
+Message-ID: <20191229094541.A66968E694@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=9fd3cd877305304e84ddebdb2d2e8f815f976187
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-12-27 15:35 +0100, Giulio Benetti spake thusly:
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Arc architecture is now supported by NSPR so let's allow to build for
+it.
 
-Applied to master, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libnspr/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/ecryptfs-utils/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-> index 68a659d33d..0c39f48d08 100644
-> --- a/package/ecryptfs-utils/Config.in
-> +++ b/package/ecryptfs-utils/Config.in
-> @@ -28,7 +28,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
->  
->  	  http://ecryptfs.org
->  
-> -comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
-> +comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynamic library"
->  	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
->  	depends on BR2_USE_MMU
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
+index 1d95155248..57fcbdf6be 100644
+--- a/package/libnspr/Config.in
++++ b/package/libnspr/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	def_bool y
+-	depends on !BR2_arc && !BR2_xtensa
++	depends on !BR2_xtensa
+ 
+ if BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 
