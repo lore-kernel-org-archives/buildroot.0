@@ -1,102 +1,117 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Dec 2019 23:12:08 +0100
-Subject: [Buildroot] [PATCH v2 2/2] download/git: ban branch references
-In-Reply-To: <20190624113224.22685-2-john@metanate.com>
-References: <20190624123027.485c128f@donbot>
- <20190624113224.22685-1-john@metanate.com>
- <20190624113224.22685-2-john@metanate.com>
-Message-ID: <20191229221208.GH26395@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 29 Dec 2019 23:15:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: drop unneeded patch
+Message-ID: <20191229221520.362426-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-John, All,
+Commit 0720ddc20321e390ca7812603300e6763198f199 added a patch that is
+already included in current version so remove it
 
-On 2019-06-24 12:32 +0100, John Keeping spake thusly:
-> As described in the manual, using a branch name as a version is not
-> supported.  However, nothing enforces this so it is easy to specify a
-> branch name either accidentally or because new developers have not read
-> through the manual.
-> 
-> For Git it is reasonably easy to catch most violations of this rule and
-> fail the fetch phase.  We now only accept tags or raw commit hashes;
-> it's possible that there are other special refs which are known to be
-> stable and this can be extended to support those in the future if
-> required.
-> 
-> Signed-off-by: John Keeping <john@metanate.com>
-> ---
->  support/download/git | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/support/download/git b/support/download/git
-> index 02bf01bb95..5b5be92d15 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -133,6 +133,20 @@ if ! _git rev-parse --quiet --verify "'${cset}^{commit}'" >/dev/null 2>&1; then
->      exit 1
->  fi
->  
-> +# Check that the specified version is not a branch. We expect a tag or
-> +# raw commit hash, and accept some special refs as above. Using a branch
-> +# is forbidden because these are mutable references.
-> +case "$(_git rev-parse --symbolic-full-name "${cset}" 2>/dev/null)" in
-> +    refs/tags/*)
-> +        : ok
-> +        ;;
-> +    refs/*)
-> +        printf >&2 "Refusing to use Git branch '%s'.\n" "${cset}"
-> +        exit 1
+Fixes:
+ - http://autobuild.buildroot.org/results/f48fe526764a0416c330b802f99e35e99e60ed57
 
-Sorry, but as I previously explained, this breaks on _existing_ git
-cached repositories. I'll repeat my previous example:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...un-the-Bubblewrap-executable-when-co.patch | 87 -------------------
+ 1 file changed, 87 deletions(-)
+ delete mode 100644 package/webkitgtk/0002-GTK-WPE-Do-not-run-the-Bubblewrap-executable-when-co.patch
 
-For example, I have a local git clone of linux-firmware, which has:
-
-    $ git branch
-    * 1baa34868b2c0a004dc595b20678145e3fff83e7
-      44d4fca9922a252a0bd81f6307bcc072a78da54a
-      d87753369b82c5f362250c197d04a1e1ef5bf698
-
-    $ git rev-parse --symbolic-full-name 1baa34868b2c0a004dc595b20678145e3fff83e7
-    warning: refname '1baa34868b2c0a004dc595b20678145e3fff83e7' is ambiguous.
-    Git normally never creates a ref that ends with 40 hex characters
-    because it will be ignored when you just specify 40-hex. These refs
-    may be created by mistake. For example,
-
-      git checkout -b $br $(git rev-parse ...)
-
-    where "$br" is somehow empty and a 40-hex ref is created. Please
-    examine these refs and maybe delete them. Turn this message off by
-    running "git config advice.objectNameWarning false"
-    refs/heads/1baa34868b2c0a004dc595b20678145e3fff83e7
-
-    $ git rev-parse --symbolic-full-name 1baa34868b2c0a004dc595b20678145e3fff83e7 2>/dev/null
-    refs/heads/1baa34868b2c0a004dc595b20678145e3fff83e7
-
-So if we were oto use 1baa34868b2c0a004dc595b20678145e3fff83e7 (which we
-did in the past), that would match the error path, which is not good.
-
-Regards,
-Yann E. MORIN.
-
-> +        ;;
-> +    # Anything else is not a ref, must be a raw hash which is ok.
-> +esac
-> +
->  # The new cset we want to checkout might have different submodules, or
->  # have sub-dirs converted to/from a submodule. So we would need to
->  # deregister _current_ submodules before we checkout.
-> -- 
-> 2.22.0
-> 
-
+diff --git a/package/webkitgtk/0002-GTK-WPE-Do-not-run-the-Bubblewrap-executable-when-co.patch b/package/webkitgtk/0002-GTK-WPE-Do-not-run-the-Bubblewrap-executable-when-co.patch
+deleted file mode 100644
+index 3381cbbfb6..0000000000
+--- a/package/webkitgtk/0002-GTK-WPE-Do-not-run-the-Bubblewrap-executable-when-co.patch
++++ /dev/null
+@@ -1,87 +0,0 @@
+-From a725f6fbe6630a980f5ac74d79fd3e18557190bc Mon Sep 17 00:00:00 2001
+-From: "aperez at igalia.com"
+- <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
+-Date: Sun, 15 Sep 2019 13:30:01 +0000
+-Subject: [PATCH xserver 2/2] [GTK][WPE] Do not run the Bubblewrap executable
+- when configuring for cross-compilation
+- https://bugs.webkit.org/show_bug.cgi?id=201340
+-
+-Reviewed by Konstantin Tokarev.
+-
+-* Source/cmake/BubblewrapSandboxChecks.cmake: Do not run the
+-Bubblewrap executable when cross-compiling to guess its version.
+-Emit a warning instead and trust that valid run-time paths will
+-be set using the BWRAP_EXECUTABLE and DBUS_PROXY_EXECUTABLE
+-variables. While at it, fix the regular expression used to match
+-the version string in the Bubblewrap output when not cross-compiling.
+-
+-Fetch from: https://bugs.webkit.org/show_bug.cgi?id=201340
+-Upstream-Status: Accepted
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-
+----
+- ChangeLog                                  | 14 ++++++++
+- Source/cmake/BubblewrapSandboxChecks.cmake | 41 ++++++++++++++--------
+- 2 files changed, 41 insertions(+), 14 deletions(-)
+-
+-diff --git a/Source/cmake/BubblewrapSandboxChecks.cmake b/Source/cmake/BubblewrapSandboxChecks.cmake
+-index ac8fbbf3c8e..73cf4ffed35 100644
+---- a/Source/cmake/BubblewrapSandboxChecks.cmake
+-+++ b/Source/cmake/BubblewrapSandboxChecks.cmake
+-@@ -3,20 +3,6 @@ if (ENABLE_BUBBLEWRAP_SANDBOX)
+-     if (NOT BWRAP_EXECUTABLE)
+-         message(FATAL_ERROR "bwrap executable is needed for ENABLE_BUBBLEWRAP_SANDBOX")
+-     endif ()
+--    add_definitions(-DBWRAP_EXECUTABLE="${BWRAP_EXECUTABLE}")
+--
+--    execute_process(
+--        COMMAND "${BWRAP_EXECUTABLE}" --version
+--        RESULT_VARIABLE BWRAP_RET
+--        OUTPUT_VARIABLE BWRAP_OUTPUT
+--    )
+--    if (BWRAP_RET)
+--        message(FATAL_ERROR "Failed to run ${BWRAP_EXECUTABLE}")
+--    endif ()
+--    string(REGEX MATCH "([0-9]+.[0-9]+.[0-9]+)" BWRAP_VERSION "${BWRAP_OUTPUT}")
+--    if (NOT "${BWRAP_VERSION}" VERSION_GREATER_EQUAL "0.3.1")
+--        message(FATAL_ERROR "bwrap must be >= 0.3.1 but ${BWRAP_VERSION} found")
+--    endif ()
+- 
+-     find_package(Libseccomp)
+-     if (NOT LIBSECCOMP_FOUND)
+-@@ -27,5 +13,32 @@ if (ENABLE_BUBBLEWRAP_SANDBOX)
+-     if (NOT DBUS_PROXY_EXECUTABLE)
+-         message(FATAL_ERROR "xdg-dbus-proxy not found and is needed for ENABLE_BUBBLEWRAP_SANDBOX")
+-     endif ()
+-+
+-+    if (NOT CMAKE_CROSSCOMPILING)
+-+        execute_process(
+-+            COMMAND "${BWRAP_EXECUTABLE}" --version
+-+            RESULT_VARIABLE BWRAP_RET
+-+            OUTPUT_VARIABLE BWRAP_OUTPUT
+-+        )
+-+        if (BWRAP_RET)
+-+            message(FATAL_ERROR "Failed to run ${BWRAP_EXECUTABLE}")
+-+        endif ()
+-+        string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" BWRAP_VERSION "${BWRAP_OUTPUT}")
+-+        if (NOT "${BWRAP_VERSION}" VERSION_GREATER_EQUAL "0.3.1")
+-+            message(FATAL_ERROR "bwrap must be >= 0.3.1 but ${BWRAP_VERSION} found")
+-+        endif ()
+-+    elseif (NOT SILENCE_CROSS_COMPILATION_NOTICES)
+-+        message(NOTICE
+-+            "***--------------------------------------------------------***\n"
+-+            "***  Cannot check Bubblewrap version when cross-compiling. ***\n"
+-+            "***  The target system MUST have version 0.3.1 or newer.   ***\n"
+-+            "***  Use the BWRAP_EXECUTABLE and DBUS_PROXY_EXECUTABLE    ***\n"
+-+            "***  variables to set the run-time paths for the 'bwrap'   ***\n"
+-+            "***  and 'xdg-dbus-proxy' programs.                        ***\n"
+-+            "***--------------------------------------------------------***"
+-+        )
+-+    endif ()
+-+
+-+    add_definitions(-DBWRAP_EXECUTABLE="${BWRAP_EXECUTABLE}")
+-     add_definitions(-DDBUS_PROXY_EXECUTABLE="${DBUS_PROXY_EXECUTABLE}")
+- endif ()
+--- 
+-2.23.0
+-
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.0
