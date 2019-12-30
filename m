@@ -1,31 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Dec 2019 23:33:18 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libressl: move config options
-In-Reply-To: <3c20be96d78c897e6a158af41df5b4462776e767.1577738159.git.yann.morin.1998@free.fr>
-References: <cover.1577738159.git.yann.morin.1998@free.fr>
- <3c20be96d78c897e6a158af41df5b4462776e767.1577738159.git.yann.morin.1998@free.fr>
-Message-ID: <20191230233318.076b2226@windsurf>
+Date: Mon, 30 Dec 2019 23:42:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-pyqt5: select
+ BR2_PACKAGE_QT5BASE_GUI
+In-Reply-To: <20191230214842.1485805-1-fontaine.fabrice@gmail.com>
+References: <20191230214842.1485805-1-fontaine.fabrice@gmail.com>
+Message-ID: <20191230234259.5bfe6355@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Dec 2019 21:36:15 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Mon, 30 Dec 2019 22:48:42 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> As we've recently done for libopenssl (openssl, the original),
-> move the libressl option to a libressl-specific Config.in.
+> gui is a mandatory dependency of python-pyqt5 as "-gui" option is used
+> internally by the configure.py script
 > 
-> The gain is minimal at best, but this is mostly for symetry with
-> libopenssl.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ea0c8db44aacf1ce76f75e8288969fe5da6690d9
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+This seems weird. Are you sure? Could you talk with upstream about this?
 
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
