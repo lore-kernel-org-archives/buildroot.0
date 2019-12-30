@@ -1,119 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Dec 2019 14:50:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/avro-c: fix build without C++
-Message-ID: <20191230135012.909578-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Dec 2019 14:53:24 +0100
+Subject: [Buildroot] [PATCH] board/qemu/sh4-r2d: fix sh4 kernel bug with
+ Binutils 2.33
+In-Reply-To: <20191230133640.9702-1-romain.naour@gmail.com>
+References: <20191230133640.9702-1-romain.naour@gmail.com>
+Message-ID: <20191230145324.4eb78299@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/135e246aa70f28c6b9aea5fd6b0eb9c7b45ebfe7
+Hello Romain,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...2-CMakeLists.txt-fix-build-without-C.patch | 92 +++++++++++++++++++
- 1 file changed, 92 insertions(+)
- create mode 100644 package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
+On Mon, 30 Dec 2019 14:36:40 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-diff --git a/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch b/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
-new file mode 100644
-index 0000000000..89a500c588
---- /dev/null
-+++ b/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
-@@ -0,0 +1,92 @@
-+From cdab7db8ad81884cfb21cc1cf94c981c59d17ef4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 30 Dec 2019 12:32:20 +0100
-+Subject: [PATCH] CMakeLists.txt: fix build without C++
-+
-+Specify that AvroC is a C project and remove tests_cpp.cpp to avoid the
-+following build failure if a C++ compiler is not found:
-+
-+CMake Error at CMakeLists.txt:20 (project):
-+  The CMAKE_CXX_COMPILER:
-+
-+    /home/naourr/work/instance-2/output-1/host/bin/microblazeel-buildroot-linux-uclibc-g++
-+
-+  is not a full path to an existing compiler tool.
-+
-+  Tell CMake where to find the compiler by setting either the environment
-+  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
-+  to the compiler, or to the compiler name if it is in the PATH.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/135e246aa70f28c6b9aea5fd6b0eb9c7b45ebfe7
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/apache/avro/pull/754]
-+---
-+ CMakeLists.txt       |  2 +-
-+ tests/CMakeLists.txt |  1 -
-+ tests/test_cpp.cpp   | 27 ---------------------------
-+ 3 files changed, 1 insertion(+), 29 deletions(-)
-+ delete mode 100644 lang/c/tests/test_cpp.cpp
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 11cbf018..b75418c3 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -17,7 +17,7 @@
-+ # under the License.
-+ #
-+ cmake_minimum_required(VERSION 2.4)
-+-project(AvroC)
-++project(AvroC C)
-+ enable_testing()
-+ 
-+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR})
-+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
-+index b9e8fe1d..2e84a06a 100644
-+--- a/tests/CMakeLists.txt
-++++ b/tests/CMakeLists.txt
-+@@ -81,7 +81,6 @@ add_avro_test_checkmem(test_avro_1405)
-+ add_avro_test_checkmem(test_avro_1572)
-+ add_avro_test(test_avro_data) # Skip memory check for datum. Deprecated and has a lot of memory issues
-+ add_avro_test_checkmem(test_refcount)
-+-add_avro_test_checkmem(test_cpp test_cpp.cpp)
-+ add_avro_test_checkmem(test_avro_1379)
-+ add_avro_test_checkmem(test_avro_1691)
-+ add_avro_test_checkmem(test_avro_1906)
-+diff --git a/lang/c/tests/test_cpp.cpp b/lang/c/tests/test_cpp.cpp
-+deleted file mode 100644
-+index 13f98a9b..00000000
-+--- a/tests/test_cpp.cpp
-++++ /dev/null
-+@@ -1,27 +0,0 @@
-+-/*
-+- * Licensed to the Apache Software Foundation (ASF) under one or more
-+- * contributor license agreements.  See the NOTICE file distributed with
-+- * this work for additional information regarding copyright ownership.
-+- * The ASF licenses this file to you under the Apache License, Version 2.0
-+- * (the "License"); you may not use this file except in compliance with
-+- * the License.  You may obtain a copy of the License at
-+- *
-+- * https://www.apache.org/licenses/LICENSE-2.0
-+- *
-+- * Unless required by applicable law or agreed to in writing, software
-+- * distributed under the License is distributed on an "AS IS" BASIS,
-+- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-+- * implied.  See the License for the specific language governing
-+- * permissions and limitations under the License.
-+- */
-+-
-+-#include "avro.h"
-+-
-+-int main(int argc, char **argv)
-+-{
-+-    (void)argc;
-+-    (void)argv;
-+-
-+-	return 0;
-+-}
-+-
-+-- 
-+2.24.0
-+
+> Remove the Binutils patch reverting [1] that trigger a sh4 kernel bug
+> with Binutils >= 2.33.
+> Add two kernel patch provided by Alan Modra [2] that fix alignment of rodata.
+> 
+> [1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=ebd2263ba9a9124d93bbc0ece63d7e0fae89b40e
+> [2] https://www.sourceware.org/ml/binutils/2019-12/msg00112.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Thanks a lot for those fixes. Have the kernel patches been submitted
+upstream, and accepted?
+
+One issue with your change is of course that now the fix only works
+when building the specific qemu_sh4 defconfigs. When not using one of
+those defconfigs, but simply building the regular Linux kernel for SH4,
+will lead to a kernel that no longer boots.
+
+Thomas
 -- 
-2.24.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
