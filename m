@@ -1,46 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 Dec 2019 13:42:00 +0100
-Subject: [Buildroot] [git commit] package/libopenssl: make use of linux-x86
- for i386
-Message-ID: <20191230123808.AC7158E79C@busybox.osuosl.org>
+Date: Mon, 30 Dec 2019 13:48:32 +0100
+Subject: [Buildroot] [PATCH 0/3] Improve libopenssl target arch selection
+In-Reply-To: <20191027102420.15560-1-thomas.petazzoni@bootlin.com>
+References: <20191027102420.15560-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20191230124832.GN26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03b39f7869859bbab692e7728af3009ed38998f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Tested with:
+On 2019-10-27 11:24 +0100, Thomas Petazzoni spake thusly:
+> Hello,
+> 
+> Reviewing commit 027c02660b8cd670eff0ba6fdd9e49253968517f
+> ("package/libopenssl: set no-asm with generic architectures") from
+> Fabrice made me realize that the OpenSSL target architecture selection
+> logic was not very easy to read, and was missing a number of useful
+> cases.
+> 
+> So here is a small patch series that moves the target architecture
+> selection logic to Config.in, and then makes use of linux-generic64
+> and linux-x86 when appropriate.
+> 
+> Thomas
+> 
+> Thomas Petazzoni (3):
+>   package/libopenssl: move target arch selection to Config.in
+>   package/libopenssl: make use of linux-generic64 for 64-bit archs
+>   package/libopenssl: make use of linux-x86 for i386
 
-BR2_x86_pentium4=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2019.05.1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-BR2_PACKAGE_OPENSSL=y
+I've applied all athree to master, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libopenssl/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+I'll reply further on patch 1, for some specific comments.
 
-diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-index 4bc32e06a9..5ca19b38f8 100644
---- a/package/libopenssl/Config.in
-+++ b/package/libopenssl/Config.in
-@@ -22,6 +22,7 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
- 	default "linux-ppc"			if BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
- 	default "linux-ppc64"			if BR2_powerpc64
- 	default "linux-ppc64le"			if BR2_powerpc64le
-+	default "linux-x86"			if BR2_i386
- 	default "linux-x86_64"			if BR2_x86_64
- 	# no-asm is needed with generic architectures such as
- 	# linux-generic{32,64}, see
+Regards,
+Yann E. MORIN.
+
+>  package/libopenssl/Config.in     | 31 ++++++++++++++++++++++++++++
+>  package/libopenssl/libopenssl.mk | 35 +-------------------------------
+>  package/openssl/Config.in        |  2 ++
+>  3 files changed, 34 insertions(+), 34 deletions(-)
+>  create mode 100644 package/libopenssl/Config.in
+> 
+> -- 
+> 2.21.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
