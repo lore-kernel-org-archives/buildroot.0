@@ -1,48 +1,41 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Dec 2019 14:45:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bitcoin: needs threads
-Message-ID: <20191230134505.908878-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Dec 2019 14:46:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcdio-paranoia: bump to version
+ 10.2+2.0.1
+Message-ID: <20191230134607.908991-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 656fc50b51c03891d34471fd39003355678f7fde added bitcoin without
-adding the threads dependency from boost
-
-Fixes:
- - http://autobuild.buildroot.org/results/8e824314d35e12678023f32650a90539a72c9bab
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bitcoin/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/libcdio-paranoia/libcdio-paranoia.hash | 2 +-
+ package/libcdio-paranoia/libcdio-paranoia.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
-index 3936cd3c79..1f08f9f26f 100644
---- a/package/bitcoin/Config.in
-+++ b/package/bitcoin/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_BITCOIN
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_SYSTEM
-@@ -37,9 +38,10 @@ config BR2_PACKAGE_BITCOIN
+diff --git a/package/libcdio-paranoia/libcdio-paranoia.hash b/package/libcdio-paranoia/libcdio-paranoia.hash
+index a62620dfd6..18e6f33dff 100644
+--- a/package/libcdio-paranoia/libcdio-paranoia.hash
++++ b/package/libcdio-paranoia/libcdio-paranoia.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 4565c18caf401083c53733e6d2847b6671ba824cff1c7792b9039693d34713c1  libcdio-paranoia-10.2+2.0.0.tar.bz2
++sha256 33b1cf305ccfbfd03b43936975615000ce538b119989c4bec469577570b60e8a  libcdio-paranoia-10.2+2.0.1.tar.bz2
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/libcdio-paranoia/libcdio-paranoia.mk b/package/libcdio-paranoia/libcdio-paranoia.mk
+index 32b1f169b4..944bb14d77 100644
+--- a/package/libcdio-paranoia/libcdio-paranoia.mk
++++ b/package/libcdio-paranoia/libcdio-paranoia.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://bitcoincore.org
- 
--comment "bitcoin needs a toolchain w/ C++, wchar"
-+comment "bitcoin needs a toolchain w/ C++, threads, wchar"
- 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 
- comment "bitcoin needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+-LIBCDIO_PARANOIA_VERSION = 10.2+2.0.0
++LIBCDIO_PARANOIA_VERSION = 10.2+2.0.1
+ LIBCDIO_PARANOIA_SOURCE = libcdio-paranoia-$(LIBCDIO_PARANOIA_VERSION).tar.bz2
+ LIBCDIO_PARANOIA_SITE = $(BR2_GNU_MIRROR)/libcdio
+ LIBCDIO_PARANOIA_LICENSE = GPL-3.0+
 -- 
 2.24.0
