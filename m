@@ -1,50 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 Dec 2019 21:38:30 +0100
-Subject: [Buildroot] [git commit] package/bitcoin: needs threads
-Message-ID: <20191230202904.0D9128E871@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Dec 2019 21:40:16 +0100
+Subject: [Buildroot] [PATCH] package/gnupg: fix TAR path in gpg-zip
+ script
+In-Reply-To: <20191230132316.GQ26395@scaer>
+References: <20191226221437.1301418-1-thomas.petazzoni@bootlin.com>
+ <20191230132316.GQ26395@scaer>
+Message-ID: <20191230214016.5b865216@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8dca9dbc27f357282142db8df552e3d3780f955
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 30 Dec 2019 14:23:16 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Commit 656fc50b51c03891d34471fd39003355678f7fde added bitcoin without
-adding the threads dependency from boost
+> > So we just opt with a very simple solution: replace TAR=something by
+> > TAR=/bin/tar, through a post-install target hook. We only do this if
+> > gpg-zip is installed, since its installation is optional. Note that
+> > the logic is still not ideal, because the installation (or not) of
+> > gpg-zip depends on whether the system/host tar has ustar format or
+> > not.  
+> 
+> But isn't that always the case, in practice? If the host has 
+> 1.27 <= tar <= 1.29, then we use it, and that has support for ustar.
+> Otherwise, we build tar 1.29, and that also has ustar.
 
-Fixes:
- - http://autobuild.buildroot.org/results/8e824314d35e12678023f32650a90539a72c9bab
+That's true indeed. But it's still kind of a coincidence.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/bitcoin/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Thanks for reviewing and applying!
 
-diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
-index 3936cd3c79..1f08f9f26f 100644
---- a/package/bitcoin/Config.in
-+++ b/package/bitcoin/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_BITCOIN
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_SYSTEM
-@@ -37,9 +38,10 @@ config BR2_PACKAGE_BITCOIN
- 
- 	  https://bitcoincore.org
- 
--comment "bitcoin needs a toolchain w/ C++, wchar"
-+comment "bitcoin needs a toolchain w/ C++, threads, wchar"
- 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 
- comment "bitcoin needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
