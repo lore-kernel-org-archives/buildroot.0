@@ -1,40 +1,119 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Dec 2019 14:47:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/i2pd: bump to version 2.29.0
-Message-ID: <20191230134737.909316-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Dec 2019 14:50:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/avro-c: fix build without C++
+Message-ID: <20191230135012.909578-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/135e246aa70f28c6b9aea5fd6b0eb9c7b45ebfe7
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/i2pd/i2pd.hash | 2 +-
- package/i2pd/i2pd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...2-CMakeLists.txt-fix-build-without-C.patch | 92 +++++++++++++++++++
+ 1 file changed, 92 insertions(+)
+ create mode 100644 package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
 
-diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
-index f104590f3a..0ae6ea05fb 100644
---- a/package/i2pd/i2pd.hash
-+++ b/package/i2pd/i2pd.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	809b37100f0f176432b01ab6edee96dc62b0f65d5bf7531e008a87117e742566	i2pd-2.24.0.tar.gz
-+sha256	fd0474c33b411593b9dc8197f3799d37d68455c11a9ee3994ec993a96388ec06	i2pd-2.29.0.tar.gz
- sha256	d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c	LICENSE
-diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
-index a064057f1f..c031145472 100644
---- a/package/i2pd/i2pd.mk
-+++ b/package/i2pd/i2pd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--I2PD_VERSION = 2.24.0
-+I2PD_VERSION = 2.29.0
- I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
- I2PD_LICENSE = BSD-3-Clause
- I2PD_LICENSE_FILES = LICENSE
+diff --git a/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch b/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
+new file mode 100644
+index 0000000000..89a500c588
+--- /dev/null
++++ b/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
+@@ -0,0 +1,92 @@
++From cdab7db8ad81884cfb21cc1cf94c981c59d17ef4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 30 Dec 2019 12:32:20 +0100
++Subject: [PATCH] CMakeLists.txt: fix build without C++
++
++Specify that AvroC is a C project and remove tests_cpp.cpp to avoid the
++following build failure if a C++ compiler is not found:
++
++CMake Error at CMakeLists.txt:20 (project):
++  The CMAKE_CXX_COMPILER:
++
++    /home/naourr/work/instance-2/output-1/host/bin/microblazeel-buildroot-linux-uclibc-g++
++
++  is not a full path to an existing compiler tool.
++
++  Tell CMake where to find the compiler by setting either the environment
++  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
++  to the compiler, or to the compiler name if it is in the PATH.
++
++Fixes:
++ - http://autobuild.buildroot.org/results/135e246aa70f28c6b9aea5fd6b0eb9c7b45ebfe7
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/apache/avro/pull/754]
++---
++ CMakeLists.txt       |  2 +-
++ tests/CMakeLists.txt |  1 -
++ tests/test_cpp.cpp   | 27 ---------------------------
++ 3 files changed, 1 insertion(+), 29 deletions(-)
++ delete mode 100644 lang/c/tests/test_cpp.cpp
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 11cbf018..b75418c3 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -17,7 +17,7 @@
++ # under the License.
++ #
++ cmake_minimum_required(VERSION 2.4)
++-project(AvroC)
+++project(AvroC C)
++ enable_testing()
++ 
++ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR})
++diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
++index b9e8fe1d..2e84a06a 100644
++--- a/tests/CMakeLists.txt
+++++ b/tests/CMakeLists.txt
++@@ -81,7 +81,6 @@ add_avro_test_checkmem(test_avro_1405)
++ add_avro_test_checkmem(test_avro_1572)
++ add_avro_test(test_avro_data) # Skip memory check for datum. Deprecated and has a lot of memory issues
++ add_avro_test_checkmem(test_refcount)
++-add_avro_test_checkmem(test_cpp test_cpp.cpp)
++ add_avro_test_checkmem(test_avro_1379)
++ add_avro_test_checkmem(test_avro_1691)
++ add_avro_test_checkmem(test_avro_1906)
++diff --git a/lang/c/tests/test_cpp.cpp b/lang/c/tests/test_cpp.cpp
++deleted file mode 100644
++index 13f98a9b..00000000
++--- a/tests/test_cpp.cpp
+++++ /dev/null
++@@ -1,27 +0,0 @@
++-/*
++- * Licensed to the Apache Software Foundation (ASF) under one or more
++- * contributor license agreements.  See the NOTICE file distributed with
++- * this work for additional information regarding copyright ownership.
++- * The ASF licenses this file to you under the Apache License, Version 2.0
++- * (the "License"); you may not use this file except in compliance with
++- * the License.  You may obtain a copy of the License at
++- *
++- * https://www.apache.org/licenses/LICENSE-2.0
++- *
++- * Unless required by applicable law or agreed to in writing, software
++- * distributed under the License is distributed on an "AS IS" BASIS,
++- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
++- * implied.  See the License for the specific language governing
++- * permissions and limitations under the License.
++- */
++-
++-#include "avro.h"
++-
++-int main(int argc, char **argv)
++-{
++-    (void)argc;
++-    (void)argv;
++-
++-	return 0;
++-}
++-
++-- 
++2.24.0
++
 -- 
 2.24.0
