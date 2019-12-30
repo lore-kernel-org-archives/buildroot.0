@@ -1,60 +1,80 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 Dec 2019 21:39:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bitcoin: needs threads
-In-Reply-To: <20191230134505.908878-1-fontaine.fabrice@gmail.com>
-References: <20191230134505.908878-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191230203903.GS26395@scaer>
+Date: Mon, 30 Dec 2019 21:52:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: Replace libtirpc
+ patch with simple removing files
+In-Reply-To: <20191230202750.12541-1-petr.vorel@gmail.com>
+References: <20191230202750.12541-1-petr.vorel@gmail.com>
+Message-ID: <20191230205218.GV26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Petr, All,
 
-On 2019-12-30 14:45 +0100, Fabrice Fontaine spake thusly:
-> Commit 656fc50b51c03891d34471fd39003355678f7fde added bitcoin without
-> adding the threads dependency from boost
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/8e824314d35e12678023f32650a90539a72c9bab
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 2019-12-30 21:27 +0100, Petr Vorel spake thusly:
+> We delete files anyway, so let's use this way instead of applying patch.
 
-Applied to master, thanks.
+No, we prefer patches over hooks, and we've in the past replaced hooks
+that tweak/remove files with patches with the same effect.
+
+Besides, I'm pretty sure your patch is wrong, see below...
+
+> Since libtirpc update to 1.2.5 commit message in patch was wrong anyway
+> (libtirpc patch 0005-Disable-DES-authentification-support.patch was
+> replaced by upstream solution).
+
+Then it is better to fix the description of the patch.
+
+[--SNIP--]
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index ce02cc4e98..0d81afc2a4 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -62,13 +62,18 @@ LTP_TESTSUITE_CONF_ENV += \
+>  	LIBS="$(LTP_TESTSUITE_LIBS)" \
+>  	SYSROOT="$(STAGING_DIR)"
+>  
+> +# libtirpc 1.2.5 has by default authdes disabled
+> +LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
+> +	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/tirpc_auth_authdes_create/ \
+> +	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/tirpc_auth_authdes_seccreate/
+> +
+>  # uclibc: bessel support normally not enabled
+>  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> -LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
+> +LTP_TESTSUITE_UNSUPPORTED_TEST_CASES += \
+>  	testcases/misc/math/float/bessel/ \
+> -	testcases/misc/math/float/float_bessel.c
+> +	testcases/misc/math/float/float_bessel.c \
+
+I doubt this trailiing '\' is correct, or it would add the next line to
+the definition, and thus the line:
+
+>  else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+
+would not be treated as Makefile code, but as part of the variable
+LTP_TESTSUITE_UNSUPPORTED_TEST_CASES.
+
+Sorry, I've marked your patch as rejected.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/bitcoin/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
-> index 3936cd3c79..1f08f9f26f 100644
-> --- a/package/bitcoin/Config.in
-> +++ b/package/bitcoin/Config.in
-> @@ -12,6 +12,7 @@ config BR2_PACKAGE_BITCOIN
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
->  	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
->  	depends on BR2_USE_WCHAR
->  	select BR2_PACKAGE_BOOST
->  	select BR2_PACKAGE_BOOST_SYSTEM
-> @@ -37,9 +38,10 @@ config BR2_PACKAGE_BITCOIN
+> -LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
+> +LTP_TESTSUITE_UNSUPPORTED_TEST_CASES += \
+>  	testcases/kernel/pty/pty01.c \
+>  	testcases/kernel/pty/pty02.c \
+>  	testcases/kernel/pty/ptem01.c \
+> @@ -97,7 +102,6 @@ LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
+>  	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_svc_unregister/ \
+>  	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_xprt_register/ \
+>  	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_xprt_unregister/ \
+> -	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/tirpc_auth_authdes_seccreate/ \
+>  	utils/benchmark/ebizzy-0.3
+>  endif
 >  
->  	  https://bitcoincore.org
->  
-> -comment "bitcoin needs a toolchain w/ C++, wchar"
-> +comment "bitcoin needs a toolchain w/ C++, threads, wchar"
->  	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
-> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-> +	depends on !BR2_INSTALL_LIBSTDCPP || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
->  
->  comment "bitcoin needs a toolchain not affected by GCC bug 64735"
->  	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
 > -- 
 > 2.24.0
 > 
