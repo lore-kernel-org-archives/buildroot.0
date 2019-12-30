@@ -1,83 +1,98 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Dec 2019 14:22:05 +0100
-Subject: [Buildroot] [PATCH 1/3] package/libopenssl: move target arch
- selection to Config.in
-In-Reply-To: <20191230125458.GO26395@scaer>
-References: <20191027102420.15560-1-thomas.petazzoni@bootlin.com>
- <20191027102420.15560-2-thomas.petazzoni@bootlin.com>
- <20191230125458.GO26395@scaer>
-Message-ID: <20191230142205.705b7030@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 30 Dec 2019 14:23:16 +0100
+Subject: [Buildroot] [PATCH] package/gnupg: fix TAR path in gpg-zip
+ script
+In-Reply-To: <20191226221437.1301418-1-thomas.petazzoni@bootlin.com>
+References: <20191226221437.1301418-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20191230132316.GQ26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Dec 2019 13:54:58 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Thomas, All,
 
-> > diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-> > new file mode 100644
-> > index 0000000000..732da5b4ef
-> > --- /dev/null
-> > +++ b/package/libopenssl/Config.in
-> > @@ -0,0 +1,29 @@
-> > +# 4xx PowerPC cores seem to have trouble with openssl's ASM
-> > +# optimizations
-> > +config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC  
+On 2019-12-26 23:14 +0100, Thomas Petazzoni spake thusly:
+> gnupg installs a shell script called gpg-zip, which contains a
+> reference to the 'tar' program. Unfortunately, the location of the tar
+> program is determined at build time, and is therefore incorrect on the
+> target. This causes runtime issues, but also potentially leaks some
+> host paths into the target, causing BR2_REPRODUCIBLE=y failures.
 > 
-> Why 'LINUX' in the option name?
-
-I wrote the patch a while ago, but I guess my reasoning was that it was
-related to the "linux-ppc" OpenSSL architecture name. I.e this option
-says which "TARGET_ARCH" in Buildroot speak, are compatible with the
-"linux-ppc" OpenSSL architecture support.
-
-But I'm fine with the name being changed, it's really just because I
-had to find a name :-)
-
-> So I know you just transposed the existing logic from Makefile to
-> Kconfig. Yet, I'd like to point at how fragile this ordering is.
+> gnupg has a --with-tar option, but it doesn't work properly as the
+> implementation of the GNUPG_CHECK_USTAR m4 macro in m4/tar-ustar.m4 is
+> incomplete:
 > 
-> The arm vs. aarch64 situation works because BR2_ARM_CPU_HAS_ARM is never
-> selected by an armv8 CPU when it works in 64bit mode.
+>  - If --with-tar is passed, AC_PATH_PROG is not called, so the TAR
+>    variable is not defined and AC_SUBST([TAR]) is not called, so the
+>    @TAR@ replacement in tools/gpg-zip.in is replaced by the empty
+>    string.
 > 
-> I think a more reliable way would have been something like:
+>  - If --with-tar is passed, the check that this tar version support
+>    the ustar format is not executed, so the HAVE_USTAR automake
+>    conditional is never defined. There is unfortunately no way to
+>    determine if the target tar supports ustar or not, but since even
+>    the Busybox variant apparently does, we can probably assume all tar
+>    versions that Buildroot can build support the ustar format.
 > 
->     config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_ARM
->         bool
->         default y if BR2_arm || BR2_armeb
->         depends on BR2_ARM_CPU_HAS_ARM
+> Fixing this logic is a bit cumbersome, gnupg 1.4.x is not really
+> maintained anymore and fixing the logic would require an AUTORECONF =
+> YES.
 > 
-> and then:
+> So we just opt with a very simple solution: replace TAR=something by
+> TAR=/bin/tar, through a post-install target hook. We only do this if
+> gpg-zip is installed, since its installation is optional. Note that
+> the logic is still not ideal, because the installation (or not) of
+> gpg-zip depends on whether the system/host tar has ustar format or
+> not.
+
+But isn't that always the case, in practice? If the host has 
+1.27 <= tar <= 1.29, then we use it, and that has support for ustar.
+Otherwise, we build tar 1.29, and that also has ustar.
+
+But OK, that's good enough as-is. Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> Fixes the gpg-zip reproducibility issue reported in:
 > 
->     default "linux-armv4"  if BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_ARM
-
-True. Could then also be:
-
-	default "linux-armv4" if (BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM
-
-We will need to clarify the semantic of BR2_ARM_CPU_HAS_ARM I believe,
-to indicate what it means in the context of 64-bit ARM platforms.
-
-> > diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-> > index a64660bea3..4d37a3ecf9 100644
-> > --- a/package/openssl/Config.in
-> > +++ b/package/openssl/Config.in
-> > @@ -43,6 +43,8 @@ config BR2_PACKAGE_LIBOPENSSL_ENGINES
-> >  	help
-> >  	  Install additional encryption engine libraries.
-> >  
-> > +source "package/libopenssl/Config.in"  
+>   http://autobuild.buildroot.net/results/d1c/d1c5ad34ba928edfbb5901eb936c7e4457cc9083//diffoscope-results.txt
 > 
-> Amybe it makes sense to move BR2_PACKAGE_LIBOPENSSL_BIN there too?
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/gnupg/gnupg.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+> index bedcf6c985..617def884e 100644
+> --- a/package/gnupg/gnupg.mk
+> +++ b/package/gnupg/gnupg.mk
+> @@ -79,5 +79,11 @@ endef
+>  GNUPG_POST_INSTALL_TARGET_HOOKS += GNUPG_REMOVE_GPGSPLIT
+>  endif
+>  
+> +define GNUPG_FIXUP_GPG_ZIP
+> +	test -f $(TARGET_DIR)/usr/bin/gpg-zip && \
+> +		$(SED) 's%^TAR=.*%TAR=/bin/tar%' $(TARGET_DIR)/usr/bin/gpg-zip
+> +endef
+> +GNUPG_POST_INSTALL_TARGET_HOOKS += GNUPG_FIXUP_GPG_ZIP
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Yes, it does.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
