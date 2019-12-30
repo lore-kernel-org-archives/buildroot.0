@@ -1,29 +1,116 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Dec 2019 14:02:06 +0100
-Subject: [Buildroot] [git commit] package/ecryptfs-utils: add hash for
- license file
-Message-ID: <20191230125303.7F30A8E7A1@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 30 Dec 2019 14:03:27 +0100
+Subject: [Buildroot] [git commit] package/fluid-soundfont: new package
+Message-ID: <20191230125410.480758E7AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a4bb695069b1b132a1002ceb959958a8755345b
+commit: https://git.buildroot.net/buildroot/commit/?id=61a84bef9ceb306220b31c1441d76da7ed8f30da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ecryptfs-utils/ecryptfs-utils.hash | 1 +
- 1 file changed, 1 insertion(+)
+FluidR3 is the third release of Frank Wen's pro-quality GM/GS
+soundfont. The soundfont has lots of excellent samples, including all
+the GM instruments along side with the GS instruments that are
+recycled and reprogrammed versions of the GM presets.
 
-diff --git a/package/ecryptfs-utils/ecryptfs-utils.hash b/package/ecryptfs-utils/ecryptfs-utils.hash
-index 1e08661e25..8a0b111e5c 100644
---- a/package/ecryptfs-utils/ecryptfs-utils.hash
-+++ b/package/ecryptfs-utils/ecryptfs-utils.hash
-@@ -2,3 +2,4 @@
- md5 83513228984f671930752c3518cac6fd  ecryptfs-utils_111.orig.tar.gz
- # Locally computed
- sha256 112cb3e37e81a1ecd8e39516725dec0ce55c5f3df6284e0f4cc0f118750a987f  ecryptfs-utils_111.orig.tar.gz
-+sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+This package contains Fluid General Midi (GM) soundfont in soundfont
+2.0 (.sf2) format.
+
+This soundfont can be used with a software synthesizer, like
+FluidSynth.
+
+Signed-off-by: Julien Olivain <juju@cotds.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/fluid-soundfont/Config.in            | 16 ++++++++++++++++
+ package/fluid-soundfont/fluid-soundfont.hash |  3 +++
+ package/fluid-soundfont/fluid-soundfont.mk   | 21 +++++++++++++++++++++
+ 5 files changed, 42 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1931b3e942..7308439f06 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1369,6 +1369,7 @@ F:	board/technexion/imx8mmpico/
+ F:	board/technexion/imx8mpico/
+ F:	configs/imx8mmpico_defconfig
+ F:	configs/imx8mpico_defconfig
++F:	package/fluid-soundfont/
+ F:	package/fluidsynth/
+ 
+ N:	Julien Viard de Galbert <julien@vdg.name>
+diff --git a/package/Config.in b/package/Config.in
+index 6aac0f7e26..888373422f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -23,6 +23,7 @@ menu "Audio and video applications"
+ 	source "package/ffmpeg/Config.in"
+ 	source "package/flac/Config.in"
+ 	source "package/flite/Config.in"
++	source "package/fluid-soundfont/Config.in"
+ 	source "package/fluidsynth/Config.in"
+ 	source "package/gmrender-resurrect/Config.in"
+ 	source "package/gstreamer/Config.in"
+diff --git a/package/fluid-soundfont/Config.in b/package/fluid-soundfont/Config.in
+new file mode 100644
+index 0000000000..67f5ea1113
+--- /dev/null
++++ b/package/fluid-soundfont/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_FLUID_SOUNDFONT
++	bool "fluid-soundfont"
++	help
++	  FluidR3 is the third release of Frank Wen's pro-quality
++	  GM/GS soundfont.  The soundfont has lots of excellent
++	  samples, including all the GM instruments along side with
++	  the GS instruments that are recycled and reprogrammed
++	  versions of the GM presets.
++
++	  This package contains Fluid General Midi (GM) soundfont in
++	  soundfont 2.0 (.sf2) format.
++
++	  This soundfont can be used with the FluidSynth real-time
++	  software synthesizer.
++
++	  http://www.hammersound.net
+diff --git a/package/fluid-soundfont/fluid-soundfont.hash b/package/fluid-soundfont/fluid-soundfont.hash
+new file mode 100644
+index 0000000000..7aaac60084
+--- /dev/null
++++ b/package/fluid-soundfont/fluid-soundfont.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 2621acaa1c78e4abdb24bdd163230cc577e61276936d6aa6e3180582142f0343  fluid-soundfont_3.1.orig.tar.gz
++sha256 8ef830b65c97a976b86e34bb5fde08d99dfb1db13c4149b5b20bc837ac6c4568  COPYING
+diff --git a/package/fluid-soundfont/fluid-soundfont.mk b/package/fluid-soundfont/fluid-soundfont.mk
+new file mode 100644
+index 0000000000..f8fd986ced
+--- /dev/null
++++ b/package/fluid-soundfont/fluid-soundfont.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# fluid-soundfont
++#
++################################################################################
++
++FLUID_SOUNDFONT_VERSION = 3.1
++FLUID_SOUNDFONT_SOURCE = fluid-soundfont_$(FLUID_SOUNDFONT_VERSION).orig.tar.gz
++# The http://www.hammersound.net archive site seems unreliable (show HTTP 500
++# error), and also publish the file in the sfArk format, which is inconvenient
++# to be used in automated build. We use here the Debian mirror publishing the
++# file in a more convenient format (inative sf2 in a tar.gz archive).
++FLUID_SOUNDFONT_SITE = http://http.debian.net/debian/pool/main/f/fluid-soundfont
++FLUID_SOUNDFONT_LICENSE = MIT
++FLUID_SOUNDFONT_LICENSE_FILES = COPYING
++
++define FLUID_SOUNDFONT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/FluidR3_GM.sf2 $(TARGET_DIR)/usr/share/soundfonts/FluidR3_GM.sf2
++endef
++
++$(eval $(generic-package))
