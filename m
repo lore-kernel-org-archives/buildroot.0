@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 Dec 2019 12:24:16 +0100
-Subject: [Buildroot] [PATCH] configs/raspberrypi3_qt5we: increase
- filesystem size
-In-Reply-To: <20191230100626.1419344-1-thomas.petazzoni@bootlin.com>
-References: <20191230100626.1419344-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20191230112416.GK26395@scaer>
+Date: Mon, 30 Dec 2019 12:30:34 +0100
+Subject: [Buildroot] [PATCH] support/config-fragments/autobuild: update
+ Buildroot toolchains to 2019.11.1
+In-Reply-To: <20191230100231.1418837-1-thomas.petazzoni@bootlin.com>
+References: <20191230100231.1418837-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20191230113034.GL26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +13,32 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2019-12-30 11:06 +0100, Thomas Petazzoni spake thusly:
-> The build of raspberrypi3_qt5we_defconfig currently fails because the
-> filesystem image size is no longer large enough to contain everything:
-> the filesystem image size is 360 MB, but the total filesystem size
-> reported by "make graph-size" is 370 MB.
-> 
-> Let's increase the size to 400 MB for good measure.
-> 
-> Fixes:
-> 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/389451889
-> 
+On 2019-12-30 11:02 +0100, Thomas Petazzoni spake thusly:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  support/config-fragments/autobuild/br-aarch64-glibc.config | 4 ++--
+[--SNIP--]
+>  32 files changed, 85 insertions(+), 86 deletions(-)
+> 
+> diff --git a/support/config-fragments/autobuild/br-aarch64-glibc.config b/support/config-fragments/autobuild/br-aarch64-glibc.config
+> index 42b1c3316c..961ff71573 100644
+> --- a/support/config-fragments/autobuild/br-aarch64-glibc.config
+> +++ b/support/config-fragments/autobuild/br-aarch64-glibc.config
+> @@ -2,8 +2,8 @@ BR2_aarch64=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-aarch64-glibc-2019.05.1.tar.bz2"
+> -BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-aarch64-glibc-2019.11.tar.bz2"
 
-Applied to master, thanks.
+The commit title says '2019.11.1', but the version here (as well as for
+all the other toolchains) is '2019.11'. Which should I trust? ;-)
+
+I can fix the commit title when applying, if need be.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  configs/raspberrypi3_qt5we_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-> index 21c5d1dc4c..4e9d782c7c 100644
-> --- a/configs/raspberrypi3_qt5we_defconfig
-> +++ b/configs/raspberrypi3_qt5we_defconfig
-> @@ -43,7 +43,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
->  # Filesystem / image
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
-> -BR2_TARGET_ROOTFS_EXT2_SIZE="360M"
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="400M"
->  # BR2_TARGET_ROOTFS_TAR is not set
->  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
->  BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
