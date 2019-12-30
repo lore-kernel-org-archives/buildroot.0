@@ -1,65 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 Dec 2019 21:36:15 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libressl: move config options
-In-Reply-To: <cover.1577738159.git.yann.morin.1998@free.fr>
-References: <cover.1577738159.git.yann.morin.1998@free.fr>
-Message-ID: <3c20be96d78c897e6a158af41df5b4462776e767.1577738159.git.yann.morin.1998@free.fr>
+Date: Mon, 30 Dec 2019 21:38:30 +0100
+Subject: [Buildroot] [git commit] package/bitcoin: needs threads
+Message-ID: <20191230202904.0D9128E871@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As we've recently done for libopenssl (openssl, the original),
-move the libressl option to a libressl-specific Config.in.
+commit: https://git.buildroot.net/buildroot/commit/?id=e8dca9dbc27f357282142db8df552e3d3780f955
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The gain is minimal at best, but this is mostly for symetry with
-libopenssl.
+Commit 656fc50b51c03891d34471fd39003355678f7fde added bitcoin without
+adding the threads dependency from boost
 
+Fixes:
+ - http://autobuild.buildroot.org/results/8e824314d35e12678023f32650a90539a72c9bab
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/libressl/Config.in |  9 +++++++++
- package/openssl/Config.in  | 10 +---------
- 2 files changed, 10 insertions(+), 9 deletions(-)
- create mode 100644 package/libressl/Config.in
+ package/bitcoin/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libressl/Config.in b/package/libressl/Config.in
-new file mode 100644
-index 0000000000..600829cb9e
---- /dev/null
-+++ b/package/libressl/Config.in
-@@ -0,0 +1,9 @@
-+if BR2_PACKAGE_LIBRESSL
-+
-+config BR2_PACKAGE_LIBRESSL_BIN
-+	bool "openssl binary"
-+	help
-+	  Install the openssl binary to the target file system. This is
-+	  a command line tool for doing various cryptographic stuff.
-+
-+endif
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index 01d3549aef..5ce91cb80f 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -44,15 +44,7 @@ config BR2_PACKAGE_LIBRESSL
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+index 3936cd3c79..1f08f9f26f 100644
+--- a/package/bitcoin/Config.in
++++ b/package/bitcoin/Config.in
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_BITCOIN
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+@@ -37,9 +38,10 @@ config BR2_PACKAGE_BITCOIN
  
- 	  http://www.libressl.org/
+ 	  https://bitcoincore.org
  
--if BR2_PACKAGE_LIBRESSL
--
--config BR2_PACKAGE_LIBRESSL_BIN
--	bool "openssl binary"
--	help
--	  Install the openssl binary to the target file system. This is
--	  a command line tool for doing various cryptographic stuff.
--
--endif
-+source "package/libressl/Config.in"
+-comment "bitcoin needs a toolchain w/ C++, wchar"
++comment "bitcoin needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
  
- # openssl from br2-external trees, if any
- source "$BR2_BASE_DIR/.br2-external.in.openssl"
--- 
-2.20.1
+ comment "bitcoin needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
