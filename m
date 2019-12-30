@@ -1,35 +1,30 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Mon, 30 Dec 2019 15:24:21 +0000
-Subject: [Buildroot] [PATCH 1/1] package/wf111: update the upstream URL in
- Config.in
-Message-ID: <20191230152421.11701-1-mark@dibsco.co.uk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 30 Dec 2019 18:42:41 +0000
+Subject: [Buildroot] [Bug 12441] qt5webengine build error: asm/errno.h: No
+ such file or directory
+In-Reply-To: <bug-12441-163@https.bugs.busybox.net/>
+References: <bug-12441-163@https.bugs.busybox.net/>
+Message-ID: <bug-12441-163-Q7q9YiskTE@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the upstream URL in the help text in Config.in. This
-addresses an intermittent 'Invalid(404)' URL status in the
-package stats web page output.
+https://bugs.busybox.net/show_bug.cgi?id=12441
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
----
- package/wf111/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #1 from Bartosz Bilas <bartosz.bilas@hotmail.com> ---
+Hello Aleksandr,
+does that error occur every build at the same time or randomly? Which buildroot
+version exactly do you use? We have patched qt5webengine recently [1] so there
+shouldn't be any problems with compilation this component.
 
-diff --git a/package/wf111/Config.in b/package/wf111/Config.in
-index 7b61ea195f..6aaf1b9edb 100644
---- a/package/wf111/Config.in
-+++ b/package/wf111/Config.in
-@@ -17,7 +17,7 @@ config BR2_PACKAGE_WF111
- 	    configuration entry that selects them, for example.
- 	  - By enabling another random WiFi driver that select them.
- 
--	  https://www.silabs.com/products/wireless/wi-fi/wf111-bluegiga-module
-+	  https://www.silabs.com/wireless/wi-fi/bluegiga-legacy-modules
- 
- comment "wf111 needs a glibc toolchain"
- 	depends on BR2_LINUX_KERNEL
+[1]
+https://github.com/buildroot/buildroot/commit/6cfe21ae90ccd88254bf5240b2b29d74794f45fe
+
+Best
+Bartek
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
