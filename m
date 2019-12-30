@@ -1,56 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Dec 2019 14:06:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: bump to version 3.2.0
-In-Reply-To: <20191226223757.265559-1-fontaine.fabrice@gmail.com>
-References: <20191226223757.265559-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191230140629.6fc1a74d@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 30 Dec 2019 14:20:10 +0100
+Subject: [Buildroot] [git commit] package/gnupg: fix TAR path in gpg-zip
+ script
+Message-ID: <20191230131048.E0EA78E7B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=68df0f9782396f89ad68627224fb5f63ebc90939
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 26 Dec 2019 23:37:57 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+gnupg installs a shell script called gpg-zip, which contains a
+reference to the 'tar' program. Unfortunately, the location of the tar
+program is determined at build time, and is therefore incorrect on the
+target. This causes runtime issues, but also potentially leaks some
+host paths into the target, causing BR2_REPRODUCIBLE=y failures.
 
-> - Remove patches (already in version)
-> - Add patch to fix static build with pcap by reverting an upstream
->   commit. This patch has been sent upstream and there is already some
->   comments on it. However, upstream does not seem to really care/test
->   static builds. So, perhaps an easier road would to add a dynamic
->   library dependency on wireshark instead of fixing things again and
->   again each time wireshark is bumped...
+gnupg has a --with-tar option, but it doesn't work properly as the
+implementation of the GNUPG_CHECK_USTAR m4 macro in m4/tar-ustar.m4 is
+incomplete:
 
-It would be fine for me to make wireshark depends on !BR2_STATIC_LIBS.
+ - If --with-tar is passed, AC_PATH_PROG is not called, so the TAR
+   variable is not defined and AC_SUBST([TAR]) is not called, so the
+   @TAR@ replacement in tools/gpg-zip.in is replaced by the empty
+   string.
 
-> - Add mandatory speexdsp dependency to avoid using internal one when
->   building wireshark or sharkd:
->   https://github.com/wireshark/wireshark/commit/186f985793cceb7d7222955987df72ab5a82beeb
-> - Disable -Werror (it is now enabled by default)
-> - Add brotli optional dependency:
->   https://github.com/wireshark/wireshark/commit/9ce60b173bf17b7d20695d9dc1de050989019664
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-CMake-add-USE_STATIC-option.patch    |  70 ------------
->  ...ke-Add-libpcap-imported-library-targ.patch | 104 ++++++++++++++++++
->  ...pkg-config-to-find-pcap-dependencies.patch |  45 --------
->  ...-config-to-find-libxml2-dependencies.patch |  48 --------
->  package/wireshark/Config.in                   |   1 +
->  package/wireshark/wireshark.hash              |   6 +-
->  package/wireshark/wireshark.mk                |  13 ++-
->  7 files changed, 119 insertions(+), 168 deletions(-)
->  delete mode 100644 package/wireshark/0001-CMake-add-USE_STATIC-option.patch
->  create mode 100644 package/wireshark/0001-CMake-revert-CMake-Add-libpcap-imported-library-targ.patch
->  delete mode 100644 package/wireshark/0002-FindPCAP-use-pkg-config-to-find-pcap-dependencies.patch
->  delete mode 100644 package/wireshark/0003-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
+ - If --with-tar is passed, the check that this tar version support
+   the ustar format is not executed, so the HAVE_USTAR automake
+   conditional is never defined. There is unfortunately no way to
+   determine if the target tar supports ustar or not, but since even
+   the Busybox variant apparently does, we can probably assume all tar
+   versions that Buildroot can build support the ustar format.
 
-Applied to master, thanks.
+Fixing this logic is a bit cumbersome, gnupg 1.4.x is not really
+maintained anymore and fixing the logic would require an AUTORECONF =
+YES.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+So we just opt with a very simple solution: replace TAR=something by
+TAR=/bin/tar, through a post-install target hook. We only do this if
+gpg-zip is installed, since its installation is optional. Note that
+the logic is still not ideal, because the installation (or not) of
+gpg-zip depends on whether the system/host tar has ustar format or
+not.
+
+Fixes the gpg-zip reproducibility issue reported in:
+
+  http://autobuild.buildroot.net/results/d1c/d1c5ad34ba928edfbb5901eb936c7e4457cc9083//diffoscope-results.txt
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/gnupg/gnupg.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index bedcf6c985..617def884e 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -79,5 +79,11 @@ endef
+ GNUPG_POST_INSTALL_TARGET_HOOKS += GNUPG_REMOVE_GPGSPLIT
+ endif
+ 
++define GNUPG_FIXUP_GPG_ZIP
++	test -f $(TARGET_DIR)/usr/bin/gpg-zip && \
++		$(SED) 's%^TAR=.*%TAR=/bin/tar%' $(TARGET_DIR)/usr/bin/gpg-zip
++endef
++GNUPG_POST_INSTALL_TARGET_HOOKS += GNUPG_FIXUP_GPG_ZIP
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
