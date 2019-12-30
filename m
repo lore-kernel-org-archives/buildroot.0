@@ -1,41 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Dec 2019 14:46:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcdio-paranoia: bump to version
- 10.2+2.0.1
-Message-ID: <20191230134607.908991-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Dec 2019 14:46:41 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5base: support ti-sgx-libgbm
+Message-ID: <20191230133719.450F38E822@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libcdio-paranoia/libcdio-paranoia.hash | 2 +-
- package/libcdio-paranoia/libcdio-paranoia.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=0e357a30931a8bf1d279bef68f914f60192d2c6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libcdio-paranoia/libcdio-paranoia.hash b/package/libcdio-paranoia/libcdio-paranoia.hash
-index a62620dfd6..18e6f33dff 100644
---- a/package/libcdio-paranoia/libcdio-paranoia.hash
-+++ b/package/libcdio-paranoia/libcdio-paranoia.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 4565c18caf401083c53733e6d2847b6671ba824cff1c7792b9039693d34713c1  libcdio-paranoia-10.2+2.0.0.tar.bz2
-+sha256 33b1cf305ccfbfd03b43936975615000ce538b119989c4bec469577570b60e8a  libcdio-paranoia-10.2+2.0.1.tar.bz2
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/libcdio-paranoia/libcdio-paranoia.mk b/package/libcdio-paranoia/libcdio-paranoia.mk
-index 32b1f169b4..944bb14d77 100644
---- a/package/libcdio-paranoia/libcdio-paranoia.mk
-+++ b/package/libcdio-paranoia/libcdio-paranoia.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCDIO_PARANOIA_VERSION = 10.2+2.0.0
-+LIBCDIO_PARANOIA_VERSION = 10.2+2.0.1
- LIBCDIO_PARANOIA_SOURCE = libcdio-paranoia-$(LIBCDIO_PARANOIA_VERSION).tar.bz2
- LIBCDIO_PARANOIA_SITE = $(BR2_GNU_MIRROR)/libcdio
- LIBCDIO_PARANOIA_LICENSE = GPL-3.0+
--- 
-2.24.0
+qt5 configure options: add ti-sgx-libgbm as GBM backend
+
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5base/qt5base.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 1a152be94b..774c771bc9 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -81,6 +81,9 @@ QT5BASE_DEPENDENCIES += mesa3d
+ else ifeq ($(BR2_PACKAGE_GCNANO_BINARIES),y)
+ QT5BASE_CONFIGURE_OPTS += -gbm
+ QT5BASE_DEPENDENCIES += gcnano-binaries
++else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
++QT5BASE_CONFIGURE_OPTS += -gbm
++QT5BASE_DEPENDENCIES += ti-sgx-libgbm
+ else
+ QT5BASE_CONFIGURE_OPTS += -no-gbm
+ endif
