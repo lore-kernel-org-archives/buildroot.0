@@ -1,53 +1,41 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue, 31 Dec 2019 16:04:31 +0100
-Subject: [Buildroot] [PATCH] package/apitrace: fix build failure due to
- gcc bug 68485 and 85180
-In-Reply-To: <20191231153307.5ff83635@windsurf>
-References: <20191227180020.22933-1-giulio.benetti@benettiengineering.com>
- <20191231153307.5ff83635@windsurf>
-Message-ID: <1bbd3516-035c-d0c9-ff67-f7077aceff4f@benettiengineering.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 31 Dec 2019 16:05:45 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add Joao Pinto as contact for
+ snps_aarch64_vdk_defconfig
+Message-ID: <20191231150327.A7B5B8E93C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=a6841e1b1077693473deaa5c3bb3d810358851f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 12/31/19 3:33 PM, Thomas Petazzoni wrote:
-> On Fri, 27 Dec 2019 19:00:20 +0100
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->> +APITRACE_CFLAGS = $(TARGET_CFLAGS)
->> +
->> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
->> +APITRACE_CFLAGS += -O0
->> +endif
->> +
->> +APITRACE_CONF_OPTS += -DCMAKE_C_FLAGS="$(APITRACE_CFLAGS)"
->> +
->> +APITRACE_CXXFLAGS = $(TARGET_CXXFLAGS)
->> +
->> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
->> +APITRACE_CXXFLAGS += -O0
->> +endif
->> +
->> +APITRACE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(APITRACE_CXXFLAGS)"
-> 
-> I'm a bit confused as to why the bug 68485 is worked-around through
-> CFLAGS and bug 85180 is worked-around through CXXFLAGS. Could you
-> explain this ?
+Joao added this defconfig a while ago, and is still active
+contributing to Buildroot, so let's add him as the contact for this
+defconfig, so that he receives build failure notifications and gets
+Cc'ed on patches.
 
-Sure, gcc bug 68485 is due to (included 3rd party) brotli, and it 
-manifests compiling C files, while gcc bug 85180 manifests on apitrace 
-while compiling C++ files.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Joao Pinto <jpinto@synopsys.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-> 
-> Thanks,
-> 
-> Thomas
-> 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3c3a4e9a2e..3a41b426a9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1232,6 +1232,10 @@ F:	package/wmctrl/
+ F:	package/x11r7/xdriver_xf86-video-imx/
+ F:	package/x11r7/xdriver_xf86-video-imx-viv/
+ 
++N:	Joao Pinto <jpinto@synopsys.com>
++F:	board/synopsys/vdk/
++F:	configs/snps_aarch64_vdk_defconfig
++
+ N:	Joel Carlson <JoelsonCarl@gmail.com>
+ F:	package/c-capnproto/
+ F:	package/capnproto/
