@@ -1,24 +1,21 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Dec 2019 09:25:12 +0100
-Subject: [Buildroot] [git commit] package/libopenssl: move options
-Message-ID: <20191231081603.118218E8B8@busybox.osuosl.org>
+Date: Tue, 31 Dec 2019 09:25:15 +0100
+Subject: [Buildroot] [git commit] package/libressl: move config options
+Message-ID: <20191231081603.19DE08E8B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27a2073a2d3beb32af199ad0e2f1efb36f431cce
+commit: https://git.buildroot.net/buildroot/commit/?id=cd2ced0a1d51b71d0ceb686806c13b78b17b8959
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since e3159cad71 (package/libopenssl: move target arch selection
-to Config.in), we have a Config.in that contains a few options to
-configure libopenssl (openSSL, the original).
+As we've recently done for libopenssl (openssl, the original),
+move the libressl option to a libressl-specific Config.in.
 
-As such, it makes sense to move the remaining options there too.
-
-We also move the condition there, mimicking what is done for the
-external toolchains' options too.
+The gain is minimal at best, but this is mostly for symetry with
+libopenssl.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -26,64 +23,43 @@ Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libopenssl/Config.in | 16 ++++++++++++++++
- package/openssl/Config.in    | 16 ----------------
- 2 files changed, 16 insertions(+), 16 deletions(-)
+ package/libressl/Config.in |  9 +++++++++
+ package/openssl/Config.in  | 10 +---------
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-index 5ca19b38f8..881518d1cb 100644
---- a/package/libopenssl/Config.in
-+++ b/package/libopenssl/Config.in
-@@ -1,3 +1,5 @@
-+if BR2_PACKAGE_LIBOPENSSL
+diff --git a/package/libressl/Config.in b/package/libressl/Config.in
+new file mode 100644
+index 0000000000..600829cb9e
+--- /dev/null
++++ b/package/libressl/Config.in
+@@ -0,0 +1,9 @@
++if BR2_PACKAGE_LIBRESSL
 +
- # 4xx PowerPC cores seem to have trouble with openssl's ASM
- # optimizations
- config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
-@@ -29,3 +31,17 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
- 	# https://github.com/openssl/openssl/issues/9839
- 	default "linux-generic64 no-asm"	if BR2_ARCH_IS_64
- 	default "linux-generic32 no-asm"
-+
-+config BR2_PACKAGE_LIBOPENSSL_BIN
++config BR2_PACKAGE_LIBRESSL_BIN
 +	bool "openssl binary"
 +	help
-+	  Install the openssl binary and the associated helper scripts
-+	  to the target file system. This is a command line tool for
-+	  doing various cryptographic stuff.
++	  Install the openssl binary to the target file system. This is
++	  a command line tool for doing various cryptographic stuff.
 +
-+config BR2_PACKAGE_LIBOPENSSL_ENGINES
-+	bool "openssl additional engines"
-+	help
-+	  Install additional encryption engine libraries.
-+
-+endif # BR2_PACKAGE_LIBOPENSSL
++endif
 diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index 4d37a3ecf9..01d3549aef 100644
+index 01d3549aef..5ce91cb80f 100644
 --- a/package/openssl/Config.in
 +++ b/package/openssl/Config.in
-@@ -29,24 +29,8 @@ config BR2_PACKAGE_LIBOPENSSL
+@@ -44,15 +44,7 @@ config BR2_PACKAGE_LIBRESSL
  
- 	  Note: Some helper scripts need perl.
+ 	  http://www.libressl.org/
  
--if BR2_PACKAGE_LIBOPENSSL
+-if BR2_PACKAGE_LIBRESSL
 -
--config BR2_PACKAGE_LIBOPENSSL_BIN
+-config BR2_PACKAGE_LIBRESSL_BIN
 -	bool "openssl binary"
 -	help
--	  Install the openssl binary and the associated helper scripts
--	  to the target file system. This is a command line tool for
--	  doing various cryptographic stuff.
+-	  Install the openssl binary to the target file system. This is
+-	  a command line tool for doing various cryptographic stuff.
 -
--config BR2_PACKAGE_LIBOPENSSL_ENGINES
--	bool "openssl additional engines"
--	help
--	  Install additional encryption engine libraries.
--
- source "package/libopenssl/Config.in"
- 
 -endif
--
- config BR2_PACKAGE_LIBRESSL
- 	bool "libressl"
- 	depends on !BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
++source "package/libressl/Config.in"
+ 
+ # openssl from br2-external trees, if any
+ source "$BR2_BASE_DIR/.br2-external.in.openssl"
