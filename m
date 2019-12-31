@@ -1,69 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Dec 2019 09:32:38 +0100
-Subject: [Buildroot] [PATCH] package/atop: bump to version 2.5.0
-In-Reply-To: <20191231031150.21964-1-ricardo.martincoski@gmail.com>
-References: <20191231031150.21964-1-ricardo.martincoski@gmail.com>
-Message-ID: <20191231083238.GA26395@scaer>
+Date: Tue, 31 Dec 2019 09:57:34 +0100
+Subject: [Buildroot] [git commit] package/xvisor: unconditionally disable SSP
+Message-ID: <20191231084810.5E4008E8F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=84ad39f5b2da3244742b046190c1d08ffbde43e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-12-31 00:11 -0300, Ricardo Martincoski spake thusly:
-> ./utils/test-pkg --package atop --all
-> 44 builds, 5 skipped, 0 build failed, 0 legal-info failed
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Fixes:
 
-Applied to master, thanks.
+- http://autobuild.buildroot.net/results/5de37d3da17ca5cb17c0113d942ce8c22c0074e0
+- http://autobuild.buildroot.net/results/41b00d95ec4eb851abceaa7919aa1c533d4f16e8
+- http://autobuild.buildroot.net/results/119e22e8b03991ab9196e428a131f5a8ae2a2b2f
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...0001-MAKEFILE-Unconditionally-disable-SSP.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-> ---
->  package/atop/atop.hash | 2 +-
->  package/atop/atop.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/atop/atop.hash b/package/atop/atop.hash
-> index 80082d022d..f404ed5d1b 100644
-> --- a/package/atop/atop.hash
-> +++ b/package/atop/atop.hash
-> @@ -1,5 +1,5 @@
->  # Locally computed:
-> -sha256  be1c010a77086b7d98376fce96514afcd73c3f20a8d1fe01520899ff69a73d69  atop-2.4.0.tar.gz
-> +sha256  4b911057ce50463b6e8b3016c5963d48535c0cddeebc6eda817e292b22f93f33  atop-2.5.0.tar.gz
->  
->  # Hash for license file:
->  sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-> diff --git a/package/atop/atop.mk b/package/atop/atop.mk
-> index 4ea1ccf26f..46baff8f72 100644
-> --- a/package/atop/atop.mk
-> +++ b/package/atop/atop.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -ATOP_VERSION = 2.4.0
-> +ATOP_VERSION = 2.5.0
->  ATOP_SITE = http://www.atoptool.nl/download
->  ATOP_LICENSE = GPL-2.0+
->  ATOP_LICENSE_FILES = COPYING
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch b/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
+new file mode 100644
+index 0000000000..ffa486d7d4
+--- /dev/null
++++ b/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
+@@ -0,0 +1,35 @@
++From f04d1b73a9060e8f09cf1173f89daab73d6c0a18 Mon Sep 17 00:00:00 2001
++From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Date: Sat, 9 Nov 2019 17:13:46 +0100
++Subject: [PATCH] [MAKEFILE] Unconditionally disable SSP
++
++Though -nostdlib is passed in $(cflags), -fno-stack-protector must also be
++passed to avoid linking errors related to undefined references to
++'__stack_chk_guard' and '__stack_chk_fail' if toolchain enforces
++-fstack-protector.
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++[yann.morin.1998 at free.fr:
++  - applied upstream: https://github.com/avpatel/xvisor-next/commit/6edd4a8bf16c42aac8bea9e0a61e8b3b47e2aa7c
++]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index d6bcf519..de8e1043 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -137,7 +137,7 @@ cppflags+=$(cpu-cppflags)
++ cppflags+=$(board-cppflags)
++ cppflags+=$(libs-cppflags-y)
++ cc=$(CROSS_COMPILE)gcc
++-cflags=-g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -D__VMM__
+++cflags=-g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -D__VMM__ -fno-stack-protector
++ cflags+=$(board-cflags) 
++ cflags+=$(cpu-cflags) 
++ cflags+=$(libs-cflags-y) 
++-- 
++2.21.0
++
