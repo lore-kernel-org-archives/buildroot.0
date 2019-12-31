@@ -1,72 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Dec 2019 17:40:23 +0100
-Subject: [Buildroot] [PATCH] package/libcurl: add option for no SSL/TLS
- support
-Message-ID: <20191231164023.10258-1-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 31 Dec 2019 18:07:36 +0100
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure due to HW
+ PPC Crypto bug
+In-Reply-To: <20191227165427.107111-1-giulio.benetti@benettiengineering.com>
+References: <20191227165427.107111-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20191231180736.09a5add2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we already have a choice to select the backend to do crypto, push
-the limits even further and add an option to do no crypto.
+On Fri, 27 Dec 2019 17:54:27 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Usually, we would have added that option first in the choice, but if we
-were to do that now, existing defconfigs that previously used openssl
-(the first item in the choice) would now default to non crypto, which is
-not so nice. So we add the new option last in the choice.
+> diff --git a/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
+> new file mode 100644
+> index 0000000000..0b891b5ebc
+> --- /dev/null
+> +++ b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
+> @@ -0,0 +1,37 @@
+> +From 09b3776a924736049693a118d5a8d883e8c794ca Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +Date: Fri, 27 Dec 2019 17:41:04 +0100
+> +Subject: [PATCH] Bug 1606119 - Fix PPC HW Crypto build failure
+> +
+> +Only Big Endian Altivec functions are used, not Little Endian ones, so
+> +let's change check if USE_PPC_CRYPTO by changing to IS_BIG_ENDIAN
+> +instead of IS_LITTLE_ENDIAN.
+> +
+> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Each crypto backend option is used in a conditional block, each of which
-default to disabling said backend. So, selecting none will indeed
-disable all.
+I don't understand the reasoning here. From a quick look, the undefined
+symbols reported in the build log come from the file
+./nss/lib/freebl/gcm-ppc.c.
 
-We can now drop the blind intermediate option that would hide the choice
-when no backend library was available; there will now always be at least
-the none option in the choice, so we need not hide it.
+This file is included in the build in nss/lib/freebl/Makefile if
+CPU_ARCH=ppc.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Julien Grossholtz <julien.grossholtz@openest.io>
----
- package/libcurl/Config.in | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+However CPU_ARCH=ppc is only set in nss/coreconf/Linux.mk as follows:
 
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index 3a9ee0f121..652285c0f8 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -45,17 +45,8 @@ config BR2_PACKAGE_LIBCURL_EXTRA_PROTOCOLS_FEATURES
- 	  - DICT
- 	  - Gopher
- 
--config BR2_PACKAGE_LIBCURL_TLS_SUPPORT
--	bool
--	default y if BR2_PACKAGE_OPENSSL
--	default y if BR2_PACKAGE_GNUTLS
--	default y if BR2_PACKAGE_LIBNSS
--	default y if BR2_PACKAGE_MBEDTLS
--	default y if BR2_PACKAGE_WOLFSSL
--
- choice
- 	prompt "SSL/TLS library to use"
--	depends on BR2_PACKAGE_LIBCURL_TLS_SUPPORT
- 
- config BR2_PACKAGE_LIBCURL_OPENSSL
- 	bool "OpenSSL"
-@@ -77,9 +68,9 @@ config BR2_PACKAGE_LIBCURL_WOLFSSL
- 	bool "WolfSSL"
- 	depends on BR2_PACKAGE_WOLFSSL
- 
-+config BR2_PACKAGE_LIBCURL_TLS_NONE
-+	bool "None"
-+
- endchoice
- 
--comment "A TLS library is needed for SSL/TLS support"
--	depends on !BR2_PACKAGE_LIBCURL_TLS_SUPPORT
--
- endif
+ifeq (,$(filter-out ppc64 ppc64le,$(OS_TEST)))
+        CPU_ARCH        = ppc
+ifeq ($(USE_64),1)
+        ARCHFLAG        = -m64
+endif
+
+In libnss.mk, we pass OS_TEST=$(LIBNSS_ARCH), which basically is the
+value of $(BR2_ARCH), which is powerpc64 or powerpc64le in Buildroot.
+
+So, regardless of whether we are big endian PPC64 or little endian
+PPC64, the gcm-ppc.c file will not be included in the build.
+
+Am I missing something ? Could you explain a bit better how you came to
+the conclusion you have in this patch ?
+
+Thanks!
+
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
