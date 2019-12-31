@@ -1,66 +1,83 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue, 31 Dec 2019 20:59:22 +0100
-Subject: [Buildroot] [PATCH v2] package/apitrace: fix build failure due to
- gcc bug 68485 and 85180
-In-Reply-To: <20191231180851.7d079afb@windsurf>
-References: <20191231180851.7d079afb@windsurf>
-Message-ID: <20191231195922.127164-1-giulio.benetti@benettiengineering.com>
+Date: Tue, 31 Dec 2019 22:24:34 +0100
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure due to HW
+ PPC Crypto bug
+In-Reply-To: <20191231180736.09a5add2@windsurf>
+References: <20191227165427.107111-1-giulio.benetti@benettiengineering.com>
+ <20191231180736.09a5add2@windsurf>
+Message-ID: <496f5949-570f-2678-6bcd-67660692479b@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The apitrace package exhibits gcc bug 68485 when built for the
-Microblaze architecture with optimization enabled, which causes a build
-failure. This is mainly due to 3rd party brotli embedded in apitrace
-that already has been fixed in Buildroot as single package. After
-working around this bug overriding -O0 to CFLAGS(Brotli is a C program),
-gcc bug 81580 showed off while compiling C++ files.
+Hi Thomas,
 
-So, as done for other packages in Buildroot, work around this gcc bug by
-setting optimization to -O0(in CFLAGS) if
-BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y. And do the same(but in CXXFLAGS) if
-BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y as already done for other packages.
+On 12/31/19 6:07 PM, Thomas Petazzoni wrote:
+> On Fri, 27 Dec 2019 17:54:27 +0100
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> diff --git a/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
+>> new file mode 100644
+>> index 0000000000..0b891b5ebc
+>> --- /dev/null
+>> +++ b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
+>> @@ -0,0 +1,37 @@
+>> +From 09b3776a924736049693a118d5a8d883e8c794ca Mon Sep 17 00:00:00 2001
+>> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> +Date: Fri, 27 Dec 2019 17:41:04 +0100
+>> +Subject: [PATCH] Bug 1606119 - Fix PPC HW Crypto build failure
+>> +
+>> +Only Big Endian Altivec functions are used, not Little Endian ones, so
+>> +let's change check if USE_PPC_CRYPTO by changing to IS_BIG_ENDIAN
+>> +instead of IS_LITTLE_ENDIAN.
+>> +
+>> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> 
+> I don't understand the reasoning here. From a quick look, the undefined
+> symbols reported in the build log come from the file
+> ./nss/lib/freebl/gcm-ppc.c.
+> 
+> This file is included in the build in nss/lib/freebl/Makefile if
+> CPU_ARCH=ppc.
+> 
+> However CPU_ARCH=ppc is only set in nss/coreconf/Linux.mk as follows:
+> 
+> ifeq (,$(filter-out ppc64 ppc64le,$(OS_TEST)))
+>          CPU_ARCH        = ppc
+> ifeq ($(USE_64),1)
+>          ARCHFLAG        = -m64
+> endif
+> 
+> In libnss.mk, we pass OS_TEST=$(LIBNSS_ARCH), which basically is the
+> value of $(BR2_ARCH), which is powerpc64 or powerpc64le in Buildroot.
+> 
+> So, regardless of whether we are big endian PPC64 or little endian
+> PPC64, the gcm-ppc.c file will not be included in the build.
+> 
+> Am I missing something ? Could you explain a bit better how you came to
+> the conclusion you have in this patch ?
 
-Fixes:
-http://autobuild.buildroot.net/results/a46/a46626cc50f07f41d831614306f556d346d31429/
+The point is that gcm-ppc.c gets compiled, but inside it there's an #if 
+defined(USE_PPC_CRYPTO) on top of the file, that is defined in gsm.h 
+only #if __powerpc64__ and LITTLE_ENDIAN. But inside gcm-ppc.c they use 
+_be() Altivec functions. Basically they have inverted LITTLE_ENDIAN with 
+BIB_ENDIAN, since they use Big Endian only Altivec functions in 
+gcm-ppc.c so the only wrong piece of code is in gcm.h, where 
+USE_PPC_CRYPTO is defined.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-V1->V2:
-* Added comments into apitrace.mk
-* Improved commit log
----
- package/apitrace/apitrace.mk | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Need only to invert the condition by which USE_PPC_CRYPTO is defined: 
+BIG_ENDIAN instead of LITTLE_ENDIAN.
 
-diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
-index e6f8a2b1c5..2b74ba26df 100644
---- a/package/apitrace/apitrace.mk
-+++ b/package/apitrace/apitrace.mk
-@@ -21,4 +21,22 @@ endif
- # Gui was never tested, so we prefer to explicitly disable it
- APITRACE_CONF_OPTS += -DENABLE_GUI=false
- 
-+APITRACE_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
-+# This works around embedded Brotli build failure
-+APITRACE_CFLAGS += -O0
-+endif
-+
-+APITRACE_CONF_OPTS += -DCMAKE_C_FLAGS="$(APITRACE_CFLAGS)"
-+
-+APITRACE_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+# This works around Apitrace itself build failure
-+APITRACE_CXXFLAGS += -O0
-+endif
-+
-+APITRACE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(APITRACE_CXXFLAGS)"
-+
- $(eval $(cmake-package))
+Best regards
 -- 
-2.20.1
+Giulio Benetti
+Benetti Engineering sas
+
+> 
+> Thanks!
+> 
+> 
+> Thomas
+> 
