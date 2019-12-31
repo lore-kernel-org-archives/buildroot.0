@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Dec 2019 16:23:09 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Theo Debrouwere as contact
- for beagleboardx15_defconfig
-In-Reply-To: <20190811120739.26539-16-thomas.petazzoni@bootlin.com>
-References: <20190811120739.26539-16-thomas.petazzoni@bootlin.com>
-Message-ID: <20191231152309.GJ26395@scaer>
+Date: Tue, 31 Dec 2019 16:23:31 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Lothar Felten as contact
+ for BeagleBone defconfigs
+In-Reply-To: <20190811120739.26539-17-thomas.petazzoni@bootlin.com>
+References: <20190811120739.26539-17-thomas.petazzoni@bootlin.com>
+Message-ID: <20191231152331.GK26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +14,20 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2019-08-11 14:07 +0200, Thomas Petazzoni spake thusly:
-> Theo added this defconfig in 2016, and is listed as the contact for
-> the pugixml package, so it probably makes sense to have him listed as
-> a contact for the beagleboardx15_defconfig as well.
+> Lothar added the beaglebone and beaglebone_qt5 defconfigs, and has
+> been regularly maintaining them, so it makes sense to have him listed
+> as a contact for those two defconfigs.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Theo Debrouwere <t.debrouwere@televic.com>
+> Cc: Lothar Felten <lothar.felten@gmail.com>
 
 Applied to master, thanks.
 
 > ---
-> Theo, could you reply with your Acked-by if you're fine with this?
+> Lothar, could you reply with an Acked-by if you are fine with this?
 > Thanks!
 
-Theo, we really need people to take care of the defconfigs, at least
+Lothar, we really need people to take care of the defconfigs, at least
 when they fail to build. Without caretakers interested in those, we may
 have to remove them in the end.
 
@@ -40,22 +40,24 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  DEVELOPERS | 2 ++
->  1 file changed, 2 insertions(+)
+>  DEVELOPERS | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 35e8d871bc..36c25c9e87 100644
+> index 36c25c9e87..bc7a408425 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -2227,6 +2227,8 @@ N:	Sven Oliver Moll <svolli@svolli.de>
->  F:	package/most/
+> @@ -1371,7 +1371,10 @@ F:	package/mongrel2/
 >  
->  N:	Theo Debrouwere <t.debrouwere@televic.com>
-> +F:	board/beagleboardx15/
-> +F:	configs/beagleboardx15_defconfig
->  F:	package/pugixml/
->  
->  N:	Thierry Bultel <tbultel@free.fr>
+>  N:	Lothar Felten <lothar.felten@gmail.com>
+>  F:	board/bananapi/bananapi-m2-ultra/
+> +F:	board/beaglebone/
+>  F:	configs/bananapi_m2_ultra_defconfig
+> +F:	configs/beaglebone_defconfig
+> +F:	configs/beaglebone_qt5_defconfig
+>  F:	package/ti-sgx-demos/
+>  F:	package/ti-sgx-km/
+>  F:	package/ti-sgx-um/
 > -- 
 > 2.21.0
 > 
