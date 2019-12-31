@@ -1,123 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 Dec 2019 15:30:02 +0100
-Subject: [Buildroot] [git commit] package/alsamixergui: cleanly fix build
- against fltk and newer alsa-libs
-Message-ID: <20191231142035.BAECD813E6@busybox.osuosl.org>
+Date: Tue, 31 Dec 2019 15:31:31 +0100
+Subject: [Buildroot] [git commit] package/avro-c: fix build without C++
+Message-ID: <20191231142204.DAC288E91E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=312814a0be9ca4acc95cf4361a94499b2d7d6bd2
+commit: https://git.buildroot.net/buildroot/commit/?id=a84e58198aab6a6c593745b5c0fffd61e204386c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We have an existing patch to configure.in that chains the test to find
-fltk (supposedly because a symbol of fltk got renamed sometime in the
-past). By doing so, this chaining breaks the build when configure later
-checks for the alsa libraries.
-
-This is because chaining calls to AC_CHECK_LIBS() one in the other would
-be expanded in such a way that internal functions, like ac_fn_c_try_link,
-would get defined after being called, which results in configure failures
-(see new bundled patch).
-
-So, we change configure to use AC_SEARCH_LIBS() instead, which allows us
-to memorise the result of each test, and we only fail when both tests
-failed.
-
-We can now drop the ac_cv overrides we had.
-
-Incidentally, this also fixes detection of newer alsa-libs, where
-atopology functions were offloaded to their own separate library:
-    https://github.com/alsa-project/alsa-lib/commit/75d393a563efb578c79364a277087c6326267f52
-
 Fixes:
-    http://autobuild.buildroot.org/results/564c1561e83e0c064f3859d25e68dec96640e060
+ - http://autobuild.buildroot.org/results/135e246aa70f28c6b9aea5fd6b0eb9c7b45ebfe7
 
-(Note: upstream has been basically dead for at least 15 years now, so we
-did not even try to submit the patch there...)
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...0002-configure-fix-detection-of-fltk-libs.patch | 53 ++++++++++++++++++++++
- package/alsamixergui/alsamixergui.mk               |  5 --
- 2 files changed, 53 insertions(+), 5 deletions(-)
+ .../0002-CMakeLists.txt-fix-build-without-C.patch  | 92 ++++++++++++++++++++++
+ 1 file changed, 92 insertions(+)
 
-diff --git a/package/alsamixergui/0002-configure-fix-detection-of-fltk-libs.patch b/package/alsamixergui/0002-configure-fix-detection-of-fltk-libs.patch
+diff --git a/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch b/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
 new file mode 100644
-index 0000000000..cc72d33bee
+index 0000000000..89a500c588
 --- /dev/null
-+++ b/package/alsamixergui/0002-configure-fix-detection-of-fltk-libs.patch
-@@ -0,0 +1,53 @@
-+From c154195fa161575363280aac9e928b7225f0de9e Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 29 Dec 2019 17:42:13 +0100
-+Subject: [PATCH] configure: fix detection of fltk libs
++++ b/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
+@@ -0,0 +1,92 @@
++From cdab7db8ad81884cfb21cc1cf94c981c59d17ef4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 30 Dec 2019 12:32:20 +0100
++Subject: [PATCH] CMakeLists.txt: fix build without C++
 +
-+Chaining calls to AC_CHECK_LIB one in the other, breaks the configure
-+script, because some internal functions (e.g. ac_fn_c_try_link) would
-+not be defined before they are needed, leading the build to fail as
-+thus:
++Specify that AvroC is a C project and remove tests_cpp.cpp to avoid the
++following build failure if a C++ compiler is not found:
 +
-+    checking for snd_tplg_new in -latopology... ./configure: line 4630:
-+    ac_fn_c_try_link: command not found
-+    no
-+    configure: error: No linkable libatopology was found.
++CMake Error at CMakeLists.txt:20 (project):
++  The CMAKE_CXX_COMPILER:
 +
-+Using AC_CHECK_LIB() in sequence (i.e. one after the other) and
-+memorising the result is not trivial: AC_CHECK_LIB() implements a
-+ddefault action-if-found that append to LIBS, but not if the user
-+ptrovides their own action-if-found.
++    /home/naourr/work/instance-2/output-1/host/bin/microblazeel-buildroot-linux-uclibc-g++
 +
-+Instead, AC_SEARH_LIBS() always append to LIBS, *and* run the
-+user-provided action.
++  is not a full path to an existing compiler tool.
 +
-+So, we switch to AC_SEARCH_LIBS() and memorise the result for each
-+test, to eventually test if ether worked.
++  Tell CMake where to find the compiler by setting either the environment
++  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
++  to the compiler, or to the compiler name if it is in the PATH.
 +
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++Fixes:
++ - http://autobuild.buildroot.org/results/135e246aa70f28c6b9aea5fd6b0eb9c7b45ebfe7
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/apache/avro/pull/754]
 +---
-+ configure.in | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
++ CMakeLists.txt       |  2 +-
++ tests/CMakeLists.txt |  1 -
++ tests/test_cpp.cpp   | 27 ---------------------------
++ 3 files changed, 1 insertion(+), 29 deletions(-)
++ delete mode 100644 lang/c/tests/test_cpp.cpp
 +
-+diff --git a/configure.in b/configure.in
-+index 9307cc2..55f6864 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -11,10 +11,10 @@ AC_PROG_INSTALL
-+ AC_PROG_LN_S
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 11cbf018..b75418c3 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -17,7 +17,7 @@
++ # under the License.
++ #
++ cmake_minimum_required(VERSION 2.4)
++-project(AvroC)
+++project(AvroC C)
++ enable_testing()
 + 
-+ dnl Checks for libraries.
-+-AC_CHECK_LIB(fltk,numericsort,,
-+-AC_CHECK_LIB(fltk,fl_numericsort,,
-+-AC_MSG_ERROR("missing fltk"))
-+-)
-++has_fltk=false
-++AC_SEARCH_LIBS(numericsort,fltk,has_fltk=true)
-++AC_SEARCH_LIBS(fl_numericsort,fltk,has_fltk=true)
-++AS_IF(test "${has_fltk}" = "false", AC_MSG_ERROR("missing fltk"))
-+ AM_PATH_ALSA(0.9.0)
-+ 
-+ dnl Checks for header files.
++ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR})
++diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
++index b9e8fe1d..2e84a06a 100644
++--- a/tests/CMakeLists.txt
+++++ b/tests/CMakeLists.txt
++@@ -81,7 +81,6 @@ add_avro_test_checkmem(test_avro_1405)
++ add_avro_test_checkmem(test_avro_1572)
++ add_avro_test(test_avro_data) # Skip memory check for datum. Deprecated and has a lot of memory issues
++ add_avro_test_checkmem(test_refcount)
++-add_avro_test_checkmem(test_cpp test_cpp.cpp)
++ add_avro_test_checkmem(test_avro_1379)
++ add_avro_test_checkmem(test_avro_1691)
++ add_avro_test_checkmem(test_avro_1906)
++diff --git a/lang/c/tests/test_cpp.cpp b/lang/c/tests/test_cpp.cpp
++deleted file mode 100644
++index 13f98a9b..00000000
++--- a/tests/test_cpp.cpp
+++++ /dev/null
++@@ -1,27 +0,0 @@
++-/*
++- * Licensed to the Apache Software Foundation (ASF) under one or more
++- * contributor license agreements.  See the NOTICE file distributed with
++- * this work for additional information regarding copyright ownership.
++- * The ASF licenses this file to you under the Apache License, Version 2.0
++- * (the "License"); you may not use this file except in compliance with
++- * the License.  You may obtain a copy of the License at
++- *
++- * https://www.apache.org/licenses/LICENSE-2.0
++- *
++- * Unless required by applicable law or agreed to in writing, software
++- * distributed under the License is distributed on an "AS IS" BASIS,
++- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
++- * implied.  See the License for the specific language governing
++- * permissions and limitations under the License.
++- */
++-
++-#include "avro.h"
++-
++-int main(int argc, char **argv)
++-{
++-    (void)argc;
++-    (void)argv;
++-
++-	return 0;
++-}
++-
 +-- 
-+2.20.1
++2.24.0
 +
-diff --git a/package/alsamixergui/alsamixergui.mk b/package/alsamixergui/alsamixergui.mk
-index 24e2497f3b..8bf3f8e073 100644
---- a/package/alsamixergui/alsamixergui.mk
-+++ b/package/alsamixergui/alsamixergui.mk
-@@ -11,11 +11,6 @@ ALSAMIXERGUI_LICENSE = GPL-2.0+
- ALSAMIXERGUI_LICENSE_FILES = debian/copyright
- ALSAMIXERGUI_AUTORECONF = YES
- 
--ALSAMIXERGUI_CONF_ENV = \
--	ac_cv_lib_fltk_numericsort=yes \
--	ac_cv_lib_fltk_fl_numericsort=yes \
--	ac_cv_lib_asound_snd_ctl_open=yes
--
- ALSAMIXERGUI_DEPENDENCIES = fltk alsa-lib
- 
- $(eval $(autotools-package))
