@@ -1,22 +1,26 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Tue, 31 Dec 2019 11:40:35 +0100
-Subject: [Buildroot] [PATCH] package/tesseract-ocr: bump to version 4.1.1
-Message-ID: <20191231104035.5506-1-gilles.talis@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 31 Dec 2019 15:26:03 +0100
+Subject: [Buildroot] [git commit] package/tesseract-ocr: bump to version
+ 4.1.1
+Message-ID: <20191231141820.6A9348E90F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=f35910ddeccab9f93226a777afefd96c0df13d03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Also removed one patch that was merged upstream
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...stead-of-off_t-for-result-from-ftell.patch | 26 -------------------
- package/tesseract-ocr/tesseract-ocr.hash      |  2 +-
- package/tesseract-ocr/tesseract-ocr.mk        |  2 +-
+ ...ng-instead-of-off_t-for-result-from-ftell.patch | 26 ----------------------
+ package/tesseract-ocr/tesseract-ocr.hash           |  2 +-
+ package/tesseract-ocr/tesseract-ocr.mk             |  2 +-
  3 files changed, 2 insertions(+), 28 deletions(-)
- delete mode 100644 package/tesseract-ocr/0001-Use-long-instead-of-off_t-for-result-from-ftell.patch
 
 diff --git a/package/tesseract-ocr/0001-Use-long-instead-of-off_t-for-result-from-ftell.patch b/package/tesseract-ocr/0001-Use-long-instead-of-off_t-for-result-from-ftell.patch
 deleted file mode 100644
@@ -74,5 +78,3 @@ index 0fbbb93422..4d2df5cb39 100644
  TESSERACT_OCR_DATA_VERSION = 4.0.0
  TESSERACT_OCR_SITE = $(call github,tesseract-ocr,tesseract,$(TESSERACT_OCR_VERSION))
  TESSERACT_OCR_LICENSE = Apache-2.0
--- 
-2.17.1
