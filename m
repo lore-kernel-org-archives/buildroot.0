@@ -1,37 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Dec 2019 16:17:50 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Julien Grossholtz as
- contact for ts7680_defconfig
-In-Reply-To: <20190811120739.26539-2-thomas.petazzoni@bootlin.com>
-References: <20190811120739.26539-2-thomas.petazzoni@bootlin.com>
-Message-ID: <20191231151750.GF26395@scaer>
+Date: Tue, 31 Dec 2019 16:18:44 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Joao Pinto as contact for
+ snps_aarch64_vdk_defconfig
+In-Reply-To: <20190811120739.26539-7-thomas.petazzoni@bootlin.com>
+References: <20190811120739.26539-7-thomas.petazzoni@bootlin.com>
+Message-ID: <20191231151844.GG26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
-
 On 2019-08-11 14:07 +0200, Thomas Petazzoni spake thusly:
-> Julien originally added this defconfig in 2017, so let's add him as a
-> contact for it, so that he receives build failure notifications and is
+> Joao added this defconfig a while ago, and is still active
+> contributing to Buildroot, so let's add him as the contact for this
+> defconfig, so that he receives build failure notifications and gets
 > Cc'ed on patches.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Julien Grossholtz <julien.grossholtz@gmail.com>
+> Cc: Joao Pinto <jpinto@synopsys.com>
 
 Applied to master, thanks.
 
 > ---
-> Julien, could you please reply with your Acked-by if you are fine with
-> this? Thanks!
+> Joao, could you reply with an Acked-by, if you're fine with this?
+> Thanks!
 
-Julien, we really need people to take care of the defconfigs, at least
+Joao, we really need people to take care of the defconfigs, at least
 when they fail to build. Without caretakers interested in those, we may
 have to remove them in the end.
 
-If you really can't handle it, please say so, so we can tale appropriate
+If you really can't handle it, please say so, so we can take appropriate
 action.
 
 Thanks! ;-)
@@ -40,22 +39,24 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  DEVELOPERS | 2 ++
->  1 file changed, 2 insertions(+)
+>  DEVELOPERS | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 8995065c5f..8a2128e1ef 100644
+> index 62eeb1fa99..8b1ba6b643 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -1289,6 +1289,8 @@ N:	Julien Floret <julien.floret@6wind.com>
->  F:	package/lldpd/
+> @@ -1161,6 +1161,10 @@ F:	package/wmctrl/
+>  F:	package/x11r7/xdriver_xf86-video-imx/
+>  F:	package/x11r7/xdriver_xf86-video-imx-viv/
 >  
->  N:	Julien Grossholtz <julien.grossholtz@openest.io>
-> +F:	board/technologic/ts7680/
-> +F:	configs/ts7680_defconfig
->  F:	package/paho-mqtt-c
->  
->  N:	Julien Olivain <juju@cotds.org>
+> +N:	Joao Pinto <jpinto@synopsys.com>
+> +F:	board/synopsys/vdk/
+> +F:	configs/snps_aarch64_vdk_defconfig
+> +
+>  N:	Joel Carlson <JoelsonCarl@gmail.com>
+>  F:	package/c-capnproto/
+>  F:	package/capnproto/
 > -- 
 > 2.21.0
 > 
