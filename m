@@ -1,31 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Dec 2019 23:42:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-pyqt5: select
- BR2_PACKAGE_QT5BASE_GUI
-In-Reply-To: <20191230214842.1485805-1-fontaine.fabrice@gmail.com>
-References: <20191230214842.1485805-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191230234259.5bfe6355@windsurf>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 31 Dec 2019 00:11:50 -0300
+Subject: [Buildroot] [PATCH] package/atop: bump to version 2.5.0
+Message-ID: <20191231031150.21964-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Dec 2019 22:48:42 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+./utils/test-pkg --package atop --all
+44 builds, 5 skipped, 0 build failed, 0 legal-info failed
 
-> gui is a mandatory dependency of python-pyqt5 as "-gui" option is used
-> internally by the configure.py script
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/ea0c8db44aacf1ce76f75e8288969fe5da6690d9
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
+ package/atop/atop.hash | 2 +-
+ package/atop/atop.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This seems weird. Are you sure? Could you talk with upstream about this?
-
-Thomas
+diff --git a/package/atop/atop.hash b/package/atop/atop.hash
+index 80082d022d..f404ed5d1b 100644
+--- a/package/atop/atop.hash
++++ b/package/atop/atop.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  be1c010a77086b7d98376fce96514afcd73c3f20a8d1fe01520899ff69a73d69  atop-2.4.0.tar.gz
++sha256  4b911057ce50463b6e8b3016c5963d48535c0cddeebc6eda817e292b22f93f33  atop-2.5.0.tar.gz
+ 
+ # Hash for license file:
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/atop/atop.mk b/package/atop/atop.mk
+index 4ea1ccf26f..46baff8f72 100644
+--- a/package/atop/atop.mk
++++ b/package/atop/atop.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ATOP_VERSION = 2.4.0
++ATOP_VERSION = 2.5.0
+ ATOP_SITE = http://www.atoptool.nl/download
+ ATOP_LICENSE = GPL-2.0+
+ ATOP_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
