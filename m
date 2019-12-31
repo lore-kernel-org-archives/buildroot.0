@@ -1,38 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Dec 2019 16:09:12 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: add Theo Debrouwere as contact
- for beagleboardx15_defconfig
-Message-ID: <20191231150327.D0C0C8E93C@busybox.osuosl.org>
+Date: Tue, 31 Dec 2019 16:17:50 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Julien Grossholtz as
+ contact for ts7680_defconfig
+In-Reply-To: <20190811120739.26539-2-thomas.petazzoni@bootlin.com>
+References: <20190811120739.26539-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20191231151750.GF26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6653d66de3e234fc9d75516959e44ea773f0dc9b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Theo added this defconfig in 2016, and is listed as the contact for
-the pugixml package, so it probably makes sense to have him listed as
-a contact for the beagleboardx15_defconfig as well.
+On 2019-08-11 14:07 +0200, Thomas Petazzoni spake thusly:
+> Julien originally added this defconfig in 2017, so let's add him as a
+> contact for it, so that he receives build failure notifications and is
+> Cc'ed on patches.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Julien Grossholtz <julien.grossholtz@gmail.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Theo Debrouwere <t.debrouwere@televic.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+Applied to master, thanks.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c69dc09d45..770ec3c314 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2333,6 +2333,8 @@ N:	Sven Oliver Moll <svolli@svolli.de>
- F:	package/most/
- 
- N:	Theo Debrouwere <t.debrouwere@televic.com>
-+F:	board/beagleboardx15/
-+F:	configs/beagleboardx15_defconfig
- F:	package/pugixml/
- 
- N:	Thierry Bultel <tbultel@free.fr>
+> ---
+> Julien, could you please reply with your Acked-by if you are fine with
+> this? Thanks!
+
+Julien, we really need people to take care of the defconfigs, at least
+when they fail to build. Without caretakers interested in those, we may
+have to remove them in the end.
+
+If you really can't handle it, please say so, so we can tale appropriate
+action.
+
+Thanks! ;-)
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  DEVELOPERS | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 8995065c5f..8a2128e1ef 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1289,6 +1289,8 @@ N:	Julien Floret <julien.floret@6wind.com>
+>  F:	package/lldpd/
+>  
+>  N:	Julien Grossholtz <julien.grossholtz@openest.io>
+> +F:	board/technologic/ts7680/
+> +F:	configs/ts7680_defconfig
+>  F:	package/paho-mqtt-c
+>  
+>  N:	Julien Olivain <juju@cotds.org>
+> -- 
+> 2.21.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
