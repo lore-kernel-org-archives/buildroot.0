@@ -1,76 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Dec 2019 09:58:41 +0100
-Subject: [Buildroot] [PATCH] package/xvisor: unconditionally disable SSP
-In-Reply-To: <20191109164757.29565-1-eric.le.bihan.dev@free.fr>
-References: <20191109164757.29565-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20191231085841.GB26395@scaer>
+Date: Tue, 31 Dec 2019 10:17:10 +0100
+Subject: [Buildroot] [RFC PATCH 1/1] libcap: always build static version
+In-Reply-To: <20191108094119.6749-1-patrick.havelange@essensium.com>
+References: <20191108094119.6749-1-patrick.havelange@essensium.com>
+Message-ID: <20191231091710.GC26395@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-?ric, All,
+Patrick, All,
 
-On 2019-11-09 17:47 +0100, Eric Le Bihan spake thusly:
-> Fixes:
+On 2019-11-08 10:41 +0100, Patrick Havelange spake thusly:
+> Some tools require a static libcap to be able to be built. This is
+> the case for lxc's init.lxc.static binary. As it is currently not
+> possible to depend explicitely on a specific static library only,
+> this patch always builds the static version of libcap.
 > 
-> - http://autobuild.buildroot.net/results/5de37d3da17ca5cb17c0113d942ce8c22c0074e0
-> - http://autobuild.buildroot.net/results/41b00d95ec4eb851abceaa7919aa1c533d4f16e8
-> - http://autobuild.buildroot.net/results/119e22e8b03991ab9196e428a131f5a8ae2a2b2f
+> We could also do this only when building lxc, however this would
+> make things more complicated inside libcap.mk, and would not bring
+> us that much as the static lib is not installed on target anyway.
+> This also reverts the previous commit
+> 7984f2d97b4271c14e0922ef22027edaedd78e59.
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+> 
+> ---
+> This patch was originally developped for the Lxc test, however
+> the init.lxc.static is only used when there is no init system
+> specified for the container. Thus it is no longer required for the
+> test. However somebody might still need it.
 
-I added a pointer to the upstream commit, now that it has been accepted,
-and applied to master, thanks.
+Your use-case is not entirely obvious, and you explain here that this
+patch is not even needed for your use-case.
+
+As discussed with Thomas on IRC, we decided to reject this patch.
+
+If you feel like you really need it, please resubmit with a proper
+explanation for the use-case.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  ...MAKEFILE-Unconditionally-disable-SSP.patch | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
+>  package/libcap/libcap.mk | 3 ---
+>  1 file changed, 3 deletions(-)
 > 
-> diff --git a/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch b/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
-> new file mode 100644
-> index 0000000000..b69a745462
-> --- /dev/null
-> +++ b/package/xvisor/0001-MAKEFILE-Unconditionally-disable-SSP.patch
-> @@ -0,0 +1,31 @@
-> +From f04d1b73a9060e8f09cf1173f89daab73d6c0a18 Mon Sep 17 00:00:00 2001
-> +From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> +Date: Sat, 9 Nov 2019 17:13:46 +0100
-> +Subject: [PATCH] [MAKEFILE] Unconditionally disable SSP
-> +
-> +Though -nostdlib is passed in $(cflags), -fno-stack-protector must also be
-> +passed to avoid linking errors related to undefined references to
-> +'__stack_chk_guard' and '__stack_chk_fail' if toolchain enforces
-> +-fstack-protector.
-> +
-> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> +---
-> + Makefile | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index d6bcf519..de8e1043 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -137,7 +137,7 @@ cppflags+=$(cpu-cppflags)
-> + cppflags+=$(board-cppflags)
-> + cppflags+=$(libs-cppflags-y)
-> + cc=$(CROSS_COMPILE)gcc
-> +-cflags=-g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -D__VMM__
-> ++cflags=-g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -D__VMM__ -fno-stack-protector
-> + cflags+=$(board-cflags) 
-> + cflags+=$(cpu-cflags) 
-> + cflags+=$(libs-cflags-y) 
-> +-- 
-> +2.21.0
-> +
+> diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+> index 4919a4adca..23888c4682 100644
+> --- a/package/libcap/libcap.mk
+> +++ b/package/libcap/libcap.mk
+> @@ -18,9 +18,6 @@ HOST_LIBCAP_DEPENDENCIES = host-gperf
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  LIBCAP_MAKE_TARGET = libcap.a libcap.pc
+>  LIBCAP_MAKE_INSTALL_TARGET = install-static
+> -else ifeq ($(BR2_SHARED_LIBS),y)
+> -LIBCAP_MAKE_TARGET = all
+> -LIBCAP_MAKE_INSTALL_TARGET = install-shared
+>  else
+>  LIBCAP_MAKE_TARGET = all
+>  LIBCAP_MAKE_INSTALL_TARGET = install
 > -- 
-> 2.21.0
+> 2.17.1
 > 
 > _______________________________________________
 > buildroot mailing list
