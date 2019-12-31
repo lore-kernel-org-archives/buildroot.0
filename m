@@ -1,34 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Dec 2019 09:26:42 +0100
-Subject: [Buildroot] [PATCH 0/2] package/openssl: move options to
- per-provider Config.in (branch yem/openssl-move-options)
-In-Reply-To: <cover.1577738159.git.yann.morin.1998@free.fr>
-References: <cover.1577738159.git.yann.morin.1998@free.fr>
-Message-ID: <20191231082642.GX26395@scaer>
+Date: Tue, 31 Dec 2019 09:27:48 +0100
+Subject: [Buildroot] [git commit] package/sdl_mixer: add host-pkgconf
+ dependency
+Message-ID: <20191231081827.69AF0814A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=03b3efb406089bfbfe9645b26a86c93a92416e5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-12-30 21:36 +0100, Yann E. MORIN spake thusly:
-> Small series that does just what it says on the tin.
-> ----------------------------------------------------------------
-> Yann E. MORIN (2):
->       package/libopenssl: move options
->       package/libressl: move config options
+host-pkgconf is needed to find libmodplug
 
-Applied to master now, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/83f378d9d01424678006434bb1e4a49cf4131fdf
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/sdl_mixer/sdl_mixer.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
+index 0423817316..ab6f7ef014 100644
+--- a/package/sdl_mixer/sdl_mixer.mk
++++ b/package/sdl_mixer/sdl_mixer.mk
+@@ -37,7 +37,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
+ SDL_MIXER_CONF_OPTS += --enable-music-mod-modplug
+-SDL_MIXER_DEPENDENCIES += libmodplug
++SDL_MIXER_DEPENDENCIES += host-pkgconf libmodplug
+ else
+ SDL_MIXER_CONF_OPTS += --disable-music-mod-modplug
+ endif
