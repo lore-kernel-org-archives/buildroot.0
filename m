@@ -1,78 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Dec 2019 10:17:10 +0100
-Subject: [Buildroot] [RFC PATCH 1/1] libcap: always build static version
-In-Reply-To: <20191108094119.6749-1-patrick.havelange@essensium.com>
-References: <20191108094119.6749-1-patrick.havelange@essensium.com>
-Message-ID: <20191231091710.GC26395@scaer>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Tue, 31 Dec 2019 11:40:35 +0100
+Subject: [Buildroot] [PATCH] package/tesseract-ocr: bump to version 4.1.1
+Message-ID: <20191231104035.5506-1-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patrick, All,
+Also removed one patch that was merged upstream
 
-On 2019-11-08 10:41 +0100, Patrick Havelange spake thusly:
-> Some tools require a static libcap to be able to be built. This is
-> the case for lxc's init.lxc.static binary. As it is currently not
-> possible to depend explicitely on a specific static library only,
-> this patch always builds the static version of libcap.
-> 
-> We could also do this only when building lxc, however this would
-> make things more complicated inside libcap.mk, and would not bring
-> us that much as the static lib is not installed on target anyway.
-> This also reverts the previous commit
-> 7984f2d97b4271c14e0922ef22027edaedd78e59.
-> 
-> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-> 
-> ---
-> This patch was originally developped for the Lxc test, however
-> the init.lxc.static is only used when there is no init system
-> specified for the container. Thus it is no longer required for the
-> test. However somebody might still need it.
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ ...stead-of-off_t-for-result-from-ftell.patch | 26 -------------------
+ package/tesseract-ocr/tesseract-ocr.hash      |  2 +-
+ package/tesseract-ocr/tesseract-ocr.mk        |  2 +-
+ 3 files changed, 2 insertions(+), 28 deletions(-)
+ delete mode 100644 package/tesseract-ocr/0001-Use-long-instead-of-off_t-for-result-from-ftell.patch
 
-Your use-case is not entirely obvious, and you explain here that this
-patch is not even needed for your use-case.
-
-As discussed with Thomas on IRC, we decided to reject this patch.
-
-If you feel like you really need it, please resubmit with a proper
-explanation for the use-case.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libcap/libcap.mk | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-> index 4919a4adca..23888c4682 100644
-> --- a/package/libcap/libcap.mk
-> +++ b/package/libcap/libcap.mk
-> @@ -18,9 +18,6 @@ HOST_LIBCAP_DEPENDENCIES = host-gperf
->  ifeq ($(BR2_STATIC_LIBS),y)
->  LIBCAP_MAKE_TARGET = libcap.a libcap.pc
->  LIBCAP_MAKE_INSTALL_TARGET = install-static
-> -else ifeq ($(BR2_SHARED_LIBS),y)
-> -LIBCAP_MAKE_TARGET = all
-> -LIBCAP_MAKE_INSTALL_TARGET = install-shared
->  else
->  LIBCAP_MAKE_TARGET = all
->  LIBCAP_MAKE_INSTALL_TARGET = install
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/tesseract-ocr/0001-Use-long-instead-of-off_t-for-result-from-ftell.patch b/package/tesseract-ocr/0001-Use-long-instead-of-off_t-for-result-from-ftell.patch
+deleted file mode 100644
+index 7cb5d6877e..0000000000
+--- a/package/tesseract-ocr/0001-Use-long-instead-of-off_t-for-result-from-ftell.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From d4e0ab3014c57e519513c10b8e23d8bf66610bff Mon Sep 17 00:00:00 2001
+-From: Stefan Weil <sw@weilnetz.de>
+-Date: Wed, 17 Jul 2019 21:11:53 +0200
+-Subject: [PATCH] Use long instead of off_t for result from ftell
+-
+-Signed-off-by: Stefan Weil <sw@weilnetz.de>
+-[Retrieved from:
+-https://github.com/tesseract-ocr/tesseract/commit/d4e0ab3014c57e519513c10b8e23d8bf66610bff]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/ccutil/scanutils.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/ccutil/scanutils.cpp b/src/ccutil/scanutils.cpp
+-index da0c6918e..ea376a570 100644
+---- a/src/ccutil/scanutils.cpp
+-+++ b/src/ccutil/scanutils.cpp
+-@@ -214,7 +214,7 @@ static int tvfscanf(FILE* stream, const char *format, va_list ap) {
+-       (CHAR_BIT * sizeof(long))];
+-   int matchinv = 0;   // Is match map inverted?
+-   unsigned char range_start = 0;
+--  off_t start_off = ftell(stream);
+-+  long start_off = ftell(stream);
+- 
+-   // Skip leading spaces
+-   SkipSpace(stream);
+diff --git a/package/tesseract-ocr/tesseract-ocr.hash b/package/tesseract-ocr/tesseract-ocr.hash
+index a5601adfc7..808ea174ef 100644
+--- a/package/tesseract-ocr/tesseract-ocr.hash
++++ b/package/tesseract-ocr/tesseract-ocr.hash
+@@ -1,5 +1,5 @@
+ # locally computed
+-sha256  5c5ed5f1a76888dc57a83704f24ae02f8319849f5c4cf19d254296978a1a1961  tesseract-ocr-4.1.0.tar.gz
++sha256  2a66ff0d8595bff8f04032165e6c936389b1e5727c3ce5a27b3e059d218db1cb  tesseract-ocr-4.1.1.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  daa0c97d651c19fba3b25e81317cd697e9908c8208090c94c3905381c23fc047  eng.traineddata
+ sha256  eac01c1d72540d6090facb7b2f42dd0a2ee8fc57c5be1b20548ae668e2761913  fra.traineddata
+diff --git a/package/tesseract-ocr/tesseract-ocr.mk b/package/tesseract-ocr/tesseract-ocr.mk
+index 0fbbb93422..4d2df5cb39 100644
+--- a/package/tesseract-ocr/tesseract-ocr.mk
++++ b/package/tesseract-ocr/tesseract-ocr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TESSERACT_OCR_VERSION = 4.1.0
++TESSERACT_OCR_VERSION = 4.1.1
+ TESSERACT_OCR_DATA_VERSION = 4.0.0
+ TESSERACT_OCR_SITE = $(call github,tesseract-ocr,tesseract,$(TESSERACT_OCR_VERSION))
+ TESSERACT_OCR_LICENSE = Apache-2.0
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
