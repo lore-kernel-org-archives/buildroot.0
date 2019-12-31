@@ -1,68 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Dec 2019 18:09:44 +0100
-Subject: [Buildroot] [git commit] docs/manual: dependency documentation
- updates
-Message-ID: <20191231170119.26C4E8E99D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 31 Dec 2019 18:11:45 +0100
+Subject: [Buildroot] [git commit] package/libcurl: add option for no SSL/TLS
+ support
+Message-ID: <20191231170248.CD4B58E9A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05d4ce444580ae54107f3f990e2902169e943d30
+commit: https://git.buildroot.net/buildroot/commit/?id=4fea071c61717bb7e248ff42bf9894d31cab1255
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update dependency documentation to detail the order-only relationship
-associated with the DEPENDENCIES variable.  See the thread at [1] for
-details.
+Since we already have a choice to select the backend to do crypto, push
+the limits even further and add an option to do no crypto.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2019-October/262685.html
+Usually, we would have added that option first in the choice, but if we
+were to do that now, existing defconfigs that previously used openssl
+(the first item in the choice) would now default to non crypto, which is
+not so nice. So we add the new option last in the choice.
 
-Signed-off-by: Dan Walkes <danwalkes@trellis-logic.com>
-[yann.morin.1998 at free.fr: indentation & slight rephrasing]
+Each crypto backend option is used in a conditional block, each of which
+default to disabling said backend. So, selecting none will indeed
+disable all.
+
+We can now drop the blind intermediate option that would hide the choice
+when no backend library was available; there will now always be at least
+the none option in the choice, so we need not hide it.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Julien Grossholtz <julien.grossholtz@openest.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/adding-packages-generic.txt |  8 +++++---
- docs/manual/rebuilding-packages.txt     | 10 ++++++++++
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ package/libcurl/Config.in | 15 +++------------
+ 1 file changed, 3 insertions(+), 12 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index f7f3e447f1..baa052e31c 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -358,9 +358,11 @@ not and can not work as people would expect it should:
- * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
-   name) that are required for the current target package to
-   compile. These dependencies are guaranteed to be compiled and
--  installed before the configuration of the current package starts. In
--  a similar way, +HOST_LIBFOO_DEPENDENCIES+ lists the dependencies for
--  the current host package.
-+  installed before the configuration of the current package starts.
-+  However, modifications to configuration of these dependencies will
-+  not force a rebuild of the current package. In a similar way,
-+  +HOST_LIBFOO_DEPENDENCIES+ lists the dependencies for the current
-+  host package.
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index 3a9ee0f121..652285c0f8 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -45,17 +45,8 @@ config BR2_PACKAGE_LIBCURL_EXTRA_PROTOCOLS_FEATURES
+ 	  - DICT
+ 	  - Gopher
  
- * +LIBFOO_EXTRACT_DEPENDENCIES+ lists the dependencies (in terms of
-   package name) that are required for the current target package to be
-diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
-index 8f4d40d4d6..621493776c 100644
---- a/docs/manual/rebuilding-packages.txt
-+++ b/docs/manual/rebuilding-packages.txt
-@@ -65,6 +65,16 @@ can help you understand how to work with Buildroot:
-    there is no need for a full rebuild: a simple +make+ invocation
-    will take the changes into account.
+-config BR2_PACKAGE_LIBCURL_TLS_SUPPORT
+-	bool
+-	default y if BR2_PACKAGE_OPENSSL
+-	default y if BR2_PACKAGE_GNUTLS
+-	default y if BR2_PACKAGE_LIBNSS
+-	default y if BR2_PACKAGE_MBEDTLS
+-	default y if BR2_PACKAGE_WOLFSSL
+-
+ choice
+ 	prompt "SSL/TLS library to use"
+-	depends on BR2_PACKAGE_LIBCURL_TLS_SUPPORT
  
-+ * When a pacjage listed in +FOO_DEPENDENCIES+ is rebuilt or removed,
-+   the package +foo+ is not automatically rebuilt. For example, if a
-+   package +bar+ is listed in +FOO_DEPENDENCIES+ with +FOO_DEPENDENCIES
-+   = bar+ and the configuration of the +bar+ package is changed, the
-+   configuration change would not result in a rebuild of package +foo+
-+   automatically. In this scenario, you may need to either rebuild any
-+   packages in your build which reference +bar+ in their +DEPENDENCIES+,
-+   or perform a full rebuild to ensure any +bar+ dependent packages are
-+   up to date.
-+
- Generally speaking, when you're facing a build error and you're unsure
- of the potential consequences of the configuration changes you've
- made, do a full rebuild. If you get the same build error, then you are
+ config BR2_PACKAGE_LIBCURL_OPENSSL
+ 	bool "OpenSSL"
+@@ -77,9 +68,9 @@ config BR2_PACKAGE_LIBCURL_WOLFSSL
+ 	bool "WolfSSL"
+ 	depends on BR2_PACKAGE_WOLFSSL
+ 
+-endchoice
++config BR2_PACKAGE_LIBCURL_TLS_NONE
++	bool "None"
+ 
+-comment "A TLS library is needed for SSL/TLS support"
+-	depends on !BR2_PACKAGE_LIBCURL_TLS_SUPPORT
++endchoice
+ 
+ endif
