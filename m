@@ -1,11 +1,10 @@
-From: Julien Grossholtz <julien.grossholtz@gmail.com>
-Date: Tue, 31 Dec 2019 16:30:28 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Julien Grossholtz as
- contact for ts7680_defconfig
-In-Reply-To: <20191231151750.GF26395@scaer>
-References: <20190811120739.26539-2-thomas.petazzoni@bootlin.com>
- <20191231151750.GF26395@scaer>
-Message-ID: <CAHxQtxO+yhvzjTJW2iDJd+fn23qs4fNv-7BvwDPG46rg5A7aSw@mail.gmail.com>
+From: Julien Grossholtz <julien.grossholtz@openest.io>
+Date: Tue, 31 Dec 2019 16:33:19 +0100
+Subject: [Buildroot] [PATCH 1/1] libcurl: add wolfssl as an option for
+ TLS
+In-Reply-To: <20191105100659.1166232-1-julien.grossholtz@openest.io>
+References: <20191105100659.1166232-1-julien.grossholtz@openest.io>
+Message-ID: <CAFN3DJj2rpxeocrHum54PuCckyA-TUJxzqDdzqeWxfu9R4A06A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,71 +13,89 @@ To: buildroot@busybox.net
 
 Hi,
 
-I no longer have access to this board, so a can not maintain it. I
-added my former manager, Jerome Oufella to this thread so he can
-decide if he wants to keep this board upstream.
+Any chance to get this patch merged ? Is there anything I must change ?
 
-Thanks,
+Regards,
 
-Le mar. 31 d?c. 2019 ? 16:17, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+Julien
+
+Le mar. 5 nov. 2019 ? 11:07, Julien Grossholtz <julien.grossholtz@openest.io>
+a ?crit :
+
+> Libcurl recipe allows selecting between various TLS backends. Users can
+> already select between several options but WolfSSL was missing. WolfSSL
+> is an efficient TLS library, it supports TLS 1.3 and is used in many
+> embedded systems.
 >
-> Thomas, All,
+> Add WolfSSL to libcurl "SSL/TLS library to use" choice list when WolfSSL
+> package is enabled. When selected in the list, use libcurl
+> --with-wolfssl configure option. Explicitly set --without-wolfssl
+> when it is not selected.
 >
-> On 2019-08-11 14:07 +0200, Thomas Petazzoni spake thusly:
-> > Julien originally added this defconfig in 2017, so let's add him as a
-> > contact for it, so that he receives build failure notifications and is
-> > Cc'ed on patches.
-> >
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Cc: Julien Grossholtz <julien.grossholtz@gmail.com>
+> Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
+> ---
+>  package/libcurl/Config.in  | 5 +++++
+>  package/libcurl/libcurl.mk | 7 +++++++
+>  2 files changed, 12 insertions(+)
 >
-> Applied to master, thanks.
+> diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+> index 0511786dc6..3a9ee0f121 100644
+> --- a/package/libcurl/Config.in
+> +++ b/package/libcurl/Config.in
+> @@ -51,6 +51,7 @@ config BR2_PACKAGE_LIBCURL_TLS_SUPPORT
+>         default y if BR2_PACKAGE_GNUTLS
+>         default y if BR2_PACKAGE_LIBNSS
+>         default y if BR2_PACKAGE_MBEDTLS
+> +       default y if BR2_PACKAGE_WOLFSSL
 >
-> > ---
-> > Julien, could you please reply with your Acked-by if you are fine with
-> > this? Thanks!
+>  choice
+>         prompt "SSL/TLS library to use"
+> @@ -72,6 +73,10 @@ config BR2_PACKAGE_LIBCURL_MBEDTLS
+>         bool "mbed TLS"
+>         depends on BR2_PACKAGE_MBEDTLS
 >
-> Julien, we really need people to take care of the defconfigs, at least
-> when they fail to build. Without caretakers interested in those, we may
-> have to remove them in the end.
+> +config BR2_PACKAGE_LIBCURL_WOLFSSL
+> +       bool "WolfSSL"
+> +       depends on BR2_PACKAGE_WOLFSSL
+> +
+>  endchoice
 >
-> If you really can't handle it, please say so, so we can tale appropriate
-> action.
+>  comment "A TLS library is needed for SSL/TLS support"
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index bab7c8e1be..264db3913e 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -74,6 +74,13 @@ else
+>  LIBCURL_CONF_OPTS += --without-mbedtls
+>  endif
 >
-> Thanks! ;-)
->
-> Regards,
-> Yann E. MORIN.
->
-> > ---
-> >  DEVELOPERS | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 8995065c5f..8a2128e1ef 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -1289,6 +1289,8 @@ N:      Julien Floret <julien.floret@6wind.com>
-> >  F:   package/lldpd/
-> >
-> >  N:   Julien Grossholtz <julien.grossholtz@openest.io>
-> > +F:   board/technologic/ts7680/
-> > +F:   configs/ts7680_defconfig
-> >  F:   package/paho-mqtt-c
-> >
-> >  N:   Julien Olivain <juju@cotds.org>
-> > --
-> > 2.21.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
+> +ifeq ($(BR2_PACKAGE_LIBCURL_WOLFSSL),y)
+> +LIBCURL_CONF_OPTS += --with-wolfssl=$(STAGING_DIR)/usr
+> +LIBCURL_DEPENDENCIES += wolfssl
+> +else
+> +LIBCURL_CONF_OPTS += --without-wolfssl
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_C_ARES),y)
+>  LIBCURL_DEPENDENCIES += c-ares
+>  LIBCURL_CONF_OPTS += --enable-ares
 > --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+> 2.23.0
+>
+>
+
+-- 
+
+*Julien Grossholtz*
+Directeur de projet
+julien.grossholtz at openest.io
++33 7 68 49 83 47
+
+        <https://openest.io/>
+Logiciels embarqu?s pour syst?mes intelligents
+
+15, avenue du Rhin ? 67100 Strasbourg ? www.openest.io
+<http://openest.io/>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20191231/810c5589/attachment.html>
