@@ -1,28 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 Dec 2019 15:31:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/avro-c: fix build without C++
-In-Reply-To: <20191230135012.909578-1-fontaine.fabrice@gmail.com>
-References: <20191230135012.909578-1-fontaine.fabrice@gmail.com>
-Message-ID: <20191231153149.3cf62805@windsurf>
+Date: Tue, 31 Dec 2019 15:33:07 +0100
+Subject: [Buildroot] [PATCH] package/apitrace: fix build failure due to
+ gcc bug 68485 and 85180
+In-Reply-To: <20191227180020.22933-1-giulio.benetti@benettiengineering.com>
+References: <20191227180020.22933-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20191231153307.5ff83635@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Dec 2019 14:50:12 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Fri, 27 Dec 2019 19:00:20 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/135e246aa70f28c6b9aea5fd6b0eb9c7b45ebfe7
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...2-CMakeLists.txt-fix-build-without-C.patch | 92 +++++++++++++++++++
->  1 file changed, 92 insertions(+)
->  create mode 100644 package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
+> +APITRACE_CFLAGS = $(TARGET_CFLAGS)
+> +
+> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
+> +APITRACE_CFLAGS += -O0
+> +endif
+> +
+> +APITRACE_CONF_OPTS += -DCMAKE_C_FLAGS="$(APITRACE_CFLAGS)"
+> +
+> +APITRACE_CXXFLAGS = $(TARGET_CXXFLAGS)
+> +
+> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+> +APITRACE_CXXFLAGS += -O0
+> +endif
+> +
+> +APITRACE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(APITRACE_CXXFLAGS)"
 
-Applied to master, thanks.
+I'm a bit confused as to why the bug 68485 is worked-around through
+CFLAGS and bug 85180 is worked-around through CXXFLAGS. Could you
+explain this ?
+
+Thanks,
 
 Thomas
 -- 
