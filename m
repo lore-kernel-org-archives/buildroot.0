@@ -1,154 +1,152 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 31 Jan 2020 22:24:20 +0100
-Subject: [Buildroot] [PATCH 1/2] package/localedef: bump to version 2.30
-In-Reply-To: <CANQCQpZ8g-L_Y5V3Xp5x99QaWotqQSPn5snV75e3w08TUG8zrA@mail.gmail.com>
-References: <20200125234918.24829-1-romain.naour@gmail.com>
- <CANQCQpZhQPvjr27oZwBeyPOnQDjtti-1XUp+_xQHCJesYBmMiw@mail.gmail.com>
- <CANQCQpZ8g-L_Y5V3Xp5x99QaWotqQSPn5snV75e3w08TUG8zrA@mail.gmail.com>
-Message-ID: <20200131222420.3d92ff13@gmx.net>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 1 Jan 2020 00:44:09 +0100
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure due to HW
+ PPC Crypto bug
+In-Reply-To: <a45613d1-5d52-9c80-8b79-a1eda19e83f0@xes-inc.com>
+References: <20191227165427.107111-1-giulio.benetti@benettiengineering.com>
+ <20191231180736.09a5add2@windsurf>
+ <496f5949-570f-2678-6bcd-67660692479b@benettiengineering.com>
+ <08c5d316-d21b-f361-1506-af6a3bdd46e0@xes-inc.com>
+ <a45613d1-5d52-9c80-8b79-a1eda19e83f0@xes-inc.com>
+Message-ID: <a1f74ad6-8dbc-e515-1393-c81ec6013472@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello *,
+Hi Vincent,
 
-On Fri, 31 Jan 2020 14:32:39 -0600, Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
 
-> Romain,
->
-> On Fri, Jan 31, 2020 at 1:47 PM Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
-> >
-> > Romain,
-> >
-> > On Sat, Jan 25, 2020 at 5:50 PM Romain Naour <romain.naour@gmail.com> wrote:
-> > >
-> > > Use the same version as for glibc package.
-> >
-> > Seems this bump requires a newer host compiler.  I found this on
-> > Ubuntu 16.04.2  with gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0
-> > 20160609
-> >
-> > BR2_aarch64=y
-> > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> > BR2_KERNEL_HEADERS_4_14=y
-> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> > BR2_LINUX_KERNEL=y
-> > BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> > BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-> > BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> > BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-> > BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> >
-> > make host-localedef
-> >
-> > configure: error:
-> > *** These critical programs are missing or too old: compiler
-> > *** Check the INSTALL file for required versions.
-> >
-> > per the INSTALL file, GCC 6.2 or higher is required
->
-> I did a build test reverting the 6.2 check (left it checking for 5)
-> and it built OK.  I'd suggest adding a patch to revert
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=4dcbbc3b28aaeafe23e1a30db84055aa6f6fa987
-> .
->
-> In addition, I agree a host toolchain dependency needs to be added for
-> 5 (unless we also revert
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=192963be49678b48f60218f1f794991cdd9fe472
->  to get back to 4.x which doesn't seem like it would work out).
->
+On 1/1/20 12:31 AM, Vincent Fazio wrote:
+> 
+> On 12/31/19 4:49 PM, Vincent Fazio wrote:
+>> Gang,
+>>
+>> Just going to toss my $.02 in...
+>>
+>> On 12/31/19 3:24 PM, Giulio Benetti wrote:
+>>> Hi Thomas,
+>>>
+>>> On 12/31/19 6:07 PM, Thomas Petazzoni wrote:
+>>>> On Fri, 27 Dec 2019 17:54:27 +0100
+>>>> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+>>>>
+>>>>> diff --git
+>>>>> a/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
+>>>>> b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
+>>>>>
+>>>>> new file mode 100644
+>>>>> index 0000000000..0b891b5ebc
+>>>>> --- /dev/null
+>>>>> +++
+>>>>> b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
+>>>>>
+>>>>> @@ -0,0 +1,37 @@
+>>>>> +From 09b3776a924736049693a118d5a8d883e8c794ca Mon Sep 17 00:00:00
+>>>>> 2001
+>>>>> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>>>> +Date: Fri, 27 Dec 2019 17:41:04 +0100
+>>>>> +Subject: [PATCH] Bug 1606119 - Fix PPC HW Crypto build failure
+>>>>> +
+>>>>> +Only Big Endian Altivec functions are used, not Little Endian
+>>>>> ones, so
+>>>>> +let's change check if USE_PPC_CRYPTO by changing to IS_BIG_ENDIAN
+>>>>> +instead of IS_LITTLE_ENDIAN.
+>>>>> +
+>>>>> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>>>
+>>>> I don't understand the reasoning here. From a quick look, the undefined
+>>>> symbols reported in the build log come from the file
+>>>> ./nss/lib/freebl/gcm-ppc.c.
+>>>>
+>>>> This file is included in the build in nss/lib/freebl/Makefile if
+>>>> CPU_ARCH=ppc.
+>>>>
+>>>> However CPU_ARCH=ppc is only set in nss/coreconf/Linux.mk as follows:
+>>>>
+>>>> ifeq (,$(filter-out ppc64 ppc64le,$(OS_TEST)))
+>>>>  ???????? CPU_ARCH??????? = ppc
+>>>> ifeq ($(USE_64),1)
+>>>>  ???????? ARCHFLAG??????? = -m64
+>>>> endif
+>>>>
+>>>> In libnss.mk, we pass OS_TEST=$(LIBNSS_ARCH), which basically is the
+>>>> value of $(BR2_ARCH), which is powerpc64 or powerpc64le in Buildroot.
+>>>>
+>>>> So, regardless of whether we are big endian PPC64 or little endian
+>>>> PPC64, the gcm-ppc.c file will not be included in the build.
+>>>>
+>>>> Am I missing something ? Could you explain a bit better how you came to
+>>>> the conclusion you have in this patch ?
+>>>
+>>> The point is that gcm-ppc.c gets compiled, but inside it there's an
+>>> #if defined(USE_PPC_CRYPTO) on top of the file, that is defined in
+>>> gsm.h only #if __powerpc64__ and LITTLE_ENDIAN. But inside gcm-ppc.c
+>>> they use _be() Altivec functions. Basically they have inverted
+>>> LITTLE_ENDIAN with BIB_ENDIAN, since they use Big Endian only Altivec
+>>> functions in gcm-ppc.c so the only wrong piece of code is in gcm.h,
+>>> where USE_PPC_CRYPTO is defined.
+>>>
+>> I assume you mean this in gcm_HashMult_hw:
 
-Suggested RFC patch (way back from December 2018) contained already an
-'0002-HACK-accept-old-toolchains.patch' to fix configure/compile for
-old host toolchains (see [1])..., maybe time to resurrect (and rebase)
-this one?
+Yes
 
-Regards,
-Peter
+>>
+>>  ??????? /* clang needs the following cast away from const; maybe a bug
+>> in 7.0.0 */
+>>  ??????? v = (vec_u64)vec_xl_be(0, (unsigned char *)buf);
+>>
+>> It should be fine to call endian specific functions if you know how
+>> the data is stored.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2018-December/237949.html
+I've completely understood vec_xl_be() wrong.
 
->
-> >
-> > >
-> > > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > > ---
-> > >  .../0001-HACK-only-build-and-install-localedef.patch            | 0
-> > >  .../localedef.hash                                              | 2 +-
-> > >  package/localedef/localedef.mk                                  | 2 +-
-> > >  3 files changed, 2 insertions(+), 2 deletions(-)
-> > >  rename package/localedef/{2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436 => 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91}/0001-HACK-only-build-and-install-localedef.patch (100%)
-> > >  rename package/localedef/{2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436 => 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91}/localedef.hash (70%)
-> > >
-> > > diff --git a/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0001-HACK-only-build-and-install-localedef.patch
-> > > similarity index 100%
-> > > rename from package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0001-HACK-only-build-and-install-localedef.patch
-> > > rename to package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0001-HACK-only-build-and-install-localedef.patch
-> > > diff --git a/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/localedef.hash b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/localedef.hash
-> > > similarity index 70%
-> > > rename from package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/localedef.hash
-> > > rename to package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/localedef.hash
-> > > index b62487ce19..4283ea04b4 100644
-> > > --- a/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/localedef.hash
-> > > +++ b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/localedef.hash
-> > > @@ -1,5 +1,5 @@
-> > >  # Locally calculated (fetched from Github)
-> > > -sha256  a5d4cbe7eceaefd8bce1104994379818169961b59346d2f3897966912237b1e6  glibc-2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436.tar.gz
-> > > +sha256  fe1ca8099bc2cda997d8a585f1a512e59df56c52c9c7363a4058da2725c8f4a9  glibc-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91.tar.gz
-> > >
-> > >  # Hashes for license files
-> > >  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> > > diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-> > > index 4005737434..10a1929044 100644
-> > > --- a/package/localedef/localedef.mk
-> > > +++ b/package/localedef/localedef.mk
-> > > @@ -7,7 +7,7 @@
-> > >  # Use the same VERSION and SITE as target glibc
-> > >  # As in glibc.mk, generate version string using:
-> > >  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
-> > > -LOCALEDEF_VERSION = 2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436
-> > > +LOCALEDEF_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
-> > >  LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
-> > >  LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
-> > >  LOCALEDEF_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
-> > > --
-> > > 2.24.1
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> >
-> >
-> > --
-> >
-> > Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-> >
-> > COLLINS AEROSPACE
-> >
-> > 400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-> >
-> > Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-> >
-> > matthew.weber at collins.com | collinsaerospace.com
-> >
-> >
-> >
-> > CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-> > privileged information of Collins Aerospace and its affiliated
-> > companies. If you are not the intended recipient, please 1) Do not
-> > disclose, copy, distribute or use this message or its contents. 2)
-> > Advise the sender by return email. 3) Delete all copies (including all
-> > attachments) from your computer. Your cooperation is greatly
-> > appreciated.
-> >
-> >
-> > Any export restricted material should be shared using my
-> > matthew.weber at corp.rockwellcollins.com address.
->
->
->
+>>
+>>> Need only to invert the condition by which USE_PPC_CRYPTO is defined:
+>>> BIG_ENDIAN instead of LITTLE_ENDIAN.
+>>>
+>>> Best regards
+>>
+>> Based on the below commit, it was tested on a POWER8, presumably in LE
+>> mode, so I'd be hesitant to switch any endian checks:
+>> https://hg.mozilla.org/projects/nss/rev/3d7e509d6d20ecd607a28fa6ce42e4ffd9c51443
+
+Right.
+
+>>
+>>
+>> The bigger issue may be that 'vec_xl_be' wasn't introduced until GCC 8
+>> and the toolchain used in the failed build is GCC 7, so that function
+>> is not available in altivec.h:
+>> https://github.com/gcc-mirror/gcc/commit/f7b0548e5eba54b637977e3df4d4daf0cabe474d
+
+Ok
+
+>>
+>>
+>> So if we stick with nss-3.48, the package should likely depend on
+>> BR2_TOOLCHAIN_GCC_AT_LEAST_8.
+
+This ^^^ is too restrictive, but...
+
+> Or don't utilize PPC hardware accelerated instructions by undefining
+> USE_PPC_CRYPTO... which is probably the saner option :-). This would
+> give the semblance that the compile worked as expected since the hashing
+> function will now be available, but Thomas' concern re CPU_ARCH and the
+> future inclusion of ppc specific source is still valid.
+
+...this is a good idea. So with gcc version < 8.x let's disable 
+USE_PPC_CRYPTO and with gcc version >= 8.x let's enable it only if 
+LITTLE_ENDIAN. So at this point I would change my upstream patch to do 
+that in NSS, since there's already a gcc version check but only against 
+version 5.x(>=) that instead needs to be >= 8.x.
+
+Thanks for all the explanations!
+
+Best regards
+and
+happy new year! For me at least :-)
+-- 
+Giulio Benetti
+Benetti Engineering sas
