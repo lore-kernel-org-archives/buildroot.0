@@ -1,106 +1,127 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Jan 2020 11:59:42 +0100
-Subject: [Buildroot] [git commit] package/tinyssh: new package
-Message-ID: <20200101105048.077948EA29@busybox.osuosl.org>
+Date: Wed, 1 Jan 2020 12:01:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tinyssh: new package
+In-Reply-To: <20190819234413.18292-1-vadim4j@gmail.com>
+References: <20190819234413.18292-1-vadim4j@gmail.com>
+Message-ID: <20200101110123.GI3519@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7b3de8a3b1b446c081593192c3acb847f6f5f05
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Vadim, All,
 
-TinySSH is a minimalistic SSH server which implements only a subset of
-SSHv2 features.
+On 2019-08-20 02:44 +0300, Vadim Kochan spake thusly:
+> TinySSH is a minimalistic SSH server which implements only a subset of
+> SSHv2 features.
+> 
+> Might be useful for small systems.
+> 
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 
-Might be useful for small systems.
-
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-[yann.morin.1998 at free.fr:
+Applied to master with the following changes:
   - add missing licence file, as noticed by Giulio
   - update the version to bring two fixes
   - update hash file accordingly (version and licence file)
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/tinyssh/Config.in    |  8 ++++++++
- package/tinyssh/tinyssh.hash |  3 +++
- package/tinyssh/tinyssh.mk   | 20 ++++++++++++++++++++
- 5 files changed, 33 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 27bedad48c..90941dd4c8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2462,6 +2462,7 @@ F:	package/tstools/
- N:	Vadim Kochan <vadim4j@gmail.com>
- F:	package/brcm-patchram-plus/
- F:	package/gettext-tiny/
-+F:	package/tinyssh/
- 
- N:	Valentin Korenblit <valentinkorenblit@gmail.com>
- F:	package/clang/
-diff --git a/package/Config.in b/package/Config.in
-index 05a4e87ae7..894284c650 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2149,6 +2149,7 @@ endif
- 	source "package/thttpd/Config.in"
- 	source "package/tinc/Config.in"
- 	source "package/tinyhttpd/Config.in"
-+	source "package/tinyssh/Config.in"
- 	source "package/tor/Config.in"
- 	source "package/traceroute/Config.in"
- 	source "package/transmission/Config.in"
-diff --git a/package/tinyssh/Config.in b/package/tinyssh/Config.in
-new file mode 100644
-index 0000000000..da19d2d454
---- /dev/null
-+++ b/package/tinyssh/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_TINYSSH
-+	bool "tinyssh"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  TinySSH is a minimalistic SSH server which implements only
-+	  a subset of SSHv2 features.
-+
-+	  https://tinyssh.org
-diff --git a/package/tinyssh/tinyssh.hash b/package/tinyssh/tinyssh.hash
-new file mode 100644
-index 0000000000..99ee4afaff
---- /dev/null
-+++ b/package/tinyssh/tinyssh.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  65a7dc785861a09399419a1e7c42cddf66f32dc233a33277327b11f1bd8a772c  tinyssh-7e2b4025bf3a2dae4c6617e3eb39df4bcde37454.tar.gz
-+sha256  b5dc19477e29f4111e1c16cd89ec0782f5a07b1a30e3bdb7c155425b81b12c46  LICENCE
-diff --git a/package/tinyssh/tinyssh.mk b/package/tinyssh/tinyssh.mk
-new file mode 100644
-index 0000000000..6f22be6c52
---- /dev/null
-+++ b/package/tinyssh/tinyssh.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# tinyssh
-+#
-+################################################################################
-+
-+TINYSSH_VERSION = 7e2b4025bf3a2dae4c6617e3eb39df4bcde37454
-+TINYSSH_SITE = $(call github,janmojzis,tinyssh,$(TINYSSH_VERSION))
-+TINYSSH_LICENSE = Public Domain, CC0-1.0
-+TINYSSH_LICENSE_FILES = LICENCE
-+
-+define TINYSSH_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) CC="$(TARGET_CC)" $(MAKE) -C $(@D) cross-compile
-+endef
-+
-+define TINYSSH_INSTALL_TARGET_CMDS
-+	$(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
-+endef
-+
-+$(eval $(generic-package))
+Regards,
+Yann E. MORIN.
+
+> ---
+>  DEVELOPERS                   |  1 +
+>  package/Config.in            |  1 +
+>  package/tinyssh/Config.in    |  8 ++++++++
+>  package/tinyssh/tinyssh.hash |  2 ++
+>  package/tinyssh/tinyssh.mk   | 19 +++++++++++++++++++
+>  5 files changed, 31 insertions(+)
+>  create mode 100644 package/tinyssh/Config.in
+>  create mode 100644 package/tinyssh/tinyssh.hash
+>  create mode 100644 package/tinyssh/tinyssh.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index e50ac78ae7..5884cea0a0 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2307,6 +2307,7 @@ F:	package/tstools/
+>  N:	Vadim Kochan <vadim4j@gmail.com>
+>  F:	package/brcm-patchram-plus/
+>  F:	package/gettext-tiny/
+> +F:	package/tinyssh/
+>  
+>  N:	Valentin Korenblit <valentinkorenblit@gmail.com>
+>  F:	package/clang/
+> diff --git a/package/Config.in b/package/Config.in
+> index 710ed12be0..d6793c891b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2073,6 +2073,7 @@ endif
+>  	source "package/thttpd/Config.in"
+>  	source "package/tinc/Config.in"
+>  	source "package/tinyhttpd/Config.in"
+> +	source "package/tinyssh/Config.in"
+>  	source "package/tor/Config.in"
+>  	source "package/traceroute/Config.in"
+>  	source "package/transmission/Config.in"
+> diff --git a/package/tinyssh/Config.in b/package/tinyssh/Config.in
+> new file mode 100644
+> index 0000000000..da19d2d454
+> --- /dev/null
+> +++ b/package/tinyssh/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_TINYSSH
+> +	bool "tinyssh"
+> +	depends on BR2_USE_MMU # fork()
+> +	help
+> +	  TinySSH is a minimalistic SSH server which implements only
+> +	  a subset of SSHv2 features.
+> +
+> +	  https://tinyssh.org
+> diff --git a/package/tinyssh/tinyssh.hash b/package/tinyssh/tinyssh.hash
+> new file mode 100644
+> index 0000000000..0ca7c5b741
+> --- /dev/null
+> +++ b/package/tinyssh/tinyssh.hash
+> @@ -0,0 +1,2 @@
+> +# locally computed
+> +sha256  7e5e080c594db9110869ecea7c9a258507a0de10a09613a584347b3d707fb609  tinyssh-acd059bcac384fcd4af35d1babc87142eca610af.tar.gz
+> diff --git a/package/tinyssh/tinyssh.mk b/package/tinyssh/tinyssh.mk
+> new file mode 100644
+> index 0000000000..69341e13e8
+> --- /dev/null
+> +++ b/package/tinyssh/tinyssh.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# tinyssh
+> +#
+> +################################################################################
+> +
+> +TINYSSH_VERSION = acd059bcac384fcd4af35d1babc87142eca610af
+> +TINYSSH_SITE = $(call github,janmojzis,tinyssh,$(TINYSSH_VERSION))
+> +TINYSSH_LICENSE = CC0-1.0
+> +
+> +define TINYSSH_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) CC="$(TARGET_CC)" $(MAKE) -C $(@D) cross-compile
+> +endef
+> +
+> +define TINYSSH_INSTALL_TARGET_CMDS
+> +	$(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
+> +endef
+> +
+> +$(eval $(generic-package))
+> -- 
+> 2.22.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
