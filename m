@@ -1,109 +1,103 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  1 Jan 2020 18:53:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/librsync: fix static link with popt
-Message-ID: <20200101175316.2524581-1-fontaine.fabrice@gmail.com>
+Date: Wed,  1 Jan 2020 18:54:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/log4cplus: fix detection of -latomic
+Message-ID: <20200101175457.2524908-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use pkg-config to retrieve popt dependencies such as iconv
-
 Fixes:
- - http://autobuild.buildroot.org/results/896e8e3efbedad90d66ae8c4e1e50f16206cab49
+ - http://autobuild.buildroot.org/results/5451df835e0e96545b322bc9bd74f76273ee3b34
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...FindPOPT.cmake-Add-PkgConfig-support.patch | 67 +++++++++++++++++++
- package/librsync/librsync.mk                  |  2 +-
- 2 files changed, 68 insertions(+), 1 deletion(-)
- create mode 100644 package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch
+ ...ure-ac-check-for-libraries-in-C-mode.patch | 62 +++++++++++++++++++
+ package/log4cplus/log4cplus.mk                |  2 +
+ 2 files changed, 64 insertions(+)
+ create mode 100644 package/log4cplus/0001-configure-ac-check-for-libraries-in-C-mode.patch
 
-diff --git a/package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch b/package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch
+diff --git a/package/log4cplus/0001-configure-ac-check-for-libraries-in-C-mode.patch b/package/log4cplus/0001-configure-ac-check-for-libraries-in-C-mode.patch
 new file mode 100644
-index 0000000000..1c8a332ab6
+index 0000000000..6226a6210d
 --- /dev/null
-+++ b/package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch
-@@ -0,0 +1,67 @@
-+From f5a131ab66fec23d0c79b55fc3907603b094deb9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 31 Dec 2019 18:13:29 +0100
-+Subject: [PATCH] cmake/FindPOPT.cmake: Add PkgConfig support
++++ b/package/log4cplus/0001-configure-ac-check-for-libraries-in-C-mode.patch
+@@ -0,0 +1,62 @@
++From 4446516eb4fc8613d26669f5683f9d5d7c36ee67 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Wed, 18 Dec 2019 21:26:58 +0100
++Subject: [PATCH] configure.ac: check for libraries in C mode
 +
-+Add PkgConfig support to retrieve popt dependencies otherwise static
-+build can fail if popt has been linked with iconv:
++Fixes check for libraries failures, e.g. (from config.log):
 +
-+[100%] Linking C executable rdiff
-+/home/buildroot/autobuild/instance-2/output-1/per-package/librsync/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/8.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-2/output-1/per-package/librsync/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libpopt.a(poptint.o): in function `POPT_fprintf':
-+poptint.c:(.text+0x34c): undefined reference to `libiconv_open
++  arc-buildroot-linux-uclibc-g++ -o conftest -Os -Wall -fdiagnostics-show-caret -ftrack-macro-expansion -fdiagnostics-color=auto -Wextra -pedantic -Wstrict-aliasing -Wstrict-overflow -Woverloaded-virtual -Wold-style-cast -Wc++14-compat -Wundef -Wshadow -Wformat -Wnoexcept -Wsuggest-attribute=format -Wsuggest-attribute=noreturn -Wno-variadic-macros -fvisibility=hidden conftest.cpp -latomic
++  conftest.cpp:28:6: error: new declaration 'char __atomic_fetch_and_4()' ambiguates built-in declaration 'unsigned int __atomic_fetch_and_4(volatile void*, unsigned int, int)' [-fpermissive]
++     28 | char __atomic_fetch_and_4 ();
++        |      ^~~~~~~~~~~~~~~~~~~~
++  conftest.cpp: In function 'int main()':
++  conftest.cpp:32:30: error: too few arguments to function 'unsigned int __atomic_fetch_and_4(volatile void*, unsigned int, int)'
++     32 | return __atomic_fetch_and_4 ();
++        |                              ^
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/896e8e3efbedad90d66ae8c4e1e50f16206cab49
++Resulting in:
 +
++	checking for library containing __atomic_fetch_and_4... no
++
++instead (after the fix applied):
++
++	checking for library containing __atomic_fetch_and_4... -latomic
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++[Retrieved from:
++https://github.com/log4cplus/log4cplus/commit/4446516eb4fc8613d26669f5683f9d5d7c36ee67]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/librsync/librsync/pull/186]
 +---
-+ cmake/FindPOPT.cmake | 29 ++++++++++++++++++-----------
-+ 1 file changed, 18 insertions(+), 11 deletions(-)
++ configure.ac | 4 ++++
++ 1 file changed, 4 insertions(+)
 +
-+diff --git a/cmake/FindPOPT.cmake b/cmake/FindPOPT.cmake
-+index 1ca452a..87b3e95 100644
-+--- a/cmake/FindPOPT.cmake
-++++ b/cmake/FindPOPT.cmake
-+@@ -42,20 +42,27 @@ if (NOT POPT_FOUND)
-+   endif (NOT POPT_ROOT_DIR)
++diff --git a/configure.ac b/configure.ac
++index 72fbd870a..64eff1936 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -412,6 +412,7 @@ LOG4CPLUS_DEFINE_MACRO_IF([LOG4CPLUS_HAVE_VAR_ATTRIBUTE_INIT_PRIORITY],
 + 
-+   ##_____________________________________________________________________________
-+-  ## Check for the header files
-++  ## Check with PkgConfig (to retrieve static dependencies such as iconv)
-++  find_package(PkgConfig QUIET)
-++  pkg_search_module (POPT QUIET popt)
-++  if (NOT POPT_FOUND)
++ dnl Checks for libraries.
 + 
-+-  find_path (POPT_INCLUDE_DIRS popt.h
-+-    HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
-+-    PATH_SUFFIXES include
-+-    )
-++    ##_____________________________________________________________________________
-++    ## Check for the header files
+++AC_LANG_PUSH([C])
++ AC_SEARCH_LIBS([__atomic_fetch_and_4], [atomic])
++ AC_SEARCH_LIBS([strerror], [cposix])
++ dnl On some systems libcompat exists only as a static library which
++@@ -422,6 +423,7 @@ AC_SEARCH_LIBS([setsockopt], [socket network net])
++ AS_IF([test "x$with_iconv" = "xyes"],
++   [AC_SEARCH_LIBS([iconv_open], [iconv], [],
++      [AC_SEARCH_LIBS([libiconv_open], [iconv])])])
+++AC_LANG_POP([C])
 + 
-+-  ##_____________________________________________________________________________
-+-  ## Check for the library
-++    find_path (POPT_INCLUDE_DIRS popt.h
-++      HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
-++      PATH_SUFFIXES include
-++      )
++ dnl Windows/MinGW specific.
 + 
-+-  find_library (POPT_LIBRARIES popt
-+-    HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
-+-    PATH_SUFFIXES lib
-+-    )
-++    ##_____________________________________________________________________________
-++    ## Check for the library
-++
-++    find_library (POPT_LIBRARIES popt
-++      HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
-++      PATH_SUFFIXES lib
-++      )
-++  endif (POPT_FOUND)
++@@ -497,7 +499,9 @@ dnl Multi threaded library.
++    AS_VAR_APPEND([LIBS], [" $PTHREAD_LIBS"])
 + 
-+   ##_____________________________________________________________________________
-+   ## Actions taken when all components have been found
-+-- 
-+2.24.0
-+
-diff --git a/package/librsync/librsync.mk b/package/librsync/librsync.mk
-index 82d9b9fe2e..bf0785b427 100644
---- a/package/librsync/librsync.mk
-+++ b/package/librsync/librsync.mk
-@@ -9,6 +9,6 @@ LIBRSYNC_SITE = $(call github,librsync,librsync,v$(LIBRSYNC_VERSION))
- LIBRSYNC_LICENSE = LGPL-2.1+
- LIBRSYNC_LICENSE_FILES = COPYING
- LIBRSYNC_INSTALL_STAGING = YES
--LIBRSYNC_DEPENDENCIES = zlib bzip2 popt
-+LIBRSYNC_DEPENDENCIES = host-pkgconf zlib bzip2 popt
++    dnl required on HP-UX
+++   AC_LANG_PUSH([C])
++    AC_SEARCH_LIBS([sem_init], [rt])
+++   AC_LANG_POP([C])
++ 
++    AS_CASE([$ax_cv_cxx_compiler_vendor],
++      [gnu|clang],
+diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
+index eadc5ec948..8a613efaee 100644
+--- a/package/log4cplus/log4cplus.mk
++++ b/package/log4cplus/log4cplus.mk
+@@ -10,6 +10,8 @@ LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-st
+ LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
+ LOG4CPLUS_LICENSE_FILES = LICENSE
+ LOG4CPLUS_INSTALL_STAGING = YES
++# We're patching configure.ac
++LOG4CPLUS_AUTORECONF = YES
  
- $(eval $(cmake-package))
+ ifeq ($(BR2_GCC_ENABLE_LTO),y)
+ LOG4CPLUS_CONF_OPTS += --enable-lto
 -- 
 2.24.0
