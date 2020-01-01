@@ -1,77 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Jan 2020 20:37:52 +0100
-Subject: [Buildroot] [PATCH] package/minicom: bump version
-In-Reply-To: <20200101174014.37595-1-giulio.benetti@benettiengineering.com>
-References: <20200101174014.37595-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200101193752.GO3519@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  1 Jan 2020 21:59:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gcr: bump to version 3.34.0
+Message-ID: <20200101205901.3007890-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio, All,
+intltool has been replace by gettext since version 3.33.4 and
+https://gitlab.gnome.org/GNOME/gcr/commit/4fb05684d2f181c35898fc26f5675b07e7e2dd34
+so replace host-intltool by $(TARGET_NLS_DEPENDENCIES)
 
-On 2020-01-01 18:40 +0100, Giulio Benetti spake thusly:
-> Shortlog follows:
-> Adam Lackorzynski (2):
->       minicom.c: Convert TABs to spaces
->       minicom.c: Reflow long_options
-> 
-> Rasmus Villemoes (1):
->       Allow user to specify buffering mode of capture file
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gcr/gcr.hash |  4 ++--
+ package/gcr/gcr.mk   | 11 ++++++++---
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-tHe complete changelog is not so initeresting to have as a commit log.
-Rather, only the important changes, if any, should be mentioned, like
-security fixes or big new feats. In this case, nothing really stands
-out, really, but I jsut kept is anyway...
-
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/minicom/minicom.hash | 2 +-
->  package/minicom/minicom.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
-> index 03e1dcc7d0..9725f58f6d 100644
-> --- a/package/minicom/minicom.hash
-> +++ b/package/minicom/minicom.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 be5d923c399bc15dade7bc89052d887034abd49b386138c16bdcb912f2135098  minicom-5086119bbaafd2f8986579209885635b92020096.tar.gz
-> +sha256 c8e34cc583f3b09c65871f5080b04799895b1ebd72092c0e18cb20a631f6c4b1  minicom-a6a507dcb8bd4cb5da7af9e2dc75b8e495fedbb6.tar.gz
->  sha256 cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
-> diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-> index c08e9b10f4..a86d587b2f 100644
-> --- a/package/minicom/minicom.mk
-> +++ b/package/minicom/minicom.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -MINICOM_VERSION = 5086119bbaafd2f8986579209885635b92020096
-> +MINICOM_VERSION = a6a507dcb8bd4cb5da7af9e2dc75b8e495fedbb6
->  MINICOM_SITE = https://salsa.debian.org/minicom-team/minicom.git
->  MINICOM_SITE_METHOD = git
->  MINICOM_LICENSE = GPL-2.0+
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
+index a78f56517d..7d5786db9e 100644
+--- a/package/gcr/gcr.hash
++++ b/package/gcr/gcr.hash
+@@ -1,3 +1,3 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.28/gcr-3.28.1.sha256sum
+-sha256	95204aa2111c301778ebfbe60975ce3ed698c958430ffcc2a785ac5e593d168b	gcr-3.28.1.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.34/gcr-3.34.0.sha256sum
++sha256	29df50974a90987af694c0fb8926a6b366e68cacd8abd813817cfe1eb5d54524	gcr-3.34.0.tar.xz
+ sha256	94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23	COPYING
+diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
+index 7cf7ea79e5..2fe583978c 100644
+--- a/package/gcr/gcr.mk
++++ b/package/gcr/gcr.mk
+@@ -4,11 +4,16 @@
+ #
+ ################################################################################
+ 
+-GCR_VERSION_MAJOR = 3.28
+-GCR_VERSION = $(GCR_VERSION_MAJOR).1
++GCR_VERSION_MAJOR = 3.34
++GCR_VERSION = $(GCR_VERSION_MAJOR).0
+ GCR_SITE = http://ftp.acc.umu.se/pub/gnome/sources/gcr/$(GCR_VERSION_MAJOR)
+ GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
+-GCR_DEPENDENCIES = host-intltool host-pkgconf libgcrypt libglib2 p11-kit
++GCR_DEPENDENCIES = \
++	host-pkgconf \
++	libgcrypt \
++	libglib2 \
++	p11-kit \
++	$(TARGET_NLS_DEPENDENCIES)
+ GCR_INSTALL_STAGING = YES
+ GCR_CONF_ENV = ac_cv_path_GNUPG=/usr/bin/gpg2
+ GCR_CONF_OPTS = \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.0
