@@ -1,127 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Jan 2020 12:01:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tinyssh: new package
-In-Reply-To: <20190819234413.18292-1-vadim4j@gmail.com>
-References: <20190819234413.18292-1-vadim4j@gmail.com>
-Message-ID: <20200101110123.GI3519@scaer>
+Date: Wed, 1 Jan 2020 13:02:30 +0100
+Subject: [Buildroot] [git commit] boot/uboot: cover more u-boot versions
+ when fixing up libfdt include paths
+Message-ID: <20200101120450.5F5B98EA3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vadim, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=35c040d1abc894a0f1eb9cb157087949223b4642
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-08-20 02:44 +0300, Vadim Kochan spake thusly:
-> TinySSH is a minimalistic SSH server which implements only a subset of
-> SSHv2 features.
-> 
-> Might be useful for small systems.
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+The original UBOOT_FIXUP_LIBFDT_INCLUDE hook only works for u-boot versions
+starting from v2017.11.
 
-Applied to master with the following changes:
-  - add missing licence file, as noticed by Giulio
-  - update the version to bring two fixes
-  - update hash file accordingly (version and licence file)
+As older u-boot versions are still in common use today, e.g. in the
+ci20_defconfig, extend the hook to cover a wider range of u-boot versions.
 
-Regards,
-Yann E. MORIN.
+The main code change was proposed by Arnout Vandecappelle in [1].
+Testing and comment changes were done by Thomas De Schampheleire.
+Additional (build) testing done by Yann.
 
-> ---
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/tinyssh/Config.in    |  8 ++++++++
->  package/tinyssh/tinyssh.hash |  2 ++
->  package/tinyssh/tinyssh.mk   | 19 +++++++++++++++++++
->  5 files changed, 31 insertions(+)
->  create mode 100644 package/tinyssh/Config.in
->  create mode 100644 package/tinyssh/tinyssh.hash
->  create mode 100644 package/tinyssh/tinyssh.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index e50ac78ae7..5884cea0a0 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2307,6 +2307,7 @@ F:	package/tstools/
->  N:	Vadim Kochan <vadim4j@gmail.com>
->  F:	package/brcm-patchram-plus/
->  F:	package/gettext-tiny/
-> +F:	package/tinyssh/
->  
->  N:	Valentin Korenblit <valentinkorenblit@gmail.com>
->  F:	package/clang/
-> diff --git a/package/Config.in b/package/Config.in
-> index 710ed12be0..d6793c891b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2073,6 +2073,7 @@ endif
->  	source "package/thttpd/Config.in"
->  	source "package/tinc/Config.in"
->  	source "package/tinyhttpd/Config.in"
-> +	source "package/tinyssh/Config.in"
->  	source "package/tor/Config.in"
->  	source "package/traceroute/Config.in"
->  	source "package/transmission/Config.in"
-> diff --git a/package/tinyssh/Config.in b/package/tinyssh/Config.in
-> new file mode 100644
-> index 0000000000..da19d2d454
-> --- /dev/null
-> +++ b/package/tinyssh/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_TINYSSH
-> +	bool "tinyssh"
-> +	depends on BR2_USE_MMU # fork()
-> +	help
-> +	  TinySSH is a minimalistic SSH server which implements only
-> +	  a subset of SSHv2 features.
-> +
-> +	  https://tinyssh.org
-> diff --git a/package/tinyssh/tinyssh.hash b/package/tinyssh/tinyssh.hash
-> new file mode 100644
-> index 0000000000..0ca7c5b741
-> --- /dev/null
-> +++ b/package/tinyssh/tinyssh.hash
-> @@ -0,0 +1,2 @@
-> +# locally computed
-> +sha256  7e5e080c594db9110869ecea7c9a258507a0de10a09613a584347b3d707fb609  tinyssh-acd059bcac384fcd4af35d1babc87142eca610af.tar.gz
-> diff --git a/package/tinyssh/tinyssh.mk b/package/tinyssh/tinyssh.mk
-> new file mode 100644
-> index 0000000000..69341e13e8
-> --- /dev/null
-> +++ b/package/tinyssh/tinyssh.mk
-> @@ -0,0 +1,19 @@
-> +################################################################################
-> +#
-> +# tinyssh
-> +#
-> +################################################################################
-> +
-> +TINYSSH_VERSION = acd059bcac384fcd4af35d1babc87142eca610af
-> +TINYSSH_SITE = $(call github,janmojzis,tinyssh,$(TINYSSH_VERSION))
-> +TINYSSH_LICENSE = CC0-1.0
-> +
-> +define TINYSSH_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) CC="$(TARGET_CC)" $(MAKE) -C $(@D) cross-compile
-> +endef
-> +
-> +define TINYSSH_INSTALL_TARGET_CMDS
-> +	$(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
-> +endef
-> +
-> +$(eval $(generic-package))
-> -- 
-> 2.22.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[1] http://lists.busybox.net/pipermail/buildroot/2019-May/251231.html
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+This was tested with the following defconfigs, that each excercise one
+case:
+
+    ----.--     No defconfig identified
+    2010.06     'lib/libfdt/', used to be simply 'libfdt' before upstream commit 0de71d507157...
+    2013.10     ci20_defconfig
+    2014.04     'srctree' used to be called 'SRCTREE' before upstream commit 01286329b27b27ea...
+    2017.05     olimex_a13_olinuxino_defconfig
+    2017.11     scripts/dtc/libfdt only exists since upstream commit c0e032e0090d6541549b19cc...
+    2018.01     mx6udoo_defconfig
+    2018.03     core change is equivalent to upstream commit e0d20dc1521e74b82dbd69be53a04884...
+    2019.10     nanopi_neo_defconfig
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+[yann.morin.1998 at free.fr: add the build-test results]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/uboot/uboot.mk | 34 +++++++++++++++++++++++++++-------
+ 1 file changed, 27 insertions(+), 7 deletions(-)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 0ebda6588c..a4879bb8b2 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -207,15 +207,35 @@ define UBOOT_APPLY_LOCAL_PATCHES
+ endef
+ UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_LOCAL_PATCHES
+ 
+-# This is equivalent to upstream commit
+-# http://git.denx.de/?p=u-boot.git;a=commitdiff;h=e0d20dc1521e74b82dbd69be53a048847798a90a. It
+-# fixes a build failure when libfdt-devel is installed system-wide.
+-# This only works when scripts/dtc/libfdt exists (E.G. versions containing
+-# http://git.denx.de/?p=u-boot.git;a=commitdiff;h=c0e032e0090d6541549b19cc47e06ccd1f302893)
++# Fixup inclusion of libfdt headers, which can fail in older u-boot versions
++# when libfdt-devel is installed system-wide.
++# The core change is equivalent to upstream commit
++# e0d20dc1521e74b82dbd69be53a048847798a90a (first in v2018.03). However, the fixup
++# is complicated by the fact that the underlying u-boot code changed multiple
++# times in history:
++# - The directory scripts/dtc/libfdt only exists since upstream commit
++#   c0e032e0090d6541549b19cc47e06ccd1f302893 (first in v2017.11). For earlier
++#   versions, create a dummy scripts/dtc/libfdt directory with symlinks for the
++#   fdt-related files. This allows to use the same -I<path> option for both
++#   cases.
++# - The variable 'srctree' used to be called 'SRCTREE' before upstream commit
++#   01286329b27b27eaeda045b469d41b1d9fce545a (first in v2014.04).
++# - The original location for libfdt, 'lib/libfdt/', used to be simply
++#   'libfdt' before upstream commit 0de71d507157c4bd4fddcd3a419140d2b986eed2
++#   (first in v2010.06). Make the 'lib' part optional in the substitution to
++#   handle this.
+ define UBOOT_FIXUP_LIBFDT_INCLUDE
+-	if [ -d $(@D)/scripts/dtc/libfdt ]; then \
+-		$(SED) 's%-I$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%' $(@D)/tools/Makefile; \
++	$(Q)if [ ! -d $(@D)/scripts/dtc/libfdt ]; then \
++		mkdir -p $(@D)/scripts/dtc/libfdt; \
++		cd $(@D)/scripts/dtc/libfdt; \
++		ln -s ../../../include/fdt.h .; \
++		ln -s ../../../include/libfdt*.h .; \
++		ln -s ../../../lib/libfdt/libfdt_internal.h .; \
+ 	fi
++	$(Q)$(SED) \
++		's%-I\ *\$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%; \
++		s%-I\ *\$$(SRCTREE)\(/lib\)\?/libfdt%-I$$(SRCTREE)/scripts/dtc/libfdt%' \
++		$(@D)/tools/Makefile
+ endef
+ UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
+ 
