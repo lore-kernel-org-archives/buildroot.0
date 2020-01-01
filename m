@@ -1,48 +1,109 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed,  1 Jan 2020 18:40:14 +0100
-Subject: [Buildroot] [PATCH] package/minicom: bump version
-Message-ID: <20200101174014.37595-1-giulio.benetti@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  1 Jan 2020 18:53:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/librsync: fix static link with popt
+Message-ID: <20200101175316.2524581-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Shortlog follows:
-Adam Lackorzynski (2):
-      minicom.c: Convert TABs to spaces
-      minicom.c: Reflow long_options
+Use pkg-config to retrieve popt dependencies such as iconv
 
-Rasmus Villemoes (1):
-      Allow user to specify buffering mode of capture file
+Fixes:
+ - http://autobuild.buildroot.org/results/896e8e3efbedad90d66ae8c4e1e50f16206cab49
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/minicom/minicom.hash | 2 +-
- package/minicom/minicom.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...FindPOPT.cmake-Add-PkgConfig-support.patch | 67 +++++++++++++++++++
+ package/librsync/librsync.mk                  |  2 +-
+ 2 files changed, 68 insertions(+), 1 deletion(-)
+ create mode 100644 package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch
 
-diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
-index 03e1dcc7d0..9725f58f6d 100644
---- a/package/minicom/minicom.hash
-+++ b/package/minicom/minicom.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 be5d923c399bc15dade7bc89052d887034abd49b386138c16bdcb912f2135098  minicom-5086119bbaafd2f8986579209885635b92020096.tar.gz
-+sha256 c8e34cc583f3b09c65871f5080b04799895b1ebd72092c0e18cb20a631f6c4b1  minicom-a6a507dcb8bd4cb5da7af9e2dc75b8e495fedbb6.tar.gz
- sha256 cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
-diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-index c08e9b10f4..a86d587b2f 100644
---- a/package/minicom/minicom.mk
-+++ b/package/minicom/minicom.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch b/package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch
+new file mode 100644
+index 0000000000..1c8a332ab6
+--- /dev/null
++++ b/package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch
+@@ -0,0 +1,67 @@
++From f5a131ab66fec23d0c79b55fc3907603b094deb9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 31 Dec 2019 18:13:29 +0100
++Subject: [PATCH] cmake/FindPOPT.cmake: Add PkgConfig support
++
++Add PkgConfig support to retrieve popt dependencies otherwise static
++build can fail if popt has been linked with iconv:
++
++[100%] Linking C executable rdiff
++/home/buildroot/autobuild/instance-2/output-1/per-package/librsync/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/8.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-2/output-1/per-package/librsync/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libpopt.a(poptint.o): in function `POPT_fprintf':
++poptint.c:(.text+0x34c): undefined reference to `libiconv_open
++
++Fixes:
++ - http://autobuild.buildroot.org/results/896e8e3efbedad90d66ae8c4e1e50f16206cab49
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/librsync/librsync/pull/186]
++---
++ cmake/FindPOPT.cmake | 29 ++++++++++++++++++-----------
++ 1 file changed, 18 insertions(+), 11 deletions(-)
++
++diff --git a/cmake/FindPOPT.cmake b/cmake/FindPOPT.cmake
++index 1ca452a..87b3e95 100644
++--- a/cmake/FindPOPT.cmake
+++++ b/cmake/FindPOPT.cmake
++@@ -42,20 +42,27 @@ if (NOT POPT_FOUND)
++   endif (NOT POPT_ROOT_DIR)
++ 
++   ##_____________________________________________________________________________
++-  ## Check for the header files
+++  ## Check with PkgConfig (to retrieve static dependencies such as iconv)
+++  find_package(PkgConfig QUIET)
+++  pkg_search_module (POPT QUIET popt)
+++  if (NOT POPT_FOUND)
++ 
++-  find_path (POPT_INCLUDE_DIRS popt.h
++-    HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
++-    PATH_SUFFIXES include
++-    )
+++    ##_____________________________________________________________________________
+++    ## Check for the header files
++ 
++-  ##_____________________________________________________________________________
++-  ## Check for the library
+++    find_path (POPT_INCLUDE_DIRS popt.h
+++      HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
+++      PATH_SUFFIXES include
+++      )
++ 
++-  find_library (POPT_LIBRARIES popt
++-    HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
++-    PATH_SUFFIXES lib
++-    )
+++    ##_____________________________________________________________________________
+++    ## Check for the library
+++
+++    find_library (POPT_LIBRARIES popt
+++      HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
+++      PATH_SUFFIXES lib
+++      )
+++  endif (POPT_FOUND)
++ 
++   ##_____________________________________________________________________________
++   ## Actions taken when all components have been found
++-- 
++2.24.0
++
+diff --git a/package/librsync/librsync.mk b/package/librsync/librsync.mk
+index 82d9b9fe2e..bf0785b427 100644
+--- a/package/librsync/librsync.mk
++++ b/package/librsync/librsync.mk
+@@ -9,6 +9,6 @@ LIBRSYNC_SITE = $(call github,librsync,librsync,v$(LIBRSYNC_VERSION))
+ LIBRSYNC_LICENSE = LGPL-2.1+
+ LIBRSYNC_LICENSE_FILES = COPYING
+ LIBRSYNC_INSTALL_STAGING = YES
+-LIBRSYNC_DEPENDENCIES = zlib bzip2 popt
++LIBRSYNC_DEPENDENCIES = host-pkgconf zlib bzip2 popt
  
--MINICOM_VERSION = 5086119bbaafd2f8986579209885635b92020096
-+MINICOM_VERSION = a6a507dcb8bd4cb5da7af9e2dc75b8e495fedbb6
- MINICOM_SITE = https://salsa.debian.org/minicom-team/minicom.git
- MINICOM_SITE_METHOD = git
- MINICOM_LICENSE = GPL-2.0+
+ $(eval $(cmake-package))
 -- 
-2.20.1
+2.24.0
