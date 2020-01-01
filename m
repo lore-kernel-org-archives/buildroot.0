@@ -1,127 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Jan 2020 19:41:17 +0100
-Subject: [Buildroot] [PATCH v2] package/libnss: fix build failure due to
- HW PPC Crypto bug
-In-Reply-To: <20200101165811.45110-1-giulio.benetti@benettiengineering.com>
-References: <20200101163258.13c7de62@windsurf>
- <20200101165811.45110-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200101184117.GN3519@scaer>
+From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Date: Wed,  1 Jan 2020 19:46:11 +0100
+Subject: [Buildroot] [PATCH] package/proj: update to 6.2.1
+Message-ID: <20200101184611.17126-1-zgyarmati@zgyarmati.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio, All,
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+---
+ package/proj/proj.hash | 2 +-
+ package/proj/proj.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2020-01-01 17:58 +0100, Giulio Benetti spake thusly:
-> libnss expects OS_TEST to be set to ppc or ppc64 or ppc64le instead of
-> powerpc, powerpc64, powerpc64le. At the moment gcm.h header checks if
-> __powerpc64__ is defined, but Makefile expects OS_TEST to be set to
-> ppc64 or ppc64le to build gcm-ppc.c. This way we end with having gcm
-> prototypes defined, but without implementation compiled. So remap
-> OS_TEST to what libnss expects depending on BR2_powerpc* enabled. This
-> way Makefile will build gcm-ppc.c too, that contains gcm-ppc function
-> implementations using Altivec. But add also a patch that modify
-> minimum gcc version required for using Altivec functions from 5.x to 8.x
-> since some Altivec intrinsics have been instroduced only in 8.x(i.e.
-> vec_xst_be()).
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Applied to master, after doing a few tweaks:
-
-  - move the arch setting to kconfig (like recently done in e3159cad71)
-  - add the build failure
-  - add pointer to upstream bug report and patch sybmission
-  - reformat and reword commit log
-
-Pushed now, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> V1 -> V2:
-> * changed completely approach
-> Pending upstream:
-> https://bugzilla.mozilla.org/show_bug.cgi?id=1606119
-> ---
->  ...6119-Fix-PPC-HW-Crypto-build-failure.patch | 35 +++++++++++++++++++
->  package/libnss/libnss.mk                      |  6 ++++
->  2 files changed, 41 insertions(+)
->  create mode 100644 package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
-> 
-> diff --git a/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
-> new file mode 100644
-> index 0000000000..2439eb1625
-> --- /dev/null
-> +++ b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
-> @@ -0,0 +1,35 @@
-> +From ebf185f8e48b5aec622dc949cef1b19b0a7669ef Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Wed, 1 Jan 2020 12:54:45 +0100
-> +Subject: [PATCH] Bug 1606119 - Fix PPC HW Crypto build failure
-> +
-> +All Altivec *_be() functions are supported from gcc version 8.x not 5.x
-> +so modify gcc version check that at the moment cause build failure due
-> +to missing Altivec *_be() functions.
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + nss/lib/freebl/gcm.h | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/nss/lib/freebl/gcm.h b/nss/lib/freebl/gcm.h
-> +index 571b9ec55..aa4dee824 100644
-> +--- a/nss/lib/freebl/gcm.h
-> ++++ b/nss/lib/freebl/gcm.h
-> +@@ -41,11 +41,11 @@
-> + #endif
-> + 
-> + /*
-> +- * PPC CRYPTO requires at least gcc 5 or clang. The LE check is purely
-> ++ * PPC CRYPTO requires at least gcc 8 or clang. The LE check is purely
-> +  * because it's only been tested on LE. If you're interested in BE,
-> +  * please send a patch.
-> +  */
-> +-#if (defined(__clang__) || (defined(__GNUC__) && __GNUC__ >= 5)) && \
-> ++#if (defined(__clang__) || (defined(__GNUC__) && __GNUC__ >= 8)) && \
-> +     defined(IS_LITTLE_ENDIAN)
-> + #define USE_PPC_CRYPTO
-> + #endif
-> +-- 
-> +2.20.1
-> +
-> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-> index 9349276a90..23dfdb11e4 100644
-> --- a/package/libnss/libnss.mk
-> +++ b/package/libnss/libnss.mk
-> @@ -39,6 +39,12 @@ endif
->  
->  ifeq ($(BR2_aarch64_be),y)
->  LIBNSS_ARCH = aarch64
-> +else ifeq ($(BR2_powerpc),y)
-> +LIBNSS_ARCH = ppc
-> +else ifeq ($(BR2_powerpc64),y)
-> +LIBNSS_ARCH = ppc64
-> +else ifeq ($(BR2_powerpc64le),y)
-> +LIBNSS_ARCH = ppc64le
->  else
->  LIBNSS_ARCH = $(ARCH)
->  endif
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/proj/proj.hash b/package/proj/proj.hash
+index c409544d77..d06de110a4 100644
+--- a/package/proj/proj.hash
++++ b/package/proj/proj.hash
+@@ -1,5 +1,5 @@
+ # Fetched from http://download.osgeo.org/proj/proj-6.2.0.tar.gz.md5
+ md5 5cde556545828beaffbe50b1bb038480 proj-6.2.0.tar.gz
+ # Locally calculated
+-sha256 b300c0f872f632ad7f8eb60725edbf14f0f8f52db740a3ab23e7b94f1cd22a50 proj-6.2.0.tar.gz
++sha256 7f2e0fe63312f1e766057cceb53dc9585c4a335ff6641de45696dbd40d17c340 proj-6.2.1.tar.gz
+ sha256 2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6 COPYING
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index faa7dab19b..3a8ac6c787 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROJ_VERSION = 6.2.0
++PROJ_VERSION = 6.2.1
+ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
