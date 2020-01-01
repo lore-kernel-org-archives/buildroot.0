@@ -1,39 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Jan 2020 10:08:22 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Nicholas Sielicki as
- contact for galileo_defconfig
-In-Reply-To: <BN6PR11MB4145284497C2AF782D307B3590260@BN6PR11MB4145.namprd11.prod.outlook.com>
-References: <20190811120739.26539-13-thomas.petazzoni@bootlin.com>
- <20191231152005.GH26395@scaer>
- <BN6PR11MB4145284497C2AF782D307B3590260@BN6PR11MB4145.namprd11.prod.outlook.com>
-Message-ID: <20200101090822.GE3519@scaer>
+Date: Wed, 1 Jan 2020 10:13:09 +0100
+Subject: [Buildroot] [git commit] package/apitrace: fix build failure due to
+ gcc bug 68485 and 85180
+Message-ID: <20200101090425.5C9FF8EA15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ray, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6f5fcb43296ffc54b2b67d0b3723405b56d8d439
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-12-31 20:15 +0000, Kinsella, Ray spake thusly:
-> Is there a log I can take a look at?
+The apitrace package exhibits gcc bug 68485 when built for the
+Microblaze architecture with optimization enabled, which causes a build
+failure. This is mainly due to 3rd party brotli embedded in apitrace
+that already has been fixed in Buildroot as single package. After
+working around this bug overriding -O0 to CFLAGS(Brotli is a C program),
+gcc bug 81580 showed off while compiling C++ files.
 
-None as of yet. We have gitlab-ci pipelines [0] running every week to
-test that the defconfigs still build. When a defconfig fails to build,
-a mail is automatically sent to whoever is registered for it.
+So, as done for other packages in Buildroot, work around this gcc bug by
+setting optimization to -O0(in CFLAGS) if
+BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y. And do the same(but in CXXFLAGS) if
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y as already done for other packages.
 
-Do you wish to be a recipient of such mail?
+Fixes:
+http://autobuild.buildroot.net/results/a46/a46626cc50f07f41d831614306f556d346d31429/
 
-[0] the latest pipeline:
-    https://gitlab.com/buildroot.org/buildroot/pipelines/105713000
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998 at free.fr: reorganise the conditions]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/apitrace/apitrace.mk | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
+index e6f8a2b1c5..e4e6c41fed 100644
+--- a/package/apitrace/apitrace.mk
++++ b/package/apitrace/apitrace.mk
+@@ -21,4 +21,21 @@ endif
+ # Gui was never tested, so we prefer to explicitly disable it
+ APITRACE_CONF_OPTS += -DENABLE_GUI=false
+ 
++APITRACE_CFLAGS = $(TARGET_CFLAGS)
++APITRACE_CXXFLAGS = $(TARGET_CXXFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++# This works around embedded Brotli build failure
++APITRACE_CFLAGS += -O0
++endif
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++# This works around Apitrace itself build failure
++APITRACE_CXXFLAGS += -O0
++endif
++
++APITRACE_CONF_OPTS += \
++	-DCMAKE_C_FLAGS="$(APITRACE_CFLAGS)" \
++	-DCMAKE_CXX_FLAGS="$(APITRACE_CXXFLAGS)"
++
+ $(eval $(cmake-package))
