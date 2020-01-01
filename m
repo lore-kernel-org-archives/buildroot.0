@@ -1,56 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Jan 2020 17:11:20 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Nicholas Sielicki as
- contact for galileo_defconfig
-In-Reply-To: <20200101163416.065d0ace@windsurf>
-References: <20190811120739.26539-13-thomas.petazzoni@bootlin.com>
- <20191231152005.GH26395@scaer>
- <MN2PR11MB4160005AC798211088F160C090210@MN2PR11MB4160.namprd11.prod.outlook.com>
- <20200101163416.065d0ace@windsurf>
-Message-ID: <20200101161120.GL3519@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 1 Jan 2020 17:15:32 +0100
+Subject: [Buildroot] [git commit] package/python-pyqt5: add hash for license
+ file
+Message-ID: <20200101160634.57F718EA5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ray, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a741402138806296e62e2391f0c8be76e9f84753
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-(removing Padraig from the loop, their email is bouncing)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-pyqt5/python-pyqt5.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On 2020-01-01 16:34 +0100, Thomas Petazzoni spake thusly:
-> On Wed, 1 Jan 2020 11:11:53 +0000
-> "Kinsella, Ray" <ray.kinsella@intel.com> wrote:
-> > My buildroot skills are bit rusty, but I have been mean to dust them off.
-> > So I am  willing to give it a go.
-> > 
-> > BTW is there a specific failure that is causing a problem at the moment.
-> > I have grub failing on what look to be Unicode related issues.
-
-Is this really 'grub' (as in grub legacy), or 'grub2'?
-We do not have the legacy grub in Buildroot anymore.
-
-> > /build/buildroot/output/host/lib/gcc/i586-buildroot-linux-uclibc/8.3.0/../../../../i586-buildroot-linux-uclibc/bin/ld: grub-core/lib/gnulib/libgnu.a(mbrtowc.o): in function `mbrtowc':
-> > mbrtowc.c:(.text+0x169): undefined reference to `mbtowc'
-> > /build/buildroot/output/host/lib/gcc/i586-buildroot-linux-uclibc/8.3.0/../../../../i586-buildroot-linux-uclibc/bin/ld: mbrtowc.c:(.text+0x17a): undefined reference to `mbtowc'
-> > /build/buildroot/output/host/lib/gcc/i586-buildroot-linux-uclibc/8.3.0/../../../../i586-buildroot-linux-uclibc/bin/ld: grub-core/lib/gnulib/libgnu.a(vasnprintf.o): in function `vasnprintf':
-> > vasnprintf.c:(.text+0x566): undefined reference to `wctomb'
-
-I've just tried to build the galileo_defconfig, and it completed
-successfully here.
-
-> Could you try enabling BR2_TOOLCHAIN_BUILDROOT_WCHAR and do a full
-> rebuild? Maybe we're missing this dependency in the grub package.
-
-We already have a dependency on BR2_USE_WCHAR in grub2.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/python-pyqt5/python-pyqt5.hash b/package/python-pyqt5/python-pyqt5.hash
+index 2a7d05b49a..8ef467a27b 100644
+--- a/package/python-pyqt5/python-pyqt5.hash
++++ b/package/python-pyqt5/python-pyqt5.hash
+@@ -1,3 +1,6 @@
+ # md5 from http://http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.7, sha256 locally computed
+ md5	e3dc21f31fd714659f0688e1eb31bacf  PyQt5_gpl-5.7.tar.gz
+ sha256	892693ba5f79989abb2061dad2d5c4e6f127e9dd3240f73f8220c7152cd35b05  PyQt5_gpl-5.7.tar.gz
++
++# Hash for license file
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
