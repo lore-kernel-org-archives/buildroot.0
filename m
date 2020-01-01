@@ -1,47 +1,38 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed,  1 Jan 2020 15:07:42 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-multidict: bump to version
- 4.7.3
-Message-ID: <20200101220742.10225-1-james.hilliard1@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 1 Jan 2020 23:09:39 +0100
+Subject: [Buildroot] [git commit] package/pulseaudio: replace host-intltool
+ by $(TARGET_NLS_DEPENDENCIES)
+Message-ID: <20200101220022.85C648EB28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-multidict/python-multidict.hash | 4 ++--
- package/python-multidict/python-multidict.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=c7130471583d200ecd10606b10f116b1c00dfa42
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
-index 0a6315280b..b0c53f49af 100644
---- a/package/python-multidict/python-multidict.hash
-+++ b/package/python-multidict/python-multidict.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/multidict/json
--md5	6e021381611e08839c2820b9778a8e85  multidict-4.7.2.tar.gz
--sha256	d4dafdcfbf0ac80fc5f00603f0ce43e487c654ae34a656e4749f175d9832b1b5  multidict-4.7.2.tar.gz
-+md5	bafb3123d53853790871f657a96491d3  multidict-4.7.3.tar.gz
-+sha256	be813fb9e5ce41a5a99a29cdb857144a1bd6670883586f995b940a4878dc5238  multidict-4.7.3.tar.gz
- # Locally computed sha256 checksums
- sha256	a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
-diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
-index ddf8086dfb..2190e501cc 100644
---- a/package/python-multidict/python-multidict.mk
-+++ b/package/python-multidict/python-multidict.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+intltool has been replaced by gettext since version 12.99.1 and
+https://gitlab.freedesktop.org/pulseaudio/pulseaudio/commit/57e3ccaf51f714eec8ca29005c3cc4fde456e84e
+so replace host-intltool by $(TARGET_NLS_DEPENDENCIES)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pulseaudio/pulseaudio.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 0e78724634..e64aa6f97b 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -17,7 +17,8 @@ PULSEAUDIO_CONF_OPTS = \
+ 	--disable-running-from-build-tree
  
--PYTHON_MULTIDICT_VERSION = 4.7.2
-+PYTHON_MULTIDICT_VERSION = 4.7.3
- PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
--PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/ec/1b/a117d6cb4403f2b64633606e3767f65fa8897b7db6efe14391c7b96cf2f6
-+PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/84/96/5503ba866d8d216e49a6ce3bcb288df8a5fb3ac8a90b8fcff9ddcda32568
- PYTHON_MULTIDICT_SETUP_TYPE = setuptools
- PYTHON_MULTIDICT_LICENSE = Apache-2.0
- PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
--- 
-2.20.1
+ PULSEAUDIO_DEPENDENCIES = \
+-	host-pkgconf libtool libsndfile speex host-intltool \
++	host-pkgconf libtool libsndfile speex \
++	$(TARGET_NLS_DEPENDENCIES) \
+ 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
+ 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
+ 	$(if $(BR2_PACKAGE_DBUS),dbus) \
