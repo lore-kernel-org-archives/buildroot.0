@@ -1,66 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Jan 2020 22:58:36 +0100
-Subject: [Buildroot] [PATCH] package/proj: update to 6.2.1
-In-Reply-To: <20200101184611.17126-1-zgyarmati@zgyarmati.de>
-References: <20200101184611.17126-1-zgyarmati@zgyarmati.de>
-Message-ID: <20200101215836.GQ3519@scaer>
+Date: Wed, 1 Jan 2020 23:01:27 +0100
+Subject: [Buildroot] [git commit] package/gcr: bump to version 3.34.0
+Message-ID: <20200101215214.E48E88EB22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zoltan, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a660a7d0260beae553dc7ee0763a853c30c90c71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-01-01 19:46 +0100, Zoltan Gyarmati spake thusly:
-> Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+intltool has been replaced by gettext since version 3.33.4 and
+https://gitlab.gnome.org/GNOME/gcr/commit/4fb05684d2f181c35898fc26f5675b07e7e2dd34
+so replace host-intltool by $(TARGET_NLS_DEPENDENCIES)
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/gcr/gcr.hash |  4 ++--
+ package/gcr/gcr.mk   | 11 ++++++++---
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/proj/proj.hash | 2 +-
->  package/proj/proj.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/proj/proj.hash b/package/proj/proj.hash
-> index c409544d77..d06de110a4 100644
-> --- a/package/proj/proj.hash
-> +++ b/package/proj/proj.hash
-> @@ -1,5 +1,5 @@
->  # Fetched from http://download.osgeo.org/proj/proj-6.2.0.tar.gz.md5
->  md5 5cde556545828beaffbe50b1bb038480 proj-6.2.0.tar.gz
->  # Locally calculated
-> -sha256 b300c0f872f632ad7f8eb60725edbf14f0f8f52db740a3ab23e7b94f1cd22a50 proj-6.2.0.tar.gz
-> +sha256 7f2e0fe63312f1e766057cceb53dc9585c4a335ff6641de45696dbd40d17c340 proj-6.2.1.tar.gz
->  sha256 2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6 COPYING
-> diff --git a/package/proj/proj.mk b/package/proj/proj.mk
-> index faa7dab19b..3a8ac6c787 100644
-> --- a/package/proj/proj.mk
-> +++ b/package/proj/proj.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -PROJ_VERSION = 6.2.0
-> +PROJ_VERSION = 6.2.1
->  PROJ_SITE = http://download.osgeo.org/proj
->  PROJ_LICENSE = MIT
->  PROJ_LICENSE_FILES = COPYING
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
+index a78f56517d..7d5786db9e 100644
+--- a/package/gcr/gcr.hash
++++ b/package/gcr/gcr.hash
+@@ -1,3 +1,3 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.28/gcr-3.28.1.sha256sum
+-sha256	95204aa2111c301778ebfbe60975ce3ed698c958430ffcc2a785ac5e593d168b	gcr-3.28.1.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.34/gcr-3.34.0.sha256sum
++sha256	29df50974a90987af694c0fb8926a6b366e68cacd8abd813817cfe1eb5d54524	gcr-3.34.0.tar.xz
+ sha256	94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23	COPYING
+diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
+index 7cf7ea79e5..2fe583978c 100644
+--- a/package/gcr/gcr.mk
++++ b/package/gcr/gcr.mk
+@@ -4,11 +4,16 @@
+ #
+ ################################################################################
+ 
+-GCR_VERSION_MAJOR = 3.28
+-GCR_VERSION = $(GCR_VERSION_MAJOR).1
++GCR_VERSION_MAJOR = 3.34
++GCR_VERSION = $(GCR_VERSION_MAJOR).0
+ GCR_SITE = http://ftp.acc.umu.se/pub/gnome/sources/gcr/$(GCR_VERSION_MAJOR)
+ GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
+-GCR_DEPENDENCIES = host-intltool host-pkgconf libgcrypt libglib2 p11-kit
++GCR_DEPENDENCIES = \
++	host-pkgconf \
++	libgcrypt \
++	libglib2 \
++	p11-kit \
++	$(TARGET_NLS_DEPENDENCIES)
+ GCR_INSTALL_STAGING = YES
+ GCR_CONF_ENV = ac_cv_path_GNUPG=/usr/bin/gpg2
+ GCR_CONF_OPTS = \
