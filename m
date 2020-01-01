@@ -1,81 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Jan 2020 15:30:43 +0100
-Subject: [Buildroot] [git commit] package/suricata: fix shabang for python
- scripts
-Message-ID: <20200101142232.BCAD98EA4C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 1 Jan 2020 16:32:58 +0100
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure due to HW
+ PPC Crypto bug
+In-Reply-To: <a1f74ad6-8dbc-e515-1393-c81ec6013472@benettiengineering.com>
+References: <20191227165427.107111-1-giulio.benetti@benettiengineering.com>
+ <20191231180736.09a5add2@windsurf>
+ <496f5949-570f-2678-6bcd-67660692479b@benettiengineering.com>
+ <08c5d316-d21b-f361-1506-af6a3bdd46e0@xes-inc.com>
+ <a45613d1-5d52-9c80-8b79-a1eda19e83f0@xes-inc.com>
+ <a1f74ad6-8dbc-e515-1393-c81ec6013472@benettiengineering.com>
+Message-ID: <20200101163258.13c7de62@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=061768a04085be1b118e056b8523976edbd06823
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 1 Jan 2020 00:44:09 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-/usr/bin/suricatactl and /usr/bin/suricatasc have their interpreter set
-to the path of python in the HOST machine.
+> >> So if we stick with nss-3.48, the package should likely depend on
+> >> BR2_TOOLCHAIN_GCC_AT_LEAST_8.  
+> 
+> This ^^^ is too restrictive, but...
+> 
+> > Or don't utilize PPC hardware accelerated instructions by undefining
+> > USE_PPC_CRYPTO... which is probably the saner option :-). This would
+> > give the semblance that the compile worked as expected since the hashing
+> > function will now be available, but Thomas' concern re CPU_ARCH and the
+> > future inclusion of ppc specific source is still valid.  
+> 
+> ...this is a good idea. So with gcc version < 8.x let's disable 
+> USE_PPC_CRYPTO and with gcc version >= 8.x let's enable it only if 
+> LITTLE_ENDIAN. So at this point I would change my upstream patch to do 
+> that in NSS, since there's already a gcc version check but only against 
+> version 5.x(>=) that instead needs to be >= 8.x.
 
-Use distutils' option '-e' to specify a better shabang.
+As I said in my previous e-mail, I also don't see how it can work with
+the current OS_TEST value that we pass in libnss.mk, which is never set
+to ppc64 or ppc64le as the libnss build system expects.
 
-[yann.morin.1998 at free.fr:
-  - author did not provide their SoB, but it's simple enough to
-    not require it for once
-  - reword commit log
-  - use git-formatted patch, with a proper commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...n-ensure-proper-shabang-on-python-scripts.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+Best regards,
 
-diff --git a/package/suricata/0003-python-ensure-proper-shabang-on-python-scripts.patch b/package/suricata/0003-python-ensure-proper-shabang-on-python-scripts.patch
-new file mode 100644
-index 0000000000..4be591be3f
---- /dev/null
-+++ b/package/suricata/0003-python-ensure-proper-shabang-on-python-scripts.patch
-@@ -0,0 +1,45 @@
-+From 44fe2328b715db25134ee095526d2fa47e6cd834 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Wed, 1 Jan 2020 15:25:57 +0100
-+Subject: [PATCH] python: ensure proper shabang on python scripts
-+
-+When instlling python scripts, distutils would use the python used to
-+run setup.py as shabang for the scripts it installs.
-+
-+However, when cross-compiling, this is most often not correct.
-+
-+Instead, using '/usr/bin/env python' is guaranteed to find the proper
-+python in the PATH, so we need to instruct setyup.py to use that as the
-+executable.
-+
-+[yann.morin.1998 at free.fr:
-+  - author did not provide their SoB, but it's simple enough to
-+    not require it for once
-+  - provide proper commit log
-+]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ python/Makefile.am | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/python/Makefile.am b/python/Makefile.am
-+index 59d195f29..a41604f72 100644
-+--- a/python/Makefile.am
-++++ b/python/Makefile.am
-+@@ -6,11 +6,11 @@ EXTRA_DIST =	setup.py \
-+ if HAVE_PYTHON
-+ all-local:
-+ 	cd $(srcdir) && \
-+-		$(HAVE_PYTHON) setup.py build --build-base $(abs_builddir)
-++		$(HAVE_PYTHON) setup.py build -e "/usr/bin/env python" --build-base $(abs_builddir)
-+ 
-+ install-exec-local:
-+ 	cd $(srcdir) && \
-+-		$(HAVE_PYTHON) setup.py build --build-base $(abs_builddir) \
-++		$(HAVE_PYTHON) setup.py build -e "/usr/bin/env python" --build-base $(abs_builddir) \
-+ 		install --prefix $(DESTDIR)$(prefix)
-+ 
-+ uninstall-local:
-+-- 
-+2.20.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
