@@ -1,24 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 2 Jan 2020 09:24:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-multidict: bump to
- version 4.7.3
-In-Reply-To: <20200101220742.10225-1-james.hilliard1@gmail.com>
-References: <20200101220742.10225-1-james.hilliard1@gmail.com>
-Message-ID: <20200102092410.25e87586@windsurf>
+Date: Thu, 2 Jan 2020 09:24:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/librsync: fix static link with
+ popt
+In-Reply-To: <20200101175316.2524581-1-fontaine.fabrice@gmail.com>
+References: <20200101175316.2524581-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200102092427.3f0beac2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  1 Jan 2020 15:07:42 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Wed,  1 Jan 2020 18:53:16 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Use pkg-config to retrieve popt dependencies such as iconv
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/896e8e3efbedad90d66ae8c4e1e50f16206cab49
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/python-multidict/python-multidict.hash | 4 ++--
->  package/python-multidict/python-multidict.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  ...FindPOPT.cmake-Add-PkgConfig-support.patch | 67 +++++++++++++++++++
+>  package/librsync/librsync.mk                  |  2 +-
+>  2 files changed, 68 insertions(+), 1 deletion(-)
+>  create mode 100644 package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch
 
 Applied to master, thanks.
 
