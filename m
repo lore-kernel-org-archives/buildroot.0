@@ -1,155 +1,46 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Thu,  2 Jan 2020 12:37:46 +0000
-Subject: [Buildroot] [PATCH 1/1] package/dcron: create directories if needed
- on startup
-Message-ID: <20200102123746.2404602-1-chrismcc@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 2 Jan 2020 14:30:16 +0100
+Subject: [Buildroot] [git commit] package/mmc-utils: fix build with SSP
+Message-ID: <20200102132044.867578EBA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Create the /var/spool/cron/crontabs and /var/spool/cron/cronstamps directories
-on startup if they don't exist.  By default /var/spool is a symlink to /tmp so
-the contents get deleted on reboot.  If the cronstamps directory does not exist
-anything in /etc/cron.hourly/ , etc. will fail to run.
+commit: https://git.buildroot.net/buildroot/commit/?id=05a802f671875d12bfc6282aeaf2b765e4a18962
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Set AM_CFLAGS to an empty value to avoid the following redefinition
+error when building with our custom _FORTIFY_SOURCE:
+
+/accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/host/bin/mips-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Werror -Wuninitialized -Wundef -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_FORTIFY_SOURCE=1 -Wp,-MMD,3rdparty/hmac_sha/.hmac_sha2.o.d,-MT,3rdparty/hmac_sha/hmac_sha2.o -c 3rdparty/hmac_sha/hmac_sha2.c -o 3rdparty/hmac_sha/hmac_sha2.o
+<command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cfef9315441b5f4909b58a6dccd8bea8e67ae992
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dcron/S90dcron      | 105 +++++++++++++++++++++++++++++-------
- package/dcron/dcron.service |   6 +++
- 2 files changed, 93 insertions(+), 18 deletions(-)
+ package/mmc-utils/mmc-utils.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/dcron/S90dcron b/package/dcron/S90dcron
-index de21d2ca13..f51513d41e 100644
---- a/package/dcron/S90dcron
-+++ b/package/dcron/S90dcron
-@@ -1,22 +1,91 @@
- #!/bin/sh
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+index 286e73b242..8c264a454a 100644
+--- a/package/mmc-utils/mmc-utils.mk
++++ b/package/mmc-utils/mmc-utils.mk
+@@ -9,8 +9,12 @@ MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
+ MMC_UTILS_LICENSE = GPL-2.0
+ MMC_UTILS_LICENSE_FILES = mmc.h
  
-+# Make sure umask is sane
-+umask 022
-+
-+PATH="/sbin:/usr/sbin:/bin:/usr/bin"
-+export PATH
-+
-+DAEMON_NAME="dcron"
-+DAEMON_DESC="dcron"
-+DAEMON_BINARY="/usr/sbin/crond"
-+DAEMON_BASENAME="crond"
-+DAEMON_CONFIG="/etc/cron.d/system"
-+DAEMON_ARGS="-- -f"
-+DAEMON_PID="/var/run/crond.pid"
-+
-+[ -r /etc/default/$DAEMON_BASENAME ] && . /etc/default/$DAEMON_BASENAME
-+[ -x $DAEMON_BINARY ] || exit 5
-+[ -r $DAEMON_CONFIG ] || exit 6
-+
-+start() {
-+  printf "Starting $DAEMON_DESC: "
-+  [ -d /var/spool/cron/crontabs   ] || mkdir -vp /var/spool/cron/crontabs
-+  [ -d /var/spool/cron/cronstamps ] || mkdir -vp /var/spool/cron/cronstamps
-+  start-stop-daemon -S -q -b  -m -p $DAEMON_PID  -x $DAEMON_BINARY $DAEMON_ARGS
-+  sleep 2 ; status ; RETVAL=$?
-+  if [ $RETVAL -ne 0 ]; then
-+    echo "FAIL"
-+  else
-+    echo "OK"
-+  fi
-+  return $RETVAL
-+}
-+
-+# -R doesn't work with busybox, but doesn't error out
-+stop() {
-+  printf "Stopping $DAEMON_DESC: "
-+  start-stop-daemon -K -R 59 -x $DAEMON_BINARY
-+  RETVAL=$?
-+  if [ $RETVAL -ne 0 ]; then
-+    echo "FAIL"
-+  else
-+    echo "OK"
-+  fi
-+  return $RETVAL
-+}
-+
-+status() {
-+  PIDS=`pidof $DAEMON_BASENAME`
-+  RETVAL=$?
-+  if [ $RETVAL -eq 0 ]; then
-+    echo "RUNNING (pid $PIDS)"
-+  else
-+    echo "NOT OK"
-+  fi
-+  return $RETVAL
-+}
-+
- case "$1" in
--	start)
--		printf "Starting cron ... "
--		start-stop-daemon -S -q -m -b -p /var/run/dcron.pid --exec /usr/sbin/crond -- -f
--		echo "done."
--		;;
--	stop)
--		printf "Stopping cron ..."
--		start-stop-daemon -K -q -p /var/run/dcron.pid
--		echo "done."
--		;;
--	restart)
--		$0 stop
--		sleep 1
--		$0 start
--		;;
--	*)
--		echo "usage: $0 {start|stop|restart}"
--		;;
-+  start)
-+    start
-+    ;;
-+  stop)
-+    stop
-+    ;;
-+  restart)
-+    echo "Restarting $DAEMON_DESC: "
-+    stop
-+    sleep 1
-+    start
-+    echo ""
-+    ;;
-+  try-restart)
-+    status
-+    if [ $RETVAL -eq 0 ]; then
-+      stop
-+      sleep 1
-+      start
-+    fi
-+    ;;
-+  status)
-+    printf "Status of $DAEMON_DESC: "
-+    status
-+    ;;
-+  *)
-+    echo "Usage: $0 {start|stop|restart|status|try-restart}" >&2
-+    exit 3
-+    ;;
- esac
-+
-+exit 0
-diff --git a/package/dcron/dcron.service b/package/dcron/dcron.service
-index 924ed72205..19c66b1535 100644
---- a/package/dcron/dcron.service
-+++ b/package/dcron/dcron.service
-@@ -3,6 +3,12 @@ Description=Task scheduler daemon
- After=syslog.target
++# override AM_CFLAGS as the project Makefile uses it to pass
++# -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2, and the latter conflicts
++# with the _FORTIFY_SOURCE that we pass when hardening options are
++# enabled.
+ define MMC_UTILS_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) AM_CFLAGS=
+ endef
  
- [Service]
-+# make sure directories exist. use -v so it gets logged
-+ExecStartPre=/bin/sh -c '\
-+test -d /var/spool/cron/crontabs   || mkdir -pv /var/spool/cron/crontabs  ; \
-+test -d /var/spool/cron/cronstamps || mkdir -pv /var/spool/cron/cronstamps; \
-+'
-+
- ExecStart=/usr/sbin/crond -S
- Type=forking
- 
--- 
-2.18.1
+ define MMC_UTILS_INSTALL_TARGET_CMDS
