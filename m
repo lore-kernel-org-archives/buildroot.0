@@ -1,126 +1,102 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 2 Jan 2020 22:41:53 +0100
-Subject: [Buildroot] [PATCH] package/libnss: fix ppc 32-bit build failure
-In-Reply-To: <23dbb404-03fa-f18f-607d-62cf8ef43a5f@xes-inc.com>
-References: <20200102181740.116227-1-giulio.benetti@benettiengineering.com>
- <23dbb404-03fa-f18f-607d-62cf8ef43a5f@xes-inc.com>
-Message-ID: <c965305f-ed37-02ce-971c-1253fe056402@benettiengineering.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu,  2 Jan 2020 23:04:15 +0100
+Subject: [Buildroot] [PATCH] package/gcc: remove gcc 5.5 or1k fork
+Message-ID: <20200102220415.431543-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+Remove the old gcc 5.5 fork for or1k architecture
+that start to fail to build with recent version
+of Binutils >= 2.32 with the following error:
 
-On 1/2/20 9:54 PM, Vincent Fazio wrote:
-> Giulio,
-> 
-> On 1/2/20 12:17 PM, Giulio Benetti wrote:
->> NSS assumes that Altivec is supported on powerpc64 only, but in
->> Makefile it tries to build gcm-ppc.c(containing Altivec functions
->> calls), even if powerpc is not 64-bits. So add a patch to add a check if
->> architecture is a 64-bit to build gcm-ppc.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/433/433a7db21654d67626c7a3e5f1272d6c3ce4fe6c/
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->> Pending upstream:
->> https://bugzilla.mozilla.org/show_bug.cgi?id=1606689
->> ---
->>    ...1606689-Fix-ppc-32-bit-build-failure.patch | 31 +++++++++++++++++++
->>    1 file changed, 31 insertions(+)
->>    create mode 100644 package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch
->>
->> diff --git a/package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch b/package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch
->> new file mode 100644
->> index 0000000000..de30fa7002
->> --- /dev/null
->> +++ b/package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch
->> @@ -0,0 +1,31 @@
->> +From fcac43d6a0af59926da7ad4a15a37255887cdfa2 Mon Sep 17 00:00:00 2001
->> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> +Date: Thu, 2 Jan 2020 18:55:50 +0100
->> +Subject: [PATCH] Bug 1606689 - Fix ppc 32-bit build failure
->> +
->> +NSS assumes that only 64-bit powerpc support Altivec instructions to be
->> +used in gcm-ppc.c, so align Makefile condition to build gcm-ppc.c only
->> +if USE_64 is defined.
->> +
->> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> +---
->> + nss/lib/freebl/Makefile | 2 +-
->> + 1 file changed, 1 insertion(+), 1 deletion(-)
->> +
->> +diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
->> +index 00518d7f8..0e230d8c5 100644
->> +--- a/nss/lib/freebl/Makefile
->> ++++ b/nss/lib/freebl/Makefile
->> +@@ -264,8 +264,8 @@ ifeq ($(CPU_ARCH),arm)
->> +     MPI_SRCS += mpi_arm.c
->> + endif
->> + ifeq ($(CPU_ARCH),ppc)
->> +-    EXTRA_SRCS += gcm-ppc.c
->> + ifdef USE_64
->> ++    EXTRA_SRCS += gcm-ppc.c
-> 
-> Are you dropping this file for 32bit builds due to the Altivec
-> requirements? General Altivec instructions are available on 32bit chips,
-> such as those from Freescale/NXP. The e600 is a product that comes to
-> mind. IMO, the Makefile should include the file if the architecture is
-> 'ppc'. I think it makes sense that the source file should determine what
-> it compiles down to. It's possible the hw acceleration logic for PPC
-> changes later and this is one more file that would need to be touched.
-> 
-> Unfortunately, this is where it gets a bit more complicated...
-> 
-> The backing instruction for the vec_xl_be compiler intrinsic is lxvd2x
-> (a VSX instruction). Technically I think this instruction was available
-> in the Power ISA as early as 2.06, but GCC is only advertising the
-> intrinsic as of ISA 3.0 (Power 9+).
-> https://gcc.gnu.org/onlinedocs/gcc-8.3.0/gcc/PowerPC-Built-in-Functions.html#PowerPC-Built-in-Functions
-> 
-> I've always had issues reading the logic behind GCC's instruction
-> generation and I don't have 8+ handy... I'm not sure if there's a guard
-> to prevent the lxvd2x instruction from being emitted or not when
-> resolving vec_xl_be and, say, '-maltivec -mpcu=7450' is specified. If
-> there isn't, I'd expect either an illegal instruction exception or for
-> the kernel to emulate it magically. If there is, I'd expect GCC to
-> either compile a compatible instruction shim or to simply error out.
-> 
-> Regardless, given the way the hardware acceleration is written currently
-> to require that compiler intrinsic, USE_PPC_CRYPTO may need to be
-> guarded by __builtin_cpu_supports("arch_3_00")
+host-gcc-final-or1k-musl-5.4.0-20170218/build/./gcc/crtbeginS.o: addend should be zero for plt relocations
+host/or1k-buildroot-linux-uclibc/bin/ld: final link failed: bad value
 
-They are all good suggestions but I think they are more NSS related than 
-Buildroot related. What I'm trying to do here is to avoid build failure 
-in Buildroot and as much as possible to try to contribute upstream. As 
-you've mentioned above 32-bit supports Altivec, but the problem at the 
-moment is that USE_PPC_CRYPTO is defined in gcm.h only if __powerpc64__ 
-is defined, this means that they only tested it for that 
-architecture(ppc64 and ppc64le). So at the moment I'd prefer keep 32-bit 
-Altivec supported devices without gcm altivec acceleration. But if you 
-have a patch that takes into account 32-bits Altivec too, please upload 
-it here:
+https://gitlab.com/kubu93/buildroot/-/jobs/391938988
 
-https://bugzilla.mozilla.org/show_bug.cgi?id=1606689
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ Config.in.legacy           | 7 +++++++
+ package/gcc/Config.in.host | 8 --------
+ package/gcc/gcc.mk         | 5 +----
+ 3 files changed, 8 insertions(+), 12 deletions(-)
 
-so we fix this problem once!
-
-Maybe we can live chat on BR IRC if you join it.
-
-Thanks for reviewing so in depth.
-Best regards
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 8436951f0f..d34ef88e1d 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2020.02"
+ 
++config BR2_GCC_VERSION_OR1K
++	bool "gcc 5.x fork for or1k has been removed"
++	select BR2_LEGACY
++	help
++	  Support for gcc 5.x for or1k has been removed. The current
++	  default version (9.x or later) has been selected instead.
++
+ config BR2_PACKAGE_PYTHON_SCAPY3K
+ 	bool "python-scapy3k is replaced by python-scapy"
+ 	select BR2_LEGACY
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 92af40b19f..3e60ced61f 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -4,7 +4,6 @@ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_CSKY if BR2_csky
+-	default BR2_GCC_VERSION_OR1K if BR2_or1k
+ 	default BR2_GCC_VERSION_8_X
+ 	help
+ 	  Select the version of gcc you wish to use.
+@@ -21,12 +20,6 @@ config BR2_GCC_VERSION_CSKY
+ 	depends on BR2_csky
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+-config BR2_GCC_VERSION_OR1K
+-	bool "gcc or1k (5.x)"
+-	# Only supported architecture
+-	depends on BR2_or1k
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+-
+ config BR2_GCC_VERSION_5_X
+ 	bool "gcc 5.x"
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+@@ -96,7 +89,6 @@ config BR2_GCC_VERSION
+ 	default "8.3.0"     if BR2_GCC_VERSION_8_X
+ 	default "9.2.0"     if BR2_GCC_VERSION_9_X
+ 	default "arc-2019.09-rc1" if BR2_GCC_VERSION_ARC
+-	default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
+ 	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
+ 
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 527f30bf22..128293570d 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -13,9 +13,6 @@ GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
+ ifeq ($(BR2_GCC_VERSION_ARC),y)
+ GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
+ GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+-else ifeq ($(BR2_GCC_VERSION_OR1K),y)
+-GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
+-GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+ else ifeq ($(BR2_csky),y)
+ GCC_SITE = $(call github,c-sky,gcc,$(GCC_VERSION))
+ GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+@@ -168,7 +165,7 @@ else
+ HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
+ endif
+ 
+-ifeq ($(BR2_arc)$(BR2_GCC_VERSION_OR1K),y)
++ifeq ($(BR2_arc),y)
+ HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
+ endif
+ 
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
->> +     DEFINES += -DNSS_NO_INIT_SUPPORT
->> + endif # USE_64
->> + endif # ppc
->> +--
->> +2.20.1
->> +
-> 
+2.24.1
