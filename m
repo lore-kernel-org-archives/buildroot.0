@@ -1,27 +1,26 @@
 From: Mao Han <han_mao@c-sky.com>
-Date: Thu,  2 Jan 2020 11:57:20 +0800
-Subject: [Buildroot] [PATCH 1/2] package/toolchain-external: ensure
- ARCH_LIB_DIR exist
-Message-ID: <1577937441-18703-1-git-send-email-han_mao@c-sky.com>
+Date: Thu,  2 Jan 2020 11:57:21 +0800
+Subject: [Buildroot] [PATCH 2/2] toolchain: Get ld.so name if available
+In-Reply-To: <1577937441-18703-1-git-send-email-han_mao@c-sky.com>
+References: <1577937441-18703-1-git-send-email-han_mao@c-sky.com>
+Message-ID: <1577937441-18703-2-git-send-email-han_mao@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Different architecture may have different arch library folder structure
-for their multilib toolchain. RISC-V toolchain has folder structure
-like:
-/sysroot/lib64/
-/sysroot/lib64/lp64
-/sysroot/lib64/lp64d
-The first level is for ISA and the second level is for ABI.
-Current buildroot only creat lib and lib64, some error is reported
-while installing the external toolchain:
->>> toolchain-external-custom  Installing to staging directory
-/usr/bin/install -D -m 0755 /.../build/toolchain-external-custom/toolchain-wrapper /.../host/bin/toolchain-wrapper
-ln: failed to create symbolic link '/.../host/riscv64-buildroot-linux-gnu/sysroot/lib64/lp64': No such file or directory
-ln: failed to create symbolic link '/.../host/riscv64-buildroot-linux-gnu/sysroot/usr/lib64/lp64': No such file or directory
+RISC-V multilib toolchain(github.com/riscv/riscv-gnu-toolchain.git) put
+multi ld.so with different ABI under sysroot/lib:
+sysroot/lib/ld-linux-riscv32-ilp32d.so.1
+sysroot/lib/ld-linux-riscv32-ilp32.so.1
+sysroot/lib/ld-linux-riscv64-lp64d.so.1
+sysroot/lib/ld-linux-riscv64-lp64.so.1
+Current buildroot script can't handle multi ld.so and report:
+>>> toolchain-external-custom  Copying external toolchain sysroot to staging...
+/bin/bash: line 0: [: too many arguments
+This patch try to get the exact name for ld.so and avoid multi ld.so check in
+the script.
 
 Signed-off-by: Qu Xianmiao <xianmiao_qu@c-sky.com>
 Signed-off-by: Chen Hongdeng <hongdeng_chen@c-sky.com>
@@ -30,21 +29,58 @@ Signed-off-by: Mao Han <han_mao@c-sky.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Mark Corbin <mark.corbin@embecosm.com>
 ---
- toolchain/toolchain-external/pkg-toolchain-external.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ toolchain/helpers.mk                                   | 10 ++++++++--
+ toolchain/toolchain-external/pkg-toolchain-external.mk |  3 ++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 03355f5..cc581fc 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -104,6 +104,7 @@ copy_toolchain_sysroot = \
+ 	ARCH_SUBDIR="$(strip $3)"; \
+ 	ARCH_LIB_DIR="$(strip $4)" ; \
+ 	SUPPORT_LIB_DIR="$(strip $5)" ; \
++	SPECIFIC_LD_NAME="$(strip $6)" ; \
+ 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
+ 		if [ ! -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
+ 			continue ; \
+@@ -136,8 +137,13 @@ copy_toolchain_sysroot = \
+ 		done ; \
+ 	fi ; \
+ 	if [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
+-		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
+-			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
++		if [ "$${SPECIFIC_LD_NAME}" != "" ]; then \
++			LD_NAME=$${SPECIFIC_LD_NAME}; \
++		else \
++			LD_NAME="ld*.so.*"; \
++		fi; \
++		if [ -e $${ARCH_SYSROOT_DIR}/lib/$${LD_NAME} ]; then \
++			cp -a $${ARCH_SYSROOT_DIR}/lib/$${LD_NAME} $(STAGING_DIR)/lib/ ; \
+ 		fi ; \
+ 	fi ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
 diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index baf719a..13b2468 100644
+index 13b2468..19cf7d6 100644
 --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
 +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -454,6 +454,8 @@ create_lib_symlinks = \
+@@ -425,6 +425,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+ 	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
+ 	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
  	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
- 		relpath="$(call relpath_prefix,$${ARCH_LIB_DIR})" ; \
-+		mkdir -p "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
-+		mkdir -p "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
- 		ln -snf $${relpath}lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
- 		ln -snf $${relpath}lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
- 	fi
++	SPECIFIC_LD_NAME=`$(TOOLCHAIN_EXTERNAL_READELF) -d $${ARCH_SYSROOT_DIR}$${ARCH_LIB_DIR}/libc*.so|grep ld|grep so|awk '{print $$NF}'|sed "s/\[//g"|sed "s/\]//g"`;\
+ 	SUPPORT_LIB_DIR="" ; \
+ 	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+ 		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
+@@ -441,7 +442,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+ 		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+ 	fi ; \
+ 	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
+-	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
++	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR},$${SPECIFIC_LD_NAME})
+ endef
+ 
+ # Create a symlink from (usr/)$(ARCH_LIB_DIR) to lib.
 -- 
 2.7.4
