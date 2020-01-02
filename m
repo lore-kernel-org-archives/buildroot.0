@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 2 Jan 2020 14:30:16 +0100
-Subject: [Buildroot] [git commit] package/mmc-utils: fix build with SSP
-Message-ID: <20200102132044.867578EBA7@busybox.osuosl.org>
+Date: Thu, 2 Jan 2020 14:31:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/avro-c: depends on
+ BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <20200102110341.149419-1-titouan.christophe@railnova.eu>
+References: <20200102110341.149419-1-titouan.christophe@railnova.eu>
+Message-ID: <20200102143127.0977eab0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05a802f671875d12bfc6282aeaf2b765e4a18962
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  2 Jan 2020 12:03:41 +0100
+Titouan Christophe <titouan.christophe@railnova.eu> wrote:
 
-Set AM_CFLAGS to an empty value to avoid the following redefinition
-error when building with our custom _FORTIFY_SOURCE:
+> Fixes: http://autobuild.buildroot.net/results/989/989b4e8aaeff51bb5236c4b31e3783a0e07e4a82
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> ---
+>  package/avro-c/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/avro-c/Config.in b/package/avro-c/Config.in
+> index fe962e1e3c..03922612df 100644
+> --- a/package/avro-c/Config.in
+> +++ b/package/avro-c/Config.in
+> @@ -4,6 +4,7 @@ comment "avro-c needs a toolchain w/ dynamic library"
+>  config BR2_PACKAGE_AVRO_C
+>  	bool "avro-c"
+>  	depends on !BR2_STATIC_LIBS  # Avro unconditionally compiles shared libs
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
 
-/accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/host/bin/mips-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Werror -Wuninitialized -Wundef -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_FORTIFY_SOURCE=1 -Wp,-MMD,3rdparty/hmac_sha/.hmac_sha2.o.d,-MT,3rdparty/hmac_sha/hmac_sha2.o -c 3rdparty/hmac_sha/hmac_sha2.c -o 3rdparty/hmac_sha/hmac_sha2.o
-<command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
+You need to add this dependency in the Config.in comment as well:
 
-Fixes:
- - http://autobuild.buildroot.org/results/cfef9315441b5f4909b58a6dccd8bea8e67ae992
+comment "avro-c needs a toolchain w/ dynamic library"
+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+        depends on BR2_STATIC_LIBS
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mmc-utils/mmc-utils.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index 286e73b242..8c264a454a 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
-@@ -9,8 +9,12 @@ MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
- MMC_UTILS_LICENSE = GPL-2.0
- MMC_UTILS_LICENSE_FILES = mmc.h
- 
-+# override AM_CFLAGS as the project Makefile uses it to pass
-+# -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2, and the latter conflicts
-+# with the _FORTIFY_SOURCE that we pass when hardening options are
-+# enabled.
- define MMC_UTILS_BUILD_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) AM_CFLAGS=
- endef
- 
- define MMC_UTILS_INSTALL_TARGET_CMDS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
