@@ -1,113 +1,50 @@
-From: Dan Walkes <danwalkes@trellis-logic.com>
-Date: Wed, 1 Jan 2020 17:41:14 -0700
-Subject: [Buildroot] [PATCH 1/1] docs/manual: dependency documentation
- updates
-In-Reply-To: <20191231171217.GA3519@scaer>
-References: <20191016175545.12855-1-danwalkes@trellis-logic.com>
- <20191231171217.GA3519@scaer>
-Message-ID: <CAAhKrJ1gn0i4LRZVVFoMmXJAdmjRx7qJ9XjgT6yWqHbnxBMbKA@mail.gmail.com>
+From: Mao Han <han_mao@c-sky.com>
+Date: Thu,  2 Jan 2020 11:57:20 +0800
+Subject: [Buildroot] [PATCH 1/2] package/toolchain-external: ensure
+ ARCH_LIB_DIR exist
+Message-ID: <1577937441-18703-1-git-send-email-han_mao@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you Yann.
+Different architecture may have different arch library folder structure
+for their multilib toolchain. RISC-V toolchain has folder structure
+like:
+/sysroot/lib64/
+/sysroot/lib64/lp64
+/sysroot/lib64/lp64d
+The first level is for ISA and the second level is for ABI.
+Current buildroot only creat lib and lib64, some error is reported
+while installing the external toolchain:
+>>> toolchain-external-custom  Installing to staging directory
+/usr/bin/install -D -m 0755 /.../build/toolchain-external-custom/toolchain-wrapper /.../host/bin/toolchain-wrapper
+ln: failed to create symbolic link '/.../host/riscv64-buildroot-linux-gnu/sysroot/lib64/lp64': No such file or directory
+ln: failed to create symbolic link '/.../host/riscv64-buildroot-linux-gnu/sysroot/usr/lib64/lp64': No such file or directory
 
-I noticed a typo in the modified version at [1] and nightly page at [2]
-"When a pacjage listed in FOO_DEPENDENCIES is rebuilt or removed"
-should be
-"When a package listed in FOO_DEPENDENCIES is rebuilt or removed"
+Signed-off-by: Qu Xianmiao <xianmiao_qu@c-sky.com>
+Signed-off-by: Chen Hongdeng <hongdeng_chen@c-sky.com>
+Signed-off-by: Guo Ren<ren_guo@c-sky.com>
+Signed-off-by: Mao Han <han_mao@c-sky.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Mark Corbin <mark.corbin@embecosm.com>
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-[1]: https://git.buildroot.net/buildroot/commit/docs/manual/rebuilding-packages.txt?id=05d4ce444580ae54107f3f990e2902169e943d30
-[2]: http://nightly.buildroot.org/manual.html
-
-Do you want me to submit a new patch for this?
-
-
-On Tue, Dec 31, 2019 at 10:12 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Dan, All,
->
-> On 2019-10-16 11:55 -0600, Dan Walkes spake thusly:
-> > Update dependency documentation to detail the order-only relationship
-> > associated with the DEPENDENCIES variable.  See the thread at [1] for
-> > details.
-> >
-> > [1] http://lists.busybox.net/pipermail/buildroot/2019-October/262685.html
-> >
-> > Signed-off-by: Dan Walkes <danwalkes@trellis-logic.com>
->
-> Applied to master, after a slight rephrasing, and a bit of indentation
-> fixup. Thanks.
->
-> Regards,
-> Yann E. MORIN.
->
-> > ---
-> >  docs/manual/adding-packages-generic.txt |  8 +++++---
-> >  docs/manual/rebuilding-packages.txt     | 10 ++++++++++
-> >  2 files changed, 15 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> > index b402767b05..af94f5b1ec 100644
-> > --- a/docs/manual/adding-packages-generic.txt
-> > +++ b/docs/manual/adding-packages-generic.txt
-> > @@ -358,9 +358,11 @@ not and can not work as people would expect it should:
-> >  * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
-> >    name) that are required for the current target package to
-> >    compile. These dependencies are guaranteed to be compiled and
-> > -  installed before the configuration of the current package starts. In
-> > -  a similar way, +HOST_LIBFOO_DEPENDENCIES+ lists the dependencies for
-> > -  the current host package.
-> > +  installed before the configuration of the current package starts.
-> > +  However, modifications to configuration of these dependencies will
-> > +  not force a rebuild of the current package. In a similar way,
-> > +  +HOST_LIBFOO_DEPENDENCIES+ lists the dependencies for the current
-> > +  host package.
-> >
-> >  * +LIBFOO_EXTRACT_DEPENDENCIES+ lists the dependencies (in terms of
-> >    package name) that are required for the current target package to be
-> > diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
-> > index 6faa67adcb..326cd1fe82 100644
-> > --- a/docs/manual/rebuilding-packages.txt
-> > +++ b/docs/manual/rebuilding-packages.txt
-> > @@ -65,6 +65,16 @@ can help you understand how to work with Buildroot:
-> >     there is no need for a full rebuild: a simple +make+ invocation
-> >     will take the changes into account.
-> >
-> > + * When a +FOO_DEPENDENCIES+ package is rebuilt or removed, the package
-> > ++foo+ is not automatically rebuilt.  For example, if a package +bar+ is
-> > +listed in +FOO_DEPENDENCIES+ with +FOO_DEPENDENCIES = bar+ and the
-> > +configuration of the +bar+ package is changed, the configuration
-> > +change would not result in a rebuild of package +foo+ automatically.
-> > +In this scenario, you may need to either rebuild any packages in your
-> > +build which reference +bar+ in their +DEPENDENCIES+, or perform a
-> > +full rebuild to ensure any +bar+ dependent packages are
-> > +up to date.
-> > +
-> >  Generally speaking, when you're facing a build error and you're unsure
-> >  of the potential consequences of the configuration changes you've
-> >  made, do a full rebuild. If you get the same build error, then you are
-> > --
-> > 2.17.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-
-
-
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index baf719a..13b2468 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -454,6 +454,8 @@ create_lib_symlinks = \
+ 	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+ 	if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
+ 		relpath="$(call relpath_prefix,$${ARCH_LIB_DIR})" ; \
++		mkdir -p "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
++		mkdir -p "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
+ 		ln -snf $${relpath}lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
+ 		ln -snf $${relpath}lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
+ 	fi
 -- 
-Dan Walkes
-Trellis-Logic
-cell: 720-239-2553
+2.7.4
