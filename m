@@ -1,44 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 2 Jan 2020 10:06:23 +0100
-Subject: [Buildroot] [PATCH v2] package/libnss: fix build failure due to
- HW PPC Crypto bug
-In-Reply-To: <20200101165811.45110-1-giulio.benetti@benettiengineering.com>
-References: <20200101163258.13c7de62@windsurf>
- <20200101165811.45110-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200102100623.6ab6714b@windsurf>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Thu,  2 Jan 2020 12:03:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/avro-c: depends on
+ BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <20200102110341.149419-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Giulio,
+Fixes: http://autobuild.buildroot.net/results/989/989b4e8aaeff51bb5236c4b31e3783a0e07e4a82
 
-Thanks for the patch. One comment below.
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/avro-c/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Wed,  1 Jan 2020 17:58:11 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-
->  ifeq ($(BR2_aarch64_be),y)
->  LIBNSS_ARCH = aarch64
-> +else ifeq ($(BR2_powerpc),y)
-> +LIBNSS_ARCH = ppc
-> +else ifeq ($(BR2_powerpc64),y)
-> +LIBNSS_ARCH = ppc64
-> +else ifeq ($(BR2_powerpc64le),y)
-> +LIBNSS_ARCH = ppc64le
->  else
->  LIBNSS_ARCH = $(ARCH)
->  endif
-
-Shouldn't we globally review the values that libnss wants for the
-OS_TEST variable (which we set to $(LIBNSS_ARCH)) and see if other
-architectures need similar tweaks ?
-
-Thanks,
-
-Thomas
+diff --git a/package/avro-c/Config.in b/package/avro-c/Config.in
+index fe962e1e3c..03922612df 100644
+--- a/package/avro-c/Config.in
++++ b/package/avro-c/Config.in
+@@ -4,6 +4,7 @@ comment "avro-c needs a toolchain w/ dynamic library"
+ config BR2_PACKAGE_AVRO_C
+ 	bool "avro-c"
+ 	depends on !BR2_STATIC_LIBS  # Avro unconditionally compiles shared libs
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_JANSSON
+ 	help
+ 	  Select this option to install the Avro C language bindings,
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0
