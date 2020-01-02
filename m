@@ -1,49 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 2 Jan 2020 09:16:27 +0100
-Subject: [Buildroot] [git commit] package/python-multidict: bump to version
- 4.7.3
-Message-ID: <20200102080654.284D18EB51@busybox.osuosl.org>
+Date: Thu, 2 Jan 2020 09:16:52 +0100
+Subject: [Buildroot] [git commit] package/stella: needs exception_ptr
+Message-ID: <20200102080722.739DE8EB55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06b0528319505c7282bbb6acbde29dd12c51d914
+commit: https://git.buildroot.net/buildroot/commit/?id=00c65a04fa505fafb47cf20a930b650e4ed40700
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+exception_ptr is needed since version 6.0 and
+https://github.com/stella-emu/stella/commit/afb1e1d1e1bc5afdb79860d2e33af3abc761303c
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b231de3d233481f11e6cd6a4df9bb6a9da685b9f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-multidict/python-multidict.hash | 4 ++--
- package/python-multidict/python-multidict.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/stella/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
-index 0a6315280b..b0c53f49af 100644
---- a/package/python-multidict/python-multidict.hash
-+++ b/package/python-multidict/python-multidict.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/multidict/json
--md5	6e021381611e08839c2820b9778a8e85  multidict-4.7.2.tar.gz
--sha256	d4dafdcfbf0ac80fc5f00603f0ce43e487c654ae34a656e4749f175d9832b1b5  multidict-4.7.2.tar.gz
-+md5	bafb3123d53853790871f657a96491d3  multidict-4.7.3.tar.gz
-+sha256	be813fb9e5ce41a5a99a29cdb857144a1bd6670883586f995b940a4878dc5238  multidict-4.7.3.tar.gz
- # Locally computed sha256 checksums
- sha256	a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
-diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
-index ddf8086dfb..2190e501cc 100644
---- a/package/python-multidict/python-multidict.mk
-+++ b/package/python-multidict/python-multidict.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MULTIDICT_VERSION = 4.7.2
-+PYTHON_MULTIDICT_VERSION = 4.7.3
- PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
--PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/ec/1b/a117d6cb4403f2b64633606e3767f65fa8897b7db6efe14391c7b96cf2f6
-+PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/84/96/5503ba866d8d216e49a6ce3bcb288df8a5fb3ac8a90b8fcff9ddcda32568
- PYTHON_MULTIDICT_SETUP_TYPE = setuptools
- PYTHON_MULTIDICT_LICENSE = Apache-2.0
- PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
+diff --git a/package/stella/Config.in b/package/stella/Config.in
+index 326b3f75eb..709da98159 100644
+--- a/package/stella/Config.in
++++ b/package/stella/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_STELLA
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	select BR2_PACKAGE_SDL2
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_ZLIB
+@@ -16,3 +17,6 @@ comment "stella needs a toolchain w/ dynamic library, C++, threads, gcc >= 5"
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
++
++comment "stella needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
