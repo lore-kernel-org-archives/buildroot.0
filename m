@@ -1,66 +1,145 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu,  2 Jan 2020 19:17:40 +0100
-Subject: [Buildroot] [PATCH] package/libnss: fix ppc 32-bit build failure
-Message-ID: <20200102181740.116227-1-giulio.benetti@benettiengineering.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 2 Jan 2020 19:34:38 +0100
+Subject: [Buildroot] [PATCH] package/meson: support cmake exported
+ packages
+In-Reply-To: <20190806082810.24082-1-m.niestroj@grinn-global.com>
+References: <20190806082810.24082-1-m.niestroj@grinn-global.com>
+Message-ID: <20200102183438.GU3519@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NSS assumes that Altivec is supported on powerpc64 only, but in
-Makefile it tries to build gcm-ppc.c(containing Altivec functions
-calls), even if powerpc is not 64-bits. So add a patch to add a check if
-architecture is a 64-bit to build gcm-ppc.
+Marcin, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/433/433a7db21654d67626c7a3e5f1272d6c3ce4fe6c/
+On 2019-08-06 10:28 +0200, Marcin Niestroj spake thusly:
+> So far meson was not able to find CMake modules in cross compiled
+> environments such as Buildroot. Added patch allows to do that
+> now. Additionally meson needs to know path to cmake binary in order to
+> finalize CMake module import.
+> 
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-Pending upstream:
-https://bugzilla.mozilla.org/show_bug.cgi?id=1606689
----
- ...1606689-Fix-ppc-32-bit-build-failure.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch
+Thanks for the patch. However, it took too long to review it, and now we
+have a newer meson. 0.52.1, which already includes your changes, right?
 
-diff --git a/package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch b/package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch
-new file mode 100644
-index 0000000000..de30fa7002
---- /dev/null
-+++ b/package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch
-@@ -0,0 +1,31 @@
-+From fcac43d6a0af59926da7ad4a15a37255887cdfa2 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 2 Jan 2020 18:55:50 +0100
-+Subject: [PATCH] Bug 1606689 - Fix ppc 32-bit build failure
-+
-+NSS assumes that only 64-bit powerpc support Altivec instructions to be
-+used in gcm-ppc.c, so align Makefile condition to build gcm-ppc.c only
-+if USE_64 is defined.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ nss/lib/freebl/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
-+index 00518d7f8..0e230d8c5 100644
-+--- a/nss/lib/freebl/Makefile
-++++ b/nss/lib/freebl/Makefile
-+@@ -264,8 +264,8 @@ ifeq ($(CPU_ARCH),arm)
-+     MPI_SRCS += mpi_arm.c
-+ endif
-+ ifeq ($(CPU_ARCH),ppc)
-+-    EXTRA_SRCS += gcm-ppc.c
-+ ifdef USE_64
-++    EXTRA_SRCS += gcm-ppc.c
-+     DEFINES += -DNSS_NO_INIT_SUPPORT
-+ endif # USE_64
-+ endif # ppc
-+-- 
-+2.20.1
-+
+As such, I've marked this patch as "Not applicable" in Patchwork.
+
+Thanks you! :-)
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...port-for-crosscompiled-CMake-modules.patch | 60 +++++++++++++++++++
+>  package/meson/cross-compilation.conf.in       |  1 +
+>  package/pkg-meson.mk                          |  1 +
+>  3 files changed, 62 insertions(+)
+>  create mode 100644 package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch
+> 
+> diff --git a/package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch b/package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch
+> new file mode 100644
+> index 0000000000..eeeab4962b
+> --- /dev/null
+> +++ b/package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch
+> @@ -0,0 +1,60 @@
+> +From 61edbcf60e20dbf730e6074f055f78e0e217f4ed Mon Sep 17 00:00:00 2001
+> +From: Marcin Niestroj <m.niestroj@grinn-global.com>
+> +Date: Thu, 1 Aug 2019 11:01:49 +0200
+> +Subject: [PATCH] Improve support for crosscompiled CMake modules
+> +
+> +commit 987539e2331f2c78e94cbcf3623a82a66dd52267 upstream.
+> +
+> +There are two variables that CMake takes into account during
+> +find_package() in cross-compiled environments, which are: CMAKE_SYSROOT
+> +and CMAKE_FIND_ROOT_PATH. Those are used in cmFindCommon::RerootPaths()
+> +function, which blindly prepends all search paths with those specified
+> +via CMAKE_SYSROOT and CMAKE_FIND_ROOT_PATH.
+> +
+> +Extend search paths by using CMAKE_SYSROOT and CMAKE_FIND_ROOT_PATH in a
+> +similar way as CMake does, so we successfully find CMake packages
+> +information in cross-compiled environments.
+> +
+> +Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> +---
+> + mesonbuild/dependencies/base.py                | 11 ++++++++++-
+> + mesonbuild/dependencies/data/CMakePathInfo.txt |  2 ++
+> + 2 files changed, 12 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
+> +index 21da8e24..98b02ff7 100644
+> +--- a/mesonbuild/dependencies/base.py
+> ++++ b/mesonbuild/dependencies/base.py
+> +@@ -1178,7 +1178,16 @@ class CMakeDependency(ExternalDependency):
+> +             return None
+> + 
+> +         # Extract the variables and sanity check them
+> +-        module_paths = sorted(set(self.get_cmake_var('MESON_PATHS_LIST')))
+> ++        root_paths = set(self.get_cmake_var('MESON_FIND_ROOT_PATH'))
+> ++        root_paths.update(set(self.get_cmake_var('MESON_CMAKE_SYSROOT')))
+> ++        root_paths = sorted(root_paths)
+> ++        root_paths = list(filter(lambda x: os.path.isdir(x), root_paths))
+> ++        module_paths = set(self.get_cmake_var('MESON_PATHS_LIST'))
+> ++        rooted_paths = []
+> ++        for j in [Path(x) for x in root_paths]:
+> ++            for i in [Path(x) for x in module_paths]:
+> ++                rooted_paths.append(str(j / i.relative_to(i.anchor)))
+> ++        module_paths = sorted(module_paths.union(rooted_paths))
+> +         module_paths = list(filter(lambda x: os.path.isdir(x), module_paths))
+> +         archs = self.get_cmake_var('MESON_ARCH_LIST')
+> + 
+> +diff --git a/mesonbuild/dependencies/data/CMakePathInfo.txt b/mesonbuild/dependencies/data/CMakePathInfo.txt
+> +index 713c2da3..662ec583 100644
+> +--- a/mesonbuild/dependencies/data/CMakePathInfo.txt
+> ++++ b/mesonbuild/dependencies/data/CMakePathInfo.txt
+> +@@ -25,5 +25,7 @@ endif()
+> + set(MESON_ARCH_LIST ${LIB_ARCH_LIST})
+> + set(MESON_PATHS_LIST ${TMP_PATHS_LIST})
+> + set(MESON_CMAKE_ROOT ${CMAKE_ROOT})
+> ++set(MESON_CMAKE_SYSROOT ${CMAKE_SYSROOT})
+> ++set(MESON_FIND_ROOT_PATH ${CMAKE_FIND_ROOT_PATH})
+> + 
+> + message(STATUS ${TMP_PATHS_LIST})
+> +-- 
+> +2.22.0
+> +
+> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> index fc8e27f7eb..cd466dbd05 100644
+> --- a/package/meson/cross-compilation.conf.in
+> +++ b/package/meson/cross-compilation.conf.in
+> @@ -9,6 +9,7 @@ cpp = '@TARGET_CROSS at g++'
+>  ar = '@TARGET_CROSS at ar'
+>  strip = '@TARGET_CROSS at strip'
+>  pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+> +cmake = ['@BR2_CMAKE@', '-DCMAKE_TOOLCHAIN_FILE=@HOST_DIR@/share/buildroot/toolchainfile.cmake']
+>  
+>  [properties]
+>  needs_exe_wrapper = true
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 0b811d1cc0..ec3e89dc1a 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -79,6 +79,7 @@ define $(2)_CONFIGURE_CMDS
+>  	    -e "s%@TARGET_LDFLAGS@%$$($(2)_MESON_SED_LDFLAGS)%g" \
+>  	    -e "s%@TARGET_CXXFLAGS@%$$($(2)_MESON_SED_CXXFLAGS)%g" \
+>  	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
+> +	    -e "s%@BR2_CMAKE@%$$(BR2_CMAKE)%g" \
+>  	    package/meson/cross-compilation.conf.in \
+>  	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+>  	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+> -- 
+> 2.22.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
