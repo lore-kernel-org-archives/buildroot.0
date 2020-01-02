@@ -1,61 +1,53 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 2 Jan 2020 23:07:26 +0100
-Subject: [Buildroot] [PATCH v2] package/libnss: fix build failure due to
- HW PPC Crypto bug
-In-Reply-To: <14ce309b-f0ab-ec05-0eb3-1e880bd9fa13@benettiengineering.com>
-References: <20200101163258.13c7de62@windsurf>
- <20200101165811.45110-1-giulio.benetti@benettiengineering.com>
- <20200102100623.6ab6714b@windsurf>
- <14ce309b-f0ab-ec05-0eb3-1e880bd9fa13@benettiengineering.com>
-Message-ID: <a8b9ad01-178b-f2fb-d65e-76716791a820@benettiengineering.com>
+From: Scott Fan <fancp2007@gmail.com>
+Date: Fri, 3 Jan 2020 07:22:54 +0800
+Subject: [Buildroot] [PATCH 2/2] board/stm32mp157c-dk2: remove
+ unnecessary workaround
+In-Reply-To: <20200101172137.4457a417@windsurf>
+References: <20191103115017.788940-1-b.bilas@grinn-global.com>
+ <20191103115017.788940-2-b.bilas@grinn-global.com>
+ <20200101172137.4457a417@windsurf>
+Message-ID: <CAFkzVZbu5myL8g1QXJML9N1U9AfmO-4bCVRi9eBY-kmiDkj+dQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 1/2/20 6:19 PM, Giulio Benetti wrote:
-> Hi Thomas,
-> 
-> On 1/2/20 10:06 AM, Thomas Petazzoni wrote:
->> Hello Giulio,
->>
->> Thanks for the patch. One comment below.
->>
->> On Wed,  1 Jan 2020 17:58:11 +0100
->> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
->>
->>>    ifeq ($(BR2_aarch64_be),y)
->>>    LIBNSS_ARCH = aarch64
->>> +else ifeq ($(BR2_powerpc),y)
->>> +LIBNSS_ARCH = ppc
->>> +else ifeq ($(BR2_powerpc64),y)
->>> +LIBNSS_ARCH = ppc64
->>> +else ifeq ($(BR2_powerpc64le),y)
->>> +LIBNSS_ARCH = ppc64le
->>>    else
->>>    LIBNSS_ARCH = $(ARCH)
->>>    endif
->>
->> Shouldn't we globally review the values that libnss wants for the
->> OS_TEST variable (which we set to $(LIBNSS_ARCH)) and see if other
->> architectures need similar tweaks ?
+Hi Bartosz,
 
-It turns out that all specific architectures checked in 
-coreconf/Linux.mk are already correct(after changing powerpc* to ppc*). 
-All the others are directly copied from OS_TEST to OS_ARCH in 
-coreconf/Linux.mk:
-https://hg.mozilla.org/projects/nss/file/tip/coreconf/Linux.mk#l93
-and OS_ARCH is the variable NSS uses internally.
+Is possible to bump linux kernel to version 5.4.7? The 5.3.x series has
+been EOL,  the "longterm maintenance" series will be acceptable.
 
-So it seems that at the moment there is nothing more to do about this.
+Thanks.
 
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+On Thu, Jan 2, 2020, 00:21 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
 
-> Absolutely yes, going to do that.
-> 
-> Best regards
-> 
+> On Sun,  3 Nov 2019 12:50:17 +0100
+> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+>
+> > Since we know the proper solution, remove that faulty patch.
+> >
+> > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> > ---
+> >  ...-fix-checking-the-presence-of-an-env.patch | 37 -------------------
+> >  configs/stm32mp157c_dk2_defconfig             |  1 -
+> >  2 files changed, 38 deletions(-)
+> >  delete mode 100644
+> board/stmicroelectronics/stm32mp157c-dk2/patches/uboot/0001-stm32mp1-configs-fix-checking-the-presence-of-an-env.patch
+>
+> Applied to master after improving the commit log. Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200103/a2e2ff23/attachment.html>
