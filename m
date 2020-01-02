@@ -1,48 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 2 Jan 2020 09:28:25 +0100
-Subject: [Buildroot] [git commit] package/openvpn: enable pam plugin support
-Message-ID: <20200102081853.9CE478EB6D@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 2 Jan 2020 09:28:47 +0100
+Subject: [Buildroot] [git commit] docs/manual: fix typo
+Message-ID: <20200102081924.553AA8EB73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6acd76584d6841543a57c60a28314b8a86a8dd9
+commit: https://git.buildroot.net/buildroot/commit/?id=1c1e9e491efef17065f33fb987f414435ac5831b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If the linux-pam package is selected, add the package to the
-dependency list and explicitly set --enable-plugin-auth-pam.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reported-by: Dan Walkes <danwalkes@trellis-logic.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/openvpn/openvpn.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ docs/manual/rebuilding-packages.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index ce86b5eff7..64f459eee3 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -11,7 +11,6 @@ OPENVPN_DEPENDENCIES = host-pkgconf openssl
- OPENVPN_LICENSE = GPL-2.0
- OPENVPN_LICENSE_FILES = COPYRIGHT.GPL
- OPENVPN_CONF_OPTS = \
--	--disable-plugin-auth-pam \
- 	--enable-iproute2 \
- 	--with-crypto-library=openssl \
- 	$(if $(BR2_STATIC_LIBS),--disable-plugins)
-@@ -45,6 +44,13 @@ else
- OPENVPN_CONF_OPTS += --disable-selinux
- endif
+diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
+index 621493776c..06d3855148 100644
+--- a/docs/manual/rebuilding-packages.txt
++++ b/docs/manual/rebuilding-packages.txt
+@@ -65,7 +65,7 @@ can help you understand how to work with Buildroot:
+    there is no need for a full rebuild: a simple +make+ invocation
+    will take the changes into account.
  
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+OPENVPN_DEPENDENCIES += linux-pam
-+OPENVPN_CONF_OPTS += --enable-plugin-auth-pam
-+else
-+OPENVPN_CONF_OPTS += --disable-plugin-auth-pam
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- OPENVPN_DEPENDENCIES += systemd
- OPENVPN_CONF_OPTS += --enable-systemd
+- * When a pacjage listed in +FOO_DEPENDENCIES+ is rebuilt or removed,
++ * When a package listed in +FOO_DEPENDENCIES+ is rebuilt or removed,
+    the package +foo+ is not automatically rebuilt. For example, if a
+    package +bar+ is listed in +FOO_DEPENDENCIES+ with +FOO_DEPENDENCIES
+    = bar+ and the configuration of the +bar+ package is changed, the
