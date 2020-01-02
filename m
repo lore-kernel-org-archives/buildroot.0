@@ -1,78 +1,155 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Thu, 2 Jan 2020 03:55:43 -0800
-Subject: [Buildroot] [PATCH 1/2] package/perl-dbd-mysql: bump to version
- 4.050
-In-Reply-To: <20200102114347.2403649-1-chrismcc@gmail.com>
-References: <20200102114347.2403649-1-chrismcc@gmail.com>
-Message-ID: <CALURroQk+Re-mxVK_=amf0hJRKYb8U8roihZ9=LFwgZSVXXvCQ@mail.gmail.com>
+Date: Thu,  2 Jan 2020 12:37:46 +0000
+Subject: [Buildroot] [PATCH 1/1] package/dcron: create directories if needed
+ on startup
+Message-ID: <20200102123746.2404602-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 2, 2020 at 3:44 AM Christopher McCrory <chrismcc@gmail.com>
-wrote:
+Create the /var/spool/cron/crontabs and /var/spool/cron/cronstamps directories
+on startup if they don't exist.  By default /var/spool is a symlink to /tmp so
+the contents get deleted on reboot.  If the cronstamps directory does not exist
+anything in /etc/cron.hourly/ , etc. will fail to run.
 
-> version 4.046_01 fixes compiling against mariadb and also introduces a
-> patch
-> that brakes with cross compiling, see patch 0001.
-> Also the buildroot host-perl ModuleManager gets somthing wrong looking for
-> libraries. Instead of checking in the build sysroot, it looks in the host
-> systems /lib, /usr/lib, etc.  For a successful build, the host system will
-> also need the matching mysql libraries installed.  Running ldd on mysql.so
-> should show libmysqlclient, and libmariadb for MariaDB. If the result spits
-> out an error about missing libraries, this is the reason.
-> This is probably the only builtroot package where this is an issue.
->
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> -
->
->
->
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+---
+ package/dcron/S90dcron      | 105 +++++++++++++++++++++++++++++-------
+ package/dcron/dcron.service |   6 +++
+ 2 files changed, 93 insertions(+), 18 deletions(-)
 
-I am successfully using this on a raspberrypi 3 using MariaDB.
-php-mysql works there also.
-
-
-For MariaDB I also needed::
-
-chrismcc at centos8-lxc git]$ cat external/packages/fixup-mariadb/
-fixup-mariadb.mk
-################################################################################
-#
-# fixup-mariadb
-#
-################################################################################
-
-ifeq ($(BR2_PACKAGE_FIXUP_MARIADB),y)
-
-define MARIADB_POST_INSTALL_STAGING_MORE
-        $(RM) -v $(STAGING_DIR)/usr/bin/mariadb_config
-endef
-
-MARIADB_POST_INSTALL_STAGING_HOOKS += MARIADB_POST_INSTALL_STAGING_MORE
-
-define MARIADB_POST_INSTALL_MORE
-$(RM) -r $(TARGET_DIR)/usr/data
-endef
-
-MARIADB_POST_INSTALL_TARGET_HOOKS += MARIADB_POST_INSTALL_MORE
-
-endif
-
-$(eval $(generic-package))
-
-
-
-
-
-
+diff --git a/package/dcron/S90dcron b/package/dcron/S90dcron
+index de21d2ca13..f51513d41e 100644
+--- a/package/dcron/S90dcron
++++ b/package/dcron/S90dcron
+@@ -1,22 +1,91 @@
+ #!/bin/sh
+ 
++# Make sure umask is sane
++umask 022
++
++PATH="/sbin:/usr/sbin:/bin:/usr/bin"
++export PATH
++
++DAEMON_NAME="dcron"
++DAEMON_DESC="dcron"
++DAEMON_BINARY="/usr/sbin/crond"
++DAEMON_BASENAME="crond"
++DAEMON_CONFIG="/etc/cron.d/system"
++DAEMON_ARGS="-- -f"
++DAEMON_PID="/var/run/crond.pid"
++
++[ -r /etc/default/$DAEMON_BASENAME ] && . /etc/default/$DAEMON_BASENAME
++[ -x $DAEMON_BINARY ] || exit 5
++[ -r $DAEMON_CONFIG ] || exit 6
++
++start() {
++  printf "Starting $DAEMON_DESC: "
++  [ -d /var/spool/cron/crontabs   ] || mkdir -vp /var/spool/cron/crontabs
++  [ -d /var/spool/cron/cronstamps ] || mkdir -vp /var/spool/cron/cronstamps
++  start-stop-daemon -S -q -b  -m -p $DAEMON_PID  -x $DAEMON_BINARY $DAEMON_ARGS
++  sleep 2 ; status ; RETVAL=$?
++  if [ $RETVAL -ne 0 ]; then
++    echo "FAIL"
++  else
++    echo "OK"
++  fi
++  return $RETVAL
++}
++
++# -R doesn't work with busybox, but doesn't error out
++stop() {
++  printf "Stopping $DAEMON_DESC: "
++  start-stop-daemon -K -R 59 -x $DAEMON_BINARY
++  RETVAL=$?
++  if [ $RETVAL -ne 0 ]; then
++    echo "FAIL"
++  else
++    echo "OK"
++  fi
++  return $RETVAL
++}
++
++status() {
++  PIDS=`pidof $DAEMON_BASENAME`
++  RETVAL=$?
++  if [ $RETVAL -eq 0 ]; then
++    echo "RUNNING (pid $PIDS)"
++  else
++    echo "NOT OK"
++  fi
++  return $RETVAL
++}
++
+ case "$1" in
+-	start)
+-		printf "Starting cron ... "
+-		start-stop-daemon -S -q -m -b -p /var/run/dcron.pid --exec /usr/sbin/crond -- -f
+-		echo "done."
+-		;;
+-	stop)
+-		printf "Stopping cron ..."
+-		start-stop-daemon -K -q -p /var/run/dcron.pid
+-		echo "done."
+-		;;
+-	restart)
+-		$0 stop
+-		sleep 1
+-		$0 start
+-		;;
+-	*)
+-		echo "usage: $0 {start|stop|restart}"
+-		;;
++  start)
++    start
++    ;;
++  stop)
++    stop
++    ;;
++  restart)
++    echo "Restarting $DAEMON_DESC: "
++    stop
++    sleep 1
++    start
++    echo ""
++    ;;
++  try-restart)
++    status
++    if [ $RETVAL -eq 0 ]; then
++      stop
++      sleep 1
++      start
++    fi
++    ;;
++  status)
++    printf "Status of $DAEMON_DESC: "
++    status
++    ;;
++  *)
++    echo "Usage: $0 {start|stop|restart|status|try-restart}" >&2
++    exit 3
++    ;;
+ esac
++
++exit 0
+diff --git a/package/dcron/dcron.service b/package/dcron/dcron.service
+index 924ed72205..19c66b1535 100644
+--- a/package/dcron/dcron.service
++++ b/package/dcron/dcron.service
+@@ -3,6 +3,12 @@ Description=Task scheduler daemon
+ After=syslog.target
+ 
+ [Service]
++# make sure directories exist. use -v so it gets logged
++ExecStartPre=/bin/sh -c '\
++test -d /var/spool/cron/crontabs   || mkdir -pv /var/spool/cron/crontabs  ; \
++test -d /var/spool/cron/cronstamps || mkdir -pv /var/spool/cron/cronstamps; \
++'
++
+ ExecStart=/usr/sbin/crond -S
+ Type=forking
+ 
 -- 
-Christopher McCrory
-To the optimist, the glass is half full.
-To the pessimist, the glass is half empty.
-To the engineer, the glass is twice as big as it needs to be.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200102/2b063690/attachment.html>
+2.18.1
