@@ -1,40 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 3 Jan 2020 17:39:09 +0100
-Subject: [Buildroot] [PATCH 05/11] support/scripts/pkg-stats: parse and
- set developers info
-In-Reply-To: <CAEyMn7aPCiLX-RB8vYm_-OnhrjXXrxJg+ufYgPUx5cRcjSW0tw@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri, 3 Jan 2020 17:39:13 +0100
+Subject: [Buildroot] [PATCH 07/11] support/scripts/pkg-stats: store
+ dependencies of package
+In-Reply-To: <20200103162941.6b428eec@windsurf>
 References: <20200103151849.10956-1-heiko.thiery@gmail.com>
- <20200103151849.10956-6-heiko.thiery@gmail.com>
- <20200103162625.093ff7b2@windsurf>
- <CAEyMn7aPCiLX-RB8vYm_-OnhrjXXrxJg+ufYgPUx5cRcjSW0tw@mail.gmail.com>
-Message-ID: <20200103173909.70596709@windsurf>
+ <20200103151849.10956-8-heiko.thiery@gmail.com>
+ <20200103162941.6b428eec@windsurf>
+Message-ID: <CAEyMn7YhmtuRSfZscUqyNm7wEWcye5x9YZO=5T8VPPzbEBuErQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 3 Jan 2020 17:32:42 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+Am Fr., 3. Jan. 2020 um 16:29 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> On Fri,  3 Jan 2020 16:18:44 +0100
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+>
+> Storing those dependencies do not make sense, because dependencies are
+> completely different depending on the Buildroot configuration. Packages
+> have optional dependencies, some dependencies on host packages only
+> exist depending on the system configuration, etc. So exposing those
+> dependencies is never going to give anything that is correct.
 
-> > You have duplicated this function from utils/getdeveloperlib.py, which
-> > is intended to be used as a Python module. Why don't we try to use it,
-> > instead ?  
-> 
-> I also thought about that ... should we then move the pkg-stats script
-> to the utils folder?
+Thought it is a good idea because I saw that on the
+https://layers.openembedded.org/layerindex/recipe/45257/. They also
+show the dependencies with a note that this can differ dependent on
+the real used configuration. But if you think it is too confusing I
+can drop that.
 
-Normally, utils/ is for tools that are directly useful to the Buildroot
-user/developer, and pkg-stats is not really such a tool. It's kind of
-an internal tool we use to generate this JSON/HTML stuff, but the
-regular Buildroot developer does not need that.
-
-One idea is to add ../../utils to the Python path used to search for
-modules. I think it can be tweaked from inside a Python script. Not
-sure if it's the nicest thing to do, though.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
