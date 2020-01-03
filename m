@@ -1,80 +1,61 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  3 Jan 2020 12:25:15 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/2] package/samba4: Do not force target python
-Message-ID: <20200103112516.1501782-1-fontaine.fabrice@gmail.com>
+Date: Fri,  3 Jan 2020 12:25:16 +0100
+Subject: [Buildroot] [PATCH v2,2/2] package/samba4: drop host-python
+In-Reply-To: <20200103112516.1501782-1-fontaine.fabrice@gmail.com>
+References: <20200103112516.1501782-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200103112516.1501782-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samba does not need python on the target for file server functionality.
-It does need it for the Active Directory Domain Controller feature,
-which is already configured in buildroot as optional and already depends
-on python3 since commit 4485a75859fbae99090b065ddd7c088a65571d37.
+Drop host-python to always build samba4 with host-python3
 
-An unnecessary target python greatly increases the size of the target
-filesystem. A somewhat minimal configuration with a samba server shunk
-from an 82 MB rootfs to 53 MB with this patch.
-
-Signed-off-by: Trent Piepho <trent.piepho@synapse.com>
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Rework patch due so it can be applied after commits 
-   fe033bdf534a7892ced72c11635d863afa92d1d2 and 
-   4485a75859fbae99090b065ddd7c088a65571d37
+ package/samba4/samba4.mk | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
- package/samba4/Config.in |  1 -
- package/samba4/samba4.mk | 12 +++++-------
- 2 files changed, 5 insertions(+), 8 deletions(-)
-
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 493c79f3f8..a34eaa8088 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -18,7 +18,6 @@ config BR2_PACKAGE_SAMBA4
- 	select BR2_PACKAGE_GNUTLS
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_PACKAGE_POPT
--	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Provides secure, stable and fast file and print services
 diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index c5d2d6c6ea..31a598333c 100644
+index 31a598333c..48c5d42843 100644
 --- a/package/samba4/samba4.mk
 +++ b/package/samba4/samba4.mk
-@@ -26,14 +26,11 @@ SAMBA4_CONF_ENV = \
+@@ -11,7 +11,7 @@ SAMBA4_INSTALL_STAGING = YES
+ SAMBA4_LICENSE = GPL-3.0+
+ SAMBA4_LICENSE_FILES = COPYING
+ SAMBA4_DEPENDENCIES = \
+-	host-e2fsprogs host-heimdal host-nfs-utils \
++	host-e2fsprogs host-heimdal host-nfs-utils host-python3 \
+ 	cmocka e2fsprogs gnutls popt zlib \
+ 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
+ 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
+@@ -22,17 +22,10 @@ SAMBA4_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ SAMBA4_CONF_ENV = \
+ 	CFLAGS="$(SAMBA4_CFLAGS)" \
+ 	LDFLAGS="$(SAMBA4_LDFLAGS)" \
++	PYTHON="$(HOST_DIR)/bin/python3" \
+ 	XSLTPROC=false \
  	WAF_NO_PREFORK=1
  
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
--SAMBA4_PYTHON = \
--	PYTHON="$(HOST_DIR)/bin/python3" \
--	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
--SAMBA4_DEPENDENCIES += host-python3 python3
-+SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python3"
-+SAMBA4_DEPENDENCIES += host-python3
- else
- SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python2"
- SAMBA4_DEPENDENCIES += host-python
--SAMBA4_CONF_OPTS += --disable-python
- endif
- 
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python3"
+-SAMBA4_DEPENDENCIES += host-python3
+-else
+-SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python2"
+-SAMBA4_DEPENDENCIES += host-python
+-endif
+-
  ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-@@ -143,9 +140,10 @@ define SAMBA4_INSTALL_TARGET_CMDS
- endef
- 
- ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),y)
--SAMBA4_DEPENDENCIES += jansson
-+SAMBA4_CONF_ENV += PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
-+SAMBA4_DEPENDENCIES += jansson python3
- else
--SAMBA4_CONF_OPTS += --without-ad-dc --without-json
-+SAMBA4_CONF_OPTS += --disable-python --without-ad-dc --without-json
- endif
- 
- ifeq ($(BR2_PACKAGE_SAMBA4_ADS),y)
+ SAMBA4_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+ SAMBA4_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
+@@ -99,7 +92,6 @@ define SAMBA4_CONFIGURE_CMDS
+ 	$(INSTALL) -m 0644 package/samba4/samba4-cache.txt $(@D)/cache.txt;
+ 	echo 'Checking uname machine type: $(BR2_ARCH)' >>$(@D)/cache.txt;
+ 	(cd $(@D); \
+-		$(SAMBA4_PYTHON) \
+ 		python_LDFLAGS="" \
+ 		python_LIBDIR="" \
+ 		$(TARGET_CONFIGURE_OPTS) \
 -- 
 2.24.0
