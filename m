@@ -1,56 +1,118 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 3 Jan 2020 17:43:07 +0100
-Subject: [Buildroot] [PATCH 10/11] support/scripts/pkg-stats: add
- package count to stats
-In-Reply-To: <20200103163503.13e7318e@windsurf>
+Date: Fri, 3 Jan 2020 17:52:22 +0100
+Subject: [Buildroot] [PATCH 08/11] support/scripts/pkg-stats: add
+ generic package status field
+In-Reply-To: <20200103163409.141a5e8a@windsurf>
 References: <20200103151849.10956-1-heiko.thiery@gmail.com>
- <20200103151849.10956-11-heiko.thiery@gmail.com>
- <20200103163503.13e7318e@windsurf>
-Message-ID: <CAEyMn7aMGcqrUZXD=ES5+KAQzfv6juWB6aNnD2kxiHM+zp-65w@mail.gmail.com>
+ <20200103151849.10956-9-heiko.thiery@gmail.com>
+ <20200103163409.141a5e8a@windsurf>
+Message-ID: <CAEyMn7ZVdG+EpMew4TbtNMy7WY6OHOCbg3fQKQx2f==v7Qhq7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fr., 3. Jan. 2020 um 16:35 Uhr schrieb Thomas Petazzoni
+Am Fr., 3. Jan. 2020 um 16:34 Uhr schrieb Thomas Petazzoni
 <thomas.petazzoni@bootlin.com>:
 >
-> On Fri,  3 Jan 2020 16:18:47 +0100
+> Hello,
+>
+> On Fri,  3 Jan 2020 16:18:45 +0100
 > Heiko Thiery <heiko.thiery@gmail.com> wrote:
 >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> > ---
-> >  support/scripts/pkg-stats | 11 +++++++----
-> >  1 file changed, 7 insertions(+), 4 deletions(-)
-> >
 > > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> > index dd3c6566a0..afd9cacafb 100755
+> > index 324700adbf..b0c2db2b93 100755
 > > --- a/support/scripts/pkg-stats
 > > +++ b/support/scripts/pkg-stats
-> > @@ -457,21 +457,22 @@ def check_package_latest_version(packages):
-> >          pkg.rm_version['version'] == pkg.current_version
+> > @@ -112,6 +112,7 @@ class Package:
+> >          self.url_status = None
+> >          self.url_worker = None
+> >          self.rm_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
+> > +        self.status = {}
 > >
-> >          if pkg.rm_version['status'] == RM_API_STATUS_ERROR:
-> > -            pkg.status['version'] = ('warning', 'rm api error')
-> > +            pkg.status['version'] = ('warning', 'RM API error')
-> >          elif pkg.rm_version['status'] == RM_API_STATUS_NOT_FOUND:
-> > -            pkg.status['version'] = ('warning', 'rm package not found')
-> > +            pkg.status['version'] = ('warning', 'RM package not found')
-> >
-> >          if pkg.rm_version['version'] is None:
-> >              pkg.status['version'] = ('warning', 'no upstream version available')
-> >          elif pkg.rm_version['version'] != pkg.current_version:
-> > -            pkg.status['version'] = ('error', 'package needs update')
-> > +            pkg.status['version'] = ('error', 'Package needs update')
-> >          else:
-> > -            pkg.status['version'] = ('ok', 'up-to-date')
-> > +            pkg.status['version'] = ('ok', 'update-to-date')
-> >      del http_pool
+> >      def pkgvar(self):
+> >          return self.name.upper().replace("-", "_")
+> > @@ -121,6 +122,7 @@ class Package:
+> >          Fills in the .url field
+> >          """
+> >          self.url_status = "No Config.in"
+> > +        self.status['url'] = ("error", "no Config.in")
 >
-> The change up to here is not related to the commit title.
+> Here it is duplicating the url_status field, I believe we want to avoid
+> that.
+>
+> >          for filename in os.listdir(self.pkg_path):
+> >              if fnmatch.fnmatch(filename, 'Config.*'):
+> >                  fp = open(os.path.join(self.pkg_path, filename), "r")
+> > @@ -128,9 +130,11 @@ class Package:
+> >                      if URL_RE.match(config_line):
+> >                          self.url = config_line.strip()
+> >                          self.url_status = "Found"
+> > +                        self.status['url'] = ("ok", "found")
+>
+> Ditto.
+>
+> >                          fp.close()
+> >                          return
+> >                  self.url_status = "Missing"
+> > +                self.status['url'] = ("error", "missing")
+>
+> Ditto.
+>
+> >                  fp.close()
+> >
+> >      def set_infra(self):
+> > @@ -155,11 +159,16 @@ class Package:
+> >          Fills in the .has_license and .has_license_files fields
+> >          """
+> >          var = self.pkgvar()
+> > +        self.status['license'] = ("error", "missing")
+> > +        self.status['license-files'] = ("error", "missing")
+> >          if var in self.all_licenses:
+> >              self.has_license = True
+> >              self.license = self.all_licenses[var]
+> > +            self.status['license'] = ("ok", "found")
+> > +
+> >          if var in self.all_license_files:
+> >              self.has_license_files = True
+> > +            self.status['license-files'] = ("ok", "found")
+>
+> Here it's duplicating self.has_license and self.has_license_files
+> basically.
+>
+> >      def set_hash_info(self):
+> >          """
+> > @@ -167,6 +176,10 @@ class Package:
+> >          """
+> >          hashpath = os.path.join(self.pkg_path, self.name + '.hash')
+> >          self.has_hash = os.path.exists(hashpath)
+> > +        if self.has_hash:
+> > +            self.status['hash'] = ("ok", "found")
+> > +        else:
+> > +            self.status['hash'] = ("error", "missing")
+>
+> Same for self.has_hash.
+>
+> Can we do better ? Maybe the issues is that pkg-stats does both
+> extracting the data to a JSON format *and* presenting it as HTML. Maybe
+> it should be separated into two tools:
 
-there I made a mistake
+My intention was not to break the existing generation of the html
+output. I thought we can remove this duplications later.
+
+>  - One doing the data extraction and generation of JSON
+>
+>  - One using the JSON to produce the HTML page, which would be replaced
+>    by your new site
+>
+> I'm not sure exactly how to go, but I'm not a big fan of this patch
+> that duplicates information that already exists (and which doesn't
+> explain why).
+
+So in the first step I will use the "new" data also for the html
+generation. And after that we should think about extracting the html
+generation to an additional tool/script?
 
 > Thomas
 > --
