@@ -1,25 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 3 Jan 2020 16:24:56 +0100
-Subject: [Buildroot] [PATCH 04/11] support/scripts/pkg-stats: do not
- exclued pkg name in json output
-In-Reply-To: <20200103151849.10956-5-heiko.thiery@gmail.com>
+Date: Fri, 3 Jan 2020 16:26:25 +0100
+Subject: [Buildroot] [PATCH 05/11] support/scripts/pkg-stats: parse and
+ set developers info
+In-Reply-To: <20200103151849.10956-6-heiko.thiery@gmail.com>
 References: <20200103151849.10956-1-heiko.thiery@gmail.com>
- <20200103151849.10956-5-heiko.thiery@gmail.com>
-Message-ID: <20200103162456.4167ad5d@windsurf>
+ <20200103151849.10956-6-heiko.thiery@gmail.com>
+Message-ID: <20200103162625.093ff7b2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  3 Jan 2020 16:18:41 +0100
+Hello,
+
+On Fri,  3 Jan 2020 16:18:42 +0100
 Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> +class Developer:
+> +    def __init__(self, name, files):
+> +        self.name = name
+> +        self.files = files
+> +
+> +def parse_developers(basepath=None):
+> +    """Parse the DEVELOPERS file and return a list of Developer objects."""
+> +    developers = []
+> +    linen = 0
+> +    if basepath is None:
+> +        basepath = os.getcwd()
+> +    with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
+> +        files = []
+> +        name = None
+> +        for line in f:
+> +            line = line.strip()
+> +            if line.startswith("#"):
+> +                continue
+> +            elif line.startswith("N:"):
+> +                if name is not None or len(files) != 0:
+> +                    print("Syntax error in DEVELOPERS file, line %d" % linen)
+> +                name = line[2:].strip()
+> +            elif line.startswith("F:"):
+> +                fname = line[2:].strip()
+> +                #dev_files = glob.glob(os.path.join(basepath, fname))
+> +                dev_files = glob.glob(fname)
+> +                if len(dev_files) == 0:
+> +                    print("WARNING: '%s' doesn't match any file" % fname)
+> +                files += dev_files
+> +            elif line == "":
+> +                if not name:
+> +                    continue
+> +                developers.append(Developer(name, files))
+> +                files = []
+> +                name = None
+> +            else:
+> +                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line))
+> +
+> +                return None
+> +            linen += 1
+> +    # handle last developer
+> +    if name is not None:
+> +        developers.append(Developer(name, files))
+> +    return developers
 
-But isn't the package name already present in
-http://autobuild.buildroot.net/stats/index.json ? All the subnodes of
-/packages/ are nodes named after the packages.
+You have duplicated this function from utils/getdeveloperlib.py, which
+is intended to be used as a Python module. Why don't we try to use it,
+instead ?
+
+Thanks,
 
 Thomas
 -- 
