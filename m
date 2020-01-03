@@ -1,174 +1,123 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  3 Jan 2020 14:37:46 +0100
+Date: Fri,  3 Jan 2020 14:37:47 +0100
 Subject: [Buildroot] [PATCH v2,
- 1/2] package/libwebsockets: fix build with openssl and without
- threads
-Message-ID: <20200103133747.1504249-1-fontaine.fabrice@gmail.com>
+ 2/2] package/libwebsockets: bump to version 3.2.1
+In-Reply-To: <20200103133747.1504249-1-fontaine.fabrice@gmail.com>
+References: <20200103133747.1504249-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200103133747.1504249-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/6186b4718db285edadf7203d00ed72f8d76a31e4
+Remove first patch (already in version)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Retrieve first patch from upstream
- - Add a second patch to fix first patch
+ ...ix-build-with-libev-and-without-test.patch | 52 -------------------
+ ...s.txt-fix-static-build-with-openssl.patch} |  0
+ ...x-build-with-openssl-and-without-th.patch} |  0
+ ...keLists.txt-fix-LWS_HAS_GETOPT_LONG.patch} |  0
+ package/libwebsockets/libwebsockets.hash      |  2 +-
+ package/libwebsockets/libwebsockets.mk        |  2 +-
+ 6 files changed, 2 insertions(+), 54 deletions(-)
+ delete mode 100644 package/libwebsockets/0001-CMakeLists.txt-fix-build-with-libev-and-without-test.patch
+ rename package/libwebsockets/{0002-CMakeLists.txt-fix-static-build-with-openssl.patch => 0001-CMakeLists.txt-fix-static-build-with-openssl.patch} (100%)
+ rename package/libwebsockets/{0003-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch => 0002-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch} (100%)
+ rename package/libwebsockets/{0004-CMakeLists.txt-fix-LWS_HAS_GETOPT_LONG.patch => 0003-CMakeLists.txt-fix-LWS_HAS_GETOPT_LONG.patch} (100%)
 
- ...ix-build-with-openssl-and-without-th.patch | 89 +++++++++++++++++++
- ...akeLists.txt-fix-LWS_HAS_GETOPT_LONG.patch | 44 +++++++++
- 2 files changed, 133 insertions(+)
- create mode 100644 package/libwebsockets/0003-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch
- create mode 100644 package/libwebsockets/0004-CMakeLists.txt-fix-LWS_HAS_GETOPT_LONG.patch
-
-diff --git a/package/libwebsockets/0003-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch b/package/libwebsockets/0003-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch
-new file mode 100644
-index 0000000000..5843e86a74
---- /dev/null
-+++ b/package/libwebsockets/0003-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch
-@@ -0,0 +1,89 @@
-+From 6985244eb128ea681bb04566d88465c42161b2ce Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 1 Jan 2020 00:40:54 +0100
-+Subject: [PATCH] openssl: detect apis correctly when pthreads not available
-+
-+Since version 3.1.0 and commit aa4143aebdb59f4f21094781fb3b6ab4649643a6,
-+-pthread is unconditionally added to CMAKE_REQUIRED_FLAGS even if
-+pthread.h is not found, this will result in a build failure with openssl
-+if the toolchain doesn't support threads:
-+
-+[  5%] Building C object CMakeFiles/websockets_shared.dir/lib/core/lws_dll2.c.o
-+In file included from /home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/include/libwebsockets.h:570,
-+                 from /home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/lib/core/private.h:130,
-+                 from /home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/lib/core/lws_dll2.c:22:
-+/home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/include/libwebsockets/lws-genhash.h:79:18: error: field 'ctx' has incomplete type
-+         HMAC_CTX ctx;
-+                  ^~~
-+
-+This build failure is raised because openssl functions are not correcly
-+detected:
-+
-+Determining if the function SSL_CTX_set1_param exists failed with the following output:
-+Change Dir: /home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/CMakeFiles/CMakeTmp
-+
-+Run Build Command(s):/usr/bin/make cmTC_06946/fast && make[1]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/CMakeFiles/CMakeTmp'
-+/usr/bin/make -f CMakeFiles/cmTC_06946.dir/build.make CMakeFiles/cmTC_06946.dir/build
-+make[2]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/CMakeFiles/CMakeTmp'
-+Building C object CMakeFiles/cmTC_06946.dir/CheckFunctionExists.c.o
-+/home/buildroot/autobuild/instance-2/output-1/host/bin/arm-linux-gcc --sysroot=/home/buildroot/autobuild/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot -DKEYWORD=__inline  -Wall -Wsign-compare -Wuninitialized -Werror  -Wundef  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os  -DCHECK_FUNCTION_EXISTS=SSL_CTX_set1_param -pthread  -DNDEBUG   -o CMakeFiles/cmTC_06946.dir/CheckFunctionExists.c.o   -c /home/buildroot/autobuild/instance-2/output-1/host/share/cmake-3.15/Modules/CheckFunctionExists.c
-+Linking C executable cmTC_06946
-+/home/buildroot/autobuild/instance-2/output-1/host/bin/cmake -E cmake_link_script CMakeFiles/cmTC_06946.dir/link.txt --verbose=1
-+/home/buildroot/autobuild/instance-2/output-1/host/bin/arm-linux-gcc --sysroot=/home/buildroot/autobuild/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot -Wall -Wsign-compare -Wuninitialized -Werror  -Wundef  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os  -DCHECK_FUNCTION_EXISTS=SSL_CTX_set1_param -pthread  -DNDEBUG    CMakeFiles/cmTC_06946.dir/CheckFunctionExists.c.o  -o cmTC_06946 /home/buildroot/autobuild/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libssl.so /home/buildroot/autobuild/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libcrypto.so -lssl -lcrypto -lm -lcap
-+/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: cannot find -lpthread
-+collect2: error: ld returned 1 exit status
-+CMakeFiles/cmTC_06946.dir/build.make:88: recipe for target 'cmTC_06946' failed
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/6186b4718db285edadf7203d00ed72f8d76a31e4
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/warmcat/libwebsockets/commit/6985244eb128ea681bb04566d88465c42161b2ce]
-+---
-+ CMakeLists.txt | 32 +++++++++++++++++---------------
-+ 1 file changed, 17 insertions(+), 15 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 888f65e83..a92fed6ab 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -929,21 +929,23 @@ CHECK_C_SOURCE_COMPILES("#include <stdint.h>
-+ 		return 0;
-+ 	}" LWS_HAS_INTPTR_T)
-+ 
-+-set(CMAKE_REQUIRED_FLAGS "-pthread")	
-+-CHECK_C_SOURCE_COMPILES("#define _GNU_SOURCE 
-+-	#include <pthread.h> 
-+-	int main(void) { 
-+-		pthread_t th = 0;
-+-		pthread_setname_np(th, NULL);
-+-		return 0;
-+-	}" LWS_HAS_PTHREAD_SETNAME_NP)
-+-
-+-CHECK_C_SOURCE_COMPILES("#include <stddef.h>
-+-	#include <getopt.h> 
-+-	int main(void) { 
-+-		void *p = (void *)getopt_long;
-+-		return p != NULL;
-+-	}" LWS_HAS_GETOPT_LONG)
-++if (LWS_HAVE_PTHREAD_H)
-++	set(CMAKE_REQUIRED_FLAGS "-pthread")
-++	CHECK_C_SOURCE_COMPILES("#define _GNU_SOURCE
-++		#include <pthread.h>
-++		int main(void) {
-++			pthread_t th = 0;
-++			pthread_setname_np(th, NULL);
-++			return 0;
-++		}" LWS_HAS_PTHREAD_SETNAME_NP)
-++
-++	CHECK_C_SOURCE_COMPILES("#include <stddef.h>
-++		#include <getopt.h>
-++		int main(void) {
-++			void *p = (void *)getopt_long;
-++			return p != NULL;
-++		}" LWS_HAS_GETOPT_LONG)
-++endif()
-+ 
-+ 
-+ if (NOT PID_T_SIZE)
-diff --git a/package/libwebsockets/0004-CMakeLists.txt-fix-LWS_HAS_GETOPT_LONG.patch b/package/libwebsockets/0004-CMakeLists.txt-fix-LWS_HAS_GETOPT_LONG.patch
-new file mode 100644
-index 0000000000..9390bd230b
---- /dev/null
-+++ b/package/libwebsockets/0004-CMakeLists.txt-fix-LWS_HAS_GETOPT_LONG.patch
-@@ -0,0 +1,44 @@
-+From 7628a62af70fa8c29f61ba39d5c908637baad486 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 3 Jan 2020 14:26:18 +0100
-+Subject: [PATCH] CMakeLists.txt: fix LWS_HAS_GETOPT_LONG
-+
-+Commit 6985244eb128ea681bb04566d88465c42161b2ce wrongly moved
-+LWS_HAS_GETOPT_LONG under LWS_HAVE_PTHREAD_H so revert this change
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/warmcat/libwebsockets/pull/1813]
-+---
-+ CMakeLists.txt | 14 +++++++-------
-+ 1 file changed, 7 insertions(+), 7 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index a92fed6a..737011b8 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -938,15 +938,15 @@ if (LWS_HAVE_PTHREAD_H)
-+ 			pthread_setname_np(th, NULL);
-+ 			return 0;
-+ 		}" LWS_HAS_PTHREAD_SETNAME_NP)
-+-
-+-	CHECK_C_SOURCE_COMPILES("#include <stddef.h>
-+-		#include <getopt.h>
-+-		int main(void) {
-+-			void *p = (void *)getopt_long;
-+-			return p != NULL;
-+-		}" LWS_HAS_GETOPT_LONG)
-+ endif()
-+ 
-++CHECK_C_SOURCE_COMPILES("#include <stddef.h>
-++	#include <getopt.h>
-++	int main(void) {
-++		void *p = (void *)getopt_long;
-++		return p != NULL;
-++	}" LWS_HAS_GETOPT_LONG)
-++
-+ 
-+ if (NOT PID_T_SIZE)
-+ 	set(pid_t int)
-+-- 
-+2.24.0
-+
+diff --git a/package/libwebsockets/0001-CMakeLists.txt-fix-build-with-libev-and-without-test.patch b/package/libwebsockets/0001-CMakeLists.txt-fix-build-with-libev-and-without-test.patch
+deleted file mode 100644
+index 09715d6b26..0000000000
+--- a/package/libwebsockets/0001-CMakeLists.txt-fix-build-with-libev-and-without-test.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 72c761789550703f004962ae164c415928e5e35c Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 6 Oct 2019 14:45:15 +0200
+-Subject: [PATCH] CMakeLists.txt: fix build with libev and without testapps
+-
+-Move libev workaround outside the
+-if ((LWS_ROLE_H1 OR LWS_ROLE_H2) AND NOT LWS_WITHOUT_TESTAPPS) block
+-otherwise build fails on:
+-
+-/home/naourr/work/instance-1/output-1/build/libwebsockets-3.2.0/lib/event-libs/libev/libev.c: In function 'lws_ev_hrtimer_cb':
+-/home/naourr/work/instance-1/output-1/build/libwebsockets-3.2.0/lib/event-libs/libev/libev.c:34:3: error: dereferencing type-punned pointer will break strict-aliasing rules [-Werror=strict-aliasing]
+-   ev_timer_set(&pt->ev.hrtimer, ((float)us) / 1000000.0, 0);
+-   ^~~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/b5a2188dce90f3ca9bf0cc7a043c1a946b8e288f
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream: https://github.com/warmcat/libwebsockets/commit/875739ca9913de8db1b1b616ecd7101df8dfc9db]
+----
+- CMakeLists.txt | 8 ++------
+- 1 file changed, 2 insertions(+), 6 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 6c26feb2..a10178c2 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1435,6 +1435,8 @@ endif()
+- if (LWS_WITH_LIBEV AND LWS_WITH_NETWORK)
+- 	list(APPEND SOURCES
+- 		lib/event-libs/libev/libev.c)
+-+	# libev generates a big mess of warnings with gcc, maintainer claims gcc to blame
+-+	set_source_files_properties( lib/event-libs/libev/libev.c PROPERTIES COMPILE_FLAGS "-Wno-error" )
+- endif()
+- 
+- if (LWS_WITH_LEJP)
+-@@ -2195,12 +2197,6 @@ if ((LWS_ROLE_H1 OR LWS_ROLE_H2) AND NOT LWS_WITHOUT_TESTAPPS)
+- 		endif()
+- 	endif()
+- 
+--	if (LWS_WITH_LIBEV)
+--		# libev generates a big mess of warnings with gcc, maintainer claims gcc to blame
+--		set_source_files_properties( lib/event-libs/libev/libev.c PROPERTIES COMPILE_FLAGS "-Wno-error" )
+--	endif()
+--
+--
+- 	if (NOT LWS_WITHOUT_SERVER)
+- 		#
+- 		# test-server
+--- 
+-2.23.0
+-
+diff --git a/package/libwebsockets/0002-CMakeLists.txt-fix-static-build-with-openssl.patch b/package/libwebsockets/0001-CMakeLists.txt-fix-static-build-with-openssl.patch
+similarity index 100%
+rename from package/libwebsockets/0002-CMakeLists.txt-fix-static-build-with-openssl.patch
+rename to package/libwebsockets/0001-CMakeLists.txt-fix-static-build-with-openssl.patch
+diff --git a/package/libwebsockets/0003-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch b/package/libwebsockets/0002-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch
+similarity index 100%
+rename from package/libwebsockets/0003-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch
+rename to package/libwebsockets/0002-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch
+diff --git a/package/libwebsockets/0004-CMakeLists.txt-fix-LWS_HAS_GETOPT_LONG.patch b/package/libwebsockets/0003-CMakeLists.txt-fix-LWS_HAS_GETOPT_LONG.patch
+similarity index 100%
+rename from package/libwebsockets/0004-CMakeLists.txt-fix-LWS_HAS_GETOPT_LONG.patch
+rename to package/libwebsockets/0003-CMakeLists.txt-fix-LWS_HAS_GETOPT_LONG.patch
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index 5bd728bc04..9aefe5c8b6 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	5e731c536a20d9c03ae611631db073f05cd77bf0906a8c30d2a13638d4c8c667  libwebsockets-3.2.0.tar.gz
++sha256	5b1521002771420bc91e1c91f36bc51f54bf4035c4bebde296dec235a45c33df  libwebsockets-3.2.1.tar.gz
+ sha256  4d092cd5e062c5ab0cf6408963d74619b5baf1571344410be6aa5bcef512eb70  LICENSE
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 7a065dfb22..5b54eebb94 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBWEBSOCKETS_VERSION = 3.2.0
++LIBWEBSOCKETS_VERSION = 3.2.1
+ LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
+ LIBWEBSOCKETS_LICENSE = LGPL-2.1 with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
 -- 
 2.24.0
