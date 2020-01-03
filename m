@@ -1,124 +1,179 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 3 Jan 2020 18:24:26 +0100
-Subject: [Buildroot] [PATCH] package/libnss: fix ppc 32-bit build failure
-In-Reply-To: <820d953e-9100-8217-b317-1b226b4aba18@xes-inc.com>
-References: <20200102181740.116227-1-giulio.benetti@benettiengineering.com>
- <23dbb404-03fa-f18f-607d-62cf8ef43a5f@xes-inc.com>
- <c965305f-ed37-02ce-971c-1253fe056402@benettiengineering.com>
- <820d953e-9100-8217-b317-1b226b4aba18@xes-inc.com>
-Message-ID: <4ef10e39-bef2-9327-ae2c-ecc9a3943e75@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  3 Jan 2020 19:11:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: depends on dynamic
+ library
+Message-ID: <20200103181143.1507204-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vincent, Thomas, Yann, All,
+Disable wireshark with static library (and so remove first patch) as
+upstream doesn't care/test static builds and I'm tired to spend time on
+fixing these issues and upstreaming them.
 
-On 1/3/20 5:22 PM, Vincent Fazio wrote:
-> Giulio,
-> 
-> On 1/2/20 3:41 PM, Giulio Benetti wrote:
->> Hi Vincent,
->>
->> On 1/2/20 9:54 PM, Vincent Fazio wrote:
->>> Giulio,
->>>
->>> Are you dropping this file for 32bit builds due to the Altivec
->>> requirements? General Altivec instructions are available on 32bit chips,
->>> such as those from Freescale/NXP. The e600 is a product that comes to
->>> mind. IMO, the Makefile should include the file if the architecture is
->>> 'ppc'. I think it makes sense that the source file should determine what
->>> it compiles down to. It's possible the hw acceleration logic for PPC
->>> changes later and this is one more file that would need to be touched.
->>>
->>> Unfortunately, this is where it gets a bit more complicated...
->>>
->>> The backing instruction for the vec_xl_be compiler intrinsic is lxvd2x
->>> (a VSX instruction). Technically I think this instruction was available
->>> in the Power ISA as early as 2.06, but GCC is only advertising the
->>> intrinsic as of ISA 3.0 (Power 9+).
->>> https://gcc.gnu.org/onlinedocs/gcc-8.3.0/gcc/PowerPC-Built-in-Functions.html#PowerPC-Built-in-Functions
->>>
->>>
->>> I've always had issues reading the logic behind GCC's instruction
->>> generation and I don't have 8+ handy... I'm not sure if there's a guard
->>> to prevent the lxvd2x instruction from being emitted or not when
->>> resolving vec_xl_be and, say, '-maltivec -mpcu=7450' is specified. If
->>> there isn't, I'd expect either an illegal instruction exception or for
->>> the kernel to emulate it magically. If there is, I'd expect GCC to
->>> either compile a compatible instruction shim or to simply error out.
->>>
->>> Regardless, given the way the hardware acceleration is written currently
->>> to require that compiler intrinsic, USE_PPC_CRYPTO may need to be
->>> guarded by __builtin_cpu_supports("arch_3_00")
->>
->> They are all good suggestions but I think they are more NSS related
->> than Buildroot related. What I'm trying to do here is to avoid build
->> failure in Buildroot and as much as possible to try to contribute
->> upstream. As you've mentioned above 32-bit supports Altivec, but the
->> problem at the moment is that USE_PPC_CRYPTO is defined in gcm.h only
->> if __powerpc64__ is defined, this means that they only tested it for
->> that architecture(ppc64 and ppc64le). So at the moment I'd prefer keep
->> 32-bit Altivec supported devices without gcm altivec acceleration. But
->> if you have a patch that takes into account 32-bits Altivec too,
->> please upload it here:
->>
-> For Buildroot, we can likely key off
-> ifneq($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+This will avoid static build failures with brotli and snappy
 
-Yes, this is a good idea.
+Fixes:
+ - http://autobuild.buildroot.org/results/2387d4590c5dce73d5f6d72bccf253e79f9a73d8
+ - http://autobuild.buildroot.org/results/3159c696c6d5b56e22bbb02c89e5aa94bc313755
 
-> and sed delete the '-mcrypto
-> -maltivec' flags from lib/freebl/Makefile... 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ke-Add-libpcap-imported-library-targ.patch | 104 ------------------
+ package/wireshark/Config.in                   |  11 +-
+ 2 files changed, 6 insertions(+), 109 deletions(-)
+ delete mode 100644 package/wireshark/0001-CMake-revert-CMake-Add-libpcap-imported-library-targ.patch
 
-It's better to avoid this kind of blind hack. I'd prefer to introduce a 
-patch in NSS which adds a NSS_ALTIVEC_DISABLE to avoid building 
-gcm-ppc.c. So combined with your suggestion above we can do something like:
-
-ifeq($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
-NSS_ALTIVEC_DISABLE=1
-endif
-
-The -mcrypto enables -mvsx
-> and causes gcc to emit instructions the target CPU may not support,
-> that's why it should be removed. Luckily, we can make some assumptions
-> that if ALTIVEC isn't supported, VSX and Crypto functions arent either
-> since they're introduced in the same or later ISA revisions.
-
-So let's assume this.
-
->> https://bugzilla.mozilla.org/show_bug.cgi?id=1606689
->>
->> so we fix this problem once!
-> I'm not sure this can be done "cleanly" given how this is currently
-> structured. I've added a comment in the bug. Not all 64bit PPC
-> processors have Altivec (e5500 does not). 
-
-Yes, I see now.
-
-> Plus this goes a bit beyond
-> that since the functions they're using require at least Power ISA 3.0.
-> The source package should probably inherit CFLAGS instead of assuming it
-> can define it given the complexities of PPC cpu tuning.
-
- From NSS point of view this would be fixed by introducing 
-NSS_ALTIVEC_DISABLE, but from Buildroot point of view this should be 
-done by adding a new variable like BR2_POWERPC_AT_LEAST_ISA_X_X
-
-But I don't know if it's worth the effort.
-
-What about above?
-
+diff --git a/package/wireshark/0001-CMake-revert-CMake-Add-libpcap-imported-library-targ.patch b/package/wireshark/0001-CMake-revert-CMake-Add-libpcap-imported-library-targ.patch
+deleted file mode 100644
+index 20225f2204..0000000000
+--- a/package/wireshark/0001-CMake-revert-CMake-Add-libpcap-imported-library-targ.patch
++++ /dev/null
+@@ -1,104 +0,0 @@
+-From 19b407fd65a11d3aa7bc70ac95d7b6f130914866 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 11 Aug 2019 12:10:34 +0200
+-Subject: [PATCH] CMake: revert "CMake: Add libpcap imported library target"
+-
+-${PCAP_LIBRARIES} is added to IMPORTED_LOCATION since
+-https://github.com/wireshark/wireshark/commit/4c5d2f5ccf822c07746853b065322c34dc322e8a
+-
+-However, this breaks static build because cmake considers that
+-IMPORTED_LOCATION is a string:
+-
+-[ 19%] Building C object epan/dissectors/CMakeFiles/dissectors.dir/packet-aim.c.o
+-x86_64-linux-gcc.br_real: error: /home/fabrice/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libpcap.a;/home/fabrice/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libnl-genl-3.a;/home/fabrice/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libnl-3.a: No such file or directory
+-make[3]: *** [CMakeFiles/mergecap.dir/build.make:102: run/mergecap] Error 1
+-make[3]: Leaving directory '/home/fabrice/buildroot/output/build/wireshark-3.1.0'
+-make[2]: *** [CMakeFiles/Makefile2:195: CMakeFiles/mergecap.dir/all] Error 2
+-make[2]: *** Waiting for unfinished jobs....
+-
+-So revert this change to use PCAP_LIBRARIES which is used to save the
+-paths of libpcap as well as its static dependencies, IMPORTED_LOCATION
+-can't be used for this purpose as cmake considers this variable to be a
+-single library path and not a list of library paths
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://code.wireshark.org/review/#/c/35567]
+----
+- CMakeLists.txt               | 2 +-
+- capchild/CMakeLists.txt      | 2 +-
+- caputils/CMakeLists.txt      | 2 +-
+- cmake/modules/FindPCAP.cmake | 8 --------
+- extcap/CMakeLists.txt        | 2 +-
+- 5 files changed, 4 insertions(+), 12 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 07d40e4ba6..cada0434ea 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -2633,7 +2633,7 @@ if(BUILD_dumpcap AND PCAP_FOUND)
+- 		wsutil
+- 		caputils
+- 		ui
+--		pcap::pcap
+-+		${PCAP_LIBRARIES}
+- 		${CAP_LIBRARIES}
+- 		${GLIB2_LIBRARIES}
+- 		${GTHREAD2_LIBRARIES}
+-diff --git a/capchild/CMakeLists.txt b/capchild/CMakeLists.txt
+-index 5eba74a28d..059c399d39 100644
+---- a/capchild/CMakeLists.txt
+-+++ b/capchild/CMakeLists.txt
+-@@ -29,7 +29,7 @@ add_library(capchild STATIC
+- target_link_libraries(capchild
+- 	PRIVATE
+- 		wsutil
+--		$<$<BOOL:${PCAP_FOUND}>:pcap::pcap>
+-+		${PCAP_LIBRARIES}
+- )
+- 
+- set_target_properties(capchild PROPERTIES
+-diff --git a/caputils/CMakeLists.txt b/caputils/CMakeLists.txt
+-index 74c9496834..e4e9beccdc 100644
+---- a/caputils/CMakeLists.txt
+-+++ b/caputils/CMakeLists.txt
+-@@ -50,7 +50,7 @@ add_library(caputils STATIC
+- target_link_libraries(caputils
+- 	PUBLIC
+- 		wsutil
+--		$<$<BOOL:${PCAP_FOUND}>:pcap::pcap>
+-+		${PCAP_LIBRARIES}
+- 	PRIVATE
+- 		${NL_LIBRARIES}
+- )
+-diff --git a/cmake/modules/FindPCAP.cmake b/cmake/modules/FindPCAP.cmake
+-index eab41f185c..8bb9b524f7 100644
+---- a/cmake/modules/FindPCAP.cmake
+-+++ b/cmake/modules/FindPCAP.cmake
+-@@ -262,11 +262,3 @@ if(PCAP_FOUND)
+- 
+-   cmake_pop_check_state()
+- endif()
+--
+--if(PCAP_FOUND AND NOT TARGET pcap::pcap)
+--  add_library(pcap::pcap UNKNOWN IMPORTED)
+--  set_target_properties(pcap::pcap PROPERTIES
+--    IMPORTED_LOCATION "${PCAP_LIBRARIES}"
+--    INTERFACE_INCLUDE_DIRECTORIES "${PCAP_INCLUDE_DIRS}"
+--  )
+--endif()
+-diff --git a/extcap/CMakeLists.txt b/extcap/CMakeLists.txt
+-index 03b2b0273e..8802d93678 100644
+---- a/extcap/CMakeLists.txt
+-+++ b/extcap/CMakeLists.txt
+-@@ -93,7 +93,7 @@ if(BUILD_androiddump)
+- 				ui
+- 				${GLIB2_LIBRARIES}
+- 				${WIN_WS2_32_LIBRARY}
+--				$<$<BOOL:${PCAP_FOUND}>:pcap::pcap>
+-+				${PCAP_LIBRARIES}
+- 			)
+- 		else()
+- 			message(FATAL_ERROR "You are trying to build androiddump with libpcap but do not have it")
+--- 
+-2.20.1
+-
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index a3ad808b86..382e429a9c 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_WIRESHARK
+ 	bool "wireshark"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork(), glib2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+@@ -20,7 +21,6 @@ config BR2_PACKAGE_WIRESHARK_GUI
+ 	default y
+ 	depends on BR2_INSTALL_LIBSTDCPP # qt5
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
+-	depends on !BR2_STATIC_LIBS # qt5
+ 	depends on BR2_PACKAGE_HAS_UDEV # qt5 input
+ 	select BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT5BASE
+@@ -34,13 +34,14 @@ config BR2_PACKAGE_WIRESHARK_GUI
+ 	help
+ 	  Enable Qt5 GUI
+ 
+-comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, dynamic library"
++comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL"
+ 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
+ endif # BR2_PACKAGE_WIRESHARK
+ 
+-comment "wireshark needs a toolchain w/ wchar, threads"
++comment "wireshark needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
->>
->> Maybe we can live chat on BR IRC if you join it.
-> I'm idling there today
->>
->>
->> Thanks for reviewing so in depth.
->> Best regards
-> 
+2.24.0
