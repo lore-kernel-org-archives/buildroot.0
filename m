@@ -1,121 +1,124 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 3 Jan 2020 17:52:22 +0100
-Subject: [Buildroot] [PATCH 08/11] support/scripts/pkg-stats: add
- generic package status field
-In-Reply-To: <20200103163409.141a5e8a@windsurf>
-References: <20200103151849.10956-1-heiko.thiery@gmail.com>
- <20200103151849.10956-9-heiko.thiery@gmail.com>
- <20200103163409.141a5e8a@windsurf>
-Message-ID: <CAEyMn7ZVdG+EpMew4TbtNMy7WY6OHOCbg3fQKQx2f==v7Qhq7g@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri, 3 Jan 2020 18:24:26 +0100
+Subject: [Buildroot] [PATCH] package/libnss: fix ppc 32-bit build failure
+In-Reply-To: <820d953e-9100-8217-b317-1b226b4aba18@xes-inc.com>
+References: <20200102181740.116227-1-giulio.benetti@benettiengineering.com>
+ <23dbb404-03fa-f18f-607d-62cf8ef43a5f@xes-inc.com>
+ <c965305f-ed37-02ce-971c-1253fe056402@benettiengineering.com>
+ <820d953e-9100-8217-b317-1b226b4aba18@xes-inc.com>
+Message-ID: <4ef10e39-bef2-9327-ae2c-ecc9a3943e75@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fr., 3. Jan. 2020 um 16:34 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello,
->
-> On Fri,  3 Jan 2020 16:18:45 +0100
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> > index 324700adbf..b0c2db2b93 100755
-> > --- a/support/scripts/pkg-stats
-> > +++ b/support/scripts/pkg-stats
-> > @@ -112,6 +112,7 @@ class Package:
-> >          self.url_status = None
-> >          self.url_worker = None
-> >          self.rm_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
-> > +        self.status = {}
-> >
-> >      def pkgvar(self):
-> >          return self.name.upper().replace("-", "_")
-> > @@ -121,6 +122,7 @@ class Package:
-> >          Fills in the .url field
-> >          """
-> >          self.url_status = "No Config.in"
-> > +        self.status['url'] = ("error", "no Config.in")
->
-> Here it is duplicating the url_status field, I believe we want to avoid
-> that.
->
-> >          for filename in os.listdir(self.pkg_path):
-> >              if fnmatch.fnmatch(filename, 'Config.*'):
-> >                  fp = open(os.path.join(self.pkg_path, filename), "r")
-> > @@ -128,9 +130,11 @@ class Package:
-> >                      if URL_RE.match(config_line):
-> >                          self.url = config_line.strip()
-> >                          self.url_status = "Found"
-> > +                        self.status['url'] = ("ok", "found")
->
-> Ditto.
->
-> >                          fp.close()
-> >                          return
-> >                  self.url_status = "Missing"
-> > +                self.status['url'] = ("error", "missing")
->
-> Ditto.
->
-> >                  fp.close()
-> >
-> >      def set_infra(self):
-> > @@ -155,11 +159,16 @@ class Package:
-> >          Fills in the .has_license and .has_license_files fields
-> >          """
-> >          var = self.pkgvar()
-> > +        self.status['license'] = ("error", "missing")
-> > +        self.status['license-files'] = ("error", "missing")
-> >          if var in self.all_licenses:
-> >              self.has_license = True
-> >              self.license = self.all_licenses[var]
-> > +            self.status['license'] = ("ok", "found")
-> > +
-> >          if var in self.all_license_files:
-> >              self.has_license_files = True
-> > +            self.status['license-files'] = ("ok", "found")
->
-> Here it's duplicating self.has_license and self.has_license_files
-> basically.
->
-> >      def set_hash_info(self):
-> >          """
-> > @@ -167,6 +176,10 @@ class Package:
-> >          """
-> >          hashpath = os.path.join(self.pkg_path, self.name + '.hash')
-> >          self.has_hash = os.path.exists(hashpath)
-> > +        if self.has_hash:
-> > +            self.status['hash'] = ("ok", "found")
-> > +        else:
-> > +            self.status['hash'] = ("error", "missing")
->
-> Same for self.has_hash.
->
-> Can we do better ? Maybe the issues is that pkg-stats does both
-> extracting the data to a JSON format *and* presenting it as HTML. Maybe
-> it should be separated into two tools:
+Vincent, Thomas, Yann, All,
 
-My intention was not to break the existing generation of the html
-output. I thought we can remove this duplications later.
+On 1/3/20 5:22 PM, Vincent Fazio wrote:
+> Giulio,
+> 
+> On 1/2/20 3:41 PM, Giulio Benetti wrote:
+>> Hi Vincent,
+>>
+>> On 1/2/20 9:54 PM, Vincent Fazio wrote:
+>>> Giulio,
+>>>
+>>> Are you dropping this file for 32bit builds due to the Altivec
+>>> requirements? General Altivec instructions are available on 32bit chips,
+>>> such as those from Freescale/NXP. The e600 is a product that comes to
+>>> mind. IMO, the Makefile should include the file if the architecture is
+>>> 'ppc'. I think it makes sense that the source file should determine what
+>>> it compiles down to. It's possible the hw acceleration logic for PPC
+>>> changes later and this is one more file that would need to be touched.
+>>>
+>>> Unfortunately, this is where it gets a bit more complicated...
+>>>
+>>> The backing instruction for the vec_xl_be compiler intrinsic is lxvd2x
+>>> (a VSX instruction). Technically I think this instruction was available
+>>> in the Power ISA as early as 2.06, but GCC is only advertising the
+>>> intrinsic as of ISA 3.0 (Power 9+).
+>>> https://gcc.gnu.org/onlinedocs/gcc-8.3.0/gcc/PowerPC-Built-in-Functions.html#PowerPC-Built-in-Functions
+>>>
+>>>
+>>> I've always had issues reading the logic behind GCC's instruction
+>>> generation and I don't have 8+ handy... I'm not sure if there's a guard
+>>> to prevent the lxvd2x instruction from being emitted or not when
+>>> resolving vec_xl_be and, say, '-maltivec -mpcu=7450' is specified. If
+>>> there isn't, I'd expect either an illegal instruction exception or for
+>>> the kernel to emulate it magically. If there is, I'd expect GCC to
+>>> either compile a compatible instruction shim or to simply error out.
+>>>
+>>> Regardless, given the way the hardware acceleration is written currently
+>>> to require that compiler intrinsic, USE_PPC_CRYPTO may need to be
+>>> guarded by __builtin_cpu_supports("arch_3_00")
+>>
+>> They are all good suggestions but I think they are more NSS related
+>> than Buildroot related. What I'm trying to do here is to avoid build
+>> failure in Buildroot and as much as possible to try to contribute
+>> upstream. As you've mentioned above 32-bit supports Altivec, but the
+>> problem at the moment is that USE_PPC_CRYPTO is defined in gcm.h only
+>> if __powerpc64__ is defined, this means that they only tested it for
+>> that architecture(ppc64 and ppc64le). So at the moment I'd prefer keep
+>> 32-bit Altivec supported devices without gcm altivec acceleration. But
+>> if you have a patch that takes into account 32-bits Altivec too,
+>> please upload it here:
+>>
+> For Buildroot, we can likely key off
+> ifneq($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
 
->  - One doing the data extraction and generation of JSON
->
->  - One using the JSON to produce the HTML page, which would be replaced
->    by your new site
->
-> I'm not sure exactly how to go, but I'm not a big fan of this patch
-> that duplicates information that already exists (and which doesn't
-> explain why).
+Yes, this is a good idea.
 
-So in the first step I will use the "new" data also for the html
-generation. And after that we should think about extracting the html
-generation to an additional tool/script?
+> and sed delete the '-mcrypto
+> -maltivec' flags from lib/freebl/Makefile... 
 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+It's better to avoid this kind of blind hack. I'd prefer to introduce a 
+patch in NSS which adds a NSS_ALTIVEC_DISABLE to avoid building 
+gcm-ppc.c. So combined with your suggestion above we can do something like:
+
+ifeq($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
+NSS_ALTIVEC_DISABLE=1
+endif
+
+The -mcrypto enables -mvsx
+> and causes gcc to emit instructions the target CPU may not support,
+> that's why it should be removed. Luckily, we can make some assumptions
+> that if ALTIVEC isn't supported, VSX and Crypto functions arent either
+> since they're introduced in the same or later ISA revisions.
+
+So let's assume this.
+
+>> https://bugzilla.mozilla.org/show_bug.cgi?id=1606689
+>>
+>> so we fix this problem once!
+> I'm not sure this can be done "cleanly" given how this is currently
+> structured. I've added a comment in the bug. Not all 64bit PPC
+> processors have Altivec (e5500 does not). 
+
+Yes, I see now.
+
+> Plus this goes a bit beyond
+> that since the functions they're using require at least Power ISA 3.0.
+> The source package should probably inherit CFLAGS instead of assuming it
+> can define it given the complexities of PPC cpu tuning.
+
+ From NSS point of view this would be fixed by introducing 
+NSS_ALTIVEC_DISABLE, but from Buildroot point of view this should be 
+done by adding a new variable like BR2_POWERPC_AT_LEAST_ISA_X_X
+
+But I don't know if it's worth the effort.
+
+What about above?
+
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+>>
+>> Maybe we can live chat on BR IRC if you join it.
+> I'm idling there today
+>>
+>>
+>> Thanks for reviewing so in depth.
+>> Best regards
+> 
