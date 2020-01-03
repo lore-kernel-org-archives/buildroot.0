@@ -1,35 +1,40 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 3 Jan 2020 17:36:16 +0100
-Subject: [Buildroot] [PATCH 06/11] support/scripts/pkg-stats: store
- licences of package
-In-Reply-To: <20200103162839.3d9ab57c@windsurf>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 3 Jan 2020 17:39:09 +0100
+Subject: [Buildroot] [PATCH 05/11] support/scripts/pkg-stats: parse and
+ set developers info
+In-Reply-To: <CAEyMn7aPCiLX-RB8vYm_-OnhrjXXrxJg+ufYgPUx5cRcjSW0tw@mail.gmail.com>
 References: <20200103151849.10956-1-heiko.thiery@gmail.com>
- <20200103151849.10956-7-heiko.thiery@gmail.com>
- <20200103162839.3d9ab57c@windsurf>
-Message-ID: <CAEyMn7b-pAAVtW1-SgiKDNqRMq8gwvHNqLMp9Kq5bobFC6BOnw@mail.gmail.com>
+ <20200103151849.10956-6-heiko.thiery@gmail.com>
+ <20200103162625.093ff7b2@windsurf>
+ <CAEyMn7aPCiLX-RB8vYm_-OnhrjXXrxJg+ufYgPUx5cRcjSW0tw@mail.gmail.com>
+Message-ID: <20200103173909.70596709@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fr., 3. Jan. 2020 um 16:28 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> On Fri,  3 Jan 2020 16:18:43 +0100
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
->
-> Just curious: how does this gets used in your statistics site ? I see
-> that you show whether the package has a license or not, but I don't see
-> the license details being exposed.
+On Fri, 3 Jan 2020 17:32:42 +0100
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-The license used by a package is show on the package detail page:
-http://packages.buildroot.thiery.it/packages/package/android-tools
+> > You have duplicated this function from utils/getdeveloperlib.py, which
+> > is intended to be used as a Python module. Why don't we try to use it,
+> > instead ?  
+> 
+> I also thought about that ... should we then move the pkg-stats script
+> to the utils folder?
 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Normally, utils/ is for tools that are directly useful to the Buildroot
+user/developer, and pkg-stats is not really such a tool. It's kind of
+an internal tool we use to generate this JSON/HTML stuff, but the
+regular Buildroot developer does not need that.
+
+One idea is to add ../../utils to the Python path used to search for
+modules. I think it can be tweaked from inside a Python script. Not
+sure if it's the nicest thing to do, though.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
