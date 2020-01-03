@@ -1,72 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 3 Jan 2020 16:26:25 +0100
-Subject: [Buildroot] [PATCH 05/11] support/scripts/pkg-stats: parse and
- set developers info
-In-Reply-To: <20200103151849.10956-6-heiko.thiery@gmail.com>
+Date: Fri, 3 Jan 2020 16:28:39 +0100
+Subject: [Buildroot] [PATCH 06/11] support/scripts/pkg-stats: store
+ licences of package
+In-Reply-To: <20200103151849.10956-7-heiko.thiery@gmail.com>
 References: <20200103151849.10956-1-heiko.thiery@gmail.com>
- <20200103151849.10956-6-heiko.thiery@gmail.com>
-Message-ID: <20200103162625.093ff7b2@windsurf>
+ <20200103151849.10956-7-heiko.thiery@gmail.com>
+Message-ID: <20200103162839.3d9ab57c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Fri,  3 Jan 2020 16:18:42 +0100
+On Fri,  3 Jan 2020 16:18:43 +0100
 Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-> +class Developer:
-> +    def __init__(self, name, files):
-> +        self.name = name
-> +        self.files = files
-> +
-> +def parse_developers(basepath=None):
-> +    """Parse the DEVELOPERS file and return a list of Developer objects."""
-> +    developers = []
-> +    linen = 0
-> +    if basepath is None:
-> +        basepath = os.getcwd()
-> +    with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
-> +        files = []
-> +        name = None
-> +        for line in f:
-> +            line = line.strip()
-> +            if line.startswith("#"):
-> +                continue
-> +            elif line.startswith("N:"):
-> +                if name is not None or len(files) != 0:
-> +                    print("Syntax error in DEVELOPERS file, line %d" % linen)
-> +                name = line[2:].strip()
-> +            elif line.startswith("F:"):
-> +                fname = line[2:].strip()
-> +                #dev_files = glob.glob(os.path.join(basepath, fname))
-> +                dev_files = glob.glob(fname)
-> +                if len(dev_files) == 0:
-> +                    print("WARNING: '%s' doesn't match any file" % fname)
-> +                files += dev_files
-> +            elif line == "":
-> +                if not name:
-> +                    continue
-> +                developers.append(Developer(name, files))
-> +                files = []
-> +                name = None
-> +            else:
-> +                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line))
-> +
-> +                return None
-> +            linen += 1
-> +    # handle last developer
-> +    if name is not None:
-> +        developers.append(Developer(name, files))
-> +    return developers
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
-You have duplicated this function from utils/getdeveloperlib.py, which
-is intended to be used as a Python module. Why don't we try to use it,
-instead ?
-
-Thanks,
+Just curious: how does this gets used in your statistics site ? I see
+that you show whether the package has a license or not, but I don't see
+the license details being exposed.
 
 Thomas
 -- 
