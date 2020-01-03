@@ -1,59 +1,51 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 3 Jan 2020 13:33:28 +0100
-Subject: [Buildroot] [POC] buildroot packages site
-In-Reply-To: <20200103132645.6be5a250@windsurf>
-References: <CAEyMn7brT6fMrUmb7L61ofOx7NuEKj2OqZrL9X00gp4rYZp1RQ@mail.gmail.com>
- <20200103132645.6be5a250@windsurf>
-Message-ID: <CAEyMn7YbbC+Nb0PbvFsS=BMh7aEi_nLZaOSS4URYzqfrzwUoYg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 3 Jan 2020 13:36:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: fix static build
+ with brotli
+In-Reply-To: <20200103105706.1500629-1-fontaine.fabrice@gmail.com>
+References: <20200103105706.1500629-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200103133658.01caf199@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri,  3 Jan 2020 11:57:06 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Am Fr., 3. Jan. 2020 um 13:26 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello Heiko,
->
-> On Fri, 3 Jan 2020 11:48:53 +0100
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > I invested some spare time to create a buildroot packages/stats site.
-> > I used python-flask for processing the json output of the pkg-stats
-> > script. To have more information in the output file I did some
-> > modifications on the pkg-stats script as well.
-> >
-> > A running installation as fcgi is available here:
-> > http://packages.buildroot.thiery.it
->
-> Wow, that's really nice. We definitely want to deploy this as a
-> replacement to http://autobuild.buildroot.org/stats/. Perhaps we should
-> even promote this to http://stats.buildroot.org/ or something like that.
+> + cmake/modules/FindBROTLI.cmake | 8 ++++++++
+> + 1 file changed, 8 insertions(+)
+> +
+> +diff --git a/cmake/modules/FindBROTLI.cmake b/cmake/modules/FindBROTLI.cmake
+> +index 4ab8dbb41c..43fb7ad11c 100644
+> +--- a/cmake/modules/FindBROTLI.cmake
+> ++++ b/cmake/modules/FindBROTLI.cmake
+> +@@ -11,6 +11,9 @@
+> + include( FindWSWinLibs )
+> + FindWSWinLibs( "brotli-.*" "BROTLI_HINTS" )
+> + 
+> ++find_package(PkgConfig QUIET)
+> ++PKG_CHECK_MODULES(PC_BROTLI QUIET libbrotlidec)
+> ++
+> + find_path(BROTLI_INCLUDE_DIR
+> +   NAMES "brotli/decode.h"
+> +   HINTS "${BROTLI_HINTS}/include"
+> +@@ -28,6 +31,11 @@ if( BROTLI_FOUND )
+> +   set( BROTLI_INCLUDE_DIRS ${BROTLI_INCLUDE_DIR} )
+> +   set( BROTLI_LIBRARIES ${BROTLIDEC_LIBRARY} )
+> + 
+> ++  # Include transitive dependencies for static linking.
+> ++  if(UNIX AND CMAKE_FIND_LIBRARY_SUFFIXES STREQUAL ".a")
 
-This sounds good  :-)
+Testing for the .a suffix shouldn't be necessary: pkg-config will
+report transitive dependency only if --static is passed, i.e only if
+you're static linking.
 
-> One question: how did you collect the stats history at
-> http://packages.buildroot.thiery.it/packages/stats?commit=198bdaadd03f75fe959c21089c354d36c90069bc ?
+Best regards,
 
-Fist I have a cron job that does updates the latest.json in a fixed
-interval (e.g. every hour). In addition I use that output and strip
-the packages stuff from the json with jq and only store the stats part
-of the output for every day.
-For having the stats back in the past I have a script that does a
-checkout for every day in the past and generates this stats output.
-
-> Thanks for this development, looks very promising!
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
---
-Heiko
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
