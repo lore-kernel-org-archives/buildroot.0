@@ -1,85 +1,119 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 3 Jan 2020 13:42:47 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/2] package/samba4: Do not force target python
-In-Reply-To: <20200103112516.1501782-1-fontaine.fabrice@gmail.com>
-References: <20200103112516.1501782-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200103134247.15b63dc2@windsurf>
+Date: Fri, 3 Jan 2020 13:44:00 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libwebsockets: fix build with
+ openssl and without threads
+In-Reply-To: <20200103105951.1500818-1-fontaine.fabrice@gmail.com>
+References: <20200103105951.1500818-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200103134400.3ffd3623@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  3 Jan 2020 12:25:15 +0100
+Hello Fabrice,
+
+On Fri,  3 Jan 2020 11:59:50 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-> index 493c79f3f8..a34eaa8088 100644
-> --- a/package/samba4/Config.in
-> +++ b/package/samba4/Config.in
-> @@ -18,7 +18,6 @@ config BR2_PACKAGE_SAMBA4
->  	select BR2_PACKAGE_GNUTLS
->  	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	select BR2_PACKAGE_POPT
-> -	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
->  	select BR2_PACKAGE_ZLIB
->  	help
->  	  Provides secure, stable and fast file and print services
-> diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-> index c5d2d6c6ea..31a598333c 100644
-> --- a/package/samba4/samba4.mk
-> +++ b/package/samba4/samba4.mk
-> @@ -26,14 +26,11 @@ SAMBA4_CONF_ENV = \
->  	WAF_NO_PREFORK=1
->  
->  ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> -SAMBA4_PYTHON = \
-> -	PYTHON="$(HOST_DIR)/bin/python3" \
-> -	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
-> -SAMBA4_DEPENDENCIES += host-python3 python3
-> +SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python3"
-> +SAMBA4_DEPENDENCIES += host-python3
->  else
->  SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python2"
->  SAMBA4_DEPENDENCIES += host-python
-> -SAMBA4_CONF_OPTS += --disable-python
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-> @@ -143,9 +140,10 @@ define SAMBA4_INSTALL_TARGET_CMDS
->  endef
->  
->  ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),y)
-> -SAMBA4_DEPENDENCIES += jansson
-> +SAMBA4_CONF_ENV += PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
-> +SAMBA4_DEPENDENCIES += jansson python3
->  else
-> -SAMBA4_CONF_OPTS += --without-ad-dc --without-json
-> +SAMBA4_CONF_OPTS += --disable-python --without-ad-dc --without-json
->  endif
+> Fixes:
+>  - http://autobuild.buildroot.org/results/6186b4718db285edadf7203d00ed72f8d76a31e4
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ix-build-with-openssl-and-without-th.patch | 90 +++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>  create mode 100644 package/libwebsockets/0003-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch
+> 
+> diff --git a/package/libwebsockets/0003-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch b/package/libwebsockets/0003-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch
+> new file mode 100644
+> index 0000000000..701a1cd67a
+> --- /dev/null
+> +++ b/package/libwebsockets/0003-CMakeLists.txt-fix-build-with-openssl-and-without-th.patch
+> @@ -0,0 +1,90 @@
+> +From 8d8bd8a8a09d2d9e937aee8c3e2b69810aa710fd Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Wed, 1 Jan 2020 00:40:54 +0100
+> +Subject: [PATCH] CMakeLists.txt: fix build with openssl and without threads
+> +
+> +Since version 3.1.0 and commit aa4143aebdb59f4f21094781fb3b6ab4649643a6,
+> +-pthread is unconditionally added to CMAKE_REQUIRED_FLAGS even if
+> +pthread.h is not found, this will result in a build failure with openssl
+> +if the toolchain doesn't support threads:
+> +
+> +[  5%] Building C object CMakeFiles/websockets_shared.dir/lib/core/lws_dll2.c.o
+> +In file included from /home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/include/libwebsockets.h:570,
+> +                 from /home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/lib/core/private.h:130,
+> +                 from /home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/lib/core/lws_dll2.c:22:
+> +/home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/include/libwebsockets/lws-genhash.h:79:18: error: field 'ctx' has incomplete type
+> +         HMAC_CTX ctx;
+> +                  ^~~
+> +
+> +This build failure is raised because openssl functions are not correcly
+> +detected:
+> +
+> +Determining if the function SSL_CTX_set1_param exists failed with the following output:
+> +Change Dir: /home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/CMakeFiles/CMakeTmp
+> +
+> +Run Build Command(s):/usr/bin/make cmTC_06946/fast && make[1]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/CMakeFiles/CMakeTmp'
+> +/usr/bin/make -f CMakeFiles/cmTC_06946.dir/build.make CMakeFiles/cmTC_06946.dir/build
+> +make[2]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/libwebsockets-3.2.0/CMakeFiles/CMakeTmp'
+> +Building C object CMakeFiles/cmTC_06946.dir/CheckFunctionExists.c.o
+> +/home/buildroot/autobuild/instance-2/output-1/host/bin/arm-linux-gcc --sysroot=/home/buildroot/autobuild/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot -DKEYWORD=__inline  -Wall -Wsign-compare -Wuninitialized -Werror  -Wundef  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os  -DCHECK_FUNCTION_EXISTS=SSL_CTX_set1_param -pthread  -DNDEBUG   -o CMakeFiles/cmTC_06946.dir/CheckFunctionExists.c.o   -c /home/buildroot/autobuild/instance-2/output-1/host/share/cmake-3.15/Modules/CheckFunctionExists.c
+> +Linking C executable cmTC_06946
+> +/home/buildroot/autobuild/instance-2/output-1/host/bin/cmake -E cmake_link_script CMakeFiles/cmTC_06946.dir/link.txt --verbose=1
+> +/home/buildroot/autobuild/instance-2/output-1/host/bin/arm-linux-gcc --sysroot=/home/buildroot/autobuild/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot -Wall -Wsign-compare -Wuninitialized -Werror  -Wundef  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os  -DCHECK_FUNCTION_EXISTS=SSL_CTX_set1_param -pthread  -DNDEBUG    CMakeFiles/cmTC_06946.dir/CheckFunctionExists.c.o  -o cmTC_06946 /home/buildroot/autobuild/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libssl.so /home/buildroot/autobuild/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libcrypto.so -lssl -lcrypto -lm -lcap
+> +/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: cannot find -lpthread
+> +collect2: error: ld returned 1 exit status
+> +CMakeFiles/cmTC_06946.dir/build.make:88: recipe for target 'cmTC_06946' failed
 
-So there is nothing Python related in samba4, besides the AD DC
-support? In his e-mail at
-http://lists.busybox.net/pipermail/buildroot/2019-November/266563.html,
-Trent said:
+I am confused by the relationship between the OpenSSL detection issue
+and the pthread problem.
 
-  But having looked at it more, samba's python support beyond the AD DC
-  feature might not be all that useful.  There is a python module, but
-  nothing in buildroot uses it.  Fedora 31 has only two (non-samba)
-  packages, freeipa and fleet-commander, that use it.  Neither is in
-  buildroot.
+> + - http://autobuild.buildroot.org/results/6186b4718db285edadf7203d00ed72f8d76a31e4
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-To me, this feels like there are indeed some Python modules in Samba4,
-and those should be built and installed when Python is enabled, even if
-AD DC support is disabled.
+Was this patch submitted upstream ?
 
-So in this patch, I would in fact keep only the Config.in change that
-makes Python no longer mandatory on the target. But the rest could be
-kept as-is: if BR2_PACKAGE_PYTHON3=y, we do get the Python modules of
-Samba4, regardless of whether AD DC support is enabled or not.
+> +-set(CMAKE_REQUIRED_FLAGS "-pthread")	
+> +-CHECK_C_SOURCE_COMPILES("#define _GNU_SOURCE 
+> +-	#include <pthread.h> 
+> +-	int main(void) { 
+> +-		pthread_t th = 0;
+> +-		pthread_setname_np(th, NULL);
+> +-		return 0;
+> +-	}" LWS_HAS_PTHREAD_SETNAME_NP)
+> +-
+> +-CHECK_C_SOURCE_COMPILES("#include <stddef.h>
+> +-	#include <getopt.h> 
+> +-	int main(void) { 
+> +-		void *p = (void *)getopt_long;
+> +-		return p != NULL;
+> +-	}" LWS_HAS_GETOPT_LONG)
+> ++if (LWS_HAVE_PTHREAD_H) 
+> ++	set(CMAKE_REQUIRED_FLAGS "-pthread")	
+> ++	CHECK_C_SOURCE_COMPILES("#define _GNU_SOURCE 
+> ++		#include <pthread.h> 
+> ++		int main(void) { 
+> ++			pthread_t th = 0;
+> ++			pthread_setname_np(th, NULL);
+> ++			return 0;
+> ++		}" LWS_HAS_PTHREAD_SETNAME_NP)
+> ++
+> ++	CHECK_C_SOURCE_COMPILES("#include <stddef.h>
+> ++		#include <getopt.h> 
+> ++		int main(void) { 
+> ++			void *p = (void *)getopt_long;
+> ++			return p != NULL;
+> ++		}" LWS_HAS_GETOPT_LONG)
 
-Best regards,
+Why is the getopt_long check moved into the LWS_HAVE_PTHREAD_H
+condition? It seems unrelated.
+
+> ++endif()
+
+Thanks,
 
 Thomas
 -- 
