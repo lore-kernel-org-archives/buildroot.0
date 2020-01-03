@@ -1,61 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  3 Jan 2020 12:25:16 +0100
-Subject: [Buildroot] [PATCH v2,2/2] package/samba4: drop host-python
-In-Reply-To: <20200103112516.1501782-1-fontaine.fabrice@gmail.com>
-References: <20200103112516.1501782-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200103112516.1501782-2-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 3 Jan 2020 13:26:45 +0100
+Subject: [Buildroot] [POC] buildroot packages site
+In-Reply-To: <CAEyMn7brT6fMrUmb7L61ofOx7NuEKj2OqZrL9X00gp4rYZp1RQ@mail.gmail.com>
+References: <CAEyMn7brT6fMrUmb7L61ofOx7NuEKj2OqZrL9X00gp4rYZp1RQ@mail.gmail.com>
+Message-ID: <20200103132645.6be5a250@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop host-python to always build samba4 with host-python3
+Hello Heiko,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/samba4/samba4.mk | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+On Fri, 3 Jan 2020 11:48:53 +0100
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 31a598333c..48c5d42843 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -11,7 +11,7 @@ SAMBA4_INSTALL_STAGING = YES
- SAMBA4_LICENSE = GPL-3.0+
- SAMBA4_LICENSE_FILES = COPYING
- SAMBA4_DEPENDENCIES = \
--	host-e2fsprogs host-heimdal host-nfs-utils \
-+	host-e2fsprogs host-heimdal host-nfs-utils host-python3 \
- 	cmocka e2fsprogs gnutls popt zlib \
- 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
- 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
-@@ -22,17 +22,10 @@ SAMBA4_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- SAMBA4_CONF_ENV = \
- 	CFLAGS="$(SAMBA4_CFLAGS)" \
- 	LDFLAGS="$(SAMBA4_LDFLAGS)" \
-+	PYTHON="$(HOST_DIR)/bin/python3" \
- 	XSLTPROC=false \
- 	WAF_NO_PREFORK=1
- 
--ifeq ($(BR2_PACKAGE_PYTHON3),y)
--SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python3"
--SAMBA4_DEPENDENCIES += host-python3
--else
--SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python2"
--SAMBA4_DEPENDENCIES += host-python
--endif
--
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- SAMBA4_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
- SAMBA4_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
-@@ -99,7 +92,6 @@ define SAMBA4_CONFIGURE_CMDS
- 	$(INSTALL) -m 0644 package/samba4/samba4-cache.txt $(@D)/cache.txt;
- 	echo 'Checking uname machine type: $(BR2_ARCH)' >>$(@D)/cache.txt;
- 	(cd $(@D); \
--		$(SAMBA4_PYTHON) \
- 		python_LDFLAGS="" \
- 		python_LIBDIR="" \
- 		$(TARGET_CONFIGURE_OPTS) \
+> I invested some spare time to create a buildroot packages/stats site.
+> I used python-flask for processing the json output of the pkg-stats
+> script. To have more information in the output file I did some
+> modifications on the pkg-stats script as well.
+> 
+> A running installation as fcgi is available here:
+> http://packages.buildroot.thiery.it
+
+Wow, that's really nice. We definitely want to deploy this as a
+replacement to http://autobuild.buildroot.org/stats/. Perhaps we should
+even promote this to http://stats.buildroot.org/ or something like that.
+
+One question: how did you collect the stats history at
+http://packages.buildroot.thiery.it/packages/stats?commit=198bdaadd03f75fe959c21089c354d36c90069bc ?
+
+Thanks for this development, looks very promising!
+
+Best regards,
+
+Thomas
 -- 
-2.24.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
