@@ -1,32 +1,55 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 3 Jan 2020 16:51:47 +0100
-Subject: [Buildroot] [PATCH 3/5] package/perl-math-bigint: remove it
-In-Reply-To: <20191222162146.1947-3-francois.perrad@gadz.org>
+Date: Fri, 3 Jan 2020 16:56:57 +0100
+Subject: [Buildroot] [PATCH 1/5] utils/scancpan: warn when a module is a
+ perl core module
+In-Reply-To: <20191222163338.GI26395@scaer>
 References: <20191222162146.1947-1-francois.perrad@gadz.org>
- <20191222162146.1947-3-francois.perrad@gadz.org>
-Message-ID: <CAAXf6LUxkaRZD-MXk8i_dDUE_Y3F5+wgFv0ypOhapgqO-H3OoA@mail.gmail.com>
+ <20191222163338.GI26395@scaer>
+Message-ID: <CAAXf6LVoWMk6ESza5jY40a9H_067iw3MJ5ksjwQ4Zbm4KbLJbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El dom., 22 dic. 2019 a las 17:22, Francois Perrad
-(<fperrad@gmail.com>) escribi?:
+Hello Yann, Fran?ois,
+
+El dom., 22 dic. 2019 a las 17:33, Yann E. MORIN
+(<yann.morin.1998@free.fr>) escribi?:
 >
-> Math::BigInt is a Perl core module
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/Config.in                              |  1 -
->  package/perl-math-bigint/Config.in             |  6 ------
->  package/perl-math-bigint/perl-math-bigint.hash |  6 ------
->  package/perl-math-bigint/perl-math-bigint.mk   | 14 --------------
->  4 files changed, 27 deletions(-)
->  delete mode 100644 package/perl-math-bigint/Config.in
->  delete mode 100644 package/perl-math-bigint/perl-math-bigint.hash
->  delete mode 100644 package/perl-math-bigint/perl-math-bigint.mk
+> Fran?ois, All,
+>
+> On 2019-12-22 17:21 +0100, Francois Perrad spake thusly:
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> This change does need to be explained in the commit log:
+>
+>   - Why is it bad that we have a pacakge that is a core module?
+>   - Does it cause any issue? If so, which one?
+>
+> Also, when you do removes package, the least is to add in Cc the people
+> that initially added the package, so they have a chance to chime in and
+> explain why they wanted to add it in the first place, and so they can
+> confirm that the core module does indeed work for them.
+>
+> I'll mark the whole series as Changes Requested in Patchowrk. Please
+> respin with explanations, and Cc original packagers.
+>
 
-Please note there is also an entry in DEVELOPERS to be removed...
 
-Thanks,
+When submitting the package perl-math-bigint I was not aware that it
+was a core package.
+After Fran?ois mentioned it, we checked internally if indeed things
+work fine without the Buildroot package, and it is the case.
+So, there is no need for package/perl-math-bigint.
+
+There is no actual harm by also having a Buildroot package, except for:
+- unneeded stuff in Buildroot
+- potential to eclipse a newer version of the package when
+package/perl evolves but package/perl-math-bigint does not.
+
+So from my point of view I would indeed remove the package again.
+I was actually going to send a revert but then I saw this series.
+
+Best regards,
 Thomas
