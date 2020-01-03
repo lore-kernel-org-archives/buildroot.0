@@ -1,35 +1,45 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 3 Jan 2020 17:29:02 +0100
-Subject: [Buildroot] [PATCH 04/11] support/scripts/pkg-stats: do not
- exclued pkg name in json output
-In-Reply-To: <20200103162456.4167ad5d@windsurf>
+Date: Fri, 3 Jan 2020 17:31:07 +0100
+Subject: [Buildroot] [PATCH 03/11] support/scripts/pkg-stats: store
+ patch info in a hash
+In-Reply-To: <20200103172628.4ea87d0e@windsurf>
 References: <20200103151849.10956-1-heiko.thiery@gmail.com>
- <20200103151849.10956-5-heiko.thiery@gmail.com>
- <20200103162456.4167ad5d@windsurf>
-Message-ID: <CAEyMn7b6EcvAKcG4nQoTAMeSLPExUTA4W-Y6jxnG7uip_qk_xA@mail.gmail.com>
+ <20200103151849.10956-4-heiko.thiery@gmail.com>
+ <20200103162352.6df5fb35@windsurf>
+ <CAEyMn7Zuj3897hZv9cYgmys-Z8h98mbUPeW0L9LJM16Wutofgw@mail.gmail.com>
+ <20200103172628.4ea87d0e@windsurf>
+Message-ID: <CAEyMn7bPG+eSiTdDNh3Loa=K1qqEOA4C=vQ3DdfvnRGz4A5BgQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fr., 3. Jan. 2020 um 16:24 Uhr schrieb Thomas Petazzoni
+Am Fr., 3. Jan. 2020 um 17:26 Uhr schrieb Thomas Petazzoni
 <thomas.petazzoni@bootlin.com>:
 >
-> On Fri,  3 Jan 2020 16:18:41 +0100
+> On Fri, 3 Jan 2020 17:23:20 +0100
 > Heiko Thiery <heiko.thiery@gmail.com> wrote:
 >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> > > Note: I haven't looked at the other patches in your series yet. Maybe
+> > > you add more entries to the dict that make it more relevant.
+> >
+> > No there are no other entries in this dict.
+> > But thinking over that I consider removing the count filed because we
+> > can calculate the count from the length of the list of patches?! What
+> > do you think?
 >
-> But isn't the package name already present in
-> http://autobuild.buildroot.net/stats/index.json ? All the subnodes of
-> /packages/ are nodes named after the packages.
+> Yes, also thought about this when reviewing. I also saw we calculate
+> this count in a few places, so was not sure if it was that great to
+> re-do the count several times. But it's not too many times so indeed,
+> perhaps it's easier to keep the patch list around.
+>
+> But in fact, why do you need the list of patches ? Your web site only
+> shows the patch count anyway.
 
-When handling a package node I dont have the knowledge of the name. Or
-I have to passing the name also to the render function:
-https://github.com/hthiery/buildroot-stats/blob/master/app/routes.py#L67
+The patches are listed in package detail ... see a the bottom of the page:
+http://packages.buildroot.thiery.it/packages/package/android-tools
 
-This is also possible. But I thought it is a good idea to do so.
 
 > Thomas
 > --
