@@ -1,48 +1,85 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  3 Jan 2020 14:43:41 +0100
-Subject: [Buildroot] [PATCH v3,
- 1/1] package/samba4: Do not force target python
-Message-ID: <20200103134341.1505177-1-fontaine.fabrice@gmail.com>
+Date: Fri,  3 Jan 2020 14:48:21 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/wireshark: fix static build with brotli
+Message-ID: <20200103134821.1505736-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samba does not need python on the target for file server functionality.
-It does need it for the Active Directory Domain Controller feature,
-which is already configured in buildroot as optional and already depends
-on python3 since commit 4485a75859fbae99090b065ddd7c088a65571d37.
+Fixes:
+ - http://autobuild.buildroot.org/results/2387d4590c5dce73d5f6d72bccf253e79f9a73d8
 
-An unnecessary target python greatly increases the size of the target
-filesystem. A somewhat minimal configuration with a samba server shunk
-from an 82 MB rootfs to 53 MB with this patch.
-
-Signed-off-by: Trent Piepho <trent.piepho@synapse.com>
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v2 -> v3 (after review of Thomas Petazzoni):
- - Only drop select in Config.in
-
 Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Rework patch due so it can be applied after commits
-   fe033bdf534a7892ced72c11635d863afa92d1d2 and
-   4485a75859fbae99090b065ddd7c088a65571d37
+ - Drop CMAKE_FIND_LIBRARY_SUFFIXES STREQUAL ".a" from patch
 
- package/samba4/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ ...-FindBROTLI.cmake-fix-static-linking.patch | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch
 
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 493c79f3f8..a34eaa8088 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -18,7 +18,6 @@ config BR2_PACKAGE_SAMBA4
- 	select BR2_PACKAGE_GNUTLS
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_PACKAGE_POPT
--	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Provides secure, stable and fast file and print services
+diff --git a/package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch b/package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch
+new file mode 100644
+index 0000000000..1300a65167
+--- /dev/null
++++ b/package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch
+@@ -0,0 +1,54 @@
++From e1d88b868f57d79a3e90af34f3961f56172998ba Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 3 Jan 2020 10:47:30 +0100
++Subject: [PATCH 2/2] FindBROTLI.cmake: fix static linking
++
++Use pkg-config to retrieve dependencies of libbrotlidec such as
++libbrotlicommon otherwise static build will fail on:
++
++[100%] Building C object CMakeFiles/tshark.dir/ui/cli/tap-smbsids.c.o
++/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libbrotlidec.a(decode.c.o): in function `ProcessCommands':
++decode.c:(.text+0x36d0): undefined reference to `BrotliTransformDictionaryWord'
++/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libbrotlidec.a(decode.c.o): in function `SafeProcessCommands':
++decode.c:(.text+0x418c): undefined reference to `BrotliTransformDictionaryWord'
++/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libbrotlidec.a(state.c.o): in function `BrotliDecoderStateInit':
++state.c:(.text+0x120): undefined reference to `BrotliGetDictionary'
++/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: state.c:(.text+0x128): undefined reference to `BrotliGetTransforms'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/2387d4590c5dce73d5f6d72bccf253e79f9a73d8
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: Not sent yet (waiting for feedback on first patch)]
++---
++ cmake/modules/FindBROTLI.cmake | 7 +++++++
++ 1 file changed, 7 insertions(+)
++
++diff --git a/cmake/modules/FindBROTLI.cmake b/cmake/modules/FindBROTLI.cmake
++index 4ab8dbb41c..687afd6e5e 100644
++--- a/cmake/modules/FindBROTLI.cmake
+++++ b/cmake/modules/FindBROTLI.cmake
++@@ -11,6 +11,9 @@
++ include( FindWSWinLibs )
++ FindWSWinLibs( "brotli-.*" "BROTLI_HINTS" )
++ 
+++find_package(PkgConfig QUIET)
+++PKG_CHECK_MODULES(PC_BROTLI QUIET libbrotlidec)
+++
++ find_path(BROTLI_INCLUDE_DIR
++   NAMES "brotli/decode.h"
++   HINTS "${BROTLI_HINTS}/include"
++@@ -28,6 +31,10 @@ if( BROTLI_FOUND )
++   set( BROTLI_INCLUDE_DIRS ${BROTLI_INCLUDE_DIR} )
++   set( BROTLI_LIBRARIES ${BROTLIDEC_LIBRARY} )
++ 
+++  if(UNIX)
+++    list(APPEND BROTLI_LIBRARIES ${PC_BROTLI_LIBRARIES})
+++  endif()
+++
++   if (WIN32)
++     set ( BROTLI_DLL_DIR "${BROTLI_HINTS}/bin"
++       CACHE PATH "Path to the brotli DLLs"
++-- 
++2.24.0
++
 -- 
 2.24.0
