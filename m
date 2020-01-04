@@ -1,36 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jan 2020 22:34:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/exim: fix host build
-Message-ID: <20200104213459.853758-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  4 Jan 2020 22:49:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/spi-tools: bump to version 0.8.4
+Message-ID: <20200104214932.2446403-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/5a7/5a765f0e65e20266c7203412a46c684a40b66ea3/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Locally I cannot reproduce the problem, hopefully this patch will fix
-the problem.
+ package/spi-tools/spi-tools.hash | 2 +-
+ package/spi-tools/spi-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- package/exim/exim.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 118ee4a1a4..1f814ef195 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -125,7 +125,7 @@ define EXIM_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)/build-br macro_predef \
- 		CC=$(HOSTCC) \
- 		LNCC=$(HOSTCC) \
--		CFLAGS="$(HOST_CFLAGS)" \
-+		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
- 		LFLAGS="-fPIC $(HOST_LDFLAGS)"
- 	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS)
- endef
+diff --git a/package/spi-tools/spi-tools.hash b/package/spi-tools/spi-tools.hash
+index 8fe2d3e6b3..eb8073f783 100644
+--- a/package/spi-tools/spi-tools.hash
++++ b/package/spi-tools/spi-tools.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  1f29548187c5a57ca5902d260b01ca9ce04d93e4406ff77f317e1d6423ed3610 spi-tools-0.8.3.tar.gz
++sha256  201ffcb53e64f28a05aa0a8de5686f7ac644268da1305c0d5f70a3d96b4a22ce spi-tools-0.8.4.tar.gz
+ sha256  a01259a1b522cf0de95824f9860613b453153eebac468e96196d5d7dba84786c LICENSE
+diff --git a/package/spi-tools/spi-tools.mk b/package/spi-tools/spi-tools.mk
+index d21e4d64dd..c25521a07f 100644
+--- a/package/spi-tools/spi-tools.mk
++++ b/package/spi-tools/spi-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPI_TOOLS_VERSION = 0.8.3
++SPI_TOOLS_VERSION = 0.8.4
+ SPI_TOOLS_SITE = $(call github,cpb-,spi-tools,$(SPI_TOOLS_VERSION))
+ # autoreconf must be run as specified in package documentation
+ SPI_TOOLS_AUTORECONF = YES
 -- 
-2.20.1
+2.24.1
