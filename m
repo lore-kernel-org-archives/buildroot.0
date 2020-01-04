@@ -1,44 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jan 2020 21:22:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.8.2
-Message-ID: <20200104202225.296427-1-bernd.kuhls@t-online.de>
+Date: Sat,  4 Jan 2020 21:48:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/stellarium: bump version to 0.19.3
+Message-ID: <20200104204836.424805-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://github.com/webmproject/libvpx/blob/master/CHANGELOG
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libvpx/libvpx.hash | 2 +-
- package/libvpx/libvpx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/stellarium/stellarium.hash | 6 +++---
+ package/stellarium/stellarium.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
-index bbcde3a47b..b75cd8d474 100644
---- a/package/libvpx/libvpx.hash
-+++ b/package/libvpx/libvpx.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 df19b8f24758e90640e1ab228ab4a4676ec3df19d23e4593375e6f3847dee03e  libvpx-1.8.1.tar.gz
-+sha256 8735d9fcd1a781ae6917f28f239a8aa358ce4864ba113ea18af4bb2dc8b474ac  libvpx-1.8.2.tar.gz
- sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
- sha256 cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index aaef708416..689ad6f05f 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
+diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
+index b1dc380f77..ea1256df1b 100644
+--- a/package/stellarium/stellarium.hash
++++ b/package/stellarium/stellarium.hash
+@@ -1,6 +1,6 @@
+ # From https://github.com/Stellarium/stellarium/releases
+-md5 5839f542f100b75031802b7ea6930854   stellarium-0.19.2.tar.gz
+-sha1 49dd7405e5be98e003829f5c220f780b68a1dc31  stellarium-0.19.2.tar.gz
++md5 2de84da8a2256f3239174e3ad8f83a5b  stellarium-0.19.3.tar.gz
++sha1 a82cfa21c8dcfbd0a0cf4e30c4ea017ceb2f87a5  stellarium-0.19.3.tar.gz
+ # Locally computed
+-sha256 e4d005c5473e3be15b3101585e8959f422437147a602b1649e4aba22a92e6081  stellarium-0.19.2.tar.gz
++sha256 176e15d8d18340cf8c8cfed14f364cbda345d94e77cc97589c163c45d9cb225d  stellarium-0.19.3.tar.gz
+ sha256 3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index d54f3572ca..ff1eb27018 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVPX_VERSION = 1.8.1
-+LIBVPX_VERSION = 1.8.2
- LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
- LIBVPX_LICENSE = BSD-3-Clause
- LIBVPX_LICENSE_FILES = LICENSE PATENTS
+-STELLARIUM_VERSION = 0.19.2
++STELLARIUM_VERSION = 0.19.3
+ STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
+ STELLARIUM_LICENSE = GPL-2.0+
+ STELLARIUM_LICENSE_FILES = COPYING
 -- 
 2.20.1
