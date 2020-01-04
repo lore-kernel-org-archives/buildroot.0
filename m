@@ -1,47 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 4 Jan 2020 16:28:11 +0100
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 4.2.2
-Message-ID: <20200104151834.8E9398EBBF@busybox.osuosl.org>
+Date: Sat, 4 Jan 2020 16:29:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version
+ to 4.11.4
+In-Reply-To: <20200104151457.2973445-1-bernd.kuhls@t-online.de>
+References: <20200104151457.2973445-1-bernd.kuhls@t-online.de>
+Message-ID: <20200104162934.4acfa319@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38510af3fb69f07ef15852607fc01b3709424081
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  4 Jan 2020 16:14:57 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Changelog:
-http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;h=9c992b5c3e3995a0e8f3316b3087205196dc6403;hb=refs/heads/release/4.2
+> Version 4.11.3 fixes
+> 
+> CVE-2019-14861: Samba AD DC zone-named record Denial of Service in DNS
+>                 management server (dnsserver).
+> CVE-2019-14870: DelegationNotAllowed not being enforced in protocol
+>                 transition on Samba AD DC.
+> 
+> Changelog:
+> https://www.samba.org/samba/history/samba-4.11.3.html
+> https://www.samba.org/samba/history/samba-4.11.4.html
+> 
+> Removed patches applied upstream, rebased patch 0002.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...ilt-heimdal-build-tools-in-case-of-.patch} |   8 +-
+>  .../samba4/0002-waf-upgrade-to-2.0.18.patch   | 736 ------------------
+>  ....patch => 0003-Fix-unistd.h-include.patch} |   0
+>  ...t_args-instead-of-exec_args-to-suppo.patch |  62 --
+>  ...004-Include-stdint.h-before-cmoka.h.patch} |   0
+>  ...re-forking-if-cross-compilation-is-e.patch |  40 -
+>  ...s-environment-to-cross-execute-tests.patch |  36 -
+>  ...autobuild-harden-samba-xc-test-suite.patch |  59 --
+>  ...cript_build-do-not-add-host-include-.patch |  30 -
+>  package/samba4/samba4.hash                    |   4 +-
+>  package/samba4/samba4.mk                      |   2 +-
+>  11 files changed, 7 insertions(+), 970 deletions(-)
+>  rename package/samba4/{0007-build-find-pre-built-heimdal-build-tools-in-case-of-.patch => 0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch} (96%)
+>  delete mode 100644 package/samba4/0002-waf-upgrade-to-2.0.18.patch
+>  rename package/samba4/{0008-Fix-unistd.h-include.patch => 0003-Fix-unistd.h-include.patch} (100%)
+>  delete mode 100644 package/samba4/0003-wafsamba-use-test_args-instead-of-exec_args-to-suppo.patch
+>  rename package/samba4/{0010-Include-stdint.h-before-cmoka.h.patch => 0004-Include-stdint.h-before-cmoka.h.patch} (100%)
+>  delete mode 100644 package/samba4/0004-wafsamba-avoid-pre-forking-if-cross-compilation-is-e.patch
+>  delete mode 100644 package/samba4/0005-wafsamba-pass-environment-to-cross-execute-tests.patch
+>  delete mode 100644 package/samba4/0006-autobuild-harden-samba-xc-test-suite.patch
+>  delete mode 100644 package/samba4/0009-heimdal_build-wscript_build-do-not-add-host-include-.patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index a31811b903..1f68943fc7 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 cec7c87e9b60d174509e263ac4011b522385fd0775292e1670ecc1180c9bb6d4  ffmpeg-4.2.1.tar.xz
-+sha256 cb754255ab0ee2ea5f66f8850e1bd6ad5cac1cd855d0a2f4990fb8c668b0d29c  ffmpeg-4.2.2.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256 cad1218c22121b169fb1380178ab7a0b33cb38a3ff6d3915b8533d1d954f3ce7  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 3dd2e3ef76..f0047c4e3b 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 4.2.1
-+FFMPEG_VERSION = 4.2.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
