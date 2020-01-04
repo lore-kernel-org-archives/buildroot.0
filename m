@@ -1,74 +1,100 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jan 2020 16:56:50 +0100
-Subject: [Buildroot] [PATCH 1/2] package/linux-headers: drop support for
- 5.3.x headers
-Message-ID: <20200104155651.3511603-1-bernd.kuhls@t-online.de>
+From: Julien Olivain <juju@cotds.org>
+Date: Sat,  4 Jan 2020 16:59:02 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/python-pyalsa: new package
+In-Reply-To: <20191231174019.19617-1-juju@cotds.org>
+References: <20191231174019.19617-1-juju@cotds.org>
+Message-ID: <20200104155902.10810-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 5.3.x series is now EOL so remove the option and add legacy
-handling for it.
+Official ALSA Python binding, including hardware
+management, mixer and sequencer control.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+http://www.alsa-project.org/
+
+Signed-off-by: Julien Olivain <juju@cotds.org>
+
 ---
- Config.in.legacy                     | 7 +++++++
- linux/linux.hash                     | 1 -
- package/linux-headers/Config.in.host | 5 -----
- 3 files changed, 7 insertions(+), 6 deletions(-)
+Changes v1 -> v2:
+  - Fix a typo in DEVELOPERS file
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 8436951f0f..d049839e2d 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+---
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-pyalsa/Config.in          |  7 +++++++
+ package/python-pyalsa/python-pyalsa.hash |  2 ++
+ package/python-pyalsa/python-pyalsa.mk   | 13 +++++++++++++
+ 5 files changed, 24 insertions(+)
+ create mode 100644 package/python-pyalsa/Config.in
+ create mode 100644 package/python-pyalsa/python-pyalsa.hash
+ create mode 100644 package/python-pyalsa/python-pyalsa.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 63e6981570..18f518d6f4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1377,6 +1377,7 @@ F:	configs/imx8mmpico_defconfig
+ F:	configs/imx8mpico_defconfig
+ F:	package/fluid-soundfont/
+ F:	package/fluidsynth/
++F:	package/python-pyalsa/
  
- comment "Legacy options removed in 2020.02"
- 
-+config BR2_KERNEL_HEADERS_5_3
-+	bool "kernel headers version 5.3.x are no longer supported"
-+	select BR2_LEGACY
+ N:	Julien Viard de Galbert <julien@vdg.name>
+ F:	package/dieharder/
+diff --git a/package/Config.in b/package/Config.in
+index 894284c650..eb278838aa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1036,6 +1036,7 @@ menu "External python modules"
+ 	source "package/python-pudb/Config.in"
+ 	source "package/python-py/Config.in"
+ 	source "package/python-pyaes/Config.in"
++	source "package/python-pyalsa/Config.in"
+ 	source "package/python-pyasn/Config.in"
+ 	source "package/python-pyasn-modules/Config.in"
+ 	source "package/python-pyasn1/Config.in"
+diff --git a/package/python-pyalsa/Config.in b/package/python-pyalsa/Config.in
+new file mode 100644
+index 0000000000..f379096058
+--- /dev/null
++++ b/package/python-pyalsa/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PYALSA
++	bool "python-pyalsa"
 +	help
-+	  Version 5.3.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
++	  Official ALSA Python binding, including hardware
++	  management, mixer and sequencer control.
 +
- config BR2_PACKAGE_PYTHON_SCAPY3K
- 	bool "python-scapy3k is replaced by python-scapy"
- 	select BR2_LEGACY
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 0cecb00ef1..97d77dc785 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,5 +1,4 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 20f14917c4f33122cfa12963a7d3180fe6f4685cacfe984553b2b5b4ad20638c  linux-5.3.18.tar.xz
- sha256 568e9f27fbba86131c2e2849f296d54216e2ed3e8c4d8aa78a93b417cab23ec0  linux-5.4.5.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 5da5e16fe08fa506f8f74aa4f17be22b52c0f513e9a3f7e7ae22fc53597ad493  linux-4.4.206.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 29213e40f8..c0ca531bcf 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -49,10 +49,6 @@ config BR2_KERNEL_HEADERS_4_19
- 	depends on !BR2_csky
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
- 
--config BR2_KERNEL_HEADERS_5_3
--	bool "Linux 5.3.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
--
- config BR2_KERNEL_HEADERS_5_4
- 	bool "Linux 5.4.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-@@ -317,7 +313,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.9.206"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.14.159"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.19.90"	if BR2_KERNEL_HEADERS_4_19
--	default "5.3.18"	if BR2_KERNEL_HEADERS_5_3
- 	default "5.4.5"		if BR2_KERNEL_HEADERS_5_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
++	  http://www.alsa-project.org/
+diff --git a/package/python-pyalsa/python-pyalsa.hash b/package/python-pyalsa/python-pyalsa.hash
+new file mode 100644
+index 0000000000..c484313b96
+--- /dev/null
++++ b/package/python-pyalsa/python-pyalsa.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 2771291a5d2cf700f0abbe6629ea37468d1463a01b2330d84ef976e1e918676c  pyalsa-1.1.6.tar.bz2
+diff --git a/package/python-pyalsa/python-pyalsa.mk b/package/python-pyalsa/python-pyalsa.mk
+new file mode 100644
+index 0000000000..af20b5602a
+--- /dev/null
++++ b/package/python-pyalsa/python-pyalsa.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-pyalsa
++#
++################################################################################
++
++PYTHON_PYALSA_VERSION = 1.1.6
++PYTHON_PYALSA_SOURCE = pyalsa-$(PYTHON_PYALSA_VERSION).tar.bz2
++PYTHON_PYALSA_SITE = ftp://ftp.alsa-project.org/pub/pyalsa
++PYTHON_PYALSA_SETUP_TYPE = distutils
++PYTHON_PYALSA_LICENSE = LGPL-2.1+
++
++$(eval $(python-package))
 -- 
-2.20.1
+2.24.1
