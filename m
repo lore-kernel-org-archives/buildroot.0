@@ -1,51 +1,39 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  4 Jan 2020 19:30:58 +0100
-Subject: [Buildroot] [PATCH 1/2] package/gnuradio: use ENABLE_ORC
-Message-ID: <20200104183059.2366937-1-fontaine.fabrice@gmail.com>
+Date: Sat,  4 Jan 2020 19:30:59 +0100
+Subject: [Buildroot] [PATCH 2/2] package/gnuradio: fix gr-pager option
+In-Reply-To: <20200104183059.2366937-1-fontaine.fabrice@gmail.com>
+References: <20200104183059.2366937-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200104183059.2366937-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use ENABLE_ORC to explicitly enable or disable ORC
-
-This option is available since version 3.7.4 and
-https://github.com/gnuradio/gnuradio/commit/085c35a375468179929b690a0d7f037dc6ef23bf
+Since a very long time (at least version 3.5.1 in 2011 and
+https://github.com/gnuradio/gnuradio/commit/accb9f2fe8fd8f6a1e114adac5b15304b0e0012d),
+gr-pager option is named ENABLE_GR_PAGER, not ENABLE_PAGER
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gnuradio/gnuradio.mk | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ package/gnuradio/gnuradio.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 9a989ad117..5b5da56b87 100644
+index 5b5da56b87..7ee44f26ae 100644
 --- a/package/gnuradio/gnuradio.mk
 +++ b/package/gnuradio/gnuradio.mk
-@@ -18,10 +18,6 @@ GNURADIO_DEPENDENCIES = \
- 	host-swig \
- 	boost
- 
--ifeq ($(BR2_PACKAGE_ORC),y)
--GNURADIO_DEPENDENCIES += orc
--endif
--
- GNURADIO_CONF_OPTS = \
- 	-DENABLE_DEFAULT=OFF \
- 	-DENABLE_VOLK=ON \
-@@ -53,6 +49,13 @@ ifeq ($(BR2_ARM_CPU_HAS_NEON),)
- GNURADIO_CONF_OPTS += -Dhave_mfpu_neon=0
+@@ -133,9 +133,9 @@ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+GNURADIO_DEPENDENCIES += orc
-+GNURADIO_CONF_OPTS += -DENABLE_ORC=ON
-+else
-+GNURADIO_CONF_OPTS += -DENABLE_ORC=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_GNURADIO_ANALOG),y)
- GNURADIO_CONF_OPTS += -DENABLE_GR_ANALOG=ON
+ ifeq ($(BR2_PACKAGE_GNURADIO_PAGER),y)
+-GNURADIO_CONF_OPTS += -DENABLE_PAGER=ON
++GNURADIO_CONF_OPTS += -DENABLE_GR_PAGER=ON
  else
+-GNURADIO_CONF_OPTS += -DENABLE_PAGER=OFF
++GNURADIO_CONF_OPTS += -DENABLE_GR_PAGER=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GNURADIO_TRELLIS),y)
 -- 
 2.24.0
