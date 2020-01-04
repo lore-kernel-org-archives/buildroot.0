@@ -1,127 +1,123 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jan 2020 19:45:40 +0100
-Subject: [Buildroot] [PATCH 2/3] package/libva-intel-driver: bump version to
- 2.4.0
-In-Reply-To: <20200104184541.3883743-1-bernd.kuhls@t-online.de>
-References: <20200104184541.3883743-1-bernd.kuhls@t-online.de>
-Message-ID: <20200104184541.3883743-2-bernd.kuhls@t-online.de>
+Date: Sat,  4 Jan 2020 19:45:39 +0100
+Subject: [Buildroot] [PATCH 1/3] package/libva: bump version to 2.6.0
+Message-ID: <20200104184541.3883743-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream.
+Added bugfix patch to fix known issue suggested by upstream:
+https://github.com/intel/libva/releases/tag/2.6.0
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...Check-the-interface-from-libva-first.patch | 71 -------------------
- .../libva-intel-driver.hash                   |  4 +-
- .../libva-intel-driver/libva-intel-driver.mk  |  2 +-
- 3 files changed, 3 insertions(+), 74 deletions(-)
- delete mode 100644 package/libva-intel-driver/0001-Check-the-interface-from-libva-first.patch
+ ...call-sequence-to-ensure-authenticate.patch | 68 +++++++++++++++++++
+ package/libva/libva.hash                      |  6 +-
+ package/libva/libva.mk                        |  2 +-
+ 3 files changed, 72 insertions(+), 4 deletions(-)
+ create mode 100644 package/libva/0001-adjust-call-sequence-to-ensure-authenticate.patch
 
-diff --git a/package/libva-intel-driver/0001-Check-the-interface-from-libva-first.patch b/package/libva-intel-driver/0001-Check-the-interface-from-libva-first.patch
-deleted file mode 100644
-index 81591fbbd4..0000000000
---- a/package/libva-intel-driver/0001-Check-the-interface-from-libva-first.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--From 3db0c4838fe30fcee5beb8b31ca67d5cf7d77fb3 Mon Sep 17 00:00:00 2001
--From: Haihao Xiang <haihao.xiang@intel.com>
--Date: Fri, 7 Dec 2018 13:31:43 +0800
--Subject: [PATCH 1/1] Check the interface from libva first
--
--This fixes https://github.com/intel/intel-vaapi-driver/issues/419
--
--Signed-off-by: Haihao Xiang <haihao.xiang@intel.com>
--[james.hilliard1 at gmail.com: backport from upstream commit
--f139dafa59172d40543f2ec469a035d3de9fdc6a]
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-----
-- src/i965_output_wayland.c | 27 ++++++++++++++++-----------
-- 1 file changed, 16 insertions(+), 11 deletions(-)
--
--diff --git a/src/i965_output_wayland.c b/src/i965_output_wayland.c
--index 122db95..a637552 100644
----- a/src/i965_output_wayland.c
--+++ b/src/i965_output_wayland.c
--@@ -397,6 +397,7 @@ i965_output_wayland_init(VADriverContextP ctx)
--     struct i965_driver_data * const i965 = i965_driver_data(ctx);
--     struct dso_handle *dso_handle;
--     struct wl_vtable *wl_vtable;
--+    struct VADriverVTableWayland * const vtable = ctx->vtable_wayland;
-- 
--     static const struct dso_symbol libegl_symbols[] = {
--         {
--@@ -465,25 +466,29 @@ i965_output_wayland_init(VADriverContextP ctx)
--     if (!i965->wl_output)
--         goto error;
-- 
---    i965->wl_output->libegl_handle = dso_open(LIBEGL_NAME);
---    if (!i965->wl_output->libegl_handle) {
---        i965->wl_output->libegl_handle = dso_open(LIBEGL_NAME_FALLBACK);
---        if (!i965->wl_output->libegl_handle)
--+    wl_vtable = &i965->wl_output->vtable;
--+
--+    if (vtable->wl_interface)
--+        wl_vtable->drm_interface = vtable->wl_interface;
--+    else {
--+        i965->wl_output->libegl_handle = dso_open(LIBEGL_NAME);
--+        if (!i965->wl_output->libegl_handle) {
--+            i965->wl_output->libegl_handle = dso_open(LIBEGL_NAME_FALLBACK);
--+            if (!i965->wl_output->libegl_handle)
--+                goto error;
--+        }
--+
--+        dso_handle = i965->wl_output->libegl_handle;
--+        if (!dso_get_symbols(dso_handle, wl_vtable, sizeof(*wl_vtable),
--+                             libegl_symbols))
--             goto error;
--     }
-- 
---    dso_handle = i965->wl_output->libegl_handle;
---    wl_vtable  = &i965->wl_output->vtable;
---    if (!dso_get_symbols(dso_handle, wl_vtable, sizeof(*wl_vtable),
---                         libegl_symbols))
---        goto error;
---
--     i965->wl_output->libwl_client_handle = dso_open(LIBWAYLAND_CLIENT_NAME);
--     if (!i965->wl_output->libwl_client_handle)
--         goto error;
-- 
--     dso_handle = i965->wl_output->libwl_client_handle;
---    wl_vtable  = &i965->wl_output->vtable;
--     if (!dso_get_symbols(dso_handle, wl_vtable, sizeof(*wl_vtable),
--                          libwl_client_symbols))
--         goto error;
---- 
--2.7.4
--
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index 8c01271aeb..555aa9473b 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
+diff --git a/package/libva/0001-adjust-call-sequence-to-ensure-authenticate.patch b/package/libva/0001-adjust-call-sequence-to-ensure-authenticate.patch
+new file mode 100644
+index 0000000000..09c766424b
+--- /dev/null
++++ b/package/libva/0001-adjust-call-sequence-to-ensure-authenticate.patch
+@@ -0,0 +1,68 @@
++From a80d2fe3bcc2c14c6e1434615d1be38924b668ea Mon Sep 17 00:00:00 2001
++From: Carl Zhang <carl.zhang@intel.com>
++Date: Mon, 30 Dec 2019 04:38:43 -0500
++Subject: [PATCH] adjust call sequence to ensure authenticate operation is
++ executed
++
++fixes #355
++
++Downloaded from upstream PR: https://github.com/intel/libva/pull/356
++
++Signed-off-by: Carl Zhang <carl.zhang@intel.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ va/va.c | 25 ++++++++++++++++---------
++ 1 file changed, 16 insertions(+), 9 deletions(-)
++
++diff --git a/va/va.c b/va/va.c
++index cfcabff..7f014a1 100644
++--- a/va/va.c
+++++ b/va/va.c
++@@ -367,11 +367,23 @@ static VAStatus va_getDriverNameByIndex(VADisplay dpy, char **driver_name, int c
++     VADisplayContextP pDisplayContext = (VADisplayContextP)dpy;
++     const char *driver_name_env = NULL;
++     VADriverContextP ctx;
+++    VAStatus status = VA_STATUS_SUCCESS;
++ 
++     ctx = CTX(dpy);
+++    if (pDisplayContext->vaGetDriverNameByIndex) {
+++        /*if vaGetDriverNameByIndex is implemented*/
+++        status = pDisplayContext->vaGetDriverNameByIndex(pDisplayContext, driver_name, candidate_index);
+++    } else {
+++        if (candidate_index == 0)
+++            status = pDisplayContext->vaGetDriverName(pDisplayContext, driver_name);
+++        else
+++            status = VA_STATUS_ERROR_INVALID_PARAMETER;
+++    }    
++     driver_name_env = getenv("LIBVA_DRIVER_NAME");
++     /*if user set driver name by vaSetDriverName */
++     if (ctx->override_driver_name){
+++        if(*driver_name)
+++            free(*driver_name);
++         *driver_name = strdup(ctx->override_driver_name);
++         if (!(*driver_name)) {
++               va_errorMessage(dpy, "va_getDriverNameByIndex  failed with %s, out of memory\n",vaErrorStr(VA_STATUS_ERROR_ALLOCATION_FAILED));
++@@ -380,19 +392,14 @@ static VAStatus va_getDriverNameByIndex(VADisplay dpy, char **driver_name, int c
++         va_infoMessage(dpy, "User requested driver '%s'\n", *driver_name);
++         return VA_STATUS_SUCCESS;
++     } else if (driver_name_env && (geteuid() == getuid())) {
+++        if(*driver_name)
+++            free(*driver_name);
++         /*if user set driver name by environment variable*/
++         *driver_name = strdup(driver_name_env);
++         va_infoMessage(dpy, "User environment variable requested driver '%s'\n", *driver_name);
++         return VA_STATUS_SUCCESS;
++-    } else if (pDisplayContext->vaGetDriverNameByIndex) {
++-        /*if vaGetDriverNameByIndex is implemented*/
++-        return pDisplayContext->vaGetDriverNameByIndex(pDisplayContext, driver_name, candidate_index);
++-    } else {
++-        if (candidate_index == 0)
++-            return pDisplayContext->vaGetDriverName(pDisplayContext, driver_name);
++-        else
++-            return VA_STATUS_ERROR_INVALID_PARAMETER;
++-    }
+++    } 
+++    return status;
++ }
++ 
++ static char *va_getDriverPath(const char *driver_dir, const char *driver_name)
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 4a62a9450a..d3a4f51ff6 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
 @@ -1,5 +1,5 @@
- # From https://github.com/intel/intel-vaapi-driver/releases
--sha1 89096f99da753ac5858304e6c17f5dd9e7581d5b  intel-vaapi-driver-2.3.0.tar.bz2
-+sha1 5f805f6a040f5beab6693d11765618cc92d2076b  intel-vaapi-driver-2.4.0.tar.bz2
+-# From https://github.com/intel/libva/releases/download/2.5.0/libva-2.5.0.tar.bz2.sha1sum
+-sha1 5bd2b0bc9d1e49cf1e21d9a63696f13a1483bd86  libva-2.5.0.tar.bz2
++# From https://github.com/intel/libva/releases/download/2.6.0/libva-2.6.0.tar.bz2.sha1sum
++sha1 9d3b55d2a01e45612c03b2e7718599e760c3bf7e  libva-2.6.0.tar.bz2
  # Locally computed
--sha256 5c2e5deab024a0a6ae81dfe77ef455542a88d824eda7bfd07684337407ecdfe3  intel-vaapi-driver-2.3.0.tar.bz2
-+sha256 71e2ddd985af6b221389db1018c4e8ca27a7f939fb51dcdf49d0efcb5ff3d089  intel-vaapi-driver-2.4.0.tar.bz2
+-sha256 3aa89cd369a506ac4dbe5de7c0ef5da4f3d220bf986403f02fa1f6f702af6878  libva-2.5.0.tar.bz2
++sha256 486bb6b5761db6e5a9f4475bd187e0bfa7309944cfc9734d496d41930353d6c5  libva-2.6.0.tar.bz2
  sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index 76cdfee382..1cf113c406 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 176f971128..0516cd0ab9 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_INTEL_DRIVER_VERSION = 2.3.0
-+LIBVA_INTEL_DRIVER_VERSION = 2.4.0
- LIBVA_INTEL_DRIVER_SOURCE = intel-vaapi-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
- LIBVA_INTEL_DRIVER_SITE = \
- 	https://github.com/intel/intel-vaapi-driver/releases/download/$(LIBVA_INTEL_DRIVER_VERSION)
+-LIBVA_VERSION = 2.5.0
++LIBVA_VERSION = 2.6.0
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
 -- 
 2.20.1
