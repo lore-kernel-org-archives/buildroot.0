@@ -1,86 +1,134 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 4 Jan 2020 16:20:16 +0100
-Subject: [Buildroot] [PATCH 2/2] package/linux-tools: add hyperv
- integration services
-In-Reply-To: <07a3e4666570e40666cc8dd518ffce582bbf7f38.1578081397.git.yann.morin.1998@free.fr>
-References: <cover.1578081397.git.yann.morin.1998@free.fr>
- <07a3e4666570e40666cc8dd518ffce582bbf7f38.1578081397.git.yann.morin.1998@free.fr>
-Message-ID: <20200104162016.6ed7f3a2@windsurf>
+Date: Sat, 4 Jan 2020 16:21:22 +0100
+Subject: [Buildroot] [git commit] package/exim: bump version to 4.93.0.3
+Message-ID: <20200104151813.5A7988EBB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  3 Jan 2020 20:57:05 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6038c3232acfdb55bd764df721b34d8a78d8cef9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> 
-> The hyperv integration services offer convenience features for guest
-> operating systems running on the microsoft hyperv virtualization
-> platform. They roughly are for HyperV what openvmtools are for VMWare.
-> 
-> The installed binary names are derived from what seems common in large
-> distros like RedHat:
-> 
->   linux kernel source name -> installed binary name
->              hv_vss_daemon -> hypervvssd
->              hv_kvp_daemon -> hypervkvpd
->            hv_fcopy_daemon -> hypervfcopyd
-> 
-> Each tool was introduced at different points in the kernel history, so
-> we need to check each of them.
-> 
-> We provide a single init script that is responsible for starting all
-> enabled programs. The global status will be the status of the last
-> program to fail to start, or empty (i.e. success) if they all started
-> successfuly.
-> 
-> However, we provide one systemd unit per program, because it is not easy
-> to use a single unit to start (and monitor) more than one executable.
-> Additionally, we do not provide a template that is filled at tinstall
-> time either, because it does not gain much (three simple units vs. a
-> template and some replacement code in the .mk).
-> 
-> Finally, the key-value daemon uses a few helper scripts to get/set the
-> network config. All are optional (their presence is checked before
-> running them), but one, hv_set_ifconfig. However, it is not strictly
-> speaking required either, so we just symlink it to /bin/true to avoid
-> any warning at runtime. Providing actual helpers is left to the end
-> user, to adapt to their own environment.
-> 
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> [yann.morin.1998 at free.fr:
->   - aggregate all three tools in a single sub-package
->   - introduce the main HV option, use a sub-option for each tool
->   - aggregate the three init scripts into one
->   - don't install the helpers; symlink the mandatory one
->   - don't create symlinks for systemd units (systemctl preset-all does
->     it for us now)
->   - expand commit log
-> ]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Removed 0004-Fix-uClibc-build.patch, committed upstream
+https://git.exim.org/exim.git/commitdiff/ec5bf0b83235d01ad0b2865d1819a603441f50f2
 
-Thanks applied to master, with just one very minor change.
+Renumbered remaining patches.
 
-> +config BR2_PACKAGE_LINUX_TOOLS_HV
-> +	bool "hv"
-> +	depends on BR2_i386 || BR2_x86_64
-> +	select BR2_PACKAGE_LINUX_TOOLS
-> +	select BR2_PACKAGE_LINUX_TOOLS_HV_KVP_DAEMON if !BR2_PACKAGE_LINUX_TOOLS_HV_HAS_ONE
-> +	help
-> +	  Microsoft HyperV integration services
-> +
-> +	  Relevant kernel configuration options: HYPERV, HYPERV_UTILS
+Added hashes provided by upstream.
 
-Changed to CONFIG_HYPERV and CONFIG_HYPERV_UTILS, as we generally point
-to kernel options including their CONFIG_ prefix.
+Explicitly disabled DANE after upstream enabled it:
+https://git.exim.org/exim.git/commitdiff/59c0959a36649c4554bd0f18f2c2e74571ed41eb#patch3
 
-Thanks a lot!
+Use new TLS options:
+https://git.exim.org/exim.git/commitdiff/01603eec64d42431f182b33008206facfc7f800e#patch1
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ibc-build.patch => 0004-Fix-uClibc-build.patch} |  0
+ package/exim/0004-remove-libnsl.patch              | 37 ----------------------
+ package/exim/exim.hash                             |  7 ++--
+ package/exim/exim.mk                               | 11 +++++--
+ 4 files changed, 13 insertions(+), 42 deletions(-)
+
+diff --git a/package/exim/0005-Fix-uClibc-build.patch b/package/exim/0004-Fix-uClibc-build.patch
+similarity index 100%
+rename from package/exim/0005-Fix-uClibc-build.patch
+rename to package/exim/0004-Fix-uClibc-build.patch
+diff --git a/package/exim/0004-remove-libnsl.patch b/package/exim/0004-remove-libnsl.patch
+deleted file mode 100644
+index 8ca53c9acb..0000000000
+--- a/package/exim/0004-remove-libnsl.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From b722f8fc01f6b1d71c98c0c66f759935b0dac136 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Sat, 19 May 2018 20:36:41 +0200
+-Subject: [PATCH] remove libnsl
+-
+-glibc now considers its built-in libnsl as being obsolete, and requires
+-passing --enable-obsolete-libnsl to have it built and installed. libnsl
+-is now provided as a separate project [1], but it isn't packaged yet in
+-Buildroot.
+-
+-Exim's nis.so and nisplus.so lookup modules require libnsl,
+-but they are not build by default. So we can safely remove -lnsl
+-from the Makefile-Linux.
+-
+-[1] https://github.com/thkukuk/libnsl.git
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- OS/Makefile-Linux | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/OS/Makefile-Linux b/OS/Makefile-Linux
+-index 990f884..ea5644b 100644
+---- a/OS/Makefile-Linux
+-+++ b/OS/Makefile-Linux
+-@@ -19,7 +19,7 @@ CFLAGS_DYNAMIC ?= -shared -rdynamic
+- DBMLIB = -ldb
+- USE_DB = yes
+- 
+--LIBS = -lnsl -lcrypt -lm
+-+LIBS = -lcrypt -lm
+- LIBRESOLV = -lresolv
+- 
+- X11=/usr/X11R6
+--- 
+-2.14.3
+-
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index 1c54e182f0..8c10adc05c 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,3 +1,6 @@
+-# Locally calculated after checking pgp signature
+-sha256 c4453bb5ec8e16c4c3353769700466eb9aa48c1b2fcf7f3b0e08954dd727d2fd  exim-4.92.3.tar.xz
++# From https://ftp.exim.org/pub/exim/exim4/fixes/00-sha256sums.txt
++sha256 8156bbe67fa72c0a297207ca0c3bb99f230df08d38d95df91f1c284b0a12983f  exim-4.93.0.3.tar.xz
++# From https://ftp.exim.org/pub/exim/exim4/fixes/00-sha512sums.txt
++sha512 8afece1059e4ada85f6ecef8197cf2ac5b56274f8c2e1bdd785e0470d37bb1e8b4fe225650ac03302824e3a7fe0a6db1641c6218edc8394a70adcc48af46a1d5  exim-4.93.0.3.tar.xz
++# Locally calculated
+ sha256 49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 040b292a87..118ee4a1a4 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-EXIM_VERSION = 4.92.3
++EXIM_VERSION = 4.93.0.3
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+-EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
++EXIM_SITE = https://ftp.exim.org/pub/exim/exim4/fixes
+ EXIM_LICENSE = GPL-2.0+
+ EXIM_LICENSE_FILES = LICENCE
+ EXIM_DEPENDENCIES = host-berkeleydb host-pcre pcre berkeleydb host-pkgconf
+@@ -48,6 +48,7 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
+ 	$(call exim-config-unset,EXIM_MONITOR)
+ 	$(call exim-config-change,AUTH_PLAINTEXT,yes)
+ 	$(call exim-config-change,AUTH_CRAM_MD5,yes)
++	$(call exim-config-unset,SUPPORT_DANE)
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_DOVECOT),y)
+@@ -67,9 +68,13 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ EXIM_DEPENDENCIES += host-openssl openssl
+ define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
+-	$(call exim-config-change,SUPPORT_TLS,yes)
++	$(call exim-config-change,USE_OPENSSL,yes)
+ 	$(call exim-config-change,USE_OPENSSL_PC,openssl)
+ endef
++else
++define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
++	$(call exim-config-change,DISABLE_TLS,yes)
++endef
+ endif
+ 
+ # musl does not provide struct ip_options nor struct ip_opts (but it is
