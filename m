@@ -1,63 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  4 Jan 2020 19:45:13 +0100
-Subject: [Buildroot] [PATCH 2/2] package/bustle: bump to version 0.7.5
-In-Reply-To: <20200104184513.2369600-1-fontaine.fabrice@gmail.com>
-References: <20200104184513.2369600-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200104184513.2369600-2-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  4 Jan 2020 19:45:41 +0100
+Subject: [Buildroot] [PATCH 3/3] package/libva-utils: bump version to 2.6.0
+In-Reply-To: <20200104184541.3883743-1-bernd.kuhls@t-online.de>
+References: <20200104184541.3883743-1-bernd.kuhls@t-online.de>
+Message-ID: <20200104184541.3883743-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Switch homepage to https://gitlab.freedesktop.org/bustle/bustle/
-- Switch site to
-  https://www.freedesktop.org/software/bustle/$(BUSTLE_VERSION)
-- Add hash for license file
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/bustle/Config.in   | 2 +-
- package/bustle/bustle.hash | 3 ++-
- package/bustle/bustle.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/libva-utils/libva-utils.hash | 6 +++---
+ package/libva-utils/libva-utils.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/bustle/Config.in b/package/bustle/Config.in
-index b3d321e14b..563b65f2c3 100644
---- a/package/bustle/Config.in
-+++ b/package/bustle/Config.in
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_BUSTLE
- 	  This only installs the command line bustle-pcap tool, not
- 	  the graphical viewer.
- 
--	  http://www.willthompson.co.uk/bustle/
-+	  https://gitlab.freedesktop.org/bustle/bustle/
- 
- comment "bustle needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
-diff --git a/package/bustle/bustle.hash b/package/bustle/bustle.hash
-index 49890f74ff..05281c4f11 100644
---- a/package/bustle/bustle.hash
-+++ b/package/bustle/bustle.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 921c2cbbb957dcb02c3aa8fd1eeff3534cb437fa9eeca1c25206ad1e741a3f14  bustle-0.5.4.tar.gz
-+sha256 7760a695b25cb264e7342f353dcdc6d2b7faeacdcd85dd14e03c61b18e791664  bustle-0.7.5.tar.gz
-+sha256 a6d6109e5b086de8e852e451b91b08b323302f55b6975d506c64c43bb094be38  LICENSE
-diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
-index ffbfbe40f7..675ffb0529 100644
---- a/package/bustle/bustle.mk
-+++ b/package/bustle/bustle.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
+index a50a01b4a1..881b56fca1 100644
+--- a/package/libva-utils/libva-utils.hash
++++ b/package/libva-utils/libva-utils.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/intel/libva-utils/releases/download/2.5.0/libva-utils-2.5.0.tar.bz2.sha1sum
+-sha1 1bd6f5bf14af7a8a72e867e3dc94fcdd90f9ad0f  libva-utils-2.5.0.tar.bz2
++# From https://github.com/intel/libva-utils/releases/download/2.6.0/libva-utils-2.6.0.tar.bz2.sha1sum
++sha1 ef6f9abe8954ec94bae0ea3bc82ffd1fa4fc5735  libva-utils-2.6.0.tar.bz2
+ # Locally computed
+-sha256 9238c9d5110d60f935683390b8383fdac3507346384cd5f117a23c6db1d72a17  libva-utils-2.5.0.tar.bz2
++sha256 2249b5d08bffc3862bbdcc9a6a4827afd504330b8d101564d39fe1a1e7adc426  libva-utils-2.6.0.tar.bz2
+ sha256 c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
+diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
+index 9b5cbdf97b..40b05e4590 100644
+--- a/package/libva-utils/libva-utils.mk
++++ b/package/libva-utils/libva-utils.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BUSTLE_VERSION = 0.5.4
--BUSTLE_SITE = http://www.willthompson.co.uk/bustle/releases/$(BUSTLE_VERSION)
-+BUSTLE_VERSION = 0.7.5
-+BUSTLE_SITE = https://www.freedesktop.org/software/bustle/$(BUSTLE_VERSION)
- BUSTLE_LICENSE = LGPL-2.1+
- BUSTLE_LICENSE_FILES = LICENSE
- BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
+-LIBVA_UTILS_VERSION = 2.5.0
++LIBVA_UTILS_VERSION = 2.6.0
+ LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
+ LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
+ LIBVA_UTILS_LICENSE = MIT
 -- 
-2.24.0
+2.20.1
