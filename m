@@ -1,64 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 4 Jan 2020 09:02:34 +0100
-Subject: [Buildroot] [PATCH 1/5] utils/scancpan: warn when a module is a
- perl core module
-In-Reply-To: <CAAXf6LVoWMk6ESza5jY40a9H_067iw3MJ5ksjwQ4Zbm4KbLJbQ@mail.gmail.com>
-References: <20191222162146.1947-1-francois.perrad@gadz.org>
- <20191222163338.GI26395@scaer>
- <CAAXf6LVoWMk6ESza5jY40a9H_067iw3MJ5ksjwQ4Zbm4KbLJbQ@mail.gmail.com>
-Message-ID: <20200104080234.GA2312@scaer>
+Date: Sat, 4 Jan 2020 09:03:36 +0100
+Subject: [Buildroot] [git commit] package/libmbim: bump to version 1.20.4
+Message-ID: <20200104075445.838E08EA0F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Fran?ois, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=393fc7b5f54c5e2e93cff23f5b07afcd5a248618
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-01-03 16:56 +0100, Thomas De Schampheleire spake thusly:
-> El dom., 22 dic. 2019 a las 17:33, Yann E. MORIN
-> (<yann.morin.1998@free.fr>) escribi?:
-> > On 2019-12-22 17:21 +0100, Francois Perrad spake thusly:
-> > > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> >
-> > This change does need to be explained in the commit log:
-> >
-> >   - Why is it bad that we have a pacakge that is a core module?
-> >   - Does it cause any issue? If so, which one?
-> >
-> > Also, when you do removes package, the least is to add in Cc the people
-> > that initially added the package, so they have a chance to chime in and
-> > explain why they wanted to add it in the first place, and so they can
-> > confirm that the core module does indeed work for them.
-> >
-> > I'll mark the whole series as Changes Requested in Patchowrk. Please
-> > respin with explanations, and Cc original packagers.
-> 
-> When submitting the package perl-math-bigint I was not aware that it
-> was a core package.
-> After Fran?ois mentioned it, we checked internally if indeed things
-> work fine without the Buildroot package, and it is the case.
-> So, there is no need for package/perl-math-bigint.
-> 
-> There is no actual harm by also having a Buildroot package, except for:
-> - unneeded stuff in Buildroot
-> - potential to eclipse a newer version of the package when
-> package/perl evolves but package/perl-math-bigint does not.
-> 
-> So from my point of view I would indeed remove the package again.
-> I was actually going to send a revert but then I saw this series.
+Small update with several memory leaks fixed.
 
-Thanks for the feedback. I had seen the previous forth-n-back about
-math-bigint too, so was pretty aware of the situation. Nonetheless, it
-should have been explained in the commit log.
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libmbim/libmbim.hash | 2 +-
+ package/libmbim/libmbim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index 94021c835a..bbf2c63afc 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  550fb69e5e57f7646f8eb9ed8d24e44ea869ad846be9c162893f12e43528059b  libmbim-1.20.2.tar.xz
++sha256  ac2708a409b09f1f6f1786a8a9e39c36619aa8d6f285ea943daa7a48ea36d3e8  libmbim-1.20.4.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index bd055df372..dc5c9a59de 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMBIM_VERSION = 1.20.2
++LIBMBIM_VERSION = 1.20.4
+ LIBMBIM_SITE = https://www.freedesktop.org/software/libmbim
+ LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
+ LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
