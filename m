@@ -1,63 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 4 Jan 2020 10:39:36 +0100
-Subject: [Buildroot] [PATCH 07/11] support/scripts/pkg-stats: store
- dependencies of package
-In-Reply-To: <CAEyMn7YhmtuRSfZscUqyNm7wEWcye5x9YZO=5T8VPPzbEBuErQ@mail.gmail.com>
-References: <20200103151849.10956-1-heiko.thiery@gmail.com>
- <20200103151849.10956-8-heiko.thiery@gmail.com>
- <20200103162941.6b428eec@windsurf>
- <CAEyMn7YhmtuRSfZscUqyNm7wEWcye5x9YZO=5T8VPPzbEBuErQ@mail.gmail.com>
-Message-ID: <20200104103936.06a7a228@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 04 Jan 2020 10:42:53 +0000
+Subject: [Buildroot] [Bug 12441] qt5webengine build error: asm/errno.h: No
+ such file or directory
+In-Reply-To: <bug-12441-163@https.bugs.busybox.net/>
+References: <bug-12441-163@https.bugs.busybox.net/>
+Message-ID: <bug-12441-163-n67HXRBREG@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 3 Jan 2020 17:39:13 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12441
 
-> Thought it is a good idea because I saw that on the
-> https://layers.openembedded.org/layerindex/recipe/45257/. They also
-> show the dependencies with a note that this can differ dependent on
-> the real used configuration. But if you think it is too confusing I
-> can drop that.
+Aleksandr Makarov <seems.deviant@gmail.com> changed:
 
-Don't get me wrong, it would be nice to have the dependencies of
-packages, but it is simply not possible.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |INVALID
 
-Consider a package like this:
-
-FOO_DEPENDENCIES = bar baz
-
-ifeq ($(BR2_PACKAGE_LIBPNG),y)
-FOO_DEPENDENCIES += libpng
-endif
-
-If you run "make VARS=FOO_DEPENDENCIES printvars" with no Buildroot
-configuration defined, or with a Buildroot configuration defined that
-has the libpng package disabled, it will return:
-
-FOO_DEPENDENCIES=bar baz
-
-If however, you run the same command with a Buildroot configuration
-defined that has the libpng package enabled, it will return:
-
-FOO_DEPENDENCIES=bar baz libpng
-
-So as you can see, there is nothing like "the list of all dependencies
-of a package" that you can get with printvars. Lots of dependencies are
-optional. Some are even conflicting, like a package can depend on A
-*or* B, but not both. Etc.
-
-This is why I think it is not a good idea to show those dependencies,
-because they simply cannot be correct "in general": they can only be
-correct within the context of a particular Buildroot configuration.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
