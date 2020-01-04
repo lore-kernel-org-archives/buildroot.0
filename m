@@ -1,43 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 4 Jan 2020 09:29:36 +0100
-Subject: [Buildroot] [git commit] support/testing: really fix python-gitdb2
- test
-Message-ID: <20200104082258.370E08EA29@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 4 Jan 2020 10:39:36 +0100
+Subject: [Buildroot] [PATCH 07/11] support/scripts/pkg-stats: store
+ dependencies of package
+In-Reply-To: <CAEyMn7YhmtuRSfZscUqyNm7wEWcye5x9YZO=5T8VPPzbEBuErQ@mail.gmail.com>
+References: <20200103151849.10956-1-heiko.thiery@gmail.com>
+ <20200103151849.10956-8-heiko.thiery@gmail.com>
+ <20200103162941.6b428eec@windsurf>
+ <CAEyMn7YhmtuRSfZscUqyNm7wEWcye5x9YZO=5T8VPPzbEBuErQ@mail.gmail.com>
+Message-ID: <20200104103936.06a7a228@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed56b7b5479176307a8f30cd3927d066b4e340d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 3 Jan 2020 17:39:13 +0100
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-The test-case for python-gitdb2 consists solely in verifying that the
-module can indeed be imported.
+> Thought it is a good idea because I saw that on the
+> https://layers.openembedded.org/layerindex/recipe/45257/. They also
+> show the dependencies with a note that this can differ dependent on
+> the real used configuration. But if you think it is too confusing I
+> can drop that.
 
-However, flake8 errors out on unused imports. Furthermore, it also
-errors about wildcard imports, as it can detect unused symbols.
+Don't get me wrong, it would be nice to have the dependencies of
+packages, but it is simply not possible.
 
-Commit d8c86be9cd7 (support/testing: fix python-gitdb2 test) tried to
-address this issue, by explicitly squelching the two errors, F401 and
-F403.
+Consider a package like this:
 
-While that works on recent distros, the image used by our docker
-pipeline is laggign behind and the flake8 there only handles at most a
-single error in the noqa list.
+FOO_DEPENDENCIES = bar baz
 
-Do as is done with the other python samples, and just blindly ignore
-all errors.
+ifeq ($(BR2_PACKAGE_LIBPNG),y)
+FOO_DEPENDENCIES += libpng
+endif
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- support/testing/tests/package/sample_python_gitdb2.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you run "make VARS=FOO_DEPENDENCIES printvars" with no Buildroot
+configuration defined, or with a Buildroot configuration defined that
+has the libpng package disabled, it will return:
 
-diff --git a/support/testing/tests/package/sample_python_gitdb2.py b/support/testing/tests/package/sample_python_gitdb2.py
-index 493dcaaee2..4a82fdf587 100644
---- a/support/testing/tests/package/sample_python_gitdb2.py
-+++ b/support/testing/tests/package/sample_python_gitdb2.py
-@@ -1 +1 @@
--from gitdb import *  # NOQA: F401 F403
-+from gitdb import *  # noqa
+FOO_DEPENDENCIES=bar baz
+
+If however, you run the same command with a Buildroot configuration
+defined that has the libpng package enabled, it will return:
+
+FOO_DEPENDENCIES=bar baz libpng
+
+So as you can see, there is nothing like "the list of all dependencies
+of a package" that you can get with printvars. Lots of dependencies are
+optional. Some are even conflicting, like a package can depend on A
+*or* B, but not both. Etc.
+
+This is why I think it is not a good idea to show those dependencies,
+because they simply cannot be correct "in general": they can only be
+correct within the context of a particular Buildroot configuration.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
