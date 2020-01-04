@@ -1,45 +1,71 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jan 2020 13:09:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 4.2.2
-Message-ID: <20200104120914.1724555-1-bernd.kuhls@t-online.de>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sat, 4 Jan 2020 13:28:42 +0100
+Subject: [Buildroot] [PATCH 07/11] support/scripts/pkg-stats: store
+ dependencies of package
+In-Reply-To: <20200104103936.06a7a228@windsurf>
+References: <20200103151849.10956-1-heiko.thiery@gmail.com>
+ <20200103151849.10956-8-heiko.thiery@gmail.com>
+ <20200103162941.6b428eec@windsurf>
+ <CAEyMn7YhmtuRSfZscUqyNm7wEWcye5x9YZO=5T8VPPzbEBuErQ@mail.gmail.com>
+ <20200104103936.06a7a228@windsurf>
+Message-ID: <CAEyMn7aE2y0HZb59b9GemwXUdvWv+ZKjTMCpuQKjZjKnf7C2-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;h=9c992b5c3e3995a0e8f3316b3087205196dc6403;hb=refs/heads/release/4.2
+Hi
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Am Sa., 4. Jan. 2020 um 10:39 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> On Fri, 3 Jan 2020 17:39:13 +0100
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> > Thought it is a good idea because I saw that on the
+> > https://layers.openembedded.org/layerindex/recipe/45257/. They also
+> > show the dependencies with a note that this can differ dependent on
+> > the real used configuration. But if you think it is too confusing I
+> > can drop that.
+>
+> Don't get me wrong, it would be nice to have the dependencies of
+> packages, but it is simply not possible.
+>
+> Consider a package like this:
+>
+> FOO_DEPENDENCIES = bar baz
+>
+> ifeq ($(BR2_PACKAGE_LIBPNG),y)
+> FOO_DEPENDENCIES += libpng
+> endif
+>
+> If you run "make VARS=FOO_DEPENDENCIES printvars" with no Buildroot
+> configuration defined, or with a Buildroot configuration defined that
+> has the libpng package disabled, it will return:
+>
+> FOO_DEPENDENCIES=bar baz
+>
+> If however, you run the same command with a Buildroot configuration
+> defined that has the libpng package enabled, it will return:
+>
+> FOO_DEPENDENCIES=bar baz libpng
+>
+> So as you can see, there is nothing like "the list of all dependencies
+> of a package" that you can get with printvars. Lots of dependencies are
+> optional. Some are even conflicting, like a package can depend on A
+> *or* B, but not both. Etc.
+>
+> This is why I think it is not a good idea to show those dependencies,
+> because they simply cannot be correct "in general": they can only be
+> correct within the context of a particular Buildroot configuration.
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index a31811b903..1f68943fc7 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 cec7c87e9b60d174509e263ac4011b522385fd0775292e1670ecc1180c9bb6d4  ffmpeg-4.2.1.tar.xz
-+sha256 cb754255ab0ee2ea5f66f8850e1bd6ad5cac1cd855d0a2f4990fb8c668b0d29c  ffmpeg-4.2.2.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256 cad1218c22121b169fb1380178ab7a0b33cb38a3ff6d3915b8533d1d954f3ce7  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 3dd2e3ef76..f0047c4e3b 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 4.2.1
-+FFMPEG_VERSION = 4.2.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
--- 
-2.20.1
+It is no problem for ... Just thought it is a good idea. but I will drop that
+
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
