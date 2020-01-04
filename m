@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jan 2020 21:04:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nano: bump version to 4.7
-Message-ID: <20200104200437.237565-1-bernd.kuhls@t-online.de>
+Date: Sat,  4 Jan 2020 21:09:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gnupg2: bump version to 2.2.19
+Message-ID: <20200104200952.277641-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,39 +9,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Release notes:
-4.6: https://lists.gnu.org/archive/html/info-gnu/2019-11/msg00011.html
-4.7: https://lists.gnu.org/archive/html/info-gnu/2019-12/msg00005.html
+- 2.2.18
+  https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000442.html
+- 2.2.19
+  https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 4e967b79c3..965a94aa0b 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v4/nano-4.5.tar.xz.asc
-+# https://www.nano-editor.org/dist/v4/nano-4.7.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256 ded5c38f5ecd9de2b624e0db8013a375c169d3fbbd49575967b868847df8f533  nano-4.5.tar.xz
-+sha256 58c0e197de5339ca3cad3ef42b65626d612ddb0b270e730f02e6ab3785c736f5  nano-4.7.tar.xz
- sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 7817cd4187..5cb8d1d5c0 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 806a07b840..2dee44283b 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q3/000439.html
+-sha1 12c1cee8871c03f0315fc8f27876364b75c95b12  gnupg-2.2.17.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
++sha1 e24a1208ffe69d7436b2f27e99542a85f34d0ac0  gnupg-2.2.19.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.17.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.19.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256 afa262868e39b651a2db4c071fba90415154243e83a830ca00516f9a807fd514  gnupg-2.2.17.tar.bz2
++sha256 242554c0e06f3a83c420b052f750b65ead711cc3fddddb5e7274fcdbb4e9dec0  gnupg-2.2.19.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index aa1f7b14d6..28e946b400 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 4
--NANO_VERSION = $(NANO_VERSION_MAJOR).5
-+NANO_VERSION = $(NANO_VERSION_MAJOR).7
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-GNUPG2_VERSION = 2.2.17
++GNUPG2_VERSION = 2.2.19
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 -- 
 2.20.1
