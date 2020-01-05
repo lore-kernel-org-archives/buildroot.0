@@ -1,25 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 05 Jan 2020 20:49:00 +0000
-Subject: [Buildroot] [Bug 12446] Buildroot fails to finish installing
- packages
-In-Reply-To: <bug-12446-163@https.bugs.busybox.net/>
-References: <bug-12446-163@https.bugs.busybox.net/>
-Message-ID: <bug-12446-163-Z4YAlYxmsT@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 05 Jan 2020 21:53:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.30.1
+In-Reply-To: <20200104154626.3368475-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 4 Jan 2020 16:46:26 +0100")
+References: <20200104154626.3368475-1-bernd.kuhls@t-online.de>
+Message-ID: <87r20doca6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12446
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
---- Comment #4 from TheComputerGuy <spaceboyross@gmail.com> ---
-The problem exists in the package/pkg-generic.mk file at line 360. I'm using
-the commit
-https://git.buildroot.net/buildroot/commit/?id=88f79481878c7adf9642e208c72dea7fe367bee8,
-look at the commit history for the file I mentioned and I haven't changed it so
-this is an upstream issue.
+ > Release notes: https://sqlite.org/releaselog/3_30_1.html
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/sqlite/sqlite.hash | 4 ++--
+ >  package/sqlite/sqlite.mk   | 2 +-
+ >  2 files changed, 3 insertions(+), 3 deletions(-)
+
+ > diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+ > index e297ce3342..ca7db8758e 100644
+ > --- a/package/sqlite/sqlite.hash
+ > +++ b/package/sqlite/sqlite.hash
+ > @@ -1,6 +1,6 @@
+ >  # From https://www.sqlite.org/download.html
+ > -sha1 785c0f6f00fe1871cb1dd97893267cb50db03b9b  sqlite-autoconf-3300000.tar.gz
+ > +sha1 8383f29d53fa1d4383e4c8eb3e087f2ed940a9e0  sqlite-autoconf-3300000.tar.gz
+
+You forgot to update the filename. Committed with that fixed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
