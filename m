@@ -1,76 +1,126 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jan 2020 21:54:42 +0100
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.4.x series
-Message-ID: <20200105205311.D822F8ECBA@busybox.osuosl.org>
+Date: Sun, 5 Jan 2020 21:58:57 +0100
+Subject: [Buildroot] [git commit] package/libva-intel-driver: bump version
+ to 2.4.0
+Message-ID: <20200105205312.0E42E8ED77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68af58dac2b77aece0e3d74f9b5e7ca81531052e
+commit: https://git.buildroot.net/buildroot/commit/?id=55de2558babeb9527a4dffb9dbabf6f6da7c63ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Removed patch applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ ...0001-Check-the-interface-from-libva-first.patch | 71 ----------------------
+ package/libva-intel-driver/libva-intel-driver.hash |  4 +-
+ package/libva-intel-driver/libva-intel-driver.mk   |  2 +-
+ 3 files changed, 3 insertions(+), 74 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 93e89a0702..80cfb9e300 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.4.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.4.7" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.88-cip16" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.82-cip14-rt5" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 97d77dc785..454d51d227 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 568e9f27fbba86131c2e2849f296d54216e2ed3e8c4d8aa78a93b417cab23ec0  linux-5.4.5.tar.xz
-+sha256 abc9b21d9146d95853dac35f4c4489a0199aff53ee6eee4b0563d1b37079fcc9  linux-5.4.7.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 5da5e16fe08fa506f8f74aa4f17be22b52c0f513e9a3f7e7ae22fc53597ad493  linux-4.4.206.tar.xz
--sha256 1df27899a9bc4dd874f3830ab9e7b638f0026dffd67a2e230444e5d2805ccad6  linux-4.9.206.tar.xz
--sha256 e8d42d3a1b85d180141e9bc11c4a0e87f8a413c0e989b0f24c1b7c40f8a826f2  linux-4.14.159.tar.xz
--sha256 29d86c0a6daf169ec0b4b42a12f8d55dc894c52bd901f876f52a05906a5cf7fd  linux-4.19.90.tar.xz
-+sha256 5899ff2a85e2b84607148349fd8e646f94399655caf0e4e55d1eb0567e48520e  linux-4.4.208.tar.xz
-+sha256 b7ad1c9841d671d026c55a4c91c77205f8b488ca5f980f838591c68662e0525a  linux-4.9.208.tar.xz
-+sha256 f65170224cd4359ce8b2793b492bd8127abdd0b91350484e001bce13f0c98b4b  linux-4.14.162.tar.xz
-+sha256 29c37cf8bbfa717ce98bc931371c35fcee3482734ad5faba32d02aff209883a2  linux-4.19.92.tar.xz
+diff --git a/package/libva-intel-driver/0001-Check-the-interface-from-libva-first.patch b/package/libva-intel-driver/0001-Check-the-interface-from-libva-first.patch
+deleted file mode 100644
+index 81591fbbd4..0000000000
+--- a/package/libva-intel-driver/0001-Check-the-interface-from-libva-first.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 3db0c4838fe30fcee5beb8b31ca67d5cf7d77fb3 Mon Sep 17 00:00:00 2001
+-From: Haihao Xiang <haihao.xiang@intel.com>
+-Date: Fri, 7 Dec 2018 13:31:43 +0800
+-Subject: [PATCH 1/1] Check the interface from libva first
+-
+-This fixes https://github.com/intel/intel-vaapi-driver/issues/419
+-
+-Signed-off-by: Haihao Xiang <haihao.xiang@intel.com>
+-[james.hilliard1 at gmail.com: backport from upstream commit
+-f139dafa59172d40543f2ec469a035d3de9fdc6a]
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+----
+- src/i965_output_wayland.c | 27 ++++++++++++++++-----------
+- 1 file changed, 16 insertions(+), 11 deletions(-)
+-
+-diff --git a/src/i965_output_wayland.c b/src/i965_output_wayland.c
+-index 122db95..a637552 100644
+---- a/src/i965_output_wayland.c
+-+++ b/src/i965_output_wayland.c
+-@@ -397,6 +397,7 @@ i965_output_wayland_init(VADriverContextP ctx)
+-     struct i965_driver_data * const i965 = i965_driver_data(ctx);
+-     struct dso_handle *dso_handle;
+-     struct wl_vtable *wl_vtable;
+-+    struct VADriverVTableWayland * const vtable = ctx->vtable_wayland;
+- 
+-     static const struct dso_symbol libegl_symbols[] = {
+-         {
+-@@ -465,25 +466,29 @@ i965_output_wayland_init(VADriverContextP ctx)
+-     if (!i965->wl_output)
+-         goto error;
+- 
+--    i965->wl_output->libegl_handle = dso_open(LIBEGL_NAME);
+--    if (!i965->wl_output->libegl_handle) {
+--        i965->wl_output->libegl_handle = dso_open(LIBEGL_NAME_FALLBACK);
+--        if (!i965->wl_output->libegl_handle)
+-+    wl_vtable = &i965->wl_output->vtable;
+-+
+-+    if (vtable->wl_interface)
+-+        wl_vtable->drm_interface = vtable->wl_interface;
+-+    else {
+-+        i965->wl_output->libegl_handle = dso_open(LIBEGL_NAME);
+-+        if (!i965->wl_output->libegl_handle) {
+-+            i965->wl_output->libegl_handle = dso_open(LIBEGL_NAME_FALLBACK);
+-+            if (!i965->wl_output->libegl_handle)
+-+                goto error;
+-+        }
+-+
+-+        dso_handle = i965->wl_output->libegl_handle;
+-+        if (!dso_get_symbols(dso_handle, wl_vtable, sizeof(*wl_vtable),
+-+                             libegl_symbols))
+-             goto error;
+-     }
+- 
+--    dso_handle = i965->wl_output->libegl_handle;
+--    wl_vtable  = &i965->wl_output->vtable;
+--    if (!dso_get_symbols(dso_handle, wl_vtable, sizeof(*wl_vtable),
+--                         libegl_symbols))
+--        goto error;
+--
+-     i965->wl_output->libwl_client_handle = dso_open(LIBWAYLAND_CLIENT_NAME);
+-     if (!i965->wl_output->libwl_client_handle)
+-         goto error;
+- 
+-     dso_handle = i965->wl_output->libwl_client_handle;
+--    wl_vtable  = &i965->wl_output->vtable;
+-     if (!dso_get_symbols(dso_handle, wl_vtable, sizeof(*wl_vtable),
+-                          libwl_client_symbols))
+-         goto error;
+--- 
+-2.7.4
+-
+diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
+index 8c01271aeb..555aa9473b 100644
+--- a/package/libva-intel-driver/libva-intel-driver.hash
++++ b/package/libva-intel-driver/libva-intel-driver.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/intel/intel-vaapi-driver/releases
+-sha1 89096f99da753ac5858304e6c17f5dd9e7581d5b  intel-vaapi-driver-2.3.0.tar.bz2
++sha1 5f805f6a040f5beab6693d11765618cc92d2076b  intel-vaapi-driver-2.4.0.tar.bz2
  # Locally computed
- sha256 6d60ce76bce2e1938f64027d12b1988c95245751feb635adfc551a021d5b3f26  linux-cip-4.19.88-cip16.tar.gz
- sha256 74ec782e11344e5c5db8e48899b464e296ef37acfb43ce7dfb01c09ea8d3e959  linux-cip-4.19.82-cip14-rt5.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index c0ca531bcf..6977d6d422 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -309,11 +309,11 @@ endchoice
+-sha256 5c2e5deab024a0a6ae81dfe77ef455542a88d824eda7bfd07684337407ecdfe3  intel-vaapi-driver-2.3.0.tar.bz2
++sha256 71e2ddd985af6b221389db1018c4e8ca27a7f939fb51dcdf49d0efcb5ff3d089  intel-vaapi-driver-2.4.0.tar.bz2
+ sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
+index 76cdfee382..1cf113c406 100644
+--- a/package/libva-intel-driver/libva-intel-driver.mk
++++ b/package/libva-intel-driver/libva-intel-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.206"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.206"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.159"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.90"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.5"		if BR2_KERNEL_HEADERS_5_4
-+	default "4.4.208"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.208"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.162"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.92"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.7"		if BR2_KERNEL_HEADERS_5_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-LIBVA_INTEL_DRIVER_VERSION = 2.3.0
++LIBVA_INTEL_DRIVER_VERSION = 2.4.0
+ LIBVA_INTEL_DRIVER_SOURCE = intel-vaapi-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
+ LIBVA_INTEL_DRIVER_SITE = \
+ 	https://github.com/intel/intel-vaapi-driver/releases/download/$(LIBVA_INTEL_DRIVER_VERSION)
