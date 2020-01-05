@@ -1,76 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jan 2020 21:54:33 +0100
-Subject: [Buildroot] [git commit] package/linux-headers: drop support for
- 5.3.x headers
-Message-ID: <20200105205311.CF0DF8ECBA@busybox.osuosl.org>
+Date: Sun, 5 Jan 2020 21:54:08 +0100
+Subject: [Buildroot] [git commit] package/tor: bump version to 0.4.2.5
+Message-ID: <20200105205311.BC8D18ECBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6343127e7ac2bd3313efc15ba586bad4706e40e5
+commit: https://git.buildroot.net/buildroot/commit/?id=d40377e4dac228608e6e630caade0549517d16ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The 5.3.x series is now EOL so remove the option and add legacy
-handling for it.
+Release notes:
+https://blog.torproject.org/new-release-0425-also-0417-0406-and-0359
+
+Updated license hash due to upstream commit:
+https://gitweb.torproject.org/tor.git/commit/LICENSE?h=maint-0.4.2&id=272265efbd89c4c2589316a20cf27064def21911
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                     | 7 +++++++
- linux/linux.hash                     | 1 -
- package/linux-headers/Config.in.host | 5 -----
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 8436951f0f..d049839e2d 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 13448de7c6..730bebc8a1 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 2a88524ce426079fb9b828bc1b789f2c8ade3ed53c130851102debc3518bed71  tor-0.4.1.6.tar.gz
+-sha256 b4248f32f009d4f5cccb704b351e31a16590e0dd5fda2856382cc854d81f6234  LICENSE
++sha256 4d5975862e7808faebe9960def6235669fafeeac844cb76965501fa7af79d8c2  tor-0.4.2.5.tar.gz
++sha256 ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 264d8d06da..1b493f6993 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2020.02"
- 
-+config BR2_KERNEL_HEADERS_5_3
-+	bool "kernel headers version 5.3.x are no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Version 5.3.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
-+
- config BR2_PACKAGE_PYTHON_SCAPY3K
- 	bool "python-scapy3k is replaced by python-scapy"
- 	select BR2_LEGACY
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 0cecb00ef1..97d77dc785 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,5 +1,4 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 20f14917c4f33122cfa12963a7d3180fe6f4685cacfe984553b2b5b4ad20638c  linux-5.3.18.tar.xz
- sha256 568e9f27fbba86131c2e2849f296d54216e2ed3e8c4d8aa78a93b417cab23ec0  linux-5.4.5.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 5da5e16fe08fa506f8f74aa4f17be22b52c0f513e9a3f7e7ae22fc53597ad493  linux-4.4.206.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 29213e40f8..c0ca531bcf 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -49,10 +49,6 @@ config BR2_KERNEL_HEADERS_4_19
- 	depends on !BR2_csky
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
- 
--config BR2_KERNEL_HEADERS_5_3
--	bool "Linux 5.3.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
--
- config BR2_KERNEL_HEADERS_5_4
- 	bool "Linux 5.4.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-@@ -317,7 +313,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.9.206"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.14.159"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.19.90"	if BR2_KERNEL_HEADERS_4_19
--	default "5.3.18"	if BR2_KERNEL_HEADERS_5_3
- 	default "5.4.5"		if BR2_KERNEL_HEADERS_5_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+-TOR_VERSION = 0.4.1.6
++TOR_VERSION = 0.4.2.5
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
