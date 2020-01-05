@@ -1,43 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jan 2020 21:55:56 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-intel:
- bump version
-Message-ID: <20200105205311.E94928ECBA@busybox.osuosl.org>
+Date: Sun, 5 Jan 2020 22:01:15 +0100
+Subject: [Buildroot] [git commit] package/jsoncpp: bump version to 1.9.2
+Message-ID: <20200105205312.2B4348ED77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c907b15549728f44f3ebc3d964d3018efcd35af5
+commit: https://git.buildroot.net/buildroot/commit/?id=ff9dc529a1b60bf8bbb36b6bb2a20c50345d915f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash | 2 +-
- package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk   | 2 +-
+ package/jsoncpp/jsoncpp.hash | 2 +-
+ package/jsoncpp/jsoncpp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
-index d081a31c42..ff816c7bbe 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
+index 39014331e6..1000167611 100644
+--- a/package/jsoncpp/jsoncpp.hash
++++ b/package/jsoncpp/jsoncpp.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 861e0bd7a41bcb4d736d6a84dc58c8cc3e2ca7184b1419271beef95855b22315  xdriver_xf86-video-intel-6f4972d5c368c30e971a23c1dc370d3e43761282.tar.gz
-+sha256 b074366aad25cae38bb455792ac3110d52bcb0e4a183766c37ee12cbe56d7f8c  xdriver_xf86-video-intel-f66d39544bb8339130c96d282a80f87ca1606caf.tar.gz
- sha256 5808e89f4b9a30afc59f335bfa8219ecf2dacb89a81d16b322bc6d92993a48fa  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 9efe8e1bcc..fb74eb6ad5 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+-sha256  c7b40f5605dd972108f503f031b20186f5e5bca2b65cd4b8bd6c3e4ba8126697  jsoncpp-1.9.1.tar.gz
++sha256  77a402fb577b2e0e5d0bdc1cf9c65278915cdb25171e3452c68b6da8a561f8f0  jsoncpp-1.9.2.tar.gz
+ sha256  95039d77a20e75b428207740d9a8f97b2dce3c89da4b21f1ad862b5997160e0a  LICENSE
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index 11615b0228..50728601a4 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 6f4972d5c368c30e971a23c1dc370d3e43761282
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = f66d39544bb8339130c96d282a80f87ca1606caf
- XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+-JSONCPP_VERSION = 1.9.1
++JSONCPP_VERSION = 1.9.2
+ JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
+ JSONCPP_LICENSE = Public Domain or MIT
+ JSONCPP_LICENSE_FILES = LICENSE
