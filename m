@@ -1,47 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jan 2020 21:31:13 +0100
-Subject: [Buildroot] [git commit] package/stellarium: bump version to 0.19.3
-Message-ID: <20200105202819.1AF988079B@busybox.osuosl.org>
+Date: Sun, 5 Jan 2020 21:36:34 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-sis: bump
+ version to 0.12.0
+Message-ID: <20200105202819.353DD8079B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=306aa32fd89669c8c174fc0af28a37fc5b198e43
+commit: https://git.buildroot.net/buildroot/commit/?id=ace7bb7724918e7095fab751eed4205f51955901
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stellarium/stellarium.hash | 6 +++---
- package/stellarium/stellarium.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash   | 10 +++++-----
+ package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-index b1dc380f77..ea1256df1b 100644
---- a/package/stellarium/stellarium.hash
-+++ b/package/stellarium/stellarium.hash
-@@ -1,6 +1,6 @@
- # From https://github.com/Stellarium/stellarium/releases
--md5 5839f542f100b75031802b7ea6930854   stellarium-0.19.2.tar.gz
--sha1 49dd7405e5be98e003829f5c220f780b68a1dc31  stellarium-0.19.2.tar.gz
-+md5 2de84da8a2256f3239174e3ad8f83a5b  stellarium-0.19.3.tar.gz
-+sha1 a82cfa21c8dcfbd0a0cf4e30c4ea017ceb2f87a5  stellarium-0.19.3.tar.gz
+diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
+index bcce6d4740..f670952702 100644
+--- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
++++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-July/003016.html
+-md5 b4ad0e572bffa609f75df787ea7b3d11  xf86-video-sis-0.11.0.tar.bz2
+-sha1 3e6b22a1c8061fb7efc7bf7012ca47fbf9f64722  xf86-video-sis-0.11.0.tar.bz2
+-sha256 2177901a21a980552f8be429f063388e4c5d5f2e24e8b0ce72d65bd93ccc3b6b  xf86-video-sis-0.11.0.tar.bz2
+-sha512 b8ad05b3faa24c6df65d825b576ddb8e2ce44705ce8b55d8cf0d9f37aa47a429ab43765d8daea57ff35c4cffed056fbec6dfe8ce95efcd6269cc7711115ea09c  xf86-video-sis-0.11.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-December/003033.html
++md5  b8ec9c21758043b1480f11baec296f5d  xf86-video-sis-0.12.0.tar.bz2
++sha1 d22f0d0081e222a62f9e788f5e73246c6d339f80  xf86-video-sis-0.12.0.tar.bz2
++sha256 119d3f17d53c862ec4bf891ed696a6f1d32cdf8bd11d944a9f0ad24625333a5b  xf86-video-sis-0.12.0.tar.bz2
++sha512 5aa101e5217f15667f2c94f7a76f4afcf47717b61f5d206ce65efe35dc3f674ca294f98ca8586971c6467f31decdd94d8255ebfc7dc220fac0179afc61995952  xf86-video-sis-0.12.0.tar.bz2
  # Locally computed
--sha256 e4d005c5473e3be15b3101585e8959f422437147a602b1649e4aba22a92e6081  stellarium-0.19.2.tar.gz
-+sha256 176e15d8d18340cf8c8cfed14f364cbda345d94e77cc97589c163c45d9cb225d  stellarium-0.19.3.tar.gz
- sha256 3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-index d54f3572ca..ff1eb27018 100644
---- a/package/stellarium/stellarium.mk
-+++ b/package/stellarium/stellarium.mk
+ sha256 e7958f9497a4daa3ae5aeaf885e4565520af2c540b6e4e04b52bf95d41d56c39  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+index 7a43d26553..f96b0a9d0e 100644
+--- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
++++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STELLARIUM_VERSION = 0.19.2
-+STELLARIUM_VERSION = 0.19.3
- STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
- STELLARIUM_LICENSE = GPL-2.0+
- STELLARIUM_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_SIS_VERSION = 0.11.0
++XDRIVER_XF86_VIDEO_SIS_VERSION = 0.12.0
+ XDRIVER_XF86_VIDEO_SIS_SOURCE = xf86-video-sis-$(XDRIVER_XF86_VIDEO_SIS_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_SIS_LICENSE = MIT
