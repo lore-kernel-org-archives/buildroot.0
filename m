@@ -1,50 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jan 2020 22:22:19 +0100
-Subject: [Buildroot] [git commit] package/runc: security bump to 1.0.0-rc9
-Message-ID: <20200105223019.6A96D8EDF8@busybox.osuosl.org>
+Date: Sun, 5 Jan 2020 22:54:38 +0100
+Subject: [Buildroot] [git commit] package/docker-cli: security bump to
+ 19.03.5
+Message-ID: <20200105223019.98B5F8EDF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbbf08849b70d68c8afd2b6648e7be6d5575d6cb
+commit: https://git.buildroot.net/buildroot/commit/?id=39cffd535633984c851b71195767951e9db56dc2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security vulnerability:
+Fixes the following security vulnerabilities:
 
-- CVE-2019-16884: runc through 1.0.0-rc8, as used in Docker through
-  19.03.2-ce and other products, allows AppArmor restriction bypass because
-  libcontainer/rootfs_linux.go incorrectly checks mount targets, and thus a
-  malicious Docker image can mount over a /proc directory.
+- CVE-2019-14271: In Docker 19.03.x before 19.03.1 linked against the GNU C
+  Library (aka glibc), code injection can occur when the nsswitch facility
+  dynamically loads a library inside a chroot that contains the contents of
+  the container
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 [Peter: mention security impact]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 4f663affc4..3e8eff3cca 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 061e611735..44f13c8bfc 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256	efe4ff9bbe49b19074346d65c914d809c0a3e90d062ea9619fe240f931f0b700  runc-1.0.0-rc8.tar.gz
-+sha256	2ec69c25df9f02c6fd38eb287145f8afba6772f809abe01df4534b5bfd68e8d4  runc-1.0.0-rc9.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index b858742905..acf61ab160 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+ # Locally calculated
+-sha256  cef3f9e8615cde906619f7ab021655a8b974d1b497ce0e5787b1afccbeabb08d  docker-cli-18.09.9.tar.gz
++sha256	00d06baf4793794c0fd9ecad5b7e95aed6eb942f24c8b6e2d7c7f7564b9743ad  docker-cli-19.03.5.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 201d782e1d..4ad30e0278 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.0.0-rc8
-+RUNC_VERSION = 1.0.0-rc9
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+-DOCKER_CLI_VERSION = 18.09.9
++DOCKER_CLI_VERSION = 19.03.5
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
+ 
