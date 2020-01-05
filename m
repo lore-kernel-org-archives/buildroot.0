@@ -1,46 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jan 2020 21:31:04 +0100
-Subject: [Buildroot] [git commit] package/libvpx: bump version to 1.8.2
-Message-ID: <20200105202819.126F38079B@busybox.osuosl.org>
+Date: Sun, 5 Jan 2020 21:29:22 +0100
+Subject: [Buildroot] [git commit] package/gnupg2: bump version to 2.2.19
+Message-ID: <20200105202818.D3DE68ECC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b60aff8888256f92ef269cb80434021aa6ca404
+commit: https://git.buildroot.net/buildroot/commit/?id=bcb6d0057fb8e5674b6e76fc0c7f38cdcf3ef89d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/webmproject/libvpx/blob/master/CHANGELOG
+Release notes:
+- 2.2.18
+  https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000442.html
+- 2.2.19
+  https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libvpx/libvpx.hash | 2 +-
- package/libvpx/libvpx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
-index bbcde3a47b..b75cd8d474 100644
---- a/package/libvpx/libvpx.hash
-+++ b/package/libvpx/libvpx.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 df19b8f24758e90640e1ab228ab4a4676ec3df19d23e4593375e6f3847dee03e  libvpx-1.8.1.tar.gz
-+sha256 8735d9fcd1a781ae6917f28f239a8aa358ce4864ba113ea18af4bb2dc8b474ac  libvpx-1.8.2.tar.gz
- sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
- sha256 cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index aaef708416..689ad6f05f 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 806a07b840..2dee44283b 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q3/000439.html
+-sha1 12c1cee8871c03f0315fc8f27876364b75c95b12  gnupg-2.2.17.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
++sha1 e24a1208ffe69d7436b2f27e99542a85f34d0ac0  gnupg-2.2.19.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.17.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.19.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256 afa262868e39b651a2db4c071fba90415154243e83a830ca00516f9a807fd514  gnupg-2.2.17.tar.bz2
++sha256 242554c0e06f3a83c420b052f750b65ead711cc3fddddb5e7274fcdbb4e9dec0  gnupg-2.2.19.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index aa1f7b14d6..28e946b400 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVPX_VERSION = 1.8.1
-+LIBVPX_VERSION = 1.8.2
- LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
- LIBVPX_LICENSE = BSD-3-Clause
- LIBVPX_LICENSE_FILES = LICENSE PATENTS
+-GNUPG2_VERSION = 2.2.17
++GNUPG2_VERSION = 2.2.19
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
