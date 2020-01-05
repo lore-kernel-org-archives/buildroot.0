@@ -1,126 +1,84 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jan 2020 17:17:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: fix gcc visibility
- flags
-In-Reply-To: <20200104222403.1631525-1-bernd.kuhls@t-online.de>
-References: <20200104222403.1631525-1-bernd.kuhls@t-online.de>
-Message-ID: <20200105161703.GA2721@scaer>
+Date: Sun, 5 Jan 2020 17:20:43 +0100
+Subject: [Buildroot] [git commit] package/mosquitto: drop patch
+Message-ID: <20200105161117.BC0AB8EC4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f77037ab2cdbf09ac3eacb3858034a3baff0c1d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-01-04 23:24 +0100, Bernd Kuhls spake thusly:
-> Fixes:
-> http://autobuild.buildroot.net/results/8c6/8c6671f64b2746033750ea043d9f96030ac5591d/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/freeswitch/0001-Fix-cross-compiling-libvpx.patch | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-> index 63fa33b93a..d59e6739b3 100644
-> --- a/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-> +++ b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-> @@ -10,6 +10,8 @@ package/freeswitch/freeswitch.mk and add target=generic-gnu as
->  configure parameter:
->  https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/libs/libvpx/README#110
->  
-> +Also remove VISIBILITY_FLAG to fix gcc issues.
-> +
->  And yes, autoreconf is also broken, so we patch Makefile.in instead
->  of Makefile.am.
->  
-> @@ -23,7 +25,7 @@ diff -uNr freeswitch-1.6.7.org/Makefile.in freeswitch-1.6.7/Makefile.in
->   
->   libs/libvpx/Makefile: libs/libvpx/.update
->  -	cd libs/libvpx && CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS) $(VISIBILITY_FLAG)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384
-> -+	cd libs/libvpx && CROSS=$(CROSS) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS) $(VISIBILITY_FLAG)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384
-> ++	cd libs/libvpx && CROSS=$(CROSS) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS) CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384
+Drop patch (refused by upstream) and use CLIENT_STATIC_LDADD that has
+been added in version 1.6.8 with
+https://github.com/eclipse/mosquitto/commit/6bde2097992f7d672e4c2c36168bfb5c73579bc3
 
-I think the problem is more profound than just that, in fact.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...01-config.mk-add-WITH_TLS_STATIC_LIB_DEPS.patch | 41 ----------------------
+ package/mosquitto/mosquitto.mk                     |  2 +-
+ 2 files changed, 1 insertion(+), 42 deletions(-)
 
-The failing build referenced in the commit log is on xtensa, but the
-config.log for libvpx shows that it detected building for x86_64, which
-is definitely incorrect:
-
-    http://autobuild.buildroot.org/results/8c6/8c6671f64b2746033750ea043d9f96030ac5591d/freeswitch-1.10.2/libs/libvpx/config.log
-
-    Configuring for target 'x86_64-linux-gcc'
-      enabling x86_64
-
-And then all the following tests systematically fail when it tries
-various x86-only optimisation flags.
-
-And looking at how we do build libvpx in Buildroot, it seems that
-freeswitch does not properly configure and build its own bundled
-copy of libvpx. Sigh... :-(
-
-I think the best solution would be for freeswitch to use a system vpx
-instead of bundling a copy, for one can dream...
-
-Short of this ideal, maybe we could build it ourselves with pre-build
-hooks, something like:
-
-    # Freeswitch's buildsystem forgets to pass important environment
-    # variables and config options when it configures libvpx, so
-    # pre-build libvpx manually, so Freeswitch does not attempt to run
-    # its flawed commands...
-    # Freeswitch only ever uses the static libtrary, that's hard-coded,
-    # we can't do anything about that...
-    # From package/libvpx/libvpx.mk:
-    # - this is not a true autotools package.  It is based on the ffmpeg
-    #   build system.
-    # - ld is being used with cc options. therefore, pretend ld is cc.
-    define FREESWITCH_BUILD_LIBVPX
-        cd $(@D)/libs/libvpx && \
-        $(TARGET_CONFIGURE_OPTS) \
-        $(TARGET_CONFIGURE_ARGS) \
-        LD="$(TARGET_CC)" \
-        CROSS=$(GNU_TARGET_NAME) \
-        ./configure \
-            --target=generic-gnu \
-            --enable-pic \
-            --prefix=/usr \
-            --disable-shared --enable-static \
-            --disable-examples \
-            --disable-docs \
-           --disable-unit-tests && \
-        $(TARGET_MAKE_ENV) \
-        $(LIBVPX_MAKE_ENV) \
-        $(MAKE) \
-            -C $(@D)/libs/libvpx \
-            all
-    endef
-    FREESWITCH_PRE_BUILD_HOOKS += FREESWITCH_BUILD_LIBVPX
-
-Care to have a look in that direction, please?
-
-Additioanlly, working with upstream so they stop using a bundled
-version, or at least that they offer the option to use a system-wide
-libvpx, would be great. Could you also look into that? ;-)
-
-Regards,
-Yann E. MORIN.
-
->   libs/libvpx/libvpx.a: libs/libvpx/Makefile libs/libvpx/.update
->   	@cd libs/libvpx && $(MAKE)
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/mosquitto/0001-config.mk-add-WITH_TLS_STATIC_LIB_DEPS.patch b/package/mosquitto/0001-config.mk-add-WITH_TLS_STATIC_LIB_DEPS.patch
+deleted file mode 100644
+index fcc169aaca..0000000000
+--- a/package/mosquitto/0001-config.mk-add-WITH_TLS_STATIC_LIB_DEPS.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 9a1ea149d3451d4edf32c5f0f0d1b4fecfbff4a2 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 6 Aug 2019 22:11:57 +0200
+-Subject: [PATCH] config.mk: add WITH_TLS_STATIC_LIB_DEPS
+-
+-Add WITH_TLS_STATIC_LIB_DEPS to allow the user to give openssl static
+-libraries dependencies such as -lz or -latomic
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/eclipse/mosquitto/pull/1371]
+----
+- config.mk | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/config.mk b/config.mk
+-index 6c23bef..c9e2daf 100644
+---- a/config.mk
+-+++ b/config.mk
+-@@ -23,6 +23,10 @@
+- # password authentication at all.
+- WITH_TLS:=yes
+- 
+-+# Use this variable to give openssl static libraries dependencies (such as -lz
+-+# or -latomic) that can be retrieved for example by pkg-config
+-+WITH_TLS_STATIC_LIB_DEPS:=
+-+
+- # Comment out to disable TLS/PSK support in the broker and client. Requires
+- # WITH_TLS=yes.
+- # This must be disabled if using openssl < 1.0.
+-@@ -202,7 +206,7 @@ ifeq ($(WITH_TLS),yes)
+- 	LIB_CPPFLAGS:=$(LIB_CPPFLAGS) -DWITH_TLS
+- 	PASSWD_LDADD:=$(PASSWD_LDADD) -lcrypto
+- 	CLIENT_CPPFLAGS:=$(CLIENT_CPPFLAGS) -DWITH_TLS
+--	STATIC_LIB_DEPS:=$(STATIC_LIB_DEPS) -lssl -lcrypto
+-+	STATIC_LIB_DEPS:=$(STATIC_LIB_DEPS) -lssl -lcrypto $(WITH_TLS_STATIC_LIB_DEPS)
+- 
+- 	ifeq ($(WITH_TLS_PSK),yes)
+- 		BROKER_CPPFLAGS:=$(BROKER_CPPFLAGS) -DWITH_TLS_PSK
+--- 
+-2.20.1
+-
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 2c3bd18d5e..aab193c14d 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -51,7 +51,7 @@ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+ MOSQUITTO_DEPENDENCIES += host-pkgconf libopenssl
+ MOSQUITTO_MAKE_OPTS += \
+ 	WITH_TLS=yes \
+-	WITH_TLS_STATIC_LIB_DEPS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
++	CLIENT_STATIC_LDADD="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
+ else
+ MOSQUITTO_MAKE_OPTS += WITH_TLS=no
+ endif
