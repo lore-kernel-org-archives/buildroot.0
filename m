@@ -1,23 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 05 Jan 2020 20:10:43 +0000
-Subject: [Buildroot] [Bug 12446] Buildroot fails to finish installing
- packages
-In-Reply-To: <bug-12446-163@https.bugs.busybox.net/>
-References: <bug-12446-163@https.bugs.busybox.net/>
-Message-ID: <bug-12446-163-nQxjmNcUS3@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 05 Jan 2020 21:30:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gnupg2: bump version to 2.2.19
+In-Reply-To: <20200104200952.277641-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 4 Jan 2020 21:09:52 +0100")
+References: <20200104200952.277641-1-bernd.kuhls@t-online.de>
+Message-ID: <87lfqlprxk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12446
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
---- Comment #2 from TheComputerGuy <spaceboyross@gmail.com> ---
-I haven't changed much in my fork besides adding packages, updating
-startup-notification, changing some defaults like the init system and libc, and
-changing the os-release file. This bug occurs on the pc_x86_64_bios_defconfig.
+ > Release notes:
+ > - 2.2.18
+ >   https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000442.html
+ > - 2.2.19
+ >   https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
