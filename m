@@ -1,49 +1,124 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jan 2020 22:01:58 +0100
-Subject: [Buildroot] [git commit] package/nano: bump version to 4.7
-Message-ID: <20200105205312.400378ECBA@busybox.osuosl.org>
+Date: Sun, 5 Jan 2020 21:57:51 +0100
+Subject: [Buildroot] [git commit] package/libva: bump version to 2.6.0
+Message-ID: <20200105205312.021128ECBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=004be1eb9c802ea3543d9dd1ae73ca1dab6a18a6
+commit: https://git.buildroot.net/buildroot/commit/?id=0cedf5974295da8dae3f714b8a58a20de91330d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-4.6: https://lists.gnu.org/archive/html/info-gnu/2019-11/msg00011.html
-4.7: https://lists.gnu.org/archive/html/info-gnu/2019-12/msg00005.html
+Added bugfix patch to fix known issue suggested by upstream:
+https://github.com/intel/libva/releases/tag/2.6.0
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...just-call-sequence-to-ensure-authenticate.patch | 68 ++++++++++++++++++++++
+ package/libva/libva.hash                           |  6 +-
+ package/libva/libva.mk                             |  2 +-
+ 3 files changed, 72 insertions(+), 4 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 4e967b79c3..965a94aa0b 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
+diff --git a/package/libva/0001-adjust-call-sequence-to-ensure-authenticate.patch b/package/libva/0001-adjust-call-sequence-to-ensure-authenticate.patch
+new file mode 100644
+index 0000000000..09c766424b
+--- /dev/null
++++ b/package/libva/0001-adjust-call-sequence-to-ensure-authenticate.patch
+@@ -0,0 +1,68 @@
++From a80d2fe3bcc2c14c6e1434615d1be38924b668ea Mon Sep 17 00:00:00 2001
++From: Carl Zhang <carl.zhang@intel.com>
++Date: Mon, 30 Dec 2019 04:38:43 -0500
++Subject: [PATCH] adjust call sequence to ensure authenticate operation is
++ executed
++
++fixes #355
++
++Downloaded from upstream PR: https://github.com/intel/libva/pull/356
++
++Signed-off-by: Carl Zhang <carl.zhang@intel.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ va/va.c | 25 ++++++++++++++++---------
++ 1 file changed, 16 insertions(+), 9 deletions(-)
++
++diff --git a/va/va.c b/va/va.c
++index cfcabff..7f014a1 100644
++--- a/va/va.c
+++++ b/va/va.c
++@@ -367,11 +367,23 @@ static VAStatus va_getDriverNameByIndex(VADisplay dpy, char **driver_name, int c
++     VADisplayContextP pDisplayContext = (VADisplayContextP)dpy;
++     const char *driver_name_env = NULL;
++     VADriverContextP ctx;
+++    VAStatus status = VA_STATUS_SUCCESS;
++ 
++     ctx = CTX(dpy);
+++    if (pDisplayContext->vaGetDriverNameByIndex) {
+++        /*if vaGetDriverNameByIndex is implemented*/
+++        status = pDisplayContext->vaGetDriverNameByIndex(pDisplayContext, driver_name, candidate_index);
+++    } else {
+++        if (candidate_index == 0)
+++            status = pDisplayContext->vaGetDriverName(pDisplayContext, driver_name);
+++        else
+++            status = VA_STATUS_ERROR_INVALID_PARAMETER;
+++    }    
++     driver_name_env = getenv("LIBVA_DRIVER_NAME");
++     /*if user set driver name by vaSetDriverName */
++     if (ctx->override_driver_name){
+++        if(*driver_name)
+++            free(*driver_name);
++         *driver_name = strdup(ctx->override_driver_name);
++         if (!(*driver_name)) {
++               va_errorMessage(dpy, "va_getDriverNameByIndex  failed with %s, out of memory\n",vaErrorStr(VA_STATUS_ERROR_ALLOCATION_FAILED));
++@@ -380,19 +392,14 @@ static VAStatus va_getDriverNameByIndex(VADisplay dpy, char **driver_name, int c
++         va_infoMessage(dpy, "User requested driver '%s'\n", *driver_name);
++         return VA_STATUS_SUCCESS;
++     } else if (driver_name_env && (geteuid() == getuid())) {
+++        if(*driver_name)
+++            free(*driver_name);
++         /*if user set driver name by environment variable*/
++         *driver_name = strdup(driver_name_env);
++         va_infoMessage(dpy, "User environment variable requested driver '%s'\n", *driver_name);
++         return VA_STATUS_SUCCESS;
++-    } else if (pDisplayContext->vaGetDriverNameByIndex) {
++-        /*if vaGetDriverNameByIndex is implemented*/
++-        return pDisplayContext->vaGetDriverNameByIndex(pDisplayContext, driver_name, candidate_index);
++-    } else {
++-        if (candidate_index == 0)
++-            return pDisplayContext->vaGetDriverName(pDisplayContext, driver_name);
++-        else
++-            return VA_STATUS_ERROR_INVALID_PARAMETER;
++-    }
+++    } 
+++    return status;
++ }
++ 
++ static char *va_getDriverPath(const char *driver_dir, const char *driver_name)
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 4a62a9450a..d3a4f51ff6 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v4/nano-4.5.tar.xz.asc
-+# https://www.nano-editor.org/dist/v4/nano-4.7.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256 ded5c38f5ecd9de2b624e0db8013a375c169d3fbbd49575967b868847df8f533  nano-4.5.tar.xz
-+sha256 58c0e197de5339ca3cad3ef42b65626d612ddb0b270e730f02e6ab3785c736f5  nano-4.7.tar.xz
- sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 7817cd4187..5cb8d1d5c0 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+-# From https://github.com/intel/libva/releases/download/2.5.0/libva-2.5.0.tar.bz2.sha1sum
+-sha1 5bd2b0bc9d1e49cf1e21d9a63696f13a1483bd86  libva-2.5.0.tar.bz2
++# From https://github.com/intel/libva/releases/download/2.6.0/libva-2.6.0.tar.bz2.sha1sum
++sha1 9d3b55d2a01e45612c03b2e7718599e760c3bf7e  libva-2.6.0.tar.bz2
+ # Locally computed
+-sha256 3aa89cd369a506ac4dbe5de7c0ef5da4f3d220bf986403f02fa1f6f702af6878  libva-2.5.0.tar.bz2
++sha256 486bb6b5761db6e5a9f4475bd187e0bfa7309944cfc9734d496d41930353d6c5  libva-2.6.0.tar.bz2
+ sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 176f971128..0516cd0ab9 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 4
--NANO_VERSION = $(NANO_VERSION_MAJOR).5
-+NANO_VERSION = $(NANO_VERSION_MAJOR).7
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-LIBVA_VERSION = 2.5.0
++LIBVA_VERSION = 2.6.0
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
