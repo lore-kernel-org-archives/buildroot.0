@@ -1,53 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 5 Jan 2020 20:12:25 +0100
-Subject: [Buildroot] [WIP] package/efl: bump to version 1.23.3
-In-Reply-To: <20200104011453.516356-1-romain.naour@gmail.com>
-References: <20200104011453.516356-1-romain.naour@gmail.com>
-Message-ID: <2177514b-9ccc-a345-6e03-77fe0627e829@mind.be>
+Date: Sun, 5 Jan 2020 20:18:44 +0100
+Subject: [Buildroot] [PATCH 05/11] support/scripts/pkg-stats: parse and
+ set developers info
+In-Reply-To: <20200103173909.70596709@windsurf>
+References: <20200103151849.10956-1-heiko.thiery@gmail.com>
+ <20200103151849.10956-6-heiko.thiery@gmail.com>
+ <20200103162625.093ff7b2@windsurf>
+ <CAEyMn7aPCiLX-RB8vYm_-OnhrjXXrxJg+ufYgPUx5cRcjSW0tw@mail.gmail.com>
+ <20200103173909.70596709@windsurf>
+Message-ID: <546f5cf1-f0d5-7a58-9fb4-0f8e231158aa@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Romain,
 
- Not a full review, just a quick thing I noticed...
 
-On 04/01/2020 02:14, Romain Naour wrote:
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 8436951f0f..9f0b6d7fe2 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,24 @@ endif
->  
->  comment "Legacy options removed in 2020.02"
->  
-> +config BR2_PACKAGE_EFL_GIF
-> +	bool "efl evas gif loader is mandatory"
-> +	select BR2_LEGACY
-> +	help
-> +	  Since efl 1.23.x, the evas gif loader can't be disabled.
-> +
-> +config BR2_PACKAGE_EFL_PNG
-> +	bool "efl evas png loader is mandatory"
-> +	select BR2_LEGACY
-> +	help
-> +	  Since efl 1.23.x, the evas png loader can't be disabled.
-> +
-> +config BR2_PACKAGE_EFL_ELPUT
-> +	bool "efl elput is enabled by efl drm option"
-> +	select BR2_LEGACY
-> +	help
-> +	  Since efl 1.23.x, the drm option enable the elput library.
+On 03/01/2020 17:39, Thomas Petazzoni wrote:
+> One idea is to add ../../utils to the Python path used to search for
+> modules.
 
- No legacy handling is needed for these. People who did have these options
-enabled don't care, because they will still be enabled. People who didn't have
-these options enabled won't even notice since legacy is not selected - and
-anyway there's nothing to be done about it.
+ The reverse would actually make more sense: move the libs to support/scripts
+(or support/python) and add that to the path of the stuff in utils.
 
- Legacy handling is only relevant if either the legacy symbol selects some new
-symbol, or if the help text gives some important advice.
+> I think it can be tweaked from inside a Python script. Not
+> sure if it's the nicest thing to do, though.
+
+import sys
+sys.path.extend(...)
+
+ I'm not sure though how it deals with relative paths.
+
+ A much simpler approach is to move the python scripts entirely to
+support/scripts and symlink them from utils. That works.
 
  Regards,
  Arnout
