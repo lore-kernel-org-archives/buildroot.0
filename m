@@ -1,48 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jan 2020 21:52:37 +0100
-Subject: [Buildroot] [git commit] package/sqlite: bump version to 3.30.1
-Message-ID: <20200105205311.A8E088ED77@busybox.osuosl.org>
+Date: Sun, 5 Jan 2020 21:54:42 +0100
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.4.x series
+Message-ID: <20200105205311.D822F8ECBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62d72f9ec282183ac8fcedb1ddc7e22375899559
+commit: https://git.buildroot.net/buildroot/commit/?id=68af58dac2b77aece0e3d74f9b5e7ca81531052e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes: https://sqlite.org/releaselog/3_30_1.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index e297ce3342..1d4bd03eda 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
- # From https://www.sqlite.org/download.html
--sha1 785c0f6f00fe1871cb1dd97893267cb50db03b9b  sqlite-autoconf-3300000.tar.gz
-+sha1 8383f29d53fa1d4383e4c8eb3e087f2ed940a9e0  sqlite-autoconf-3300100.tar.gz
- # Calculated based on the hash above
--sha256 e0a8cf4c7a87455e55e10413d16f358ca121ccec687fe1301eac95e2d340fc58  sqlite-autoconf-3300000.tar.gz
-+sha256 8c5a50db089bd2a1b08dbc5b00d2027602ca7ff238ba7658fabca454d4298e60  sqlite-autoconf-3300100.tar.gz
- # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index ba5b5c5d00..c5cf9607a4 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 93e89a0702..80cfb9e300 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--SQLITE_VERSION = 3300000
-+SQLITE_VERSION = 3300100
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2019
- SQLITE_LICENSE = Public domain
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.4.5" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.4.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.88-cip16" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.82-cip14-rt5" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 97d77dc785..454d51d227 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 568e9f27fbba86131c2e2849f296d54216e2ed3e8c4d8aa78a93b417cab23ec0  linux-5.4.5.tar.xz
++sha256 abc9b21d9146d95853dac35f4c4489a0199aff53ee6eee4b0563d1b37079fcc9  linux-5.4.7.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 5da5e16fe08fa506f8f74aa4f17be22b52c0f513e9a3f7e7ae22fc53597ad493  linux-4.4.206.tar.xz
+-sha256 1df27899a9bc4dd874f3830ab9e7b638f0026dffd67a2e230444e5d2805ccad6  linux-4.9.206.tar.xz
+-sha256 e8d42d3a1b85d180141e9bc11c4a0e87f8a413c0e989b0f24c1b7c40f8a826f2  linux-4.14.159.tar.xz
+-sha256 29d86c0a6daf169ec0b4b42a12f8d55dc894c52bd901f876f52a05906a5cf7fd  linux-4.19.90.tar.xz
++sha256 5899ff2a85e2b84607148349fd8e646f94399655caf0e4e55d1eb0567e48520e  linux-4.4.208.tar.xz
++sha256 b7ad1c9841d671d026c55a4c91c77205f8b488ca5f980f838591c68662e0525a  linux-4.9.208.tar.xz
++sha256 f65170224cd4359ce8b2793b492bd8127abdd0b91350484e001bce13f0c98b4b  linux-4.14.162.tar.xz
++sha256 29c37cf8bbfa717ce98bc931371c35fcee3482734ad5faba32d02aff209883a2  linux-4.19.92.tar.xz
+ # Locally computed
+ sha256 6d60ce76bce2e1938f64027d12b1988c95245751feb635adfc551a021d5b3f26  linux-cip-4.19.88-cip16.tar.gz
+ sha256 74ec782e11344e5c5db8e48899b464e296ef37acfb43ce7dfb01c09ea8d3e959  linux-cip-4.19.82-cip14-rt5.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c0ca531bcf..6977d6d422 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -309,11 +309,11 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.206"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.206"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.159"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.90"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.5"		if BR2_KERNEL_HEADERS_5_4
++	default "4.4.208"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.208"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.162"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.92"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.7"		if BR2_KERNEL_HEADERS_5_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
