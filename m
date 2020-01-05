@@ -1,37 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 05 Jan 2020 20:34:46 +0000
-Subject: [Buildroot] [Bug 12446] Buildroot fails to finish installing
- packages
-In-Reply-To: <bug-12446-163@https.bugs.busybox.net/>
-References: <bug-12446-163@https.bugs.busybox.net/>
-Message-ID: <bug-12446-163-fKDNzy9Zwa@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 05 Jan 2020 21:36:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXpm/: bump
+ version to 3.5.13
+In-Reply-To: <20200104210016.450228-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 4 Jan 2020 22:00:16 +0100")
+References: <20200104210016.450228-1-bernd.kuhls@t-online.de>
+Message-ID: <87zhf1od2u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12446
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
---- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-> This bug occurs on the pc_x86_64_bios_defconfig
+ > Removed patch applied upstream:
+ > https://cgit.freedesktop.org/xorg/lib/libXpm/commit/?id=7af7c5e275b69daedee3696bee1e880586f30373
 
-pc_x86_64_bios_defconfig does not have xapp_xkbcomp enabled, so
-I can't reproduce your failure.
+ > Removed autoreconf.
 
-> I haven't changed much in my fork besides adding packages,
-> updating startup-notification, changing some defaults like
-> the init system and libc
+ > Added all hashes provided by upstream.
 
-That's already a lot of changes! :-/
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Please, try to reproduce on the upstream Buildroot, and provide us
-with a defconfig that exhibits the problem, or we won't be able to
-reproduce and help.
-
-If it does not fail on upstream buildroot, then it's a change in
-your fork that causes the issue.
+Dropped the trailing / in $SUBJECT and Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
