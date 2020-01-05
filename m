@@ -1,21 +1,22 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Jan 2020 22:01:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: bump version to 1.9.2
-In-Reply-To: <20200104195004.145031-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 4 Jan 2020 20:50:04 +0100")
-References: <20200104195004.145031-1-bernd.kuhls@t-online.de>
-Message-ID: <87k165mxcv.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 05 Jan 2020 21:01:34 +0000
+Subject: [Buildroot] [Bug 12446] Buildroot fails to finish installing
+ packages
+In-Reply-To: <bug-12446-163@https.bugs.busybox.net/>
+References: <bug-12446-163@https.bugs.busybox.net/>
+Message-ID: <bug-12446-163-EW86zkJtP0@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+https://bugs.busybox.net/show_bug.cgi?id=12446
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
+--- Comment #5 from TheComputerGuy <spaceboyross@gmail.com> ---
+https://gist.github.com/RossComputerGuy/4d023304f3a33eeb02cc1a04a9d4e5bc I
+uploaded the config file as a gist, try it and you'll see that my issue occurs.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
