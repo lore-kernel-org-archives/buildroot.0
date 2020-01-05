@@ -1,22 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 05 Jan 2020 21:01:34 +0000
-Subject: [Buildroot] [Bug 12446] Buildroot fails to finish installing
- packages
-In-Reply-To: <bug-12446-163@https.bugs.busybox.net/>
-References: <bug-12446-163@https.bugs.busybox.net/>
-Message-ID: <bug-12446-163-EW86zkJtP0@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 05 Jan 2020 22:02:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmicrohttpd: bump version to
+ 0.9.69
+In-Reply-To: <20200104200057.219122-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 4 Jan 2020 21:00:57 +0100")
+References: <20200104200057.219122-1-bernd.kuhls@t-online.de>
+Message-ID: <87ftgtmxbd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12446
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
---- Comment #5 from TheComputerGuy <spaceboyross@gmail.com> ---
-https://gist.github.com/RossComputerGuy/4d023304f3a33eeb02cc1a04a9d4e5bc I
-uploaded the config file as a gist, try it and you'll see that my issue occurs.
+ > Release notes:
+ > https://lists.gnu.org/archive/html/info-gnu/2019-12/msg00003.html
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
