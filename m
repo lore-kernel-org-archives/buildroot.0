@@ -1,24 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Jan 2020 21:34:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.8.2
-In-Reply-To: <20200104202225.296427-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 4 Jan 2020 21:22:25 +0100")
-References: <20200104202225.296427-1-bernd.kuhls@t-online.de>
-Message-ID: <874kx9prqk.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 05 Jan 2020 20:34:46 +0000
+Subject: [Buildroot] [Bug 12446] Buildroot fails to finish installing
+ packages
+In-Reply-To: <bug-12446-163@https.bugs.busybox.net/>
+References: <bug-12446-163@https.bugs.busybox.net/>
+Message-ID: <bug-12446-163-fKDNzy9Zwa@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+https://bugs.busybox.net/show_bug.cgi?id=12446
 
- > Changelog:
- > https://github.com/webmproject/libvpx/blob/master/CHANGELOG
+--- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+> This bug occurs on the pc_x86_64_bios_defconfig
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+pc_x86_64_bios_defconfig does not have xapp_xkbcomp enabled, so
+I can't reproduce your failure.
 
-Committed, thanks.
+> I haven't changed much in my fork besides adding packages,
+> updating startup-notification, changing some defaults like
+> the init system and libc
+
+That's already a lot of changes! :-/
+
+Please, try to reproduce on the upstream Buildroot, and provide us
+with a defconfig that exhibits the problem, or we won't be able to
+reproduce and help.
+
+If it does not fail on upstream buildroot, then it's a change in
+your fork that causes the issue.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
