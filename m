@@ -1,42 +1,79 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jan 2020 23:24:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: fix gcc visibility flags
-Message-ID: <20200104222403.1631525-1-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 05 Jan 2020 02:01:09 +0000
+Subject: [Buildroot] [Bug 12446] New: Buildroot fails to finish installing
+ packages
+Message-ID: <bug-12446-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/8c6/8c6671f64b2746033750ea043d9f96030ac5591d/
+https://bugs.busybox.net/show_bug.cgi?id=12446
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/freeswitch/0001-Fix-cross-compiling-libvpx.patch | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+            Bug ID: 12446
+           Summary: Buildroot fails to finish installing packages
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: spaceboyross at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-index 63fa33b93a..d59e6739b3 100644
---- a/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-+++ b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-@@ -10,6 +10,8 @@ package/freeswitch/freeswitch.mk and add target=generic-gnu as
- configure parameter:
- https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/libs/libvpx/README#110
- 
-+Also remove VISIBILITY_FLAG to fix gcc issues.
-+
- And yes, autoreconf is also broken, so we patch Makefile.in instead
- of Makefile.am.
- 
-@@ -23,7 +25,7 @@ diff -uNr freeswitch-1.6.7.org/Makefile.in freeswitch-1.6.7/Makefile.in
-  
-  libs/libvpx/Makefile: libs/libvpx/.update
- -	cd libs/libvpx && CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS) $(VISIBILITY_FLAG)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384
--+	cd libs/libvpx && CROSS=$(CROSS) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS) $(VISIBILITY_FLAG)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384
-++	cd libs/libvpx && CROSS=$(CROSS) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS) CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384
-  
-  libs/libvpx/libvpx.a: libs/libvpx/Makefile libs/libvpx/.update
-  	@cd libs/libvpx && $(MAKE)
+I'm using a forked version of Buildroot for my OS called ExpidusOS
+(https://github.com/ExpidusOS). After SDDM is installed, Make fails to create
+the `.stamp_target_installed` file. Then it works at xfont_font-misc-misc
+package but fails when installing Linux. This is the output:
+
+>>> xapp_xkbcomp 1.4.2 Installing to target
+PATH="/home/ross/ExpidusOS/buildroot/output/host/bin:/home/ross/ExpidusOS/buildroot/output/host/sbin:/home/ross/Applications/.bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/emscripten:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/ross/.gem/ruby/2.6.0/bin:/opt/toolchains/dc/sh-elf/bin:/opt/toolchains/dc/bin:/opt/toolchains/dc/kos/utils/gnu_wrappers:/home/ross/.gem/ruby/2.6.0/bin:/opt/toolchains/dc/sh-elf/bin:/opt/toolchains/dc/bin:/opt/toolchains/dc/kos/utils/gnu_wrappers"
+ /usr/bin/make -j5 DESTDIR=/home/ross/ExpidusOS/buildroot/output/target install
+-C /home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2/
+make[1]: Entering directory
+'/home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2'
+Making install in man
+make[2]: Entering directory
+'/home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2/man'
+make[3]: Entering directory
+'/home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2/man'
+make[3]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p
+'/home/ross/ExpidusOS/buildroot/output/target/usr/share/man/man1'
+ /usr/bin/install -c -m 644 xkbcomp.1
+'/home/ross/ExpidusOS/buildroot/output/target/usr/share/man/man1'
+make[3]: Leaving directory
+'/home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2/man'
+make[2]: Leaving directory
+'/home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2/man'
+make[2]: Entering directory
+'/home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2'
+make[3]: Entering directory
+'/home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2'
+ /usr/bin/mkdir -p '/home/ross/ExpidusOS/buildroot/output/target/usr/bin'
+ /usr/bin/mkdir -p
+'/home/ross/ExpidusOS/buildroot/output/target/usr/lib/pkgconfig'
+ /usr/bin/install -c -m 644 xkbcomp.pc
+'/home/ross/ExpidusOS/buildroot/output/target/usr/lib/pkgconfig'
+  /usr/bin/install -c xkbcomp
+'/home/ross/ExpidusOS/buildroot/output/target/usr/bin'
+make[3]: Leaving directory
+'/home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2'
+make[2]: Leaving directory
+'/home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2'
+make[1]: Leaving directory
+'/home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2'
+xapp_xkbcomp: installs files in
+/home/ross/ExpidusOS/buildroot/output/target//home/ross/ExpidusOS/buildroot/output
+make: *** [package/pkg-generic.mk:360:
+/home/ross/ExpidusOS/buildroot/output/build/xapp_xkbcomp-1.4.2/.stamp_target_installed]
+Error 1
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
