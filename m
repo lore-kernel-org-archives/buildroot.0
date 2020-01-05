@@ -1,32 +1,130 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun,  5 Jan 2020 10:23:28 +0100
-Subject: [Buildroot] [PATCH v2 6/8] support/scripts/pkg-stats: add package
- count to stats
-In-Reply-To: <20200105092329.6288-1-heiko.thiery@gmail.com>
-References: <20200105092329.6288-1-heiko.thiery@gmail.com>
-Message-ID: <20200105092329.6288-7-heiko.thiery@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun,  5 Jan 2020 12:31:59 +0100
+Subject: [Buildroot] [PATCH 1/6] package/alure: new package
+Message-ID: <20200105113204.30356-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- support/scripts/pkg-stats | 1 +
- 1 file changed, 1 insertion(+)
+Use the latest commit since there is no release since 1.2 (8 years ago).
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index ace092cf3b..8ec3204d9a 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -407,6 +407,7 @@ def check_package_latest_version(packages):
+While testing with test-pkg, the last build issue was
+due to the gcc 4.8.3 compiler missing C++11 feature:
+"std::list.erase(const_iterator pos) not implemented" [1]
+
+arm-none-linux-gnueabi/include/c++/4.8.3/bits/vector.tcc:134:5: note:
+no known conversion for argument 1 from '__gnu_cxx::__normal_iterator<const alure::Source*, std::vector<alure::Source> >'
+to 'std::vector<alure::Source>::iterator {aka __gnu_cxx::__normal_iterator<alure::Source*, std::vector<alure::Source> >}
+
+https://github.com/kcat/alure/blob/14beed2a86d5a36030e907b21c46614d505f07cd/src/context.cpp#L1357
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=57158
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/Config.in        |  1 +
+ package/alure/Config.in  | 27 +++++++++++++++++++++++++++
+ package/alure/alure.hash |  2 ++
+ package/alure/alure.mk   | 34 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 64 insertions(+)
+ create mode 100644 package/alure/Config.in
+ create mode 100644 package/alure/alure.hash
+ create mode 100644 package/alure/alure.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 894284c650..98ac976138 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1199,6 +1199,7 @@ menu "Libraries"
  
- def calculate_stats(packages):
-     stats = defaultdict(int)
-+    stats['packages'] = len(packages)
-     for pkg in packages:
-         # If packages have multiple infra, take the first one. For the
-         # vast majority of packages, the target and host infra are the
+ menu "Audio/Sound"
+ 	source "package/alsa-lib/Config.in"
++	source "package/alure/Config.in"
+ 	source "package/aubio/Config.in"
+ 	source "package/audiofile/Config.in"
+ 	source "package/bcg729/Config.in"
+diff --git a/package/alure/Config.in b/package/alure/Config.in
+new file mode 100644
+index 0000000000..4acd66d2ee
+--- /dev/null
++++ b/package/alure/Config.in
+@@ -0,0 +1,27 @@
++config BR2_PACKAGE_ALURE
++	bool "alure"
++	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
++	depends on BR2_USE_WCHAR # use wchar_t
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
++	select BR2_PACKAGE_OPENAL
++	help
++	  Alure is a C++ 3D audio API. It uses OpenAL for audio
++	  rendering, and provides common higher-level features such as
++	  file loading and decoding, buffer caching, background
++	  streaming, and source management for virtually unlimited
++	  sound source handles.
++
++	  https://kcat.strangesoft.net/alure.html
++
++comment "alure needs a toolchain w/ C++, gcc >= 4.9, NPTL, wchar"
++	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
++		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
++
++comment "alure needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/alure/alure.hash b/package/alure/alure.hash
+new file mode 100644
+index 0000000000..3387f76f9d
+--- /dev/null
++++ b/package/alure/alure.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 9b808e5b5a54d156348221dc86704c7831115047d5238691e6088f8c4814b2ca  alure-14beed2a86d5a36030e907b21c46614d505f07cd.tar.gz
+diff --git a/package/alure/alure.mk b/package/alure/alure.mk
+new file mode 100644
+index 0000000000..c3bf5d31cf
+--- /dev/null
++++ b/package/alure/alure.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# alure
++#
++################################################################################
++
++ALURE_VERSION = 14beed2a86d5a36030e907b21c46614d505f07cd
++ALURE_SITE = $(call github,kcat,alure,$(ALURE_VERSION))
++ALURE_LICENSE = MIT, Public Domain (src/decoders/dr_flac.h)
++ALURE_LICENSE_FILES = LICENSE
++ALURE_INSTALL_STAGING = YES
++
++ALURE_DEPENDENCIES = openal
++
++# Disabling alure examples remove the dependecies on physfs and dump libraries.
++# Enable at least one built-in decoder (wave).
++ALURE_CONF_OPTS = -DALURE_INSTALL=ON \
++	-DALURE_BUILD_EXAMPLES=OFF \
++	-DALURE_ENABLE_FLAC=OFF \
++	-DALURE_ENABLE_MINIMP3=OFF \
++	-DALURE_ENABLE_OPUS=OFF \
++	-DALURE_ENABLE_SNDFILE=OFF \
++	-DALURE_ENABLE_VORBIS=OFF \
++	-DALURE_ENABLE_WAVE=ON
++
++ifeq ($(BR2_STATIC_LIBS),y)
++ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=OFF \
++	-DALURE_BUILD_STATIC=ON
++else
++ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=ON \
++	-DALURE_BUILD_STATIC=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
-2.20.1
+2.24.1
