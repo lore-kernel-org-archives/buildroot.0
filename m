@@ -1,44 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Jan 2020 16:42:43 +0100
-Subject: [Buildroot] [git commit] package/ncmpc: bump to version 0.36
-Message-ID: <20200106153418.A380D8EE7D@busybox.osuosl.org>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon,  6 Jan 2020 17:10:54 +0100
+Subject: [Buildroot] [PATCH 01/22] erlang-p1-utils: Bump to version 1.0.16
+In-Reply-To: <20200106161115.16524-1-johan.oudinet@gmail.com>
+References: <20200106161115.16524-1-johan.oudinet@gmail.com>
+Message-ID: <20200106161115.16524-2-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ccf0795b88f08c7c3e26795e768cfc0fcd92371
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/ncmpc/ncmpc.hash | 2 +-
- package/ncmpc/ncmpc.mk   | 2 +-
+ package/erlang-p1-utils/erlang-p1-utils.hash | 2 +-
+ package/erlang-p1-utils/erlang-p1-utils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
-index 7bde99bfc9..2a8533a2ee 100644
---- a/package/ncmpc/ncmpc.hash
-+++ b/package/ncmpc/ncmpc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256 bd4f1e638290915e08be045087c1df2d562d012b14f662dd33fd7c7043ddd241  ncmpc-0.35.tar.xz
-+sha256 4632873dfc8efe61e501dc9184a5b921b482be2ddbedd3d23d05241d477a3e2c  ncmpc-0.36.tar.xz
- 
- # Hash for license file:
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index a8805c334c..86e3c8383f 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/erlang-p1-utils/erlang-p1-utils.hash b/package/erlang-p1-utils/erlang-p1-utils.hash
+index db925bddd1..cd26340e12 100644
+--- a/package/erlang-p1-utils/erlang-p1-utils.hash
++++ b/package/erlang-p1-utils/erlang-p1-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 8f21fc0472c314572ebb066d624cb5463cf5b016e18b7fd7dca9dca2a4589382 erlang-p1-utils-1.0.13.tar.gz
++sha256 2559967770558dc003bcc3c7efc216f6c57c4f23830d5de33c6bf61d8a3f880c erlang-p1-utils-1.0.16.tar.gz
+diff --git a/package/erlang-p1-utils/erlang-p1-utils.mk b/package/erlang-p1-utils/erlang-p1-utils.mk
+index 6025e3f56c..5375971d39 100644
+--- a/package/erlang-p1-utils/erlang-p1-utils.mk
++++ b/package/erlang-p1-utils/erlang-p1-utils.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NCMPC_VERSION_MAJOR = 0
--NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).35
-+NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).36
- NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
- NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
- NCMPC_DEPENDENCIES = \
+-ERLANG_P1_UTILS_VERSION = 1.0.13
++ERLANG_P1_UTILS_VERSION = 1.0.16
+ ERLANG_P1_UTILS_SITE = $(call github,processone,p1_utils,$(ERLANG_P1_UTILS_VERSION))
+ ERLANG_P1_UTILS_LICENSE = Apache-2.0
+ ERLANG_P1_UTILS_LICENSE_FILES = LICENSE.txt
+-- 
+2.20.1
