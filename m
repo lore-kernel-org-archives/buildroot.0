@@ -1,48 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Jan 2020 21:33:17 +0100
-Subject: [Buildroot] Header is nine years old
-In-Reply-To: <XnsAB3CA67D5979Efgotham@195.159.176.226>
-References: <XnsAB3CA67D5979Efgotham@195.159.176.226>
-Message-ID: <20200106213317.693ae331@windsurf>
+Date: Mon, 6 Jan 2020 21:36:09 +0100
+Subject: [Buildroot] [PATCH 00/22] Bump ejabberd to version 19.09.1
+In-Reply-To: <20200106161115.16524-1-johan.oudinet@gmail.com>
+References: <20200106161115.16524-1-johan.oudinet@gmail.com>
+Message-ID: <20200106213609.6b8b25ce@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Frederick,
+Hello Johan,
 
-On Mon, 6 Jan 2020 16:21:59 -0000 (UTC)
-Frederick Gotham <cauldwell.thomas@gmail.com> wrote:
+On Mon,  6 Jan 2020 17:10:53 +0100
+Johan Oudinet <johan.oudinet@gmail.com> wrote:
 
-> The following header file:
-> 
->     #include <linux/list.h>
-> 
-> was added to the Github for the Linux kernel in May 2011. That was 9 years 
-> ago.
+> Ejabberd has many dependencies. Bump all of them to the versions
+> required by ejabberd-19.09.1.
 
-This is an internal kernel header.
+Thanks for the patch series, I have applied it all, but there were a
+few issues. See below for some general comments.
 
-> So on my Buildroot setup, I navigate to this directory:
-> 
->     build/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/linux
+> Johan Oudinet (22):
+>   erlang-p1-utils: Bump to version 1.0.16
+>   erlang-lager: Bump to version 3.6.10
+>   erlang-eimp: Bump to version 1.0.12
+>   erlang-p1-cache-tab: Bump to version 1.0.20
+>   erlang-p1-oauth2: Bump to version 0.6.5
+>   erlang-p1-sip: Bump to version 1.0.30
+>   erlang-p1-stringprep: Bump to version 1.0.17
+>   erlang-p1-tls: Bump to version 1.1.2
+>   ejabberd-p1-stun: Bump to version 1.0.29
 
-This only contains the kernel headers exposed to userspace, i.e the
-UAPI (user-space API). There is absolutely no reason for list.h to be
-in there.
+Problem in the commit title: the package name is erlang-p1-stun, not
+ejabberd-p1-stun.
 
-> And I check to see if "list.h" is in there. It's not there, and this is why I 
-> am unable to build the latest version of Barebox.
-> 
-> Anyone got any idea why that header file isn't in there?
+>   erlang-p1-xml: Bump to version 1.1.37
+>   erlang-p1-zlib: Bump to version 1.0.6
+>   erlang-p1-xmpp: Bump to version 1.4.2
+>   erlang-p1-yaml: Bump to version 1.0.21
 
-You need to give more details about the Barebox failure you're seeing:
-which version you're trying to build, what is the build error. But the
-error is clearly not due to <linux/list.h> being missing from the
-compiler sysroot.
+For all those version bumps, the commit title format should have been:
 
-Best regards,
+	package/foo: bump to version XYZ
+
+i.e "package/foo" as the prefix, and bump instead of Bump.
+
+One useful addition would be to add the hash of the license file in the
+.hash file of those packages.
+
+>   erlang-base64url: New package
+>   erlang-jose: New package
+>   erlang-idna: New package
+>   erlang-p1-mqtree: New package
+>   erlang-p1-pkix: New package
+>   erlang-p1-yconf: New package
+>   erlang-p1-acme: New package
+
+For all those packages:
+
+ - You missed the update to the DEVELOPERS file
+
+ - The "erlang" dependency added in <pkg>_DEPENDENCIES was not needed
+   as it is implied by the rebar-package infrastructure
+
+ - The hash of the license file was missing.
+
+ - The commit title should have been: "package/foo: new package"
+
+>   ejabberd: Bump to version 19.09.1
+
+Same as previous version bumps on the commit title.
+
+>   erlang-p1-iconv: Remove package
+
+This one lacked an updated to the Config.in.legacy file.
+
+I fixed all those minor details, and applied. As I mentioned above, it
+would be good to add the hash of the license file in all Erlang
+packages that don't have it yet.
+
+Thanks a lot!
 
 Thomas
 -- 
