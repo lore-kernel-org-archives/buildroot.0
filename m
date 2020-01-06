@@ -1,39 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Jan 2020 21:47:04 +0100
-Subject: [Buildroot] [PATCH 0/5] package: add host-coreutils (branch
- yem/host-coreutils)
-In-Reply-To: <cover.1576701539.git.yann.morin.1998@free.fr>
-References: <cover.1576701539.git.yann.morin.1998@free.fr>
-Message-ID: <20200106214704.0413d5dc@windsurf>
+Date: Mon, 6 Jan 2020 21:49:58 +0100
+Subject: [Buildroot] [git commit] package/lua-codegen: new package
+Message-ID: <20200106204016.52DF881488@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1a05c43a3e7bbea266c261e10bedba3c3a06fa05
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Dec 2019 21:39:04 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/Config.in                    |  1 +
+ package/lua-codegen/Config.in        |  6 ++++++
+ package/lua-codegen/lua-codegen.hash |  3 +++
+ package/lua-codegen/lua-codegen.mk   | 12 ++++++++++++
+ 4 files changed, 22 insertions(+)
 
-> Yann E. MORIN (5):
->       package/coreutils: introduce a host variant
->       core/dependencies: check if we need to build our own host-coreutils
->       package/systemd: add dependency on host-coreutils
->       package/libselinux: add dependency on host-coreutils for ln --relative
->       package/libsepol: add dependency on host-coreutils for ln --relative
-
-Thanks, I've applied to master!
-
-One thing that would be nice is to check if
-package/coreutils/0001-fix-for-dummy-man-usage.patch is still needed,
-and if it is, what we can do about it. It's annoying to have AUTORECONF
-= YES and GETTEXTIZE = YES just for this patch.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/Config.in b/package/Config.in
+index 296dbe49d5..3a75561151 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -636,6 +636,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-cjson/Config.in"
+ 	source "package/lua-coat/Config.in"
+ 	source "package/lua-coatpersistent/Config.in"
++	source "package/lua-codegen/Config.in"
+ 	source "package/lua-compat53/Config.in"
+ 	source "package/lua-cqueues/Config.in"
+ 	source "package/lua-csnappy/Config.in"
+diff --git a/package/lua-codegen/Config.in b/package/lua-codegen/Config.in
+new file mode 100644
+index 0000000000..fbcf5ca487
+--- /dev/null
++++ b/package/lua-codegen/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LUA_CODEGEN
++	bool "lua-codegen"
++	help
++	  A template engine.
++
++	  https://fperrad.frama.io/lua-CodeGen
+diff --git a/package/lua-codegen/lua-codegen.hash b/package/lua-codegen/lua-codegen.hash
+new file mode 100644
+index 0000000000..0b49a5a78c
+--- /dev/null
++++ b/package/lua-codegen/lua-codegen.hash
+@@ -0,0 +1,3 @@
++# computed by luarocks/buildroot
++sha256 c09126d7f5d0fa9c867ee9108eb5961dab111320ee35e5f842317f6058e922ec  lua-codegen-0.3.3-1.src.rock
++sha256 f09265c450c3a59558ecc552ea4ba61e5a74dec995738eec545d121718833a80  lua-CodeGen-0.3.3/COPYRIGHT
+diff --git a/package/lua-codegen/lua-codegen.mk b/package/lua-codegen/lua-codegen.mk
+new file mode 100644
+index 0000000000..caa9008e5f
+--- /dev/null
++++ b/package/lua-codegen/lua-codegen.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# lua-codegen
++#
++################################################################################
++
++LUA_CODEGEN_VERSION = 0.3.3-1
++LUA_CODEGEN_NAME_UPSTREAM = lua-CodeGen
++LUA_CODEGEN_LICENSE = MIT
++LUA_CODEGEN_LICENSE_FILES = $(LUA_CODEGEN_SUBDIR)/COPYRIGHT
++
++$(eval $(luarocks-package))
