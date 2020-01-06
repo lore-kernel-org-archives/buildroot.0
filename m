@@ -1,49 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Jan 2020 10:42:48 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Nicholas Sielicki as
- contact for galileo_defconfig
-In-Reply-To: <BN6PR11MB4145527DD926BC273CA3F6B7903C0@BN6PR11MB4145.namprd11.prod.outlook.com>
-References: <20190811120739.26539-13-thomas.petazzoni@bootlin.com>
- <20191231152005.GH26395@scaer>
- <MN2PR11MB4160005AC798211088F160C090210@MN2PR11MB4160.namprd11.prod.outlook.com>
- <20200101163416.065d0ace@windsurf> <20200101161120.GL3519@scaer>
- <BN6PR11MB4145B63CE33025809CB99F8490210@BN6PR11MB4145.namprd11.prod.outlook.com>
- <20200101211657.GP3519@scaer> <20200102091439.37998851@windsurf>
- <BN6PR11MB4145CB3739932D59E074FC1C90200@BN6PR11MB4145.namprd11.prod.outlook.com>
- <20200103092443.4e98511a@windsurf>
- <BN6PR11MB4145527DD926BC273CA3F6B7903C0@BN6PR11MB4145.namprd11.prod.outlook.com>
-Message-ID: <20200106104248.2fa99686@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 6 Jan 2020 10:54:09 +0100
+Subject: [Buildroot] [PATCH 1/2] board/raspberrypi/post-image.sh:
+ support older defconfigs
+In-Reply-To: <20200103003752.140-1-chrismcc@gmail.com>
+References: <20200103003752.140-1-chrismcc@gmail.com>
+Message-ID: <20200106105409.24949715@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Christopher,
 
-On Mon, 6 Jan 2020 09:33:20 +0000
-"Kinsella, Ray" <ray.kinsella@intel.com> wrote:
+On Fri,  3 Jan 2020 00:37:51 +0000, Christopher McCrory <chrismcc@gmail.com> wrote:
 
-> The Galileo had a nice niche as being one of the very few boards with PCIe.
-> Although it had been EOL'ed at Intel, I would get contacted about it regularly enough. 
-> 
-> Now there are alternatives such as the PINE64 etc, so that interest as dried up.
-> So yes, I think we should be agree'ing when we remove the defconfig.
-> 
-> Presume the next buildroot LTS is 20.02, we I suppose gives us three choices.
-> 
-> 1. EOL Galileo in 20.02
-> 2. Update Galileo to support a latest Kernel LTS in 20.02 (with the compromises discussed previously).
-> 3. Leave Galileo as is for 20.02, and remove it post 20.02 release.
-> 
-> When is code freeze for 20.02?
+> Commit ada40afb324 fixed pi3-minuart-bt being changed to miniuart-bt.  Older
+> defconfig files based on raspberrypi*_defconfigs might have to old call,
+> BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
+> Allow either argument to add the correct miniuart-bt overlay.
+>
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> ---
+>  board/raspberrypi/post-image.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+> index 9dbd98ef9b..e9246fa113 100755
+> --- a/board/raspberrypi/post-image.sh
+> +++ b/board/raspberrypi/post-image.sh
+> @@ -10,7 +10,7 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+>  for arg in "$@"
+>  do
+>  	case "${arg}" in
+> -		--add-miniuart-bt-overlay)
+> +		--add-miniuart-bt-overlay|--add-pi3-miniuart-bt-overlay)
 
-End of January 2020.
+In favour for this one ;-), suggested for the pi3-miniuart/miniuart change
+commit [1], but rejected by the maintainers [2]...
 
-Best regards,
+Regards
+Peter
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[1] http://lists.busybox.net/pipermail/buildroot/2019-December/268042.html
+[2] http://lists.busybox.net/pipermail/buildroot/2019-December/268046.html
+
+>  		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+>  			echo "Adding 'dtoverlay=miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
+>  			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
