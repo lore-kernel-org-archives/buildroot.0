@@ -1,96 +1,53 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Mon, 6 Jan 2020 14:12:30 -0800
-Subject: [Buildroot] [PATCH 1/2] board/raspberrypi/post-image.sh:
- support older defconfigs
-In-Reply-To: <20200106180029.GF2721@scaer>
-References: <20200103003752.140-1-chrismcc@gmail.com>
- <20200106180029.GF2721@scaer>
-Message-ID: <CALURroRt8sxOnkvuK33EMeFymAXECTQyR0b=SkyXCKaQXtggCQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 6 Jan 2020 23:24:52 +0100
+Subject: [Buildroot] [git commit] toolchain/toolchain-wrapper: handle
+ __{BASE_, }FILE__ macro for reproducibility
+Message-ID: <20200106221707.DF1A8829F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 6, 2020 at 10:00 AM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=71d690145474554eb3310fa57db3a335bad6c242
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Christopher, All,
->
-> On 2020-01-03 00:37 +0000, Christopher McCrory spake thusly:
-> > Commit ada40afb324 fixed pi3-minuart-bt being changed to miniuart-bt.
-> Older
-> > defconfig files based on raspberrypi*_defconfigs might have to old call,
-> > BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
-> > Allow either argument to add the correct miniuart-bt overlay.
-> >
-> > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
->
-> As Peter noticed, we already refused such a change in the past, and I am
-> 100% aligned with the reasoning Arnout gave back then.
->
->
-I would disagree a little bit, but I'm all good with the maintainers
-choices overall. I didn't see that thread originally. And I'm all good with
-not adding this patch.
+Many tools use __FILE__ or __BASE_FILE__ for debugging and both
+capture the build path. This results in non-reproducible images when
+building in different directories.
 
+If the config uses GCC 8 or above, we use -ffile-prefix-map=old=new
+and let gcc take care of the path remapping in __FILE__. Since GCC
+versions before v8 did not have this feature, we use an empty string
+in that case, and disable the builtin-macro-redefined warning which
+would otherwise trigger and cause build issues with -Werror.
 
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+[Thomas:
+ - as suggested by Arnout, use the empty string for the __FILE__ and
+   __BASE_FILE__ value
+ - as suggested by Romain, also handle __BASE_FILE__ in addition to
+   __FILE__
+ - pass -Wno-builtin-macro-redefined to avoid build errors when
+   -Werror is passed]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ toolchain/toolchain-wrapper.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-
-
-> Regards,
-> Yann E. MORIN.
->
-> > ---
-> >  board/raspberrypi/post-image.sh | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/board/raspberrypi/post-image.sh
-> b/board/raspberrypi/post-image.sh
-> > index 9dbd98ef9b..e9246fa113 100755
-> > --- a/board/raspberrypi/post-image.sh
-> > +++ b/board/raspberrypi/post-image.sh
-> > @@ -10,7 +10,7 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-> >  for arg in "$@"
-> >  do
-> >       case "${arg}" in
-> > -             --add-miniuart-bt-overlay)
-> > +             --add-miniuart-bt-overlay|--add-pi3-miniuart-bt-overlay)
-> >               if ! grep -qE '^dtoverlay='
-> "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> >                       echo "Adding 'dtoverlay=miniuart-bt' to config.txt
-> (fixes ttyAMA0 serial console)."
-> >                       cat << __EOF__ >>
-> "${BINARIES_DIR}/rpi-firmware/config.txt"
-> > --
-> > 2.18.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
-
-
--- 
-Christopher McCrory
-To the optimist, the glass is half full.
-To the pessimist, the glass is half empty.
-To the engineer, the glass is twice as big as it needs to be.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200106/f79c001e/attachment.html>
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index 88695a5b2d..09dda17890 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -23,6 +23,11 @@ TOOLCHAIN_WRAPPER_OPTS = \
+ 
+ ifeq ($(BR2_REPRODUCIBLE),y)
+ TOOLCHAIN_WRAPPER_OPTS += -Wl,--build-id=none
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
++TOOLCHAIN_WRAPPER_OPTS += -ffile-prefix-map=$(BASE_DIR)=buildroot
++else
++TOOLCHAIN_WRAPPER_OPTS += -D__FILE__=\"\" -D__BASE_FILE__=\"\" -Wno-builtin-macro-redefined
++endif
+ endif
+ 
+ # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
