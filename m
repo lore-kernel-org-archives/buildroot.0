@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon,  6 Jan 2020 17:11:07 +0100
-Subject: [Buildroot] [PATCH 14/22] erlang-base64url: New package
+Date: Mon,  6 Jan 2020 17:11:08 +0100
+Subject: [Buildroot] [PATCH 15/22] erlang-jose: New package
 In-Reply-To: <20200106161115.16524-1-johan.oudinet@gmail.com>
 References: <20200106161115.16524-1-johan.oudinet@gmail.com>
-Message-ID: <20200106161115.16524-15-johan.oudinet@gmail.com>
+Message-ID: <20200106161115.16524-16-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,64 +12,65 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/Config.in                              |  1 +
- package/erlang-base64url/Config.in             |  6 ++++++
- package/erlang-base64url/erlang-base64url.hash |  2 ++
- package/erlang-base64url/erlang-base64url.mk   | 13 +++++++++++++
- 4 files changed, 22 insertions(+)
- create mode 100644 package/erlang-base64url/Config.in
- create mode 100644 package/erlang-base64url/erlang-base64url.hash
- create mode 100644 package/erlang-base64url/erlang-base64url.mk
+ package/Config.in                    |  1 +
+ package/erlang-jose/Config.in        |  7 +++++++
+ package/erlang-jose/erlang-jose.hash |  2 ++
+ package/erlang-jose/erlang-jose.mk   | 13 +++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/erlang-jose/Config.in
+ create mode 100644 package/erlang-jose/erlang-jose.hash
+ create mode 100644 package/erlang-jose/erlang-jose.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 894284c650..0c4698f601 100644
+index 0c4698f601..52d556c5ee 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -576,6 +576,7 @@ menu "Interpreter languages and scripting"
- 	source "package/erlang/Config.in"
- if BR2_PACKAGE_ERLANG
- menu "Erlang libraries/modules"
-+	source "package/erlang-base64url/Config.in"
+@@ -580,6 +580,7 @@ menu "Erlang libraries/modules"
  	source "package/erlang-eimp/Config.in"
  	source "package/erlang-goldrush/Config.in"
  	source "package/erlang-jiffy/Config.in"
-diff --git a/package/erlang-base64url/Config.in b/package/erlang-base64url/Config.in
++	source "package/erlang-jose/Config.in"
+ 	source "package/erlang-lager/Config.in"
+ 	source "package/erlang-p1-cache-tab/Config.in"
+ 	source "package/erlang-p1-iconv/Config.in"
+diff --git a/package/erlang-jose/Config.in b/package/erlang-jose/Config.in
 new file mode 100644
-index 0000000000..7883fa3831
+index 0000000000..8e7f2209b2
 --- /dev/null
-+++ b/package/erlang-base64url/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ERLANG_BASE64URL
-+	bool "erlang-base64url"
++++ b/package/erlang-jose/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ERLANG_JOSE
++	bool "erlang-jose"
++	select BR2_PACKAGE_ERLANG_BASE64URL
 +	help
-+	  URL safe base64-compatible codec.
++	  JSON Object Signing and Encryption (JOSE) for Erlang and Elixir.
 +
-+	  https://github.com/dvv/base64url
-diff --git a/package/erlang-base64url/erlang-base64url.hash b/package/erlang-base64url/erlang-base64url.hash
++	  https://github.com/potatosalad/erlang-jose
+diff --git a/package/erlang-jose/erlang-jose.hash b/package/erlang-jose/erlang-jose.hash
 new file mode 100644
-index 0000000000..8d3d9e1961
+index 0000000000..3b1f18504e
 --- /dev/null
-+++ b/package/erlang-base64url/erlang-base64url.hash
++++ b/package/erlang-jose/erlang-jose.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 7ef7210effd25ac1f82f190fcfaef53e49d7bc40bb94112c4aa07266c32a851b erlang-base64url-1.0.1.tar.gz
-diff --git a/package/erlang-base64url/erlang-base64url.mk b/package/erlang-base64url/erlang-base64url.mk
++sha256 d55a9d3a1697833fed555a21f1aeb2727af88193995cb6ffa945d4b6749d0e8d erlang-jose-1.9.0.tar.gz
+diff --git a/package/erlang-jose/erlang-jose.mk b/package/erlang-jose/erlang-jose.mk
 new file mode 100644
-index 0000000000..bf8cffcbba
+index 0000000000..18d66d7204
 --- /dev/null
-+++ b/package/erlang-base64url/erlang-base64url.mk
++++ b/package/erlang-jose/erlang-jose.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# erlang-base64url
++# erlang-jose
 +#
 +################################################################################
 +
-+ERLANG_BASE64URL_VERSION = 1.0.1
-+ERLANG_BASE64URL_SITE = $(call github,dvv,base64url,$(ERLANG_BASE64URL_VERSION))
-+ERLANG_BASE64URL_LICENSE = MIT
-+ERLANG_BASE64URL_LICENSE_FILES = LICENSE.txt
-+ERLANG_BASE64URL_DEPENDENCIES = erlang
++ERLANG_JOSE_VERSION = 1.9.0
++ERLANG_JOSE_SITE = $(call github,potatosalad,erlang-jose,$(ERLANG_JOSE_VERSION))
++ERLANG_JOSE_LICENSE = MIT
++ERLANG_JOSE_LICENSE_FILES = LICENSE.md
++ERLANG_JOSE_DEPENDENCIES = erlang erlang-base64url
 +
 +$(eval $(rebar-package))
 -- 
