@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 6 Jan 2020 21:24:44 +0100
-Subject: [Buildroot] [git commit] package/erlang-base64url: new package
-Message-ID: <20200106201550.7C5408EE93@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang-p1-mqtree: new package
+Message-ID: <20200106201550.9A06C8EE4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7cf5b99bbbe54e99b4897df08803672428666f3
+commit: https://git.buildroot.net/buildroot/commit/?id=e7f86fa9a0484658d4c71c88ab5db095b331e77f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
@@ -16,71 +16,73 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  DEVELOPERS                                     |  1 +
  package/Config.in                              |  1 +
- package/erlang-base64url/Config.in             |  6 ++++++
- package/erlang-base64url/erlang-base64url.hash |  3 +++
- package/erlang-base64url/erlang-base64url.mk   | 12 ++++++++++++
- 5 files changed, 23 insertions(+)
+ package/erlang-p1-mqtree/Config.in             |  7 +++++++
+ package/erlang-p1-mqtree/erlang-p1-mqtree.hash |  3 +++
+ package/erlang-p1-mqtree/erlang-p1-mqtree.mk   | 13 +++++++++++++
+ 5 files changed, 25 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 63e6981570..590c54d065 100644
+index 606ee1a87c..d7d4b30815 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1255,6 +1255,7 @@ F:	package/python-libconfig/
- 
- N:	Johan Oudinet <johan.oudinet@gmail.com>
- F:	package/ejabberd/
-+F:	package/erlang-base64url/
- F:	package/erlang-eimp/
- F:	package/erlang-goldrush/
- F:	package/erlang-jiffy/
+@@ -1264,6 +1264,7 @@ F:	package/erlang-jose/
+ F:	package/erlang-lager/
+ F:	package/erlang-p1-cache-tab/
+ F:	package/erlang-p1-iconv/
++F:	package/erlang-p1-mqtree/
+ F:	package/erlang-p1-oauth2/
+ F:	package/erlang-p1-sip/
+ F:	package/erlang-p1-stringprep/
 diff --git a/package/Config.in b/package/Config.in
-index 894284c650..0c4698f601 100644
+index 15e9348502..760e3fd4f0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -576,6 +576,7 @@ menu "Interpreter languages and scripting"
- 	source "package/erlang/Config.in"
- if BR2_PACKAGE_ERLANG
- menu "Erlang libraries/modules"
-+	source "package/erlang-base64url/Config.in"
- 	source "package/erlang-eimp/Config.in"
- 	source "package/erlang-goldrush/Config.in"
- 	source "package/erlang-jiffy/Config.in"
-diff --git a/package/erlang-base64url/Config.in b/package/erlang-base64url/Config.in
+@@ -585,6 +585,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-lager/Config.in"
+ 	source "package/erlang-p1-cache-tab/Config.in"
+ 	source "package/erlang-p1-iconv/Config.in"
++	source "package/erlang-p1-mqtree/Config.in"
+ 	source "package/erlang-p1-oauth2/Config.in"
+ 	source "package/erlang-p1-sip/Config.in"
+ 	source "package/erlang-p1-stringprep/Config.in"
+diff --git a/package/erlang-p1-mqtree/Config.in b/package/erlang-p1-mqtree/Config.in
 new file mode 100644
-index 0000000000..7883fa3831
+index 0000000000..4e2d58c256
 --- /dev/null
-+++ b/package/erlang-base64url/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ERLANG_BASE64URL
-+	bool "erlang-base64url"
++++ b/package/erlang-p1-mqtree/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ERLANG_P1_MQTREE
++	bool "erlang-p1-mqtree"
++	select BR2_PACKAGE_ERLANG_P1_UTILS
 +	help
-+	  URL safe base64-compatible codec.
++	  Index tree for MQTT topic filters.
 +
-+	  https://github.com/dvv/base64url
-diff --git a/package/erlang-base64url/erlang-base64url.hash b/package/erlang-base64url/erlang-base64url.hash
++	  https://github.com/processone/mqtree
+diff --git a/package/erlang-p1-mqtree/erlang-p1-mqtree.hash b/package/erlang-p1-mqtree/erlang-p1-mqtree.hash
 new file mode 100644
-index 0000000000..becbe5db61
+index 0000000000..43e98d0699
 --- /dev/null
-+++ b/package/erlang-base64url/erlang-base64url.hash
++++ b/package/erlang-p1-mqtree/erlang-p1-mqtree.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256 7ef7210effd25ac1f82f190fcfaef53e49d7bc40bb94112c4aa07266c32a851b erlang-base64url-1.0.1.tar.gz
-+sha256 d59dff2fa4c39f05188ee533fbf06479eef1b47f8cad6353f8ab3726cc6923bc LICENSE.txt
-diff --git a/package/erlang-base64url/erlang-base64url.mk b/package/erlang-base64url/erlang-base64url.mk
++sha256 034d564e92ca8e9d66668548ea510d2cf9fdbad40609622a87374aa907110884 erlang-p1-mqtree-1.0.5.tar.gz
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
+diff --git a/package/erlang-p1-mqtree/erlang-p1-mqtree.mk b/package/erlang-p1-mqtree/erlang-p1-mqtree.mk
 new file mode 100644
-index 0000000000..2d49631941
+index 0000000000..bd5f28237c
 --- /dev/null
-+++ b/package/erlang-base64url/erlang-base64url.mk
-@@ -0,0 +1,12 @@
++++ b/package/erlang-p1-mqtree/erlang-p1-mqtree.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# erlang-base64url
++# erlang-p1-mqtree
 +#
 +################################################################################
 +
-+ERLANG_BASE64URL_VERSION = 1.0.1
-+ERLANG_BASE64URL_SITE = $(call github,dvv,base64url,$(ERLANG_BASE64URL_VERSION))
-+ERLANG_BASE64URL_LICENSE = MIT
-+ERLANG_BASE64URL_LICENSE_FILES = LICENSE.txt
++ERLANG_P1_MQTREE_VERSION = 1.0.5
++ERLANG_P1_MQTREE_SITE = $(call github,processone,mqtree,$(ERLANG_P1_MQTREE_VERSION))
++ERLANG_P1_MQTREE_LICENSE = Apache-2.0
++ERLANG_P1_MQTREE_LICENSE_FILES = LICENSE
++ERLANG_P1_MQTREE_DEPENDENCIES = erlang-p1-utils
 +
 +$(eval $(rebar-package))
