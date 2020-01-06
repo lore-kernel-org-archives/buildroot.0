@@ -1,61 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Jan 2020 19:00:29 +0100
-Subject: [Buildroot] [PATCH 1/2] board/raspberrypi/post-image.sh:
- support older defconfigs
-In-Reply-To: <20200103003752.140-1-chrismcc@gmail.com>
-References: <20200103003752.140-1-chrismcc@gmail.com>
-Message-ID: <20200106180029.GF2721@scaer>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 6 Jan 2020 19:08:52 +0100
+Subject: [Buildroot] [PATCH v2 0/8] pkg-stats json output improvements
+In-Reply-To: <CAEyMn7YYEcJUe6XE+AAjHMH+oaOMkF3=qydH9WE1fs4NqjQ5hw@mail.gmail.com>
+References: <20200105092329.6288-1-heiko.thiery@gmail.com>
+ <20200105204554.421b0ef7@windsurf>
+ <CAEyMn7YYEcJUe6XE+AAjHMH+oaOMkF3=qydH9WE1fs4NqjQ5hw@mail.gmail.com>
+Message-ID: <CAEyMn7arZQa2gb_F81ccM7d5zXqBgyMbph4A2C-m6Uzngv6Pwg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christopher, All,
+Hi Thomas,
 
-On 2020-01-03 00:37 +0000, Christopher McCrory spake thusly:
-> Commit ada40afb324 fixed pi3-minuart-bt being changed to miniuart-bt.  Older
-> defconfig files based on raspberrypi*_defconfigs might have to old call,
-> BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
-> Allow either argument to add the correct miniuart-bt overlay.
-> 
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Am So., 5. Jan. 2020 um 22:40 Uhr schrieb Heiko Thiery <heiko.thiery@gmail.com>:
+>
+> Am So., 5. Jan. 2020 um 20:45 Uhr schrieb Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com>:
+> >
+> > Hello Heiko,
+> >
+> > On Sun,  5 Jan 2020 10:23:22 +0100
+> > Heiko Thiery <heiko.thiery@gmail.com> wrote:
+> >
+> > > This patches add several improvements for the json output of the
+> > > pkg-stats script.
+> > >
+> > > - add developers information to the packages
+> > > - add supported defconfigs to json
+> > > - add license information to json
+> > > - add more generic status field to the packages
+> >
+> > Thanks for this new iteration. There is however one really important
+> > thing that I missed in the review of v1: the JSON provided by pkg-stats
+> > is then used by other tools. So if you change the layout/format of the
+> > JSON file, those tools also need to be modified accordingly.
+> >
+> > The tool consuming the JSON file today is the daily-mail script at
+> > https://git.buildroot.org/buildroot-test/tree/utils/daily-mail. I think
+> > the only function that needs to be modified is
+> > https://git.buildroot.org/buildroot-test/tree/utils/daily-mail#n549.
+>
+> ok I see .. was not aware of this repo till now. I try to figure out
+> how it works. But when I'm correct this script is also used for the
+> other branches of maintained buildroot versions. So if we change the
+> layout of the JSON file we have to take care of the pkg-stats script
+> in the other maintained branches.
 
-As Peter noticed, we already refused such a change in the past, and I am
-100% aligned with the reasoning Arnout gave back then.
+if I see correct we only need to change this line
+https://git.buildroot.org/buildroot-test/tree/utils/daily-mail#n554 to
+get the 'status', 'latest_v' and 'id' from the dict 'rm_version'.
+Should I send a patch to you? Or where to send?
 
-Regards,
-Yann E. MORIN.
+> > Best regards,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
 
-> ---
->  board/raspberrypi/post-image.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-> index 9dbd98ef9b..e9246fa113 100755
-> --- a/board/raspberrypi/post-image.sh
-> +++ b/board/raspberrypi/post-image.sh
-> @@ -10,7 +10,7 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
->  for arg in "$@"
->  do
->  	case "${arg}" in
-> -		--add-miniuart-bt-overlay)
-> +		--add-miniuart-bt-overlay|--add-pi3-miniuart-bt-overlay)
->  		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
->  			echo "Adding 'dtoverlay=miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
->  			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
-> -- 
-> 2.18.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--
+Heiko
