@@ -1,7 +1,8 @@
 From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon,  6 Jan 2020 20:53:07 +0100
-Subject: [Buildroot] [PATCH] libarchive: security bump to version 3.4.1
-Message-ID: <1578340387-11194-1-git-send-email-pjtexier@koncepto.io>
+Date: Mon,  6 Jan 2020 20:56:37 +0100
+Subject: [Buildroot] [PATCH] package/libarchive: security bump to version
+ 3.4.1
+Message-ID: <1578340597-31153-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,6 +23,9 @@ Also remove upstreamed patch.
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
+v1 -> v2 :
+	- update commit title "libarchive to package/libarchive"
+
  .../0001-Unbreak-compilation-without-zlib.patch    | 167 ---------------------
  package/libarchive/libarchive.hash                 |   4 +-
  package/libarchive/libarchive.mk                   |   2 +-
