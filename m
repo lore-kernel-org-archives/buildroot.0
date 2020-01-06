@@ -1,28 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Jan 2020 23:33:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/angularjs: bump version to 1.7.9
-In-Reply-To: <20200106094244.44vpuzpmtbj25rq2@zenon.in.qult.net>
-References: <20200106094244.44vpuzpmtbj25rq2@zenon.in.qult.net>
-Message-ID: <20200106233315.726ada38@windsurf>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon,  6 Jan 2020 19:46:47 -0300
+Subject: [Buildroot] [PATCH] configs/imx6ulevk: Bump the kernel version
+Message-ID: <20200106224647.15233-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 6 Jan 2020 10:42:44 +0100
-Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr> wrote:
+Bump the kernel version to 5.4.8.
 
-> Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
-> ---
->  package/angularjs/angularjs.hash | 4 ++--
->  package/angularjs/angularjs.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/imx6ulevk_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/configs/imx6ulevk_defconfig b/configs/imx6ulevk_defconfig
+index 9e30d2c3c4..53381d71a7 100644
+--- a/configs/imx6ulevk_defconfig
++++ b/configs/imx6ulevk_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-14x14-evk"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
