@@ -1,43 +1,37 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon,  6 Jan 2020 19:46:47 -0300
-Subject: [Buildroot] [PATCH] configs/imx6ulevk: Bump the kernel version
-Message-ID: <20200106224647.15233-1-festevam@gmail.com>
+From: Trent Piepho <trent.piepho@synapse.com>
+Date: Mon, 6 Jan 2020 20:58:53 +0000
+Subject: [Buildroot] [PATCH v3,
+ 1/1] package/samba4: Do not force target python
+In-Reply-To: <20200103134341.1505177-1-fontaine.fabrice@gmail.com>
+References: <20200103134341.1505177-1-fontaine.fabrice@gmail.com>
+Message-ID: <f9c453d2c255c9bf5eae3a95da77da2520441742.camel@synapse.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump the kernel version to 5.4.8.
+On Fri, 2020-01-03 at 14:43 +0100, Fabrice Fontaine wrote:
+> Samba does not need python on the target for file server functionality.
+> It does need it for the Active Directory Domain Controller feature,
+> which is already configured in buildroot as optional and already depends
+> on python3 since commit 4485a75859fbae99090b065ddd7c088a65571d37.
+> 
+> An unnecessary target python greatly increases the size of the target
+> filesystem. A somewhat minimal configuration with a samba server shunk
+> from an 82 MB rootfs to 53 MB with this patch.
+> 
+> Signed-off-by: Trent Piepho <trent.piepho@synapse.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v2 -> v3 (after review of Thomas Petazzoni):
+>  - Only drop select in Config.in
+> 
+> Changes v1 -> v2 (after review of Thomas Petazzoni):
+>  - Rework patch due so it can be applied after commits
+>    fe033bdf534a7892ced72c11635d863afa92d1d2 and
+>    4485a75859fbae99090b065ddd7c088a65571d37
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- configs/imx6ulevk_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/configs/imx6ulevk_defconfig b/configs/imx6ulevk_defconfig
-index 9e30d2c3c4..53381d71a7 100644
---- a/configs/imx6ulevk_defconfig
-+++ b/configs/imx6ulevk_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
--# Linux headers same as kernel, a 4.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-14x14-evk"
--- 
-2.17.1
+Test v3 and it looks good to me.  After commit fe033bd added the
+disable-python logic, the samba4.mk part of my origina v1 isn't needed
+anymore to get a working build.
