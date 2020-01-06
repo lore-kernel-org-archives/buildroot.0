@@ -1,72 +1,42 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Mon, 6 Jan 2020 12:20:04 -0600
-Subject: [Buildroot] [PATCH 1/1] check-kernel-headers: allow safe
- version mismatches
-In-Reply-To: <20191205202554.18273-1-vfazio@xes-inc.com>
-References: <20191205202554.18273-1-vfazio@xes-inc.com>
-Message-ID: <b45e78f5-fc2c-094d-114e-fda933ff9782@xes-inc.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  6 Jan 2020 19:24:19 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libsigrok: add optional bluez-utils
+ dependency
+Message-ID: <20200106182420.2833708-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Spoke with Yann on IRC about this
+bluez-utils has been added since version 0.5.2 and
+https://github.com/sigrokproject/libsigrok/commit/f085705f4888f8127c80539e0fcd1cb3974bdff2
 
-On 12/5/19 2:25 PM, Vincent Fazio wrote:
-> Previously, if toolchain headers were versioned ahead of the latest
-> selectable Buildroot toolchain header version, packages could not be
-> built because of an explicit equality check. This forced the user to
-> either advance the Buildroot repository or to rebuild their toolchain
-> with a selectable, but older, version of headers.
->
-> Now, we allow a toolchain's headers to outpace the latest selectable
-> Buildroot toolchain header version. The header version dependencies in
-> package configurations use "at least" version semantics, so newer
-> toolchains still meet the requirement.
->
-> Suggested-by: Aaron Sierra <asierra@xes-inc.com>
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-> ---
->   support/scripts/check-kernel-headers.sh | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-> index 9d23c00feb..093df46510 100755
-> --- a/support/scripts/check-kernel-headers.sh
-> +++ b/support/scripts/check-kernel-headers.sh
-> @@ -33,7 +33,7 @@ int main(int argc __attribute__((unused)),
->            char** argv __attribute__((unused)))
->   {
->       if((LINUX_VERSION_CODE & ~0xFF)
-> -        != KERNEL_VERSION(${HDR_M},${HDR_m},0))
-> +        < KERNEL_VERSION(${HDR_M},${HDR_m},0))
-This check is OK _only_ if the header version selected is the latest 
-version allowed by BR, so an additional Kconfig string value needs to be 
-set, likely in toolchain/Config.in
->       {
->           printf("Incorrect selection of kernel headers: ");
->           printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libsigrok/libsigrok.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-support/scripts/check-kernel-headers.sh
- ??? needs to accept a 4th parameter for the latest BR version
- ??? needs to do the BR_HEADERS_LATEST == BR2_TOOLCHAIN_HEADERS_AT_LEAST 
-&& (LINUX_VERSION_CODE && >= BR_HEADERS_LATEST) comparison in the 
-generated C code
-
-toolchain/helpers.mk
- ??? check_kernel_headers_version needs a 4th argument
- ??? pass the 4th argument to check-kernel-headers.sh
-
-toolchain/toolchain-external/pkg-toolchain-external.mk
- ??? needs to pass the 4th argument to check_kernel_headers_version
-
-package/linux-headers/linux-headers.mk
- ??? probably needs to pass the 4th argument to check_kernel_headers_version
-
-
+diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+index 971e90c94a..922011af7c 100644
+--- a/package/libsigrok/libsigrok.mk
++++ b/package/libsigrok/libsigrok.mk
+@@ -12,6 +12,16 @@ LIBSIGROK_INSTALL_STAGING = YES
+ LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
+ LIBSIGROK_CONF_OPTS = --disable-java --disable-python
+ 
++ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
++LIBSIGROK_CONF_OPTS += --with-libbluez
++LIBSIGROK_DEPENDENCIES += bluez_utils
++else ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
++LIBSIGROK_CONF_OPTS += --with-libbluez
++LIBSIGROK_DEPENDENCIES += bluez_utils5
++else
++LIBSIGROK_CONF_OPTS += --without-libbluez
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
+ LIBSIGROK_CONF_OPTS += --with-libserialport
+ LIBSIGROK_DEPENDENCIES += libserialport
 -- 
-Vincent Fazio
-Embedded Software Engineer - Linux
-Extreme Engineering Solutions, Inc
-http://www.xes-inc.com
+2.24.1
