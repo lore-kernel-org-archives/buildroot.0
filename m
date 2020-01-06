@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon,  6 Jan 2020 17:11:01 +0100
-Subject: [Buildroot] [PATCH 08/22] erlang-p1-tls: Bump to version 1.1.2
+Date: Mon,  6 Jan 2020 17:11:03 +0100
+Subject: [Buildroot] [PATCH 10/22] erlang-p1-xml: Bump to version 1.1.37
 In-Reply-To: <20200106161115.16524-1-johan.oudinet@gmail.com>
 References: <20200106161115.16524-1-johan.oudinet@gmail.com>
-Message-ID: <20200106161115.16524-9-johan.oudinet@gmail.com>
+Message-ID: <20200106161115.16524-11-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang-p1-tls/erlang-p1-tls.hash | 2 +-
- package/erlang-p1-tls/erlang-p1-tls.mk   | 2 +-
+ package/erlang-p1-xml/erlang-p1-xml.hash | 2 +-
+ package/erlang-p1-xml/erlang-p1-xml.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-tls/erlang-p1-tls.hash b/package/erlang-p1-tls/erlang-p1-tls.hash
-index af635e5221..5933f3e22f 100644
---- a/package/erlang-p1-tls/erlang-p1-tls.hash
-+++ b/package/erlang-p1-tls/erlang-p1-tls.hash
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.hash b/package/erlang-p1-xml/erlang-p1-xml.hash
+index ac8042da64..fc70167579 100644
+--- a/package/erlang-p1-xml/erlang-p1-xml.hash
++++ b/package/erlang-p1-xml/erlang-p1-xml.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 5bb883b03514999876c750cdb08a5e4cf80a9eb89319037b612e1265c43f6f6d erlang-p1-tls-1.0.25.tar.gz
-+sha256 6444e174650054a53624490155a914b8bea31cdefbcd5f87fc1862102dc1db6e erlang-p1-tls-1.1.2.tar.gz
-diff --git a/package/erlang-p1-tls/erlang-p1-tls.mk b/package/erlang-p1-tls/erlang-p1-tls.mk
-index b569664465..824fe41ec1 100644
---- a/package/erlang-p1-tls/erlang-p1-tls.mk
-+++ b/package/erlang-p1-tls/erlang-p1-tls.mk
+-sha256 8615f77a1448e297af25f85261b6e4a84952af797da2e317c8ec71fe2fe779ac erlang-p1-xml-1.1.34.tar.gz
++sha256 f3226683ec9c8406147a025beebb5b9ed0adcb28099b7c4bb9435a369e9ac3f9 erlang-p1-xml-1.1.37.tar.gz
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
+index c8c65ff423..c66bd25776 100644
+--- a/package/erlang-p1-xml/erlang-p1-xml.mk
++++ b/package/erlang-p1-xml/erlang-p1-xml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_TLS_VERSION = 1.0.25
-+ERLANG_P1_TLS_VERSION = 1.1.2
- ERLANG_P1_TLS_SITE = $(call github,processone,fast_tls,$(ERLANG_P1_TLS_VERSION))
- ERLANG_P1_TLS_LICENSE = Apache-2.0
- ERLANG_P1_TLS_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_XML_VERSION = 1.1.34
++ERLANG_P1_XML_VERSION = 1.1.37
+ ERLANG_P1_XML_SITE = $(call github,processone,fast_xml,$(ERLANG_P1_XML_VERSION))
+ ERLANG_P1_XML_LICENSE = Apache-2.0
+ ERLANG_P1_XML_LICENSE_FILES = LICENSE.txt
 -- 
 2.20.1
