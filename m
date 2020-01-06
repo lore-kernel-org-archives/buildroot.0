@@ -1,38 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 06 Jan 2020 17:17:13 +0000
-Subject: [Buildroot] [Bug 12446] Buildroot fails to finish installing
- packages
-In-Reply-To: <bug-12446-163@https.bugs.busybox.net/>
-References: <bug-12446-163@https.bugs.busybox.net/>
-Message-ID: <bug-12446-163-hDPR4iEvEX@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 6 Jan 2020 18:56:40 +0100
+Subject: [Buildroot] [git commit] configs/raspberrypi0w_defconfig: fix post
+ script args
+Message-ID: <20200106174809.A56088EE94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12446
+commit: https://git.buildroot.net/buildroot/commit/?id=61d7face887c8e5869e23d4a394d7e7f4f157258
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-> https://gist.github.com/RossComputerGuy/4d023304f3a33eeb02cc1a04a9d4e5bc
+Commit ada40afb324 updated the raspberrypi*defconfigs to use
+ -add-miniuart-bt-overlay instead of -add-pi3-miniuart-bt-overlay.
+Update raspberrypi0w_defconfig also.
 
-As I expected, that config file builds perfectly well in upstream
-Buildroot.
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/raspberrypi0w_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> try it and you'll see that my issue occurs.
-
-I am sorry, but you have still failed to provide a way to reproduce
-your issue on upstream Buildroot, and thus I am no longer going to
-spend any time on this build report.
-
-Please, please, try on *your* side to reproduce with upstream
-Buildroot. If you can't reproduce, it is a problem with the changes
-you did in your fork.
-
-Note that if you want to help update some components versions, you
-can send patches to that effect, and we can then help iron out the
-issues on the patches.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
+index ea5856e8c0..e3c747ff6f 100644
+--- a/configs/raspberrypi0w_defconfig
++++ b/configs/raspberrypi0w_defconfig
+@@ -29,4 +29,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi0w/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi0w/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
