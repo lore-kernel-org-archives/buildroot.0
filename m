@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon,  6 Jan 2020 17:11:02 +0100
-Subject: [Buildroot] [PATCH 09/22] ejabberd-p1-stun: Bump to version 1.0.29
+Date: Mon,  6 Jan 2020 17:11:07 +0100
+Subject: [Buildroot] [PATCH 14/22] erlang-base64url: New package
 In-Reply-To: <20200106161115.16524-1-johan.oudinet@gmail.com>
 References: <20200106161115.16524-1-johan.oudinet@gmail.com>
-Message-ID: <20200106161115.16524-10-johan.oudinet@gmail.com>
+Message-ID: <20200106161115.16524-15-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,65 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang-p1-stun/erlang-p1-stun.hash | 2 +-
- package/erlang-p1-stun/erlang-p1-stun.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                              |  1 +
+ package/erlang-base64url/Config.in             |  6 ++++++
+ package/erlang-base64url/erlang-base64url.hash |  2 ++
+ package/erlang-base64url/erlang-base64url.mk   | 13 +++++++++++++
+ 4 files changed, 22 insertions(+)
+ create mode 100644 package/erlang-base64url/Config.in
+ create mode 100644 package/erlang-base64url/erlang-base64url.hash
+ create mode 100644 package/erlang-base64url/erlang-base64url.mk
 
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.hash b/package/erlang-p1-stun/erlang-p1-stun.hash
-index 7400a276a0..736ac48e38 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.hash
-+++ b/package/erlang-p1-stun/erlang-p1-stun.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 a5a59ae3c75290029aa062ef19ecd52b8377959a8eb7352bd2a62c4ff1dd0613 erlang-p1-stun-1.0.25.tar.gz
-+sha256 87cfd9d75c7b956b4c26c9e94492737a4528abf4b09f4f7d89a40abaa0dc088a erlang-p1-stun-1.0.29.tar.gz
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1-stun/erlang-p1-stun.mk
-index 32bdd4f245..ff2899ffbe 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.mk
-+++ b/package/erlang-p1-stun/erlang-p1-stun.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_P1_STUN_VERSION = 1.0.25
-+ERLANG_P1_STUN_VERSION = 1.0.29
- ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
- ERLANG_P1_STUN_LICENSE = Apache-2.0
- ERLANG_P1_STUN_LICENSE_FILES = LICENSE.txt
+diff --git a/package/Config.in b/package/Config.in
+index 894284c650..0c4698f601 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -576,6 +576,7 @@ menu "Interpreter languages and scripting"
+ 	source "package/erlang/Config.in"
+ if BR2_PACKAGE_ERLANG
+ menu "Erlang libraries/modules"
++	source "package/erlang-base64url/Config.in"
+ 	source "package/erlang-eimp/Config.in"
+ 	source "package/erlang-goldrush/Config.in"
+ 	source "package/erlang-jiffy/Config.in"
+diff --git a/package/erlang-base64url/Config.in b/package/erlang-base64url/Config.in
+new file mode 100644
+index 0000000000..7883fa3831
+--- /dev/null
++++ b/package/erlang-base64url/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_ERLANG_BASE64URL
++	bool "erlang-base64url"
++	help
++	  URL safe base64-compatible codec.
++
++	  https://github.com/dvv/base64url
+diff --git a/package/erlang-base64url/erlang-base64url.hash b/package/erlang-base64url/erlang-base64url.hash
+new file mode 100644
+index 0000000000..8d3d9e1961
+--- /dev/null
++++ b/package/erlang-base64url/erlang-base64url.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 7ef7210effd25ac1f82f190fcfaef53e49d7bc40bb94112c4aa07266c32a851b erlang-base64url-1.0.1.tar.gz
+diff --git a/package/erlang-base64url/erlang-base64url.mk b/package/erlang-base64url/erlang-base64url.mk
+new file mode 100644
+index 0000000000..bf8cffcbba
+--- /dev/null
++++ b/package/erlang-base64url/erlang-base64url.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# erlang-base64url
++#
++################################################################################
++
++ERLANG_BASE64URL_VERSION = 1.0.1
++ERLANG_BASE64URL_SITE = $(call github,dvv,base64url,$(ERLANG_BASE64URL_VERSION))
++ERLANG_BASE64URL_LICENSE = MIT
++ERLANG_BASE64URL_LICENSE_FILES = LICENSE.txt
++ERLANG_BASE64URL_DEPENDENCIES = erlang
++
++$(eval $(rebar-package))
 -- 
 2.20.1
