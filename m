@@ -1,62 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  6 Jan 2020 19:24:20 +0100
-Subject: [Buildroot] [PATCH 2/2] package/bluez_utils: fix build with c99
-In-Reply-To: <20200106182420.2833708-1-fontaine.fabrice@gmail.com>
-References: <20200106182420.2833708-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200106182420.2833708-2-fontaine.fabrice@gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon,  6 Jan 2020 20:51:40 +0100
+Subject: [Buildroot] [PATCH] package/libubootenv: bump to version cc628ee
+Message-ID: <1578340300-4253-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will fix a build failure with libsigrok
+This includes the following changes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/005a16e63518716c6e99c74c618d01be453c76d4
+cc628ee libuboot: wrap libuboot in extern "C" for C++
+bf6ff63 Prepare 0.2
+3393485 Fix compiler warning
+8f7c00a uboot_env: fix the resarch of ubi volume
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- .../0007-fix-lib-bluetooth-h-with-c99.patch   | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/bluez_utils/0007-fix-lib-bluetooth-h-with-c99.patch
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bluez_utils/0007-fix-lib-bluetooth-h-with-c99.patch b/package/bluez_utils/0007-fix-lib-bluetooth-h-with-c99.patch
-new file mode 100644
-index 0000000000..3738baf1f5
---- /dev/null
-+++ b/package/bluez_utils/0007-fix-lib-bluetooth-h-with-c99.patch
-@@ -0,0 +1,31 @@
-+http://permalink.gmane.org/gmane.linux.bluez.kernel/22306
-+
-+[Retrieved from:
-+https://428282.bugs.gentoo.org/attachment.cgi?id=319374]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff --git a/lib/bluetooth.h b/lib/bluetooth.h
-+index 0541842..5b2153d 100644
-+--- a/lib/bluetooth.h
-++++ b/lib/bluetooth.h
-+@@ -140,16 +140,16 @@ enum {
-+ #define bt_get_unaligned(ptr)			\
-+ ({						\
-+ 	struct __attribute__((packed)) {	\
-+-		typeof(*(ptr)) __v;		\
-+-	} *__p = (typeof(__p)) (ptr);		\
-++		__typeof__(*(ptr)) __v;		\
-++	} *__p = (__typeof__(__p)) (ptr);	\
-+ 	__p->__v;				\
-+ })
-+ 
-+ #define bt_put_unaligned(val, ptr)		\
-+ do {						\
-+ 	struct __attribute__((packed)) {	\
-+-		typeof(*(ptr)) __v;		\
-+-	} *__p = (typeof(__p)) (ptr);		\
-++		__typeof__(*(ptr)) __v;		\
-++	} *__p = (__typeof__(__p)) (ptr);	\
-+ 	__p->__v = (val);			\
-+ } while(0)
-+ 
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index 36396ac..161a8dd 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 38431bcbb93fa1a6065828947ca9f9510709b5ac57f8f700fd91473236885064 libubootenv-92949816720d7af2ac722016e7a5b9a85ff141bc.tar.gz
++sha256 4d948a8b7e4fb92c36c36a1a247c1bab4343c55b5324699d18ea012737dbedeb libubootenv-cc628ee0cd750be26275b6eaeaba4d324df11dec.tar.gz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 2c6abe8..ae3db40 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUBOOTENV_VERSION = 92949816720d7af2ac722016e7a5b9a85ff141bc
++LIBUBOOTENV_VERSION = cc628ee0cd750be26275b6eaeaba4d324df11dec
+ LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
 -- 
-2.24.1
+2.7.4
