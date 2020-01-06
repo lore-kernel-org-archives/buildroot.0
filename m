@@ -1,10 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon,  6 Jan 2020 17:10:57 +0100
-Subject: [Buildroot] [PATCH 04/22] erlang-p1-cache-tab: Bump to version
- 1.0.20
+Date: Mon,  6 Jan 2020 17:10:58 +0100
+Subject: [Buildroot] [PATCH 05/22] erlang-p1-oauth2: Bump to version 0.6.5
 In-Reply-To: <20200106161115.16524-1-johan.oudinet@gmail.com>
 References: <20200106161115.16524-1-johan.oudinet@gmail.com>
-Message-ID: <20200106161115.16524-5-johan.oudinet@gmail.com>
+Message-ID: <20200106161115.16524-6-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash | 2 +-
- package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk   | 2 +-
+ package/erlang-p1-oauth2/erlang-p1-oauth2.hash | 2 +-
+ package/erlang-p1-oauth2/erlang-p1-oauth2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
-index 841410292f..7e3800a6b0 100644
---- a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
-+++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
+diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.hash b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
+index 58756c6fd7..1a4211c1d2 100644
+--- a/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
++++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 169c3ca82b99c482e5914b616d594fed25cf34a4c995e37bfe1651d70bbaea55 erlang-p1-cache-tab-1.0.16.tar.gz
-+sha256 572b6532dca59c561d994bf2bf8eed3637118c64cdd3a9e51d81b506f5b09e2c erlang-p1-cache-tab-1.0.20.tar.gz
-diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
-index a25f0a1e6e..0d53358cfa 100644
---- a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
-+++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
+-sha256 d7d954376ae7c131a0884c7c80b0b9e8270b6f574182df59ce4f2fbbae322854 erlang-p1-oauth2-0.6.3.tar.gz
++sha256 55bf54133ce0882fab59f813ddf9ed4dac1e051a53fb4bd1c0565136ebb4d6ac erlang-p1-oauth2-0.6.5.tar.gz
+diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.mk b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
+index 444bc8971b..ea7c23a517 100644
+--- a/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
++++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_CACHE_TAB_VERSION = 1.0.16
-+ERLANG_P1_CACHE_TAB_VERSION = 1.0.20
- ERLANG_P1_CACHE_TAB_SITE = $(call github,processone,cache_tab,$(ERLANG_P1_CACHE_TAB_VERSION))
- ERLANG_P1_CACHE_TAB_LICENSE = Apache-2.0
- ERLANG_P1_CACHE_TAB_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_OAUTH2_VERSION = 0.6.3
++ERLANG_P1_OAUTH2_VERSION = 0.6.5
+ ERLANG_P1_OAUTH2_SITE = $(call github,processone,p1_oauth2,$(ERLANG_P1_OAUTH2_VERSION))
+ ERLANG_P1_OAUTH2_LICENSE = MIT
+ ERLANG_P1_OAUTH2_LICENSE_FILES = LICENSE
 -- 
 2.20.1
