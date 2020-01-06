@@ -1,10 +1,9 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  6 Jan 2020 11:47:30 +0100
-Subject: [Buildroot] [PATCH 1/2] package/wireguard: change to the
- wireguard-tools package
+Date: Mon,  6 Jan 2020 11:47:31 +0100
+Subject: [Buildroot] [PATCH 2/2] package/wireguard-linux-compat: new package
 In-Reply-To: <20200106104731.13306-1-peter@korsgaard.com>
 References: <20200106104731.13306-1-peter@korsgaard.com>
-Message-ID: <20200106104731.13306-2-peter@korsgaard.com>
+Message-ID: <20200106104731.13306-3-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,83 +14,103 @@ With the kernel support for WireGuard getting mainlined, the upstream repo
 has been split in a wireguard-tools repo for the userspace tooling and
 wireguard-linux-compat for the kernel side (for 3.10+ legacy kernels).
 
-Keep the BR2_PACKAGE_WIREGUARD name for the userspace utilities for
-compatibility reasons.
+Add a wireguard-linux-compat for the compatibility out-of-tree kernel module.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/Config.in      |  9 ++++-----
- package/wireguard/wireguard.hash |  4 ++--
- package/wireguard/wireguard.mk   | 15 +++++----------
- 3 files changed, 11 insertions(+), 17 deletions(-)
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/wireguard-linux-compat/Config.in      | 23 +++++++++++++++++++
+ .../wireguard-linux-compat.hash               |  4 ++++
+ .../wireguard-linux-compat.mk                 | 15 ++++++++++++
+ 5 files changed, 44 insertions(+)
+ create mode 100644 package/wireguard-linux-compat/Config.in
+ create mode 100644 package/wireguard-linux-compat/wireguard-linux-compat.hash
+ create mode 100644 package/wireguard-linux-compat/wireguard-linux-compat.mk
 
-diff --git a/package/wireguard/Config.in b/package/wireguard/Config.in
-index fe92fd6cfc..ba90ce82f2 100644
---- a/package/wireguard/Config.in
-+++ b/package/wireguard/Config.in
-@@ -11,11 +11,10 @@ config BR2_PACKAGE_WIREGUARD
- 	  more performant than OpenVPN. WireGuard is designed as a
- 	  general purpose VPN for running on embedded interfaces and
- 	  super computers alike, fit for many different
--	  circumstances. Initially released for the Linux kernel, it
--	  plans to be cross-platform and widely deployable. It is
--	  currently under heavy development, but already it might be
--	  regarded as the most secure, easiest to use, and simplest
--	  VPN solution in the industry.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 63e6981570..ac10b9270b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1940,6 +1940,7 @@ F:	package/sedutil/
+ F:	package/tpm2-totp/
+ F:	package/triggerhappy/
+ F:	package/wireguard/
++F:	package/wireguard-linux-compat/
+ F:	support/testing/tests/package/test_docker_compose.py
+ 
+ N:	Peter Seiderer <ps.report@gmx.net>
+diff --git a/package/Config.in b/package/Config.in
+index 894284c650..00718d4fc9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2173,6 +2173,7 @@ endif
+ 	source "package/wget/Config.in"
+ 	source "package/whois/Config.in"
+ 	source "package/wireguard/Config.in"
++	source "package/wireguard-linux-compat/Config.in"
+ 	source "package/wireless-regdb/Config.in"
+ 	source "package/wireless_tools/Config.in"
+ 	source "package/wireshark/Config.in"
+diff --git a/package/wireguard-linux-compat/Config.in b/package/wireguard-linux-compat/Config.in
+new file mode 100644
+index 0000000000..4ee214be63
+--- /dev/null
++++ b/package/wireguard-linux-compat/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
++	bool "wireguard linux-compat"
++	depends on BR2_LINUX_KERNEL
++	# kernel module requires 3.10+
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	help
++	  WireGuard is an extremely simple yet fast and modern VPN
++	  that utilizes state-of-the-art cryptography. It aims to be
++	  faster, simpler, leaner, and more useful than IPSec, while
++	  avoiding the massive headache. It intends to be considerably
++	  more performant than OpenVPN. WireGuard is designed as a
++	  general purpose VPN for running on embedded interfaces and
++	  super computers alike, fit for many different
 +	  circumstances.
 +
-+	  This package provides the userspace tooling to configure
-+	  WireGuard tunnels.
- 
- 	  https://www.wireguard.com
- 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 66ebf41dc6..b8b1dac1ac 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2019-December/004764.html
--sha256 b0d718380f7a8822b2f12d75e462fa4eafa3a77871002981f367cd4fe2a1b071  WireGuard-0.0.20191212.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004819.html
-+sha256 547cd1c2f8dca904faac9e8d3964f1ef956c24bb12e3498da88dde95243c7f08  wireguard-tools-1.0.20200102.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 3c604b3014..80c1f4c186 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20191212
--WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
--WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
-+WIREGUARD_VERSION = 1.0.20200102
-+WIREGUARD_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
-+WIREGUARD_SOURCE = wireguard-tools-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
- WIREGUARD_LICENSE_FILES = COPYING
- WIREGUARD_DEPENDENCIES = host-pkgconf libmnl
-@@ -25,17 +25,12 @@ endif
- 
- define WIREGUARD_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(WIREGUARD_MAKE_OPTS) \
--		-C $(@D)/src/tools
-+		-C $(@D)/src
- endef
- 
- define WIREGUARD_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(WIREGUARD_MAKE_OPTS) \
--		-C $(@D)/src/tools install DESTDIR=$(TARGET_DIR)
-+		-C $(@D)/src install DESTDIR=$(TARGET_DIR)
- endef
- 
--ifeq ($(BR2_LINUX_KERNEL),y)
--WIREGUARD_MODULE_SUBDIRS = src
--$(eval $(kernel-module))
--endif
--
- $(eval $(generic-package))
++	  Support for WireGuard is included in Linux 5.6+. This
++	  package provides a backport of the kernel support for older
++	  kernels.
++
++	  https://www.wireguard.com
++
++comment "wireguard-linux-compat needs a toolchain w/ headers >= 3.10"
++	depends on BR2_LINUX_KERNEL && !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+new file mode 100644
+index 0000000000..1653eaa089
+--- /dev/null
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -0,0 +1,4 @@
++# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004844.html
++sha256 9f12f68e96f6865325995c38213e09b05751cd1ef03e0bbc9f1bdc3e5680b337  wireguard-linux-compat-0.0.20200105.tar.xz
++# Locally calculated
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+new file mode 100644
+index 0000000000..ddceed5660
+--- /dev/null
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# wireguard
++#
++################################################################################
++
++WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200105
++WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
++WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
++WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
++WIREGUARD_LINUX_COMPAT_LICENSE_FILES = COPYING
++WIREGUARD_LINUX_COMPAT_MODULE_SUBDIRS = src
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
 -- 
 2.20.1
