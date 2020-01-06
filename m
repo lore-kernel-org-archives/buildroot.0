@@ -1,51 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Jan 2020 21:43:38 +0100
-Subject: [Buildroot] [git commit] core/dependencies: check if we need to
- build our own host-coreutils
-Message-ID: <20200106203440.0DB9D80E2B@busybox.osuosl.org>
+Date: Mon, 6 Jan 2020 21:44:19 +0100
+Subject: [Buildroot] [git commit] package/libsepol: add dependency on
+ host-coreutils for ln --relative
+Message-ID: <20200106203440.2B1E180F7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a95ea4b64dc9ca41b5ec94ec5aaf9937a3906709
+commit: https://git.buildroot.net/buildroot/commit/?id=cddaae145ae9fcc04332c958b3c8968336dfb16f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/dependencies/check-host-coreutils.mk |  6 ++++++
- support/dependencies/check-host-coreutils.sh | 12 ++++++++++++
- 2 files changed, 18 insertions(+)
+ package/libsepol/0002-revert-ln-relative.patch | 29 --------------------------
+ package/libsepol/libsepol.mk                   |  2 +-
+ 2 files changed, 1 insertion(+), 30 deletions(-)
 
-diff --git a/support/dependencies/check-host-coreutils.mk b/support/dependencies/check-host-coreutils.mk
-new file mode 100644
-index 0000000000..87a3f446ea
---- /dev/null
-+++ b/support/dependencies/check-host-coreutils.mk
-@@ -0,0 +1,6 @@
-+# Check whether the host's coreutils are up to date enough
-+# to provide 'ln --relative' and 'realpath'.
-+
-+ifeq (,$(call suitable-host-package,coreutils))
-+BR2_COREUTILS_HOST_DEPENDENCY = host-coreutils
-+endif
-diff --git a/support/dependencies/check-host-coreutils.sh b/support/dependencies/check-host-coreutils.sh
-new file mode 100755
-index 0000000000..4d36d74933
---- /dev/null
-+++ b/support/dependencies/check-host-coreutils.sh
-@@ -0,0 +1,12 @@
-+#!/bin/sh
-+
-+# Exit on the first error
-+set -e
-+
-+# Does ln supports the --relative/-r option?
-+ln --relative --help >/dev/null 2>&1
-+
-+# Does realpath exist?
-+realpath --help >/dev/null 2>&1
-+
-+echo OK
+diff --git a/package/libsepol/0002-revert-ln-relative.patch b/package/libsepol/0002-revert-ln-relative.patch
+deleted file mode 100644
+index 40dabc38de..0000000000
+--- a/package/libsepol/0002-revert-ln-relative.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 16b2b0e21e10727065042a1baabd1a887757c65c Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <aduskett@gmail.com>
+-Date: Mon, 9 Oct 2017 16:29:36 -0400
+-Subject: [PATCH] Makefile: revert libsepol: use ln --relative to create .so symlinks
+-
+-This reverts 71393a181d63c9baae5fe8dcaeb9411d1f253998
+-
+-ln --relative is too recent to be available in all distributions,
+-especially enterprise-grade distros that can stick around as long as
+-they are maintained (up to 10 years in some cases?).
+-
+-For the sake of Buildroot, revert the upstream patch.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Update for 2.8 (with assumption that SHLIBDIR=LIBDIR)]
+-
+-diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
+---- libsepol-2.7.orig/src/Makefile	2018-01-15 21:37:12.821831315 +0100
+-+++ libsepol-2.7/src/Makefile	2018-01-15 21:38:03.838497434 +0100
+-@@ -92,7 +92,7 @@
+- endif
+-	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
+-	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
+--	$(LN) -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
+-+	cd $(DESTDIR)$(LIBDIR) && ln -sf $(LIBSO) $(TARGET)
+- 
+- relabel:
+- 	/sbin/restorecon $(LIBINSTALL)/$(LIBSO)
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index 58b9b9c374..62b0744aa3 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -11,7 +11,7 @@ LIBSEPOL_LICENSE_FILES = COPYING
+ 
+ LIBSEPOL_INSTALL_STAGING = YES
+ LIBSEPOL_DEPENDENCIES = host-flex
+-HOST_LIBSEPOL_DEPENDENCIES = host-flex
++HOST_LIBSEPOL_DEPENDENCIES = $(BR2_COREUTILS_HOST_DEPENDENCY) host-flex
+ 
+ LIBSEPOL_MAKE_FLAGS = $(TARGET_CONFIGURE_OPTS)
+ 
