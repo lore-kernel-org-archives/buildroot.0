@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon,  6 Jan 2020 17:11:06 +0100
-Subject: [Buildroot] [PATCH 13/22] erlang-p1-yaml: Bump to version 1.0.21
+Date: Mon,  6 Jan 2020 17:11:11 +0100
+Subject: [Buildroot] [PATCH 18/22] erlang-p1-pkix: New package
 In-Reply-To: <20200106161115.16524-1-johan.oudinet@gmail.com>
 References: <20200106161115.16524-1-johan.oudinet@gmail.com>
-Message-ID: <20200106161115.16524-14-johan.oudinet@gmail.com>
+Message-ID: <20200106161115.16524-19-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,65 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang-p1-yaml/erlang-p1-yaml.hash | 2 +-
- package/erlang-p1-yaml/erlang-p1-yaml.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                          |  1 +
+ package/erlang-p1-pkix/Config.in           |  6 ++++++
+ package/erlang-p1-pkix/erlang-p1-pkix.hash |  2 ++
+ package/erlang-p1-pkix/erlang-p1-pkix.mk   | 13 +++++++++++++
+ 4 files changed, 22 insertions(+)
+ create mode 100644 package/erlang-p1-pkix/Config.in
+ create mode 100644 package/erlang-p1-pkix/erlang-p1-pkix.hash
+ create mode 100644 package/erlang-p1-pkix/erlang-p1-pkix.mk
 
-diff --git a/package/erlang-p1-yaml/erlang-p1-yaml.hash b/package/erlang-p1-yaml/erlang-p1-yaml.hash
-index 2f3b181f6a..4f4c489cf1 100644
---- a/package/erlang-p1-yaml/erlang-p1-yaml.hash
-+++ b/package/erlang-p1-yaml/erlang-p1-yaml.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 d2675ec9b2f64eba6c3437597e3abe3bfaae2172560784456a2763d1d1a50b08 erlang-p1-yaml-1.0.17.tar.gz
-+sha256 b915612c06ef190bfed6d0370906b071274ed4ce4143b668cdad66588a9484a0 erlang-p1-yaml-1.0.21.tar.gz
-diff --git a/package/erlang-p1-yaml/erlang-p1-yaml.mk b/package/erlang-p1-yaml/erlang-p1-yaml.mk
-index d4173988f3..6836c3f557 100644
---- a/package/erlang-p1-yaml/erlang-p1-yaml.mk
-+++ b/package/erlang-p1-yaml/erlang-p1-yaml.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_P1_YAML_VERSION = 1.0.17
-+ERLANG_P1_YAML_VERSION = 1.0.21
- ERLANG_P1_YAML_SITE = $(call github,processone,fast_yaml,$(ERLANG_P1_YAML_VERSION))
- ERLANG_P1_YAML_LICENSE = Apache-2.0
- ERLANG_P1_YAML_LICENSE_FILES = LICENSE.txt
+diff --git a/package/Config.in b/package/Config.in
+index 760e3fd4f0..853961ee87 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -587,6 +587,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-iconv/Config.in"
+ 	source "package/erlang-p1-mqtree/Config.in"
+ 	source "package/erlang-p1-oauth2/Config.in"
++	source "package/erlang-p1-pkix/Config.in"
+ 	source "package/erlang-p1-sip/Config.in"
+ 	source "package/erlang-p1-stringprep/Config.in"
+ 	source "package/erlang-p1-stun/Config.in"
+diff --git a/package/erlang-p1-pkix/Config.in b/package/erlang-p1-pkix/Config.in
+new file mode 100644
+index 0000000000..dfd43f9de4
+--- /dev/null
++++ b/package/erlang-p1-pkix/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_ERLANG_P1_PKIX
++	bool "erlang-p1-pkix"
++	help
++	  PKIX certificates management library for Erlang.
++
++	  https://github.com/processone/pkix
+diff --git a/package/erlang-p1-pkix/erlang-p1-pkix.hash b/package/erlang-p1-pkix/erlang-p1-pkix.hash
+new file mode 100644
+index 0000000000..cb6004f6b2
+--- /dev/null
++++ b/package/erlang-p1-pkix/erlang-p1-pkix.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 184069d9055991cb8b7bd07dde8737a0a793e66e1ec1020deb680f83260a3e82 erlang-p1-pkix-1.0.4.tar.gz
+diff --git a/package/erlang-p1-pkix/erlang-p1-pkix.mk b/package/erlang-p1-pkix/erlang-p1-pkix.mk
+new file mode 100644
+index 0000000000..40fe80c8e8
+--- /dev/null
++++ b/package/erlang-p1-pkix/erlang-p1-pkix.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# erlang-p1-pkix
++#
++################################################################################
++
++ERLANG_P1_PKIX_VERSION = 1.0.4
++ERLANG_P1_PKIX_SITE = $(call github,processone,pkix,$(ERLANG_P1_PKIX_VERSION))
++ERLANG_P1_PKIX_LICENSE = Apache-2.0
++ERLANG_P1_PKIX_LICENSE_FILES = LICENSE
++ERLANG_P1_PKIX_DEPENDENCIES = erlang
++
++$(eval $(rebar-package))
 -- 
 2.20.1
