@@ -1,233 +1,188 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon,  6 Jan 2020 20:56:37 +0100
-Subject: [Buildroot] [PATCH] package/libarchive: security bump to version
- 3.4.1
-Message-ID: <1578340597-31153-1-git-send-email-pjtexier@koncepto.io>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  6 Jan 2020 21:10:12 +0100
+Subject: [Buildroot] [PATCHv2] toolchain/external: allow custom toolchains
+ to use newer headers
+Message-ID: <20200106201012.11214-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerabilities:
+From: Vincent Fazio <vfazio@xes-inc.com>
 
-- CVE-2019-19221: In Libarchive 3.4.0, archive_wstring_append_from_mbs in archive_string.c
- has an out-of-bounds read because of an incorrect mbrtowc or mbtowc call. For example,
- bsdtar crashes via a crafted archive.
+When Buildroot is released, it knows up to a certain kernel header
+version, and no later. However, it is possible that an external
+toolchain will be used, that uses headers newer than the latest
+version Buildroot knows about.
 
-And adds various security fixes.  For details, see :
+This may also happen when testing a development, rc-class kernel
+version.
 
-https://github.com/libarchive/libarchive/releases/tag/v3.4.1
+In the current state, Buildroot would refuse to use such toolchains,
+because the test is for strict equality.
 
-Also remove upstreamed patch.
+We'd like to make that situation possible, but we also want the user
+not to be lenient at the same time, and select the right headers
+version when it is known.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+So, we add a new Kconfig blind option that the latest kernel headers
+version selects. This options is then used to decide whether we do a
+strict or loose check of the kernel headers.
+
+Suggested-by: Aaron Sierra <asierra@xes-inc.com>
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+[yann.morin.1998 at free.fr: only do a loose check for the latest version]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
 ---
-v1 -> v2 :
-	- update commit title "libarchive to package/libarchive"
+Changes v1 -> v2:  (Yann)
+  - make it loose only for the latest version
+---
+ package/linux-headers/linux-headers.mk        |  3 +-
+ support/scripts/check-kernel-headers.sh       | 31 ++++++++++++++++---
+ toolchain/helpers.mk                          |  3 +-
+ .../pkg-toolchain-external.mk                 |  3 +-
+ .../Config.in.options                         | 15 +++++++++
+ 5 files changed, 48 insertions(+), 7 deletions(-)
 
- .../0001-Unbreak-compilation-without-zlib.patch    | 167 ---------------------
- package/libarchive/libarchive.hash                 |   4 +-
- package/libarchive/libarchive.mk                   |   2 +-
- 3 files changed, 3 insertions(+), 170 deletions(-)
- delete mode 100644 package/libarchive/0001-Unbreak-compilation-without-zlib.patch
-
-diff --git a/package/libarchive/0001-Unbreak-compilation-without-zlib.patch b/package/libarchive/0001-Unbreak-compilation-without-zlib.patch
-deleted file mode 100644
-index b4da520..0000000
---- a/package/libarchive/0001-Unbreak-compilation-without-zlib.patch
-+++ /dev/null
-@@ -1,167 +0,0 @@
--From 64333cef68d7bcc67bef6ecf177fbeaa549b9139 Mon Sep 17 00:00:00 2001
--From: Martin Matuska <martin@matuska.org>
--Date: Sat, 29 Jun 2019 00:20:58 +0200
--Subject: [PATCH] Unbreak compilation without zlib
--
--Fixes #1214
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit 64333cef68d7
--
-- libarchive/archive_read_support_filter_gzip.c | 54 ++++++++++++-------
-- libarchive/test/test_read_format_raw.c        |  4 ++
-- 2 files changed, 39 insertions(+), 19 deletions(-)
--
--diff --git a/libarchive/archive_read_support_filter_gzip.c b/libarchive/archive_read_support_filter_gzip.c
--index 458b6f729164..9fa9e2b0ddb8 100644
----- a/libarchive/archive_read_support_filter_gzip.c
--+++ b/libarchive/archive_read_support_filter_gzip.c
--@@ -131,12 +131,20 @@ archive_read_support_filter_gzip(struct archive *_a)
--  */
-- static ssize_t
-- peek_at_header(struct archive_read_filter *filter, int *pbits,
---	       struct private_data *state)
--+#ifdef HAVE_ZLIB_H
--+	       struct private_data *state
--+#else
--+	       void *state
--+#endif
--+	      )
-- {
-- 	const unsigned char *p;
-- 	ssize_t avail, len;
-- 	int bits = 0;
-- 	int header_flags;
--+#ifndef HAVE_ZLIB_H
--+	(void)state; /* UNUSED */
--+#endif
-- 
-- 	/* Start by looking at the first ten bytes of the header, which
-- 	 * is all fixed layout. */
--@@ -153,8 +161,10 @@ peek_at_header(struct archive_read_filter *filter, int *pbits,
-- 	bits += 3;
-- 	header_flags = p[3];
-- 	/* Bytes 4-7 are mod time in little endian. */
--+#ifdef HAVE_ZLIB_H
-- 	if (state)
-- 		state->mtime = archive_le32dec(p + 4);
--+#endif
-- 	/* Byte 8 is deflate flags. */
-- 	/* XXXX TODO: return deflate flags back to consume_header for use
-- 	   in initializing the decompressor. */
--@@ -171,7 +181,9 @@ peek_at_header(struct archive_read_filter *filter, int *pbits,
-- 
-- 	/* Null-terminated optional filename. */
-- 	if (header_flags & 8) {
--+#ifdef HAVE_ZLIB_H
-- 		ssize_t file_start = len;
--+#endif
-- 		do {
-- 			++len;
-- 			if (avail < len)
--@@ -181,11 +193,13 @@ peek_at_header(struct archive_read_filter *filter, int *pbits,
-- 				return (0);
-- 		} while (p[len - 1] != 0);
-- 
--+#ifdef HAVE_ZLIB_H
-- 		if (state) {
-- 			/* Reset the name in case of repeat header reads. */
-- 			free(state->name);
-- 			state->name = strdup((const char *)&p[file_start]);
-- 		}
--+#endif
-- 	}
-- 
-- 	/* Null-terminated optional comment. */
--@@ -236,24 +250,6 @@ gzip_bidder_bid(struct archive_read_filter_bidder *self,
-- 	return (0);
-- }
-- 
---static int
---gzip_read_header(struct archive_read_filter *self, struct archive_entry *entry)
---{
---	struct private_data *state;
---
---	state = (struct private_data *)self->data;
---
---	/* A mtime of 0 is considered invalid/missing. */
---	if (state->mtime != 0)
---		archive_entry_set_mtime(entry, state->mtime, 0);
---
---	/* If the name is available, extract it. */
---	if (state->name)
---		archive_entry_set_pathname(entry, state->name);
---
---	return (ARCHIVE_OK);
---}
---
-- #ifndef HAVE_ZLIB_H
-- 
-- /*
--@@ -277,6 +273,24 @@ gzip_bidder_init(struct archive_read_filter *self)
-- 
-- #else
-- 
--+static int
--+gzip_read_header(struct archive_read_filter *self, struct archive_entry *entry)
--+{
--+	struct private_data *state;
--+
--+	state = (struct private_data *)self->data;
--+
--+	/* A mtime of 0 is considered invalid/missing. */
--+	if (state->mtime != 0)
--+		archive_entry_set_mtime(entry, state->mtime, 0);
--+
--+	/* If the name is available, extract it. */
--+	if (state->name)
--+		archive_entry_set_pathname(entry, state->name);
--+
--+	return (ARCHIVE_OK);
--+}
--+
-- /*
--  * Initialize the filter object.
--  */
--@@ -306,7 +320,9 @@ gzip_bidder_init(struct archive_read_filter *self)
-- 	self->read = gzip_filter_read;
-- 	self->skip = NULL; /* not supported */
-- 	self->close = gzip_filter_close;
--+#ifdef HAVE_ZLIB_H
-- 	self->read_header = gzip_read_header;
--+#endif
-- 
-- 	state->in_stream = 0; /* We're not actually within a stream yet. */
-- 
--diff --git a/libarchive/test/test_read_format_raw.c b/libarchive/test/test_read_format_raw.c
--index 0dac8bfbab4a..3961723b48a1 100644
----- a/libarchive/test/test_read_format_raw.c
--+++ b/libarchive/test/test_read_format_raw.c
--@@ -36,7 +36,9 @@ DEFINE_TEST(test_read_format_raw)
-- 	const char *reffile1 = "test_read_format_raw.data";
-- 	const char *reffile2 = "test_read_format_raw.data.Z";
-- 	const char *reffile3 = "test_read_format_raw.bufr";
--+#ifdef HAVE_ZLIB_H
-- 	const char *reffile4 = "test_read_format_raw.data.gz";
--+#endif
-- 
-- 	/* First, try pulling data out of an uninterpretable file. */
-- 	extract_reference_file(reffile1);
--@@ -119,6 +121,7 @@ DEFINE_TEST(test_read_format_raw)
-- 	assertEqualIntA(a, ARCHIVE_OK, archive_read_close(a));
-- 	assertEqualInt(ARCHIVE_OK, archive_read_free(a));
-- 
--+#ifdef HAVE_ZLIB_H
-- 	/* Fourth, try with gzip which has metadata. */
-- 	extract_reference_file(reffile4);
-- 	assert((a = archive_read_new()) != NULL);
--@@ -144,4 +147,5 @@ DEFINE_TEST(test_read_format_raw)
-- 	assertEqualIntA(a, ARCHIVE_EOF, archive_read_next_header(a, &ae));
-- 	assertEqualIntA(a, ARCHIVE_OK, archive_read_close(a));
-- 	assertEqualInt(ARCHIVE_OK, archive_read_free(a));
--+#endif
-- }
---- 
--2.20.1
--
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index 04c5777..b01d636 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
--# From https://www.libarchive.de/downloads/libarchive-3.4.0.tar.gz.sums.txt
--sha256  8643d50ed40c759f5412a3af4e353cffbce4fdf3b5cf321cb72cacf06b2d825e  libarchive-3.4.0.tar.gz
-+# From https://www.libarchive.de/downloads/sha256sums
-+sha256  fcf87f3ad8db2e4f74f32526dee62dd1fb9894782b0a503a89c9d7a70a235191  libarchive-3.4.1.tar.gz
- # Locally computed:
- sha256  e1e3d4ba9d0b0ccba333b5f5539f7c6c9a3ef3d57a96cd165d2c45eaa1cd026d  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index ccda183..e256b72 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 676c8c44ea..ee1a6c27d7 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -135,7 +135,8 @@ define LINUX_HEADERS_CHECK_VERSION
+ 	$(call check_kernel_headers_version,\
+ 		$(BUILD_DIR),\
+ 		$(STAGING_DIR),\
+-		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)))
++		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),
++		strict)
+ endef
+ LINUX_HEADERS_POST_INSTALL_STAGING_HOOKS += LINUX_HEADERS_CHECK_VERSION
+ endif
+diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+index 9d23c00feb..aafa7785c1 100755
+--- a/support/scripts/check-kernel-headers.sh
++++ b/support/scripts/check-kernel-headers.sh
+@@ -1,9 +1,29 @@
+ #!/bin/sh
  
--LIBARCHIVE_VERSION = 3.4.0
-+LIBARCHIVE_VERSION = 3.4.1
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
++# This script (and the embedded C code) will check that the actual
++# headers version match the user told us they were:
++#
++# - if both versions are the same, all is well.
++#
++# - if the actual headers are older than the user told us, this is
++#   an error.
++#
++# - if the actual headers are more recent than the user told us, and
++#   we are doing a strict check, then this is an error.
++#
++# - if the actual headers are more recent than the user told us, and
++#   we are doing a loose check, then a warning is printed, but this is
++#   not an error.
++#
++# That last conditions allows a user to provide a pre-built external
++# toolchain that uses kernel headers more recent than what Buildroot
++# knew when it was released.
++
+ BUILDDIR="${1}"
+ SYSROOT="${2}"
+ # Make sure we have enough version components
+ HDR_VER="${3}.0.0"
++CHECK="${4}"  # 'strict' or 'loose'
+ 
+ HDR_M="${HDR_VER%%.*}"
+ HDR_V="${HDR_VER#*.}"
+@@ -32,16 +52,19 @@ ${HOSTCC} -imacros "${SYSROOT}/usr/include/linux/version.h" \
+ int main(int argc __attribute__((unused)),
+          char** argv __attribute__((unused)))
+ {
+-    if((LINUX_VERSION_CODE & ~0xFF)
+-        != KERNEL_VERSION(${HDR_M},${HDR_m},0))
++    int ret = 0;
++    int l = LINUX_VERSION_CODE & ~0xFF;
++    int h = KERNEL_VERSION(${HDR_M},${HDR_m},0);
++
++    if(l != h)
+     {
+         printf("Incorrect selection of kernel headers: ");
+         printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
+                ((LINUX_VERSION_CODE>>16) & 0xFF),
+                ((LINUX_VERSION_CODE>>8) & 0xFF));
+-        return 1;
++        ret = ((l >= h ) && ("${CHECK}"[0] == 'l')) ? 0 : 1;
+     }
+-    return 0;
++    return ret;
+ }
+ _EOF_
+ 
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 996cc70d44..9a1f0495a5 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -161,9 +161,10 @@ copy_toolchain_sysroot = \
+ # $1: build directory
+ # $2: sysroot directory
+ # $3: kernel version string, in the form: X.Y
++# $4: test to do, 'strict' or 'loose'
+ #
+ check_kernel_headers_version = \
+-	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3); then \
++	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3) $(4); then \
+ 		exit 1; \
+ 	fi
+ 
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 1c43409514..0f1a7a5cd3 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -542,7 +542,8 @@ define $(2)_CONFIGURE_CMDS
+ 	$$(call check_kernel_headers_version,\
+ 		$$(BUILD_DIR)\
+ 		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
+-		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
++		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),
++		$(if $(BR2_TOOLCHAIN_EXTERNAL_HEADERS_LATEST),loose,strict)); \
+ 	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
+ 		$$(call qstrip,$$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
+ 	if test "$$(BR2_arm)" = "y" ; then \
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 665765a104..ed0a1b4421 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -92,6 +92,13 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
+ 
+ endchoice
+ 
++# This should be selected by a single version, below, to indicate that
++# Buildroot does not know of mor erecent headers than the ones selected.
++# This allows using toolchains with headers more recent than Buildroot
++# knows about, while still enforcing strict check for older headers.
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_LATEST
++	bool
++
+ choice
+ 	bool "External toolchain kernel headers series"
+ 	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+@@ -109,9 +116,17 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++	  If your toolchain uses headers newer than the latest version
++	  in the choice, then select the latest version.
++
++# Note: when adding a new version here, be sure to move the
++# 'select BR2_TOOLCHAIN_EXTERNAL_HEADERS_LATEST' from the
++# current "latest version" to that new "latest version".
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4
+ 	bool "5.4.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_TOOLCHAIN_EXTERNAL_HEADERS_LATEST
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3
+ 	bool "5.3.x"
 -- 
-2.7.4
+2.20.1
