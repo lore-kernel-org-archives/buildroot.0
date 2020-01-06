@@ -1,45 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Jan 2020 23:28:24 +0100
-Subject: [Buildroot] [PATCH v2 2/2] toolchain/toolchain-wrapper: handle
- __FILE__ macro for reproducibility
-In-Reply-To: <20190831180113.16025-2-itsatharva@gmail.com>
-References: <20190831180113.16025-1-itsatharva@gmail.com>
- <20190831180113.16025-2-itsatharva@gmail.com>
-Message-ID: <20200106232824.30e88329@windsurf>
+Date: Mon, 6 Jan 2020 23:28:39 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: Fix warning with get-developers
+Message-ID: <20200106221854.10F32829FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9295f6465042432c0ca02157b9c03a4f38c49c00
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 31 Aug 2019 23:31:13 +0530
-Atharva Lele <itsatharva@gmail.com> wrote:
+erlang-p1-iconv does not exist as a package in buildroot and cause warning
+with get-developers :
 
-> Many tools use __FILE__ for debugging and __FILE__ captures the build path.
-> This results in non-reproducible images when building in different directories.
-> 
-> If the config uses GCC 8 or above, we use -ffile-prefix-map=old=new and let gcc
-> take care of the path remapping in __FILE__. Since GCC versions before v8 did
-> not have this feature, we use a dummy string in that case.
-> 
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+./utils/get-developers -p erlang-p1-iconv
+WARNING: 'package/erlang-p1-iconv/' doesn't match any file
 
-I have applied this patch, with the following changes:
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-    [Thomas:
-     - as suggested by Arnout, use the empty string for the __FILE__ and
-       __BASE_FILE__ value
-     - as suggested by Romain, also handle __BASE_FILE__ in addition to
-       __FILE__
-     - pass -Wno-builtin-macro-redefined to avoid build errors when
-       -Werror is passed]
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d0e915779a..00c4cdc1a9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1264,7 +1264,6 @@ F:	package/erlang-jose/
+ F:	package/erlang-lager/
+ F:	package/erlang-p1-acme/
+ F:	package/erlang-p1-cache-tab/
+-F:	package/erlang-p1-iconv/
+ F:	package/erlang-p1-mqtree/
+ F:	package/erlang-p1-oauth2/
+ F:	package/erlang-p1-pkix/
