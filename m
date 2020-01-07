@@ -1,51 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  7 Jan 2020 18:12:48 +0100
-Subject: [Buildroot] [PATCH] package/libselinux: fix python module install
- patch
-Message-ID: <20200107171248.15904-1-yann.morin.1998@free.fr>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Tue, 7 Jan 2020 22:46:15 +0530
+Subject: [Buildroot] [PATCH v5 2/2] package/python-scipy: new package
+In-Reply-To: <20190930084326.4414-2-esben@geanix.com>
+References: <20190930084326.4414-1-esben@geanix.com>
+ <20190930084326.4414-2-esben@geanix.com>
+Message-ID: <CAMty3ZCObAUJ+j1zfKdNUvmwsYkCHdy5LPi8iuDKdQQ_bsMKbg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 2768a0eb4 (package/libselinux: add dependency on
-host-coreutils for ln --relative), we dropped a previous patch
-which touched the same line, so the python module install patch
-no longer applies.
+On Mon, Sep 30, 2019 at 2:13 PM Esben Haabendal <esben@geanix.com> wrote:
+>
+> See http://scipy.github.io/devdocs/building/linux.html
+> for SciPy build requirements:
+>
+>     * BLAS and LAPACK libraries
+>     * C and Fortran compilers
+>     * Python header files
+>     * Cython compiler
+>
+> For now, clapack package is used to provide both BLAS and LAPACK libraries, as
+> that is what is supported by the current python-numpy recipe which
+> python-scipy depends on.
+>
+> With additional work, it should be possible to improve both python-numpy and
+> python-scipy to support other BLAS and LAPACK library implementations, but it
+> is probably best to keep such changes aligned.
+>
+> A site.cfg file is used to configure numpy distutils extension to find include
+> files and libraries in stagging.
+>
+> Note, host-python-numpy is needed in order to use numpy distutils extension
+> from it.
+>
+> Signed-off-by: Esben Haabendal <esben@geanix.com>
+> ---
 
-Rather than drop use of ln --relative, which we now have (and
-which was all that fuss was for), just drop the use of the PYCEXT
-use altogether.
+Thanks for the great work.
 
-Fixes:
-  - http://autobuild.buildroot.org/results/c8f/c8fe5b47e422bac13b4d5fa10bd1ee5218021585/ (host)
-  - http://autobuild.buildroot.org/results/402/4026a34c6c096354ba99e8c202210428fa2795d2/ (target)
+Tested the build via arm64 configuration and verified import in sample
+python test.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- ...Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libselinux/0006-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch b/package/libselinux/0006-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-index 57cc151e70..c960e1db7e 100644
---- a/package/libselinux/0006-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-+++ b/package/libselinux/0006-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-@@ -37,8 +37,8 @@ index 799df2b0..95684ed7 100644
-  install-pywrap: pywrap
-  	$(PYTHON) setup.py install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-  	install -m 644 $(SWIGPYOUT) $(DESTDIR)$(PYTHONLIBDIR)/selinux/__init__.py
---	cd $(DESTDIR)$(PYTHONLIBDIR) && ln -sf selinux/_selinux$(PYCEXT) _selinux$(PYCEXT)
--+	cd $(DESTDIR)$(PYTHONLIBDIR) && ln -sf selinux/_selinux*.so .
-+-	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux$(PYCEXT) $(DESTDIR)$(PYTHONLIBDIR)/_selinux$(PYCEXT)
-++	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux*.so $(DESTDIR)$(PYTHONLIBDIR)/
-  
-  install-rubywrap: rubywrap
-  	test -d $(DESTDIR)$(RUBYINSTALL) || install -m 755 -d $(DESTDIR)$(RUBYINSTALL) 
--- 
-2.20.1
+Tested-by: Jagan Teki <jagan@amarulasolutions.com>
