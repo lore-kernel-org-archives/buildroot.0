@@ -1,28 +1,32 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue,  7 Jan 2020 13:18:02 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/ejabberd: add hash for license
- file
-In-Reply-To: <20200107114801.25624-2-johan.oudinet@gmail.com>
-References: <20200107114801.25624-2-johan.oudinet@gmail.com>
-Message-ID: <20200107121802.30730-1-johan.oudinet@gmail.com>
+From: Mehmet Sami Tok <mehmetsamitok@gmail.com>
+Date: Tue,  7 Jan 2020 15:32:08 +0300
+Subject: [Buildroot] [PATCH 0/1] remove optimize by default while using qmake
+Message-ID: <20200107123209.6608-1-mehmetsamitok@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
----
- package/ejabberd/ejabberd.hash | 1 +
- 1 file changed, 1 insertion(+)
+When building qt projects with debug configuration on a host computer,
+applications build with optimization even if not configured to.
 
-diff --git a/package/ejabberd/ejabberd.hash b/package/ejabberd/ejabberd.hash
-index 277ae06107..145e7401a9 100644
---- a/package/ejabberd/ejabberd.hash
-+++ b/package/ejabberd/ejabberd.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256 18ddf61af22fc9b59f8afc6835aae2aee9896eb91cc1030056d6bca6a1fa40d2 ejabberd-19.09.1.tgz
-+sha256 469bb8cfa3ef22c102875ff31932450c075e6908ff3f7d36893485c0c30898eb COPYING
+Optimization flags in TARGET_CFLAGS are passed as default build
+arguments of qt build commands. If they are not overriden or removed
+manually from build arguments, any project build with optimization
+level of root file system by default.
+
+So I filtered optimization flags which are passed to "config.opt"
+first, then made into "mkspecs/qdevice.pri".
+
+Signed-off-by: Mehmet Sami TOK <mehmetsamitok@gmail.com>
+
+Mehmet Sami Tok (1):
+  package/qt5: remove optimize by default on debug builds made with
+    qmake
+
+ package/qt5/qt5base/qt5base.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
 -- 
-2.20.1
+2.17.1
