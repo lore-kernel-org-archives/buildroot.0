@@ -1,45 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Jan 2020 21:01:36 +0100
-Subject: [Buildroot] [git commit] configs/imx6ulevk: Bump the kernel version
-Message-ID: <20200107195916.6EBF583622@busybox.osuosl.org>
+Date: Tue, 7 Jan 2020 21:06:23 +0100
+Subject: [Buildroot] [git commit] configs/olimex_a20_olinuxino_lime*: bump
+ kernel version
+Message-ID: <20200107195916.93DB283622@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b17635cb220d8320154e69fb606f158d40a6cce9
+commit: https://git.buildroot.net/buildroot/commit/?id=96c1f8cad724a7e37b521d90a3b7a63737ea3971
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump the kernel version to 5.4.8.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/imx6ulevk_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ configs/olimex_a20_olinuxino_lime2_defconfig | 6 +++---
+ configs/olimex_a20_olinuxino_lime_defconfig  | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/configs/imx6ulevk_defconfig b/configs/imx6ulevk_defconfig
-index 9e30d2c3c4..53381d71a7 100644
---- a/configs/imx6ulevk_defconfig
-+++ b/configs/imx6ulevk_defconfig
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index b944f222c1..21b681a1fb 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
 @@ -3,8 +3,8 @@ BR2_arm=y
  BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+ BR2_ARM_EABIHF=y
  
--# Linux headers same as kernel, a 4.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
+-# Linux headers same as kernel, a 4.19 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
 +# Linux headers same as kernel, a 5.4 series
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
  
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # kernel
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.11"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.78"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-14x14-evk"
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index dae7ac7138..029f9ebad3 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ 
+-# Linux headers same as kernel, a 4.19 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.78"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
