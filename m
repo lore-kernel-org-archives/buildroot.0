@@ -1,118 +1,49 @@
-From: Frederick Gotham <cauldwell.thomas@gmail.com>
-Date: Tue, 7 Jan 2020 08:28:39 +0000
-Subject: [Buildroot] Header is nine years old
-In-Reply-To: <20200106213317.693ae331@windsurf>
-References: <XnsAB3CA67D5979Efgotham@195.159.176.226>
- <20200106213317.693ae331@windsurf>
-Message-ID: <CALtZhhMC1gi4ER0CVTAmT1dkkgOXQ_MMrTXxMAxCUPEzCX3+iQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 7 Jan 2020 09:32:45 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/mmc-utils: fix
+ build with SSP
+Message-ID: <20200107082433.DF65A83287@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4cd38597061c293115c43c81f07bac09ff4a8361
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-> "You need to give more details about the Barebox failure you're seeing"
+Set AM_CFLAGS to an empty value to avoid the following redefinition
+error when building with our custom _FORTIFY_SOURCE:
 
+/accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/host/bin/mips-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Werror -Wuninitialized -Wundef -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_FORTIFY_SOURCE=1 -Wp,-MMD,3rdparty/hmac_sha/.hmac_sha2.o.d,-MT,3rdparty/hmac_sha/hmac_sha2.o -c 3rdparty/hmac_sha/hmac_sha2.c -o 3rdparty/hmac_sha/hmac_sha2.o
+<command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
 
-Here's the exact output:
+Fixes:
+ - http://autobuild.buildroot.org/results/cfef9315441b5f4909b58a6dccd8bea8e67ae992
 
->>> barebox 2019.12.0 Configuring
->>> barebox 2019.12.0 Building
-/opt/src/build/output/host/bin/x86_64-buildroot-linux-gnu-gcc
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
-  -o /opt/src/build/output/build/barebox-2019.12.0/bareboxenv
-/opt/src/build/output/build/barebox-2019.12.0/scripts/bareboxenv.c
-/opt/src/build/output/build/barebox-2019.12.0/scripts/bareboxenv.c:100:10:
-fatal error: linux/list.h: No such file or directory
- #include <linux/list.h>
-          ^~~~~~~~~~~~~~
-compilation terminated.
-package/pkg-generic.mk:238: recipe for target
-'/opt/src/build/output/build/barebox-2019.12.0/.stamp_built' failed
-make: *** [/opt/src/build/output/build/barebox-2019.12.0/.stamp_built] Error 1
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 05a802f671875d12bfc6282aeaf2b765e4a18962)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mmc-utils/mmc-utils.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-
-So if I then open up the file "bareboxenv.c", and navigate to line
-#100, I see that it includes a load of headers. Here are the lines #93
-- 122:
-
-static char *concat_subpath_file(const char *path, const char *f)
-{
-	if (f && DOT_OR_DOTDOT(f))
-		return NULL;
-	return concat_path_file(path, f);
-}
-
-#include <linux/list.h>
-#include <linux/list_sort.h>
-#include "../lib/list_sort.c"
-#include "../lib/recursive_action.c"
-#include "../include/envfs.h"
-#include "../crypto/crc32.c"
-#include "../lib/make_directory.c"
-#include "../common/environment.c"
-
-static void usage(char *prgname)
-{
-	printf( "Usage : %s [OPTION] DIRECTORY FILE\n"
-		"Load a barebox environment sector into a directory or\n"
-		"save a directory into a barebox environment sector\n"
-		"\n"
-		"options:\n"
-		"  -s        save (directory -> environment sector)\n"
-		"  -z        force the built-in default environment at startup\n"
-		"  -l        load (environment sector -> directory)\n"
-		"  -p <size> pad output file to given size\n"
-		"  -v        verbose\n",
-		prgname);
-}
-
-
-
-
-On 1/6/20, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> Hello Frederick,
->
-> On Mon, 6 Jan 2020 16:21:59 -0000 (UTC)
-> Frederick Gotham <cauldwell.thomas@gmail.com> wrote:
->
->> The following header file:
->>
->>     #include <linux/list.h>
->>
->> was added to the Github for the Linux kernel in May 2011. That was 9 years
->>
->> ago.
->
-> This is an internal kernel header.
->
->> So on my Buildroot setup, I navigate to this directory:
->>
->>
->> build/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/linux
->
-> This only contains the kernel headers exposed to userspace, i.e the
-> UAPI (user-space API). There is absolutely no reason for list.h to be
-> in there.
->
->> And I check to see if "list.h" is in there. It's not there, and this is
->> why I
->> am unable to build the latest version of Barebox.
->>
->> Anyone got any idea why that header file isn't in there?
->
-> You need to give more details about the Barebox failure you're seeing:
-> which version you're trying to build, what is the build error. But the
-> error is clearly not due to <linux/list.h> being missing from the
-> compiler sysroot.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+index 286e73b242..8c264a454a 100644
+--- a/package/mmc-utils/mmc-utils.mk
++++ b/package/mmc-utils/mmc-utils.mk
+@@ -9,8 +9,12 @@ MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
+ MMC_UTILS_LICENSE = GPL-2.0
+ MMC_UTILS_LICENSE_FILES = mmc.h
+ 
++# override AM_CFLAGS as the project Makefile uses it to pass
++# -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2, and the latter conflicts
++# with the _FORTIFY_SOURCE that we pass when hardening options are
++# enabled.
+ define MMC_UTILS_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) AM_CFLAGS=
+ endef
+ 
+ define MMC_UTILS_INSTALL_TARGET_CMDS
