@@ -1,44 +1,58 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Tue,  7 Jan 2020 12:03:43 +0100
-Subject: [Buildroot] [PATCH] package/cryptsetup: update to version 2.2.2
-Message-ID: <20200107110343.12111-1-p.debruijn@unilogic.nl>
+From: Jerry Huang <jerry.huang@nxp.com>
+Date: Tue, 7 Jan 2020 08:11:20 +0000
+Subject: [Buildroot] [EXT] Re: [PATCH v3 9/9] configs/nxp_ls1028ardb*:
+ new board
+In-Reply-To: <CA+h21hqX-R2ks1ACMXyS9kMFBKcgLU68Z-yoiB82fb3dvfF7WA@mail.gmail.com>
+References: <20191127071720.15623-1-jerry.huang@nxp.com>
+ <20191127071720.15623-9-jerry.huang@nxp.com>
+ <CA+h21hqX-R2ks1ACMXyS9kMFBKcgLU68Z-yoiB82fb3dvfF7WA@mail.gmail.com>
+Message-ID: <VI1PR04MB51364975EDFE241E042611CDFE3F0@VI1PR04MB5136.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
----
- package/cryptsetup/cryptsetup.hash | 4 ++--
- package/cryptsetup/cryptsetup.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi, Vlamidir,
+sure
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index 748ea0e..175ecf3 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
--# From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/sha256sums.asc
--sha256 7c51fae0f0e7ea9af0f515b2ac77009fb2969a6619ebab47d097dca38b083d30  cryptsetup-2.0.6.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.2/sha256sums.asc
-+sha256 2af0ec9551ab9c870074cae9d3f68d82cab004f4095fa89db0e4413713424a46  cryptsetup-2.2.2.tar.xz
- sha256 45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256 8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index b6d4df6..197f5f2 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CRYPTSETUP_VERSION_MAJOR = 2.0
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
-+CRYPTSETUP_VERSION_MAJOR = 2.2
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).2
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c libargon2 \
--- 
-2.7.4
+Best Regards
+Jerry Huang
+
+> -----Original Message-----
+> From: Vladimir Oltean <olteanv@gmail.com>
+> Sent: Tuesday, December 24, 2019 8:48 PM
+> To: Jerry Huang <jerry.huang@nxp.com>
+> Cc: buildroot at busybox.net; Michael Walle <michael@walle.cc>;
+> geomatsi at gmail.com; Matthew Weber <matthew.weber@collins.com>;
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Subject: [EXT] Re: [Buildroot] [PATCH v3 9/9] configs/nxp_ls1028ardb*: new
+> board
+> 
+> Caution: EXT Email
+> 
+> Hi Jerry,
+> 
+> On Wed, 27 Nov 2019 at 09:18, Changming Huang <jerry.huang@nxp.com>
+> wrote:
+> >
+> > This is to support Freescale/NXP LS1028ARDB in Buildroot.
+> > The board is setup to track the Linux at 4.19 via NXP LSDK-19.09.
+> >
+> > The target will build uboot and RCW binary with arm-trusted-firmware
+> support.
+> >
+> > board/nxp/ls1028ardb/: scripts related with ls1028ardb
+> > nxp_ls1028ardb-64b-emmc_defconfig: defconfig boot from emmc chip on
+> board
+> > nxp_ls1028ardb-64b_defconfig: defconfig boot from SD card
+> > nxp_ls1028ardb-64b-xspi_defconfig: defconfig boot from FlexSPI chip on board
+> >
+> > Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+> > ---
+> 
+> It looks like this series has stagnated. Do you think you can repost a
+> v4 with the feedback received so far?
+> 
+> Thanks,
+> -Vladimir
