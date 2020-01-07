@@ -1,39 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 7 Jan 2020 21:27:47 +0100
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/leveldb: fix static build with -latomic
-In-Reply-To: <20191227094000.374160-2-fontaine.fabrice@gmail.com>
-References: <20191227094000.374160-1-fontaine.fabrice@gmail.com>
- <20191227094000.374160-2-fontaine.fabrice@gmail.com>
-Message-ID: <20200107212747.63e8269b@windsurf>
+Date: Tue, 7 Jan 2020 21:30:54 +0100
+Subject: [Buildroot] [git commit] package/mesa3d: fix gallium nouveau driver
+ with gcc 4.9
+Message-ID: <20200107202107.38BF983720@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 27 Dec 2019 10:40:00 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a57aceb472e1e6017a4f1b7e391337296816df01
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Drop workaround and use an upstreamable solution to link with -latomic
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/01d5a50581ac9e9b46f40e6f9665f74897db5e6f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...keLists.txt-check-for-atomic-library.patch | 49 +++++++++++++++++++
->  package/leveldb/leveldb.mk                    |  4 --
->  2 files changed, 49 insertions(+), 4 deletions(-)
->  create mode 100644 package/leveldb/0003-CMakeLists.txt-check-for-atomic-library.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/599dc3478ed65d36fbf9f5e9625691dfa813b530
 
-Applied to master, thanks. Seems like a good approach that we should
-probably use on other CMake-based packages.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch b/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
+new file mode 100644
+index 0000000000..73e75993de
+--- /dev/null
++++ b/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
+@@ -0,0 +1,47 @@
++From f2ce27b761eeca301a109856f20ed9a8eb06796d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 28 Dec 2019 21:49:43 +0100
++Subject: [PATCH] src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: prefix
++ isinf with std::
++
++Prefix isinf with std:: to fix the following build failure with gcc 4.9:
++
++../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: In member function 'bool nv50_ir::GCRA::simplify()':
++../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1350:29: error: 'isinf' was not declared in this scope
++          if (isinf(bestScore)) {
++                             ^
++../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1350:29: note: suggested alternative:
++In file included from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/random:38:0,
++                 from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/bits/stl_algo.h:66,
++                 from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/algorithm:62,
++                 from ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:26:
++/data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/cmath:621:5: note:   'std::isinf'
++     isinf(_Tp __x)
++     ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/599dc3478ed65d36fbf9f5e9625691dfa813b530
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3227]
++---
++ src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
++index 6df2664da22..e81fb117213 100644
++--- a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
+++++ b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
++@@ -1345,7 +1345,7 @@ GCRA::simplify()
++                bestMaxReg = it->maxReg;
++             }
++          }
++-         if (isinf(bestScore)) {
+++         if (std::isinf(bestScore)) {
++             ERROR("no viable spill candidates left\n");
++             return false;
++          }
++-- 
++2.24.0
++
