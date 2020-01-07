@@ -1,136 +1,154 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Jan 2020 22:12:15 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/boost:
- boost-thread needs a toolchain without bug 64735
-Message-ID: <20200107210624.BBB6F839CB@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 Jan 2020 22:20:16 +0100
+Subject: [Buildroot] [PATCHv2] toolchain/external: allow custom
+ toolchains to use newer headers
+In-Reply-To: <298831776.602613.1578355454140.JavaMail.zimbra@xes-inc.com>
+References: <20200106201012.11214-1-yann.morin.1998@free.fr>
+ <20200106204111.GG2721@scaer>
+ <298831776.602613.1578355454140.JavaMail.zimbra@xes-inc.com>
+Message-ID: <20200107212016.GA8086@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=697f6a7c1b762590bde47682902477ac122c56f2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+Aaron, Vincent, All,
 
-boost-thread needs std::current_exception since version 1.71.0 and
-https://github.com/boostorg/exception/commit/386f5507cb8ec99c03ca535bea4f8bd61e0de910
+On 2020-01-06 18:04 -0600, Aaron Sierra spake thusly:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > On 2020-01-06 21:10 +0100, Yann E. MORIN spake thusly:
+> >> From: Vincent Fazio <vfazio@xes-inc.com>
+> >> When Buildroot is released, it knows up to a certain kernel header
+> >> version, and no later. However, it is possible that an external
+> >> toolchain will be used, that uses headers newer than the latest
+> >> version Buildroot knows about.
+> Vincent and I were looking through your v2 patch and started putting
+> together a truth table. I finished it after he left for the day, so be
+> aware that he hasn't reviewed it at this point:
 
-std::current_exception depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 as a
-result, gnuradio fails to build on:
+Thanks for the feedback and the complete tables. :-)
 
-[ 12%] Building CXX object gnuradio-runtime/lib/pmt/CMakeFiles/gnuradio-pmt.dir/pmt_pool.cc.o
-In file included from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/detail/exception_ptr.hpp:15:0,
-                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception_ptr.hpp:9,
-                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/thread/exceptional_ptr.hpp:10,
-                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/thread/future.hpp:34,
-                 from /home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/thread.hpp:24,
-                 from /home/test/autobuild/run/instance-2/output-1/build/gnuradio-3.7.13.5/gnuradio-runtime/include/pmt/pmt_pool.h:27,
-                 from /home/test/autobuild/run/instance-2/output-1/build/gnuradio-3.7.13.5/gnuradio-runtime/lib/pmt/pmt.cc:31:
-/home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp: In function 'std::string boost::current_exception_diagnostic_information(bool)':
-/home/test/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp:49:26: error: 'current_exception' is not a member of 'std'
-         else if (auto* p=std::current_exception().__cxa_exception_type())
-                          ^
-So add this dependency on boost-thread, boost-log and gnuradio (the only
-reverse dependencies of boost-thread that does not already depends on
-!BR2_TOOLCHAIN_HAS_GCC_BUG_64735)
+> = equals latest BR is aware
+> < less than latest BR is aware
+> > greater than latest BR is aware
+> 
+> building   | selected | toolchain | OK?
+> toolchain? | headers  | headers   |
+> -------------------------------------------
+> no         | =        |  =        | yes
+> no         | =        |  <        | no (user lied about toolchain headers)
+> no         | =        |  >        | yes (primary goal of patchset)
+> no         | <        |  =        | no (for BR support purposes)
+> no         | <        |  <        | yes, if equal (for BR support purposes)
+> no         | <        |  >        | no (for BR support purposes)
+> no         | >        |  =        | not possible
+> no         | >        |  <        | not possible
+> no         | >        |  >        | not possible
+> yes        | =        |  =        | yes (non-custom are self-consistent)
+> 
+> These are all custom kernel headers.
+> 
+> yes        | =        |  <        | no (user lied about toolchain headers)
+> yes        | =        |  >        | yes (desirable side-effect of primary goal)
+> yes        | <        |  =        | no (for BR support purposes)
+> yes        | <        |  <        | yes, if equal (for BR support purposes)
+> yes        | <        |  >        | no (for BR support purposes)
+> yes        | >        |  =        | not possible
+> yes        | >        |  <        | not possible
+> yes        | >        |  >        | not possible
 
-Finally, add this dependency on gqrx as it is a reverse dependency of
-gnuradio
+Those tables are based on comparing the latest version known to
+Buildroot, with the selected version and the actual version.
 
-Fixes:
- - http://autobuild.buildroot.org/results/c384205cf50929c320d90b620f2390837721d9f9
- - http://autobuild.buildroot.org/results/47440354b336b943b74b72fa303b079dc962bfd0
+What we really want to test in Buildroot, is that he selected version is
+the same as the actual version. This is the core of the check.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d7e49f5f42881f8781e7a8add6e0114af0bd9511)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/boost/Config.in    | 8 ++++++++
- package/gnuradio/Config.in | 4 ++++
- package/gqrx/Config.in     | 4 ++++
- 3 files changed, 16 insertions(+)
+Now we want to relax that check a little, when the latest version is
+custom and higher than the actual version and the latest know to
+Buildroot.
+So the logic is as such:
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 392d7424fb..a053b776fd 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -202,6 +202,7 @@ comment "boost-locale needs a toolchain w/ dynamic library"
- config BR2_PACKAGE_BOOST_LOG
- 	bool "boost-log"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
- 	select BR2_PACKAGE_BOOST_ATOMIC
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
-@@ -214,6 +215,9 @@ config BR2_PACKAGE_BOOST_LOG
- comment "boost-log needs a toolchain w/ NPTL"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
-+comment "boost-log needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_BOOST_MATH
- 	bool "boost-math"
- 	help
-@@ -304,12 +308,16 @@ config BR2_PACKAGE_BOOST_TEST
- 
- config BR2_PACKAGE_BOOST_THREAD
- 	bool "boost-thread"
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
- 	select BR2_PACKAGE_BOOST_ATOMIC if !BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	select BR2_PACKAGE_BOOST_CHRONO
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	help
- 	  Portable C++ multi-threading. C++11, C++14.
- 
-+comment "boost-thread needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_BOOST_TIMER
- 	bool "boost-timer"
- 	select BR2_PACKAGE_BOOST_CHRONO
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 80f6a1c535..442b86c692 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -4,6 +4,9 @@ comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 
-+comment "gnuradio needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_GNURADIO
- 	bool "gnuradio"
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -12,6 +15,7 @@ config BR2_PACKAGE_GNURADIO
- 	depends on BR2_USE_MMU # use fork()
- 	depends on BR2_USE_WCHAR # boost
- 	depends on !BR2_PACKAGE_PYTHON3
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
-diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-index b0d7e7b9f3..990d594c6a 100644
---- a/package/gqrx/Config.in
-+++ b/package/gqrx/Config.in
-@@ -8,6 +8,9 @@ comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
- comment "gqrx needs qt5"
- 	depends on !BR2_PACKAGE_QT5
- 
-+comment "gqrx needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_GQRX
- 	bool "gqrx"
- 	depends on BR2_USE_MMU # gnuradio
-@@ -18,6 +21,7 @@ config BR2_PACKAGE_GQRX
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_QT5
- 	depends on !BR2_PACKAGE_PYTHON3
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # gnuradio
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
- 	select BR2_PACKAGE_BOOST_SYSTEM
+    if selected version == actual version:
+        return OK
+
+    if not latest:
+        return KO
+
+    if selected version < actual version:
+        return OK
+
+    return KO
+
+> >> +        ret = ((l >= h ) && ("${CHECK}"[0] == 'l')) ? 0 : 1;
+> 
+> Based on the truth table and descriptive summaries, this test appears to be
+> inverted for the case that Vincent and I are most interested in. This version
+> is subtly different, but seems easier to maintain to me:
+
+I tested this script as follows, with sysroot set to '' (empty) to use
+my distros' headers, which are 5.0.0:
+
+    $ HOSTCC=gcc ./support/scripts/check-kernel-headers.sh /home/ymorin/dev/buildroot/buildroot  4.9.0 loose; echo $?
+    Incorrect selection of kernel headers: expected 4.9.x, got 5.0.x
+    0
+    $ HOSTCC=gcc ./support/scripts/check-kernel-headers.sh /home/ymorin/dev/buildroot/buildroot  5.0.0 loose; echo $?
+    0
+    $ HOSTCC=gcc ./support/scripts/check-kernel-headers.sh /home/ymorin/dev/buildroot/buildroot  5.1.0 loose; echo $?
+    Incorrect selection of kernel headers: expected 5.1.x, got 5.0.x
+    1
+    $ HOSTCC=gcc ./support/scripts/check-kernel-headers.sh /home/ymorin/dev/buildroot/buildroot  4.9.0 strict; echo $?
+    Incorrect selection of kernel headers: expected 4.9.x, got 5.0.x
+    1
+    $ HOSTCC=gcc ./support/scripts/check-kernel-headers.sh /home/ymorin/dev/buildroot/buildroot  5.0.0 strict; echo $?
+    0
+    $ HOSTCC=gcc ./support/scripts/check-kernel-headers.sh /home/ymorin/dev/buildroot/buildroot  5.1.0 strict; echo $?
+    Incorrect selection of kernel headers: expected 5.1.x, got 5.0.x
+    1
+
+So as far as I can see, this script has the expected behaviour, with the
+first case equivalent to what you expect (custom headers newer than
+latest version known to BR).
+
+>    +        if ("${CHECK}"[0] == 's' || (l > h))
+>    +                ret = 1;
+
+Actually, I think you got it wrong: 'l' is the actual version, and 'h'
+is the version specified by the user, so you want to allow that.
+
+Of course, I may have entirely missed something (which seems to be quite
+usual these days...)
+
+> [snip]
+> >> diff --git
+> >> a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> >> b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> >> index 665765a104..ed0a1b4421 100644
+> >> --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> >> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> >> @@ -92,6 +92,13 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
+> >>  
+> >>  endchoice
+> >>  
+> >> +# This should be selected by a single version, below, to indicate that
+> >> +# Buildroot does not know of mor erecent headers than the ones selected.
+> 
+> I'm sure you meant "more recent" ;)
+
+I've reworked that part in the new commit, and the code has moved
+somewhere else, and this comment is no longer needed.
+
+Thanks for the review! :-)
+
+Regards,
+Yann E. MORIN.
+
+> Aaron
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
