@@ -1,188 +1,58 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 7 Jan 2020 18:30:55 +0100
-Subject: [Buildroot] Header is nine years old
-In-Reply-To: <20200107103959.025a9581@gmx.net>
-References: <XnsAB3CA67D5979Efgotham@195.159.176.226>
- <20200106213317.693ae331@windsurf>
- <CALtZhhMC1gi4ER0CVTAmT1dkkgOXQ_MMrTXxMAxCUPEzCX3+iQ@mail.gmail.com>
- <20200107103959.025a9581@gmx.net>
-Message-ID: <20200107183055.0a52268a@gmx.net>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 7 Jan 2020 09:32:56 -0800
+Subject: [Buildroot] [PATCH] package/libselinux: fix python module
+ install patch
+In-Reply-To: <20200107171248.15904-1-yann.morin.1998@free.fr>
+References: <20200107171248.15904-1-yann.morin.1998@free.fr>
+Message-ID: <CAFSsvmrfiPWpk1m-Laz-ZreQeyFub=zVeBO2MqsxQx+OGbwATw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Frederick,
+reviewed-by: Adam Duskett <aduskett@gmail.com>
 
-On Tue, 7 Jan 2020 10:39:59 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
-
-> Hello Frederick,
+On Tue, Jan 7, 2020 at 9:12 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> On Tue, 7 Jan 2020 08:28:39 +0000, Frederick Gotham <cauldwell.thomas@gmail.com> wrote:
+> Since commit 2768a0eb4 (package/libselinux: add dependency on
+> host-coreutils for ln --relative), we dropped a previous patch
+> which touched the same line, so the python module install patch
+> no longer applies.
 >
-> > Thomas Petazzoni wrote:
-> >
-> > > "You need to give more details about the Barebox failure you're seeing"
-> >
-> >
-> > Here's the exact output:
-> >
-> > >>> barebox 2019.12.0 Configuring
-> > >>> barebox 2019.12.0 Building
-> > /opt/src/build/output/host/bin/x86_64-buildroot-linux-gnu-gcc
-> > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
-> >   -o /opt/src/build/output/build/barebox-2019.12.0/bareboxenv
-> > /opt/src/build/output/build/barebox-2019.12.0/scripts/bareboxenv.c
-> > /opt/src/build/output/build/barebox-2019.12.0/scripts/bareboxenv.c:100:10:
-> > fatal error: linux/list.h: No such file or directory
-> >  #include <linux/list.h>
-> >           ^~~~~~~~~~~~~~
+> Rather than drop use of ln --relative, which we now have (and
+> which was all that fuss was for), just drop the use of the PYCEXT
+> use altogether.
 >
-> This include was introduced in barebox by commit 'recursive_action: add ACTION_SORT flag'
-> from 2019-01-08 ([1]), so maybe more a barebox than a buildroot question...
+> Fixes:
+>   - http://autobuild.buildroot.org/results/c8f/c8fe5b47e422bac13b4d5fa10bd1ee5218021585/ (host)
+>   - http://autobuild.buildroot.org/results/402/4026a34c6c096354ba99e8c202210428fa2795d2/ (target)
 >
-> Maybe you can avoid the problem by changing the barebox version (by using a pre 2019-01-08
-> version), or by changing your barebox/buildroot config (disabling bareboxenv)?
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Adam Duskett <aduskett@gmail.com>
+> Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+> Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+> ---
+>  ...Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> Without reproducing the problem but looking at the commit you could try to change
-> the lines (totally untested)
+> diff --git a/package/libselinux/0006-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch b/package/libselinux/0006-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
+> index 57cc151e70..c960e1db7e 100644
+> --- a/package/libselinux/0006-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
+> +++ b/package/libselinux/0006-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
+> @@ -37,8 +37,8 @@ index 799df2b0..95684ed7 100644
+>   install-pywrap: pywrap
+>         $(PYTHON) setup.py install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
+>         install -m 644 $(SWIGPYOUT) $(DESTDIR)$(PYTHONLIBDIR)/selinux/__init__.py
+> --      cd $(DESTDIR)$(PYTHONLIBDIR) && ln -sf selinux/_selinux$(PYCEXT) _selinux$(PYCEXT)
+> -+      cd $(DESTDIR)$(PYTHONLIBDIR) && ln -sf selinux/_selinux*.so .
+> +-      ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux$(PYCEXT) $(DESTDIR)$(PYTHONLIBDIR)/_selinux$(PYCEXT)
+> ++      ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux*.so $(DESTDIR)$(PYTHONLIBDIR)/
 >
-> 	#include <linux/list.h>
-> 	#include <linux/list_sort.h>
+>   install-rubywrap: rubywrap
+>         test -d $(DESTDIR)$(RUBYINSTALL) || install -m 755 -d $(DESTDIR)$(RUBYINSTALL)
+> --
+> 2.20.1
 >
-> to (or similar)
->
-> 	#include <../include/linux/list.h>
-> 	#include <../include/linux/list_sort.h>
->
-> as the barebox sources carry a copy of the linux kernel include files...
-
-Suggestion maybe nonsens as another copy of the linux kenrnel include files
-(or part of) is stored in the barebox-2019.12.0/scripts/include/linux
-directory...
-
->
-> Please provide your buildroot/barebox config file for further help and/or
-> report your problem upstream (barebox at lists.infradead.org, [2])
-
-I can reproduce your problem using buildroot raspberrypi3_defconfig and
-enabling barebox with the rpi_defconfig and BR2_TARGET_BAREBOX_BAREBOXENV
-enabled...., disabling BR2_TARGET_BAREBOX_BAREBOXENV avoids the list.h/list_sort.h
-problem....
-
-But later the buildroot/barebox install step fails with:
-
->>> barebox 2019.12.0 Installing to images directory
-if test -n ""; then cp -L  .../images ; elif test -h .../build/barebox-2019.12.0/barebox-flash-image ; then cp -L .../build/barebox-2019.12.0/barebox-flash-image .../images/barebox.bin ; else cp .../build/barebox-2019.12.0/barebox.bin .../images; fi
-cp: cannot stat '.../build/barebox-2019.12.0/barebox-flash-image': No such file or directory
-make[1]: *** [package/pkg-generic.mk:343: .../build/barebox-2019.12.0/.stamp_images_installed] Error 1
-make: *** [Makefile:23: _all] Error 2
-
-Regards,
-Peter
-
->
-> Regards,
-> Peter
->
-> [1] https://git.pengutronix.de/cgit/barebox/commit/?id=99c1263dce3902a8961bcdcac9398bce51fccd1b
-> [2] http://lists.infradead.org/mailman/listinfo/barebox
->
-> > compilation terminated.
-> > package/pkg-generic.mk:238: recipe for target
-> > '/opt/src/build/output/build/barebox-2019.12.0/.stamp_built' failed
-> > make: *** [/opt/src/build/output/build/barebox-2019.12.0/.stamp_built] Error 1
-> >
-> >
-> > So if I then open up the file "bareboxenv.c", and navigate to line
-> > #100, I see that it includes a load of headers. Here are the lines #93
-> > - 122:
-> >
-> > static char *concat_subpath_file(const char *path, const char *f)
-> > {
-> > 	if (f && DOT_OR_DOTDOT(f))
-> > 		return NULL;
-> > 	return concat_path_file(path, f);
-> > }
-> >
-> > #include <linux/list.h>
-> > #include <linux/list_sort.h>
-> > #include "../lib/list_sort.c"
-> > #include "../lib/recursive_action.c"
-> > #include "../include/envfs.h"
-> > #include "../crypto/crc32.c"
-> > #include "../lib/make_directory.c"
-> > #include "../common/environment.c"
-> >
-> > static void usage(char *prgname)
-> > {
-> > 	printf( "Usage : %s [OPTION] DIRECTORY FILE\n"
-> > 		"Load a barebox environment sector into a directory or\n"
-> > 		"save a directory into a barebox environment sector\n"
-> > 		"\n"
-> > 		"options:\n"
-> > 		"  -s        save (directory -> environment sector)\n"
-> > 		"  -z        force the built-in default environment at startup\n"
-> > 		"  -l        load (environment sector -> directory)\n"
-> > 		"  -p <size> pad output file to given size\n"
-> > 		"  -v        verbose\n",
-> > 		prgname);
-> > }
-> >
-> >
-> >
-> >
-> > On 1/6/20, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> > > Hello Frederick,
-> > >
-> > > On Mon, 6 Jan 2020 16:21:59 -0000 (UTC)
-> > > Frederick Gotham <cauldwell.thomas@gmail.com> wrote:
-> > >
-> > >> The following header file:
-> > >>
-> > >>     #include <linux/list.h>
-> > >>
-> > >> was added to the Github for the Linux kernel in May 2011. That was 9 years
-> > >>
-> > >> ago.
-> > >
-> > > This is an internal kernel header.
-> > >
-> > >> So on my Buildroot setup, I navigate to this directory:
-> > >>
-> > >>
-> > >> build/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/linux
-> > >
-> > > This only contains the kernel headers exposed to userspace, i.e the
-> > > UAPI (user-space API). There is absolutely no reason for list.h to be
-> > > in there.
-> > >
-> > >> And I check to see if "list.h" is in there. It's not there, and this is
-> > >> why I
-> > >> am unable to build the latest version of Barebox.
-> > >>
-> > >> Anyone got any idea why that header file isn't in there?
-> > >
-> > > You need to give more details about the Barebox failure you're seeing:
-> > > which version you're trying to build, what is the build error. But the
-> > > error is clearly not due to <linux/list.h> being missing from the
-> > > compiler sysroot.
-> > >
-> > > Best regards,
-> > >
-> > > Thomas
-> > > --
-> > > Thomas Petazzoni, CTO, Bootlin
-> > > Embedded Linux and Kernel engineering
-> > > https://bootlin.com
-> > >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
