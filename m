@@ -1,44 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Jan 2020 21:03:04 +0100
-Subject: [Buildroot] [git commit] configs/olimex_imx233_olinuxino: bump
- kernel version
-Message-ID: <20200107195916.8D75683631@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 7 Jan 2020 21:19:46 +0100
+Subject: [Buildroot] [git commit] package/ejabberd: add hash for license file
+Message-ID: <20200107201015.65C90836D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6deb6583403d347d25b32fe2949d292223bee90
+commit: https://git.buildroot.net/buildroot/commit/?id=fd42481b22e9cd6752bdfaf555aa1a3a91abc99c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/olimex_imx233_olinuxino_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/ejabberd/ejabberd.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
-index 232d9d0dce..26e5ad1393 100644
---- a/configs/olimex_imx233_olinuxino_defconfig
-+++ b/configs/olimex_imx233_olinuxino_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_arm926t=y
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-@@ -14,7 +14,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
- BR2_LINUX_KERNEL_DEFCONFIG="mxs"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/imx233_olinuxino/linux-wifi.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/package/ejabberd/ejabberd.hash b/package/ejabberd/ejabberd.hash
+index 277ae06107..145e7401a9 100644
+--- a/package/ejabberd/ejabberd.hash
++++ b/package/ejabberd/ejabberd.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256 18ddf61af22fc9b59f8afc6835aae2aee9896eb91cc1030056d6bca6a1fa40d2 ejabberd-19.09.1.tgz
++sha256 469bb8cfa3ef22c102875ff31932450c075e6908ff3f7d36893485c0c30898eb COPYING
