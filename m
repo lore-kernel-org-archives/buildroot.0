@@ -1,37 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Jan 2020 23:03:55 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/quota: fix NLS
- build
-Message-ID: <20200107220141.7AA8F83A90@busybox.osuosl.org>
+Date: Tue, 7 Jan 2020 23:12:47 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/ecryptfs-utils:
+ fix typo in Config.in comment
+Message-ID: <20200107220309.9B51A83AB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=060cedbb1b8c7fba2943abe99e1657938a599dcb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0c08ba372e6f08b8648914d661650195b384c7fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/9e40a5b97dcd52cdfbd11688426ecad70390d56b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7dc84d35b280193f3656bd1d39257bb1ed040567)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 39e3079b0bf1cddc83f0b0505101b62b905f0a02)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/quota/quota.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/ecryptfs-utils/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index aafce0d1e9..3921860264 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -11,6 +11,7 @@ QUOTA_LICENSE = GPL-2.0+
- QUOTA_LICENSE_FILES = COPYING
- # We're patching configure.ac
- QUOTA_AUTORECONF = YES
-+QUOTA_GETTEXTIZE = YES
- QUOTA_LIBS = $(TARGET_NLS_LIBS)
- QUOTA_CONF_OPTS = --disable-pie
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 6652d33e0e..eda884bd16 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -30,7 +30,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
  
+ 	  http://ecryptfs.org
+ 
+-comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
++comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynamic library"
+ 	depends on !BR2_microblaze
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on BR2_USE_MMU
