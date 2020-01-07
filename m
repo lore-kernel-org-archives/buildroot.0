@@ -1,156 +1,27 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 7 Jan 2020 10:39:59 +0100
-Subject: [Buildroot] Header is nine years old
-In-Reply-To: <CALtZhhMC1gi4ER0CVTAmT1dkkgOXQ_MMrTXxMAxCUPEzCX3+iQ@mail.gmail.com>
-References: <XnsAB3CA67D5979Efgotham@195.159.176.226>
- <20200106213317.693ae331@windsurf>
- <CALtZhhMC1gi4ER0CVTAmT1dkkgOXQ_MMrTXxMAxCUPEzCX3+iQ@mail.gmail.com>
-Message-ID: <20200107103959.025a9581@gmx.net>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Tue, 7 Jan 2020 11:47:35 +0100
+Subject: [Buildroot] [PATCH 00/22] Bump ejabberd to version 19.09.1
+In-Reply-To: <20200106213609.6b8b25ce@windsurf>
+References: <20200106161115.16524-1-johan.oudinet@gmail.com>
+ <20200106213609.6b8b25ce@windsurf>
+Message-ID: <CAJtjsKYeRmWdVQzrxqhG-7HeTAj7d++YZpLpKOt=DAJT2ozWnA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Frederick,
+Hi Thomas,
 
-On Tue, 7 Jan 2020 08:28:39 +0000, Frederick Gotham <cauldwell.thomas@gmail.com> wrote:
+On Mon, Jan 6, 2020 at 9:36 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> I fixed all those minor details, and applied. As I mentioned above, it
+> would be good to add the hash of the license file in all Erlang
+> packages that don't have it yet.
 
-> Thomas Petazzoni wrote:
->
-> > "You need to give more details about the Barebox failure you're seeing"
->
->
-> Here's the exact output:
->
-> >>> barebox 2019.12.0 Configuring
-> >>> barebox 2019.12.0 Building
-> /opt/src/build/output/host/bin/x86_64-buildroot-linux-gnu-gcc
-> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
->   -o /opt/src/build/output/build/barebox-2019.12.0/bareboxenv
-> /opt/src/build/output/build/barebox-2019.12.0/scripts/bareboxenv.c
-> /opt/src/build/output/build/barebox-2019.12.0/scripts/bareboxenv.c:100:10:
-> fatal error: linux/list.h: No such file or directory
->  #include <linux/list.h>
->           ^~~~~~~~~~~~~~
+Thanks for fixing all those mistakes. I'll add the hash for the
+license files and send a patch Today.
 
-This include was introduced in barebox by commit 'recursive_action: add ACTION_SORT flag'
-from 2019-01-08 ([1]), so maybe more a barebox than a buildroot question...
-
-Maybe you can avoid the problem by changing the barebox version (by using a pre 2019-01-08
-version), or by changing your barebox/buildroot config (disabling bareboxenv)?
-
-Without reproducing the problem but looking at the commit you could try to change
-the lines (totally untested)
-
-	#include <linux/list.h>
-	#include <linux/list_sort.h>
-
-to (or similar)
-
-	#include <../include/linux/list.h>
-	#include <../include/linux/list_sort.h>
-
-as the barebox sources carry a copy of the linux kernel include files...
-
-Please provide your buildroot/barebox config file for further help and/or
-report your problem upstream (barebox at lists.infradead.org, [2])
-
-Regards,
-Peter
-
-[1] https://git.pengutronix.de/cgit/barebox/commit/?id=99c1263dce3902a8961bcdcac9398bce51fccd1b
-[2] http://lists.infradead.org/mailman/listinfo/barebox
-
-> compilation terminated.
-> package/pkg-generic.mk:238: recipe for target
-> '/opt/src/build/output/build/barebox-2019.12.0/.stamp_built' failed
-> make: *** [/opt/src/build/output/build/barebox-2019.12.0/.stamp_built] Error 1
->
->
-> So if I then open up the file "bareboxenv.c", and navigate to line
-> #100, I see that it includes a load of headers. Here are the lines #93
-> - 122:
->
-> static char *concat_subpath_file(const char *path, const char *f)
-> {
-> 	if (f && DOT_OR_DOTDOT(f))
-> 		return NULL;
-> 	return concat_path_file(path, f);
-> }
->
-> #include <linux/list.h>
-> #include <linux/list_sort.h>
-> #include "../lib/list_sort.c"
-> #include "../lib/recursive_action.c"
-> #include "../include/envfs.h"
-> #include "../crypto/crc32.c"
-> #include "../lib/make_directory.c"
-> #include "../common/environment.c"
->
-> static void usage(char *prgname)
-> {
-> 	printf( "Usage : %s [OPTION] DIRECTORY FILE\n"
-> 		"Load a barebox environment sector into a directory or\n"
-> 		"save a directory into a barebox environment sector\n"
-> 		"\n"
-> 		"options:\n"
-> 		"  -s        save (directory -> environment sector)\n"
-> 		"  -z        force the built-in default environment at startup\n"
-> 		"  -l        load (environment sector -> directory)\n"
-> 		"  -p <size> pad output file to given size\n"
-> 		"  -v        verbose\n",
-> 		prgname);
-> }
->
->
->
->
-> On 1/6/20, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> > Hello Frederick,
-> >
-> > On Mon, 6 Jan 2020 16:21:59 -0000 (UTC)
-> > Frederick Gotham <cauldwell.thomas@gmail.com> wrote:
-> >
-> >> The following header file:
-> >>
-> >>     #include <linux/list.h>
-> >>
-> >> was added to the Github for the Linux kernel in May 2011. That was 9 years
-> >>
-> >> ago.
-> >
-> > This is an internal kernel header.
-> >
-> >> So on my Buildroot setup, I navigate to this directory:
-> >>
-> >>
-> >> build/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/linux
-> >
-> > This only contains the kernel headers exposed to userspace, i.e the
-> > UAPI (user-space API). There is absolutely no reason for list.h to be
-> > in there.
-> >
-> >> And I check to see if "list.h" is in there. It's not there, and this is
-> >> why I
-> >> am unable to build the latest version of Barebox.
-> >>
-> >> Anyone got any idea why that header file isn't in there?
-> >
-> > You need to give more details about the Barebox failure you're seeing:
-> > which version you're trying to build, what is the build error. But the
-> > error is clearly not due to <linux/list.h> being missing from the
-> > compiler sysroot.
-> >
-> > Best regards,
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Best,
+-- 
+Johan
