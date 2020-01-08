@@ -1,46 +1,41 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  8 Jan 2020 22:04:39 +0300
-Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: disable TEAP for
- internal TLS implementation
-Message-ID: <20200108190439.459316-1-geomatsi@gmail.com>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Wed,  8 Jan 2020 20:27:21 +0100
+Subject: [Buildroot] [PATCH] package/c-periphery: Bump version to 2.1.0
+Message-ID: <20200108192721.19685-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-EAP-TEAP support in hostapd/wpa_supplicant fails to build with internal
-TLS implementation. This patch disables TEAP support in wpa_supplicant
-when internal TLS implementation is selected. Similar fix for hostapd
-package has already been merged to Buildroot: see commit 47d14e3b1c20
-("package/hostapd: disable TEAP for internal TLS implementation").
-
-TEAP is still an experimental feature that is not recommmended for
-production use. Currently it should not be used for anything else
-than experimentation and interoperability testing. Those who needs
-experimenting with TEAP are encouraged to enable openssl in their
-buildroot configuration.
-
-Fixes:
-http://autobuild.buildroot.net/results/e83613c06041a60f89da787f4ebf876245713cd2/
-
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/c-periphery/c-periphery.hash | 4 ++--
+ package/c-periphery/c-periphery.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 4f95ea6276..c87494c2bf 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -112,7 +112,7 @@ WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf libopenssl
- WPA_SUPPLICANT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
- else
--WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
- WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
+diff --git a/package/c-periphery/c-periphery.hash b/package/c-periphery/c-periphery.hash
+index 8f3bd8a3da..244f8f60f1 100644
+--- a/package/c-periphery/c-periphery.hash
++++ b/package/c-periphery/c-periphery.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 50665a4f298b30e4cc8f7dbd38362fd860cc3746803d00325cb04806674e3166  c-periphery-1.1.3.tar.gz
+-sha256 6b5669a90260126f0600aae98cb10fb5e219269dc9cbd0137f63927b96d5c31d  LICENSE
++sha256 1c455c42b26818d199ac227cd19714f265623e15d363fdfdf47a2416a4165654  c-periphery-2.1.0.tar.gz
++sha256 e7b9464cb8511f19ddb40f9cf52fe86b3dfe38b2faed9d7bbc3d5707677ffbe3  LICENSE
+diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
+index e62d3e05ca..bb50434efa 100644
+--- a/package/c-periphery/c-periphery.mk
++++ b/package/c-periphery/c-periphery.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-C_PERIPHERY_VERSION = 1.1.3
++C_PERIPHERY_VERSION = 2.1.0
+ C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,v$(C_PERIPHERY_VERSION))
+ C_PERIPHERY_INSTALL_STAGING = YES
+ # only a static library
 -- 
-2.24.1
+2.20.1
