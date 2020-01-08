@@ -1,116 +1,112 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  8 Jan 2020 16:10:40 +0100
-Subject: [Buildroot] [PATCH v2 4/5] package/perl-mime-base64: remove it
+Date: Wed,  8 Jan 2020 16:10:41 +0100
+Subject: [Buildroot] [PATCH v2 5/5] package/perl-net-ping: remove it
 In-Reply-To: <20200108151041.12757-1-francois.perrad@gadz.org>
 References: <20200108151041.12757-1-francois.perrad@gadz.org>
-Message-ID: <20200108151041.12757-4-francois.perrad@gadz.org>
+Message-ID: <20200108151041.12757-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MIME::Base64 is a Perl core module (ie. bundled with perl)
+Net::Ping is a Perl core module (ie. bundled with perl)
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- Config.in.legacy                               |  6 ++++++
- DEVELOPERS                                     |  1 -
- package/Config.in                              |  1 -
- package/perl-mime-base64/Config.in             | 10 ----------
- package/perl-mime-base64/perl-mime-base64.hash |  6 ------
- package/perl-mime-base64/perl-mime-base64.mk   | 14 --------------
- 6 files changed, 6 insertions(+), 32 deletions(-)
- delete mode 100644 package/perl-mime-base64/Config.in
- delete mode 100644 package/perl-mime-base64/perl-mime-base64.hash
- delete mode 100644 package/perl-mime-base64/perl-mime-base64.mk
+ Config.in.legacy                         |  6 ++++++
+ DEVELOPERS                               |  1 -
+ package/Config.in                        |  1 -
+ package/perl-net-ping/Config.in          |  6 ------
+ package/perl-net-ping/perl-net-ping.hash |  6 ------
+ package/perl-net-ping/perl-net-ping.mk   | 14 --------------
+ 6 files changed, 6 insertions(+), 28 deletions(-)
+ delete mode 100644 package/perl-net-ping/Config.in
+ delete mode 100644 package/perl-net-ping/perl-net-ping.hash
+ delete mode 100644 package/perl-net-ping/perl-net-ping.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 297a25994..e1e868531 100644
+index e1e868531..85f88be15 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -152,6 +152,12 @@ config BR2_PACKAGE_PERL_DIGEST_MD5
+@@ -158,6 +158,12 @@ config BR2_PACKAGE_PERL_MIME_BASE64
  	help
- 	  Digest::MD5 is a Perl core module (ie. bundled with perl).
+ 	  MIME::Base64 is a Perl core module (ie. bundled with perl).
  
-+config BR2_PACKAGE_PERL_MIME_BASE64
-+	bool "perl-mime-base64 was removed"
++config BR2_PACKAGE_PERL_NET_PING
++	bool "perl-net-ping was removed"
 +	select BR2_LEGACY
 +	help
-+	  MIME::Base64 is a Perl core module (ie. bundled with perl).
++	  Net::Ping is a Perl core module (ie. bundled with perl).
 +
  comment "Legacy options removed in 2019.11"
  
  config BR2_PACKAGE_OPENVMTOOLS_PROCPS
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 071095ef6..ba75f601f 100644
+index ba75f601f..4d2a442dc 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -395,7 +395,6 @@ F:	package/perl-io-html/
- F:	package/perl-lwp-mediatypes/
- F:	package/perl-mail-dkim/
- F:	package/perl-mailtools/
--F:	package/perl-mime-base64/
- F:	package/perl-net-dns/
- F:	package/perl-net-http/
- F:	package/perl-netaddr-ip/
+@@ -2286,7 +2286,6 @@ F:	package/perl-crypt-openssl-aes/
+ F:	package/perl-math-prime-util/
+ F:	package/perl-mime-base64-urlsafe/
+ F:	package/perl-mojolicious-plugin-authentication/
+-F:	package/perl-net-ping/
+ F:	package/perl-net-snmp/
+ F:	package/perl-net-ssh2/
+ F:	package/perl-net-telnet/
 diff --git a/package/Config.in b/package/Config.in
-index 6f0432a37..5dab6ba31 100644
+index 5dab6ba31..fc97e6eb4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -752,7 +752,6 @@ menu "Perl libraries/modules"
- 	source "package/perl-mail-dkim/Config.in"
- 	source "package/perl-mailtools/Config.in"
- 	source "package/perl-math-prime-util/Config.in"
--	source "package/perl-mime-base64/Config.in"
- 	source "package/perl-mime-base64-urlsafe/Config.in"
- 	source "package/perl-mime-tools/Config.in"
- 	source "package/perl-module-implementation/Config.in"
-diff --git a/package/perl-mime-base64/Config.in b/package/perl-mime-base64/Config.in
+@@ -761,7 +761,6 @@ menu "Perl libraries/modules"
+ 	source "package/perl-moo/Config.in"
+ 	source "package/perl-net-dns/Config.in"
+ 	source "package/perl-net-http/Config.in"
+-	source "package/perl-net-ping/Config.in"
+ 	source "package/perl-net-snmp/Config.in"
+ 	source "package/perl-net-ssh2/Config.in"
+ 	source "package/perl-net-ssleay/Config.in"
+diff --git a/package/perl-net-ping/Config.in b/package/perl-net-ping/Config.in
 deleted file mode 100644
-index ecb3d2ee6..000000000
---- a/package/perl-mime-base64/Config.in
+index 21239a095..000000000
+--- a/package/perl-net-ping/Config.in
 +++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_PERL_MIME_BASE64
--	bool "perl-mime-base64"
--	depends on !BR2_STATIC_LIBS
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_PERL_NET_PING
+-	bool "perl-net-ping"
 -	help
--	  The RFC 2045 encodings; base64 and quoted-printable.
+-	  check a remote host for reachability.
 -
--	  https://metacpan.org/release/MIME-Base64
--
--comment "perl-mime-base64 needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-mime-base64/perl-mime-base64.hash b/package/perl-mime-base64/perl-mime-base64.hash
+-	  https://metacpan.org/release/Net-Ping
+diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
 deleted file mode 100644
-index 77bd7b063..000000000
---- a/package/perl-mime-base64/perl-mime-base64.hash
+index 2842827c8..000000000
+--- a/package/perl-net-ping/perl-net-ping.hash
 +++ /dev/null
 @@ -1,6 +0,0 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5    ef958dc2bf96be5f759391c6ac1debd4 MIME-Base64-3.15.tar.gz
--sha256 7f863566a6a9cb93eda93beadb77d9aa04b9304d769cea3bb921b9a91b3a1eb9 MIME-Base64-3.15.tar.gz
+-md5    eb90f86dcc31126e88be02ecb62d5303 Net-Ping-2.72.tar.gz
+-sha256 555af602f54229cd81fef7da1a81516800f3155c6dc4d07dc71be1de3253dd6a Net-Ping-2.72.tar.gz
 -
 -# computed by scancpan
--sha256 08e6898e3d62619e83880832ec42ae8a2984257e4c244843db9d3b9b7fcff236 README
-diff --git a/package/perl-mime-base64/perl-mime-base64.mk b/package/perl-mime-base64/perl-mime-base64.mk
+-sha256 9441a22309a2b40ff1282ac1906c137f07f5e521e7b1ec162b251f6006051b47 README
+diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
 deleted file mode 100644
-index 201707d46..000000000
---- a/package/perl-mime-base64/perl-mime-base64.mk
+index b422c4eab..000000000
+--- a/package/perl-net-ping/perl-net-ping.mk
 +++ /dev/null
 @@ -1,14 +0,0 @@
 -################################################################################
 -#
--# perl-mime-base64
+-# perl-net-ping
 -#
 -################################################################################
 -
--PERL_MIME_BASE64_VERSION = 3.15
--PERL_MIME_BASE64_SOURCE = MIME-Base64-$(PERL_MIME_BASE64_VERSION).tar.gz
--PERL_MIME_BASE64_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
--PERL_MIME_BASE64_LICENSE = Artistic or GPL-1.0+
--PERL_MIME_BASE64_LICENSE_FILES = README
--PERL_MIME_BASE64_DISTNAME = MIME-Base64
+-PERL_NET_PING_VERSION = 2.72
+-PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
+-PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+-PERL_NET_PING_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_PING_LICENSE_FILES = README
+-PERL_NET_PING_DISTNAME = Net-Ping
 -
 -$(eval $(perl-package))
 -- 
