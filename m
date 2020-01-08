@@ -1,98 +1,116 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  8 Jan 2020 16:10:39 +0100
-Subject: [Buildroot] [PATCH v2 3/5] package/perl-math-bigint: remove it
+Date: Wed,  8 Jan 2020 16:10:40 +0100
+Subject: [Buildroot] [PATCH v2 4/5] package/perl-mime-base64: remove it
 In-Reply-To: <20200108151041.12757-1-francois.perrad@gadz.org>
 References: <20200108151041.12757-1-francois.perrad@gadz.org>
-Message-ID: <20200108151041.12757-3-francois.perrad@gadz.org>
+Message-ID: <20200108151041.12757-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Math::BigInt is a Perl core module (ie. bundled with perl)
-
-This package was never released with BR,
-so no need to add an entry in Config.legacy
-
+MIME::Base64 is a Perl core module (ie. bundled with perl)
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
+ Config.in.legacy                               |  6 ++++++
  DEVELOPERS                                     |  1 -
  package/Config.in                              |  1 -
- package/perl-math-bigint/Config.in             |  6 ------
- package/perl-math-bigint/perl-math-bigint.hash |  6 ------
- package/perl-math-bigint/perl-math-bigint.mk   | 14 --------------
- 5 files changed, 28 deletions(-)
- delete mode 100644 package/perl-math-bigint/Config.in
- delete mode 100644 package/perl-math-bigint/perl-math-bigint.hash
- delete mode 100644 package/perl-math-bigint/perl-math-bigint.mk
+ package/perl-mime-base64/Config.in             | 10 ----------
+ package/perl-mime-base64/perl-mime-base64.hash |  6 ------
+ package/perl-mime-base64/perl-mime-base64.mk   | 14 --------------
+ 6 files changed, 6 insertions(+), 32 deletions(-)
+ delete mode 100644 package/perl-mime-base64/Config.in
+ delete mode 100644 package/perl-mime-base64/perl-mime-base64.hash
+ delete mode 100644 package/perl-mime-base64/perl-mime-base64.mk
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 297a25994..e1e868531 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -152,6 +152,12 @@ config BR2_PACKAGE_PERL_DIGEST_MD5
+ 	help
+ 	  Digest::MD5 is a Perl core module (ie. bundled with perl).
+ 
++config BR2_PACKAGE_PERL_MIME_BASE64
++	bool "perl-mime-base64 was removed"
++	select BR2_LEGACY
++	help
++	  MIME::Base64 is a Perl core module (ie. bundled with perl).
++
+ comment "Legacy options removed in 2019.11"
+ 
+ config BR2_PACKAGE_OPENVMTOOLS_PROCPS
 diff --git a/DEVELOPERS b/DEVELOPERS
-index b181cb6e1..071095ef6 100644
+index 071095ef6..ba75f601f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2284,7 +2284,6 @@ F:	package/perl-convert-asn1/
- F:	package/perl-crypt-blowfish/
- F:	package/perl-crypt-cbc/
- F:	package/perl-crypt-openssl-aes/
--F:	package/perl-math-bigint/
- F:	package/perl-math-prime-util/
- F:	package/perl-mime-base64-urlsafe/
- F:	package/perl-mojolicious-plugin-authentication/
+@@ -395,7 +395,6 @@ F:	package/perl-io-html/
+ F:	package/perl-lwp-mediatypes/
+ F:	package/perl-mail-dkim/
+ F:	package/perl-mailtools/
+-F:	package/perl-mime-base64/
+ F:	package/perl-net-dns/
+ F:	package/perl-net-http/
+ F:	package/perl-netaddr-ip/
 diff --git a/package/Config.in b/package/Config.in
-index 894a4d9b4..6f0432a37 100644
+index 6f0432a37..5dab6ba31 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -751,7 +751,6 @@ menu "Perl libraries/modules"
- 	source "package/perl-lwp-mediatypes/Config.in"
+@@ -752,7 +752,6 @@ menu "Perl libraries/modules"
  	source "package/perl-mail-dkim/Config.in"
  	source "package/perl-mailtools/Config.in"
--	source "package/perl-math-bigint/Config.in"
  	source "package/perl-math-prime-util/Config.in"
- 	source "package/perl-mime-base64/Config.in"
+-	source "package/perl-mime-base64/Config.in"
  	source "package/perl-mime-base64-urlsafe/Config.in"
-diff --git a/package/perl-math-bigint/Config.in b/package/perl-math-bigint/Config.in
+ 	source "package/perl-mime-tools/Config.in"
+ 	source "package/perl-module-implementation/Config.in"
+diff --git a/package/perl-mime-base64/Config.in b/package/perl-mime-base64/Config.in
 deleted file mode 100644
-index 89722e7b1..000000000
---- a/package/perl-math-bigint/Config.in
+index ecb3d2ee6..000000000
+--- a/package/perl-mime-base64/Config.in
 +++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_PERL_MATH_BIGINT
--	bool "perl-math-bigint"
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_PERL_MIME_BASE64
+-	bool "perl-mime-base64"
+-	depends on !BR2_STATIC_LIBS
 -	help
--	  Pure Perl module to test Math::BigInt with scalars.
+-	  The RFC 2045 encodings; base64 and quoted-printable.
 -
--	  https://metacpan.org/release/Math-BigInt
-diff --git a/package/perl-math-bigint/perl-math-bigint.hash b/package/perl-math-bigint/perl-math-bigint.hash
+-	  https://metacpan.org/release/MIME-Base64
+-
+-comment "perl-mime-base64 needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-mime-base64/perl-mime-base64.hash b/package/perl-mime-base64/perl-mime-base64.hash
 deleted file mode 100644
-index ad3d66bbf..000000000
---- a/package/perl-math-bigint/perl-math-bigint.hash
+index 77bd7b063..000000000
+--- a/package/perl-mime-base64/perl-mime-base64.hash
 +++ /dev/null
 @@ -1,6 +0,0 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5    a6e5a6c391b453e04c2b60506e1b5342 Math-BigInt-1.999818.tar.gz
--sha256 b27634356ce2af9b7c0123ac8395a89a32fb15aeae82fcd39de8156cad278c15 Math-BigInt-1.999818.tar.gz
+-md5    ef958dc2bf96be5f759391c6ac1debd4 MIME-Base64-3.15.tar.gz
+-sha256 7f863566a6a9cb93eda93beadb77d9aa04b9304d769cea3bb921b9a91b3a1eb9 MIME-Base64-3.15.tar.gz
 -
 -# computed by scancpan
--sha256 b857edab549ac6893e2df5e1ec768ee46b62bcf1607a55e876f4d23f079eacce LICENSE
-diff --git a/package/perl-math-bigint/perl-math-bigint.mk b/package/perl-math-bigint/perl-math-bigint.mk
+-sha256 08e6898e3d62619e83880832ec42ae8a2984257e4c244843db9d3b9b7fcff236 README
+diff --git a/package/perl-mime-base64/perl-mime-base64.mk b/package/perl-mime-base64/perl-mime-base64.mk
 deleted file mode 100644
-index 156c6ce38..000000000
---- a/package/perl-math-bigint/perl-math-bigint.mk
+index 201707d46..000000000
+--- a/package/perl-mime-base64/perl-mime-base64.mk
 +++ /dev/null
 @@ -1,14 +0,0 @@
 -################################################################################
 -#
--# perl-math-bigint
+-# perl-mime-base64
 -#
 -################################################################################
 -
--PERL_MATH_BIGINT_VERSION = 1.999818
--PERL_MATH_BIGINT_SOURCE = Math-BigInt-$(PERL_MATH_BIGINT_VERSION).tar.gz
--PERL_MATH_BIGINT_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PJ/PJACKLAM
--PERL_MATH_BIGINT_LICENSE = Artistic or GPL-1.0+
--PERL_MATH_BIGINT_LICENSE_FILES = LICENSE
--PERL_MATH_BIGINT_DISTNAME = Math-BigInt
+-PERL_MIME_BASE64_VERSION = 3.15
+-PERL_MIME_BASE64_SOURCE = MIME-Base64-$(PERL_MIME_BASE64_VERSION).tar.gz
+-PERL_MIME_BASE64_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+-PERL_MIME_BASE64_LICENSE = Artistic or GPL-1.0+
+-PERL_MIME_BASE64_LICENSE_FILES = README
+-PERL_MIME_BASE64_DISTNAME = MIME-Base64
 -
 -$(eval $(perl-package))
 -- 
