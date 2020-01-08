@@ -1,46 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Jan 2020 23:10:09 +0100
-Subject: [Buildroot] [git commit] package/mtr: bump to version 0.93
-Message-ID: <20200108220048.ADA7F870D4@busybox.osuosl.org>
+Date: Wed, 8 Jan 2020 23:10:17 +0100
+Subject: [Buildroot] [git commit] package/pugixml: bump to version 1.10
+Message-ID: <20200108220048.D26E6870D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15eaf1cb225b633c83858dc09ba971121dd20cae
+commit: https://git.buildroot.net/buildroot/commit/?id=ee1f731a90d43ee9464374ee3e9a3da22da2b533
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
+Update hash of license file (update in year and version)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mtr/mtr.hash | 3 ++-
- package/mtr/mtr.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/pugixml/pugixml.hash | 4 ++--
+ package/pugixml/pugixml.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mtr/mtr.hash b/package/mtr/mtr.hash
-index f3df81f42a..7771e091e2 100644
---- a/package/mtr/mtr.hash
-+++ b/package/mtr/mtr.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	12a6a94c0ec04d508de27eda5f5ba91f50d4b5fe74a98aca0973e2c16a42555a	mtr-66de3ecbab28b054b868a73fbb57f30549d770ac.tar.gz
-+sha256	3a1ab330104ddee3135af3cfa567b9608001c5deecbf200c08b545ed6d7a4c8f	mtr-0.93.tar.gz
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/mtr/mtr.mk b/package/mtr/mtr.mk
-index 82688ed061..7a4b140267 100644
---- a/package/mtr/mtr.mk
-+++ b/package/mtr/mtr.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/pugixml/pugixml.hash b/package/pugixml/pugixml.hash
+index fb6566dabf..79ae75e83b 100644
+--- a/package/pugixml/pugixml.hash
++++ b/package/pugixml/pugixml.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  d156d35b83f680e40fd6412c4455fdd03544339779134617b9b28d19e11fdba6  pugixml-1.9.tar.gz
+-sha256  5f2318fdea73711b4761fd395462a51dc7d4626088ebaa41732b598821ac935a  readme.txt
++sha256  55f399fbb470942410d348584dc953bcaec926415d3462f471ef350f29b5870a  pugixml-1.10.tar.gz
++sha256  16582559c91ecf831d6289d472a903032e7d7994a86521c5c39513568d6ad208  readme.txt
+diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
+index 368f958920..800a3836ce 100644
+--- a/package/pugixml/pugixml.mk
++++ b/package/pugixml/pugixml.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MTR_VERSION = 66de3ecbab28b054b868a73fbb57f30549d770ac
--MTR_SITE = $(call github,traviscross,mtr,$(MTR_VERSION))
-+MTR_VERSION = 0.93
-+MTR_SITE = $(call github,traviscross,mtr,v$(MTR_VERSION))
- MTR_AUTORECONF = YES
- MTR_CONF_OPTS = --without-gtk
- MTR_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_NCURSES),ncurses)
+-PUGIXML_VERSION = 1.9
++PUGIXML_VERSION = 1.10
+ PUGIXML_SITE = http://github.com/zeux/pugixml/releases/download/v$(PUGIXML_VERSION)
+ PUGIXML_LICENSE = MIT
+ PUGIXML_LICENSE_FILES = readme.txt
