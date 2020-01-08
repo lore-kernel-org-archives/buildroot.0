@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Jan 2020 09:35:44 +0100
-Subject: [Buildroot] [PATCH 1/2] package/bustle: select dbus instead of
- depending on it
-In-Reply-To: <20200104184513.2369600-1-fontaine.fabrice@gmail.com>
-References: <20200104184513.2369600-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200108093544.3288c09d@windsurf>
+Date: Wed, 8 Jan 2020 09:36:12 +0100
+Subject: [Buildroot] [git commit] package/exim: fix host build
+Message-ID: <20200108082623.31F577FD13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  4 Jan 2020 19:45:12 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2c692e81a844b30b4d3161dfd9897b3265bb9279
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/5a7/5a765f0e65e20266c7203412a46c684a40b66ea3/
 
-I agree that in general we prefer to use "select" for non-obvious
-dependencies. But here, the dependency is obvious, and in fact "bustle"
-is completely useless if you don't use D-Bus: you will only want to
-even consider enabling bustle if you're already using D-Bus, and want
-to debug some stuff.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/exim/exim.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So I think it is a case where a "depends on" dependency makes a lot of
-sense, very much like Python modules all "depends on" the Python
-interpreter being present, rather than selecting it.
-
-So I've mark the patch as Rejected in patchwork.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 118ee4a1a4..1f814ef195 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -125,7 +125,7 @@ define EXIM_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)/build-br macro_predef \
+ 		CC=$(HOSTCC) \
+ 		LNCC=$(HOSTCC) \
+-		CFLAGS="$(HOST_CFLAGS)" \
++		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
+ 		LFLAGS="-fPIC $(HOST_LDFLAGS)"
+ 	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS)
+ endef
