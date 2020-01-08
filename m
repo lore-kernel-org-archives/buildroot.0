@@ -1,42 +1,46 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Wed,  8 Jan 2020 18:58:52 +0100
-Subject: [Buildroot] [PATCH] package/python-periphery: bump to version 2.0.1
-Message-ID: <1578506332-11020-1-git-send-email-pjtexier@koncepto.io>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Wed,  8 Jan 2020 22:04:39 +0300
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: disable TEAP for
+ internal TLS implementation
+Message-ID: <20200108190439.459316-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See changelog https://github.com/vsergeev/python-periphery/blob/master/CHANGELOG.md
+EAP-TEAP support in hostapd/wpa_supplicant fails to build with internal
+TLS implementation. This patch disables TEAP support in wpa_supplicant
+when internal TLS implementation is selected. Similar fix for hostapd
+package has already been merged to Buildroot: see commit 47d14e3b1c20
+("package/hostapd: disable TEAP for internal TLS implementation").
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+TEAP is still an experimental feature that is not recommmended for
+production use. Currently it should not be used for anything else
+than experimentation and interoperability testing. Those who needs
+experimenting with TEAP are encouraged to enable openssl in their
+buildroot configuration.
+
+Fixes:
+http://autobuild.buildroot.net/results/e83613c06041a60f89da787f4ebf876245713cd2/
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- package/python-periphery/python-periphery.hash | 2 +-
- package/python-periphery/python-periphery.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wpa_supplicant/wpa_supplicant.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-periphery/python-periphery.hash b/package/python-periphery/python-periphery.hash
-index 3164120..e9c3869 100644
---- a/package/python-periphery/python-periphery.hash
-+++ b/package/python-periphery/python-periphery.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 e43d7e9037e73a6a108c73ed53f2a942373ee9c8d3aaca0f53a39956bef1f3d6  python-periphery-2.0.0.tar.gz
-+sha256 e6da8dcf8f639d1c3be3f19d27cbd472ef904db204c5453b250f87ab9bca2025  python-periphery-2.0.1.tar.gz
- sha256 bf032b9319cfd918368219450a9917529f131925e698cbab1b63f42b629ff505  LICENSE
-diff --git a/package/python-periphery/python-periphery.mk b/package/python-periphery/python-periphery.mk
-index d24d87a..97cb52e 100644
---- a/package/python-periphery/python-periphery.mk
-+++ b/package/python-periphery/python-periphery.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 4f95ea6276..c87494c2bf 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -112,7 +112,7 @@ WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf libopenssl
+ WPA_SUPPLICANT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
+ else
+-WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD
++WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
+ WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ endif
  
--PYTHON_PERIPHERY_VERSION = 2.0.0
-+PYTHON_PERIPHERY_VERSION = 2.0.1
- PYTHON_PERIPHERY_SITE = $(call github,vsergeev,python-periphery,v$(PYTHON_PERIPHERY_VERSION))
- PYTHON_PERIPHERY_LICENSE = MIT
- PYTHON_PERIPHERY_LICENSE_FILES = LICENSE
 -- 
-2.7.4
+2.24.1
