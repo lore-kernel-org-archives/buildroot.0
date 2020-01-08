@@ -1,73 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  8 Jan 2020 22:39:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11/xserver_xorg-server: fix build
- without glx
-Message-ID: <20200108213928.3581531-1-fontaine.fabrice@gmail.com>
+Date: Wed,  8 Jan 2020 22:42:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mtr: bump to version 0.93
+Message-ID: <20200108214206.3581779-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/de838a843f97673d1381a55fd4e9b07164693913
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...mon-xf86Init.c-fix-build-without-glx.patch | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+ package/mtr/mtr.hash | 3 ++-
+ package/mtr/mtr.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
-new file mode 100644
-index 0000000000..f1fdfe3e37
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
-@@ -0,0 +1,45 @@
-+From 49456e0a37fac7bc9d1f01bc1519fb0d699956db Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 27 Dec 2019 23:33:37 +0100
-+Subject: [PATCH] hw/xfree86/common/xf86Init.c: fix build without glx
-+
-+Since commit d8ec33fe0542141aed1d9016d2ecaf52da944b4b, an include on
-+glxvndabi.h has been added to hw/xfree86/common/xf86Init.c
-+
-+However, if glx is disabled through --disable-glx and GLX headers are
-+not installed in the build's environment, build fails on:
-+
-+In file included from xf86Init.c:81:
-+../../../include/glxvndabi.h:64:10: fatal error: GL/glxproto.h: No such file or directory
-+   64 | #include <GL/glxproto.h>
-+      |          ^~~~~~~~~~~~~~~
-+
-+Fix this failure by removing this include which does not seem to be
-+needed (an other option would have been to keep it under an ifdef GLXEXT
-+block)
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/de838a843f97673d1381a55fd4e9b07164693913
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://gitlab.freedesktop.org/xorg/xserver/commit/49456e0a37fac7bc9d1f01bc1519fb0d699956db]
-+---
-+ hw/xfree86/common/xf86Init.c | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/hw/xfree86/common/xf86Init.c b/hw/xfree86/common/xf86Init.c
-+index 0631c7237..e6fb11398 100644
-+--- a/hw/xfree86/common/xf86Init.c
-++++ b/hw/xfree86/common/xf86Init.c
-+@@ -74,7 +74,6 @@
-+ #include "xf86Crtc.h"
-+ #include "picturestr.h"
-+ #include "randrstr.h"
-+-#include "glxvndabi.h"
-+ #include "xf86Bus.h"
-+ #ifdef XSERVER_LIBPCIACCESS
-+ #include "xf86VGAarbiter.h"
-+-- 
-+2.24.1
-+
+diff --git a/package/mtr/mtr.hash b/package/mtr/mtr.hash
+index f3df81f42a..7771e091e2 100644
+--- a/package/mtr/mtr.hash
++++ b/package/mtr/mtr.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	12a6a94c0ec04d508de27eda5f5ba91f50d4b5fe74a98aca0973e2c16a42555a	mtr-66de3ecbab28b054b868a73fbb57f30549d770ac.tar.gz
++sha256	3a1ab330104ddee3135af3cfa567b9608001c5deecbf200c08b545ed6d7a4c8f	mtr-0.93.tar.gz
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/mtr/mtr.mk b/package/mtr/mtr.mk
+index 82688ed061..7a4b140267 100644
+--- a/package/mtr/mtr.mk
++++ b/package/mtr/mtr.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-MTR_VERSION = 66de3ecbab28b054b868a73fbb57f30549d770ac
+-MTR_SITE = $(call github,traviscross,mtr,$(MTR_VERSION))
++MTR_VERSION = 0.93
++MTR_SITE = $(call github,traviscross,mtr,v$(MTR_VERSION))
+ MTR_AUTORECONF = YES
+ MTR_CONF_OPTS = --without-gtk
+ MTR_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_NCURSES),ncurses)
 -- 
 2.24.1
