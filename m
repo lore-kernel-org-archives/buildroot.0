@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Jan 2020 09:32:50 +0100
-Subject: [Buildroot] [PATCH v3,
- 1/1] package/samba4: Do not force target python
-In-Reply-To: <20200103134341.1505177-1-fontaine.fabrice@gmail.com>
-References: <20200103134341.1505177-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200108093250.3bdfcc54@windsurf>
+Date: Wed, 8 Jan 2020 09:32:59 +0100
+Subject: [Buildroot] [PATCHv2] toolchain-external: update Arm AArch64 BE
+ toolchain 9.2-2019.12
+In-Reply-To: <20200107213014.7477-1-romain.naour@gmail.com>
+References: <20200107213014.7477-1-romain.naour@gmail.com>
+Message-ID: <20200108093259.1d35df28@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  3 Jan 2020 14:43:41 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Tue,  7 Jan 2020 22:30:14 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-> Samba does not need python on the target for file server functionality.
-> It does need it for the Active Directory Domain Controller feature,
-> which is already configured in buildroot as optional and already depends
-> on python3 since commit 4485a75859fbae99090b065ddd7c088a65571d37.
+> Update to gcc 9.2.1, gdb 8.3.0, binutils 2.33.1.
 > 
-> An unnecessary target python greatly increases the size of the target
-> filesystem. A somewhat minimal configuration with a samba server shunk
-> from an 82 MB rootfs to 53 MB with this patch.
+> The download url has been fixed:
+> https://bugs.linaro.org/show_bug.cgi?id=5529
 > 
-> Signed-off-by: Trent Piepho <trent.piepho@synapse.com>
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> See "Release Note":
+> https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads#
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
-> Changes v2 -> v3 (after review of Thomas Petazzoni):
->  - Only drop select in Config.in
+> v2: wait for upstream url fix
+>     fix hash
+>     
+>  .../toolchain-external-arm-aarch64-be/Config.in             | 6 +++---
+>  .../toolchain-external-arm-aarch64-be/Config.in.options     | 2 +-
+>  .../toolchain-external-arm-aarch64-be.hash                  | 6 +++---
+>  .../toolchain-external-arm-aarch64-be.mk                    | 6 +++---
+>  4 files changed, 10 insertions(+), 10 deletions(-)
 
 Applied to master, thanks.
 
