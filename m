@@ -1,110 +1,96 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Jan 2020 18:24:00 +0100
-Subject: [Buildroot] [git commit] package/perl-net-ping: remove it
-Message-ID: <20200108171504.8EED684054@busybox.osuosl.org>
+Date: Wed, 8 Jan 2020 18:19:46 +0100
+Subject: [Buildroot] [git commit] package/perl-math-bigint: remove it
+Message-ID: <20200108171504.738A3848AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1e54f71ef85b558affce1ee28efaefe160665b1
+commit: https://git.buildroot.net/buildroot/commit/?id=3ce4cf46fed1f07d448161f984970bf035efe671
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Net::Ping is a Perl core module (ie. bundled with perl)
+Math::BigInt is a Perl core module (ie. bundled with perl)
+
+This package was never released with BR,
+so no need to add an entry in Config.legacy
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in.legacy                         |  6 ++++++
- DEVELOPERS                               |  1 -
- package/Config.in                        |  1 -
- package/perl-net-ping/Config.in          |  6 ------
- package/perl-net-ping/perl-net-ping.hash |  6 ------
- package/perl-net-ping/perl-net-ping.mk   | 14 --------------
- 6 files changed, 6 insertions(+), 28 deletions(-)
+ DEVELOPERS                                     |  1 -
+ package/Config.in                              |  1 -
+ package/perl-math-bigint/Config.in             |  6 ------
+ package/perl-math-bigint/perl-math-bigint.hash |  6 ------
+ package/perl-math-bigint/perl-math-bigint.mk   | 14 --------------
+ 5 files changed, 28 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 80a26b4f01..c483ac3856 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2020.02"
- 
-+config BR2_PACKAGE_PERL_NET_PING
-+	bool "perl-net-ping was removed"
-+	select BR2_LEGACY
-+	help
-+	  Net::Ping is a Perl core module (ie. bundled with perl).
-+
- config BR2_PACKAGE_PERL_MIME_BASE64
- 	bool "perl-mime-base64 was removed"
- 	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c2a6356aa0..1f86c256a5 100644
+index eb36f1c5dc..15a1291705 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2375,7 +2375,6 @@ F:	package/perl-crypt-openssl-aes/
+@@ -2373,7 +2373,6 @@ F:	package/perl-convert-asn1/
+ F:	package/perl-crypt-blowfish/
+ F:	package/perl-crypt-cbc/
+ F:	package/perl-crypt-openssl-aes/
+-F:	package/perl-math-bigint/
  F:	package/perl-math-prime-util/
  F:	package/perl-mime-base64-urlsafe/
  F:	package/perl-mojolicious-plugin-authentication/
--F:	package/perl-net-ping/
- F:	package/perl-net-snmp/
- F:	package/perl-net-ssh2/
- F:	package/perl-net-telnet/
 diff --git a/package/Config.in b/package/Config.in
-index bec618a08f..45935ce18e 100644
+index a916e47927..68db30096d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -775,7 +775,6 @@ menu "Perl libraries/modules"
- 	source "package/perl-moo/Config.in"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
--	source "package/perl-net-ping/Config.in"
- 	source "package/perl-net-snmp/Config.in"
- 	source "package/perl-net-ssh2/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
-diff --git a/package/perl-net-ping/Config.in b/package/perl-net-ping/Config.in
+@@ -765,7 +765,6 @@ menu "Perl libraries/modules"
+ 	source "package/perl-lwp-mediatypes/Config.in"
+ 	source "package/perl-mail-dkim/Config.in"
+ 	source "package/perl-mailtools/Config.in"
+-	source "package/perl-math-bigint/Config.in"
+ 	source "package/perl-math-prime-util/Config.in"
+ 	source "package/perl-mime-base64/Config.in"
+ 	source "package/perl-mime-base64-urlsafe/Config.in"
+diff --git a/package/perl-math-bigint/Config.in b/package/perl-math-bigint/Config.in
 deleted file mode 100644
-index 21239a095f..0000000000
---- a/package/perl-net-ping/Config.in
+index 89722e7b10..0000000000
+--- a/package/perl-math-bigint/Config.in
 +++ /dev/null
 @@ -1,6 +0,0 @@
--config BR2_PACKAGE_PERL_NET_PING
--	bool "perl-net-ping"
+-config BR2_PACKAGE_PERL_MATH_BIGINT
+-	bool "perl-math-bigint"
 -	help
--	  check a remote host for reachability.
+-	  Pure Perl module to test Math::BigInt with scalars.
 -
--	  https://metacpan.org/release/Net-Ping
-diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
+-	  https://metacpan.org/release/Math-BigInt
+diff --git a/package/perl-math-bigint/perl-math-bigint.hash b/package/perl-math-bigint/perl-math-bigint.hash
 deleted file mode 100644
-index 2842827c85..0000000000
---- a/package/perl-net-ping/perl-net-ping.hash
+index ad3d66bbf8..0000000000
+--- a/package/perl-math-bigint/perl-math-bigint.hash
 +++ /dev/null
 @@ -1,6 +0,0 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5    eb90f86dcc31126e88be02ecb62d5303 Net-Ping-2.72.tar.gz
--sha256 555af602f54229cd81fef7da1a81516800f3155c6dc4d07dc71be1de3253dd6a Net-Ping-2.72.tar.gz
+-md5    a6e5a6c391b453e04c2b60506e1b5342 Math-BigInt-1.999818.tar.gz
+-sha256 b27634356ce2af9b7c0123ac8395a89a32fb15aeae82fcd39de8156cad278c15 Math-BigInt-1.999818.tar.gz
 -
 -# computed by scancpan
--sha256 9441a22309a2b40ff1282ac1906c137f07f5e521e7b1ec162b251f6006051b47 README
-diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
+-sha256 b857edab549ac6893e2df5e1ec768ee46b62bcf1607a55e876f4d23f079eacce LICENSE
+diff --git a/package/perl-math-bigint/perl-math-bigint.mk b/package/perl-math-bigint/perl-math-bigint.mk
 deleted file mode 100644
-index b422c4eaba..0000000000
---- a/package/perl-net-ping/perl-net-ping.mk
+index 156c6ce38d..0000000000
+--- a/package/perl-math-bigint/perl-math-bigint.mk
 +++ /dev/null
 @@ -1,14 +0,0 @@
 -################################################################################
 -#
--# perl-net-ping
+-# perl-math-bigint
 -#
 -################################################################################
 -
--PERL_NET_PING_VERSION = 2.72
--PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
--PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
--PERL_NET_PING_LICENSE = Artistic or GPL-1.0+
--PERL_NET_PING_LICENSE_FILES = README
--PERL_NET_PING_DISTNAME = Net-Ping
+-PERL_MATH_BIGINT_VERSION = 1.999818
+-PERL_MATH_BIGINT_SOURCE = Math-BigInt-$(PERL_MATH_BIGINT_VERSION).tar.gz
+-PERL_MATH_BIGINT_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PJ/PJACKLAM
+-PERL_MATH_BIGINT_LICENSE = Artistic or GPL-1.0+
+-PERL_MATH_BIGINT_LICENSE_FILES = LICENSE
+-PERL_MATH_BIGINT_DISTNAME = Math-BigInt
 -
 -$(eval $(perl-package))
