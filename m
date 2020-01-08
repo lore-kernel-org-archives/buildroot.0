@@ -1,113 +1,66 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  8 Jan 2020 16:10:41 +0100
-Subject: [Buildroot] [PATCH v2 5/5] package/perl-net-ping: remove it
-In-Reply-To: <20200108151041.12757-1-francois.perrad@gadz.org>
-References: <20200108151041.12757-1-francois.perrad@gadz.org>
-Message-ID: <20200108151041.12757-5-francois.perrad@gadz.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 8 Jan 2020 17:46:07 +0100
+Subject: [Buildroot] [git commit] package/bluez-alsa: bump to version 2.0.0
+Message-ID: <20200108164457.3813584055@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Net::Ping is a Perl core module (ie. bundled with perl)
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- Config.in.legacy                         |  6 ++++++
- DEVELOPERS                               |  1 -
- package/Config.in                        |  1 -
- package/perl-net-ping/Config.in          |  6 ------
- package/perl-net-ping/perl-net-ping.hash |  6 ------
- package/perl-net-ping/perl-net-ping.mk   | 14 --------------
- 6 files changed, 6 insertions(+), 28 deletions(-)
- delete mode 100644 package/perl-net-ping/Config.in
- delete mode 100644 package/perl-net-ping/perl-net-ping.hash
- delete mode 100644 package/perl-net-ping/perl-net-ping.mk
+commit: https://git.buildroot.net/buildroot/commit/?id=97fb35a2ed83a8ec6df9b897deaf98177d33b8e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index e1e868531..85f88be15 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -158,6 +158,12 @@ config BR2_PACKAGE_PERL_MIME_BASE64
- 	help
- 	  MIME::Base64 is a Perl core module (ie. bundled with perl).
+Version 2.0.0 adds support for MP3 with lame and full MPEG support with
+mpg123, both optional.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/bluez-alsa/bluez-alsa.hash |  2 +-
+ package/bluez-alsa/bluez-alsa.mk   | 16 +++++++++++++++-
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/package/bluez-alsa/bluez-alsa.hash b/package/bluez-alsa/bluez-alsa.hash
+index afc84329b3..37c4919f91 100644
+--- a/package/bluez-alsa/bluez-alsa.hash
++++ b/package/bluez-alsa/bluez-alsa.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated:
+-sha256  6287ae6135795a78470068ef9d9ea660d556cefc409905bd9211fda04d1e1f8e  bluez-alsa-1.4.0.tar.gz
++sha256  451c99c2045a1ec1ffe0d054be4774fbd01af34d6d1a2757d346d02718381697  bluez-alsa-2.0.0.tar.gz
+ sha256  45fe8648faa0e735d4aaf60c32ddd37fc7f027d34ccedcf0f69d8aa961b63b25  LICENSE
+diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
+index 4552be82f3..5c07a1a5e8 100644
+--- a/package/bluez-alsa/bluez-alsa.mk
++++ b/package/bluez-alsa/bluez-alsa.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_PERL_NET_PING
-+	bool "perl-net-ping was removed"
-+	select BR2_LEGACY
-+	help
-+	  Net::Ping is a Perl core module (ie. bundled with perl).
+-BLUEZ_ALSA_VERSION = 1.4.0
++BLUEZ_ALSA_VERSION = 2.0.0
+ BLUEZ_ALSA_SITE = $(call github,Arkq,bluez-alsa,v$(BLUEZ_ALSA_VERSION))
+ BLUEZ_ALSA_LICENSE = MIT
+ BLUEZ_ALSA_LICENSE_FILES = LICENSE
+@@ -32,6 +32,20 @@ else
+ BLUEZ_ALSA_CONF_OPTS += --disable-aac
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LAME),y)
++BLUEZ_ALSA_DEPENDENCIES += lame
++BLUEZ_ALSA_CONF_OPTS += --enable-mp3lame
++else
++BLUEZ_ALSA_CONF_OPTS += --disable-mp3lame
++endif
 +
- comment "Legacy options removed in 2019.11"
- 
- config BR2_PACKAGE_OPENVMTOOLS_PROCPS
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ba75f601f..4d2a442dc 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2286,7 +2286,6 @@ F:	package/perl-crypt-openssl-aes/
- F:	package/perl-math-prime-util/
- F:	package/perl-mime-base64-urlsafe/
- F:	package/perl-mojolicious-plugin-authentication/
--F:	package/perl-net-ping/
- F:	package/perl-net-snmp/
- F:	package/perl-net-ssh2/
- F:	package/perl-net-telnet/
-diff --git a/package/Config.in b/package/Config.in
-index 5dab6ba31..fc97e6eb4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -761,7 +761,6 @@ menu "Perl libraries/modules"
- 	source "package/perl-moo/Config.in"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
--	source "package/perl-net-ping/Config.in"
- 	source "package/perl-net-snmp/Config.in"
- 	source "package/perl-net-ssh2/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
-diff --git a/package/perl-net-ping/Config.in b/package/perl-net-ping/Config.in
-deleted file mode 100644
-index 21239a095..000000000
---- a/package/perl-net-ping/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_PERL_NET_PING
--	bool "perl-net-ping"
--	help
--	  check a remote host for reachability.
--
--	  https://metacpan.org/release/Net-Ping
-diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
-deleted file mode 100644
-index 2842827c8..000000000
---- a/package/perl-net-ping/perl-net-ping.hash
-+++ /dev/null
-@@ -1,6 +0,0 @@
--# retrieved by scancpan from http://cpan.metacpan.org/
--md5    eb90f86dcc31126e88be02ecb62d5303 Net-Ping-2.72.tar.gz
--sha256 555af602f54229cd81fef7da1a81516800f3155c6dc4d07dc71be1de3253dd6a Net-Ping-2.72.tar.gz
--
--# computed by scancpan
--sha256 9441a22309a2b40ff1282ac1906c137f07f5e521e7b1ec162b251f6006051b47 README
-diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
-deleted file mode 100644
-index b422c4eab..000000000
---- a/package/perl-net-ping/perl-net-ping.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# perl-net-ping
--#
--################################################################################
--
--PERL_NET_PING_VERSION = 2.72
--PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
--PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
--PERL_NET_PING_LICENSE = Artistic or GPL-1.0+
--PERL_NET_PING_LICENSE_FILES = README
--PERL_NET_PING_DISTNAME = Net-Ping
--
--$(eval $(perl-package))
--- 
-2.20.1
++ifeq ($(BR2_PACKAGE_MPG123),y)
++BLUEZ_ALSA_DEPENDENCIES += mpg123
++BLUEZ_ALSA_CONF_OPTS += --enable-mpg123
++else
++BLUEZ_ALSA_CONF_OPTS += --disable-mpg123
++endif
++
+ # no build dependency, disables internal HFP in favor of oFonos HFP profile
+ ifeq ($(BR2_PACKAGE_OFONO),y)
+ BLUEZ_ALSA_CONF_OPTS += --enable-ofono
