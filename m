@@ -1,78 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Jan 2020 22:09:29 +0100
-Subject: [Buildroot] [PATCH 0/2] package/wireguard upgrade
-In-Reply-To: <20200106104731.13306-1-peter@korsgaard.com>
-References: <20200106104731.13306-1-peter@korsgaard.com>
-Message-ID: <20200108210929.GD17943@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  8 Jan 2020 22:39:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11/xserver_xorg-server: fix build
+ without glx
+Message-ID: <20200108213928.3581531-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Fixes:
+ - http://autobuild.buildroot.org/results/de838a843f97673d1381a55fd4e9b07164693913
 
-On 2020-01-06 11:47 +0100, Peter Korsgaard spake thusly:
-> With the kernel support for WireGuard getting mainlined, the upstream repo
-> has been split in a wireguard-tools repo for the userspace tooling and
-> wireguard-linux-compat for the kernel side (for 3.10+ legacy kernels).
-> 
-> This series changes the wireguard package to use the wireguard-tools
-> repo and adds a package for wireguard-linux-compat.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...mon-xf86Init.c-fix-build-without-glx.patch | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
 
-So, previously, selecting BR2_PACKAGE_WIREGUARD would build both the
-kernel module and the userland tools, as they were packagesd in a single
-upstream package.
-
-Now, they are separated into two different upstream packages, namely
-wireguard-tools and wireguard-linux-compat.
-
-With your patchset, an existing defconfig will now only build the
-userland tools, even if the user would still need the kernel module for
-older kernels.
-
-So, my proposal would be to have a single patch that introduces the
-split, with a renaming of the existing wireguard package, and a legacy
-symbol that selects both the userland tools and the compat module.
-
-This would allow existing configs to stay to iso-functionality. Thanks
-to the legacy handling, the user will notice and will have to confirm
-they still need/want the kernel module, and they can disable it if not.
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
-> Peter Korsgaard (2):
->   package/wireguard: change to the wireguard-tools package
->   package/wireguard-linux-compat: new package
-> 
->  DEVELOPERS                                    |  1 +
->  package/Config.in                             |  1 +
->  package/wireguard-linux-compat/Config.in      | 23 +++++++++++++++++++
->  .../wireguard-linux-compat.hash               |  4 ++++
->  .../wireguard-linux-compat.mk                 | 15 ++++++++++++
->  package/wireguard/Config.in                   |  9 ++++----
->  package/wireguard/wireguard.hash              |  4 ++--
->  package/wireguard/wireguard.mk                | 15 ++++--------
->  8 files changed, 55 insertions(+), 17 deletions(-)
->  create mode 100644 package/wireguard-linux-compat/Config.in
->  create mode 100644 package/wireguard-linux-compat/wireguard-linux-compat.hash
->  create mode 100644 package/wireguard-linux-compat/wireguard-linux-compat.mk
-> 
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+new file mode 100644
+index 0000000000..f1fdfe3e37
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+@@ -0,0 +1,45 @@
++From 49456e0a37fac7bc9d1f01bc1519fb0d699956db Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 27 Dec 2019 23:33:37 +0100
++Subject: [PATCH] hw/xfree86/common/xf86Init.c: fix build without glx
++
++Since commit d8ec33fe0542141aed1d9016d2ecaf52da944b4b, an include on
++glxvndabi.h has been added to hw/xfree86/common/xf86Init.c
++
++However, if glx is disabled through --disable-glx and GLX headers are
++not installed in the build's environment, build fails on:
++
++In file included from xf86Init.c:81:
++../../../include/glxvndabi.h:64:10: fatal error: GL/glxproto.h: No such file or directory
++   64 | #include <GL/glxproto.h>
++      |          ^~~~~~~~~~~~~~~
++
++Fix this failure by removing this include which does not seem to be
++needed (an other option would have been to keep it under an ifdef GLXEXT
++block)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/de838a843f97673d1381a55fd4e9b07164693913
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://gitlab.freedesktop.org/xorg/xserver/commit/49456e0a37fac7bc9d1f01bc1519fb0d699956db]
++---
++ hw/xfree86/common/xf86Init.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/hw/xfree86/common/xf86Init.c b/hw/xfree86/common/xf86Init.c
++index 0631c7237..e6fb11398 100644
++--- a/hw/xfree86/common/xf86Init.c
+++++ b/hw/xfree86/common/xf86Init.c
++@@ -74,7 +74,6 @@
++ #include "xf86Crtc.h"
++ #include "picturestr.h"
++ #include "randrstr.h"
++-#include "glxvndabi.h"
++ #include "xf86Bus.h"
++ #ifdef XSERVER_LIBPCIACCESS
++ #include "xf86VGAarbiter.h"
++-- 
++2.24.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.1
