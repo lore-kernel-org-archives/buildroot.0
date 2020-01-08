@@ -1,53 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  8 Jan 2020 08:41:09 +0100
-Subject: [Buildroot] [PATCH] package/libcurl: bump version to 7.68.0
-Message-ID: <20200108074109.27474-1-peter@korsgaard.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed,  8 Jan 2020 09:12:07 +0100
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.15.0
+Message-ID: <20200108081207.12462-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Notice that 7.68.0 includes a Windows-only security fix:
+For details see [1].
 
-- CVE-2019-15601: SMB access smuggling via FILE URL on Windows
-  https://curl.haxx.se/docs/CVE-2019-15601.html
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-January/041115.html
 
-So not applicable to Buildroot.
-
-Update the license hash for a copyright year update:
-
--Copyright (c) 1996 - 2019, Daniel Stenberg, <daniel@haxx.se>, and many
-+Copyright (c) 1996 - 2020, Daniel Stenberg, <daniel@haxx.se>, and many
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index b46ee52d04..e60194254e 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 f5d2e7320379338c3952dcc7566a140abb49edb575f9f99272455785c40e536c  curl-7.67.0.tar.xz
--sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-+sha256 b724240722276a27f6e770b952121a3afd097129d8c9fe18e6272dc34192035a  curl-7.68.0.tar.xz
-+sha256 db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index d46b874b37..a7f10ddde5 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 8c6d0396a8..ee006fe513 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2019-October/040967.html
+-md5 d052faa64eb6d2e649e582cc0fcf6e32 libinput-1.14.3.tar.xz
+-sha1 af23a4359202c24b592033f54347719a8f44d872 libinput-1.14.3.tar.xz
+-sha256 0feb3a0589709cc1032893bfaf4c49150d5360bd9782bec888f9e4dd9044c5b7 libinput-1.14.3.tar.xz
+-sha512 f01d1bd1b25b8060519575644597d35f0c89de5386d298441f440128ceee3e57549921a058adec31adc8b33dbdedf4c0bd12c76905a69f752859d3136e26336d libinput-1.14.3.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-January/041115.html
++md5 d5fe153c4b1d69ec35dc846588cd47ec libinput-1.15.0.tar.xz
++sha1 93dd7636b65e8cfea3a3068da5415f29195a189d libinput-1.15.0.tar.xz
++sha256 bfbf1fef66bcb2be871a18783dfcfb88ecb431f496bf0a9cf6685fd29c5843e1 libinput-1.15.0.tar.xz
++sha512 5dab48e1b4c9c0deb5b01ebc3ccb4cc28d614be25d87daaf42f51fbd2d955266f3fdba73029bc0094caa55060dad8967751b72d8f45f19a40b542f0c9118c1b6 libinput-1.15.0.tar.xz
+ 
+ # License files
+ sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index e6e190bc47..03ae668f4e 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.67.0
-+LIBCURL_VERSION = 7.68.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-LIBINPUT_VERSION = 1.14.3
++LIBINPUT_VERSION = 1.15.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 -- 
-2.20.1
+2.24.1
