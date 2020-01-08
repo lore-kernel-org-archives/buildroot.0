@@ -1,191 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Jan 2020 09:30:56 +0100
-Subject: [Buildroot] [git commit] package/jsoncpp: disable tests
-Message-ID: <20200108082120.EB83B83C1C@busybox.osuosl.org>
+Date: Wed, 8 Jan 2020 09:31:08 +0100
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.15.0
+Message-ID: <20200108082121.0CF7383C1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b03dd54612f1f52cca3319ff73c4c272a4eefaf
+commit: https://git.buildroot.net/buildroot/commit/?id=432942e45be2f995f19de4b5ab1958facad5d7fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Disable tests to avoid a build failure on gcc 4.8 because of
-std::hexfloat added in version 1.9.2 with
-https://github.com/open-source-parsers/jsoncpp/commit/638ad269e75f28f9830f7bfc01278aeaf5b00135
+For details see [1].
 
-Fixes:
- - http://autobuild.buildroot.org/results/f816229b835f61fa3e4c84aa659d30f81191f369
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-January/041115.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jsoncpp/0001-Meson-updates.patch | 147 +++++++++++++++++++++++++++++++
- package/jsoncpp/jsoncpp.mk               |   1 +
- 2 files changed, 148 insertions(+)
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/jsoncpp/0001-Meson-updates.patch b/package/jsoncpp/0001-Meson-updates.patch
-new file mode 100644
-index 0000000000..8a44c5b032
---- /dev/null
-+++ b/package/jsoncpp/0001-Meson-updates.patch
-@@ -0,0 +1,147 @@
-+From 6bc55ec35d02931960ec1f5768fc9c56ab62ef66 Mon Sep 17 00:00:00 2001
-+From: David Seifert <16636962+SoapGentoo@users.noreply.github.com>
-+Date: Tue, 7 Jan 2020 02:23:50 +0100
-+Subject: [PATCH] Meson updates (#1124)
-+
-+* Modernize meson.build
-+
-+* Make tests optional
-+* Use `files()` for quick sanity checks
-+
-+* Bump version to 1.9.3
-+
-+* Bump SOVERSION, as some functions were removed
-+  and structs were changed, as determined by
-+  libabigail.
-+
-+[Retrieved from:
-+https://github.com/open-source-parsers/jsoncpp/commit/6bc55ec35d02931960ec1f5768fc9c56ab62ef66]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ CMakeLists.txt         |  2 +-
-+ include/json/version.h |  4 ++--
-+ meson.build            | 33 ++++++++++++++++++---------------
-+ meson_options.txt      |  5 +++++
-+ 4 files changed, 26 insertions(+), 18 deletions(-)
-+ create mode 100644 meson_options.txt
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 4e063317..c05ddccb 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -70,7 +70,7 @@ project(JSONCPP
-+         # 2. /include/json/version.h
-+         # 3. /CMakeLists.txt
-+         # IMPORTANT: also update the SOVERSION!!
-+-        VERSION 1.9.2 # <major>[.<minor>[.<patch>[.<tweak>]]]
-++        VERSION 1.9.3 # <major>[.<minor>[.<patch>[.<tweak>]]]
-+         LANGUAGES CXX)
-+ 
-+ message(STATUS "JsonCpp Version: ${JSONCPP_VERSION_MAJOR}.${JSONCPP_VERSION_MINOR}.${JSONCPP_VERSION_PATCH}")
-+diff --git a/include/json/version.h b/include/json/version.h
-+index ff94372b..0f298341 100644
-+--- a/include/json/version.h
-++++ b/include/json/version.h
-+@@ -9,10 +9,10 @@
-+ // 3. /CMakeLists.txt
-+ // IMPORTANT: also update the SOVERSION!!
-+ 
-+-#define JSONCPP_VERSION_STRING "1.9.2"
-++#define JSONCPP_VERSION_STRING "1.9.3"
-+ #define JSONCPP_VERSION_MAJOR 1
-+ #define JSONCPP_VERSION_MINOR 9
-+-#define JSONCPP_VERSION_PATCH 2
-++#define JSONCPP_VERSION_PATCH 3
-+ #define JSONCPP_VERSION_QUALIFIER
-+ #define JSONCPP_VERSION_HEXA                                                   \
-+   ((JSONCPP_VERSION_MAJOR << 24) | (JSONCPP_VERSION_MINOR << 16) |             \
-+diff --git a/meson.build b/meson.build
-+index 1bc94a8a..c2932030 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -9,7 +9,7 @@ project(
-+   # 2. /include/json/version.h
-+   # 3. /CMakeLists.txt
-+   # IMPORTANT: also update the SOVERSION!!
-+-  version : '1.9.2',
-++  version : '1.9.3',
-+   default_options : [
-+     'buildtype=release',
-+     'cpp_std=c++11',
-+@@ -18,7 +18,7 @@ project(
-+   meson_version : '>= 0.49.0')
-+ 
-+ 
-+-jsoncpp_headers = [
-++jsoncpp_headers = files([
-+   'include/json/allocator.h',
-+   'include/json/assertions.h',
-+   'include/json/config.h',
-+@@ -28,7 +28,8 @@ jsoncpp_headers = [
-+   'include/json/reader.h',
-+   'include/json/value.h',
-+   'include/json/version.h',
-+-  'include/json/writer.h']
-++  'include/json/writer.h',
-++])
-+ jsoncpp_include_directories = include_directories('include')
-+ 
-+ install_headers(
-+@@ -44,13 +45,12 @@ else
-+ endif
-+ 
-+ jsoncpp_lib = library(
-+-  'jsoncpp',
-+-  [ jsoncpp_headers,
-+-    'src/lib_json/json_tool.h',
-++  'jsoncpp', files([
-+     'src/lib_json/json_reader.cpp',
-+     'src/lib_json/json_value.cpp',
-+-    'src/lib_json/json_writer.cpp'],
-+-  soversion : 22,
-++    'src/lib_json/json_writer.cpp',
-++  ]),
-++  soversion : 23,
-+   install : true,
-+   include_directories : jsoncpp_include_directories,
-+   cpp_args: dll_export_flag)
-+@@ -66,18 +66,21 @@ import('pkgconfig').generate(
-+ jsoncpp_dep = declare_dependency(
-+   include_directories : jsoncpp_include_directories,
-+   link_with : jsoncpp_lib,
-+-  version : meson.project_version(),
-+-  )
-++  version : meson.project_version())
-+ 
-+ # tests
-+-python = import('python').find_installation()
-++if meson.is_subproject() or not get_option('tests')
-++  subdir_done()
-++endif
-++
-++python = import('python').find_installation('python3')
-+ 
-+ jsoncpp_test = executable(
-+-  'jsoncpp_test',
-+-  [ 'src/test_lib_json/jsontest.cpp',
-+-    'src/test_lib_json/jsontest.h',
-++  'jsoncpp_test', files([
-++    'src/test_lib_json/jsontest.cpp',
-+     'src/test_lib_json/main.cpp',
-+-    'src/test_lib_json/fuzz.cpp'],
-++    'src/test_lib_json/fuzz.cpp',
-++  ]),
-+   include_directories : jsoncpp_include_directories,
-+   link_with : jsoncpp_lib,
-+   install : false,
-+diff --git a/meson_options.txt b/meson_options.txt
-+new file mode 100644
-+index 00000000..9c215ae6
-+--- /dev/null
-++++ b/meson_options.txt
-+@@ -0,0 +1,5 @@
-++option(
-++  'tests',
-++  type : 'boolean',
-++  value : true,
-++  description : 'Enable building tests')
-diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
-index 50728601a4..f9761d4a6e 100644
---- a/package/jsoncpp/jsoncpp.mk
-+++ b/package/jsoncpp/jsoncpp.mk
-@@ -9,5 +9,6 @@ JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
- JSONCPP_LICENSE = Public Domain or MIT
- JSONCPP_LICENSE_FILES = LICENSE
- JSONCPP_INSTALL_STAGING = YES
-+JSONCPP_CONF_OPTS = -Dtests=false
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 8c6d0396a8..ee006fe513 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2019-October/040967.html
+-md5 d052faa64eb6d2e649e582cc0fcf6e32 libinput-1.14.3.tar.xz
+-sha1 af23a4359202c24b592033f54347719a8f44d872 libinput-1.14.3.tar.xz
+-sha256 0feb3a0589709cc1032893bfaf4c49150d5360bd9782bec888f9e4dd9044c5b7 libinput-1.14.3.tar.xz
+-sha512 f01d1bd1b25b8060519575644597d35f0c89de5386d298441f440128ceee3e57549921a058adec31adc8b33dbdedf4c0bd12c76905a69f752859d3136e26336d libinput-1.14.3.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-January/041115.html
++md5 d5fe153c4b1d69ec35dc846588cd47ec libinput-1.15.0.tar.xz
++sha1 93dd7636b65e8cfea3a3068da5415f29195a189d libinput-1.15.0.tar.xz
++sha256 bfbf1fef66bcb2be871a18783dfcfb88ecb431f496bf0a9cf6685fd29c5843e1 libinput-1.15.0.tar.xz
++sha512 5dab48e1b4c9c0deb5b01ebc3ccb4cc28d614be25d87daaf42f51fbd2d955266f3fdba73029bc0094caa55060dad8967751b72d8f45f19a40b542f0c9118c1b6 libinput-1.15.0.tar.xz
  
- $(eval $(meson-package))
+ # License files
+ sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index e6e190bc47..03ae668f4e 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.14.3
++LIBINPUT_VERSION = 1.15.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
