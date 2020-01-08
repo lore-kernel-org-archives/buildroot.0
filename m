@@ -1,45 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Jan 2020 23:10:17 +0100
-Subject: [Buildroot] [git commit] package/pugixml: bump to version 1.10
-Message-ID: <20200108220048.D26E6870D4@busybox.osuosl.org>
+Date: Wed, 8 Jan 2020 23:10:14 +0100
+Subject: [Buildroot] [git commit] package/libcli: bump to version 1.10.2
+Message-ID: <20200108220048.C37047FB06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee1f731a90d43ee9464374ee3e9a3da22da2b533
+commit: https://git.buildroot.net/buildroot/commit/?id=378251372bd5a6d5977c1028e772e8cecca40606
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of license file (update in year and version)
+Update hash of license file (updated LGPL-2.1:
+https://github.com/dparrish/libcli/commit/41594c4284f14b828589ca0239ca29c2bdac5b96)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pugixml/pugixml.hash | 4 ++--
- package/pugixml/pugixml.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libcli/libcli.hash | 4 ++--
+ package/libcli/libcli.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pugixml/pugixml.hash b/package/pugixml/pugixml.hash
-index fb6566dabf..79ae75e83b 100644
---- a/package/pugixml/pugixml.hash
-+++ b/package/pugixml/pugixml.hash
+diff --git a/package/libcli/libcli.hash b/package/libcli/libcli.hash
+index 729c636960..ce4373e92b 100644
+--- a/package/libcli/libcli.hash
++++ b/package/libcli/libcli.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  d156d35b83f680e40fd6412c4455fdd03544339779134617b9b28d19e11fdba6  pugixml-1.9.tar.gz
--sha256  5f2318fdea73711b4761fd395462a51dc7d4626088ebaa41732b598821ac935a  readme.txt
-+sha256  55f399fbb470942410d348584dc953bcaec926415d3462f471ef350f29b5870a  pugixml-1.10.tar.gz
-+sha256  16582559c91ecf831d6289d472a903032e7d7994a86521c5c39513568d6ad208  readme.txt
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index 368f958920..800a3836ce 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256 3c801cb0112b6b5e07bdc3b98c034b36df6f33a8ed95ce74520b704bdbc0f36d  libcli-c63c9d35144939c8b4fa3c5394aed2e29ff517b0.tar.gz
+-sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
++sha256 190f0a315dbc291400e9d33f701f9a66894102a6c29e1aebb63f01239bb164d0  libcli-1.10.2.tar.gz
++sha256 376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  COPYING
+diff --git a/package/libcli/libcli.mk b/package/libcli/libcli.mk
+index 0fef008a4f..bc46082546 100644
+--- a/package/libcli/libcli.mk
++++ b/package/libcli/libcli.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PUGIXML_VERSION = 1.9
-+PUGIXML_VERSION = 1.10
- PUGIXML_SITE = http://github.com/zeux/pugixml/releases/download/v$(PUGIXML_VERSION)
- PUGIXML_LICENSE = MIT
- PUGIXML_LICENSE_FILES = readme.txt
+-LIBCLI_VERSION = c63c9d35144939c8b4fa3c5394aed2e29ff517b0
+-LIBCLI_SITE = $(call github,dparrish,libcli,$(LIBCLI_VERSION))
++LIBCLI_VERSION = 1.10.2
++LIBCLI_SITE = $(call github,dparrish,libcli,V$(LIBCLI_VERSION))
+ LIBCLI_LICENSE = LGPL-2.1
+ LIBCLI_LICENSE_FILES = COPYING
+ LIBCLI_INSTALL_STAGING = YES
