@@ -1,32 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Jan 2020 10:31:09 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/avro-c: depends on
- BR2_TOOLCHAIN_HAS_SYNC_4
-In-Reply-To: <20200102175135.155177-1-titouan.christophe@railnova.eu>
-References: <20200102175135.155177-1-titouan.christophe@railnova.eu>
-Message-ID: <20200108103109.678c3c1a@windsurf>
+From: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Date: Wed,  8 Jan 2020 11:44:39 +0100
+Subject: [Buildroot] [PATCH] package/systemd: use interface for networkd
+ config file
+Message-ID: <20200108104439.7041-1-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  2 Jan 2020 18:51:35 +0100
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+by using the interface in the filename for the networkd config
+file, we have a clear association between the config file and
+the interface it applies to.
 
-> Fixes: http://autobuild.buildroot.net/results/989/989b4e8aaeff51bb5236c4b31e3783a0e07e4a82
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> ---
-> Changes v1->v2: Config.in comment also depends on ..SYNC_4
-> ---
->  package/avro-c/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+this is benefitical for systems that have multiple interfaces.
 
-Applied to master, thanks.
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+---
+ package/systemd/systemd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 791e770..6e31a14 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -330,7 +330,7 @@ ifneq ($(SYSTEMD_NETWORKD_DHCP_IFACE),)
+ define SYSTEMD_INSTALL_NETWORK_CONFS
+ 	sed s/SYSTEMD_NETWORKD_DHCP_IFACE/$(SYSTEMD_NETWORKD_DHCP_IFACE)/ \
+ 		$(SYSTEMD_PKGDIR)/dhcp.network > \
+-		$(TARGET_DIR)/etc/systemd/network/dhcp.network
++		$(TARGET_DIR)/etc/systemd/network/$(SYSTEMD_NETWORKD_DHCP_IFACE).network
+ endef
+ endif
+ else
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
