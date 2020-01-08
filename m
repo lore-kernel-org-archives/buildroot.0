@@ -1,35 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Jan 2020 09:33:11 +0100
-Subject: [Buildroot] [PATCH] package/libcurl: bump version to 7.68.0
-In-Reply-To: <20200108074109.27474-1-peter@korsgaard.com>
-References: <20200108074109.27474-1-peter@korsgaard.com>
-Message-ID: <20200108093311.47560dcd@windsurf>
+Date: Wed, 8 Jan 2020 09:33:15 +0100
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.15.0
+In-Reply-To: <20200108081207.12462-1-ps.report@gmx.net>
+References: <20200108081207.12462-1-ps.report@gmx.net>
+Message-ID: <20200108093315.352158c4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Jan 2020 08:41:09 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Wed,  8 Jan 2020 09:12:07 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> Notice that 7.68.0 includes a Windows-only security fix:
+> For details see [1].
 > 
-> - CVE-2019-15601: SMB access smuggling via FILE URL on Windows
->   https://curl.haxx.se/docs/CVE-2019-15601.html
+> [1] https://lists.freedesktop.org/archives/wayland-devel/2020-January/041115.html
 > 
-> So not applicable to Buildroot.
-> 
-> Update the license hash for a copyright year update:
-> 
-> -Copyright (c) 1996 - 2019, Daniel Stenberg, <daniel@haxx.se>, and many
-> +Copyright (c) 1996 - 2020, Daniel Stenberg, <daniel@haxx.se>, and many
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/libcurl/libcurl.hash | 4 ++--
->  package/libcurl/libcurl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libinput/libinput.hash | 10 +++++-----
+>  package/libinput/libinput.mk   |  2 +-
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
 Applied to master, thanks.
 
