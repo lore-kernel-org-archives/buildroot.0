@@ -1,51 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Jan 2020 09:36:35 +0100
-Subject: [Buildroot] [git commit] package/alsa-lib: bump version to 1.2.1.2
-Message-ID: <20200108082730.747AF83D8A@busybox.osuosl.org>
+Date: Wed, 8 Jan 2020 09:37:02 +0100
+Subject: [Buildroot] [git commit] package/python-semver: bump to version
+ 2.9.0
+Message-ID: <20200108082730.7CF3483D8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1473773837d46683d3ec112eb20244e939461887
+commit: https://git.buildroot.net/buildroot/commit/?id=8154f6f005c2edbf2e96cf73858632df3c598e6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switched _SITE to https.
+The license text is now included in the tarball, so add it to _LICENSE_FILES
+and add a hash for it.
 
-Release notes:
-https://www.alsa-project.org/wiki/Changes_v1.2.1.1_v1.2.1.2
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/alsa-lib/alsa-lib.hash | 2 +-
- package/alsa-lib/alsa-lib.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-semver/python-semver.hash | 6 ++++--
+ package/python-semver/python-semver.mk   | 6 +++---
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index 0b8ced0124..2f34a12fb5 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 c95ac63c0aad43a6ac457d960569096b0b2ef72dc4e3737e77e3e2de87022cec  alsa-lib-1.2.1.1.tar.bz2
-+sha256 958e260e3673f1f6ff6b2d2c0df3fc2e469bea5b2957163ce96ce17f23e87943  alsa-lib-1.2.1.2.tar.bz2
- sha256 32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
- sha256 bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index 954cbfb241..38bd0fb70a 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-semver/python-semver.hash b/package/python-semver/python-semver.hash
+index e18cc1c672..60aaa6b8c4 100644
+--- a/package/python-semver/python-semver.hash
++++ b/package/python-semver/python-semver.hash
+@@ -1,3 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/semver/json
+-md5	dc579ba9d0bb2137bad5324d4bdb7e40  semver-2.8.1.tar.gz
+-sha256	5b09010a66d9a3837211bb7ae5a20d10ba88f8cb49e92cb139a69ef90d5060d8  semver-2.8.1.tar.gz
++md5	a411b305a3f6714bca126a0b59dc4429  semver-2.9.0.tar.gz
++sha256	ed1edeaa0c27f68feb74f09f715077fd07b728446dc2bb7fc470fc0f737873a0  semver-2.9.0.tar.gz
++# Locally computed
++sha256	cda490c32e61d3884dc17791fc8078f2a3e564fba98dd18b4dc64eb2720b2b6f  LICENSE.txt
+diff --git a/package/python-semver/python-semver.mk b/package/python-semver/python-semver.mk
+index afdd34564e..6e1faef126 100644
+--- a/package/python-semver/python-semver.mk
++++ b/package/python-semver/python-semver.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--ALSA_LIB_VERSION = 1.2.1.1
-+ALSA_LIB_VERSION = 1.2.1.2
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
--ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
-+ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
- ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
- ALSA_LIB_LICENSE_FILES = COPYING aserver/COPYING
- ALSA_LIB_INSTALL_STAGING = YES
+-PYTHON_SEMVER_VERSION = 2.8.1
++PYTHON_SEMVER_VERSION = 2.9.0
+ PYTHON_SEMVER_SOURCE = semver-$(PYTHON_SEMVER_VERSION).tar.gz
+-PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/47/13/8ae74584d6dd33a1d640ea27cd656a9f718132e75d759c09377d10d64595
++PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/be/c8/392e3c1c4080202b99e8b3b5d0ab6cbcfc4b25d50031c2c21d130871bf88
+ PYTHON_SEMVER_SETUP_TYPE = setuptools
+-# no license file in tarball, but available in git
+ PYTHON_SEMVER_LICENSE = BSD-3-Clause
++PYTHON_SEMVER_LICENSE_FILES = LICENSE.txt
+ 
+ $(eval $(python-package))
