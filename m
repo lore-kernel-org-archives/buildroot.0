@@ -1,31 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Jan 2020 09:33:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: disable tests
-In-Reply-To: <20200108065324.3577371-1-fontaine.fabrice@gmail.com>
-References: <20200108065324.3577371-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200108093308.4b1d8110@windsurf>
+Date: Wed, 8 Jan 2020 09:33:11 +0100
+Subject: [Buildroot] [PATCH] package/libcurl: bump version to 7.68.0
+In-Reply-To: <20200108074109.27474-1-peter@korsgaard.com>
+References: <20200108074109.27474-1-peter@korsgaard.com>
+Message-ID: <20200108093311.47560dcd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Jan 2020 07:53:24 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Wed,  8 Jan 2020 08:41:09 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> Disable tests to avoid a build failure on gcc 4.8 because of
-> std::hexfloat added in version 1.9.2 with
-> https://github.com/open-source-parsers/jsoncpp/commit/638ad269e75f28f9830f7bfc01278aeaf5b00135
+> Notice that 7.68.0 includes a Windows-only security fix:
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f816229b835f61fa3e4c84aa659d30f81191f369
+> - CVE-2019-15601: SMB access smuggling via FILE URL on Windows
+>   https://curl.haxx.se/docs/CVE-2019-15601.html
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> So not applicable to Buildroot.
+> 
+> Update the license hash for a copyright year update:
+> 
+> -Copyright (c) 1996 - 2019, Daniel Stenberg, <daniel@haxx.se>, and many
+> +Copyright (c) 1996 - 2020, Daniel Stenberg, <daniel@haxx.se>, and many
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/jsoncpp/0001-Meson-updates.patch | 147 +++++++++++++++++++++++
->  package/jsoncpp/jsoncpp.mk               |   1 +
->  2 files changed, 148 insertions(+)
->  create mode 100644 package/jsoncpp/0001-Meson-updates.patch
+>  package/libcurl/libcurl.hash | 4 ++--
+>  package/libcurl/libcurl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
