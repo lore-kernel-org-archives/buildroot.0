@@ -1,9 +1,9 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  9 Jan 2020 11:02:56 +0100
-Subject: [Buildroot] [PATCH] package/mfgtools: drop package
+Date: Thu,  9 Jan 2020 11:02:57 +0100
+Subject: [Buildroot] [PATCH 2/2] package/mfgtools: drop package
 In-Reply-To: <20200109100257.91010-1-joerg.krause@embedded.rocks>
 References: <20200109100257.91010-1-joerg.krause@embedded.rocks>
-Message-ID: <20200109100257.91010-2-joerg.krause@embedded.rocks>
+Message-ID: <20200109100257.91010-3-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
