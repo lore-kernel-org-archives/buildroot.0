@@ -1,63 +1,99 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  9 Jan 2020 14:21:56 +0100
-Subject: [Buildroot] [PATCH v1] package/zxing-cpp: disable testrunner
-Message-ID: <20200109132156.30722-1-ps.report@gmx.net>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Thu, 9 Jan 2020 14:58:04 +0100
+Subject: [Buildroot] [PATCH 1/2] Revert "package/libnss: fix build
+ failure on RHEL 7"
+In-Reply-To: <20200108220150.GE17943@scaer>
+References: <20200108170745.99342-1-giulio.benetti@benettiengineering.com>
+ <20200108220150.GE17943@scaer>
+Message-ID: <683cb19e-2276-943c-5ab3-c827c7be20a4@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In case cppunit dependency is found the testrunner is build
-which needs c++11 compile support enabled, avoid by building
-only libzxing and zxing targets.
+On 1/8/20 11:01 PM, Yann E. MORIN wrote:
+> Giulio, All,
+> 
+> On 2020-01-08 18:07 +0100, Giulio Benetti spake thusly:
+>> After discussing upstream here:
+>> https://bugzilla.mozilla.org/show_bug.cgi?id=1603398
+>> it turned out that my patch to fix the bug is wrong. The best way to fix
+>> it is to append -DLINUX to NATIVE_FLAGS in libnss.mk. Next patch is
+>> going to fix this.
+>>
+>> This reverts commit fe4b47a12181b89eecb9a8e324f1ad053147f948.
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> 
+> I've applied both to master, but as a single commit.
+> 
+> Indeed, this comit removing a patch that fixes a build failure, so all
+> alone, it breaks the build again.
+> 
+> And in case the second patch is not applied, the build stays broken.
+> 
+> and indeed, the two are in fact a single semantic patch: revert a change
+> that upstream deemed incorrect, and aply a fix that upstream suggested
+> as a replqacement for the incorrect patch.
+> 
+> So, I merged both commit in a single one, adapted the commit log, and
+> pushed. Thanks!
 
-Fixes:
-  - http://autobuild.buildroot.net/results/f7c2c03a2b5a0147a041d873c1a36143861be764
+I've missed bisection, thank you for fixing it.
 
-  [ 85%] Building CXX object CMakeFiles/testrunner.dir/core/tests/src/common/BitArrayTest.cpp.o
-  In file included from .../host/opt/ext-toolchain/mips64el-buildroot-linux-uclibc/include/c++/5.5.0/type_traits:35:0,
-                   from .../host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/cppunit/tools/StringHelper.h:7,
-                   from .../host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/cppunit/TestAssert.h:8,
-                   from .../host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/cppunit/TestCase.h:6,
-                   from .../host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/cppunit/TestCaller.h:5,
-                   from .../host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/cppunit/extensions/HelperMacros.h:9,
-                   from .../build/zxing-cpp-0db7f855135222becff193671faae79c083424b6/core/tests/src/common/BitArrayTest.h:24,
-                   from .../build/zxing-cpp-0db7f855135222becff193671faae79c083424b6/core/tests/src/common/BitArrayTest.cpp:21:
-  .../host/opt/ext-toolchain/mips64el-buildroot-linux-uclibc/include/c++/5.5.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Notes:
-
-  Alternative solution would be to enforce c++11 support for the
-  testrunner target with the following CMakeLists.txt patch:
-
-  --- a/CMakeLists.txt.orig       2020-01-09 14:13:26.177686351 +0100
-  +++ b/CMakeLists.txt    2020-01-09 14:13:32.341807901 +0100
-  @@ -84,6 +84,7 @@
-       add_executable(testrunner ${TESTRUNNER_FILES})
-       include_directories(${CPPUNIT_INCLUDE_DIR})
-       target_link_libraries(testrunner libzxing  ${CPPUNIT_LIBRARIES})
-  +    set_property(TARGET testrunner PROPERTY CXX_STANDARD 11)
-   else()
-       message(WARNING "Not building testrunner, because CppUnit is missing")
-   endif()
----
- package/zxing-cpp/zxing-cpp.mk | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
-index 7113ae2b06..885d6fc344 100644
---- a/package/zxing-cpp/zxing-cpp.mk
-+++ b/package/zxing-cpp/zxing-cpp.mk
-@@ -15,4 +15,7 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
- ZXING_CPP_DEPENDENCIES += libiconv
- endif
- 
-+# build all targets except testrunner (needs c++11 support)
-+ZXING_CPP_MAKE_OPTS = libzxing zxing
-+
- $(eval $(cmake-package))
 -- 
-2.24.1
+Giulio Benetti
+Benetti Engineering sas
+
+> Regards,
+> Yann E. MORIN.
+> 
+>> ---
+>>   ...-nsinstall.c-build-failure-on-RHEL-7.patch | 29 -------------------
+>>   1 file changed, 29 deletions(-)
+>>   delete mode 100644 package/libnss/0003-Bug-1603398-Fix-nsinstall.c-build-failure-on-RHEL-7.patch
+>>
+>> diff --git a/package/libnss/0003-Bug-1603398-Fix-nsinstall.c-build-failure-on-RHEL-7.patch b/package/libnss/0003-Bug-1603398-Fix-nsinstall.c-build-failure-on-RHEL-7.patch
+>> deleted file mode 100644
+>> index 631d97d11f..0000000000
+>> --- a/package/libnss/0003-Bug-1603398-Fix-nsinstall.c-build-failure-on-RHEL-7.patch
+>> +++ /dev/null
+>> @@ -1,29 +0,0 @@
+>> -From 1ba8516045bc8a13fd72e1a85206a04b29d96758 Mon Sep 17 00:00:00 2001
+>> -From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> -Date: Thu, 12 Dec 2019 12:57:29 +0100
+>> -Subject: [PATCH] Bug 1603398 - Fix nsinstall.c build failure on RHEL 7
+>> -
+>> -In Linux.mk -DLINUX and -Dlinux must be passed to DEFINES, not
+>> -OS_CFLAGS.
+>> -
+>> -Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ----
+>> - nss/coreconf/Linux.mk | 2 +-
+>> - 1 file changed, 1 insertion(+), 1 deletion(-)
+>> -
+>> -diff --git a/nss/coreconf/Linux.mk b/nss/coreconf/Linux.mk
+>> -index d07f8a3c5..4b45a6054 100644
+>> ---- a/nss/coreconf/Linux.mk
+>> -+++ b/nss/coreconf/Linux.mk
+>> -@@ -132,7 +132,7 @@ endif
+>> -
+>> - OS_CFLAGS		= $(DSO_CFLAGS) $(OS_REL_CFLAGS) $(ARCHFLAG) -pipe -ffunction-sections -fdata-sections -DHAVE_STRERROR
+>> - ifeq ($(KERNEL),Linux)
+>> --	OS_CFLAGS	+= -DLINUX -Dlinux
+>> -+	DEFINES		+= -DLINUX -Dlinux
+>> - endif
+>> - OS_LIBS			= $(OS_PTHREAD) -ldl -lc
+>> -
+>> ---
+>> -2.20.1
+>> -
+>> -- 
+>> 2.20.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
