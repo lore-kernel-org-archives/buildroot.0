@@ -1,50 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 Jan 2020 17:15:44 +0100
-Subject: [Buildroot] [git commit] package/python-pyzmq: bump to version
- 18.1.1
-Message-ID: <20200109160609.C0A1687FF5@busybox.osuosl.org>
+Date: Thu, 9 Jan 2020 17:15:10 +0100
+Subject: [Buildroot] [git commit] package/python-psutil: bump to version
+ 5.6.7
+Message-ID: <20200109160609.B3C4487FF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f9da5c9ddc6b54576fbf0568dccfbf9d94a0db9
+commit: https://git.buildroot.net/buildroot/commit/?id=50ac16660525fe9773d9665c0f13cce3e9a1988e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyzmq/python-pyzmq.hash | 4 ++--
- package/python-pyzmq/python-pyzmq.mk   | 4 ++--
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
-index 4b77721a72..96e0ab9ffc 100644
---- a/package/python-pyzmq/python-pyzmq.hash
-+++ b/package/python-pyzmq/python-pyzmq.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pyzmq/json
--md5    3c8039d007bbbd08a2275f52f5dc9a35  pyzmq-18.1.0.tar.gz
--sha256 93f44739db69234c013a16990e43db1aa0af3cf5a4b8b377d028ff24515fbeb3  pyzmq-18.1.0.tar.gz
-+md5    d850bbab7c7f558b91c95b19028ff4b8  pyzmq-18.1.1.tar.gz
-+sha256 8c69a6cbfa94da29a34f6b16193e7c15f5d3220cb772d6d17425ff3faa063a6d  pyzmq-18.1.1.tar.gz
- # Locally calculated
- sha256 aef3b80570351d44e29c22d080d4e9e106b34f3fdbc5cdf9636994474c72b1a2   COPYING.BSD
- sha256 44b23767df3c0fe27f88981f09bc7f50a1695cec4b24252fa5f55f03e76bcd6d   COPYING.LESSER
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index cba3abdb52..0ba0c8d980 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index 3081e41540..7f3d629d66 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5	7ca9d297c23ca0074c1cf173bed061b0  psutil-5.6.4.tar.gz
+-sha256	512e854d68f8b42f79b2c7864d997b39125baff9bcff00028ce43543867de7c4  psutil-5.6.4.tar.gz
++md5	b2c94e0368fc6e6f237a7252f8e85ca2  psutil-5.6.7.tar.gz
++sha256	ffad8eb2ac614518bbe3c0b8eb9dffdb3a8d2e3a7d5da51c5b974fb723a5c5aa  psutil-5.6.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256	24c12984500caa07ffdce19eebc06396c5e6d244b573bc6c438f4a6ef8e56c1b  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 0edf1c669b..62a94f3c41 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYZMQ_VERSION = 18.1.0
-+PYTHON_PYZMQ_VERSION = 18.1.1
- PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
--PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/7a/d2/1eb3a994374802b352d4911f3317313a5b4ea786bc830cc5e343dad9b06d
-+PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/3c/83/7ecbe9b762829f589fa9734026e0ccb63cb128fe5615ae1698f65df72bfe
- PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
- # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
- PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
+-PYTHON_PSUTIL_VERSION = 5.6.4
++PYTHON_PSUTIL_VERSION = 5.6.7
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/47/ea/d3b6d6fd0b4a6c12984df652525f394e68c8678d2b05075219144eb3a1cf
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/73/93/4f8213fbe66fc20cb904f35e6e04e20b47b85bee39845cc66a0bcf5ccdcb
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
