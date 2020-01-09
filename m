@@ -1,31 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 Jan 2020 16:12:17 +0100
-Subject: [Buildroot] [POC] buildroot packages site
-In-Reply-To: <CAEyMn7Y497pMZd3hqKypwzOqZ8LE8s4PNz7FYTE1T5xUyVcW7g@mail.gmail.com>
-References: <CAEyMn7brT6fMrUmb7L61ofOx7NuEKj2OqZrL9X00gp4rYZp1RQ@mail.gmail.com>
- <20200103132645.6be5a250@windsurf>
- <CAEyMn7YbbC+Nb0PbvFsS=BMh7aEi_nLZaOSS4URYzqfrzwUoYg@mail.gmail.com>
- <20200103134607.1b6a7f55@windsurf>
- <CAEyMn7Y497pMZd3hqKypwzOqZ8LE8s4PNz7FYTE1T5xUyVcW7g@mail.gmail.com>
-Message-ID: <20200109161217.2a8b4a4a@windsurf>
+Date: Thu, 9 Jan 2020 17:01:34 +0100
+Subject: [Buildroot] [git commit] package/tcpdump: remove unnecessary
+ dependency on zlib
+Message-ID: <20200109155146.93AB5870B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 9 Jan 2020 15:58:35 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a103aeb43696a8ff886e62e3a8cc30c9ef7c4c8c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > OK, let's work on getting this in place. We need to sync with Peter
-> > Korsgaard to see how it can be deployed on the existing infrastructure.  
-> 
-> Is that something we can discuss at Brussel on the Buildroot Developers Meeting?
+The tcpdump package currently depends on zlib, but this is not
+needed. The commit removes this non-mandatory dependency.
 
-Of course!
+Signed-off-by: Mircea Gliga <gliga.mircea@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tcpdump/tcpdump.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 72bf6f8704..01a46b9b5f 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -16,7 +16,7 @@ TCPDUMP_CONF_OPTS = \
+ 	--without-crypto \
+ 	--with-system-libpcap \
+ 	$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
+-TCPDUMP_DEPENDENCIES = zlib libpcap
++TCPDUMP_DEPENDENCIES = libpcap
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ TCPDUMP_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
