@@ -1,49 +1,57 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu,  9 Jan 2020 10:16:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pyzmq: bump to version 18.1.1
-In-Reply-To: <20200109081650.28912-1-asafka7@gmail.com>
-References: <20200109081650.28912-1-asafka7@gmail.com>
-Message-ID: <20200109081650.28912-5-asafka7@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 09 Jan 2020 10:15:47 +0100
+Subject: [Buildroot] [PATCH 0/2] package/wireguard upgrade
+In-Reply-To: <20200108210929.GD17943@scaer> (Yann E. MORIN's message of "Wed, 
+ 8 Jan 2020 22:09:29 +0100")
+References: <20200106104731.13306-1-peter@korsgaard.com>
+ <20200108210929.GD17943@scaer>
+Message-ID: <87imllgfcs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-pyzmq/python-pyzmq.hash | 4 ++--
- package/python-pyzmq/python-pyzmq.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
-index 4b77721a72..96e0ab9ffc 100644
---- a/package/python-pyzmq/python-pyzmq.hash
-+++ b/package/python-pyzmq/python-pyzmq.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pyzmq/json
--md5    3c8039d007bbbd08a2275f52f5dc9a35  pyzmq-18.1.0.tar.gz
--sha256 93f44739db69234c013a16990e43db1aa0af3cf5a4b8b377d028ff24515fbeb3  pyzmq-18.1.0.tar.gz
-+md5    d850bbab7c7f558b91c95b19028ff4b8  pyzmq-18.1.1.tar.gz
-+sha256 8c69a6cbfa94da29a34f6b16193e7c15f5d3220cb772d6d17425ff3faa063a6d  pyzmq-18.1.1.tar.gz
- # Locally calculated
- sha256 aef3b80570351d44e29c22d080d4e9e106b34f3fdbc5cdf9636994474c72b1a2   COPYING.BSD
- sha256 44b23767df3c0fe27f88981f09bc7f50a1695cec4b24252fa5f55f03e76bcd6d   COPYING.LESSER
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index cba3abdb52..0ba0c8d980 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYZMQ_VERSION = 18.1.0
-+PYTHON_PYZMQ_VERSION = 18.1.1
- PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
--PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/7a/d2/1eb3a994374802b352d4911f3317313a5b4ea786bc830cc5e343dad9b06d
-+PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/3c/83/7ecbe9b762829f589fa9734026e0ccb63cb128fe5615ae1698f65df72bfe
- PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
- # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
- PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
+ > Peter, All,
+ > On 2020-01-06 11:47 +0100, Peter Korsgaard spake thusly:
+ >> With the kernel support for WireGuard getting mainlined, the upstream repo
+ >> has been split in a wireguard-tools repo for the userspace tooling and
+ >> wireguard-linux-compat for the kernel side (for 3.10+ legacy kernels).
+ >> 
+ >> This series changes the wireguard package to use the wireguard-tools
+ >> repo and adds a package for wireguard-linux-compat.
+
+ > So, previously, selecting BR2_PACKAGE_WIREGUARD would build both the
+ > kernel module and the userland tools, as they were packagesd in a single
+ > upstream package.
+
+Yes, if the configuration builds a Linux kernel.
+
+
+ > Now, they are separated into two different upstream packages, namely
+ > wireguard-tools and wireguard-linux-compat.
+
+ > With your patchset, an existing defconfig will now only build the
+ > userland tools, even if the user would still need the kernel module for
+ > older kernels.
+
+ > So, my proposal would be to have a single patch that introduces the
+ > split, with a renaming of the existing wireguard package, and a legacy
+ > symbol that selects both the userland tools and the compat module.
+
+I don't think there is any specific reason why it all HAS to be done in
+a single commit?
+
+
+ > This would allow existing configs to stay to iso-functionality. Thanks
+ > to the legacy handling, the user will notice and will have to confirm
+ > they still need/want the kernel module, and they can disable it if not.
+
+The symbol rename is a bit more noisy, but it indeed is nicer for users
+of the legacy kernel module.
+
+Thanks, I've sent a v2 implementing that.
 -- 
-2.20.1
+Bye, Peter Korsgaard
