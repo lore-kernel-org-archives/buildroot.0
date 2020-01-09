@@ -1,96 +1,99 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 9 Jan 2020 21:50:25 +0100
-Subject: [Buildroot] dillo
-In-Reply-To: <372b903d-cd05-28bd-b1ba-7ac3314ee165@cam.ac.uk>
-References: <372b903d-cd05-28bd-b1ba-7ac3314ee165@cam.ac.uk>
-Message-ID: <20200109215025.377ae5b8@gmx.net>
+Date: Thu,  9 Jan 2020 22:21:10 +0100
+Subject: [Buildroot] [PATCH v1] package/dillo: fix openssl support
+Message-ID: <20200109212110.20227-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jonathan
+Add two patches to fix openssl support:
 
-added CC buildroot at buildroot.org
+ - 0003-Fix-openssl-detection.patch (suggested by Jonathan Kimmitt)
+ - 0004-Support-OpenSSL-1.1.0.patch (taken from upstream)
 
-On Thu, 9 Jan 2020 17:09:12 +0000, Jonathan Kimmitt <jrrk2@cam.ac.uk> wrote:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ .../dillo/0003-Fix-openssl-detection.patch    | 29 ++++++++++++++++
+ .../dillo/0004-Support-OpenSSL-1.1.0.patch    | 33 +++++++++++++++++++
+ 2 files changed, 62 insertions(+)
+ create mode 100644 package/dillo/0003-Fix-openssl-detection.patch
+ create mode 100644 package/dillo/0004-Support-OpenSSL-1.1.0.patch
 
-> Dear Peter,
->
-> Are you a maintainer for the dillo port to buildroot? If so I have some
-> patches for you
-
-Yes, somehow...
-
->
-> concerning SSL compatibility, relative to the 2019.11 release. No doubt
-> they need reworking to be upstream worthy.
-
-Thanks for the patches, some remarks:
-
-- 0003-SSL_library_init.patch
-
-> SSL_library_init is now a #define, causing this check to fail ...
->
-> --- a/configure.ac	2020-01-09 14:57:27.823065488 +0000
-> +++ b/configure.ac	2020-01-09 14:59:35.735065000 +0000
-> @@ -276,7 +276,7 @@
->
->    if test "x$ssl_ok" = "xyes"; then
->      old_libs="$LIBS"
-> -    AC_CHECK_LIB(ssl, SSL_library_init, ssl_ok=yes, ssl_ok=no, -lcrypto)
-> +    AC_CHECK_LIB(ssl, OPENSSL_init_ssl, ssl_ok=yes, ssl_ok=no, -lcrypto)
->      LIBS="$old_libs"
->    fi
-
-Which openssl provider/library did you use, openssl (BR2_PACKAGE_LIBOPENSSL=y) or
-libressl (BR2_PACKAGE_LIBRESSL=y)?
-
-Will test/check your patch (but needs some time, I am no daily dillo user ;-) )...
-
-
-- 0004-certificate.patch
-
-> --- a/dpi/https.c	2015-06-30 15:06:08.000000000 +0100
-> +++ b/dpi/https.c	2020-01-09 15:28:25.843058400 +0000
-> @@ -475,9 +475,12 @@
->           break;
->        case X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT:
->           /*Either self signed and untrusted*/
-> +#if 0
->           /*Extract CN from certificate name information*/
->           if ((cn = strstr(remote_cert->name, "/CN=")) == NULL) {
-> -            strcpy(buf, "(no CN given)");
-> +#endif
-> +           strcpy(buf, "(no CN given)");
-> +#if 0
->           } else {
->              char *cn_end;
->
-> @@ -489,6 +492,7 @@
->              strncpy(buf, cn, (size_t) (cn_end - cn));
->              buf[cn_end - cn] = '\0';
->           }
-> +#endif
->           msg = dStrconcat("The remote certificate is self-signed and "
->                            "untrusted.\nFor address: ", buf, NULL);
->           d_cmd = a_Dpip_build_cmd(
-
-This one looks like upstream commit 'Support OpenSSL 1.1.0' ([1]) and
-according to the mercurial info should be contained in the 3.0.5
-release (in case I read the mercurial info right), but seems not to
-be contained in the dillo-3.0.5.tar.bz2 sources...
-
-Regards,
-Peter
-
-[1] https://hg.dillo.org/dillo/rev/b171b8610400
-
->
-> Regards,
->
-> Jonathan Kimmitt
->
->
->
+diff --git a/package/dillo/0003-Fix-openssl-detection.patch b/package/dillo/0003-Fix-openssl-detection.patch
+new file mode 100644
+index 0000000000..0578718c2b
+--- /dev/null
++++ b/package/dillo/0003-Fix-openssl-detection.patch
+@@ -0,0 +1,29 @@
++From 96dde9dedf806256cdc6cbf5cacbd5c8d74e6288 Mon Sep 17 00:00:00 2001
++From: Jonathan Kimmitt <jrrk2@cam.ac.uk>
++Date: Thu, 9 Jan 2020 22:01:42 +0100
++Subject: [PATCH 3/4] Fix openssl detection
++
++SSL_library_init is now a define, use OPENSSL_init_ssl instead.
++
++Signed-off-by: Jonathan Kimmitt <jrrk2@cam.ac.uk>
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 66b5e9f..206fd53 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -276,7 +276,7 @@ if test "x$enable_ssl" = "xyes"; then
++ 
++   if test "x$ssl_ok" = "xyes"; then
++     old_libs="$LIBS"
++-    AC_CHECK_LIB(ssl, SSL_library_init, ssl_ok=yes, ssl_ok=no, -lcrypto)
+++    AC_CHECK_LIB(ssl, OPENSSL_init_ssl, ssl_ok=yes, ssl_ok=no, -lcrypto)
++     LIBS="$old_libs"
++   fi
++ 
++-- 
++2.24.1
++
+diff --git a/package/dillo/0004-Support-OpenSSL-1.1.0.patch b/package/dillo/0004-Support-OpenSSL-1.1.0.patch
+new file mode 100644
+index 0000000000..57518cf5c5
+--- /dev/null
++++ b/package/dillo/0004-Support-OpenSSL-1.1.0.patch
+@@ -0,0 +1,33 @@
++From ff44d8b2d5211a502afdb3e612dae0e8133b5124 Mon Sep 17 00:00:00 2001
++From: Johannes Hofmann <Johannes.Hofmann@gmx.de>
++Date: Thu, 9 Jan 2020 22:07:15 +0100
++Subject: [PATCH 4/4] Support OpenSSL 1.1.0
++
++taken-from: pkgsrc (Ryo ONODERA)
++submitted-by: Jun Ebihara <jun@soum.co.jp>
++
++Upstream: https://hg.dillo.org/dillo/rev/b171b8610400
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ dpi/https.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/dpi/https.c b/dpi/https.c
++index 766b3af..025cfc4 100644
++--- a/dpi/https.c
+++++ b/dpi/https.c
++@@ -476,7 +476,11 @@ static int handle_certificate_problem(SSL * ssl_connection)
++       case X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT:
++          /*Either self signed and untrusted*/
++          /*Extract CN from certificate name information*/
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L
++          if ((cn = strstr(remote_cert->name, "/CN=")) == NULL) {
+++#else
+++         if ((cn = strstr(X509_get_subject_name(remote_cert), "/CN=")) == NULL) {
+++#endif
++             strcpy(buf, "(no CN given)");
++          } else {
++             char *cn_end;
++-- 
++2.24.1
++
+-- 
+2.24.1
