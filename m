@@ -1,7 +1,7 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed,  8 Jan 2020 16:16:05 -0700
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.53.0
-Message-ID: <20200108231605.76439-1-james.hilliard1@gmail.com>
+Date: Wed,  8 Jan 2020 19:40:00 -0700
+Subject: [Buildroot] [PATCH v2 1/1] package/meson: bump to version 0.53.0
+Message-ID: <20200109024000.99511-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,15 +10,24 @@ To: buildroot@busybox.net
 
 Removed patch that is now upstream.
 
+Add patch to prevent passing an invalid linker to gcc fixing:
+ERROR: Unable to determine dynamic linker
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+---
+Changes v1 -> v2:
+  - add patch to prevent passing an invalid linker to gcc
 ---
  ...ic-libs-when-default-library-static.patch} |  0
  ...dist.py-import-lzma-only-when-needed.patch | 50 -------------------
+ ...ent-passing-an-invalid-linker-to-gcc.patch | 31 ++++++++++++
  package/meson/meson.hash                      |  4 +-
  package/meson/meson.mk                        |  2 +-
- 4 files changed, 3 insertions(+), 53 deletions(-)
+ 5 files changed, 34 insertions(+), 53 deletions(-)
  rename package/meson/{0003-Prefer-ext-static-libs-when-default-library-static.patch => 0002-Prefer-ext-static-libs-when-default-library-static.patch} (100%)
  delete mode 100644 package/meson/0002-mdist.py-import-lzma-only-when-needed.patch
+ create mode 100644 package/meson/0003-Prevent-passing-an-invalid-linker-to-gcc.patch
 
 diff --git a/package/meson/0003-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
 similarity index 100%
@@ -80,6 +89,43 @@ index 81758bc1b3..0000000000
 --- 
 -2.20.1
 -
+diff --git a/package/meson/0003-Prevent-passing-an-invalid-linker-to-gcc.patch b/package/meson/0003-Prevent-passing-an-invalid-linker-to-gcc.patch
+new file mode 100644
+index 0000000000..9e26341186
+--- /dev/null
++++ b/package/meson/0003-Prevent-passing-an-invalid-linker-to-gcc.patch
+@@ -0,0 +1,31 @@
++From 295a48be7bc1371b710280c81cb7caccb5b4253f Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Wed, 8 Jan 2020 19:32:09 -0600
++Subject: [PATCH] Prevent passing an invalid linker to gcc.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream-Status:
++https://github.com/mesonbuild/meson/pull/6436]
++---
++ mesonbuild/compilers/mixins/gnu.py | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/mesonbuild/compilers/mixins/gnu.py b/mesonbuild/compilers/mixins/gnu.py
++index dcca2271..3ff20874 100644
++--- a/mesonbuild/compilers/mixins/gnu.py
+++++ b/mesonbuild/compilers/mixins/gnu.py
++@@ -304,7 +304,10 @@ class GnuLikeCompiler(metaclass=abc.ABCMeta):
++ 
++     @classmethod
++     def use_linker_args(cls, linker: str) -> typing.List[str]:
++-        return ['-fuse-ld={}'.format(linker)]
+++        if linker in ['bfd', 'gold', 'lld']:
+++            return ['-fuse-ld={}'.format(linker)]
+++        else:
+++            return []
++ 
++ 
++ class GnuCompiler(GnuLikeCompiler):
++-- 
++2.20.1
++
 diff --git a/package/meson/meson.hash b/package/meson/meson.hash
 index 461e908b4a..3039526857 100644
 --- a/package/meson/meson.hash
