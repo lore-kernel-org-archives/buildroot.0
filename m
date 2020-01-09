@@ -1,105 +1,224 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu,  9 Jan 2020 19:32:06 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libuv, uvw: bump to versions 1.34.0,
- 2.3.0_libuv-v1.34
-Message-ID: <20200109173206.25322-1-asafka7@gmail.com>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Thu, 9 Jan 2020 11:33:14 -0600
+Subject: [Buildroot] [PATCHv3] toolchain/external: allow custom
+ toolchains to use newer headers
+In-Reply-To: <20200107205429.11726-1-yann.morin.1998@free.fr>
+References: <20200107205429.11726-1-yann.morin.1998@free.fr>
+Message-ID: <5a3417a2-6b02-991b-03c8-eab3835101ba@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove uvw patch (now on upstream).
+Tested-by: Vincent Fazio <vfazio@xes-inc.com>
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
-v1->v2: bump libuv and uvw in the same patch.
----
- package/libuv/libuv.hash                      |  2 +-
- package/libuv/libuv.mk                        |  2 +-
- ...-CMakeLists.txt-add-BUILD_DOC-option.patch | 28 -------------------
- package/uvw/uvw.hash                          |  2 +-
- package/uvw/uvw.mk                            |  2 +-
- 5 files changed, 4 insertions(+), 32 deletions(-)
- delete mode 100644 package/uvw/0001-CMakeLists.txt-add-BUILD_DOC-option.patch
+On 1/7/20 2:54 PM, Yann E. MORIN wrote:
+> From: Vincent Fazio <vfazio@xes-inc.com>
+>
+> When Buildroot is released, it knows up to a certain kernel header
+> version, and no later. However, it is possible that an external
+> toolchain will be used, that uses headers newer than the latest version
+> Buildroot knows about.
+>
+> This may also happen when testing a development, rc-class kernel
+> version, either in an external toolchain, or with an internal toolchain
+> with custom headers (same-as-kernel, custom version, custom git,
+> custom tarball).
+>
+> In the current state, Buildroot would refuse to use such toolchains,
+> because the test is for strict equality.
+>
+> We'd like to make that situation possible, but we also want the user not
+> to be lenient at the same time, and select the right headers version
+> when it is known.
+>
+> So, we add a new Kconfig blind option that the latest kernel headers
+> version selects. This options is then used to decide whether we do a
+> strict or loose check of the kernel headers.
+>
+> Suggested-by: Aaron Sierra <asierra@xes-inc.com>
+> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+> [yann.morin.1998 at free.fr:
+>    - only do a loose check for the latest version
+>    - expand commit log
+> ]
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>
+> ---
+> Changes v2 -> v3:  (Yann)
+>    - also handle the internal toolchain for custom headers
+>      (noticed by Vincent)
+>
+> Changes v1 -> v2:  (Yann)
+>    - make it loose only for the latest version
+> ---
+>   package/linux-headers/Config.in.host          |  3 +++
+>   package/linux-headers/linux-headers.mk        |  5 +++-
+>   support/scripts/check-kernel-headers.sh       | 27 ++++++++++++++++---
+>   toolchain/Config.in                           |  8 ++++++
+>   toolchain/helpers.mk                          |  6 ++++-
+>   .../pkg-toolchain-external.mk                 |  3 ++-
+>   .../Config.in.options                         |  3 +++
+>   7 files changed, 48 insertions(+), 7 deletions(-)
+>
+> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+> index 1b479a5c4d..37d368b8e5 100644
+> --- a/package/linux-headers/Config.in.host
+> +++ b/package/linux-headers/Config.in.host
+> @@ -118,6 +118,9 @@ choice
+>   	  This is used to hide/show some packages that have strict
+>   	  requirements on the version of kernel headers.
+>   
+> +	  If your kernel headers are more recent than the latest version
+> +	  in the choice, then select the latest version.
+> +
+>   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4
+>   	bool "5.4.x"
+>   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+> index 676c8c44ea..d653c951fd 100644
+> --- a/package/linux-headers/linux-headers.mk
+> +++ b/package/linux-headers/linux-headers.mk
+> @@ -131,11 +131,14 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
+>   endef
+>   
+>   ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
+> +# In this case, we must always do a 'loose' test, because they are all
+> +# custom versions which may be later than what we know right now.
+>   define LINUX_HEADERS_CHECK_VERSION
+>   	$(call check_kernel_headers_version,\
+>   		$(BUILD_DIR),\
+>   		$(STAGING_DIR),\
+> -		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)))
+> +		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
+> +		loose)
+>   endef
+>   LINUX_HEADERS_POST_INSTALL_STAGING_HOOKS += LINUX_HEADERS_CHECK_VERSION
+>   endif
+> diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+> index 9d23c00feb..0f03c6cb34 100755
+> --- a/support/scripts/check-kernel-headers.sh
+> +++ b/support/scripts/check-kernel-headers.sh
+> @@ -1,9 +1,25 @@
+>   #!/bin/sh
+>   
+> +# This script (and the embedded C code) will check that the actual
+> +# headers version match the user told us they were:
+> +#
+> +# - if both versions are the same, all is well.
+> +#
+> +# - if the actual headers are older than the user told us, this is
+> +#   an error.
+> +#
+> +# - if the actual headers are more recent than the user told us, and
+> +#   we are doing a strict check, then this is an error.
+> +#
+> +# - if the actual headers are more recent than the user told us, and
+> +#   we are doing a loose check, then a warning is printed, but this is
+> +#   not an error.
+> +
+>   BUILDDIR="${1}"
+>   SYSROOT="${2}"
+>   # Make sure we have enough version components
+>   HDR_VER="${3}.0.0"
+> +CHECK="${4}"  # 'strict' or 'loose'
+>   
+>   HDR_M="${HDR_VER%%.*}"
+>   HDR_V="${HDR_VER#*.}"
+> @@ -32,16 +48,19 @@ ${HOSTCC} -imacros "${SYSROOT}/usr/include/linux/version.h" \
+>   int main(int argc __attribute__((unused)),
+>            char** argv __attribute__((unused)))
+>   {
+> -    if((LINUX_VERSION_CODE & ~0xFF)
+> -        != KERNEL_VERSION(${HDR_M},${HDR_m},0))
+> +    int ret = 0;
+> +    int l = LINUX_VERSION_CODE & ~0xFF;
+> +    int h = KERNEL_VERSION(${HDR_M},${HDR_m},0);
+> +
+> +    if(l != h)
+>       {
+>           printf("Incorrect selection of kernel headers: ");
+>           printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
+>                  ((LINUX_VERSION_CODE>>16) & 0xFF),
+>                  ((LINUX_VERSION_CODE>>8) & 0xFF));
+> -        return 1;
+> +        ret = ((l >= h ) && ("${CHECK}"[0] == 'l')) ? 0 : 1;
+>       }
+> -    return 0;
+> +    return ret;
+>   }
+>   _EOF_
+>   
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index 858121d2c5..973c03254f 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -457,6 +457,14 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
+>   config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+>   	bool
+>   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
+> +	select BR2_TOOLCHAIN_HEADERS_LATEST
+> +
+> +# This should be selected by the latest version, above, to indicate that
+> +# Buildroot does not know of more recent headers than the ones selected.
+> +# This allows using toolchains with headers more recent than Buildroot
+> +# knows about, while still enforcing strict check for older headers.
+> +config BR2_TOOLCHAIN_HEADERS_LATEST
+> +	bool
+>   
+>   # This order guarantees that the highest version is set, as kconfig
+>   # stops affecting a value on the first matching default.
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 996cc70d44..2c2a987c3e 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -161,9 +161,13 @@ copy_toolchain_sysroot = \
+>   # $1: build directory
+>   # $2: sysroot directory
+>   # $3: kernel version string, in the form: X.Y
+> +# $4: test to do for the latest kernel version, 'strict' or 'loose'
+> +#     always 'strict' if this is not the latest version.
+>   #
+>   check_kernel_headers_version = \
+> -	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3); then \
+> +	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3) \
+> +		$(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict); \
+> +	then \
+>   		exit 1; \
+>   	fi
+>   
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 1c43409514..b01082aadd 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -542,7 +542,8 @@ define $(2)_CONFIGURE_CMDS
+>   	$$(call check_kernel_headers_version,\
+>   		$$(BUILD_DIR)\
+>   		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
+> -		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
+> +		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
+> +		$$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict)); \
+>   	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
+>   		$$(call qstrip,$$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
+>   	if test "$$(BR2_arm)" = "y" ; then \
+> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> index 665765a104..d7a40e457b 100644
+> --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> @@ -109,6 +109,9 @@ choice
+>   	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+>   	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+>   
+> +	  If your toolchain uses headers newer than the latest version
+> +	  in the choice, then select the latest version.
+> +
+>   config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4
+>   	bool "5.4.x"
+>   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 3890c8af94..e49822ad0d 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  63794499bf5da1720e249d3fc14ff396b70b8736effe6ce5b4e47e0f3d476467  libuv-1.33.1.tar.gz
-+sha256  2c36b49bcf82c0d06ab0d77f98805605efa071d58ca29dee7c790912598b005d  libuv-1.34.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 618b25d5f6..4865c54551 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -6,7 +6,7 @@
- 
- # When bumping libuv, check if a new version of uvw is available
- # and bump it too.
--LIBUV_VERSION = 1.33.1
-+LIBUV_VERSION = 1.34.0
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
-diff --git a/package/uvw/0001-CMakeLists.txt-add-BUILD_DOC-option.patch b/package/uvw/0001-CMakeLists.txt-add-BUILD_DOC-option.patch
-deleted file mode 100644
-index ae52362fa1..0000000000
---- a/package/uvw/0001-CMakeLists.txt-add-BUILD_DOC-option.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 8038b6343466b9a58fd5ef5f13d3255ecbfce5aa Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 31 Oct 2019 13:41:04 +0100
--Subject: [PATCH] CMakeLists.txt: add BUILD_DOC option
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/skypjack/uvw/pull/165]
-----
-- CMakeLists.txt | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 9fc5538..da6a02d 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -62,7 +62,8 @@ find_package(Doxygen 1.8)
-- # Referenced directories and targets
-- #
-- 
---if(DOXYGEN_FOUND)
--+option(BUILD_DOC "Build documentation" ON)
--+if(BUILD_DOC AND DOXYGEN_FOUND)
--     add_subdirectory(docs)
-- endif()
-- 
---- 
--2.23.0
--
-diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
-index e6129e559d..0fd93d3924 100644
---- a/package/uvw/uvw.hash
-+++ b/package/uvw/uvw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  266a354f0c64a8e85f29b10f20f4d08a35bc1e8caa7cc94a8afecf9ca43f4442  uvw-2.2.0_libuv-v1.33.tar.gz
-+sha256  e10b3ea2df202ef8de24b9922cc30f4de89f30ed4533a6ebfc9d979e7b7c66aa  uvw-2.3.0_libuv-v1.34.tar.gz
- sha256  ea786619b4d1b2ba0a188e923111122dfefea1d01c86e37f9e8c80bdbc3ea400  LICENSE
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-index 2e46721b52..46ee05bb08 100644
---- a/package/uvw/uvw.mk
-+++ b/package/uvw/uvw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UVW_VERSION = 2.2.0_libuv-v1.33
-+UVW_VERSION = 2.3.0_libuv-v1.34
- UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
- UVW_INSTALL_STAGING = YES
- UVW_INSTALL_TARGET = NO
 -- 
-2.20.1
+Vincent Fazio
+Embedded Software Engineer - Linux
+Extreme Engineering Solutions, Inc
+http://www.xes-inc.com
