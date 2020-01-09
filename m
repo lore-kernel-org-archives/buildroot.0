@@ -1,30 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 Jan 2020 17:19:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/json-for-modern-cpp: bump to
- version 3.7.3
-In-Reply-To: <20200109081650.28912-2-asafka7@gmail.com>
-References: <20200109081650.28912-1-asafka7@gmail.com>
- <20200109081650.28912-2-asafka7@gmail.com>
-Message-ID: <20200109171914.2e552cb2@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 9 Jan 2020 17:40:00 +0100
+Subject: [Buildroot] [git commit] package/libupnp18: add config option
+ --enable-reuseaddr
+Message-ID: <20200109164022.3DD2780057@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  9 Jan 2020 10:16:47 +0200
-Asaf Kahlon <asafka7@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=09c5f205744dd5501f3ebc821a123133538e5540
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
->  package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Enable the option to use SO_REUSEADDR on the built-in miniserver
+socket to allow clean restarts [1].
 
-Applied to master, thanks.
+This fixes a runtime issue with Gerbera and possible other programs
+which does not allow a graceful restart otherwise.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[1] https://github.com/pupnp/pupnp/commit/629dec75610260a669c7c3ed40c9332b7917b562
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libupnp18/libupnp18.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+index ca82a54413..f73c656831 100644
+--- a/package/libupnp18/libupnp18.mk
++++ b/package/libupnp18/libupnp18.mk
+@@ -13,6 +13,9 @@ LIBUPNP18_LICENSE = BSD-3-Clause
+ LIBUPNP18_LICENSE_FILES = COPYING
+ LIBUPNP18_DEPENDENCIES = host-pkgconf
+ 
++# Bind the internal miniserver socket with reuseaddr to allow clean restarts.
++LIBUPNP18_CONF_OPTS += --enable-reuseaddr
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBUPNP18_CONF_OPTS += --enable-open-ssl
+ LIBUPNP18_DEPENDENCIES += openssl
