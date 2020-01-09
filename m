@@ -1,76 +1,41 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu,  9 Jan 2020 19:02:23 +0100
-Subject: [Buildroot] [PATCH 2/2] lua-silva: new package
-In-Reply-To: <20200109180223.21214-1-francois.perrad@gadz.org>
-References: <20200109180223.21214-1-francois.perrad@gadz.org>
-Message-ID: <20200109180223.21214-2-francois.perrad@gadz.org>
+From: Paul Kasemir <paul.kasemir@ui.com>
+Date: Thu, 9 Jan 2020 11:09:19 -0700
+Subject: [Buildroot] Potential issue with per package directory hard link
+Message-ID: <CA+Vmb_ebsMv-UQ8pJoOr0W-pwmU_rdwRJDRgE8hw2paVDE05-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in                |  1 +
- package/lua-silva/Config.in      |  6 ++++++
- package/lua-silva/lua-silva.hash |  3 +++
- package/lua-silva/lua-silva.mk   | 12 ++++++++++++
- 4 files changed, 22 insertions(+)
- create mode 100644 package/lua-silva/Config.in
- create mode 100644 package/lua-silva/lua-silva.hash
- create mode 100644 package/lua-silva/lua-silva.mk
+Hi Thomas et. al,
 
-diff --git a/package/Config.in b/package/Config.in
-index 67a49f0ff..ac59182c8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -644,6 +644,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-rotas/Config.in"
- 	source "package/lua-sailor/Config.in"
- 	source "package/lua-sdl2/Config.in"
-+	source "package/lua-silva/Config.in"
- 	source "package/lua-std-debug/Config.in"
- 	source "package/lua-std-normalize/Config.in"
- 	source "package/lua-stdlib/Config.in"
-diff --git a/package/lua-silva/Config.in b/package/lua-silva/Config.in
-new file mode 100644
-index 000000000..1ddc3fad9
---- /dev/null
-+++ b/package/lua-silva/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LUA_SILVA
-+	bool "lua-silva"
-+	help
-+	  your string matcher expert.
-+
-+	  https://fperrad.frama.io/lua-Silva
-diff --git a/package/lua-silva/lua-silva.hash b/package/lua-silva/lua-silva.hash
-new file mode 100644
-index 000000000..7bb04da95
---- /dev/null
-+++ b/package/lua-silva/lua-silva.hash
-@@ -0,0 +1,3 @@
-+# computed by luarocks/buildroot
-+sha256 89cfdf6c67b69ff5e18591fb79cfe10c7e5f4923494ed92f426f44e475a9b522  lua-silva-0.1.6-1.src.rock
-+sha256 166beeb47e49a35b3ff8c6af91a399046a9cc5e29a8072618b4ca90f5b7a6c95  lua-Silva-0.1.6/COPYRIGHT
-diff --git a/package/lua-silva/lua-silva.mk b/package/lua-silva/lua-silva.mk
-new file mode 100644
-index 000000000..949e2d36d
---- /dev/null
-+++ b/package/lua-silva/lua-silva.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# lua-silva
-+#
-+################################################################################
-+
-+LUA_SILVA_VERSION = 0.1.6-1
-+LUA_SILVA_NAME_UPSTREAM = lua-Silva
-+LUA_SILVA_LICENSE = MIT
-+LUA_SILVA_LICENSE_FILES = $(LUA_SILVA_SUBDIR)/COPYRIGHT
-+
-+$(eval $(luarocks-package))
--- 
-2.20.1
+Regarding this line in the per package directory core changes:
+https://github.com/buildroot/buildroot/commit/c4e6d5c8be6ada8e7c60950e3b499c55d48761cb#diff-4ba3c73225b6850a34a3077526e4105cR146
+
+Using hard links is a good idea, but it also lets you shoot yourself in the
+foot a little bit.
+
+Take this example
+PackageA builds and installs FileA to staging
+PackageB builds and modifies FileA is such a way that FileA doesn't work
+anymore
+
+Since it is a hardlink, FileA is now broken for all packages depending on
+PackageA and you would need to rebuild both PackageA to get a working copy
+again, even though PackageB was the one that corrupted the file.
+
+Not sure if you can come up with another way that would enforce a new file
+created if the file is modified. Using sed -i 'expr' FileA is fine, but
+using echo "something" >> FileA will modify all versions.
+
+I've thought of using unionfs, but that would probably add a lot more
+complication than its worth and you would have tons of mounts you would
+then need to manage. I've also tried inotify, but it didn't seem reliable
+and is also a bit complicated to manage.
+
+I just thought I would bring this to your attention in case you weren't
+already aware of it.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200109/fe01f2f7/attachment.html>
