@@ -1,71 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 11:04:23 +0100
-Subject: [Buildroot] [PATCH 1/1] rtl8821au: bump to 2020.01 commit hash
-In-Reply-To: <20200110050016.1924705-1-christian@paral.in> (Christian
- Stewart's message of "Thu, 9 Jan 2020 21:00:16 -0800")
-References: <20200110050016.1924705-1-christian@paral.in>
-Message-ID: <87blrbocew.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 10 Jan 2020 11:57:00 +0100
+Subject: [Buildroot] [PATCH 1/2] package/toolchain-external: ensure
+ ARCH_LIB_DIR exist
+In-Reply-To: <1577937441-18703-1-git-send-email-han_mao@c-sky.com>
+References: <1577937441-18703-1-git-send-email-han_mao@c-sky.com>
+Message-ID: <CAAXf6LUVA4QkSmz8OaSOyqzKaw--eD5r0zAD+zONfyGROv1MZw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+Hello,
 
- > Bumps rtl8821au to the 2020.01 master commit hash:
+El jue., 2 ene. 2020 a las 5:15, Mao Han (<han_mao@c-sky.com>) escribi?:
+>
+> Different architecture may have different arch library folder structure
+> for their multilib toolchain. RISC-V toolchain has folder structure
+> like:
+> /sysroot/lib64/
+> /sysroot/lib64/lp64
+> /sysroot/lib64/lp64d
+> The first level is for ISA and the second level is for ABI.
+> Current buildroot only creat lib and lib64, some error is reported
+> while installing the external toolchain:
+> >>> toolchain-external-custom  Installing to staging directory
+> /usr/bin/install -D -m 0755 /.../build/toolchain-external-custom/toolchain-wrapper /.../host/bin/toolchain-wrapper
+> ln: failed to create symbolic link '/.../host/riscv64-buildroot-linux-gnu/sysroot/lib64/lp64': No such file or directory
+> ln: failed to create symbolic link '/.../host/riscv64-buildroot-linux-gnu/sysroot/usr/lib64/lp64': No such file or directory
+>
+> Signed-off-by: Qu Xianmiao <xianmiao_qu@c-sky.com>
+> Signed-off-by: Chen Hongdeng <hongdeng_chen@c-sky.com>
+> Signed-off-by: Guo Ren<ren_guo@c-sky.com>
+> Signed-off-by: Mao Han <han_mao@c-sky.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Mark Corbin <mark.corbin@embecosm.com>
+> ---
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index baf719a..13b2468 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -454,6 +454,8 @@ create_lib_symlinks = \
+>         ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+>         if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
+>                 relpath="$(call relpath_prefix,$${ARCH_LIB_DIR})" ; \
+> +               mkdir -p "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
+> +               mkdir -p "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
+>                 ln -snf $${relpath}lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
+>                 ln -snf $${relpath}lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
 
-What do you mean with 2020.01? I thought you were referring to a tag,
-but I don't see any tags in that repo.
+This is not correct.
 
- >   fa68771376a637c0b5f9cfa53da008570939a259
+The purpose of this code is to create a symbolic link named according
+to 'ARCH_LIB_DIR' inside DESTDIR and DESTDIR/usr.
+It is not the purpose to create a symbolic link called 'lib' inside a
+directory DESTDIR/ARCH_LIB_DIR.
+The change you made is creating a _directory_ ARCH_LIB_DIR while it
+should be a _symbolic link_.
 
-Looking at that commit in github:
+Could you please clarify what is the value of ARCH_LIB_DIR in your case?
 
-https://github.com/abperiasamy/rtl8812AU_8821AU_linux/commit/fa68771376a637c0b5f9cfa53da008570939a259
+And could you clarify which part of the path is missing?
+'/.../host/riscv64-buildroot-linux-gnu/sysroot/lib64/lp64' ?
+I assume that the 'lib64' part is missing?
 
-I see people are having problems and some discussion about reverting it,
-so are you sure we should be using it in Buildroot?
+Finally, please provide a defconfig that allows to reproduce and test
+this problem.
 
-And finally, the commit message should be prefixed with
-package/rtl8821au like your other patch.
-
- > https://github.com/abperiasamy/rtl8812AU_8821AU_linux
-
- > Signed-off-by: Christian Stewart <christian@paral.in>
- > ---
- >  package/rtl8821au/rtl8821au.hash | 2 +-
- >  package/rtl8821au/rtl8821au.mk   | 2 +-
- >  2 files changed, 2 insertions(+), 2 deletions(-)
-
- > diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
- > index f35d57910c..503a8866d7 100644
- > --- a/package/rtl8821au/rtl8821au.hash
- > +++ b/package/rtl8821au/rtl8821au.hash
- > @@ -1,2 +1,2 @@
- >  # Locally calculated
- > -sha256 23889fe4bf518dbadcbfac613f64a74bbce177267d9337a98843e4e7de8f1896  rtl8821au-b018b446fb0729fa659e7eead475d6c13f192642.tar.gz
- > +sha256  ac5a7c4f25509f754d0d386185940a21758544b0d25b9fc760154c468f6767cf  rtl8821au-fa68771376a637c0b5f9cfa53da008570939a259.tar.gz
- > diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
- > index b6ad431b8b..c3f0d9192a 100644
- > --- a/package/rtl8821au/rtl8821au.mk
- > +++ b/package/rtl8821au/rtl8821au.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
- 
- > -RTL8821AU_VERSION = b018b446fb0729fa659e7eead475d6c13f192642
- > +RTL8821AU_VERSION = fa68771376a637c0b5f9cfa53da008570939a259
- >  RTL8821AU_SITE = $(call github,abperiasamy,rtl8812AU_8821AU_linux,$(RTL8821AU_VERSION))
- >  RTL8821AU_LICENSE = GPL-2.0
- >  RTL8821AU_LICENSE_FILES = LICENSE
- > -- 
- > 2.24.1
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Bye, Peter Korsgaard
+Thanks,
+Thomas
