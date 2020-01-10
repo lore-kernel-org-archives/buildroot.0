@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 14:52:33 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/cc-tool: add hash
+Date: Fri, 10 Jan 2020 14:52:07 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/cc-tool: add hash
  for license file
-Message-ID: <20200110134320.0949581682@busybox.osuosl.org>
+Message-ID: <20200110134324.4408F88502@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94b8ab0e84d90e6fbe2b313773707317462f5387
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4b21e835a3fd8d5f3cbd709bab7ddea91a76ccfd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
