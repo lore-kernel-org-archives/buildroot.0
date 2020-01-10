@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Jan 2020 23:16:46 +0100
-Subject: [Buildroot] [git commit] package/tor: add optional dependency to
- zstd
-Message-ID: <20200110221023.5FFFC89010@busybox.osuosl.org>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Fri, 10 Jan 2020 23:23:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/scons: bump to version 3.1.2
+Message-ID: <20200110222355.153442-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3c6667b9b39b904d8f5f2fc774373bf75ecb674
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-http://autobuild.buildroot.net/results/454/454309539101c55a572c12c699cf3542dfb21637/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- package/tor/tor.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/scons/scons.hash | 2 +-
+ package/scons/scons.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 1b493f6993..2ecb41f072 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -37,6 +37,13 @@ else
- TOR_CONF_OPTS += --disable-lzma
- endif
+diff --git a/package/scons/scons.hash b/package/scons/scons.hash
+index 14be1250de..bbeda86b11 100644
+--- a/package/scons/scons.hash
++++ b/package/scons/scons.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  f3f548d738d4a2179123ecd744271ec413b2d55735ea7625a59b1b59e6cd132f  scons-3.1.0.tar.gz
++sha256  7801f3f62f654528e272df780be10c0e9337e897650b62ddcee9f39fde13f8fb  scons-3.1.2.tar.gz
+ sha256  c4248451b6a4cd09870de4fb82a857feb9f98174167b07500c19ed0263fd4db7  LICENSE.txt
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index d7cc427add..da2ccceb08 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+TOR_CONF_OPTS += --enable-zstd
-+TOR_DEPENDENCIES += host-pkgconf zstd
-+else
-+TOR_CONF_OPTS += --disable-zstd
-+endif
-+
- ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_i386)$(BR2_x86_64)$(BR2_PACKAGE_LIBSECCOMP),yy)
- TOR_CONF_OPTS += --enable-seccomp
- TOR_DEPENDENCIES += libseccomp
+-SCONS_VERSION = 3.1.0
++SCONS_VERSION = 3.1.2
+ SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
+ SCONS_LICENSE = MIT
+ SCONS_LICENSE_FILES = LICENSE.txt
+-- 
+2.24.1
