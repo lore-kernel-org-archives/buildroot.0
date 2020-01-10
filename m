@@ -1,52 +1,114 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 10 Jan 2020 18:28:17 +0100
-Subject: [Buildroot] [PATCH v1 1/2] package/snort: needs zlib
-Message-ID: <20200110172818.17155-1-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 10 Jan 2020 18:35:16 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/wireshark: fix static build with brotli
+In-Reply-To: <20200103134821.1505736-1-fontaine.fabrice@gmail.com>
+References: <20200103134821.1505736-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200110173516.GB2478@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Fabrice, All,
 
-  checking zlib.h usability... no
-  checking zlib.h presence... no
-  checking for zlib.h... no
+On 2020-01-03 14:48 +0100, Fabrice Fontaine spake thusly:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/2387d4590c5dce73d5f6d72bccf253e79f9a73d8
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-     ERROR!  zlib header not found, go get it from
-     http://www.zlib.net
+Since wireshark now depends on dynamic libraries, this build failure
+with static brotli should no longer be a concern, right?
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/snort/Config.in | 1 +
- package/snort/snort.mk  | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+Patch marked as "not applicable" now.
 
-diff --git a/package/snort/Config.in b/package/snort/Config.in
-index 7d2c52c3f3..fc74efcfed 100644
---- a/package/snort/Config.in
-+++ b/package/snort/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_SNORT
- 	select BR2_PACKAGE_DAQ
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Snort is a free and open source network intrusion
- 	  prevention system (IPS) and network intrusion detection
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index 024c94162b..4006d176bf 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -9,7 +9,7 @@ SNORT_SITE = https://www.snort.org/downloads/snort
- SNORT_LICENSE = GPL-2.0
- SNORT_LICENSE_FILES = LICENSE COPYING
- 
--SNORT_DEPENDENCIES = libpcap libdnet daq pcre host-pkgconf
-+SNORT_DEPENDENCIES = libpcap libdnet daq pcre zlib host-pkgconf
- 
- # patching configure.in
- SNORT_AUTORECONF = YES
+Thanks again for looking at all such mess...
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes v1 -> v2 (after review of Thomas Petazzoni):
+>  - Drop CMAKE_FIND_LIBRARY_SUFFIXES STREQUAL ".a" from patch
+> 
+>  ...-FindBROTLI.cmake-fix-static-linking.patch | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch
+> 
+> diff --git a/package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch b/package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch
+> new file mode 100644
+> index 0000000000..1300a65167
+> --- /dev/null
+> +++ b/package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch
+> @@ -0,0 +1,54 @@
+> +From e1d88b868f57d79a3e90af34f3961f56172998ba Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Fri, 3 Jan 2020 10:47:30 +0100
+> +Subject: [PATCH 2/2] FindBROTLI.cmake: fix static linking
+> +
+> +Use pkg-config to retrieve dependencies of libbrotlidec such as
+> +libbrotlicommon otherwise static build will fail on:
+> +
+> +[100%] Building C object CMakeFiles/tshark.dir/ui/cli/tap-smbsids.c.o
+> +/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libbrotlidec.a(decode.c.o): in function `ProcessCommands':
+> +decode.c:(.text+0x36d0): undefined reference to `BrotliTransformDictionaryWord'
+> +/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libbrotlidec.a(decode.c.o): in function `SafeProcessCommands':
+> +decode.c:(.text+0x418c): undefined reference to `BrotliTransformDictionaryWord'
+> +/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libbrotlidec.a(state.c.o): in function `BrotliDecoderStateInit':
+> +state.c:(.text+0x120): undefined reference to `BrotliGetDictionary'
+> +/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: state.c:(.text+0x128): undefined reference to `BrotliGetTransforms'
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/2387d4590c5dce73d5f6d72bccf253e79f9a73d8
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: Not sent yet (waiting for feedback on first patch)]
+> +---
+> + cmake/modules/FindBROTLI.cmake | 7 +++++++
+> + 1 file changed, 7 insertions(+)
+> +
+> +diff --git a/cmake/modules/FindBROTLI.cmake b/cmake/modules/FindBROTLI.cmake
+> +index 4ab8dbb41c..687afd6e5e 100644
+> +--- a/cmake/modules/FindBROTLI.cmake
+> ++++ b/cmake/modules/FindBROTLI.cmake
+> +@@ -11,6 +11,9 @@
+> + include( FindWSWinLibs )
+> + FindWSWinLibs( "brotli-.*" "BROTLI_HINTS" )
+> + 
+> ++find_package(PkgConfig QUIET)
+> ++PKG_CHECK_MODULES(PC_BROTLI QUIET libbrotlidec)
+> ++
+> + find_path(BROTLI_INCLUDE_DIR
+> +   NAMES "brotli/decode.h"
+> +   HINTS "${BROTLI_HINTS}/include"
+> +@@ -28,6 +31,10 @@ if( BROTLI_FOUND )
+> +   set( BROTLI_INCLUDE_DIRS ${BROTLI_INCLUDE_DIR} )
+> +   set( BROTLI_LIBRARIES ${BROTLIDEC_LIBRARY} )
+> + 
+> ++  if(UNIX)
+> ++    list(APPEND BROTLI_LIBRARIES ${PC_BROTLI_LIBRARIES})
+> ++  endif()
+> ++
+> +   if (WIN32)
+> +     set ( BROTLI_DLL_DIR "${BROTLI_HINTS}/bin"
+> +       CACHE PATH "Path to the brotli DLLs"
+> +-- 
+> +2.24.0
+> +
+> -- 
+> 2.24.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.24.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
