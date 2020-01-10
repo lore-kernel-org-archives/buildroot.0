@@ -1,60 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Jan 2020 23:05:34 +0100
-Subject: [Buildroot] [PATCH] package/bash: update to version 5.0.11
-In-Reply-To: <20200107102421.11432-1-p.debruijn@unilogic.nl>
-References: <20200107102421.11432-1-p.debruijn@unilogic.nl>
-Message-ID: <20200110230534.4ea199fe@windsurf>
+Date: Fri, 10 Jan 2020 23:12:17 +0100
+Subject: [Buildroot] [git commit] package/bluez_utils: fix build with c99
+Message-ID: <20200110220318.DCCB68900D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  7 Jan 2020 11:24:21 +0100
-Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d98d78d84a4efef92a40ab538d6204d13b354e43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> ---
->  package/bash/0001-bash44-019.patch |  54 ---------
->  package/bash/0001-bash50-001.patch | 166 ++++++++++++++++++++++++++
->  package/bash/0002-bash44-020.patch | 181 ----------------------------
->  package/bash/0002-bash50-002.patch | 113 ++++++++++++++++++
->  package/bash/0003-bash44-021.patch |  61 ----------
->  package/bash/0003-bash50-003.patch | 239 +++++++++++++++++++++++++++++++++++++
->  package/bash/0004-bash44-022.patch |  65 ----------
->  package/bash/0004-bash50-004.patch |  53 ++++++++
->  package/bash/0005-bash44-023.patch |  56 ---------
->  package/bash/0005-bash50-005.patch | 110 +++++++++++++++++
->  package/bash/0006-bash50-006.patch |  47 ++++++++
->  package/bash/0007-bash50-007.patch |  62 ++++++++++
->  package/bash/0008-bash50-008.patch |  68 +++++++++++
->  package/bash/0009-bash50-009.patch |  42 +++++++
->  package/bash/0010-bash50-010.patch | 172 ++++++++++++++++++++++++++
->  package/bash/0011-bash50-011.patch |  59 +++++++++
->  package/bash/bash.hash             |   2 +-
->  package/bash/bash.mk               |   2 +-
->  18 files changed, 1133 insertions(+), 419 deletions(-)
->  delete mode 100644 package/bash/0001-bash44-019.patch
->  create mode 100644 package/bash/0001-bash50-001.patch
->  delete mode 100644 package/bash/0002-bash44-020.patch
->  create mode 100644 package/bash/0002-bash50-002.patch
->  delete mode 100644 package/bash/0003-bash44-021.patch
->  create mode 100644 package/bash/0003-bash50-003.patch
->  delete mode 100644 package/bash/0004-bash44-022.patch
->  create mode 100644 package/bash/0004-bash50-004.patch
->  delete mode 100644 package/bash/0005-bash44-023.patch
->  create mode 100644 package/bash/0005-bash50-005.patch
->  create mode 100644 package/bash/0006-bash50-006.patch
->  create mode 100644 package/bash/0007-bash50-007.patch
->  create mode 100644 package/bash/0008-bash50-008.patch
->  create mode 100644 package/bash/0009-bash50-009.patch
->  create mode 100644 package/bash/0010-bash50-010.patch
->  create mode 100644 package/bash/0011-bash50-011.patch
+This will fix a build failure with libsigrok
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/005a16e63518716c6e99c74c618d01be453c76d4
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0007-fix-lib-bluetooth-h-with-c99.patch        | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/package/bluez_utils/0007-fix-lib-bluetooth-h-with-c99.patch b/package/bluez_utils/0007-fix-lib-bluetooth-h-with-c99.patch
+new file mode 100644
+index 0000000000..3738baf1f5
+--- /dev/null
++++ b/package/bluez_utils/0007-fix-lib-bluetooth-h-with-c99.patch
+@@ -0,0 +1,31 @@
++http://permalink.gmane.org/gmane.linux.bluez.kernel/22306
++
++[Retrieved from:
++https://428282.bugs.gentoo.org/attachment.cgi?id=319374]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff --git a/lib/bluetooth.h b/lib/bluetooth.h
++index 0541842..5b2153d 100644
++--- a/lib/bluetooth.h
+++++ b/lib/bluetooth.h
++@@ -140,16 +140,16 @@ enum {
++ #define bt_get_unaligned(ptr)			\
++ ({						\
++ 	struct __attribute__((packed)) {	\
++-		typeof(*(ptr)) __v;		\
++-	} *__p = (typeof(__p)) (ptr);		\
+++		__typeof__(*(ptr)) __v;		\
+++	} *__p = (__typeof__(__p)) (ptr);	\
++ 	__p->__v;				\
++ })
++ 
++ #define bt_put_unaligned(val, ptr)		\
++ do {						\
++ 	struct __attribute__((packed)) {	\
++-		typeof(*(ptr)) __v;		\
++-	} *__p = (typeof(__p)) (ptr);		\
+++		__typeof__(*(ptr)) __v;		\
+++	} *__p = (__typeof__(__p)) (ptr);	\
++ 	__p->__v = (val);			\
++ } while(0)
++ 
