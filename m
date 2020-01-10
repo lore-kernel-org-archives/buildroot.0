@@ -1,36 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Jan 2020 09:17:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/go: bump to 1.13.6
-In-Reply-To: <20200110044551.1912203-1-christian@paral.in>
-References: <20200110044551.1912203-1-christian@paral.in>
-Message-ID: <20200110091749.6bdc279c@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Jan 2020 09:06:15 +0100
+Subject: [Buildroot] [git commit] package/rtl8821au: update site url to
+ correct repository
+Message-ID: <20200110082255.99D3A8848E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian,
+commit: https://git.buildroot.net/buildroot/commit/?id=6d4c2d062e9571f279cfb148689531bade4f6015
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  9 Jan 2020 20:45:51 -0800
-Christian Stewart <christian@paral.in> wrote:
+Commit 5eecaf354ce (package/rtl8821au: switch to abperiasamy fork) changed
+the upstream location, but didn't update the link in the help text.
 
-> go1.13.6 (released 2020/01/09) includes fixes to the runtime and the net/http
-> package.
-> 
-> https://github.com/golang/go/issues?q=milestone=Go1.13.6
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Christian Stewart <christian@paral.in>
+[Peter: extend commit message]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rtl8821au/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Since you're bumping Go, I was wondering what is the status of the "Go
-module" support, that you started a while ago ? This was not a simple
-topic, but I think this is something we can to get into Buildroot at
-some point.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
+index 9827ad5b94..87c191b22a 100644
+--- a/package/rtl8821au/Config.in
++++ b/package/rtl8821au/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_RTL8821AU
+ 	help
+ 	  rtl8821au wifi driver
+ 
+-	  https://github.com/paralin/rtl8821au
++	  https://github.com/abperiasamy/rtl8812AU_8821AU_linux
