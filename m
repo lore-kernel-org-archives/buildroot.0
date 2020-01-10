@@ -1,118 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 18:07:45 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/cpio: security
- bump to version 2.13
-Message-ID: <20200110173412.0C5958859C@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 10 Jan 2020 19:26:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: fix static build with
+ readline
+Message-ID: <20200110182634.3887115-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4e1afcb0d97edf7d08f1acb2223e8c8cc178045
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+Fixes:
+ - http://autobuild.buildroot.org/results/88609eefe55af2ca50d43e17d3424b923528b07a
 
-Removed patch fixing CVE-2016-2037 which was applied upstream.
-
-This release fixes CVE-2015-1197, CVE-2016-2037, CVE-2019-14866.
-
-Switched to .bz2 tarball.
-Added hashes provided by upstream and license hash.
-
-Release notes:
-https://lists.gnu.org/archive/html/info-gnu/2019-11/msg00002.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6c1e4d98f3a3909043ca63376ccfe9fafffafc80)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cpio/0001-fix-CVE-2016-2037.patch | 51 -------------------------------
- package/cpio/cpio.hash                    |  7 ++++-
- package/cpio/cpio.mk                      |  3 +-
- 3 files changed, 8 insertions(+), 53 deletions(-)
+ ....txt-use-pkg-config-to-find-readline.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch
 
-diff --git a/package/cpio/0001-fix-CVE-2016-2037.patch b/package/cpio/0001-fix-CVE-2016-2037.patch
-deleted file mode 100644
-index aec2ccb8e5..0000000000
---- a/package/cpio/0001-fix-CVE-2016-2037.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From: Pavel Raiskup
--Subject: [Bug-cpio] [PATCH] fix 1-byte out-of-bounds write
--Date: Tue, 26 Jan 2016 23:17:54 +0100
--
--Other calls to cpio_safer_name_suffix seem to be safe.
--
--* src/copyin.c (process_copy_in):  Make sure that file_hdr.c_name
--has at least two bytes allocated.
--* src/util.c (cpio_safer_name_suffix): Document that use of this
--function requires to be careful.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Patch status: fetched/submitted
--URL: https://lists.gnu.org/archive/html/bug-cpio/2016-01/msg00005.html
--
-- src/copyin.c | 2 ++
-- src/util.c   | 5 ++++-
-- 2 files changed, 6 insertions(+), 1 deletion(-)
--
--diff --git a/src/copyin.c b/src/copyin.c
--index cde911e..032d35f 100644
----- a/src/copyin.c
--+++ b/src/copyin.c
--@@ -1385,6 +1385,8 @@ process_copy_in ()
--          break;
--        }
--
--+      if (file_hdr.c_namesize <= 1)
--+        file_hdr.c_name = xrealloc(file_hdr.c_name, 2);
--       cpio_safer_name_suffix (file_hdr.c_name, false, !no_abs_paths_flag,
--                              false);
--
--diff --git a/src/util.c b/src/util.c
--index 6ff6032..2763ac1 100644
----- a/src/util.c
--+++ b/src/util.c
--@@ -1411,7 +1411,10 @@ set_file_times (int fd,
-- }
-- 
-- /* Do we have to ignore absolute paths, and if so, does the filename
---   have an absolute path?  */
--+   have an absolute path?
--+   Before calling this function make sure that the allocated NAME buffer has
--+   capacity@least 2 bytes to allow us to store the "." string inside.  */
--+
-- void
-- cpio_safer_name_suffix (char *name, bool link_target, bool absolute_names,
--                        bool strip_leading_dots)
----
--2.5.0
-diff --git a/package/cpio/cpio.hash b/package/cpio/cpio.hash
-index 962a100cc4..a3a0d4b3f9 100644
---- a/package/cpio/cpio.hash
-+++ b/package/cpio/cpio.hash
-@@ -1,2 +1,7 @@
-+# From https://lists.gnu.org/archive/html/info-gnu/2019-11/msg00002.html
-+md5 f3438e672e3fa273a7dc26339dd1eed6  cpio-2.13.tar.bz2
-+sha1 4dcefc0e1bc36b11506a354768d82b15e3fe6bb8  cpio-2.13.tar.bz2
- # Locally calculated after checking pgp signature
--sha256	08a35e92deb3c85d269a0059a27d4140a9667a6369459299d08c17f713a92e73	cpio-2.12.tar.gz
-+sha256 eab5bdc5ae1df285c59f2a4f140a98fc33678a0bf61bdba67d9436ae26b46f6d  cpio-2.13.tar.bz2
-+# Locally calculated
-+sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
-index cc40838840..1d9c54669e 100644
---- a/package/cpio/cpio.mk
-+++ b/package/cpio/cpio.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
- 
--CPIO_VERSION = 2.12
-+CPIO_VERSION = 2.13
-+CPIO_SOURCE = cpio-$(CPIO_VERSION).tar.bz2
- CPIO_SITE = $(BR2_GNU_MIRROR)/cpio
- CPIO_CONF_OPTS = --bindir=/bin
- CPIO_LICENSE = GPL-3.0+
+diff --git a/package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch b/package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch
+new file mode 100644
+index 0000000000..2b685e4aad
+--- /dev/null
++++ b/package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch
+@@ -0,0 +1,49 @@
++From c538c9fa7e392ce16c3354696e7dc7781a78a300 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 10 Jan 2020 08:49:51 +0100
++Subject: [PATCH] CMakeLists.txt: use pkg-config to find readline
++
++Use pkg_check_modules to find readline dependencies such as ncurses and
++fallback on current mechanism.
++
++This will fix the following build failure when building statically:
++
++/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libreadline.a(display.o): in function `cr':
++display.c:(.text+0x1a0): undefined reference to `tputs'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/88609eefe55af2ca50d43e17d3424b923528b07a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/FluidSynth/fluidsynth/pull/606] 
++---
++ CMakeLists.txt | 11 +++++++----
++ 1 file changed, 7 insertions(+), 4 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index d4956b1..3747faa 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -629,12 +629,15 @@ endif ( enable-oboe )
++ unset ( WITH_READLINE CACHE )
++ unset ( READLINE_LIBS CACHE )
++ if ( enable-readline )
++-  find_package ( Readline )
++-  set ( FOUND_READLINE ${HAVE_READLINE} )
++-  if ( HAVE_READLINE )
+++  pkg_check_modules ( READLINE readline )
+++  if ( NOT READLINE_FOUND )
+++    find_package ( Readline )
+++    set ( READLINE_FOUND ${HAVE_READLINE} )
+++  endif ( NOT READLINE_FOUND )
+++  if ( READLINE_FOUND )
++     set ( WITH_READLINE 1 )
++     set ( READLINE_LIBS ${READLINE_LIBRARIES} )
++-  endif ( HAVE_READLINE )
+++  endif ( READLINE_FOUND )
++ endif ( enable-readline )
++ 
++ unset ( ENABLE_MIXER_THREADS CACHE )
++-- 
++2.24.1
++
+-- 
+2.24.1
