@@ -1,36 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 21:17:34 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/rtl8821au: update
- site url to correct repository
-Message-ID: <20200110200829.59D79888DE@busybox.osuosl.org>
+Date: Fri, 10 Jan 2020 21:23:26 +0100
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{14,
+ 19}.x / 5.4.x series
+Message-ID: <20200110202326.27399-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e50f53d31bffa5d35f4b7a08458ae93844a128a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
-
-Commit 5eecaf354ce (package/rtl8821au: switch to abperiasamy fork) changed
-the upstream location, but didn't update the link in the help text.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-[Peter: extend commit message]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6d4c2d062e9571f279cfb148689531bade4f6015)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8821au/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
-index 9827ad5b94..87c191b22a 100644
---- a/package/rtl8821au/Config.in
-+++ b/package/rtl8821au/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_RTL8821AU
- 	help
- 	  rtl8821au wifi driver
+diff --git a/linux/Config.in b/linux/Config.in
+index 0542619c9f..90d1c215fb 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--	  https://github.com/paralin/rtl8821au
-+	  https://github.com/abperiasamy/rtl8812AU_8821AU_linux
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.4.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.4.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.88-cip16" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.82-cip14-rt5" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 7e4be4086f..04e2362c28 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 42c414c902193f9e8a1b70c728ca440de02d85dc29102f52ef98cfbf20d29a52  linux-5.4.8.tar.xz
++sha256 f23c0218a5e3b363bb5a880972f507bb4dc4a290a787a7da08be07ea12042edd  linux-5.4.10.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256 5899ff2a85e2b84607148349fd8e646f94399655caf0e4e55d1eb0567e48520e  linux-4.4.208.tar.xz
+ sha256 b7ad1c9841d671d026c55a4c91c77205f8b488ca5f980f838591c68662e0525a  linux-4.9.208.tar.xz
+-sha256 f65170224cd4359ce8b2793b492bd8127abdd0b91350484e001bce13f0c98b4b  linux-4.14.162.tar.xz
+-sha256 2af5d23f82a8bf69a6e4d8407579293b7beeebd3054dc464d48bdb5d2d7f5834  linux-4.19.93.tar.xz
++sha256 eb29cc9cfd54158789064b3d6e5b3eab108facec048b8d405a63e9863329b049  linux-4.14.163.tar.xz
++sha256 c62a10a75a7c4213e41287040e7c7509b7d42117d6830feb7dfe505949fa7467  linux-4.19.94.tar.xz
+ # Locally computed
+ sha256 6d60ce76bce2e1938f64027d12b1988c95245751feb635adfc551a021d5b3f26  linux-cip-4.19.88-cip16.tar.gz
+ sha256 74ec782e11344e5c5db8e48899b464e296ef37acfb43ce7dfb01c09ea8d3e959  linux-cip-4.19.82-cip14-rt5.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1b479a5c4d..6b6fe028c5 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -311,9 +311,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "4.4.208"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.208"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.162"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.93"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.8"		if BR2_KERNEL_HEADERS_5_4
++	default "4.14.163"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.94"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.10"	if BR2_KERNEL_HEADERS_5_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-- 
+2.20.1
