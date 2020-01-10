@@ -1,95 +1,152 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 20:52:38 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/mender-grubenv:
- fix installation with genimage.sh script
-Message-ID: <20200110194321.52C348889B@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 10 Jan 2020 20:53:47 +0100
+Subject: [Buildroot] dillo
+In-Reply-To: <b192f7f2-e7c8-45c3-0fd5-a9c2db78a92d@cam.ac.uk>
+References: <372b903d-cd05-28bd-b1ba-7ac3314ee165@cam.ac.uk>
+ <20200109215025.377ae5b8@gmx.net> <20200109222935.2f3fec16@gmx.net>
+ <b192f7f2-e7c8-45c3-0fd5-a9c2db78a92d@cam.ac.uk>
+Message-ID: <20200110205347.6aaa4eed@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=037a4ab2d81e213fdaeed19bfdc0b3a200e0bbb0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+Hello Jonathan,
 
-mender-grubenv currently has 3 problems that prevent an x86_64-efi image from
-successfully being made with the genimage.sh script.
+On Fri, 10 Jan 2020 10:15:35 +0000, Jonathan Kimmitt <jrrk2@cam.ac.uk> wrote:
 
-- mender-grubenv does not currently depend on Grub2.
-  While Grub2 is not needed to build the mender-grubenv package, Grub2 needs
-  to be built first for mender-grubenv to overwrite the default Grub2 files
-  reliably.
+> Dear Peter,
+>
+> Thanks for that analsys. My second patch obviously was just a workaround
+> to prevent the compile error.
+>
+> Is there any special instruction to automate the process of testing
+> these patches? I am not familiar
+>
+> with systems that are not GitHub based.
 
-- The MENDER_GRUBENV_ENV_DIR variable points to /boot/efi/EFI/BOOT instead of
-  /boot/EFI/BOOT, which is where the Grub2 package installs the default files.
-  This variable now points to the correct location.
+	$ wget https://buildroot.org/downloads/buildroot-2019.11.tar.bz2
+	$ tar -xjf buildroot-2019.11.tar.bz2
+	$ curl -OJL  https://patchwork.ozlabs.org/patch/1220668/mbox
+	$ cd buildroot-2019.11
+	$ patch -p 1 < ../v1-package-dillo-fix-openssl-support.patch
 
-- The Grub2 package installs images to $(BINARIES_DIR)/efi-part, which the
-  mender-grubenv package currently does not do. As such; the default Grub2
-  configuration file is used instead of the one provided by mender-grubenv.
-  Adding a MENDER_GRUBENV_INSTALL_IMAGES_CMDS define in mender-grubenv.mk which
-  copies the installed files from $(TARGET_DIR)/boot/EFI to
-  $(BINARIES_DIR)/efi-part fixes this issue.
+or
 
-Signed-off-by: Adam Duskett <aduskett@greenlots.com>
-[Thomas:
- - drop "runtime" on the depends on BR2_TARGET_GRUB2 since we now have
-   a build-time dependency on it
- - explicitly copy the files installed by mender-grubenv in
-   MENDER_GRUBENV_INSTALL_IMAGES_CMDS instead of blindly copying
-   everything that is in $(TARGET_DIR)/boot/EFI]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 425f79087a02ec2fd53c76bb155efb41708aef68)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mender-grubenv/Config.in         |  2 +-
- package/mender-grubenv/mender-grubenv.mk | 14 +++++++++++++-
- 2 files changed, 14 insertions(+), 2 deletions(-)
+	$ git clone https://git.busybox.net/buildroot
+	$ curl -OJL  https://patchwork.ozlabs.org/patch/1220668/mbox
+	$ cd buildroot
+	$ git checkout 2019.11
+	$ git checkout -b test-dill-patch-001
+	$ git am ../v1-package-dillo-fix-openssl-support.patch
 
-diff --git a/package/mender-grubenv/Config.in b/package/mender-grubenv/Config.in
-index e1c785fb44..28b4bb7074 100644
---- a/package/mender-grubenv/Config.in
-+++ b/package/mender-grubenv/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_MENDER_GRUBENV
- 	depends on BR2_PACKAGE_MENDER # runtime
- 	# grubenv provides it's own fw_printenv.
- 	depends on !BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
--	depends on BR2_TARGET_GRUB2 # runtime
-+	depends on BR2_TARGET_GRUB2
- 	help
- 	  Contains the boot scripts and tools used by Mender to
- 	  integrate with the GRUB bootloader.
-diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
-index c947f2ff9d..6e38557eb3 100644
---- a/package/mender-grubenv/mender-grubenv.mk
-+++ b/package/mender-grubenv/mender-grubenv.mk
-@@ -8,11 +8,15 @@ MENDER_GRUBENV_VERSION = 1.3.0
- MENDER_GRUBENV_SITE = $(call github,mendersoftware,grub-mender-grubenv,$(MENDER_GRUBENV_VERSION))
- MENDER_GRUBENV_LICENSE = Apache-2.0
- MENDER_GRUBENV_LICENSE_FILES = LICENSE
-+# Grub2 must be built first so this package can overwrite the config files
-+# provided by grub.
-+MENDER_GRUBENV_DEPENDENCIES = grub2
-+MENDER_GRUBENV_INSTALL_IMAGES = YES
- 
- ifeq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),y)
- MENDER_GRUBENV_ENV_DIR = /boot/grub
- else
--MENDER_GRUBENV_ENV_DIR = /boot/efi/EFI/BOOT
-+MENDER_GRUBENV_ENV_DIR = /boot/EFI/BOOT
- endif
- 
- MENDER_GRUBENV_MAKE_ENV = \
-@@ -50,4 +54,12 @@ define MENDER_GRUBENV_INSTALL_TARGET_CMDS
- 	$(MENDER_GRUBENV_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
- endef
- 
-+# Overwrite the default grub2 config files with the ones in this package.
-+define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
-+	mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
-+	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
-+		$(TARGET_DIR)/boot/EFI/BOOT/mender_grubenv* \
-+		$(BINARIES_DIR)/efi-part/EFI/BOOT
-+endef
-+
- $(eval $(generic-package))
+and proceed with your dillo test config (and in case your re-use an
+existing build mind the dirclean/rebuild hints [3])...
+
+Regards,
+Peter
+
+[3] https://buildroot.org/downloads/manual/manual.html#rebuild-pkg
+
+>
+> Regards,
+>
+> Jonathan
+>
+> On 09/01/2020 21:29, Peter Seiderer wrote:
+> > Hello Jonathan,
+> >
+> > On Thu, 9 Jan 2020 21:50:25 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> >> Hello Jonathan
+> >>
+> >> added CC buildroot at buildroot.org
+> >>
+> >> On Thu, 9 Jan 2020 17:09:12 +0000, Jonathan Kimmitt <jrrk2@cam.ac.uk> wrote:
+> >>
+> >>> Dear Peter,
+> >>>
+> >>> Are you a maintainer for the dillo port to buildroot? If so I have some
+> >>> patches for you
+> >> Yes, somehow...
+> >>
+> >>> concerning SSL compatibility, relative to the 2019.11 release. No doubt
+> >>> they need reworking to be upstream worthy.
+> >> Thanks for the patches, some remarks:
+> >>
+> >> - 0003-SSL_library_init.patch
+> >>
+> >>> SSL_library_init is now a #define, causing this check to fail ...
+> >>>
+> >>> --- a/configure.ac	2020-01-09 14:57:27.823065488 +0000
+> >>> +++ b/configure.ac	2020-01-09 14:59:35.735065000 +0000
+> >>> @@ -276,7 +276,7 @@
+> >>>
+> >>>     if test "x$ssl_ok" = "xyes"; then
+> >>>       old_libs="$LIBS"
+> >>> -    AC_CHECK_LIB(ssl, SSL_library_init, ssl_ok=yes, ssl_ok=no, -lcrypto)
+> >>> +    AC_CHECK_LIB(ssl, OPENSSL_init_ssl, ssl_ok=yes, ssl_ok=no, -lcrypto)
+> >>>       LIBS="$old_libs"
+> >>>     fi
+> >> Which openssl provider/library did you use, openssl (BR2_PACKAGE_LIBOPENSSL=y) or
+> >> libressl (BR2_PACKAGE_LIBRESSL=y)?
+> >>
+> >> Will test/check your patch (but needs some time, I am no daily dillo user ;-) )...
+> > O.k, your patch works with the current libopenssl-1.1.1d and libressl-3.0.2 (just
+> > did a quick compile time test)...
+> >
+> >>
+> >> - 0004-certificate.patch
+> >>
+> >>> --- a/dpi/https.c	2015-06-30 15:06:08.000000000 +0100
+> >>> +++ b/dpi/https.c	2020-01-09 15:28:25.843058400 +0000
+> >>> @@ -475,9 +475,12 @@
+> >>>            break;
+> >>>         case X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT:
+> >>>            /*Either self signed and untrusted*/
+> >>> +#if 0
+> >>>            /*Extract CN from certificate name information*/
+> >>>            if ((cn = strstr(remote_cert->name, "/CN=")) == NULL) {
+> >>> -            strcpy(buf, "(no CN given)");
+> >>> +#endif
+> >>> +           strcpy(buf, "(no CN given)");
+> >>> +#if 0
+> >>>            } else {
+> >>>               char *cn_end;
+> >>>
+> >>> @@ -489,6 +492,7 @@
+> >>>               strncpy(buf, cn, (size_t) (cn_end - cn));
+> >>>               buf[cn_end - cn] = '\0';
+> >>>            }
+> >>> +#endif
+> >>>            msg = dStrconcat("The remote certificate is self-signed and "
+> >>>                             "untrusted.\nFor address: ", buf, NULL);
+> >>>            d_cmd = a_Dpip_build_cmd(
+> >> This one looks like upstream commit 'Support OpenSSL 1.1.0' ([1]) and
+> >> according to the mercurial info should be contained in the 3.0.5
+> >> release (in case I read the mercurial info right), but seems not to
+> >> be contained in the dillo-3.0.5.tar.bz2 sources...
+> > And with your openssl detection fix this upstream commit is needed to
+> > avoid a compile failure...., just send out a proper buildroot patch
+> > adding the two dillo patches ([2])....
+> >
+> > Regards,
+> > Peter
+> >
+> >> Regards,
+> >> Peter
+> > [2] https://patchwork.ozlabs.org/patch/1220668/
+> >
+> >> [1] https://hg.dillo.org/dillo/rev/b171b8610400
+> >>
+> >>> Regards,
+> >>>
+> >>> Jonathan Kimmitt
+> >>>
+> >>>
+> >>>
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at busybox.net
+> >> http://lists.busybox.net/mailman/listinfo/buildroot
