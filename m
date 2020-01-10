@@ -1,28 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Jan 2020 23:01:08 +0100
-Subject: [Buildroot] [PATCH] package/cryptsetup: update to version 2.2.2
-In-Reply-To: <20200107110343.12111-1-p.debruijn@unilogic.nl>
-References: <20200107110343.12111-1-p.debruijn@unilogic.nl>
-Message-ID: <20200110230108.455c86d6@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 10 Jan 2020 23:02:36 +0100
+Subject: [Buildroot] [PATCH 2/5] package/vlc: add fluidsynth optional
+ dependency
+In-Reply-To: <20200110220239.196975-1-fontaine.fabrice@gmail.com>
+References: <20200110220239.196975-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200110220239.196975-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  7 Jan 2020 12:03:43 +0100
-Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/vlc/vlc.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> ---
->  package/cryptsetup/cryptsetup.hash | 4 ++--
->  package/cryptsetup/cryptsetup.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index ae12e89b8a..4b1cd68d8b 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -55,7 +55,6 @@ VLC_CONF_OPTS += \
+ 	--disable-dsm \
+ 	--disable-dv1394 \
+ 	--disable-fluidlite \
+-	--disable-fluidsynth \
+ 	--disable-gme \
+ 	--disable-goom \
+ 	--disable-jack \
+@@ -164,6 +163,13 @@ else
+ VLC_CONF_OPTS += --disable-flac
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FLUIDSYNTH),y)
++VLC_CONF_OPTS += --enable-fluidsynth
++VLC_DEPENDENCIES += fluidsynth
++else
++VLC_CONF_OPTS += --disable-fluidsynth
++endif
++
+ ifeq ($(BR2_PACKAGE_FREERDP),y)
+ VLC_CONF_OPTS += --enable-freerdp
+ VLC_DEPENDENCIES += freerdp
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.24.1
