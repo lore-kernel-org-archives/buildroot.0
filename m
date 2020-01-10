@@ -1,162 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 10 Jan 2020 18:37:41 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/wireshark: fix static build with snappy
-In-Reply-To: <20190528203230.24558-1-fontaine.fabrice@gmail.com>
-References: <20190528203230.24558-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200110173741.GC2478@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Jan 2020 18:01:50 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/gnupg2: bump
+ version to 2.2.19
+Message-ID: <20200110173411.F086D886AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3f3ef62ce81891315577eafb13b73c1eac63b071
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-On 2019-05-28 22:32 +0200, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/419468f0d7d3c2b64d420513aa9505c6de097ed2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Release notes:
+- 2.2.18
+  https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000442.html
+- 2.2.19
+  https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
 
-I had been contemplating that patch for quite some time now, and was
-really undecided what we were to be doing about it...
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit bcb6d0057fb8e5674b6e76fc0c7f38cdcf3ef89d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-But now, we've accepted your patch to make woreshark depend on shared
-libraries, so this build failure should no longer occur any more, or so
-I hope.
-
-Marked as "not applicable" in Patchwork.
-
-Thank you!
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2 (after review of Arnout Vandecappelle):
->  - Set linker to CXX instead of adding -lstdc++ to LIBS
-> 
->  ...s.txt-fix-static-linking-with-snappy.patch | 98 +++++++++++++++++++
->  1 file changed, 98 insertions(+)
->  create mode 100644 package/wireshark/0005-CMakeLists.txt-fix-static-linking-with-snappy.patch
-> 
-> diff --git a/package/wireshark/0005-CMakeLists.txt-fix-static-linking-with-snappy.patch b/package/wireshark/0005-CMakeLists.txt-fix-static-linking-with-snappy.patch
-> new file mode 100644
-> index 0000000000..e9233aa90f
-> --- /dev/null
-> +++ b/package/wireshark/0005-CMakeLists.txt-fix-static-linking-with-snappy.patch
-> @@ -0,0 +1,98 @@
-> +From eb226af7ae998cda6b9747d9e77692fda85563bc Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Tue, 28 May 2019 21:26:19 +0200
-> +Subject: [PATCH] CMakeLists.txt: fix static linking with snappy
-> +
-> +snappy is a C++ library so cxx linker must be used to avoid errors
-> +when statically linking:
-> +
-> +/home/buildroot/autobuild/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libsnappy.a(snappy.cc.o): In function `snappy::internal::WorkingMemory::GetHashTable(unsigned int, int*)':
-> +snappy.cc:(.text+0x358): undefined reference to `operator new[](unsigned int)'
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/faa65da84ace974426e220205f4665fc0a73bdfe
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + CMakeLists.txt | 30 ++++++++++++++++++++++++++++++
-> + 1 file changed, 30 insertions(+)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index e2fdafc227..cf5b8dfd56 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -2191,6 +2191,11 @@ if(BUILD_wireshark AND QT_FOUND)
-> + 	if(ENABLE_APPLICATION_BUNDLE OR WIN32)
-> + 		set_target_properties(wireshark PROPERTIES OUTPUT_NAME Wireshark)
-> + 	endif()
-> ++	# epan links with snappy which is a C++ library so use cxx linker to
-> ++	# avoid error when statically linking
-> ++	if(SNAPPY_FOUND)
-> ++		set_target_properties(wireshark PROPERTIES LINKER_LANGUAGE CXX)
-> ++	endif(SNAPPY_FOUND)
-> + 
-> + 	if(ENABLE_APPLICATION_BUNDLE)
-> + 		add_dependencies(wireshark manpages)
-> +@@ -2306,6 +2311,11 @@ if(BUILD_tshark)
-> + 	add_executable(tshark ${tshark_FILES})
-> + 	set_extra_executable_properties(tshark "Executables")
-> + 	target_link_libraries(tshark ${tshark_LIBS})
-> ++	# epan links with snappy which is a C++ library so use cxx linker to
-> ++	# avoid error when statically linking
-> ++	if(SNAPPY_FOUND)
-> ++		set_target_properties(tshark PROPERTIES LINKER_LANGUAGE CXX)
-> ++	endif(SNAPPY_FOUND)
-> + 	install(TARGETS tshark RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-> + endif()
-> + 
-> +@@ -2329,6 +2339,11 @@ if(BUILD_tfshark)
-> + 	add_executable(tfshark ${tfshark_FILES})
-> + 	set_extra_executable_properties(tfshark "Executables")
-> + 	target_link_libraries(tfshark ${tfshark_LIBS})
-> ++	# epan links with snappy which is a C++ library so use cxx linker to
-> ++	# avoid error when statically linking
-> ++	if(SNAPPY_FOUND)
-> ++		set_target_properties(tfshark PROPERTIES LINKER_LANGUAGE CXX)
-> ++	endif(SNAPPY_FOUND)
-> + 	install(TARGETS tfshark RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-> + endif()
-> + 
-> +@@ -2352,6 +2367,11 @@ if(BUILD_rawshark AND PCAP_FOUND)
-> + 	add_executable(rawshark ${rawshark_FILES})
-> + 	set_extra_executable_properties(rawshark "Executables")
-> + 	target_link_libraries(rawshark ${rawshark_LIBS})
-> ++	# epan links with snappy which is a C++ library so use cxx linker to
-> ++	# avoid error when statically linking
-> ++	if(SNAPPY_FOUND)
-> ++		set_target_properties(rawshark PROPERTIES LINKER_LANGUAGE CXX)
-> ++	endif(SNAPPY_FOUND)
-> + 	install(TARGETS rawshark RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-> + endif()
-> + 
-> +@@ -2383,6 +2403,11 @@ if(BUILD_sharkd)
-> + 	if(WIN32)
-> + 		target_link_libraries(sharkd "ws2_32.lib")
-> + 	endif(WIN32)
-> ++	# epan links with snappy which is a C++ library so use cxx linker to
-> ++	# avoid error when statically linking
-> ++	if(SNAPPY_FOUND)
-> ++		set_target_properties(sharkd PROPERTIES LINKER_LANGUAGE CXX)
-> ++	endif(SNAPPY_FOUND)
-> + 
-> + 	install(TARGETS sharkd RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-> + endif()
-> +@@ -2400,6 +2425,11 @@ if(BUILD_dftest)
-> + 	add_executable(dftest ${dftest_FILES})
-> + 	set_extra_executable_properties(dftest "Tests")
-> + 	target_link_libraries(dftest ${dftest_LIBS})
-> ++	# epan links with snappy which is a C++ library so use cxx linker to
-> ++	# avoid error when statically linking
-> ++	if(SNAPPY_FOUND)
-> ++		set_target_properties(dftest PROPERTIES LINKER_LANGUAGE CXX)
-> ++	endif(SNAPPY_FOUND)
-> + endif()
-> + 
-> + if(BUILD_randpkt)
-> +-- 
-> +2.20.1
-> +
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 806a07b840..2dee44283b 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q3/000439.html
+-sha1 12c1cee8871c03f0315fc8f27876364b75c95b12  gnupg-2.2.17.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
++sha1 e24a1208ffe69d7436b2f27e99542a85f34d0ac0  gnupg-2.2.19.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.17.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.19.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256 afa262868e39b651a2db4c071fba90415154243e83a830ca00516f9a807fd514  gnupg-2.2.17.tar.bz2
++sha256 242554c0e06f3a83c420b052f750b65ead711cc3fddddb5e7274fcdbb4e9dec0  gnupg-2.2.19.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index aa1f7b14d6..28e946b400 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.2.17
++GNUPG2_VERSION = 2.2.19
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
