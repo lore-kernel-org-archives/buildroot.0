@@ -1,22 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 21:18:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rtl8821au: update site url to
- correct repository
-In-Reply-To: <20200110043236.1874260-1-christian@paral.in> (Christian
- Stewart's message of "Thu, 9 Jan 2020 20:32:36 -0800")
-References: <20200110043236.1874260-1-christian@paral.in>
-Message-ID: <87imljjcac.fsf@dell.be.48ers.dk>
+Date: Fri, 10 Jan 2020 21:17:30 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/rtl8821au: update
+ site url to correct repository
+Message-ID: <20200110200825.29868888D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=88ff46a1b8c6dd19ee9cc35b17e3462691289c53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+Commit 5eecaf354ce (package/rtl8821au: switch to abperiasamy fork) changed
+the upstream location, but didn't update the link in the help text.
 
-Committed to 2019.02.x and 2019.11.x, thanks.
+Signed-off-by: Christian Stewart <christian@paral.in>
+[Peter: extend commit message]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6d4c2d062e9571f279cfb148689531bade4f6015)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rtl8821au/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
+index 9827ad5b94..87c191b22a 100644
+--- a/package/rtl8821au/Config.in
++++ b/package/rtl8821au/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_RTL8821AU
+ 	help
+ 	  rtl8821au wifi driver
+ 
+-	  https://github.com/paralin/rtl8821au
++	  https://github.com/abperiasamy/rtl8812AU_8821AU_linux
