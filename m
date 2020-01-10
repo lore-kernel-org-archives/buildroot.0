@@ -1,97 +1,67 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Fri, 10 Jan 2020 18:14:20 -0300
-Subject: [Buildroot] [PATCH] package/asn1c: new host package
-Message-ID: <20200110211420.7704-1-sergio.prado@e-labworks.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 10 Jan 2020 22:30:25 +0100
+Subject: [Buildroot] [git commit] package/pinentry: add pinentry-fltk
+Message-ID: <20200110212036.36C3E8898A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The asn1c is a free, open source compiler of ASN.1 specifications into C
-source code.
+commit: https://git.buildroot.net/buildroot/commit/?id=cfeb591865f6047f6545cc081f4712049b8bdf95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+pinentry-fltk has been added in version 1.1.0 with
+https://github.com/gpg/pinentry/commit/6c45eed62214b44fcc11e642b19df7b6ca0da0bd
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in.host       |  1 +
- package/asn1c/Config.in.host | 11 +++++++++++
- package/asn1c/asn1c.hash     |  5 +++++
- package/asn1c/asn1c.mk       | 12 ++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/asn1c/Config.in.host
- create mode 100644 package/asn1c/asn1c.hash
- create mode 100644 package/asn1c/asn1c.mk
+ package/pinentry/Config.in   | 13 +++++++++++++
+ package/pinentry/pinentry.mk |  9 +++++++++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 80843dd1a113..287e222cdf57 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2241,6 +2241,7 @@ N:	Sergio Prado <sergio.prado@e-labworks.com>
- F:	board/toradex/apalis-imx6/
- F:	configs/toradex_apalis_imx6_defconfig
- F:	package/aoetools/
-+F:	package/asn1c/
- F:	package/curlpp/
- F:	package/daq/
- F:	package/libgdiplus/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 62e860d7c36c..a012ffaa38e9 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -2,6 +2,7 @@ menu "Host utilities"
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index 518e3ad37f..9048edd21b 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -15,6 +15,19 @@ menuconfig BR2_PACKAGE_PINENTRY
  
- 	source "package/aespipe/Config.in.host"
- 	source "package/android-tools/Config.in.host"
-+	source "package/asn1c/Config.in.host"
- 	source "package/btrfs-progs/Config.in.host"
- 	source "package/cargo/Config.in.host"
- 	source "package/cbootimage/Config.in.host"
-diff --git a/package/asn1c/Config.in.host b/package/asn1c/Config.in.host
-new file mode 100644
-index 000000000000..951f5f66915e
---- /dev/null
-+++ b/package/asn1c/Config.in.host
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_HOST_ASN1C
-+	bool "host asn1c"
+ if BR2_PACKAGE_PINENTRY
+ 
++config BR2_PACKAGE_PINENTRY_FLTK
++	bool "pinentry-fltk"
++	depends on BR2_USE_MMU # fltk
++	depends on BR2_INSTALL_LIBSTDCPP # fltk
++	depends on BR2_PACKAGE_XORG7 # fltk
++	select BR2_PACKAGE_FLTK
 +	help
-+	  ASN.1 stands for Abstract Syntax Notation One and allows
-+	  to describe complex data structures independently of any
-+	  particular programming language.
++	  The pinentry-fltk tool
 +
-+	  The asn1c is a free, open source compiler of ASN.1
-+	  specifications into C source code.
++comment "pinentry-fltk needs X and a toolchain w/ C++"
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_XORG7 || !BR2_INSTALL_LIBSTDCPP
 +
-+	  http://lionet.info/asn1c
-diff --git a/package/asn1c/asn1c.hash b/package/asn1c/asn1c.hash
-new file mode 100644
-index 000000000000..a4fd3beffa53
---- /dev/null
-+++ b/package/asn1c/asn1c.hash
-@@ -0,0 +1,5 @@
-+# Locally computed:
-+sha256 8007440b647ef2dd9fb73d931c33ac11764e6afb2437dbe638bb4e5fc82386b9  asn1c-0.9.28.tar.gz
+ config BR2_PACKAGE_PINENTRY_NCURSES
+ 	bool "pinentry-ncurses"
+ 	select BR2_PACKAGE_NCURSES
+diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
+index 0e9dfb2f0e..1bc1adab17 100644
+--- a/package/pinentry/pinentry.mk
++++ b/package/pinentry/pinentry.mk
+@@ -36,6 +36,15 @@ else
+ PINENTRY_CONF_OPTS += --disable-libsecret
+ endif
+ 
++# pinentry-fltk backend
++ifeq ($(BR2_PACKAGE_PINENTRY_FLTK),y)
++PINENTRY_CONF_ENV += ac_cv_path_FLTK_CONFIG=$(STAGING_DIR)/usr/bin/fltk-config
++PINENTRY_CONF_OPTS += --enable-pinentry-fltk
++PINENTRY_DEPENDENCIES += fltk
++else
++PINENTRY_CONF_OPTS += --disable-pinentry-fltk
++endif
 +
-+# Hash for license files:
-+sha256 bcc636802a52ace2255212be15fb707084af87061b5cfd37eb84dcf6a02cc48b  LICENSE
-diff --git a/package/asn1c/asn1c.mk b/package/asn1c/asn1c.mk
-new file mode 100644
-index 000000000000..314462a92bf9
---- /dev/null
-+++ b/package/asn1c/asn1c.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# asn1c
-+#
-+################################################################################
-+
-+ASN1C_VERSION = 0.9.28
-+ASN1C_SITE = https://github.com/vlm/asn1c/releases/download/v$(ASN1C_VERSION)
-+ASN1C_LICENSE = BSD-2-Clause
-+ASN1C_LICENSE_FILES = LICENSE
-+
-+$(eval $(host-autotools-package))
--- 
-2.17.1
+ # pinentry-ncurses backend
+ ifeq ($(BR2_PACKAGE_PINENTRY_NCURSES),y)
+ PINENTRY_CONF_OPTS += --enable-ncurses --with-ncurses-include-dir=none
