@@ -1,77 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 10 Jan 2020 19:26:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: fix static build with
- readline
-Message-ID: <20200110182634.3887115-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Jan 2020 19:32:54 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.4.x series
+Message-ID: <20200110182405.EB976886CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/88609eefe55af2ca50d43e17d3424b923528b07a
+commit: https://git.buildroot.net/buildroot/commit/?id=d4f5e1f197c5ba99adeb88e497a25c04b07abe54
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Peter: drop 5.4.x bump]
+(cherry picked from commit 68af58dac2b77aece0e3d74f9b5e7ca81531052e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ....txt-use-pkg-config-to-find-readline.patch | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch
+ linux/linux.hash                     | 8 ++++----
+ package/linux-headers/Config.in.host | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch b/package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch
-new file mode 100644
-index 0000000000..2b685e4aad
---- /dev/null
-+++ b/package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch
-@@ -0,0 +1,49 @@
-+From c538c9fa7e392ce16c3354696e7dc7781a78a300 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 10 Jan 2020 08:49:51 +0100
-+Subject: [PATCH] CMakeLists.txt: use pkg-config to find readline
-+
-+Use pkg_check_modules to find readline dependencies such as ncurses and
-+fallback on current mechanism.
-+
-+This will fix the following build failure when building statically:
-+
-+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libreadline.a(display.o): in function `cr':
-+display.c:(.text+0x1a0): undefined reference to `tputs'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/88609eefe55af2ca50d43e17d3424b923528b07a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/FluidSynth/fluidsynth/pull/606] 
-+---
-+ CMakeLists.txt | 11 +++++++----
-+ 1 file changed, 7 insertions(+), 4 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index d4956b1..3747faa 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -629,12 +629,15 @@ endif ( enable-oboe )
-+ unset ( WITH_READLINE CACHE )
-+ unset ( READLINE_LIBS CACHE )
-+ if ( enable-readline )
-+-  find_package ( Readline )
-+-  set ( FOUND_READLINE ${HAVE_READLINE} )
-+-  if ( HAVE_READLINE )
-++  pkg_check_modules ( READLINE readline )
-++  if ( NOT READLINE_FOUND )
-++    find_package ( Readline )
-++    set ( READLINE_FOUND ${HAVE_READLINE} )
-++  endif ( NOT READLINE_FOUND )
-++  if ( READLINE_FOUND )
-+     set ( WITH_READLINE 1 )
-+     set ( READLINE_LIBS ${READLINE_LIBRARIES} )
-+-  endif ( HAVE_READLINE )
-++  endif ( READLINE_FOUND )
-+ endif ( enable-readline )
-+ 
-+ unset ( ENABLE_MIXER_THREADS CACHE )
-+-- 
-+2.24.1
-+
--- 
-2.24.1
+diff --git a/linux/linux.hash b/linux/linux.hash
+index f9c29dfb45..57aff83e6c 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,7 +1,7 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256 20f14917c4f33122cfa12963a7d3180fe6f4685cacfe984553b2b5b4ad20638c  linux-5.3.18.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 5da5e16fe08fa506f8f74aa4f17be22b52c0f513e9a3f7e7ae22fc53597ad493  linux-4.4.206.tar.xz
+-sha256 1df27899a9bc4dd874f3830ab9e7b638f0026dffd67a2e230444e5d2805ccad6  linux-4.9.206.tar.xz
+-sha256 e8d42d3a1b85d180141e9bc11c4a0e87f8a413c0e989b0f24c1b7c40f8a826f2  linux-4.14.159.tar.xz
+-sha256 29d86c0a6daf169ec0b4b42a12f8d55dc894c52bd901f876f52a05906a5cf7fd  linux-4.19.90.tar.xz
++sha256 5899ff2a85e2b84607148349fd8e646f94399655caf0e4e55d1eb0567e48520e  linux-4.4.208.tar.xz
++sha256 b7ad1c9841d671d026c55a4c91c77205f8b488ca5f980f838591c68662e0525a  linux-4.9.208.tar.xz
++sha256 f65170224cd4359ce8b2793b492bd8127abdd0b91350484e001bce13f0c98b4b  linux-4.14.162.tar.xz
++sha256 29c37cf8bbfa717ce98bc931371c35fcee3482734ad5faba32d02aff209883a2  linux-4.19.92.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ecb450e0ed..9f08f91d44 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -305,10 +305,10 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.206"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.206"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.159"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.90"	if BR2_KERNEL_HEADERS_4_19
++	default "4.4.208"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.208"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.162"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.92"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.3.18"	if BR2_KERNEL_HEADERS_5_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
