@@ -1,10 +1,10 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 10 Jan 2020 23:02:38 +0100
-Subject: [Buildroot] [PATCH 4/5] package/sdl2_mixer: add optional fluidsynth
- dependency
+Date: Fri, 10 Jan 2020 23:02:39 +0100
+Subject: [Buildroot] [PATCH 5/5] package/gstreamer1/gst1-plugins-bad: add
+ fluidsynth option
 In-Reply-To: <20200110220239.196975-1-fontaine.fabrice@gmail.com>
 References: <20200110220239.196975-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200110220239.196975-4-fontaine.fabrice@gmail.com>
+Message-ID: <20200110220239.196975-5-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sdl2_mixer/sdl2_mixer.mk | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in       | 13 +++++++++++++
+ .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  8 +++++++-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/package/sdl2_mixer/sdl2_mixer.mk b/package/sdl2_mixer/sdl2_mixer.mk
-index 198333854e..34bba5772d 100644
---- a/package/sdl2_mixer/sdl2_mixer.mk
-+++ b/package/sdl2_mixer/sdl2_mixer.mk
-@@ -12,9 +12,7 @@ SDL2_MIXER_LICENSE_FILES = COPYING.txt
- SDL2_MIXER_INSTALL_STAGING = YES
- SDL2_MIXER_DEPENDENCIES = sdl2 host-pkgconf
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 393950ef2f..d831f8072e 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -397,6 +397,19 @@ comment "fdk-aac needs a toolchain w/ C++"
+ 	depends on BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP
  
--SDL2_MIXER_CONF_OPTS = \
--	--disable-music-midi-fluidsynth \
--	--disable-music-mp3
-+SDL2_MIXER_CONF_OPTS = --disable-music-mp3
- 
- ifeq ($(BR2_PACKAGE_FLAC),y)
- SDL2_MIXER_CONF_OPTS += --enable-music-flac
-@@ -23,6 +21,13 @@ else
- SDL2_MIXER_CONF_OPTS += --disable-music-flac
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH
++	bool "fluidsynth"
++	depends on BR2_USE_WCHAR # fluidsynth
++	depends on BR2_TOOLCHAIN_HAS_THREADS # fluidsynth
++	depends on BR2_USE_MMU # fluidsynth
++	select BR2_PACKAGE_FLUIDSYNTH
++	help
++	  Fluidsynth MIDI decoder plugin
++
++comment "fluidsynth needs a toolchain w/ threads, wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+ 	bool "gl"
+ 	default y
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 259f00cdbb..ef36e4dc0a 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -42,7 +42,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+ 	-Dfaac=disabled \
+ 	-Dflite=disabled \
+ 	-Dgsm=disabled \
+-	-Dfluidsynth=disabled \
+ 	-Dkate=disabled \
+ 	-Dladspa=disabled \
+ 	-Dlv2=disabled \
+@@ -526,6 +525,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dfdkaac=disabled
  endif
  
-+ifeq ($(BR2_PACKAGE_FLUIDSYNTH),y)
-+SDL2_MIXER_CONF_OPTS += --enable-music-midi-fluidsynth
-+SDL2_MIXER_DEPENDENCIES += fluidsynth
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH),y)
++GST1_PLUGINS_BAD_CONF_OPTS += -Dfluidsynth=enabled
++GST1_PLUGINS_BAD_DEPENDENCIES += fluidsynth
 +else
-+SDL2_MIXER_CONF_OPTS += --disable-music-midi-fluidsynth
++GST1_PLUGINS_BAD_CONF_OPTS += -Dfluidsynth=disabled
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
- SDL2_MIXER_CONF_OPTS += --enable-music-mod-modplug
- SDL2_MIXER_DEPENDENCIES += libmodplug
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dgl=enabled
+ else
 -- 
 2.24.1
