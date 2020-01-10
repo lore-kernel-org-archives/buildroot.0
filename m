@@ -1,58 +1,118 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 17:45:46 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/gnupg2: bump
- version to 2.2.19
-Message-ID: <20200110172714.3AFA388685@busybox.osuosl.org>
+Date: Fri, 10 Jan 2020 18:07:57 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/cpio: security
+ bump to version 2.13
+Message-ID: <20200110172714.4A20F88685@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f28511cae80d102259d28020c25673cc7a3105a
+commit: https://git.buildroot.net/buildroot/commit/?id=1a0d86095f15d4c126fc6d08d9dda617928e59d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
+Removed patch fixing CVE-2016-2037 which was applied upstream.
+
+This release fixes CVE-2015-1197, CVE-2016-2037, CVE-2019-14866.
+
+Switched to .bz2 tarball.
+Added hashes provided by upstream and license hash.
+
 Release notes:
-- 2.2.18
-  https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000442.html
-- 2.2.19
-  https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
+https://lists.gnu.org/archive/html/info-gnu/2019-11/msg00002.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bcb6d0057fb8e5674b6e76fc0c7f38cdcf3ef89d)
+(cherry picked from commit 6c1e4d98f3a3909043ca63376ccfe9fafffafc80)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/cpio/0001-fix-CVE-2016-2037.patch | 51 -------------------------------
+ package/cpio/cpio.hash                    |  7 ++++-
+ package/cpio/cpio.mk                      |  3 +-
+ 3 files changed, 8 insertions(+), 53 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index 806a07b840..2dee44283b 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,7 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q3/000439.html
--sha1 12c1cee8871c03f0315fc8f27876364b75c95b12  gnupg-2.2.17.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
-+sha1 e24a1208ffe69d7436b2f27e99542a85f34d0ac0  gnupg-2.2.19.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.17.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.19.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256 afa262868e39b651a2db4c071fba90415154243e83a830ca00516f9a807fd514  gnupg-2.2.17.tar.bz2
-+sha256 242554c0e06f3a83c420b052f750b65ead711cc3fddddb5e7274fcdbb4e9dec0  gnupg-2.2.19.tar.bz2
- sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index aa1f7b14d6..28e946b400 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/cpio/0001-fix-CVE-2016-2037.patch b/package/cpio/0001-fix-CVE-2016-2037.patch
+deleted file mode 100644
+index aec2ccb8e5..0000000000
+--- a/package/cpio/0001-fix-CVE-2016-2037.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From: Pavel Raiskup
+-Subject: [Bug-cpio] [PATCH] fix 1-byte out-of-bounds write
+-Date: Tue, 26 Jan 2016 23:17:54 +0100
+-
+-Other calls to cpio_safer_name_suffix seem to be safe.
+-
+-* src/copyin.c (process_copy_in):  Make sure that file_hdr.c_name
+-has at least two bytes allocated.
+-* src/util.c (cpio_safer_name_suffix): Document that use of this
+-function requires to be careful.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Patch status: fetched/submitted
+-URL: https://lists.gnu.org/archive/html/bug-cpio/2016-01/msg00005.html
+-
+- src/copyin.c | 2 ++
+- src/util.c   | 5 ++++-
+- 2 files changed, 6 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/copyin.c b/src/copyin.c
+-index cde911e..032d35f 100644
+---- a/src/copyin.c
+-+++ b/src/copyin.c
+-@@ -1385,6 +1385,8 @@ process_copy_in ()
+-          break;
+-        }
+-
+-+      if (file_hdr.c_namesize <= 1)
+-+        file_hdr.c_name = xrealloc(file_hdr.c_name, 2);
+-       cpio_safer_name_suffix (file_hdr.c_name, false, !no_abs_paths_flag,
+-                              false);
+-
+-diff --git a/src/util.c b/src/util.c
+-index 6ff6032..2763ac1 100644
+---- a/src/util.c
+-+++ b/src/util.c
+-@@ -1411,7 +1411,10 @@ set_file_times (int fd,
+- }
+- 
+- /* Do we have to ignore absolute paths, and if so, does the filename
+--   have an absolute path?  */
+-+   have an absolute path?
+-+   Before calling this function make sure that the allocated NAME buffer has
+-+   capacity@least 2 bytes to allow us to store the "." string inside.  */
+-+
+- void
+- cpio_safer_name_suffix (char *name, bool link_target, bool absolute_names,
+-                        bool strip_leading_dots)
+---
+-2.5.0
+diff --git a/package/cpio/cpio.hash b/package/cpio/cpio.hash
+index 962a100cc4..a3a0d4b3f9 100644
+--- a/package/cpio/cpio.hash
++++ b/package/cpio/cpio.hash
+@@ -1,2 +1,7 @@
++# From https://lists.gnu.org/archive/html/info-gnu/2019-11/msg00002.html
++md5 f3438e672e3fa273a7dc26339dd1eed6  cpio-2.13.tar.bz2
++sha1 4dcefc0e1bc36b11506a354768d82b15e3fe6bb8  cpio-2.13.tar.bz2
+ # Locally calculated after checking pgp signature
+-sha256	08a35e92deb3c85d269a0059a27d4140a9667a6369459299d08c17f713a92e73	cpio-2.12.tar.gz
++sha256 eab5bdc5ae1df285c59f2a4f140a98fc33678a0bf61bdba67d9436ae26b46f6d  cpio-2.13.tar.bz2
++# Locally calculated
++sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+index 9a09279572..76cd8659ad 100644
+--- a/package/cpio/cpio.mk
++++ b/package/cpio/cpio.mk
+@@ -4,7 +4,8 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.2.17
-+GNUPG2_VERSION = 2.2.19
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+-CPIO_VERSION = 2.12
++CPIO_VERSION = 2.13
++CPIO_SOURCE = cpio-$(CPIO_VERSION).tar.bz2
+ CPIO_SITE = $(BR2_GNU_MIRROR)/cpio
+ CPIO_CONF_OPTS = --bindir=/bin
+ CPIO_LICENSE = GPL-3.0+
