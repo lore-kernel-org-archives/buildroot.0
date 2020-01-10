@@ -1,29 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Jan 2020 21:56:52 +0100
-Subject: [Buildroot] Kconfig warnings with GCC9
-In-Reply-To: <CAGt4E5su1GkK+5ghxC9x9G9KNizC-5jm5E58qPKkDXKuDu5CqQ@mail.gmail.com>
-References: <CAGt4E5su1GkK+5ghxC9x9G9KNizC-5jm5E58qPKkDXKuDu5CqQ@mail.gmail.com>
-Message-ID: <20200110215652.291df299@windsurf>
+Date: Fri, 10 Jan 2020 22:07:19 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/snort: needs zlib
+In-Reply-To: <20200110172818.17155-1-ps.report@gmx.net>
+References: <20200110172818.17155-1-ps.report@gmx.net>
+Message-ID: <20200110220719.3bcada58@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Fri, 10 Jan 2020 18:28:17 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-On Fri, 10 Jan 2020 11:17:47 -0800
-Markus Mayer <mmayer@broadcom.com> wrote:
-
-> Hi all,
+> Fixes:
 > 
-> Using GCC9 (Ubuntu 19.10), I am getting some compiler warnings
-> (potential buffer overruns) in the Kconfig code. Is this a known
-> issue?
+>   checking zlib.h usability... no
+>   checking zlib.h presence... no
+>   checking for zlib.h... no
+> 
+>      ERROR!  zlib header not found, go get it from
+>      http://www.zlib.net
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-You can try to update the kconfig code in Buildroot with the kconfig
-code available from the latest kernel, and see if it fixes the
-warnings. We're currently using the kconfig code from 4.17-rc2 it seems.
+Since when is zlib needed? We've add the snort package for quite some
+time. Is it due to the bump to 2.9.15 in December ?
 
 Thomas
 -- 
