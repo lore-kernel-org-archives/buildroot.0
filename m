@@ -1,49 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Jan 2020 22:09:15 +0100
-Subject: [Buildroot] [git commit] package/python-aioredis: bump version to
- 1.3.1
-Message-ID: <20200110210808.7751D88933@busybox.osuosl.org>
+Date: Fri, 10 Jan 2020 22:09:58 +0100
+Subject: [Buildroot] [git commit] package/python3: bump version to 3.8.1
+Message-ID: <20200110210808.877F488933@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6d673ccc4b15993b033cf931d886c6dde7f5778
+commit: https://git.buildroot.net/buildroot/commit/?id=f0bf0ebad0aace5db01b3de0bbe3b5e5573f5142
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-aioredis/python-aioredis.hash | 4 ++--
- package/python-aioredis/python-aioredis.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python3/python3.hash | 4 ++--
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-aioredis/python-aioredis.hash b/package/python-aioredis/python-aioredis.hash
-index 9000072420..7162890c4c 100644
---- a/package/python-aioredis/python-aioredis.hash
-+++ b/package/python-aioredis/python-aioredis.hash
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index de317e897d..3773825b43 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioredis/json
--md5	7577e902854a66649c34866e1d3197c0  aioredis-1.3.0.tar.gz
--sha256	86da2748fb0652625a8346f413167f078ec72bdc76e217db7e605a059cd56e86  aioredis-1.3.0.tar.gz
-+md5	950d2092ad96bb1145e9af7bd780fe38  aioredis-1.3.1.tar.gz
-+sha256	15f8af30b044c771aee6787e5ec24694c048184c7b9e54c3b60c750a4b93273a  aioredis-1.3.1.tar.gz
- # Locally computed sha256 checksums
- sha256	a288b4f41b5531ff7e9e2df9cd3f17a1844badebc52d7a9205b131f8b8a50744  LICENSE
-diff --git a/package/python-aioredis/python-aioredis.mk b/package/python-aioredis/python-aioredis.mk
-index 0781ee55d5..750f37b6b2 100644
---- a/package/python-aioredis/python-aioredis.mk
-+++ b/package/python-aioredis/python-aioredis.mk
-@@ -4,9 +4,9 @@
- #
+ # From https://www.python.org/downloads/release/python-380/
+-md5		dbac8df9d8b9edc678d0f4cacdb7dbb0 Python-3.8.0.tar.xz
++md5		b3fb85fd479c0bf950c626ef80cacb57 Python-3.8.1.tar.xz
+ # Locally computed
+-sha256 b356244e13fb5491da890b35b13b2118c3122977c2cd825e3eb6e7d462030d84 Python-3.8.0.tar.xz
++sha256 75894117f6db7051c1b34f37410168844bbb357c139a8a10a352e9bf8be594e8 Python-3.8.1.tar.xz
+ sha256 a77d71d6be6f9032e6b6e5d2cf6da68f9eeab9036edfbc043633c8979cd5e82c LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index a6692c5257..9432f1c59e 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_AIOREDIS_VERSION = 1.3.0
-+PYTHON_AIOREDIS_VERSION = 1.3.1
- PYTHON_AIOREDIS_SOURCE = aioredis-$(PYTHON_AIOREDIS_VERSION).tar.gz
--PYTHON_AIOREDIS_SITE = https://files.pythonhosted.org/packages/48/28/0bf4d0d218f521b95b0497b72135a4ff5ef55e62c72bb73babb0345a4627
-+PYTHON_AIOREDIS_SITE = https://files.pythonhosted.org/packages/2c/2a/662e5e79dde5d00964b995d50e38ecdefeeeb09b37edafff193c7e850f46
- PYTHON_AIOREDIS_SETUP_TYPE = setuptools
- PYTHON_AIOREDIS_LICENSE = MIT
- PYTHON_AIOREDIS_LICENSE_FILES = LICENSE
+ PYTHON3_VERSION_MAJOR = 3.8
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).0
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).1
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
