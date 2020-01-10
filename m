@@ -1,39 +1,134 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 21:01:57 +0100
-Subject: [Buildroot] [PATCH] package/libarchive: security bump to
- version 3.4.1
-In-Reply-To: <1578340597-31153-1-git-send-email-pjtexier@koncepto.io>
- (Pierre-Jean Texier's message of "Mon, 6 Jan 2020 20:56:37 +0100")
-References: <1578340597-31153-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <877e1zkrm2.fsf@dell.be.48ers.dk>
+Date: Fri, 10 Jan 2020 21:02:14 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libarchive: add
+ upstream security fix for CVE-2019-19221
+Message-ID: <20200110195301.48838888A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ffacda24e7068500bdd0fb64f08e242f0aad357f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fixes the following security vulnerabilities:
- > - CVE-2019-19221: In Libarchive 3.4.0, archive_wstring_append_from_mbs in archive_string.c
- >  has an out-of-bounds read because of an incorrect mbrtowc or mbtowc call. For example,
- >  bsdtar crashes via a crafted archive.
+Fixes the following security issue:
 
- > And adds various security fixes.  For details, see :
+- CVE-2019-19221: In Libarchive 3.4.0, archive_wstring_append_from_mbs in
+  archive_string.c has an out-of-bounds read because of an incorrect mbrtowc
+  or mbtowc call.  For example, bsdtar crashes via a crafted archive.
 
- > https://github.com/libarchive/libarchive/releases/tag/v3.4.1
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-optimize-archive_wstring_append_from_mbs.patch | 103 +++++++++++++++++++++
+ 1 file changed, 103 insertions(+)
 
- > Also remove upstreamed patch.
-
- > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
- > ---
- > v1 -> v2 :
- > 	- update commit title "libarchive to package/libarchive"
-
-Committed to 2019.11.x, thanks.
-
-For 2019.02.x I will instead cherry-pick the upstream fix and apply to
-our 3.3.x version.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libarchive/0008-Bugfix-and-optimize-archive_wstring_append_from_mbs.patch b/package/libarchive/0008-Bugfix-and-optimize-archive_wstring_append_from_mbs.patch
+new file mode 100644
+index 0000000000..a047e26c0c
+--- /dev/null
++++ b/package/libarchive/0008-Bugfix-and-optimize-archive_wstring_append_from_mbs.patch
+@@ -0,0 +1,103 @@
++From 22b1db9d46654afc6f0c28f90af8cdc84a199f41 Mon Sep 17 00:00:00 2001
++From: Martin Matuska <martin@matuska.org>
++Date: Thu, 21 Nov 2019 03:08:40 +0100
++Subject: [PATCH] Bugfix and optimize archive_wstring_append_from_mbs()
++
++The cal to mbrtowc() or mbtowc() should read up to mbs_length
++bytes and not wcs_length. This avoids out-of-bounds reads.
++
++mbrtowc() and mbtowc() return (size_t)-1 wit errno EILSEQ when
++they encounter an invalid multibyte character and (size_t)-2 when
++they they encounter an incomplete multibyte character. As we return
++failure and all our callers error out it makes no sense to continue
++parsing mbs.
++
++As we allocate `len` wchars at the beginning and each wchar has
++at least one byte, there will never be need to grow the buffer,
++so the code can be left out. On the other hand, we are always
++allocatng more memory than we need.
++
++As long as wcs_length == mbs_length == len we can omit wcs_length.
++We keep the old code commented if we decide to save memory and
++use autoexpanding wcs_length in the future.
++
++Fixes #1276
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++[Peter: fixes CVE-2019-19221]
++---
++ libarchive/archive_string.c | 28 +++++++++++++++++-----------
++ 1 file changed, 17 insertions(+), 11 deletions(-)
++
++diff --git a/libarchive/archive_string.c b/libarchive/archive_string.c
++index 979a418b..bd39c96f 100644
++--- a/libarchive/archive_string.c
+++++ b/libarchive/archive_string.c
++@@ -591,7 +591,7 @@ archive_wstring_append_from_mbs(struct archive_wstring *dest,
++ 	 * No single byte will be more than one wide character,
++ 	 * so this length estimate will always be big enough.
++ 	 */
++-	size_t wcs_length = len;
+++	// size_t wcs_length = len;
++ 	size_t mbs_length = len;
++ 	const char *mbs = p;
++ 	wchar_t *wcs;
++@@ -600,7 +600,11 @@ archive_wstring_append_from_mbs(struct archive_wstring *dest,
++ 
++ 	memset(&shift_state, 0, sizeof(shift_state));
++ #endif
++-	if (NULL == archive_wstring_ensure(dest, dest->length + wcs_length + 1))
+++	/*
+++	 * As we decided to have wcs_length == mbs_length == len
+++	 * we can use len here instead of wcs_length
+++	 */
+++	if (NULL == archive_wstring_ensure(dest, dest->length + len + 1))
++ 		return (-1);
++ 	wcs = dest->s + dest->length;
++ 	/*
++@@ -609,6 +613,12 @@ archive_wstring_append_from_mbs(struct archive_wstring *dest,
++ 	 * multi bytes.
++ 	 */
++ 	while (*mbs && mbs_length > 0) {
+++		/*
+++		 * The buffer we allocated is always big enough.
+++		 * Keep this code path in a comment if we decide to choose
+++		 * smaller wcs_length in the future
+++		 */
+++/*
++ 		if (wcs_length == 0) {
++ 			dest->length = wcs - dest->s;
++ 			dest->s[dest->length] = L'\0';
++@@ -618,24 +628,20 @@ archive_wstring_append_from_mbs(struct archive_wstring *dest,
++ 				return (-1);
++ 			wcs = dest->s + dest->length;
++ 		}
+++*/
++ #if HAVE_MBRTOWC
++-		r = mbrtowc(wcs, mbs, wcs_length, &shift_state);
+++		r = mbrtowc(wcs, mbs, mbs_length, &shift_state);
++ #else
++-		r = mbtowc(wcs, mbs, wcs_length);
+++		r = mbtowc(wcs, mbs, mbs_length);
++ #endif
++ 		if (r == (size_t)-1 || r == (size_t)-2) {
++ 			ret_val = -1;
++-			if (errno == EILSEQ) {
++-				++mbs;
++-				--mbs_length;
++-				continue;
++-			} else
++-				break;
+++			break;
++ 		}
++ 		if (r == 0 || r > mbs_length)
++ 			break;
++ 		wcs++;
++-		wcs_length--;
+++		// wcs_length--;
++ 		mbs += r;
++ 		mbs_length -= r;
++ 	}
++-- 
++2.20.1
++
