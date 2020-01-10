@@ -1,53 +1,148 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 16:01:30 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/samba4: security
- bump to version 4.9.17
-Message-ID: <20200110150921.BA5A488595@busybox.osuosl.org>
+Date: Fri, 10 Jan 2020 16:19:57 +0100
+Subject: [Buildroot] [PATCH 1/2] libmodescurity: new package
+In-Reply-To: <20200110140017.15045-1-frank.vanbever@essensium.com> (Frank
+ Vanbever's message of "Fri, 10 Jan 2020 15:00:16 +0100")
+References: <20200110140017.15045-1-frank.vanbever@essensium.com>
+Message-ID: <87d0brmj8i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49719ba18236e73722611e91b93826f2e2a5f56c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Frank" == Frank Vanbever <frank.vanbever@essensium.com> writes:
 
-Fixes the following security vulnerabilities:
+Thanks for the patch! A few comments:
 
-- CVE-2019-14861: Samba AD DC zone-named record Denial of Service in DNS
-                  management server (dnsserver).
-- CVE-2019-14870: DelegationNotAllowed not being enforced in protocol transition
-                  on Samba AD DC.
+s|libmodescurity|package/libmodsecurity| in the subject.
 
-https://www.samba.org/samba/history/samba-4.9.17.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+ > ---
+ >  DEVELOPERS                                    |  3 +
+ >  package/Config.in                             |  1 +
+ >  ...-CANONICAL_HOST-cannot-be-determined.patch | 31 ++++++++++
+ >  ...test-for-uClinux-in-configure-script.patch | 28 +++++++++
+ >  package/libmodsecurity/Config.in              | 14 +++++
+ >  package/libmodsecurity/libmodsecurity.hash    |  4 ++
+ >  package/libmodsecurity/libmodsecurity.mk      | 59 +++++++++++++++++++
+ >  7 files changed, 140 insertions(+)
+ >  create mode 100644 package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch
+ >  create mode 100644 package/libmodsecurity/0002-test-for-uClinux-in-configure-script.patch
+ >  create mode 100644 package/libmodsecurity/Config.in
+ >  create mode 100644 package/libmodsecurity/libmodsecurity.hash
+ >  create mode 100644 package/libmodsecurity/libmodsecurity.mk
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index e0ea49a6f1..27b5551ada 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.15.tar.asc
--sha256 377102b80b97941bf0d131b828cae8415190e5bdd2928c2e2c954e29f1904496  samba-4.9.15.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.17.tar.asc
-+sha256 42467af2efab4793c7988561644a84de4000e96a87ce8239362c6d10abace295  samba-4.9.17.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 3f30efac60..e15d0742e7 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > diff --git a/DEVELOPERS b/DEVELOPERS
+ > index 80843dd1a1..534f4d746c 100644
+ > --- a/DEVELOPERS
+ > +++ b/DEVELOPERS
+ > @@ -955,6 +955,9 @@ F:	package/ucl/
+ >  F:	package/upx/
+ >  F:	package/zxing-cpp/
  
--SAMBA4_VERSION = 4.9.15
-+SAMBA4_VERSION = 4.9.17
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ > +N:	Frank Vanbever <frank.vanbever@essensium.com>
+ > +F:	package/libmodsecurity/
+ > +
+ >  N:	Ga?l Portay <gael.portay@collabora.com>
+ >  F:	package/qt5/qt5virtualkeyboard/
+ >  F:	package/qt5/qt5webengine/
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 873a592d64..190cc4217c 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -2032,6 +2032,7 @@ menu "Networking applications"
+ >  	source "package/leafnode2/Config.in"
+ >  	source "package/lft/Config.in"
+ >  	source "package/lftp/Config.in"
+ > +	source "package/libmodsecurity/Config.in"
+
+Isn't libmodsecurity a library? If so, then a better location would be
+Libraries -> Networking or Libraries -> Security
+
+
+ >  	source "package/lighttpd/Config.in"
+ >  	source "package/linknx/Config.in"
+ >  	source "package/links/Config.in"
+ > diff --git a/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch b/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch
+ > new file mode 100644
+ > index 0000000000..d725d136ff
+ > --- /dev/null
+ > +++ b/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch
+ > @@ -0,0 +1,31 @@
+ > +From 0832208360aab69fbaec76225db67801840a33fe Mon Sep 17 00:00:00 2001
+ > +From: Frank Vanbever <frank.vanbever@essensium.com>
+ > +Date: Fri, 10 Jan 2020 11:14:43 +0100
+ > +Subject: [PATCH] Fail when CANONICAL_HOST cannot be determined
+ > +
+ > +When the CANONICAL_HOST is unknown the configure script exits
+ > +with exit code 0 even though no makefile was produced.
+ > +
+ > +patch was submitted upstream: https://github.com/SpiderLabs/ModSecurity/pull/2235
+ > +
+ > +Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+ > +---
+ > + configure.ac | 2 +-
+ > + 1 file changed, 1 insertion(+), 1 deletion(-)
+ > +
+ > +diff --git a/configure.ac b/configure.ac
+ > +index 95e48843..5e6971f4 100644
+ > +--- a/configure.ac
+ > ++++ b/configure.ac
+ > +@@ -193,7 +193,7 @@ case $host in
+ > +     ;;
+ > +        *)
+ > +     echo "Unknown CANONICAL_HOST $host"
+ > +-    exit
+ > ++    exit 1
+
+What is the use of this patch in Buildroot? I mean, it looks correct but
+we should ensure the configure script can correctly detect
+CANONICAL_HOST (whatever that is), so this should never trigger?
+
+
+ > +++ b/package/libmodsecurity/libmodsecurity.mk
+ > @@ -0,0 +1,59 @@
+ > +################################################################################
+ > +#
+ > +# libmodsecurity
+ > +#
+ > +################################################################################
+ > +
+ > +LIBMODSECURITY_VERSION = 3.0.3
+ > +LIBMODSECURITY_SOURCE = modsecurity-v$(LIBMODSECURITY_VERSION).tar.gz
+ > +LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/$(LIBMODSECURITY_VERSION)
+ > +LIBMODSECURITY_INSTALL_STAGING = YES
+ > +LIBMODSECURITY_LICENSE = Apache-2.0
+ > +LIBMODSECURITY_LICENSE_FILES = LICENSE
+ > +LIBMODSECURITY_AUTORECONF = YES
+
+Please add a comment about why this is done, E.G.
+
+0002-test-for-uClinux-in-configure-script.patch
+
+ > +LIBMODSECURITY_CONF_ENV = \
+ > +	ac_cv_file_others_libinjection_src_libinjection_html5_c=yes # Necessary to work around AC_CHECK_FILE cross-compile limitation
+ > +
+ > +LIBMODSECURITY_DEPENDENCIES = pcre
+ > +LIBMODSECURITY_CONF_OPTS =  --disable-examples
+
+One space too many after =
+
+> +
+ > +ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ > +LIBMODSECURITY_DEPENDENCIES += libxml2
+ > +LIBMODSECURITY_CONF_OPTS += --with-libxml="$(STAGING_DIR)"
+ > +else
+ > +LIBMODSECURITY_CONF_OPTS += --with-libxml="no"
+
+Is the more standard --without-libxml not supported?
+
+ > +ifeq ($(BR2_PACKAGE_LUA),y)
+ > +LIBMODSECURITY_DEPENDENCIES += lua
+
+Does this work both with lua 5.1 and 5.3?
+
+-- 
+Bye, Peter Korsgaard
