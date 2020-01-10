@@ -1,134 +1,233 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 21:02:14 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libarchive: add
- upstream security fix for CVE-2019-19221
-Message-ID: <20200110195301.48838888A3@busybox.osuosl.org>
+Date: Fri, 10 Jan 2020 20:54:26 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libarchive:
+ security bump to version 3.4.1
+Message-ID: <20200110195305.2B8E5888A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffacda24e7068500bdd0fb64f08e242f0aad357f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1e12bf308cc2d4e6f21c98a6e06e8257ee6be449
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Fixes the following security issue:
+Fixes the following security vulnerabilities:
 
-- CVE-2019-19221: In Libarchive 3.4.0, archive_wstring_append_from_mbs in
-  archive_string.c has an out-of-bounds read because of an incorrect mbrtowc
-  or mbtowc call.  For example, bsdtar crashes via a crafted archive.
+- CVE-2019-19221: In Libarchive 3.4.0, archive_wstring_append_from_mbs in archive_string.c
+ has an out-of-bounds read because of an incorrect mbrtowc or mbtowc call. For example,
+ bsdtar crashes via a crafted archive.
 
+And adds various security fixes.  For details, see :
+
+https://github.com/libarchive/libarchive/releases/tag/v3.4.1
+
+Also remove upstreamed patch.
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bbc64eae62f86434096b290d602873e393d59c43)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-optimize-archive_wstring_append_from_mbs.patch | 103 +++++++++++++++++++++
- 1 file changed, 103 insertions(+)
+ .../0001-Unbreak-compilation-without-zlib.patch    | 167 ---------------------
+ package/libarchive/libarchive.hash                 |   4 +-
+ package/libarchive/libarchive.mk                   |   2 +-
+ 3 files changed, 3 insertions(+), 170 deletions(-)
 
-diff --git a/package/libarchive/0008-Bugfix-and-optimize-archive_wstring_append_from_mbs.patch b/package/libarchive/0008-Bugfix-and-optimize-archive_wstring_append_from_mbs.patch
-new file mode 100644
-index 0000000000..a047e26c0c
---- /dev/null
-+++ b/package/libarchive/0008-Bugfix-and-optimize-archive_wstring_append_from_mbs.patch
-@@ -0,0 +1,103 @@
-+From 22b1db9d46654afc6f0c28f90af8cdc84a199f41 Mon Sep 17 00:00:00 2001
-+From: Martin Matuska <martin@matuska.org>
-+Date: Thu, 21 Nov 2019 03:08:40 +0100
-+Subject: [PATCH] Bugfix and optimize archive_wstring_append_from_mbs()
-+
-+The cal to mbrtowc() or mbtowc() should read up to mbs_length
-+bytes and not wcs_length. This avoids out-of-bounds reads.
-+
-+mbrtowc() and mbtowc() return (size_t)-1 wit errno EILSEQ when
-+they encounter an invalid multibyte character and (size_t)-2 when
-+they they encounter an incomplete multibyte character. As we return
-+failure and all our callers error out it makes no sense to continue
-+parsing mbs.
-+
-+As we allocate `len` wchars at the beginning and each wchar has
-+at least one byte, there will never be need to grow the buffer,
-+so the code can be left out. On the other hand, we are always
-+allocatng more memory than we need.
-+
-+As long as wcs_length == mbs_length == len we can omit wcs_length.
-+We keep the old code commented if we decide to save memory and
-+use autoexpanding wcs_length in the future.
-+
-+Fixes #1276
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+[Peter: fixes CVE-2019-19221]
-+---
-+ libarchive/archive_string.c | 28 +++++++++++++++++-----------
-+ 1 file changed, 17 insertions(+), 11 deletions(-)
-+
-+diff --git a/libarchive/archive_string.c b/libarchive/archive_string.c
-+index 979a418b..bd39c96f 100644
-+--- a/libarchive/archive_string.c
-++++ b/libarchive/archive_string.c
-+@@ -591,7 +591,7 @@ archive_wstring_append_from_mbs(struct archive_wstring *dest,
-+ 	 * No single byte will be more than one wide character,
-+ 	 * so this length estimate will always be big enough.
-+ 	 */
-+-	size_t wcs_length = len;
-++	// size_t wcs_length = len;
-+ 	size_t mbs_length = len;
-+ 	const char *mbs = p;
-+ 	wchar_t *wcs;
-+@@ -600,7 +600,11 @@ archive_wstring_append_from_mbs(struct archive_wstring *dest,
-+ 
-+ 	memset(&shift_state, 0, sizeof(shift_state));
-+ #endif
-+-	if (NULL == archive_wstring_ensure(dest, dest->length + wcs_length + 1))
-++	/*
-++	 * As we decided to have wcs_length == mbs_length == len
-++	 * we can use len here instead of wcs_length
-++	 */
-++	if (NULL == archive_wstring_ensure(dest, dest->length + len + 1))
-+ 		return (-1);
-+ 	wcs = dest->s + dest->length;
-+ 	/*
-+@@ -609,6 +613,12 @@ archive_wstring_append_from_mbs(struct archive_wstring *dest,
-+ 	 * multi bytes.
-+ 	 */
-+ 	while (*mbs && mbs_length > 0) {
-++		/*
-++		 * The buffer we allocated is always big enough.
-++		 * Keep this code path in a comment if we decide to choose
-++		 * smaller wcs_length in the future
-++		 */
-++/*
-+ 		if (wcs_length == 0) {
-+ 			dest->length = wcs - dest->s;
-+ 			dest->s[dest->length] = L'\0';
-+@@ -618,24 +628,20 @@ archive_wstring_append_from_mbs(struct archive_wstring *dest,
-+ 				return (-1);
-+ 			wcs = dest->s + dest->length;
-+ 		}
-++*/
-+ #if HAVE_MBRTOWC
-+-		r = mbrtowc(wcs, mbs, wcs_length, &shift_state);
-++		r = mbrtowc(wcs, mbs, mbs_length, &shift_state);
-+ #else
-+-		r = mbtowc(wcs, mbs, wcs_length);
-++		r = mbtowc(wcs, mbs, mbs_length);
-+ #endif
-+ 		if (r == (size_t)-1 || r == (size_t)-2) {
-+ 			ret_val = -1;
-+-			if (errno == EILSEQ) {
-+-				++mbs;
-+-				--mbs_length;
-+-				continue;
-+-			} else
-+-				break;
-++			break;
-+ 		}
-+ 		if (r == 0 || r > mbs_length)
-+ 			break;
-+ 		wcs++;
-+-		wcs_length--;
-++		// wcs_length--;
-+ 		mbs += r;
-+ 		mbs_length -= r;
-+ 	}
-+-- 
-+2.20.1
-+
+diff --git a/package/libarchive/0001-Unbreak-compilation-without-zlib.patch b/package/libarchive/0001-Unbreak-compilation-without-zlib.patch
+deleted file mode 100644
+index b4da5206d4..0000000000
+--- a/package/libarchive/0001-Unbreak-compilation-without-zlib.patch
++++ /dev/null
+@@ -1,167 +0,0 @@
+-From 64333cef68d7bcc67bef6ecf177fbeaa549b9139 Mon Sep 17 00:00:00 2001
+-From: Martin Matuska <martin@matuska.org>
+-Date: Sat, 29 Jun 2019 00:20:58 +0200
+-Subject: [PATCH] Unbreak compilation without zlib
+-
+-Fixes #1214
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit 64333cef68d7
+-
+- libarchive/archive_read_support_filter_gzip.c | 54 ++++++++++++-------
+- libarchive/test/test_read_format_raw.c        |  4 ++
+- 2 files changed, 39 insertions(+), 19 deletions(-)
+-
+-diff --git a/libarchive/archive_read_support_filter_gzip.c b/libarchive/archive_read_support_filter_gzip.c
+-index 458b6f729164..9fa9e2b0ddb8 100644
+---- a/libarchive/archive_read_support_filter_gzip.c
+-+++ b/libarchive/archive_read_support_filter_gzip.c
+-@@ -131,12 +131,20 @@ archive_read_support_filter_gzip(struct archive *_a)
+-  */
+- static ssize_t
+- peek_at_header(struct archive_read_filter *filter, int *pbits,
+--	       struct private_data *state)
+-+#ifdef HAVE_ZLIB_H
+-+	       struct private_data *state
+-+#else
+-+	       void *state
+-+#endif
+-+	      )
+- {
+- 	const unsigned char *p;
+- 	ssize_t avail, len;
+- 	int bits = 0;
+- 	int header_flags;
+-+#ifndef HAVE_ZLIB_H
+-+	(void)state; /* UNUSED */
+-+#endif
+- 
+- 	/* Start by looking at the first ten bytes of the header, which
+- 	 * is all fixed layout. */
+-@@ -153,8 +161,10 @@ peek_at_header(struct archive_read_filter *filter, int *pbits,
+- 	bits += 3;
+- 	header_flags = p[3];
+- 	/* Bytes 4-7 are mod time in little endian. */
+-+#ifdef HAVE_ZLIB_H
+- 	if (state)
+- 		state->mtime = archive_le32dec(p + 4);
+-+#endif
+- 	/* Byte 8 is deflate flags. */
+- 	/* XXXX TODO: return deflate flags back to consume_header for use
+- 	   in initializing the decompressor. */
+-@@ -171,7 +181,9 @@ peek_at_header(struct archive_read_filter *filter, int *pbits,
+- 
+- 	/* Null-terminated optional filename. */
+- 	if (header_flags & 8) {
+-+#ifdef HAVE_ZLIB_H
+- 		ssize_t file_start = len;
+-+#endif
+- 		do {
+- 			++len;
+- 			if (avail < len)
+-@@ -181,11 +193,13 @@ peek_at_header(struct archive_read_filter *filter, int *pbits,
+- 				return (0);
+- 		} while (p[len - 1] != 0);
+- 
+-+#ifdef HAVE_ZLIB_H
+- 		if (state) {
+- 			/* Reset the name in case of repeat header reads. */
+- 			free(state->name);
+- 			state->name = strdup((const char *)&p[file_start]);
+- 		}
+-+#endif
+- 	}
+- 
+- 	/* Null-terminated optional comment. */
+-@@ -236,24 +250,6 @@ gzip_bidder_bid(struct archive_read_filter_bidder *self,
+- 	return (0);
+- }
+- 
+--static int
+--gzip_read_header(struct archive_read_filter *self, struct archive_entry *entry)
+--{
+--	struct private_data *state;
+--
+--	state = (struct private_data *)self->data;
+--
+--	/* A mtime of 0 is considered invalid/missing. */
+--	if (state->mtime != 0)
+--		archive_entry_set_mtime(entry, state->mtime, 0);
+--
+--	/* If the name is available, extract it. */
+--	if (state->name)
+--		archive_entry_set_pathname(entry, state->name);
+--
+--	return (ARCHIVE_OK);
+--}
+--
+- #ifndef HAVE_ZLIB_H
+- 
+- /*
+-@@ -277,6 +273,24 @@ gzip_bidder_init(struct archive_read_filter *self)
+- 
+- #else
+- 
+-+static int
+-+gzip_read_header(struct archive_read_filter *self, struct archive_entry *entry)
+-+{
+-+	struct private_data *state;
+-+
+-+	state = (struct private_data *)self->data;
+-+
+-+	/* A mtime of 0 is considered invalid/missing. */
+-+	if (state->mtime != 0)
+-+		archive_entry_set_mtime(entry, state->mtime, 0);
+-+
+-+	/* If the name is available, extract it. */
+-+	if (state->name)
+-+		archive_entry_set_pathname(entry, state->name);
+-+
+-+	return (ARCHIVE_OK);
+-+}
+-+
+- /*
+-  * Initialize the filter object.
+-  */
+-@@ -306,7 +320,9 @@ gzip_bidder_init(struct archive_read_filter *self)
+- 	self->read = gzip_filter_read;
+- 	self->skip = NULL; /* not supported */
+- 	self->close = gzip_filter_close;
+-+#ifdef HAVE_ZLIB_H
+- 	self->read_header = gzip_read_header;
+-+#endif
+- 
+- 	state->in_stream = 0; /* We're not actually within a stream yet. */
+- 
+-diff --git a/libarchive/test/test_read_format_raw.c b/libarchive/test/test_read_format_raw.c
+-index 0dac8bfbab4a..3961723b48a1 100644
+---- a/libarchive/test/test_read_format_raw.c
+-+++ b/libarchive/test/test_read_format_raw.c
+-@@ -36,7 +36,9 @@ DEFINE_TEST(test_read_format_raw)
+- 	const char *reffile1 = "test_read_format_raw.data";
+- 	const char *reffile2 = "test_read_format_raw.data.Z";
+- 	const char *reffile3 = "test_read_format_raw.bufr";
+-+#ifdef HAVE_ZLIB_H
+- 	const char *reffile4 = "test_read_format_raw.data.gz";
+-+#endif
+- 
+- 	/* First, try pulling data out of an uninterpretable file. */
+- 	extract_reference_file(reffile1);
+-@@ -119,6 +121,7 @@ DEFINE_TEST(test_read_format_raw)
+- 	assertEqualIntA(a, ARCHIVE_OK, archive_read_close(a));
+- 	assertEqualInt(ARCHIVE_OK, archive_read_free(a));
+- 
+-+#ifdef HAVE_ZLIB_H
+- 	/* Fourth, try with gzip which has metadata. */
+- 	extract_reference_file(reffile4);
+- 	assert((a = archive_read_new()) != NULL);
+-@@ -144,4 +147,5 @@ DEFINE_TEST(test_read_format_raw)
+- 	assertEqualIntA(a, ARCHIVE_EOF, archive_read_next_header(a, &ae));
+- 	assertEqualIntA(a, ARCHIVE_OK, archive_read_close(a));
+- 	assertEqualInt(ARCHIVE_OK, archive_read_free(a));
+-+#endif
+- }
+--- 
+-2.20.1
+-
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index 04c5777753..b01d6368a5 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,4 +1,4 @@
+-# From https://www.libarchive.de/downloads/libarchive-3.4.0.tar.gz.sums.txt
+-sha256  8643d50ed40c759f5412a3af4e353cffbce4fdf3b5cf321cb72cacf06b2d825e  libarchive-3.4.0.tar.gz
++# From https://www.libarchive.de/downloads/sha256sums
++sha256  fcf87f3ad8db2e4f74f32526dee62dd1fb9894782b0a503a89c9d7a70a235191  libarchive-3.4.1.tar.gz
+ # Locally computed:
+ sha256  e1e3d4ba9d0b0ccba333b5f5539f7c6c9a3ef3d57a96cd165d2c45eaa1cd026d  COPYING
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index ccda18386f..e256b72289 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBARCHIVE_VERSION = 3.4.0
++LIBARCHIVE_VERSION = 3.4.1
+ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
