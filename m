@@ -1,38 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Jan 2020 22:34:04 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/2] package/zxing-cpp: replace ZXING_CPP_MAKE_OPTS workaround
-In-Reply-To: <20200109223915.3719988-1-fontaine.fabrice@gmail.com>
-References: <20200109223915.3719988-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200110223404.35d98a90@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 10 Jan 2020 22:38:37 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/snort: needs zlib
+In-Reply-To: <20200110220719.3bcada58@windsurf>
+References: <20200110172818.17155-1-ps.report@gmx.net>
+ <20200110220719.3bcada58@windsurf>
+Message-ID: <20200110223837.170e8e3f@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  9 Jan 2020 23:39:14 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Thomas,
 
-> Bumping to version e0e40dd in commit
-> ad9c5bbfa7ee355b9f6120358cde08ae866537ac included the following upstream
-> commit:
-> https://github.com/glassechidna/zxing-cpp/commit/4e2b4fe1668c60d73e7649b0d3d5888912878392
-> 
-> This commit contains CMake improvements and especially a new
-> BUILD_TESTING option that disable the testrunner compile, use this
-> instead of the ZXING_CPP_MAKE_OPTS workaround.
-> 
-> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Peter Seiderer):
->  - Update commit title and message to fix version and drop C++11
+On Fri, 10 Jan 2020 22:07:19 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Thanks, both patches applied.
+> On Fri, 10 Jan 2020 18:28:17 +0100
+> Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > Fixes:
+> >
+> >   checking zlib.h usability... no
+> >   checking zlib.h presence... no
+> >   checking for zlib.h... no
+> >
+> >      ERROR!  zlib header not found, go get it from
+> >      http://www.zlib.net
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>
+> Since when is zlib needed? We've add the snort package for quite some
+> time. Is it due to the bump to 2.9.15 in December ?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+No, I think it is a side effect of 'package/libpcap: remove unnecessary dependency
+on zlib' ([1]) as snort selects/depends on libpcap...
+
+Regards,
+Peter
+
+[1] https://git.buildroot.net/buildroot/commit/?id=fe4b9321e5ef3594776bba443d9718efd766f40e
+
+>
+> Thomas
