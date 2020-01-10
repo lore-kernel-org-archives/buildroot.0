@@ -1,71 +1,32 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 10 Jan 2020 23:02:39 +0100
-Subject: [Buildroot] [PATCH 5/5] package/gstreamer1/gst1-plugins-bad: add
- fluidsynth option
-In-Reply-To: <20200110220239.196975-1-fontaine.fabrice@gmail.com>
-References: <20200110220239.196975-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200110220239.196975-5-fontaine.fabrice@gmail.com>
+Date: Fri, 10 Jan 2020 23:02:35 +0100
+Subject: [Buildroot] [PATCH 1/5] package/fluidsynth: install to staging
+Message-ID: <20200110220239.196975-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Install fluidsynth to staging to be able to use it in vlc, sdl2_mixer
+and gst1-plugins-bad
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in       | 13 +++++++++++++
- .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  8 +++++++-
- 2 files changed, 20 insertions(+), 1 deletion(-)
+ package/fluidsynth/fluidsynth.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 393950ef2f..d831f8072e 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -397,6 +397,19 @@ comment "fdk-aac needs a toolchain w/ C++"
- 	depends on BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index 4ef0a6f40d..7681e906b1 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -8,6 +8,7 @@ FLUIDSYNTH_VERSION = 2.1.0
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
++FLUIDSYNTH_INSTALL_STAGING = YES
+ FLUIDSYNTH_DEPENDENCIES = libglib2
  
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH
-+	bool "fluidsynth"
-+	depends on BR2_USE_WCHAR # fluidsynth
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # fluidsynth
-+	depends on BR2_USE_MMU # fluidsynth
-+	select BR2_PACKAGE_FLUIDSYNTH
-+	help
-+	  Fluidsynth MIDI decoder plugin
-+
-+comment "fluidsynth needs a toolchain w/ threads, wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
- 	bool "gl"
- 	default y
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 259f00cdbb..ef36e4dc0a 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -42,7 +42,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 	-Dfaac=disabled \
- 	-Dflite=disabled \
- 	-Dgsm=disabled \
--	-Dfluidsynth=disabled \
- 	-Dkate=disabled \
- 	-Dladspa=disabled \
- 	-Dlv2=disabled \
-@@ -526,6 +525,13 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += -Dfdkaac=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dfluidsynth=enabled
-+GST1_PLUGINS_BAD_DEPENDENCIES += fluidsynth
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dfluidsynth=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL),y)
- GST1_PLUGINS_BAD_CONF_OPTS += -Dgl=enabled
- else
+ ifeq ($(BR2_PACKAGE_FLUIDSYNTH_ALSA_LIB),y)
 -- 
 2.24.1
