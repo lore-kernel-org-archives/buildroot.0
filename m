@@ -1,220 +1,117 @@
 From: Frank Vanbever <frank.vanbever@essensium.com>
-Date: Fri, 10 Jan 2020 15:00:16 +0100
-Subject: [Buildroot] [PATCH 1/2] libmodescurity: new package
-Message-ID: <20200110140017.15045-1-frank.vanbever@essensium.com>
+Date: Fri, 10 Jan 2020 15:00:17 +0100
+Subject: [Buildroot] [PATCH 2/2] nginx-modsecurity: new package
+In-Reply-To: <20200110140017.15045-1-frank.vanbever@essensium.com>
+References: <20200110140017.15045-1-frank.vanbever@essensium.com>
+Message-ID: <20200110140017.15045-2-frank.vanbever@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This commit adds the modsecurity-nginx nxinx module.
+The name of the package diverges slightly from upstream to maintain
+consistency with other nginx modules already present.
+
 Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
 ---
- DEVELOPERS                                    |  3 +
- package/Config.in                             |  1 +
- ...-CANONICAL_HOST-cannot-be-determined.patch | 31 ++++++++++
- ...test-for-uClinux-in-configure-script.patch | 28 +++++++++
- package/libmodsecurity/Config.in              | 14 +++++
- package/libmodsecurity/libmodsecurity.hash    |  4 ++
- package/libmodsecurity/libmodsecurity.mk      | 59 +++++++++++++++++++
- 7 files changed, 140 insertions(+)
- create mode 100644 package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch
- create mode 100644 package/libmodsecurity/0002-test-for-uClinux-in-configure-script.patch
- create mode 100644 package/libmodsecurity/Config.in
- create mode 100644 package/libmodsecurity/libmodsecurity.hash
- create mode 100644 package/libmodsecurity/libmodsecurity.mk
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/nginx-modsecurity/Config.in              | 10 ++++++++++
+ package/nginx-modsecurity/nginx-modsecurity.hash |  4 ++++
+ package/nginx-modsecurity/nginx-modsecurity.mk   | 14 ++++++++++++++
+ package/nginx/nginx.mk                           |  5 +++++
+ 6 files changed, 35 insertions(+)
+ create mode 100644 package/nginx-modsecurity/Config.in
+ create mode 100644 package/nginx-modsecurity/nginx-modsecurity.hash
+ create mode 100644 package/nginx-modsecurity/nginx-modsecurity.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 80843dd1a1..534f4d746c 100644
+index 534f4d746c..998347c77d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -955,6 +955,9 @@ F:	package/ucl/
- F:	package/upx/
- F:	package/zxing-cpp/
+@@ -957,6 +957,7 @@ F:	package/zxing-cpp/
  
-+N:	Frank Vanbever <frank.vanbever@essensium.com>
-+F:	package/libmodsecurity/
-+
+ N:	Frank Vanbever <frank.vanbever@essensium.com>
+ F:	package/libmodsecurity/
++F:	package/nginx-modsecurity/
+ 
  N:	Ga?l Portay <gael.portay@collabora.com>
  F:	package/qt5/qt5virtualkeyboard/
- F:	package/qt5/qt5webengine/
 diff --git a/package/Config.in b/package/Config.in
-index 873a592d64..190cc4217c 100644
+index 190cc4217c..03f8cdf891 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2032,6 +2032,7 @@ menu "Networking applications"
- 	source "package/leafnode2/Config.in"
- 	source "package/lft/Config.in"
- 	source "package/lftp/Config.in"
-+	source "package/libmodsecurity/Config.in"
- 	source "package/lighttpd/Config.in"
- 	source "package/linknx/Config.in"
- 	source "package/links/Config.in"
-diff --git a/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch b/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch
+@@ -2075,6 +2075,7 @@ menu "External nginx modules"
+ 	source "package/nginx-dav-ext/Config.in"
+ 	source "package/nginx-naxsi/Config.in"
+ 	source "package/nginx-upload/Config.in"
++	source "package/nginx-modsecurity/Config.in"
+ endmenu
+ endif
+ 	source "package/ngircd/Config.in"
+diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
 new file mode 100644
-index 0000000000..d725d136ff
+index 0000000000..cfefefce0c
 --- /dev/null
-+++ b/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch
-@@ -0,0 +1,31 @@
-+From 0832208360aab69fbaec76225db67801840a33fe Mon Sep 17 00:00:00 2001
-+From: Frank Vanbever <frank.vanbever@essensium.com>
-+Date: Fri, 10 Jan 2020 11:14:43 +0100
-+Subject: [PATCH] Fail when CANONICAL_HOST cannot be determined
-+
-+When the CANONICAL_HOST is unknown the configure script exits
-+with exit code 0 even though no makefile was produced.
-+
-+patch was submitted upstream: https://github.com/SpiderLabs/ModSecurity/pull/2235
-+
-+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 95e48843..5e6971f4 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -193,7 +193,7 @@ case $host in
-+     ;;
-+        *)
-+     echo "Unknown CANONICAL_HOST $host"
-+-    exit
-++    exit 1
-+     ;;
-+ esac
-+ 
-+-- 
-+2.20.1
-+
-diff --git a/package/libmodsecurity/0002-test-for-uClinux-in-configure-script.patch b/package/libmodsecurity/0002-test-for-uClinux-in-configure-script.patch
-new file mode 100644
-index 0000000000..73022f31f2
---- /dev/null
-+++ b/package/libmodsecurity/0002-test-for-uClinux-in-configure-script.patch
-@@ -0,0 +1,28 @@
-+From 13c505e30474c919ed9ae552e459769c456da21e Mon Sep 17 00:00:00 2001
-+From: Frank Vanbever <frank.vanbever@essensium.com>
-+Date: Fri, 10 Jan 2020 11:24:43 +0100
-+Subject: [PATCH] test for uClinux in configure script
-+
-+patch was submitted upstream: https://github.com/SpiderLabs/ModSecurity/pull/2235
-+
-+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 5e6971f4..51d38071 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -156,7 +156,7 @@ case $host in
-+     AC_DEFINE([MACOSX], [1], [Define if the operating system is Macintosh OSX])
-+     PLATFORM="MacOSX"
-+     ;;
-+-  *-*-linux*)
-++  *-*-linux* | *-*uclinux*)
-+     echo "Checking platform... Identified as Linux"
-+     AC_DEFINE([LINUX], [1], [Define if the operating system is LINUX])
-+     PLATFORM="Linux"
-+-- 
-+2.20.1
-+
-diff --git a/package/libmodsecurity/Config.in b/package/libmodsecurity/Config.in
-new file mode 100644
-index 0000000000..ddd4170945
---- /dev/null
-+++ b/package/libmodsecurity/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LIBMODSECURITY
-+	bool "libmodsecurity"
++++ b/package/nginx-modsecurity/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_NGINX_MODSECURITY
++	bool "nginx-modsecurity"
 +	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_LIBMODSECURITY
 +	help
-+	  Libmodsecurity is one component of the ModSecurity
-+	  v3 project. The library codebase serves as an
-+	  interface to ModSecurity Connectors taking in web
-+	  traffic and applying traditional ModSecurity
-+	  processing. In general, it provides the capability
-+	  to load/interpret rules written in the ModSecurity
-+	  SecRules format and apply them to HTTP content
-+	  provided by your application via Connectors.
++	  The ModSecurity-nginx connector is the connection
++	  point between nginx and libmodsecurity
++	  (ModSecurity v3).
 +
-+	  https://github.com/SpiderLabs/ModSecurity
-diff --git a/package/libmodsecurity/libmodsecurity.hash b/package/libmodsecurity/libmodsecurity.hash
++	  https://github.com/SpiderLabs/ModSecurity-nginx
+diff --git a/package/nginx-modsecurity/nginx-modsecurity.hash b/package/nginx-modsecurity/nginx-modsecurity.hash
 new file mode 100644
-index 0000000000..29c0a079fe
+index 0000000000..d2dd266ac1
 --- /dev/null
-+++ b/package/libmodsecurity/libmodsecurity.hash
++++ b/package/nginx-modsecurity/nginx-modsecurity.hash
 @@ -0,0 +1,4 @@
-+# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.3/modsecurity-v3.0.3.tar.gz.sha256
-+sha256 8aa1300105d8cc23315a5e54421192bc617a66246ad004bd89e67c232208d0f4  modsecurity-v3.0.3.tar.gz
++# From https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v1.0.1/modsecurity-nginx-v1.0.1.tar.gz.sha256
++sha256 def45a8db5bc9da14765eda75363457209a86c89538ccf5bfbd3aa02fa10833c modsecurity-nginx-v1.0.1.tar.gz
 +# Localy calculated
-+sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
++sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4 LICENSE
+diff --git a/package/nginx-modsecurity/nginx-modsecurity.mk b/package/nginx-modsecurity/nginx-modsecurity.mk
 new file mode 100644
-index 0000000000..991402057d
+index 0000000000..f1c4106047
 --- /dev/null
-+++ b/package/libmodsecurity/libmodsecurity.mk
-@@ -0,0 +1,59 @@
++++ b/package/nginx-modsecurity/nginx-modsecurity.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# libmodsecurity
++# nginx-modsecurity
 +#
 +################################################################################
 +
-+LIBMODSECURITY_VERSION = 3.0.3
-+LIBMODSECURITY_SOURCE = modsecurity-v$(LIBMODSECURITY_VERSION).tar.gz
-+LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/$(LIBMODSECURITY_VERSION)
-+LIBMODSECURITY_INSTALL_STAGING = YES
-+LIBMODSECURITY_LICENSE = Apache-2.0
-+LIBMODSECURITY_LICENSE_FILES = LICENSE
-+LIBMODSECURITY_AUTORECONF = YES
-+LIBMODSECURITY_CONF_ENV = \
-+	ac_cv_file_others_libinjection_src_libinjection_html5_c=yes # Necessary to work around AC_CHECK_FILE cross-compile limitation
++NGINX_MODSECURITY_VERSION = 1.0.1
++NGINX_MODSECURITY_SOURCE = modsecurity-nginx-v$(NGINX_MODSECURITY_VERSION).tar.gz
++NGINX_MODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/$(NGINX_MODSECURITY_VERSION)
++NGINX_MODSECURITY_LICENSE = Apache-2.0
++NGINX_MODSECURITY_LICENSE_FILES = LICENSE
++NGINX_MODSECURITY_DEPENDENCIES = libmodsecurity
 +
-+LIBMODSECURITY_DEPENDENCIES = pcre
-+LIBMODSECURITY_CONF_OPTS =  --disable-examples
-+
-+ifeq ($(BR2_PACKAGE_LIBXML2),y)
-+LIBMODSECURITY_DEPENDENCIES += libxml2
-+LIBMODSECURITY_CONF_OPTS += --with-libxml="$(STAGING_DIR)"
-+else
-+LIBMODSECURITY_CONF_OPTS += --with-libxml="no"
++$(eval $(generic-package))
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index f895b78779..a9eac57adc 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -250,6 +250,11 @@ NGINX_DEPENDENCIES += nginx-naxsi
+ NGINX_CONF_OPTS += --add-module=$(NGINX_NAXSI_DIR)/naxsi_src
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NGINX_MODSECURITY),y)
++NGINX_DEPENDENCIES += nginx-modsecurity
++NGINX_CONF_OPTS += --add-module=$(NGINX_MODSECURITY_DIR)
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+LIBMODSECURITY_DEPENDENCIES += libcurl
-+LIBMODSECURITY_CONF_OPTS += --with-curl="$(STAGING_DIR)"
-+else
-+LIBMODSECURITY_CONF_OPTS += --with-curl="no"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_YAJL),y)
-+LIBMODSECURITY_DEPENDENCIES += yajl
-+else
-+LIBMODSECURITY_CONF_OPTS += --with-yajl="no"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GEOIP),y)
-+LIBMODSECURITY_DEPENDENCIES += geoip
-+else
-+LIBMODSECURITY_CONF_OPTS += --with-geoip="no"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
-+LIBMODSECURITY_DEPENDENCIES += libmaxminddb
-+else
-+LIBMODSECURITY_CONF_OPTS += --with-maxmind="no"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LUA),y)
-+LIBMODSECURITY_DEPENDENCIES += lua
-+LIBMODSECURITY_CONF_OPTS += --with-lua="$(STAGING_DIR)"
-+else
-+LIBMODSECURITY_CONF_OPTS += --with-lua="no"
-+endif
-+
-+$(eval $(autotools-package))
+ # Debug logging
+ NGINX_CONF_OPTS += $(if $(BR2_PACKAGE_NGINX_DEBUG),--with-debug)
+ 
 -- 
 2.20.1
