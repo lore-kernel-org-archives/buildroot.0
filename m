@@ -1,38 +1,105 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 21:04:35 +0100
+Date: Fri, 10 Jan 2020 21:04:26 +0100
 Subject: [Buildroot] [git commit branch/2019.11.x] package/docker-engine:
- fix hash of license file
-Message-ID: <20200110195440.102B2888AF@busybox.osuosl.org>
+ security bump to 19.03.5
+Message-ID: <20200110195440.06EEF888AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e94ec534f4fa0f0ba9d3153d7be5d737ca53fb8
+commit: https://git.buildroot.net/buildroot/commit/?id=434e873fde9b6c8c9195117c5ed24c6bafed187a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Commit 0161899ae56d2c886df890ae352665bb07c88869 forgot to update hash of
-license file (update in year):
-https://github.com/docker/engine/commit/68906e6dcdd115be8b12913a7d1c4d9c4db6c495
+Fixes the following security vulnerabilities:
 
-Fixes:
- - http://autobuild.buildroot.org/results/3d1ccae5f3e4eeed9a3bf2eb29fd194b868bc0a7
+- CVE-2019-14271: In Docker 19.03.x before 19.03.1 linked against the GNU C
+  Library (aka glibc), code injection can occur when the nsswitch facility
+  dynamically loads a library inside a chroot that contains the contents of
+  the container
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a93c104917c2d477c04275ea84669333d9f5c369)
+Signed-off-by: Christian Stewart <christian@paral.in>
+[Peter: mention security impact]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0161899ae56d2c886df890ae352665bb07c88869)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...001-Fix-faulty-runc-version-commit-scrape.patch | 45 ----------------------
+ package/docker-engine/docker-engine.hash           |  2 +-
+ package/docker-engine/docker-engine.mk             |  2 +-
+ 3 files changed, 2 insertions(+), 47 deletions(-)
 
+diff --git a/package/docker-engine/0001-Fix-faulty-runc-version-commit-scrape.patch b/package/docker-engine/0001-Fix-faulty-runc-version-commit-scrape.patch
+deleted file mode 100644
+index dc47a8f9ef..0000000000
+--- a/package/docker-engine/0001-Fix-faulty-runc-version-commit-scrape.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 324e7be4b252c13002bca6a9d82e7b2e43664634 Mon Sep 17 00:00:00 2001
+-From: Christian Stewart <christian@paral.in>
+-Date: Mon, 26 Nov 2018 22:59:32 -0800
+-Subject: [PATCH] Fix faulty runc version commit scrape
+-
+-This commit replaces faulty logic to determine the runc version commit hash.
+-
+-The original logic takes the second line of the output of "runc --version" and
+-does not work if there are a different number of lines printed from the command
+-than expected. The buildroot version of runc outputs two lines instead of the
+-expected three, causing the error:
+-
+-unknown output format: runc version commit: ...
+-
+-This patch replaces this logic with a simple scan of the "runc --version"
+-output, searching for the "runc version commit" prefixed line.
+-
+-Signed-off-by: Christian Stewart <christian@paral.in>
+----
+- daemon/info_unix.go | 9 +++++----
+- 1 file changed, 5 insertions(+), 4 deletions(-)
+-
+-diff --git a/daemon/info_unix.go b/daemon/info_unix.go
+-index 60b2f99870..688a510796 100644
+---- a/daemon/info_unix.go
+-+++ b/daemon/info_unix.go
+-@@ -32,10 +32,11 @@ func (daemon *Daemon) fillPlatformInfo(v *types.Info, sysInfo *sysinfo.SysInfo)
+- 	defaultRuntimeBinary := daemon.configStore.GetRuntime(v.DefaultRuntime).Path
+- 	if rv, err := exec.Command(defaultRuntimeBinary, "--version").Output(); err == nil {
+- 		parts := strings.Split(strings.TrimSpace(string(rv)), "\n")
+--		if len(parts) == 3 {
+--			parts = strings.Split(parts[1], ": ")
+--			if len(parts) == 2 {
+--				v.RuncCommit.ID = strings.TrimSpace(parts[1])
+-+		for _, pt := range parts {
+-+			ptKv := strings.Split(pt, ":")
+-+			if strings.HasSuffix(strings.TrimSpace(ptKv[0]), "commit") {
+-+				v.RuncCommit.ID = strings.TrimSpace(ptKv[1])
+-+				break
+- 			}
+- 		}
+- 
+--- 
+-2.18.1
+-
 diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 59c9204285..1f1643d377 100644
+index b89310f993..59c9204285 100644
 --- a/package/docker-engine/docker-engine.hash
 +++ b/package/docker-engine/docker-engine.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
- sha256	bc5d1ac503e44593be8003ed0ad9c75bf0da535db19837a9338429c438bd4637  docker-engine-19.03.5.tar.gz
--sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-+sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+-sha256	fa3a9e998627418d648495d06d168c4d26ed07859c9370d5fddbfd29c26d8592  docker-engine-18.09.9.tar.gz
++sha256	bc5d1ac503e44593be8003ed0ad9c75bf0da535db19837a9338429c438bd4637  docker-engine-19.03.5.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 6a225ee5f0..24022f7107 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_ENGINE_VERSION = 18.09.9
++DOCKER_ENGINE_VERSION = 19.03.5
+ DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
