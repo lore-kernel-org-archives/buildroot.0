@@ -1,33 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 14:52:07 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/cc-tool: add hash
- for license file
-Message-ID: <20200110134324.4408F88502@busybox.osuosl.org>
+Date: Fri, 10 Jan 2020 14:54:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: replace
+ host-intltool by $(TARGET_NLS_DEPENDENCIES)
+In-Reply-To: <20200101211448.3162049-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 1 Jan 2020 22:14:48 +0100")
+References: <20200101211448.3162049-1-fontaine.fabrice@gmail.com>
+Message-ID: <8736cno1r4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b21e835a3fd8d5f3cbd709bab7ddea91a76ccfd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 239dee9b3b610a74fafca49cb97ae4e9527f3834)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cc-tool/cc-tool.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ > intltool has been replaced by gettext since version 12.99.1 and
+ > https://gitlab.freedesktop.org/pulseaudio/pulseaudio/commit/57e3ccaf51f714eec8ca29005c3cc4fde456e84e
+ > so replace host-intltool by $(TARGET_NLS_DEPENDENCIES)
 
-diff --git a/package/cc-tool/cc-tool.hash b/package/cc-tool/cc-tool.hash
-index 81844eec82..d778b44395 100644
---- a/package/cc-tool/cc-tool.hash
-+++ b/package/cc-tool/cc-tool.hash
-@@ -1,3 +1,6 @@
- # From http://sourceforge.net/projects/cctool/files/
- sha1 f313e55f019ea5338438633f5b5e689b699343e1  cc-tool-0.26-src.tgz
- md5 26960676f3e6264e612c299fbf8ec5ea  cc-tool-0.26-src.tgz
-+
-+# Hash for license file
-+sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
