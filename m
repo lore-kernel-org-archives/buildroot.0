@@ -1,114 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 10 Jan 2020 18:35:16 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/wireshark: fix static build with brotli
-In-Reply-To: <20200103134821.1505736-1-fontaine.fabrice@gmail.com>
-References: <20200103134821.1505736-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200110173516.GB2478@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Jan 2020 17:45:46 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gnupg2: bump
+ version to 2.2.19
+Message-ID: <20200110172714.3AFA388685@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=0f28511cae80d102259d28020c25673cc7a3105a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-On 2020-01-03 14:48 +0100, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/2387d4590c5dce73d5f6d72bccf253e79f9a73d8
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Release notes:
+- 2.2.18
+  https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000442.html
+- 2.2.19
+  https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
 
-Since wireshark now depends on dynamic libraries, this build failure
-with static brotli should no longer be a concern, right?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit bcb6d0057fb8e5674b6e76fc0c7f38cdcf3ef89d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Patch marked as "not applicable" now.
-
-Thanks again for looking at all such mess...
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Drop CMAKE_FIND_LIBRARY_SUFFIXES STREQUAL ".a" from patch
-> 
->  ...-FindBROTLI.cmake-fix-static-linking.patch | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch
-> 
-> diff --git a/package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch b/package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch
-> new file mode 100644
-> index 0000000000..1300a65167
-> --- /dev/null
-> +++ b/package/wireshark/0002-FindBROTLI.cmake-fix-static-linking.patch
-> @@ -0,0 +1,54 @@
-> +From e1d88b868f57d79a3e90af34f3961f56172998ba Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Fri, 3 Jan 2020 10:47:30 +0100
-> +Subject: [PATCH 2/2] FindBROTLI.cmake: fix static linking
-> +
-> +Use pkg-config to retrieve dependencies of libbrotlidec such as
-> +libbrotlicommon otherwise static build will fail on:
-> +
-> +[100%] Building C object CMakeFiles/tshark.dir/ui/cli/tap-smbsids.c.o
-> +/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libbrotlidec.a(decode.c.o): in function `ProcessCommands':
-> +decode.c:(.text+0x36d0): undefined reference to `BrotliTransformDictionaryWord'
-> +/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libbrotlidec.a(decode.c.o): in function `SafeProcessCommands':
-> +decode.c:(.text+0x418c): undefined reference to `BrotliTransformDictionaryWord'
-> +/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libbrotlidec.a(state.c.o): in function `BrotliDecoderStateInit':
-> +state.c:(.text+0x120): undefined reference to `BrotliGetDictionary'
-> +/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: state.c:(.text+0x128): undefined reference to `BrotliGetTransforms'
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/2387d4590c5dce73d5f6d72bccf253e79f9a73d8
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: Not sent yet (waiting for feedback on first patch)]
-> +---
-> + cmake/modules/FindBROTLI.cmake | 7 +++++++
-> + 1 file changed, 7 insertions(+)
-> +
-> +diff --git a/cmake/modules/FindBROTLI.cmake b/cmake/modules/FindBROTLI.cmake
-> +index 4ab8dbb41c..687afd6e5e 100644
-> +--- a/cmake/modules/FindBROTLI.cmake
-> ++++ b/cmake/modules/FindBROTLI.cmake
-> +@@ -11,6 +11,9 @@
-> + include( FindWSWinLibs )
-> + FindWSWinLibs( "brotli-.*" "BROTLI_HINTS" )
-> + 
-> ++find_package(PkgConfig QUIET)
-> ++PKG_CHECK_MODULES(PC_BROTLI QUIET libbrotlidec)
-> ++
-> + find_path(BROTLI_INCLUDE_DIR
-> +   NAMES "brotli/decode.h"
-> +   HINTS "${BROTLI_HINTS}/include"
-> +@@ -28,6 +31,10 @@ if( BROTLI_FOUND )
-> +   set( BROTLI_INCLUDE_DIRS ${BROTLI_INCLUDE_DIR} )
-> +   set( BROTLI_LIBRARIES ${BROTLIDEC_LIBRARY} )
-> + 
-> ++  if(UNIX)
-> ++    list(APPEND BROTLI_LIBRARIES ${PC_BROTLI_LIBRARIES})
-> ++  endif()
-> ++
-> +   if (WIN32)
-> +     set ( BROTLI_DLL_DIR "${BROTLI_HINTS}/bin"
-> +       CACHE PATH "Path to the brotli DLLs"
-> +-- 
-> +2.24.0
-> +
-> -- 
-> 2.24.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 806a07b840..2dee44283b 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q3/000439.html
+-sha1 12c1cee8871c03f0315fc8f27876364b75c95b12  gnupg-2.2.17.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
++sha1 e24a1208ffe69d7436b2f27e99542a85f34d0ac0  gnupg-2.2.19.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.17.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.19.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256 afa262868e39b651a2db4c071fba90415154243e83a830ca00516f9a807fd514  gnupg-2.2.17.tar.bz2
++sha256 242554c0e06f3a83c420b052f750b65ead711cc3fddddb5e7274fcdbb4e9dec0  gnupg-2.2.19.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index aa1f7b14d6..28e946b400 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.2.17
++GNUPG2_VERSION = 2.2.19
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
