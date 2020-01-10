@@ -1,49 +1,35 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Fri, 10 Jan 2020 11:34:53 -0300
-Subject: [Buildroot] [PATCH] package/libpam-tacplus: fix build for nios2
-In-Reply-To: <20200110151346.00a462d8@windsurf>
-References: <20200110121439.16180-1-unixmania@gmail.com>
- <20200110151346.00a462d8@windsurf>
-Message-ID: <CAJ4jsaeoYbSZwcBNarp3Wk8-O6iU+yyxgnq5HPnOzNiKWeXyXg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Jan 2020 15:54:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version
+ to 4.11.4
+In-Reply-To: <20200104151457.2973445-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 4 Jan 2020 16:14:57 +0100")
+References: <20200104151457.2973445-1-bernd.kuhls@t-online.de>
+Message-ID: <87pnfrmkfl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 10, 2020 at 11:13 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Fri, 10 Jan 2020 09:14:39 -0300
-> unixmania at gmail.com wrote:
->
-> > From: Carlos Santos <unixmania@gmail.com>
-> >
-> > Pull an upstream patch that prevents compilation errors due to an unused
-> > return value.
-> >
-> > Add patch not yet applied upstream to prevent another failure because of
-> > the formatters used to print size_t and ssize_t values.
-> >
-> > Upstream status: https://github.com/kravietz/pam_tacplus/pull/136
-> >
-> > Fixes:
-> >   http://autobuild.buildroot.net/results/cf15b09bd7501c017a4e8cf9fb80857197d4a433/
-> >
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
->
-> Thanks. Your commit title saysa "fix build for nios2". Indeed, the
-> autobuilder failures are only on nios2, but I don't see how this
-> problem is nios2 specific. Isn't it more specific to a particular
-> version of gcc, the kernel headers or C library ?
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-The failure due to the unused return value happens because pam_tacplus
-by default uses the -Werror flag, so any recent GCC would trigger it.
-Anyway, the upstream code already avoids the problem.
+ > Version 4.11.3 fixes
+ > CVE-2019-14861: Samba AD DC zone-named record Denial of Service in DNS
+ >                 management server (dnsserver).
+ > CVE-2019-14870: DelegationNotAllowed not being enforced in protocol
+ >                 transition on Samba AD DC.
 
-I didn't have time to check the printf formats on other architectures
-but it's certainly not specific to nios2, since it is related to the
-actual size and type size of size_t.
+ > Changelog:
+ > https://www.samba.org/samba/history/samba-4.11.3.html
+ > https://www.samba.org/samba/history/samba-4.11.4.html
+
+ > Removed patches applied upstream, rebased patch 0002.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+For 2019.02.x I have instead bumped to 4.9.17, and for 2019.11.x to
+4.10.11, both fixing the same issue.
 
 -- 
-Carlos Santos <unixmania@gmail.com>
+Bye, Peter Korsgaard
