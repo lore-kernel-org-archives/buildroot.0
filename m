@@ -1,50 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 16:19:28 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/ffmpeg: bump
- version to 4.2.2
-Message-ID: <20200110151228.9B476885A3@busybox.osuosl.org>
+Date: Fri, 10 Jan 2020 15:50:53 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/samba4: security
+ bump to version 4.10.11
+Message-ID: <20200110151228.91390885A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab6415682b3a054b3a983d788fefa5970ccd2fb4
+commit: https://git.buildroot.net/buildroot/commit/?id=b1e692daa6971f6f225d38bdac6236dfa502fce2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Changelog:
-http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;h=9c992b5c3e3995a0e8f3316b3087205196dc6403;hb=refs/heads/release/4.2
+Fixes the following security vulnerabilities:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 38510af3fb69f07ef15852607fc01b3709424081)
+- CVE-2019-14861: Samba AD DC zone-named record Denial of Service in DNS
+		  management server (dnsserver).
+- CVE-2019-14870: DelegationNotAllowed not being enforced in protocol transition
+		  on Samba AD DC.
+
+https://www.samba.org/samba/history/samba-4.10.11.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index a31811b903..1f68943fc7 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 cec7c87e9b60d174509e263ac4011b522385fd0775292e1670ecc1180c9bb6d4  ffmpeg-4.2.1.tar.xz
-+sha256 cb754255ab0ee2ea5f66f8850e1bd6ad5cac1cd855d0a2f4990fb8c668b0d29c  ffmpeg-4.2.2.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256 cad1218c22121b169fb1380178ab7a0b33cb38a3ff6d3915b8533d1d954f3ce7  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 3dd2e3ef76..f0047c4e3b 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 02220772f6..beaf187bf0 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.10.10.tar.asc
+-sha256 700c734b51610e2feaa0d6744f9bec0c0d8917bca8cc78d5b63a4591f32866a5  samba-4.10.10.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.10.11.tar.asc
++sha256 609f4232e04c6eaad0e3b8e00cd837683a960ebb95c1fe3349e968d1d1dff894  samba-4.10.11.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index c7910d87c8..91155128b9 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 4.2.1
-+FFMPEG_VERSION = 4.2.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-SAMBA4_VERSION = 4.10.10
++SAMBA4_VERSION = 4.10.11
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
