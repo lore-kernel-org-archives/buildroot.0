@@ -1,22 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 20:45:34 +0100
-Subject: [Buildroot] [PATCH v1 4/4] package/docker-cli: bump to 19.03.5
-In-Reply-To: <20191203045003.145746-4-christian@paral.in> (Christian Stewart's
- message of "Mon, 2 Dec 2019 20:50:03 -0800")
-References: <20191203045003.145746-1-christian@paral.in>
- <20191203045003.145746-4-christian@paral.in>
-Message-ID: <87ftgnksdd.fsf@dell.be.48ers.dk>
+Date: Fri, 10 Jan 2020 20:02:22 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ package/docker-containerd: security bump to 1.2.11
+Message-ID: <20200110193543.D0E7E8873A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bd90b0b90d1fa623fa0e24bd725f0b5d48090a98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+Fixes the following security vulnerabilities:
 
-Committed to 2019.02.x and 2019.11.x, thanks.
+containerd 1.2.9/gRPC:
 
--- 
-Bye, Peter Korsgaard
+- CVE-2019-9512: Some HTTP/2 implementations are vulnerable to ping floods,
+  potentially leading to a denial of service.  The attacker sends continual
+  pings to an HTTP/2 peer, causing the peer to build an internal queue of
+  responses.  Depending on how efficiently this data is queued, this can
+  consume excess CPU, memory, or both
+
+- CVE-2019-9514: Some HTTP/2 implementations are vulnerable to a reset
+  flood, potentially leading to a denial of service.  The attacker opens a
+  number of streams and sends an invalid request over each stream that
+  should solicit a stream of RST_STREAM frames from the peer.  Depending on
+  how the peer queues the RST_STREAM frames, this can consume excess memory,
+  CPU, or both
+
+- CVE-2019-9515: Some HTTP/2 implementations are vulnerable to a settings
+  flood, potentially leading to a denial of service.  The attacker sends a
+  stream of SETTINGS frames to the peer.  Since the RFC requires that the
+  peer reply with one acknowledgement per SETTINGS frame, an empty SETTINGS
+  frame is almost equivalent in behavior to a ping.  Depending on how
+  efficiently this data is queued, this can consume excess CPU, memory, or
+  both
+
+containerd 1.2.10/runc:
+
+- CVE-2019-16884: runc through 1.0.0-rc8, as used in Docker through
+  19.03.2-ce and other products, allows AppArmor restriction bypass because
+  libcontainer/rootfs_linux.go incorrectly checks mount targets, and thus a
+  malicious Docker image can mount over a /proc director
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+[Peter: mention security impact]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f40f2bae81b352dcd06902fbb3755313be67b622)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/docker-containerd/docker-containerd.hash | 4 ++--
+ package/docker-containerd/docker-containerd.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index 525191c651..aad74089e9 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256	f2d578b743fb9faa5b3477b7cf4b33d00501087043a53b27754f14bbe741f891  docker-containerd-v1.2.6.tar.gz
+-sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4	LICENSE
++sha256	6a4192fced10c390373adfa9fa9a4f12fe9f38bde580d90468a79ed6c8af75ee  docker-containerd-1.2.11.tar.gz
++sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index c67b36e7dc..69068e44f8 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CONTAINERD_VERSION = v1.2.6
+-DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
++DOCKER_CONTAINERD_VERSION = 1.2.11
++DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+ 
