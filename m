@@ -1,53 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2020 15:50:53 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/samba4: security
- bump to version 4.10.11
-Message-ID: <20200110151228.91390885A3@busybox.osuosl.org>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Fri, 10 Jan 2020 08:16:33 -0800
+Subject: [Buildroot] [PATCH 1/3] package/python-django: bump version to 3.0.2
+Message-ID: <20200110161635.35043-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1e692daa6971f6f225d38bdac6236dfa502fce2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+From: Adam Duskett <Aduskett@gmail.com>
 
-Fixes the following security vulnerabilities:
-
-- CVE-2019-14861: Samba AD DC zone-named record Denial of Service in DNS
-		  management server (dnsserver).
-- CVE-2019-14870: DelegationNotAllowed not being enforced in protocol transition
-		  on Samba AD DC.
-
-https://www.samba.org/samba/history/samba-4.10.11.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 02220772f6..beaf187bf0 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.10.10.tar.asc
--sha256 700c734b51610e2feaa0d6744f9bec0c0d8917bca8cc78d5b63a4591f32866a5  samba-4.10.10.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.10.11.tar.asc
-+sha256 609f4232e04c6eaad0e3b8e00cd837683a960ebb95c1fe3349e968d1d1dff894  samba-4.10.11.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index c7910d87c8..91155128b9 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index f55f844e33..8a2f967077 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	12f434ed7ccd6ee57be6f05a45e20e97  Django-3.0.1.tar.gz
+-sha256	315b11ea265dd15348d47f2cbb044ef71da2018f6e582fed875c889758e6f844  Django-3.0.1.tar.gz
++md5	24d5364af6b04c4dd173111a3207459a  Django-3.0.2.tar.gz
++sha256	8c3575f81e11390893860d97e1e0154c47512f180ea55bd84ce8fa69ba8051ca  Django-3.0.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 100eb43abe..68f9094fc0 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.10.10
-+SAMBA4_VERSION = 4.10.11
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-PYTHON_DJANGO_VERSION = 3.0.1
++PYTHON_DJANGO_VERSION = 3.0.2
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/44/e8/4ae9ef3d455f4ce5aa22259cb6e40c69b29ef6b02d49c5cdfa265f7fc821
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c5/c1/5b901e21114b5dd9233726c2975c0aa7e9f48f63e41ec95d8777721d8aff
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
+-- 
+2.21.0 (Apple Git-122.2)
