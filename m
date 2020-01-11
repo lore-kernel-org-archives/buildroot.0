@@ -1,56 +1,57 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 11 Jan 2020 12:50:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/poppler: bump to version 0.84.0
-Message-ID: <20200111115000.864622-1-fontaine.fabrice@gmail.com>
+Date: Sat, 11 Jan 2020 12:50:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/poppler: really disable test
+ programs
+Message-ID: <20200111115054.864819-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop USE_FIXEDPOINT, remove since version 0.80.0 and
-  https://gitlab.freedesktop.org/poppler/poppler/commit/5b81ab6ce06f60daa63029a3eb12cd31d6852799
-- Add hash for license file
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/poppler/poppler.hash | 3 ++-
- package/poppler/poppler.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ ...1-CMakeLists.txt-fix-BUILD_CPP_TESTS.patch | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/poppler/0001-CMakeLists.txt-fix-BUILD_CPP_TESTS.patch
 
-diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
-index 2d01754f5c..000bb6bff0 100644
---- a/package/poppler/poppler.hash
-+++ b/package/poppler/poppler.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 7267eb4cbccd64a58244b8211603c1c1b6bf32c7f6a4ced2642865346102f36b  poppler-0.77.0.tar.xz
-+sha256 c7a130da743b38a548f7a21fe5940506fb1949f4ebdd3209f0e5b302fa139731  poppler-0.84.0.tar.xz
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING 
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index ffa65f68ce..e452c2336d 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POPPLER_VERSION = 0.77.0
-+POPPLER_VERSION = 0.84.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = http://poppler.freedesktop.org
- POPPLER_DEPENDENCIES = fontconfig host-pkgconf
-@@ -108,9 +108,9 @@ POPPLER_CONF_OPTS += -DWITH_NSS3=OFF
- endif
- 
- ifeq ($(BR2_SOFT_FLOAT),y)
--POPPLER_CONF_OPTS += -USE_FIXEDPOINT=ON -DUSE_FLOAT=OFF
-+POPPLER_CONF_OPTS += -DUSE_FLOAT=OFF
- else
--POPPLER_CONF_OPTS += -USE_FIXEDPOINT=OFF -DUSE_FLOAT=ON
-+POPPLER_CONF_OPTS += -DUSE_FLOAT=ON
- endif
- 
- $(eval $(cmake-package))
+diff --git a/package/poppler/0001-CMakeLists.txt-fix-BUILD_CPP_TESTS.patch b/package/poppler/0001-CMakeLists.txt-fix-BUILD_CPP_TESTS.patch
+new file mode 100644
+index 0000000000..476676199a
+--- /dev/null
++++ b/package/poppler/0001-CMakeLists.txt-fix-BUILD_CPP_TESTS.patch
+@@ -0,0 +1,32 @@
++From ccc5f765c37b2d65e2e0b64d92326997f90acb3e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 11 Jan 2020 12:37:07 +0100
++Subject: [PATCH] CMakeLists.txt: fix BUILD_CPP_TESTS
++
++Do not build programs under the test directory if BUILD_CPP_TESTS is OFF
++as this directory contains multiple C++ test executables
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/poppler/poppler/merge_requests/490]
++---
++ CMakeLists.txt | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index c182d146..d159582b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -677,7 +677,9 @@ endif()
++ if(ENABLE_GLIB)
++   add_subdirectory(glib)
++ endif()
+++if(BUILD_CPP_TESTS)
++ add_subdirectory(test)
+++endif()
++ if(ENABLE_QT5)
++   add_subdirectory(qt5)
++ endif()
++-- 
++2.24.1
++
 -- 
 2.24.1
