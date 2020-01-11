@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Jan 2020 10:58:38 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/dillo: fix
+Date: Sat, 11 Jan 2020 10:58:10 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/dillo: fix
  openssl support
-Message-ID: <20200111100532.0ED51886E4@busybox.osuosl.org>
+Message-ID: <20200111100536.7B5FA8875C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc8bb269bb9239a2d9017a858bb821cbd55d05c5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0325706b4382c205d3040842ee2f0e7b0dfe4758
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Add two patches to fix openssl support:
 
