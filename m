@@ -1,43 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Jan 2020 22:38:56 +0100
-Subject: [Buildroot] [git commit] package/bash-completion: bump to version
- 2.10
-Message-ID: <20200111213005.18AB98B375@busybox.osuosl.org>
+Date: Sat, 11 Jan 2020 22:39:07 +0100
+Subject: [Buildroot] [git commit] package/opencv3: security bump to version
+ 3.4.9
+Message-ID: <20200111213005.251538A540@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc9a4ac60023ad6449f43335f0e16a5c35824e26
+commit: https://git.buildroot.net/buildroot/commit/?id=f6fb2cae0691d25b034b12a16261ee26096db7d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- Fix CVE-2019-14491: An issue was discovered in OpenCV before 3.4.7
+  and 4.x before 4.1.1. There is an out of bounds read in the function
+  cv::predictOrdered<cv::HaarEvaluator> in
+  modules/objdetect/src/cascadedetect.hpp, which leads to denial of service.
+- Fix CVE-2019-14492: An issue was discovered in OpenCV before 3.4.7
+  and 4.x before 4.1.1. There is an out of bounds read/write in the
+  function HaarEvaluator::OptFeature::calc in
+  modules/objdetect/src/cascadedetect.hpp, which leads to denial of service.
+- atomic workaround is not needed since version 3.4.8 and
+  https://github.com/opencv/opencv/commit/464972855e25f71667009b8fe88092d11aab0297
+- Update hash of license file (Xperience.AI added:
+  https://github.com/opencv/opencv/commit/766465ce9483c20d54bfce422d285c077f6502bd)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bash-completion/bash-completion.hash | 2 +-
- package/bash-completion/bash-completion.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/opencv3/opencv3.hash | 4 ++--
+ package/opencv3/opencv3.mk   | 7 +------
+ 2 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/bash-completion/bash-completion.hash b/package/bash-completion/bash-completion.hash
-index a286bd9bab..fa98272be6 100644
---- a/package/bash-completion/bash-completion.hash
-+++ b/package/bash-completion/bash-completion.hash
+diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
+index 0b88b52da5..4953d01a1c 100644
+--- a/package/opencv3/opencv3.hash
++++ b/package/opencv3/opencv3.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 d48fe378e731062f479c5f8802ffa9d3c40a275a19e6e0f6f6cc4b90fa12b2f5  bash-completion-2.9.tar.xz
-+sha256 123c17998e34b937ce57bb1b111cd817bc369309e9a8047c0bcf06ead4a3ec92  bash-completion-2.10.tar.xz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/bash-completion/bash-completion.mk b/package/bash-completion/bash-completion.mk
-index 2ec8d72485..4b86e9f118 100644
---- a/package/bash-completion/bash-completion.mk
-+++ b/package/bash-completion/bash-completion.mk
+-sha256 e7d311ff97f376b8ee85112e2b536dbf4bdf1233673500175ed7cf21a0089f6d  opencv3-3.4.6.tar.gz
+-sha256 488b640f88bc72a1f9bbb985bde8352ed8826b863f0b3e14f7038c44bf95d6bc  LICENSE
++sha256 b7ea364de7273cfb3b771a0d9c111b8b8dfb42ff2bcd2d84681902fb8f49892a  opencv3-3.4.9.tar.gz
++sha256 c3596f2f886631ac49af2c9a201ca559f850bb5726bdc25eacbe2369a70caad9  LICENSE
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index d38107f6e7..4ddd80723f 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BASH_COMPLETION_VERSION = 2.9
-+BASH_COMPLETION_VERSION = 2.10
- BASH_COMPLETION_SITE = https://github.com/scop/bash-completion/releases/download/$(BASH_COMPLETION_VERSION)
- BASH_COMPLETION_SOURCE = bash-completion-$(BASH_COMPLETION_VERSION).tar.xz
- BASH_COMPLETION_LICENSE = GPL-2.0
+-OPENCV3_VERSION = 3.4.6
++OPENCV3_VERSION = 3.4.9
+ OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
+ OPENCV3_INSTALL_STAGING = YES
+ OPENCV3_LICENSE = BSD-3-Clause
+@@ -13,11 +13,6 @@ OPENCV3_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
+ OPENCV3_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+-# Uses __atomic_fetch_add_4
+-ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-OPENCV3_CXXFLAGS += -latomic
+-endif
+-
+ # Fix c++11 build with missing std::exception_ptr
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
+ OPENCV3_CXXFLAGS += -DCV__EXCEPTION_PTR=0
