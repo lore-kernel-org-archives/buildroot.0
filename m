@@ -1,41 +1,53 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Fri, 10 Jan 2020 14:35:37 -0800
-Subject: [Buildroot] Kconfig warnings with GCC9
-In-Reply-To: <20200110215652.291df299@windsurf>
-References: <CAGt4E5su1GkK+5ghxC9x9G9KNizC-5jm5E58qPKkDXKuDu5CqQ@mail.gmail.com>
- <20200110215652.291df299@windsurf>
-Message-ID: <CAGt4E5u+KA3Vi0dp+YRAYnvXSJN1XXF=S86Th4NoyamnQSWpiw@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 10 Jan 2020 19:59:03 -0800
+Subject: [Buildroot] [PATCH 1/1] package/go: bump to 1.13.6
+In-Reply-To: <20200110091749.6bdc279c@windsurf>
+References: <20200110044551.1912203-1-christian@paral.in>
+ <20200110091749.6bdc279c@windsurf>
+Message-ID: <CA+h8R2q7wghq5vkpePxFZ48ZJ7D_Z7DEC1g-+yiBxJ9eA21+PA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 10 Jan 2020 at 12:56, Thomas Petazzoni
+Hi Thomas,
+
+On Fri, Jan 10, 2020 at 12:17 AM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Fri, 10 Jan 2020 11:17:47 -0800
-> Markus Mayer <mmayer@broadcom.com> wrote:
->
-> > Hi all,
-> >
-> > Using GCC9 (Ubuntu 19.10), I am getting some compiler warnings
-> > (potential buffer overruns) in the Kconfig code. Is this a known
-> > issue?
->
-> You can try to update the kconfig code in Buildroot with the kconfig
-> code available from the latest kernel, and see if it fixes the
-> warnings. We're currently using the kconfig code from 4.17-rc2 it seems.
+> Since you're bumping Go, I was wondering what is the status of the "Go
+> module" support, that you started a while ago ? This was not a simple
+> topic, but I think this is something we can to get into Buildroot at
+> some point.
 
-I'll give it a shot.
+It's less complex than you might think. Simply put: Go code is
+organized into "packages." A package might be identified as
+"github.com/urfave/cli" for example. Today, projects in Buildroot have
+all code dependencies included with them under a "vendor" directory.
+Buildroot creates a directory called "gopath" and symlinks the code
+into the correct root import path within this "gopath" directory.
 
-Regards,
--Markus
+With Go modules, the compiler builds a virtual mapping of paths to
+package identifiers, rather than relying on having the package
+identifiers as paths on the filesystem.
 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+In practice, this means that the patch is compatible with existing
+code. The only difference is that we no longer need to create the
+"gopath" directory.
+
+The patch series is here: https://github.com/paralin/buildroot/tree/go-module
+
+This particular version of the series uses the "extract" step to
+download code dependencies to vendor/ if the vendor/ directory does
+not exist. This should be moved into some sort of a extra part of the
+download step. This way, vendor/ as downloaded by the Go tool when
+running the "go mod vendor" command would be included in the source
+archive.
+
+I am going to submit a version of the series which assumes vendor/ is
+always there (as is the case currently) and simply introduces the
+change of removing the gopath symlink step. This will be a good
+conservative first step.
+
+Best regards,
+Christian
