@@ -1,51 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Jan 2020 11:49:42 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_fonttosfnt: bump
- version to 1.1.0
-Message-ID: <20200111104019.2A9DE8913B@busybox.osuosl.org>
+Date: Sat, 11 Jan 2020 11:49:03 +0100
+Subject: [Buildroot] [git commit] package/exim: bump version to 4.93.0.4
+Message-ID: <20200111104019.09CD58900F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc4593232c15fa6d870ca86fa16b57b408a2fb7a
+commit: https://git.buildroot.net/buildroot/commit/?id=c4a993b93bad415444bd6aab90725ff99eafa917
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://lists.exim.org/lurker/message/20200107.002043.053ca484.en.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash | 10 +++++-----
- package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/exim/exim.hash | 4 ++--
+ package/exim/exim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
-index 8e1237b2fd..7a13a01a15 100644
---- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
-+++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-July/002910.html
--md5 70b785f2063643049bffb31ba4772619  fonttosfnt-1.0.5.tar.bz2
--sha1 acc1c8e47ba0fdc872442bf4fb087074b40ae618  fonttosfnt-1.0.5.tar.bz2
--sha256 c80a5ff516aa06da2e90df044b8e28715f7d9e451feac8030951d9ff828d8503  fonttosfnt-1.0.5.tar.bz2
--sha512 dba990098c95b07bc7240699a5c9ea11f056fbfddd70f669ae283548cbf20d756b28d817a99548c23ba81de9792877296ab6f35ee3c630e5c3cd8f14650ce297  fonttosfnt-1.0.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-January/003035.html
-+md5 bf8086aa878f0d1bb7715e5865183cc4  fonttosfnt-1.1.0.tar.bz2
-+sha1 0e0ea8c92941bf9126b87fae5bb723c8e1035ae2  fonttosfnt-1.1.0.tar.bz2
-+sha256 7283fd477e3de75cce40b91b5012953e30b862975555d4482435e2ee7b0f46dc  fonttosfnt-1.1.0.tar.bz2
-+sha512 f4fb9814c23bfd6f83771959444d2c37eb4ba32edee43c37cf21f0181be80c6e278307641b0f4dae4ee5d10db3289e95194f99757ea4bbca343fff15498e7173  fonttosfnt-1.1.0.tar.bz2
- # Locally computed
- sha256 f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
-diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
-index 0e392e959a..ab1d955771 100644
---- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
-+++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index 8c10adc05c..7cedf1bc88 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/fixes/00-sha256sums.txt
+-sha256 8156bbe67fa72c0a297207ca0c3bb99f230df08d38d95df91f1c284b0a12983f  exim-4.93.0.3.tar.xz
++sha256 537d366ee18ed357656f54f255f8f9e11bde9684fcaaecaaa56f84cdbcd3e405  exim-4.93.0.4.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/fixes/00-sha512sums.txt
+-sha512 8afece1059e4ada85f6ecef8197cf2ac5b56274f8c2e1bdd785e0470d37bb1e8b4fe225650ac03302824e3a7fe0a6db1641c6218edc8394a70adcc48af46a1d5  exim-4.93.0.3.tar.xz
++sha512 84951849b69399d6f187d2801760dc0cb9e61c88c7c88aaca4e07e48120199a6be94b2236d058ffeacb8d611dd84056b610d480353c301a3ad5799768dd39d96  exim-4.93.0.4.tar.xz
+ # Locally calculated
+ sha256 49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 1f814ef195..c07d6f919c 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_FONTTOSFNT_VERSION = 1.0.5
-+XAPP_FONTTOSFNT_VERSION = 1.1.0
- XAPP_FONTTOSFNT_SOURCE = fonttosfnt-$(XAPP_FONTTOSFNT_VERSION).tar.bz2
- XAPP_FONTTOSFNT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_FONTTOSFNT_LICENSE = MIT
+-EXIM_VERSION = 4.93.0.3
++EXIM_VERSION = 4.93.0.4
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4/fixes
+ EXIM_LICENSE = GPL-2.0+
