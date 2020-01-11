@@ -1,49 +1,48 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Jan 2020 09:51:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_fonttosfnt: bump version
- to 1.1.0
-Message-ID: <20200111085139.222050-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 11 Jan 2020 10:02:22 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/python3: bump
+ version to 3.7.6
+Message-ID: <20200111085242.AD47888555@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash | 10 +++++-----
- package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=7ca73f0f7bad7ad429aae63fcede0257877bb27b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
-index 8e1237b2fd..7a13a01a15 100644
---- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
-+++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-July/002910.html
--md5 70b785f2063643049bffb31ba4772619  fonttosfnt-1.0.5.tar.bz2
--sha1 acc1c8e47ba0fdc872442bf4fb087074b40ae618  fonttosfnt-1.0.5.tar.bz2
--sha256 c80a5ff516aa06da2e90df044b8e28715f7d9e451feac8030951d9ff828d8503  fonttosfnt-1.0.5.tar.bz2
--sha512 dba990098c95b07bc7240699a5c9ea11f056fbfddd70f669ae283548cbf20d756b28d817a99548c23ba81de9792877296ab6f35ee3c630e5c3cd8f14650ce297  fonttosfnt-1.0.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-January/003035.html
-+md5 bf8086aa878f0d1bb7715e5865183cc4  fonttosfnt-1.1.0.tar.bz2
-+sha1 0e0ea8c92941bf9126b87fae5bb723c8e1035ae2  fonttosfnt-1.1.0.tar.bz2
-+sha256 7283fd477e3de75cce40b91b5012953e30b862975555d4482435e2ee7b0f46dc  fonttosfnt-1.1.0.tar.bz2
-+sha512 f4fb9814c23bfd6f83771959444d2c37eb4ba32edee43c37cf21f0181be80c6e278307641b0f4dae4ee5d10db3289e95194f99757ea4bbca343fff15498e7173  fonttosfnt-1.1.0.tar.bz2
+For additional fixes.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index a138724ff8..6e99cae59b 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-375/
+-md5 08ed8030b1183107c48f2092e79a87e2 Python-3.7.5.tar.xz
++# From https://www.python.org/downloads/release/python-376/
++md5 c08fbee72ad5c2c95b0f4e44bf6fd72c Python-3.7.6.tar.xz
  # Locally computed
- sha256 f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
-diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
-index 0e392e959a..ab1d955771 100644
---- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
-+++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
-@@ -4,7 +4,7 @@
- #
+-sha256 e85a76ea9f3d6c485ec1780fca4e500725a4a7bbc63c78ebc44170de9b619d94 Python-3.7.5.tar.xz
++sha256 55a2cce72049f0794e9a11a84862e9039af9183603b78bc60d89539f82cf533f Python-3.7.6.tar.xz
+ sha256 a77d71d6be6f9032e6b6e5d2cf6da68f9eeab9036edfbc043633c8979cd5e82c LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 625c059135..7f93372c22 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XAPP_FONTTOSFNT_VERSION = 1.0.5
-+XAPP_FONTTOSFNT_VERSION = 1.1.0
- XAPP_FONTTOSFNT_SOURCE = fonttosfnt-$(XAPP_FONTTOSFNT_VERSION).tar.bz2
- XAPP_FONTTOSFNT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_FONTTOSFNT_LICENSE = MIT
--- 
-2.20.1
+ PYTHON3_VERSION_MAJOR = 3.7
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
