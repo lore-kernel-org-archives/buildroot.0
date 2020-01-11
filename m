@@ -1,51 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Jan 2020 11:47:11 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] {linux,
- linux-headers}: bump 4.{14, 19}.x / 5.4.x series
-Message-ID: <20200111103733.807F888FFF@busybox.osuosl.org>
+Date: Sat, 11 Jan 2020 11:21:22 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x]
+ package/x11r7/xserver_xorg-server: fix build without glx
+Message-ID: <20200111103733.76F7588FFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e2e3411a5e504f0b97cbb736cfa186343f668f5
+commit: https://git.buildroot.net/buildroot/commit/?id=015b69ce4b9051062a35e0c011fa9f38f796b66c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/de838a843f97673d1381a55fd4e9b07164693913
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3cb8d6c3a67929127f470aead6eac28ec1590678)
-[Peter: drop 5.4.x bump]
+(cherry picked from commit 59dae1dde8f9ab0db7346e24776d0c5fd3bfe4fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...6-common-xf86Init.c-fix-build-without-glx.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index e7d8d3a784..c084245ba2 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -3,5 +3,5 @@ sha256 20f14917c4f33122cfa12963a7d3180fe6f4685cacfe984553b2b5b4ad20638c  linux-5
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 5899ff2a85e2b84607148349fd8e646f94399655caf0e4e55d1eb0567e48520e  linux-4.4.208.tar.xz
- sha256 b7ad1c9841d671d026c55a4c91c77205f8b488ca5f980f838591c68662e0525a  linux-4.9.208.tar.xz
--sha256 f65170224cd4359ce8b2793b492bd8127abdd0b91350484e001bce13f0c98b4b  linux-4.14.162.tar.xz
--sha256 2af5d23f82a8bf69a6e4d8407579293b7beeebd3054dc464d48bdb5d2d7f5834  linux-4.19.93.tar.xz
-+sha256 eb29cc9cfd54158789064b3d6e5b3eab108facec048b8d405a63e9863329b049  linux-4.14.163.tar.xz
-+sha256 c62a10a75a7c4213e41287040e7c7509b7d42117d6830feb7dfe505949fa7467  linux-4.19.94.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e26cbe6f77..6fa553beb0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -307,8 +307,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.208"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.208"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.162"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.93"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.14.163"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.94"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.3.18"	if BR2_KERNEL_HEADERS_5_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+diff --git a/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+new file mode 100644
+index 0000000000..f1fdfe3e37
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+@@ -0,0 +1,45 @@
++From 49456e0a37fac7bc9d1f01bc1519fb0d699956db Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 27 Dec 2019 23:33:37 +0100
++Subject: [PATCH] hw/xfree86/common/xf86Init.c: fix build without glx
++
++Since commit d8ec33fe0542141aed1d9016d2ecaf52da944b4b, an include on
++glxvndabi.h has been added to hw/xfree86/common/xf86Init.c
++
++However, if glx is disabled through --disable-glx and GLX headers are
++not installed in the build's environment, build fails on:
++
++In file included from xf86Init.c:81:
++../../../include/glxvndabi.h:64:10: fatal error: GL/glxproto.h: No such file or directory
++   64 | #include <GL/glxproto.h>
++      |          ^~~~~~~~~~~~~~~
++
++Fix this failure by removing this include which does not seem to be
++needed (an other option would have been to keep it under an ifdef GLXEXT
++block)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/de838a843f97673d1381a55fd4e9b07164693913
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://gitlab.freedesktop.org/xorg/xserver/commit/49456e0a37fac7bc9d1f01bc1519fb0d699956db]
++---
++ hw/xfree86/common/xf86Init.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/hw/xfree86/common/xf86Init.c b/hw/xfree86/common/xf86Init.c
++index 0631c7237..e6fb11398 100644
++--- a/hw/xfree86/common/xf86Init.c
+++++ b/hw/xfree86/common/xf86Init.c
++@@ -74,7 +74,6 @@
++ #include "xf86Crtc.h"
++ #include "picturestr.h"
++ #include "randrstr.h"
++-#include "glxvndabi.h"
++ #include "xf86Bus.h"
++ #ifdef XSERVER_LIBPCIACCESS
++ #include "xf86VGAarbiter.h"
++-- 
++2.24.1
++
