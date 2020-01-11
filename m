@@ -1,60 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 11 Jan 2020 15:37:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ussp-push: add bluez5_utils
- support
-In-Reply-To: <20200111153209.2a6b57d6@windsurf>
-References: <20200111092101.419186-1-fontaine.fabrice@gmail.com>
- <20200111153209.2a6b57d6@windsurf>
-Message-ID: <CAPi7W81_HzpKNt2Pdo8CGmjkcH_mReenmG38xzFAF-BUu6-ALw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Jan 2020 15:36:31 +0100
+Subject: [Buildroot] [git commit] package/glibc: add missing comment
+Message-ID: <20200111142634.06EFF8A3F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=62c621990ba8f5351bbf31d4a23dd5d447d3a6b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le sam. 11 janv. 2020 ? 15:32, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Sat, 11 Jan 2020 10:21:01 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/ussp-push/Config.in    | 2 +-
-> >  package/ussp-push/ussp-push.mk | 4 +++-
-> >  2 files changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/package/ussp-push/Config.in b/package/ussp-push/Config.in
-> > index aefec85a20..d0ab577609 100644
-> > --- a/package/ussp-push/Config.in
-> > +++ b/package/ussp-push/Config.in
-> > @@ -5,7 +5,7 @@ config BR2_PACKAGE_USSP_PUSH
-> >       depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
-> >       depends on BR2_USE_MMU # dbus
-> >       select BR2_PACKAGE_OPENOBEX
-> > -     select BR2_PACKAGE_BLUEZ_UTILS
-> > +     select BR2_PACKAGE_BLUEZ_UTILS if !BR2_PACKAGE_BLUEZ5_UTILS
->
-> Doing this causes a Kconfig circular dependency:
->
-> package/bluez_utils/Config.in:1:error: recursive dependency detected!
-> package/bluez_utils/Config.in:1:        symbol BR2_PACKAGE_BLUEZ_UTILS is selected by BR2_PACKAGE_BLUEZ5_UTILS
-> package/bluez5_utils/Config.in:1:       symbol BR2_PACKAGE_BLUEZ5_UTILS is selected by BR2_PACKAGE_BLUEZ_ALSA
-> package/bluez-alsa/Config.in:1: symbol BR2_PACKAGE_BLUEZ_ALSA depends on BR2_PACKAGE_BLUEZ_UTILS
->
-> This problem also affects your cwiid and sconeserver patches.
-OK, I made these changes to prepare the drop of bluez_utils in an
-upcoming patch.
-How should I proceed? Should I just replace bluez_utils by
-bluez5_utils in this upcoming patch?
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+Since [1], glibc package has a new option to install glibc utils to the
+target. But this option is displayed below "Kernel Header Options".
 
-Fabrice
+As for uClibc package, add a comment line to separate Glibc options
+from kernel header options.
+
+[1] c6cd512fe2e954b2ccc0412717c1c3380bc5f69b
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glibc/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index cc178468b5..5ecd058145 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -1,5 +1,7 @@
+ if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 
++comment "Glibc Options"
++
+ config BR2_PACKAGE_GLIBC
+ 	bool
+ 	default y
