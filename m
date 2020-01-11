@@ -1,65 +1,219 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 11 Jan 2020 11:45:04 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
- linux-headers}: bump 4.{14, 19}.x / 5.4.x series
-Message-ID: <20200111103533.6C2E288935@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ package/x11r7/xserver_xorg-server: bump version to 1.20.6
+Message-ID: <20200111103533.52FC6886CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ae9a67893e3119b15fe159f3ded3e86a4912d4d
+commit: https://git.buildroot.net/buildroot/commit/?id=d3a9a1b9bcb8d7680fd6e10fc07d1cfb57504a36
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Removed patches 0006 & 0007 which were applied upstream as single
+commit on the server-1.20-branch branch:
+https://gitlab.freedesktop.org/xorg/xserver/commit/07efd81b819f21046afc0bb7e19a6cdf7f3c7ea9
+
+Updated upstream URL for patch 0001.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3cb8d6c3a67929127f470aead6eac28ec1590678)
-[Peter: drop 5.4.x bump]
+(cherry picked from commit 5f90daa66f32e874185e289b71f00bad74b96461)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ ...ler.h-only-use-inx-outx-on-ARM-with-glibc.patch | 34 ------------
+ ...Do-not-include-sys-io.h-on-ARM-with-glibc.patch | 62 ----------------------
+ .../0001-modesettings-needs-dri2.patch             |  2 +-
+ ...onfigure.ac-Fix-check-for-CLOCK_MONOTONIC.patch |  0
+ .../0003-Remove-check-for-useSIGIO-option.patch    |  0
+ .../0004-include-misc.h-fix-uClibc-build.patch     |  0
+ ...wayland-Makefile.am-fix-build-without-glx.patch |  0
+ package/x11r7/xserver_xorg-server/Config.in        |  4 +-
+ .../xserver_xorg-server/xserver_xorg-server.hash   | 10 ++--
+ 9 files changed, 8 insertions(+), 104 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index cccbbfca67..6c1d172be5 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
+diff --git a/package/x11r7/xserver_xorg-server/1.20.5/0006-compiler.h-only-use-inx-outx-on-ARM-with-glibc.patch b/package/x11r7/xserver_xorg-server/1.20.5/0006-compiler.h-only-use-inx-outx-on-ARM-with-glibc.patch
+deleted file mode 100644
+index e6f2b4382e..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.20.5/0006-compiler.h-only-use-inx-outx-on-ARM-with-glibc.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 6a2ce6c5da9456b97683db6224f38ef3b02cce4b Mon Sep 17 00:00:00 2001
+-From: Ross Burton <ross.burton@intel.com>
+-Date: Thu, 20 Sep 2018 13:21:34 +0100
+-Subject: [PATCH] compiler.h: only use inx/outx on ARM with glibc
+-
+-musl only implements inx/outx on x86, so check for __GLIBC__ instead of
+-__linux__.
+-
+-Signed-off-by: Ross Burton <ross.burton@intel.com>
+-[Upstream: https://gitlab.freedesktop.org/xorg/xserver/commit/6a2ce6c5da9456b97683db6224f38ef3b02cce4b.patch]
+-Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+----
+- hw/xfree86/common/compiler.h | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/hw/xfree86/common/compiler.h b/hw/xfree86/common/compiler.h
+-index 7144c6a27..fb53ced80 100644
+---- a/hw/xfree86/common/compiler.h
+-+++ b/hw/xfree86/common/compiler.h
+-@@ -758,9 +758,9 @@ inl(unsigned short port)
+-     return xf86ReadMmio32Le((void *) ioBase, port);
+- }
+- 
+--#elif defined(__arm__) && defined(__linux__)
+-+#elif defined(__arm__) && defined(__GLIBC__)
+- 
+--/* for Linux on ARM, we use the LIBC inx/outx routines */
+-+/* for glibc on ARM, we use the LIBC inx/outx routines */
+- /* note that the appropriate setup via "ioperm" needs to be done */
+- /*  *before* any inx/outx is done. */
+- 
+--- 
+-2.23.0
+-
+diff --git a/package/x11r7/xserver_xorg-server/1.20.5/0007-compiler.h-Do-not-include-sys-io.h-on-ARM-with-glibc.patch b/package/x11r7/xserver_xorg-server/1.20.5/0007-compiler.h-Do-not-include-sys-io.h-on-ARM-with-glibc.patch
+deleted file mode 100644
+index 87ef064bf7..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.20.5/0007-compiler.h-Do-not-include-sys-io.h-on-ARM-with-glibc.patch
++++ /dev/null
+@@ -1,62 +0,0 @@
+-From fe4cd0e7f5c58fa94db36326aadc1bd4e6d73eba Mon Sep 17 00:00:00 2001
+-From: Olivier Fourdan <ofourdan@redhat.com>
+-Date: Mon, 1 Jul 2019 13:20:39 +0200
+-Subject: [PATCH] compiler.h: Do not include sys/io.h on ARM with glibc
+-
+-<sys/io.h> on ARM hasn't worked for a long, long time, so it was removed
+-it from glibc upstream.
+-
+-Remove the include to avoid a compilation failure on ARM with glibc.
+-
+-Signed-off-by: Olivier Fourdan <ofourdan@redhat.com>
+-Closes: https://gitlab.freedesktop.org/xorg/xserver/issues/840
+-[Upstream: https://gitlab.freedesktop.org/xorg/xserver/commit/fe4cd0e7f5c58fa94db36326aadc1bd4e6d73eba.patch]
+-Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+----
+- hw/xfree86/common/compiler.h | 30 ------------------------------
+- 1 file changed, 30 deletions(-)
+-
+-diff --git a/hw/xfree86/common/compiler.h b/hw/xfree86/common/compiler.h
+-index fb53ced80..2b2008b3f 100644
+---- a/hw/xfree86/common/compiler.h
+-+++ b/hw/xfree86/common/compiler.h
+-@@ -758,36 +758,6 @@ inl(unsigned short port)
+-     return xf86ReadMmio32Le((void *) ioBase, port);
+- }
+- 
+--#elif defined(__arm__) && defined(__GLIBC__)
+--
+--/* for glibc on ARM, we use the LIBC inx/outx routines */
+--/* note that the appropriate setup via "ioperm" needs to be done */
+--/*  *before* any inx/outx is done. */
+--
+--#include <sys/io.h>
+--
+--static __inline__ void
+--xf_outb(unsigned short port, unsigned char val)
+--{
+--    outb(val, port);
+--}
+--
+--static __inline__ void
+--xf_outw(unsigned short port, unsigned short val)
+--{
+--    outw(val, port);
+--}
+--
+--static __inline__ void
+--xf_outl(unsigned short port, unsigned int val)
+--{
+--    outl(val, port);
+--}
+--
+--#define outb xf_outb
+--#define outw xf_outw
+--#define outl xf_outl
+--
+- #elif defined(__nds32__)
+- 
+- /*
+--- 
+-2.23.0
+-
+diff --git a/package/x11r7/xserver_xorg-server/1.20.5/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.20.6/0001-modesettings-needs-dri2.patch
+similarity index 89%
+rename from package/x11r7/xserver_xorg-server/1.20.5/0001-modesettings-needs-dri2.patch
+rename to package/x11r7/xserver_xorg-server/1.20.6/0001-modesettings-needs-dri2.patch
+index 790371c456..97ec29d044 100644
+--- a/package/x11r7/xserver_xorg-server/1.20.5/0001-modesettings-needs-dri2.patch
++++ b/package/x11r7/xserver_xorg-server/1.20.6/0001-modesettings-needs-dri2.patch
+@@ -1,7 +1,7 @@
+ Kernel modesettings support also depends on dri2, see
+ http://cgit.freedesktop.org/xorg/xserver/tree/hw/xfree86/drivers/modesetting/Makefile.am#n46
  
- config BR2_LINUX_KERNEL_VERSION
+-Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=91584
++Patch sent upstream: https://gitlab.freedesktop.org/xorg/xserver/issues/479
+ 
+ [rebased for version 1.20.0]
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+diff --git a/package/x11r7/xserver_xorg-server/1.20.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.20.6/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+rename to package/x11r7/xserver_xorg-server/1.20.6/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.5/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.20.6/0003-Remove-check-for-useSIGIO-option.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.5/0003-Remove-check-for-useSIGIO-option.patch
+rename to package/x11r7/xserver_xorg-server/1.20.6/0003-Remove-check-for-useSIGIO-option.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.5/0004-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xserver_xorg-server/1.20.6/0004-include-misc.h-fix-uClibc-build.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.5/0004-include-misc.h-fix-uClibc-build.patch
+rename to package/x11r7/xserver_xorg-server/1.20.6/0004-include-misc.h-fix-uClibc-build.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.5/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/1.20.6/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.5/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch
+rename to package/x11r7/xserver_xorg-server/1.20.6/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index ec4ba91502..982b9bcb4e 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -61,7 +61,7 @@ choice
+ 	bool "X Window System server version"
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
+-	bool "1.20.5"
++	bool "1.20.6"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
+ 	select BR2_PACKAGE_XLIB_LIBXFONT2
+ 
+@@ -79,7 +79,7 @@ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
  	string
--	default "4.19.93" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.19.94" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index d2fbee4206..7d72e43573 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -2,5 +2,5 @@
- sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
- sha256 5899ff2a85e2b84607148349fd8e646f94399655caf0e4e55d1eb0567e48520e  linux-4.4.208.tar.xz
- sha256 b7ad1c9841d671d026c55a4c91c77205f8b488ca5f980f838591c68662e0525a  linux-4.9.208.tar.xz
--sha256 f65170224cd4359ce8b2793b492bd8127abdd0b91350484e001bce13f0c98b4b  linux-4.14.162.tar.xz
--sha256 2af5d23f82a8bf69a6e4d8407579293b7beeebd3054dc464d48bdb5d2d7f5834  linux-4.19.93.tar.xz
-+sha256 eb29cc9cfd54158789064b3d6e5b3eab108facec048b8d405a63e9863329b049  linux-4.14.163.tar.xz
-+sha256 c62a10a75a7c4213e41287040e7c7509b7d42117d6830feb7dfe505949fa7467  linux-4.19.94.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e3349099ef..6241c80820 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -289,8 +289,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.208"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.208"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.162"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.93"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.14.163"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.94"	if BR2_KERNEL_HEADERS_4_19
- 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+-	default "1.20.5" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
++	default "1.20.6" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
+ 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index fe2a7ae55a..cd1b560162 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -3,11 +3,11 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+ # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+ sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2019-May/002993.html
+-md5 c9fc7e21e11286dbedd22c00df652130  xorg-server-1.20.5.tar.bz2
+-sha1 fea6fd34c7f48b3c69fbecd8fb294eaa1498e69c  xorg-server-1.20.5.tar.bz2
+-sha256 a81d8243f37e75a03d4f8c55f96d0bc25802be6ec45c3bfa5cb614c6d01bac9d  xorg-server-1.20.5.tar.bz2
+-sha512 625f0626b122cf95600abe382c3217348999357a0e2d2443092f1b67cff1c98d7ef09303884ceaeac181e0555dc56b0d4d44bda45cc464dac2d9a50c5b32d631  xorg-server-1.20.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-November/003032.html
++md5 a98170084f2c8fed480d2ff601f8a14b  xorg-server-1.20.6.tar.bz2
++sha1 59473e72136113f3a35b1ab5a5cfcbcad955b660  xorg-server-1.20.6.tar.bz2
++sha256 6316146304e6e8a36d5904987ae2917b5d5b195dc9fc63d67f7aca137e5a51d1  xorg-server-1.20.6.tar.bz2
++sha512 9aa0ba4aee92fe628f2b8c41e4fe0134dc86154bb8787f907884ef2fd970e18e68e72ea8a1beb706d11ecf155b2abc9731f1abadff251ed592f8cca3b1240dd6  xorg-server-1.20.6.tar.bz2
+ 
+ # Locally calculated
+ sha256 4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
