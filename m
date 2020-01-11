@@ -1,33 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 11 Jan 2020 11:45:04 +0100
 Subject: [Buildroot] [git commit branch/2019.02.x]
- package/x11r7/xserver_xorg-server: add license hash
-Message-ID: <20200111103533.32BA888935@busybox.osuosl.org>
+ package/x11r7/xserver_xorg-server: fix build without glx
+Message-ID: <20200111103533.5B1AD88937@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27d32810547c4e76e4a97f54832e509abe191671
+commit: https://git.buildroot.net/buildroot/commit/?id=54105f9d90cbfc8c2bb461a9b0f4b8e16398cb2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 4801346196e6a4f92278968a58ec0d24b62655ce)
+Fixes:
+ - http://autobuild.buildroot.org/results/de838a843f97673d1381a55fd4e9b07164693913
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 59dae1dde8f9ab0db7346e24776d0c5fd3bfe4fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ ...6-common-xf86Init.c-fix-build-without-glx.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index f79dc0c4eb..fe2a7ae55a 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -8,3 +8,6 @@ md5 c9fc7e21e11286dbedd22c00df652130  xorg-server-1.20.5.tar.bz2
- sha1 fea6fd34c7f48b3c69fbecd8fb294eaa1498e69c  xorg-server-1.20.5.tar.bz2
- sha256 a81d8243f37e75a03d4f8c55f96d0bc25802be6ec45c3bfa5cb614c6d01bac9d  xorg-server-1.20.5.tar.bz2
- sha512 625f0626b122cf95600abe382c3217348999357a0e2d2443092f1b67cff1c98d7ef09303884ceaeac181e0555dc56b0d4d44bda45cc464dac2d9a50c5b32d631  xorg-server-1.20.5.tar.bz2
+diff --git a/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+new file mode 100644
+index 0000000000..f1fdfe3e37
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+@@ -0,0 +1,45 @@
++From 49456e0a37fac7bc9d1f01bc1519fb0d699956db Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 27 Dec 2019 23:33:37 +0100
++Subject: [PATCH] hw/xfree86/common/xf86Init.c: fix build without glx
 +
-+# Locally calculated
-+sha256 4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
++Since commit d8ec33fe0542141aed1d9016d2ecaf52da944b4b, an include on
++glxvndabi.h has been added to hw/xfree86/common/xf86Init.c
++
++However, if glx is disabled through --disable-glx and GLX headers are
++not installed in the build's environment, build fails on:
++
++In file included from xf86Init.c:81:
++../../../include/glxvndabi.h:64:10: fatal error: GL/glxproto.h: No such file or directory
++   64 | #include <GL/glxproto.h>
++      |          ^~~~~~~~~~~~~~~
++
++Fix this failure by removing this include which does not seem to be
++needed (an other option would have been to keep it under an ifdef GLXEXT
++block)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/de838a843f97673d1381a55fd4e9b07164693913
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://gitlab.freedesktop.org/xorg/xserver/commit/49456e0a37fac7bc9d1f01bc1519fb0d699956db]
++---
++ hw/xfree86/common/xf86Init.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/hw/xfree86/common/xf86Init.c b/hw/xfree86/common/xf86Init.c
++index 0631c7237..e6fb11398 100644
++--- a/hw/xfree86/common/xf86Init.c
+++++ b/hw/xfree86/common/xf86Init.c
++@@ -74,7 +74,6 @@
++ #include "xf86Crtc.h"
++ #include "picturestr.h"
++ #include "randrstr.h"
++-#include "glxvndabi.h"
++ #include "xf86Bus.h"
++ #ifdef XSERVER_LIBPCIACCESS
++ #include "xf86VGAarbiter.h"
++-- 
++2.24.1
++
