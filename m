@@ -1,57 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 11 Jan 2020 12:50:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/poppler: really disable test
- programs
-Message-ID: <20200111115054.864819-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Jan 2020 14:20:56 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/snort: needs zlib
+In-Reply-To: <20200110223837.170e8e3f@gmx.net>
+References: <20200110172818.17155-1-ps.report@gmx.net>
+ <20200110220719.3bcada58@windsurf>
+ <20200110223837.170e8e3f@gmx.net>
+Message-ID: <20200111142056.66ddf3d1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...1-CMakeLists.txt-fix-BUILD_CPP_TESTS.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/poppler/0001-CMakeLists.txt-fix-BUILD_CPP_TESTS.patch
+On Fri, 10 Jan 2020 22:38:37 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-diff --git a/package/poppler/0001-CMakeLists.txt-fix-BUILD_CPP_TESTS.patch b/package/poppler/0001-CMakeLists.txt-fix-BUILD_CPP_TESTS.patch
-new file mode 100644
-index 0000000000..476676199a
---- /dev/null
-+++ b/package/poppler/0001-CMakeLists.txt-fix-BUILD_CPP_TESTS.patch
-@@ -0,0 +1,32 @@
-+From ccc5f765c37b2d65e2e0b64d92326997f90acb3e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 11 Jan 2020 12:37:07 +0100
-+Subject: [PATCH] CMakeLists.txt: fix BUILD_CPP_TESTS
-+
-+Do not build programs under the test directory if BUILD_CPP_TESTS is OFF
-+as this directory contains multiple C++ test executables
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/poppler/poppler/merge_requests/490]
-+---
-+ CMakeLists.txt | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index c182d146..d159582b 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -677,7 +677,9 @@ endif()
-+ if(ENABLE_GLIB)
-+   add_subdirectory(glib)
-+ endif()
-++if(BUILD_CPP_TESTS)
-+ add_subdirectory(test)
-++endif()
-+ if(ENABLE_QT5)
-+   add_subdirectory(qt5)
-+ endif()
-+-- 
-+2.24.1
-+
+> On Fri, 10 Jan 2020 22:07:19 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+> > On Fri, 10 Jan 2020 18:28:17 +0100
+> > Peter Seiderer <ps.report@gmx.net> wrote:
+> >  
+> > > Fixes:
+> > >
+> > >   checking zlib.h usability... no
+> > >   checking zlib.h presence... no
+> > >   checking for zlib.h... no
+> > >
+> > >      ERROR!  zlib header not found, go get it from
+> > >      http://www.zlib.net
+> > >
+> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
+> >
+> > Since when is zlib needed? We've add the snort package for quite some
+> > time. Is it due to the bump to 2.9.15 in December ?  
+> 
+> No, I think it is a side effect of 'package/libpcap: remove unnecessary dependency
+> on zlib' ([1]) as snort selects/depends on libpcap...
+
+Ah, yes, indeed.
+
+Thanks,
+
+Thomas
 -- 
-2.24.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
