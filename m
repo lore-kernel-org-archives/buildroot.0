@@ -1,34 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jan 2020 15:46:00 +0100
-Subject: [Buildroot] [git commit] package/fluidsynth: install to staging
-Message-ID: <20200111144128.EA3338A542@busybox.osuosl.org>
+Date: Sat, 11 Jan 2020 15:46:31 +0100
+Subject: [Buildroot] [git commit] package/vlc: add fluidsynth optional
+ dependency
+Message-ID: <20200111144129.042948A3FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73ec188b79ebd0da9a50d8b986bb78dbcbc368e6
+commit: https://git.buildroot.net/buildroot/commit/?id=fdde7eca042b077813562fbf73ebc6e21128aeef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Install fluidsynth to staging to be able to use it in vlc, sdl2_mixer
-and gst1-plugins-bad
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fluidsynth/fluidsynth.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/vlc/vlc.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index 4ef0a6f40d..7681e906b1 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -8,6 +8,7 @@ FLUIDSYNTH_VERSION = 2.1.0
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
-+FLUIDSYNTH_INSTALL_STAGING = YES
- FLUIDSYNTH_DEPENDENCIES = libglib2
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index ae12e89b8a..4b1cd68d8b 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -55,7 +55,6 @@ VLC_CONF_OPTS += \
+ 	--disable-dsm \
+ 	--disable-dv1394 \
+ 	--disable-fluidlite \
+-	--disable-fluidsynth \
+ 	--disable-gme \
+ 	--disable-goom \
+ 	--disable-jack \
+@@ -164,6 +163,13 @@ else
+ VLC_CONF_OPTS += --disable-flac
+ endif
  
- ifeq ($(BR2_PACKAGE_FLUIDSYNTH_ALSA_LIB),y)
++ifeq ($(BR2_PACKAGE_FLUIDSYNTH),y)
++VLC_CONF_OPTS += --enable-fluidsynth
++VLC_DEPENDENCIES += fluidsynth
++else
++VLC_CONF_OPTS += --disable-fluidsynth
++endif
++
+ ifeq ($(BR2_PACKAGE_FREERDP),y)
+ VLC_CONF_OPTS += --enable-freerdp
+ VLC_DEPENDENCIES += freerdp
