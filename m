@@ -1,39 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Jan 2020 11:48:53 +0100
-Subject: [Buildroot] [git commit] package/libsigrok: fix bluez5_utils
- dependency
-Message-ID: <20200111104019.0006689139@busybox.osuosl.org>
+Date: Sat, 11 Jan 2020 11:49:42 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xapp_fonttosfnt: bump
+ version to 1.1.0
+Message-ID: <20200111104019.2A9DE8913B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0704fa59abd5fc784a8b3e099a8549084619782
+commit: https://git.buildroot.net/buildroot/commit/?id=dc4593232c15fa6d870ca86fa16b57b408a2fb7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit ab390616eb74fcb982c886408b53489dc42179bb wrongly added a
-bluez_utils5 dependency instead of bluez5_utils
-
-Fixes:
- - http://autobuild.buildroot.org/results/942aa07547068c9b47ce50c6dc016ee633e1a1c8
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsigrok/libsigrok.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash | 10 +++++-----
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 922011af7c..4866ec4d68 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -17,7 +17,7 @@ LIBSIGROK_CONF_OPTS += --with-libbluez
- LIBSIGROK_DEPENDENCIES += bluez_utils
- else ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
- LIBSIGROK_CONF_OPTS += --with-libbluez
--LIBSIGROK_DEPENDENCIES += bluez_utils5
-+LIBSIGROK_DEPENDENCIES += bluez5_utils
- else
- LIBSIGROK_CONF_OPTS += --without-libbluez
- endif
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+index 8e1237b2fd..7a13a01a15 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-July/002910.html
+-md5 70b785f2063643049bffb31ba4772619  fonttosfnt-1.0.5.tar.bz2
+-sha1 acc1c8e47ba0fdc872442bf4fb087074b40ae618  fonttosfnt-1.0.5.tar.bz2
+-sha256 c80a5ff516aa06da2e90df044b8e28715f7d9e451feac8030951d9ff828d8503  fonttosfnt-1.0.5.tar.bz2
+-sha512 dba990098c95b07bc7240699a5c9ea11f056fbfddd70f669ae283548cbf20d756b28d817a99548c23ba81de9792877296ab6f35ee3c630e5c3cd8f14650ce297  fonttosfnt-1.0.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-January/003035.html
++md5 bf8086aa878f0d1bb7715e5865183cc4  fonttosfnt-1.1.0.tar.bz2
++sha1 0e0ea8c92941bf9126b87fae5bb723c8e1035ae2  fonttosfnt-1.1.0.tar.bz2
++sha256 7283fd477e3de75cce40b91b5012953e30b862975555d4482435e2ee7b0f46dc  fonttosfnt-1.1.0.tar.bz2
++sha512 f4fb9814c23bfd6f83771959444d2c37eb4ba32edee43c37cf21f0181be80c6e278307641b0f4dae4ee5d10db3289e95194f99757ea4bbca343fff15498e7173  fonttosfnt-1.1.0.tar.bz2
+ # Locally computed
+ sha256 f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+index 0e392e959a..ab1d955771 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_FONTTOSFNT_VERSION = 1.0.5
++XAPP_FONTTOSFNT_VERSION = 1.1.0
+ XAPP_FONTTOSFNT_SOURCE = fonttosfnt-$(XAPP_FONTTOSFNT_VERSION).tar.bz2
+ XAPP_FONTTOSFNT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_FONTTOSFNT_LICENSE = MIT
