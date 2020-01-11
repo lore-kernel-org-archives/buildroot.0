@@ -1,43 +1,41 @@
 From: Christian Stewart <christian@paral.in>
-Date: Fri, 10 Jan 2020 20:13:54 -0800
-Subject: [Buildroot] [PATCH v2 5/6] package/docker-cli: fix go-module
- package identifier
-In-Reply-To: <20200111041355.21705-1-christian@paral.in>
-References: <20200111041355.21705-1-christian@paral.in>
-Message-ID: <20200111041355.21705-5-christian@paral.in>
+Date: Fri, 10 Jan 2020 20:23:04 -0800
+Subject: [Buildroot] [PATCH 1/1] rtl8821au: bump to 2020.01 commit hash
+In-Reply-To: <87blrbocew.fsf@dell.be.48ers.dk>
+References: <20200110050016.1924705-1-christian@paral.in>
+ <87blrbocew.fsf@dell.be.48ers.dk>
+Message-ID: <CA+h8R2rZL5Ca1Yp4Ec0yG9cxG5rhKQjy5tqerH1x9VPN+iPV+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/docker-cli/docker-cli.mk | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Hi Peter,
 
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 4ad30e0278..12fb563885 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -13,12 +13,13 @@ DOCKER_CLI_LICENSE_FILES = LICENSE
- 
- DOCKER_CLI_DEPENDENCIES = host-pkgconf
- 
--DOCKER_CLI_TAGS = autogen
--DOCKER_CLI_BUILD_TARGETS = cmd/docker
--
-+DOCKER_CLI_GOMOD = github.com/docker/cli
- DOCKER_CLI_LDFLAGS = \
--	-X github.com/docker/cli/cli.GitCommit=$(DOCKER_CLI_VERSION) \
--	-X github.com/docker/cli/cli.Version=$(DOCKER_CLI_VERSION)
-+	-X $(DOCKER_CLI_GOMOD).GitCommit=$(DOCKER_CLI_VERSION) \
-+	-X $(DOCKER_CLI_GOMOD).Version=$(DOCKER_CLI_VERSION)
-+
-+DOCKER_CLI_BUILD_TARGETS = $(DOCKER_CLI_GOMOD)/cmd/docker
-+DOCKER_CLI_TAGS = autogen
- 
- ifeq ($(BR2_PACKAGE_DOCKER_CLI_STATIC),y)
- DOCKER_CLI_LDFLAGS += -extldflags '-static'
--- 
-2.24.1
+
+On Fri, Jan 10, 2020 at 2:04 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+> What do you mean with 2020.01? I thought you were referring to a tag,
+> but I don't see any tags in that repo.
+
+I'm just indicating that it's the latest version as of January 2020.
+
+>  >   fa68771376a637c0b5f9cfa53da008570939a259
+>
+> Looking at that commit in github:
+>
+> https://github.com/abperiasamy/rtl8812AU_8821AU_linux/commit/fa68771376a637c0b5f9cfa53da008570939a259
+>
+> I see people are having problems and some discussion about reverting it,
+> so are you sure we should be using it in Buildroot?
+
+I actually noticed this about an hour after submitting the patch and
+marked it as Superceeded in patchwork.
+
+> And finally, the commit message should be prefixed with
+> package/rtl8821au like your other patch.
+
+ack.
+
+Best,
+Christian
