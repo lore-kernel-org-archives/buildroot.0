@@ -1,39 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 11 Jan 2020 17:21:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/opencv3: add protobuf option
-In-Reply-To: <20200111171444.49006f09@windsurf>
-References: <20200111150143.1253117-1-fontaine.fabrice@gmail.com>
- <20200111171444.49006f09@windsurf>
-Message-ID: <CAPi7W80L3R=CJ+jOv8f-JU0hWWQMLNmjKT7Fc5q89Q=uTD2dnw@mail.gmail.com>
+Date: Sat, 11 Jan 2020 17:24:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/poppler: really disable test
+ programs
+In-Reply-To: <20200111170845.1239c29a@windsurf>
+References: <20200111115054.864819-1-fontaine.fabrice@gmail.com>
+ <20200111153537.66974300@windsurf>
+ <CAPi7W80=Gn0SsFg0MWDBiJYd2DLriDredJYcbYGVpBjw6jXhfA@mail.gmail.com>
+ <20200111170845.1239c29a@windsurf>
+Message-ID: <CAPi7W83_x=jyFaoP2t2yAMFBzBDAmQSXd+6Q+tUGLQkSEiaD3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le sam. 11 janv. 2020 ? 17:14, Thomas Petazzoni
+Le sam. 11 janv. 2020 ? 17:08, Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> a ?crit :
 >
-> On Sat, 11 Jan 2020 16:01:43 +0100
+> On Sat, 11 Jan 2020 15:44:44 +0100
 > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 >
-> > Currently, protobuf is built unconditionnally since version 3.3.0 and
-> > https://github.com/opencv/opencv/commit/1c4c58d1b5b7430463281e8c8072e04245f561b0
+> > > What is the problem with C++ executables, since poppler depends on C++
+> > > anyway ?
+> > >
+> > > Of course, it is good to disable building tests if possible, but I'm
+> > > just curious to understand the motivation for the change: did you
+> > > encounter a build failure? Or it is just that you realized the tests
+> > > were being built while they should not?
+> > Following your comment on the leveldb patch that was fixing the
+> > -latomic build failure, I'm going through the different -latomic
+> > workarounds used in the cmake packages.
+> > I'm trying to replace these workarounds by upstreamable patches.
+> > However, in some cases such as libraries (like poppler) these
+> > workarounds/patches are not strictly needed if we don't build any
+> > executable.
 >
-> If I understand correctly, what you meant is:
->
-> Since version 3.3.0 and its commit
-> https://github.com/opencv/opencv/commit/1c4c58d1b5b7430463281e8c8072e04245f561b0,
-> opencv3 bundles its own copy of protobuf. Instead of using the bundled
-> protobuf library, this commit disables building protobuf
-> (BUILD_PROTOBUF=OFF) and instead uses the protobuf Buildroot package
-> (using the WITH_PROTOBUF=ON/OFF option).
->
-> Is that correct ?
-Yes, this is correct. I should have take more time in writing this
-commit message.
->
-> Thanks,
+> It's not true: if libpoppler.so uses some symbols that are defined in
+> libatomic.so, then it should link against libatomic.so (i.e
+> libpoppler.so should have a DT_NEEDED entry for libatomic.so).
+> Otherwise any application linking against libpoppler.so will have to
+> know that it should also link against libatomic.so, which is not good.
+OK, then I'll make a patch for poppler and sent it upstream.
 >
 > Thomas
 > --
