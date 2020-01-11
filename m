@@ -1,29 +1,22 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sat, 11 Jan 2020 21:30:57 +0100
-Subject: [Buildroot] [PATCH] package/python-periphery: bump to version
- 2.0.1
-In-Reply-To: <20200111212549.40100f40@windsurf>
-References: <1578506332-11020-1-git-send-email-pjtexier@koncepto.io>
- <20200111155446.3a7405a9@windsurf>
- <d418522b-a80b-bbf8-4040-548c4f73e48c@koncepto.io>
- <20200111212549.40100f40@windsurf>
-Message-ID: <03335274-979f-8ee8-677f-2961f3f09941@koncepto.io>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 11 Jan 2020 22:39:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bash-completion: bump to
+ version 2.10
+In-Reply-To: <20200111153424.1254203-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 11 Jan 2020 16:34:24 +0100")
+References: <20200111153424.1254203-1-fontaine.fabrice@gmail.com>
+Message-ID: <877e1xisfm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Le 11/01/2020 ? 21:25, Thomas Petazzoni a ?crit?:
-> Yes, I haven't pushed yet. I push commits in batches, but some real
-> life stuff got in the way, and I didn't push everything. It will
-> definitely be pushed when I resume by BR work, no worries.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Ok I see ;), thanks for the feedback.
+Committed, thanks.
 
-Regards
 -- 
-Pierre-Jean Texier
-Embedded Linux Engineer
-https://koncepto.io
+Bye, Peter Korsgaard
