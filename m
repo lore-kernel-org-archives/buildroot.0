@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Jan 2020 09:44:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 19.3.2
-Message-ID: <20200111084454.147363-1-bernd.kuhls@t-online.de>
+Date: Sat, 11 Jan 2020 09:51:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_fonttosfnt: bump version
+ to 1.1.0
+Message-ID: <20200111085139.222050-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,50 +11,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash | 10 +++++-----
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index ab4a30d4c5..ccd008cedf 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 19.3.1
-+MESA3D_HEADERS_VERSION = 19.3.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 791877d210..45b38abf2b 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2019-December/000564.html
--sha256 cd951db69c56a97ff0570a7ab2c0e39e6c5323f4cd8f4eb8274723e033beae59  mesa-19.3.1.tar.xz
--sha512 338d2e37122ef22cc4e27a2f3c39e23e419703a507ace99383c749a563936c5f0428cce9a68ac80d0bd2ff57be8a55f42aee0ed6d16bf6b77b4e59d428729568  mesa-19.3.1.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2020-January/000566.html
-+sha256 4e3aee324616352bbc7f58d47ab573e10f68cc7719fd045bd6d3abcdd97ee1c1  mesa-19.3.2.tar.xz
-+sha512 fb69999fa7a15cd6f2c254fb6e8fe635e56dc49a5c2c762a96c77815cbad77060b8f81a02e67ac9ec58092ab866e080fb928086a5ac1e61c3efe882e5825cd28  mesa-19.3.2.tar.xz
- 
- # License
- sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 92816bf110..f6f276c92d 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+index 8e1237b2fd..7a13a01a15 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-July/002910.html
+-md5 70b785f2063643049bffb31ba4772619  fonttosfnt-1.0.5.tar.bz2
+-sha1 acc1c8e47ba0fdc872442bf4fb087074b40ae618  fonttosfnt-1.0.5.tar.bz2
+-sha256 c80a5ff516aa06da2e90df044b8e28715f7d9e451feac8030951d9ff828d8503  fonttosfnt-1.0.5.tar.bz2
+-sha512 dba990098c95b07bc7240699a5c9ea11f056fbfddd70f669ae283548cbf20d756b28d817a99548c23ba81de9792877296ab6f35ee3c630e5c3cd8f14650ce297  fonttosfnt-1.0.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-January/003035.html
++md5 bf8086aa878f0d1bb7715e5865183cc4  fonttosfnt-1.1.0.tar.bz2
++sha1 0e0ea8c92941bf9126b87fae5bb723c8e1035ae2  fonttosfnt-1.1.0.tar.bz2
++sha256 7283fd477e3de75cce40b91b5012953e30b862975555d4482435e2ee7b0f46dc  fonttosfnt-1.1.0.tar.bz2
++sha512 f4fb9814c23bfd6f83771959444d2c37eb4ba32edee43c37cf21f0181be80c6e278307641b0f4dae4ee5d10db3289e95194f99757ea4bbca343fff15498e7173  fonttosfnt-1.1.0.tar.bz2
+ # Locally computed
+ sha256 f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+index 0e392e959a..ab1d955771 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 19.3.1
-+MESA3D_VERSION = 19.3.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-XAPP_FONTTOSFNT_VERSION = 1.0.5
++XAPP_FONTTOSFNT_VERSION = 1.1.0
+ XAPP_FONTTOSFNT_SOURCE = fonttosfnt-$(XAPP_FONTTOSFNT_VERSION).tar.bz2
+ XAPP_FONTTOSFNT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_FONTTOSFNT_LICENSE = MIT
 -- 
 2.20.1
