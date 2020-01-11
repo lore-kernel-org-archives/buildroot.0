@@ -1,42 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jan 2020 15:36:53 +0100
-Subject: [Buildroot] [git commit] package/scons: bump to version 3.1.2
-Message-ID: <20200111142655.0677E8A3FE@busybox.osuosl.org>
+Date: Sat, 11 Jan 2020 15:37:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/scons: bump to version 3.1.2
+In-Reply-To: <20200110222355.153442-1-titouan.christophe@railnova.eu>
+References: <20200110222355.153442-1-titouan.christophe@railnova.eu>
+Message-ID: <20200111153702.7d83409e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4716b1e33057f9fc016debc4d35e2cad198a068
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 10 Jan 2020 23:23:55 +0100
+Titouan Christophe <titouan.christophe@railnova.eu> wrote:
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/scons/scons.hash | 2 +-
- package/scons/scons.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> ---
+>  package/scons/scons.hash | 2 +-
+>  package/scons/scons.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/scons/scons.hash b/package/scons/scons.hash
-index 14be1250de..bbeda86b11 100644
---- a/package/scons/scons.hash
-+++ b/package/scons/scons.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  f3f548d738d4a2179123ecd744271ec413b2d55735ea7625a59b1b59e6cd132f  scons-3.1.0.tar.gz
-+sha256  7801f3f62f654528e272df780be10c0e9337e897650b62ddcee9f39fde13f8fb  scons-3.1.2.tar.gz
- sha256  c4248451b6a4cd09870de4fb82a857feb9f98174167b07500c19ed0263fd4db7  LICENSE.txt
-diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-index d7cc427add..da2ccceb08 100644
---- a/package/scons/scons.mk
-+++ b/package/scons/scons.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SCONS_VERSION = 3.1.0
-+SCONS_VERSION = 3.1.2
- SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
- SCONS_LICENSE = MIT
- SCONS_LICENSE_FILES = LICENSE.txt
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
