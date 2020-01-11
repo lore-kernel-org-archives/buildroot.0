@@ -1,69 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Jan 2020 22:39:07 +0100
-Subject: [Buildroot] [git commit] package/opencv3: security bump to version
- 3.4.9
-Message-ID: <20200111213005.251538A540@busybox.osuosl.org>
+Date: Sat, 11 Jan 2020 22:39:56 +0100
+Subject: [Buildroot] [git commit] package/fio: bump to version 3.17
+Message-ID: <20200111213005.32DB28B378@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6fb2cae0691d25b034b12a16261ee26096db7d1
+commit: https://git.buildroot.net/buildroot/commit/?id=e9221dd54c2f3947d5a70d67a09bb2db0a67b6d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2019-14491: An issue was discovered in OpenCV before 3.4.7
-  and 4.x before 4.1.1. There is an out of bounds read in the function
-  cv::predictOrdered<cv::HaarEvaluator> in
-  modules/objdetect/src/cascadedetect.hpp, which leads to denial of service.
-- Fix CVE-2019-14492: An issue was discovered in OpenCV before 3.4.7
-  and 4.x before 4.1.1. There is an out of bounds read/write in the
-  function HaarEvaluator::OptFeature::calc in
-  modules/objdetect/src/cascadedetect.hpp, which leads to denial of service.
-- atomic workaround is not needed since version 3.4.8 and
-  https://github.com/opencv/opencv/commit/464972855e25f71667009b8fe88092d11aab0297
-- Update hash of license file (Xperience.AI added:
-  https://github.com/opencv/opencv/commit/766465ce9483c20d54bfce422d285c077f6502bd)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv3/opencv3.hash | 4 ++--
- package/opencv3/opencv3.mk   | 7 +------
- 2 files changed, 3 insertions(+), 8 deletions(-)
+ package/fio/fio.hash | 2 +-
+ package/fio/fio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
-index 0b88b52da5..4953d01a1c 100644
---- a/package/opencv3/opencv3.hash
-+++ b/package/opencv3/opencv3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 e7d311ff97f376b8ee85112e2b536dbf4bdf1233673500175ed7cf21a0089f6d  opencv3-3.4.6.tar.gz
--sha256 488b640f88bc72a1f9bbb985bde8352ed8826b863f0b3e14f7038c44bf95d6bc  LICENSE
-+sha256 b7ea364de7273cfb3b771a0d9c111b8b8dfb42ff2bcd2d84681902fb8f49892a  opencv3-3.4.9.tar.gz
-+sha256 c3596f2f886631ac49af2c9a201ca559f850bb5726bdc25eacbe2369a70caad9  LICENSE
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index d38107f6e7..4ddd80723f 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
+diff --git a/package/fio/fio.hash b/package/fio/fio.hash
+index 2950fe70c0..4b6c9b8c1d 100644
+--- a/package/fio/fio.hash
++++ b/package/fio/fio.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 988ba0ed7488968fdccc882ceadd2124370825d0a1317ae4fdd80d5f2acc31da  fio-3.16.tar.gz
++sha256 2aa68326266ef074ecc0892ebfe165e28c981282f345ee05f9d06f11ada3f052  fio-3.17.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256 8a240c1ad13d1fe3e58588643d81d0695899be4a669fe6d8fafa76ca6a89db2c  MORAL-LICENSE
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+index 357d0931a3..5761d1c282 100644
+--- a/package/fio/fio.mk
++++ b/package/fio/fio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENCV3_VERSION = 3.4.6
-+OPENCV3_VERSION = 3.4.9
- OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
- OPENCV3_INSTALL_STAGING = YES
- OPENCV3_LICENSE = BSD-3-Clause
-@@ -13,11 +13,6 @@ OPENCV3_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- OPENCV3_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
--# Uses __atomic_fetch_add_4
--ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--OPENCV3_CXXFLAGS += -latomic
--endif
--
- # Fix c++11 build with missing std::exception_ptr
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
- OPENCV3_CXXFLAGS += -DCV__EXCEPTION_PTR=0
+-FIO_VERSION = 3.16
++FIO_VERSION = 3.17
+ FIO_SITE = http://brick.kernel.dk/snaps
+ FIO_LICENSE = GPL-2.0
+ FIO_LICENSE_FILES = COPYING MORAL-LICENSE
