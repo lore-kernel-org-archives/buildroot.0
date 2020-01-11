@@ -1,33 +1,49 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 11 Jan 2020 23:06:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/scons: fix hash of license file
-Message-ID: <20200111220620.1892368-1-fontaine.fabrice@gmail.com>
+Date: Sat, 11 Jan 2020 23:07:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qhull: bump to version 7.3.2
+Message-ID: <20200111220731.1892481-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit d4716b1e33057f9fc016debc4d35e2cad198a068 forgot to update hash of
-license file. This file was updated with a "MIT License" line:
-https://github.com/SCons/scons/commit/3243305c08dd93b16ae0024780a38ad51dacd5e1
-
-Fixes:
- - http://autobuild.buildroot.org/results/43547a6015cbd0db7a9e8e7bbe7c60029db20511
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/scons/scons.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qhull/qhull.hash | 7 ++++---
+ package/qhull/qhull.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/scons/scons.hash b/package/scons/scons.hash
-index bbeda86b11..a72fbaee5a 100644
---- a/package/scons/scons.hash
-+++ b/package/scons/scons.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
- sha256  7801f3f62f654528e272df780be10c0e9337e897650b62ddcee9f39fde13f8fb  scons-3.1.2.tar.gz
--sha256  c4248451b6a4cd09870de4fb82a857feb9f98174167b07500c19ed0263fd4db7  LICENSE.txt
-+sha256  72ed889165fb28378cadac14552be4a959f1ebab6b148abb5dd2b49712c3c6f6  LICENSE.txt
+diff --git a/package/qhull/qhull.hash b/package/qhull/qhull.hash
+index 4f059f2b5b..b97c25a3f7 100644
+--- a/package/qhull/qhull.hash
++++ b/package/qhull/qhull.hash
+@@ -1,4 +1,5 @@
+-# From http://www.qhull.org/download/qhull-2015.2.md5sum
+-md5	e6270733a826a6a7c32b796e005ec3dc	qhull-2015-src-7.2.0.tgz
++# From http://www.qhull.org/download/qhull-2019.1.md5sum
++md5	53c04f9c89b491b17b10c7ea1eaa4cc8	qhull-2019-src-7.3.2.tgz
+ # Locally computed
+-sha256	78b010925c3b577adc3d58278787d7df08f7c8fb02c3490e375eab91bb58a436	qhull-2015-src-7.2.0.tgz
++sha256	2b7990558c363076261564f61b74db4d0d73b71869755108a469038c07dc43fb	qhull-2019-src-7.3.2.tgz
++sha256	34db0c0c4f931861d720555c9cd7a2e228d1290ba29af0f2ee80c41bb2038afb	COPYING.txt
+diff --git a/package/qhull/qhull.mk b/package/qhull/qhull.mk
+index 8ea38f01ad..fcf517634b 100644
+--- a/package/qhull/qhull.mk
++++ b/package/qhull/qhull.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-QHULL_VERSION = 7.2.0
++QHULL_VERSION = 7.3.2
+ QHULL_SITE = http://www.qhull.org/download
+-QHULL_SOURCE = qhull-2015-src-$(QHULL_VERSION).tgz
++QHULL_SOURCE = qhull-2019-src-$(QHULL_VERSION).tgz
+ QHULL_INSTALL_STAGING = YES
+ QHULL_LICENSE = BSD-Style
+ QHULL_LICENSE_FILES = COPYING.txt
 -- 
 2.24.1
