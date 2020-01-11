@@ -1,49 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jan 2020 15:47:42 +0100
-Subject: [Buildroot] [git commit] package/sdl2_mixer: add optional
- fluidsynth dependency
-Message-ID: <20200111144129.1D7E98A3FD@busybox.osuosl.org>
+Date: Sat, 11 Jan 2020 15:49:32 +0100
+Subject: [Buildroot] [git commit] package/snort: needs zlib
+Message-ID: <20200111144129.3AA298A3FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dca735e486ba9ec434f7309a74d53ece75c5c37
+commit: https://git.buildroot.net/buildroot/commit/?id=1ae505f0bd12672d5653d792d044a5fdbd95820d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In commit fe4b9321e5ef3594776bba443d9718efd766f40e ("package/libpcap:
+remove unnecessary dependency on zlib"), the depedency of libpcap on
+zlib was removed as it was not needed. However, it was thanks to this
+dependency that the snort package satisfied its dependency on zlib,
+which is now missing. This commit fixes that by adding a dependency of
+snort on zlib.
+
+Fixes:
+
+  checking zlib.h usability... no
+  checking zlib.h presence... no
+  checking for zlib.h... no
+
+     ERROR!  zlib header not found, go get it from
+     http://www.zlib.net
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sdl2_mixer/sdl2_mixer.mk | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/snort/Config.in | 1 +
+ package/snort/snort.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/sdl2_mixer/sdl2_mixer.mk b/package/sdl2_mixer/sdl2_mixer.mk
-index 198333854e..34bba5772d 100644
---- a/package/sdl2_mixer/sdl2_mixer.mk
-+++ b/package/sdl2_mixer/sdl2_mixer.mk
-@@ -12,9 +12,7 @@ SDL2_MIXER_LICENSE_FILES = COPYING.txt
- SDL2_MIXER_INSTALL_STAGING = YES
- SDL2_MIXER_DEPENDENCIES = sdl2 host-pkgconf
+diff --git a/package/snort/Config.in b/package/snort/Config.in
+index 7d2c52c3f3..fc74efcfed 100644
+--- a/package/snort/Config.in
++++ b/package/snort/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_SNORT
+ 	select BR2_PACKAGE_DAQ
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Snort is a free and open source network intrusion
+ 	  prevention system (IPS) and network intrusion detection
+diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+index 024c94162b..4006d176bf 100644
+--- a/package/snort/snort.mk
++++ b/package/snort/snort.mk
+@@ -9,7 +9,7 @@ SNORT_SITE = https://www.snort.org/downloads/snort
+ SNORT_LICENSE = GPL-2.0
+ SNORT_LICENSE_FILES = LICENSE COPYING
  
--SDL2_MIXER_CONF_OPTS = \
--	--disable-music-midi-fluidsynth \
--	--disable-music-mp3
-+SDL2_MIXER_CONF_OPTS = --disable-music-mp3
+-SNORT_DEPENDENCIES = libpcap libdnet daq pcre host-pkgconf
++SNORT_DEPENDENCIES = libpcap libdnet daq pcre zlib host-pkgconf
  
- ifeq ($(BR2_PACKAGE_FLAC),y)
- SDL2_MIXER_CONF_OPTS += --enable-music-flac
-@@ -23,6 +21,13 @@ else
- SDL2_MIXER_CONF_OPTS += --disable-music-flac
- endif
- 
-+ifeq ($(BR2_PACKAGE_FLUIDSYNTH),y)
-+SDL2_MIXER_CONF_OPTS += --enable-music-midi-fluidsynth
-+SDL2_MIXER_DEPENDENCIES += fluidsynth
-+else
-+SDL2_MIXER_CONF_OPTS += --disable-music-midi-fluidsynth
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
- SDL2_MIXER_CONF_OPTS += --enable-music-mod-modplug
- SDL2_MIXER_DEPENDENCIES += libmodplug
+ # patching configure.in
+ SNORT_AUTORECONF = YES
