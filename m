@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 11 Jan 2020 10:21:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ussp-push: add bluez5_utils support
-Message-ID: <20200111092101.419186-1-fontaine.fabrice@gmail.com>
+Date: Sat, 11 Jan 2020 10:22:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cwiid: add bluez5_utils support
+Message-ID: <20200111092215.419309-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ussp-push/Config.in    | 2 +-
- package/ussp-push/ussp-push.mk | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/cwiid/Config.in | 2 +-
+ package/cwiid/cwiid.mk  | 6 +++++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/ussp-push/Config.in b/package/ussp-push/Config.in
-index aefec85a20..d0ab577609 100644
---- a/package/ussp-push/Config.in
-+++ b/package/ussp-push/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_USSP_PUSH
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus
- 	select BR2_PACKAGE_OPENOBEX
+diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
+index 7ee8117355..c66ffe1aee 100644
+--- a/package/cwiid/Config.in
++++ b/package/cwiid/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_CWIID
+ 	depends on BR2_USE_WCHAR # bluez_utils -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> dbus, alsa-lib, libglib2
+ 	depends on BR2_USE_MMU # bluez_utils -> dbus, libglib2
 -	select BR2_PACKAGE_BLUEZ_UTILS
 +	select BR2_PACKAGE_BLUEZ_UTILS if !BR2_PACKAGE_BLUEZ5_UTILS
  	help
- 	  ussp-push is an OBEX object pusher for Linux, using the BlueZ
- 	  BlueTooth stack.
-diff --git a/package/ussp-push/ussp-push.mk b/package/ussp-push/ussp-push.mk
-index 0c45c291ac..e56b611727 100644
---- a/package/ussp-push/ussp-push.mk
-+++ b/package/ussp-push/ussp-push.mk
-@@ -9,6 +9,8 @@ USSP_PUSH_SITE = http://www.xmailserver.org
- USSP_PUSH_LICENSE = GPL-2.0+
- USSP_PUSH_LICENSE_FILES = COPYING
+ 	  A collection of Linux tools written in C for interfacing to
+ 	  the Nintendo Wiimote.
+diff --git a/package/cwiid/cwiid.mk b/package/cwiid/cwiid.mk
+index c092e401df..4f8f091909 100644
+--- a/package/cwiid/cwiid.mk
++++ b/package/cwiid/cwiid.mk
+@@ -12,7 +12,11 @@ CWIID_LICENSE_FILES = COPYING
+ CWIID_AUTORECONF = YES
+ CWIID_INSTALL_STAGING = YES
  
--USSP_PUSH_DEPENDENCIES = bluez_utils openobex
-+USSP_PUSH_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_BLUEZ_UTILS),bluez_utils,bluez5_utils) \
-+	openobex
+-CWIID_DEPENDENCIES = host-pkgconf host-bison host-flex bluez_utils
++CWIID_DEPENDENCIES = \
++	host-pkgconf \
++	host-bison \
++	host-flex \
++	$(if $(BR2_PACKAGE_BLUEZ_UTILS),bluez_utils,bluez5_utils)
  
- $(eval $(autotools-package))
+ # Disable python support. This disables the 2 following things:
+ #   - wminput Python plugin support
 -- 
 2.24.1
