@@ -1,62 +1,92 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 11 Jan 2020 23:08:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/olsr: enable back on musl with
- headers >= 4.15
-Message-ID: <20200111220824.1892590-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 11 Jan 2020 22:48:43 +0000
+Subject: [Buildroot] [Bug 12456] New: qtvirtualkeyboard: No such file or
+ directory
+Message-ID: <bug-12456-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-olsr has been disabled on musl three years ago by commit
-4bca88c839e54a9140c06010666f5e034127b8b1.
+https://bugs.busybox.net/show_bug.cgi?id=12456
 
-Comments in https://github.com/OLSR/olsrd/issues/6 suggest that the
-issue was due to olsr mixing kernel and userspace headers. This issue is
-still open.
+            Bug ID: 12456
+           Summary: qtvirtualkeyboard: No such file or directory
+           Product: buildroot
+           Version: 2019.11
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: blocker
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: sam.petrocelli at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-However, nowadays olsr builds fine on musl under those two conditions:
-- musl >= 1.1.16 (i.e. with
-  http://git.musl-libc.org/cgit/musl/commit/?id=04983f2272382af92eb8f8838964ff944fbb8258)
-- kernels >= 4.15 (i.e. with
-  https://github.com/torvalds/linux/commit/c0bace798436bca0fdc221ff61143f1376a9c3de)
+Created attachment 8331
+  --> https://bugs.busybox.net/attachment.cgi?id=8331&action=edit
+Comparing the output of an older version of buildroot (approx two years old)
+with 2019.11
 
-So enable it back on musl with kernels >= 4.15.
+>>> qt5virtualkeyboard 5.12.5 Installing to target
+mkdir -p
+/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/target/usr/lib/qt/plugins/platforminputcontexts
+cp -dpfr
+/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so
+/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/target/usr/lib/qt/plugins/platforminputcontexts
+cp -dpf
+/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5VirtualKeyboard*.so.*
+/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/target/usr/lib
+mkdir -p
+/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/target/usr/qml/QtQuick
+cp -dpfr
+/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/qml/QtQuick/VirtualKeyboard
+/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/target/usr/qml/QtQuick/
+cp -dpfr
+/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/qtvirtualkeyboard
+/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/target/usr
+cp: cannot stat
+'/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/qtvirtualkeyboard':
+No such file or directory
+make[1]: *** [package/pkg-generic.mk:335:
+/home/spetroce/code/src/Buildroot-Toolchain-Release/Toolchain/morepork-build-root/output/build/qt5virtualkeyboard-5.12.5/.stamp_target_installed]
+Error 1
+make: *** [Makefile:84: _all] Error 2
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/olsr/Config.in | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/olsr/Config.in b/package/olsr/Config.in
-index 85c5b4da1f..632511fba9 100644
---- a/package/olsr/Config.in
-+++ b/package/olsr/Config.in
-@@ -3,9 +3,8 @@ config BR2_PACKAGE_OLSR
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
--	# doesn't build with musl,
- 	# https://github.com/OLSR/olsrd/issues/6
--	depends on !BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_TOOLCHAIN_USES_MUSL || BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
- 	help
- 	  The Optimized Link State Routing protocol (OLSR) is a
- 	  routing protocol that is optimised for mobile ad-hoc
-@@ -16,7 +15,10 @@ config BR2_PACKAGE_OLSR
- 
- 	  http://www.olsr.org/
- 
--comment "olsr needs a uClibc or glibc toolchain w/ threads, dynamic library"
-+comment "olsr needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+
-+comment "olsr needs a musl toolchain w/ headers >= 4.15"
-+	depends on BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+Commenting the following lines within qt5virtualkeyboard.mk results in a
+successful build.
+
+ifdef QT5VIRTUALKEYBOARD_3RDPARTY_PARTS
+define QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS
+  cp -dpfr $(STAGING_DIR)/usr/qtvirtualkeyboard $(TARGET_DIR)/usr
+endef
+endif
+
+I have the following set in my defconfig file:
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_QT5BASE_EGLFS=y
+BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+BR2_PACKAGE_QT5BASE_GIF=y
+BR2_PACKAGE_QT5BASE_JPEG=y
+BR2_PACKAGE_QT5BASE_PNG=y
+BR2_PACKAGE_QT5GRAPHICALEFFECTS=y
+BR2_PACKAGE_QT5MULTIMEDIA=y
+BR2_PACKAGE_QT5QUICKCONTROLS2=y
+BR2_PACKAGE_QT5TOOLS=y
+BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS=y
+BR2_PACKAGE_QT5VIRTUALKEYBOARD=y
+BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS="all"
+
+I have no problems with this on an older version (it's a fork of buildroot that
+is approximately 2 years old) of buildroot, but when using the 2019.11 branch I
+run into the error described above. I attached a text file that contains a find
+output for the qtvirtualkeyboard dict files on both the older and 2019.11
+buildroots.
+
 -- 
-2.24.1
+You are receiving this mail because:
+You are on the CC list for the bug.
