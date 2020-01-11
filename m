@@ -1,10 +1,11 @@
 From: Christian Stewart <christian@paral.in>
-Date: Fri, 10 Jan 2020 20:23:04 -0800
-Subject: [Buildroot] [PATCH 1/1] rtl8821au: bump to 2020.01 commit hash
-In-Reply-To: <87blrbocew.fsf@dell.be.48ers.dk>
-References: <20200110050016.1924705-1-christian@paral.in>
- <87blrbocew.fsf@dell.be.48ers.dk>
-Message-ID: <CA+h8R2rZL5Ca1Yp4Ec0yG9cxG5rhKQjy5tqerH1x9VPN+iPV+Q@mail.gmail.com>
+Date: Fri, 10 Jan 2020 20:20:34 -0800
+Subject: [Buildroot] [PATCH 2/2] package/docker-proxy: bump to feeff4
+In-Reply-To: <87lfqfg0ve.fsf@dell.be.48ers.dk>
+References: <20200110045033.1920685-1-christian@paral.in>
+ <20200110045033.1920685-2-christian@paral.in>
+ <87lfqfg0ve.fsf@dell.be.48ers.dk>
+Message-ID: <CA+h8R2qiKXsKQsprOTAW6OeFhDPKYBcFMr5bDaUDVEr4AdiZhQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +14,28 @@ To: buildroot@busybox.net
 
 Hi Peter,
 
+On Fri, Jan 10, 2020 at 12:40 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+> I was of the understanding that docker-proxy isn't really needed any
+> more. Can you clarify?
 
-On Fri, Jan 10, 2020 at 2:04 AM Peter Korsgaard <peter@korsgaard.com> wrote:
-> What do you mean with 2020.01? I thought you were referring to a tag,
-> but I don't see any tags in that repo.
+I have build + run tested it with the latest version as built by this
+patch. Docker-proxy is still used in the Gentoo build files.
 
-I'm just indicating that it's the latest version as of January 2020.
+There's not much information online about docker-proxy, one article
+even claims that it should be a symlink to the docker binary itself.
 
->  >   fa68771376a637c0b5f9cfa53da008570939a259
->
-> Looking at that commit in github:
->
-> https://github.com/abperiasamy/rtl8812AU_8821AU_linux/commit/fa68771376a637c0b5f9cfa53da008570939a259
->
-> I see people are having problems and some discussion about reverting it,
-> so are you sure we should be using it in Buildroot?
+The docker-proxy binary is executed when port-forwarding.
 
-I actually noticed this about an hour after submitting the patch and
-marked it as Superceeded in patchwork.
+$ docker run -d -p 80:8080 nginx
 
-> And finally, the commit message should be prefixed with
-> package/rtl8821au like your other patch.
+Results in the following being run:
 
-ack.
+/usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 80
+-container-ip 172.17.0.2 -container-port 8080
 
-Best,
+The binary does need to be in place, and it works fine after this
+version bump. I'm not sure if it could be replaced with a symlink to
+the docker binary itself.
+
+Best regards,
 Christian
