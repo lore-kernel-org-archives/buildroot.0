@@ -1,80 +1,121 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jan 2020 22:09:49 +0100
-Subject: [Buildroot] [git commit] package/zeromq: add -latomic to libzmq.pc
-Message-ID: <20200112205947.625848B920@busybox.osuosl.org>
+Date: Sun, 12 Jan 2020 22:11:27 +0100
+Subject: [Buildroot] [git commit] package/proj: bump to version 6.3.0
+Message-ID: <20200112210245.A64F77F956@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2fc6df260fc6ba9e8fac81b3ee27b0ad7b02875
+commit: https://git.buildroot.net/buildroot/commit/?id=35fd6c7bdac9247fc0090732b386d5cdf3e8bb4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will fix a static build failure with czmq
-
-Fixes:
- - http://autobuild.buildroot.org/results/4a12f1ede260cd956a0b5ccb4eec6ca8b44cb04f
+Remove patches (already in version)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ude.m4-add-latomic-to-PKGCFG_LIBS_PRIVATE.patch | 36 ++++++++++++++++++++++
- package/zeromq/zeromq.mk                           |  2 ++
- 2 files changed, 38 insertions(+)
+ .../proj/0001-proj.pc.in-add-Libs.Private.patch    | 27 ------------------
+ ...oj.pc.in-add-SQLITE3_LIBS-to-Libs.Private.patch | 32 ----------------------
+ package/proj/proj.hash                             |  6 ++--
+ package/proj/proj.mk                               |  2 +-
+ 4 files changed, 4 insertions(+), 63 deletions(-)
 
-diff --git a/package/zeromq/0001-acinclude.m4-add-latomic-to-PKGCFG_LIBS_PRIVATE.patch b/package/zeromq/0001-acinclude.m4-add-latomic-to-PKGCFG_LIBS_PRIVATE.patch
-new file mode 100644
-index 0000000000..49f753b27f
---- /dev/null
-+++ b/package/zeromq/0001-acinclude.m4-add-latomic-to-PKGCFG_LIBS_PRIVATE.patch
-@@ -0,0 +1,36 @@
-+From d59dcbcaebd91ca30a0f866403c383177a4843f8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 12 Jan 2020 10:10:15 +0100
-+Subject: [PATCH] acinclude.m4: add -latomic to PKGCFG_LIBS_PRIVATE
-+
-+Add -latomic to PKGCFG_LIBS_PRIVATE so applications linking statically
-+with libzmq (such czmq) will know that they have to link with -latomic
-+and the following build failure will be avoided:
-+
-+  CCLD     src/czmq_selftest
-+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-3/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libzmq.a(src_libzmq_la-ctx.o): in function `zmq::ctx_t::create_socket(int)':
-+ctx.cpp:(.text+0x1710): undefined reference to `__atomic_fetch_add_4'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/4a12f1ede260cd956a0b5ccb4eec6ca8b44cb04f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/zeromq/libzmq/commit/d59dcbcaebd91ca30a0f866403c383177a4843f8]
-+---
-+ acinclude.m4 | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index 8c042ca50..387a3d2a1 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -691,7 +691,7 @@ int main (int, char **)
-+             return t;
-+         }
-+         ])],
-+-        [AC_MSG_RESULT(yes) ; libzmq_cv_has_atomic_instrisics="yes" ; $1],
-++        [AC_MSG_RESULT(yes) ; libzmq_cv_has_atomic_instrisics="yes" PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE -latomic" ; $1],
-+         [AC_MSG_RESULT(no) ; libzmq_cv_has_atomic_instrisics="no" LIBS=$save_LIBS ; $2])
-+     fi
-+ }])
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 2c2e3e45b8..04f7e7d3f2 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -11,6 +11,8 @@ ZEROMQ_DEPENDENCIES = util-linux
- ZEROMQ_CONF_OPTS = --without-documentation
- ZEROMQ_LICENSE = LGPL-3.0+ with exceptions
- ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
-+# We're patching acinclude.m4
-+ZEROMQ_AUTORECONF = YES
+diff --git a/package/proj/0001-proj.pc.in-add-Libs.Private.patch b/package/proj/0001-proj.pc.in-add-Libs.Private.patch
+deleted file mode 100644
+index 5032ede647..0000000000
+--- a/package/proj/0001-proj.pc.in-add-Libs.Private.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From bdee73f3e0d8b4b6f2b6e0edb945dbd9abfd3255 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 9 Oct 2019 15:24:08 +0200
+-Subject: [PATCH] proj.pc.in: add Libs.Private
+-
+-Add -lstdc++ to Libs.Private to allow packages such as libgeotiff to
+-retrieve this dependency when linking statically with proj
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/OSGeo/PROJ/pull/1664]
+----
+- proj.pc.in | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/proj.pc.in b/proj.pc.in
+-index a6a5d75f..001f08a1 100644
+---- a/proj.pc.in
+-+++ b/proj.pc.in
+-@@ -9,4 +9,5 @@ Description: Cartographic Projections Library.
+- Requires:
+- Version: @VERSION@
+- Libs: -L${libdir} -lproj
+-+Libs.Private: -lstdc++
+- Cflags: -I${includedir}
+--- 
+-2.23.0
+-
+diff --git a/package/proj/0002-proj.pc.in-add-SQLITE3_LIBS-to-Libs.Private.patch b/package/proj/0002-proj.pc.in-add-SQLITE3_LIBS-to-Libs.Private.patch
+deleted file mode 100644
+index 112559143e..0000000000
+--- a/package/proj/0002-proj.pc.in-add-SQLITE3_LIBS-to-Libs.Private.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 0181fd5fa0d75c5a6339dee9a8eaea95ff4bf0b0 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 20 Oct 2019 11:05:42 +0200
+-Subject: [PATCH] proj.pc.in: add SQLITE3_LIBS to Libs.Private
+-
+-Add @SQLITE3_LIBS@ to Libs.Private so applications linking statically
+-with proj (such as libgeotiff) will know that they have to link with
+--lsqlite3
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/737db533c16f285a02118ab048e8427d3e35803d
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/OSGeo/PROJ/pull/1686]
+----
+- proj.pc.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/proj.pc.in b/proj.pc.in
+-index 001f08a1..67a432f1 100644
+---- a/proj.pc.in
+-+++ b/proj.pc.in
+-@@ -9,5 +9,5 @@ Description: Cartographic Projections Library.
+- Requires:
+- Version: @VERSION@
+- Libs: -L${libdir} -lproj
+--Libs.Private: -lstdc++
+-+Libs.Private: @SQLITE3_LIBS@ -lstdc++
+- Cflags: -I${includedir}
+--- 
+-2.23.0
+-
+diff --git a/package/proj/proj.hash b/package/proj/proj.hash
+index d06de110a4..ade9502b67 100644
+--- a/package/proj/proj.hash
++++ b/package/proj/proj.hash
+@@ -1,5 +1,5 @@
+-# Fetched from http://download.osgeo.org/proj/proj-6.2.0.tar.gz.md5
+-md5 5cde556545828beaffbe50b1bb038480 proj-6.2.0.tar.gz
++# Fetched from http://download.osgeo.org/proj/proj-6.3.0.tar.gz.md5
++md5 09243feb4f243a2bdd455035a2007384 proj-6.3.0.tar.gz
+ # Locally calculated
+-sha256 7f2e0fe63312f1e766057cceb53dc9585c4a335ff6641de45696dbd40d17c340 proj-6.2.1.tar.gz
++sha256 68ce9ba0005d442c2c1d238a3b9bc6654c358159b4af467b91e8d5b407c79c77 proj-6.3.0.tar.gz
+ sha256 2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6 COPYING
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index 3a8ac6c787..2be0004023 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Assume these flags are always available. It is true, at least for
- # SOCK_CLOEXEC, since linux v2.6.27.
+-PROJ_VERSION = 6.2.1
++PROJ_VERSION = 6.3.0
+ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
