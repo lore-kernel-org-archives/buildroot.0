@@ -1,64 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jan 2020 22:20:11 +0100
-Subject: [Buildroot] [git commit] package/olsr: enable back on musl with
- headers >= 4.15
-Message-ID: <20200112211503.2110D8C562@busybox.osuosl.org>
+Date: Sun, 12 Jan 2020 22:22:17 +0100
+Subject: [Buildroot] [git commit] package/uacme: bump version to 1.0.21
+Message-ID: <20200112211503.2EDAD8BE9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8033e5b87ddf631071f4b04c470933531bcb6524
+commit: https://git.buildroot.net/buildroot/commit/?id=a4ff3268ffe1c9e584e4a7a1b3860e4ea44eb331
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-olsr has been disabled on musl three years ago by commit
-4bca88c839e54a9140c06010666f5e034127b8b1.
-
-Comments in https://github.com/OLSR/olsrd/issues/6 suggest that the
-issue was due to olsr mixing kernel and userspace headers. This issue is
-still open.
-
-However, nowadays olsr builds fine on musl under those two conditions:
-- musl >= 1.1.16 (i.e. with
-  http://git.musl-libc.org/cgit/musl/commit/?id=04983f2272382af92eb8f8838964ff944fbb8258)
-- kernels >= 4.15 (i.e. with
-  https://github.com/torvalds/linux/commit/c0bace798436bca0fdc221ff61143f1376a9c3de)
-
-So enable it back on musl with kernels >= 4.15.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/olsr/Config.in | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/olsr/Config.in b/package/olsr/Config.in
-index 85c5b4da1f..632511fba9 100644
---- a/package/olsr/Config.in
-+++ b/package/olsr/Config.in
-@@ -3,9 +3,8 @@ config BR2_PACKAGE_OLSR
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
--	# doesn't build with musl,
- 	# https://github.com/OLSR/olsrd/issues/6
--	depends on !BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_TOOLCHAIN_USES_MUSL || BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
- 	help
- 	  The Optimized Link State Routing protocol (OLSR) is a
- 	  routing protocol that is optimised for mobile ad-hoc
-@@ -16,7 +15,10 @@ config BR2_PACKAGE_OLSR
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index 3fac0da5d1..b8d631d50b 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	c9106e166156685fcf9f164f0b2935cf680251a653f460b04da26a290e946bf9        uacme-1.0.20.tar.gz
++sha256	c80bbee3c2ac3a64f70abe23be3b7768039785863170ac062625407a0b61e635        uacme-1.0.21.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 0a662a2646..5813399c56 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://www.olsr.org/
- 
--comment "olsr needs a uClibc or glibc toolchain w/ threads, dynamic library"
-+comment "olsr needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+
-+comment "olsr needs a musl toolchain w/ headers >= 4.15"
-+	depends on BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+-UACME_VERSION = 1.0.20
++UACME_VERSION = 1.0.21
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
