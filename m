@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jan 2020 11:37:24 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/opencv3: security
+Date: Sun, 12 Jan 2020 11:31:42 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/opencv3: security
  bump to version 3.4.9
-Message-ID: <20200112104514.58AF188933@busybox.osuosl.org>
+Message-ID: <20200112104521.656608B4DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4690339f2af34b3e57c7cda4b3e4a090f96ada0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6aa842fc456ba98821ffea371a859e6655fb5295
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 - Fix CVE-2019-14491: An issue was discovered in OpenCV before 3.4.7
   and 4.x before 4.1.1. There is an out of bounds read in the function
@@ -45,7 +45,7 @@ index 0b88b52da5..4953d01a1c 100644
 +sha256 b7ea364de7273cfb3b771a0d9c111b8b8dfb42ff2bcd2d84681902fb8f49892a  opencv3-3.4.9.tar.gz
 +sha256 c3596f2f886631ac49af2c9a201ca559f850bb5726bdc25eacbe2369a70caad9  LICENSE
 diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 8fb97b5135..a6d795bd85 100644
+index d38107f6e7..4ddd80723f 100644
 --- a/package/opencv3/opencv3.mk
 +++ b/package/opencv3/opencv3.mk
 @@ -4,7 +4,7 @@
