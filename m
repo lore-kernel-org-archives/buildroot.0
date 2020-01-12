@@ -1,67 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jan 2020 15:50:47 +0100
-Subject: [Buildroot] [git commit] Update for 2019.11.1
-Message-ID: <20200112144448.ACF068B581@busybox.osuosl.org>
+Date: Sun, 12 Jan 2020 15:54:36 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2019.11.1
+Message-ID: <20200112144448.B93198B446@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=538d277312e365f8862d0a6acefd0948f5eef49b
+commit: https://git.buildroot.net/buildroot/commit/?id=d04f052ea348bb5198626cc33c79cb42a9bbec34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 57fbebac60f5247744882b3729ee9b2dc32c8f15)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 3c3fc1d768..b4d6faa38a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,41 @@
-+2019.11.1, released January 12th, 2020
-+
-+	Important / security related fixes.
-+
-+	Infrastructure: kconfig: Fix reconfigure logic, python: Ensure
-+	correct compiler and linker flags are used for compiled code
-+
-+	utils/scanpypi: Remind users to update DEVELOPERS
-+
-+	Defconfigs: imx6-sabresd: Fix the Qt5 display names,
-+	imx8: Drop extra copy of U-Boot DTB
-+
-+	Updated/fixed packages: acsccid, bitcoin, boost, busybox,
-+	cc-tool, cmocka, cpio, cups, dante, dialog, dillo, docker-cli,
-+	docker-containerd, docker-engine, easy-rsa, ebtables,
-+	ecryptfs-utils, efl, ffmpeg, gdb, git, glibc, gnupg2, go,
-+	gpsd, grpc, gst1-plugins-bad, iputils, jasper,
-+	kf5-kcoreaddons, leveldb, libarchive, libfribi, libgit2,
-+	libkrb5, libp11, librsvg, libssh, libtomcrypt, libuio, libv4l,
-+	lirc-tools, log4cplus, lrzip, lvm2, mali-t76x,
-+	matchbox-desktop, mender-grubenv, mmc-utils, mosquitto,
-+	nodejs, ntp, openipmi, opencv3, openpowerlink, openrc, pango,
-+	perl-sys-cpu, pimd, postgresql, pulseaudio, python-brotli,
-+	python-coherence, python-crc16, python-django, python-dpkt,
-+	python-gobject, python-pyasn-modules, python-pypcap,
-+	python-pyqt5, python-subprocess32, python3, qpdf,
-+	qt-webkit-kiosk, qt5virtualkeyboard, qt5webengine, quota,
-+	rabbitmq-c, rauc, rpcbind, rtl8821au, runc, rygel, samba4,
-+	sdl2, setserial, snort, spidev_test,
-+	sunxi-mali-mainline-driver, syslog-ng, sysrepo, tcllib, tftpd,
-+	usbmount, w_scan, wavpack, wsapi, wsapi-fcgi, wsapi-xavante,
-+	x265, xserver_xorg-server, ytree, zip
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12121: PyQt5.QtSerialPort and other modules not being built
-+	#12286: Can't import gobject in python 3.8
-+
- 2019.11, released December 1st, 2019
+diff --git a/docs/website/download.html b/docs/website/download.html
+index df34053ea7..80e42a1a82 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
  
- 	Various fixes.
+-      <h3 style="text-align: center;">Latest stable release: <b>2019.11</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2019.11.1</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2019.11.tar.gz">buildroot-2019.11.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.11.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.11.1.tar.gz">buildroot-2019.11.1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2019.11.1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2019.11.tar.bz2">buildroot-2019.11.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.11.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.11.1.tar.bz2">buildroot-2019.11.1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2019.11.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 70a691c22c..f840a9b8a7 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2019.11.1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>12 January 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2019.11.1 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2019.11 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.11.1">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-January/271404.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2019.11.1.tar.bz2">2019.11.1 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
