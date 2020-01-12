@@ -1,33 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 12 Jan 2020 23:27:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/olsr: add netjson plugin
-Message-ID: <20200112222754.3769908-1-fontaine.fabrice@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 12 Jan 2020 19:38:01 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-01-10
+In-Reply-To: <5e19769d.1c69fb81.e886c.4c29SMTPIN_ADDED_MISSING@mx.google.com>
+References: <5e19769d.1c69fb81.e886c.4c29SMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <CAOMZO5COUHMcKFfW=zJ+G_ZMdTO=CxwD2iySgsLF0P1xVnL5kQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add netjson plugin, available since version 0.9.5 and
-https://github.com/OLSR/olsrd/commit/64c00288f8e87d314a723e20c2dd69f1165f1645
+Hi Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/olsr/olsr.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, Jan 11, 2020 at 4:17 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index 766b1432c1..e643a0cfb3 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -9,7 +9,7 @@ OLSR_VERSION = $(OLSR_VERSION_MAJOR).6.1
- OLSR_SOURCE = olsrd-$(OLSR_VERSION).tar.bz2
- OLSR_SITE = http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
- OLSR_PLUGINS = arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo jsoninfo \
--	mdns nameservice p2pd pgraph secure txtinfo watchdog
-+	mdns nameservice netjson p2pd pgraph secure txtinfo watchdog
- # Doesn't really need quagga but not very useful without it
- OLSR_PLUGINS += $(if $(BR2_PACKAGE_QUAGGA),quagga)
- OLSR_LICENSE = BSD-3-Clause, LGPL-2.1+
--- 
-2.24.1
+> Build failures related to your defconfigs:
+>
+>                         defconfig |                        link to the job
+> ----------------------------------+--------------------------------------------------------------
+>                  imx6-sabresd_qt5 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/398923315
+
+I am not sure about the failure here.
+
+Adding Peter in case he has some suggestions.
+
+Thanks
