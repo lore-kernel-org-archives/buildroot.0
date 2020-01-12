@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jan 2020 22:05:11 +0100
-Subject: [Buildroot] Travel sponsorship for the Buildroot Developers Meeting
-Message-ID: <20200112220511.291b6fef@windsurf>
+Date: Sun, 12 Jan 2020 22:08:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/zeromq: add -latomic to
+ libzmq.pc
+In-Reply-To: <20200112190748.3717278-1-fontaine.fabrice@gmail.com>
+References: <20200112190748.3717278-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200112220818.5be6e2a5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, 12 Jan 2020 20:07:48 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-We are happy to announce that the Buildroot Association has granted
-travel sponsorship to Adam Duskett, so that he can travel from the US
-to Brussels for the next Buildroot Developers Meeting.
+> This will fix a static build failure with czmq
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/4a12f1ede260cd956a0b5ccb4eec6ca8b44cb04f
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...4-add-latomic-to-PKGCFG_LIBS_PRIVATE.patch | 36 +++++++++++++++++++
+>  package/zeromq/zeromq.mk                      |  2 ++
+>  2 files changed, 38 insertions(+)
+>  create mode 100644 package/zeromq/0001-acinclude.m4-add-latomic-to-PKGCFG_LIBS_PRIVATE.patch
 
-We would like to thank all the companies and individuals who donated to
-the Buildroot Association, their donation make this kind of travel
-sponsorship possible. If you are interested in donating or being a
-member of the Buildroot Association, see
-https://buildroot.org/association.html for more details.
-
-Also, if you are a Buildroot contributor, interested in participating
-to the Buildroot Meeting, but cannot attend due to the cost of travel,
-do not hesitate to contact us. We believe it is very useful for
-Buildroot contributors to meet each other, and we are therefore willing
-to spend some of the Buildroot Association budget on travel sponsorship.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
