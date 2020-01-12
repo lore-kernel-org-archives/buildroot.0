@@ -1,42 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jan 2020 23:19:49 +0100
-Subject: [Buildroot] [PATCH] package/thermald: new package
-In-Reply-To: <20191231031255.15587-1-ricardo.martincoski@gmail.com>
-References: <20191231031255.15587-1-ricardo.martincoski@gmail.com>
-Message-ID: <20200112231949.671680c4@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 12 Jan 2020 23:23:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-pyqt5: select
+ BR2_PACKAGE_QT5BASE_GUI
+In-Reply-To: <20200112230647.1fce0393@windsurf>
+References: <20191230214842.1485805-1-fontaine.fabrice@gmail.com>
+ <20191230234259.5bfe6355@windsurf> <20200112230647.1fce0393@windsurf>
+Message-ID: <CAPi7W83tq1Lcfh6jsREDkS7dc7k8HKrp+50hwDCCZyQEbkq8Zg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 31 Dec 2019 00:12:55 -0300
-Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
+Le dim. 12 janv. 2020 ? 23:06, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Fabrice,
+>
+> Any comment on the below question ?
+This is indeed "strange" but configure.py is really passing -gui
+unconditionally for QtCore (as well as QtDbus, QtNetwork ...).
+I didn't try to get in touch with upstream yet however I would assume
+that pyqt really expects that GUI is enabled on Qt.
+Here is an extract of their whitepaper
+(https://www.riverbankcomputing.com/static/Docs/PyQt4-whitepaper/pyqt-whitepaper-a4.pdf):
+PyQt, provides an ideal combination for rapidly creating powerful and
+flexible GUI applications.
+>
+> Thanks!
+>
+> Thomas
+>
+> On Mon, 30 Dec 2019 23:42:59 +0100
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>
+> > On Mon, 30 Dec 2019 22:48:42 +0100
+> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >
+> > > gui is a mandatory dependency of python-pyqt5 as "-gui" option is used
+> > > internally by the configure.py script
+> > >
+> > > Fixes:
+> > >  - http://autobuild.buildroot.org/results/ea0c8db44aacf1ce76f75e8288969fe5da6690d9
+> > >
+> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >
+> > This seems weird. Are you sure? Could you talk with upstream about this?
+> >
+> > Thomas
+>
+>
+>
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-> From: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-> 
-> Thermal Daemon is a Linux daemon for monitoring and controlling platform
-> temperatures.
-> 
-> ./utils/test-pkg --package thermald --all
-> 44 builds, 39 skipped, 0 build failed, 0 legal-info failed
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-> ---
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/thermald/Config.in     | 23 +++++++++++++++++++++++
->  package/thermald/thermald.hash |  5 +++++
->  package/thermald/thermald.mk   | 21 +++++++++++++++++++++
->  5 files changed, 51 insertions(+)
->  create mode 100644 package/thermald/Config.in
->  create mode 100644 package/thermald/thermald.hash
->  create mode 100644 package/thermald/thermald.mk
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
