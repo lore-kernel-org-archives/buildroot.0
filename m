@@ -1,25 +1,63 @@
-From: Ash Charles <ashcharles@gmail.com>
-Date: Sun, 12 Jan 2020 15:14:46 -0500
-Subject: [Buildroot] 32-bit host tools for ti-cgt-pru package
-In-Reply-To: <20200112211016.59ffbef2@windsurf>
-References: <CAK8F28m1MVtDtB+9DhhhQTgODneKB1WGW9Gy_FtPL2O7ikQb_w@mail.gmail.com>
- <20200112211016.59ffbef2@windsurf>
-Message-ID: <CAK8F28=Rn0eWNgCwtYVj8QmysfRJdV-TO8F9c01eaCHvBy1_ng@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Jan 2020 21:21:02 +0100
+Subject: [Buildroot] [git commit] package/alure: add minimp3 decoder option
+Message-ID: <20200112201134.BD55A8B580@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 12, 2020 at 3:10 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-<snip>
-> We do have an option named BR2_HOSTARCH_NEEDS_IA32_LIBS which packages
-> that are pre-built for x86-32 can depend on. When this option is
-> selected, Buildroot will refuse to start the build if the system is
-> x86-64 and doesn't have the 32-bit compat libraries. We already use it
-> in a few packages, and some external toolchains.
-Perfect -- thanks for the hint.  I figured I was missing something :).
-I'll test out and hope to submit a patch adding this option.
+commit: https://git.buildroot.net/buildroot/commit/?id=af4ce1f07ee6a7773d3303b5f0a6a4d6f06a503e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---Ash
+Alure doesn't use/need an external minimp3 library.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/alure/Config.in | 5 +++++
+ package/alure/alure.mk  | 7 ++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/package/alure/Config.in b/package/alure/Config.in
+index be3f8ebfdd..e0064accba 100644
+--- a/package/alure/Config.in
++++ b/package/alure/Config.in
+@@ -23,6 +23,11 @@ config BR2_PACKAGE_ALURE_FLAC_DECODER
+ 	help
+ 	  Enables the built-in FLAC decoder.
+ 
++config BR2_PACKAGE_ALURE_MINIMP3_DECODER
++	bool "minimp3 decoder"
++	help
++	  Enables the built-in minimp3 decoder.
++
+ config BR2_PACKAGE_ALURE_OPUS_DECODER
+ 	bool "opus decoder"
+ 	select BR2_PACKAGE_LIBOGG
+diff --git a/package/alure/alure.mk b/package/alure/alure.mk
+index 3e88e09664..f0eca8a2ee 100644
+--- a/package/alure/alure.mk
++++ b/package/alure/alure.mk
+@@ -16,7 +16,6 @@ ALURE_DEPENDENCIES = openal
+ # Enable at least one built-in decoder (wave).
+ ALURE_CONF_OPTS = -DALURE_INSTALL=ON \
+ 	-DALURE_BUILD_EXAMPLES=OFF \
+-	-DALURE_ENABLE_MINIMP3=OFF \
+ 	-DALURE_ENABLE_WAVE=ON
+ 
+ ifeq ($(BR2_PACKAGE_ALURE_FLAC_DECODER),y)
+@@ -25,6 +24,12 @@ else
+ ALURE_CONF_OPTS += -DALURE_ENABLE_FLAC=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ALURE_MINIMP3_DECODER),y)
++ALURE_CONF_OPTS += -DALURE_ENABLE_MINIMP3=ON
++else
++ALURE_CONF_OPTS += -DALURE_ENABLE_MINIMP3=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_ALURE_OPUS_DECODER),y)
+ ALURE_CONF_OPTS += -DALURE_ENABLE_OPUS=ON
+ ALURE_DEPENDENCIES += libogg opus
