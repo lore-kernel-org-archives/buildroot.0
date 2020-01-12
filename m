@@ -1,121 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jan 2020 22:11:27 +0100
-Subject: [Buildroot] [git commit] package/proj: bump to version 6.3.0
-Message-ID: <20200112210245.A64F77F956@busybox.osuosl.org>
+Date: Sun, 12 Jan 2020 22:13:10 +0100
+Subject: [Buildroot] [git commit] package/qhull: bump to version 7.3.2
+Message-ID: <20200112210645.ED2F28BE9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35fd6c7bdac9247fc0090732b386d5cdf3e8bb4c
+commit: https://git.buildroot.net/buildroot/commit/?id=e63c09c0f30f736f9ec0a81ddb3b94e5a7610b2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove patches (already in version)
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../proj/0001-proj.pc.in-add-Libs.Private.patch    | 27 ------------------
- ...oj.pc.in-add-SQLITE3_LIBS-to-Libs.Private.patch | 32 ----------------------
- package/proj/proj.hash                             |  6 ++--
- package/proj/proj.mk                               |  2 +-
- 4 files changed, 4 insertions(+), 63 deletions(-)
+ package/qhull/qhull.hash | 7 ++++---
+ package/qhull/qhull.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/proj/0001-proj.pc.in-add-Libs.Private.patch b/package/proj/0001-proj.pc.in-add-Libs.Private.patch
-deleted file mode 100644
-index 5032ede647..0000000000
---- a/package/proj/0001-proj.pc.in-add-Libs.Private.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From bdee73f3e0d8b4b6f2b6e0edb945dbd9abfd3255 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 9 Oct 2019 15:24:08 +0200
--Subject: [PATCH] proj.pc.in: add Libs.Private
--
--Add -lstdc++ to Libs.Private to allow packages such as libgeotiff to
--retrieve this dependency when linking statically with proj
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/OSGeo/PROJ/pull/1664]
-----
-- proj.pc.in | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/proj.pc.in b/proj.pc.in
--index a6a5d75f..001f08a1 100644
----- a/proj.pc.in
--+++ b/proj.pc.in
--@@ -9,4 +9,5 @@ Description: Cartographic Projections Library.
-- Requires:
-- Version: @VERSION@
-- Libs: -L${libdir} -lproj
--+Libs.Private: -lstdc++
-- Cflags: -I${includedir}
---- 
--2.23.0
--
-diff --git a/package/proj/0002-proj.pc.in-add-SQLITE3_LIBS-to-Libs.Private.patch b/package/proj/0002-proj.pc.in-add-SQLITE3_LIBS-to-Libs.Private.patch
-deleted file mode 100644
-index 112559143e..0000000000
---- a/package/proj/0002-proj.pc.in-add-SQLITE3_LIBS-to-Libs.Private.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 0181fd5fa0d75c5a6339dee9a8eaea95ff4bf0b0 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 20 Oct 2019 11:05:42 +0200
--Subject: [PATCH] proj.pc.in: add SQLITE3_LIBS to Libs.Private
--
--Add @SQLITE3_LIBS@ to Libs.Private so applications linking statically
--with proj (such as libgeotiff) will know that they have to link with
---lsqlite3
--
--Fixes:
-- - http://autobuild.buildroot.org/results/737db533c16f285a02118ab048e8427d3e35803d
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/OSGeo/PROJ/pull/1686]
-----
-- proj.pc.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/proj.pc.in b/proj.pc.in
--index 001f08a1..67a432f1 100644
----- a/proj.pc.in
--+++ b/proj.pc.in
--@@ -9,5 +9,5 @@ Description: Cartographic Projections Library.
-- Requires:
-- Version: @VERSION@
-- Libs: -L${libdir} -lproj
---Libs.Private: -lstdc++
--+Libs.Private: @SQLITE3_LIBS@ -lstdc++
-- Cflags: -I${includedir}
---- 
--2.23.0
--
-diff --git a/package/proj/proj.hash b/package/proj/proj.hash
-index d06de110a4..ade9502b67 100644
---- a/package/proj/proj.hash
-+++ b/package/proj/proj.hash
-@@ -1,5 +1,5 @@
--# Fetched from http://download.osgeo.org/proj/proj-6.2.0.tar.gz.md5
--md5 5cde556545828beaffbe50b1bb038480 proj-6.2.0.tar.gz
-+# Fetched from http://download.osgeo.org/proj/proj-6.3.0.tar.gz.md5
-+md5 09243feb4f243a2bdd455035a2007384 proj-6.3.0.tar.gz
- # Locally calculated
--sha256 7f2e0fe63312f1e766057cceb53dc9585c4a335ff6641de45696dbd40d17c340 proj-6.2.1.tar.gz
-+sha256 68ce9ba0005d442c2c1d238a3b9bc6654c358159b4af467b91e8d5b407c79c77 proj-6.3.0.tar.gz
- sha256 2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6 COPYING
-diff --git a/package/proj/proj.mk b/package/proj/proj.mk
-index 3a8ac6c787..2be0004023 100644
---- a/package/proj/proj.mk
-+++ b/package/proj/proj.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/qhull/qhull.hash b/package/qhull/qhull.hash
+index 4f059f2b5b..b97c25a3f7 100644
+--- a/package/qhull/qhull.hash
++++ b/package/qhull/qhull.hash
+@@ -1,4 +1,5 @@
+-# From http://www.qhull.org/download/qhull-2015.2.md5sum
+-md5	e6270733a826a6a7c32b796e005ec3dc	qhull-2015-src-7.2.0.tgz
++# From http://www.qhull.org/download/qhull-2019.1.md5sum
++md5	53c04f9c89b491b17b10c7ea1eaa4cc8	qhull-2019-src-7.3.2.tgz
+ # Locally computed
+-sha256	78b010925c3b577adc3d58278787d7df08f7c8fb02c3490e375eab91bb58a436	qhull-2015-src-7.2.0.tgz
++sha256	2b7990558c363076261564f61b74db4d0d73b71869755108a469038c07dc43fb	qhull-2019-src-7.3.2.tgz
++sha256	34db0c0c4f931861d720555c9cd7a2e228d1290ba29af0f2ee80c41bb2038afb	COPYING.txt
+diff --git a/package/qhull/qhull.mk b/package/qhull/qhull.mk
+index 8ea38f01ad..fcf517634b 100644
+--- a/package/qhull/qhull.mk
++++ b/package/qhull/qhull.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PROJ_VERSION = 6.2.1
-+PROJ_VERSION = 6.3.0
- PROJ_SITE = http://download.osgeo.org/proj
- PROJ_LICENSE = MIT
- PROJ_LICENSE_FILES = COPYING
+-QHULL_VERSION = 7.2.0
++QHULL_VERSION = 7.3.2
+ QHULL_SITE = http://www.qhull.org/download
+-QHULL_SOURCE = qhull-2015-src-$(QHULL_VERSION).tgz
++QHULL_SOURCE = qhull-2019-src-$(QHULL_VERSION).tgz
+ QHULL_INSTALL_STAGING = YES
+ QHULL_LICENSE = BSD-Style
+ QHULL_LICENSE_FILES = COPYING.txt
