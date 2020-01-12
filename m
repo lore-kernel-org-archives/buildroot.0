@@ -1,66 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jan 2020 16:27:27 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] Update for 2019.02.8
-Message-ID: <20200112151748.A1D8A7FE3E@busybox.osuosl.org>
+From: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Date: Sun, 12 Jan 2020 17:55:32 +0100
+Subject: [Buildroot] [PATCH] package/uacme: bump version to 1.0.21
+Message-ID: <20200112165532.qcw32hxmphbqbknd@einstein.dilieto.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24f25c8d23bd85d57b6e9c776f2c7716f2ddd4af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
 ---
- CHANGES  | 23 +++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 25 insertions(+), 2 deletions(-)
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index f952453790..a4d732bd2a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,26 @@
-+2019.02.9, released January 12th, 2020
-+
-+	Important / security related fixes.
-+
-+	pkg-python infrastructure: Ensure correct compiler and linker
-+	flags are used for compiled code
-+
-+	utils/scanpypi: Remind users to update DEVELOPERS
-+
-+	Updated/fixed packages: busybox, cc-tool, cpio, cups, dante,
-+	dillo, docker-cli, docker-containerd, docker-engine, easy-rsa,
-+	ecryptfs-utils, efl, git, glibc, gnupg2, gst1-plugins-bad,
-+	kf5-kcoreaddons, libarchive, libgit2, libkrb5, librsvg,
-+	libssh, libtomcrypt, libuio, lirc-tools, lvm2,
-+	matchbox-desktop, nodejs, ntp, opencv3, openpowerlink,
-+	python-django, python-ecdsa, python-pyasn-modules,
-+	python-pyqt5, python-subprocess32, python3, qpdf, runc, rygel,
-+	samba4, sdl2, wavpack, xserver_xorg-server, zip
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12121: PyQt5.QtSerialPort and other modules not being built
-+
- 2019.02.8, released December 7th, 2019
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index 3fac0da5d1..b8d631d50b 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	c9106e166156685fcf9f164f0b2935cf680251a653f460b04da26a290e946bf9        uacme-1.0.20.tar.gz
++sha256	c80bbee3c2ac3a64f70abe23be3b7768039785863170ac062625407a0b61e635        uacme-1.0.21.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 0a662a2646..5813399c56 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index dfa62870c7..93d30ff145 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2019.02.8
-+export BR2_VERSION := 2019.02.9
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1575746000
-+BR2_VERSION_EPOCH = 1578842000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+-UACME_VERSION = 1.0.20
++UACME_VERSION = 1.0.21
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
+-- 
+2.11.0
