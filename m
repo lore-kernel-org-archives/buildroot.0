@@ -1,40 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jan 2020 11:33:48 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/opencv3:
- objdetect needs calib3d
-Message-ID: <20200112104514.4821988933@busybox.osuosl.org>
+Date: Sun, 12 Jan 2020 11:36:28 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/opencv3: fix
+ build due to gcc bug 68485
+Message-ID: <20200112104514.5028B8B4D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a448bc9509b1363cbc02877ad7fabee095bd0969
+commit: https://git.buildroot.net/buildroot/commit/?id=412d835bc729d958316c1d11e22f53dfc378de92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-objdetect needs calib3d since version 3.4.4 and
-https://github.com/opencv/opencv/commit/53ec8f286b7d475fa5a799023595bd4dc73e5c81
+With Microblaze Gcc version <= 9.x the build fails due to gcc bug 68485:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. The bug show up when
+building opencv3 with optimization but not when building with -O0. To
+work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_68458=y, we force using
+-O0.
 
 Fixes:
- - http://autobuild.buildroot.org/results/37d0a5ba57de4c52b6e0ec99aedaca71f3397fbb
+ - http://autobuild.buildroot.org/results/c78eac84d1c5a6702e7759cd5364da1c3e399b4b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 7c165e442f1803570fecc2b2cff82d44e3eee783)
+Reviewed-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 87040137a38012e9ae680098fc5facda0ea0fcf3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv3/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/opencv3/opencv3.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index c308cd4d87..cf7763d4ae 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -140,6 +140,7 @@ config BR2_PACKAGE_OPENCV3_LIB_ML
- config BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
- 	bool "objdetect"
- 	# opencv_core dependency is already enabled
-+	select BR2_PACKAGE_OPENCV3_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV3_LIB_ML
- 	help
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 5bc6376ca3..8fb97b5135 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -23,6 +23,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
+ OPENCV3_CXXFLAGS += -DCV__EXCEPTION_PTR=0
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++OPENCV3_CXXFLAGS += -O0
++endif
++
+ # OpenCV component options
+ OPENCV3_CONF_OPTS += \
+ 	-DCMAKE_CXX_FLAGS="$(OPENCV3_CXXFLAGS)" \
