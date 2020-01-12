@@ -1,28 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jan 2020 22:25:13 +0100
-Subject: [Buildroot] [PATCH] package/uacme: bump version to 1.0.21
-In-Reply-To: <20200112165532.qcw32hxmphbqbknd@einstein.dilieto.eu>
-References: <20200112165532.qcw32hxmphbqbknd@einstein.dilieto.eu>
-Message-ID: <20200112222513.455bd330@windsurf>
+Date: Sun, 12 Jan 2020 22:25:20 +0100
+Subject: [Buildroot] [git commit] package/tor: add systemd optional
+ dependency
+Message-ID: <20200112211519.215AE8C589@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 12 Jan 2020 17:55:32 +0100
-Nicola Di Lieto <nicola.dilieto@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8bb3bb44921fe50e46e9dcff00ebfb7262e421c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
-> ---
->  package/uacme/uacme.hash | 2 +-
->  package/uacme/uacme.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/fa5f8506866451f40eb5f548c1099ae931b26fcc
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tor/tor.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 2ecb41f072..0b41897b85 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -30,6 +30,13 @@ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ TOR_DEPENDENCIES += libcap
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++TOR_CONF_OPTS += --enable-systemd
++TOR_DEPENDENCIES += host-pkgconf systemd
++else
++TOR_CONF_OPTS += --disable-systemd
++endif
++
+ ifeq ($(BR2_PACKAGE_XZ),y)
+ TOR_CONF_OPTS += --enable-lzma
+ TOR_DEPENDENCIES += host-pkgconf xz
