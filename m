@@ -1,69 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 13 Jan 2020 23:38:26 +0100
-Subject: [Buildroot] [PATCH v1] package/zxing-cpp: bump version to
- 0db7f85
-In-Reply-To: <20200109143231.30713-1-ps.report@gmx.net>
-References: <20200109143231.30713-1-ps.report@gmx.net>
-Message-ID: <82156321-a41b-bd20-1f11-7341d26559aa@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 13 Jan 2020 23:59:32 +0100
+Subject: [Buildroot] [PATCH] toolchain/toolchain-external: warn for untested
+ GCC/kernel version
+Message-ID: <20200113225932.28031-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The oldest toolchain we test in the autobuilders is the Sourcery ARM
+toolchain which is GCC 4.8 and kernel headers 3.13. Therefore, it is
+likely that we're missing the required _AT_LEAST dependencies to exclude
+packages that don't build with older GCC/headers.
 
+Add a comment to the custom external toolchain that warns when an
+untested GCC or kernel headers version is selected.
 
-On 09/01/2020 15:32, Peter Seiderer wrote:
-> - bump version to 0db7f85
-> - add hash for license file
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
-> 
->  - upstream contains an altnenative fix for the c++11/testrunner
->    problem (enforcing -std=c++11 for the whole compile, see [1])
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+This patch was triggered by [1], where I observed that zxing-cpp is
+probably missing a GCC_AT_LEAST_4_8 dependency, but we don't detect this
+in the autobuilders for lack of an older toolchain.
 
- Hum, so that means there is now a hard dependency on GCC 4.8+.
+Note that this also means we should probably remove all older
+GCC_AT_LEAST options from packages.
 
- Note that this doesn't lead to autobuilder failures because the oldest
-toolchain we check for in the autobuilders is the Sourcery ARM toolchain which
-is 4.8.
+Alternatively, we could in the custom external toolchain remove all the
+old options (and also remove them from packages), and replace it with
+e.g. "4.8 or earlier".
 
- Maybe we should do something about that...
+But for the time being, this patch is simpler :-)
 
- Regards,
- Arnout
+[1] http://lists.busybox.net/pipermail/buildroot/2020-January/271558.html
+---
+ .../toolchain-external-custom/Config.in.options             | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> 
-> [1] https://github.com/glassechidna/zxing-cpp/commit/14d0a7196993868e5fb5ef18afd03a2bf2ca8014
-> ---
->  package/zxing-cpp/zxing-cpp.hash | 5 ++++-
->  package/zxing-cpp/zxing-cpp.mk   | 2 +-
->  2 files changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/zxing-cpp/zxing-cpp.hash b/package/zxing-cpp/zxing-cpp.hash
-> index 4625fbf61c..f12349bbd9 100644
-> --- a/package/zxing-cpp/zxing-cpp.hash
-> +++ b/package/zxing-cpp/zxing-cpp.hash
-> @@ -1,2 +1,5 @@
->  # Locally calculated
-> -sha256 643c931a35c363109cd38c5a1526505b75f57c0634907cb7b6bc24f6f48eb32b zxing-cpp-0db7f855135222becff193671faae79c083424b6.tar.gz
-> +sha256 4c2b8601d0e3377143c1a0bbab220146af9fa5a5e29e8fbef42862fe3d38f8e6 zxing-cpp-e0e40ddec63f38405aca5c8c1ff60b85ec8b1f10.tar.gz
-> +
-> +# License files
-> +sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4 COPYING
-> diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
-> index 7113ae2b06..2cead4e65b 100644
-> --- a/package/zxing-cpp/zxing-cpp.mk
-> +++ b/package/zxing-cpp/zxing-cpp.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -ZXING_CPP_VERSION = 0db7f855135222becff193671faae79c083424b6
-> +ZXING_CPP_VERSION = e0e40ddec63f38405aca5c8c1ff60b85ec8b1f10
->  ZXING_CPP_SITE = $(call github,glassechidna,zxing-cpp,$(ZXING_CPP_VERSION))
->  ZXING_CPP_LICENSE = Apache-2.0
->  ZXING_CPP_LICENSE_FILES = COPYING
-> 
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 665765a104..9680509a13 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -92,6 +92,9 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
+ 
+ endchoice
+ 
++comment "GCC older than 4.8 is not tested by Buildroot. Use at your own risk."
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
+ choice
+ 	bool "External toolchain kernel headers series"
+ 	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+@@ -298,6 +301,9 @@ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+ 
+ endchoice
+ 
++comment "Kernel headers older than 3.13 is not tested by Buildroot. Use at your own risk."
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
++
+ choice
+ 	prompt "External toolchain C library"
+ 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+-- 
+2.21.1
