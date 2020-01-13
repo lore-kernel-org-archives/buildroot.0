@@ -1,47 +1,44 @@
 From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 13 Jan 2020 15:02:00 +0100
-Subject: [Buildroot] [PATCH] package/ipset: bump to version 7.5
-Message-ID: <1578924120-6614-1-git-send-email-pjtexier@koncepto.io>
+Date: Mon, 13 Jan 2020 15:23:58 +0100
+Subject: [Buildroot] [PATCH] package/ethtool: bump to version 5.4
+Message-ID: <1578925438-4442-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See full changelog http://ipset.netfilter.org/changelog.html
+See full changelog https://www.spinics.net/lists/netdev/msg624080.html
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/ipset/ipset.hash | 6 +++---
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index 25c0e69..9c95ca4 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,6 +1,6 @@
--# From http://ipset.netfilter.org/ipset-7.4.tar.bz2.md5sum.txt
--md5 f9dda6f2fc3bb941e0ca3a6c292baf2c  ipset-7.4.tar.bz2
-+# From http://ipset.netfilter.org/ipset-7.5.tar.bz2.md5sum.txt
-+md5 1f3156c68f6fa6de03d8f3ca0539fb78  ipset-7.5.tar.bz2
- # Calculated based on the hash above
--sha256 4a974176e57fe4b7e2984abb231c4a18af2291bdc41536ef64e4b8ec4d4a1884  ipset-7.4.tar.bz2
-+sha256 a57aee54ab6ffe9e04603a464bbf69d66db976500bb04dd04fd3fbd6efb36a0b  ipset-7.5.tar.bz2
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index f8ac6c6..86c71d7 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256	f3dac0dbce7066af05fbe92812cc33a042d03fb00a45bcf9959f20455efe24c4	ethtool-5.3.tar.xz
++sha256	22f81e4927d6eb6a13a259d705248a96005fce2005e15257f639f5a1c8c52b6b	ethtool-5.4.tar.xz
  # Locally calculated
- sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index ab3fb85..383e90a 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+ sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1	LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index c5f15fc..ce4f2d8 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPSET_VERSION = 7.4
-+IPSET_VERSION = 7.5
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+-ETHTOOL_VERSION = 5.3
++ETHTOOL_VERSION = 5.4
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
 -- 
 2.7.4
