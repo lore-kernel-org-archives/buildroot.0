@@ -1,39 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jan 2020 11:46:18 +0100
-Subject: [Buildroot] What do we want to do with Python2?
-In-Reply-To: <f0badb1d-2bf7-fb3b-6564-65f1f8c6a4b0@railnova.eu>
-References: <CALFsTFUYfPhOaJTei-sGrbNNY1WBP1TG55UyZywPys_3R3E=Kw@mail.gmail.com>
- <20200112210849.0e300c45@windsurf>
- <f0badb1d-2bf7-fb3b-6564-65f1f8c6a4b0@railnova.eu>
-Message-ID: <20200113114618.6f2480e3@windsurf>
+Date: Mon, 13 Jan 2020 12:27:40 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: drop Sven Neumann
+Message-ID: <20200113111747.21FEE8168E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jan 2020 11:03:26 +0100
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b97b9a59897e6d9ae2fc6ddbb86a3e00c33dc9f3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> I did not had so much time to continue on the Py2 deprecation track 
-> since the ELCE developer meeting, but I intend to continue at the next 
-> one (FOSDEM).
-> 
-> In my opinion, we should strive for a Python3 only Buildroot for the 
-> 2021.02 release, and use the year 2020 to either remove Py2-only 
-> packages, or wait for an upstream update. I would like to prioritize the 
-> packages that use Python at compile time, because that would allow us to 
-> get rid of host-python2 first (maybe even for the 2020.05 ?).
+His e-mail address has been bouncing for quite some time:
 
-Unfortunately, you can't get rid of host-python2 if you still have
-python2 available as a target package, because building the target
-Python interpreter requires having the matching host Python interpreter
-available.
+From: thomas.petazzoni@bootlin.com To: neumann at teufel.de
+212.91.255.190[212.91.255.190] reply 550 5.1.10 RESOLVER.ADR.RecipientNotFound
 
-Best regards,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 7 -------
+ 1 file changed, 7 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2823f9c041..510fea78de 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2337,13 +2337,6 @@ N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+ F:	package/lcdproc/
+ F:	package/python-influxdb/
+ 
+-N:	Sven Neumann <neumann@teufel.de>
+-F:	package/glib-networking/
+-F:	package/gstreamer1/gst1-libav/
+-F:	package/libmms/
+-F:	package/orc/
+-F:	package/wampcc/
+-
+ N:	Sven Oliver Moll <svolli@svolli.de>
+ F:	package/most/
+ 
