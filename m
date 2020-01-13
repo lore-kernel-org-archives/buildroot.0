@@ -1,32 +1,37 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 13 Jan 2020 16:35:15 +0100
-Subject: [Buildroot] [PATCH 3/3] package/openssh: create system users
-In-Reply-To: <20200113153516.486106-1-nolange79@gmail.com>
-References: <20200113153516.486106-1-nolange79@gmail.com>
-Message-ID: <20200113153516.486106-3-nolange79@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jan 2020 16:45:41 +0100
+Subject: [Buildroot] [PATCH 1/2] libmodescurity: new package
+In-Reply-To: <a94f6405-b567-cc14-a114-812bbdf0b977@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 13 Jan 2020 16:33:07 +0100")
+References: <20200110140017.15045-1-frank.vanbever@essensium.com>
+ <87d0brmj8i.fsf@dell.be.48ers.dk>
+ <a94f6405-b567-cc14-a114-812bbdf0b977@mind.be>
+Message-ID: <87tv4zbbru.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- package/openssh/openssh.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 0411133bdc..6e29c3af7d 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -67,7 +67,7 @@ define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
- endef
- else
- define OPENSSH_USERS
--	sshd -1 sshd -1 * /var/empty - - SSH drop priv user
-+	sshd -2 sshd -2 * /var/empty - - SSH drop priv user
- endef
- endif
- 
+Hi,
+
+ >> > +-    exit
+ >> > ++    exit 1
+ >> 
+ >> What is the use of this patch in Buildroot? I mean, it looks correct but
+ >> we should ensure the configure script can correctly detect
+ >> CANONICAL_HOST (whatever that is), so this should never trigger?
+
+ >  Without this patch, if there is some platform for which CANONICAL_HOST does not
+ > get set correctly, you get a very cryptic error instead of a failure of the
+ > configure step. So hopefully this patch isn't needed, but if it is actually
+ > needed because CANONICAL_HOST is still not correct, it helps us a lot.
+
+ >  In other words, I would keep it in Buildroot.
+
+Fine by me, and it hopefully will soon be applied upstream.
+
 -- 
-2.24.1
+Bye, Peter Korsgaard
