@@ -1,50 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 13 Jan 2020 19:08:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/olsr: use make foreach loops
-Message-ID: <20200113180856.787063-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 13 Jan 2020 18:08:08 +0000
+Subject: [Buildroot] [Bug 12331] meson issue
+In-Reply-To: <bug-12331-163@https.bugs.busybox.net/>
+References: <bug-12331-163@https.bugs.busybox.net/>
+Message-ID: <bug-12331-163-uip8TbOW6B@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replace shell for loops by make foreach loops
+https://bugs.busybox.net/show_bug.cgi?id=12331
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/olsr/olsr.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index e643a0cfb3..3533e2a1fd 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -18,19 +18,19 @@ OLSR_DEPENDENCIES = host-flex host-bison
- 
- define OLSR_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D) olsrd
--	for p in $(OLSR_PLUGINS) ; do \
--		$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D)/lib/$$p ; \
--	done
-+	$(foreach p,$(OLSR_PLUGINS),
-+		$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D)/lib/$(p)
-+	)
- endef
- 
- define OLSR_INSTALL_TARGET_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
- 		prefix="/usr" install_bin
--	for p in $(OLSR_PLUGINS) ; do \
--		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib/$$p \
-+	$(foreach p,$(OLSR_PLUGINS),
-+		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib/$(p) \
- 			LDCONFIG=/bin/true DESTDIR=$(TARGET_DIR) \
--			prefix="/usr" install ; \
--	done
-+			prefix="/usr" install
-+	)
- 	$(INSTALL) -D -m 0644 $(@D)/files/olsrd.conf.default.lq \
- 		$(TARGET_DIR)/etc/olsrd/olsrd.conf
- endef
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+
+--- Comment #5 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+I've sent a tentative patch to the list:
+https://patchwork.ozlabs.org/patch/1222257/
+
+It's not unlike Thomas' proposal, but with my little touch... ;-)
+
 -- 
-2.24.1
+You are receiving this mail because:
+You are on the CC list for the bug.
