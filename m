@@ -1,64 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jan 2020 21:17:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/olsr: use make foreach loops
-In-Reply-To: <20200113180856.787063-1-fontaine.fabrice@gmail.com>
-References: <20200113180856.787063-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200113211754.02aff2c1@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jan 2020 21:18:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/parted: bump to version 3.3
+In-Reply-To: <20200113193044.825053-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 13 Jan 2020 20:30:44 +0100")
+References: <20200113193044.825053-1-fontaine.fabrice@gmail.com>
+Message-ID: <874kwzaz5a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jan 2020 19:08:56 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> Replace shell for loops by make foreach loops
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/olsr/olsr.mk | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-> index e643a0cfb3..3533e2a1fd 100644
-> --- a/package/olsr/olsr.mk
-> +++ b/package/olsr/olsr.mk
-> @@ -18,19 +18,19 @@ OLSR_DEPENDENCIES = host-flex host-bison
->  
->  define OLSR_BUILD_CMDS
->  	$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D) olsrd
-> -	for p in $(OLSR_PLUGINS) ; do \
-> -		$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D)/lib/$$p ; \
-> -	done
-> +	$(foreach p,$(OLSR_PLUGINS),
+ > - Remove all patches (already in version) as well as autoreconf
+ > - Remove --disable-dynamic-loading (dropped since
+ >   http://git.savannah.gnu.org/cgit/parted.git/commit/?id=b49388018931cab220b9dd50f3a2bd51401e48af)
+ > - Add a dependency on locale as locale_t is unconditionnaly used since
+ >   http://git.savannah.gnu.org/cgit/parted.git/commit/?id=9c266205416ec956d6205c828211480de3767d02
 
-Did you test this? To me, it seems like a backslash is missing at the end of this line.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-> +		$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D)/lib/$(p)
-> +	)
->  endef
->  
->  define OLSR_INSTALL_TARGET_CMDS
->  	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
->  		prefix="/usr" install_bin
-> -	for p in $(OLSR_PLUGINS) ; do \
-> -		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib/$$p \
-> +	$(foreach p,$(OLSR_PLUGINS),
+Committed, thanks.
 
-Same here.
-
-> +		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib/$(p) \
->  			LDCONFIG=/bin/true DESTDIR=$(TARGET_DIR) \
-> -			prefix="/usr" install ; \
-> -	done
-> +			prefix="/usr" install
-> +	)
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
