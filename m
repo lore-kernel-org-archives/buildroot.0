@@ -1,46 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 13 Jan 2020 12:50:11 +0000
-Subject: [Buildroot] [Bug 12461] New: libglib2 build files with deep
- directory structure
-Message-ID: <bug-12461-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 Jan 2020 13:53:50 +0100
+Subject: [Buildroot] [PATCH] package/tpm2-totp: bump version to 0.2.1
+In-Reply-To: <20200113074352.20992-1-peter@korsgaard.com>
+References: <20200113074352.20992-1-peter@korsgaard.com>
+Message-ID: <20200113135350.303d13e4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12461
+On Mon, 13 Jan 2020 08:43:51 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-            Bug ID: 12461
-           Summary: libglib2 build files with deep directory structure
-           Product: buildroot
-           Version: 2019.11.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: m.weisser.m at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+> And drop patch now upstream.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  ...-src-libtpm2-totp.c-include-endian.h.patch | 34 -------------------
+>  package/tpm2-totp/tpm2-totp.hash              |  2 +-
+>  package/tpm2-totp/tpm2-totp.mk                |  2 +-
+>  3 files changed, 2 insertions(+), 36 deletions(-)
+>  delete mode 100644 package/tpm2-totp/0001-src-libtpm2-totp.c-include-endian.h.patch
 
-When building my current config it fails (to be more precise it hangs) when
-trying to build libglib2
+Applied to master, thanks.
 
-The last message is 
-
-/xxxx/yyyyy/xxxxxxxx/yyyyyyyy/zz/xxx/yyyyyyy/zzzz/xxxx/yyyyyy/zzzzzzzzzzzzzzzzz/xxxxxx/yyyyy/zzzzz/xxxxxx/yyy/output/host/bin/meson:
-line 3: __requires__: command not found
-
-This is caused by the shebang in output/host/bin/meson
-
-#!/xxxx/yyyyy/xxxxxxxx/yyyyyyyy/zz/xxx/yyyyyyy/zzzz/xxxx/yyyyyy/zzzzzzzzzzzzzzzzz/xxxxxx/yyyyy/zzzzz/xxxxxx/yyy/output/host/bin/python3
-
-which has a length of 135 characters which is to long for the kernel. Any other
-workaround besides reducing the directory nesting?
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
