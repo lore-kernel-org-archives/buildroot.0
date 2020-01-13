@@ -1,36 +1,29 @@
-From: Ash Charles <ashcharles@gmail.com>
-Date: Sun, 12 Jan 2020 20:41:41 -0500
-Subject: [Buildroot] [PATCH] ti-cgt-pru: specify need for 32-bit host
- libraries
-Message-ID: <20200113014141.579479-1-ashcharles@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 13 Jan 2020 03:00:30 +0000
+Subject: [Buildroot] [Bug 12456] qtvirtualkeyboard: No such file or directory
+In-Reply-To: <bug-12456-163@https.bugs.busybox.net/>
+References: <bug-12456-163@https.bugs.busybox.net/>
+Message-ID: <bug-12456-163-uw96xsibuR@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The downloaded source for the ti-cgt-pru package is an installer that
-requires 32-bit host libraries for extraction. Specify this dependency
-in the package configuration [1].
+https://bugs.busybox.net/show_bug.cgi?id=12456
 
-[1] http://lists.busybox.net/pipermail/buildroot/2020-January/271416.html
+Sam Petrocelli <sam.petrocelli@gmail.com> changed:
 
-Signed-off-by: Ash Charles <ashcharles@gmail.com>
----
- package/ti-cgt-pru/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #8331|0                           |1
+        is obsolete|                            |
 
-diff --git a/package/ti-cgt-pru/Config.in.host b/package/ti-cgt-pru/Config.in.host
-index a36633705d..eab3cd72d5 100644
---- a/package/ti-cgt-pru/Config.in.host
-+++ b/package/ti-cgt-pru/Config.in.host
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_HOST_TI_CGT_PRU_ARCH_SUPPORTS
- config BR2_PACKAGE_HOST_TI_CGT_PRU
- 	bool "host ti-cgt-pru"
- 	depends on BR2_PACKAGE_HOST_TI_CGT_PRU_ARCH_SUPPORTS
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  This package provides the Code Generation Tools for the PRU
- 	  unit found on some TI processors e.g. AM3358.
+--- Comment #2 from Sam Petrocelli <sam.petrocelli@gmail.com> ---
+Created attachment 8336
+  --> https://bugs.busybox.net/attachment.cgi?id=8336&action=edit
+the .config file used to produce the error
+
 -- 
-2.24.1
+You are receiving this mail because:
+You are on the CC list for the bug.
