@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Jan 2020 00:05:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: disable TEAP
- for internal TLS implementation
-In-Reply-To: <20200108190439.459316-1-geomatsi@gmail.com>
-References: <20200108190439.459316-1-geomatsi@gmail.com>
-Message-ID: <17bdeec1-8e1f-9049-f285-853cb34fcfdc@mind.be>
+Date: Tue, 14 Jan 2020 00:37:40 +0100
+Subject: [Buildroot] [RFC PATCH] autotools: do not overwrite first
+ include path
+In-Reply-To: <20191212085748.13802-1-michael@walle.cc>
+References: <20191212085748.13802-1-michael@walle.cc>
+Message-ID: <53fbaa47-6e61-6be6-2aef-3daee6a698dc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,47 +13,80 @@ To: buildroot@busybox.net
 
 
 
-On 08/01/2020 20:04, Sergey Matyukevich wrote:
-> EAP-TEAP support in hostapd/wpa_supplicant fails to build with internal
-> TLS implementation. This patch disables TEAP support in wpa_supplicant
-> when internal TLS implementation is selected. Similar fix for hostapd
-> package has already been merged to Buildroot: see commit 47d14e3b1c20
-> ("package/hostapd: disable TEAP for internal TLS implementation").
+On 12/12/2019 09:57, Michael Walle wrote:
+> The first include path is special in aclocal. For example it is the path
+> for the --install option. Also, the first include is treated in a
+> special way if it doesn't exists. This might be the case if there is the
+> following construct:
 > 
-> TEAP is still an experimental feature that is not recommmended for
-> production use. Currently it should not be used for anything else
-> than experimentation and interoperability testing. Those who needs
-> experimenting with TEAP are encouraged to enable openssl in their
-> buildroot configuration.
+>   configure.ac: AC_CONFIG_MACRO_DIR([m4])
+>   Makefile.am: ACLOCAL_AMFLAGS="-I m4"
+> 
+> If the package doesn't have local macros, the m4/ directory might not
+> exist. aclocal will then just issue a warning instead of aborting the
+> execution with a fatal error. See discussion here:
+>   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=565663
+> 
+> Don't use the "-I" option in aclocal. Instead use ACLOCAL_PATH to pass
+> the system-wide include dirs.
+> 
+> As a side effect this should fix the use of $(ACLOCAL) alone. Up until
+> now, $(ACLOCAL) didn't include the ACLOCAL_HOST_DIR system include path.
+> 
+> autoreconf will pass the "-I" options to every tool it runs. So move the
+> argument to each individual tool except aclocal.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+>  package/autoconf/autoconf.mk | 6 +++---
+>  package/automake/automake.mk | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+> index e5f474c72d..336ac59b42 100644
+> --- a/package/autoconf/autoconf.mk
+> +++ b/package/autoconf/autoconf.mk
+> @@ -21,6 +21,6 @@ HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
+>  $(eval $(host-autotools-package))
+>  
+>  # variables used by other packages
+> -AUTOCONF = $(HOST_DIR)/bin/autoconf
+> -AUTOHEADER = $(HOST_DIR)/bin/autoheader
+> -AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+> +AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+> +AUTOHEADER = $(HOST_DIR)/bin/autoheader -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+> +AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i
 
- So then why don't we just unconditionally disable this feature? Preferably with
-a comment in the .mk file that it's disabled due to its experimental nature, so
-that someone who needs it a couple of years down the line can note that it's not
-longer experimental.
+ This will expand to:
+
+... ACLOCAL="ACLOCAL_PATH="$(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)"
+$(HOST_DIR)/bin/aclocal" AUTOCONF=...
+
+(I've only done one level of expansion, but is shows my point.) So the quotation
+marks are screwed up a little.
+
+ It does work because the space is still quoted, and the quotes around the
+ACLOCAL_PATH value are actually redundant (because spaces in directories are not
+supported). But it looks a little weird.
+
+
+ That said, I wonder: why don't we simply export ACLOCAL_PATH? I think with
+that, we don't need the -I options in autoheader and autoconf any more, right?
+
 
  Regards,
  Arnout
 
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/e83613c06041a60f89da787f4ebf876245713cd2/
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> ---
->  package/wpa_supplicant/wpa_supplicant.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-> index 4f95ea6276..c87494c2bf 100644
-> --- a/package/wpa_supplicant/wpa_supplicant.mk
-> +++ b/package/wpa_supplicant/wpa_supplicant.mk
-> @@ -112,7 +112,7 @@ WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf libopenssl
->  WPA_SUPPLICANT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
->  WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
->  else
-> -WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD
-> +WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
->  WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
->  endif
->  
+
+> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+> index 270337712e..b34a8eb717 100644
+> --- a/package/automake/automake.mk
+> +++ b/package/automake/automake.mk
+> @@ -32,4 +32,4 @@ $(eval $(host-autotools-package))
+>  # variables used by other packages
+>  AUTOMAKE = $(HOST_DIR)/bin/automake
+>  ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+> -ACLOCAL = $(HOST_DIR)/bin/aclocal -I $(ACLOCAL_DIR)
+> +ACLOCAL = ACLOCAL_PATH="$(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)" $(HOST_DIR)/bin/aclocal
 > 
