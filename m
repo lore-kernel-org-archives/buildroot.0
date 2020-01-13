@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 13 Jan 2020 23:33:53 +0100
-Subject: [Buildroot] Potential issue with per package directory hard link
-In-Reply-To: <CA+Vmb_ebsMv-UQ8pJoOr0W-pwmU_rdwRJDRgE8hw2paVDE05-A@mail.gmail.com>
-References: <CA+Vmb_ebsMv-UQ8pJoOr0W-pwmU_rdwRJDRgE8hw2paVDE05-A@mail.gmail.com>
-Message-ID: <1535bff6-53c4-4695-d8b7-f183d556a970@mind.be>
+Date: Mon, 13 Jan 2020 23:38:26 +0100
+Subject: [Buildroot] [PATCH v1] package/zxing-cpp: bump version to
+ 0db7f85
+In-Reply-To: <20200109143231.30713-1-ps.report@gmx.net>
+References: <20200109143231.30713-1-ps.report@gmx.net>
+Message-ID: <82156321-a41b-bd20-1f11-7341d26559aa@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,60 +13,57 @@ To: buildroot@busybox.net
 
 
 
-On 09/01/2020 19:09, Paul Kasemir wrote:
-> Hi Thomas et. al,
+On 09/01/2020 15:32, Peter Seiderer wrote:
+> - bump version to 0db7f85
+> - add hash for license file
 > 
-> Regarding this line in the per package directory core changes:
-> https://github.com/buildroot/buildroot/commit/c4e6d5c8be6ada8e7c60950e3b499c55d48761cb#diff-4ba3c73225b6850a34a3077526e4105cR146
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Notes:
 > 
-> Using hard links is a good idea, but it also lets you shoot yourself in the
-> foot a little bit.
-> 
-> Take this example
-> PackageA builds and installs FileA to staging
-> PackageB builds and modifies FileA is such a way that FileA doesn't work
-> anymore
-> 
-> Since it is a hardlink, FileA is now broken for all packages depending on
-> PackageA and you would need to rebuild both PackageA to get a working copy
-> again, even though PackageB was the one that corrupted the file.
-> 
-> Not sure if you can come up with another way that would enforce a new file
-> created if the file is modified. Using sed -i 'expr' FileA is fine, but
-> using echo "something" >> FileA will modify all versions.
+>  - upstream contains an altnenative fix for the c++11/testrunner
+>    problem (enforcing -std=c++11 for the whole compile, see [1])
 
- An easy way to error out in such cases is to chmod -R a-w the install
-directories. Not ideal though because you probably want to restore permissions
-afterwards.
+ Hum, so that means there is now a hard dependency on GCC 4.8+.
 
- However, we've already concluded that modifying files is really a problem with
-per-package directories. If package A, B and C all modify the same file, and B
-and C both depend on A but not on each other, then the order between B and C is
-not defined. So when the final host, staging and target dirs are created by
-combining all per-package directories, we will get the result of either B's or
-C's edit, but not both combined.
+ Note that this doesn't lead to autobuilder failures because the oldest
+toolchain we check for in the autobuilders is the Sourcery ARM toolchain which
+is 4.8.
 
- Whether such edits are made with echo>>, sed -i or even rm makes no difference,
-the net result will always be wrong.
-
- The solution is to introduce the check-unique-files step again to make sure
-this doesn't happen, i.e. no two packages touch the same file.
+ Maybe we should do something about that...
 
  Regards,
  Arnout
 
-
-> I've thought of using unionfs, but that would probably add a lot more
-> complication than its worth and you would have tons of mounts you would
-> then need to manage. I've also tried inotify, but it didn't seem reliable
-> and is also a bit complicated to manage.
 > 
-> I just thought I would bring this to your attention in case you weren't
-> already aware of it.
+> [1] https://github.com/glassechidna/zxing-cpp/commit/14d0a7196993868e5fb5ef18afd03a2bf2ca8014
+> ---
+>  package/zxing-cpp/zxing-cpp.hash | 5 ++++-
+>  package/zxing-cpp/zxing-cpp.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 > 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/zxing-cpp/zxing-cpp.hash b/package/zxing-cpp/zxing-cpp.hash
+> index 4625fbf61c..f12349bbd9 100644
+> --- a/package/zxing-cpp/zxing-cpp.hash
+> +++ b/package/zxing-cpp/zxing-cpp.hash
+> @@ -1,2 +1,5 @@
+>  # Locally calculated
+> -sha256 643c931a35c363109cd38c5a1526505b75f57c0634907cb7b6bc24f6f48eb32b zxing-cpp-0db7f855135222becff193671faae79c083424b6.tar.gz
+> +sha256 4c2b8601d0e3377143c1a0bbab220146af9fa5a5e29e8fbef42862fe3d38f8e6 zxing-cpp-e0e40ddec63f38405aca5c8c1ff60b85ec8b1f10.tar.gz
+> +
+> +# License files
+> +sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4 COPYING
+> diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
+> index 7113ae2b06..2cead4e65b 100644
+> --- a/package/zxing-cpp/zxing-cpp.mk
+> +++ b/package/zxing-cpp/zxing-cpp.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -ZXING_CPP_VERSION = 0db7f855135222becff193671faae79c083424b6
+> +ZXING_CPP_VERSION = e0e40ddec63f38405aca5c8c1ff60b85ec8b1f10
+>  ZXING_CPP_SITE = $(call github,glassechidna,zxing-cpp,$(ZXING_CPP_VERSION))
+>  ZXING_CPP_LICENSE = Apache-2.0
+>  ZXING_CPP_LICENSE_FILES = COPYING
 > 
