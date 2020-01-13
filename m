@@ -1,42 +1,31 @@
-From: Alifer Moraes <alifer.wsdm@gmail.com>
-Date: Mon, 13 Jan 2020 14:34:18 -0300
-Subject: [Buildroot] [PATCH] configs/imx7d-sdb: bump U-Boot and kernel
- versions
-Message-ID: <20200113173418.25565-1-alifer.wsdm@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 13 Jan 2020 17:37:40 +0000
+Subject: [Buildroot] [Bug 12461] libglib2 build files with deep directory
+ structure
+In-Reply-To: <bug-12461-163@https.bugs.busybox.net/>
+References: <bug-12461-163@https.bugs.busybox.net/>
+Message-ID: <bug-12461-163-A5Vgx9YsDA@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-boot to 2020.01 and kernel to 5.4.8
+https://bugs.busybox.net/show_bug.cgi?id=12461
 
-Signed-off-by: Alifer Moraes <alifer.wsdm@gmail.com>
----
- configs/imx7d-sdb_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
-index e855384075..1a3494b4af 100644
---- a/configs/imx7d-sdb_defconfig
-+++ b/configs/imx7d-sdb_defconfig
-@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
-@@ -22,7 +22,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
- 
- # Filesystem
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+         Resolution|---                         |DUPLICATE
+             Status|NEW                         |RESOLVED
+
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+
+
+*** This bug has been marked as a duplicate of bug 12331 ***
+
 -- 
-2.17.1
+You are receiving this mail because:
+You are on the CC list for the bug.
