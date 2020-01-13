@@ -1,81 +1,90 @@
-From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Date: Mon, 13 Jan 2020 12:55:12 +0100
-Subject: [Buildroot] [PATCH] package/grantlee: bump to 5.2.0,
- use github upstream, remove obsolete patch
-Message-ID: <20200113115512.20589-1-zgyarmati@zgyarmati.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 13 Jan 2020 14:15:54 +0200
+Subject: [Buildroot] [PATCH] package/socat: bump to version 1.7.3.4
+Message-ID: <7fc2887a08f5c80d39361d2207495be5c5c96cae.1578917754.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
----
- .../0001-Remove-vestigial-ansi-flag.patch     | 27 -------------------
- package/grantlee/grantlee.hash                |  4 +--
- package/grantlee/grantlee.mk                  |  4 +--
- 3 files changed, 4 insertions(+), 31 deletions(-)
- delete mode 100644 package/grantlee/0001-Remove-vestigial-ansi-flag.patch
+Drop patch #2. Upstream commit d8a5d49c2d8359 includes stddef.h in a
+higher level header.
 
-diff --git a/package/grantlee/0001-Remove-vestigial-ansi-flag.patch b/package/grantlee/0001-Remove-vestigial-ansi-flag.patch
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...h => 0002-compat-set-NETDB_INTERNAL.patch} |  0
+ ...002-ptrdiff_t-is-defined-in-stddef.h.patch | 28 -------------------
+ package/socat/socat.hash                      |  4 +--
+ package/socat/socat.mk                        |  2 +-
+ 4 files changed, 3 insertions(+), 31 deletions(-)
+ rename package/socat/{0003-compat-set-NETDB_INTERNAL.patch => 0002-compat-set-NETDB_INTERNAL.patch} (100%)
+ delete mode 100644 package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch
+
+diff --git a/package/socat/0003-compat-set-NETDB_INTERNAL.patch b/package/socat/0002-compat-set-NETDB_INTERNAL.patch
+similarity index 100%
+rename from package/socat/0003-compat-set-NETDB_INTERNAL.patch
+rename to package/socat/0002-compat-set-NETDB_INTERNAL.patch
+diff --git a/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch b/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch
 deleted file mode 100644
-index 250463c2fd..0000000000
---- a/package/grantlee/0001-Remove-vestigial-ansi-flag.patch
+index acae641b34b6..000000000000
+--- a/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch
 +++ /dev/null
-@@ -1,27 +0,0 @@
--From c989fcf192d01d26866faf6405a28ba4fdce64c3 Mon Sep 17 00:00:00 2001
--From: Stephen Kelly <steveire@gmail.com>
--Date: Sun, 21 Jul 2019 16:00:41 +0100
--Subject: [PATCH] Remove vestigial -ansi flag
+@@ -1,28 +0,0 @@
+-From 99c55f2694fe8621ca2344eb002610dac7f9c969 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 2 Feb 2016 09:34:24 -0300
+-Subject: [PATCH] ptrdiff_t is defined in stddef.h
 -
--This causes the compiler to not operate in C++11 mode, meaning that
--headers such as <type_traits> issue errors.
--[Retrieved from:
--https://github.com/steveire/grantlee/commit/c989fcf192d01d26866faf6405a28ba4fdce64c3]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Status: sent upstream via email.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- nestlex.c | 2 ++
+- 1 file changed, 2 insertions(+)
 -
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 6d51110..9172213 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -59,7 +59,7 @@ endif()
+-diff --git a/nestlex.c b/nestlex.c
+-index f7950f0..f49482d 100644
+---- a/nestlex.c
+-+++ b/nestlex.c
+-@@ -4,6 +4,8 @@
 - 
-- if (CMAKE_COMPILER_IS_GNUCXX)
--   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
---  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common ")
--+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common ")
+- /* a function for lexical scanning of nested character patterns */
 - 
--   if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
--     # Needed on 64 bit
-diff --git a/package/grantlee/grantlee.hash b/package/grantlee/grantlee.hash
-index 2be423bd95..f93380bd96 100644
---- a/package/grantlee/grantlee.hash
-+++ b/package/grantlee/grantlee.hash
-@@ -1,5 +1,5 @@
--# Locally calculated after checking pgp signature
--sha256  ea2e402466c74bb533eee2c7252209ec61cd93a5d236fecd625b4a0eb13a1478    grantlee-5.1.0.tar.gz
-+# Locally calculated
-+sha256  139acee5746b957bdf1327ec0d97c604d4c0b9be42aec5d584297cb5ed6a990a    grantlee-5.2.0.tar.gz
- 
- # Hash for license file
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861    COPYING.LIB
-diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
-index 575b63fef5..7079679ca4 100644
---- a/package/grantlee/grantlee.mk
-+++ b/package/grantlee/grantlee.mk
-@@ -4,8 +4,8 @@
+-+#include <stddef.h>	/* ptrdiff_t */
+-+
+- #include "config.h"
+- #include "mytypes.h"
+- 
+--- 
+-2.4.10
+-
+diff --git a/package/socat/socat.hash b/package/socat/socat.hash
+index 92d62ab71642..ff4ef6262a6d 100644
+--- a/package/socat/socat.hash
++++ b/package/socat/socat.hash
+@@ -1,7 +1,7 @@
+ # From http://www.dest-unreach.org/socat/download.md5sum
+-md5	b2a032a47b8b89a18485697fa975154f	socat-1.7.3.3.tar.bz2
++md5	c9e71d0136c88a01d6fd30a13a3936ed	socat-1.7.3.4.tar.bz2
+ # From http://www.dest-unreach.org/socat/download.sha256sum
+-sha256	0dd63ffe498168a4aac41d307594c5076ff307aa0ac04b141f8f1cec6594d04a	socat-1.7.3.3.tar.bz2
++sha256	972374ca86f65498e23e3259c2ee1b8f9dbeb04d12c2a78c0c9b5d1cb97dfdfc	socat-1.7.3.4.tar.bz2
+ # Locally calculated
+ sha256	4846488cea98a2905dc75b7aa5eea721568e372447efe06b85bd896ee8c54f10	README
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index 9e747e08fa62..3807d45379fc 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GRANTLEE_VERSION = 5.1.0
--GRANTLEE_SITE = http://downloads.grantlee.org
-+GRANTLEE_VERSION = 5.2.0
-+GRANTLEE_SITE = $(call github,steveire,grantlee,v$(GRANTLEE_VERSION))
- GRANTLEE_INSTALL_STAGING = YES
- GRANTLEE_LICENSE = LGPL-2.1+
- GRANTLEE_LICENSE_FILES = COPYING.LIB
+-SOCAT_VERSION = 1.7.3.3
++SOCAT_VERSION = 1.7.3.4
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+ SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
 -- 
-2.17.1
+2.24.1
