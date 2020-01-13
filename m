@@ -1,44 +1,78 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 13 Jan 2020 15:23:58 +0100
-Subject: [Buildroot] [PATCH] package/ethtool: bump to version 5.4
-Message-ID: <1578925438-4442-1-git-send-email-pjtexier@koncepto.io>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 13 Jan 2020 16:17:56 +0100
+Subject: [Buildroot] [PATCH] package/python-aenum: new package
+Message-ID: <20200113151756.29749-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See full changelog https://www.spinics.net/lists/netdev/msg624080.html
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                      |  1 +
+ package/python-aenum/Config.in         |  7 +++++++
+ package/python-aenum/python-aenum.hash |  2 ++
+ package/python-aenum/python-aenum.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-aenum/Config.in
+ create mode 100644 package/python-aenum/python-aenum.hash
+ create mode 100644 package/python-aenum/python-aenum.mk
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index f8ac6c6..86c71d7 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256	f3dac0dbce7066af05fbe92812cc33a042d03fb00a45bcf9959f20455efe24c4	ethtool-5.3.tar.xz
-+sha256	22f81e4927d6eb6a13a259d705248a96005fce2005e15257f639f5a1c8c52b6b	ethtool-5.4.tar.xz
- # Locally calculated
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
- sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1	LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index c5f15fc..ce4f2d8 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ETHTOOL_VERSION = 5.3
-+ETHTOOL_VERSION = 5.4
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+diff --git a/package/Config.in b/package/Config.in
+index f72c77b416..bc44c8121e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -816,6 +816,7 @@ endif
+ 	source "package/python3/Config.in"
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
++	source "package/python-aenum/Config.in"
+ 	source "package/python-aioblescan/Config.in"
+ 	source "package/python-aiocoap/Config.in"
+ 	source "package/python-aioconsole/Config.in"
+diff --git a/package/python-aenum/Config.in b/package/python-aenum/Config.in
+new file mode 100644
+index 0000000000..be3dd0fb9c
+--- /dev/null
++++ b/package/python-aenum/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_AENUM
++	bool "python-aenum"
++	help
++	  Advanced Enumerations (compatible with Python's stdlib Enum),
++	  NamedTuples, and NamedConstants.
++
++	  https://pypi.org/project/aenum
+diff --git a/package/python-aenum/python-aenum.hash b/package/python-aenum/python-aenum.hash
+new file mode 100644
+index 0000000000..14436343ba
+--- /dev/null
++++ b/package/python-aenum/python-aenum.hash
+@@ -0,0 +1,2 @@
++# sha256 from https://pypi.org/pypi/aenum/json
++sha256	a4334cabf47c167d44ab5a6198837b80deec5d5bad1b5cf70c966c3a330260e8  aenum-2.2.3.tar.gz
+diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
+new file mode 100644
+index 0000000000..1d5322ef41
+--- /dev/null
++++ b/package/python-aenum/python-aenum.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-aenum
++#
++################################################################################
++
++PYTHON_AENUM_VERSION = 2.2.3
++PYTHON_AENUM_SOURCE = aenum-$(PYTHON_AENUM_VERSION).tar.gz
++PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/6f/6a/8ed729e0add885d7a559ebb06133029b1f8c4bd66cbf1bdee1ec969fb310
++PYTHON_AENUM_SETUP_TYPE = setuptools
++PYTHON_AENUM_LICENSE = BSD-3-Clause
++PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
++
++$(eval $(python-package))
 -- 
-2.7.4
+2.17.0
