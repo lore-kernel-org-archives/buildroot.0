@@ -1,101 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jan 2020 18:20:33 +0100
-Subject: [Buildroot] [PATCHv3] toolchain/external: allow custom
- toolchains to use newer headers
-In-Reply-To: <20200113170959.1c7a901a@windsurf>
-References: <20200107205429.11726-1-yann.morin.1998@free.fr>
- <20200113170959.1c7a901a@windsurf>
-Message-ID: <20200113172033.GB28343@scaer>
+From: Pedro Jardim <jardim.c.pedro@gmail.com>
+Date: Mon, 13 Jan 2020 14:24:54 -0300
+Subject: [Buildroot] [PATCH] configs/imx6-sabresd: Bump U-Boot and kernel
+ versions
+Message-ID: <20200113172454.1081-1-jardim.c.pedro@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Bump U-Boot to 2020.01 version and kernel to 5.4.8.
 
-On 2020-01-13 17:09 +0100, Thomas Petazzoni spake thusly:
-> Thanks for this patch. I just needed it for an internal toolchain that
-> I'm building with Buildroot 2019.02 (which supported headers 5.0
-> maximum), but using Linux 5.4. So, the commit title that starts with
-> "toolchain/external" is a bit incorrect as your implementation, as the
-> commit log states, also addresses the case of internal toolchain.
+Signed-off-by: Pedro Jardim <jardim.c.pedro@gmail.com>
+---
+ configs/imx6-sabresd_defconfig     | 4 ++--
+ configs/imx6-sabresd_qt5_defconfig | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Right, I'll update the commit title.
-
-> Some more comments below.
-> 
-> On Tue,  7 Jan 2020 21:54:29 +0100
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> 
-> > +	  If your kernel headers are more recent than the latest version
-> > +	  in the choice, then select the latest version.
-> > +
-> >  config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4
-> >  	bool "5.4.x"
-> 
-> We should probably change the prompt here to:
-> 
-> 	bool "5.4.x or later"
-> 
-> and make it an habit of moving this "or later" statement to the most
-> recent kernel headers option. This is IMO clearer than just the
-> additional statement in the help text.
-
-I was a bit worried about the additional burden of updating the headers
-versions here and there...
-
-With the patch as proposed, the 'latest' semantic is located in a single
-place, and there is a single 'select' to move around, in
-toolchain/Config.in:560.
-
-But I can change. The existing prompts will be visible in the diff
-context, so should be easy to spot. Hopefully.
-
-> >  BUILDDIR="${1}"
-> >  SYSROOT="${2}"
-> >  # Make sure we have enough version components
-> >  HDR_VER="${3}.0.0"
-> > +CHECK="${4}"  # 'strict' or 'loose'
-> >  
-> >  HDR_M="${HDR_VER%%.*}"
-> >  HDR_V="${HDR_VER#*.}"
-> > @@ -32,16 +48,19 @@ ${HOSTCC} -imacros "${SYSROOT}/usr/include/linux/version.h" \
-> >  int main(int argc __attribute__((unused)),
-> >           char** argv __attribute__((unused)))
-> >  {
-> > -    if((LINUX_VERSION_CODE & ~0xFF)
-> > -        != KERNEL_VERSION(${HDR_M},${HDR_m},0))
-> > +    int ret = 0;
-> > +    int l = LINUX_VERSION_CODE & ~0xFF;
-> > +    int h = KERNEL_VERSION(${HDR_M},${HDR_m},0);
-> > +
-> > +    if(l != h)
-> >      {
-> >          printf("Incorrect selection of kernel headers: ");
-> >          printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
-> >                 ((LINUX_VERSION_CODE>>16) & 0xFF),
-> >                 ((LINUX_VERSION_CODE>>8) & 0xFF));  
-> > -        return 1;
-> > +        ret = ((l >= h ) && ("${CHECK}"[0] == 'l')) ? 0 : 1;
-> 
-> No space before the parenthesis after "h".
-
-Yeah. typo.
-
-> Also, checking just the
-> first letter of ${CHECK} seems like a hack. Why not:
-> 	ret = ((l >= h) && !strcmp("${CHECK}", "loose")) ? 0 : 1;
-
-Can do. Done.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
+index 98f11c7ef1..d244c5961a 100644
+--- a/configs/imx6-sabresd_defconfig
++++ b/configs/imx6-sabresd_defconfig
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index d5369b34fc..47c00284d9 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -30,7 +30,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
