@@ -1,150 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jan 2020 21:20:47 +0100
-Subject: [Buildroot] [git commit] package/strace: bump to version 5.4
-Message-ID: <20200113201115.9AE35818F3@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 13 Jan 2020 21:32:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/olsr: use make foreach loops
+In-Reply-To: <20200113211754.02aff2c1@windsurf>
+References: <20200113180856.787063-1-fontaine.fabrice@gmail.com>
+ <20200113211754.02aff2c1@windsurf>
+Message-ID: <CAPi7W819rDx7o3H6UHfSS0W9g5xzwmc1HK8RL4ovDT4GoeJrMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bff7e7561562a881ccaa594f66ec77f9e7ddc4e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas,
 
-Drop patch. Upstream commit 509400106aeb fixed no-MMU build in a
-different way.
+Le lun. 13 janv. 2020 ? 21:17, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Mon, 13 Jan 2020 19:08:56 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > Replace shell for loops by make foreach loops
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/olsr/olsr.mk | 14 +++++++-------
+> >  1 file changed, 7 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+> > index e643a0cfb3..3533e2a1fd 100644
+> > --- a/package/olsr/olsr.mk
+> > +++ b/package/olsr/olsr.mk
+> > @@ -18,19 +18,19 @@ OLSR_DEPENDENCIES = host-flex host-bison
+> >
+> >  define OLSR_BUILD_CMDS
+> >       $(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D) olsrd
+> > -     for p in $(OLSR_PLUGINS) ; do \
+> > -             $(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D)/lib/$$p ; \
+> > -     done
+> > +     $(foreach p,$(OLSR_PLUGINS),
+>
+> Did you test this? To me, it seems like a backslash is missing at the end of this line.
+Yes, it builds fine. I decided to skip the backslash as some packages
+(ltp-testsuite, selinux-python, policycoreutils, python-pyqt5) don't
+add it while others (systemd, sunxi-tools) do.
+But I can add a backslash if you want, I don't know what is the "best practice".
+>
+> > +             $(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D)/lib/$(p)
+> > +     )
+> >  endef
+> >
+> >  define OLSR_INSTALL_TARGET_CMDS
+> >       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
+> >               prefix="/usr" install_bin
+> > -     for p in $(OLSR_PLUGINS) ; do \
+> > -             $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib/$$p \
+> > +     $(foreach p,$(OLSR_PLUGINS),
+>
+> Same here.
+>
+> > +             $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib/$(p) \
+> >                       LDCONFIG=/bin/true DESTDIR=$(TARGET_DIR) \
+> > -                     prefix="/usr" install ; \
+> > -     done
+> > +                     prefix="/usr" install
+> > +     )
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-Add patch fixing no-MMU build.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...lter_seccomp-fix-build-for-no-MMU-targets.patch | 40 -------------------
- .../0001-filter_seccomp-fix-no-MMU-build.patch     | 46 ++++++++++++++++++++++
- package/strace/strace.hash                         |  4 +-
- package/strace/strace.mk                           |  2 +-
- 4 files changed, 49 insertions(+), 43 deletions(-)
-
-diff --git a/package/strace/0001-filter_seccomp-fix-build-for-no-MMU-targets.patch b/package/strace/0001-filter_seccomp-fix-build-for-no-MMU-targets.patch
-deleted file mode 100644
-index 88f075b0ab..0000000000
---- a/package/strace/0001-filter_seccomp-fix-build-for-no-MMU-targets.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From f1b16bba907a4d37632689d92ad23083feec4891 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 4 Oct 2019 09:51:23 +0300
--Subject: [PATCH] filter_seccomp: fix build for no-MMU targets
--
--Detect and define NOMMU_SYSTEM correctly to avoid unsupported fork()
--call on no-MMU Linux systems.
--
--Fix strace binary link failure:
--
--.../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: strace-filter_seccomp.o: in function `check_seccomp_filter':
--filter_seccomp.c:(.text+0x39a): undefined reference to `fork'
--collect2: error: ld returned 1 exit status
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://lists.strace.io/pipermail/strace-devel/2019-October/009159.html
--
-- filter_seccomp.c | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/filter_seccomp.c b/filter_seccomp.c
--index fc582654b7ac..28b46aabe25e 100644
----- a/filter_seccomp.c
--+++ b/filter_seccomp.c
--@@ -21,6 +21,11 @@
-- #include "syscall.h"
-- #include "scno.h"
-- 
--+#if !defined(HAVE_FORK)
--+# undef NOMMU_SYSTEM
--+# define NOMMU_SYSTEM 1
--+#endif
--+
-- bool seccomp_filtering;
-- bool seccomp_before_sysentry;
-- 
---- 
--2.23.0
--
-diff --git a/package/strace/0001-filter_seccomp-fix-no-MMU-build.patch b/package/strace/0001-filter_seccomp-fix-no-MMU-build.patch
-new file mode 100644
-index 0000000000..27f6d1490b
---- /dev/null
-+++ b/package/strace/0001-filter_seccomp-fix-no-MMU-build.patch
-@@ -0,0 +1,46 @@
-+From fb4fdb83be36ff5e71426d2bdea81d035cdbd0b8 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Mon, 13 Jan 2020 14:54:15 +0200
-+Subject: [PATCH] filter_seccomp: fix no-MMU build
-+
-+Move the declaration of filter_generators out of HAVE_FORK ifdef to fix
-+build for no-MMU targets:
-+
-+filter_seccomp.c: In function ???check_seccomp_filter_properties???:
-+filter_seccomp.c:608:42: error: ???filter_generators??? undeclared (first use in this function); did you mean ???linear_filter_generator????
-+  for (unsigned int i = 0; i < ARRAY_SIZE(filter_generators); ++i) {
-+                                          ^~~~~~~~~~~~~~~~~
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://lists.strace.io/pipermail/strace-devel/2020-January/thread.html
-+
-+
-+ filter_seccomp.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/filter_seccomp.c b/filter_seccomp.c
-+index 91f6bc42bce3..da1abc713dfc 100644
-+--- a/filter_seccomp.c
-++++ b/filter_seccomp.c
-+@@ -68,8 +68,6 @@ static const struct audit_arch_t audit_arch_vec[SUPPORTED_PERSONALITIES] = {
-+ # endif
-+ };
-+ 
-+-# ifdef HAVE_FORK
-+-
-+ typedef unsigned short (*filter_generator_t)(struct sock_filter *,
-+ 					     bool *overflow);
-+ static unsigned short linear_filter_generator(struct sock_filter *,
-+@@ -92,6 +90,8 @@ static struct sock_fprog bpf_prog = {
-+ 	.filter = NULL,
-+ };
-+ 
-++# ifdef HAVE_FORK
-++
-+ static void ATTRIBUTE_NORETURN
-+ check_seccomp_order_do_child(void)
-+ {
-+-- 
-+2.24.1
-+
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 2386857c2f..dfc2143d65 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/5.3/strace-5.3.tar.xz.asc
--sha256	6c131198749656401fe3efd6b4b16a07ea867e8f530867ceae8930bbc937a047	strace-5.3.tar.xz
-+# https://strace.io/files/5.4/strace-5.4.tar.xz.asc
-+sha256	f7d00514d51290b6db78ad7a9de709baf93caa5981498924cbc9a744cfd2a741	strace-5.4.tar.xz
- sha256	739b2725197137a04ab48ee6b19da3fdf7e497249e0dedd9f51c11a570401ede	COPYING
- sha256	7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa	LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 5e7a119ba5..5ad249b13c 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRACE_VERSION = 5.3
-+STRACE_VERSION = 5.4
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+Fabrice
