@@ -1,61 +1,89 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 13 Jan 2020 16:33:07 +0100
-Subject: [Buildroot] [PATCH 1/2] libmodescurity: new package
-In-Reply-To: <87d0brmj8i.fsf@dell.be.48ers.dk>
-References: <20200110140017.15045-1-frank.vanbever@essensium.com>
- <87d0brmj8i.fsf@dell.be.48ers.dk>
-Message-ID: <a94f6405-b567-cc14-a114-812bbdf0b977@mind.be>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 13 Jan 2020 16:34:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: update user generation
+Message-ID: <20200113153415.486032-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+since V235 the "gateway" and "upload" services use DynamicUsers,
+requiring no entries in /etc/passwd.
+This functionality requires option nss-systemd, which is always
+enabled in buildroot.
 
+the "bus-proxy" user was removed in V244.
 
-On 10/01/2020 16:19, Peter Korsgaard wrote:
->  > diff --git a/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch b/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch
->  > new file mode 100644
->  > index 0000000000..d725d136ff
->  > --- /dev/null
->  > +++ b/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch
->  > @@ -0,0 +1,31 @@
->  > +From 0832208360aab69fbaec76225db67801840a33fe Mon Sep 17 00:00:00 2001
->  > +From: Frank Vanbever <frank.vanbever@essensium.com>
->  > +Date: Fri, 10 Jan 2020 11:14:43 +0100
->  > +Subject: [PATCH] Fail when CANONICAL_HOST cannot be determined
->  > +
->  > +When the CANONICAL_HOST is unknown the configure script exits
->  > +with exit code 0 even though no makefile was produced.
->  > +
->  > +patch was submitted upstream: https://github.com/SpiderLabs/ModSecurity/pull/2235
->  > +
->  > +Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
->  > +---
->  > + configure.ac | 2 +-
->  > + 1 file changed, 1 insertion(+), 1 deletion(-)
->  > +
->  > +diff --git a/configure.ac b/configure.ac
->  > +index 95e48843..5e6971f4 100644
->  > +--- a/configure.ac
->  > ++++ b/configure.ac
->  > +@@ -193,7 +193,7 @@ case $host in
->  > +     ;;
->  > +        *)
->  > +     echo "Unknown CANONICAL_HOST $host"
->  > +-    exit
->  > ++    exit 1
-> 
-> What is the use of this patch in Buildroot? I mean, it looks correct but
-> we should ensure the configure script can correctly detect
-> CANONICAL_HOST (whatever that is), so this should never trigger?
+thre "remote" user will now only be generated if the feature is
+enabled.
 
- Without this patch, if there is some platform for which CANONICAL_HOST does not
-get set correctly, you get a very cryptic error instead of a failure of the
-configure step. So hopefully this patch isn't needed, but if it is actually
-needed because CANONICAL_HOST is still not correct, it helps us a lot.
+Description is matched to the ones in the upstream sysusers.d
+files. home is set to /run/systemd.
 
- In other words, I would keep it in Buildroot.
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ package/systemd/systemd.mk | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
- Regards,
- Arnout
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 442803baa8..a3073f10a9 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -181,6 +181,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE),y)
+ SYSTEMD_CONF_OPTS += -Dremote=true
++SYSTEMD_REMOTE_USER = systemd-journal-remote -1 systemd-journal-remote -1 * /run/systemd - - systemd Journal Remote
+ else
+ SYSTEMD_CONF_OPTS += -Dremote=false
+ endif
+@@ -304,7 +305,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_COREDUMP),y)
+ SYSTEMD_CONF_OPTS += -Dcoredump=true
+-SYSTEMD_COREDUMP_USER = systemd-coredump -1 systemd-coredump -1 * /var/lib/systemd/coredump - - Core Dumper
++SYSTEMD_COREDUMP_USER = systemd-coredump -1 systemd-coredump -1 * /run/systemd - - systemd core dump processing
+ else
+ SYSTEMD_CONF_OPTS += -Dcoredump=false
+ endif
+@@ -324,7 +325,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
+ SYSTEMD_CONF_OPTS += -Dnetworkd=true
+-SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - Network Manager
++SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * /run/systemd - - systemd Network Management
+ SYSTEMD_NETWORKD_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
+ ifneq ($(SYSTEMD_NETWORKD_DHCP_IFACE),)
+ define SYSTEMD_INSTALL_NETWORK_CONFS
+@@ -343,14 +344,14 @@ define SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ 		$(TARGET_DIR)/etc/resolv.conf
+ endef
+ SYSTEMD_CONF_OPTS += -Dresolve=true
+-SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
++SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * /run/systemd - - systemd Resolver
+ else
+ SYSTEMD_CONF_OPTS += -Dresolve=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+ SYSTEMD_CONF_OPTS += -Dtimesyncd=true
+-SYSTEMD_TIMESYNCD_USER = systemd-timesync -1 systemd-timesync -1 * - - - Network Time Synchronization
++SYSTEMD_TIMESYNCD_USER = systemd-timesync -1 systemd-timesync -1 * /run/systemd - - systemd Time Synchronization
+ else
+ SYSTEMD_CONF_OPTS += -Dtimesyncd=false
+ endif
+@@ -423,10 +424,7 @@ define SYSTEMD_USERS
+ 	- - systemd-journal -1 * - - - Journal
+ 	- - render -1 * - - - DRI rendering nodes
+ 	- - kvm -1 * - - - kvm nodes
+-	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
+-	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
+-	systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
+-	systemd-journal-upload -1 systemd-journal-upload -1 * - - - Journal Upload
++	$(SYSTEMD_REMOTE_USER)
+ 	$(SYSTEMD_COREDUMP_USER)
+ 	$(SYSTEMD_NETWORKD_USER)
+ 	$(SYSTEMD_RESOLVED_USER)
+-- 
+2.24.1
