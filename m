@@ -1,70 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 13 Jan 2020 21:58:35 +0100
-Subject: [Buildroot] [PATCH] package/meson: fix shabang in deep build
- trees
-In-Reply-To: <20200113180322.5618-1-yann.morin.1998@free.fr>
-References: <20200113180322.5618-1-yann.morin.1998@free.fr>
-Message-ID: <3d675a20-7663-c884-70c2-0880176346de@mind.be>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 13 Jan 2020 22:40:15 +0100
+Subject: [Buildroot] [PATCH] package/fail2ban: bump to version 0.11.1
+Message-ID: <20200113214015.15632-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch bump fail2ban to verison 0.11.1.
 
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/fail2ban/fail2ban.hash | 2 +-
+ package/fail2ban/fail2ban.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 13/01/2020 19:03, Yann E. MORIN wrote:
-> The meson script includes the full path to the python interpreter. In
-> deep build trees, this path can be more than 128 characters long, which
-> is the limit a shabang might be.
-> 
-> In older kernels, that was silently ignored, leading to potential bugs,
-> but newer kernels enforce that limit, and refuse to execve() the script,
-> returning with NOEXEC. Since the script is +x, the shell (any bourne
-> shell, as well as the C shell) will conclude from that situation that
-> they should interpret it as a shell script, which it obviously is not.
-> 
-> Fix the problem bu replacing the shabang with a call to /usr/bin/env
-> which will redirect to the correct pytohn3 interpreter found in the
-> PATH.
-> 
-> Note however that this means our meson installation can no longer be
-> called from outside of the meson-package infrastructure anymore (not
-> that we ever supported it before, but who knows what people may have
-> done in their br2-external), unless one does set the PATH to include
-> $(HOST_DIR)/bin/ earlier than a system-provided python3 would be found.
-
-Actually, since meson doesn't depend on any non-standard python package, using
-the system-provided python3 is fine. In fact, IIRC the idea was to use the
-system-provided python3 if available, but nobody ever implemented that.
-
- Regards,
- Arnout
-
-> 
-> Fixes: #12331 #12461
-> 
-> Reported-by: Jean-pierre Cartal <jpcartal@free.fr>
-> Reported-by: Matthias Wei?er <m.weisser.m@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/meson/meson.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> index d409ae7b52..179daaa38a 100644
-> --- a/package/meson/meson.mk
-> +++ b/package/meson/meson.mk
-> @@ -49,4 +49,10 @@ HOST_MESON_SED_CFLAGS = $(if $(strip $(TARGET_CFLAGS)),`printf '"%s"$(comma) ' $
->  HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
->  HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
->  
-> +# Avoid interpreter shabang longer than 127 chars
-> +define HOST_MESON_SET_INTERPRETER
-> +	$(SED) '1s:.*:#!/usr/bin/env python3:' $(HOST_DIR)/bin/meson
-> +endef
-> +HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_SET_INTERPRETER
-> +
->  $(eval $(host-python-package))
-> 
+diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
+index 25d120c115..f807d5a82b 100644
+--- a/package/fail2ban/fail2ban.hash
++++ b/package/fail2ban/fail2ban.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  d6ca1bbc7e7944f7acb2ba7c1065953cd9837680bc4d175f30ed155c6a372449  fail2ban-0.10.4.tar.gz
++sha256  71d2a52b66bb0f87ac3812246bdd3819ec561913cd44afd39130a342f043aa6d  fail2ban-0.11.1.tar.gz
+ sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
+diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+index a0325dffc5..07c0c04787 100644
+--- a/package/fail2ban/fail2ban.mk
++++ b/package/fail2ban/fail2ban.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FAIL2BAN_VERSION = 0.10.4
++FAIL2BAN_VERSION = 0.11.1
+ FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
+ FAIL2BAN_LICENSE = GPL-2.0+
+ FAIL2BAN_LICENSE_FILES = COPYING
+-- 
+2.17.1
