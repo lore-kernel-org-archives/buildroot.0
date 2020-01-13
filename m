@@ -1,29 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 13 Jan 2020 18:08:08 +0000
-Subject: [Buildroot] [Bug 12331] meson issue
-In-Reply-To: <bug-12331-163@https.bugs.busybox.net/>
-References: <bug-12331-163@https.bugs.busybox.net/>
-Message-ID: <bug-12331-163-uip8TbOW6B@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 13 Jan 2020 19:15:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qwt: bump to version 6.1.4
+Message-ID: <20200113181514.788834-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12331
+Add hash for license file
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/qwt/qwt.hash | 10 +++++++---
+ package/qwt/qwt.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-
---- Comment #5 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-I've sent a tentative patch to the list:
-https://patchwork.ozlabs.org/patch/1222257/
-
-It's not unlike Thomas' proposal, but with my little touch... ;-)
-
+diff --git a/package/qwt/qwt.hash b/package/qwt/qwt.hash
+index a0077a6804..95e910e5e4 100644
+--- a/package/qwt/qwt.hash
++++ b/package/qwt/qwt.hash
+@@ -1,3 +1,7 @@
+-# From https://sourceforge.net/projects/qwt/files/qwt/6.1.3/
+-sha1 90ec21bc42f7fae270482e1a0df3bc79cb10e5c7  qwt-6.1.3.tar.bz2
+-md5  19d1f5fa5e22054d22ee3accc37c54ba          qwt-6.1.3.tar.bz2
++# From https://sourceforge.net/projects/qwt/files/qwt/6.1.4/
++sha1 a1028cb0a33322920266fb183869023b8ed30394  qwt-6.1.4.tar.bz2
++md5  4fb1852f694420e3ab9c583526edecc5          qwt-6.1.4.tar.bz2
++
++# Locally computed
++sha256 1529215329e51fc562e0009505a838f427919a18b362afff441f035b2d9b5bd9  qwt-6.1.4.tar.bz2
++sha256 d8737db330e1eeb439962e11654ab7f1aece3561d9415454a8c538643824ede6  COPYING
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index f381ebbb7a..e0ffec765f 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QWT_VERSION = 6.1.3
++QWT_VERSION = 6.1.4
+ QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
+ QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
+ QWT_INSTALL_STAGING = YES
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.24.1
