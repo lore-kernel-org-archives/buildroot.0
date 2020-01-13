@@ -1,73 +1,57 @@
-From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Mon, 13 Jan 2020 17:48:34 +0000
-Subject: [Buildroot] [PATCH v2] binutils/ARC: cleanup
-In-Reply-To: <20191222224144.38603994@windsurf>
-References: <20191206221918.1c05e316@windsurf.home>
- <20191217213253.12446-1-vgupta@synopsys.com>
- <20191222224144.38603994@windsurf>
-Message-ID: <585b63d8-16e1-4891-fc0d-8121acb59a73@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Jan 2020 19:03:22 +0100
+Subject: [Buildroot] [PATCH] package/meson: fix shabang in deep build trees
+Message-ID: <20200113180322.5618-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The meson script includes the full path to the python interpreter. In
+deep build trees, this path can be more than 128 characters long, which
+is the limit a shabang might be.
 
-On 12/22/19 1:41 PM, Thomas Petazzoni wrote:
-> Hello Vineet,
->
-> On Tue, 17 Dec 2019 13:32:53 -0800
-> Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
->
->> Remove special handling for ARC - as it is not needed for cksy etc.
->>
->> A nice side benefit is that the ARC specific version now only needs to
->> be specified in single place (vs 3 currently) in binutils/Config.in.host
->>
->> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
->> ---
->>  package/binutils/binutils.mk | 6 +-----
->>  1 file changed, 1 insertion(+), 5 deletions(-)
->>
->> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
->> index a19d6940f7c1..3ae5561d67d3 100644
->> --- a/package/binutils/binutils.mk
->> +++ b/package/binutils/binutils.mk
->> @@ -8,14 +8,10 @@
->>  # If not, we do like other packages
->>  BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
->>  ifeq ($(BINUTILS_VERSION),)
->> -ifeq ($(BR2_arc),y)
->> -BINUTILS_VERSION = arc-2019.09-rc1
->> -else
->>  BINUTILS_VERSION = 2.32
->>  endif
->> -endif # BINUTILS_VERSION
->>  
->> -ifeq ($(BINUTILS_VERSION),arc-2019.09-rc1)
->> +ifeq ($(BR2_BINUTILS_VERSION_ARC),y)
->>  BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
->>  BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
->>  BINUTILS_FROM_GIT = y
-> In fact, I was wrong, this also does not work, in the following
-> situation:
->
->  - You're using a pre-compiled external toolchain, so host-binutils is
->    not selected/enabled, so the version selection in
->    package/binutils/Config.in.host is not used, and therefore
->    BR2_BINUTILS_VERSION_ARC cannot be set to 'y'.
->
->  - You have binutils enabled for the target.
->
-> Then, with your patch, we will no longer select the ARC-specific fork
-> of binutils.
->
-> Basically, for the target binutils (just like for target gdb), we don't
-> have any version selection, so we force using one specific version
-> depending on the architecture.
+In older kernels, that was silently ignored, leading to potential bugs,
+but newer kernels enforce that limit, and refuse to execve() the script,
+returning with NOEXEC. Since the script is +x, the shell (any bourne
+shell, as well as the C shell) will conclude from that situation that
+they should interpret it as a shell script, which it obviously is not.
 
-Does that mean that other arch in that file (csky) with custom github location is
-affected with the issue you mentioned above ?
+Fix the problem bu replacing the shabang with a call to /usr/bin/env
+which will redirect to the correct pytohn3 interpreter found in the
+PATH.
 
--Vineet
+Note however that this means our meson installation can no longer be
+called from outside of the meson-package infrastructure anymore (not
+that we ever supported it before, but who knows what people may have
+done in their br2-external), unless one does set the PATH to include
+$(HOST_DIR)/bin/ earlier than a system-provided python3 would be found.
+
+Fixes: #12331 #12461
+
+Reported-by: Jean-pierre Cartal <jpcartal@free.fr>
+Reported-by: Matthias Wei?er <m.weisser.m@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/meson/meson.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index d409ae7b52..179daaa38a 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -49,4 +49,10 @@ HOST_MESON_SED_CFLAGS = $(if $(strip $(TARGET_CFLAGS)),`printf '"%s"$(comma) ' $
+ HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+ HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+ 
++# Avoid interpreter shabang longer than 127 chars
++define HOST_MESON_SET_INTERPRETER
++	$(SED) '1s:.*:#!/usr/bin/env python3:' $(HOST_DIR)/bin/meson
++endef
++HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_SET_INTERPRETER
++
+ $(eval $(host-python-package))
+-- 
+2.20.1
