@@ -1,41 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jan 2020 12:27:40 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: drop Sven Neumann
-Message-ID: <20200113111747.21FEE8168E@busybox.osuosl.org>
+Date: Mon, 13 Jan 2020 12:28:27 +0100
+Subject: [Buildroot] [git commit] package/olsr: add netjson plugin
+Message-ID: <20200113111827.BA994816A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b97b9a59897e6d9ae2fc6ddbb86a3e00c33dc9f3
+commit: https://git.buildroot.net/buildroot/commit/?id=39476fbd82b0dac43fec5e671171e4e6ad9a4860
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-His e-mail address has been bouncing for quite some time:
+Add netjson plugin, available since version 0.9.5 and
+https://github.com/OLSR/olsrd/commit/64c00288f8e87d314a723e20c2dd69f1165f1645
 
-From: thomas.petazzoni@bootlin.com To: neumann at teufel.de
-212.91.255.190[212.91.255.190] reply 550 5.1.10 RESOLVER.ADR.RecipientNotFound
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 7 -------
- 1 file changed, 7 deletions(-)
+ package/olsr/olsr.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2823f9c041..510fea78de 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2337,13 +2337,6 @@ N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
- F:	package/lcdproc/
- F:	package/python-influxdb/
- 
--N:	Sven Neumann <neumann@teufel.de>
--F:	package/glib-networking/
--F:	package/gstreamer1/gst1-libav/
--F:	package/libmms/
--F:	package/orc/
--F:	package/wampcc/
--
- N:	Sven Oliver Moll <svolli@svolli.de>
- F:	package/most/
- 
+diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+index 766b1432c1..e643a0cfb3 100644
+--- a/package/olsr/olsr.mk
++++ b/package/olsr/olsr.mk
+@@ -9,7 +9,7 @@ OLSR_VERSION = $(OLSR_VERSION_MAJOR).6.1
+ OLSR_SOURCE = olsrd-$(OLSR_VERSION).tar.bz2
+ OLSR_SITE = http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
+ OLSR_PLUGINS = arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo jsoninfo \
+-	mdns nameservice p2pd pgraph secure txtinfo watchdog
++	mdns nameservice netjson p2pd pgraph secure txtinfo watchdog
+ # Doesn't really need quagga but not very useful without it
+ OLSR_PLUGINS += $(if $(BR2_PACKAGE_QUAGGA),quagga)
+ OLSR_LICENSE = BSD-3-Clause, LGPL-2.1+
