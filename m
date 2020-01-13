@@ -1,65 +1,78 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 13 Jan 2020 23:59:32 +0100
-Subject: [Buildroot] [PATCH] toolchain/toolchain-external: warn for untested
- GCC/kernel version
-Message-ID: <20200113225932.28031-1-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Jan 2020 00:03:36 +0100
+Subject: [Buildroot] [PATCH] package/c-periphery: Bump version to 2.1.0
+In-Reply-To: <1aa46d96-7b36-8d82-dce8-65f3b24f7939@koncepto.io>
+References: <20200108192721.19685-1-offougajoris@gmail.com>
+ <1aa46d96-7b36-8d82-dce8-65f3b24f7939@koncepto.io>
+Message-ID: <42959990-b682-d143-f900-44ce4406d5ad@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The oldest toolchain we test in the autobuilders is the Sourcery ARM
-toolchain which is GCC 4.8 and kernel headers 3.13. Therefore, it is
-likely that we're missing the required _AT_LEAST dependencies to exclude
-packages that don't build with older GCC/headers.
 
-Add a comment to the custom external toolchain that warns when an
-untested GCC or kernel headers version is selected.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-This patch was triggered by [1], where I observed that zxing-cpp is
-probably missing a GCC_AT_LEAST_4_8 dependency, but we don't detect this
-in the autobuilders for lack of an older toolchain.
+On 08/01/2020 20:59, Pierre-Jean Texier wrote:
+> Hi Joris,
+> 
+> Le 08/01/2020 ? 20:27, Joris Offouga a ?crit?:
+>> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+>> ---
+>> ? package/c-periphery/c-periphery.hash | 4 ++--
+>> ? package/c-periphery/c-periphery.mk?? | 2 +-
+>> ? 2 files changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/package/c-periphery/c-periphery.hash
+>> b/package/c-periphery/c-periphery.hash
+>> index 8f3bd8a3da..244f8f60f1 100644
+>> --- a/package/c-periphery/c-periphery.hash
+>> +++ b/package/c-periphery/c-periphery.hash
+>> @@ -1,3 +1,3 @@
+>> ? # Locally calculated
+>> -sha256 50665a4f298b30e4cc8f7dbd38362fd860cc3746803d00325cb04806674e3166?
+>> c-periphery-1.1.3.tar.gz
+>> -sha256 6b5669a90260126f0600aae98cb10fb5e219269dc9cbd0137f63927b96d5c31d? LICENSE
+>> +sha256 1c455c42b26818d199ac227cd19714f265623e15d363fdfdf47a2416a4165654?
+>> c-periphery-2.1.0.tar.gz
+>> +sha256 e7b9464cb8511f19ddb40f9cf52fe86b3dfe38b2faed9d7bbc3d5707677ffbe3? LICENSE
+>> diff --git a/package/c-periphery/c-periphery.mk
+>> b/package/c-periphery/c-periphery.mk
+>> index e62d3e05ca..bb50434efa 100644
+>> --- a/package/c-periphery/c-periphery.mk
+>> +++ b/package/c-periphery/c-periphery.mk
+>> @@ -4,7 +4,7 @@
+>> ? #
+>> ?
+>> ################################################################################
+>> ? -C_PERIPHERY_VERSION = 1.1.3
+>> +C_PERIPHERY_VERSION = 2.1.0
+>> ? C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,v$(C_PERIPHERY_VERSION))
+>> ? C_PERIPHERY_INSTALL_STAGING = YES
+>> ? # only a static library
+>>
+> 
+> I just tested your patch and I have the following
+> issues:
+> 
+> ???????????????????????????? br-arm-full [1/6]: OK
+> ????????????????? br-arm-cortex-a9-glibc [2/6]: OK
+> ?????????????????? br-arm-cortex-m4-full [3/6]: OK
+> ????????????????????????? br-x86-64-musl [4/6]: OK
+> ????????????????????? br-arm-full-static [5/6]: FAILED
+> ??????????????????????????? sourcery-arm [6/6]: FAILED
+> 6 builds, 0 skipped, 2 build failed, 0 legal-info failed
+> 
+> The output log is:
+> 
+> src/gpio.c:21:24: fatal error: linux/gpio.h: No such file or directory
+> ?#include <linux/gpio.h>
 
-Note that this also means we should probably remove all older
-GCC_AT_LEAST options from packages.
+ That header was introduced in 4.6, and the failing toolchains have headers 4.4
+and 3.13 respectively. So c-periphery should either get a dependency on
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6, or it should be patched to revert to the
+sysfs API for older kernels.
 
-Alternatively, we could in the custom external toolchain remove all the
-old options (and also remove them from packages), and replace it with
-e.g. "4.8 or earlier".
 
-But for the time being, this patch is simpler :-)
-
-[1] http://lists.busybox.net/pipermail/buildroot/2020-January/271558.html
----
- .../toolchain-external-custom/Config.in.options             | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 665765a104..9680509a13 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -92,6 +92,9 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
- 
- endchoice
- 
-+comment "GCC older than 4.8 is not tested by Buildroot. Use at your own risk."
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
- choice
- 	bool "External toolchain kernel headers series"
- 	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
-@@ -298,6 +301,9 @@ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
- 
- endchoice
- 
-+comment "Kernel headers older than 3.13 is not tested by Buildroot. Use at your own risk."
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+
- choice
- 	prompt "External toolchain C library"
- 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
--- 
-2.21.1
+ Regards,
+ Arnout
