@@ -1,62 +1,73 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 13 Jan 2020 18:42:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/systemd: update user generation
-In-Reply-To: <20200113170148.32a46621@windsurf>
-References: <20200113153415.486032-1-nolange79@gmail.com>
- <20200113170148.32a46621@windsurf>
-Message-ID: <CADYdroP=7zUHsZ70+-9w98qVwENnFTvmLP-Z61oaEjYu0TmmkA@mail.gmail.com>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Mon, 13 Jan 2020 17:48:34 +0000
+Subject: [Buildroot] [PATCH v2] binutils/ARC: cleanup
+In-Reply-To: <20191222224144.38603994@windsurf>
+References: <20191206221918.1c05e316@windsurf.home>
+ <20191217213253.12446-1-vgupta@synopsys.com>
+ <20191222224144.38603994@windsurf>
+Message-ID: <585b63d8-16e1-4891-fc0d-8121acb59a73@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mo., 13. Jan. 2020 um 17:01 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello Norbert,
->
-> On Mon, 13 Jan 2020 16:34:15 +0100
-> Norbert Lange <nolange79@gmail.com> wrote:
->
-> > since V235 the "gateway" and "upload" services use DynamicUsers,
-> > requiring no entries in /etc/passwd.
-> > This functionality requires option nss-systemd, which is always
-> > enabled in buildroot.
-> >
-> > the "bus-proxy" user was removed in V244.
-> >
-> > thre "remote" user will now only be generated if the feature is
-> > enabled.
-> >
-> > Description is matched to the ones in the upstream sysusers.d
-> > files. home is set to /run/systemd.
-> >
-> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
->
-> Thanks for your patch. However, it fixes numerous different problems,
-> and as such, should be split into several patches, one fixing each
-> issue.
->
-> Could you send an updated version, split into multiple patches ?
+Hi Thomas,
 
-There are alot ways to split them?
-Is this enough, or do you need more splits:
-
-first 3 points
-description
-home
-
-the home part is actually a bit of a nuisance, as mkusers then creates
-the folder /run/systemd and it ends up in the image.
-I would have another patch to clean out /run before running the image
-creation command.
-
-Norbert
-> Thanks!
+On 12/22/19 1:41 PM, Thomas Petazzoni wrote:
+> Hello Vineet,
 >
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> On Tue, 17 Dec 2019 13:32:53 -0800
+> Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+>
+>> Remove special handling for ARC - as it is not needed for cksy etc.
+>>
+>> A nice side benefit is that the ARC specific version now only needs to
+>> be specified in single place (vs 3 currently) in binutils/Config.in.host
+>>
+>> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+>> ---
+>>  package/binutils/binutils.mk | 6 +-----
+>>  1 file changed, 1 insertion(+), 5 deletions(-)
+>>
+>> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+>> index a19d6940f7c1..3ae5561d67d3 100644
+>> --- a/package/binutils/binutils.mk
+>> +++ b/package/binutils/binutils.mk
+>> @@ -8,14 +8,10 @@
+>>  # If not, we do like other packages
+>>  BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
+>>  ifeq ($(BINUTILS_VERSION),)
+>> -ifeq ($(BR2_arc),y)
+>> -BINUTILS_VERSION = arc-2019.09-rc1
+>> -else
+>>  BINUTILS_VERSION = 2.32
+>>  endif
+>> -endif # BINUTILS_VERSION
+>>  
+>> -ifeq ($(BINUTILS_VERSION),arc-2019.09-rc1)
+>> +ifeq ($(BR2_BINUTILS_VERSION_ARC),y)
+>>  BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
+>>  BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
+>>  BINUTILS_FROM_GIT = y
+> In fact, I was wrong, this also does not work, in the following
+> situation:
+>
+>  - You're using a pre-compiled external toolchain, so host-binutils is
+>    not selected/enabled, so the version selection in
+>    package/binutils/Config.in.host is not used, and therefore
+>    BR2_BINUTILS_VERSION_ARC cannot be set to 'y'.
+>
+>  - You have binutils enabled for the target.
+>
+> Then, with your patch, we will no longer select the ARC-specific fork
+> of binutils.
+>
+> Basically, for the target binutils (just like for target gdb), we don't
+> have any version selection, so we force using one specific version
+> depending on the architecture.
+
+Does that mean that other arch in that file (csky) with custom github location is
+affected with the issue you mentioned above ?
+
+-Vineet
