@@ -1,85 +1,43 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 14 Jan 2020 10:42:56 +0100
-Subject: [Buildroot] [PATCH v1 3/3] package/rpi-userland: bump version to
- 42ec119
+Date: Tue, 14 Jan 2020 10:42:55 +0100
+Subject: [Buildroot] [PATCH v1 2/3] package/rpi-firmware: bump version to
+ 62a0d75
 In-Reply-To: <20200114094256.23174-1-ps.report@gmx.net>
 References: <20200114094256.23174-1-ps.report@gmx.net>
-Message-ID: <20200114094256.23174-3-ps.report@gmx.net>
+Message-ID: <20200114094256.23174-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add 0006-Fix-for-cmake-vmcs_host-error-fixes-603.patch (upstream
-  suggested cmake compile fix, taken from [1])
-
-[1] https://github.com/raspberrypi/userland/pull/605/commits/c22df881e1f45f8934b355e903f4d9be2391ab98
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...-for-cmake-vmcs_host-error-fixes-603.patch | 29 +++++++++++++++++++
- package/rpi-userland/rpi-userland.hash        |  2 +-
- package/rpi-userland/rpi-userland.mk          |  2 +-
- 3 files changed, 31 insertions(+), 2 deletions(-)
- create mode 100644 package/rpi-userland/0006-Fix-for-cmake-vmcs_host-error-fixes-603.patch
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-userland/0006-Fix-for-cmake-vmcs_host-error-fixes-603.patch b/package/rpi-userland/0006-Fix-for-cmake-vmcs_host-error-fixes-603.patch
-new file mode 100644
-index 0000000000..d0669f0f06
---- /dev/null
-+++ b/package/rpi-userland/0006-Fix-for-cmake-vmcs_host-error-fixes-603.patch
-@@ -0,0 +1,29 @@
-+From 902831348f72c88df2776d4a09e86874ae2e34e0 Mon Sep 17 00:00:00 2001
-+From: Damian Wrobel <dwrobel@ertelnet.rybnik.pl>
-+Date: Fri, 27 Dec 2019 15:49:45 +0100
-+Subject: [PATCH] Fix for cmake vmcs_host error (fixes #603)
-+
-+Signed-off-by: Damian Wrobel <dwrobel@ertelnet.rybnik.pl>
-+
-+Upstream: https://github.com/raspberrypi/userland/pull/605/commits/c22df881e1f45f8934b355e903f4d9be2391ab98
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ interface/vmcs_host/CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/interface/vmcs_host/CMakeLists.txt b/interface/vmcs_host/CMakeLists.txt
-+index e34e0ae..ab2e0fa 100755
-+--- a/interface/vmcs_host/CMakeLists.txt
-++++ b/interface/vmcs_host/CMakeLists.txt
-+@@ -24,7 +24,7 @@ if(NOT ARM64)
-+ 
-+ 	# ILCS pulls in EGL for the ILCS/EGL surface API support
-+ 	target_link_libraries(vcilcs brcmEGL brcmGLESv2 khrn_client vchiq_arm vcos)
-+-	set(INSTALL_TARGETS "${INSTALL_TARGETS} vcilcs")
-++	set(INSTALL_TARGETS ${INSTALL_TARGETS} vcilcs)
-+ endif()
-+ 
-+ # vchostif needs ilcore as well (vmcs_main pulls it in)
-+-- 
-+2.24.1
-+
-diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
-index 6d59f2aafc..98d62fa73f 100644
---- a/package/rpi-userland/rpi-userland.hash
-+++ b/package/rpi-userland/rpi-userland.hash
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 63d8ac50a0..b5bb4d9f37 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 d6231e9fa33c805cf7cbb559a0d6eb125605fc2ba862d9e5a3248778dd269859 rpi-userland-5070cb7fc150fc98f1ed64a7739c3356970d9f76.tar.gz
-+sha256 cb0f1d653fdb9975783f30359277d9de2868607381e081796eac68745e3e8324 rpi-userland-42ec119e03eb8dffc7c83e2ac0e665e333abbef6.tar.gz
- sha256 bee6f1249175683d8610651706e1aa7dffcbfd3f9c4c05bc1e5ab34f313c2db5 LICENCE
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 2b672b6c97..555e84ecab 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
+-sha256 b3c5c9d3cda1f77caf317b8d1f0496cd7ca791ddaeec8207a5a1940111483509 rpi-firmware-1.20190925.tar.gz
++sha256 088d094618924a90f65bb511808bbeb921e0769c878fa7baa9626954206f61a2 rpi-firmware-62a0d75b67484cb306a2a6f8fa954d9644868169.tar.gz
+ sha256 ba76edfc10a248166d965b8eaf320771c44f4f432d4fce2fd31fd272e7038add boot/LICENCE.broadcom
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index ee59ee2f26..b320e11233 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_USERLAND_VERSION = 5070cb7fc150fc98f1ed64a7739c3356970d9f76
-+RPI_USERLAND_VERSION = 42ec119e03eb8dffc7c83e2ac0e665e333abbef6
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3-Clause
- RPI_USERLAND_LICENSE_FILES = LICENCE
+-RPI_FIRMWARE_VERSION = 1.20190925
++RPI_FIRMWARE_VERSION = 62a0d75b67484cb306a2a6f8fa954d9644868169
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
 2.24.1
