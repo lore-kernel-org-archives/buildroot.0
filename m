@@ -1,215 +1,244 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue, 14 Jan 2020 21:49:27 +0100
-Subject: [Buildroot] [PATCH] package/libnss: fix arm32 neon build failure
-In-Reply-To: <20200110111526.26486-1-giulio.benetti@benettiengineering.com>
-References: <20200110111526.26486-1-giulio.benetti@benettiengineering.com>
-Message-ID: <65fd9249-71e3-b458-d9b1-82765ef6005b@benettiengineering.com>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Tue, 14 Jan 2020 14:50:14 -0600
+Subject: [Buildroot] [PATCHv4] toolchain: allow using custom headers
+ newer than latest known ones
+In-Reply-To: <20200113180639.7344-1-yann.morin.1998@free.fr>
+References: <20200113180639.7344-1-yann.morin.1998@free.fr>
+Message-ID: <cd1aa638-a8bb-b141-ec3e-9ea05f3f7111@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Yann,
 
-On 1/10/20 12:15 PM, Giulio Benetti wrote:
-> libnss assumes that every arm 32 supports neon, but this is not true, so
-> add pending patch [1] to check if arm 32 supports neon and fix build
-> failure.
-> 
-> [1]: https://bugzilla.mozilla.org/show_bug.cgi?id=1608327
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/d3d/d3d5da5d0f3c495376cd0f3d63b846ff16d429d9/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+On 1/13/20 12:06 PM, Yann E. MORIN wrote:
+> From: Vincent Fazio <vfazio@xes-inc.com>
+>
+> When Buildroot is released, it knows up to a certain kernel header
+> version, and no later. However, it is possible that an external
+> toolchain will be used, that uses headers newer than the latest version
+> Buildroot knows about.
+>
+> This may also happen when testing a development, an rc-class, or a newly
+> released kernel, either in an external toolchain, or with an internal
+> toolchain with custom headers (same-as-kernel, custom version, custom
+> git, custom tarball).
+>
+> In the current state, Buildroot would refuse to use such toolchains,
+> because the test is for strict equality.
+>
+> We'd like to make that situation possible, but we also want the user not
+> to be lenient at the same time, and select the right headers version
+> when it is known.
+>
+> So, we add a new Kconfig blind option that the latest kernel headers
+> version selects. This options is then used to decide whether we do a
+> strict or loose check of the kernel headers.
+>
+> Suggested-by: Aaron Sierra <asierra@xes-inc.com>
+> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+> [yann.morin.1998 at free.fr:
+>    - only do a loose check for the latest version
+>    - expand commit log
+> ]
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>
 > ---
->   ...freebl-arm-NEON-code-use-on-tier3-pl.patch | 169 ++++++++++++++++++
->   1 file changed, 169 insertions(+)
->   create mode 100644 package/libnss/0003-Bug-1608327-Fix-freebl-arm-NEON-code-use-on-tier3-pl.patch
-> 
-> diff --git a/package/libnss/0003-Bug-1608327-Fix-freebl-arm-NEON-code-use-on-tier3-pl.patch b/package/libnss/0003-Bug-1608327-Fix-freebl-arm-NEON-code-use-on-tier3-pl.patch
-> new file mode 100644
-> index 0000000000..06bd6a167c
-> --- /dev/null
-> +++ b/package/libnss/0003-Bug-1608327-Fix-freebl-arm-NEON-code-use-on-tier3-pl.patch
-> @@ -0,0 +1,169 @@
-> +From 0efcc6d793ede00d0e62250e1252c9c1040a6dda Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Fri, 10 Jan 2020 12:00:48 +0100
-> +Subject: [PATCH] Bug 1608327 - Fix freebl arm NEON code use on tier3
-> + platforms.
+> Changes v3 -> v4: (Yann)
+>    - fix commit title: it's not just about external toolchains  (Thomas)
+>    - fix C-code coding style  (Thomas)
+>    - add 'or later' to the prompts  (Thomas)
+>
+> Changes v2 -> v3:  (Yann)
+>    - also handle the internal toolchain for custom headers
+>      (noticed by Vincent)
+>
+> Changes v1 -> v2:  (Yann)
+>    - make it loose only for the latest version
+> ---
+>   package/linux-headers/Config.in.host          |  5 +++-
+>   package/linux-headers/linux-headers.mk        |  5 +++-
+>   support/scripts/check-kernel-headers.sh       | 27 ++++++++++++++++---
+>   toolchain/Config.in                           |  8 ++++++
+>   toolchain/helpers.mk                          |  6 ++++-
+>   .../pkg-toolchain-external.mk                 |  3 ++-
+>   .../Config.in.options                         |  5 +++-
+>   7 files changed, 50 insertions(+), 9 deletions(-)
+>
+> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+> index 6b6fe028c5..905497f496 100644
+> --- a/package/linux-headers/Config.in.host
+> +++ b/package/linux-headers/Config.in.host
+> @@ -118,8 +118,11 @@ choice
+>   	  This is used to hide/show some packages that have strict
+>   	  requirements on the version of kernel headers.
+>   
+> +	  If your kernel headers are more recent than the latest version
+> +	  in the choice, then select the latest version.
 > +
-> +Despite the code having runtime detection of NEON and crypto extensions,
-> +the optimized code using those instructions is disabled at build time on
-> +platforms where the compiler doesn't enable NEON by default of with the
-> +flags it's given for the caller code.
+>   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4
+> -	bool "5.4.x"
+> +	bool "5.4.x or later"
+>   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+>   
+>   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3
+> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+> index 676c8c44ea..d653c951fd 100644
+> --- a/package/linux-headers/linux-headers.mk
+> +++ b/package/linux-headers/linux-headers.mk
+> @@ -131,11 +131,14 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
+>   endef
+>   
+>   ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
+> +# In this case, we must always do a 'loose' test, because they are all
+> +# custom versions which may be later than what we know right now.
+>   define LINUX_HEADERS_CHECK_VERSION
+>   	$(call check_kernel_headers_version,\
+>   		$(BUILD_DIR),\
+>   		$(STAGING_DIR),\
+> -		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)))
+> +		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
+> +		loose)
+>   endef
+>   LINUX_HEADERS_POST_INSTALL_STAGING_HOOKS += LINUX_HEADERS_CHECK_VERSION
+>   endif
+> diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+> index 9d23c00feb..b99e0a7c2d 100755
+> --- a/support/scripts/check-kernel-headers.sh
+> +++ b/support/scripts/check-kernel-headers.sh
+> @@ -1,9 +1,25 @@
+>   #!/bin/sh
+>   
+> +# This script (and the embedded C code) will check that the actual
+> +# headers version match the user told us they were:
+> +#
+> +# - if both versions are the same, all is well.
+> +#
+> +# - if the actual headers are older than the user told us, this is
+> +#   an error.
+> +#
+> +# - if the actual headers are more recent than the user told us, and
+> +#   we are doing a strict check, then this is an error.
+> +#
+> +# - if the actual headers are more recent than the user told us, and
+> +#   we are doing a loose check, then a warning is printed, but this is
+> +#   not an error.
 > +
-> +In the case of gcm, this goes as far as causing a build error.
-> +
-> +What is needed is for the optimized code to be enabled in every case,
-> +letting the caller code choose whether to use that code based on the
-> +existing runtime checks.
-> +
-> +But this can't be simply done either, because those optimized parts of
-> +the code need to be built with NEON enabled, unconditionally, but that
-> +is not compatible with platforms using the softfloat ABI. For those,
-> +we need to use the softfp ABI, which is compatible. However, the softfp
-> +ABI is not compatible with the hardfp ABI, so we also can't
-> +unconditionally use the softfp ABI, so we do so only when the compiler
-> +targets the softfloat ABI, which confusingly enough is advertized via
-> +the SOFTFP define.
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>   BUILDDIR="${1}"
+>   SYSROOT="${2}"
+>   # Make sure we have enough version components
+>   HDR_VER="${3}.0.0"
+> +CHECK="${4}"  # 'strict' or 'loose'
+>   
+>   HDR_M="${HDR_VER%%.*}"
+>   HDR_V="${HDR_VER#*.}"
+> @@ -32,16 +48,19 @@ ${HOSTCC} -imacros "${SYSROOT}/usr/include/linux/version.h" \
+Since we're using strcmp now, we'll want #include <string.h> otherwise 
+GCC may throw a warning:
 
-This patch has been upstreamed:
-https://hg.mozilla.org/projects/nss/rev/dc57fe5d65d4bb9e407cdd7ef3bfffdb5c77ebb8
+<stdin>: In function ?main?:
+<stdin>:17:29: warning: implicit declaration of function ?strcmp? 
+[-Wimplicit-function-declaration]
+Incorrect selection of kernel headers: expected 4.19.x, got 4.20.x
 
-Best regards
+>   int main(int argc __attribute__((unused)),
+>            char** argv __attribute__((unused)))
+>   {
+> -    if((LINUX_VERSION_CODE & ~0xFF)
+> -        != KERNEL_VERSION(${HDR_M},${HDR_m},0))
+> +    int ret = 0;
+> +    int l = LINUX_VERSION_CODE & ~0xFF;
+> +    int h = KERNEL_VERSION(${HDR_M},${HDR_m},0);
+> +
+> +    if(l != h)
+>       {
+>           printf("Incorrect selection of kernel headers: ");
+>           printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
+>                  ((LINUX_VERSION_CODE>>16) & 0xFF),
+>                  ((LINUX_VERSION_CODE>>8) & 0xFF));
+> -        return 1;
+> +        ret = ((l >= h) && !strcmp("${CHECK}", "loose")) ? 0 : 1;
+>       }
+> -    return 0;
+> +    return ret;
+>   }
+>   _EOF_
+>   
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index 858121d2c5..973c03254f 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -457,6 +457,14 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
+>   config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+>   	bool
+>   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
+> +	select BR2_TOOLCHAIN_HEADERS_LATEST
+> +
+> +# This should be selected by the latest version, above, to indicate that
+> +# Buildroot does not know of more recent headers than the ones selected.
+> +# This allows using toolchains with headers more recent than Buildroot
+> +# knows about, while still enforcing strict check for older headers.
+> +config BR2_TOOLCHAIN_HEADERS_LATEST
+> +	bool
+>   
+>   # This order guarantees that the highest version is set, as kconfig
+>   # stops affecting a value on the first matching default.
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 996cc70d44..2c2a987c3e 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -161,9 +161,13 @@ copy_toolchain_sysroot = \
+>   # $1: build directory
+>   # $2: sysroot directory
+>   # $3: kernel version string, in the form: X.Y
+> +# $4: test to do for the latest kernel version, 'strict' or 'loose'
+> +#     always 'strict' if this is not the latest version.
+>   #
+>   check_kernel_headers_version = \
+> -	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3); then \
+> +	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3) \
+> +		$(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict); \
+> +	then \
+>   		exit 1; \
+>   	fi
+>   
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 1c43409514..b01082aadd 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -542,7 +542,8 @@ define $(2)_CONFIGURE_CMDS
+>   	$$(call check_kernel_headers_version,\
+>   		$$(BUILD_DIR)\
+>   		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
+> -		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
+> +		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
+> +		$$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict)); \
+>   	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
+>   		$$(call qstrip,$$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
+>   	if test "$$(BR2_arm)" = "y" ; then \
+> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> index 665765a104..81ace76493 100644
+> --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> @@ -109,8 +109,11 @@ choice
+>   	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+>   	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+>   
+> +	  If your toolchain uses headers newer than the latest version
+> +	  in the choice, then select the latest version.
+> +
+>   config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4
+> -	bool "5.4.x"
+> +	bool "5.4.x or later"
+>   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+>   
+>   config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3
+
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> +---
-> + nss/lib/freebl/Makefile         |  8 ++++++--
-> + nss/lib/freebl/aes-armv8.c      |  2 +-
-> + nss/lib/freebl/freebl.gyp       | 17 +++++++++++++----
-> + nss/lib/freebl/gcm-arm32-neon.c |  4 ++--
-> + nss/lib/freebl/gcm.c            |  7 ++-----
-> + nss/lib/freebl/rijndael.c       |  3 +--
-> + 6 files changed, 25 insertions(+), 16 deletions(-)
-> +
-> +diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
-> +index 0e230d8c5..1a930dca6 100644
-> +--- a/nss/lib/freebl/Makefile
-> ++++ b/nss/lib/freebl/Makefile
-> +@@ -781,8 +781,12 @@ $(OBJDIR)/$(PROG_PREFIX)intel-gcm-wrap$(OBJ_SUFFIX): CFLAGS += -mssse3
-> + endif
-> +
-> + ifeq ($(CPU_ARCH),arm)
-> +-$(OBJDIR)/$(PROG_PREFIX)aes-armv8$(OBJ_SUFFIX): CFLAGS += -march=armv8-a -mfpu=crypto-neon-fp-armv8
-> +-$(OBJDIR)/$(PROG_PREFIX)gcm-arm32-neon$(OBJ_SUFFIX): CFLAGS += -mfpu=neon
-> ++# When the compiler uses the softfloat ABI, we want to use the compatible softfp ABI when
-> ++# enabling NEON for these objects.
-> ++# Confusingly, __SOFTFP__ is the name of the define for the softfloat ABI, not for the softfp ABI.
-> ++USES_SOFTFLOAT_ABI := $(shell $(CC) -o - -E -dM - $(CFLAGS) < /dev/null | grep __SOFTFP__ > /dev/null && echo 1)
-> ++$(OBJDIR)/$(PROG_PREFIX)aes-armv8$(OBJ_SUFFIX): CFLAGS += -march=armv8-a -mfpu=crypto-neon-fp-armv8$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
-> ++$(OBJDIR)/$(PROG_PREFIX)gcm-arm32-neon$(OBJ_SUFFIX): CFLAGS += -mfpu=neon$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
-> + endif
-> + ifeq ($(CPU_ARCH),aarch64)
-> + $(OBJDIR)/$(PROG_PREFIX)aes-armv8$(OBJ_SUFFIX): CFLAGS += -march=armv8-a+crypto
-> +diff --git a/nss/lib/freebl/aes-armv8.c b/nss/lib/freebl/aes-armv8.c
-> +index 8213272f5..7be39ede8 100644
-> +--- a/nss/lib/freebl/aes-armv8.c
-> ++++ b/nss/lib/freebl/aes-armv8.c
-> +@@ -8,7 +8,7 @@
-> + #if ((defined(__clang__) ||                                         \
-> +       (defined(__GNUC__) && defined(__GNUC_MINOR__) &&              \
-> +        (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8)))) && \
-> +-     (defined(__ARM_NEON) || defined(__ARM_NEON__)))
-> ++     defined(IS_LITTLE_ENDIAN))
-> +
-> + #ifndef __ARM_FEATURE_CRYPTO
-> + #error "Compiler option is invalid"
-> +diff --git a/nss/lib/freebl/freebl.gyp b/nss/lib/freebl/freebl.gyp
-> +index 5d247742d..2b8182ef8 100644
-> +--- a/nss/lib/freebl/freebl.gyp
-> ++++ b/nss/lib/freebl/freebl.gyp
-> +@@ -126,10 +126,12 @@
-> +         '<(DEPTH)/exports.gyp:nss_exports'
-> +       ],
-> +       'cflags': [
-> +-        '-mfpu=neon'
-> ++        '-mfpu=neon',
-> ++        '<@(softfp_cflags)',
-> +       ],
-> +       'cflags_mozilla': [
-> +-        '-mfpu=neon'
-> ++        '-mfpu=neon',
-> ++        '<@(softfp_cflags)',
-> +       ]
-> +     },
-> +     {
-> +@@ -179,11 +181,13 @@
-> +         [ 'target_arch=="arm"', {
-> +           'cflags': [
-> +             '-march=armv8-a',
-> +-            '-mfpu=crypto-neon-fp-armv8'
-> ++            '-mfpu=crypto-neon-fp-armv8',
-> ++            '<@(softfp_cflags)',
-> +           ],
-> +           'cflags_mozilla': [
-> +             '-march=armv8-a',
-> +-            '-mfpu=crypto-neon-fp-armv8'
-> ++            '-mfpu=crypto-neon-fp-armv8',
-> ++            '<@(softfp_cflags)',
-> +           ],
-> +         }, 'target_arch=="arm64" or target_arch=="aarch64"', {
-> +           'cflags': [
-> +@@ -533,6 +537,11 @@
-> +       }, {
-> +         'have_int128_support%': 0,
-> +       }],
-> ++      [ 'target_arch=="arm"', {
-> ++        # When the compiler uses the softfloat ABI, we want to use the compatible softfp ABI when enabling NEON for these objects.
-> ++        # Confusingly, __SOFTFP__ is the name of the define for the softfloat ABI, not for the softfp ABI.
-> ++        'softfp_cflags': '<!(${CC:-cc} -o - -E -dM - ${CFLAGS} < /dev/null | grep __SOFTFP__ > /dev/null && echo -mfloat-abi=softfp || true)',
-> ++      }],
-> +     ],
-> +   }
-> + }
-> +diff --git a/nss/lib/freebl/gcm-arm32-neon.c b/nss/lib/freebl/gcm-arm32-neon.c
-> +index 97eb82ec6..be0424770 100644
-> +--- a/nss/lib/freebl/gcm-arm32-neon.c
-> ++++ b/nss/lib/freebl/gcm-arm32-neon.c
-> +@@ -11,7 +11,7 @@
-> + #include "secerr.h"
-> + #include "prtypes.h"
-> +
-> +-#if defined(__ARM_NEON__) || defined(__ARM_NEON)
-> ++#if defined(IS_LITTLE_ENDIAN)
-> +
-> + #include <arm_neon.h>
-> +
-> +@@ -199,4 +199,4 @@ gcm_HashZeroX_hw(gcmHashContext *ghash)
-> +     return SECSuccess;
-> + }
-> +
-> +-#endif /* __ARM_NEON__ || __ARM_NEON */
-> ++#endif /* IS_LITTLE_ENDIAN */
-> +diff --git a/nss/lib/freebl/gcm.c b/nss/lib/freebl/gcm.c
-> +index 080e641ea..2a42f74c0 100644
-> +--- a/nss/lib/freebl/gcm.c
-> ++++ b/nss/lib/freebl/gcm.c
-> +@@ -21,11 +21,8 @@
-> + #if defined(__aarch64__) && defined(IS_LITTLE_ENDIAN) && \
-> +     (defined(__clang__) || defined(__GNUC__) && __GNUC__ > 6)
-> + #define USE_ARM_GCM
-> +-#elif defined(__arm__) && defined(IS_LITTLE_ENDIAN) && \
-> +-    (defined(__ARM_NEON__) || defined(__ARM_NEON))
-> +-/* We don't test on big endian platform, so disable this on big endian.
-> +- * Also, we don't check whether compiler support NEON well, so this uses
-> +- * that compiler uses -mfpu=neon only. */
-> ++#elif defined(__arm__) && defined(IS_LITTLE_ENDIAN)
-> ++/* We don't test on big endian platform, so disable this on big endian. */
-> + #define USE_ARM_GCM
-> + #endif
-> +
-> +diff --git a/nss/lib/freebl/rijndael.c b/nss/lib/freebl/rijndael.c
-> +index 40364fce0..2e8bab87f 100644
-> +--- a/nss/lib/freebl/rijndael.c
-> ++++ b/nss/lib/freebl/rijndael.c
-> +@@ -20,8 +20,7 @@
-> + #include "gcm.h"
-> + #include "mpi.h"
-> +
-> +-#if (!defined(IS_LITTLE_ENDIAN) && !defined(NSS_X86_OR_X64)) || \
-> +-    (defined(__arm__) && !defined(__ARM_NEON) && !defined(__ARM_NEON__))
-> ++#if !defined(IS_LITTLE_ENDIAN) && !defined(NSS_X86_OR_X64)
-> + // not test yet on big endian platform of arm
-> + #undef USE_HW_AES
-> + #endif
-> +--
-> +2.20.1
-> +
-> 
+Vincent Fazio
+Embedded Software Engineer - Linux
+Extreme Engineering Solutions, Inc
+http://www.xes-inc.com
