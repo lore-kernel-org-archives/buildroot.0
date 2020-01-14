@@ -1,83 +1,90 @@
-From: Enoch W. <ixew@hotmail.com>
-Date: Tue, 14 Jan 2020 18:48:01 +0000
-Subject: [Buildroot] Multiple ("simultaneous") buildroot projects
-In-Reply-To: <0559f5de-e2c1-12b5-deeb-57f62103b7c3@mind.be>
-References: <BY5PR01MB6084639E519B441D79221318CC390@BY5PR01MB6084.prod.exchangelabs.com>
- <0559f5de-e2c1-12b5-deeb-57f62103b7c3@mind.be>
-Message-ID: <BY5PR01MB6084637E18DE8692ABF9B17DCC340@BY5PR01MB6084.prod.exchangelabs.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 14 Jan 2020 19:44:44 +0000
+Subject: [Buildroot] [PATCH v1 2/3] package/rpi-firmware: bump version
+ to 62a0d75
+In-Reply-To: <20200114182954.4cee6766@gmx.net>
+References: <20200114094256.23174-1-ps.report@gmx.net>
+ <20200114094256.23174-2-ps.report@gmx.net>
+ <20200114163653.GE22540@scaer> <20200114182954.4cee6766@gmx.net>
+Message-ID: <CAFGQKxfZj5ct49TttwOqwzq6r3WYVbCOcKD06qPmS9dEqtaTeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Very helpful answer, Thanks, Enoch.
+Peter,
 
+On Tue, 14 Jan 2020 at 17:29, Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> Hello Yann,
+>
+> On Tue, 14 Jan 2020 17:36:53 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>
+> > Peter, All,
+> >
+> > On 2020-01-14 10:42 +0100, Peter Seiderer spake thusly:
+> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > > ---
+> > >  package/rpi-firmware/rpi-firmware.hash | 2 +-
+> > >  package/rpi-firmware/rpi-firmware.mk   | 2 +-
+> > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+> > > index 63d8ac50a0..b5bb4d9f37 100644
+> > > --- a/package/rpi-firmware/rpi-firmware.hash
+> > > +++ b/package/rpi-firmware/rpi-firmware.hash
+> > > @@ -1,3 +1,3 @@
+> > >  # Locally computed
+> > > -sha256 b3c5c9d3cda1f77caf317b8d1f0496cd7ca791ddaeec8207a5a1940111483509 rpi-firmware-1.20190925.tar.gz
+> > > +sha256 088d094618924a90f65bb511808bbeb921e0769c878fa7baa9626954206f61a2 rpi-firmware-62a0d75b67484cb306a2a6f8fa954d9644868169.tar.gz
+> > >  sha256 ba76edfc10a248166d965b8eaf320771c44f4f432d4fce2fd31fd272e7038add boot/LICENCE.broadcom
+> > > diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> > > index ee59ee2f26..b320e11233 100644
+> > > --- a/package/rpi-firmware/rpi-firmware.mk
+> > > +++ b/package/rpi-firmware/rpi-firmware.mk
+> > > @@ -4,7 +4,7 @@
+> > >  #
+> > >  ################################################################################
+> > >
+> > > -RPI_FIRMWARE_VERSION = 1.20190925
+> > > +RPI_FIRMWARE_VERSION = 62a0d75b67484cb306a2a6f8fa954d9644868169
+> >
+> > This goes from a tag to a sha1. Why do we need to do so? This should be
+> > explained in the commit log.
+>
+> No new tag since 1.20190925...., and tags seems to be the exception for
+> buildroot (two times tags, numerous ones sha1), and we want to keep
+> rpi-firmware up to the same as the rpi linux-kernel (see e.g.
+> 'kernel: Bump to 4.19.95' [1])...
 
-On 1/13/20 5:27 PM, Arnout Vandecappelle wrote:
+The tags match the release of the kernel in raspbian.  So the current
+kernel used in raspbian is 1.20190925, no new one has been released
+yet.  I think we should stick with released kernels.
 
+Thanks
 
+Martin
 
-On 09/01/2020 20:08, Enoch W. wrote:
-
-
-Good day to all,
-
-
-I have now a second buildroot project in active development relying on a different Linux version.
-
-Is there a recommended way to manage the two with maximal code sharing?
-
-
-
- Normally if the two project should be able to use the same buildroot tree -
-even if you add custom packages directly in the buildroot tree (rather than
-through BR2_EXTERNAL), they can share code.
-
- They would be different only because they use a different defconfig.
-
- You can have the build results side-by-side by setting an output directory
-explicitly with O= instead of using the default output/
-
- The two project configurations may share some of the common files (e.g. kernel
-configuration fragments, overlay files, post-build and post-image scripts). For
-example, I would typically have an organisation like this:
-
--+-- buildroot (= checked-out buildroot sources, typically as a git submodule)
- +-+ output
- | +-- project1 (= O=$PWD/output/project1 output directory used for project1)
- | +-- project2 (= O=$PWD/output/project2 output directory used for project2)
- +-- project1 (overlay, kernel config, ... specific for project1)
- +-- project2 (overlay, kernel config, ... specific for project2)
- +-- common (overlay, kernel config, ... common to the projects)
- +-+ configs
- | +-- project1_defconfig (= Buildroot defconfig for project1)
- | +-- project2_defconfig (= Buildroot defconfig for project2)
- +-- Makefile (top-level makefile that sets O= and calls into buildroot make)
-
-
- Regards,
- Arnout
-
-
-
-
-
-Or is it best to put the two in separate docker containers? :-)
-
-I've seen this question coming up before, but not receiving an "official answer".
-
-
-Thanks, Enoch.
-
-
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net<mailto:buildroot@busybox.net>
-http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200114/16e04f01/attachment.html>
+>
+> Regards,
+> Peter
+>
+> [1] https://github.com/raspberrypi/firmware/commit/d5b8d8d7cce3f3eecb24c20a55cc50a48e3d5f4e
+>
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > >  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+> > >  RPI_FIRMWARE_LICENSE = BSD-3-Clause
+> > >  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+> > > --
+> > > 2.24.1
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+>
