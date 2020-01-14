@@ -1,13 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jan 2020 17:32:50 +0100
-Subject: [Buildroot] [PATCH v1 3/3] package/rpi-userland: bump version
- to 42ec119
-In-Reply-To: <20200114152755.4123935c@gmx.net>
+Date: Tue, 14 Jan 2020 17:36:53 +0100
+Subject: [Buildroot] [PATCH v1 2/3] package/rpi-firmware: bump version
+ to 62a0d75
+In-Reply-To: <20200114094256.23174-2-ps.report@gmx.net>
 References: <20200114094256.23174-1-ps.report@gmx.net>
- <20200114094256.23174-3-ps.report@gmx.net>
- <trinity-41871925-7822-4238-98ae-909b71ee05a8-1579005943320@3c-app-mailcom-bs09>
- <20200114152755.4123935c@gmx.net>
-Message-ID: <20200114163250.GD22540@scaer>
+ <20200114094256.23174-2-ps.report@gmx.net>
+Message-ID: <20200114163653.GE22540@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,15 +14,49 @@ To: buildroot@busybox.net
 
 Peter, All,
 
-On 2020-01-14 15:27 +0100, Peter Seiderer spake thusly:
-> On Tue, 14 Jan 2020 13:45:43 +0100, daggs <daggs@gmx.com> wrote:
-> > do note that this commit allows rpi-userland compilation on aarch64. might be a good idea to fix rpi-userland.mk and Config.in to support that.
-> Thanks for the hint, will give it a try the next days....
+On 2020-01-14 10:42 +0100, Peter Seiderer spake thusly:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/rpi-firmware/rpi-firmware.hash | 2 +-
+>  package/rpi-firmware/rpi-firmware.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+> index 63d8ac50a0..b5bb4d9f37 100644
+> --- a/package/rpi-firmware/rpi-firmware.hash
+> +++ b/package/rpi-firmware/rpi-firmware.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256 b3c5c9d3cda1f77caf317b8d1f0496cd7ca791ddaeec8207a5a1940111483509 rpi-firmware-1.20190925.tar.gz
+> +sha256 088d094618924a90f65bb511808bbeb921e0769c878fa7baa9626954206f61a2 rpi-firmware-62a0d75b67484cb306a2a6f8fa954d9644868169.tar.gz
+>  sha256 ba76edfc10a248166d965b8eaf320771c44f4f432d4fce2fd31fd272e7038add boot/LICENCE.broadcom
+> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> index ee59ee2f26..b320e11233 100644
+> --- a/package/rpi-firmware/rpi-firmware.mk
+> +++ b/package/rpi-firmware/rpi-firmware.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -RPI_FIRMWARE_VERSION = 1.20190925
+> +RPI_FIRMWARE_VERSION = 62a0d75b67484cb306a2a6f8fa954d9644868169
 
-Thanks. If at all possible, enable aarch64 in a separate patch.
+This goes from a tag to a sha1. Why do we need to do so? This should be
+explained in the commit log.
 
 Regards,
 Yann E. MORIN.
+
+>  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+>  RPI_FIRMWARE_LICENSE = BSD-3-Clause
+>  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
