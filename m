@@ -1,65 +1,102 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jan 2020 21:55:20 +0100
-Subject: [Buildroot] [PATCH 0/5 v4] package/xenomai: add alternate download
- locations (branch yem/xenomai-custom)
-Message-ID: <cover.1579035147.git.yann.morin.1998@free.fr>
+Date: Tue, 14 Jan 2020 21:55:19 +0100
+Subject: [Buildroot] [PATCH 1/5 v4] package/xenomai: move the version
+ setting to Kconfig
+In-Reply-To: <cover.1579035147.git.yann.morin.1998@free.fr>
+References: <cover.1579035147.git.yann.morin.1998@free.fr>
+Message-ID: <11d1ef09d50bb027aca094070792402d16d6c8b6.1579035147.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+The xenomai version is decided in Kconfig, but the default value is
+set in the .mk. This is unlike the other packages that have a version
+choice (like linux, uboot...).
 
-This series, initiated by Jan to get arbitrary git revision from the
-official Xenomai git tree, was morphed and expanded by Yann to include
-all the usual alternate download locations (like for the other packages
-like linux, uboot...). Some refactoring to the version handling ensued.
+Move the value into Config.in.
 
-Using a git tree is needed, as some versions are tagged, but not
-tarballed. So, as a git download is needed, let's just expand that to
-the other usual VCS as well.
+This paves the way to using other custom sources, like from a git tree.
 
-The most complex is the first patch, with the shuffling around of the
-version handling, but the rest is pretty straightforward.
+Note however that any existing configuration will need to be adapted to
+the new settings. Adding legacy handling is non-trivial, so manual
+intervention will be required.
 
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Jan Kiszka <jan.kiszka@siemens.com>
+cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/xenomai/Config.in  | 26 +++++++++++++++++---------
+ package/xenomai/xenomai.mk | 14 +++++++-------
+ 2 files changed, 24 insertions(+), 16 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit e2e57d56787b7a7d24ed3f9a97902d2bbd58c190
-
-  docs/manual: run-tests test framework (2020-01-14 17:29:23 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 65857f8b385110e6dfc59ae8011df19181006c1b
-
-  package/xenomai: add support to download from a custom svn tree (2020-01-14 21:31:36 +0100)
-
-
-----------------------------------------------------------------
-Jan Kiszka (1):
-      package/xenomai: add support to download from a custom git tree
-
-Yann E. MORIN (4):
-      package/xenomai: move the version setting to Kconfig
-      package/xenomai: add support to download a custom tarball
-      package/xenomai: add support to download from a custom Hg tree
-      package/xenomai: add support to download from a custom svn tree
-
- package/xenomai/Config.in  | 50 +++++++++++++++++++++++++++++++++++++---------
- package/xenomai/xenomai.mk | 27 +++++++++++++++++++------
- 2 files changed, 62 insertions(+), 15 deletions(-)
-
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index 0cb0b343de..39d10ae695 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -41,17 +41,25 @@ config BR2_PACKAGE_XENOMAI
+ 
+ if BR2_PACKAGE_XENOMAI
+ 
+-config BR2_PACKAGE_XENOMAI_VERSION
+-	string "Custom Xenomai version"
++choice
++	bool "Xenomai version"
+ 	help
+-	  Manually select Xenomai version. If left empty, the default
+-	  version will be used.
+-
+ 	  Make sure that the selected version has a patch for your
+-	  selected Linux kernel. If it does not, download and select
+-	  a patch manually with
+-	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
+-	  Kernel -> Linux Kernel Extensions menu.
++	  selected Linux kernel. If it does not, download and select a
++	  patch manually with BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH,
++	  in the Linux Kernel -> Linux Kernel Extensions menu.
++
++config BR2_PACKAGE_XENOMAI_LATEST_VERSION
++	bool "Latest version (3.0.10)"
++
++config BR2_PACKAGE_XENOMAI_CUSTOM_VERSION
++	bool "Custom version"
++
++endchoice
++
++config BR2_PACKAGE_XENOMAI_VERSION
++	string "Custom Xenomai version" if !BR2_PACKAGE_XENOMAI_LATEST_VERSION
++	default "3.0.10" if BR2_PACKAGE_XENOMAI_LATEST_VERSION
+ 
+ choice
+ 	prompt "Xenomai core"
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 5f389ac851..bab9d6997d 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -5,14 +5,14 @@
+ ################################################################################
+ 
+ XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+-ifeq ($(XENOMAI_VERSION),)
+-XENOMAI_VERSION = 3.0.10
+-else
+-BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+-endif
+-
+-XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
+ XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
++XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
++
++# Exclude all from the hash check, but the latest version.
++ifeq ($(BR2_PACKAGE_XENOMAI)$(BR2_PACKAGE_XENOMAI_LATEST_VERSION),y)
++BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
++endif
++
+ XENOMAI_LICENSE = GPL-2.0+ with exception (headers), LGPL-2.1+ (libraries), GPL-2.0+ (kernel), GFDL-1.2+ (docs), GPL-2.0 (ipipe patch, can driver)
+ # GFDL is not included but refers to gnu.org
+ XENOMAI_LICENSE_FILES = debian/copyright include/COPYING kernel/cobalt/COPYING \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
