@@ -1,134 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jan 2020 22:05:37 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: bump
- version to 1.20.7
-Message-ID: <20200114205531.3E41082121@busybox.osuosl.org>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Tue, 14 Jan 2020 15:10:40 -0600
+Subject: [Buildroot] Allowing to build from Git branches
+In-Reply-To: <20200114220401.61700031@windsurf>
+References: <20200114220401.61700031@windsurf>
+Message-ID: <7cb813ef-4b64-60c4-a810-50b80bac76a8@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3988f1e3f230370be4aa1229d91e39ac49728c8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I can see the argument for this. I used to use a hacked up BR branch 
+that added support for checking if the reference to the git branch has 
+changed since the last download but this was only while images? were in 
+development. I always switched to fixed hashes after the iterations were 
+completed.
 
-Added patch to fix build error.
+On 1/14/20 3:04 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> I know some people are going to yell at me for bringing up this topic,
+> but let's do it anyway.
+>
+> Currently, Buildroot says that using a Git branch as the VERSION for a
+> package is not supported. There are some patches that have been
+> proposed to explicitly prevent using branches, but in the current
+> Buildroot it "works" except that a cached tarball is preserved in
+> DL_DIR, which means that the branch is never fetched again unless the
+> tarball is manually deleted from DL_DIR. We have generally resisted
+> supporting Git branches with the (very valid) argument that it breaks
+> reproducibility.
+>
+> However, over time, I have seen a number of users/companies complaining
+> about this, both on the mailing list and privately with customers or
+> while discussing with users at conferences.
+>
+> The typical use case that they describe is the following: a company has
+> a large number of packages in Buildroot to build in-house software
+> components. Both for their CI runs, and for the developers actively
+> working on the system, they would like for those packages to point to a
+> branch, and always fetch the latest version. Yes, it is not
+> reproducible, but reproducibility is not what is desired at this point
+> of the project: what is wanted is precisely to fetch the latest and
+> greatest for those packages that point to a branch, to make sure the
+> most recent code gets tested and used by developers internally.
+>
+> The only solution we offer for this today is <pkg>_OVERRIDE_SRCDIR or
+> <pkg>_SITE_METHOD = local, but neither of those are very practical: you
+> need to have fetched each of your software components outside of
+> Buildroot, and point Buildroot at them. It's a bit silly when Buildroot
+> is already perfectly capable of doing this.
+>
+> Overall, I think it makes sense to realize that Buildroot is used in
+> different use-cases:
+>
+>   - During active development, where we want to offer a lot of
+>     flexibility, possibly at the expense of reproducibility.
+>
+>   - During release/generation of the final firmware that will be used on
+>     actual devices, where we want an absolute reproducibility, to the
+>     point where we're working on binary-identical results.
+>
+> Buildroot has its roots in solving the second use-case. However, we
+> have already added some features, like OVERRIDE_SRCDIR and SITE_METHOD
+> = local, to provide the additional flexibility needed for the first use
+> case. In some sense, those features already kill reproducibility: what
+> you're building is some random source code from some random local
+> folder. Completely non-reproducible. Possibility worse that a Git
+> branch, where you can potentially at least trace back which commit was
+> built, and re-do that same build.
+>
+> So I'd like to start the debate on whether it might makes sense to
+> relax our requirements on this, and be more pragmatic, and support
+> fetching from Git branches. Of course, this very likely needs to be
+> guarded by a Config.in option, so that we clearly set the boundary
+> between "you're in the safe zone where your build is reproducible" and
+> "you're in the zone where your build is non-reproducible".
+>
+> And now, let's the flames start! :-)
+>
+> Thomas
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-modesettings-needs-dri2.patch             |  0
- ...onfigure.ac-Fix-check-for-CLOCK_MONOTONIC.patch |  0
- .../0003-Remove-check-for-useSIGIO-option.patch    |  0
- .../0004-include-misc.h-fix-uClibc-build.patch     |  0
- ...wayland-Makefile.am-fix-build-without-glx.patch |  0
- ...6-common-xf86Init.c-fix-build-without-glx.patch |  0
- .../0007-modesetting-explicitly-include-mi-h.patch | 31 ++++++++++++++++++++++
- package/x11r7/xserver_xorg-server/Config.in        |  4 +--
- .../xserver_xorg-server/xserver_xorg-server.hash   | 10 +++----
- 9 files changed, 38 insertions(+), 7 deletions(-)
-
-diff --git a/package/x11r7/xserver_xorg-server/1.20.6/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.20.7/0001-modesettings-needs-dri2.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.6/0001-modesettings-needs-dri2.patch
-rename to package/x11r7/xserver_xorg-server/1.20.7/0001-modesettings-needs-dri2.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.6/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.20.7/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.6/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-rename to package/x11r7/xserver_xorg-server/1.20.7/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.6/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.20.7/0003-Remove-check-for-useSIGIO-option.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.6/0003-Remove-check-for-useSIGIO-option.patch
-rename to package/x11r7/xserver_xorg-server/1.20.7/0003-Remove-check-for-useSIGIO-option.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.6/0004-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xserver_xorg-server/1.20.7/0004-include-misc.h-fix-uClibc-build.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.6/0004-include-misc.h-fix-uClibc-build.patch
-rename to package/x11r7/xserver_xorg-server/1.20.7/0004-include-misc.h-fix-uClibc-build.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.6/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/1.20.7/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.6/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch
-rename to package/x11r7/xserver_xorg-server/1.20.7/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/1.20.7/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.6/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
-rename to package/x11r7/xserver_xorg-server/1.20.7/0006-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.7/0007-modesetting-explicitly-include-mi-h.patch b/package/x11r7/xserver_xorg-server/1.20.7/0007-modesetting-explicitly-include-mi-h.patch
-new file mode 100644
-index 0000000000..2aea7348b4
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/1.20.7/0007-modesetting-explicitly-include-mi-h.patch
-@@ -0,0 +1,31 @@
-+From f73cdeac19774c7786ae71e0b38de9b1df39ea98 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>
-+Date: Tue, 14 Jan 2020 09:23:34 +0100
-+Subject: [PATCH] modesetting: Explicitly #include "mi.h"
-+
-+For the miClearDrawable prototype. Apparently it doesn't get pulled in
-+for some build configurations, breaking the build.
-+
-+Downloaded from upstream PR:
-+https://gitlab.freedesktop.org/xorg/xserver/merge_requests/380
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ hw/xfree86/drivers/modesetting/drmmode_display.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/hw/xfree86/drivers/modesetting/drmmode_display.c b/hw/xfree86/drivers/modesetting/drmmode_display.c
-+index b826bee6a..d13cec077 100644
-+--- a/hw/xfree86/drivers/modesetting/drmmode_display.c
-++++ b/hw/xfree86/drivers/modesetting/drmmode_display.c
-+@@ -37,6 +37,7 @@
-+ #include "inputstr.h"
-+ #include "xf86str.h"
-+ #include "X11/Xatom.h"
-++#include "mi.h"
-+ #include "micmap.h"
-+ #include "xf86cmap.h"
-+ #include "xf86DDC.h"
-+-- 
-+2.24.1
-+
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 982b9bcb4e..fd590a1a47 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -61,7 +61,7 @@ choice
- 	bool "X Window System server version"
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
--	bool "1.20.6"
-+	bool "1.20.7"
- 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
- 	select BR2_PACKAGE_XLIB_LIBXFONT2
- 
-@@ -79,7 +79,7 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.20.6" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
-+	default "1.20.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
- 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index cd1b560162..c546f8c6b9 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -3,11 +3,11 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
- # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
- sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
--# From https://lists.x.org/archives/xorg-announce/2019-November/003032.html
--md5 a98170084f2c8fed480d2ff601f8a14b  xorg-server-1.20.6.tar.bz2
--sha1 59473e72136113f3a35b1ab5a5cfcbcad955b660  xorg-server-1.20.6.tar.bz2
--sha256 6316146304e6e8a36d5904987ae2917b5d5b195dc9fc63d67f7aca137e5a51d1  xorg-server-1.20.6.tar.bz2
--sha512 9aa0ba4aee92fe628f2b8c41e4fe0134dc86154bb8787f907884ef2fd970e18e68e72ea8a1beb706d11ecf155b2abc9731f1abadff251ed592f8cca3b1240dd6  xorg-server-1.20.6.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-January/003036.html
-+md5 d2e96355ad47244c675bce38db2b48a9  xorg-server-1.20.7.tar.bz2
-+sha1 11d048431dc7582898628149ca3a758008b7d50b  xorg-server-1.20.7.tar.bz2
-+sha256 bd5986f010f34f5b3d6bc99fe395ecb1e0dead15a26807e0c832701809a06ea1  xorg-server-1.20.7.tar.bz2
-+sha512 c67612e379111c28c68941c0a660abf72be7669591b41ccaa3b3474c4540a03822a28d892831b12ce08bac6e5e7e33504c2d19ef2a0c2298f83bd083459f96f5  xorg-server-1.20.7.tar.bz2
- 
- # Locally calculated
- sha256 4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+-- 
+Vincent Fazio
+Embedded Software Engineer - Linux
+Extreme Engineering Solutions, Inc
+http://www.xes-inc.com
