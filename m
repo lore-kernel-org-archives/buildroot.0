@@ -1,67 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jan 2020 17:36:53 +0100
-Subject: [Buildroot] [PATCH v1 2/3] package/rpi-firmware: bump version
- to 62a0d75
-In-Reply-To: <20200114094256.23174-2-ps.report@gmx.net>
-References: <20200114094256.23174-1-ps.report@gmx.net>
- <20200114094256.23174-2-ps.report@gmx.net>
-Message-ID: <20200114163653.GE22540@scaer>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 14 Jan 2020 17:37:56 +0100
+Subject: [Buildroot] [PATCH 1/2] package/lua-livr: new package
+Message-ID: <20200114163757.29642-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in              |  1 +
+ package/lua-livr/Config.in     |  7 +++++++
+ package/lua-livr/lua-livr.hash |  3 +++
+ package/lua-livr/lua-livr.mk   | 12 ++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/lua-livr/Config.in
+ create mode 100644 package/lua-livr/lua-livr.hash
+ create mode 100644 package/lua-livr/lua-livr.mk
 
-On 2020-01-14 10:42 +0100, Peter Seiderer spake thusly:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/rpi-firmware/rpi-firmware.hash | 2 +-
->  package/rpi-firmware/rpi-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-> index 63d8ac50a0..b5bb4d9f37 100644
-> --- a/package/rpi-firmware/rpi-firmware.hash
-> +++ b/package/rpi-firmware/rpi-firmware.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256 b3c5c9d3cda1f77caf317b8d1f0496cd7ca791ddaeec8207a5a1940111483509 rpi-firmware-1.20190925.tar.gz
-> +sha256 088d094618924a90f65bb511808bbeb921e0769c878fa7baa9626954206f61a2 rpi-firmware-62a0d75b67484cb306a2a6f8fa954d9644868169.tar.gz
->  sha256 ba76edfc10a248166d965b8eaf320771c44f4f432d4fce2fd31fd272e7038add boot/LICENCE.broadcom
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index ee59ee2f26..b320e11233 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -RPI_FIRMWARE_VERSION = 1.20190925
-> +RPI_FIRMWARE_VERSION = 62a0d75b67484cb306a2a6f8fa954d9644868169
-
-This goes from a tag to a sha1. Why do we need to do so? This should be
-explained in the commit log.
-
-Regards,
-Yann E. MORIN.
-
->  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
->  RPI_FIRMWARE_LICENSE = BSD-3-Clause
->  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index ac59182c8..e18bf40cd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -634,6 +634,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-gd/Config.in"
+ 	source "package/lua-http/Config.in"
+ 	source "package/lua-iconv/Config.in"
++	source "package/lua-livr/Config.in"
+ 	source "package/lua-lpeg-patterns/Config.in"
+ 	source "package/lua-lunitx/Config.in"
+ 	source "package/lua-markdown/Config.in"
+diff --git a/package/lua-livr/Config.in b/package/lua-livr/Config.in
+new file mode 100644
+index 000000000..76fd1c754
+--- /dev/null
++++ b/package/lua-livr/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LUA_LIVR
++	bool "lua-livr"
++	help
++	  Lightweight validator supporting Language Independent
++	  Validation Rules Specification (LIVR).
++
++	  https://fperrad.frama.io/lua-LIVR
+diff --git a/package/lua-livr/lua-livr.hash b/package/lua-livr/lua-livr.hash
+new file mode 100644
+index 000000000..a891420b4
+--- /dev/null
++++ b/package/lua-livr/lua-livr.hash
+@@ -0,0 +1,3 @@
++# computed by luarocks/buildroot
++sha256 a3890301ed5f393b585cab26ac944eddc9df41bfa2ab87c11785925193453493  lua-livr-0.2.1-1.src.rock
++sha256 8f09089acf52cfabcc2a44ec3a492dc261e0ae9df3c618f43b33805e696e02d8  lua-LIVR-0.2.1/COPYRIGHT
+diff --git a/package/lua-livr/lua-livr.mk b/package/lua-livr/lua-livr.mk
+new file mode 100644
+index 000000000..25034b897
+--- /dev/null
++++ b/package/lua-livr/lua-livr.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# lua-livr
++#
++################################################################################
++
++LUA_LIVR_VERSION = 0.2.1-1
++LUA_LIVR_NAME_UPSTREAM = lua-LIVR
++LUA_LIVR_LICENSE = MIT
++LUA_LIVR_LICENSE_FILES = $(LUA_LIVR_SUBDIR)/COPYRIGHT
++
++$(eval $(luarocks-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
