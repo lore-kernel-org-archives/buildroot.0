@@ -1,53 +1,75 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Jan 2020 19:14:51 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/olsr: use make foreach loops
-Message-ID: <20200114181451.1591276-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 14 Jan 2020 19:49:28 +0100
+Subject: [Buildroot] [PATCH] package/libnss: fix ppc 32-bit build failure
+In-Reply-To: <20200102181740.116227-1-giulio.benetti@benettiengineering.com>
+References: <20200102181740.116227-1-giulio.benetti@benettiengineering.com>
+Message-ID: <90b03639-5faf-0ab9-bd2a-ac301f1a24d5@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replace shell for loops by make foreach loops
+This patch is wrong. I reject it and going to send another one both 
+upstream and to Buildroot ML.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Add a trailing backslash
-
- package/olsr/olsr.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index e643a0cfb3..53bf874af0 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -18,19 +18,19 @@ OLSR_DEPENDENCIES = host-flex host-bison
- 
- define OLSR_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D) olsrd
--	for p in $(OLSR_PLUGINS) ; do \
--		$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D)/lib/$$p ; \
--	done
-+	$(foreach p,$(OLSR_PLUGINS), \
-+		$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D)/lib/$(p)
-+	)
- endef
- 
- define OLSR_INSTALL_TARGET_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
- 		prefix="/usr" install_bin
--	for p in $(OLSR_PLUGINS) ; do \
--		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib/$$p \
-+	$(foreach p,$(OLSR_PLUGINS), \
-+		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib/$(p) \
- 			LDCONFIG=/bin/true DESTDIR=$(TARGET_DIR) \
--			prefix="/usr" install ; \
--	done
-+			prefix="/usr" install
-+	)
- 	$(INSTALL) -D -m 0644 $(@D)/files/olsrd.conf.default.lq \
- 		$(TARGET_DIR)/etc/olsrd/olsrd.conf
- endef
 -- 
-2.24.1
+Giulio Benetti
+Benetti Engineering sas
+
+On 1/2/20 7:17 PM, Giulio Benetti wrote:
+> NSS assumes that Altivec is supported on powerpc64 only, but in
+> Makefile it tries to build gcm-ppc.c(containing Altivec functions
+> calls), even if powerpc is not 64-bits. So add a patch to add a check if
+> architecture is a 64-bit to build gcm-ppc.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/433/433a7db21654d67626c7a3e5f1272d6c3ce4fe6c/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+> Pending upstream:
+> https://bugzilla.mozilla.org/show_bug.cgi?id=1606689
+> ---
+>   ...1606689-Fix-ppc-32-bit-build-failure.patch | 31 +++++++++++++++++++
+>   1 file changed, 31 insertions(+)
+>   create mode 100644 package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch
+> 
+> diff --git a/package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch b/package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch
+> new file mode 100644
+> index 0000000000..de30fa7002
+> --- /dev/null
+> +++ b/package/libnss/0006-Bug-1606689-Fix-ppc-32-bit-build-failure.patch
+> @@ -0,0 +1,31 @@
+> +From fcac43d6a0af59926da7ad4a15a37255887cdfa2 Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +Date: Thu, 2 Jan 2020 18:55:50 +0100
+> +Subject: [PATCH] Bug 1606689 - Fix ppc 32-bit build failure
+> +
+> +NSS assumes that only 64-bit powerpc support Altivec instructions to be
+> +used in gcm-ppc.c, so align Makefile condition to build gcm-ppc.c only
+> +if USE_64 is defined.
+> +
+> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +---
+> + nss/lib/freebl/Makefile | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
+> +index 00518d7f8..0e230d8c5 100644
+> +--- a/nss/lib/freebl/Makefile
+> ++++ b/nss/lib/freebl/Makefile
+> +@@ -264,8 +264,8 @@ ifeq ($(CPU_ARCH),arm)
+> +     MPI_SRCS += mpi_arm.c
+> + endif
+> + ifeq ($(CPU_ARCH),ppc)
+> +-    EXTRA_SRCS += gcm-ppc.c
+> + ifdef USE_64
+> ++    EXTRA_SRCS += gcm-ppc.c
+> +     DEFINES += -DNSS_NO_INIT_SUPPORT
+> + endif # USE_64
+> + endif # ppc
+> +--
+> +2.20.1
+> +
+> 
