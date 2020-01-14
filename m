@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 15 Jan 2020 00:21:22 +0100
-Subject: [Buildroot] [PATCH] package/python-pillow: bump to version
- 6.2.2/7.0.0
-In-Reply-To: <20200114091526.126189da@windsurf>
-References: <20200113222430.5157-1-angelo@amarulasolutions.com>
- <20200114091526.126189da@windsurf>
-Message-ID: <fcc7fd07-77ed-41a3-85cf-d8fe40a65409@mind.be>
+Date: Wed, 15 Jan 2020 00:27:36 +0100
+Subject: [Buildroot] [RFC PATCH] autotools: do not overwrite first
+ include path
+In-Reply-To: <fd9bee30fa6a1d7851f243f10e66a355@walle.cc>
+References: <20191212085748.13802-1-michael@walle.cc>
+ <53fbaa47-6e61-6be6-2aef-3daee6a698dc@mind.be>
+ <fd9bee30fa6a1d7851f243f10e66a355@walle.cc>
+Message-ID: <9bf713cc-6153-c06c-20bf-c9a3430955dd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +15,58 @@ To: buildroot@busybox.net
 
 
 
-On 14/01/2020 09:15, Thomas Petazzoni wrote:
-> On Mon, 13 Jan 2020 23:24:30 +0100
-> Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
+On 14/01/2020 11:52, Michael Walle wrote:
+> Hi Arnout,
 > 
->> This patch bumps Pillow to version 7.0.0 for Python3 and version
->> 6.2.2 for Python2.
->> Different versions here are needed cause the latest 7.0.0 only
->> supports Python3, while support for Python2 is available in 6.2.2.
->>
->> It updates also the LICENSE hash due to copyright year update.
->>
->> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
->> ---
->> I don't really know if this is the correct way to support two versions
->> of the same package, please let me know.
+> Am 2020-01-14 00:37, schrieb Arnout Vandecappelle:
+[snip]
+>> ?That said, I wonder: why don't we simply export ACLOCAL_PATH? I think with
+>> that, we don't need the -I options in autoheader and autoconf any more, right?
 > 
-> If the latest version only supports Python 3.x, then only support this
-> version, and make it "depends on BR2_PACKAGE_PYTHON3". Python 2.x is
-> now considered deprecated by the upstream Python developers. I don't
-> think Buildroot should bother with keeping old Python modules around
-> just for the sake of Python 2.x compatibility.
+> You mean something like that:
+> 
+> ACLOCAL = $(HOST_DIR)/bin/aclocal -I $(ACLOCAL_DIR)
+> ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
+> 
+> AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL_PATH="$(ACLOCAL_PATH)"
+> ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)"
+> AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i
+> 
+> That won't work if $(ACLOCAL) is used alone. But from what I see that isn't
+> used for now. So we could give that a try.
+> 
+> Or rather something like that:
+> ACLOCAL = $(HOST_DIR)/bin/aclocal -I $(ACLOCAL_DIR)
+> ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
+> export ACLOCAL_PATH
+> 
+> AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)"
+> AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true
+> $(HOST_DIR)/bin/autoreconf -f -i
 
- +1.
 
- Peter may want to backport the 6.2.2 bump to 2019.11, however, depending on
-what got changed in there.
+ This second one is what I meant. But of course, this only works if autoconf and
+automake don't need the explicit -I options.
+
+
+> But that would clutter the variable ACLOCAL_PATH
+
+ That can actually be considered a good thing. If the user has set ACLOCAL_PATH,
+we really do want to override it (we don't want to rely on anything from the host).
+
+> and no other package exports variables.
+
+ Packages per se, indeed no, but this stuff can actually be considered part of
+the infrastructure. They could just as well be defined in package/Makefile.in or
+package/pkg-autotools.mk.
+
+ A bunch of files are already exporting variables - particularly
+package/pkg-download.mk.
+
 
  Regards,
  Arnout
+
+
+> 
+> -michael
