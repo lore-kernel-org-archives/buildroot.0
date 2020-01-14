@@ -1,145 +1,125 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 14 Jan 2020 10:42:54 +0100
-Subject: [Buildroot] [PATCH v1 1/3] configs/raspberrypi*: bump kernel
- version to 301ec88
-Message-ID: <20200114094256.23174-1-ps.report@gmx.net>
+From: Michael Walle <michael@walle.cc>
+Date: Tue, 14 Jan 2020 11:52:36 +0100
+Subject: [Buildroot] [RFC PATCH] autotools: do not overwrite first
+ include path
+In-Reply-To: <53fbaa47-6e61-6be6-2aef-3daee6a698dc@mind.be>
+References: <20191212085748.13802-1-michael@walle.cc>
+ <53fbaa47-6e61-6be6-2aef-3daee6a698dc@mind.be>
+Message-ID: <fd9bee30fa6a1d7851f243f10e66a355@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now based on 4.19.93 (from 4.19.75).
+Hi Arnout,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- configs/raspberrypi0_defconfig       | 2 +-
- configs/raspberrypi0w_defconfig      | 2 +-
- configs/raspberrypi2_defconfig       | 2 +-
- configs/raspberrypi3_64_defconfig    | 2 +-
- configs/raspberrypi3_defconfig       | 2 +-
- configs/raspberrypi3_qt5we_defconfig | 2 +-
- configs/raspberrypi4_64_defconfig    | 2 +-
- configs/raspberrypi4_defconfig       | 2 +-
- configs/raspberrypi_defconfig        | 2 +-
- 9 files changed, 9 insertions(+), 9 deletions(-)
+Am 2020-01-14 00:37, schrieb Arnout Vandecappelle:
+> On 12/12/2019 09:57, Michael Walle wrote:
+>> The first include path is special in aclocal. For example it is the 
+>> path
+>> for the --install option. Also, the first include is treated in a
+>> special way if it doesn't exists. This might be the case if there is 
+>> the
+>> following construct:
+>> 
+>>   configure.ac: AC_CONFIG_MACRO_DIR([m4])
+>>   Makefile.am: ACLOCAL_AMFLAGS="-I m4"
+>> 
+>> If the package doesn't have local macros, the m4/ directory might not
+>> exist. aclocal will then just issue a warning instead of aborting the
+>> execution with a fatal error. See discussion here:
+>>   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=565663
+>> 
+>> Don't use the "-I" option in aclocal. Instead use ACLOCAL_PATH to pass
+>> the system-wide include dirs.
+>> 
+>> As a side effect this should fix the use of $(ACLOCAL) alone. Up until
+>> now, $(ACLOCAL) didn't include the ACLOCAL_HOST_DIR system include 
+>> path.
+>> 
+>> autoreconf will pass the "-I" options to every tool it runs. So move 
+>> the
+>> argument to each individual tool except aclocal.
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+>> ---
+>>  package/autoconf/autoconf.mk | 6 +++---
+>>  package/automake/automake.mk | 2 +-
+>>  2 files changed, 4 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/package/autoconf/autoconf.mk 
+>> b/package/autoconf/autoconf.mk
+>> index e5f474c72d..336ac59b42 100644
+>> --- a/package/autoconf/autoconf.mk
+>> +++ b/package/autoconf/autoconf.mk
+>> @@ -21,6 +21,6 @@ HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
+>>  $(eval $(host-autotools-package))
+>> 
+>>  # variables used by other packages
+>> -AUTOCONF = $(HOST_DIR)/bin/autoconf
+>> -AUTOHEADER = $(HOST_DIR)/bin/autoheader
+>> -AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" 
+>> AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" 
+>> AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf 
+>> -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+>> +AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I 
+>> "$(ACLOCAL_HOST_DIR)"
+>> +AUTOHEADER = $(HOST_DIR)/bin/autoheader -I "$(ACLOCAL_DIR)" -I 
+>> "$(ACLOCAL_HOST_DIR)"
+>> +AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" 
+>> AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" 
+>> AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf 
+>> -f -i
+> 
+>  This will expand to:
+> 
+> ... ACLOCAL="ACLOCAL_PATH="$(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)"
+> $(HOST_DIR)/bin/aclocal" AUTOCONF=...
+> 
+> (I've only done one level of expansion, but is shows my point.) So the 
+> quotation
+> marks are screwed up a little.
 
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index 1600e219d1..5cdc38eae0 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B from the kernel sources: the zero is the same
-diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-index e3c747ff6f..129afc4f2e 100644
---- a/configs/raspberrypi0w_defconfig
-+++ b/configs/raspberrypi0w_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index e6c38e74b7..15b6a58780 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index b9a070fb82..45283496ac 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 530eb0ab3f..08e7bed027 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index 4e9d782c7c..63a03e5cf9 100644
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-index f013c4382c..0733e91b05 100644
---- a/configs/raspberrypi4_64_defconfig
-+++ b/configs/raspberrypi4_64_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-index a216463e28..2402b0673c 100644
---- a/configs/raspberrypi4_defconfig
-+++ b/configs/raspberrypi4_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 969a92820e..1b47e293f8 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
--- 
-2.24.1
+nice catch.
+
+>  It does work because the space is still quoted, and the quotes around 
+> the
+> ACLOCAL_PATH value are actually redundant (because spaces in 
+> directories are not
+> supported). But it looks a little weird.
+> 
+> 
+>  That said, I wonder: why don't we simply export ACLOCAL_PATH? I think 
+> with
+> that, we don't need the -I options in autoheader and autoconf any more, 
+> right?
+
+You mean something like that:
+
+ACLOCAL = $(HOST_DIR)/bin/aclocal -I $(ACLOCAL_DIR)
+ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
+
+AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL_PATH="$(ACLOCAL_PATH)" 
+ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" 
+AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f 
+-i
+
+That won't work if $(ACLOCAL) is used alone. But from what I see that 
+isn't
+used for now. So we could give that a try.
+
+Or rather something like that:
+ACLOCAL = $(HOST_DIR)/bin/aclocal -I $(ACLOCAL_DIR)
+ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
+export ACLOCAL_PATH
+
+AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" 
+AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" 
+AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i
+
+But that would clutter the variable ACLOCAL_PATH and no other package 
+exports variables.
+
+-michael
