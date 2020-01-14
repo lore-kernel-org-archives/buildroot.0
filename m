@@ -1,92 +1,27 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Jan 2020 00:37:40 +0100
-Subject: [Buildroot] [RFC PATCH] autotools: do not overwrite first
- include path
-In-Reply-To: <20191212085748.13802-1-michael@walle.cc>
-References: <20191212085748.13802-1-michael@walle.cc>
-Message-ID: <53fbaa47-6e61-6be6-2aef-3daee6a698dc@mind.be>
+From: Ash Charles <ashcharles@gmail.com>
+Date: Mon, 13 Jan 2020 19:58:40 -0500
+Subject: [Buildroot] [PATCH 0/2] Version bumps for PRU packages
+Message-ID: <20200114005842.45810-1-ashcharles@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump versions for TI's PRU co-processor toolcahin and support libraries.
 
+Note, I don't have hardware so I'm unable to confirm that these versions
+do more than build correctly.
 
-On 12/12/2019 09:57, Michael Walle wrote:
-> The first include path is special in aclocal. For example it is the path
-> for the --install option. Also, the first include is treated in a
-> special way if it doesn't exists. This might be the case if there is the
-> following construct:
-> 
->   configure.ac: AC_CONFIG_MACRO_DIR([m4])
->   Makefile.am: ACLOCAL_AMFLAGS="-I m4"
-> 
-> If the package doesn't have local macros, the m4/ directory might not
-> exist. aclocal will then just issue a warning instead of aborting the
-> execution with a fatal error. See discussion here:
->   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=565663
-> 
-> Don't use the "-I" option in aclocal. Instead use ACLOCAL_PATH to pass
-> the system-wide include dirs.
-> 
-> As a side effect this should fix the use of $(ACLOCAL) alone. Up until
-> now, $(ACLOCAL) didn't include the ACLOCAL_HOST_DIR system include path.
-> 
-> autoreconf will pass the "-I" options to every tool it runs. So move the
-> argument to each individual tool except aclocal.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  package/autoconf/autoconf.mk | 6 +++---
->  package/automake/automake.mk | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-> index e5f474c72d..336ac59b42 100644
-> --- a/package/autoconf/autoconf.mk
-> +++ b/package/autoconf/autoconf.mk
-> @@ -21,6 +21,6 @@ HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
->  $(eval $(host-autotools-package))
->  
->  # variables used by other packages
-> -AUTOCONF = $(HOST_DIR)/bin/autoconf
-> -AUTOHEADER = $(HOST_DIR)/bin/autoheader
-> -AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-> +AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-> +AUTOHEADER = $(HOST_DIR)/bin/autoheader -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-> +AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i
+Ash Charles (2):
+  ti-cgt-pru: bump to latest version 2.3.3
+  pru-software-support: bump to latest version 5.6.0
 
- This will expand to:
+ package/pru-software-support/pru-software-support.hash | 2 +-
+ package/pru-software-support/pru-software-support.mk   | 7 ++++---
+ package/ti-cgt-pru/ti-cgt-pru.hash                     | 6 +++---
+ package/ti-cgt-pru/ti-cgt-pru.mk                       | 4 ++--
+ 4 files changed, 10 insertions(+), 9 deletions(-)
 
-... ACLOCAL="ACLOCAL_PATH="$(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)"
-$(HOST_DIR)/bin/aclocal" AUTOCONF=...
-
-(I've only done one level of expansion, but is shows my point.) So the quotation
-marks are screwed up a little.
-
- It does work because the space is still quoted, and the quotes around the
-ACLOCAL_PATH value are actually redundant (because spaces in directories are not
-supported). But it looks a little weird.
-
-
- That said, I wonder: why don't we simply export ACLOCAL_PATH? I think with
-that, we don't need the -I options in autoheader and autoconf any more, right?
-
-
- Regards,
- Arnout
-
-
-> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-> index 270337712e..b34a8eb717 100644
-> --- a/package/automake/automake.mk
-> +++ b/package/automake/automake.mk
-> @@ -32,4 +32,4 @@ $(eval $(host-autotools-package))
->  # variables used by other packages
->  AUTOMAKE = $(HOST_DIR)/bin/automake
->  ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
-> -ACLOCAL = $(HOST_DIR)/bin/aclocal -I $(ACLOCAL_DIR)
-> +ACLOCAL = ACLOCAL_PATH="$(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)" $(HOST_DIR)/bin/aclocal
-> 
+-- 
+2.24.1
