@@ -1,113 +1,51 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Tue, 14 Jan 2020 22:14:24 +0100
-Subject: [Buildroot] Allowing to build from Git branches
-In-Reply-To: <7cb813ef-4b64-60c4-a810-50b80bac76a8@xes-inc.com>
-References: <20200114220401.61700031@windsurf>
- <7cb813ef-4b64-60c4-a810-50b80bac76a8@xes-inc.com>
-Message-ID: <CAOf5uwmosMBGiF_GSHjDw4rc-7BkaGhRRGF36xPHDNaPT8MaEg@mail.gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Tue, 14 Jan 2020 22:17:45 +0100
+Subject: [Buildroot] [PATCH v1 3/3] package/rpi-userland: bump version
+ to 42ec119
+In-Reply-To: <20200114181920.54b8bd3e@gmx.net>
+References: <20200114094256.23174-1-ps.report@gmx.net>
+ <20200114094256.23174-3-ps.report@gmx.net>
+ <trinity-41871925-7822-4238-98ae-909b71ee05a8-1579005943320@3c-app-mailcom-bs09>
+ <20200114152755.4123935c@gmx.net> <20200114181920.54b8bd3e@gmx.net>
+Message-ID: <trinity-12b6b7ea-6e9e-4540-9048-5a259f7605ff-1579036665309@3c-app-mailcom-bs11>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Greetings Peter,
 
-On Tue, Jan 14, 2020 at 10:10 PM Vincent Fazio <vfazio@xes-inc.com> wrote:
+> Sent: Tuesday, January 14, 2020 at 7:19 PM
+> From: "Peter Seiderer" <ps.report@gmx.net>
+> To: daggs <daggs@gmx.com>
+> Cc: buildroot at buildroot.org, "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>, "Martin Bark" <martin@barkynet.com>, "Mahyar Koshkouei" <mahyar.koshkouei@gmail.com>, "Arthur Courtel" <arthur.courtel@smile.fr>
+> Subject: Re: [Buildroot] [PATCH v1 3/3] package/rpi-userland: bump version to 42ec119
 >
-> I can see the argument for this. I used to use a hacked up BR branch
-> that added support for checking if the reference to the git branch has
-> changed since the last download but this was only while images  were in
-> development. I always switched to fixed hashes after the iterations were
-> completed.
+> Hello Dagg,
 >
-> On 1/14/20 3:04 PM, Thomas Petazzoni wrote:
-> > Hello,
-> >
-> > I know some people are going to yell at me for bringing up this topic,
-> > but let's do it anyway.
-> >
-> > Currently, Buildroot says that using a Git branch as the VERSION for a
-> > package is not supported. There are some patches that have been
-> > proposed to explicitly prevent using branches, but in the current
-> > Buildroot it "works" except that a cached tarball is preserved in
-> > DL_DIR, which means that the branch is never fetched again unless the
-> > tarball is manually deleted from DL_DIR. We have generally resisted
-> > supporting Git branches with the (very valid) argument that it breaks
-> > reproducibility.
-> >
-> > However, over time, I have seen a number of users/companies complaining
-> > about this, both on the mailing list and privately with customers or
-> > while discussing with users at conferences.
-> >
-> > The typical use case that they describe is the following: a company has
-> > a large number of packages in Buildroot to build in-house software
-> > components. Both for their CI runs, and for the developers actively
-> > working on the system, they would like for those packages to point to a
-> > branch, and always fetch the latest version. Yes, it is not
-> > reproducible, but reproducibility is not what is desired at this point
-> > of the project: what is wanted is precisely to fetch the latest and
-> > greatest for those packages that point to a branch, to make sure the
-> > most recent code gets tested and used by developers internally.
-> >
-> > The only solution we offer for this today is <pkg>_OVERRIDE_SRCDIR or
-> > <pkg>_SITE_METHOD = local, but neither of those are very practical: you
-> > need to have fetched each of your software components outside of
-> > Buildroot, and point Buildroot at them. It's a bit silly when Buildroot
-> > is already perfectly capable of doing this.
-> >
-
-We use the SRC_OVERRIDE and repo tools. I think that buildroot change
-is not required. We have couple of scripts to tag version easily and organize
-project that are in continue development outside buildroot.
-
-Michael
-
-> > Overall, I think it makes sense to realize that Buildroot is used in
-> > different use-cases:
-> >
-> >   - During active development, where we want to offer a lot of
-> >     flexibility, possibly at the expense of reproducibility.
-> >
-> >   - During release/generation of the final firmware that will be used on
-> >     actual devices, where we want an absolute reproducibility, to the
-> >     point where we're working on binary-identical results.
-> >
-> > Buildroot has its roots in solving the second use-case. However, we
-> > have already added some features, like OVERRIDE_SRCDIR and SITE_METHOD
-> > = local, to provide the additional flexibility needed for the first use
-> > case. In some sense, those features already kill reproducibility: what
-> > you're building is some random source code from some random local
-> > folder. Completely non-reproducible. Possibility worse that a Git
-> > branch, where you can potentially at least trace back which commit was
-> > built, and re-do that same build.
-> >
-> > So I'd like to start the debate on whether it might makes sense to
-> > relax our requirements on this, and be more pragmatic, and support
-> > fetching from Git branches. Of course, this very likely needs to be
-> > guarded by a Config.in option, so that we clearly set the boundary
-> > between "you're in the safe zone where your build is reproducible" and
-> > "you're in the zone where your build is non-reproducible".
-> >
-> > And now, let's the flames start! :-)
-> >
-> > Thomas
+> On Tue, 14 Jan 2020 15:27:55 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 >
-> --
-> Vincent Fazio
-> Embedded Software Engineer - Linux
-> Extreme Engineering Solutions, Inc
-> http://www.xes-inc.com
+> > Hello Dagg,
+> >
+> > On Tue, 14 Jan 2020 13:45:43 +0100, daggs <daggs@gmx.com> wrote:
+> >
+> > >
+> > > do note that this commit allows rpi-userland compilation on aarch64. might be a good idea to fix rpi-userland.mk and Config.in to support that.
+> > >
+> > > Dagg.
+> >
+> > Thanks for the hint, will give it a try the next days....
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> But does not provide the full set of libs for the 64bit build, e.g.
+> no libegl, libgles, libopenmax, libopenvg (see e.g. [1], [2]), not
+> sure which libs all the buildroot rpi-userland dependent packages
+> expect (and if a incomplete rpi-userland is worth the 64-bit build)?
+>
 
+that is correct, libopenmax will probably not be implemented (as the devs say), mmal is supported and can be used instead.
+as for the rest, I don't think they will be supported, according to the relevant issue (https://github.com/raspberrypi/userland/issues/314), it seems that they plan to wrap the aarch64 support up with the current list. infact, I won't be surprised if one will ask for they will say to use libegl, libgles from exiting 32 bits libs.
 
+for me, 64 bit build it worthwhile because I want to use mmal with tvheadend.
 
--- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+btw 06bc6daa02137ca72b7a2104afad81e82a44de17 includes that patch already, might be worthwhile to bump the version again.
