@@ -1,244 +1,190 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Wed, 15 Jan 2020 12:44:23 -0600
-Subject: [Buildroot] [PATCHv5] toolchain: allow using custom headers
- newer than latest known ones
-In-Reply-To: <20200115182907.7104-1-yann.morin.1998@free.fr>
-References: <20200115182907.7104-1-yann.morin.1998@free.fr>
-Message-ID: <af743cd9-930a-ccd2-d513-3f9caff44220@xes-inc.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 15 Jan 2020 21:37:53 +0100
+Subject: [Buildroot] [PATCH] infra: add the transient download mechanism
+Message-ID: <20200115203753.12110-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested-by: Vincent Fazio <vfazio@xes-inc.com>
+NOTE: NOT TO BE COMMITTED!
 
-On 1/15/20 12:29 PM, Yann E. MORIN wrote:
-> From: Vincent Fazio <vfazio@xes-inc.com>
->
-> When Buildroot is released, it knows up to a certain kernel header
-> version, and no later. However, it is possible that an external
-> toolchain will be used, that uses headers newer than the latest version
-> Buildroot knows about.
->
-> This may also happen when testing a development, an rc-class, or a newly
-> released kernel, either in an external toolchain, or with an internal
-> toolchain with custom headers (same-as-kernel, custom version, custom
-> git, custom tarball).
->
-> In the current state, Buildroot would refuse to use such toolchains,
-> because the test is for strict equality.
->
-> We'd like to make that situation possible, but we also want the user not
-> to be lenient at the same time, and select the right headers version
-> when it is known.
->
-> So, we add a new Kconfig blind option that the latest kernel headers
-> version selects. This options is then used to decide whether we do a
-> strict or loose check of the kernel headers.
->
-> Suggested-by: Aaron Sierra <asierra@xes-inc.com>
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-> [yann.morin.1998 at free.fr:
->    - only do a loose check for the latest version
->    - expand commit log
-> ]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->
-> ---
-> Changes v4 -> v5: (Yann)
->    - include string.h for strcmp()  (Vincent)
->
-> Changes v3 -> v4: (Yann)
->    - fix commit title: it's not just about external toolchains  (Thomas)
->    - fix C-code coding style  (Thomas)
->    - add 'or later' to the prompts  (Thomas)
->
-> Changes v2 -> v3:  (Yann)
->    - also handle the internal toolchain for custom headers
->      (noticed by Vincent)
->
-> Changes v1 -> v2:  (Yann)
->    - make it loose only for the latest version
-> ---
->   package/linux-headers/Config.in.host          |  5 +++-
->   package/linux-headers/linux-headers.mk        |  5 +++-
->   support/scripts/check-kernel-headers.sh       | 28 ++++++++++++++++---
->   toolchain/Config.in                           |  8 ++++++
->   toolchain/helpers.mk                          |  6 +++-
->   .../pkg-toolchain-external.mk                 |  3 +-
->   .../Config.in.options                         |  5 +++-
->   7 files changed, 51 insertions(+), 9 deletions(-)
->
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index 6b6fe028c5..905497f496 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -118,8 +118,11 @@ choice
->   	  This is used to hide/show some packages that have strict
->   	  requirements on the version of kernel headers.
->   
-> +	  If your kernel headers are more recent than the latest version
-> +	  in the choice, then select the latest version.
-> +
->   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4
-> -	bool "5.4.x"
-> +	bool "5.4.x or later"
->   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
->   
->   config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3
-> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-> index 676c8c44ea..d653c951fd 100644
-> --- a/package/linux-headers/linux-headers.mk
-> +++ b/package/linux-headers/linux-headers.mk
-> @@ -131,11 +131,14 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
->   endef
->   
->   ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
-> +# In this case, we must always do a 'loose' test, because they are all
-> +# custom versions which may be later than what we know right now.
->   define LINUX_HEADERS_CHECK_VERSION
->   	$(call check_kernel_headers_version,\
->   		$(BUILD_DIR),\
->   		$(STAGING_DIR),\
-> -		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)))
-> +		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
-> +		loose)
->   endef
->   LINUX_HEADERS_POST_INSTALL_STAGING_HOOKS += LINUX_HEADERS_CHECK_VERSION
->   endif
-> diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-> index 9d23c00feb..d1864cb05e 100755
-> --- a/support/scripts/check-kernel-headers.sh
-> +++ b/support/scripts/check-kernel-headers.sh
-> @@ -1,9 +1,25 @@
->   #!/bin/sh
->   
-> +# This script (and the embedded C code) will check that the actual
-> +# headers version match the user told us they were:
-> +#
-> +# - if both versions are the same, all is well.
-> +#
-> +# - if the actual headers are older than the user told us, this is
-> +#   an error.
-> +#
-> +# - if the actual headers are more recent than the user told us, and
-> +#   we are doing a strict check, then this is an error.
-> +#
-> +# - if the actual headers are more recent than the user told us, and
-> +#   we are doing a loose check, then a warning is printed, but this is
-> +#   not an error.
-> +
->   BUILDDIR="${1}"
->   SYSROOT="${2}"
->   # Make sure we have enough version components
->   HDR_VER="${3}.0.0"
-> +CHECK="${4}"  # 'strict' or 'loose'
->   
->   HDR_M="${HDR_VER%%.*}"
->   HDR_V="${HDR_VER#*.}"
-> @@ -28,20 +44,24 @@ ${HOSTCC} -imacros "${SYSROOT}/usr/include/linux/version.h" \
->             -x c -o "${EXEC}" - <<_EOF_
->   #include <stdio.h>
->   #include <stdlib.h>
-> +#include <string.h>
->   
->   int main(int argc __attribute__((unused)),
->            char** argv __attribute__((unused)))
->   {
-> -    if((LINUX_VERSION_CODE & ~0xFF)
-> -        != KERNEL_VERSION(${HDR_M},${HDR_m},0))
-> +    int ret = 0;
-> +    int l = LINUX_VERSION_CODE & ~0xFF;
-> +    int h = KERNEL_VERSION(${HDR_M},${HDR_m},0);
-> +
-> +    if(l != h)
->       {
->           printf("Incorrect selection of kernel headers: ");
->           printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
->                  ((LINUX_VERSION_CODE>>16) & 0xFF),
->                  ((LINUX_VERSION_CODE>>8) & 0xFF));
-> -        return 1;
-> +        ret = ((l >= h) && !strcmp("${CHECK}", "loose")) ? 0 : 1;
->       }
-> -    return 0;
-> +    return ret;
->   }
->   _EOF_
->   
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index 858121d2c5..973c03254f 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -457,6 +457,14 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
->   config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
->   	bool
->   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
-> +	select BR2_TOOLCHAIN_HEADERS_LATEST
-> +
-> +# This should be selected by the latest version, above, to indicate that
-> +# Buildroot does not know of more recent headers than the ones selected.
-> +# This allows using toolchains with headers more recent than Buildroot
-> +# knows about, while still enforcing strict check for older headers.
-> +config BR2_TOOLCHAIN_HEADERS_LATEST
-> +	bool
->   
->   # This order guarantees that the highest version is set, as kconfig
->   # stops affecting a value on the first matching default.
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 996cc70d44..2c2a987c3e 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -161,9 +161,13 @@ copy_toolchain_sysroot = \
->   # $1: build directory
->   # $2: sysroot directory
->   # $3: kernel version string, in the form: X.Y
-> +# $4: test to do for the latest kernel version, 'strict' or 'loose'
-> +#     always 'strict' if this is not the latest version.
->   #
->   check_kernel_headers_version = \
-> -	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3); then \
-> +	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3) \
-> +		$(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict); \
-> +	then \
->   		exit 1; \
->   	fi
->   
-> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index 1c43409514..b01082aadd 100644
-> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -542,7 +542,8 @@ define $(2)_CONFIGURE_CMDS
->   	$$(call check_kernel_headers_version,\
->   		$$(BUILD_DIR)\
->   		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
-> -		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
-> +		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
-> +		$$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict)); \
->   	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
->   		$$(call qstrip,$$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
->   	if test "$$(BR2_arm)" = "y" ; then \
-> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> index 665765a104..81ace76493 100644
-> --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> @@ -109,8 +109,11 @@ choice
->   	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
->   	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
->   
-> +	  If your toolchain uses headers newer than the latest version
-> +	  in the choice, then select the latest version.
-> +
->   config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4
-> -	bool "5.4.x"
-> +	bool "5.4.x or later"
->   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
->   
->   config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3
+This patch is a proof of concept for the transient download mechanism,
+that would help using branches as versions, and keep using the head of
+the branch each time a build started.
 
+A package declares its download as transient with:
+  FOO_DOWNLOAD_TRANSIENT = YES
+
+this means that the download infra will not use any already downloaded
+archive, and will instead always download it as if missing.
+
+Since the check is done in the download wrapper, we have no TOCTOU race
+in case two bulds would attempt the same transient download: the archive
+is only replaced ato,mically as usual.
+
+So, if the package uses a branch as version, the branch's HEAD at that
+very moment will be redownloaded.
+
+This stil has the drawback that two builds in parallel may get slightly
+different content for the same branch, and the first build could end up
+using the download of the second build:
+
+    build-1             build-2
+
+    download
+    |                   download
+    |                   |
+    save to dl-dir      |
+    [...]               save to dl-dir
+    extract
+
+Furthermore, even with a single build, it might get what it expects:
+
+    developer-1         developer-2
+
+    git push branch
+    trigger CI          git push branch
+    [...]
+    download
+
+In that case the build of delopper-1 would get the code of developper-2
+who pushed on the same branch.
+
+For people who are aiming at their feet, we're now providing them with
+a loaded gun. ;-]
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Vincent Fazio <vfazio@xes-inc.com>
+Cc: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Cc: Chris Packham <judge.packham@gmail.com>
+Cc: Nicolas Carrier <nicolas.carrier@orolia.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+---
+ docs/manual/adding-packages-generic.txt | 16 +++++++++++++---
+ package/busybox/busybox.mk              |  1 +
+ package/pkg-download.mk                 |  1 +
+ package/pkg-generic.mk                  |  8 +-------
+ support/download/dl-wrapper             |  8 +++++---
+ 5 files changed, 21 insertions(+), 13 deletions(-)
+
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index baa052e31c..afffb09bc8 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -206,12 +206,14 @@ information is (assuming the package name is +libfoo+) :
+   ** a tag for a git tree +LIBFOO_VERSION = v0.1.2+
+ +
+ .Note:
+-Using a branch name as +FOO_VERSION+ is not supported, because it does
+-not and can not work as people would expect it should:
++Using a branch name as +FOO_VERSION+, although technically possible,
++is highly discouraged, because it does not and can not work as people
++would expect it should:
+ +
+   1. due to local caching, Buildroot will not re-fetch the repository,
+      so people who expect to be able to follow the remote repository
+-     would be quite surprised and disappointed;
++     would be quite surprised and disappointed (but see
++     +LIBFOO_DOWNLOAD_TRANSIENT+, later);
+   2. because two builds can never be perfectly simultaneous, and because
+      the remote repository may get new commits on the branch anytime,
+      two users, using the same Buildroot tree and building the same
+@@ -342,6 +344,14 @@ not and can not work as people would expect it should:
+   submodules when they contain bundled libraries, in which case we
+   prefer to use those libraries from their own package.
+ 
++* +LIBFOO_DOWNLOAD_TRANSIENT+ can be set to +YES+ or +NO+ (the default).
++  If set to +YES+, the download for that package will be attempted at
++  every build; any already downloaded archive is ignored as if missing.
++  This may help when a branch is specified in +LIBFOO_VERSION+, and the
++  head/tip of the branch is to be built, like a CI pipeline would need
++  for example. This still suffers from the other issues listed above
++  about using branches, though.
++
+ * +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
+   (directories) that tar must strip from file names on extraction.
+   The tarball for most packages has one leading component named
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 6283bc96ea..ee17febe48 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -9,6 +9,7 @@ BUSYBOX_SITE = http://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPL-2.0
+ BUSYBOX_LICENSE_FILES = LICENSE
++BUSYBOX_DOWNLOAD_TRANSIENT = YES
+ 
+ define BUSYBOX_HELP_CMDS
+ 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index de619ba90a..c3a98ce7b0 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -108,6 +108,7 @@ define DOWNLOAD
+ 		-n '$($(2)_BASENAME_RAW)' \
+ 		-N '$($(2)_RAWNAME)' \
+ 		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
++		$(if $($(2)_DOWNLOAD_TRANSIENT),-F) \
+ 		$(if $($(2)_GIT_SUBMODULES),-r) \
+ 		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(2)),-u $(uri)) \
+ 		$(QUIET) \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 268d999efb..7c2e9db604 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -158,13 +158,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
+ 	@$(call step_start,download)
+ 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DOWNLOAD_DEPENDENCIES))
+ 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+-# Only show the download message if it isn't already downloaded
+-	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
+-		if test ! -e $($(PKG)_DL_DIR)/`basename $$p` ; then \
+-			$(call MESSAGE,"Downloading") ; \
+-			break ; \
+-		fi ; \
+-	done
++	@$(call MESSAGE,"Downloading") ; \
+ 	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p),$(PKG))$(sep))
+ 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)mkdir -p $(@D)
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 3315bd410e..ab22ca7e4f 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -21,11 +21,12 @@ export BR_BACKEND_DL_GETOPTS=":hc:d:o:n:N:H:ru:qf:e"
+ 
+ main() {
+     local OPT OPTARG
+-    local backend output hfile recurse quiet rc
++    local backend output hfile recurse quiet rc force
+     local -a uris
+ 
+     # Parse our options; anything after '--' is for the backend
+-    while getopts ":c:d:D:o:n:N:H:rf:u:q" OPT; do
++    force=false
++    while getopts ":c:d:D:o:n:N:H:rf:u:qF" OPT; do
+         case "${OPT}" in
+         c)  cset="${OPTARG}";;
+         d)  dl_dir="${OPTARG}";;
+@@ -38,6 +39,7 @@ main() {
+         f)  filename="${OPTARG}";;
+         u)  uris+=( "${OPTARG}" );;
+         q)  quiet="-q";;
++        F)  force=true;;
+         :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+         \?) error "unknown option '%s'\n" "${OPTARG}";;
+         esac
+@@ -67,7 +69,7 @@ main() {
+     # - matches all its hashes: do not download it again and exit promptly
+     # - fails at least one of its hashes: force a re-download
+     # - there's no hash (but a .hash file): consider it a hard error
+-    if [ -e "${output}" ]; then
++    if ! ${force} && [ -e "${output}" ]; then
+         if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
+             exit 0
+         elif [ ${?} -ne 2 ]; then
 -- 
-Vincent Fazio
-Embedded Software Engineer - Linux
-Extreme Engineering Solutions, Inc
-http://www.xes-inc.com
+2.20.1
