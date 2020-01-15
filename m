@@ -1,194 +1,218 @@
 From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Wed, 15 Jan 2020 14:26:17 +0100
-Subject: [Buildroot] [PATCH v2 9/9] package/cargo-bin: remove and use
- cargo-bin from rust-bin package
+Date: Wed, 15 Jan 2020 14:26:14 +0100
+Subject: [Buildroot] [PATCH v2 6/9] package/cargo: drop package
 In-Reply-To: <20200115132617.26604-1-patrick.havelange@essensium.com>
 References: <20200115132617.26604-1-patrick.havelange@essensium.com>
-Message-ID: <20200115132617.26604-9-patrick.havelange@essensium.com>
+Message-ID: <20200115132617.26604-6-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also added hashes for rust-bin powerpc64le.
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
+As no package depends on the standalone cargo package, it can be
+dropped.
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+
 ---
- DEVELOPERS                       |  1 -
- package/cargo-bin/cargo-bin.hash | 13 -------------
- package/cargo-bin/cargo-bin.mk   | 20 --------------------
- package/rust-bin/rust-bin.hash   | 15 +++++++++------
- package/rust-bin/rust-bin.mk     | 28 ++++++++++++----------------
- package/rust/rust.mk             |  2 +-
- 6 files changed, 22 insertions(+), 57 deletions(-)
- delete mode 100644 package/cargo-bin/cargo-bin.hash
- delete mode 100644 package/cargo-bin/cargo-bin.mk
+Changes v1 -> v2:
+  - Also update DEVELOPERS file
+  - Also update tests/package/test_rust.py
+---
+ DEVELOPERS                                 |  1 -
+ package/Config.in.host                     |  1 -
+ package/cargo/Config.in.host               |  9 ---
+ package/cargo/cargo.hash                   |  8 --
+ package/cargo/cargo.mk                     | 91 ----------------------
+ package/cargo/config.in                    |  2 -
+ support/testing/tests/package/test_rust.py |  2 -
+ 7 files changed, 114 deletions(-)
+ delete mode 100644 package/cargo/Config.in.host
+ delete mode 100644 package/cargo/cargo.hash
+ delete mode 100644 package/cargo/cargo.mk
+ delete mode 100644 package/cargo/config.in
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index aca4fd2506..bd78e100f6 100644
+index 5652fc3555..aca4fd2506 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -706,7 +706,6 @@ F:	package/gstreamer1/gst1-plugins-bayer2rgb-neon/
- N:	Eric Le Bihan <eric.le.bihan.dev@free.fr>
+@@ -707,7 +707,6 @@ N:	Eric Le Bihan <eric.le.bihan.dev@free.fr>
  F:	docs/manual/adding-packages-meson.txt
  F:	package/adwaita-icon-theme/
--F:	package/cargo-bin/
+ F:	package/cargo-bin/
+-F:	package/cargo/
  F:	package/darkhttpd/
  F:	package/eudev/
  F:	package/execline/
-diff --git a/package/cargo-bin/cargo-bin.hash b/package/cargo-bin/cargo-bin.hash
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 62e860d7c3..d69961e813 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -3,7 +3,6 @@ menu "Host utilities"
+ 	source "package/aespipe/Config.in.host"
+ 	source "package/android-tools/Config.in.host"
+ 	source "package/btrfs-progs/Config.in.host"
+-	source "package/cargo/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+ 	source "package/checkpolicy/Config.in.host"
+ 	source "package/checksec/Config.in.host"
+diff --git a/package/cargo/Config.in.host b/package/cargo/Config.in.host
 deleted file mode 100644
-index 22cad3c0ee..0000000000
---- a/package/cargo-bin/cargo-bin.hash
+index c33c6851f2..0000000000
+--- a/package/cargo/Config.in.host
 +++ /dev/null
-@@ -1,13 +0,0 @@
--# From https://static.rust-lang.org/dist/cargo-0.41.0-i686-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/cargo-0.41.0-i686-unknown-linux-gnu.tar.xz.asc
--sha256 c48bc132f4025ff39b1b6dc52aef9d406c3f926ce05fe92d943ceab7a5fd6058  cargo-0.41.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/cargo-0.41.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/cargo-0.41.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
--sha256 7705f21d938a72ba6f01818661b2dea29183209940a335f18d1761e1e03d3710  cargo-0.41.0-powerpc64le-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/cargo-0.41.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/cargo-0.41.0-x86_64-unknown-linux-gnu.tar.xz.asc
--sha256 9b6ae643fa240c5ecbc1dc390f4020b6a683f25bac6f7437ebd4b9d32a8d0b6c  cargo-0.41.0-x86_64-unknown-linux-gnu.tar.xz
+@@ -1,9 +0,0 @@
+-config BR2_PACKAGE_HOST_CARGO
+-	bool "host cargo"
+-	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+-	select BR2_PACKAGE_HOST_RUSTC
+-	help
+-	  Cargo is the package manager for the Rust programming
+-	  language.
+-
+-	  https://crates.io/
+diff --git a/package/cargo/cargo.hash b/package/cargo/cargo.hash
+deleted file mode 100644
+index baa2cfbc33..0000000000
+--- a/package/cargo/cargo.hash
++++ /dev/null
+@@ -1,8 +0,0 @@
 -# Locally generated
--sha256 8ada45cd9f843acf64e4722ae262c622a2b3b3007c7310ef36ac1061a30f6adb  LICENSE-APACHE
+-sha256 1a4bae6910ca895157a1abe8225eb2b7e9b49ee1ee1e4e72fb81cb8e1446bff9  cargo-0.26.0.tar.gz
+-sha256 dc7240d60a869fa24a68c8734fb7c810c27cca0a6dad52df6279865e4e8e7fae  rust-installer-4f994850808a572e2cc8d43f968893c8e942e9bf.tar.gz
+-sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
 -sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
--sha256 cbc759b1f17a2ac38fe3eb9e9563b1a08ba0f900611c49faaf68b46907b6d898  LICENSE-THIRD-PARTY
-diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
+-sha256 8bd89f9222dc80292f4107347103b693ac66f3a083371f0629ccf42338abe880  LICENSE-THIRD-PARTY
+-# From https://src.fedoraproject.org/repo/pkgs/cargo/cargo-0.26.0-vendor.tar.xz/sha512
+-sha512 6ed2a1644c9b18fc24ddad5350d41b6c36cd5b62de4cf0b748a57b589f4f0ac12f91461989158d58d0892bf6fc2c1626cf574e7e2b9da4b0e35f72dfd88f9048  cargo-0.26.0-vendor.tar.xz
+diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
 deleted file mode 100644
-index 09dd58e3df..0000000000
---- a/package/cargo-bin/cargo-bin.mk
+index a387281b4c..0000000000
+--- a/package/cargo/cargo.mk
 +++ /dev/null
-@@ -1,20 +0,0 @@
+@@ -1,91 +0,0 @@
 -################################################################################
 -#
--# cargo-bin
+-# cargo
 -#
 -################################################################################
 -
--CARGO_BIN_VERSION = 0.41.0
--CARGO_BIN_SITE = https://static.rust-lang.org/dist
--CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
--CARGO_BIN_LICENSE = Apache-2.0 or MIT
--CARGO_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-CARGO_VERSION = 0.26.0
+-CARGO_SITE = $(call github,rust-lang,cargo,$(CARGO_VERSION))
+-CARGO_LICENSE = Apache-2.0 or MIT
+-CARGO_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 -
--ifeq ($(BR2_PACKAGE_HOST_RUST_BIN),y)
--define HOST_CARGO_BIN_INSTALL_CMDS
--       $(@D)/install.sh --prefix=$(HOST_DIR) --disable-ldconfig
+-CARGO_DEPS_SHA512 = 6ed2a1644c9b18fc24ddad5350d41b6c36cd5b62de4cf0b748a57b589f4f0ac12f91461989158d58d0892bf6fc2c1626cf574e7e2b9da4b0e35f72dfd88f9048
+-CARGO_DEPS_SITE = https://src.fedoraproject.org/repo/pkgs/cargo/$(CARGO_DEPS_SOURCE)/sha512/$(CARGO_DEPS_SHA512)
+-CARGO_DEPS_SOURCE = cargo-$(CARGO_VERSION)-vendor.tar.xz
+-
+-CARGO_INSTALLER_VERSION = 4f994850808a572e2cc8d43f968893c8e942e9bf
+-CARGO_INSTALLER_SITE = $(call github,rust-lang,rust-installer,$(CARGO_INSTALLER_VERSION))
+-CARGO_INSTALLER_SOURCE = rust-installer-$(CARGO_INSTALLER_VERSION).tar.gz
+-
+-HOST_CARGO_EXTRA_DOWNLOADS = \
+-	$(CARGO_DEPS_SITE)/$(CARGO_DEPS_SOURCE) \
+-	$(CARGO_INSTALLER_SITE)/$(CARGO_INSTALLER_SOURCE)
+-
+-HOST_CARGO_DEPENDENCIES = \
+-	$(BR2_CMAKE_HOST_DEPENDENCY) \
+-	host-pkgconf \
+-	host-openssl \
+-	host-libhttpparser \
+-	host-libssh2 \
+-	host-libcurl \
+-	host-rustc \
+-	host-cargo-bin
+-
+-HOST_CARGO_SNAP_BIN = $(HOST_CARGO_BIN_DIR)/cargo/bin/cargo
+-HOST_CARGO_HOME = $(HOST_DIR)/share/cargo
+-
+-define HOST_CARGO_EXTRACT_DEPS
+-	@mkdir -p $(@D)/vendor
+-	$(call suitable-extractor,$(CARGO_DEPS_SOURCE)) \
+-		$(HOST_CARGO_DL_DIR)/$(CARGO_DEPS_SOURCE) | \
+-		$(TAR) --strip-components=1 -C $(@D)/vendor $(TAR_OPTIONS) -
 -endef
--HOST_CARGO_BIN_POST_INSTALL_HOOKS += HOST_RUST_INSTALL_CARGO_CONFIG
--endif
+-
+-HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_DEPS
+-
+-define HOST_CARGO_EXTRACT_INSTALLER
+-	@mkdir -p $(@D)/src/rust-installer
+-	$(call suitable-extractor,$(CARGO_INSTALLER_SOURCE)) \
+-		$(HOST_CARGO_DL_DIR)/$(CARGO_INSTALLER_SOURCE) | \
+-		$(TAR) --strip-components=1 -C $(@D)/src/rust-installer $(TAR_OPTIONS) -
+-endef
+-
+-HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_INSTALLER
+-
+-define HOST_CARGO_SETUP_DEPS
+-	mkdir -p $(@D)/.cargo
+-	( \
+-		echo "[source.crates-io]"; \
+-		echo "registry = 'https://github.com/rust-lang/crates.io-index'"; \
+-		echo "replace-with = 'vendored-sources'"; \
+-		echo "[source.vendored-sources]"; \
+-		echo "directory = '$(@D)/vendor'"; \
+-	) > $(@D)/.cargo/config
+-endef
+-
+-HOST_CARGO_PRE_CONFIGURE_HOOKS += HOST_CARGO_SETUP_DEPS
+-
+-HOST_CARGO_SNAP_OPTS = \
+-	--release \
+-	$(if $(VERBOSE),--verbose)
+-
+-HOST_CARGO_ENV = \
+-	RUSTFLAGS="$(addprefix -Clink-arg=,$(HOST_LDFLAGS))" \
+-	CARGO_HOME=$(HOST_CARGO_HOME)
+-
+-define HOST_CARGO_BUILD_CMDS
+-	(cd $(@D); $(HOST_MAKE_ENV) $(HOST_CARGO_ENV) $(HOST_CARGO_SNAP_BIN) \
+-		build $(HOST_CARGO_SNAP_OPTS))
+-endef
+-
+-define HOST_CARGO_INSTALL_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/target/release/cargo $(HOST_DIR)/bin/cargo
+-	$(INSTALL) -D package/cargo/config.in \
+-		$(HOST_DIR)/share/cargo/config
+-	$(SED) 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
+-		$(HOST_DIR)/share/cargo/config
+-	$(SED) 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
+-		$(HOST_DIR)/share/cargo/config
+-endef
 -
 -$(eval $(host-generic-package))
-diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-index 12195f2911..1fdce9ad6f 100644
---- a/package/rust-bin/rust-bin.hash
-+++ b/package/rust-bin/rust-bin.hash
-@@ -1,9 +1,12 @@
--# From https://static.rust-lang.org/dist/rustc-1.40.0-i686-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rustc-1.40.0-i686-unknown-linux-gnu.tar.xz.asc
--sha256 257e4789043098a5e3b4fa85ea988019f37d640a10f83d39ada00fb23e057b8a  rustc-1.40.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rustc-1.40.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rustc-1.40.0-x86_64-unknown-linux-gnu.tar.xz.asc
--sha256 b1c00618b7a98156e88b14682508a503284f85748eab23de749a20dcc8847111  rustc-1.40.0-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.40.0-i686-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.40.0-i686-unknown-linux-gnu.tar.xz.asc
-+sha256 82454e1b60b2bc24779d9c949cc0e1da43f3e423dbfc6b45b5afddf65829fc9d  rust-1.40.0-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.40.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.40.0-x86_64-unknown-linux-gnu.tar.xz.asc
-+sha256 37492d6467bcea611b2c7388aed50b655524f81410e255142ef6cfb6cef1ec53  rust-1.40.0-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.40.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.40.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
-+sha256 82454e1b60b2bc24779d9c949cc0e1da43f3e423dbfc6b45b5afddf65829fc9d  rust-1.40.0-powerpc64le-unknown-linux-gnu.tar.xz
- # From https://static.rust-lang.org/dist/rust-std-1.40.0-aarch64-unknown-linux-gnu.tar.xz.sha256
- # Verified using https://static.rust-lang.org/dist/rust-std-1.40.0-aarch64-unknown-linux-gnu.tar.xz.asc
- sha256 1abd1865e8339c2cac6992a11f6f98b66fa2b97f67acaddcf1992e39a7001bfc  rust-std-1.40.0-aarch64-unknown-linux-gnu.tar.xz
-diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
-index a5966768a4..be8d623aa2 100644
---- a/package/rust-bin/rust-bin.mk
-+++ b/package/rust-bin/rust-bin.mk
-@@ -10,18 +10,14 @@ RUST_BIN_LICENSE = Apache-2.0 or MIT
- RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+diff --git a/package/cargo/config.in b/package/cargo/config.in
+deleted file mode 100644
+index 47fad026be..0000000000
+--- a/package/cargo/config.in
++++ /dev/null
+@@ -1,2 +0,0 @@
+-[target. at RUSTC_TARGET_NAME@]
+-linker = "@CROSS_PREFIX at gcc"
+diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
+index 9854c3692e..15bb93dd97 100644
+--- a/support/testing/tests/package/test_rust.py
++++ b/support/testing/tests/package/test_rust.py
+@@ -73,7 +73,6 @@ class TestRustBin(TestRustBase):
+         BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+-        BR2_PACKAGE_HOST_CARGO=y
+         BR2_PACKAGE_HOST_RUSTC=y
+         """
  
- HOST_RUST_BIN_PROVIDES = host-rustc
--HOST_RUST_BIN_DEPENDENCIES = host-cargo-bin
- 
--HOST_RUST_BIN_SOURCE = rustc-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
--
--HOST_RUST_BIN_EXTRA_DOWNLOADS = \
--	rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
-+HOST_RUST_BIN_SOURCE = rust-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
- 
- ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
--HOST_RUST_BIN_EXTRA_DOWNLOADS += rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME).tar.xz
-+HOST_RUST_BIN_EXTRA_DOWNLOADS = rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME).tar.xz
- endif
- 
--HOST_RUST_BIN_LIBSTD_HOST_PREFIX = rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME)/rust-std-$(RUSTC_HOST_NAME)
-+HOST_RUST_BIN_LIBSTD_HOST_PREFIX = rust-std-$(RUSTC_HOST_NAME)
- 
- define HOST_RUST_BIN_LIBSTD_EXTRACT
- 	mkdir -p $(@D)/std
-@@ -31,36 +27,36 @@ define HOST_RUST_BIN_LIBSTD_EXTRACT
- 	)
- 	mkdir -p $(@D)/rustc/lib/rustlib/$(RUSTC_HOST_NAME)/lib
- 	cd $(@D)/rustc/lib/rustlib/$(RUSTC_HOST_NAME)/lib; \
--		ln -sf ../../../../../std/$(HOST_RUST_BIN_LIBSTD_HOST_PREFIX)/lib/rustlib/$(RUSTC_HOST_NAME)/lib/* .
-+		ln -sf ../../../../../$(HOST_RUST_BIN_LIBSTD_HOST_PREFIX)/lib/rustlib/$(RUSTC_HOST_NAME)/lib/* .
- endef
- 
- HOST_RUST_BIN_POST_EXTRACT_HOOKS += HOST_RUST_BIN_LIBSTD_EXTRACT
- 
--HOST_RUST_BIN_INSTALL_OPTS = \
-+HOST_RUST_BIN_INSTALL_COMMON_OPTS = \
- 	--prefix=$(HOST_DIR) \
- 	--disable-ldconfig
- 
-+HOST_RUST_BIN_INSTALL_OPTS = \
-+	$(HOST_RUST_BIN_INSTALL_COMMON_OPTS) \
-+	--components=rustc,cargo,rust-std-$(RUSTC_HOST_NAME)
-+
- define HOST_RUST_BIN_INSTALL_RUSTC
- 	(cd $(@D); \
- 		./install.sh $(HOST_RUST_BIN_INSTALL_OPTS))
- endef
- 
--define HOST_RUST_BIN_INSTALL_LIBSTD_HOST
--	(cd $(@D)/std/rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME); \
--		./install.sh $(HOST_RUST_BIN_INSTALL_OPTS))
--endef
--
- ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
- define HOST_RUST_BIN_INSTALL_LIBSTD_TARGET
- 	(cd $(@D)/std/rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME); \
--		./install.sh $(HOST_RUST_BIN_INSTALL_OPTS))
-+		./install.sh $(HOST_RUST_BIN_INSTALL_COMMON_OPTS))
- endef
- endif
- 
- define HOST_RUST_BIN_INSTALL_CMDS
- 	$(HOST_RUST_BIN_INSTALL_RUSTC)
--	$(HOST_RUST_BIN_INSTALL_LIBSTD_HOST)
- 	$(HOST_RUST_BIN_INSTALL_LIBSTD_TARGET)
- endef
- 
-+HOST_RUST_BIN_POST_INSTALL_HOOKS += HOST_RUST_INSTALL_CARGO_CONFIG
-+
- $(eval $(host-generic-package))
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index e5d0e2ee71..a473b5e8af 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -41,7 +41,7 @@ define HOST_RUST_CONFIGURE_CMDS
- 	( \
- 		echo '[build]'; \
- 		echo 'target = ["$(RUSTC_TARGET_NAME)"]'; \
--		echo 'cargo = "$(HOST_CARGO_BIN_DIR)/cargo/bin/cargo"'; \
-+		echo 'cargo = "$(HOST_RUST_BIN_DIR)/cargo/bin/cargo"'; \
- 		echo 'rustc = "$(HOST_RUST_BIN_DIR)/rustc/bin/rustc"'; \
- 		echo 'python = "$(HOST_DIR)/bin/python2"'; \
- 		echo 'submodules = false'; \
+@@ -102,7 +101,6 @@ class TestRust(TestRustBase):
+         BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+-        BR2_PACKAGE_HOST_CARGO=y
+         BR2_PACKAGE_HOST_RUSTC=y
+         BR2_PACKAGE_HOST_RUST=y
+         """
 -- 
 2.17.1
