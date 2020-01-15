@@ -1,47 +1,106 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 15 Jan 2020 21:43:02 +0100
-Subject: [Buildroot] Allowing to build from Git branches
-In-Reply-To: <20200115144048.424279f5@windsurf>
-References: <20200114220401.61700031@windsurf>
- <CAFOYHZAq0Yrhg10m+U5UNa5+YRY+gcqDQ9K8sE+Sjg1P32edWQ@mail.gmail.com>
- <20200115090044.5b9d56d0@windsurf>
- <a299da2b-3b31-d9d3-ebbd-7c67b731ffe7@logilin.fr>
- <20200115144048.424279f5@windsurf>
-Message-ID: <20200115204302.GG22540@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 15 Jan 2020 21:55:10 +0100
+Subject: [Buildroot] [PATCH v1 2/3] package/rpi-firmware: bump version
+ to 62a0d75
+In-Reply-To: <CAFGQKxfZj5ct49TttwOqwzq6r3WYVbCOcKD06qPmS9dEqtaTeg@mail.gmail.com>
+References: <20200114094256.23174-1-ps.report@gmx.net>
+ <20200114094256.23174-2-ps.report@gmx.net>
+ <20200114163653.GE22540@scaer> <20200114182954.4cee6766@gmx.net>
+ <CAFGQKxfZj5ct49TttwOqwzq6r3WYVbCOcKD06qPmS9dEqtaTeg@mail.gmail.com>
+Message-ID: <20200115215510.5f6e4f67@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello Martin,
 
-On 2020-01-15 14:40 +0100, Thomas Petazzoni spake thusly:
-> On Wed, 15 Jan 2020 09:54:16 +0100
-> Christophe Blaess <mailist@logilin.fr> wrote:
-> > Would it be possible to have an option on a per-package basis to always 
-> > by-pass the DL_DIR mechanism and re-fetch the sources?
-> 
-> Yes, that would definitely be an idea. There was some discussion
-> yesterday evening about this on IRC with Yann E. Morin, and indeed one
-> of the idea that came up is to have something like
-> <pkg>_DOWNLOAD_TRANSIENT = YES, which would tell the download
-> infrastructure to refetch from upstream everytime the package is built
-> instead of using a locally available tarball.
+On Tue, 14 Jan 2020 19:44:44 +0000, Martin Bark <martin@barkynet.com> wrote:
 
-I've jsut sent a proof-of-concept of this 'transient' mchanism, which
-turned out to be relatively easy to come up with; there is even far more
-boilerplate and documentation that actual code to implement the feature.
+> Peter,
+>
+> On Tue, 14 Jan 2020 at 17:29, Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > Hello Yann,
+> >
+> > On Tue, 14 Jan 2020 17:36:53 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> >
+> > > Peter, All,
+> > >
+> > > On 2020-01-14 10:42 +0100, Peter Seiderer spake thusly:
+> > > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > > > ---
+> > > >  package/rpi-firmware/rpi-firmware.hash | 2 +-
+> > > >  package/rpi-firmware/rpi-firmware.mk   | 2 +-
+> > > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+> > > > index 63d8ac50a0..b5bb4d9f37 100644
+> > > > --- a/package/rpi-firmware/rpi-firmware.hash
+> > > > +++ b/package/rpi-firmware/rpi-firmware.hash
+> > > > @@ -1,3 +1,3 @@
+> > > >  # Locally computed
+> > > > -sha256 b3c5c9d3cda1f77caf317b8d1f0496cd7ca791ddaeec8207a5a1940111483509 rpi-firmware-1.20190925.tar.gz
+> > > > +sha256 088d094618924a90f65bb511808bbeb921e0769c878fa7baa9626954206f61a2 rpi-firmware-62a0d75b67484cb306a2a6f8fa954d9644868169.tar.gz
+> > > >  sha256 ba76edfc10a248166d965b8eaf320771c44f4f432d4fce2fd31fd272e7038add boot/LICENCE.broadcom
+> > > > diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> > > > index ee59ee2f26..b320e11233 100644
+> > > > --- a/package/rpi-firmware/rpi-firmware.mk
+> > > > +++ b/package/rpi-firmware/rpi-firmware.mk
+> > > > @@ -4,7 +4,7 @@
+> > > >  #
+> > > >  ################################################################################
+> > > >
+> > > > -RPI_FIRMWARE_VERSION = 1.20190925
+> > > > +RPI_FIRMWARE_VERSION = 62a0d75b67484cb306a2a6f8fa954d9644868169
+> > >
+> > > This goes from a tag to a sha1. Why do we need to do so? This should be
+> > > explained in the commit log.
+> >
+> > No new tag since 1.20190925...., and tags seems to be the exception for
+> > buildroot (two times tags, numerous ones sha1), and we want to keep
+> > rpi-firmware up to the same as the rpi linux-kernel (see e.g.
+> > 'kernel: Bump to 4.19.95' [1])...
+>
+> The tags match the release of the kernel in raspbian.  So the current
+> kernel used in raspbian is 1.20190925, no new one has been released
+> yet.  I think we should stick with released kernels.
 
-    http://lists.busybox.net/pipermail/buildroot/2020-January/271660.html
+Trade off between 'offical' and up-to-date, I am in favour for the
+up-to-date ;-), 4.19.75 vs. 4.19.93 and as mentioned already in [2]
+'...tags seems to be the exception for buildroot (two times tags,
+numerous ones sha1)...'
 
 Regards,
-Yann E. MORIN.
+Peter
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+[2] http://lists.busybox.net/pipermail/buildroot/2020-January/271589.html
+
+>
+> Thanks
+>
+> Martin
+>
+> >
+> > Regards,
+> > Peter
+> >
+> > [1] https://github.com/raspberrypi/firmware/commit/d5b8d8d7cce3f3eecb24c20a55cc50a48e3d5f4e
+> >
+> > >
+> > > Regards,
+> > > Yann E. MORIN.
+> > >
+> > > >  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+> > > >  RPI_FIRMWARE_LICENSE = BSD-3-Clause
+> > > >  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+> > > > --
+> > > > 2.24.1
+> > > >
+> > > > _______________________________________________
+> > > > buildroot mailing list
+> > > > buildroot at busybox.net
+> > > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > >
+> >
