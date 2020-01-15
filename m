@@ -1,55 +1,194 @@
 From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Wed, 15 Jan 2020 14:26:15 +0100
-Subject: [Buildroot] [PATCH v2 7/9] docs/manual: cargo packages depend on
- host-rustc
+Date: Wed, 15 Jan 2020 14:26:17 +0100
+Subject: [Buildroot] [PATCH v2 9/9] package/cargo-bin: remove and use
+ cargo-bin from rust-bin package
 In-Reply-To: <20200115132617.26604-1-patrick.havelange@essensium.com>
 References: <20200115132617.26604-1-patrick.havelange@essensium.com>
-Message-ID: <20200115132617.26604-7-patrick.havelange@essensium.com>
+Message-ID: <20200115132617.26604-9-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Also added hashes for rust-bin powerpc64le.
 
-As Cargo is either installed by host-rust or host-rust-bin, the
-Cargo-based packages should depend on host-rustc.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 ---
- docs/manual/adding-packages-cargo.txt | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ DEVELOPERS                       |  1 -
+ package/cargo-bin/cargo-bin.hash | 13 -------------
+ package/cargo-bin/cargo-bin.mk   | 20 --------------------
+ package/rust-bin/rust-bin.hash   | 15 +++++++++------
+ package/rust-bin/rust-bin.mk     | 28 ++++++++++++----------------
+ package/rust/rust.mk             |  2 +-
+ 6 files changed, 22 insertions(+), 57 deletions(-)
+ delete mode 100644 package/cargo-bin/cargo-bin.hash
+ delete mode 100644 package/cargo-bin/cargo-bin.mk
 
-diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
-index b6029e1eed..b83f86e9e6 100644
---- a/docs/manual/adding-packages-cargo.txt
-+++ b/docs/manual/adding-packages-cargo.txt
-@@ -18,11 +18,10 @@ The +Config.in+ file of Cargo-based package 'foo' should contain:
- 01: config BR2_PACKAGE_FOO
- 02: 	bool "foo"
- 03: 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
--04: 	select BR2_PACKAGE_HOST_CARGO
--05: 	help
--06: 	  This is a comment that explains what foo is.
--07:
--08: 	  http://foosoftware.org/foo/
-+04: 	help
-+05: 	  This is a comment that explains what foo is.
-+06:
-+07: 	  http://foosoftware.org/foo/
- ---------------------------
+diff --git a/DEVELOPERS b/DEVELOPERS
+index aca4fd2506..bd78e100f6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -706,7 +706,6 @@ F:	package/gstreamer1/gst1-plugins-bayer2rgb-neon/
+ N:	Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ F:	docs/manual/adding-packages-meson.txt
+ F:	package/adwaita-icon-theme/
+-F:	package/cargo-bin/
+ F:	package/darkhttpd/
+ F:	package/eudev/
+ F:	package/execline/
+diff --git a/package/cargo-bin/cargo-bin.hash b/package/cargo-bin/cargo-bin.hash
+deleted file mode 100644
+index 22cad3c0ee..0000000000
+--- a/package/cargo-bin/cargo-bin.hash
++++ /dev/null
+@@ -1,13 +0,0 @@
+-# From https://static.rust-lang.org/dist/cargo-0.41.0-i686-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/cargo-0.41.0-i686-unknown-linux-gnu.tar.xz.asc
+-sha256 c48bc132f4025ff39b1b6dc52aef9d406c3f926ce05fe92d943ceab7a5fd6058  cargo-0.41.0-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/cargo-0.41.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/cargo-0.41.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
+-sha256 7705f21d938a72ba6f01818661b2dea29183209940a335f18d1761e1e03d3710  cargo-0.41.0-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/cargo-0.41.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/cargo-0.41.0-x86_64-unknown-linux-gnu.tar.xz.asc
+-sha256 9b6ae643fa240c5ecbc1dc390f4020b6a683f25bac6f7437ebd4b9d32a8d0b6c  cargo-0.41.0-x86_64-unknown-linux-gnu.tar.xz
+-# Locally generated
+-sha256 8ada45cd9f843acf64e4722ae262c622a2b3b3007c7310ef36ac1061a30f6adb  LICENSE-APACHE
+-sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+-sha256 cbc759b1f17a2ac38fe3eb9e9563b1a08ba0f900611c49faaf68b46907b6d898  LICENSE-THIRD-PARTY
+diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
+deleted file mode 100644
+index 09dd58e3df..0000000000
+--- a/package/cargo-bin/cargo-bin.mk
++++ /dev/null
+@@ -1,20 +0,0 @@
+-################################################################################
+-#
+-# cargo-bin
+-#
+-################################################################################
+-
+-CARGO_BIN_VERSION = 0.41.0
+-CARGO_BIN_SITE = https://static.rust-lang.org/dist
+-CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
+-CARGO_BIN_LICENSE = Apache-2.0 or MIT
+-CARGO_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-
+-ifeq ($(BR2_PACKAGE_HOST_RUST_BIN),y)
+-define HOST_CARGO_BIN_INSTALL_CMDS
+-       $(@D)/install.sh --prefix=$(HOST_DIR) --disable-ldconfig
+-endef
+-HOST_CARGO_BIN_POST_INSTALL_HOOKS += HOST_RUST_INSTALL_CARGO_CONFIG
+-endif
+-
+-$(eval $(host-generic-package))
+diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
+index 12195f2911..1fdce9ad6f 100644
+--- a/package/rust-bin/rust-bin.hash
++++ b/package/rust-bin/rust-bin.hash
+@@ -1,9 +1,12 @@
+-# From https://static.rust-lang.org/dist/rustc-1.40.0-i686-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rustc-1.40.0-i686-unknown-linux-gnu.tar.xz.asc
+-sha256 257e4789043098a5e3b4fa85ea988019f37d640a10f83d39ada00fb23e057b8a  rustc-1.40.0-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rustc-1.40.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rustc-1.40.0-x86_64-unknown-linux-gnu.tar.xz.asc
+-sha256 b1c00618b7a98156e88b14682508a503284f85748eab23de749a20dcc8847111  rustc-1.40.0-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.40.0-i686-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.40.0-i686-unknown-linux-gnu.tar.xz.asc
++sha256 82454e1b60b2bc24779d9c949cc0e1da43f3e423dbfc6b45b5afddf65829fc9d  rust-1.40.0-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.40.0-x86_64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.40.0-x86_64-unknown-linux-gnu.tar.xz.asc
++sha256 37492d6467bcea611b2c7388aed50b655524f81410e255142ef6cfb6cef1ec53  rust-1.40.0-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.40.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.40.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
++sha256 82454e1b60b2bc24779d9c949cc0e1da43f3e423dbfc6b45b5afddf65829fc9d  rust-1.40.0-powerpc64le-unknown-linux-gnu.tar.xz
+ # From https://static.rust-lang.org/dist/rust-std-1.40.0-aarch64-unknown-linux-gnu.tar.xz.sha256
+ # Verified using https://static.rust-lang.org/dist/rust-std-1.40.0-aarch64-unknown-linux-gnu.tar.xz.asc
+ sha256 1abd1865e8339c2cac6992a11f6f98b66fa2b97f67acaddcf1992e39a7001bfc  rust-std-1.40.0-aarch64-unknown-linux-gnu.tar.xz
+diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
+index a5966768a4..be8d623aa2 100644
+--- a/package/rust-bin/rust-bin.mk
++++ b/package/rust-bin/rust-bin.mk
+@@ -10,18 +10,14 @@ RUST_BIN_LICENSE = Apache-2.0 or MIT
+ RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
  
- ==== Cargo-based package's +.mk+ file
-@@ -44,7 +43,7 @@ package. Let's start with an example:
- 10: FOO_LICENSE = GPL-3.0+
- 11: FOO_LICENSE_FILES = COPYING
- 12:
--13: FOO_DEPENDENCIES = host-cargo
-+13: FOO_DEPENDENCIES = host-rustc
- 14:
- 15: FOO_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
- 16: FOO_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
+ HOST_RUST_BIN_PROVIDES = host-rustc
+-HOST_RUST_BIN_DEPENDENCIES = host-cargo-bin
+ 
+-HOST_RUST_BIN_SOURCE = rustc-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
+-
+-HOST_RUST_BIN_EXTRA_DOWNLOADS = \
+-	rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
++HOST_RUST_BIN_SOURCE = rust-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
+ 
+ ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
+-HOST_RUST_BIN_EXTRA_DOWNLOADS += rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME).tar.xz
++HOST_RUST_BIN_EXTRA_DOWNLOADS = rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME).tar.xz
+ endif
+ 
+-HOST_RUST_BIN_LIBSTD_HOST_PREFIX = rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME)/rust-std-$(RUSTC_HOST_NAME)
++HOST_RUST_BIN_LIBSTD_HOST_PREFIX = rust-std-$(RUSTC_HOST_NAME)
+ 
+ define HOST_RUST_BIN_LIBSTD_EXTRACT
+ 	mkdir -p $(@D)/std
+@@ -31,36 +27,36 @@ define HOST_RUST_BIN_LIBSTD_EXTRACT
+ 	)
+ 	mkdir -p $(@D)/rustc/lib/rustlib/$(RUSTC_HOST_NAME)/lib
+ 	cd $(@D)/rustc/lib/rustlib/$(RUSTC_HOST_NAME)/lib; \
+-		ln -sf ../../../../../std/$(HOST_RUST_BIN_LIBSTD_HOST_PREFIX)/lib/rustlib/$(RUSTC_HOST_NAME)/lib/* .
++		ln -sf ../../../../../$(HOST_RUST_BIN_LIBSTD_HOST_PREFIX)/lib/rustlib/$(RUSTC_HOST_NAME)/lib/* .
+ endef
+ 
+ HOST_RUST_BIN_POST_EXTRACT_HOOKS += HOST_RUST_BIN_LIBSTD_EXTRACT
+ 
+-HOST_RUST_BIN_INSTALL_OPTS = \
++HOST_RUST_BIN_INSTALL_COMMON_OPTS = \
+ 	--prefix=$(HOST_DIR) \
+ 	--disable-ldconfig
+ 
++HOST_RUST_BIN_INSTALL_OPTS = \
++	$(HOST_RUST_BIN_INSTALL_COMMON_OPTS) \
++	--components=rustc,cargo,rust-std-$(RUSTC_HOST_NAME)
++
+ define HOST_RUST_BIN_INSTALL_RUSTC
+ 	(cd $(@D); \
+ 		./install.sh $(HOST_RUST_BIN_INSTALL_OPTS))
+ endef
+ 
+-define HOST_RUST_BIN_INSTALL_LIBSTD_HOST
+-	(cd $(@D)/std/rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME); \
+-		./install.sh $(HOST_RUST_BIN_INSTALL_OPTS))
+-endef
+-
+ ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
+ define HOST_RUST_BIN_INSTALL_LIBSTD_TARGET
+ 	(cd $(@D)/std/rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME); \
+-		./install.sh $(HOST_RUST_BIN_INSTALL_OPTS))
++		./install.sh $(HOST_RUST_BIN_INSTALL_COMMON_OPTS))
+ endef
+ endif
+ 
+ define HOST_RUST_BIN_INSTALL_CMDS
+ 	$(HOST_RUST_BIN_INSTALL_RUSTC)
+-	$(HOST_RUST_BIN_INSTALL_LIBSTD_HOST)
+ 	$(HOST_RUST_BIN_INSTALL_LIBSTD_TARGET)
+ endef
+ 
++HOST_RUST_BIN_POST_INSTALL_HOOKS += HOST_RUST_INSTALL_CARGO_CONFIG
++
+ $(eval $(host-generic-package))
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index e5d0e2ee71..a473b5e8af 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -41,7 +41,7 @@ define HOST_RUST_CONFIGURE_CMDS
+ 	( \
+ 		echo '[build]'; \
+ 		echo 'target = ["$(RUSTC_TARGET_NAME)"]'; \
+-		echo 'cargo = "$(HOST_CARGO_BIN_DIR)/cargo/bin/cargo"'; \
++		echo 'cargo = "$(HOST_RUST_BIN_DIR)/cargo/bin/cargo"'; \
+ 		echo 'rustc = "$(HOST_RUST_BIN_DIR)/rustc/bin/rustc"'; \
+ 		echo 'python = "$(HOST_DIR)/bin/python2"'; \
+ 		echo 'submodules = false'; \
 -- 
 2.17.1
