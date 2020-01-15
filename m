@@ -1,7 +1,10 @@
 From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Wed, 15 Jan 2020 14:26:09 +0100
-Subject: [Buildroot] [PATCH v2 1/9] package/rust: build and install cargo
-Message-ID: <20200115132617.26604-1-patrick.havelange@essensium.com>
+Date: Wed, 15 Jan 2020 14:26:10 +0100
+Subject: [Buildroot] [PATCH v2 2/9] package/cargo-bin: install if rust-bin
+ selected
+In-Reply-To: <20200115132617.26604-1-patrick.havelange@essensium.com>
+References: <20200115132617.26604-1-patrick.havelange@essensium.com>
+Message-ID: <20200115132617.26604-2-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,76 +13,31 @@ To: buildroot@busybox.net
 
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-Cargo source code is not provided anymore as a separate tarball but is
-now built along with the Rust compiler.
+If host-rust-bin, the pre-built Rust compiler, is selected as a rustc
+provider, then also install the pre-built cargo binary to be coherent.
 
-So update rust host variant to build Cargo and install the
-cross-compilation configuration file.
+Also install configuration file, reusing the one from rust package.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 ---
- package/rust/config.in |  2 ++
- package/rust/rust.mk   | 25 ++++++++++++++++++++++++-
- 2 files changed, 26 insertions(+), 1 deletion(-)
- create mode 100644 package/rust/config.in
+ package/cargo-bin/cargo-bin.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/rust/config.in b/package/rust/config.in
-new file mode 100644
-index 0000000000..47fad026be
---- /dev/null
-+++ b/package/rust/config.in
-@@ -0,0 +1,2 @@
-+[target. at RUSTC_TARGET_NAME@]
-+linker = "@CROSS_PREFIX at gcc"
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index 5d14fc6682..901995c203 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -47,11 +47,14 @@ define HOST_RUST_CONFIGURE_CMDS
- 		echo 'python = "$(HOST_DIR)/bin/python2"'; \
- 		echo 'submodules = false'; \
- 		echo 'vendor = true'; \
-+		echo 'extended = true'; \
-+		echo 'tools = ["cargo"]'; \
- 		echo 'compiler-docs = false'; \
- 		echo 'docs = false'; \
- 		echo 'verbose = $(HOST_RUST_VERBOSITY)'; \
- 		echo '[install]'; \
- 		echo 'prefix = "$(HOST_DIR)"'; \
-+		echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
- 		echo '[rust]'; \
- 		echo 'channel = "stable"'; \
- 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
-@@ -64,9 +67,29 @@ define HOST_RUST_BUILD_CMDS
- 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py build
- endef
+diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
+index 3614f7a53d..4a3d52e43b 100644
+--- a/package/cargo-bin/cargo-bin.mk
++++ b/package/cargo-bin/cargo-bin.mk
+@@ -10,4 +10,11 @@ CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
+ CARGO_BIN_LICENSE = Apache-2.0 or MIT
+ CARGO_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
  
--define HOST_RUST_INSTALL_CMDS
-+define HOST_RUST_INSTALL_RUST_BIN
- 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py dist
- 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py install
- endef
- 
-+define HOST_RUST_INSTALL_CARGO_BIN
-+	find $(@D)/build/tmp/dist -maxdepth 2 -wholename '*cargo*/install.sh' \
-+		-exec {} --prefix=$(HOST_DIR) --disable-ldconfig \;
++ifeq ($(BR2_PACKAGE_HOST_RUST_BIN),y)
++define HOST_CARGO_BIN_INSTALL_CMDS
++       $(@D)/install.sh --prefix=$(HOST_DIR) --disable-ldconfig
 +endef
-+
-+define HOST_RUST_INSTALL_CARGO_CONFIG
-+	$(INSTALL) -D package/rust/config.in \
-+		$(HOST_DIR)/share/cargo/config
-+	$(SED) 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
-+		$(HOST_DIR)/share/cargo/config
-+	$(SED) 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
-+		$(HOST_DIR)/share/cargo/config
-+endef
-+
-+define HOST_RUST_INSTALL_CMDS
-+	$(HOST_RUST_INSTALL_RUST_BIN)
-+	$(HOST_RUST_INSTALL_CARGO_BIN)
-+	$(HOST_RUST_INSTALL_CARGO_CONFIG)
-+endef
++HOST_CARGO_BIN_POST_INSTALL_HOOKS += HOST_RUST_INSTALL_CARGO_CONFIG
++endif
 +
  $(eval $(host-generic-package))
 -- 
