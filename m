@@ -1,215 +1,68 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Wed, 15 Jan 2020 23:04:07 +0100
-Subject: [Buildroot] [PATCH] infra: add the transient download mechanism
-In-Reply-To: <20200115203753.12110-1-yann.morin.1998@free.fr>
-References: <20200115203753.12110-1-yann.morin.1998@free.fr>
-Message-ID: <CAOf5uwn=OEjLkbuu6tpAxYKbVVcaCiKW02EAOnX7KmMgNOTT0Q@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 15 Jan 2020 23:15:57 +0100
+Subject: [Buildroot] [PATCH] package/mono: bump to version 6.0.0.313
+Message-ID: <20200115221557.28384-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+This patch bumps mono to version 6.8.0.96 and it's related dependency
+monolite to version ABB721D6-116A-4555-B4FD-9248146D2051.
 
-On Wed, Jan 15, 2020 at 9:37 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> NOTE: NOT TO BE COMMITTED!
->
-> This patch is a proof of concept for the transient download mechanism,
-> that would help using branches as versions, and keep using the head of
-> the branch each time a build started.
->
-> A package declares its download as transient with:
->   FOO_DOWNLOAD_TRANSIENT = YES
->
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/mono/mono.hash         | 2 +-
+ package/mono/mono.mk           | 2 +-
+ package/monolite/monolite.hash | 2 +-
+ package/monolite/monolite.mk   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-Why we can not just have like
-PKG_TRANSIENT_OVERRIDE_FILE="ci.mk"
-
-ci.mk
-
-FOO_DOWNLOAD_TRANSIENT = YES
-FOO_REVISION="<TAG> e/o BRANCH"
-
-Michael
-
-> this means that the download infra will not use any already downloaded
-> archive, and will instead always download it as if missing.
->
-> Since the check is done in the download wrapper, we have no TOCTOU race
-> in case two bulds would attempt the same transient download: the archive
-> is only replaced ato,mically as usual.
->
-> So, if the package uses a branch as version, the branch's HEAD at that
-> very moment will be redownloaded.
->
-> This stil has the drawback that two builds in parallel may get slightly
-> different content for the same branch, and the first build could end up
-> using the download of the second build:
->
->     build-1             build-2
->
->     download
->     |                   download
->     |                   |
->     save to dl-dir      |
->     [...]               save to dl-dir
->     extract
->
-> Furthermore, even with a single build, it might get what it expects:
->
->     developer-1         developer-2
->
->     git push branch
->     trigger CI          git push branch
->     [...]
->     download
->
-> In that case the build of delopper-1 would get the code of developper-2
-> who pushed on the same branch.
->
-> For people who are aiming at their feet, we're now providing them with
-> a loaded gun. ;-]
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Vincent Fazio <vfazio@xes-inc.com>
-> Cc: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-> Cc: Chris Packham <judge.packham@gmail.com>
-> Cc: Nicolas Carrier <nicolas.carrier@orolia.com>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> ---
->  docs/manual/adding-packages-generic.txt | 16 +++++++++++++---
->  package/busybox/busybox.mk              |  1 +
->  package/pkg-download.mk                 |  1 +
->  package/pkg-generic.mk                  |  8 +-------
->  support/download/dl-wrapper             |  8 +++++---
->  5 files changed, 21 insertions(+), 13 deletions(-)
->
-> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index baa052e31c..afffb09bc8 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -206,12 +206,14 @@ information is (assuming the package name is +libfoo+) :
->    ** a tag for a git tree +LIBFOO_VERSION = v0.1.2+
->  +
->  .Note:
-> -Using a branch name as +FOO_VERSION+ is not supported, because it does
-> -not and can not work as people would expect it should:
-> +Using a branch name as +FOO_VERSION+, although technically possible,
-> +is highly discouraged, because it does not and can not work as people
-> +would expect it should:
->  +
->    1. due to local caching, Buildroot will not re-fetch the repository,
->       so people who expect to be able to follow the remote repository
-> -     would be quite surprised and disappointed;
-> +     would be quite surprised and disappointed (but see
-> +     +LIBFOO_DOWNLOAD_TRANSIENT+, later);
->    2. because two builds can never be perfectly simultaneous, and because
->       the remote repository may get new commits on the branch anytime,
->       two users, using the same Buildroot tree and building the same
-> @@ -342,6 +344,14 @@ not and can not work as people would expect it should:
->    submodules when they contain bundled libraries, in which case we
->    prefer to use those libraries from their own package.
->
-> +* +LIBFOO_DOWNLOAD_TRANSIENT+ can be set to +YES+ or +NO+ (the default).
-> +  If set to +YES+, the download for that package will be attempted at
-> +  every build; any already downloaded archive is ignored as if missing.
-> +  This may help when a branch is specified in +LIBFOO_VERSION+, and the
-> +  head/tip of the branch is to be built, like a CI pipeline would need
-> +  for example. This still suffers from the other issues listed above
-> +  about using branches, though.
-> +
->  * +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
->    (directories) that tar must strip from file names on extraction.
->    The tarball for most packages has one leading component named
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 6283bc96ea..ee17febe48 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -9,6 +9,7 @@ BUSYBOX_SITE = http://www.busybox.net/downloads
->  BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
->  BUSYBOX_LICENSE = GPL-2.0
->  BUSYBOX_LICENSE_FILES = LICENSE
-> +BUSYBOX_DOWNLOAD_TRANSIENT = YES
->
->  define BUSYBOX_HELP_CMDS
->         @echo '  busybox-menuconfig     - Run BusyBox menuconfig'
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index de619ba90a..c3a98ce7b0 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -108,6 +108,7 @@ define DOWNLOAD
->                 -n '$($(2)_BASENAME_RAW)' \
->                 -N '$($(2)_RAWNAME)' \
->                 -o '$($(2)_DL_DIR)/$(notdir $(1))' \
-> +               $(if $($(2)_DOWNLOAD_TRANSIENT),-F) \
->                 $(if $($(2)_GIT_SUBMODULES),-r) \
->                 $(foreach uri,$(call DOWNLOAD_URIS,$(1),$(2)),-u $(uri)) \
->                 $(QUIET) \
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 268d999efb..7c2e9db604 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -158,13 +158,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
->         @$(call step_start,download)
->         $(call prepare-per-package-directory,$($(PKG)_FINAL_DOWNLOAD_DEPENDENCIES))
->         $(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
-> -# Only show the download message if it isn't already downloaded
-> -       $(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
-> -               if test ! -e $($(PKG)_DL_DIR)/`basename $$p` ; then \
-> -                       $(call MESSAGE,"Downloading") ; \
-> -                       break ; \
-> -               fi ; \
-> -       done
-> +       @$(call MESSAGE,"Downloading") ; \
->         $(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p),$(PKG))$(sep))
->         $(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
->         $(Q)mkdir -p $(@D)
-> diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-> index 3315bd410e..ab22ca7e4f 100755
-> --- a/support/download/dl-wrapper
-> +++ b/support/download/dl-wrapper
-> @@ -21,11 +21,12 @@ export BR_BACKEND_DL_GETOPTS=":hc:d:o:n:N:H:ru:qf:e"
->
->  main() {
->      local OPT OPTARG
-> -    local backend output hfile recurse quiet rc
-> +    local backend output hfile recurse quiet rc force
->      local -a uris
->
->      # Parse our options; anything after '--' is for the backend
-> -    while getopts ":c:d:D:o:n:N:H:rf:u:q" OPT; do
-> +    force=false
-> +    while getopts ":c:d:D:o:n:N:H:rf:u:qF" OPT; do
->          case "${OPT}" in
->          c)  cset="${OPTARG}";;
->          d)  dl_dir="${OPTARG}";;
-> @@ -38,6 +39,7 @@ main() {
->          f)  filename="${OPTARG}";;
->          u)  uris+=( "${OPTARG}" );;
->          q)  quiet="-q";;
-> +        F)  force=true;;
->          :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
->          \?) error "unknown option '%s'\n" "${OPTARG}";;
->          esac
-> @@ -67,7 +69,7 @@ main() {
->      # - matches all its hashes: do not download it again and exit promptly
->      # - fails at least one of its hashes: force a re-download
->      # - there's no hash (but a .hash file): consider it a hard error
-> -    if [ -e "${output}" ]; then
-> +    if ! ${force} && [ -e "${output}" ]; then
->          if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
->              exit 0
->          elif [ ${?} -ne 2 ]; then
-> --
-> 2.20.1
->
-
-
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index 6fcf26beae..fa5333867c 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256 a946e91d7da3f90b5e7cbbdf27adfa2f57ddb09b199dfc4d6d3bc05eb0690c50  mono-6.0.0.313.tar.xz
++sha256 ed5df4ec663a4e228e89e910e954fa18d33f72e790c11174e1b62fc8cca90ba0  mono-6.8.0.96.tar.xz
+ sha256 923c7053ad0d430cd9b0b69a0ccf3abb7170a1ce50ecbf01915b565a35823d10  LICENSE
+ sha256 fc488f3ec9f36856bea8cce5cdde1449176341ef93a3962b691970f8981799f4  mcs/COPYING
+ sha256 2c3c3ef532828bcd42bb3127349625a25291ff5ae7e6f8d42e0fe9b5be836a99  external/Newtonsoft.Json/Tools/7-zip/copying.txt
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index a65963a259..274d9817e5 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONO_VERSION = 6.0.0.313
++MONO_VERSION = 6.8.0.96
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.xz
+ MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
+diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
+index 1fc0d758cc..bd953591b4 100644
+--- a/package/monolite/monolite.hash
++++ b/package/monolite/monolite.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 21f0dada9f866e8e90c4884cef08d738f9addbe99b66a4b0d442f25ea0841abe  monolite-linux-d0aa6798-834d-11e9-b38a-3b0d70487d01-latest.tar.gz
++sha256 4b75a73bb4a99b8e3b51837afb72192cce27b482cb5ec70cc136b293071f902e  monolite-linux-ABB721D6-116A-4555-B4FD-9248146D2051-latest.tar.gz
+diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
+index 262ed06c4d..b9e3990c42 100644
+--- a/package/monolite/monolite.mk
++++ b/package/monolite/monolite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONOLITE_VERSION = d0aa6798-834d-11e9-b38a-3b0d70487d01
++MONOLITE_VERSION = ABB721D6-116A-4555-B4FD-9248146D2051
+ MONOLITE_SITE = http://download.mono-project.com/monolite
+ MONOLITE_SOURCE = monolite-linux-$(MONOLITE_VERSION)-latest.tar.gz
+ MONOLITE_LICENSE = LGPL-2.0 or commercial
 -- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+2.17.1
