@@ -1,155 +1,86 @@
-From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Wed, 15 Jan 2020 09:02:59 +0000
-Subject: [Buildroot] Allowing to build from Git branches
-In-Reply-To: <CAFOYHZAZ=__V_iA+X=_EFnPmYEULw+ab5Dq-zfrYU-zpNdUp5g@mail.gmail.com>
-References: <20200114220401.61700031@windsurf>
- <CAFOYHZAq0Yrhg10m+U5UNa5+YRY+gcqDQ9K8sE+Sjg1P32edWQ@mail.gmail.com>
- <20200115090044.5b9d56d0@windsurf>
- <CAFOYHZAZ=__V_iA+X=_EFnPmYEULw+ab5Dq-zfrYU-zpNdUp5g@mail.gmail.com>
-Message-ID: <210e53732c31ed0e4a34cbc83ac8d143f3834ebd.camel@orolia.com>
+From: Patrick Havelange <patrick.havelange@essensium.com>
+Date: Wed, 15 Jan 2020 14:26:09 +0100
+Subject: [Buildroot] [PATCH v2 1/9] package/rust: build and install cargo
+Message-ID: <20200115132617.26604-1-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Everyone,
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-As an integrator I'm directly concerned by this discussion.
+Cargo source code is not provided anymore as a separate tarball but is
+now built along with the Rust compiler.
 
-The landscape you've described Thomas, is really accurate, with the
-conflicting worflows, one for developers (who want to build what's more
-recent) and one for the integrators (who want to know exactly what's
-going into a release.
+So update rust host variant to build Cargo and install the
+cross-compilation configuration file.
 
-At Orolia, I've solved it using a conjunction of SRC_OVERRIDE and repo
-(like Michael apparently) by having different sets of manifests for the
-different workflows, that is one set following the branches, for
-development and another set on sha1s for releases.
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+---
+ package/rust/config.in |  2 ++
+ package/rust/rust.mk   | 25 ++++++++++++++++++++++++-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+ create mode 100644 package/rust/config.in
 
-The implicit contract being that, for a given buildroot revision, the
-build of the packages it provides has to be reproducible.
-Because of the partial support of build on branches, this is not
-guaranteed and I've been bitten by that recently, when a branch was
-used (due to a broken patch of ours on buildroot) when a tag should
-have been used instead.
-
-
-So AFAIC, I don't need to be able to build from a branch but I'd really
-need to _detect_ that a branch is being used by a package handled
-directly by buildroot (that is, not in the EXTERNAL dir) and ideally,
-to fail the build.
-This could be controlled by an option, to keep the compatibility with
-the current behavior...
-
-
-On Wed, 2020-01-15 at 21:30 +1300, Chris Packham wrote:
-> 
-> 
-> On Wed, 15 Jan 2020, 9:00 PM Thomas Petazzoni, <
-> thomas.petazzoni at bootlin.com> wrote:
-> > Hello Chris,
-> > 
-> > On Wed, 15 Jan 2020 20:07:29 +1300
-> > Chris Packham <judge.packham@gmail.com> wrote:
-> > 
-> > > > However, over time, I have seen a number of users/companies
-> > complaining
-> > > > about this, both on the mailing list and privately with
-> > customers or
-> > > > while discussing with users at conferences.
-> > > 
-> > > Yep I'm one of those users.
-> > 
-> > And you're not the only one :-)
-> > 
-> > > I'd qualify that reproducibility is good but we also want correct
-> > builds.
-> > > 
-> > > A frustration for us (bear in mind this was ~2010) was that it
-> > was often
-> > > hit and miss between whether buildroot would pick up the fact
-> > that the
-> > > source had changed so we were constantly second-guessing the
-> > validity of
-> > > tests which led to a lot of make <package>-dirclean.
-> > 
-> > I don't really understand how it can be "hit and miss". The way
-> > Buildroot downloads from the upstream location for each package is
-> > completely deterministic.
-> > 
-> > In addition, if you were doing <package>-dirclean to avoid the
-> > problem,
-> > then we're not talking about the same issue, because <package>-
-> > dirclean
-> > has zero impact on the contents of DL_DIR, and therefore zero
-> > impact on
-> > whether Buildroot will re-download things or not.
-> > 
-> > Perhaps your issue was broader in the sense that you wanted an
-> > existing
-> > Buildroot build (where all packages have already been built) to
-> > automatically refetch some of the packages from Git, without having
-> > to
-> > do a "make clean". And that is why you had to selectively "make
-> > <package>-dirclean" those packages.
-> > 
-> 
-> Yes it was the re-build case that was problematic for us.
-> 
-> The hit and miss was probably our attempt to make buildroot build
-> packages using local sources. This was before SITE_METHOD=local was a
-> thing.
-> 
-> > However, what I am proposing is not going that far. All what I'm
-> > proposing is that if you're doing a clean build, if a package
-> > points to
-> > a Git branch as an upstream source, then Buildroot would re-fetch
-> > from
-> > that Git branch rather than using a locally cached tarball in
-> > DL_DIR
-> > potentially corresponding to an older version of that Git branch.
-> > 
-> > > > So I'd like to start the debate on whether it might makes sense
-> > to
-> > > > relax our requirements on this, and be more pragmatic, and
-> > support
-> > > > fetching from Git branches. Of course, this very likely needs
-> > to be
-> > > > guarded by a Config.in option, so that we clearly set the
-> > boundary
-> > > > between "you're in the safe zone where your build is
-> > reproducible" and
-> > > > "you're in the zone where your build is non-reproducible".
-> > > 
-> > > As you've hinted at it should be possible to at least track the
-> > git
-> > > describe --always --dirty (or hg equivalent) to provide some
-> > level of
-> > > traceability even if it's not complete binary equvialence.
-> > 
-> > Yes, absolutely. In fact, automatically refetching branches is in
-> > some
-> > sense more reproducible than when OVERRIDE_SRCDIR / SITE_METHOD =
-> > local
-> > are used.
-> > 
-> > Indeed, when a package points to a branch, you can at least save
-> > the
-> > Git commit which was pointed by the branch at the moment of the
-> > build,
-> > and save that somewhere, allowing you to reproduce the same build
-> > later
-> > if you need to. However a source directory used with
-> > OVERRIDE_SRCDIR /
-> > SITE_METHOD = local can contain any random changes that Buildroot
-> > can't
-> > track at all.
-> > 
-> > Best regards,
-> > 
-> > Thomas
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/rust/config.in b/package/rust/config.in
+new file mode 100644
+index 0000000000..47fad026be
+--- /dev/null
++++ b/package/rust/config.in
+@@ -0,0 +1,2 @@
++[target. at RUSTC_TARGET_NAME@]
++linker = "@CROSS_PREFIX at gcc"
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 5d14fc6682..901995c203 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -47,11 +47,14 @@ define HOST_RUST_CONFIGURE_CMDS
+ 		echo 'python = "$(HOST_DIR)/bin/python2"'; \
+ 		echo 'submodules = false'; \
+ 		echo 'vendor = true'; \
++		echo 'extended = true'; \
++		echo 'tools = ["cargo"]'; \
+ 		echo 'compiler-docs = false'; \
+ 		echo 'docs = false'; \
+ 		echo 'verbose = $(HOST_RUST_VERBOSITY)'; \
+ 		echo '[install]'; \
+ 		echo 'prefix = "$(HOST_DIR)"'; \
++		echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
+ 		echo '[rust]'; \
+ 		echo 'channel = "stable"'; \
+ 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
+@@ -64,9 +67,29 @@ define HOST_RUST_BUILD_CMDS
+ 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py build
+ endef
+ 
+-define HOST_RUST_INSTALL_CMDS
++define HOST_RUST_INSTALL_RUST_BIN
+ 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py dist
+ 	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py install
+ endef
+ 
++define HOST_RUST_INSTALL_CARGO_BIN
++	find $(@D)/build/tmp/dist -maxdepth 2 -wholename '*cargo*/install.sh' \
++		-exec {} --prefix=$(HOST_DIR) --disable-ldconfig \;
++endef
++
++define HOST_RUST_INSTALL_CARGO_CONFIG
++	$(INSTALL) -D package/rust/config.in \
++		$(HOST_DIR)/share/cargo/config
++	$(SED) 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
++		$(HOST_DIR)/share/cargo/config
++	$(SED) 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
++		$(HOST_DIR)/share/cargo/config
++endef
++
++define HOST_RUST_INSTALL_CMDS
++	$(HOST_RUST_INSTALL_RUST_BIN)
++	$(HOST_RUST_INSTALL_CARGO_BIN)
++	$(HOST_RUST_INSTALL_CARGO_CONFIG)
++endef
++
+ $(eval $(host-generic-package))
+-- 
+2.17.1
