@@ -1,52 +1,155 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Wed, 15 Jan 2020 09:17:21 -0300
-Subject: [Buildroot] [PATCH] package/modem-manager: update to version
- 1.12.4
-In-Reply-To: <20200115095500.27579-1-aleksander@aleksander.es>
-References: <20200115095500.27579-1-aleksander@aleksander.es>
-Message-ID: <CAJ4jsaeaZXSYBGjuQo-FqBSfm+5FFrg1PYGhNfZucdVT5ntShw@mail.gmail.com>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Wed, 15 Jan 2020 09:02:59 +0000
+Subject: [Buildroot] Allowing to build from Git branches
+In-Reply-To: <CAFOYHZAZ=__V_iA+X=_EFnPmYEULw+ab5Dq-zfrYU-zpNdUp5g@mail.gmail.com>
+References: <20200114220401.61700031@windsurf>
+ <CAFOYHZAq0Yrhg10m+U5UNa5+YRY+gcqDQ9K8sE+Sjg1P32edWQ@mail.gmail.com>
+ <20200115090044.5b9d56d0@windsurf>
+ <CAFOYHZAZ=__V_iA+X=_EFnPmYEULw+ab5Dq-zfrYU-zpNdUp5g@mail.gmail.com>
+Message-ID: <210e53732c31ed0e4a34cbc83ac8d143f3834ebd.camel@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 15, 2020 at 6:55 AM Aleksander Morgado
-<aleksander@aleksander.es> wrote:
->
-> https://lists.freedesktop.org/archives/modemmanager-devel/2020-January/007670.html
->
-> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> ---
->  package/modem-manager/modem-manager.hash | 2 +-
->  package/modem-manager/modem-manager.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-> index a3925bb4a2..ef2fe9c08f 100644
-> --- a/package/modem-manager/modem-manager.hash
-> +++ b/package/modem-manager/modem-manager.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed
-> -sha256  4f76d2bdd0ed6780837cdde886eaf535f9770f9daa1ff92e63658d06aa5d25ea  ModemManager-1.12.2.tar.xz
-> +sha256  852d61755e0c1a8d0c609b17192d742b324fdd2e513f3ed64b228befb859a95b  ModemManager-1.12.4.tar.xz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> index 2f198a355a..3fc7337eb3 100644
-> --- a/package/modem-manager/modem-manager.mk
-> +++ b/package/modem-manager/modem-manager.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -MODEM_MANAGER_VERSION = 1.12.2
-> +MODEM_MANAGER_VERSION = 1.12.4
->  MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
->  MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
->  MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
-> --
-> 2.24.1
->
+Hi Everyone,
 
-Tested-by: Carlos Santos <unixmania@gmail.com>
+As an integrator I'm directly concerned by this discussion.
+
+The landscape you've described Thomas, is really accurate, with the
+conflicting worflows, one for developers (who want to build what's more
+recent) and one for the integrators (who want to know exactly what's
+going into a release.
+
+At Orolia, I've solved it using a conjunction of SRC_OVERRIDE and repo
+(like Michael apparently) by having different sets of manifests for the
+different workflows, that is one set following the branches, for
+development and another set on sha1s for releases.
+
+The implicit contract being that, for a given buildroot revision, the
+build of the packages it provides has to be reproducible.
+Because of the partial support of build on branches, this is not
+guaranteed and I've been bitten by that recently, when a branch was
+used (due to a broken patch of ours on buildroot) when a tag should
+have been used instead.
+
+
+So AFAIC, I don't need to be able to build from a branch but I'd really
+need to _detect_ that a branch is being used by a package handled
+directly by buildroot (that is, not in the EXTERNAL dir) and ideally,
+to fail the build.
+This could be controlled by an option, to keep the compatibility with
+the current behavior...
+
+
+On Wed, 2020-01-15 at 21:30 +1300, Chris Packham wrote:
+> 
+> 
+> On Wed, 15 Jan 2020, 9:00 PM Thomas Petazzoni, <
+> thomas.petazzoni at bootlin.com> wrote:
+> > Hello Chris,
+> > 
+> > On Wed, 15 Jan 2020 20:07:29 +1300
+> > Chris Packham <judge.packham@gmail.com> wrote:
+> > 
+> > > > However, over time, I have seen a number of users/companies
+> > complaining
+> > > > about this, both on the mailing list and privately with
+> > customers or
+> > > > while discussing with users at conferences.
+> > > 
+> > > Yep I'm one of those users.
+> > 
+> > And you're not the only one :-)
+> > 
+> > > I'd qualify that reproducibility is good but we also want correct
+> > builds.
+> > > 
+> > > A frustration for us (bear in mind this was ~2010) was that it
+> > was often
+> > > hit and miss between whether buildroot would pick up the fact
+> > that the
+> > > source had changed so we were constantly second-guessing the
+> > validity of
+> > > tests which led to a lot of make <package>-dirclean.
+> > 
+> > I don't really understand how it can be "hit and miss". The way
+> > Buildroot downloads from the upstream location for each package is
+> > completely deterministic.
+> > 
+> > In addition, if you were doing <package>-dirclean to avoid the
+> > problem,
+> > then we're not talking about the same issue, because <package>-
+> > dirclean
+> > has zero impact on the contents of DL_DIR, and therefore zero
+> > impact on
+> > whether Buildroot will re-download things or not.
+> > 
+> > Perhaps your issue was broader in the sense that you wanted an
+> > existing
+> > Buildroot build (where all packages have already been built) to
+> > automatically refetch some of the packages from Git, without having
+> > to
+> > do a "make clean". And that is why you had to selectively "make
+> > <package>-dirclean" those packages.
+> > 
+> 
+> Yes it was the re-build case that was problematic for us.
+> 
+> The hit and miss was probably our attempt to make buildroot build
+> packages using local sources. This was before SITE_METHOD=local was a
+> thing.
+> 
+> > However, what I am proposing is not going that far. All what I'm
+> > proposing is that if you're doing a clean build, if a package
+> > points to
+> > a Git branch as an upstream source, then Buildroot would re-fetch
+> > from
+> > that Git branch rather than using a locally cached tarball in
+> > DL_DIR
+> > potentially corresponding to an older version of that Git branch.
+> > 
+> > > > So I'd like to start the debate on whether it might makes sense
+> > to
+> > > > relax our requirements on this, and be more pragmatic, and
+> > support
+> > > > fetching from Git branches. Of course, this very likely needs
+> > to be
+> > > > guarded by a Config.in option, so that we clearly set the
+> > boundary
+> > > > between "you're in the safe zone where your build is
+> > reproducible" and
+> > > > "you're in the zone where your build is non-reproducible".
+> > > 
+> > > As you've hinted at it should be possible to at least track the
+> > git
+> > > describe --always --dirty (or hg equivalent) to provide some
+> > level of
+> > > traceability even if it's not complete binary equvialence.
+> > 
+> > Yes, absolutely. In fact, automatically refetching branches is in
+> > some
+> > sense more reproducible than when OVERRIDE_SRCDIR / SITE_METHOD =
+> > local
+> > are used.
+> > 
+> > Indeed, when a package points to a branch, you can at least save
+> > the
+> > Git commit which was pointed by the branch at the moment of the
+> > build,
+> > and save that somewhere, allowing you to reproduce the same build
+> > later
+> > if you need to. However a source directory used with
+> > OVERRIDE_SRCDIR /
+> > SITE_METHOD = local can contain any random changes that Buildroot
+> > can't
+> > track at all.
+> > 
+> > Best regards,
+> > 
+> > Thomas
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
