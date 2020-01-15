@@ -1,69 +1,111 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 15 Jan 2020 22:00:36 +0100
-Subject: [Buildroot] [PATCH v2] package/python-pillow: bump to version
- 6.2.2/7.0.0
-Message-ID: <20200115210036.29906-1-angelo@amarulasolutions.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 15 Jan 2020 22:01:54 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/freeswitch: fix libvpx build
+Message-ID: <20200115210154.1431967-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bump Pillow to version 7.0.0 for Python3 and version
-6.2.2 for Python2.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-It updates also the LICENSE hash due to copyright year update.
+Fixes:
+http://autobuild.buildroot.net/results/4be/4be6df27f33e4fd6955e47892e1650a9d5ebbded/
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Removed old patch.
+
+Source of the new patch:
+http://lists.busybox.net/pipermail/buildroot/2020-January/270707.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changelog:
-v1->v2: removed python2 support as the package supports only python3 now
+v2: using FREESWITCH_PRE_BUILD_HOOKS we are building libvpx ourselves
+    (Yann)
 
- package/python-pillow/Config.in          | 1 +
- package/python-pillow/python-pillow.hash | 8 ++++----
- package/python-pillow/python-pillow.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ .../0001-Fix-cross-compiling-libvpx.patch     | 29 ----------------
+ package/freeswitch/freeswitch.mk              | 33 +++++++++++++++++++
+ 2 files changed, 33 insertions(+), 29 deletions(-)
+ delete mode 100644 package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
 
-diff --git a/package/python-pillow/Config.in b/package/python-pillow/Config.in
-index 3820ba8fb1..f824d1371e 100644
---- a/package/python-pillow/Config.in
-+++ b/package/python-pillow/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PILLOW
- 	bool "python-pillow"
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  Pillow is the "friendly" PIL fork by Alex Clark and
- 	  Contributors. PIL is the Python Imaging Library by Fredrik
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 990b25c46e..0d66c4bb3c 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,5 +1,5 @@
--# md5, sha256 from https://pypi.org/pypi/pillow/json
--md5	13acde283ece6ac69f62609fa108d316  Pillow-6.2.1.tar.gz
--sha256	bf4e972a88f8841d8fdc6db1a75e0f8d763e66e3754b03006cbc3854d89f1cb1  Pillow-6.2.1.tar.gz
-+# md5, sha256 from https://pypi.org/project/Pillow/
-+md5	d099946335c1ba372f5b1fa68ca71645  Pillow-7.0.0.tar.gz
-+sha256	4d9ed9a64095e031435af120d3c910148067087541131e82b3e8db302f4c8946  Pillow-7.0.0.tar.gz
- # Locally computed sha256 checksums
--sha256	64ea4328ed56392b423ef968519a9ad427e3de9b985862c95ed2ed4d793d22ee  LICENSE
-+sha256	04a04a908e52921829c7f51528e5619c79becdde99c484ab7d4f235e2927968c  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 895b1fcb99..5ff2dcfdb6 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PILLOW_VERSION = 6.2.1
-+PYTHON_PILLOW_VERSION = 7.0.0
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/39/47/f28067b187dd664d205f75b07dcc6e0e95703e134008a14814827eebcaab
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/5b/bb/cdc8086db1f15d0664dd22a62c69613cdc00f1dd430b5b19df1bea83f2a3
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+diff --git a/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
+deleted file mode 100644
+index 63fa33b93a..0000000000
+--- a/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-Fix cross-compiling libvpx
+-
+-Freeswitch since version 1.6.7 only uses an in-tree-version of libvpx:
+-https://freeswitch.org/fisheye/changelog/freeswitch?cs=febe0f8dacea2d2a31902b3dc469be757f8c3c4d
+-
+-It is not possible to use an external version of libvpx anymore.
+-Unfortunately the freeswitch build system has no support for cross-
+-compiling libvpx so we need to patch Makefile to pass CROSS from
+-package/freeswitch/freeswitch.mk and add target=generic-gnu as
+-configure parameter:
+-https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/libs/libvpx/README#110
+-
+-And yes, autoreconf is also broken, so we patch Makefile.in instead
+-of Makefile.am.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr freeswitch-1.6.7.org/Makefile.in freeswitch-1.6.7/Makefile.in
+---- freeswitch-1.6.7.org/Makefile.in	2016-04-01 18:09:54.000000000 +0200
+-+++ freeswitch-1.6.7/Makefile.in	2016-04-22 20:11:37.938961730 +0200
+-@@ -4182,7 +4182,7 @@
+- 	cd libs/libzrtp && $(MAKE)
+- 
+- libs/libvpx/Makefile: libs/libvpx/.update
+--	cd libs/libvpx && CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS) $(VISIBILITY_FLAG)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384
+-+	cd libs/libvpx && CROSS=$(CROSS) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS) $(VISIBILITY_FLAG)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384
+- 
+- libs/libvpx/libvpx.a: libs/libvpx/Makefile libs/libvpx/.update
+- 	@cd libs/libvpx && $(MAKE)
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index d743e60f1c..5985df4a6e 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -309,6 +309,39 @@ FREESWITCH_CONF_OPTS += --enable-libvpx --enable-libyuv
+ FREESWITCH_DEPENDENCIES += host-yasm ffmpeg
+ FREESWITCH_ENABLED_MODULES += applications/mod_av applications/mod_fsv
+ FREESWITCH_MAKE_ENV += CROSS=$(TARGET_CROSS)
++
++# Freeswitch's buildsystem forgets to pass important environment
++# variables and config options when it configures libvpx, so
++# pre-build libvpx manually, so Freeswitch does not attempt to run
++# its flawed commands...
++# Freeswitch only ever uses the static libtrary, that's hard-coded,
++# we can't do anything about that...
++# From package/libvpx/libvpx.mk:
++# - this is not a true autotools package.  It is based on the ffmpeg
++#   build system.
++# - ld is being used with cc options. therefore, pretend ld is cc.
++define FREESWITCH_BUILD_LIBVPX
++	cd $(@D)/libs/libvpx && \
++	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_ARGS) \
++	LD="$(TARGET_CC)" \
++	CROSS=$(GNU_TARGET_NAME) \
++	./configure \
++		--target=generic-gnu \
++		--enable-pic \
++		--prefix=/usr \
++		--disable-shared --enable-static \
++		--disable-examples \
++		--disable-docs \
++		--disable-unit-tests && \
++	$(TARGET_MAKE_ENV) \
++	$(LIBVPX_MAKE_ENV) \
++	$(MAKE) \
++		-C $(@D)/libs/libvpx \
++		all
++endef
++FREESWITCH_PRE_BUILD_HOOKS += FREESWITCH_BUILD_LIBVPX
++
+ else
+ FREESWITCH_CONF_OPTS += --disable-libvpx --disable-libyuv
+ endif
 -- 
-2.17.1
+2.20.1
