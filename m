@@ -1,43 +1,133 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Wed, 15 Jan 2020 10:55:00 +0100
-Subject: [Buildroot] [PATCH] package/modem-manager: update to version 1.12.4
-Message-ID: <20200115095500.27579-1-aleksander@aleksander.es>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Wed, 15 Jan 2020 10:21:05 +0000
+Subject: [Buildroot] Multiple ("simultaneous") buildroot projects
+In-Reply-To: <BY5PR01MB6084637E18DE8692ABF9B17DCC340@BY5PR01MB6084.prod.exchangelabs.com>
+References: <BY5PR01MB6084639E519B441D79221318CC390@BY5PR01MB6084.prod.exchangelabs.com>
+ <0559f5de-e2c1-12b5-deeb-57f62103b7c3@mind.be>
+ <BY5PR01MB6084637E18DE8692ABF9B17DCC340@BY5PR01MB6084.prod.exchangelabs.com>
+Message-ID: <77dc4d361749bfc26405cdfbd4900f4604d25e2e.camel@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://lists.freedesktop.org/archives/modemmanager-devel/2020-January/007670.html
+On top of something similar to what Arnout describes, I add a file
+(current_target, but the naming sucks :/) containing the current name
+of the project (project1, project2), which is set when applying a
+defconfig, by wrapping the XXX_defconfig buildroot target in our top
+level Makefile
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
----
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The other buildroot targets are then wrapped in a generic way so that
+the correct O= variable value gets passed, depending on the content of
+the current_target file.
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index a3925bb4a2..ef2fe9c08f 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  4f76d2bdd0ed6780837cdde886eaf535f9770f9daa1ff92e63658d06aa5d25ea  ModemManager-1.12.2.tar.xz
-+sha256  852d61755e0c1a8d0c609b17192d742b324fdd2e513f3ed64b228befb859a95b  ModemManager-1.12.4.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 2f198a355a..3fc7337eb3 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MODEM_MANAGER_VERSION = 1.12.2
-+MODEM_MANAGER_VERSION = 1.12.4
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
--- 
-2.24.1
+This gives something like (in our top-level Makefile):
+
+BUILDROOT_EXTERNAL := $(CURDIR)/config/carbon/
+BUILDROOT_DIR := $(CURDIR)/build/buildroot/
+
+# the DL_DIR cache is shared among projects
+BUILDROOT_BUILD_OPTS := \
+	BR2_DL_DIR=$(DL_DIR) \
+	BR2_EXTERNAL=$(BUILDROOT_EXTERNAL)
+
+BUILDROOT_TARGET_FILE := $(CURDIR)/current_target
+BUILDROOT_TARGET := `cat $(BUILDROOT_TARGET_FILE)`
+BUILDROOT_OUTPUT := $(OUT_DIR)/output-$(BUILDROOT_TARGET)
+
+define buildroot-build
+	$(MAKE) -C $(BUILDROOT_DIR) $(BUILDROOT_BUILD_OPTS)
+endef
+
+define buildroot-target-info
+	$(if $(BUILDROOT_TARGET),@$(call MESSAGE,"Current target
+$(BUILDROOT_TARGET)",))
+endef
+
+.PHONY: default
+default:
+	$(buildroot-target-info)
+	$(buildroot-build) O=$(BUILDROOT_OUTPUT)
+
+%:
+	$(buildroot-target-info)
+	$(buildroot-build) O=$(BUILDROOT_OUTPUT) $@
+
+On Tue, 2020-01-14 at 18:48 +0000, Enoch W. wrote:
+> Very helpful answer, Thanks, Enoch.
+> 
+> 
+> On 1/13/20 5:27 PM, Arnout Vandecappelle wrote:
+> > On 09/01/2020 20:08, Enoch W. wrote:
+> > > Good day to all,
+> > > 
+> > > 
+> > > I have now a second buildroot project in active development
+> > > relying on a different Linux version.
+> > > 
+> > > Is there a recommended way to manage the two with maximal code
+> > > sharing?
+> > 
+> >  Normally if the two project should be able to use the same
+> > buildroot tree -
+> > even if you add custom packages directly in the buildroot tree
+> > (rather than
+> > through BR2_EXTERNAL), they can share code.
+> > 
+> >  They would be different only because they use a different
+> > defconfig.
+> > 
+> >  You can have the build results side-by-side by setting an output
+> > directory
+> > explicitly with O= instead of using the default output/
+> > 
+> >  The two project configurations may share some of the common files
+> > (e.g. kernel
+> > configuration fragments, overlay files, post-build and post-image
+> > scripts). For
+> > example, I would typically have an organisation like this:
+> > 
+> > -+-- buildroot (= checked-out buildroot sources, typically as a git
+> > submodule)
+> >  +-+ output
+> >  | +-- project1 (= O=$PWD/output/project1 output directory used for
+> > project1)
+> >  | +-- project2 (= O=$PWD/output/project2 output directory used for
+> > project2)
+> >  +-- project1 (overlay, kernel config, ... specific for project1)
+> >  +-- project2 (overlay, kernel config, ... specific for project2)
+> >  +-- common (overlay, kernel config, ... common to the projects)
+> >  +-+ configs
+> >  | +-- project1_defconfig (= Buildroot defconfig for project1)
+> >  | +-- project2_defconfig (= Buildroot defconfig for project2)
+> >  +-- Makefile (top-level makefile that sets O= and calls into
+> > buildroot make)
+> > 
+> > 
+> >  Regards,
+> >  Arnout
+> > 
+> > 
+> > > Or is it best to put the two in separate docker containers? :-)
+> > > 
+> > > I've seen this question coming up before, but not receiving an
+> > > "official answer".
+> > > 
+> > > 
+> > > Thanks, Enoch.
+> > > 
+> > > 
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > > 
+>  
+> ATTENTION: This email came from an external source.
+> Do not open attachments or click on links from unknown senders or
+> unexpected emails.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
