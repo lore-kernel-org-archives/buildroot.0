@@ -1,68 +1,47 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 15 Jan 2020 23:15:57 +0100
-Subject: [Buildroot] [PATCH] package/mono: bump to version 6.0.0.313
-Message-ID: <20200115221557.28384-1-angelo@amarulasolutions.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 15 Jan 2020 15:27:26 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-pycares: bump to version
+ 3.1.1
+Message-ID: <20200115222726.62855-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps mono to version 6.8.0.96 and it's related dependency
-monolite to version ABB721D6-116A-4555-B4FD-9248146D2051.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/mono/mono.hash         | 2 +-
- package/mono/mono.mk           | 2 +-
- package/monolite/monolite.hash | 2 +-
- package/monolite/monolite.mk   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pycares/python-pycares.hash | 4 ++--
+ package/python-pycares/python-pycares.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index 6fcf26beae..fa5333867c 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
+diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
+index 63f5d88aeb..c8c46175dc 100644
+--- a/package/python-pycares/python-pycares.hash
++++ b/package/python-pycares/python-pycares.hash
 @@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256 a946e91d7da3f90b5e7cbbdf27adfa2f57ddb09b199dfc4d6d3bc05eb0690c50  mono-6.0.0.313.tar.xz
-+sha256 ed5df4ec663a4e228e89e910e954fa18d33f72e790c11174e1b62fc8cca90ba0  mono-6.8.0.96.tar.xz
- sha256 923c7053ad0d430cd9b0b69a0ccf3abb7170a1ce50ecbf01915b565a35823d10  LICENSE
- sha256 fc488f3ec9f36856bea8cce5cdde1449176341ef93a3962b691970f8981799f4  mcs/COPYING
- sha256 2c3c3ef532828bcd42bb3127349625a25291ff5ae7e6f8d42e0fe9b5be836a99  external/Newtonsoft.Json/Tools/7-zip/copying.txt
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index a65963a259..274d9817e5 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/pycares/json
+-md5	9d71bb8654cd2f7f34bdfe0ba641b59c  pycares-3.1.0.tar.gz
+-sha256	663c000625725d3a63466a674df4ee7f62bf8ca1ae8a0b87a6411eb811e0e794  pycares-3.1.0.tar.gz
++md5	8ac802d79b318efa27d3a9949d0604d1  pycares-3.1.1.tar.gz
++sha256	18dfd4fd300f570d6c4536c1d987b7b7673b2a9d14346592c5d6ed716df0d104  pycares-3.1.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
+diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
+index ecac40fd2d..dea34f82bf 100644
+--- a/package/python-pycares/python-pycares.mk
++++ b/package/python-pycares/python-pycares.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MONO_VERSION = 6.0.0.313
-+MONO_VERSION = 6.8.0.96
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.xz
- MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
-diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-index 1fc0d758cc..bd953591b4 100644
---- a/package/monolite/monolite.hash
-+++ b/package/monolite/monolite.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 21f0dada9f866e8e90c4884cef08d738f9addbe99b66a4b0d442f25ea0841abe  monolite-linux-d0aa6798-834d-11e9-b38a-3b0d70487d01-latest.tar.gz
-+sha256 4b75a73bb4a99b8e3b51837afb72192cce27b482cb5ec70cc136b293071f902e  monolite-linux-ABB721D6-116A-4555-B4FD-9248146D2051-latest.tar.gz
-diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-index 262ed06c4d..b9e3990c42 100644
---- a/package/monolite/monolite.mk
-+++ b/package/monolite/monolite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONOLITE_VERSION = d0aa6798-834d-11e9-b38a-3b0d70487d01
-+MONOLITE_VERSION = ABB721D6-116A-4555-B4FD-9248146D2051
- MONOLITE_SITE = http://download.mono-project.com/monolite
- MONOLITE_SOURCE = monolite-linux-$(MONOLITE_VERSION)-latest.tar.gz
- MONOLITE_LICENSE = LGPL-2.0 or commercial
+-PYTHON_PYCARES_VERSION = 3.1.0
++PYTHON_PYCARES_VERSION = 3.1.1
+ PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
+-PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/50/39/d7d4e85041e95c12ccca220663328709da81f75f5e86d76049f0937e9f83
++PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/4e/09/f49ef1c4b6a5ad50fc08a8acd015f1938594dd7a6b4a6a96d049d9bbec7d
+ PYTHON_PYCARES_SETUP_TYPE = setuptools
+ PYTHON_PYCARES_LICENSE = MIT
+ PYTHON_PYCARES_LICENSE_FILES = LICENSE
 -- 
-2.17.1
+2.20.1
