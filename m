@@ -1,83 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Jan 2020 09:00:44 +0100
-Subject: [Buildroot] Allowing to build from Git branches
-In-Reply-To: <CAFOYHZAq0Yrhg10m+U5UNa5+YRY+gcqDQ9K8sE+Sjg1P32edWQ@mail.gmail.com>
-References: <20200114220401.61700031@windsurf>
- <CAFOYHZAq0Yrhg10m+U5UNa5+YRY+gcqDQ9K8sE+Sjg1P32edWQ@mail.gmail.com>
-Message-ID: <20200115090044.5b9d56d0@windsurf>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 15 Jan 2020 09:09:24 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/python-aenum: new package
+Message-ID: <20200115080926.6669-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chris,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Wed, 15 Jan 2020 20:07:29 +1300
-Chris Packham <judge.packham@gmail.com> wrote:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes v1 -> v2:
+  - add followup patches fixing python-can package
 
-> > However, over time, I have seen a number of users/companies complaining
-> > about this, both on the mailing list and privately with customers or
-> > while discussing with users at conferences.
-> 
-> Yep I'm one of those users.
+ package/Config.in                      |  1 +
+ package/python-aenum/Config.in         |  7 +++++++
+ package/python-aenum/python-aenum.hash |  2 ++
+ package/python-aenum/python-aenum.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-aenum/Config.in
+ create mode 100644 package/python-aenum/python-aenum.hash
+ create mode 100644 package/python-aenum/python-aenum.mk
 
-And you're not the only one :-)
-
-> I'd qualify that reproducibility is good but we also want correct builds.
-> 
-> A frustration for us (bear in mind this was ~2010) was that it was often
-> hit and miss between whether buildroot would pick up the fact that the
-> source had changed so we were constantly second-guessing the validity of
-> tests which led to a lot of make <package>-dirclean.
-
-I don't really understand how it can be "hit and miss". The way
-Buildroot downloads from the upstream location for each package is
-completely deterministic.
-
-In addition, if you were doing <package>-dirclean to avoid the problem,
-then we're not talking about the same issue, because <package>-dirclean
-has zero impact on the contents of DL_DIR, and therefore zero impact on
-whether Buildroot will re-download things or not.
-
-Perhaps your issue was broader in the sense that you wanted an existing
-Buildroot build (where all packages have already been built) to
-automatically refetch some of the packages from Git, without having to
-do a "make clean". And that is why you had to selectively "make
-<package>-dirclean" those packages.
-
-However, what I am proposing is not going that far. All what I'm
-proposing is that if you're doing a clean build, if a package points to
-a Git branch as an upstream source, then Buildroot would re-fetch from
-that Git branch rather than using a locally cached tarball in DL_DIR
-potentially corresponding to an older version of that Git branch.
-
-> > So I'd like to start the debate on whether it might makes sense to
-> > relax our requirements on this, and be more pragmatic, and support
-> > fetching from Git branches. Of course, this very likely needs to be
-> > guarded by a Config.in option, so that we clearly set the boundary
-> > between "you're in the safe zone where your build is reproducible" and
-> > "you're in the zone where your build is non-reproducible".
-> 
-> As you've hinted at it should be possible to at least track the git
-> describe --always --dirty (or hg equivalent) to provide some level of
-> traceability even if it's not complete binary equvialence.
-
-Yes, absolutely. In fact, automatically refetching branches is in some
-sense more reproducible than when OVERRIDE_SRCDIR / SITE_METHOD = local
-are used.
-
-Indeed, when a package points to a branch, you can at least save the
-Git commit which was pointed by the branch at the moment of the build,
-and save that somewhere, allowing you to reproduce the same build later
-if you need to. However a source directory used with OVERRIDE_SRCDIR /
-SITE_METHOD = local can contain any random changes that Buildroot can't
-track at all.
-
-Best regards,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 4c94914680..4c6e46b794 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -832,6 +832,7 @@ endif
+ 	source "package/python3/Config.in"
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
++	source "package/python-aenum/Config.in"
+ 	source "package/python-aioblescan/Config.in"
+ 	source "package/python-aiocoap/Config.in"
+ 	source "package/python-aioconsole/Config.in"
+diff --git a/package/python-aenum/Config.in b/package/python-aenum/Config.in
+new file mode 100644
+index 0000000000..be3dd0fb9c
+--- /dev/null
++++ b/package/python-aenum/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_AENUM
++	bool "python-aenum"
++	help
++	  Advanced Enumerations (compatible with Python's stdlib Enum),
++	  NamedTuples, and NamedConstants.
++
++	  https://pypi.org/project/aenum
+diff --git a/package/python-aenum/python-aenum.hash b/package/python-aenum/python-aenum.hash
+new file mode 100644
+index 0000000000..14436343ba
+--- /dev/null
++++ b/package/python-aenum/python-aenum.hash
+@@ -0,0 +1,2 @@
++# sha256 from https://pypi.org/pypi/aenum/json
++sha256	a4334cabf47c167d44ab5a6198837b80deec5d5bad1b5cf70c966c3a330260e8  aenum-2.2.3.tar.gz
+diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
+new file mode 100644
+index 0000000000..1d5322ef41
+--- /dev/null
++++ b/package/python-aenum/python-aenum.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-aenum
++#
++################################################################################
++
++PYTHON_AENUM_VERSION = 2.2.3
++PYTHON_AENUM_SOURCE = aenum-$(PYTHON_AENUM_VERSION).tar.gz
++PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/6f/6a/8ed729e0add885d7a559ebb06133029b1f8c4bd66cbf1bdee1ec969fb310
++PYTHON_AENUM_SETUP_TYPE = setuptools
++PYTHON_AENUM_LICENSE = BSD-3-Clause
++PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
++
++$(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.0
