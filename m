@@ -1,10 +1,10 @@
 From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Wed, 15 Jan 2020 14:26:11 +0100
-Subject: [Buildroot] [PATCH v2 3/9] package/rust-bin: host variant depends
- on host-cargo-bin
+Date: Wed, 15 Jan 2020 14:26:12 +0100
+Subject: [Buildroot] [PATCH v2 4/9] package/rust: drop dependency on
+ host-cargo-bin
 In-Reply-To: <20200115132617.26604-1-patrick.havelange@essensium.com>
 References: <20200115132617.26604-1-patrick.havelange@essensium.com>
-Message-ID: <20200115132617.26604-3-patrick.havelange@essensium.com>
+Message-ID: <20200115132617.26604-4-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,26 @@ To: buildroot@busybox.net
 
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-Ensure installation of pre-built cargo binary by adding it to the
-dependency list of the host variant of the pre-built Rust compiler.
+As host-rust depends on host-rust-bin, which depends on host-cargo-bin,
+remove unneeded dependency.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 ---
- package/rust-bin/rust-bin.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/rust/rust.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
-index a374215e20..bef3102450 100644
---- a/package/rust-bin/rust-bin.mk
-+++ b/package/rust-bin/rust-bin.mk
-@@ -10,6 +10,7 @@ RUST_BIN_LICENSE = Apache-2.0 or MIT
- RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
- 
- HOST_RUST_BIN_PROVIDES = host-rustc
-+HOST_RUST_BIN_DEPENDENCIES = host-cargo-bin
- 
- HOST_RUST_BIN_SOURCE = rustc-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
- 
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 901995c203..50ed08901c 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -15,7 +15,6 @@ HOST_RUST_PROVIDES = host-rustc
+ HOST_RUST_DEPENDENCIES = \
+ 	toolchain \
+ 	host-rust-bin \
+-	host-cargo-bin \
+ 	host-openssl \
+ 	host-python \
+ 	$(BR2_CMAKE_HOST_DEPENDENCY)
 -- 
 2.17.1
