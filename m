@@ -1,64 +1,48 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 15 Jan 2020 21:57:36 +0100
-Subject: [Buildroot] [PATCH v1 3/3] package/rpi-userland: bump version
- to 42ec119
-In-Reply-To: <trinity-12b6b7ea-6e9e-4540-9048-5a259f7605ff-1579036665309@3c-app-mailcom-bs11>
-References: <20200114094256.23174-1-ps.report@gmx.net>
- <20200114094256.23174-3-ps.report@gmx.net>
- <trinity-41871925-7822-4238-98ae-909b71ee05a8-1579005943320@3c-app-mailcom-bs09>
- <20200114152755.4123935c@gmx.net> <20200114181920.54b8bd3e@gmx.net>
- <trinity-12b6b7ea-6e9e-4540-9048-5a259f7605ff-1579036665309@3c-app-mailcom-bs11>
-Message-ID: <20200115215736.5f8c581e@gmx.net>
+Date: Wed, 15 Jan 2020 22:00:37 +0100
+Subject: [Buildroot] [PATCH v2 3/3] package/rpi-userland: bump version to
+ 06bc6da
+In-Reply-To: <20200115210037.9564-1-ps.report@gmx.net>
+References: <20200115210037.9564-1-ps.report@gmx.net>
+Message-ID: <20200115210037.9564-3-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Dagg,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 - > v2:
+  - bump to 06bc6da (instead of 42ec119), now contains
+    previous patch extra upstream patch
+    0006-Fix-for-cmake-vmcs_host-error-fixes-603.patch
+---
+ package/rpi-userland/rpi-userland.hash | 2 +-
+ package/rpi-userland/rpi-userland.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 14 Jan 2020 22:17:45 +0100, daggs <daggs@gmx.com> wrote:
-
-> Greetings Peter,
->
-> > Sent: Tuesday, January 14, 2020 at 7:19 PM
-> > From: "Peter Seiderer" <ps.report@gmx.net>
-> > To: daggs <daggs@gmx.com>
-> > Cc: buildroot at buildroot.org, "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>, "Martin Bark" <martin@barkynet.com>, "Mahyar Koshkouei" <mahyar.koshkouei@gmail.com>, "Arthur Courtel" <arthur.courtel@smile.fr>
-> > Subject: Re: [Buildroot] [PATCH v1 3/3] package/rpi-userland: bump version to 42ec119
-> >
-> > Hello Dagg,
-> >
-> > On Tue, 14 Jan 2020 15:27:55 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > > Hello Dagg,
-> > >
-> > > On Tue, 14 Jan 2020 13:45:43 +0100, daggs <daggs@gmx.com> wrote:
-> > >
-> > > >
-> > > > do note that this commit allows rpi-userland compilation on aarch64. might be a good idea to fix rpi-userland.mk and Config.in to support that.
-> > > >
-> > > > Dagg.
-> > >
-> > > Thanks for the hint, will give it a try the next days....
-> >
-> > But does not provide the full set of libs for the 64bit build, e.g.
-> > no libegl, libgles, libopenmax, libopenvg (see e.g. [1], [2]), not
-> > sure which libs all the buildroot rpi-userland dependent packages
-> > expect (and if a incomplete rpi-userland is worth the 64-bit build)?
-> >
->
-> that is correct, libopenmax will probably not be implemented (as the devs say), mmal is supported and can be used instead.
-> as for the rest, I don't think they will be supported, according to the relevant issue (https://github.com/raspberrypi/userland/issues/314), it seems that they plan to wrap the aarch64 support up with the current list. infact, I won't be surprised if one will ask for they will say to use libegl, libgles from exiting 32 bits libs.
->
-> for me, 64 bit build it worthwhile because I want to use mmal with tvheadend.
-
-O.k, will try to get a proper rpi-userland-enable-64bit patch...
-
->
-> btw 06bc6daa02137ca72b7a2104afad81e82a44de17 includes that patch already, might be worthwhile to bump the version again.
-
-Thanks for the hint, will send an updated patch series...
-
-Regards,
-Peter
+diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
+index 6d59f2aafc..b6d9b99b3c 100644
+--- a/package/rpi-userland/rpi-userland.hash
++++ b/package/rpi-userland/rpi-userland.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 d6231e9fa33c805cf7cbb559a0d6eb125605fc2ba862d9e5a3248778dd269859 rpi-userland-5070cb7fc150fc98f1ed64a7739c3356970d9f76.tar.gz
++sha256 cf4dff40a2f4ec38bc7e42a80b989df1bf88e12d714f7e681f83c4e5a588f5c9 rpi-userland-06bc6daa02137ca72b7a2104afad81e82a44de17.tar.gz
+ sha256 bee6f1249175683d8610651706e1aa7dffcbfd3f9c4c05bc1e5ab34f313c2db5 LICENCE
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 2b672b6c97..7dd29e88e7 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_USERLAND_VERSION = 5070cb7fc150fc98f1ed64a7739c3356970d9f76
++RPI_USERLAND_VERSION = 06bc6daa02137ca72b7a2104afad81e82a44de17
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3-Clause
+ RPI_USERLAND_LICENSE_FILES = LICENCE
+-- 
+2.24.1
