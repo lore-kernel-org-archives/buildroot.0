@@ -1,18 +1,25 @@
-From: daggs <daggs@gmx.com>
-Date: Thu, 16 Jan 2020 22:32:16 +0100
-Subject: [Buildroot] network doesn't come up on boot
-Message-ID: <trinity-9dec1600-52e4-4b7a-a033-25e0087c0ad6-1579210334874@3c-app-mailcom-bs08>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 16 Jan 2020 21:43:12 +0000
+Subject: [Buildroot] [Bug 12481] minicom fails when output directory path
+ contains "m4"
+In-Reply-To: <bug-12481-163@https.bugs.busybox.net/>
+References: <bug-12481-163@https.bugs.busybox.net/>
+Message-ID: <bug-12481-163-MQYXLhTzCG@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+https://bugs.busybox.net/show_bug.cgi?id=12481
 
-I have a rpi4 board to whom I've created a 64 bit image, I've noticed that even with the busybox init system, the network doesn't come up when I boot the system.
-I must plug a screen and a keyboard, login manually and restart the service.
+Giulio Benetti <giulio.benetti@micronovasrl.com> changed:
 
-has anyone else noticed such scenario?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Assignee|unassigned at buildroot.uclibc |giulio.benetti at benettiengin
+                   |.org                        |eering.com
 
-Dagg.
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
