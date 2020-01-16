@@ -1,204 +1,176 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Jan 2020 07:18:02 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-01-15
-Message-ID: <20200116071812.0E41F203B5@silver.osuosl.org>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Thu, 16 Jan 2020 10:22:42 +0300
+Subject: [Buildroot] [PATCH] package/toolchain: bumb ARC tools to
+ arc-2019.09 release
+Message-ID: <20200116072242.10524-1-Evgeniy.Didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit bumps ARC toolchain to most recent arc-2019.09 release version.
 
-Autobuild statistics for 2020-01-15
-===============================
+ARC GNU tools of version arc-2019.09 bring some quite significant changes like:
+* Binutils v2_33.20191002 with additional ARC patches
+* GCC 9.2.1 with additional ARC patches
+* glibc 2.30 with additional ARC patches
 
-      branch |  OK | NOK | TIM | TOT |
-  2019.02.x  |  4  |  0  |  1  |  5  |
-  2019.11.x  | 10  |  5  |  0  | 15  |
-    master   | 91  | 88  |  0  | 179 |
+More information on this release could be found here:
+https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2019.09-release
 
-Results for branch 'master'
-===========================
+Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
+---
+ package/binutils/Config.in.host                                       | 2 +-
+ .../0001-poison-system-directories.patch                              | 0
+ package/binutils/binutils.hash                                        | 2 +-
+ package/binutils/binutils.mk                                          | 4 ++--
+ package/gcc/Config.in.host                                            | 2 +-
+ .../{arc-2019.09-rc1 => arc-2019.09-release}/0100-uclibc-conf.patch   | 0
+ package/gcc/gcc.hash                                                  | 2 +-
+ package/gdb/Config.in.host                                            | 2 +-
+ package/gdb/gdb.hash                                                  | 2 +-
+ package/glibc/{arc-2019.09-rc1 => arc-2019.09-release}/glibc.hash     | 2 +-
+ package/glibc/glibc.mk                                                | 2 +-
+ 11 files changed, 10 insertions(+), 10 deletions(-)
+ rename package/binutils/{arc-2019.09-rc1 => arc-2019.09-release}/0001-poison-system-directories.patch (100%)
+ rename package/gcc/{arc-2019.09-rc1 => arc-2019.09-release}/0100-uclibc-conf.patch (100%)
+ rename package/glibc/{arc-2019.09-rc1 => arc-2019.09-release}/glibc.hash (75%)
 
-Classification of failures by reason
-------------------------------------
-
-             freeswitch-1.10.2 | 13
-                    brltty-6.0 | 9 
-                   mutt-1.13.3 | 8 
-                    parted-3.3 | 6 
-                apr-util-1.6.1 | 5 
-              host-grpc-1.25.0 | 5 
-                bitcoin-0.16.3 | 4 
-                 libnss-3.49.1 | 4 
-            host-mfgtools-0.02 | 2 
-               libsigsegv-2.12 | 2 
-                  olsr-0.9.6.1 | 2 
-                 opencv3-3.4.9 | 2 
-             openjdk-12.0.2+10 | 2 
-       python-matplotlib-3.0.3 | 2 
-               acpica-20191018 | 1 
-                      bash-5.0 | 1 
-domoticz-0f411f781ae4fb4a82... | 1 
-                 exim-4.93.0.4 | 1 
-                haproxy-2.0.10 | 1 
-           host-doxygen-1.8.17 | 1 
-             host-pango-1.44.6 | 1 
-           libsamplerate-0.1.9 | 1 
-               libtheora-1.1.1 | 1 
-                     lxc-3.2.1 | 1 
-                 mesa3d-19.3.2 | 1 
-                   mimic-1.1.0 | 1 
-               protobuf-3.11.0 | 1 
-        python-alsaaudio-0.8.4 | 1 
-                qt5base-5.12.5 | 1 
-         qt5xmlpatterns-5.12.5 | 1 
-                  spdlog-1.4.2 | 1 
-                     squid-4.8 | 1 
-                      tio-1.32 | 1 
-           uboot-tools-2019.10 | 1 
-                       unknown | 1 
-                    xen-4.12.1 | 1 
-
-
-Detail of failures
-------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    m68k     |        acpica-20191018         | NOK | http://autobuild.buildroot.net/results/804ad9e4a33a0622535253dc228d5bb850ff82a9 |     
-    arc      |         apr-util-1.6.1         | NOK | http://autobuild.buildroot.net/results/74614e4deafe64ca8879abdf081a6748097acb37 |     
-    arm      |         apr-util-1.6.1         | NOK | http://autobuild.buildroot.net/results/5493f5842e3379d2e3eab60cd5c9db70f420575b |     
-   x86_64    |         apr-util-1.6.1         | NOK | http://autobuild.buildroot.net/results/73e8b94fb66ec2317f307916393ff3a7f2fb9b06 |     
-    arc      |         apr-util-1.6.1         | NOK | http://autobuild.buildroot.net/results/dae9d20894431f71888af3418776dfd4c1682b91 |     
- powerpc64   |         apr-util-1.6.1         | NOK | http://autobuild.buildroot.net/results/6cde15051aea757deb4e29d4d96a0ee41a9c352c |     
-  powerpc    |            bash-5.0            | NOK | http://autobuild.buildroot.net/results/553cf73e0bb69223d5d767c87a522829c64bce41 | ORPH
-    arc      |         bitcoin-0.16.3         | NOK | http://autobuild.buildroot.net/results/1f1269c92538ade7f87b014220eb5d1e7b4e882e |     
-    arc      |         bitcoin-0.16.3         | NOK | http://autobuild.buildroot.net/results/95d9f21a650e30e6d6c1636042bb24555079f643 |     
-    arc      |         bitcoin-0.16.3         | NOK | http://autobuild.buildroot.net/results/0917154a60cbe238ed4ed6f038f0c65a8379206d |     
-    arc      |         bitcoin-0.16.3         | NOK | http://autobuild.buildroot.net/results/0cfa6ca08435fc8498243989e2210e53ccebf842 |     
-   xtensa    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/dcb139dcf9648aea26a3899cbe8a7fad31ad3798 |     
-    or1k     |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/7264a4ecfc34fc7c0856b16a4f70735c9d7c96a1 |     
-   xtensa    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/360a30d8c8825442a8128c1e0056d8ba04d488f0 |     
-    m68k     |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/2d0b8d1324deb041c7d55cb09590f120138719ef |     
-  powerpc    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/09cf4985d99969b24ec8139f2e4fab794053776b |     
-    sh4      |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/46be21d7d4479e3c3f6b841ec99778901973889e |     
-   mipsel    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/1cbdbb05692806680f9badd98c599004c5fa7fce |     
-    or1k     |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/932ac891ccaa4463ef42470bf313ad52ce78be79 |     
-   xtensa    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/54cf7f44b03e8fccf72d5ac75287e36cb067041d |     
-   xtensa    | domoticz-0f411f781ae4fb4a82... | NOK | http://autobuild.buildroot.net/results/d398d9fd68ca46a05e4b61c6c53df412a323e75a |     
-    arm      |         exim-4.93.0.4          | NOK | http://autobuild.buildroot.net/results/1441ae8ddfccf9dbf2b7fb3f11612d2aa643ae9e |     
-  riscv64    |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/7a5b9c9e4304fe586f59886afae65a7a48c8f679 |     
-    arm      |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/b56010f7bfe1766ecd1088001562da3df8d361bc |     
-  mips64el   |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/d2391a7bf7dfc436f4c262639e724fa3a2c84ac9 |     
- powerpc64   |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/615bc92f28e99748b598f4f916150a969ab52394 |     
-  riscv64    |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/4be6df27f33e4fd6955e47892e1650a9d5ebbded |     
-  powerpc    |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/ece8c42bf4092f34b3fa0b7a20c136b24c452523 |     
-  mips64el   |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/7006bc6ed0e27b1ec3156c7c697fec56e738682f |     
-  riscv64    |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/08bf88999e054e96388c84e9ec0161ecb58b8d72 |     
-    mips     |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/55bf85018ba49ef9bba238aed1dc019d40c05dda |     
-  riscv32    |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/17b549181b6ba7bfe58f0d7e0a62f4733f90ba95 |     
-    arm      |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/12a6ac06eaa2d7b43f675ea8b01c1814f9f4d266 |     
-    arm      |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/e8c1457d612986f0acb18c7a818de6d47b4f3e1d |     
-    arm      |       freeswitch-1.10.2        | NOK | http://autobuild.buildroot.net/results/6d095764fabd91f7c53265a5c89df9ff03a93918 |     
-    m68k     |         haproxy-2.0.10         | NOK | http://autobuild.buildroot.net/results/e565cc1821d12745448cf2538ccd754222234461 |     
-powerpc64le  |      host-doxygen-1.8.17       | NOK | http://autobuild.buildroot.net/results/607b27c930fcf7d86274eb0dcfa8cbf72e67c4f3 |     
-  powerpc    |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/0e70ff1393ca07cbd139358e100836fc39537c94 |     
-   xtensa    |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/46d08e5b09b0b088795198a9296d45eab133a499 |     
- powerpc64   |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/4be6f75d6957e0ece2c1617e57d515357848cf62 |     
-   mipsel    |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/53f96dcc6f07ac3bce23b865105548bdf3e40a26 |     
-  aarch64    |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/1d146fd7baf0f16d91ad71694e454143e806a1d1 |     
-    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/77e341588ce339d9018cbfabbf1ba87c31e93696 |     
-    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/b85ecb81f8f1312e7de14518b4d072f4f35d63bc |     
-microblazeel |       host-pango-1.44.6        | NOK | http://autobuild.buildroot.net/results/6a97ffc57b6259320306fd52d4797dece5e8fdf6 | ORPH
-    arm      |         libnss-3.49.1          | NOK | http://autobuild.buildroot.net/results/d6122929c8176d54a429e169a57e8fe39bd8b08e |     
-    arm      |         libnss-3.49.1          | NOK | http://autobuild.buildroot.net/results/ae28bf20ca24a18c609051f57eff23fae1f97695 |     
-    arm      |         libnss-3.49.1          | NOK | http://autobuild.buildroot.net/results/b426088056bce620420bfc1e3b1bcb8180c99b4b |     
-    arm      |         libnss-3.49.1          | NOK | http://autobuild.buildroot.net/results/754102d628548ed0bc692f42fa726050f615bc28 |     
-    m68k     |      libsamplerate-0.1.9       | NOK | http://autobuild.buildroot.net/results/283728b2daac4c6103d691e87705f82512c10546 | ORPH
-  riscv64    |        libsigsegv-2.12         | NOK | http://autobuild.buildroot.net/results/320c30f476c93353aab632bd5ac633fce0a5f881 |     
-  riscv64    |        libsigsegv-2.12         | NOK | http://autobuild.buildroot.net/results/7e2a802e850516e75cad24e7c0fb48b75077e6dc |     
-    or1k     |        libtheora-1.1.1         | NOK | http://autobuild.buildroot.net/results/9f6a4704eaa9c8d7a5cc36102ae775b417569d46 | ORPH
-  sparc64    |           lxc-3.2.1            | NOK | http://autobuild.buildroot.net/results/b334a642799837fa971cc0fad1ff10537f88b974 |     
-    arm      |         mesa3d-19.3.2          | NOK | http://autobuild.buildroot.net/results/df0fdb3e6ad9515190b728a849ab19d962b72a1a |     
-    m68k     |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/04155236f07dc2d46fdc13c50edf316d87706885 |     
-    i686     |          mutt-1.13.3           | NOK | http://autobuild.buildroot.net/results/fa796368b171512d3afdfe7d81e8a960e987e221 |     
-    or1k     |          mutt-1.13.3           | NOK | http://autobuild.buildroot.net/results/8b146432c05589e65e1f4a4831a85b64affbe2cd |     
-    arc      |          mutt-1.13.3           | NOK | http://autobuild.buildroot.net/results/dedef6e8dcb7b4acd8f368682f825fea8172ae62 |     
-microblazeel |          mutt-1.13.3           | NOK | http://autobuild.buildroot.net/results/d7acda7dad408903a00e4274644db2a08f2a2784 |     
-  aarch64    |          mutt-1.13.3           | NOK | http://autobuild.buildroot.net/results/0f445d2472a1fd8e07f2625f653f4f1f81d2fe3a |     
-   x86_64    |          mutt-1.13.3           | NOK | http://autobuild.buildroot.net/results/b21619bbefeab1a675667f7c5658e588fcf2353a |     
-   mipsel    |          mutt-1.13.3           | NOK | http://autobuild.buildroot.net/results/ebbf2553989963cfeb2e5fc20a2f3f1a66394e61 |     
-   xtensa    |          mutt-1.13.3           | NOK | http://autobuild.buildroot.net/results/7d9b15238419da132a59ddece80c25b0125acc13 |     
-  riscv64    |          olsr-0.9.6.1          | NOK | http://autobuild.buildroot.net/results/2bffa4b3d28478bb9e6bddfc901d39b4cd724978 | ORPH
-microblazeel |          olsr-0.9.6.1          | NOK | http://autobuild.buildroot.net/results/0b32680939a35c67f50e3818a81deb4d9672c10d | ORPH
-powerpc64le  |         opencv3-3.4.9          | NOK | http://autobuild.buildroot.net/results/7c7b235cc922252c5e297f135c31fe7cb362f6ec |     
-  powerpc    |         opencv3-3.4.9          | NOK | http://autobuild.buildroot.net/results/c1dad542edc217cd0881d470f47c8ecff91ec9e6 |     
-  sparc64    |       openjdk-12.0.2+10        | NOK | http://autobuild.buildroot.net/results/e61709c77181f38150246ea8994a53354eb67f2a |     
-    arm      |       openjdk-12.0.2+10        | NOK | http://autobuild.buildroot.net/results/b31b2fbe01394045afb5bf7b350d6c4a4afb55a7 |     
-    m68k     |           parted-3.3           | NOK | http://autobuild.buildroot.net/results/7b6eb06521622847ed9a2d2950762851cae69d23 |     
-   sparc     |           parted-3.3           | NOK | http://autobuild.buildroot.net/results/7f3098b7b0a0f18ee22f6a10351b1559b78e8183 |     
-  powerpc    |           parted-3.3           | NOK | http://autobuild.buildroot.net/results/49901c72b90fbf7b722e7a4e8f9c83dce099eb2c |     
-    sh4      |           parted-3.3           | NOK | http://autobuild.buildroot.net/results/2e6d655d0ee171e2dd278635932ff857b822996d |     
-    arm      |           parted-3.3           | NOK | http://autobuild.buildroot.net/results/97b569d40fd56ccc60b49d1390350680f8778848 |     
-    arc      |           parted-3.3           | NOK | http://autobuild.buildroot.net/results/4d17b0579d8e6cc5f79d3cd52dcf3f4450fccbfe |     
-    or1k     |        protobuf-3.11.0         | NOK | http://autobuild.buildroot.net/results/2ae0c2e52d49bdee3ac022d4d7efba0c0809a4e9 |     
-    arm      |     python-alsaaudio-0.8.4     | NOK | http://autobuild.buildroot.net/results/1abfe1d727776d9283c7385056c1ab7e39418dc3 |     
-  aarch64    |    python-matplotlib-3.0.3     | NOK | http://autobuild.buildroot.net/results/38f0bf44648a0b997ef0fb44d70bf62021f949f9 |     
-  aarch64    |    python-matplotlib-3.0.3     | NOK | http://autobuild.buildroot.net/results/0e78d1bffa41b282856109681d8616e417b64a5f |     
- aarch64_be  |         qt5base-5.12.5         | NOK | http://autobuild.buildroot.net/results/863926916657d1439a36438c3bcec0c067f2069d |     
-    arm      |     qt5xmlpatterns-5.12.5      | NOK | http://autobuild.buildroot.net/results/cb8727d6ec312febb158ac0f39ac3938b46cfbaa |     
-  aarch64    |          spdlog-1.4.2          | NOK | http://autobuild.buildroot.net/results/4750b261d4476e626b406a99f8600d2c8ba4db9d |     
-    or1k     |           squid-4.8            | NOK | http://autobuild.buildroot.net/results/d4c0f574ced247ef477db0a10d1921eb334a780d | ORPH
-   sparc     |            tio-1.32            | NOK | http://autobuild.buildroot.net/results/6fd9116b3fc3d4e530056d6342d4222850454655 |     
-  riscv64    |      uboot-tools-2019.10       | NOK | http://autobuild.buildroot.net/results/a41df0fb65e39c86869e719f4ee52730080afed4 |     
-  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/78d657d828c42b71c222980264d9506ae98c9f88 |     
-  aarch64    |           xen-4.12.1           | NOK | http://autobuild.buildroot.net/results/5e7cb831cd90d13edb118a9731c56e5d9c62a415 |     
-
-
-Results for branch '2019.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                     host-llvm | 1 
-
-
-Detail of failures
-------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |           host-llvm            | TIM | http://autobuild.buildroot.net/results/3a7ee953b494505cfa021b9905eb1264e8422af3 |     
-
-
-Results for branch '2019.11.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-host-google-breakpad-7515ab... | 1 
-                  ndisc6-1.0.4 | 1 
-                 systemd-243.4 | 1 
-toolchain-external-codesour... | 1 
-                     vlc-3.0.8 | 1 
-
-
-Detail of failures
-------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      | host-google-breakpad-7515ab... | NOK | http://autobuild.buildroot.net/results/f79e5223e4c56d48cb7af926f58196dfdb506fb6 |     
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/392328d85ead942b5e1991deae00ce3f33c9b10f | ORPH
-  sparc64    |         systemd-243.4          | NOK | http://autobuild.buildroot.net/results/7f2fcf373140637549b34fb2a7436d751364caa8 |     
-    arm      | toolchain-external-codesour... | NOK | http://autobuild.buildroot.net/results/9a69ef34b5c664a5cc14ff23935324ca312e9db7 | ORPH
-  riscv32    |           vlc-3.0.8            | NOK | http://autobuild.buildroot.net/results/3eaf5db7a5eba8e99d8c8409b49411a1fd469b7f |     
-
-
-
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 514f620086..06902b4ba6 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -37,7 +37,7 @@ endchoice
+ 
+ config BR2_BINUTILS_VERSION
+ 	string
+-	default "arc-2019.09-rc1"	if BR2_BINUTILS_VERSION_ARC
++	default "arc-2019.09-release"	if BR2_BINUTILS_VERSION_ARC
+ 	default "c66d8bbcebfddf713b2b436e1b135e6b125a55a5" if BR2_BINUTILS_VERSION_CSKY
+ 	default "2.31.1"	if BR2_BINUTILS_VERSION_2_31_X
+ 	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
+diff --git a/package/binutils/arc-2019.09-rc1/0001-poison-system-directories.patch b/package/binutils/arc-2019.09-release/0001-poison-system-directories.patch
+similarity index 100%
+rename from package/binutils/arc-2019.09-rc1/0001-poison-system-directories.patch
+rename to package/binutils/arc-2019.09-release/0001-poison-system-directories.patch
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index 544b318d02..82a4082104 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -4,7 +4,7 @@ sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724a
+ sha512  b7a6767c6c7ca6b5cafa7080e6820b7bb3a53b7148348c438d99905defbdf0d30c9744a484ee01c9441a8153901808513366b15ba9533e20c9673c262ade36ac  binutils-2.33.1.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+-sha512  3840770da5ede0248f6a6605e3f1743210acd9f4da7de48720ef566cc2aae52ea9e84c285a0a6d39eb15bd7ad197d543b6e407ec9e1a00739989e574d4e04384  binutils-gdb-arc-2019.09-rc1.tar.gz
++sha512  33ac5ad662db551870193f5c76c35a18de465adfa1c7f4bf5c1bb4145805a47507bf11ec21eb446b52f91f70cfe392252dd2b02724dc9dad3505258e3f6f4d45  binutils-gdb-arc-2019.09-release.tar.gz
+ 
+ # Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
+ sha512  979552d4b3a4f31e9f3b9a7027321bd4eb3ac6c2d8deac1720e94e54f81d736db09c53c5d87c301010e307b64127e14400a036c7a35e5d63a954a4edd9cc8e2c  binutils-c66d8bbcebfddf713b2b436e1b135e6b125a55a5.tar.gz
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index a19d6940f7..876c9c59f8 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -9,13 +9,13 @@
+ BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
+ ifeq ($(BINUTILS_VERSION),)
+ ifeq ($(BR2_arc),y)
+-BINUTILS_VERSION = arc-2019.09-rc1
++BINUTILS_VERSION = arc-2019.09-release
+ else
+ BINUTILS_VERSION = 2.32
+ endif
+ endif # BINUTILS_VERSION
+ 
+-ifeq ($(BINUTILS_VERSION),arc-2019.09-rc1)
++ifeq ($(BINUTILS_VERSION),arc-2019.09-release)
+ BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
+ BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
+ BINUTILS_FROM_GIT = y
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 92af40b19f..e9d9d52347 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -95,7 +95,7 @@ config BR2_GCC_VERSION
+ 	default "7.5.0"     if BR2_GCC_VERSION_7_X
+ 	default "8.3.0"     if BR2_GCC_VERSION_8_X
+ 	default "9.2.0"     if BR2_GCC_VERSION_9_X
+-	default "arc-2019.09-rc1" if BR2_GCC_VERSION_ARC
++	default "arc-2019.09-release" if BR2_GCC_VERSION_ARC
+ 	default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
+ 	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
+ 
+diff --git a/package/gcc/arc-2019.09-rc1/0100-uclibc-conf.patch b/package/gcc/arc-2019.09-release/0100-uclibc-conf.patch
+similarity index 100%
+rename from package/gcc/arc-2019.09-rc1/0100-uclibc-conf.patch
+rename to package/gcc/arc-2019.09-release/0100-uclibc-conf.patch
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 393c4eb940..65c8c0d794 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -8,7 +8,7 @@ sha512  1811337ae3add9680cec64968a2509d085b6dc5b6783fc1e8c295e3e47416196fd1a3ad8
+ sha512  a12dff52af876aee0fd89a8d09cdc455f35ec46845e154023202392adc164848faf8ee881b59b681b696e27c69fd143a214014db4214db62f9891a1c8365c040  gcc-9.2.0.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+-sha512  c478efba4a497875b2add3b1bf4261c187459e252d397ace40ca740e51ac96491defa78733aafcb2b03c8e2e423dd8c115761a5e74ef2386368d53730f3e45ba  gcc-arc-2019.09-rc1.tar.gz
++sha512  84648d13f174102733e06ccdf7b351150babe06af0f2b99b8dfb2b2d3c3f13e424547349939806fe19932ad347977cad79cd8b37be9cbb03e6a4d03cdf95a72e  gcc-arc-2019.09-release.tar.gz
+ # Locally calculated (fetched from Github)
+ sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
+ # Locally calculated (fetched from https://github.com/c-sky/gcc)
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index a22b3150aa..5315f10493 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -67,7 +67,7 @@ endif
+ # If cross-gdb is not enabled, the latest working version is chosen.
+ config BR2_GDB_VERSION
+ 	string
+-	default "arc-2019.09-rc1-gdb" if BR2_arc
++	default "arc-2019.09-release-gdb" if BR2_arc
+ 	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
+ 	default "8.1.1"    if BR2_GDB_VERSION_8_1
+ 	default "8.2.1"    if BR2_GDB_VERSION_8_2 || !BR2_PACKAGE_HOST_GDB
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index ec60b47c20..b98d6d6a67 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -4,7 +4,7 @@ sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5
+ sha512  47ac074d20a09a3fac8f4a41dce0a0cbe6ef702f7dc21ba8b7d650d306128dcae481e9a16bf65e596b3a541dc82ae57c02bcbb786d551b4ef3e2917b9b6f0ae1	gdb-8.3.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+-sha512  a2b83e949638fa27d3d2b971e3a77902050191d517c5b9ca1273d182b8c3b9da2c993a0dbaf76e18d2603e59a1af6618dff830a3905f22272af68fcbb49d58a8 	gdb-arc-2019.09-rc1-gdb.tar.gz
++sha512  c33818f8679d99d5315220578864b04b87f69c46ebe62472809ee6e1d260e5ec84d598f38d80c127a2045d6624f28803c2720d89434204acbd94e988a45870f1 	gdb-arc-2019.09-release-gdb.tar.gz
+ 
+ # Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
+ sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b	gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
+diff --git a/package/glibc/arc-2019.09-rc1/glibc.hash b/package/glibc/arc-2019.09-release/glibc.hash
+similarity index 75%
+rename from package/glibc/arc-2019.09-rc1/glibc.hash
+rename to package/glibc/arc-2019.09-release/glibc.hash
+index e99eedc8ea..296035c495 100644
+--- a/package/glibc/arc-2019.09-rc1/glibc.hash
++++ b/package/glibc/arc-2019.09-release/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  a9beeace7e2b4b25c6d253591b005975c50bf4ca1c0b6b38a24d89ac5a1458e1  glibc-arc-2019.09-rc1.tar.gz
++sha256  0e0fd7603938fd8ebd793385a3d72c6e1fba22e16a600a16cc953a93f0e85943  glibc-arc-2019.09-release.tar.gz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index c77105ec61..e4eb665ed6 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ifeq ($(BR2_arc),y)
+-GLIBC_VERSION =  arc-2019.09-rc1
++GLIBC_VERSION =  arc-2019.09-release
+ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
+ else ifeq ($(BR2_RISCV_32),y)
+ GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
 -- 
-http://autobuild.buildroot.net
+2.16.2
