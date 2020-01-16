@@ -1,93 +1,127 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Thu, 16 Jan 2020 11:15:39 +0100
-Subject: [Buildroot] [PATCH] infra: add the transient download mechanism
-In-Reply-To: <20200116110306.5c91286b@windsurf>
-References: <20200115203753.12110-1-yann.morin.1998@free.fr>
- <534f269547ead6d86e7a571978b54d79cd24cd0d.camel@orolia.com>
- <20200116103120.7b41295a@windsurf>
- <CAOf5uwmX0vdPFW9s9fC64Q7DFvQGCWdSqZy4GjEPrryy8Sa9ZA@mail.gmail.com>
- <20200116110306.5c91286b@windsurf>
-Message-ID: <CAOf5uw=m8DVBh_o0WLyR2__7OkhkXMVv-VX7JJ2Rm7WyJs1csw@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 16 Jan 2020 11:33:08 +0100
+Subject: [Buildroot] [PATCH v14 1/5] package/libiberty: new package
+In-Reply-To: <20191021200438.97453-2-aduskett@gmail.com>
+References: <20191021200438.97453-1-aduskett@gmail.com>
+ <20191021200438.97453-2-aduskett@gmail.com>
+Message-ID: <CAGm1_ksFbqq+a9OULXZFVYSEG5FvMAePcjDMwVkTHPbVbnXBaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi Adam,
 
-On Thu, Jan 16, 2020 at 11:03 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+On Mon, Oct 21, 2019 at 10:05 PM <aduskett@gmail.com> wrote:
 >
-> On Thu, 16 Jan 2020 10:56:53 +0100
-> Michael Nazzareno Trimarchi <michael@amarulasolutions.com> wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
 >
-> > We are using a similar setup of Nicolas. Right now we have
-> > CI and reproducible build using external tools. What I would like to solve
-> > with buildroot is:
-> >
-> > - make the build reproducible
-> > - implement topic build on custom patch using CI
-> > - make tagging and branching easy
+> Some packages, like prelink-cross, will want to use libiberty but do
+> not bundle their own instance (which is good!).
 >
-> Could you give more details, because these items are quite vague/fuzzy,
-> and I don't understand from a very practical point of view what you
-> mean. Could you describe some example workflow, what would be your
-> expectation of Buildroot's behavior, etc.
+> However, libiberty is made for being bundled in packages: all GNU
+> packages that use libiberty (gcc, binutils, gdb et al...) all have
+> their own bundled variant. This means that there is no official
+> upstream for libiberty; the closest being as part of the
+> combined binutils-gdb tree.
 >
-Suppose you have this manifest
-
-<?xml version="1.0" encoding="UTF-8"?>
-<manifest>
-  <remote  name="amarula-gitea"
-           fetch=".."
-           review="https://gerrit-review.amarulasolutions.com" />
-
-  <remote  name="prj"
-           fetch="ssh://server1/home/gitrepos/"
-           revision="master" />
-
-  <default revision="prj2"
-           remote="amarula-gitea"
-           sync-j="4"
-           sync-c="true" />
-
-  <project path="app1" name="smile" remote="prj" />
-  <project path="buildroot" name="prj/buildroot" />
-  <project path="linux" name="prj/linux" />
-  <project path="build" name="prj/build" >
-    <copyfile src="root.mk" dest="Makefile" />
-  </project>
-  <project path="library/lib1" name="prj/lib1" />
-  <project path="u-boot" name="prj/u-boot" />
-</manifest>
-
-This one describe the project and we have override part for the
-project in the manifest. For each version we can tag
-and each repo and create a snapshot manifest of the project.
-Manifest will have revison set to revision="refs/tags/<some tag>"
-
-If I need to emit a release starting from some tag I can branch it and
-apply patch on top of this branch and everything
-can be stored as a separed manifest. Using jenkins trigger on topic
-upload on gerrit we can easily build a version with some
-patchset applied and if we want to re-build some version we can just
-use the right tagged manifest
-
-Michael
-
-> Thanks,
+> So we introduce a new host-only package, that installs just libiberty
+> from a binutils released tarball.
 >
-> Thomas
+> Again, as libiberty is usually bundled in packages, it usually only
+> install a static version. Furthermore, it does not obey to the usual
+
+s/install/installs and perhaps remove "to" after obey
+
+Any plans for v15? Or are you waiting for the next
+gobject-introspection release that would make some related patches as
+obsolete?
+
+Regards,
+Yegor
+
+> --enable-shared and --disable-static flags; it only ever builds a
+> static version.
+>
+> Furthermore, this library is not built with -fPIC, but some packages
+> may pick it to build shared objects. This is the case for host-gdb,
+> for example, which accidentally picks that library instead of its
+> internal one.
+>
+> So, rather than fix the various gdb versions and variants we can use,
+> we ensure that the libiberty we install is usable in shared objects,
+> and we ensure it is always built before host-gdb.
+>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+> Changes v1 -> v11:
+>   - Add this patch to the series
+>
+>  DEVELOPERS                       |  1 +
+>  package/libiberty/libiberty.hash |  2 ++
+>  package/libiberty/libiberty.mk   | 27 +++++++++++++++++++++++++++
+>  3 files changed, 30 insertions(+)
+>  create mode 100644 package/libiberty/libiberty.hash
+>  create mode 100644 package/libiberty/libiberty.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 906ccae006..f10711ee6a 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2426,6 +2426,7 @@ F:        package/keyutils/
+>  F:     package/libbsd/
+>  F:     package/libedit/
+>  F:     package/libgsm/
+> +F:     package/libiberty/
+>  F:     package/libinput/
+>  F:     package/libiscsi/
+>  F:     package/libpri/
+> diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
+> new file mode 100644
+> index 0000000000..270f38dfa7
+> --- /dev/null
+> +++ b/package/libiberty/libiberty.hash
+> @@ -0,0 +1,2 @@
+> +# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
+> +sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
+> diff --git a/package/libiberty/libiberty.mk b/package/libiberty/libiberty.mk
+> new file mode 100644
+> index 0000000000..17976fdd4f
+> --- /dev/null
+> +++ b/package/libiberty/libiberty.mk
+> @@ -0,0 +1,27 @@
+> +################################################################################
+> +#
+> +# libiberty
+> +#
+> +################################################################################
+> +
+> +LIBIBERTY_VERSION = 2.32
+> +LIBIBERTY_SOURCE = binutils-$(LIBIBERTY_VERSION).tar.xz
+> +LIBIBERTY_SITE = $(BR2_GNU_MIRROR)/binutils
+> +LIBIBERTY_DL_SUBDIR = binutils
+> +LIBIBERTY_SUBDIR = libiberty
+> +
+> +# We explicitly disable multilib, as we do in binutils.
+> +# By default, libiberty installs nothing, so we must force it.
+> +HOST_LIBIBERTY_CONF_OPTS = \
+> +       --disable-multilib \
+> +       --enable-install-libiberty
+> +
+> +# Some packages (e.g. host-gdb) will pick this library and build shared
+> +# objects with it. But libiberty does not honour the --enable-shared and
+> +# --disable-static flags; it only ever builds a static library no matter
+> +# what. So we must force -fPIC in build flags.
+> +HOST_LIBIBERTY_CONF_ENV = \
+> +       CFLAGS="$(HOST_CFLAGS) -fPIC" \
+> +       LDFLAGS="$(HOST_LDFLAGS) -fPIC"
+> +
+> +$(eval $(host-autotools-package))
 > --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-
-
--- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+> 2.21.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
