@@ -1,272 +1,85 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 16 Jan 2020 10:36:45 +0100
-Subject: [Buildroot] [PATCH 1/2] package/toolchain-external: ensure
- ARCH_LIB_DIR exist
-In-Reply-To: <20200113033451.GA15150@vmh-VirtualBox>
-References: <1577937441-18703-1-git-send-email-han_mao@c-sky.com>
- <CAAXf6LUVA4QkSmz8OaSOyqzKaw--eD5r0zAD+zONfyGROv1MZw@mail.gmail.com>
- <20200113033451.GA15150@vmh-VirtualBox>
-Message-ID: <CAAXf6LWZZKCW=g=ReXz00hLJSiBw6sJfsmSxu0=Q_J4FVda32g@mail.gmail.com>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Thu, 16 Jan 2020 10:56:53 +0100
+Subject: [Buildroot] [PATCH] infra: add the transient download mechanism
+In-Reply-To: <20200116103120.7b41295a@windsurf>
+References: <20200115203753.12110-1-yann.morin.1998@free.fr>
+ <534f269547ead6d86e7a571978b54d79cd24cd0d.camel@orolia.com>
+ <20200116103120.7b41295a@windsurf>
+Message-ID: <CAOf5uwmX0vdPFW9s9fC64Q7DFvQGCWdSqZy4GjEPrryy8Sa9ZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mao Han,
+Hi
 
-El lun., 13 ene. 2020 a las 4:39, Mao Han (<han_mao@c-sky.com>) escribi?:
+On Thu, Jan 16, 2020 at 10:31 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> Hi,
-> On Fri, Jan 10, 2020 at 11:57:00AM +0100, Thomas De Schampheleire wrote:
-> > Hello,
-> >
-> > El jue., 2 ene. 2020 a las 5:15, Mao Han (<han_mao@c-sky.com>) escribi?:
-> > >
-> > > Different architecture may have different arch library folder structure
-> > > for their multilib toolchain. RISC-V toolchain has folder structure
-> > > like:
-> > > /sysroot/lib64/
-> > > /sysroot/lib64/lp64
-> > > /sysroot/lib64/lp64d
-> > > The first level is for ISA and the second level is for ABI.
-> > > Current buildroot only creat lib and lib64, some error is reported
-> > > while installing the external toolchain:
-> > > >>> toolchain-external-custom  Installing to staging directory
-> > > /usr/bin/install -D -m 0755 /.../build/toolchain-external-custom/toolchain-wrapper /.../host/bin/toolchain-wrapper
-> > > ln: failed to create symbolic link '/.../host/riscv64-buildroot-linux-gnu/sysroot/lib64/lp64': No such file or directory
-> > > ln: failed to create symbolic link '/.../host/riscv64-buildroot-linux-gnu/sysroot/usr/lib64/lp64': No such file or directory
-> > >
-> > > Signed-off-by: Qu Xianmiao <xianmiao_qu@c-sky.com>
-> > > Signed-off-by: Chen Hongdeng <hongdeng_chen@c-sky.com>
-> > > Signed-off-by: Guo Ren<ren_guo@c-sky.com>
-> > > Signed-off-by: Mao Han <han_mao@c-sky.com>
-> > > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > > Cc: Mark Corbin <mark.corbin@embecosm.com>
-> > > ---
-> > >  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > > index baf719a..13b2468 100644
-> > > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > > @@ -454,6 +454,8 @@ create_lib_symlinks = \
-> > >         ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-> > >         if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
-> > >                 relpath="$(call relpath_prefix,$${ARCH_LIB_DIR})" ; \
-> > > +               mkdir -p "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
-> > > +               mkdir -p "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
-> > >                 ln -snf $${relpath}lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
-> > >                 ln -snf $${relpath}lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
-> >
-> > This is not correct.
-> >
-> > The purpose of this code is to create a symbolic link named according
-> > to 'ARCH_LIB_DIR' inside DESTDIR and DESTDIR/usr.
-> > It is not the purpose to create a symbolic link called 'lib' inside a
-> > directory DESTDIR/ARCH_LIB_DIR.
-> > The change you made is creating a _directory_ ARCH_LIB_DIR while it
-> > should be a _symbolic link_.
-> >
+> Hello,
 >
-> Yes, I misunderstood the option -f as it will only remove the symbol
-> file not the directory.
-> The path sysroot/lib64 is relinked to sysroot/lib after the external
-> tool installation, all the libraries are copied to sysroot/lib/lp64d.
-> The toolchain can find it's corresponding library, so I don't notice
-> the mistake.
+> On Thu, 16 Jan 2020 09:11:32 +0000
+> Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
 >
-> If I change the code like:
-> mkdir -p `dirname "$${DESTDIR}/$${ARCH_LIB_DIR}"` ; \
-> mkdir -p `dirname "$${DESTDIR}/usr/$${ARCH_LIB_DIR}"` ; \
+> > One small remark, to be able to reproduce the build, on top of this
+> > mechanism, there should be:
+> > * a way to store the actual VCS revision used for the build (to at
+> > least know what was just built!)
 >
-> Two symbol links are created:
-> sysroot/:lib64 -> lib
-> sysroot/lib: lp64d -> ../lib
-> The libraries are under: lib, lib64, lib64/lp64d ...
+> That seems quite easy to do.
 >
-> > Could you please clarify what is the value of ARCH_LIB_DIR in your case?
-> >
-> > And could you clarify which part of the path is missing?
-> > '/.../host/riscv64-buildroot-linux-gnu/sysroot/lib64/lp64' ?
-> > I assume that the 'lib64' part is missing?
-> >
+> > * a way to force the build to re-use a particular set of revisions
 >
-> Yes, "lib64" is the missing part. It can be some other value like
-> "lib64xthead" when the extension is different.
+> I don't see how that can be done however, and how that would work from
+> a user interface point of view. Sure the first build could store the
+> exact Git commit used for building each transient package, and store
+> that "somewhere", and then re-use that for the next build. But how does
+> the user decide whether what he wants is to re-do the build with the
+> same commits or not ? Where is that "somewhere" ?
 >
-> > Finally, please provide a defconfig that allows to reproduce and test
-> > this problem.
-> >
+> > That's part of why I don't think that this kind of feature is a good
+> > thing to integrate into buildroot. I prefer to delegate it to tools
+> > meant for that (using a mix of local packages and OVERRIDE).
 >
-> The defconfig is attached. And the toolchain I used comes from:
-> https://github.com/riscv/riscv-gnu-toolchain
+> Different people/companies have different work flows. We have people
+> telling us that using local packages and OVERRIDE for their CI is not
+> very convenient/practical.
+
+We are using a similar setup of Nicolas. Right now we have
+CI and reproducible build using external tools. What I would like to solve
+with buildroot is:
+
+- make the build reproducible
+- implement topic build on custom patch using CI
+- make tagging and branching easy
+
+All of this I have already with repo + buildroot
+
+Michael
+
 >
-> make with:
-> git clone https://github.com/riscv/riscv-gnu-toolchain
-> cd riscv-gnu-toolchain
-> git submodule update --init --recursive
-> ./configure --prefix=/opt/riscv --enable-multilib
-> make linux
+> > And like said before, I think it's preferable to have a optional
+> > feature to prevent branches from being used, making the build fail.
 >
-> I can't provide the toolchain binary as it is quite large, and
-> the network is also limited.
+> The feature proposed by Yann *is* optional, as it's conditional on
+> having a specific variable set in the package .mk file.
 >
-
-I compiled the riscv toolchain as instructed, and applied your config
-(note: it was a full config, not a defconfig). The defconfig is:
-
-BR2_riscv=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/riscv"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-unknown-linux-gnu"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_0=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-BR2_SYSTEM_DHCP="eth0"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.12"
-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_OPENSBI=y
-BR2_TARGET_OPENSBI_PLAT="qemu/virt"
-BR2_PACKAGE_HOST_QEMU=y
-BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-
-Using this config, I do not see the same error as you. The toolchain
-seems to install correctly (note: later we will notice it does not;
-see below), but I do get an error later when busybox is compiled:
-
-...
-  CC      libbb/xregcomp.o
-  AR      libbb/lib.a
-  LINK    busybox_unstripped
-Your linker does not support --sort-section,alignment
-Your linker does not support --sort-common
-Your linker does not support -Wl,--gc-sections
-Trying libraries: m resolv
-Failed: -Wl,--start-group  -lm -lresolv  -Wl,--end-group
-Output of:
-/home/tdescham/repo/contrib/buildroot/output/host/bin/riscv64-unknown-linux-gnu-gcc
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
--Wall -Wshadow -Wwrite-strings -Wundef -Wstrict-prototypes -Wunused
--Wunused-parameter -Wunused-function -Wunused-value
--Wmissing-prototypes -Wmissing-declarations -Wno-format-security
--Wdeclaration-after-statement -Wold-style-definition
--fno-builtin-strlen -finline-limit=0 -fomit-frame-pointer
--ffunction-sections -fdata-sections -fno-guess-branch-probability
--funsigned-char -static-libgcc -falign-functions=1 -falign-jumps=1
--falign-labels=1 -falign-loops=1 -fno-unwind-tables
--fno-asynchronous-unwind-tables -fno-builtin-printf -Os -o
-busybox_unstripped -Wl,--start-group applets/built-in.o archival/lib.a
-archival/libarchive/lib.a console-tools/lib.a coreutils/lib.a
-coreutils/libcoreutils/lib.a debianutils/lib.a klibc-utils/lib.a
-e2fsprogs/lib.a editors/lib.a findutils/lib.a init/lib.a libbb/lib.a
-libpwdgrp/lib.a loginutils/lib.a mailutils/lib.a miscutils/lib.a
-modutils/lib.a networking/lib.a networking/libiproute/lib.a
-networking/udhcp/lib.a printutils/lib.a procps/lib.a runit/lib.a
-selinux/lib.a shell/lib.a sysklogd/lib.a util-linux/lib.a
-util-linux/volume_id/lib.a archival/built-in.o
-archival/libarchive/built-in.o console-tools/built-in.o
-coreutils/built-in.o coreutils/libcoreutils/built-in.o
-debianutils/built-in.o klibc-utils/built-in.o e2fsprogs/built-in.o
-editors/built-in.o findutils/built-in.o init/built-in.o
-libbb/built-in.o libpwdgrp/built-in.o loginutils/built-in.o
-mailutils/built-in.o miscutils/built-in.o modutils/built-in.o
-networking/built-in.o networking/libiproute/built-in.o
-networking/udhcp/built-in.o printutils/built-in.o procps/built-in.o
-runit/built-in.o selinux/built-in.o shell/built-in.o
-sysklogd/built-in.o util-linux/built-in.o
-util-linux/volume_id/built-in.o -Wl,--end-group -Wl,--start-group -lm
--lresolv -Wl,--end-group
-==========
-/home/tdescham/repo/contrib/riscv/lib/gcc/riscv64-unknown-linux-gnu/9.2.0/../../../../riscv64-unknown-linux-gnu/bin/ld:
-coreutils/lib.a(mktemp.o): in function `.L5':
-mktemp.c:(.text.mktemp_main+0xb4): warning: the use of `mktemp' is
-dangerous, better use `mkstemp' or `mkdtemp'
-/home/tdescham/repo/contrib/riscv/lib/gcc/riscv64-unknown-linux-gnu/9.2.0/../../../../riscv64-unknown-linux-gnu/bin/ld:
-cannot find /lib/ld-linux-riscv64-lp64d.so.1 inside
-/home/tdescham/repo/contrib/buildroot/output/host/riscv64-buildroot-linux-gnu/sysroot
-collect2: error: ld returned 1 exit status
-Note: if build needs additional libraries, put them in CONFIG_EXTRA_LDLIBS.
-Example: CONFIG_EXTRA_LDLIBS="pthread dl tirpc audit pam"
-make[1]: *** [Makefile:718: busybox_unstripped] Error 1
-make[1]: Leaving directory
-'/home/tdescham/repo/contrib/buildroot/output/build/busybox-1.31.1'
-make: *** [package/pkg-generic.mk:260:
-/home/tdescham/repo/contrib/buildroot/output/build/busybox-1.31.1/.stamp_built]
-Error 2
+> However, one question that is raised by Yann's patch is whether we want
+> to forbid using branches when TRANSIENT_DOWNLOAD is NO.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
 
-So the actual error here is:
-/home/tdescham/repo/contrib/riscv/lib/gcc/riscv64-unknown-linux-gnu/9.2.0/../../../../riscv64-unknown-linux-gnu/bin/ld:
-cannot find /lib/ld-linux-riscv64-lp64d.so.1 inside
-/home/tdescham/repo/contrib/buildroot/output/host/riscv64-buildroot-linux-gnu/sysroot
-collect2: error: ld returned 1 exit status
 
-At this point, the situation in the buildroot sysroot is:
-
-$ ls -l output/host/riscv64-buildroot-linux-gnu/sysroot/
-total 56
-drwxr-xr-x 2 tdescham tdescham 4096 Jan 16 10:05 bin/
-drwxr-xr-x 2 tdescham tdescham 4096 May  7  2019 dev/
-drwxr-xr-x 3 tdescham tdescham 4096 Jan 15 21:58 etc/
-drwxr-xr-x 2 tdescham tdescham 4096 Jan 16 08:48 lib/
-lrwxrwxrwx 1 tdescham tdescham    3 Jan 16 10:05 lib64 -> lib/
-drwxr-xr-x 2 tdescham tdescham 4096 May 28  2014 media/
-drwxr-xr-x 2 tdescham tdescham 4096 May 28  2014 mnt/
-drwxr-xr-x 2 tdescham tdescham 4096 May 28  2014 opt/
-drwxr-xr-x 2 tdescham tdescham 4096 May 28  2014 proc/
-drwxr-xr-x 2 tdescham tdescham 4096 Jan 25  2017 root/
-drwxr-xr-x 2 tdescham tdescham 4096 Feb  2  2016 run/
-drwxr-xr-x 2 tdescham tdescham 4096 Jan 15 21:58 sbin/
-drwxr-xr-x 2 tdescham tdescham 4096 May 28  2014 sys/
-drwxr-xr-x 2 tdescham tdescham 4096 May 28  2014 tmp/
-drwxr-xr-x 8 tdescham tdescham 4096 Jan 15 21:57 usr/
-
-$ ls -l output/host/riscv64-buildroot-linux-gnu/sysroot/lib/lp64d
-lrwxrwxrwx 1 tdescham tdescham 6 Jan 16 10:05
-output/host/riscv64-buildroot-linux-gnu/sysroot/lib/lp64d -> ../lib/
-
-and there is no ld-linux* file found anywhere, indeed.
-
-Looking at the output of the toolchain installation, there was an error:
->>> toolchain-external-custom  Copying external toolchain sysroot to staging...
-/bin/sh: line 0: [: too many arguments
-
-which is caused by the fact that there are multiple 'ld*' matches:
-(extra traces added)
-
-SYSROOT_DIR=/home/tdescham/repo/contrib/riscv/sysroot/
-ARCH_SYSROOT_DIR=/home/tdescham/repo/contrib/riscv/sysroot/
-ARCH_SUBDIR=
-ARCH_LIB_DIR=lib64/lp64d
-SUPPORT_LIB_DIR=
-no ld found yet @@@@@@@@@@@@
-/home/tdescham/repo/contrib/riscv/sysroot//lib/ld-linux-riscv32-ilp32d.so.1
-/home/tdescham/repo/contrib/riscv/sysroot//lib/ld-linux-riscv32-ilp32.so.1
-/home/tdescham/repo/contrib/riscv/sysroot//lib/ld-linux-riscv64-lp64d.so.1
-/home/tdescham/repo/contrib/riscv/sysroot//lib/ld-linux-riscv64-lp64.so.1
-/bin/sh: line 0: [: too many arguments
-done no ld found @@@@@@@@@@@@
-
-Corresponding to this code:
-
-    if [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
-        echo "no ld found yet @@@@@@@@@@@@"; \
-        ls $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ; \
-        if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
-            echo "ld found in arch_sysroot_dir @@@@@@@@@@@@@"; \
-            cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
-        fi ; \
-        echo "done no ld found @@@@@@@@@@@@" ; \
-    fi ; \
-
-
-I'm not yet sure how this should be solved...
-
-Best regards,
-Thomas
+-- 
+| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
+| COO  -  Founder                                      Cruquiuskade 47 |
+| +31(0)851119172                                 Amsterdam 1018 AM NL |
+|                  [`as] http://www.amarulasolutions.com               |
