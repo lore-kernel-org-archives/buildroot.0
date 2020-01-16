@@ -1,38 +1,38 @@
-From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Thu, 16 Jan 2020 10:01:09 +0000
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 16 Jan 2020 11:03:06 +0100
 Subject: [Buildroot] [PATCH] infra: add the transient download mechanism
-In-Reply-To: <20200116103120.7b41295a@windsurf>
+In-Reply-To: <CAOf5uwmX0vdPFW9s9fC64Q7DFvQGCWdSqZy4GjEPrryy8Sa9ZA@mail.gmail.com>
 References: <20200115203753.12110-1-yann.morin.1998@free.fr>
  <534f269547ead6d86e7a571978b54d79cd24cd0d.camel@orolia.com>
  <20200116103120.7b41295a@windsurf>
-Message-ID: <e7e0088e1b76adf1492f06e81b386a0018b9336b.camel@orolia.com>
+ <CAOf5uwmX0vdPFW9s9fC64Q7DFvQGCWdSqZy4GjEPrryy8Sa9ZA@mail.gmail.com>
+Message-ID: <20200116110306.5c91286b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, 16 Jan 2020 10:56:53 +0100
+Michael Nazzareno Trimarchi <michael@amarulasolutions.com> wrote:
 
-> However, one question that is raised by Yann's patch is whether we
-> want
-> to forbid using branches when TRANSIENT_DOWNLOAD is NO.
+> We are using a similar setup of Nicolas. Right now we have
+> CI and reproducible build using external tools. What I would like to solve
+> with buildroot is:
 > 
+> - make the build reproducible
+> - implement topic build on custom patch using CI
+> - make tagging and branching easy
 
-Just to be sure I understand, when you say "when TRANSIENT_DOWNLOAD is
-NO.", it'd be the same as if TRANSIENT_DOWNLOAD download is not defined
-at all, right?
-If it's the case, then that seems to me like a good idea, because it
-renders explicit the risk taken by the user when using a branch (which
-can be done unknowingly ATM).
+Could you give more details, because these items are quite vague/fuzzy,
+and I don't understand from a very practical point of view what you
+mean. Could you describe some example workflow, what would be your
+expectation of Buildroot's behavior, etc.
 
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> ATTENTION: This email came from an external source.
-> Do not open attachments or click on links from unknown senders or
-> unexpected emails.
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
