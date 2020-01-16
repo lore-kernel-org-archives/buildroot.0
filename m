@@ -1,102 +1,89 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Thu, 16 Jan 2020 17:52:07 +0100
-Subject: [Buildroot] [PATCH] infra: add the transient download mechanism
-In-Reply-To: <20200116153541.GI22540@scaer>
-References: <20200115203753.12110-1-yann.morin.1998@free.fr>
- <534f269547ead6d86e7a571978b54d79cd24cd0d.camel@orolia.com>
- <20200116103120.7b41295a@windsurf>
- <CAOf5uwmX0vdPFW9s9fC64Q7DFvQGCWdSqZy4GjEPrryy8Sa9ZA@mail.gmail.com>
- <20200116110306.5c91286b@windsurf>
- <CAOf5uw=m8DVBh_o0WLyR2__7OkhkXMVv-VX7JJ2Rm7WyJs1csw@mail.gmail.com>
- <20200116153541.GI22540@scaer>
-Message-ID: <CAOf5uw=XRC2fEKqaexAq+85Uy++iL_2MpU3R7-u3PWPs2Zm25w@mail.gmail.com>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Thu, 16 Jan 2020 13:38:49 -0600
+Subject: [Buildroot] [PATCH 1/4] core/pkg-infra: introduce download features
+ concept
+Message-ID: <20200116193852.17683-1-vfazio@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+---
+ package/pkg-download.mk     | 1 +
+ package/pkg-generic.mk      | 7 +++++++
+ support/download/dl-wrapper | 8 +++++---
+ 3 files changed, 13 insertions(+), 3 deletions(-)
 
-On Thu, Jan 16, 2020 at 4:35 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Michael, All,
->
-> On 2020-01-16 11:15 +0100, Michael Nazzareno Trimarchi spake thusly:
-> > On Thu, Jan 16, 2020 at 11:03 AM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> > > > We are using a similar setup of Nicolas. Right now we have
-> > > > CI and reproducible build using external tools. What I would like to solve
-> > > > with buildroot is:
-> > > >
-> > > > - make the build reproducible
-> > > > - implement topic build on custom patch using CI
-> > > > - make tagging and branching easy
-> > > Could you give more details, because these items are quite vague/fuzzy,
-> > > and I don't understand from a very practical point of view what you
-> > > mean. Could you describe some example workflow, what would be your
-> > > expectation of Buildroot's behavior, etc.
->
-> I have to admit that, like Thomas, I do not completely understand what
-> you're doing or trying to achieve...
->
-> > Suppose you have this manifest
-> [--SNIP--]
-> > This one describe the project and we have override part for the
-> > project in the manifest. For each version we can tag
-> > and each repo and create a snapshot manifest of the project.
-> > Manifest will have revison set to revision="refs/tags/<some tag>"
-> >
-> > If I need to emit a release starting from some tag I can branch it and
-> > apply patch on top of this branch and everything
-> > can be stored as a separed manifest. Using jenkins trigger on topic
-> > upload on gerrit we can easily build a version with some
-> > patchset applied and if we want to re-build some version we can just
-> > use the right tagged manifest
->
-> I don't understand the problem that using repo solves.
->
-> repo's manifest identifies packages, where they are from, and what
-> version to use for each. That is exactly what the _VERSION and _SITE do
-> in a .mk file to begin with...
-
-Yes, definitely you can manage in the same way but having one point
-as a manifest file where I can manage only project I change during the
-product life avoid
-me to change those when I create a specific tag. repo let me to tag
-in automatic way and let buildroot to be tagged only on project that
-I download from outside. I'm not saying here that the direction you are taken
-is wrong but not all the companies will use it.
-BTW my way to write english is terrible, I like having a desk and discuss
-face to face. Make more sense to me to discuss in Fossdem if you will be there
-
-Michael
-
->
-> Using repo and a manifest only seem interesting when one wants to have
-> their packages in the same directory structure as Buildroot, and use
-> _SITE_METHOD = local. But in that case, a repo manifest is very akin to
-> git submodules.
->
-> And in that case, there is no need to be able to uses branches as
-> _VERSION, since the packages sources jsut 'follow' the branch buildroot
-> is on, and that repo checked out...
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-
-
-
---
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index de619ba90a..889ff57ded 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -108,6 +108,7 @@ define DOWNLOAD
+ 		-n '$($(2)_BASENAME_RAW)' \
+ 		-N '$($(2)_RAWNAME)' \
+ 		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
++		-x '$($(2)_DL_FEATURES)' \
+ 		$(if $($(2)_GIT_SUBMODULES),-r) \
+ 		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(2)),-u $(uri)) \
+ 		$(QUIET) \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 268d999efb..3ea818fc15 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -567,6 +567,13 @@ ifndef $(2)_DL_OPTS
+  endif
+ endif
+ 
++ifndef $(2)_DL_FEATURES
++ ifdef $(3)_DL_FEATURES
++  $(2)_DL_FEATURES = $$($(3)_DL_FEATURES)
++ endif
++endif
++
++
+ ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
+ BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+ endif
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 3315bd410e..b77ee06b86 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -17,15 +17,15 @@
+ # We want to catch any unexpected failure, and exit immediately.
+ set -e
+ 
+-export BR_BACKEND_DL_GETOPTS=":hc:d:o:n:N:H:ru:qf:e"
++export BR_BACKEND_DL_GETOPTS=":hc:d:o:n:N:H:ru:qf:x:e"
+ 
+ main() {
+     local OPT OPTARG
+-    local backend output hfile recurse quiet rc
++    local backend output hfile recurse quiet rc features
+     local -a uris
+ 
+     # Parse our options; anything after '--' is for the backend
+-    while getopts ":c:d:D:o:n:N:H:rf:u:q" OPT; do
++    while getopts ":c:d:D:o:n:N:H:rf:u:x:q" OPT; do
+         case "${OPT}" in
+         c)  cset="${OPTARG}";;
+         d)  dl_dir="${OPTARG}";;
+@@ -37,6 +37,7 @@ main() {
+         r)  recurse="-r";;
+         f)  filename="${OPTARG}";;
+         u)  uris+=( "${OPTARG}" );;
++        x)  features="${OPTARG}";;
+         q)  quiet="-q";;
+         :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+         \?) error "unknown option '%s'\n" "${OPTARG}";;
+@@ -127,6 +128,7 @@ main() {
+                 -f "${filename}" \
+                 -u "${uri}" \
+                 -o "${tmpf}" \
++                -x "${features}" \
+                 ${quiet} ${recurse} -- "${@}"
+         then
+             # cd back to keep path coherence
+-- 
+2.25.0
