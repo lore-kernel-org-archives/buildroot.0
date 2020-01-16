@@ -1,158 +1,82 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 15 Jan 2020 17:16:00 -0700
-Subject: [Buildroot] [PATCH v4 1/1] package/tar: bump target version to 1.32
- (host is kept at 1.31)
-Message-ID: <20200116001600.567-1-james.hilliard1@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 16 Jan 2020 07:35:33 +0200
+Subject: [Buildroot] [PATCH v2] package/python-pillow: bump to version
+ 6.2.2/7.0.0
+In-Reply-To: <20200115210036.29906-1-angelo@amarulasolutions.com>
+References: <20200115210036.29906-1-angelo@amarulasolutions.com>
+Message-ID: <20200116053533.qyhozaffvp6ilwn7@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Luc Creti <luc.creti@atos.net>
+Hi Angelo,
 
-The host tar is used to create the archives in the VCS download backends
-(git, cvs, svn, hg...) and tar 1.30 and forward have changed the way
-they generate the archives.
+On Wed, Jan 15, 2020 at 10:00:36PM +0100, Angelo Compagnucci wrote:
+> This patch bump Pillow to version 7.0.0 for Python3 and version
+> 6.2.2 for Python2.
+> 
+> It updates also the LICENSE hash due to copyright year update.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+> Changelog:
+> v1->v2: removed python2 support as the package supports only python3 now
 
-So, all the archives that have been generated before 1.30 was released
-are not bit-for-bit reproducible (even though the extracted content
-would be), so the hashes we have for those archives would not match.
+Subject and commit log need update, then.
 
-Hence host-tar requires a patch to restore reproducibility.
+baruch
 
-Since there is no tar-1.32.cpio.gz available we must keep host-tar at
-version 1.31.
+> 
+>  package/python-pillow/Config.in          | 1 +
+>  package/python-pillow/python-pillow.hash | 8 ++++----
+>  package/python-pillow/python-pillow.mk   | 4 ++--
+>  3 files changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/python-pillow/Config.in b/package/python-pillow/Config.in
+> index 3820ba8fb1..f824d1371e 100644
+> --- a/package/python-pillow/Config.in
+> +++ b/package/python-pillow/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_PYTHON_PILLOW
+>  	bool "python-pillow"
+> +	depends on BR2_PACKAGE_PYTHON3
+>  	help
+>  	  Pillow is the "friendly" PIL fork by Alex Clark and
+>  	  Contributors. PIL is the Python Imaging Library by Fredrik
+> diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+> index 990b25c46e..0d66c4bb3c 100644
+> --- a/package/python-pillow/python-pillow.hash
+> +++ b/package/python-pillow/python-pillow.hash
+> @@ -1,5 +1,5 @@
+> -# md5, sha256 from https://pypi.org/pypi/pillow/json
+> -md5	13acde283ece6ac69f62609fa108d316  Pillow-6.2.1.tar.gz
+> -sha256	bf4e972a88f8841d8fdc6db1a75e0f8d763e66e3754b03006cbc3854d89f1cb1  Pillow-6.2.1.tar.gz
+> +# md5, sha256 from https://pypi.org/project/Pillow/
+> +md5	d099946335c1ba372f5b1fa68ca71645  Pillow-7.0.0.tar.gz
+> +sha256	4d9ed9a64095e031435af120d3c910148067087541131e82b3e8db302f4c8946  Pillow-7.0.0.tar.gz
+>  # Locally computed sha256 checksums
+> -sha256	64ea4328ed56392b423ef968519a9ad427e3de9b985862c95ed2ed4d793d22ee  LICENSE
+> +sha256	04a04a908e52921829c7f51528e5619c79becdde99c484ab7d4f235e2927968c  LICENSE
+> diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+> index 895b1fcb99..5ff2dcfdb6 100644
+> --- a/package/python-pillow/python-pillow.mk
+> +++ b/package/python-pillow/python-pillow.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_PILLOW_VERSION = 6.2.1
+> +PYTHON_PILLOW_VERSION = 7.0.0
+> +PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/39/47/f28067b187dd664d205f75b07dcc6e0e95703e134008a14814827eebcaab
+>  PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+> -PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/5b/bb/cdc8086db1f15d0664dd22a62c69613cdc00f1dd430b5b19df1bea83f2a3
+>  PYTHON_PILLOW_LICENSE = PIL Software License
+>  PYTHON_PILLOW_LICENSE_FILES = LICENSE
+>  PYTHON_PILLOW_SETUP_TYPE = setuptools
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=12256
-
-Signed-off-by: Luc Creti <luc.creti@atos.net>
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v0->v1:
-  - Commit message rewritten based on comment from Yann E. MORIN
-Changes v1->v2:
-  - Title modified to enphasize that host-tar is kept at 1.29
-Changes v2->v3
-  - Add a comment in the .mk file that explains why the host-tar package
-    is kept at 1.29 and not bumped to any higher version
-  - Add missing spaces around '='
-  - Spell Author name as 'Luc Creti'
-Changes v3->v4
-  - Bump host-tar to 1.31 and patch it to restore reproducibility.
----
- .../0001-tar-fix-reproducibility-issue.patch  | 42 +++++++++++++++++++
- package/tar/tar.hash                          |  4 +-
- package/tar/tar.mk                            | 20 +++++++--
- 3 files changed, 60 insertions(+), 6 deletions(-)
- create mode 100644 package/tar/host/0001-tar-fix-reproducibility-issue.patch
-
-diff --git a/package/tar/host/0001-tar-fix-reproducibility-issue.patch b/package/tar/host/0001-tar-fix-reproducibility-issue.patch
-new file mode 100644
-index 0000000000..a2417694e4
---- /dev/null
-+++ b/package/tar/host/0001-tar-fix-reproducibility-issue.patch
-@@ -0,0 +1,42 @@
-+From e79e62e3e066545ba5319e2a905e62a0bb47e9e1 Mon Sep 17 00:00:00 2001
-+From: Felix Fietkau <nbd@nbd.name>
-+Date: Mon, 19 Dec 2016 21:06:07 +0100
-+Subject: [PATCH] tar: fix reproducibility issue
-+
-+Force root/root as names for uid0/gid0 instead of using the system
-+names. This helps make packed download tarballs more reproducible
-+
-+Signed-off-by: Felix Fietkau <nbd@nbd.name>
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[James Hilliard: import patch from openwrt]
-+---
-+ src/create.c | 13 ++-----------
-+ 1 file changed, 2 insertions(+), 11 deletions(-)
-+
-+diff --git a/src/create.c b/src/create.c
-+index bb9c115..1baee36 100644
-+--- a/src/create.c
-++++ b/src/create.c
-+@@ -543,17 +543,8 @@ write_gnu_long_link (struct tar_stat_info *st, const char *p, char type)
-+   union block *header;
-+ 
-+   header = start_private_header ("././@LongLink", size, 0);
-+-  if (! numeric_owner_option)
-+-    {
-+-      static char *uname, *gname;
-+-      if (!uname)
-+-	{
-+-	  uid_to_uname (0, &uname);
-+-	  gid_to_gname (0, &gname);
-+-	}
-+-      UNAME_TO_CHARS (uname, header->header.uname);
-+-      GNAME_TO_CHARS (gname, header->header.gname);
-+-    }
-++  UNAME_TO_CHARS ("root", header->header.uname);
-++  GNAME_TO_CHARS ("root", header->header.gname);
-+ 
-+   strcpy (header->buffer + offsetof (struct posix_header, magic),
-+ 	  OLDGNU_MAGIC);
-+-- 
-+2.20.1
-+
-diff --git a/package/tar/tar.hash b/package/tar/tar.hash
-index 60309bab8f..f919168dc2 100644
---- a/package/tar/tar.hash
-+++ b/package/tar/tar.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking signature
--sha256	402dcfd0022fd7a1f2c5611f5c61af1cd84910a760a44a688e18ddbff4e9f024	tar-1.29.tar.xz
--sha256	9173f222464dd3676118408840da5990527062b5c7daf6487bed7c396c45bfb1	tar-1.29.cpio.gz
-+sha256	d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8	tar-1.32.tar.xz
-+sha256	a50fd6eaf2a554930064c18ff5a1016707ab8af5b739dd0890dca04656e7c2aa	tar-1.31.cpio.gz
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 6f609d7a02..224519cae6 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -4,7 +4,10 @@
- #
- ################################################################################
- 
--TAR_VERSION = 1.29
-+# Host tar is kept at 1.31 because there is no cpio.gz archive available for
-+# tar version 1.32
-+HOST_TAR_VERSION = 1.31
-+TAR_VERSION = 1.32
- TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
- TAR_SITE = $(BR2_GNU_MIRROR)/tar
- # busybox installs in /bin, so we need tar to install as well in /bin
-@@ -31,13 +34,13 @@ $(eval $(autotools-package))
- 
- # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
- # of needing tar to build tar.
--HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
-+HOST_TAR_SOURCE = tar-$(HOST_TAR_VERSION).cpio.gz
- define HOST_TAR_EXTRACT_CMDS
- 	mkdir -p $(@D)
- 	cd $(@D) && \
- 		$(call suitable-extractor,$(HOST_TAR_SOURCE)) $(TAR_DL_DIR)/$(HOST_TAR_SOURCE) | cpio -i --preserve-modification-time
--	mv $(@D)/tar-$(TAR_VERSION)/* $(@D)
--	rmdir $(@D)/tar-$(TAR_VERSION)
-+	mv $(@D)/tar-$(HOST_TAR_VERSION)/* $(@D)
-+	rmdir $(@D)/tar-$(HOST_TAR_VERSION)
- endef
- 
- HOST_TAR_CONF_OPTS = --without-selinux
-@@ -47,4 +50,13 @@ HOST_TAR_CONF_ENV = \
- 	CC="$(HOSTCC_NOCCACHE)" \
- 	CXX="$(HOSTCXX_NOCCACHE)"
- 
-+# host-tar is used to create the archives in the VCS download backends and tar
-+# 1.30 and forward have changed the archive format. So archives generated with
-+# earlier versions are not bit-for-bit reproducible and the hashes would not
-+# match. We add a patch that restores the origional format to host-tar.
-+define HOST_TAR_APPLY_PATCHES
-+	$(APPLY_PATCHES) $(@D) package/tar/host \*.patch
-+endef
-+HOST_TAR_POST_PATCH_HOOKS += HOST_TAR_APPLY_PATCHES
-+
- $(eval $(host-autotools-package))
 -- 
-2.20.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
