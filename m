@@ -1,187 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Jan 2020 22:24:20 +0100
-Subject: [Buildroot] [PATCH v2 1/3] configs/raspberrypi*: bump kernel
- version to 301ec88
-In-Reply-To: <20200115210037.9564-1-ps.report@gmx.net>
-References: <20200115210037.9564-1-ps.report@gmx.net>
-Message-ID: <20200117212420.GR22540@scaer>
+From: Julien Olivain <juju@cotds.org>
+Date: Fri, 17 Jan 2020 22:27:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: fix static build
+ with readline
+In-Reply-To: <20200110182634.3887115-1-fontaine.fabrice@gmail.com>
+References: <20200110182634.3887115-1-fontaine.fabrice@gmail.com>
+Message-ID: <0111ed3e282f0c3a14ad95f4e39eb842@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hi Fabrice,
 
-Thanks for the reespin.
+Patch looks good, and fixes static build failures for me. Thanks!
 
-On 2020-01-15 22:00 +0100, Peter Seiderer spake thusly:
-> Now based on 4.19.93 (from 4.19.75).
-
-Sorry, but you are still not explaining _why_ we need to go from a tag
-to a sha1.
-
-Even saying "upstream is lenient about tags, we don't know when the next
-one will be released, so switch to a sha1" would have been enough...
-
-Please resend, either expanding on the above, or providing a better
-explanation.
-
-Ditto your second patch.
-
-However, for the thied one, we're already using a sha1, so the
-explantions is not needed. However, just resend it as well: I did not
-apply it, as I did not know if it makes sense to apply it separately of
-the second one...
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - no changes
-> ---
->  configs/raspberrypi0_defconfig       | 2 +-
->  configs/raspberrypi0w_defconfig      | 2 +-
->  configs/raspberrypi2_defconfig       | 2 +-
->  configs/raspberrypi3_64_defconfig    | 2 +-
->  configs/raspberrypi3_defconfig       | 2 +-
->  configs/raspberrypi3_qt5we_defconfig | 2 +-
->  configs/raspberrypi4_64_defconfig    | 2 +-
->  configs/raspberrypi4_defconfig       | 2 +-
->  configs/raspberrypi_defconfig        | 2 +-
->  9 files changed, 9 insertions(+), 9 deletions(-)
+On 2020-01-10 19:26, Fabrice Fontaine wrote:
+> Fixes:
+>  -
+> http://autobuild.buildroot.org/results/88609eefe55af2ca50d43e17d3424b923528b07a
 > 
-> diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-> index 1600e219d1..5cdc38eae0 100644
-> --- a/configs/raspberrypi0_defconfig
-> +++ b/configs/raspberrypi0_defconfig
-> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->  
->  # Build the DTBs for A/B from the kernel sources: the zero is the same
-> diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-> index e3c747ff6f..129afc4f2e 100644
-> --- a/configs/raspberrypi0w_defconfig
-> +++ b/configs/raspberrypi0w_defconfig
-> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
-> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-> index e6c38e74b7..15b6a58780 100644
-> --- a/configs/raspberrypi2_defconfig
-> +++ b/configs/raspberrypi2_defconfig
-> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->  
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-> index b9a070fb82..45283496ac 100644
-> --- a/configs/raspberrypi3_64_defconfig
-> +++ b/configs/raspberrypi3_64_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
->  
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-> index 530eb0ab3f..08e7bed027 100644
-> --- a/configs/raspberrypi3_defconfig
-> +++ b/configs/raspberrypi3_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->  
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-> index 4e9d782c7c..63a03e5cf9 100644
-> --- a/configs/raspberrypi3_qt5we_defconfig
-> +++ b/configs/raspberrypi3_qt5we_defconfig
-> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->  
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-> index f013c4382c..0733e91b05 100644
-> --- a/configs/raspberrypi4_64_defconfig
-> +++ b/configs/raspberrypi4_64_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->  
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-> index a216463e28..2402b0673c 100644
-> --- a/configs/raspberrypi4_defconfig
-> +++ b/configs/raspberrypi4_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->  
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-> index 969a92820e..1b47e293f8 100644
-> --- a/configs/raspberrypi_defconfig
-> +++ b/configs/raspberrypi_defconfig
-> @@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->  
->  # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
-> -- 
-> 2.24.1
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ....txt-use-pkg-config-to-find-readline.patch | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644
+> package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git
+> a/package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch b/package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch
+> new file mode 100644
+> index 0000000000..2b685e4aad
+> --- /dev/null
+> +++
+> b/package/fluidsynth/0001-CMakeLists.txt-use-pkg-config-to-find-readline.patch
+> @@ -0,0 +1,49 @@
+> +From c538c9fa7e392ce16c3354696e7dc7781a78a300 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Fri, 10 Jan 2020 08:49:51 +0100
+> +Subject: [PATCH] CMakeLists.txt: use pkg-config to find readline
+> +
+> +Use pkg_check_modules to find readline dependencies such as ncurses 
+> and
+> +fallback on current mechanism.
+> +
+> +This will fix the following build failure when building statically:
+> +
+> +/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libreadline.a(display.o): in function `cr':
+> +display.c:(.text+0x1a0): undefined reference to `tputs'
+> +
+> +Fixes:
+> + -
+> http://autobuild.buildroot.org/results/88609eefe55af2ca50d43e17d3424b923528b07a
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/FluidSynth/fluidsynth/pull/606]
+> +---
+> + CMakeLists.txt | 11 +++++++----
+> + 1 file changed, 7 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index d4956b1..3747faa 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -629,12 +629,15 @@ endif ( enable-oboe )
+> + unset ( WITH_READLINE CACHE )
+> + unset ( READLINE_LIBS CACHE )
+> + if ( enable-readline )
+> +-  find_package ( Readline )
+> +-  set ( FOUND_READLINE ${HAVE_READLINE} )
+> +-  if ( HAVE_READLINE )
+> ++  pkg_check_modules ( READLINE readline )
+> ++  if ( NOT READLINE_FOUND )
+> ++    find_package ( Readline )
+> ++    set ( READLINE_FOUND ${HAVE_READLINE} )
+> ++  endif ( NOT READLINE_FOUND )
+> ++  if ( READLINE_FOUND )
+> +     set ( WITH_READLINE 1 )
+> +     set ( READLINE_LIBS ${READLINE_LIBRARIES} )
+> +-  endif ( HAVE_READLINE )
+> ++  endif ( READLINE_FOUND )
+> + endif ( enable-readline )
+> +
+> + unset ( ENABLE_MIXER_THREADS CACHE )
+> +--
+> +2.24.1
+> +
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Reviewed-by: Julien Olivain <juju@cotds.org>
+Tested-by: Julien Olivain <juju@cotds.org>
