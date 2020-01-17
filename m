@@ -1,66 +1,201 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Jan 2020 09:17:55 +0100
-Subject: [Buildroot] [PATCH 1/4] core/pkg-infra: introduce download
- features concept
-In-Reply-To: <b782018a-bec1-07d5-da24-128d4eba2a1b@mind.be>
-References: <20200116193852.17683-1-vfazio@xes-inc.com>
- <CAMQcK5+-_N_Rwkx6E+w7eid5rKNVNjith7Feg8yYgzQX+dvtQQ@mail.gmail.com>
- <674b2ca7-cb45-c89d-a5e5-cfc230200db2@xes-inc.com>
- <b782018a-bec1-07d5-da24-128d4eba2a1b@mind.be>
-Message-ID: <20200117091755.69711c60@windsurf>
+From: Yann Cardaillac <ycardaillac@sepro-group.com>
+Date: Fri, 17 Jan 2020 09:34:37 +0100 (CET)
+Subject: [Buildroot] [PATCH] package/open62541: new package
+In-Reply-To: <1579212339-5234-1-git-send-email-yann.cardaillac@smile.fr>
+References: <1579212339-5234-1-git-send-email-yann.cardaillac@smile.fr>
+Message-ID: <1652584748.18055981.1579250077721.JavaMail.zimbra@sepro-group.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Jan 2020 23:59:00 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Hi,
 
->  It's good to fire it off early (as an RFC) to avoid wasting work if it's going
-> in the wrong direction.
-> 
->  ... which I think this is.
-> 
->  I guess the idea is to generalize the submodules feature so it can be used by
-> several VCS systems, and to combine it with the transient option.
-> 
->  However, I don't think the additional complexity is worth it.
-> 
->  Separate _GIT_SUBMODULES = YES and _DOWNLOAD_TRANSIENT = YES are IMO easier to
-> understand than _DL_FEATURES = submodules transient, because we don't really
-> have the latter pattern anywhere else in Buildroot. In addition, it's hard to
-> remember if it's comma-separated or space-separated.
+I did a bit of work to simplify our integration of package. 
 
-I asked the exact same question on IRC before Vincent sent his patch
-series, and both Yann and me suggested that it should be sent with
-actual examples of how the DL_FEATURES mechanism will be used.
+Kubu gave me a bit of advices before posting the work once again. 
 
-The intention of Vincent is not to use this DL_FEATURES variable for
-"transient", but rather to implement download method specific things,
-and the first example was git-lfs support.
+Any feedback will be deeply appreciated. 
 
-transient would remain a separate variable. transient is independent of
-the download method: it only tells the download infrastructure to
-ignore the cache, and always redownlaod from upstream, regardless of
-the download method.
-
-DL_FEATURES however would be to pass backend-specific flags.
-
-That being said, I agree that with just two flags for the moment
-(submodules and git-lfs), it's not clear this is really needed. Also,
-this DL_FEATURES mechanism only allows to pass booleans, which works
-fine for submodules and git-lfs, but what if we want to pass some
-actual value to a download backend (like a timeout value, or some other
-thing).
-
-So maybe with just two booleans for now, we should stick to
-<pkg>_GIT_SUBMODULES = YES and <pkg>_GIT_LFS = YES ?
+However it might take me a bit of time to act on them.
 
 Best regards,
 
-Thomas
+Yann
+
+----- Mail original -----
+De: "Yann CARDAILLAC" <yann.cardaillac@smile.fr>
+?: "buildroot" <buildroot@busybox.net>
+Cc: "Yann CARDAILLAC" <ycardaillac@sepro-group.com>, "romain naour" <romain.naour@smile.fr>
+Envoy?: Jeudi 16 Janvier 2020 23:05:39
+Objet: [PATCH] package/open62541: new package
+
+From: Yann CARDAILLAC <ycardaillac@sepro-group.com>
+
+Signed-off-by: Yann CARDAILLAC <ycardaillac@sepro-group.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ package/Config.in                |  1 +
+ package/open62541/Config.in      | 62 ++++++++++++++++++++++++++++++++
+ package/open62541/open62541.hash |  3 ++
+ package/open62541/open62541.mk   | 57 +++++++++++++++++++++++++++++
+ 4 files changed, 123 insertions(+)
+ create mode 100644 package/open62541/Config.in
+ create mode 100644 package/open62541/open62541.hash
+ create mode 100644 package/open62541/open62541.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 4c94914680..748446f3b4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -499,6 +499,7 @@ endmenu
+ 	source "package/ofono/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+ 	source "package/open2300/Config.in"
++	source "package/open62541/Config.in"
+ 	source "package/openipmi/Config.in"
+ 	source "package/openocd/Config.in"
+ 	source "package/openpowerlink/Config.in"
+diff --git a/package/open62541/Config.in b/package/open62541/Config.in
+new file mode 100644
+index 0000000000..8fb0c1f8e6
+--- /dev/null
++++ b/package/open62541/Config.in
+@@ -0,0 +1,62 @@
++config BR2_PACKAGE_OPEN62541
++	bool "open62541"
++	help
++	  open62541 is an open source and free implementation of OPC UA
++
++	  http://open62541.org
++
++if BR2_PACKAGE_OPEN62541
++
++choice
++	prompt "choose UA_NAMESPACE_ZERO"
++
++config BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_NONE
++	bool "NONE"
++	help
++	  Don't set the UA_NAMESPACE_ZERO.
++
++config BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_MINIMAL
++	bool "MINIMAL"
++	help
++	  A barebones namespace zero that is compatible with most
++	  clients.  But this namespace 0 is so small that it does
++	  not pass the CTT
++	  (Conformance Testing Tools of the OPC Foundation).
++
++config BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED
++	bool "REDUCED"
++	help
++	  Small namespace zero that passes the CTT.
++
++config BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_FULL
++	bool "FULL"
++	help
++	  Full namespace zero generated from the official XML
++	  definitions.
++
++endchoice
++
++menu "Advanced build options"
++
++config BR2_PACKAGE_OPEN62541_JSON_ENCODING
++	bool "json encoding"
++
++config BR2_PACKAGE_OPEN62541_PUBSUB
++	bool "publish/subscribe"
++
++config BR2_PACKAGE_OPEN62541_PUBSUB_DELTAFRAMES
++	bool "publish/subscribe deltaframes"
++
++config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
++	bool "publish/subscribe informationmodel"
++	depends on BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED || BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_FULL
++	select BR2_PACKAGE_OPEN62541_PUBSUB
++
++config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL_METHODS
++	bool "publish/subscribe informationmodel methods"
++	depends on BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED || BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_FULL
++	select BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
++
++endmenu
++
++endif
+diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
+new file mode 100644
+index 0000000000..1f9f3787b9
+--- /dev/null
++++ b/package/open62541/open62541.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 766dc30dd7d27578560f7091f70f97d1edcbbdbea6ac0c33c6bc6df5e9daadc9  open62541-v1.0.tar.gz
++sha256 fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
+diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+new file mode 100644
+index 0000000000..b3d2eb7dd5
+--- /dev/null
++++ b/package/open62541/open62541.mk
+@@ -0,0 +1,57 @@
++################################################################################
++#
++# open62541
++#
++################################################################################
++
++OPEN62541_VERSION = v1.0
++OPEN62541_SITE_METHOD = git
++OPEN62541_SITE = git://github.com/open62541/open62541.git
++OPEN62541_GIT_SUBMODULES = YES
++OPEN62541_INSTALL_STAGING = YES
++OPEN62541_LICENSE = MPL-2.0
++OPEN62541_LICENSE_FILES = LICENSE
++
++# Don't use git discribe to get the version number.
++OPEN62541_CONF_OPTS += -DGIT_EXECUTABLE=NO \
++	-DOPEN62541_VERSION=$(OPEN62541_VERSION)
++
++ifeq ($(BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_MINIMAL),y)
++OPEN62541_CONF_OPTS += -DUA_NAMESPACE_ZERO=MINIMAL
++else ifeq ($(BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED),y)
++OPEN62541_CONF_OPTS += -DUA_NAMESPACE_ZERO=REDUCED
++else ifeq ($(BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_FULL),y)
++OPEN62541_CONF_OPTS +=  -DUA_NAMESPACE_ZERO=FULL
++endif
++
++ifeq ($(BR2_PACKAGE_OPEN62541_JSON_ENCODING),y)
++OPEN62541_CONF_OPTS += -DUA_ENABLE_JSON_ENCODING=ON
++else
++OPEN62541_CONF_OPTS += -DUA_ENABLE_JSON_ENCODING=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB),y)
++OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB=ON
++else
++OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_DELTAFRAMES),y)
++OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_DELTAFRAMES=ON
++else
++OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_DELTAFRAMES=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL),y)
++OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=ON
++else
++OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL_METHODS),y)
++OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS=ON
++else
++OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.1
