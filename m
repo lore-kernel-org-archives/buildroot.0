@@ -1,29 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 17 Jan 2020 20:55:28 +0000
-Subject: [Buildroot] [Bug 12456] qtvirtualkeyboard: No such file or directory
-In-Reply-To: <bug-12456-163@https.bugs.busybox.net/>
-References: <bug-12456-163@https.bugs.busybox.net/>
-Message-ID: <bug-12456-163-UOcTvamNO9@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 17 Jan 2020 22:02:32 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself as contact for
+ libtirpc, nfs-utils
+Message-ID: <20200117205227.B27D482570@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12456
+commit: https://git.buildroot.net/buildroot/commit/?id=9d740ca90db7689c147fa385f2d0410ea4ce085b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-
---- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=3645f89922c70b9ebbf31926e6dc7cbbffe2b47a
-
-Thanks both for the report and the fix. :-)
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 510fea78de..977b7cbc95 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1984,8 +1984,10 @@ N:	Petr Vorel <petr.vorel@gmail.com>
+ F:	package/ima-evm-utils/
+ F:	package/iproute2/
+ F:	package/iputils/
++F:	package/libtirpc/
+ F:	package/linux-backports/
+ F:	package/ltp-testsuite/
++F:	package/nfs-utils/
+ F:	support/kconfig/
+ 
+ N:	Phil Eichinger <phil.eichinger@gmail.com>
