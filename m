@@ -1,123 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Jan 2020 21:43:03 +0100
-Subject: [Buildroot] [PATCH] toolchain: bump ARC prebuild toolchain to
- arc-2019.09
-In-Reply-To: <20200117164005.36657-1-Evgeniy.Didin@synopsys.com>
-References: <20200117164005.36657-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <20200117204303.GN22540@scaer>
+Date: Fri, 17 Jan 2020 21:50:08 +0100
+Subject: [Buildroot] [git commit] package/qt5virtualkeyboard: fix install
+ for Qt 5.12.x
+Message-ID: <20200117204227.05A5D824EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Evgeniy, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3645f89922c70b9ebbf31926e6dc7cbbffe2b47a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-01-17 19:40 +0300, Evgeniy Didin spake thusly:
-> Lets update prebuilt ARC toolchain to the most recent arc-2019.09.
+With Qt 5.12.x only handwriting/lipi-toolkit needs 3rdparty parts
+installation (with Qt 5.6.x although zn_CZ/pinyin and zh_TW tcime).
 
-I was about to apply, when I noticed something strange, see below...
+Fixes:
+  - https://bugs.busybox.net/show_bug.cgi?id=12456
 
-> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: arc-buildroot at synopsys.com
-> ---
->  .../toolchain-external-synopsys-arc/Config.in                  |  6 +++---
->  .../toolchain-external-synopsys-arc.hash                       | 10 +++++-----
->  .../toolchain-external-synopsys-arc.mk                         |  2 +-
->  3 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-> index 5cb0ce2a3e..b0ebb6ea08 100644
-> --- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-> +++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-> @@ -1,7 +1,7 @@
->  config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
-> -	bool "Synopsys ARC 2018.09 toolchain"
-> +	bool "Synopsys ARC 2019.09 toolchain"
->  	depends on BR2_arc
-> -	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
-> +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
->  	depends on BR2_HOSTARCH = "x86_64"
->  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
->  	select BR2_INSTALL_LIBSTDCPP
-> @@ -12,7 +12,7 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
->  	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
->  	select BR2_TOOLCHAIN_HAS_SSP
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
-> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
-> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+  cp: cannot stat '.../host/arm-buildroot-linux-gnueabihf/sysroot/usr/qtvirtualkeyboard': No such file or directory
 
-There is something fishy in the gcc version dependency:
+Also fix the way we test the variable: we very seldomly use ifdef,
+instead we usually test for equality.
 
-    depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-    select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+Reported-by: Sam Petrocelli <sam.petrocelli@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998 at free.fr: also fix the way we test the variable]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-So, if the arch requires at least gcc-9, then this toolchain is not
-selectable. However, it is a gcc-9. So that's just not correct, is it?
-
-For a pre-built toolchain with gcc-N, it hsould:
-
-    depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_(N+1)
-    select BR2_TOOLCHAIN_GCC_AT_LEAST_(N)
-
-See for example the other pre-built toolchaons, like:
-    toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-    toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
-    toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
-    ...
-
-Note that the problem already existed before your patch, but with gcc-8.
-
-I think you can just drop the 'depends on', because there is nothing
-more recent than gcc-9 for now.
-
-Regards,
-Yann E. MORIN.
-
->  	help
->  	  Toolchain for the ARC cores, from
->  	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
-> diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-> index 20eac19caa..3ce6bbcb12 100644
-> --- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-> +++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-> @@ -1,5 +1,5 @@
-> -# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2018.09-release
-> -sha256 324b422eec3b9b36ea64c9e13167a4467fc13ab230eff34f2fa785039b460c16  arc_gnu_2018.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
-> -sha256 b0299ad9be0c300237789e5bf8e45d72bf040aab00c3718fbdb4160b75d2ed8f  arc_gnu_2018.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
-> -sha256 d1a4c039416b3da4d94ea066f861cc96ec60afec9c2bab1b2e937555b5e05238  arc_gnu_2018.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
-> -sha256 a519ed3686dc8e3c5f86646988d38647aa039f4af3204d9b7e84efa26cd37221  arc_gnu_2018.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
-> +# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2019.09-release
-> +sha256 f7cbf68ef251943db7baf63535e0ec98dafbdf5d925017b4e1d4fc64d9b38a26  arc_gnu_2019.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
-> +sha256 ac09f0a21f9d50146a5e542f4a6abc93e5a1dcb0a1372cb5c3ba86bbefaaec7d  arc_gnu_2019.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
-> +sha256 245ca49fe8ea2456617541b18bb96e52e6c0dc619f00e293fcaad519fc436c35  arc_gnu_2019.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
-> +sha256 6f039a0158c03af398ada31fae96009e47f0d7b7f7d52e12eb419492fc3f27e7  arc_gnu_2019.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
-> diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-> index e3ff17ff7b..c8f141e45d 100644
-> --- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-> +++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2018.09
-> +TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2019.09
->  TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)-release
->  
->  ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
-> -- 
-> 2.16.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index 59ee30c2d2..c13fa699a6 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -34,9 +34,9 @@ endif
+ endif
+ 
+ ifneq ($(filter zh_CN all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+-QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
+ QT5VIRTUALKEYBOARD_LICENSE += , Apache-2.0 (pinyin)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
++QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
+ QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/pinyin/NOTICE
+ else
+ QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/pinyin/3rdparty/pinyin/NOTICE
+@@ -44,9 +44,9 @@ endif
+ endif
+ 
+ ifneq ($(filter zh_TW all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+-QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
+ QT5VIRTUALKEYBOARD_LICENSE += , Apache-2.0 (tcime), BSD-3-Clause (tcime)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
++QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
+ QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/tcime/COPYING
+ else
+ QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/tcime/3rdparty/tcime/COPYING
+@@ -69,7 +69,7 @@ ifeq ($(BR2_PACKAGE_QT5VIRTUALKEYBOARD_ARROW_KEY_NAVIGATION),y)
+ QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+=arrow-key-navigation
+ endif
+ 
+-ifdef QT5VIRTUALKEYBOARD_3RDPARTY_PARTS
++ifeq ($(QT5VIRTUALKEYBOARD_3RDPARTY_PARTS),YES)
+ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS
+ 	cp -dpfr $(STAGING_DIR)/usr/qtvirtualkeyboard $(TARGET_DIR)/usr
+ endef
