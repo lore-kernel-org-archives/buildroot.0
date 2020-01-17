@@ -1,67 +1,75 @@
-From: Michael Walle <michael@walle.cc>
-Date: Fri, 17 Jan 2020 15:41:10 +0100
-Subject: [Buildroot] [PATCH] autotools: do not overwrite first include path
-Message-ID: <20200117144110.11506-1-michael@walle.cc>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Fri, 17 Jan 2020 19:40:05 +0300
+Subject: [Buildroot] [PATCH] toolchain: bump ARC prebuild toolchain to
+ arc-2019.09
+Message-ID: <20200117164005.36657-1-Evgeniy.Didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The first include path is special in aclocal. For example it is the path
-for the --install option. Also, the first include is treated in a
-special way if it doesn't exists. This might be the case if there is the
-following construct:
+Lets update prebuilt ARC toolchain to the most recent arc-2019.09.
 
-  configure.ac: AC_CONFIG_MACRO_DIR([m4])
-  Makefile.am: ACLOCAL_AMFLAGS="-I m4"
-
-If the package doesn't have local macros, the m4/ directory might not
-exist. aclocal will then just issue a warning instead of aborting the
-execution with a fatal error. See discussion here:
-  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=565663
-
-Don't use the "-I" option in aclocal. Instead use ACLOCAL_PATH to pass
-the system-wide include dirs.
-
-As a side effect this should fix the use of $(ACLOCAL) alone. Up until
-now, $(ACLOCAL) didn't include the ACLOCAL_HOST_DIR system include path.
-
-autoreconf will pass the "-I" options to every tool it runs. So move the
-argument to each individual tool except aclocal.
-
-Signed-off-by: Michael Walle <michael@walle.cc>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
 ---
- package/autoconf/autoconf.mk | 6 +++---
- package/automake/automake.mk | 4 +++-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ .../toolchain-external-synopsys-arc/Config.in                  |  6 +++---
+ .../toolchain-external-synopsys-arc.hash                       | 10 +++++-----
+ .../toolchain-external-synopsys-arc.mk                         |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index e5f474c72d..336ac59b42 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -21,6 +21,6 @@ HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
- $(eval $(host-autotools-package))
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+index 5cb0ce2a3e..b0ebb6ea08 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+-	bool "Synopsys ARC 2018.09 toolchain"
++	bool "Synopsys ARC 2019.09 toolchain"
+ 	depends on BR2_arc
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ 	depends on BR2_HOSTARCH = "x86_64"
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -12,7 +12,7 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 	help
+ 	  Toolchain for the ARC cores, from
+ 	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+index 20eac19caa..3ce6bbcb12 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2018.09-release
+-sha256 324b422eec3b9b36ea64c9e13167a4467fc13ab230eff34f2fa785039b460c16  arc_gnu_2018.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
+-sha256 b0299ad9be0c300237789e5bf8e45d72bf040aab00c3718fbdb4160b75d2ed8f  arc_gnu_2018.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
+-sha256 d1a4c039416b3da4d94ea066f861cc96ec60afec9c2bab1b2e937555b5e05238  arc_gnu_2018.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
+-sha256 a519ed3686dc8e3c5f86646988d38647aa039f4af3204d9b7e84efa26cd37221  arc_gnu_2018.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
++# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2019.09-release
++sha256 f7cbf68ef251943db7baf63535e0ec98dafbdf5d925017b4e1d4fc64d9b38a26  arc_gnu_2019.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
++sha256 ac09f0a21f9d50146a5e542f4a6abc93e5a1dcb0a1372cb5c3ba86bbefaaec7d  arc_gnu_2019.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
++sha256 245ca49fe8ea2456617541b18bb96e52e6c0dc619f00e293fcaad519fc436c35  arc_gnu_2019.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
++sha256 6f039a0158c03af398ada31fae96009e47f0d7b7f7d52e12eb419492fc3f27e7  arc_gnu_2019.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+index e3ff17ff7b..c8f141e45d 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # variables used by other packages
--AUTOCONF = $(HOST_DIR)/bin/autoconf
--AUTOHEADER = $(HOST_DIR)/bin/autoheader
--AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-+AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-+AUTOHEADER = $(HOST_DIR)/bin/autoheader -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-+AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 270337712e..89dcaa1293 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -32,4 +32,6 @@ $(eval $(host-autotools-package))
- # variables used by other packages
- AUTOMAKE = $(HOST_DIR)/bin/automake
- ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
--ACLOCAL = $(HOST_DIR)/bin/aclocal -I $(ACLOCAL_DIR)
-+ACLOCAL = $(HOST_DIR)/bin/aclocal
-+ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
-+export ACLOCAL_PATH
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2018.09
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2019.09
+ TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)-release
+ 
+ ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
 -- 
-2.20.1
+2.16.2
