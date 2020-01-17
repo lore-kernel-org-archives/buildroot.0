@@ -1,33 +1,79 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 17 Jan 2020 17:55:07 +0000
-Subject: [Buildroot] [Bug 12481] minicom fails when output directory path
- contains "m4"
-In-Reply-To: <bug-12481-163@https.bugs.busybox.net/>
-References: <bug-12481-163@https.bugs.busybox.net/>
-Message-ID: <bug-12481-163-LwRX5ryCAz@https.bugs.busybox.net/>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri, 17 Jan 2020 18:55:30 +0100
+Subject: [Buildroot] [PATCH] package/gettext-tiny: fix install failure
+ if path contains "m4/" string
+In-Reply-To: <20200117175321.104000-1-giulio.benetti@benettiengineering.com>
+References: <20200117175321.104000-1-giulio.benetti@benettiengineering.com>
+Message-ID: <98a0ee03-74cf-a953-8820-dd7a27e2d985@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12481
+Forgot to mention...
 
-Giulio Benetti <giulio.benetti@benettiengineering.com> changed:
+On 1/17/20 6:53 PM, Giulio Benetti wrote:
+> When building with path containing "m4/" occurence(i.e. make
+> O=output-m4) gettext-tiny install recipe copies files to wrong place and
+> later some package using autotools fail to autoreconf(i.e. minicom).
+> This is due to buggy gettext-tiny Makefile install recipe where they
+> substitute every "m4/" in INSTALL destination path, including the "m4/"
+> part of our build folder. Add patch to fix this by using sed instead of
+> $(subst ...) to substitute only last "m4/" occurence in path.
+> 
+> Fixes:
+> https://bugs.busybox.net/show_bug.cgi?id=12481
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|FIXED                       |---
+Patch pending upstream:
+https://github.com/sabotage-linux/gettext-tiny/pull/49
 
---- Comment #8 from Giulio Benetti <giulio.benetti@benettiengineering.com> ---
-I've wrongly marked as fixed.
-
-This is the patch for Buildroot to test:
-https://patchwork.ozlabs.org/patch/1224921/
-
-Best regards
+>   ...tall-failure-if-path-contains-m4-str.patch | 31 +++++++++++++++++++
+>   1 file changed, 31 insertions(+)
+>   create mode 100644 package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
+> 
+> diff --git a/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch b/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
+> new file mode 100644
+> index 0000000000..e607f9ea2a
+> --- /dev/null
+> +++ b/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
+> @@ -0,0 +1,31 @@
+> +From c9440e55e1179e7ce29cceae2ddb089b11c00f07 Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +Date: Fri, 17 Jan 2020 18:34:42 +0100
+> +Subject: [PATCH] Makefile: fix install failure if path contains "m4/" string
+> +
+> +Actually Makefile install recipe substitutes every occurence of "m4/" in
+> +file name of the target of the rule($@), in an absolute path there could
+> +more than one "m4/" occurence, so install will fail. Let's change
+> +$(susbst ...) call with a call to sed substituting only last occurence
+> +of "m4/".
+> +
+> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +---
+> + Makefile | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/Makefile b/Makefile
+> +index 4a3c3f6..1f925a3 100644
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -88,6 +88,6 @@ $(DESTDIR)$(datadir)/%: %
+> + 	$(INSTALL) -D -m 644 $< $@
+> +
+> + $(DESTDIR)$(acdir)/%: %
+> +-	$(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(subst m4/,,$@)
+> ++	$(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(shell echo $@ | sed 's,\(.*\)m4/,\1,')
+> +
+> + .PHONY: all clean install
+> +--
+> +2.20.1
+> +
+> 
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Giulio Benetti
+Benetti Engineering sas
