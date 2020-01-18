@@ -1,32 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Jan 2020 22:22:38 +0000
-Subject: [Buildroot] [Bug 12481] minicom fails when output directory path
- contains "m4"
-In-Reply-To: <bug-12481-163@https.bugs.busybox.net/>
-References: <bug-12481-163@https.bugs.busybox.net/>
-Message-ID: <bug-12481-163-3OOpw4N3Mo@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 18 Jan 2020 23:35:59 +0100
+Subject: [Buildroot] [PATCH v8 19/20] package/kodi-visualisation-*: mass
+ version bump
+References: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
+ <20200118200620.3967240-20-bernd.kuhls@t-online.de>
+ <20200118220358.GI32369@scaer>
+Message-ID: <frdcfgxnh9.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12481
+Am Sat, 18 Jan 2020 23:03:58 +0100 schrieb Yann E. MORIN:
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+> Bernd, All,
+> 
+> On 2020-01-18 21:06 +0100, Bernd Kuhls spake thusly:
+>> Rebased
+>> package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-
+for-egl-with-pkg-config.patch
+> 
+> You said "rebased" but you removed it altogether. It has however never
+> been upstreamed, AFAICS... Care to comment/explai, please?
+> 
+> Note: if onlt the commit log needes to be fixed, no need to respin the
+> series, I can fix locally before applying.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-         Resolution|---                         |FIXED
-             Status|REOPENED                    |RESOLVED
+Hi Yann,
 
---- Comment #9 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Fixed with:
-https://git.buildroot.org/buildroot/commit/?id=41b9a64526b7bbd28ba2d084f3786cb536750daa
+you are right, the commit log needs to be rephrased:
 
-Thanks both for the report, investigation and fix! :-)
+Removed patch kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-
+for-egl-with-pkg-config.patch because upstream removed glesv2 support:
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+https://github.com/xbmc/visualization.shadertoy/commit/
+d880b98b932efc0c57670ec3f2def947664b60b0
+
+Regards, Bernd
