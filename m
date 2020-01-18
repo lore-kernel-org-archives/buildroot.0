@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Jan 2020 23:02:16 +0100
-Subject: [Buildroot] [PATCH v8 00/20] package/kodi: bump to version
- 18.5-Leia
-In-Reply-To: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
+Date: Sat, 18 Jan 2020 23:03:58 +0100
+Subject: [Buildroot] [PATCH v8 19/20] package/kodi-visualisation-*: mass
+ version bump
+In-Reply-To: <20200118200620.3967240-20-bernd.kuhls@t-online.de>
 References: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
-Message-ID: <20200118220216.GH32369@scaer>
+ <20200118200620.3967240-20-bernd.kuhls@t-online.de>
+Message-ID: <20200118220358.GI32369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,210 +14,223 @@ To: buildroot@busybox.net
 
 Bernd, All,
 
-I was about to apply the whole series in batch, but there are two
-commits that made me raise an eyebrow, so I'll reply to both in a
-separate email.
+On 2020-01-18 21:06 +0100, Bernd Kuhls spake thusly:
+> Rebased
+> package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
+
+You said "rebased" but you removed it altogether. It has however never
+been upstreamed, AFAICS... Care to comment/explai, please?
+
+Note: if onlt the commit log needes to be fixed, no need to respin the
+series, I can fix locally before applying.
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
 
-On 2020-01-18 21:06 +0100, Bernd Kuhls spake thusly:
-> Bernd Kuhls (20):
->   package/kodi-platform: bump version
->   package/kodi: bump to version 18.5-Leia
->   package/kodi-audiodecoder-*: mass version bump
->   package/kodi-audioencoder-*: mass version bump
->   package/kodi-inputstream-adaptive: bump version
->   package/kodi-inputstream-rtmp: bump version
->   package/kodi-peripheral-joystick: bump version
->   package/kodi-peripheral-*: mass version bump
->   package/kodi-pvr-iptvsimple: bump version
->   package/kodi-pvr-mediaportal-tvserver: bump version
->   package/kodi-pvr-stalker: bump version
->   package/kodi-pvr-vuplus: bump version
->   package/kodi-pvr-*: mass version bump
->   package/kodi-screensaver-asteroids: bump version
->   package/kodi-screensaver-rsxs: bump version
->   package/kodi-screensaver-*: mass version bump
->   package/kodi-skin-confluence: bump version
->   package/kodi-visualisation-goom: bump version
->   package/kodi-visualisation-*: mass version bump
->   package/kodi-vfs-sftp: bump version
+> Added patch to fix cstddef include and license hash for
+> kodi-visualisation-spectrum.
 > 
->  package/kodi-audiodecoder-modplug/Config.in   |   3 +-
->  .../kodi-audiodecoder-modplug.hash            |   2 +-
->  .../kodi-audiodecoder-modplug.mk              |   6 +-
->  package/kodi-audiodecoder-nosefart/Config.in  |   3 +-
->  .../kodi-audiodecoder-nosefart.hash           |   2 +-
->  .../kodi-audiodecoder-nosefart.mk             |   6 +-
->  package/kodi-audiodecoder-sidplay/Config.in   |   3 +-
->  .../kodi-audiodecoder-sidplay.hash            |   2 +-
->  .../kodi-audiodecoder-sidplay.mk              |   6 +-
->  package/kodi-audiodecoder-snesapu/Config.in   |   3 +-
->  .../kodi-audiodecoder-snesapu.hash            |   2 +-
->  .../kodi-audiodecoder-snesapu.mk              |   6 +-
->  package/kodi-audiodecoder-stsound/Config.in   |   3 +-
->  .../kodi-audiodecoder-stsound.hash            |   2 +-
->  .../kodi-audiodecoder-stsound.mk              |   6 +-
->  package/kodi-audiodecoder-timidity/Config.in  |   2 +-
->  .../kodi-audiodecoder-timidity.hash           |   2 +-
->  .../kodi-audiodecoder-timidity.mk             |   4 +-
->  package/kodi-audiodecoder-vgmstream/Config.in |   3 +-
->  .../kodi-audiodecoder-vgmstream.hash          |   2 +-
->  .../kodi-audiodecoder-vgmstream.mk            |   6 +-
->  .../kodi-audioencoder-flac.hash               |   2 +-
->  .../kodi-audioencoder-flac.mk                 |   4 +-
->  .../kodi-audioencoder-lame.hash               |   2 +-
->  .../kodi-audioencoder-lame.mk                 |   4 +-
->  .../kodi-audioencoder-vorbis.hash             |   2 +-
->  .../kodi-audioencoder-vorbis.mk               |   2 +-
->  .../kodi-audioencoder-wav.hash                |   2 +-
->  .../kodi-audioencoder-wav.mk                  |   4 +-
->  package/kodi-inputstream-adaptive/Config.in   |   2 -
->  .../kodi-inputstream-adaptive.hash            |   2 +-
->  .../kodi-inputstream-adaptive.mk              |   6 +-
->  package/kodi-inputstream-rtmp/Config.in       |   2 +-
->  .../kodi-inputstream-rtmp.hash                |   2 +-
->  .../kodi-inputstream-rtmp.mk                  |   4 +-
->  .../kodi-jsonschemabuilder.mk                 |   4 +-
->  package/kodi-peripheral-joystick/Config.in    |   2 +-
->  .../kodi-peripheral-joystick.hash             |   2 +-
->  .../kodi-peripheral-joystick.mk               |   8 +-
->  .../kodi-peripheral-steamcontroller.hash      |   2 +-
->  .../kodi-peripheral-steamcontroller.mk        |   2 +-
->  .../kodi-peripheral-xarcade.hash              |   2 +-
->  .../kodi-peripheral-xarcade.mk                |   2 +-
->  package/kodi-platform/kodi-platform.hash      |   2 +-
->  package/kodi-platform/kodi-platform.mk        |   2 +-
->  .../kodi-pvr-argustv/kodi-pvr-argustv.hash    |   2 +-
->  package/kodi-pvr-argustv/kodi-pvr-argustv.mk  |   4 +-
->  .../kodi-pvr-dvblink/kodi-pvr-dvblink.hash    |   2 +-
->  package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk  |   4 +-
->  .../kodi-pvr-dvbviewer.hash                   |   2 +-
->  .../kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk  |   4 +-
->  package/kodi-pvr-filmon/kodi-pvr-filmon.hash  |   2 +-
->  package/kodi-pvr-filmon/kodi-pvr-filmon.mk    |   4 +-
->  .../kodi-pvr-hdhomerun.hash                   |   2 +-
->  .../kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk  |   4 +-
->  package/kodi-pvr-hts/kodi-pvr-hts.hash        |   2 +-
->  package/kodi-pvr-hts/kodi-pvr-hts.mk          |   4 +-
->  package/kodi-pvr-iptvsimple/Config.in         |   1 +
->  .../kodi-pvr-iptvsimple.hash                  |   2 +-
->  .../kodi-pvr-iptvsimple.mk                    |   6 +-
->  ...e555-remove-xlocale.h-from-Locale.hh.patch |  33 ----
->  .../kodi-pvr-mediaportal-tvserver.hash        |   2 +-
->  .../kodi-pvr-mediaportal-tvserver.mk          |   4 +-
->  package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash  |   2 +-
->  package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk    |   4 +-
->  .../kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash    |   2 +-
->  package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk  |   4 +-
->  package/kodi-pvr-njoy/kodi-pvr-njoy.hash      |   2 +-
->  package/kodi-pvr-njoy/kodi-pvr-njoy.mk        |   4 +-
->  package/kodi-pvr-pctv/kodi-pvr-pctv.hash      |   2 +-
->  package/kodi-pvr-pctv/kodi-pvr-pctv.mk        |   4 +-
->  .../0001-src-CWatchdog.h-Fix-gcc7-build.patch |  29 ---
->  .../kodi-pvr-stalker/kodi-pvr-stalker.hash    |   2 +-
->  package/kodi-pvr-stalker/kodi-pvr-stalker.mk  |   4 +-
->  package/kodi-pvr-vbox/kodi-pvr-vbox.hash      |   2 +-
->  package/kodi-pvr-vbox/kodi-pvr-vbox.mk        |   4 +-
->  .../kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash  |   2 +-
->  .../kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk    |   4 +-
->  package/kodi-pvr-vuplus/Config.in             |   2 +
->  package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash  |   2 +-
->  package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk    |   6 +-
->  package/kodi-pvr-wmc/kodi-pvr-wmc.hash        |   2 +-
->  package/kodi-pvr-wmc/kodi-pvr-wmc.mk          |   4 +-
->  package/kodi-screensaver-asteroids/Config.in  |   3 +-
->  .../kodi-screensaver-asteroids.hash           |   2 +-
->  .../kodi-screensaver-asteroids.mk             |   6 +-
->  package/kodi-screensaver-asterwave/Config.in  |   2 +-
->  .../kodi-screensaver-asterwave.hash           |   2 +-
->  .../kodi-screensaver-asterwave.mk             |   4 +-
->  .../0001-Add-missing-stddef-include.patch     |  25 +++
->  package/kodi-screensaver-biogenesis/Config.in |   2 +-
->  .../kodi-screensaver-biogenesis.hash          |   2 +-
->  .../kodi-screensaver-biogenesis.mk            |   4 +-
->  package/kodi-screensaver-cpblobs/Config.in    |   2 +-
->  .../kodi-screensaver-cpblobs.hash             |   2 +-
->  .../kodi-screensaver-cpblobs.mk               |   4 +-
->  .../kodi-screensaver-crystalmorph.hash        |   2 +-
->  .../kodi-screensaver-crystalmorph.mk          |   2 +-
->  package/kodi-screensaver-greynetic/Config.in  |   2 +-
->  .../kodi-screensaver-greynetic.hash           |   2 +-
->  .../kodi-screensaver-greynetic.mk             |   4 +-
->  .../0001-Add-missing-stddef-include.patch     |  25 +++
->  .../kodi-screensaver-matrixtrails/Config.in   |   2 +-
->  .../kodi-screensaver-matrixtrails.hash        |   2 +-
->  .../kodi-screensaver-matrixtrails.mk          |   5 +-
->  ...ackport-Add-missing-cstddef-includes.patch |  32 ++++
->  package/kodi-screensaver-pingpong/Config.in   |   2 +-
->  .../kodi-screensaver-pingpong.hash            |   2 +-
->  .../kodi-screensaver-pingpong.mk              |   4 +-
->  .../0001-Add-missing-stddef-include.patch     |  25 +++
->  package/kodi-screensaver-pyro/Config.in       |   2 +-
->  .../kodi-screensaver-pyro.hash                |   2 +-
->  .../kodi-screensaver-pyro.mk                  |   4 +-
->  .../0001-Disable-drempels.patch               |  40 +++++
->  .../0001-cross-compile.patch                  |  37 ----
->  .../0002-fix-default-include-dir.patch        |  28 ---
->  package/kodi-screensaver-rsxs/Config.in       |  14 +-
->  .../kodi-screensaver-rsxs.hash                |   2 +-
->  .../kodi-screensaver-rsxs.mk                  |   7 +-
->  package/kodi-screensaver-stars/Config.in      |   2 +-
->  .../kodi-screensaver-stars.hash               |   2 +-
->  .../kodi-screensaver-stars.mk                 |   4 +-
->  .../kodi-skin-confluence.hash                 |   3 +-
->  .../kodi-skin-confluence.mk                   |   4 +-
->  ...-fix-texture-packer-cmake-source-dir.patch |  27 +++
->  .../0002-fix_reallocarray.patch               | 170 ------------------
->  .../kodi-texturepacker/kodi-texturepacker.mk  |   7 +-
->  package/kodi-vfs-sftp/kodi-vfs-sftp.hash      |   3 +-
->  package/kodi-vfs-sftp/kodi-vfs-sftp.mk        |   2 +-
->  .../kodi-visualisation-fishbmc.hash           |   2 +-
->  .../kodi-visualisation-fishbmc.mk             |   4 +-
->  .../0001-cross-compile.patch                  |  32 ----
->  .../kodi-visualisation-goom.hash              |   2 +-
->  .../kodi-visualisation-goom.mk                |   4 +-
->  ...-also-search-for-egl-with-pkg-config.patch |  44 -----
->  .../kodi-visualisation-shadertoy.hash         |   2 +-
->  .../kodi-visualisation-shadertoy.mk           |   4 +-
->  ...Backport-Add-missing-cstddef-include.patch |  30 ++++
->  .../kodi-visualisation-spectrum.hash          |   3 +-
->  .../kodi-visualisation-spectrum.mk            |   4 +-
->  .../kodi-visualisation-waveform.hash          |   2 +-
->  .../kodi-visualisation-waveform.mk            |   4 +-
->  ...e-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch |   8 +-
->  ...endency-on-gmp-and-libintl-from-Find.patch |  39 ----
->  ...h => 0002-Fix-crosscompiling-issues.patch} |  29 ++-
->  .../0003-Add-missing-cassert-includes.patch   |  50 ++++++
->  ...cmake-iconv-is-a-required-dependency.patch |  92 ----------
->  ...ackport-Add-missing-cstddef-includes.patch |  44 +++++
->  .../kodi/0004-Fix-ffmpeg-build-for-mips.patch |  43 -----
->  package/kodi/Config.in                        |  24 +--
->  package/kodi/kodi.hash                        |  13 +-
->  package/kodi/kodi.mk                          |  82 ++++-----
->  152 files changed, 537 insertions(+), 868 deletions(-)
->  delete mode 100644 package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch
->  delete mode 100644 package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
->  create mode 100644 package/kodi-screensaver-biogenesis/0001-Add-missing-stddef-include.patch
->  create mode 100644 package/kodi-screensaver-matrixtrails/0001-Add-missing-stddef-include.patch
->  create mode 100644 package/kodi-screensaver-pingpong/0001-Backport-Add-missing-cstddef-includes.patch
->  create mode 100644 package/kodi-screensaver-pyro/0001-Add-missing-stddef-include.patch
->  create mode 100644 package/kodi-screensaver-rsxs/0001-Disable-drempels.patch
->  delete mode 100644 package/kodi-screensaver-rsxs/0001-cross-compile.patch
->  delete mode 100644 package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
->  create mode 100644 package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch
->  delete mode 100644 package/kodi-texturepacker/0002-fix_reallocarray.patch
->  delete mode 100644 package/kodi-visualisation-goom/0001-cross-compile.patch
+> Visualisation repos were moved to the xbmc project:
+> https://github.com/xbmc/repo-binary-addons/commit/38166cbdfa18d361e5b6009296a78c69a1172879
+> https://github.com/xbmc/repo-binary-addons/commit/57b8ed5fb9b5f0368738260b762cc0bab1147172
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../kodi-visualisation-fishbmc.hash           |  2 +-
+>  .../kodi-visualisation-fishbmc.mk             |  4 +-
+>  ...-also-search-for-egl-with-pkg-config.patch | 44 -------------------
+>  .../kodi-visualisation-shadertoy.hash         |  2 +-
+>  .../kodi-visualisation-shadertoy.mk           |  4 +-
+>  ...Backport-Add-missing-cstddef-include.patch | 30 +++++++++++++
+>  .../kodi-visualisation-spectrum.hash          |  3 +-
+>  .../kodi-visualisation-spectrum.mk            |  4 +-
+>  .../kodi-visualisation-waveform.hash          |  2 +-
+>  .../kodi-visualisation-waveform.mk            |  4 +-
+>  10 files changed, 43 insertions(+), 56 deletions(-)
 >  delete mode 100644 package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
 >  create mode 100644 package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch
->  delete mode 100644 package/kodi/0002-CMake-Remove-dependency-on-gmp-and-libintl-from-Find.patch
->  rename package/kodi/{0005-Fix-crosscompiling-issues.patch => 0002-Fix-crosscompiling-issues.patch} (86%)
->  create mode 100644 package/kodi/0003-Add-missing-cassert-includes.patch
->  delete mode 100644 package/kodi/0003-cmake-iconv-is-a-required-dependency.patch
->  create mode 100644 package/kodi/0004-Backport-Add-missing-cstddef-includes.patch
->  delete mode 100644 package/kodi/0004-Fix-ffmpeg-build-for-mips.patch
 > 
+> diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+> index 21d80a31cb..cd4734eaab 100644
+> --- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+> +++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 cf42a21978578cb5ecb10c20fe09791183d8ef2998ff9d956a84142a7dda8f72  kodi-visualisation-fishbmc-4.1.0.tar.gz
+> +sha256 8142fe4a32c0c113945c5fc9745e54639ca73308371d292e3422730bfad1d064  kodi-visualisation-fishbmc-5.1.2-Leia.tar.gz
+> diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+> index 8360660ef4..a89c559d26 100644
+> --- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+> +++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -KODI_VISUALISATION_FISHBMC_VERSION = 4.1.0
+> -KODI_VISUALISATION_FISHBMC_SITE = $(call github,notspiff,visualization.fishbmc,v$(KODI_VISUALISATION_FISHBMC_VERSION))
+> +KODI_VISUALISATION_FISHBMC_VERSION = 5.1.2-Leia
+> +KODI_VISUALISATION_FISHBMC_SITE = $(call github,xbmc,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
+>  KODI_VISUALISATION_FISHBMC_LICENSE = GPL-2.0+
+>  KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
+>  KODI_VISUALISATION_FISHBMC_DEPENDENCIES = kodi
+> diff --git a/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch b/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
+> deleted file mode 100644
+> index 8de96a6de3..0000000000
+> --- a/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
+> +++ /dev/null
+> @@ -1,44 +0,0 @@
+> -From 9c428c3c9f120a11468f98546bcc754d2c3302af Mon Sep 17 00:00:00 2001
+> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> -Date: Thu, 30 Jul 2015 10:02:15 +0200
+> -Subject: [PATCH] FindOpenGLES2: also search for egl with pkg-config
+> -
+> -The non-pkg-config path looks for both EGL *and* OpenGL ES, but not
+> -the pkg-config path, which might lead to missing libraries/headers if
+> -egl.pc has more header paths or libraries than glesv2.pc.
+> -
+> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ----
+> - CMakeLists.txt      | 2 +-
+> - FindOpenGLES2.cmake | 2 +-
+> - 2 files changed, 2 insertions(+), 2 deletions(-)
+> -
+> -diff --git a/CMakeLists.txt b/CMakeLists.txt
+> -index 8b084cf..81bbe27 100644
+> ---- a/CMakeLists.txt
+> -+++ b/CMakeLists.txt
+> -@@ -35,7 +35,7 @@
+> -     endif()
+> -   endif()
+> - 
+> --  include_directories(${OpenGL_INCLUDE_DIR}
+> -+  include_directories(${OpenGL_INCLUDE_DIR} ${OpenGLES2_INCLUDE_DIRS}
+> -                       ${KODI_INCLUDE_DIR}
+> -                       ${p8-platform_INCLUDE_DIRS}
+> -                       ${PROJECT_SOURCE_DIR}/lib/kissfft
+> -diff --git a/FindOpenGLES2.cmake b/FindOpenGLES2.cmake
+> -index e1b7d21..2a9ce0d 100644
+> ---- a/FindOpenGLES2.cmake
+> -+++ b/FindOpenGLES2.cmake
+> -@@ -7,7 +7,7 @@
+> - 
+> - find_package(PkgConfig)
+> - if(PKG_CONFIG_FOUND)
+> --  pkg_check_modules(OpenGLES2 glesv2)
+> -+  pkg_check_modules(OpenGLES2 glesv2 egl)
+> - endif(PKG_CONFIG_FOUND)
+> - 
+> - if(NOT OPENGLES2_FOUND)
+> --- 
+> -2.5.0
+> -
+> diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+> index ae8c59ddb0..cf3e06daa7 100644
+> --- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+> +++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 4456e88bc94bcb3e2481286b27926a1f6d85d6f857de31a46d50f44fead01abd  kodi-visualisation-shadertoy-1.1.5.tar.gz
+> +sha256 7b09de334ed3c96d2e2552e0594b8f76c11e36edfc10efd725851140132a4d4f  kodi-visualisation-shadertoy-1.2.3-Leia.tar.gz
+> diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+> index a2b1b14d9f..b928e64d9b 100644
+> --- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+> +++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -KODI_VISUALISATION_SHADERTOY_VERSION = 1.1.5
+> -KODI_VISUALISATION_SHADERTOY_SITE = $(call github,notspiff,visualization.shadertoy,v$(KODI_VISUALISATION_SHADERTOY_VERSION))
+> +KODI_VISUALISATION_SHADERTOY_VERSION = 1.2.3-Leia
+> +KODI_VISUALISATION_SHADERTOY_SITE = $(call github,xbmc,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
+>  KODI_VISUALISATION_SHADERTOY_LICENSE = GPL-2.0+
+>  KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = src/main.cpp
+>  KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi libplatform
+> diff --git a/package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch b/package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch
+> new file mode 100644
+> index 0000000000..5b1bb0c47c
+> --- /dev/null
+> +++ b/package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch
+> @@ -0,0 +1,30 @@
+> +From b2c54c1043c2396678005b578e85db30bdf5ccb9 Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Sat, 18 Jan 2020 20:22:41 +0100
+> +Subject: [PATCH] [Backport] Add missing cstddef include
+> +
+> +Backported from https://github.com/xbmc/visualization.spectrum/pull/37
+> +
+> +Patch sent upstream:
+> +https://github.com/xbmc/visualization.spectrum/pull/38
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + src/opengl_spectrum.cpp | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/src/opengl_spectrum.cpp b/src/opengl_spectrum.cpp
+> +index 05409ea..2441fd6 100644
+> +--- a/src/opengl_spectrum.cpp
+> ++++ b/src/opengl_spectrum.cpp
+> +@@ -38,6 +38,7 @@
+> + #include <string.h>
+> + #include <math.h>
+> + #include <stdint.h>
+> ++#include <cstddef>
+> + 
+> + #include <glm/glm.hpp>
+> + #include <glm/gtc/type_ptr.hpp>
+> +-- 
+> +2.20.1
+> +
+> diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+> index 2d9ab0f3cf..4064184a75 100644
+> --- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+> +++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+> @@ -1,2 +1,3 @@
+>  # Locally computed
+> -sha256 7ee78ff5c24e3f81b6e2a9208237f34667cb9faa5453d7bdb900ab65245973f1  kodi-visualisation-spectrum-1.1.1.tar.gz
+> +sha256 ec88defbb90fdb03f075abdba39c436906a8fbad8f034da3e3b31f75842206cc  kodi-visualisation-spectrum-3.0.2-Leia.tar.gz
+> +sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+> diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+> index 016f405e40..c3d61c1ef4 100644
+> --- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+> +++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -KODI_VISUALISATION_SPECTRUM_VERSION = 1.1.1
+> -KODI_VISUALISATION_SPECTRUM_SITE = $(call github,notspiff,visualization.spectrum,v$(KODI_VISUALISATION_SPECTRUM_VERSION))
+> +KODI_VISUALISATION_SPECTRUM_VERSION = 3.0.2-Leia
+> +KODI_VISUALISATION_SPECTRUM_SITE = $(call github,xbmc,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
+>  KODI_VISUALISATION_SPECTRUM_LICENSE = GPL-2.0+
+>  KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = COPYING
+>  KODI_VISUALISATION_SPECTRUM_DEPENDENCIES = kodi
+> diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+> index 271dc4a9e0..af6fd37a03 100644
+> --- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+> +++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 cf10d8d78cb2bde4a0a21bb7e467445617b46593c093ef05f336f95a048f2d54  kodi-visualisation-waveform-1.1.0.tar.gz
+> +sha256 c5fbf48c2251b61d9abfcd679a750199f5efc78e63fded9a1482cfd9b41d0b5b  kodi-visualisation-waveform-3.1.1-Leia.tar.gz
+> diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+> index 13a621edb0..2d65df8538 100644
+> --- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+> +++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -KODI_VISUALISATION_WAVEFORM_VERSION = 1.1.0
+> -KODI_VISUALISATION_WAVEFORM_SITE = $(call github,notspiff,visualization.waveform,v$(KODI_VISUALISATION_WAVEFORM_VERSION))
+> +KODI_VISUALISATION_WAVEFORM_VERSION = 3.1.1-Leia
+> +KODI_VISUALISATION_WAVEFORM_SITE = $(call github,xbmc,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
+>  KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
+>  KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
+>  KODI_VISUALISATION_WAVEFORM_DEPENDENCIES = kodi
 > -- 
 > 2.20.1
 > 
