@@ -1,33 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Jan 2020 13:09:06 +0100
-Subject: [Buildroot] [PATCH] package/toolchain: bumb ARC tools to
- arc-2019.09 release
-In-Reply-To: <MN2PR12MB2877CB96415FE15CBBC17D13D9300@MN2PR12MB2877.namprd12.prod.outlook.com>
-References: <20200116072242.10524-1-Evgeniy.Didin@synopsys.com>
- <20200117203435.GM22540@scaer>
- <MN2PR12MB2877CB96415FE15CBBC17D13D9300@MN2PR12MB2877.namprd12.prod.outlook.com>
-Message-ID: <20200118120906.GS22540@scaer>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sat, 18 Jan 2020 13:16:53 +0100
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add Pierre-Jean Texier for
+ numactl
+In-Reply-To: <1579349813-10121-1-git-send-email-pjtexier@koncepto.io>
+References: <1579349813-10121-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <1579349813-10121-2-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Evgeniy, All,
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 2020-01-18 09:16 +0000, Evgeniy Didin spake thusly:
-> Could you please apply this patch to [1]2019.11.x branch,
-> as it has arc-2019.09-rc1 version of arc tools?
-
-It's Peter's call to backport it to a stable branch. Peter?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 977b7cb..88b4dd0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2028,6 +2028,7 @@ F:	package/libubootenv/
+ F:	package/libxml2/
+ F:	package/mongoose/
+ F:	package/mxml/
++F:	package/numactl/
+ F:	package/python-periphery/
+ F:	package/raspi-gpio/
+ F:	package/sbc/
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
