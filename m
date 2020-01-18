@@ -1,40 +1,57 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Jan 2020 23:35:59 +0100
-Subject: [Buildroot] [PATCH v8 19/20] package/kodi-visualisation-*: mass
- version bump
+Date: Sat, 18 Jan 2020 23:42:55 +0100
+Subject: [Buildroot] [PATCH v8 15/20] package/kodi-screensaver-rsxs:
+ bump version
 References: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
- <20200118200620.3967240-20-bernd.kuhls@t-online.de>
- <20200118220358.GI32369@scaer>
-Message-ID: <frdcfgxnh9.ln2@ID-313208.user.individual.net>
+ <20200118200620.3967240-16-bernd.kuhls@t-online.de>
+ <20200118221442.GJ32369@scaer>
+Message-ID: <f8ecfgxnh9.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 18 Jan 2020 23:03:58 +0100 schrieb Yann E. MORIN:
-
-> Bernd, All,
-> 
-> On 2020-01-18 21:06 +0100, Bernd Kuhls spake thusly:
->> Rebased
->> package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-
-for-egl-with-pkg-config.patch
-> 
-> You said "rebased" but you removed it altogether. It has however never
-> been upstreamed, AFAICS... Care to comment/explai, please?
-> 
-> Note: if onlt the commit log needes to be fixed, no need to respin the
-> series, I can fix locally before applying.
-
 Hi Yann,
 
-you are right, the commit log needs to be rephrased:
+Am Sat, 18 Jan 2020 23:14:42 +0100 schrieb Yann E. MORIN:
 
-Removed patch kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-
-for-egl-with-pkg-config.patch because upstream removed glesv2 support:
+> Note: I am fine with disabling entirely, but I'd prefer this is
+> explictly stated, like:
+> 
+>     Even though rsxs has a minimal bundled imagemagick, we simply
+>     disable drempels to avoid using a bundled library.
 
-https://github.com/xbmc/visualization.shadertoy/commit/
-d880b98b932efc0c57670ec3f2def947664b60b0
+ok, you can add this sentence to the commit log because this was my 
+intention.
+
+> You're adding a few dependencies, some of whihch are not ovious, like
+> libtool.
+
+They are all lined-up in CMakeLists.txt, including ltdl:
+https://github.com/xbmc/screensavers.rsxs/blob/Leia/CMakeLists.txt#L15
+
+> Additionally, you're not propagating the dependency of glm (needs
+> libstdc++). That's OK because Kodi does need C++, and thus rsxs already
+> implicitly has that dependency, but I don;t like it much, though...
+
+True, but there will never be a time when Kodi will not depend on c++ so 
+I did not add this dependency to all the subpackages of kodi.
+
+> Again, if all it takes are a few sentences or bullet points to be added
+> to the commit log, no need to respin: I can add them locally before
+> applying.
+
+If you consider my explanations sufficient you are free to add them to 
+the commit log ;)
+
+> Regards,
+> Yann E. MORIN.
 
 Regards, Bernd
+
+PS: Please note that you will not receive emails from me because your 
+provider blocks my provider for several years now:
+<yann.morin.1998@free.fr>: delivery temporarily suspended: host
+ mx2.free.fr[212.27.42.59] refused to talk to me: 421 Too many errors from
+    your IP (194.25.134.85), please visit http://postmaster.free.fr/
