@@ -1,69 +1,65 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Jan 2020 21:06:07 +0100
-Subject: [Buildroot] [PATCH v8 07/20] package/kodi-peripheral-joystick: bump
- version
+Date: Sat, 18 Jan 2020 21:06:08 +0100
+Subject: [Buildroot] [PATCH v8 08/20] package/kodi-peripheral-*: mass
+ version bump
 In-Reply-To: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
 References: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
-Message-ID: <20200118200620.3967240-8-bernd.kuhls@t-online.de>
+Message-ID: <20200118200620.3967240-9-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed dependency to kodi-platform
-https://github.com/xbmc/peripheral.joystick/commit/a9489ea0f08bbf04affb798857439540478ff90d
-
-Added dependency to tinyxml
-https://github.com/xbmc/peripheral.joystick/commit/471aa27d6c8ff9c9d0ac50c1b32f1504840194b5
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-peripheral-joystick/Config.in                | 2 +-
- .../kodi-peripheral-joystick.hash                         | 2 +-
- .../kodi-peripheral-joystick/kodi-peripheral-joystick.mk  | 8 +++-----
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ .../kodi-peripheral-steamcontroller.hash                        | 2 +-
+ .../kodi-peripheral-steamcontroller.mk                          | 2 +-
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash    | 2 +-
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk      | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/Config.in b/package/kodi-peripheral-joystick/Config.in
-index f257710a88..d93e71b607 100644
---- a/package/kodi-peripheral-joystick/Config.in
-+++ b/package/kodi-peripheral-joystick/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_KODI_PERIPHERAL_JOYSTICK
- 	bool "kodi-peripheral-joystick"
- 	depends on BR2_PACKAGE_HAS_UDEV
--	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML
- 	help
- 	  Kodi joystick support (drivers and button maps)
- 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index 5a7348d414..84f847f309 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+diff --git a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
+index c0b3bf6e22..5966ee8908 100644
+--- a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
++++ b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 9a183e1f92ff2c68816bfa0056c65585a3e1129d924326359d7a5dfbcba6c56a  kodi-peripheral-joystick-1.3.4.tar.gz
-+sha256 b6ddefed73582a3dc9bc36a9d40f8309139802ef9cfc130933bd0fe6e569d933  kodi-peripheral-joystick-1.4.8-Leia.tar.gz
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index 13c33fc0af..c56cfef43f 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-@@ -4,12 +4,10 @@
+-sha256 d5547b78ba84c9743c884a9377c398b540bfcf23e467e1edf8be2625d400c205  kodi-peripheral-steamcontroller-ef527cd81cfcd6c8342691f5c764e5c51df1fca2.tar.gz
++sha256 26edbe8778d9267cb35f18e44b7e9cbd3d3c193710edc9e586b20eed5f4ff0f8  kodi-peripheral-steamcontroller-0347e66dc8464184d636aea2cfe10491d6fcda96.tar.gz
+diff --git a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
+index 98cccc8520..1b244602af 100644
+--- a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
++++ b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PERIPHERAL_JOYSTICK_VERSION = 1.3.4
--KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,v$(KODI_PERIPHERAL_JOYSTICK_VERSION))
-+KODI_PERIPHERAL_JOYSTICK_VERSION = 1.4.8-Leia
-+KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = src/addon.cpp
--KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi-platform udev
-+KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi tinyxml udev
+-KODI_PERIPHERAL_STEAMCONTROLLER_VERSION = ef527cd81cfcd6c8342691f5c764e5c51df1fca2
++KODI_PERIPHERAL_STEAMCONTROLLER_VERSION = 0347e66dc8464184d636aea2cfe10491d6fcda96
+ KODI_PERIPHERAL_STEAMCONTROLLER_SITE = $(call github,kodi-game,peripheral.steamcontroller,$(KODI_PERIPHERAL_STEAMCONTROLLER_VERSION))
+ KODI_PERIPHERAL_STEAMCONTROLLER_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_STEAMCONTROLLER_LICENSE_FILES = src/addon.cpp
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+index 48dc5a0415..ec01bfdf76 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 cd503e7f1413214693c28b59f19f3fffe0a54cff5c29d43b2eca9bb31c10edeb  kodi-peripheral-xarcade-f1875ba4b7aa6ce85ec40fedf48ed5501c79e5fd.tar.gz
++sha256 c1d755230b0f2fe943cf7297a6d187371088f39391944d422d2bf5969c8863c1  kodi-peripheral-xarcade-51e1a4550a6c7d7feeb01760a731af17bea6c524.tar.gz
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+index c4ddba3eb5..0946a90d7b 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(cmake-package))
+-KODI_PERIPHERAL_XARCADE_VERSION = f1875ba4b7aa6ce85ec40fedf48ed5501c79e5fd
++KODI_PERIPHERAL_XARCADE_VERSION = 51e1a4550a6c7d7feeb01760a731af17bea6c524
+ KODI_PERIPHERAL_XARCADE_SITE = $(call github,kodi-game,peripheral.xarcade,$(KODI_PERIPHERAL_XARCADE_VERSION))
+ KODI_PERIPHERAL_XARCADE_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_XARCADE_LICENSE_FILES = src/addon.cpp
 -- 
 2.20.1
