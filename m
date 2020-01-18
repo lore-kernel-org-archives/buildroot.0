@@ -1,95 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Jan 2020 13:49:04 +0100
-Subject: [Buildroot] [PATCH v3] package/python-pillow: bump to version
- 7.0.0
-In-Reply-To: <20200116062833.7158-1-angelo@amarulasolutions.com>
-References: <20200116062833.7158-1-angelo@amarulasolutions.com>
-Message-ID: <20200118124904.GA22540@scaer>
+Date: Sat, 18 Jan 2020 13:53:35 +0100
+Subject: [Buildroot] [git commit] package/mono: bump to version 6.0.0.313
+Message-ID: <20200118124339.53CA882670@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4c8a285b6e35c4028341f874760bfa9226ebff94
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-01-16 07:28 +0100, Angelo Compagnucci spake thusly:
-> This patch bump Pillow to version 7.0.0.
-> Latest Pillow version doesn't support python2 anymore, thus
-> enforce the dependency on python3.
-> 
-> It updates also the LICENSE hash due to copyright year update.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+This patch bumps mono to version 6.8.0.96 and its related dependency
+monolite to version ABB721D6-116A-4555-B4FD-9248146D2051.
 
-Applied to master, thanks.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/mono/mono.hash         | 2 +-
+ package/mono/mono.mk           | 2 +-
+ package/monolite/monolite.hash | 2 +-
+ package/monolite/monolite.mk   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changelog:
-> v1->v2: removed python2 support as the package supports only python3 now
-> v2->v3: fixing commit message
-> 
->  package/python-pillow/Config.in          | 1 +
->  package/python-pillow/python-pillow.hash | 8 ++++----
->  package/python-pillow/python-pillow.mk   | 4 ++--
->  3 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/python-pillow/Config.in b/package/python-pillow/Config.in
-> index 3820ba8fb1..f824d1371e 100644
-> --- a/package/python-pillow/Config.in
-> +++ b/package/python-pillow/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_PILLOW
->  	bool "python-pillow"
-> +	depends on BR2_PACKAGE_PYTHON3
->  	help
->  	  Pillow is the "friendly" PIL fork by Alex Clark and
->  	  Contributors. PIL is the Python Imaging Library by Fredrik
-> diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-> index 990b25c46e..0d66c4bb3c 100644
-> --- a/package/python-pillow/python-pillow.hash
-> +++ b/package/python-pillow/python-pillow.hash
-> @@ -1,5 +1,5 @@
-> -# md5, sha256 from https://pypi.org/pypi/pillow/json
-> -md5	13acde283ece6ac69f62609fa108d316  Pillow-6.2.1.tar.gz
-> -sha256	bf4e972a88f8841d8fdc6db1a75e0f8d763e66e3754b03006cbc3854d89f1cb1  Pillow-6.2.1.tar.gz
-> +# md5, sha256 from https://pypi.org/project/Pillow/
-> +md5	d099946335c1ba372f5b1fa68ca71645  Pillow-7.0.0.tar.gz
-> +sha256	4d9ed9a64095e031435af120d3c910148067087541131e82b3e8db302f4c8946  Pillow-7.0.0.tar.gz
->  # Locally computed sha256 checksums
-> -sha256	64ea4328ed56392b423ef968519a9ad427e3de9b985862c95ed2ed4d793d22ee  LICENSE
-> +sha256	04a04a908e52921829c7f51528e5619c79becdde99c484ab7d4f235e2927968c  LICENSE
-> diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-> index 895b1fcb99..5ff2dcfdb6 100644
-> --- a/package/python-pillow/python-pillow.mk
-> +++ b/package/python-pillow/python-pillow.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -PYTHON_PILLOW_VERSION = 6.2.1
-> +PYTHON_PILLOW_VERSION = 7.0.0
-> +PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/39/47/f28067b187dd664d205f75b07dcc6e0e95703e134008a14814827eebcaab
->  PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
-> -PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/5b/bb/cdc8086db1f15d0664dd22a62c69613cdc00f1dd430b5b19df1bea83f2a3
->  PYTHON_PILLOW_LICENSE = PIL Software License
->  PYTHON_PILLOW_LICENSE_FILES = LICENSE
->  PYTHON_PILLOW_SETUP_TYPE = setuptools
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index 6fcf26beae..fa5333867c 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256 a946e91d7da3f90b5e7cbbdf27adfa2f57ddb09b199dfc4d6d3bc05eb0690c50  mono-6.0.0.313.tar.xz
++sha256 ed5df4ec663a4e228e89e910e954fa18d33f72e790c11174e1b62fc8cca90ba0  mono-6.8.0.96.tar.xz
+ sha256 923c7053ad0d430cd9b0b69a0ccf3abb7170a1ce50ecbf01915b565a35823d10  LICENSE
+ sha256 fc488f3ec9f36856bea8cce5cdde1449176341ef93a3962b691970f8981799f4  mcs/COPYING
+ sha256 2c3c3ef532828bcd42bb3127349625a25291ff5ae7e6f8d42e0fe9b5be836a99  external/Newtonsoft.Json/Tools/7-zip/copying.txt
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index a65963a259..274d9817e5 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONO_VERSION = 6.0.0.313
++MONO_VERSION = 6.8.0.96
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.xz
+ MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
+diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
+index 1fc0d758cc..bd953591b4 100644
+--- a/package/monolite/monolite.hash
++++ b/package/monolite/monolite.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 21f0dada9f866e8e90c4884cef08d738f9addbe99b66a4b0d442f25ea0841abe  monolite-linux-d0aa6798-834d-11e9-b38a-3b0d70487d01-latest.tar.gz
++sha256 4b75a73bb4a99b8e3b51837afb72192cce27b482cb5ec70cc136b293071f902e  monolite-linux-ABB721D6-116A-4555-B4FD-9248146D2051-latest.tar.gz
+diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
+index 262ed06c4d..b9e3990c42 100644
+--- a/package/monolite/monolite.mk
++++ b/package/monolite/monolite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONOLITE_VERSION = d0aa6798-834d-11e9-b38a-3b0d70487d01
++MONOLITE_VERSION = ABB721D6-116A-4555-B4FD-9248146D2051
+ MONOLITE_SITE = http://download.mono-project.com/monolite
+ MONOLITE_SOURCE = monolite-linux-$(MONOLITE_VERSION)-latest.tar.gz
+ MONOLITE_LICENSE = LGPL-2.0 or commercial
