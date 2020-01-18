@@ -1,24 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Jan 2020 19:08:01 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/freeswitch: fix libvpx build
-References: <20200115210154.1431967-1-bernd.kuhls@t-online.de>
- <20200118173735.GB32369@scaer>
-Message-ID: <15ubfgx5ba.ln2@ID-313208.user.individual.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 18 Jan 2020 19:37:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mpv: add libvdpau optional
+ dependency
+Message-ID: <20200118183732.1114950-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 18 Jan 2020 18:37:35 +0100 schrieb Yann E. MORIN:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mpv/mpv.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-> BTW, I just noticed you assigned that patch to me as author, and I'm not
-> sure why (yeah, I provided the blurb [...]
-
-Hi Yann,
-
-doing copy'n'paste I would not call authorship. It was your intellectual 
-work which I used to cook up this patch, so for me it was obvious that 
-you are the author ;)
-
-Regards, Bernd
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index f92b604c28..2150f7e9aa 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -30,7 +30,6 @@ MPV_CONF_OPTS = \
+ 	--disable-uchardet \
+ 	--disable-vapoursynth \
+ 	--disable-vapoursynth-lazy \
+-	--disable-vdpau \
+ 	--disable-mali-fbdev
+ 
+ # ALSA support requires pcm+mixer
+@@ -130,6 +129,14 @@ else
+ MPV_CONF_OPTS += --disable-drm
+ endif
+ 
++# libvdpau
++ifeq ($(BR2_PACKAGE_LIBVDPAU),y)
++MPV_CONF_OPTS += --enable-vdpau
++MPV_DEPENDENCIES += libvdpau
++else
++MPV_CONF_OPTS += --disable-vdpau
++endif
++
+ # LUA support, only for lua51/lua52/luajit
+ # This enables the controller (OSD) together with libass
+ ifeq ($(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUAJIT),y)
+-- 
+2.24.1
