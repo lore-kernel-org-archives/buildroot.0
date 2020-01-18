@@ -1,195 +1,81 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sat, 18 Jan 2020 09:16:56 -0300
-Subject: [Buildroot] [PATCH v5 1/1] package/tar: bump target version to
- 1.32
-In-Reply-To: <20200118022637.53884-1-james.hilliard1@gmail.com>
-References: <20200118022637.53884-1-james.hilliard1@gmail.com>
-Message-ID: <CAJ4jsadxjMVSHqCMxTzm1aUkg-uHd7Hye1cnHY+YmAiA=tvAbQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Jan 2020 13:14:07 +0100
+Subject: [Buildroot] [git commit] toolchain: bump ARC prebuild toolchain to
+ arc-2019.09
+Message-ID: <20200118121242.0C30F8223B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 17, 2020 at 11:26 PM James Hilliard
-<james.hilliard1@gmail.com> wrote:
->
-> From: Luc Creti <luc.creti@atos.net>
->
-> The host tar is used to create the archives in the VCS download backends
-> (git, cvs, svn, hg...) and tar 1.30 and forward have changed the way
-> they generate the archives.
->
-> So, all the archives that have been generated before 1.30 was released
-> are not bit-for-bit reproducible (even though the extracted content
-> would be), so the hashes we have for those archives would not match.
->
-> Hence host-tar requires a patch to restore reproducibility.
->
-> Extract host-tar with tar from build host instead of using cpio.gz.
->
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12256
->
-> Signed-off-by: Luc Creti <luc.creti@atos.net>
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes v0->v1:
->   - Commit message rewritten based on comment from Yann E. MORIN
-> Changes v1->v2:
->   - Title modified to enphasize that host-tar is kept at 1.29
-> Changes v2->v3
->   - Add a comment in the .mk file that explains why the host-tar package
->     is kept at 1.29 and not bumped to any higher version
->   - Add missing spaces around '='
->   - Spell Author name as 'Luc Creti'
-> Changes v3->v4
->   - Bump host-tar to 1.31 and patch it to restore reproducibility.
-> Changes v4->v5
->   - Don't use cpio.gz.
-> ---
->  .../0001-tar-fix-reproducibility-issue.patch  | 42 +++++++++++++++++++
->  package/tar/tar.hash                          |  3 +-
->  package/tar/tar.mk                            | 19 +++++----
->  3 files changed, 55 insertions(+), 9 deletions(-)
->  create mode 100644 package/tar/host/0001-tar-fix-reproducibility-issue.patch
->
-> diff --git a/package/tar/host/0001-tar-fix-reproducibility-issue.patch b/package/tar/host/0001-tar-fix-reproducibility-issue.patch
-> new file mode 100644
-> index 0000000000..a2417694e4
-> --- /dev/null
-> +++ b/package/tar/host/0001-tar-fix-reproducibility-issue.patch
-> @@ -0,0 +1,42 @@
-> +From e79e62e3e066545ba5319e2a905e62a0bb47e9e1 Mon Sep 17 00:00:00 2001
-> +From: Felix Fietkau <nbd@nbd.name>
-> +Date: Mon, 19 Dec 2016 21:06:07 +0100
-> +Subject: [PATCH] tar: fix reproducibility issue
-> +
-> +Force root/root as names for uid0/gid0 instead of using the system
-> +names. This helps make packed download tarballs more reproducible
-> +
-> +Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +[James Hilliard: import patch from openwrt]
-> +---
-> + src/create.c | 13 ++-----------
-> + 1 file changed, 2 insertions(+), 11 deletions(-)
-> +
-> +diff --git a/src/create.c b/src/create.c
-> +index bb9c115..1baee36 100644
-> +--- a/src/create.c
-> ++++ b/src/create.c
-> +@@ -543,17 +543,8 @@ write_gnu_long_link (struct tar_stat_info *st, const char *p, char type)
-> +   union block *header;
-> +
-> +   header = start_private_header ("././@LongLink", size, 0);
-> +-  if (! numeric_owner_option)
-> +-    {
-> +-      static char *uname, *gname;
-> +-      if (!uname)
-> +-      {
-> +-        uid_to_uname (0, &uname);
-> +-        gid_to_gname (0, &gname);
-> +-      }
-> +-      UNAME_TO_CHARS (uname, header->header.uname);
-> +-      GNAME_TO_CHARS (gname, header->header.gname);
-> +-    }
-> ++  UNAME_TO_CHARS ("root", header->header.uname);
-> ++  GNAME_TO_CHARS ("root", header->header.gname);
-> +
-> +   strcpy (header->buffer + offsetof (struct posix_header, magic),
-> +         OLDGNU_MAGIC);
-> +--
-> +2.20.1
-> +
-> diff --git a/package/tar/tar.hash b/package/tar/tar.hash
-> index 60309bab8f..0a0516ddd9 100644
-> --- a/package/tar/tar.hash
-> +++ b/package/tar/tar.hash
-> @@ -1,4 +1,3 @@
->  # Locally calculated after checking signature
-> -sha256 402dcfd0022fd7a1f2c5611f5c61af1cd84910a760a44a688e18ddbff4e9f024        tar-1.29.tar.xz
-> -sha256 9173f222464dd3676118408840da5990527062b5c7daf6487bed7c396c45bfb1        tar-1.29.cpio.gz
-> +sha256 d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8        tar-1.32.tar.xz
->  sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903        COPYING
-> diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-> index 6f609d7a02..84d79680b9 100644
-> --- a/package/tar/tar.mk
-> +++ b/package/tar/tar.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -TAR_VERSION = 1.29
-> +TAR_VERSION = 1.32
->  TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
->  TAR_SITE = $(BR2_GNU_MIRROR)/tar
->  # busybox installs in /bin, so we need tar to install as well in /bin
-> @@ -29,15 +29,11 @@ endif
->
->  $(eval $(autotools-package))
->
-> -# host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
-> -# of needing tar to build tar.
-> -HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
->  define HOST_TAR_EXTRACT_CMDS
->         mkdir -p $(@D)
->         cd $(@D) && \
-> -               $(call suitable-extractor,$(HOST_TAR_SOURCE)) $(TAR_DL_DIR)/$(HOST_TAR_SOURCE) | cpio -i --preserve-modification-time
-> -       mv $(@D)/tar-$(TAR_VERSION)/* $(@D)
-> -       rmdir $(@D)/tar-$(TAR_VERSION)
-> +               $(call suitable-extractor,$(TAR_SOURCE)) $(TAR_DL_DIR)/$(TAR_SOURCE) \
-> +               | tar --strip-components=1 -xf -
->  endef
->
->  HOST_TAR_CONF_OPTS = --without-selinux
-> @@ -47,4 +43,13 @@ HOST_TAR_CONF_ENV = \
->         CC="$(HOSTCC_NOCCACHE)" \
->         CXX="$(HOSTCXX_NOCCACHE)"
->
-> +# host-tar is used to create the archives in the VCS download backends and tar
-> +# 1.30 and forward have changed the archive format. So archives generated with
-> +# earlier versions are not bit-for-bit reproducible and the hashes would not
-> +# match. We add a patch that restores the origional format to host-tar.
-> +define HOST_TAR_APPLY_PATCHES
-> +       $(APPLY_PATCHES) $(@D) package/tar/host \*.patch
-> +endef
-> +HOST_TAR_POST_PATCH_HOOKS += HOST_TAR_APPLY_PATCHES
-> +
->  $(eval $(host-autotools-package))
-> --
-> 2.20.1
->
+commit: https://git.buildroot.net/buildroot/commit/?id=96c494da676cae32d27246ca42f0ec23b65ee30a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tested-by: Carlos Santos <unixmania@gmail.com>
+Lets update prebuilt ARC toolchain to the most recent arc-2019.09.
+
+We are dropping dependency of BR2_ARCH_NEEDS_GCC_AT_LEAST_*
+as for ARC arch there is no any selection of
+BR2_ARCH_NEEDS_GCC_AT_LEAST_* option.
+
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Compared an archive generated with host-tar 1.29 with one generated
-with the patched host-tar 1.32.
+ .../toolchain-external-synopsys-arc/Config.in                  |  5 ++---
+ .../toolchain-external-synopsys-arc.hash                       | 10 +++++-----
+ .../toolchain-external-synopsys-arc.mk                         |  2 +-
+ 3 files changed, 8 insertions(+), 9 deletions(-)
 
-$ mkdir beaglebone_qt5
-$ cd beaglebone_qt5
-$ make -C ../buildroot O=$PWD beaglebone_qt5_defconfig
-$ echo $BR2_DL_DIR
-/home/casantos/src
-$ grep TI_SGX_UM_VERSION ../buildroot/package/ti-sgx-um/ti-sgx-um.mk
-TI_SGX_UM_VERSION = 2a2e5bb090ced870d73ed4edbc54793e952cc6d8
-$ ls -ld ~/src/ti-sgx-um/ti-sgx-um-2a2e5bb090ced870d73ed4edbc54793e952cc6d8.tar.gz
--rw-r--r--. 1 casantos casantos 56M Nov 15 00:28
-/home/casantos/src/ti-sgx-um/ti-sgx-um-2a2e5bb090ced870d73ed4edbc54793e952cc6d8.tar.gz
-$ sha256sum ~/src/ti-sgx-um/ti-sgx-um-2a2e5bb090ced870d73ed4edbc54793e952cc6d8.tar.gz
-cb1373a6335af3d3741c6b11cf217afc8bdbe182642229df359c38e3ccfc5866
-/home/casantos/src/ti-sgx-um/ti-sgx-um-2a2e5bb090ced870d73ed4edbc54793e952cc6d8.tar.gz
-$ rm ~/src/ti-sgx-um/ti-sgx-um-2a2e5bb090ced870d73ed4edbc54793e952cc6d8.tar.gz
-$ make ti-sgx-um-source
-$ sha256sum ~/src/ti-sgx-um/ti-sgx-um-2a2e5bb090ced870d73ed4edbc54793e952cc6d8.tar.gz
-| grep cb1373a6335af3d3741c6b11cf217afc8bdbe182642229df359c38e3ccfc5866
-cb1373a6335af3d3741c6b11cf217afc8bdbe182642229df359c38e3ccfc5866
-/home/casantos/src/ti-sgx-um/ti-sgx-um-2a2e5bb090ced870d73ed4edbc54793e952cc6d8.tar.gz
-$ host/bin/tar --version
-tar (GNU tar) 1.32
-Copyright (C) 2019 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-
-Written by John Gilmore and Jay Fenlason.
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+index 5cb0ce2a3e..c3483f331c 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+-	bool "Synopsys ARC 2018.09 toolchain"
++	bool "Synopsys ARC 2019.09 toolchain"
+ 	depends on BR2_arc
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	depends on BR2_HOSTARCH = "x86_64"
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -12,7 +11,7 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 	help
+ 	  Toolchain for the ARC cores, from
+ 	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+index 20eac19caa..3ce6bbcb12 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2018.09-release
+-sha256 324b422eec3b9b36ea64c9e13167a4467fc13ab230eff34f2fa785039b460c16  arc_gnu_2018.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
+-sha256 b0299ad9be0c300237789e5bf8e45d72bf040aab00c3718fbdb4160b75d2ed8f  arc_gnu_2018.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
+-sha256 d1a4c039416b3da4d94ea066f861cc96ec60afec9c2bab1b2e937555b5e05238  arc_gnu_2018.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
+-sha256 a519ed3686dc8e3c5f86646988d38647aa039f4af3204d9b7e84efa26cd37221  arc_gnu_2018.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
++# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2019.09-release
++sha256 f7cbf68ef251943db7baf63535e0ec98dafbdf5d925017b4e1d4fc64d9b38a26  arc_gnu_2019.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
++sha256 ac09f0a21f9d50146a5e542f4a6abc93e5a1dcb0a1372cb5c3ba86bbefaaec7d  arc_gnu_2019.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
++sha256 245ca49fe8ea2456617541b18bb96e52e6c0dc619f00e293fcaad519fc436c35  arc_gnu_2019.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
++sha256 6f039a0158c03af398ada31fae96009e47f0d7b7f7d52e12eb419492fc3f27e7  arc_gnu_2019.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+index e3ff17ff7b..c8f141e45d 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2018.09
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2019.09
+ TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)-release
+ 
+ ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
