@@ -1,62 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Jan 2020 18:56:29 +0100
-Subject: [Buildroot] [PATCH 1/2] docs/manual/legal-notice.txt: update
- list of non-saved material
-In-Reply-To: <20200118161820.12412-1-luca@lucaceresoli.net>
-References: <20200118161820.12412-1-luca@lucaceresoli.net>
-Message-ID: <20200118175629.GD32369@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 18 Jan 2020 19:06:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/icu: bump to version 65-1
+Message-ID: <20200118180635.930935-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+Switch site to github to get the latest release
 
-On 2020-01-18 17:18 +0100, Luca Ceresoli spake thusly:
-> This list dates back to 2012. Since a long time now Buildroot saves the
-> patches applied as well as the actual source code for some external
-> toolchains. Update the manual accordingly.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/icu/icu.hash | 4 ++--
+ package/icu/icu.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-Both applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  docs/manual/legal-notice.txt | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
-> index 69753282ec30..179aa6b1798e 100644
-> --- a/docs/manual/legal-notice.txt
-> +++ b/docs/manual/legal-notice.txt
-> @@ -67,9 +67,8 @@ for packages released under BSD-like licenses, that you are not required to
->  redistribute in source form.
->  
->  Moreover, due to technical limitations, Buildroot does not produce some
-> -material that you will or may need, such as the toolchain source code and the
-> -Buildroot source code itself (including patches to packages for which source
-> -distribution is required).
-> +material that you will or may need, such as the toolchain source code for
-> +some of the external toolchains and the Buildroot source code itself.
->  When you run +make legal-info+, Buildroot produces warnings in the +README+
->  file to inform you of relevant material that could not be saved.
->  
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/icu/icu.hash b/package/icu/icu.hash
+index 86de0e14ea..5eb508d2cb 100644
+--- a/package/icu/icu.hash
++++ b/package/icu/icu.hash
+@@ -1,4 +1,4 @@
+-# From http://download.icu-project.org/files/icu4c/64.2/SHASUM512.txt
+-sha512 5ecb4c230ba45918747a1cf9aef86f555aa07d5b29b1d07ab674e8013f46dfb907a0e9d6945db41155f9dc3012fd94e1152ffc19f61a68b6dfcbabdcb8ae9d78  icu4c-64_2-src.tgz
++# From https://github.com/unicode-org/icu/releases/download/release-65-1/SHASUM512.txt
++sha512 8f1ef33e1f4abc9a8ee870331c59f01b473d6da1251a19ce403f822f3e3871096f0791855d39c8f20c612fc49cda2c62c06864aa32ddab2dbd186d2b21ce9139  icu4c-65_1-src.tgz
+ # Locally computed
+ sha256 6a18c5fac70d7860b57f5b72b4e2c9a1ba6b3d2741eef7ff9767c5379364f10d  LICENSE
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 81d1dbc179..0b8aeeaee1 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -7,9 +7,10 @@
+ # Git tags (and therefore versions on release-monitoring.org) use the
+ # XX-Y format, but the tarballs are named XX_Y and the containing
+ # directories XX.Y.
+-ICU_VERSION = 64-2
++ICU_VERSION = 65-1
+ ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
+-ICU_SITE = http://download.icu-project.org/files/icu4c/$(subst -,.,$(ICU_VERSION))
++ICU_SITE = \
++	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
+ ICU_LICENSE = ICU License
+ ICU_LICENSE_FILES = LICENSE
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.1
