@@ -1,40 +1,107 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 18 Jan 2020 18:28:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/poco: bump to version 1.9.4
-Message-ID: <20200118172832.907958-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Jan 2020 17:10:46 +0100
+Subject: [Buildroot] [git commit] package/freeswitch: fix libvpx build
+Message-ID: <20200118172525.D5DB6827FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/poco/poco.hash | 2 +-
- package/poco/poco.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=efb4e3632caa269515ce315ef137a05562390c62
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/poco/poco.hash b/package/poco/poco.hash
-index 33e60dba45..0cdaf0d3f3 100644
---- a/package/poco/poco.hash
-+++ b/package/poco/poco.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  43cc469c01d1f799efc51e2bfde6ffdf467b98a8a0901e6b33db86958619b3af  poco-1.8.1.tar.gz
-+sha256  367014cdbcfe9df8f1d746239902149d2398af9b49ba2c1aaaa88616fd538f61  poco-1.9.4.tar.gz
- sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 7283447f9d..d2b668ae13 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POCO_VERSION = 1.8.1
-+POCO_VERSION = 1.9.4
- POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
- POCO_LICENSE = BSL-1.0
- POCO_LICENSE_FILES = LICENSE
--- 
-2.24.1
+Fixes:
+http://autobuild.buildroot.net/results/4be/4be6df27f33e4fd6955e47892e1650a9d5ebbded/
+
+Removed old patch.
+
+Source of the new patch:
+http://lists.busybox.net/pipermail/buildroot/2020-January/270707.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0001-Fix-cross-compiling-libvpx.patch          | 29 -------------------
+ package/freeswitch/freeswitch.mk                   | 33 ++++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 29 deletions(-)
+
+diff --git a/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
+deleted file mode 100644
+index 63fa33b93a..0000000000
+--- a/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-Fix cross-compiling libvpx
+-
+-Freeswitch since version 1.6.7 only uses an in-tree-version of libvpx:
+-https://freeswitch.org/fisheye/changelog/freeswitch?cs=febe0f8dacea2d2a31902b3dc469be757f8c3c4d
+-
+-It is not possible to use an external version of libvpx anymore.
+-Unfortunately the freeswitch build system has no support for cross-
+-compiling libvpx so we need to patch Makefile to pass CROSS from
+-package/freeswitch/freeswitch.mk and add target=generic-gnu as
+-configure parameter:
+-https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/libs/libvpx/README#110
+-
+-And yes, autoreconf is also broken, so we patch Makefile.in instead
+-of Makefile.am.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr freeswitch-1.6.7.org/Makefile.in freeswitch-1.6.7/Makefile.in
+---- freeswitch-1.6.7.org/Makefile.in	2016-04-01 18:09:54.000000000 +0200
+-+++ freeswitch-1.6.7/Makefile.in	2016-04-22 20:11:37.938961730 +0200
+-@@ -4182,7 +4182,7 @@
+- 	cd libs/libzrtp && $(MAKE)
+- 
+- libs/libvpx/Makefile: libs/libvpx/.update
+--	cd libs/libvpx && CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS) $(VISIBILITY_FLAG)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384
+-+	cd libs/libvpx && CROSS=$(CROSS) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS) $(VISIBILITY_FLAG)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384
+- 
+- libs/libvpx/libvpx.a: libs/libvpx/Makefile libs/libvpx/.update
+- 	@cd libs/libvpx && $(MAKE)
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index d743e60f1c..5985df4a6e 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -309,6 +309,39 @@ FREESWITCH_CONF_OPTS += --enable-libvpx --enable-libyuv
+ FREESWITCH_DEPENDENCIES += host-yasm ffmpeg
+ FREESWITCH_ENABLED_MODULES += applications/mod_av applications/mod_fsv
+ FREESWITCH_MAKE_ENV += CROSS=$(TARGET_CROSS)
++
++# Freeswitch's buildsystem forgets to pass important environment
++# variables and config options when it configures libvpx, so
++# pre-build libvpx manually, so Freeswitch does not attempt to run
++# its flawed commands...
++# Freeswitch only ever uses the static libtrary, that's hard-coded,
++# we can't do anything about that...
++# From package/libvpx/libvpx.mk:
++# - this is not a true autotools package.  It is based on the ffmpeg
++#   build system.
++# - ld is being used with cc options. therefore, pretend ld is cc.
++define FREESWITCH_BUILD_LIBVPX
++	cd $(@D)/libs/libvpx && \
++	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_ARGS) \
++	LD="$(TARGET_CC)" \
++	CROSS=$(GNU_TARGET_NAME) \
++	./configure \
++		--target=generic-gnu \
++		--enable-pic \
++		--prefix=/usr \
++		--disable-shared --enable-static \
++		--disable-examples \
++		--disable-docs \
++		--disable-unit-tests && \
++	$(TARGET_MAKE_ENV) \
++	$(LIBVPX_MAKE_ENV) \
++	$(MAKE) \
++		-C $(@D)/libs/libvpx \
++		all
++endef
++FREESWITCH_PRE_BUILD_HOOKS += FREESWITCH_BUILD_LIBVPX
++
+ else
+ FREESWITCH_CONF_OPTS += --disable-libvpx --disable-libyuv
+ endif
