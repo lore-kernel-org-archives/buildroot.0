@@ -1,59 +1,84 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 18 Jan 2020 17:18:20 +0100
-Subject: [Buildroot] [PATCH 2/2] core/legal-info: update list of saved
- material in README
-In-Reply-To: <20200118161820.12412-1-luca@lucaceresoli.net>
-References: <20200118161820.12412-1-luca@lucaceresoli.net>
-Message-ID: <20200118161820.12412-2-luca@lucaceresoli.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 18 Jan 2020 17:36:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/olsr: add pud plugin
+Message-ID: <20200118163618.662596-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The README file saved by legal-info does not mention the host package
-variant of the saved material. Add them.
+pud plugin needs gpsd and has a specific license
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- support/legal-info/README.header | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+ ...-lib-pud-Makefile-fix-parallel-build.patch | 33 +++++++++++++++++++
+ package/olsr/olsr.mk                          | 11 +++++--
+ 2 files changed, 42 insertions(+), 2 deletions(-)
+ create mode 100644 package/olsr/0001-lib-pud-Makefile-fix-parallel-build.patch
 
-diff --git a/support/legal-info/README.header b/support/legal-info/README.header
-index d3bdf71bcffe..55996b53036c 100644
---- a/support/legal-info/README.header
-+++ b/support/legal-info/README.header
-@@ -14,18 +14,22 @@ This material is composed of the following items.
-    compiled programs.
-    Note: this may have not been saved due to technical limitations, you may
-    need to collect it manually.
-- * The original source code for all packages; this has been saved in the
--   sources/ subdirectory (except for the non-redistributable packages, which
--   have not been saved). Patches that were applied are also saved, along
--   with a file named 'series' that lists the patches in the order they were
--   applied. Patches are under the same license as the files that they modify
--   in the original package.
-+ * The original source code for target packages in the 'sources/'
-+   subdirectory and for host packages in the 'host-sources/' subdirectory
-+   (except for the non-redistributable packages, which have not been
-+   saved). Patches that were applied are also saved, along with a file
-+   named 'series' that lists the patches in the order they were
-+   applied. Patches are under the same license as the files that they
-+   modify in the original package.
-    Note: Buildroot applies additional patches to Libtool scripts of
-    autotools-based packages. These patches can be found under
-    support/libtool in the Buildroot source and, due to technical
-    limitations, are not saved with the package sources. You may need
-    to collect them manually.
-- * A manifest file listing the configured packages and related information.
-- * The license text of the packages; they have been saved in the licenses/
--   subdirectory.
-+ * Two manifest files listing the configured packages and related
-+   information: 'manifest.csv' for target packages and 'host-manifest.csv'
-+   for host packages.
-+ * The license text of the packages, in the 'licenses/' and
-+   'host-licenses/' subdirectories for target and host packages
-+   respectively.
+diff --git a/package/olsr/0001-lib-pud-Makefile-fix-parallel-build.patch b/package/olsr/0001-lib-pud-Makefile-fix-parallel-build.patch
+new file mode 100644
+index 0000000000..b15df2408d
+--- /dev/null
++++ b/package/olsr/0001-lib-pud-Makefile-fix-parallel-build.patch
+@@ -0,0 +1,33 @@
++From 2f9311668dfdeee0453f5fceb27e8c95c065c4b6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 18 Jan 2020 17:29:56 +0100
++Subject: [PATCH] lib/pud/Makefile: fix parallel build
++
++nmealib is needed to build olsrd_pud plugin otherwise build fails on:
++
++[LD] olsrd_pud.so.3.0.0 (nmealib dynamically linked)
++/home/fabrice/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.3/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lnmea
++wireformat/lib/libOlsrdPudWireFormat.so: file not recognized: File truncated
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/OLSR/olsrd/pull/78]
++---
++ lib/pud/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/pud/Makefile b/lib/pud/Makefile
++index e2524421..28330d92 100644
++--- a/lib/pud/Makefile
+++++ b/lib/pud/Makefile
++@@ -108,7 +108,7 @@ endif
++ 
++ default_target: nmealib library $(PLUGIN_FULLNAME)
++ 
++-$(PLUGIN_FULLNAME): $(OBJS) version-script.txt
+++$(PLUGIN_FULLNAME): $(OBJS) version-script.txt nmealib
++ ifeq ($(PUD_NMEALIB_STATICALLY_LINKED),)
++ ifeq ($(VERBOSE),0)
++ 	@echo "[LD] $@ (nmealib dynamically linked)"
++-- 
++2.24.1
++
+diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+index 31c601f80e..4a24cda442 100644
+--- a/package/olsr/olsr.mk
++++ b/package/olsr/olsr.mk
+@@ -10,10 +10,17 @@ OLSR_PLUGINS = arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo jsoninfo \
+ 	mdns nameservice netjson poprouting p2pd pgraph secure txtinfo watchdog
+ # Doesn't really need quagga but not very useful without it
+ OLSR_PLUGINS += $(if $(BR2_PACKAGE_QUAGGA),quagga)
+-OLSR_LICENSE = BSD-3-Clause, LGPL-2.1+
+-OLSR_LICENSE_FILES = license.txt lib/pud/nmealib/LICENSE
++OLSR_LICENSE = BSD-3-Clause
++OLSR_LICENSE_FILES = license.txt
+ OLSR_DEPENDENCIES = host-flex host-bison
  
++ifeq ($(BR2_PACKAGE_GPSD),y)
++OLSR_LICENSE += , LGPL-2.1+ (nmealib)
++OLSR_LICENSE_FILES += lib/pud/nmealib/LICENSE
++OLSR_DEPENDENCIES += gpsd
++OLSR_PLUGINS += pud
++endif
++
+ define OLSR_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D) olsrd
+ 	$(foreach p,$(OLSR_PLUGINS), \
 -- 
-2.25.0
+2.24.1
