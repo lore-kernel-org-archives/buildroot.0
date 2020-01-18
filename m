@@ -1,42 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Jan 2020 21:06:20 +0100
-Subject: [Buildroot] [PATCH v8 20/20] package/kodi-vfs-sftp: bump version
-In-Reply-To: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
-References: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
-Message-ID: <20200118200620.3967240-21-bernd.kuhls@t-online.de>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sat, 18 Jan 2020 17:22:17 -0300
+Subject: [Buildroot] [PATCH v3 next] package/tar: bump target version to
+ 1.32 (host is kept at 1.29)
+In-Reply-To: <20200118145154.GC22540@scaer>
+References: <20191119121831.2329-1-unixmania@gmail.com>
+ <20200118123934.GV22540@scaer>
+ <CAJ4jsae+9emfBSo1x9CHsNszj62fMx6Su-Jixp_OsbJbYL4ucw@mail.gmail.com>
+ <20200118145154.GC22540@scaer>
+Message-ID: <CAJ4jsafKVR0m6BZpAr3=tL-z8QNadykF-8Nw8xDTKUEDCbSW_w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-vfs-sftp/kodi-vfs-sftp.hash | 3 +--
- package/kodi-vfs-sftp/kodi-vfs-sftp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+On Sat, Jan 18, 2020 at 11:52 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Carlos, All,
+>
+> On 2020-01-18 11:12 -0300, Carlos Santos spake thusly:
+> > On Sat, Jan 18, 2020 at 9:39 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > On 2019-11-19 09:18 -0300, unixmania at gmail.com spake thusly:
+> > > > From: Luc Creti <luc.creti@atos.net>
+> [--SNIP--]
+> > > > Hence host-tar must be kept at version 1.29.
+> [--SNIP--]
+> > > Applied to master, with all the host-related commentsd and variables
+> > > moved down to gether. Thanks.
+> > Can't we at least get rid of the cpio thing, as done in v5?
+>
+> Why? We can't ensure that the host has tar, and if it does, we can't be
+> sure we can rely on it to extract the tarball.
+>
+> cpio is present virtually everywhere, and its format has been stable for
+> the longest time.
+>
+> Regards,
+> Yann E. MORIN.
 
-diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
-index dbf8231038..ba7804b3ce 100644
---- a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
-+++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
-@@ -1,3 +1,2 @@
- # Locally computed
--sha256 f78561c460c7bf67be476eb485eaa0ac4497a6d1831b9955da46daa11219f53b  kodi-vfs-sftp-1.0.3-Leia.tar.gz
--sha256 2b1cdc44ec0b52abc2e4b61f827d407388dad49e4fdc25370824b5c21aadeb17  src/SFTPFile.cpp
-+sha256 6a6d7fc777f574746bcc34b618700a4db3981aee470b68d60c3407eeeb0c16d9  kodi-vfs-sftp-1.0.5-Leia.tar.gz
-diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
-index eaaf7a2cb2..8657ebdcef 100644
---- a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
-+++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VFS_SFTP_VERSION = 1.0.3-Leia
-+KODI_VFS_SFTP_VERSION = 1.0.5-Leia
- KODI_VFS_SFTP_SITE = $(call github,xbmc,vfs.sftp,$(KODI_VFS_SFTP_VERSION))
- KODI_VFS_SFTP_LICENSE = GPL-2.0+
- KODI_VFS_SFTP_LICENSE_FILES = src/SFTPFile.cpp
+CPIO(1L)                                                      CPIO(1L)
+
+NAME
+       cpio - copy files to and from archives
+
+__WARNING__
+       The cpio utility is considered LEGACY based on POSIX specifica?
+       tion.  Users are encouraged to use other  archiving  tools  for
+       archive creation.
+
 -- 
-2.20.1
+Carlos Santos <unixmania@gmail.com>
