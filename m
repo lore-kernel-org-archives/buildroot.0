@@ -1,48 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jan 2020 23:10:05 +0100
-Subject: [Buildroot] [git commit] package/mpv: add libv4l support
-Message-ID: <20200119220028.819F9829F7@busybox.osuosl.org>
+Date: Sun, 19 Jan 2020 23:07:17 +0100
+Subject: [Buildroot] [git commit] package/webp: bump to version 1.1.0
+Message-ID: <20200119220028.7AD2582A9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22f4c826ca2c7edca7761394a5175b45a4fc22b4
+commit: https://git.buildroot.net/buildroot/commit/?id=4204ff8dfe62ba76c85739d0293f56e9d22d5f4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpv/mpv.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/webp/webp.hash | 2 +-
+ package/webp/webp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 2150f7e9aa..8619de5a8e 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -23,7 +23,6 @@ MPV_CONF_OPTS = \
- 	--disable-cocoa \
- 	--disable-coreaudio \
- 	--disable-cuda-hwaccel \
--	--disable-libv4l2 \
- 	--disable-opensles \
- 	--disable-rsound \
- 	--disable-rubberband \
-@@ -129,6 +128,16 @@ else
- MPV_CONF_OPTS += --disable-drm
- endif
+diff --git a/package/webp/webp.hash b/package/webp/webp.hash
+index 0aae16ef8f..a2d0000266 100644
+--- a/package/webp/webp.hash
++++ b/package/webp/webp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	e20a07865c8697bba00aebccc6f54912d6bc333bb4d604e6b07491c1a226b34f	libwebp-1.0.3.tar.gz
++sha256	98a052268cc4d5ece27f76572a7f50293f439c17a98e67c4ea0c7ed6f50ef043	libwebp-1.1.0.tar.gz
+ sha256	5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf	COPYING
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index d5df3f5da0..4a94554984 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# libv4l
-+ifeq ($(BR2_PACKAGE_LIBV4L),y)
-+MPV_CONF_OPTS += \
-+	--enable-libv4l2 \
-+	--enable-tv
-+MPV_DEPENDENCIES += libv4l
-+else
-+MPV_CONF_OPTS += --disable-libv4l2
-+endif
-+
- # libvdpau
- ifeq ($(BR2_PACKAGE_LIBVDPAU),y)
- MPV_CONF_OPTS += --enable-vdpau
+-WEBP_VERSION = 1.0.3
++WEBP_VERSION = 1.1.0
+ WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
+ WEBP_SITE = http://downloads.webmproject.org/releases/webp
+ WEBP_LICENSE = BSD-3-Clause
