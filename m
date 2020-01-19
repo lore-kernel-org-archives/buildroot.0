@@ -1,51 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jan 2020 18:03:58 +0100
-Subject: [Buildroot] [PATCH 3/3] package/xen: add upstream security fix for
- XSA-312
-In-Reply-To: <20200119170358.5408-1-peter@korsgaard.com>
-References: <20200119170358.5408-1-peter@korsgaard.com>
-Message-ID: <20200119170358.5408-3-peter@korsgaard.com>
+From: Alex Corcoles <alex@corcoles.net>
+Date: Sun, 19 Jan 2020 20:40:39 +0100
+Subject: [Buildroot] "PATCH": hack to be able to build Rust targetting
+ MIPS
+In-Reply-To: <20200118212756.GG32369@scaer>
+References: <CAPAYC_xPtDO=j3fWeOEbC41X3PXJZ+7AD=WRm8A1DGQrtbadFQ@mail.gmail.com>
+ <CAPAYC_y98TxMoBtG=P9hDe26=1rHfaoMyoH5NJyLHbRxcxpMAQ@mail.gmail.com>
+ <20200118212756.GG32369@scaer>
+Message-ID: <CAPAYC_zexzuMfp9F=d8KL-jS8TxQF1sqh07W_zT9J9AiK0rjgA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+> RUSTC_TARGET_NAME is defined in package/rustc/rustc.mk:
+>
+>     10 ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
+>     11 RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-gnu$(RUSTC_ABI)
+>     12 endif
+>
+> So, it is only defined if BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is
+> set, and this is defined in package/rustc/Config.in.host. It needs a
+> glibc toolchain (and an x86 or x86_64 host machine).
+>
+> But your configuration uses uClibc-ng, not glibc, so this is the reason
+> that it does not work for you.
+>
+> If you believe the dependency on glibc is too stringent, then this is
+> the place to fix stuff, not redefine the variable as you suggested.
+>
 
-XSA-312: arm: a CPU may speculate past the ERET instruction
+Honestly, I don't have any idea what I'm doing :)
 
-For further details, see the advisory:
+Rust itself supports uclibc on mipsel:
 
-https://xenbits.xenproject.org/xsa/advisory-312.html
+https://forge.rust-lang.org/release/platform-support.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xen/xen.hash | 1 +
- package/xen/xen.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+mipsel-unknown-linux-uclibc is a Tier 3 platform, which is not awesome, but
+it could work. Frankly I don't know much about buildroot to hack this up
+(or even to know if it's worth trying).
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index ad6220d94b..672ba5cb8d 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,4 @@
- # Locally computed
- sha256 1c75cbe728dfabf02b7f9a17ce96ee7d202d2fd4b4689490018d3a28b63f9fa3 xen-4.12.2.tar.gz
-+sha256 9b2078d448e4815c9ddc6554bf869d64412dc787b1b94830a24e47df6a9f30e7 xsa312.patch
- sha256 dba0d79260259c013c52e5d4daeaea564a2fbb9ff7fc6778c377a401ec3898de COPYING
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 7eb2643343..d0c6bebe9d 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -6,6 +6,8 @@
- 
- XEN_VERSION = 4.12.2
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
-+XEN_PATCH = \
-+	https://xenbits.xenproject.org/xsa/xsa312.patch
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
- XEN_DEPENDENCIES = host-acpica host-python
+(I'm just trying to run rust-sdl/rust-sdl2 on a RG-300 which uses buildroot
+for development purposes. I've managed to build C stuff using SDL
+successfully in buildroot, but Rust is proving to be more complex)
+
 -- 
-2.20.1
+   ___
+ {~._.~}
+  ( Y )
+ ()~*~()  mail: alex at corcoles dot net
+ (_)-(_)  http://alex.corcoles.net/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200119/a183a471/attachment.html>
