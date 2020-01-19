@@ -1,48 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jan 2020 12:07:34 +0100
-Subject: [Buildroot] [PATCH v9 22/23] package/kodi-visualisation-waveform:
- bump version to 3.1.1-Leia
+Date: Sun, 19 Jan 2020 12:07:33 +0100
+Subject: [Buildroot] [PATCH v9 21/23] package/kodi-visualisation-fishbmc:
+ bump version to 5.1.2-Leia
 In-Reply-To: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
 References: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
-Message-ID: <20200119110735.1104443-23-bernd.kuhls@t-online.de>
+Message-ID: <20200119110735.1104443-22-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash, moved repo to xbmc project:
-https://github.com/xbmc/repo-binary-addons/commit/57b8ed5fb9b5f0368738260b762cc0bab1147172
+Added license hash, moved repo to xbmc project because
+https://github.com/notspiff/visualization.fishbmc is forwarded to
+https://github.com/xbmc/visualization.fishbmc
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-visualisation-waveform.hash                          | 3 ++-
- .../kodi-visualisation-waveform.mk                            | 4 ++--
+ .../kodi-visualisation-fishbmc.hash                           | 3 ++-
+ .../kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk  | 4 ++--
  2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-index 271dc4a9e0..80808663c1 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+index 21d80a31cb..e8b5c6cb59 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
 @@ -1,2 +1,3 @@
  # Locally computed
--sha256 cf10d8d78cb2bde4a0a21bb7e467445617b46593c093ef05f336f95a048f2d54  kodi-visualisation-waveform-1.1.0.tar.gz
-+sha256 c5fbf48c2251b61d9abfcd679a750199f5efc78e63fded9a1482cfd9b41d0b5b  kodi-visualisation-waveform-3.1.1-Leia.tar.gz
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-index 13a621edb0..2d65df8538 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+-sha256 cf42a21978578cb5ecb10c20fe09791183d8ef2998ff9d956a84142a7dda8f72  kodi-visualisation-fishbmc-4.1.0.tar.gz
++sha256 8142fe4a32c0c113945c5fc9745e54639ca73308371d292e3422730bfad1d064  kodi-visualisation-fishbmc-5.1.2-Leia.tar.gz
++sha256 684792cea796ea39d086ffd6cf5cb7c70ab8188dcf493707ba90d081d28f787e  visualization.fishbmc/LICENSE
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+index 8360660ef4..a89c559d26 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_WAVEFORM_VERSION = 1.1.0
--KODI_VISUALISATION_WAVEFORM_SITE = $(call github,notspiff,visualization.waveform,v$(KODI_VISUALISATION_WAVEFORM_VERSION))
-+KODI_VISUALISATION_WAVEFORM_VERSION = 3.1.1-Leia
-+KODI_VISUALISATION_WAVEFORM_SITE = $(call github,xbmc,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
- KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
- KODI_VISUALISATION_WAVEFORM_DEPENDENCIES = kodi
+-KODI_VISUALISATION_FISHBMC_VERSION = 4.1.0
+-KODI_VISUALISATION_FISHBMC_SITE = $(call github,notspiff,visualization.fishbmc,v$(KODI_VISUALISATION_FISHBMC_VERSION))
++KODI_VISUALISATION_FISHBMC_VERSION = 5.1.2-Leia
++KODI_VISUALISATION_FISHBMC_SITE = $(call github,xbmc,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
+ KODI_VISUALISATION_FISHBMC_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
+ KODI_VISUALISATION_FISHBMC_DEPENDENCIES = kodi
 -- 
 2.20.1
