@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jan 2020 23:07:47 +0100
-Subject: [Buildroot] [PATCH] package/webp: bump to version 1.1.0
-In-Reply-To: <20200118122450.22599-1-gilles.talis@gmail.com> (Gilles Talis's
- message of "Sat, 18 Jan 2020 13:24:50 +0100")
-References: <20200118122450.22599-1-gilles.talis@gmail.com>
-Message-ID: <87h80rqevg.fsf@dell.be.48ers.dk>
+Date: Sun, 19 Jan 2020 23:10:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mpv: add libv4l support
+In-Reply-To: <20200119095102.1564028-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 19 Jan 2020 10:51:02 +0100")
+References: <20200119095102.1564028-1-fontaine.fabrice@gmail.com>
+Message-ID: <87d0bfqerh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
