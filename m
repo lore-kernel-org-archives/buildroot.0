@@ -1,72 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jan 2020 10:07:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/icu: bump to version 65-1
-In-Reply-To: <20200118180635.930935-1-fontaine.fabrice@gmail.com>
-References: <20200118180635.930935-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200119090708.GQ32369@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 19 Jan 2020 10:51:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mpv: add libv4l support
+Message-ID: <20200119095102.1564028-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mpv/mpv.mk | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-On 2020-01-18 19:06 +0100, Fabrice Fontaine spake thusly:
-> Switch site to github to get the latest release
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/icu/icu.hash | 4 ++--
->  package/icu/icu.mk   | 5 +++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/icu/icu.hash b/package/icu/icu.hash
-> index 86de0e14ea..5eb508d2cb 100644
-> --- a/package/icu/icu.hash
-> +++ b/package/icu/icu.hash
-> @@ -1,4 +1,4 @@
-> -# From http://download.icu-project.org/files/icu4c/64.2/SHASUM512.txt
-> -sha512 5ecb4c230ba45918747a1cf9aef86f555aa07d5b29b1d07ab674e8013f46dfb907a0e9d6945db41155f9dc3012fd94e1152ffc19f61a68b6dfcbabdcb8ae9d78  icu4c-64_2-src.tgz
-> +# From https://github.com/unicode-org/icu/releases/download/release-65-1/SHASUM512.txt
-> +sha512 8f1ef33e1f4abc9a8ee870331c59f01b473d6da1251a19ce403f822f3e3871096f0791855d39c8f20c612fc49cda2c62c06864aa32ddab2dbd186d2b21ce9139  icu4c-65_1-src.tgz
->  # Locally computed
->  sha256 6a18c5fac70d7860b57f5b72b4e2c9a1ba6b3d2741eef7ff9767c5379364f10d  LICENSE
-> diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-> index 81d1dbc179..0b8aeeaee1 100644
-> --- a/package/icu/icu.mk
-> +++ b/package/icu/icu.mk
-> @@ -7,9 +7,10 @@
->  # Git tags (and therefore versions on release-monitoring.org) use the
->  # XX-Y format, but the tarballs are named XX_Y and the containing
->  # directories XX.Y.
-> -ICU_VERSION = 64-2
-> +ICU_VERSION = 65-1
->  ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
-> -ICU_SITE = http://download.icu-project.org/files/icu4c/$(subst -,.,$(ICU_VERSION))
-> +ICU_SITE = \
-> +	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
->  ICU_LICENSE = ICU License
->  ICU_LICENSE_FILES = LICENSE
->  
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 2150f7e9aa..8619de5a8e 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -23,7 +23,6 @@ MPV_CONF_OPTS = \
+ 	--disable-cocoa \
+ 	--disable-coreaudio \
+ 	--disable-cuda-hwaccel \
+-	--disable-libv4l2 \
+ 	--disable-opensles \
+ 	--disable-rsound \
+ 	--disable-rubberband \
+@@ -129,6 +128,16 @@ else
+ MPV_CONF_OPTS += --disable-drm
+ endif
+ 
++# libv4l
++ifeq ($(BR2_PACKAGE_LIBV4L),y)
++MPV_CONF_OPTS += \
++	--enable-libv4l2 \
++	--enable-tv
++MPV_DEPENDENCIES += libv4l
++else
++MPV_CONF_OPTS += --disable-libv4l2
++endif
++
+ # libvdpau
+ ifeq ($(BR2_PACKAGE_LIBVDPAU),y)
+ MPV_CONF_OPTS += --enable-vdpau
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.1
