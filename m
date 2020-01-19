@@ -1,315 +1,232 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jan 2020 12:07:15 +0100
-Subject: [Buildroot] [PATCH v9 03/23] package/kodi-audiodecoder-*: mass
- version bump
-In-Reply-To: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
-References: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
-Message-ID: <20200119110735.1104443-4-bernd.kuhls@t-online.de>
+Date: Sun, 19 Jan 2020 12:07:12 +0100
+Subject: [Buildroot] [PATCH v9 00/23] package/kodi: bump to version 18.5-Leia
+Message-ID: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed _SITE after upstream relocated all audio decoders to xbmc repos
-https://github.com/xbmc/repo-binary-addons/commit/4c900f6835889ce45ba4daaf0387bb5eb13db065
+Hi,
 
-Changed dependency from kodi-platform to kodi itself, the dependency to
-kodi-platform was removed upstream.
+v9: - kodi: fixed rbpi dependencies
+      split visualisation commits
+      kodi-visualisation-shadertoy: added glm dependency
+      updated commit logs (Yann)
+v8: - bumped to 18.5-Leia
+    - rebased
+    - bumped various addons
+    - added patches adding cassert and cstddef includes to fix build
+      with gcc 5
+v7: - bumped to Leia HEAD
+    - rebased
+    - switched most addons to version based on current tag from Leia
+      branch instead of using a hash-based version number
+v6: - bumped kodi to 18.4-Leia
+    - bumped several kodi packages to latest Leia HEAD
+v5: - bumped several kodi packages to latest Leia HEAD
+    - removed big kodi-screensaver-rsxs patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-audiodecoder-modplug/Config.in                 | 3 +--
- .../kodi-audiodecoder-modplug.hash                          | 2 +-
- .../kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk  | 6 +++---
- package/kodi-audiodecoder-nosefart/Config.in                | 3 +--
- .../kodi-audiodecoder-nosefart.hash                         | 2 +-
- .../kodi-audiodecoder-nosefart.mk                           | 6 +++---
- package/kodi-audiodecoder-sidplay/Config.in                 | 3 +--
- .../kodi-audiodecoder-sidplay.hash                          | 2 +-
- .../kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk  | 6 +++---
- package/kodi-audiodecoder-snesapu/Config.in                 | 3 +--
- .../kodi-audiodecoder-snesapu.hash                          | 2 +-
- .../kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk  | 6 +++---
- package/kodi-audiodecoder-stsound/Config.in                 | 3 +--
- .../kodi-audiodecoder-stsound.hash                          | 2 +-
- .../kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk  | 6 +++---
- package/kodi-audiodecoder-timidity/Config.in                | 2 +-
- .../kodi-audiodecoder-timidity.hash                         | 2 +-
- .../kodi-audiodecoder-timidity.mk                           | 4 ++--
- package/kodi-audiodecoder-vgmstream/Config.in               | 3 +--
- .../kodi-audiodecoder-vgmstream.hash                        | 2 +-
- .../kodi-audiodecoder-vgmstream.mk                          | 6 +++---
- 21 files changed, 34 insertions(+), 40 deletions(-)
+Bernd Kuhls (23):
+  package/kodi-platform: bump version
+  package/kodi: bump to version 18.5-Leia
+  package/kodi-audiodecoder-*: mass version bump
+  package/kodi-audioencoder-*: mass version bump
+  package/kodi-inputstream-adaptive: bump version
+  package/kodi-inputstream-rtmp: bump version
+  package/kodi-peripheral-joystick: bump version
+  package/kodi-peripheral-*: mass version bump
+  package/kodi-pvr-iptvsimple: bump version
+  package/kodi-pvr-mediaportal-tvserver: bump version
+  package/kodi-pvr-stalker: bump version
+  package/kodi-pvr-vuplus: bump version
+  package/kodi-pvr-*: mass version bump
+  package/kodi-screensaver-asteroids: bump version
+  package/kodi-screensaver-rsxs: bump version
+  package/kodi-screensaver-*: mass version bump
+  package/kodi-skin-confluence: bump version
+  package/kodi-visualisation-goom: bump version to 2.1.0-Leia
+  package/kodi-visualisation-shadertoy: bump version to 1.2.3-Leia
+  package/kodi-visualisation-spectrum: bump version to 3.0.2-Leia
+  package/kodi-visualisation-fishbmc: bump version to 5.1.2-Leia
+  package/kodi-visualisation-waveform: bump version to 3.1.1-Leia
+  package/kodi-vfs-sftp: bump version
 
-diff --git a/package/kodi-audiodecoder-modplug/Config.in b/package/kodi-audiodecoder-modplug/Config.in
-index 026997319e..856ca8beb1 100644
---- a/package/kodi-audiodecoder-modplug/Config.in
-+++ b/package/kodi-audiodecoder-modplug/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_MODPLUG
- 	bool "kodi-audiodecoder-modplug"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	select BR2_PACKAGE_LIBMODPLUG
- 	help
- 	  Modplug decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.modplug
-+	  https://github.com/xbmc/audiodecoder.modplug
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-index 6a0607e83d..3f5a06ceff 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 8be4f8c6324bf790069e42c963e14733c53fcdc27548f21f4822b178f47b8177  kodi-audiodecoder-modplug-1.1.0.tar.gz
-+sha256 2e99f1c8b28e176268644c07020aa92ad74d22e7244db1af69f31b767f8e845f  kodi-audiodecoder-modplug-2.0.2-Leia.tar.gz
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-index fb7003f093..6a501c2379 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_MODPLUG_VERSION = 1.1.0
--KODI_AUDIODECODER_MODPLUG_SITE = $(call github,notspiff,audiodecoder.modplug,v$(KODI_AUDIODECODER_MODPLUG_VERSION))
-+KODI_AUDIODECODER_MODPLUG_VERSION = 2.0.2-Leia
-+KODI_AUDIODECODER_MODPLUG_SITE = $(call github,xbmc,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
- KODI_AUDIODECODER_MODPLUG_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = src/ModplugCodec.cpp
--KODI_AUDIODECODER_MODPLUG_DEPENDENCIES = kodi-platform libmodplug
-+KODI_AUDIODECODER_MODPLUG_DEPENDENCIES = kodi libmodplug
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-nosefart/Config.in b/package/kodi-audiodecoder-nosefart/Config.in
-index 96591aae5c..bb56a3d6d4 100644
---- a/package/kodi-audiodecoder-nosefart/Config.in
-+++ b/package/kodi-audiodecoder-nosefart/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_NOSEFART
- 	bool "kodi-audiodecoder-nosefart"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  Nosefart decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.nosefart
-+	  https://github.com/xbmc/audiodecoder.nosefart
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-index 670e324ee4..20bd7ebd92 100644
---- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 444cc85f4618daa5147a63633db3f300123d5e33b1b5894e7036fa9243e8a535  kodi-audiodecoder-nosefart-1.1.0.tar.gz
-+sha256 0c17f407d90dd08368aead5df8bacf7589b97bf1c0d1ea45c60cc7d0da26844c  kodi-audiodecoder-nosefart-2.0.1-Leia.tar.gz
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-index 5e008198ca..1d9944d6c6 100644
---- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_NOSEFART_VERSION = 1.1.0
--KODI_AUDIODECODER_NOSEFART_SITE = $(call github,notspiff,audiodecoder.nosefart,v$(KODI_AUDIODECODER_NOSEFART_VERSION))
-+KODI_AUDIODECODER_NOSEFART_VERSION = 2.0.1-Leia
-+KODI_AUDIODECODER_NOSEFART_SITE = $(call github,xbmc,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
- KODI_AUDIODECODER_NOSEFART_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = src/NSFCodec.cpp
--KODI_AUDIODECODER_NOSEFART_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_NOSEFART_DEPENDENCIES = kodi
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-sidplay/Config.in b/package/kodi-audiodecoder-sidplay/Config.in
-index ae99afa9e0..eca4160a90 100644
---- a/package/kodi-audiodecoder-sidplay/Config.in
-+++ b/package/kodi-audiodecoder-sidplay/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_SIDPLAY
- 	bool "kodi-audiodecoder-sidplay"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	select BR2_PACKAGE_LIBSIDPLAY2
- 	help
- 	  Sidplay decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.sidplay
-+	  https://github.com/xbmc/audiodecoder.sidplay
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-index 97c5f28fc7..2cd4fbabd0 100644
---- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 527b188679add8043e8cd691af9735b6fe8bd6935ad8ac8312b459d6f160cdac  kodi-audiodecoder-sidplay-1.1.0.tar.gz
-+sha256 0dbff020e1988261680f2329fb6a29a034fede467885158ee63bae7e763d8e87  kodi-audiodecoder-sidplay-1.2.1-Leia.tar.gz
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-index 8dc827a666..83541d5ec6 100644
---- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_SIDPLAY_VERSION = 1.1.0
--KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,notspiff,audiodecoder.sidplay,v$(KODI_AUDIODECODER_SIDPLAY_VERSION))
-+KODI_AUDIODECODER_SIDPLAY_VERSION = 1.2.1-Leia
-+KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,xbmc,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
- KODI_AUDIODECODER_SIDPLAY_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
--KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi-platform libsidplay2
-+KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi libsidplay2
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-snesapu/Config.in b/package/kodi-audiodecoder-snesapu/Config.in
-index 0cb572fec3..2c3bb15d2f 100644
---- a/package/kodi-audiodecoder-snesapu/Config.in
-+++ b/package/kodi-audiodecoder-snesapu/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_SNESAPU
- 	bool "kodi-audiodecoder-snesapu"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  SPC decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.snesapu
-+	  https://github.com/xbmc/audiodecoder.snesapu
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-index 877b7a7f9c..c6ef3752e7 100644
---- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 20d85822d0c01223903b5e5472a1d029fa4931c2a9ac4d399345c4363fa8f905  kodi-audiodecoder-snesapu-1.1.0.tar.gz
-+sha256 db39f1f4a892fede45a5bffadd760962b5f02ab62e095a35dc37298cf548013d  kodi-audiodecoder-snesapu-2.0.1-Leia.tar.gz
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-index df7a8f09b9..d78f915384 100644
---- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_SNESAPU_VERSION = 1.1.0
--KODI_AUDIODECODER_SNESAPU_SITE = $(call github,notspiff,audiodecoder.snesapu,v$(KODI_AUDIODECODER_SNESAPU_VERSION))
-+KODI_AUDIODECODER_SNESAPU_VERSION = 2.0.1-Leia
-+KODI_AUDIODECODER_SNESAPU_SITE = $(call github,xbmc,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
- KODI_AUDIODECODER_SNESAPU_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = src/SPCCodec.cpp
--KODI_AUDIODECODER_SNESAPU_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_SNESAPU_DEPENDENCIES = kodi
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-stsound/Config.in b/package/kodi-audiodecoder-stsound/Config.in
-index 6be216a2c7..2001e481cd 100644
---- a/package/kodi-audiodecoder-stsound/Config.in
-+++ b/package/kodi-audiodecoder-stsound/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_STSOUND
- 	bool "kodi-audiodecoder-stsound"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  YM decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.stsound
-+	  https://github.com/xbmc/audiodecoder.stsound
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-index 2d70e085d9..0d33d38566 100644
---- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 c9b6e98d544712f7cec3cf18f866ccaed2fbcd20410179259ae0455ffa967ca4  kodi-audiodecoder-stsound-1.1.0.tar.gz
-+sha256 75e219bf9abac3949dd3dd3fe908bc2b6e6b85654594e5494335e7e2f14dd1f1  kodi-audiodecoder-stsound-2.0.1-Leia.tar.gz
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-index f49c614bb2..b20fc345fe 100644
---- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_STSOUND_VERSION = 1.1.0
--KODI_AUDIODECODER_STSOUND_SITE = $(call github,notspiff,audiodecoder.stsound,v$(KODI_AUDIODECODER_STSOUND_VERSION))
-+KODI_AUDIODECODER_STSOUND_VERSION = 2.0.1-Leia
-+KODI_AUDIODECODER_STSOUND_SITE = $(call github,xbmc,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
- KODI_AUDIODECODER_STSOUND_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_STSOUND_LICENSE_FILES = src/YMCodec.cpp
--KODI_AUDIODECODER_STSOUND_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_STSOUND_DEPENDENCIES = kodi
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-timidity/Config.in b/package/kodi-audiodecoder-timidity/Config.in
-index 3372dc5c05..ad3caf1e42 100644
---- a/package/kodi-audiodecoder-timidity/Config.in
-+++ b/package/kodi-audiodecoder-timidity/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_KODI_AUDIODECODER_TIMIDITY
- 	help
- 	  Timidity decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.timidity
-+	  https://github.com/xbmc/audiodecoder.timidity
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-index 34260e9449..70a05acd94 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 83a740010dc7fa01101da370c74e79287ebd67bd28d27125e4372abe2fb3bb47  kodi-audiodecoder-timidity-1.1.1.tar.gz
-+sha256 bc6dea6dca0949571a3123e26f27dc73c78b8a876362fc8e95649280f2557bc0  kodi-audiodecoder-timidity-2.0.3-Leia.tar.gz
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-index a4847e0289..fa78a3d782 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_TIMIDITY_VERSION = 1.1.1
--KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,notspiff,audiodecoder.timidity,v$(KODI_AUDIODECODER_TIMIDITY_VERSION))
-+KODI_AUDIODECODER_TIMIDITY_VERSION = 2.0.3-Leia
-+KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,xbmc,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
- KODI_AUDIODECODER_TIMIDITY_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = src/TimidityCodec.cpp
- KODI_AUDIODECODER_TIMIDITY_DEPENDENCIES = kodi
-diff --git a/package/kodi-audiodecoder-vgmstream/Config.in b/package/kodi-audiodecoder-vgmstream/Config.in
-index ebf83df23b..440edc7cf6 100644
---- a/package/kodi-audiodecoder-vgmstream/Config.in
-+++ b/package/kodi-audiodecoder-vgmstream/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_VGMSTREAM
- 	bool "kodi-audiodecoder-vgmstream"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  VGM decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.vgmstream
-+	  https://github.com/xbmc/audiodecoder.vgmstream
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-index f4cf51aa21..26415717cf 100644
---- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 40cd4f7f143c9313a4437854e31c460046af47bd709364439f0e370ec464af0d  kodi-audiodecoder-vgmstream-1.1.0.tar.gz
-+sha256 6f1940d2a0607342cba8cffc0beb7c78caae5995c2d554a6079f4849997da7ba  kodi-audiodecoder-vgmstream-1.1.4-Leia.tar.gz
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-index e89602117e..81f4825885 100644
---- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_VGMSTREAM_VERSION = 1.1.0
--KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,notspiff,audiodecoder.vgmstream,v$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
-+KODI_AUDIODECODER_VGMSTREAM_VERSION = 1.1.4-Leia
-+KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,xbmc,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
- KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = src/VGMCodec.cpp
--KODI_AUDIODECODER_VGMSTREAM_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_VGMSTREAM_DEPENDENCIES = kodi
- 
- $(eval $(cmake-package))
+ package/kodi-audiodecoder-modplug/Config.in   |   3 +-
+ .../kodi-audiodecoder-modplug.hash            |   2 +-
+ .../kodi-audiodecoder-modplug.mk              |   6 +-
+ package/kodi-audiodecoder-nosefart/Config.in  |   3 +-
+ .../kodi-audiodecoder-nosefart.hash           |   2 +-
+ .../kodi-audiodecoder-nosefart.mk             |   6 +-
+ package/kodi-audiodecoder-sidplay/Config.in   |   3 +-
+ .../kodi-audiodecoder-sidplay.hash            |   2 +-
+ .../kodi-audiodecoder-sidplay.mk              |   6 +-
+ package/kodi-audiodecoder-snesapu/Config.in   |   3 +-
+ .../kodi-audiodecoder-snesapu.hash            |   2 +-
+ .../kodi-audiodecoder-snesapu.mk              |   6 +-
+ package/kodi-audiodecoder-stsound/Config.in   |   3 +-
+ .../kodi-audiodecoder-stsound.hash            |   2 +-
+ .../kodi-audiodecoder-stsound.mk              |   6 +-
+ package/kodi-audiodecoder-timidity/Config.in  |   2 +-
+ .../kodi-audiodecoder-timidity.hash           |   2 +-
+ .../kodi-audiodecoder-timidity.mk             |   4 +-
+ package/kodi-audiodecoder-vgmstream/Config.in |   3 +-
+ .../kodi-audiodecoder-vgmstream.hash          |   2 +-
+ .../kodi-audiodecoder-vgmstream.mk            |   6 +-
+ .../kodi-audioencoder-flac.hash               |   2 +-
+ .../kodi-audioencoder-flac.mk                 |   4 +-
+ .../kodi-audioencoder-lame.hash               |   2 +-
+ .../kodi-audioencoder-lame.mk                 |   4 +-
+ .../kodi-audioencoder-vorbis.hash             |   2 +-
+ .../kodi-audioencoder-vorbis.mk               |   2 +-
+ .../kodi-audioencoder-wav.hash                |   2 +-
+ .../kodi-audioencoder-wav.mk                  |   4 +-
+ package/kodi-inputstream-adaptive/Config.in   |   2 -
+ .../kodi-inputstream-adaptive.hash            |   2 +-
+ .../kodi-inputstream-adaptive.mk              |   6 +-
+ package/kodi-inputstream-rtmp/Config.in       |   2 +-
+ .../kodi-inputstream-rtmp.hash                |   2 +-
+ .../kodi-inputstream-rtmp.mk                  |   4 +-
+ .../kodi-jsonschemabuilder.mk                 |   4 +-
+ package/kodi-peripheral-joystick/Config.in    |   2 +-
+ .../kodi-peripheral-joystick.hash             |   2 +-
+ .../kodi-peripheral-joystick.mk               |   8 +-
+ .../kodi-peripheral-steamcontroller.hash      |   2 +-
+ .../kodi-peripheral-steamcontroller.mk        |   2 +-
+ .../kodi-peripheral-xarcade.hash              |   2 +-
+ .../kodi-peripheral-xarcade.mk                |   2 +-
+ package/kodi-platform/kodi-platform.hash      |   2 +-
+ package/kodi-platform/kodi-platform.mk        |   2 +-
+ .../kodi-pvr-argustv/kodi-pvr-argustv.hash    |   2 +-
+ package/kodi-pvr-argustv/kodi-pvr-argustv.mk  |   4 +-
+ .../kodi-pvr-dvblink/kodi-pvr-dvblink.hash    |   2 +-
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk  |   4 +-
+ .../kodi-pvr-dvbviewer.hash                   |   2 +-
+ .../kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk  |   4 +-
+ package/kodi-pvr-filmon/kodi-pvr-filmon.hash  |   2 +-
+ package/kodi-pvr-filmon/kodi-pvr-filmon.mk    |   4 +-
+ .../kodi-pvr-hdhomerun.hash                   |   2 +-
+ .../kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk  |   4 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.hash        |   2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk          |   4 +-
+ package/kodi-pvr-iptvsimple/Config.in         |   1 +
+ .../kodi-pvr-iptvsimple.hash                  |   2 +-
+ .../kodi-pvr-iptvsimple.mk                    |   6 +-
+ ...e555-remove-xlocale.h-from-Locale.hh.patch |  33 ----
+ .../kodi-pvr-mediaportal-tvserver.hash        |   2 +-
+ .../kodi-pvr-mediaportal-tvserver.mk          |   4 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash  |   2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk    |   4 +-
+ .../kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash    |   2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk  |   4 +-
+ package/kodi-pvr-njoy/kodi-pvr-njoy.hash      |   2 +-
+ package/kodi-pvr-njoy/kodi-pvr-njoy.mk        |   4 +-
+ package/kodi-pvr-pctv/kodi-pvr-pctv.hash      |   2 +-
+ package/kodi-pvr-pctv/kodi-pvr-pctv.mk        |   4 +-
+ .../0001-src-CWatchdog.h-Fix-gcc7-build.patch |  29 ---
+ .../kodi-pvr-stalker/kodi-pvr-stalker.hash    |   2 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk  |   4 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.hash      |   2 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.mk        |   4 +-
+ .../kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash  |   2 +-
+ .../kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk    |   4 +-
+ package/kodi-pvr-vuplus/Config.in             |   2 +
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash  |   2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk    |   6 +-
+ package/kodi-pvr-wmc/kodi-pvr-wmc.hash        |   2 +-
+ package/kodi-pvr-wmc/kodi-pvr-wmc.mk          |   4 +-
+ package/kodi-screensaver-asteroids/Config.in  |   3 +-
+ .../kodi-screensaver-asteroids.hash           |   2 +-
+ .../kodi-screensaver-asteroids.mk             |   6 +-
+ package/kodi-screensaver-asterwave/Config.in  |   2 +-
+ .../kodi-screensaver-asterwave.hash           |   2 +-
+ .../kodi-screensaver-asterwave.mk             |   4 +-
+ .../0001-Add-missing-stddef-include.patch     |  25 +++
+ package/kodi-screensaver-biogenesis/Config.in |   2 +-
+ .../kodi-screensaver-biogenesis.hash          |   2 +-
+ .../kodi-screensaver-biogenesis.mk            |   4 +-
+ package/kodi-screensaver-cpblobs/Config.in    |   2 +-
+ .../kodi-screensaver-cpblobs.hash             |   2 +-
+ .../kodi-screensaver-cpblobs.mk               |   4 +-
+ .../kodi-screensaver-crystalmorph.hash        |   2 +-
+ .../kodi-screensaver-crystalmorph.mk          |   2 +-
+ package/kodi-screensaver-greynetic/Config.in  |   2 +-
+ .../kodi-screensaver-greynetic.hash           |   2 +-
+ .../kodi-screensaver-greynetic.mk             |   4 +-
+ .../0001-Add-missing-stddef-include.patch     |  25 +++
+ .../kodi-screensaver-matrixtrails/Config.in   |   2 +-
+ .../kodi-screensaver-matrixtrails.hash        |   2 +-
+ .../kodi-screensaver-matrixtrails.mk          |   5 +-
+ ...ackport-Add-missing-cstddef-includes.patch |  32 ++++
+ package/kodi-screensaver-pingpong/Config.in   |   2 +-
+ .../kodi-screensaver-pingpong.hash            |   2 +-
+ .../kodi-screensaver-pingpong.mk              |   4 +-
+ .../0001-Add-missing-stddef-include.patch     |  25 +++
+ package/kodi-screensaver-pyro/Config.in       |   2 +-
+ .../kodi-screensaver-pyro.hash                |   2 +-
+ .../kodi-screensaver-pyro.mk                  |   4 +-
+ .../0001-Disable-drempels.patch               |  40 +++++
+ .../0001-cross-compile.patch                  |  37 ----
+ .../0002-fix-default-include-dir.patch        |  28 ---
+ package/kodi-screensaver-rsxs/Config.in       |  14 +-
+ .../kodi-screensaver-rsxs.hash                |   2 +-
+ .../kodi-screensaver-rsxs.mk                  |   7 +-
+ package/kodi-screensaver-stars/Config.in      |   2 +-
+ .../kodi-screensaver-stars.hash               |   2 +-
+ .../kodi-screensaver-stars.mk                 |   4 +-
+ .../kodi-skin-confluence.hash                 |   3 +-
+ .../kodi-skin-confluence.mk                   |   4 +-
+ ...-fix-texture-packer-cmake-source-dir.patch |  27 +++
+ .../0002-fix_reallocarray.patch               | 170 ------------------
+ .../kodi-texturepacker/kodi-texturepacker.mk  |   7 +-
+ package/kodi-vfs-sftp/kodi-vfs-sftp.hash      |   3 +-
+ package/kodi-vfs-sftp/kodi-vfs-sftp.mk        |   2 +-
+ .../kodi-visualisation-fishbmc.hash           |   3 +-
+ .../kodi-visualisation-fishbmc.mk             |   4 +-
+ .../0001-cross-compile.patch                  |  32 ----
+ .../kodi-visualisation-goom.hash              |   2 +-
+ .../kodi-visualisation-goom.mk                |   4 +-
+ ...-also-search-for-egl-with-pkg-config.patch |  44 -----
+ .../kodi-visualisation-shadertoy/Config.in    |   1 +
+ .../kodi-visualisation-shadertoy.hash         |   2 +-
+ .../kodi-visualisation-shadertoy.mk           |   6 +-
+ ...Backport-Add-missing-cstddef-include.patch |  30 ++++
+ .../kodi-visualisation-spectrum.hash          |   3 +-
+ .../kodi-visualisation-spectrum.mk            |   4 +-
+ .../kodi-visualisation-waveform.hash          |   3 +-
+ .../kodi-visualisation-waveform.mk            |   4 +-
+ ...e-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch |   8 +-
+ ...endency-on-gmp-and-libintl-from-Find.patch |  39 ----
+ ...h => 0002-Fix-crosscompiling-issues.patch} |  29 ++-
+ .../0003-Add-missing-cassert-includes.patch   |  50 ++++++
+ ...cmake-iconv-is-a-required-dependency.patch |  92 ----------
+ ...ackport-Add-missing-cstddef-includes.patch |  44 +++++
+ .../kodi/0004-Fix-ffmpeg-build-for-mips.patch |  43 -----
+ package/kodi/Config.in                        |  28 +--
+ package/kodi/kodi.hash                        |  13 +-
+ package/kodi/kodi.mk                          |  84 ++++-----
+ 153 files changed, 546 insertions(+), 870 deletions(-)
+ delete mode 100644 package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch
+ delete mode 100644 package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
+ create mode 100644 package/kodi-screensaver-biogenesis/0001-Add-missing-stddef-include.patch
+ create mode 100644 package/kodi-screensaver-matrixtrails/0001-Add-missing-stddef-include.patch
+ create mode 100644 package/kodi-screensaver-pingpong/0001-Backport-Add-missing-cstddef-includes.patch
+ create mode 100644 package/kodi-screensaver-pyro/0001-Add-missing-stddef-include.patch
+ create mode 100644 package/kodi-screensaver-rsxs/0001-Disable-drempels.patch
+ delete mode 100644 package/kodi-screensaver-rsxs/0001-cross-compile.patch
+ delete mode 100644 package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
+ create mode 100644 package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch
+ delete mode 100644 package/kodi-texturepacker/0002-fix_reallocarray.patch
+ delete mode 100644 package/kodi-visualisation-goom/0001-cross-compile.patch
+ delete mode 100644 package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
+ create mode 100644 package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch
+ delete mode 100644 package/kodi/0002-CMake-Remove-dependency-on-gmp-and-libintl-from-Find.patch
+ rename package/kodi/{0005-Fix-crosscompiling-issues.patch => 0002-Fix-crosscompiling-issues.patch} (86%)
+ create mode 100644 package/kodi/0003-Add-missing-cassert-includes.patch
+ delete mode 100644 package/kodi/0003-cmake-iconv-is-a-required-dependency.patch
+ create mode 100644 package/kodi/0004-Backport-Add-missing-cstddef-includes.patch
+ delete mode 100644 package/kodi/0004-Fix-ffmpeg-build-for-mips.patch
+
 -- 
 2.20.1
