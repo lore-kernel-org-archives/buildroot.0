@@ -1,57 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Jan 2020 23:42:55 +0100
-Subject: [Buildroot] [PATCH v8 15/20] package/kodi-screensaver-rsxs:
- bump version
-References: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
- <20200118200620.3967240-16-bernd.kuhls@t-online.de>
- <20200118221442.GJ32369@scaer>
-Message-ID: <f8ecfgxnh9.ln2@ID-313208.user.individual.net>
+From: Christoph Muellner <christoph.muellner@theobroma-systems.com>
+Date: Sun, 19 Jan 2020 01:28:05 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: add support for bundling TEE in
+ ELF format into U-Boot
+Message-ID: <20200119002805.2103-1-christoph.muellner@theobroma-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Some U-Boot platforms (e.g. rockchip) can bundle OPTEE's tee.elf
+into the U-Boot image. This patch brings the necessary changes to
+enable this feature.
 
-Am Sat, 18 Jan 2020 23:14:42 +0100 schrieb Yann E. MORIN:
+Signed-off-by: Christoph Muellner <christoph.muellner@theobroma-systems.com>
+---
+ boot/uboot/Config.in | 10 ++++++++++
+ boot/uboot/uboot.mk  |  5 +++++
+ 2 files changed, 15 insertions(+)
 
-> Note: I am fine with disabling entirely, but I'd prefer this is
-> explictly stated, like:
-> 
->     Even though rsxs has a minimal bundled imagemagick, we simply
->     disable drempels to avoid using a bundled library.
-
-ok, you can add this sentence to the commit log because this was my 
-intention.
-
-> You're adding a few dependencies, some of whihch are not ovious, like
-> libtool.
-
-They are all lined-up in CMakeLists.txt, including ltdl:
-https://github.com/xbmc/screensavers.rsxs/blob/Leia/CMakeLists.txt#L15
-
-> Additionally, you're not propagating the dependency of glm (needs
-> libstdc++). That's OK because Kodi does need C++, and thus rsxs already
-> implicitly has that dependency, but I don;t like it much, though...
-
-True, but there will never be a time when Kodi will not depend on c++ so 
-I did not add this dependency to all the subpackages of kodi.
-
-> Again, if all it takes are a few sentences or bullet points to be added
-> to the commit log, no need to respin: I can add them locally before
-> applying.
-
-If you consider my explanations sufficient you are free to add them to 
-the commit log ;)
-
-> Regards,
-> Yann E. MORIN.
-
-Regards, Bernd
-
-PS: Please note that you will not receive emails from me because your 
-provider blocks my provider for several years now:
-<yann.morin.1998@free.fr>: delivery temporarily suspended: host
- mx2.free.fr[212.27.42.59] refused to talk to me: 421 Too many errors from
-    your IP (194.25.134.85), please visit http://postmaster.free.fr/
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index ffc441d670..1c1ab3907a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -202,6 +202,16 @@ config BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF
+ 
+ endchoice
+ 
++config BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE
++	bool "U-Boot needs OPTEE TEE"
++	depends on BR2_TARGET_OPTEE_OS_CORE
++	help
++	  Some platforms (such as Rockchip) encapsulate the TEE
++	  inside U-Boot. This option makes sure optee-os gets
++	  built prior to U-Boot, and that the TEE variable
++	  pointing to OPTEE's tee.elf, is passed during the
++	  Buildroot build.
++
+ menu "U-Boot binary format"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_AIS
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index a4879bb8b2..8dc932def6 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -150,6 +150,11 @@ UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
+ endif
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE),y)
++UBOOT_DEPENDENCIES += optee-os
++UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/tee.elf
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+ UBOOT_DEPENDENCIES += host-dtc
+ endif
+-- 
+2.11.0
