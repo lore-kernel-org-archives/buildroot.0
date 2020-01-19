@@ -1,64 +1,117 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jan 2020 12:07:21 +0100
-Subject: [Buildroot] [PATCH v9 09/23] package/kodi-pvr-iptvsimple: bump
- version
+Date: Sun, 19 Jan 2020 12:07:16 +0100
+Subject: [Buildroot] [PATCH v9 04/23] package/kodi-audioencoder-*: mass
+ version bump
 In-Reply-To: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
 References: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
-Message-ID: <20200119110735.1104443-10-bernd.kuhls@t-online.de>
+Message-ID: <20200119110735.1104443-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rapidxml was added as dependency:
-https://github.com/kodi-pvr/pvr.iptvsimple/commit/d27b3ed1d379d2f865e95f08bdf2dbf086f8c0ad
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-iptvsimple/Config.in                | 1 +
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 6 ++----
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash    | 2 +-
+ package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk      | 4 ++--
+ package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash    | 2 +-
+ package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk      | 4 ++--
+ .../kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash    | 2 +-
+ package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk  | 2 +-
+ package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash      | 2 +-
+ package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk        | 4 ++--
+ 8 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/kodi-pvr-iptvsimple/Config.in b/package/kodi-pvr-iptvsimple/Config.in
-index b59674979f..94fc1f0602 100644
---- a/package/kodi-pvr-iptvsimple/Config.in
-+++ b/package/kodi-pvr-iptvsimple/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
- 	bool "kodi-pvr-iptvsimple"
- 	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_RAPIDXML
- 	help
- 	  IPTV Live TV and Radio PVR client addon for Kodi
- 
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-index 0b0406feb8..1b79b57049 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
+index 9a0f81e10d..7599ed9218 100644
+--- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
++++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 329bd71e5c786d7b037bf5fd103ee4abff892afc6e5186a5d0a797194a8c4c7c  kodi-pvr-iptvsimple-2.4.14-Krypton.tar.gz
-+sha256 25eff252ad748e0cf166cd01b0f08e8fb3977c98a1b04cad9ef6509ea30c5fa9  kodi-pvr-iptvsimple-3.8.8-Leia.tar.gz
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-index 0df509ea6a..16007cf404 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-@@ -4,12 +4,10 @@
+-sha256 811dac5766dc9ef1a3447c55637edde55c5ddca1d583124e9312328152015ae5  kodi-audioencoder-flac-1.1.0.tar.gz
++sha256 e6b8ad024c171eb463339a1f136f3ee9465267ef7fd3b80a5f0007b0180f36e5  kodi-audioencoder-flac-2.0.5-Leia.tar.gz
+diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+index ea5a0860c6..9940949c7b 100644
+--- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
++++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_IPTVSIMPLE_VERSION = 2.4.14-Krypton
-+KODI_PVR_IPTVSIMPLE_VERSION = 3.8.8-Leia
- KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
- KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
- KODI_PVR_IPTVSIMPLE_LICENSE_FILES = src/client.h
--KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform
-+KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform rapidxml
+-KODI_AUDIOENCODER_FLAC_VERSION = 1.1.0
+-KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,v$(KODI_AUDIOENCODER_FLAC_VERSION))
++KODI_AUDIOENCODER_FLAC_VERSION = 2.0.5-Leia
++KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
+ KODI_AUDIOENCODER_FLAC_LICENSE = GPL-2.0+
+ KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
+ KODI_AUDIOENCODER_FLAC_DEPENDENCIES = flac kodi libogg host-pkgconf
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
+index 6edd161559..e25df69e79 100644
+--- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 5118a2925bb0f7eca36b2d0f4d6822b45a8967c9fb91054bfaa8f83d21209c95  kodi-audioencoder-lame-1.2.0.tar.gz
++sha256 c9c0e700012e2763eb6d9ffcc80ccd87faf991e5cf58b30cabd51b435fd48614  kodi-audioencoder-lame-2.0.3-Leia.tar.gz
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+index 3f06a06135..a278a0f410 100644
+--- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- $(eval $(cmake-package))
+-KODI_AUDIOENCODER_LAME_VERSION = 1.2.0
+-KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,v$(KODI_AUDIOENCODER_LAME_VERSION))
++KODI_AUDIOENCODER_LAME_VERSION = 2.0.3-Leia
++KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
+ KODI_AUDIOENCODER_LAME_LICENSE = GPL-2.0+
+ KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
+ KODI_AUDIOENCODER_LAME_DEPENDENCIES = kodi lame
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
+index 1b41a88dbc..7ba473e5f7 100644
+--- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
++++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 f00c74f010b465d43e8206bcbe155785e1f34660ca010acff3b890595ea2352c  kodi-audioencoder-vorbis-1.1.0.tar.gz
++sha256 f6f220fad74a64d29a4375fbc24560ee528d0dbf1e195f17015381fcd67c8acc  kodi-audioencoder-vorbis-2.0.2-Leia.tar.gz
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+index 0c0c406a58..8ea569e638 100644
+--- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
++++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIOENCODER_VORBIS_VERSION = 1.1.0
++KODI_AUDIOENCODER_VORBIS_VERSION = 2.0.2-Leia
+ KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,v$(KODI_AUDIOENCODER_VORBIS_VERSION))
+ KODI_AUDIOENCODER_VORBIS_LICENSE = GPL-2.0+
+ KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
+diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
+index b302c18ac9..06e724a969 100644
+--- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
++++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 f9b0f79c8364fb7ef584137031fceb8d2ab1af28e110cfe2a31932631cb8d36e  kodi-audioencoder-wav-1.1.0.tar.gz
++sha256 eb6939551fa7da01a7f333702af1959771e7db46437647d32eb2b002b142c9a0  kodi-audioencoder-wav-2.0.2-Leia.tar.gz
+diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+index d21546ba05..25551927d1 100644
+--- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
++++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIOENCODER_WAV_VERSION = 1.1.0
+-KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,v$(KODI_AUDIOENCODER_WAV_VERSION))
++KODI_AUDIOENCODER_WAV_VERSION = 2.0.2-Leia
++KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,$(KODI_AUDIOENCODER_WAV_VERSION))
+ KODI_AUDIOENCODER_WAV_LICENSE = GPL-2.0+
+ KODI_AUDIOENCODER_WAV_LICENSE_FILES = src/EncoderWav.cpp
+ KODI_AUDIOENCODER_WAV_DEPENDENCIES = kodi
 -- 
 2.20.1
