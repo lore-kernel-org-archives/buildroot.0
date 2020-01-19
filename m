@@ -1,69 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jan 2020 12:07:19 +0100
-Subject: [Buildroot] [PATCH v9 07/23] package/kodi-peripheral-joystick: bump
+Date: Sun, 19 Jan 2020 12:07:29 +0100
+Subject: [Buildroot] [PATCH v9 17/23] package/kodi-skin-confluence: bump
  version
 In-Reply-To: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
 References: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
-Message-ID: <20200119110735.1104443-8-bernd.kuhls@t-online.de>
+Message-ID: <20200119110735.1104443-18-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed dependency to kodi-platform
-https://github.com/xbmc/peripheral.joystick/commit/a9489ea0f08bbf04affb798857439540478ff90d
-
-Added dependency to tinyxml
-https://github.com/xbmc/peripheral.joystick/commit/471aa27d6c8ff9c9d0ac50c1b32f1504840194b5
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-peripheral-joystick/Config.in                | 2 +-
- .../kodi-peripheral-joystick.hash                         | 2 +-
- .../kodi-peripheral-joystick/kodi-peripheral-joystick.mk  | 8 +++-----
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 3 ++-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 4 +---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/Config.in b/package/kodi-peripheral-joystick/Config.in
-index f257710a88..d93e71b607 100644
---- a/package/kodi-peripheral-joystick/Config.in
-+++ b/package/kodi-peripheral-joystick/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_KODI_PERIPHERAL_JOYSTICK
- 	bool "kodi-peripheral-joystick"
- 	depends on BR2_PACKAGE_HAS_UDEV
--	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML
- 	help
- 	  Kodi joystick support (drivers and button maps)
- 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index 5a7348d414..84f847f309 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index 2dabbbd4c2..113548bf64 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+@@ -1,2 +1,3 @@
  # Locally computed
--sha256 9a183e1f92ff2c68816bfa0056c65585a3e1129d924326359d7a5dfbcba6c56a  kodi-peripheral-joystick-1.3.4.tar.gz
-+sha256 b6ddefed73582a3dc9bc36a9d40f8309139802ef9cfc130933bd0fe6e569d933  kodi-peripheral-joystick-1.4.8-Leia.tar.gz
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index 13c33fc0af..c56cfef43f 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-@@ -4,12 +4,10 @@
+-sha256 1fa8ebeec269e678111f64bec373d98e34b4ba1b32e583a505431b2562910ba0  kodi-skin-confluence-37bba429adc16d49a07add08de406682e1cc673a.tar.gz
++sha256 dc4a0abf05db50caf8e70e4904b8c2c445008ec3d6d23381c9c31dedaf6109de  kodi-skin-confluence-cffcb8320003e6048abe4b26316e5d5f3d50eac9.tar.gz
++sha256 89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index e9cdf3fbf7..d9bd10bdfa 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+@@ -4,9 +4,7 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
+-# This cset is on the branch 'krypton'
 -# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PERIPHERAL_JOYSTICK_VERSION = 1.3.4
--KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,v$(KODI_PERIPHERAL_JOYSTICK_VERSION))
-+KODI_PERIPHERAL_JOYSTICK_VERSION = 1.4.8-Leia
-+KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = src/addon.cpp
--KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi-platform udev
-+KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi tinyxml udev
- 
- $(eval $(cmake-package))
+-KODI_SKIN_CONFLUENCE_VERSION = 37bba429adc16d49a07add08de406682e1cc673a
++KODI_SKIN_CONFLUENCE_VERSION = cffcb8320003e6048abe4b26316e5d5f3d50eac9
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
 -- 
 2.20.1
