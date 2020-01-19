@@ -1,70 +1,68 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jan 2020 12:07:26 +0100
-Subject: [Buildroot] [PATCH v9 14/23] package/kodi-screensaver-asteroids:
- bump version
+Date: Sun, 19 Jan 2020 12:07:19 +0100
+Subject: [Buildroot] [PATCH v9 07/23] package/kodi-peripheral-joystick: bump
+ version
 In-Reply-To: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
 References: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
-Message-ID: <20200119110735.1104443-15-bernd.kuhls@t-online.de>
+Message-ID: <20200119110735.1104443-8-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Package was moved to xbmc repo:
-https://github.com/xbmc/repo-binary-addons/commit/57b8ed5fb9b5f0368738260b762cc0bab1147172#diff-4fa94ef50ebd8df4af5fd4eed5e693b6
+Removed dependency to kodi-platform
+https://github.com/xbmc/peripheral.joystick/commit/a9489ea0f08bbf04affb798857439540478ff90d
 
-Added dependency to glm:
-https://github.com/xbmc/screensaver.asteroids/commit/360a02fc20925fa17179f3298dd4515b4354e266
+Added dependency to tinyxml
+https://github.com/xbmc/peripheral.joystick/commit/471aa27d6c8ff9c9d0ac50c1b32f1504840194b5
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-asteroids/Config.in                | 3 ++-
- .../kodi-screensaver-asteroids.hash                         | 2 +-
- .../kodi-screensaver-asteroids.mk                           | 6 +++---
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ package/kodi-peripheral-joystick/Config.in                | 2 +-
+ .../kodi-peripheral-joystick.hash                         | 2 +-
+ .../kodi-peripheral-joystick/kodi-peripheral-joystick.mk  | 8 +++-----
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
-index ccc2aba6aa..3d66c3dcc3 100644
---- a/package/kodi-screensaver-asteroids/Config.in
-+++ b/package/kodi-screensaver-asteroids/Config.in
-@@ -1,10 +1,11 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
- 	bool "kodi-screensaver-asteroids"
- 	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_GLM
+diff --git a/package/kodi-peripheral-joystick/Config.in b/package/kodi-peripheral-joystick/Config.in
+index f257710a88..d93e71b607 100644
+--- a/package/kodi-peripheral-joystick/Config.in
++++ b/package/kodi-peripheral-joystick/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_KODI_PERIPHERAL_JOYSTICK
+ 	bool "kodi-peripheral-joystick"
+ 	depends on BR2_PACKAGE_HAS_UDEV
+-	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_TINYXML
  	help
- 	  Asteroids screensaver for Kodi
+ 	  Kodi joystick support (drivers and button maps)
  
--	  https://github.com/notspiff/screensaver.asteroids
-+	  https://github.com/xbmc/screensaver.asteroids
- 
- comment "kodi-screensaver-asteroids needs OpenGL"
- 	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-index d62032c076..b01580a62e 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+index 5a7348d414..84f847f309 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 2e072e6aad12f707dec1e70b7df26c590bb41fed8880dcfdbe6c99949b7e287a  kodi-screensaver-asteroids-1.1.2.tar.gz
-+sha256 fa7671a1c88b75e6d26a172fdffdad4fdbd78f000f54632c47e38c17cd0da460  kodi-screensaver-asteroids-2.3.1-Leia.tar.gz
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-index 378da74be1..70d9d8e48b 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-@@ -4,10 +4,10 @@
+-sha256 9a183e1f92ff2c68816bfa0056c65585a3e1129d924326359d7a5dfbcba6c56a  kodi-peripheral-joystick-1.3.4.tar.gz
++sha256 b6ddefed73582a3dc9bc36a9d40f8309139802ef9cfc130933bd0fe6e569d933  kodi-peripheral-joystick-1.4.8-Leia.tar.gz
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+index 13c33fc0af..c56cfef43f 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+@@ -4,12 +4,10 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_ASTEROIDS_VERSION = 1.1.2
--KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,v$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
-+KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.3.1-Leia
-+KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,xbmc,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
- KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
--KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = kodi
-+KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = glm kodi
+-# This cset is on the branch 'Krypton'
+-# When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PERIPHERAL_JOYSTICK_VERSION = 1.3.4
+-KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,v$(KODI_PERIPHERAL_JOYSTICK_VERSION))
++KODI_PERIPHERAL_JOYSTICK_VERSION = 1.4.8-Leia
++KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
+ KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = src/addon.cpp
+-KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi-platform udev
++KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi tinyxml udev
  
  $(eval $(cmake-package))
 -- 
