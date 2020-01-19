@@ -1,49 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jan 2020 23:27:17 +0100
-Subject: [Buildroot] [git commit] package/python-pycares: bump to version
- 3.1.1
-Message-ID: <20200119221830.81C1C82AB9@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sun, 19 Jan 2020 23:53:48 +0100
+Subject: [Buildroot] [PATCH] package/gettext-tiny: bump version to latest
+Message-ID: <20200119225348.29225-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4b8d836ecfc51c59328c52bf62d2e5d1f7cf38e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Drop patch already upstreamed to fix install failure if path contains
+"m4/ string.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/python-pycares/python-pycares.hash | 4 ++--
- package/python-pycares/python-pycares.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...tall-failure-if-path-contains-m4-str.patch | 31 -------------------
+ package/gettext-tiny/gettext-tiny.hash        |  2 +-
+ package/gettext-tiny/gettext-tiny.mk          |  2 +-
+ 3 files changed, 2 insertions(+), 33 deletions(-)
+ delete mode 100644 package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
 
-diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
-index 63f5d88aeb..c8c46175dc 100644
---- a/package/python-pycares/python-pycares.hash
-+++ b/package/python-pycares/python-pycares.hash
+diff --git a/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch b/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
+deleted file mode 100644
+index f1c68ee1e7..0000000000
+--- a/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 2ad9d66d733396b655f05b477a5e91592378fb21 Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Fri, 17 Jan 2020 18:34:42 +0100
+-Subject: [PATCH] Makefile: fix install failure if path contains "m4/" string
+-
+-Actually Makefile install recipe substitutes every occurence of "m4/" in
+-file name of the target of the rule($@), in an absolute path there could
+-more than one "m4/" occurence, so install will fail. Let's change
+-$(subst ...) with $(patsubst ...) substituting only last occurence of
+-"m4/" pattern.
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 4a3c3f6..2e13403 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -88,6 +88,6 @@ $(DESTDIR)$(datadir)/%: %
+- 	$(INSTALL) -D -m 644 $< $@
+- 
+- $(DESTDIR)$(acdir)/%: %
+--	$(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(subst m4/,,$@)
+-+	$(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(patsubst %m4/,%,$(dir $@))/$(notdir $@)
+- 
+- .PHONY: all clean install
+--- 
+-2.20.1
+-
+diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
+index 4de837da46..9232fe8530 100644
+--- a/package/gettext-tiny/gettext-tiny.hash
++++ b/package/gettext-tiny/gettext-tiny.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycares/json
--md5	9d71bb8654cd2f7f34bdfe0ba641b59c  pycares-3.1.0.tar.gz
--sha256	663c000625725d3a63466a674df4ee7f62bf8ca1ae8a0b87a6411eb811e0e794  pycares-3.1.0.tar.gz
-+md5	8ac802d79b318efa27d3a9949d0604d1  pycares-3.1.1.tar.gz
-+sha256	18dfd4fd300f570d6c4536c1d987b7b7673b2a9d14346592c5d6ed716df0d104  pycares-3.1.1.tar.gz
- # Locally computed sha256 checksums
- sha256	427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
-diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
-index ecac40fd2d..dea34f82bf 100644
---- a/package/python-pycares/python-pycares.mk
-+++ b/package/python-pycares/python-pycares.mk
-@@ -4,9 +4,9 @@
+ # Locally Computed:
+-sha256 ba7b6960018022d876e39aa723d40b6745823b2ff71dae591d05bbd1b8ec180f  gettext-tiny-73fc3e7ef7e016a3874b632fd0475969d288f309.tar.gz
++sha256 efc740007c82a9b3a0d382fb50d212fa7dc0beddb9695409ee79684f9f2124b2  gettext-tiny-adaa9c64921e80f2b8dd3610ffb508618b9204f3.tar.gz
+ sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  extra/COPYING
+ # From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index 6ee6269e09..09a98f99b4 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYCARES_VERSION = 3.1.0
-+PYTHON_PYCARES_VERSION = 3.1.1
- PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
--PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/50/39/d7d4e85041e95c12ccca220663328709da81f75f5e86d76049f0937e9f83
-+PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/4e/09/f49ef1c4b6a5ad50fc08a8acd015f1938594dd7a6b4a6a96d049d9bbec7d
- PYTHON_PYCARES_SETUP_TYPE = setuptools
- PYTHON_PYCARES_LICENSE = MIT
- PYTHON_PYCARES_LICENSE_FILES = LICENSE
+-GETTEXT_TINY_VERSION = 73fc3e7ef7e016a3874b632fd0475969d288f309
++GETTEXT_TINY_VERSION = adaa9c64921e80f2b8dd3610ffb508618b9204f3
+ GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,$(GETTEXT_TINY_VERSION))
+ GETTEXT_TINY_LICENSE = MIT, GPL-3.0+ (extra gettext)
+ GETTEXT_TINY_INSTALL_STAGING = YES
+-- 
+2.20.1
