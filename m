@@ -1,66 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jan 2020 10:00:12 +0100
-Subject: [Buildroot] [PATCH 1/2] package/micropython: bump to version
- 1.12
-In-Reply-To: <1579353013-3395-1-git-send-email-pjtexier@koncepto.io>
-References: <1579353013-3395-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20200119090012.GN32369@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Jan 2020 10:02:51 +0100
+Subject: [Buildroot] [PATCH v8 19/20] package/kodi-visualisation-*: mass
+ version bump
+References: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
+ <20200118200620.3967240-20-bernd.kuhls@t-online.de>
+ <20200118220358.GI32369@scaer>
+ <frdcfgxnh9.ln2@ID-313208.user.individual.net>
+ <20200119084406.GL32369@scaer>
+Message-ID: <riidfgxktb.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pierre-Jean, All,
+Am Sun, 19 Jan 2020 09:44:06 +0100 schrieb Yann E. MORIN:
 
-On 2020-01-18 14:10 +0100, Pierre-Jean Texier spake thusly:
-> See full changelog https://github.com/micropython/micropython/releases/tag/v1.12
+> But OK, they rewrote the code. However, looking at the [atch you remove,
+> and looking at the new code, I am not sure what we tried to fix is not
+> broken again. For example, the pkg-config check was changed (in our
+> patch):
 > 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-
-Both applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/micropython/micropython.hash | 2 +-
->  package/micropython/micropython.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>     -pkg_check_modules(OpenGLES2 glesv2) +pkg_check_modules(OpenGLES2
+>     glesv2 egl)
 > 
-> diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
-> index 1b77bc6..a889044 100644
-> --- a/package/micropython/micropython.hash
-> +++ b/package/micropython/micropython.hash
-> @@ -1,2 +1,2 @@
->  #locally computed
-> -sha256 2ab6f75b4bff040445f848004d387dbe1bcbdf1188db2334b2bd3eaa173eb744  micropython-1.11.tar.gz
-> +sha256 330cd32c7b67cb6b531d158eabcf68af3a7d7ad7b5a4b0ce3c73da3d241da6a2  micropython-1.12.tar.gz
-> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-> index a5b8218..8328992 100644
-> --- a/package/micropython/micropython.mk
-> +++ b/package/micropython/micropython.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -MICROPYTHON_VERSION = 1.11
-> +MICROPYTHON_VERSION = 1.12
->  MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
->  MICROPYTHON_LICENSE = MIT
->  MICROPYTHON_LICENSE_FILES = LICENSE
-> -- 
-> 2.7.4
+> And their new code does something that is equivalent to the original
+> line we patched:
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>     pkg_check_modules(PC_OPENGLES ${_brcmprefix}glesv2 QUIET)
+> 
+> So I wonder if we do not still need something similar to our patch...
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Hi Yann,
+
+the patch I removed existed to fix "The non-pkg-config path looks for 
+both EGL *and* OpenGL ES".
+
+This was true with package version 1.1.5:
+https://github.com/xbmc/visualization.shadertoy/blob/
+e88fd6ee830bb2ec7c35239a90d1e03155a5c6d7/FindOpenGLES2.cmake#L21
+
+	find_library(OPENGLES2_egl_LIBRARY NAMES EGL)
+
+Current version https://github.com/xbmc/visualization.shadertoy/blob/Leia/
+FindOpenGLES.cmake however does not look for egl at all anymore, neither 
+do FindOpenGl.cmake and CMakeLists.txt, so I doubt that our fix is still 
+needed.
+
+Regards, Bernd
