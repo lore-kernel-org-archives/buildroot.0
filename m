@@ -1,50 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jan 2020 10:02:51 +0100
-Subject: [Buildroot] [PATCH v8 19/20] package/kodi-visualisation-*: mass
- version bump
-References: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
- <20200118200620.3967240-20-bernd.kuhls@t-online.de>
- <20200118220358.GI32369@scaer>
- <frdcfgxnh9.ln2@ID-313208.user.individual.net>
- <20200119084406.GL32369@scaer>
-Message-ID: <riidfgxktb.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Jan 2020 10:01:09 +0100
+Subject: [Buildroot] [git commit] package/poco: bump to version 1.9.4
+Message-ID: <20200119085327.16A3F829F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 19 Jan 2020 09:44:06 +0100 schrieb Yann E. MORIN:
+commit: https://git.buildroot.net/buildroot/commit/?id=8f722017ebc118d42806e1ed2267d83235b8dfd7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> But OK, they rewrote the code. However, looking at the [atch you remove,
-> and looking at the new code, I am not sure what we tried to fix is not
-> broken again. For example, the pkg-config check was changed (in our
-> patch):
-> 
->     -pkg_check_modules(OpenGLES2 glesv2) +pkg_check_modules(OpenGLES2
->     glesv2 egl)
-> 
-> And their new code does something that is equivalent to the original
-> line we patched:
-> 
->     pkg_check_modules(PC_OPENGLES ${_brcmprefix}glesv2 QUIET)
-> 
-> So I wonder if we do not still need something similar to our patch...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/poco/poco.hash | 2 +-
+ package/poco/poco.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hi Yann,
-
-the patch I removed existed to fix "The non-pkg-config path looks for 
-both EGL *and* OpenGL ES".
-
-This was true with package version 1.1.5:
-https://github.com/xbmc/visualization.shadertoy/blob/
-e88fd6ee830bb2ec7c35239a90d1e03155a5c6d7/FindOpenGLES2.cmake#L21
-
-	find_library(OPENGLES2_egl_LIBRARY NAMES EGL)
-
-Current version https://github.com/xbmc/visualization.shadertoy/blob/Leia/
-FindOpenGLES.cmake however does not look for egl at all anymore, neither 
-do FindOpenGl.cmake and CMakeLists.txt, so I doubt that our fix is still 
-needed.
-
-Regards, Bernd
+diff --git a/package/poco/poco.hash b/package/poco/poco.hash
+index 33e60dba45..0cdaf0d3f3 100644
+--- a/package/poco/poco.hash
++++ b/package/poco/poco.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  43cc469c01d1f799efc51e2bfde6ffdf467b98a8a0901e6b33db86958619b3af  poco-1.8.1.tar.gz
++sha256  367014cdbcfe9df8f1d746239902149d2398af9b49ba2c1aaaa88616fd538f61  poco-1.9.4.tar.gz
+ sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 7283447f9d..d2b668ae13 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POCO_VERSION = 1.8.1
++POCO_VERSION = 1.9.4
+ POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
+ POCO_LICENSE = BSL-1.0
+ POCO_LICENSE_FILES = LICENSE
