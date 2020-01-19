@@ -1,65 +1,114 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jan 2020 12:07:24 +0100
-Subject: [Buildroot] [PATCH v9 12/23] package/kodi-pvr-vuplus: bump version
+Date: Sun, 19 Jan 2020 12:07:31 +0100
+Subject: [Buildroot] [PATCH v9 19/23] package/kodi-visualisation-shadertoy:
+ bump version to 1.2.3-Leia
 In-Reply-To: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
 References: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
-Message-ID: <20200119110735.1104443-13-bernd.kuhls@t-online.de>
+Message-ID: <20200119110735.1104443-20-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added dependency to json-for-modern-cpp after upstream commit:
-https://github.com/kodi-pvr/pvr.vuplus/commit/07480b96fc674317ccbb792b03b811edec143e0c
-
-Also added missing dependency to tinyxml.
+Added dependency to glm.
+Although glm depends on BR2_INSTALL_LIBSTDCPP this dependency was not
+added because Kodi itself already depends on C++.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-vuplus/Config.in            | 2 ++
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 6 ++----
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ ...-also-search-for-egl-with-pkg-config.patch | 44 -------------------
+ .../kodi-visualisation-shadertoy/Config.in    |  1 +
+ .../kodi-visualisation-shadertoy.hash         |  2 +-
+ .../kodi-visualisation-shadertoy.mk           |  6 +--
+ 4 files changed, 5 insertions(+), 48 deletions(-)
+ delete mode 100644 package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
 
-diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
-index a56c4ede93..96320f6fcb 100644
---- a/package/kodi-pvr-vuplus/Config.in
-+++ b/package/kodi-pvr-vuplus/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_VUPLUS
- 	bool "kodi-pvr-vuplus"
-+	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
- 	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML
+diff --git a/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch b/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
+deleted file mode 100644
+index 8de96a6de3..0000000000
+--- a/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 9c428c3c9f120a11468f98546bcc754d2c3302af Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Thu, 30 Jul 2015 10:02:15 +0200
+-Subject: [PATCH] FindOpenGLES2: also search for egl with pkg-config
+-
+-The non-pkg-config path looks for both EGL *and* OpenGL ES, but not
+-the pkg-config path, which might lead to missing libraries/headers if
+-egl.pc has more header paths or libraries than glesv2.pc.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- CMakeLists.txt      | 2 +-
+- FindOpenGLES2.cmake | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 8b084cf..81bbe27 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -35,7 +35,7 @@
+-     endif()
+-   endif()
+- 
+--  include_directories(${OpenGL_INCLUDE_DIR}
+-+  include_directories(${OpenGL_INCLUDE_DIR} ${OpenGLES2_INCLUDE_DIRS}
+-                       ${KODI_INCLUDE_DIR}
+-                       ${p8-platform_INCLUDE_DIRS}
+-                       ${PROJECT_SOURCE_DIR}/lib/kissfft
+-diff --git a/FindOpenGLES2.cmake b/FindOpenGLES2.cmake
+-index e1b7d21..2a9ce0d 100644
+---- a/FindOpenGLES2.cmake
+-+++ b/FindOpenGLES2.cmake
+-@@ -7,7 +7,7 @@
+- 
+- find_package(PkgConfig)
+- if(PKG_CONFIG_FOUND)
+--  pkg_check_modules(OpenGLES2 glesv2)
+-+  pkg_check_modules(OpenGLES2 glesv2 egl)
+- endif(PKG_CONFIG_FOUND)
+- 
+- if(NOT OPENGLES2_FOUND)
+--- 
+-2.5.0
+-
+diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
+index 3b981d0bf4..1fabba5ef5 100644
+--- a/package/kodi-visualisation-shadertoy/Config.in
++++ b/package/kodi-visualisation-shadertoy/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
+ 	bool "kodi-visualisation-shadertoy"
++	select BR2_PACKAGE_GLM
+ 	select BR2_PACKAGE_LIBPLATFORM
  	help
- 	  VuPlus PVR client addon for Kodi
- 
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-index f4f6756931..eb0408db8a 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+ 	  Shadertoy visualiser for Kodi
+diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+index ae8c59ddb0..cf3e06daa7 100644
+--- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
++++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 a8c7345e4e2e415e29c21f14460b257dfbe08ed5ecf1cc2dc6bc393a10f95cf3  kodi-pvr-vuplus-2.4.12-Krypton.tar.gz
-+sha256 d7dd890e4491e211ff3781cdc043347ab7a4ef6e00619ac1b4641ed81b0c3626  kodi-pvr-vuplus-3.28.9-Leia.tar.gz
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-index 581d884caa..34ec5d2384 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-@@ -4,12 +4,10 @@
+-sha256 4456e88bc94bcb3e2481286b27926a1f6d85d6f857de31a46d50f44fead01abd  kodi-visualisation-shadertoy-1.1.5.tar.gz
++sha256 7b09de334ed3c96d2e2552e0594b8f76c11e36edfc10efd725851140132a4d4f  kodi-visualisation-shadertoy-1.2.3-Leia.tar.gz
+diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+index a2b1b14d9f..add0f3ddea 100644
+--- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
++++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_VUPLUS_VERSION = 2.4.12-Krypton
-+KODI_PVR_VUPLUS_VERSION = 3.28.9-Leia
- KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
- KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
- KODI_PVR_VUPLUS_LICENSE_FILES = src/client.h
--KODI_PVR_VUPLUS_DEPENDENCIES = kodi-platform
-+KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform tinyxml
+-KODI_VISUALISATION_SHADERTOY_VERSION = 1.1.5
+-KODI_VISUALISATION_SHADERTOY_SITE = $(call github,notspiff,visualization.shadertoy,v$(KODI_VISUALISATION_SHADERTOY_VERSION))
++KODI_VISUALISATION_SHADERTOY_VERSION = 1.2.3-Leia
++KODI_VISUALISATION_SHADERTOY_SITE = $(call github,xbmc,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
+ KODI_VISUALISATION_SHADERTOY_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = src/main.cpp
+-KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi libplatform
++KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = glm kodi libplatform
  
  $(eval $(cmake-package))
 -- 
