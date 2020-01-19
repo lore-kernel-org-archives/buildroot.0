@@ -1,13 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jan 2020 09:44:06 +0100
-Subject: [Buildroot] [PATCH v8 19/20] package/kodi-visualisation-*: mass
- version bump
-In-Reply-To: <frdcfgxnh9.ln2@ID-313208.user.individual.net>
+Date: Sun, 19 Jan 2020 09:53:35 +0100
+Subject: [Buildroot] [PATCH v8 15/20] package/kodi-screensaver-rsxs:
+ bump version
+In-Reply-To: <f8ecfgxnh9.ln2@ID-313208.user.individual.net>
 References: <20200118200620.3967240-1-bernd.kuhls@t-online.de>
- <20200118200620.3967240-20-bernd.kuhls@t-online.de>
- <20200118220358.GI32369@scaer>
- <frdcfgxnh9.ln2@ID-313208.user.individual.net>
-Message-ID: <20200119084406.GL32369@scaer>
+ <20200118200620.3967240-16-bernd.kuhls@t-online.de>
+ <20200118221442.GJ32369@scaer>
+ <f8ecfgxnh9.ln2@ID-313208.user.individual.net>
+Message-ID: <20200119085335.GM32369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,66 +16,35 @@ To: buildroot@busybox.net
 
 Bernd, All,
 
-On 2020-01-18 23:35 +0100, Bernd Kuhls spake thusly:
-> Am Sat, 18 Jan 2020 23:03:58 +0100 schrieb Yann E. MORIN:
-> > On 2020-01-18 21:06 +0100, Bernd Kuhls spake thusly:
-> >> Rebased
-> >> package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-
-> for-egl-with-pkg-config.patch
-> > You said "rebased" but you removed it altogether. It has however never
-> > been upstreamed, AFAICS... Care to comment/explai, please?
+On 2020-01-18 23:42 +0100, Bernd Kuhls spake thusly:
+> Am Sat, 18 Jan 2020 23:14:42 +0100 schrieb Yann E. MORIN:
+> > Note: I am fine with disabling entirely, but I'd prefer this is
+> > explictly stated, like:
 > > 
-> > Note: if onlt the commit log needes to be fixed, no need to respin the
-> > series, I can fix locally before applying.
+> >     Even though rsxs has a minimal bundled imagemagick, we simply
+> >     disable drempels to avoid using a bundled library.
+> ok, you can add this sentence to the commit log because this was my 
+> intention.
 > 
-> Hi Yann,
+> > You're adding a few dependencies, some of whihch are not ovious, like
+> > libtool.
 > 
-> you are right, the commit log needs to be rephrased:
+> They are all lined-up in CMakeLists.txt, including ltdl:
+> https://github.com/xbmc/screensavers.rsxs/blob/Leia/CMakeLists.txt#L15
 > 
-> Removed patch kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-
-> for-egl-with-pkg-config.patch because upstream removed glesv2 support:
+> > Additionally, you're not propagating the dependency of glm (needs
+> > libstdc++). That's OK because Kodi does need C++, and thus rsxs already
+> > implicitly has that dependency, but I don;t like it much, though...
 > 
-> https://github.com/xbmc/visualization.shadertoy/commit/
-> d880b98b932efc0c57670ec3f2def947664b60b0
+> True, but there will never be a time when Kodi will not depend on c++ so 
+> I did not add this dependency to all the subpackages of kodi.
 
-Actualy, they did not remove gles2 support at all, as far as I can see
-in that comit log; exceprts:
+Yeah, but seeing new 'select' for whjich the dependencies are not
+propagated at least warrant a note in the commit log, if at all to show
+the reviewers/committers that you accoutned for the deepndency in some
+way (and that it is not just an oversight).
 
-      find_path(OPENGLES_INCLUDE_DIR GLES2/gl2.h
-                                     PATHS ${PC_OPENGLES_INCLUDEDIR})
-      find_library(OPENGLES_gl_LIBRARY NAMES ${_brcmprefix}GLESv2
-                                       PATHS ${PC_OPENGLES_LIBDIR})
-    [...]
-    if(OPENGLES_FOUND)
-      set(OPENGLES_LIBRARIES ${OPENGLES_gl_LIBRARY})
-      if(OPENGLES3_INCLUDE_DIR)
-        set(OPENGLES_INCLUDE_DIRS ${OPENGLES_INCLUDE_DIR} ${OPENGLES3_INCLUDE_DIR})
-        set(OPENGLES_DEFINITIONS -DHAS_GLES=3)
-        mark_as_advanced(OPENGLES_INCLUDE_DIR OPENGLES3_INCLUDE_DIR OPENGLES_gl_LIBRARY)
-      else()
-        set(OPENGLES_INCLUDE_DIRS ${OPENGLES_INCLUDE_DIR})
-        set(OPENGLES_DEFINITIONS -DHAS_GLES=2)
-        mark_as_advanced(OPENGLES_INCLUDE_DIR OPENGLES_gl_LIBRARY)
-      endif()
-    endif()
-
-So they still support gles2, and they additionally added support for
-gles3.
-
-But OK, they rewrote the code. However, looking at the [atch you remove,
-and looking at the new code, I am not sure what we tried to fix is not
-broken again. For example, the pkg-config check was changed (in our
-patch):
-
-    -pkg_check_modules(OpenGLES2 glesv2)
-    +pkg_check_modules(OpenGLES2 glesv2 egl)
-
-And their new code does something that is equivalent to the original
-line we patched:
-
-    pkg_check_modules(PC_OPENGLES ${_brcmprefix}glesv2 QUIET)
-
-So I wonder if we do not still need something similar to our patch...
+Thanks for the feedback. :-)
 
 Regards,
 Yann E. MORIN.
