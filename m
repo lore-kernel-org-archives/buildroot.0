@@ -1,191 +1,105 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 Jan 2020 07:55:54 +0100
-Subject: [Buildroot] [PATCH v2 1/3] configs/raspberrypi*: bump kernel
- version to 301ec88
-In-Reply-To: <20200117212420.GR22540@scaer>
-References: <20200115210037.9564-1-ps.report@gmx.net>
- <20200117212420.GR22540@scaer>
-Message-ID: <20200120075554.155a4c33@gmx.net>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 20 Jan 2020 08:14:37 +0100
+Subject: [Buildroot] [PATCH] package/gettext-tiny: bump version to latest
+In-Reply-To: <20200119225348.29225-1-giulio.benetti@benettiengineering.com>
+References: <20200119225348.29225-1-giulio.benetti@benettiengineering.com>
+Message-ID: <CAEyMn7ZjxJc5n94D2p-+-XUBoUQeHyK8xRQtWLV4YMnjgNtZKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hi,
 
-On Fri, 17 Jan 2020 22:24:20 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Tested with:
+utils/test-pkg -p minicom -d ~/pkg-test-m4
+                             br-arm-full [1/6]: OK
+                  br-arm-cortex-a9-glibc [2/6]: OK
+                   br-arm-cortex-m4-full [3/6]: SKIPPED
+                          br-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
+6 builds, 1 skipped, 0 build failed, 0 legal-info failed
 
-> Peter, All,
+Am So., 19. Jan. 2020 um 23:53 Uhr schrieb Giulio Benetti
+<giulio.benetti@benettiengineering.com>:
 >
-> Thanks for the reespin.
+> Drop patch already upstreamed to fix install failure if path contains
+> "m4/ string.
 >
-> On 2020-01-15 22:00 +0100, Peter Seiderer spake thusly:
-> > Now based on 4.19.93 (from 4.19.75).
->
-> Sorry, but you are still not explaining _why_ we need to go from a tag
-> to a sha1.
->
-> Even saying "upstream is lenient about tags, we don't know when the next
-> one will be released, so switch to a sha1" would have been enough...
->
-> Please resend, either expanding on the above, or providing a better
-> explanation.
->
-> Ditto your second patch.
->
-> However, for the thied one, we're already using a sha1, so the
-> explantions is not needed. However, just resend it as well: I did not
-> apply it, as I did not know if it makes sense to apply it separately of
-> the second one...
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Ups, sorry, will fix it on next patch interation...
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
 
-Regards,
-Peter
-
+> ---
+>  ...tall-failure-if-path-contains-m4-str.patch | 31 -------------------
+>  package/gettext-tiny/gettext-tiny.hash        |  2 +-
+>  package/gettext-tiny/gettext-tiny.mk          |  2 +-
+>  3 files changed, 2 insertions(+), 33 deletions(-)
+>  delete mode 100644 package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
 >
-> Regards,
-> Yann E. MORIN.
+> diff --git a/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch b/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
+> deleted file mode 100644
+> index f1c68ee1e7..0000000000
+> --- a/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
+> +++ /dev/null
+> @@ -1,31 +0,0 @@
+> -From 2ad9d66d733396b655f05b477a5e91592378fb21 Mon Sep 17 00:00:00 2001
+> -From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> -Date: Fri, 17 Jan 2020 18:34:42 +0100
+> -Subject: [PATCH] Makefile: fix install failure if path contains "m4/" string
+> -
+> -Actually Makefile install recipe substitutes every occurence of "m4/" in
+> -file name of the target of the rule($@), in an absolute path there could
+> -more than one "m4/" occurence, so install will fail. Let's change
+> -$(subst ...) with $(patsubst ...) substituting only last occurence of
+> -"m4/" pattern.
+> -
+> -Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ----
+> - Makefile | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff --git a/Makefile b/Makefile
+> -index 4a3c3f6..2e13403 100644
+> ---- a/Makefile
+> -+++ b/Makefile
+> -@@ -88,6 +88,6 @@ $(DESTDIR)$(datadir)/%: %
+> -       $(INSTALL) -D -m 644 $< $@
+> -
+> - $(DESTDIR)$(acdir)/%: %
+> --      $(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(subst m4/,,$@)
+> -+      $(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(patsubst %m4/,%,$(dir $@))/$(notdir $@)
+> -
+> - .PHONY: all clean install
+> ---
+> -2.20.1
+> -
+> diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
+> index 4de837da46..9232fe8530 100644
+> --- a/package/gettext-tiny/gettext-tiny.hash
+> +++ b/package/gettext-tiny/gettext-tiny.hash
+> @@ -1,5 +1,5 @@
+>  # Locally Computed:
+> -sha256 ba7b6960018022d876e39aa723d40b6745823b2ff71dae591d05bbd1b8ec180f  gettext-tiny-73fc3e7ef7e016a3874b632fd0475969d288f309.tar.gz
+> +sha256 efc740007c82a9b3a0d382fb50d212fa7dc0beddb9695409ee79684f9f2124b2  gettext-tiny-adaa9c64921e80f2b8dd3610ffb508618b9204f3.tar.gz
+>  sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
+>  sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  extra/COPYING
+>  # From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
+> diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+> index 6ee6269e09..09a98f99b4 100644
+> --- a/package/gettext-tiny/gettext-tiny.mk
+> +++ b/package/gettext-tiny/gettext-tiny.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes v1 -> v2:
-> >   - no changes
-> > ---
-> >  configs/raspberrypi0_defconfig       | 2 +-
-> >  configs/raspberrypi0w_defconfig      | 2 +-
-> >  configs/raspberrypi2_defconfig       | 2 +-
-> >  configs/raspberrypi3_64_defconfig    | 2 +-
-> >  configs/raspberrypi3_defconfig       | 2 +-
-> >  configs/raspberrypi3_qt5we_defconfig | 2 +-
-> >  configs/raspberrypi4_64_defconfig    | 2 +-
-> >  configs/raspberrypi4_defconfig       | 2 +-
-> >  configs/raspberrypi_defconfig        | 2 +-
-> >  9 files changed, 9 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-> > index 1600e219d1..5cdc38eae0 100644
-> > --- a/configs/raspberrypi0_defconfig
-> > +++ b/configs/raspberrypi0_defconfig
-> > @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> >
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
-> >
-> >  # Build the DTBs for A/B from the kernel sources: the zero is the same
-> > diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-> > index e3c747ff6f..129afc4f2e 100644
-> > --- a/configs/raspberrypi0w_defconfig
-> > +++ b/configs/raspberrypi0w_defconfig
-> > @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> >
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
-> >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> >  BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
-> > diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-> > index e6c38e74b7..15b6a58780 100644
-> > --- a/configs/raspberrypi2_defconfig
-> > +++ b/configs/raspberrypi2_defconfig
-> > @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-> >
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-> >
-> >  # Build the DTB from the kernel sources
-> > diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-> > index b9a070fb82..45283496ac 100644
-> > --- a/configs/raspberrypi3_64_defconfig
-> > +++ b/configs/raspberrypi3_64_defconfig
-> > @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-> >
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
-> >
-> >  # Build the DTB from the kernel sources
-> > diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-> > index 530eb0ab3f..08e7bed027 100644
-> > --- a/configs/raspberrypi3_defconfig
-> > +++ b/configs/raspberrypi3_defconfig
-> > @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-> >
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-> >
-> >  # Build the DTB from the kernel sources
-> > diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-> > index 4e9d782c7c..63a03e5cf9 100644
-> > --- a/configs/raspberrypi3_qt5we_defconfig
-> > +++ b/configs/raspberrypi3_qt5we_defconfig
-> > @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-> >
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-> >
-> >  # Build the DTB from the kernel sources
-> > diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-> > index f013c4382c..0733e91b05 100644
-> > --- a/configs/raspberrypi4_64_defconfig
-> > +++ b/configs/raspberrypi4_64_defconfig
-> > @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-> >
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-> >
-> >  # Build the DTB from the kernel sources
-> > diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-> > index a216463e28..2402b0673c 100644
-> > --- a/configs/raspberrypi4_defconfig
-> > +++ b/configs/raspberrypi4_defconfig
-> > @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-> >
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-> >
-> >  # Build the DTB from the kernel sources
-> > diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-> > index 969a92820e..1b47e293f8 100644
-> > --- a/configs/raspberrypi_defconfig
-> > +++ b/configs/raspberrypi_defconfig
-> > @@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> >
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,301ec88e28eb8924e827e60020ab513e60fb7085)/linux-301ec88e28eb8924e827e60020ab513e60fb7085.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
-> >
-> >  # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
-> > --
-> > 2.24.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+> -GETTEXT_TINY_VERSION = 73fc3e7ef7e016a3874b632fd0475969d288f309
+> +GETTEXT_TINY_VERSION = adaa9c64921e80f2b8dd3610ffb508618b9204f3
+>  GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,$(GETTEXT_TINY_VERSION))
+>  GETTEXT_TINY_LICENSE = MIT, GPL-3.0+ (extra gettext)
+>  GETTEXT_TINY_INSTALL_STAGING = YES
+> --
+> 2.20.1
 >
