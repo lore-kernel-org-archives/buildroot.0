@@ -1,10 +1,8 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 20 Jan 2020 08:55:39 +0100
-Subject: [Buildroot] [PATCH] package/busybox: update minimal .config file
- with Busybox 1.31.1
-In-Reply-To: <20200120075539.3071-1-joerg.krause@embedded.rocks>
-References: <20200120075539.3071-1-joerg.krause@embedded.rocks>
-Message-ID: <20200120075539.3071-2-joerg.krause@embedded.rocks>
+Date: Mon, 20 Jan 2020 08:55:38 +0100
+Subject: [Buildroot] [PATCH] package/busybox: update .config file with
+ Busybox 1.31.1
+Message-ID: <20200120075539.3071-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +10,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Commit 5530674e0ce21a927735ff77602a9e5854363751 bumped the version, but
-did not update the minimal .config file.
+did not update the config file.
 
-Update the configuration file by loading the busybox-iminimal.config file
-and saving it back.
+Update the configuration file by loading the busybox.config file and
+saving it back.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/busybox/busybox-minimal.config | 52 +++++++++++++++++++++++---
- 1 file changed, 46 insertions(+), 6 deletions(-)
+ package/busybox/busybox.config | 55 +++++++++++++++++++++++++++-------
+ 1 file changed, 45 insertions(+), 10 deletions(-)
 
-diff --git a/package/busybox/busybox-minimal.config b/package/busybox/busybox-minimal.config
-index a7aa19ea8a..6107edbdea 100644
---- a/package/busybox/busybox-minimal.config
-+++ b/package/busybox/busybox-minimal.config
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 1ea810e5be..ec1af4720c 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
 @@ -1,7 +1,7 @@
  #
  # Automatically generated make config: don't edit
 -# Busybox version: 1.28.0
--# Wed Feb  7 09:47:09 2018
+-# Wed Feb  7 09:44:57 2018
 +# Busybox version: 1.31.1
-+# Tue Jan 14 10:15:13 2020
++# Tue Jan 14 10:13:06 2020
  #
  CONFIG_HAVE_DOT_CONFIG=y
  
@@ -86,13 +84,13 @@ index a7aa19ea8a..6107edbdea 100644
  # CONFIG_FEATURE_EDITING_ASK_TERMINAL is not set
  # CONFIG_LOCALE_SUPPORT is not set
  # CONFIG_UNICODE_SUPPORT is not set
-@@ -149,6 +156,7 @@ CONFIG_LZCAT=y
+@@ -149,6 +156,7 @@ CONFIG_UNXZ=y
  CONFIG_XZCAT=y
- # CONFIG_XZ is not set
+ CONFIG_XZ=y
  # CONFIG_BZIP2 is not set
 +CONFIG_BZIP2_SMALL=0
  CONFIG_FEATURE_BZIP2_DECOMPRESS=y
- # CONFIG_CPIO is not set
+ CONFIG_CPIO=y
  # CONFIG_FEATURE_CPIO_O is not set
 @@ -201,6 +209,7 @@ CONFIG_CKSUM=y
  # CONFIG_COMM is not set
@@ -129,23 +127,23 @@ index a7aa19ea8a..6107edbdea 100644
  # CONFIG_TAC is not set
  CONFIG_TAIL=y
  CONFIG_FEATURE_FANCY_TAIL=y
-@@ -433,6 +442,7 @@ CONFIG_FEATURE_VI_UNDO_QUEUE_MAX=0
- # CONFIG_FEATURE_FIND_MMIN is not set
- # CONFIG_FEATURE_FIND_PERM is not set
- # CONFIG_FEATURE_FIND_TYPE is not set
-+# CONFIG_FEATURE_FIND_EXECUTABLE is not set
- # CONFIG_FEATURE_FIND_XDEV is not set
- # CONFIG_FEATURE_FIND_MAXDEPTH is not set
- # CONFIG_FEATURE_FIND_NEWER is not set
-@@ -446,6 +456,7 @@ CONFIG_FEATURE_VI_UNDO_QUEUE_MAX=0
- # CONFIG_FEATURE_FIND_PAREN is not set
- # CONFIG_FEATURE_FIND_SIZE is not set
- # CONFIG_FEATURE_FIND_PRUNE is not set
-+# CONFIG_FEATURE_FIND_QUIT is not set
+@@ -437,6 +446,7 @@ CONFIG_FEATURE_FIND_MTIME=y
+ CONFIG_FEATURE_FIND_MMIN=y
+ CONFIG_FEATURE_FIND_PERM=y
+ CONFIG_FEATURE_FIND_TYPE=y
++CONFIG_FEATURE_FIND_EXECUTABLE=y
+ CONFIG_FEATURE_FIND_XDEV=y
+ CONFIG_FEATURE_FIND_MAXDEPTH=y
+ CONFIG_FEATURE_FIND_NEWER=y
+@@ -450,6 +460,7 @@ CONFIG_FEATURE_FIND_DEPTH=y
+ CONFIG_FEATURE_FIND_PAREN=y
+ CONFIG_FEATURE_FIND_SIZE=y
+ CONFIG_FEATURE_FIND_PRUNE=y
++CONFIG_FEATURE_FIND_QUIT=y
  # CONFIG_FEATURE_FIND_DELETE is not set
- # CONFIG_FEATURE_FIND_PATH is not set
- # CONFIG_FEATURE_FIND_REGEX is not set
-@@ -473,6 +484,7 @@ CONFIG_FEATURE_XARGS_SUPPORT_ARGS_FILE=y
+ CONFIG_FEATURE_FIND_PATH=y
+ CONFIG_FEATURE_FIND_REGEX=y
+@@ -477,6 +488,7 @@ CONFIG_FEATURE_XARGS_SUPPORT_ARGS_FILE=y
  CONFIG_HALT=y
  CONFIG_POWEROFF=y
  CONFIG_REBOOT=y
@@ -153,24 +151,16 @@ index a7aa19ea8a..6107edbdea 100644
  # CONFIG_FEATURE_CALL_TELINIT is not set
  CONFIG_TELINIT_PATH=""
  CONFIG_INIT=y
-@@ -624,6 +636,7 @@ CONFIG_XXD=y
- # CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
- # CONFIG_FEATURE_MDEV_EXEC is not set
- # CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
-+# CONFIG_FEATURE_MDEV_DAEMON is not set
- CONFIG_MESG=y
- CONFIG_FEATURE_MESG_ENABLE_ONLY_GROUP=y
- CONFIG_MKE2FS=y
-@@ -647,6 +660,8 @@ CONFIG_FEATURE_MOUNT_FLAGS=y
+@@ -652,6 +664,8 @@ CONFIG_FEATURE_MOUNT_FLAGS=y
  CONFIG_FEATURE_MOUNT_FSTAB=y
  CONFIG_FEATURE_MOUNT_OTHERTAB=y
- # CONFIG_MOUNTPOINT is not set
+ CONFIG_MOUNTPOINT=y
 +CONFIG_NOLOGIN=y
 +CONFIG_NOLOGIN_DEPENDENCIES=y
  # CONFIG_NSENTER is not set
- # CONFIG_PIVOT_ROOT is not set
- # CONFIG_RDATE is not set
-@@ -700,6 +715,7 @@ CONFIG_VOLUMEID=y
+ CONFIG_PIVOT_ROOT=y
+ CONFIG_RDATE=y
+@@ -705,6 +719,7 @@ CONFIG_FEATURE_VOLUMEID_FAT=y
  # CONFIG_FEATURE_VOLUMEID_HFS is not set
  # CONFIG_FEATURE_VOLUMEID_ISO9660 is not set
  # CONFIG_FEATURE_VOLUMEID_JFS is not set
@@ -178,12 +168,12 @@ index a7aa19ea8a..6107edbdea 100644
  # CONFIG_FEATURE_VOLUMEID_LINUXRAID is not set
  # CONFIG_FEATURE_VOLUMEID_LINUXSWAP is not set
  # CONFIG_FEATURE_VOLUMEID_LUKS is not set
-@@ -721,6 +737,12 @@ CONFIG_FEATURE_VOLUMEID_MINIX=y
+@@ -726,6 +741,12 @@ CONFIG_FEATURE_VOLUMEID_UBIFS=y
  # CONFIG_ADJTIMEX is not set
  # CONFIG_BBCONFIG is not set
  # CONFIG_FEATURE_COMPRESS_BBCONFIG is not set
 +CONFIG_BC=y
-+# CONFIG_DC is not set
++CONFIG_DC=y
 +CONFIG_FEATURE_DC_BIG=y
 +# CONFIG_FEATURE_DC_LIBM is not set
 +CONFIG_FEATURE_BC_INTERACTIVE=y
@@ -191,62 +181,62 @@ index a7aa19ea8a..6107edbdea 100644
  # CONFIG_BEEP is not set
  CONFIG_FEATURE_BEEP_FREQ=0
  CONFIG_FEATURE_BEEP_LENGTH_MS=0
-@@ -739,8 +761,6 @@ CONFIG_FEATURE_BEEP_LENGTH_MS=0
- # CONFIG_FEATURE_CROND_SPECIAL_TIMES is not set
- CONFIG_FEATURE_CROND_DIR=""
- # CONFIG_CRONTAB is not set
--# CONFIG_DC is not set
+@@ -744,8 +765,6 @@ CONFIG_CROND=y
+ CONFIG_FEATURE_CROND_SPECIAL_TIMES=y
+ CONFIG_FEATURE_CROND_DIR="/var/spool/cron"
+ CONFIG_CRONTAB=y
+-CONFIG_DC=y
 -# CONFIG_FEATURE_DC_LIBM is not set
  # CONFIG_DEVFSD is not set
  # CONFIG_DEVFSD_MODLOAD is not set
  # CONFIG_DEVFSD_FG_NP is not set
-@@ -764,6 +784,7 @@ CONFIG_HEXEDIT=y
- # CONFIG_I2CSET is not set
- # CONFIG_I2CDUMP is not set
- # CONFIG_I2CDETECT is not set
+@@ -769,6 +788,7 @@ CONFIG_I2CGET=y
+ CONFIG_I2CSET=y
+ CONFIG_I2CDUMP=y
+ CONFIG_I2CDETECT=y
 +CONFIG_I2CTRANSFER=y
  # CONFIG_INOTIFYD is not set
- # CONFIG_LESS is not set
- CONFIG_FEATURE_LESS_MAXLINES=0
-@@ -776,6 +797,8 @@ CONFIG_FEATURE_LESS_MAXLINES=0
+ CONFIG_LESS=y
+ CONFIG_FEATURE_LESS_MAXLINES=9999999
+@@ -781,6 +801,8 @@ CONFIG_FEATURE_LESS_REGEXP=y
  # CONFIG_FEATURE_LESS_ASK_TERMINAL is not set
  # CONFIG_FEATURE_LESS_DASHCMD is not set
  # CONFIG_FEATURE_LESS_LINENUMS is not set
 +# CONFIG_FEATURE_LESS_RAW is not set
 +# CONFIG_FEATURE_LESS_ENV is not set
  CONFIG_LSSCSI=y
- # CONFIG_MAKEDEVS is not set
+ CONFIG_MAKEDEVS=y
  # CONFIG_FEATURE_MAKEDEVS_LEAF is not set
-@@ -795,6 +818,7 @@ CONFIG_SETFATTR=y
+@@ -800,6 +822,7 @@ CONFIG_SETFATTR=y
  CONFIG_SETSERIAL=y
- # CONFIG_STRINGS is not set
- # CONFIG_TIME is not set
+ CONFIG_STRINGS=y
+ CONFIG_TIME=y
 +CONFIG_TS=y
  # CONFIG_TTYSIZE is not set
- # CONFIG_UBIRENAME is not set
+ CONFIG_UBIRENAME=y
  # CONFIG_UBIATTACH is not set
-@@ -813,6 +837,7 @@ CONFIG_SETSERIAL=y
+@@ -818,6 +841,7 @@ CONFIG_FEATURE_IPV6=y
  # CONFIG_FEATURE_UNIX_LOCAL is not set
- # CONFIG_FEATURE_PREFER_IPV4_ADDRESS is not set
+ CONFIG_FEATURE_PREFER_IPV4_ADDRESS=y
  # CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
 +# CONFIG_FEATURE_TLS_SHA1 is not set
- # CONFIG_ARP is not set
- # CONFIG_ARPING is not set
+ CONFIG_ARP=y
+ CONFIG_ARPING=y
  # CONFIG_BRCTL is not set
-@@ -895,9 +920,12 @@ CONFIG_NETSTAT=y
+@@ -900,9 +924,12 @@ CONFIG_NETSTAT=y
  # CONFIG_FEATURE_NETSTAT_WIDE is not set
- CONFIG_FEATURE_NETSTAT_PRG=y
- # CONFIG_NSLOOKUP is not set
-+# CONFIG_FEATURE_NSLOOKUP_BIG is not set
-+# CONFIG_FEATURE_NSLOOKUP_LONG_OPTIONS is not set
+ # CONFIG_FEATURE_NETSTAT_PRG is not set
+ CONFIG_NSLOOKUP=y
++CONFIG_FEATURE_NSLOOKUP_BIG=y
++CONFIG_FEATURE_NSLOOKUP_LONG_OPTIONS=y
  # CONFIG_NTPD is not set
  # CONFIG_FEATURE_NTPD_SERVER is not set
  # CONFIG_FEATURE_NTPD_CONF is not set
 +# CONFIG_FEATURE_NTP_AUTH is not set
  CONFIG_PING=y
  # CONFIG_PING6 is not set
- # CONFIG_FEATURE_FANCY_PING is not set
-@@ -905,6 +933,8 @@ CONFIG_PING=y
+ CONFIG_FEATURE_FANCY_PING=y
+@@ -910,6 +937,8 @@ CONFIG_FEATURE_FANCY_PING=y
  CONFIG_ROUTE=y
  # CONFIG_SLATTACH is not set
  # CONFIG_SSL_CLIENT is not set
@@ -255,15 +245,20 @@ index a7aa19ea8a..6107edbdea 100644
  # CONFIG_TCPSVD is not set
  # CONFIG_UDPSVD is not set
  CONFIG_TELNET=y
-@@ -916,6 +946,7 @@ CONFIG_FEATURE_TELNET_WIDTH=y
+@@ -921,11 +950,8 @@ CONFIG_FEATURE_TELNET_WIDTH=y
  # CONFIG_FEATURE_TELNETD_INETD_WAIT is not set
- # CONFIG_TFTP is not set
+ CONFIG_TFTP=y
  # CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
-+# CONFIG_FEATURE_TFTP_HPA_COMPAT is not set
++CONFIG_FEATURE_TFTP_HPA_COMPAT=y
  # CONFIG_TFTPD is not set
- # CONFIG_FEATURE_TFTP_GET is not set
- # CONFIG_FEATURE_TFTP_PUT is not set
-@@ -952,6 +983,7 @@ CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
+-
+-#
+-# Common options for tftp/tftpd
+-#
+ CONFIG_FEATURE_TFTP_GET=y
+ CONFIG_FEATURE_TFTP_PUT=y
+ CONFIG_FEATURE_TFTP_BLOCKSIZE=y
+@@ -961,6 +987,7 @@ CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
  # CONFIG_FEATURE_UDHCPC6_RFC3646 is not set
  # CONFIG_FEATURE_UDHCPC6_RFC4704 is not set
  # CONFIG_FEATURE_UDHCPC6_RFC4833 is not set
@@ -271,7 +266,7 @@ index a7aa19ea8a..6107edbdea 100644
  
  #
  # Common options for DHCP applets
-@@ -1038,6 +1070,7 @@ CONFIG_FEATURE_PS_LONG=y
+@@ -1047,6 +1074,7 @@ CONFIG_WATCH=y
  # CONFIG_SV is not set
  CONFIG_SV_DEFAULT_SERVICE_DIR=""
  CONFIG_SVC=y
@@ -279,33 +274,33 @@ index a7aa19ea8a..6107edbdea 100644
  # CONFIG_SVLOGD is not set
  # CONFIG_CHCON is not set
  # CONFIG_GETENFORCE is not set
-@@ -1066,6 +1099,8 @@ CONFIG_BASH_IS_NONE=y
- # CONFIG_ASH_OPTIMIZE_FOR_SIZE is not set
- # CONFIG_ASH_INTERNAL_GLOB is not set
- # CONFIG_ASH_BASH_COMPAT is not set
+@@ -1075,6 +1103,8 @@ CONFIG_ASH=y
+ CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
+ CONFIG_ASH_INTERNAL_GLOB=y
+ CONFIG_ASH_BASH_COMPAT=y
 +# CONFIG_ASH_BASH_SOURCE_CURDIR is not set
-+# CONFIG_ASH_BASH_NOT_FOUND_HOOK is not set
- # CONFIG_ASH_JOB_CONTROL is not set
- # CONFIG_ASH_ALIAS is not set
- # CONFIG_ASH_RANDOM_SUPPORT is not set
-@@ -1082,6 +1117,8 @@ CONFIG_BASH_IS_NONE=y
- CONFIG_HUSH=y
- CONFIG_HUSH_BASH_COMPAT=y
- CONFIG_HUSH_BRACE_EXPANSION=y
-+CONFIG_HUSH_LINENO_VAR=y
++CONFIG_ASH_BASH_NOT_FOUND_HOOK=y
+ CONFIG_ASH_JOB_CONTROL=y
+ CONFIG_ASH_ALIAS=y
+ CONFIG_ASH_RANDOM_SUPPORT=y
+@@ -1091,6 +1121,8 @@ CONFIG_ASH_CMDCMD=y
+ # CONFIG_HUSH is not set
+ # CONFIG_HUSH_BASH_COMPAT is not set
+ # CONFIG_HUSH_BRACE_EXPANSION is not set
++# CONFIG_HUSH_LINENO_VAR is not set
 +# CONFIG_HUSH_BASH_SOURCE_CURDIR is not set
- CONFIG_HUSH_INTERACTIVE=y
- CONFIG_HUSH_SAVEHISTORY=y
- CONFIG_HUSH_JOB=y
-@@ -1102,6 +1139,7 @@ CONFIG_HUSH_EXPORT_N=y
- CONFIG_HUSH_READONLY=y
- CONFIG_HUSH_KILL=y
- CONFIG_HUSH_WAIT=y
-+CONFIG_HUSH_COMMAND=y
- CONFIG_HUSH_TRAP=y
- CONFIG_HUSH_TYPE=y
- CONFIG_HUSH_TIMES=y
-@@ -1118,11 +1156,13 @@ CONFIG_HUSH_GETOPTS=y
+ # CONFIG_HUSH_INTERACTIVE is not set
+ # CONFIG_HUSH_SAVEHISTORY is not set
+ # CONFIG_HUSH_JOB is not set
+@@ -1111,6 +1143,7 @@ CONFIG_ASH_CMDCMD=y
+ # CONFIG_HUSH_READONLY is not set
+ # CONFIG_HUSH_KILL is not set
+ # CONFIG_HUSH_WAIT is not set
++# CONFIG_HUSH_COMMAND is not set
+ # CONFIG_HUSH_TRAP is not set
+ # CONFIG_HUSH_TYPE is not set
+ # CONFIG_HUSH_TIMES is not set
+@@ -1127,11 +1160,13 @@ CONFIG_ASH_CMDCMD=y
  #
  CONFIG_FEATURE_SH_MATH=y
  CONFIG_FEATURE_SH_MATH_64=y
