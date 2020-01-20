@@ -1,140 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jan 2020 22:44:30 +0100
-Subject: [Buildroot] [git commit] package/libpam-tacplus: bump to version
- 1.5.1
-Message-ID: <20200120214202.6495783468@busybox.osuosl.org>
+Date: Mon, 20 Jan 2020 22:47:49 +0100
+Subject: [Buildroot] [git commit] package/gettext-tiny: bump version to
+ latest
+Message-ID: <20200120214202.7AEC883468@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe6efce9eb777e421efa5a9d3f1225ddc17deac3
+commit: https://git.buildroot.net/buildroot/commit/?id=f22762317206a9bd538366f34e1e169a42dba394
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove all patches, already applied upstream.
-- Let PAM module be installed at the default place ($libdir/security).
+Drop patch already upstreamed to fix install failure if path contains
+"m4/ string.
 
-Fixes:
-  http://autobuild.buildroot.net/results/cf15b09bd7501c017a4e8cf9fb80857197d4a433/
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-getrandom-call-in-magic.c.patch       | 30 -----------------
- ...0002-Fix-compilation-of-tacc.c-with-GCC-8.patch | 39 ----------------------
- package/libpam-tacplus/libpam-tacplus.hash         |  2 +-
- package/libpam-tacplus/libpam-tacplus.mk           |  4 +--
- 4 files changed, 2 insertions(+), 73 deletions(-)
+ ...x-install-failure-if-path-contains-m4-str.patch | 31 ----------------------
+ package/gettext-tiny/gettext-tiny.hash             |  2 +-
+ package/gettext-tiny/gettext-tiny.mk               |  2 +-
+ 3 files changed, 2 insertions(+), 33 deletions(-)
 
-diff --git a/package/libpam-tacplus/0001-Fix-getrandom-call-in-magic.c.patch b/package/libpam-tacplus/0001-Fix-getrandom-call-in-magic.c.patch
+diff --git a/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch b/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
 deleted file mode 100644
-index bde717f3f0..0000000000
---- a/package/libpam-tacplus/0001-Fix-getrandom-call-in-magic.c.patch
+index f1c68ee1e7..0000000000
+--- a/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
 +++ /dev/null
-@@ -1,30 +0,0 @@
--From 5b49ec03b165b8d7c69e196bf1c2780274fbe1ee Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 20 May 2018 15:47:33 +0200
--Subject: [PATCH] Fix getrandom call in magic.c
+@@ -1,31 +0,0 @@
+-From 2ad9d66d733396b655f05b477a5e91592378fb21 Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Fri, 17 Jan 2020 18:34:42 +0100
+-Subject: [PATCH] Makefile: fix install failure if path contains "m4/" string
 -
--_GNU_SOURCE must be defined before any includes to be able to use
--getrandom
+-Actually Makefile install recipe substitutes every occurence of "m4/" in
+-file name of the target of the rule($@), in an absolute path there could
+-more than one "m4/" occurence, so install will fail. Let's change
+-$(subst ...) with $(patsubst ...) substituting only last occurence of
+-"m4/" pattern.
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--
--[Upstream status: https://github.com/jeroennijhof/pam_tacplus/pull/118]
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ----
-- libtac/lib/magic.c | 1 +
-- 1 file changed, 1 insertion(+)
+- Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/libtac/lib/magic.c b/libtac/lib/magic.c
--index 97aa035..a9cbe86 100644
----- a/libtac/lib/magic.c
--+++ b/libtac/lib/magic.c
--@@ -18,6 +18,7 @@
--  * See `CHANGES' file for revision history.
--  */
+-diff --git a/Makefile b/Makefile
+-index 4a3c3f6..2e13403 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -88,6 +88,6 @@ $(DESTDIR)$(datadir)/%: %
+- 	$(INSTALL) -D -m 644 $< $@
 - 
--+#define _GNU_SOURCE
-- #include <stdio.h>
-- #include <stdlib.h>
-- #include <sys/types.h>
+- $(DESTDIR)$(acdir)/%: %
+--	$(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(subst m4/,,$@)
+-+	$(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(patsubst %m4/,%,$(dir $@))/$(notdir $@)
+- 
+- .PHONY: all clean install
 --- 
--2.14.1
+-2.20.1
 -
-diff --git a/package/libpam-tacplus/0002-Fix-compilation-of-tacc.c-with-GCC-8.patch b/package/libpam-tacplus/0002-Fix-compilation-of-tacc.c-with-GCC-8.patch
-deleted file mode 100644
-index 2f87b92767..0000000000
---- a/package/libpam-tacplus/0002-Fix-compilation-of-tacc.c-with-GCC-8.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 4c9635b03d0acf140f65004be9d4822297ee5a35 Mon Sep 17 00:00:00 2001
--From: Carlos Santos <casantos@datacom.com.br>
--Date: Mon, 10 Dec 2018 17:27:16 -0200
--Subject: [PATCH] Fix compilation of tacc.c with GCC 8
--
--GCC 8 demands that the size of the string copied by strncpy be smaller
--than the size of the destination to keep space for the trailibg '\0':
--
--tacc.c:378:3: error: 'strncpy' specified bound 4 equals destination size [-Werror=stringop-truncation]
--   strncpy(utmpx.ut_id, tty + C_STRLEN("tty"), sizeof(utmpx.ut_id));
--
--Ensure that no more than sizeof(utmpx.ut_id) - 1 characters are copied
--and that a trailing '\0' is stored.
--
--Fixes:
--  http://autobuild.buildroot.net/results/da6d150e470046c03c5f7463de045604e15e4a30/
--
--Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-----
-- tacc.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/tacc.c b/tacc.c
--index f61e2d7..3c1a40c 100644
----- a/tacc.c
--+++ b/tacc.c
--@@ -375,7 +375,8 @@ int main(int argc, char **argv) {
-- 		utmpx.ut_type = USER_PROCESS;
-- 		utmpx.ut_pid = getpid();
-- 		xstrcpy(utmpx.ut_line, tty, sizeof(utmpx.ut_line));
---		strncpy(utmpx.ut_id, tty + C_STRLEN("tty"), sizeof(utmpx.ut_id));
--+		strncpy(utmpx.ut_id, tty + C_STRLEN("tty"), sizeof(utmpx.ut_id) - 1);
--+		utmpx.ut_id[sizeof(utmpx.ut_id) - 1] = '\0';
-- 		xstrcpy(utmpx.ut_host, "dialup", sizeof(utmpx.ut_host));
-- 		utmpx.ut_tv.tv_sec = tv.tv_sec;
-- 		utmpx.ut_tv.tv_usec = tv.tv_usec;
---- 
--2.14.5
--
-diff --git a/package/libpam-tacplus/libpam-tacplus.hash b/package/libpam-tacplus/libpam-tacplus.hash
-index a40c6a014b..b1cd053f12 100644
---- a/package/libpam-tacplus/libpam-tacplus.hash
-+++ b/package/libpam-tacplus/libpam-tacplus.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 6e1ce4e3194a4d7823a0f0b352485d5028790e4a0974b9a9619f71b07f79a5fa  libpam-tacplus-1.5.0-beta.2.tar.gz
-+sha256 82f204b949b2a55d0711b314c6e3b213bd1c0c1ee0d9ba15680570db22bff2d8  libpam-tacplus-1.5.1.tar.gz
- sha256 b2b961f07e97c4fb78074276da304ea36b85dc299aae5efb79080cedaea3d5ac  COPYING
-diff --git a/package/libpam-tacplus/libpam-tacplus.mk b/package/libpam-tacplus/libpam-tacplus.mk
-index 9922199420..f69d275cb6 100644
---- a/package/libpam-tacplus/libpam-tacplus.mk
-+++ b/package/libpam-tacplus/libpam-tacplus.mk
+diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
+index 4de837da46..9232fe8530 100644
+--- a/package/gettext-tiny/gettext-tiny.hash
++++ b/package/gettext-tiny/gettext-tiny.hash
+@@ -1,5 +1,5 @@
+ # Locally Computed:
+-sha256 ba7b6960018022d876e39aa723d40b6745823b2ff71dae591d05bbd1b8ec180f  gettext-tiny-73fc3e7ef7e016a3874b632fd0475969d288f309.tar.gz
++sha256 efc740007c82a9b3a0d382fb50d212fa7dc0beddb9695409ee79684f9f2124b2  gettext-tiny-adaa9c64921e80f2b8dd3610ffb508618b9204f3.tar.gz
+ sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  extra/COPYING
+ # From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index 6ee6269e09..09a98f99b4 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPAM_TACPLUS_VERSION = 1.5.0-beta.2
-+LIBPAM_TACPLUS_VERSION = 1.5.1
- LIBPAM_TACPLUS_SITE = $(call github,jeroennijhof,pam_tacplus,v$(LIBPAM_TACPLUS_VERSION))
- LIBPAM_TACPLUS_LICENSE = GPL-2.0+
- LIBPAM_TACPLUS_LICENSE_FILES = COPYING
-@@ -14,7 +14,5 @@ LIBPAM_TACPLUS_AUTORECONF = YES
- LIBPAM_TACPLUS_INSTALL_STAGING = YES
- LIBPAM_TACPLUS_CONF_ENV = \
- 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
--LIBPAM_TACPLUS_CONF_OPTS = \
--	--enable-pamdir=/lib/security
- 
- $(eval $(autotools-package))
+-GETTEXT_TINY_VERSION = 73fc3e7ef7e016a3874b632fd0475969d288f309
++GETTEXT_TINY_VERSION = adaa9c64921e80f2b8dd3610ffb508618b9204f3
+ GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,$(GETTEXT_TINY_VERSION))
+ GETTEXT_TINY_LICENSE = MIT, GPL-3.0+ (extra gettext)
+ GETTEXT_TINY_INSTALL_STAGING = YES
