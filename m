@@ -1,46 +1,40 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 20 Jan 2020 10:12:53 +0100
-Subject: [Buildroot] [PATCH] package/uvw: bump to version 2.3.1_libuv-v1.34
-In-Reply-To: <20200120091254.30207-1-joerg.krause@embedded.rocks>
-References: <20200120091254.30207-1-joerg.krause@embedded.rocks>
-Message-ID: <20200120091254.30207-2-joerg.krause@embedded.rocks>
+Date: Mon, 20 Jan 2020 10:26:13 +0100
+Subject: [Buildroot] [PATCH] package/mpd: bump version to 0.21.19
+Message-ID: <20200120092613.6139-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The copyright year was updated in LICENSE, therefore the value of the
-hash was updated, too.
-
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/uvw/uvw.hash | 4 ++--
- package/uvw/uvw.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
-index 0fd93d3924..c74db9b916 100644
---- a/package/uvw/uvw.hash
-+++ b/package/uvw/uvw.hash
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 798dd73369..ecc2ee42a5 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e10b3ea2df202ef8de24b9922cc30f4de89f30ed4533a6ebfc9d979e7b7c66aa  uvw-2.3.0_libuv-v1.34.tar.gz
--sha256  ea786619b4d1b2ba0a188e923111122dfefea1d01c86e37f9e8c80bdbc3ea400  LICENSE
-+sha256  578179ee76d010c5c9fb180a1b60e45e9f04968718d62c51ec0f71b43564bab9  uvw-2.3.1_libuv-v1.34.tar.gz
-+sha256  755b2f245af22830c15b60c54469c0d92fbed42009b0d0074cec4b3959905757  LICENSE
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-index 46ee05bb08..71b23b2ac1 100644
---- a/package/uvw/uvw.mk
-+++ b/package/uvw/uvw.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally calculated after checking pgp signature
+-sha256  30cf1bddf7d7388487276745ad3515f134e07f0c57f9f97cb2b5d3befd4a4d92  mpd-0.21.16.tar.xz
++sha256  d3275e11d85637adde250cadf3b4f5aec2144228f0d8085767493fc46c55b2f9  mpd-0.21.19.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 6e980b8df1..647cac4f32 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--UVW_VERSION = 2.3.0_libuv-v1.34
-+UVW_VERSION = 2.3.1_libuv-v1.34
- UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
- UVW_INSTALL_STAGING = YES
- UVW_INSTALL_TARGET = NO
+ MPD_VERSION_MAJOR = 0.21
+-MPD_VERSION = $(MPD_VERSION_MAJOR).16
++MPD_VERSION = $(MPD_VERSION_MAJOR).19
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
 -- 
 2.25.0
