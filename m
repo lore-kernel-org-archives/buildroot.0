@@ -1,40 +1,66 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 20 Jan 2020 10:26:13 +0100
-Subject: [Buildroot] [PATCH] package/mpd: bump version to 0.21.19
-Message-ID: <20200120092613.6139-1-joerg.krause@embedded.rocks>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Mon, 20 Jan 2020 09:46:09 +0000
+Subject: [Buildroot] [PATCH] package/olsr: needs -fPIC on Microblaze
+In-Reply-To: <20200118222034.48072-1-giulio.benetti@benettiengineering.com>
+References: <20200118222034.48072-1-giulio.benetti@benettiengineering.com>
+Message-ID: <DM6PR12MB2876F2A5F2BBD3A59DD336DFD9320@DM6PR12MB2876.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Giulio,
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 798dd73369..ecc2ee42a5 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  30cf1bddf7d7388487276745ad3515f134e07f0c57f9f97cb2b5d3befd4a4d92  mpd-0.21.16.tar.xz
-+sha256  d3275e11d85637adde250cadf3b4f5aec2144228f0d8085767493fc46c55b2f9  mpd-0.21.19.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 6e980b8df1..647cac4f32 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.21
--MPD_VERSION = $(MPD_VERSION_MAJOR).16
-+MPD_VERSION = $(MPD_VERSION_MAJOR).19
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
--- 
-2.25.0
+>When building on Microblaze package olsr needs to be compiled with
+>-fPIC, so append -fPIC to CFLAGS when invoking make.
+
+>Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>---
+>  package/olsr/olsr.mk | 13 +++++++++++--
+> 1 file changed, 11 insertions(+), 2 deletions(-)
+
+> diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+>index 53bf874af0..ab4d5f1a76 100644
+>--- a/package/olsr/olsr.mk
+>+++ b/package/olsr/olsr.mk
+>@@ -16,10 +16,19 @@ OLSR_LICENSE = BSD-3-Clause, LGPL-2.1+
+> OLSR_LICENSE_FILES = license.txt lib/pud/nmealib/LICENSE
+> OLSR_DEPENDENCIES = host-flex host-bison
+>
+>+OLSR_CFLAGS = $(TARGET_CFLAGS)
+>+
+
+This error appears for other architectures(ARC, RISCV, arm) as well:
+http://autobuild.buildroot.net/results/0d3/0d3489b14f4f4f0d4837d00209b5c1ee8d6f6a98//
+http://autobuild.buildroot.net/results/b85/b85d27b3a4bab5d68460401ff49e624177d55afa//
+
+Could you please remove ifeq statement below so that the "-fPIC" option is applied for all purposes?
+
+>+# microblaze needs -fPIC to link
+>+ifeq ($(BR2_microblaze),y)
+>+OLSR_CFLAGS += -fPIC
+>+endif
+>+
+> define OLSR_BUILD_CMDS
+>-       $(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D) olsrd
+>+       $(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) \
+>+               CFLAGS="$(OLSR_CFLAGS)" -C $(@D) olsrd
+>         $(foreach p,$(OLSR_PLUGINS), \
+>-               $(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D)/lib/$(p)
+>+               $(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) \
+>+                       CFLAGS="$(OLSR_CFLAGS)" -C $(@D)/lib/$(p)
+>        )
+> endef
+
+> --
+> 2.20.1
+
+
+
+Best regards,
+Evgeniy Didin
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200120/1fba3b37/attachment.html>
