@@ -1,84 +1,62 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 19 Jan 2020 23:53:48 +0100
-Subject: [Buildroot] [PATCH] package/gettext-tiny: bump version to latest
-Message-ID: <20200119225348.29225-1-giulio.benetti@benettiengineering.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Mon, 20 Jan 2020 10:23:59 +1000
+Subject: [Buildroot] [PATCH 1/3] package/xen: explicitly disable
+ checkpolicy logic
+In-Reply-To: <20200119170358.5408-1-peter@korsgaard.com>
+References: <20200119170358.5408-1-peter@korsgaard.com>
+Message-ID: <CAKmqyKNY9DwY=yrf2_db8VOnw+X=Jn1mHpq65dcXDJiiHdwQfA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch already upstreamed to fix install failure if path contains
-"m4/ string.
+On Mon, Jan 20, 2020 at 3:04 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/14af2dc3219847a92c6ec2db14ba387159b61fde
+>
+> The Xen build system builds and embeds a default XSM FLASK (Flux Advanced
+> Security Kernel) security policy if it detects SELinux checkpolicy on the
+> build machine.
+>
+> If enabled, a gen-policy.py python script is used to convert the binary
+> FLASK policy to a C array initialization list to embed it in the Xen binary.
+> Depending on the python version and locale available on the host, this fails
+> with byte values outside the 0..255 range:
+>
+> policy.c:7:10: error: unsigned conversion from 'int' to 'unsigned char' changes value from '56575' to '255' [-Werror=overflow]
+>   0xdc8c, 0xdcff, 0x7c, 0xdcf9, 0x08, 0x00, 0x00, 0x00, 0x58, 0x65, 0x6e, 0x46, 0x6c,
+>
+> To fix this and ensure a consistent build, pass XEN_HAS_CHECKPOLICY=n to
+> disable the checkpolicy detection.
+>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...tall-failure-if-path-contains-m4-str.patch | 31 -------------------
- package/gettext-tiny/gettext-tiny.hash        |  2 +-
- package/gettext-tiny/gettext-tiny.mk          |  2 +-
- 3 files changed, 2 insertions(+), 33 deletions(-)
- delete mode 100644 package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 
-diff --git a/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch b/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
-deleted file mode 100644
-index f1c68ee1e7..0000000000
---- a/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 2ad9d66d733396b655f05b477a5e91592378fb21 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Fri, 17 Jan 2020 18:34:42 +0100
--Subject: [PATCH] Makefile: fix install failure if path contains "m4/" string
--
--Actually Makefile install recipe substitutes every occurence of "m4/" in
--file name of the target of the rule($@), in an absolute path there could
--more than one "m4/" occurence, so install will fail. Let's change
--$(subst ...) with $(patsubst ...) substituting only last occurence of
--"m4/" pattern.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 4a3c3f6..2e13403 100644
----- a/Makefile
--+++ b/Makefile
--@@ -88,6 +88,6 @@ $(DESTDIR)$(datadir)/%: %
-- 	$(INSTALL) -D -m 644 $< $@
-- 
-- $(DESTDIR)$(acdir)/%: %
---	$(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(subst m4/,,$@)
--+	$(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(patsubst %m4/,%,$(dir $@))/$(notdir $@)
-- 
-- .PHONY: all clean install
---- 
--2.20.1
--
-diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
-index 4de837da46..9232fe8530 100644
---- a/package/gettext-tiny/gettext-tiny.hash
-+++ b/package/gettext-tiny/gettext-tiny.hash
-@@ -1,5 +1,5 @@
- # Locally Computed:
--sha256 ba7b6960018022d876e39aa723d40b6745823b2ff71dae591d05bbd1b8ec180f  gettext-tiny-73fc3e7ef7e016a3874b632fd0475969d288f309.tar.gz
-+sha256 efc740007c82a9b3a0d382fb50d212fa7dc0beddb9695409ee79684f9f2124b2  gettext-tiny-adaa9c64921e80f2b8dd3610ffb508618b9204f3.tar.gz
- sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  extra/COPYING
- # From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
-diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-index 6ee6269e09..09a98f99b4 100644
---- a/package/gettext-tiny/gettext-tiny.mk
-+++ b/package/gettext-tiny/gettext-tiny.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GETTEXT_TINY_VERSION = 73fc3e7ef7e016a3874b632fd0475969d288f309
-+GETTEXT_TINY_VERSION = adaa9c64921e80f2b8dd3610ffb508618b9204f3
- GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,$(GETTEXT_TINY_VERSION))
- GETTEXT_TINY_LICENSE = MIT, GPL-3.0+ (extra gettext)
- GETTEXT_TINY_INSTALL_STAGING = YES
--- 
-2.20.1
+Alistair
+
+> ---
+>  package/xen/xen.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+> index b0dc2dfe4c..167f0ad638 100644
+> --- a/package/xen/xen.mk
+> +++ b/package/xen/xen.mk
+> @@ -26,6 +26,7 @@ XEN_MAKE_ENV = \
+>         XEN_TARGET_ARCH=$(XEN_ARCH) \
+>         CROSS_COMPILE=$(TARGET_CROSS) \
+>         HOST_EXTRACFLAGS="-Wno-error" \
+> +       XEN_HAS_CHECKPOLICY=n \
+>         $(TARGET_CONFIGURE_OPTS)
+>
+>  ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
