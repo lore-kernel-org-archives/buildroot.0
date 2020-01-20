@@ -1,22 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jan 2020 22:48:06 +0100
-Subject: [Buildroot] [PATCH] package/gettext-tiny: bump version to latest
-In-Reply-To: <20200119225348.29225-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Sun, 19 Jan 2020 23:53:48 +0100")
-References: <20200119225348.29225-1-giulio.benetti@benettiengineering.com>
-Message-ID: <87o8uxol49.fsf@dell.be.48ers.dk>
+Date: Mon, 20 Jan 2020 22:48:14 +0100
+Subject: [Buildroot] [PATCH] orangepi_pc_defconfig: bump linux to 5.4.13
+In-Reply-To: <20200119215139.22634-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 19 Jan 2020 22:51:39 +0100")
+References: <20200119215139.22634-1-peter@korsgaard.com>
+Message-ID: <87k15lol41.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Drop patch already upstreamed to fix install failure if path contains
- > "m4/ string.
-
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > As 5.3.x is now EOL.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
