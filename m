@@ -1,10 +1,11 @@
 From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 20 Jan 2020 10:23:59 +1000
-Subject: [Buildroot] [PATCH 1/3] package/xen: explicitly disable
- checkpolicy logic
-In-Reply-To: <20200119170358.5408-1-peter@korsgaard.com>
+Date: Mon, 20 Jan 2020 10:26:51 +1000
+Subject: [Buildroot] [PATCH 2/3] package/xen: security bump to version
+ 4.12.2
+In-Reply-To: <20200119170358.5408-2-peter@korsgaard.com>
 References: <20200119170358.5408-1-peter@korsgaard.com>
-Message-ID: <CAKmqyKNY9DwY=yrf2_db8VOnw+X=Jn1mHpq65dcXDJiiHdwQfA@mail.gmail.com>
+ <20200119170358.5408-2-peter@korsgaard.com>
+Message-ID: <CAKmqyKM5aRoXBv1mhZSY6HU8i1C8OQgUmgB7=5cHsbxcfGYgCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,33 @@ To: buildroot@busybox.net
 
 On Mon, Jan 20, 2020 at 3:04 AM Peter Korsgaard <peter@korsgaard.com> wrote:
 >
-> Fixes:
-> http://autobuild.buildroot.net/results/14af2dc3219847a92c6ec2db14ba387159b61fde
+> The 4.12.2 release brings a large number of fixes:
 >
-> The Xen build system builds and embeds a default XSM FLASK (Flux Advanced
-> Security Kernel) security policy if it detects SELinux checkpolicy on the
-> build machine.
+> https://xenproject.org/downloads/xen-project-archives/xen-project-4-12-series/xen-project-4-12-2/
 >
-> If enabled, a gen-policy.py python script is used to convert the binary
-> FLASK policy to a C array initialization list to embed it in the Xen binary.
-> Depending on the python version and locale available on the host, this fails
-> with byte values outside the 0..255 range:
+> Including a number of security fixes:
 >
-> policy.c:7:10: error: unsigned conversion from 'int' to 'unsigned char' changes value from '56575' to '255' [-Werror=overflow]
->   0xdc8c, 0xdcff, 0x7c, 0xdcf9, 0x08, 0x00, 0x00, 0x00, 0x58, 0x65, 0x6e, 0x46, 0x6c,
->
-> To fix this and ensure a consistent build, pass XEN_HAS_CHECKPOLICY=n to
-> disable the checkpolicy detection.
+> XSA-296: VCPUOP_initialise DoS (CVE-2019-18420)
+> XSA-298: missing descriptor table limit checking in x86 PV emulation
+>          (CVE-2019-18425)
+> XSA-299: Issues with restartable PV type change operations (CVE-2019-18421)
+> XSA-301: add-to-physmap can be abused to DoS Arm hosts (CVE-2019-18423)
+> XSA-302: passed through PCI devices may corrupt host memory after
+>          deassignment (CVE-2019-18424)
+> XSA-303: ARM: Interrupts are unconditionally unmasked in exception handlers
+>          (CVE-2019-18422)
+> XSA-304: x86: Machine Check Error on Page Size Change DoS (CVE-2018-12207)
+> XSA-305: TSX Asynchronous Abort speculative side channel (CVE-2019-11135)
+> XSA-306: Device quarantine for alternate pci assignment methods
+>          (CVE-2019-19579)
+> XSA-307: find_next_bit() issues (CVE-2019-19581 CVE-2019-19582)
+> XSA-308: VMX: VMentry failure with debug exceptions and blocked states
+>          (CVE-2019-19583)
+> XSA-309: Linear pagetable use / entry miscounts (CVE-2019-19578)
+> XSA-310: Further issues with restartable PV type change operations
+>          (CVE-2019-19580)
+> XSA-311: Bugs in dynamic height handling for AMD IOMMU pagetables
+>          (CVE-2019-19577)
 >
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
@@ -38,21 +49,32 @@ Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Alistair
 
 > ---
->  package/xen/xen.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/xen/xen.hash | 2 +-
+>  package/xen/xen.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 >
+> diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+> index a15bc7d852..ad6220d94b 100644
+> --- a/package/xen/xen.hash
+> +++ b/package/xen/xen.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256 5450a85497b84167df1d229b3ab98fb24ef4d6b0510dce522798c13c1b090159 xen-4.12.1.tar.gz
+> +sha256 1c75cbe728dfabf02b7f9a17ce96ee7d202d2fd4b4689490018d3a28b63f9fa3 xen-4.12.2.tar.gz
+>  sha256 dba0d79260259c013c52e5d4daeaea564a2fbb9ff7fc6778c377a401ec3898de COPYING
 > diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-> index b0dc2dfe4c..167f0ad638 100644
+> index 167f0ad638..7eb2643343 100644
 > --- a/package/xen/xen.mk
 > +++ b/package/xen/xen.mk
-> @@ -26,6 +26,7 @@ XEN_MAKE_ENV = \
->         XEN_TARGET_ARCH=$(XEN_ARCH) \
->         CROSS_COMPILE=$(TARGET_CROSS) \
->         HOST_EXTRACFLAGS="-Wno-error" \
-> +       XEN_HAS_CHECKPOLICY=n \
->         $(TARGET_CONFIGURE_OPTS)
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >
->  ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
+> -XEN_VERSION = 4.12.1
+> +XEN_VERSION = 4.12.2
+>  XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+>  XEN_LICENSE = GPL-2.0
+>  XEN_LICENSE_FILES = COPYING
 > --
 > 2.20.1
 >
