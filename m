@@ -1,40 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Jan 2020 09:56:38 +0100
-Subject: [Buildroot] [PATCH 1/4] core/pkg-infra: introduce download
- features concept
-In-Reply-To: <20200117164432.GK22540@scaer>
-References: <20200116193852.17683-1-vfazio@xes-inc.com>
- <CAMQcK5+-_N_Rwkx6E+w7eid5rKNVNjith7Feg8yYgzQX+dvtQQ@mail.gmail.com>
- <674b2ca7-cb45-c89d-a5e5-cfc230200db2@xes-inc.com>
- <b782018a-bec1-07d5-da24-128d4eba2a1b@mind.be>
- <20200117091755.69711c60@windsurf> <20200117164432.GK22540@scaer>
-Message-ID: <36d96c34-c5d2-26a3-6284-6e5035cc1ab9@mind.be>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 20 Jan 2020 10:12:52 +0100
+Subject: [Buildroot] [PATCH] package/libuv: bump to version 1.34.1
+Message-ID: <20200120091254.30207-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-On 17/01/2020 17:44, Yann E. MORIN wrote:
-
-[snip]
-> At some point in the past, Arnout expressed some concern about adding yet
-> more variables,
-
- That was more about internal variables, not user-facing variables. And also
-about variables that are actually assigned to. Each variable that is set in
-inner-generic-package gets multiplied a thousandfold and this puts pressure on
-the internal tables in make.
-
-> and this feature thingy would be the opportunity to
-> coalesce many variables into a single one (or rather, avoiud adding new
-> variables).
-
- Iff there are several users of it. So, as I said, it's a good idea if we get 4
-features.
-
-
- Regards,
- Arnout
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index e49822ad0d..923cd1cb37 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2c36b49bcf82c0d06ab0d77f98805605efa071d58ca29dee7c790912598b005d  libuv-1.34.0.tar.gz
++sha256  e3e0105c9b26e181e0547607cb6893462beb0c652674c3795766b2e5555288b3  libuv-1.34.1.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 4865c54551..d7160d1e0a 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping libuv, check if a new version of uvw is available
+ # and bump it too.
+-LIBUV_VERSION = 1.34.0
++LIBUV_VERSION = 1.34.1
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
+-- 
+2.25.0
