@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jan 2020 08:39:03 +0100
-Subject: [Buildroot] [PATCH 1/3] package/xen: explicitly disable
- checkpolicy logic
-In-Reply-To: <20200119170358.5408-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 19 Jan 2020 18:03:56 +0100")
+Date: Mon, 20 Jan 2020 08:39:11 +0100
+Subject: [Buildroot] [PATCH 2/3] package/xen: security bump to version
+ 4.12.2
+In-Reply-To: <20200119170358.5408-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 19 Jan 2020 18:03:57 +0100")
 References: <20200119170358.5408-1-peter@korsgaard.com>
-Message-ID: <87v9p6pofc.fsf@dell.be.48ers.dk>
+ <20200119170358.5408-2-peter@korsgaard.com>
+Message-ID: <87r1zupof4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +15,32 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/14af2dc3219847a92c6ec2db14ba387159b61fde
+ > The 4.12.2 release brings a large number of fixes:
+ > https://xenproject.org/downloads/xen-project-archives/xen-project-4-12-series/xen-project-4-12-2/
 
- > The Xen build system builds and embeds a default XSM FLASK (Flux Advanced
- > Security Kernel) security policy if it detects SELinux checkpolicy on the
- > build machine.
+ > Including a number of security fixes:
 
- > If enabled, a gen-policy.py python script is used to convert the binary
- > FLASK policy to a C array initialization list to embed it in the Xen binary.
- > Depending on the python version and locale available on the host, this fails
- > with byte values outside the 0..255 range:
-
- > policy.c:7:10: error: unsigned conversion from 'int' to 'unsigned char' changes value from '56575' to '255' [-Werror=overflow]
- >   0xdc8c, 0xdcff, 0x7c, 0xdcf9, 0x08, 0x00, 0x00, 0x00, 0x58, 0x65, 0x6e, 0x46, 0x6c,
-
- > To fix this and ensure a consistent build, pass XEN_HAS_CHECKPOLICY=n to
- > disable the checkpolicy detection.
+ > XSA-296: VCPUOP_initialise DoS (CVE-2019-18420)
+ > XSA-298: missing descriptor table limit checking in x86 PV emulation
+ > 	 (CVE-2019-18425)
+ > XSA-299: Issues with restartable PV type change operations (CVE-2019-18421)
+ > XSA-301: add-to-physmap can be abused to DoS Arm hosts (CVE-2019-18423)
+ > XSA-302: passed through PCI devices may corrupt host memory after
+ >          deassignment (CVE-2019-18424)
+ > XSA-303: ARM: Interrupts are unconditionally unmasked in exception handlers
+ > 	 (CVE-2019-18422)
+ > XSA-304: x86: Machine Check Error on Page Size Change DoS (CVE-2018-12207)
+ > XSA-305: TSX Asynchronous Abort speculative side channel (CVE-2019-11135)
+ > XSA-306: Device quarantine for alternate pci assignment methods
+ > 	 (CVE-2019-19579)
+ > XSA-307: find_next_bit() issues (CVE-2019-19581 CVE-2019-19582)
+ > XSA-308: VMX: VMentry failure with debug exceptions and blocked states
+ > 	 (CVE-2019-19583)
+ > XSA-309: Linear pagetable use / entry miscounts (CVE-2019-19578)
+ > XSA-310: Further issues with restartable PV type change operations
+ > 	 (CVE-2019-19580)
+ > XSA-311: Bugs in dynamic height handling for AMD IOMMU pagetables
+ > 	 (CVE-2019-19577)
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
