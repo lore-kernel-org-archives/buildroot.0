@@ -1,7 +1,7 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 20 Jan 2020 19:14:59 -0700
-Subject: [Buildroot] [PATCH 1/1] package/v4l2loopback: bump to version 0.12.3
-Message-ID: <20200121021459.106628-1-james.hilliard1@gmail.com>
+Date: Mon, 20 Jan 2020 19:32:42 -0700
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump to version 12.14.1
+Message-ID: <20200121023242.94475-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/v4l2loopback/v4l2loopback.hash | 2 +-
- package/v4l2loopback/v4l2loopback.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/v4l2loopback/v4l2loopback.hash b/package/v4l2loopback/v4l2loopback.hash
-index fa1a165c11..b9d65c821c 100644
---- a/package/v4l2loopback/v4l2loopback.hash
-+++ b/package/v4l2loopback/v4l2loopback.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	6d2c27a69d982bf39d7330b92f084fd0388beef486879320ccf263e4716cd549  v4l2loopback-0.12.2.tar.gz
-+sha256	3f6bb14b80865ec8df557c26fd2c5ba91d726580773a75a62aa2959864ef70ba  v4l2loopback-0.12.3.tar.gz
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
-index 5c9158bc92..8fa0704989 100644
---- a/package/v4l2loopback/v4l2loopback.mk
-+++ b/package/v4l2loopback/v4l2loopback.mk
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index bde0ac0167..92369105ff 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v12.14.0/SHASUMS256.txt
+-sha256 088a217ba2af641b8cc15be29f6e2956b8a33e6badb85596bbc2cdea9df9be71  node-v12.14.0.tar.xz
++# From https://nodejs.org/dist/v12.14.1/SHASUMS256.txt
++sha256 877b4b842318b0e09bc754faf7343f2f097f0fc4f88ab9ae57cf9944e88e7adb  node-v12.14.1.tar.xz
+ 
+ # Hash for license file
+ sha256 950bbc741dc021489c47683e34e7637e9b96fb4a1f430b2f77a744130516e293  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 62c4c1abb1..e6eb73d576 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--V4L2LOOPBACK_VERSION = 0.12.2
-+V4L2LOOPBACK_VERSION = 0.12.3
- V4L2LOOPBACK_SITE = $(call github,umlaeute,v4l2loopback,v$(V4L2LOOPBACK_VERSION))
- V4L2LOOPBACK_LICENSE = GPL-2.0+
- V4L2LOOPBACK_LICENSE_FILES = COPYING
+-NODEJS_VERSION = 12.14.0
++NODEJS_VERSION = 12.14.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
 -- 
 2.20.1
