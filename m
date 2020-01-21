@@ -1,104 +1,40 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 20 Jan 2020 18:55:43 -0700
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: Fix build with icu 65.1
-Message-ID: <20200121015543.95323-1-james.hilliard1@gmail.com>
+Date: Mon, 20 Jan 2020 19:14:59 -0700
+Subject: [Buildroot] [PATCH 1/1] package/v4l2loopback: bump to version 0.12.3
+Message-ID: <20200121021459.106628-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix build issue introduced in buildroot commit
-e2a2fab11baf7cdc7e74d4f65ec73c4c79668007 which bumped ICU to
-version 65.1.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .../0002-Fix-build-with-icu-65.1.patch        | 76 +++++++++++++++++++
- 1 file changed, 76 insertions(+)
- create mode 100644 package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
+ package/v4l2loopback/v4l2loopback.hash | 2 +-
+ package/v4l2loopback/v4l2loopback.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch b/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
-new file mode 100644
-index 0000000000..7d4d23d472
---- /dev/null
-+++ b/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
-@@ -0,0 +1,76 @@
-+From 730b80e691a4b9dd0e9727cfcd9806dfa542397b Mon Sep 17 00:00:00 2001
-+From: "commit-queue at webkit.org"
-+ <commit-queue@webkit.org@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
-+Date: Fri, 4 Oct 2019 21:51:37 +0000
-+Subject: [PATCH] Fix build with icu 65.1
-+ https://bugs.webkit.org/show_bug.cgi?id=202600
-+
-+Patch by Heiko Becker <heirecka@exherbo.org> on 2019-10-04
-+Reviewed by Konstantin Tokarev.
-+
-+Source/WebCore:
-+
-+* dom/Document.cpp:
-+(WebCore::isValidNameNonASCII):
-+(WebCore::Document::parseQualifiedName):
-+
-+Source/WTF:
-+
-+* wtf/URLHelpers.cpp:
-+(WTF::URLHelpers::allCharactersInIDNScriptWhiteList):
-+
-+git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 250747 268f45cc-cd09-0410-ab3c-d52691b4dbfc
-+[james.hilliard1 at gmail.com: backport from upstream webkit commit
-+730b80e691a4b9dd0e9727cfcd9806dfa542397b]
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+---
-+ Source/WTF/ChangeLog            | 10 ++++++++++
-+ Source/WTF/wtf/URLHelpers.cpp   |  2 +-
-+ Source/WebCore/ChangeLog        | 11 +++++++++++
-+ Source/WebCore/dom/Document.cpp |  6 +++---
-+ 4 files changed, 25 insertions(+), 4 deletions(-)
-+
-+diff --git a/Source/WTF/wtf/URLHelpers.cpp b/Source/WTF/wtf/URLHelpers.cpp
-+index 18e7f13cd61..c584f1a0cb7 100644
-+--- a/Source/WTF/wtf/URLHelpers.cpp
-++++ b/Source/WTF/wtf/URLHelpers.cpp
-+@@ -301,7 +301,7 @@ static bool allCharactersInIDNScriptWhiteList(const UChar* buffer, int32_t lengt
-+     Optional<UChar32> previousCodePoint;
-+     while (i < length) {
-+         UChar32 c;
-+-        U16_NEXT(buffer, i, length, c)
-++        U16_NEXT(buffer, i, length, c);
-+         UErrorCode error = U_ZERO_ERROR;
-+         UScriptCode script = uscript_getScript(c, &error);
-+         if (error != U_ZERO_ERROR) {
-+diff --git a/Source/WebCore/dom/Document.cpp b/Source/WebCore/dom/Document.cpp
-+index 2443e24c9bc..1fbb3a71600 100644
-+--- a/Source/WebCore/dom/Document.cpp
-++++ b/Source/WebCore/dom/Document.cpp
-+@@ -4954,12 +4954,12 @@ static bool isValidNameNonASCII(const UChar* characters, unsigned length)
-+     unsigned i = 0;
-+ 
-+     UChar32 c;
-+-    U16_NEXT(characters, i, length, c)
-++    U16_NEXT(characters, i, length, c);
-+     if (!isValidNameStart(c))
-+         return false;
-+ 
-+     while (i < length) {
-+-        U16_NEXT(characters, i, length, c)
-++        U16_NEXT(characters, i, length, c);
-+         if (!isValidNamePart(c))
-+             return false;
-+     }
-+@@ -5019,7 +5019,7 @@ ExceptionOr<std::pair<AtomString, AtomString>> Document::parseQualifiedName(cons
-+ 
-+     for (unsigned i = 0; i < length; ) {
-+         UChar32 c;
-+-        U16_NEXT(qualifiedName, i, length, c)
-++        U16_NEXT(qualifiedName, i, length, c);
-+         if (c == ':') {
-+             if (sawColon)
-+                 return Exception { InvalidCharacterError };
-+-- 
-+2.20.1
-+
+diff --git a/package/v4l2loopback/v4l2loopback.hash b/package/v4l2loopback/v4l2loopback.hash
+index fa1a165c11..b9d65c821c 100644
+--- a/package/v4l2loopback/v4l2loopback.hash
++++ b/package/v4l2loopback/v4l2loopback.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	6d2c27a69d982bf39d7330b92f084fd0388beef486879320ccf263e4716cd549  v4l2loopback-0.12.2.tar.gz
++sha256	3f6bb14b80865ec8df557c26fd2c5ba91d726580773a75a62aa2959864ef70ba  v4l2loopback-0.12.3.tar.gz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
+index 5c9158bc92..8fa0704989 100644
+--- a/package/v4l2loopback/v4l2loopback.mk
++++ b/package/v4l2loopback/v4l2loopback.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-V4L2LOOPBACK_VERSION = 0.12.2
++V4L2LOOPBACK_VERSION = 0.12.3
+ V4L2LOOPBACK_SITE = $(call github,umlaeute,v4l2loopback,v$(V4L2LOOPBACK_VERSION))
+ V4L2LOOPBACK_LICENSE = GPL-2.0+
+ V4L2LOOPBACK_LICENSE_FILES = COPYING
 -- 
 2.20.1
