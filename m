@@ -1,65 +1,233 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue, 21 Jan 2020 13:29:16 -0600
-Subject: [Buildroot] [PATCH v2 1/1] perl: Add option to enable threads
-Message-ID: <20200121192916.63356-1-clayton.shotwell@rockwellcollins.com>
+From: Stephen Boyd <swboyd@chromium.org>
+Date: Tue, 21 Jan 2020 11:46:56 -0800
+Subject: [Buildroot] [PATCH 1/1] board: Add support for nautilus
+ chromebook
+In-Reply-To: <20191120231927.788e22af@windsurf.home>
+References: <20191119213121.165863-1-swboyd@chromium.org>
+ <20191120231927.788e22af@windsurf.home>
+Message-ID: <5e275531.1c69fb81.c8af5.e6e3@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Hector Kesari <hector.kesari@rockwellcollins.com>
+Quoting Thomas Petazzoni (2019-11-20 14:19:27)
+> Hello Stephen,
+> 
+> Nice to see you here ! :-)
 
-Add config option for Perl to enable threads usage.
+Sorry for late reply. I got busy with holidays!
 
-Signed-off-by: Hector Kesari <hector.kesari@rockwellcollins.com>
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> 
+> On Tue, 19 Nov 2019 13:31:21 -0800
+> Stephen Boyd <swboyd@chromium.org> wrote:
+> 
+> > This adds support for the "Nautilus" chromebook, similar to how "Snow"
+> > is supported. We drop the cgpt requirement in favor of using 'sgdisk'
+> > and support a genimage config file instead of a custom partitioning
+> > script. I also included a kernel configuration file based on a minimized
+> > version pulled from a chromeos kernel running on the device.
+> > 
+> > Cc: Alex Suykov <alex.suykov@gmail.com>
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> 
+> Thanks for this submission. Overall it looks pretty good, there are
+> just a few minor details, see below.
+> 
+> First, the commit title should be:
+> 
+>         configs/chromebook_nautilus: new defconfig
 
----
-Changes v1 -> v2:
-  - Changed references of PERL to Perl
-  - Added a warning about using Perl threads
----
- package/perl/Config.in | 13 +++++++++++++
- package/perl/perl.mk   |  4 ++++
- 2 files changed, 17 insertions(+)
+Got it.
 
-diff --git a/package/perl/Config.in b/package/perl/Config.in
-index 32a3fd2ee9..34b87ee575 100644
---- a/package/perl/Config.in
-+++ b/package/perl/Config.in
-@@ -24,4 +24,17 @@ config BR2_PACKAGE_PERL_MODULES
- 	  Leave empty for all modules (as far as the external libraries
- 	  are available).
- 
-+config BR2_PACKAGE_PERL_ENABLE_THREADS
-+	bool "Support for Threads in Perl"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Enable use of threads in Perl scripts
-+
-+	  WARNING: The use of interpreter-based threads in Perl
-+	  is officially discouraged.
-+	  See https://perldoc.perl.org/threads.html#WARNING
-+
-+comment "Perl threads need toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- endif
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 0ab81ddb34..e0bbf9cfd4 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -62,6 +62,10 @@ ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
- PERL_CONF_OPTS += -Dusedevel
- endif
- 
-+ifeq ($(BR2_PACKAGE_PERL_ENABLE_THREADS),y)
-+PERL_CONF_OPTS += -Dusethreads
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- PERL_CONF_OPTS += --all-static --no-dynaloader
- endif
--- 
-2.23.0
+> 
+> >  board/chromebook/nautilus/config            | 635 ++++++++++++++++++++
+> >  board/chromebook/nautilus/genimage.cfg      |  17 +
+> >  board/chromebook/nautilus/kernel.args       |   1 +
+> >  board/chromebook/nautilus/mark_boot_once.sh |  16 +
+> >  board/chromebook/nautilus/readme.txt        |  83 +++
+> >  board/chromebook/nautilus/sign.sh           |  31 +
+> >  configs/chromebook_nautilus_defconfig       |  15 +
+> >  7 files changed, 798 insertions(+)
+> 
+> Could you add an entry in the DEVELOPERS file to associate your
+> name/email to the files being added (i.e both the defconfig and the
+> board/ directory).
+
+Ok, sure.
+
+> 
+> > diff --git a/board/chromebook/nautilus/config b/board/chromebook/nautilus/config
+> 
+> Can we name this linux.config instead ?
+> 
+> This defconfig also seems pretty long, with lots of drivers enabled,
+> many as modules. Do we need all of them? Looking at the list of
+> modules, it seems unlikely all of these are needed/useful. So could you
+> do a pass of cleanup ?
+
+I can remove all the modules? Or get rid of modules that don't load on
+my board?
+
+> 
+> > diff --git a/board/chromebook/nautilus/genimage.cfg b/board/chromebook/nautilus/genimage.cfg
+> > new file mode 100644
+> > index 000000000000..c4873e8b3670
+> > --- /dev/null
+> > +++ b/board/chromebook/nautilus/genimage.cfg
+> > @@ -0,0 +1,17 @@
+> > +image sdcard.img {
+> > +     exec-post = "board/chromebook/nautilus/mark_boot_once.sh"
+> 
+> Learned about this feature :) Could have been a post-image script, but
+> OK, this exec-post mechanism also works.
+> 
+> > +     hdimage {
+> > +             gpt = "true"
+> > +     }
+> > +
+> > +     partition kernel {
+> > +             image = "Image.kpart"
+> > +             bootable = "true"
+> > +             partition-type-uuid = FE3A2A5D-4F32-41A7-B725-ACCC3285A309
+> 
+> Just curious, the UUID needs to be exactly that one for the
+> bootloader/firmware to pick up the kernel image from there ?
+
+Yes.
+
+> 
+> 
+> > diff --git a/board/chromebook/nautilus/mark_boot_once.sh b/board/chromebook/nautilus/mark_boot_once.sh
+> > new file mode 100755
+> > index 000000000000..ea06a5b7cc73
+> > --- /dev/null
+> > +++ b/board/chromebook/nautilus/mark_boot_once.sh
+> > @@ -0,0 +1,16 @@
+> > +#!/bin/sh
+> > +
+> > +# This script marks the kernel partition as 'boot once'
+> > +# so that depthcharge will pick it.
+> > +
+> > +img=$BINARIES_DIR/sdcard.img
+> > +sgdisk=$HOST_DIR/sbin/sgdisk
+> > +
+> > +run() { echo "$@"; "$@"; }
+> > +die() { echo "$@" >&2; exit 1; }
+> > +
+> > +test -x $sgdisk || die "sgdisk not found (host-gptfdisk has not been built?)"
+> 
+> We generally don't do such checks, we assume that the configuration is
+> correct, and therefore the necessary tools will be available.
+
+Alright. I can drop it.
+
+> 
+> > +# Set succesful, priority, tries flags on kernel partition
+> > +# cgpt args are '-S 0 -T 1 -P 15'
+> > +run $sgdisk -A 1:=:0xe1f000000000004 $img
+> 
+> While I understand the idea of your "run" wrapper, we don't have this
+> anywhere in our other scripts, so I'd rather avoid it.
+
+Ah ok. I got this from somewhere else in buildroot but maybe I had
+something old.
+
+> 
+> > +The signing part is done by sign.sh script in this directory.
+> > +
+> 
+> by *the* sign.sh
+> 
+> > +It does not really matter where rootfs is as long as the kernel is able
+> 
+> where *the* rootfs is
+
+Alright. Fixed them.
+
+> 
+> > +to find it, but this particular configuration assumes the kernel is on
+> > +partition n and rootfs is on partition n+1.
+> > +Make sure to check kernel.args if you change this.
+> > +
+> > +Making the boot media
+> > +---------------------
+> > +Start by configuring and building the images.
+> > +
+> > +     make chromebook_nautilus_defconfig
+> > +     make menuconfig # if necessary
+> > +     make
+> > +
+> > +The important files are:
+> > +
+> > +     Image.kpart (kernel partition, signed)
+> > +     rootfs.tar
+> > +     sdcard.img (SD card/USB image containing both kernel and rootfs)
+> > +
+> > +Write the image directly to some SD card or USB stick.
+> > +WARNING: make sure there is nothing important on that device,
+> > +and double-check the device name!
+> > +
+> > +     SD=/dev/mmcblk1         # may be /dev/sdX on some hosts
+> > +     dd if=output/images/sdcard.img of=$SD
+> 
+> Drop the SD variable here.
+
+Ok.
+
+> 
+> 
+> > diff --git a/board/chromebook/nautilus/sign.sh b/board/chromebook/nautilus/sign.sh
+> > new file mode 100755
+> > index 000000000000..3b8c9c577b20
+> > --- /dev/null
+> > +++ b/board/chromebook/nautilus/sign.sh
+> > @@ -0,0 +1,31 @@
+> > +#!/bin/sh
+> > +
+> > +# This script creates a kernel partition containing the kernel bzImage
+> > +# then signs it using futility from vboot-utils.
+> > +# The resulting file is called Image.kpart.
+> > +
+> > +BOARD_DIR=$(dirname $0)
+> > +futility=$HOST_DIR/bin/futility
+> > +devkeys=$HOST_DIR/share/vboot/devkeys
+> > +vmlinuz=$BINARIES_DIR/bzImage
+> > +
+> > +run() { echo "$@"; "$@"; }
+> > +die() { echo "$@" >&2; exit 1; }
+> > +test -f $vmlinuz || \
+> > +     die "No kernel image found"
+> > +test -x $futility || \
+> > +     die "No futility found (host-vboot-utils has not been built?)"
+> 
+> As said above, we probably don't need those checks. Just assume things
+> have been built as they should be.
+
+Got it.
+
+> 
+> 
+> > diff --git a/configs/chromebook_nautilus_defconfig b/configs/chromebook_nautilus_defconfig
+> > new file mode 100644
+> > index 000000000000..536e1fc96ad1
+> > --- /dev/null
+> > +++ b/configs/chromebook_nautilus_defconfig
+> > @@ -0,0 +1,15 @@
+> > +BR2_x86_64=y
+> > +BR2_x86_core2=y
+> > +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+> > +BR2_TARGET_GENERIC_GETTY_TERM="linux"
+> > +BR2_ROOTFS_POST_BUILD_SCRIPT="board/chromebook/nautilus/sign.sh"
+> > +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> > +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/chromebook/nautilus/genimage.cfg"
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> > +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/chromebook/nautilus/config"
+> 
+> We want to use a specific kernel version that is know to have been
+> tested, and not just "the latest kernel".
+> 
+
+Ok. I picked 5.4 for now.
