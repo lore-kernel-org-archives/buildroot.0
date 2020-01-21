@@ -1,67 +1,104 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 20 Jan 2020 18:40:14 -0700
-Subject: [Buildroot] [PATCH 2/2] package/ser2net: bump to version 4.1.1
-In-Reply-To: <20200121014014.32703-1-james.hilliard1@gmail.com>
-References: <20200121014014.32703-1-james.hilliard1@gmail.com>
-Message-ID: <20200121014014.32703-2-james.hilliard1@gmail.com>
+Date: Mon, 20 Jan 2020 18:55:43 -0700
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: Fix build with icu 65.1
+Message-ID: <20200121015543.95323-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added new ser2net dependencies gensio and libyaml.
+Add patch to fix build issue introduced in buildroot commit
+e2a2fab11baf7cdc7e74d4f65ec73c4c79668007 which bumped ICU to
+version 65.1.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/ser2net/Config.in    | 2 ++
- package/ser2net/ser2net.hash | 6 +++---
- package/ser2net/ser2net.mk   | 3 ++-
- 3 files changed, 7 insertions(+), 4 deletions(-)
+ .../0002-Fix-build-with-icu-65.1.patch        | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
 
-diff --git a/package/ser2net/Config.in b/package/ser2net/Config.in
-index cb4d69f741..3d110b70f2 100644
---- a/package/ser2net/Config.in
-+++ b/package/ser2net/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_SER2NET
- 	bool "ser2net"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_GENSIO
-+	select BR2_PACKAGE_LIBYAML
- 	help
- 	  Ser2net provides a way for a user to connect from a network
- 	  connection to a serial port.
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index c736c726ac..5bd927d7d1 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5 e10e7c8c97e5bade5e85ce6e89bdf1f4  ser2net-3.5.tar.gz
--sha1 0ad0affd37ef544c23f42a3f46d09e969d0d9116  ser2net-3.5.tar.gz
-+md5 44a69f573677d9f2bde87b3611db5817  ser2net-4.1.1.tar.gz
-+sha1 502e11c3bee429de6550db459d83c9a0991cfc5c  ser2net-4.1.1.tar.gz
- # Locally computed:
--sha256 ba9e1d60a89fd7ed075553b4a2074352902203f7fbd9b65b15048c05f0e3f3be  ser2net-3.5.tar.gz
-+sha256 ad6c8fb34d01be177570323899d840a44c8774399d594595393708162fc61e22  ser2net-4.1.1.tar.gz
- sha256 501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 5ab5c4d2ae..2ea68ccc43 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--SER2NET_VERSION = 3.5
-+SER2NET_VERSION = 4.1.1
- SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPL-2.0+
- SER2NET_LICENSE_FILES = COPYING
-+SER2NET_DEPENDENCIES = gensio libyaml
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- SER2NET_CONF_OPTS += --with-pthreads
+diff --git a/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch b/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
+new file mode 100644
+index 0000000000..7d4d23d472
+--- /dev/null
++++ b/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
+@@ -0,0 +1,76 @@
++From 730b80e691a4b9dd0e9727cfcd9806dfa542397b Mon Sep 17 00:00:00 2001
++From: "commit-queue at webkit.org"
++ <commit-queue@webkit.org@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
++Date: Fri, 4 Oct 2019 21:51:37 +0000
++Subject: [PATCH] Fix build with icu 65.1
++ https://bugs.webkit.org/show_bug.cgi?id=202600
++
++Patch by Heiko Becker <heirecka@exherbo.org> on 2019-10-04
++Reviewed by Konstantin Tokarev.
++
++Source/WebCore:
++
++* dom/Document.cpp:
++(WebCore::isValidNameNonASCII):
++(WebCore::Document::parseQualifiedName):
++
++Source/WTF:
++
++* wtf/URLHelpers.cpp:
++(WTF::URLHelpers::allCharactersInIDNScriptWhiteList):
++
++git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 250747 268f45cc-cd09-0410-ab3c-d52691b4dbfc
++[james.hilliard1 at gmail.com: backport from upstream webkit commit
++730b80e691a4b9dd0e9727cfcd9806dfa542397b]
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++---
++ Source/WTF/ChangeLog            | 10 ++++++++++
++ Source/WTF/wtf/URLHelpers.cpp   |  2 +-
++ Source/WebCore/ChangeLog        | 11 +++++++++++
++ Source/WebCore/dom/Document.cpp |  6 +++---
++ 4 files changed, 25 insertions(+), 4 deletions(-)
++
++diff --git a/Source/WTF/wtf/URLHelpers.cpp b/Source/WTF/wtf/URLHelpers.cpp
++index 18e7f13cd61..c584f1a0cb7 100644
++--- a/Source/WTF/wtf/URLHelpers.cpp
+++++ b/Source/WTF/wtf/URLHelpers.cpp
++@@ -301,7 +301,7 @@ static bool allCharactersInIDNScriptWhiteList(const UChar* buffer, int32_t lengt
++     Optional<UChar32> previousCodePoint;
++     while (i < length) {
++         UChar32 c;
++-        U16_NEXT(buffer, i, length, c)
+++        U16_NEXT(buffer, i, length, c);
++         UErrorCode error = U_ZERO_ERROR;
++         UScriptCode script = uscript_getScript(c, &error);
++         if (error != U_ZERO_ERROR) {
++diff --git a/Source/WebCore/dom/Document.cpp b/Source/WebCore/dom/Document.cpp
++index 2443e24c9bc..1fbb3a71600 100644
++--- a/Source/WebCore/dom/Document.cpp
+++++ b/Source/WebCore/dom/Document.cpp
++@@ -4954,12 +4954,12 @@ static bool isValidNameNonASCII(const UChar* characters, unsigned length)
++     unsigned i = 0;
++ 
++     UChar32 c;
++-    U16_NEXT(characters, i, length, c)
+++    U16_NEXT(characters, i, length, c);
++     if (!isValidNameStart(c))
++         return false;
++ 
++     while (i < length) {
++-        U16_NEXT(characters, i, length, c)
+++        U16_NEXT(characters, i, length, c);
++         if (!isValidNamePart(c))
++             return false;
++     }
++@@ -5019,7 +5019,7 @@ ExceptionOr<std::pair<AtomString, AtomString>> Document::parseQualifiedName(cons
++ 
++     for (unsigned i = 0; i < length; ) {
++         UChar32 c;
++-        U16_NEXT(qualifiedName, i, length, c)
+++        U16_NEXT(qualifiedName, i, length, c);
++         if (c == ':') {
++             if (sawColon)
++                 return Exception { InvalidCharacterError };
++-- 
++2.20.1
++
 -- 
 2.20.1
