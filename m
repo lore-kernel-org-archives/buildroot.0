@@ -1,9 +1,18 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Jan 2020 23:05:45 +0100
-Subject: [Buildroot] [PATCH 2/2] package/nginx: use StateDirectory
-In-Reply-To: <20200120091633.6062-1-p.debruijn@unilogic.nl>
-References: <20200120091633.6062-1-p.debruijn@unilogic.nl>
-Message-ID: <d780a4cf-50fb-25e5-2da8-076d22edf79e@mind.be>
+Date: Tue, 21 Jan 2020 23:21:08 +0100
+Subject: [Buildroot] [PATCH 1/4] core/pkg-infra: introduce download
+ features concept
+In-Reply-To: <05878807-9eb8-75d5-ab09-0871c3d20454@xes-inc.com>
+References: <20200116193852.17683-1-vfazio@xes-inc.com>
+ <CAMQcK5+-_N_Rwkx6E+w7eid5rKNVNjith7Feg8yYgzQX+dvtQQ@mail.gmail.com>
+ <674b2ca7-cb45-c89d-a5e5-cfc230200db2@xes-inc.com>
+ <b782018a-bec1-07d5-da24-128d4eba2a1b@mind.be>
+ <20200117091755.69711c60@windsurf> <20200117164432.GK22540@scaer>
+ <36d96c34-c5d2-26a3-6284-6e5035cc1ab9@mind.be>
+ <55a401b6-2453-7d0f-1e19-fa0f306bc0aa@xes-inc.com>
+ <30e3a759-8dda-0aef-14b7-50f4403a2e27@mind.be>
+ <05878807-9eb8-75d5-ab09-0871c3d20454@xes-inc.com>
+Message-ID: <e2ebebb5-c730-441f-dc9e-45b568102fbf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,94 +21,80 @@ To: buildroot@busybox.net
 
 
 
-On 20/01/2020 10:16, Pascal de Bruijn wrote:
-> move
->   http-client-body-temp-path
->   http-proxy-temp-path
->   http-fastcgi-temp-path
->   http-scgi-temp-path
->   http-uwsgi-temp-path
+On 20/01/2020 22:26, Vincent Fazio wrote:
+> Arnout,
 > 
-> from /var/tmp/nginx to /var/lib/nginx
+> On 1/20/20 3:07 PM, Arnout Vandecappelle wrote:
+>>
+>> On 20/01/2020 21:38, Vincent Fazio wrote:
+>>> Arnout, Yann, et al
+>>>
+>>> On 1/20/20 2:56 AM, Arnout Vandecappelle wrote:
+>>>> On 17/01/2020 17:44, Yann E. MORIN wrote:
+>>>>
+>>>> [snip]
+>>>>> At some point in the past, Arnout expressed some concern about adding yet
+>>>>> more variables,
+>>>> ?? That was more about internal variables, not user-facing variables. And also
+>>>> about variables that are actually assigned to. Each variable that is set in
+>>>> inner-generic-package gets multiplied a thousandfold and this puts pressure on
+>>>> the internal tables in make.
+>>>>
+>>>>> and this feature thingy would be the opportunity to
+>>>>> coalesce many variables into a single one (or rather, avoiud adding new
+>>>>> variables).
+>>>> ?? Iff there are several users of it. So, as I said, it's a good idea if we
+>>>> get 4
+>>>> features.
+>>> So it sounds like this is too much infrastructure change until we have 4
+>>> definitive use-cases.
+>>>
+>>> At this time, we only have one (git submodules). My intent with this series was
+>>> to add the foundation for supporting git-lfs (which would be the second
+>>> use-case) and others.
+>>>
+>>> Based on the conversation, it seems like until we have a hard requirement from
+>>> other backends (hg and svn as previously mentioned), this series is DOA and that
+>>> git-lfs support should be added via some <pkg>_GIT_LFS define as was originally
+>>> submitted here:
+>>> http://lists.busybox.net/pipermail/buildroot/2018-April/219716.html
+>>>
+>>> My main goal here is to add git-lfs support, regardless of how that needs to
+>>> happen. If resubmitting the original patch gets that done, that's what I'll do.
+>> ? Yes, I think the original patch should be fine. Just also add git-lfs to
+>> DL_TOOLS_DEPENDENCIES, and test if it still works correctly if you don't have
+>> git-lfs installed on your host.
 > 
-> this allows the use of systemd constructs
+> I have a series staged here with most of that support:
+> https://gitlab.com/vfazio/buildroot/merge_requests/4/commits
 > 
->   LogsDirectory=nginx
->   StateDirectory=nginx
+> I opted to create a host package for git-lfs in the case the host was missing
+> it.. but can drop that if we'd rather enforce the host to have it pre-installed.
+> 
+> I was a bit confused on the difference between DL_TOOLS_DEPENDENCIES and
+> <PKG>_DOWNLOAD_DEPENDENCIES and opted for the latter, but can change that.
 
- I'm not very familiar with nginx (nor systemd), but it would seem more
-appropriate to me to use CacheDirectory (i.e. /var/cache), because that also
-points to /tmp just like /var/tmp did. IOW, by default it's on a tmpfs and will
-be flushed on reboot.
+ DL_TOOLS_DEPENDENCIES means that we check if the tool is already installed on
+the system.
 
- Otherwise, looks good to me.
+ <PKG>_DOWNLOAD_DEPENDENCIES means that the host-tool will be built (and the one
+on the system is never used, unless you add check-host-git-lfs support).
+
+ Personally I think for something like git-lfs we can expect it to be installed
+on the system, since it will probably never be used by any in-tree package. IOW,
+I think DL_TOOLS_DEPENDENCIES is the easiest and good-enough solution.
+
+
+>> ? Ideally there should also be a package in-tree that uses it, but I can imagine
+>> that it will be hard to find one... Failing that, a test case would be nice -
+>> but again, that may be difficult to implement without relying on some
+>> server-side support for it.
+> As you mention, a test case will be difficult without a server implementing the
+> protocol and I expect most packages that need this functionality will be
+> external tree packages (we need it for vendor supplied binaries for which
+> sources are not available).
+
+ So no testing. Oh well.
 
  Regards,
  Arnout
-
-> 
-> to replace
-> 
->   ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
-> 
-> as there isn't similar construct for /var/tmp
-> 
-> as a sidenote, ubuntu also uses /var/lib/nginx
-> 
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> ---
->  package/nginx/S50nginx      |  2 +-
->  package/nginx/nginx.mk      | 10 +++++-----
->  package/nginx/nginx.service |  3 ++-
->  3 files changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/nginx/S50nginx b/package/nginx/S50nginx
-> index 964652b..db41099 100644
-> --- a/package/nginx/S50nginx
-> +++ b/package/nginx/S50nginx
-> @@ -9,7 +9,7 @@ PIDFILE=/var/run/nginx.pid
->  case "$1" in
->    start)
->  	echo "Starting nginx..."
-> -	mkdir -p /var/log/nginx /var/tmp/nginx
-> +	mkdir -p /var/log/nginx /var/lib/nginx
->  	start-stop-daemon -S -x "$NGINX" -p "$PIDFILE"
->  	;;
->    stop)
-> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-> index 59fddbb..9a9dd94 100644
-> --- a/package/nginx/nginx.mk
-> +++ b/package/nginx/nginx.mk
-> @@ -56,11 +56,11 @@ NGINX_CONF_OPTS += \
->  	--group=www-data \
->  	--error-log-path=/var/log/nginx/error.log \
->  	--http-log-path=/var/log/nginx/access.log \
-> -	--http-client-body-temp-path=/var/tmp/nginx/client-body \
-> -	--http-proxy-temp-path=/var/tmp/nginx/proxy \
-> -	--http-fastcgi-temp-path=/var/tmp/nginx/fastcgi \
-> -	--http-scgi-temp-path=/var/tmp/nginx/scgi \
-> -	--http-uwsgi-temp-path=/var/tmp/nginx/uwsgi
-> +	--http-client-body-temp-path=/var/lib/nginx/client-body \
-> +	--http-proxy-temp-path=/var/lib/nginx/proxy \
-> +	--http-fastcgi-temp-path=/var/lib/nginx/fastcgi \
-> +	--http-scgi-temp-path=/var/lib/nginx/scgi \
-> +	--http-uwsgi-temp-path=/var/lib/nginx/uwsgi
->  
->  NGINX_CONF_OPTS += \
->  	$(if $(BR2_PACKAGE_NGINX_FILE_AIO),--with-file-aio) \
-> diff --git a/package/nginx/nginx.service b/package/nginx/nginx.service
-> index 320df9a..d2f5f38 100644
-> --- a/package/nginx/nginx.service
-> +++ b/package/nginx/nginx.service
-> @@ -4,8 +4,9 @@ After=syslog.target network.target
->  
->  [Service]
->  Type=forking
-> +LogsDirectory=nginx
-> +StateDirectory=nginx
->  PIDFile=/var/run/nginx.pid
-> -ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
->  ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
->  ExecStart=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
->  ExecReload=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;' -s reload
-> 
