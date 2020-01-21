@@ -1,50 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jan 2020 21:09:36 +0100
-Subject: [Buildroot] [git commit] package/prosody: bump to version 0.11.4
-Message-ID: <20200121200043.D9FA883647@busybox.osuosl.org>
+Date: Tue, 21 Jan 2020 21:07:49 +0100
+Subject: [Buildroot] [git commit] package/fail2ban: bump version to 0.10.5
+Message-ID: <20200121200043.BA4E383467@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af3fd3a0d4cc77739cb8b24fd72203820a76df67
+commit: https://git.buildroot.net/buildroot/commit/?id=d2139a73a1f19a512fcca31ed151ba92c741bdc8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/prosody/prosody.hash | 8 ++++----
- package/prosody/prosody.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/fail2ban/fail2ban.hash | 2 +-
+ package/fail2ban/fail2ban.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
-index d7d1d06eda..e39fafde69 100644
---- a/package/prosody/prosody.hash
-+++ b/package/prosody/prosody.hash
-@@ -1,8 +1,8 @@
- # Locally computed:
--md5    2cf85cd8f7fc061916d97a169e850a0e  prosody-0.11.3.tar.gz
--sha1   87ec8039bf297ba9bc4da44b2ba42f4b035e73ca  prosody-0.11.3.tar.gz
--sha256 cfdabd6f42a9fc5db300221967c518c26bd4b6e62def721c1626894d6325bf87  prosody-0.11.3.tar.gz
--sha512 07239433c7c65184ca24d665c92b787ff9e4a5ee190ab90dede802ffd2cbd97855356d818858871e62284e9923f485b3468ab1baed5d3fb13aac0551a38967eb  prosody-0.11.3.tar.gz
-+md5    375a3737ffd6831d967fb1917f097372  prosody-0.11.4.tar.gz
-+sha1   59e9e684230c26daf53526e18b0e6e2efb0d63c5  prosody-0.11.4.tar.gz
-+sha256 b5f26fa343c7f32f6242721d6991cb35f5d2a28d2bf59d2bc329a940523704fd  prosody-0.11.4.tar.gz
-+sha512 0c3aa3373c53f803b88a87dad4ca18b215de7a485d29b0bc4b186d97f7c48262840199a74f62aba6b7b4f1766fdfb37327ed4ff24e877c3a6dfca58764a035c3  prosody-0.11.4.tar.gz
- 
- # Hash for license file:
- sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index 05ea3d2e40..7245afdc6c 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
+diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
+index 25d120c115..90a4287355 100644
+--- a/package/fail2ban/fail2ban.hash
++++ b/package/fail2ban/fail2ban.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  d6ca1bbc7e7944f7acb2ba7c1065953cd9837680bc4d175f30ed155c6a372449  fail2ban-0.10.4.tar.gz
++sha256  a665df6338cf836edd90d1c87dcef28c8cec1aaae5f72e3f2a45ecda89a7ba5f  fail2ban-0.10.5.tar.gz
+ sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
+diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+index a0325dffc5..0a8f3c6cfc 100644
+--- a/package/fail2ban/fail2ban.mk
++++ b/package/fail2ban/fail2ban.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PROSODY_VERSION = 0.11.3
-+PROSODY_VERSION = 0.11.4
- PROSODY_SITE = https://prosody.im/downloads/source
- PROSODY_LICENSE = MIT
- PROSODY_LICENSE_FILES = COPYING
+-FAIL2BAN_VERSION = 0.10.4
++FAIL2BAN_VERSION = 0.10.5
+ FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
+ FAIL2BAN_LICENSE = GPL-2.0+
+ FAIL2BAN_LICENSE_FILES = COPYING
