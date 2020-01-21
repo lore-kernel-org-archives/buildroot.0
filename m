@@ -1,58 +1,105 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jan 2020 22:45:41 +0100
-Subject: [Buildroot] [PATCH 1/3] package/xen: explicitly disable
- checkpolicy logic
-In-Reply-To: <564b6b88-967f-f541-1368-2a515fc881af@mind.be> (Arnout
- Vandecappelle's message of "Tue, 21 Jan 2020 22:29:32 +0100")
-References: <20200119170358.5408-1-peter@korsgaard.com>
- <564b6b88-967f-f541-1368-2a515fc881af@mind.be>
-Message-ID: <8736c8zdoa.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 21 Jan 2020 23:05:45 +0100
+Subject: [Buildroot] [PATCH 2/2] package/nginx: use StateDirectory
+In-Reply-To: <20200120091633.6062-1-p.debruijn@unilogic.nl>
+References: <20200120091633.6062-1-p.debruijn@unilogic.nl>
+Message-ID: <d780a4cf-50fb-25e5-2da8-076d22edf79e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-
- > On 19/01/2020 18:03, Peter Korsgaard wrote:
- >> Fixes:
- >> http://autobuild.buildroot.net/results/14af2dc3219847a92c6ec2db14ba387159b61fde
- >> 
- >> The Xen build system builds and embeds a default XSM FLASK (Flux Advanced
- >> Security Kernel) security policy if it detects SELinux checkpolicy on the
- >> build machine.
- >> 
- >> If enabled, a gen-policy.py python script is used to convert the binary
- >> FLASK policy to a C array initialization list to embed it in the Xen binary.
- >> Depending on the python version and locale available on the host, this fails
-
- >  The more appropriate thing to do would be to:
-
- > - set this XEN_HAS_CHECKPOLICY=n if selinux is disabled;
- > - do not set it when selinux is enabled, and depend on host-checkpolicy
-
-Yes, that can be done in the future by someone interested in xen with
-XSM/selinux support.
 
 
- > - depend on host-python
- > - set LC_ALL=C
+On 20/01/2020 10:16, Pascal de Bruijn wrote:
+> move
+>   http-client-body-temp-path
+>   http-proxy-temp-path
+>   http-fastcgi-temp-path
+>   http-scgi-temp-path
+>   http-uwsgi-temp-path
+> 
+> from /var/tmp/nginx to /var/lib/nginx
+> 
+> this allows the use of systemd constructs
+> 
+>   LogsDirectory=nginx
+>   StateDirectory=nginx
 
-Hmm, where are we setting LC_ALL=C in the package build step?
+ I'm not very familiar with nginx (nor systemd), but it would seem more
+appropriate to me to use CacheDirectory (i.e. /var/cache), because that also
+points to /tmp just like /var/tmp did. IOW, by default it's on a tmpfs and will
+be flushed on reboot.
 
- >  However, the latter two are already done. So except for incorrectly detecting
- > checkpolicy installed on the system, I wonder what is really triggering this
- > issue...
+ Otherwise, looks good to me.
 
-I was also unable to reproduce the issue locally, but given the > 255
-byte values I assume it is related to locale. Looking at the issue I
-noticed the invalid checkpolicy logic and that disabling it would get
-rid of the entire code path.
+ Regards,
+ Arnout
 
-But I am fine with people sending patches to improve it. I don't use Xen
-myself, I only looked at the build issues while doing security support
-and noticed they have been occuring for quite a long time.
-
--- 
-Bye, Peter Korsgaard
+> 
+> to replace
+> 
+>   ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
+> 
+> as there isn't similar construct for /var/tmp
+> 
+> as a sidenote, ubuntu also uses /var/lib/nginx
+> 
+> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+> ---
+>  package/nginx/S50nginx      |  2 +-
+>  package/nginx/nginx.mk      | 10 +++++-----
+>  package/nginx/nginx.service |  3 ++-
+>  3 files changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/nginx/S50nginx b/package/nginx/S50nginx
+> index 964652b..db41099 100644
+> --- a/package/nginx/S50nginx
+> +++ b/package/nginx/S50nginx
+> @@ -9,7 +9,7 @@ PIDFILE=/var/run/nginx.pid
+>  case "$1" in
+>    start)
+>  	echo "Starting nginx..."
+> -	mkdir -p /var/log/nginx /var/tmp/nginx
+> +	mkdir -p /var/log/nginx /var/lib/nginx
+>  	start-stop-daemon -S -x "$NGINX" -p "$PIDFILE"
+>  	;;
+>    stop)
+> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+> index 59fddbb..9a9dd94 100644
+> --- a/package/nginx/nginx.mk
+> +++ b/package/nginx/nginx.mk
+> @@ -56,11 +56,11 @@ NGINX_CONF_OPTS += \
+>  	--group=www-data \
+>  	--error-log-path=/var/log/nginx/error.log \
+>  	--http-log-path=/var/log/nginx/access.log \
+> -	--http-client-body-temp-path=/var/tmp/nginx/client-body \
+> -	--http-proxy-temp-path=/var/tmp/nginx/proxy \
+> -	--http-fastcgi-temp-path=/var/tmp/nginx/fastcgi \
+> -	--http-scgi-temp-path=/var/tmp/nginx/scgi \
+> -	--http-uwsgi-temp-path=/var/tmp/nginx/uwsgi
+> +	--http-client-body-temp-path=/var/lib/nginx/client-body \
+> +	--http-proxy-temp-path=/var/lib/nginx/proxy \
+> +	--http-fastcgi-temp-path=/var/lib/nginx/fastcgi \
+> +	--http-scgi-temp-path=/var/lib/nginx/scgi \
+> +	--http-uwsgi-temp-path=/var/lib/nginx/uwsgi
+>  
+>  NGINX_CONF_OPTS += \
+>  	$(if $(BR2_PACKAGE_NGINX_FILE_AIO),--with-file-aio) \
+> diff --git a/package/nginx/nginx.service b/package/nginx/nginx.service
+> index 320df9a..d2f5f38 100644
+> --- a/package/nginx/nginx.service
+> +++ b/package/nginx/nginx.service
+> @@ -4,8 +4,9 @@ After=syslog.target network.target
+>  
+>  [Service]
+>  Type=forking
+> +LogsDirectory=nginx
+> +StateDirectory=nginx
+>  PIDFile=/var/run/nginx.pid
+> -ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
+>  ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
+>  ExecStart=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
+>  ExecReload=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;' -s reload
+> 
