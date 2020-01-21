@@ -1,42 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jan 2020 21:07:49 +0100
-Subject: [Buildroot] [git commit] package/fail2ban: bump version to 0.10.5
-Message-ID: <20200121200043.BA4E383467@busybox.osuosl.org>
+Date: Tue, 21 Jan 2020 21:03:00 +0100
+Subject: [Buildroot] [git commit] package/v4l2loopback: bump to version
+ 0.12.3
+Message-ID: <20200121200043.91E6283647@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2139a73a1f19a512fcca31ed151ba92c741bdc8
+commit: https://git.buildroot.net/buildroot/commit/?id=61bc7a944f4006e482c0b6320dd3a90d270dc8c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fail2ban/fail2ban.hash | 2 +-
- package/fail2ban/fail2ban.mk   | 2 +-
+ package/v4l2loopback/v4l2loopback.hash | 2 +-
+ package/v4l2loopback/v4l2loopback.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
-index 25d120c115..90a4287355 100644
---- a/package/fail2ban/fail2ban.hash
-+++ b/package/fail2ban/fail2ban.hash
+diff --git a/package/v4l2loopback/v4l2loopback.hash b/package/v4l2loopback/v4l2loopback.hash
+index fa1a165c11..b9d65c821c 100644
+--- a/package/v4l2loopback/v4l2loopback.hash
++++ b/package/v4l2loopback/v4l2loopback.hash
 @@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  d6ca1bbc7e7944f7acb2ba7c1065953cd9837680bc4d175f30ed155c6a372449  fail2ban-0.10.4.tar.gz
-+sha256  a665df6338cf836edd90d1c87dcef28c8cec1aaae5f72e3f2a45ecda89a7ba5f  fail2ban-0.10.5.tar.gz
- sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index a0325dffc5..0a8f3c6cfc 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
+ # Locally calculated
+-sha256	6d2c27a69d982bf39d7330b92f084fd0388beef486879320ccf263e4716cd549  v4l2loopback-0.12.2.tar.gz
++sha256	3f6bb14b80865ec8df557c26fd2c5ba91d726580773a75a62aa2959864ef70ba  v4l2loopback-0.12.3.tar.gz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
+index 5c9158bc92..8fa0704989 100644
+--- a/package/v4l2loopback/v4l2loopback.mk
++++ b/package/v4l2loopback/v4l2loopback.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FAIL2BAN_VERSION = 0.10.4
-+FAIL2BAN_VERSION = 0.10.5
- FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
- FAIL2BAN_LICENSE = GPL-2.0+
- FAIL2BAN_LICENSE_FILES = COPYING
+-V4L2LOOPBACK_VERSION = 0.12.2
++V4L2LOOPBACK_VERSION = 0.12.3
+ V4L2LOOPBACK_SITE = $(call github,umlaeute,v4l2loopback,v$(V4L2LOOPBACK_VERSION))
+ V4L2LOOPBACK_LICENSE = GPL-2.0+
+ V4L2LOOPBACK_LICENSE_FILES = COPYING
