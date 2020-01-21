@@ -1,19 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jan 2020 21:07:57 +0100
-Subject: [Buildroot] [PATCH] package/fail2ban: bump version to 0.10.5
-In-Reply-To: <20200121084314.4262-1-p.debruijn@unilogic.nl> (Pascal de
- Bruijn's message of "Tue, 21 Jan 2020 09:43:14 +0100")
-References: <20200121084314.4262-1-p.debruijn@unilogic.nl>
-Message-ID: <87sgk8zi76.fsf@dell.be.48ers.dk>
+Date: Tue, 21 Jan 2020 21:08:52 +0100
+Subject: [Buildroot] [PATCH] package/rtl8821au: bump to version 4235b0e
+In-Reply-To: <1579603304-9908-1-git-send-email-angelo@amarulasolutions.com>
+ (Angelo Compagnucci's message of "Tue, 21 Jan 2020 11:41:44 +0100")
+References: <1579603304-9908-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <87o8uwzi5n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pascal" == Pascal de Bruijn <p.debruijn@unilogic.nl> writes:
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
- > Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+ > This patch bump package/rtl8821au to version 4235b0e.
+
+For git bumps it is nice to give a short explanation why / what this
+brings.
 
 Committed, thanks.
 
