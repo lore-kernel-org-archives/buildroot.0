@@ -1,135 +1,48 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 21 Jan 2020 18:46:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: Fix build with icu
- 65.1
-In-Reply-To: <20200121104152.GB181712@momiji>
-References: <20200121015543.95323-1-james.hilliard1@gmail.com>
- <20200121104152.GB181712@momiji>
-Message-ID: <20200121184614.GC221767@momiji>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 21 Jan 2020 18:33:35 +0100
+Subject: [Buildroot] [PATCH] package/prosody: bump to version 0.11.4
+Message-ID: <20200121173335.29194-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 21 Jan 2020 10:41:52 +0200, Adrian Perez de Castro <aperez@igalia.com> wrote:
-> On Mon, 20 Jan 2020 18:55:43 -0700, James Hilliard <james.hilliard1@gmail.com> wrote:
-> 
-> > Add patch to fix build issue introduced in buildroot commit
-> > e2a2fab11baf7cdc7e74d4f65ec73c4c79668007 which bumped ICU to
-> > version 65.1.
-> > 
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> 
-> Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/prosody/prosody.hash | 8 ++++----
+ package/prosody/prosody.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Of course, we also need to apply the same patch to the WebKitGTK package.
-I have submitted the patch, here:
-
-  https://patchwork.ozlabs.org/patch/1226666/
-
-Cheers,
-?Adri?n
-
-
-> > ---
-> >  .../0002-Fix-build-with-icu-65.1.patch        | 76 +++++++++++++++++++
-> >  1 file changed, 76 insertions(+)
-> >  create mode 100644 package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
-> > 
-> > diff --git a/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch b/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
-> > new file mode 100644
-> > index 0000000000..7d4d23d472
-> > --- /dev/null
-> > +++ b/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
-> > @@ -0,0 +1,76 @@
-> > +From 730b80e691a4b9dd0e9727cfcd9806dfa542397b Mon Sep 17 00:00:00 2001
-> > +From: "commit-queue at webkit.org"
-> > + <commit-queue@webkit.org@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
-> > +Date: Fri, 4 Oct 2019 21:51:37 +0000
-> > +Subject: [PATCH] Fix build with icu 65.1
-> > + https://bugs.webkit.org/show_bug.cgi?id=202600
-> > +
-> > +Patch by Heiko Becker <heirecka@exherbo.org> on 2019-10-04
-> > +Reviewed by Konstantin Tokarev.
-> > +
-> > +Source/WebCore:
-> > +
-> > +* dom/Document.cpp:
-> > +(WebCore::isValidNameNonASCII):
-> > +(WebCore::Document::parseQualifiedName):
-> > +
-> > +Source/WTF:
-> > +
-> > +* wtf/URLHelpers.cpp:
-> > +(WTF::URLHelpers::allCharactersInIDNScriptWhiteList):
-> > +
-> > +git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 250747 268f45cc-cd09-0410-ab3c-d52691b4dbfc
-> > +[james.hilliard1 at gmail.com: backport from upstream webkit commit
-> > +730b80e691a4b9dd0e9727cfcd9806dfa542397b]
-> > +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > +---
-> > + Source/WTF/ChangeLog            | 10 ++++++++++
-> > + Source/WTF/wtf/URLHelpers.cpp   |  2 +-
-> > + Source/WebCore/ChangeLog        | 11 +++++++++++
-> > + Source/WebCore/dom/Document.cpp |  6 +++---
-> > + 4 files changed, 25 insertions(+), 4 deletions(-)
-> > +
-> > +diff --git a/Source/WTF/wtf/URLHelpers.cpp b/Source/WTF/wtf/URLHelpers.cpp
-> > +index 18e7f13cd61..c584f1a0cb7 100644
-> > +--- a/Source/WTF/wtf/URLHelpers.cpp
-> > ++++ b/Source/WTF/wtf/URLHelpers.cpp
-> > +@@ -301,7 +301,7 @@ static bool allCharactersInIDNScriptWhiteList(const UChar* buffer, int32_t lengt
-> > +     Optional<UChar32> previousCodePoint;
-> > +     while (i < length) {
-> > +         UChar32 c;
-> > +-        U16_NEXT(buffer, i, length, c)
-> > ++        U16_NEXT(buffer, i, length, c);
-> > +         UErrorCode error = U_ZERO_ERROR;
-> > +         UScriptCode script = uscript_getScript(c, &error);
-> > +         if (error != U_ZERO_ERROR) {
-> > +diff --git a/Source/WebCore/dom/Document.cpp b/Source/WebCore/dom/Document.cpp
-> > +index 2443e24c9bc..1fbb3a71600 100644
-> > +--- a/Source/WebCore/dom/Document.cpp
-> > ++++ b/Source/WebCore/dom/Document.cpp
-> > +@@ -4954,12 +4954,12 @@ static bool isValidNameNonASCII(const UChar* characters, unsigned length)
-> > +     unsigned i = 0;
-> > + 
-> > +     UChar32 c;
-> > +-    U16_NEXT(characters, i, length, c)
-> > ++    U16_NEXT(characters, i, length, c);
-> > +     if (!isValidNameStart(c))
-> > +         return false;
-> > + 
-> > +     while (i < length) {
-> > +-        U16_NEXT(characters, i, length, c)
-> > ++        U16_NEXT(characters, i, length, c);
-> > +         if (!isValidNamePart(c))
-> > +             return false;
-> > +     }
-> > +@@ -5019,7 +5019,7 @@ ExceptionOr<std::pair<AtomString, AtomString>> Document::parseQualifiedName(cons
-> > + 
-> > +     for (unsigned i = 0; i < length; ) {
-> > +         UChar32 c;
-> > +-        U16_NEXT(qualifiedName, i, length, c)
-> > ++        U16_NEXT(qualifiedName, i, length, c);
-> > +         if (c == ':') {
-> > +             if (sawColon)
-> > +                 return Exception { InvalidCharacterError };
-> > +-- 
-> > +2.20.1
-> > +
-> > -- 
-> > 2.20.1
-> > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200121/e06b35c4/attachment.asc>
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index d7d1d06ed..e39fafde6 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,8 +1,8 @@
+ # Locally computed:
+-md5    2cf85cd8f7fc061916d97a169e850a0e  prosody-0.11.3.tar.gz
+-sha1   87ec8039bf297ba9bc4da44b2ba42f4b035e73ca  prosody-0.11.3.tar.gz
+-sha256 cfdabd6f42a9fc5db300221967c518c26bd4b6e62def721c1626894d6325bf87  prosody-0.11.3.tar.gz
+-sha512 07239433c7c65184ca24d665c92b787ff9e4a5ee190ab90dede802ffd2cbd97855356d818858871e62284e9923f485b3468ab1baed5d3fb13aac0551a38967eb  prosody-0.11.3.tar.gz
++md5    375a3737ffd6831d967fb1917f097372  prosody-0.11.4.tar.gz
++sha1   59e9e684230c26daf53526e18b0e6e2efb0d63c5  prosody-0.11.4.tar.gz
++sha256 b5f26fa343c7f32f6242721d6991cb35f5d2a28d2bf59d2bc329a940523704fd  prosody-0.11.4.tar.gz
++sha512 0c3aa3373c53f803b88a87dad4ca18b215de7a485d29b0bc4b186d97f7c48262840199a74f62aba6b7b4f1766fdfb37327ed4ff24e877c3a6dfca58764a035c3  prosody-0.11.4.tar.gz
+ 
+ # Hash for license file:
+ sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index 05ea3d2e4..7245afdc6 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROSODY_VERSION = 0.11.3
++PROSODY_VERSION = 0.11.4
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
+-- 
+2.20.1
