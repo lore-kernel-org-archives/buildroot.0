@@ -1,56 +1,46 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue, 21 Jan 2020 08:09:51 -0600
-Subject: [Buildroot] [PATCH 1/1] perl: Add option to enable threads
-Message-ID: <20200121140951.180608-1-clayton.shotwell@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Jan 2020 17:35:18 +0100
+Subject: [Buildroot] [PATCH 1/2] package/wireguard-tools: bump to version
+ 1.0-20200121
+Message-ID: <20200121163519.10171-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Hector Kesari <hector.kesari@rockwellcollins.com>
+For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2020-January/004869.html
 
-Add config option for PERL to enable threads usage.
-
-Signed-off-by: Hector Kesari <hector.kesari@rockwellcollins.com>
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl/Config.in | 9 +++++++++
- package/perl/perl.mk   | 4 ++++
- 2 files changed, 13 insertions(+)
+ package/wireguard-tools/wireguard-tools.hash | 4 ++--
+ package/wireguard-tools/wireguard-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl/Config.in b/package/perl/Config.in
-index 32a3fd2ee9..7bd644a85d 100644
---- a/package/perl/Config.in
-+++ b/package/perl/Config.in
-@@ -24,4 +24,13 @@ config BR2_PACKAGE_PERL_MODULES
- 	  Leave empty for all modules (as far as the external libraries
- 	  are available).
+diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
+index b8b1dac1ac..1650f67e7a 100644
+--- a/package/wireguard-tools/wireguard-tools.hash
++++ b/package/wireguard-tools/wireguard-tools.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004819.html
+-sha256 547cd1c2f8dca904faac9e8d3964f1ef956c24bb12e3498da88dde95243c7f08  wireguard-tools-1.0.20200102.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004869.html
++sha256 15bfdbdbecbd3870ced9a7e68286c871bfcb2071d165f113808081f2e428faa3  wireguard-tools-1.0.20200121.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
+index 6fcfebf13a..0acf0fcbb5 100644
+--- a/package/wireguard-tools/wireguard-tools.mk
++++ b/package/wireguard-tools/wireguard-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_PERL_ENABLE_THREADS
-+	bool "Support for Threads in PERL"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Enable use of threads in PERL scripts
-+
-+comment "Perl threads need toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- endif
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 0ab81ddb34..e0bbf9cfd4 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -62,6 +62,10 @@ ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
- PERL_CONF_OPTS += -Dusedevel
- endif
- 
-+ifeq ($(BR2_PACKAGE_PERL_ENABLE_THREADS),y)
-+PERL_CONF_OPTS += -Dusethreads
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- PERL_CONF_OPTS += --all-static --no-dynaloader
- endif
+-WIREGUARD_TOOLS_VERSION = 1.0.20200102
++WIREGUARD_TOOLS_VERSION = 1.0.20200121
+ WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
+ WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
+ WIREGUARD_TOOLS_LICENSE = GPL-2.0
 -- 
-2.23.0
+2.20.1
