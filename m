@@ -1,32 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jan 2020 21:05:44 +0100
-Subject: [Buildroot] [git commit] package/wpewebkit: Fix build with icu 65.1
-Message-ID: <20200121200043.B17DD83467@busybox.osuosl.org>
+Date: Tue, 21 Jan 2020 21:09:13 +0100
+Subject: [Buildroot] [git commit] package/webkitgtk: Fix build with ICU 65.1
+Message-ID: <20200121200043.CD7E683649@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f8abbeec33ce8dfc0e3b14d2c352210634ce28c
+commit: https://git.buildroot.net/buildroot/commit/?id=0decc94e4c5608b069214c33d40ecf8af36505ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add patch to fix build issue introduced in buildroot commit
 e2a2fab11baf7cdc7e74d4f65ec73c4c79668007 which bumped ICU to
 version 65.1.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../wpewebkit/0002-Fix-build-with-icu-65.1.patch   | 76 ++++++++++++++++++++++
+ .../webkitgtk/0001-Fix-build-with-icu-65.1.patch   | 76 ++++++++++++++++++++++
  1 file changed, 76 insertions(+)
 
-diff --git a/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch b/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
+diff --git a/package/webkitgtk/0001-Fix-build-with-icu-65.1.patch b/package/webkitgtk/0001-Fix-build-with-icu-65.1.patch
 new file mode 100644
-index 0000000000..7d4d23d472
+index 0000000000..207e10491a
 --- /dev/null
-+++ b/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
++++ b/package/webkitgtk/0001-Fix-build-with-icu-65.1.patch
 @@ -0,0 +1,76 @@
 +From 730b80e691a4b9dd0e9727cfcd9806dfa542397b Mon Sep 17 00:00:00 2001
 +From: "commit-queue at webkit.org"
@@ -50,9 +49,9 @@ index 0000000000..7d4d23d472
 +(WTF::URLHelpers::allCharactersInIDNScriptWhiteList):
 +
 +git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 250747 268f45cc-cd09-0410-ab3c-d52691b4dbfc
-+[james.hilliard1 at gmail.com: backport from upstream webkit commit
++[aperez at igalia.com: backport from upstream webkit commit
 +730b80e691a4b9dd0e9727cfcd9806dfa542397b]
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 +---
 + Source/WTF/ChangeLog            | 10 ++++++++++
 + Source/WTF/wtf/URLHelpers.cpp   |  2 +-
