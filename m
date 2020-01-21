@@ -1,38 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jan 2020 22:03:00 +0100
-Subject: [Buildroot] [PATCH] board/ci20/genimage.cfg: drop hardcoded rootfs
- partition size
-Message-ID: <20200121210301.28973-1-peter@korsgaard.com>
+Date: Tue, 21 Jan 2020 22:04:33 +0100
+Subject: [Buildroot] Problem generating rootfs for ci20 defconfig
+In-Reply-To: <CAJ4jsackLicBx5naQiNu+hCWZ45Jbx8cqRCK9sLaSHrDTE1pNg@mail.gmail.com>
+ (Carlos Santos's message of "Mon, 20 Jan 2020 13:41:20 -0300")
+References: <87muaimcqg.fsf@igalia.com>
+ <CAJ4jsafbQ9GBLYd=x95B7QZ=AAd2AdLH-+iuPNnEqhkGfKZ1uw@mail.gmail.com>
+ <87lfq2mbiz.fsf@igalia.com>
+ <CAJ4jsackLicBx5naQiNu+hCWZ45Jbx8cqRCK9sLaSHrDTE1pNg@mail.gmail.com>
+Message-ID: <877e1kzfku.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As recently reported to the list:
-http://lists.busybox.net/pipermail/buildroot/2020-January/271937.html
+>>>>> "Carlos" == Carlos Santos <unixmania@gmail.com> writes:
 
-The hardcoded rootfs partition size can lead to hard to understand build
-failures if more packages are added.
+Hi,
 
-So drop the hardcoded partition size.  Genimage will then size the partition
-to match the size of the rootfs image (which by default is also 60MB for ext4).
+ > Perhaps we should drop the size parameter for rootts in
+ > board/*/genimage.cfg and let genimage always use the size of the
+ > filesystem image.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/ci20/genimage.cfg | 1 -
- 1 file changed, 1 deletion(-)
+I was thinking the same. I sent a patch for ci20, but it indeed probably
+makes sense to do it for all defconfigs.
 
-diff --git a/board/ci20/genimage.cfg b/board/ci20/genimage.cfg
-index fa3e7368d3..5f8a16c610 100644
---- a/board/ci20/genimage.cfg
-+++ b/board/ci20/genimage.cfg
-@@ -24,6 +24,5 @@ image sdcard.img {
-         partition-type = 0x83
-         image = "rootfs.ext4"
-         offset = 2M
--        size = 60M
-     }
- }
+https://patchwork.ozlabs.org/patch/1226767/
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
