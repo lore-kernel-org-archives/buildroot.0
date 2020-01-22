@@ -1,44 +1,31 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 22 Jan 2020 10:22:40 +0200
-Subject: [Buildroot] [PATCH 19/26] package/daemon: add hash for license
- file
-In-Reply-To: <20200122081657.31817-20-heiko.thiery@gmail.com>
-References: <20200122081657.31817-1-heiko.thiery@gmail.com>
- <20200122081657.31817-20-heiko.thiery@gmail.com>
-Message-ID: <87sgk76gtr.fsf@tarshish>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Wed, 22 Jan 2020 11:34:01 +0100
+Subject: [Buildroot] [PATCH] package/erlang-p1-xmpp: fix host build
+Message-ID: <20200122103401.21596-1-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Heiko,
+Fixes:
+http://autobuild.buildroot.net/results/3e594350131994df53b20d5113fefbba2e747836
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+---
+ package/erlang-p1-xmpp/erlang-p1-xmpp.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Wed, Jan 22 2020, Heiko Thiery wrote:
-
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-
-Acked-by: Baruch Siach <baruch@tkos.co.il>
-
-Thanks,
-baruch
-
-> ---
->  package/daemon/daemon.hash | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
-> index 32308ea3f7..ad8637ee81 100644
-> --- a/package/daemon/daemon.hash
-> +++ b/package/daemon/daemon.hash
-> @@ -1,3 +1,4 @@
->  # md5 from http://www.libslack.org/daemon/; sha256 locally calculated
->  md5 6cd0a28630a29ac279bc501f39baec66 daemon-0.6.4.tar.gz
->  sha256 c4b9ea4aa74d55ea618c34f1e02c080ddf368549037cb239ee60c83191035ca1 daemon-0.6.4.tar.gz
-> +sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 LICENSE
-
-
+diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.mk b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
+index ced058731b..2f74c60df2 100644
+--- a/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
++++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
+@@ -11,6 +11,7 @@ ERLANG_P1_XMPP_LICENSE_FILES = LICENSE.txt
+ ERLANG_P1_XMPP_INSTALL_STAGING = YES
+ ERLANG_P1_XMPP_DEPENDENCIES = erlang-p1-xml erlang-p1-stringprep \
+ 	erlang-p1-tls erlang-p1-utils erlang-p1-zlib host-erlang-p1-xml
++HOST_ERLANG_P1_XMPP_DEPENDENCIES = host-erlang-p1-xml
+ 
+ $(eval $(rebar-package))
+ $(eval $(host-rebar-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.20.1
