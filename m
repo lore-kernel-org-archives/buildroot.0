@@ -1,40 +1,73 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Wed, 22 Jan 2020 08:50:05 +0100
-Subject: [Buildroot] [PATCH 2/2] package/nftables: bump version to 0.9.3
-Message-ID: <20200122075005.2915-1-p.debruijn@unilogic.nl>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 22 Jan 2020 09:16:32 +0100
+Subject: [Buildroot] [PATCH 00/26] Add hash for license file in some packages
+Message-ID: <20200122081657.31817-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
----
- package/nftables/nftables.hash | 2 +-
- package/nftables/nftables.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This is a bunch of patches that adds the license file hashes.
 
-diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
-index ae3404b..93c816e 100644
---- a/package/nftables/nftables.hash
-+++ b/package/nftables/nftables.hash
-@@ -1,3 +1,3 @@
- # From https://netfilter.org/projects/nftables/downloads.html
--sha256	5cb66180143e6bfc774f4eb316206d40ac1cb6df269a90882404cbf7165513f5	nftables-0.9.2.tar.bz2
-+sha256	956b915ce2a7aeaff123e49006be7a0690a0964e96c062703181a36e2e5edb78	nftables-0.9.3.tar.bz2
- sha256	c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e	COPYING
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 884a7dd..11ef684 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NFTABLES_VERSION = 0.9.2
-+NFTABLES_VERSION = 0.9.3
- NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
- NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
- NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
+The packages are tests with: make <pkg>-legal-info
+
+
+Heiko Thiery (26):
+  package/crudini: add hash for license file
+  package/netcat: add hash for license file
+  package/phytool: add hash for license file
+  package/python-iniparser: add hash for license file
+  package/4th: add hash for license file
+  package/alure: add hash for license file
+  package/atest: add hash for license file
+  package/atf: add hash for license file
+  package/audiofile: add hash for license file
+  package/bcache-tools: add hash for license file
+  package/bmon: add hash for license file
+  package/bridge-utils: add hash for license file
+  package/cgic: add hash for license file
+  package/aumix: add hash for license file
+  package/cpuload: add hash for license file
+  package/ctorrent: add hash for license file
+  package/curlftpfs: add hash for license file
+  package/czmq: fix typo for LICNESE hash
+  package/daemon: add hash for license file
+  package/dbus-cpp: add hash for license file
+  package/dhcpdump: add hash for license file
+  package/dieharder: add hash for license file
+  package/acpitool: add hash for license file
+  package/autoconf-archive: add hash for license file
+  package/angular-websocket: add hash for license file
+  package/axel: add hash for license file
+
+ package/4th/4th.hash                             | 1 +
+ package/acpitool/acpitool.hash                   | 1 +
+ package/alure/alure.hash                         | 1 +
+ package/angular-websocket/angular-websocket.hash | 1 +
+ package/atest/atest.hash                         | 1 +
+ package/atf/atf.hash                             | 1 +
+ package/audiofile/audiofile.hash                 | 2 ++
+ package/aumix/aumix.hash                         | 1 +
+ package/autoconf-archive/autoconf-archive.hash   | 1 +
+ package/axel/axel.hash                           | 2 ++
+ package/bcache-tools/bcache-tools.hash           | 1 +
+ package/bmon/bmon.hash                           | 2 ++
+ package/bridge-utils/bridge-utils.hash           | 3 +++
+ package/cgic/cgic.hash                           | 1 +
+ package/cpuload/cpuload.hash                     | 1 +
+ package/crudini/crudini.hash                     | 7 +++++--
+ package/ctorrent/ctorrent.hash                   | 3 +++
+ package/curlftpfs/curlftpfs.hash                 | 1 +
+ package/czmq/czmq.hash                           | 2 +-
+ package/daemon/daemon.hash                       | 1 +
+ package/dbus-cpp/dbus-cpp.hash                   | 1 +
+ package/dhcpdump/dhcpdump.hash                   | 1 +
+ package/dieharder/dieharder.hash                 | 1 +
+ package/netcat/netcat.hash                       | 1 +
+ package/phytool/phytool.hash                     | 1 +
+ package/python-iniparse/python-iniparse.hash     | 8 ++++++--
+ 26 files changed, 42 insertions(+), 5 deletions(-)
+
 -- 
-2.7.4
+2.20.1
