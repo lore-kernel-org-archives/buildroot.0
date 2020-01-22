@@ -1,110 +1,171 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Wed, 22 Jan 2020 07:56:15 -0600
-Subject: [Buildroot] [PATCH 1/4] core/pkg-infra: introduce download
- features concept
-In-Reply-To: <e2ebebb5-c730-441f-dc9e-45b568102fbf@mind.be>
-References: <20200116193852.17683-1-vfazio@xes-inc.com>
- <CAMQcK5+-_N_Rwkx6E+w7eid5rKNVNjith7Feg8yYgzQX+dvtQQ@mail.gmail.com>
- <674b2ca7-cb45-c89d-a5e5-cfc230200db2@xes-inc.com>
- <b782018a-bec1-07d5-da24-128d4eba2a1b@mind.be>
- <20200117091755.69711c60@windsurf> <20200117164432.GK22540@scaer>
- <36d96c34-c5d2-26a3-6284-6e5035cc1ab9@mind.be>
- <55a401b6-2453-7d0f-1e19-fa0f306bc0aa@xes-inc.com>
- <30e3a759-8dda-0aef-14b7-50f4403a2e27@mind.be>
- <05878807-9eb8-75d5-ab09-0871c3d20454@xes-inc.com>
- <e2ebebb5-c730-441f-dc9e-45b568102fbf@mind.be>
-Message-ID: <1195e7e8-e95a-8316-ee3f-28061722bfcc@xes-inc.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Wed, 22 Jan 2020 14:10:16 +0000
+Subject: [Buildroot] [PATCH v3 1/3] configs/raspberrypi*: bump kernel
+ version to 0d72d83
+In-Reply-To: <20200120103941.12052-1-ps.report@gmx.net>
+References: <20200120103941.12052-1-ps.report@gmx.net>
+Message-ID: <CAFGQKxcMGArKc7f2rDLWikFz8Uw+ZBDvtxTbz8FS3=cfy_xfwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, et al,
+Peter,
 
-I've rejected this series in favor of reintroducing the original patch + 
-suggested changes.
+On Mon, 20 Jan 2020 at 10:39, Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> Now based on 4.19.95 (from 4.19.75).
+>
+> Go back to sha1 version scheme instead of official tag (after
+> only two tag versions) to get an up-to-date kernel version
+> (as the offical last tag is from september 2019).
 
-http://patchwork.ozlabs.org/patch/1226759/
+The 20200114-1 kernel was released the other week.  I think you should
+just use this official release tag.
 
-On 1/21/20 4:21 PM, Arnout Vandecappelle wrote:
->
-> On 20/01/2020 22:26, Vincent Fazio wrote:
->> Arnout,
->>
->> On 1/20/20 3:07 PM, Arnout Vandecappelle wrote:
->>> On 20/01/2020 21:38, Vincent Fazio wrote:
->>>> Arnout, Yann, et al
->>>>
->>>> On 1/20/20 2:56 AM, Arnout Vandecappelle wrote:
->>>>> On 17/01/2020 17:44, Yann E. MORIN wrote:
->>>>>
->>>>> [snip]
->>>>>> At some point in the past, Arnout expressed some concern about adding yet
->>>>>> more variables,
->>>>>  ?? That was more about internal variables, not user-facing variables. And also
->>>>> about variables that are actually assigned to. Each variable that is set in
->>>>> inner-generic-package gets multiplied a thousandfold and this puts pressure on
->>>>> the internal tables in make.
->>>>>
->>>>>> and this feature thingy would be the opportunity to
->>>>>> coalesce many variables into a single one (or rather, avoiud adding new
->>>>>> variables).
->>>>>  ?? Iff there are several users of it. So, as I said, it's a good idea if we
->>>>> get 4
->>>>> features.
->>>> So it sounds like this is too much infrastructure change until we have 4
->>>> definitive use-cases.
->>>>
->>>> At this time, we only have one (git submodules). My intent with this series was
->>>> to add the foundation for supporting git-lfs (which would be the second
->>>> use-case) and others.
->>>>
->>>> Based on the conversation, it seems like until we have a hard requirement from
->>>> other backends (hg and svn as previously mentioned), this series is DOA and that
->>>> git-lfs support should be added via some <pkg>_GIT_LFS define as was originally
->>>> submitted here:
->>>> http://lists.busybox.net/pipermail/buildroot/2018-April/219716.html
->>>>
->>>> My main goal here is to add git-lfs support, regardless of how that needs to
->>>> happen. If resubmitting the original patch gets that done, that's what I'll do.
->>>  ? Yes, I think the original patch should be fine. Just also add git-lfs to
->>> DL_TOOLS_DEPENDENCIES, and test if it still works correctly if you don't have
->>> git-lfs installed on your host.
->> I have a series staged here with most of that support:
->> https://gitlab.com/vfazio/buildroot/merge_requests/4/commits
->>
->> I opted to create a host package for git-lfs in the case the host was missing
->> it.. but can drop that if we'd rather enforce the host to have it pre-installed.
->>
->> I was a bit confused on the difference between DL_TOOLS_DEPENDENCIES and
->> <PKG>_DOWNLOAD_DEPENDENCIES and opted for the latter, but can change that.
->   DL_TOOLS_DEPENDENCIES means that we check if the tool is already installed on
-> the system.
->
->   <PKG>_DOWNLOAD_DEPENDENCIES means that the host-tool will be built (and the one
-> on the system is never used, unless you add check-host-git-lfs support).
->
->   Personally I think for something like git-lfs we can expect it to be installed
-> on the system, since it will probably never be used by any in-tree package. IOW,
-> I think DL_TOOLS_DEPENDENCIES is the easiest and good-enough solution.
->
->
->>>  ? Ideally there should also be a package in-tree that uses it, but I can imagine
->>> that it will be hard to find one... Failing that, a test case would be nice -
->>> but again, that may be difficult to implement without relying on some
->>> server-side support for it.
->> As you mention, a test case will be difficult without a server implementing the
->> protocol and I expect most packages that need this functionality will be
->> external tree packages (we need it for vendor supplied binaries for which
->> sources are not available).
->   So no testing. Oh well.
->
->   Regards,
->   Arnout
+Thanks
 
--- 
-Vincent Fazio
-Embedded Software Engineer - Linux
-Extreme Engineering Solutions, Inc
-http://www.xes-inc.com
+Martin
+
+>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - no changes
+>
+> Chnages v2 -> v3:
+>   - bump version to 0d72d83/4.19.95
+>   - add sha1 explanation
+> ---
+>  configs/raspberrypi0_defconfig       | 2 +-
+>  configs/raspberrypi0w_defconfig      | 2 +-
+>  configs/raspberrypi2_defconfig       | 2 +-
+>  configs/raspberrypi3_64_defconfig    | 2 +-
+>  configs/raspberrypi3_defconfig       | 2 +-
+>  configs/raspberrypi3_qt5we_defconfig | 2 +-
+>  configs/raspberrypi4_64_defconfig    | 2 +-
+>  configs/raspberrypi4_defconfig       | 2 +-
+>  configs/raspberrypi_defconfig        | 2 +-
+>  9 files changed, 9 insertions(+), 9 deletions(-)
+>
+> diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
+> index 1600e219d1..a2b615263f 100644
+> --- a/configs/raspberrypi0_defconfig
+> +++ b/configs/raspberrypi0_defconfig
+> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b)/linux-0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+>
+>  # Build the DTBs for A/B from the kernel sources: the zero is the same
+> diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
+> index e3c747ff6f..948339d6df 100644
+> --- a/configs/raspberrypi0w_defconfig
+> +++ b/configs/raspberrypi0w_defconfig
+> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b)/linux-0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
+> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+> index e6c38e74b7..b4e617ae37 100644
+> --- a/configs/raspberrypi2_defconfig
+> +++ b/configs/raspberrypi2_defconfig
+> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+>
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b)/linux-0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+>
+>  # Build the DTB from the kernel sources
+> diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+> index b9a070fb82..0b04874c43 100644
+> --- a/configs/raspberrypi3_64_defconfig
+> +++ b/configs/raspberrypi3_64_defconfig
+> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+>
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b)/linux-0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+>
+>  # Build the DTB from the kernel sources
+> diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+> index 530eb0ab3f..b95de5499a 100644
+> --- a/configs/raspberrypi3_defconfig
+> +++ b/configs/raspberrypi3_defconfig
+> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+>
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b)/linux-0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+>
+>  # Build the DTB from the kernel sources
+> diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+> index 4e9d782c7c..cbfe94b596 100644
+> --- a/configs/raspberrypi3_qt5we_defconfig
+> +++ b/configs/raspberrypi3_qt5we_defconfig
+> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+>
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b)/linux-0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+>
+>  # Build the DTB from the kernel sources
+> diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
+> index f013c4382c..91b9c2c8d7 100644
+> --- a/configs/raspberrypi4_64_defconfig
+> +++ b/configs/raspberrypi4_64_defconfig
+> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+>
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190819-1)/linux-raspberrypi-kernel_1.20190819-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b)/linux-0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+>
+>  # Build the DTB from the kernel sources
+> diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
+> index a216463e28..4ae47e798f 100644
+> --- a/configs/raspberrypi4_defconfig
+> +++ b/configs/raspberrypi4_defconfig
+> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+>
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b)/linux-0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+>
+>  # Build the DTB from the kernel sources
+> diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+> index 969a92820e..06bce19df7 100644
+> --- a/configs/raspberrypi_defconfig
+> +++ b/configs/raspberrypi_defconfig
+> @@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,raspberrypi-kernel_1.20190925-1)/linux-raspberrypi-kernel_1.20190925-1.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b)/linux-0d72d83ec92acda1e8cbad0d4213a5ec2b3f2e1b.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+>
+>  # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
+> --
+> 2.24.1
+>
