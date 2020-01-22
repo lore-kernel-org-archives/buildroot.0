@@ -1,27 +1,48 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 22 Jan 2020 23:32:30 +0100
-Subject: [Buildroot] [git commit] package/axel: add hash for license file
-Message-ID: <20200122222228.11DA58386E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 22 Jan 2020 23:41:48 +0100
+Subject: [Buildroot] [PATCH 00/26] Add hash for license file in some
+ packages
+In-Reply-To: <15578e10-adba-7ca7-924b-ea2abecd1012@mind.be>
+References: <20200122081657.31817-1-heiko.thiery@gmail.com>
+ <15578e10-adba-7ca7-924b-ea2abecd1012@mind.be>
+Message-ID: <77188e69-5d04-d5b6-8a5a-3965d1bbce9e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c1223e637c870334148031dc26d6f5002e0ff58
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/axel/axel.hash | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/package/axel/axel.hash b/package/axel/axel.hash
-index e7c128ed76..f9c5526f88 100644
---- a/package/axel/axel.hash
-+++ b/package/axel/axel.hash
-@@ -1 +1,3 @@
-+# locally computed
- sha256 24ab549021bdfca01ad5e8e95b706869dd30fe9ab1043da4cbb9dff89edc267d  axel-2.17.6.tar.xz
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+On 22/01/2020 23:32, Arnout Vandecappelle wrote:
+> 
+> 
+> On 22/01/2020 09:16, Heiko Thiery wrote:
+>> This is a bunch of patches that adds the license file hashes.
+>>
+>> The packages are tests with: make <pkg>-legal-info
+> 
+>  Series applied
+
+ Forgot to mention: in a few of them, I also changed the spaces/tabs in the
+existing hash to be consistent (aligned) with the hash you added.
+
+ Regards,
+ Arnout
+
+>, except for the autoconf-archive one because that failed the
+> 'make host-autoconf-archive-legal-info' test...
+> 
+>>>> host-autoconf-archive 2019.01.06 Collecting legal info
+> ERROR: COPYING has wrong sha256 hash:
+> ERROR: expected: ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6
+> ERROR: got     : e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195
+> 
+> 
+>  Can you check that?
+> 
+>  (Marked it as Changes Requested in patchwork)
+> 
+>  Regards,
+>  Arnout
+> 
