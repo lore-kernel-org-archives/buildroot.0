@@ -1,50 +1,86 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Wed, 22 Jan 2020 14:15:14 +0100
-Subject: [Buildroot] [PATCH] package/fail2ban: add python3 support
-Message-ID: <20200122131514.10400-1-p.debruijn@unilogic.nl>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Date: Wed, 22 Jan 2020 07:45:34 -0600
+Subject: [Buildroot] [PATCH v2 1/1] perl: Add option to enable threads
+In-Reply-To: <f5353499-031e-078a-f3a1-a72826e3f0d4@mind.be>
+References: <20200121192916.63356-1-clayton.shotwell@rockwellcollins.com>
+ <f5353499-031e-078a-f3a1-a72826e3f0d4@mind.be>
+Message-ID: <CANn-YGTNO=SyFKKKOV56M+XqZootw+Mey-vue6fRYrXfz5WGOw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the fail2ban codebase is still native python2, but 2to3 is supported
+On Tue, Jan 21, 2020 at 4:23 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 21/01/2020 20:29, Clayton Shotwell wrote:
+> > From: Hector Kesari <hector.kesari@rockwellcollins.com>
+> >
+> > Add config option for Perl to enable threads usage.
+> >
+> > Signed-off-by: Hector Kesari <hector.kesari@rockwellcollins.com>
+> > Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> >
+> > ---
+> > Changes v1 -> v2:
+> >   - Changed references of PERL to Perl
+> >   - Added a warning about using Perl threads
+> > ---
+> >  package/perl/Config.in | 13 +++++++++++++
+> >  package/perl/perl.mk   |  4 ++++
+> >  2 files changed, 17 insertions(+)
+> >
+> > diff --git a/package/perl/Config.in b/package/perl/Config.in
+> > index 32a3fd2ee9..34b87ee575 100644
+> > --- a/package/perl/Config.in
+> > +++ b/package/perl/Config.in
+> > @@ -24,4 +24,17 @@ config BR2_PACKAGE_PERL_MODULES
+> >         Leave empty for all modules (as far as the external libraries
+> >         are available).
+> >
+> > +config BR2_PACKAGE_PERL_ENABLE_THREADS
+> > +     bool "Support for Threads in Perl"
+> > +     depends on BR2_TOOLCHAIN_HAS_THREADS
+> > +     help
+> > +       Enable use of threads in Perl scripts
+> > +
+> > +       WARNING: The use of interpreter-based threads in Perl
+> > +       is officially discouraged.
+> > +       See https://perldoc.perl.org/threads.html#WARNING
+>
+>  So why do you want it then?
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
----
- package/fail2ban/Config.in   | 2 +-
- package/fail2ban/fail2ban.mk | 7 +++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+Goal of the program is to not modify the perl code since it "works".
+There may be others
+with older code bases that could use the thread support.
 
-diff --git a/package/fail2ban/Config.in b/package/fail2ban/Config.in
-index f05adbb..86e6233 100644
---- a/package/fail2ban/Config.in
-+++ b/package/fail2ban/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_FAIL2BAN
- 	bool "fail2ban"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_SYSTEMD if BR2_PACKAGE_SYSTEMD
- 	help
- 	  Fail2ban scans log files (e.g. /var/log/apache/error_log) and
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index 0a8f3c6..0c5de9a 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
-@@ -10,6 +10,13 @@ FAIL2BAN_LICENSE = GPL-2.0+
- FAIL2BAN_LICENSE_FILES = COPYING
- FAIL2BAN_SETUP_TYPE = distutils
- 
-+define FAIL2BAN_PYTHON_2TO3
-+	$(HOST_DIR)/bin/2to3 --write --nobackups --no-diffs $(@D)/bin/* $(@D)/fail2ban
-+endef
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+FAIL2BAN_POST_PATCH_HOOKS += FAIL2BAN_PYTHON_2TO3
-+endif
-+
- define FAIL2BAN_FIX_DEFAULT_CONFIG
- 	$(SED) '/^socket/c\socket = /run/fail2ban.sock' $(TARGET_DIR)/etc/fail2ban/fail2ban.conf
- 	$(SED) '/^pidfile/c\pidfile = /run/fail2ban.pid' $(TARGET_DIR)/etc/fail2ban/fail2ban.conf
--- 
-2.7.4
+Thanks,
+Clayton
+
+>
+>  Regards,
+>  Arnout
+>
+> > +
+> > +comment "Perl threads need toolchain w/ threads"
+> > +     depends on !BR2_TOOLCHAIN_HAS_THREADS
+> > +
+> >  endif
+> > diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+> > index 0ab81ddb34..e0bbf9cfd4 100644
+> > --- a/package/perl/perl.mk
+> > +++ b/package/perl/perl.mk
+> > @@ -62,6 +62,10 @@ ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+> >  PERL_CONF_OPTS += -Dusedevel
+> >  endif
+> >
+> > +ifeq ($(BR2_PACKAGE_PERL_ENABLE_THREADS),y)
+> > +PERL_CONF_OPTS += -Dusethreads
+> > +endif
+> > +
+> >  ifeq ($(BR2_STATIC_LIBS),y)
+> >  PERL_CONF_OPTS += --all-static --no-dynaloader
+> >  endif
+> >
