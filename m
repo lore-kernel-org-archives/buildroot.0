@@ -1,9 +1,9 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 22 Jan 2020 09:16:35 +0100
-Subject: [Buildroot] [PATCH 03/26] package/phytool: add hash for license file
+Date: Wed, 22 Jan 2020 09:16:34 +0100
+Subject: [Buildroot] [PATCH 02/26] package/netcat: add hash for license file
 In-Reply-To: <20200122081657.31817-1-heiko.thiery@gmail.com>
 References: <20200122081657.31817-1-heiko.thiery@gmail.com>
-Message-ID: <20200122081657.31817-4-heiko.thiery@gmail.com>
+Message-ID: <20200122081657.31817-3-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,16 @@ To: buildroot@busybox.net
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/phytool/phytool.hash | 1 +
+ package/netcat/netcat.hash | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/phytool/phytool.hash b/package/phytool/phytool.hash
-index ce04936417..b6bfd8132f 100644
---- a/package/phytool/phytool.hash
-+++ b/package/phytool/phytool.hash
-@@ -2,3 +2,4 @@
- # sha256 locally computed:
- md5  972982f8e5f7237cbccfc6d275da7348  phytool-2.tar.xz
- sha256  9901a14e8c6af02b7333c60b21ff81f50620e8326d54827185e5617ff9b11d21  phytool-2.tar.xz
-+sha256  f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  LICENSE
+diff --git a/package/netcat/netcat.hash b/package/netcat/netcat.hash
+index e20c4c297a..d591f3d666 100644
+--- a/package/netcat/netcat.hash
++++ b/package/netcat/netcat.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  30719c9a4ffbcf15676b8f528233ccc54ee6cba96cb4590975f5fd60c68a066f  netcat-0.7.1.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
 -- 
 2.20.1
