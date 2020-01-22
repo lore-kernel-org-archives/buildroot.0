@@ -1,54 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jan 2020 19:56:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
- 4.11.5
-Message-ID: <20200122185659.336443-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 22 Jan 2020 20:11:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libjpeg: security bump to version 9d
+Message-ID: <20200122191130.55384-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.samba.org/samba/history/samba-4.11.5.html
+- Fix CVE-2018-11813: libjpeg 9c has a large loop because read_pixel in
+  rdtarga.c mishandles EOF.
+- Update hash of README (small updates such as authors, year ...)
 
-This is a security release in order to address the following defects:
-
-CVE-2019-14902: Replication of ACLs set to inherit down a subtree on AD
-                Directory not automatic.
-CVE-2019-14907: Crash after failed character conversion at log level 3
-                or above.
-CVE-2019-19344: Use after free during DNS zone scavenging in Samba AD
-                DC.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
+ package/libjpeg/libjpeg.hash | 4 ++--
+ package/libjpeg/libjpeg.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index e8bd026a9e..47e251b38c 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.4.tar.asc
--sha256 b95471ba450757109dce65acfe75dafc719c5cc5d464fc65ee442433a461db24  samba-4.11.4.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.11.5.tar.asc
-+sha256 f3e299ff62e424c0c259a2e60ca30979c8a65244d7ef6b54667902dac639d93f  samba-4.11.5.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 965d593bd1..d66fd5794d 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/libjpeg/libjpeg.hash b/package/libjpeg/libjpeg.hash
+index 7d47f550cb..4f0a677d04 100644
+--- a/package/libjpeg/libjpeg.hash
++++ b/package/libjpeg/libjpeg.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256	650250979303a649e21f87b5ccd02672af1ea6954b911342ea491f351ceb7122	jpegsrc.v9c.tar.gz
+-sha256	31f366acfb6259456d9046eb7f16875e387f8bf029d37ac4c4397bf63f22fd6b	README
++sha256	99cb50e48a4556bc571dadd27931955ff458aae32f68c4d9c39d624693f69c32	jpegsrc.v9d.tar.gz
++sha256	3dc4e4a145c907a96bd6a0e40be3f722fecf061951909143cdff5365cba9c78c	README
+diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
+index ab09881fc1..b855344f3c 100644
+--- a/package/libjpeg/libjpeg.mk
++++ b/package/libjpeg/libjpeg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.11.4
-+SAMBA4_VERSION = 4.11.5
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-LIBJPEG_VERSION = 9c
++LIBJPEG_VERSION = 9d
+ LIBJPEG_SITE = http://www.ijg.org/files
+ LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
+ LIBJPEG_LICENSE = IJG
 -- 
-2.20.1
+2.24.1
