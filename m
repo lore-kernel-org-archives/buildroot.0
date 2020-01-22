@@ -1,48 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jan 2020 20:51:01 +0100
-Subject: [Buildroot] [git commit] package/libjpeg: security bump to version
- 9d
-Message-ID: <20200122194112.3FAE9836E1@busybox.osuosl.org>
+Date: Wed, 22 Jan 2020 20:32:52 +0100
+Subject: [Buildroot] [git commit] package/nftables: bump version to 0.9.3
+Message-ID: <20200122194112.065AE83645@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75a14ec067ed244c239692ff3944cc9c71674c6f
+commit: https://git.buildroot.net/buildroot/commit/?id=0267d162a22a1b341b5fb73ef7f46147a7f9b337
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2018-11813: libjpeg 9c has a large loop because read_pixel in
-  rdtarga.c mishandles EOF.
-- Update hash of README (small updates such as authors, year ...)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libjpeg/libjpeg.hash | 4 ++--
- package/libjpeg/libjpeg.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nftables/nftables.hash | 2 +-
+ package/nftables/nftables.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libjpeg/libjpeg.hash b/package/libjpeg/libjpeg.hash
-index 7d47f550cb..4f0a677d04 100644
---- a/package/libjpeg/libjpeg.hash
-+++ b/package/libjpeg/libjpeg.hash
+diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
+index ae3404b257..93c816edc7 100644
+--- a/package/nftables/nftables.hash
++++ b/package/nftables/nftables.hash
 @@ -1,3 +1,3 @@
- # locally computed hash
--sha256	650250979303a649e21f87b5ccd02672af1ea6954b911342ea491f351ceb7122	jpegsrc.v9c.tar.gz
--sha256	31f366acfb6259456d9046eb7f16875e387f8bf029d37ac4c4397bf63f22fd6b	README
-+sha256	99cb50e48a4556bc571dadd27931955ff458aae32f68c4d9c39d624693f69c32	jpegsrc.v9d.tar.gz
-+sha256	3dc4e4a145c907a96bd6a0e40be3f722fecf061951909143cdff5365cba9c78c	README
-diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
-index ab09881fc1..b855344f3c 100644
---- a/package/libjpeg/libjpeg.mk
-+++ b/package/libjpeg/libjpeg.mk
+ # From https://netfilter.org/projects/nftables/downloads.html
+-sha256	5cb66180143e6bfc774f4eb316206d40ac1cb6df269a90882404cbf7165513f5	nftables-0.9.2.tar.bz2
++sha256	956b915ce2a7aeaff123e49006be7a0690a0964e96c062703181a36e2e5edb78	nftables-0.9.3.tar.bz2
+ sha256	c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e	COPYING
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 884a7dd1e1..11ef6844ce 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBJPEG_VERSION = 9c
-+LIBJPEG_VERSION = 9d
- LIBJPEG_SITE = http://www.ijg.org/files
- LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
- LIBJPEG_LICENSE = IJG
+-NFTABLES_VERSION = 0.9.2
++NFTABLES_VERSION = 0.9.3
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+ NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
+ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
