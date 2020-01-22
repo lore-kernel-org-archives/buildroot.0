@@ -1,32 +1,28 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 22 Jan 2020 22:45:36 +0100
-Subject: [Buildroot] [git commit] package/crudini: add hash for license file
-Message-ID: <20200122222120.116B88370A@busybox.osuosl.org>
+Date: Wed, 22 Jan 2020 23:22:12 +0100
+Subject: [Buildroot] [git commit] package/atf: add hash for license file
+Message-ID: <20200122222120.5923083649@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61fb556b41a9841dd9aa8343d315e18d486a3d3f
+commit: https://git.buildroot.net/buildroot/commit/?id=fabb29bf4bee319c9d4202a43d733bded22966a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/crudini/crudini.hash | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/atf/atf.hash | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/crudini/crudini.hash b/package/crudini/crudini.hash
-index 9279847be9..6c08223b83 100644
---- a/package/crudini/crudini.hash
-+++ b/package/crudini/crudini.hash
-@@ -1,3 +1,6 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9b8500c90467f0a61c714fbe852c2a66, sha256 locally computed
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9b8500c90467f0a61c714fbe852c2a66
- md5    9b8500c90467f0a61c714fbe852c2a66 crudini-0.9.tar.gz
--sha256 10512a5a2f7b54b42e48a1d00f0c6398947c2ba6c264b9fdef86677f0e949fd3  crudini-0.9.tar.gz
-+
-+# locally computed
-+sha256  10512a5a2f7b54b42e48a1d00f0c6398947c2ba6c264b9fdef86677f0e949fd3  crudini-0.9.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/atf/atf.hash b/package/atf/atf.hash
+index 78cd3c6828..49c235a636 100644
+--- a/package/atf/atf.hash
++++ b/package/atf/atf.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 92bc64180135eea8fe84c91c9f894e678767764f6dbc8482021d4dde09857505 atf-0.21.tar.gz
++sha256 92bc64180135eea8fe84c91c9f894e678767764f6dbc8482021d4dde09857505  atf-0.21.tar.gz
++sha256 2a15172ddf6386297734c9800c899e6e8dc16c5a03931dcf95a9ab321a24cfe4  COPYING
