@@ -1,34 +1,30 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 22 Jan 2020 23:20:11 +0100
-Subject: [Buildroot] [git commit] package/python-iniparse: add hash for
- license file
-Message-ID: <20200122222120.2D70C8370A@busybox.osuosl.org>
+Date: Wed, 22 Jan 2020 23:24:43 +0100
+Subject: [Buildroot] [git commit] package/bridge-utils: add hash for license
+ file
+Message-ID: <20200122222120.7FEB883710@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ea025131776da1c3450b88338d339f0be232845
+commit: https://git.buildroot.net/buildroot/commit/?id=b57dd94764b0ed0f1d0a4656aafe6f00bfb659ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-iniparse/python-iniparse.hash | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/bridge-utils/bridge-utils.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/python-iniparse/python-iniparse.hash b/package/python-iniparse/python-iniparse.hash
-index f1f803823e..b843025521 100644
---- a/package/python-iniparse/python-iniparse.hash
-+++ b/package/python-iniparse/python-iniparse.hash
-@@ -1,3 +1,7 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5e573e9e9733d97623881ce9bbe5eca6, sha256 locally computed
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5e573e9e9733d97623881ce9bbe5eca6
- md5 5e573e9e9733d97623881ce9bbe5eca6 iniparse-0.4.tar.gz
--sha256 abc1ee12d2cfb2506109072d6c21e40b6c75a3fe90a9c924327d80bc0d99c054  iniparse-0.4.tar.gz
+diff --git a/package/bridge-utils/bridge-utils.hash b/package/bridge-utils/bridge-utils.hash
+index e699b24a63..5658116f88 100644
+--- a/package/bridge-utils/bridge-utils.hash
++++ b/package/bridge-utils/bridge-utils.hash
+@@ -1,2 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/net/bridge-utils/sha256sums.asc
+ sha256 cc67efb5d5fb8928a6569b3fade2b4042ec17da04678dab127d96b46489e26c8 bridge-utils-1.6.tar.xz
 +
-+# sha256 locally computed
-+sha256  abc1ee12d2cfb2506109072d6c21e40b6c75a3fe90a9c924327d80bc0d99c054  iniparse-0.4.tar.gz
-+sha256  ff45637d8a96adc414179e502fbed40160e57205bf2e302140e79a0c71eceaa7  LICENSE
-+sha256  9b02e3dfe433ccd2bd94636ef6eb08638b5a54deafe5f87a3d9d9104356c48e0  LICENSE-PSF
++# locally computed
++sha256 995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  COPYING
