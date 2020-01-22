@@ -1,27 +1,35 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 22 Jan 2020 23:27:20 +0100
-Subject: [Buildroot] [git commit] package/dhcpdump: add hash for license file
-Message-ID: <20200122222120.C69DF8370A@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 22 Jan 2020 23:32:00 +0100
+Subject: [Buildroot] [PATCH 00/26] Add hash for license file in some
+ packages
+In-Reply-To: <20200122081657.31817-1-heiko.thiery@gmail.com>
+References: <20200122081657.31817-1-heiko.thiery@gmail.com>
+Message-ID: <15578e10-adba-7ca7-924b-ea2abecd1012@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6efb580b30aa3da2d7937900294d67a7c0ecfc6e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/dhcpdump/dhcpdump.hash | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/package/dhcpdump/dhcpdump.hash b/package/dhcpdump/dhcpdump.hash
-index 36040c8a5d..358a6f01d2 100644
---- a/package/dhcpdump/dhcpdump.hash
-+++ b/package/dhcpdump/dhcpdump.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 6d5eb9418162fb738bc56e4c1682ce7f7392dd96e568cc996e44c28de7f77190  dhcpdump-1.8.tar.gz
-+sha256 bab6ca76b7e93885396513689b1248dfb0e8fd662695b8bd1b26784ef71a0192  LICENSE
+On 22/01/2020 09:16, Heiko Thiery wrote:
+> This is a bunch of patches that adds the license file hashes.
+> 
+> The packages are tests with: make <pkg>-legal-info
+
+ Series applied, except for the autoconf-archive one because that failed the
+'make host-autoconf-archive-legal-info' test...
+
+>>> host-autoconf-archive 2019.01.06 Collecting legal info
+ERROR: COPYING has wrong sha256 hash:
+ERROR: expected: ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6
+ERROR: got     : e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195
+
+
+ Can you check that?
+
+ (Marked it as Changes Requested in patchwork)
+
+ Regards,
+ Arnout
