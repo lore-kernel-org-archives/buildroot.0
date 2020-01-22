@@ -1,42 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jan 2020 20:32:45 +0100
-Subject: [Buildroot] [git commit] package/libnftnl: bump version to 1.1.5
-Message-ID: <20200122194111.EEEDD836E2@busybox.osuosl.org>
+Date: Wed, 22 Jan 2020 20:50:51 +0100
+Subject: [Buildroot] [git commit] package/samba4: security bump version to
+ 4.11.5
+Message-ID: <20200122194112.3275D83645@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b084bea37fbc5ee26165bb6d61564afadb96c05a
+commit: https://git.buildroot.net/buildroot/commit/?id=77795a16063c7ebe10ae6f4a184f201bf88f7337
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Release notes: https://www.samba.org/samba/history/samba-4.11.5.html
+
+This is a security release in order to address the following defects:
+
+CVE-2019-14902: Replication of ACLs set to inherit down a subtree on AD
+                Directory not automatic.
+CVE-2019-14907: Crash after failed character conversion at log level 3
+                or above.
+CVE-2019-19344: Use after free during DNS zone scavenging in Samba AD
+                DC.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnftnl/libnftnl.hash | 2 +-
- package/libnftnl/libnftnl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
-index 315e2e1522..4d2eb0ef08 100644
---- a/package/libnftnl/libnftnl.hash
-+++ b/package/libnftnl/libnftnl.hash
-@@ -1,3 +1,3 @@
- # From http://www.netfilter.org/projects/libnftnl/downloads.html
--sha256	c8c7988347adf261efac5bba59f8e5f995ffb65f247a88cc144e69620573ed20	libnftnl-1.1.4.tar.bz2
-+sha256	66de4d05227c0a1a731c369b193010d18a05b1185c2735211e0ecf658eeb14f3	libnftnl-1.1.5.tar.bz2
- sha256	98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24	COPYING
-diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
-index a4e9b4b940..ac780bd8d3 100644
---- a/package/libnftnl/libnftnl.mk
-+++ b/package/libnftnl/libnftnl.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index e8bd026a9e..47e251b38c 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.11.4.tar.asc
+-sha256 b95471ba450757109dce65acfe75dafc719c5cc5d464fc65ee442433a461db24  samba-4.11.4.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.11.5.tar.asc
++sha256 f3e299ff62e424c0c259a2e60ca30979c8a65244d7ef6b54667902dac639d93f  samba-4.11.5.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 965d593bd1..d66fd5794d 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNFTNL_VERSION = 1.1.4
-+LIBNFTNL_VERSION = 1.1.5
- LIBNFTNL_SITE = https://netfilter.org/projects/libnftnl/files
- LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.bz2
- LIBNFTNL_LICENSE = GPL-2.0+
+-SAMBA4_VERSION = 4.11.4
++SAMBA4_VERSION = 4.11.5
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
