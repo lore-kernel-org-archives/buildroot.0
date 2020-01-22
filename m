@@ -1,54 +1,54 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 22 Jan 2020 19:16:25 +0100
-Subject: [Buildroot] [PATCH] libnss: Re-add ZLIB_INCLUDE_DIR varible
-In-Reply-To: <5337c66e-881d-2eb9-bde6-e5b185b68741@benettiengineering.com>
-References: <20200122164450.17963-1-thomas.preston@codethink.co.uk>
- <5337c66e-881d-2eb9-bde6-e5b185b68741@benettiengineering.com>
-Message-ID: <6adeec84-1148-d926-13f5-5664b99ac2bf@benettiengineering.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 22 Jan 2020 19:56:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
+ 4.11.5
+Message-ID: <20200122185659.336443-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Forgot to mention that commit title should start with 
-"package/libnss:..." instead of just "libnss", but maybe the committer 
-could ammend it just before committing.
+Release notes: https://www.samba.org/samba/history/samba-4.11.5.html
 
-Kind regards
+This is a security release in order to address the following defects:
+
+CVE-2019-14902: Replication of ACLs set to inherit down a subtree on AD
+                Directory not automatic.
+CVE-2019-14907: Crash after failed character conversion at log level 3
+                or above.
+CVE-2019-19344: Use after free during DNS zone scavenging in Samba AD
+                DC.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index e8bd026a9e..47e251b38c 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.11.4.tar.asc
+-sha256 b95471ba450757109dce65acfe75dafc719c5cc5d464fc65ee442433a461db24  samba-4.11.4.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.11.5.tar.asc
++sha256 f3e299ff62e424c0c259a2e60ca30979c8a65244d7ef6b54667902dac639d93f  samba-4.11.5.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 965d593bd1..d66fd5794d 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.11.4
++SAMBA4_VERSION = 4.11.5
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-On 1/22/20 6:39 PM, Giulio Benetti wrote:
-> Hi Thomas,
-> 
-> On 1/22/20 5:44 PM, Thomas Preston wrote:
->> The libnss patch adding ZLIB_INCLUDE_DIR is added to upstream on
->> 2020-01-07 but the 3.49.1 release on 2020-01-13 does not contain this
->> patch, so we have actually prematurely removed it from Buildroot.
->>
->> This only affects host-libnss when libzlib is not installed in the host
->> system. When building for the target, the toolchain-wrapper already
->> looks in the target sysroot default include path - where zlib.h is
->> installed.
->>
->> Re-add this patch, so that we can build host-libnss 3.49.1.
->>
->> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
-> 
-> You're right, it is because version 3.49.1 is not in master branch, so
-> this will be fixed bumping to 3.50 when they release it(2020-02-07
-> according to [1]).
-> 
-> Anyway I've built successfully with this buildroot patch and it builds
-> correctly, so:
-> 
-> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> 
-> And thank you :-)
-> 
-> [1]: https://wiki.mozilla.org/NSS:Release_Versions
-> 
-> Best regards
-> 
+2.20.1
