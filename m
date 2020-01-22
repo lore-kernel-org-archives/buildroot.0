@@ -1,73 +1,107 @@
-From: Nathan Ford <nford@westpond.com>
-Date: Wed, 22 Jan 2020 11:19:22 -0500
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5webengine: Fix building
- against system ffmpeg
-Message-ID: <CAOgXH4cKir4gopXC8vi0rENaamo4aw=Epv2dShmCgRv3wwNFQg@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 22 Jan 2020 18:39:02 +0100
+Subject: [Buildroot] [PATCH] libnss: Re-add ZLIB_INCLUDE_DIR varible
+In-Reply-To: <20200122164450.17963-1-thomas.preston@codethink.co.uk>
+References: <20200122164450.17963-1-thomas.preston@codethink.co.uk>
+Message-ID: <5337c66e-881d-2eb9-bde6-e5b185b68741@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- As of QT 5.10 the WEBENGINE_CONFIG options have been
- removed in favor of configure command line options.
- dist/changes-5.9.0 and dist/changes-5.10.0 document
- this.
+Hi Thomas,
 
-qt5webengine also now requires webp mux support or the auto
-detection of ffmpeg will fail.
+On 1/22/20 5:44 PM, Thomas Preston wrote:
+> The libnss patch adding ZLIB_INCLUDE_DIR is added to upstream on
+> 2020-01-07 but the 3.49.1 release on 2020-01-13 does not contain this
+> patch, so we have actually prematurely removed it from Buildroot.
+> 
+> This only affects host-libnss when libzlib is not installed in the host
+> system. When building for the target, the toolchain-wrapper already
+> looks in the target sysroot default include path - where zlib.h is
+> installed.
+> 
+> Re-add this patch, so that we can build host-libnss 3.49.1.
+> 
+> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 
-This fixes bug 12416
+You're right, it is because version 3.49.1 is not in master branch, so 
+this will be fixed bumping to 3.50 when they release it(2020-02-07 
+according to [1]).
 
-Signed-off-by: Nathan Ford <nford@westpond.com>
+Anyway I've built successfully with this buildroot patch and it builds 
+correctly, so:
 
-diff --git a/package/qt5/qt5webengine/Config.in
-b/package/qt5/qt5webengine/Config.in
-index 0e776ec..18e4418 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -42,6 +42,7 @@ config BR2_PACKAGE_QT5WEBENGINE
-        select BR2_PACKAGE_OPUS
-        select BR2_PACKAGE_WEBP
-        select BR2_PACKAGE_WEBP_DEMUX
-+       select BR2_PACKAGE_WEBP_MUX
-        select BR2_PACKAGE_QT5BASE_DBUS
-        select BR2_PACKAGE_QT5BASE_EGLFS
-        select BR2_PACKAGE_QT5BASE_FONTCONFIG
-diff --git a/package/qt5/qt5webengine/qt5webengine.mk
-b/package/qt5/qt5webengine/qt5webengine.mk
-index 1d5ee8d..5a2ca6d 100644
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -30,16 +30,16 @@ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
- endif
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
--QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_system_ffmpeg
-+QT5WEBENGINE_QMAKEFLAGS += -webengine-ffmpeg
+And thank you :-)
 
- ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
--QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_proprietary_codecs
-+QT5WEBENGINE_QMAKEFLAGS += -webengine-proprietary-codecs
- endif
+[1]: https://wiki.mozilla.org/NSS:Release_Versions
 
- ifeq ($(BR2_PACKAGE_QT5WEBENGINE_ALSA),y)
- QT5WEBENGINE_DEPENDENCIES += alsa-lib
- else
--QT5WEBENGINE_QMAKEFLAGS += QT_CONFIG-=alsa
-+QT5WEBENGINE_QMAKEFLAGS += -no-webengine-alsa
- endif
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
 
- # QtWebengine's build system uses python, but only supports python2. We work
-@@ -64,7 +64,7 @@ QT5WEBENGINE_ENV +=
-GN_PKG_CONFIG_HOST=$(@D)/host-bin/host-pkg-config
- endif
-
- define QT5WEBENGINE_CONFIGURE_CMDS
--       (cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV)
-$(HOST_DIR)/bin/qmake $(QT5WEBENGINE_QMAKEFLAGS))
-+       (cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV)
-$(HOST_DIR)/bin/qmake -- $(QT5WEBENGINE_QMAKEFLAGS))
- endef
-
- define QT5WEBENGINE_BUILD_CMDS
+> ---
+>   .../0001-add-zlib-include-dir-variable.patch  | 49 +++++++++++++++++++
+>   1 file changed, 49 insertions(+)
+>   create mode 100644 package/libnss/0001-add-zlib-include-dir-variable.patch
+> 
+> diff --git a/package/libnss/0001-add-zlib-include-dir-variable.patch b/package/libnss/0001-add-zlib-include-dir-variable.patch
+> new file mode 100644
+> index 0000000000..cd0bdeec31
+> --- /dev/null
+> +++ b/package/libnss/0001-add-zlib-include-dir-variable.patch
+> @@ -0,0 +1,49 @@
+> +Add ZLIB_INCLUDE_DIR variable
+> +
+> +On Linux platform[1], the build system forces to use zlib from the
+> +system instead of compiling the one located intree.
+> +
+> +The following error is raised when the zlib header is installed
+> +somewhere else than in the default system include path:
+> +
+> +	ssl3con.c:39:18: fatal error: zlib.h: No such file or directory
+> +	 #include "zlib.h"
+> +
+> +The same trick setup for sqlite include directory is reproduced for
+> +zlib. The build system disallows in any manner to give arguments to the
+> +compiler explicity.
+> +
+> +The variable ZLIB_INCLUDE_DIR point to the directory where the zlib
+> +header is located.
+> +
+> +[1]: https://hg.mozilla.org/projects/nss/file/NSS_3_33_BRANCH/coreconf/Linux.mk#l180
+> +[2]: https://hg.mozilla.org/projects/nss/file/NSS_3_33_BRANCH/lib/softoken/manifest.mn#l17
+> +
+> +Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> +
+> +--- libnss-3.33.orig/nss/lib/ssl/manifest.mn	2017-09-20 02:47:27.000000000 -0400
+> ++++ libnss-3.33/nss/lib/ssl/manifest.mn	2018-02-16 16:45:41.512709898 -0500
+> +@@ -6,6 +6,10 @@
+> +
+> + # DEFINES = -DTRACE
+> +
+> ++ifdef ZLIB_INCLUDE_DIR
+> ++INCLUDES += -I$(ZLIB_INCLUDE_DIR)
+> ++endif
+> ++
+> + EXPORTS = \
+> +         ssl.h \
+> +         sslt.h \
+> +--- host-libnss-3.33.orig/nss/cmd/signtool/manifest.mn.orig	2018-02-16 17:08:58.474777871 -0500
+> ++++ host-libnss-3.33/nss/cmd/signtool/manifest.mn	2018-02-16 17:09:22.603710963 -0500
+> +@@ -6,6 +6,10 @@
+> +
+> + MODULE = nss
+> +
+> ++ifdef ZLIB_INCLUDE_DIR
+> ++INCLUDES += -I$(ZLIB_INCLUDE_DIR)
+> ++endif
+> ++
+> + EXPORTS =
+> +
+> + CSRCS = signtool.c		\
+> 
