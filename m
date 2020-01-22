@@ -1,7 +1,7 @@
 From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Wed, 22 Jan 2020 08:49:43 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libnftnl: bump version to 1.1.5
-Message-ID: <20200122074943.2855-1-p.debruijn@unilogic.nl>
+Date: Wed, 22 Jan 2020 08:50:05 +0100
+Subject: [Buildroot] [PATCH 2/2] package/nftables: bump version to 0.9.3
+Message-ID: <20200122075005.2915-1-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 ---
- package/libnftnl/libnftnl.hash | 2 +-
- package/libnftnl/libnftnl.mk   | 2 +-
+ package/nftables/nftables.hash | 2 +-
+ package/nftables/nftables.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
-index 315e2e1..4d2eb0e 100644
---- a/package/libnftnl/libnftnl.hash
-+++ b/package/libnftnl/libnftnl.hash
+diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
+index ae3404b..93c816e 100644
+--- a/package/nftables/nftables.hash
++++ b/package/nftables/nftables.hash
 @@ -1,3 +1,3 @@
- # From http://www.netfilter.org/projects/libnftnl/downloads.html
--sha256	c8c7988347adf261efac5bba59f8e5f995ffb65f247a88cc144e69620573ed20	libnftnl-1.1.4.tar.bz2
-+sha256	66de4d05227c0a1a731c369b193010d18a05b1185c2735211e0ecf658eeb14f3	libnftnl-1.1.5.tar.bz2
- sha256	98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24	COPYING
-diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
-index a4e9b4b..ac780bd 100644
---- a/package/libnftnl/libnftnl.mk
-+++ b/package/libnftnl/libnftnl.mk
+ # From https://netfilter.org/projects/nftables/downloads.html
+-sha256	5cb66180143e6bfc774f4eb316206d40ac1cb6df269a90882404cbf7165513f5	nftables-0.9.2.tar.bz2
++sha256	956b915ce2a7aeaff123e49006be7a0690a0964e96c062703181a36e2e5edb78	nftables-0.9.3.tar.bz2
+ sha256	c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e	COPYING
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 884a7dd..11ef684 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNFTNL_VERSION = 1.1.4
-+LIBNFTNL_VERSION = 1.1.5
- LIBNFTNL_SITE = https://netfilter.org/projects/libnftnl/files
- LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.bz2
- LIBNFTNL_LICENSE = GPL-2.0+
+-NFTABLES_VERSION = 0.9.2
++NFTABLES_VERSION = 0.9.3
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+ NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
+ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
 -- 
 2.7.4
