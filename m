@@ -1,30 +1,28 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 22 Jan 2020 23:24:43 +0100
-Subject: [Buildroot] [git commit] package/bridge-utils: add hash for license
- file
-Message-ID: <20200122222120.7FEB883710@busybox.osuosl.org>
+Date: Wed, 22 Jan 2020 22:52:33 +0100
+Subject: [Buildroot] [git commit] package/phytool: add hash for license file
+Message-ID: <20200122222120.25D6483710@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b57dd94764b0ed0f1d0a4656aafe6f00bfb659ec
+commit: https://git.buildroot.net/buildroot/commit/?id=304e39324ccdfcd705ee35139085d9214f20a5b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/bridge-utils/bridge-utils.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/phytool/phytool.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/bridge-utils/bridge-utils.hash b/package/bridge-utils/bridge-utils.hash
-index e699b24a63..5658116f88 100644
---- a/package/bridge-utils/bridge-utils.hash
-+++ b/package/bridge-utils/bridge-utils.hash
-@@ -1,2 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/net/bridge-utils/sha256sums.asc
- sha256 cc67efb5d5fb8928a6569b3fade2b4042ec17da04678dab127d96b46489e26c8 bridge-utils-1.6.tar.xz
-+
-+# locally computed
-+sha256 995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  COPYING
+diff --git a/package/phytool/phytool.hash b/package/phytool/phytool.hash
+index ce04936417..b6bfd8132f 100644
+--- a/package/phytool/phytool.hash
++++ b/package/phytool/phytool.hash
+@@ -2,3 +2,4 @@
+ # sha256 locally computed:
+ md5  972982f8e5f7237cbccfc6d275da7348  phytool-2.tar.xz
+ sha256  9901a14e8c6af02b7333c60b21ff81f50620e8326d54827185e5617ff9b11d21  phytool-2.tar.xz
++sha256  f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  LICENSE
