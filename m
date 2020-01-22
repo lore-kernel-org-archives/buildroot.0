@@ -1,29 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jan 2020 21:21:19 +0100
-Subject: [Buildroot] [git commit] package/czmq: fix typo for LICNESE hash
-Message-ID: <20200122201212.715CA83700@busybox.osuosl.org>
+Date: Wed, 22 Jan 2020 21:21:06 +0100
+Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump to
+ version 1.0-20200121
+Message-ID: <20200122201212.697F4836DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d7d019a2692f912c440ee9ee10199bb624da770
+commit: https://git.buildroot.net/buildroot/commit/?id=193d6a0e070510d35d726f175b768ff61944abbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2020-January/004870.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/czmq/czmq.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/czmq/czmq.hash b/package/czmq/czmq.hash
-index 97b6e03b54..4738c9c434 100644
---- a/package/czmq/czmq.hash
-+++ b/package/czmq/czmq.hash
-@@ -3,4 +3,4 @@ md5 7e09997db6ac3b25e8ed104053040722 czmq-4.2.0.tar.gz
- sha1 42165b3eede517708814e5a1b6972d8bde417f7a czmq-4.2.0.tar.gz
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 1653eaa089..0e087c033b 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004844.html
+-sha256 9f12f68e96f6865325995c38213e09b05751cd1ef03e0bbc9f1bdc3e5680b337  wireguard-linux-compat-0.0.20200105.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004870.html
++sha256 7726c2994d11913c4543fd3dc83636f7ce573ca689b15e11b83e980acc04422b  wireguard-linux-compat-0.0.20200121.tar.xz
  # Locally calculated
- sha256 cfab29c2b3cc8a845749758a51e1dd5f5160c1ef57e2a41ea96e4c2dcc8feceb czmq-4.2.0.tar.gz
--sha256 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5 LICENCE
-+sha256 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5 LICENSE
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index ddceed5660..2b8e349cb9 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200105
++WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200121
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
