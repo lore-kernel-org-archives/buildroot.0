@@ -1,7 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 22 Jan 2020 22:25:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bitcoin: bump to version 0.19.1
-Message-ID: <20200122212515.1008516-1-fontaine.fabrice@gmail.com>
+Date: Wed, 22 Jan 2020 22:26:37 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/bitcoin: bump to version 0.19.0.1
+Message-ID: <20200122212637.1008692-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,6 +17,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix version in title
+
  ...sing-header-bootlegged-by-boost-1-72.patch | 28 -------------------
  package/bitcoin/bitcoin.hash                  |  8 ++++--
  package/bitcoin/bitcoin.mk                    |  4 +--
