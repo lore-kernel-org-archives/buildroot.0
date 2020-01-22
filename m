@@ -1,27 +1,29 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 22 Jan 2020 23:25:01 +0100
-Subject: [Buildroot] [git commit] package/cgic: add hash for license file
-Message-ID: <20200122222120.878508370A@busybox.osuosl.org>
+Date: Wed, 22 Jan 2020 23:28:53 +0100
+Subject: [Buildroot] [git commit] package/acpitool: add hash for license file
+Message-ID: <20200122222120.DFC7A83710@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a92493021c3766ff7bdb455af6a58b270644a9cb
+commit: https://git.buildroot.net/buildroot/commit/?id=991544aed4072fddce555801eaf1cb83fac19d83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[Arnout: add space to existing hash to align them]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/cgic/cgic.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/acpitool/acpitool.hash | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/cgic/cgic.hash b/package/cgic/cgic.hash
-index fa1d0bc95c..d3f082e888 100644
---- a/package/cgic/cgic.hash
-+++ b/package/cgic/cgic.hash
+diff --git a/package/acpitool/acpitool.hash b/package/acpitool/acpitool.hash
+index e25dc546f3..b43bc374ca 100644
+--- a/package/acpitool/acpitool.hash
++++ b/package/acpitool/acpitool.hash
 @@ -1,2 +1,3 @@
- # Locally computed
- sha256 1e8834642a4b89528bb7bde2f287e133c6b07e210e68681a34137c436d59d320  cgic207.tar.gz
-+sha256 6a7de92593d64dbf7630d8f66f97e04a899769bef1e055f2434bc06b87b9de62  license.txt
+ # locally computed hash
+-sha256 004fb6cd43102918b6302cf537a2db7ceadda04aef2e0906ddf230f820dad34f acpitool-0.5.1.tar.bz2
++sha256 004fb6cd43102918b6302cf537a2db7ceadda04aef2e0906ddf230f820dad34f  acpitool-0.5.1.tar.bz2
++sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
