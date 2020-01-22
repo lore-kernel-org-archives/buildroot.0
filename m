@@ -1,42 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jan 2020 20:32:52 +0100
-Subject: [Buildroot] [git commit] package/nftables: bump version to 0.9.3
-Message-ID: <20200122194112.065AE83645@busybox.osuosl.org>
+Date: Wed, 22 Jan 2020 20:50:18 +0100
+Subject: [Buildroot] [git commit] package/libnss: Re-add ZLIB_INCLUDE_DIR
+ varible
+Message-ID: <20200122194112.1ECCB83645@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0267d162a22a1b341b5fb73ef7f46147a7f9b337
+commit: https://git.buildroot.net/buildroot/commit/?id=21fdb04eb58b97461c90898aaf2c40c9aa88da7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+The libnss patch adding ZLIB_INCLUDE_DIR is added to upstream on
+2020-01-07 but the 3.49.1 release on 2020-01-13 does not contain this
+patch, so we have actually prematurely removed it from Buildroot.
+
+This only affects host-libnss when libzlib is not installed in the host
+system. When building for the target, the toolchain-wrapper already
+looks in the target sysroot default include path - where zlib.h is
+installed.
+
+Re-add this patch, so that we can build host-libnss 3.49.1.
+
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nftables/nftables.hash | 2 +-
- package/nftables/nftables.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-add-zlib-include-dir-variable.patch       | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
-index ae3404b257..93c816edc7 100644
---- a/package/nftables/nftables.hash
-+++ b/package/nftables/nftables.hash
-@@ -1,3 +1,3 @@
- # From https://netfilter.org/projects/nftables/downloads.html
--sha256	5cb66180143e6bfc774f4eb316206d40ac1cb6df269a90882404cbf7165513f5	nftables-0.9.2.tar.bz2
-+sha256	956b915ce2a7aeaff123e49006be7a0690a0964e96c062703181a36e2e5edb78	nftables-0.9.3.tar.bz2
- sha256	c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e	COPYING
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 884a7dd1e1..11ef6844ce 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NFTABLES_VERSION = 0.9.2
-+NFTABLES_VERSION = 0.9.3
- NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
- NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
- NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
+diff --git a/package/libnss/0001-add-zlib-include-dir-variable.patch b/package/libnss/0001-add-zlib-include-dir-variable.patch
+new file mode 100644
+index 0000000000..cd0bdeec31
+--- /dev/null
++++ b/package/libnss/0001-add-zlib-include-dir-variable.patch
+@@ -0,0 +1,49 @@
++Add ZLIB_INCLUDE_DIR variable
++
++On Linux platform[1], the build system forces to use zlib from the
++system instead of compiling the one located intree.
++
++The following error is raised when the zlib header is installed
++somewhere else than in the default system include path:
++
++	ssl3con.c:39:18: fatal error: zlib.h: No such file or directory
++	 #include "zlib.h"
++
++The same trick setup for sqlite include directory is reproduced for
++zlib. The build system disallows in any manner to give arguments to the
++compiler explicity.
++
++The variable ZLIB_INCLUDE_DIR point to the directory where the zlib
++header is located.
++
++[1]: https://hg.mozilla.org/projects/nss/file/NSS_3_33_BRANCH/coreconf/Linux.mk#l180
++[2]: https://hg.mozilla.org/projects/nss/file/NSS_3_33_BRANCH/lib/softoken/manifest.mn#l17
++
++Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
++
++--- libnss-3.33.orig/nss/lib/ssl/manifest.mn	2017-09-20 02:47:27.000000000 -0400
+++++ libnss-3.33/nss/lib/ssl/manifest.mn	2018-02-16 16:45:41.512709898 -0500
++@@ -6,6 +6,10 @@
++ 
++ # DEFINES = -DTRACE
++ 
+++ifdef ZLIB_INCLUDE_DIR
+++INCLUDES += -I$(ZLIB_INCLUDE_DIR)
+++endif
+++
++ EXPORTS = \
++         ssl.h \
++         sslt.h \
++--- host-libnss-3.33.orig/nss/cmd/signtool/manifest.mn.orig	2018-02-16 17:08:58.474777871 -0500
+++++ host-libnss-3.33/nss/cmd/signtool/manifest.mn	2018-02-16 17:09:22.603710963 -0500
++@@ -6,6 +6,10 @@
++ 
++ MODULE = nss
++ 
+++ifdef ZLIB_INCLUDE_DIR
+++INCLUDES += -I$(ZLIB_INCLUDE_DIR)
+++endif
+++
++ EXPORTS = 
++ 
++ CSRCS = signtool.c		\
