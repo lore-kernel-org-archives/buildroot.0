@@ -1,31 +1,28 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 22 Jan 2020 23:23:11 +0100
-Subject: [Buildroot] [git commit] package/audiofile: add hash for license
+Date: Wed, 22 Jan 2020 23:23:42 +0100
+Subject: [Buildroot] [git commit] package/bcache-tools: add hash for license
  file
-Message-ID: <20200122222120.6184F83649@busybox.osuosl.org>
+Message-ID: <20200122222120.6CA9F83649@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcf6b37da7e435a0c40e09d124a0928da9ce2a4b
+commit: https://git.buildroot.net/buildroot/commit/?id=f66e37a4cabb9a056328d6dba46878d047d1215c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-[Arnout: also replace tab with spaces]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/audiofile/audiofile.hash | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/bcache-tools/bcache-tools.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/audiofile/audiofile.hash b/package/audiofile/audiofile.hash
-index 3b9cba64f1..f4028f9a6e 100644
---- a/package/audiofile/audiofile.hash
-+++ b/package/audiofile/audiofile.hash
-@@ -1,2 +1,4 @@
+diff --git a/package/bcache-tools/bcache-tools.hash b/package/bcache-tools/bcache-tools.hash
+index 4213705f35..d80ec44a73 100644
+--- a/package/bcache-tools/bcache-tools.hash
++++ b/package/bcache-tools/bcache-tools.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256	cdc60df19ab08bfe55344395739bb08f50fc15c92da3962fac334d3bff116965  audiofile-0.3.6.tar.gz
-+sha256  cdc60df19ab08bfe55344395739bb08f50fc15c92da3962fac334d3bff116965  audiofile-0.3.6.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
+ sha256 d56923936f37287efc57a46315679102ef2c86cd0be5874590320acd48c1201c  bcache-tools-1.0.8.tar.gz
++sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
