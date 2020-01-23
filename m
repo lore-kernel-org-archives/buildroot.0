@@ -1,66 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 23 Jan 2020 01:04:02 +0100
-Subject: [Buildroot] [git commit] package/kodi-pvr-vuplus: bump version
-Message-ID: <20200122235421.6201883687@busybox.osuosl.org>
+Date: Thu, 23 Jan 2020 01:04:03 +0100
+Subject: [Buildroot] [git commit] package/kodi-vfs-sftp: bump version
+Message-ID: <20200122235422.0D7BB81427@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cc2ae83fca29e3f70a42759a105bb1495831e7e
+commit: https://git.buildroot.net/buildroot/commit/?id=27ea062ad0680626abc5822f2bfe7793be7cbeef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added dependency to json-for-modern-cpp after upstream commit:
-https://github.com/kodi-pvr/pvr.vuplus/commit/07480b96fc674317ccbb792b03b811edec143e0c
-
-Also added missing dependency to tinyxml.
+License hash has changed because it is a source file, but also because
+the name changed from XBMC to Kodi, and the year bumped to 2019.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi-pvr-vuplus/Config.in            | 2 ++
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 6 ++----
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/kodi-vfs-sftp/kodi-vfs-sftp.hash | 4 ++--
+ package/kodi-vfs-sftp/kodi-vfs-sftp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
-index a56c4ede93..96320f6fcb 100644
---- a/package/kodi-pvr-vuplus/Config.in
-+++ b/package/kodi-pvr-vuplus/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_VUPLUS
- 	bool "kodi-pvr-vuplus"
-+	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
- 	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML
- 	help
- 	  VuPlus PVR client addon for Kodi
- 
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-index f4f6756931..eb0408db8a 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
+index dbf8231038..08115847bb 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256 a8c7345e4e2e415e29c21f14460b257dfbe08ed5ecf1cc2dc6bc393a10f95cf3  kodi-pvr-vuplus-2.4.12-Krypton.tar.gz
-+sha256 d7dd890e4491e211ff3781cdc043347ab7a4ef6e00619ac1b4641ed81b0c3626  kodi-pvr-vuplus-3.28.9-Leia.tar.gz
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-index 581d884caa..34ec5d2384 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-@@ -4,12 +4,10 @@
+-sha256 f78561c460c7bf67be476eb485eaa0ac4497a6d1831b9955da46daa11219f53b  kodi-vfs-sftp-1.0.3-Leia.tar.gz
+-sha256 2b1cdc44ec0b52abc2e4b61f827d407388dad49e4fdc25370824b5c21aadeb17  src/SFTPFile.cpp
++sha256 6a6d7fc777f574746bcc34b618700a4db3981aee470b68d60c3407eeeb0c16d9  kodi-vfs-sftp-1.0.5-Leia.tar.gz
++sha256 394c58f6cf5e728770c1ac7ea7d509fa54f950cad6e757a9f093344f5230b7b9  src/SFTPFile.cpp
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
+index eaaf7a2cb2..8657ebdcef 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_VUPLUS_VERSION = 2.4.12-Krypton
-+KODI_PVR_VUPLUS_VERSION = 3.28.9-Leia
- KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
- KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
- KODI_PVR_VUPLUS_LICENSE_FILES = src/client.h
--KODI_PVR_VUPLUS_DEPENDENCIES = kodi-platform
-+KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform tinyxml
- 
- $(eval $(cmake-package))
+-KODI_VFS_SFTP_VERSION = 1.0.3-Leia
++KODI_VFS_SFTP_VERSION = 1.0.5-Leia
+ KODI_VFS_SFTP_SITE = $(call github,xbmc,vfs.sftp,$(KODI_VFS_SFTP_VERSION))
+ KODI_VFS_SFTP_LICENSE = GPL-2.0+
+ KODI_VFS_SFTP_LICENSE_FILES = src/SFTPFile.cpp
