@@ -1,86 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Thu, 23 Jan 2020 01:04:02 +0100
-Subject: [Buildroot] [git commit] package/kodi-pvr-mediaportal-tvserver:
- bump version
-Message-ID: <20200122235421.457DD8386D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-skin-confluence: bump version
+Message-ID: <20200122235421.B24348386D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5746d35e4cf2b52c444cc6a837210ef16a7ed64
+commit: https://git.buildroot.net/buildroot/commit/?id=6718b6293658cccd4f8bce597d3d2d378f39d4e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch, not needed anymore after PR 81.
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...1-live555-remove-xlocale.h-from-Locale.hh.patch | 33 ----------------------
- .../kodi-pvr-mediaportal-tvserver.hash             |  2 +-
- .../kodi-pvr-mediaportal-tvserver.mk               |  4 +--
- 3 files changed, 2 insertions(+), 37 deletions(-)
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 3 ++-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 4 +---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch b/package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch
-deleted file mode 100644
-index 7abb153b0e..0000000000
---- a/package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 64b264d141fd80991ac071c5370802e2d7394f6d Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 3 Dec 2017 22:17:12 +0100
--Subject: [PATCH] live555: remove xlocale.h from Locale.hh
--
--Fixes build error with glibc 2.26:
--https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
--
--Patch sent upstream:
--https://github.com/kodi-pvr/pvr.mediaportal.tvserver/pull/79
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/lib/live555/liveMedia/include/Locale.hh | 3 ---
-- 1 file changed, 3 deletions(-)
--
--diff --git a/src/lib/live555/liveMedia/include/Locale.hh b/src/lib/live555/liveMedia/include/Locale.hh
--index b327948..c4b4f4a 100644
----- a/src/lib/live555/liveMedia/include/Locale.hh
--+++ b/src/lib/live555/liveMedia/include/Locale.hh
--@@ -43,9 +43,6 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
-- 
-- #ifndef LOCALE_NOT_USED
-- #include <locale.h>
---#ifndef XLOCALE_NOT_USED
---#include <xlocale.h> // because, on some systems, <locale.h> doesn't include <xlocale.h>; this makes sure that we get both
---#endif
-- #endif
-- 
-- 
---- 
--2.11.0
--
-diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
-index 6eb0abfbaf..d34635fd3e 100644
---- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
-+++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index 2dabbbd4c2..113548bf64 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+@@ -1,2 +1,3 @@
  # Locally computed
--sha256 3f5c022f83636b3739f26c1a07166b498eac82e8081ed7551980f4bb27c6b56e  kodi-pvr-mediaportal-tvserver-2.4.19v2-Krypton.tar.gz
-+sha256 9c05578566f7448dc3a7677587c804596aa314afd493cb9c62cc65ea883645aa  kodi-pvr-mediaportal-tvserver-3.5.18-Leia.tar.gz
-diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-index 99a318911e..1b6ad39ef1 100644
---- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-+++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+-sha256 1fa8ebeec269e678111f64bec373d98e34b4ba1b32e583a505431b2562910ba0  kodi-skin-confluence-37bba429adc16d49a07add08de406682e1cc673a.tar.gz
++sha256 dc4a0abf05db50caf8e70e4904b8c2c445008ec3d6d23381c9c31dedaf6109de  kodi-skin-confluence-cffcb8320003e6048abe4b26316e5d5f3d50eac9.tar.gz
++sha256 89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index e9cdf3fbf7..d9bd10bdfa 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
 @@ -4,9 +4,7 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
+-# This cset is on the branch 'krypton'
 -# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 2.4.19v2-Krypton
-+KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 3.5.18-Leia
- KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
- KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPL-2.0+
- KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = src/client.h
+-KODI_SKIN_CONFLUENCE_VERSION = 37bba429adc16d49a07add08de406682e1cc673a
++KODI_SKIN_CONFLUENCE_VERSION = cffcb8320003e6048abe4b26316e5d5f3d50eac9
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
