@@ -1,121 +1,72 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Jan 2020 06:15:15 +0100
-Subject: [Buildroot] [PATCH 1/3] package/kodi: add optional support for
- wayland
-Message-ID: <20200123051517.3726-1-bernd.kuhls@t-online.de>
+Date: Thu, 23 Jan 2020 06:15:16 +0100
+Subject: [Buildroot] [PATCH 2/3] package/mesa3d: add option to configure gbm
+ support
+In-Reply-To: <20200123051517.3726-1-bernd.kuhls@t-online.de>
+References: <20200123051517.3726-1-bernd.kuhls@t-online.de>
+Message-ID: <20200123051517.3726-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see upstream PR 12664.
+Kodi 18.0-Leia will implement stand-alone gbm support alongside x11 &
+wayland. To enable building gbm support in mesa3d without x11 & wayland
+we need to add a specific configure option for it.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 44 +++++++++++++++++++++++++++++++++++++++---
- package/kodi/kodi.mk   | 16 +++++++++++++++
- 2 files changed, 57 insertions(+), 3 deletions(-)
+ package/mesa3d/Config.in | 6 ++++++
+ package/mesa3d/mesa3d.mk | 9 ++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index f592e18e13..630813b437 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -28,6 +28,27 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 455091eb9d..18553191df 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -348,6 +348,11 @@ if BR2_PACKAGE_MESA3D_DRIVER
  
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GL
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_PACKAGE_WAYLAND # waylandpp
-+	select BR2_PACKAGE_WAYLANDPP
-+	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GLES
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_PACKAGE_WAYLAND # waylandpp
-+	select BR2_PACKAGE_WAYLANDPP
-+	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+
- config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
- 	bool
- 	default y
-@@ -189,6 +210,17 @@ config BR2_PACKAGE_KODI_PLATFORM_RBPI
- 	select BR2_PACKAGE_LIBINPUT
- 	select BR2_PACKAGE_LIBXKBCOMMON
+ comment "OpenGL API Support"
  
-+config BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL
-+	bool "Wayland/OpenGL"
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GL
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_LIBXKBCOMMON
++config BR2_PACKAGE_MESA3D_GBM
++	bool "gbm"
++	help
++	  Enable Generic Buffer Management (gbm)
 +
-+config BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES
-+	bool "Wayland/GLES"
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GLES
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+
- config BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 	bool "X11/OpenGL"
- 	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
-@@ -242,13 +274,19 @@ config BR2_PACKAGE_KODI_LIBUSB
- 
- config BR2_PACKAGE_KODI_LIBVA
- 	bool "va"
--	depends on BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-+	depends on \
-+		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL || \
-+		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES || \
-+		BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 	select BR2_PACKAGE_LIBVA
+ config BR2_PACKAGE_MESA3D_OPENGL_GLX
+ 	bool "OpenGL GLX"
+ 	depends on BR2_PACKAGE_XORG7
+@@ -363,6 +368,7 @@ config BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	bool "OpenGL EGL"
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++	select BR2_PACKAGE_MESA3D_GBM
  	help
- 	  Enable libva support.
+ 	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL
+ 	  applications similar to GLX, for X, and WGL, for Windows.
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f6f276c92d..3999573912 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -197,10 +197,17 @@ endif
+ MESA3D_CONF_OPTS += \
+ 	-Dplatforms=$(subst $(space),$(comma),$(MESA3D_PLATFORMS))
  
--comment "libva support needs platform 'X11/OpenGL'"
--	depends on !BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-+comment "libva support needs platform 'Wayland' or 'X11/OpenGL'"
-+	depends on \
-+		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL && \
-+		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES && \
-+		!BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 
- config BR2_PACKAGE_KODI_LIBVDPAU
- 	bool "vdpau"
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 435f47cae8..fd20cd38f7 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -179,6 +179,22 @@ KODI_CONF_OPTS += -DCORE_PLATFORM_NAME=rbpi
- KODI_DEPENDENCIES += libinput libxkbcommon rpi-userland
- endif
- 
-+ifeq ($(BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL),y)
-+KODI_CONF_OPTS += \
-+	-DCORE_PLATFORM_NAME=wayland \
-+	-DWAYLAND_RENDER_SYSTEM=gl
-+KODI_DEPENDENCIES += libegl libgl libglu libxkbcommon waylandpp
++ifeq ($(BR2_PACKAGE_MESA3D_GBM),y)
++MESA3D_CONF_OPTS += \
++	-Dgbm=true
++else
++MESA3D_CONF_OPTS += \
++	-Dgbm=false
 +endif
 +
-+ifeq ($(BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES),y)
-+KODI_CONF_OPTS += \
-+	-DCORE_PLATFORM_NAME=wayland \
-+	-DWAYLAND_RENDER_SYSTEM=gles
-+KODI_C_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
-+KODI_CXX_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
-+KODI_DEPENDENCIES += libegl libgles libxkbcommon waylandpp
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL),y)
- KODI_CONF_OPTS += -DCORE_PLATFORM_NAME=x11
- KODI_DEPENDENCIES += libegl libglu libgl xlib_libX11 xlib_libXext \
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+ MESA3D_PROVIDES += libegl
+ MESA3D_CONF_OPTS += \
+-	-Dgbm=true \
+ 	-Degl=true
+ else
+ MESA3D_CONF_OPTS += \
 -- 
 2.20.1
