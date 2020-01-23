@@ -1,96 +1,76 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 23 Jan 2020 23:29:13 +0100
-Subject: [Buildroot] [git commit] package/qt5/qt5base: fix building with
- correct optimization
-Message-ID: <20200123222544.115D383905@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 23 Jan 2020 23:39:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-pyqt5: select
+ BR2_PACKAGE_QT5BASE_GUI
+In-Reply-To: <CAPi7W83tq1Lcfh6jsREDkS7dc7k8HKrp+50hwDCCZyQEbkq8Zg@mail.gmail.com>
+References: <20191230214842.1485805-1-fontaine.fabrice@gmail.com>
+ <20191230234259.5bfe6355@windsurf> <20200112230647.1fce0393@windsurf>
+ <CAPi7W83tq1Lcfh6jsREDkS7dc7k8HKrp+50hwDCCZyQEbkq8Zg@mail.gmail.com>
+Message-ID: <27821b18-b923-ff87-9da9-f56e65d78a45@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4a6f974b158a23bcab2f5e0e42971d0c15cc04b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Qt5 has predefined optimization flags depending if you're building for
-size, for debug etc. These flags are defined in
-mkspecs/common/gcc-base.conf:
 
-QMAKE_CFLAGS_OPTIMIZE      = -O2
-QMAKE_CFLAGS_OPTIMIZE_FULL = -O3
-QMAKE_CFLAGS_OPTIMIZE_DEBUG = -Og
-QMAKE_CFLAGS_OPTIMIZE_SIZE = -Os
+On 12/01/2020 23:23, Fabrice Fontaine wrote:
+> Le dim. 12 janv. 2020 ? 23:06, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> a ?crit :
+>>
+>> Fabrice,
+>>
+>> Any comment on the below question ?
+> This is indeed "strange" but configure.py is really passing -gui
+> unconditionally for QtCore (as well as QtDbus, QtNetwork ...).
 
-Then, in the same file, they use them to set
-QMAKE_CFLAGS_RELEASE/QMAKE_CXXFLAGS_RELEASE:
+ I've added a bit of this explanation to the commit message and applied to
+master, thanks!
 
-QMAKE_CFLAGS_RELEASE       += $$QMAKE_CFLAGS_OPTIMIZE
-QMAKE_CXXFLAGS_RELEASE    += $$QMAKE_CFLAGS_RELEASE
+ Regards,
+ Arnout
 
-At this point there is our chance to override QMAKE_CFLAGS_OPTIMIZE_* in
-qmake.conf, but it's too late, because QMAKE_CFLAGS_RELEASE is already
-set (i.e. -O2) so trying to add or remove QMAKE_CFLAGS_OPTIMIZE (that is
-reset now on) from QMAKE_CLAGS_RELEASE in
-common/features/default_post.prf won't work:
-
-optimize_size {
-    !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_SIZE)  {
-        QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
-        QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
-        QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
-        QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
-    }
-} else: optimize_full {
-    !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_FULL)  {
-        QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
-        QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
-        QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
-        QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
-    }
-}
-
-So let's reset:
-QMAKE_CFLAGS_RELEASE
-QMAKE_CFLAGS_DEBUG
-QMAKE_CXXFLAGS_RELEASE
-QMAKE_CXXFLAGS_DEBUG
-in our qmake.conf since the only assignment done in
-mkspecs/common/gcc-base.conf only regards optimization.
-
-This package is also affected by BR2_TOOLCHAIN_HAS_GCC_BUG_90620 and
-it's been worked around by appending -O0 to CFLAGS/CXXFLAGS. This bug
-prevented workaround to work overriding optimization flags, so solving
-this also solves workaround problem.
-
-Fixes:
-http://autobuild.buildroot.net/results/ada/adaa9b4bcc6f9d2b5e82c479859a07e8abf5cf13/
-http://autobuild.buildroot.net/results/a83/a83bdd1f3bf309c07abebe871b017c331ed36e67/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Tested-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Arnout: add a comment to qmake.conf.in]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/qt5/qt5base/qmake.conf.in | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
-index 2eb564e172..024c074928 100644
---- a/package/qt5/qt5base/qmake.conf.in
-+++ b/package/qt5/qt5base/qmake.conf.in
-@@ -15,10 +15,15 @@ QMAKE_CXX               = $${CROSS_COMPILE}g++
- # modifications to gcc-base.conf
- QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
- QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
-+# Remove all optimisation flags, we really only want our own.
- QMAKE_CFLAGS_OPTIMIZE       =
- QMAKE_CFLAGS_OPTIMIZE_DEBUG =
- QMAKE_CFLAGS_OPTIMIZE_FULL  =
- QMAKE_CFLAGS_OPTIMIZE_SIZE  =
-+QMAKE_CFLAGS_DEBUG =
-+QMAKE_CXXFLAGS_DEBUG =
-+QMAKE_CFLAGS_RELEASE =
-+QMAKE_CXXFLAGS_RELEASE =
- CONFIG                 += nostrip
- 
- QMAKE_LIBS             += -lrt -lpthread -ldl
+> I didn't try to get in touch with upstream yet however I would assume
+> that pyqt really expects that GUI is enabled on Qt.
+> Here is an extract of their whitepaper
+> (https://www.riverbankcomputing.com/static/Docs/PyQt4-whitepaper/pyqt-whitepaper-a4.pdf):
+> PyQt, provides an ideal combination for rapidly creating powerful and
+> flexible GUI applications.
+>>
+>> Thanks!
+>>
+>> Thomas
+>>
+>> On Mon, 30 Dec 2019 23:42:59 +0100
+>> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>>
+>>> On Mon, 30 Dec 2019 22:48:42 +0100
+>>> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>>
+>>>> gui is a mandatory dependency of python-pyqt5 as "-gui" option is used
+>>>> internally by the configure.py script
+>>>>
+>>>> Fixes:
+>>>>  - http://autobuild.buildroot.org/results/ea0c8db44aacf1ce76f75e8288969fe5da6690d9
+>>>>
+>>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>>
+>>> This seems weird. Are you sure? Could you talk with upstream about this?
+>>>
+>>> Thomas
+>>
+>>
+>>
+>> --
+>> Thomas Petazzoni, CTO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+> Best Regards,
+> 
+> Fabrice
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
