@@ -1,29 +1,130 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 24 Jan 2020 00:00:20 +0100
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/libwebsockets: bump to version 3.2.1
-In-Reply-To: <20200103133747.1504249-2-fontaine.fabrice@gmail.com>
-References: <20200103133747.1504249-1-fontaine.fabrice@gmail.com>
- <20200103133747.1504249-2-fontaine.fabrice@gmail.com>
-Message-ID: <cfe68638-6374-cb1e-5707-93af9f05160c@mind.be>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri, 24 Jan 2020 00:02:10 +0100
+Subject: [Buildroot] [PATCH v3] package/qt5base: fix building with
+ correct optimization
+In-Reply-To: <e57befe8-282b-d4c6-528e-4b26438d59b6@mind.be>
+References: <20191125112614.93405-1-giulio.benetti@benettiengineering.com>
+ <e57befe8-282b-d4c6-528e-4b26438d59b6@mind.be>
+Message-ID: <f6f93fdf-769f-0d70-445a-3772d906c377@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 03/01/2020 14:37, Fabrice Fontaine wrote:
-> Remove first patch (already in version)
+On 1/23/20 11:33 PM, Arnout Vandecappelle wrote:
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> 
+> On 25/11/2019 12:26, Giulio Benetti wrote:
+>> Qt5 has predefined optimization flags depending if you're building for
+>> size, for debug etc. These flags are defined in
+>> mkspecs/common/gcc-base.conf:
+>>
+>> QMAKE_CFLAGS_OPTIMIZE      = -O2
+>> QMAKE_CFLAGS_OPTIMIZE_FULL = -O3
+>> QMAKE_CFLAGS_OPTIMIZE_DEBUG = -Og
+>> QMAKE_CFLAGS_OPTIMIZE_SIZE = -Os
+>>
+>> Then, in the same file, they use them to set
+>> QMAKE_CFLAGS_RELEASE/QMAKE_CXXFLAGS_RELEASE:
+>>
+>> QMAKE_CFLAGS_RELEASE       += $$QMAKE_CFLAGS_OPTIMIZE
+>> QMAKE_CXXFLAGS_RELEASE    += $$QMAKE_CFLAGS_RELEASE
+>>
+>> At this point there is our chance to override QMAKE_CFLAGS_OPTIMIZE_* in
+>> qmake.conf, but it's too late, because QMAKE_CFLAGS_RELEASE is already
+>> set(i.e. -O2) so trying to add or remove QMAKE_CFLAGS_OPTIMIZE(that is
+>> reset now on) from QMAKE_CLAGS_RELEASE in
+>> common/features/default_post.prf won't work:
+>>
+>> optimize_size {
+>>      !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_SIZE)  {
+>>          QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+>>          QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+>>          QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
+>>          QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
+>>      }
+>> } else: optimize_full {
+>>      !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_FULL)  {
+>>          QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+>>          QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+>>          QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
+>>          QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
+>>      }
+>> }
+> 
+>   This stuff is complicated...
+> 
+>>
+>> So let's reset:
+>> QMAKE_CFLAGS_RELEASE
+>> QMAKE_CFLAGS_DEBUG
+>> QMAKE_CXXFLAGS_RELEASE
+>> QMAKE_CXXFLAGS_DEBUG
+>> in our qmake.conf.in since the only assignment done in
+>> mkspecs/common/gcc-base.conf only regards optimization.
+> 
+>   But that's a really elegant solution!
 
- Both patches are included in the upstream 3.2.2 release, so instead I bumped to
-that.
+Thank you! It made me nut for days, not only for the solution itself but 
+for writing commit log(as you can see below)! I think it's been the most 
+difficult commit log I've ever written!
 
- This is a stable branch so the bump can be applied to 2019.11.x as well.
-2019.02.x has an older version.
+>>
+>> This package is also affected by BR2_TOOLCHAIN_HAS_GCC_BUG_90620 and
+>> it's been worked around by appending -O0 to CFLAGS/CXXFLAGS. This bug
+>> prevented workaround to work overriding optimization flags, so solving
+>> this also solves workaround problem.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/ada/adaa9b4bcc6f9d2b5e82c479859a07e8abf5cf13/
+>> http://autobuild.buildroot.net/results/a83/a83bdd1f3bf309c07abebe871b017c331ed36e67/
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>> V1->V2:
+>> * rewritten entire commit log
+>> V2->V3:
+>> * rewritten entire commit log again trying to explain better
+>> ---
+>>   package/qt5/qt5base/qmake.conf.in | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
+>> index 2eb564e172..ae25b2e20f 100644
+>> --- a/package/qt5/qt5base/qmake.conf.in
+>> +++ b/package/qt5/qt5base/qmake.conf.in
+>> @@ -19,6 +19,10 @@ QMAKE_CFLAGS_OPTIMIZE       =
+> 
+>   I've added a comment above "Remove all optimisation flags, we really only want
+> our own."
 
- Regards,
- Arnout
+Yes, better to underline it.
+
+Kind regards and thank you for reviewing this patch.
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+> 
+>   Applied to master, thanks.
+> 
+>   Regards,
+>   Arnout
+> 
+>>   QMAKE_CFLAGS_OPTIMIZE_DEBUG =
+>>   QMAKE_CFLAGS_OPTIMIZE_FULL  =
+>>   QMAKE_CFLAGS_OPTIMIZE_SIZE  =
+>> +QMAKE_CFLAGS_DEBUG =
+>> +QMAKE_CXXFLAGS_DEBUG =
+>> +QMAKE_CFLAGS_RELEASE =
+>> +QMAKE_CXXFLAGS_RELEASE =
+>>   CONFIG                 += nostrip
+>>   
+>>   QMAKE_LIBS             += -lrt -lpthread -ldl
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
