@@ -1,27 +1,46 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 23 Jan 2020 08:00:14 +0100
-Subject: [Buildroot] [PATCH v2 24/26] package/autoconf-archive: add hash for
- license file
-Message-ID: <20200123070014.12654-1-heiko.thiery@gmail.com>
+Date: Thu, 23 Jan 2020 08:02:29 +0100
+Subject: [Buildroot] [PATCH 00/26] Add hash for license file in some
+ packages
+In-Reply-To: <15578e10-adba-7ca7-924b-ea2abecd1012@mind.be>
+References: <20200122081657.31817-1-heiko.thiery@gmail.com>
+ <15578e10-adba-7ca7-924b-ea2abecd1012@mind.be>
+Message-ID: <CAEyMn7bKN4QUnuUvR-KbSim_KBXsVX4+MHu9WfW4Hhcc26nyDw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- package/autoconf-archive/autoconf-archive.hash | 2 ++
- 1 file changed, 2 insertions(+)
+Hi,
 
-diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
-index fadda54e86..3ef98f2f14 100644
---- a/package/autoconf-archive/autoconf-archive.hash
-+++ b/package/autoconf-archive/autoconf-archive.hash
-@@ -1,2 +1,4 @@
- # Computed locally
- sha256 17195c833098da79de5778ee90948f4c5d90ed1a0cf8391b4ab348e2ec511e3f  autoconf-archive-2019.01.06.tar.xz
-+sha256 e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195  COPYING
-+sha256 23ed0b84fa023bfa33433b498192cd08a3bfb1f4864a8ed791a84f3eb48b2dd2  COPYING.EXCEPTION
--- 
-2.20.1
+Am Mi., 22. Jan. 2020 um 23:32 Uhr schrieb Arnout Vandecappelle
+<arnout@mind.be>:
+>
+>
+>
+> On 22/01/2020 09:16, Heiko Thiery wrote:
+> > This is a bunch of patches that adds the license file hashes.
+> >
+> > The packages are tests with: make <pkg>-legal-info
+>
+>  Series applied, except for the autoconf-archive one because that failed the
+> 'make host-autoconf-archive-legal-info' test...
+>
+> >>> host-autoconf-archive 2019.01.06 Collecting legal info
+> ERROR: COPYING has wrong sha256 hash:
+> ERROR: expected: ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6
+> ERROR: got     : e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195
+>
+>
+>  Can you check that?
+>
+>  (Marked it as Changes Requested in patchwork)
+
+Indeed here I made a mistake. Changed it to the correct value and
+added a second hash for the other license file "COPYING.EXCEPTION".
+
+Thank you
+
+>  Regards,
+>  Arnout
