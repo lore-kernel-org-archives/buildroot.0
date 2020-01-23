@@ -1,94 +1,78 @@
-From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
-Date: Thu, 23 Jan 2020 13:17:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openssh: improve init script
-Message-ID: <20200123121755.vp2n7mx3xxpbrbyz@zenon.in.qult.net>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Thu, 23 Jan 2020 13:46:32 +0000
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump to version 12.14.1
+In-Reply-To: <20200121023242.94475-1-james.hilliard1@gmail.com>
+References: <20200121023242.94475-1-james.hilliard1@gmail.com>
+Message-ID: <b25a1221-50a0-4915-9b73-1b304f033f87@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current init script for sshd is too simplistic and its use of
-killall to terminate the daemon has the annoying downside of killing
-every instance of sshd, possibly including the one spawned for the
-interactive session in which the script itself is started.  If the
-intention was to simply restart the daemon, killing the current
-session ultimately kills the script and the daemon is not properly
-started again.
+Hi all,
 
-Improve the init script in the following ways:
+On 21/01/2020 02:32, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/nodejs/nodejs.hash | 4 ++--
+>  package/nodejs/nodejs.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+> index bde0ac0167..92369105ff 100644
+> --- a/package/nodejs/nodejs.hash
+> +++ b/package/nodejs/nodejs.hash
+> @@ -1,5 +1,5 @@
+> -# From https://nodejs.org/dist/v12.14.0/SHASUMS256.txt
+> -sha256 088a217ba2af641b8cc15be29f6e2956b8a33e6badb85596bbc2cdea9df9be71  node-v12.14.0.tar.xz
+> +# From https://nodejs.org/dist/v12.14.1/SHASUMS256.txt
+> +sha256 877b4b842318b0e09bc754faf7343f2f097f0fc4f88ab9ae57cf9944e88e7adb  node-v12.14.1.tar.xz
+>  
+>  # Hash for license file
+>  sha256 950bbc741dc021489c47683e34e7637e9b96fb4a1f430b2f77a744130516e293  LICENSE
+> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> index 62c4c1abb1..e6eb73d576 100644
+> --- a/package/nodejs/nodejs.mk
+> +++ b/package/nodejs/nodejs.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -NODEJS_VERSION = 12.14.0
+> +NODEJS_VERSION = 12.14.1
+>  NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+>  NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+>  NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+> 
 
-  Use start-stop-daemon to avoid running the daemon more than once and
-  to safely send termination signals to the right process.
+This breaks host-nodejs for me. Looks like an error with icu-small conflicting
+with host-icu, but I can't tell for sure. It works again when I revert this
+patch (nodejs 12.14.0) and clean-rebuild.
 
-  Add a proper reload action, by sending the daemon the SIGHUP signal.
+I can reproduce with something similar to this:
 
-  During restart, check that the daemon has properly terminated and if
-  not, wait one second before sending it the SIGKILL signal.
+	docker build -t "repro" support/docker
+	docker run \
+		--mount=type=bind,src="$(pwd)",dst=/home/br-user \
+		--user "$UID:$UID" -it "repro" \
+		make host-nodejs
 
-Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
----
- package/openssh/S50sshd | 29 ++++++++++++++++++++---------
- 1 file changed, 20 insertions(+), 9 deletions(-)
+The error looks like this:
 
-diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
-index 22da41d1ca..66cdd5e291 100644
---- a/package/openssh/S50sshd
-+++ b/package/openssh/S50sshd
-@@ -13,20 +13,29 @@ start() {
- 	/usr/bin/ssh-keygen -A
- 
- 	printf "Starting sshd: "
--	/usr/sbin/sshd
--	touch /var/lock/sshd
--	echo "OK"
-+	start-stop-daemon -S -q -x /usr/sbin/sshd -p /run/sshd.pid &&
-+	{ touch /var/lock/sshd; echo "OK"; } || echo "FAIL"
- }
- stop() {
- 	printf "Stopping sshd: "
--	killall sshd
--	rm -f /var/lock/sshd
--	echo "OK"
-+	start-stop-daemon -K -q -x /usr/sbin/sshd -p /run/sshd.pid &&
-+	{ rm -f /var/lock/sshd; echo "OK"; } || echo "FAIL"
- }
- restart() {
- 	stop
-+	# Ensure the daemon has terminated before calling start again.
-+	if start-stop-daemon -K -q -x /usr/sbin/sshd -p /run/sshd.pid -t; then
-+		sleep 1
-+		start-stop-daemon -K -s KILL -q -x /usr/sbin/sshd \
-+				  -p /run/sshd.pid
-+	fi
- 	start
- }
-+reload() {
-+	printf "Reloading sshd: "
-+	start-stop-daemon -K -s HUP -q -x /usr/sbin/sshd -p /run/sshd.pid &&
-+	echo "OK" || echo "FAIL"
-+}
- 
- case "$1" in
-   start)
-@@ -35,13 +44,15 @@ case "$1" in
-   stop)
- 	stop
- 	;;
--  restart|reload)
-+  reload)
-+	reload
-+	;;
-+  restart)
- 	restart
- 	;;
-   *)
--	echo "Usage: $0 {start|stop|restart}"
-+	echo "Usage: $0 {start|stop|reload|restart}"
- 	exit 1
- esac
- 
- exit $?
--
--- 
-2.20.1
+make[2]: *** [/home/br-user/output/build/host-nodejs-12.14.1/out/Release/obj.target/icui18n/deps/icu-small/source/i18n/number_multiplier.o] Error 1
+In file included from ../deps/icu-small/source/i18n/number_types.h:11:0,
+                 from ../deps/icu-small/source/i18n/number_decimalquantity.h:14,
+                 from ../deps/icu-small/source/i18n/numparse_types.h:11,
+                 from ../deps/icu-small/source/i18n/number_currencysymbols.cpp:12:
+../deps/icu-small/source/i18n/unicode/decimfmt.h:899:13: error: invalid covariant return type for ?virtual icu_65::Format* icu_65::DecimalFormat::clone() const?
+     Format* clone(void) const U_OVERRIDE;
+             ^~~~~
+In file included from ../deps/icu-small/source/i18n/unicode/decimfmt.h:39:0,
+                 from ../deps/icu-small/source/i18n/number_types.h:11,
+                 from ../deps/icu-small/source/i18n/number_decimalquantity.h:14,
+                 from ../deps/icu-small/source/i18n/numparse_types.h:11,
+                 from ../deps/icu-small/source/i18n/number_currencysymbols.cpp:12:
+/home/br-user/output/host/include/unicode/numfmt.h:271:27: error:   overriding ?virtual icu_65::NumberFormat* icu_65::NumberFormat::clone() const?
+     virtual NumberFormat* clone() const = 0;
+                           ^~~~~
