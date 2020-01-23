@@ -1,37 +1,89 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Jan 2020 22:23:39 +0100
-Subject: [Buildroot] Upcoming glibc-2.31 breaks busybox, strace.
-In-Reply-To: <BN8PR12MB28683E6EF9441AEBAB2CF685D90F0@BN8PR12MB2868.namprd12.prod.outlook.com>
-References: <BN8PR12MB28683E6EF9441AEBAB2CF685D90F0@BN8PR12MB2868.namprd12.prod.outlook.com>
-Message-ID: <2cb40bdc-2c78-6edd-bcea-3db5cbba3ba7@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 23 Jan 2020 22:44:12 +0100
+Subject: [Buildroot] BR2_EXTERNAL and linux-ext-*.mk
+In-Reply-To: <CAEyMn7a2qBj2efokN1Au3qek8yNsg_hdjBzntkiC8nCFZ5M=rg@mail.gmail.com>
+References: <CAEyMn7a2qBj2efokN1Au3qek8yNsg_hdjBzntkiC8nCFZ5M=rg@mail.gmail.com>
+Message-ID: <20200123214412.GZ32369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 23/01/2020 12:56, Evgeniy Didin wrote:
-> Hi Thomas, all,
+On 2020-01-23 22:08 +0100, Heiko Thiery spake thusly:
+> Hi All,
 > 
-> In February 2020 the new release of glibc is going to happen. There are at least
-> two packages known which latest releases
-> fail to build with latest revision of glibc: Busybox and strace.
+> I recently recognized that there is the support to have linux patches
+> located in the BR2_EXTERNAL/linux directory with
+> c26eafa96cabd597a5cce534133ee0ff996b800c.
 > 
-> For "strace" there is a patch in master branch which solves the error:
-> https://github.com/strace/strace/commit/9afd83c11cb78a04954daaedb54b20214a35ec9c
+> While using this feature I noticed that in there seems to go something
+> wrong. Once a file that matchs linux/linux-ext-*.mk is detected the
+> LINUX_PKGDIR is set to the BR2_EXTERNAL/linux path and for example the
+> "0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional" patch
+> fails because the path is no longer valid. Also the hash check for the
+> linux sources fails due to the same reason.
 > 
-> For busybox there are at least two patches required:
-> https://git.buildroot.net/busybox/commit/?id=6937487be73cd4563b876413277a295a5fe2f32c
-> https://git.buildroot.net/busybox/commit/?id=d3539be8f27b8cbfdfee460fe08299158f08bcd9
+> Following 2 "make-linux-patch" tries, the first ends without error and
+> the second show the error:
 > 
-> Should we introduce these patches now or should we wait until glibc-2.31 is
-> introduced in buildroot?
+> 
+> 
+> ---------- without BR2_EXTERNAL/linux/linux-ext-xxx.mk:
+[--SNIP--]
+> # make printvars VARS=LINUX_PKGDIR
+> LINUX_PKGDIR=linux/
+> --------------------
+> 
+> ----------  with BR2_EXTERNAL/linux/linux-ext-xxx.mk:
+[--SNIP--]
+> # make printvars VARS=LINUX_PKGDIR
+> LINUX_PKGDIR=/home/hthiery/sources/test-linux/buildroot-external-linux-test/linux/
+> ----------
+> 
+> Do I miss something here or is this a bug?
 
- It doesn't hurt to introduce those patches now, since it's possible for people
-to use an external toolchain with glibc-2.31. In fact, I suspect that the ARC
-people do exactly that :-)
+This is a bug, but not a simple one.
 
- Regards,
- Arnout
+FOO_PKGDIR is set based on the last component of the $(MAKEFILES)
+variable. That variables contains the list of Makefiles that have been
+included, in the order they've been included, with the top-level
+Makefile first (left-most), and the last one last (right-most).
+
+As long as we did support only in-tree linux extensions, all was OK,
+because we would only include Makefiles from the same directory as the
+main linux.mk one, so LINUX_PKGDIR was set to the directory of the last
+linux extension included, which was OK.
+
+But now, we can include extensions from a br2-external tree, and that
+last assumption breaks down.
+
+When we added that support, we only thought about the name of the
+package, which is set based on the latest component of the directory, so
+it had to be 'linux'. But we completely forgot about the _PKGDIR
+variable. The existing comment only spoke about the directory name, not
+the full path, because FOO_PKGCDIR was only introduced after linux
+extensions were.
+
+It turns out that we may have a way out: we do not really care about the
+order the extensions are included, since all they do is register post
+hooks. So, if we were to include the extensions from the br2-external
+trees, then the in-tree ones, we'd be back to the original situation.
+
+This is still a bit flaky, because we may end up breaking this again in
+the future, but I don;t have a better solution (well, we could also have
+a dummy empty makefile fragment that we explicitly include just right
+before callign the pkg-generic infra, but that's still fragile).
+
+Care to test and properly send: http://code.bulix.org/4fcw7l-1104853?raw
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
