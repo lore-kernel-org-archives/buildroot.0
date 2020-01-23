@@ -1,66 +1,81 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Thu, 23 Jan 2020 01:04:02 +0100
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version
-Message-ID: <20200122235421.1089D8386D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-stalker: bump version
+Message-ID: <20200122235421.576A78386D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bb8a8fed1ba21d34e4728c2cdafaa8517a5c12f
+commit: https://git.buildroot.net/buildroot/commit/?id=0aec6528c88ba609063c144770e61098ec2ad19c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switched dependencies from libplatform & kodi-platform to kodi after
-upstream commit:
-https://github.com/peak3d/inputstream.adaptive/commit/0d1c5503ad809a23062aebd3c01837ca5d21ea3a
+Removed patch after being applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi-inputstream-adaptive/Config.in                      | 2 --
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 6 ++----
- 3 files changed, 3 insertions(+), 7 deletions(-)
+ .../0001-src-CWatchdog.h-Fix-gcc7-build.patch      | 29 ----------------------
+ package/kodi-pvr-stalker/kodi-pvr-stalker.hash     |  2 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk       |  4 +--
+ 3 files changed, 2 insertions(+), 33 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-index cb5127363a..f9ba20adcf 100644
---- a/package/kodi-inputstream-adaptive/Config.in
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -3,8 +3,6 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
- 	# wvdecrypter/cdm/build/build_config.h
- 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
- 		|| BR2_mips64el || BR2_x86_64
--	select BR2_PACKAGE_LIBPLATFORM
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  Kodi inputstream addon for several manifest types
- 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 15ecf494f1..94a001c4e7 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+diff --git a/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch b/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
+deleted file mode 100644
+index 2d85f6bc6f..0000000000
+--- a/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From bb16ccd14deb3a01049daec37b6d2e7711ef4738 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sat, 13 May 2017 20:22:08 +0200
+-Subject: [PATCH] src/CWatchdog.h: Fix gcc7 build
+-
+-Building with gcc7 is broken:
+-
+-src/CWatchdog.h:31:58: error: 'std::function' has not been declared
+-    CWatchdog(unsigned int interval, SAPI *api, std::function<void(SError)> errorCallback);
+-                                                     ^~~~~~~~
+-
+-Submitted-upstream: https://github.com/kodi-pvr/pvr.stalker/pull/93
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/CWatchdog.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/CWatchdog.h b/src/CWatchdog.h
+-index c465e91..239d95d 100644
+---- a/src/CWatchdog.h
+-+++ b/src/CWatchdog.h
+-@@ -22,6 +22,7 @@
+-  */
+- 
+- #include <thread>
+-+#include <functional>
+- 
+- #include "SAPI.h"
+- 
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
+index 07c768f252..d3cd685fd2 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 872a6ffefb90b6201a1e01fe5a52e05877e2040737e052b2f249725b9a8a44ff  kodi-inputstream-adaptive-c51b9a9b58a645f820883e6d99982277fc58aac5.tar.gz
-+sha256 e47263240ac9276546ead439ba14ee26c3f3b45f2882351a9081e5502e296329  kodi-inputstream-adaptive-2.4.2-Leia.tar.gz
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index ab810d3248..90958bdf1a 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,12 +4,10 @@
+-sha256 466cb3869927cdd245a746a32d92250e198befe577f7a847884eab1fd8eeb139  kodi-pvr-stalker-2.8.6-Krypton.tar.gz
++sha256 03eb428f21d6b8526b6671278b60ac6dc5a761a515af27172d8ac5c814cc3f65  kodi-pvr-stalker-3.4.10-Leia.tar.gz
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+index 32ac2cad0e..1b1592320c 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+@@ -4,9 +4,7 @@
  #
  ################################################################################
  
 -# This cset is on the branch 'Krypton'
 -# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = c51b9a9b58a645f820883e6d99982277fc58aac5
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.2-Leia
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
--KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
-+KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
- 
- $(eval $(cmake-package))
+-KODI_PVR_STALKER_VERSION = 2.8.6-Krypton
++KODI_PVR_STALKER_VERSION = 3.4.10-Leia
+ KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
+ KODI_PVR_STALKER_LICENSE = GPL-2.0+
+ KODI_PVR_STALKER_LICENSE_FILES = src/client.h
