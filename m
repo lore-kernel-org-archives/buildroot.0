@@ -1,41 +1,63 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 22 Jan 2020 23:44:41 +0100
-Subject: [Buildroot] [git commit] package/kodi-platform: bump version
-Message-ID: <20200122235420.D25F58386D@busybox.osuosl.org>
+Date: Thu, 23 Jan 2020 01:04:02 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-iptvsimple: bump version
+Message-ID: <20200122235421.3DB4D83881@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02d1e38d93f335bbc304cccd8a1bb4e0c6365545
+commit: https://git.buildroot.net/buildroot/commit/?id=e3520c0ec243fe858fee1829518f455f496a36bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Rapidxml was added as dependency:
+https://github.com/kodi-pvr/pvr.iptvsimple/commit/d27b3ed1d379d2f865e95f08bdf2dbf086f8c0ad
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi-platform/kodi-platform.hash | 2 +-
- package/kodi-platform/kodi-platform.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-pvr-iptvsimple/Config.in                | 1 +
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 6 ++----
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
-index d99c6225cb..0b2ab6b147 100644
---- a/package/kodi-platform/kodi-platform.hash
-+++ b/package/kodi-platform/kodi-platform.hash
+diff --git a/package/kodi-pvr-iptvsimple/Config.in b/package/kodi-pvr-iptvsimple/Config.in
+index b59674979f..94fc1f0602 100644
+--- a/package/kodi-pvr-iptvsimple/Config.in
++++ b/package/kodi-pvr-iptvsimple/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
+ 	bool "kodi-pvr-iptvsimple"
+ 	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_RAPIDXML
+ 	help
+ 	  IPTV Live TV and Radio PVR client addon for Kodi
+ 
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 0b0406feb8..1b79b57049 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 c53f37888d752e233f5adabc6ecfb8a1ea02728e010007200bbf671f6b9462de  kodi-platform-36fb49371dbce49bf470a5bb1fc51b74b4a3612d.tar.gz
-+sha256 d5b9b61c1c22b471d948b2c8de50f77ccadbd908869b13b5d98c42f447268d56  kodi-platform-915da086fa7b4ea72796052a04ed6de95501b95c.tar.gz
-diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
-index 53f8ce956b..8bf517fa5d 100644
---- a/package/kodi-platform/kodi-platform.mk
-+++ b/package/kodi-platform/kodi-platform.mk
-@@ -4,7 +4,7 @@
+-sha256 329bd71e5c786d7b037bf5fd103ee4abff892afc6e5186a5d0a797194a8c4c7c  kodi-pvr-iptvsimple-2.4.14-Krypton.tar.gz
++sha256 25eff252ad748e0cf166cd01b0f08e8fb3977c98a1b04cad9ef6509ea30c5fa9  kodi-pvr-iptvsimple-3.8.8-Leia.tar.gz
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 0df509ea6a..16007cf404 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,12 +4,10 @@
  #
  ################################################################################
  
--KODI_PLATFORM_VERSION = 36fb49371dbce49bf470a5bb1fc51b74b4a3612d
-+KODI_PLATFORM_VERSION = 915da086fa7b4ea72796052a04ed6de95501b95c
- KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
- KODI_PLATFORM_LICENSE = GPL-2.0+
- KODI_PLATFORM_LICENSE_FILES = src/util/XMLUtils.h
+-# This cset is on the branch 'Krypton'
+-# When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_IPTVSIMPLE_VERSION = 2.4.14-Krypton
++KODI_PVR_IPTVSIMPLE_VERSION = 3.8.8-Leia
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = src/client.h
+-KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform
++KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform rapidxml
+ 
+ $(eval $(cmake-package))
