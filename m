@@ -1,88 +1,27 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Thu, 23 Jan 2020 09:36:41 +0100
-Subject: [Buildroot] [PATCH] package/nginx: use CacheDirectory
-Message-ID: <20200123083641.3808-1-p.debruijn@unilogic.nl>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 23 Jan 2020 10:42:01 +0100
+Subject: [Buildroot] EFI handover support
+In-Reply-To: <1579751304890-0.post@n4.nabble.com> (a.'s message of "Wed, 22
+ Jan 2020 21:48:24 -0600 (CST)")
+References: <1579673443483-0.post@n4.nabble.com>
+ <878slzxnt5.fsf@dell.be.48ers.dk> <1579751304890-0.post@n4.nabble.com>
+Message-ID: <87muaewlue.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-move
-  http-client-body-temp-path
-  http-proxy-temp-path
-  http-fastcgi-temp-path
-  http-scgi-temp-path
-  http-uwsgi-temp-path
+>>>>> "a" == a  <anushka.parashar@tesco.com> writes:
 
-from /var/tmp/nginx to /var/cache/nginx
+ > Hi, 
+ > I figured that needs to be set, but couldn't find that variable anywhere in
+ > the buildroot. 
+ > I'm not able to find it, can you please help me with that?
 
-this allows the use of systemd constructs
+CONFIG_EFI_STUB is a kernel configuration option, not a Buildroot
+option. Run `make linux-menuconfig' to change the Linux configuration
+options.
 
-  LogsDirectory=nginx
-  CacheDirectory=nginx
-
-to replace
-
-  ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
-
-as there isn't similar construct for /var/tmp
-
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
----
- package/nginx/S50nginx      |  2 +-
- package/nginx/nginx.mk      | 10 +++++-----
- package/nginx/nginx.service |  3 ++-
- 3 files changed, 8 insertions(+), 7 deletions(-)
-
-diff --git a/package/nginx/S50nginx b/package/nginx/S50nginx
-index 964652b..6c243f4 100644
---- a/package/nginx/S50nginx
-+++ b/package/nginx/S50nginx
-@@ -9,7 +9,7 @@ PIDFILE=/var/run/nginx.pid
- case "$1" in
-   start)
- 	echo "Starting nginx..."
--	mkdir -p /var/log/nginx /var/tmp/nginx
-+	mkdir -p /var/log/nginx /var/cache/nginx
- 	start-stop-daemon -S -x "$NGINX" -p "$PIDFILE"
- 	;;
-   stop)
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 59fddbb..bb8c57a 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -56,11 +56,11 @@ NGINX_CONF_OPTS += \
- 	--group=www-data \
- 	--error-log-path=/var/log/nginx/error.log \
- 	--http-log-path=/var/log/nginx/access.log \
--	--http-client-body-temp-path=/var/tmp/nginx/client-body \
--	--http-proxy-temp-path=/var/tmp/nginx/proxy \
--	--http-fastcgi-temp-path=/var/tmp/nginx/fastcgi \
--	--http-scgi-temp-path=/var/tmp/nginx/scgi \
--	--http-uwsgi-temp-path=/var/tmp/nginx/uwsgi
-+	--http-client-body-temp-path=/var/cache/nginx/client-body \
-+	--http-proxy-temp-path=/var/cache/nginx/proxy \
-+	--http-fastcgi-temp-path=/var/cache/nginx/fastcgi \
-+	--http-scgi-temp-path=/var/cache/nginx/scgi \
-+	--http-uwsgi-temp-path=/var/cache/nginx/uwsgi
- 
- NGINX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_NGINX_FILE_AIO),--with-file-aio) \
-diff --git a/package/nginx/nginx.service b/package/nginx/nginx.service
-index 320df9a..3f6cd12 100644
---- a/package/nginx/nginx.service
-+++ b/package/nginx/nginx.service
-@@ -4,8 +4,9 @@ After=syslog.target network.target
- 
- [Service]
- Type=forking
-+LogsDirectory=nginx
-+CacheDirectory=nginx
- PIDFile=/var/run/nginx.pid
--ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
- ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
- ExecStart=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
- ExecReload=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;' -s reload
 -- 
-2.7.4
+Bye, Peter Korsgaard
