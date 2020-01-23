@@ -1,87 +1,132 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 23 Jan 2020 14:03:30 -0700
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump to version 12.14.1
-In-Reply-To: <b25a1221-50a0-4915-9b73-1b304f033f87@codethink.co.uk>
-References: <20200121023242.94475-1-james.hilliard1@gmail.com>
- <b25a1221-50a0-4915-9b73-1b304f033f87@codethink.co.uk>
-Message-ID: <CADvTj4qNBoJBm1nPfKJ+=0qBWda+-XSU2LQ=FD0WHaYHF-_TsQ@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 23 Jan 2020 22:08:43 +0100
+Subject: [Buildroot] BR2_EXTERNAL and linux-ext-*.mk
+Message-ID: <CAEyMn7a2qBj2efokN1Au3qek8yNsg_hdjBzntkiC8nCFZ5M=rg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I thought that issue was caused by the ICU 65.1 bump, not the nodejs bump.
+Hi All,
 
-I have a pending pull request to nodejs that might fix this issue by
-the way https://github.com/nodejs/node/pull/31433.
+I recently recognized that there is the support to have linux patches
+located in the BR2_EXTERNAL/linux directory with
+c26eafa96cabd597a5cce534133ee0ff996b800c.
 
-On Thu, Jan 23, 2020 at 6:46 AM Thomas Preston
-<thomas.preston@codethink.co.uk> wrote:
->
-> Hi all,
->
-> On 21/01/2020 02:32, James Hilliard wrote:
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >  package/nodejs/nodejs.hash | 4 ++--
-> >  package/nodejs/nodejs.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-> > index bde0ac0167..92369105ff 100644
-> > --- a/package/nodejs/nodejs.hash
-> > +++ b/package/nodejs/nodejs.hash
-> > @@ -1,5 +1,5 @@
-> > -# From https://nodejs.org/dist/v12.14.0/SHASUMS256.txt
-> > -sha256 088a217ba2af641b8cc15be29f6e2956b8a33e6badb85596bbc2cdea9df9be71  node-v12.14.0.tar.xz
-> > +# From https://nodejs.org/dist/v12.14.1/SHASUMS256.txt
-> > +sha256 877b4b842318b0e09bc754faf7343f2f097f0fc4f88ab9ae57cf9944e88e7adb  node-v12.14.1.tar.xz
-> >
-> >  # Hash for license file
-> >  sha256 950bbc741dc021489c47683e34e7637e9b96fb4a1f430b2f77a744130516e293  LICENSE
-> > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> > index 62c4c1abb1..e6eb73d576 100644
-> > --- a/package/nodejs/nodejs.mk
-> > +++ b/package/nodejs/nodejs.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >
-> > -NODEJS_VERSION = 12.14.0
-> > +NODEJS_VERSION = 12.14.1
-> >  NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
-> >  NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
-> >  NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
-> >
->
-> This breaks host-nodejs for me. Looks like an error with icu-small conflicting
-> with host-icu, but I can't tell for sure. It works again when I revert this
-> patch (nodejs 12.14.0) and clean-rebuild.
->
-> I can reproduce with something similar to this:
->
->         docker build -t "repro" support/docker
->         docker run \
->                 --mount=type=bind,src="$(pwd)",dst=/home/br-user \
->                 --user "$UID:$UID" -it "repro" \
->                 make host-nodejs
->
-> The error looks like this:
->
-> make[2]: *** [/home/br-user/output/build/host-nodejs-12.14.1/out/Release/obj.target/icui18n/deps/icu-small/source/i18n/number_multiplier.o] Error 1
-> In file included from ../deps/icu-small/source/i18n/number_types.h:11:0,
->                  from ../deps/icu-small/source/i18n/number_decimalquantity.h:14,
->                  from ../deps/icu-small/source/i18n/numparse_types.h:11,
->                  from ../deps/icu-small/source/i18n/number_currencysymbols.cpp:12:
-> ../deps/icu-small/source/i18n/unicode/decimfmt.h:899:13: error: invalid covariant return type for ?virtual icu_65::Format* icu_65::DecimalFormat::clone() const?
->      Format* clone(void) const U_OVERRIDE;
->              ^~~~~
-> In file included from ../deps/icu-small/source/i18n/unicode/decimfmt.h:39:0,
->                  from ../deps/icu-small/source/i18n/number_types.h:11,
->                  from ../deps/icu-small/source/i18n/number_decimalquantity.h:14,
->                  from ../deps/icu-small/source/i18n/numparse_types.h:11,
->                  from ../deps/icu-small/source/i18n/number_currencysymbols.cpp:12:
-> /home/br-user/output/host/include/unicode/numfmt.h:271:27: error:   overriding ?virtual icu_65::NumberFormat* icu_65::NumberFormat::clone() const?
->      virtual NumberFormat* clone() const = 0;
->                            ^~~~~
+While using this feature I noticed that in there seems to go something
+wrong. Once a file that matchs linux/linux-ext-*.mk is detected the
+LINUX_PKGDIR is set to the BR2_EXTERNAL/linux path and for example the
+"0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional" patch
+fails because the path is no longer valid. Also the hash check for the
+linux sources fails due to the same reason.
+
+Following 2 "make-linux-patch" tries, the first ends without error and
+the second show the error:
+
+
+
+---------- without BR2_EXTERNAL/linux/linux-ext-xxx.mk:
+
+# make linux-patch
+>>> linux 5.4.13 Downloading
+--2020-01-23 21:57:11--
+https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.13.tar.xz
+Aufl?sen des Hostnamens cdn.kernel.org (cdn.kernel.org)?
+151.101.1.176, 151.101.65.176, 151.101.129.176, ...
+Verbindungsaufbau zu cdn.kernel.org
+(cdn.kernel.org)|151.101.1.176|:443 ? verbunden.
+HTTP-Anforderung gesendet, auf Antwort wird gewartet ? 200 OK
+L?nge: 109463864 (104M) [application/x-xz]
+Wird in ?/home/hthiery/sources/test-linux/build/build/.linux-5.4.13.tar.xz.3jGhoi/output?
+gespeichert.
+
+/home/hthiery/sources/test-linux/build/build
+100%[===========================================================================================>]
+104,39M  5,52MB/s    in 12s
+
+2020-01-23 21:57:23 (8,59 MB/s) -
+?/home/hthiery/sources/test-linux/build/build/.linux-5.4.13.tar.xz.3jGhoi/output?
+gespeichert [109463864/109463864]
+
+linux-5.4.13.tar.xz: OK (sha256:
+49fb29d96d7e7c1d7e6082701bd26bfddd0fbc87a796fb6ba6258bc5fd386ad7)
+>>> linux 5.4.13 Extracting
+xzcat /home/hthiery/sources/test-linux/buildroot/dl/linux/linux-5.4.13.tar.xz
+| /home/hthiery/sources/test-linux/build/host/bin/tar
+--strip-components=1 -C
+/home/hthiery/sources/test-linux/build/build/linux-5.4.13   -xf -
+>>> linux 5.4.13 Patching
+if [ -f /home/hthiery/sources/test-linux/build/build/linux-5.4.13/tools/perf/Documentation/Makefile
+]; then printf "%%:\n\t@:\n"
+>/home/hthiery/sources/test-linux/build/build/linux-5.4.13/tools/perf/Documentation/GNUmakefile;
+fi
+for p in  ; do if test -d $p ; then
+PATH=/home/hthiery/sources/test-linux/build/host/bin:$PATH
+support/scripts/apply-patches.sh
+/home/hthiery/sources/test-linux/build/build/linux-5.4.13 $p \*.patch
+|| exit 1 ; else
+PATH=/home/hthiery/sources/test-linux/build/host/bin:$PATH
+support/scripts/apply-patches.sh
+/home/hthiery/sources/test-linux/build/build/linux-5.4.13 `dirname $p`
+`basename $p` || exit 1; fi done
+
+# make printvars VARS=LINUX_PKGDIR
+LINUX_PKGDIR=linux/
+--------------------
+
+
+----------  with BR2_EXTERNAL/linux/linux-ext-xxx.mk:
+
+# make linux-patch
+>>> linux 5.4.13 Downloading
+--2020-01-23 21:59:54--
+https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.13.tar.xz
+Aufl?sen des Hostnamens cdn.kernel.org (cdn.kernel.org)?
+151.101.1.176, 151.101.65.176, 151.101.129.176, ...
+Verbindungsaufbau zu cdn.kernel.org
+(cdn.kernel.org)|151.101.1.176|:443 ? verbunden.
+HTTP-Anforderung gesendet, auf Antwort wird gewartet ? 200 OK
+L?nge: 109463864 (104M) [application/x-xz]
+Wird in ?/home/hthiery/sources/test-linux/build/build/.linux-5.4.13.tar.xz.QfCmJd/output?
+gespeichert.
+
+/home/hthiery/sources/test-linux/build/build
+100%[===========================================================================================>]
+104,39M  13,0MB/s    in 6,1s
+
+2020-01-23 22:00:00 (17,0 MB/s) -
+?/home/hthiery/sources/test-linux/build/build/.linux-5.4.13.tar.xz.QfCmJd/output?
+gespeichert [109463864/109463864]
+
+WARNING: no hash file for linux-5.4.13.tar.xz
+>>> linux 5.4.13 Extracting
+xzcat /home/hthiery/sources/test-linux/buildroot/dl/linux/linux-5.4.13.tar.xz
+| /home/hthiery/sources/test-linux/build/host/bin/tar
+--strip-components=1 -C
+/home/hthiery/sources/test-linux/build/build/linux-5.4.13   -xf -
+>>> linux 5.4.13 Patching
+if [ -f /home/hthiery/sources/test-linux/build/build/linux-5.4.13/tools/perf/Documentation/Makefile
+]; then printf "%%:\n\t@:\n"
+>/home/hthiery/sources/test-linux/build/build/linux-5.4.13/tools/perf/Documentation/GNUmakefile;
+fi
+for p in  ; do if test -d $p ; then
+PATH=/home/hthiery/sources/test-linux/build/host/bin:$PATH
+support/scripts/apply-patches.sh
+/home/hthiery/sources/test-linux/build/build/linux-5.4.13 $p \*.patch
+|| exit 1 ; else
+PATH=/home/hthiery/sources/test-linux/build/host/bin:$PATH
+support/scripts/apply-patches.sh
+/home/hthiery/sources/test-linux/build/build/linux-5.4.13 `dirname $p`
+`basename $p` || exit 1; fi done
+/bin/bash: /home/hthiery/sources/test-linux/buildroot-external-linux-test/linux//0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional:
+Datei oder Verzeichnis nicht gefunden
+
+# make printvars VARS=LINUX_PKGDIR
+LINUX_PKGDIR=/home/hthiery/sources/test-linux/buildroot-external-linux-test/linux/
+----------
+
+Do I miss something here or is this a bug?
+
+--
+Heiko
