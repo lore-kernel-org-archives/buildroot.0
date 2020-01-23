@@ -1,69 +1,49 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 23 Jan 2020 01:04:02 +0100
-Subject: [Buildroot] [git commit] package/kodi-peripheral-joystick: bump
- version
-Message-ID: <20200122235421.2535683874@busybox.osuosl.org>
+Date: Thu, 23 Jan 2020 01:04:03 +0100
+Subject: [Buildroot] [git commit] package/kodi-visualisation-fishbmc: bump
+ version to 5.1.2-Leia
+Message-ID: <20200122235421.EFDB08386D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c963c3268adbd0efc02e76bf40bbd40f84d3dbf8
+commit: https://git.buildroot.net/buildroot/commit/?id=4726e93c63d51fe287c62628a9c71c04517d727c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed dependency to kodi-platform
-https://github.com/xbmc/peripheral.joystick/commit/a9489ea0f08bbf04affb798857439540478ff90d
-
-Added dependency to tinyxml
-https://github.com/xbmc/peripheral.joystick/commit/471aa27d6c8ff9c9d0ac50c1b32f1504840194b5
+Added license hash, moved repo to xbmc project because
+https://github.com/notspiff/visualization.fishbmc is forwarded to
+https://github.com/xbmc/visualization.fishbmc
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi-peripheral-joystick/Config.in                     | 2 +-
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 8 +++-----
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash | 3 ++-
+ package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/Config.in b/package/kodi-peripheral-joystick/Config.in
-index f257710a88..d93e71b607 100644
---- a/package/kodi-peripheral-joystick/Config.in
-+++ b/package/kodi-peripheral-joystick/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_KODI_PERIPHERAL_JOYSTICK
- 	bool "kodi-peripheral-joystick"
- 	depends on BR2_PACKAGE_HAS_UDEV
--	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML
- 	help
- 	  Kodi joystick support (drivers and button maps)
- 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index 5a7348d414..84f847f309 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+index 21d80a31cb..e8b5c6cb59 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+@@ -1,2 +1,3 @@
  # Locally computed
--sha256 9a183e1f92ff2c68816bfa0056c65585a3e1129d924326359d7a5dfbcba6c56a  kodi-peripheral-joystick-1.3.4.tar.gz
-+sha256 b6ddefed73582a3dc9bc36a9d40f8309139802ef9cfc130933bd0fe6e569d933  kodi-peripheral-joystick-1.4.8-Leia.tar.gz
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index 13c33fc0af..c56cfef43f 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-@@ -4,12 +4,10 @@
+-sha256 cf42a21978578cb5ecb10c20fe09791183d8ef2998ff9d956a84142a7dda8f72  kodi-visualisation-fishbmc-4.1.0.tar.gz
++sha256 8142fe4a32c0c113945c5fc9745e54639ca73308371d292e3422730bfad1d064  kodi-visualisation-fishbmc-5.1.2-Leia.tar.gz
++sha256 684792cea796ea39d086ffd6cf5cb7c70ab8188dcf493707ba90d081d28f787e  visualization.fishbmc/LICENSE
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+index 8360660ef4..a89c559d26 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PERIPHERAL_JOYSTICK_VERSION = 1.3.4
--KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,v$(KODI_PERIPHERAL_JOYSTICK_VERSION))
-+KODI_PERIPHERAL_JOYSTICK_VERSION = 1.4.8-Leia
-+KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = src/addon.cpp
--KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi-platform udev
-+KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi tinyxml udev
- 
- $(eval $(cmake-package))
+-KODI_VISUALISATION_FISHBMC_VERSION = 4.1.0
+-KODI_VISUALISATION_FISHBMC_SITE = $(call github,notspiff,visualization.fishbmc,v$(KODI_VISUALISATION_FISHBMC_VERSION))
++KODI_VISUALISATION_FISHBMC_VERSION = 5.1.2-Leia
++KODI_VISUALISATION_FISHBMC_SITE = $(call github,xbmc,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
+ KODI_VISUALISATION_FISHBMC_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
+ KODI_VISUALISATION_FISHBMC_DEPENDENCIES = kodi
