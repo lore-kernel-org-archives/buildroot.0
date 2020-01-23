@@ -1,216 +1,66 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Thu, 23 Jan 2020 01:04:02 +0100
-Subject: [Buildroot] [git commit] package/kodi-screensaver-rsxs: bump version
-Message-ID: <20200122235421.803AA83687@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
+ version
+Message-ID: <20200122235421.1089D8386D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e68bcc985fbb17e50cfa2944807090b6cd57c871
+commit: https://git.buildroot.net/buildroot/commit/?id=9bb8a8fed1ba21d34e4728c2cdafaa8517a5c12f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated dependencies after upstream commit
-https://github.com/xbmc/screensavers.rsxs/commit/dbb88536964dc0ca4144016eb12f7307b60cb1fa
-
-Although glm depends on BR2_INSTALL_LIBSTDCPP this dependency was not
-added because Kodi itself already depends on C++.
-
-Also removed patch 0002 because this package has no direct dependency
-for X libraries anymore.
-
-Removed patch 0001 which was applied upstream
-https://github.com/xbmc/screensavers.rsxs/commit/b9dda499db62944d9a95f4690d67101eca539ca7
-
-Added patch to disable building the drempels screensaver which depends
-on imagemagick6. Even though rsxs has a minimal bundled imagemagick, we
-simply disable drempels to avoid using a bundled library.
+Switched dependencies from libplatform & kodi-platform to kodi after
+upstream commit:
+https://github.com/peak3d/inputstream.adaptive/commit/0d1c5503ad809a23062aebd3c01837ca5d21ea3a
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0001-Disable-drempels.patch                    | 40 ++++++++++++++++++++++
- .../kodi-screensaver-rsxs/0001-cross-compile.patch | 37 --------------------
- .../0002-fix-default-include-dir.patch             | 28 ---------------
- package/kodi-screensaver-rsxs/Config.in            | 14 +++++---
- .../kodi-screensaver-rsxs.hash                     |  2 +-
- .../kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk |  7 ++--
- 6 files changed, 53 insertions(+), 75 deletions(-)
+ package/kodi-inputstream-adaptive/Config.in                      | 2 --
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 6 ++----
+ 3 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi-screensaver-rsxs/0001-Disable-drempels.patch b/package/kodi-screensaver-rsxs/0001-Disable-drempels.patch
-new file mode 100644
-index 0000000000..e76a9b9943
---- /dev/null
-+++ b/package/kodi-screensaver-rsxs/0001-Disable-drempels.patch
-@@ -0,0 +1,40 @@
-+From 28c01686ba0d67d317e058776f01efba5e6471bd Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 13 Jul 2019 14:18:12 +0200
-+Subject: [PATCH] Disable drempels
-+
-+Does not build with ImageMagick 7.x:
-+
-+src/drempels/TexMgr.cpp:31:10: fatal error: magick/api.h:
-+ No such file or directory
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ CMakeLists.txt | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index a86ccd0..b5ca03f 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -40,8 +40,7 @@ include_directories(${KODI_INCLUDE_DIR}/.. # Hack way with "/..", need bigger Ko
-+ if(ImageMagick_FOUND AND NOT ${OWN_IMAGE_MAGICK})
-+   message(STATUS "ImageMagick found in the system and is used")
-+ else()
-+-  message(STATUS "ImageMagick not found or forced and add custom created")
-+-  add_subdirectory(lib/ImageMagick)
-++  message(STATUS "ImageMagick not found")
-+ endif()
-+ add_subdirectory(lib/kodi/gui/gl)
-+ add_subdirectory(lib/Implicit)
-+@@ -70,7 +69,6 @@ include(src/biof/CMakeLists.txt)
-+ include(src/busyspheres/CMakeLists.txt)
-+ include(src/colorfire/CMakeLists.txt)
-+ include(src/cyclone/CMakeLists.txt)
-+-include(src/drempels/CMakeLists.txt)
-+ include(src/euphoria/CMakeLists.txt)
-+ include(src/feedback/CMakeLists.txt)
-+ include(src/fieldlines/CMakeLists.txt)
-+-- 
-+2.20.1
-+
-diff --git a/package/kodi-screensaver-rsxs/0001-cross-compile.patch b/package/kodi-screensaver-rsxs/0001-cross-compile.patch
-deleted file mode 100644
-index a7b2053d76..0000000000
---- a/package/kodi-screensaver-rsxs/0001-cross-compile.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--Fix cross-compilation
--
--Use the cross-compiler and not the host version.
--
--Patch sent upstream:
--https://github.com/notspiff/screensavers.rsxs/pull/5
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.org/CMakeLists.txt screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259/CMakeLists.txt
----- screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.org/CMakeLists.txt	2015-03-19 12:20:23.000000000 +0100
--+++ screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259/CMakeLists.txt	2015-07-19 20:26:16.660481032 +0200
--@@ -33,6 +33,11 @@
--                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/src/skyrocket
--                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/src/solarwinds)
--                         
--+
--+get_filename_component( COMPILER_FILENAME "${CMAKE_C_COMPILER}" NAME )
--+string( REGEX REPLACE "-[^-]+$" ""
--+        TOOLCHAIN_NAME "${COMPILER_FILENAME}" )
--+
-- include(ExternalProject)
-- set(update_command "")
-- if(BOOTSTRAP_IN_TREE OR NOT DEFINED BOOTSTRAP_IN_TREE)
--@@ -46,8 +51,11 @@
--   endif()
-- endif()
-- externalproject_add(rsxs SOURCE_DIR ${PROJECT_SOURCE_DIR}/${rsxs_dir}
---                    CONFIGURE_COMMAND ${configure_start}
--+                    CONFIGURE_COMMAND gl_cv_func_gettimeofday_clobber=no ac_cv_type__Bool=yes
--+                                      ac_cv_func_malloc_0_nonnull=yes
--+                                      ${configure_start}
--                                       --prefix=<INSTALL_DIR>
--+                                      --host=${TOOLCHAIN_NAME}
--                                       --without-xscreensaver
--                                       --disable-cyclone
--                                       --disable-euphoria
-diff --git a/package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch b/package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
-deleted file mode 100644
-index a7e7c74b0f..0000000000
---- a/package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--Fix X include path to prevent error during configure
--
--Downloaded from
--https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/mediacenter/kodi-binary-addons/screensavers.rsxs/patches/screensavers.rsxs-0002-fix-default-include-dir.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -Naur screensavers.rsxs-3241d29.orig/CMakeLists.txt screensavers.rsxs-3241d29/CMakeLists.txt
----- screensavers.rsxs-3241d29.orig/CMakeLists.txt	2015-10-22 23:59:38.187280475 -0700
--+++ screensavers.rsxs-3241d29/CMakeLists.txt	2015-10-23 00:00:27.228113829 -0700
--@@ -17,7 +17,7 @@
-- include_directories(${OpenGL_INCLUDE_DIR}
--                     ${PNG_INCLUDE_DIR}
--                     ${KODI_INCLUDE_DIR}
---                    ${X_INCLUDE_DIRS}
--+                    ${X_INCLUDE_DIR}
--                     ${CMAKE_BINARY_DIR}/rsxs-prefix/src/rsxs-build
--                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/src
--                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/lib
--@@ -67,7 +67,7 @@
--                                       --disable-skyrocket
--                                       --disable-solarwinds
--                                       --disable-sound
---                                      --x-includes=${X_INCLUDE_DIRS}
--+                                      --x-includes=${X_INCLUDE_DIR}
--                                       --x-libraries=${X_LIBRARIES}
--                                       ${PNG_PATH}
--                                       ${EXTRA_FLAGS}
-diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
-index c523ce5a1c..076c7effa0 100644
---- a/package/kodi-screensaver-rsxs/Config.in
-+++ b/package/kodi-screensaver-rsxs/Config.in
-@@ -1,13 +1,17 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
- 	bool "kodi-screensaver-rsxs"
- 	depends on BR2_PACKAGE_HAS_LIBGL # libglu
--	depends on BR2_PACKAGE_XORG7 # xlib_libXmu
-+	select BR2_PACKAGE_BZIP2
-+	select BR2_PACKAGE_GLI
-+	select BR2_PACKAGE_GLM
-+	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBPNG
--	select BR2_PACKAGE_XLIB_LIBXMU
-+	select BR2_PACKAGE_LIBTOOL
-+	select BR2_PACKAGE_TIFF
+diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
+index cb5127363a..f9ba20adcf 100644
+--- a/package/kodi-inputstream-adaptive/Config.in
++++ b/package/kodi-inputstream-adaptive/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
+ 	# wvdecrypter/cdm/build/build_config.h
+ 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
+ 		|| BR2_mips64el || BR2_x86_64
+-	select BR2_PACKAGE_LIBPLATFORM
+-	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  RSXS screensaver add-ons for Kodi
+ 	  Kodi inputstream addon for several manifest types
  
--	  https://github.com/notspiff/screensavers.rsxs
-+	  https://github.com/xbmc/screensavers.rsxs
- 
--comment "kodi-screensaver-rsxs depends on X.org and needs OpenGL"
--	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
-+comment "kodi-screensaver-rsxs needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
-index e80c972ebb..b2d9e33a57 100644
---- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 15ecf494f1..94a001c4e7 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 8436c29d2f42bc65ff6f1abc2f1d05a613cc2ebb16d793e02b1f2bee296952a6  kodi-screensaver-rsxs-1.3.0.tar.gz
-+sha256 22ff3f0ca9679c59ce1a90b98d918dd10a8012b789729b2e44c04d4ce8c86ad8  kodi-screensaver-rsxs-7cb648507440d87948dec10d5bfdab3b722d37fe.tar.gz
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-index 64ffb4fba6..e208698797 100644
---- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-@@ -4,10 +4,9 @@
+-sha256 872a6ffefb90b6201a1e01fe5a52e05877e2040737e052b2f249725b9a8a44ff  kodi-inputstream-adaptive-c51b9a9b58a645f820883e6d99982277fc58aac5.tar.gz
++sha256 e47263240ac9276546ead439ba14ee26c3f3b45f2882351a9081e5502e296329  kodi-inputstream-adaptive-2.4.2-Leia.tar.gz
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index ab810d3248..90958bdf1a 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,12 +4,10 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_RSXS_VERSION = 1.3.0
--KODI_SCREENSAVER_RSXS_SITE = $(call github,notspiff,screensavers.rsxs,v$(KODI_SCREENSAVER_RSXS_VERSION))
-+KODI_SCREENSAVER_RSXS_VERSION = 7cb648507440d87948dec10d5bfdab3b722d37fe
-+KODI_SCREENSAVER_RSXS_SITE = $(call github,xbmc,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
- KODI_SCREENSAVER_RSXS_LICENSE = GPL-3.0
--KODI_SCREENSAVER_RSXS_LICENSE_FILES = lib/rsxs-1.0/COPYING
--KODI_SCREENSAVER_RSXS_DEPENDENCIES = kodi libpng xlib_libXmu
-+KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 gli glm jpeg kodi libpng libtool tiff
+-# This cset is on the branch 'Krypton'
+-# When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = c51b9a9b58a645f820883e6d99982277fc58aac5
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.2-Leia
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
+-KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
++KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
  
  $(eval $(cmake-package))
