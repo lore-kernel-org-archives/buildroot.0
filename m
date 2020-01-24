@@ -1,49 +1,65 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 24 Jan 2020 18:11:06 +0100
-Subject: [Buildroot] [PATCH 5/6] package/perl-timedate: bump to version 2.31
+Date: Fri, 24 Jan 2020 18:11:07 +0100
+Subject: [Buildroot] [PATCH 6/6] package/perl-type-tiny: bump to version
+ 1.008003
 In-Reply-To: <20200124171107.26086-1-francois.perrad@gadz.org>
 References: <20200124171107.26086-1-francois.perrad@gadz.org>
-Message-ID: <20200124171107.26086-5-francois.perrad@gadz.org>
+Message-ID: <20200124171107.26086-6-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+the year of LICENSE was upgraded:
+- This software is copyright (c) 2019 by Toby Inkster.
++ This software is copyright (c) 2020 by Toby Inkster.
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-timedate/perl-timedate.hash | 4 ++--
- package/perl-timedate/perl-timedate.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-type-tiny/Config.in           | 2 +-
+ package/perl-type-tiny/perl-type-tiny.hash | 8 ++++----
+ package/perl-type-tiny/perl-type-tiny.mk   | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-timedate/perl-timedate.hash b/package/perl-timedate/perl-timedate.hash
-index 234136d0c..5ddfbd251 100644
---- a/package/perl-timedate/perl-timedate.hash
-+++ b/package/perl-timedate/perl-timedate.hash
-@@ -1,6 +1,6 @@
+diff --git a/package/perl-type-tiny/Config.in b/package/perl-type-tiny/Config.in
+index c49a0d4bb..96e5ea135 100644
+--- a/package/perl-type-tiny/Config.in
++++ b/package/perl-type-tiny/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_PERL_TYPE_TINY
+ 	help
+ 	  tiny, yet Moo(se)-compatible type constraint.
+ 
+-	  https://metacpan.org/release/Type-Tiny
++	  http://typetiny.toby.ink/
+diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
+index d6b3639dc..8263e14c9 100644
+--- a/package/perl-type-tiny/perl-type-tiny.hash
++++ b/package/perl-type-tiny/perl-type-tiny.hash
+@@ -1,7 +1,7 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    b1d91153ac971347aee84292ed886c1c TimeDate-2.30.tar.gz
--sha256 75bd254871cb5853a6aa0403ac0be270cdd75c9d1b6639f18ecba63c15298e86 TimeDate-2.30.tar.gz
-+md5    230d361a13eae79dfe3fb650acece511 TimeDate-2.31.tar.gz
-+sha256 5c720fedb245122d073ea9c030aca24b06a615c71d40c46f832a8a1809354d81 TimeDate-2.31.tar.gz
+-md5    a7fe90a6d53d2cd57381e60e682f828f Type-Tiny-1.004004.tar.gz
+-sha256 081281ea004cdd89003d938aa52c1398e24411dd8f7163b14d0977a13f7062be Type-Tiny-1.004004.tar.gz
++md5    04194fe9673ef5504be9d50aa5d6782a Type-Tiny-1.008003.tar.gz
++sha256 a44e6e3ab29f05516d2a670de817278a7a06d55bce6f4ceaeb84ce032dcd00f5 Type-Tiny-1.008003.tar.gz
  
  # computed by scancpan
- sha256 e72e67533eb3ddd705ae718898945e2f3bf3702e91e85bb67824575706bd5bf9 README
-diff --git a/package/perl-timedate/perl-timedate.mk b/package/perl-timedate/perl-timedate.mk
-index bc4fc9a11..d4b6305ab 100644
---- a/package/perl-timedate/perl-timedate.mk
-+++ b/package/perl-timedate/perl-timedate.mk
-@@ -4,9 +4,9 @@
+-sha256 57e58f271bf6bca0bb22ab9e72b04c9e12010b0a898453a2fcde49fb9ff28afc COPYRIGHT
+-sha256 5c791221f0dde289392a38a5921b66d4a1be8248cc64ee6de15f3c2426892673 LICENSE
++sha256 7cf4a3f3f81896130c0bc8041fddd737052cdf28e1bd8af7046884f63f262e53 COPYRIGHT
++sha256 1fb7395e76eabf94c421912d7d0a4f7fa745d49e1acb76b222c21d605b66bd25 LICENSE
+diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
+index aa7306416..ea1290bb2 100644
+--- a/package/perl-type-tiny/perl-type-tiny.mk
++++ b/package/perl-type-tiny/perl-type-tiny.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_TIMEDATE_VERSION = 2.30
-+PERL_TIMEDATE_VERSION = 2.31
- PERL_TIMEDATE_SOURCE = TimeDate-$(PERL_TIMEDATE_VERSION).tar.gz
--PERL_TIMEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GB/GBARR
-+PERL_TIMEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AT/ATOOMIC
- PERL_TIMEDATE_LICENSE = Artistic or GPL-1.0+
- PERL_TIMEDATE_LICENSE_FILES = README
- PERL_TIMEDATE_DISTNAME = TimeDate
+-PERL_TYPE_TINY_VERSION = 1.004004
++PERL_TYPE_TINY_VERSION = 1.008003
+ PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
+ PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
+ PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
 -- 
 2.20.1
