@@ -1,68 +1,55 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 24 Jan 2020 12:57:37 +0100
-Subject: [Buildroot] [PATCH v4 2/3] package/rpi-firmware: bump version to
- 01ecfd2
-In-Reply-To: <20200124115738.16642-1-ps.report@gmx.net>
-References: <20200124115738.16642-1-ps.report@gmx.net>
-Message-ID: <20200124115738.16642-2-ps.report@gmx.net>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Fri, 24 Jan 2020 13:39:34 +0000
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump to version 12.14.1
+In-Reply-To: <791e6cb2-07c0-3da5-76a4-749a598adab4@codethink.co.uk>
+References: <20200121023242.94475-1-james.hilliard1@gmail.com>
+ <b25a1221-50a0-4915-9b73-1b304f033f87@codethink.co.uk>
+ <CADvTj4qNBoJBm1nPfKJ+=0qBWda+-XSU2LQ=FD0WHaYHF-_TsQ@mail.gmail.com>
+ <791e6cb2-07c0-3da5-76a4-749a598adab4@codethink.co.uk>
+Message-ID: <a5a61bbc-82ac-9e0b-3403-afb024dd85e9@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Keep rpi-firmware up-to-date with the kernel
-vesion bump (4.19.97).
+On 24/01/2020 11:31, Thomas Preston wrote:
+> There's a few things fishy;
+> 1. Three instances of `-I/home/br-user/output/host/include`
 
-Go back to sha1 version scheme instead of official tag (after
-only two tag versions) to keep up with the up-to-date kernel
-version (as the offical last tag is for 4.19.94).
+The first `-I$(HOST_DIR)/include` is because nodejs configure.py uses
+buildroot's host-pkg-config script to get the include directories for
+zlib, which happens to be /home/br-user/output/host/include - which
+also includes host-icu headers.
 
-Update boot/LICENCE.broadcom hash according to the
-'Update to support customisation program ' change ([1]).
+The final two `-I$(HOST_DIR)/include` are from:
 
-[1] https://github.com/raspberrypi/firmware/commit/dd9e9ebb5d5306e91acb135db890cf18f3a5eea2#diff-b7cccbd9821a372750de822dfd97a843
+	CFLAGS.target
+	CXXFLAGS.target
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - no changes
+It's really an ordering issue, because nodejs configure.py looks for
+ICU headers in `-I$(HOST_DIR)/include` before the bundled icu-small
+directory.
 
-Changes v2 -> v3:
-  - bump version to be2713b/4.19.95
-  - add sha1 explanation
-  - update boot/LICENCE.broadcom hash
+One workaround is to remove "--shared-zlib" so that
+`-I$(HOST_DIR)/include` isn't listed before the icu-small arguments
 
-Changes v3 -> v4:
-  - bump version to 01ecfd2/4.19.97
-  - update change tag/sha1 reasoning
----
- package/rpi-firmware/rpi-firmware.hash | 4 ++--
- package/rpi-firmware/rpi-firmware.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+	-I../deps/icu-small/source/i18n
+	-I../deps/icu-small/source/common
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index 63d8ac50a0..59ab1da0c6 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 b3c5c9d3cda1f77caf317b8d1f0496cd7ca791ddaeec8207a5a1940111483509 rpi-firmware-1.20190925.tar.gz
--sha256 ba76edfc10a248166d965b8eaf320771c44f4f432d4fce2fd31fd272e7038add boot/LICENCE.broadcom
-+sha256 31a84340be08be319570a9d1439f25c0e3513fed73065a56aa5dd61dd605d5d9 rpi-firmware-01ecfd2ba2b7cf3a2f4aa75ada895ee4a3e729f5.tar.gz
-+sha256 c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b boot/LICENCE.broadcom
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index ee59ee2f26..6fee60b08c 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_FIRMWARE_VERSION = 1.20190925
-+RPI_FIRMWARE_VERSION = 01ecfd2ba2b7cf3a2f4aa75ada895ee4a3e729f5
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3-Clause
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
--- 
-2.24.1
+Zlib is still found because it's in the host system include dir,
+although I'm not sure how acceptable this solution is to upstream
+Buildroot. Maybe remove it but add a comment?
+
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 62c4c1abb1..181668b743 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -63,7 +63,6 @@ define HOST_NODEJS_CONFIGURE_CMDS
+                --shared-openssl \
+                --shared-openssl-includes=$(HOST_DIR)/include/openssl \
+                --shared-openssl-libpath=$(HOST_DIR)/lib \
+-               --shared-zlib \
+                --no-cross-compiling \
+                --with-intl=small-icu \
+        )
