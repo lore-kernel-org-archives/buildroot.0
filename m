@@ -1,25 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Jan 2020 20:25:28 +0100
-Subject: [Buildroot] [PATCH] package/uboot-tools: bump to version 2020.01
-In-Reply-To: <20200123080651.1002679-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Thu, 23 Jan 2020 09:06:51 +0100")
-References: <20200123080651.1002679-1-joerg.krause@embedded.rocks>
-Message-ID: <87a76cveqf.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Jan 2020 20:23:45 +0100
+Subject: [Buildroot] [git commit] package/autoconf-archive: add hash for
+ license file
+Message-ID: <20200124191544.4FDA683A51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e233ec030b23c0b58cbc3799b6acd49e61fcd3ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Also:
- >  * Regenerate patch 0002 so it applies without hunk.
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/autoconf-archive/autoconf-archive.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-s/hunk/fuzz/
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
+index fadda54e86..3ef98f2f14 100644
+--- a/package/autoconf-archive/autoconf-archive.hash
++++ b/package/autoconf-archive/autoconf-archive.hash
+@@ -1,2 +1,4 @@
+ # Computed locally
+ sha256 17195c833098da79de5778ee90948f4c5d90ed1a0cf8391b4ab348e2ec511e3f  autoconf-archive-2019.01.06.tar.xz
++sha256 e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195  COPYING
++sha256 23ed0b84fa023bfa33433b498192cd08a3bfb1f4864a8ed791a84f3eb48b2dd2  COPYING.EXCEPTION
