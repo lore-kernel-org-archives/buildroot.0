@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 24 Jan 2020 22:50:44 +0000
+Date: Fri, 24 Jan 2020 22:50:31 +0000
 Subject: [Buildroot] [Bug 12501] libnss-3.49.1: ld error: multiple
  definition of `gcm_HashZeroX_hw'
 In-Reply-To: <bug-12501-163@https.bugs.busybox.net/>
 References: <bug-12501-163@https.bugs.busybox.net/>
-Message-ID: <bug-12501-163-emSGHwctZg@https.bugs.busybox.net/>
+Message-ID: <bug-12501-163-T6GpS7WfWe@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,17 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=12501
 
-Giulio Benetti <giulio.benetti@benettiengineering.com> changed:
+--- Comment #1 from Giulio Benetti <giulio.benetti@benettiengineering.com> ---
+Hi Aleksandr,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |giulio.benetti at benettiengin
-                   |.org                        |eering.com
+here you can find a patch that solves the problem:
+https://patchwork.ozlabs.org/patch/1229021/
+
+It bumps to version 3.49.2, where they've fixed that bug.
+
+Can you try to apply it and check if it works correctly?
+
+Thank you
 
 -- 
 You are receiving this mail because:
