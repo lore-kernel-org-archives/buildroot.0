@@ -1,57 +1,81 @@
-From: rscr <rafacrespiramon@gmail.com>
-Date: Fri, 24 Jan 2020 04:21:10 -0600 (CST)
-Subject: [Buildroot] QtWebEngine on RPI 0 W
-Message-ID: <1579861270269-0.post@n4.nabble.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 24 Jan 2020 11:37:45 +0100
+Subject: [Buildroot] [PATCH] docs/website: add commercial support section
+ with Mind
+Message-ID: <20200124103745.5132-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, 
+Add a section to the support page for commercial support.
 
-I have built a custom image for RPI 0 W. Now I need QT with QtWebEngine. 
+Add a box for Mind in that section.
 
-- As I am using  toolchain *arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf*, I
-have to use Qt 5.6.3 because it is supported by GCC > 4.8
+This can be used as an example for other companies that provide
+technical support for Buildroot.
 
-ISSUE:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+There has been some discussion (off-list) about how to formalize
+acceptance criteria for companies to be added to this commercial support
+section, but without conclusion AFAIU. So I thought I'd go ahead and
+just add one example that should be uncontroversial :-)
 
-When trying to build the image, I got building failed. Some of the errors
-are:
+I have not looked at how it looks in the browser, because I don't know
+how to deploy the website in a way that I can preview it...
+---
+ docs/website/support.html | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-Running configuration tests (phase 1)...
-/home/ibercomp/rcr/projects/cp4/buildroot/output/host/bin/arm-linux-gnueabihf-g++
--c -fvisibility=hidden fvisibility.c
-Symbol visibility control enabled.
-collect2: fatal error: cannot find 'ld'
-compilation terminated
-...
-Makefile:192: recipe for target 'db2.o' failed
-...
-Makefile:192: recipe for target 'ibase.o' failed
-...
-Makefile:195: recipe for target 'icu.o' failed
-make[2]: *** [icu.o] Error 1
-ICU disabled.
-The ICU library support cannot be enabled.
-
-
-Find attached my defconfig: cp4_defconfig.cp4_defconfig
-<http://buildroot-busybox.2317881.n4.nabble.com/file/t2824/cp4_defconfig.cp4_defconfig>  
-
-*Any idea of what I've been missing?*
-
-It is possible having Qt 5.11.3 and once built the image, add a QtWebEngine
-version supported by my gcc?  
-
-Kind Regards, 
-
-Rafa
-
-
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+diff --git a/docs/website/support.html b/docs/website/support.html
+index 1a5ce9e225..5128eb291e 100644
+--- a/docs/website/support.html
++++ b/docs/website/support.html
+@@ -92,6 +92,43 @@
+     </div>
+   </div>
+ 
++  <div class="panel panel-primary">
++    <div class="panel-heading">Commercial support</div>
++    <div class="panel-body">
++      <p>In addition, the following companies are able to provide commercial support.</p>
++
++      <div class="row">
++	<div class="col-sm-4">
++	  <div class="panel panel-default panel-sponsor">
++	    <div class="panel-body">
++	      <div class="col-sm-12" style="height: 150px;">
++		<a href="http://www.mind.be">
++		  <img class="img-responsive center-block" src="images/mind-logo.png"/>
++		</a>
++	      </div>
++	      <div class="col-sm-12" style="height: 350px;">
++		<p><a href="http://www.mind.be">Mind</a> provides consultancy
++		and services (outsourcing and fixed price projects), as well as
++		support and training, in the field of Linux, Android and Open
++		Source software for embedded systems. Within this field, Mind's
++		core expertise is in Low-level software development, Networking,
++		Security and Multimedia.</p>
++
++		<p>Our team consists of highly skilled and enthusiastic embedded
++		software engineers with a passion for Open Source software and
++		for hardware.</p>
++
++		<p>We can provide services for the initial bringup of a
++		Buildroot-based system, developing extensions to Buildroot, and
++		long-term maintenance.</p>
++	      </div>
++	    </div>
++	  </div>
++	</div>
++      </div>
++    </div>
++  </div>
++
+ </div><!--/.col-sm-10 -->
+ </div><!--/.row -->
+ </div>
+-- 
+2.21.1
