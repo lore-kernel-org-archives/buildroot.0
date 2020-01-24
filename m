@@ -1,13 +1,14 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Jan 2020 18:55:52 +0100
-Subject: [Buildroot] BR2_EXTERNAL and linux-ext-*.mk
-In-Reply-To: <670ea8ba-28a8-0d67-79f8-927b1eeee66a@mind.be>
-References: <CAEyMn7a2qBj2efokN1Au3qek8yNsg_hdjBzntkiC8nCFZ5M=rg@mail.gmail.com>
- <20200123214412.GZ32369@scaer>
- <5f9b9342-a3bc-a24e-932e-f11460f28886@mind.be>
- <20200124173809.GA32369@scaer>
- <670ea8ba-28a8-0d67-79f8-927b1eeee66a@mind.be>
-Message-ID: <20200124175552.GC32369@scaer>
+Date: Fri, 24 Jan 2020 19:14:38 +0100
+Subject: [Buildroot] [PATCH v2,
+ 2/4] package/celt051: needs dynamic library
+In-Reply-To: <069a1277-e9bc-c297-4da3-a89cd776c79c@mind.be>
+References: <20191117164452.5361-1-fontaine.fabrice@gmail.com>
+ <20191117164452.5361-2-fontaine.fabrice@gmail.com>
+ <871rtyyapg.fsf@dell.be.48ers.dk>
+ <CAPi7W80KMHAyKyHmmkHKZuyfQLyA5+cifwhdVp54PjwwK+8FtA@mail.gmail.com>
+ <069a1277-e9bc-c297-4da3-a89cd776c79c@mind.be>
+Message-ID: <20200124181438.GD32369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,14 +17,35 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2020-01-24 18:43 +0100, Arnout Vandecappelle spake thusly:
-> On 24/01/2020 18:38, Yann E. MORIN wrote:
-> > Do you already have some code for that big overhaul, except for the
-> > little snippet I provided and we discussed on a few months ago?
->  Of course not. All talk and no work, that's me.
+On 2020-01-23 23:23 +0100, Arnout Vandecappelle spake thusly:
+> On 23/11/2019 17:05, Fabrice Fontaine wrote:
+> > Dear Peter,
+> > 
+> > Le sam. 23 nov. 2019 ? 14:38, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+> >>
+> >>>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+> >>
+> >>  > celt051 can't be built statically with opus as opus embeds its own celt
+> >>  > version. So add a dynamic library dependency to celt051 (and not to
+> >>  > opus, as celt051 is only used optionally by spice whereas opus is
+> >>  > selected by 9 packages)
+> [snip]
+> >> Care to send a patch doing something like that? Thanks.
+> > An other option would be to remove celt051 package indeed the root
+> > cause of this static build failure is that celt has been merged into
+> > the IETF Opus codec and is now obsolete (see http://celt-codec.org/).
+> 
+>  Indeed, that makes more sense. Care to remove it? Legacy handling should select
+> BR2_PACKAGE_OPUS then (with appropriate explanation).
+> 
+>  Yann is developer for celt051, so please give a peep if it can't be removed.
 
-I don't have anything more either. Your comment gave me hope you had...
-Damn... ;-)
+Well, celt-0.51 was introduced because at the time. spice on;y supported
+that, and not the later versions, which is still documented in the
+package itself.
+
+But sicne then (7 years ago now), spice was updated, so maybe it can
+support newer versions, and maybe it works with Opus instead.
 
 Regards,
 Yann E. MORIN.
