@@ -1,130 +1,62 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 24 Jan 2020 00:02:10 +0100
-Subject: [Buildroot] [PATCH v3] package/qt5base: fix building with
- correct optimization
-In-Reply-To: <e57befe8-282b-d4c6-528e-4b26438d59b6@mind.be>
-References: <20191125112614.93405-1-giulio.benetti@benettiengineering.com>
- <e57befe8-282b-d4c6-528e-4b26438d59b6@mind.be>
-Message-ID: <f6f93fdf-769f-0d70-445a-3772d906c377@benettiengineering.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Fri, 24 Jan 2020 15:29:03 +1030
+Subject: [Buildroot] [PATCH] package/kexec-lite: Bump version
+Message-ID: <20200124045903.272466-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 1/23/20 11:33 PM, Arnout Vandecappelle wrote:
-> 
-> 
-> On 25/11/2019 12:26, Giulio Benetti wrote:
->> Qt5 has predefined optimization flags depending if you're building for
->> size, for debug etc. These flags are defined in
->> mkspecs/common/gcc-base.conf:
->>
->> QMAKE_CFLAGS_OPTIMIZE      = -O2
->> QMAKE_CFLAGS_OPTIMIZE_FULL = -O3
->> QMAKE_CFLAGS_OPTIMIZE_DEBUG = -Og
->> QMAKE_CFLAGS_OPTIMIZE_SIZE = -Os
->>
->> Then, in the same file, they use them to set
->> QMAKE_CFLAGS_RELEASE/QMAKE_CXXFLAGS_RELEASE:
->>
->> QMAKE_CFLAGS_RELEASE       += $$QMAKE_CFLAGS_OPTIMIZE
->> QMAKE_CXXFLAGS_RELEASE    += $$QMAKE_CFLAGS_RELEASE
->>
->> At this point there is our chance to override QMAKE_CFLAGS_OPTIMIZE_* in
->> qmake.conf, but it's too late, because QMAKE_CFLAGS_RELEASE is already
->> set(i.e. -O2) so trying to add or remove QMAKE_CFLAGS_OPTIMIZE(that is
->> reset now on) from QMAKE_CLAGS_RELEASE in
->> common/features/default_post.prf won't work:
->>
->> optimize_size {
->>      !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_SIZE)  {
->>          QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
->>          QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
->>          QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
->>          QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
->>      }
->> } else: optimize_full {
->>      !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_FULL)  {
->>          QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
->>          QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
->>          QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
->>          QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
->>      }
->> }
-> 
->   This stuff is complicated...
-> 
->>
->> So let's reset:
->> QMAKE_CFLAGS_RELEASE
->> QMAKE_CFLAGS_DEBUG
->> QMAKE_CXXFLAGS_RELEASE
->> QMAKE_CXXFLAGS_DEBUG
->> in our qmake.conf.in since the only assignment done in
->> mkspecs/common/gcc-base.conf only regards optimization.
-> 
->   But that's a really elegant solution!
+Upstream changes include:
 
-Thank you! It made me nut for days, not only for the solution itself but 
-for writing commit log(as you can see below)! I think it's been the most 
-difficult commit log I've ever written!
+ - Fix loading FreeBSD kernels with multiple PT_LOAD sections.
 
->>
->> This package is also affected by BR2_TOOLCHAIN_HAS_GCC_BUG_90620 and
->> it's been worked around by appending -O0 to CFLAGS/CXXFLAGS. This bug
->> prevented workaround to work overriding optimization flags, so solving
->> this also solves workaround problem.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/ada/adaa9b4bcc6f9d2b5e82c479859a07e8abf5cf13/
->> http://autobuild.buildroot.net/results/a83/a83bdd1f3bf309c07abebe871b017c331ed36e67/
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->> V1->V2:
->> * rewritten entire commit log
->> V2->V3:
->> * rewritten entire commit log again trying to explain better
->> ---
->>   package/qt5/qt5base/qmake.conf.in | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
->> index 2eb564e172..ae25b2e20f 100644
->> --- a/package/qt5/qt5base/qmake.conf.in
->> +++ b/package/qt5/qt5base/qmake.conf.in
->> @@ -19,6 +19,10 @@ QMAKE_CFLAGS_OPTIMIZE       =
-> 
->   I've added a comment above "Remove all optimisation flags, we really only want
-> our own."
+ - Use autotools to configure and build kexec-lite
 
-Yes, better to underline it.
+ - Add support for kexec_file_load
 
-Kind regards and thank you for reviewing this patch.
+The packaging is adjusted to account for the change in build systems.
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ package/kexec-lite/kexec-lite.hash |  2 +-
+ package/kexec-lite/kexec-lite.mk   | 13 +++----------
+ 2 files changed, 4 insertions(+), 11 deletions(-)
+
+diff --git a/package/kexec-lite/kexec-lite.hash b/package/kexec-lite/kexec-lite.hash
+index d71e8d00a45f..91e39d68ee99 100644
+--- a/package/kexec-lite/kexec-lite.hash
++++ b/package/kexec-lite/kexec-lite.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 2e9b131324cec9d27840179daa35e3159a4032ff78b74e301850faa007567d0e kexec-lite-87d044a895b1c004320a2676099a54a5a2a74f2e.tar.gz
++sha256 6eb115c8db3a071b970d7ba985ea5e2425e1e716952186f9a4fe329a2e2bb1ca kexec-lite-18ec88310c4134eca2f9e3c417cd09f5914bf633.tar.gz
+diff --git a/package/kexec-lite/kexec-lite.mk b/package/kexec-lite/kexec-lite.mk
+index 8e1ad8d52df6..e44c6df8f219 100644
+--- a/package/kexec-lite/kexec-lite.mk
++++ b/package/kexec-lite/kexec-lite.mk
+@@ -4,18 +4,11 @@
+ #
+ ################################################################################
+ 
+-KEXEC_LITE_VERSION = 87d044a895b1c004320a2676099a54a5a2a74f2e
++KEXEC_LITE_VERSION = 18ec88310c4134eca2f9e3c417cd09f5914bf633
+ KEXEC_LITE_SITE = $(call github,antonblanchard,kexec-lite,$(KEXEC_LITE_VERSION))
+ KEXEC_LITE_LICENSE = GPL-2.0+
+ KEXEC_LITE_LICENSE_FILES = COPYING
+ KEXEC_LITE_DEPENDENCIES = elfutils dtc
++KEXEC_LITE_AUTORECONF = YES
+ 
+-define KEXEC_LITE_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+-endef
+-
+-define KEXEC_LITE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 755 $(@D)/kexec $(TARGET_DIR)/usr/sbin/kexec
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> 
->   Applied to master, thanks.
-> 
->   Regards,
->   Arnout
-> 
->>   QMAKE_CFLAGS_OPTIMIZE_DEBUG =
->>   QMAKE_CFLAGS_OPTIMIZE_FULL  =
->>   QMAKE_CFLAGS_OPTIMIZE_SIZE  =
->> +QMAKE_CFLAGS_DEBUG =
->> +QMAKE_CXXFLAGS_DEBUG =
->> +QMAKE_CFLAGS_RELEASE =
->> +QMAKE_CXXFLAGS_RELEASE =
->>   CONFIG                 += nostrip
->>   
->>   QMAKE_LIBS             += -lrt -lpthread -ldl
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+2.24.1
