@@ -1,20 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Jan 2020 20:24:10 +0100
-Subject: [Buildroot] [PATCH v2 24/26] package/autoconf-archive: add hash
- for license file
-In-Reply-To: <20200123070014.12654-1-heiko.thiery@gmail.com> (Heiko Thiery's
- message of "Thu, 23 Jan 2020 08:00:14 +0100")
-References: <20200123070014.12654-1-heiko.thiery@gmail.com>
-Message-ID: <87eevovesl.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Jan 2020 20:25:28 +0100
+Subject: [Buildroot] [PATCH] package/uboot-tools: bump to version 2020.01
+In-Reply-To: <20200123080651.1002679-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Thu, 23 Jan 2020 09:06:51 +0100")
+References: <20200123080651.1002679-1-joerg.krause@embedded.rocks>
+Message-ID: <87a76cveqf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+ > Also:
+ >  * Regenerate patch 0002 so it applies without hunk.
+
+s/hunk/fuzz/
 
 Committed, thanks.
 
