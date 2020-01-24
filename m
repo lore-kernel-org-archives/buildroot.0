@@ -1,40 +1,112 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 24 Jan 2020 21:37:56 +0100
-Subject: [Buildroot] [PATCH] package/moarvm: bumpp to version 2020.01.1
-Message-ID: <20200124203756.19287-1-francois.perrad@gadz.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Jan 2020 22:38:55 +0100
+Subject: [Buildroot] [PATCH] package/linux: fix LINUX_PKGDIR with
+ br2-external linux-extensions
+Message-ID: <20200124213855.23215-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+When 'make' includes a new Makefile, it appends its path to the MAKEFILE_LIST
+variable. From that variable, we construct a few set of derivative
+variables:
+    pkgdir = $(dir $(lastword $(MAKEFILE_LIST)))
+    pkgname = $(lastword $(subst /, ,$(pkgdir)))
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index 5e11a2003..908885f68 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 9c8d8c01d64d404b35527d0ac773934a73201b84390cd02b14a9d9c5b12cde14  MoarVM-2020.01.tar.gz
-+sha256 dcb61e44a098e8375c385eb9d52bd6394255a388697b2f6a52d88e6cf4a53587  MoarVM-2020.01.1.tar.gz
- sha256 c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index 685128aae..e554ddb6d 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
-@@ -4,7 +4,7 @@
+Essentially, pkgdir is the full directory where the package is located
+(either relative to Buildroot's top directory for in-tree packages, or
+absolute for packages in br2-external trees), while pkgname is the last
+component of that directory.
+
+pkgdir is in turn used to seed FOO_PKGDIR.
+
+This all happens when we eventually call the package-generic infra,
+later down in the file.
+
+When they are parsed, the Makefiles for each linux-extensions are
+appended to MAKEFILE_LIST, after the linux.mk one. But since they are
+located in the same directory as the main linux.mk, the last component
+of MaKEFILE_LIST, which is no longer the main linux.mk, will still yield
+the correct values for the linux package.
+
+This is a tough assumption we made there and then.
+
+When we added the support for br2-external linux extensions, we where
+very cautious to explicitly scan them from a directory named 'linux', so
+that this would yield the correct package name.
+
+And that worked well so far, until someone needed to build an older
+kernel, for which our conditional patch is needed, and which just
+failed:
+
+    /bin/bash: [...]/buildroot-external-linux-test/linux//0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional: No such file or directory
+
+When we scan linux extensions from a br2-external tree, the last
+component of MAKEFILE_LIST is no longer in the same directory as the
+main linux.mk, and thus the assumption above falls to pieces...
+
+Again, when we added support for linux extensions from br2-external,
+although we cared about the package name (pkgname), we completely missed
+out on the package directory, and the LINUX_PKGDIR variable.
+
+We do not have a very clean way out of this mess, but we have a nice
+dirty trick scan the linux extensions from a br2-external tree before we
+scan the in-tree ones. That way, the last component of MAKEFILE_LIST is
+back to one that is in the same directory as the main linux.mk, and
+we're back on tracks.
+
+This is still very fragile, though, but short of a complete overhaul on
+how packages are parsed and evaluated, this is the best we can come in
+short order.
+
+Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Heiko Thiery <heiko.thiery@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/linux.mk | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 6e9d11dd38..6df62df41b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -527,18 +527,23 @@ endef
  #
- ################################################################################
+ # Note: our package infrastructure uses the full-path of the last-scanned
+ # Makefile to determine what package we're currently defining, using the
+-# last directory component in the path. As such, including other Makefiles,
+-# like below, before we call one of the *-package macros usually doesn't
+-# work.
+-# However, since the files we include here are in the same directory as
+-# the current Makefile, we are OK. But this is a hard requirement: files
+-# included here *must* either be in this same directory OR within a
+-# another directory with the name "linux" (in the BR2_EXTERNAL case).
+-include $(sort $(wildcard linux/linux-ext-*.mk))
+-
+-# Import linux-kernel-extensions from br2-externals
++# last directory component in the path. Additionally, the full path of
++# the package directory is also stored in _PKGDIR (e.g. to find patches)
++#
++# As such, including other Makefiles, like below, before we call one of
++# the *-package macros usually doesn't work.
++#
++# However, by including the in-tree extensions after the ones from the
++# br2-external trees, we're back to the situation where the last Makefile
++# scanned *is* in included from the correct directory.
++#
++# NOTE: this is very fragile, and extra care must be taken to ensure that
++# we always end up with an in-tree included file. That's mostly OK, because
++# we do have in-tree linux-extensions.
++#
+ include $(sort $(wildcard $(foreach ext,$(BR2_EXTERNAL_DIRS), \
+ 	$(ext)/linux/linux-ext-*.mk)))
++include $(sort $(wildcard linux/linux-ext-*.mk))
  
--MOARVM_VERSION = 2020.01
-+MOARVM_VERSION = 2020.01.1
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+ LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
+ 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
 -- 
 2.20.1
