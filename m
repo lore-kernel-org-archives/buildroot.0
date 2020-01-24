@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 24 Jan 2020 18:11:05 +0100
-Subject: [Buildroot] [PATCH 4/6] package/perl-sys-cpu: bump to version 0.61
+Date: Fri, 24 Jan 2020 18:11:06 +0100
+Subject: [Buildroot] [PATCH 5/6] package/perl-timedate: bump to version 2.31
 In-Reply-To: <20200124171107.26086-1-francois.perrad@gadz.org>
 References: <20200124171107.26086-1-francois.perrad@gadz.org>
-Message-ID: <20200124171107.26086-4-francois.perrad@gadz.org>
+Message-ID: <20200124171107.26086-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +12,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../0001-remove-extraneous-include.patch           | 14 +++++++-------
- package/perl-sys-cpu/perl-sys-cpu.hash             |  2 +-
- package/perl-sys-cpu/perl-sys-cpu.mk               |  4 ++--
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ package/perl-timedate/perl-timedate.hash | 4 ++--
+ package/perl-timedate/perl-timedate.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-sys-cpu/0001-remove-extraneous-include.patch b/package/perl-sys-cpu/0001-remove-extraneous-include.patch
-index eb7d8f76a..885b64410 100644
---- a/package/perl-sys-cpu/0001-remove-extraneous-include.patch
-+++ b/package/perl-sys-cpu/0001-remove-extraneous-include.patch
-@@ -11,10 +11,10 @@ Index: b/CPU.xs
- --- a/CPU.xs
- +++ b/CPU.xs
- @@ -24,7 +24,6 @@
--  #include <winreg.h>
-- #else                /* other (try unix) */
--  #include <unistd.h>
--- #include <sys/unistd.h>
-- #endif
-- #if defined(__sun) || defined(__sun__) 
--  #include <sys/processor.h>
-+  #include <winreg.h>
-+ #else                /* other (try unix) */
-+  #include <unistd.h>
-+- #include <sys/unistd.h>
-+ #endif
-+ #if defined(__sun) || defined(__sun__)
-+  #include <sys/processor.h>
-diff --git a/package/perl-sys-cpu/perl-sys-cpu.hash b/package/perl-sys-cpu/perl-sys-cpu.hash
-index 0977606b1..933a1bd80 100644
---- a/package/perl-sys-cpu/perl-sys-cpu.hash
-+++ b/package/perl-sys-cpu/perl-sys-cpu.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256 ca0ec47ab24070e3040e5075337cfc69721362d9bef50f6992072efe644d4d26  Sys-CPU-0.52.tar.gz
-+sha256 250a86b79c231001c4ae71d2f66428092a4fbb2070971acafd471aa49739c9e4  Sys-CPU-0.61.tar.gz
-diff --git a/package/perl-sys-cpu/perl-sys-cpu.mk b/package/perl-sys-cpu/perl-sys-cpu.mk
-index 8402bef8f..013de1b0d 100644
---- a/package/perl-sys-cpu/perl-sys-cpu.mk
-+++ b/package/perl-sys-cpu/perl-sys-cpu.mk
+diff --git a/package/perl-timedate/perl-timedate.hash b/package/perl-timedate/perl-timedate.hash
+index 234136d0c..5ddfbd251 100644
+--- a/package/perl-timedate/perl-timedate.hash
++++ b/package/perl-timedate/perl-timedate.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    b1d91153ac971347aee84292ed886c1c TimeDate-2.30.tar.gz
+-sha256 75bd254871cb5853a6aa0403ac0be270cdd75c9d1b6639f18ecba63c15298e86 TimeDate-2.30.tar.gz
++md5    230d361a13eae79dfe3fb650acece511 TimeDate-2.31.tar.gz
++sha256 5c720fedb245122d073ea9c030aca24b06a615c71d40c46f832a8a1809354d81 TimeDate-2.31.tar.gz
+ 
+ # computed by scancpan
+ sha256 e72e67533eb3ddd705ae718898945e2f3bf3702e91e85bb67824575706bd5bf9 README
+diff --git a/package/perl-timedate/perl-timedate.mk b/package/perl-timedate/perl-timedate.mk
+index bc4fc9a11..d4b6305ab 100644
+--- a/package/perl-timedate/perl-timedate.mk
++++ b/package/perl-timedate/perl-timedate.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_SYS_CPU_VERSION = 0.52
-+PERL_SYS_CPU_VERSION = 0.61
- PERL_SYS_CPU_SOURCE = Sys-CPU-$(PERL_SYS_CPU_VERSION).tar.gz
--PERL_SYS_CPU_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MK/MKODERER
-+PERL_SYS_CPU_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MZ/MZSANFORD
- PERL_SYS_CPU_LICENSE = Artistic or GPL-1.0+
- PERL_SYS_CPU_LICENSE_FILES = README
- 
+-PERL_TIMEDATE_VERSION = 2.30
++PERL_TIMEDATE_VERSION = 2.31
+ PERL_TIMEDATE_SOURCE = TimeDate-$(PERL_TIMEDATE_VERSION).tar.gz
+-PERL_TIMEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GB/GBARR
++PERL_TIMEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AT/ATOOMIC
+ PERL_TIMEDATE_LICENSE = Artistic or GPL-1.0+
+ PERL_TIMEDATE_LICENSE_FILES = README
+ PERL_TIMEDATE_DISTNAME = TimeDate
 -- 
 2.20.1
