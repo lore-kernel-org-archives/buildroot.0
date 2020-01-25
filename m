@@ -1,71 +1,104 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 25 Jan 2020 15:20:06 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/gensio: new package
-In-Reply-To: <87sgk3u6ry.fsf@dell.be.48ers.dk>
-References: <20200125054617.66028-1-james.hilliard1@gmail.com>
- <87sgk3u6ry.fsf@dell.be.48ers.dk>
-Message-ID: <CADvTj4pexA1xb3MHvBfArPCoDitaCRsfkxm7Tk-H4HfboDtQ4w@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 25 Jan 2020 23:45:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gensio: fix build without threads
+Message-ID: <20200125224510.3757122-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 25, 2020 at 4:14 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
->
->  > A library to abstract stream I/O like serial port, TCP, telnet, UDP,
->  > SSL, IPMI SOL, etc.
->
->  > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->  > ---
->  > Changes v1 -> v2:
->  >   - fix openssl path
->  >   - fix licenses
->  >   - fix config description format
->  > ---
->  >  DEVELOPERS                 |  1 +
->  >  package/Config.in          |  1 +
->  >  package/gensio/Config.in   |  8 ++++++++
->  >  package/gensio/gensio.hash |  7 +++++++
->  >  package/gensio/gensio.mk   | 29 +++++++++++++++++++++++++++++
->  >  5 files changed, 46 insertions(+)
->  >  create mode 100644 package/gensio/Config.in
->  >  create mode 100644 package/gensio/gensio.hash
->  >  create mode 100644 package/gensio/gensio.mk
->
-> ..
->
->  > +++ b/package/gensio/gensio.mk
->  > @@ -0,0 +1,29 @@
->  > +################################################################################
->  > +#
->  > +# gensio
->  > +#
->  > +################################################################################
->  > +
->  > +GENSIO_VERSION = 1.3.3
->  > +GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
->  > +GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
->  > +GENSIO_LICENSE_FILES = COPYING.LIB COPYING
->  > +GENSIO_INSTALL_STAGING = YES
->  > +
->  > +GENSIO_CONF_OPTS += \
->
-> Don't use += for the initial assignment.
->
->  > +    --without-openipmi \
->  > +    --without-swig \
->  > +    --without-python \
->  > +    --with-openssl=$(STAGING_DIR)/usr
->
-> This deserves a comment explaining why we need to do this
-> unconditionally of it openssl is enabled or not.
->
-> Committed with these fixes, thanks.
-Is the ser2net bump(https://patchwork.ozlabs.org/patch/1226210/) that
-depended on this good now as well?
->
-> --
-> Bye, Peter Korsgaard
+Fixes:
+ - http://autobuild.buildroot.org/results/b5847ac9e818571b746e2a81cf830b6caf50a7d7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...sue-compiling-with-pthreads-disabled.patch | 27 ++++++++++++
+ ...tor.c-fix-definition-of-pthread_mute.patch | 42 +++++++++++++++++++
+ 2 files changed, 69 insertions(+)
+ create mode 100644 package/gensio/0001-Fix-an-issue-compiling-with-pthreads-disabled.patch
+ create mode 100644 package/gensio/0002-lib-gensio_selector.c-fix-definition-of-pthread_mute.patch
+
+diff --git a/package/gensio/0001-Fix-an-issue-compiling-with-pthreads-disabled.patch b/package/gensio/0001-Fix-an-issue-compiling-with-pthreads-disabled.patch
+new file mode 100644
+index 0000000000..d7af0acb97
+--- /dev/null
++++ b/package/gensio/0001-Fix-an-issue-compiling-with-pthreads-disabled.patch
+@@ -0,0 +1,27 @@
++From 2e1a982ed0eef1188ad15995e177e7d40746685f Mon Sep 17 00:00:00 2001
++From: Corey Minyard <cminyard@mvista.com>
++Date: Tue, 7 Jan 2020 11:34:33 -0600
++Subject: [PATCH] Fix an issue compiling with pthreads disabled
++
++Define PTHREAD_MUTEX_INITIALIZER in this case.
++
++Signed-off-by: Corey Minyard <cminyard@mvista.com>
++[Retrieved from:
++https://github.com/cminyard/gensio/commit/2e1a982ed0eef1188ad15995e177e7d40746685f]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/gensio_selector.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/gensio_selector.c b/lib/gensio_selector.c
++index c050df0..66ada01 100644
++--- a/lib/gensio_selector.c
+++++ b/lib/gensio_selector.c
++@@ -30,6 +30,7 @@
++ #define pthread_mutex_unlock(l) do { } while (0)
++ #define pthread_mutex_init(l, n) do { } while (0)
++ #define pthread_mutex_destroy(l, n) do { } while (0)
+++#define PTHREAD_MUTEX_INITIALIZER 0
++ #endif
++ 
++ #include <gensio/gensio_selector.h>
+diff --git a/package/gensio/0002-lib-gensio_selector.c-fix-definition-of-pthread_mute.patch b/package/gensio/0002-lib-gensio_selector.c-fix-definition-of-pthread_mute.patch
+new file mode 100644
+index 0000000000..1c90bf3711
+--- /dev/null
++++ b/package/gensio/0002-lib-gensio_selector.c-fix-definition-of-pthread_mute.patch
+@@ -0,0 +1,42 @@
++From f1582f417aaf8f4fa7f1828f2504ba2f03909819 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 25 Jan 2020 23:35:54 +0100
++Subject: [PATCH] lib/gensio_selector.c: fix definition of
++ pthread_mutex_destroy
++
++Fix definition of pthread_mutex_destroy otherwise build without threads
++will fail on:
++
++gensio_selector.c: In function 'gensio_sel_free_lock':
++gensio_selector.c:82:38: error: macro "pthread_mutex_destroy" requires 2 arguments, but only 1 given
++     pthread_mutex_destroy(&lock->lock);
++                                      ^
++gensio_selector.c:82:5: error: 'pthread_mutex_destroy' undeclared (first use in this function)
++     pthread_mutex_destroy(&lock->lock);
++     ^~~~~~~~~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/b5847ac9e818571b746e2a81cf830b6caf50a7d7
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/cminyard/gensio/pull/8]
++---
++ lib/gensio_selector.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/gensio_selector.c b/lib/gensio_selector.c
++index a3bec38..615ab61 100644
++--- a/lib/gensio_selector.c
+++++ b/lib/gensio_selector.c
++@@ -29,7 +29,7 @@
++ #define pthread_mutex_lock(l) do { } while (0)
++ #define pthread_mutex_unlock(l) do { } while (0)
++ #define pthread_mutex_init(l, n) do { } while (0)
++-#define pthread_mutex_destroy(l, n) do { } while (0)
+++#define pthread_mutex_destroy(l) do { } while (0)
++ #define PTHREAD_MUTEX_INITIALIZER 0
++ #endif
++ 
++-- 
++2.24.1
++
+-- 
+2.24.1
