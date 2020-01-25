@@ -1,54 +1,31 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 26 Jan 2020 00:49:17 +0100
-Subject: [Buildroot] [PATCH 1/2] package/localedef: bump to version 2.30
-Message-ID: <20200125234918.24829-1-romain.naour@gmail.com>
+Date: Sun, 26 Jan 2020 00:49:18 +0100
+Subject: [Buildroot] [PATCH 2/2] package/glibc: add comment
+In-Reply-To: <20200125234918.24829-1-romain.naour@gmail.com>
+References: <20200125234918.24829-1-romain.naour@gmail.com>
+Message-ID: <20200125234918.24829-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the same version as for glibc package.
-
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../0001-HACK-only-build-and-install-localedef.patch            | 0
- .../localedef.hash                                              | 2 +-
- package/localedef/localedef.mk                                  | 2 +-
- 3 files changed, 2 insertions(+), 2 deletions(-)
- rename package/localedef/{2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436 => 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91}/0001-HACK-only-build-and-install-localedef.patch (100%)
- rename package/localedef/{2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436 => 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91}/localedef.hash (70%)
+ package/glibc/glibc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0001-HACK-only-build-and-install-localedef.patch
-similarity index 100%
-rename from package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0001-HACK-only-build-and-install-localedef.patch
-rename to package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0001-HACK-only-build-and-install-localedef.patch
-diff --git a/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/localedef.hash b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/localedef.hash
-similarity index 70%
-rename from package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/localedef.hash
-rename to package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/localedef.hash
-index b62487ce19..4283ea04b4 100644
---- a/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/localedef.hash
-+++ b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/localedef.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  a5d4cbe7eceaefd8bce1104994379818169961b59346d2f3897966912237b1e6  glibc-2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436.tar.gz
-+sha256  fe1ca8099bc2cda997d8a585f1a512e59df56c52c9c7363a4058da2725c8f4a9  glibc-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 4005737434..10a1929044 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index e4eb665ed6..2ca73343b3 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -16,6 +16,7 @@ GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
+ else
+ # Generate version string using:
  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436
-+LOCALEDEF_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- LOCALEDEF_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
++# When updating the version, please also update localedef
+ GLIBC_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
 -- 
 2.24.1
