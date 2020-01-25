@@ -1,57 +1,42 @@
 From: Nathaniel Roach <nroach44@nroach44.id.au>
-Date: Sat, 25 Jan 2020 23:32:33 +0800
-Subject: [Buildroot] [PATCH 1/2] package/liboping: remove -Werror build flag
-Message-ID: <20200125153233.32426-1-nroach44@nroach44.id.au>
+Date: Sat, 25 Jan 2020 23:34:05 +0800
+Subject: [Buildroot] package/xtables-addons: bump version to 3.7
+Message-ID: <20200125153405.315-1-nroach44@nroach44.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Same as https://bugs.gentoo.org/675344 - when building, GCC
-will fail the build due to a truncation warning.
-
-Remove -Wall and -Werror from Makefile.am and run automake
-to apply the change
+Resolves build failure with Linux 5.4
 
 Signed-off-by: Nathaniel Roach <nroach44@nroach44.id.au>
 ---
- package/liboping/0002-no-werror.patch | 14 ++++++++++++++
- package/liboping/liboping.mk          |  1 +
- 2 files changed, 15 insertions(+)
- create mode 100644 package/liboping/0002-no-werror.patch
+ package/xtables-addons/xtables-addons.hash | 1 +
+ package/xtables-addons/xtables-addons.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/liboping/0002-no-werror.patch b/package/liboping/0002-no-werror.patch
-new file mode 100644
-index 0000000000..febb2c0335
---- /dev/null
-+++ b/package/liboping/0002-no-werror.patch
-@@ -0,0 +1,14 @@
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -2,10 +2,6 @@ AUTOMAKE_OPTIONS = foreign no-dependencies
-+ 
-+ SUBDIRS = mans
-+ 
-+-if COMPILER_IS_GCC
-+-AM_CFLAGS = -Wall -Werror
-+-endif
-+-
-+ include_HEADERS = oping.h
-+ lib_LTLIBRARIES = liboping.la
-+ 
-+
-diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
-index 4aa3e30ee8..6e3530fdb0 100644
---- a/package/liboping/liboping.mk
-+++ b/package/liboping/liboping.mk
-@@ -11,6 +11,7 @@ LIBOPING_INSTALL_STAGING = YES
- LIBOPING_CONF_OPTS = --without-perl-bindings
- LIBOPING_LICENSE = LGPL-2.1+, GPL-2.0
- LIBOPING_LICENSE_FILES = COPYING
-+LIBOPING_AUTORECONF = YES
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index 0d30b1ab1e..fea496d997 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256 189ff57a0b8960969bd99141a6c79c345efa67e4461f450e2f162c9bd3d17da6 xtables-addons-3.5.tar.xz
++sha256 045ee3fcfe5d6edb95483cf49e2446ff8cab4bb79411018b18354138b70c5eb5 xtables-addons-3.7.tar.xz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 LICENSE
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index e8b931eaeb..1a74b80f46 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- LIBOPING_DEPENDENCIES += ncurses
+-XTABLES_ADDONS_VERSION = 3.5
++XTABLES_ADDONS_VERSION = 3.7
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+ XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
 -- 
 2.20.1
