@@ -1,62 +1,79 @@
-From: Nathaniel Roach <nroach44@nroach44.id.au>
-Date: Sat, 25 Jan 2020 23:35:33 +0800
-Subject: [Buildroot] [PATCH 1/2] package/liboping: remove -Werror build
- flag
-In-Reply-To: <20200125153233.32426-1-nroach44@nroach44.id.au>
-References: <20200125153233.32426-1-nroach44@nroach44.id.au>
-Message-ID: <a3148155-4e79-a8e6-7e7c-1f7a09e441c5@nroach44.id.au>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 25 Jan 2020 17:25:50 +0100
+Subject: [Buildroot] QtWebEngine on RPI 0 W
+In-Reply-To: <1579861270269-0.post@n4.nabble.com>
+References: <1579861270269-0.post@n4.nabble.com>
+Message-ID: <20200125172550.45366ce5@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch is standalone, title can be amended if no other changes are needed
+On Fri, 24 Jan 2020 04:21:10 -0600 (CST), rscr <rafacrespiramon@gmail.com> wrote:
 
+> Hi,
+>
+> I have built a custom image for RPI 0 W. Now I need QT with QtWebEngine.
+>
+> - As I am using  toolchain *arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf*, I
+> have to use Qt 5.6.3 because it is supported by GCC > 4.8
 
-On 25/1/20 11:32 pm, Nathaniel Roach wrote:
-> Same as https://bugs.gentoo.org/675344 - when building, GCC
-> will fail the build due to a truncation warning.
+Why stay with this old-gcc-version toolchain?
+
 >
-> Remove -Wall and -Werror from Makefile.am and run automake
-> to apply the change
+> ISSUE:
 >
-> Signed-off-by: Nathaniel Roach <nroach44@nroach44.id.au>
-> ---
->   package/liboping/0002-no-werror.patch | 14 ++++++++++++++
->   package/liboping/liboping.mk          |  1 +
->   2 files changed, 15 insertions(+)
->   create mode 100644 package/liboping/0002-no-werror.patch
+> When trying to build the image, I got building failed. Some of the errors
+> are:
 >
-> diff --git a/package/liboping/0002-no-werror.patch b/package/liboping/0002-no-werror.patch
-> new file mode 100644
-> index 0000000000..febb2c0335
-> --- /dev/null
-> +++ b/package/liboping/0002-no-werror.patch
-> @@ -0,0 +1,14 @@
-> +--- a/src/Makefile.am
-> ++++ b/src/Makefile.am
-> +@@ -2,10 +2,6 @@ AUTOMAKE_OPTIONS = foreign no-dependencies
-> +
-> + SUBDIRS = mans
-> +
-> +-if COMPILER_IS_GCC
-> +-AM_CFLAGS = -Wall -Werror
-> +-endif
-> +-
-> + include_HEADERS = oping.h
-> + lib_LTLIBRARIES = liboping.la
-> +
-> +
-> diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
-> index 4aa3e30ee8..6e3530fdb0 100644
-> --- a/package/liboping/liboping.mk
-> +++ b/package/liboping/liboping.mk
-> @@ -11,6 +11,7 @@ LIBOPING_INSTALL_STAGING = YES
->   LIBOPING_CONF_OPTS = --without-perl-bindings
->   LIBOPING_LICENSE = LGPL-2.1+, GPL-2.0
->   LIBOPING_LICENSE_FILES = COPYING
-> +LIBOPING_AUTORECONF = YES
->   
->   ifeq ($(BR2_PACKAGE_NCURSES),y)
->   LIBOPING_DEPENDENCIES += ncurses
+> Running configuration tests (phase 1)...
+> /home/ibercomp/rcr/projects/cp4/buildroot/output/host/bin/arm-linux-gnueabihf-g++
+> -c -fvisibility=hidden fvisibility.c
+> Symbol visibility control enabled.
+> collect2: fatal error: cannot find 'ld'
+> compilation terminated
+> ...
+> Makefile:192: recipe for target 'db2.o' failed
+> ...
+> Makefile:192: recipe for target 'ibase.o' failed
+> ...
+> Makefile:195: recipe for target 'icu.o' failed
+> make[2]: *** [icu.o] Error 1
+> ICU disabled.
+> The ICU library support cannot be enabled.
+>
+>
+> Find attached my defconfig: cp4_defconfig.cp4_defconfig
+> <http://buildroot-busybox.2317881.n4.nabble.com/file/t2824/cp4_defconfig.cp4_defconfig>
+
+Important information missing, which buildroot version do you use?
+
+Please provide a more complete failure output (one where can be seen which package is failing),
+see e.g. a random autobuild failure [1] for example....
+
+Regards,
+Peter
+
+[1]  http://autobuild.buildroot.net/results/03d7f4c955f55b4d15b51b55c8e779cfaf25c089/build-end.log
+
+>
+> *Any idea of what I've been missing?*
+>
+> It is possible having Qt 5.11.3 and once built the image, add a QtWebEngine
+> version supported by my gcc?
+>
+> Kind Regards,
+>
+> Rafa
+>
+>
+>
+>
+>
+> --
+> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
