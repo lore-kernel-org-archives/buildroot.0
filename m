@@ -1,76 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 25 Jan 2020 21:04:57 +0100
-Subject: [Buildroot] [PATCH 1/2] package/liboping: remove -Werror build
- flag
-In-Reply-To: <20200124143609.14313-1-nroach44@gmail.com>
-References: <20200124143609.14313-1-nroach44@gmail.com>
-Message-ID: <CAPi7W81yAtkC3xJPL++Lb-ZP=5yja0KRy00t3ALdp2Q4EGFv6g@mail.gmail.com>
+Date: Sat, 25 Jan 2020 21:06:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cppunit: bump to version 1.15.1
+Message-ID: <20200125200632.3722250-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nathaniel,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cppunit/cppunit.hash | 4 ++--
+ package/cppunit/cppunit.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Le ven. 24 janv. 2020 ? 15:36, Nathaniel Roach <nroach44@gmail.com> a ?crit :
->
-> Same as https://bugs.gentoo.org/675344 - when building, GCC
-> will fail the build due to a truncation warning.
-Can you be more specific on the build failure? For example, by
-providing a link on autobuilder?
-Otherwise, I would prefer an upstreamable solution such as adding a
---disable-werror option or adding a patch that fixes the issue.
-There is a pending PR on a truncation error on upstream github:
-https://github.com/octo/liboping/pull/50.
-Is it related to your build failure? In this case, I would suggest to
-retrieve this commit.
->
-> Remove -Wall and -Werror from Makefile.am and run automake
-> to apply the change
->
-> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
-> ---
->  package/liboping/0002-no-werror.patch | 14 ++++++++++++++
->  package/liboping/liboping.mk          |  1 +
->  2 files changed, 15 insertions(+)
->  create mode 100644 package/liboping/0002-no-werror.patch
->
-> diff --git a/package/liboping/0002-no-werror.patch b/package/liboping/0002-no-werror.patch
-> new file mode 100644
-> index 0000000000..febb2c0335
-> --- /dev/null
-> +++ b/package/liboping/0002-no-werror.patch
-> @@ -0,0 +1,14 @@
-> +--- a/src/Makefile.am
-> ++++ b/src/Makefile.am
-> +@@ -2,10 +2,6 @@ AUTOMAKE_OPTIONS = foreign no-dependencies
-> +
-> + SUBDIRS = mans
-> +
-> +-if COMPILER_IS_GCC
-> +-AM_CFLAGS = -Wall -Werror
-> +-endif
-> +-
-> + include_HEADERS = oping.h
-> + lib_LTLIBRARIES = liboping.la
-> +
-> +
-> diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
-> index 4aa3e30ee8..6e3530fdb0 100644
-> --- a/package/liboping/liboping.mk
-> +++ b/package/liboping/liboping.mk
-> @@ -11,6 +11,7 @@ LIBOPING_INSTALL_STAGING = YES
->  LIBOPING_CONF_OPTS = --without-perl-bindings
->  LIBOPING_LICENSE = LGPL-2.1+, GPL-2.0
->  LIBOPING_LICENSE_FILES = COPYING
-> +LIBOPING_AUTORECONF = YES
->
->  ifeq ($(BR2_PACKAGE_NCURSES),y)
->  LIBOPING_DEPENDENCIES += ncurses
-> --
-> 2.20.1
->
-Best Regards,
-
-Fabrice
+diff --git a/package/cppunit/cppunit.hash b/package/cppunit/cppunit.hash
+index 4948a8b2a1..47577f2a0b 100644
+--- a/package/cppunit/cppunit.hash
++++ b/package/cppunit/cppunit.hash
+@@ -1,6 +1,6 @@
+ # hash from: http://www.freedesktop.org/wiki/Software/cppunit/:
+-md5	7ad93022171710a541bfe4bfd8b4a381  cppunit-1.14.0.tar.gz
+-sha256	3d569869d27b48860210c758c4f313082103a5e58219a7669b52bfd29d674780  cppunit-1.14.0.tar.gz
++md5	9dc669e6145cadd9674873e24943e6dd  cppunit-1.15.1.tar.gz
++sha256	89c5c6665337f56fd2db36bc3805a5619709d51fb136e51937072f63fcc717a7  cppunit-1.15.1.tar.gz
+ 
+ # Locally calculated:
+ sha256	badf14d0aa3eaf1a7ae5f19a47a8ef2fc71a96802c4bc3d354535693c389f4e5  COPYING
+diff --git a/package/cppunit/cppunit.mk b/package/cppunit/cppunit.mk
+index 6d771f331b..3fe12b33bb 100644
+--- a/package/cppunit/cppunit.mk
++++ b/package/cppunit/cppunit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CPPUNIT_VERSION = 1.14.0
++CPPUNIT_VERSION = 1.15.1
+ CPPUNIT_SITE = http://dev-www.libreoffice.org/src
+ CPPUNIT_INSTALL_STAGING = YES
+ CPPUNIT_LICENSE = LGPL-2.1
+-- 
+2.24.1
