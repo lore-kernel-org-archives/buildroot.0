@@ -1,118 +1,126 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 24 Jan 2020 22:46:17 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/gensio: new package
-Message-ID: <20200125054617.66028-1-james.hilliard1@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sat, 25 Jan 2020 08:04:17 +0100
+Subject: [Buildroot] [PATCH] package/linux: fix LINUX_PKGDIR with
+ br2-external linux-extensions
+In-Reply-To: <20200124213855.23215-1-yann.morin.1998@free.fr>
+References: <20200124213855.23215-1-yann.morin.1998@free.fr>
+Message-ID: <CAEyMn7aD799BeoLAvt3YTxRwmQs9ZPVsE2hX-6CJSRrtsXp1Zw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A library to abstract stream I/O like serial port, TCP, telnet, UDP,
-SSL, IPMI SOL, etc.
+Hi,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - fix openssl path
-  - fix licenses
-  - fix config description format
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/gensio/Config.in   |  8 ++++++++
- package/gensio/gensio.hash |  7 +++++++
- package/gensio/gensio.mk   | 29 +++++++++++++++++++++++++++++
- 5 files changed, 46 insertions(+)
- create mode 100644 package/gensio/Config.in
- create mode 100644 package/gensio/gensio.hash
- create mode 100644 package/gensio/gensio.mk
+Am Fr., 24. Jan. 2020 um 22:39 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
+>
+> When 'make' includes a new Makefile, it appends its path to the MAKEFILE_LIST
+> variable. From that variable, we construct a few set of derivative
+> variables:
+>     pkgdir = $(dir $(lastword $(MAKEFILE_LIST)))
+>     pkgname = $(lastword $(subst /, ,$(pkgdir)))
+>
+> Essentially, pkgdir is the full directory where the package is located
+> (either relative to Buildroot's top directory for in-tree packages, or
+> absolute for packages in br2-external trees), while pkgname is the last
+> component of that directory.
+>
+> pkgdir is in turn used to seed FOO_PKGDIR.
+>
+> This all happens when we eventually call the package-generic infra,
+> later down in the file.
+>
+> When they are parsed, the Makefiles for each linux-extensions are
+> appended to MAKEFILE_LIST, after the linux.mk one. But since they are
+> located in the same directory as the main linux.mk, the last component
+> of MaKEFILE_LIST, which is no longer the main linux.mk, will still yield
+> the correct values for the linux package.
+>
+> This is a tough assumption we made there and then.
+>
+> When we added the support for br2-external linux extensions, we where
+> very cautious to explicitly scan them from a directory named 'linux', so
+> that this would yield the correct package name.
+>
+> And that worked well so far, until someone needed to build an older
+> kernel, for which our conditional patch is needed, and which just
+> failed:
+>
+>     /bin/bash: [...]/buildroot-external-linux-test/linux//0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional: No such file or directory
+>
+> When we scan linux extensions from a br2-external tree, the last
+> component of MAKEFILE_LIST is no longer in the same directory as the
+> main linux.mk, and thus the assumption above falls to pieces...
+>
+> Again, when we added support for linux extensions from br2-external,
+> although we cared about the package name (pkgname), we completely missed
+> out on the package directory, and the LINUX_PKGDIR variable.
+>
+> We do not have a very clean way out of this mess, but we have a nice
+> dirty trick scan the linux extensions from a br2-external tree before we
+> scan the in-tree ones. That way, the last component of MAKEFILE_LIST is
+> back to one that is in the same directory as the main linux.mk, and
+> we're back on tracks.
+>
+> This is still very fragile, though, but short of a complete overhaul on
+> how packages are parsed and evaluated, this is the best we can come in
+> short order.
+>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a1eb052652..07fd0e0055 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1132,6 +1132,7 @@ F:	configs/pine64_defconfig
- F:	configs/pine64_sopine_defconfig
- 
- N:	James Hilliard <james.hilliard1@gmail.com>
-+F:	package/gensio/
- F:	package/lua-std-debug/
- F:	package/lua-std-normalize/
- F:	package/pipewire/
-diff --git a/package/Config.in b/package/Config.in
-index 4c94914680..592f827c0b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1623,6 +1623,7 @@ menu "Networking"
- 	source "package/flickcurl/Config.in"
- 	source "package/fmlib/Config.in"
- 	source "package/freeradius-client/Config.in"
-+	source "package/gensio/Config.in"
- 	source "package/geoip/Config.in"
- 	source "package/glib-networking/Config.in"
- 	source "package/grpc/Config.in"
-diff --git a/package/gensio/Config.in b/package/gensio/Config.in
-new file mode 100644
-index 0000000000..f874d1a469
---- /dev/null
-+++ b/package/gensio/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_GENSIO
-+	bool "gensio"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  A library to abstract stream I/O like serial port, TCP,
-+	  telnet, UDP, SSL, IPMI SOL, etc.
-+
-+	  https://github.com/cminyard/gensio
-diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
-new file mode 100644
-index 0000000000..e3c0f02067
---- /dev/null
-+++ b/package/gensio/gensio.hash
-@@ -0,0 +1,7 @@
-+# From https://sourceforge.net/projects/ser2net/files/ser2net/
-+md5 34e1d41fff06fe7d3b98887fff6c2e90  gensio-1.3.3.tar.gz
-+sha1 50f3901378cab229594cfab4dafe4b6846957524  gensio-1.3.3.tar.gz
-+# Locally computed:
-+sha256 26f94b4fb8d689fc381c5fa7aa04db84b97785016c00e2bad8803d1bc668aa9b  gensio-1.3.3.tar.gz
-+sha256 501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-+sha256 dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-new file mode 100644
-index 0000000000..e883496081
---- /dev/null
-+++ b/package/gensio/gensio.mk
-@@ -0,0 +1,29 @@
-+################################################################################
-+#
-+# gensio
-+#
-+################################################################################
-+
-+GENSIO_VERSION = 1.3.3
-+GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
-+GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
-+GENSIO_LICENSE_FILES = COPYING.LIB COPYING
-+GENSIO_INSTALL_STAGING = YES
-+
-+GENSIO_CONF_OPTS += \
-+	--without-openipmi \
-+	--without-swig \
-+	--without-python \
-+	--with-openssl=$(STAGING_DIR)/usr
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+GENSIO_DEPENDENCIES += openssl
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+GENSIO_CONF_OPTS += --with-pthreads
-+else
-+GENSIO_CONF_OPTS += --without-pthreads
-+endif
-+
-+$(eval $(autotools-package))
--- 
-2.20.1
+Thank you for the very detailed explanation.
+
+> Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Heiko Thiery <heiko.thiery@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+
+> ---
+>  linux/linux.mk | 25 +++++++++++++++----------
+>  1 file changed, 15 insertions(+), 10 deletions(-)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 6e9d11dd38..6df62df41b 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -527,18 +527,23 @@ endef
+>  #
+>  # Note: our package infrastructure uses the full-path of the last-scanned
+>  # Makefile to determine what package we're currently defining, using the
+> -# last directory component in the path. As such, including other Makefiles,
+> -# like below, before we call one of the *-package macros usually doesn't
+> -# work.
+> -# However, since the files we include here are in the same directory as
+> -# the current Makefile, we are OK. But this is a hard requirement: files
+> -# included here *must* either be in this same directory OR within a
+> -# another directory with the name "linux" (in the BR2_EXTERNAL case).
+> -include $(sort $(wildcard linux/linux-ext-*.mk))
+> -
+> -# Import linux-kernel-extensions from br2-externals
+> +# last directory component in the path. Additionally, the full path of
+> +# the package directory is also stored in _PKGDIR (e.g. to find patches)
+> +#
+> +# As such, including other Makefiles, like below, before we call one of
+> +# the *-package macros usually doesn't work.
+> +#
+> +# However, by including the in-tree extensions after the ones from the
+> +# br2-external trees, we're back to the situation where the last Makefile
+> +# scanned *is* in included from the correct directory.
+> +#
+> +# NOTE: this is very fragile, and extra care must be taken to ensure that
+> +# we always end up with an in-tree included file. That's mostly OK, because
+> +# we do have in-tree linux-extensions.
+> +#
+>  include $(sort $(wildcard $(foreach ext,$(BR2_EXTERNAL_DIRS), \
+>         $(ext)/linux/linux-ext-*.mk)))
+> +include $(sort $(wildcard linux/linux-ext-*.mk))
+>
+>  LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
+>         $(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
+> --
+> 2.20.1
+>
