@@ -1,81 +1,57 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Sat, 25 Jan 2020 13:20:37 +0100
-Subject: [Buildroot] vmlinuz on x86_64
-In-Reply-To: <fd9f65e5eb361ad58d81c793458662de@umbiko.net>
-References: <mailman.11.1579867203.254328.buildroot@busybox.net>
- <fd9f65e5eb361ad58d81c793458662de@umbiko.net>
-Message-ID: <42c0dbc09d265f1c22688a3efd135381@umbiko.net>
+From: Nathaniel Roach <nroach44@nroach44.id.au>
+Date: Sat, 25 Jan 2020 23:32:33 +0800
+Subject: [Buildroot] [PATCH 1/2] package/liboping: remove -Werror build flag
+Message-ID: <20200125153233.32426-1-nroach44@nroach44.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Date: Fri, 24 Jan 2020 04:55:50 -0600 (CST)
-> From: a <anushka.parashar@tesco.com>
-> To: buildroot at busybox.net
-> Subject: [Buildroot] vmlinuz on x86_64
-> Message-ID: <1579863350359-0.post@n4.nabble.com>
-> Content-Type: text/plain; charset=us-ascii
-> 
-> Hi!
-> 
-> I'm trying to boot my image using Grub2 on efi mode. I have:
-> 1. bzImage
-> 2. initrd
-> 
-> But I'm not able to boot it.
+Same as https://bugs.gentoo.org/675344 - when building, GCC
+will fail the build due to a truncation warning.
 
-Hi a,
+Remove -Wall and -Werror from Makefile.am and run automake
+to apply the change
 
-I do not use UEFI normally, because the hardware refuses to boot without 
-attached monitor.
+Signed-off-by: Nathaniel Roach <nroach44@nroach44.id.au>
+---
+ package/liboping/0002-no-werror.patch | 14 ++++++++++++++
+ package/liboping/liboping.mk          |  1 +
+ 2 files changed, 15 insertions(+)
+ create mode 100644 package/liboping/0002-no-werror.patch
 
-While testing UEFI setups, I was able to boot a Buildroot generated 
-bzImage using an UEFI enabled device. In the kernel configuration within 
-Buildroot, CONFIG_EFI,CONFIG_EFI_PARTITION, CONFIG_EFI_RUNTIME_MAP, 
-CONFIG_EFI_RUNTIME_WRAPPERS, and CONFIG_EFI_VARS are enabled; probably 
-only CONFIG_EFI is needed.
-
-Steps to reproduce:
-
-# sgdisk --zap-all /dev/sdX
-# sgdisk --new=1:0:600000 --typecode=1:ef00 /dev/sdX
-# sgdisk --new=2:600000:0 --typecode=2:8300 /dev/sdX
-# mkfs.vfat -F32 -n GRUB2EFI /dev/sdX1
-# mkfs.ext4 -L NABLA /dev/sdX2
-
-# mount /dev/sdX1 /mnt
-# mkdir -p /mnt/EFI/BOOT
-# grub-mkimage -o /mnt/EFI/BOOT/bootx64.efi -p /efi/boot -O x86_64-efi  
-part_gpt part_msdos cpio fat exfat ext2  boot linux loopback normal 
-search search_fs_file search_fs_uuid search_label test serial terminal 
-efi_gop efifwsetup
-# cat << EOF > /mnt/EFI/BOOT/grub.cfg
-# grub.cfg
-set timeout=3
-set color_highlight=black/light-gray
-
-menuentry 'nabla' {
-search --set=root --label NABLA --hint hd0,gpt2
-linux /boot/bzImage quiet
-}
-
-menuentry 'nabla-debug' {
-         search --set=root --label NABLA --hint hd0,gpt2
-         linux /boot/bzImage debug ignore_loglevel
-}
-EOF
-
-# mkdir -p /tmp/nabla && mount /dev/sdX1 /tmp/nabla
-# mkdir /tmp/nabla/boot
-# cp /tmp/bzImage /tmp/nabla/boot/
-# sync && umount /dev/sdX?
-
-If your system does not boot check the frame buffer configuration (UEFI 
-boot seems to not support text based output), the CONFIG_EFI kconfig 
-variable, the modules needed /configured for grub2, and the boot 
-partition flags.
-
-Kind regards,
-Andreas
+diff --git a/package/liboping/0002-no-werror.patch b/package/liboping/0002-no-werror.patch
+new file mode 100644
+index 0000000000..febb2c0335
+--- /dev/null
++++ b/package/liboping/0002-no-werror.patch
+@@ -0,0 +1,14 @@
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -2,10 +2,6 @@ AUTOMAKE_OPTIONS = foreign no-dependencies
++ 
++ SUBDIRS = mans
++ 
++-if COMPILER_IS_GCC
++-AM_CFLAGS = -Wall -Werror
++-endif
++-
++ include_HEADERS = oping.h
++ lib_LTLIBRARIES = liboping.la
++ 
++
+diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
+index 4aa3e30ee8..6e3530fdb0 100644
+--- a/package/liboping/liboping.mk
++++ b/package/liboping/liboping.mk
+@@ -11,6 +11,7 @@ LIBOPING_INSTALL_STAGING = YES
+ LIBOPING_CONF_OPTS = --without-perl-bindings
+ LIBOPING_LICENSE = LGPL-2.1+, GPL-2.0
+ LIBOPING_LICENSE_FILES = COPYING
++LIBOPING_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ LIBOPING_DEPENDENCIES += ncurses
+-- 
+2.20.1
