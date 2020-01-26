@@ -1,26 +1,22 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 26 Jan 2020 09:01:20 +0100
-Subject: [Buildroot] Package can create
- LINUX_FINAL_RECURSIVE_DEPENDENCIES
-In-Reply-To: <20200126075046.GG32369@scaer>
-References: <CAEyMn7b_ESWcZ8ZBQAVYHxyXNQHrQUGx--8QGD1C6jj+F1=2gA@mail.gmail.com>
- <20200126075046.GG32369@scaer>
-Message-ID: <CAEyMn7bVMyR1AF72UeGh64JnQwEo7krRxmN4pBA4X5mo+NeWpQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 Jan 2020 09:07:20 +0100
+Subject: [Buildroot] [PATCH 1/2] package/localedef: bump to version 2.30
+In-Reply-To: <20200125234918.24829-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sun, 26 Jan 2020 00:49:17 +0100")
+References: <20200125234918.24829-1-romain.naour@gmail.com>
+Message-ID: <87k15etzd3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-> However, if your package provides a kernel patch, why does it not patch
-> the kernel with your new module to begin with, and have the module built
-> as part of the kernel build? After all, that's the whole point of linux
-> extensions: inject new code in the kernel build process.
+ > Use the same version as for glibc package.
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-We just integrate this code from an external supplier. Both the kernel
-module and the patches. And by doing this in that way we don't have to
-create the patch for the module. But I have check.
+Committed, thanks.
 
-Thank you
+-- 
+Bye, Peter Korsgaard
