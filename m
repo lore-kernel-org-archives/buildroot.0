@@ -1,118 +1,110 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 26 Jan 2020 21:42:53 +0100
-Subject: [Buildroot] [PATCH v14 0/5] gobject-introspection: New package
-In-Reply-To: <20191021200438.97453-1-aduskett@gmail.com>
-References: <20191021200438.97453-1-aduskett@gmail.com>
-Message-ID: <34e3cb2e-d377-a970-742b-68e86dba6a7b@benettiengineering.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 26 Jan 2020 13:57:40 -0700
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: use system-icu for
+ host-nodejs when available
+In-Reply-To: <20200126162659.GR32369@scaer>
+References: <20200126075848.66484-1-james.hilliard1@gmail.com>
+ <20200126162659.GR32369@scaer>
+Message-ID: <CADvTj4oy4x+9xKaZfz5wiiMf-qMfYJc1cjka-uCGYdYCj3aEBA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
-
-I'm bumping udisks which has new dependency libblockdev that in order 
-needs gobject-introspection and also libbytesize and volume_key that I'm 
-going to send patches for. So I'm testing this patch series.
-
-Only needed to rebase a little and update to latest 
-gobject-introspection version(1.63.2).
-
-I'll let you know all the results. You can follow the udisks version 
-bumping at:
-https://elinux.org/Buildroot#Important
-
-Kind regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-On 10/21/19 10:04 PM, aduskett at gmail.com wrote:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Included in version 14 of the gobject-introspection patch series.
-> The patch series is almost identical with V13 except for one
-> significant change:
-> 
-> With permission from Arnout I have included the patch:
-> package/pkg-meson.mk: set Python sysconfigdata
-> However; the patch has one big flaw I would like to discuss:
-> 
-> The patch breaks libglib2 if a target-python is not selected or is not yet
-> built and installed before building target libglib2. Indeed, it would be
-> because we would pass _PYTHON_SYSCONFIGDATA_NAME="" as an environment
-> variable, which leads to the following error during libglib2-configure:
-> meson.build:1978:0: ERROR: <ExternalProgram 'python3' -> ['output/host/bin/python3']> is not a valid python or it is missing setuptools
-> 
-> However, I do believe the patch is a better direction to go than the previous
-> patch: package/meson: prevent python include path manipulation for two
-> significant reasons:
-> 
-> 1) Meson does not have to be patched.
-> 2) It fixes the suffix of built python applications that use meson
->     (such as newer versions of python-gobject.) With the old patch, the suffix
->     of the python libraries is -x86-64 even though the binaries themselves would
->     be the target architecture, which causes import errors on the target. With
->     this patch, the suffix is correct.
->     
-> I propose keeping the patch but modifying it to work correctly if the
-> target-python isn't selected or isn't yet built. I need help however with this
-> as I am not great with makefile syntax this complex.
-> 
-> Thanks!
-> 
-> Adam
-> 
-> 
-> Adam Duskett (5):
->    package/libiberty: new package
->    package/prelink-cross: new package
->    package/gdb: depend on libiberty
->    package/pkg-meson.mk: set Python sysconfigdata
->    package/gobject-introspection: new package
-> 
->   DEVELOPERS                                    |   3 +
->   package/Config.in                             |   1 +
->   package/gdb/gdb.mk                            |   4 +-
->   ...lete-upstream-attempt-at-cross-compi.patch |  33 ++++
->   ...d-cross-compilation-support-to-meson.patch | 163 ++++++++++++++++++
->   ...d-disable-tests-when-cross-compiling.patch |  27 +++
->   ...canner-add-use-binary-wrapper-option.patch |  52 ++++++
->   ...scanner-add-a-use-ldd-wrapper-option.patch |  48 ++++++
->   ...scanner-add-a-lib-dirs-envvar-option.patch |  73 ++++++++
->   .../0007-Add-rpath-links-to-ccompiler.patch   |  29 ++++
->   ...-error-return-codes-from-ldd-wrapper.patch |  28 +++
->   package/gobject-introspection/Config.in       |  26 +++
->   .../gobject-introspection/g-ir-compiler.in    |   2 +
->   .../g-ir-scanner-lddwrapper.in                |   2 +
->   .../g-ir-scanner-qemuwrapper.in               |  17 ++
->   package/gobject-introspection/g-ir-scanner.in |   7 +
->   .../gobject-introspection.hash                |   4 +
->   .../gobject-introspection.mk                  | 103 +++++++++++
->   package/libiberty/libiberty.hash              |   2 +
->   package/libiberty/libiberty.mk                |  27 +++
->   package/pkg-meson.mk                          |   3 +
->   package/prelink-cross/prelink-cross.hash      |   3 +
->   package/prelink-cross/prelink-cross.mk        |  16 ++
->   23 files changed, 672 insertions(+), 1 deletion(-)
->   create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
->   create mode 100644 package/gobject-introspection/0002-add-cross-compilation-support-to-meson.patch
->   create mode 100644 package/gobject-introspection/0003-meson.build-disable-tests-when-cross-compiling.patch
->   create mode 100644 package/gobject-introspection/0004-giscanner-add-use-binary-wrapper-option.patch
->   create mode 100644 package/gobject-introspection/0005-giscanner-add-a-use-ldd-wrapper-option.patch
->   create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
->   create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
->   create mode 100644 package/gobject-introspection/0008-ignore-error-return-codes-from-ldd-wrapper.patch
->   create mode 100644 package/gobject-introspection/Config.in
->   create mode 100644 package/gobject-introspection/g-ir-compiler.in
->   create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
->   create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
->   create mode 100644 package/gobject-introspection/g-ir-scanner.in
->   create mode 100644 package/gobject-introspection/gobject-introspection.hash
->   create mode 100644 package/gobject-introspection/gobject-introspection.mk
->   create mode 100644 package/libiberty/libiberty.hash
->   create mode 100644 package/libiberty/libiberty.mk
->   create mode 100644 package/prelink-cross/prelink-cross.hash
->   create mode 100644 package/prelink-cross/prelink-cross.mk
-> 
+On Sun, Jan 26, 2020 at 9:27 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> James, All,
+>
+> On 2020-01-26 00:58 -0700, James Hilliard spake thusly:
+> > Fixes:
+> >  - http://autobuild.buildroot.net/results/1ef947553ec762dba6a6202b1cfc84ceed75dbb2/
+>
+> Pointing to an autobuild failure is nice, but you really need to provide
+> a bit more context and explanations on what you are doing here...
+>
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  package/nodejs/nodejs.mk | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> > index e6eb73d576..abc868c364 100644
+> > --- a/package/nodejs/nodejs.mk
+> > +++ b/package/nodejs/nodejs.mk
+> > @@ -65,7 +65,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
+> >               --shared-openssl-libpath=$(HOST_DIR)/lib \
+> >               --shared-zlib \
+> >               --no-cross-compiling \
+> > -             --with-intl=small-icu \
+> > +             --with-intl=$(if $(BR2_PACKAGE_ICU),system-icu,small-icu) \
+>
+> We already have a conditional block about icu, lines 35-40.
+>
+> >       )
+> >  endef
+> >
+> > @@ -80,6 +80,7 @@ define HOST_NODEJS_BUILD_CMDS
+> >       $(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+> >               $(MAKE) -C $(@D) \
+> >               $(HOST_CONFIGURE_OPTS) \
+> > +             $(if $(BR2_PACKAGE_ICU),CXXFLAGS.target="-DU_DISABLE_RENAMING=1") \
+>
+> Why do you need to account for a target package when building the host
+> variant of nodejs? If this is needed, then explain it in the commit log.
+I was doing that because the target icu package determines if host-icu
+is built, which breaks the small-icu host-nodejs build.
+>
+> Then, the way we usually pass such options is to append to the existing
+> CXXFLAGS. With the above comment, that would probably yield something
+> like (e.g. for target, ditto for host):
+I tried that approach first but it didn't seem to work seemingly due to the
+weird nodejs build system.
+>
+>     NODEJS_CXXFLAGS = $(TARGET_CXXFLAGS)
+>
+>     ifeq ($(BR2_PACKAGE_ICU),y)
+>     NODEJS_DEPENDENCIES += icu
+>     NODEJS_CONF_OPTS += --with-intl=system-icu
+>     NODEJS_CXXFLAGS += -DU_DISABLE_RENAMING=1
+>     else
+>     NODEJS_CONF_OPTS += --with-intl=small-icu
+>     endif
+>
+>     [...]
+>
+>     $(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+>         $(MAKE) -C $(@D) \
+>         $(TARGET_CONFIGURE_OPTS) \
+>         CXXFLAGS="$(NODEJS_CXXFLAGS)" \
+>         [...]
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >               LDFLAGS.host="$(HOST_LDFLAGS)" \
+> >               NO_LOAD=cctest.target.mk \
+> >               PATH=$(@D)/bin:$(BR_PATH)
+> > @@ -89,6 +90,7 @@ define HOST_NODEJS_INSTALL_CMDS
+> >       $(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+> >               $(MAKE) -C $(@D) install \
+> >               $(HOST_CONFIGURE_OPTS) \
+> > +             $(if $(BR2_PACKAGE_ICU),CXXFLAGS.target="-DU_DISABLE_RENAMING=1") \
+> >               LDFLAGS.host="$(HOST_LDFLAGS)" \
+> >               NO_LOAD=cctest.target.mk \
+> >               PATH=$(@D)/bin:$(BR_PATH)
+> > --
+> > 2.20.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
