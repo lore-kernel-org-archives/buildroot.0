@@ -1,75 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jan 2020 08:50:46 +0100
-Subject: [Buildroot] Package can create
- LINUX_FINAL_RECURSIVE_DEPENDENCIES
-In-Reply-To: <CAEyMn7b_ESWcZ8ZBQAVYHxyXNQHrQUGx--8QGD1C6jj+F1=2gA@mail.gmail.com>
-References: <CAEyMn7b_ESWcZ8ZBQAVYHxyXNQHrQUGx--8QGD1C6jj+F1=2gA@mail.gmail.com>
-Message-ID: <20200126075046.GG32369@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 Jan 2020 08:54:05 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/gensio: new package
+In-Reply-To: <CADvTj4pexA1xb3MHvBfArPCoDitaCRsfkxm7Tk-H4HfboDtQ4w@mail.gmail.com>
+ (James Hilliard's message of "Sat, 25 Jan 2020 15:20:06 -0700")
+References: <20200125054617.66028-1-james.hilliard1@gmail.com>
+ <87sgk3u6ry.fsf@dell.be.48ers.dk>
+ <CADvTj4pexA1xb3MHvBfArPCoDitaCRsfkxm7Tk-H4HfboDtQ4w@mail.gmail.com>
+Message-ID: <87o8uqtzz6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-On 2020-01-24 08:37 +0100, Heiko Thiery spake thusly:
-> I have a custom package (MYPACKAGE) in my BR2_EXTERNAL. This package
-> uses the "$(eval $(kernel-module))". In addition this package also
-> adds a kernel patch hook via BR2_EXTERNAL/linux-ext-MYPACKAGE.mk.
-> 
-> As far as I see MYPACKAGE depends on linux (due to kernel-module) and
-> LINUX depends on MYPACKAGE due to the dependency created to
-> LINUX_PATCH_DEPENDENCIES.
-> 
-> ----
-> # make linux-legal-info
-> linux/linux.mk:578: *** Recursive variable
-> 'LINUX_FINAL_RECURSIVE_DEPENDENCIES' references itself (eventually).
-> Stop.
-> make: *** [Makefile:23: _all] Error 2
-> ----
-> 
-> Is having a package that does both (linux kernel module and kernel
-> patching) allowed?
+ >> This deserves a comment explaining why we need to do this
+ >> unconditionally of it openssl is enabled or not.
+ >> 
+ >> Committed with these fixes, thanks.
 
-The linux-extensions are only _PATCH_DEPENDENCIES, that is the packages
-providing the extensions shall be extracted and patched before linux is
-patched.
+ > Is the ser2net bump(https://patchwork.ozlabs.org/patch/1226210/) that
+ > depended on this good now as well?
 
-So, as far as a build is concerned, this does not cause a circular
-dependency.
-
-However, as you noticed later, this does generate a circular dependency,
-like gathering the elgal-info.
-
-> Can this be fixed?
-
-No, that 'can't be, I'm afraid... :-/
-
-> I think linux only need the
-> dependency to the MYPACKAGE_EXTRACT because the patch is not a result
-> of the build of this package.
-
-This is already the case, see above.
-
-> What do you think?
-
-As a short-term solution, just provide towo packages: one that provides
-the extension, one that provides the kernel module.
-
-However, if your package provides a kernel patch, why does it not patch
-the kernel with your new module to begin with, and have the module built
-as part of the kernel build? After all, that's the whole point of linux
-extensions: inject new code in the kernel build process.
-
-Regards,
-Yann E. MORIN.
+Sorry, I ran out of time yesterday. I will have a look today.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
