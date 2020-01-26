@@ -1,98 +1,93 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jan 2020 16:42:45 +0100
-Subject: [Buildroot] [PATCH] docs/website: add commercial support
- section with Mind
-In-Reply-To: <20200124103745.5132-1-arnout@mind.be>
-References: <20200124103745.5132-1-arnout@mind.be>
-Message-ID: <20200126154245.GQ32369@scaer>
+Date: Sun, 26 Jan 2020 17:26:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: use system-icu for
+ host-nodejs when available
+In-Reply-To: <20200126075848.66484-1-james.hilliard1@gmail.com>
+References: <20200126075848.66484-1-james.hilliard1@gmail.com>
+Message-ID: <20200126162659.GR32369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+James, All,
 
-On 2020-01-24 11:37 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> Add a section to the support page for commercial support.
-> 
-> Add a box for Mind in that section.
-> 
-> This can be used as an example for other companies that provide
-> technical support for Buildroot.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On 2020-01-26 00:58 -0700, James Hilliard spake thusly:
+> Fixes:
+>  - http://autobuild.buildroot.net/results/1ef947553ec762dba6a6202b1cfc84ceed75dbb2/
+
+Pointing to an autobuild failure is nice, but you really need to provide
+a bit more context and explanations on what you are doing here...
+
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
-> There has been some discussion (off-list) about how to formalize
-> acceptance criteria for companies to be added to this commercial support
-> section, but without conclusion AFAIU. So I thought I'd go ahead and
-> just add one example that should be uncontroversial :-)
+>  package/nodejs/nodejs.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> I have not looked at how it looks in the browser, because I don't know
-> how to deploy the website in a way that I can preview it...
+> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> index e6eb73d576..abc868c364 100644
+> --- a/package/nodejs/nodejs.mk
+> +++ b/package/nodejs/nodejs.mk
+> @@ -65,7 +65,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
+>  		--shared-openssl-libpath=$(HOST_DIR)/lib \
+>  		--shared-zlib \
+>  		--no-cross-compiling \
+> -		--with-intl=small-icu \
+> +		--with-intl=$(if $(BR2_PACKAGE_ICU),system-icu,small-icu) \
 
-    $ git clone https://github.com/danvk/ssi-server.git ~/tmp/ssi-server
-    $ cd docs/website/
-    $ ~/tmp/ssi-server/ssi_server 8000 &
-    $ firefox http:/localhost:8000/
+We already have a conditional block about icu, lines 35-40.
+
+>  	)
+>  endef
+>  
+> @@ -80,6 +80,7 @@ define HOST_NODEJS_BUILD_CMDS
+>  	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+>  		$(MAKE) -C $(@D) \
+>  		$(HOST_CONFIGURE_OPTS) \
+> +		$(if $(BR2_PACKAGE_ICU),CXXFLAGS.target="-DU_DISABLE_RENAMING=1") \
+
+Why do you need to account for a target package when building the host
+variant of nodejs? If this is needed, then explain it in the commit log.
+
+Then, the way we usually pass such options is to append to the existing
+CXXFLAGS. With the above comment, that would probably yield something
+like (e.g. for target, ditto for host):
+
+    NODEJS_CXXFLAGS = $(TARGET_CXXFLAGS)
+
+    ifeq ($(BR2_PACKAGE_ICU),y)
+    NODEJS_DEPENDENCIES += icu
+    NODEJS_CONF_OPTS += --with-intl=system-icu
+    NODEJS_CXXFLAGS += -DU_DISABLE_RENAMING=1
+    else
+    NODEJS_CONF_OPTS += --with-intl=small-icu
+    endif
+
+    [...]
+
+    $(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+        $(MAKE) -C $(@D) \
+        $(TARGET_CONFIGURE_OPTS) \
+        CXXFLAGS="$(NODEJS_CXXFLAGS)" \
+        [...]
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  docs/website/support.html | 37 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/docs/website/support.html b/docs/website/support.html
-> index 1a5ce9e225..5128eb291e 100644
-> --- a/docs/website/support.html
-> +++ b/docs/website/support.html
-> @@ -92,6 +92,43 @@
->      </div>
->    </div>
->  
-> +  <div class="panel panel-primary">
-> +    <div class="panel-heading">Commercial support</div>
-> +    <div class="panel-body">
-> +      <p>In addition, the following companies are able to provide commercial support.</p>
-> +
-> +      <div class="row">
-> +	<div class="col-sm-4">
-> +	  <div class="panel panel-default panel-sponsor">
-> +	    <div class="panel-body">
-> +	      <div class="col-sm-12" style="height: 150px;">
-> +		<a href="http://www.mind.be">
-> +		  <img class="img-responsive center-block" src="images/mind-logo.png"/>
-> +		</a>
-> +	      </div>
-> +	      <div class="col-sm-12" style="height: 350px;">
-> +		<p><a href="http://www.mind.be">Mind</a> provides consultancy
-> +		and services (outsourcing and fixed price projects), as well as
-> +		support and training, in the field of Linux, Android and Open
-> +		Source software for embedded systems. Within this field, Mind's
-> +		core expertise is in Low-level software development, Networking,
-> +		Security and Multimedia.</p>
-> +
-> +		<p>Our team consists of highly skilled and enthusiastic embedded
-> +		software engineers with a passion for Open Source software and
-> +		for hardware.</p>
-> +
-> +		<p>We can provide services for the initial bringup of a
-> +		Buildroot-based system, developing extensions to Buildroot, and
-> +		long-term maintenance.</p>
-> +	      </div>
-> +	    </div>
-> +	  </div>
-> +	</div>
-> +      </div>
-> +    </div>
-> +  </div>
-> +
->  </div><!--/.col-sm-10 -->
->  </div><!--/.row -->
->  </div>
+>  		LDFLAGS.host="$(HOST_LDFLAGS)" \
+>  		NO_LOAD=cctest.target.mk \
+>  		PATH=$(@D)/bin:$(BR_PATH)
+> @@ -89,6 +90,7 @@ define HOST_NODEJS_INSTALL_CMDS
+>  	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+>  		$(MAKE) -C $(@D) install \
+>  		$(HOST_CONFIGURE_OPTS) \
+> +		$(if $(BR2_PACKAGE_ICU),CXXFLAGS.target="-DU_DISABLE_RENAMING=1") \
+>  		LDFLAGS.host="$(HOST_LDFLAGS)" \
+>  		NO_LOAD=cctest.target.mk \
+>  		PATH=$(@D)/bin:$(BR_PATH)
 > -- 
-> 2.21.1
+> 2.20.1
 > 
 > _______________________________________________
 > buildroot mailing list
