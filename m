@@ -1,33 +1,29 @@
-From: Andrea Simeoni <andreasimeoni73@gmail.com>
-Date: Mon, 27 Jan 2020 16:01:17 +0100
-Subject: [Buildroot] Requirements for QML in RPi4
-Message-ID: <CAPmASevs=kKKCspFM0M_ydbeSzNJLGEEiGmrgb6Ap-RqUtE-Ag@mail.gmail.com>
+From: Andreas Ziegler <br015@umbiko.net>
+Date: Mon, 27 Jan 2020 16:07:26 +0100
+Subject: [Buildroot] buildroot Digest, Vol 163, Issue 61
+In-Reply-To: <mailman.11.1580126403.253964.buildroot@busybox.net>
+References: <mailman.11.1580126403.253964.buildroot@busybox.net>
+Message-ID: <96682a9834fc6354ff2ffb841cffac54@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After several years I'm going to give another try to Buildroot :-)
-This time I built an environment for RPi4+Qt5.
-Surely I missed some packages because if I try to run a QML application I
-got the following error:
+> Date: Mon, 27 Jan 2020 04:59:03 -0600 (CST)
+> From: a <anushka.parashar@tesco.com>
+> To: buildroot at busybox.net
+> Subject: Re: [Buildroot] vmlinuz on x86_64
+> 
+> It's still not working, now it is reading the grub.cfg file and shows 
+> blank
+> screen after that.
+> 
+> Can't figure out what actually is happening!
 
-> Could not find DRM device!
-> Aborted
+Do you have a frame buffer device configured in your kernel config? 
+Legacy BIOS (needed for VGA text console) is disabled if you use UEFI 
+boot.
 
-Instead a Qt5 console application seems to run fine.
-
-I attach my .config file. Hope you can give me some hints!
-Best regards
-Andrea
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200127/b6a67040/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config
-Type: application/octet-stream
-Size: 109442 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200127/b6a67040/attachment.obj>
+Kind regards,
+Andreas
