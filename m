@@ -1,43 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jan 2020 17:48:16 +0100
-Subject: [Buildroot] [git commit] package/rpi-userland: bump version to
- 06bc6da
-Message-ID: <20200127163929.ADAF383C77@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 27 Jan 2020 17:55:02 +0100
+Subject: [Buildroot] [PATCH v14 4/5] package/pkg-meson.mk: set Python
+ sysconfigdata
+In-Reply-To: <20191021200438.97453-5-aduskett@gmail.com>
+References: <20191021200438.97453-1-aduskett@gmail.com>
+ <20191021200438.97453-5-aduskett@gmail.com>
+Message-ID: <31da668b-b6c6-96b9-ba9a-01d196229ce3@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=068160f46a84a0ea54690b6849e99e2cdeebd472
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rpi-userland/rpi-userland.hash | 2 +-
- package/rpi-userland/rpi-userland.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+this patch breaks pkg-meson.mk on building glib2, as suggested by Adam 
+lets substitute it with this patch:
+https://patchwork.ozlabs.org/patch/1120929/
 
-diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
-index 6d59f2aafc..b6d9b99b3c 100644
---- a/package/rpi-userland/rpi-userland.hash
-+++ b/package/rpi-userland/rpi-userland.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 d6231e9fa33c805cf7cbb559a0d6eb125605fc2ba862d9e5a3248778dd269859 rpi-userland-5070cb7fc150fc98f1ed64a7739c3356970d9f76.tar.gz
-+sha256 cf4dff40a2f4ec38bc7e42a80b989df1bf88e12d714f7e681f83c4e5a588f5c9 rpi-userland-06bc6daa02137ca72b7a2104afad81e82a44de17.tar.gz
- sha256 bee6f1249175683d8610651706e1aa7dffcbfd3f9c4c05bc1e5ab34f313c2db5 LICENCE
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 2b672b6c97..7dd29e88e7 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_USERLAND_VERSION = 5070cb7fc150fc98f1ed64a7739c3356970d9f76
-+RPI_USERLAND_VERSION = 06bc6daa02137ca72b7a2104afad81e82a44de17
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3-Clause
- RPI_USERLAND_LICENSE_FILES = LICENCE
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+On 10/21/19 10:04 PM, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> meson has support for Python dependencies, to e.g. build Python modules.
+> It parses Python's sysconfig module to find the appropriate
+> configuration variables. However, the sysconfig module is the one for
+> the host, _not_ for the target. Therefore, wrong values may be set. Many
+> of them get overridden anyway by the cross-compilation.conf. One
+> particular one that is problematic is that it uses the python-XXX.pc
+> pkg-config file for the host instead of the target, because it
+> explicitly sets the PKG_CONFIG_LIBDIR found in sysconfig.
+> 
+> Use the same trick as for python package: pass PYTHONPATH,
+> PYTHONNOUSERSITE and _PYTHON_SYSCONFIGDATA_NAME in the environment to
+> point to staging instead of host. This ensures the sysconfig from the
+> target is used instead of the one from the host.
+> 
+> An alternative would be to patch meson to not use the PKG_CONFIG_LIBDIR
+> from sysconfig. However, it is likely that other problems will pop up at
+> some point because of using the wrong sysconfig.
+> 
+> Note that this approach will still break things when meson needs to
+> build something for the host during a target build.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+> Changes v1 -> v14:
+>    - Add this patch to the series.
+> 
+>   package/pkg-meson.mk | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 184a22a44a..b6360fb738 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -84,6 +84,9 @@ define $(2)_CONFIGURE_CMDS
+>   	    ) \
+>   	    package/meson/cross-compilation.conf.in \
+>   	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+> +	_PYTHON_SYSCONFIGDATA_NAME="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PKG_PYTHON_SYSCONFIGDATA_NAME),_sysconfigdata)" \
+> +	PYTHONPATH="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PYTHON3_PATH),$$(PYTHON_PATH))" \
+> +	PYTHONNOUSERSITE=1 \
+>   	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+>   		--prefix=/usr \
+>   		--libdir=lib \
+> 
