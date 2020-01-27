@@ -1,70 +1,47 @@
-From: Tom Marcuzzi <tom.marcuzzi@orolia.com>
-Date: Mon, 27 Jan 2020 17:28:15 +0000
-Subject: [Buildroot] [PATCH] package/collectd: add config option for lua
-Message-ID: <20200127172740.11610-1-tom.marcuzzi@orolia.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 27 Jan 2020 14:42:46 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-debugtoolbar: bump
+ to version 0.6.0
+Message-ID: <20200127214246.122938-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Tom Marcuzzi <tom.marcuzzi@orolia.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/collectd/Config.in   | 7 +++++++
- package/collectd/collectd.mk | 9 ++-------
- 2 files changed, 9 insertions(+), 7 deletions(-)
+ .../python-aiohttp-debugtoolbar.hash                          | 4 ++--
+ .../python-aiohttp-debugtoolbar.mk                            | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 402de219f4..303b5dc01b 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -63,6 +63,13 @@ config BR2_PACKAGE_COLLECTD_LOGSTASH
- 	help
- 	  Writes log messages formatted as logstash JSON events.
+diff --git a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash
+index 655c46da3c..927bd32895 100644
+--- a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash
++++ b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp_debugtoolbar/json
+-md5	26b26163f3fbeb16ac67197902330942  aiohttp-debugtoolbar-0.5.0.tar.gz
+-sha256	697c9cfac4017d532e26a8c05f14c1a43b3b147f53460daacb0ed144401df441  aiohttp-debugtoolbar-0.5.0.tar.gz
++md5	496734057cb413d7a49a52a817802dbb  aiohttp-debugtoolbar-0.6.0.tar.gz
++sha256	ec231661133b40136608d39dfb688e7ea0c3d47b6ae6dee52d5bf24ceb9e4d45  aiohttp-debugtoolbar-0.6.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	94d638be2cb4f186cc62bb567455837757547c15f1b350863aaf05a38843b542  LICENSE
+diff --git a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk
+index 27eadd2173..319d20ffc5 100644
+--- a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk
++++ b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_COLLECTD_LUA
-+	bool "lua"
-+	select BR2_PACKAGE_LUA
-+	help
-+	  Embeds a Lua interpreter into collectd and provides an
-+	  interface to collectd's plugin system.
-+
- config BR2_PACKAGE_COLLECTD_NOTIFY_EMAIL
- 	bool "notify_email"
- 	depends on !BR2_STATIC_LIBS # libesmtp
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 0cd86adbd4..9258977613 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -89,6 +89,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_LOAD),--enable-load,--disable-load) \
- 	$(if $(BR2_PACKAGE_COLLECTD_LOGFILE),--enable-logfile,--disable-logfile) \
- 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),--enable-log_logstash,--disable-log_logstash) \
-+	$(if $(BR2_PACKAGE_COLLECTD_LUA),--enable-lua,--disable-lua) \
- 	$(if $(BR2_PACKAGE_COLLECTD_LVM),--enable-lvm,--disable-lvm) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MD),--enable-md,--disable-md) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),--enable-memcachec,--disable-memcachec) \
-@@ -162,6 +163,7 @@ COLLECTD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_COLLECTD_GRPC),grpc) \
- 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
- 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),yajl) \
-+	$(if $(BR2_PACKAGE_COLLECTD_LUA),lua) \
- 	$(if $(BR2_PACKAGE_COLLECTD_LVM),lvm2) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),libmemcached) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MODBUS),libmodbus) \
-@@ -213,13 +215,6 @@ else
- COLLECTD_CONF_OPTS += --with-libgcrypt=no
- endif
- 
--ifeq ($(BR2_PACKAGE_LUA),y)
--COLLECTD_DEPENDENCIES += lua
--COLLECTD_CONF_OPTS += --enable-lua
--else
--COLLECTD_CONF_OPTS += --disable-lua
--endif
--
- define COLLECTD_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
- 	rm -f $(TARGET_DIR)/usr/bin/collectd-nagios
+-PYTHON_AIOHTTP_DEBUGTOOLBAR_VERSION = 0.5.0
++PYTHON_AIOHTTP_DEBUGTOOLBAR_VERSION = 0.6.0
+ PYTHON_AIOHTTP_DEBUGTOOLBAR_SOURCE = aiohttp-debugtoolbar-$(PYTHON_AIOHTTP_DEBUGTOOLBAR_VERSION).tar.gz
+-PYTHON_AIOHTTP_DEBUGTOOLBAR_SITE = https://files.pythonhosted.org/packages/08/b1/b629499450a84e68b53d000e6150ae4dace68ae589c5ac36b6541777c8d3
++PYTHON_AIOHTTP_DEBUGTOOLBAR_SITE = https://files.pythonhosted.org/packages/3f/dd/5121417dfbeb4661673afa5c8708f1539889d0e54b1509a6fdf66705efc5
+ PYTHON_AIOHTTP_DEBUGTOOLBAR_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_DEBUGTOOLBAR_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_DEBUGTOOLBAR_LICENSE_FILES = LICENSE
 -- 
-2.17.1
+2.20.1
