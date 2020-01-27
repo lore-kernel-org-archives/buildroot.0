@@ -1,56 +1,59 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 27 Jan 2020 16:41:25 +0100
-Subject: [Buildroot] Requirements for QML in RPi4
-In-Reply-To: <CAPmASevs=kKKCspFM0M_ydbeSzNJLGEEiGmrgb6Ap-RqUtE-Ag@mail.gmail.com>
-References: <CAPmASevs=kKKCspFM0M_ydbeSzNJLGEEiGmrgb6Ap-RqUtE-Ag@mail.gmail.com>
-Message-ID: <20200127164125.1ec2b7ff@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 27 Jan 2020 17:22:29 +0100
+Subject: [Buildroot] [PATCH v2,
+ 2/4] package/celt051: needs dynamic library
+In-Reply-To: <20200124181438.GD32369@scaer>
+References: <20191117164452.5361-1-fontaine.fabrice@gmail.com>
+ <20191117164452.5361-2-fontaine.fabrice@gmail.com>
+ <871rtyyapg.fsf@dell.be.48ers.dk>
+ <CAPi7W80KMHAyKyHmmkHKZuyfQLyA5+cifwhdVp54PjwwK+8FtA@mail.gmail.com>
+ <069a1277-e9bc-c297-4da3-a89cd776c79c@mind.be> <20200124181438.GD32369@scaer>
+Message-ID: <9912b986-598b-6483-3e44-45327811a243@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andrea,
-
-On Mon, 27 Jan 2020 16:01:17 +0100, Andrea Simeoni <andreasimeoni73@gmail.com> wrote:
-
-> After several years I'm going to give another try to Buildroot :-)
-> This time I built an environment for RPi4+Qt5.
-> Surely I missed some packages because if I try to run a QML application I
-> got the following error:
->
-> > Could not find DRM device!
-> > Aborted
->
-> Instead a Qt5 console application seems to run fine.
->
-> I attach my .config file. Hope you can give me some hints!
-
-You seem to have a RPi4-64bit config, trying to run
-mesa vc4?
-
-Sorry, not owning an RPi4 for testing, but for the RPi3 you
-need to enable the right Device-Tree-Overlay in your config.txt,
-e.g. (see the following two links for earlier discussion [1], [2]):
-
-dtoverlay=vc4-fkms-v3d
-
-This may or may not work as RPi3 is VC4 and RPi4 is VC6 ([3]),
-but Gentoo claims to have RPi4 running with mesa ([4], [5])...
-
-Alternatively your can try RPi4-32bit and enable rpi-userland/BR2_PACKAGE_RPI_USERLAND
-instead of mesa...
-
-Regards,
-Peter
 
 
-[1] http://lists.busybox.net/pipermail/buildroot/2019-October/264561.html
-[2] http://lists.busybox.net/pipermail/buildroot/2019-November/265133.html
-[3] http://lists.busybox.net/pipermail/buildroot/2019-November/265139.html
-[4] http://lists.busybox.net/pipermail/buildroot/2019-November/265153.html
-[5] https://github.com/sakaki-/gentoo-on-rpi-64bit
+On 24/01/2020 19:14, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2020-01-23 23:23 +0100, Arnout Vandecappelle spake thusly:
+>> On 23/11/2019 17:05, Fabrice Fontaine wrote:
+>>> Dear Peter,
+>>>
+>>> Le sam. 23 nov. 2019 ? 14:38, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+>>>>
+>>>>>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>
+>>>>  > celt051 can't be built statically with opus as opus embeds its own celt
+>>>>  > version. So add a dynamic library dependency to celt051 (and not to
+>>>>  > opus, as celt051 is only used optionally by spice whereas opus is
+>>>>  > selected by 9 packages)
+>> [snip]
+>>>> Care to send a patch doing something like that? Thanks.
+>>> An other option would be to remove celt051 package indeed the root
+>>> cause of this static build failure is that celt has been merged into
+>>> the IETF Opus codec and is now obsolete (see http://celt-codec.org/).
+>>
+>>  Indeed, that makes more sense. Care to remove it? Legacy handling should select
+>> BR2_PACKAGE_OPUS then (with appropriate explanation).
+>>
+>>  Yann is developer for celt051, so please give a peep if it can't be removed.
+> 
+> Well, celt-0.51 was introduced because at the time. spice on;y supported
+> that, and not the later versions, which is still documented in the
+> package itself.
+> 
+> But sicne then (7 years ago now), spice was updated, so maybe it can
+> support newer versions, and maybe it works with Opus instead.
 
+ Opus support in spice has already been added with the bump to 0.14.1 in
+f33f7a4f6407f.
 
-> Best regards
-> Andrea
+ So if someone could remove celt051 please :-)
+
+ Regards,
+ Arnout
