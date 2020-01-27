@@ -1,47 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jan 2020 17:48:31 +0100
-Subject: [Buildroot] [PATCH v4 2/3] package/rpi-firmware: bump version
- to 01ecfd2
-In-Reply-To: <20200124115738.16642-2-ps.report@gmx.net> (Peter Seiderer's
- message of "Fri, 24 Jan 2020 12:57:37 +0100")
-References: <20200124115738.16642-1-ps.report@gmx.net>
- <20200124115738.16642-2-ps.report@gmx.net>
-Message-ID: <87a768sv4w.fsf@dell.be.48ers.dk>
+Date: Mon, 27 Jan 2020 17:49:34 +0100
+Subject: [Buildroot] [PATCH] docs/website: add commercial support
+ section with Mind
+In-Reply-To: <20200126154245.GQ32369@scaer> (Yann E. MORIN's message of "Sun, 
+ 26 Jan 2020 16:42:45 +0100")
+References: <20200124103745.5132-1-arnout@mind.be>
+ <20200126154245.GQ32369@scaer>
+Message-ID: <875zgwsv35.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Keep rpi-firmware up-to-date with the kernel
- > vesion bump (4.19.97).
+ > Arnout, All,
+ > On 2020-01-24 11:37 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+ >> Add a section to the support page for commercial support.
+ >> 
+ >> Add a box for Mind in that section.
+ >> 
+ >> This can be used as an example for other companies that provide
+ >> technical support for Buildroot.
+ >> 
+ >> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ >> ---
+ >> There has been some discussion (off-list) about how to formalize
+ >> acceptance criteria for companies to be added to this commercial support
+ >> section, but without conclusion AFAIU. So I thought I'd go ahead and
+ >> just add one example that should be uncontroversial :-)
+ >> 
+ >> I have not looked at how it looks in the browser, because I don't know
+ >> how to deploy the website in a way that I can preview it...
 
- > Go back to sha1 version scheme instead of official tag (after
- > only two tag versions) to keep up with the up-to-date kernel
- > version (as the offical last tag is for 4.19.94).
+ >     $ git clone https://github.com/danvk/ssi-server.git ~/tmp/ssi-server
+ >     $ cd docs/website/
+ >     $ ~/tmp/ssi-server/ssi_server 8000 &
+ >     $ firefox http:/localhost:8000/
 
- > Update boot/LICENCE.broadcom hash according to the
- > 'Update to support customisation program ' change ([1]).
-
- > [1] https://github.com/raspberrypi/firmware/commit/dd9e9ebb5d5306e91acb135db890cf18f3a5eea2#diff-b7cccbd9821a372750de822dfd97a843
-
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- > ---
- > Changes v1 -> v2:
- >   - no changes
-
- > Changes v2 -> v3:
- >   - bump version to be2713b/4.19.95
- >   - add sha1 explanation
- >   - update boot/LICENCE.broadcom hash
-
- > Changes v3 -> v4:
- >   - bump version to 01ecfd2/4.19.97
- >   - update change tag/sha1 reasoning
-
-Committed, thanks.
+Neat. I normally just open the html file manually, which also kind of
+works for most things (not layout obviously).
 
 -- 
 Bye, Peter Korsgaard
