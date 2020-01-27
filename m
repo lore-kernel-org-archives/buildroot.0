@@ -1,40 +1,70 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 27 Jan 2020 19:54:13 +0100
-Subject: [Buildroot] [PATCH 2/2] package/kodi-visualisation-goom: fix build
- with gcc-4.9
-In-Reply-To: <20200127185413.1760-1-bernd.kuhls@t-online.de>
-References: <20200127185413.1760-1-bernd.kuhls@t-online.de>
-Message-ID: <20200127185413.1760-2-bernd.kuhls@t-online.de>
+From: Tom Marcuzzi <tom.marcuzzi@orolia.com>
+Date: Mon, 27 Jan 2020 17:28:15 +0000
+Subject: [Buildroot] [PATCH] package/collectd: add config option for lua
+Message-ID: <20200127172740.11610-1-tom.marcuzzi@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes build error:
-
-output/build/kodi-visualisation-goom-2.1.0-Leia/lib/goom/src/lines.c:
-In function 'goom_lines_draw':
-output/build/kodi-visualisation-goom-2.1.0-Leia/lib/goom/src/lines.c:232:3:
-error: 'for' loop initial declarations are only allowed in C99 or C11 mode
-   for (int i = 1; i < AUDIO_SAMPLE_LEN; i++) {
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Tom Marcuzzi <tom.marcuzzi@orolia.com>
 ---
- package/kodi-visualisation-goom/kodi-visualisation-goom.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/collectd/Config.in   | 7 +++++++
+ package/collectd/collectd.mk | 9 ++-------
+ 2 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-index d742e00e5a..0184d8474c 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-@@ -11,4 +11,7 @@ KODI_VISUALISATION_GOOM_LICENSE_FILES = src/Main.cpp
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 402de219f4..303b5dc01b 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -63,6 +63,13 @@ config BR2_PACKAGE_COLLECTD_LOGSTASH
+ 	help
+ 	  Writes log messages formatted as logstash JSON events.
  
- KODI_VISUALISATION_GOOM_DEPENDENCIES = glm kodi
- 
-+KODI_VISUALISATION_GOOM_CONF_OPTS += \
-+	-DCMAKE_C_FLAGS="-std=c11"
++config BR2_PACKAGE_COLLECTD_LUA
++	bool "lua"
++	select BR2_PACKAGE_LUA
++	help
++	  Embeds a Lua interpreter into collectd and provides an
++	  interface to collectd's plugin system.
 +
- $(eval $(cmake-package))
+ config BR2_PACKAGE_COLLECTD_NOTIFY_EMAIL
+ 	bool "notify_email"
+ 	depends on !BR2_STATIC_LIBS # libesmtp
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 0cd86adbd4..9258977613 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -89,6 +89,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOAD),--enable-load,--disable-load) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOGFILE),--enable-logfile,--disable-logfile) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),--enable-log_logstash,--disable-log_logstash) \
++	$(if $(BR2_PACKAGE_COLLECTD_LUA),--enable-lua,--disable-lua) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LVM),--enable-lvm,--disable-lvm) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MD),--enable-md,--disable-md) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),--enable-memcachec,--disable-memcachec) \
+@@ -162,6 +163,7 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_GRPC),grpc) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),yajl) \
++	$(if $(BR2_PACKAGE_COLLECTD_LUA),lua) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LVM),lvm2) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),libmemcached) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MODBUS),libmodbus) \
+@@ -213,13 +215,6 @@ else
+ COLLECTD_CONF_OPTS += --with-libgcrypt=no
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LUA),y)
+-COLLECTD_DEPENDENCIES += lua
+-COLLECTD_CONF_OPTS += --enable-lua
+-else
+-COLLECTD_CONF_OPTS += --disable-lua
+-endif
+-
+ define COLLECTD_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+ 	rm -f $(TARGET_DIR)/usr/bin/collectd-nagios
 -- 
-2.20.1
+2.17.1
