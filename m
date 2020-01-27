@@ -1,72 +1,23 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 27 Jan 2020 17:55:02 +0100
-Subject: [Buildroot] [PATCH v14 4/5] package/pkg-meson.mk: set Python
- sysconfigdata
-In-Reply-To: <20191021200438.97453-5-aduskett@gmail.com>
-References: <20191021200438.97453-1-aduskett@gmail.com>
- <20191021200438.97453-5-aduskett@gmail.com>
-Message-ID: <31da668b-b6c6-96b9-ba9a-01d196229ce3@benettiengineering.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Jan 2020 18:04:22 +0100
+Subject: [Buildroot] [PATCH 2/2] package/ser2net: bump to version 4.1.1
+In-Reply-To: <20200121014014.32703-2-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Mon, 20 Jan 2020 18:40:14 -0700")
+References: <20200121014014.32703-1-james.hilliard1@gmail.com>
+ <20200121014014.32703-2-james.hilliard1@gmail.com>
+Message-ID: <871rrksueh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-this patch breaks pkg-meson.mk on building glib2, as suggested by Adam 
-lets substitute it with this patch:
-https://patchwork.ozlabs.org/patch/1120929/
+ > Added new ser2net dependencies gensio and libyaml.
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Best regards
+Committed after extending the commit message a bit, thanks.
+
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-On 10/21/19 10:04 PM, aduskett at gmail.com wrote:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> meson has support for Python dependencies, to e.g. build Python modules.
-> It parses Python's sysconfig module to find the appropriate
-> configuration variables. However, the sysconfig module is the one for
-> the host, _not_ for the target. Therefore, wrong values may be set. Many
-> of them get overridden anyway by the cross-compilation.conf. One
-> particular one that is problematic is that it uses the python-XXX.pc
-> pkg-config file for the host instead of the target, because it
-> explicitly sets the PKG_CONFIG_LIBDIR found in sysconfig.
-> 
-> Use the same trick as for python package: pass PYTHONPATH,
-> PYTHONNOUSERSITE and _PYTHON_SYSCONFIGDATA_NAME in the environment to
-> point to staging instead of host. This ensures the sysconfig from the
-> target is used instead of the one from the host.
-> 
-> An alternative would be to patch meson to not use the PKG_CONFIG_LIBDIR
-> from sysconfig. However, it is likely that other problems will pop up at
-> some point because of using the wrong sysconfig.
-> 
-> Note that this approach will still break things when meson needs to
-> build something for the host during a target build.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
-> Changes v1 -> v14:
->    - Add this patch to the series.
-> 
->   package/pkg-meson.mk | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index 184a22a44a..b6360fb738 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -84,6 +84,9 @@ define $(2)_CONFIGURE_CMDS
->   	    ) \
->   	    package/meson/cross-compilation.conf.in \
->   	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
-> +	_PYTHON_SYSCONFIGDATA_NAME="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PKG_PYTHON_SYSCONFIGDATA_NAME),_sysconfigdata)" \
-> +	PYTHONPATH="$$(if $$(BR2_PACKAGE_PYTHON3),$$(PYTHON3_PATH),$$(PYTHON_PATH))" \
-> +	PYTHONNOUSERSITE=1 \
->   	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
->   		--prefix=/usr \
->   		--libdir=lib \
-> 
+Bye, Peter Korsgaard
