@@ -1,44 +1,100 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Jan 2020 22:03:54 +0100
-Subject: [Buildroot] [git commit] package/xtables-addons: bump version to 3.7
-Message-ID: <20200126205801.688BB83C0C@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 26 Jan 2020 17:55:39 -0700
+Subject: [Buildroot] [PATCH v2 1/1] package/nodejs: use system-icu for
+ host-nodejs when available
+Message-ID: <20200127005539.125369-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=447a72a68208cf70941d8a621dbb53d3297f2a76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Removed LDFLAGS.host as it doesn't appear to be needed.
 
-Resolves build failure with Linux 5.4
+Set CXXFLAGS.target to -DU_DISABLE_RENAMING=1 when building with
+system-icu since host-icu is built with --disable-renaming.
 
-Signed-off-by: Nathaniel Roach <nroach44@nroach44.id.au>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/1ef947553ec762dba6a6202b1cfc84ceed75dbb2/
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/xtables-addons/xtables-addons.hash | 1 +
- package/xtables-addons/xtables-addons.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+Changes v1 -> v2:
+  - removed LDFLAGS.host
+  - Rework style for setting
+---
+ package/nodejs/nodejs.mk | 29 +++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index 0d30b1ab1e..fea496d997 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
-@@ -1,3 +1,4 @@
- # Locally calculated
- sha256 189ff57a0b8960969bd99141a6c79c345efa67e4461f450e2f162c9bd3d17da6 xtables-addons-3.5.tar.xz
-+sha256 045ee3fcfe5d6edb95483cf49e2446ff8cab4bb79411018b18354138b70c5eb5 xtables-addons-3.7.tar.xz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 LICENSE
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index e8b931eaeb..1a74b80f46 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index e6eb73d576..432f47c66a 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -25,6 +25,17 @@ NODEJS_CONF_OPTS = \
+ 	--cross-compiling \
+ 	--dest-os=linux
  
--XTABLES_ADDONS_VERSION = 3.5
-+XTABLES_ADDONS_VERSION = 3.7
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
- XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
++HOST_NODEJS_CONF_OPTS = \
++	--prefix=$(HOST_DIR) \
++	--without-snapshot \
++	--without-dtrace \
++	--without-etw \
++	--shared-openssl \
++	--shared-openssl-includes=$(HOST_DIR)/include/openssl \
++	--shared-openssl-libpath=$(HOST_DIR)/lib \
++	--shared-zlib \
++	--no-cross-compiling
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ NODEJS_DEPENDENCIES += openssl
+ NODEJS_CONF_OPTS += --shared-openssl
+@@ -35,8 +46,11 @@ endif
+ ifeq ($(BR2_PACKAGE_ICU),y)
+ NODEJS_DEPENDENCIES += icu
+ NODEJS_CONF_OPTS += --with-intl=system-icu
++HOST_NODEJS_CONF_OPTS += --with-intl=system-icu
++HOST_NODEJS_CXXFLAGS = -DU_DISABLE_RENAMING=1
+ else
+ NODEJS_CONF_OPTS += --with-intl=none
++HOST_NODEJS_CONF_OPTS += --with-intl=small-icu
+ endif
+ 
+ ifneq ($(BR2_PACKAGE_NODEJS_NPM),y)
+@@ -56,16 +70,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 		PATH=$(@D)/bin:$(BR_PATH) \
+ 		PYTHON=$(HOST_DIR)/bin/python2 \
+ 		$(HOST_DIR)/bin/python2 ./configure \
+-		--prefix=$(HOST_DIR) \
+-		--without-snapshot \
+-		--without-dtrace \
+-		--without-etw \
+-		--shared-openssl \
+-		--shared-openssl-includes=$(HOST_DIR)/include/openssl \
+-		--shared-openssl-libpath=$(HOST_DIR)/lib \
+-		--shared-zlib \
+-		--no-cross-compiling \
+-		--with-intl=small-icu \
++		$(HOST_NODEJS_CONF_OPTS) \
+ 	)
+ endef
+ 
+@@ -80,7 +85,7 @@ define HOST_NODEJS_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ 		$(MAKE) -C $(@D) \
+ 		$(HOST_CONFIGURE_OPTS) \
+-		LDFLAGS.host="$(HOST_LDFLAGS)" \
++		$(if $(HOST_NODEJS_CXXFLAGS),CXXFLAGS.target="$(HOST_NODEJS_CXXFLAGS)") \
+ 		NO_LOAD=cctest.target.mk \
+ 		PATH=$(@D)/bin:$(BR_PATH)
+ endef
+@@ -89,7 +94,7 @@ define HOST_NODEJS_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ 		$(MAKE) -C $(@D) install \
+ 		$(HOST_CONFIGURE_OPTS) \
+-		LDFLAGS.host="$(HOST_LDFLAGS)" \
++		$(if $(HOST_NODEJS_CXXFLAGS),CXXFLAGS.target="$(HOST_NODEJS_CXXFLAGS)") \
+ 		NO_LOAD=cctest.target.mk \
+ 		PATH=$(@D)/bin:$(BR_PATH)
+ 
+-- 
+2.20.1
