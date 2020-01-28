@@ -1,62 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2020 23:26:02 +0100
-Subject: [Buildroot] [PATCH] package/opkg: bump version to 0.4.2
-In-Reply-To: <wtsHeWbrD_SXpln9FkH0NuAJUwaB2S-yRU2MFAoNKFS1CkjKah_6ZnXZj0TlSmHWN_tTfylU6FCOz3XrAs89VS-r80orW3-C757Hu0fZ59w=@protonmail.com>
- (MAX's message of "Tue, 28 Jan 2020 19:00:48 +0000")
-References: <wtsHeWbrD_SXpln9FkH0NuAJUwaB2S-yRU2MFAoNKFS1CkjKah_6ZnXZj0TlSmHWN_tTfylU6FCOz3XrAs89VS-r80orW3-C757Hu0fZ59w=@protonmail.com>
-Message-ID: <87k15b6ww5.fsf@dell.be.48ers.dk>
+Date: Tue, 28 Jan 2020 23:21:13 +0100
+Subject: [Buildroot] [git commit] package/aircrack-ng: bump to version 1.6
+Message-ID: <20200128221533.28A2D8404E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "MAX" == MAX  <phobie@protonmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=10c42859f016bb6bd339c4cd21061f9590dc5ccc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Laurent Cans <laurent.cans@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/aircrack-ng/aircrack-ng.hash | 4 ++--
+ package/aircrack-ng/aircrack-ng.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Max Berger <phobie@protonmail.com>
- > ---
- > package/opkg/opkg.hash | 2 +-
- > package/opkg/opkg.mk   | 2 +-
- > 2 files changed, 2 insertions(+), 2 deletions(-)
-
- > diff --git a/package/opkg/opkg.hash b/package/opkg/opkg.hash
- > index 69eebde2d3..b1ead67a11 100644
- > --- a/package/opkg/opkg.hash
- > +++ b/package/opkg/opkg.hash
- > @@ -1,4 +1,4 @@
- > # From http://downloads.yoctoproject.org/releases/opkg/SHA256SUMS
- > -sha256 45ac1e037d3877f635d883f8a555e172883a25d3eeb7986c75890fdd31250a43  opkg-0.4.1.tar.gz
- > +sha256 86887852c43457edfff9d8b6d9520f3f1cdd55f25eb600a6eb31e1c4e151e106  opkg-0.4.2.tar.gz
- > # Locally calculated
- > sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
- > diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
- > index 8155ed381f..e25e51b9e6 100644
-
-Your mailer seems to have eaten all the leading spaces, corrupting the
-patch. Fixed that up manually and committed, but please consider fixing
-your mailer for future patches. Also please use your full name in From
-so I don't need to fix that up manually.
-
-
- > --- a/package/opkg/opkg.mk
- > +++ b/package/opkg/opkg.mk
- > @@ -4,7 +4,7 @@
- > #
- > ################################################################################
-
- > -OPKG_VERSION = 0.4.1
- > +OPKG_VERSION = 0.4.2
- > OPKG_SITE = http://downloads.yoctoproject.org/releases/opkg
- > OPKG_DEPENDENCIES = host-pkgconf libarchive
- > OPKG_LICENSE = GPL-2.0+
- > --
- > 2.13.6
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/aircrack-ng/aircrack-ng.hash b/package/aircrack-ng/aircrack-ng.hash
+index d8a171dc07..990c3ef563 100644
+--- a/package/aircrack-ng/aircrack-ng.hash
++++ b/package/aircrack-ng/aircrack-ng.hash
+@@ -1,6 +1,6 @@
+ # From http://www.aircrack-ng.org/downloads.html
+-sha1 7b63c7ce01cb65a4775833c6cadf7ddd82bf46d5 aircrack-ng-1.5.2.tar.gz
+-md5 2648c192d206e953c67dca64967d2982 aircrack-ng-1.5.2.tar.gz
++sha1 ffeb4816476e7b329dc0c154f1aa4a30ad171beb aircrack-ng-1.6.tar.gz
++md5  22ddc85549b51ed0da0931d01ef215e5 aircrack-ng-1.6.tar.gz
+ 
+ # Hash for license file:
+ sha256 fc51fd3a97223f2fd47b057202d4a6b0daaedf23b5a1f5ff8723c192fc1e021d LICENSE
+diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+index a6db384b84..baa1fad9e1 100644
+--- a/package/aircrack-ng/aircrack-ng.mk
++++ b/package/aircrack-ng/aircrack-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AIRCRACK_NG_VERSION = 1.5.2
++AIRCRACK_NG_VERSION = 1.6
+ AIRCRACK_NG_SITE = http://download.aircrack-ng.org
+ AIRCRACK_NG_LICENSE = GPL-2.0+
+ AIRCRACK_NG_LICENSE_FILES = LICENSE
