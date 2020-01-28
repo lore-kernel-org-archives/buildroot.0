@@ -1,8 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2020 08:23:21 +0100
-Subject: [Buildroot] [PATCH 1/2] package/webkitgtk: security bump to version
+Date: Tue, 28 Jan 2020 08:23:22 +0100
+Subject: [Buildroot] [PATCH 2/2] package/wpewebkit: security bump to version
  2.26.3
-Message-ID: <20200128072323.9204-1-peter@korsgaard.com>
+In-Reply-To: <20200128072323.9204-1-peter@korsgaard.com>
+References: <20200128072323.9204-1-peter@korsgaard.com>
+Message-ID: <20200128072323.9204-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,16 +29,16 @@ Drop now upstreamed patch.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-build-with-icu-65.1.patch        | 76 -------------------
- package/webkitgtk/webkitgtk.hash              |  8 +-
- package/webkitgtk/webkitgtk.mk                |  2 +-
+ .../0002-Fix-build-with-icu-65.1.patch        | 76 -------------------
+ package/wpewebkit/wpewebkit.hash              |  8 +-
+ package/wpewebkit/wpewebkit.mk                |  2 +-
  3 files changed, 5 insertions(+), 81 deletions(-)
- delete mode 100644 package/webkitgtk/0001-Fix-build-with-icu-65.1.patch
+ delete mode 100644 package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
 
-diff --git a/package/webkitgtk/0001-Fix-build-with-icu-65.1.patch b/package/webkitgtk/0001-Fix-build-with-icu-65.1.patch
+diff --git a/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch b/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
 deleted file mode 100644
-index 207e10491a..0000000000
---- a/package/webkitgtk/0001-Fix-build-with-icu-65.1.patch
+index 7d4d23d472..0000000000
+--- a/package/wpewebkit/0002-Fix-build-with-icu-65.1.patch
 +++ /dev/null
 @@ -1,76 +0,0 @@
 -From 730b80e691a4b9dd0e9727cfcd9806dfa542397b Mon Sep 17 00:00:00 2001
@@ -61,9 +63,9 @@ index 207e10491a..0000000000
 -(WTF::URLHelpers::allCharactersInIDNScriptWhiteList):
 -
 -git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 250747 268f45cc-cd09-0410-ab3c-d52691b4dbfc
--[aperez at igalia.com: backport from upstream webkit commit
+-[james.hilliard1 at gmail.com: backport from upstream webkit commit
 -730b80e691a4b9dd0e9727cfcd9806dfa542397b]
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ----
 - Source/WTF/ChangeLog            | 10 ++++++++++
 - Source/WTF/wtf/URLHelpers.cpp   |  2 +-
@@ -115,34 +117,34 @@ index 207e10491a..0000000000
 --- 
 -2.20.1
 -
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 71642ad144..13d8742b7f 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 85a3271874..07a06466d0 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
 @@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.26.2.tar.xz.sums
--md5 65e06fe73ee166447894aaea95038e3b webkitgtk-2.26.2.tar.xz
--sha1 5bd1ccb436c76fd1edb83afd5bec377de5655d45 webkitgtk-2.26.2.tar.xz
--sha256 6b80f0637a80818559ac8fd50db3b394f41cb61904fb9b3ed65fa51635806512 webkitgtk-2.26.2.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.26.3.tar.xz.sums
-+md5 4c27d59a032710dae3cffa5990bb6aea webkitgtk-2.26.3.tar.xz
-+sha1 8d5a7b4f330788847f85e1b2cb6191435dcf9f28 webkitgtk-2.26.3.tar.xz
-+sha256 add51153943cc11d90a7038d0ea5f6332281e6c0be0640f802a211b035f0e611 webkitgtk-2.26.3.tar.xz
+-# From https://wpewebkit.org/releases/wpewebkit-2.26.2.tar.xz.sums
+-md5 057cc2647231e90c8197873df9a9f54c wpewebkit-2.26.2.tar.xz
+-sha1 eca4e35af2c2e70bd36a9bdef3bfbbfbd417210c wpewebkit-2.26.2.tar.xz
+-sha256 dd4fce390f1721d8d6d017fa712adb990f7230bde84a1b7d27327bd589053fdd wpewebkit-2.26.2.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.26.3.tar.xz.sums
++md5 735beb5c1f825d5feda2e355aca6bec0 wpewebkit-2.26.3.tar.xz
++sha1 aeda665b3a137ac748ff1d08ce9e4c751f7caf97 wpewebkit-2.26.3.tar.xz
++sha256 2da9fe9c3a8bdfecc4281d848a4eacdd7be8ac5e0fc397020094d68cf32c10b3 wpewebkit-2.26.3.tar.xz
  
  # Hashes for license files:
  sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 27ae8c1e5a..389c16de4a 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index d732938b57..cf45b68943 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.26.2
-+WEBKITGTK_VERSION = 2.26.3
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-WPEWEBKIT_VERSION = 2.26.2
++WPEWEBKIT_VERSION = 2.26.3
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
 -- 
 2.20.1
