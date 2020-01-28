@@ -1,41 +1,78 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 28 Jan 2020 08:29:25 +0100
-Subject: [Buildroot] Requirements for QML in RPi4
-In-Reply-To: <CAPmASevGW-0BY78ETy=p+c3p_cOnWG0DO3d8FV=+U6ij9DynpQ@mail.gmail.com>
-References: <CAPmASevs=kKKCspFM0M_ydbeSzNJLGEEiGmrgb6Ap-RqUtE-Ag@mail.gmail.com>
- <20200127164125.1ec2b7ff@gmx.net>
- <CAPmASevGW-0BY78ETy=p+c3p_cOnWG0DO3d8FV=+U6ij9DynpQ@mail.gmail.com>
-Message-ID: <20200128082925.7c9b4145@gmx.net>
+From: rscr <rafacrespiramon@gmail.com>
+Date: Tue, 28 Jan 2020 01:41:07 -0600 (CST)
+Subject: [Buildroot] QtWebEngine on RPI 0 W
+In-Reply-To: <20200125172550.45366ce5@gmx.net>
+References: <1579861270269-0.post@n4.nabble.com>
+ <20200125172550.45366ce5@gmx.net>
+Message-ID: <1580197267384-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Re-add CC: buildroot at busybox.net
+> Hi,
+>
+> I have built a custom image for RPI 0 W. Now I need QT with QtWebEngine.
+>
+> - As I am using  toolchain *arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf*, I
+> have to use Qt 5.6.3 because it is supported by GCC > 4.8
+>
+>Why stay with this old-gcc-version toolchain?
 
-On Mon, 27 Jan 2020 17:38:25 +0100, Andrea Simeoni <andreasimeoni73@gmail.com> wrote:
+- This toolchain is the one recommended in raspberry/tools github: 
+https://github.com/raspberrypi/tools/blob/master/arm-bcm2708/arm-linux-gnueabihf
+<https://github.com/raspberrypi/tools/blob/master/arm-bcm2708/arm-linux-gnueabihf>  
 
-> > You seem to have a RPi4-64bit config, trying to run
-> > mesa vc4?
-> >
+If there is a new version, I didn't know it. I could use, for example, these
+toolchains? https://github.com/abhiTronix/raspberry-pi-cross-compilers
+<https://github.com/abhiTronix/raspberry-pi-cross-compilers>  
+
 >
-> IIRC it was needed to get accelerated GPU.
+> ISSUE:
+>
+> When trying to build the image, I got building failed. Some of the errors
+> are:
+>
+> Running configuration tests (phase 1)...
+> /home/ibercomp/rcr/projects/cp4/buildroot/output/host/bin/arm-linux-gnueabihf-g++
+> -c -fvisibility=hidden fvisibility.c
+> Symbol visibility control enabled.
+> collect2: fatal error: cannot find 'ld'
+> compilation terminated
+> ...
+> Makefile:192: recipe for target 'db2.o' failed
+> ...
+> Makefile:192: recipe for target 'ibase.o' failed
+> ...
+> Makefile:195: recipe for target 'icu.o' failed
+> make[2]: *** [icu.o] Error 1
+> ICU disabled.
+> The ICU library support cannot be enabled.
 >
 >
+> Find attached my defconfig: cp4_defconfig.cp4_defconfig
+> <http://buildroot-busybox.2317881.n4.nabble.com/file/t2824/cp4_defconfig.cp4_defconfig>
 >
-> > dtoverlay=vc4-fkms-v3d
-> >
->
-> Unfortunately it doesn't work. I read the links, and the situation seems a
-> bit confusing.
->
->
-> Alternatively your can try RPi4-32bit and enable
-> > rpi-userland/BR2_PACKAGE_RPI_USERLAND
-> > instead of mesa...
-> >
->
-> I don't need 64-bit but I need QML+GPU. I'm going to try RPi4+32bit w/
-> userland.
-> I hope it will works! I will report the results.
+>Important information missing, which buildroot version do you use?
+
+I am using buildroot-2019.02.09
+
+I will build the image again to provide the complete failure output....but
+If there is any solution where I could keep using QT 5.11.3 version with a
+GCC > 5 I prefer it.
+
+Kind Regards, 
+
+Rafa
+
+
+
+
+
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
