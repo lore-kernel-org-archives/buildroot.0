@@ -1,45 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2020 16:01:25 +0100
-Subject: [Buildroot] [git commit] package/libpjsip: add libsamplerate support
-Message-ID: <20200128145211.C1BDE83D30@busybox.osuosl.org>
+Date: Tue, 28 Jan 2020 16:00:37 +0100
+Subject: [Buildroot] [git commit] package/bluez-alsa: bump to version 2.1.0
+Message-ID: <20200128145211.BA17783DE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cdf39726c2ec346d6aeea90f0273a13d026b9c2c
+commit: https://git.buildroot.net/buildroot/commit/?id=952f98dff3b026433ce1ff052e5ab5c63e82e00d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Also:
+  * Conditionally enable support for integration with UPower D-Bus
+    service if BR2_PACKAGE_UPOWER is selected
+  * The copyright year was updated in the LICENSE file, therefore
+    the hash value was also recalculated.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpjsip/libpjsip.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/bluez-alsa/bluez-alsa.hash | 4 ++--
+ package/bluez-alsa/bluez-alsa.mk   | 9 ++++++++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index f5c51fadf3..2e6c5abf08 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -36,7 +36,6 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-g711-codec \
- 	--disable-l16-codec \
- 	--disable-g722-codec \
--	--disable-libsamplerate \
- 	--disable-sdl \
- 	--disable-ffmpeg \
- 	--disable-v4l2 \
-@@ -71,6 +70,13 @@ else
- LIBPJSIP_CONF_OPTS += --disable-ssl
+diff --git a/package/bluez-alsa/bluez-alsa.hash b/package/bluez-alsa/bluez-alsa.hash
+index 37c4919f91..603a501d4f 100644
+--- a/package/bluez-alsa/bluez-alsa.hash
++++ b/package/bluez-alsa/bluez-alsa.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated:
+-sha256  451c99c2045a1ec1ffe0d054be4774fbd01af34d6d1a2757d346d02718381697  bluez-alsa-2.0.0.tar.gz
+-sha256  45fe8648faa0e735d4aaf60c32ddd37fc7f027d34ccedcf0f69d8aa961b63b25  LICENSE
++sha256  6459f70e47e70b4c04a85acf148381e6c8a2e86bd638aff21870afc6c14b85b0  bluez-alsa-2.1.0.tar.gz
++sha256  60253922a459245128c34eb379cbda7c76936636d4c10edc576663a0f560dd4d  LICENSE
+diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
+index 5c07a1a5e8..c5a51ce5d4 100644
+--- a/package/bluez-alsa/bluez-alsa.mk
++++ b/package/bluez-alsa/bluez-alsa.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BLUEZ_ALSA_VERSION = 2.0.0
++BLUEZ_ALSA_VERSION = 2.1.0
+ BLUEZ_ALSA_SITE = $(call github,Arkq,bluez-alsa,v$(BLUEZ_ALSA_VERSION))
+ BLUEZ_ALSA_LICENSE = MIT
+ BLUEZ_ALSA_LICENSE_FILES = LICENSE
+@@ -53,6 +53,13 @@ else
+ BLUEZ_ALSA_CONF_OPTS += --disable-ofono
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
-+LIBPJSIP_DEPENDENCIES += libsamplerate
-+LIBPJSIP_CONF_OPTS += --enable-libsamplerate
++# no build dependency, enables integration with UPower D-Bus service
++ifeq ($(BR2_PACKAGE_UPOWER),y)
++BLUEZ_ALSA_CONF_OPTS += --enable-upower
 +else
-+LIBPJSIP_CONF_OPTS += --disable-libsamplerate
++BLUEZ_ALSA_CONF_OPTS += --disable-upower
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPUS),y)
- LIBPJSIP_DEPENDENCIES += opus
- LIBPJSIP_CONF_OPTS += --with-opus=$(STAGING_DIR)/usr
+ ifeq ($(BR2_PACKAGE_BLUEZ_ALSA_HCITOP),y)
+ BLUEZ_ALSA_DEPENDENCIES += libbsd ncurses
+ BLUEZ_ALSA_CONF_OPTS += --enable-hcitop
