@@ -1,116 +1,122 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 28 Jan 2020 10:43:26 +0100
-Subject: [Buildroot] QtWebEngine on RPI 0 W
-In-Reply-To: <20200128085828.5959e493@gmx.net>
-References: <1579861270269-0.post@n4.nabble.com>
- <20200125172550.45366ce5@gmx.net>
- <1580197267384-0.post@n4.nabble.com>
- <20200128085828.5959e493@gmx.net>
-Message-ID: <20200128104326.030b51d9@gmx.net>
+From: Adrian Martinez <adrian.martinez@sevensols.com>
+Date: Tue, 28 Jan 2020 10:45:40 +0100
+Subject: [Buildroot] Fwd: Building helloworld package
+In-Reply-To: <CAL=12L3JEZrrx_vW=XYBob4x1_vN1yP+TNvtKH=UPOAM0Eg-9Q@mail.gmail.com>
+References: <CAL=12L3JEZrrx_vW=XYBob4x1_vN1yP+TNvtKH=UPOAM0Eg-9Q@mail.gmail.com>
+Message-ID: <CAL=12L0cJNEKwgZ7qVTs-4xGh2HNxCTBU7PsYa+iqpc4yd2HHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Rafa,
+Hi!! I have a ZCU102 (Xilinx) board and I'm trying to build a linux with a
+simple package, helloworld.
 
-On Tue, 28 Jan 2020 08:58:28 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+I've been following this page -->
+https://techfortalk.co.uk/2017/06/16/how-to-create-a-new-package-under-buildroot/
 
-> Hello Rafa,
->
-> On Tue, 28 Jan 2020 01:41:07 -0600 (CST), rscr <rafacrespiramon@gmail.com> wrote:
->
-> > > Hi,
-> > >
-> > > I have built a custom image for RPI 0 W. Now I need QT with QtWebEngine.
-> > >
-> > > - As I am using  toolchain *arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf*, I
-> > > have to use Qt 5.6.3 because it is supported by GCC > 4.8
-> > >
-> > >Why stay with this old-gcc-version toolchain?
-> >
-> > - This toolchain is the one recommended in raspberry/tools github:
-> > https://github.com/raspberrypi/tools/blob/master/arm-bcm2708/arm-linux-gnueabihf
-> > <https://github.com/raspberrypi/tools/blob/master/arm-bcm2708/arm-linux-gnueabihf>
-> >
-> > If there is a new version, I didn't know it. I could use, for example, these
-> > toolchains? https://github.com/abhiTronix/raspberry-pi-cross-compilers
-> > <https://github.com/abhiTronix/raspberry-pi-cross-compilers>
-> >
->
-> Use an up-to-date buildroot generated one (downside is an increased build duration) ;-)
->
-> > >
-> > > ISSUE:
-> > >
-> > > When trying to build the image, I got building failed. Some of the errors
-> > > are:
-> > >
-> > > Running configuration tests (phase 1)...
-> > > /home/ibercomp/rcr/projects/cp4/buildroot/output/host/bin/arm-linux-gnueabihf-g++
-> > > -c -fvisibility=hidden fvisibility.c
-> > > Symbol visibility control enabled.
-> > > collect2: fatal error: cannot find 'ld'
-> > > compilation terminated
-> > > ...
-> > > Makefile:192: recipe for target 'db2.o' failed
-> > > ...
-> > > Makefile:192: recipe for target 'ibase.o' failed
-> > > ...
-> > > Makefile:195: recipe for target 'icu.o' failed
-> > > make[2]: *** [icu.o] Error 1
-> > > ICU disabled.
-> > > The ICU library support cannot be enabled.
-> > >
-> > >
-> > > Find attached my defconfig: cp4_defconfig.cp4_defconfig
-> > > <http://buildroot-busybox.2317881.n4.nabble.com/file/t2824/cp4_defconfig.cp4_defconfig>
-> > >
-> > >Important information missing, which buildroot version do you use?
-> >
-> > I am using buildroot-2019.02.09
-> >
-> > I will build the image again to provide the complete failure output....but
-> > If there is any solution where I could keep using QT 5.11.3 version with a
-> > GCC > 5 I prefer it.
->
-> Thanks for the info, will try to reproduce your failure (did try it with
-> buildroot-2019.11.1 but qt5webengine-5.6.3 compile failed because of
-> incompatibility with some of the version bumped dependent libs e.g.
-> ffmpeg, libjpeg, ...).
+- My package/Config.in is:
 
-Your given failure maybe irrelevant or your are missing the real failure later on
-(or it is a problem with your build host/setup)...
 
-The only failure I get with your defconfig is while compiling
-build/qt5webengine-5.6.3/src/3rdparty/chromium/ui/gfx/codec/jpeg_codec.cc,
-which can be fixed by the suggested buildroot-2019.02.9 patch (see [1]).
 
-With this patch applied qt5webengine-5.6.3 builds fine here...
+*config BR2_PACKAGE_PAQPRUEBAADRI       bool "paqpruebaadri"       help
+           This is sample package.*
 
-Regards,
-Peter
+- My package/paq_prueba_adri.mk is:
 
-[1] https://patchwork.ozlabs.org/patch/1230245
 
->
-> Regards,
-> Peter
->
-> >
-> > Kind Regards,
-> >
-> > Rafa
-> >
-> > --
-> > Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*paqpruebaadri_MODULE_VERSION = 1.0paqpruebaadri_SITE =
+/home/adrian/Documents/codigo_holamundopaqpruebaadri_SITE_METHOD =
+localpaqpruebaadri_LICENSE = GPLv2paqpruebaadri_LICENSE_FILES =
+COPYINGpaqpruebaadri_MODULE_MAKE_OPTS = \        CONFIG_DUMMY1= \
+CONFIG_DUMMY2=ydefine ADRI_BUILD_CMDS$(MAKE) CC="$(TARGET_CC)"
+LD="$(TARGET_LD)" -C $(@D) allendefdefine
+ADRI_INSTALL_TARGET_CMDS$(INSTALL) -D -m 0755 $(@D)/adritest
+$(TARGET_DIR)/bin$(INSTALL) -D -m 0755 $(@D)//run_adritest.sh
+$(TARGET_DIR)/bin$(TARGET_DIR)/rootendef $(eval $(generic-package))*
+
+- And, inside of the main Config.in, I've written:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*menu "Target packages" source "package/busybox/Config.in" source
+"package/skeleton/Config.in" source "package/skeleton-custom/Config.in"
+source "package/skeleton-init-common/Config.in" source
+"package/skeleton-init-none/Config.in" source
+"package/skeleton-init-systemd/Config.in" source
+"package/skeleton-init-sysv/Config.in"--> menu "Paq prueba
+ADRI"                                            <---->         source
+"package/paq_prueba_adri/Config.in"  <---->
+endmenu
+<--menu "Audio and video applications" source
+"package/alsa-utils/Config.in" source "package/atest/Config.in".*
+*.*
+
+*.*
+
+- The code and make files are:
+
+
+
+
+
+
+*#include <stdio.h>int main(){        printf("Hola mundo");        return
+0;}*
+
+
+
+*holamundo:
+/home/adrian/Documents/ZCU-102/buildroot-2019.02.3/output/host/usr/bin/aarch64-linux-gnu-gcc
+holamundo.c*
+
+But, when I boot the board, I don't find anything about my package.
+Am I following the correct steps?
+
+Thanks, Adri?n.
+
+-- 
+?This e-mail and any materials attached hereto, including, without 
+limitation, all content hereof and thereof are confidential and proprietary 
+to Seven Solutions,S.L and/or its affiliates, and are *confidential*. 
+Without the prior written consent of Seven Solutions, this content may not 
+(i) be disclosed to any third party, (ii) be reproduced, modified or 
+otherwise used by anyone other than current employees of Seven Solutions or 
+its affiliates. If you are not the intended recipient or if this message 
+has been received in error, please notify us immediately via e-mail and 
+delete it.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200128/de695a52/attachment.html>
