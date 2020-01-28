@@ -1,65 +1,170 @@
-From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
-Date: Tue, 28 Jan 2020 11:58:40 +0100
-Subject: [Buildroot] [Question]: Building your own external toolchain
-Message-ID: <CABhNV22ZOaOa7kKF-0jC9bhH54QyevM5vo50u7+pyEKCDUuUiA@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 28 Jan 2020 12:17:36 +0100
+Subject: [Buildroot] Fwd: Building helloworld package
+In-Reply-To: <CAL=12L0cJNEKwgZ7qVTs-4xGh2HNxCTBU7PsYa+iqpc4yd2HHQ@mail.gmail.com>
+References: <CAL=12L3JEZrrx_vW=XYBob4x1_vN1yP+TNvtKH=UPOAM0Eg-9Q@mail.gmail.com>
+ <CAL=12L0cJNEKwgZ7qVTs-4xGh2HNxCTBU7PsYa+iqpc4yd2HHQ@mail.gmail.com>
+Message-ID: <20200128121736.049bf4f3@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+Hello Adrian,
 
-I am building a rootfs with multiple initramfs targets.
-I need GCC8 and glibc 2-29 to target ARM, so none of the supplied
-toolchains work.
+please try to send your e-mails as plain text instead of html (the default looks garbled like
+this http://lists.busybox.net/pipermail/buildroot/2020-January/272348.html)...
 
-I would like to use 'make sdk' on the rootfs and use the resulting
-images/arm-buildroot-linux-gnueabihf_sdk-buildroot.tar.gz
-to build the initramfs.
+> Hi!! I have a ZCU102 (Xilinx) board and I'm trying to build a linux with a simple package, helloworld.
+> 
+> I've been following this page --> https://techfortalk.co.uk/2017/06/16/how-to-create-a-new-package-under-buildroot/
 
-Before I start:
-Am I doing this wrong? Is there a clever way to build a rootfs and couple
-of types of initramfs without needing a defconfig for every one (1* rootfs
-+ N* initramfs), with a separate output folder for each (output_rootfs,
-output_initramfs_debug, output_initramfs_release, ... ) ?
+You seem to have it a little mixed up with
+	https://techfortalk.co.uk/2017/06/15/how-to-addcompile-a-kernel-module-as-a-new-buildroot-package/
 
-So I have this one:
-rootfs defconfig:
-BR2_REPRODUCIBLE=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-BR2_GCC_VERSION_8_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
+And the page how-to-create-a-new-package-under-buildroot contains some typos/mistakes..., but
+the following should work in your case:
+
+> 
+> - My package/Config.in is:
+> config BR2_PACKAGE_PAQPRUEBAADRI
+>        bool "paqpruebaadri"
+>        help
+>                This is sample package.
+> 
+
+package/paq_prueba_adri/Config.in:
+
+config BR2_PACKAGE_PAQ_PRUEB_AADRI
+	bool "paq-prueba-adri"
+	help
+	  This is sample package.
+
+> - My package/paq_prueba_adri.mk is:
+> paqpruebaadri_MODULE_VERSION = 1.0
+> paqpruebaadri_SITE = /home/adrian/Documents/codigo_holamundo
+> paqpruebaadri_SITE_METHOD = local
+> paqpruebaadri_LICENSE = GPLv2
+> paqpruebaadri_LICENSE_FILES = COPYING
+> paqpruebaadri_MODULE_MAKE_OPTS = \
+>         CONFIG_DUMMY1= \
+>         CONFIG_DUMMY2=y
+> 
+> define ADRI_BUILD_CMDS
+> $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+> endef
+> 
+> define ADRI_INSTALL_TARGET_CMDS
+> $(INSTALL) -D -m 0755 $(@D)/adritest $(TARGET_DIR)/bin
+> $(INSTALL) -D -m 0755 $(@D)//run_adritest.sh $(TARGET_DIR)/bin
+> $(TARGET_DIR)/root
+> endef
+>  
+> $(eval $(generic-package))
+
+package/paq_prueba_adri/paq_prueba_adri.mk
+
+PAQ_PRUEBA_ADRI_VERSION = 1.0
+PAQ_PRUEBA_ADRI_SITE = /home/adrian/Documents/codigo_holamundo
+PAQ_PRUEBA_ADRI_SITE_METHOD = local
+PAQ_PRUEBA_ADRI_LICENSE = GPLv2
+PAQ_PRUEBA_ADRI_LICENSE_FILES = COPYING
+
+define PAQ_PRUEBA_ADRI_BUILD_CMDS
+$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+endef
+
+define PAQ_PRUEBA_ADRI_INSTALL_TARGET_CMDS
+$(INSTALL) -D -m 0755 $(@D)/holamundo $(TARGET_DIR)/bin
+endef
+ 
+$(eval $(generic-package))
+
+> 
+> - And, inside of the main Config.in, I've written:
+> menu "Target packages"
+> 
+> source "package/busybox/Config.in"CC := gcc
+
+all: holamundo
+
+holamundo: holamundo.c
+	$(CC) $(CFLAGS) -o holamundo holamundo.c
+
+> source "package/skeleton/Config.in"
+> source "package/skeleton-custom/Config.in"
+> source "package/skeleton-init-common/Config.in"
+> source "package/skeleton-init-none/Config.in"
+> source "package/skeleton-init-systemd/Config.in"
+> source "package/skeleton-init-sysv/Config.in"
+> 
+> --> menu "Paq prueba ADRI"                                            <--
+> -->         source "package/paq_prueba_adri/Config.in"  <--
+> --> endmenu                                                                        <--
+> 
+> menu "Audio and video applications"
+> source "package/alsa-utils/Config.in"
+> source "package/atest/Config.in"
+> .
+> .
+> .
+
+package/Config.in:
+
+[...]
+menu "Paq prueba ADRI"
+        source "package/paq_prueba_adri/Config.in
+endmenu
+[...]
+
+> CC := gcc
+
+all: holamundo
+
+holamundo: holamundo.c
+	$(CC) $(CFLAGS) -o holamundo holamundo.c
+
+> - The code and make files are:
+> #include <stdio.h>
+> 
+> int main()
+> {
+>         printf("Hola mundo");
+>         return 0;
+> }
+> 
+
+Should be o.k. (if stored under /home/adrian/Documents/codigo_holamundo/holamundo.c)...
+
+> 
+> holamundo:
+> /home/adrian/Documents/ZCU-102/buildroot-2019.02.3/output/host/usr/bin/aarch64-linux-gnu-gcc holamundo.c
+> 
+
+/home/adrian/Documents/codigo_holamundo/Makefile:
+
+CC := gcc
+CFLAGS := -Wall -g
+
+all: holamundo
+
+holamundo: holamundo.c
+	$(CC) $(CFLAGS) -o holamundo holamundo.c
 
 
-All the initramfs defconfigs
-BR2_REPRODUCIBLE=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="file://$(TOPDIR)/output_rootfs/images/arm-buildroot-linux-gnueabihf_sdk-buildroot.tar.gz"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-buildroot-linux-gnueabihf"
-BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> But, when I boot the board, I don't find anything about my package.
+> Am I following the correct steps?
 
-The 'file://' in BR2_TOOLCHAIN_EXTERNAL_URL seems wrong, but it was the
-only way to get it to download. I also had issues with target_install, but
-this config seems to work.
-Is there a better way to do this?
-Is there a way to always "refresh" the
-$(BR2_DL_DIR)/toolchain-external-custom/arm-buildroot-linux-gnueabihf_sdk-buildroot.tar.gz
-so it is in sync with $(BR2_TOOLCHAIN_EXTERNAL_URL). There is no hash by
-design, so I have to do an rm -f
-"$(BR2_DL_DIR)/toolchain-external-custom/arm-buildroot-linux-gnueabihf_sdk-buildroot.tar.gz"
-every time I call "make O=output_rootfs sdk".
-Is there something I am forgetting?
+Make sure BR2_PACKAGE_PAQ_PRUEB_AADRI is enabled in your buildroot .config file...
 
--- 
-Regards
-Einar J?n
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200128/55bdebb1/attachment.html>
+In case of failure don't hesitate to ask further questions and/or send the output
+from:
+	$ rm -rf build/paq_prueba_adri-1.0 && make paq_prueba_adri VERBOSE=1
+
+Regards,
+Peter
+
+> 
+> Thanks, Adri?n.
+> 
