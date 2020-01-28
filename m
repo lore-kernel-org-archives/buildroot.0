@@ -1,170 +1,63 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 28 Jan 2020 12:17:36 +0100
-Subject: [Buildroot] Fwd: Building helloworld package
-In-Reply-To: <CAL=12L0cJNEKwgZ7qVTs-4xGh2HNxCTBU7PsYa+iqpc4yd2HHQ@mail.gmail.com>
-References: <CAL=12L3JEZrrx_vW=XYBob4x1_vN1yP+TNvtKH=UPOAM0Eg-9Q@mail.gmail.com>
- <CAL=12L0cJNEKwgZ7qVTs-4xGh2HNxCTBU7PsYa+iqpc4yd2HHQ@mail.gmail.com>
-Message-ID: <20200128121736.049bf4f3@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 28 Jan 2020 14:44:12 +0100
+Subject: [Buildroot] host-python-2.7 failure to build _hashlib
+In-Reply-To: <CA+h21hrqSponHMwMUBXhRaCmnVjwzrhKJSH+XSZcO8Zp69JFmA@mail.gmail.com>
+References: <CA+h21hors57FFbQzm0x2Rd_pABb95-GaxPOPiRQ5ZzB9NgT-Mg@mail.gmail.com>
+ <20200127234031.79371041@windsurf>
+ <CA+h21hr2ReX5zxqmRrM9dq77S-nwqSQvmTQh6N-FLEvoooUfLw@mail.gmail.com>
+ <20200128101431.02251042@windsurf>
+ <CA+h21hrqSponHMwMUBXhRaCmnVjwzrhKJSH+XSZcO8Zp69JFmA@mail.gmail.com>
+Message-ID: <20200128144412.16fe35b1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrian,
+On Tue, 28 Jan 2020 12:28:01 +0200
+Vladimir Oltean <olteanv@gmail.com> wrote:
 
-please try to send your e-mails as plain text instead of html (the default looks garbled like
-this http://lists.busybox.net/pipermail/buildroot/2020-January/272348.html)...
-
-> Hi!! I have a ZCU102 (Xilinx) board and I'm trying to build a linux with a simple package, helloworld.
+> > diff --git a/package/python/python.mk b/package/python/python.mk
+> > index 41a981e3d3..cd79be78f6 100644
+> > --- a/package/python/python.mk
+> > +++ b/package/python/python.mk
+> > @@ -33,7 +33,8 @@ HOST_PYTHON_CONF_OPTS += \
+> >         --disable-test-modules \
+> >         --disable-bz2 \
+> >         --disable-ossaudiodev \
+> > -       --disable-pyo-build
+> > +       --disable-pyo-build \
+> > +       --disable-hashlib  
 > 
-> I've been following this page --> https://techfortalk.co.uk/2017/06/16/how-to-create-a-new-package-under-buildroot/
+> Yes, this works, but I'm not exactly sure what conclusion I should draw from it.
 
-You seem to have it a little mixed up with
-	https://techfortalk.co.uk/2017/06/15/how-to-addcompile-a-kernel-module-as-a-new-buildroot-package/
+I explained above the patch in my previous e-mail what (I believe) was
+happening.
 
-And the page how-to-create-a-new-package-under-buildroot contains some typos/mistakes..., but
-the following should work in your case:
+> hashlib seems to require BR2_PACKAGE_HOST_PYTHON_SSL, but without a
+> proper dependency tracking system for host packages, I don't know how
+> it can be disabled in that case.
 
-> 
-> - My package/Config.in is:
-> config BR2_PACKAGE_PAQPRUEBAADRI
->        bool "paqpruebaadri"
->        help
->                This is sample package.
-> 
+Three solutions:
 
-package/paq_prueba_adri/Config.in:
+ - We hook into the BR2_PACKAGE_HOST_PYTHON_SSL option, and add
+   --disable-hashlib in the "else" case of this condition. This makes
+   the BR2_PACKAGE_HOST_PYTHON_SSL option have the semantic "build all
+   Python modules that depend on OpenSSL".
 
-config BR2_PACKAGE_PAQ_PRUEB_AADRI
-	bool "paq-prueba-adri"
-	help
-	  This is sample package.
+ - We create a separate BR2_PACKAGE_HOST_PYTHON_HASHLIB option, so that
+   the semantic of BR2_PACKAGE_HOST_PYTHON_SSL remains "build the
+   Python ssl module"
 
-> - My package/paq_prueba_adri.mk is:
-> paqpruebaadri_MODULE_VERSION = 1.0
-> paqpruebaadri_SITE = /home/adrian/Documents/codigo_holamundo
-> paqpruebaadri_SITE_METHOD = local
-> paqpruebaadri_LICENSE = GPLv2
-> paqpruebaadri_LICENSE_FILES = COPYING
-> paqpruebaadri_MODULE_MAKE_OPTS = \
->         CONFIG_DUMMY1= \
->         CONFIG_DUMMY2=y
-> 
-> define ADRI_BUILD_CMDS
-> $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-> endef
-> 
-> define ADRI_INSTALL_TARGET_CMDS
-> $(INSTALL) -D -m 0755 $(@D)/adritest $(TARGET_DIR)/bin
-> $(INSTALL) -D -m 0755 $(@D)//run_adritest.sh $(TARGET_DIR)/bin
-> $(TARGET_DIR)/root
-> endef
->  
-> $(eval $(generic-package))
+ - We simply unconditionally add --disable-hashlib like I proposed, and
+   wait until someone needs hashlib in host-python.
 
-package/paq_prueba_adri/paq_prueba_adri.mk
+I suggest we take the third solution for now.
 
-PAQ_PRUEBA_ADRI_VERSION = 1.0
-PAQ_PRUEBA_ADRI_SITE = /home/adrian/Documents/codigo_holamundo
-PAQ_PRUEBA_ADRI_SITE_METHOD = local
-PAQ_PRUEBA_ADRI_LICENSE = GPLv2
-PAQ_PRUEBA_ADRI_LICENSE_FILES = COPYING
+Best regards,
 
-define PAQ_PRUEBA_ADRI_BUILD_CMDS
-$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-endef
-
-define PAQ_PRUEBA_ADRI_INSTALL_TARGET_CMDS
-$(INSTALL) -D -m 0755 $(@D)/holamundo $(TARGET_DIR)/bin
-endef
- 
-$(eval $(generic-package))
-
-> 
-> - And, inside of the main Config.in, I've written:
-> menu "Target packages"
-> 
-> source "package/busybox/Config.in"CC := gcc
-
-all: holamundo
-
-holamundo: holamundo.c
-	$(CC) $(CFLAGS) -o holamundo holamundo.c
-
-> source "package/skeleton/Config.in"
-> source "package/skeleton-custom/Config.in"
-> source "package/skeleton-init-common/Config.in"
-> source "package/skeleton-init-none/Config.in"
-> source "package/skeleton-init-systemd/Config.in"
-> source "package/skeleton-init-sysv/Config.in"
-> 
-> --> menu "Paq prueba ADRI"                                            <--
-> -->         source "package/paq_prueba_adri/Config.in"  <--
-> --> endmenu                                                                        <--
-> 
-> menu "Audio and video applications"
-> source "package/alsa-utils/Config.in"
-> source "package/atest/Config.in"
-> .
-> .
-> .
-
-package/Config.in:
-
-[...]
-menu "Paq prueba ADRI"
-        source "package/paq_prueba_adri/Config.in
-endmenu
-[...]
-
-> CC := gcc
-
-all: holamundo
-
-holamundo: holamundo.c
-	$(CC) $(CFLAGS) -o holamundo holamundo.c
-
-> - The code and make files are:
-> #include <stdio.h>
-> 
-> int main()
-> {
->         printf("Hola mundo");
->         return 0;
-> }
-> 
-
-Should be o.k. (if stored under /home/adrian/Documents/codigo_holamundo/holamundo.c)...
-
-> 
-> holamundo:
-> /home/adrian/Documents/ZCU-102/buildroot-2019.02.3/output/host/usr/bin/aarch64-linux-gnu-gcc holamundo.c
-> 
-
-/home/adrian/Documents/codigo_holamundo/Makefile:
-
-CC := gcc
-CFLAGS := -Wall -g
-
-all: holamundo
-
-holamundo: holamundo.c
-	$(CC) $(CFLAGS) -o holamundo holamundo.c
-
-
-> But, when I boot the board, I don't find anything about my package.
-> Am I following the correct steps?
-
-Make sure BR2_PACKAGE_PAQ_PRUEB_AADRI is enabled in your buildroot .config file...
-
-In case of failure don't hesitate to ask further questions and/or send the output
-from:
-	$ rm -rf build/paq_prueba_adri-1.0 && make paq_prueba_adri VERBOSE=1
-
-Regards,
-Peter
-
-> 
-> Thanks, Adri?n.
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
