@@ -1,93 +1,109 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 28 Jan 2020 02:57:42 -0700
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: use system-icu for
- host-nodejs when available
-In-Reply-To: <20200128102057.6c5cda1f@windsurf>
-References: <20200126075848.66484-1-james.hilliard1@gmail.com>
- <20200126162659.GR32369@scaer> <20200128102057.6c5cda1f@windsurf>
-Message-ID: <CADvTj4rhYWGeZef11z9aEjOmDyZR=6eHVeZMGO6uQfqdBOeWLA@mail.gmail.com>
+From: Vladimir Oltean <olteanv@gmail.com>
+Date: Tue, 28 Jan 2020 12:28:01 +0200
+Subject: [Buildroot] host-python-2.7 failure to build _hashlib
+In-Reply-To: <20200128101431.02251042@windsurf>
+References: <CA+h21hors57FFbQzm0x2Rd_pABb95-GaxPOPiRQ5ZzB9NgT-Mg@mail.gmail.com>
+ <20200127234031.79371041@windsurf>
+ <CA+h21hr2ReX5zxqmRrM9dq77S-nwqSQvmTQh6N-FLEvoooUfLw@mail.gmail.com>
+ <20200128101431.02251042@windsurf>
+Message-ID: <CA+h21hrqSponHMwMUBXhRaCmnVjwzrhKJSH+XSZcO8Zp69JFmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 28, 2020 at 2:20 AM Thomas Petazzoni
+Hi Thomas,
+
+On Tue, 28 Jan 2020 at 11:14, Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> On Sun, 26 Jan 2020 17:26:59 +0100
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> Hello Vladimir,
 >
-> > James, All,
-> >
-> > On 2020-01-26 00:58 -0700, James Hilliard spake thusly:
-> > > Fixes:
-> > >  - http://autobuild.buildroot.net/results/1ef947553ec762dba6a6202b1cfc84ceed75dbb2/
-> >
-> > Pointing to an autobuild failure is nice, but you really need to provide
-> > a bit more context and explanations on what you are doing here...
-> >
-> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > > ---
-> > >  package/nodejs/nodejs.mk | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> On Tue, 28 Jan 2020 01:39:57 +0200
+> Vladimir Oltean <olteanv@gmail.com> wrote:
+>
+> > > Because we don't enforce this for host packages. We do enforce it for
+> > > target packages (i.e a target package cannot be built if its Config.in
+> > > option is not enabled somehow). But we don't enforce it for host
+> > > packages.
 > > >
-> > > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> > > index e6eb73d576..abc868c364 100644
-> > > --- a/package/nodejs/nodejs.mk
-> > > +++ b/package/nodejs/nodejs.mk
-> > > @@ -65,7 +65,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
-> > >             --shared-openssl-libpath=$(HOST_DIR)/lib \
-> > >             --shared-zlib \
-> > >             --no-cross-compiling \
-> > > -           --with-intl=small-icu \
-> > > +           --with-intl=$(if $(BR2_PACKAGE_ICU),system-icu,small-icu) \
-> >
-> > We already have a conditional block about icu, lines 35-40.
-> >
-> > >     )
-> > >  endef
+> > > For example, host-pkgconf has a visible Config.in option called
+> > > BR2_PACKAGE_HOST_PKGCONF. However, almost none of the packages that
+> > > depend on host-pkgconf have a select BR2_PACKAGE_HOST_PKGCONF.
 > > >
-> > > @@ -80,6 +80,7 @@ define HOST_NODEJS_BUILD_CMDS
-> > >     $(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
-> > >             $(MAKE) -C $(@D) \
-> > >             $(HOST_CONFIGURE_OPTS) \
-> > > +           $(if $(BR2_PACKAGE_ICU),CXXFLAGS.target="-DU_DISABLE_RENAMING=1") \
 > >
-> > Why do you need to account for a target package when building the host
-> > variant of nodejs? If this is needed, then explain it in the commit log.
-> >
-> > Then, the way we usually pass such options is to append to the existing
-> > CXXFLAGS. With the above comment, that would probably yield something
-> > like (e.g. for target, ditto for host):
-> >
-> >     NODEJS_CXXFLAGS = $(TARGET_CXXFLAGS)
-> >
-> >     ifeq ($(BR2_PACKAGE_ICU),y)
-> >     NODEJS_DEPENDENCIES += icu
-> >     NODEJS_CONF_OPTS += --with-intl=system-icu
-> >     NODEJS_CXXFLAGS += -DU_DISABLE_RENAMING=1
-> >     else
-> >     NODEJS_CONF_OPTS += --with-intl=small-icu
-> >     endif
+> > Why not?
 >
-> I think you're missing the fact that James is tweaking
-> HOST_NODEJS_CONF_OPTS, depending on the value of BR2_PACKAGE_ICU, which
-> looks very wrong.
+> That's mainly historical. We used to not have any visible Config.in
+> option for host packages: host packages were only built as build
+> dependencies of target packages. But then, we realized that some host
+> packages were not just mere build dependencies of target packages: they
+> were useful by themselves. This is the case for flashing tools,
+> debugging tools, filesystem image creation utilities, and more. So we
+> started adding Config.in options for host packages.
 >
-> The issue is apparently that when host-icu has been built, the
-> host-nodejs internal small-icu causes a build failure. However, while
-> BR2_PACKAGE_ICU=y implies that host-icu will be built, host-icu can
-> potentially be built even with BR2_PACKAGE_ICU is disabled. It is not
-> the case today in Buildroot, because host-icu is only in the build
-> dependencies of the target icu package, but relying on this assumption
-> seems wrong.
-Is there a way to make it depend on host-icu directly?
+> We have been considering adding Config.in options for all host packages
+> (some visible, some hidden), but adding all those "select" was
+> considered too much of a burden compared to the benefit.
 >
-> Best regards,
+> We had some discussion about this at a previous Buildroot Developers
+> meeting, after FOSDEM 2019. See the notes of the discussion:
+> https://elinux.org/Buildroot:DeveloperDaysFOSDEM2019#.22Config.in.host.22_for_all_host_packages.
+>
+> > > > - The Makefile doesn't complain that they don't (usually it does, when
+> > > > packages add _DEPENDENCIES that are absent from Config.in)
+> > >
+> > > See above: only for target packages.
+> > >
+> > > > When I enable BR2_PACKAGE_HOST_PYTHON and BR2_PACKAGE_HOST_PYTHON_SSL
+> > > > in .config, I am able to carry on with the build.
+> > > >
+> > > > Can somebody please explain what is going on?
+> > > > I am not a proficient Python user either, by the way.
+> > >
+> > > I don't really understand why your host-python package fails to build.
+> > > Could you share the entire build log of the host-python package ?
+> > >
+> >
+> > So it looks like the mailing list didn't like my log pasted in here.
+> > Let's try Github gists:
+> > https://gist.github.com/vladimiroltean/4d6b1441b0dbe64dc8e2f9d1ce336e42
+>
+> We're not explicitly disabling building the hashlib module when
+> building host-python, and hashlib needs OpenSSL, but apparently the
+> OpenSSL of your system is not compatible with Python 2.x.
+>
+> Could you try the following change ?
+>
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index 41a981e3d3..cd79be78f6 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -33,7 +33,8 @@ HOST_PYTHON_CONF_OPTS += \
+>         --disable-test-modules \
+>         --disable-bz2 \
+>         --disable-ossaudiodev \
+> -       --disable-pyo-build
+> +       --disable-pyo-build \
+> +       --disable-hashlib
+
+Yes, this works, but I'm not exactly sure what conclusion I should draw from it.
+hashlib seems to require BR2_PACKAGE_HOST_PYTHON_SSL, but without a
+proper dependency tracking system for host packages, I don't know how
+it can be disabled in that case.
+
+>
+>  # Make sure that LD_LIBRARY_PATH overrides -rpath.
+>  # This is needed because libpython may be installed at the same time that
+>
+> Thanks,
 >
 > Thomas
 > --
 > Thomas Petazzoni, CTO, Bootlin
 > Embedded Linux and Kernel engineering
 > https://bootlin.com
+
+Thanks,
+-Vladimir
