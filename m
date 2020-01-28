@@ -1,122 +1,93 @@
-From: Adrian Martinez <adrian.martinez@sevensols.com>
-Date: Tue, 28 Jan 2020 10:45:40 +0100
-Subject: [Buildroot] Fwd: Building helloworld package
-In-Reply-To: <CAL=12L3JEZrrx_vW=XYBob4x1_vN1yP+TNvtKH=UPOAM0Eg-9Q@mail.gmail.com>
-References: <CAL=12L3JEZrrx_vW=XYBob4x1_vN1yP+TNvtKH=UPOAM0Eg-9Q@mail.gmail.com>
-Message-ID: <CAL=12L0cJNEKwgZ7qVTs-4xGh2HNxCTBU7PsYa+iqpc4yd2HHQ@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 28 Jan 2020 02:57:42 -0700
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: use system-icu for
+ host-nodejs when available
+In-Reply-To: <20200128102057.6c5cda1f@windsurf>
+References: <20200126075848.66484-1-james.hilliard1@gmail.com>
+ <20200126162659.GR32369@scaer> <20200128102057.6c5cda1f@windsurf>
+Message-ID: <CADvTj4rhYWGeZef11z9aEjOmDyZR=6eHVeZMGO6uQfqdBOeWLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!! I have a ZCU102 (Xilinx) board and I'm trying to build a linux with a
-simple package, helloworld.
-
-I've been following this page -->
-https://techfortalk.co.uk/2017/06/16/how-to-create-a-new-package-under-buildroot/
-
-- My package/Config.in is:
-
-
-
-*config BR2_PACKAGE_PAQPRUEBAADRI       bool "paqpruebaadri"       help
-           This is sample package.*
-
-- My package/paq_prueba_adri.mk is:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-*paqpruebaadri_MODULE_VERSION = 1.0paqpruebaadri_SITE =
-/home/adrian/Documents/codigo_holamundopaqpruebaadri_SITE_METHOD =
-localpaqpruebaadri_LICENSE = GPLv2paqpruebaadri_LICENSE_FILES =
-COPYINGpaqpruebaadri_MODULE_MAKE_OPTS = \        CONFIG_DUMMY1= \
-CONFIG_DUMMY2=ydefine ADRI_BUILD_CMDS$(MAKE) CC="$(TARGET_CC)"
-LD="$(TARGET_LD)" -C $(@D) allendefdefine
-ADRI_INSTALL_TARGET_CMDS$(INSTALL) -D -m 0755 $(@D)/adritest
-$(TARGET_DIR)/bin$(INSTALL) -D -m 0755 $(@D)//run_adritest.sh
-$(TARGET_DIR)/bin$(TARGET_DIR)/rootendef $(eval $(generic-package))*
-
-- And, inside of the main Config.in, I've written:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-*menu "Target packages" source "package/busybox/Config.in" source
-"package/skeleton/Config.in" source "package/skeleton-custom/Config.in"
-source "package/skeleton-init-common/Config.in" source
-"package/skeleton-init-none/Config.in" source
-"package/skeleton-init-systemd/Config.in" source
-"package/skeleton-init-sysv/Config.in"--> menu "Paq prueba
-ADRI"                                            <---->         source
-"package/paq_prueba_adri/Config.in"  <---->
-endmenu
-<--menu "Audio and video applications" source
-"package/alsa-utils/Config.in" source "package/atest/Config.in".*
-*.*
-
-*.*
-
-- The code and make files are:
-
-
-
-
-
-
-*#include <stdio.h>int main(){        printf("Hola mundo");        return
-0;}*
-
-
-
-*holamundo:
-/home/adrian/Documents/ZCU-102/buildroot-2019.02.3/output/host/usr/bin/aarch64-linux-gnu-gcc
-holamundo.c*
-
-But, when I boot the board, I don't find anything about my package.
-Am I following the correct steps?
-
-Thanks, Adri?n.
-
--- 
-?This e-mail and any materials attached hereto, including, without 
-limitation, all content hereof and thereof are confidential and proprietary 
-to Seven Solutions,S.L and/or its affiliates, and are *confidential*. 
-Without the prior written consent of Seven Solutions, this content may not 
-(i) be disclosed to any third party, (ii) be reproduced, modified or 
-otherwise used by anyone other than current employees of Seven Solutions or 
-its affiliates. If you are not the intended recipient or if this message 
-has been received in error, please notify us immediately via e-mail and 
-delete it.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200128/de695a52/attachment.html>
+On Tue, Jan 28, 2020 at 2:20 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Sun, 26 Jan 2020 17:26:59 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>
+> > James, All,
+> >
+> > On 2020-01-26 00:58 -0700, James Hilliard spake thusly:
+> > > Fixes:
+> > >  - http://autobuild.buildroot.net/results/1ef947553ec762dba6a6202b1cfc84ceed75dbb2/
+> >
+> > Pointing to an autobuild failure is nice, but you really need to provide
+> > a bit more context and explanations on what you are doing here...
+> >
+> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > ---
+> > >  package/nodejs/nodejs.mk | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> > > index e6eb73d576..abc868c364 100644
+> > > --- a/package/nodejs/nodejs.mk
+> > > +++ b/package/nodejs/nodejs.mk
+> > > @@ -65,7 +65,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
+> > >             --shared-openssl-libpath=$(HOST_DIR)/lib \
+> > >             --shared-zlib \
+> > >             --no-cross-compiling \
+> > > -           --with-intl=small-icu \
+> > > +           --with-intl=$(if $(BR2_PACKAGE_ICU),system-icu,small-icu) \
+> >
+> > We already have a conditional block about icu, lines 35-40.
+> >
+> > >     )
+> > >  endef
+> > >
+> > > @@ -80,6 +80,7 @@ define HOST_NODEJS_BUILD_CMDS
+> > >     $(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+> > >             $(MAKE) -C $(@D) \
+> > >             $(HOST_CONFIGURE_OPTS) \
+> > > +           $(if $(BR2_PACKAGE_ICU),CXXFLAGS.target="-DU_DISABLE_RENAMING=1") \
+> >
+> > Why do you need to account for a target package when building the host
+> > variant of nodejs? If this is needed, then explain it in the commit log.
+> >
+> > Then, the way we usually pass such options is to append to the existing
+> > CXXFLAGS. With the above comment, that would probably yield something
+> > like (e.g. for target, ditto for host):
+> >
+> >     NODEJS_CXXFLAGS = $(TARGET_CXXFLAGS)
+> >
+> >     ifeq ($(BR2_PACKAGE_ICU),y)
+> >     NODEJS_DEPENDENCIES += icu
+> >     NODEJS_CONF_OPTS += --with-intl=system-icu
+> >     NODEJS_CXXFLAGS += -DU_DISABLE_RENAMING=1
+> >     else
+> >     NODEJS_CONF_OPTS += --with-intl=small-icu
+> >     endif
+>
+> I think you're missing the fact that James is tweaking
+> HOST_NODEJS_CONF_OPTS, depending on the value of BR2_PACKAGE_ICU, which
+> looks very wrong.
+>
+> The issue is apparently that when host-icu has been built, the
+> host-nodejs internal small-icu causes a build failure. However, while
+> BR2_PACKAGE_ICU=y implies that host-icu will be built, host-icu can
+> potentially be built even with BR2_PACKAGE_ICU is disabled. It is not
+> the case today in Buildroot, because host-icu is only in the build
+> dependencies of the target icu package, but relying on this assumption
+> seems wrong.
+Is there a way to make it depend on host-icu directly?
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
