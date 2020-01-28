@@ -1,32 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Jan 2020 18:31:01 +0000
-Subject: [Buildroot] [Bug 12511] rng-tools has forced dependency on
- jitterentropy-library ; It slows boot considerably
-In-Reply-To: <bug-12511-163@https.bugs.busybox.net/>
-References: <bug-12511-163@https.bugs.busybox.net/>
-Message-ID: <bug-12511-163-FHISvke00W@https.bugs.busybox.net/>
+From: Laurent Cans <laurent.cans@gmail.com>
+Date: Tue, 28 Jan 2020 19:48:27 +0100
+Subject: [Buildroot] [PATCH] package/aircrack-ng: bump to version 1.6
+Message-ID: <20200128184827.25409-1-laurent.cans@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12511
+Signed-off-by: Laurent Cans <laurent.cans@gmail.com>
+---
+ package/aircrack-ng/aircrack-ng.hash | 4 ++--
+ package/aircrack-ng/aircrack-ng.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- Comment #1 from Matt Weber <matthew.weber@rockwellcollins.com> ---
-Sorry to hear about the boot delay issue.  The reason it was added by default
-was I noticed the init script had handled a case of adding entropy when a hwrng
-wasn't present. I didn't realize the impact when hwrng was enabled.
-
-I agree, I think something like a new kconfig sub option named "enable source
-jitterentropy" under rngd might be best (with a solid help description
-outlining when to enable it).  There isn't a ideal way to get a linux config
-option to trigger a dependency in the buildroot build.
-
-We could tailor the initscript and have it check if there is a hwrng enabled by
-checking for dev node existence if that is consistance.  However we can't
-probably depend on the linux config being present and parse-able.
-
+diff --git a/package/aircrack-ng/aircrack-ng.hash b/package/aircrack-ng/aircrack-ng.hash
+index d8a171dc07..990c3ef563 100644
+--- a/package/aircrack-ng/aircrack-ng.hash
++++ b/package/aircrack-ng/aircrack-ng.hash
+@@ -1,6 +1,6 @@
+ # From http://www.aircrack-ng.org/downloads.html
+-sha1 7b63c7ce01cb65a4775833c6cadf7ddd82bf46d5 aircrack-ng-1.5.2.tar.gz
+-md5 2648c192d206e953c67dca64967d2982 aircrack-ng-1.5.2.tar.gz
++sha1 ffeb4816476e7b329dc0c154f1aa4a30ad171beb aircrack-ng-1.6.tar.gz
++md5  22ddc85549b51ed0da0931d01ef215e5 aircrack-ng-1.6.tar.gz
+ 
+ # Hash for license file:
+ sha256 fc51fd3a97223f2fd47b057202d4a6b0daaedf23b5a1f5ff8723c192fc1e021d LICENSE
+diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+index a6db384b84..baa1fad9e1 100644
+--- a/package/aircrack-ng/aircrack-ng.mk
++++ b/package/aircrack-ng/aircrack-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AIRCRACK_NG_VERSION = 1.5.2
++AIRCRACK_NG_VERSION = 1.6
+ AIRCRACK_NG_SITE = http://download.aircrack-ng.org
+ AIRCRACK_NG_LICENSE = GPL-2.0+
+ AIRCRACK_NG_LICENSE_FILES = LICENSE
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
