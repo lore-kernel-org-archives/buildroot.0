@@ -1,21 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2020 17:16:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/opkg-utils: bump to version
- 0.4.2
-In-Reply-To: <20200128225600.101716-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 28 Jan 2020 23:56:00 +0100")
-References: <20200128225600.101716-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tv4e5jb9.fsf@dell.be.48ers.dk>
+Date: Wed, 29 Jan 2020 17:17:15 +0100
+Subject: [Buildroot] [PATCH] package/luarocks: bump to version 3.3.0
+In-Reply-To: <20200129110626.9076-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Wed, 29 Jan 2020 12:06:26 +0100")
+References: <20200129110626.9076-1-francois.perrad@gadz.org>
+Message-ID: <87pnf25jas.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > Add hash for license file
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Committed, thanks.
 
