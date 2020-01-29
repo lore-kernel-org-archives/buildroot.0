@@ -1,62 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2020 20:48:18 +0100
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 19.3.3
-Message-ID: <20200129194011.D1E008465A@busybox.osuosl.org>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Wed, 29 Jan 2020 20:57:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libubootenv: bump to version 879c073
+Message-ID: <1580327836-5669-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44655cda41a132f2caec648347c76df5e24fa6d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This includes the following changes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+879c073 Do not hardcode path for install
+d9c639b libubootenv: add pkg-config support
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 752c9c3c16..667a74b1a8 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 19.3.2
-+MESA3D_HEADERS_VERSION = 19.3.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 45b38abf2b..e14b890e73 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2020-January/000566.html
--sha256 4e3aee324616352bbc7f58d47ab573e10f68cc7719fd045bd6d3abcdd97ee1c1  mesa-19.3.2.tar.xz
--sha512 fb69999fa7a15cd6f2c254fb6e8fe635e56dc49a5c2c762a96c77815cbad77060b8f81a02e67ac9ec58092ab866e080fb928086a5ac1e61c3efe882e5825cd28  mesa-19.3.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2020-January/000567.html
-+sha256 81ce4810bb25d61300f8104856461f4d49cf7cb794aa70cb572312e370c39f09  mesa-19.3.3.tar.xz
-+sha512 1f792fbde71132afd4a43d6abe6a3d640f375e83641c6144c82312774434c9588ffba65a3ba38394947bd753656aa85213b6cd9f745cec0040c0559eb41f0dc9  mesa-19.3.3.tar.xz
- 
- # License
- sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index f6f276c92d..50a29aa7db 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index 161a8dd..bde2ac3 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 4d948a8b7e4fb92c36c36a1a247c1bab4343c55b5324699d18ea012737dbedeb libubootenv-cc628ee0cd750be26275b6eaeaba4d324df11dec.tar.gz
++sha256 332c45d46401f1859f0781fd0fd316bb1c251264674677c26a4d9b9e1c592719 libubootenv-879c0731fa0725785b9fa4499bbf6aacd04ee4c2.tar.gz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index ae3db40..99cbd0d 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 19.3.2
-+MESA3D_VERSION = 19.3.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-LIBUBOOTENV_VERSION = cc628ee0cd750be26275b6eaeaba4d324df11dec
++LIBUBOOTENV_VERSION = 879c0731fa0725785b9fa4499bbf6aacd04ee4c2
+ LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
+-- 
+2.7.4
