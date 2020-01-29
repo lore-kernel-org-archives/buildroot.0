@@ -1,26 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2020 20:49:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.11.6
-In-Reply-To: <20200129190700.691686-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 29 Jan 2020 20:07:00 +0100")
-References: <20200129190700.691686-1-bernd.kuhls@t-online.de>
-Message-ID: <878slq9h5k.fsf@dell.be.48ers.dk>
+Date: Wed, 29 Jan 2020 20:49:23 +0100
+Subject: [Buildroot] [git commit] package/libpjsip: add bcg729 optional
+ dependency
+Message-ID: <20200129194011.DA6DC842EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3fe4a3603cf58f397eaafe2d5ea24ebf75ff018d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Release notes: https://www.samba.org/samba/history/samba-4.11.6.html
- > Removed patch 0004 which was applied upstream:
- > https://git.samba.org/samba.git/?p=samba.git;a=commit;h=1d28d27070a7ade82283dab11c9ef7cadfbf54fb
- > https://git.samba.org/samba.git/?p=samba.git;a=commit;h=3889444e00866eafebcdfb42be5f07990b881c56
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libpjsip/libpjsip.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 84919fdc10..b89249a6e5 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -49,6 +49,13 @@ LIBPJSIP_CONF_OPTS = \
+ # so we want to use it.
+ LIBPJSIP_CONF_OPTS += --enable-epoll
+ 
++ifeq ($(BR2_PACKAGE_BCG729),y)
++LIBPJSIP_DEPENDENCIES += bcg729
++LIBPJSIP_CONF_OPTS += --with-bcg729=$(STAGING_DIR)/usr
++else
++LIBPJSIP_CONF_OPTS += --disable-bcg729
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBGSM),y)
+ LIBPJSIP_CONF_OPTS += \
+ 	--enable-gsm-codec \
