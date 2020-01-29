@@ -1,54 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2020 20:47:32 +0100
-Subject: [Buildroot] [git commit] package/go: security bump to version 1.13.7
-Message-ID: <20200129194011.CF60E842EA@busybox.osuosl.org>
+Date: Wed, 29 Jan 2020 20:47:22 +0100
+Subject: [Buildroot] [git commit] package/python-aiohttp-debugtoolbar: bump
+ to version 0.6.0
+Message-ID: <20200129194011.C172F84659@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f40acb4684be2aed970242da8b16bff12d921993
+commit: https://git.buildroot.net/buildroot/commit/?id=f6820165c71548788bee0eb652e7a48780e43322
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issue:
-
-- Panic in crypto/x509 certificate parsing and golang.org/x/crypto/cryptobyte
-
-On 32-bit architectures, a malformed input to crypto/x509 or the ASN.1
-parsing functions of golang.org/x/crypto/cryptobyte can lead to a panic.
-The malformed certificate can be delivered via a crypto/tls connection to a
-client, or to a server that accepts client certificates.  net/http clients
-can be made to crash by an HTTPS server, while net/http servers that accept
-client certificates will recover the panic and are unaffected.  Thanks to
-Project Wycheproof for providing the test cases that led to the discovery of
-this issue.  The issue is CVE-2020-7919 and Go issue golang.org/issue/36837.
-
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash | 4 ++--
+ package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index f440490b4e..b607ce37d4 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	aae5be954bdc40bcf8006eb77e8d8a5dde412722bc8effcdaf9772620d06420c  go1.13.6.src.tar.gz
-+sha256	e4ad42cc5f5c19521fbbbde3680995f2546110b5c6aa2b48c3754ff7af9b41f4  go1.13.7.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index a0f796c21b..43c04ac0c5 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash
+index 655c46da3c..927bd32895 100644
+--- a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash
++++ b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp_debugtoolbar/json
+-md5	26b26163f3fbeb16ac67197902330942  aiohttp-debugtoolbar-0.5.0.tar.gz
+-sha256	697c9cfac4017d532e26a8c05f14c1a43b3b147f53460daacb0ed144401df441  aiohttp-debugtoolbar-0.5.0.tar.gz
++md5	496734057cb413d7a49a52a817802dbb  aiohttp-debugtoolbar-0.6.0.tar.gz
++sha256	ec231661133b40136608d39dfb688e7ea0c3d47b6ae6dee52d5bf24ceb9e4d45  aiohttp-debugtoolbar-0.6.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	94d638be2cb4f186cc62bb567455837757547c15f1b350863aaf05a38843b542  LICENSE
+diff --git a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk
+index 27eadd2173..319d20ffc5 100644
+--- a/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk
++++ b/package/python-aiohttp-debugtoolbar/python-aiohttp-debugtoolbar.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--GO_VERSION = 1.13.6
-+GO_VERSION = 1.13.7
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-PYTHON_AIOHTTP_DEBUGTOOLBAR_VERSION = 0.5.0
++PYTHON_AIOHTTP_DEBUGTOOLBAR_VERSION = 0.6.0
+ PYTHON_AIOHTTP_DEBUGTOOLBAR_SOURCE = aiohttp-debugtoolbar-$(PYTHON_AIOHTTP_DEBUGTOOLBAR_VERSION).tar.gz
+-PYTHON_AIOHTTP_DEBUGTOOLBAR_SITE = https://files.pythonhosted.org/packages/08/b1/b629499450a84e68b53d000e6150ae4dace68ae589c5ac36b6541777c8d3
++PYTHON_AIOHTTP_DEBUGTOOLBAR_SITE = https://files.pythonhosted.org/packages/3f/dd/5121417dfbeb4661673afa5c8708f1539889d0e54b1509a6fdf66705efc5
+ PYTHON_AIOHTTP_DEBUGTOOLBAR_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_DEBUGTOOLBAR_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_DEBUGTOOLBAR_LICENSE_FILES = LICENSE
