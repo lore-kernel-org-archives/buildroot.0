@@ -1,191 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2020 20:49:43 +0100
-Subject: [Buildroot] [git commit] package/samba4: bump version to 4.11.6
-Message-ID: <20200129194011.E320C84659@busybox.osuosl.org>
+Date: Wed, 29 Jan 2020 20:48:18 +0100
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.3.3
+Message-ID: <20200129194011.D1E008465A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c373b614e67a5ab1708ec564bf529bf3f26b976
+commit: https://git.buildroot.net/buildroot/commit/?id=44655cda41a132f2caec648347c76df5e24fa6d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes: https://www.samba.org/samba/history/samba-4.11.6.html
-
-Removed patch 0004 which was applied upstream:
-https://git.samba.org/samba.git/?p=samba.git;a=commit;h=1d28d27070a7ade82283dab11c9ef7cadfbf54fb
-https://git.samba.org/samba.git/?p=samba.git;a=commit;h=3889444e00866eafebcdfb42be5f07990b881c56
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0004-Include-stdint.h-before-cmoka.h.patch     | 134 ---------------------
- package/samba4/samba4.hash                         |   4 +-
- package/samba4/samba4.mk                           |   2 +-
- 3 files changed, 3 insertions(+), 137 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/samba4/0004-Include-stdint.h-before-cmoka.h.patch b/package/samba4/0004-Include-stdint.h-before-cmoka.h.patch
-deleted file mode 100644
-index 71a79abbf8..0000000000
---- a/package/samba4/0004-Include-stdint.h-before-cmoka.h.patch
-+++ /dev/null
-@@ -1,134 +0,0 @@
--From 512dff011cd1bce9ca48c20fd9470dbc05dd2449 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 15 Dec 2019 17:08:24 +0100
--Subject: [PATCH] Include stdint.h before cmoka.h
--
--This fix the following build failures:
--
--[2466/3864] Linking bin/default/lib/ldb/ldbmodify
--In file included from /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/include/stdint.h:9:0,
--                 from ../../lib/tevent/tevent.h:31,
--                 from ../../lib/ldb/include/ldb.h:51,
--                 from ../../lib/ldb/tests/test_ldb_dn.c:25:
--/home/buildroot/autobuild/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/stdint.h:122:27: error: conflicting types for 'uintptr_t'
-- typedef unsigned long int uintptr_t;
--                           ^
--In file included from ../../lib/ldb/tests/test_ldb_dn.c:23:0:
--/home/buildroot/autobuild/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/cmocka.h:132:28: note: previous declaration of 'uintptr_t' was here
--       typedef unsigned int uintptr_t;
--                            ^
--
--In file included from /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/include/stdint.h:9:0,
--                 from ../../lib/tevent/tevent.h:31,
--                 from ../../lib/ldb/tests/ldb_key_value_test.c:48:
--/home/buildroot/autobuild/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/stdint.h:122:27: error: conflicting types for 'uintptr_t'
-- typedef unsigned long int uintptr_t;
--                           ^
--In file included from ../../lib/ldb/tests/ldb_key_value_test.c:43:0:
--/home/buildroot/autobuild/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/cmocka.h:132:28: note: previous declaration of 'uintptr_t' was here
--       typedef unsigned int uintptr_t;
--                            ^
--
--Fixes:
-- - http://autobuild.buildroot.org/results/9507739b3d5d51024ee9c60b74c2f85d5004e7e2
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://gitlab.com/samba-team/samba/merge_requests/1003]
-----
-- lib/ldb/tests/ldb_key_value_sub_txn_test.c | 1 +
-- lib/ldb/tests/ldb_key_value_test.c         | 1 +
-- lib/ldb/tests/ldb_lmdb_size_test.c         | 1 +
-- lib/ldb/tests/ldb_lmdb_test.c              | 1 +
-- lib/ldb/tests/ldb_no_lmdb_test.c           | 1 +
-- lib/ldb/tests/test_ldb_dn.c                | 1 +
-- source4/utils/oLschema2ldif/test.c         | 1 +
-- 7 files changed, 7 insertions(+)
--
--diff --git a/lib/ldb/tests/ldb_key_value_sub_txn_test.c b/lib/ldb/tests/ldb_key_value_sub_txn_test.c
--index e71f81b866e..1eafd2d79e9 100644
----- a/lib/ldb/tests/ldb_key_value_sub_txn_test.c
--+++ b/lib/ldb/tests/ldb_key_value_sub_txn_test.c
--@@ -37,6 +37,7 @@
--  */
-- #include <stdarg.h>
-- #include <stddef.h>
--+#include <stdint.h>
-- #include <setjmp.h>
-- #include <cmocka.h>
-- 
--diff --git a/lib/ldb/tests/ldb_key_value_test.c b/lib/ldb/tests/ldb_key_value_test.c
--index 3f31bb98350..458452e5dc4 100644
----- a/lib/ldb/tests/ldb_key_value_test.c
--+++ b/lib/ldb/tests/ldb_key_value_test.c
--@@ -39,6 +39,7 @@
--  */
-- #include <stdarg.h>
-- #include <stddef.h>
--+#include <stdint.h>
-- #include <setjmp.h>
-- #include <cmocka.h>
-- 
--diff --git a/lib/ldb/tests/ldb_lmdb_size_test.c b/lib/ldb/tests/ldb_lmdb_size_test.c
--index c0c4fe87204..95eba878ba7 100644
----- a/lib/ldb/tests/ldb_lmdb_size_test.c
--+++ b/lib/ldb/tests/ldb_lmdb_size_test.c
--@@ -43,6 +43,7 @@
--  */
-- #include <stdarg.h>
-- #include <stddef.h>
--+#include <stdint.h>
-- #include <setjmp.h>
-- #include <cmocka.h>
-- 
--diff --git a/lib/ldb/tests/ldb_lmdb_test.c b/lib/ldb/tests/ldb_lmdb_test.c
--index 78758bbbe16..798a1916281 100644
----- a/lib/ldb/tests/ldb_lmdb_test.c
--+++ b/lib/ldb/tests/ldb_lmdb_test.c
--@@ -40,6 +40,7 @@
--  */
-- #include <stdarg.h>
-- #include <stddef.h>
--+#include <stdint.h>
-- #include <setjmp.h>
-- #include <cmocka.h>
-- 
--diff --git a/lib/ldb/tests/ldb_no_lmdb_test.c b/lib/ldb/tests/ldb_no_lmdb_test.c
--index 8e5a6eee8d2..be23d744004 100644
----- a/lib/ldb/tests/ldb_no_lmdb_test.c
--+++ b/lib/ldb/tests/ldb_no_lmdb_test.c
--@@ -40,6 +40,7 @@
--  */
-- #include <stdarg.h>
-- #include <stddef.h>
--+#include <stdint.h>
-- #include <setjmp.h>
-- #include <cmocka.h>
-- 
--diff --git a/lib/ldb/tests/test_ldb_dn.c b/lib/ldb/tests/test_ldb_dn.c
--index 109ee53c8ab..6faff9b7de7 100644
----- a/lib/ldb/tests/test_ldb_dn.c
--+++ b/lib/ldb/tests/test_ldb_dn.c
--@@ -19,6 +19,7 @@
-- 
-- #include <stdarg.h>
-- #include <stddef.h>
--+#include <stdint.h>
-- #include <setjmp.h>
-- #include <cmocka.h>
-- 
--diff --git a/source4/utils/oLschema2ldif/test.c b/source4/utils/oLschema2ldif/test.c
--index 6748ce08c33..3834ea462fd 100644
----- a/source4/utils/oLschema2ldif/test.c
--+++ b/source4/utils/oLschema2ldif/test.c
--@@ -19,6 +19,7 @@
-- 
-- #include <stdarg.h>
-- #include <stddef.h>
--+#include <stdint.h>
-- #include <setjmp.h>
-- #include <cmocka.h>
-- 
---- 
--2.24.0
--
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 47e251b38c..022bc22055 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.5.tar.asc
--sha256 f3e299ff62e424c0c259a2e60ca30979c8a65244d7ef6b54667902dac639d93f  samba-4.11.5.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.11.6.tar.asc
-+sha256 91438f4d7b71f673421435fa7f26b03b613f214139636ce50af35bc2ff09ef38  samba-4.11.6.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index d66fd5794d..005296ea74 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 752c9c3c16..667a74b1a8 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.3.2
++MESA3D_HEADERS_VERSION = 19.3.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 45b38abf2b..e14b890e73 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2020-January/000566.html
+-sha256 4e3aee324616352bbc7f58d47ab573e10f68cc7719fd045bd6d3abcdd97ee1c1  mesa-19.3.2.tar.xz
+-sha512 fb69999fa7a15cd6f2c254fb6e8fe635e56dc49a5c2c762a96c77815cbad77060b8f81a02e67ac9ec58092ab866e080fb928086a5ac1e61c3efe882e5825cd28  mesa-19.3.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2020-January/000567.html
++sha256 81ce4810bb25d61300f8104856461f4d49cf7cb794aa70cb572312e370c39f09  mesa-19.3.3.tar.xz
++sha512 1f792fbde71132afd4a43d6abe6a3d640f375e83641c6144c82312774434c9588ffba65a3ba38394947bd753656aa85213b6cd9f745cec0040c0559eb41f0dc9  mesa-19.3.3.tar.xz
+ 
+ # License
+ sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f6f276c92d..50a29aa7db 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SAMBA4_VERSION = 4.11.5
-+SAMBA4_VERSION = 4.11.6
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.3.2
++MESA3D_VERSION = 19.3.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
