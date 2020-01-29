@@ -1,38 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2020 20:49:23 +0100
-Subject: [Buildroot] [git commit] package/libpjsip: add bcg729 optional
- dependency
-Message-ID: <20200129194011.DA6DC842EA@busybox.osuosl.org>
+Date: Wed, 29 Jan 2020 20:47:32 +0100
+Subject: [Buildroot] [git commit] package/go: security bump to version 1.13.7
+Message-ID: <20200129194011.CF60E842EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fe4a3603cf58f397eaafe2d5ea24ebf75ff018d
+commit: https://git.buildroot.net/buildroot/commit/?id=f40acb4684be2aed970242da8b16bff12d921993
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes the following security issue:
+
+- Panic in crypto/x509 certificate parsing and golang.org/x/crypto/cryptobyte
+
+On 32-bit architectures, a malformed input to crypto/x509 or the ASN.1
+parsing functions of golang.org/x/crypto/cryptobyte can lead to a panic.
+The malformed certificate can be delivered via a crypto/tls connection to a
+client, or to a server that accepts client certificates.  net/http clients
+can be made to crash by an HTTPS server, while net/http servers that accept
+client certificates will recover the panic and are unaffected.  Thanks to
+Project Wycheproof for providing the test cases that led to the discovery of
+this issue.  The issue is CVE-2020-7919 and Go issue golang.org/issue/36837.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpjsip/libpjsip.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 84919fdc10..b89249a6e5 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -49,6 +49,13 @@ LIBPJSIP_CONF_OPTS = \
- # so we want to use it.
- LIBPJSIP_CONF_OPTS += --enable-epoll
+diff --git a/package/go/go.hash b/package/go/go.hash
+index f440490b4e..b607ce37d4 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	aae5be954bdc40bcf8006eb77e8d8a5dde412722bc8effcdaf9772620d06420c  go1.13.6.src.tar.gz
++sha256	e4ad42cc5f5c19521fbbbde3680995f2546110b5c6aa2b48c3754ff7af9b41f4  go1.13.7.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index a0f796c21b..43c04ac0c5 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_BCG729),y)
-+LIBPJSIP_DEPENDENCIES += bcg729
-+LIBPJSIP_CONF_OPTS += --with-bcg729=$(STAGING_DIR)/usr
-+else
-+LIBPJSIP_CONF_OPTS += --disable-bcg729
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGSM),y)
- LIBPJSIP_CONF_OPTS += \
- 	--enable-gsm-codec \
+-GO_VERSION = 1.13.6
++GO_VERSION = 1.13.7
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
