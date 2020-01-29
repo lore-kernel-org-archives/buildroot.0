@@ -1,45 +1,43 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Wed, 29 Jan 2020 20:57:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libubootenv: bump to version 879c073
-Message-ID: <1580327836-5669-1-git-send-email-pjtexier@koncepto.io>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 29 Jan 2020 21:26:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libpjsip: add sound support
+Message-ID: <20200129202628.205096-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This includes the following changes:
-
-879c073 Do not hardcode path for install
-d9c639b libubootenv: add pkg-config support
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libubootenv/libubootenv.hash | 2 +-
- package/libubootenv/libubootenv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libpjsip/libpjsip.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
-index 161a8dd..bde2ac3 100644
---- a/package/libubootenv/libubootenv.hash
-+++ b/package/libubootenv/libubootenv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 4d948a8b7e4fb92c36c36a1a247c1bab4343c55b5324699d18ea012737dbedeb libubootenv-cc628ee0cd750be26275b6eaeaba4d324df11dec.tar.gz
-+sha256 332c45d46401f1859f0781fd0fd316bb1c251264674677c26a4d9b9e1c592719 libubootenv-879c0731fa0725785b9fa4499bbf6aacd04ee4c2.tar.gz
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 Licenses/lgpl-2.1.txt
-diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-index ae3db40..99cbd0d 100644
---- a/package/libubootenv/libubootenv.mk
-+++ b/package/libubootenv/libubootenv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index b89249a6e5..a6012ba58b 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -25,7 +25,6 @@ LIBPJSIP_CONF_ENV = \
+ 	CFLAGS="$(LIBPJSIP_CFLAGS)"
  
--LIBUBOOTENV_VERSION = cc628ee0cd750be26275b6eaeaba4d324df11dec
-+LIBUBOOTENV_VERSION = 879c0731fa0725785b9fa4499bbf6aacd04ee4c2
- LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
- LIBUBOOTENV_LICENSE = LGPL-2.1
- LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
+ LIBPJSIP_CONF_OPTS = \
+-	--disable-sound \
+ 	--disable-resample \
+ 	--disable-video \
+ 	--disable-g7221-codec \
+@@ -49,6 +48,13 @@ LIBPJSIP_CONF_OPTS = \
+ # so we want to use it.
+ LIBPJSIP_CONF_OPTS += --enable-epoll
+ 
++ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER),y)
++LIBPJSIP_DEPENDENCIES += alsa-lib
++LIBPJSIP_CONF_OPTS += --enable-sound
++else
++LIBPJSIP_CONF_OPTS += --disable-sound
++endif
++
+ ifeq ($(BR2_PACKAGE_BCG729),y)
+ LIBPJSIP_DEPENDENCIES += bcg729
+ LIBPJSIP_CONF_OPTS += --with-bcg729=$(STAGING_DIR)/usr
 -- 
-2.7.4
+2.24.1
