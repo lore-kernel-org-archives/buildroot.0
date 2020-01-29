@@ -1,83 +1,47 @@
-From: Yann Cardaillac <ycardaillac@sepro-group.com>
-Date: Wed, 29 Jan 2020 16:35:30 +0100 (CET)
-Subject: [Buildroot] [valgrind] problem with glibc 2.23 and valgrind 3.12.0
-Message-ID: <141898239.12156194.1580312130858.JavaMail.zimbra@sepro-group.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Jan 2020 16:56:34 +0100
+Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump version to
+ 0.0.20200128
+Message-ID: <20200129155635.29613-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all, 
+Fixes build issues with kernel 5.5. For details, see the announcement:
 
-I mentioned on IRC a problem with valgrind and glibc. 
-The issue is 100% repeatable. 
+https://lists.zx2c4.com/pipermail/wireguard/2020-January/004905.html
 
-Valgrind is in version 3.12.0 
-Toolchain external, Linaro ARM 2017.02 
-Glibc 2.23 
-Buildroot 2017.08.2 
-Target is Arm Cortex a9 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I'm working with [ https://valgrind.org/docs/manual/quick-start.html | https://valgrind.org/docs/manual/quick-start.html ] as a reference program. 
-When executing the program "a.c" on my target I won't get the same error, instead I'm seeing: 
-
-[ https://pastebin.com/QJ2j89Y8 | https://pastebin.com/QJ2j89Y8 ] 
-
-As you can see I have the proper error that I'm expected but also some error refering to ld-2.23.so lib. Which I did not altered by any way. 
-
-==31275== Conditional jump or move depends on uninitialised value(s) 
-==31275== at 0x4011E14: index (in /usr/lib/ld-2.23.so) 
-==31275== 
-==31275== Conditional jump or move depends on uninitialised value(s) 
-==31275== at 0x4011E18: index (in /usr/lib/ld-2.23.so) 
-==31275== 
-==31275== Conditional jump or move depends on uninitialised value(s) 
-==31275== at 0x4005A5A: expand_dynamic_string_token (in /usr/lib/ld-2.23.so) 
-
-To fix that issue, I've had to add a few new rules to a supp files: 
-
-{ 
-Sepro-fix-glibc-ld-bug 
-Memcheck:Cond 
-fun:index 
-} 
-
-{ 
-Sepro-fix-glibc-ld-bug 
-Memcheck:Cond 
-fun:expand_dynamic_string_token 
-} 
-
-I took those rule from : 
-valgrind ./a.out --gen-suppressions=yes 
-
-Then using the supp file as such : 
-valgrind --leak-check=yes --suppressions=/lib/valgrind/sepro.supp ./a.out 
-
-My question is mostly why do I have to do that by myself is it safe? 
-
-I've find this kind of files while being looking for solution to my errors : 
-
-[ https://github.com/mozilla-b2g/valgrind/blob/master/glibc-2.3.supp | https://github.com/mozilla-b2g/valgrind/blob/master/glibc-2.3.supp ] 
-
-Shouldn't we have one equivalent directly coming with valgrind? 
-
-Best regards, 
-
-	
-
-	
-
-Yann CARDAILLAC 
-Ing?nieur d?veloppement logiciel 
-SEPRO Robotique - 88 Rue Henry Bessemer - Zone Ajoncs Ouest - CS 10084 - 85003 La Roche sur Yon Cedex (France) 
-
-[ http://www.sepro-group.com/fr | www.sepro-group.com ] | [ https://twitter.com/seprogroup | 
-
-                @SeproGroup
-             ] 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200129/04913411/attachment.html>
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 0e087c033b..47715fecb1 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004870.html
+-sha256 7726c2994d11913c4543fd3dc83636f7ce573ca689b15e11b83e980acc04422b  wireguard-linux-compat-0.0.20200121.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004905.html
++sha256 8610c6d8712cfd885f50b1a8c572518edf318c094d68491ea218bb50566a9a8a  wireguard-linux-compat-0.0.20200128.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index 2b8e349cb9..097b80e70d 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200121
++WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200128
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+-- 
+2.20.1
