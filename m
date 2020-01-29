@@ -1,51 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2020 17:17:41 +0100
-Subject: [Buildroot] [git commit] package/python-rpi-ws281x: Bump to version
- 4.2.3
-Message-ID: <20200129160718.53A71842EB@busybox.osuosl.org>
+Date: Wed, 29 Jan 2020 17:17:23 +0100
+Subject: [Buildroot] [git commit] package/luarocks: bump to version 3.3.0
+Message-ID: <20200129160718.4BC46842EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a28dcaa4345e9262b73b4e53d9eff7eb6ca4db27
+commit: https://git.buildroot.net/buildroot/commit/?id=db78559f6a65a0ecd44e4321a69f86c63447e618
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-rpi-ws281x/python-rpi-ws281x.hash | 6 +++---
- package/python-rpi-ws281x/python-rpi-ws281x.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/luarocks/luarocks.hash | 2 +-
+ package/luarocks/luarocks.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-rpi-ws281x/python-rpi-ws281x.hash b/package/python-rpi-ws281x/python-rpi-ws281x.hash
-index b009014fb1..5333baabb6 100644
---- a/package/python-rpi-ws281x/python-rpi-ws281x.hash
-+++ b/package/python-rpi-ws281x/python-rpi-ws281x.hash
-@@ -1,6 +1,6 @@
--# md5, sha256 from https://pypi.org/pypi/rpi_ws281x/json
--md5	7914013f6e0ee17ce23d51622d60761d  rpi_ws281x-4.2.2.tar.gz
--sha256	d06cd31217dec40d715a3a07ccb2b4b0b0719527c5aa020cbdd77d0c0b31d113  rpi_ws281x-4.2.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/rpi-ws281x/json
-+md5	17a714941043621e81f592e6a137dd92  rpi_ws281x-4.2.3.tar.gz
-+sha256	265a395410cc7199f779c4209ca3970b7211896b86dbaa4731bdc3569d2e595f  rpi_ws281x-4.2.3.tar.gz
- # Locally computed sha256 checksums
- sha256	7bbf6337c1eee7169579e6acd398f31ea274dfa3a1689ab7e654ca3585d5a8a9  LICENSE
- sha256	7bbf6337c1eee7169579e6acd398f31ea274dfa3a1689ab7e654ca3585d5a8a9  lib/LICENSE
-diff --git a/package/python-rpi-ws281x/python-rpi-ws281x.mk b/package/python-rpi-ws281x/python-rpi-ws281x.mk
-index 6c83cab417..899ad3d1e3 100644
---- a/package/python-rpi-ws281x/python-rpi-ws281x.mk
-+++ b/package/python-rpi-ws281x/python-rpi-ws281x.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 3bcd22fbe6..f001729170 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 f27e20c9cdb3ffb991ccdb85796c36a0690566676f8e1a59b0d0ee6598907d04  luarocks-3.2.1.tar.gz
++sha256 8de54eb851f5245ed3708d94d8872e825b9704049d3ad4febe8e219f419b427d  luarocks-3.3.0.tar.gz
+ sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index cd547e280b..84b3fe4387 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_RPI_WS281X_VERSION = 4.2.2
-+PYTHON_RPI_WS281X_VERSION = 4.2.3
- PYTHON_RPI_WS281X_SOURCE = rpi_ws281x-$(PYTHON_RPI_WS281X_VERSION).tar.gz
--PYTHON_RPI_WS281X_SITE = https://files.pythonhosted.org/packages/3b/b3/cdc84887ead3f15b9f3f2b5fe2b48168757a606c6d08feb53536a8afb396
-+PYTHON_RPI_WS281X_SITE = https://files.pythonhosted.org/packages/03/6c/46fad1bace9d5917190fd76e1550ec6727010cff6d3e5818b8c3a5405ba3
- PYTHON_RPI_WS281X_SETUP_TYPE = setuptools
- PYTHON_RPI_WS281X_LICENSE = MIT
- PYTHON_RPI_WS281X_LICENSE_FILES = LICENSE lib/LICENSE
+-LUAROCKS_VERSION = 3.2.1
++LUAROCKS_VERSION = 3.3.0
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
