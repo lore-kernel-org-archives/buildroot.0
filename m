@@ -1,30 +1,32 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 30 Jan 2020 22:16:37 +0100
-Subject: [Buildroot] [PATCH-2019.02.x v1 1/2] package/qt5base: add patch to
- fix CVE-2020-0569 for LTS
-Message-ID: <20200130211638.25085-1-ps.report@gmx.net>
+Date: Thu, 30 Jan 2020 22:16:38 +0100
+Subject: [Buildroot] [PATCH-2019.02.x v1 2/2] package/qt5base: add patch to
+ fix CVE-2020-0569 for latest
+In-Reply-To: <20200130211638.25085-1-ps.report@gmx.net>
+References: <20200130211638.25085-1-ps.report@gmx.net>
+Message-ID: <20200130211638.25085-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch to fix CVE-2020-0569 for LTS version
+Add upstream patch to fix CVE-2020-0569 for latest version
 (see [1] for details).
 
 [1] https://www.openwall.com/lists/oss-security/2020/01/30/1
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...0005-Do-not-load-plugin-from-the-PWD.patch | 32 +++++++++++++++++++
+ ...0007-Do-not-load-plugin-from-the-PWD.patch | 32 +++++++++++++++++++
  1 file changed, 32 insertions(+)
- create mode 100644 package/qt5/qt5base/5.6.3/0005-Do-not-load-plugin-from-the-PWD.patch
+ create mode 100644 package/qt5/qt5base/5.11.3/0007-Do-not-load-plugin-from-the-PWD.patch
 
-diff --git a/package/qt5/qt5base/5.6.3/0005-Do-not-load-plugin-from-the-PWD.patch b/package/qt5/qt5base/5.6.3/0005-Do-not-load-plugin-from-the-PWD.patch
+diff --git a/package/qt5/qt5base/5.11.3/0007-Do-not-load-plugin-from-the-PWD.patch b/package/qt5/qt5base/5.11.3/0007-Do-not-load-plugin-from-the-PWD.patch
 new file mode 100644
 index 0000000000..4acd42f005
 --- /dev/null
-+++ b/package/qt5/qt5base/5.6.3/0005-Do-not-load-plugin-from-the-PWD.patch
++++ b/package/qt5/qt5base/5.11.3/0007-Do-not-load-plugin-from-the-PWD.patch
 @@ -0,0 +1,32 @@
 +From bf131e8d2181b3404f5293546ed390999f760404 Mon Sep 17 00:00:00 2001
 +From: Olivier Goffart <ogoffart@woboq.com>
