@@ -1,48 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Jan 2020 11:37:03 +0100
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
- version to 0.0.20200128
-Message-ID: <20200130102650.B3BC986428@busybox.osuosl.org>
+From: rscr <rafacrespiramon@gmail.com>
+Date: Thu, 30 Jan 2020 05:38:49 -0600 (CST)
+Subject: [Buildroot] QtWebEngine on RPI 0 W
+In-Reply-To: <20200128104326.030b51d9@gmx.net>
+References: <1579861270269-0.post@n4.nabble.com>
+ <20200125172550.45366ce5@gmx.net> <1580197267384-0.post@n4.nabble.com>
+ <20200128085828.5959e493@gmx.net> <20200128104326.030b51d9@gmx.net>
+Message-ID: <1580384329954-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f263a5b2b1bb5ac370222f31b2acaec8ccc838b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter, 
 
-Fixes build issues with kernel 5.5. For details, see the announcement:
+Thanks for testing it. As I would like to keep using the Qt 5.11.3. I would
+like to find a solution with a gcc toolchain > 5 (webengine requirement)
 
-https://lists.zx2c4.com/pipermail/wireguard/2020-January/004905.html
+- Using the one provided by RPI is not possible because it is 4.9.3
+- Next I tried to use the buildroot toolchain, with gcc 5 (find attached my
+defconfig). 
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+cp4_defconfig.cp4_defconfig
+<http://buildroot-busybox.2317881.n4.nabble.com/file/t2824/cp4_defconfig.cp4_defconfig>  
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index 0e087c033b..47715fecb1 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004870.html
--sha256 7726c2994d11913c4543fd3dc83636f7ce573ca689b15e11b83e980acc04422b  wireguard-linux-compat-0.0.20200121.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004905.html
-+sha256 8610c6d8712cfd885f50b1a8c572518edf318c094d68491ea218bb50566a9a8a  wireguard-linux-compat-0.0.20200128.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 2b8e349cb9..097b80e70d 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200121
-+WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200128
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+Now it fails building qt5webengine, when:
+
+./../../3rdparty/chromium/third_party/WebKit/Source/modules/indexeddb/InspectorIndexedDBAgent.cpp:1007:7:
+warning: ?blink::ClearObjectStore? has a base
+?blink::{anonymous}::ExecutableWithDatabase<blink::protocol::IndexedDB::Backend::ClearObjectStoreCallback>?
+whose type uses the anonymous namespace
+[15206/15243] CXX obj/QtWebEngineCore/media_capture_devices_dispatcher.o
+FAILED: obj/QtWebEngineCore/media_capture_devices_dispatcher.o 
+
+....
+
+virtual memory exhausted: Cannot allocate memory
+[15208/15243] CXX obj/QtWebEngineCore/network_delegate_qt.o
+ninja: build stopped: subcommand failed.
+Makefile.gn_run:331: recipe for target 'run_ninja' failed
+make[5]: *** [run_ninja] Error 1
+Makefile:80: recipe for target 'sub-gn_run-pro-make_first' failed
+make[4]: *** [sub-gn_run-pro-make_first] Error 2
+Makefile:77: recipe for target 'sub-core-make_first' failed
+make[3]: *** [sub-core-make_first] Error 2
+Makefile:46: recipe for target 'sub-src-make_first' failed
+make[2]: *** [sub-src-make_first] Error 2
+package/pkg-generic.mk:238: recipe for target
+'/home/ibercomp/rcr/projects/cp4/buildroot/output/build/qt5webengine-5.11.3/.stamp_built'
+failed
+make[1]: ***
+[/home/ibercomp/rcr/projects/cp4/buildroot/output/build/qt5webengine-5.11.3/.stamp_built]
+Error 2
+Makefile:84: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+This is a problem of the defconfig? The rpi 0 W maybe can not support the
+qt5WebEngine? It is a problem with host (I am using Ubuntu 16.04)?
+
+Kind Regards and thanks!
+
+Rafa
+
+
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
