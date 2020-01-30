@@ -1,45 +1,110 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Jan 2020 23:48:10 +0100
-Subject: [Buildroot] [git commit] package/libqmi: bump to version 1.24.4
-Message-ID: <20200130223903.002608675C@busybox.osuosl.org>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Date: Thu, 30 Jan 2020 17:17:51 -0600
+Subject: [Buildroot] [PATCH 1/1] squashfs: bump version to 4.4
+Message-ID: <20200130231751.4773-1-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73526282a2d95a22c70b432d11e6debfb04643b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bump to version 4.4 and switch to github site since the kernel
+repository has not been updated. See
+https://github.com/plougher/squashfs-tools/blob/master/README.
 
-https://lists.freedesktop.org/archives/libqmi-devel/2020-January/003193.html
+Dropping patch that has been incorporated in the new release.
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This version bump includes support for reproducible images. See the full
+release notes for details at
+https://github.com/plougher/squashfs-tools/blob/master/README-4.4
+
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 ---
- package/libqmi/libqmi.hash | 2 +-
- package/libqmi/libqmi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/squashfs/0001-include-sysmacros.patch | 47 -------------------
+ package/squashfs/squashfs.hash                |  2 +-
+ package/squashfs/squashfs.mk                  |  5 +-
+ 3 files changed, 3 insertions(+), 51 deletions(-)
+ delete mode 100644 package/squashfs/0001-include-sysmacros.patch
 
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index 6936fa6de9..ce96721153 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256	4ae4e476f960dbc0d04b1c0368776eb78edffd4421f3e4c074bb2bfb6375b282  libqmi-1.24.2.tar.xz
-+sha256	0316badec92ff32f51fe6278e6046968d2272a26608995deedd8e4afb563918a  libqmi-1.24.4.tar.xz
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 51ddd2745f..7e89d4a1ae 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/squashfs/0001-include-sysmacros.patch b/package/squashfs/0001-include-sysmacros.patch
+deleted file mode 100644
+index d794836c04..0000000000
+--- a/package/squashfs/0001-include-sysmacros.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 968aa53dd6d2c0831a9af01873441767c06b88d0 Mon Sep 17 00:00:00 2001
+-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-Date: Wed, 1 Aug 2018 12:17:10 +0200
+-Subject: [PATCH] mksquashfs/unsquashfs: fix compilation with glibc 2.25+
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-From glibc 2.25 release notes:
+-https://sourceware.org/ml/libc-alpha/2017-02/msg00079.html
+-"* The inclusion of <sys/sysmacros.h> by <sys/types.h> is deprecated.
+-  This means that in a future release, the macros ?major?, ?minor?, and
+-  ?makedev? will only be available from <sys/sysmacros.h>."
+-
+-See glibc bug https://sourceware.org/bugzilla/show_bug.cgi?id=19239 .
+-
+-Fetch from: https://github.com/plougher/squashfs-tools/pull/52.patch
+-Signed-off-by: Richard Kunze <richard.kunze@web.de>
+----
+- squashfs-tools/mksquashfs.c | 1 +
+- squashfs-tools/unsquashfs.c | 1 +
+- 2 files changed, 2 insertions(+)
+-
+-diff --git a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
+-index d696a51..8d57c3e 100644
+---- a/squashfs-tools/mksquashfs.c
+-+++ b/squashfs-tools/mksquashfs.c
+-@@ -35,6 +35,7 @@
+- #include <stddef.h>
+- #include <sys/types.h>
+- #include <sys/stat.h>
+-+#include <sys/sysmacros.h>
+- #include <fcntl.h>
+- #include <errno.h>
+- #include <dirent.h>
+-diff --git a/squashfs-tools/unsquashfs.c b/squashfs-tools/unsquashfs.c
+-index a57f85c..a492b27 100644
+---- a/squashfs-tools/unsquashfs.c
+-+++ b/squashfs-tools/unsquashfs.c
+-@@ -33,6 +33,7 @@
+- #include "fnmatch_compat.h"
+- 
+- #include <sys/sysinfo.h>
+-+#include <sys/sysmacros.h>
+- #include <sys/types.h>
+- #include <sys/time.h>
+- #include <sys/resource.h>
+diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
+index 4464e62c02..1f08b530a0 100644
+--- a/package/squashfs/squashfs.hash
++++ b/package/squashfs/squashfs.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 bd0aa3011320b8ebee68aa406060de277bef16daf81bad5b9f70cbea6db1a779 squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
++sha256 a7fa4845e9908523c38d4acf92f8a41fdfcd19def41bd5090d7ad767a6dc75c3 squashfs-4.4.tar.gz
+ 
+ # License files
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 7467342c48..15707e198e 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--LIBQMI_VERSION = 1.24.2
-+LIBQMI_VERSION = 1.24.4
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+-SQUASHFS_VERSION = e38956b92f738518c29734399629e7cdb33072d3
+-SQUASHFS_SITE = https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
+-SQUASHFS_SITE_METHOD = git
++SQUASHFS_VERSION = 4.4
++SQUASHFS_SITE = $(call github,plougher,squashfs-tools,$(SQUASHFS_VERSION))
+ SQUASHFS_LICENSE = GPL-2.0+
+ SQUASHFS_LICENSE_FILES = COPYING
+ SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
+-- 
+2.23.0
