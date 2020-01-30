@@ -1,95 +1,247 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Thu, 30 Jan 2020 09:47:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: use pkgconf to find host
- libraries.
-Message-ID: <20200130084734.20100-1-nicolas.cavallari@green-communications.fr>
+From: Frank Vanbever <frank.vanbever@essensium.com>
+Date: Thu, 30 Jan 2020 10:56:28 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/libmodsecurity: new package
+In-Reply-To: <20200120123310.29892-1-frank.vanbever@essensium.com>
+References: <20200120123310.29892-1-frank.vanbever@essensium.com>
+Message-ID: <20200130095629.18339-1-frank.vanbever@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-meson makes a distinction between 'native' (i.e. host) dependencies
-and 'host' (i.e. target) dependencies and can use a different pkg-config
-binary for each case.
+The dependency on !BR2_STATIC_LIBS is due to missing Libs.private in the
+libmodconfig pkg-config file making builds that statically link against
+libmodsecurity fail.
 
-Currently, pkg-meson only pass the target pkg-config and meson
-automatically guesses the host pkg-config by searching PATH, which finds
-host/bin/pkg-config, which is the target pkg-config wrapper script.
+Lua is disabled due to using the host libraries.
+Yajl is disabled as enabling it forces the tests to be built. These tests have a
+hard dependency on libmodsecurity.a which is not built when --disable-static is
+used in the configuration. There is no flag to disable these tests.
 
-As a result, meson uses the target pkg-config to find host dependencies,
-with possibly incorrect results.
-
-This patch causes meson to use host/bin/pkgconf directly to find host
-dependencies, using the apparently recommended method[1] of
-specifing the PKG_CONFIG environment variable.  pkgconf does not know
-about the target sysroot, so only finds host dependencies.
-
-[1] https://github.com/mesonbuild/meson/issues/1849
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
---
-
-This meson.build snippet:
-
-----------------------------
-host_glib = dependency('glib-2.0', native: true, method: 'pkg-config')
-gdbus_codegen = find_program(host_glib.get_pkgconfig_variable('bindir')
-                             + '/gdbus-codegen')
-----------------------------
-
-Without the patch, it uses the target .pc file with a prefix of /usr,
-and finds /usr/bin/gdbus-codegen from the host :
-
-Found pkg-config: $OUTPUT/host/bin/pkg-config (1.6.1)
-Build-time dependency glib-2.0 found: YES 2.62.4
-Program /usr/bin/gdbus-codegen found: YES (/usr/bin/gdbus-codegen)
-
-For a complete dummy example, use this dummy package:
-
-base64 -d << EOF | tar -xJv
-/Td6WFoAAATm1rRGAgAhARwAAAAQz1jM4Cf/AsJdADgYSJnNF3UkZpejSZiTToh3TmWwjd6v7C8E
-PXLCFsW1o1RD4pKzYIacUzj5A1VS6TvDBN4+ynQO837jjfHvz6kgAyGryHKoSq7OI71xqrwiX/4W
-E6a5fnuXGGuPAScuqHa/u88SKGfAOmh1xE5guv5qZcgyhDIB5H5nIQwzyb1trdobmRqUMFT1rT5T
-sON0C/SB59IEbKITx5ItzheQu7D5erkFYrjhcBV1xNCh0J7uwF5XXF9qVHhlvQyp5AJFF9lSUJB2
-eTX5ORhCpcGvO/AAhnnlf4DU8C9a7CFVfTfhP+sgs5T7aC1ymojylvBL5TmkAKCna5hN6Ckzr9qH
-jKYDXAhwJTuMPZkgSFS8OVXkgKnxDS5vG9Ssg0ueb3G7tIEhxt2ehjMgDPK5N/blHnE1t/ZjXe2Q
-g/TV83LE/MpUKiTQO7JwZ5+tWmT2WWgxK6fG8ckuhlwXhZmVkjWCw+1uxs0C8FrfZFH1ms5MhEyS
-6Zgi0803KfOamnH/k6PtEPVB5G7BCWf/b+6Wfo/ZvPSgSYrpcDMJs5j+3KkUjnfpgCuXYXE5TSmE
-DcrINQHDLYq3hHWklV0n7bFwS3loEWcti/OKQkjeu/3c4E5c/+IWyJFTeLoKEbrNIPtLOYAvsRf+
-FJHYzqQyEWoqgAejX6K/XWclKrFAePkjKTouj10ppv9WENd+KCnK7JErZp2zqKwJeGZcOlHsFJ9C
-dUTWFgOU3VzsWiYMnxuPHnvYt3uXr6XlFQHA818kZdcJIMvfUPLRNhrBwR893vTd5aw6/tb4EPeR
-HacNklguWar6H9w69r8KY2yqk9cepySCDkomVGFqmi5gPH9anFGfEKEUJhKNdjMqF44jx76odAOZ
-ijoW+F9h6qHVQFGSLhxchqcMWgA+0aBVz9My+PoRzIsXEmH+21W9ucie9zPCw3QWVVPxgAAAAACQ
-pqAPsaqrpAAB3gWAUAAAeb5korHEZ/sCAAAAAARZWg==
-EOF
-
-I tested that the following packages still compile:
-- libglib2
-- gst1-plugins-bad
-- gst1-plugins-base
-- gst1-plugins-good
-- gst1-plugins-ugly
-- gstreamer1
-- libdrm
-- mesa3d
+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
 ---
- package/pkg-meson.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changes v2 -> v3: nothing
+Changes v1 -> v2:
+- bump version to 3.0.4
+- fix URL
+- Move menu entry to Libraries/Networking
+- Add reconf comment
+- Coding style fixes
+- cleaned up CONF_OPTS
+- Add explicit C++ & static dependency
+- Explicitly disabled unavailable dependencies
+- Explicitly disabled Yajl and Lua
+- Cleaned up dependencies
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index e7eea2aa58..349da39369 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -84,7 +84,8 @@ define $(2)_CONFIGURE_CMDS
- 	    ) \
- 	    package/meson/cross-compilation.conf.in \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
--	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
-+	PATH=$$(BR_PATH) PKG_CONFIG=$(HOST_DIR)/bin/pkgconf \
-+	$$($$(PKG)_CONF_ENV) $$(MESON) \
- 		--prefix=/usr \
- 		--libdir=lib \
- 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+---
+ DEVELOPERS                                    |  3 +
+ package/Config.in                             |  1 +
+ ...-CANONICAL_HOST-cannot-be-determined.patch | 31 +++++++++++
+ ...test-for-uClinux-in-configure-script.patch | 28 ++++++++++
+ package/libmodsecurity/Config.in              | 19 +++++++
+ package/libmodsecurity/libmodsecurity.hash    |  4 ++
+ package/libmodsecurity/libmodsecurity.mk      | 55 +++++++++++++++++++
+ 7 files changed, 141 insertions(+)
+ create mode 100644 package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch
+ create mode 100644 package/libmodsecurity/0002-test-for-uClinux-in-configure-script.patch
+ create mode 100644 package/libmodsecurity/Config.in
+ create mode 100644 package/libmodsecurity/libmodsecurity.hash
+ create mode 100644 package/libmodsecurity/libmodsecurity.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d5f7bdb8f7..513afd32e5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -955,6 +955,9 @@ F:	package/ucl/
+ F:	package/upx/
+ F:	package/zxing-cpp/
+ 
++N:	Frank Vanbever <frank.vanbever@essensium.com>
++F:	package/libmodsecurity/
++
+ N:	Ga?l Portay <gael.portay@collabora.com>
+ F:	package/qt5/qt5virtualkeyboard/
+ F:	package/qt5/qt5webengine/
+diff --git a/package/Config.in b/package/Config.in
+index db35848fed..c4e89d3ff3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1657,6 +1657,7 @@ menu "Networking"
+ 	source "package/libminiupnpc/Config.in"
+ 	source "package/libmnl/Config.in"
+ 	source "package/libmodbus/Config.in"
++	source "package/libmodsecurity/Config.in"
+ 	source "package/libnatpmp/Config.in"
+ 	source "package/libndp/Config.in"
+ 	source "package/libnet/Config.in"
+diff --git a/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch b/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch
+new file mode 100644
+index 0000000000..ab00a14e2a
+--- /dev/null
++++ b/package/libmodsecurity/0001-Fail-when-CANONICAL_HOST-cannot-be-determined.patch
+@@ -0,0 +1,31 @@
++From 0832208360aab69fbaec76225db67801840a33fe Mon Sep 17 00:00:00 2001
++From: Frank Vanbever <frank.vanbever@essensium.com>
++Date: Fri, 10 Jan 2020 11:14:43 +0100
++Subject: [PATCH] Fail when CANONICAL_HOST cannot be determined
++
++When the CANONICAL_HOST is unknown the configure script exits
++with exit code 0 even though no makefile was produced.
++
++Upstream: https://github.com/SpiderLabs/ModSecurity/pull/2235
++
++Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 95e48843..5e6971f4 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -193,7 +193,7 @@ case $host in
++     ;;
++        *)
++     echo "Unknown CANONICAL_HOST $host"
++-    exit
+++    exit 1
++     ;;
++ esac
++ 
++-- 
++2.20.1
++
+diff --git a/package/libmodsecurity/0002-test-for-uClinux-in-configure-script.patch b/package/libmodsecurity/0002-test-for-uClinux-in-configure-script.patch
+new file mode 100644
+index 0000000000..ccd96fea95
+--- /dev/null
++++ b/package/libmodsecurity/0002-test-for-uClinux-in-configure-script.patch
+@@ -0,0 +1,28 @@
++From 13c505e30474c919ed9ae552e459769c456da21e Mon Sep 17 00:00:00 2001
++From: Frank Vanbever <frank.vanbever@essensium.com>
++Date: Fri, 10 Jan 2020 11:24:43 +0100
++Subject: [PATCH] test for uClinux in configure script
++
++Upstream: https://github.com/SpiderLabs/ModSecurity/pull/2235
++
++Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5e6971f4..51d38071 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -156,7 +156,7 @@ case $host in
++     AC_DEFINE([MACOSX], [1], [Define if the operating system is Macintosh OSX])
++     PLATFORM="MacOSX"
++     ;;
++-  *-*-linux*)
+++  *-*-linux* | *-*uclinux*)
++     echo "Checking platform... Identified as Linux"
++     AC_DEFINE([LINUX], [1], [Define if the operating system is LINUX])
++     PLATFORM="Linux"
++-- 
++2.20.1
++
+diff --git a/package/libmodsecurity/Config.in b/package/libmodsecurity/Config.in
+new file mode 100644
+index 0000000000..129881b0de
+--- /dev/null
++++ b/package/libmodsecurity/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LIBMODSECURITY
++	bool "libmodsecurity"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_PCRE
++	help
++	  Libmodsecurity is one component of the ModSecurity
++	  v3 project. The library codebase serves as an
++	  interface to ModSecurity Connectors taking in web
++	  traffic and applying traditional ModSecurity
++	  processing. In general, it provides the capability
++	  to load/interpret rules written in the ModSecurity
++	  SecRules format and apply them to HTTP content
++	  provided by your application via Connectors.
++
++	  https://github.com/SpiderLabs/ModSecurity
++
++comment "libmodsecurity needs a toolchain w/ C++, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+diff --git a/package/libmodsecurity/libmodsecurity.hash b/package/libmodsecurity/libmodsecurity.hash
+new file mode 100644
+index 0000000000..ddce3ef9c6
+--- /dev/null
++++ b/package/libmodsecurity/libmodsecurity.hash
+@@ -0,0 +1,4 @@
++# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.4/modsecurity-v3.0.4.tar.gz.sha256
++sha256  b4231177dd80b4e076b228e57d498670113b69d445bab86db25f65346c24db22  modsecurity-v3.0.4.tar.gz
++# Localy calculated
++sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+new file mode 100644
+index 0000000000..c32bfb4b3c
+--- /dev/null
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -0,0 +1,55 @@
++################################################################################
++#
++# libmodsecurity
++#
++################################################################################
++
++LIBMODSECURITY_VERSION = 3.0.4
++LIBMODSECURITY_SOURCE = modsecurity-v$(LIBMODSECURITY_VERSION).tar.gz
++LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(LIBMODSECURITY_VERSION)
++LIBMODSECURITY_INSTALL_STAGING = YES
++LIBMODSECURITY_LICENSE = Apache-2.0
++LIBMODSECURITY_LICENSE_FILES = LICENSE
++# 0002-test-for-uClinux-in-configure-script.patch
++LIBMODSECURITY_AUTORECONF = YES
++# libinjection uses AC_CHECK_FILE, not available in cross-compile
++LIBMODSECURITY_CONF_ENV = \
++	ac_cv_file_others_libinjection_src_libinjection_html5_c=yes
++
++LIBMODSECURITY_DEPENDENCIES = pcre
++LIBMODSECURITY_CONF_OPTS = \
++	--disable-examples \
++	--without-lmdb \
++	--without-ssdeep \
++	--without-lua \
++	--without-yajl
++
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++LIBMODSECURITY_DEPENDENCIES += libxml2
++LIBMODSECURITY_CONF_OPTS += --with-libxml="$(STAGING_DIR)/usr/bin/xml2-config"
++else
++LIBMODSECURITY_CONF_OPTS += --without-libxml
++endif
++
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++LIBMODSECURITY_DEPENDENCIES += libcurl
++LIBMODSECURITY_CONF_OPTS += --with-curl="$(STAGING_DIR)/usr/bin/curl-config"
++else
++LIBMODSECURITY_CONF_OPTS += --without-curl
++endif
++
++ifeq ($(BR2_PACKAGE_GEOIP),y)
++LIBMODSECURITY_DEPENDENCIES += geoip
++LIBMODSECURITY_CONF_OPTS += --with-geoip
++else
++LIBMODSECURITY_CONF_OPTS += --without-geoip
++endif
++
++ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
++LIBMODSECURITY_DEPENDENCIES += libmaxminddb
++LIBMODSECURITY_CONF_OPTS += --with-maxmind
++else
++LIBMODSECURITY_CONF_OPTS += --without-maxmind
++endif
++
++$(eval $(autotools-package))
 -- 
-2.25.0
+2.20.1
