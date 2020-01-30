@@ -1,5 +1,5 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 30 Jan 2020 13:02:31 +0100
+Date: Thu, 30 Jan 2020 13:20:47 +0100
 Subject: [Buildroot] QtWebEngine on RPI 0 W
 In-Reply-To: <1580384329954-0.post@n4.nabble.com>
 References: <1579861270269-0.post@n4.nabble.com>
@@ -7,7 +7,7 @@ References: <1579861270269-0.post@n4.nabble.com>
  <1580197267384-0.post@n4.nabble.com>
  <20200128085828.5959e493@gmx.net> <20200128104326.030b51d9@gmx.net>
  <1580384329954-0.post@n4.nabble.com>
-Message-ID: <20200130130231.0142f85d@gmx.net>
+Message-ID: <20200130132047.5d82cab0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,6 +29,19 @@ On Thu, 30 Jan 2020 05:38:49 -0600 (CST), rscr <rafacrespiramon@gmail.com> wrote
 > 
 > cp4_defconfig.cp4_defconfig
 > <http://buildroot-busybox.2317881.n4.nabble.com/file/t2824/cp4_defconfig.cp4_defconfig>  
+
+Your provided defconfig states:
+
+BR2_TOOLCHAIN_EXTERNAL_PATH="/home/ibercomp/rcr/tools/toolchains/sourceforge/rpi0w/cross-pi-gcc-6.3.0-0"
+
+So you are still not using a buildroot provided toolchain (I suspect from the path your use
+one from the https://sourceforge.net/projects/raspberry-pi-cross-compilers/ project)?
+
+BR2_PACKAGE_QT5WEBENGINE is not enabled in the given defconfig, wrong defconfig?
+
+Regards,
+Peter
+
 > 
 > Now it fails building qt5webengine, when:
 > 
@@ -42,14 +55,6 @@ On Thu, 30 Jan 2020 05:38:49 -0600 (CST), rscr <rafacrespiramon@gmail.com> wrote
 > ....
 > 
 > virtual memory exhausted: Cannot allocate memory
-
-Try to add more RAM to your build host (or swap space) ;-), or
-set BR2_JLEVEL (Build options ---> Number of jobs to run simultaneously
-(0 for auto)) to an appropriate value...
-
-Regards,
-Peter
-
 > [15208/15243] CXX obj/QtWebEngineCore/network_delegate_qt.o
 > ninja: build stopped: subcommand failed.
 > Makefile.gn_run:331: recipe for target 'run_ninja' failed
