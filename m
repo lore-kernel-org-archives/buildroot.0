@@ -1,27 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Jan 2020 08:07:19 +0100
-Subject: [Buildroot] [PATCH v2 3/3] support/testing: add python-can test
- case
-In-Reply-To: <20200115080926.6669-3-yegorslists@googlemail.com> (yegorslists's
- message of "Wed, 15 Jan 2020 09:09:26 +0100")
-References: <20200115080926.6669-1-yegorslists@googlemail.com>
- <20200115080926.6669-3-yegorslists@googlemail.com>
-Message-ID: <87zhe4qf2w.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Jan 2020 08:01:37 +0100
+Subject: [Buildroot] [git commit] package/python-can: add missing dependency
+Message-ID: <20200131065647.7566386AC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ce0f9052f59c4c25fe822aad3d47e41976b39ef5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- > ---
- > Changes v1 -> v2:
- >   - no changes
+Python-can depends on aenum package since 3.2.0:
 
-Committed, thanks.
+https://github.com/hardbyte/python-can/commit/dcf87ce3712244bdde7cb4692901950ffcec2215
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-can/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/python-can/Config.in b/package/python-can/Config.in
+index f3ed1b77e3..3d06374c6a 100644
+--- a/package/python-can/Config.in
++++ b/package/python-can/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_CAN
+ 	select BR2_PACKAGE_PYTHON_SQLITE if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_SQLITE if BR2_PACKAGE_PYTHON3 # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPING if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_AENUM # runtime
+ 	select BR2_PACKAGE_PYTHON_WRAPT # runtime
+ 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
