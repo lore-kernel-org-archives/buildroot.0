@@ -1,142 +1,105 @@
-From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Fri, 31 Jan 2020 12:27:48 +0100
-Subject: [Buildroot] [RFC PATCH 3/4] package/pkg-cargo.mk: split download &
- build phase
-In-Reply-To: <20200131112749.30915-1-patrick.havelange@essensium.com>
-References: <20200131112749.30915-1-patrick.havelange@essensium.com>
-Message-ID: <20200131112749.30915-3-patrick.havelange@essensium.com>
+From: Tom Marcuzzi <tom.marcuzzi@orolia.com>
+Date: Fri, 31 Jan 2020 09:14:16 +0000
+Subject: [Buildroot] [PATCH] package/collectd: add config option for lua
+In-Reply-To: <87pnf0shr4.fsf@dell.be.48ers.dk>
+References: <20200127172740.11610-1-tom.marcuzzi@orolia.com>
+ <87pnf0shr4.fsf@dell.be.48ers.dk>
+Message-ID: <4eaf8f1f-629a-93ef-fc37-1c23c185f893@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use cargo to download the dependencies of a given package before
-building it. This ensures that the CARGO_HOME directory is being
-populated with all the necessary sources. The build phase is
-forced to not query the online repository anymore and thus uses
-the previously downloaded files.
-It also allows to have offline builds.
-Updated the cargo doc w.r.t. that aspect.
+Hi Peter,
 
-Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
----
- docs/manual/adding-packages-cargo.txt | 16 ++++-------
- package/pkg-cargo.mk                  | 13 ++++++++-
- support/download/cargo                | 41 +++++++++++++++++++++++++++
- 3 files changed, 58 insertions(+), 12 deletions(-)
- create mode 100755 support/download/cargo
+On 1/30/20 11:26 PM, Peter Korsgaard wrote:
+>>>>>> "Tom" == Tom Marcuzzi <tom.marcuzzi@orolia.com> writes:
+> 
+>   > Signed-off-by: Tom Marcuzzi <tom.marcuzzi@orolia.com>
+> 
+> Why? What is wrong with the automatic dependency?
+>  
 
-diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
-index 9a496224e3..62a6611214 100644
---- a/docs/manual/adding-packages-cargo.txt
-+++ b/docs/manual/adding-packages-cargo.txt
-@@ -61,16 +61,10 @@ Those will then replace the commands from the cargo infrastructure.
- ==== About Dependencies Management
- 
- A crate can depend on other libraries from crates.io or git repositories, listed
--in its Cargo.toml file. Before starting a build, Cargo usually downloads
--automatically them. This step can also be performed independently, via the
--+cargo fetch+ command.
-+in its Cargo.toml file. Before starting a build, the +cargo fetch+ command
-+will be run and will take care of downloading those dependencies.
- 
- Cargo maintains a local cache of the registry index and of git checkouts of the
--crates, whose location is given by +$CARGO_HOME+. As seen in the package
--Makefile example at line 15, this environment variable is set to
--+$(HOST_DIR)/share/cargo+.
--
--This dependency download mechanism is not convenient when performing an offline
--build, as Cargo will fail to fetch the dependencies. In that case, it is advised
--to generate a tarball of the dependencies using the +cargo vendor+ and add it to
--+FOO_EXTRA_DOWNLOADS+.
-+crates, whose location is given by +$CARGO_HOME+.
-+
-+This effectively permits to perform an offline build.
-diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-index 2242f3a082..cfdae06a4e 100644
---- a/package/pkg-cargo.mk
-+++ b/package/pkg-cargo.mk
-@@ -46,6 +46,15 @@ ifeq ($(4),target)
-     $(2)_CARGO_TARGET_OPT = --target $$(RUSTC_TARGET_NAME)
- endif
- 
-+define $(2)_CARGO_DL_STEP
-+	$(TARGET_MAKE_ENV) $$($(2)_CARGO_ENV) \
-+		$(TOPDIR)/support/download/cargo \
-+		$$($(2)_DL_DIR)/$$($(2)_SOURCE) \
-+		$$($(2)_CARGO_TARGET_OPT)
-+endef
-+
-+$(2)_POST_DOWNLOAD_HOOKS += $(2)_CARGO_DL_STEP
-+
- #
- # Build step. Only define it if not already defined by the package .mk
- # file.
-@@ -56,7 +65,8 @@ define $(2)_BUILD_CMDS
- 		cargo build \
- 			--$$($(2)_CARGO_MODE) \
- 			$$($(2)_CARGO_TARGET_OPT) \
--			--manifest-path $$(@D)/Cargo.toml
-+			--manifest-path $$(@D)/Cargo.toml \
-+			--offline
- endef
- endif
- 
-@@ -72,6 +82,7 @@ define $(2)_INSTALL_TARGET_CMDS
- 			--bins \
- 			--path $$(@D) \
- 			$$($(2)_CARGO_TARGET_OPT) \
-+			--offline \
- 			--force
- endef
- endif
-diff --git a/support/download/cargo b/support/download/cargo
-new file mode 100755
-index 0000000000..51b76ec4f5
---- /dev/null
-+++ b/support/download/cargo
-@@ -0,0 +1,41 @@
-+#!/usr/bin/env bash
-+
-+# We want to catch any unexpected failure, and exit immediately
-+set -e
-+
-+# Download helper for cargo package. It will populate the CARGO_HOME
-+# cache with the dependencies of a given package
-+#
-+# Arguments are in this order:
-+# $1 mandatory fullpath to an already downloaded source file of a cargo package
-+# $2+ optional arguments, e.g. the --target option
-+#
-+# Environment:
-+# CARGO_HOME set
-+# cargo in PATH
-+
-+tmpd=""
-+
-+do_clean() {
-+    if [ ! -z "${tmpd}" ]; then
-+        rm -rf "${tmpd}"
-+    fi
-+}
-+
-+trap do_clean EXIT
-+
-+if [ $# -eq 0 ] ; then
-+    echo Need at least path to tarball as argument >&2
-+    exit 1
-+fi;
-+if [ -z "$CARGO_HOME" ] ; then
-+    echo CARGO_HOME must be set to a non empty value >&2
-+    exit 1
-+fi
-+
-+tmpd="$(mktemp -d)"
-+cd "${tmpd}"
-+
-+tar xf "${1}"
-+shift 1
-+cargo fetch --manifest-path */Cargo.toml $*
--- 
-2.17.1
+It is not that there is anything wrong with the automatic dependency, 
+but in my humble opinion adding the lua option may be a more logical way 
+of doing in regards to the other collectd plugins, since every 
+implemented plugin has a configuration option. This gives more 
+flexibility and is more explicit since the user can choose himself 
+whether he wants the plugin or not, which is not the case with the 
+automatic dependency.
+
+>   > ---
+>   >  package/collectd/Config.in   | 7 +++++++
+>   >  package/collectd/collectd.mk | 9 ++-------
+>   >  2 files changed, 9 insertions(+), 7 deletions(-)
+> 
+>   > diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+>   > index 402de219f4..303b5dc01b 100644
+>   > --- a/package/collectd/Config.in
+>   > +++ b/package/collectd/Config.in
+>   > @@ -63,6 +63,13 @@ config BR2_PACKAGE_COLLECTD_LOGSTASH
+>   >      help
+>   >        Writes log messages formatted as logstash JSON events.
+> 
+>   > +config BR2_PACKAGE_COLLECTD_LUA
+>   > +    bool "lua"
+>   > +    select BR2_PACKAGE_LUA
+>   > +    help
+>   > +      Embeds a Lua interpreter into collectd and provides an
+>   > +      interface to collectd's plugin system.
+>   > +
+>   >  config BR2_PACKAGE_COLLECTD_NOTIFY_EMAIL
+>   >      bool "notify_email"
+>   >      depends on !BR2_STATIC_LIBS # libesmtp
+>   > diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+>   > index 0cd86adbd4..9258977613 100644
+>   > --- a/package/collectd/collectd.mk
+>   > +++ b/package/collectd/collectd.mk
+>   > @@ -89,6 +89,7 @@ COLLECTD_CONF_OPTS += \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_LOAD),--enable-load,--disable-load) \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_LOGFILE),--enable-logfile,--disable-logfile) \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),--enable-log_logstash,--disable-log_logstash) \
+>   > +    $(if $(BR2_PACKAGE_COLLECTD_LUA),--enable-lua,--disable-lua) \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_LVM),--enable-lvm,--disable-lvm) \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_MD),--enable-md,--disable-md) \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),--enable-memcachec,--disable-memcachec) \
+>   > @@ -162,6 +163,7 @@ COLLECTD_DEPENDENCIES = \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_GRPC),grpc) \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),yajl) \
+>   > +    $(if $(BR2_PACKAGE_COLLECTD_LUA),lua) \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_LVM),lvm2) \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),libmemcached) \
+>   >      $(if $(BR2_PACKAGE_COLLECTD_MODBUS),libmodbus) \
+>   > @@ -213,13 +215,6 @@ else
+>   >  COLLECTD_CONF_OPTS += --with-libgcrypt=no
+>   >  endif
+> 
+>   > -ifeq ($(BR2_PACKAGE_LUA),y)
+>   > -COLLECTD_DEPENDENCIES += lua
+>   > -COLLECTD_CONF_OPTS += --enable-lua
+>   > -else
+>   > -COLLECTD_CONF_OPTS += --disable-lua
+>   > -endif
+>   > -
+>   >  define COLLECTD_INSTALL_TARGET_CMDS
+>   >      $(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+>   >      rm -f $(TARGET_DIR)/usr/bin/collectd-nagios
+>   > --
+>   > 2.17.1
+> 
+>   > _______________________________________________
+>   > buildroot mailing list
+>   > buildroot at busybox.net
+>   > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> --
+> Bye, Peter Korsgaard
+> ATTENTION: This email came from an external source.
+> Do not open attachments or click on links from unknown senders or unexpected emails.
+> 
+
+Regards,
+
+Tom Marcuzzi
