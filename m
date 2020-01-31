@@ -1,46 +1,37 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Fri, 31 Jan 2020 09:39:52 -0600
-Subject: [Buildroot] [PATCH v2 1/1] toolchain/toolchain-buildroot: PPC64(LE)
- support in musl requires ALTIVEC
-Message-ID: <20200131153952.680-1-vfazio@xes-inc.com>
+From: Frank Vanbever <frank.vanbever@essensium.com>
+Date: Fri, 31 Jan 2020 16:42:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: point to staging
+ pcre-config
+Message-ID: <20200131154257.12259-1-frank.vanbever@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-musl currently assumes all PPC64(LE) CPUs support ALTIVEC instructions.
+The libmodsecurity build system uses the file installed on the host if not
+explicitly pointed to pcre-config in the staging dir.
 
-However, there are exceptions (such as the e5500) for which musl builds
-ultimately generate illegal instructions for the targets.
+Fixes:
+- http://autobuild.buildroot.net/results/f936ad05bca4bb776917306700750ba6d2498ef0
+  + similar failures for other architectures
 
-Disable musl if the PPC64(LE) CPU does not support ALTIVEC instructions.
-
-This patch addresses the issues seen here:
-  https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092743
-  https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092744
-
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
 ---
- toolchain/toolchain-buildroot/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/libmodsecurity/libmodsecurity.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index a980f766ac..09a46822c9 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -83,8 +83,10 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	bool "musl"
- 	depends on BR2_aarch64	   || BR2_arm   || BR2_armeb   || BR2_i386 || \
- 		   BR2_microblaze  || BR2_mips  || BR2_mipsel  || BR2_mips64 || \
--		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
--		   BR2_powerpc64le || BR2_RISCV_64 || BR2_sh   || BR2_x86_64
-+		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_RISCV_64 || \
-+		   BR2_sh	   || BR2_x86_64 || \
-+		   ((BR2_powerpc64 || BR2_powerpc64le) && BR2_POWERPC_CPU_HAS_ALTIVEC)
-+		   # musl assumes all PPC64 targets support ALTIVEC instructions
- 	depends on !BR2_powerpc_SPE # not supported, build breaks
- 	# sh2 nommu is supported by musl, but we don't have support
- 	# for it in Buildroot.
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index c32bfb4b3c..063f969fc6 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -18,6 +18,7 @@ LIBMODSECURITY_CONF_ENV = \
+ 
+ LIBMODSECURITY_DEPENDENCIES = pcre
+ LIBMODSECURITY_CONF_OPTS = \
++	--with-pcre="$(STAGING_DIR)/usr/bin/pcre-config" \
+ 	--disable-examples \
+ 	--without-lmdb \
+ 	--without-ssdeep \
 -- 
-2.25.0
+2.20.1
