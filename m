@@ -1,47 +1,48 @@
-From: Tom Marcuzzi <tom.marcuzzi@orolia.com>
-Date: Fri, 31 Jan 2020 09:50:56 +0000
-Subject: [Buildroot] [PATCH] package/collectd: add config option for lua
-In-Reply-To: <87v9osq8gc.fsf@dell.be.48ers.dk>
-References: <20200127172740.11610-1-tom.marcuzzi@orolia.com>
- <87pnf0shr4.fsf@dell.be.48ers.dk>
- <4eaf8f1f-629a-93ef-fc37-1c23c185f893@orolia.com>
- <87v9osq8gc.fsf@dell.be.48ers.dk>
-Message-ID: <9cee41af-93e1-20e6-8cb9-89e54e38dc3e@orolia.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Fri, 31 Jan 2020 08:30:23 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-01-30
+In-Reply-To: <5e33d4ae.1c69fb81.ad6da.2160SMTPIN_ADDED_MISSING@mx.google.com>
+References: <5e33d4ae.1c69fb81.ad6da.2160SMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <CAJ4jsaei097TWPPVeW4OrjJD70it6oXdy4r4e8iEO9NWUrw96w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 1/31/20 10:30 AM, Peter Korsgaard wrote:
->>>>>> "Tom" == Tom Marcuzzi <tom.marcuzzi@orolia.com> writes:
-> 
->   > Hi Peter,
->   > On 1/30/20 11:26 PM, Peter Korsgaard wrote:
->   >>>>>>> "Tom" == Tom Marcuzzi <tom.marcuzzi@orolia.com> writes:
->   >>
->   >> > Signed-off-by: Tom Marcuzzi <tom.marcuzzi@orolia.com>
->   >>
->   >> Why? What is wrong with the automatic dependency?
->   >>
-> 
->   > It is not that there is anything wrong with the automatic dependency,
->   > but in my humble opinion adding the lua option may be a more logical way
->   > of doing in regards to the other collectd plugins, since every
->   > implemented plugin has a configuration option. This gives more
->   > flexibility and is more explicit since the user can choose himself
->   > whether he wants the plugin or not, which is not the case with the
->   > automatic dependency.
-> 
-> But if your system has collectd and lua enabled, what would the reason
-> be to not enable lua support in collectd? How much extra size does this
-> add to collectd?
+On Fri, Jan 31, 2020 at 4:18 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Recent build failures and runtime-tests failures
+> ================================================
+>
+> This is the list of Buildroot build failures that occurred on
+> 2020-01-30, and for which you are a registered architecture developer,
+> package developer or defconfig developer. This list also include
+> runtime tests failures. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Results for the 'master' branch
+> -------------------------------
+>
+> Build failures related to your packages:
+>
+>     arch     |             reason             |                                       url
+> -------------+--------------------------------+---------------------------------------------------------------------------------
+>   mips64el   |      libpam-tacplus-1.5.1      | http://autobuild.buildroot.net/results/2330b996f692dd06b77c4bce720cc608eca464bb
+>     arc      |      libpam-tacplus-1.5.1      | http://autobuild.buildroot.net/results/35aa5bcbc1e65e9c20bc8a4c897698c15f6480b9
 
-It adds on my system around 18KB. I agree that the reason not to enable 
-lua support may be unclear. My patch is more about consistency, in 
-regard to what has been done before for the previous plugins, which are 
-not enabled by default.
+Could somebody please apply the fix sent by Fabrice Fontaine?
 
-Regards,
+    https://patchwork.ozlabs.org/patch/1227407/
 
-Tom Marcuzzi
+There is also this small improvement:
+
+    https://patchwork.ozlabs.org/patch/1227429/
+
+-- 
+Carlos Santos <unixmania@gmail.com>
