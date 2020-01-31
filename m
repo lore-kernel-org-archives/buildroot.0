@@ -1,42 +1,25 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 30 Jan 2020 16:24:35 -0700
-Subject: [Buildroot] [PATCH v4 1/1] package/nodejs: Remove --shared-zlib
- configure arg
-Message-ID: <20200130232435.113452-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 Jan 2020 08:05:43 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/python-aenum: new package
+In-Reply-To: <20200115080926.6669-1-yegorslists@googlemail.com> (yegorslists's
+ message of "Wed, 15 Jan 2020 09:09:24 +0100")
+References: <20200115080926.6669-1-yegorslists@googlemail.com>
+Message-ID: <878slortq0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Preston <thomas.preston@codethink.co.uk>
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-The nodejs configure.py file orders zlib headers before the bundled ICU
-headers. The zlib headers happen to be located in the system include
-directory, next to some system ICU headers (not bundled). If these are
-built before nodejs is, nodejs will get confused and try to use the
-system ICU headers instead of the bundled ones.
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - add followup patches fixing python-can package
 
-Fix this by removing the --shared-zlib configure argument, since we
-search in the system include directory after bundled ICU headers anyway.
+Committed after adding a hash for the license file, thanks.
 
-Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/nodejs/nodejs.mk | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index e6eb73d576..205e8a8bd5 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -63,7 +63,6 @@ define HOST_NODEJS_CONFIGURE_CMDS
- 		--shared-openssl \
- 		--shared-openssl-includes=$(HOST_DIR)/include/openssl \
- 		--shared-openssl-libpath=$(HOST_DIR)/lib \
--		--shared-zlib \
- 		--no-cross-compiling \
- 		--with-intl=small-icu \
- 	)
 -- 
-2.20.1
+Bye, Peter Korsgaard
