@@ -1,123 +1,119 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 31 Jan 2020 17:26:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libva: bump version to 2.6.1
-Message-ID: <20200131162622.273432-1-bernd.kuhls@t-online.de>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Fri, 31 Jan 2020 17:59:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/genimage: bump to version 12
+Message-ID: <1580489971-27640-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch which was applied upstream:
-https://github.com/intel/libva/commit/69b4230c36d977d4198d74a5f1fc7529715fd5ab
+Also drop upstreamed patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- ...call-sequence-to-ensure-authenticate.patch | 68 -------------------
- package/libva/libva.hash                      |  6 +-
- package/libva/libva.mk                        |  2 +-
- 3 files changed, 4 insertions(+), 72 deletions(-)
- delete mode 100644 package/libva/0001-adjust-call-sequence-to-ensure-authenticate.patch
+ ...-vfat-Add-label-option-to-set-volume-name.patch | 69 ----------------------
+ package/genimage/genimage.hash                     |  2 +-
+ package/genimage/genimage.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 71 deletions(-)
+ delete mode 100644 package/genimage/0001-image-vfat-Add-label-option-to-set-volume-name.patch
 
-diff --git a/package/libva/0001-adjust-call-sequence-to-ensure-authenticate.patch b/package/libva/0001-adjust-call-sequence-to-ensure-authenticate.patch
+diff --git a/package/genimage/0001-image-vfat-Add-label-option-to-set-volume-name.patch b/package/genimage/0001-image-vfat-Add-label-option-to-set-volume-name.patch
 deleted file mode 100644
-index 09c766424b..0000000000
---- a/package/libva/0001-adjust-call-sequence-to-ensure-authenticate.patch
+index a77b826..0000000
+--- a/package/genimage/0001-image-vfat-Add-label-option-to-set-volume-name.patch
 +++ /dev/null
-@@ -1,68 +0,0 @@
--From a80d2fe3bcc2c14c6e1434615d1be38924b668ea Mon Sep 17 00:00:00 2001
--From: Carl Zhang <carl.zhang@intel.com>
--Date: Mon, 30 Dec 2019 04:38:43 -0500
--Subject: [PATCH] adjust call sequence to ensure authenticate operation is
-- executed
+@@ -1,69 +0,0 @@
+-From c1a165731298b96175b9b0dd80ad088dc8b33dc1 Mon Sep 17 00:00:00 2001
+-From: Florent Viard <fviard@cxignited.com>
+-Date: Sun, 27 Oct 2019 23:48:16 +0100
+-Subject: [PATCH] image-vfat: Add label option to set volume name.
 -
--fixes #355
--
--Downloaded from upstream PR: https://github.com/intel/libva/pull/356
--
--Signed-off-by: Carl Zhang <carl.zhang@intel.com>
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Signed-off-by: Florent Viard <fviard@cxignited.com>
+-[dariobin at libero.it: remove README.rst changes]
+-Signed-off-by: Dario Binacchi <dariobin@libero.it>
 ----
-- va/va.c | 25 ++++++++++++++++---------
-- 1 file changed, 16 insertions(+), 9 deletions(-)
+- image-vfat.c | 18 ++++++++++++++++--
+- 1 file changed, 16 insertions(+), 2 deletions(-)
 -
--diff --git a/va/va.c b/va/va.c
--index cfcabff..7f014a1 100644
----- a/va/va.c
--+++ b/va/va.c
--@@ -367,11 +367,23 @@ static VAStatus va_getDriverNameByIndex(VADisplay dpy, char **driver_name, int c
--     VADisplayContextP pDisplayContext = (VADisplayContextP)dpy;
--     const char *driver_name_env = NULL;
--     VADriverContextP ctx;
--+    VAStatus status = VA_STATUS_SUCCESS;
+-diff --git a/image-vfat.c b/image-vfat.c
+-index f16242c..3ea7288 100644
+---- a/image-vfat.c
+-+++ b/image-vfat.c
+-@@ -27,14 +27,20 @@ static int vfat_generate(struct image *image)
+- 	int ret;
+- 	struct partition *part;
+- 	char *extraargs = cfg_getstr(image->imagesec, "extraargs");
+-+	char *label = cfg_getstr(image->imagesec, "label");
+-+
+-+	if (label && label[0] != '\0')
+-+		xasprintf(&label, "-n '%s'", label);
+-+	else
+-+		label = "";
 - 
--     ctx = CTX(dpy);
--+    if (pDisplayContext->vaGetDriverNameByIndex) {
--+        /*if vaGetDriverNameByIndex is implemented*/
--+        status = pDisplayContext->vaGetDriverNameByIndex(pDisplayContext, driver_name, candidate_index);
--+    } else {
--+        if (candidate_index == 0)
--+            status = pDisplayContext->vaGetDriverName(pDisplayContext, driver_name);
--+        else
--+            status = VA_STATUS_ERROR_INVALID_PARAMETER;
--+    }    
--     driver_name_env = getenv("LIBVA_DRIVER_NAME");
--     /*if user set driver name by vaSetDriverName */
--     if (ctx->override_driver_name){
--+        if(*driver_name)
--+            free(*driver_name);
--         *driver_name = strdup(ctx->override_driver_name);
--         if (!(*driver_name)) {
--               va_errorMessage(dpy, "va_getDriverNameByIndex  failed with %s, out of memory\n",vaErrorStr(VA_STATUS_ERROR_ALLOCATION_FAILED));
--@@ -380,19 +392,14 @@ static VAStatus va_getDriverNameByIndex(VADisplay dpy, char **driver_name, int c
--         va_infoMessage(dpy, "User requested driver '%s'\n", *driver_name);
--         return VA_STATUS_SUCCESS;
--     } else if (driver_name_env && (geteuid() == getuid())) {
--+        if(*driver_name)
--+            free(*driver_name);
--         /*if user set driver name by environment variable*/
--         *driver_name = strdup(driver_name_env);
--         va_infoMessage(dpy, "User environment variable requested driver '%s'\n", *driver_name);
--         return VA_STATUS_SUCCESS;
---    } else if (pDisplayContext->vaGetDriverNameByIndex) {
---        /*if vaGetDriverNameByIndex is implemented*/
---        return pDisplayContext->vaGetDriverNameByIndex(pDisplayContext, driver_name, candidate_index);
---    } else {
---        if (candidate_index == 0)
---            return pDisplayContext->vaGetDriverName(pDisplayContext, driver_name);
---        else
---            return VA_STATUS_ERROR_INVALID_PARAMETER;
---    }
--+    } 
--+    return status;
+- 	ret = systemp(image, "%s if=/dev/zero of=\"%s\" seek=%lld count=0 bs=1 2>/dev/null",
+- 			get_opt("dd"), imageoutfile(image), image->size);
+- 	if (ret)
+- 		return ret;
+- 
+--	ret = systemp(image, "%s %s '%s'", get_opt("mkdosfs"),
+--			extraargs, imageoutfile(image));
+-+	ret = systemp(image, "%s %s %s '%s'", get_opt("mkdosfs"),
+-+			extraargs, label, imageoutfile(image));
+- 	if (ret)
+- 		return ret;
+- 
+-@@ -72,11 +78,18 @@ static int vfat_generate(struct image *image)
+- 
+- static int vfat_setup(struct image *image, cfg_t *cfg)
+- {
+-+	char *label = cfg_getstr(image->imagesec, "label");
+-+
+- 	if (!image->size) {
+- 		image_error(image, "no size given or must not be zero\n");
+- 		return -EINVAL;
+- 	}
+- 
+-+	if (label && strlen(label) > 11) {
+-+		image_error(image, "vfat volume name cannot be longer than 11 characters\n");
+-+		return -EINVAL;
+-+	}
+-+
+- 	return 0;
 - }
 - 
-- static char *va_getDriverPath(const char *driver_dir, const char *driver_name)
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index d3a4f51ff6..8edacf1289 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/intel/libva/releases/download/2.6.0/libva-2.6.0.tar.bz2.sha1sum
--sha1 9d3b55d2a01e45612c03b2e7718599e760c3bf7e  libva-2.6.0.tar.bz2
-+# From https://github.com/intel/libva/releases/download/2.6.1/libva-2.6.1.tar.bz2.sha1sum
-+sha1 6b218e5622174a37fd0cfd8777b10717c95bd20e  libva-2.6.1.tar.bz2
- # Locally computed
--sha256 486bb6b5761db6e5a9f4475bd187e0bfa7309944cfc9734d496d41930353d6c5  libva-2.6.0.tar.bz2
-+sha256 6c57eb642d828af2411aa38f55dc10111e8c98976dbab8fd62e48629401eaea5  libva-2.6.1.tar.bz2
- sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 439f76ad69..3079563e50 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
+-@@ -112,6 +125,7 @@ static cfg_opt_t file_opts[] = {
+- 
+- static cfg_opt_t vfat_opts[] = {
+- 	CFG_STR("extraargs", "", CFGF_NONE),
+-+	CFG_STR("label", "", CFGF_NONE),
+- 	CFG_STR_LIST("files", 0, CFGF_NONE),
+- 	CFG_SEC("file", file_opts, CFGF_MULTI | CFGF_TITLE),
+- 	CFG_END()
+--- 
+-2.24.0
+-
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+index c1f2270..fb5d235 100644
+--- a/package/genimage/genimage.hash
++++ b/package/genimage/genimage.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	2ee024bfb2ec157651b86f3365d138ee013dcc48277d86e1eed6f3285a67b532	genimage-11.tar.xz
++sha256	2e9b43d1288f4e216d6c79de2a0c53ce1bd41f93cec750d8ab057aa2d0b0ee4a	genimage-12.tar.xz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 5ef7d30..8960393 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_VERSION = 2.6.0
-+LIBVA_VERSION = 2.6.1
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
+-GENIMAGE_VERSION = 11
++GENIMAGE_VERSION = 12
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
 -- 
-2.20.1
+2.7.4
