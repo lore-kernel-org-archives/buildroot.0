@@ -1,24 +1,42 @@
-From: Andrea Simeoni <andreasimeoni73@gmail.com>
-Date: Fri, 31 Jan 2020 14:27:53 +0100
-Subject: [Buildroot] Beaglebone support
-Message-ID: <CAPmASeu4KLNSK=nkgb04C4UKwTsDfjyZ0RXOCkF2r3yWyHYWJg@mail.gmail.com>
+From: Arthur Courtel <arthur.courtel@smile.fr>
+Date: Fri, 31 Jan 2020 14:32:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/arp-scan: bump version to 1.9.7
+Message-ID: <20200131133213.339171-1-arthur.courtel@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, because I was not able to run Buildroot on RPi4+Qt5/QML w/ hw
-acceleration, I'm going to give it a try with a Beaglebone Black.
+From: Arthur <arthur.courtel@smile.fr>
 
-I'm aware you cannot try *all* the almost infinite combinations of
-packages, but I politely ask if someone tried to use this board with
-Qt5/QML, QtMultimedia (broken since a lot of years on RPi - not a Buildroot
-fault, of course!) and omxplayer.
+Signed-off-by: Arthur Courtel <arthur.courtel@smile.fr>
+---
+ package/arp-scan/arp-scan.hash | 2 +-
+ package/arp-scan/arp-scan.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I would like to run Qt5 with a GPU driver, not a standard linuxfb.
-Thanks in advance
-Andrea
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200131/b956dc6c/attachment.html>
+diff --git a/package/arp-scan/arp-scan.hash b/package/arp-scan/arp-scan.hash
+index d14e6ba270..5600f5136f 100644
+--- a/package/arp-scan/arp-scan.hash
++++ b/package/arp-scan/arp-scan.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	971b45c3369816467994797fbcd0076eb8f0ffb9c42764ea6dba25ab3fd490da	arp-scan-1.9.6.tar.gz
++sha256  e03c36e4933c655bd0e4a841272554a347cd0136faf42c4a6564059e0761c039  arp-scan-1.9.7.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
+index 20e9cb62fe..cc1efe84a7 100644
+--- a/package/arp-scan/arp-scan.mk
++++ b/package/arp-scan/arp-scan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ARP_SCAN_VERSION = 1.9.6
++ARP_SCAN_VERSION = 1.9.7
+ ARP_SCAN_SITE = $(call github,royhills,arp-scan,$(ARP_SCAN_VERSION))
+ ARP_SCAN_LICENSE = GPL-3.0+
+ ARP_SCAN_LICENSE_FILES = COPYING
+-- 
+2.24.1
