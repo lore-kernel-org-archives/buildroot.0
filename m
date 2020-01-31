@@ -1,63 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Jan 2020 18:49:39 +0100
-Subject: [Buildroot] [PATCH] linux/linux.mk: use HOST_MAKE_ENV rather than
- TARGET_MAKE_ENV
-Message-ID: <20200131174940.12469-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 31 Jan 2020 19:05:43 +0100
+Subject: [Buildroot] [PATCH 1/2] package/file: add xz optional dependency
+Message-ID: <20200131180544.1135547-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While the kernel is built for the target, the build may need various host
-libraries depending on config (and kernel version), so use HOST_MAKE_ENV
-instead of TARGET_MAKE_ENV.
+xz is an optional dependency since version 5.38 and
+https://github.com/file/file/commit/b259a07ea95827f565faa20f0316e5b2704064f7
 
-In particular, this ensures that our host-pkgconf will look for host
-libraries and not target ones.
-
-Fixes building scripts/dtc for Buildroot configurations enabling libyaml and
-host-pkgconf for kernels after commit 067c650c45 (dtc: Use pkg-config to
-locate libyaml).
-
-With this enabled, we can drop the PKG_CONFIG_* variables for the
-_NEEDS_HOST_LIBELF conditional, as those are included in HOST_MAKE_ENV.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- linux/linux.mk | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ package/file/file.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7d66c9aeea..9a2f63d4df 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -60,8 +60,12 @@ BR_NO_CHECK_HASH_FOR += $(notdir $(LINUX_PATCHES))
- # be directories in the patch list (unlike for other packages).
- LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
- 
-+# while the kernel is built for the target, the build may need various
-+# host libraries depending on config (and version), so use
-+# HOST_MAKE_ENV here. In particular, this ensures that our
-+# host-pkgconf will look for host libraries and not target ones.
- LINUX_MAKE_ENV = \
--	$(TARGET_MAKE_ENV) \
-+	$(HOST_MAKE_ENV) \
- 	BR_BINARIES_DIR=$(BINARIES_DIR)
- 
- LINUX_INSTALL_IMAGES = YES
-@@ -102,12 +106,6 @@ endif
- 
- ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF),y)
- LINUX_DEPENDENCIES += host-elfutils host-pkgconf
--LINUX_MAKE_ENV += \
--	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--	PKG_CONFIG_SYSROOT_DIR="/" \
--	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
--	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
--	PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 3ae7c85976..8d0968e6b2 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -21,5 +21,12 @@ else
+ FILE_CONF_OPTS += --disable-libseccomp
  endif
  
- # If host-uboot-tools is selected by the user, assume it is needed to
++ifeq ($(BR2_PACKAGE_XZ),y)
++FILE_CONF_OPTS += --enable-xzlib
++FILE_DEPENDENCIES += xz
++else
++FILE_CONF_OPTS += --disable-xzlib
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-2.20.1
+2.24.1
