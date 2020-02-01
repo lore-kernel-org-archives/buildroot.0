@@ -1,56 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Feb 2020 11:29:39 +0100
-Subject: [Buildroot] [git commit] package/arp-scan: bump version to 1.9.7
-Message-ID: <20200201101914.C79C5873D9@busybox.osuosl.org>
+Date: Sat, 1 Feb 2020 11:30:40 +0100
+Subject: [Buildroot] [git commit] package/gerbera: fix static linking with
+ libmagic
+Message-ID: <20200201102036.6F37A873D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5cfb319f9493d677f059ca72b80f7fa22fc9f0f
+commit: https://git.buildroot.net/buildroot/commit/?id=314f0b464b92993961da318486376ad0e1eee74a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Arthur Courtel <arthur.courtel@smile.fr>
+Fixes:
+ - http://autobuild.buildroot.org/results/37b1ef54dc41100689f311fbc31fc9300dc6ae63
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/arp-scan/arp-scan.hash | 2 +-
- package/arp-scan/arp-scan.mk   | 2 +-
- package/python/python.mk       | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ ...ake-FindLibMagic.cmake-fix-static-linking.patch | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-diff --git a/package/arp-scan/arp-scan.hash b/package/arp-scan/arp-scan.hash
-index d14e6ba270..562deb8ff0 100644
---- a/package/arp-scan/arp-scan.hash
-+++ b/package/arp-scan/arp-scan.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	971b45c3369816467994797fbcd0076eb8f0ffb9c42764ea6dba25ab3fd490da	arp-scan-1.9.6.tar.gz
-+sha256  e03c36e4933c655bd0e4a841272554a347cd0136faf42c4a6564059e0761c039	arp-scan-1.9.7.tar.gz
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
-index 20e9cb62fe..cc1efe84a7 100644
---- a/package/arp-scan/arp-scan.mk
-+++ b/package/arp-scan/arp-scan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ARP_SCAN_VERSION = 1.9.6
-+ARP_SCAN_VERSION = 1.9.7
- ARP_SCAN_SITE = $(call github,royhills,arp-scan,$(ARP_SCAN_VERSION))
- ARP_SCAN_LICENSE = GPL-3.0+
- ARP_SCAN_LICENSE_FILES = COPYING
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 41a981e3d3..9e3c32687c 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -60,7 +60,7 @@ HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
- ifeq ($(BR2_PACKAGE_HOST_PYTHON_SSL),y)
- HOST_PYTHON_DEPENDENCIES += host-openssl
- else
--HOST_PYTHON_CONF_OPTS += --disable-ssl
-+HOST_PYTHON_CONF_OPTS += --disable-ssl --disable-hashlib
- endif
- 
- PYTHON_INSTALL_STAGING = YES
+diff --git a/package/gerbera/0001-cmake-FindLibMagic.cmake-fix-static-linking.patch b/package/gerbera/0001-cmake-FindLibMagic.cmake-fix-static-linking.patch
+new file mode 100644
+index 0000000000..5a189614f7
+--- /dev/null
++++ b/package/gerbera/0001-cmake-FindLibMagic.cmake-fix-static-linking.patch
+@@ -0,0 +1,60 @@
++From 64f49c6131f4112e5efd8b69094235f13882ccf5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 31 Jan 2020 17:14:11 +0100
++Subject: [PATCH] cmake/FindLibMagic.cmake: fix static linking
++
++libmagic can optionally depends on xz (for lzma) or bzip2 since version
++5.38 and
++https://github.com/file/file/commit/b259a07ea95827f565faa20f0316e5b2704064f7
++so use pkg-config to retrieve those static dependencies and avoid the
++following build failure:
++
++[100%] Linking CXX executable gerbera
++/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/br-user/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmagic.a(compress.o): in function `uncompressbuf':
++compress.c:(.text+0x69c): undefined reference to `BZ2_bzDecompressInit'
++/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x710): undefined reference to `BZ2_bzDecompress'
++/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x730): undefined reference to `BZ2_bzDecompressEnd'
++/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x7bc): undefined reference to `lzma_auto_decoder'
++/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x828): undefined reference to `lzma_code'
++/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x848): undefined reference to `lzma_end'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/37b1ef54dc41100689f311fbc31fc9300dc6ae63
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ cmake/FindLibMagic.cmake | 15 +++++++++++++--
++ 1 file changed, 13 insertions(+), 2 deletions(-)
++
++diff --git a/cmake/FindLibMagic.cmake b/cmake/FindLibMagic.cmake
++index f68ab923..04995af4 100644
++--- a/cmake/FindLibMagic.cmake
+++++ b/cmake/FindLibMagic.cmake
++@@ -1,11 +1,22 @@
++ INCLUDE (FindPackageHandleStandardArgs)
++ 
++-FIND_PATH(MAGIC_INCLUDE_DIR magic.h)
++-FIND_LIBRARY(MAGIC_LIBRARIES NAMES magic)
+++find_package(PkgConfig QUIET)
+++
+++pkg_check_modules(PC_MAGIC QUIET libmagic)
+++
+++FIND_PATH(MAGIC_INCLUDE_DIR magic.h
+++    HINTS ${PC_MAGIC_INCLUDEDIR} ${PC_MAGIC_INCLUDE_DIRS})
+++FIND_LIBRARY(MAGIC_LIBRARIES NAMES magic
+++    HINTS ${PC_MAGIC_LIBDIR} ${PC_MAGIC_LIBRARY_DIRS})
++ 
++ # handle the QUIETLY and REQUIRED arguments and set MAGIC_FOUND to TRUE
++ find_package_handle_standard_args(MAGIC DEFAULT_MSG MAGIC_LIBRARIES)
++ 
+++if (MAGIC_FOUND)
+++    set (MAGIC_LIBRARIES ${MAGIC_LIBRARY} ${PC_MAGIC_LIBRARIES})
+++    set (MAGIC_INCLUDE_DIRS ${MAGIC_INCLUDE_DIR} )
+++endif ()
+++
++ MARK_AS_ADVANCED(
++     MAGIC_LIBRARIES
++     MAGIC_INCLUDE_DIRS )
++-- 
++2.24.1
++
