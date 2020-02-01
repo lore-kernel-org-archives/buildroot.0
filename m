@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Feb 2020 10:30:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: point to
- staging pcre-config
-In-Reply-To: <20200131154257.12259-1-frank.vanbever@essensium.com>
-References: <20200131154257.12259-1-frank.vanbever@essensium.com>
-Message-ID: <20200201103009.080334a3@windsurf>
+Date: Sat, 1 Feb 2020 10:30:25 +0100
+Subject: [Buildroot] [PATCH 1/2] package/file: add xz optional dependency
+In-Reply-To: <20200131180544.1135547-1-fontaine.fabrice@gmail.com>
+References: <20200131180544.1135547-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200201103025.4d23a8f1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 31 Jan 2020 16:42:57 +0100
-Frank Vanbever <frank.vanbever@essensium.com> wrote:
+On Fri, 31 Jan 2020 19:05:43 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> The libmodsecurity build system uses the file installed on the host if not
-> explicitly pointed to pcre-config in the staging dir.
+> xz is an optional dependency since version 5.38 and
+> https://github.com/file/file/commit/b259a07ea95827f565faa20f0316e5b2704064f7
 > 
-> Fixes:
-> - http://autobuild.buildroot.net/results/f936ad05bca4bb776917306700750ba6d2498ef0
->   + similar failures for other architectures
-> 
-> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libmodsecurity/libmodsecurity.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/file/file.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
