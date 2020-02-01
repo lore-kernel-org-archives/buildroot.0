@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Feb 2020 22:53:59 +0100
-Subject: [Buildroot] [PATCH v4 1/1] package/meson: bump to version 0.53.1
-In-Reply-To: <20200125234526.49517-1-james.hilliard1@gmail.com>
-References: <20200125234526.49517-1-james.hilliard1@gmail.com>
-Message-ID: <20200201225359.773cabd7@windsurf>
+Date: Sat, 1 Feb 2020 22:57:36 +0100
+Subject: [Buildroot] [PATCH 1/3] package/erlang: bump to version 22.2
+In-Reply-To: <20200129172618.16966-1-frank.vanbever@essensium.com>
+References: <20200129172618.16966-1-frank.vanbever@essensium.com>
+Message-ID: <20200201225736.4c899cf7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 25 Jan 2020 16:45:26 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Hello,
 
-> Removed patch that is now upstream.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> 
-> ---
-> Changes v3 -> v4:
->   - bump to 0.53.1 which includes gcc linker fix
-> Changes v2 -> v3:
->   - backport upstream fix from commit instead of pull request
-> Changes v1 -> v2:
->   - add patch to prevent passing an invalid linker to gcc
-> ---
->  ...ic-libs-when-default-library-static.patch} |  0
->  ...dist.py-import-lzma-only-when-needed.patch | 50 -------------------
->  package/meson/meson.hash                      |  4 +-
->  package/meson/meson.mk                        |  2 +-
->  4 files changed, 3 insertions(+), 53 deletions(-)
->  rename package/meson/{0003-Prefer-ext-static-libs-when-default-library-static.patch => 0002-Prefer-ext-static-libs-when-default-library-static.patch} (100%)
->  delete mode 100644 package/meson/0002-mdist.py-import-lzma-only-when-needed.patch
+Johan: I really would like a Reviewed-by/Acked-by tag from you, as you
+are the one typically taking care of erlang support in Buildroot.
 
-Applied to master, thanks.
+On Wed, 29 Jan 2020 18:26:16 +0100
+Frank Vanbever <frank.vanbever@essensium.com> wrote:
+
+> The issue fixed by 0003-Link-with-LDLIBS-instead-of-LIBS-for-DED.patch (ERL-529)
+> has been fixed since OTP20.3 (a5cbcbdb85) and is no longer required.
+> 
+> OTP provides wrapper scripts (otp_build and configure) which perform tasks
+> previously handled directly by autotools i.e. autoreconf.
+> 
+> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+
+Thanks,
 
 Thomas
 -- 
