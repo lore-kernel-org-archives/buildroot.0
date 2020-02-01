@@ -1,39 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Feb 2020 11:33:47 +0100
-Subject: [Buildroot] [PATCH 1/2] package/file: add libmagic.pc
-In-Reply-To: <20200131194058.1161216-1-fontaine.fabrice@gmail.com>
-References: <20200131194058.1161216-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200201113347.3a063c97@windsurf>
+Date: Sat, 1 Feb 2020 11:38:19 +0100
+Subject: [Buildroot] [git commit] package/tpm2-tools: bump version to 4.1.1
+Message-ID: <20200201102725.D6AC8873F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 31 Jan 2020 20:40:57 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=39ca698bfcb3a7b4005019169e3cabf02ca42b8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/37b1ef54dc41100689f311fbc31fc9300dc6ae63
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/file/0001-Add-libmagic.pc.patch | 76 +++++++++++++++++++++++++
->  package/file/file.mk                    |  2 +
->  2 files changed, 78 insertions(+)
->  create mode 100644 package/file/0001-Add-libmagic.pc.patch
+Bugfix release, fixing a number of issues in the 4.1 release.  For details,
+see the announcement:
 
-Thanks, both applied. I hope the patch adding libmagic.pc will be
-accepted upstream by the file developers, as otherwise we would have to
-keep it forever, and the AUTORECONF = YES as well. But what you did is
-the right way of fixing the issue (instead of doing a work around in
-the gerbera package). We might however have to fix several other
-packages to make them use pkg-config to get the details of libmagic.
+https://github.com/tpm2-software/tpm2-tools/releases/tag/4.1.1
 
-Best regards,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tpm2-tools/tpm2-tools.hash | 2 +-
+ package/tpm2-tools/tpm2-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tpm2-tools/tpm2-tools.hash b/package/tpm2-tools/tpm2-tools.hash
+index 9d36d70f78..16059627ac 100644
+--- a/package/tpm2-tools/tpm2-tools.hash
++++ b/package/tpm2-tools/tpm2-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 07ce37f552ed47f582fbc3423bc316fea64012ef15a92a25766a36534524dcf2  tpm2-tools-4.1.tar.gz
++sha256 40b9263d8b949bd2bc03a3cd60fa242e27116727467f9bbdd0b5f2539a25a7b1  tpm2-tools-4.1.1.tar.gz
+ sha256 e10dce74279166bf7bc463eb6e462c2025bceb3e50cadfe865d92c1c3dc0bb21  LICENSE
+diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
+index 692bda8d8b..4ebca0f906 100644
+--- a/package/tpm2-tools/tpm2-tools.mk
++++ b/package/tpm2-tools/tpm2-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TPM2_TOOLS_VERSION = 4.1
++TPM2_TOOLS_VERSION = 4.1.1
+ TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
+ TPM2_TOOLS_LICENSE = BSD-3-Clause
+ TPM2_TOOLS_LICENSE_FILES = LICENSE
