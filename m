@@ -1,63 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Feb 2020 12:36:48 +0100
-Subject: [Buildroot] [git commit] package/file: zlib is optional,
- not mandatory
-Message-ID: <20200201112626.93A5487F69@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sat, 1 Feb 2020 13:30:46 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libnss: bump version to 3.49.2
+In-Reply-To: <20200201084758.285234-2-bernd.kuhls@t-online.de>
+References: <20200201084758.285234-1-bernd.kuhls@t-online.de>
+ <20200201084758.285234-2-bernd.kuhls@t-online.de>
+Message-ID: <8c628e21-90bd-f036-9f26-ac72ab6dc5ad@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95cee1652978c393545d41e55ae5bba06196e4f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Bernd,
 
-zlib is optional since version 4.22 and
-https://github.com/file/file/commit/b950f1f426f8855e69d6f3dcc32067e931e015b7
-and --enable-zlib has been fixed since version 5.37 and
-https://github.com/file/file/commit/8c6dcd7ef690e90a3e897e8f886513750ed2c04d
+there is already a patch pending for this:
+https://patchwork.ozlabs.org/patch/1229021/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/file/Config.in | 1 -
- package/file/file.mk   | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
 
-diff --git a/package/file/Config.in b/package/file/Config.in
-index 13934b2239..edc4d874b2 100644
---- a/package/file/Config.in
-+++ b/package/file/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_FILE
- 	bool "file"
--	select BR2_PACKAGE_ZLIB
- 	help
- 	  Program to identify a file's format by scanning binary data
- 	  for known patterns.
-diff --git a/package/file/file.mk b/package/file/file.mk
-index cff59c86ad..42f9524ed1 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -6,7 +6,7 @@
- 
- FILE_VERSION = 5.38
- FILE_SITE = ftp://ftp.astron.com/pub/file
--FILE_DEPENDENCIES = host-file zlib
-+FILE_DEPENDENCIES = host-file
- HOST_FILE_DEPENDENCIES = host-zlib
- FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- FILE_INSTALL_STAGING = YES
-@@ -37,5 +37,12 @@ else
- FILE_CONF_OPTS += --disable-xzlib
- endif
- 
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+FILE_CONF_OPTS += --enable-zlib
-+FILE_DEPENDENCIES += zlib
-+else
-+FILE_CONF_OPTS += --disable-zlib
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+On 2/1/20 9:47 AM, Bernd Kuhls wrote:
+> Release notes:
+> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.49.2_release_notes
+> 
+> Added sha1 hash provided by upstream.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>   package/libnss/libnss.hash | 6 ++++--
+>   package/libnss/libnss.mk   | 2 +-
+>   2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+> index 01098df99a..569ab71c06 100644
+> --- a/package/libnss/libnss.hash
+> +++ b/package/libnss/libnss.hash
+> @@ -1,4 +1,6 @@
+> -# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_48_RTM/src/SHA256SUMS
+> -sha256	d9aa42e49e02bb0dc0a2f164604cfc718e11a2a06ddb266cd676376ac21b026e  nss-3.49.1.tar.gz
+> +# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_49_2_RTM/src/SHA1SUMS
+> +sha1 08858e0fe80f0bed02e9c7e190e6bb9c2a505b8b  nss-3.49.2.tar.gz
+> +# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_49_2_RTM/src/SHA256SUMS
+> +sha256 faa7502c3ce9240d4be2aa88f63d88cf7d1cc512060e63ef21a7813c236160b2  nss-3.49.2.tar.gz
+>   # Locally calculated
+>   sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+> index d7d3cda86b..11b57d8142 100644
+> --- a/package/libnss/libnss.mk
+> +++ b/package/libnss/libnss.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -LIBNSS_VERSION = 3.49.1
+> +LIBNSS_VERSION = 3.49.2
+>   LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+>   LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+>   LIBNSS_DISTDIR = dist
+> 
