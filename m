@@ -1,60 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Feb 2020 23:36:31 +0100
-Subject: [Buildroot] [git commit] package/mesa3d: add support for gallium
- iris driver
-Message-ID: <20200201223151.924AD880D3@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 01 Feb 2020 23:43:17 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/qt5base: add patch to fix
+ CVE-2020-0569 for LTS
+In-Reply-To: <20200130211335.24913-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Thu, 30 Jan 2020 22:13:34 +0100")
+References: <20200130211335.24913-1-ps.report@gmx.net>
+Message-ID: <87wo96orne.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77b4f9b31bf730260fc23ef5cd22e53314a4f3f6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mesa3d/Config.in | 7 +++++++
- package/mesa3d/mesa3d.mk | 3 +++
- 2 files changed, 10 insertions(+)
+ > Add upstream patch to fix CVE-2020-0569 for LTS version
+ > (see [1] for details).
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 455091eb9d..14adb407b4 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -113,6 +113,13 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
- 	help
- 	  Mesa driver for Freedreno GPUs.
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
-+	bool "Gallium iris driver"
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-+	help
-+	  Mesa driver for iris-based Intel GPUs.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
- 	bool "Gallium KMSRO driver"
- 	depends on BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 50a29aa7db..f0e889a400 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -74,6 +74,7 @@ endif
- #Gallium Drivers
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO) += freedreno
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS)     += iris
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
-@@ -167,6 +168,8 @@ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
- MESA3D_PLATFORMS += drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO),y)
- MESA3D_PLATFORMS += drm
-+else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS),y)
-+MESA3D_PLATFORMS += drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA),y)
- MESA3D_PLATFORMS += drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST),y)
+ > [1] https://www.openwall.com/lists/oss-security/2020/01/30/1
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed after extending the commit message a bit, thanks.
+
+-- 
+Bye, Peter Korsgaard
