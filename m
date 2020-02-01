@@ -1,33 +1,28 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  1 Feb 2020 10:02:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-screensaver-matrixtrails:
- remove 'v' prefix from github-fetched package
-Message-ID: <20200201090209.304623-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 1 Feb 2020 10:21:30 +0100
+Subject: [Buildroot] Buildroot dinner @ FOSDEM: this Saturday
+Message-ID: <20200201102130.7986dbed@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../kodi-screensaver-matrixtrails.mk                          | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-index 670cec3efb..674a0116e2 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_MATRIXTRAILS_VERSION = v2.2.1-Leia
--KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
-+KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.2.1-Leia
-+KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,v$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = src/matrixtrails.cpp
- KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi libsoil
+If you're a Buildroot developer/user at FOSDEM and want to meet with
+other Buildroot developers, a part of the Buildroot community will
+share a dinner tonight in Brussels after FOSDEM. We typically join in
+the entrance of building H at the end of the day, after the talks end
+and then move to the Volle Gas restaurant.
+
+If you're interested, please drop me a private e-mail so that I can
+give you my contact details to facilitate things.
+
+Best regards,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
