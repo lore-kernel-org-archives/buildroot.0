@@ -1,51 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  1 Feb 2020 09:47:58 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libnss: bump version to 3.49.2
-In-Reply-To: <20200201084758.285234-1-bernd.kuhls@t-online.de>
-References: <20200201084758.285234-1-bernd.kuhls@t-online.de>
-Message-ID: <20200201084758.285234-2-bernd.kuhls@t-online.de>
+Date: Sat,  1 Feb 2020 09:55:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libplist: bump version to 2.1.0
+Message-ID: <20200201085553.302990-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.49.2_release_notes
-
-Added sha1 hash provided by upstream.
+Switched _SITE to github, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libnss/libnss.hash | 6 ++++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/libplist/libplist.hash | 3 ++-
+ package/libplist/libplist.mk   | 7 ++++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 01098df99a..569ab71c06 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,6 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_48_RTM/src/SHA256SUMS
--sha256	d9aa42e49e02bb0dc0a2f164604cfc718e11a2a06ddb266cd676376ac21b026e  nss-3.49.1.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_49_2_RTM/src/SHA1SUMS
-+sha1 08858e0fe80f0bed02e9c7e190e6bb9c2a505b8b  nss-3.49.2.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_49_2_RTM/src/SHA256SUMS
-+sha256 faa7502c3ce9240d4be2aa88f63d88cf7d1cc512060e63ef21a7813c236160b2  nss-3.49.2.tar.gz
+diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
+index 63c2515062..8b36daceab 100644
+--- a/package/libplist/libplist.hash
++++ b/package/libplist/libplist.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index d7d3cda86b..11b57d8142 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
+-sha256 3a7e9694c2d9a85174ba1fa92417cfabaea7f6d19631e544948dc7e17e82f602  libplist-2.0.0.tar.bz2
++sha256 4b33f9af3f9208d54a3c3e1a8c149932513f451c98d1dd696fe42c06e30b7f03  libplist-2.1.0.tar.gz
++sha256 7619c753cac95d4740220223bde48a032606fcaccde5e546f9bc444c81ab356d  COPYING
+diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
+index 09fc8168e4..d07fb5dd2e 100644
+--- a/package/libplist/libplist.mk
++++ b/package/libplist/libplist.mk
+@@ -4,12 +4,13 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.49.1
-+LIBNSS_VERSION = 3.49.2
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-LIBPLIST_VERSION = 2.0.0
+-LIBPLIST_SOURCE = libplist-$(LIBPLIST_VERSION).tar.bz2
+-LIBPLIST_SITE = http://www.libimobiledevice.org/downloads
++LIBPLIST_VERSION = 2.1.0
++LIBPLIST_SITE = $(call github,libimobiledevice,libplist,$(LIBPLIST_VERSION))
+ LIBPLIST_INSTALL_STAGING = YES
+ LIBPLIST_LICENSE = LGPL-2.1+
+ LIBPLIST_LICENSE_FILES = COPYING
++# github tarball does not include configure
++LIBPLIST_AUTORECONF = YES
+ 
+ # Disable building Python bindings, because it requires host-cython, which
+ # is not packaged in Buildroot at all.
 -- 
 2.20.1
