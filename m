@@ -1,54 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  1 Feb 2020 23:30:49 +0100
-Subject: [Buildroot] [PATCH] package/sudo: bump version to 1.8.31
-Message-ID: <20200201223050.26812-1-peter@korsgaard.com>
+Date: Sat, 01 Feb 2020 23:32:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libva: bump version to 2.6.1
+In-Reply-To: <20200131162622.273432-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 31 Jan 2020 17:26:22 +0100")
+References: <20200131162622.273432-1-bernd.kuhls@t-online.de>
+Message-ID: <871rreq6pp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Notice that 1.8.31 fixes a security issue with the non-default pwfeedback
-option, but according to the advisory this is not exploitable in 1.8.28:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-versions 1.8.26 through 1.8.30 it is not exploitable due to a change in EOF
-handling introduced in sudo 1.8.26
+ > Removed patch which was applied upstream:
+ > https://github.com/intel/libva/commit/69b4230c36d977d4198d74a5f1fc7529715fd5ab
 
-https://www.sudo.ws/alerts/pwfeedback.html
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Adjust license hash as the copyright year was changed:
--   Copyright (c) 1994-1996, 1998-2019
-+   Copyright (c) 1994-1996, 1998-2020
+Committed, thanks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sudo/sudo.hash | 4 ++--
- package/sudo/sudo.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index 1795952988..fff1aa2343 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
-@@ -1,4 +1,4 @@
- # From: http://www.sudo.ws/download.html
--sha256 9129fa745a08caff0ce2042d2162b38eb9bf73bf43fcb248ac8b3a750c1f13a1  sudo-1.8.28.tar.gz
-+sha256 7ea8d97a3cee4c844e0887ea7a1bd80eb54cc98fd77966776cb1a80653ad454f  sudo-1.8.31.tar.gz
- # Locally calculated
--sha256 e0e7990185834e9f08f3e922905d7bfaf998d13be668c6026d2586b1718210ba  doc/LICENSE
-+sha256 be099fd0ee954224f392dde163aef6d6359c58a5afa1ebb1bd55058318add789  doc/LICENSE
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index a7966047f8..a4def4368a 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUDO_VERSION = 1.8.28
-+SUDO_VERSION = 1.8.31
- SUDO_SITE = https://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC, BSD-3-Clause
- SUDO_LICENSE_FILES = doc/LICENSE
 -- 
-2.20.1
+Bye, Peter Korsgaard
