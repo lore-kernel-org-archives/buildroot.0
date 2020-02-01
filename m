@@ -1,15 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Feb 2020 11:30:40 +0100
-Subject: [Buildroot] [git commit] package/gerbera: fix static linking with
- libmagic
-Message-ID: <20200201102036.6F37A873D8@busybox.osuosl.org>
+Date: Sat, 1 Feb 2020 11:30:28 +0100
+Subject: [Buildroot] [git commit] package/file: add libmagic.pc
+Message-ID: <20200201102035.D9279873E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=314f0b464b92993961da318486376ad0e1eee74a
+commit: https://git.buildroot.net/buildroot/commit/?id=13f991292fb41ab824786480f299b7bc7252920a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
@@ -18,25 +17,27 @@ Fixes:
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ake-FindLibMagic.cmake-fix-static-linking.patch | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ package/file/0001-Add-libmagic.pc.patch | 76 +++++++++++++++++++++++++++++++++
+ package/file/file.mk                    |  2 +
+ 2 files changed, 78 insertions(+)
 
-diff --git a/package/gerbera/0001-cmake-FindLibMagic.cmake-fix-static-linking.patch b/package/gerbera/0001-cmake-FindLibMagic.cmake-fix-static-linking.patch
+diff --git a/package/file/0001-Add-libmagic.pc.patch b/package/file/0001-Add-libmagic.pc.patch
 new file mode 100644
-index 0000000000..5a189614f7
+index 0000000000..b26d16224d
 --- /dev/null
-+++ b/package/gerbera/0001-cmake-FindLibMagic.cmake-fix-static-linking.patch
-@@ -0,0 +1,60 @@
-+From 64f49c6131f4112e5efd8b69094235f13882ccf5 Mon Sep 17 00:00:00 2001
++++ b/package/file/0001-Add-libmagic.pc.patch
+@@ -0,0 +1,76 @@
++From d079cac1110cc2761417f0dcb0a142b217eb1eda Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 31 Jan 2020 17:14:11 +0100
-+Subject: [PATCH] cmake/FindLibMagic.cmake: fix static linking
++Date: Fri, 31 Jan 2020 20:26:29 +0100
++Subject: [PATCH] Add libmagic.pc
 +
 +libmagic can optionally depends on xz (for lzma) or bzip2 since version
 +5.38 and
 +https://github.com/file/file/commit/b259a07ea95827f565faa20f0316e5b2704064f7
-+so use pkg-config to retrieve those static dependencies and avoid the
-+following build failure:
++so add libmagic.pc so package (such as gerbera) that links with libmagic
++will be able to use pkg-config to retrieve those static dependencies
++For example, this will avoid the following build failure:
 +
 +[100%] Linking CXX executable gerbera
 +/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/br-user/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmagic.a(compress.o): in function `uncompressbuf':
@@ -51,39 +52,67 @@ index 0000000000..5a189614f7
 + - http://autobuild.buildroot.org/results/37b1ef54dc41100689f311fbc31fc9300dc6ae63
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://bugs.astron.com/view.php?id=136]
 +---
-+ cmake/FindLibMagic.cmake | 15 +++++++++++++--
-+ 1 file changed, 13 insertions(+), 2 deletions(-)
++ Makefile.am    |  5 +++++
++ configure.ac   |  2 +-
++ libmagic.pc.in | 10 ++++++++++
++ 3 files changed, 16 insertions(+), 1 deletion(-)
++ create mode 100644 libmagic.pc.in
 +
-+diff --git a/cmake/FindLibMagic.cmake b/cmake/FindLibMagic.cmake
-+index f68ab923..04995af4 100644
-+--- a/cmake/FindLibMagic.cmake
-++++ b/cmake/FindLibMagic.cmake
-+@@ -1,11 +1,22 @@
-+ INCLUDE (FindPackageHandleStandardArgs)
++diff --git a/Makefile.am b/Makefile.am
++index 8bd927d9..2ab67ed7 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -3,3 +3,8 @@ ACLOCAL_AMFLAGS = -I m4
++ EXTRA_DIST = MAINT
 + 
-+-FIND_PATH(MAGIC_INCLUDE_DIR magic.h)
-+-FIND_LIBRARY(MAGIC_LIBRARIES NAMES magic)
-++find_package(PkgConfig QUIET)
++ SUBDIRS = src magic tests doc python
 ++
-++pkg_check_modules(PC_MAGIC QUIET libmagic)
-++
-++FIND_PATH(MAGIC_INCLUDE_DIR magic.h
-++    HINTS ${PC_MAGIC_INCLUDEDIR} ${PC_MAGIC_INCLUDE_DIRS})
-++FIND_LIBRARY(MAGIC_LIBRARIES NAMES magic
-++    HINTS ${PC_MAGIC_LIBDIR} ${PC_MAGIC_LIBRARY_DIRS})
+++# This variable must have 'exec' in its name, in order to be installed
+++# by 'install-exec' target (instead of default 'install-data')
+++pkgconfigexecdir = $(libdir)/pkgconfig
+++pkgconfigexec_DATA = libmagic.pc
++diff --git a/configure.ac b/configure.ac
++index ac37fccd..b2e2e5b8 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -217,5 +217,5 @@ if  test "$ac_cv_header_lzma_h$ac_cv_lib_lzma_lzma_stream_decoder" = "yesyes"; t
++   AC_DEFINE([XZLIBSUPPORT], 1, [Enable xzlib compression support])
++ fi
 + 
-+ # handle the QUIETLY and REQUIRED arguments and set MAGIC_FOUND to TRUE
-+ find_package_handle_standard_args(MAGIC DEFAULT_MSG MAGIC_LIBRARIES)
-+ 
-++if (MAGIC_FOUND)
-++    set (MAGIC_LIBRARIES ${MAGIC_LIBRARY} ${PC_MAGIC_LIBRARIES})
-++    set (MAGIC_INCLUDE_DIRS ${MAGIC_INCLUDE_DIR} )
-++endif ()
++-AC_CONFIG_FILES([Makefile src/Makefile magic/Makefile tests/Makefile doc/Makefile python/Makefile])
+++AC_CONFIG_FILES([Makefile src/Makefile magic/Makefile tests/Makefile doc/Makefile python/Makefile libmagic.pc])
++ AC_OUTPUT
++diff --git a/libmagic.pc.in b/libmagic.pc.in
++new file mode 100644
++index 00000000..3ad1290b
++--- /dev/null
+++++ b/libmagic.pc.in
++@@ -0,0 +1,10 @@
+++prefix=@prefix@
+++exec_prefix=@exec_prefix@
+++libdir=@libdir@
+++includedir=@includedir@
 ++
-+ MARK_AS_ADVANCED(
-+     MAGIC_LIBRARIES
-+     MAGIC_INCLUDE_DIRS )
+++Name: libmagic
+++Description: Magic number recognition library
+++Version: @VERSION@
+++Libs: -L${libdir} -lmagic
+++Libs.private: @LIBS@
 +-- 
 +2.24.1
 +
+diff --git a/package/file/file.mk b/package/file/file.mk
+index ffa8b8b905..cff59c86ad 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -12,6 +12,8 @@ FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ FILE_INSTALL_STAGING = YES
+ FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
+ FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
++# We're patching configure.ac
++FILE_AUTORECONF = YES
+ HOST_FILE_CONF_OPTS = --disable-libseccomp
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
