@@ -1,120 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Feb 2020 12:06:23 +0100
-Subject: [Buildroot] [git commit] package/genimage: bump to version 12
-Message-ID: <20200201105549.24BF587F59@busybox.osuosl.org>
+Date: Sat, 1 Feb 2020 12:36:48 +0100
+Subject: [Buildroot] [git commit] package/file: zlib is optional,
+ not mandatory
+Message-ID: <20200201112626.93A5487F69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=846a135fa7555f3e79fe87495ed5ed18832aaddb
+commit: https://git.buildroot.net/buildroot/commit/?id=95cee1652978c393545d41e55ae5bba06196e4f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also drop upstreamed patch
+zlib is optional since version 4.22 and
+https://github.com/file/file/commit/b950f1f426f8855e69d6f3dcc32067e931e015b7
+and --enable-zlib has been fixed since version 5.37 and
+https://github.com/file/file/commit/8c6dcd7ef690e90a3e897e8f886513750ed2c04d
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...-vfat-Add-label-option-to-set-volume-name.patch | 69 ----------------------
- package/genimage/genimage.hash                     |  2 +-
- package/genimage/genimage.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 71 deletions(-)
+ package/file/Config.in | 1 -
+ package/file/file.mk   | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/genimage/0001-image-vfat-Add-label-option-to-set-volume-name.patch b/package/genimage/0001-image-vfat-Add-label-option-to-set-volume-name.patch
-deleted file mode 100644
-index a77b8260a0..0000000000
---- a/package/genimage/0001-image-vfat-Add-label-option-to-set-volume-name.patch
-+++ /dev/null
-@@ -1,69 +0,0 @@
--From c1a165731298b96175b9b0dd80ad088dc8b33dc1 Mon Sep 17 00:00:00 2001
--From: Florent Viard <fviard@cxignited.com>
--Date: Sun, 27 Oct 2019 23:48:16 +0100
--Subject: [PATCH] image-vfat: Add label option to set volume name.
--
--Signed-off-by: Florent Viard <fviard@cxignited.com>
--[dariobin at libero.it: remove README.rst changes]
--Signed-off-by: Dario Binacchi <dariobin@libero.it>
-----
-- image-vfat.c | 18 ++++++++++++++++--
-- 1 file changed, 16 insertions(+), 2 deletions(-)
--
--diff --git a/image-vfat.c b/image-vfat.c
--index f16242c..3ea7288 100644
----- a/image-vfat.c
--+++ b/image-vfat.c
--@@ -27,14 +27,20 @@ static int vfat_generate(struct image *image)
-- 	int ret;
-- 	struct partition *part;
-- 	char *extraargs = cfg_getstr(image->imagesec, "extraargs");
--+	char *label = cfg_getstr(image->imagesec, "label");
--+
--+	if (label && label[0] != '\0')
--+		xasprintf(&label, "-n '%s'", label);
--+	else
--+		label = "";
-- 
-- 	ret = systemp(image, "%s if=/dev/zero of=\"%s\" seek=%lld count=0 bs=1 2>/dev/null",
-- 			get_opt("dd"), imageoutfile(image), image->size);
-- 	if (ret)
-- 		return ret;
-- 
---	ret = systemp(image, "%s %s '%s'", get_opt("mkdosfs"),
---			extraargs, imageoutfile(image));
--+	ret = systemp(image, "%s %s %s '%s'", get_opt("mkdosfs"),
--+			extraargs, label, imageoutfile(image));
-- 	if (ret)
-- 		return ret;
-- 
--@@ -72,11 +78,18 @@ static int vfat_generate(struct image *image)
-- 
-- static int vfat_setup(struct image *image, cfg_t *cfg)
-- {
--+	char *label = cfg_getstr(image->imagesec, "label");
--+
-- 	if (!image->size) {
-- 		image_error(image, "no size given or must not be zero\n");
-- 		return -EINVAL;
-- 	}
-- 
--+	if (label && strlen(label) > 11) {
--+		image_error(image, "vfat volume name cannot be longer than 11 characters\n");
--+		return -EINVAL;
--+	}
--+
-- 	return 0;
-- }
-- 
--@@ -112,6 +125,7 @@ static cfg_opt_t file_opts[] = {
-- 
-- static cfg_opt_t vfat_opts[] = {
-- 	CFG_STR("extraargs", "", CFGF_NONE),
--+	CFG_STR("label", "", CFGF_NONE),
-- 	CFG_STR_LIST("files", 0, CFGF_NONE),
-- 	CFG_SEC("file", file_opts, CFGF_MULTI | CFGF_TITLE),
-- 	CFG_END()
---- 
--2.24.0
--
-diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
-index c1f2270d28..fb5d235508 100644
---- a/package/genimage/genimage.hash
-+++ b/package/genimage/genimage.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	2ee024bfb2ec157651b86f3365d138ee013dcc48277d86e1eed6f3285a67b532	genimage-11.tar.xz
-+sha256	2e9b43d1288f4e216d6c79de2a0c53ce1bd41f93cec750d8ab057aa2d0b0ee4a	genimage-12.tar.xz
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-index 5ef7d301fa..8960393904 100644
---- a/package/genimage/genimage.mk
-+++ b/package/genimage/genimage.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/file/Config.in b/package/file/Config.in
+index 13934b2239..edc4d874b2 100644
+--- a/package/file/Config.in
++++ b/package/file/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_FILE
+ 	bool "file"
+-	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Program to identify a file's format by scanning binary data
+ 	  for known patterns.
+diff --git a/package/file/file.mk b/package/file/file.mk
+index cff59c86ad..42f9524ed1 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -6,7 +6,7 @@
  
--GENIMAGE_VERSION = 11
-+GENIMAGE_VERSION = 12
- GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
- GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
- HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
+ FILE_VERSION = 5.38
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+-FILE_DEPENDENCIES = host-file zlib
++FILE_DEPENDENCIES = host-file
+ HOST_FILE_DEPENDENCIES = host-zlib
+ FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ FILE_INSTALL_STAGING = YES
+@@ -37,5 +37,12 @@ else
+ FILE_CONF_OPTS += --disable-xzlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++FILE_CONF_OPTS += --enable-zlib
++FILE_DEPENDENCIES += zlib
++else
++FILE_CONF_OPTS += --disable-zlib
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
