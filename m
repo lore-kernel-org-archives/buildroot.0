@@ -1,57 +1,38 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sat, 1 Feb 2020 13:44:24 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libnss: bump version to 3.49.2
-In-Reply-To: <20200124195704.115545-2-giulio.benetti@benettiengineering.com>
-References: <20200124195704.115545-1-giulio.benetti@benettiengineering.com>
- <20200124195704.115545-2-giulio.benetti@benettiengineering.com>
-Message-ID: <b40cfa30-3d6b-91f7-31db-e40924476451@benettiengineering.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  1 Feb 2020 13:59:21 +0100
+Subject: [Buildroot] [PATCH 2/2] package/kodi: needs extra encodings in
+ libiconv
+In-Reply-To: <20200201125921.1193669-1-bernd.kuhls@t-online.de>
+References: <20200201125921.1193669-1-bernd.kuhls@t-online.de>
+Message-ID: <20200201125921.1193669-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 1/24/20 8:57 PM, Giulio Benetti wrote:
-> Release notes:
-> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.49.2_release_notes
+The Kodi build system also enables extra encodings:
+https://github.com/xbmc/xbmc/blob/Leia/tools/depends/target/libiconv/Makefile#L13
 
-Forgot to mention:
-Fixes:
-http://autobuild.buildroot.net/results/268/2687d667467a2f4209af74e6e77073801c716a3b/
-http://autobuild.buildroot.net/results/0a4/0a46d17d44b69afa8576b7a09ec825319d195489/build-end.log
+Without them addons fail to install:
+https://github.com/garbear/kodi-steamlink/issues/34#issuecomment-579392269
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   package/libnss/libnss.hash | 4 ++--
->   package/libnss/libnss.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-> index 01098df99a..dc04acbb6e 100644
-> --- a/package/libnss/libnss.hash
-> +++ b/package/libnss/libnss.hash
-> @@ -1,4 +1,4 @@
-> -# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_48_RTM/src/SHA256SUMS
-> -sha256	d9aa42e49e02bb0dc0a2f164604cfc718e11a2a06ddb266cd676376ac21b026e  nss-3.49.1.tar.gz
-> +# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_49_2_RTM/src/SHA256SUMS
-> +sha256	faa7502c3ce9240d4be2aa88f63d88cf7d1cc512060e63ef21a7813c236160b2  nss-3.49.2.tar.gz
->   # Locally calculated
->   sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-> index d7d3cda86b..11b57d8142 100644
-> --- a/package/libnss/libnss.mk
-> +++ b/package/libnss/libnss.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -LIBNSS_VERSION = 3.49.1
-> +LIBNSS_VERSION = 3.49.2
->   LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
->   LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
->   LIBNSS_DISTDIR = dist
-> 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index f592e18e13..65e7768d6d 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -65,6 +65,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBFRIBIDI
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	select BR2_PACKAGE_LIBICONV_EXTRA_ENCODINGS if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_LIBPLIST
+ 	select BR2_PACKAGE_LIBSAMPLERATE
+ 	select BR2_PACKAGE_LZO
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.20.1
