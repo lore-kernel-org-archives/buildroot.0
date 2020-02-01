@@ -1,63 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Feb 2020 23:15:41 +0100
-Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: allow
- additional make targets
-Message-ID: <20200201220847.70029880AF@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat,  1 Feb 2020 23:30:49 +0100
+Subject: [Buildroot] [PATCH] package/sudo: bump version to 1.8.31
+Message-ID: <20200201223050.26812-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05b8c7da6de863561d66717735a4870f2766454c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Notice that 1.8.31 fixes a security issue with the non-default pwfeedback
+option, but according to the advisory this is not exploitable in 1.8.28:
 
-Allow specifying additional build targets for ATF.
+versions 1.8.26 through 1.8.30 it is not exploitable due to a change in EOF
+handling introduced in sudo 1.8.26
 
-This might be more useful when using a custom git repository.
+https://www.sudo.ws/alerts/pwfeedback.html
 
-For example, when using with the ATF repository from NXP QorIQ,
-there is a new build target 'pbl' which is used to build the
-pbl binary image. Note that in the specific case of the 'pbl'
-target, additional build variables also need to be specified
-through BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES.
+Adjust license hash as the copyright year was changed:
+-   Copyright (c) 1994-1996, 1998-2019
++   Copyright (c) 1994-1996, 1998-2020
 
-Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/arm-trusted-firmware/Config.in               | 7 +++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 3 +++
- 2 files changed, 10 insertions(+)
+ package/sudo/sudo.hash | 4 ++--
+ package/sudo/sudo.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 96861c3f4d..373591d497 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -135,6 +135,13 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index 1795952988..fff1aa2343 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,4 +1,4 @@
+ # From: http://www.sudo.ws/download.html
+-sha256 9129fa745a08caff0ce2042d2162b38eb9bf73bf43fcb248ac8b3a750c1f13a1  sudo-1.8.28.tar.gz
++sha256 7ea8d97a3cee4c844e0887ea7a1bd80eb54cc98fd77966776cb1a80653ad454f  sudo-1.8.31.tar.gz
+ # Locally calculated
+-sha256 e0e7990185834e9f08f3e922905d7bfaf998d13be668c6026d2586b1718210ba  doc/LICENSE
++sha256 be099fd0ee954224f392dde163aef6d6359c58a5afa1ebb1bd55058318add789  doc/LICENSE
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index a7966047f8..a4def4368a 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
- 
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS
-+	string "Additional ATF make targets"
-+	help
-+	  Additional targets for the ATF build
-+	  E.G. When using the QorIQ custom ATF repository from NXP,
-+	  the target 'pbl' can be used to build the pbl binary.
-+
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES
- 	string "Additional ATF build variables"
- 	help
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 2133d39e6d..bf1ac46cf6 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -139,6 +139,9 @@ define ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF
- endef
- endif
- 
-+ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += \
-+	$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS)
-+
- define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- 	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
+-SUDO_VERSION = 1.8.28
++SUDO_VERSION = 1.8.31
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = doc/LICENSE
+-- 
+2.20.1
