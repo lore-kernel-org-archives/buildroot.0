@@ -1,39 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Feb 2020 10:27:21 +0100
-Subject: [Buildroot] [git commit] package/file: add xz optional dependency
-Message-ID: <20200201091708.7CA6E867D7@busybox.osuosl.org>
+Date: Sat, 1 Feb 2020 10:30:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: point to
+ staging pcre-config
+In-Reply-To: <20200131154257.12259-1-frank.vanbever@essensium.com>
+References: <20200131154257.12259-1-frank.vanbever@essensium.com>
+Message-ID: <20200201103009.080334a3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e70be6d290a157897d2d9335991f99e967013d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 31 Jan 2020 16:42:57 +0100
+Frank Vanbever <frank.vanbever@essensium.com> wrote:
 
-xz is an optional dependency since version 5.38 and
-https://github.com/file/file/commit/b259a07ea95827f565faa20f0316e5b2704064f7
+> The libmodsecurity build system uses the file installed on the host if not
+> explicitly pointed to pcre-config in the staging dir.
+> 
+> Fixes:
+> - http://autobuild.buildroot.net/results/f936ad05bca4bb776917306700750ba6d2498ef0
+>   + similar failures for other architectures
+> 
+> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+> ---
+>  package/libmodsecurity/libmodsecurity.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/file/file.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 3ae7c85976..8d0968e6b2 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -21,5 +21,12 @@ else
- FILE_CONF_OPTS += --disable-libseccomp
- endif
- 
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+FILE_CONF_OPTS += --enable-xzlib
-+FILE_DEPENDENCIES += xz
-+else
-+FILE_CONF_OPTS += --disable-xzlib
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
