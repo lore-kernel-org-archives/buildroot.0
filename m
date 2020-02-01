@@ -1,46 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Feb 2020 10:24:25 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libnspr: bump to version 4.25,
- add xtensa support
-In-Reply-To: <20200201084758.285234-1-bernd.kuhls@t-online.de>
-References: <20200201084758.285234-1-bernd.kuhls@t-online.de>
-Message-ID: <20200201102425.1556253b@windsurf>
+Date: Sat, 1 Feb 2020 10:26:29 +0100
+Subject: [Buildroot] [git commit] package/libmodsecurity: point to staging
+ pcre-config
+Message-ID: <20200201091602.2C6428675C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  1 Feb 2020 09:47:57 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=788a7560cb4e1c2f3aea086bd1556616d505cb7c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> nspr 4.25 added support for Xtensa architecture:
-> https://groups.google.com/forum/#!topic/mozilla.dev.tech.nspr/lK7toqtJ96E
-> 
-> Removed BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT because it was only needed for
-> xtensa.
-> 
-> Added sha1 hash provided by upstream.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The libmodsecurity build system uses the file installed on the host if not
+explicitly pointed to pcre-config in the staging dir.
 
-I don't feel very strongly about it, but I'm wondering if it doesn't
-make sense to keep BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT. There is some
-architecture-specific code in libnpsr, so every time we add a new CPU
-architecture, we would have to poentially re-add this hidden option.
+Fixes:
+- http://autobuild.buildroot.net/results/f936ad05bca4bb776917306700750ba6d2498ef0
+  + similar failures for other architectures
 
-More specifically, I have been working on using Buildroot for a new CPU
-architecture (not yet upstream, but will be submitted in the future),
-and it was quite nice to have this BR2_PACKAGE_LIBNPSR_ARCH_SUPPORT to
-disable libnpsr on this CPU architecture for the moment.
+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libmodsecurity/libmodsecurity.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-But again, I don't feel very strongly, it can very well be re-added
-later if need be.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index c32bfb4b3c..063f969fc6 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -18,6 +18,7 @@ LIBMODSECURITY_CONF_ENV = \
+ 
+ LIBMODSECURITY_DEPENDENCIES = pcre
+ LIBMODSECURITY_CONF_OPTS = \
++	--with-pcre="$(STAGING_DIR)/usr/bin/pcre-config" \
+ 	--disable-examples \
+ 	--without-lmdb \
+ 	--without-ssdeep \
