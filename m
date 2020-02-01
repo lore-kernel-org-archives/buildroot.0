@@ -1,43 +1,61 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sat,  1 Feb 2020 11:56:40 +0100
-Subject: [Buildroot] [PATCH] package/bluez-alsa: fix location of alsa config
- files
-Message-ID: <20200201105640.8428-1-joerg.krause@embedded.rocks>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  1 Feb 2020 12:04:26 +0100
+Subject: [Buildroot] [PATCH 1/2] package/file: zlib is optional,
+ not mandatory
+Message-ID: <20200201110427.1682488-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since alsa-lib version 1.1.7 [1] the location for add-on config files
-has changed.
+zlib is optional since version 4.22 and
+https://github.com/file/file/commit/b950f1f426f8855e69d6f3dcc32067e931e015b7
+and --enable-zlib has been fixed since version 5.37 and
+https://github.com/file/file/commit/8c6dcd7ef690e90a3e897e8f886513750ed2c04d
 
-In fact, the path for the alsa add-on config files has never been
-correct set in the package (it should have been
-`/usr/share/alsa/alsa.conf.d`).
-
-With alsa-lib version 1.1.7 or later the correct path is
-`/etc/alsa/conf.d`.
-
-[1] https://github.com/alsa-project/alsa-lib/commit/93e03bdc2a3dcd5d12516f5de78e14d88a32ff2c
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bluez-alsa/bluez-alsa.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/file/Config.in | 1 -
+ package/file/file.mk   | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
-index c5a51ce5d4..7fed922a71 100644
---- a/package/bluez-alsa/bluez-alsa.mk
-+++ b/package/bluez-alsa/bluez-alsa.mk
-@@ -23,7 +23,7 @@ BLUEZ_ALSA_CONF_OPTS = \
- 	--enable-aplay \
- 	--disable-debug-time \
- 	--with-alsaplugindir=/usr/lib/alsa-lib \
--	--with-alsaconfdir=/usr/share/alsa
-+	--with-alsaconfdir=/etc/alsa/conf.d
+diff --git a/package/file/Config.in b/package/file/Config.in
+index 13934b2239..edc4d874b2 100644
+--- a/package/file/Config.in
++++ b/package/file/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_FILE
+ 	bool "file"
+-	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Program to identify a file's format by scanning binary data
+ 	  for known patterns.
+diff --git a/package/file/file.mk b/package/file/file.mk
+index cff59c86ad..42f9524ed1 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -6,7 +6,7 @@
  
- ifeq ($(BR2_PACKAGE_FDK_AAC),y)
- BLUEZ_ALSA_DEPENDENCIES += fdk-aac
+ FILE_VERSION = 5.38
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+-FILE_DEPENDENCIES = host-file zlib
++FILE_DEPENDENCIES = host-file
+ HOST_FILE_DEPENDENCIES = host-zlib
+ FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ FILE_INSTALL_STAGING = YES
+@@ -37,5 +37,12 @@ else
+ FILE_CONF_OPTS += --disable-xzlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++FILE_CONF_OPTS += --enable-zlib
++FILE_DEPENDENCIES += zlib
++else
++FILE_CONF_OPTS += --disable-zlib
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-2.25.0
+2.24.1
