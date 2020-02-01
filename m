@@ -1,83 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Feb 2020 23:14:48 +0100
-Subject: [Buildroot] [PATCH 2/2] package/file: drop host-file
-In-Reply-To: <20200201110427.1682488-2-fontaine.fabrice@gmail.com>
-References: <20200201110427.1682488-1-fontaine.fabrice@gmail.com>
- <20200201110427.1682488-2-fontaine.fabrice@gmail.com>
-Message-ID: <20200201221448.GB21372@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 1 Feb 2020 23:15:41 +0100
+Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: allow
+ additional make targets
+Message-ID: <20200201220847.70029880AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=05b8c7da6de863561d66717735a4870f2766454c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-02-01 12:04 +0100, Fabrice Fontaine spake thusly:
-> file does not need a dependency on host-file and as host-file was only
-> used by file, drop host-file altogether
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Allow specifying additional build targets for ATF.
 
-That dependendcy was dded in 2005, with a message stating (roughly) that
-we need to have a file version on the host that is not older than the
-version on the target.
+This might be more useful when using a custom git repository.
 
-And indeed, it does not build on my autobuilder, with this error message
-(yes, file is nice enough to not fail miserably and provide a useful
-message):
+For example, when using with the ATF repository from NXP QorIQ,
+there is a new build target 'pbl' which is used to build the
+pbl binary image. Note that in the specific case of the 'pbl'
+target, additional build variables also need to be specified
+through BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES.
 
-    Making all in magic
-    Cannot use the installed version of file (5.14) to
-    cross-compile file 5.38
-    Please install file 5.38 locally first
+Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/arm-trusted-firmware/Config.in               | 7 +++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 3 +++
+ 2 files changed, 10 insertions(+)
 
-So, I'll reject this patch.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/file/file.mk | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/package/file/file.mk b/package/file/file.mk
-> index 42f9524ed1..b2e1e7c171 100644
-> --- a/package/file/file.mk
-> +++ b/package/file/file.mk
-> @@ -6,15 +6,12 @@
->  
->  FILE_VERSION = 5.38
->  FILE_SITE = ftp://ftp.astron.com/pub/file
-> -FILE_DEPENDENCIES = host-file
-> -HOST_FILE_DEPENDENCIES = host-zlib
->  FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
->  FILE_INSTALL_STAGING = YES
->  FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
->  FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
->  # We're patching configure.ac
->  FILE_AUTORECONF = YES
-> -HOST_FILE_CONF_OPTS = --disable-libseccomp
->  
->  ifeq ($(BR2_PACKAGE_BZIP2),y)
->  FILE_CONF_OPTS += --enable-bzlib
-> @@ -45,4 +42,3 @@ FILE_CONF_OPTS += --disable-zlib
->  endif
->  
->  $(eval $(autotools-package))
-> -$(eval $(host-autotools-package))
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 96861c3f4d..373591d497 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -135,6 +135,13 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
+ 
+ endif
+ 
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS
++	string "Additional ATF make targets"
++	help
++	  Additional targets for the ATF build
++	  E.G. When using the QorIQ custom ATF repository from NXP,
++	  the target 'pbl' can be used to build the pbl binary.
++
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES
+ 	string "Additional ATF build variables"
+ 	help
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 2133d39e6d..bf1ac46cf6 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -139,6 +139,9 @@ define ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF
+ endef
+ endif
+ 
++ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += \
++	$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS)
++
+ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
+ 	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
