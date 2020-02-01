@@ -1,39 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Feb 2020 10:26:29 +0100
-Subject: [Buildroot] [git commit] package/libmodsecurity: point to staging
- pcre-config
-Message-ID: <20200201091602.2C6428675C@busybox.osuosl.org>
+Date: Sat, 1 Feb 2020 10:27:32 +0100
+Subject: [Buildroot] [git commit] package/file: add bzip2 optional dependency
+Message-ID: <20200201091708.8E53C866E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=788a7560cb4e1c2f3aea086bd1556616d505cb7c
+commit: https://git.buildroot.net/buildroot/commit/?id=adf8751a4836d1bfba18776ced2dbfd57c6506b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libmodsecurity build system uses the file installed on the host if not
-explicitly pointed to pcre-config in the staging dir.
+bzip2 is an optional dependency since version 5.38 and
+https://github.com/file/file/commit/b259a07ea95827f565faa20f0316e5b2704064f7
 
-Fixes:
-- http://autobuild.buildroot.net/results/f936ad05bca4bb776917306700750ba6d2498ef0
-  + similar failures for other architectures
-
-Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libmodsecurity/libmodsecurity.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/file/file.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
-index c32bfb4b3c..063f969fc6 100644
---- a/package/libmodsecurity/libmodsecurity.mk
-+++ b/package/libmodsecurity/libmodsecurity.mk
-@@ -18,6 +18,7 @@ LIBMODSECURITY_CONF_ENV = \
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 8d0968e6b2..ffa8b8b905 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -14,6 +14,13 @@ FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
+ FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
+ HOST_FILE_CONF_OPTS = --disable-libseccomp
  
- LIBMODSECURITY_DEPENDENCIES = pcre
- LIBMODSECURITY_CONF_OPTS = \
-+	--with-pcre="$(STAGING_DIR)/usr/bin/pcre-config" \
- 	--disable-examples \
- 	--without-lmdb \
- 	--without-ssdeep \
++ifeq ($(BR2_PACKAGE_BZIP2),y)
++FILE_CONF_OPTS += --enable-bzlib
++FILE_DEPENDENCIES += bzip2
++else
++FILE_CONF_OPTS += --disable-bzlib
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ FILE_CONF_OPTS += --enable-libseccomp
+ FILE_DEPENDENCIES += libseccomp
