@@ -1,38 +1,51 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sat, 1 Feb 2020 14:24:42 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libnspr: bump to version 4.25,
- add xtensa support
-In-Reply-To: <njagggxdp2.ln2@ID-313208.user.individual.net>
-References: <20200201084758.285234-1-bernd.kuhls@t-online.de>
- <ae7f1ee5-8030-b113-d6c2-b89a4cb11019@benettiengineering.com>
- <njagggxdp2.ln2@ID-313208.user.individual.net>
-Message-ID: <61c92b3c-462b-a8bb-efa6-059d5f0c94b6@benettiengineering.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 01 Feb 2020 14:26:48 +0100
+Subject: [Buildroot] [PATCH v9 02/23] package/kodi: bump to version
+ 18.5-Leia
+References: <20200119110735.1104443-1-bernd.kuhls@t-online.de>
+ <20200119110735.1104443-3-bernd.kuhls@t-online.de>
+ <d2a6b010-4165-10d7-ce36-05056a17da44@mind.be>
+Message-ID: <otagggxdp2.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2/1/20 2:21 PM, Bernd Kuhls wrote:
-> Am Sat, 01 Feb 2020 13:35:34 +0100 schrieb Giulio Benetti:
-> 
->> Dumb question:
->> Did you check patchwork for libnspr and libnss before starting to work
-> 
-> Hi Guilio,
-> 
-> no, I did not, marked my patches as rejected, sorry for the noise.
+Hi Arnout,
 
-no problem!
+Am Thu, 23 Jan 2020 01:04:23 +0100 schrieb Arnout Vandecappelle:
 
-> Regards, Bernd
+> Hi Bernd,
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+>  I'm applying to master (hopefully I'll be able to finish that) but I have a few
+> follow-up questions/requests.
 
--- 
-Giulio Benetti
-Benetti Engineering sas
+thanks.
+
+>> Added dependencies to autoreconf cpluff.
+> 
+>  You don't explain here, nore in the .mk file, while cpluff needs to be
+> autoreconf'ed.
+
+the tarball does not contain a configure script in lib/cpluff/
+
+>> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+>> index db6931ed8a..f592e18e13 100644
+>> --- a/package/kodi/Config.in
+>> +++ b/package/kodi/Config.in
+>> @@ -23,7 +23,9 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
+>>  	# List of valid CPUs can be found here:
+>>  	# https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/scripts/rbpi/ArchSetup.cmake#L12
+>>  	depends on BR2_arm1176jzf_s || BR2_cortex_a7 || BR2_cortex_a53
+>> +	depends on BR2_ENABLE_LOCALE # libinput
+>>  	depends on BR2_PACKAGE_RPI_USERLAND
+>> +	depends on BR2_PACKAGE_HAS_UDEV # libinput
+> 
+>  Maybe the two new dependencies warrant a comment? The arch dependency and the
+> rpi-userland dependency are kind of obvious, but these new ones aren't.
+
+Upstream requires LibInput and Xkbcommon for rbpi:
+https://github.com/xbmc/xbmc/blob/Leia/cmake/platform/linux/rbpi.cmake
+
+Regards, Bernd
