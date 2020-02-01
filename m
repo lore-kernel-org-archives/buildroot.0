@@ -1,50 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  1 Feb 2020 09:55:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libplist: bump version to 2.1.0
-Message-ID: <20200201085553.302990-1-bernd.kuhls@t-online.de>
+Date: Sat,  1 Feb 2020 10:00:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi-audioencoder-vorbis: bump
+ version to 2.0.3-Leia
+Message-ID: <20200201090014.304439-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switched _SITE to github, added license hash.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libplist/libplist.hash | 3 ++-
- package/libplist/libplist.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ .../kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash    | 2 +-
+ package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk  | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
-index 63c2515062..8b36daceab 100644
---- a/package/libplist/libplist.hash
-+++ b/package/libplist/libplist.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 3a7e9694c2d9a85174ba1fa92417cfabaea7f6d19631e544948dc7e17e82f602  libplist-2.0.0.tar.bz2
-+sha256 4b33f9af3f9208d54a3c3e1a8c149932513f451c98d1dd696fe42c06e30b7f03  libplist-2.1.0.tar.gz
-+sha256 7619c753cac95d4740220223bde48a032606fcaccde5e546f9bc444c81ab356d  COPYING
-diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
-index 09fc8168e4..d07fb5dd2e 100644
---- a/package/libplist/libplist.mk
-+++ b/package/libplist/libplist.mk
-@@ -4,12 +4,13 @@
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
+index 7ba473e5f7..aab1a6bcd7 100644
+--- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
++++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 f6f220fad74a64d29a4375fbc24560ee528d0dbf1e195f17015381fcd67c8acc  kodi-audioencoder-vorbis-2.0.2-Leia.tar.gz
++sha256 0bc1470ecef83ecc7e36239ef414abc49380394b551d35eb7bcc6704e74b469c  kodi-audioencoder-vorbis-2.0.3-Leia.tar.gz
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+index 8ea569e638..8b2b0fc640 100644
+--- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
++++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBPLIST_VERSION = 2.0.0
--LIBPLIST_SOURCE = libplist-$(LIBPLIST_VERSION).tar.bz2
--LIBPLIST_SITE = http://www.libimobiledevice.org/downloads
-+LIBPLIST_VERSION = 2.1.0
-+LIBPLIST_SITE = $(call github,libimobiledevice,libplist,$(LIBPLIST_VERSION))
- LIBPLIST_INSTALL_STAGING = YES
- LIBPLIST_LICENSE = LGPL-2.1+
- LIBPLIST_LICENSE_FILES = COPYING
-+# github tarball does not include configure
-+LIBPLIST_AUTORECONF = YES
- 
- # Disable building Python bindings, because it requires host-cython, which
- # is not packaged in Buildroot at all.
+-KODI_AUDIOENCODER_VORBIS_VERSION = 2.0.2-Leia
+-KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,v$(KODI_AUDIOENCODER_VORBIS_VERSION))
++KODI_AUDIOENCODER_VORBIS_VERSION = 2.0.3-Leia
++KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
+ KODI_AUDIOENCODER_VORBIS_LICENSE = GPL-2.0+
+ KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
+ KODI_AUDIOENCODER_VORBIS_DEPENDENCIES = kodi libogg libvorbis host-pkgconf
 -- 
 2.20.1
