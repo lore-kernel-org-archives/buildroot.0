@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  1 Feb 2020 10:00:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-audioencoder-vorbis: bump
- version to 2.0.3-Leia
-Message-ID: <20200201090014.304439-1-bernd.kuhls@t-online.de>
+Date: Sat,  1 Feb 2020 10:02:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi-screensaver-matrixtrails:
+ remove 'v' prefix from github-fetched package
+Message-ID: <20200201090209.304623-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,32 +11,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash    | 2 +-
- package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk  | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../kodi-screensaver-matrixtrails.mk                          | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-index 7ba473e5f7..aab1a6bcd7 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 f6f220fad74a64d29a4375fbc24560ee528d0dbf1e195f17015381fcd67c8acc  kodi-audioencoder-vorbis-2.0.2-Leia.tar.gz
-+sha256 0bc1470ecef83ecc7e36239ef414abc49380394b551d35eb7bcc6704e74b469c  kodi-audioencoder-vorbis-2.0.3-Leia.tar.gz
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-index 8ea569e638..8b2b0fc640 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+index 670cec3efb..674a0116e2 100644
+--- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--KODI_AUDIOENCODER_VORBIS_VERSION = 2.0.2-Leia
--KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,v$(KODI_AUDIOENCODER_VORBIS_VERSION))
-+KODI_AUDIOENCODER_VORBIS_VERSION = 2.0.3-Leia
-+KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
- KODI_AUDIOENCODER_VORBIS_LICENSE = GPL-2.0+
- KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
- KODI_AUDIOENCODER_VORBIS_DEPENDENCIES = kodi libogg libvorbis host-pkgconf
+-KODI_SCREENSAVER_MATRIXTRAILS_VERSION = v2.2.1-Leia
+-KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
++KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.2.1-Leia
++KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,v$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
+ KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = src/matrixtrails.cpp
+ KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi libsoil
 -- 
 2.20.1
