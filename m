@@ -1,38 +1,92 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  1 Feb 2020 13:59:21 +0100
-Subject: [Buildroot] [PATCH 2/2] package/kodi: needs extra encodings in
- libiconv
-In-Reply-To: <20200201125921.1193669-1-bernd.kuhls@t-online.de>
-References: <20200201125921.1193669-1-bernd.kuhls@t-online.de>
-Message-ID: <20200201125921.1193669-2-bernd.kuhls@t-online.de>
+Date: Sat,  1 Feb 2020 13:59:20 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/libiconv: enable extra encodings
+Message-ID: <20200201125921.1193669-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Kodi build system also enables extra encodings:
-https://github.com/xbmc/xbmc/blob/Leia/tools/depends/target/libiconv/Makefile#L13
+Quoting https://www.gnu.org/software/libiconv/
 
-Without them addons fail to install:
-https://github.com/garbear/kodi-steamlink/issues/34#issuecomment-579392269
+"When configured with the option --enable-extra-encodings, it also
+ provides support for a few extra encodings:
+
+European languages
+    CP{437,737,775,852,853,855,857,858,860,861,863,865,869,1125}
+Semitic languages
+    CP864
+Japanese
+    EUC-JISX0213, Shift_JISX0213, ISO-2022-JP-3
+Chinese
+    BIG5-2003 (experimental)
+Turkmen
+    TDS565
+Platform specifics
+    ATARIST, RISCOS-LATIN1"
+
+Updating Kodi from version 17.6 to 18.5 caused runtime errors on systems
+with locale support disabled, here Kodi uses libiconv but needs CP437:
+
+ERROR: customConvert: iconv_open() for "CP437" -> "UTF-8" failed,
+ errno = 22 (Invalid argument)
+
+Due to the size increase of libiconv.so.2.6.0 from 941K to 1,1M a new
+Config.in option was added.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+v2: added Config.in option (Thomas, Arnout)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index f592e18e13..65e7768d6d 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -65,6 +65,7 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBFRIBIDI
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	select BR2_PACKAGE_LIBICONV_EXTRA_ENCODINGS if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBPLIST
- 	select BR2_PACKAGE_LIBSAMPLERATE
- 	select BR2_PACKAGE_LZO
+ package/libiconv/Config.in   | 22 ++++++++++++++++++++++
+ package/libiconv/libiconv.mk |  4 ++++
+ 2 files changed, 26 insertions(+)
+
+diff --git a/package/libiconv/Config.in b/package/libiconv/Config.in
+index ee4fd62011..6c9e6ea81b 100644
+--- a/package/libiconv/Config.in
++++ b/package/libiconv/Config.in
+@@ -5,3 +5,25 @@ config BR2_PACKAGE_LIBICONV
+ 	  unicode conversion library
+ 
+ 	  http://ftp.gnu.org/pub/gnu/libiconv
++
++if BR2_PACKAGE_LIBICONV
++
++config BR2_PACKAGE_LIBICONV_EXTRA_ENCODINGS
++	bool "extra encodings"
++	help
++	  Provide support for a few extra encodings:
++
++	  European languages
++	      CP{437,737,775,852,853,855,857,858,860,861,863,865,869,1125}
++	  Semitic languages
++	      CP864
++	  Japanese
++	      EUC-JISX0213, Shift_JISX0213, ISO-2022-JP-3
++	  Chinese
++	      BIG5-2003 (experimental)
++	  Turkmen
++	      TDS565
++	  Platform specifics
++	      ATARIST, RISCOS-LATIN1
++
++endif
+diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
+index 9a8133612b..ec79a5d735 100644
+--- a/package/libiconv/libiconv.mk
++++ b/package/libiconv/libiconv.mk
+@@ -10,6 +10,10 @@ LIBICONV_INSTALL_STAGING = YES
+ LIBICONV_LICENSE = GPL-3.0+ (iconv program), LGPL-2.0+ (library)
+ LIBICONV_LICENSE_FILES = COPYING COPYING.LIB
+ 
++ifeq ($(BR2_PACKAGE_LIBICONV_EXTRA_ENCODINGS),y)
++LIBICONV_CONF_OPTS = --enable-extra-encodings
++endif
++
+ # Don't build the preloadable library, as we don't need it (it's only
+ # for LD_PRELOAD to replace glibc's iconv, but we never build libiconv
+ # when glibc is used). And it causes problems for static only builds.
 -- 
 2.20.1
