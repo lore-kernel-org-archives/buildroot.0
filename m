@@ -1,90 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Feb 2020 15:12:05 +0100
-Subject: [Buildroot] [git commit] package/socat: bump to version 1.7.3.4
-Message-ID: <20200202140115.7124F88307@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 2 Feb 2020 15:32:23 +0100
+Subject: [Buildroot] Upcoming glibc-2.31 breaks busybox, strace.
+In-Reply-To: <87r1zdnm4v.fsf@dell.be.48ers.dk>
+References: <BN8PR12MB28683E6EF9441AEBAB2CF685D90F0@BN8PR12MB2868.namprd12.prod.outlook.com>
+ <2cb40bdc-2c78-6edd-bcea-3db5cbba3ba7@mind.be>
+ <87r1zdnm4v.fsf@dell.be.48ers.dk>
+Message-ID: <CANLo3JixXm8m456dRzG81pjOEMXWNV1RiopuJqfzDywP4WgRFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75f4520ac1fd53ff4c74ffe3843d8b77a1023ffe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi All,
 
-Drop patch #2. Upstream commit d8a5d49c2d8359 includes stddef.h in a
-higher level header.
+Le dim. 2 f?vr. 2020 ? 14:40, Peter Korsgaard <peter@korsgaard.com> a
+?crit :
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ....patch => 0002-compat-set-NETDB_INTERNAL.patch} |  0
- .../0002-ptrdiff_t-is-defined-in-stddef.h.patch    | 28 ----------------------
- package/socat/socat.hash                           |  4 ++--
- package/socat/socat.mk                             |  2 +-
- 4 files changed, 3 insertions(+), 31 deletions(-)
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>
+> Hi,
+>
+>  >> In February 2020 the new release of glibc is going to happen. There
+> are at least
+>  >> two packages known which latest releases
+>  >> fail to build with latest revision of glibc: Busybox and strace.
+>  >>
+>  >> For "strace" there is a patch in master branch which solves the error:
+>  >>
+> https://github.com/strace/strace/commit/9afd83c11cb78a04954daaedb54b20214a35ec9c
+>  >>
+>  >> For busybox there are at least two patches required:
+>  >>
+> https://git.buildroot.net/busybox/commit/?id=6937487be73cd4563b876413277a295a5fe2f32c
+>  >>
+> https://git.buildroot.net/busybox/commit/?id=d3539be8f27b8cbfdfee460fe08299158f08bcd9
+>  >>
+>  >> Should we introduce these patches now or should we wait until
+> glibc-2.31 is
+>  >> introduced in buildroot?
+>
+>  >  It doesn't hurt to introduce those patches now, since it's possible
+> for people
+>  > to use an external toolchain with glibc-2.31. In fact, I suspect that
+> the ARC
+>  > people do exactly that :-)
+>
+> Yes, please send patches.
+>
 
-diff --git a/package/socat/0003-compat-set-NETDB_INTERNAL.patch b/package/socat/0002-compat-set-NETDB_INTERNAL.patch
-similarity index 100%
-rename from package/socat/0003-compat-set-NETDB_INTERNAL.patch
-rename to package/socat/0002-compat-set-NETDB_INTERNAL.patch
-diff --git a/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch b/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch
-deleted file mode 100644
-index acae641b34..0000000000
---- a/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 99c55f2694fe8621ca2344eb002610dac7f9c969 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 2 Feb 2016 09:34:24 -0300
--Subject: [PATCH] ptrdiff_t is defined in stddef.h
--
--Status: sent upstream via email.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- nestlex.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/nestlex.c b/nestlex.c
--index f7950f0..f49482d 100644
----- a/nestlex.c
--+++ b/nestlex.c
--@@ -4,6 +4,8 @@
-- 
-- /* a function for lexical scanning of nested character patterns */
-- 
--+#include <stddef.h>	/* ptrdiff_t */
--+
-- #include "config.h"
-- #include "mytypes.h"
-- 
---- 
--2.4.10
--
-diff --git a/package/socat/socat.hash b/package/socat/socat.hash
-index 92d62ab716..e5b65925d1 100644
---- a/package/socat/socat.hash
-+++ b/package/socat/socat.hash
-@@ -1,7 +1,7 @@
- # From http://www.dest-unreach.org/socat/download.md5sum
--md5	b2a032a47b8b89a18485697fa975154f	socat-1.7.3.3.tar.bz2
-+md5	3cca4f8cd9d2d1caabd9cc099451bac9	socat-1.7.3.4.tar.bz2
- # From http://www.dest-unreach.org/socat/download.sha256sum
--sha256	0dd63ffe498168a4aac41d307594c5076ff307aa0ac04b141f8f1cec6594d04a	socat-1.7.3.3.tar.bz2
-+sha256	972374ca86f65498e23e3259c2ee1b8f9dbeb04d12c2a78c0c9b5d1cb97dfdfc	socat-1.7.3.4.tar.bz2
- # Locally calculated
- sha256	4846488cea98a2905dc75b7aa5eea721568e372447efe06b85bd896ee8c54f10	README
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index 9e747e08fa..3807d45379 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SOCAT_VERSION = 1.7.3.3
-+SOCAT_VERSION = 1.7.3.4
- SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
- SOCAT_SITE = http://www.dest-unreach.org/socat/download
- SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
+There are some other issues with this  new version that was discovered by
+toolchain-builder:
+https://sourceware.org/ml/libc-alpha/2020-02/msg00007.html
+
+I'll send patchs for glibc and gcc.
+
+Thanks for sharing your issues with glibc!
+
+Best regards,
+Romain
+
+
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200202/223c6366/attachment.html>
