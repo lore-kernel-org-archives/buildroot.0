@@ -1,46 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Feb 2020 14:38:33 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/bitcoin: bump to version 0.19.0.1
-In-Reply-To: <CADvTj4q1xNEsaU3sj5xiV+RiEF_6mHdKOVasNLkPV8KPYzr-Pw@mail.gmail.com>
- (James Hilliard's message of "Sun, 2 Feb 2020 01:42:04 -0700")
-References: <20200122212637.1008692-1-fontaine.fabrice@gmail.com>
- <20200202090709.2c9afa39@windsurf>
- <CADvTj4q1xNEsaU3sj5xiV+RiEF_6mHdKOVasNLkPV8KPYzr-Pw@mail.gmail.com>
-Message-ID: <87v9opnm7a.fsf@dell.be.48ers.dk>
+Date: Sun, 02 Feb 2020 14:40:00 +0100
+Subject: [Buildroot] Upcoming glibc-2.31 breaks busybox, strace.
+In-Reply-To: <2cb40bdc-2c78-6edd-bcea-3db5cbba3ba7@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 23 Jan 2020 22:23:39 +0100")
+References: <BN8PR12MB28683E6EF9441AEBAB2CF685D90F0@BN8PR12MB2868.namprd12.prod.outlook.com>
+ <2cb40bdc-2c78-6edd-bcea-3db5cbba3ba7@mind.be>
+Message-ID: <87r1zdnm4v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
 Hi,
 
- > Any bitcoin core updates really need to be backported as well even
- > if they are a major version bump.
+ >> In February 2020 the new release of glibc is going to happen. There are at least
+ >> two packages known which latest releases
+ >> fail to build with latest revision of glibc: Busybox and strace.
+ >> 
+ >> For "strace" there is a patch in master branch which solves the error:
+ >> https://github.com/strace/strace/commit/9afd83c11cb78a04954daaedb54b20214a35ec9c
+ >> 
+ >> For busybox there are at least two patches required:
+ >> https://git.buildroot.net/busybox/commit/?id=6937487be73cd4563b876413277a295a5fe2f32c
+ >> https://git.buildroot.net/busybox/commit/?id=d3539be8f27b8cbfdfee460fe08299158f08bcd9
+ >> 
+ >> Should we introduce these patches now or should we wait until glibc-2.31 is
+ >> introduced in buildroot?
 
- > I should probably add that there are special security considerations
- > that need to be taken into account when packaging bitcoin core.
- > See:
- > https://bitcoinmagazine.com/articles/linux-distribution-packaging-and-bitcoin-1374549783
- > https://bugzilla.redhat.com/show_bug.cgi?id=1020292
+ >  It doesn't hurt to introduce those patches now, since it's possible for people
+ > to use an external toolchain with glibc-2.31. In fact, I suspect that the ARC
+ > people do exactly that :-)
 
- > There are very few Linux distributions that package bitcoin core
- > as very few have a suitable release model for properly handling
- > updates. In general if a distribution can not keep Bitcoin Core on
- > the latest version for all supported releases then it really should
- > not be packaged at all.
-
- > One way to mitigate the risk is to explicitly remove the bitcoin core
- > package or replace it with a non-functional dummy package for
- > any stable branches where it can't be kept fully up to date. This
- > should probably be done as the final step when a stable branch is
- > no longer supported as well.
-
-So what do you suggest? I take it that this means that you are using
-bitcoin? Will you handle backports of it for our stable/lts releases?
+Yes, please send patches.
 
 -- 
 Bye, Peter Korsgaard
