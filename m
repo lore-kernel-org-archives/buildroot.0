@@ -1,118 +1,92 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 2 Feb 2020 21:14:12 +0100
-Subject: [Buildroot] [PATCH] package/gcc: remove gcc 5.5 or1k fork
-In-Reply-To: <20200102220415.431543-1-romain.naour@gmail.com>
-References: <20200102220415.431543-1-romain.naour@gmail.com>
-Message-ID: <5810f8fa-c8d7-d46a-4586-a4514a80f21b@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sun,  2 Feb 2020 12:39:31 -0800
+Subject: [Buildroot] [PATCH 1/1] package/openjdk and package/openjdk-bin:
+ bump version to 13.0.2+8
+Message-ID: <20200202203931.694941-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Other changes:
+  - Add --with-stdc++lib=dynamic to openjdk.mk or else openjdk will fail to
+    build because it defaults to looking for a static libstdc++ library.
 
-Le 02/01/2020 ? 23:04, Romain Naour a ?crit?:
-> Remove the old gcc 5.5 fork for or1k architecture
-> that start to fail to build with recent version
-> of Binutils >= 2.32 with the following error:
-> 
-> host-gcc-final-or1k-musl-5.4.0-20170218/build/./gcc/crtbeginS.o: addend should be zero for plt relocations
-> host/or1k-buildroot-linux-uclibc/bin/ld: final link failed: bad value
-> 
-> https://gitlab.com/kubu93/buildroot/-/jobs/391938988
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/openjdk-bin/openjdk-bin.hash | 2 +-
+ package/openjdk-bin/openjdk-bin.mk   | 8 ++++----
+ package/openjdk/openjdk.hash         | 2 +-
+ package/openjdk/openjdk.mk           | 7 ++++---
+ 4 files changed, 10 insertions(+), 9 deletions(-)
 
-binutils 2.34 has been released this weekend, it means that binutils 2.31 will
-be removed after adding binutils 2.34:
-
-https://lists.gnu.org/archive/html/info-gnu/2020-02/msg00000.html
-
-So this issue will be trigged with all binutils version available in Buildroot
-(2.31 -> 2.34).
-
-Best regards,
-Romain
-
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  Config.in.legacy           | 7 +++++++
->  package/gcc/Config.in.host | 8 --------
->  package/gcc/gcc.mk         | 5 +----
->  3 files changed, 8 insertions(+), 12 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 8436951f0f..d34ef88e1d 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,13 @@ endif
->  
->  comment "Legacy options removed in 2020.02"
->  
-> +config BR2_GCC_VERSION_OR1K
-> +	bool "gcc 5.x fork for or1k has been removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  Support for gcc 5.x for or1k has been removed. The current
-> +	  default version (9.x or later) has been selected instead.
-> +
->  config BR2_PACKAGE_PYTHON_SCAPY3K
->  	bool "python-scapy3k is replaced by python-scapy"
->  	select BR2_LEGACY
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index 92af40b19f..3e60ced61f 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -4,7 +4,6 @@ choice
->  	prompt "GCC compiler Version"
->  	default BR2_GCC_VERSION_ARC if BR2_arc
->  	default BR2_GCC_VERSION_CSKY if BR2_csky
-> -	default BR2_GCC_VERSION_OR1K if BR2_or1k
->  	default BR2_GCC_VERSION_8_X
->  	help
->  	  Select the version of gcc you wish to use.
-> @@ -21,12 +20,6 @@ config BR2_GCC_VERSION_CSKY
->  	depends on BR2_csky
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
->  
-> -config BR2_GCC_VERSION_OR1K
-> -	bool "gcc or1k (5.x)"
-> -	# Only supported architecture
-> -	depends on BR2_or1k
-> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> -
->  config BR2_GCC_VERSION_5_X
->  	bool "gcc 5.x"
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
-> @@ -96,7 +89,6 @@ config BR2_GCC_VERSION
->  	default "8.3.0"     if BR2_GCC_VERSION_8_X
->  	default "9.2.0"     if BR2_GCC_VERSION_9_X
->  	default "arc-2019.09-rc1" if BR2_GCC_VERSION_ARC
-> -	default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
->  	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
->  
->  config BR2_EXTRA_GCC_CONFIG_OPTIONS
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index 527f30bf22..128293570d 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -13,9 +13,6 @@ GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
->  ifeq ($(BR2_GCC_VERSION_ARC),y)
->  GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
->  GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
-> -else ifeq ($(BR2_GCC_VERSION_OR1K),y)
-> -GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
-> -GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
->  else ifeq ($(BR2_csky),y)
->  GCC_SITE = $(call github,c-sky,gcc,$(GCC_VERSION))
->  GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
-> @@ -168,7 +165,7 @@ else
->  HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
->  endif
->  
-> -ifeq ($(BR2_arc)$(BR2_GCC_VERSION_OR1K),y)
-> +ifeq ($(BR2_arc),y)
->  HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
->  endif
->  
-> 
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index dc0476ca2d..3e4df59236 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/AdoptOpenJDK/openjdk12-binaries/releases
+-sha256  1202f536984c28d68681d51207a84b6c76e5998579132d3fe1b8085aa6a5f21e	OpenJDK12U-jdk_x64_linux_hotspot_12.0.2_10.tar.gz
++sha256  9ccc063569f19899fd08e41466f8c4cd4e05058abdb5178fa374cb365dcf5998	OpenJDK13U-jdk_x64_linux_hotspot_13.0.2_8.tar.gz
+ 
+ # Locally calculated
+ sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 80b69b7a0e..e2525a5c3d 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-HOST_OPENJDK_BIN_VERSION_MAJOR = 12.0.2
+-HOST_OPENJDK_BIN_VERSION_MINOR = 10
++HOST_OPENJDK_BIN_VERSION_MAJOR = 13.0.2
++HOST_OPENJDK_BIN_VERSION_MINOR = 8
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
+-HOST_OPENJDK_BIN_SOURCE = OpenJDK12U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+-HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
++HOST_OPENJDK_BIN_SOURCE = OpenJDK13U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
++HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
+ HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
+ 
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index beed7a34a2..ca282591ef 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 b2bcad35656b00928683416f3480ad00363b00993eb711c3e1886e4fe77eefeb  jdk-12.0.2+10.tar.gz
++sha256 d38fb17795782dffe84e98f21f1d6293b0a45ea8f1e9c81e99cd71acac03a4e0  jdk-13.0.2+8.tar.gz
+ sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index e95ece2eba..030a205228 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-OPENJDK_VERSION_MAJOR = 12.0.2
+-OPENJDK_VERSION_MINOR = 10
++OPENJDK_VERSION_MAJOR = 13.0.2
++OPENJDK_VERSION_MINOR = 8
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
+-OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk12u/archive
++OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk13u/archive
+ OPENJDK_LICENSE = GPL-2.0+ with exception
+ OPENJDK_LICENSE_FILES = LICENSE
+ 
+@@ -70,6 +70,7 @@ OPENJDK_CONF_OPTS = \
+ 	--enable-unlimited-crypto \
+ 	--openjdk-target=$(GNU_TARGET_NAME) \
+ 	--with-boot-jdk=$(HOST_DIR) \
++	--with-stdc++lib=dynamic \
+ 	--with-debug-level=release \
+ 	--with-devkit=$(HOST_DIR) \
+ 	--with-extra-cflags="$(TARGET_CFLAGS)" \
+-- 
+2.24.1
