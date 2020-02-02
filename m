@@ -1,99 +1,124 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 2 Feb 2020 02:28:07 -0700
-Subject: [Buildroot] [PATCH 1/1] package/bitcoin: add backporting
- requirement note to bitcoin package
-In-Reply-To: <20200202091245.GA4107@scaer>
-References: <20200202085526.35742-1-james.hilliard1@gmail.com>
- <20200202091245.GA4107@scaer>
-Message-ID: <CADvTj4o7upTLeckBwwBNredhhnAciMyLy6uEz8XP4Sz2ssPv6A@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 2 Feb 2020 10:47:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: use pkgconf to find
+ host libraries.
+In-Reply-To: <20200130084734.20100-1-nicolas.cavallari@green-communications.fr>
+References: <20200130084734.20100-1-nicolas.cavallari@green-communications.fr>
+Message-ID: <b3e489a7-0c62-aed2-c896-f41c9a10d757@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 2, 2020 at 2:12 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2020-02-02 01:55 -0700, James Hilliard spake thusly:
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >  package/bitcoin/bitcoin.mk | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-> > index 040c55b8a6..c58bd9797c 100644
-> > --- a/package/bitcoin/bitcoin.mk
-> > +++ b/package/bitcoin/bitcoin.mk
-> > @@ -4,6 +4,10 @@
-> >  #
-> >  ################################################################################
-> >
-> > +# Major version updates must be backported unconditionally, if backporting
-> > +# is not feasible the bitcoin package must be removed from any such branches.
-> > +# Details:
-> > +# https://bitcoinmagazine.com/articles/linux-distribution-packaging-and-bitcoin-1374549783
->
-> The referenced post is not about ensuring the latest version is
-> packaged, but it is a pledge that distributions do not package bitcoin
-> at all, or that if they do, they just plainly use binaries provided by
-> upstream, and that the distributions do carefully assess the unbundling
-> of bundled libraries if they do so.
-Yeah, I guess this specific issue is probably less of a concern now as
-openssl should no longer be a critical dependency.
-This used to be a major problem:
-https://github.com/bitcoin/bips/blob/master/bip-0066.mediawiki
-https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-July/009697.html
->
-> And the reasons they provide do not really apply to us, I believe,
-> because we are not a distribution; we are a buildsystem that generates
-> firmware images. Once such an image is flashed on a device, we have no
-> way to guarantee that it will be updated, or even updatable.
-It might be a good idea to remove the package entirely or at least place
-warnings all over the config readme.
->
-> Besides, we're not doing any unbundling on that package; the only
-> external dependencies (bot optional) are not bundled.
->
-> Finally, if one were to use a released version of Buildroot, say
-> 2019.05, we are no longer maintaining it, so it would anyway be stuck to
-> the older bitcoin version anyway...
-So my suggestion there would be to remove the package entirely from
-older released versions of buildroot that are no longer supported right
-before they lose support.
->
-> The best we can ensure is that we try to follow upstream releases as
-> closely as possible in master (and thus interesting parties should send
-> patches), and when it makes sense secrity-wise, to backport it to the
-> older branches, like we do for all other packages.
-So this is where things are tricky as it's very often not feasible to backport
-minimal security patches for bitcoin, at least that's been the case
-historically.
->
-> So, this comment is not about what upstream said, and, I believe, does
-> not make sense us. Or we'd need to have such a comment in all
-> packages...
-I'll discuss with upstream and see what makes the most sense.
->
-> Regards,
-> Yann E. MORIN.
->
-> >  BITCOIN_VERSION = 0.19.0.1
-> >  BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
-> >  BITCOIN_AUTORECONF = YES
-> > --
-> > 2.20.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
+ Hi Nicolas,
+
+ Looks good to me, but...
+
+On 30/01/2020 09:47, Nicolas Cavallari wrote:
+> meson makes a distinction between 'native' (i.e. host) dependencies
+> and 'host' (i.e. target) dependencies and can use a different pkg-config
+> binary for each case.
+> 
+> Currently, pkg-meson only pass the target pkg-config and meson
+> automatically guesses the host pkg-config by searching PATH, which finds
+> host/bin/pkg-config, which is the target pkg-config wrapper script.
+> 
+> As a result, meson uses the target pkg-config to find host dependencies,
+> with possibly incorrect results.
+> 
+> This patch causes meson to use host/bin/pkgconf directly to find host
+> dependencies, using the apparently recommended method[1] of
+> specifing the PKG_CONFIG environment variable.  pkgconf does not know
+> about the target sysroot, so only finds host dependencies.
+
+ In HOST_MAKE_ENV we also set
+
+PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
+
+Don't we still need that to make sure it will indeed find our own .pc files? Or
+is that anyway the default for pkgconf due to our --prefix in the configure step?
+
+ Similar for
+
+PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+
+although for those I do think they're not needed.
+
+ Regardless, I think it would be cleaner to create a
+$(HOST_DIR)/bin/host-pkg-config wrapper that sets the environment correctly for
+the host.
+
+
+ Regards,
+ Arnout
+
+> 
+> [1] https://github.com/mesonbuild/meson/issues/1849
+> 
+> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 > --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+> 
+> This meson.build snippet:
+> 
+> ----------------------------
+> host_glib = dependency('glib-2.0', native: true, method: 'pkg-config')
+> gdbus_codegen = find_program(host_glib.get_pkgconfig_variable('bindir')
+>                              + '/gdbus-codegen')
+> ----------------------------
+> 
+> Without the patch, it uses the target .pc file with a prefix of /usr,
+> and finds /usr/bin/gdbus-codegen from the host :
+> 
+> Found pkg-config: $OUTPUT/host/bin/pkg-config (1.6.1)
+> Build-time dependency glib-2.0 found: YES 2.62.4
+> Program /usr/bin/gdbus-codegen found: YES (/usr/bin/gdbus-codegen)
+> 
+> For a complete dummy example, use this dummy package:
+> 
+> base64 -d << EOF | tar -xJv
+> /Td6WFoAAATm1rRGAgAhARwAAAAQz1jM4Cf/AsJdADgYSJnNF3UkZpejSZiTToh3TmWwjd6v7C8E
+> PXLCFsW1o1RD4pKzYIacUzj5A1VS6TvDBN4+ynQO837jjfHvz6kgAyGryHKoSq7OI71xqrwiX/4W
+> E6a5fnuXGGuPAScuqHa/u88SKGfAOmh1xE5guv5qZcgyhDIB5H5nIQwzyb1trdobmRqUMFT1rT5T
+> sON0C/SB59IEbKITx5ItzheQu7D5erkFYrjhcBV1xNCh0J7uwF5XXF9qVHhlvQyp5AJFF9lSUJB2
+> eTX5ORhCpcGvO/AAhnnlf4DU8C9a7CFVfTfhP+sgs5T7aC1ymojylvBL5TmkAKCna5hN6Ckzr9qH
+> jKYDXAhwJTuMPZkgSFS8OVXkgKnxDS5vG9Ssg0ueb3G7tIEhxt2ehjMgDPK5N/blHnE1t/ZjXe2Q
+> g/TV83LE/MpUKiTQO7JwZ5+tWmT2WWgxK6fG8ckuhlwXhZmVkjWCw+1uxs0C8FrfZFH1ms5MhEyS
+> 6Zgi0803KfOamnH/k6PtEPVB5G7BCWf/b+6Wfo/ZvPSgSYrpcDMJs5j+3KkUjnfpgCuXYXE5TSmE
+> DcrINQHDLYq3hHWklV0n7bFwS3loEWcti/OKQkjeu/3c4E5c/+IWyJFTeLoKEbrNIPtLOYAvsRf+
+> FJHYzqQyEWoqgAejX6K/XWclKrFAePkjKTouj10ppv9WENd+KCnK7JErZp2zqKwJeGZcOlHsFJ9C
+> dUTWFgOU3VzsWiYMnxuPHnvYt3uXr6XlFQHA818kZdcJIMvfUPLRNhrBwR893vTd5aw6/tb4EPeR
+> HacNklguWar6H9w69r8KY2yqk9cepySCDkomVGFqmi5gPH9anFGfEKEUJhKNdjMqF44jx76odAOZ
+> ijoW+F9h6qHVQFGSLhxchqcMWgA+0aBVz9My+PoRzIsXEmH+21W9ucie9zPCw3QWVVPxgAAAAACQ
+> pqAPsaqrpAAB3gWAUAAAeb5korHEZ/sCAAAAAARZWg==
+> EOF
+> 
+> I tested that the following packages still compile:
+> - libglib2
+> - gst1-plugins-bad
+> - gst1-plugins-base
+> - gst1-plugins-good
+> - gst1-plugins-ugly
+> - gstreamer1
+> - libdrm
+> - mesa3d
+> ---
+>  package/pkg-meson.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index e7eea2aa58..349da39369 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -84,7 +84,8 @@ define $(2)_CONFIGURE_CMDS
+>  	    ) \
+>  	    package/meson/cross-compilation.conf.in \
+>  	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+> -	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+> +	PATH=$$(BR_PATH) PKG_CONFIG=$(HOST_DIR)/bin/pkgconf \
+> +	$$($$(PKG)_CONF_ENV) $$(MESON) \
+>  		--prefix=/usr \
+>  		--libdir=lib \
+>  		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+> 
