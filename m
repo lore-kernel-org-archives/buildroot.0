@@ -1,40 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Feb 2020 21:06:20 +0100
-Subject: [Buildroot] [git commit] package/nginx-modsecurity: depends on
- BR2_PACKAGE_NGINX_HTTP
-Message-ID: <20200202200006.5C29488487@busybox.osuosl.org>
+Date: Sun, 2 Feb 2020 21:09:45 +0100
+Subject: [Buildroot] [git commit] package/libpjsip: add sdl2 support
+Message-ID: <20200202200006.6404C88476@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10684bbc901107d54766dec65787740f0516a6a4
+commit: https://git.buildroot.net/buildroot/commit/?id=8330cfe5c5f8cd820577b2abd24c90bc10116dae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
- - http://autobuild.buildroot.org/results/7babc12094f4d490569556824a2029e5f08ff866
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nginx-modsecurity/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libpjsip/libpjsip.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
-index 68f6a81045..aa9d53a3fe 100644
---- a/package/nginx-modsecurity/Config.in
-+++ b/package/nginx-modsecurity/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_NGINX_MODSECURITY
- 	bool "nginx-modsecurity"
-+	depends on BR2_PACKAGE_NGINX_HTTP
- 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
- 	depends on !BR2_STATIC_LIBS # libmodsecurity
- 	select BR2_PACKAGE_PCRE # libmodsecurity
-@@ -12,4 +13,5 @@ config BR2_PACKAGE_NGINX_MODSECURITY
- 	  https://github.com/SpiderLabs/ModSecurity-nginx
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 655ab4498c..7736a005af 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -33,7 +33,6 @@ LIBPJSIP_CONF_OPTS = \
+ 	--disable-g711-codec \
+ 	--disable-l16-codec \
+ 	--disable-g722-codec \
+-	--disable-sdl \
+ 	--disable-ffmpeg \
+ 	--disable-ipp \
+ 	--disable-silk \
+@@ -122,6 +121,13 @@ else
+ LIBPJSIP_CONF_OPTS += --disable-opus
+ endif
  
- comment "nginx-modsecurity needs a toolchain w/ C++, dynamic library"
-+	depends on BR2_PACKAGE_NGINX_HTTP
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
++ifeq ($(BR2_PACKAGE_SDL2),y)
++LIBPJSIP_DEPENDENCIES += sdl2
++LIBPJSIP_CONF_OPTS += --with-sdl=$(STAGING_DIR)/usr
++else
++LIBPJSIP_CONF_OPTS += --disable-sdl
++endif
++
+ ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
+ LIBPJSIP_CONF_OPTS += \
+ 	--enable-speex-aec \
