@@ -1,160 +1,48 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 2 Feb 2020 04:43:32 -0700
-Subject: [Buildroot] [PATCH v9 3/3] package/weston: bump to version 8.0.0
-In-Reply-To: <20200202105211.GC4107@scaer>
-References: <20200202071646.4744-1-james.hilliard1@gmail.com>
- <20200202071646.4744-3-james.hilliard1@gmail.com>
- <20200202105211.GC4107@scaer>
-Message-ID: <CADvTj4oU_akhSO7EesY6r40Q-vW+dhBPakfSySuzLGL1prfAbw@mail.gmail.com>
+Date: Sun,  2 Feb 2020 05:38:55 -0700
+Subject: [Buildroot] [PATCH v10 1/2] package/wayland-protocols: bump to
+ version 1.18
+Message-ID: <20200202123856.94585-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 2, 2020 at 3:52 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2020-02-02 00:16 -0700, James Hilliard spake thusly:
-> > The autotools build system is deprecated and replaced with meson for weston.
-> >
-> > We need to enable pango when building demo clients since it is required
-> > by meson.
-> >
-> > The dbus option in autotools is replaced with launcher-logind in meson.
->
-> ... "which is only ever used with systemd, so add it to the condition."
->
-> > We need to explicitly set the image-webp option to avoid failures when
-> > building without webp.
->
-> There's no need for this kind of detail in the commit log.
->
-> > Replaced WESTON_NATIVE_BACKEND with backend-default in meson.
->
-> This should be a preparatory patch, because it also makes sense with the
-> current situation.
-The behavior of WESTON_NATIVE_BACKEND appears to be a bit different
-from backend-default, see:
-https://github.com/wayland-project/weston/blob/6.0.1/configure.ac#L102-L103
->
-> However, if only the RDP backend isenabled, there is then no default.
-> That's not good.
->
-> Furthermore, the choise of a default is before the actual selection, so
-> it means the user as to back and forth to change the default.
->
-> I would alternatively suggest that the choice indeed stays first, but
-> that dthe dependency is incerted: the choice seelcts the defautl
-> backend:
->
->     choice
->         bool "default compositor"
->
->         config BR2_PKG_WESON_DEFAULT_FB
->             bool "fb"
->             select BR2_PKG_WESTON_FB
->
->         config BR2_PKG_WESTON_DEFAULT_DRM
->             bool "drm"
->             depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
->             select BR2_PKG_WESTON_DRM
->
->         comment ""drm backend needs mesa3d w/ EGL driver"
->             depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
->
->         [...x11, rdp...]
->
->     endchoice
->
->     config BR2_PKG_WESTON_DEFAULT_COMPOSITOR
->         string
->         default "fbdev" if BR2_PKG_WESON_DEFAULT_FB
->         default "drm"   if BR2_PKG_WESON_DEFAULT_DRM
->         [...]
->
->     config BR2_PKG_WESTON_FB
->         bool "fb compositor"
->
->     config BR2_PKG_WESTON_DRM
->         bool "drm compositor"
->         depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
->
->     [...]
->
-> > Added optional pipewire dependency.
->
-> This should be done in a follow up patch.
->
-> > Added patch fixing missing include in os-compatibility.c.
->
-> Such details are not needed in the commit log, as long as the patch
-> description is good enough (which it should be). Otherwise, you'd also
-> have to explain the second patch too...
->
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> [--SNIP--]
-> > @@ -102,7 +122,22 @@ comment "XWayland support needs libepoxy and X.org enabled"
-> >
-> >  config BR2_PACKAGE_WESTON_DEMO_CLIENTS
-> >       bool "demo clients"
-> > +     depends on BR2_PACKAGE_HAS_LIBGLES
-> > +     depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-> > +     depends on BR2_USE_WCHAR # pango
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # pango
-> > +     depends on BR2_USE_MMU # pango
-> > +     depends on BR2_INSTALL_LIBSTDCPP # pango
-> > +     depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
->
-> Please keep the dependency in the order described in the manual:
->   - qrchitecture dependencies, e.g. MMU...
->   - toolchain dependencies, e.g. sync-4, stdc++ threads, wchar...
->   - system depependencies, e.g. init system...
->   - negative package dependencies, e.g. !foo, !bar_opt
->   - positive package dependencies, e.g. foo, bar_opt
->
-> [--SNIP--]
-> > -# Uses VIDIOC_EXPBUF, only available from 3.8+
-> > -ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),)
-> > -WESTON_CONF_OPTS += --disable-simple-dmabuf-v4l-client
-> > +     -Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
-> > +     -Dremoting=false \
-> > +     -Dbackend-headless=false \
-> > +     -Dcolor-management-colord=false
->
-> You're moving conditions around (the vidioc one was later), so it makes
-> reviewing even more complicated...
->
-> > +ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_SYSTEMD),yy)
->
-> This new systemd dependency should be explained in the commit log (see
-> my proposal blurb above).
->
-> >  ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
-> > -WESTON_CONF_OPTS += \
-> > -     --enable-fbdev-compositor \
-> > -     WESTON_NATIVE_BACKEND=fbdev-backend.so
-> > +WESTON_CONF_OPTS += -Dbackend-fbdev=true
-> > +ifeq ($(BR2_PACKAGE_WESTON_DEFAULT_BACKEND_FBDEV),y)
-> > +WESTON_CONF_OPTS += -Dbackend-default=fbdev
-> > +endif
->
-> This (and the following cases) should be replaced by a single line,
-> outside of any condition:
->
->     WESTON_CONF_OPTS += -Dbackend-default=$(call qstrip,$(BR2_PKG_WESTON_DEFAULT_COMPOSITOR))
->
-> Care to fix and respin, please?
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/wayland-protocols/wayland-protocols.hash | 8 ++++----
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index d62a433dfd..a27ff9e52c 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2018-November/039662.html
+-md5 55ddd5fdb02b73b9de9559aaec267315  wayland-protocols-1.17.tar.xz
+-sha1 7d2569c838c776545e3eb1b1049b9c37178aae24  wayland-protocols-1.17.tar.xz
+-sha256 df1319cf9705643aea9fd16f9056f4e5b2471bd10c0cc3713d4a4cdc23d6812f  wayland-protocols-1.17.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2019-July/040756.html
++md5 af38f22d8e233c2f2e00ddc8dcc94694  wayland-protocols-1.18.tar.xz
++sha1 aa2f132c082f3c790bd046283b3ef7ce3fb11370  wayland-protocols-1.18.tar.xz
++sha256 3d73b7e7661763dc09d7d9107678400101ecff2b5b1e531674abfa81e04874b3  wayland-protocols-1.18.tar.xz
+ sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index 5ed4c3bc90..fbfa99558d 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAYLAND_PROTOCOLS_VERSION = 1.17
++WAYLAND_PROTOCOLS_VERSION = 1.18
+ WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
+-- 
+2.20.1
