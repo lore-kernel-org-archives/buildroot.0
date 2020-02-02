@@ -1,77 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Feb 2020 20:45:30 +0100
-Subject: [Buildroot] [git commit] package/python-entrypoints: new package
-Message-ID: <20200202195023.09C8F8839A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 2 Feb 2020 21:02:28 +0100
+Subject: [Buildroot] [git commit] linux/linux.mk: use HOST_MAKE_ENV rather
+ than TARGET_MAKE_ENV
+Message-ID: <20200202195146.8B9D1883A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55567e56d61d3985a1920ff0e69502dfcd607b82
+commit: https://git.buildroot.net/buildroot/commit/?id=f0b208f1252fb2c0588bdd1ff394bcec8a56a21a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                                  |  1 +
- package/python-entrypoints/Config.in               |  6 ++++++
- package/python-entrypoints/python-entrypoints.hash |  5 +++++
- package/python-entrypoints/python-entrypoints.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+While the kernel is built for the target, the build may need various host
+libraries depending on config (and kernel version), so use HOST_MAKE_ENV
+instead of TARGET_MAKE_ENV.
 
-diff --git a/package/Config.in b/package/Config.in
-index 711613fb4a..273d39c81f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -931,6 +931,7 @@ menu "External python modules"
- 	source "package/python-dpkt/Config.in"
- 	source "package/python-ecdsa/Config.in"
- 	source "package/python-engineio/Config.in"
-+	source "package/python-entrypoints/Config.in"
- 	source "package/python-enum/Config.in"
- 	source "package/python-enum34/Config.in"
- 	source "package/python-esptool/Config.in"
-diff --git a/package/python-entrypoints/Config.in b/package/python-entrypoints/Config.in
-new file mode 100644
-index 0000000000..8253a04591
---- /dev/null
-+++ b/package/python-entrypoints/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_ENTRYPOINTS
-+	bool "python-entrypoints"
-+	help
-+	  Discover and load entry points from installed packages.
-+
-+	  https://github.com/takluyver/entrypoints
-diff --git a/package/python-entrypoints/python-entrypoints.hash b/package/python-entrypoints/python-entrypoints.hash
-new file mode 100644
-index 0000000000..c645452109
---- /dev/null
-+++ b/package/python-entrypoints/python-entrypoints.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/entrypoints/json
-+md5	c5c61ea2e46a0c50ea08f4af7955a0b1  entrypoints-0.3.tar.gz
-+sha256	c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451  entrypoints-0.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256	de5fcd7349cdf399b0707a2a024833c4704743650133c72d6f0ff7561a03a848  LICENSE
-diff --git a/package/python-entrypoints/python-entrypoints.mk b/package/python-entrypoints/python-entrypoints.mk
-new file mode 100644
-index 0000000000..7ab1b4d64a
---- /dev/null
-+++ b/package/python-entrypoints/python-entrypoints.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-entrypoints
-+#
-+################################################################################
-+
-+PYTHON_ENTRYPOINTS_VERSION = 0.3
-+PYTHON_ENTRYPOINTS_SOURCE = entrypoints-$(PYTHON_ENTRYPOINTS_VERSION).tar.gz
-+PYTHON_ENTRYPOINTS_SITE = https://files.pythonhosted.org/packages/b4/ef/063484f1f9ba3081e920ec9972c96664e2edb9fdc3d8669b0e3b8fc0ad7c
-+PYTHON_ENTRYPOINTS_SETUP_TYPE = distutils
-+PYTHON_ENTRYPOINTS_LICENSE = MIT
-+PYTHON_ENTRYPOINTS_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+In particular, this ensures that our host-pkgconf will look for host
+libraries and not target ones.
+
+Fixes building scripts/dtc for Buildroot configurations enabling libyaml and
+host-pkgconf for kernels after commit 067c650c45 (dtc: Use pkg-config to
+locate libyaml).
+
+With this enabled, we can drop the PKG_CONFIG_* variables for the
+_NEEDS_HOST_LIBELF conditional, as those are included in HOST_MAKE_ENV.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/linux.mk | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7d66c9aeea..9a2f63d4df 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -60,8 +60,12 @@ BR_NO_CHECK_HASH_FOR += $(notdir $(LINUX_PATCHES))
+ # be directories in the patch list (unlike for other packages).
+ LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
+ 
++# while the kernel is built for the target, the build may need various
++# host libraries depending on config (and version), so use
++# HOST_MAKE_ENV here. In particular, this ensures that our
++# host-pkgconf will look for host libraries and not target ones.
+ LINUX_MAKE_ENV = \
+-	$(TARGET_MAKE_ENV) \
++	$(HOST_MAKE_ENV) \
+ 	BR_BINARIES_DIR=$(BINARIES_DIR)
+ 
+ LINUX_INSTALL_IMAGES = YES
+@@ -102,12 +106,6 @@ endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF),y)
+ LINUX_DEPENDENCIES += host-elfutils host-pkgconf
+-LINUX_MAKE_ENV += \
+-	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-	PKG_CONFIG_SYSROOT_DIR="/" \
+-	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+-	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+-	PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
+ endif
+ 
+ # If host-uboot-tools is selected by the user, assume it is needed to
