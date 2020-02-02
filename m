@@ -1,64 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  2 Feb 2020 22:37:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: needs threads
-Message-ID: <20200202213734.1787224-1-fontaine.fabrice@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 2 Feb 2020 23:21:36 +0100
+Subject: [Buildroot] [PATCH 21/32] package/r*: add license file hashes
+In-Reply-To: <20200202194321.16321-22-heiko.thiery@gmail.com>
+References: <20200202194321.16321-1-heiko.thiery@gmail.com>
+ <20200202194321.16321-22-heiko.thiery@gmail.com>
+Message-ID: <5fec229e-fcce-819a-a001-520a64d7af48@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/78391abbf87ac9c04b13d7aab7acf7d1aaade75d
+Hi Heiko,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libmodsecurity/Config.in    | 6 ++++--
- package/nginx-modsecurity/Config.in | 6 ++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+On 02/02/20 20:43, Heiko Thiery wrote:
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+>  package/rabbitmq-server/rabbitmq-server.hash | 18 +++++++++++++++++-
+>  package/racehound/racehound.hash             |  1 +
+>  package/ramsmp/ramsmp.hash                   |  3 ++-
+>  package/ramspeed/ramspeed.hash               |  3 ++-
+>  package/ranger/ranger.hash                   |  4 +++-
+>  package/rapidxml/rapidxml.hash               |  3 ++-
+>  package/raptor/raptor.hash                   |  3 ++-
+>  package/ratpoison/ratpoison.hash             |  3 ++-
+>  package/read-edid/read-edid.hash             |  3 ++-
+>  package/rp-pppoe/rp-pppoe.hash               |  4 +++-
+>  package/rsh-redone/rsh-redone.hash           |  4 +++-
+>  package/rt-tests/rt-tests.hash               |  3 ++-
+>  package/rtl8188eu/rtl8188eu.hash             |  3 ++-
+>  package/rtl8821au/rtl8821au.hash             |  3 ++-
+>  14 files changed, 45 insertions(+), 13 deletions(-)
+> 
+> diff --git a/package/rabbitmq-server/rabbitmq-server.hash b/package/rabbitmq-server/rabbitmq-server.hash
+> index 3cd412dd0f..3c552820c1 100644
+> --- a/package/rabbitmq-server/rabbitmq-server.hash
+> +++ b/package/rabbitmq-server/rabbitmq-server.hash
+> @@ -1,2 +1,18 @@
+>  # Locally computed
+> -sha256 395689bcf57fd48aed452fcd43ff9a992de40067d3ea5c44e14680d69db7b78e  rabbitmq-server-3.6.6.tar.xz
+> +sha256  395689bcf57fd48aed452fcd43ff9a992de40067d3ea5c44e14680d69db7b78e  rabbitmq-server-3.6.6.tar.xz
 
-diff --git a/package/libmodsecurity/Config.in b/package/libmodsecurity/Config.in
-index 129881b0de..ea58c6d0e2 100644
---- a/package/libmodsecurity/Config.in
-+++ b/package/libmodsecurity/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBMODSECURITY
- 	bool "libmodsecurity"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_PCRE
- 	help
- 	  Libmodsecurity is one component of the ModSecurity
-@@ -15,5 +16,6 @@ config BR2_PACKAGE_LIBMODSECURITY
- 
- 	  https://github.com/SpiderLabs/ModSecurity
- 
--comment "libmodsecurity needs a toolchain w/ C++, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-+comment "libmodsecurity needs a toolchain w/ C++, dynamic library, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
-index aa9d53a3fe..2af11eeee2 100644
---- a/package/nginx-modsecurity/Config.in
-+++ b/package/nginx-modsecurity/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
- 	depends on BR2_PACKAGE_NGINX_HTTP
- 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
- 	depends on !BR2_STATIC_LIBS # libmodsecurity
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libmodsecurity
- 	select BR2_PACKAGE_PCRE # libmodsecurity
- 	select BR2_PACKAGE_LIBMODSECURITY
- 	help
-@@ -12,6 +13,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
- 
- 	  https://github.com/SpiderLabs/ModSecurity-nginx
- 
--comment "nginx-modsecurity needs a toolchain w/ C++, dynamic library"
-+comment "nginx-modsecurity needs a toolchain w/ C++, dynamic library, threads"
- 	depends on BR2_PACKAGE_NGINX_HTTP
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
+Many lines in this patches are just whitespace changes, which is
+generally not nice. But in this specific case you are moving from a
+user-chosen number of spaces or tabs to the format produced by sha256
+sum. IIRC that is pretty much constant, so I guess this could be adopted
+a new standard.
+
+For the above reason:
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+
 -- 
-2.24.1
+Luca
