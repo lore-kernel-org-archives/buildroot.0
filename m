@@ -1,40 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Feb 2020 14:40:00 +0100
-Subject: [Buildroot] Upcoming glibc-2.31 breaks busybox, strace.
-In-Reply-To: <2cb40bdc-2c78-6edd-bcea-3db5cbba3ba7@mind.be> (Arnout
- Vandecappelle's message of "Thu, 23 Jan 2020 22:23:39 +0100")
-References: <BN8PR12MB28683E6EF9441AEBAB2CF685D90F0@BN8PR12MB2868.namprd12.prod.outlook.com>
- <2cb40bdc-2c78-6edd-bcea-3db5cbba3ba7@mind.be>
-Message-ID: <87r1zdnm4v.fsf@dell.be.48ers.dk>
+From: Andrea Simeoni <andreasimeoni73@gmail.com>
+Date: Sun, 2 Feb 2020 14:43:35 +0100
+Subject: [Buildroot] Specify relative size of rootfs
+Message-ID: <CAPmASetWvHgW2CJmUovxpdOTCYv0GMTQwX972mD5ytXWtOjevA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+in Filesystem images > ext2/3/7 root filesystem I can specify the exact
+size of the partition.
+Instead I would find more useful to specify a relative size, to the minimum
+needed. I.e., leave 200M free after putting in all the stuff. Otherwise I
+need:
 
-Hi,
+1. compile
+2. burn an image (or mount locally)
+3. inspect the disk usage with `df -h`
+4. change the parameters above
+5. compile
 
- >> In February 2020 the new release of glibc is going to happen. There are at least
- >> two packages known which latest releases
- >> fail to build with latest revision of glibc: Busybox and strace.
- >> 
- >> For "strace" there is a patch in master branch which solves the error:
- >> https://github.com/strace/strace/commit/9afd83c11cb78a04954daaedb54b20214a35ec9c
- >> 
- >> For busybox there are at least two patches required:
- >> https://git.buildroot.net/busybox/commit/?id=6937487be73cd4563b876413277a295a5fe2f32c
- >> https://git.buildroot.net/busybox/commit/?id=d3539be8f27b8cbfdfee460fe08299158f08bcd9
- >> 
- >> Should we introduce these patches now or should we wait until glibc-2.31 is
- >> introduced in buildroot?
-
- >  It doesn't hurt to introduce those patches now, since it's possible for people
- > to use an external toolchain with glibc-2.31. In fact, I suspect that the ARC
- > people do exactly that :-)
-
-Yes, please send patches.
-
--- 
-Bye, Peter Korsgaard
+If I need to tweak my environment adding (or removing) packages I have to
+do again all the steps.
+Thanks
+Andrea S.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200202/67427847/attachment.html>
