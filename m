@@ -1,65 +1,103 @@
-From: Refik Tuzakli <tuzakli.refik@gmail.com>
-Date: Sun,  2 Feb 2020 14:30:33 +0300
-Subject: [Buildroot] [PATCH v1 3/3] package/freescale-imx/imx-gpu-g2d: bump
- to version 6.4.0.p1.0
-Message-ID: <20200202113033.17306-1-tuzakli.refik@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 2 Feb 2020 12:26:17 +0100
+Subject: [Buildroot] [git commit] package/kodi: use github helper for
+ KODI_EXTRA_DOWNLOADS
+Message-ID: <20200202112236.D01188827D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
----
- package/freescale-imx/imx-gpu-g2d/Config.in        | 6 +++++-
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 3 ++-
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 6 +++++-
- 3 files changed, 12 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=467b3dc1e327f19ab678c39c8f64490484c195dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/freescale-imx/imx-gpu-g2d/Config.in b/package/freescale-imx/imx-gpu-g2d/Config.in
-index 47375788d1..aeca087f86 100644
---- a/package/freescale-imx/imx-gpu-g2d/Config.in
-+++ b/package/freescale-imx/imx-gpu-g2d/Config.in
-@@ -2,10 +2,14 @@ comment "imx-gpu-g2d needs a glibc toolchain with armhf enabled"
- 	depends on BR2_arm
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
+This will ensure the downloads have nicer filenames in the download
+directory, e.g.:
+    4.0.4-Leia-18.4.tar.gz --> kodi-ffmpeg-4.0.4-Leia-18.4.tar.gz
+
+Update the hashes list accordingly.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998 at free.fr: expand comit log with additional explanations]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/kodi/kodi.hash | 12 ++++--------
+ package/kodi/kodi.mk   | 29 ++++++++++++-----------------
+ 2 files changed, 16 insertions(+), 25 deletions(-)
+
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index cc248e537e..578befec1b 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,11 +1,7 @@
+ # Locally computed
+ sha256 108979df8b41ab4168f5cdc0233f46e38767eda5921f4ccae16584e98d0d6b29  kodi-18.5-Leia.tar.gz
++sha256 e11e7594af35f36ab2711252c3d6bb106908f26605498aef4a9be2d7bc001db2  kodi-ffmpeg-4.0.4-Leia-18.4.tar.gz
++sha256 38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
++sha256 071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
++sha256 a30b6aa0aad0f2c505bc77948af2d5531a80b6e68112addb4c123fca24d5d3bf  kodi-libdvdread-6.0.0-Leia-Alpha-3.tar.gz
+ sha256 9d2396ef3e091d3b82bc84143e070700412984e8589513570f54e0675d1e8851  LICENSE.md
+-# Locally computed - ffmpeg
+-sha256 e11e7594af35f36ab2711252c3d6bb106908f26605498aef4a9be2d7bc001db2  4.0.4-Leia-18.4.tar.gz
+-# Locally computed - libdvdcss
+-sha256 d816ed421ca5b70319298bda7830cff475a77d446539c54cf6d576dd6c651cee  e646b950095589e74a2c08cf0c34b758c669aa75.tar.gz
+-# Locally computed - libdvdnav
+-sha256 e50db40a823ddc795d1fe5f18db2517fb3e05fe0c4a88abf1578d95d7a1cce63  9277007ce2263b908e9ce3091cc31b3dd87c351c.tar.gz
+-# Locally computed - libdvdread
+-sha256 2d9d6d185dd25a983d6dfc2a00207cafdc396a969c227d5edd84b6215b2fba89  bd6b329f0137ab6a9f779a28dd96f04713735e17.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 435f47cae8..1036151a89 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -49,21 +49,16 @@ KODI_DEPENDENCIES = \
+ 	tinyxml \
+ 	zlib
  
-+comment "imx-gpu-g2d needs a glibc toolchain"
-+	depends on BR2_aarch64
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+
- config BR2_PACKAGE_IMX_GPU_G2D
- 	bool "imx-gpu-g2d"
- 	# Pre-built binaries only available for ARM EABIhf
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_arm && BR2_ARM_EABIHF) || BR2_aarch64
- 	# Library binaries are linked against libc.so.6
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_IMX_GPU_VIV
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-index 3bcbc558e2..2388cafbc6 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-@@ -1 +1,2 @@
--sha256	5f2d2171d5cd57f37ab07184fc908a0f6ecb2a97f023f04c2f9f3b3d7fec8481  imx-gpu-g2d-6.2.4.p1.2.bin
-+sha256	6d6d02d035d988cbdb2014794f2efe970a3f5ac277202882bbf553bb7fd789d2  imx-gpu-g2d-6.4.0.p1.0-aarch32.bin
-+sha256	35885f435dbe951d2c0f439a376ed8a59a50b67a1b7e1e14fa2ab03995abb1ad  imx-gpu-g2d-6.4.0.p1.0-aarch64.bin
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-index 015ab628b6..6598e4c32b 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-@@ -4,7 +4,11 @@
- #
- ################################################################################
+-# taken from tools/depends/target/ffmpeg/FFMPEG-VERSION
++# taken from tools/depends/target/*/*-VERSION
+ KODI_FFMPEG_VERSION = 4.0.4-Leia-18.4
++KODI_LIBDVDCSS_VERSION = 1.4.2-Leia-Beta-5
++KODI_LIBDVDNAV_VERSION = 6.0.0-Leia-Alpha-3
++KODI_LIBDVDREAD_VERSION = 6.0.0-Leia-Alpha-3
+ KODI_EXTRA_DOWNLOADS += \
+-	https://github.com/xbmc/FFmpeg/archive/$(KODI_FFMPEG_VERSION).tar.gz
+-
+-# 1.4.2-Leia-Beta-5
+-KODI_LIBDVDCSS_VERSION = e646b950095589e74a2c08cf0c34b758c669aa75
+-# 6.0.0-Leia-Alpha-3
+-KODI_LIBDVDNAV_VERSION = 9277007ce2263b908e9ce3091cc31b3dd87c351c
+-# 6.0.0-Leia-Alpha-3
+-KODI_LIBDVDREAD_VERSION = bd6b329f0137ab6a9f779a28dd96f04713735e17
+-KODI_EXTRA_DOWNLOADS += \
+-	https://github.com/xbmc/libdvdcss/archive/$(KODI_LIBDVDCSS_VERSION).tar.gz \
+-	https://github.com/xbmc/libdvdnav/archive/$(KODI_LIBDVDNAV_VERSION).tar.gz \
+-	https://github.com/xbmc/libdvdread/archive/$(KODI_LIBDVDREAD_VERSION).tar.gz
++	$(call github,xbmc,FFmpeg,$(KODI_FFMPEG_VERSION))/kodi-ffmpeg-$(KODI_FFMPEG_VERSION).tar.gz \
++	$(call github,xbmc,libdvdcss,$(KODI_LIBDVDCSS_VERSION))/kodi-libdvdcss-$(KODI_LIBDVDCSS_VERSION).tar.gz \
++	$(call github,xbmc,libdvdnav,$(KODI_LIBDVDNAV_VERSION))/kodi-libdvdnav-$(KODI_LIBDVDNAV_VERSION).tar.gz \
++	$(call github,xbmc,libdvdread,$(KODI_LIBDVDREAD_VERSION))/kodi-libdvdread-$(KODI_LIBDVDREAD_VERSION).tar.gz
  
--IMX_GPU_G2D_VERSION = 6.2.4.p1.2
-+ifeq ($(BR2_aarch64),y)
-+IMX_GPU_G2D_VERSION = 6.4.0.p1.0-aarch64
-+else
-+IMX_GPU_G2D_VERSION = 6.4.0.p1.0-aarch32
-+endif
- IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
- IMX_GPU_G2D_DEPENDENCIES = imx-gpu-viv
--- 
-2.17.1
+ define KODI_CPLUFF_AUTOCONF
+ 	cd $(KODI_SRCDIR)/lib/cpluff && ./autogen.sh
+@@ -80,16 +75,16 @@ KODI_CONF_OPTS += \
+ 	-DENABLE_INTERNAL_CROSSGUID=OFF \
+ 	-DENABLE_INTERNAL_FFMPEG=ON \
+ 	-DENABLE_INTERNAL_FLATBUFFERS=OFF \
+-	-DFFMPEG_URL=$(KODI_DL_DIR)/$(KODI_FFMPEG_VERSION).tar.gz \
++	-DFFMPEG_URL=$(KODI_DL_DIR)/kodi-ffmpeg-$(KODI_FFMPEG_VERSION).tar.gz \
+ 	-DKODI_DEPENDSBUILD=OFF \
+ 	-DENABLE_LDGOLD=OFF \
+ 	-DNATIVEPREFIX=$(HOST_DIR) \
+ 	-DDEPENDS_PATH=$(STAGING_DIR)/usr \
+ 	-DWITH_JSONSCHEMABUILDER=$(HOST_DIR)/bin/JsonSchemaBuilder \
+ 	-DWITH_TEXTUREPACKER=$(HOST_DIR)/bin/TexturePacker \
+-	-DLIBDVDCSS_URL=$(KODI_DL_DIR)/$(KODI_LIBDVDCSS_VERSION).tar.gz \
+-	-DLIBDVDNAV_URL=$(KODI_DL_DIR)/$(KODI_LIBDVDNAV_VERSION).tar.gz \
+-	-DLIBDVDREAD_URL=$(KODI_DL_DIR)/$(KODI_LIBDVDREAD_VERSION).tar.gz
++	-DLIBDVDCSS_URL=$(KODI_DL_DIR)/kodi-libdvdcss-$(KODI_LIBDVDCSS_VERSION).tar.gz \
++	-DLIBDVDNAV_URL=$(KODI_DL_DIR)/kodi-libdvdnav-$(KODI_LIBDVDNAV_VERSION).tar.gz \
++	-DLIBDVDREAD_URL=$(KODI_DL_DIR)/kodi-libdvdread-$(KODI_LIBDVDREAD_VERSION).tar.gz
+ 
+ ifeq ($(BR2_ENABLE_LOCALE),)
+ KODI_DEPENDENCIES += libiconv
