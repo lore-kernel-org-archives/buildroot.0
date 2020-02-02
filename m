@@ -1,28 +1,21 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 2 Feb 2020 21:10:37 +0100
-Subject: [Buildroot] [PATCH 00/32] add a huge bunch of license file
- hashes
-In-Reply-To: <20200202194321.16321-1-heiko.thiery@gmail.com>
-References: <20200202194321.16321-1-heiko.thiery@gmail.com>
-Message-ID: <CAEyMn7Y63VJjkBq_zZq3REmLB=nmpT=Pv7CHrqPigmn4y042DQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Feb 2020 21:10:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libpjsip: add sdl2 support
+In-Reply-To: <20200202163003.143259-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 2 Feb 2020 17:30:03 +0100")
+References: <20200202163003.143259-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sgjsn41e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Am So., 2. Feb. 2020 um 20:43 Uhr schrieb Heiko Thiery <heiko.thiery@gmail.com>:
->
-> This series add missing entries in the hash files for the license files.
-> The entries are generated semi-automatically and manually recheck.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-to who may concern ... here is the link to the script that did the
-automatically stuff.
+Committed, thanks.
 
-https://github.com/hthiery/buildroot-hash
-
---
-
-Heiko
+-- 
+Bye, Peter Korsgaard
