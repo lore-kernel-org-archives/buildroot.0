@@ -1,37 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  2 Feb 2020 11:45:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/smartmontools: add libselinux
- optional dependency
-Message-ID: <20200202104511.3342301-1-fontaine.fabrice@gmail.com>
+Date: Sun,  2 Feb 2020 11:45:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libpjsip: add libyuv support
+Message-ID: <20200202104557.3342451-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libselinux is an optional dependency since a very long time (2010) and
-https://github.com/mirror/smartmontools/commit/ab807ee43bd4821f5e0e010de08a746d88506b17
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/smartmontools/smartmontools.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libpjsip/libpjsip.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-index 6c90538f70..bad7da2d16 100644
---- a/package/smartmontools/smartmontools.mk
-+++ b/package/smartmontools/smartmontools.mk
-@@ -16,4 +16,11 @@ else
- SMARTMONTOOLS_CONF_OPTS += --without-libcap-ng
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index a9febcf9c6..86cd31fc81 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -36,7 +36,6 @@ LIBPJSIP_CONF_OPTS = \
+ 	--disable-sdl \
+ 	--disable-ffmpeg \
+ 	--disable-openh264 \
+-	--disable-libyuv \
+ 	--disable-ipp \
+ 	--disable-silk \
+ 	--with-external-srtp
+@@ -94,6 +93,15 @@ else
+ LIBPJSIP_CONF_OPTS += --disable-v4l2
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SMARTMONTOOLS_CONF_OPTS += --with-selinux
-+SMARTMONTOOLS_DEPENDENCIES += libselinux
++ifeq ($(BR2_PACKAGE_LIBYUV),y)
++LIBPJSIP_DEPENDENCIES += libyuv
++LIBPJSIP_CONF_OPTS += \
++	--enable-libyuv \
++	--with-external-yuv
 +else
-+SMARTMONTOOLS_CONF_OPTS += --without-selinux
++LIBPJSIP_CONF_OPTS += --disable-libyuv
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_OPENCORE_AMR),y)
+ LIBPJSIP_DEPENDENCIES += opencore-amr
+ LIBPJSIP_CONF_OPTS += --with-opencore-amr=$(STAGING_DIR)/usr
 -- 
 2.24.1
