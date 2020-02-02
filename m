@@ -1,53 +1,74 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 2 Feb 2020 22:03:43 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Feb 2020 22:26:00 +0100
 Subject: [Buildroot] Qt5 Webkit fails to compile
-In-Reply-To: <CAPmASevria8dFywjiy6_9ww+GCDw79k9LAmCaTz=XxwDqojjQQ@mail.gmail.com>
+In-Reply-To: <20200202194245.46e18d8e@gmx.net> (Peter Seiderer's message of
+ "Sun, 2 Feb 2020 19:42:45 +0100")
 References: <CAPmASevmB9AZ7yOMmR3dBPcc4-4Ra2NOgfGV-J=4TXy=_cxGmw@mail.gmail.com>
  <20200202194245.46e18d8e@gmx.net>
- <CAPmASevria8dFywjiy6_9ww+GCDw79k9LAmCaTz=XxwDqojjQQ@mail.gmail.com>
-Message-ID: <20200202220343.3164146d@gmx.net>
+Message-ID: <87o8ugn0k7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andrea,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-On Sun, 2 Feb 2020 20:51:24 +0100, Andrea Simeoni <andreasimeoni73@gmail.com> wrote:
+ > Hello Andrea,
+ > On Sun, 2 Feb 2020 18:25:14 +0100, Andrea Simeoni <andreasimeoni73@gmail.com> wrote:
 
-> Detected the same failure while preparing the the Qt-5.12.7 version bump,
-> > fixed by the following qt5webkit patch (proper buildroot patch will
-> > follow soon):
-> >
->
-> Super fast! Great!
-> I've already seen the Buildroot patch(es).
-> What's the recommended way to apply them? It's enough to pull from master
-> branch on github or I have to patch the file(s) manually?
+ >> Hi! I'm building a slightly modified config for Raspberry Pi 3 (attached
+ >> the .config file).
+ >> The compilation of qt5webkit fails. This is the error:
+ >> 
+ >> platform/graphics/SegmentedFontData.cpp:65:9: error: expected ?;? before
+ >> ?if?
+ >> if (!containsCharacter(c))
+ >> ^~
+ >> 
+ >> the line before is:
+ >> 
+ >> U16_NEXT(characters, i, length, c)
+ >> 
+ >> and U16_NEXT is defined in uft16.h as:
+ >> 
+ >> #define U16_NEXT(s, i, length, c) { \
+ >> (c)=(s)[(i)++]; \
+ >> if(U16_IS_LEAD(c)) { \
+ >> uint16_t __c2; \
+ >> if((i)<(length) && U16_IS_TRAIL(__c2=(s)[(i)])) { \
+ >> ++(i); \
+ >> (c)=U16_GET_SUPPLEMENTARY((c), __c2); \
+ >> } \
+ >> } \
+ >> }
+ >> 
+ >> Is there something other I need to add in the configuration?
 
-The patches show up on master branch after one of the maintainers commits them
-(in case they are accepted), for preliminary testing your have to apply them
-manually, best by down loading them from patchwork ([1]), e.g. for this ones ([2], [3]):
+ > Detected the same failure while preparing the the Qt-5.12.7 version bump,
+ > fixed by the following qt5webkit patch (proper buildroot patch will
+ > follow soon):
 
-	$ curl -OJL https://patchwork.ozlabs.org/patch/1232425/mbox/
-	$ curl -OJL https://patchwork.ozlabs.org/patch/1232424/mbox/
+ > diff --git a/Source/WebCore/dom/Document.cpp b/Source/WebCore/dom/Document.cpp
+ > index af63b141..26f7312b 100644
+ > --- a/Source/WebCore/dom/Document.cpp
+ > +++ b/Source/WebCore/dom/Document.cpp
+ > @@ -3846,12 +3846,12 @@ static bool isValidNameNonASCII(const UChar* characters, unsigned length)
+ >      unsigned i = 0;
+ 
+ >      UChar32 c;
+ > -    U16_NEXT(characters, i, length, c)
+ > +    U16_NEXT(characters, i, length, c);
+ >      if (!isValidNameStart(c))
+ >          return false;
+ 
+ >      while (i < length) {
+ > -        U16_NEXT(characters, i, length, c)
+ > +        U16_NEXT(characters, i, length, c);
 
-	$ git am v1-1-2-package-qt5webkit-convert-patch-to-git-format-and-re-number.patch
-	$ git am v1-2-2-package-qt5webkit-add-patch-to-fix-ICU-related-compile-failure.patch
+This looks very similar to our recent webkitgtk / wpewebkit patches:
 
-or (for non-git):
+https://git.buildroot.net/buildroot/commit/?id=8f8abbeec33ce8dfc0e3b14d2c352210634ce28c
 
-	$ patch -p 1 < v1-1-2-package-qt5webkit-convert-patch-to-git-format-and-re-number.patch
-	$ patch -p 2 < v1-2-2-package-qt5webkit-add-patch-to-fix-ICU-related-compile-failure.patch
-
-Regards,
-Peter
-
-[1] https://patchwork.ozlabs.org/project/buildroot/list/
-[2] https://patchwork.ozlabs.org/patch/1232425/
-[3] https://patchwork.ozlabs.org/patch/1232424/
-
->
-> Best regards
-> Andrea S.
+-- 
+Bye, Peter Korsgaard
