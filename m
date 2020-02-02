@@ -1,96 +1,55 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 2 Feb 2020 19:42:45 +0100
-Subject: [Buildroot] Qt5 Webkit fails to compile
-In-Reply-To: <CAPmASevmB9AZ7yOMmR3dBPcc4-4Ra2NOgfGV-J=4TXy=_cxGmw@mail.gmail.com>
-References: <CAPmASevmB9AZ7yOMmR3dBPcc4-4Ra2NOgfGV-J=4TXy=_cxGmw@mail.gmail.com>
-Message-ID: <20200202194245.46e18d8e@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 2 Feb 2020 20:02:05 +0100
+Subject: [Buildroot] [PATCH v9 1/3] package/weston-imx: Split weston-imx
+ off from weston
+In-Reply-To: <67840919-8E24-45D8-AA29-58A0E9C58693@walle.cc>
+References: <20200202071646.4744-1-james.hilliard1@gmail.com>
+ <67840919-8E24-45D8-AA29-58A0E9C58693@walle.cc>
+Message-ID: <20200202190205.GA14722@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andrea,
+Michael, All,
 
-On Sun, 2 Feb 2020 18:25:14 +0100, Andrea Simeoni <andreasimeoni73@gmail.com> wrote:
+On 2020-02-02 17:42 +0100, Michael Walle spake thusly:
+> Am 2. Februar 2020 08:16:44 MEZ schrieb James Hilliard <james.hilliard1@gmail.com>:
+> >This is in preparation for migration of weston to the meson build
+> >system.
+> >Since weston-imx is based off of a much older version of weston it is
+> >difficult to maintain as part of the weston package.
+> >
+> >Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >---
+> > package/Config.in                  |   1 +
+> > package/weston-imx/Config.in       | 108 ++++++++++++++++++++++
+> > package/weston-imx/weston-imx.hash |   2 +
+> > package/weston-imx/weston-imx.mk   | 144 +++++++++++++++++++++++++++++
+> 
+> I'm too late to this since this is already merged.. but now that
+> weston-imx is a separate package shouldn't it go into
+> packages/freescale-imx/? 
 
-> Hi! I'm building a slightly modified config for Raspberry Pi 3 (attached
-> the .config file).
-> The compilation of qt5webkit fails. This is the error:
-> 
-> platform/graphics/SegmentedFontData.cpp:65:9: error: expected ?;? before
-> ?if?
->          if (!containsCharacter(c))
->          ^~
-> 
-> the line before is:
-> 
->         U16_NEXT(characters, i, length, c)
-> 
-> and U16_NEXT is defined in uft16.h as:
-> 
-> #define U16_NEXT(s, i, length, c) { \
->     (c)=(s)[(i)++]; \
->     if(U16_IS_LEAD(c)) { \
->         uint16_t __c2; \
->         if((i)<(length) && U16_IS_TRAIL(__c2=(s)[(i)])) { \
->             ++(i); \
->             (c)=U16_GET_SUPPLEMENTARY((c), __c2); \
->         } \
->     } \
-> }
-> 
-> Is there something other I need to add in the configuration?
+I also considered it, but decided against eventually, with the reasoning
+that I prefer to have it next to weston so it bugs me every time I try
+to auto-complete /package/west<TAB>, enough so that one day I get enough
+and kill it with fire and rage.
 
-Detected the same failure while preparing the the Qt-5.12.7 version bump,
-fixed by the following qt5webkit patch (proper buildroot patch will
-follow soon):
+Seriously, though, yes, I prefer to have it next to the vanilla one, but
+that was just personal preference. Had the patch moved it to the IMX sub
+directory, I might have left it there.
 
-diff --git a/Source/WebCore/dom/Document.cpp b/Source/WebCore/dom/Document.cpp
-index af63b141..26f7312b 100644
---- a/Source/WebCore/dom/Document.cpp
-+++ b/Source/WebCore/dom/Document.cpp
-@@ -3846,12 +3846,12 @@ static bool isValidNameNonASCII(const UChar* characters, unsigned length)
-     unsigned i = 0;
- 
-     UChar32 c;
--    U16_NEXT(characters, i, length, c)
-+    U16_NEXT(characters, i, length, c);
-     if (!isValidNameStart(c))
-         return false;
- 
-     while (i < length) {
--        U16_NEXT(characters, i, length, c)
-+        U16_NEXT(characters, i, length, c);
-         if (!isValidNamePart(c))
-             return false;
-     }
-@@ -3914,7 +3914,7 @@ bool Document::parseQualifiedName(const String& qualifiedName, String& prefix, S
-     const UChar* s = qualifiedName.characters();
-     for (unsigned i = 0; i < length;) {
-         UChar32 c;
--        U16_NEXT(s, i, length, c)
-+        U16_NEXT(s, i, length, c);
-         if (c == ':') {
-             if (sawColon) {
-                 ec = NAMESPACE_ERR;
-diff --git a/Source/WebCore/platform/graphics/SegmentedFontData.cpp b/Source/WebCore/platform/graphics/SegmentedFontData.cpp
-index efb20a8c..99b3e86c 100644
---- a/Source/WebCore/platform/graphics/SegmentedFontData.cpp
-+++ b/Source/WebCore/platform/graphics/SegmentedFontData.cpp
-@@ -61,7 +61,7 @@ bool SegmentedFontData::containsCharacters(const UChar* characters, int length)
- {
-     UChar32 c;
-     for (int i = 0; i < length; ) {
--        U16_NEXT(characters, i, length, c)
-+        U16_NEXT(characters, i, length, c);
-         if (!containsCharacter(c))
-             return false;
-     }
+Anyway, too late now! ;-)
 
 Regards,
-Peter
+Yann E. MORIN.
 
-> 
-> Thanks in advance
-> Andrea S.
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
