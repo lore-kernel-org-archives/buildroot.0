@@ -1,44 +1,36 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 2 Feb 2020 09:48:35 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/qt5base: add patches to fix
- CVE-2020-0569 and CVE-2020-0570 for latest
-In-Reply-To: <87sgjuorlh.fsf@dell.be.48ers.dk>
-References: <20200130211335.24913-1-ps.report@gmx.net>
- <20200130211335.24913-2-ps.report@gmx.net>
- <87sgjuorlh.fsf@dell.be.48ers.dk>
-Message-ID: <20200202094835.0613f372@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 2 Feb 2020 09:51:50 +0100
+Subject: [Buildroot] [git commit] package/libevent: do not drop python
+ script with python 3
+Message-ID: <20200202084059.66EE8818ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=f0ec49f09b244598d1adde4a7f918d4d31050a42
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 01 Feb 2020 23:44:26 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
+python script is compatible with python3 since 2.1.10 and
+https://github.com/libevent/libevent/commit/532a8cc301db39e82166b4fe98146534fdc242ce
 
-> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
->
->  > Add upstream patches to fix CVE-2020-0569 and CVE-2020-0570 for
->  > latest qt version (for details see [1]).
->
->  > [1] https://www.openwall.com/lists/oss-security/2020/01/30/1
->
->  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->
-> Committed after extending the commit message a bit, thanks.
->
-> I see from the advisory that there is a 5.12.7 version with this fix
-> included. Any specific reason why we don't bump the version instead?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libevent/libevent.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Because the advisory states 'fixed 5.12.7 (future)'...
-
->
-> https://download.qt.io/archive/qt/5.12/5.12.7/
->
-
-...and the version is only available since two days (and the sha256 sums only since
-yesterday)..., but version bump  patch will follow soon ;-)
-
-Regards,
-Peter
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index a5ba7fdf6a..d604559313 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -24,7 +24,7 @@ endef
+ 
+ # libevent installs a python script to target - get rid of it if we
+ # don't have python support enabled
+-ifneq ($(BR2_PACKAGE_PYTHON),y)
++ifneq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+ LIBEVENT_POST_INSTALL_TARGET_HOOKS += LIBEVENT_REMOVE_PYSCRIPT
+ endif
+ 
