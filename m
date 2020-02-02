@@ -1,45 +1,26 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Feb 2020 15:00:10 +0100
-Subject: [Buildroot] [git commit] package/libpjsip: add openh264 support
-Message-ID: <20200202135030.EE974882E9@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Feb 2020 15:01:47 +0100
+Subject: [Buildroot] [PATCH v2] package/socat: bump to version 1.7.3.4
+In-Reply-To: <3bc4ff78a19cf6d375b296acc01b79c3491258ee.1578918942.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 13 Jan 2020 14:35:42 +0200")
+References: <3bc4ff78a19cf6d375b296acc01b79c3491258ee.1578918942.git.baruch@tkos.co.il>
+Message-ID: <87mua1nl4k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ed187bf15b7dd6d9945211d1c0671ebba905d64
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libpjsip/libpjsip.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ > Drop patch #2. Upstream commit d8a5d49c2d8359 includes stddef.h in a
+ > higher level header.
 
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 86cd31fc81..655ab4498c 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -35,7 +35,6 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-g722-codec \
- 	--disable-sdl \
- 	--disable-ffmpeg \
--	--disable-openh264 \
- 	--disable-ipp \
- 	--disable-silk \
- 	--with-external-srtp
-@@ -69,6 +68,13 @@ LIBPJSIP_CONF_OPTS += \
- 	--disable-gsm-codec
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBOPENH264),y)
-+LIBPJSIP_DEPENDENCIES += libopenh264
-+LIBPJSIP_CONF_OPTS += --with-openh264=$(STAGING_DIR)/usr
-+else
-+LIBPJSIP_CONF_OPTS += --disable-openh264
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- LIBPJSIP_DEPENDENCIES += libopenssl
- LIBPJSIP_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > v2: Fix md5 hash
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
