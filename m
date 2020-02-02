@@ -1,26 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Feb 2020 15:01:47 +0100
-Subject: [Buildroot] [PATCH v2] package/socat: bump to version 1.7.3.4
-In-Reply-To: <3bc4ff78a19cf6d375b296acc01b79c3491258ee.1578918942.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 13 Jan 2020 14:35:42 +0200")
-References: <3bc4ff78a19cf6d375b296acc01b79c3491258ee.1578918942.git.baruch@tkos.co.il>
-Message-ID: <87mua1nl4k.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 2 Feb 2020 15:02:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libpjsip: add openh264 support
+In-Reply-To: <20200202135352.3841459-1-fontaine.fabrice@gmail.com>
+References: <20200202135352.3841459-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200202140200.GB25002@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Fabrice, All,
 
- > Drop patch #2. Upstream commit d8a5d49c2d8359 includes stddef.h in a
- > higher level header.
+On 2020-02-02 14:53 +0100, Fabrice Fontaine spake thusly:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > v2: Fix md5 hash
+Applied to master, thanks.
 
-Committed, thanks.
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libpjsip/libpjsip.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+> index 86cd31fc81..655ab4498c 100644
+> --- a/package/libpjsip/libpjsip.mk
+> +++ b/package/libpjsip/libpjsip.mk
+> @@ -35,7 +35,6 @@ LIBPJSIP_CONF_OPTS = \
+>  	--disable-g722-codec \
+>  	--disable-sdl \
+>  	--disable-ffmpeg \
+> -	--disable-openh264 \
+>  	--disable-ipp \
+>  	--disable-silk \
+>  	--with-external-srtp
+> @@ -69,6 +68,13 @@ LIBPJSIP_CONF_OPTS += \
+>  	--disable-gsm-codec
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBOPENH264),y)
+> +LIBPJSIP_DEPENDENCIES += libopenh264
+> +LIBPJSIP_CONF_OPTS += --with-openh264=$(STAGING_DIR)/usr
+> +else
+> +LIBPJSIP_CONF_OPTS += --disable-openh264
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+>  LIBPJSIP_DEPENDENCIES += libopenssl
+>  LIBPJSIP_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
