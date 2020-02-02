@@ -1,21 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Feb 2020 21:10:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpjsip: add sdl2 support
-In-Reply-To: <20200202163003.143259-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 2 Feb 2020 17:30:03 +0100")
-References: <20200202163003.143259-1-fontaine.fabrice@gmail.com>
-Message-ID: <87sgjsn41e.fsf@dell.be.48ers.dk>
+Date: Sun, 2 Feb 2020 21:06:20 +0100
+Subject: [Buildroot] [git commit] package/nginx-modsecurity: depends on
+ BR2_PACKAGE_NGINX_HTTP
+Message-ID: <20200202200006.5C29488487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=10684bbc901107d54766dec65787740f0516a6a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/7babc12094f4d490569556824a2029e5f08ff866
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nginx-modsecurity/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
+index 68f6a81045..aa9d53a3fe 100644
+--- a/package/nginx-modsecurity/Config.in
++++ b/package/nginx-modsecurity/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NGINX_MODSECURITY
+ 	bool "nginx-modsecurity"
++	depends on BR2_PACKAGE_NGINX_HTTP
+ 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
+ 	depends on !BR2_STATIC_LIBS # libmodsecurity
+ 	select BR2_PACKAGE_PCRE # libmodsecurity
+@@ -12,4 +13,5 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ 	  https://github.com/SpiderLabs/ModSecurity-nginx
+ 
+ comment "nginx-modsecurity needs a toolchain w/ C++, dynamic library"
++	depends on BR2_PACKAGE_NGINX_HTTP
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
