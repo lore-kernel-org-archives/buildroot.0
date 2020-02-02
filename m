@@ -1,99 +1,81 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun,  2 Feb 2020 20:08:24 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/qt5webkit: add patch to fix ICU
- related compile failure
-In-Reply-To: <20200202190824.9856-1-ps.report@gmx.net>
-References: <20200202190824.9856-1-ps.report@gmx.net>
-Message-ID: <20200202190824.9856-2-ps.report@gmx.net>
+Date: Sun,  2 Feb 2020 20:08:23 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/qt5webkit: convert patch to git
+ format and re-number
+Message-ID: <20200202190824.9856-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes (usage of ICU U16_NEXT() macro without trailing semicolon):
-
-  platform/graphics/SegmentedFontData.cpp:65:9: error: expected ?;? before ?if?
-  dom/Document.cpp:3850:5: error: expected ?;? before ?if?
-  dom/Document.cpp:3855:9: error: expected ?;? before ?if?
-  dom/Document.cpp:3918:9: error: expected ?;? before ?if?
+Convert patch 0005-Fix-installation-of-class-headers.patch to git
+format and re-number it to 0004-Fix-installation-of-class-headers.patch.
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...005-Fix-ICU-related-compile-failures.patch | 67 +++++++++++++++++++
- 1 file changed, 67 insertions(+)
- create mode 100644 package/qt5/qt5webkit/5.9.1/0005-Fix-ICU-related-compile-failures.patch
+ ...4-Fix-installation-of-class-headers.patch} | 32 +++++++++++++++----
+ 1 file changed, 25 insertions(+), 7 deletions(-)
+ rename package/qt5/qt5webkit/5.9.1/{0005-Fix-installation-of-class-headers.patch => 0004-Fix-installation-of-class-headers.patch} (85%)
 
-diff --git a/package/qt5/qt5webkit/5.9.1/0005-Fix-ICU-related-compile-failures.patch b/package/qt5/qt5webkit/5.9.1/0005-Fix-ICU-related-compile-failures.patch
-new file mode 100644
-index 0000000000..1a99eb7f84
---- /dev/null
-+++ b/package/qt5/qt5webkit/5.9.1/0005-Fix-ICU-related-compile-failures.patch
-@@ -0,0 +1,67 @@
-+From 38e3436db7222ac403a405db7e0fd1d472f1704a Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 2 Feb 2020 10:51:00 +0100
-+Subject: [PATCH] Fix ICU related compile failures.
+diff --git a/package/qt5/qt5webkit/5.9.1/0005-Fix-installation-of-class-headers.patch b/package/qt5/qt5webkit/5.9.1/0004-Fix-installation-of-class-headers.patch
+similarity index 85%
+rename from package/qt5/qt5webkit/5.9.1/0005-Fix-installation-of-class-headers.patch
+rename to package/qt5/qt5webkit/5.9.1/0004-Fix-installation-of-class-headers.patch
+index abddfe5d14..92aab57111 100644
+--- a/package/qt5/qt5webkit/5.9.1/0005-Fix-installation-of-class-headers.patch
++++ b/package/qt5/qt5webkit/5.9.1/0004-Fix-installation-of-class-headers.patch
+@@ -1,4 +1,10 @@
+-Fix installation of class headers
++From 7d763d441fd4fa78553a818ee75ac477eb6dbcbe Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
++Date: Sun, 2 Feb 2020 10:48:50 +0100
++Subject: [PATCH] Fix installation of class headers
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
-+
-+The ICU macro U16_NEXT() needs a trailing semicolon.
-+
-+Fixes:
-+
-+  platform/graphics/SegmentedFontData.cpp:65:9: error: expected ?;? before ?if?
-+  dom/Document.cpp:3850:5: error: expected ?;? before ?if?
-+  dom/Document.cpp:3855:9: error: expected ?;? before ?if?
-+  dom/Document.cpp:3918:9: error: expected ?;? before ?if?
-+
+ 
+ Since Qt 5.11 (see commit [1]), the key word HEADER_CLASSES has been
+ removed. It has been replaced by a new variable GENERATED_HEADER_FILES.
+@@ -9,9 +15,17 @@ HEADER_FILES.
+ [1]: https://github.com/qt/qtbase/commit/9c4c136bc9f29bab1cc9684dfced55a92a8bbe96
+ 
+ Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+-diff -Nurd qtwebkit-opensource-src-5.9.1.orig/include/QtWebKit/headers.pri qtwebkit-opensource-src-5.9.1/include/QtWebKit/headers.pri
+---- qtwebkit-opensource-src-5.9.1.orig/include/QtWebKit/headers.pri	2018-06-29 09:21:06.395038976 -0400
+-+++ qtwebkit-opensource-src-5.9.1/include/QtWebKit/headers.pri	2018-06-29 17:37:52.500020060 -0400
++[Converted to git formated patch]
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ Source/WebCore/dom/Document.cpp                        | 6 +++---
-+ Source/WebCore/platform/graphics/SegmentedFontData.cpp | 2 +-
-+ 2 files changed, 4 insertions(+), 4 deletions(-)
++ include/QtWebKit/headers.pri        | 3 +--
++ include/QtWebKitWidgets/headers.pri | 3 +--
++ 2 files changed, 2 insertions(+), 4 deletions(-)
 +
-+diff --git a/Source/WebCore/dom/Document.cpp b/Source/WebCore/dom/Document.cpp
-+index af63b141..26f7312b 100644
-+--- a/Source/WebCore/dom/Document.cpp
-++++ b/Source/WebCore/dom/Document.cpp
-+@@ -3846,12 +3846,12 @@ static bool isValidNameNonASCII(const UChar* characters, unsigned length)
-+     unsigned i = 0;
-+ 
-+     UChar32 c;
-+-    U16_NEXT(characters, i, length, c)
-++    U16_NEXT(characters, i, length, c);
-+     if (!isValidNameStart(c))
-+         return false;
-+ 
-+     while (i < length) {
-+-        U16_NEXT(characters, i, length, c)
-++        U16_NEXT(characters, i, length, c);
-+         if (!isValidNamePart(c))
-+             return false;
-+     }
-+@@ -3914,7 +3914,7 @@ bool Document::parseQualifiedName(const String& qualifiedName, String& prefix, S
-+     const UChar* s = qualifiedName.characters();
-+     for (unsigned i = 0; i < length;) {
-+         UChar32 c;
-+-        U16_NEXT(s, i, length, c)
-++        U16_NEXT(s, i, length, c);
-+         if (c == ':') {
-+             if (sawColon) {
-+                 ec = NAMESPACE_ERR;
-+diff --git a/Source/WebCore/platform/graphics/SegmentedFontData.cpp b/Source/WebCore/platform/graphics/SegmentedFontData.cpp
-+index efb20a8c..99b3e86c 100644
-+--- a/Source/WebCore/platform/graphics/SegmentedFontData.cpp
-++++ b/Source/WebCore/platform/graphics/SegmentedFontData.cpp
-+@@ -61,7 +61,7 @@ bool SegmentedFontData::containsCharacters(const UChar* characters, int length)
-+ {
-+     UChar32 c;
-+     for (int i = 0; i < length; ) {
-+-        U16_NEXT(characters, i, length, c)
-++        U16_NEXT(characters, i, length, c);
-+         if (!containsCharacter(c))
-+             return false;
-+     }
++diff --git a/include/QtWebKit/headers.pri b/include/QtWebKit/headers.pri
++index 6775f3a6..3a5c14cd 100644
++--- a/include/QtWebKit/headers.pri
+++++ b/include/QtWebKit/headers.pri
+ @@ -1,5 +1,4 @@
+ -SYNCQT.HEADER_FILES = WebKit/qt/Api/qwebdatabase.h WebKit/qt/Api/qwebelement.h WebKit/qt/Api/qwebhistory.h WebKit/qt/Api/qwebhistoryinterface.h WebKit/qt/Api/qwebkitglobal.h WebKit/qt/Api/qwebkitplatformplugin.h WebKit/qt/Api/qwebpluginfactory.h WebKit/qt/Api/qwebsecurityorigin.h WebKit/qt/Api/qwebsettings.h ../include/QtWebKit/qtwebkitversion.h ../include/QtWebKit/QtWebKit 
+ -SYNCQT.HEADER_CLASSES = ../include/QtWebKit/QWebDatabase ../include/QtWebKit/QWebElement ../include/QtWebKit/QWebElementCollection ../include/QtWebKit/QWebHistoryItem ../include/QtWebKit/QWebHistory ../include/QtWebKit/QWebHistoryInterface ../include/QtWebKit/QWebSelectData ../include/QtWebKit/QWebSelectMethod ../include/QtWebKit/QWebNotificationData ../include/QtWebKit/QWebNotificationPresenter ../include/QtWebKit/QWebHapticFeedbackPlayer ../include/QtWebKit/QWebTouchModifier ../include/QtWebKit/QWebFullScreenVideoHandler ../include/QtWebKit/QWebSpellChecker ../include/QtWebKit/QWebKitPlatformPlugin ../include/QtWebKit/QWebPluginFactory ../include/QtWebKit/QWebSecurityOrigin ../include/QtWebKit/QWebSettings ../include/QtWebKit/QtWebKitVersion 
+@@ -19,9 +33,10 @@ diff -Nurd qtwebkit-opensource-src-5.9.1.orig/include/QtWebKit/headers.pri qtweb
+  SYNCQT.PRIVATE_HEADER_FILES = WebKit/qt/Api/qhttpheader_p.h WebKit/qt/Api/qwebdatabase_p.h WebKit/qt/Api/qwebelement_p.h WebKit/qt/Api/qwebhistory_p.h WebKit/qt/Api/qwebplugindatabase_p.h WebKit/qt/Api/qwebscriptworld.h WebKit/qt/Api/qwebscriptworld_p.h WebKit/qt/Api/qwebsecurityorigin_p.h WebKit2/UIProcess/API/qt/qquicknetworkreply_p.h WebKit2/UIProcess/API/qt/qquicknetworkrequest_p.h WebKit2/UIProcess/API/qt/qquickurlschemedelegate_p.h WebKit2/UIProcess/API/qt/qquickwebpage_p.h WebKit2/UIProcess/API/qt/qquickwebpage_p_p.h WebKit2/UIProcess/API/qt/qquickwebview_p.h WebKit2/UIProcess/API/qt/qquickwebview_p_p.h WebKit2/UIProcess/API/qt/qtwebsecurityorigin_p.h WebKit2/UIProcess/API/qt/qwebchannelwebkittransport_p.h WebKit2/UIProcess/API/qt/qwebdownloaditem_p.h WebKit2/UIProcess/API/qt/qwebdownloaditem_p_p.h WebKit2/UIProcess/API/qt/qwebiconimageprovider_p.h WebKit2/UIProcess/API/qt/qwebkittest_p.h WebKit2/UIProcess/API/qt/qwebloadrequest_p.h WebKit2/UIProcess/API/qt/qwebnavigationhistory_p.h WebKit2/UIProcess/API/qt/qwebnavigationhistory_p_p.h WebKit2/UIProcess/API/qt/qwebnavigationrequest_p.h WebKit2/UIProcess/API/qt/qwebpermissionrequest_p.h WebKit2/UIProcess/API/qt/qwebpreferences_p.h WebKit2/UIProcess/API/qt/qwebpreferences_p_p.h WebKit2/UIProcess/API/qt/raw/qrawwebview_p.h WebKit2/UIProcess/API/qt/raw/qrawwebview_p_p.h WebKit2/UIProcess/API/qt/tests/bytearraytestdata.h WebKit2/UIProcess/API/qt/tests/testwindow.h WebKit2/UIProcess/API/qt/tests/util.h 
+  SYNCQT.INJECTED_PRIVATE_HEADER_FILES = 
+  SYNCQT.QPA_HEADER_FILES = 
+-diff -Nurd qtwebkit-opensource-src-5.9.1.orig/include/QtWebKitWidgets/headers.pri qtwebkit-opensource-src-5.9.1/include/QtWebKitWidgets/headers.pri
+---- qtwebkit-opensource-src-5.9.1.orig/include/QtWebKitWidgets/headers.pri	2018-06-29 09:21:06.391705602 -0400
+-+++ qtwebkit-opensource-src-5.9.1/include/QtWebKitWidgets/headers.pri	2018-06-29 17:38:47.660648435 -0400
++diff --git a/include/QtWebKitWidgets/headers.pri b/include/QtWebKitWidgets/headers.pri
++index 9d386e29..2b8b095c 100644
++--- a/include/QtWebKitWidgets/headers.pri
+++++ b/include/QtWebKitWidgets/headers.pri
+ @@ -1,5 +1,4 @@
+ -SYNCQT.HEADER_FILES = WebKit/qt/WidgetApi/qgraphicswebview.h WebKit/qt/WidgetApi/qwebframe.h WebKit/qt/WidgetApi/qwebinspector.h WebKit/qt/WidgetApi/qwebpage.h WebKit/qt/WidgetApi/qwebview.h ../include/QtWebKitWidgets/qtwebkitwidgetsversion.h ../include/QtWebKitWidgets/QtWebKitWidgets 
+ -SYNCQT.HEADER_CLASSES = ../include/QtWebKitWidgets/QGraphicsWebView ../include/QtWebKitWidgets/QWebHitTestResult ../include/QtWebKitWidgets/QWebFrame ../include/QtWebKitWidgets/QWebInspector ../include/QtWebKitWidgets/QWebPage ../include/QtWebKitWidgets/QWebView ../include/QtWebKitWidgets/QtWebKitWidgetsVersion 
+@@ -29,3 +44,6 @@ diff -Nurd qtwebkit-opensource-src-5.9.1.orig/include/QtWebKitWidgets/headers.pr
+  SYNCQT.PRIVATE_HEADER_FILES = WebKit/qt/WidgetApi/qwebframe_p.h WebKit/qt/WidgetApi/qwebinspector_p.h WebKit/qt/WidgetApi/qwebpage_p.h WebKit/qt/WidgetApi/qwebviewaccessible_p.h 
+  SYNCQT.INJECTED_PRIVATE_HEADER_FILES = 
+  SYNCQT.QPA_HEADER_FILES = 
 +-- 
 +2.25.0
 +
