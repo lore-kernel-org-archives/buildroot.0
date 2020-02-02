@@ -1,121 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  2 Feb 2020 17:20:22 +0100
-Subject: [Buildroot] [PATCH 1/3] package/kodi: add optional support for
- wayland
-Message-ID: <20200202162024.21405-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  2 Feb 2020 17:27:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nginx-modsecurity: depends on
+ BR2_PACKAGE_NGINX_HTTP
+Message-ID: <20200202162703.142811-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see upstream PR 12664.
+Fixes:
+ - http://autobuild.buildroot.org/results/7babc12094f4d490569556824a2029e5f08ff866
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/kodi/Config.in | 44 +++++++++++++++++++++++++++++++++++++++---
- package/kodi/kodi.mk   | 16 +++++++++++++++
- 2 files changed, 57 insertions(+), 3 deletions(-)
+ package/nginx-modsecurity/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 65e7768d6d..0a793abe37 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -28,6 +28,27 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
+index 68f6a81045..aa9d53a3fe 100644
+--- a/package/nginx-modsecurity/Config.in
++++ b/package/nginx-modsecurity/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NGINX_MODSECURITY
+ 	bool "nginx-modsecurity"
++	depends on BR2_PACKAGE_NGINX_HTTP
+ 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
+ 	depends on !BR2_STATIC_LIBS # libmodsecurity
+ 	select BR2_PACKAGE_PCRE # libmodsecurity
+@@ -12,4 +13,5 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ 	  https://github.com/SpiderLabs/ModSecurity-nginx
  
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GL
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_PACKAGE_WAYLAND # waylandpp
-+	select BR2_PACKAGE_WAYLANDPP
-+	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GLES
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_PACKAGE_WAYLAND # waylandpp
-+	select BR2_PACKAGE_WAYLANDPP
-+	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+
- config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
- 	bool
- 	default y
-@@ -190,6 +211,17 @@ config BR2_PACKAGE_KODI_PLATFORM_RBPI
- 	select BR2_PACKAGE_LIBINPUT
- 	select BR2_PACKAGE_LIBXKBCOMMON
- 
-+config BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL
-+	bool "Wayland/OpenGL"
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GL
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+
-+config BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES
-+	bool "Wayland/GLES"
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GLES
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+
- config BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 	bool "X11/OpenGL"
- 	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
-@@ -243,13 +275,19 @@ config BR2_PACKAGE_KODI_LIBUSB
- 
- config BR2_PACKAGE_KODI_LIBVA
- 	bool "va"
--	depends on BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-+	depends on \
-+		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL || \
-+		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES || \
-+		BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 	select BR2_PACKAGE_LIBVA
- 	help
- 	  Enable libva support.
- 
--comment "libva support needs platform 'X11/OpenGL'"
--	depends on !BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-+comment "libva support needs platform 'Wayland' or 'X11/OpenGL'"
-+	depends on \
-+		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL && \
-+		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES && \
-+		!BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 
- config BR2_PACKAGE_KODI_LIBVDPAU
- 	bool "vdpau"
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 1036151a89..2f2a92a889 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -174,6 +174,22 @@ KODI_CONF_OPTS += -DCORE_PLATFORM_NAME=rbpi
- KODI_DEPENDENCIES += libinput libxkbcommon rpi-userland
- endif
- 
-+ifeq ($(BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL),y)
-+KODI_CONF_OPTS += \
-+	-DCORE_PLATFORM_NAME=wayland \
-+	-DWAYLAND_RENDER_SYSTEM=gl
-+KODI_DEPENDENCIES += libegl libgl libglu libxkbcommon waylandpp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES),y)
-+KODI_CONF_OPTS += \
-+	-DCORE_PLATFORM_NAME=wayland \
-+	-DWAYLAND_RENDER_SYSTEM=gles
-+KODI_C_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
-+KODI_CXX_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
-+KODI_DEPENDENCIES += libegl libgles libxkbcommon waylandpp
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL),y)
- KODI_CONF_OPTS += -DCORE_PLATFORM_NAME=x11
- KODI_DEPENDENCIES += libegl libglu libgl xlib_libX11 xlib_libXext \
+ comment "nginx-modsecurity needs a toolchain w/ C++, dynamic library"
++	depends on BR2_PACKAGE_NGINX_HTTP
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
 -- 
-2.20.1
+2.24.1
