@@ -1,400 +1,388 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Feb 2020 10:58:07 +0100
-Subject: [Buildroot] [git commit] package/weston: bump to version 8.0.0
-Message-ID: <20200202095814.9EA7F80266@busybox.osuosl.org>
+Date: Sun, 2 Feb 2020 10:37:05 +0100
+Subject: [Buildroot] [git commit] package/weston-imx: split weston-imx off
+ from weston
+Message-ID: <20200202095814.957A38823D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f217669de10f61d77e9ff834d9efdcee4efdf04
+commit: https://git.buildroot.net/buildroot/commit/?id=4c58c0ace16e3d9ad190b55f193932853a25396b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Lots of changes with this big leap:
-  - autotools is deprecated and replaced with meson
-  - demo clients now need pango
+Stock weston has been migrated to meson, now the only buildsystem
+starting with version 8, but the IMX fork is still stuck With the
+older version 6, which only has the autotools buildsystem.
 
----------------------------
+As a consequence, either we make weston a hybrid package that calls
+to the appropriate package macro infra, or we split the IMX fork off
+to its own package.
 
-The dbus option in autotools is replaced with launcher-logind in meson.
+meson and autotools have two different ways to express passing options,
+so we can't factorise the code paths to support both buildsystems:
+we'd need to duplicate those depending on the variant used.
 
-Replaced WESTON_NATIVE_BACKEND with backend-default in meson.
+So, it's much more sensible to spin he IMX variant away. Besides, that
+will make it easier to drop it, should it eventually gets merged
+upstream (or the fork just dies off).
 
-Added optional pipewire dependency.
-
-Added patch fixing missing include in os-compatibility.c.
+We ensure that the two variants, vanilla and IMX, can't get selected at
+the same time, by making weston-imx depend on !weston, and hiding it
+behind IMX conditionals.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998 at free.fr:
+  - drop !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL dependency from stock weston
+  - make weston-imx depends on !weston
+  - rework commit log
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ally-include-sys-mman.h-in-os-compatibili.patch |  38 +++++++
- ...add-missing-defines-for-pre-v3.17-kernels.patch |  42 ++++++++
- package/weston/Config.in                           |  35 ++++++
- package/weston/weston.hash                         |  10 +-
- package/weston/weston.mk                           | 118 ++++++++++++---------
- 5 files changed, 185 insertions(+), 58 deletions(-)
+ package/Config.in                  |   1 +
+ package/weston-imx/Config.in       | 115 +++++++++++++++++++++++++++++
+ package/weston-imx/weston-imx.hash |   2 +
+ package/weston-imx/weston-imx.mk   | 144 +++++++++++++++++++++++++++++++++++++
+ package/weston/weston.hash         |   2 -
+ package/weston/weston.mk           |  16 -----
+ 6 files changed, 262 insertions(+), 18 deletions(-)
 
-diff --git a/package/weston/0001-unconditionally-include-sys-mman.h-in-os-compatibili.patch b/package/weston/0001-unconditionally-include-sys-mman.h-in-os-compatibili.patch
+diff --git a/package/Config.in b/package/Config.in
+index c8f23c2712..d1b31d63fb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -342,6 +342,7 @@ comment "QT libraries and helper libraries"
+ endif
+ 	source "package/tekui/Config.in"
+ 	source "package/weston/Config.in"
++	source "package/weston-imx/Config.in"
+ 	source "package/x11r7/Config.in"
+ 
+ comment "X applications"
+diff --git a/package/weston-imx/Config.in b/package/weston-imx/Config.in
 new file mode 100644
-index 0000000000..0c632fbf35
+index 0000000000..712341b24e
 --- /dev/null
-+++ b/package/weston/0001-unconditionally-include-sys-mman.h-in-os-compatibili.patch
-@@ -0,0 +1,38 @@
-+From 888dd1ae6a0261230b2bc47079d7b20df8c05e68 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Sat, 1 Feb 2020 20:02:29 -0700
-+Subject: [PATCH] unconditionally include sys/mman.h in os-compatibility.c
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/weston-imx/Config.in
+@@ -0,0 +1,115 @@
++comment "weston-imx needs udev and a toolchain w/ locale, threads, dynamic library, headers >= 3.0"
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_STATIC_LIBS || \
++		!BR2_ENABLE_LOCALE
++	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
++	depends on !BR2_PACKAGE_WESTON
 +
-+Fixes:
-+../shared/os-compatibility.c:273:25: error: ???PROT_READ??? undeclared (first use in this function); did you mean ???LOCK_READ????
-+  map = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, file->fd, 0);
-+                         ^~~~~~~~~
-+                         LOCK_READ
++comment "weston-imx needs imx-gpu-viv with wyalnd output"
++	depends on (BR2_arm && BR2_ARM_EABIHF) || BR2_aarch64 # imx-gpu-viv
++	depends on !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
++	depends on !BR2_PACKAGE_WESTON
 +
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/wayland/weston/merge_requests/368]
-+---
-+ shared/os-compatibility.c | 2 --
-+ 1 file changed, 2 deletions(-)
++config BR2_PACKAGE_WESTON_IMX
++	bool "weston-imx"
++	depends on !BR2_STATIC_LIBS # wayland
++	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++	depends on BR2_ENABLE_LOCALE # libinput
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
++	depends on !BR2_PACKAGE_WESTON
++	select BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
++	select BR2_PACKAGE_LIBXKBCOMMON
++	select BR2_PACKAGE_CAIRO
++	select BR2_PACKAGE_CAIRO_PNG
++	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBINPUT
++	select BR2_PACKAGE_LIBDRM
++	# Runtime dependency
++	select BR2_PACKAGE_XKEYBOARD_CONFIG
++	# Make sure at least one compositor is selected.
++	select BR2_PACKAGE_WESTON_IMX_FBDEV if !BR2_PACKAGE_WESTON_IMX_HAS_COMPOSITOR
++	help
++	  Weston is the reference implementation of a Wayland
++	  compositor, and a useful compositor in its own right.
++	  Weston has various backends that lets it run on Linux kernel
++	  modesetting and evdev input as well as under X11.
 +
-+diff --git a/shared/os-compatibility.c b/shared/os-compatibility.c
-+index 5e1ce479..ddc37807 100644
-+--- a/shared/os-compatibility.c
-++++ b/shared/os-compatibility.c
-+@@ -35,9 +35,7 @@
-+ #include <stdlib.h>
-+ #include <libweston/zalloc.h>
-+ 
-+-#ifdef HAVE_MEMFD_CREATE
-+ #include <sys/mman.h>
-+-#endif
-+ 
-+ #include "os-compatibility.h"
-+ 
-+-- 
-+2.20.1
++	  http://wayland.freedesktop.org/
 +
-diff --git a/package/weston/0002-add-missing-defines-for-pre-v3.17-kernels.patch b/package/weston/0002-add-missing-defines-for-pre-v3.17-kernels.patch
-new file mode 100644
-index 0000000000..39360f4fd2
---- /dev/null
-+++ b/package/weston/0002-add-missing-defines-for-pre-v3.17-kernels.patch
-@@ -0,0 +1,42 @@
-+From f43c98b23e0d7731cd8d7a9b4510c359f3df7930 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Sat, 1 Feb 2020 23:32:29 -0700
-+Subject: [PATCH] add missing defines for pre-v3.17 kernels
++if BR2_PACKAGE_WESTON_IMX
 +
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/wayland/weston/merge_requests/369]
-+---
-+ shared/os-compatibility.c | 16 ++++++++++++++++
-+ 1 file changed, 16 insertions(+)
++# Helper to make sure at least one compositor is selected.
++config BR2_PACKAGE_WESTON_IMX_HAS_COMPOSITOR
++	bool
 +
-+diff --git a/shared/os-compatibility.c b/shared/os-compatibility.c
-+index ddc37807..26c39e67 100644
-+--- a/shared/os-compatibility.c
-++++ b/shared/os-compatibility.c
-+@@ -39,6 +39,22 @@
-+ 
-+ #include "os-compatibility.h"
-+ 
-++#ifndef F_GET_SEALS
-++#define F_GET_SEALS	(1034)
-++#endif
-++
-++#ifndef F_SEAL_SHRINK
-++#define F_SEAL_SHRINK	0x0002
-++#endif
-++
-++#ifndef F_SEAL_GROW
-++#define F_SEAL_GROW	0x0004
-++#endif
-++
-++#ifndef F_SEAL_WRITE
-++#define F_SEAL_WRITE	0x0008
-++#endif
-++
-+ #define READONLY_SEALS (F_SEAL_SHRINK | F_SEAL_GROW | F_SEAL_WRITE)
-+ 
-+ int
-+-- 
-+2.20.1
++config BR2_PACKAGE_WESTON_IMX_DRM
++	bool "DRM compositor"
++	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
++	select BR2_PACKAGE_WESTON_IMX_HAS_COMPOSITOR
 +
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index f874b0cc6a..6a80285c62 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -33,6 +33,26 @@ config BR2_PACKAGE_WESTON
- 
- if BR2_PACKAGE_WESTON
- 
-+choice
-+	prompt "Backend default"
-+	depends on BR2_PACKAGE_WESTON_FBDEV || \
-+		BR2_PACKAGE_WESTON_DRM || \
-+		BR2_PACKAGE_WESTON_X11
++# Uses libgbm from mesa3d
++comment "DRM compositor needs an OpenGL EGL backend provided by mesa3d"
++	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
 +
-+config BR2_PACKAGE_WESTON_DEFAULT_BACKEND_FBDEV
-+	bool "fbdev"
-+	depends on BR2_PACKAGE_WESTON_FBDEV
++config BR2_PACKAGE_WESTON_IMX_FBDEV
++	bool "fbdev compositor"
 +
-+config BR2_PACKAGE_WESTON_DEFAULT_BACKEND_DRM
-+	bool "drm"
-+	depends on BR2_PACKAGE_WESTON_DRM
++# FreeRDP needs threads and !static, already the case for weston
++config BR2_PACKAGE_WESTON_IMX_RDP
++	bool "RDP compositor"
++	depends on BR2_USE_MMU # freerdp, libglib2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_USE_WCHAR # freerdp
++	depends on BR2_INSTALL_LIBSTDCPP # freerdp
++	select BR2_PACKAGE_FREERDP
++	select BR2_PACKAGE_WESTON_IMX_HAS_COMPOSITOR
++	help
++	  This enables the RDP backend, which allows accessing weston
++	  through the network with any RDP-compliant client.
 +
-+config BR2_PACKAGE_WESTON_DEFAULT_BACKEND_X11
-+	bool "X11"
-+	depends on BR2_PACKAGE_WESTON_X11
++	  Please note that one must pass those options to weston for RDP
++	  to be functional:
++	    --rdp-tls-cert=/path/to/server.crt
++	    --rdp-tls-key=/path/to/server.key
 +
-+endchoice
++	  By default, Buildroot installs such files in
++	  /etc/freerdp/server/ so you may want to change them in a
++	  post-build script or a rootfs overlay.
 +
- # Helper to make sure at least one compositor is selected.
- config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	bool
-@@ -100,7 +120,22 @@ comment "XWayland support needs libepoxy and X.org enabled"
- 
- config BR2_PACKAGE_WESTON_DEMO_CLIENTS
- 	bool "demo clients"
-+	depends on BR2_USE_MMU # pango
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # pango
-+	depends on BR2_INSTALL_LIBSTDCPP # pango
-+	depends on BR2_USE_WCHAR # pango
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	select BR2_PACKAGE_PANGO
- 	help
- 	  This enables the installation of Weston's demo clients.
- 
-+comment "demo clients needs an OpenGL ES provider, an OpenEGL-capable Wayland backend and a toolchain w/ wchar, threads, C++"
++comment "RDP compositor needs a toolchain w/ wchar, C++"
 +	depends on BR2_USE_MMU
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_HAS_LIBGLES || \
-+		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
 +
- endif
++config BR2_PACKAGE_WESTON_IMX_X11
++	bool "X11 compositor"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_WESTON_IMX_HAS_COMPOSITOR
++
++comment "X11 compositor needs X.org enabled"
++	depends on !BR2_PACKAGE_XORG7
++
++config BR2_PACKAGE_WESTON_IMX_XWAYLAND
++	bool "XWayland support"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_LIBEPOXY
++	select BR2_PACKAGE_CAIRO
++	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXCURSOR
++
++comment "XWayland support needs libepoxy and X.org enabled"
++	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
++
++config BR2_PACKAGE_WESTON_IMX_DEMO_CLIENTS
++	bool "demo clients"
++	help
++	  This enables the installation of Weston's demo clients.
++
++endif
+diff --git a/package/weston-imx/weston-imx.hash b/package/weston-imx/weston-imx.hash
+new file mode 100644
+index 0000000000..759a9b6554
+--- /dev/null
++++ b/package/weston-imx/weston-imx.hash
+@@ -0,0 +1,2 @@
++# locally computed
++sha256 f39f7a24a01b023aa204ad47977a6476c17a307769f29d408621a05b5cbbcfc7  weston-imx-rel_imx_4.9.51_8mq_ga.tar.gz
+diff --git a/package/weston-imx/weston-imx.mk b/package/weston-imx/weston-imx.mk
+new file mode 100644
+index 0000000000..e803fa3ee2
+--- /dev/null
++++ b/package/weston-imx/weston-imx.mk
+@@ -0,0 +1,144 @@
++################################################################################
++#
++# weston-imx
++#
++################################################################################
++
++WESTON_IMX_VERSION = rel_imx_4.9.51_8mq_ga
++WESTON_IMX_SITE = https://source.codeaurora.org/external/imx/weston-imx
++WESTON_IMX_SITE_METHOD = git
++WESTON_IMX_AUTORECONF = YES
++WESTON_IMX_LICENSE = MIT
++WESTON_IMX_LICENSE_FILES = COPYING
++
++WESTON_IMX_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
++	libxkbcommon pixman libpng jpeg udev cairo libinput libdrm \
++	$(if $(BR2_PACKAGE_WEBP),webp)
++
++WESTON_IMX_CONF_OPTS = \
++	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
++	--disable-headless-compositor \
++	--disable-colord \
++	--disable-devdocs \
++	--disable-setuid-install
++
++WESTON_IMX_MAKE_OPTS = \
++	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
++
++# Uses VIDIOC_EXPBUF, only available from 3.8+
++ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),)
++WESTON_IMX_CONF_OPTS += --disable-simple-dmabuf-v4l-client
++endif
++
++ifeq ($(BR2_PACKAGE_DBUS),y)
++WESTON_IMX_CONF_OPTS += --enable-dbus
++WESTON_IMX_DEPENDENCIES += dbus
++else
++WESTON_IMX_CONF_OPTS += --disable-dbus
++endif
++
++# weston-launch must be u+s root in order to work properly
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++define WESTON_IMX_PERMISSIONS
++	/usr/bin/weston-launch f 4755 0 0 - - - - -
++endef
++define WESTON_IMX_USERS
++	- - weston-launch -1 - - - - Weston launcher group
++endef
++WESTON_IMX_CONF_OPTS += --enable-weston-launch
++WESTON_IMX_DEPENDENCIES += linux-pam
++else
++WESTON_IMX_CONF_OPTS += --disable-weston-launch
++endif
++
++ifeq ($(BR2_PACKAGE_IMX_GPU_G2D),y)
++WESTON_IMX_DEPENDENCIES += imx-gpu-g2d
++# --enable-imxg2d actually disables it, so no CONF_OPTS
++else
++WESTON_IMX_CONF_OPTS += --disable-imxg2d
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND)$(BR2_PACKAGE_HAS_LIBGLES),yy)
++WESTON_IMX_CONF_OPTS += --enable-egl
++WESTON_IMX_DEPENDENCIES += libegl libgles
++else
++WESTON_IMX_CONF_OPTS += \
++	--disable-egl \
++	--disable-simple-dmabuf-drm-client \
++	--disable-simple-egl-clients
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_IMX_RDP),y)
++WESTON_IMX_DEPENDENCIES += freerdp
++WESTON_IMX_CONF_OPTS += --enable-rdp-compositor
++else
++WESTON_IMX_CONF_OPTS += --disable-rdp-compositor
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_IMX_FBDEV),y)
++WESTON_IMX_CONF_OPTS += \
++	--enable-fbdev-compositor \
++	WESTON_IMX_NATIVE_BACKEND=fbdev-backend.so
++else
++WESTON_IMX_CONF_OPTS += --disable-fbdev-compositor
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_IMX_DRM),y)
++WESTON_IMX_CONF_OPTS += \
++	--enable-drm-compositor \
++	WESTON_IMX_NATIVE_BACKEND=drm-backend.so
++else
++WESTON_IMX_CONF_OPTS += --disable-drm-compositor
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_IMX_X11),y)
++WESTON_IMX_CONF_OPTS += \
++	--enable-x11-compositor \
++	WESTON_IMX_NATIVE_BACKEND=x11-backend.so
++WESTON_IMX_DEPENDENCIES += libxcb xlib_libX11
++else
++WESTON_IMX_CONF_OPTS += --disable-x11-compositor
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_IMX_XWAYLAND),y)
++WESTON_IMX_CONF_OPTS += --enable-xwayland
++WESTON_IMX_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor
++else
++WESTON_IMX_CONF_OPTS += --disable-xwayland
++endif
++
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++WESTON_IMX_CONF_OPTS += --enable-vaapi-recorder
++WESTON_IMX_DEPENDENCIES += libva
++else
++WESTON_IMX_CONF_OPTS += --disable-vaapi-recorder
++endif
++
++ifeq ($(BR2_PACKAGE_LCMS2),y)
++WESTON_IMX_CONF_OPTS += --enable-lcms
++WESTON_IMX_DEPENDENCIES += lcms2
++else
++WESTON_IMX_CONF_OPTS += --disable-lcms
++endif
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++WESTON_IMX_CONF_OPTS += --enable-systemd-login --enable-systemd-notify
++WESTON_IMX_DEPENDENCIES += systemd
++else
++WESTON_IMX_CONF_OPTS += --disable-systemd-login --disable-systemd-notify
++endif
++
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++WESTON_IMX_CONF_OPTS += --enable-junit-xml
++WESTON_IMX_DEPENDENCIES += libxml2
++else
++WESTON_IMX_CONF_OPTS += --disable-junit-xml
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_IMX_DEMO_CLIENTS),y)
++WESTON_IMX_CONF_OPTS += --enable-demo-clients-install
++else
++WESTON_IMX_CONF_OPTS += --disable-demo-clients-install
++endif
++
++$(eval $(autotools-package))
 diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index c9b2d4b1ce..0be1855a86 100644
+index a2dddf7a5b..c9b2d4b1ce 100644
 --- a/package/weston/weston.hash
 +++ b/package/weston/weston.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2019-June/040661.html
--md5 e7b10710ef1eac82258f97bfd41fe534  weston-6.0.1.tar.xz
--sha1 3b39e454b3dc8dc32598790cfcc65728b448378b  weston-6.0.1.tar.xz
--sha256 bf2f6d5aae2e11cabb6bd69a76bcf9edb084f8c3e14ca769bea7234a513155b4  weston-6.0.1.tar.xz
--sha512 3da04ff9b884480ce0824950347185e55584e3938021fe62014423d3d51577eafdda8de650a5de6eb37a842130c9cb14c7a952a560f6be93ff973164363af3d9  weston-6.0.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-January/041147.html
-+md5 53e4810d852df0601d01fd986a5b22b3  weston-8.0.0.tar.xz
-+sha1 80200a9c677d34c2de52230be444bd03ecd84229  weston-8.0.0.tar.xz
-+sha256 7518b49b2eaa1c3091f24671bdcc124fd49fc8f1af51161927afa4329c027848  weston-8.0.0.tar.xz
-+sha512 74853b0c9cabbabe942a2d057b65e4e97b48dc5f4df6d7b9ffc10ec52bc787009b12b900be6b426551902b920b7308baa967b7489761641dc9c31cf90440950c  weston-8.0.0.tar.xz
+@@ -3,5 +3,3 @@ md5 e7b10710ef1eac82258f97bfd41fe534  weston-6.0.1.tar.xz
+ sha1 3b39e454b3dc8dc32598790cfcc65728b448378b  weston-6.0.1.tar.xz
+ sha256 bf2f6d5aae2e11cabb6bd69a76bcf9edb084f8c3e14ca769bea7234a513155b4  weston-6.0.1.tar.xz
+ sha512 3da04ff9b884480ce0824950347185e55584e3938021fe62014423d3d51577eafdda8de650a5de6eb37a842130c9cb14c7a952a560f6be93ff973164363af3d9  weston-6.0.1.tar.xz
+-# locally computed
+-sha256 0f0de7b7b1f65870139c95dde7abc19ed305631ae7c5d37c386db40cde108632  weston-rel_imx_4.9.51_8mq_ga.tar.gz
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 154ae38b83..ad15591e87 100644
+index ee3d3be87e..154ae38b83 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
-@@ -4,37 +4,33 @@
+@@ -4,16 +4,9 @@
  #
  ################################################################################
  
--WESTON_VERSION = 6.0.1
-+WESTON_VERSION = 8.0.0
+-ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
+-WESTON_VERSION = rel_imx_4.9.51_8mq_ga
+-WESTON_SITE = https://source.codeaurora.org/external/imx/weston-imx
+-WESTON_SITE_METHOD = git
+-WESTON_AUTORECONF = YES
+-else
+ WESTON_VERSION = 6.0.1
  WESTON_SITE = http://wayland.freedesktop.org/releases
  WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+-endif
  WESTON_LICENSE = MIT
  WESTON_LICENSE_FILES = COPYING
  
- WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
--	libxkbcommon pixman libpng jpeg udev cairo libinput libdrm \
--	$(if $(BR2_PACKAGE_WEBP),webp)
-+	libxkbcommon pixman libpng jpeg udev cairo libinput libdrm
+@@ -58,15 +51,6 @@ else
+ WESTON_CONF_OPTS += --disable-weston-launch
+ endif
  
- WESTON_CONF_OPTS = \
--	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
--	--disable-headless-compositor \
--	--disable-colord \
--	--disable-devdocs \
--	--disable-setuid-install \
--	--enable-autotools
+-ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
+-ifeq ($(BR2_PACKAGE_IMX_GPU_G2D),y)
+-WESTON_DEPENDENCIES += imx-gpu-g2d
+-# --enable-imxg2d actually disables it, so no CONF_OPTS
+-else
+-WESTON_CONF_OPTS += --disable-imxg2d
+-endif
+-endif
 -
--WESTON_MAKE_OPTS = \
--	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
--
--# Uses VIDIOC_EXPBUF, only available from 3.8+
--ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),)
--WESTON_CONF_OPTS += --disable-simple-dmabuf-v4l-client
-+	-Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
-+	-Dremoting=false \
-+	-Dbackend-headless=false \
-+	-Dcolor-management-colord=false
-+
-+ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_SYSTEMD),yy)
-+WESTON_CONF_OPTS += -Dlauncher-logind=true
-+WESTON_DEPENDENCIES += dbus systemd
-+else
-+WESTON_CONF_OPTS += -Dlauncher-logind=false
- endif
- 
--ifeq ($(BR2_PACKAGE_DBUS),y)
--WESTON_CONF_OPTS += --enable-dbus
--WESTON_DEPENDENCIES += dbus
-+ifeq ($(BR2_PACKAGE_WEBP),y)
-+WESTON_CONF_OPTS += -Dimage-webp=true
-+WESTON_DEPENDENCIES += webp
- else
--WESTON_CONF_OPTS += --disable-dbus
-+WESTON_CONF_OPTS += -Dimage-webp=false
- endif
- 
- # weston-launch must be u+s root in order to work properly
-@@ -45,93 +41,109 @@ endef
- define WESTON_USERS
- 	- - weston-launch -1 - - - - Weston launcher group
- endef
--WESTON_CONF_OPTS += --enable-weston-launch
-+WESTON_CONF_OPTS += -Dweston-launch=true
- WESTON_DEPENDENCIES += linux-pam
- else
--WESTON_CONF_OPTS += --disable-weston-launch
-+WESTON_CONF_OPTS += -Dweston-launch=false
-+endif
-+
-+# Uses VIDIOC_EXPBUF, only available from 3.8+
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
-+WESTON_CONF_OPTS +=	-Dsimple-clients=dmabuf-v4l
-+else
-+WESTON_CONF_OPTS +=	-Dsimple-clients=
- endif
- 
  ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND)$(BR2_PACKAGE_HAS_LIBGLES),yy)
--WESTON_CONF_OPTS += --enable-egl
-+WESTON_CONF_OPTS += -Drenderer-gl=true
+ WESTON_CONF_OPTS += --enable-egl
  WESTON_DEPENDENCIES += libegl libgles
- else
- WESTON_CONF_OPTS += \
--	--disable-egl \
--	--disable-simple-dmabuf-drm-client \
--	--disable-simple-egl-clients
-+	-Drenderer-gl=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
- WESTON_DEPENDENCIES += freerdp
--WESTON_CONF_OPTS += --enable-rdp-compositor
-+WESTON_CONF_OPTS += -Dbackend-rdp=true
- else
--WESTON_CONF_OPTS += --disable-rdp-compositor
-+WESTON_CONF_OPTS += -Dbackend-rdp=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
--WESTON_CONF_OPTS += \
--	--enable-fbdev-compositor \
--	WESTON_NATIVE_BACKEND=fbdev-backend.so
-+WESTON_CONF_OPTS += -Dbackend-fbdev=true
-+ifeq ($(BR2_PACKAGE_WESTON_DEFAULT_BACKEND_FBDEV),y)
-+WESTON_CONF_OPTS += -Dbackend-default=fbdev
-+endif
- else
--WESTON_CONF_OPTS += --disable-fbdev-compositor
-+WESTON_CONF_OPTS += -Dbackend-fbdev=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_DRM),y)
--WESTON_CONF_OPTS += \
--	--enable-drm-compositor \
--	WESTON_NATIVE_BACKEND=drm-backend.so
-+WESTON_CONF_OPTS += -Dbackend-drm=true
-+ifeq ($(BR2_PACKAGE_WESTON_DEFAULT_BACKEND_DRM),y)
-+WESTON_CONF_OPTS += -Dbackend-default=drm
-+endif
- else
--WESTON_CONF_OPTS += --disable-drm-compositor
-+WESTON_CONF_OPTS += -Dbackend-drm=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_X11),y)
--WESTON_CONF_OPTS += \
--	--enable-x11-compositor \
--	WESTON_NATIVE_BACKEND=x11-backend.so
-+WESTON_CONF_OPTS += -Dbackend-x11=true
-+ifeq ($(BR2_PACKAGE_WESTON_DEFAULT_BACKEND_X11),y)
-+WESTON_CONF_OPTS += -Dbackend-default=x11
-+endif
- WESTON_DEPENDENCIES += libxcb xlib_libX11
- else
--WESTON_CONF_OPTS += --disable-x11-compositor
-+WESTON_CONF_OPTS += -Dbackend-x11=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_XWAYLAND),y)
--WESTON_CONF_OPTS += --enable-xwayland
-+WESTON_CONF_OPTS += -Dxwayland=true
- WESTON_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor
- else
--WESTON_CONF_OPTS += --disable-xwayland
-+WESTON_CONF_OPTS += -Dxwayland=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBVA),y)
--WESTON_CONF_OPTS += --enable-vaapi-recorder
-+WESTON_CONF_OPTS += -Dbackend-drm-screencast-vaapi=true
- WESTON_DEPENDENCIES += libva
- else
--WESTON_CONF_OPTS += --disable-vaapi-recorder
-+WESTON_CONF_OPTS += -Dbackend-drm-screencast-vaapi=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LCMS2),y)
--WESTON_CONF_OPTS += --enable-lcms
-+WESTON_CONF_OPTS += -Dcolor-management-lcms=true
- WESTON_DEPENDENCIES += lcms2
- else
--WESTON_CONF_OPTS += --disable-lcms
-+WESTON_CONF_OPTS += -Dcolor-management-lcms=false
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--WESTON_CONF_OPTS += --enable-systemd-login --enable-systemd-notify
-+WESTON_CONF_OPTS += -Dsystemd=true
- WESTON_DEPENDENCIES += systemd
- else
--WESTON_CONF_OPTS += --disable-systemd-login --disable-systemd-notify
-+WESTON_CONF_OPTS += -Dsystemd=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
--WESTON_CONF_OPTS += --enable-junit-xml
-+WESTON_CONF_OPTS += -Dtest-junit-xml=true
- WESTON_DEPENDENCIES += libxml2
- else
--WESTON_CONF_OPTS += --disable-junit-xml
-+WESTON_CONF_OPTS += -Dtest-junit-xml=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PIPEWIRE)$(BR2_PACKAGE_WESTON_DRM),yy)
-+WESTON_CONF_OPTS += -Dpipewire=true
-+WESTON_DEPENDENCIES += pipewire
-+else
-+WESTON_CONF_OPTS += -Dpipewire=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
--WESTON_CONF_OPTS += --enable-demo-clients-install
-+WESTON_CONF_OPTS += -Ddemo-clients=true
-+WESTON_DEPENDENCIES += pango
- else
--WESTON_CONF_OPTS += --disable-demo-clients-install
-+WESTON_CONF_OPTS += -Ddemo-clients=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
