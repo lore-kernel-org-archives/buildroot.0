@@ -1,31 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 2 Feb 2020 09:05:27 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libnss: rename patch number
-In-Reply-To: <20200124195704.115545-1-giulio.benetti@benettiengineering.com>
-References: <20200124195704.115545-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200202090527.626045d4@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Feb 2020 09:06:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libpam-tacplus: fix build on
+ uclibc
+In-Reply-To: <20200122195931.295299-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 22 Jan 2020 20:59:31 +0100")
+References: <20200122195931.295299-1-fontaine.fabrice@gmail.com>
+Message-ID: <87d0axpg5b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 24 Jan 2020 20:57:03 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> At the moment there are 2 patches with the same id(0001-xxx.patch) so
-> let's rename one of them to 0002-xxx.patch.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  ...> 0002-Bug-1602743-Fix-PowerPc-build-sys-auxv.h-failure.patch} | 0  
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename package/libnss/{0001-Bug-1602743-Fix-PowerPc-build-sys-auxv.h-failure.patch => 0002-Bug-1602743-Fix-PowerPc-build-sys-auxv.h-failure.patch} (100%)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/05c67484136f3bb433ce7fc47b2ce01167048cc2
 
-Thanks, series applied!
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
