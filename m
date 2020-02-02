@@ -1,9 +1,9 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun,  2 Feb 2020 20:43:03 +0100
-Subject: [Buildroot] [PATCH 13/32] package/lib*: add license file hashes
+Date: Sun,  2 Feb 2020 20:43:06 +0100
+Subject: [Buildroot] [PATCH 16/32] package/n*: add license file hashes
 In-Reply-To: <20200202194321.16321-1-heiko.thiery@gmail.com>
 References: <20200202194321.16321-1-heiko.thiery@gmail.com>
-Message-ID: <20200202194321.16321-14-heiko.thiery@gmail.com>
+Message-ID: <20200202194321.16321-17-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,236 +12,207 @@ To: buildroot@busybox.net
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/freescale-imx/libz160/libz160.hash | 1 +
- package/libcofi/libcofi.hash               | 1 +
- package/libcrossguid/libcrossguid.hash     | 3 ++-
- package/liblockfile/liblockfile.hash       | 6 ++++--
- package/libnet/libnet.hash                 | 2 ++
- package/libplayer/libplayer.hash           | 3 ++-
- package/libplist/libplist.hash             | 3 ++-
- package/libpthsem/libpthsem.hash           | 3 ++-
- package/libreplaygain/libreplaygain.hash   | 4 +++-
- package/librsvg/librsvg.hash               | 2 ++
- package/libserialport/libserialport.hash   | 3 ++-
- package/libsexy/libsexy.hash               | 3 ++-
- package/libshairplay/libshairplay.hash     | 3 ++-
- package/libsidplay2/libsidplay2.hash       | 2 ++
- package/libsoc/libsoc.hash                 | 1 +
- package/libsoil/libsoil.hash               | 4 +++-
- package/libsoundtouch/libsoundtouch.hash   | 3 ++-
- package/libsvg-cairo/libsvg-cairo.hash     | 3 ++-
- package/libsvg/libsvg.hash                 | 3 ++-
- package/libtpl/libtpl.hash                 | 3 ++-
- package/libuecc/libuecc.hash               | 1 +
- package/libuio/libuio.hash                 | 3 ++-
- 22 files changed, 44 insertions(+), 16 deletions(-)
+ package/nanocom/nanocom.hash                         | 1 +
+ package/ncftp/ncftp.hash                             | 3 ++-
+ package/ne10/ne10.hash                               | 3 ++-
+ package/neard/neard.hash                             | 4 +++-
+ package/net-tools/net-tools.hash                     | 3 ++-
+ package/netatalk/netatalk.hash                       | 3 +++
+ package/netperf/netperf.hash                         | 3 ++-
+ package/netplug/netplug.hash                         | 3 ++-
+ package/netsniff-ng/netsniff-ng.hash                 | 5 ++++-
+ package/netstat-nat/netstat-nat.hash                 | 3 ++-
+ package/netsurf-buildsystem/netsurf-buildsystem.hash | 3 ++-
+ package/nfacct/nfacct.hash                           | 2 ++
+ package/nginx-upload/nginx-upload.hash               | 3 ++-
+ package/nload/nload.hash                             | 2 ++
+ package/nodm/nodm.hash                               | 3 ++-
+ package/noip/noip.hash                               | 3 ++-
+ package/ntfs-3g/ntfs-3g.hash                         | 4 +++-
+ package/nut/nut.hash                                 | 4 ++++
+ package/nuttcp/nuttcp.hash                           | 4 +++-
+ 19 files changed, 45 insertions(+), 14 deletions(-)
 
-diff --git a/package/freescale-imx/libz160/libz160.hash b/package/freescale-imx/libz160/libz160.hash
-index ee10630fdf..75f266e3c5 100644
---- a/package/freescale-imx/libz160/libz160.hash
-+++ b/package/freescale-imx/libz160/libz160.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  08767eb269a0a30ca0aa3d3b5aa9a53a2d17ed1c24651b7e8cefc7704b883f19  libz160-bin-11.09.01.bin
-+sha256  6d7a2fefc2f7ce888f9eb74919b852aed5a1087b2e84345be90cadbebe1b6578  EULA
-diff --git a/package/libcofi/libcofi.hash b/package/libcofi/libcofi.hash
-index 1baaece4cb..c5f6bb4416 100644
---- a/package/libcofi/libcofi.hash
-+++ b/package/libcofi/libcofi.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  72ec89c19267612b316ec9c5835c07212b8f0a377c5b4c20b6e46e69a6e4a5e5  libcofi-7313fbe12b0593034d0a1b606bf33c7cf4ababce.tar.gz
-+sha256  1a8203e5d11f0841235cf30265b1ffb19c0d9c4a6d2889554cbeccaf9f09b327  README.md
-diff --git a/package/libcrossguid/libcrossguid.hash b/package/libcrossguid/libcrossguid.hash
-index a991da56a0..17dbe35c71 100644
---- a/package/libcrossguid/libcrossguid.hash
-+++ b/package/libcrossguid/libcrossguid.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 022c9f02cc36e865cd8fd0111a597ff2bd91988deeb348dbe2aba64aed1abd99  libcrossguid-8f399e8bd4252be9952f3dfa8199924cc8487ca4.tar.gz
-+sha256  022c9f02cc36e865cd8fd0111a597ff2bd91988deeb348dbe2aba64aed1abd99  libcrossguid-8f399e8bd4252be9952f3dfa8199924cc8487ca4.tar.gz
-+sha256  779e58787f966a1552f68d5ec041513cef68785dae4a519dbda7bc0b86eda20e  LICENSE
-diff --git a/package/liblockfile/liblockfile.hash b/package/liblockfile/liblockfile.hash
-index 4421673b91..881ad992ae 100644
---- a/package/liblockfile/liblockfile.hash
-+++ b/package/liblockfile/liblockfile.hash
-@@ -1,3 +1,5 @@
- # From http://snapshot.debian.org/archive/debian/20151026T153523Z/pool/main/libl/liblockfile/liblockfile_1.09-6.dsc
--sha256	16979eba05396365e1d6af7100431ae9d32f9bc063930d1de66298a0695f1b7f	liblockfile_1.09.orig.tar.gz
--sha256	d45eacb7c637c16d03c777c55989d98da494ae9584a0783fe6dbf0db60fa290f	liblockfile_1.09-6.debian.tar.bz2
-+sha256  16979eba05396365e1d6af7100431ae9d32f9bc063930d1de66298a0695f1b7f  liblockfile_1.09.orig.tar.gz
-+sha256  d45eacb7c637c16d03c777c55989d98da494ae9584a0783fe6dbf0db60fa290f  liblockfile_1.09-6.debian.tar.bz2
-+# Locally computed
-+sha256  5fffcc11f94a05a7cff02ff792407737eb1cba840767cc1a71b67fbb19695dd3  COPYRIGHT
-diff --git a/package/libnet/libnet.hash b/package/libnet/libnet.hash
-index dd3349082d..9f62aeda60 100644
---- a/package/libnet/libnet.hash
-+++ b/package/libnet/libnet.hash
-@@ -1,3 +1,5 @@
- # From https://sourceforge.net/projects/libnet-dev/files/
- sha1 dffff71c325584fdcf99b80567b60f8ad985e34c libnet-1.1.6.tar.gz
- md5 710296fe424a49344e5fcc0d09e53317 libnet-1.1.6.tar.gz
-+# Locally computed
-+sha256  961355c8bac6de11ecb8f634111986712e80a88272c0bb0954fd1810e6f47cab  doc/COPYING
-diff --git a/package/libplayer/libplayer.hash b/package/libplayer/libplayer.hash
-index 6f131433b4..62041e5737 100644
---- a/package/libplayer/libplayer.hash
-+++ b/package/libplayer/libplayer.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	aa5eeb54f773bc9cad2733e4a0b5870208fc7f75024515ea87e55f64653e9d65	libplayer-2.0.1.tar.bz2
-+sha256  aa5eeb54f773bc9cad2733e4a0b5870208fc7f75024515ea87e55f64653e9d65  libplayer-2.0.1.tar.bz2
-+sha256  29bc1d97c09654ba9a9f490e3b69d1bba84938ebb21ac87b2af4d190b082e2ca  COPYING
-diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
-index 63c2515062..f07017f939 100644
---- a/package/libplist/libplist.hash
-+++ b/package/libplist/libplist.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 3a7e9694c2d9a85174ba1fa92417cfabaea7f6d19631e544948dc7e17e82f602  libplist-2.0.0.tar.bz2
-+sha256  3a7e9694c2d9a85174ba1fa92417cfabaea7f6d19631e544948dc7e17e82f602  libplist-2.0.0.tar.bz2
-+sha256  7619c753cac95d4740220223bde48a032606fcaccde5e546f9bc444c81ab356d  COPYING
-diff --git a/package/libpthsem/libpthsem.hash b/package/libpthsem/libpthsem.hash
-index b6aa2b87c5..9da4b88278 100644
---- a/package/libpthsem/libpthsem.hash
-+++ b/package/libpthsem/libpthsem.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	4024cafdd5d4bce2b1778a6be5491222c3f6e7ef1e43971264c451c0012c5c01  pthsem_2.0.8.tar.gz
-+sha256  4024cafdd5d4bce2b1778a6be5491222c3f6e7ef1e43971264c451c0012c5c01  pthsem_2.0.8.tar.gz
-+sha256  f1b95d3728077d1a3efe7fc17928b1953b1224f6caf9c528e30e570158b7520d  COPYING
-diff --git a/package/libreplaygain/libreplaygain.hash b/package/libreplaygain/libreplaygain.hash
-index 7a6109805a..63e5dca578 100644
---- a/package/libreplaygain/libreplaygain.hash
-+++ b/package/libreplaygain/libreplaygain.hash
-@@ -1,4 +1,6 @@
- # From https://www.musepack.net/index.php?pg=src
- md5	e27b3b1249b7fbae92d656d9e3d26633	libreplaygain_r475.tar.gz
- # Calculated based on the hash above
--sha256	8258bf785547ac2cda43bb195e07522f0a3682f55abe97753c974609ec232482	libreplaygain_r475.tar.gz
-+sha256  8258bf785547ac2cda43bb195e07522f0a3682f55abe97753c974609ec232482  libreplaygain_r475.tar.gz
-+# Locally computed
-+sha256  511e7b63ce6530b93932d19da3471a6672586339bc131b2699ad4e9b0ee6c9bb  src/gain_analysis.c
-diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
-index 6f4b07423a..366d9b0db6 100644
---- a/package/librsvg/librsvg.hash
-+++ b/package/librsvg/librsvg.hash
-@@ -1,2 +1,4 @@
- # From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.40/librsvg-2.40.20.sha256sum
- sha256	cff4dd3c3b78bfe99d8fcfad3b8ba1eee3289a0823c0e118d78106be6b84c92b	librsvg-2.40.20.tar.xz
-+# Locally computed
-+sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING.LIB
-diff --git a/package/libserialport/libserialport.hash b/package/libserialport/libserialport.hash
-index f2619029a2..39f0c8f1f0 100644
---- a/package/libserialport/libserialport.hash
-+++ b/package/libserialport/libserialport.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256	4a2af9d9c3ff488e92fb75b4ba38b35bcf9b8a66df04773eba2a7bbf1fa7529d	libserialport-0.1.1.tar.gz
-+sha256  4a2af9d9c3ff488e92fb75b4ba38b35bcf9b8a66df04773eba2a7bbf1fa7529d  libserialport-0.1.1.tar.gz
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
-diff --git a/package/libsexy/libsexy.hash b/package/libsexy/libsexy.hash
-index 78b1a82657..6f47e8ba7c 100644
---- a/package/libsexy/libsexy.hash
-+++ b/package/libsexy/libsexy.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	8c4101a8cda5fccbba85ba1a15f46f2cf75deaa8b3c525ce5b135b9e1a8fe49e	libsexy-0.1.11.tar.gz
-+sha256  8c4101a8cda5fccbba85ba1a15f46f2cf75deaa8b3c525ce5b135b9e1a8fe49e  libsexy-0.1.11.tar.gz
-+sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-diff --git a/package/libshairplay/libshairplay.hash b/package/libshairplay/libshairplay.hash
-index 19261f98bf..9b12b5a558 100644
---- a/package/libshairplay/libshairplay.hash
-+++ b/package/libshairplay/libshairplay.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 49ac0e0470ec6367f720c7b79a09165138f57b60f5949a2d9c38be5823d13294 libshairplay-ce80e005908f41d0e6fde1c4a21e9cb8ee54007b.tar.gz
-+sha256  49ac0e0470ec6367f720c7b79a09165138f57b60f5949a2d9c38be5823d13294  libshairplay-ce80e005908f41d0e6fde1c4a21e9cb8ee54007b.tar.gz
-+sha256  0ac7d61c52aff5717c02250ca0adf0ef35019e2c0838a3479b8fce597aea6fde  LICENSE
-diff --git a/package/libsidplay2/libsidplay2.hash b/package/libsidplay2/libsidplay2.hash
-index 1b45cb8781..5342135adf 100644
---- a/package/libsidplay2/libsidplay2.hash
-+++ b/package/libsidplay2/libsidplay2.hash
-@@ -1,2 +1,4 @@
- # From http://sourceforge.net/projects/sidplay2/files/sidplay2/sidplay-libs-2.1.1/
- sha1	8af6350866edc30b0d331e075fa97292f6f645a5	sidplay-libs-2.1.1.tar.gz
-+# Locally computed
-+sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  libsidplay/COPYING
-diff --git a/package/libsoc/libsoc.hash b/package/libsoc/libsoc.hash
-index 77f2fad79c..2e7c82953c 100644
---- a/package/libsoc/libsoc.hash
-+++ b/package/libsoc/libsoc.hash
+diff --git a/package/nanocom/nanocom.hash b/package/nanocom/nanocom.hash
+index 7e7016c25b..df35a37b05 100644
+--- a/package/nanocom/nanocom.hash
++++ b/package/nanocom/nanocom.hash
 @@ -1,2 +1,3 @@
  # Locally computed:
- sha256  8df626bde365b94a805e1c323104c63a7429ec64c9df815cd1d9b9c4b317e066  libsoc-0.8.2.tar.gz
-+sha256  782dafc98788c358fb20e530c8fde3186cdb60f5e18fe6d348fe84ee9f65ddb0  LICENCE
-diff --git a/package/libsoil/libsoil.hash b/package/libsoil/libsoil.hash
-index 175569b9f6..2596cd6b4d 100644
---- a/package/libsoil/libsoil.hash
-+++ b/package/libsoil/libsoil.hash
-@@ -1,2 +1,4 @@
+ sha256  5cb26e3e232cfc4a7cb16da432db532b775c5ebdb887ac9d39df5632f2c9a5e5  nanocom.tar.gz
++sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/ncftp/ncftp.hash b/package/ncftp/ncftp.hash
+index f6f7310151..3ab27df5cc 100644
+--- a/package/ncftp/ncftp.hash
++++ b/package/ncftp/ncftp.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 129e5954850290da98af012559e6743de193de0012e972ff939df9b604f81c23  ncftp-3.2.6-src.tar.gz
++sha256  129e5954850290da98af012559e6743de193de0012e972ff939df9b604f81c23  ncftp-3.2.6-src.tar.gz
++sha256  4fe2f063d25d79c49712a272ebb68e050c703eed9c66c80108427edfe3285580  doc/LICENSE.txt
+diff --git a/package/ne10/ne10.hash b/package/ne10/ne10.hash
+index a9635e4011..2c56215c1c 100644
+--- a/package/ne10/ne10.hash
++++ b/package/ne10/ne10.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256	a2305b8d64f6d636e36d669bbdb0ca5445d1345c754b3d61d3f037dad2e5f701	soil.zip
-+sha256  a2305b8d64f6d636e36d669bbdb0ca5445d1345c754b3d61d3f037dad2e5f701  soil.zip
-+sha256  a53f0508cafb544aa0b11c241c1000055bd9d827d19712f4de08898e36f29728  src/stb_image_aug.c
-+sha256  449ba815b6f610660515246d029f5d08b45178fe8f9f9f520939edad85a7935e  src/image_helper.c
-diff --git a/package/libsoundtouch/libsoundtouch.hash b/package/libsoundtouch/libsoundtouch.hash
-index af0c36283a..a79e62f031 100644
---- a/package/libsoundtouch/libsoundtouch.hash
-+++ b/package/libsoundtouch/libsoundtouch.hash
+-sha256 450dac5bb3a2351019ae23792e97c3bf965d16a21c0598b73cea9fbc3b3a56af  ne10-1.2.0.tar.gz
++sha256  450dac5bb3a2351019ae23792e97c3bf965d16a21c0598b73cea9fbc3b3a56af  ne10-1.2.0.tar.gz
++sha256  eb48041c8e0ad556cf72f2a6eff89c893aa5702bba4e163ca7798cce07e6c55e  doc/LICENSE
+diff --git a/package/neard/neard.hash b/package/neard/neard.hash
+index d1e74b37bf..948314ddd7 100644
+--- a/package/neard/neard.hash
++++ b/package/neard/neard.hash
+@@ -1,2 +1,4 @@
+ # From https://www.kernel.org/pub/linux/network/nfc/sha256sums.asc
+-sha256 eae3b11c541a988ec11ca94b7deab01080cd5b58cfef3ced6ceac9b6e6e65b36  neard-0.16.tar.xz
++sha256  eae3b11c541a988ec11ca94b7deab01080cd5b58cfef3ced6ceac9b6e6e65b36  neard-0.16.tar.xz
++# Locally computed
++sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/net-tools/net-tools.hash b/package/net-tools/net-tools.hash
+index 766b6fa031..510cac3659 100644
+--- a/package/net-tools/net-tools.hash
++++ b/package/net-tools/net-tools.hash
 @@ -1,2 +1,3 @@
  # Locally computed
--sha256 c805e7a72b7758a8986b71e73d2f94a8c79c66c1246fa2af1743c4282702e096  libsoundtouch-010a91a59071c7fefd316fca62c0d980ec85b4b1.tar.gz
-+sha256  c805e7a72b7758a8986b71e73d2f94a8c79c66c1246fa2af1743c4282702e096  libsoundtouch-010a91a59071c7fefd316fca62c0d980ec85b4b1.tar.gz
-+sha256  9c6a15d7433078e4c0d3cb9820f172bbf0bf829e7648d719dc85c1429815519b  COPYING.TXT
-diff --git a/package/libsvg-cairo/libsvg-cairo.hash b/package/libsvg-cairo/libsvg-cairo.hash
-index fba96def72..7240ee57b1 100644
---- a/package/libsvg-cairo/libsvg-cairo.hash
-+++ b/package/libsvg-cairo/libsvg-cairo.hash
-@@ -2,4 +2,5 @@
- md5 d79da7b3a60ad8c8e4b902c9b3563047  libsvg-cairo-0.1.6.tar.gz
- 
- # Locally calculated
--sha256 a380be6a78ec2938100ce904363815a94068fca372c666b8cc82aa8711a0215c libsvg-cairo-0.1.6.tar.gz
-+sha256  a380be6a78ec2938100ce904363815a94068fca372c666b8cc82aa8711a0215c  libsvg-cairo-0.1.6.tar.gz
-+sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
-diff --git a/package/libsvg/libsvg.hash b/package/libsvg/libsvg.hash
-index c5008491f1..c314c58015 100644
---- a/package/libsvg/libsvg.hash
-+++ b/package/libsvg/libsvg.hash
-@@ -2,4 +2,5 @@
- md5 ce0715e3013f78506795fba16e8455d3 libsvg-0.1.4.tar.gz
- 
- # Locally calculated
--sha256 4c3bf9292e676a72b12338691be64d0f38cd7f2ea5e8b67fbbf45f1ed404bc8f libsvg-0.1.4.tar.gz
-+sha256  4c3bf9292e676a72b12338691be64d0f38cd7f2ea5e8b67fbbf45f1ed404bc8f  libsvg-0.1.4.tar.gz
-+sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/libtpl/libtpl.hash b/package/libtpl/libtpl.hash
-index 9a455bed97..74ca68fb91 100644
---- a/package/libtpl/libtpl.hash
-+++ b/package/libtpl/libtpl.hash
+-sha256 f7cfe9e73825bac9ab1a6f99d1fc7f54bfd9d33a6f62ba58d28a566905c4e86c  net-tools-479bb4a7e11a4084e2935c0a576388f92469225b.tar.gz
++sha256  f7cfe9e73825bac9ab1a6f99d1fc7f54bfd9d33a6f62ba58d28a566905c4e86c  net-tools-479bb4a7e11a4084e2935c0a576388f92469225b.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
+index 762fcd460e..6c3250a005 100644
+--- a/package/netatalk/netatalk.hash
++++ b/package/netatalk/netatalk.hash
+@@ -1,3 +1,6 @@
+ # From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.12/
+ md5 021d2330cb7f7cd2977aec46299dcc1b  netatalk-3.1.12.tar.bz2
+ sha1 cc1fe1ebdbdb4da9cf82835c440e82ba28a832c5  netatalk-3.1.12.tar.bz2
++# Locally computed
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  7599ae145e53be03a08f8b558b2f2e0c828e1630f1843cc04f41981b8cefcd65  COPYRIGHT
+diff --git a/package/netperf/netperf.hash b/package/netperf/netperf.hash
+index f97274015c..47730855d3 100644
+--- a/package/netperf/netperf.hash
++++ b/package/netperf/netperf.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256 0b3750bf62f56be4c42f83c89d8449b24f1c5f1605a104801d70f2f3c06fb2ff  libtpl-1.6.1.tar.gz
-+sha256  0b3750bf62f56be4c42f83c89d8449b24f1c5f1605a104801d70f2f3c06fb2ff  libtpl-1.6.1.tar.gz
-+sha256  8554ddb5779f1ad2f3ea6db1d0df622e63fca11f44bfc3c8b3c207ea0482c746  LICENSE
-diff --git a/package/libuecc/libuecc.hash b/package/libuecc/libuecc.hash
-index 67eb5eb572..bfc9aaf396 100644
---- a/package/libuecc/libuecc.hash
-+++ b/package/libuecc/libuecc.hash
-@@ -2,3 +2,4 @@
- md5     5cd543cb8e7bce83a22c07a0579c95a1                                  libuecc-7.tar.xz
- # computed locally
- sha256  b94aef08eab5359d0facaa7ead2ce81b193eef0c61379d9835213ebc0a46257a  libuecc-7.tar.xz
-+sha256  ec4d9fcc3a37a7998a9ea4decf38f4c0c91a44fd05bb17638c52fe16f2b12e23  COPYRIGHT
-diff --git a/package/libuio/libuio.hash b/package/libuio/libuio.hash
-index ce2f86ee19..54fb02b112 100644
---- a/package/libuio/libuio.hash
-+++ b/package/libuio/libuio.hash
+-sha256	842af17655835c8be7203808c3393e6cb327a8067f3ed1f1053eb78b4e40375a	netperf-2.7.0.tar.bz2
++sha256  842af17655835c8be7203808c3393e6cb327a8067f3ed1f1053eb78b4e40375a  netperf-2.7.0.tar.bz2
++sha256  dc874b3047b6259336431e813961fb6c5945561c6ad7a732aa8531a3c6b1a9fa  COPYING
+diff --git a/package/netplug/netplug.hash b/package/netplug/netplug.hash
+index 16a98b7d66..a0d2317a8c 100644
+--- a/package/netplug/netplug.hash
++++ b/package/netplug/netplug.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256 1494375bd493ef1a1b868ce2cbc7d29f3f9f692c21f70689eae28566e56f2c15 libuio-ca28ff0f69d89a789a47552c72db5a43d280710b.tar.gz
-+sha256  1494375bd493ef1a1b868ce2cbc7d29f3f9f692c21f70689eae28566e56f2c15  libuio-ca28ff0f69d89a789a47552c72db5a43d280710b.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+-sha256	5180dfd9a7d3d0633a027b0a04f01b45a6a64623813cd48bd54423b90814864e	netplug-1.2.9.2.tar.bz2
++sha256  5180dfd9a7d3d0633a027b0a04f01b45a6a64623813cd48bd54423b90814864e  netplug-1.2.9.2.tar.bz2
++sha256  08ce3ddda499d6befdc80161c7cc82e90da05c31eb1047dae41ef531d5170e9b  COPYING
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+index d44c762660..c9408ccbdb 100644
+--- a/package/netsniff-ng/netsniff-ng.hash
++++ b/package/netsniff-ng/netsniff-ng.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking signature
+-sha256 7949d38eb5b507700ea0f3c87e9f804d87b43f86ea5de0e961451044c2d3dba2  netsniff-ng-0.6.6.tar.xz
++sha256  7949d38eb5b507700ea0f3c87e9f804d87b43f86ea5de0e961451044c2d3dba2  netsniff-ng-0.6.6.tar.xz
++# Locally computed
++sha256  b353349ba51e0d4b59cf2f188f0c285296e154ce8c58954bc5e0dc0282a4db2d  README
++sha256  8f6d85366f3763557d6ddd0637988b9ba11edef354e3c9302fff4262a235c387  COPYING
+diff --git a/package/netstat-nat/netstat-nat.hash b/package/netstat-nat/netstat-nat.hash
+index 924da129f7..7530b8a09f 100644
+--- a/package/netstat-nat/netstat-nat.hash
++++ b/package/netstat-nat/netstat-nat.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	e945faa283a49f33af15de915a949c9273a230fc17154925364c547adab676ca	netstat-nat-1.4.10.tar.gz
++sha256  e945faa283a49f33af15de915a949c9273a230fc17154925364c547adab676ca  netstat-nat-1.4.10.tar.gz
++sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+diff --git a/package/netsurf-buildsystem/netsurf-buildsystem.hash b/package/netsurf-buildsystem/netsurf-buildsystem.hash
+index c326c28d22..8e3bbabf05 100644
+--- a/package/netsurf-buildsystem/netsurf-buildsystem.hash
++++ b/package/netsurf-buildsystem/netsurf-buildsystem.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 2e2d93e25623761c5de39c8c94750c982335acc1c2da4439b1a2088ecd4455c9  netsurf-buildsystem-7574b41345968b5f7e9ca5875faccb1478ce0555.tar.gz
++sha256  2e2d93e25623761c5de39c8c94750c982335acc1c2da4439b1a2088ecd4455c9  netsurf-buildsystem-7574b41345968b5f7e9ca5875faccb1478ce0555.tar.gz
++sha256  b2ddc1d607332423f6cf415b2ac619a1c03dd565facdc39a571282a520929a65  llvm/LICENSE.TXT
+diff --git a/package/nfacct/nfacct.hash b/package/nfacct/nfacct.hash
+index 737354ef3f..d6c05e16d3 100644
+--- a/package/nfacct/nfacct.hash
++++ b/package/nfacct/nfacct.hash
+@@ -1,3 +1,5 @@
+ # From ftp://ftp.netfilter.org/pub/nfacct/nfacct-1.0.2.tar.bz2.{md5sum,sha1sum}
+ md5	94faafdaaed85ca9220c5692be8a408e	nfacct-1.0.2.tar.bz2
+ sha1	17d6576778227ea93c62600d9b18ff4932963c6a	nfacct-1.0.2.tar.bz2
++# Locally computed
++sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+diff --git a/package/nginx-upload/nginx-upload.hash b/package/nginx-upload/nginx-upload.hash
+index 3a8dfeddf3..ac04626eb0 100644
+--- a/package/nginx-upload/nginx-upload.hash
++++ b/package/nginx-upload/nginx-upload.hash
+@@ -1,2 +1,3 @@
+ #Locally Computed:
+-sha256 5f1c3c2b9858b9cacd877a0f2df9b9263734e9cef8d837b73f0e659c0f7fde2d  nginx-upload-70bee48f1811eecd255ed094ce9f0fb560c390c3.tar.gz
++sha256  5f1c3c2b9858b9cacd877a0f2df9b9263734e9cef8d837b73f0e659c0f7fde2d  nginx-upload-70bee48f1811eecd255ed094ce9f0fb560c390c3.tar.gz
++sha256  825f9684c427e29fd1ab085d5c421a4cbf96a460f3c58884a42c28bfbac5e544  LICENCE
+diff --git a/package/nload/nload.hash b/package/nload/nload.hash
+index 4a8a09d394..f5b8e58f66 100644
+--- a/package/nload/nload.hash
++++ b/package/nload/nload.hash
+@@ -1,3 +1,5 @@
+ # From https://sourceforge.net/projects/nload/files/nload/0.7.4/
+ md5	3c733c528f244ca5a4f76bf185729c39	nload-0.7.4.tar.gz
+ sha1	bb0a168c93c588ad4fd5e3a653b3620b79ada1e8	nload-0.7.4.tar.gz
++# Locally computed
++sha256  67f82e045cf7acfef853ea0f426575a8359161a0a325e19f02b529a87c4b6c34  COPYING
+diff --git a/package/nodm/nodm.hash b/package/nodm/nodm.hash
+index 2a70c68606..79f16af78c 100644
+--- a/package/nodm/nodm.hash
++++ b/package/nodm/nodm.hash
+@@ -1,2 +1,3 @@
+ # locally calculated
+-sha256 ef11667ae82846801a9633df36c20f632cc03319bb1da35f062ac0f950771273  nodm-0.13.tar.gz
++sha256  ef11667ae82846801a9633df36c20f632cc03319bb1da35f062ac0f950771273  nodm-0.13.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/noip/noip.hash b/package/noip/noip.hash
+index 166438db48..79b6309da2 100644
+--- a/package/noip/noip.hash
++++ b/package/noip/noip.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 82b9bafab96a0c53b21aaef688bf70b3572e26217b5e2072bdb09da3c4a6f593  noip-duc-linux.tar.gz
++sha256  82b9bafab96a0c53b21aaef688bf70b3572e26217b5e2072bdb09da3c4a6f593  noip-duc-linux.tar.gz
++sha256  5aaf7e9e1790c6e372b6c5dec8c6c4b60504414a8c56f64c3071d281d3c251fa  COPYING
+diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
+index 2e0b06fd5d..63c999f253 100644
+--- a/package/ntfs-3g/ntfs-3g.hash
++++ b/package/ntfs-3g/ntfs-3g.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+-sha256 3e5a021d7b761261836dcb305370af299793eedbded731df3d6943802e1262d5  ntfs-3g_ntfsprogs-2017.3.23.tgz
++sha256  3e5a021d7b761261836dcb305370af299793eedbded731df3d6943802e1262d5  ntfs-3g_ntfsprogs-2017.3.23.tgz
++sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
++sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING.LIB
+diff --git a/package/nut/nut.hash b/package/nut/nut.hash
+index 870c67cc8e..0a677bc058 100644
+--- a/package/nut/nut.hash
++++ b/package/nut/nut.hash
+@@ -1,2 +1,6 @@
+ # From http://www.networkupstools.org/source/2.7/nut-2.7.2.tar.gz.sha256
+ sha256  980e82918c52d364605c0703a5dcf01f74ad2ef06e3d365949e43b7d406d25a7  nut-2.7.4.tar.gz
++# Locally computed
++sha256  9f562d0e6be5108a06684dd249686d378abe1653df14b1944e971e084f6751f0  COPYING
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE-GPL2
++sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  LICENSE-GPL3
+diff --git a/package/nuttcp/nuttcp.hash b/package/nuttcp/nuttcp.hash
+index 88310a31d6..c7d0148e12 100644
+--- a/package/nuttcp/nuttcp.hash
++++ b/package/nuttcp/nuttcp.hash
+@@ -1,2 +1,4 @@
+ # From http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2009-August/170685.html
+-sha256	054e96d9d68fe917df6f25fab15c7755bdd480f6420d7d48d9194a1a52378169  nuttcp-6.1.2.tar.bz2
++sha256  054e96d9d68fe917df6f25fab15c7755bdd480f6420d7d48d9194a1a52378169  nuttcp-6.1.2.tar.bz2
++# Locally computed
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
 -- 
 2.20.1
