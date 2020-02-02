@@ -1,25 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Feb 2020 09:07:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpam-tacplus: add openssl
- optional dependency
-In-Reply-To: <20200122210046.844027-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 22 Jan 2020 22:00:46 +0100")
-References: <20200122210046.844027-1-fontaine.fabrice@gmail.com>
-Message-ID: <878sllpg45.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 2 Feb 2020 09:07:09 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/bitcoin: bump to version 0.19.0.1
+In-Reply-To: <20200122212637.1008692-1-fontaine.fabrice@gmail.com>
+References: <20200122212637.1008692-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200202090709.2c9afa39@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+On Wed, 22 Jan 2020 22:26:37 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
- > openssl is an optional dependency since version 1.4.1 and
- > https://github.com/kravietz/pam_tacplus/commit/789cf4a85266dcb426ed133b2d07df86d0a55972
+> - Retrieve official tarball instead of using github as specified in
+>   https://github.com/bitcoin/bitcoin/releases/tag/v0.19.0.1
+> - Remove patch (already in version)
+> - Update hash of COPYING (update in year:
+>   https://github.com/bitcoin/bitcoin/commit/ae5594d51b489826f2f2315c92e8df5ee0267efc)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2:
+>  - Fix version in title
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Applied to master, thanks.
 
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
