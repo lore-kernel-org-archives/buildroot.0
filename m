@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 2 Feb 2020 09:52:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libevent: do not drop python
- script with python 3
-In-Reply-To: <20200122191438.55671-1-fontaine.fabrice@gmail.com>
-References: <20200122191438.55671-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200202095239.33a84884@windsurf>
+Date: Sun, 2 Feb 2020 09:54:37 +0100
+Subject: [Buildroot] [git commit] package/erlang-p1-xmpp: fix host build
+Message-ID: <20200202084348.530B17FE6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 22 Jan 2020 20:14:38 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=307fd6f517f1a4e64846f3a76c624aac8e6eacd9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> python script is compatible with python3 since 2.1.10 and
-> https://github.com/libevent/libevent/commit/532a8cc301db39e82166b4fe98146534fdc242ce
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libevent/libevent.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes:
+http://autobuild.buildroot.net/results/3e594350131994df53b20d5113fefbba2e747836
 
-Applied to master, thanks.
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/erlang-p1-xmpp/erlang-p1-xmpp.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.mk b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
+index ced058731b..2f74c60df2 100644
+--- a/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
++++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
+@@ -11,6 +11,7 @@ ERLANG_P1_XMPP_LICENSE_FILES = LICENSE.txt
+ ERLANG_P1_XMPP_INSTALL_STAGING = YES
+ ERLANG_P1_XMPP_DEPENDENCIES = erlang-p1-xml erlang-p1-stringprep \
+ 	erlang-p1-tls erlang-p1-utils erlang-p1-zlib host-erlang-p1-xml
++HOST_ERLANG_P1_XMPP_DEPENDENCIES = host-erlang-p1-xml
+ 
+ $(eval $(rebar-package))
+ $(eval $(host-rebar-package))
