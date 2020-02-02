@@ -1,9 +1,9 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun,  2 Feb 2020 20:43:04 +0100
-Subject: [Buildroot] [PATCH 14/32] package/l*: add license file hashes
+Date: Sun,  2 Feb 2020 20:43:05 +0100
+Subject: [Buildroot] [PATCH 15/32] package/m*: add license file hashes
 In-Reply-To: <20200202194321.16321-1-heiko.thiery@gmail.com>
 References: <20200202194321.16321-1-heiko.thiery@gmail.com>
-Message-ID: <20200202194321.16321-15-heiko.thiery@gmail.com>
+Message-ID: <20200202194321.16321-16-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,397 +12,337 @@ To: buildroot@busybox.net
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- linux/linux.hash                                         | 1 +
- package/latencytop/latencytop.hash                       | 1 +
- package/lbase64/lbase64.hash                             | 3 ++-
- package/lbreakout2/lbreakout2.hash                       | 3 ++-
- package/lcdapi/lcdapi.hash                               | 3 ++-
- package/lcdproc/lcdproc.hash                             | 1 +
- package/leafnode2/leafnode2.hash                         | 4 +++-
- package/leafpad/leafpad.hash                             | 4 +++-
- package/lensfun/lensfun.hash                             | 4 +++-
- package/lesstif/lesstif.hash                             | 1 +
- package/let-me-create/let-me-create.hash                 | 3 ++-
- package/linenoise/linenoise.hash                         | 3 ++-
- package/linphone/linphone.hash                           | 4 +++-
- package/linux-backports/linux-backports.hash             | 4 +++-
- package/linux-fusion/linux-fusion.hash                   | 3 ++-
- package/linux-pam/linux-pam.hash                         | 4 +++-
- package/linux-syscall-support/linux-syscall-support.hash | 3 ++-
- package/lirc-tools/lirc-tools.hash                       | 3 ++-
- package/lite/lite.hash                                   | 3 ++-
- package/lksctp-tools/lksctp-tools.hash                   | 3 +++
- package/lmbench/lmbench.hash                             | 2 ++
- package/lockdev/lockdev.hash                             | 6 ++++--
- package/log4cxx/log4cxx.hash                             | 4 +++-
- package/lpc3250loader/lpc3250loader.hash                 | 3 ++-
- package/lrzsz/lrzsz.hash                                 | 3 ++-
- package/lshw/lshw.hash                                   | 3 ++-
- package/lsuio/lsuio.hash                                 | 3 ++-
- package/ltp-testsuite/ltp-testsuite.hash                 | 2 ++
- package/ltrace/ltrace.hash                               | 3 ++-
- package/lua-ev/lua-ev.hash                               | 3 ++-
- package/lua-msgpack-native/lua-msgpack-native.hash       | 1 +
- package/lua-sdl2/lua-sdl2.hash                           | 3 ++-
- package/lua/lua.hash                                     | 2 ++
- package/luabitop/luabitop.hash                           | 4 +++-
- package/luaposix/luaposix.hash                           | 3 ++-
- package/lugaru/lugaru.hash                               | 4 +++-
- package/lutok/lutok.hash                                 | 3 ++-
- 37 files changed, 81 insertions(+), 29 deletions(-)
+ boot/mv-ddr-marvell/mv-ddr-marvell.hash                     | 3 ++-
+ package/macchanger/macchanger.hash                          | 2 ++
+ package/make/make.hash                                      | 4 +++-
+ package/matchbox-common/matchbox-common.hash                | 2 ++
+ package/matchbox-desktop/matchbox-desktop.hash              | 2 ++
+ package/matchbox-fakekey/matchbox-fakekey.hash              | 2 ++
+ package/matchbox-keyboard/matchbox-keyboard.hash            | 2 ++
+ package/matchbox-lib/matchbox-lib.hash                      | 2 ++
+ package/matchbox-panel/matchbox-panel.hash                  | 2 ++
+ .../matchbox-startup-monitor/matchbox-startup-monitor.hash  | 2 ++
+ package/mcrypt/mcrypt.hash                                  | 1 +
+ package/memstat/memstat.hash                                | 2 ++
+ package/memtest86/memtest86.hash                            | 3 ++-
+ package/memtester/memtester.hash                            | 3 ++-
+ package/metacity/metacity.hash                              | 5 ++++-
+ package/micropython-lib/micropython-lib.hash                | 3 ++-
+ package/midori/midori.hash                                  | 3 +++
+ package/mii-diag/mii-diag.hash                              | 6 ++++--
+ package/mimic/mimic.hash                                    | 3 ++-
+ package/minidlna/minidlna.hash                              | 4 +++-
+ package/miraclecast/miraclecast.hash                        | 6 +++++-
+ package/mksh/mksh.hash                                      | 4 +++-
+ package/modplugtools/modplugtools.hash                      | 1 +
+ package/mongrel2/mongrel2.hash                              | 3 ++-
+ package/mono-gtksharp3/mono-gtksharp3.hash                  | 5 ++++-
+ package/mp4v2/mp4v2.hash                                    | 2 ++
+ package/mpir/mpir.hash                                      | 3 ++-
+ package/mraa/mraa.hash                                      | 3 ++-
+ package/msr-tools/msr-tools.hash                            | 3 ++-
+ package/mtdev2tuio/mtdev2tuio.hash                          | 3 ++-
+ package/musepack/musepack.hash                              | 5 ++++-
+ 31 files changed, 75 insertions(+), 19 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index ddeb7194ce..e198393da7 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -8,3 +8,4 @@ sha256 8dbc21f994af9dc3468da4e934a641b457a57cf125d1a8e8f95fe488edd5b5ab  linux-4
- # Locally computed
- sha256 6d60ce76bce2e1938f64027d12b1988c95245751feb635adfc551a021d5b3f26  linux-cip-4.19.88-cip16.tar.gz
- sha256 74ec782e11344e5c5db8e48899b464e296ef37acfb43ce7dfb01c09ea8d3e959  linux-cip-4.19.82-cip14-rt5.tar.gz
-+sha256 ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff  COPYING
-diff --git a/package/latencytop/latencytop.hash b/package/latencytop/latencytop.hash
-index 4be004cafc..74b8a03a23 100644
---- a/package/latencytop/latencytop.hash
-+++ b/package/latencytop/latencytop.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  9e7f72fbea7bd918e71212a1eabaad8488d2c602205d2e3c95d62cd57e9203ef  latencytop-0.5.tar.gz
-+sha256  34d1db30ab21eaedb2c191b2787632a960090a0c63da9f5b481d84b23b98c438  latencytop.c
-diff --git a/package/lbase64/lbase64.hash b/package/lbase64/lbase64.hash
-index d835d40b25..34ef21324c 100644
---- a/package/lbase64/lbase64.hash
-+++ b/package/lbase64/lbase64.hash
+diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
+index 9324dd21c3..ec2fe6ed37 100644
+--- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
++++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256 b83dbc87330a322e5222cd891a6e258b533f5b6c46e8f3c18fc0265e4c991aaa  lbase64.tar.gz
-+sha256  b83dbc87330a322e5222cd891a6e258b533f5b6c46e8f3c18fc0265e4c991aaa  lbase64.tar.gz
-+sha256  a2b4f2d25b56c40801ce4f403541cbc301313048acfaa59c9509024bec57b662  README
-diff --git a/package/lbreakout2/lbreakout2.hash b/package/lbreakout2/lbreakout2.hash
-index 0d305dcd73..56d0a9501f 100644
---- a/package/lbreakout2/lbreakout2.hash
-+++ b/package/lbreakout2/lbreakout2.hash
-@@ -2,4 +2,5 @@
- md5 1a9238b83f9f13f09b7a4d53e00b4e84  lbreakout2-2.6.5.tar.gz
- sha1 d92326499165fd368be04378d633e13d42b4d2d7  lbreakout2-2.6.5.tar.gz
- # Locally computed:
--sha256 9104d6175553da3442dc6a5fc407a669e2f5aff3eedc5d30409eb003b7a78d6f  lbreakout2-2.6.5.tar.gz
-+sha256  9104d6175553da3442dc6a5fc407a669e2f5aff3eedc5d30409eb003b7a78d6f  lbreakout2-2.6.5.tar.gz
-+sha256  67f82e045cf7acfef853ea0f426575a8359161a0a325e19f02b529a87c4b6c34  COPYING
-diff --git a/package/lcdapi/lcdapi.hash b/package/lcdapi/lcdapi.hash
-index 643894e491..fc86b66d0e 100644
---- a/package/lcdapi/lcdapi.hash
-+++ b/package/lcdapi/lcdapi.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 6afdd4238af1fa7ea5f10378601381fc3f535a10504dc7d4ea8eab56e0dda091  lcdapi-0.11.tar.gz
-+sha256  6afdd4238af1fa7ea5f10378601381fc3f535a10504dc7d4ea8eab56e0dda091  lcdapi-0.11.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/lcdproc/lcdproc.hash b/package/lcdproc/lcdproc.hash
-index 00f685448d..a90d43c1f2 100644
---- a/package/lcdproc/lcdproc.hash
-+++ b/package/lcdproc/lcdproc.hash
-@@ -1,3 +1,4 @@
- # Locally computed:
- sha256  843007d377adc856529ed0c7c42c9a7563043f06b1b73add0372bba3a3029804  lcdproc-0.5.7.tar.gz
- sha256  d48a915496c96ff775b377d2222de3150ae5172bfb84a6ec9f9ceab962f97b83  lcdproc-0.5.9.tar.gz
-+sha256  1b2a567f289f66a143c56353e7b3d4fa5862514a5e3c5cfdf8b02ee5e5aaa953  COPYING
-diff --git a/package/leafnode2/leafnode2.hash b/package/leafnode2/leafnode2.hash
-index 9c94fb9ec4..7dfa7cce8d 100644
---- a/package/leafnode2/leafnode2.hash
-+++ b/package/leafnode2/leafnode2.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
--sha256 34eba2cbbb871b724c8d5dd402d1c358aeb21ba426beb5658e155ed0d7461075  leafnode-2.0.0.alpha20140727b.tar.bz2
-+sha256  34eba2cbbb871b724c8d5dd402d1c358aeb21ba426beb5658e155ed0d7461075  leafnode-2.0.0.alpha20140727b.tar.bz2
-+sha256  59d37f745dc5a2d63a51dff344f4ad89f72e76f8c7b7d877f20880d838b1bec9  COPYING
-+sha256  0c92246a9d3636e0aa6a244f6c481639b2e530fbbb25bc048ce7acd83e1fc5f6  COPYING.LGPL
-diff --git a/package/leafpad/leafpad.hash b/package/leafpad/leafpad.hash
-index be56d41454..e21c07ad2c 100644
---- a/package/leafpad/leafpad.hash
-+++ b/package/leafpad/leafpad.hash
+-sha256 39dcc8baccb82cbc746d8f82ce7f673e1b1236e8aee0d09e7ab12c27eeb6ecda mv-ddr-marvell-618dadd1491eb2f7b2fd74313c04f7accddae475.tar.gz
++sha256  39dcc8baccb82cbc746d8f82ce7f673e1b1236e8aee0d09e7ab12c27eeb6ecda  mv-ddr-marvell-618dadd1491eb2f7b2fd74313c04f7accddae475.tar.gz
++sha256  69208236fc322026920b92d1d839ebdc521ca65379bfdb3368a24945e794fc78  ddr3_init.c
+diff --git a/package/macchanger/macchanger.hash b/package/macchanger/macchanger.hash
+index ce3a7f569d..dbcfa6cff1 100644
+--- a/package/macchanger/macchanger.hash
++++ b/package/macchanger/macchanger.hash
 @@ -1,2 +1,4 @@
  # Locally calculated after checking pgp signature
--sha256	959d22ae07f22803bc66ff40d373a854532a6e4732680bf8a96a3fbcb9f80a2c	leafpad-0.8.18.1.tar.gz
-+sha256  959d22ae07f22803bc66ff40d373a854532a6e4732680bf8a96a3fbcb9f80a2c  leafpad-0.8.18.1.tar.gz
+ sha256  dae2717c270fd5f62d790dbf80c19793c651b1b26b62c101b82d5fdf25a845bf  macchanger-1.7.0.tar.gz
 +# Locally computed
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/lensfun/lensfun.hash b/package/lensfun/lensfun.hash
-index a60f8f4613..1a27373f23 100644
---- a/package/lensfun/lensfun.hash
-+++ b/package/lensfun/lensfun.hash
-@@ -2,4 +2,6 @@
- sha1 1d978b15aa7304d66a4931fa37ca9f8f89396c16 lensfun-0.3.2.tar.gz
- md5 247e59a0812ec451f6cd0d20b3379cb5 lensfun-0.3.2.tar.gz
- # Locally calculated
--sha256 ae8bcad46614ca47f5bda65b00af4a257a9564a61725df9c74cb260da544d331 lensfun-0.3.2.tar.gz
-+sha256  ae8bcad46614ca47f5bda65b00af4a257a9564a61725df9c74cb260da544d331  lensfun-0.3.2.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  docs/gpl-3.0.txt
-+sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  docs/lgpl-3.0.txt
-diff --git a/package/lesstif/lesstif.hash b/package/lesstif/lesstif.hash
-index c2ede8b6a8..31a394dbbc 100644
---- a/package/lesstif/lesstif.hash
-+++ b/package/lesstif/lesstif.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  eb4aa38858c29a4a3bcf605cfe7d91ca41f4522d78d770f69721e6e3a4ecf7e3  lesstif-0.95.2.tar.bz2
-+sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING.LIB
-diff --git a/package/let-me-create/let-me-create.hash b/package/let-me-create/let-me-create.hash
-index 585b0ea3fc..899761786a 100644
---- a/package/let-me-create/let-me-create.hash
-+++ b/package/let-me-create/let-me-create.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 5f42858a2062f34d2578e9cb1aed3ccb8d2409d908aa4c41a924418666d5f2bd  let-me-create-1.5.2.tar.gz
-+sha256  5f42858a2062f34d2578e9cb1aed3ccb8d2409d908aa4c41a924418666d5f2bd  let-me-create-1.5.2.tar.gz
-+sha256  8ffc162e1435e810845b09a4c0d534df057a030f4c107778677b6621dc203426  LICENSE
-diff --git a/package/linenoise/linenoise.hash b/package/linenoise/linenoise.hash
-index 7837bc68f4..a1cabd9eff 100644
---- a/package/linenoise/linenoise.hash
-+++ b/package/linenoise/linenoise.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 f5054a4fe120d43d85427cf58af93e56b9bb80389d507a9bec9b75531a340014  linenoise-1.0.tar.gz
-+sha256  f5054a4fe120d43d85427cf58af93e56b9bb80389d507a9bec9b75531a340014  linenoise-1.0.tar.gz
-+sha256  efe1692aa5b869edaa0ac88f95eb0276c1125304ffc636a299db3ebbab47f62b  LICENSE
-diff --git a/package/linphone/linphone.hash b/package/linphone/linphone.hash
-index 9ed9d37f77..e5b9015ae5 100644
---- a/package/linphone/linphone.hash
-+++ b/package/linphone/linphone.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	05ba81223e9378c3bce8d33080213b9925af49bd9623cd9004eb3dd22ca9d2a0	linphone-3.6.1.tar.gz
-+sha256  05ba81223e9378c3bce8d33080213b9925af49bd9623cd9004eb3dd22ca9d2a0  linphone-3.6.1.tar.gz
-+# Locally computed
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
-index 38f39b98d5..f39bc2ed27 100644
---- a/package/linux-backports/linux-backports.hash
-+++ b/package/linux-backports/linux-backports.hash
-@@ -1,2 +1,4 @@
- # From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v4.4.2/sha256sums.asc
--sha256 a979e194c2ed9fdfca092a448e626d85c5af0e4de5ad993c0967afd15af01285  backports-4.4.2-1.tar.xz
-+sha256  a979e194c2ed9fdfca092a448e626d85c5af0e4de5ad993c0967afd15af01285  backports-4.4.2-1.tar.xz
-+# Locally computed
-+sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-diff --git a/package/linux-fusion/linux-fusion.hash b/package/linux-fusion/linux-fusion.hash
-index 4bf288d15d..8a90afe2a6 100644
---- a/package/linux-fusion/linux-fusion.hash
-+++ b/package/linux-fusion/linux-fusion.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 c3c71af364ef774c70d3f6fbc32d14bc786d915df633d6fe733e1fde84ad6e99 linux-fusion-9.0.3.tar.xz
-+sha256  c3c71af364ef774c70d3f6fbc32d14bc786d915df633d6fe733e1fde84ad6e99  linux-fusion-9.0.3.tar.xz
-+sha256  51bc14bdef3a064383702e638515824986e5a746de236d46ee904ea15312a198  debian/copyright
-diff --git a/package/linux-pam/linux-pam.hash b/package/linux-pam/linux-pam.hash
-index 183bcca401..cfe58ce28e 100644
---- a/package/linux-pam/linux-pam.hash
-+++ b/package/linux-pam/linux-pam.hash
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/make/make.hash b/package/make/make.hash
+index ea2e860512..242cb95643 100644
+--- a/package/make/make.hash
++++ b/package/make/make.hash
 @@ -1,4 +1,6 @@
- # Locally computed hashes after checking signature at
- # https://github.com/linux-pam/linux-pam/releases/download/v1.3.1/Linux-PAM-1.3.1.tar.xz.asc
- # signed with the key 8C6BFD92EE0F42EDF91A6A736D1A7F052E5924BB
--sha256 eff47a4ecd833fbf18de9686632a70ee8d0794b79aecb217ebd0ce11db4cd0db  Linux-PAM-1.3.1.tar.xz
-+sha256  eff47a4ecd833fbf18de9686632a70ee8d0794b79aecb217ebd0ce11db4cd0db  Linux-PAM-1.3.1.tar.xz
+ # From http://lists.gnu.org/archive/html/info-gnu/2016-06/msg00005.html
+ md5 15b012617e7c44c0ed482721629577ac  make-4.2.1.tar.bz2
+ # Locally calculated after checking signature
+-sha256 d6e262bf3601b42d2b1e4ef8310029e1dcf20083c5446b4b7aa67081fdffc589  make-4.2.1.tar.bz2
++sha256  d6e262bf3601b42d2b1e4ef8310029e1dcf20083c5446b4b7aa67081fdffc589  make-4.2.1.tar.bz2
 +# Locally computed
-+sha256  133d98e7a2ab3ffd330b4debb0bfc10fea21e4b2b5a5b09de2e924293be5ff08  Copyright
-diff --git a/package/linux-syscall-support/linux-syscall-support.hash b/package/linux-syscall-support/linux-syscall-support.hash
-index 30925522ff..2371dffb12 100644
---- a/package/linux-syscall-support/linux-syscall-support.hash
-+++ b/package/linux-syscall-support/linux-syscall-support.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 e5088b81011e30b567b6bde6bb7c22ad529c4ee8890cc5e93d58b21f2c4df56a  linux-syscall-support-3f6478ac95edf86cd3da300c2c0d34a438f5dbeb.tar.gz
-+sha256  e5088b81011e30b567b6bde6bb7c22ad529c4ee8890cc5e93d58b21f2c4df56a  linux-syscall-support-3f6478ac95edf86cd3da300c2c0d34a438f5dbeb.tar.gz
-+sha256  4c1fc9acc9f3867e5c81b5d5f57c52fb9a932662bd4e2e5e43b3fe95390035f5  linux_syscall_support.h
-diff --git a/package/lirc-tools/lirc-tools.hash b/package/lirc-tools/lirc-tools.hash
-index ed5ecfde9b..8d9a79d2d1 100644
---- a/package/lirc-tools/lirc-tools.hash
-+++ b/package/lirc-tools/lirc-tools.hash
-@@ -2,4 +2,5 @@
- sha1 9d6f6d18ac566a96ef4ca1d6909a4e8bc517d48a lirc-0.10.1.tar.bz2
- md5 86c3f8e4efaba10571addb8313d1e040 lirc-0.10.1.tar.bz2
- # Locally computed
--sha256 8b753c60df2a7f5dcda2db72c38e448ca300c3b4f6000c1501fcb0bd5df414f2 lirc-0.10.1.tar.bz2
-+sha256  8b753c60df2a7f5dcda2db72c38e448ca300c3b4f6000c1501fcb0bd5df414f2  lirc-0.10.1.tar.bz2
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/lite/lite.hash b/package/lite/lite.hash
-index 9da6b4b6e6..13a494b714 100644
---- a/package/lite/lite.hash
-+++ b/package/lite/lite.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	1b784cf595c3d5313e3705db210119f77d48826dbc7fcf6328af83a1270c2264	LiTE-0.8.10.tar.gz
-+sha256  1b784cf595c3d5313e3705db210119f77d48826dbc7fcf6328af83a1270c2264  LiTE-0.8.10.tar.gz
-+sha256  512d2d21b6b3384ba64781abb0208a1b87740bc31e2df48e2b206ddb7e4d5779  COPYING
-diff --git a/package/lksctp-tools/lksctp-tools.hash b/package/lksctp-tools/lksctp-tools.hash
-index 0ecc8ff0e2..7c8ef60460 100644
---- a/package/lksctp-tools/lksctp-tools.hash
-+++ b/package/lksctp-tools/lksctp-tools.hash
-@@ -1,3 +1,6 @@
- # From https://sourceforge.net/projects/lksctp/files/lksctp-tools/
- md5	68e9b8fa4d4e331029b247b72d46d7a5	lksctp-tools-1.0.17.tar.gz
- sha1	941b0b5c39e364a971f514bba66120435660e518	lksctp-tools-1.0.17.tar.gz
-+# Locally computed
-+sha256  dee5f35e583183abb9212938643ecb2d858fd89e2e286f4b1d903f65d49d6c76  COPYING.lib
-+sha256  cc2a6651c315b233ebc110b49ea3c6452eff9a28f8bc051ffd2bb92a8dcfa3d2  COPYING
-diff --git a/package/lmbench/lmbench.hash b/package/lmbench/lmbench.hash
-index b7aaa6ae56..25c150f4d7 100644
---- a/package/lmbench/lmbench.hash
-+++ b/package/lmbench/lmbench.hash
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/matchbox-common/matchbox-common.hash b/package/matchbox-common/matchbox-common.hash
+index 619d8473c0..b4aa42a15e 100644
+--- a/package/matchbox-common/matchbox-common.hash
++++ b/package/matchbox-common/matchbox-common.hash
 @@ -1,2 +1,4 @@
- # Locally computed:
- sha256  cbd5777d15f44eab7666dcac418054c3c09df99826961a397d9acf43d8a2a551  lmbench-3.0-a9.tgz
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-+sha256  3be7a155efa448db90071a95fbf81796f8f90edf9204f0463cfd23402dc90a72  COPYING-2
-diff --git a/package/lockdev/lockdev.hash b/package/lockdev/lockdev.hash
-index bb055e4ade..e32466dfe7 100644
---- a/package/lockdev/lockdev.hash
-+++ b/package/lockdev/lockdev.hash
-@@ -1,3 +1,5 @@
- # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockdev/lockdev_1.0.3-1.6.dsc
--sha256	ccae635d7ac3fdd50897eceb250872b3d9a191d298f213e7f0c836910d869f82	lockdev_1.0.3.orig.tar.gz
--sha256	a5405c6ee5e97e45eeb1c81330a7e9f444a58bda5e6771fa30007516c115007e	lockdev_1.0.3-1.6.diff.gz
-+sha256  ccae635d7ac3fdd50897eceb250872b3d9a191d298f213e7f0c836910d869f82  lockdev_1.0.3.orig.tar.gz
-+sha256  a5405c6ee5e97e45eeb1c81330a7e9f444a58bda5e6771fa30007516c115007e  lockdev_1.0.3-1.6.diff.gz
-+# Locally calculated
-+sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  LICENSE
-diff --git a/package/log4cxx/log4cxx.hash b/package/log4cxx/log4cxx.hash
-index 469d99af02..90fa2e73d3 100644
---- a/package/log4cxx/log4cxx.hash
-+++ b/package/log4cxx/log4cxx.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	0de0396220a9566a580166e66b39674cb40efd2176f52ad2c65486c99c920c8c	apache-log4cxx-0.10.0.tar.gz
-+sha256  0de0396220a9566a580166e66b39674cb40efd2176f52ad2c65486c99c920c8c  apache-log4cxx-0.10.0.tar.gz
+ # From http://downloads.yoctoproject.org/releases/matchbox/matchbox-common/0.9/matchbox-common-0.9.1.tar.bz2.md5
+ md5	8e8ba0ee170a9ac78fdc583b00ccf76b	matchbox-common-0.9.1.tar.bz2
 +# Locally computed
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/lpc3250loader/lpc3250loader.hash b/package/lpc3250loader/lpc3250loader.hash
-index 4f9dbc4e04..9a27863b25 100644
---- a/package/lpc3250loader/lpc3250loader.hash
-+++ b/package/lpc3250loader/lpc3250loader.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 267de7541c92e5b007b93c660a41188976d531a3757f4ffd9b7142d3994da7d1  lpc3250loader-1.0.tar.gz
-+sha256  267de7541c92e5b007b93c660a41188976d531a3757f4ffd9b7142d3994da7d1  lpc3250loader-1.0.tar.gz
-+sha256  9a817497240e8e92f09ccfec7568a74673dc30ec008b541c8706663677b4e7a9  LPC3250loader.py
-diff --git a/package/lrzsz/lrzsz.hash b/package/lrzsz/lrzsz.hash
-index 932832d58b..cd8dd6f489 100644
---- a/package/lrzsz/lrzsz.hash
-+++ b/package/lrzsz/lrzsz.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	c28b36b14bddb014d9e9c97c52459852f97bd405f89113f30bee45ed92728ff1	lrzsz-0.12.20.tar.gz
-+sha256  c28b36b14bddb014d9e9c97c52459852f97bd405f89113f30bee45ed92728ff1  lrzsz-0.12.20.tar.gz
-+sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/lshw/lshw.hash b/package/lshw/lshw.hash
-index 0694229cf5..a8352d4283 100644
---- a/package/lshw/lshw.hash
-+++ b/package/lshw/lshw.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	ae22ef11c934364be4fd2a0a1a7aadf4495a0251ec6979da280d342a89ca3c2f	lshw-B.02.18.tar.gz
-+sha256  ae22ef11c934364be4fd2a0a1a7aadf4495a0251ec6979da280d342a89ca3c2f  lshw-B.02.18.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/lsuio/lsuio.hash b/package/lsuio/lsuio.hash
-index d6077af2d4..2df6d074f4 100644
---- a/package/lsuio/lsuio.hash
-+++ b/package/lsuio/lsuio.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	c88b3850248b2d3419e025abd7b9b0991c8bd33a2d4983f9608408a29900bfb5	lsuio-0.2.0.tar.gz
-+sha256  c88b3850248b2d3419e025abd7b9b0991c8bd33a2d4983f9608408a29900bfb5  lsuio-0.2.0.tar.gz
 +sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index 777f06ea56..4f373c0ce4 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
+diff --git a/package/matchbox-desktop/matchbox-desktop.hash b/package/matchbox-desktop/matchbox-desktop.hash
+index e48a4a955c..0673e8e10f 100644
+--- a/package/matchbox-desktop/matchbox-desktop.hash
++++ b/package/matchbox-desktop/matchbox-desktop.hash
 @@ -1,2 +1,4 @@
- # From: https://github.com/linux-test-project/ltp/releases/download/20200120/ltp-full-20200120.tar.xz.sha1
- sha1 8f622383907e2e64e60b69fd305fecb34311d6b6  ltp-full-20200120.tar.xz
+ # From http://downloads.yoctoproject.org/releases/matchbox/matchbox-desktop/0.9/matchbox-desktop-0.9.1.tar.bz2.md5
+ md5	3335a30b1a1aacfb39f23b505254765c	matchbox-desktop-0.9.1.tar.bz2
 +# Locally computed
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ltrace/ltrace.hash b/package/ltrace/ltrace.hash
-index 58a9c6d2af..f795f53bfb 100644
---- a/package/ltrace/ltrace.hash
-+++ b/package/ltrace/ltrace.hash
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/matchbox-fakekey/matchbox-fakekey.hash b/package/matchbox-fakekey/matchbox-fakekey.hash
+index 3e8778a6e1..516e0b6362 100644
+--- a/package/matchbox-fakekey/matchbox-fakekey.hash
++++ b/package/matchbox-fakekey/matchbox-fakekey.hash
+@@ -1,2 +1,4 @@
+ # From http://downloads.yoctoproject.org/releases/matchbox/libfakekey/0.1/libfakekey-0.1.tar.bz2.md5
+ md5	83dbde4d77e8baf0176fe4291d8a2303	libfakekey-0.1.tar.bz2
++# Locally computed
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/matchbox-keyboard/matchbox-keyboard.hash b/package/matchbox-keyboard/matchbox-keyboard.hash
+index 76997b0da3..c65fbecff4 100644
+--- a/package/matchbox-keyboard/matchbox-keyboard.hash
++++ b/package/matchbox-keyboard/matchbox-keyboard.hash
+@@ -1,2 +1,4 @@
+ # From http://downloads.yoctoproject.org/releases/matchbox/matchbox-keyboard/0.1/matchbox-keyboard-0.1.tar.bz2.md5
+ md5	50940321d59fee23b38a4941100abf25	matchbox-keyboard-0.1.tar.bz2
++# Locally computed
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/matchbox-lib/matchbox-lib.hash b/package/matchbox-lib/matchbox-lib.hash
+index 6f3a6531ee..d48fb32043 100644
+--- a/package/matchbox-lib/matchbox-lib.hash
++++ b/package/matchbox-lib/matchbox-lib.hash
+@@ -1,2 +1,4 @@
+ # From http://downloads.yoctoproject.org/releases/matchbox/libmatchbox/1.9/libmatchbox-1.9.tar.bz2.md5
+ md5	9f73e7515cc4679171a5db180dc1343b	libmatchbox-1.9.tar.bz2
++# Locally computed
++sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
+diff --git a/package/matchbox-panel/matchbox-panel.hash b/package/matchbox-panel/matchbox-panel.hash
+index 82802a9982..5e72b9ec8f 100644
+--- a/package/matchbox-panel/matchbox-panel.hash
++++ b/package/matchbox-panel/matchbox-panel.hash
+@@ -1,2 +1,4 @@
+ # From http://downloads.yoctoproject.org/releases/matchbox/matchbox-panel/0.9/matchbox-panel-0.9.3.tar.bz2.md5
+ md5	56d1807636f3919e22e51896ab7ccd2e	matchbox-panel-0.9.3.tar.bz2
++# Locally computed
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/matchbox-startup-monitor/matchbox-startup-monitor.hash b/package/matchbox-startup-monitor/matchbox-startup-monitor.hash
+index b08e228912..c1b5098e92 100644
+--- a/package/matchbox-startup-monitor/matchbox-startup-monitor.hash
++++ b/package/matchbox-startup-monitor/matchbox-startup-monitor.hash
+@@ -1,2 +1,4 @@
+ # From http://downloads.yoctoproject.org/releases/matchbox/mb-applet-startup-monitor/0.1/mb-applet-startup-monitor-0.1.tar.bz2.md5
+ md5	ea4b3c1ebee3f731b77a2d4bf8e9aa3c	mb-applet-startup-monitor-0.1.tar.bz2
++# Locally computed
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/mcrypt/mcrypt.hash b/package/mcrypt/mcrypt.hash
+index cf29eaa9f6..c6c8871f4f 100644
+--- a/package/mcrypt/mcrypt.hash
++++ b/package/mcrypt/mcrypt.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  5145aa844e54cca89ddab6fb7dd9e5952811d8d787c4f4bf27eb261e6c182098  mcrypt-2.6.8.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/memstat/memstat.hash b/package/memstat/memstat.hash
+index f27e7d25f3..9a30e342fb 100644
+--- a/package/memstat/memstat.hash
++++ b/package/memstat/memstat.hash
+@@ -1,2 +1,4 @@
+ # From http://sourceforge.net/projects/memstattool/files/
+ sha1	26071dbc30a2796c0503c7d8060a548ca36f8df9	memstat_1.0.tar.gz
++# Locally computed
++sha256  5e5db2a2fab637bbbc5d2400141fcb9f1b4b55540d025c2dc54378dc497cb524  debian/copyright
+diff --git a/package/memtest86/memtest86.hash b/package/memtest86/memtest86.hash
+index 81ad98e72e..559ae0ac6c 100644
+--- a/package/memtest86/memtest86.hash
++++ b/package/memtest86/memtest86.hash
+@@ -1,2 +1,3 @@
+ # locally computed using sha256sum
+-sha256	142127b7953fbd829b1057fb64a78d3340c2b771484230a7347e94530a0d9039	memtest86+-5.01.tar.gz
++sha256  142127b7953fbd829b1057fb64a78d3340c2b771484230a7347e94530a0d9039  memtest86+-5.01.tar.gz
++sha256  2e15e2174b86640d7fbfcb62b51d9182062d9db71d66a46e5b01d736c68150ea  README
+diff --git a/package/memtester/memtester.hash b/package/memtester/memtester.hash
+index 2d9ef3977f..da8c1c02c9 100644
+--- a/package/memtester/memtester.hash
++++ b/package/memtester/memtester.hash
 @@ -1,2 +1,3 @@
  # Locally computed
--sha256 894333bb7d347066c4e398d9f4a202af5f2faf80754905dd0e6a2259695baba0  ltrace-c22d359433b333937ee3d803450dc41998115685.tar.gz
-+sha256  894333bb7d347066c4e398d9f4a202af5f2faf80754905dd0e6a2259695baba0  ltrace-c22d359433b333937ee3d803450dc41998115685.tar.gz
-+sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/lua-ev/lua-ev.hash b/package/lua-ev/lua-ev.hash
-index 3f8d981297..eb4f4cf74c 100644
---- a/package/lua-ev/lua-ev.hash
-+++ b/package/lua-ev/lua-ev.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 4e26e05830955fdd882a1b48b535be94356582eea310327f839f830cd9250d3a  lua-ev-339426fbe528f11cb3cd1af69a88f06bba367981.tar.gz
-+sha256  4e26e05830955fdd882a1b48b535be94356582eea310327f839f830cd9250d3a  lua-ev-339426fbe528f11cb3cd1af69a88f06bba367981.tar.gz
-+sha256  c224cc31feec52e33b621ccdbc245e21316a20a134a4cd8706438a3b3382e8ac  README
-diff --git a/package/lua-msgpack-native/lua-msgpack-native.hash b/package/lua-msgpack-native/lua-msgpack-native.hash
-index cfc598319d..2a49e9f382 100644
---- a/package/lua-msgpack-native/lua-msgpack-native.hash
-+++ b/package/lua-msgpack-native/lua-msgpack-native.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  025cf91d509fa3985869d18ef9b8eaeb875ff3c9fcf6467beeed6eab3bb35c93  lua-msgpack-native-41a91b994c70389dc9daa1a15678741d8ec41749.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/lua-sdl2/lua-sdl2.hash b/package/lua-sdl2/lua-sdl2.hash
-index 690ff147e2..e3680a92e2 100644
---- a/package/lua-sdl2/lua-sdl2.hash
-+++ b/package/lua-sdl2/lua-sdl2.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	cee7875106062fbc00cf8acb3b2738e336e2327df73ede011968cb060c094bfb  lua-sdl2-2.0.5-6.0.tar.gz
-+sha256  cee7875106062fbc00cf8acb3b2738e336e2327df73ede011968cb060c094bfb  lua-sdl2-2.0.5-6.0.tar.gz
-+sha256  4f56a5b6943a8ff9611a39e7d4d88dba9ad314dcdf56c62a1425798a6e624494  LICENSE
-diff --git a/package/lua/lua.hash b/package/lua/lua.hash
-index ba57304d0f..3e7812b7dc 100644
---- a/package/lua/lua.hash
-+++ b/package/lua/lua.hash
-@@ -4,3 +4,5 @@ sha1 112eb10ff04d1b4c9898e121d6bdf54a81482447  lua-5.3.5.tar.gz
- 
- md5 2e115fe26e435e33b0d5c022e4490567           lua-5.1.5.tar.gz
- sha1 b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
+-sha256	f9dfe2fd737c38fad6535bbab327da9a21f7ce4ea6f18c7b3339adef6bf5fd88	memtester-4.3.0.tar.gz
++sha256  f9dfe2fd737c38fad6535bbab327da9a21f7ce4ea6f18c7b3339adef6bf5fd88  memtester-4.3.0.tar.gz
++sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+diff --git a/package/metacity/metacity.hash b/package/metacity/metacity.hash
+index 49450160fe..583db0f204 100644
+--- a/package/metacity/metacity.hash
++++ b/package/metacity/metacity.hash
+@@ -1,2 +1,5 @@
+ # From http://ftp.gnome.org/pub/gnome/sources/metacity/2.25/metacity-2.25.1.sha256sum
+-sha256	fb2ede4ac02d7da08d3c3323fb76afaf945c8cccc07cb2d3a4b7f44fb49f1c47	metacity-2.25.1.tar.bz2
++sha256  fb2ede4ac02d7da08d3c3323fb76afaf945c8cccc07cb2d3a4b7f44fb49f1c47  metacity-2.25.1.tar.bz2
++
 +# Locally computed
-+sha256  ee5e3e82af1e1b543c4f216e399d7c8cfee797711913f349e385101c4ae60a79  COPYRIGHT
-diff --git a/package/luabitop/luabitop.hash b/package/luabitop/luabitop.hash
-index 6f36bd18b7..02757a6b08 100644
---- a/package/luabitop/luabitop.hash
-+++ b/package/luabitop/luabitop.hash
-@@ -1,2 +1,4 @@
- # computed by luarocks/buildroot
--sha256 fc7a8065a57462ee13bed7f95b0ab13f94ecd1bf846108c61ccf2c75548af26e  luabitop-1.0.2-1.src.rock
-+sha256  fc7a8065a57462ee13bed7f95b0ab13f94ecd1bf846108c61ccf2c75548af26e  luabitop-1.0.2-1.src.rock
-+# Locally calcuated
-+sha256  25e331120d0c2f95fa2ac6e439ca920f0a4362c366a4c7382d843113743a3ba5  LuaBitOp-1.0.2/README
-diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
-index fb06bc40a1..ee72bfe321 100644
---- a/package/luaposix/luaposix.hash
-+++ b/package/luaposix/luaposix.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 7948f4ac8b953172e928753632e37ad97cc3014df74b524fe7839f71216a7e90  luaposix-34.1.1.tar.gz
-+sha256  7948f4ac8b953172e928753632e37ad97cc3014df74b524fe7839f71216a7e90  luaposix-34.1.1.tar.gz
-+sha256  a868e95dd14f832eb63c4580c5fed42d78a6bd11785e3605211f446b05904a18  LICENSE
-diff --git a/package/lugaru/lugaru.hash b/package/lugaru/lugaru.hash
-index 6ba2bca6ec..a08edb460f 100644
---- a/package/lugaru/lugaru.hash
-+++ b/package/lugaru/lugaru.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
--sha256 f3ea477caf78911c69939fbdc163f9f6517c7ef2267e716a0e050be1a166ef97 lugaru-1.2.tar.xz
-+sha256  f3ea477caf78911c69939fbdc163f9f6517c7ef2267e716a0e050be1a166ef97  lugaru-1.2.tar.xz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.txt
-+sha256  df020520630390de59394235a90a17c5d52d3b80ef76e2edf6d0690cd8b7fd7c  CONTENT-LICENSE.txt
-diff --git a/package/lutok/lutok.hash b/package/lutok/lutok.hash
-index 0ec8988073..5ae9b1f429 100644
---- a/package/lutok/lutok.hash
-+++ b/package/lutok/lutok.hash
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/micropython-lib/micropython-lib.hash b/package/micropython-lib/micropython-lib.hash
+index 1ba662ac8d..cbdda23844 100644
+--- a/package/micropython-lib/micropython-lib.hash
++++ b/package/micropython-lib/micropython-lib.hash
 @@ -1,2 +1,3 @@
  # Locally computed
--sha256 2cec51efa0c8d65ace8b21eaa08384b77abc5087b46e785f78de1c21fb754cd5 lutok-0.4.tar.gz
-+sha256  2cec51efa0c8d65ace8b21eaa08384b77abc5087b46e785f78de1c21fb754cd5  lutok-0.4.tar.gz
-+sha256  9343913f8ef8a91ceaf148fdcdb70bb8a45b9df9dac2ef71308053dcb312ade9  COPYING
+-sha256 66e15380eb109613263beb6825b8eecb9191088270c1a59e8c7d922dd57183c7  micropython-lib-1.9.3.tar.gz
++sha256  66e15380eb109613263beb6825b8eecb9191088270c1a59e8c7d922dd57183c7  micropython-lib-1.9.3.tar.gz
++sha256  baed4196a4310c576c2010f0a49f987a49e63856df7cd45af11cb3571df4bf74  LICENSE
+diff --git a/package/midori/midori.hash b/package/midori/midori.hash
+index f548c427fb..d8fd1b7a26 100644
+--- a/package/midori/midori.hash
++++ b/package/midori/midori.hash
+@@ -1,2 +1,5 @@
+ # From download link @ http://midori-browser.org/download/source/
+ sha1	64c86935028feb5f89d799c2acacaad67764da6f	midori_0.5.11_all_.tar.bz2
++
++# Locally computed
++sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/mii-diag/mii-diag.hash b/package/mii-diag/mii-diag.hash
+index 22c69e3e57..daf06d8e62 100644
+--- a/package/mii-diag/mii-diag.hash
++++ b/package/mii-diag/mii-diag.hash
+@@ -1,3 +1,5 @@
+ # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/m/mii-diag/mii-diag_2.11-3.dsc
+-sha256	c690e87e6010607593c1cc2ccd5c481eb3be179387220ad445d8ab83d73ad41c	mii-diag_2.11.orig.tar.gz
+-sha256	b49fd3e7c0c446a949c3ca246cc441824d7ef5a61530f884756a82b0b2997190	mii-diag_2.11-3.diff.gz
++sha256  c690e87e6010607593c1cc2ccd5c481eb3be179387220ad445d8ab83d73ad41c  mii-diag_2.11.orig.tar.gz
++sha256  b49fd3e7c0c446a949c3ca246cc441824d7ef5a61530f884756a82b0b2997190  mii-diag_2.11-3.diff.gz
++# Locally calculated
++sha256  e4a8bd5101522569381305262e6c0f06284c264092b7bd42d80ae3d3715940f5  mii-diag.c
+diff --git a/package/mimic/mimic.hash b/package/mimic/mimic.hash
+index 39d016548a..10780d415d 100644
+--- a/package/mimic/mimic.hash
++++ b/package/mimic/mimic.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	725003c9972d5b67c49d5ea6a89cb26b63414ff2c7adbbaf9200cf9eb55f80eb  mimic-1.1.0.tar.gz
++sha256  725003c9972d5b67c49d5ea6a89cb26b63414ff2c7adbbaf9200cf9eb55f80eb  mimic-1.1.0.tar.gz
++sha256  c423c1c6d260091d80ee4c00f386a10fea39963a3f1530f2c245f15dd20324ee  COPYING
+diff --git a/package/minidlna/minidlna.hash b/package/minidlna/minidlna.hash
+index 5398506c22..608970b1c3 100644
+--- a/package/minidlna/minidlna.hash
++++ b/package/minidlna/minidlna.hash
+@@ -2,4 +2,6 @@
+ md5 a968d3d84971322471cabda3669cc0f8  minidlna-1.2.1.tar.gz
+ sha1 79d0032c7055aefd4c8e5178bc86fbf258d449d2  minidlna-1.2.1.tar.gz
+ # Locally computed
+-sha256 67388ba23ab0c7033557a32084804f796aa2a796db7bb2b770fb76ac2a742eec  minidlna-1.2.1.tar.gz
++sha256  67388ba23ab0c7033557a32084804f796aa2a796db7bb2b770fb76ac2a742eec  minidlna-1.2.1.tar.gz
++sha256  79146b7f558e56510b9a714ff75318c05ab93aeccfd6597497b9bce212cf92ea  COPYING
++sha256  94876d7886116e176e702b4902bd9f19731a6883db5f229ac2a7058a22aa6529  LICENCE.miniupnpd
+diff --git a/package/miraclecast/miraclecast.hash b/package/miraclecast/miraclecast.hash
+index 97c68d019d..1ec0b27fd4 100644
+--- a/package/miraclecast/miraclecast.hash
++++ b/package/miraclecast/miraclecast.hash
+@@ -1,2 +1,6 @@
+ # Locally calculated
+-sha256 e11440f782519663db367285dd54b53eb5feb78682dac42bd90230222de9f0fd miraclecast-c94be167c85c6ec8badd7ac79e3dea2e0b73225c.tar.gz
++sha256  e11440f782519663db367285dd54b53eb5feb78682dac42bd90230222de9f0fd  miraclecast-c94be167c85c6ec8badd7ac79e3dea2e0b73225c.tar.gz
++sha256  66bdcc8bcbd1d5ee336c4c8e8749ea538e17b0c0e22b0f705025deb1e912a6d3  COPYING
++sha256  8e136a0e16783d79792e6a57a1422a40acea2e18affb5e2cecb858382f8b0a6c  LICENSE_gdhcp
++sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE_htable
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE_lgpl
+diff --git a/package/mksh/mksh.hash b/package/mksh/mksh.hash
+index 872d042cab..4e71a42634 100644
+--- a/package/mksh/mksh.hash
++++ b/package/mksh/mksh.hash
+@@ -1,2 +1,4 @@
+ # From http://www.mirbsd.org/mksh.htm#build
+-sha256 3d101154182d52ae54ef26e1360c95bc89c929d28859d378cc1c84f3439dbe75  mksh-R57.tgz
++sha256  3d101154182d52ae54ef26e1360c95bc89c929d28859d378cc1c84f3439dbe75  mksh-R57.tgz
++# Locally computed
++sha256  4655d87a53a703ead36a52f166f065c23cf58dd02d7b14abd2474f9f49383a16  mksh.1
+diff --git a/package/modplugtools/modplugtools.hash b/package/modplugtools/modplugtools.hash
+index e29eda90e0..848d640321 100644
+--- a/package/modplugtools/modplugtools.hash
++++ b/package/modplugtools/modplugtools.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  0122d44ea0513b928cf9d463acc886d08a2664579aa96ddeeb270d5c81193a4e  modplugtools-0.5.3.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
+index b8f8de3d76..b1db917c57 100644
+--- a/package/mongrel2/mongrel2.hash
++++ b/package/mongrel2/mongrel2.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 543553c3082f2b992649a975f6cb7324ae2aea93af05288ea4f2c1262a7f63b2  mongrel2-v1.9.2.tar.bz2
++sha256  543553c3082f2b992649a975f6cb7324ae2aea93af05288ea4f2c1262a7f63b2  mongrel2-v1.9.2.tar.bz2
++sha256  eb6e2a2baa637d06f6aa762886fbc8939934eb5fdb0b3a5b3882f2a61e9a4357  LICENSE
+diff --git a/package/mono-gtksharp3/mono-gtksharp3.hash b/package/mono-gtksharp3/mono-gtksharp3.hash
+index 4005051b10..706d985159 100644
+--- a/package/mono-gtksharp3/mono-gtksharp3.hash
++++ b/package/mono-gtksharp3/mono-gtksharp3.hash
+@@ -1,2 +1,5 @@
+ # sha256 from https://download.gnome.org/sources/gtk-sharp/2.99/gtk-sharp-2.99.3.sha256sum
+-sha256 6440f571416267ae0cb5698071d087b31e3084693fa2c829b1db37ca7ea2c3a2	gtk-sharp-2.99.3.tar.xz
++sha256  6440f571416267ae0cb5698071d087b31e3084693fa2c829b1db37ca7ea2c3a2  gtk-sharp-2.99.3.tar.xz
++
++# Locally computed
++sha256  4b96eca92e6964e89c2faf6a810c9a0214daf6be651fa848fdfbb8cef80c04b1  COPYING
+diff --git a/package/mp4v2/mp4v2.hash b/package/mp4v2/mp4v2.hash
+index d5a49c44ce..d75c1994d9 100644
+--- a/package/mp4v2/mp4v2.hash
++++ b/package/mp4v2/mp4v2.hash
+@@ -1,2 +1,4 @@
+ # From https://code.google.com/p/mp4v2/downloads/detail?name=mp4v2-2.0.0.tar.bz2
+ sha1 193260cfb7201e6ec250137bcca1468d4d20e2f0 mp4v2-2.0.0.tar.bz2
++# Locally computed
++sha256  15e38684c940176e2fc76331a2299d2ab5115ac997078f768ef31b896af69fc5  COPYING
+diff --git a/package/mpir/mpir.hash b/package/mpir/mpir.hash
+index 8320337ebb..71d0c19d12 100644
+--- a/package/mpir/mpir.hash
++++ b/package/mpir/mpir.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	52f63459cf3f9478859de29e00357f004050ead70b45913f2c2269d9708675bb	mpir-3.0.0.tar.bz2
++sha256  52f63459cf3f9478859de29e00357f004050ead70b45913f2c2269d9708675bb  mpir-3.0.0.tar.bz2
++sha256  9ccf26cfe845e0eb8bb58053e47366e7ab6b697ae010f7650978d4b71b7d1fc1  COPYING.LIB
+diff --git a/package/mraa/mraa.hash b/package/mraa/mraa.hash
+index abe6d9f84a..f2eb73ca74 100644
+--- a/package/mraa/mraa.hash
++++ b/package/mraa/mraa.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 e4501e6936afb426c75b7d406c1a7a27b514297f640e887de4d88a2d9687f37b  mraa-0.9.1.tar.gz
++sha256  e4501e6936afb426c75b7d406c1a7a27b514297f640e887de4d88a2d9687f37b  mraa-0.9.1.tar.gz
++sha256  04f8503394c6d01c86538a693f6990fc1debd94119954ff4eae4407fe7c60a8e  COPYING
+diff --git a/package/msr-tools/msr-tools.hash b/package/msr-tools/msr-tools.hash
+index 18146df51e..51ec1c79c7 100644
+--- a/package/msr-tools/msr-tools.hash
++++ b/package/msr-tools/msr-tools.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 9b87245ee091a798184e447066e9e0d7709b7c81f5e6ad55f2b958c1aa50c4a3 msr-tools-1.3.tar.gz
++sha256  9b87245ee091a798184e447066e9e0d7709b7c81f5e6ad55f2b958c1aa50c4a3  msr-tools-1.3.tar.gz
++sha256  98398b08cd0dab9a04115b049758d4a7917af3c74389a4576d26c8a240d38a73  cpuid.c
+diff --git a/package/mtdev2tuio/mtdev2tuio.hash b/package/mtdev2tuio/mtdev2tuio.hash
+index b0d159cadc..9932e9e180 100644
+--- a/package/mtdev2tuio/mtdev2tuio.hash
++++ b/package/mtdev2tuio/mtdev2tuio.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 4a6aa319c44478dceaf01a24603690767e56c029a1f0380da0f31eac5a02e10f  mtdev2tuio-e1e7378d86abe751158e743586133022f32fa4d1.tar.gz
++sha256  4a6aa319c44478dceaf01a24603690767e56c029a1f0380da0f31eac5a02e10f  mtdev2tuio-e1e7378d86abe751158e743586133022f32fa4d1.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/musepack/musepack.hash b/package/musepack/musepack.hash
+index b1bd73ca89..b811edd991 100644
+--- a/package/musepack/musepack.hash
++++ b/package/musepack/musepack.hash
+@@ -1,4 +1,7 @@
+ # From https://www.musepack.net/index.php?pg=src
+ md5	754d67be67f713e54baf70fcfdb2817e	musepack_src_r475.tar.gz
+ # Calculated based on the hash above
+-sha256	a4b1742f997f83e1056142d556a8c20845ba764b70365ff9ccf2e3f81c427b2b	musepack_src_r475.tar.gz
++sha256  a4b1742f997f83e1056142d556a8c20845ba764b70365ff9ccf2e3f81c427b2b  musepack_src_r475.tar.gz
++# Locally computed
++sha256  141f551d8e4f037b7f6bc9136b7d3116c7ae9ec8da10c4f14c07c6dc34bc9aa5  libmpcdec/COPYING
++sha256  0da88639aebbd614151ee52294fa13789f8cd28d9f2e0a56998b89b5c21ddc2b  libmpcenc/quant.c
 -- 
 2.20.1
