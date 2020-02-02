@@ -1,9 +1,9 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun,  2 Feb 2020 20:43:14 +0100
-Subject: [Buildroot] [PATCH 24/32] package/u*: add license file hashes
+Date: Sun,  2 Feb 2020 20:43:16 +0100
+Subject: [Buildroot] [PATCH 26/32] package/w*: add license file hashes
 In-Reply-To: <20200202194321.16321-1-heiko.thiery@gmail.com>
 References: <20200202194321.16321-1-heiko.thiery@gmail.com>
-Message-ID: <20200202194321.16321-25-heiko.thiery@gmail.com>
+Message-ID: <20200202194321.16321-27-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,131 +12,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/ubus/ubus.hash                     | 1 +
- package/uccp420wlan/uccp420wlan.hash       | 4 +++-
- package/ucl/ucl.hash                       | 3 ++-
- package/udpcast/udpcast.hash               | 3 ++-
- package/udpxy/udpxy.hash                   | 3 ++-
- package/uhttpd/uhttpd.hash                 | 3 ++-
- package/unionfs/unionfs.hash               | 5 +++--
- package/unzip/unzip.hash                   | 1 +
- package/upx/upx.hash                       | 1 +
- package/usbmount/usbmount.hash             | 4 +++-
- package/ushare/ushare.hash                 | 3 ++-
- package/ux500-firmware/ux500-firmware.hash | 3 ++-
- 12 files changed, 24 insertions(+), 10 deletions(-)
+ package/w_scan/w_scan.hash     | 3 ++-
+ package/weston/weston.hash     | 3 ++-
+ package/which/which.hash       | 4 +++-
+ package/wipe/wipe.hash         | 1 +
+ package/wiringpi/wiringpi.hash | 3 ++-
+ package/wmctrl/wmctrl.hash     | 3 ++-
+ 6 files changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/package/ubus/ubus.hash b/package/ubus/ubus.hash
-index 08297348e0..bda58bc30c 100644
---- a/package/ubus/ubus.hash
-+++ b/package/ubus/ubus.hash
+diff --git a/package/w_scan/w_scan.hash b/package/w_scan/w_scan.hash
+index e04a084360..fcb0e611bc 100644
+--- a/package/w_scan/w_scan.hash
++++ b/package/w_scan/w_scan.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
- sha256  93ef2612853641ca8d16d07527115c72ed03f8eaa1c727a01b069a4e814247c0  ubus-34c6e818e431cc53478a0f7c7c1eca07d194d692.tar.gz
-+sha256  f53187f011575f6ec6c529136fd4658d67e674227c80b7b72c99b3654454ae7f  ubusd_acl.h
-diff --git a/package/uccp420wlan/uccp420wlan.hash b/package/uccp420wlan/uccp420wlan.hash
-index 90f4948ac9..905fa4299d 100644
---- a/package/uccp420wlan/uccp420wlan.hash
-+++ b/package/uccp420wlan/uccp420wlan.hash
+-sha256 38e0f38a7bf06cff6d6ea01652ad4ee60da2cb0e937360468f936da785b46ffe  w_scan-20170107.tar.bz2
++sha256  38e0f38a7bf06cff6d6ea01652ad4ee60da2cb0e937360468f936da785b46ffe  w_scan-20170107.tar.bz2
++sha256  ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7  COPYING
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index a2dddf7a5b..408fe5a025 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -4,4 +4,5 @@ sha1 3b39e454b3dc8dc32598790cfcc65728b448378b  weston-6.0.1.tar.xz
+ sha256 bf2f6d5aae2e11cabb6bd69a76bcf9edb084f8c3e14ca769bea7234a513155b4  weston-6.0.1.tar.xz
+ sha512 3da04ff9b884480ce0824950347185e55584e3938021fe62014423d3d51577eafdda8de650a5de6eb37a842130c9cb14c7a952a560f6be93ff973164363af3d9  weston-6.0.1.tar.xz
+ # locally computed
+-sha256 0f0de7b7b1f65870139c95dde7abc19ed305631ae7c5d37c386db40cde108632  weston-rel_imx_4.9.51_8mq_ga.tar.gz
++sha256  0f0de7b7b1f65870139c95dde7abc19ed305631ae7c5d37c386db40cde108632  weston-rel_imx_4.9.51_8mq_ga.tar.gz
++sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
+diff --git a/package/which/which.hash b/package/which/which.hash
+index fe649ab019..edea4e5e34 100644
+--- a/package/which/which.hash
++++ b/package/which/which.hash
 @@ -1,2 +1,4 @@
- # locally computed hash
--sha256 1d4de62fc842dbab739708cf0d9ebce270fcdf63c1c13ac676cbc253acdaa3bb uccp420wlan-6.9.1.tar.gz
-+sha256  1d4de62fc842dbab739708cf0d9ebce270fcdf63c1c13ac676cbc253acdaa3bb  uccp420wlan-6.9.1.tar.gz
-+sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-+sha256  9ac431585fddfe624b08cf7464876a5e96061047ff26a9e926da3d89d21a2a73  firmware/LICENSE.imagination
-diff --git a/package/ucl/ucl.hash b/package/ucl/ucl.hash
-index 6b1f41ed10..0252f69297 100644
---- a/package/ucl/ucl.hash
-+++ b/package/ucl/ucl.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	b865299ffd45d73412293369c9754b07637680e5c826915f097577cd27350348	ucl-1.03.tar.gz
-+sha256  b865299ffd45d73412293369c9754b07637680e5c826915f097577cd27350348  ucl-1.03.tar.gz
-+sha256  70439f6e2b47057a408d2390ed6663b9875f5a08066a06a060a357ef1df89a8c  COPYING
-diff --git a/package/udpcast/udpcast.hash b/package/udpcast/udpcast.hash
-index 133e1db80b..a70aa71981 100644
---- a/package/udpcast/udpcast.hash
-+++ b/package/udpcast/udpcast.hash
-@@ -1,2 +1,3 @@
- # locally computed hash
--sha256 ce9090ef80b6035a744a9b5ac335e61c99baa92c39ff53277266fbfcb836445a udpcast-20120424.tar.gz
-+sha256  ce9090ef80b6035a744a9b5ac335e61c99baa92c39ff53277266fbfcb836445a  udpcast-20120424.tar.gz
-+sha256  422befd3503b1f39a6027017f639874c1f274e37ec60ba3174894646b584ccbc  COPYING
-diff --git a/package/udpxy/udpxy.hash b/package/udpxy/udpxy.hash
-index 4042a41dd6..8455fcdb1a 100644
---- a/package/udpxy/udpxy.hash
-+++ b/package/udpxy/udpxy.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256  6ce33b1d14a1aeab4bd2566aca112e41943df4d002a7678d9a715108e6b714bd    udpxy.1.0.23-9-prod.tar.gz
-+sha256  6ce33b1d14a1aeab4bd2566aca112e41943df4d002a7678d9a715108e6b714bd  udpxy.1.0.23-9-prod.tar.gz
-+sha256  60ead3913246c7cd930fe653c0053aba1af2cd9f82b266befdbbd6e0b8ecb750  README
-diff --git a/package/uhttpd/uhttpd.hash b/package/uhttpd/uhttpd.hash
-index 7e09f18087..e8bdb0bb6b 100644
---- a/package/uhttpd/uhttpd.hash
-+++ b/package/uhttpd/uhttpd.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 9325c95c9bb1c51bf135700a65738884fa9cd548ff8166c8b61fdbf99825cd6d  uhttpd-a8bf9c00842224edb394e79909053f7628ee6a82.tar.gz
-+sha256  9325c95c9bb1c51bf135700a65738884fa9cd548ff8166c8b61fdbf99825cd6d  uhttpd-a8bf9c00842224edb394e79909053f7628ee6a82.tar.gz
-+sha256  2a61a8a690e7646a4bfe4261bf77c49f47588db5fc234b3cc66809dcc0cb3985  uhttpd.h
-diff --git a/package/unionfs/unionfs.hash b/package/unionfs/unionfs.hash
-index fcc1d58d6e..f4310b023d 100644
---- a/package/unionfs/unionfs.hash
-+++ b/package/unionfs/unionfs.hash
-@@ -1,3 +1,4 @@
- # Locally computed
--sha256	f24d7dd64c678cefacbebf2727b61e3127b8ecb6bb9176d7117dd31503455643	unionfs-2.0.tar.gz
--sha256	976ca25b7706911f1a6e981c0fd236b607f497aa0b23d407825b0aad41f7c896	0001-include-asm-ioctl.h-for-_IOC_SIZE.patch
-+sha256  f24d7dd64c678cefacbebf2727b61e3127b8ecb6bb9176d7117dd31503455643  unionfs-2.0.tar.gz
-+sha256  976ca25b7706911f1a6e981c0fd236b607f497aa0b23d407825b0aad41f7c896  0001-include-asm-ioctl.h-for-_IOC_SIZE.patch
-+sha256  f56a5579d670e18e0667700bc599acbc0b8217ca1f76b2adb3dad7d2953c4049  LICENSE
-diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
-index a10778a468..d05957d5e2 100644
---- a/package/unzip/unzip.hash
-+++ b/package/unzip/unzip.hash
-@@ -1,5 +1,6 @@
- # Locally computed:
- sha256 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37 unzip60.tgz
-+sha256 7469b81d5d29ac4fd670f7c86ba0cb9fa34f137a2d4d5198437d92ddf918984b LICENSE
- sha256 66a364d75cea29363768ca6d43dd11b9913a59e42b8da16c4f63516c3e4ce7c1 07-increase-size-of-cfactorstr.patch
- sha256 3a8cfd2702d220c6c119eaf805b018b66460284e585e92adc8a572d190471724 08-allow-greater-hostver-values.patch
- sha256 0a1b23118b2f4a3ed097348ab33050d4f79b3863ab30e6d64ac382589834e3de 09-cve-2014-8139-crc-overflow.patch
-diff --git a/package/upx/upx.hash b/package/upx/upx.hash
-index bfcf9326f9..cc7fb66c97 100644
---- a/package/upx/upx.hash
-+++ b/package/upx/upx.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  527ce757429841f51675352b1f9f6fc8ad97b18002080d7bf8672c466d8c6a3c  upx-3.91-src.tar.bz2
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/usbmount/usbmount.hash b/package/usbmount/usbmount.hash
-index 4a5c7f202d..6465461611 100644
---- a/package/usbmount/usbmount.hash
-+++ b/package/usbmount/usbmount.hash
-@@ -1,2 +1,4 @@
- # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/u/usbmount/usbmount_0.0.22.dsc
--sha256	a2b8581534b6c92f0376d202639dbc28862d3834dac64c35bde752f84975527d	usbmount_0.0.22.tar.gz
-+sha256  a2b8581534b6c92f0376d202639dbc28862d3834dac64c35bde752f84975527d  usbmount_0.0.22.tar.gz
+ # Locally calculated after checking pgp signature
+-sha256	f4a245b94124b377d8b49646bf421f9155d36aa7614b6ebf83705d3ffc76eaad	which-2.21.tar.gz
++sha256  f4a245b94124b377d8b49646bf421f9155d36aa7614b6ebf83705d3ffc76eaad  which-2.21.tar.gz
 +# Locally computed
-+sha256  797a416c87923338aa3ed05cce3cfdac6101f0142e72d5ab05c7bd76af5e527b  debian/copyright
-diff --git a/package/ushare/ushare.hash b/package/ushare/ushare.hash
-index 77f0f0f85d..03c675f094 100644
---- a/package/ushare/ushare.hash
-+++ b/package/ushare/ushare.hash
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/wipe/wipe.hash b/package/wipe/wipe.hash
+index 9bde2014dd..d607efde44 100644
+--- a/package/wipe/wipe.hash
++++ b/package/wipe/wipe.hash
 @@ -1,2 +1,3 @@
- # locally computed hash
--sha256 7b9b85c79968d4f4560f02a99e33c6a33ff58f9d41d8faea79e31cce2ee78665 ushare-1.1a.tar.bz2
-+sha256  7b9b85c79968d4f4560f02a99e33c6a33ff58f9d41d8faea79e31cce2ee78665  ushare-1.1a.tar.bz2
-+sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ux500-firmware/ux500-firmware.hash b/package/ux500-firmware/ux500-firmware.hash
-index 1028cc0e12..b77ed20473 100644
---- a/package/ux500-firmware/ux500-firmware.hash
-+++ b/package/ux500-firmware/ux500-firmware.hash
+ # Locally computed:
+ sha256  463916370f9b35bb34419c2c0ae3dc4c0a471db32e8595afa1d14c0337b61aa0  wipe-2.3.1.tar.bz2
++sha256  890cd89006bb57ce95b460e867c7bcc81d30cbc23067a9be4644bdac6882bc14  LICENSE
+diff --git a/package/wiringpi/wiringpi.hash b/package/wiringpi/wiringpi.hash
+index 9c4fe22f5f..83885e4b6d 100644
+--- a/package/wiringpi/wiringpi.hash
++++ b/package/wiringpi/wiringpi.hash
 @@ -1,2 +1,3 @@
- # locally computed hash
--sha256 81633274a9157c076e5e09b5addd81fbcef504b829fc801041cea50eea774bcd ux500-firmware_1.1.3-6linaro1.tar.gz
-+sha256  81633274a9157c076e5e09b5addd81fbcef504b829fc801041cea50eea774bcd  ux500-firmware_1.1.3-6linaro1.tar.gz
-+sha256  b5bbc3fb3ff2f8e165b3bf60b25702d8970b3d7fe88b1c883f20615d550a7cb2  license.txt
+ # Locally calculated
+-sha256 2455fc97d2b60ed169675dccbaabf55e1958c3c2499b246c96edfc8b036e9073 wiringpi-2.46.tar.gz
++sha256  2455fc97d2b60ed169675dccbaabf55e1958c3c2499b246c96edfc8b036e9073  wiringpi-2.46.tar.gz
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
+diff --git a/package/wmctrl/wmctrl.hash b/package/wmctrl/wmctrl.hash
+index a08c0e9e04..531f64a0d8 100644
+--- a/package/wmctrl/wmctrl.hash
++++ b/package/wmctrl/wmctrl.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9 wmctrl-1.07.tar.gz
++sha256  d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9  wmctrl-1.07.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
 -- 
 2.20.1
