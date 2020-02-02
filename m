@@ -1,9 +1,9 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun,  2 Feb 2020 20:43:00 +0100
-Subject: [Buildroot] [PATCH 10/32] package/j*: add license file hashes
+Date: Sun,  2 Feb 2020 20:42:54 +0100
+Subject: [Buildroot] [PATCH 04/32] package/d*: add license file hashes
 In-Reply-To: <20200202194321.16321-1-heiko.thiery@gmail.com>
 References: <20200202194321.16321-1-heiko.thiery@gmail.com>
-Message-ID: <20200202194321.16321-11-heiko.thiery@gmail.com>
+Message-ID: <20200202194321.16321-5-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,83 +12,173 @@ To: buildroot@busybox.net
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/jamvm/jamvm.hash                                 | 1 +
- package/jquery-datetimepicker/jquery-datetimepicker.hash | 3 ++-
- package/jquery-keyboard/jquery-keyboard.hash             | 3 ++-
- package/jquery-sidebar/jquery-sidebar.hash               | 1 +
- package/jquery-ui-themes/jquery-ui-themes.hash           | 1 +
- package/jquery-ui/jquery-ui.hash                         | 1 +
- package/jquery-validation/jquery-validation.hash         | 3 ++-
- package/json-javascript/json-javascript.hash             | 3 ++-
- 8 files changed, 12 insertions(+), 4 deletions(-)
+ package/dawgdic/dawgdic.hash                     | 3 ++-
+ package/dbus-triggerd/dbus-triggerd.hash         | 3 ++-
+ package/dc3dd/dc3dd.hash                         | 3 ++-
+ package/dejavu/dejavu.hash                       | 5 ++++-
+ package/dillo/dillo.hash                         | 3 ++-
+ package/directfb-examples/directfb-examples.hash | 3 ++-
+ package/directfb/directfb.hash                   | 3 ++-
+ package/dmalloc/dmalloc.hash                     | 3 ++-
+ package/dmraid/dmraid.hash                       | 3 +++
+ package/docker/docker.hash                       | 4 +++-
+ package/dstat/dstat.hash                         | 3 ++-
+ package/dtach/dtach.hash                         | 1 +
+ package/duma/duma.hash                           | 2 ++
+ package/dvbsnoop/dvbsnoop.hash                   | 1 +
+ package/dvdauthor/dvdauthor.hash                 | 3 ++-
+ package/dvdrw-tools/dvdrw-tools.hash             | 3 ++-
+ 16 files changed, 34 insertions(+), 12 deletions(-)
 
-diff --git a/package/jamvm/jamvm.hash b/package/jamvm/jamvm.hash
-index f8ef76cb92..9bcbd61393 100644
---- a/package/jamvm/jamvm.hash
-+++ b/package/jamvm/jamvm.hash
+diff --git a/package/dawgdic/dawgdic.hash b/package/dawgdic/dawgdic.hash
+index da03f0b860..ecf3cf9546 100644
+--- a/package/dawgdic/dawgdic.hash
++++ b/package/dawgdic/dawgdic.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 54622a3e79ff3ad2c01a830ec52b997b42ead468b18af5acebab3a4ff32a5ad6  dawgdic-16ac537ba9883ff01b63b6d1fdc3072150c68fee.tar.gz
++sha256  54622a3e79ff3ad2c01a830ec52b997b42ead468b18af5acebab3a4ff32a5ad6  dawgdic-16ac537ba9883ff01b63b6d1fdc3072150c68fee.tar.gz
++sha256  3059f68686f1c5bc6ed0e9db415fc257c4e7618b6ac58ecce83986eb8a7cf501  COPYING
+diff --git a/package/dbus-triggerd/dbus-triggerd.hash b/package/dbus-triggerd/dbus-triggerd.hash
+index aa4ad97914..b7ed89abf7 100644
+--- a/package/dbus-triggerd/dbus-triggerd.hash
++++ b/package/dbus-triggerd/dbus-triggerd.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 3c6d865427bf1b93b16323c796ed6957ce6b2b6fd53f518b1b082d03b939102c  dbus-triggerd-ba3dbec805cb707c94c54de21666bf18b79bcc09.tar.gz
++sha256  3c6d865427bf1b93b16323c796ed6957ce6b2b6fd53f518b1b082d03b939102c  dbus-triggerd-ba3dbec805cb707c94c54de21666bf18b79bcc09.tar.gz
++sha256  30d135650639af9019633690fc1aecbfc150aeeef9446347d4286a58338d10b0  dbus-triggerd.c
+diff --git a/package/dc3dd/dc3dd.hash b/package/dc3dd/dc3dd.hash
+index 5490d8d3f7..670bffa7a7 100644
+--- a/package/dc3dd/dc3dd.hash
++++ b/package/dc3dd/dc3dd.hash
+@@ -1,4 +1,5 @@
+ # From https://sourceforge.net/projects/dc3dd/files/dc3dd/7.2/
+ sha1 1bfe81a921a8473a6ecb46f328ecaab761afb55d dc3dd-7.2.641.tar.xz
+ # Locally computed
+-sha256 7f50aadc38649845ab11014d11013928411c9d2128c941e9630939d4c28cae6d  dc3dd-7.2.641.tar.xz
++sha256  7f50aadc38649845ab11014d11013928411c9d2128c941e9630939d4c28cae6d  dc3dd-7.2.641.tar.xz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/dejavu/dejavu.hash b/package/dejavu/dejavu.hash
+index db7365a1c3..def64cbe87 100644
+--- a/package/dejavu/dejavu.hash
++++ b/package/dejavu/dejavu.hash
+@@ -1,2 +1,5 @@
+ # From https://dejavu-fonts.github.io/Download.html
+-sha256 fa9ca4d13871dd122f61258a80d01751d603b4d3ee14095d65453b4e846e17d7  dejavu-fonts-ttf-2.37.tar.bz2
++sha256  fa9ca4d13871dd122f61258a80d01751d603b4d3ee14095d65453b4e846e17d7  dejavu-fonts-ttf-2.37.tar.bz2
++
++# locally computed
++sha256  7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93  LICENSE
+diff --git a/package/dillo/dillo.hash b/package/dillo/dillo.hash
+index cab0b14abd..fa46702a63 100644
+--- a/package/dillo/dillo.hash
++++ b/package/dillo/dillo.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 db1be16c1c5842ebe07b419aa7c6ef11a45603a75df2877f99635f4f8345148b dillo-3.0.5.tar.bz2
++sha256  db1be16c1c5842ebe07b419aa7c6ef11a45603a75df2877f99635f4f8345148b  dillo-3.0.5.tar.bz2
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/directfb-examples/directfb-examples.hash b/package/directfb-examples/directfb-examples.hash
+index 9d59cfef78..9c7f7c25a7 100644
+--- a/package/directfb-examples/directfb-examples.hash
++++ b/package/directfb-examples/directfb-examples.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 9a2104cc4da8123c8371813551b66b943198979f745cbebc034bb5e10844122a DirectFB-examples-1.7.0.tar.gz
++sha256  9a2104cc4da8123c8371813551b66b943198979f745cbebc034bb5e10844122a  DirectFB-examples-1.7.0.tar.gz
++sha256  f91483684678e8aa8ccc4ee0ede3140b0494f8305e162695c7e6e3f83e54f236  COPYING
+diff --git a/package/directfb/directfb.hash b/package/directfb/directfb.hash
+index 069d8c3f1d..f8c4a8303c 100644
+--- a/package/directfb/directfb.hash
++++ b/package/directfb/directfb.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 b785c638dc31b8fe3a7c81be1475c89b2255ab3d67b777c747d3fbc52f8027a3 DirectFB-1.7.7.tar.gz
++sha256  b785c638dc31b8fe3a7c81be1475c89b2255ab3d67b777c747d3fbc52f8027a3  DirectFB-1.7.7.tar.gz
++sha256  512d2d21b6b3384ba64781abb0208a1b87740bc31e2df48e2b206ddb7e4d5779  COPYING
+diff --git a/package/dmalloc/dmalloc.hash b/package/dmalloc/dmalloc.hash
+index e74ef741b9..113751656c 100644
+--- a/package/dmalloc/dmalloc.hash
++++ b/package/dmalloc/dmalloc.hash
 @@ -1,2 +1,3 @@
  # Locally computed:
- sha256  76428e96df0ae9dd964c7a7c74c1e9a837e2f312c39e9a357fa8178f7eff80da  jamvm-2.0.0.tar.gz
-+sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/jquery-datetimepicker/jquery-datetimepicker.hash b/package/jquery-datetimepicker/jquery-datetimepicker.hash
-index b6aba87920..1fbd428e75 100644
---- a/package/jquery-datetimepicker/jquery-datetimepicker.hash
-+++ b/package/jquery-datetimepicker/jquery-datetimepicker.hash
-@@ -1,2 +1,3 @@
+-sha256 d3be5c6eec24950cb3bd67dbfbcdf036f1278fae5fd78655ef8cdf9e911e428a dmalloc-5.5.2.tgz
++sha256  d3be5c6eec24950cb3bd67dbfbcdf036f1278fae5fd78655ef8cdf9e911e428a  dmalloc-5.5.2.tgz
++sha256  8659d49ceeeb006288ad246164e504ccfe33f7a4c1680439fb6ff6a393b0722b  dmalloc.h.1
+diff --git a/package/dmraid/dmraid.hash b/package/dmraid/dmraid.hash
+index 31669218e8..af84732f93 100644
+--- a/package/dmraid/dmraid.hash
++++ b/package/dmraid/dmraid.hash
+@@ -1,2 +1,5 @@
+ # From http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-1.0.0.rc16-3.tar.bz2.md5.sum
+ md5	819338fcef98e8e25819f0516722beeb dmraid-1.0.0.rc16-3.tar.bz2
++# locally computed
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  1.0.0.rc16-3/dmraid/LICENSE_GPL
++sha256  4bc391fcf852e03c3a7564cb146af6e47717562eed296b28bce123ee1b0396b8  1.0.0.rc16-3/dmraid/LICENSE
+diff --git a/package/docker/docker.hash b/package/docker/docker.hash
+index 710a0eb57c..cf0f00e8d8 100644
+--- a/package/docker/docker.hash
++++ b/package/docker/docker.hash
+@@ -1,2 +1,4 @@
  # Locally calculated
--sha256 2f362a8acd149d1487a9460942f135d1037f01ee0cbfecba8c352fa2f79c34c9  jquery-datetimepicker-2.4.5.tar.gz
-+sha256  2f362a8acd149d1487a9460942f135d1037f01ee0cbfecba8c352fa2f79c34c9  jquery-datetimepicker-2.4.5.tar.gz
-+sha256  491add640b4678b78571d3b4c0840422b48a5b397e47e2104c1942ff1fce1a68  MIT-LICENSE.txt
-diff --git a/package/jquery-keyboard/jquery-keyboard.hash b/package/jquery-keyboard/jquery-keyboard.hash
-index 171f1133ee..a0d9d7d88c 100644
---- a/package/jquery-keyboard/jquery-keyboard.hash
-+++ b/package/jquery-keyboard/jquery-keyboard.hash
+-sha256	47629578e89d96d1541c91d040aec4316f03ad6d01dc3eecb8f82a33445c1e4e	docker-1.5.tar.gz
++sha256  47629578e89d96d1541c91d040aec4316f03ad6d01dc3eecb8f82a33445c1e4e  docker-1.5.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  fd82a1ac93bfe0a5afcf28cfb5342dd02015555fc23529a87bd77a7b271d3262  README
+diff --git a/package/dstat/dstat.hash b/package/dstat/dstat.hash
+index 1f1f769cc5..603bd506fd 100644
+--- a/package/dstat/dstat.hash
++++ b/package/dstat/dstat.hash
 @@ -1,2 +1,3 @@
- # Locally calculated
--sha256 6a20a1cdc9367c218048125eeb6f78d775175a964b3b9b781a931b63c0f98c66  jquery-keyboard-1.18.12.tar.gz
-+sha256  6a20a1cdc9367c218048125eeb6f78d775175a964b3b9b781a931b63c0f98c66  jquery-keyboard-1.18.12.tar.gz
-+sha256  0ad9a0e7291b45cdb5abe2a517d8b82282a816d41c9224660849792ce01fe983  README.markdown
-diff --git a/package/jquery-sidebar/jquery-sidebar.hash b/package/jquery-sidebar/jquery-sidebar.hash
-index 60e44d4187..5d336fee23 100644
---- a/package/jquery-sidebar/jquery-sidebar.hash
-+++ b/package/jquery-sidebar/jquery-sidebar.hash
+ # Locally computed:
+-sha256 4fbd58f3461c86d09a3ab97472aa204de37aa33d31a0493a3e5ed86a2045abea  dstat-0.7.4.tar.gz
++sha256  4fbd58f3461c86d09a3ab97472aa204de37aa33d31a0493a3e5ed86a2045abea  dstat-0.7.4.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/dtach/dtach.hash b/package/dtach/dtach.hash
+index 5caa58e5c0..1a97aa35ff 100644
+--- a/package/dtach/dtach.hash
++++ b/package/dtach/dtach.hash
 @@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  5f7e8c835ee49a9e6dcf89f4e8ccbe724b061c0fc8565b504dd8b3e67ab79f82  dtach-0.9.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/duma/duma.hash b/package/duma/duma.hash
+index f664d4033b..ccf171a97c 100644
+--- a/package/duma/duma.hash
++++ b/package/duma/duma.hash
+@@ -1,2 +1,4 @@
+ # Locally computed:
+ sha256  baaf794854e3093ad1bddadbfb8ad4b220a7117d70359ee216bd59e353734e17  duma_2_5_15.tar.gz
++sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING-GPL
++sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING-LGPL
+diff --git a/package/dvbsnoop/dvbsnoop.hash b/package/dvbsnoop/dvbsnoop.hash
+index 05939f9e31..0d88afe154 100644
+--- a/package/dvbsnoop/dvbsnoop.hash
++++ b/package/dvbsnoop/dvbsnoop.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  7658498b26a5d2a0242e81f0cfafa0e43a2bec56f8674e7ac197dfc310866ec6  dvbsnoop-1.4.50.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/dvdauthor/dvdauthor.hash b/package/dvdauthor/dvdauthor.hash
+index 36d5d0e686..833884aa9a 100644
+--- a/package/dvdauthor/dvdauthor.hash
++++ b/package/dvdauthor/dvdauthor.hash
+@@ -2,4 +2,5 @@
+ md5 1173dcb8d40e74fc90c0f3a25dbd642d  dvdauthor-0.7.2.tar.gz
+ sha1 0e605642140576bfb3e963414d77630d1c073a51  dvdauthor-0.7.2.tar.gz
  # Locally computed
- sha256  c96e46439a87555f2200442f597cce64f21f81f94d7601ddfc3b837913ddb42f  jquery-sidebar-3.3.2.tar.gz
-+sha256  f3522370f4b6accf9c1344f520bdea35f2388f1cbb124c0c179d2ca2a6a94c76  LICENSE
-diff --git a/package/jquery-ui-themes/jquery-ui-themes.hash b/package/jquery-ui-themes/jquery-ui-themes.hash
-index 5441789b99..5f662dad54 100644
---- a/package/jquery-ui-themes/jquery-ui-themes.hash
-+++ b/package/jquery-ui-themes/jquery-ui-themes.hash
+-sha256 3020a92de9f78eb36f48b6f22d5a001c47107826634a785a62dfcd080f612eb7  dvdauthor-0.7.2.tar.gz
++sha256  3020a92de9f78eb36f48b6f22d5a001c47107826634a785a62dfcd080f612eb7  dvdauthor-0.7.2.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/dvdrw-tools/dvdrw-tools.hash b/package/dvdrw-tools/dvdrw-tools.hash
+index 17d48f1d1f..a5ed6ad521 100644
+--- a/package/dvdrw-tools/dvdrw-tools.hash
++++ b/package/dvdrw-tools/dvdrw-tools.hash
 @@ -1,2 +1,3 @@
- # locally computed
- sha256  90467a83abcb8d2471b0d53d21b4c09e2cf686d5350e10a6e84fa3f3616a840f  jquery-ui-themes-1.10.4.zip
-+sha256  ef1fdd608b20fbea7ef269ed03bd24e637717cc193971798a394bf2fa983cd53  MIT-LICENSE.txt
-diff --git a/package/jquery-ui/jquery-ui.hash b/package/jquery-ui/jquery-ui.hash
-index daf89d095c..453ecd5521 100644
---- a/package/jquery-ui/jquery-ui.hash
-+++ b/package/jquery-ui/jquery-ui.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  c76f349930245360f4d1dea672b9a587f8938b536a378e20eeff919f7263f99f  jquery-ui-1.10.4.zip
-+sha256  ef1fdd608b20fbea7ef269ed03bd24e637717cc193971798a394bf2fa983cd53  MIT-LICENSE.txt
-diff --git a/package/jquery-validation/jquery-validation.hash b/package/jquery-validation/jquery-validation.hash
-index 61c16cf093..af451a6c1a 100644
---- a/package/jquery-validation/jquery-validation.hash
-+++ b/package/jquery-validation/jquery-validation.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256	14efe6f1784ef6e97116b15c77b04b7e8f47ec07b1479bcd6fa0b081faa19440	jquery-validation-1.14.0.zip
-+sha256  14efe6f1784ef6e97116b15c77b04b7e8f47ec07b1479bcd6fa0b081faa19440  jquery-validation-1.14.0.zip
-+sha256  c2f9aa180de990ff16ca7e756c9af52ecc1b3536e3fb32649d7b2c510bccf9d0  README.md
-diff --git a/package/json-javascript/json-javascript.hash b/package/json-javascript/json-javascript.hash
-index 6216445ce0..9522fee9ea 100644
---- a/package/json-javascript/json-javascript.hash
-+++ b/package/json-javascript/json-javascript.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 1a9dd4429e4bb4929dcb438f9591a3625bc8cc161f840b5f843d8b1d2c8dcfe5  json-javascript-3d7767b6b1f3da363c625ff54e63bbf20e9e83ac.tar.gz
-+sha256  1a9dd4429e4bb4929dcb438f9591a3625bc8cc161f840b5f843d8b1d2c8dcfe5  json-javascript-3d7767b6b1f3da363c625ff54e63bbf20e9e83ac.tar.gz
-+sha256  925947d3d711c4441a9db20f51215fbf5c119d2a3b51cadb2c9031907d8014b5  json2.js
+ # Locally computed using sha256sum
+-sha256	f8d60f822e914128bcbc5f64fbe3ed131cbff9045dca7e12c5b77b26edde72ca	dvd+rw-tools-7.1.tar.gz
++sha256  f8d60f822e914128bcbc5f64fbe3ed131cbff9045dca7e12c5b77b26edde72ca  dvd+rw-tools-7.1.tar.gz
++sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  LICENSE
 -- 
 2.20.1
