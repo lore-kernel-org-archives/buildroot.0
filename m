@@ -1,125 +1,96 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  2 Feb 2020 18:33:31 +0100
-Subject: [Buildroot] [PATCH v2 2/4] package/kodi: add optional support for
- wayland
-In-Reply-To: <20200202173333.305860-1-bernd.kuhls@t-online.de>
-References: <20200202173333.305860-1-bernd.kuhls@t-online.de>
-Message-ID: <20200202173333.305860-2-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 2 Feb 2020 19:42:45 +0100
+Subject: [Buildroot] Qt5 Webkit fails to compile
+In-Reply-To: <CAPmASevmB9AZ7yOMmR3dBPcc4-4Ra2NOgfGV-J=4TXy=_cxGmw@mail.gmail.com>
+References: <CAPmASevmB9AZ7yOMmR3dBPcc4-4Ra2NOgfGV-J=4TXy=_cxGmw@mail.gmail.com>
+Message-ID: <20200202194245.46e18d8e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see upstream PR 12664.
+Hello Andrea,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: no changes
+On Sun, 2 Feb 2020 18:25:14 +0100, Andrea Simeoni <andreasimeoni73@gmail.com> wrote:
 
- package/kodi/Config.in | 44 +++++++++++++++++++++++++++++++++++++++---
- package/kodi/kodi.mk   | 16 +++++++++++++++
- 2 files changed, 57 insertions(+), 3 deletions(-)
+> Hi! I'm building a slightly modified config for Raspberry Pi 3 (attached
+> the .config file).
+> The compilation of qt5webkit fails. This is the error:
+> 
+> platform/graphics/SegmentedFontData.cpp:65:9: error: expected ?;? before
+> ?if?
+>          if (!containsCharacter(c))
+>          ^~
+> 
+> the line before is:
+> 
+>         U16_NEXT(characters, i, length, c)
+> 
+> and U16_NEXT is defined in uft16.h as:
+> 
+> #define U16_NEXT(s, i, length, c) { \
+>     (c)=(s)[(i)++]; \
+>     if(U16_IS_LEAD(c)) { \
+>         uint16_t __c2; \
+>         if((i)<(length) && U16_IS_TRAIL(__c2=(s)[(i)])) { \
+>             ++(i); \
+>             (c)=U16_GET_SUPPLEMENTARY((c), __c2); \
+>         } \
+>     } \
+> }
+> 
+> Is there something other I need to add in the configuration?
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 2782da5953..0f2f4e2df2 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -27,6 +27,27 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+Detected the same failure while preparing the the Qt-5.12.7 version bump,
+fixed by the following qt5webkit patch (proper buildroot patch will
+follow soon):
+
+diff --git a/Source/WebCore/dom/Document.cpp b/Source/WebCore/dom/Document.cpp
+index af63b141..26f7312b 100644
+--- a/Source/WebCore/dom/Document.cpp
++++ b/Source/WebCore/dom/Document.cpp
+@@ -3846,12 +3846,12 @@ static bool isValidNameNonASCII(const UChar* characters, unsigned length)
+     unsigned i = 0;
  
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GL
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_PACKAGE_WAYLAND # waylandpp
-+	select BR2_PACKAGE_WAYLANDPP
-+	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GLES
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_PACKAGE_WAYLAND # waylandpp
-+	select BR2_PACKAGE_WAYLANDPP
-+	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+
- config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
- 	bool
- 	default y
-@@ -189,6 +210,17 @@ config BR2_PACKAGE_KODI_PLATFORM_RBPI
- 	select BR2_PACKAGE_LIBINPUT
- 	select BR2_PACKAGE_LIBXKBCOMMON
+     UChar32 c;
+-    U16_NEXT(characters, i, length, c)
++    U16_NEXT(characters, i, length, c);
+     if (!isValidNameStart(c))
+         return false;
  
-+config BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL
-+	bool "Wayland/OpenGL"
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GL
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+
-+config BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES
-+	bool "Wayland/GLES"
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GLES
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+
- config BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 	bool "X11/OpenGL"
- 	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
-@@ -242,13 +274,19 @@ config BR2_PACKAGE_KODI_LIBUSB
- 
- config BR2_PACKAGE_KODI_LIBVA
- 	bool "va"
--	depends on BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-+	depends on \
-+		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL || \
-+		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES || \
-+		BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 	select BR2_PACKAGE_LIBVA
- 	help
- 	  Enable libva support.
- 
--comment "libva support needs platform 'X11/OpenGL'"
--	depends on !BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-+comment "libva support needs platform 'Wayland' or 'X11/OpenGL'"
-+	depends on \
-+		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL && \
-+		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES && \
-+		!BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 
- config BR2_PACKAGE_KODI_LIBVDPAU
- 	bool "vdpau"
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 1036151a89..2f2a92a889 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -174,6 +174,22 @@ KODI_CONF_OPTS += -DCORE_PLATFORM_NAME=rbpi
- KODI_DEPENDENCIES += libinput libxkbcommon rpi-userland
- endif
- 
-+ifeq ($(BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL),y)
-+KODI_CONF_OPTS += \
-+	-DCORE_PLATFORM_NAME=wayland \
-+	-DWAYLAND_RENDER_SYSTEM=gl
-+KODI_DEPENDENCIES += libegl libgl libglu libxkbcommon waylandpp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES),y)
-+KODI_CONF_OPTS += \
-+	-DCORE_PLATFORM_NAME=wayland \
-+	-DWAYLAND_RENDER_SYSTEM=gles
-+KODI_C_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
-+KODI_CXX_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
-+KODI_DEPENDENCIES += libegl libgles libxkbcommon waylandpp
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL),y)
- KODI_CONF_OPTS += -DCORE_PLATFORM_NAME=x11
- KODI_DEPENDENCIES += libegl libglu libgl xlib_libX11 xlib_libXext \
--- 
-2.20.1
+     while (i < length) {
+-        U16_NEXT(characters, i, length, c)
++        U16_NEXT(characters, i, length, c);
+         if (!isValidNamePart(c))
+             return false;
+     }
+@@ -3914,7 +3914,7 @@ bool Document::parseQualifiedName(const String& qualifiedName, String& prefix, S
+     const UChar* s = qualifiedName.characters();
+     for (unsigned i = 0; i < length;) {
+         UChar32 c;
+-        U16_NEXT(s, i, length, c)
++        U16_NEXT(s, i, length, c);
+         if (c == ':') {
+             if (sawColon) {
+                 ec = NAMESPACE_ERR;
+diff --git a/Source/WebCore/platform/graphics/SegmentedFontData.cpp b/Source/WebCore/platform/graphics/SegmentedFontData.cpp
+index efb20a8c..99b3e86c 100644
+--- a/Source/WebCore/platform/graphics/SegmentedFontData.cpp
++++ b/Source/WebCore/platform/graphics/SegmentedFontData.cpp
+@@ -61,7 +61,7 @@ bool SegmentedFontData::containsCharacters(const UChar* characters, int length)
+ {
+     UChar32 c;
+     for (int i = 0; i < length; ) {
+-        U16_NEXT(characters, i, length, c)
++        U16_NEXT(characters, i, length, c);
+         if (!containsCharacter(c))
+             return false;
+     }
+
+Regards,
+Peter
+
+> 
+> Thanks in advance
+> Andrea S.
