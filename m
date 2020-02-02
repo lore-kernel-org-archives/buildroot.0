@@ -1,172 +1,37 @@
-From: Refik Tuzakli <tuzakli.refik@gmail.com>
-Date: Sun,  2 Feb 2020 13:38:01 +0300
-Subject: [Buildroot] [PATCH v1] package/freescale-imx/imx-dpu-g2d: new
- package
-Message-ID: <20200202103801.16077-1-tuzakli.refik@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  2 Feb 2020 11:45:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/smartmontools: add libselinux
+ optional dependency
+Message-ID: <20200202104511.3342301-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-imx-dpu-g2d package is used by i.MX 8 and i.MX 8X series instead of imx-vpu or imx-vpu-hantro.With this commit, imx-dpu-g2d is added and is enabled for i.MX 8X. imx-vpu and imx-vpu-hantro are disabled for the i.MX series that do not have vpu support.
+libselinux is an optional dependency since a very long time (2010) and
+https://github.com/mirror/smartmontools/commit/ab807ee43bd4821f5e0e010de08a746d88506b17
 
-Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/freescale-imx/Config.in               | 16 +++++++-
- .../firmware-imx/firmware-imx.mk              |  4 ++
- package/freescale-imx/imx-dpu-g2d/Config.in   | 23 ++++++++++++
- .../imx-dpu-g2d/imx-dpu-g2d.hash              |  2 +
- .../freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk  | 37 +++++++++++++++++++
- 5 files changed, 81 insertions(+), 1 deletion(-)
- create mode 100644 package/freescale-imx/imx-dpu-g2d/Config.in
- create mode 100644 package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
- create mode 100644 package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
+ package/smartmontools/smartmontools.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index f010aab87b..893079586c 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -63,6 +63,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
- 	default "IMX6UL" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
- 	default "IMX7" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
- 	default "IMX8" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
-+	default "IMX8X" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+index 6c90538f70..bad7da2d16 100644
+--- a/package/smartmontools/smartmontools.mk
++++ b/package/smartmontools/smartmontools.mk
+@@ -16,4 +16,11 @@ else
+ SMARTMONTOOLS_CONF_OPTS += --without-libcap-ng
+ endif
  
- config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
- 	bool
-@@ -75,13 +76,18 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
- 	bool
- 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
- 
-+config BR2_PACKAGE_FREESCALE_IMX_HAS_DPU
-+	bool
-+	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+
- config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
- 	bool
- 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
--		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
- 
- source "package/freescale-imx/imx-alsa-plugins/Config.in"
- source "package/freescale-imx/imx-codec/Config.in"
-@@ -90,9 +96,17 @@ source "package/freescale-imx/imx-lib/Config.in"
- source "package/freescale-imx/imx-m4fwloader/Config.in"
- source "package/freescale-imx/imx-parser/Config.in"
- source "package/freescale-imx/imx-uuc/Config.in"
-+if BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
- source "package/freescale-imx/imx-vpu/Config.in"
-+source "package/freescale-imx/imx-vpuwrap/Config.in"
-+endif
-+if BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
- source "package/freescale-imx/imx-vpu-hantro/Config.in"
- source "package/freescale-imx/imx-vpuwrap/Config.in"
-+endif
-+if BR2_PACKAGE_FREESCALE_IMX_HAS_DPU
-+source "package/freescale-imx/imx-dpu-g2d/Config.in"
-+endif
- source "package/freescale-imx/firmware-imx/Config.in"
- source "package/freescale-imx/imx-sc-firmware/Config.in"
- if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index c9040e1853..6c8685e60b 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -53,6 +53,10 @@ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
- 	cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
- 		$(BINARIES_DIR)/ahab-container.img
- endef
-+define FIRMWARE_IMX_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/lib/firmware/vpu
-+	cp -r $(@D)/firmware/vpu/vpu_fw_imx8* $(TARGET_DIR)/lib/firmware/vpu
-+endef
- else
- define FIRMWARE_IMX_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/lib/firmware/imx
-diff --git a/package/freescale-imx/imx-dpu-g2d/Config.in b/package/freescale-imx/imx-dpu-g2d/Config.in
-new file mode 100644
-index 0000000000..2675840093
---- /dev/null
-+++ b/package/freescale-imx/imx-dpu-g2d/Config.in
-@@ -0,0 +1,23 @@
-+comment "imx-dpu-g2d needs a glibc toolchain"
-+	depends on BR2_aarch64
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+
-+config BR2_PACKAGE_IMX_DPU_G2D
-+	bool "imx-dpu-g2d"
-+	# Library binaries are linked against libc.so.6
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_IMX_GPU_VIV
-+	help
-+	  Userspace DPU 2D libraries for Vivante GPU on i.MX platforms.
-+
-+	  This library is provided by NXP as-is and doesn't have an
-+	  upstream.
-+
-+if BR2_PACKAGE_IMX_DPU_G2D
-+
-+config BR2_PACKAGE_IMX_DPU_G2D_EXAMPLES
-+	bool "install examples"
-+	help
-+	  Copy the Vivante DPU examples to the target.
-+
-+endif
-diff --git a/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
-new file mode 100644
-index 0000000000..0d1e6ca277
---- /dev/null
-+++ b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
-@@ -0,0 +1,2 @@
-+sha256	46c72ce9b98b7116e9f7f53a66aadc8fb66910473477c6553db77ed71e54d7ea  imx-dpu-g2d-1.8.2.bin
-+
-diff --git a/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
-new file mode 100644
-index 0000000000..75fb7e21f0
---- /dev/null
-+++ b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# imx-dpu-g2d
-+#
-+################################################################################
-+
-+IMX_DPU_G2D_VERSION = 1.8.2
-+IMX_DPU_G2D_SITE = $(FREESCALE_IMX_SITE)
-+IMX_DPU_G2D_SOURCE = imx-dpu-g2d-$(IMX_DPU_G2D_VERSION).bin
-+IMX_DPU_G2D_DEPENDENCIES = imx-gpu-viv
-+IMX_DPU_G2D_INSTALL_STAGING = YES
-+
-+IMX_DPU_G2D_LICENSE = NXP Semiconductor Software License Agreement
-+IMX_DPU_G2D_LICENSE_FILES = EULA COPYING
-+IMX_DPU_G2D_REDISTRIBUTE = NO
-+
-+define IMX_DPU_G2D_EXTRACT_CMDS
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_DPU_G2D_DL_DIR)/$(IMX_DPU_G2D_SOURCE))
-+endef
-+
-+define IMX_DPU_G2D_INSTALL_STAGING_CMDS
-+	cp -a $(@D)/g2d/usr/* $(STAGING_DIR)/usr
-+endef
-+
-+ifeq ($(BR2_PACKAGE_IMX_DPU_G2D_EXAMPLES),y)
-+define IMX_DPU_G2D_INSTALL_EXAMPLES
-+	mkdir -p $(TARGET_DIR)/usr/share/examples/
-+	cp -a $(@D)/gpu-demos/opt/* $(TARGET_DIR)/usr/share/examples/
-+endef
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++SMARTMONTOOLS_CONF_OPTS += --with-selinux
++SMARTMONTOOLS_DEPENDENCIES += libselinux
++else
++SMARTMONTOOLS_CONF_OPTS += --without-selinux
 +endif
 +
-+define IMX_DPU_G2D_INSTALL_TARGET_CMDS
-+	$(IMX_DPU_G2D_INSTALL_EXAMPLES)
-+	cp -a $(@D)/g2d/usr/lib $(TARGET_DIR)/usr
-+endef
-+
-+$(eval $(generic-package))
+ $(eval $(autotools-package))
 -- 
-2.17.1
+2.24.1
