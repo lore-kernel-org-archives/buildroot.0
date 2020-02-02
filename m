@@ -1,33 +1,38 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun,  2 Feb 2020 01:55:26 -0700
-Subject: [Buildroot] [PATCH 1/1] package/bitcoin: add backporting
- requirement note to bitcoin package
-Message-ID: <20200202085526.35742-1-james.hilliard1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 2 Feb 2020 09:56:53 +0100
+Subject: [Buildroot] [PATCH] package/erlang-p1-xmpp: fix host build
+In-Reply-To: <20200122103401.21596-1-johan.oudinet@gmail.com>
+References: <20200122103401.21596-1-johan.oudinet@gmail.com>
+Message-ID: <20200202095653.1311254f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/bitcoin/bitcoin.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+On Wed, 22 Jan 2020 11:34:01 +0100
+Johan Oudinet <johan.oudinet@gmail.com> wrote:
 
-diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-index 040c55b8a6..c58bd9797c 100644
---- a/package/bitcoin/bitcoin.mk
-+++ b/package/bitcoin/bitcoin.mk
-@@ -4,6 +4,10 @@
- #
- ################################################################################
- 
-+# Major version updates must be backported unconditionally, if backporting
-+# is not feasible the bitcoin package must be removed from any such branches.
-+# Details:
-+# https://bitcoinmagazine.com/articles/linux-distribution-packaging-and-bitcoin-1374549783
- BITCOIN_VERSION = 0.19.0.1
- BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
- BITCOIN_AUTORECONF = YES
+> Fixes:
+> http://autobuild.buildroot.net/results/3e594350131994df53b20d5113fefbba2e747836
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+
+Thanks, I've applied, but I have a question below.
+
+>  ERLANG_P1_XMPP_DEPENDENCIES = erlang-p1-xml erlang-p1-stringprep \
+>  	erlang-p1-tls erlang-p1-utils erlang-p1-zlib host-erlang-p1-xml
+> +HOST_ERLANG_P1_XMPP_DEPENDENCIES = host-erlang-p1-xml
+
+It is weird that there is no symmetry between the target dependencies
+and host dependencies. Why don't we have the same set of packages ?
+
+Also, it is really normal/correct for the target variant to depend on
+host-erlang-p1-xml ?
+
+Best regards,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
