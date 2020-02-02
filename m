@@ -1,45 +1,118 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Feb 2020 21:09:45 +0100
-Subject: [Buildroot] [git commit] package/libpjsip: add sdl2 support
-Message-ID: <20200202200006.6404C88476@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 2 Feb 2020 21:14:12 +0100
+Subject: [Buildroot] [PATCH] package/gcc: remove gcc 5.5 or1k fork
+In-Reply-To: <20200102220415.431543-1-romain.naour@gmail.com>
+References: <20200102220415.431543-1-romain.naour@gmail.com>
+Message-ID: <5810f8fa-c8d7-d46a-4586-a4514a80f21b@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8330cfe5c5f8cd820577b2abd24c90bc10116dae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libpjsip/libpjsip.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Le 02/01/2020 ? 23:04, Romain Naour a ?crit?:
+> Remove the old gcc 5.5 fork for or1k architecture
+> that start to fail to build with recent version
+> of Binutils >= 2.32 with the following error:
+> 
+> host-gcc-final-or1k-musl-5.4.0-20170218/build/./gcc/crtbeginS.o: addend should be zero for plt relocations
+> host/or1k-buildroot-linux-uclibc/bin/ld: final link failed: bad value
+> 
+> https://gitlab.com/kubu93/buildroot/-/jobs/391938988
 
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 655ab4498c..7736a005af 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -33,7 +33,6 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-g711-codec \
- 	--disable-l16-codec \
- 	--disable-g722-codec \
--	--disable-sdl \
- 	--disable-ffmpeg \
- 	--disable-ipp \
- 	--disable-silk \
-@@ -122,6 +121,13 @@ else
- LIBPJSIP_CONF_OPTS += --disable-opus
- endif
- 
-+ifeq ($(BR2_PACKAGE_SDL2),y)
-+LIBPJSIP_DEPENDENCIES += sdl2
-+LIBPJSIP_CONF_OPTS += --with-sdl=$(STAGING_DIR)/usr
-+else
-+LIBPJSIP_CONF_OPTS += --disable-sdl
-+endif
-+
- ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
- LIBPJSIP_CONF_OPTS += \
- 	--enable-speex-aec \
+binutils 2.34 has been released this weekend, it means that binutils 2.31 will
+be removed after adding binutils 2.34:
+
+https://lists.gnu.org/archive/html/info-gnu/2020-02/msg00000.html
+
+So this issue will be trigged with all binutils version available in Buildroot
+(2.31 -> 2.34).
+
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  Config.in.legacy           | 7 +++++++
+>  package/gcc/Config.in.host | 8 --------
+>  package/gcc/gcc.mk         | 5 +----
+>  3 files changed, 8 insertions(+), 12 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 8436951f0f..d34ef88e1d 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,13 @@ endif
+>  
+>  comment "Legacy options removed in 2020.02"
+>  
+> +config BR2_GCC_VERSION_OR1K
+> +	bool "gcc 5.x fork for or1k has been removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  Support for gcc 5.x for or1k has been removed. The current
+> +	  default version (9.x or later) has been selected instead.
+> +
+>  config BR2_PACKAGE_PYTHON_SCAPY3K
+>  	bool "python-scapy3k is replaced by python-scapy"
+>  	select BR2_LEGACY
+> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> index 92af40b19f..3e60ced61f 100644
+> --- a/package/gcc/Config.in.host
+> +++ b/package/gcc/Config.in.host
+> @@ -4,7 +4,6 @@ choice
+>  	prompt "GCC compiler Version"
+>  	default BR2_GCC_VERSION_ARC if BR2_arc
+>  	default BR2_GCC_VERSION_CSKY if BR2_csky
+> -	default BR2_GCC_VERSION_OR1K if BR2_or1k
+>  	default BR2_GCC_VERSION_8_X
+>  	help
+>  	  Select the version of gcc you wish to use.
+> @@ -21,12 +20,6 @@ config BR2_GCC_VERSION_CSKY
+>  	depends on BR2_csky
+>  	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+>  
+> -config BR2_GCC_VERSION_OR1K
+> -	bool "gcc or1k (5.x)"
+> -	# Only supported architecture
+> -	depends on BR2_or1k
+> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> -
+>  config BR2_GCC_VERSION_5_X
+>  	bool "gcc 5.x"
+>  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+> @@ -96,7 +89,6 @@ config BR2_GCC_VERSION
+>  	default "8.3.0"     if BR2_GCC_VERSION_8_X
+>  	default "9.2.0"     if BR2_GCC_VERSION_9_X
+>  	default "arc-2019.09-rc1" if BR2_GCC_VERSION_ARC
+> -	default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
+>  	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
+>  
+>  config BR2_EXTRA_GCC_CONFIG_OPTIONS
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 527f30bf22..128293570d 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -13,9 +13,6 @@ GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
+>  ifeq ($(BR2_GCC_VERSION_ARC),y)
+>  GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
+>  GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+> -else ifeq ($(BR2_GCC_VERSION_OR1K),y)
+> -GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
+> -GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+>  else ifeq ($(BR2_csky),y)
+>  GCC_SITE = $(call github,c-sky,gcc,$(GCC_VERSION))
+>  GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+> @@ -168,7 +165,7 @@ else
+>  HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
+>  endif
+>  
+> -ifeq ($(BR2_arc)$(BR2_GCC_VERSION_OR1K),y)
+> +ifeq ($(BR2_arc),y)
+>  HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
+>  endif
+>  
+> 
