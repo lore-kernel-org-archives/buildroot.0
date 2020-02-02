@@ -1,74 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 2 Feb 2020 15:12:05 +0100
-Subject: [Buildroot] [git commit] package/lua-livr-extra: new package
-Message-ID: <20200202140115.8BA0A88308@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/socat: bump to version 1.7.3.4
+Message-ID: <20200202140115.7124F88307@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59dbd33496d1176b49e38e06580a1b6d0be27838
+commit: https://git.buildroot.net/buildroot/commit/?id=75f4520ac1fd53ff4c74ffe3843d8b77a1023ffe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Drop patch #2. Upstream commit d8a5d49c2d8359 includes stddef.h in a
+higher level header.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                          |  1 +
- package/lua-livr-extra/Config.in           |  7 +++++++
- package/lua-livr-extra/lua-livr-extra.hash |  3 +++
- package/lua-livr-extra/lua-livr-extra.mk   | 12 ++++++++++++
- 4 files changed, 23 insertions(+)
+ ....patch => 0002-compat-set-NETDB_INTERNAL.patch} |  0
+ .../0002-ptrdiff_t-is-defined-in-stddef.h.patch    | 28 ----------------------
+ package/socat/socat.hash                           |  4 ++--
+ package/socat/socat.mk                             |  2 +-
+ 4 files changed, 3 insertions(+), 31 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 452b283670..711613fb4a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -651,6 +651,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-http/Config.in"
- 	source "package/lua-iconv/Config.in"
- 	source "package/lua-livr/Config.in"
-+	source "package/lua-livr-extra/Config.in"
- 	source "package/lua-lpeg-patterns/Config.in"
- 	source "package/lua-lunitx/Config.in"
- 	source "package/lua-markdown/Config.in"
-diff --git a/package/lua-livr-extra/Config.in b/package/lua-livr-extra/Config.in
-new file mode 100644
-index 0000000000..0850622923
---- /dev/null
-+++ b/package/lua-livr-extra/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LUA_LIVR_EXTRA
-+	bool "lua-livr-extra"
-+	select BR2_PACKAGE_LUA_LIVR # runtime
-+	help
-+	  more LIVR rules.
-+
-+	  https://fperrad.frama.io/lua-LIVR-extra
-diff --git a/package/lua-livr-extra/lua-livr-extra.hash b/package/lua-livr-extra/lua-livr-extra.hash
-new file mode 100644
-index 0000000000..cb7cf898bc
---- /dev/null
-+++ b/package/lua-livr-extra/lua-livr-extra.hash
-@@ -0,0 +1,3 @@
-+# computed by luarocks/buildroot
-+sha256 42fef357db3e05e32112ddebcd4296f040a825dfac77ff2fa03aedbdcdaac729  lua-livr-extra-0.1.1-1.src.rock
-+sha256 96751dc604608ecf2357d1599bc2d2e9f56382793a6c218dc98d460759adbf07  lua-LIVR-extra-0.1.1/COPYRIGHT
-diff --git a/package/lua-livr-extra/lua-livr-extra.mk b/package/lua-livr-extra/lua-livr-extra.mk
-new file mode 100644
-index 0000000000..0a6378dbf5
---- /dev/null
-+++ b/package/lua-livr-extra/lua-livr-extra.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# lua-livr-extra
-+#
-+################################################################################
-+
-+LUA_LIVR_EXTRA_VERSION = 0.1.1-1
-+LUA_LIVR_EXTRA_NAME_UPSTREAM = lua-LIVR-extra
-+LUA_LIVR_EXTRA_LICENSE = MIT
-+LUA_LIVR_EXTRA_LICENSE_FILES = $(LUA_LIVR_EXTRA_SUBDIR)/COPYRIGHT
-+
-+$(eval $(luarocks-package))
+diff --git a/package/socat/0003-compat-set-NETDB_INTERNAL.patch b/package/socat/0002-compat-set-NETDB_INTERNAL.patch
+similarity index 100%
+rename from package/socat/0003-compat-set-NETDB_INTERNAL.patch
+rename to package/socat/0002-compat-set-NETDB_INTERNAL.patch
+diff --git a/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch b/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch
+deleted file mode 100644
+index acae641b34..0000000000
+--- a/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 99c55f2694fe8621ca2344eb002610dac7f9c969 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 2 Feb 2016 09:34:24 -0300
+-Subject: [PATCH] ptrdiff_t is defined in stddef.h
+-
+-Status: sent upstream via email.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- nestlex.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/nestlex.c b/nestlex.c
+-index f7950f0..f49482d 100644
+---- a/nestlex.c
+-+++ b/nestlex.c
+-@@ -4,6 +4,8 @@
+- 
+- /* a function for lexical scanning of nested character patterns */
+- 
+-+#include <stddef.h>	/* ptrdiff_t */
+-+
+- #include "config.h"
+- #include "mytypes.h"
+- 
+--- 
+-2.4.10
+-
+diff --git a/package/socat/socat.hash b/package/socat/socat.hash
+index 92d62ab716..e5b65925d1 100644
+--- a/package/socat/socat.hash
++++ b/package/socat/socat.hash
+@@ -1,7 +1,7 @@
+ # From http://www.dest-unreach.org/socat/download.md5sum
+-md5	b2a032a47b8b89a18485697fa975154f	socat-1.7.3.3.tar.bz2
++md5	3cca4f8cd9d2d1caabd9cc099451bac9	socat-1.7.3.4.tar.bz2
+ # From http://www.dest-unreach.org/socat/download.sha256sum
+-sha256	0dd63ffe498168a4aac41d307594c5076ff307aa0ac04b141f8f1cec6594d04a	socat-1.7.3.3.tar.bz2
++sha256	972374ca86f65498e23e3259c2ee1b8f9dbeb04d12c2a78c0c9b5d1cb97dfdfc	socat-1.7.3.4.tar.bz2
+ # Locally calculated
+ sha256	4846488cea98a2905dc75b7aa5eea721568e372447efe06b85bd896ee8c54f10	README
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index 9e747e08fa..3807d45379 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SOCAT_VERSION = 1.7.3.3
++SOCAT_VERSION = 1.7.3.4
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+ SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
