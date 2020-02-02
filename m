@@ -1,42 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 2 Feb 2020 21:07:18 +0100
-Subject: [Buildroot] [PATCH] linux/linux.mk: use HOST_MAKE_ENV rather
- than TARGET_MAKE_ENV
-In-Reply-To: <20200131174940.12469-1-peter@korsgaard.com>
-References: <20200131174940.12469-1-peter@korsgaard.com>
-Message-ID: <20200202210718.41881805@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Feb 2020 21:08:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nginx-modsecurity: depends on
+ BR2_PACKAGE_NGINX_HTTP
+In-Reply-To: <20200202162703.142811-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 2 Feb 2020 17:27:03 +0100")
+References: <20200202162703.142811-1-fontaine.fabrice@gmail.com>
+Message-ID: <87wo94n463.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 31 Jan 2020 18:49:39 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> While the kernel is built for the target, the build may need various host
-> libraries depending on config (and kernel version), so use HOST_MAKE_ENV
-> instead of TARGET_MAKE_ENV.
-> 
-> In particular, this ensures that our host-pkgconf will look for host
-> libraries and not target ones.
-> 
-> Fixes building scripts/dtc for Buildroot configurations enabling libyaml and
-> host-pkgconf for kernels after commit 067c650c45 (dtc: Use pkg-config to
-> locate libyaml).
-> 
-> With this enabled, we can drop the PKG_CONFIG_* variables for the
-> _NEEDS_HOST_LIBELF conditional, as those are included in HOST_MAKE_ENV.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  linux/linux.mk | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/7babc12094f4d490569556824a2029e5f08ff866
 
-Applied to master, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
