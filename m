@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Feb 2020 21:17:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.5.5
-In-Reply-To: <20200203181202.2110059-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 3 Feb 2020 19:12:02 +0100")
-References: <20200203181202.2110059-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pnev8lys.fsf@dell.be.48ers.dk>
+Date: Mon, 03 Feb 2020 21:17:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/minizip: bump to version 2.9.1
+In-Reply-To: <20200203181638.2123619-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 3 Feb 2020 19:16:38 +0100")
+References: <20200203181638.2123619-1-fontaine.fabrice@gmail.com>
+Message-ID: <87lfpj8lym.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
