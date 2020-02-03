@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 23:44:15 +0100
-Subject: [Buildroot] [PATCH] package/systemd: use interface for networkd
- config file
-In-Reply-To: <20200108104439.7041-1-p.debruijn@unilogic.nl>
-References: <20200108104439.7041-1-p.debruijn@unilogic.nl>
-Message-ID: <20200203234415.7227f506@windsurf>
+Date: Mon, 3 Feb 2020 23:45:37 +0100
+Subject: [Buildroot] [git commit] package/freescale-imx:
+ BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU is also true on i.MX8X
+Message-ID: <20200203223458.A02308911C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Jan 2020 11:44:39 +0100
-Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7b3c48ed8107c5cd39f5d761734964dcd8c8d408
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> by using the interface in the filename for the networkd config
-> file, we have a clear association between the config file and
-> the interface it applies to.
-> 
-> this is benefitical for systems that have multiple interfaces.
-> 
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> ---
->  package/systemd/systemd.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+This will allow to select the imx-gpu-viv package on i.MX8X.
 
-Applied to master, thanks.
+Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freescale-imx/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index f010aab87b..d23bcdbd9a 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -81,7 +81,8 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+-		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+ 
+ source "package/freescale-imx/imx-alsa-plugins/Config.in"
+ source "package/freescale-imx/imx-codec/Config.in"
