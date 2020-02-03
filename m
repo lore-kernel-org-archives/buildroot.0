@@ -1,40 +1,90 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Feb 2020 11:11:38 +0100
-Subject: [Buildroot] [git commit] package/thermald: fix build with NLS
-Message-ID: <20200203100056.55EE68867C@busybox.osuosl.org>
+From: Andrea Simeoni <andreasimeoni73@gmail.com>
+Date: Mon, 3 Feb 2020 11:13:30 +0100
+Subject: [Buildroot] Qt5 Webkit fails to compile
+In-Reply-To: <20200202220343.3164146d@gmx.net>
+References: <CAPmASevmB9AZ7yOMmR3dBPcc4-4Ra2NOgfGV-J=4TXy=_cxGmw@mail.gmail.com>
+ <20200202194245.46e18d8e@gmx.net>
+ <CAPmASevria8dFywjiy6_9ww+GCDw79k9LAmCaTz=XxwDqojjQQ@mail.gmail.com>
+ <20200202220343.3164146d@gmx.net>
+Message-ID: <CAPmASeuDs2TE_=E+_qSf5E9PEMgfJth7e+SzbMikOZgzAeG2iA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d25713f247eb746d4e7c7b1582a89f5e557b1c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Peter,
+thanks for the hints. For the first time I have the qt5webkit running on
+RPi!
+I get a couple of warnings at run-time:
 
-Fixes:
- - http://autobuild.buildroot.org/results/609e304d2874f39cbb6258ee185610332a1031f2
+[0203/101010.722538:WARNING:resource_bundle_qt.cpp(116)]
+locale_file_path.empty() for locale
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/thermald/thermald.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+[0203/101010.834550:WARNING:resource_bundle_qt.cpp(116)]
+locale_file_path.empty() for locale
 
-diff --git a/package/thermald/thermald.mk b/package/thermald/thermald.mk
-index ace4eed8e3..98e9c361e5 100644
---- a/package/thermald/thermald.mk
-+++ b/package/thermald/thermald.mk
-@@ -8,10 +8,11 @@ THERMALD_VERSION = 1.9.1
- THERMALD_SITE = $(call github,intel,thermal_daemon,v$(THERMALD_VERSION))
- # fetched from Github, with no configure script
- THERMALD_AUTORECONF = YES
--THERMALD_DEPENDENCIES = dbus dbus-glib libxml2
-+THERMALD_DEPENDENCIES = dbus dbus-glib libxml2 $(TARGET_NLS_DEPENDENCIES)
- # tools are GPL-3.0+ but are not added to the target
- THERMALD_LICENSE = GPL-2.0+
- THERMALD_LICENSE_FILES = COPYING
-+THERMALD_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
- THERMALD_DEPENDENCIES += systemd
+
+but I'm not sure if they are related to Buildroot in any way.
+
+Best
+
+Andrea S.
+
+
+
+Il giorno dom 2 feb 2020 alle ore 22:03 Peter Seiderer <ps.report@gmx.net>
+ha scritto:
+
+> Hello Andrea,
+>
+> On Sun, 2 Feb 2020 20:51:24 +0100, Andrea Simeoni <
+> andreasimeoni73 at gmail.com> wrote:
+>
+> > Detected the same failure while preparing the the Qt-5.12.7 version bump,
+> > > fixed by the following qt5webkit patch (proper buildroot patch will
+> > > follow soon):
+> > >
+> >
+> > Super fast! Great!
+> > I've already seen the Buildroot patch(es).
+> > What's the recommended way to apply them? It's enough to pull from master
+> > branch on github or I have to patch the file(s) manually?
+>
+> The patches show up on master branch after one of the maintainers commits
+> them
+> (in case they are accepted), for preliminary testing your have to apply
+> them
+> manually, best by down loading them from patchwork ([1]), e.g. for this
+> ones ([2], [3]):
+>
+>         $ curl -OJL https://patchwork.ozlabs.org/patch/1232425/mbox/
+>         $ curl -OJL https://patchwork.ozlabs.org/patch/1232424/mbox/
+>
+>         $ git am
+> v1-1-2-package-qt5webkit-convert-patch-to-git-format-and-re-number.patch
+>         $ git am
+> v1-2-2-package-qt5webkit-add-patch-to-fix-ICU-related-compile-failure.patch
+>
+> or (for non-git):
+>
+>         $ patch -p 1 <
+> v1-1-2-package-qt5webkit-convert-patch-to-git-format-and-re-number.patch
+>         $ patch -p 2 <
+> v1-2-2-package-qt5webkit-add-patch-to-fix-ICU-related-compile-failure.patch
+>
+> Regards,
+> Peter
+>
+> [1] https://patchwork.ozlabs.org/project/buildroot/list/
+> [2] https://patchwork.ozlabs.org/patch/1232425/
+> [3] https://patchwork.ozlabs.org/patch/1232424/
+>
+> >
+> > Best regards
+> > Andrea S.
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200203/0a13d861/attachment.html>
