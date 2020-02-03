@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  3 Feb 2020 21:20:19 +0100
-Subject: [Buildroot] [PATCH 1/2] package/uboot-tools: needs make >= 4.0
+Date: Mon,  3 Feb 2020 21:20:20 +0100
+Subject: [Buildroot] [PATCH 2/2] boot/uboot: needs make >= 4.0
 In-Reply-To: <cover.1580761209.git.yann.morin.1998@free.fr>
 References: <cover.1580761209.git.yann.morin.1998@free.fr>
-Message-ID: <db7a911e37b838e8b96707502259828e011cbb36.1580761209.git.yann.morin.1998@free.fr>
+Message-ID: <214c0588eab33158185f6199444bd0b6dbc577ba.1580761209.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +13,50 @@ To: buildroot@busybox.net
 Starting with 2020.01, uboot started using the 'undefine' make
 directive, which was only introduced with make 4.0.
 
+In the general case, we do not have a way to know if the uboot
+selected by the user is older or later than 2020.01, so we have
+no way to know before hand if make >= 4.0 is needed or not. As
+such, we have no other option than to always require it.
+
 So, use the existing $(BR2_MAKE_HOST_DEPENDENCY) and $(BR2_MAKE),
 both of each will ensure that we do use a make that is at least 4.0.
-
-Fixes:
-    http://autobuild.buildroot.org/results/c97/c976ed5eb7760cba192d22b3f1e7460596fd82dd/
 
 Reported-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/uboot-tools/uboot-tools.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ boot/uboot/uboot.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 1f0bac5bf7..98ac71911b 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -11,6 +11,9 @@ UBOOT_TOOLS_LICENSE = GPL-2.0+
- UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
- UBOOT_TOOLS_INSTALL_STAGING = YES
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index a4879bb8b2..19dfb08e81 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -12,6 +12,8 @@ UBOOT_LICENSE_FILES = Licenses/gpl-2.0.txt
  
-+UBOOT_TOOLS_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
-+HOST_UBOOT_TOOLS_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
+ UBOOT_INSTALL_IMAGES = YES
+ 
++UBOOT_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
 +
- define UBOOT_TOOLS_CONFIGURE_CMDS
- 	mkdir -p $(@D)/include/config
- 	touch $(@D)/include/config/auto.conf
-@@ -39,9 +42,9 @@ endef
- endif
- 
- define UBOOT_TOOLS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(BR2_MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
- 		CROSS_BUILD_TOOLS=y tools-only
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(BR2_MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
- 		envtools no-dot-config-targets=envtools
+ ifeq ($(UBOOT_VERSION),custom)
+ # Handle custom U-Boot tarballs as specified by the configuration
+ UBOOT_TARBALL = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
+@@ -242,7 +244,7 @@ UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
+ ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
+ define UBOOT_CONFIGURE_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) \
+-		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
++		$(BR2_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
+ 		$(UBOOT_BOARD_NAME)_config
  endef
- 
-@@ -103,7 +106,7 @@ HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
- endif
- 
- define HOST_UBOOT_TOOLS_BUILD_CMDS
--	$(MAKE1) -C $(@D) $(HOST_UBOOT_TOOLS_MAKE_OPTS) tools-only
-+	$(BR2_MAKE1) -C $(@D) $(HOST_UBOOT_TOOLS_MAKE_OPTS) tools-only
- endef
- 
- define HOST_UBOOT_TOOLS_INSTALL_CMDS
+ else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+@@ -279,7 +281,7 @@ define UBOOT_BUILD_CMDS
+ 		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
+ 	)
+ 	$(TARGET_CONFIGURE_OPTS) \
+-		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
++		$(BR2_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
+ 		$(UBOOT_MAKE_TARGET)
+ 	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
+ 		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
 -- 
 2.20.1
