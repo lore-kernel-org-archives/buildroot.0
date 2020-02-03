@@ -1,371 +1,249 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Feb 2020 14:45:36 +0100
-Subject: [Buildroot] [git commit] package/s*: add license file hashes
-Message-ID: <20200203133730.6DAB988723@busybox.osuosl.org>
+Date: Mon, 3 Feb 2020 14:45:35 +0100
+Subject: [Buildroot] [git commit] package/lib*: add license file hashes
+Message-ID: <20200203133729.F033D88723@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38d14c57040b2880f53c372c642c5fee58595ac0
+commit: https://git.buildroot.net/buildroot/commit/?id=762119b4c5489352a889c2627eb37906647c375d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998 at free.fr: rebase libplist after bump]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- boot/syslinux/syslinux.hash                            | 4 +++-
- package/scrypt/scrypt.hash                             | 4 +++-
- package/sdl2_gfx/sdl2_gfx.hash                         | 4 +++-
- package/sdl2_mixer/sdl2_mixer.hash                     | 3 ++-
- package/sdl2_net/sdl2_net.hash                         | 3 ++-
- package/sdl2_ttf/sdl2_ttf.hash                         | 3 ++-
- package/sdl_gfx/sdl_gfx.hash                           | 3 +++
- package/sdl_image/sdl_image.hash                       | 3 ++-
- package/sdl_net/sdl_net.hash                           | 3 ++-
- package/sdl_sound/sdl_sound.hash                       | 3 ++-
- package/sdl_ttf/sdl_ttf.hash                           | 3 ++-
- package/sdparm/sdparm.hash                             | 3 ++-
- package/sigrok-cli/sigrok-cli.hash                     | 3 ++-
- package/sl/sl.hash                                     | 3 ++-
- package/smack/smack.hash                               | 3 ++-
- package/smartmontools/smartmontools.hash               | 2 ++
- package/smstools3/smstools3.hash                       | 4 +++-
- package/socketcand/socketcand.hash                     | 3 ++-
- package/sofia-sip/sofia-sip.hash                       | 4 +++-
- package/sox/sox.hash                                   | 3 +++
- package/sp-oops-extract/sp-oops-extract.hash           | 3 ++-
- package/spawn-fcgi/spawn-fcgi.hash                     | 4 +++-
- package/sphinxbase/sphinxbase.hash                     | 3 ++-
- package/sredird/sredird.hash                           | 3 ++-
- package/sshfs/sshfs.hash                               | 3 ++-
- package/sshpass/sshpass.hash                           | 1 +
- package/start-stop-daemon/start-stop-daemon.hash       | 4 +++-
- package/startup-notification/startup-notification.hash | 3 ++-
- package/statserial/statserial.hash                     | 3 ++-
- package/stress/stress.hash                             | 4 +++-
- package/sunxi-tools/sunxi-tools.hash                   | 3 ++-
- package/supertux/supertux.hash                         | 4 +++-
- package/sysprof/sysprof.hash                           | 3 ++-
- package/systemd-bootchart/systemd-bootchart.hash       | 3 ++-
- 34 files changed, 78 insertions(+), 30 deletions(-)
+ package/freescale-imx/libz160/libz160.hash | 1 +
+ package/libcofi/libcofi.hash               | 1 +
+ package/libcrossguid/libcrossguid.hash     | 3 ++-
+ package/liblockfile/liblockfile.hash       | 6 ++++--
+ package/libnet/libnet.hash                 | 2 ++
+ package/libplayer/libplayer.hash           | 3 ++-
+ package/libplist/libplist.hash             | 3 ++-
+ package/libpthsem/libpthsem.hash           | 3 ++-
+ package/libreplaygain/libreplaygain.hash   | 4 +++-
+ package/librsvg/librsvg.hash               | 2 ++
+ package/libserialport/libserialport.hash   | 3 ++-
+ package/libsexy/libsexy.hash               | 3 ++-
+ package/libshairplay/libshairplay.hash     | 3 ++-
+ package/libsidplay2/libsidplay2.hash       | 2 ++
+ package/libsoc/libsoc.hash                 | 1 +
+ package/libsoil/libsoil.hash               | 4 +++-
+ package/libsoundtouch/libsoundtouch.hash   | 3 ++-
+ package/libsvg-cairo/libsvg-cairo.hash     | 3 ++-
+ package/libsvg/libsvg.hash                 | 3 ++-
+ package/libtpl/libtpl.hash                 | 3 ++-
+ package/libuecc/libuecc.hash               | 1 +
+ package/libuio/libuio.hash                 | 3 ++-
+ 22 files changed, 44 insertions(+), 16 deletions(-)
 
-diff --git a/boot/syslinux/syslinux.hash b/boot/syslinux/syslinux.hash
-index 5303f4df0b..9bec3a20e7 100644
---- a/boot/syslinux/syslinux.hash
-+++ b/boot/syslinux/syslinux.hash
-@@ -1,2 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/boot/syslinux/sha256sums.asc
--sha256	26d3986d2bea109d5dc0e4f8c4822a459276cf021125e8c9f23c3cca5d8c850e	syslinux-6.03.tar.xz
-+sha256  26d3986d2bea109d5dc0e4f8c4822a459276cf021125e8c9f23c3cca5d8c850e  syslinux-6.03.tar.xz
-+# Locally computed
-+sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/scrypt/scrypt.hash b/package/scrypt/scrypt.hash
-index 6694456763..8a20d42bee 100644
---- a/package/scrypt/scrypt.hash
-+++ b/package/scrypt/scrypt.hash
-@@ -1,2 +1,4 @@
- # From http://www.tarsnap.com/scrypt/scrypt-sigs-1.2.0.asc
--sha256 1754bc89405277c8ac14220377a4c240ddc34b1ce70882aa92cd01bfdc8569d4  scrypt-1.2.0.tgz
-+sha256  1754bc89405277c8ac14220377a4c240ddc34b1ce70882aa92cd01bfdc8569d4  scrypt-1.2.0.tgz
-+# Locally computed
-+sha256  e9d3ce691acc974c05d54bdea919fa03018fcdb5abd82eab5cdb78f07c451e0a  main.c
-diff --git a/package/sdl2_gfx/sdl2_gfx.hash b/package/sdl2_gfx/sdl2_gfx.hash
-index 3eb62ee366..190c997d36 100644
---- a/package/sdl2_gfx/sdl2_gfx.hash
-+++ b/package/sdl2_gfx/sdl2_gfx.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
--sha256 63e0e01addedc9df2f85b93a248f06e8a04affa014a835c2ea34bfe34e576262  SDL2_gfx-1.0.4.tar.gz
-+sha256  63e0e01addedc9df2f85b93a248f06e8a04affa014a835c2ea34bfe34e576262  SDL2_gfx-1.0.4.tar.gz
-+sha256  ec9036525fe1adde787041cce6c4b7fbb262863c238bb9051037e29a57e27bfc  COPYING
-+sha256  18e6fad60b809b0e30bd2576a0d33c179ca2ac694504a849d05b6579e3c481dd  SDL2_framerate.h
-diff --git a/package/sdl2_mixer/sdl2_mixer.hash b/package/sdl2_mixer/sdl2_mixer.hash
-index 48bc887a4b..441d0124e4 100644
---- a/package/sdl2_mixer/sdl2_mixer.hash
-+++ b/package/sdl2_mixer/sdl2_mixer.hash
+diff --git a/package/freescale-imx/libz160/libz160.hash b/package/freescale-imx/libz160/libz160.hash
+index ee10630fdf..75f266e3c5 100644
+--- a/package/freescale-imx/libz160/libz160.hash
++++ b/package/freescale-imx/libz160/libz160.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+ sha256  08767eb269a0a30ca0aa3d3b5aa9a53a2d17ed1c24651b7e8cefc7704b883f19  libz160-bin-11.09.01.bin
++sha256  6d7a2fefc2f7ce888f9eb74919b852aed5a1087b2e84345be90cadbebe1b6578  EULA
+diff --git a/package/libcofi/libcofi.hash b/package/libcofi/libcofi.hash
+index 1baaece4cb..c5f6bb4416 100644
+--- a/package/libcofi/libcofi.hash
++++ b/package/libcofi/libcofi.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+ sha256  72ec89c19267612b316ec9c5835c07212b8f0a377c5b4c20b6e46e69a6e4a5e5  libcofi-7313fbe12b0593034d0a1b606bf33c7cf4ababce.tar.gz
++sha256  1a8203e5d11f0841235cf30265b1ffb19c0d9c4a6d2889554cbeccaf9f09b327  README.md
+diff --git a/package/libcrossguid/libcrossguid.hash b/package/libcrossguid/libcrossguid.hash
+index a991da56a0..17dbe35c71 100644
+--- a/package/libcrossguid/libcrossguid.hash
++++ b/package/libcrossguid/libcrossguid.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256 5a24f62a610249d744cbd8d28ee399d8905db7222bf3bdbc8a8b4a76e597695f  SDL2_mixer-2.0.1.tar.gz
-+sha256  5a24f62a610249d744cbd8d28ee399d8905db7222bf3bdbc8a8b4a76e597695f  SDL2_mixer-2.0.1.tar.gz
-+sha256  4fc74d216e009c7cc5d939b688fc122b329787dcd24f69ae2a08ce052c826b39  COPYING.txt
-diff --git a/package/sdl2_net/sdl2_net.hash b/package/sdl2_net/sdl2_net.hash
-index c5f4433837..a58e3c96cf 100644
---- a/package/sdl2_net/sdl2_net.hash
-+++ b/package/sdl2_net/sdl2_net.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 15ce8a7e5a23dafe8177c8df6e6c79b6749a03fff1e8196742d3571657609d21  SDL2_net-2.0.1.tar.gz
-+sha256  15ce8a7e5a23dafe8177c8df6e6c79b6749a03fff1e8196742d3571657609d21  SDL2_net-2.0.1.tar.gz
-+sha256  f09845a238245402a8b8388db6634d8a5b2c3e1dc098f16f9d8c74a276ef4594  COPYING.txt
-diff --git a/package/sdl2_ttf/sdl2_ttf.hash b/package/sdl2_ttf/sdl2_ttf.hash
-index 1e83941758..16459e4a59 100644
---- a/package/sdl2_ttf/sdl2_ttf.hash
-+++ b/package/sdl2_ttf/sdl2_ttf.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 a9eceb1ad88c1f1545cd7bd28e7cbc0b2c14191d40238f531a15b01b1b22cd33  SDL2_ttf-2.0.15.tar.gz
-+sha256  a9eceb1ad88c1f1545cd7bd28e7cbc0b2c14191d40238f531a15b01b1b22cd33  SDL2_ttf-2.0.15.tar.gz
-+sha256  f6370809c9f644760920d9945c5be07aed17664975f2e4741013d4d9a2ec696f  COPYING.txt
-diff --git a/package/sdl_gfx/sdl_gfx.hash b/package/sdl_gfx/sdl_gfx.hash
-index 8c2be96fff..afd4653667 100644
---- a/package/sdl_gfx/sdl_gfx.hash
-+++ b/package/sdl_gfx/sdl_gfx.hash
-@@ -1,3 +1,6 @@
- # From http://sourceforge.net/projects/sdlgfx/files/
- md5	fcc3c4f2d1b4943409bf7e67dd65d03a	SDL_gfx-2.0.23.tar.gz
- sha1	aae60e7fed539f3f8a0a0bd6da3bbcf625642596	SDL_gfx-2.0.23.tar.gz
-+# Locally computed
-+sha256  4f5df842266c59b2d7e6ef35b53d7f37b13795d93baf3ed211f502c216f7bc89  COPYING
-+sha256  5f3bc98e0bd2de83279bd62868d4bc0c2b4f811ab828b036d36a4a6d1cd5672d  LICENSE
-diff --git a/package/sdl_image/sdl_image.hash b/package/sdl_image/sdl_image.hash
-index 836223489c..90e3040a17 100644
---- a/package/sdl_image/sdl_image.hash
-+++ b/package/sdl_image/sdl_image.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	0b90722984561004de84847744d566809dbb9daf732a9e503b91a1b5a84e5699	SDL_image-1.2.12.tar.gz
-+sha256  0b90722984561004de84847744d566809dbb9daf732a9e503b91a1b5a84e5699  SDL_image-1.2.12.tar.gz
-+sha256  653649692218d56e5807bdc5b72f51aa6067bc44d30b757e18c03b32bcaf98da  COPYING
-diff --git a/package/sdl_net/sdl_net.hash b/package/sdl_net/sdl_net.hash
-index 56a7484284..4f2e1ae76a 100644
---- a/package/sdl_net/sdl_net.hash
-+++ b/package/sdl_net/sdl_net.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	5f4a7a8bb884f793c278ac3f3713be41980c5eedccecff0260411347714facb4	SDL_net-1.2.8.tar.gz
-+sha256  5f4a7a8bb884f793c278ac3f3713be41980c5eedccecff0260411347714facb4  SDL_net-1.2.8.tar.gz
-+sha256  e542f822a6cd82deccf82cf0f50192917b0158d725a6bc6348ab1ccdd890ecbe  COPYING
-diff --git a/package/sdl_sound/sdl_sound.hash b/package/sdl_sound/sdl_sound.hash
-index a548627916..1ea76b0b0b 100644
---- a/package/sdl_sound/sdl_sound.hash
-+++ b/package/sdl_sound/sdl_sound.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	3999fd0bbb485289a52be14b2f68b571cb84e380cc43387eadf778f64c79e6df	SDL_sound-1.0.3.tar.gz
-+sha256  3999fd0bbb485289a52be14b2f68b571cb84e380cc43387eadf778f64c79e6df  SDL_sound-1.0.3.tar.gz
-+sha256  2a781dd2f8c5435c59cfa3b79dfea1c1d7df676ed318ecc802139f76ac345d07  COPYING
-diff --git a/package/sdl_ttf/sdl_ttf.hash b/package/sdl_ttf/sdl_ttf.hash
-index ac7d6a6be0..86a15d6dd4 100644
---- a/package/sdl_ttf/sdl_ttf.hash
-+++ b/package/sdl_ttf/sdl_ttf.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	724cd895ecf4da319a3ef164892b72078bd92632a5d812111261cde248ebcdb7	SDL_ttf-2.0.11.tar.gz
-+sha256  724cd895ecf4da319a3ef164892b72078bd92632a5d812111261cde248ebcdb7  SDL_ttf-2.0.11.tar.gz
-+sha256  b609721d3d4ac67facaf86f068c8b311b6c5f6cef89b6d84268aa38b7867ab7b  COPYING
-diff --git a/package/sdparm/sdparm.hash b/package/sdparm/sdparm.hash
-index 050785ab71..22d6b5b87b 100644
---- a/package/sdparm/sdparm.hash
-+++ b/package/sdparm/sdparm.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	7dc9e148cef22744e00809dad21b59ac544e3615001bc1b2399978f73e1d58ca	sdparm-1.10.tar.xz
-+sha256  7dc9e148cef22744e00809dad21b59ac544e3615001bc1b2399978f73e1d58ca  sdparm-1.10.tar.xz
-+sha256  4f98444e14adb18a94a65c3ded5f0dad42d382c6a2288b593a2d5bd5ecc4f46d  COPYING
-diff --git a/package/sigrok-cli/sigrok-cli.hash b/package/sigrok-cli/sigrok-cli.hash
-index 42bbdc185e..63a3dd80aa 100644
---- a/package/sigrok-cli/sigrok-cli.hash
-+++ b/package/sigrok-cli/sigrok-cli.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256	5669d968c2de3dfc6adfda76e83789b6ba76368407c832438cef5e7099a65e1c	sigrok-cli-0.7.0.tar.gz
-+sha256  5669d968c2de3dfc6adfda76e83789b6ba76368407c832438cef5e7099a65e1c  sigrok-cli-0.7.0.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/sl/sl.hash b/package/sl/sl.hash
-index be74670ffb..908b1bd91e 100644
---- a/package/sl/sl.hash
-+++ b/package/sl/sl.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 1e5996757f879c81f202a18ad8e982195cf51c41727d3fea4af01fdcbbb5563a  sl-5.02.tar.gz
-+sha256  1e5996757f879c81f202a18ad8e982195cf51c41727d3fea4af01fdcbbb5563a  sl-5.02.tar.gz
-+sha256  72c7d262e2c9ddf019edc90af852a01a410338efff4e75e1c005b77ada4be7c4  LICENSE
-diff --git a/package/smack/smack.hash b/package/smack/smack.hash
-index 2c1f446250..a753f93fb7 100644
---- a/package/smack/smack.hash
-+++ b/package/smack/smack.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 1a607da3b1a661dc76b7a5b8571f4a2d56b4d61d78376088d19f2d8637dc6822  smack-1.3.1.tar.gz
-+sha256  1a607da3b1a661dc76b7a5b8571f4a2d56b4d61d78376088d19f2d8637dc6822  smack-1.3.1.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
-index 2f2b7aa096..ffa1e8f97e 100644
---- a/package/smartmontools/smartmontools.hash
-+++ b/package/smartmontools/smartmontools.hash
+-sha256 022c9f02cc36e865cd8fd0111a597ff2bd91988deeb348dbe2aba64aed1abd99  libcrossguid-8f399e8bd4252be9952f3dfa8199924cc8487ca4.tar.gz
++sha256  022c9f02cc36e865cd8fd0111a597ff2bd91988deeb348dbe2aba64aed1abd99  libcrossguid-8f399e8bd4252be9952f3dfa8199924cc8487ca4.tar.gz
++sha256  779e58787f966a1552f68d5ec041513cef68785dae4a519dbda7bc0b86eda20e  LICENSE
+diff --git a/package/liblockfile/liblockfile.hash b/package/liblockfile/liblockfile.hash
+index 4421673b91..881ad992ae 100644
+--- a/package/liblockfile/liblockfile.hash
++++ b/package/liblockfile/liblockfile.hash
 @@ -1,3 +1,5 @@
- # From http://sourceforge.net/projects/smartmontools/files/smartmontools/6.5/
- md5	093aeec3f8f39fa9a37593c4012d3156	smartmontools-6.5.tar.gz
- sha1	7e788b429534a4ae627858fbcc826b93402cee7e	smartmontools-6.5.tar.gz
+ # From http://snapshot.debian.org/archive/debian/20151026T153523Z/pool/main/libl/liblockfile/liblockfile_1.09-6.dsc
+-sha256	16979eba05396365e1d6af7100431ae9d32f9bc063930d1de66298a0695f1b7f	liblockfile_1.09.orig.tar.gz
+-sha256	d45eacb7c637c16d03c777c55989d98da494ae9584a0783fe6dbf0db60fa290f	liblockfile_1.09-6.debian.tar.bz2
++sha256  16979eba05396365e1d6af7100431ae9d32f9bc063930d1de66298a0695f1b7f  liblockfile_1.09.orig.tar.gz
++sha256  d45eacb7c637c16d03c777c55989d98da494ae9584a0783fe6dbf0db60fa290f  liblockfile_1.09-6.debian.tar.bz2
 +# Locally computed
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/smstools3/smstools3.hash b/package/smstools3/smstools3.hash
-index b0b521f747..9eb73e9380 100644
---- a/package/smstools3/smstools3.hash
-+++ b/package/smstools3/smstools3.hash
-@@ -1,2 +1,4 @@
++sha256  5fffcc11f94a05a7cff02ff792407737eb1cba840767cc1a71b67fbb19695dd3  COPYRIGHT
+diff --git a/package/libnet/libnet.hash b/package/libnet/libnet.hash
+index dd3349082d..9f62aeda60 100644
+--- a/package/libnet/libnet.hash
++++ b/package/libnet/libnet.hash
+@@ -1,3 +1,5 @@
+ # From https://sourceforge.net/projects/libnet-dev/files/
+ sha1 dffff71c325584fdcf99b80567b60f8ad985e34c libnet-1.1.6.tar.gz
+ md5 710296fe424a49344e5fcc0d09e53317 libnet-1.1.6.tar.gz
++# Locally computed
++sha256  961355c8bac6de11ecb8f634111986712e80a88272c0bb0954fd1810e6f47cab  doc/COPYING
+diff --git a/package/libplayer/libplayer.hash b/package/libplayer/libplayer.hash
+index 6f131433b4..62041e5737 100644
+--- a/package/libplayer/libplayer.hash
++++ b/package/libplayer/libplayer.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256	ed00ffaeaa312a5b4f969f4e97a64603a866bbe16e393ea02f5bf05234814d59	smstools3-3.1.15.tar.gz
-+sha256  ed00ffaeaa312a5b4f969f4e97a64603a866bbe16e393ea02f5bf05234814d59  smstools3-3.1.15.tar.gz
-+sha256  61ae4d83c30236cc7df40b1ccbbe6be07d334f9579b8d0facecc34334fe15b61  doc/license.html
-+sha256  786b4da4dd900cad87a7dc17769458607bdeae575d62e6e98ad7144e9225f8d3  LICENSE
-diff --git a/package/socketcand/socketcand.hash b/package/socketcand/socketcand.hash
-index 6b19c70524..6ee0c314a8 100644
---- a/package/socketcand/socketcand.hash
-+++ b/package/socketcand/socketcand.hash
+-sha256	aa5eeb54f773bc9cad2733e4a0b5870208fc7f75024515ea87e55f64653e9d65	libplayer-2.0.1.tar.bz2
++sha256  aa5eeb54f773bc9cad2733e4a0b5870208fc7f75024515ea87e55f64653e9d65  libplayer-2.0.1.tar.bz2
++sha256  29bc1d97c09654ba9a9f490e3b69d1bba84938ebb21ac87b2af4d190b082e2ca  COPYING
+diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
+index 8b36daceab..9934ad05eb 100644
+--- a/package/libplist/libplist.hash
++++ b/package/libplist/libplist.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+-sha256 4b33f9af3f9208d54a3c3e1a8c149932513f451c98d1dd696fe42c06e30b7f03  libplist-2.1.0.tar.gz
++sha256  4b33f9af3f9208d54a3c3e1a8c149932513f451c98d1dd696fe42c06e30b7f03  libplist-2.1.0.tar.gz
++sha256  7619c753cac95d4740220223bde48a032606fcaccde5e546f9bc444c81ab356d  COPYING
+ sha256 7619c753cac95d4740220223bde48a032606fcaccde5e546f9bc444c81ab356d  COPYING
+diff --git a/package/libpthsem/libpthsem.hash b/package/libpthsem/libpthsem.hash
+index b6aa2b87c5..9da4b88278 100644
+--- a/package/libpthsem/libpthsem.hash
++++ b/package/libpthsem/libpthsem.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	4024cafdd5d4bce2b1778a6be5491222c3f6e7ef1e43971264c451c0012c5c01  pthsem_2.0.8.tar.gz
++sha256  4024cafdd5d4bce2b1778a6be5491222c3f6e7ef1e43971264c451c0012c5c01  pthsem_2.0.8.tar.gz
++sha256  f1b95d3728077d1a3efe7fc17928b1953b1224f6caf9c528e30e570158b7520d  COPYING
+diff --git a/package/libreplaygain/libreplaygain.hash b/package/libreplaygain/libreplaygain.hash
+index 7a6109805a..63e5dca578 100644
+--- a/package/libreplaygain/libreplaygain.hash
++++ b/package/libreplaygain/libreplaygain.hash
+@@ -1,4 +1,6 @@
+ # From https://www.musepack.net/index.php?pg=src
+ md5	e27b3b1249b7fbae92d656d9e3d26633	libreplaygain_r475.tar.gz
+ # Calculated based on the hash above
+-sha256	8258bf785547ac2cda43bb195e07522f0a3682f55abe97753c974609ec232482	libreplaygain_r475.tar.gz
++sha256  8258bf785547ac2cda43bb195e07522f0a3682f55abe97753c974609ec232482  libreplaygain_r475.tar.gz
++# Locally computed
++sha256  511e7b63ce6530b93932d19da3471a6672586339bc131b2699ad4e9b0ee6c9bb  src/gain_analysis.c
+diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
+index 6f4b07423a..366d9b0db6 100644
+--- a/package/librsvg/librsvg.hash
++++ b/package/librsvg/librsvg.hash
+@@ -1,2 +1,4 @@
+ # From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.40/librsvg-2.40.20.sha256sum
+ sha256	cff4dd3c3b78bfe99d8fcfad3b8ba1eee3289a0823c0e118d78106be6b84c92b	librsvg-2.40.20.tar.xz
++# Locally computed
++sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING.LIB
+diff --git a/package/libserialport/libserialport.hash b/package/libserialport/libserialport.hash
+index f2619029a2..39f0c8f1f0 100644
+--- a/package/libserialport/libserialport.hash
++++ b/package/libserialport/libserialport.hash
 @@ -1,2 +1,3 @@
  # Locally computed
--sha256 3c5cc7af4ff707ac344e62d2e37a74b59aeccd14b88e837cc142c52b69d64a39 socketcand-69e2201222f015a1abe7a58ecf61325012cd91b1.tar.gz
-+sha256  3c5cc7af4ff707ac344e62d2e37a74b59aeccd14b88e837cc142c52b69d64a39  socketcand-69e2201222f015a1abe7a58ecf61325012cd91b1.tar.gz
-+sha256  b32028a4080be38208ee951c6e8afc6f3bfb3d5496559b260ab0dce9472740f6  socketcand.c
-diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
-index fe9c4b11c2..6e81ec878f 100644
---- a/package/sofia-sip/sofia-sip.hash
-+++ b/package/sofia-sip/sofia-sip.hash
-@@ -1,2 +1,4 @@
+-sha256	4a2af9d9c3ff488e92fb75b4ba38b35bcf9b8a66df04773eba2a7bbf1fa7529d	libserialport-0.1.1.tar.gz
++sha256  4a2af9d9c3ff488e92fb75b4ba38b35bcf9b8a66df04773eba2a7bbf1fa7529d  libserialport-0.1.1.tar.gz
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
+diff --git a/package/libsexy/libsexy.hash b/package/libsexy/libsexy.hash
+index 78b1a82657..6f47e8ba7c 100644
+--- a/package/libsexy/libsexy.hash
++++ b/package/libsexy/libsexy.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	8c4101a8cda5fccbba85ba1a15f46f2cf75deaa8b3c525ce5b135b9e1a8fe49e	libsexy-0.1.11.tar.gz
++sha256  8c4101a8cda5fccbba85ba1a15f46f2cf75deaa8b3c525ce5b135b9e1a8fe49e  libsexy-0.1.11.tar.gz
++sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
+diff --git a/package/libshairplay/libshairplay.hash b/package/libshairplay/libshairplay.hash
+index 19261f98bf..9b12b5a558 100644
+--- a/package/libshairplay/libshairplay.hash
++++ b/package/libshairplay/libshairplay.hash
+@@ -1,2 +1,3 @@
  # Locally computed
--sha256 2b01bc2e1826e00d1f7f57d29a2854b15fd5fe24695e47a14a735d195dd37c81 sofia-sip-1.12.11.tar.gz
-+sha256  2b01bc2e1826e00d1f7f57d29a2854b15fd5fe24695e47a14a735d195dd37c81  sofia-sip-1.12.11.tar.gz
-+sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
-+sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
-diff --git a/package/sox/sox.hash b/package/sox/sox.hash
-index 2f8069b69f..1a4a7dbf7f 100644
---- a/package/sox/sox.hash
-+++ b/package/sox/sox.hash
-@@ -1,3 +1,6 @@
- # From http://sourceforge.net/projects/sox/files/sox/14.4.2/
- md5	ba804bb1ce5c71dd484a102a5b27d0dd	sox-14.4.2.tar.bz2
- sha1	dc9668256b9d81ef25d672f14f12ec026b0b4087	sox-14.4.2.tar.bz2
+-sha256 49ac0e0470ec6367f720c7b79a09165138f57b60f5949a2d9c38be5823d13294 libshairplay-ce80e005908f41d0e6fde1c4a21e9cb8ee54007b.tar.gz
++sha256  49ac0e0470ec6367f720c7b79a09165138f57b60f5949a2d9c38be5823d13294  libshairplay-ce80e005908f41d0e6fde1c4a21e9cb8ee54007b.tar.gz
++sha256  0ac7d61c52aff5717c02250ca0adf0ef35019e2c0838a3479b8fce597aea6fde  LICENSE
+diff --git a/package/libsidplay2/libsidplay2.hash b/package/libsidplay2/libsidplay2.hash
+index 1b45cb8781..5342135adf 100644
+--- a/package/libsidplay2/libsidplay2.hash
++++ b/package/libsidplay2/libsidplay2.hash
+@@ -1,2 +1,4 @@
+ # From http://sourceforge.net/projects/sidplay2/files/sidplay2/sidplay-libs-2.1.1/
+ sha1	8af6350866edc30b0d331e075fa97292f6f645a5	sidplay-libs-2.1.1.tar.gz
 +# Locally computed
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL
-+sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  LICENSE.LGPL
-diff --git a/package/sp-oops-extract/sp-oops-extract.hash b/package/sp-oops-extract/sp-oops-extract.hash
-index 835bfe8915..666cce784e 100644
---- a/package/sp-oops-extract/sp-oops-extract.hash
-+++ b/package/sp-oops-extract/sp-oops-extract.hash
++sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  libsidplay/COPYING
+diff --git a/package/libsoc/libsoc.hash b/package/libsoc/libsoc.hash
+index 77f2fad79c..2e7c82953c 100644
+--- a/package/libsoc/libsoc.hash
++++ b/package/libsoc/libsoc.hash
 @@ -1,2 +1,3 @@
  # Locally computed:
--sha256 85601a569af1f4584db75fad21d3a70e377ce12d1bccad7dbe1112abd3b43d93 sp-oops-extract_0.0.7-1.tar.gz
-+sha256  85601a569af1f4584db75fad21d3a70e377ce12d1bccad7dbe1112abd3b43d93  sp-oops-extract_0.0.7-1.tar.gz
-+sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
-diff --git a/package/spawn-fcgi/spawn-fcgi.hash b/package/spawn-fcgi/spawn-fcgi.hash
-index c1911e4e9f..b5c5c7423b 100644
---- a/package/spawn-fcgi/spawn-fcgi.hash
-+++ b/package/spawn-fcgi/spawn-fcgi.hash
+ sha256  8df626bde365b94a805e1c323104c63a7429ec64c9df815cd1d9b9c4b317e066  libsoc-0.8.2.tar.gz
++sha256  782dafc98788c358fb20e530c8fde3186cdb60f5e18fe6d348fe84ee9f65ddb0  LICENCE
+diff --git a/package/libsoil/libsoil.hash b/package/libsoil/libsoil.hash
+index 175569b9f6..2596cd6b4d 100644
+--- a/package/libsoil/libsoil.hash
++++ b/package/libsoil/libsoil.hash
 @@ -1,2 +1,4 @@
- # From http://redmine.lighttpd.net/news/9
--sha256	a3cfc7c9581b6ddc31084b379c9160323fa345d357ace6cd2d3d3af3593e2873	spawn-fcgi-1.6.4.tar.bz2
-+sha256  a3cfc7c9581b6ddc31084b379c9160323fa345d357ace6cd2d3d3af3593e2873  spawn-fcgi-1.6.4.tar.bz2
-+# Locally computed
-+sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
-diff --git a/package/sphinxbase/sphinxbase.hash b/package/sphinxbase/sphinxbase.hash
-index 9fbb6dfd79..433fba685d 100644
---- a/package/sphinxbase/sphinxbase.hash
-+++ b/package/sphinxbase/sphinxbase.hash
+ # Locally calculated
+-sha256	a2305b8d64f6d636e36d669bbdb0ca5445d1345c754b3d61d3f037dad2e5f701	soil.zip
++sha256  a2305b8d64f6d636e36d669bbdb0ca5445d1345c754b3d61d3f037dad2e5f701  soil.zip
++sha256  a53f0508cafb544aa0b11c241c1000055bd9d827d19712f4de08898e36f29728  src/stb_image_aug.c
++sha256  449ba815b6f610660515246d029f5d08b45178fe8f9f9f520939edad85a7935e  src/image_helper.c
+diff --git a/package/libsoundtouch/libsoundtouch.hash b/package/libsoundtouch/libsoundtouch.hash
+index af0c36283a..a79e62f031 100644
+--- a/package/libsoundtouch/libsoundtouch.hash
++++ b/package/libsoundtouch/libsoundtouch.hash
 @@ -1,2 +1,3 @@
  # Locally computed
--sha256 06971dbe272d2f73bde0ef7b3538c0c8f8ea885cb171fd6b17a5975bced66e64 sphinxbase-5prealpha.tar.gz
-+sha256  06971dbe272d2f73bde0ef7b3538c0c8f8ea885cb171fd6b17a5975bced66e64  sphinxbase-5prealpha.tar.gz
-+sha256  26f12e0152a5d58c69904e439761a1b2fbb9267b5f04674dbf93667e3e6dd043  src/libsphinxbase/util/bio.c
-diff --git a/package/sredird/sredird.hash b/package/sredird/sredird.hash
-index 63a419fc87..1181627a41 100644
---- a/package/sredird/sredird.hash
-+++ b/package/sredird/sredird.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256	640c47dcd84b3b90640165a38eb336a675fdab06c14c09cae2f4a604cae560d3	sredird-2.2.2.tar.gz
-+sha256  640c47dcd84b3b90640165a38eb336a675fdab06c14c09cae2f4a604cae560d3  sredird-2.2.2.tar.gz
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/sshfs/sshfs.hash b/package/sshfs/sshfs.hash
-index 09ae5d1cfa..a8878e6931 100644
---- a/package/sshfs/sshfs.hash
-+++ b/package/sshfs/sshfs.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256	7f689174d02e6b7e2631306fda4fb8e6b4483102d1bce82b3cdafba33369ad22	sshfs-2.8.tar.gz
-+sha256  7f689174d02e6b7e2631306fda4fb8e6b4483102d1bce82b3cdafba33369ad22  sshfs-2.8.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sshpass/sshpass.hash b/package/sshpass/sshpass.hash
-index f6e0611c2f..9635a91806 100644
---- a/package/sshpass/sshpass.hash
-+++ b/package/sshpass/sshpass.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  c6324fcee608b99a58f9870157dfa754837f8c48be3df0f5e2f3accf145dee60  sshpass-1.06.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/start-stop-daemon/start-stop-daemon.hash b/package/start-stop-daemon/start-stop-daemon.hash
-index 7ce6cc3663..e5d1d91129 100644
---- a/package/start-stop-daemon/start-stop-daemon.hash
-+++ b/package/start-stop-daemon/start-stop-daemon.hash
-@@ -1,2 +1,4 @@
- # From http://ftp.de.debian.org/debian/pool/main/d/dpkg/dpkg_1.18.10.dsc
--sha256	025524da41ba18b183ff11e388eb8686f7cc58ee835ed7d48bd159c46a8b6dc5	dpkg_1.18.10.tar.xz
-+sha256  025524da41ba18b183ff11e388eb8686f7cc58ee835ed7d48bd159c46a8b6dc5  dpkg_1.18.10.tar.xz
-+# Locally computed
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/startup-notification/startup-notification.hash b/package/startup-notification/startup-notification.hash
-index cadbf98434..474c8bd92c 100644
---- a/package/startup-notification/startup-notification.hash
-+++ b/package/startup-notification/startup-notification.hash
+-sha256 c805e7a72b7758a8986b71e73d2f94a8c79c66c1246fa2af1743c4282702e096  libsoundtouch-010a91a59071c7fefd316fca62c0d980ec85b4b1.tar.gz
++sha256  c805e7a72b7758a8986b71e73d2f94a8c79c66c1246fa2af1743c4282702e096  libsoundtouch-010a91a59071c7fefd316fca62c0d980ec85b4b1.tar.gz
++sha256  9c6a15d7433078e4c0d3cb9820f172bbf0bf829e7648d719dc85c1429815519b  COPYING.TXT
+diff --git a/package/libsvg-cairo/libsvg-cairo.hash b/package/libsvg-cairo/libsvg-cairo.hash
+index fba96def72..7240ee57b1 100644
+--- a/package/libsvg-cairo/libsvg-cairo.hash
++++ b/package/libsvg-cairo/libsvg-cairo.hash
+@@ -2,4 +2,5 @@
+ md5 d79da7b3a60ad8c8e4b902c9b3563047  libsvg-cairo-0.1.6.tar.gz
+ 
+ # Locally calculated
+-sha256 a380be6a78ec2938100ce904363815a94068fca372c666b8cc82aa8711a0215c libsvg-cairo-0.1.6.tar.gz
++sha256  a380be6a78ec2938100ce904363815a94068fca372c666b8cc82aa8711a0215c  libsvg-cairo-0.1.6.tar.gz
++sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
+diff --git a/package/libsvg/libsvg.hash b/package/libsvg/libsvg.hash
+index c5008491f1..c314c58015 100644
+--- a/package/libsvg/libsvg.hash
++++ b/package/libsvg/libsvg.hash
+@@ -2,4 +2,5 @@
+ md5 ce0715e3013f78506795fba16e8455d3 libsvg-0.1.4.tar.gz
+ 
+ # Locally calculated
+-sha256 4c3bf9292e676a72b12338691be64d0f38cd7f2ea5e8b67fbbf45f1ed404bc8f libsvg-0.1.4.tar.gz
++sha256  4c3bf9292e676a72b12338691be64d0f38cd7f2ea5e8b67fbbf45f1ed404bc8f  libsvg-0.1.4.tar.gz
++sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/libtpl/libtpl.hash b/package/libtpl/libtpl.hash
+index 9a455bed97..74ca68fb91 100644
+--- a/package/libtpl/libtpl.hash
++++ b/package/libtpl/libtpl.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256	c2fa09f9a49d8b319e79638e49e967c682df8726006e03059b1ffca5ab82099c	startup-notification-0.9.tar.gz
-+sha256  c2fa09f9a49d8b319e79638e49e967c682df8726006e03059b1ffca5ab82099c  startup-notification-0.9.tar.gz
-+sha256  29935974beae046f50da806b5f4e54532401dd7bcfbc696a0b645f4cbcce9dbb  COPYING
-diff --git a/package/statserial/statserial.hash b/package/statserial/statserial.hash
-index 3cdb17d6c2..ca96b864d9 100644
---- a/package/statserial/statserial.hash
-+++ b/package/statserial/statserial.hash
+-sha256 0b3750bf62f56be4c42f83c89d8449b24f1c5f1605a104801d70f2f3c06fb2ff  libtpl-1.6.1.tar.gz
++sha256  0b3750bf62f56be4c42f83c89d8449b24f1c5f1605a104801d70f2f3c06fb2ff  libtpl-1.6.1.tar.gz
++sha256  8554ddb5779f1ad2f3ea6db1d0df622e63fca11f44bfc3c8b3c207ea0482c746  LICENSE
+diff --git a/package/libuecc/libuecc.hash b/package/libuecc/libuecc.hash
+index 67eb5eb572..bfc9aaf396 100644
+--- a/package/libuecc/libuecc.hash
++++ b/package/libuecc/libuecc.hash
+@@ -2,3 +2,4 @@
+ md5     5cd543cb8e7bce83a22c07a0579c95a1                                  libuecc-7.tar.xz
+ # computed locally
+ sha256  b94aef08eab5359d0facaa7ead2ce81b193eef0c61379d9835213ebc0a46257a  libuecc-7.tar.xz
++sha256  ec4d9fcc3a37a7998a9ea4decf38f4c0c91a44fd05bb17638c52fe16f2b12e23  COPYRIGHT
+diff --git a/package/libuio/libuio.hash b/package/libuio/libuio.hash
+index ce2f86ee19..54fb02b112 100644
+--- a/package/libuio/libuio.hash
++++ b/package/libuio/libuio.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256	40cf3bd506852942aa98f468c90ed4ea66dbd343b93efacd40d617b55caf3967	statserial-1.1.tar.gz
-+sha256  40cf3bd506852942aa98f468c90ed4ea66dbd343b93efacd40d617b55caf3967  statserial-1.1.tar.gz
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/stress/stress.hash b/package/stress/stress.hash
-index 24cf0431b2..8d14d053fb 100644
---- a/package/stress/stress.hash
-+++ b/package/stress/stress.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256 057e4fc2a7706411e1014bf172e4f94b63a12f18412378fca8684ca92408825b stress-1.0.4.tar.gz
-+sha256  057e4fc2a7706411e1014bf172e4f94b63a12f18412378fca8684ca92408825b  stress-1.0.4.tar.gz
-+# Locally computed
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sunxi-tools/sunxi-tools.hash b/package/sunxi-tools/sunxi-tools.hash
-index aba3fe6a71..2de26c418b 100644
---- a/package/sunxi-tools/sunxi-tools.hash
-+++ b/package/sunxi-tools/sunxi-tools.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	da5d762608517b4b2e9bd392bd9a63afae3973d9c8264cbcfb757ddac8120d1b  sunxi-tools-1.4.1.tar.gz
-+sha256  da5d762608517b4b2e9bd392bd9a63afae3973d9c8264cbcfb757ddac8120d1b  sunxi-tools-1.4.1.tar.gz
-+sha256  2b0d4dda4bf8034e1506507a67f80f982131137afe62bf144d248f9faea31da4  LICENSE.md
-diff --git a/package/supertux/supertux.hash b/package/supertux/supertux.hash
-index 23e2645da6..2b3ca799d7 100644
---- a/package/supertux/supertux.hash
-+++ b/package/supertux/supertux.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
--sha256 c4c3e5fa6f90e87b8c5ad6b22a179e9a9839bf997e7f219e22bbcd1c97223ac0 SuperTux-v0.6.0-Source.tar.gz
-+sha256  c4c3e5fa6f90e87b8c5ad6b22a179e9a9839bf997e7f219e22bbcd1c97223ac0  SuperTux-v0.6.0-Source.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.txt
-+sha256  35c61f69239ff2f55fe0fa5dee5bad6bff311a07c47fa049552e0973a47c07bb  data/AUTHORS
-diff --git a/package/sysprof/sysprof.hash b/package/sysprof/sysprof.hash
-index 8541ecc1a1..4ce206be0b 100644
---- a/package/sysprof/sysprof.hash
-+++ b/package/sysprof/sysprof.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	baf03c6fc01a845c705873e6fc7927aa89539dcda6963f9ec4c8eb4c086a64f1	sysprof-1.2.0.tar.gz
-+sha256  baf03c6fc01a845c705873e6fc7927aa89539dcda6963f9ec4c8eb4c086a64f1  sysprof-1.2.0.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/systemd-bootchart/systemd-bootchart.hash b/package/systemd-bootchart/systemd-bootchart.hash
-index 40643dbca0..8085883247 100644
---- a/package/systemd-bootchart/systemd-bootchart.hash
-+++ b/package/systemd-bootchart/systemd-bootchart.hash
-@@ -1,2 +1,3 @@
- # sha256 locally computed
--sha256 f4cb17b21928e36ec27de5c5294dea6ec1de4acd7ee6c56d6ecc75319cbcaefa systemd-bootchart-233.tar.xz
-+sha256  f4cb17b21928e36ec27de5c5294dea6ec1de4acd7ee6c56d6ecc75319cbcaefa  systemd-bootchart-233.tar.xz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+-sha256 1494375bd493ef1a1b868ce2cbc7d29f3f9f692c21f70689eae28566e56f2c15 libuio-ca28ff0f69d89a789a47552c72db5a43d280710b.tar.gz
++sha256  1494375bd493ef1a1b868ce2cbc7d29f3f9f692c21f70689eae28566e56f2c15  libuio-ca28ff0f69d89a789a47552c72db5a43d280710b.tar.gz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
