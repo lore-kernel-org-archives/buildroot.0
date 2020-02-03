@@ -1,47 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 23:41:52 +0100
-Subject: [Buildroot] [PATCH v2 1/6] package/gqrx: backport/adapt patch
- to suppport Gnuradio 3.8
-In-Reply-To: <20200117110232.31336-1-gwenj@trabucayre.com>
+Date: Mon, 3 Feb 2020 23:42:20 +0100
+Subject: [Buildroot] [PATCH v2 3/6] package/gnuradio: bump to version
+ 3.8.0.0
+In-Reply-To: <20200117110232.31336-3-gwenj@trabucayre.com>
 References: <20200117110232.31336-1-gwenj@trabucayre.com>
-Message-ID: <20200203234152.0e6f97bd@windsurf>
+ <20200117110232.31336-3-gwenj@trabucayre.com>
+Message-ID: <20200203234220.106983ea@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 17 Jan 2020 12:02:27 +0100
+On Fri, 17 Jan 2020 12:02:29 +0100
 Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
 
 > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > 
-> Gnuradio 3.8 has break some functions or header. Current gqrx release does
-> not support these new features.
-> 
-> So we add compatibility backport patches from pull-request:
-> https://github.com/csete/gqrx/pull/705
+> Since 2019/08/09 a new version of gnuradio is available.
+> This patch bump to this version with some modifications:
+> - suppress the applied patch 0001-socket_pdu_impl.cc-fix-build-with-boost-1.70.0.patch
+> - backport patch to have boost unit_test_framework optional instead of mandatory:
+>   https://github.com/gnuradio/gnuradio/pull/2927
+> - backport patch to fix neon version detection:
+>   https://github.com/gnuradio/volk/pull/319
+> - add boost atomic (used by pmt), log4cpp (now mandatory) and gmp as dependencies
+> - suppress the no more available BR2_PACKAGE_GNURADIO_LOG, since log4cpp is mandatory. Since this
+>   option is now always true no need to add an entry in legacy.
+> - suppress all workaround for neon. Now volk is able to detect correctly neon
+>   version.
+> - add explictly path to python interpreter
 > 
 > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > ---
->  package/gqrx/0001-add_includes_for_GR38.patch | 194 ++++++++++++++++++
->  ...2-build_with_cmake_for_both_versions.patch |  59 ++++++
->  ...0003-pass_GNU_Radio_version_as_macro.patch | 161 +++++++++++++++
->  .../0004-link_against_gr-audio_library.patch  |  21 ++
->  ...-support_37_and_38_builds_with_qmake.patch |  53 +++++
->  ..._shells_without_here-string_operator.patch |  26 +++
->  6 files changed, 514 insertions(+)
->  create mode 100644 package/gqrx/0001-add_includes_for_GR38.patch
->  create mode 100644 package/gqrx/0002-build_with_cmake_for_both_versions.patch
->  create mode 100644 package/gqrx/0003-pass_GNU_Radio_version_as_macro.patch
->  create mode 100644 package/gqrx/0004-link_against_gr-audio_library.patch
->  create mode 100644 package/gqrx/0005-support_37_and_38_builds_with_qmake.patch
->  create mode 100644 package/gqrx/0006-support_shells_without_here-string_operator.patch
+> Changes v1 -> v2:
+>  * add backported patch (Arnout)
+>  * explain why BR2_PACKAGE_GNURADIO_LOG is not added to legacy (Arnout)
+>  * suppress everything about neon (Arnout)
+> ---
+>  ...est_framework-required-only-when-ENA.patch | 92 +++++++++++++++++++
+>  ..._impl.cc-fix-build-with-boost-1.70.0.patch | 42 ---------
+>  ...MakeLists-fix-neon-version-detection.patch | 50 ++++++++++
 
-I've applied the entire series. I will make a few comments on some of
-the patches.
+Did you submit upstream the two patches that you have added ?
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
