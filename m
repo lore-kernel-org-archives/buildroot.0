@@ -1,43 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Feb 2020 17:02:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/imagemagick: disable opencl
-In-Reply-To: <20190924114722.2578c41b@windsurf> (Thomas Petazzoni's message of
- "Tue, 24 Sep 2019 11:47:22 +0200")
-References: <20190823191417.8748-1-juju@cotds.org>
- <20190924114722.2578c41b@windsurf>
-Message-ID: <874kw73bhp.fsf@dell.be.48ers.dk>
+Date: Mon, 3 Feb 2020 17:03:24 +0100
+Subject: [Buildroot] [git commit] package/imagemagick: explicitly disable
+ opencl
+Message-ID: <20200203155229.1851988932@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9056908e93daae5af08a123e0bc05072c6e6c58e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > On Fri, 23 Aug 2019 21:14:17 +0200
- > Julien Olivain <juju@cotds.org> wrote:
+Some packages installs libOpenCL without declaring
+BR2_PACKAGE_PROVIDES_LIBOPENCL (e.g.  imx-gpu-viv).  ImageMagick will detect
+the library and will require libtool.  Since libtool is not in dependencies,
+build might fail.
 
- >> Some packages installs libOpenCL without declaring
- >> BR2_PACKAGE_PROVIDES_LIBOPENCL (e.g. imx-gpu-viv). ImageMagick will
- >> detect the library and will require libtool. Since libtool is not in
- >> dependencies, build might fail.
- >> 
- >> To prevent that situation, this patch explicitly disable opencl
- >> support.
- >> 
- >> Signed-off-by: Julien Olivain <juju@cotds.org>
+To prevent that situation, explicitly disable opencl support for target and host.
 
- > FYI, I've started looking into this. First, there is an upstream commit
- > that fixes using disable_opencl instead of enable_opencl. Then I fixed
- > up the configure.ac to use the "no_cl" variable that the OpenCL M4
- > macro defines. But then even with --disable-opencl, the build fails
- > because MAGICKCORE__OPENCL is defined. I'm still trying to figure out
- > why.
+Signed-off-by: Julien Olivain <juju@cotds.org>
+[Peter: drop unneeded ax_cv_check_cl_libcl=no]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/imagemagick/imagemagick.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I don't see that issue any more (In fact, the only references to that
-symbol seems to be in Magick{Core,Wand}/studio.h), and the
-IMAGEMAGICK_CONV_ENV tweak isn't needed any more, so I dropped that and
-committed - Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 0bac0b4fc3..eaa291a1bd 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -22,6 +22,7 @@ IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
+ 
+ IMAGEMAGICK_CONF_OPTS = \
+ 	--program-transform-name='s,,,' \
++	--disable-opencl \
+ 	--disable-openmp \
+ 	--without-djvu \
+ 	--without-dps \
+@@ -152,6 +153,7 @@ IMAGEMAGICK_CONF_OPTS += --without-bzlib
+ endif
+ 
+ HOST_IMAGEMAGICK_CONF_OPTS = \
++	--disable-opencl \
+ 	--disable-openmp \
+ 	--without-djvu \
+ 	--without-dps \
