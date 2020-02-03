@@ -1,37 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Feb 2020 16:13:46 +0100
-Subject: [Buildroot] [PATCH 1/1] set minimum cmake version to 3.10
-In-Reply-To: <20200203142738.1558715-1-aduskett@gmail.com> (Adam Duskett's
- message of "Mon, 3 Feb 2020 06:27:38 -0800")
-References: <20200203142738.1558715-1-aduskett@gmail.com>
-Message-ID: <878slj3dqt.fsf@dell.be.48ers.dk>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon,  3 Feb 2020 07:51:17 -0800
+Subject: [Buildroot] [PATCH 1/1] package/ninja: remove fdiagnostics-color
+ from make command
+Message-ID: <20200203155117.1972331-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
+-fdiagnostics-color was introduced in gcc 4.9 and the minimum supported version
+that Buildroot supports is 4.8.
 
- > The CMakeLists.txt file uses the CMP0091 which is an MSVC runtime library flag
- > abstraction macro.
+Fixes:
+http://autobuild.buildroot.net/results/e5a02faa75345009e7cdcbf9d693199bee4741aa
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ ...fdiagnostics-color-from-make-command.patch | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch
 
- > Because we are not building ninja for Microsoft, it is safe to remove this
- > macro and set the minimum version to 3.10.
-
-There's unfortunately still another issue:
-
-http://autobuild.buildroot.net/results/615/6150430d396b74a81be87d942ca571c7c15dfc52/build-end.log
-
-CMakeLists.txt hardcodes -fdiagnostic-color, which is only supported
-from gcc 4.9, breaking builds on old autobuilders:
-
-https://gcc.gnu.org/gcc-4.9/changes.html
-
-We don't really care about coloured error messages, so I guess we can
-just patch away that line.
-
-Care to send a patch doing that?
-
+diff --git a/package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch b/package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch
+new file mode 100644
+index 0000000000..d419ab48dc
+--- /dev/null
++++ b/package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch
+@@ -0,0 +1,29 @@
++From 87caa8c4bc536f745aceed757ce8a492fbdba84f Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Mon, 3 Feb 2020 07:36:58 -0800
++Subject: [PATCH] remove fdiagnostics-color from make command
++
++-fdiagnostics-color was introduced in gcc 4.9 and the minimum supported version
++that Buildroot supports is 4.8.
++
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index a040e0b..af8010f 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -18,7 +18,7 @@ if(MSVC)
++ 	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
++ 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /GR- /Zc:__cplusplus")
++ else()
++-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -fdiagnostics-color")
+++	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
++ endif()
++ 
++ find_program(RE2C re2c)
++-- 
++2.24.1
++
 -- 
-Bye, Peter Korsgaard
+2.24.1
