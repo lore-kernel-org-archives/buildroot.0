@@ -1,89 +1,201 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 03 Feb 2020 00:18:27 +0000
-Subject: [Buildroot] [Bug 12521] New: RISCV RV32IA selected, RV64GC output
-Message-ID: <bug-12521-163@https.bugs.busybox.net/>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 2 Feb 2020 18:08:20 -0700
+Subject: [Buildroot] [PATCH v10 2/2] package/weston: bump to version
+ 8.0.0
+In-Reply-To: <20200202192053.GB14722@scaer>
+References: <20200202123856.94585-1-james.hilliard1@gmail.com>
+ <20200202123856.94585-2-james.hilliard1@gmail.com>
+ <20200202192053.GB14722@scaer>
+Message-ID: <CADvTj4pQFcaBoYY_x30ETk3QFeZiWMvmc61JZsfAt3atH9Jw_w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12521
-
-            Bug ID: 12521
-           Summary: RISCV RV32IA selected, RV64GC output
-           Product: buildroot
-           Version: 2019.11
-          Hardware: Other
-                OS: All
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: lelassal at hushmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-Hi,
-
-I selected RV32IA (no option without A) and ILP32 as target. Output is ELF
-format using VMLinux which has been disassembled using
-riscv64-unknown-elf-objdump. I get this:
-
-
-ffffffe000000000 <_start>:
-ffffffe000000000:       10401073                csrw    sie,zero
-ffffffe000000004:       007a6197                auipc   gp,0x7a6
-ffffffe000000008:       d9418193                addi    gp,gp,-620 #
-ffffffe0007a5d98 <__global_pointer$>
-ffffffe00000000c:       6299                    lui     t0,0x6
-ffffffe00000000e:       1002b073                csrc    sstatus,t0
-ffffffe000000012:       21018693                addi    a3,gp,528 #
-ffffffe0007a5fa8 <hart_lottery>
-ffffffe000000016:       4605                    li      a2,1
-ffffffe000000018:       00c6a6af                amoadd.w        a3,a2,(a3)
-ffffffe00000001c:       e2e9                    bnez    a3,ffffffe0000000de
-<relocate+0x64>
-ffffffe00000001e:       007a8697                auipc   a3,0x7a8
-ffffffe000000022:       fe268693                addi    a3,a3,-30 #
-ffffffe0007a8000 <swapper_pmd>
-ffffffe000000026:       00872717                auipc   a4,0x872
-ffffffe00000002a:       e3a70713                addi    a4,a4,-454 #
-ffffffe000871e60 <__bss_stop>
-ffffffe00000002e:       00e6d763                bge     a3,a4,ffffffe00000003c
-<clear_bss_done>
-
-ffffffe000000032 <clear_bss>:
-ffffffe000000032:       0006b023                sd      zero,0(a3)
-ffffffe000000036:       06a1                    addi    a3,a3,8
-ffffffe000000038:       fee6cde3                blt     a3,a4,ffffffe000000032
-<clear_bss>
-
-...
-
-ffffffe00000079c:       6314                    ld      a3,0(a4)
-ffffffe00000079e:       0074b617                auipc   a2,0x74b
-ffffffe0000007a2:       53260613                addi    a2,a2,1330 #
-ffffffe00074bcd0 <__start___param>
-ffffffe0000007a6:       0074e797                auipc   a5,0x74e
-ffffffe0000007aa:       d0278793                addi    a5,a5,-766 #
-ffffffe00074e4a8 <__stop___param>
-ffffffe0000007ae:       8f91                    sub     a5,a5,a2
-ffffffe0000007b0:       878d                    srai    a5,a5,0x3
-ffffffe0000007b2:       02d786bb                mulw    a3,a5,a3
-ffffffe0000007b6:       19018793                addi    a5,gp,400 #
-ffffffe0007a5f28 <static_command_line>
-ffffffe0000007ba:       638c                    ld      a1,0(a5)
-ffffffe0000007bc:       00000897                auipc   a7,0x0
-
-
-
-As you can see, it uses compressed instructions, is 64 bit and more (like
-multiplication).
-
-Thank you.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+On Sun, Feb 2, 2020 at 12:21 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> James, All,
+>
+> On 2020-02-02 05:38 -0700, James Hilliard spake thusly:
+> > The autotools build system is deprecated and replaced with meson for weston.
+> [--SNIP--]
+> > Replaced WESTON_NATIVE_BACKEND with backend-default in meson.
+>
+> So, as I asked in the previous review, this should be a preliminary
+> patch, that just does that: introduce the selection menu for a default
+> backend.
+>
+> I know you argued that WESTON_NATIVE_BACKEND and backend-default do not
+> have exactly the same meaning, but the way WESTON_NATIVE_BACKEND is
+> handled in Buildroot makes it look very much like it actually is the
+> default backend.
+>
+> So, please, split that off the bump into a separate, preliminary patch.
+>
+> A very good reason for doing so, is that I have comments to provide
+> about it, and it would be much easier to do a review and reworks of it
+> if it were split.
+>
+> [--SNIP--]
+> > diff --git a/package/weston/Config.in b/package/weston/Config.in
+> > index f874b0cc6a..ec9cd072b8 100644
+> > --- a/package/weston/Config.in
+> > +++ b/package/weston/Config.in
+> > @@ -21,8 +21,6 @@ config BR2_PACKAGE_WESTON
+> >       select BR2_PACKAGE_LIBDRM
+> >       # Runtime dependency
+> >       select BR2_PACKAGE_XKEYBOARD_CONFIG
+> > -     # Make sure at least one compositor is selected.
+> > -     select BR2_PACKAGE_WESTON_FBDEV if !BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+> >       help
+> >         Weston is the reference implementation of a Wayland
+> >         compositor, and a useful compositor in its own right.
+> > @@ -33,10 +31,44 @@ config BR2_PACKAGE_WESTON
+> >
+> >  if BR2_PACKAGE_WESTON
+> >
+> > +choice
+> > +     prompt "default compositor"
+> > +
+> > +config BR2_PACKAGE_WESTON_DEFAULT_BACKEND_FB
+>
+> FBDEV, not FB (my code snippet was just to illustrate the topic). Please
+> keep the existing naming scheme. Also, it is a compositor, not a
+> backend.
+>
+> > +     bool "fb"
+>
+> fbdev
+>
+> > +     select BR2_PACKAGE_WESTON_FB
+> > +
+> > +config BR2_PACKAGE_WESTON_DEFAULT_BACKEND_DRM
+> > +     bool "drm"
+> > +     depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+> > +     select BR2_PACKAGE_WESTON_DRM
+> > +
+> > +comment "drm backend needs mesa3d w/ EGL driver"
+> > +     depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
+> > +
+> > +config BR2_PACKAGE_WESTON_DEFAULT_BACKEND_X11
+> > +     bool "X11"
+> > +     depends on BR2_PACKAGE_XORG7
+> > +     select BR2_PACKAGE_WESTON_X11
+> > +
+> > +comment "X11 backend needs X.org"
+> > +     depends on !BR2_PACKAGE_XORG7
+>
+> And what about the RDP compositor?
+It's not a valid option
+https://github.com/wayland-project/weston/blob/8.0.0/meson_options.txt#L56
+>
+> > +endchoice
+> > +
+> > +config BR2_PACKAGE_WESTON_DEFAULT_COMPOSITOR
+> > +     string
+> > +     default "fbdev" if BR2_PACKAGE_WESTON_DEFAULT_BACKEND_FB
+> > +     default "drm"   if BR2_PACKAGE_WESTON_DEFAULT_BACKEND_DRM
+> > +     default "x11"   if BR2_PACKAGE_WESTON_DEFAULT_BACKEND_X11
+> > +
+> >  # Helper to make sure at least one compositor is selected.
+> >  config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+> >       bool
+>
+> This is not longer needed, since we have a choice to that effect...
+Ok, will remove
+>
+> > +config BR2_PACKAGE_WESTON_FB
+> > +     bool "fb compositor"
+>
+> Don't gratuitously rename and move options.
+>
+> >  config BR2_PACKAGE_WESTON_DRM
+> >       bool "DRM compositor"
+> >       depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+> > @@ -46,8 +78,15 @@ config BR2_PACKAGE_WESTON_DRM
+> >  comment "DRM compositor needs an OpenGL EGL backend provided by mesa3d"
+> >       depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
+> >
+> > -config BR2_PACKAGE_WESTON_FBDEV
+> > -     bool "fbdev compositor"
+> > +config BR2_PACKAGE_WESTON_X11
+> > +     bool "X11 compositor"
+> > +     depends on BR2_PACKAGE_XORG7
+> > +     select BR2_PACKAGE_LIBXCB
+> > +     select BR2_PACKAGE_XLIB_LIBX11
+> > +     select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+> > +
+> > +comment "X11 compositor needs X.org enabled"
+> > +     depends on !BR2_PACKAGE_XORG7
+> >
+> >  # FreeRDP needs threads and !static, already the case for weston
+> >  config BR2_PACKAGE_WESTON_RDP
+> > @@ -76,16 +115,6 @@ comment "RDP compositor needs a toolchain w/ wchar, C++"
+> >       depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> >       depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
+> >
+> > -config BR2_PACKAGE_WESTON_X11
+> > -     bool "X11 compositor"
+> > -     depends on BR2_PACKAGE_XORG7
+> > -     select BR2_PACKAGE_LIBXCB
+> > -     select BR2_PACKAGE_XLIB_LIBX11
+> > -     select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+> > -
+> > -comment "X11 compositor needs X.org enabled"
+> > -     depends on !BR2_PACKAGE_XORG7
+>
+> Ditto, don't move around.
+>
+> [--SNIP--]
+> > diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+> > index 154ae38b83..b1c8f97e07 100644
+> > --- a/package/weston/weston.mk
+> > +++ b/package/weston/weston.mk
+> > @@ -4,37 +4,34 @@
+> >  #
+> >  ################################################################################
+> >
+> > -WESTON_VERSION = 6.0.1
+> > +WESTON_VERSION = 8.0.0
+> >  WESTON_SITE = http://wayland.freedesktop.org/releases
+> >  WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+> >  WESTON_LICENSE = MIT
+> >  WESTON_LICENSE_FILES = COPYING
+> >
+> >  WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+> > -     libxkbcommon pixman libpng jpeg udev cairo libinput libdrm \
+> > -     $(if $(BR2_PACKAGE_WEBP),webp)
+> > +     libxkbcommon pixman libpng jpeg udev cairo libinput libdrm
+> >
+> >  WESTON_CONF_OPTS = \
+> > -     --with-dtddir=$(STAGING_DIR)/usr/share/wayland \
+> > -     --disable-headless-compositor \
+> > -     --disable-colord \
+> > -     --disable-devdocs \
+> > -     --disable-setuid-install \
+> > -     --enable-autotools
+> > -
+> > -WESTON_MAKE_OPTS = \
+> > -     WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
+> > -
+> > -# Uses VIDIOC_EXPBUF, only available from 3.8+
+> > -ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),)
+> > -WESTON_CONF_OPTS += --disable-simple-dmabuf-v4l-client
+>
+> As I already commented in my previous review, you moved the VIDIOC
+> conditional later in the file, which makes for a more complicated
+> review. Please avoid gratuitous move (or do that in a follow-up or
+> preparatory patch).
+Ok, will leave that where it was.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
