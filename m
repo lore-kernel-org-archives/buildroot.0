@@ -1,35 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Feb 2020 18:24:27 +0100
-Subject: [Buildroot] [git commit] package/fail2ban: add conditional
- python-systemd dependancy
-Message-ID: <20200203171426.B96CE88DCF@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 3 Feb 2020 11:35:01 -0600
+Subject: [Buildroot] [PATCH v2] packagersyslog: enable options when
+ libcurl is enabled
+In-Reply-To: <87a761ni4l.fsf@dell.be.48ers.dk>
+References: <20191104211203.52912-1-matthew.weber@rockwellcollins.com>
+ <87a761ni4l.fsf@dell.be.48ers.dk>
+Message-ID: <CANQCQpYkxiByUsrfQbDHDd0WpAsTeiggJXJpJqNp6_N=M1ud5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6e0aaa5441275675ea953b5d980ca7d6df918e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter,
 
-fail2ban needs python-systemd for its systemd backend to
-be able to read logs from systemd/journald
+On Sun, Feb 2, 2020 at 9:07 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>
+>  > Following the bump to 8.1910.0, items requiring libcurl were
+>  > disabled by default. This patch selectively enables options
+>  > which depend on libcurl when that package is enabled in the
+>  > build.
+>
+>  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>  > ---
+>  > Changes
+>  > v1 -> v2
+>  > [Thomas
+>  >  - Flipped libcurl conditional and name of this patchset to rsyslog
+>  > ---
+>  >  package/rsyslog/rsyslog.mk | 12 +++++++++++-
+>  >  1 file changed, 11 insertions(+), 1 deletion(-)
+>
+>  > diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+>  > index 5bd6b59ba3..d5a88b19d3 100644
+>  > --- a/package/rsyslog/rsyslog.mk
+>  > +++ b/package/rsyslog/rsyslog.mk
+>  > @@ -17,7 +17,16 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
+>  >  RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
+>  >      $(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
+>
+>  > -# Disable items requiring libcurl
+>  > +ifeq ($(BR2_PACKAGE_LIBCURL),y)
+>  > +RSYSLOG_DEPENDENCIES += libcurl
+>  > +RSYSLOG_CONF_OPTS += --enable-elasticsearch \
+>  > +    --enable-clickhouse \
+>  > +    --enable-omhttp \
+>  > +    --enable-fmhttp \
+>  > +    --enable-imdocker \
+>  > +    --enable-omhttpfs \
+>  > +    --enable-mmkubernetes
+>
+>  I was about to apply this, but it fails to build here (a config with
+>  just curl and rsyslog):
+>
+> checking for CURL... yes
+> checking for LIBLOGNORM... no
+> configure: error: Package requirements (lognorm >= 2.0.3) were not met:
+>
+> Package 'lognorm', required by 'virtual:world', not found
+>
+> Consider adjusting the PKG_CONFIG_PATH environment variable if you
+> installed software in a non-standard prefix.
+>
+> Alternatively, you may set the environment variables LIBLOGNORM_CFLAGS
+> and LIBLOGNORM_LIBS to avoid the need to call pkg-config.
+> See the pkg-config man page for more details.
+> make[1]: *** [package/pkg-generic.mk:250: /home/peko/source/buildroot/output-rsyslog/build/rsyslog-8.1911.0/.stamp_configured] Error 1
+>
+> Care to take a look?
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fail2ban/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+I'll take a look.
 
-diff --git a/package/fail2ban/Config.in b/package/fail2ban/Config.in
-index 39e996fdb6..86e6233793 100644
---- a/package/fail2ban/Config.in
-+++ b/package/fail2ban/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_FAIL2BAN
- 	bool "fail2ban"
- 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_SYSTEMD if BR2_PACKAGE_SYSTEMD
- 	help
- 	  Fail2ban scans log files (e.g. /var/log/apache/error_log) and
- 	  bans IPs that show the malicious signs -- too many password
+Matt
