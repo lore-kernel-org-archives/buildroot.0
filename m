@@ -1,59 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Feb 2020 22:15:22 +0100
-Subject: [Buildroot] [git commit] ti-cgt-pru: bump to latest version 2.3.3
-Message-ID: <20200203210423.35F5888F6E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Feb 2020 22:17:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mutt: fix build without makedoc
+In-Reply-To: <20200114180116.1590142-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 14 Jan 2020 19:01:16 +0100")
+References: <20200114180116.1590142-1-fontaine.fabrice@gmail.com>
+Message-ID: <875zgn1ibs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d7235112a66386fe5d5e30e361e4cb186018b41
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Update to the latest version of the PRU code generation toolchain [1].
-The license files differ only in whitespace and the version numbers
-references compared with the previous release.
+ > Cross-compilation of mutt is broken since bump to version 1.13.3 with
+ > commit d42603b3872a0eed5a5a3dda13843fb5835f15a5
 
-[1] https://release-monitoring.org/project/59398/
+ > Indeed, since upstream commit 9bacbaa9, even with --disable-doc, mutt
+ > tries to generate and install documentation files.
+ > Build fails because mutt wants to generate muttrc.man by building (and
+ > then running) a makedoc binary with the target cross-compiler (which
+ > will obviously fail).
 
-Signed-off-by: Ash Charles <ashcharles@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/ti-cgt-pru/ti-cgt-pru.hash | 6 +++---
- package/ti-cgt-pru/ti-cgt-pru.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ > See https://gitlab.com/muttmua/mutt/issues/202
 
-diff --git a/package/ti-cgt-pru/ti-cgt-pru.hash b/package/ti-cgt-pru/ti-cgt-pru.hash
-index 1975d8d1e6..4dee321838 100644
---- a/package/ti-cgt-pru/ti-cgt-pru.hash
-+++ b/package/ti-cgt-pru/ti-cgt-pru.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256	7dc37fd689d1d506bf410d2a00af658b93a58d4bc10ac32c2210129dab617377	ti_cgt_pru_2.2.1_linux_installer_x86.bin
--sha256	eb646f4f8b14351110992b40ba24d12803bcc150a76e7298705f51088b0a09cc	PRU_Code_Generation_Tools_2.2.x_manifest.html
--sha256	6b98f9262abd1ae9a3731e6feee02a56b6e290542dea119eeeeaf88bf802aabc	pru_rts_2_2_0_82167478-F8C9-49b2-82BD-12F8550770F9.spdx
-+sha256	1f1405167214f2c0ef848591b17a7799fdcd9f55f11bc90db9ace3490d426215	ti_cgt_pru_2.3.3_linux_installer_x86.bin
-+sha256	913cb4ab564f874b7c9a11726a16c4ccdc7ecc60be2738201281a1e28dc93641	PRU_Code_Generation_Tools_2.3.x_manifest.html
-+sha256	5e198df9782c63cedc8363f0e298b241a9a8084398a925f6e1003dbcb60801cb	pru_rts_2_3_0_82167478-F8C9-49b2-82BD-12F8550770F9.spdx
-diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
-index 3665d2cec8..8bf907cc95 100644
---- a/package/ti-cgt-pru/ti-cgt-pru.mk
-+++ b/package/ti-cgt-pru/ti-cgt-pru.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--TI_CGT_PRU_VERSION = 2.2.1
-+TI_CGT_PRU_VERSION = 2.3.3
- TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
- TI_CGT_PRU_SITE = http://downloads.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
- TI_CGT_PRU_LICENSE = TI Technology and Software Publicly Available License (compiler + PRU library), \
- 	BSL-1.0 (compiler), BSD-2-Clause, BSD-3-Clause, MIT, AFL-3.0, Hewlett-Packard (PRU library)
--TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.2.x_manifest.html \
--	pru_rts_2_2_0_82167478-F8C9-49b2-82BD-12F8550770F9.spdx
-+TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.3.x_manifest.html \
-+	pru_rts_2_3_0_82167478-F8C9-49b2-82BD-12F8550770F9.spdx
- 
- define HOST_TI_CGT_PRU_EXTRACT_CMDS
- 	chmod +x $(HOST_TI_CGT_PRU_DL_DIR)/$(TI_CGT_PRU_SOURCE)
+ > To fix this issue, retrieve two upstream patches.
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/2b01b7e65c0dc0e1191ba48e02e31503958d82fe
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
