@@ -1,84 +1,38 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon,  3 Feb 2020 17:30:50 +0100
-Subject: [Buildroot] [PATCH v4 2/2] support/testing: add netdata test
-In-Reply-To: <20200203163050.4071698-1-m.niestroj@grinn-global.com>
-References: <20200203163050.4071698-1-m.niestroj@grinn-global.com>
-Message-ID: <20200203163050.4071698-2-m.niestroj@grinn-global.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Feb 2020 17:34:37 +0100
+Subject: [Buildroot] [PATCH ] package/sdl2: SDL2 2.0.09 to Version 2.0.10
+In-Reply-To: <1270bd947c2e436e940d0a07f7f7e5a0@go-sys.de> (Michael Fischer's
+ message of "Mon, 3 Feb 2020 14:48:22 +0000")
+References: <1270bd947c2e436e940d0a07f7f7e5a0@go-sys.de>
+Message-ID: <87v9on1vfm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
-changes v3 -> v4:
- - do not launch netdata explicitly, but rely on init script to run netdata on
-   default port
+>>>>> "Michael" == Michael Fischer <mf@go-sys.de> writes:
 
-changes v2 -> v3: none
+Hello,
 
-changes v1 -> v2:
- - squash DEVELOPERS entry from another commit (suggested by Arnout)
+Thank you for your contribution. There unfortunately were a few issues:
 
- .gitlab-ci.yml                                |  1 +
- DEVELOPERS                                    |  1 +
- support/testing/tests/package/test_netdata.py | 23 +++++++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 support/testing/tests/package/test_netdata.py
+- Your mailed had corrupted white space in the patch, so it couldn't be
+  applied. Please consider using git send-email and test by mailing
+  yourself a patch and verify that it can be applied for the future
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index d5a2a06b6e..98d6995d7e 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -414,6 +414,7 @@ tests.package.test_luasyslog.TestLuajitLuasyslog: { extends: .runtime_test }
- tests.package.test_luvi.TestLuvi: { extends: .runtime_test }
- tests.package.test_lxc.TestLxc: { extends: .runtime_test }
- tests.package.test_lzlib.TestLuaLzlib: { extends: .runtime_test }
-+tests.package.test_netdata.TestNetdata: { extends: .runtime_test }
- tests.package.test_openjdk.TestOpenJdk: { extends: .runtime_test }
- tests.package.test_perl.TestPerl: { extends: .runtime_test }
- tests.package.test_perl_class_load.TestPerlClassLoad: { extends: .runtime_test }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 25e8c5849a..ca5e6e2b36 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1532,6 +1532,7 @@ F:	package/murata-cyw-fw/
- F:	package/netdata/
- F:	package/rs485conf/
- F:	package/turbolua/
-+F:	support/testing/tests/package/test_netdata.py
- 
- N:	Marcus Folkesson <marcus.folkesson@gmail.com>
- F:	package/libostree/
-diff --git a/support/testing/tests/package/test_netdata.py b/support/testing/tests/package/test_netdata.py
-new file mode 100644
-index 0000000000..7418b762a4
---- /dev/null
-+++ b/support/testing/tests/package/test_netdata.py
-@@ -0,0 +1,23 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestNetdata(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_NETDATA=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        cmd = "wget localhost:19999 -O - | grep '<title>netdata dashboard</title>'"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
+- You forgot to add your signed-off-by (git commit -s) to your
+  commit. Given how trivial the patch is I decided to ignore that and
+  add it for you
+
+- You forgot to adjust the comment in the hash file to refer to 2.0.10
+
+- You forgot to adjust the hash of COPYING.txt to take into
+  consideration the change in copyright year. Please remember to check
+  that the licensing info is still correct when bumping a package
+  version (make sdl2-legal-info).
+
+Committed with those issues fixed, thanks.
+
 -- 
-2.24.1
+Bye, Peter Korsgaard
