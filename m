@@ -1,10 +1,10 @@
 From: Refik Tuzakli <tuzakli.refik@gmail.com>
-Date: Mon,  3 Feb 2020 22:31:53 +0300
-Subject: [Buildroot] [PATCH v2 5/7] package/freescale-imx/imx-gpu-viv: bump
+Date: Mon,  3 Feb 2020 22:31:54 +0300
+Subject: [Buildroot] [PATCH v2 6/7] package/freescale-imx/imx-gpu-g2d: bump
  to version 6.4.0.p1.0
 In-Reply-To: <20200203193155.12657-1-tuzakli.refik@gmail.com>
 References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
-Message-ID: <20200203193155.12657-5-tuzakli.refik@gmail.com>
+Message-ID: <20200203193155.12657-6-tuzakli.refik@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
 ---
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash |  7 +++++--
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 13 +++++++------
- 2 files changed, 12 insertions(+), 8 deletions(-)
+ package/freescale-imx/imx-gpu-g2d/Config.in        | 6 +++++-
+ package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 7 ++++++-
+ package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 6 +++++-
+ 3 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-index 2cbc36a185..1a67b53ac5 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-@@ -1,2 +1,5 @@
--sha256	dddadd164bede4793409ccfb636324dd73862c33458db66a5860f126bada25dc  imx-gpu-viv-6.2.4.p1.2-aarch32.bin
--sha256	27ed3f58681cef18f87ea20946cc89b2cef4848006064303d20583e6ed7aeec7  imx-gpu-viv-6.2.4.p1.2-aarch64.bin
+diff --git a/package/freescale-imx/imx-gpu-g2d/Config.in b/package/freescale-imx/imx-gpu-g2d/Config.in
+index 47375788d1..aeca087f86 100644
+--- a/package/freescale-imx/imx-gpu-g2d/Config.in
++++ b/package/freescale-imx/imx-gpu-g2d/Config.in
+@@ -2,10 +2,14 @@ comment "imx-gpu-g2d needs a glibc toolchain with armhf enabled"
+ 	depends on BR2_arm
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
+ 
++comment "imx-gpu-g2d needs a glibc toolchain"
++	depends on BR2_aarch64
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
++
+ config BR2_PACKAGE_IMX_GPU_G2D
+ 	bool "imx-gpu-g2d"
+ 	# Pre-built binaries only available for ARM EABIhf
+-	depends on BR2_ARM_EABIHF
++	depends on (BR2_arm && BR2_ARM_EABIHF) || BR2_aarch64
+ 	# Library binaries are linked against libc.so.6
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_IMX_GPU_VIV
+diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
+index 3bcbc558e2..1ad90d34a6 100644
+--- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
++++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
+@@ -1 +1,6 @@
+-sha256	5f2d2171d5cd57f37ab07184fc908a0f6ecb2a97f023f04c2f9f3b3d7fec8481  imx-gpu-g2d-6.2.4.p1.2.bin
 +# Locally calculated
-+sha256	b5c94b56a9f7c84aa084603a6ca21b5f3941b400e4f6ee8558b58c9b9f1aab36  imx-gpu-viv-6.4.0.p1.0-aarch32.bin
-+sha256	45852a5c3c61a9215a2ffb7387a6e1cce7ddac6f12513fc77459ad7e1f1b3a27  imx-gpu-viv-6.4.0.p1.0-aarch64.bin
++sha256	6d6d02d035d988cbdb2014794f2efe970a3f5ac277202882bbf553bb7fd789d2  imx-gpu-g2d-6.4.0.p1.0-aarch32.bin
++sha256	35885f435dbe951d2c0f439a376ed8a59a50b67a1b7e1e14fa2ab03995abb1ad  imx-gpu-g2d-6.4.0.p1.0-aarch64.bin
 +sha256	d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
 +sha256	9665930f69c0b6f4a4c055d7fe2b8ee563e771efbc83892abb1955e61492cdf7  EULA
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index d2a9fad459..93dd1b3cde 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -5,9 +5,9 @@
++
+diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
+index 015ab628b6..6598e4c32b 100644
+--- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
++++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
+@@ -4,7 +4,11 @@
+ #
  ################################################################################
  
- ifeq ($(BR2_aarch64),y)
--IMX_GPU_VIV_VERSION = 6.2.4.p1.2-aarch64
-+IMX_GPU_VIV_VERSION = 6.4.0.p1.0-aarch64
- else
--IMX_GPU_VIV_VERSION = 6.2.4.p1.2-aarch32
-+IMX_GPU_VIV_VERSION = 6.4.0.p1.0-aarch32
- endif
- IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
-@@ -42,9 +42,10 @@ endef
- # Make sure these commands are idempotent.
- define IMX_GPU_VIV_BUILD_CMDS
- 	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/gpu-core/usr/include/*/*.h
--	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so
--	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so.1
--	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so.1.2.0
-+	ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so
-+	ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1
-+	ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1.2
-+	ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1.2.0
- 	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so
- 	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1
- 	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1.0
-@@ -115,7 +116,7 @@ define IMX_GPU_VIV_INSTALL_TARGET_CMDS
- 	$(IMX_GPU_VIV_INSTALL_EXAMPLES)
- 	$(IMX_GPU_VIV_INSTALL_GMEM_INFO)
- 	cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
--	for lib in EGL GAL GLESv2 VDK; do \
-+	for lib in EGL GAL GL GLESv2 VDK vulkan; do \
- 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
- 			case $$f in \
- 				*-$(IMX_GPU_VIV_LIB_TARGET).so) : ;; \
+-IMX_GPU_G2D_VERSION = 6.2.4.p1.2
++ifeq ($(BR2_aarch64),y)
++IMX_GPU_G2D_VERSION = 6.4.0.p1.0-aarch64
++else
++IMX_GPU_G2D_VERSION = 6.4.0.p1.0-aarch32
++endif
+ IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
+ IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
+ IMX_GPU_G2D_DEPENDENCIES = imx-gpu-viv
 -- 
 2.17.1
