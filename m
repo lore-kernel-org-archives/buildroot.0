@@ -1,67 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 11:26:02 +0100
-Subject: [Buildroot] [PATCH v2 2/4] package/kodi: add optional support
- for wayland
-In-Reply-To: <20200202173333.305860-2-bernd.kuhls@t-online.de>
-References: <20200202173333.305860-1-bernd.kuhls@t-online.de>
- <20200202173333.305860-2-bernd.kuhls@t-online.de>
-Message-ID: <20200203112602.47e97cc6@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Feb 2020 11:26:36 +0100
+Subject: [Buildroot] [git commit] package/wayland-protocols: bump to version
+ 1.18
+Message-ID: <20200203101723.74D1B8869E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4dc43069b8eadd6e92e990e74b9b13603658720f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  2 Feb 2020 18:33:31 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/wayland-protocols/wayland-protocols.hash | 8 ++++----
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-> For details see upstream PR 12664.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-I've applied, with a few changes, see below.
-
-> +config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GL
-> +	bool
-> +	default y
-
-I've added a
-
-	depends on BR2_PACKAGE_HAS_LIBGL
-
-cause you then depend on "libgl".
-
-> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
-> +	depends on BR2_PACKAGE_WAYLAND # waylandpp
-> +	select BR2_PACKAGE_WAYLANDPP
-
-You should not add such selects to blind options that are "default y".
-Indeed here, waylandpp is going to be selected as soon as all the
-dependencies of this option are met, regardless of whether you really
-enable Kodi's Wayland backend.
-
-So I moved the select to BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL.
-
-> +config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GLES
-> +	bool
-> +	default y
-> +	depends on BR2_PACKAGE_HAS_LIBGLES
-> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
-> +	depends on BR2_PACKAGE_WAYLAND # waylandpp
-> +	select BR2_PACKAGE_WAYLANDPP
-
-Ditto here.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index d62a433dfd..a27ff9e52c 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2018-November/039662.html
+-md5 55ddd5fdb02b73b9de9559aaec267315  wayland-protocols-1.17.tar.xz
+-sha1 7d2569c838c776545e3eb1b1049b9c37178aae24  wayland-protocols-1.17.tar.xz
+-sha256 df1319cf9705643aea9fd16f9056f4e5b2471bd10c0cc3713d4a4cdc23d6812f  wayland-protocols-1.17.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2019-July/040756.html
++md5 af38f22d8e233c2f2e00ddc8dcc94694  wayland-protocols-1.18.tar.xz
++sha1 aa2f132c082f3c790bd046283b3ef7ce3fb11370  wayland-protocols-1.18.tar.xz
++sha256 3d73b7e7661763dc09d7d9107678400101ecff2b5b1e531674abfa81e04874b3  wayland-protocols-1.18.tar.xz
+ sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index 5ed4c3bc90..fbfa99558d 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAYLAND_PROTOCOLS_VERSION = 1.17
++WAYLAND_PROTOCOLS_VERSION = 1.18
+ WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
