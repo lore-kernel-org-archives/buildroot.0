@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Feb 2020 21:16:57 +0100
-Subject: [Buildroot] [git commit] package/minizip: bump to version 2.9.1
-Message-ID: <20200203200907.16A1388DCC@busybox.osuosl.org>
+Date: Mon, 3 Feb 2020 21:18:58 +0100
+Subject: [Buildroot] [git commit] package/iproute2: bump to version v5.5.0
+Message-ID: <20200203200907.3C13A88E95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0166125e3e132eb47902fc3c6e96e0718fb913f6
+commit: https://git.buildroot.net/buildroot/commit/?id=e4ce714e0cf34827479b170ec9f69036f626fbf9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minizip/minizip.hash | 2 +-
- package/minizip/minizip.mk   | 2 +-
+ package/iproute2/iproute2.hash | 2 +-
+ package/iproute2/iproute2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
-index 1b4f32a966..e27eb03d94 100644
---- a/package/minizip/minizip.hash
-+++ b/package/minizip/minizip.hash
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 41588488e6..c451cfa941 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256 d9501b1048064855222a42264ce773eebc29bbad5bcadbbeb22db2c3e65ae447  minizip-2.9.0.tar.gz
-+sha256 90481093302ccda81b2d129fea1800ea53be3f826ab0ec6176ad6807869ec4d9  minizip-2.9.1.tar.gz
- sha256 675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
-diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-index 3ae8d1d6f0..40e6bcf9a8 100644
---- a/package/minizip/minizip.mk
-+++ b/package/minizip/minizip.mk
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	fe97aa60a0d4c5ac830be18937e18dc3400ca713a33a89ad896ff1e3d46086ae  iproute2-5.4.0.tar.xz
++sha256	bac543435cac208a11db44c9cc8e35aa902befef8750594654ee71941c388f7b  iproute2-5.5.0.tar.xz
+ sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 6dc3fbd9c0..a2e2d25d81 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MINIZIP_VERSION = 2.9.0
-+MINIZIP_VERSION = 2.9.1
- MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
- MINIZIP_DEPENDENCIES = \
- 	host-pkgconf \
+-IPROUTE2_VERSION = 5.4.0
++IPROUTE2_VERSION = 5.5.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
