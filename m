@@ -1,23 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Feb 2020 22:02:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/smartmontools: add libselinux
- optional dependency
-In-Reply-To: <20200202104511.3342301-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 2 Feb 2020 11:45:11 +0100")
-References: <20200202104511.3342301-1-fontaine.fabrice@gmail.com>
-Message-ID: <87imkn1j0n.fsf@dell.be.48ers.dk>
+Date: Mon, 03 Feb 2020 22:03:34 +0100
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.15.1
+In-Reply-To: <20200203205049.28519-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Mon, 3 Feb 2020 21:50:49 +0100")
+References: <20200203205049.28519-1-ps.report@gmx.net>
+Message-ID: <87eevb1izd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > libselinux is an optional dependency since a very long time (2010) and
- > https://github.com/mirror/smartmontools/commit/ab807ee43bd4821f5e0e010de08a746d88506b17
+ > For details see [1].
+ > [1] https://lists.freedesktop.org/archives/wayland-devel/2020-February/041186.html
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed, thanks.
 
