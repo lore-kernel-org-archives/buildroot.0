@@ -1,72 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 11:42:42 +0100
-Subject: [Buildroot] [git commit] package/mesa3d: add option to configure
- gbm support
-Message-ID: <20200203103336.AAE98886FD@busybox.osuosl.org>
+Date: Mon, 3 Feb 2020 11:45:23 +0100
+Subject: [Buildroot] [PATCH v2 3/4] package/mesa3d: add option to
+ configure gbm support
+In-Reply-To: <20200202173333.305860-3-bernd.kuhls@t-online.de>
+References: <20200202173333.305860-1-bernd.kuhls@t-online.de>
+ <20200202173333.305860-3-bernd.kuhls@t-online.de>
+Message-ID: <20200203114523.44c12c78@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6c051acf787c804e732bc58ba8d7e440701a168
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  2 Feb 2020 18:33:32 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Kodi 18.0-Leia implements stand-alone gbm support alongside x11 &
-wayland. To enable building gbm support in mesa3d without x11 &
-wayland we need to add a specific configure option for it.
+> Kodi 18.0-Leia will implement stand-alone gbm support alongside x11 &
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mesa3d/Config.in | 6 ++++++
- package/mesa3d/mesa3d.mk | 9 ++++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+"will" ? I changed "will implement" to "implements" since your PATCH
+4/4 uses that today :)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 14adb407b4..5929e15442 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -355,6 +355,11 @@ if BR2_PACKAGE_MESA3D_DRIVER
- 
- comment "OpenGL API Support"
- 
-+config BR2_PACKAGE_MESA3D_GBM
-+	bool "gbm"
-+	help
-+	  Enable Generic Buffer Management (gbm)
-+
- config BR2_PACKAGE_MESA3D_OPENGL_GLX
- 	bool "OpenGL GLX"
- 	depends on BR2_PACKAGE_XORG7
-@@ -370,6 +375,7 @@ config BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	bool "OpenGL EGL"
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	select BR2_PACKAGE_MESA3D_GBM
- 	help
- 	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL
- 	  applications similar to GLX, for X, and WGL, for Windows.
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index f0e889a400..c7e5be55a0 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -200,10 +200,17 @@ endif
- MESA3D_CONF_OPTS += \
- 	-Dplatforms=$(subst $(space),$(comma),$(MESA3D_PLATFORMS))
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_GBM),y)
-+MESA3D_CONF_OPTS += \
-+	-Dgbm=true
-+else
-+MESA3D_CONF_OPTS += \
-+	-Dgbm=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
- MESA3D_PROVIDES += libegl
- MESA3D_CONF_OPTS += \
--	-Dgbm=true \
- 	-Degl=true
- else
- MESA3D_CONF_OPTS += \
+Applied with this change. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
