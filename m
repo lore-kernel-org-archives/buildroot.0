@@ -1,93 +1,49 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 3 Feb 2020 17:46:48 +0100
-Subject: [Buildroot] [PATCH] package/open62541: new package
-In-Reply-To: <CAEyMn7ZrcGvbNjT1SETefM_Oz3RouTs6BURb5bQ75TJv-uVKpw@mail.gmail.com>
-References: <1579212339-5234-1-git-send-email-yann.cardaillac@smile.fr>
- <CAEyMn7ZrcGvbNjT1SETefM_Oz3RouTs6BURb5bQ75TJv-uVKpw@mail.gmail.com>
-Message-ID: <24ff2724-0e6f-a564-5df9-a152a9197908@smile.fr>
+From: titouan.christophe at railnova.eu <titouan.christophe@railnova.eu>
+Date: Mon,  3 Feb 2020 17:57:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jack2: bump to version 1.9.14
+Message-ID: <20200203165734.25937-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Heiko, Yann, All,
+From: Titouan Christophe <titouan.christophe@railnova.eu>
 
-Le 03/02/2020 ? 17:05, Heiko Thiery a ?crit?:
-> Hi Yann,
-> 
-> Am Do., 16. Jan. 2020 um 23:05 Uhr schrieb Yann CARDAILLAC
-> <yann.cardaillac@smile.fr>:
->>
->> From: Yann CARDAILLAC <ycardaillac@sepro-group.com>
->>
->> Signed-off-by: Yann CARDAILLAC <ycardaillac@sepro-group.com>
->> Signed-off-by: Romain Naour <romain.naour@smile.fr>
->> ---
-[...]
->> diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
->> new file mode 100644
->> index 0000000000..b3d2eb7dd5
->> --- /dev/null
->> +++ b/package/open62541/open62541.mk
->> @@ -0,0 +1,57 @@
->> +################################################################################
->> +#
->> +# open62541
->> +#
->> +################################################################################
->> +
->> +OPEN62541_VERSION = v1.0
->> +OPEN62541_SITE_METHOD = git
->> +OPEN62541_SITE = git://github.com/open62541/open62541.git
->> +OPEN62541_GIT_SUBMODULES = YES
->> +OPEN62541_INSTALL_STAGING = YES
->> +OPEN62541_LICENSE = MPL-2.0
->> +OPEN62541_LICENSE_FILES = LICENSE
->> +
->> +# Don't use git discribe to get the version number.
->> +OPEN62541_CONF_OPTS += -DGIT_EXECUTABLE=NO \
->> +       -DOPEN62541_VERSION=$(OPEN62541_VERSION)
-> 
-> I think you should not use the '+'  for the first time.
-> 
-> 
-> On the other hand I tried to build the package with a compiler without
-> c++ suport and it fails.
-> I just did a 'make defconfig', 'make menuconfig' with selecting the
-> open62541 package and it fails.
-> 
-> At least there seems to be a missing 'C' in the CMakefile.txt.
-> 
-> --- a/CMakeLists.txt
-> +++ b/CMakeLists.txt
-> @@ -1,5 +1,5 @@
->  cmake_minimum_required(VERSION 3.0...3.12)
-> -project(open62541)
-> +project(open62541 C)
->  # set(CMAKE_VERBOSE_MAKEFILE ON)
->  if(${CMAKE_VERSION} VERSION_LESS 3.12)
->      cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-> 
-> But then it fails with an missing compiler option (ssp).
-> 
-> Should we even support building on c only compiler?
+Amongst other things, the jack2 waf script has been made
+compatible with Python3 in this latest release, which makes
+it possible to be built on py3
 
-Thanks for the review.
+See also upstream release notes:
+- https://github.com/jackaudio/jack2/releases/tag/v1.9.13
+- https://github.com/jackaudio/jack2/releases/tag/v1.9.14
 
-By default, the ssp support is not enabled when you build a toolchain.
-But the hardening option of this package (UA_ENABLE_HARDENING) is enabled by
-default, so it add several hardening option even if the toolchain doesn't
-support it.
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/jack2/jack2.hash | 2 +-
+ package/jack2/jack2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I would suggest to disable it from the package (-DUA_ENABLE_HARDENING=OFF) and
-let Buildroot (and its toolchain wrapper) handling the hardening support.
-
-Best regards,
-Romain
-
-> 
-> --
-> Heiko
-> 
-> 
+diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
+index f6f2345eb5..aec56e24a4 100644
+--- a/package/jack2/jack2.hash
++++ b/package/jack2/jack2.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 deefe2f936dc32f59ad3cef7e37276c2035ef8a024ca92118f35c9a292272e33  jack2-1.9.12.tar.gz
++sha256 a20a32366780c0061fd58fbb5f09e514ea9b7ce6e53b080a44b11a558a83217c  jack2-1.9.14.tar.gz
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index c4cad32ed6..b08c45cce7 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JACK2_VERSION = 1.9.12
++JACK2_VERSION = 1.9.14
+ JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+ JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+ JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
+-- 
+2.24.1
