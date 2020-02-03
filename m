@@ -1,95 +1,52 @@
-From: Alex Corcoles <alex@corcoles.net>
-Date: Mon, 3 Feb 2020 18:08:20 +0100
-Subject: [Buildroot] "PATCH": hack to be able to build Rust targetting
- MIPS
-In-Reply-To: <CAPAYC_xA2zkmmADgr9G2mspcS=Ej16wOM75rT-aCKbK42hzk5g@mail.gmail.com>
-References: <CAPAYC_xPtDO=j3fWeOEbC41X3PXJZ+7AD=WRm8A1DGQrtbadFQ@mail.gmail.com>
- <CAPAYC_y98TxMoBtG=P9hDe26=1rHfaoMyoH5NJyLHbRxcxpMAQ@mail.gmail.com>
- <20200119213102.GA2894@ned>
- <CAPAYC_xA2zkmmADgr9G2mspcS=Ej16wOM75rT-aCKbK42hzk5g@mail.gmail.com>
-Message-ID: <CAPAYC_wFywnPH6j8muHXvX1n+bLrWkZxBMrm+ywXQAyTbvsK8Q@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Feb 2020 18:09:17 +0100
+Subject: [Buildroot] [PATCH] package/fail2ban: add python3 support
+In-Reply-To: <20200122131514.10400-1-p.debruijn@unilogic.nl> (Pascal de
+ Bruijn's message of "Wed, 22 Jan 2020 14:15:14 +0100")
+References: <20200122131514.10400-1-p.debruijn@unilogic.nl>
+Message-ID: <87r1zb1ttu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've finally had more time to play with this. It seems that
-mipsel-unknown-linux-uclibc works! I've been able to run software built
-with it on a real hardware device, although it's very crashy (all
-arithmetic operations seem to crash with illegal instruction- probably I
-didn't configure my toolchain right or there's a Rust issue...).
+>>>>> "Pascal" == Pascal de Bruijn <p.debruijn@unilogic.nl> writes:
 
-I would suggest removing the limitation on uclibc... perhaps with a big
-warning flag, though, as I haven't managed to build complex, stable
-software.
+ > the fail2ban codebase is still native python2, but 2to3 is supported
+ > Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+ > ---
+ >  package/fail2ban/Config.in   | 2 +-
+ >  package/fail2ban/fail2ban.mk | 7 +++++++
+ >  2 files changed, 8 insertions(+), 1 deletion(-)
 
-I've written a bit about the process at:
+ > diff --git a/package/fail2ban/Config.in b/package/fail2ban/Config.in
+ > index f05adbb..86e6233 100644
+ > --- a/package/fail2ban/Config.in
+ > +++ b/package/fail2ban/Config.in
+ > @@ -1,6 +1,6 @@
+ >  config BR2_PACKAGE_FAIL2BAN
+ >  	bool "fail2ban"
+ > -	depends on BR2_PACKAGE_PYTHON
+ > +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ >  	select BR2_PACKAGE_PYTHON_SYSTEMD if BR2_PACKAGE_SYSTEMD
+ >  	help
+ >  	  Fail2ban scans log files (e.g. /var/log/apache/error_log) and
+ > diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+ > index 0a8f3c6..0c5de9a 100644
+ > --- a/package/fail2ban/fail2ban.mk
+ > +++ b/package/fail2ban/fail2ban.mk
+ > @@ -10,6 +10,13 @@ FAIL2BAN_LICENSE = GPL-2.0+
+ >  FAIL2BAN_LICENSE_FILES = COPYING
+ >  FAIL2BAN_SETUP_TYPE = distutils
+ 
+ > +define FAIL2BAN_PYTHON_2TO3
+ > +	$(HOST_DIR)/bin/2to3 --write --nobackups --no-diffs $(@D)/bin/* $(@D)/fail2ban
 
-https://users.rust-lang.org/t/trying-to-compile-rust-sdl-stuff-for-a-rg300-console-buildroot-mipsel-uclibc/36722
-https://github.com/alexpdp7/retrofw2-rust
+I was going to say that this is horrible, but this is indeed apparently
+how upstream expects you to use it (with the fail2ban-2to3 script).
 
-Cheers,
-
-?lex
-
-On Mon, Jan 20, 2020 at 5:31 PM Alex Corcoles <alex@corcoles.net> wrote:
-
-> Hi!
->
-> The RUSTC_TARGET_NAME variable is defined in rustc.mk only if the symbol
->> BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is selected. This symbols is
->> used to ensure all the conditions to build a rust package are met. One
->> of them is that the toolchain is glibc-based. This is required, because
->> the standard library provided by the pre-built host Rust toolchain is
->> built against glibc.
->>
->> In your defconfig, the toolchain is uclibc-based and the host Rust
->> toolchain is built from source.
->>
->> Hence BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is not defined and so
->> is RUSTC_TARGET_NAME.
->>
->> So there is a bug: the restriction on having a glibc-based toolchain
->> should apply either when using a pre-built rust toolchain or building
->> one from source. I'll see how to fix it.
->>
->> The list of supported platforms [1] mentions GNU glibc and musl, but not
->> uclibc. Does the build with your defconfig and patch successful?
->>
->> [1] https://forge.rust-lang.org/release/platform-support.html
->>
->
-> I think I built it successfully after introducing my hack, but as far as I
-> understand, it is not guaranteed to build in the future (and the opposite
-> is true, perhaps if it doesn't build today, it will tomorrow). In the link
-> you sent, mipsel-unknown-linux-uclibc is Tier 3 with std.
->
-> If I have some time I will play around with it and see you some results.
->
-> IMHO, perhaps you should hide non Tier-1 platforms behind an "enable this
-> option for non-Tier 1 Rust builds which are not guaranteed to work", or
-> something like that.
->
-> Cheers,
->
-> ?lex
->
-> --
->    ___
->  {~._.~}
->   ( Y )
->  ()~*~()  mail: alex at corcoles dot net
->  (_)-(_)  http://alex.corcoles.net/
->
->
+Committed, thanks.
 
 -- 
-   ___
- {~._.~}
-  ( Y )
- ()~*~()  mail: alex at corcoles dot net
- (_)-(_)  http://alex.corcoles.net/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200203/e8cfc0c9/attachment.html>
+Bye, Peter Korsgaard
