@@ -1,59 +1,46 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  3 Feb 2020 07:51:17 -0800
-Subject: [Buildroot] [PATCH 1/1] package/ninja: remove fdiagnostics-color
- from make command
-Message-ID: <20200203155117.1972331-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Feb 2020 16:49:45 +0100
+Subject: [Buildroot] [git commit] Config.in.legacy: fix separator comment
+ location
+Message-ID: <20200203154034.A3A0B873EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
--fdiagnostics-color was introduced in gcc 4.9 and the minimum supported version
-that Buildroot supports is 4.8.
+commit: https://git.buildroot.net/buildroot/commit/?id=c4293d0ec51a26c0875e66a8c60a2c2779b00ff6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/e5a02faa75345009e7cdcbf9d693199bee4741aa
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+When the fis and gadgetfs-test packages were removed, their respective
+options in Config.in.legacy were placed before the "Legacy options
+removed in 2020.02", while they should have been placed after. Let's
+fix that.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...fdiagnostics-color-from-make-command.patch | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch
+ Config.in.legacy | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch b/package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch
-new file mode 100644
-index 0000000000..d419ab48dc
---- /dev/null
-+++ b/package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch
-@@ -0,0 +1,29 @@
-+From 87caa8c4bc536f745aceed757ce8a492fbdba84f Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Mon, 3 Feb 2020 07:36:58 -0800
-+Subject: [PATCH] remove fdiagnostics-color from make command
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 955e5f2f7d..0e479a8808 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,6 +144,8 @@ endif
+ 
+ ###############################################################################
+ 
++comment "Legacy options removed in 2020.02"
 +
-+-fdiagnostics-color was introduced in gcc 4.9 and the minimum supported version
-+that Buildroot supports is 4.8.
-+
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index a040e0b..af8010f 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -18,7 +18,7 @@ if(MSVC)
-+ 	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-+ 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /GR- /Zc:__cplusplus")
-+ else()
-+-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -fdiagnostics-color")
-++	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
-+ endif()
-+ 
-+ find_program(RE2C re2c)
-+-- 
-+2.24.1
-+
--- 
-2.24.1
+ config BR2_PACKAGE_GADGETFS_TEST
+ 	bool "gadgetfs-test was removed"
+ 	select BR2_LEGACY
+@@ -158,8 +160,6 @@ config BR2_PACKAGE_FIS
+ 	help
+ 	  The fis package was removed.
+ 
+-comment "Legacy options removed in 2020.02"
+-
+ config BR2_PACKAGE_REFPOLICY_POLICY_VERSION
+ 	string "refpolicy policy version"
+ 	help
