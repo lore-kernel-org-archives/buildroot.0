@@ -1,42 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Feb 2020 21:18:58 +0100
-Subject: [Buildroot] [git commit] package/iproute2: bump to version v5.5.0
-Message-ID: <20200203200907.3C13A88E95@busybox.osuosl.org>
+Date: Mon, 3 Feb 2020 21:17:54 +0100
+Subject: [Buildroot] [git commit] package/ncmpc: bump to version 0.37
+Message-ID: <20200203200907.320D288E95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4ce714e0cf34827479b170ec9f69036f626fbf9
+commit: https://git.buildroot.net/buildroot/commit/?id=d6163eab43c3e4576ceb5874ed683701336d80e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Bump gcc requirement to gcc >= 7 as C++17 is mandatory since
+https://github.com/MusicPlayerDaemon/ncmpc/commit/85f136dd6b6a8d044b19cbef818ee360292cc06e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ncmpc/Config.in  | 6 +++---
+ package/ncmpc/ncmpc.hash | 2 +-
+ package/ncmpc/ncmpc.mk   | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index 41588488e6..c451cfa941 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256	fe97aa60a0d4c5ac830be18937e18dc3400ca713a33a89ad896ff1e3d46086ae  iproute2-5.4.0.tar.xz
-+sha256	bac543435cac208a11db44c9cc8e35aa902befef8750594654ee71941c388f7b  iproute2-5.5.0.tar.xz
- sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 6dc3fbd9c0..a2e2d25d81 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/ncmpc/Config.in b/package/ncmpc/Config.in
+index 2122bf3543..0e062460a7 100644
+--- a/package/ncmpc/Config.in
++++ b/package/ncmpc/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_NCMPC
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_LIBMPDCLIENT
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_NCMPC
+ 
+ 	  http://www.musicpd.org/clients/ncmpc/
+ 
+-comment "ncmpc needs a toolchain w/ C++, wchar, threads, gcc >= 6"
++comment "ncmpc needs a toolchain w/ C++, wchar, threads, gcc >= 7"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_6
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
+index 2a8533a2ee..963c6d2601 100644
+--- a/package/ncmpc/ncmpc.hash
++++ b/package/ncmpc/ncmpc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256 4632873dfc8efe61e501dc9184a5b921b482be2ddbedd3d23d05241d477a3e2c  ncmpc-0.36.tar.xz
++sha256 7c8eb727f6e12d8f97a53915b1b5632898b4afb335a1121c5e01c81df695615c  ncmpc-0.37.tar.xz
+ 
+ # Hash for license file:
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 86e3c8383f..29675f2256 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--IPROUTE2_VERSION = 5.4.0
-+IPROUTE2_VERSION = 5.5.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ NCMPC_VERSION_MAJOR = 0
+-NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).36
++NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).37
+ NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
+ NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
+ NCMPC_DEPENDENCIES = \
