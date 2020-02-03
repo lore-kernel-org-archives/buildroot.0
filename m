@@ -1,100 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Feb 2020 14:07:28 +0100
-Subject: [Buildroot] [git commit] package/qt5webkit: add patch to fix ICU
- related compile failure
-Message-ID: <20200203125754.6BAB588097@busybox.osuosl.org>
+Date: Mon, 3 Feb 2020 14:06:35 +0100
+Subject: [Buildroot] [git commit] package/libmodsecurity: needs threads
+Message-ID: <20200203125754.48FB1880F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2636e2d5f2e2f67984a10256001362d3864a8224
+commit: https://git.buildroot.net/buildroot/commit/?id=7be92248850fd93040a42ee8cb77bb7170535527
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes (usage of ICU U16_NEXT() macro without trailing semicolon):
+Fixes:
+ - http://autobuild.buildroot.org/results/78391abbf87ac9c04b13d7aab7acf7d1aaade75d
 
-  platform/graphics/SegmentedFontData.cpp:65:9: error: expected ???;??? before ???if???
-  dom/Document.cpp:3850:5: error: expected ???;??? before ???if???
-  dom/Document.cpp:3855:9: error: expected ???;??? before ???if???
-  dom/Document.cpp:3918:9: error: expected ???;??? before ???if???
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0005-Fix-ICU-related-compile-failures.patch    | 67 ++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ package/libmodsecurity/Config.in    | 6 ++++--
+ package/nginx-modsecurity/Config.in | 6 ++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/qt5/qt5webkit/5.9.1/0005-Fix-ICU-related-compile-failures.patch b/package/qt5/qt5webkit/5.9.1/0005-Fix-ICU-related-compile-failures.patch
-new file mode 100644
-index 0000000000..1a99eb7f84
---- /dev/null
-+++ b/package/qt5/qt5webkit/5.9.1/0005-Fix-ICU-related-compile-failures.patch
-@@ -0,0 +1,67 @@
-+From 38e3436db7222ac403a405db7e0fd1d472f1704a Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 2 Feb 2020 10:51:00 +0100
-+Subject: [PATCH] Fix ICU related compile failures.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The ICU macro U16_NEXT() needs a trailing semicolon.
-+
-+Fixes:
-+
-+  platform/graphics/SegmentedFontData.cpp:65:9: error: expected ???;??? before ???if???
-+  dom/Document.cpp:3850:5: error: expected ???;??? before ???if???
-+  dom/Document.cpp:3855:9: error: expected ???;??? before ???if???
-+  dom/Document.cpp:3918:9: error: expected ???;??? before ???if???
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ Source/WebCore/dom/Document.cpp                        | 6 +++---
-+ Source/WebCore/platform/graphics/SegmentedFontData.cpp | 2 +-
-+ 2 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/Source/WebCore/dom/Document.cpp b/Source/WebCore/dom/Document.cpp
-+index af63b141..26f7312b 100644
-+--- a/Source/WebCore/dom/Document.cpp
-++++ b/Source/WebCore/dom/Document.cpp
-+@@ -3846,12 +3846,12 @@ static bool isValidNameNonASCII(const UChar* characters, unsigned length)
-+     unsigned i = 0;
-+ 
-+     UChar32 c;
-+-    U16_NEXT(characters, i, length, c)
-++    U16_NEXT(characters, i, length, c);
-+     if (!isValidNameStart(c))
-+         return false;
-+ 
-+     while (i < length) {
-+-        U16_NEXT(characters, i, length, c)
-++        U16_NEXT(characters, i, length, c);
-+         if (!isValidNamePart(c))
-+             return false;
-+     }
-+@@ -3914,7 +3914,7 @@ bool Document::parseQualifiedName(const String& qualifiedName, String& prefix, S
-+     const UChar* s = qualifiedName.characters();
-+     for (unsigned i = 0; i < length;) {
-+         UChar32 c;
-+-        U16_NEXT(s, i, length, c)
-++        U16_NEXT(s, i, length, c);
-+         if (c == ':') {
-+             if (sawColon) {
-+                 ec = NAMESPACE_ERR;
-+diff --git a/Source/WebCore/platform/graphics/SegmentedFontData.cpp b/Source/WebCore/platform/graphics/SegmentedFontData.cpp
-+index efb20a8c..99b3e86c 100644
-+--- a/Source/WebCore/platform/graphics/SegmentedFontData.cpp
-++++ b/Source/WebCore/platform/graphics/SegmentedFontData.cpp
-+@@ -61,7 +61,7 @@ bool SegmentedFontData::containsCharacters(const UChar* characters, int length)
-+ {
-+     UChar32 c;
-+     for (int i = 0; i < length; ) {
-+-        U16_NEXT(characters, i, length, c)
-++        U16_NEXT(characters, i, length, c);
-+         if (!containsCharacter(c))
-+             return false;
-+     }
-+-- 
-+2.25.0
-+
+diff --git a/package/libmodsecurity/Config.in b/package/libmodsecurity/Config.in
+index 129881b0de..ea58c6d0e2 100644
+--- a/package/libmodsecurity/Config.in
++++ b/package/libmodsecurity/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBMODSECURITY
+ 	bool "libmodsecurity"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_PCRE
+ 	help
+ 	  Libmodsecurity is one component of the ModSecurity
+@@ -15,5 +16,6 @@ config BR2_PACKAGE_LIBMODSECURITY
+ 
+ 	  https://github.com/SpiderLabs/ModSecurity
+ 
+-comment "libmodsecurity needs a toolchain w/ C++, dynamic library"
+-	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
++comment "libmodsecurity needs a toolchain w/ C++, dynamic library, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
+index aa9d53a3fe..2af11eeee2 100644
+--- a/package/nginx-modsecurity/Config.in
++++ b/package/nginx-modsecurity/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ 	depends on BR2_PACKAGE_NGINX_HTTP
+ 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
+ 	depends on !BR2_STATIC_LIBS # libmodsecurity
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libmodsecurity
+ 	select BR2_PACKAGE_PCRE # libmodsecurity
+ 	select BR2_PACKAGE_LIBMODSECURITY
+ 	help
+@@ -12,6 +13,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ 
+ 	  https://github.com/SpiderLabs/ModSecurity-nginx
+ 
+-comment "nginx-modsecurity needs a toolchain w/ C++, dynamic library"
++comment "nginx-modsecurity needs a toolchain w/ C++, dynamic library, threads"
+ 	depends on BR2_PACKAGE_NGINX_HTTP
+-	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS
