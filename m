@@ -1,89 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 3 Feb 2020 14:45:36 +0100
-Subject: [Buildroot] [git commit] package/q*: add license file hashes
-Message-ID: <20200203133730.45717888B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x*: add license file hashes
+Message-ID: <20200203133730.A73FA88723@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cb4d07a0bfbe01911c23bb39ce17426f09d7c54
+commit: https://git.buildroot.net/buildroot/commit/?id=f8e52e88a822af7ba6334daa0d78bceb73a6e9fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/qextserialport/qextserialport.hash             |  1 +
- package/qjson/qjson.hash                               |  3 ++-
- package/qpid-proton/qpid-proton.hash                   |  2 ++
- package/qt-webkit-kiosk/qt-webkit-kiosk.hash           |  3 ++-
- package/qt5/qt5webkit-examples/qt5webkit-examples.hash | 10 ++++++++--
- package/qt5cinex/qt5cinex.hash                         |  5 +++--
- 6 files changed, 18 insertions(+), 6 deletions(-)
+ package/x11r7/xcb-util-cursor/xcb-util-cursor.hash      |  2 ++
+ .../x11r7/xcb-util-renderutil/xcb-util-renderutil.hash  |  4 +++-
+ .../xcursor-transparent-theme.hash                      |  1 +
+ package/x11r7/xlib_libXtst/xlib_libXtst.hash            |  4 +++-
+ package/xenomai/xenomai.hash                            | 17 ++++++++++++++++-
+ package/xmlstarlet/xmlstarlet.hash                      |  2 ++
+ 6 files changed, 27 insertions(+), 3 deletions(-)
 
-diff --git a/package/qextserialport/qextserialport.hash b/package/qextserialport/qextserialport.hash
-index 60c0ff3224..198ea022be 100644
---- a/package/qextserialport/qextserialport.hash
-+++ b/package/qextserialport/qextserialport.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  23e3b10a8d8a1e2fb071047144222c43d150748ce6670e5d047ba5b0502ad0b2  qextserialport-ada321a9ee463f628e7b781b8ed00ff219152158.tar.gz
-+sha256  363f34c4e9ee62df5e88788723beb9d0ad2c62fa36625355f261f7e6d672aaf5  LICENSE.md
-diff --git a/package/qjson/qjson.hash b/package/qjson/qjson.hash
-index d794b48727..ab22350e61 100644
---- a/package/qjson/qjson.hash
-+++ b/package/qjson/qjson.hash
-@@ -1,2 +1,3 @@
- # locally computed
--sha256 e812617477f3c2bb990561767a4cd8b1d3803a52018d4878da302529552610d4 qjson-0.9.0.tar.gz
-+sha256  e812617477f3c2bb990561767a4cd8b1d3803a52018d4878da302529552610d4  qjson-0.9.0.tar.gz
-+sha256  758a0cd48d2bec59cbd04ab616737b7aa0cdceac87508adbc9468715ac90722b  COPYING.lib
-diff --git a/package/qpid-proton/qpid-proton.hash b/package/qpid-proton/qpid-proton.hash
-index 8c2cc4f350..1ee72eef7a 100644
---- a/package/qpid-proton/qpid-proton.hash
-+++ b/package/qpid-proton/qpid-proton.hash
+diff --git a/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
+index 36f2258dcb..1964624dc5 100644
+--- a/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
++++ b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
 @@ -1,2 +1,4 @@
- # Hash from: http://www.apache.org/dist/qpid/proton/0.9.1/qpid-proton-0.9.1.tar.gz.sha
- sha1  98008d90acd0d47cbd7ac1572a2bb50b452338ed  qpid-proton-0.9.1.tar.gz
+ # From https://lists.x.org/archives/xorg-announce/2016-May/002691.html
+ sha1	26562eb6d4151307f7b6a53453d360ecfc0563ac	xcb-util-cursor-0.1.3.tar.bz2
 +# Locally computed
-+sha256  9fade5e12873678456137b36cfa4a5983c3793836d41c011f2c2abb02ca36a66  LICENSE
-diff --git a/package/qt-webkit-kiosk/qt-webkit-kiosk.hash b/package/qt-webkit-kiosk/qt-webkit-kiosk.hash
-index 666cb6ce55..1e56b4eba7 100644
---- a/package/qt-webkit-kiosk/qt-webkit-kiosk.hash
-+++ b/package/qt-webkit-kiosk/qt-webkit-kiosk.hash
++sha256  0dde91ae1d443105dc9e13cbaed6674c36683b7095836ad9ddfce26be270aad5  COPYING
+diff --git a/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash b/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash
+index 1a1ad3e8a5..19ed9d4640 100644
+--- a/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash
++++ b/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash
+@@ -1,2 +1,4 @@
+ # From http://lists.x.org/archives/xorg-announce/2014-June/002446.html
+-sha256	c6e97e48fb1286d6394dddb1c1732f00227c70bd1bedb7d1acabefdd340bea5b	xcb-util-renderutil-0.3.9.tar.bz2
++sha256  c6e97e48fb1286d6394dddb1c1732f00227c70bd1bedb7d1acabefdd340bea5b  xcb-util-renderutil-0.3.9.tar.bz2
++# Locally computed
++sha256  271169dd66674e9c396697af0b4822d1c59ccd2342b7740864d667a02963068b  COPYING
+diff --git a/package/x11r7/xcursor-transparent-theme/xcursor-transparent-theme.hash b/package/x11r7/xcursor-transparent-theme/xcursor-transparent-theme.hash
+index 19f0de2eaa..52d230762a 100644
+--- a/package/x11r7/xcursor-transparent-theme/xcursor-transparent-theme.hash
++++ b/package/x11r7/xcursor-transparent-theme/xcursor-transparent-theme.hash
 @@ -1,2 +1,3 @@
- # Locally computed
--sha256 07fbc3f5053f55e4ef6566a15b42b74895314b48a0dfd46f0984f96f0fbb3e02  qt-webkit-kiosk-a7720e50f2bd70aad99e0b465f5c4a57aca48127.tar.gz
-+sha256  07fbc3f5053f55e4ef6566a15b42b74895314b48a0dfd46f0984f96f0fbb3e02  qt-webkit-kiosk-a7720e50f2bd70aad99e0b465f5c4a57aca48127.tar.gz
-+sha256  de59ec6c939f4c4def79c0a996b3bd5626895fcbd1ae108e7bddb1dac8218381  doc/lgpl.html
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-index 6e4c090fdd..0d48ecdffa 100644
---- a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-+++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-@@ -1,5 +1,11 @@
- # Hash from: https://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-examples-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 2d6ce7146298d03b443cca4390bbfee17c4c0b08a31efcbf9fe0732291a6169e qtwebkit-examples-opensource-src-5.6.3.tar.xz
-+sha256  2d6ce7146298d03b443cca4390bbfee17c4c0b08a31efcbf9fe0732291a6169e  qtwebkit-examples-opensource-src-5.6.3.tar.xz
- 
- # Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-examples-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 e4ce4de6b468243abad2baabbe8ddfb05d25b186529bfe88cb8662fc983f54d0 qtwebkit-examples-opensource-src-5.9.1.tar.xz
-+sha256  e4ce4de6b468243abad2baabbe8ddfb05d25b186529bfe88cb8662fc983f54d0  qtwebkit-examples-opensource-src-5.9.1.tar.xz
-+
+ # locally computed
+ sha256  b26adf2d503d01299718390ae39dab4691a67220de09423be0364e9a060bf7e4  xcursor-transparent-theme-0.1.1.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.hash b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
+index 7e55a75e27..f64a018567 100644
+--- a/package/x11r7/xlib_libXtst/xlib_libXtst.hash
++++ b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
+@@ -1,2 +1,4 @@
+ # From https://lists.x.org/archives/xorg-announce/2016-October/002726.html
+-sha256 4655498a1b8e844e3d6f21f3b2c4e2b571effb5fd83199d428a6ba7ea4bf5204  libXtst-1.2.3.tar.bz2
++sha256  4655498a1b8e844e3d6f21f3b2c4e2b571effb5fd83199d428a6ba7ea4bf5204  libXtst-1.2.3.tar.bz2
 +# Locally computed
-+sha256  a3db6c7f3027aa27489c25a2fa259185cdee945780c32e01c60cbfabf4743b6c  LICENSE.LGPLv21
-+sha256  04505ee290cbe7b29b3766e00ff81987e84658f620cb43bd6e7bb52ee4234e1b  LICENSE.LGPLv3
-+sha256  6c3f3c31b93985f1b93bfbb35fb609d37281697d0efc220c9f91cf4b59eaabde  LICENSE.GPLv2
-+sha256  d3d9052b838761dbe00067168ed9ebc437734d53ebf71dea1c8e9f7532a5333b  LICENSE.GPLv3
-diff --git a/package/qt5cinex/qt5cinex.hash b/package/qt5cinex/qt5cinex.hash
-index 637f388b73..ac62ee2260 100644
---- a/package/qt5cinex/qt5cinex.hash
-+++ b/package/qt5cinex/qt5cinex.hash
-@@ -1,3 +1,4 @@
- # Locally computed
--sha256 0dd602983ced5f7c0cfd5ad0fbfe2b0b7e3c9ff715e4ef23eef818ccc2b6c60b Qt5_CinematicExperience_rpi_1.0.tgz
--sha256 0e547e0259667915a24e84ade5efdcd0c553f81786734452c2c8dbce19a19f44 Qt5_CinematicExperience_1.0.tgz
-+sha256  0dd602983ced5f7c0cfd5ad0fbfe2b0b7e3c9ff715e4ef23eef818ccc2b6c60b  Qt5_CinematicExperience_rpi_1.0.tgz
-+sha256  0e547e0259667915a24e84ade5efdcd0c553f81786734452c2c8dbce19a19f44  Qt5_CinematicExperience_1.0.tgz
-+sha256  bf6206061bcffb43c82999b8845360f223ac5cb4f574219fe95543ffd6755614  README
++sha256  940190489c7a0e5ae3d83fc4fcbd79e0cd1b765bf1a4efd408293c1ee0332ceb  COPYING
+diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
+index 7da3d0d4a1..7a07f06155 100644
+--- a/package/xenomai/xenomai.hash
++++ b/package/xenomai/xenomai.hash
+@@ -1,2 +1,17 @@
+ # Locally computed;
+-sha256 080f893d6ab8e3065285fbb482695477a0502b9490dccd1f744cebaac94691e5  xenomai-3.0.10.tar.bz2
++sha256  080f893d6ab8e3065285fbb482695477a0502b9490dccd1f744cebaac94691e5  xenomai-3.0.10.tar.bz2
++sha256  d37ebe86bf618942dad958927c44403f9b02fbebb3071a4a08408ccbdab5290f  debian/copyright
++sha256  f3380321da72ff509bf6939aa80e6d02fd22268f5c705137b34c205b39bc63a0  include/COPYING
++sha256  d6b6d8ed1b12309085caf1cf775ea4acdad3288c7f7d993c2502bd19c87e4764  kernel/cobalt/COPYING
++sha256  d6b6d8ed1b12309085caf1cf775ea4acdad3288c7f7d993c2502bd19c87e4764  kernel/cobalt/posix/COPYING
++sha256  9c90501baa30534ffed6b39eef413bd1727170ef691fd9768dc8644c3042df54  kernel/cobalt/rtdm/COPYING
++sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  lib/alchemy/COPYING
++sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  lib/analogy/COPYING
++sha256  0519083691511d71408f8c9a2794fa2f6ad13a5eec00717f4572b54d18d6f9da  lib/boilerplate/iniparser/LICENSE
++sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  lib/boilerplate/COPYING
++sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  lib/cobalt/COPYING
++sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  lib/copperplate/COPYING
++sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  lib/psos/COPYING
++sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  lib/smokey/COPYING
++sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  lib/trank/COPYING
++sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  lib/vxworks/COPYING
+diff --git a/package/xmlstarlet/xmlstarlet.hash b/package/xmlstarlet/xmlstarlet.hash
+index ca9aecfec8..7191150957 100644
+--- a/package/xmlstarlet/xmlstarlet.hash
++++ b/package/xmlstarlet/xmlstarlet.hash
+@@ -1,3 +1,5 @@
+ # From https://sourceforge.net/projects/xmlstar/files/xmlstarlet/1.6.1/
+ sha1	87bb104f546caca71b9540807c5b2738944cb219	xmlstarlet-1.6.1.tar.gz
+ md5	f3c5dfa3b1a2ee06cd57c255cc8b70a0		xmlstarlet-1.6.1.tar.gz
++# Locally computed
++sha256  6641cc5b00c1651fa22175f34efd01695e64a348b1ba07048538276f44866862  COPYING
