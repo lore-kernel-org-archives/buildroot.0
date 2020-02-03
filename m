@@ -1,290 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Feb 2020 14:44:53 +0100
-Subject: [Buildroot] [git commit] package/g*: add license file hashes
-Message-ID: <20200203133729.9808088723@busybox.osuosl.org>
+Date: Mon, 3 Feb 2020 14:44:52 +0100
+Subject: [Buildroot] [git commit] package/e*: add license file hashes
+Message-ID: <20200203133729.8385288723@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aaae3ab1f8af372b8119cdb623c2e80bf1cadd5c
+commit: https://git.buildroot.net/buildroot/commit/?id=15f28381e7f0404706b3aad7ebea7c7d61c3d236
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gamin/gamin.hash                                 | 3 ++-
- package/genext2fs/genext2fs.hash                         | 1 +
- package/genromfs/genromfs.hash                           | 1 +
- package/gettext-gnu/gettext-gnu.hash                     | 3 ++-
- package/giblib/giblib.hash                               | 3 ++-
- package/glmark2/glmark2.hash                             | 4 +++-
- package/gmpc/gmpc.hash                                   | 3 ++-
- package/gnupg/gnupg.hash                                 | 4 +++-
- package/gnuplot/gnuplot.hash                             | 3 ++-
- package/go-bootstrap/go-bootstrap.hash                   | 3 ++-
- package/google-breakpad/google-breakpad.hash             | 3 ++-
- package/gpm/gpm.hash                                     | 1 +
- package/gqview/gqview.hash                               | 1 +
- package/granite/granite.hash                             | 4 +++-
- package/graphite2/graphite2.hash                         | 3 ++-
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.hash             | 4 ++++
- package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.hash   | 4 +++-
- package/gstreamer/gst-plugins-bad/gst-plugins-bad.hash   | 3 +++
- package/gstreamer/gst-plugins-base/gst-plugins-base.hash | 3 +++
- package/gstreamer/gst-plugins-good/gst-plugins-good.hash | 2 ++
- package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash | 5 +++--
- package/gstreamer/gstreamer/gstreamer.hash               | 1 +
- package/gtk2-engines/gtk2-engines.hash                   | 4 +++-
- package/gtkmm3/gtkmm3.hash                               | 3 +++
- package/guile/guile.hash                                 | 6 +++++-
- 25 files changed, 59 insertions(+), 16 deletions(-)
+ package/edid-decode/edid-decode.hash       | 3 ++-
+ package/elf2flt/elf2flt.hash               | 3 ++-
+ package/elftosb/elftosb.hash               | 2 ++
+ package/empty/empty.hash                   | 1 +
+ package/enchant/enchant.hash               | 2 ++
+ package/espeak/espeak.hash                 | 1 +
+ package/evemu/evemu.hash                   | 4 +++-
+ package/explorercanvas/explorercanvas.hash | 3 ++-
+ package/ezxml/ezxml.hash                   | 1 +
+ 9 files changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/package/gamin/gamin.hash b/package/gamin/gamin.hash
-index 0a43706193..e28660dded 100644
---- a/package/gamin/gamin.hash
-+++ b/package/gamin/gamin.hash
+diff --git a/package/edid-decode/edid-decode.hash b/package/edid-decode/edid-decode.hash
+index 12cd30e818..e0a9c18523 100644
+--- a/package/edid-decode/edid-decode.hash
++++ b/package/edid-decode/edid-decode.hash
 @@ -1,2 +1,3 @@
- # Locally calculated
--sha256	28085f0ae8be10eab582ff186af4fb0be92cc6c62b5cc19cd09b295c7c2899a1	gamin-0.1.10.tar.gz
-+sha256  28085f0ae8be10eab582ff186af4fb0be92cc6c62b5cc19cd09b295c7c2899a1  gamin-0.1.10.tar.gz
-+sha256  7f9ffc38883325f011f331a9d6074ffd0175fbcecd57f69c577fb3845f333876  COPYING
-diff --git a/package/genext2fs/genext2fs.hash b/package/genext2fs/genext2fs.hash
-index 46b8af352d..add44c4c4e 100644
---- a/package/genext2fs/genext2fs.hash
-+++ b/package/genext2fs/genext2fs.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  404dbbfa7a86a6c3de8225c8da254d026b17fd288e05cec4df2cc7e1f4feecfc  genext2fs-1.4.1.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/genromfs/genromfs.hash b/package/genromfs/genromfs.hash
-index 477e5d2dcb..0be88ee1b4 100644
---- a/package/genromfs/genromfs.hash
-+++ b/package/genromfs/genromfs.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  30f37fc734572c1dbaa2504585bc23ba6b8fd7df767ae7155995b2ca0ebed960  genromfs-0.5.2.tar.gz
-+sha256  cc2a6651c315b233ebc110b49ea3c6452eff9a28f8bc051ffd2bb92a8dcfa3d2  COPYING
-diff --git a/package/gettext-gnu/gettext-gnu.hash b/package/gettext-gnu/gettext-gnu.hash
-index a2ab298760..5a621ae2d3 100644
---- a/package/gettext-gnu/gettext-gnu.hash
-+++ b/package/gettext-gnu/gettext-gnu.hash
-@@ -2,4 +2,5 @@
- md5	df3f5690eaa30fd228537b00cb7b7590	gettext-0.19.8.1.tar.xz
- sha1	e0fe90ede22f7f16bbde7bdea791a835f2773fc9	gettext-0.19.8.1.tar.xz
- # License files, locally calculated
--sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  3fe5361f24b7c49ba12911c08f5a33f9cb18871d95d9fb881f5b8a4793e04288  gettext-runtime/intl/COPYING.LIB
-diff --git a/package/giblib/giblib.hash b/package/giblib/giblib.hash
-index 942aee705b..0c83a55457 100644
---- a/package/giblib/giblib.hash
-+++ b/package/giblib/giblib.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	176611c4d88d742ea4013991ad54c2f9d2feefbc97a28434c0f48922ebaa8bac  giblib-1.2.4.tar.gz
-+sha256  176611c4d88d742ea4013991ad54c2f9d2feefbc97a28434c0f48922ebaa8bac  giblib-1.2.4.tar.gz
-+sha256  8601e2dacede853fe325f7fd3a11f93b1753d576db60426f1b0ff4e68f41ff07  COPYING
-diff --git a/package/glmark2/glmark2.hash b/package/glmark2/glmark2.hash
-index c8772422eb..ffd1ba2d50 100644
---- a/package/glmark2/glmark2.hash
-+++ b/package/glmark2/glmark2.hash
-@@ -1,2 +1,4 @@
  # Locally computed
--sha256 6a9de46c098406895411b629fe8fadfdce92360500f0f10e4cc60a889a1692eb glmark2-9e01aef1a786b28aca73135a5b00f85c357e8f5e.tar.gz
-+sha256  6a9de46c098406895411b629fe8fadfdce92360500f0f10e4cc60a889a1692eb  glmark2-9e01aef1a786b28aca73135a5b00f85c357e8f5e.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  16fbc228292bd774b263b212ae422c524cbf3b2078bcf21b22f8bdd4373be617  COPYING.SGI
-diff --git a/package/gmpc/gmpc.hash b/package/gmpc/gmpc.hash
-index cd39822c39..66de8b6226 100644
---- a/package/gmpc/gmpc.hash
-+++ b/package/gmpc/gmpc.hash
+-sha256 27fcf4c8693ec6fe020b18c78c70ddba9a8b3ea8c55fcfad2a38103128ec5e36 edid-decode-6def7bc83dfb0338632e06a8b14c93faa6af8879.tar.gz
++sha256  27fcf4c8693ec6fe020b18c78c70ddba9a8b3ea8c55fcfad2a38103128ec5e36  edid-decode-6def7bc83dfb0338632e06a8b14c93faa6af8879.tar.gz
++sha256  4b4a7e6d7c358bb5b982eaa84d228cd9e99b75a5fefd3af01272957bf2016b5b  edid-decode.c
+diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
+index 773cf35b77..c4b0697fcd 100644
+--- a/package/elf2flt/elf2flt.hash
++++ b/package/elf2flt/elf2flt.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256	a69414f35396846733632ca9619921d7acda537ffd6d49bd84b444945cb76b2c	gmpc-11.8.16.tar.gz
-+sha256  a69414f35396846733632ca9619921d7acda537ffd6d49bd84b444945cb76b2c  gmpc-11.8.16.tar.gz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/gnupg/gnupg.hash b/package/gnupg/gnupg.hash
-index 3bacdf6563..f4b33bda6b 100644
---- a/package/gnupg/gnupg.hash
-+++ b/package/gnupg/gnupg.hash
-@@ -1,3 +1,5 @@
- # Locally computed based on signature
- # https://gnupg.org/ftp/gcrypt/gnupg/gnupg-1.4.23.tar.bz2.sig
--sha256	c9462f17e651b6507848c08c430c791287cd75491f8b5a8b50c6ed46b12678ba	gnupg-1.4.23.tar.bz2
-+sha256  c9462f17e651b6507848c08c430c791287cd75491f8b5a8b50c6ed46b12678ba  gnupg-1.4.23.tar.bz2
+-sha256 d63baae6fe0d7fcc50a635be151a6f9e1e83dba30568046a869a395c15bf6284  elf2flt-7e33f28df198c46764021ed14408bd262751e148.tar.gz
++sha256  d63baae6fe0d7fcc50a635be151a6f9e1e83dba30568046a869a395c15bf6284  elf2flt-7e33f28df198c46764021ed14408bd262751e148.tar.gz
++sha256  f20bc5007904094e3a4e9fbcc3526cdd40893f91d458c3139b308e5c4c0899c6  LICENSE.TXT
+diff --git a/package/elftosb/elftosb.hash b/package/elftosb/elftosb.hash
+index 2b9f02b14f..83f5ce664e 100644
+--- a/package/elftosb/elftosb.hash
++++ b/package/elftosb/elftosb.hash
+@@ -1,2 +1,4 @@
+ # From http://repository.timesys.com/buildsources/e/elftosb/elftosb-10.12.01/elftosb-10.12.01.tar.gz.md5sum
+ md5	e8005d606c1e0bb3507c82f6eceb3056	elftosb-10.12.01.tar.gz
 +# locally computed
-+sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
-index 1ea8c2852f..1f3a08bb00 100644
---- a/package/gnuplot/gnuplot.hash
-+++ b/package/gnuplot/gnuplot.hash
-@@ -2,4 +2,5 @@
- md5 8ec46520a86a61163a701b00404faf1a  gnuplot-5.0.6.tar.gz
- sha1 f7b8948166b22e5bd658d5cf7579716f4821dba0  gnuplot-5.0.6.tar.gz
- # Locally computed
--sha256 5bbe4713e555c2e103b7d4ffd45fca69551fff09cf5c3f9cb17428aaacc9b460  gnuplot-5.0.6.tar.gz
-+sha256  5bbe4713e555c2e103b7d4ffd45fca69551fff09cf5c3f9cb17428aaacc9b460  gnuplot-5.0.6.tar.gz
-+sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
-diff --git a/package/go-bootstrap/go-bootstrap.hash b/package/go-bootstrap/go-bootstrap.hash
-index 8938266f2d..03fd7d571f 100644
---- a/package/go-bootstrap/go-bootstrap.hash
-+++ b/package/go-bootstrap/go-bootstrap.hash
++sha256  c861c25936b7bc0cf180023d540f2b0d0f5892edd27fd00efef4b6234c1df27a  COPYING
+diff --git a/package/empty/empty.hash b/package/empty/empty.hash
+index e62939687d..47e9577070 100644
+--- a/package/empty/empty.hash
++++ b/package/empty/empty.hash
 @@ -1,2 +1,3 @@
  # Locally computed:
--sha256 9947fc705b0b841b5938c48b22dc33e9647ec0752bae66e50278df4f23f64959  go1.4.3.src.tar.gz
-+sha256  9947fc705b0b841b5938c48b22dc33e9647ec0752bae66e50278df4f23f64959  go1.4.3.src.tar.gz
-+sha256  dd26a7abddd02e2d0aba97805b31f248ef7835d9e10da289b22e3b8ab78b324d  LICENSE
-diff --git a/package/google-breakpad/google-breakpad.hash b/package/google-breakpad/google-breakpad.hash
-index 79e8d08b28..81715ec573 100644
---- a/package/google-breakpad/google-breakpad.hash
-+++ b/package/google-breakpad/google-breakpad.hash
+ sha256  7e6636e400856984c4405ce7bd0843aaa3329fa3efd20c58df8400a9eaa35f09  empty-0.6.20b.tgz
++sha256  f01dbe3c624084900b9df1393d9062518b2bc0487acd6a3300ebd6e71352d112  COPYRIGHT
+diff --git a/package/enchant/enchant.hash b/package/enchant/enchant.hash
+index 884a8b59f2..f5709f08ee 100644
+--- a/package/enchant/enchant.hash
++++ b/package/enchant/enchant.hash
+@@ -1,2 +1,4 @@
+ # From http://www.abisource.com/downloads/enchant/1.6.0/MD5SUM
+ md5	de11011aff801dc61042828041fb59c7	enchant-1.6.0.tar.gz
++# locally computed
++sha256  d0db934167997c8b8c863af297b3653aa98500bca0a7c05e9c6ec0dabf4f67d4  COPYING.LIB
+diff --git a/package/espeak/espeak.hash b/package/espeak/espeak.hash
+index 8f4a1ab95b..91feda3ca1 100644
+--- a/package/espeak/espeak.hash
++++ b/package/espeak/espeak.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  bf9a17673adffcc28ff7ea18764f06136547e97bbd9edf2ec612f09b207f0659  espeak-1.48.04-source.zip
++sha256  0bbca7a0ad5da4a6b0677f90d17817984edce7e42d300cae94ae93e4ccba9df7  License.txt
+diff --git a/package/evemu/evemu.hash b/package/evemu/evemu.hash
+index 7d45eb3e5b..13dd402937 100644
+--- a/package/evemu/evemu.hash
++++ b/package/evemu/evemu.hash
+@@ -1,2 +1,4 @@
+ # From https://lists.freedesktop.org/archives/input-tools/2017-September/001416.html
+-sha256 78c9400d55eeeb5ab75161360543f9376438c4da4934cb34cdda5b46021ae379 evemu-2.7.0.tar.xz
++sha256  78c9400d55eeeb5ab75161360543f9376438c4da4934cb34cdda5b46021ae379  evemu-2.7.0.tar.xz
++# locally computed
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
+diff --git a/package/explorercanvas/explorercanvas.hash b/package/explorercanvas/explorercanvas.hash
+index 59e8c7a0e3..e47367a21a 100644
+--- a/package/explorercanvas/explorercanvas.hash
++++ b/package/explorercanvas/explorercanvas.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256 6f444233e88957c30cc2d5497ee9d72d104122ce2c25a7ef7f6be3af1b3f7353  google-breakpad-7515ab13768c7edc09f0f2ec2354dc6c928239a6.tar.gz
-+sha256  6f444233e88957c30cc2d5497ee9d72d104122ce2c25a7ef7f6be3af1b3f7353  google-breakpad-7515ab13768c7edc09f0f2ec2354dc6c928239a6.tar.gz
-+sha256  f9752a0a4ac5215eaa3a4f0ec29cd52563c883de5d7870525cc0bc3a21cb8e15  LICENSE
-diff --git a/package/gpm/gpm.hash b/package/gpm/gpm.hash
-index 7bbc43dd40..fac8931834 100644
---- a/package/gpm/gpm.hash
-+++ b/package/gpm/gpm.hash
+-sha256 7b8f597b5d3a2f71e87aac413e12e03d852df3dd3ac39f70e1615c9c850217ec  explorercanvas-aa989ea9d9bac748638f7c66b0fc88e619715da6.tar.gz
++sha256  7b8f597b5d3a2f71e87aac413e12e03d852df3dd3ac39f70e1615c9c850217ec  explorercanvas-aa989ea9d9bac748638f7c66b0fc88e619715da6.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/ezxml/ezxml.hash b/package/ezxml/ezxml.hash
+index 44d7bbdf9f..bf04b0e00e 100644
+--- a/package/ezxml/ezxml.hash
++++ b/package/ezxml/ezxml.hash
 @@ -1,2 +1,3 @@
  # Locally computed:
- sha256  a955053b36556ffa7c628ce18fd6de7d625966573fa412fb08869533d8f7385c  gpm-1.20.7.tar.lzma
-+sha256  1b2a567f289f66a143c56353e7b3d4fa5862514a5e3c5cfdf8b02ee5e5aaa953  COPYING
-diff --git a/package/gqview/gqview.hash b/package/gqview/gqview.hash
-index eb65497131..3d1330d4ff 100644
---- a/package/gqview/gqview.hash
-+++ b/package/gqview/gqview.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  12fea494e607a69eff31cdca13d306ef1b0b3b7850be0f8b236f267d8f2e9546  gqview-2.1.5.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/granite/granite.hash b/package/granite/granite.hash
-index b9ed2874ce..48f62604fa 100644
---- a/package/granite/granite.hash
-+++ b/package/granite/granite.hash
-@@ -1,4 +1,6 @@
- # From https://launchpad.net/granite/0.4/0.4.1/+download/granite-0.4.1.tar.xz/+md5
- md5 b1002c0488bb9ade0ef89730c4f84393 granite-0.4.1.tar.xz
- # Calculated based on the hash above
--sha256 8bb411523e6cd5685c928dbfe08893892189cedf9fad5f537aa76182032cf09c  granite-0.4.1.tar.xz
-+sha256  8bb411523e6cd5685c928dbfe08893892189cedf9fad5f537aa76182032cf09c  granite-0.4.1.tar.xz
-+# Locally computed
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
-diff --git a/package/graphite2/graphite2.hash b/package/graphite2/graphite2.hash
-index ecf082b08d..e0c1aae670 100644
---- a/package/graphite2/graphite2.hash
-+++ b/package/graphite2/graphite2.hash
-@@ -2,4 +2,5 @@
- md5 b39d5ed21195f8b709bcee548c87e2b5  graphite2-1.3.10.tgz
- sha1 668f3bce96fc02d90ea875b401ed36b2e8957d2f  graphite2-1.3.10.tgz
- # Locally computed
--sha256 90fde3b2f9ea95d68ffb19278d07d9b8a7efa5ba0e413bebcea802ce05cda1ae  graphite2-1.3.10.tgz
-+sha256  90fde3b2f9ea95d68ffb19278d07d9b8a7efa5ba0e413bebcea802ce05cda1ae  graphite2-1.3.10.tgz
-+sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE
-diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.hash b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.hash
-index 5f7f35d9a4..c83c051b48 100644
---- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.hash
-+++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.hash
-@@ -1,2 +1,6 @@
- # From http://gstreamer.freedesktop.org/src/gst-ffmpeg/gst-ffmpeg-0.10.13.tar.bz2.md5
- md5	7f5beacaf1312db2db30a026b36888c4	gst-ffmpeg-0.10.13.tar.bz2
-+# Locally computed
-+sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING.LIB
-+sha256  03fe7ca91cc28e99b4003d5b3bd4ce3b084d4c475fdf9975cf0e7fdf4dc739cd  gst-libs/ext/libav/COPYING.LGPLv2.1
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  gst-libs/ext/libav/COPYING.LGPLv3
-diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.hash b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.hash
-index f1d639142f..338ef33fe7 100644
---- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.hash
-+++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.hash
-@@ -1,2 +1,4 @@
- # locally computed
--sha256	568883b2a1d8d32e4004cb3f123790d0b4286c91c1fac38c9dc8e20bd1250764  gst-fsl-plugins-4.0.3.tar.gz
-+sha256  568883b2a1d8d32e4004cb3f123790d0b4286c91c1fac38c9dc8e20bd1250764  gst-fsl-plugins-4.0.3.tar.gz
-+sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING-LGPL-2.1
-+sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING-LGPL-2
-diff --git a/package/gstreamer/gst-plugins-bad/gst-plugins-bad.hash b/package/gstreamer/gst-plugins-bad/gst-plugins-bad.hash
-index 760ed31c9c..6448acc4cc 100644
---- a/package/gstreamer/gst-plugins-bad/gst-plugins-bad.hash
-+++ b/package/gstreamer/gst-plugins-bad/gst-plugins-bad.hash
-@@ -1,2 +1,5 @@
- # From http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-0.10.23.tar.xz.md5
- md5	e4822fa2cc933768e2998311a1565979	gst-plugins-bad-0.10.23.tar.xz
-+# Locally computed
-+sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING.LIB
-+sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/gstreamer/gst-plugins-base/gst-plugins-base.hash b/package/gstreamer/gst-plugins-base/gst-plugins-base.hash
-index 77eba71bb5..f71f8dfb2b 100644
---- a/package/gstreamer/gst-plugins-base/gst-plugins-base.hash
-+++ b/package/gstreamer/gst-plugins-base/gst-plugins-base.hash
-@@ -1,2 +1,5 @@
- # From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-0.10.36.tar.xz.md5
- md5	3d2337841b132fe996e5eb2396ac9438	gst-plugins-base-0.10.36.tar.xz
-+# Locally computed
-+sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-+sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING.LIB
-diff --git a/package/gstreamer/gst-plugins-good/gst-plugins-good.hash b/package/gstreamer/gst-plugins-good/gst-plugins-good.hash
-index 094dc87978..1b8b474207 100644
---- a/package/gstreamer/gst-plugins-good/gst-plugins-good.hash
-+++ b/package/gstreamer/gst-plugins-good/gst-plugins-good.hash
-@@ -1,2 +1,4 @@
- # From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-0.10.31.tar.xz.md5
- md5	555845ceab722e517040bab57f9ace95	gst-plugins-good-0.10.31.tar.xz
-+# Locally computed
-+sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash
-index 56f2a8c4bd..8e103676e4 100644
---- a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash
-+++ b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash
-@@ -1,5 +1,6 @@
- # From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-0.10.19.tar.xz.md5
- md5	ba26045c8c8c91f0d48d327ccf53ac0c	gst-plugins-ugly-0.10.19.tar.xz
- # Locally computed
--sha256	4934f65ff892637e7efaf1cfe635779189dde429d0706f40c86a3aac476ea873	gst-plugins-ugly-0.10.19.tar.xz
--sha256	2a8aa4cd019fab333f1f8377bf7afa426d3038a033361d90fab70c335e9a53e7	cdio-cd-text-api.patch
-+sha256  4934f65ff892637e7efaf1cfe635779189dde429d0706f40c86a3aac476ea873  gst-plugins-ugly-0.10.19.tar.xz
-+sha256  2a8aa4cd019fab333f1f8377bf7afa426d3038a033361d90fab70c335e9a53e7  cdio-cd-text-api.patch
-+sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/gstreamer/gstreamer/gstreamer.hash b/package/gstreamer/gstreamer/gstreamer.hash
-index 4fcf34ac32..9b3c42b44a 100644
---- a/package/gstreamer/gstreamer/gstreamer.hash
-+++ b/package/gstreamer/gstreamer/gstreamer.hash
-@@ -2,3 +2,4 @@
- md5	15389c73e091b1dda915279c388b9cb2	gstreamer-0.10.36.tar.xz
- # locally computed
- sha256  9151aa108c177054387885763fa0e433e76780f7c5655c70a5390f2a6c6871da  gstreamer-0.10.36.tar.xz
-+sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING
-diff --git a/package/gtk2-engines/gtk2-engines.hash b/package/gtk2-engines/gtk2-engines.hash
-index ac56c7d73e..20125c706c 100644
---- a/package/gtk2-engines/gtk2-engines.hash
-+++ b/package/gtk2-engines/gtk2-engines.hash
-@@ -1,2 +1,4 @@
- # From http://ftp.gnome.org/pub/gnome/sources/gtk-engines/2.20/gtk-engines-2.20.2.sha256sum
--sha256	15b680abca6c773ecb85253521fa100dd3b8549befeecc7595b10209d62d66b5	gtk-engines-2.20.2.tar.bz2
-+sha256  15b680abca6c773ecb85253521fa100dd3b8549befeecc7595b10209d62d66b5  gtk-engines-2.20.2.tar.bz2
-+# Locally computed
-+sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
-diff --git a/package/gtkmm3/gtkmm3.hash b/package/gtkmm3/gtkmm3.hash
-index 951b481f2c..87c59b2cab 100644
---- a/package/gtkmm3/gtkmm3.hash
-+++ b/package/gtkmm3/gtkmm3.hash
-@@ -1,2 +1,5 @@
- # From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.22/gtkmm-3.22.0.sha256sum
- sha256	05da4d4b628fb20c8384630ddf478a3b5562952b2d6181fe28d58f6cbc0514f5	gtkmm-3.22.0.tar.xz
-+# Locally computed
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
-diff --git a/package/guile/guile.hash b/package/guile/guile.hash
-index 63651cf740..47ac009757 100644
---- a/package/guile/guile.hash
-+++ b/package/guile/guile.hash
-@@ -1,2 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256 e8442566256e1be14e51fc18839cd799b966bc5b16c6a1d7a7c35155a8619d82  guile-2.0.14.tar.xz
-+sha256  e8442566256e1be14e51fc18839cd799b966bc5b16c6a1d7a7c35155a8619d82  guile-2.0.14.tar.xz
-+# Locally computed
-+sha256  b51c6f20e6d029cb5b3e5bf235ac562c9a188c5bdc4ffcdc663897772d6e0260  LICENSE
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  9ccf26cfe845e0eb8bb58053e47366e7ab6b697ae010f7650978d4b71b7d1fc1  COPYING.LESSER
+ sha256  a68d52257dcb0ff2ad3d71c8c64311edb8030254bb8b581e229aeaba6231cdf9  ezxml-0.8.6.tar.gz
++sha256  e82e49402f6b21176c65eead46dbd39d8f7a3c28b052589d8b307dfc8f78a03f  license.txt
