@@ -1,105 +1,70 @@
-From: Alex Corcoles <alex@corcoles.net>
-Date: Mon, 3 Feb 2020 18:14:58 +0100
-Subject: [Buildroot] Fwd: "PATCH": hack to be able to build Rust targetting
- MIPS
-In-Reply-To: <CAPAYC_wFywnPH6j8muHXvX1n+bLrWkZxBMrm+ywXQAyTbvsK8Q@mail.gmail.com>
-References: <CAPAYC_xPtDO=j3fWeOEbC41X3PXJZ+7AD=WRm8A1DGQrtbadFQ@mail.gmail.com>
- <CAPAYC_y98TxMoBtG=P9hDe26=1rHfaoMyoH5NJyLHbRxcxpMAQ@mail.gmail.com>
- <20200119213102.GA2894@ned>
- <CAPAYC_xA2zkmmADgr9G2mspcS=Ej16wOM75rT-aCKbK42hzk5g@mail.gmail.com>
- <CAPAYC_wFywnPH6j8muHXvX1n+bLrWkZxBMrm+ywXQAyTbvsK8Q@mail.gmail.com>
-Message-ID: <CAPAYC_z0NSxhO_kk9YpQeOn8YiY1dcjL6q4BR88nVZwzEosrgw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Feb 2020 18:21:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jack2: bump to version 1.9.14
+In-Reply-To: <20200203165734.25937-1-titouan.christophe@railnova.eu> (titouan
+ christophe's message of "Mon, 3 Feb 2020 17:57:34 +0100")
+References: <20200203165734.25937-1-titouan.christophe@railnova.eu>
+Message-ID: <87imkn1t9s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've finally had more time to play with this. It seems that
-mipsel-unknown-linux-uclibc works! I've been able to run software built
-with it on a real hardware device, although it's very crashy (all
-arithmetic operations seem to crash with illegal instruction- probably I
-didn't configure my toolchain right or there's a Rust issue...).
+>>>>> "titouan" == titouan christophe <titouan.christophe@railnova.eu> writes:
 
-I would suggest removing the limitation on uclibc... perhaps with a big
-warning flag, though, as I haven't managed to build complex, stable
-software.
+ > From: Titouan Christophe <titouan.christophe@railnova.eu>
+ > Amongst other things, the jack2 waf script has been made
+ > compatible with Python3 in this latest release, which makes
+ > it possible to be built on py3
 
-I've written a bit about the process at:
+This presumably doesn't help much as long as it has host-python in its
+_DEPENDENCIES and our pkg-waf.mk hard codes python2?
 
-https://users.rust-lang.org/t/trying-to-compile-rust-sdl-stuff-for-a-rg300-console-buildroot-mipsel-uclibc/36722
-https://github.com/alexpdp7/retrofw2-rust
+Still, bumping the version is fine - So committed, thanks.
 
-Cheers,
+ > See also upstream release notes:
+ > - https://github.com/jackaudio/jack2/releases/tag/v1.9.13
+ > - https://github.com/jackaudio/jack2/releases/tag/v1.9.14
 
-?lex
 
-On Mon, Jan 20, 2020 at 5:31 PM Alex Corcoles <alex@corcoles.net> wrote:
+ > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ > ---
+ >  package/jack2/jack2.hash | 2 +-
+ >  package/jack2/jack2.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Hi!
->
-> The RUSTC_TARGET_NAME variable is defined in rustc.mk only if the symbol
->> BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is selected. This symbols is
->> used to ensure all the conditions to build a rust package are met. One
->> of them is that the toolchain is glibc-based. This is required, because
->> the standard library provided by the pre-built host Rust toolchain is
->> built against glibc.
->>
->> In your defconfig, the toolchain is uclibc-based and the host Rust
->> toolchain is built from source.
->>
->> Hence BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is not defined and so
->> is RUSTC_TARGET_NAME.
->>
->> So there is a bug: the restriction on having a glibc-based toolchain
->> should apply either when using a pre-built rust toolchain or building
->> one from source. I'll see how to fix it.
->>
->> The list of supported platforms [1] mentions GNU glibc and musl, but not
->> uclibc. Does the build with your defconfig and patch successful?
->>
->> [1] https://forge.rust-lang.org/release/platform-support.html
->>
->
-> I think I built it successfully after introducing my hack, but as far as I
-> understand, it is not guaranteed to build in the future (and the opposite
-> is true, perhaps if it doesn't build today, it will tomorrow). In the link
-> you sent, mipsel-unknown-linux-uclibc is Tier 3 with std.
->
-> If I have some time I will play around with it and see you some results.
->
-> IMHO, perhaps you should hide non Tier-1 platforms behind an "enable this
-> option for non-Tier 1 Rust builds which are not guaranteed to work", or
-> something like that.
->
-> Cheers,
->
-> ?lex
->
-> --
->    ___
->  {~._.~}
->   ( Y )
->  ()~*~()  mail: alex at corcoles dot net
->  (_)-(_)  http://alex.corcoles.net/
->
->
+ > diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
+ > index f6f2345eb5..aec56e24a4 100644
+ > --- a/package/jack2/jack2.hash
+ > +++ b/package/jack2/jack2.hash
+ > @@ -1,2 +1,2 @@
+ >  # Locally calculated
+ > -sha256 deefe2f936dc32f59ad3cef7e37276c2035ef8a024ca92118f35c9a292272e33  jack2-1.9.12.tar.gz
+ > +sha256 a20a32366780c0061fd58fbb5f09e514ea9b7ce6e53b080a44b11a558a83217c  jack2-1.9.14.tar.gz
+ > diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+ > index c4cad32ed6..b08c45cce7 100644
+ > --- a/package/jack2/jack2.mk
+ > +++ b/package/jack2/jack2.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -JACK2_VERSION = 1.9.12
+ > +JACK2_VERSION = 1.9.14
+ >  JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+ >  JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+ >  JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
+
+So if it can 
+
+ > -- 
+ > 2.24.1
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-   ___
- {~._.~}
-  ( Y )
- ()~*~()  mail: alex at corcoles dot net
- (_)-(_)  http://alex.corcoles.net/
-
-
-
--- 
-   ___
- {~._.~}
-  ( Y )
- ()~*~()  mail: alex at corcoles dot net
- (_)-(_)  http://alex.corcoles.net/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200203/2b401c07/attachment.html>
+Bye, Peter Korsgaard
