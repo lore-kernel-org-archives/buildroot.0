@@ -1,63 +1,45 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 3 Feb 2020 19:10:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jack2: bump to version 1.9.14
-In-Reply-To: <87imkn1t9s.fsf@dell.be.48ers.dk>
-References: <20200203165734.25937-1-titouan.christophe@railnova.eu>
- <87imkn1t9s.fsf@dell.be.48ers.dk>
-Message-ID: <2447bd5a-a07c-980c-5074-b63150cfde7f@railnova.eu>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  3 Feb 2020 19:12:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.5.5
+Message-ID: <20200203181202.2110059-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter and all,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/whois/whois.hash | 4 ++--
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2/3/20 6:21 PM, Peter Korsgaard wrote:
->>>>>> "titouan" == titouan christophe <titouan.christophe@railnova.eu> writes:
-> 
->   > From: Titouan Christophe <titouan.christophe@railnova.eu>
->   > Amongst other things, the jack2 waf script has been made
->   > compatible with Python3 in this latest release, which makes
->   > it possible to be built on py3
-> 
-> This presumably doesn't help much as long as it has host-python in its
-> _DEPENDENCIES and our pkg-waf.mk hard codes python2?
-
-I actually came up with this version bump while testing to switch the 
-waf-package infrastructure to python3 [1], and in this context jack2 
-1.9.12 raised some errors from the waf script.
-
-I'll look if it's possible to remove that host-python dependency as well 
-later tonight or tomorrow.
-
-> 
-> Still, bumping the version is fine - So committed, thanks.
-> 
->   
->   > -JACK2_VERSION = 1.9.12
->   > +JACK2_VERSION = 1.9.14
->   >  JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
->   >  JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
->   >  JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
-> 
-> So if it can
-
-Yes we can :-)
-
-> 
->   > --
->   > 2.24.1
-> 
->   > _______________________________________________
->   > buildroot mailing list
->   > buildroot at busybox.net
->   > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
-[1] http://paste.awesom.eu/Ypoa
-
-Kind regards,
-
-Titouan
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index 77d30b2cd0..b83ea68d28 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,5 +1,5 @@
+-# From http://snapshot.debian.org/archive/debian/20191118T030126Z/pool/main/w/whois/whois_5.5.3.dsc
+-sha256	55c33f9c2a01c0cf1d6449ece63b0c26ef45aab63cf5f01c18459df0e341ab46	whois_5.5.3.tar.xz
++# From http://snapshot.debian.org/archive/debian/20200123T155144Z/pool/main/w/whois/whois_5.5.5.dsc
++sha256	c30e8a444482eadac157be42649833ef77c5ea9fb5cbcbabb6ee3f2254e5530d	whois_5.5.5.tar.xz
+ 
+ # Hash for license file:
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 1517d1e630..9d29c2f852 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-WHOIS_VERSION = 5.5.3
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20191118T030126Z/pool/main/w/whois
++WHOIS_VERSION = 5.5.5
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20200123T155144Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ WHOIS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
+-- 
+2.24.1
