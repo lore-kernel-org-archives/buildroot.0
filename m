@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Feb 2020 18:09:17 +0100
+Date: Mon, 03 Feb 2020 18:11:07 +0100
 Subject: [Buildroot] [PATCH] package/fail2ban: add python3 support
 In-Reply-To: <20200122131514.10400-1-p.debruijn@unilogic.nl> (Pascal de
  Bruijn's message of "Wed, 22 Jan 2020 14:15:14 +0100")
 References: <20200122131514.10400-1-p.debruijn@unilogic.nl>
-Message-ID: <87r1zb1ttu.fsf@dell.be.48ers.dk>
+Message-ID: <87mu9z1tqs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -42,11 +42,13 @@ To: buildroot@busybox.net
  
  > +define FAIL2BAN_PYTHON_2TO3
  > +	$(HOST_DIR)/bin/2to3 --write --nobackups --no-diffs $(@D)/bin/* $(@D)/fail2ban
+ > +endef
+ > +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ > +FAIL2BAN_POST_PATCH_HOOKS += FAIL2BAN_PYTHON_2TO3
 
-I was going to say that this is horrible, but this is indeed apparently
-how upstream expects you to use it (with the fail2ban-2to3 script).
-
-Committed, thanks.
+Ups, sent too fast - We need to ensure that host-python3 is available
+here at patch time for 2to3, so I've added FAIL2BAN_DEPENDENCIES +=
+host-python3
 
 -- 
 Bye, Peter Korsgaard
