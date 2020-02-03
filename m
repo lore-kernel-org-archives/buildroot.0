@@ -1,68 +1,103 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Feb 2020 11:46:06 +0100
-Subject: [Buildroot] [PATCH v10 1/2] package/wayland-protocols: bump to
- version 1.18
-In-Reply-To: <20200202123856.94585-1-james.hilliard1@gmail.com>
-References: <20200202123856.94585-1-james.hilliard1@gmail.com>
-Message-ID: <20200203104606.GB3299@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Feb 2020 11:47:55 +0100
+Subject: [Buildroot] [PATCH v2 4/4] package/kodi: add optional support
+ for gbm
+In-Reply-To: <20200202173333.305860-4-bernd.kuhls@t-online.de>
+References: <20200202173333.305860-1-bernd.kuhls@t-online.de>
+ <20200202173333.305860-4-bernd.kuhls@t-online.de>
+Message-ID: <20200203114755.607fdb4a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Hello Bernd,
 
-On 2020-02-02 05:38 -0700, James Hilliard spake thusly:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+On Sun,  2 Feb 2020 18:33:33 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Applied to master (for good this time!). Thanks.
-
-Regards,
-Yann E. MORIN.
-
+> For details see upstream PR 11955.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/wayland-protocols/wayland-protocols.hash | 8 ++++----
->  package/wayland-protocols/wayland-protocols.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+> v2: removed dependency on BR2_ENABLE_LOCALE
 > 
-> diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
-> index d62a433dfd..a27ff9e52c 100644
-> --- a/package/wayland-protocols/wayland-protocols.hash
-> +++ b/package/wayland-protocols/wayland-protocols.hash
-> @@ -1,5 +1,5 @@
-> -# From https://lists.freedesktop.org/archives/wayland-devel/2018-November/039662.html
-> -md5 55ddd5fdb02b73b9de9559aaec267315  wayland-protocols-1.17.tar.xz
-> -sha1 7d2569c838c776545e3eb1b1049b9c37178aae24  wayland-protocols-1.17.tar.xz
-> -sha256 df1319cf9705643aea9fd16f9056f4e5b2471bd10c0cc3713d4a4cdc23d6812f  wayland-protocols-1.17.tar.xz
-> +# From https://lists.freedesktop.org/archives/wayland-devel/2019-July/040756.html
-> +md5 af38f22d8e233c2f2e00ddc8dcc94694  wayland-protocols-1.18.tar.xz
-> +sha1 aa2f132c082f3c790bd046283b3ef7ce3fb11370  wayland-protocols-1.18.tar.xz
-> +sha256 3d73b7e7661763dc09d7d9107678400101ecff2b5b1e531674abfa81e04874b3  wayland-protocols-1.18.tar.xz
->  sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
-> diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-> index 5ed4c3bc90..fbfa99558d 100644
-> --- a/package/wayland-protocols/wayland-protocols.mk
-> +++ b/package/wayland-protocols/wayland-protocols.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+>  package/kodi/Config.in | 43 +++++++++++++++++++++++++++++++++++++++++-
+>  package/kodi/kodi.mk   | 14 ++++++++++++++
+>  2 files changed, 56 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index 0f2f4e2df2..f8b95c2234 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -17,6 +17,23 @@ comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, t
+>  config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+>  	bool
 >  
-> -WAYLAND_PROTOCOLS_VERSION = 1.17
-> +WAYLAND_PROTOCOLS_VERSION = 1.18
->  WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
->  WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
->  WAYLAND_PROTOCOLS_LICENSE = MIT
-> -- 
-> 2.20.1
-> 
+> +config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GL
+> +	bool
+> +	default y
+> +	depends on BR2_PACKAGE_HAS_LIBGL
+> +	depends on BR2_PACKAGE_HAS_LIBEGL
+> +	depends on BR2_PACKAGE_MESA3D_GBM
+> +	depends on BR2_PACKAGE_HAS_UDEV # libinput
+> +	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+> +
+> +config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GLES
+> +	bool
+> +	default y
+> +	depends on BR2_PACKAGE_HAS_LIBGLES
 
+Are you sure you don't need BR2_PACKAGE_HAS_LIBEGL ? In the .mk file,
+you use libegl.
+
+> +	depends on BR2_PACKAGE_MESA3D_GBM
+> +	depends on BR2_PACKAGE_HAS_UDEV # libinput
+> +	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+> +
+>  config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
+>  	bool
+>  	default y
+> @@ -204,6 +221,26 @@ choice
+>  	prompt "platform"
+>  	default BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
+>  
+> +config BR2_PACKAGE_KODI_PLATFORM_GBM_GL
+> +	bool "gbm/OpenGL"
+> +	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GL
+> +	select BR2_PACKAGE_LIBGLU
+> +	select BR2_PACKAGE_LIBINPUT
+> +	select BR2_PACKAGE_LIBXKBCOMMON
+> +
+> +config BR2_PACKAGE_KODI_PLATFORM_GBM_GLES
+> +	bool "gbm/GLES"
+> +	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GLES
+> +	select BR2_PACKAGE_LIBGLU
+
+LIBGLU is only available when BR2_PACKAGE_HAS_LIBGL is enabled, so this
+looks odd. And you don't have a dependency on libglu in the .mk file.
+
+> +ifeq ($(BR2_PACKAGE_KODI_PLATFORM_GBM_GL),y)
+> +KODI_CONF_OPTS += \
+> +	-DCORE_PLATFORM_NAME=gbm \
+> +	-DGBM_RENDER_SYSTEM=gl
+> +KODI_DEPENDENCIES += libegl libglu libinput libxkbcommon mesa3d
+
+You don't need libgl ?
+
+> +ifeq ($(BR2_PACKAGE_KODI_PLATFORM_GBM_GLES),y)
+> +KODI_CONF_OPTS += \
+> +	-DCORE_PLATFORM_NAME=gbm \
+> +	-DGBM_RENDER_SYSTEM=gles
+> +KODI_DEPENDENCIES += libgles libinput libxkbcommon mesa3d
+
+You don't need libegl here ?
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
