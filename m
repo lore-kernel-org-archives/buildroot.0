@@ -1,43 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 12:31:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python: re-enable hashlib
-In-Reply-To: <20200203111837.13376-1-titouan.christophe@railnova.eu>
-References: <20200203111837.13376-1-titouan.christophe@railnova.eu>
-Message-ID: <20200203123112.41c6247b@windsurf>
+Date: Mon, 3 Feb 2020 12:31:22 +0100
+Subject: [Buildroot] [git commit] package/python-django: security bump to
+ version 3.0.3
+Message-ID: <20200203112023.A54DC8871C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  3 Feb 2020 12:18:37 +0100
-titouan.christophe at railnova.eu wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=44e53c6b4843ca3f78eac5216cd737b8e27f60df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Titouan Christophe <titouan.christophe@railnova.eu>
-> 
-> In commit e5cfb319f9493d677f059ca72b80f7fa22fc9f0f,
-> the committer did add the flag `--disable-hashlib` to python,
-> even though this was not part of the original patch
-> (https://patchwork.ozlabs.org/patch/1231905/).
-> 
-> This unexpected modification break the builds of waf-based
-> packages, such as jack2, mpv or aubio. This commit therefore
-> 
-> Fixes: http://autobuild.buildroot.net/results/2b3/2b377bcfda6e7ae4d6bb894664e3a4cb13a70b6d/
-> Fixes: http://autobuild.buildroot.net/results/cd5/cd5da8cb3da8479ebee60d011ce0c5dc0e59aab7/
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Fixes the following security issues:
 
-Note to self: "git commit -a --amend" can be dangerous. Sorry for the mess.
+- CVE-2020-7471: Potential SQL injection via StringAgg(delimiter)
+  django.contrib.postgres.aggregates.StringAgg aggregation function was
+  subject to SQL injection, using a suitably crafted delimiter.
 
-However, this particular change is related to a discussion I had on the
-mailing list about this hashlib module which was causing build issues
-on some machines in host Python. This module needs OpenSSL on the host,
-which we don't have installed on some autobuilders. So how come we
-hadn't seen these failures before ?
+For more details, see the advisory:
+https://www.djangoproject.com/weblog/2020/feb/03/security-releases/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 8a2f967077..cdf3dbd271 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	24d5364af6b04c4dd173111a3207459a  Django-3.0.2.tar.gz
+-sha256	8c3575f81e11390893860d97e1e0154c47512f180ea55bd84ce8fa69ba8051ca  Django-3.0.2.tar.gz
++md5	37ec335a56234c0ad56c383b810afc7f  Django-3.0.3.tar.gz
++sha256	2f1ba1db8648484dd5c238fb62504777b7ad090c81c5f1fd8d5eb5ec21b5f283  Django-3.0.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 68f9094fc0..0e557489df 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 3.0.2
++PYTHON_DJANGO_VERSION = 3.0.3
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c5/c1/5b901e21114b5dd9233726c2975c0aa7e9f48f63e41ec95d8777721d8aff
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/3d/21/316d435bf8bd6f355be6b5765da91394fb38f405e5bea6680e411e4d470c
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
