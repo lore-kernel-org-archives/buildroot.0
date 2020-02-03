@@ -1,49 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Feb 2020 11:26:36 +0100
-Subject: [Buildroot] [git commit] package/wayland-protocols: bump to version
- 1.18
-Message-ID: <20200203101723.74D1B8869E@busybox.osuosl.org>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon,  3 Feb 2020 02:29:27 -0800
+Subject: [Buildroot] [PATCH 1/1] package/janus-gateway: bump version to 0.8.1
+Message-ID: <20200203102927.1007733-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4dc43069b8eadd6e92e990e74b9b13603658720f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Other changes:
+  - Update License hash which properly adds the OpenSSL exception.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Tested with Debian 8:
+
+br-arm-full [1/6]: OK
+br-arm-cortex-a9-glibc [2/6]:   OK
+ br-arm-cortex-m4-full [3/6]:   SKIPPED
+        br-x86-64-musl [4/6]:   OK
+    br-arm-full-static [5/6]:   SKIPPED
+          sourcery-arm [6/6]:   OK
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/wayland-protocols/wayland-protocols.hash | 8 ++++----
- package/wayland-protocols/wayland-protocols.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/janus-gateway/janus-gateway.hash | 4 ++--
+ package/janus-gateway/janus-gateway.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
-index d62a433dfd..a27ff9e52c 100644
---- a/package/wayland-protocols/wayland-protocols.hash
-+++ b/package/wayland-protocols/wayland-protocols.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2018-November/039662.html
--md5 55ddd5fdb02b73b9de9559aaec267315  wayland-protocols-1.17.tar.xz
--sha1 7d2569c838c776545e3eb1b1049b9c37178aae24  wayland-protocols-1.17.tar.xz
--sha256 df1319cf9705643aea9fd16f9056f4e5b2471bd10c0cc3713d4a4cdc23d6812f  wayland-protocols-1.17.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2019-July/040756.html
-+md5 af38f22d8e233c2f2e00ddc8dcc94694  wayland-protocols-1.18.tar.xz
-+sha1 aa2f132c082f3c790bd046283b3ef7ce3fb11370  wayland-protocols-1.18.tar.xz
-+sha256 3d73b7e7661763dc09d7d9107678400101ecff2b5b1e531674abfa81e04874b3  wayland-protocols-1.18.tar.xz
- sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
-diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-index 5ed4c3bc90..fbfa99558d 100644
---- a/package/wayland-protocols/wayland-protocols.mk
-+++ b/package/wayland-protocols/wayland-protocols.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index 784c43d252..b74ec2511f 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 d34868c259f388105fe16a5cd304a5684d45b1eddbe436293f4aa2178c0e4b6e janus-gateway-0.7.3.tar.gz
+-sha256 0a884af515b4593503f6f0c9b424db3945bd77eaa2644d25f45eb93a412b3c19 COPYING
++sha256 668758f06e2a158f83b89d17aad322959221fbeadcc5611c6f7a38ff76fd2896 janus-gateway-0.8.1.tar.gz
++sha256 91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6 COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index b0c01f3173..93091134cc 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--WAYLAND_PROTOCOLS_VERSION = 1.17
-+WAYLAND_PROTOCOLS_VERSION = 1.18
- WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
- WAYLAND_PROTOCOLS_LICENSE = MIT
+-JANUS_GATEWAY_VERSION = 0.7.3
++JANUS_GATEWAY_VERSION = 0.8.1
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
+-JANUS_GATEWAY_LICENSE = GPL-3.0
++JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
+ 
+ # ding-libs provides the ini_config library
+-- 
+2.24.1
