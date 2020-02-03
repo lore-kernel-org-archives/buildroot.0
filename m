@@ -1,72 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 15:28:19 +0100
-Subject: [Buildroot] [git commit] package/refpolicy: bump version to
- 2.20190609
-Message-ID: <20200203141720.87194888C9@busybox.osuosl.org>
+Date: Mon, 3 Feb 2020 15:29:01 +0100
+Subject: [Buildroot] [git commit] package/ninja: set minimum cmake version
+ to 3.10
+Message-ID: <20200203141825.81F50888CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f30a1434d0ce2726f222d6708d423aa57ce43f9d
+commit: https://git.buildroot.net/buildroot/commit/?id=c9cdc1f2b6eaf0d493c89750855c3cdde813802e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Other changes:
-  - Depend on host-python3, as python2 support was removed.
+The CMakeLists.txt file uses the CMP0091 which is an MSVC runtime
+library flag abstraction macro.
+
+Because we are not building ninja for Microsoft, it is safe to remove
+this macro and set the minimum version to 3.10.
+
+Fixes:
+http://autobuild.buildroot.net/results/992b34c5625ec733d8dce678aa7a7540c4768ca1
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/refpolicy/refpolicy.hash |  2 +-
- package/refpolicy/refpolicy.mk   | 13 ++++---------
- 2 files changed, 5 insertions(+), 10 deletions(-)
+ .../0001-set-minimum-cmake-version-to-3.10.patch   | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
-index 856d8cb8a2..0c77b626cc 100644
---- a/package/refpolicy/refpolicy.hash
-+++ b/package/refpolicy/refpolicy.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/SELinuxProject/refpolicy/releases
--sha256 ed620dc91c4e09eee6271b373f7c61a364a82ea57bd2dc86ca1f7075304e2843  refpolicy-2.20190201.tar.bz2
-+sha256 67bd1213e9d014ada15512028bb7f35ef6610c2d209cc5117b8577474aa6147f  refpolicy-2.20190609.tar.bz2
- 
- # Locally computed
- sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 66bddd1aee..d13be18f73 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--REFPOLICY_VERSION = 2.20190201
-+REFPOLICY_VERSION = 2.20190609
- REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
--REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20190201
-+REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20190609
- REFPOLICY_LICENSE = GPL-2.0
- REFPOLICY_LICENSE_FILES = COPYING
- REFPOLICY_INSTALL_STAGING = YES
-@@ -14,18 +14,13 @@ REFPOLICY_DEPENDENCIES = \
- 	host-m4 \
- 	host-checkpolicy \
- 	host-policycoreutils \
-+	host-python3 \
- 	host-setools \
- 	host-gawk
- 
--ifeq ($(BR2_PACKAGE_PYTHON3),y)
--REFPOLICY_DEPENDENCIES += host-python3
--else
--REFPOLICY_DEPENDENCIES += host-python
--endif
--
- # Cannot use multiple threads to build the reference policy
- REFPOLICY_MAKE = \
--	PYTHON=$(HOST_DIR)/usr/bin/python \
-+	PYTHON=$(HOST_DIR)/usr/bin/python3 \
- 	TEST_TOOLCHAIN=$(HOST_DIR) \
- 	$(TARGET_MAKE_ENV) \
- 	$(MAKE1)
+diff --git a/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch b/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
+new file mode 100644
+index 0000000000..d75b78fde9
+--- /dev/null
++++ b/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
+@@ -0,0 +1,30 @@
++From 4645f74eb668cc1cf876d1e9bef933591da7575c Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Mon, 3 Feb 2020 06:21:57 -0800
++Subject: [PATCH] set minimum cmake version to 3.10
++
++The CMakeLists.txt file uses the CMP0091 which is an MSVC runtime library flag
++abstraction macro.
++
++Because we are not building ninja for Microsoft, it is safe to remove this
++macro and set the minimum version to 3.10.
++
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ CMakeLists.txt | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 60fd8a1..a040e0b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,5 +1,4 @@
++-cmake_minimum_required(VERSION 3.15)
++-cmake_policy(SET CMP0091 NEW)
+++cmake_minimum_required(VERSION 3.10)
++ project(ninja)
++ 
++ if(CMAKE_BUILD_TYPE MATCHES "Release")
++-- 
++2.24.1
++
