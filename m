@@ -1,99 +1,108 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 3 Feb 2020 14:45:36 +0100
-Subject: [Buildroot] [git commit] package/v*: add license file hashes
-Message-ID: <20200203133730.8E5F288723@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/o*: add license file hashes
+Message-ID: <20200203133730.1B53788723@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d8553f5e4bf83934087c0fd279495db4e7526cb
+commit: https://git.buildroot.net/buildroot/commit/?id=10590fdb9301125d1147722b7fc6612248c17b72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/v4l2grab/v4l2grab.hash         | 3 ++-
- package/vala/vala.hash                 | 4 +++-
- package/vboot-utils/vboot-utils.hash   | 1 +
- package/vim/vim.hash                   | 3 ++-
- package/vo-aacenc/vo-aacenc.hash       | 1 +
- package/vorbis-tools/vorbis-tools.hash | 4 +++-
- package/vpnc/vpnc.hash                 | 3 ++-
- package/vsftpd/vsftpd.hash             | 4 +++-
- 8 files changed, 17 insertions(+), 6 deletions(-)
+ package/odhcploc/odhcploc.hash                   | 1 +
+ package/omap-u-boot-utils/omap-u-boot-utils.hash | 1 +
+ package/open-plc-utils/open-plc-utils.hash       | 3 ++-
+ package/openbox/openbox.hash                     | 1 +
+ package/openpgm/openpgm.hash                     | 3 ++-
+ package/openpowerlink/openpowerlink.hash         | 3 ++-
+ package/oracle-mysql/oracle-mysql.hash           | 4 +++-
+ package/ortp/ortp.hash                           | 1 +
+ package/owl-linux/owl-linux.hash                 | 1 +
+ 9 files changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/package/v4l2grab/v4l2grab.hash b/package/v4l2grab/v4l2grab.hash
-index a59c8af320..eba36b5c7a 100644
---- a/package/v4l2grab/v4l2grab.hash
-+++ b/package/v4l2grab/v4l2grab.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 9a8d0d1ca5ac9fb9f66e00300bb3265d156cf1cb67eb30f6e6637c83b0b507a1 v4l2grab-f8d8844d52387b3db7b8736f5e86156d9374f781.tar.gz
-+sha256  9a8d0d1ca5ac9fb9f66e00300bb3265d156cf1cb67eb30f6e6637c83b0b507a1  v4l2grab-f8d8844d52387b3db7b8736f5e86156d9374f781.tar.gz
-+sha256  7fa0d45fe86fda646fada21ecfa7672e951b01c521aecd358f586facd65fb5b3  LICENSE.md
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index 48212b22a4..7b3f0c9f76 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
-@@ -1,2 +1,4 @@
- # From https://download.gnome.org/sources/vala/0.34/vala-0.34.7.sha256sum
--sha256 1b2cb14f377d4c41fa3a86d3d01b93017015ce91b6714a85f27346073b4034fa  vala-0.34.7.tar.xz
-+sha256  1b2cb14f377d4c41fa3a86d3d01b93017015ce91b6714a85f27346073b4034fa  vala-0.34.7.tar.xz
-+# Locally computed
-+sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/vboot-utils/vboot-utils.hash b/package/vboot-utils/vboot-utils.hash
-index 4ff6c39807..e2ddf77734 100644
---- a/package/vboot-utils/vboot-utils.hash
-+++ b/package/vboot-utils/vboot-utils.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256  d95b64b1f1de4a3ffa5c2e446d7c8e92aa197aee10de24206b2ea2deb5a8b947  vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz
-+sha256  cb9dc8e96aedf9120b6757a60387db10f3c1a8e3fd97bb9d0f11327be5a7ed4d  LICENSE
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index d85bd7760c..6c68b1bc2b 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 4b7359a58a75c29d4a8fc7fcbb2ccab1d1dc0ede1c4c689b27cc049c17920278 vim-8.1.1929.tar.gz
-+sha256  4b7359a58a75c29d4a8fc7fcbb2ccab1d1dc0ede1c4c689b27cc049c17920278  vim-8.1.1929.tar.gz
-+sha256  70ab7f93197b29d47bfe4371774c8d904f7842d4843c257d21c29b7ac38d6406  README.txt
-diff --git a/package/vo-aacenc/vo-aacenc.hash b/package/vo-aacenc/vo-aacenc.hash
-index 822f8424a7..f0d352f82f 100644
---- a/package/vo-aacenc/vo-aacenc.hash
-+++ b/package/vo-aacenc/vo-aacenc.hash
+diff --git a/package/odhcploc/odhcploc.hash b/package/odhcploc/odhcploc.hash
+index 201339f97c..a1d9a5661f 100644
+--- a/package/odhcploc/odhcploc.hash
++++ b/package/odhcploc/odhcploc.hash
 @@ -1,2 +1,3 @@
  # Locally computed:
- sha256  e51a7477a359f18df7c4f82d195dab4e14e7414cbd48cf79cc195fc446850f36  vo-aacenc-0.1.3.tar.gz
-+sha256  8b3f1762349248d444ab9acbafe73941254e36e1064954da56bb9ddbd5873ddb  COPYING
-diff --git a/package/vorbis-tools/vorbis-tools.hash b/package/vorbis-tools/vorbis-tools.hash
-index 8f40eda9d2..76122be13f 100644
---- a/package/vorbis-tools/vorbis-tools.hash
-+++ b/package/vorbis-tools/vorbis-tools.hash
-@@ -1,2 +1,4 @@
- # From http://downloads.xiph.org/releases/vorbis/SHA256SUMS
--sha256	a389395baa43f8e5a796c99daf62397e435a7e73531c9f44d9084055a05d22bc	vorbis-tools-1.4.0.tar.gz
-+sha256  a389395baa43f8e5a796c99daf62397e435a7e73531c9f44d9084055a05d22bc  vorbis-tools-1.4.0.tar.gz
-+# Locally computed
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/vpnc/vpnc.hash b/package/vpnc/vpnc.hash
-index 98a98472e3..f512a77792 100644
---- a/package/vpnc/vpnc.hash
-+++ b/package/vpnc/vpnc.hash
+ sha256  b0360a3aece8a29d131531da7bfc36d57c30c6eed30ff1ea360f7cccea1d62d7  odhcploc-20111021.tar.gz
++sha256  092a5b7be2a7ff088be7ec99adf68629509911b66f304b8ea0c835cdc138d544  COPYING
+diff --git a/package/omap-u-boot-utils/omap-u-boot-utils.hash b/package/omap-u-boot-utils/omap-u-boot-utils.hash
+index 020c4405c9..e61bb812e0 100644
+--- a/package/omap-u-boot-utils/omap-u-boot-utils.hash
++++ b/package/omap-u-boot-utils/omap-u-boot-utils.hash
 @@ -1,2 +1,3 @@
- # locally computed hash
--sha256 c10a5c2c0813198ca2404dd36db380cdb6395b46338123b341775095cf61521d  vpnc-b1243d29e0c00312ead038b04a2cf5e2fa31d740.tar.gz
-+sha256  c10a5c2c0813198ca2404dd36db380cdb6395b46338123b341775095cf61521d  vpnc-b1243d29e0c00312ead038b04a2cf5e2fa31d740.tar.gz
-+sha256  bf3ec1bd1dec31a6ab8980bfd04569f506432f35ee01e88a3910847784bc2de1  COPYING
-diff --git a/package/vsftpd/vsftpd.hash b/package/vsftpd/vsftpd.hash
-index a0cd55b6d1..955cd30889 100644
---- a/package/vsftpd/vsftpd.hash
-+++ b/package/vsftpd/vsftpd.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	9d4d2bf6e6e2884852ba4e69e157a2cecd68c5a7635d66a3a8cf8d898c955ef7	vsftpd-3.0.3.tar.gz
-+sha256  9d4d2bf6e6e2884852ba4e69e157a2cecd68c5a7635d66a3a8cf8d898c955ef7  vsftpd-3.0.3.tar.gz
-+# Locally computed
-+sha256  c9cf119e2f9dbcf187fb805ba5aded105db26a693803636fb7228c98460ffbf2  COPYING
+ # locally computed
+ sha256  f9c2553efeff1289b2b964a266a0b4a03a377f84a14d0599a779f6e3d7b75d5f  omap-u-boot-utils-3f07426cddc0be9e24702e7aacc7574ddd7fba28.tar.gz
++sha256  1080312c3230fb7dd32fe807ed8c8cd11f4061bf1a2f065b651630bfe30157b2  COPYING
+diff --git a/package/open-plc-utils/open-plc-utils.hash b/package/open-plc-utils/open-plc-utils.hash
+index a76630df96..0c3b64b7e7 100644
+--- a/package/open-plc-utils/open-plc-utils.hash
++++ b/package/open-plc-utils/open-plc-utils.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 00cd7f71e03849b1d6a96ec040351b819481e2f420cfb246f0b0f02cde73e098 open-plc-utils-1be781d1ea81827e5f6c1a35961c65dd4d15472c.tar.gz
++sha256  00cd7f71e03849b1d6a96ec040351b819481e2f420cfb246f0b0f02cde73e098  open-plc-utils-1be781d1ea81827e5f6c1a35961c65dd4d15472c.tar.gz
++sha256  3137c632bbcec5e88b72dc13f4fe06ee184eea364fec8f7494bdfa57672ef921  LICENSE
+diff --git a/package/openbox/openbox.hash b/package/openbox/openbox.hash
+index a8696b3f87..c3f9953a99 100644
+--- a/package/openbox/openbox.hash
++++ b/package/openbox/openbox.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  abe75855cc5616554ffd47134ad15291fe37ebbebf1a80b69cbde9d670f0e26d  openbox-3.6.1.tar.xz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/openpgm/openpgm.hash b/package/openpgm/openpgm.hash
+index 581a223462..472053173c 100644
+--- a/package/openpgm/openpgm.hash
++++ b/package/openpgm/openpgm.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 acc1545fd8060aa66b17327110e2859e451cfc685ebd3b2211619728e3471b66  openpgm-5-2-122.tar.gz
++sha256  acc1545fd8060aa66b17327110e2859e451cfc685ebd3b2211619728e3471b66  openpgm-5-2-122.tar.gz
++sha256  4a7d4ec71fa60969399fd4caad64d5a3003fee2775445f271a5a36a8ae743a29  openpgm/pgm/LICENSE
+diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
+index 13b5e9351e..cd00f902fb 100644
+--- a/package/openpowerlink/openpowerlink.hash
++++ b/package/openpowerlink/openpowerlink.hash
+@@ -2,4 +2,5 @@
+ md5	04524d1b1f9946176dce0ccb0eecf537	openPOWERLINK_V2.7.1.tar.gz
+ sha1	4ee9c6e26bbc729fdbbb272155b093ffa0d9cefd	openPOWERLINK_V2.7.1.tar.gz
+ # sha256 locally computed
+-sha256	d0d65f4fb8f2ad209cf9575714f88f33168a1cf71e8f1801e1e1ac4df6a37ffd	openPOWERLINK_V2.7.1.tar.gz
++sha256  d0d65f4fb8f2ad209cf9575714f88f33168a1cf71e8f1801e1e1ac4df6a37ffd  openPOWERLINK_V2.7.1.tar.gz
++sha256  348e31e9e5094104463d58d33abd31049fdf209afbc12ea7abb7fd4b4a147429  license.md
+diff --git a/package/oracle-mysql/oracle-mysql.hash b/package/oracle-mysql/oracle-mysql.hash
+index bc309ec9a8..9d1c86854f 100644
+--- a/package/oracle-mysql/oracle-mysql.hash
++++ b/package/oracle-mysql/oracle-mysql.hash
+@@ -1,4 +1,6 @@
+ # From https://downloads.mariadb.com/archives/mysql-5.1/mysql-5.1.73.tar.gz.md5
+ md5	887f869bcc757957067b9198f707f32f	mysql-5.1.73.tar.gz
+ # Locally computed
+-sha256 05ebe21305408b24407d14b77607a3e5ffa3c300e03f1359d3066f301989dcb5  mysql-5.1.73.tar.gz
++sha256  05ebe21305408b24407d14b77607a3e5ffa3c300e03f1359d3066f301989dcb5  mysql-5.1.73.tar.gz
++sha256  cbf0dbf56528a629f4358a1339f981202f1a9a0d9542c092b03f486064ced2db  README
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/ortp/ortp.hash b/package/ortp/ortp.hash
+index c990d96eb3..93ec39297f 100644
+--- a/package/ortp/ortp.hash
++++ b/package/ortp/ortp.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  eb61a833ab3ad80978d7007411240f46e9b2d1034373b9d9dfaac88c1b6ec0af  ortp-0.27.0.tar.gz
++sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
+diff --git a/package/owl-linux/owl-linux.hash b/package/owl-linux/owl-linux.hash
+index 4a5133df47..555d2c2849 100644
+--- a/package/owl-linux/owl-linux.hash
++++ b/package/owl-linux/owl-linux.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+ sha256  a6b1bc6b3900954438a0f1a316bac5f74171125a88c80c35e137f4ca512dedc6  owl-linux-1.0.7.tar.gz
++sha256  092f1698328e0d4cc2d04ef1445207a9d278963284cd709fa88f1b8c9999264b  LICENSE
