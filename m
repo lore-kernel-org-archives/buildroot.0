@@ -1,19 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Feb 2020 21:17:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/minizip: bump to version 2.9.1
-In-Reply-To: <20200203181638.2123619-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 3 Feb 2020 19:16:38 +0100")
-References: <20200203181638.2123619-1-fontaine.fabrice@gmail.com>
-Message-ID: <87lfpj8lym.fsf@dell.be.48ers.dk>
+Date: Mon, 03 Feb 2020 21:17:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ptm2human: bump version to
+ d0b8b6be98
+In-Reply-To: <20200203181605.10019-1-juju@cotds.org> (Julien Olivain's message
+ of "Mon, 3 Feb 2020 19:16:05 +0100")
+References: <20200203181605.10019-1-juju@cotds.org>
+Message-ID: <87h8078ly6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Julien" == Julien Olivain <juju@cotds.org> writes:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Also drop upstreamed patch.
+ > Signed-off-by: Julien Olivain <juju@cotds.org>
 
 Committed, thanks.
 
