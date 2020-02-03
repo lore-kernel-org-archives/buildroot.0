@@ -1,16 +1,17 @@
 From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Mon, 3 Feb 2020 19:34:11 +0100
-Subject: [Buildroot] [PATCH 1/2] package/systemd: set machine id file
+Date: Mon, 3 Feb 2020 19:37:30 +0100
+Subject: [Buildroot] [PATCH 2/2] package/systemd: set systemd generators
  instalation as optional choice
-In-Reply-To: <29c3de2c-0add-0305-3c47-1e02658e9fac@grinn-global.com>
+In-Reply-To: <CAFvCimVSNPX+9wPs3RzhMFdfPjstZTxay4FVUvfVUwdKYVLwQA@mail.gmail.com>
 References: <20191117113345.159653-1-b.bilas@grinn-global.com>
- <0b8bd9be-3109-f998-5a44-cca063d1e207@mind.be>
- <CAFvCimUuDJUWzKPA-rX0rqcFNGgNARvD5gdLYqDjR+XVdbgUVA@mail.gmail.com>
- <6987e42b-89ad-cbf3-fd03-ee3ad74880b7@mind.be>
- <20191119094006.065afe96@windsurf.home>
- <CAFvCimWo84uxBqohUeG9zA_nD21AfCUp6nme_a8aBQ8sRShACg@mail.gmail.com>
- <29c3de2c-0add-0305-3c47-1e02658e9fac@grinn-global.com>
-Message-ID: <53507a28-495b-1b77-cc08-1e78afcd2d0b@grinn-global.com>
+ <20191117113345.159653-2-b.bilas@grinn-global.com>
+ <2c37cf4c-b2db-027b-1511-f0581a84fffe@mind.be>
+ <CAFvCimXzP4TeBhPGzFcDHtd4ZeXwVkf8AoPH3dgze8_o7RCe7g@mail.gmail.com>
+ <6c9fb6a2-aa2d-5179-5478-ef2530d6f1ee@grinn-global.com>
+ <CAFvCimWg5K3mEjR+--+0FPasxQaGdEYwpaj76tEfYTiXHO942Q@mail.gmail.com>
+ <2bfef11f-e9c1-133e-e9e2-0abd9526a016@grinn-global.com>
+ <CAFvCimVSNPX+9wPs3RzhMFdfPjstZTxay4FVUvfVUwdKYVLwQA@mail.gmail.com>
+Message-ID: <5c42b3da-6149-feff-2f21-520a88a397a9@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,152 +27,430 @@ out as an unthought idea.
 
 Best
 Bartek
-On 03.02.2020 19:28, Bartosz Bilas wrote:
-> Hello everyone,
+On 25.11.2019 18:02, J?r?my ROSEN wrote:
+> That's very weird... I'm absolutely certain that generators are 
+> (supposed to) run on config reload and every reboot.
+> The files they create are stored under /run, so they are destroyed on 
+> every reboot.
 >
-> let's reject this patch due to possible upstream solution as Jeremy 
-> mentioned.
+> Either you have some bug somewhere or you misdiagnosed something...
 >
-> Best
-> Bartek
-> On 19.11.2019 11:15, J?r?my ROSEN wrote:
->> As a side-note, I am working with upstream to have a better support 
->> of (3) : https://github.com/systemd/systemd/pull/14059
+> Do not that generators are run *very early* in the boot (before the 
+> unit files are even loaded) so stuff like journald are not around yet.
+> The best way to check if they are run might be to create a tiny 
+> generator that saves the current date and time in /run or something 
+> like that...
+>
+> Jeremy
+>
+>
+> Le?lun. 25 nov. 2019 ??17:55, Bartosz Bilas <b.bilas@grinn-global.com 
+> <mailto:b.bilas@grinn-global.com>> a ?crit?:
+>
+>     Hello,
+>
+>     On 25.11.2019 17:48, J?r?my ROSEN wrote:
+>>     I don't understand that remark...
 >>
->> I am a bit cautious about the new config option because it seems too 
->> "advanced" for a config option (for me, it's something that should be set
->> in a post-image or overlay) but that's open to discussion.
+>>     generators are run at every boot and also when "systemctl
+>>     daemon-reload" is called
+>>     They have nothing to do with the machine-id or the firstboot logic...
+>
+>     that's weird because when I was testing I noticed the generators
+>     were executing only once during the first new system instance
+>     boots up. I'll double-check that then.
+>
+>     Best
+>     Bartek
 >>
->> Please wait a little before applying this patch, if that's the way 
->> buildroot wants to go, so my pull-request above is solved and we might
->> backport it to ease our transition.
+>>     Le?lun. 25 nov. 2019 ??17:44, Bartosz Bilas
+>>     <b.bilas at grinn-global.com <mailto:b.bilas@grinn-global.com>> a
+>>     ?crit?:
 >>
->> Cheers
->> J?r?my
+>>         Hello guys,
 >>
->> Le?mar. 19 nov. 2019 ??09:40, Thomas Petazzoni 
->> <thomas.petazzoni at bootlin.com <mailto:thomas.petazzoni@bootlin.com>> 
->> a ?crit?:
+>>         On 17.11.2019 16:06, J?r?my ROSEN wrote:
+>>>         overall I'm not very keen on adding options for the various
+>>>         generators...
+>>>
+>>>         there are special case where you want to get rid of a
+>>>         specific generator, but it's really special and probably
+>>>         better done in a post-image script
+>>>
+>>>         detailed answers below
+>>>
+>>>         Le?dim. 17 nov. 2019 ??15:12, Arnout Vandecappelle
+>>>         <arnout at mind.be <mailto:arnout@mind.be>> a ?crit?:
+>>>
+>>>
+>>>
+>>>             On 17/11/2019 12:33, Bartosz Bilas wrote:
+>>>             > Allow the user to choose which systemd generator
+>>>             should be installed
+>>>             > on the target instead of installing all of them by
+>>>             default.
+>>>             > That's usefull in case of when someone is using
+>>>             firstboot condition
+>>>             ? ? ? ? ?useful
+>>>
+>>>             > and doesn't want to have e.g getty services created
+>>>             automatically during
+>>>             > system boot by systemd-getty-generator. Set them
+>>>             enabled by default to
+>>>             > keep compatibility with old builds.
+>>>             >
+>>>             > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com
+>>>             <mailto:b.bilas@grinn-global.com>>
+>>>             > ---
+>>>             >? package/systemd/Config.in? | 94
+>>>             ++++++++++++++++++++++++++++++++++++++
+>>>             >? package/systemd/systemd.mk <http://systemd.mk> | 56
+>>>             +++++++++++++++++++++++
+>>>             >? 2 files changed, 150 insertions(+)
+>>>             >
+>>>             > diff --git a/package/systemd/Config.in
+>>>             b/package/systemd/Config.in
+>>>             > index fadc1a32c8..052b69f4de 100644
+>>>             > --- a/package/systemd/Config.in
+>>>             > +++ b/package/systemd/Config.in
+>>>             > @@ -112,6 +112,100 @@ config
+>>>             BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
+>>>             >? ? ? ?default "x64"? ?if BR2_x86_64
+>>>             >? ? ? ?depends on BR2_PACKAGE_SYSTEMD_BOOT
+>>>             >
+>>>             > +menu systemd-generators
+>>>
+>>>             ?I don't like adding submenus. Instead, I'd just do it
+>>>             with a comment.
+>>>
+>>>             ?However, doesn't all this depend on
+>>>             BR2_PACKAGE_SYSTEMD_FIRSTBOOT? In that
+>>>             case, it could be done with a condition just under that
+>>>             option and the
+>>>             generators would be indented. Although, maybe they don't
+>>>             only get executed on
+>>>             firstboot...
+>>>
+>>>
+>>>         No... generators are a core feature of systemd, it's not
+>>>         related to first-boot in any way that I know
+>>>
+>>>             ?So, then I'd move this section to the end of Config.in,
+>>>             and use a comment
+>>>             instead of a menu.
+>>>
+>>>             > +config BR2_PACKAGE_SYSTEMD_DEBUG_GENERATOR
+>>>             > +? ? ?bool "systemd debug generator"
+>>>             > +? ? ?default y
+>>>
+>>>             ?Although this one should default y for backward
+>>>             compatibility, I'm of a mind to
+>>>             change the default here. It doesn't sound like something
+>>>             you want to have on by
+>>>             default.
+>>>
+>>>
+>>>         Despite its name, this is not a debug tool, but more of a
+>>>         rescue tool. It allows you to get a shell back on a
+>>>         very broken system, or to prevent a unit from starting from
+>>>         the kernel-command-line
+>>>
+>>>         This should really be here all the time except on very
+>>>         specific use-cases, I don't think making it optional
+>>>         is a good idea
+>>>
+>>>             > + ? ?help
+>>>             > +? ? ? ?systemd-debug-generator is for enabling a
+>>>             runtime debug
+>>>             > +? ? ? ?shell and masking specific units at boot.
+>>>             > +
+>>>             > +
+>>>             https://www.freedesktop.org/software/systemd/man/systemd-debug-generator.html
+>>>             > +
+>>>             > +config BR2_PACKAGE_SYSTEMD_FSTAB_GENERATOR
+>>>             > +? ? ?bool "systemd fstab generator"
+>>>             > +? ? ?default y
+>>>             > +? ? ?help
+>>>             > +? ? ? ?systemd-fstab-generator is a generator that
+>>>             translates
+>>>             > +? ? ? ?/etc/fstab into native systemd units early at boot
+>>>             > +? ? ? ?and when configuration of the system manager
+>>>             is reloaded.
+>>>             > +? ? ? ?This will instantiate mount and swap units as
+>>>             necessary.
+>>>
+>>>             ?Makes me realize that we probably shouldn't have an
+>>>             fstab in
+>>>             skeleton-init-systemd...
+>>>
+>>>         fstab is supported in systemd and it is not a deprecated
+>>>         feature.
+>>>         It is the recommended?way to automatically mount filesystems
+>>>         at boot.
+>>>
+>>>         this one is really fundamental, and should really not be
+>>>         removed. lots of things might break.
+>>>
+>>>         there are a couple of reasons to use .mount units instead
+>>>         (and the fstab-generator simply
+>>>         creates .mount units from /etc/fstab) but in the common case
+>>>         you are supposed to use /etc/fstab
+>>>
+>>>         so again, I don't think this is a good idea.
+>>>
+>>>
+>>>             > +
+>>>             > +
+>>>             https://www.freedesktop.org/software/systemd/man/systemd-fstab-generator.html
+>>>             > +
+>>>             > +config BR2_PACKAGE_SYSTEMD_GETTY_GENERATOR
+>>>             > +? ? ?bool "systemd getty generator"
+>>>             > +? ? ?default y
+>>>             > +? ? ?help
+>>>             > +? ? ? ?systemd-getty-generator is a generator that
+>>>             automatically
+>>>             > +? ? ? ?instantiates serial-getty at .service
+>>>             <mailto:serial-getty@.service> on the kernel
+>>>             > +? ? ? ?console(s), if they can function as ttys and
+>>>             are not
+>>>             > +? ? ? ?provided by the virtual console subsystem. It
+>>>             will also
+>>>             > +? ? ? ?instantiate serial-getty at .service
+>>>             <mailto:serial-getty@.service> instances for
+>>>             > +? ? ? ?virtualizer consoles, if execution in a
+>>>             virtualized
+>>>             > +? ? ? ?environment is detected.
+>>>             > +
+>>>             > +
+>>>             https://www.freedesktop.org/software/systemd/man/systemd-getty-generator.html
+>>>             > +
+>>>
+>>>
+>>>         That one could be made optional, since it's about
+>>>         runtime-detection of the right way to start a getty
+>>>         (i.e figure out if the console is a serial tty, a normal
+>>>         tty, or a vconsole) and in the embedded case
+>>>         we usually know what we have
+>>>
+>>>         note that it means manually enabling a service instead...
+>>>         which is probably harder
+>>>
+>>>         but otoh, it's typically very small and it does "the right
+>>>         thing" most of the time. So again, probably a
+>>>         better fit for a post-image script
+>>>
+>>>             > +config BR2_PACKAGE_SYSTEMD_GPT_AUTO_GENERATOR
+>>>             > +? ? ?bool "systemd gpt auto generator"
+>>>             > +? ? ?default y
+>>>
+>>>             ?For this one, I also doubt that we want to have this
+>>>             default on.
+>>>
+>>>
+>>>         That one can probably be made optional, yes... it saves 34k
+>>>         approximately
+>>>
+>>>             > + ? ?help
+>>>             > +? ? ? ?systemd-gpt-auto-generator is a unit generator
+>>>             that
+>>>             > +? ? ? ?automatically discovers root, /home/, /srv/,
+>>>             the EFI
+>>>             > +? ? ? ?System Partition, the Extended Boot Loader
+>>>             Partition and
+>>>             > +? ? ? ?swap partitions and creates mount and swap
+>>>             units for them,
+>>>             > +? ? ? ?based on the partition type GUIDs of GUID
+>>>             partition tables
+>>>             > +? ? ? ?(GPT). It implements the Discoverable Partitions
+>>>             > +? ? ? ?Specification.
+>>>             > +
+>>>             > +
+>>>             https://www.freedesktop.org/software/systemd/man/systemd-gpt-auto-generator.html
+>>>             > +
+>>>             > +config BR2_PACKAGE_SYSTEMD_RC_LOCAL_GENERATOR
+>>>             > +? ? ?bool "systemd rc local generator"
+>>>             > +? ? ?default y
+>>>
+>>>             ?Same here. It's pretty useless in Buildroot context.
+>>>
+>>>
+>>>         this one is already conditional to compiling sysV backward
+>>>         compatibility support...
+>>>         which i think is always on in buildroot (neet to
+>>>         double-check that)
+>>>
+>>>         I think having an option to enable/disable sysV support
+>>>         would be more generic and more useful
+>>>
+>>>             > + ? ?help
+>>>             > +? ? ? ?systemd-rc-local-generator is a generator that
+>>>             checks
+>>>             > +? ? ? ?whether /etc/rc.local exists and is executable,
+>>>             > +? ? ? ?and if it is pulls the rc-local.service unit
+>>>             into the
+>>>             > +? ? ? ?boot process.
+>>>             > +
+>>>             > +
+>>>             https://www.freedesktop.org/software/systemd/man/systemd-rc-local-generator.html
+>>>             > +
+>>>             > +config BR2_PACKAGE_SYSTEMD_RUN_GENERATOR
+>>>             > +? ? ?bool "systemd run generator"
+>>>             > +? ? ?default y
+>>>             > +? ? ?help
+>>>             > +? ? ? ?systemd-run-generator is for invoking commands
+>>>             specified
+>>>             > +? ? ? ?on the kernel command line as system service.
+>>>             > +
+>>>             > +
+>>>             https://www.freedesktop.org/software/systemd/man/systemd-run-generator.html
+>>>             > +
+>>>
+>>>
+>>>         This one could be optional... it's very usefull?for
+>>>         containers, less for full-blown systems
+>>>
+>>>             > +config BR2_PACKAGE_SYSTEMD_SYSTEM_UPDATE_GENERATOR
+>>>             > +? ? ?bool "systemd system update generator"
+>>>             > +? ? ?default y
+>>>             > +? ? ?help
+>>>             > +? ? ? ?systemd-system-update-generator is a generator
+>>>             that
+>>>             > +? ? ? ?automatically redirects the boot process to
+>>>             > +? ? ? ?system-update.target, if /system-update exists.
+>>>             > +
+>>>             > +
+>>>             https://www.freedesktop.org/software/systemd/man/systemd-system-update-generator.html
+>>>             > +
+>>>
+>>>
+>>>         this one could be optional
+>>>
+>>>             > +config BR2_PACKAGE_SYSTEMD_SYSV_GENERATOR
+>>>             > +? ? ?bool "systemd sysv generator"
+>>>             > +? ? ?default y
+>>>             > +? ? ?help
+>>>             > +? ? ? ?systemd-sysv-generator is a generator that
+>>>             creates wrapper
+>>>             > +? ? ? ?.service units for SysV init scripts in
+>>>             /etc/init.d/* at
+>>>             > +? ? ? ?boot and when configuration of the system
+>>>             manager is
+>>>             > +? ? ? ?reloaded. This will allow systemd(1) to
+>>>             support them
+>>>             > +? ? ? ?similarly to native units/
+>>>             > +
+>>>             > +
+>>>             https://www.freedesktop.org/software/systemd/man/systemd-system-update-generator.html
+>>>             > +
+>>>             > +endmenu
+>>>             > +
+>>>
+>>>
+>>>         Again, i'd rather have a generic way to disable the sysV
+>>>         support at compile time...
+>>>
+>>>
+>>>
+>>>         Ok so overall, I think most generators should stay in and
+>>>         only one or two should be made optional...
+>>>         Sorry for the negative feedback, but I don't like adding
+>>>         complex compilation options that are not supported
+>>>         upstream, especially when all generators together wait 272k
+>>>         on my debian
+>>         Until we don't decide about the installation machine-id file
+>>         that patch doesn't make any sense due to the impossibility to
+>>         run those generators at all.
 >>
->>     Hello,
+>>         Best
+>>         Bartek
+>>>
+>>>         The few that could legitimately be made optional are easy
+>>>         enough to remove in a post-image that I'm not sure
+>>>         it's worth the trouble
+>>>
+>>>         i'd?be ok for a patch doing that, though, but only for the
+>>>         few ones that are worth it...
+>>>
+>>>         Cheers
+>>>         Jeremy
+>>>
+>>>         -- 
+>>>         SMILE <http://www.smile.eu/>
+>>>
+>>>         20 rue des Jardins
+>>>         92600 Asni?res-sur-Seine
+>>>
+>>>         	
+>>>         *J?r?my ROSEN*
+>>>         Architecte technique
+>>>
+>>>         email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
+>>>         phone +33 6 88 25 87 42
+>>>         url http://www.smile.eu <http://www.smile.eu/>
+>>>
+>>>         Twitter <https://twitter.com/GroupeSmile> Facebook
+>>>         <https://www.facebook.com/smileopensource> LinkedIn
+>>>         <https://www.linkedin.com/company/smile> Github
+>>>         <https://github.com/Smile-SA>
+>>>
+>>>
+>>>         D?couvrez l?univers Smile, rendez-vous sur smile.eu
+>>>         <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
 >>
->>     On Sun, 17 Nov 2019 17:00:05 +0100
->>     Arnout Vandecappelle <arnout at mind.be <mailto:arnout@mind.be>> wrote:
 >>
->>     > > Could something like that be enough ? can we trust "remount RW" ?
->>     > > maybe "remount RW" should be renamed "create a RW filesystem"
->>     and enable various
->>     > > tweaks related to RO vs RW
->>     >
->>     >? As written above: no.
->>     >
->>     >? The problem is: we're not a distro.
 >>
->>     Agreed.
->>
->>     > We leave too much freedom for the user to
->>     > integrate things in various ways to be able to make assumptions
->>     about what is
->>     > the right way to do things. So, the only thing we can do is to
->>     give a decent
->>     > out-of-the-box experience, and let the user figure out how to
->>     tweak things -
->>     > possibly adding a config option for a common situation that is
->>     easily handled in
->>     > a generic way. The other thing we can do is to provide
->>     documentation about the
->>     > proper way to integrate things in different scenarios.
->>     >
->>     >? I'm starting to agree that this option is maybe not that great.
->>
->>     But I would in fact not come to the same conclusion. Having this
->>     empty
->>     machine-id file is useless and causes problems when the filesystem is
->>     R/W. So for the sake of supporting the R/O case (for which we create
->>     this empty machine-id file), we make the R/W experience less good.
->>
->>     So I'd say that the right approach is to not do too much
->>     integration by
->>     precisely having the option proposed by Bartosz, with many the tweak
->>     that it should default y if rootfs is really, and default disable
->>     otherwise, but while still being an option that the user can tweak,
->>     because as you rightfully explained, the RW/RO remount option is
->>     just a
->>     clue, not a definitive answer on whether /etc is writable or not.
->>
->>     To me, having this option matches the Buildroot way: we are not a
->>     distro, we don't enforce how the system should work, so we
->>     provide the
->>     appropriate options, while making sure the option has the most
->>     sensible
->>     default values.
->>
->>     Generally speaking, Buildroot kind of supports "out of the box"
->>     two use
->>     cases:
->>
->>     ?(1) The root filesystem is completely read-write.
->>
->>     ?(2) The root filesystem is completely read-only, and all files
->>     that need
->>     ? ? ?to be written are stored in tmpfs, and therefore are volatile.
->>
->>     I.e, we do not have any explicit support for what is I guess a much
->>     more common use case than (2):
->>
->>     ?(3) The root filesystem is completely read-only, but there is
->>     another
->>     ? ? ?read-write partition somewhere that stores the information
->>     that can
->>     ? ? ?change but needs to be persistent (user configuration, etc.)
->>
->>     Since we don't have explicit support for (3), there is no way we can
->>     properly support machine-id and ConditionFirstBoot in the case of
->>     (2),
->>     because there's nowhere we can store /etc/machine-id.
->>
->>     So the best we can do is in the case of (2), default to creating an
->>     empty /etc/machine-id, while giving the possibility for the user
->>     implementing (3) in its own way, to disable the creation of the empty
->>     /etc/machine-id.
->>
->>     Best regards,
->>
->>     Thomas
 >>     -- 
->>     Thomas Petazzoni, CTO, Bootlin
->>     Embedded Linux and Kernel engineering
->>     https://bootlin.com
+>>     SMILE <http://www.smile.eu/>
+>>
+>>     20 rue des Jardins
+>>     92600 Asni?res-sur-Seine
+>>
+>>     	
+>>     *J?r?my ROSEN*
+>>     Architecte technique
+>>
+>>     email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
+>>     phone? +33 6 88 25 87 42
+>>     url http://www.smile.eu <http://www.smile.eu/>
+>>
+>>     Twitter <https://twitter.com/GroupeSmile> Facebook
+>>     <https://www.facebook.com/smileopensource> LinkedIn
+>>     <https://www.linkedin.com/company/smile> Github
+>>     <https://github.com/Smile-SA>
 >>
 >>
+>>     D?couvrez l?univers Smile, rendez-vous sur smile.eu
+>>     <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
 >>
->> -- 
->> SMILE <http://www.smile.eu/>
->>
->> 20 rue des Jardins
->> 92600 Asni?res-sur-Seine
->>
->> 	
->> *J?r?my ROSEN*
->> Architecte technique
->>
->> email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
->> phone? +33 6 88 25 87 42
->> url http://www.smile.eu <http://www.smile.eu/>
->>
->> Twitter <https://twitter.com/GroupeSmile> Facebook 
->> <https://www.facebook.com/smileopensource> LinkedIn 
->> <https://www.linkedin.com/company/smile> Github 
->> <https://github.com/Smile-SA>
->>
->>
->> D?couvrez l?univers Smile, rendez-vous sur smile.eu 
->> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+>>     _______________________________________________
+>>     buildroot mailing list
+>>     buildroot at busybox.net  <mailto:buildroot@busybox.net>
+>>     http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+> -- 
+> SMILE <http://www.smile.eu/>
+>
+> 20 rue des Jardins
+> 92600 Asni?res-sur-Seine
+>
+> 	
+> *J?r?my ROSEN*
+> Architecte technique
+>
+> email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
+> phone? +33 6 88 25 87 42
+> url http://www.smile.eu <http://www.smile.eu/>
+>
+> Twitter <https://twitter.com/GroupeSmile> Facebook 
+> <https://www.facebook.com/smileopensource> LinkedIn 
+> <https://www.linkedin.com/company/smile> Github 
+> <https://github.com/Smile-SA>
+>
+>
+> D?couvrez l?univers Smile, rendez-vous sur smile.eu 
+> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200203/e21e22b7/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200203/b959925e/attachment.html>
