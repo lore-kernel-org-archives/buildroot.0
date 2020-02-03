@@ -1,50 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  3 Feb 2020 21:20:17 +0100
-Subject: [Buildroot] [PATCH 0/2] uboot: needs make >= 4.0 (branch yem/fixes)
-Message-ID: <cover.1580761209.git.yann.morin.1998@free.fr>
+Date: Mon,  3 Feb 2020 21:20:19 +0100
+Subject: [Buildroot] [PATCH 1/2] package/uboot-tools: needs make >= 4.0
+In-Reply-To: <cover.1580761209.git.yann.morin.1998@free.fr>
+References: <cover.1580761209.git.yann.morin.1998@free.fr>
+Message-ID: <db7a911e37b838e8b96707502259828e011cbb36.1580761209.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Starting with 2020.01, uboot started using the 'undefine' make
+directive, which was only introduced with make 4.0.
 
-This 2-patch series fixes the build for uboot >= 2020.01 and uboot-tools
-when the host make is older than 4.0 (in practice, is 3.81).
+So, use the existing $(BR2_MAKE_HOST_DEPENDENCY) and $(BR2_MAKE),
+both of each will ensure that we do use a make that is at least 4.0.
 
+Fixes:
+    http://autobuild.buildroot.org/results/c97/c976ed5eb7760cba192d22b3f1e7460596fd82dd/
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit b6e0aaa5441275675ea953b5d980ca7d6df918e1
-
-  package/fail2ban: add conditional python-systemd dependancy (2020-02-03 18:24:27 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 214c0588eab33158185f6199444bd0b6dbc577ba
-
-  boot/uboot: needs make >= 4.0 (2020-02-03 21:19:39 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/uboot-tools: needs make >= 4.0
-      boot/uboot: needs make >= 4.0
-
- boot/uboot/uboot.mk                | 6 ++++--
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
  package/uboot-tools/uboot-tools.mk | 9 ++++++---
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 1f0bac5bf7..98ac71911b 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -11,6 +11,9 @@ UBOOT_TOOLS_LICENSE = GPL-2.0+
+ UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
+ UBOOT_TOOLS_INSTALL_STAGING = YES
+ 
++UBOOT_TOOLS_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
++HOST_UBOOT_TOOLS_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
++
+ define UBOOT_TOOLS_CONFIGURE_CMDS
+ 	mkdir -p $(@D)/include/config
+ 	touch $(@D)/include/config/auto.conf
+@@ -39,9 +42,9 @@ endef
+ endif
+ 
+ define UBOOT_TOOLS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
++	$(TARGET_MAKE_ENV) $(BR2_MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
+ 		CROSS_BUILD_TOOLS=y tools-only
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
++	$(TARGET_MAKE_ENV) $(BR2_MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
+ 		envtools no-dot-config-targets=envtools
+ endef
+ 
+@@ -103,7 +106,7 @@ HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
+ endif
+ 
+ define HOST_UBOOT_TOOLS_BUILD_CMDS
+-	$(MAKE1) -C $(@D) $(HOST_UBOOT_TOOLS_MAKE_OPTS) tools-only
++	$(BR2_MAKE1) -C $(@D) $(HOST_UBOOT_TOOLS_MAKE_OPTS) tools-only
+ endef
+ 
+ define HOST_UBOOT_TOOLS_INSTALL_CMDS
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
