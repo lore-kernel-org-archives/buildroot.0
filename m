@@ -1,76 +1,63 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 3 Feb 2020 11:35:01 -0600
-Subject: [Buildroot] [PATCH v2] packagersyslog: enable options when
- libcurl is enabled
-In-Reply-To: <87a761ni4l.fsf@dell.be.48ers.dk>
-References: <20191104211203.52912-1-matthew.weber@rockwellcollins.com>
- <87a761ni4l.fsf@dell.be.48ers.dk>
-Message-ID: <CANQCQpYkxiByUsrfQbDHDd0WpAsTeiggJXJpJqNp6_N=M1ud5A@mail.gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Mon, 3 Feb 2020 19:10:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jack2: bump to version 1.9.14
+In-Reply-To: <87imkn1t9s.fsf@dell.be.48ers.dk>
+References: <20200203165734.25937-1-titouan.christophe@railnova.eu>
+ <87imkn1t9s.fsf@dell.be.48ers.dk>
+Message-ID: <2447bd5a-a07c-980c-5074-b63150cfde7f@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Hello Peter and all,
 
-On Sun, Feb 2, 2020 at 9:07 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
->
->  > Following the bump to 8.1910.0, items requiring libcurl were
->  > disabled by default. This patch selectively enables options
->  > which depend on libcurl when that package is enabled in the
->  > build.
->
->  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->  > ---
->  > Changes
->  > v1 -> v2
->  > [Thomas
->  >  - Flipped libcurl conditional and name of this patchset to rsyslog
->  > ---
->  >  package/rsyslog/rsyslog.mk | 12 +++++++++++-
->  >  1 file changed, 11 insertions(+), 1 deletion(-)
->
->  > diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
->  > index 5bd6b59ba3..d5a88b19d3 100644
->  > --- a/package/rsyslog/rsyslog.mk
->  > +++ b/package/rsyslog/rsyslog.mk
->  > @@ -17,7 +17,16 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
->  >  RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
->  >      $(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
->
->  > -# Disable items requiring libcurl
->  > +ifeq ($(BR2_PACKAGE_LIBCURL),y)
->  > +RSYSLOG_DEPENDENCIES += libcurl
->  > +RSYSLOG_CONF_OPTS += --enable-elasticsearch \
->  > +    --enable-clickhouse \
->  > +    --enable-omhttp \
->  > +    --enable-fmhttp \
->  > +    --enable-imdocker \
->  > +    --enable-omhttpfs \
->  > +    --enable-mmkubernetes
->
->  I was about to apply this, but it fails to build here (a config with
->  just curl and rsyslog):
->
-> checking for CURL... yes
-> checking for LIBLOGNORM... no
-> configure: error: Package requirements (lognorm >= 2.0.3) were not met:
->
-> Package 'lognorm', required by 'virtual:world', not found
->
-> Consider adjusting the PKG_CONFIG_PATH environment variable if you
-> installed software in a non-standard prefix.
->
-> Alternatively, you may set the environment variables LIBLOGNORM_CFLAGS
-> and LIBLOGNORM_LIBS to avoid the need to call pkg-config.
-> See the pkg-config man page for more details.
-> make[1]: *** [package/pkg-generic.mk:250: /home/peko/source/buildroot/output-rsyslog/build/rsyslog-8.1911.0/.stamp_configured] Error 1
->
-> Care to take a look?
+On 2/3/20 6:21 PM, Peter Korsgaard wrote:
+>>>>>> "titouan" == titouan christophe <titouan.christophe@railnova.eu> writes:
+> 
+>   > From: Titouan Christophe <titouan.christophe@railnova.eu>
+>   > Amongst other things, the jack2 waf script has been made
+>   > compatible with Python3 in this latest release, which makes
+>   > it possible to be built on py3
+> 
+> This presumably doesn't help much as long as it has host-python in its
+> _DEPENDENCIES and our pkg-waf.mk hard codes python2?
 
-I'll take a look.
+I actually came up with this version bump while testing to switch the 
+waf-package infrastructure to python3 [1], and in this context jack2 
+1.9.12 raised some errors from the waf script.
 
-Matt
+I'll look if it's possible to remove that host-python dependency as well 
+later tonight or tomorrow.
+
+> 
+> Still, bumping the version is fine - So committed, thanks.
+> 
+>   
+>   > -JACK2_VERSION = 1.9.12
+>   > +JACK2_VERSION = 1.9.14
+>   >  JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+>   >  JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+>   >  JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
+> 
+> So if it can
+
+Yes we can :-)
+
+> 
+>   > --
+>   > 2.24.1
+> 
+>   > _______________________________________________
+>   > buildroot mailing list
+>   > buildroot at busybox.net
+>   > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
+[1] http://paste.awesom.eu/Ypoa
+
+Kind regards,
+
+Titouan
