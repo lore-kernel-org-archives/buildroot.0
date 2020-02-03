@@ -1,30 +1,29 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Mon,  3 Feb 2020 13:57:26 +0000
-Subject: [Buildroot] [PATCH 1/1] package/fis: remove package
-Message-ID: <20200203135726.10872-1-mark@dibsco.co.uk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Feb 2020 15:09:22 +0100
+Subject: [Buildroot] [git commit] package/fis: remove package
+Message-ID: <20200203135906.8F223888BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ce142f2922361b60ca014cd049921dc136093092
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Remove fis as RedBoot hasn't been updated for over 10 years.
 
 Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  Config.in.legacy                   |   6 +
  package/Config.in                  |   1 -
- package/fis/0001-checksum.patch    | 274 -----------------------------
+ package/fis/0001-checksum.patch    | 274 -------------------------------------
  package/fis/0003-list_output.patch |  21 ---
  package/fis/0004-sorted_list.patch |  30 ----
  package/fis/Config.in              |   4 -
  package/fis/fis.mk                 |  22 ---
  7 files changed, 6 insertions(+), 352 deletions(-)
- delete mode 100644 package/fis/0001-checksum.patch
- delete mode 100644 package/fis/0003-list_output.patch
- delete mode 100644 package/fis/0004-sorted_list.patch
- delete mode 100644 package/fis/Config.in
- delete mode 100644 package/fis/fis.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
 index 4b84116e0c..5fd086b499 100644
@@ -436,5 +435,3 @@ index 6db06bf74a..0000000000
 -endef
 -
 -$(eval $(generic-package))
--- 
-2.20.1
