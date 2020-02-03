@@ -1,58 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Feb 2020 19:44:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jack2: bump to version 1.9.14
-In-Reply-To: <2447bd5a-a07c-980c-5074-b63150cfde7f@railnova.eu> (Titouan
- Christophe's message of "Mon, 3 Feb 2020 19:10:05 +0100")
-References: <20200203165734.25937-1-titouan.christophe@railnova.eu>
- <87imkn1t9s.fsf@dell.be.48ers.dk>
- <2447bd5a-a07c-980c-5074-b63150cfde7f@railnova.eu>
-Message-ID: <87tv478q9y.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Feb 2020 19:46:38 +0100
+Subject: [Buildroot] [PATCH 1/5] package/refpolicy: remove dependency on
+ policycoreutils
+In-Reply-To: <20200203132951.1331252-1-aduskett@gmail.com>
+References: <20200203132951.1331252-1-aduskett@gmail.com>
+Message-ID: <20200203194638.4581b6d9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+On Mon,  3 Feb 2020 05:29:47 -0800
+Adam Duskett <aduskett@gmail.com> wrote:
 
- > Hello Peter and all,
- > On 2/3/20 6:21 PM, Peter Korsgaard wrote:
- >>>>>>> "titouan" == titouan christophe <titouan.christophe@railnova.eu> writes:
- >> 
- >> > From: Titouan Christophe <titouan.christophe@railnova.eu>
- >> > Amongst other things, the jack2 waf script has been made
- >> > compatible with Python3 in this latest release, which makes
- >> > it possible to be built on py3
- >> 
- >> This presumably doesn't help much as long as it has host-python in its
- >> _DEPENDENCIES and our pkg-waf.mk hard codes python2?
+> Only host-policycoreutils is needed to build refpolicy. Remove the uneeded
+> target package.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
- > I actually came up with this version bump while testing to switch the
- > waf-package infrastructure to python3 [1], and in this context jack2
- > 1.9.12 raised some errors from the waf script.
+So, this commit had the side effect of causing a build issue:
 
- > I'll look if it's possible to remove that host-python dependency as
- > well later tonight or tomorrow.
+  http://autobuild.buildroot.net/results/5d8/5d8fda7c488a03c14942d87467d501acd633d24a/build-end.log
 
-Great, thanks ;)
+this is due to policycoreutils selecting BR2_PACKAGE_BUSYBOX_SELINUX
+when BR2_PACKAGE_BUSYBOX, which in turns causes busybox to select
+BR2_PACKAGE_LIBSELINUX and depend on it from a makefile point of view.
+But since we dropped the "depends on" of policycoreutils, we now
+violate the "depends on" of libselinux.
 
- >> 
- >> Still, bumping the version is fine - So committed, thanks.
- >> 
- >> > -JACK2_VERSION = 1.9.12
- >> > +JACK2_VERSION = 1.9.14
- >> >  JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
- >> >  JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
- >> >  JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
- >> 
- >> So if it can
+However, it probably isn't the best idea of have refpolicy take care of
+forcing Busybox's SELinux support, so I've committed a change to
+Busybox that makes it enable by default its SELinux support when
+libselinux is enabled:
 
- > Yes we can :-)
+  https://git.buildroot.org/buildroot/commit/?id=bc2e241bce5c1f70e93d22aceee180ee26db0e77
 
-Heh - I was going to write something about this host-python
-dependency. I guess it comes from the use of waf, but it seems redundant
-as pkg-waf.mk already pulls in host-python (or perhaps host-python3 in
-the future).
+Best regards,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
