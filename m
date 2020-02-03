@@ -1,40 +1,55 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon,  3 Feb 2020 14:50:22 +0100
-Subject: [Buildroot] [PATCH] package/glibc/riscv32: update LICENSE file hash
-Message-ID: <20200203135022.91206-1-romain.naour@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Feb 2020 14:54:07 +0100
+Subject: [Buildroot] [PATCH 00/32] add a huge bunch of license file
+ hashes
+In-Reply-To: <20200202194321.16321-1-heiko.thiery@gmail.com>
+References: <20200202194321.16321-1-heiko.thiery@gmail.com>
+Message-ID: <20200203135407.GC3299@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The LICENSE file hash wasn't changed with the last glibc bump for riscv32 [1].
-The change is due to upstream LICENSE file update between glibc 2.26 and 2.29
-[2] [3].
+Heiko, All,
 
-This issue was discovered by toolchain-builder [4].
+On 2020-02-02 20:42 +0100, Heiko Thiery spake thusly:
+> This series add missing entries in the hash files for the license files.
+> The entries are generated semi-automatically and manually recheck.
 
-[1] a4958567284026f979f6e0056a5b98bedd77e88f
-[2] https://sourceware.org/git/?p=glibc.git;a=commit;h=7f9f1ecb710eac4d65bb02785ddf288cac098323
-[3] https://sourceware.org/git/?p=glibc.git;a=commit;h=5a357506659f9a00fcf5bc9c5d8fc676175c89a7
-[4] https://gitlab.com/kubu93/toolchains-builder/-/jobs/423826546
+Thank you very much for this! :-)
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Alistair Francis <alistair@alistair23.me>
-Cc: Mark Corbin <mark@dibsco.co.uk>
----
- .../glibc/06983fe52cfe8e4779035c27e8cc5d2caab31531/glibc.hash   | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I've now applied the whole series, and it dd pass muster, except for
+those few exceptions:
 
-diff --git a/package/glibc/06983fe52cfe8e4779035c27e8cc5d2caab31531/glibc.hash b/package/glibc/06983fe52cfe8e4779035c27e8cc5d2caab31531/glibc.hash
-index 09ddc7be72..ce378c0bd1 100644
---- a/package/glibc/06983fe52cfe8e4779035c27e8cc5d2caab31531/glibc.hash
-+++ b/package/glibc/06983fe52cfe8e4779035c27e8cc5d2caab31531/glibc.hash
-@@ -4,4 +4,4 @@ sha256 703877c0df77fce00719fe55cc62b07bb8d5f44fdb704bbb1b0bf2cf38afe10a  glibc-0
- # Hashes for license files
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LIB
--sha256 61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431 LICENSES
-+sha256 35bdb41dc0bcb10702ddacbd51ec4c0fe6fb3129f734e8c85fc02e4d3eb0ce3f LICENSES
+  - dropped because of conflicts:
+    - kodi-audioencoder-vorbis
+    - kodi-screensaver-matrixtrails
+    - kodi-screensaver-biogenesis
+    - kodi-screensaver-pyro
+    - mii-diag
+
+  - dropped because already handled:
+    - rt-test
+
+  - fixed:
+    - libplist
+    - weston
+
+  - new not covered:
+    - weston-imx
+
+Can you have a look at those, please?
+
+Thanks again! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.24.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
