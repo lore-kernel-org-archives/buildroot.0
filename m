@@ -1,184 +1,204 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 3 Feb 2020 14:44:52 +0100
-Subject: [Buildroot] [git commit] package/d*: add license file hashes
-Message-ID: <20200203133729.7B32188723@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/f*: add license file hashes
+Message-ID: <20200203133729.8D77D88723@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46f16d3f9fd13af06e30874a6a8bd8b790f9d239
+commit: https://git.buildroot.net/buildroot/commit/?id=c8024f012197a6d763a4c1410438d6bc16fa0fc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dawgdic/dawgdic.hash                     | 3 ++-
- package/dbus-triggerd/dbus-triggerd.hash         | 3 ++-
- package/dc3dd/dc3dd.hash                         | 3 ++-
- package/dejavu/dejavu.hash                       | 5 ++++-
- package/dillo/dillo.hash                         | 3 ++-
- package/directfb-examples/directfb-examples.hash | 3 ++-
- package/directfb/directfb.hash                   | 3 ++-
- package/dmalloc/dmalloc.hash                     | 3 ++-
- package/dmraid/dmraid.hash                       | 3 +++
- package/docker/docker.hash                       | 4 +++-
- package/dstat/dstat.hash                         | 3 ++-
- package/dtach/dtach.hash                         | 1 +
- package/duma/duma.hash                           | 2 ++
- package/dvbsnoop/dvbsnoop.hash                   | 1 +
- package/dvdauthor/dvdauthor.hash                 | 3 ++-
- package/dvdrw-tools/dvdrw-tools.hash             | 3 ++-
- 16 files changed, 34 insertions(+), 12 deletions(-)
+ package/faifa/faifa.hash                         | 1 +
+ package/fastd/fastd.hash                         | 1 +
+ package/fb-test-app/fb-test-app.hash             | 3 ++-
+ package/fbgrab/fbgrab.hash                       | 3 ++-
+ package/fbterm/fbterm.hash                       | 2 ++
+ package/fbv/fbv.hash                             | 3 ++-
+ package/fcgiwrap/fcgiwrap.hash                   | 3 ++-
+ package/fconfig/fconfig.hash                     | 3 ++-
+ package/ficl/ficl.hash                           | 1 +
+ package/filemq/filemq.hash                       | 3 ++-
+ package/flann/flann.hash                         | 3 ++-
+ package/flashbench/flashbench.hash               | 3 ++-
+ package/fluxbox/fluxbox.hash                     | 1 +
+ package/fmc/fmc.hash                             | 3 ++-
+ package/fmlib/fmlib.hash                         | 3 ++-
+ package/fmtools/fmtools.hash                     | 4 +++-
+ package/freeradius-client/freeradius-client.hash | 1 +
+ package/fswebcam/fswebcam.hash                   | 3 ++-
+ package/fxload/fxload.hash                       | 1 +
+ 19 files changed, 33 insertions(+), 12 deletions(-)
 
-diff --git a/package/dawgdic/dawgdic.hash b/package/dawgdic/dawgdic.hash
-index da03f0b860..ecf3cf9546 100644
---- a/package/dawgdic/dawgdic.hash
-+++ b/package/dawgdic/dawgdic.hash
+diff --git a/package/faifa/faifa.hash b/package/faifa/faifa.hash
+index 5d45e5db9d..658dae4a71 100644
+--- a/package/faifa/faifa.hash
++++ b/package/faifa/faifa.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+ sha256  6eada81f3d21f80b5848338b627784981064d728f8e377e5cf973d31640d4489  faifa-0.1.tar.gz
++sha256  9b62e4601b2b9cd5719a393e88ed71a8304048862502db765ed9d6ff8cf38c5e  COPYING
+diff --git a/package/fastd/fastd.hash b/package/fastd/fastd.hash
+index 3c6a99e986..accdf087eb 100644
+--- a/package/fastd/fastd.hash
++++ b/package/fastd/fastd.hash
+@@ -2,3 +2,4 @@
+ md5     e53236d3049f64f7955ad9556da099eb                                  fastd-18.tar.xz
+ # computed locally
+ sha256  714ff09d7bd75f79783f744f6f8c5af2fe456c8cf876feaa704c205a73e043c9  fastd-18.tar.xz
++sha256  c3095dd0adffc03eaeba9c7cd81f06962ef4797a836e49468b3dccc2802ff904  COPYRIGHT
+diff --git a/package/fb-test-app/fb-test-app.hash b/package/fb-test-app/fb-test-app.hash
+index 7f7375316c..06611db799 100644
+--- a/package/fb-test-app/fb-test-app.hash
++++ b/package/fb-test-app/fb-test-app.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256 54622a3e79ff3ad2c01a830ec52b997b42ead468b18af5acebab3a4ff32a5ad6  dawgdic-16ac537ba9883ff01b63b6d1fdc3072150c68fee.tar.gz
-+sha256  54622a3e79ff3ad2c01a830ec52b997b42ead468b18af5acebab3a4ff32a5ad6  dawgdic-16ac537ba9883ff01b63b6d1fdc3072150c68fee.tar.gz
-+sha256  3059f68686f1c5bc6ed0e9db415fc257c4e7618b6ac58ecce83986eb8a7cf501  COPYING
-diff --git a/package/dbus-triggerd/dbus-triggerd.hash b/package/dbus-triggerd/dbus-triggerd.hash
-index aa4ad97914..b7ed89abf7 100644
---- a/package/dbus-triggerd/dbus-triggerd.hash
-+++ b/package/dbus-triggerd/dbus-triggerd.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 3c6d865427bf1b93b16323c796ed6957ce6b2b6fd53f518b1b082d03b939102c  dbus-triggerd-ba3dbec805cb707c94c54de21666bf18b79bcc09.tar.gz
-+sha256  3c6d865427bf1b93b16323c796ed6957ce6b2b6fd53f518b1b082d03b939102c  dbus-triggerd-ba3dbec805cb707c94c54de21666bf18b79bcc09.tar.gz
-+sha256  30d135650639af9019633690fc1aecbfc150aeeef9446347d4286a58338d10b0  dbus-triggerd.c
-diff --git a/package/dc3dd/dc3dd.hash b/package/dc3dd/dc3dd.hash
-index 5490d8d3f7..670bffa7a7 100644
---- a/package/dc3dd/dc3dd.hash
-+++ b/package/dc3dd/dc3dd.hash
-@@ -1,4 +1,5 @@
- # From https://sourceforge.net/projects/dc3dd/files/dc3dd/7.2/
- sha1 1bfe81a921a8473a6ecb46f328ecaab761afb55d dc3dd-7.2.641.tar.xz
- # Locally computed
--sha256 7f50aadc38649845ab11014d11013928411c9d2128c941e9630939d4c28cae6d  dc3dd-7.2.641.tar.xz
-+sha256  7f50aadc38649845ab11014d11013928411c9d2128c941e9630939d4c28cae6d  dc3dd-7.2.641.tar.xz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/dejavu/dejavu.hash b/package/dejavu/dejavu.hash
-index db7365a1c3..def64cbe87 100644
---- a/package/dejavu/dejavu.hash
-+++ b/package/dejavu/dejavu.hash
-@@ -1,2 +1,5 @@
- # From https://dejavu-fonts.github.io/Download.html
--sha256 fa9ca4d13871dd122f61258a80d01751d603b4d3ee14095d65453b4e846e17d7  dejavu-fonts-ttf-2.37.tar.bz2
-+sha256  fa9ca4d13871dd122f61258a80d01751d603b4d3ee14095d65453b4e846e17d7  dejavu-fonts-ttf-2.37.tar.bz2
-+
-+# locally computed
-+sha256  7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93  LICENSE
-diff --git a/package/dillo/dillo.hash b/package/dillo/dillo.hash
-index cab0b14abd..fa46702a63 100644
---- a/package/dillo/dillo.hash
-+++ b/package/dillo/dillo.hash
+-sha256 6baf6b45968d0bb9a5527c6c4bf18661e9f9eb9be973a6d1952c38168c90d58f  fb-test-app-rosetta-1.1.0.tar.gz
++sha256  6baf6b45968d0bb9a5527c6c4bf18661e9f9eb9be973a6d1952c38168c90d58f  fb-test-app-rosetta-1.1.0.tar.gz
++sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
+index de3bc1ffd7..386d8fb5cb 100644
+--- a/package/fbgrab/fbgrab.hash
++++ b/package/fbgrab/fbgrab.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256 db1be16c1c5842ebe07b419aa7c6ef11a45603a75df2877f99635f4f8345148b dillo-3.0.5.tar.bz2
-+sha256  db1be16c1c5842ebe07b419aa7c6ef11a45603a75df2877f99635f4f8345148b  dillo-3.0.5.tar.bz2
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/directfb-examples/directfb-examples.hash b/package/directfb-examples/directfb-examples.hash
-index 9d59cfef78..9c7f7c25a7 100644
---- a/package/directfb-examples/directfb-examples.hash
-+++ b/package/directfb-examples/directfb-examples.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 9a2104cc4da8123c8371813551b66b943198979f745cbebc034bb5e10844122a DirectFB-examples-1.7.0.tar.gz
-+sha256  9a2104cc4da8123c8371813551b66b943198979f745cbebc034bb5e10844122a  DirectFB-examples-1.7.0.tar.gz
-+sha256  f91483684678e8aa8ccc4ee0ede3140b0494f8305e162695c7e6e3f83e54f236  COPYING
-diff --git a/package/directfb/directfb.hash b/package/directfb/directfb.hash
-index 069d8c3f1d..f8c4a8303c 100644
---- a/package/directfb/directfb.hash
-+++ b/package/directfb/directfb.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 b785c638dc31b8fe3a7c81be1475c89b2255ab3d67b777c747d3fbc52f8027a3 DirectFB-1.7.7.tar.gz
-+sha256  b785c638dc31b8fe3a7c81be1475c89b2255ab3d67b777c747d3fbc52f8027a3  DirectFB-1.7.7.tar.gz
-+sha256  512d2d21b6b3384ba64781abb0208a1b87740bc31e2df48e2b206ddb7e4d5779  COPYING
-diff --git a/package/dmalloc/dmalloc.hash b/package/dmalloc/dmalloc.hash
-index e74ef741b9..113751656c 100644
---- a/package/dmalloc/dmalloc.hash
-+++ b/package/dmalloc/dmalloc.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256 d3be5c6eec24950cb3bd67dbfbcdf036f1278fae5fd78655ef8cdf9e911e428a dmalloc-5.5.2.tgz
-+sha256  d3be5c6eec24950cb3bd67dbfbcdf036f1278fae5fd78655ef8cdf9e911e428a  dmalloc-5.5.2.tgz
-+sha256  8659d49ceeeb006288ad246164e504ccfe33f7a4c1680439fb6ff6a393b0722b  dmalloc.h.1
-diff --git a/package/dmraid/dmraid.hash b/package/dmraid/dmraid.hash
-index 31669218e8..af84732f93 100644
---- a/package/dmraid/dmraid.hash
-+++ b/package/dmraid/dmraid.hash
-@@ -1,2 +1,5 @@
- # From http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-1.0.0.rc16-3.tar.bz2.md5.sum
- md5	819338fcef98e8e25819f0516722beeb dmraid-1.0.0.rc16-3.tar.bz2
-+# locally computed
-+sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  1.0.0.rc16-3/dmraid/LICENSE_GPL
-+sha256  4bc391fcf852e03c3a7564cb146af6e47717562eed296b28bce123ee1b0396b8  1.0.0.rc16-3/dmraid/LICENSE
-diff --git a/package/docker/docker.hash b/package/docker/docker.hash
-index 710a0eb57c..cf0f00e8d8 100644
---- a/package/docker/docker.hash
-+++ b/package/docker/docker.hash
+-sha256 5fab478cbf8731fbacefaa76236a8f8b38ccff920c53b3a8253bc35509fba8ed fbgrab-1.3.tar.gz
++sha256  5fab478cbf8731fbacefaa76236a8f8b38ccff920c53b3a8253bc35509fba8ed  fbgrab-1.3.tar.gz
++sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/package/fbterm/fbterm.hash b/package/fbterm/fbterm.hash
+index 20a3e8f083..37c32df7a4 100644
+--- a/package/fbterm/fbterm.hash
++++ b/package/fbterm/fbterm.hash
 @@ -1,2 +1,4 @@
+ # From http://code.google.com/p/fbterm/downloads/detail?name=fbterm-1.7.0.tar.gz&can=2&q=
+ sha1	dc7b7ff29212c1551f35bf7a50967454d3b8c67c	fbterm-1.7.0.tar.gz
++# locally computed
++sha256  b2b961f07e97c4fb78074276da304ea36b85dc299aae5efb79080cedaea3d5ac  COPYING
+diff --git a/package/fbv/fbv.hash b/package/fbv/fbv.hash
+index 892012b3d9..3f25465ba1 100644
+--- a/package/fbv/fbv.hash
++++ b/package/fbv/fbv.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256	47629578e89d96d1541c91d040aec4316f03ad6d01dc3eecb8f82a33445c1e4e	docker-1.5.tar.gz
-+sha256  47629578e89d96d1541c91d040aec4316f03ad6d01dc3eecb8f82a33445c1e4e  docker-1.5.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256  fd82a1ac93bfe0a5afcf28cfb5342dd02015555fc23529a87bd77a7b271d3262  README
-diff --git a/package/dstat/dstat.hash b/package/dstat/dstat.hash
-index 1f1f769cc5..603bd506fd 100644
---- a/package/dstat/dstat.hash
-+++ b/package/dstat/dstat.hash
+-sha256	9b55b9dafd5eb01562060d860e267e309a1876e8ba5ce4d3303484b94129ab3c	fbv-1.0b.tar.gz
++sha256  9b55b9dafd5eb01562060d860e267e309a1876e8ba5ce4d3303484b94129ab3c  fbv-1.0b.tar.gz
++sha256  bf21d97bafcaacb5d6bc3d5502030c340f0e0593614078ab017af91e950083af  COPYING
+diff --git a/package/fcgiwrap/fcgiwrap.hash b/package/fcgiwrap/fcgiwrap.hash
+index 4ad8b0bb77..cf2c785c67 100644
+--- a/package/fcgiwrap/fcgiwrap.hash
++++ b/package/fcgiwrap/fcgiwrap.hash
 @@ -1,2 +1,3 @@
- # Locally computed:
--sha256 4fbd58f3461c86d09a3ab97472aa204de37aa33d31a0493a3e5ed86a2045abea  dstat-0.7.4.tar.gz
-+sha256  4fbd58f3461c86d09a3ab97472aa204de37aa33d31a0493a3e5ed86a2045abea  dstat-0.7.4.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/dtach/dtach.hash b/package/dtach/dtach.hash
-index 5caa58e5c0..1a97aa35ff 100644
---- a/package/dtach/dtach.hash
-+++ b/package/dtach/dtach.hash
+ # Locally calculated
+-sha256 c72f2933669ebd21605975c5a11f26b9739e32e4f9d324fb9e1a1925e9c2ae88  fcgiwrap-99c942c90063c73734e56bacaa65f947772d9186.tar.gz
++sha256  c72f2933669ebd21605975c5a11f26b9739e32e4f9d324fb9e1a1925e9c2ae88  fcgiwrap-99c942c90063c73734e56bacaa65f947772d9186.tar.gz
++sha256  1504c301f6d417f2626085337e5c3bb3dc0282265089396ab36bfe1942feef1c  COPYING
+diff --git a/package/fconfig/fconfig.hash b/package/fconfig/fconfig.hash
+index eae26e2b14..98e7fbf12b 100644
+--- a/package/fconfig/fconfig.hash
++++ b/package/fconfig/fconfig.hash
 @@ -1,2 +1,3 @@
- # Locally computed:
- sha256  5f7e8c835ee49a9e6dcf89f4e8ccbe724b061c0fc8565b504dd8b3e67ab79f82  dtach-0.9.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/duma/duma.hash b/package/duma/duma.hash
-index f664d4033b..ccf171a97c 100644
---- a/package/duma/duma.hash
-+++ b/package/duma/duma.hash
-@@ -1,2 +1,4 @@
- # Locally computed:
- sha256  baaf794854e3093ad1bddadbfb8ad4b220a7117d70359ee216bd59e353734e17  duma_2_5_15.tar.gz
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING-GPL
-+sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING-LGPL
-diff --git a/package/dvbsnoop/dvbsnoop.hash b/package/dvbsnoop/dvbsnoop.hash
-index 05939f9e31..0d88afe154 100644
---- a/package/dvbsnoop/dvbsnoop.hash
-+++ b/package/dvbsnoop/dvbsnoop.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  7658498b26a5d2a0242e81f0cfafa0e43a2bec56f8674e7ac197dfc310866ec6  dvbsnoop-1.4.50.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/dvdauthor/dvdauthor.hash b/package/dvdauthor/dvdauthor.hash
-index 36d5d0e686..833884aa9a 100644
---- a/package/dvdauthor/dvdauthor.hash
-+++ b/package/dvdauthor/dvdauthor.hash
-@@ -2,4 +2,5 @@
- md5 1173dcb8d40e74fc90c0f3a25dbd642d  dvdauthor-0.7.2.tar.gz
- sha1 0e605642140576bfb3e963414d77630d1c073a51  dvdauthor-0.7.2.tar.gz
  # Locally computed
--sha256 3020a92de9f78eb36f48b6f22d5a001c47107826634a785a62dfcd080f612eb7  dvdauthor-0.7.2.tar.gz
-+sha256  3020a92de9f78eb36f48b6f22d5a001c47107826634a785a62dfcd080f612eb7  dvdauthor-0.7.2.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/dvdrw-tools/dvdrw-tools.hash b/package/dvdrw-tools/dvdrw-tools.hash
-index 17d48f1d1f..a5ed6ad521 100644
---- a/package/dvdrw-tools/dvdrw-tools.hash
-+++ b/package/dvdrw-tools/dvdrw-tools.hash
+-sha256 4ff0e8f07e35e46b705c0dbe9d9544ede01ea092a69e3f7db03e55a3f2bb8eb7 fconfig-20080329.tar.gz
++sha256  4ff0e8f07e35e46b705c0dbe9d9544ede01ea092a69e3f7db03e55a3f2bb8eb7  fconfig-20080329.tar.gz
++sha256  e698a9ea4d6dab0a15d3d6fd354b97b820629244f946529cc7f42b2b8e8f16d0  fconfig.c
+diff --git a/package/ficl/ficl.hash b/package/ficl/ficl.hash
+index 4bfbbd070a..df53c843c1 100644
+--- a/package/ficl/ficl.hash
++++ b/package/ficl/ficl.hash
 @@ -1,2 +1,3 @@
- # Locally computed using sha256sum
--sha256	f8d60f822e914128bcbc5f64fbe3ed131cbff9045dca7e12c5b77b26edde72ca	dvd+rw-tools-7.1.tar.gz
-+sha256  f8d60f822e914128bcbc5f64fbe3ed131cbff9045dca7e12c5b77b26edde72ca  dvd+rw-tools-7.1.tar.gz
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  LICENSE
+ # Locally computed:
+ sha256  4daf74f3d3d6f8b86ea7cb47bc24931d50b4809b50ba34ca32e0ca1e972bd3a3  ficl-4.1.0.tar.gz
++sha256  1d1dd1f1cde52e8b607c5ccb6a2e5de878fd1719b8c5a4d31b9cdb343c203d0d  ReadMe.txt
+diff --git a/package/filemq/filemq.hash b/package/filemq/filemq.hash
+index d1df1ff2a9..611d19208e 100644
+--- a/package/filemq/filemq.hash
++++ b/package/filemq/filemq.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 f3764e1adacfbf7fd09fb9c553e796a80d8159f1ace689fb68307afbc1746d4c  filemq-8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0.tar.gz
++sha256  f3764e1adacfbf7fd09fb9c553e796a80d8159f1ace689fb68307afbc1746d4c  filemq-8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0.tar.gz
++sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  LICENSE
+diff --git a/package/flann/flann.hash b/package/flann/flann.hash
+index c2c41beb02..543e4b483d 100644
+--- a/package/flann/flann.hash
++++ b/package/flann/flann.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 b23b5f4e71139faa3bcb39e6bbcc76967fbaf308c4ee9d4f5bfbeceaa76cc5d3  flann-1.9.1.tar.gz
++sha256  b23b5f4e71139faa3bcb39e6bbcc76967fbaf308c4ee9d4f5bfbeceaa76cc5d3  flann-1.9.1.tar.gz
++sha256  3993f339cc56506c62aa1eb2fb76f240ee93b738d857832899c1e207b1dc069a  COPYING
+diff --git a/package/flashbench/flashbench.hash b/package/flashbench/flashbench.hash
+index a5eb388c8d..f82d7f0eed 100644
+--- a/package/flashbench/flashbench.hash
++++ b/package/flashbench/flashbench.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 12e2dcb6f041ef1a303fc5bc84642ed637c24d77ed6c667a2187f21d54555731  flashbench-2e30b1968a66147412f21002ea844122a0d5e2f0.tar.gz
++sha256  12e2dcb6f041ef1a303fc5bc84642ed637c24d77ed6c667a2187f21d54555731  flashbench-2e30b1968a66147412f21002ea844122a0d5e2f0.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/fluxbox/fluxbox.hash b/package/fluxbox/fluxbox.hash
+index b18582b6c0..f59423c3d1 100644
+--- a/package/fluxbox/fluxbox.hash
++++ b/package/fluxbox/fluxbox.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  fc8c75fe94c54ed5a5dd3fd4a752109f8949d6df67a48e5b11a261403c382ec0  fluxbox-1.3.7.tar.xz
++sha256  d445b8c8b3cedd8b9ebb7f450524cf658d4a199b3a89a9f2af4255cc589c6253  COPYING
+diff --git a/package/fmc/fmc.hash b/package/fmc/fmc.hash
+index 13d9d77ee5..d31bb5e794 100644
+--- a/package/fmc/fmc.hash
++++ b/package/fmc/fmc.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	a91e0c9b7c7f238634c64a755c05671f33f2acdb6ae2d09cad4d683b364ee8e4	fmc-fsl-sdk-v2.0.tar.gz
++sha256  a91e0c9b7c7f238634c64a755c05671f33f2acdb6ae2d09cad4d683b364ee8e4  fmc-fsl-sdk-v2.0.tar.gz
++sha256  f92862ceb95db5492f50a59d7c799c9395b714db88db92d11891dc0233e2ac42  COPYING
+diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
+index 3746695db9..9143ac2c37 100644
+--- a/package/fmlib/fmlib.hash
++++ b/package/fmlib/fmlib.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256	e5870756c7432b15f7a48b860625808f3c95d5f7fa5e251552eb2324ca51b0fa	fmlib-fsl-sdk-v2.0.tar.gz
++sha256  e5870756c7432b15f7a48b860625808f3c95d5f7fa5e251552eb2324ca51b0fa  fmlib-fsl-sdk-v2.0.tar.gz
++sha256  837559e20d83910a005e7883b876cc5c42805fe4abcf7e5c5b3c8d036b7f61c8  COPYING
+diff --git a/package/fmtools/fmtools.hash b/package/fmtools/fmtools.hash
+index 435cf0adc7..48f88be5fb 100644
+--- a/package/fmtools/fmtools.hash
++++ b/package/fmtools/fmtools.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	75174e07d8cde6d4a8a5d7bbaa3a3b0760a850e7f6840cb7c6246227b18f5a39	fmtools-2.0.7.tar.gz
++sha256  75174e07d8cde6d4a8a5d7bbaa3a3b0760a850e7f6840cb7c6246227b18f5a39  fmtools-2.0.7.tar.gz
++# locally computed
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/freeradius-client/freeradius-client.hash b/package/freeradius-client/freeradius-client.hash
+index 5931ac2b00..e343b3a4a5 100644
+--- a/package/freeradius-client/freeradius-client.hash
++++ b/package/freeradius-client/freeradius-client.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256  eada2861b8f4928e3ac6b5bbfe11e92cd6cdcacfce40cae1085e77c1b6add0e9  freeradius-client-1.1.7.tar.gz
++sha256  e579878de7971b2224ae2263bbc61f6c465fe40e884a9068d5fa9d17fbfd2ebe  COPYRIGHT
+diff --git a/package/fswebcam/fswebcam.hash b/package/fswebcam/fswebcam.hash
+index 1e75f237e7..28f604547c 100644
+--- a/package/fswebcam/fswebcam.hash
++++ b/package/fswebcam/fswebcam.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	444d6a8a82102e09e935540c64a731021de36db03e1e74181f41ca6f39aa6474	fswebcam-20140113.tar.xz
++sha256  444d6a8a82102e09e935540c64a731021de36db03e1e74181f41ca6f39aa6474  fswebcam-20140113.tar.xz
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/fxload/fxload.hash b/package/fxload/fxload.hash
+index 7febbccf1d..68a6ba8475 100644
+--- a/package/fxload/fxload.hash
++++ b/package/fxload/fxload.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  0cc8bfd2a7cbba2f68e0c5767477634922287943c91dd9fcf029fc8b9d577858  fxload-2008_10_13.tar.gz
++sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
