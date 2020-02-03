@@ -1,56 +1,72 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  3 Feb 2020 02:29:27 -0800
-Subject: [Buildroot] [PATCH 1/1] package/janus-gateway: bump version to 0.8.1
-Message-ID: <20200203102927.1007733-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Feb 2020 11:42:42 +0100
+Subject: [Buildroot] [git commit] package/mesa3d: add option to configure
+ gbm support
+Message-ID: <20200203103336.AAE98886FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Other changes:
-  - Update License hash which properly adds the OpenSSL exception.
+commit: https://git.buildroot.net/buildroot/commit/?id=b6c051acf787c804e732bc58ba8d7e440701a168
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tested with Debian 8:
+Kodi 18.0-Leia implements stand-alone gbm support alongside x11 &
+wayland. To enable building gbm support in mesa3d without x11 &
+wayland we need to add a specific configure option for it.
 
-br-arm-full [1/6]: OK
-br-arm-cortex-a9-glibc [2/6]:   OK
- br-arm-cortex-m4-full [3/6]:   SKIPPED
-        br-x86-64-musl [4/6]:   OK
-    br-arm-full-static [5/6]:   SKIPPED
-          sourcery-arm [6/6]:   OK
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/janus-gateway/janus-gateway.hash | 4 ++--
- package/janus-gateway/janus-gateway.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mesa3d/Config.in | 6 ++++++
+ package/mesa3d/mesa3d.mk | 9 ++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
-index 784c43d252..b74ec2511f 100644
---- a/package/janus-gateway/janus-gateway.hash
-+++ b/package/janus-gateway/janus-gateway.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 d34868c259f388105fe16a5cd304a5684d45b1eddbe436293f4aa2178c0e4b6e janus-gateway-0.7.3.tar.gz
--sha256 0a884af515b4593503f6f0c9b424db3945bd77eaa2644d25f45eb93a412b3c19 COPYING
-+sha256 668758f06e2a158f83b89d17aad322959221fbeadcc5611c6f7a38ff76fd2896 janus-gateway-0.8.1.tar.gz
-+sha256 91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6 COPYING
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index b0c01f3173..93091134cc 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 14adb407b4..5929e15442 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -355,6 +355,11 @@ if BR2_PACKAGE_MESA3D_DRIVER
  
--JANUS_GATEWAY_VERSION = 0.7.3
-+JANUS_GATEWAY_VERSION = 0.8.1
- JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
--JANUS_GATEWAY_LICENSE = GPL-3.0
-+JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
- JANUS_GATEWAY_LICENSE_FILES = COPYING
+ comment "OpenGL API Support"
  
- # ding-libs provides the ini_config library
--- 
-2.24.1
++config BR2_PACKAGE_MESA3D_GBM
++	bool "gbm"
++	help
++	  Enable Generic Buffer Management (gbm)
++
+ config BR2_PACKAGE_MESA3D_OPENGL_GLX
+ 	bool "OpenGL GLX"
+ 	depends on BR2_PACKAGE_XORG7
+@@ -370,6 +375,7 @@ config BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	bool "OpenGL EGL"
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++	select BR2_PACKAGE_MESA3D_GBM
+ 	help
+ 	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL
+ 	  applications similar to GLX, for X, and WGL, for Windows.
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f0e889a400..c7e5be55a0 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -200,10 +200,17 @@ endif
+ MESA3D_CONF_OPTS += \
+ 	-Dplatforms=$(subst $(space),$(comma),$(MESA3D_PLATFORMS))
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_GBM),y)
++MESA3D_CONF_OPTS += \
++	-Dgbm=true
++else
++MESA3D_CONF_OPTS += \
++	-Dgbm=false
++endif
++
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+ MESA3D_PROVIDES += libegl
+ MESA3D_CONF_OPTS += \
+-	-Dgbm=true \
+ 	-Degl=true
+ else
+ MESA3D_CONF_OPTS += \
