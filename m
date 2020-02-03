@@ -1,44 +1,95 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon,  3 Feb 2020 17:59:46 +0100
-Subject: [Buildroot] [PATCH 3/3] package/lmbench: fix build failure due to
- gcc bug 93532
-In-Reply-To: <20200203165946.50232-1-giulio.benetti@benettiengineering.com>
-References: <20200203165946.50232-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200203165946.50232-4-giulio.benetti@benettiengineering.com>
+From: Alex Corcoles <alex@corcoles.net>
+Date: Mon, 3 Feb 2020 18:08:20 +0100
+Subject: [Buildroot] "PATCH": hack to be able to build Rust targetting
+ MIPS
+In-Reply-To: <CAPAYC_xA2zkmmADgr9G2mspcS=Ej16wOM75rT-aCKbK42hzk5g@mail.gmail.com>
+References: <CAPAYC_xPtDO=j3fWeOEbC41X3PXJZ+7AD=WRm8A1DGQrtbadFQ@mail.gmail.com>
+ <CAPAYC_y98TxMoBtG=P9hDe26=1rHfaoMyoH5NJyLHbRxcxpMAQ@mail.gmail.com>
+ <20200119213102.GA2894@ned>
+ <CAPAYC_xA2zkmmADgr9G2mspcS=Ej16wOM75rT-aCKbK42hzk5g@mail.gmail.com>
+Message-ID: <CAPAYC_wFywnPH6j8muHXvX1n+bLrWkZxBMrm+ywXQAyTbvsK8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The lmbench package exhibits gcc bug 93532 when built for the Riscv32
-architecture with optimization enabled, which causes a build to hang.
+I've finally had more time to play with this. It seems that
+mipsel-unknown-linux-uclibc works! I've been able to run software built
+with it on a real hardware device, although it's very crashy (all
+arithmetic operations seem to crash with illegal instruction- probably I
+didn't configure my toolchain right or there's a Rust issue...).
 
-As done for other packages in Buildroot work around this gcc bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_93532=y.
+I would suggest removing the limitation on uclibc... perhaps with a big
+warning flag, though, as I haven't managed to build complex, stable
+software.
 
-Fixes:
-http://autobuild.buildroot.net/results/d47/d47e46889d7bcc5864c738cb948afc168327b612/
+I've written a bit about the process at:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/lmbench/lmbench.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+https://users.rust-lang.org/t/trying-to-compile-rust-sdl-stuff-for-a-rg300-console-buildroot-mipsel-uclibc/36722
+https://github.com/alexpdp7/retrofw2-rust
 
-diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
-index 2f3b19b5f8..09299a0c17 100644
---- a/package/lmbench/lmbench.mk
-+++ b/package/lmbench/lmbench.mk
-@@ -28,6 +28,10 @@ define LMBENCH_CONFIGURE_CMDS
- 	touch $@
- endef
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_93532),y)
-+LMBENCH_CFLAGS += -O0
-+endif
-+
- # Note: there is a second stage 'make' invocation from the 'scripts/build'
- # script. So the variables override below don't take direct effect in
- # src/Makefile.
+Cheers,
+
+?lex
+
+On Mon, Jan 20, 2020 at 5:31 PM Alex Corcoles <alex@corcoles.net> wrote:
+
+> Hi!
+>
+> The RUSTC_TARGET_NAME variable is defined in rustc.mk only if the symbol
+>> BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is selected. This symbols is
+>> used to ensure all the conditions to build a rust package are met. One
+>> of them is that the toolchain is glibc-based. This is required, because
+>> the standard library provided by the pre-built host Rust toolchain is
+>> built against glibc.
+>>
+>> In your defconfig, the toolchain is uclibc-based and the host Rust
+>> toolchain is built from source.
+>>
+>> Hence BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is not defined and so
+>> is RUSTC_TARGET_NAME.
+>>
+>> So there is a bug: the restriction on having a glibc-based toolchain
+>> should apply either when using a pre-built rust toolchain or building
+>> one from source. I'll see how to fix it.
+>>
+>> The list of supported platforms [1] mentions GNU glibc and musl, but not
+>> uclibc. Does the build with your defconfig and patch successful?
+>>
+>> [1] https://forge.rust-lang.org/release/platform-support.html
+>>
+>
+> I think I built it successfully after introducing my hack, but as far as I
+> understand, it is not guaranteed to build in the future (and the opposite
+> is true, perhaps if it doesn't build today, it will tomorrow). In the link
+> you sent, mipsel-unknown-linux-uclibc is Tier 3 with std.
+>
+> If I have some time I will play around with it and see you some results.
+>
+> IMHO, perhaps you should hide non Tier-1 platforms behind an "enable this
+> option for non-Tier 1 Rust builds which are not guaranteed to work", or
+> something like that.
+>
+> Cheers,
+>
+> ?lex
+>
+> --
+>    ___
+>  {~._.~}
+>   ( Y )
+>  ()~*~()  mail: alex at corcoles dot net
+>  (_)-(_)  http://alex.corcoles.net/
+>
+>
+
 -- 
-2.20.1
+   ___
+ {~._.~}
+  ( Y )
+ ()~*~()  mail: alex at corcoles dot net
+ (_)-(_)  http://alex.corcoles.net/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200203/e8cfc0c9/attachment.html>
