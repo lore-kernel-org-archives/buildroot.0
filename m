@@ -1,65 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Feb 2020 21:28:41 +0100
-Subject: [Buildroot] [git commit] package/uboot-tools: needs make >= 4.0
-Message-ID: <20200203202048.D620888EE6@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  3 Feb 2020 21:50:49 +0100
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.15.1
+Message-ID: <20200203205049.28519-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9f4d7376ef57815028aeaa46efa6bdf01caa7e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+For details see [1].
 
-Starting with 2020.01, uboot started using the 'undefine' make
-directive, which was only introduced with make 4.0.
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-February/041186.html
 
-So, use the existing $(BR2_MAKE_HOST_DEPENDENCY) and $(BR2_MAKE),
-both of each will ensure that we do use a make that is at least 4.0.
-
-Fixes:
-    http://autobuild.buildroot.org/results/c97/c976ed5eb7760cba192d22b3f1e7460596fd82dd/
-
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/uboot-tools/uboot-tools.mk | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 1f0bac5bf7..8cafc084e1 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -11,6 +11,10 @@ UBOOT_TOOLS_LICENSE = GPL-2.0+
- UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
- UBOOT_TOOLS_INSTALL_STAGING = YES
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index ee006fe513..235025768b 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-January/041115.html
+-md5 d5fe153c4b1d69ec35dc846588cd47ec libinput-1.15.0.tar.xz
+-sha1 93dd7636b65e8cfea3a3068da5415f29195a189d libinput-1.15.0.tar.xz
+-sha256 bfbf1fef66bcb2be871a18783dfcfb88ecb431f496bf0a9cf6685fd29c5843e1 libinput-1.15.0.tar.xz
+-sha512 5dab48e1b4c9c0deb5b01ebc3ccb4cc28d614be25d87daaf42f51fbd2d955266f3fdba73029bc0094caa55060dad8967751b72d8f45f19a40b542f0c9118c1b6 libinput-1.15.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-February/041186.html
++md5 93850756b6c07aafb49d5226e88fdc81 libinput-1.15.1.tar.xz
++sha1 1b311c407c21210ad9d13b059e9eab4b85f19fb5 libinput-1.15.1.tar.xz
++sha256 6b2f57495c6f173ecf49ee19d3e10087d9916a52711e1b5eb01e0d9635950c16 libinput-1.15.1.tar.xz
++sha512 634810359bc4d86f2c4c75f472bee5eaed04ed93af3c91c4bc46a596402323941f9cc90173e278bfa7e5cbda6b7a20adc59bd09520dd4152fc961302b7e57904 libinput-1.15.1.tar.xz
  
-+# u-boot 2020.01+ needs make 4.0+
-+UBOOT_TOOLS_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
-+HOST_UBOOT_TOOLS_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
-+
- define UBOOT_TOOLS_CONFIGURE_CMDS
- 	mkdir -p $(@D)/include/config
- 	touch $(@D)/include/config/auto.conf
-@@ -39,9 +43,9 @@ endef
- endif
+ # License files
+ sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 03ae668f4e..ac7fbb3b2e 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define UBOOT_TOOLS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(BR2_MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
- 		CROSS_BUILD_TOOLS=y tools-only
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(BR2_MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
- 		envtools no-dot-config-targets=envtools
- endef
- 
-@@ -103,7 +107,7 @@ HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
- endif
- 
- define HOST_UBOOT_TOOLS_BUILD_CMDS
--	$(MAKE1) -C $(@D) $(HOST_UBOOT_TOOLS_MAKE_OPTS) tools-only
-+	$(BR2_MAKE1) -C $(@D) $(HOST_UBOOT_TOOLS_MAKE_OPTS) tools-only
- endef
- 
- define HOST_UBOOT_TOOLS_INSTALL_CMDS
+-LIBINPUT_VERSION = 1.15.0
++LIBINPUT_VERSION = 1.15.1
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-- 
+2.25.0
