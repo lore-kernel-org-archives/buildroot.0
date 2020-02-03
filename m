@@ -1,48 +1,218 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Feb 2020 17:03:24 +0100
-Subject: [Buildroot] [git commit] package/imagemagick: explicitly disable
- opencl
-Message-ID: <20200203155229.1851988932@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 3 Feb 2020 17:05:58 +0100
+Subject: [Buildroot] [PATCH] package/open62541: new package
+In-Reply-To: <1579212339-5234-1-git-send-email-yann.cardaillac@smile.fr>
+References: <1579212339-5234-1-git-send-email-yann.cardaillac@smile.fr>
+Message-ID: <CAEyMn7ZrcGvbNjT1SETefM_Oz3RouTs6BURb5bQ75TJv-uVKpw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9056908e93daae5af08a123e0bc05072c6e6c58e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann,
 
-Some packages installs libOpenCL without declaring
-BR2_PACKAGE_PROVIDES_LIBOPENCL (e.g.  imx-gpu-viv).  ImageMagick will detect
-the library and will require libtool.  Since libtool is not in dependencies,
-build might fail.
+Am Do., 16. Jan. 2020 um 23:05 Uhr schrieb Yann CARDAILLAC
+<yann.cardaillac@smile.fr>:
+>
+> From: Yann CARDAILLAC <ycardaillac@sepro-group.com>
+>
+> Signed-off-by: Yann CARDAILLAC <ycardaillac@sepro-group.com>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ---
+>  package/Config.in                |  1 +
+>  package/open62541/Config.in      | 62 ++++++++++++++++++++++++++++++++
+>  package/open62541/open62541.hash |  3 ++
+>  package/open62541/open62541.mk   | 57 +++++++++++++++++++++++++++++
+>  4 files changed, 123 insertions(+)
+>  create mode 100644 package/open62541/Config.in
+>  create mode 100644 package/open62541/open62541.hash
+>  create mode 100644 package/open62541/open62541.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 4c94914680..748446f3b4 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -499,6 +499,7 @@ endmenu
+>         source "package/ofono/Config.in"
+>         source "package/on2-8170-modules/Config.in"
+>         source "package/open2300/Config.in"
+> +       source "package/open62541/Config.in"
+>         source "package/openipmi/Config.in"
+>         source "package/openocd/Config.in"
+>         source "package/openpowerlink/Config.in"
+> diff --git a/package/open62541/Config.in b/package/open62541/Config.in
+> new file mode 100644
+> index 0000000000..8fb0c1f8e6
+> --- /dev/null
+> +++ b/package/open62541/Config.in
+> @@ -0,0 +1,62 @@
+> +config BR2_PACKAGE_OPEN62541
+> +       bool "open62541"
+> +       help
+> +         open62541 is an open source and free implementation of OPC UA
+> +
+> +         http://open62541.org
+> +
+> +if BR2_PACKAGE_OPEN62541
+> +
+> +choice
+> +       prompt "choose UA_NAMESPACE_ZERO"
+> +
+> +config BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_NONE
+> +       bool "NONE"
+> +       help
+> +         Don't set the UA_NAMESPACE_ZERO.
+> +
+> +config BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_MINIMAL
+> +       bool "MINIMAL"
+> +       help
+> +         A barebones namespace zero that is compatible with most
+> +         clients.  But this namespace 0 is so small that it does
+> +         not pass the CTT
+> +         (Conformance Testing Tools of the OPC Foundation).
+> +
+> +config BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED
+> +       bool "REDUCED"
+> +       help
+> +         Small namespace zero that passes the CTT.
+> +
+> +config BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_FULL
+> +       bool "FULL"
+> +       help
+> +         Full namespace zero generated from the official XML
+> +         definitions.
+> +
+> +endchoice
+> +
+> +menu "Advanced build options"
+> +
+> +config BR2_PACKAGE_OPEN62541_JSON_ENCODING
+> +       bool "json encoding"
+> +
+> +config BR2_PACKAGE_OPEN62541_PUBSUB
+> +       bool "publish/subscribe"
+> +
+> +config BR2_PACKAGE_OPEN62541_PUBSUB_DELTAFRAMES
+> +       bool "publish/subscribe deltaframes"
+> +
+> +config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
+> +       bool "publish/subscribe informationmodel"
+> +       depends on BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED || BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_FULL
+> +       select BR2_PACKAGE_OPEN62541_PUBSUB
+> +
+> +config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL_METHODS
+> +       bool "publish/subscribe informationmodel methods"
+> +       depends on BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED || BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_FULL
+> +       select BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
+> +
+> +endmenu
+> +
+> +endif
+> diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
+> new file mode 100644
+> index 0000000000..1f9f3787b9
+> --- /dev/null
+> +++ b/package/open62541/open62541.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256 766dc30dd7d27578560f7091f70f97d1edcbbdbea6ac0c33c6bc6df5e9daadc9  open62541-v1.0.tar.gz
+> +sha256 fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
+> diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+> new file mode 100644
+> index 0000000000..b3d2eb7dd5
+> --- /dev/null
+> +++ b/package/open62541/open62541.mk
+> @@ -0,0 +1,57 @@
+> +################################################################################
+> +#
+> +# open62541
+> +#
+> +################################################################################
+> +
+> +OPEN62541_VERSION = v1.0
+> +OPEN62541_SITE_METHOD = git
+> +OPEN62541_SITE = git://github.com/open62541/open62541.git
+> +OPEN62541_GIT_SUBMODULES = YES
+> +OPEN62541_INSTALL_STAGING = YES
+> +OPEN62541_LICENSE = MPL-2.0
+> +OPEN62541_LICENSE_FILES = LICENSE
+> +
+> +# Don't use git discribe to get the version number.
+> +OPEN62541_CONF_OPTS += -DGIT_EXECUTABLE=NO \
+> +       -DOPEN62541_VERSION=$(OPEN62541_VERSION)
 
-To prevent that situation, explicitly disable opencl support for target and host.
+I think you should not use the '+'  for the first time.
 
-Signed-off-by: Julien Olivain <juju@cotds.org>
-[Peter: drop unneeded ax_cv_check_cl_libcl=no]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/imagemagick/imagemagick.mk | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 0bac0b4fc3..eaa291a1bd 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -22,6 +22,7 @@ IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
- 
- IMAGEMAGICK_CONF_OPTS = \
- 	--program-transform-name='s,,,' \
-+	--disable-opencl \
- 	--disable-openmp \
- 	--without-djvu \
- 	--without-dps \
-@@ -152,6 +153,7 @@ IMAGEMAGICK_CONF_OPTS += --without-bzlib
- endif
- 
- HOST_IMAGEMAGICK_CONF_OPTS = \
-+	--disable-opencl \
- 	--disable-openmp \
- 	--without-djvu \
- 	--without-dps \
+On the other hand I tried to build the package with a compiler without
+c++ suport and it fails.
+I just did a 'make defconfig', 'make menuconfig' with selecting the
+open62541 package and it fails.
+
+At least there seems to be a missing 'C' in the CMakefile.txt.
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ cmake_minimum_required(VERSION 3.0...3.12)
+-project(open62541)
++project(open62541 C)
+ # set(CMAKE_VERBOSE_MAKEFILE ON)
+ if(${CMAKE_VERSION} VERSION_LESS 3.12)
+     cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+
+But then it fails with an missing compiler option (ssp).
+
+Should we even support building on c only compiler?
+
+--
+Heiko
+
+
+> +ifeq ($(BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_MINIMAL),y)
+> +OPEN62541_CONF_OPTS += -DUA_NAMESPACE_ZERO=MINIMAL
+> +else ifeq ($(BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED),y)
+> +OPEN62541_CONF_OPTS += -DUA_NAMESPACE_ZERO=REDUCED
+> +else ifeq ($(BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_FULL),y)
+> +OPEN62541_CONF_OPTS +=  -DUA_NAMESPACE_ZERO=FULL
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPEN62541_JSON_ENCODING),y)
+> +OPEN62541_CONF_OPTS += -DUA_ENABLE_JSON_ENCODING=ON
+> +else
+> +OPEN62541_CONF_OPTS += -DUA_ENABLE_JSON_ENCODING=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB),y)
+> +OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB=ON
+> +else
+> +OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_DELTAFRAMES),y)
+> +OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_DELTAFRAMES=ON
+> +else
+> +OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_DELTAFRAMES=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL),y)
+> +OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=ON
+> +else
+> +OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL_METHODS),y)
+> +OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS=ON
+> +else
+> +OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS=OFF
+> +endif
+> +
+> +$(eval $(cmake-package))
+> --
+> 2.21.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
