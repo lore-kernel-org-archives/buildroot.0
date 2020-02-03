@@ -1,71 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Feb 2020 21:17:54 +0100
-Subject: [Buildroot] [git commit] package/ncmpc: bump to version 0.37
-Message-ID: <20200203200907.320D288E95@busybox.osuosl.org>
+Date: Mon, 3 Feb 2020 21:19:05 +0100
+Subject: [Buildroot] [git commit] package/libmpdclient: bump to version 2.18
+Message-ID: <20200203200907.48BF688E95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6163eab43c3e4576ceb5874ed683701336d80e7
+commit: https://git.buildroot.net/buildroot/commit/?id=767c8afd1165a429eac33df0f8ad82d118d0082e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Bump gcc requirement to gcc >= 7 as C++17 is mandatory since
-https://github.com/MusicPlayerDaemon/ncmpc/commit/85f136dd6b6a8d044b19cbef818ee360292cc06e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncmpc/Config.in  | 6 +++---
- package/ncmpc/ncmpc.hash | 2 +-
- package/ncmpc/ncmpc.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/libmpdclient/libmpdclient.hash | 4 ++--
+ package/libmpdclient/libmpdclient.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ncmpc/Config.in b/package/ncmpc/Config.in
-index 2122bf3543..0e062460a7 100644
---- a/package/ncmpc/Config.in
-+++ b/package/ncmpc/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_NCMPC
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # boost
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_LIBMPDCLIENT
-@@ -16,7 +16,7 @@ config BR2_PACKAGE_NCMPC
- 
- 	  http://www.musicpd.org/clients/ncmpc/
- 
--comment "ncmpc needs a toolchain w/ C++, wchar, threads, gcc >= 6"
-+comment "ncmpc needs a toolchain w/ C++, wchar, threads, gcc >= 7"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
-index 2a8533a2ee..963c6d2601 100644
---- a/package/ncmpc/ncmpc.hash
-+++ b/package/ncmpc/ncmpc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256 4632873dfc8efe61e501dc9184a5b921b482be2ddbedd3d23d05241d477a3e2c  ncmpc-0.36.tar.xz
-+sha256 7c8eb727f6e12d8f97a53915b1b5632898b4afb335a1121c5e01c81df695615c  ncmpc-0.37.tar.xz
- 
- # Hash for license file:
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index 86e3c8383f..29675f2256 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
+diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
+index f268e876e2..e4456f125c 100644
+--- a/package/libmpdclient/libmpdclient.hash
++++ b/package/libmpdclient/libmpdclient.hash
+@@ -1,3 +1,3 @@
+-# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.16.tar.xz.sig, sha256 locally computed
+-sha256  fa6bdab67c0e0490302b38f00c27b4959735c3ec8aef7a88327adb1407654464  libmpdclient-2.16.tar.xz
++# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.18.tar.xz.sig, sha256 locally computed
++sha256  4cb01e1f567e0169aca94875fb6e1200e7f5ce35b63a4df768ec1591fb1081fa  libmpdclient-2.18.tar.xz
+ sha256  9574c3b0a9c31723cc3d5f32af4655a015fff5ec6ec8115b7906cd7d9623cf32  COPYING
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index dc206c7211..6e7c5a45a9 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- NCMPC_VERSION_MAJOR = 0
--NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).36
-+NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).37
- NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
- NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
- NCMPC_DEPENDENCIES = \
+ LIBMPDCLIENT_VERSION_MAJOR = 2
+-LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).16
++LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).18
+ LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
+ LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
+ LIBMPDCLIENT_INSTALL_STAGING = YES
