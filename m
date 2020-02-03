@@ -1,45 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 3 Feb 2020 22:51:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpjsip: use system portaudio
- instead of bundled one
-In-Reply-To: <20200203223858.79181c44@windsurf>
-References: <20200203211559.2529379-1-fontaine.fabrice@gmail.com>
- <20200203223858.79181c44@windsurf>
-Message-ID: <CAPi7W83pufau8SkrQ9B0rsSbiC48xydLGMKx-3ZKN=2S7fVzFw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Feb 2020 22:50:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bluez_utils: drop package
+In-Reply-To: <20200112220839.3720326-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 12 Jan 2020 23:08:39 +0100")
+References: <20200112220839.3720326-1-fontaine.fabrice@gmail.com>
+Message-ID: <871rrb1gsg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Le lun. 3 f?vr. 2020 ? 22:39, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Mon,  3 Feb 2020 22:15:59 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Are you sure there's a bundled one? I don't really see it, and the
-> aconfigure.ac logic is not very clear. How did you find this ? Could
-> you give some more details ?
-You're right, bundled portaudio was removed from libpjsip 4 years ago
-with https://trac.pjsip.org/repos/ticket/1906.
-I'll send a v2 to make portaudio an optional dependency.
->
-> It seems like libpjsip can use ALSA, in which case it doesn't need
-> PortAudio. So it would be nice to have more details from you about this
-> change.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+ > BlueZ 4.x is deprecated since a long time (BlueZ 5.x has been released
+ > in 2012) so drop it.
 
-Fabrice
+ > For cwwiid, sconeserver and ussp-push, replace bluez_utils by
+ > bluez5_utils. All other packages already support bluez5_utils so just
+ > drop bluez_utils.
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+..
+
+ > +++ b/package/bluez-tools/bluez-tools.mk
+ > @@ -4,33 +4,13 @@
+ >  #
+ >  ################################################################################
+ 
+ > -ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
+ > -# this is the last version compatible with BlueZ 4 API
+ > -BLUEZ_TOOLS_VERSION = 171181b6ef6c94aefc828dc7fd8de136b9f97532
+
+Dropped this line from the .hash file and committed, thanks!
+
+-- 
+Bye, Peter Korsgaard
