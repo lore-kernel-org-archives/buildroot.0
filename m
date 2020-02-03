@@ -1,48 +1,34 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  3 Feb 2020 02:21:10 -0800
-Subject: [Buildroot] [PATCH 2/2] package/ninja: change package type to
- host-cmake
-In-Reply-To: <20200203102110.985994-1-aduskett@gmail.com>
-References: <20200203102110.985994-1-aduskett@gmail.com>
-Message-ID: <20200203102110.985994-2-aduskett@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Feb 2020 11:24:16 +0100
+Subject: [Buildroot] [PATCH v2] package/olsr: needs -fPIC to avoid build
+ failure
+In-Reply-To: <20200120145147.22650-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Mon, 20 Jan 2020 15:51:47 +0100")
+References: <DM6PR12MB2876F2A5F2BBD3A59DD336DFD9320@DM6PR12MB2876.namprd12.prod.outlook.com>
+ <20200120145147.22650-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87blqgm0j3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ninja 1.10.0 now supports cmake as a build system. This change makes the make
-file much more straightforward.
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/ninja/ninja.mk | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+ > When building on Arc, Microblaze, Riscv32, Riscv64, package olsr needs
+ > to be compiled with -fPIC, so append -fPIC to CFLAGS when invoking make
+ > by default, since it seems to be mandatory in general and it's harmless
+ > for other architectures.
 
-diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
-index 0d9426d1f4..060893d85f 100644
---- a/package/ninja/ninja.mk
-+++ b/package/ninja/ninja.mk
-@@ -9,19 +9,8 @@ NINJA_SITE = $(call github,ninja-build,ninja,v$(NINJA_VERSION))
- NINJA_LICENSE = Apache-2.0
- NINJA_LICENSE_FILES = COPYING
- 
--# Although Ninja supports both Python2 and Python3, we enforce Python3
--# on the host for the following reason: Meson is the only package
--# using Ninja so far and Meson requires Python3. In this way, we
--# prevent both Python2 and Python3 from being created on the host,
--# which is time consuming and without benefit.
--HOST_NINJA_DEPENDENCIES = host-python3
--
--define HOST_NINJA_BUILD_CMDS
--	(cd $(@D); $(HOST_DIR)/bin/python3 configure.py --bootstrap)
--endef
--
- define HOST_NINJA_INSTALL_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/ninja $(HOST_DIR)/bin/ninja
- endef
- 
--$(eval $(host-generic-package))
-+$(eval $(host-cmake-package))
+ > Fixes:
+ > http://autobuild.buildroot.net/results/9d6/9d6d69133789aba16daeb6dc53721597e6be9806/
+ > http://autobuild.buildroot.net/results/b85/b85d27b3a4bab5d68460401ff49e624177d55afa/
+ > http://autobuild.buildroot.net/results/0d3/0d3489b14f4f4f0d4837d00209b5c1ee8d6f6a98/
+ > http://autobuild.buildroot.net/results/d9a/d9a143c8e9a175741acfafd17b63544d04744ac9/
+
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Committed, thanks.
+
 -- 
-2.24.1
+Bye, Peter Korsgaard
