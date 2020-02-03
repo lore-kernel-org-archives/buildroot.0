@@ -1,54 +1,63 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 3 Feb 2020 15:27:01 +0100
-Subject: [Buildroot] [PATCH 00/32] add a huge bunch of license file
- hashes
-In-Reply-To: <20200203135407.GC3299@scaer>
-References: <20200202194321.16321-1-heiko.thiery@gmail.com>
- <20200203135407.GC3299@scaer>
-Message-ID: <CAEyMn7ZiHW5uAJZWZPoDkPAdK4ouCC7hpdw52DQyxezmwr8dkQ@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon,  3 Feb 2020 06:27:38 -0800
+Subject: [Buildroot] [PATCH 1/1] set minimum cmake version to 3.10
+Message-ID: <20200203142738.1558715-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The CMakeLists.txt file uses the CMP0091 which is an MSVC runtime library flag
+abstraction macro.
 
-Am Mo., 3. Feb. 2020 um 14:54 Uhr schrieb Yann E. MORIN
-<yann.morin.1998@free.fr>:
->
-> Heiko, All,
->
-> On 2020-02-02 20:42 +0100, Heiko Thiery spake thusly:
-> > This series add missing entries in the hash files for the license files.
-> > The entries are generated semi-automatically and manually recheck.
->
-> Thank you very much for this! :-)
->
-> I've now applied the whole series, and it dd pass muster, except for
-> those few exceptions:
->
->   - dropped because of conflicts:
->     - kodi-audioencoder-vorbis
->     - kodi-screensaver-matrixtrails
->     - kodi-screensaver-biogenesis
->     - kodi-screensaver-pyro
->     - mii-diag
->
->   - dropped because already handled:
->     - rt-test
->
->   - fixed:
->     - libplist
->     - weston
->
->   - new not covered:
->     - weston-imx
->
-> Can you have a look at those, please?
+Because we are not building ninja for Microsoft, it is safe to remove this
+macro and set the minimum version to 3.10.
 
-should i take a look on all of these failed or dropped packages? what
-was the issue with the conflicts?
+Fixes:
+http://autobuild.buildroot.net/results/992b34c5625ec733d8dce678aa7a7540c4768ca1
 
---
-Heiko
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ ...01-set-minimum-cmake-version-to-3.10.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
+
+diff --git a/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch b/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
+new file mode 100644
+index 0000000000..d75b78fde9
+--- /dev/null
++++ b/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
+@@ -0,0 +1,30 @@
++From 4645f74eb668cc1cf876d1e9bef933591da7575c Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Mon, 3 Feb 2020 06:21:57 -0800
++Subject: [PATCH] set minimum cmake version to 3.10
++
++The CMakeLists.txt file uses the CMP0091 which is an MSVC runtime library flag
++abstraction macro.
++
++Because we are not building ninja for Microsoft, it is safe to remove this
++macro and set the minimum version to 3.10.
++
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ CMakeLists.txt | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 60fd8a1..a040e0b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,5 +1,4 @@
++-cmake_minimum_required(VERSION 3.15)
++-cmake_policy(SET CMP0091 NEW)
+++cmake_minimum_required(VERSION 3.10)
++ project(ninja)
++ 
++ if(CMAKE_BUILD_TYPE MATCHES "Release")
++-- 
++2.24.1
++
+-- 
+2.24.1
