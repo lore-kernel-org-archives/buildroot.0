@@ -1,45 +1,56 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon,  3 Feb 2020 15:23:05 -0700
-Subject: [Buildroot] [PATCH 1/1] package/weston: add pipewire support
-Message-ID: <20200203222305.47765-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Feb 2020 23:27:53 +0100
+Subject: [Buildroot] [PATCH 2/2] package/haproxy: bump to version 2.1.2
+In-Reply-To: <20200203205256.2508469-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 3 Feb 2020 21:52:56 +0100")
+References: <20200203205256.2508469-1-fontaine.fabrice@gmail.com>
+ <20200203205256.2508469-2-fontaine.fabrice@gmail.com>
+Message-ID: <87wo93z4pi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/weston/weston.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index ada3f565cb..b22e685948 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -17,8 +17,7 @@ WESTON_CONF_OPTS = \
- 	-Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
- 	-Dbackend-headless=false \
- 	-Dcolor-management-colord=false \
--	-Dremoting=false \
--	-Dpipewire=false
-+	-Dremoting=false
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/haproxy/haproxy.hash | 4 ++--
+ >  package/haproxy/haproxy.mk   | 4 ++--
+ >  2 files changed, 4 insertions(+), 4 deletions(-)
+
+ > diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+ > index 87a29eeba1..7f03e88d43 100644
+ > --- a/package/haproxy/haproxy.hash
+ > +++ b/package/haproxy/haproxy.hash
+ > @@ -1,5 +1,5 @@
+ > -# From: http://www.haproxy.org/download/2.0/src/haproxy-2.0.10.tar.gz.sha256
+ > -sha256 1d38ab3dd45e930b209e922a360ee8c636103e21e5b5a2656d3795401316a4ea haproxy-2.0.10.tar.gz
+ > +# From: http://www.haproxy.org/download/2.1/src/haproxy-2.1.2.tar.gz.sha256
+ > +sha256	6079b08a8905ade5a9a2835ead8963ee10a855d8508a85efb7181eea2d310b77	haproxy-2.1.2.tar.gz
+ >  # Locally computed:
+ >  sha256	0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28	LICENSE
+ >  sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	doc/lgpl.txt
+ > diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+ > index 88247d8e63..5485954a1f 100644
+ > --- a/package/haproxy/haproxy.mk
+ > +++ b/package/haproxy/haproxy.mk
+ > @@ -4,8 +4,8 @@
+ >  #
+ >  ################################################################################
  
- # Uses VIDIOC_EXPBUF, only available from 3.8+
- ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
-@@ -127,6 +126,13 @@ else
- WESTON_CONF_OPTS += -Dtest-junit-xml=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_PIPEWIRE)$(BR2_PACKAGE_WESTON_DRM),yy)
-+WESTON_CONF_OPTS += -Dpipewire=true
-+WESTON_DEPENDENCIES += pipewire
-+else
-+WESTON_CONF_OPTS += -Dpipewire=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
- WESTON_CONF_OPTS += -Ddemo-clients=true
- WESTON_DEPENDENCIES += pango
+ > -HAPROXY_VERSION_MAJOR = 2.0
+ > -HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).10
+ > +HAPROXY_VERSION_MAJOR = 2.1
+ > +HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).2
+
+Sorry, I wasn't fast enough to reply to this before it was merged - But
+according to the website, the 2.0.x series is a LTS series, and 2.1.x
+isn't - So moving away from 2.0.x just before our new LTS series is
+perhaps not such a great idea?
+
+See the table on https://www.haproxy.org/
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
