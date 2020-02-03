@@ -1,50 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Feb 2020 21:25:49 +0100
-Subject: [Buildroot] [git commit] package/python-validators: bump version to
- 0.14.2
-Message-ID: <20200203201523.C146A88EDA@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  3 Feb 2020 21:30:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cairo: bump to version 1.17.2
+Message-ID: <20200203203039.2437654-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=776b8d44ed7642884b582d4c19379b04ab144588
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes an issue with domain name validation.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-validators/python-validators.hash | 4 ++--
- package/python-validators/python-validators.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/cairo/cairo.hash | 6 +++---
+ package/cairo/cairo.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-validators/python-validators.hash b/package/python-validators/python-validators.hash
-index f3c92f89a6..1a3aa79980 100644
---- a/package/python-validators/python-validators.hash
-+++ b/package/python-validators/python-validators.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/validators/json
--md5	016484275dba8fd5c4cfd82dada490e2  validators-0.14.1.tar.gz
--sha256	0bfe836a1af37bb266d71ec1e98b530c38ce11bc7fbe0c4c96ef7b1532d019e5  validators-0.14.1.tar.gz
-+md5	ae3932b693452b96f037c919e1d7250f  validators-0.14.2.tar.gz
-+sha256	b192e6bde7d617811d59f50584ed240b580375648cd032d106edeb3164099508  validators-0.14.2.tar.gz
- # Locally computed sha256 checksums
- sha256	a7fd9d761c7ca1c6508b9baf030f6e21f5752d1caea3e49a270634aa9ef01e6f  LICENSE
-diff --git a/package/python-validators/python-validators.mk b/package/python-validators/python-validators.mk
-index a8e99c86a5..e24ce35fdd 100644
---- a/package/python-validators/python-validators.mk
-+++ b/package/python-validators/python-validators.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
+index 949ed3ffee..b647b55491 100644
+--- a/package/cairo/cairo.hash
++++ b/package/cairo/cairo.hash
+@@ -1,7 +1,7 @@
+-# From https://www.cairographics.org/releases/cairo-1.16.0.tar.xz.sha1
+-sha1 00e81842ae5e81bb0343108884eb5205be0eac14 cairo-1.16.0.tar.xz
++# From https://cairographics.org/snapshots/cairo-1.17.2.tar.xz.sha1
++sha1 c5d6f12701f23b2dc2988a5a5586848e70e858fe cairo-1.17.2.tar.xz
+ # Calculated based on the hash above
+-sha256	5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331	cairo-1.16.0.tar.xz
++sha256	6b70d4655e2a47a22b101c666f4b29ba746eda4aa8a0f7255b32b2e9408801df	cairo-1.17.2.tar.xz
+ 
+ # Hash for license files:
+ sha256	67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf	COPYING
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 902f505aaa..10f6a661f8 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_VALIDATORS_VERSION = 0.14.1
-+PYTHON_VALIDATORS_VERSION = 0.14.2
- PYTHON_VALIDATORS_SOURCE = validators-$(PYTHON_VALIDATORS_VERSION).tar.gz
--PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/72/8a/f99287daae8cfef938e6eec785f6e259bf6bad93269d5398bb546d5b1563
-+PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/4d/56/9b48c918ef118ea12b90f227c4498ed4703b418bdd8fb49479dfcbeae4ef
- PYTHON_VALIDATORS_SETUP_TYPE = setuptools
- PYTHON_VALIDATORS_LICENSE = BSD
- PYTHON_VALIDATORS_LICENSE_FILES = LICENSE
+-CAIRO_VERSION = 1.16.0
++CAIRO_VERSION = 1.17.2
+ CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+ CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
+ CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
+-CAIRO_SITE = http://cairographics.org/releases
++CAIRO_SITE = http://cairographics.org/snapshots
+ CAIRO_INSTALL_STAGING = YES
+ 
+ # relocation truncated to fit: R_68K_GOT16O
+-- 
+2.24.1
