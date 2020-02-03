@@ -1,10 +1,9 @@
 From: Refik Tuzakli <tuzakli.refik@gmail.com>
-Date: Mon,  3 Feb 2020 22:31:54 +0300
-Subject: [Buildroot] [PATCH v2 6/7] package/freescale-imx/imx-gpu-g2d: bump
- to version 6.4.0.p1.0
+Date: Mon,  3 Feb 2020 22:31:55 +0300
+Subject: [Buildroot] [PATCH v2 7/7] DEVELOPERS: update my entry list
 In-Reply-To: <20200203193155.12657-1-tuzakli.refik@gmail.com>
 References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
-Message-ID: <20200203193155.12657-6-tuzakli.refik@gmail.com>
+Message-ID: <20200203193155.12657-7-tuzakli.refik@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
 ---
- package/freescale-imx/imx-gpu-g2d/Config.in        | 6 +++++-
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 7 ++++++-
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 6 +++++-
- 3 files changed, 16 insertions(+), 3 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/freescale-imx/imx-gpu-g2d/Config.in b/package/freescale-imx/imx-gpu-g2d/Config.in
-index 47375788d1..aeca087f86 100644
---- a/package/freescale-imx/imx-gpu-g2d/Config.in
-+++ b/package/freescale-imx/imx-gpu-g2d/Config.in
-@@ -2,10 +2,14 @@ comment "imx-gpu-g2d needs a glibc toolchain with armhf enabled"
- 	depends on BR2_arm
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 172ebbf43a..13cf9d320d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2069,6 +2069,7 @@ F:	package/uhttpd/
+ F:	package/ustream-ssl/
  
-+comment "imx-gpu-g2d needs a glibc toolchain"
-+	depends on BR2_aarch64
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+
- config BR2_PACKAGE_IMX_GPU_G2D
- 	bool "imx-gpu-g2d"
- 	# Pre-built binaries only available for ARM EABIhf
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_arm && BR2_ARM_EABIHF) || BR2_aarch64
- 	# Library binaries are linked against libc.so.6
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_IMX_GPU_VIV
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-index 3bcbc558e2..1ad90d34a6 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-@@ -1 +1,6 @@
--sha256	5f2d2171d5cd57f37ab07184fc908a0f6ecb2a97f023f04c2f9f3b3d7fec8481  imx-gpu-g2d-6.2.4.p1.2.bin
-+# Locally calculated
-+sha256	6d6d02d035d988cbdb2014794f2efe970a3f5ac277202882bbf553bb7fd789d2  imx-gpu-g2d-6.4.0.p1.0-aarch32.bin
-+sha256	35885f435dbe951d2c0f439a376ed8a59a50b67a1b7e1e14fa2ab03995abb1ad  imx-gpu-g2d-6.4.0.p1.0-aarch64.bin
-+sha256	d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
-+sha256	9665930f69c0b6f4a4c055d7fe2b8ee563e771efbc83892abb1955e61492cdf7  EULA
-+
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-index 015ab628b6..6598e4c32b 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-@@ -4,7 +4,11 @@
- #
- ################################################################################
+ N:	Refik Tuzakli <tuzakli.refik@gmail.com>
++F:	package/freescale-imx/
+ F:	package/paho-mqtt-cpp/
  
--IMX_GPU_G2D_VERSION = 6.2.4.p1.2
-+ifeq ($(BR2_aarch64),y)
-+IMX_GPU_G2D_VERSION = 6.4.0.p1.0-aarch64
-+else
-+IMX_GPU_G2D_VERSION = 6.4.0.p1.0-aarch32
-+endif
- IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
- IMX_GPU_G2D_DEPENDENCIES = imx-gpu-viv
+ N:	R?mi R?rolle <remi.rerolle@gmail.com>
 -- 
 2.17.1
