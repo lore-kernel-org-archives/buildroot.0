@@ -1,46 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 16:49:45 +0100
-Subject: [Buildroot] [git commit] Config.in.legacy: fix separator comment
- location
-Message-ID: <20200203154034.A3A0B873EB@busybox.osuosl.org>
+Date: Mon, 3 Feb 2020 16:49:33 +0100
+Subject: [Buildroot] [git commit] package/libsepol: change policy version to
+ an int
+Message-ID: <20200203154034.7D9A6888DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4293d0ec51a26c0875e66a8c60a2c2779b00ff6
+commit: https://git.buildroot.net/buildroot/commit/?id=45bd1e73a9297239bc318df2d57ecb70a4fc7bb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When the fis and gadgetfs-test packages were removed, their respective
-options in Config.in.legacy were placed before the "Legacy options
-removed in 2020.02", while they should have been placed after. Let's
-fix that.
+The policy version has to be a number, as such, set the type to int.
 
+Due to the type change, we can't any longer do the legacy handling of
+re-using the refpolicy policy version.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libsepol/Config.in     | 5 ++---
+ package/refpolicy/refpolicy.mk | 3 +--
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 955e5f2f7d..0e479a8808 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,8 @@ endif
+diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
+index 049c915c36..3b84c90761 100644
+--- a/package/libsepol/Config.in
++++ b/package/libsepol/Config.in
+@@ -10,9 +10,8 @@ config BR2_PACKAGE_LIBSEPOL
+ if BR2_PACKAGE_LIBSEPOL
  
- ###############################################################################
+ config BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
+-	string "Policy version"
+-	default BR2_PACKAGE_REFPOLICY_POLICY_VERSION if BR2_PACKAGE_REFPOLICY_POLICY_VERSION != ""
+-	default "30"
++	int "Policy version"
++	default 30
  
-+comment "Legacy options removed in 2020.02"
-+
- config BR2_PACKAGE_GADGETFS_TEST
- 	bool "gadgetfs-test was removed"
- 	select BR2_LEGACY
-@@ -158,8 +160,6 @@ config BR2_PACKAGE_FIS
- 	help
- 	  The fis package was removed.
+ endif
  
--comment "Legacy options removed in 2020.02"
--
- config BR2_PACKAGE_REFPOLICY_POLICY_VERSION
- 	string "refpolicy policy version"
- 	help
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index 3f421e2ac1..1a5fefff06 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -25,8 +25,7 @@ REFPOLICY_MAKE = \
+ 	$(TARGET_MAKE_ENV) \
+ 	$(MAKE1)
+ 
+-REFPOLICY_POLICY_VERSION = \
+-	$(call qstrip,$(BR2_PACKAGE_LIBSEPOL_POLICY_VERSION))
++REFPOLICY_POLICY_VERSION = $(BR2_PACKAGE_LIBSEPOL_POLICY_VERSION)
+ REFPOLICY_POLICY_STATE = \
+ 	$(call qstrip,$(BR2_PACKAGE_REFPOLICY_POLICY_STATE))
+ 
