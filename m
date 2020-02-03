@@ -1,119 +1,122 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 3 Feb 2020 14:44:52 +0100
-Subject: [Buildroot] [git commit] package/b*: add license file hashes
-Message-ID: <20200203133729.5F909888B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/a*: add license file hashes
+Message-ID: <20200203133729.5622A8881A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00c97c98dfcf9aeb566f07c4aefdc3347532ebeb
+commit: https://git.buildroot.net/buildroot/commit/?id=abb9bc29c7b0a592fe3c3cd9aba501857f6df894
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/bctoolbox/bctoolbox.hash           | 1 +
- package/bcusdk/bcusdk.hash                 | 3 ++-
- package/beecrypt/beecrypt.hash             | 1 +
- package/benejson/benejson.hash             | 1 +
- package/binutils/binutils.hash             | 4 ++++
- package/bitstream-vera/bitstream-vera.hash | 4 +++-
- package/bluez-tools/bluez-tools.hash       | 5 +++--
- package/boa/boa.hash                       | 1 +
- package/bonnie/bonnie.hash                 | 1 +
- package/bsdiff/bsdiff.hash                 | 2 ++
- 10 files changed, 19 insertions(+), 4 deletions(-)
+ boot/at91bootstrap3/at91bootstrap3.hash            | 1 +
+ package/adwaita-icon-theme/adwaita-icon-theme.hash | 6 +++++-
+ package/aer-inject/aer-inject.hash                 | 3 ++-
+ package/alsamixergui/alsamixergui.hash             | 2 ++
+ package/am335x-pru-package/am335x-pru-package.hash | 3 ++-
+ package/am33x-cm3/am33x-cm3.hash                   | 3 ++-
+ package/android-tools/android-tools.hash           | 1 +
+ package/atkmm/atkmm.hash                           | 5 ++++-
+ package/avrdude/avrdude.hash                       | 3 ++-
+ package/axfsutils/axfsutils.hash                   | 3 ++-
+ 10 files changed, 23 insertions(+), 7 deletions(-)
 
-diff --git a/package/bctoolbox/bctoolbox.hash b/package/bctoolbox/bctoolbox.hash
-index 70be55c3d7..6242355ee2 100644
---- a/package/bctoolbox/bctoolbox.hash
-+++ b/package/bctoolbox/bctoolbox.hash
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index b2ad6241db..9f6c95ab08 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
- sha256  da7df7ff359a9829e9e6ef98dfe9fead0cf735b8a4a5da1b1047f467dee1b2a9  bctoolbox-0.4.0.tar.gz
-+sha256  849dd903d98f12a964466ccfbaf3a1de1f94ad0ebd49a59d12f8ce4506f9f647  COPYING
-diff --git a/package/bcusdk/bcusdk.hash b/package/bcusdk/bcusdk.hash
-index 219498bcbb..a97062143d 100644
---- a/package/bcusdk/bcusdk.hash
-+++ b/package/bcusdk/bcusdk.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	014cdaafc36f223c584b39ae5d698dd037a8e15aba4e78a2e531b51ff1331304  bcusdk_0.0.5.tar.gz
-+sha256  014cdaafc36f223c584b39ae5d698dd037a8e15aba4e78a2e531b51ff1331304  bcusdk_0.0.5.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/beecrypt/beecrypt.hash b/package/beecrypt/beecrypt.hash
-index e697c26f08..2f84007b45 100644
---- a/package/beecrypt/beecrypt.hash
-+++ b/package/beecrypt/beecrypt.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  286f1f56080d1a6b1d024003a5fa2158f4ff82cae0c6829d3c476a4b5898c55d  beecrypt-4.2.1.tar.gz
-+sha256  512d2d21b6b3384ba64781abb0208a1b87740bc31e2df48e2b206ddb7e4d5779  COPYING.LIB
-diff --git a/package/benejson/benejson.hash b/package/benejson/benejson.hash
-index 696dc4f3f6..437e1d9dd8 100644
---- a/package/benejson/benejson.hash
-+++ b/package/benejson/benejson.hash
+ sha256	e23e6df23b79ca81e412cb73a1f48bd95df8d46c7d52a1d073c2ed9d4f3a1a71  at91bootstrap3-v3.9.0.tar.gz
++sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
+diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.hash b/package/adwaita-icon-theme/adwaita-icon-theme.hash
+index 61b5f14d25..0daef24db5 100644
+--- a/package/adwaita-icon-theme/adwaita-icon-theme.hash
++++ b/package/adwaita-icon-theme/adwaita-icon-theme.hash
+@@ -1,2 +1,6 @@
+ # From http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.22/adwaita-icon-theme-3.22.0.sha256sum
+-sha256	c18bf6e26087d9819a962c77288b291efab25d0419b73d909dd771716a45dcb7	adwaita-icon-theme-3.22.0.tar.xz
++sha256  c18bf6e26087d9819a962c77288b291efab25d0419b73d909dd771716a45dcb7  adwaita-icon-theme-3.22.0.tar.xz
++# locally computed
++sha256  51f83b2b4e9ed2beebc9b8eed2ecad29314a58ed8c5184b22ad8f9df703d3ce5  COPYING
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING_LGPL
++sha256  207fe75c396c0ae197c57d42c727163428b6667d98cef3644e41c6f1afe1895f  COPYING_CCBYSA3
+diff --git a/package/aer-inject/aer-inject.hash b/package/aer-inject/aer-inject.hash
+index 6329de6df7..ee097c873a 100644
+--- a/package/aer-inject/aer-inject.hash
++++ b/package/aer-inject/aer-inject.hash
 @@ -1,2 +1,3 @@
  # Locally computed
- sha256  2ce5f3c2323500bdf651e7fcaecbd1011997141e6067567b8d2caa4cf7182f4a  benejson-0.9.7.tar.gz
-+sha256  d0b7dae881fcb18c4dddfd8b0c1643ae671d5f356d14ba5b4e95ca889cc9ec32  LICENSE
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index 82a4082104..797dd5b923 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -8,3 +8,7 @@ sha512  33ac5ad662db551870193f5c76c35a18de465adfa1c7f4bf5c1bb4145805a47507bf11ec
- 
- # Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
- sha512  979552d4b3a4f31e9f3b9a7027321bd4eb3ac6c2d8deac1720e94e54f81d736db09c53c5d87c301010e307b64127e14400a036c7a35e5d63a954a4edd9cc8e2c  binutils-c66d8bbcebfddf713b2b436e1b135e6b125a55a5.tar.gz
-+
-+# locally computed
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
-+sha256  56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d  COPYING.LIB
-diff --git a/package/bitstream-vera/bitstream-vera.hash b/package/bitstream-vera/bitstream-vera.hash
-index e18b38bb65..bb31b17a4a 100644
---- a/package/bitstream-vera/bitstream-vera.hash
-+++ b/package/bitstream-vera/bitstream-vera.hash
+-sha256 49a44b7a9e3983dc15fdc5bacd0e095df650296024f43f9d6c080ad54de0b07f  aer-inject-9bd5e2c7886fca72f139cd8402488a2235957d41.tar.gz
++sha256  49a44b7a9e3983dc15fdc5bacd0e095df650296024f43f9d6c080ad54de0b07f  aer-inject-9bd5e2c7886fca72f139cd8402488a2235957d41.tar.gz
++sha256  659a191d8775e05c6c6a9a4ba66b3577c577342bb83f20d393135eb6633c8973  README
+diff --git a/package/alsamixergui/alsamixergui.hash b/package/alsamixergui/alsamixergui.hash
+index 5cea490a49..85c9ffe75e 100644
+--- a/package/alsamixergui/alsamixergui.hash
++++ b/package/alsamixergui/alsamixergui.hash
 @@ -1,2 +1,4 @@
- # From http://ftp.gnome.org/pub/GNOME/sources/ttf-bitstream-vera/1.10/ttf-bitstream-vera-1.10.tar.bz2.sha256sum
--sha256	db5b27df7bbb318036ebdb75acd3e98f1bd6eb6608fb70a67d478cd243d178dc	ttf-bitstream-vera-1.10.tar.bz2
-+sha256  db5b27df7bbb318036ebdb75acd3e98f1bd6eb6608fb70a67d478cd243d178dc  ttf-bitstream-vera-1.10.tar.bz2
+ # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/a/alsamixergui/alsamixergui_0.9.0rc2-1-9.dsc
+ md5	af942a41b81ba27e2e4d0a1e1ab0decb  alsamixergui_0.9.0rc2-1.orig.tar.gz
 +# locally computed
-+sha256  3361d054759a2fc686a2c058be82deaf9c2e6fe549be9004d7935a6c1736315d  COPYRIGHT.TXT
-diff --git a/package/bluez-tools/bluez-tools.hash b/package/bluez-tools/bluez-tools.hash
-index 214fa5bdff..8be058ea6a 100644
---- a/package/bluez-tools/bluez-tools.hash
-+++ b/package/bluez-tools/bluez-tools.hash
++sha256  ea617b76dcd0df74576686ca34c281f43bb9d844015cea91e3debc91538d2b1d  debian/copyright
+diff --git a/package/am335x-pru-package/am335x-pru-package.hash b/package/am335x-pru-package/am335x-pru-package.hash
+index 36671b488a..ad386fe04b 100644
+--- a/package/am335x-pru-package/am335x-pru-package.hash
++++ b/package/am335x-pru-package/am335x-pru-package.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 2a902f825ccc1885c5dccd83e1ccee104aa30e601c9964a24f49459f76f674b9 am335x-pru-package-5f374ad57cc195f28bf5e585c3d446aba6ee7096.tar.gz
++sha256  2a902f825ccc1885c5dccd83e1ccee104aa30e601c9964a24f49459f76f674b9  am335x-pru-package-5f374ad57cc195f28bf5e585c3d446aba6ee7096.tar.gz
++sha256  f0fcdf9b2090896389eb4b784f23be96d5544c5ce5282d84f82ae9a8e8331beb  pru_sw/utils/LICENCE.txt
+diff --git a/package/am33x-cm3/am33x-cm3.hash b/package/am33x-cm3/am33x-cm3.hash
+index bb8c2f665e..a63ba64a3c 100644
+--- a/package/am33x-cm3/am33x-cm3.hash
++++ b/package/am33x-cm3/am33x-cm3.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 a722098b362f58f4dfb2a7c30afd604424d435b3d5ebe6ebf5d76ad942f796d0  am33x-cm3-11107db2f1e9e58ee75d4fe9cc38423c9a6e4365.tar.gz
++sha256  a722098b362f58f4dfb2a7c30afd604424d435b3d5ebe6ebf5d76ad942f796d0  am33x-cm3-11107db2f1e9e58ee75d4fe9cc38423c9a6e4365.tar.gz
++sha256  e136e6949a1d3ca144374375af8b9387faa11d2eee7debff8cf22ca8fe7bf7e9  License.txt
+diff --git a/package/android-tools/android-tools.hash b/package/android-tools/android-tools.hash
+index 7afa04430b..27602fb2f7 100644
+--- a/package/android-tools/android-tools.hash
++++ b/package/android-tools/android-tools.hash
 @@ -1,3 +1,4 @@
- # Locally computed
--sha256 56204ddd1cc7890d60f6a47507755f786fa3ee28f1da370a32ca7d7e0795a953  bluez-tools-171181b6ef6c94aefc828dc7fd8de136b9f97532.tar.gz
--sha256 62ca98af63d2ae142dbc77995c6bd4c259eaba4a5832daa33ae9e3d585b9205f  bluez-tools-97efd293491ad7ec96a655665339908f2478b3d1.tar.gz
-+sha256  56204ddd1cc7890d60f6a47507755f786fa3ee28f1da370a32ca7d7e0795a953  bluez-tools-171181b6ef6c94aefc828dc7fd8de136b9f97532.tar.gz
-+sha256  62ca98af63d2ae142dbc77995c6bd4c259eaba4a5832daa33ae9e3d585b9205f  bluez-tools-97efd293491ad7ec96a655665339908f2478b3d1.tar.gz
-+sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/boa/boa.hash b/package/boa/boa.hash
-index 37760fd51d..4efe3aec43 100644
---- a/package/boa/boa.hash
-+++ b/package/boa/boa.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256  02c51bf25f29d56e641b662f0767759654c28d88ec31f55c5a73d57edfe13cf6  boa-0.94.14rc21.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/bonnie/bonnie.hash b/package/bonnie/bonnie.hash
-index acf00fdbe9..c8118e9d62 100644
---- a/package/bonnie/bonnie.hash
-+++ b/package/bonnie/bonnie.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256	cb3866116634bf65760b6806be4afa7e24a1cad6f145c876df8721f01ba2e2cb  bonnie++-1.03e.tgz
-+sha256  bdfeef85436885bc317fdbae3732b17a39e7910eb855553a83b4d2cf9032e773  copyright.txt
-diff --git a/package/bsdiff/bsdiff.hash b/package/bsdiff/bsdiff.hash
-index 989fcf1f12..2c6d02f4e3 100644
---- a/package/bsdiff/bsdiff.hash
-+++ b/package/bsdiff/bsdiff.hash
-@@ -1,2 +1,4 @@
- # From http://www.daemonology.net/bsdiff/:
- md5	e6d812394f0e0ecc8d5df255aa1db22a  bsdiff-4.3.tar.gz
+ # locally computed
+ sha256	9bfba987e1351b12aa983787b9ae4424ab752e9e646d8e93771538dc1e5d932f  android-tools_4.2.2+git20130218.orig.tar.xz
+ sha256	73c3078de3e44d8a3cadf7a360863c63155d9d558c2f0933cf38ad901a3f5998  android-tools_4.2.2+git20130218-3ubuntu41.debian.tar.gz
++sha256  170c5939bf8c8eed1db8f66f2d6155e8c1a3e799e390b55e7aad253195b1ebf5  debian/copyright
+diff --git a/package/atkmm/atkmm.hash b/package/atkmm/atkmm.hash
+index 4b3577c88d..42cc2d7221 100644
+--- a/package/atkmm/atkmm.hash
++++ b/package/atkmm/atkmm.hash
+@@ -1,2 +1,5 @@
+ # From http://ftp.gnome.org/pub/gnome/sources/atkmm/2.24/atkmm-2.24.2.sha256sum
+-sha256	ff95385759e2af23828d4056356f25376cfabc41e690ac1df055371537e458bd	atkmm-2.24.2.tar.xz
++sha256  ff95385759e2af23828d4056356f25376cfabc41e690ac1df055371537e458bd  atkmm-2.24.2.tar.xz
 +# locally computed
-+sha256  fc0a6e634ef77dcf14bf36c7b6d1e57ba1ac5c4809073dfaacb3b5f7ab277eb7  bsdiff.c
++sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
+diff --git a/package/avrdude/avrdude.hash b/package/avrdude/avrdude.hash
+index b203d4d100..888668ae44 100644
+--- a/package/avrdude/avrdude.hash
++++ b/package/avrdude/avrdude.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 cfa97af7badc713c62306ab85d0e7a288b064bf72e698494f73cb16c5b2c659e avrdude-f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa.tar.gz
++sha256  cfa97af7badc713c62306ab85d0e7a288b064bf72e698494f73cb16c5b2c659e  avrdude-f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa.tar.gz
++sha256  201babc7da198873304a77a30dbfc7ca449c9bba52df2dffa4cca0009dbdfcb2  avrdude/COPYING
+diff --git a/package/axfsutils/axfsutils.hash b/package/axfsutils/axfsutils.hash
+index 3ef5c5876f..b7a5943ddb 100644
+--- a/package/axfsutils/axfsutils.hash
++++ b/package/axfsutils/axfsutils.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 7d8c0febaf6f104c2b179475ea1ee6d361688ad7fa4c98dfdf7395fcff2be685 axfsutils-384a1ea214c8cf8359faba00a12513ee7ae1a9f5.tar.gz
++sha256  7d8c0febaf6f104c2b179475ea1ee6d361688ad7fa4c98dfdf7395fcff2be685  axfsutils-384a1ea214c8cf8359faba00a12513ee7ae1a9f5.tar.gz
++sha256  1929a1e67d189aa3a24de76255841b33818f7f65944b6e73a1568ba575ab54d5  mkfs.axfs-legacy/COPYING
