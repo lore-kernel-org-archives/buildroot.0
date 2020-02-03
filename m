@@ -1,64 +1,33 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 3 Feb 2020 11:10:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysrepo: fix host configure
- option
-In-Reply-To: <20191111040518.7996-1-xiaolin.he@nxp.com>
-References: <20191111040518.7996-1-xiaolin.he@nxp.com>
-Message-ID: <0cc416d6-453d-c61c-1d54-e526987f5508@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 3 Feb 2020 11:10:48 +0100
+Subject: [Buildroot] [git commit] package/rt-tests: simplify PYLIB logic
+Message-ID: <20200203095950.3290F8859C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Xiaolin,
+commit: https://git.buildroot.net/buildroot/commit/?id=7041b753dcf49080472bab75ad2e7a49272f6fd3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 11.11.19 05:05, Xiaolin He wrote:
-> Host-sysrepoctl should install yang modules to target
-> directory.
->
-> Signed-off-by: Xiaolin He <xiaolin.he@nxp.com>
-> ---
->   DEVELOPERS                 | 3 +++
->   package/sysrepo/sysrepo.mk | 2 +-
->   2 files changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index c0863aabc6..41a3935407 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2430,6 +2430,9 @@ F:	package/python-pyusb/
->   N:	Wojciech Nizi?ski <niziak@spox.org>
->   F:	package/fwup/
->   
-> +N:	Xiaolin He <xiaolin.he@nxp.com>
-> +F:	package/sysrepo/
-> +
->   N:	Yann E. MORIN <yann.morin.1998@free.fr>
->   F:	board/friendlyarm/nanopi-neo/
->   F:	configs/nanopi_neo_defconfig
-> diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-> index 8676158a19..932c8fd5c0 100644
-> --- a/package/sysrepo/sysrepo.mk
-> +++ b/package/sysrepo/sysrepo.mk
-> @@ -58,7 +58,7 @@ HOST_SYSREPO_CONF_OPTS = \
->   	-DCALL_TARGET_BINS_DIRECTLY=OFF \
->   	-DBUILD_EXAMPLES=OFF \
->   	-DBUILD_CPP_EXAMPLES=OFF \
-> -	-DREPOSITORY_LOC=$(HOST_DIR)/etc/sysrepo \
-> +	-DREPOSITORY_LOC=$(TARGET_DIR)/etc/sysrepo \
->   	-DSUBSCRIPTIONS_SOCKET_DIR=$(HOST_DIR)/var/run/sysrepo-subscriptions
->   
->   $(eval $(cmake-package))
+No functional change, but improves readability.
 
-I think this patch is no longer valid/required for the new version of 
-the sysrepo package.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rt-tests/rt-tests.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-But nevertheless having you as maintainer for the sysrepo package would 
-be great. So could you send a new patch only adding you as maintainer?
-
-
---
-
-Heiko
+diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+index 431c017688..abc32f4fb2 100644
+--- a/package/rt-tests/rt-tests.mk
++++ b/package/rt-tests/rt-tests.mk
+@@ -25,7 +25,7 @@ define RT_TESTS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		DESTDIR="$(TARGET_DIR)" \
+ 		prefix=/usr \
+-		$(if $(BR2_PACKAGE_PYTHON3),PYLIB=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/,PYLIB="") \
++		PYLIB="$(if $(BR2_PACKAGE_PYTHON3),/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/)" \
+ 		install
+ endef
+ 
