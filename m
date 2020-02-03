@@ -1,101 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Feb 2020 14:44:52 +0100
-Subject: [Buildroot] [git commit] package/c*: add license file hashes
-Message-ID: <20200203133729.6C2378881A@busybox.osuosl.org>
+Date: Mon, 3 Feb 2020 14:45:35 +0100
+Subject: [Buildroot] [git commit] package/k*: add license file hashes
+Message-ID: <20200203133729.C687088723@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9776e8c05032ee0612843b283a95fb845d7e90d1
+commit: https://git.buildroot.net/buildroot/commit/?id=335f3d5ff9b8ef7ecb4a8f1e42d303a9fc81d072
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/cannelloni/cannelloni.hash         | 1 +
- package/cantarell/cantarell.hash           | 4 +++-
- package/cdrkit/cdrkit.hash                 | 4 +++-
- package/cgroupfs-mount/cgroupfs-mount.hash | 3 ++-
- package/classpath/classpath.hash           | 4 +++-
- package/cppdb/cppdb.hash                   | 3 +++
- package/cramfs/cramfs.hash                 | 1 +
- package/crda/crda.hash                     | 3 ++-
- 8 files changed, 18 insertions(+), 5 deletions(-)
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash           | 3 ++-
+ package/kbd/kbd.hash                                                   | 3 ++-
+ package/kexec-lite/kexec-lite.hash                                     | 3 ++-
+ package/kismet/kismet.hash                                             | 3 ++-
+ package/kmsxx/kmsxx.hash                                               | 1 +
+ package/knock/knock.hash                                               | 3 ++-
+ package/kvm-unit-tests/kvm-unit-tests.hash                             | 3 ++-
+ package/kvmtool/kvmtool.hash                                           | 3 ++-
+ 8 files changed, 15 insertions(+), 7 deletions(-)
 
-diff --git a/package/cannelloni/cannelloni.hash b/package/cannelloni/cannelloni.hash
-index c14dceb794..41cb72816d 100644
---- a/package/cannelloni/cannelloni.hash
-+++ b/package/cannelloni/cannelloni.hash
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index 3ed7ca2dd9..19341db6ba 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
 @@ -1,2 +1,3 @@
- # Locally computed
- sha256  fe5abb1c9e523049c48dd906603bc762cc55ccd20c16dbec7dc64163b9eefccf  cannelloni-20160414.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  gpl-2.0.txt
-diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
-index 330e7869d1..49b4634063 100644
---- a/package/cantarell/cantarell.hash
-+++ b/package/cantarell/cantarell.hash
-@@ -1,2 +1,4 @@
- # From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.25.sha256sum
--sha256	14a228aa0b516dfc367b434a850f955a00c57fc549cbb05348e2b150196a737f	cantarell-fonts-0.0.25.tar.xz
-+sha256  14a228aa0b516dfc367b434a850f955a00c57fc549cbb05348e2b150196a737f  cantarell-fonts-0.0.25.tar.xz
-+# locally computed
-+sha256  79a9d6198c0d9192c1b0bf55bcbc404a39390bd0d8c650cf20d652c2eaa284d8  COPYING
-diff --git a/package/cdrkit/cdrkit.hash b/package/cdrkit/cdrkit.hash
-index 6ecb922df6..8b574c7079 100644
---- a/package/cdrkit/cdrkit.hash
-+++ b/package/cdrkit/cdrkit.hash
-@@ -1,2 +1,4 @@
- # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cdrkit/cdrkit_1.1.11-3.dsc
--sha256	d1c030756ecc182defee9fe885638c1785d35a2c2a297b4604c0e0dcc78e47da	cdrkit_1.1.11.orig.tar.gz
-+sha256  d1c030756ecc182defee9fe885638c1785d35a2c2a297b4604c0e0dcc78e47da  cdrkit_1.1.11.orig.tar.gz
-+# locally computed
-+sha256  90daae00475a992a367da5b0658469a5d1c4449dbbe964c5b7246e1aec92f491  COPYING
-diff --git a/package/cgroupfs-mount/cgroupfs-mount.hash b/package/cgroupfs-mount/cgroupfs-mount.hash
-index 926a031d75..dc103646a8 100644
---- a/package/cgroupfs-mount/cgroupfs-mount.hash
-+++ b/package/cgroupfs-mount/cgroupfs-mount.hash
+ # locally computed
+-sha256	ad910b7d36dc433bbbe85808d278312e9199635aaa5d00097b70ffab11bde9e6  kernel-module-imx-gpu-viv-86354002bea77acd9ce1812712e9d8485b377ec8.tar.gz
++sha256  ad910b7d36dc433bbbe85808d278312e9199635aaa5d00097b70ffab11bde9e6  kernel-module-imx-gpu-viv-86354002bea77acd9ce1812712e9d8485b377ec8.tar.gz
++sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/kbd/kbd.hash b/package/kbd/kbd.hash
+index 3fed6ace0e..cf29c59860 100644
+--- a/package/kbd/kbd.hash
++++ b/package/kbd/kbd.hash
+@@ -1,2 +1,3 @@
+ # From https://www.kernel.org/pub/linux/utils/kbd/sha256sums.asc
+-sha256 5fd90af6beb225a9bb9b9fb414c090fba53c9a55793e172f508cd43652e59a88  kbd-2.0.4.tar.xz
++sha256  5fd90af6beb225a9bb9b9fb414c090fba53c9a55793e172f508cd43652e59a88  kbd-2.0.4.tar.xz
++sha256  8682bd7a7fe88bad31bf94ee9795c73fd4bc27bfcd50fb135f36dd8762c52035  COPYING
+diff --git a/package/kexec-lite/kexec-lite.hash b/package/kexec-lite/kexec-lite.hash
+index 91e39d68ee..01008236a7 100644
+--- a/package/kexec-lite/kexec-lite.hash
++++ b/package/kexec-lite/kexec-lite.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256 d6c8aff7af59c7d0082ee3018c97f73b0421e81a49bb28ad9f66a36da5cd6ec7  cgroupfs-mount-1.4.tar.gz
-+sha256  d6c8aff7af59c7d0082ee3018c97f73b0421e81a49bb28ad9f66a36da5cd6ec7  cgroupfs-mount-1.4.tar.gz
-+sha256  e52f47a650734f70c40c8fd9318f85e42777bf3fba7ff1dfb72f845bb417f7e6  debian/copyright
-diff --git a/package/classpath/classpath.hash b/package/classpath/classpath.hash
-index d1c5b5c1a4..98a7f1eab0 100644
---- a/package/classpath/classpath.hash
-+++ b/package/classpath/classpath.hash
-@@ -1,2 +1,4 @@
- # From https://www.gnu.org/software/classpath/announce/20120307.html
--sha256	f929297f8ae9b613a1a167e231566861893260651d913ad9b6c11933895fecc8	classpath-0.99.tar.gz
-+sha256  f929297f8ae9b613a1a167e231566861893260651d913ad9b6c11933895fecc8  classpath-0.99.tar.gz
-+# locally computed
-+sha256  357bd31f17c7869a73cd159e46b3dafa2bbf434f022085a820c1f68d941a0b4c  COPYING
-diff --git a/package/cppdb/cppdb.hash b/package/cppdb/cppdb.hash
-index efc0eac0df..6423ef289e 100644
---- a/package/cppdb/cppdb.hash
-+++ b/package/cppdb/cppdb.hash
-@@ -1,3 +1,6 @@
- # From http://sourceforge.net/projects/cppcms/files/cppdb/0.3.1/
- md5	129f1d75f46114b79160b93807d5223f	cppdb-0.3.1.tar.bz2
- sha1	c0410dcc482d71696ac9206044b3a3ac03d31f96	cppdb-0.3.1.tar.bz2
-+# locally computed
-+sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-+sha256  503ed52ef942d44bb26bd47dd5c6765927b198624e4f375e32cc660dfc2a0981  MIT.txt
-diff --git a/package/cramfs/cramfs.hash b/package/cramfs/cramfs.hash
-index c6c18b073c..af7d2e1db3 100644
---- a/package/cramfs/cramfs.hash
-+++ b/package/cramfs/cramfs.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  99d87aa5874f4a34c219275e0297b0f4c710895f9c87295267aeabe6a752add1  cramfs-1a1e65f2a049.tar.gz
-+sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/crda/crda.hash b/package/crda/crda.hash
-index edec55a019..2a263d172a 100644
---- a/package/crda/crda.hash
-+++ b/package/crda/crda.hash
+-sha256 6eb115c8db3a071b970d7ba985ea5e2425e1e716952186f9a4fe329a2e2bb1ca kexec-lite-18ec88310c4134eca2f9e3c417cd09f5914bf633.tar.gz
++sha256  6eb115c8db3a071b970d7ba985ea5e2425e1e716952186f9a4fe329a2e2bb1ca  kexec-lite-18ec88310c4134eca2f9e3c417cd09f5914bf633.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/kismet/kismet.hash b/package/kismet/kismet.hash
+index 913dffc9dd..30780b1cc3 100644
+--- a/package/kismet/kismet.hash
++++ b/package/kismet/kismet.hash
 @@ -1,2 +1,3 @@
  # Locally computed
--sha256 5a8f35bb8b27474f466b0e75d451ba917433d8aab1889678a64d9c4e72a8b8c2 crda-4.14.tar.gz
-+sha256  5a8f35bb8b27474f466b0e75d451ba917433d8aab1889678a64d9c4e72a8b8c2  crda-4.14.tar.gz
-+sha256  c16224b376128b589eea69a8fdd1f09818b8cb995e10d1e37f72dff22233d7b0  LICENSE
+-sha256 bdb21f153311f1ff3b16621bf0d6740f66369bf0982b0a289c9a12af8847e237  kismet-2016-07-R1.tar.xz
++sha256  bdb21f153311f1ff3b16621bf0d6740f66369bf0982b0a289c9a12af8847e237  kismet-2016-07-R1.tar.xz
++sha256  92b9eae679d8efbcd7514f7ff1346e4c1d42d272cd10bcb724d1511d35e28cd1  debian/copyright
+diff --git a/package/kmsxx/kmsxx.hash b/package/kmsxx/kmsxx.hash
+index 94a9ea1eaa..b8d06ac478 100644
+--- a/package/kmsxx/kmsxx.hash
++++ b/package/kmsxx/kmsxx.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  28892e50c1d1c83fddff9ec683e3bdbd465f5032d0014ceeab43563b813807e1  kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9.tar.gz
++sha256  022b4d51da34a380d74dc24eea8e2c4e1a4c8776a52171f8d9e941cf56daf888  LICENSE
+diff --git a/package/knock/knock.hash b/package/knock/knock.hash
+index 3599e43da2..0b9a0918fc 100644
+--- a/package/knock/knock.hash
++++ b/package/knock/knock.hash
+@@ -1,2 +1,3 @@
+ # locally computed hash
+-sha256	940a8de61b4b3530560805c3b9310a077c28c99173c2ccb07ff96720b0e93c58	knock-258a27e5a47809f97c2b9f2751a88c2f94aae891.tar.gz
++sha256  940a8de61b4b3530560805c3b9310a077c28c99173c2ccb07ff96720b0e93c58  knock-258a27e5a47809f97c2b9f2751a88c2f94aae891.tar.gz
++sha256  d747e19206e41702e40822dd91d37cbf40edd86f364ea416d667a0e3013f7189  COPYING
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.hash b/package/kvm-unit-tests/kvm-unit-tests.hash
+index bb827de939..3458778937 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.hash
++++ b/package/kvm-unit-tests/kvm-unit-tests.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 346c543de9e953db283072e1c591cab9d0eb775f7fb1fff3d7560f38bdf6bdf2  kvm-unit-tests-kvm-unit-tests-20171020.tar.gz
++sha256  346c543de9e953db283072e1c591cab9d0eb775f7fb1fff3d7560f38bdf6bdf2  kvm-unit-tests-kvm-unit-tests-20171020.tar.gz
++sha256  d9bbb60891710d248f01c8bdac50ef7ad39188de512610437872e83112b38a1b  COPYRIGHT
+diff --git a/package/kvmtool/kvmtool.hash b/package/kvmtool/kvmtool.hash
+index 428277354d..fd841c354c 100644
+--- a/package/kvmtool/kvmtool.hash
++++ b/package/kvmtool/kvmtool.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 2d55e4521ac040b870db015e1f075d69b89f940242d7ce5708f7d7060d62c0cc  kvmtool-f77d646ba01d04be5aad9449ac00719c043fe36e.tar.gz
++sha256  2d55e4521ac040b870db015e1f075d69b89f940242d7ce5708f7d7060d62c0cc  kvmtool-f77d646ba01d04be5aad9449ac00719c043fe36e.tar.gz
++sha256  0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
