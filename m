@@ -1,31 +1,21 @@
-From: Refik Tuzakli <tuzakli.refik@gmail.com>
-Date: Mon,  3 Feb 2020 22:31:55 +0300
-Subject: [Buildroot] [PATCH v2 7/7] DEVELOPERS: update my entry list
-In-Reply-To: <20200203193155.12657-1-tuzakli.refik@gmail.com>
-References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
-Message-ID: <20200203193155.12657-7-tuzakli.refik@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Feb 2020 21:17:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.5.5
+In-Reply-To: <20200203181202.2110059-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 3 Feb 2020 19:12:02 +0100")
+References: <20200203181202.2110059-1-fontaine.fabrice@gmail.com>
+Message-ID: <87pnev8lys.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 172ebbf43a..13cf9d320d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2069,6 +2069,7 @@ F:	package/uhttpd/
- F:	package/ustream-ssl/
- 
- N:	Refik Tuzakli <tuzakli.refik@gmail.com>
-+F:	package/freescale-imx/
- F:	package/paho-mqtt-cpp/
- 
- N:	R?mi R?rolle <remi.rerolle@gmail.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
