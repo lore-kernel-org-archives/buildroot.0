@@ -1,22 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Feb 2020 14:06:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: needs threads
-In-Reply-To: <20200202213734.1787224-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 2 Feb 2020 22:37:34 +0100")
-References: <20200202213734.1787224-1-fontaine.fabrice@gmail.com>
-Message-ID: <8736brn7ko.fsf@dell.be.48ers.dk>
+Date: Mon, 03 Feb 2020 14:08:08 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/qt5webkit: convert patch to
+ git format and re-number
+In-Reply-To: <20200202190824.9856-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 2 Feb 2020 20:08:23 +0100")
+References: <20200202190824.9856-1-ps.report@gmx.net>
+Message-ID: <87y2tjlsxz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/78391abbf87ac9c04b13d7aab7acf7d1aaade75d
+ > Convert patch 0005-Fix-installation-of-class-headers.patch to git
+ > format and re-number it to 0004-Fix-installation-of-class-headers.patch.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed, thanks.
 
