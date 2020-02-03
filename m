@@ -1,59 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 15:29:52 +0100
-Subject: [Buildroot] [git commit] package/waf: bump to version 2.0.19
-Message-ID: <20200203141853.BA42B888D7@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Feb 2020 15:38:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/network-manager-openvpn: new
+ package
+In-Reply-To: <8b51f7b227fd3cef7bc968a0c4f0eebd018d6655.camel@wiedemann-group.com>
+ (Michel Alex's message of "Fri, 17 Jan 2020 07:46:25 +0000")
+References: <8b51f7b227fd3cef7bc968a0c4f0eebd018d6655.camel@wiedemann-group.com>
+Message-ID: <87h8073fdt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43f7e2fe611a73294d38abd20c9b07fa07530796
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Michel" == Michel Alex <Alex.Michel@wiedemann-group.com> writes:
 
-Also add myself as DEVELOPER, as waf is currently orphan,
-and I am the last one to fiddle with it.
+Hello,
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS           | 1 +
- package/waf/waf.hash | 4 ++--
- package/waf/waf.mk   | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+Sorry for the slow response!
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 32c28d62fd..172ebbf43a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2452,6 +2452,7 @@ F:	package/avro-c/
- F:	package/mosquitto/
- F:	package/python-avro/
- F:	package/redis/
-+F:	package/waf/
+ > From: Alex Michel <alex.michel@wiedemann-group.com>
+ > This package provides OpenVPN plugin for network manager
+
+ > Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
+ > ---
+ >  package/network-manager-openvpn/Config.in     |  5 ++++
+ >  .../network-manager-openvpn.hash              |  4 ++++
+ >  .../network-manager-openvpn.mk                | 23 +++++++++++++++++++
+ >  package/network-manager/Config.in             |  3 +++
+ >  4 files changed, 35 insertions(+)
+ >  create mode 100644 package/network-manager-openvpn/Config.in
+ >  create mode 100644 package/network-manager-openvpn/network-manager-openvpn.hash
+ >  create mode 100644 package/network-manager-openvpn/network-manager-openvpn.mk
+
+ > diff --git a/package/network-manager-openvpn/Config.in b/package/network-manager-openvpn/Config.in
+ > new file mode 100644
+ > index 0000000000..8f13d78d48
+ > --- /dev/null
+ > +++ b/package/network-manager-openvpn/Config.in
+ > @@ -0,0 +1,5 @@
+ > +config BR2_PACKAGE_NETWORK_MANAGER_OPENVPN
+ > +	bool "OpenVPN support"
+ > +	depends on BR2_PACKAGE_NETWORK_MANAGER
+
+What about openvpn? Looking at the code, it seems to execute
+/usr/bin/openvpn - So it should depend on BR2_PACKAGE_OPENVPN
+
+
+ > +	help
+ > +	  This option enables OpenVPN plugin
+
+It would be good with an upstream URL here.
+
+
+ > +++ b/package/network-manager-openvpn/network-manager-openvpn.mk
+ > @@ -0,0 +1,23 @@
+ > +################################################################################
+ > +#
+ > +# network-manager-openvpn
+ > +#
+ > +################################################################################
+ > +
+ > +NETWORK_MANAGER_OPENVPN_VERSION_MAJOR = 1.8
+ > +NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).10
+ > +NETWORK_MANAGER_OPENVPN_SOURCE = NetworkManager-openvpn-$(NETWORK_MANAGER_OPENVPN_VERSION).tar.xz
+ > +NETWORK_MANAGER_OPENVPN_SITE = https://download.gnome.org/sources/NetworkManager-openvpn/$(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR)
+ > +NETWORK_MANAGER_OPENVPN_INSTALL_STAGING = YES
+
+Why? Does this provide a library?
+
+
+ > +++ b/package/network-manager/Config.in
+ > @@ -61,6 +61,9 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
+ >  	help
+ >  	  This option enables support for OpenVSwitch
  
- N:	Trent Piepho <tpiepho@impinj.com>
- F:	package/libp11/
-diff --git a/package/waf/waf.hash b/package/waf/waf.hash
-index 9d610b2c1e..572562cf92 100644
---- a/package/waf/waf.hash
-+++ b/package/waf/waf.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha1    33d170c738ed8c92dda2945b445272972f558244                          waf-1.9.5
--sha256  101f14e0f47a6410c00b8feda094948516cd3989491c56eb8268907fcd164909  waf-1.9.5
-+sha1    d857c29d49848e0fc42e69daa25e0ec2e732ac17                          waf-2.0.19
-+sha256  ba63c90a865a9bcf46926c4e6776f9a3f73d29f33d49b7f61f96bc37b7397cef  waf-2.0.19
-diff --git a/package/waf/waf.mk b/package/waf/waf.mk
-index 97bc2a8963..ae3eb0f1ed 100644
---- a/package/waf/waf.mk
-+++ b/package/waf/waf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WAF_VERSION = 1.9.5
-+WAF_VERSION = 2.0.19
- WAF_SOURCE = waf-$(WAF_VERSION)
- WAF_SITE = https://waf.io
- 
+ > +# source the OpenVPN plugin
+ > +	source "package/network-manager-openvpn/Config.in"
+ > +
+ >  endif
+
+Elsewhere in Buildroot we simple add such extra/optional components
+after the main package instead of including them from the Config.in of
+the main package. Can you please do that as well here?
+
+-- 
+Bye, Peter Korsgaard
