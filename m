@@ -1,38 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 14:20:31 +0100
-Subject: [Buildroot] [PATCH] package/kexec-lite: Bump version
-In-Reply-To: <20200124045903.272466-1-joel@jms.id.au>
-References: <20200124045903.272466-1-joel@jms.id.au>
-Message-ID: <20200203142031.1e942c14@windsurf>
+Date: Mon, 3 Feb 2020 14:21:06 +0100
+Subject: [Buildroot] [git commit] package/lld: bump to version 9.0.1
+Message-ID: <20200203131025.826398881B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 24 Jan 2020 15:29:03 +1030
-Joel Stanley <joel@jms.id.au> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c44096acd93bece939e0416b9998ac893810b89b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Upstream changes include:
-> 
->  - Fix loading FreeBSD kernels with multiple PT_LOAD sections.
-> 
->  - Use autotools to configure and build kexec-lite
-> 
->  - Add support for kexec_file_load
-> 
-> The packaging is adjusted to account for the change in build systems.
-> 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->  package/kexec-lite/kexec-lite.hash |  2 +-
->  package/kexec-lite/kexec-lite.mk   | 13 +++----------
->  2 files changed, 4 insertions(+), 11 deletions(-)
+This was missed when LLVM and Clang were updated.
 
-Applied to master, thanks.
+Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lld/lld.hash | 2 +-
+ package/lld/lld.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lld/lld.hash b/package/lld/lld.hash
+index 3d5a3feb9a..2144cc5666 100644
+--- a/package/lld/lld.hash
++++ b/package/lld/lld.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256 31c6748b235d09723fb73fea0c816ed5a3fab0f96b66f8fbc546a0fcc8688f91  lld-9.0.0.src.tar.xz
++sha256 86262bad3e2fd784ba8c5e2158d7aa36f12b85f2515e95bc81d65d75bb9b0c82  lld-9.0.1.src.tar.xz
+ sha256 f7891568956e34643eb6a0db1462db30820d40d7266e2a78063f2fe233ece5a0  LICENSE.TXT
+diff --git a/package/lld/lld.mk b/package/lld/lld.mk
+index bba608d64a..ea09c5d340 100644
+--- a/package/lld/lld.mk
++++ b/package/lld/lld.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ # LLVM, Clang and lld should be version bumped together
+-LLD_VERSION = 9.0.0
+-LLD_SITE = https://llvm.org/releases/$(LLD_VERSION)
++LLD_VERSION = 9.0.1
++LLD_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLD_VERSION)
+ LLD_SOURCE = lld-$(LLD_VERSION).src.tar.xz
+ LLD_LICENSE = Apache-2.0 with exceptions
+ LLD_LICENSE_FILES = LICENSE.TXT
