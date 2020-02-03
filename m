@@ -1,209 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Feb 2020 16:01:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gadgetfs-test: remove package
-In-Reply-To: <20200203144057.12469-1-mark@dibsco.co.uk>
-References: <20200203144057.12469-1-mark@dibsco.co.uk>
-Message-ID: <20200203150108.GE3299@scaer>
+Date: Mon, 3 Feb 2020 16:06:00 +0100
+Subject: [Buildroot] [PATCH 00/32] add a huge bunch of license file
+ hashes
+In-Reply-To: <CAEyMn7ZiHW5uAJZWZPoDkPAdK4ouCC7hpdw52DQyxezmwr8dkQ@mail.gmail.com>
+References: <20200202194321.16321-1-heiko.thiery@gmail.com>
+ <20200203135407.GC3299@scaer>
+ <CAEyMn7ZiHW5uAJZWZPoDkPAdK4ouCC7hpdw52DQyxezmwr8dkQ@mail.gmail.com>
+Message-ID: <20200203150600.GF3299@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark, All,
+Heiko, All,
 
-On 2020-02-03 14:40 +0000, Mark Corbin spake thusly:
-> Remove gadgetfs-test as gadgetfs has been deprecated in favour of
-> functionfs.
+On 2020-02-03 15:27 +0100, Heiko Thiery spake thusly:
+> Am Mo., 3. Feb. 2020 um 14:54 Uhr schrieb Yann E. MORIN
+> <yann.morin.1998@free.fr>:
+> > On 2020-02-02 20:42 +0100, Heiko Thiery spake thusly:
+> > > This series add missing entries in the hash files for the license files.
+> > > The entries are generated semi-automatically and manually recheck.
+> >
+> > Thank you very much for this! :-)
+> >
+> > I've now applied the whole series, and it dd pass muster, except for
+> > those few exceptions:
+> >
+> >   - dropped because of conflicts:
+> >     - kodi-audioencoder-vorbis
+> >     - kodi-screensaver-matrixtrails
+> >     - kodi-screensaver-biogenesis
+> >     - kodi-screensaver-pyro
+> >     - mii-diag
+> >
+> >   - dropped because already handled:
+> >     - rt-test
+> >
+> >   - fixed:
+> >     - libplist
+> >     - weston
+> >
+> >   - new not covered:
+> >     - weston-imx
+> >
+> > Can you have a look at those, please?
 > 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+> should i take a look on all of these failed or dropped packages? what
+> was the issue with the conflicts?
 
-Applied to master, thanks.
+Sorry, I was not clear enough, so as seen IRL:
+
+  - the 4 kodi packages had a conflict in their .hash files, so I removed
+    them from the series. It means those 4 still do not have a hash for
+    their license files (but the other kodi packages are still OK);
+
+  - the mii-diag I dropped, because the hash did not match;
+
+  - the fixed ones I fixed, so just ignore them (they're OK now!);
+
+  - the weston-imx is a new package that was ontroduced after you sent
+    your series.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  Config.in.legacy                              |  8 ++++
->  package/Config.in                             |  1 -
->  .../0001-fix-usb-ch9-include.patch            | 40 -------------------
->  ...name-include-usb_gadgetfs-to-usb-dir.patch | 12 ------
->  package/gadgetfs-test/Config.in               | 19 ---------
->  package/gadgetfs-test/gadgetfs-test.hash      |  2 -
->  package/gadgetfs-test/gadgetfs-test.mk        | 25 ------------
->  7 files changed, 8 insertions(+), 99 deletions(-)
->  delete mode 100644 package/gadgetfs-test/0001-fix-usb-ch9-include.patch
->  delete mode 100644 package/gadgetfs-test/0002-rename-include-usb_gadgetfs-to-usb-dir.patch
->  delete mode 100644 package/gadgetfs-test/Config.in
->  delete mode 100644 package/gadgetfs-test/gadgetfs-test.hash
->  delete mode 100644 package/gadgetfs-test/gadgetfs-test.mk
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 5fd086b499..061d0f7871 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -144,6 +144,14 @@ endif
->  
->  ###############################################################################
->  
-> +config BR2_PACKAGE_GADGETFS_TEST
-> +	bool "gadgetfs-test was removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  The gadgetfs-test package was removed. Gadgetfs has been
-> +	  deprecated in favour of functionfs. Consider using
-> +	  gadget-tool (gt) instead.
-> +
->  config BR2_PACKAGE_FIS
->  	bool "fis was removed"
->  	select BR2_LEGACY
-> diff --git a/package/Config.in b/package/Config.in
-> index 492bb352a6..e7cf60c533 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -452,7 +452,6 @@ endmenu
->  	source "package/fmtools/Config.in"
->  	source "package/freescale-imx/Config.in"
->  	source "package/fxload/Config.in"
-> -	source "package/gadgetfs-test/Config.in"
->  	source "package/gcnano-binaries/Config.in"
->  	source "package/gpm/Config.in"
->  	source "package/gpsd/Config.in"
-> diff --git a/package/gadgetfs-test/0001-fix-usb-ch9-include.patch b/package/gadgetfs-test/0001-fix-usb-ch9-include.patch
-> deleted file mode 100644
-> index 3d7ce82b4f..0000000000
-> --- a/package/gadgetfs-test/0001-fix-usb-ch9-include.patch
-> +++ /dev/null
-> @@ -1,40 +0,0 @@
-> -From 8cf5909c6f8e0a892155dea14a07adfad445762d Mon Sep 17 00:00:00 2001
-> -From: Haavard Skinnemoen <hskinnemoen@atmel.com>
-> -Date: Sat, 23 Jun 2007 18:34:09 +0200
-> -Subject: [PATCH] Include usb/ch9.h instead of usb_ch9.h
-> -
-> -Signed-off-by: Haavard Skinnemoen <hskinnemoen@atmel.com>
-> ----
-> - usb.c       |    2 +-
-> - usbstring.c |    2 +-
-> - 2 files changed, 2 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/usb.c b/usb.c
-> -index ea6c7de..b161154 100644
-> ---- a/usb.c
-> -+++ b/usb.c
-> -@@ -35,7 +35,7 @@
-> - 
-> - #include <linux/types.h>
-> - #include <linux/usb_gadgetfs.h>
-> --#include <linux/usb_ch9.h>
-> -+#include <linux/usb/ch9.h>
-> - 
-> - #ifdef	AIO
-> - /* this aio code works with libaio-0.3.106 */
-> -diff --git a/usbstring.c b/usbstring.c
-> -index 4bf2965..993acc2 100644
-> ---- a/usbstring.c
-> -+++ b/usbstring.c
-> -@@ -11,7 +11,7 @@
-> - #include <string.h>
-> - 
-> - #include <linux/types.h>
-> --#include <linux/usb_ch9.h>
-> -+#include <linux/usb/ch9.h>
-> - 
-> - #include "usbstring.h"
-> - 
-> --- 
-> -1.5.2.2
-> -
-> diff --git a/package/gadgetfs-test/0002-rename-include-usb_gadgetfs-to-usb-dir.patch b/package/gadgetfs-test/0002-rename-include-usb_gadgetfs-to-usb-dir.patch
-> deleted file mode 100644
-> index ffc2da377d..0000000000
-> --- a/package/gadgetfs-test/0002-rename-include-usb_gadgetfs-to-usb-dir.patch
-> +++ /dev/null
-> @@ -1,12 +0,0 @@
-> -diff -upr gadgetfs-test-orig/usb.c gadgetfs-test/usb.c
-> ---- gadgetfs-test-orig/usb.c	2007-07-18 14:38:38.000000000 +0200
-> -+++ gadgetfs-test/usb.c	2007-07-18 15:33:04.000000000 +0200
-> -@@ -34,7 +34,7 @@
-> - #include <asm/byteorder.h>
-> - 
-> - #include <linux/types.h>
-> --#include <linux/usb_gadgetfs.h>
-> -+#include <linux/usb/gadgetfs.h>
-> - #include <linux/usb/ch9.h>
-> - 
-> - #ifdef	AIO
-> diff --git a/package/gadgetfs-test/Config.in b/package/gadgetfs-test/Config.in
-> deleted file mode 100644
-> index ca14c91b41..0000000000
-> --- a/package/gadgetfs-test/Config.in
-> +++ /dev/null
-> @@ -1,19 +0,0 @@
-> -config BR2_PACKAGE_GADGETFS_TEST
-> -	bool "gadgetfs-test"
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	help
-> -	  Test program for gadgetfs from linux-usb.org
-> -
-> -if BR2_PACKAGE_GADGETFS_TEST
-> -
-> -config BR2_PACKAGE_GADGETFS_TEST_USE_AIO
-> -	bool "use asynchronous i/o"
-> -	select BR2_PACKAGE_LIBAIO
-> -	help
-> -	  Select this to have gadgetfs-test do asynchronous I/O using
-> -	  the libaio library.
-> -
-> -endif
-> -
-> -comment "gadgetfs-test needs a toolchain w/ threads"
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/gadgetfs-test/gadgetfs-test.hash b/package/gadgetfs-test/gadgetfs-test.hash
-> deleted file mode 100644
-> index b96190a574..0000000000
-> --- a/package/gadgetfs-test/gadgetfs-test.hash
-> +++ /dev/null
-> @@ -1,2 +0,0 @@
-> -# Locally calculated
-> -sha256 bd8ebcf7ce86f4b022a4e7ba6b1cc16ffc4022bb58c1910fe4ac96c88217e7ec gadgetfs-test.tar.bz2
-> diff --git a/package/gadgetfs-test/gadgetfs-test.mk b/package/gadgetfs-test/gadgetfs-test.mk
-> deleted file mode 100644
-> index ca47738f5c..0000000000
-> --- a/package/gadgetfs-test/gadgetfs-test.mk
-> +++ /dev/null
-> @@ -1,25 +0,0 @@
-> -################################################################################
-> -#
-> -# gadgetfs-test
-> -#
-> -################################################################################
-> -
-> -GADGETFS_TEST_SOURCE = gadgetfs-test.tar.bz2
-> -GADGETFS_TEST_SITE = http://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/GadgetFsTest
-> -
-> -GADGETFS_TEST_MAKEOPTS = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
-> -
-> -ifeq ($(BR2_PACKAGE_GADGETFS_TEST_USE_AIO),y)
-> -GADGETFS_TEST_DEPENDENCIES = libaio
-> -GADGETFS_TEST_MAKEOPTS += USE_AIO=y
-> -endif
-> -
-> -define GADGETFS_TEST_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(GADGETFS_TEST_MAKEOPTS)
-> -endef
-> -
-> -define GADGETFS_TEST_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) prefix=/usr install
-> -endef
-> -
-> -$(eval $(generic-package))
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
