@@ -1,55 +1,105 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Feb 2020 18:12:34 +0100
-Subject: [Buildroot] [git commit] package/fail2ban: add python3 support
-Message-ID: <20200203170133.68D0D88DBF@busybox.osuosl.org>
+From: Alex Corcoles <alex@corcoles.net>
+Date: Mon, 3 Feb 2020 18:14:58 +0100
+Subject: [Buildroot] Fwd: "PATCH": hack to be able to build Rust targetting
+ MIPS
+In-Reply-To: <CAPAYC_wFywnPH6j8muHXvX1n+bLrWkZxBMrm+ywXQAyTbvsK8Q@mail.gmail.com>
+References: <CAPAYC_xPtDO=j3fWeOEbC41X3PXJZ+7AD=WRm8A1DGQrtbadFQ@mail.gmail.com>
+ <CAPAYC_y98TxMoBtG=P9hDe26=1rHfaoMyoH5NJyLHbRxcxpMAQ@mail.gmail.com>
+ <20200119213102.GA2894@ned>
+ <CAPAYC_xA2zkmmADgr9G2mspcS=Ej16wOM75rT-aCKbK42hzk5g@mail.gmail.com>
+ <CAPAYC_wFywnPH6j8muHXvX1n+bLrWkZxBMrm+ywXQAyTbvsK8Q@mail.gmail.com>
+Message-ID: <CAPAYC_z0NSxhO_kk9YpQeOn8YiY1dcjL6q4BR88nVZwzEosrgw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d666026385573286371a0f5d9f4b5e0d80f723b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I've finally had more time to play with this. It seems that
+mipsel-unknown-linux-uclibc works! I've been able to run software built
+with it on a real hardware device, although it's very crashy (all
+arithmetic operations seem to crash with illegal instruction- probably I
+didn't configure my toolchain right or there's a Rust issue...).
 
-The fail2ban codebase is still native python2, but 2to3 is supported
-upstream.
+I would suggest removing the limitation on uclibc... perhaps with a big
+warning flag, though, as I haven't managed to build complex, stable
+software.
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-[Peter: ensure host-python3 is available]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fail2ban/Config.in   | 2 +-
- package/fail2ban/fail2ban.mk | 8 ++++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+I've written a bit about the process at:
 
-diff --git a/package/fail2ban/Config.in b/package/fail2ban/Config.in
-index 8fa63bfdcb..39e996fdb6 100644
---- a/package/fail2ban/Config.in
-+++ b/package/fail2ban/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_FAIL2BAN
- 	bool "fail2ban"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	help
- 	  Fail2ban scans log files (e.g. /var/log/apache/error_log) and
- 	  bans IPs that show the malicious signs -- too many password
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index 07c0c04787..6f023b48a1 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
-@@ -10,6 +10,14 @@ FAIL2BAN_LICENSE = GPL-2.0+
- FAIL2BAN_LICENSE_FILES = COPYING
- FAIL2BAN_SETUP_TYPE = distutils
- 
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+define FAIL2BAN_PYTHON_2TO3
-+	$(HOST_DIR)/bin/2to3 --write --nobackups --no-diffs $(@D)/bin/* $(@D)/fail2ban
-+endef
-+FAIL2BAN_DEPENDENCIES += host-python3
-+FAIL2BAN_POST_PATCH_HOOKS += FAIL2BAN_PYTHON_2TO3
-+endif
-+
- define FAIL2BAN_FIX_DEFAULT_CONFIG
- 	$(SED) '/^socket/c\socket = /run/fail2ban.sock' $(TARGET_DIR)/etc/fail2ban/fail2ban.conf
- 	$(SED) '/^pidfile/c\pidfile = /run/fail2ban.pid' $(TARGET_DIR)/etc/fail2ban/fail2ban.conf
+https://users.rust-lang.org/t/trying-to-compile-rust-sdl-stuff-for-a-rg300-console-buildroot-mipsel-uclibc/36722
+https://github.com/alexpdp7/retrofw2-rust
+
+Cheers,
+
+?lex
+
+On Mon, Jan 20, 2020 at 5:31 PM Alex Corcoles <alex@corcoles.net> wrote:
+
+> Hi!
+>
+> The RUSTC_TARGET_NAME variable is defined in rustc.mk only if the symbol
+>> BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is selected. This symbols is
+>> used to ensure all the conditions to build a rust package are met. One
+>> of them is that the toolchain is glibc-based. This is required, because
+>> the standard library provided by the pre-built host Rust toolchain is
+>> built against glibc.
+>>
+>> In your defconfig, the toolchain is uclibc-based and the host Rust
+>> toolchain is built from source.
+>>
+>> Hence BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is not defined and so
+>> is RUSTC_TARGET_NAME.
+>>
+>> So there is a bug: the restriction on having a glibc-based toolchain
+>> should apply either when using a pre-built rust toolchain or building
+>> one from source. I'll see how to fix it.
+>>
+>> The list of supported platforms [1] mentions GNU glibc and musl, but not
+>> uclibc. Does the build with your defconfig and patch successful?
+>>
+>> [1] https://forge.rust-lang.org/release/platform-support.html
+>>
+>
+> I think I built it successfully after introducing my hack, but as far as I
+> understand, it is not guaranteed to build in the future (and the opposite
+> is true, perhaps if it doesn't build today, it will tomorrow). In the link
+> you sent, mipsel-unknown-linux-uclibc is Tier 3 with std.
+>
+> If I have some time I will play around with it and see you some results.
+>
+> IMHO, perhaps you should hide non Tier-1 platforms behind an "enable this
+> option for non-Tier 1 Rust builds which are not guaranteed to work", or
+> something like that.
+>
+> Cheers,
+>
+> ?lex
+>
+> --
+>    ___
+>  {~._.~}
+>   ( Y )
+>  ()~*~()  mail: alex at corcoles dot net
+>  (_)-(_)  http://alex.corcoles.net/
+>
+>
+
+-- 
+   ___
+ {~._.~}
+  ( Y )
+ ()~*~()  mail: alex at corcoles dot net
+ (_)-(_)  http://alex.corcoles.net/
+
+
+
+-- 
+   ___
+ {~._.~}
+  ( Y )
+ ()~*~()  mail: alex at corcoles dot net
+ (_)-(_)  http://alex.corcoles.net/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200203/2b401c07/attachment.html>
