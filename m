@@ -1,30 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 14:21:30 +0100
-Subject: [Buildroot] [PATCH] package/lld: Bump lld version to 9.0.1.
-In-Reply-To: <20200123155716.1560-1-michael.drake@codethink.co.uk>
-References: <20200123155716.1560-1-michael.drake@codethink.co.uk>
-Message-ID: <20200203142130.6f601805@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Feb 2020 14:22:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openjdk and
+ package/openjdk-bin: bump version to 13.0.2+8
+In-Reply-To: <20200202203931.694941-1-aduskett@gmail.com> (Adam Duskett's
+ message of "Sun, 2 Feb 2020 12:39:31 -0800")
+References: <20200202203931.694941-1-aduskett@gmail.com>
+Message-ID: <87pnevlsai.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 23 Jan 2020 15:57:16 +0000
-Michael Drake <michael.drake@codethink.co.uk> wrote:
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
-> This was missed when LLVM and Clang were updated.
-> 
-> Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
-> ---
->  package/lld/lld.hash | 2 +-
->  package/lld/lld.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+ > Other changes:
+ >   - Add --with-stdc++lib=dynamic to openjdk.mk or else openjdk will fail to
+ >     build because it defaults to looking for a static libstdc++ library.
 
-Applied to master, thanks.
+ > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
