@@ -1,29 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 12:34:06 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ninja: bump to version 1.10.0
-In-Reply-To: <20200203102110.985994-1-aduskett@gmail.com>
-References: <20200203102110.985994-1-aduskett@gmail.com>
-Message-ID: <20200203123406.17f4211d@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 03 Feb 2020 12:10:54 +0000
+Subject: [Buildroot] [Bug 12331] meson issue
+In-Reply-To: <bug-12331-163@https.bugs.busybox.net/>
+References: <bug-12331-163@https.bugs.busybox.net/>
+Message-ID: <bug-12331-163-rtdl2Iu0Q0@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  3 Feb 2020 02:21:09 -0800
-Adam Duskett <aduskett@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12331
 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/ninja/ninja.hash | 2 +-
->  package/ninja/ninja.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Both applied, thanks. I've extended a bit the commit log for PATCH 2/2
-when applying.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-Thomas
+--- Comment #6 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed in git:
+https://git.buildroot.org/buildroot/commit/?id=62df914ced5adab3869c2ce6f9a41203802e6358
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
