@@ -1,79 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 15:26:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openssh: improve init script
-In-Reply-To: <20200203141253.tzh3kwfsy5yhmsor@zenon.in.qult.net>
-References: <20200123121755.vp2n7mx3xxpbrbyz@zenon.in.qult.net>
- <20200203142721.5b143c0e@windsurf>
- <20200203141253.tzh3kwfsy5yhmsor@zenon.in.qult.net>
-Message-ID: <20200203152603.496bb507@windsurf>
+From: titouan.christophe at railnova.eu <titouan.christophe@railnova.eu>
+Date: Mon,  3 Feb 2020 15:26:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/waf: bump to version 2.0.19
+Message-ID: <20200203142628.12805-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Titouan Christophe <titouan.christophe@railnova.eu>
 
-On Mon, 3 Feb 2020 15:12:53 +0100
-Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr> wrote:
+Also add myself as DEVELOPER, as waf is currently orphan,
+and I am the last one to fiddle with it.
 
-> > > Improve the init script in the following ways:
-> > > 
-> > >   Use start-stop-daemon to avoid running the daemon more than once and
-> > >   to safely send termination signals to the right process.
-> > > 
-> > >   Add a proper reload action, by sending the daemon the SIGHUP signal.  
-> > 
-> > This should ideally be done in a separate patch.
-> >   
-> > >   During restart, check that the daemon has properly terminated and if
-> > >   not, wait one second before sending it the SIGKILL signal.  
-> > 
-> > We never do that in any of our other init scripts, I'm not sure we want
-> > to do that here. Is there any reason to do that?  
-> 
-> Of course, if start-stop-daemon -S finds a matching running process,
-> it returns an error.  Sending a SIGTERM to the running process during
-> the stop phase doesn't guarantee that the process will have already terminated
-> during the start phase, even after sleeping.  If I could use
-> the --retry option of standalone start-stop-daemon, I would.  But with
-> the assumption of Busybox, I need to make sure that the daemon has
-> terminated by the time I attempt to start it again.
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ DEVELOPERS           | 1 +
+ package/waf/waf.hash | 4 ++--
+ package/waf/waf.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-The problem that you're exposing here doesn't seem to be specific to
-openssh, so I think we don't want to solve it specifically for openssh.
-
-> > Overall, could you look at package/busybox/S01syslogd, and use it as a
-> > template for S50openssh ?  
-> 
-> If you mean that I should be testing for start-stop-daemon's return
-> code explicitly by setting status=$? and using if-then-else-fi
-> constructs, then sure, yes.
-
-I meant to make sure the init script looks as much as possible like
-S01syslogd, i.e same indentation, same organization, same logic. As I
-said, Carlos started an effort to try to make our init scripts more
-consistent between each other, so let's try to go in that direction :-)
-
-> > I am a bit confused by this touch /var/lock/sshd. Is it really
-> > necessary? The git history was not very helpful on this, as it has been
-> > in Buildroot since the init script was introduced years ago. The fact
-> > that it is created *after* the sshd daemon is started makes it really
-> > weird.
-> > 
-> > Do you have any comment/insight on this ?  
-> 
-> Quite frankly, I have no idea why it's there and by keeping it, I just
-> wanted stay compatible with whatever is possibly using it.
-
-We had a brief look at it with Peter Korsgaard, we don't see why it
-would be needed. Could you include a preparation patch in your series
-that drops this touch+rm of /var/lock/sshd ?
-
-Thanks!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 32c28d62fd..172ebbf43a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2452,6 +2452,7 @@ F:	package/avro-c/
+ F:	package/mosquitto/
+ F:	package/python-avro/
+ F:	package/redis/
++F:	package/waf/
+ 
+ N:	Trent Piepho <tpiepho@impinj.com>
+ F:	package/libp11/
+diff --git a/package/waf/waf.hash b/package/waf/waf.hash
+index 9d610b2c1e..572562cf92 100644
+--- a/package/waf/waf.hash
++++ b/package/waf/waf.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha1    33d170c738ed8c92dda2945b445272972f558244                          waf-1.9.5
+-sha256  101f14e0f47a6410c00b8feda094948516cd3989491c56eb8268907fcd164909  waf-1.9.5
++sha1    d857c29d49848e0fc42e69daa25e0ec2e732ac17                          waf-2.0.19
++sha256  ba63c90a865a9bcf46926c4e6776f9a3f73d29f33d49b7f61f96bc37b7397cef  waf-2.0.19
+diff --git a/package/waf/waf.mk b/package/waf/waf.mk
+index 97bc2a8963..ae3eb0f1ed 100644
+--- a/package/waf/waf.mk
++++ b/package/waf/waf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAF_VERSION = 1.9.5
++WAF_VERSION = 2.0.19
+ WAF_SOURCE = waf-$(WAF_VERSION)
+ WAF_SITE = https://waf.io
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.24.1
