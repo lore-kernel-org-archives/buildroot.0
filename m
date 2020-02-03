@@ -1,63 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 3 Feb 2020 15:28:19 +0100
-Subject: [Buildroot] [git commit] package/refpolicy: remove dependency on
- policycoreutils
-Message-ID: <20200203141720.7E3A6888C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/refpolicy: bump version to
+ 2.20190609
+Message-ID: <20200203141720.87194888C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0dcb5513ef0db8266b107a7f9fbc5fc1fedc888d
+commit: https://git.buildroot.net/buildroot/commit/?id=f30a1434d0ce2726f222d6708d423aa57ce43f9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Only host-policycoreutils is needed to build refpolicy. Remove the uneeded
-target package.
+Other changes:
+  - Depend on host-python3, as python2 support was removed.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/refpolicy/Config.in    | 8 --------
- package/refpolicy/refpolicy.mk | 3 +--
- 2 files changed, 1 insertion(+), 10 deletions(-)
+ package/refpolicy/refpolicy.hash |  2 +-
+ package/refpolicy/refpolicy.mk   | 13 ++++---------
+ 2 files changed, 5 insertions(+), 10 deletions(-)
 
-diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-index e775865317..d9cf6e6531 100644
---- a/package/refpolicy/Config.in
-+++ b/package/refpolicy/Config.in
-@@ -1,9 +1,5 @@
- config BR2_PACKAGE_REFPOLICY
- 	bool "refpolicy"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # policycoreutils
--	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS # policycoreutils
--	depends on !BR2_STATIC_LIBS # policycoreutils
--	select BR2_PACKAGE_POLICYCOREUTILS
- 	select BR2_PACKAGE_BUSYBOX_SELINUX if BR2_PACKAGE_BUSYBOX
- 	help
- 	  The SELinux Reference Policy project (refpolicy) is a
-@@ -26,10 +22,6 @@ config BR2_PACKAGE_REFPOLICY
+diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
+index 856d8cb8a2..0c77b626cc 100644
+--- a/package/refpolicy/refpolicy.hash
++++ b/package/refpolicy/refpolicy.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/SELinuxProject/refpolicy/releases
+-sha256 ed620dc91c4e09eee6271b373f7c61a364a82ea57bd2dc86ca1f7075304e2843  refpolicy-2.20190201.tar.bz2
++sha256 67bd1213e9d014ada15512028bb7f35ef6610c2d209cc5117b8577474aa6147f  refpolicy-2.20190609.tar.bz2
  
- 	  https://github.com/TresysTechnology/refpolicy
- 
--comment "refpolicy needs a toolchain w/ threads, dynamic library"
--	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
--
- if BR2_PACKAGE_REFPOLICY
- 
- config BR2_PACKAGE_REFPOLICY_POLICY_VERSION
+ # Locally computed
+ sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
 diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 1c3b1bc541..66bddd1aee 100644
+index 66bddd1aee..d13be18f73 100644
 --- a/package/refpolicy/refpolicy.mk
 +++ b/package/refpolicy/refpolicy.mk
-@@ -15,8 +15,7 @@ REFPOLICY_DEPENDENCIES = \
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-REFPOLICY_VERSION = 2.20190201
++REFPOLICY_VERSION = 2.20190609
+ REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
+-REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20190201
++REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20190609
+ REFPOLICY_LICENSE = GPL-2.0
+ REFPOLICY_LICENSE_FILES = COPYING
+ REFPOLICY_INSTALL_STAGING = YES
+@@ -14,18 +14,13 @@ REFPOLICY_DEPENDENCIES = \
+ 	host-m4 \
  	host-checkpolicy \
  	host-policycoreutils \
++	host-python3 \
  	host-setools \
--	host-gawk \
--	policycoreutils
-+	host-gawk
+ 	host-gawk
  
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- REFPOLICY_DEPENDENCIES += host-python3
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-REFPOLICY_DEPENDENCIES += host-python3
+-else
+-REFPOLICY_DEPENDENCIES += host-python
+-endif
+-
+ # Cannot use multiple threads to build the reference policy
+ REFPOLICY_MAKE = \
+-	PYTHON=$(HOST_DIR)/usr/bin/python \
++	PYTHON=$(HOST_DIR)/usr/bin/python3 \
+ 	TEST_TOOLCHAIN=$(HOST_DIR) \
+ 	$(TARGET_MAKE_ENV) \
+ 	$(MAKE1)
