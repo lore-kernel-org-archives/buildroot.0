@@ -1,74 +1,157 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  3 Feb 2020 19:27:10 +0100
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.4.x series
-Message-ID: <20200203182710.3179-1-peter@korsgaard.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon, 3 Feb 2020 19:28:16 +0100
+Subject: [Buildroot] [PATCH 1/2] package/systemd: set machine id file
+ instalation as optional choice
+In-Reply-To: <CAFvCimWo84uxBqohUeG9zA_nD21AfCUp6nme_a8aBQ8sRShACg@mail.gmail.com>
+References: <20191117113345.159653-1-b.bilas@grinn-global.com>
+ <0b8bd9be-3109-f998-5a44-cca063d1e207@mind.be>
+ <CAFvCimUuDJUWzKPA-rX0rqcFNGgNARvD5gdLYqDjR+XVdbgUVA@mail.gmail.com>
+ <6987e42b-89ad-cbf3-fd03-ee3ad74880b7@mind.be>
+ <20191119094006.065afe96@windsurf.home>
+ <CAFvCimWo84uxBqohUeG9zA_nD21AfCUp6nme_a8aBQ8sRShACg@mail.gmail.com>
+Message-ID: <29c3de2c-0add-0305-3c47-1e02658e9fac@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+Hello everyone,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ae5b1860a6..6b96d53beb 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.4.15" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.4.17" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.94-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.90-cip16-rt6" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index e198393da7..940a90ed9d 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 6407222f850f685b346011bd696a3216d5df0f37e0184099100d2724396d94b1  linux-5.4.15.tar.xz
-+sha256 945f2bf6af69eed0ac81ef75b571f37ae1e16a9bb8a2ae698a365ee3ec2c74b9  linux-5.4.17.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 77df6c3c5c512516db444264242cef5370550ed58ef3f198632858b917f9d8b8  linux-4.4.211.tar.xz
--sha256 2597608d5d974cfdc015eaf6a4197b36f19d722b8a309b57e741fb02e311b1be  linux-4.9.211.tar.xz
--sha256 db5777d3a12a85bc8c130b7b250bab2283f9d964b725e5de3c216b495eeb31fe  linux-4.14.168.tar.xz
--sha256 8dbc21f994af9dc3468da4e934a641b457a57cf125d1a8e8f95fe488edd5b5ab  linux-4.19.99.tar.xz
-+sha256 47e6c22722917d3609c430392b7549267c1f097ddae9dc0e7f071a6ea4c7a357  linux-4.4.212.tar.xz
-+sha256 ade738a606c9b52ecf764e94b4e77116caa3a2b8abd30f4534d220ac6894be30  linux-4.9.212.tar.xz
-+sha256 d88ea97993c56b1fa0b0a05061bcde476c6be4fc3bb2de8bd97a8f8ff7278249  linux-4.14.169.tar.xz
-+sha256 be26156abdb38ac0576a34a235ef456bb8ca67fbbe56fc6649b8d069159f8bc4  linux-4.19.101.tar.xz
- # Locally computed
- sha256 6d60ce76bce2e1938f64027d12b1988c95245751feb635adfc551a021d5b3f26  linux-cip-4.19.88-cip16.tar.gz
- sha256 74ec782e11344e5c5db8e48899b464e296ef37acfb43ce7dfb01c09ea8d3e959  linux-cip-4.19.82-cip14-rt5.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a8dca5d09a..9f46a1052b 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -309,11 +309,11 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.211"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.211"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.168"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.99"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.15"	if BR2_KERNEL_HEADERS_5_4
-+	default "4.4.212"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.212"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.169"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.101"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.17"	if BR2_KERNEL_HEADERS_5_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.20.1
+let's reject this patch due to possible upstream solution as Jeremy 
+mentioned.
+
+Best
+Bartek
+On 19.11.2019 11:15, J?r?my ROSEN wrote:
+> As a side-note, I am working with upstream to have a better support of 
+> (3) : https://github.com/systemd/systemd/pull/14059
+>
+> I am a bit cautious about the new config option because it seems too 
+> "advanced" for a config option (for me, it's something that should be set
+> in a post-image or overlay) but that's open to discussion.
+>
+> Please wait a little before applying this patch, if that's the way 
+> buildroot wants to go, so my pull-request above is solved and we might
+> backport it to ease our transition.
+>
+> Cheers
+> J?r?my
+>
+> Le?mar. 19 nov. 2019 ??09:40, Thomas Petazzoni 
+> <thomas.petazzoni at bootlin.com <mailto:thomas.petazzoni@bootlin.com>> a 
+> ?crit?:
+>
+>     Hello,
+>
+>     On Sun, 17 Nov 2019 17:00:05 +0100
+>     Arnout Vandecappelle <arnout at mind.be <mailto:arnout@mind.be>> wrote:
+>
+>     > > Could something like that be enough ? can we trust "remount RW" ?
+>     > > maybe "remount RW" should be renamed "create a RW filesystem"
+>     and enable various
+>     > > tweaks related to RO vs RW
+>     >
+>     >? As written above: no.
+>     >
+>     >? The problem is: we're not a distro.
+>
+>     Agreed.
+>
+>     > We leave too much freedom for the user to
+>     > integrate things in various ways to be able to make assumptions
+>     about what is
+>     > the right way to do things. So, the only thing we can do is to
+>     give a decent
+>     > out-of-the-box experience, and let the user figure out how to
+>     tweak things -
+>     > possibly adding a config option for a common situation that is
+>     easily handled in
+>     > a generic way. The other thing we can do is to provide
+>     documentation about the
+>     > proper way to integrate things in different scenarios.
+>     >
+>     >? I'm starting to agree that this option is maybe not that great.
+>
+>     But I would in fact not come to the same conclusion. Having this empty
+>     machine-id file is useless and causes problems when the filesystem is
+>     R/W. So for the sake of supporting the R/O case (for which we create
+>     this empty machine-id file), we make the R/W experience less good.
+>
+>     So I'd say that the right approach is to not do too much
+>     integration by
+>     precisely having the option proposed by Bartosz, with many the tweak
+>     that it should default y if rootfs is really, and default disable
+>     otherwise, but while still being an option that the user can tweak,
+>     because as you rightfully explained, the RW/RO remount option is
+>     just a
+>     clue, not a definitive answer on whether /etc is writable or not.
+>
+>     To me, having this option matches the Buildroot way: we are not a
+>     distro, we don't enforce how the system should work, so we provide the
+>     appropriate options, while making sure the option has the most
+>     sensible
+>     default values.
+>
+>     Generally speaking, Buildroot kind of supports "out of the box"
+>     two use
+>     cases:
+>
+>     ?(1) The root filesystem is completely read-write.
+>
+>     ?(2) The root filesystem is completely read-only, and all files
+>     that need
+>     ? ? ?to be written are stored in tmpfs, and therefore are volatile.
+>
+>     I.e, we do not have any explicit support for what is I guess a much
+>     more common use case than (2):
+>
+>     ?(3) The root filesystem is completely read-only, but there is another
+>     ? ? ?read-write partition somewhere that stores the information
+>     that can
+>     ? ? ?change but needs to be persistent (user configuration, etc.)
+>
+>     Since we don't have explicit support for (3), there is no way we can
+>     properly support machine-id and ConditionFirstBoot in the case of (2),
+>     because there's nowhere we can store /etc/machine-id.
+>
+>     So the best we can do is in the case of (2), default to creating an
+>     empty /etc/machine-id, while giving the possibility for the user
+>     implementing (3) in its own way, to disable the creation of the empty
+>     /etc/machine-id.
+>
+>     Best regards,
+>
+>     Thomas
+>     -- 
+>     Thomas Petazzoni, CTO, Bootlin
+>     Embedded Linux and Kernel engineering
+>     https://bootlin.com
+>
+>
+>
+> -- 
+> SMILE <http://www.smile.eu/>
+>
+> 20 rue des Jardins
+> 92600 Asni?res-sur-Seine
+>
+> 	
+> *J?r?my ROSEN*
+> Architecte technique
+>
+> email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
+> phone? +33 6 88 25 87 42
+> url http://www.smile.eu <http://www.smile.eu/>
+>
+> Twitter <https://twitter.com/GroupeSmile> Facebook 
+> <https://www.facebook.com/smileopensource> LinkedIn 
+> <https://www.linkedin.com/company/smile> Github 
+> <https://github.com/Smile-SA>
+>
+>
+> D?couvrez l?univers Smile, rendez-vous sur smile.eu 
+> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200203/3c4a0a7b/attachment.html>
