@@ -1,25 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Feb 2020 18:25:05 +0100
-Subject: [Buildroot] [PATCH] package/fail2ban: add conditional
+Date: Mon, 3 Feb 2020 18:24:27 +0100
+Subject: [Buildroot] [git commit] package/fail2ban: add conditional
  python-systemd dependancy
-In-Reply-To: <20200121104212.5621-1-p.debruijn@unilogic.nl> (Pascal de
- Bruijn's message of "Tue, 21 Jan 2020 11:42:12 +0100")
-References: <20200121104212.5621-1-p.debruijn@unilogic.nl>
-Message-ID: <87eevb1t3i.fsf@dell.be.48ers.dk>
+Message-ID: <20200203171426.B96CE88DCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pascal" == Pascal de Bruijn <p.debruijn@unilogic.nl> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b6e0aaa5441275675ea953b5d980ca7d6df918e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > fail2ban needs python-systemd for it's systemd backend to
- > be able to read logs from systemd/journald
+fail2ban needs python-systemd for its systemd backend to
+be able to read logs from systemd/journald
 
- > Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/fail2ban/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/fail2ban/Config.in b/package/fail2ban/Config.in
+index 39e996fdb6..86e6233793 100644
+--- a/package/fail2ban/Config.in
++++ b/package/fail2ban/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_FAIL2BAN
+ 	bool "fail2ban"
+ 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_SYSTEMD if BR2_PACKAGE_SYSTEMD
+ 	help
+ 	  Fail2ban scans log files (e.g. /var/log/apache/error_log) and
+ 	  bans IPs that show the malicious signs -- too many password
