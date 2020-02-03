@@ -1,71 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 16:49:33 +0100
-Subject: [Buildroot] [git commit] package/libsepol: set default policy
- version
-Message-ID: <20200203154034.89DAC873EB@busybox.osuosl.org>
+Date: Mon, 3 Feb 2020 16:49:43 +0100
+Subject: [Buildroot] [git commit] package/busybox: change how its SELinux
+ support is enabled
+Message-ID: <20200203154034.9A021873EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55784bcbfa77671359a6e7a98a6a73bf8cc73126
+commit: https://git.buildroot.net/buildroot/commit/?id=bc2e241bce5c1f70e93d22aceee180ee26db0e77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If a policy is built that is newer than the kernel can support, the
-libsepol will fail to load that policy.
+Following commit 0dcb5513ef0db8266b107a7f9fbc5fc1fedc888d
+("package/refpolicy: remove dependency on policycoreutils"), we have a
+build failure on some configurations:
 
-Indeed, a user can manually select the policy version in the config
-as-is. However, it is not a friendly solution. The best solution available
-is to set a default policy version based off of the toolchain header kernel
-version. While a user may have a toolchain that has older kernel headers than
-the built kernel, it is still better than setting the default to the maximum
-available version that SELinux can support.
+Makefile:571: *** libselinux is in the dependency chain of busybox that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
 
-The following defaults policy versions are as follows for the given toolchain
-headers:
+This is because refpolicy selects the busybox SELinux support when
+Busybox is enabled, which it turns selects libselinux, but we no
+longer pay attention to the libselinux dependencies while doing this.
 
-31 >= 4.13
-30 >= 4.3
-29 >= 3.14
-28 >= 3.5
-26 >= 2.6
-default 25
+Since it's quite weird to have refpolicy mess with Busybox SELinux
+support, this commit changes the logic to have Busybox automatically
+enable its SELinux support as soon as SELinux support is enabled,
+while still allowing it to be disabled.
 
-Note: Version 27 was never released.
+Fixes:
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+  http://autobuild.buildroot.net/results/5d8fda7c488a03c14942d87467d501acd633d24a/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libsepol/Config.in | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ package/busybox/Config.in   | 5 ++---
+ package/refpolicy/Config.in | 1 -
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
-index 3b84c90761..21d4d7865c 100644
---- a/package/libsepol/Config.in
-+++ b/package/libsepol/Config.in
-@@ -11,7 +11,23 @@ if BR2_PACKAGE_LIBSEPOL
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index be8b0e4799..5e5c586762 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -38,10 +38,9 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
  
- config BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
- 	int "Policy version"
--	default 30
-+	default 31 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
-+	default 30 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-+	default 29 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-+	default 28 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+	default 26 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_2_6
-+	default 25
-+	help
-+	  The maximum SELinux policy version your kernel supports.
-+
-+	  Here's a handy table to help you choose:
-+	  kernel version   SElinux policy max version
-+	  <= 2.6.x         25
-+	  > 2.6 <= 3.5     26
-+	  > 3.5 <= 3.14    28 (27 and 28 were added@the same time)
-+	  > 3.14 <= 4.3    29
-+	  > 4.3 <= 4.13    30
-+	  > 4.13           31
- 
- endif
- 
+ config BR2_PACKAGE_BUSYBOX_SELINUX
+ 	bool "Enable SELinux support"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_STATIC_LIBS
++	default y
++	depends on BR2_PACKAGE_LIBSELINUX
+ 	select BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
+-	select BR2_PACKAGE_LIBSELINUX
+ 	help
+ 	  Enable SELinux support in BusyBox. Please note that
+ 	  depending on your BusyBox configuration and the SELinux
+diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+index f0c8a43563..b50b2f09ff 100644
+--- a/package/refpolicy/Config.in
++++ b/package/refpolicy/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_REFPOLICY
+ 	bool "refpolicy"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libsepol
+-	select BR2_PACKAGE_BUSYBOX_SELINUX if BR2_PACKAGE_BUSYBOX
+ 	# Even though libsepol is not necessary for building, we get
+ 	# the policy version from libsepol, so we select it, and treat
+ 	# it like a runtime dependency.
