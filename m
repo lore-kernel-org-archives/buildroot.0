@@ -1,28 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Feb 2020 22:38:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpjsip: use system portaudio
- instead of bundled one
-In-Reply-To: <20200203211559.2529379-1-fontaine.fabrice@gmail.com>
-References: <20200203211559.2529379-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200203223858.79181c44@windsurf>
+Date: Mon, 3 Feb 2020 22:39:40 +0100
+Subject: [Buildroot] [PATCH 1/2] package/haproxy: install only binary
+In-Reply-To: <20200203205256.2508469-1-fontaine.fabrice@gmail.com>
+References: <20200203205256.2508469-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200203223940.3b9c4d0e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  3 Feb 2020 22:15:59 +0100
+On Mon,  3 Feb 2020 21:52:55 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
+> Use install-bin instead of install target to avoid installing doc and
+> man pages
+> 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/haproxy/haproxy.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Are you sure there's a bundled one? I don't really see it, and the
-aconfigure.ac logic is not very clear. How did you find this ? Could
-you give some more details ?
-
-It seems like libpjsip can use ALSA, in which case it doesn't need
-PortAudio. So it would be nice to have more details from you about this
-change.
+doc and man pages get removed by target-finalize, so we're not really
+interested in doing "special" things to avoid their installation, even
+if admittedly in this case the "special" thing is pretty basic.
 
 Best regards,
 
