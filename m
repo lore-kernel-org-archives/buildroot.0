@@ -1,14 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Feb 2020 15:31:59 +0100
-Subject: [Buildroot] [PATCH v3 for-next 00/11] gitlab Qemu runtime
- testing
-In-Reply-To: <341bf831-7063-ca42-2fa1-967ce7836d92@smile.fr>
-References: <20191117201909.12900-1-romain.naour@smile.fr>
- <4ae261dd-e9f5-0212-eafd-c642c21d27bf@smile.fr>
- <99a9e061-7fca-c7c0-683b-49845067ba8f@mind.be>
- <87k16s4lkk.fsf@dell.be.48ers.dk>
- <341bf831-7063-ca42-2fa1-967ce7836d92@smile.fr>
-Message-ID: <ec140d5b-8435-a0a3-e83e-0a7845f8bf21@mind.be>
+Date: Tue, 4 Feb 2020 15:36:01 +0100
+Subject: [Buildroot] [PATCH v2] package/libnspr: remove
+ BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+In-Reply-To: <20200204110416.074754d8@windsurf>
+References: <20200204095059.7315-1-giulio.benetti@benettiengineering.com>
+ <20200204110416.074754d8@windsurf>
+Message-ID: <b1fbe4c2-03eb-9c45-484d-043a2f7b60b4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,59 +14,23 @@ To: buildroot@busybox.net
 
 
 
-On 04/02/2020 14:59, Romain Naour wrote:
-> Hi,
+On 04/02/2020 11:04, Thomas Petazzoni wrote:
+> On Tue,  4 Feb 2020 10:50:59 +0100
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 > 
-> Le 19/12/2019 ? 12:11, Peter Korsgaard a ?crit?:
->>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>> Since all architectures supported by Buildroot are supported by libnspr
+>> BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT makes no sense anymore, so let's remove
+>> it all around.
 >>
->> Hi,
->>
->>  >> I discussed about this series with Jeremy and he suggest to add the Qemu command
->>  >> line into the Qemu's defconfig file (add a new Kconfig option).
->>  >> With that, we can even add a new Makefile target "make run-qemu" to start Qemu
->>  >> when the Qemu command line is set in the defconfig (this would avoid adding
->>  >> several launch.sh script).
->>
->>  > So something like
->>
->>  > config BR2_PACKAGE_HOST_QEMU_LAUNCH_ARGS
->>  > 	string "qemu launch command"
->>  > 	help
->>  > 	  Command to launch qemu. If this is defined, 'make run-qemu' can be
->>  > 	  used to build everything and launch qemu.
->>
->>
->>  > HOST_QEMU_LAUNCH_ARGS = $(call qstrip,$(BR2_PACKAGE_HOST_QEMU_LAUNCH_ARGS))
->>  > ifneq ($(HOST_QEMU_LAUNCH_ARGS),)
->>  > run-qemu: world
->>  > 	$(Q)$(HOST_QEMU) <kernel args> <rootfs args> $(HOST_QEMU_LAUNCH_ARGS)
->>  > endif
->>
->>  > Looks like a good idea indeed!
->>
->> Cute. The kernel arguments (-kernel path/to/kernel/image) could indeed
->> probably be standardized, but we do some to have quite some variation in
->> the rootfs arguments.
->>
->> But OK, we could start with just including the rootfs argument in
->> _LAUNCH_ARGS.
->>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > 
-> About the qemu-system-* binary, should we use the one from the host or use the
-> one from the host-qemu package? (or it depend?)
-> 
-> It can be convenient to use the Qemu provided by the host since it can provide
-> full feature support. The Qemu provided by host-qemu only support some
-> dependencies but not all.
-> 
-> On the other hand, the user can still use the qemu-system-* he want by not using
-> make run-qemu but using the qemu command line in the console.
+> Arnout and I both agreed that we want to keep this blind option, so I'm
+> not sure I understand why you're sending this patch. Did we miss something?
 
- Indeed. I think the 'run-qemu' should be something completely self-contained
-and not rely on anything on the build machine.
-
- So I think we should use host-qemu.
+ Actually, Giulio replied that in the other thread (but it should be part of the
+commit log here, maybe): adding architecture support is trivial (just a matter
+of defining the right sizes), so we should never need to re-add this option.
+Just fix libnspr.
 
  Regards,
  Arnout
