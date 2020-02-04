@@ -1,42 +1,75 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue,  4 Feb 2020 15:24:56 +0100
-Subject: [Buildroot] [PATCH 5/5] package/pkg-meson: use TARGET_MAKE_ENV in
- configure
-In-Reply-To: <20200204142456.1537358-1-arnout@mind.be>
-References: <20200204142456.1537358-1-arnout@mind.be>
-Message-ID: <20200204142456.1537358-6-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 4 Feb 2020 15:31:59 +0100
+Subject: [Buildroot] [PATCH v3 for-next 00/11] gitlab Qemu runtime
+ testing
+In-Reply-To: <341bf831-7063-ca42-2fa1-967ce7836d92@smile.fr>
+References: <20191117201909.12900-1-romain.naour@smile.fr>
+ <4ae261dd-e9f5-0212-eafd-c642c21d27bf@smile.fr>
+ <99a9e061-7fca-c7c0-683b-49845067ba8f@mind.be>
+ <87k16s4lkk.fsf@dell.be.48ers.dk>
+ <341bf831-7063-ca42-2fa1-967ce7836d92@smile.fr>
+Message-ID: <ec140d5b-8435-a0a3-e83e-0a7845f8bf21@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The configure step doesn't use TARGET_MAKE_ENV, but sets PATH
-explicitly. Thus, it missed the update of PATH with HOST_BIN_CROSS.
 
-Instead of adding it explicitly again, just use TARGET_MAKE_ENV. Yes,
-it's not really a 'make environment' that we're expecting to use in the
-configure step, 'conf environment' would make more sense. However,
-TARGET_MAKE_ENV is indeed used in the configure step since it's part of
-TARGET_CONFIGURE_OPTS.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/pkg-meson.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 04/02/2020 14:59, Romain Naour wrote:
+> Hi,
+> 
+> Le 19/12/2019 ? 12:11, Peter Korsgaard a ?crit?:
+>>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>
+>> Hi,
+>>
+>>  >> I discussed about this series with Jeremy and he suggest to add the Qemu command
+>>  >> line into the Qemu's defconfig file (add a new Kconfig option).
+>>  >> With that, we can even add a new Makefile target "make run-qemu" to start Qemu
+>>  >> when the Qemu command line is set in the defconfig (this would avoid adding
+>>  >> several launch.sh script).
+>>
+>>  > So something like
+>>
+>>  > config BR2_PACKAGE_HOST_QEMU_LAUNCH_ARGS
+>>  > 	string "qemu launch command"
+>>  > 	help
+>>  > 	  Command to launch qemu. If this is defined, 'make run-qemu' can be
+>>  > 	  used to build everything and launch qemu.
+>>
+>>
+>>  > HOST_QEMU_LAUNCH_ARGS = $(call qstrip,$(BR2_PACKAGE_HOST_QEMU_LAUNCH_ARGS))
+>>  > ifneq ($(HOST_QEMU_LAUNCH_ARGS),)
+>>  > run-qemu: world
+>>  > 	$(Q)$(HOST_QEMU) <kernel args> <rootfs args> $(HOST_QEMU_LAUNCH_ARGS)
+>>  > endif
+>>
+>>  > Looks like a good idea indeed!
+>>
+>> Cute. The kernel arguments (-kernel path/to/kernel/image) could indeed
+>> probably be standardized, but we do some to have quite some variation in
+>> the rootfs arguments.
+>>
+>> But OK, we could start with just including the rootfs argument in
+>> _LAUNCH_ARGS.
+>>
+> 
+> About the qemu-system-* binary, should we use the one from the host or use the
+> one from the host-qemu package? (or it depend?)
+> 
+> It can be convenient to use the Qemu provided by the host since it can provide
+> full feature support. The Qemu provided by host-qemu only support some
+> dependencies but not all.
+> 
+> On the other hand, the user can still use the qemu-system-* he want by not using
+> make run-qemu but using the qemu command line in the console.
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index e7eea2aa58..7bb08157f5 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -84,7 +84,7 @@ define $(2)_CONFIGURE_CMDS
- 	    ) \
- 	    package/meson/cross-compilation.conf.in \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
--	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_CONF_ENV) $$(MESON) \
- 		--prefix=/usr \
- 		--libdir=lib \
- 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
--- 
-2.24.1
+ Indeed. I think the 'run-qemu' should be something completely self-contained
+and not rely on anything on the build machine.
+
+ So I think we should use host-qemu.
+
+ Regards,
+ Arnout
