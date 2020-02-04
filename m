@@ -1,95 +1,24 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  4 Feb 2020 02:09:42 -0800
-Subject: [Buildroot] [PATCH 1/1] package/restorecond: Fix restorecond init
- script.
-Message-ID: <20200204100942.421804-1-aduskett@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 Feb 2020 11:28:06 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/libxslt: bump to version
+ 1.1.34
+In-Reply-To: <20191123173505.718679-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 23 Nov 2019 18:35:05 +0100")
+References: <20191123173505.718679-1-fontaine.fabrice@gmail.com>
+Message-ID: <87v9ommytl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current restorecond init script has several issues which prevent
-it from starting:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-  - Busybox ash will error at "test $EUID = 0  || exit 4" with the error
-    "sh: 0: unknown operand"
+ > Remove patch (already in version)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  - start-stop-daemon is not used
-  - Failures happen silently.
+Committed to 2019.02.x and 2019.11.x after updating the commit message
+to mention the security fixes, thanks.
 
-Add our own S20restorecond to the package file and use that instead.
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/restorecond/S20restorecond | 45 ++++++++++++++++++++++++++++++
- package/restorecond/restorecond.mk |  2 +-
- 2 files changed, 46 insertions(+), 1 deletion(-)
- create mode 100644 package/restorecond/S20restorecond
-
-diff --git a/package/restorecond/S20restorecond b/package/restorecond/S20restorecond
-new file mode 100644
-index 0000000000..1abf678177
---- /dev/null
-+++ b/package/restorecond/S20restorecond
-@@ -0,0 +1,45 @@
-+#!/bin/sh
-+RESTORECOND=/usr/sbin/restorecond
-+PIDFILE=/run/restorecond.pid
-+if [ -x /usr/sbin/selinuxenabled ]; then
-+  if ! /usr/sbin/selinuxenabled; then
-+    echo "Selinux is not enabled!"
-+    exit 7
-+  fi
-+fi
-+
-+# Check that we are root ... so non-root users stop here
-+if [ $EUID != 0 ]; then
-+  echo "Restorecond must be ran as root!"
-+  exit 4
-+fi
-+
-+test -x /usr/sbin/restorecond  || exit 5
-+test -f /etc/selinux/restorecond.conf  || exit 6
-+
-+case "$1" in
-+  start)
-+    echo "Starting restorecond..."
-+    unset HOME MAIL USER USERNAME
-+    start-stop-daemon -S -x "${RESTORECOND}" -p "${PIDFILE}"
-+  ;;
-+  stop)
-+  echo "Stopping restorecond..."
-+  start-stop-daemon -K -x "${RESTORECOND}" -p "${PIDFILE}" -o
-+  ;;
-+  reload|force-reload)
-+  echo "Reloading restorecond..."
-+  restart
-+  ;;
-+  restart)
-+  stop
-+  start
-+  ;;
-+  condrestart)
-+  [ -e /var/lock/subsys/restorecond ] && restart
-+  ;;
-+  *)
-+  echo "Usage: $0 {start|stop|restart|reload|force-reload|condrestart}"
-+  exit 3
-+  ;;
-+esac
-diff --git a/package/restorecond/restorecond.mk b/package/restorecond/restorecond.mk
-index c519b5de2b..cb4859c2d0 100644
---- a/package/restorecond/restorecond.mk
-+++ b/package/restorecond/restorecond.mk
-@@ -27,7 +27,7 @@ define RESTORECOND_BUILD_CMDS
- endef
- 
- define RESTORECOND_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D $(@D)/restorecond.init \
-+	$(INSTALL) -m 0755 -D $(RESTORECOND_PKGDIR)/S20restorecond \
- 		$(TARGET_DIR)/etc/init.d/S20restorecond
- endef
- 
 -- 
-2.24.1
+Bye, Peter Korsgaard
