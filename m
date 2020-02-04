@@ -1,61 +1,157 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Feb 2020 13:57:34 +0100
-Subject: [Buildroot] [PATCH] package/grep: fix busybox aliasing
-In-Reply-To: <1580813230-11405-1-git-send-email-angelo@amarulasolutions.com>
- (Angelo Compagnucci's message of "Tue, 4 Feb 2020 11:47:10 +0100")
-References: <1580813230-11405-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <87pneuldc1.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 4 Feb 2020 14:10:35 +0100
+Subject: [Buildroot] [PATCH v4 2/2] package/php-xdebug: new package
+In-Reply-To: <ad4d8011-dc9e-ccc2-c357-2464db5a6f61@smile.fr>
+References: <20191025182217.13682-1-nicolas.carrier@orolia.com>
+ <20191025182217.13682-2-nicolas.carrier@orolia.com>
+ <ad4d8011-dc9e-ccc2-c357-2464db5a6f61@smile.fr>
+Message-ID: <c5cf69fe-e2bc-81c2-5278-8b8568dce4db@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+Le 25/10/2019 ? 21:14, Romain Naour a ?crit?:
+> Hi Nicolas,
+> 
+> Le 25/10/2019 ? 20:22, Nicolas Carrier a ?crit?:
+>> Extension for PHP to assist with debugging and development.
+>>
+>> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+> 
+> Reviewed-by: Romain Naour <romain.naour@smile.fr>
+> 
+> Best regards,
+> Romain
+> 
+>> ---
+>>
+>> Changes v3 -> v4:
+>>   - add myself to the DEVELOPERS file
+>>
+>> Changes v2 -> v3:
+>>   - sorted correctly the new entry in the top level Config.in
+>>   - use the AUTOCONF and AUTOHEADER variables from automake.mk
+>>
+>> Changes v1 -> v2:
+>>   - move xdebug to php extensions submenu, with the following two consequences:
+>>         - makes it dependent on php
+>>         - makes it wrapped inside !STATIC test
+>>   - removed empty line in Config.in
+>>   - removed Web page: prefix in help string
+>>   - one option per line in PHP_XDEBUG_CONF_OPTS
+>>   - renamed to php-xdebug
+>>   - changed license to `Xdebug License (PHP-3.0-like)`
+>>
+>> ---
+>>
+>>  DEVELOPERS                         |  3 +++
+>>  package/Config.in                  |  1 +
+>>  package/php-xdebug/Config.in       |  6 ++++++
+>>  package/php-xdebug/php-xdebug.hash |  3 +++
+>>  package/php-xdebug/php-xdebug.mk   | 28 ++++++++++++++++++++++++++++
+>>  5 files changed, 41 insertions(+)
+>>  create mode 100644 package/php-xdebug/Config.in
+>>  create mode 100644 package/php-xdebug/php-xdebug.hash
+>>  create mode 100644 package/php-xdebug/php-xdebug.mk
+>>
+>> diff --git a/DEVELOPERS b/DEVELOPERS
+>> index ec4f50a79e..322d7f59c7 100644
+>> --- a/DEVELOPERS
+>> +++ b/DEVELOPERS
+>> @@ -1724,6 +1724,9 @@ F:	package/libevdev/
+>>  N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
+>>  F:	package/uacme/
+>>  
+>> +N:	Nicolas Carrier <nicolas.carrier@orolia.com>
+>> +F:	package/php-xdebug/
+>> +
+>>  N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+>>  F:	package/libgit2/
+>>  
+>> diff --git a/package/Config.in b/package/Config.in
+>> index d78b4c444b..4f1b80a8e4 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -801,6 +801,7 @@ menu "External php extensions"
+>>  	source "package/php-imagick/Config.in"
+>>  	source "package/php-memcached/Config.in"
+>>  	source "package/php-ssh2/Config.in"
+>> +	source "package/php-xdebug/Config.in"
+>>  	source "package/php-yaml/Config.in"
+>>  	source "package/php-zmq/Config.in"
+>>  endmenu
+>> diff --git a/package/php-xdebug/Config.in b/package/php-xdebug/Config.in
+>> new file mode 100644
+>> index 0000000000..b5919e06cd
+>> --- /dev/null
+>> +++ b/package/php-xdebug/Config.in
+>> @@ -0,0 +1,6 @@
+>> +config BR2_PACKAGE_PHP_XDEBUG
+>> +	bool "php-xdebug"
 
- > When grep package is selected, it should be installed at the same exact
- > location where busybox installs it too, this way the grep/egrep/fgrep
- > executables will end up overwriting the busybox provided ones.
- > Busybox installs *grep executables in /bin, grep package in /usr/bin.
+Other php modules add a dependency on php package here
+	depends on BR2_PACKAGE_PHP
 
- > Moreover, egrep/fgrep is using autotools SHELL variable to execve the
- > grep executable with correct options, SHELL is defaulted to /bin/bash
- > which is usually not available on target.
+even if all php modules are guarded by a if BR2_PACKAGE_PHP [1]
+For example, we don't add a depends on BR2_PACKAGE_PYTHON to python modules.
 
-"Moreover" in a commit message is quite a strong hint that the commit is
-doing several things ;)
+So you're right it's not necessary to add the "depends on BR2_PACKAGE_PHP, maybe
+we should remove them.
 
-Can you split it up into two commits, one for the prefix issue and one
-for the SHELL issue?
+[1]
+https://git.buildroot.net/buildroot/tree/package/Config.in?id=0b056944f5878304f51af3e9edb6d596f24fc370#n559
 
-I take it that you checked that the configure logic works with
-SHELL=/bin/sh when that ISN'T bash?
+Best regards,
+Romain
 
-
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
- > ---
- >  package/grep/grep.mk | 1 +
- >  1 file changed, 1 insertion(+)
-
- > diff --git a/package/grep/grep.mk b/package/grep/grep.mk
- > index 96685b0..7365a57 100644
- > --- a/package/grep/grep.mk
- > +++ b/package/grep/grep.mk
- > @@ -10,6 +10,7 @@ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- >  GREP_LICENSE = GPL-3.0+
- >  GREP_LICENSE_FILES = COPYING
- >  GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- > +GREP_CONF_OPTS = SHELL=/bin/sh --exec-prefix=/
- 
- >  # link with iconv if enabled
- >  ifeq ($(BR2_PACKAGE_LIBICONV),y)
- > -- 
- > 2.7.4
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Bye, Peter Korsgaard
+>> +	help
+>> +	  Extension for PHP to assist with debugging and development.
+>> +
+>> +	  http://xdebug.org
+>> diff --git a/package/php-xdebug/php-xdebug.hash b/package/php-xdebug/php-xdebug.hash
+>> new file mode 100644
+>> index 0000000000..d645142efc
+>> --- /dev/null
+>> +++ b/package/php-xdebug/php-xdebug.hash
+>> @@ -0,0 +1,3 @@
+>> +# Locally computed
+>> +sha256 ef479ee1a3da3f933e0d046ca8cd0c14601f29b2c0c41cc60c9388546a4e0272  LICENSE
+>> +sha256 b2aeb55335c5649034fe936abb90f61df175c4f0a0f0b97a219b3559541edfbd  php-xdebug-2.7.2.tar.gz
+>> diff --git a/package/php-xdebug/php-xdebug.mk b/package/php-xdebug/php-xdebug.mk
+>> new file mode 100644
+>> index 0000000000..a77bbeee90
+>> --- /dev/null
+>> +++ b/package/php-xdebug/php-xdebug.mk
+>> @@ -0,0 +1,28 @@
+>> +################################################################################
+>> +#
+>> +# php-xdebug
+>> +#
+>> +################################################################################
+>> +
+>> +PHP_XDEBUG_VERSION = 2.7.2
+>> +PHP_XDEBUG_SITE = $(call github,xdebug,xdebug,$(PHP_XDEBUG_VERSION))
+>> +PHP_XDEBUG_INSTALL_STAGING = YES
+>> +PHP_XDEBUG_LICENSE = Xdebug License (PHP-3.0-like)
+>> +PHP_XDEBUG_LICENSE_FILES = LICENSE
+>> +# phpize does the autoconf magic
+>> +PHP_XDEBUG_DEPENDENCIES = php host-autoconf
+>> +PHP_XDEBUG_CONF_OPTS = \
+>> +	--enable-xdebug \
+>> +	--with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+>> +	--with-xdebug=$(STAGING_DIR)/usr
+>> +
+>> +define PHP_XDEBUG_PHPIZE
+>> +	(cd $(@D); \
+>> +		PHP_AUTOCONF=$(AUTOCONF) \
+>> +		PHP_AUTOHEADER=$(AUTOHEADER) \
+>> +		$(STAGING_DIR)/usr/bin/phpize)
+>> +endef
+>> +
+>> +PHP_XDEBUG_PRE_CONFIGURE_HOOKS += PHP_XDEBUG_PHPIZE
+>> +
+>> +$(eval $(autotools-package))
+>>
+> 
