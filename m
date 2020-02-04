@@ -1,62 +1,64 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue,  4 Feb 2020 15:24:47 +0100
-Subject: [Buildroot] [PATCH v2] package/grep: fix egrep/fgrep shebang
-Message-ID: <1580826287-1343-1-git-send-email-angelo@amarulasolutions.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue,  4 Feb 2020 15:24:51 +0100
+Subject: [Buildroot] [PATCH 0/5] [RFC] Introduce cross-bin directory
+Message-ID: <20200204142456.1537358-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-egrep/fgrep are using autotools SHELL variable to exec the
-grep executable with correct options, SHELL is defaulted to
-/bin/bash which we usually don't have on target.
-This patch defaults on /bin/sh, when /bin/sh is not available
-on target, we simply remove the aliases.
+This series is the start of a "cross-bin" directory that I've mentioned
+a couple of times already.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
-Changelog:
-v1 -> v2:
-* Handling the corner case when BR2_SYSTEM_BIN_SH_NONE as suggested by
-  Yann
+The idea is that host-tools that are meant for cross-building but don't
+encode the cross-target in their name can be put in this directory, and
+we put this directory in front of PATH for cross-compilation. For
+example, the pkg-config wrapper is really a cross-compilation wrapper.
+To be able to support building of host tools with it, we need to add
+environment variables to force host compilation in HOST_CONFIGURE_OPTS.
+By moving the pkg-config wrapper to the cross-bin directory, we can
+avoid that: for cross-compilation (i.e. target packages), the cross-bin
+dir is put in front of PATH, so the pkg-config wrapper for target is
+found. For native compilation (i.e. host packages), the cross-bin dir
+is *not* put in PATH, so the normal pkg-config configuration will be
+used.
 
- package/grep/Config.in | 2 ++
- package/grep/grep.mk   | 9 +++++++++
- 2 files changed, 11 insertions(+)
+This series does not do that yet for pkg-config itself. It is only done
+for python and python3. The idea is to start with something a little
+bit less far-reaching that pkg-config. Also, the python3 change is
+needed for meson packages that build python modules from C code (e.g.
+recent python-gobject). These need to have _PYTHON_SYSCONFIGDATA_NAME
+set in the environment, but we can't just export that unconditionally
+even for target packages because sometimes (e.g. in libglib2) meson
+builds native python modules as part of the build and those should
+*not* have _PYTHON_SYSCONFIGDATA_NAME set to the target name... The
+python3 wrapper nicely solves this.
 
-diff --git a/package/grep/Config.in b/package/grep/Config.in
-index 5b0471b..47ced41 100644
---- a/package/grep/Config.in
-+++ b/package/grep/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_GREP
- 	help
- 	  The GNU regular expression matcher.
- 
-+	  egrep/fgrep aliases need /bin/sh to be available.
-+
- 	  http://www.gnu.org/software/grep/grep.html
- 
- comment "grep needs a toolchain w/ wchar"
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index be3e53b..02d8b50 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -12,6 +12,15 @@ GREP_LICENSE_FILES = COPYING
- GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- GREP_CONF_OPTS = --exec-prefix=/
- 
-+ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
-+define GREP_REMOVE_ALIAS
-+	$(RM) $(TARGET_DIR)/bin/[fe]grep
-+endef
-+GREP_POST_INSTALL_TARGET_HOOKS += GREP_REMOVE_ALIAS
-+else
-+GREP_CONF_OPTS += SHELL=/bin/sh
-+endif
-+
- # link with iconv if enabled
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- GREP_CONF_ENV += LIBS=-liconv
+The python2 wrapper is added as well for symmetry, and because it
+allows us to simplify the inner-python-package definitions.
+
+This series is posted as an RFC, but it can actually be applied as is.
+It is a requirement for many packages that use the newly-added
+gobject-introspection (e.g. gstreamer1, python-gobject).
+
+Arnout Vandecappelle (5):
+  package/Makefile.in: add HOST_BIN_CROSS
+  package/python3: install wrapper in HOST_BIN_CROSS
+  package/python: install wrapper in HOST_BIN_CROSS
+  package/pkg-python: rely on python wrapper in HOST_BIN_CROSS
+  package/pkg-meson: use TARGET_MAKE_ENV in configure
+
+ package/Makefile.in               |  5 ++++-
+ package/pkg-meson.mk              |  2 +-
+ package/pkg-python.mk             | 22 +++-------------------
+ package/python/python-wrapper.in  | 10 ++++++++++
+ package/python/python.mk          | 17 ++++++++++++++---
+ package/python3/python-wrapper.in | 24 ++++++++++++++++++++++++
+ package/python3/python3.mk        | 17 ++++++++++++++---
+ 7 files changed, 70 insertions(+), 27 deletions(-)
+ create mode 100644 package/python/python-wrapper.in
+ create mode 100644 package/python3/python-wrapper.in
+
 -- 
-2.7.4
+2.24.1
