@@ -1,7 +1,8 @@
 From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Tue,  4 Feb 2020 15:16:48 +0100
-Subject: [Buildroot] [PATCH 2/3] package/lvm2: optional systemd integration
-Message-ID: <20200204141648.9826-1-p.debruijn@unilogic.nl>
+Date: Tue,  4 Feb 2020 15:17:01 +0100
+Subject: [Buildroot] [PATCH 3/3] package/lvm2: fix udev unsupported option
+ warning
+Message-ID: <20200204141701.9881-1-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +11,48 @@ To: buildroot@busybox.net
 
 Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 ---
- package/lvm2/Config.in | 7 +++++++
- package/lvm2/lvm2.mk   | 6 ++++++
- 2 files changed, 13 insertions(+)
+ ...ve-unsupported-options-event-timeout-rule.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/lvm2/0002-udev-remove-unsupported-options-event-timeout-rule.patch
 
-diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-index de5b972..0f9e86e 100644
---- a/package/lvm2/Config.in
-+++ b/package/lvm2/Config.in
-@@ -47,6 +47,13 @@ config BR2_PACKAGE_LVM2_APP_LIBRARY
- comment "lvm2 application library needs a glibc or uClibc toolchain"
- 	depends on BR2_TOOLCHAIN_USES_MUSL
- 
-+config BR2_PACKAGE_LVM2_SYSTEMD
-+	bool "install systemd integration"
-+	depends on BR2_PACKAGE_SYSTEMD
-+	select BR2_PACKAGE_LVM2_APP_LIBRARY
-+	help
-+	  Install systemd generator and services.
+diff --git a/package/lvm2/0002-udev-remove-unsupported-options-event-timeout-rule.patch b/package/lvm2/0002-udev-remove-unsupported-options-event-timeout-rule.patch
+new file mode 100644
+index 0000000..f162ec5
+--- /dev/null
++++ b/package/lvm2/0002-udev-remove-unsupported-options-event-timeout-rule.patch
+@@ -0,0 +1,33 @@
++From 125f27ac37bc9b93cc96f64052b9681b3d479ee1 Mon Sep 17 00:00:00 2001
++From: Peter Rajnoha <prajnoha@redhat.com>
++Date: Tue, 13 Aug 2019 15:18:30 +0200
++Subject: [PATCH] udev: remove unsupported OPTIONS+="event_timeout" rule
 +
- endif
- 
- comment "lvm2 needs a toolchain w/ threads, dynamic library"
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 43370b0..9847f96 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -54,6 +54,12 @@ else
- LVM2_CONF_OPTS += --disable-applib
- endif
- 
-+ifeq ($(BR2_PACKAGE_LVM2_SYSTEMD),y)
-+LVM2_DEPENDANCIES += systemd
-+LVM2_CONF_OPTS += --enable-lvmetad
-+LVM2_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install install_systemd_units install_systemd_generators
-+endif
++The OPTIONS+="event_timeout" is Unsupported since systemd/udev version 216,
++that is ~5 years ago.
 +
- ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
- endif
++Since systemd/udev version 243, there's a new message printed if unsupported
++OPTIONS value is used:
++
++  Invalid value for OPTIONS key, ignoring: 'event_timeout=180'
++
++Resolves: https://bugzilla.redhat.com/show_bug.cgi?id=1740666
++
++Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
++---
++diff --git a/udev/11-dm-lvm.rules.in b/udev/11-dm-lvm.rules.in
++index 91cb991..7c58994 100644
++--- a/udev/11-dm-lvm.rules.in
+++++ b/udev/11-dm-lvm.rules.in
++@@ -37,8 +37,6 @@ ENV{DM_SUBSYSTEM_UDEV_FLAG0}!="1", ENV{DM_NOSCAN}=="1", ENV{DM_UDEV_DISABLE_OTHE
++ 
++ ENV{DM_UDEV_DISABLE_SUBSYSTEM_RULES_FLAG}=="1", GOTO="lvm_end"
++ 
++-OPTIONS+="event_timeout=180"
++-
++ # Do not create symlinks for inappropriate subdevices.
++ ENV{DM_LV_NAME}=="pvmove?*|?*_vorigin", GOTO="lvm_disable"
++ ENV{DM_LV_LAYER}=="?*", GOTO="lvm_disable"
++-- 
++2.9.3
++
 -- 
 2.7.4
