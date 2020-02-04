@@ -1,51 +1,39 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 4 Feb 2020 22:14:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gcc: pass -Wno-error to debug
- builds
-In-Reply-To: <20200204001027.126863-1-james.hilliard1@gmail.com>
-References: <20200204001027.126863-1-james.hilliard1@gmail.com>
-Message-ID: <7b8ffab6-a31d-6bf7-f3c7-706fb0845ba0@smile.fr>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Tue, 4 Feb 2020 13:09:25 -0800
+Subject: [Buildroot] [PATCH] package/xen: bump to version 4.13.0
+In-Reply-To: <87zhdyn0hx.fsf@dell.be.48ers.dk>
+References: <20200203224241.12481-1-alistair.francis@wdc.com>
+ <87zhdyn0hx.fsf@dell.be.48ers.dk>
+Message-ID: <CAKmqyKMNyJubtuOa=tS8KidYbpvQFmJYA7CSV1x+N+emGDQ6BA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi James,
+On Tue, Feb 4, 2020 at 1:51 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Alistair" == Alistair Francis <alistair.francis@wdc.com> writes:
+>
+>  > Bump to the latest version of Xen and remove the no longer required
+>  > patch.
+>
+>  > Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+>
+> Committed, thanks.
+>
+> I see from the release notes
+> (https://wiki.xenproject.org/wiki/Xen_Project_4.13_Release_Notes) that
+> it should now work with python 3.x. Given that python 2.x is now EOL, it
+> would be good if we could change it to use host-python3 instead.
+>
+> Is this something you can look into?
 
-Le 04/02/2020 ? 01:10, James Hilliard a ?crit?:
-> Fixes:
-> ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
->    return S_ISLNK (st.st_mode);
->                      ^
-> 
-
-Can you provide a defconfig that allow to reproduce the issue.
-
-Thanks!
-
-Best regards,
-Romain
+I just sent a patch.
 
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/gcc/gcc.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index 527f30bf22..badf358707 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -103,6 +103,10 @@ HOST_GCC_COMMON_CONF_ENV = \
->  GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
->  GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
->  
-> +ifeq ($(BR2_ENABLE_DEBUG),y)
-> +GCC_COMMON_TARGET_CFLAGS += -Wno-error
-> +endif
-> +
->  # Propagate options used for target software building to GCC target libs
->  HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
->  HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
-> 
+Alistair
+
+>
+> --
+> Bye, Peter Korsgaard
