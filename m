@@ -1,48 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2020 22:41:23 +0100
-Subject: [Buildroot] [git commit] package/xen: use host-python3 to build
-Message-ID: <20200204213539.516BA8B815@busybox.osuosl.org>
+Date: Tue, 04 Feb 2020 22:49:52 +0100
+Subject: [Buildroot] [PATCH] package/bluez-alsa: fix location of alsa
+ config files
+In-Reply-To: <20200201105640.8428-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Sat, 1 Feb 2020 11:56:40 +0100")
+References: <20200201105640.8428-1-joerg.krause@embedded.rocks>
+Message-ID: <87v9omvx8f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5dd9f6beb94abee8c932edb180dcbe465c4e79c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-As noted in https://wiki.xenproject.org/wiki/Xen_Project_4.13_Release_Notes
+ > Since alsa-lib version 1.1.7 [1] the location for add-on config files
+ > has changed.
 
-- Xen 4.13 is now fully Py3 compatible
+ > In fact, the path for the alsa add-on config files has never been
+ > correct set in the package (it should have been
+ > `/usr/share/alsa/alsa.conf.d`).
 
-So swith to that now that python 2.x is EOL.
+ > With alsa-lib version 1.1.7 or later the correct path is
+ > `/etc/alsa/conf.d`.
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-[Peter: extend commit message]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xen/xen.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > [1] https://github.com/alsa-project/alsa-lib/commit/93e03bdc2a3dcd5d12516f5de78e14d88a32ff2c
 
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 951af963e0..fa49f5996b 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -8,7 +8,7 @@ XEN_VERSION = 4.13.0
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
--XEN_DEPENDENCIES = host-acpica host-python
-+XEN_DEPENDENCIES = host-acpica host-python3
- 
- # Calculate XEN_ARCH
- ifeq ($(ARCH),aarch64)
-@@ -21,7 +21,7 @@ XEN_CONF_OPTS = \
- 	--disable-ocamltools \
- 	--with-initddir=/etc/init.d
- 
--XEN_CONF_ENV = PYTHON=$(HOST_DIR)/bin/python2
-+XEN_CONF_ENV = PYTHON=$(HOST_DIR)/bin/python3
- XEN_MAKE_ENV = \
- 	XEN_TARGET_ARCH=$(XEN_ARCH) \
- 	CROSS_COMPILE=$(TARGET_CROSS) \
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
