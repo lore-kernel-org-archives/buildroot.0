@@ -1,67 +1,75 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 4 Feb 2020 22:38:18 +0100
-Subject: [Buildroot] [PATCH v4 1/1] toolchain/toolchain-buildroot:
- PPC64(LE) support in musl requires ALTIVEC
-In-Reply-To: <20200204213548.20234-1-vfazio@xes-inc.com>
-References: <20200204192520.2059-1-vfazio@xes-inc.com>
- <20200204213548.20234-1-vfazio@xes-inc.com>
-Message-ID: <a6cb5cb5-f7b0-e956-929b-b9c035ddb735@smile.fr>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue,  4 Feb 2020 13:39:51 -0800
+Subject: [Buildroot] [PATCH v15 0/5] package/gobject-introspection: new
+ package
+Message-ID: <20200204213956.2124306-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 04/02/2020 ? 22:35, Vincent Fazio a ?crit?:
-> musl currently assumes all PPC64(LE) CPUs support ALTIVEC instructions.
-> 
-> However, there are exceptions (such as the e5500) for which musl builds
-> ultimately generate illegal instructions for the targets.
-> 
-> Disable musl if the PPC64(LE) CPU does not support ALTIVEC instructions.
-> 
-> This patch addresses the issues seen here:
->   https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092743
->   https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092744
-> 
-> musl mailing list thread:
->   https://www.openwall.com/lists/musl/2020/02/03/10
-> 
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+It's baaaaaaaaack.
 
+Changes:
+ - Impliment Arnouts suggestions.
+ - Blacklist x86 steam roller and core-avx, they cause segfualts with qemu.
+ - Pray a bit more.
+ - Drink a LOT more.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+This depends on Arnouts patch series:
+https://patchwork.ozlabs.org/project/buildroot/list/?series=156716
+https://patchwork.ozlabs.org/project/buildroot/list/?series=156749
 
-Best regards,
-Romain
+Adam Duskett (5):
+  package/libiberty: new package
+  package/qemu: do not support x86_steamroller or x86_core_avx2
+  package/prelink-cross: new package
+  package/gdb: depend on libiberty
+  package/gobject-introspection: new package
 
-> ---
-> 
-> Changes v3 -> v4:
->   - document musl mailing list thread (suggested by Romain)
-> 
-> Changes v2 -> v3:
->   - change to 'depends on' semantics (suggested by Romain)
-> 
-> Changes v1 -> v2:
->   - clarify commit message (suggested by Matthew)
->   - add job logs (suggested by Romain)
-> 
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-> ---
->  toolchain/toolchain-buildroot/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index a980f766ac..8c33b2b4dd 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -86,6 +86,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
->  		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
->  		   BR2_powerpc64le || BR2_RISCV_64 || BR2_sh   || BR2_x86_64
->  	depends on !BR2_powerpc_SPE # not supported, build breaks
-> +	depends on !(BR2_powerpc64 || BR2_powerpc64le) || BR2_POWERPC_CPU_HAS_ALTIVEC
->  	# sh2 nommu is supported by musl, but we don't have support
->  	# for it in Buildroot.
->  	depends on BR2_USE_MMU
-> 
+ DEVELOPERS                                    |   2 +
+ package/gdb/gdb.mk                            |   4 +-
+ ...lete-upstream-attempt-at-cross-compi.patch |  33 ++++
+ ...d-cross-compilation-support-to-meson.patch | 163 ++++++++++++++++++
+ .../0003-disable-tests.patch                  |  29 ++++
+ ...canner-add-use-binary-wrapper-option.patch |  52 ++++++
+ ...scanner-add-a-use-ldd-wrapper-option.patch |  48 ++++++
+ ...scanner-add-a-lib-dirs-envvar-option.patch |  73 ++++++++
+ .../0007-Add-rpath-links-to-ccompiler.patch   |  29 ++++
+ ...-error-return-codes-from-ldd-wrapper.patch |  28 +++
+ package/gobject-introspection/Config.in       |  33 ++++
+ .../gobject-introspection/g-ir-compiler.in    |   2 +
+ .../g-ir-scanner-lddwrapper.in                |   2 +
+ .../g-ir-scanner-qemuwrapper.in               |  18 ++
+ package/gobject-introspection/g-ir-scanner.in |   8 +
+ .../gobject-introspection.hash                |   4 +
+ .../gobject-introspection.mk                  | 122 +++++++++++++
+ package/libiberty/libiberty.hash              |   2 +
+ package/libiberty/libiberty.mk                |  27 +++
+ package/prelink-cross/prelink-cross.hash      |   3 +
+ package/prelink-cross/prelink-cross.mk        |  16 ++
+ package/qemu/Config.in.host                   |   1 +
+ 22 files changed, 698 insertions(+), 1 deletion(-)
+ create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
+ create mode 100644 package/gobject-introspection/0002-add-cross-compilation-support-to-meson.patch
+ create mode 100644 package/gobject-introspection/0003-disable-tests.patch
+ create mode 100644 package/gobject-introspection/0004-giscanner-add-use-binary-wrapper-option.patch
+ create mode 100644 package/gobject-introspection/0005-giscanner-add-a-use-ldd-wrapper-option.patch
+ create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
+ create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
+ create mode 100644 package/gobject-introspection/0008-ignore-error-return-codes-from-ldd-wrapper.patch
+ create mode 100644 package/gobject-introspection/Config.in
+ create mode 100644 package/gobject-introspection/g-ir-compiler.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner.in
+ create mode 100644 package/gobject-introspection/gobject-introspection.hash
+ create mode 100644 package/gobject-introspection/gobject-introspection.mk
+ create mode 100644 package/libiberty/libiberty.hash
+ create mode 100644 package/libiberty/libiberty.mk
+ create mode 100644 package/prelink-cross/prelink-cross.hash
+ create mode 100644 package/prelink-cross/prelink-cross.mk
+
+-- 
+2.24.1
