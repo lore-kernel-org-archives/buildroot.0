@@ -1,65 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Feb 2020 16:18:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/weston: add pipewire support
-In-Reply-To: <20200203222305.47765-1-james.hilliard1@gmail.com>
-References: <20200203222305.47765-1-james.hilliard1@gmail.com>
-Message-ID: <20200204151843.GF3101@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 4 Feb 2020 16:22:23 +0100
+Subject: [Buildroot] [PATCH v2] package/libnspr: remove
+ BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+In-Reply-To: <b1fbe4c2-03eb-9c45-484d-043a2f7b60b4@mind.be>
+References: <20200204095059.7315-1-giulio.benetti@benettiengineering.com>
+ <20200204110416.074754d8@windsurf>
+ <b1fbe4c2-03eb-9c45-484d-043a2f7b60b4@mind.be>
+Message-ID: <20200204162223.50db5e36@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+On Tue, 4 Feb 2020 15:36:01 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-On 2020-02-03 15:23 -0700, James Hilliard spake thusly:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/weston/weston.mk | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+> > Arnout and I both agreed that we want to keep this blind option, so I'm
+> > not sure I understand why you're sending this patch. Did we miss something?  
 > 
-> diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-> index ada3f565cb..b22e685948 100644
-> --- a/package/weston/weston.mk
-> +++ b/package/weston/weston.mk
-> @@ -17,8 +17,7 @@ WESTON_CONF_OPTS = \
->  	-Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
->  	-Dbackend-headless=false \
->  	-Dcolor-management-colord=false \
-> -	-Dremoting=false \
-> -	-Dpipewire=false
-> +	-Dremoting=false
->  
->  # Uses VIDIOC_EXPBUF, only available from 3.8+
->  ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
-> @@ -127,6 +126,13 @@ else
->  WESTON_CONF_OPTS += -Dtest-junit-xml=false
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_PIPEWIRE)$(BR2_PACKAGE_WESTON_DRM),yy)
-> +WESTON_CONF_OPTS += -Dpipewire=true
-> +WESTON_DEPENDENCIES += pipewire
-> +else
-> +WESTON_CONF_OPTS += -Dpipewire=false
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
->  WESTON_CONF_OPTS += -Ddemo-clients=true
->  WESTON_DEPENDENCIES += pango
-> -- 
-> 2.20.1
-> 
+>  Actually, Giulio replied that in the other thread (but it should be part of the
+> commit log here, maybe): adding architecture support is trivial (just a matter
+> of defining the right sizes), so we should never need to re-add this option.
+> Just fix libnspr.
 
+Yes, it is true that the architecture support in libnspr is trivial.
+Though we lived for quite some time without it for some CPU
+architectures :-)
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
