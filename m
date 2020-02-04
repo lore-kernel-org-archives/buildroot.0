@@ -1,171 +1,209 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2020 13:44:57 +0100
-Subject: [Buildroot] [git commit] package/can-utils: bump to version
- 2020.02.0
-Message-ID: <20200204123700.CD6318A5E4@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 4 Feb 2020 13:49:29 +0100
+Subject: [Buildroot] [PATCH v4 1/2] package/bmap-tools: new package
+In-Reply-To: <0f8747b6-557e-6e06-45a5-7755b0228432@smile.fr>
+References: <20191105125039.1443-1-nicolas.carrier@orolia.com>
+ <0f8747b6-557e-6e06-45a5-7755b0228432@smile.fr>
+Message-ID: <bf7abbc4-2251-faf8-1968-62253c0ce5fb@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29a3412781aabfd5784448d5f1e3a18d7fb1b9d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le 19/11/2019 ? 21:36, Romain Naour a ?crit?:
+> Hi Nicolas,
+> 
+> 
+> Le 05/11/2019 ? 13:51, Nicolas Carrier a ?crit?:
+>> ---
+>>
+>> I need bmap-tools on the target since it's what our flashing / upgrade procudure
+>> uses to speed up the process (flashing ~8GB disk images full of zeroes).
+>>
+>> Changes v3 -v4:
+>>   - added the upstream URL to the package's help
+>>
+>> Changes v2 -> v3:
+>>   - double-checked that setuptools is required by bmap-tools at runtime too
+>>   - moved the "v" from BMAP_TOOLS_VERSION to BMAP_TOOLS_SITE (in the .hash too)
+>>   - changed license name from GPLv2 to GPL-2.0
+>>
+>> Changes v1 -> v2:
+>>   - no change
+>>
+>> ---
+>>
+>> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
 
-Remove the upstreamed patch and change the license information, as the
-GPL-2.0+ files have been relicensed as GPL-2.0 since
-https://github.com/linux-can/can-utils/commit/59f92965b90efc00b0cb63e3d4edfefd9b24326f
+Your SoB line should be on top of "---" in the commit log.
+Otherwise it is dropped by git am when the patch is applied.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Peter: clarify licensing change]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ude-to-find-SIOCGSTAMP-with-latest-kernel.patch | 109 ---------------------
- package/can-utils/can-utils.hash                   |   5 +-
- package/can-utils/can-utils.mk                     |   6 +-
- 3 files changed, 6 insertions(+), 114 deletions(-)
 
-diff --git a/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch b/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-deleted file mode 100644
-index 3cde5b42af..0000000000
---- a/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-+++ /dev/null
-@@ -1,109 +0,0 @@
--From e9590b1ca75d360eaf3211bebd86058214d48064 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 14 Jul 2019 21:50:43 +0200
--Subject: [PATCH] fix include to find SIOCGSTAMP with latest kernel
--
--In linux kernel commit 0768e17073dc527ccd18ed5f96ce85f9985e9115
--the asm-generic/sockios.h header no longer defines SIOCGSTAMP.
--Instead it provides only SIOCGSTAMP_OLD.
--
--The linux/sockios.h header now defines SIOCGSTAMP using either
--SIOCGSTAMP_OLD or SIOCGSTAMP_NEW as appropriate. This linux only
--header file is not pulled so we get a build failure.
--
--canlogserver.c: In function 'main':
--canlogserver.c:404:21: error: 'SIOCGSTAMP' undeclared (first use in this function); did you mean 'SIOCGRARP'?
--     if (ioctl(s[i], SIOCGSTAMP, &tv) < 0)
--                     ^~~~~~~~~~
--                     SIOCGRARP
--canlogserver.c:404:21: note: each undeclared identifier is reported only once for each function it appears in
--
--Fixes:
-- - http://autobuild.buildroot.org/results/363de7d9bf433be8bc47ba4ee52ae0bb80fa9021
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/linux-can/can-utils/pull/147]
-----
-- canlogserver.c | 1 +
-- cansniffer.c   | 1 +
-- isotpdump.c    | 1 +
-- isotpperf.c    | 1 +
-- isotpsniffer.c | 1 +
-- slcanpty.c     | 1 +
-- 6 files changed, 6 insertions(+)
--
--diff --git a/canlogserver.c b/canlogserver.c
--index f9ae159..4429ccd 100644
----- a/canlogserver.c
--+++ b/canlogserver.c
--@@ -62,6 +62,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/raw.h>
--+#include <linux/sockios.h>
-- #include <signal.h>
-- #include <errno.h>
-- 
--diff --git a/cansniffer.c b/cansniffer.c
--index b710058..0ff29b4 100644
----- a/cansniffer.c
--+++ b/cansniffer.c
--@@ -62,6 +62,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/bcm.h>
--+#include <linux/sockios.h>
-- 
-- #include "terminal.h"
-- 
--diff --git a/isotpdump.c b/isotpdump.c
--index 1ab9416..97baeca 100644
----- a/isotpdump.c
--+++ b/isotpdump.c
--@@ -57,6 +57,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/raw.h>
--+#include <linux/sockios.h>
-- #include "terminal.h"
-- 
-- #define NO_CAN_ID 0xFFFFFFFFU
--diff --git a/isotpperf.c b/isotpperf.c
--index 6ee6ede..5ad302a 100644
----- a/isotpperf.c
--+++ b/isotpperf.c
--@@ -57,6 +57,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/raw.h>
--+#include <linux/sockios.h>
-- 
-- #define NO_CAN_ID 0xFFFFFFFFU
-- #define PERCENTRES 2 /* resolution in percent for bargraph */
--diff --git a/isotpsniffer.c b/isotpsniffer.c
--index 6c19c8b..5d61872 100644
----- a/isotpsniffer.c
--+++ b/isotpsniffer.c
--@@ -56,6 +56,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/isotp.h>
--+#include <linux/sockios.h>
-- #include "terminal.h"
-- 
-- #define NO_CAN_ID 0xFFFFFFFFU
--diff --git a/slcanpty.c b/slcanpty.c
--index e90b32a..5fdfa55 100644
----- a/slcanpty.c
--+++ b/slcanpty.c
--@@ -37,6 +37,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/raw.h>
--+#include <linux/sockios.h>
-- 
-- /* maximum rx buffer len: extended CAN frame with timestamp */
-- #define SLC_MTU (sizeof("T1111222281122334455667788EA5F\r")+1)
---- 
--2.20.1
--
-diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
-index 403c59787e..adbf5b0bca 100644
---- a/package/can-utils/can-utils.hash
-+++ b/package/can-utils/can-utils.hash
-@@ -1,3 +1,4 @@
- # Locally computed
--sha256  370ad4b19447c29099f7300548f1a3362d6e123c4a6a827dbbd3110bc2c26839  can-utils-2018.02.0.tar.gz
--sha256  c258939ebb09c3857f5fc7704a449e5077cc881090c87b38f9a81332b96fa075  Makefile
-+sha256  ea0f96a02af37f16713284c7bdccdbae716d9bcb979ccfb51185d696c31f9ecf  can-utils-2020.02.0.tar.gz
-+sha256  c3dc748f5e725cf5ed89784fe78e4ff1b05d309bf1e7ade4c572e8fde1b8406c  LICENSES/BSD-3-Clause
-+sha256  995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  LICENSES/GPL-2.0-only.txt
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index 7e919a3efa..cd4dba5616 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--CAN_UTILS_VERSION = 2018.02.0
-+CAN_UTILS_VERSION = 2020.02.0
- CAN_UTILS_SITE = $(call github,linux-can,can-utils,v$(CAN_UTILS_VERSION))
--CAN_UTILS_LICENSE = BSD-3-Clause or GPL-2.0, GPL-2.0+
--CAN_UTILS_LICENSE_FILES = Makefile
-+CAN_UTILS_LICENSE = BSD-3-Clause or GPL-2.0
-+CAN_UTILS_LICENSE_FILES = LICENSES/BSD-3-Clause LICENSES/GPL-2.0-only.txt
- CAN_UTILS_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+>> ---
+>>  DEVELOPERS                         |  3 +++
+>>  package/Config.in                  |  1 +
+>>  package/bmap-tools/Config.in       | 15 +++++++++++++++
+>>  package/bmap-tools/bmap-tools.hash |  2 ++
+>>  package/bmap-tools/bmap-tools.mk   | 15 +++++++++++++++
+>>  5 files changed, 36 insertions(+)
+>>  create mode 100644 package/bmap-tools/Config.in
+>>  create mode 100644 package/bmap-tools/bmap-tools.hash
+>>  create mode 100644 package/bmap-tools/bmap-tools.mk
+>>
+>> diff --git a/DEVELOPERS b/DEVELOPERS
+>> index 24c57b25f7..947722a8c7 100644
+>> --- a/DEVELOPERS
+>> +++ b/DEVELOPERS
+>> @@ -1728,6 +1728,9 @@ F:	package/libevdev/
+>>  N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
+>>  F:	package/uacme/
+>>  
+>> +N:	Nicolas Carrier <nicolas.carrier@orolia.com>
+>> +F:	package/bmap-tools/
+>> +
+>>  N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+>>  F:	package/libgit2/
+>>  
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 1ad1d49a8a..52852ac2fc 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -184,6 +184,7 @@ menu "Filesystem and flash utilities"
+>>  	source "package/aufs/Config.in"
+>>  	source "package/aufs-util/Config.in"
+>>  	source "package/autofs/Config.in"
+>> +	source "package/bmap-tools/Config.in"
+>>  	source "package/btrfs-progs/Config.in"
+>>  	source "package/cifs-utils/Config.in"
+>>  	source "package/cpio/Config.in"
+>> diff --git a/package/bmap-tools/Config.in b/package/bmap-tools/Config.in
+>> new file mode 100644
+>> index 0000000000..e582270c44
+>> --- /dev/null
+>> +++ b/package/bmap-tools/Config.in
+>> @@ -0,0 +1,15 @@
+>> +config BR2_PACKAGE_BMAP_TOOLS
+>> +	bool "bmap-tools"
+>> +	depends on BR2_PACKAGE_PYTHON3 || \
+>> +		BR2_PACKAGE_PYTHON
+>> +	select BR2_PACKAGE_PYTHON_SIX # runtime
+>> +	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+>> +	help
+>> +	  Tool to flash image files to block devices using the block map
+>> +	  bmaptool is a generic tool for creating the block map (bmap)
+>> +	  for a file, and copying files using the block map. The idea is
+>> +	  that large file containing unused blocks, like raw system
+>> +	  image files, can be copied or flashed a lot faster with
+>> +	  bmaptool than with traditional tools like "dd" or "cp".
+>> +
+>> +	  https://github.com/intel/bmap-tools
+>> diff --git a/package/bmap-tools/bmap-tools.hash b/package/bmap-tools/bmap-tools.hash
+>> new file mode 100644
+>> index 0000000000..794765b633
+>> --- /dev/null
+>> +++ b/package/bmap-tools/bmap-tools.hash
+>> @@ -0,0 +1,2 @@
+>> +sha256  d410e2d97192d0fc2f88ef160a0bb6ed83fce99da97a606d7f6890cc654ec594  bmap-tools-3.5.tar.gz
+>> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>> diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmap-tools/bmap-tools.mk
+>> new file mode 100644
+>> index 0000000000..4c2465876e
+>> --- /dev/null
+>> +++ b/package/bmap-tools/bmap-tools.mk
+>> @@ -0,0 +1,15 @@
+>> +################################################################################
+>> +#
+>> +# bmap-tools
+>> +#
+>> +################################################################################
+>> +
+>> +BMAP_TOOLS_VERSION = 3.5
+>> +BMAP_TOOLS_SITE = $(call github,intel,bmap-tools,v$(BMAP_TOOLS_VERSION))
+>> +BMAP_TOOLS_LICENSE = GPL-2.0
+>> +BMAP_TOOLS_LICENSE_FILES = COPYING
+>> +BMAP_TOOLS_SETUP_TYPE = setuptools
+>> +BMAP_TOOLS_DEPENDENCIES = \
+>> +	python-setuptools
+> When you create a new package for a software in Buildroot, it can be useful to
+> check how the software is packaged for other Linux distribution or build tool
+> (Yocto).
+> 
+> For example, Fedora, ArchLinux and Debian
+> 
+> https://github.com/intel/bmap-tools/blob/master/packaging/bmap-tools.spec#L20
+> https://github.com/intel/bmap-tools/blob/master/debian/control#L13
+> 
+>          python-gpgme,
+>          ${misc:Depends},
+>          ${python:Depends},
+>          bzip2,
+>          pbzip2,
+>          gzip,
+>          pigz,
+>          lzop,
+>          liblz4-tool,
+>          xz-utils,
+>          tar,
+>          unzip
+> 
+> Some of theses (maybe optional) dependencies are missing in your patch.
+> Can you check them?
+
+
+When python2 is used, BR2_PACKAGE_PYTHON_HASHLIB should be selected [1] (to be
+checked but I'm not sure it's worth the effort to test python2 case, maybe you
+can make this package python3 only)
+
+[1] https://github.com/intel/bmap-tools/blob/master/bmaptools/BmapCopy.py#L62
+
+For others dependencies, bmaptool is testing several command at runtime (ssh,
+pigz, pbzip2) but it can use an alternative tool for some of them.
+(grep for program_is_available in the code)
+
+- ssh command is required for remote access.
+- pbzip2 command can be replaced by bzip2 but in the system used for testing
+bzip2 is not installed.
+- tar is used as archiver but it can be use with options that is not available
+from the busybox version.
+
+Here is the output of tar --help from busybox:
+Create, extract, or list files from a tar file
+
+	c	Create
+	x	Extract
+	t	List
+	-f FILE	Name of TARFILE ('-' for stdin/out)
+	-C DIR	Change to DIR before operation
+	-v	Verbose
+	-O	Extract to stdout
+	-o	Don't restore user:group
+	-k	Don't replace existing files
+	-h	Follow symlinks
+	-T FILE	File with names to include
+	-X FILE	File with glob patterns to exclude
+	--exclude PATTERN	Glob pattern to exclude
+
+By looking at the code [1] bmaptool is expecting the complete version of tar
+command. The one that provide -z option.
+
+Note: you can also add -z option for busybox tar but it require to enable it
+from the busybox configuration.
+
+There are other such unsupported options. I would suggest to select the tar
+package (don't forget to add tar's reverse dependencies)
+
+[1] https://github.com/intel/bmap-tools/blob/master/bmaptools/TransRead.py#L336
+
+
+Best regards,
+Romain
+
+> 
+> Best regards,
+> Romain
+> 
+>> +
+>> +$(eval $(python-package))
+>>
+> 
