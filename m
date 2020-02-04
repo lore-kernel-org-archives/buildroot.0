@@ -1,41 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 4 Feb 2020 00:09:22 +0100
-Subject: [Buildroot] [PATCH v2 3/7] availability control for vpu in i.MX
- families
-In-Reply-To: <20200203193155.12657-3-tuzakli.refik@gmail.com>
-References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
- <20200203193155.12657-3-tuzakli.refik@gmail.com>
-Message-ID: <20200204000922.73a63083@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon,  3 Feb 2020 17:10:27 -0700
+Subject: [Buildroot] [PATCH 1/1] package/gcc: pass -Wno-error to debug builds
+Message-ID: <20200204001027.126863-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  3 Feb 2020 22:31:51 +0300
-Refik Tuzakli <tuzakli.refik@gmail.com> wrote:
+Fixes:
+../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
+   return S_ISLNK (st.st_mode);
+                     ^
 
-> Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
-> ---
->  package/freescale-imx/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/gcc/gcc.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-This patch is not necessary: the imx-vpu, imx-vpu-hantro and
-imx-vpuwrap packages already have in their Config.in files the
-appropriate "depends on" to ensure their options are only visible under
-the right conditions.
-
-Also, we don't want to have two "source" statements including the same
-file.
-
-So since there is no additional explanation in your patch for this
-change, I'll mark it as Rejected in our patch tracking system. If you
-have more details, don't hesitate to provide them.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 527f30bf22..badf358707 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -103,6 +103,10 @@ HOST_GCC_COMMON_CONF_ENV = \
+ GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+ GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
++ifeq ($(BR2_ENABLE_DEBUG),y)
++GCC_COMMON_TARGET_CFLAGS += -Wno-error
++endif
++
+ # Propagate options used for target software building to GCC target libs
+ HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
+ HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
