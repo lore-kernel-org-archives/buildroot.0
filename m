@@ -1,46 +1,49 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue,  4 Feb 2020 15:17:11 -0800
-Subject: [Buildroot] [PATCH v1 1/1] package/docker-containerd: bump to 1.2.12
-Message-ID: <20200204231711.38205-1-christian@paral.in>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Tue,  4 Feb 2020 15:13:10 -0800
+Subject: [Buildroot] [PATCH] linux/linux.hash: remove hash for COPYING
+Message-ID: <20200204231310.22132-1-mmayer@broadcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-containerd is now a separate CNCF sponsored project, and is no longer explicitly
-associated with docker/moby.
+The hash for "COPYING" changed between v4.16 and v4.17. Since kernels
+before and after the change are supported, storing the hash for this
+file will cause an error during "make legal-info" when a kernel with the
+respective other hash is being used.
 
-This commit bumps to the latest bugfix release for 1.2.x.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 ---
- package/docker-containerd/docker-containerd.hash | 4 ++--
- package/docker-containerd/docker-containerd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index aad74089e9..a4acc17710 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256	6a4192fced10c390373adfa9fa9a4f12fe9f38bde580d90468a79ed6c8af75ee  docker-containerd-1.2.11.tar.gz
--sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-+sha256 318886ea1efdec36f088fd6a0a0fe2b2f0ebdfd0066bdb4bd284bad12abc0a41  docker-containerd-1.2.12.tar.gz
-+sha256 4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 69068e44f8..67de8d7468 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_CONTAINERD_VERSION = 1.2.11
-+DOCKER_CONTAINERD_VERSION = 1.2.12
- DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+One way to reproduce the problem:
+
+1) Download and extract
+   https://mirrors.edge.kernel.org/pub/linux/kernel/v4.x/linux-4.9.212.tar.xz
+2) Configure buildroot as usual
+3) Point LINUX_OVERRIDE_SRCDIR to the 4.9.212 directory created above
+4) make && make legal-info
+
+[...]
+>>> linux-tools  Collecting legal info
+>>> linux custom Collecting legal info
+ERROR: COPYING has wrong sha256 hash:
+ERROR: expected: ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff
+ERROR: got     : af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+linux/linux.mk:606: recipe for target 'linux-legal-info' failed
+
+ linux/linux.hash | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 940a90ed9dea..289171987aa1 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -8,4 +8,3 @@ sha256 be26156abdb38ac0576a34a235ef456bb8ca67fbbe56fc6649b8d069159f8bc4  linux-4
+ # Locally computed
+ sha256 6d60ce76bce2e1938f64027d12b1988c95245751feb635adfc551a021d5b3f26  linux-cip-4.19.88-cip16.tar.gz
+ sha256 74ec782e11344e5c5db8e48899b464e296ef37acfb43ce7dfb01c09ea8d3e959  linux-cip-4.19.82-cip14-rt5.tar.gz
+-sha256 ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff  COPYING
 -- 
-2.25.0
+2.17.1
