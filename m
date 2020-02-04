@@ -1,55 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Feb 2020 22:31:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump to
- 10.3.22
-In-Reply-To: <20200204181851.26394-1-bluemrp9@gmail.com> (Ryan Coe's message
- of "Tue, 4 Feb 2020 10:18:51 -0800")
-References: <20200204181851.26394-1-bluemrp9@gmail.com>
-Message-ID: <87lfpixcn5.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Feb 2020 22:32:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/whois: add host-pkgconf
+ mandatory dependency
+In-Reply-To: <20200204175434.2887526-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 4 Feb 2020 18:54:34 +0100")
+References: <20200204175434.2887526-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h806xclr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Release notes:
- > https://mariadb.com/kb/en/library/mariadb-10322-release-notes/
+ > pkg-config is used to check if libidn2 is available since version 5.2.18
+ > and
+ > https://github.com/rfc1036/whois/commit/e20b8bbab3687aa26294bc3c443b4a43292b7636
 
- > Changelog:
- > https://mariadb.com/kb/en/library/mariadb-10322-changelog/
+ > This can lead to a build failure if a broken libidn2.pc is found on host
+ > so add a mandatory host-pkgconf dependency and drop our manual handling
+ > of HAVE_LIBIDN2 option (which does not exist anymore)
 
- > Fixes the following security vulnerability (10.3.22):
- > CVE-2020-2574 - Vulnerability in the MySQL Client product of Oracle MySQL
- > (component: C API). Supported versions that are affected are 5.6.46 and
- > prior, 5.7.28 and prior and 8.0.18 and prior. Difficult to exploit
- > vulnerability allows unauthenticated attacker with network access via
- > multiple protocols to compromise MySQL Client. Successful attacks of this
- > vulnerability can result in unauthorized ability to cause a hang or
- > frequently repeatable crash (complete DOS) of MySQL Client.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/6cd0dd779d72b7162943f0f7dbb4e7d258b463eb
 
- > Fixes the following security vulnerabilities (10.3.19):
- > CVE-2019-2974 - Vulnerability in the MySQL Server product of Oracle MySQL
- > (component: Server: Optimizer). Supported versions that are affected are
- > 5.6.45 and prior, 5.7.27 and prior and 8.0.17 and prior. Easily exploitable
- > vulnerability allows low privileged attacker with network access via
- > multiple protocols to compromise MySQL Server. Successful attacks of this
- > vulnerability can result in unauthorized ability to cause a hang or
- > frequently repeatable crash (complete DOS) of MySQL Server.
-
- > CVE-2019-2938 - Vulnerability in the MySQL Server product of Oracle MySQL
- > (component: InnoDB). Supported versions that are affected are 5.7.27 and
- > prior and 8.0.17 and prior. Difficult to exploit vulnerability allows high
- > privileged attacker with network access via multiple protocols to compromise
- > MySQL Server. Successful attacks of this vulnerability can result in
- > unauthorized ability to cause a hang or frequently repeatable crash
- > (complete DOS) of MySQL Server.
-
- > Patch 0002-fix-build-error-with-newer-cmake.patch has been removed as it
- > has been applied upstream.
-
- > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
