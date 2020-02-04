@@ -1,24 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Feb 2020 11:28:06 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/libxslt: bump to version
- 1.1.34
-In-Reply-To: <20191123173505.718679-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 23 Nov 2019 18:35:05 +0100")
-References: <20191123173505.718679-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9ommytl.fsf@dell.be.48ers.dk>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue,  4 Feb 2020 02:33:17 -0800
+Subject: [Buildroot] [PATCH v2 2/7] package/libsemanage: bump version to 3.0
+In-Reply-To: <20200204103322.428413-1-aduskett@gmail.com>
+References: <20200204103322.428413-1-aduskett@gmail.com>
+Message-ID: <20200204103322.428413-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Other changes:
+  - Remove the Python2 check, as 3.0 has removed support for Python2.
 
- > Remove patch (already in version)
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/libsemanage/libsemanage.hash |  2 +-
+ package/libsemanage/libsemanage.mk   | 16 ++++------------
+ 2 files changed, 5 insertions(+), 13 deletions(-)
 
-Committed to 2019.02.x and 2019.11.x after updating the commit message
-to mention the security fixes, thanks.
-
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index 871ed192c4..85dafeb44d 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
+@@ -1,5 +1,5 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 2576349d344492e73b468059767268dec1dabd8c35f3c7222c3ec2448737bc1c libsemanage-2.9.tar.gz
++sha256 a497b0720d54eac427f1f3f618eed417e50ed8f4e47ed0f7a1d391bd416e84cf libsemanage-3.0.tar.gz
+ 
+ # Hash for license file
+ sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index fd90346049..cdf1a2f2f8 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSEMANAGE_VERSION = 2.9
+-LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
++LIBSEMANAGE_VERSION = 3.0
++LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux bzip2
+@@ -31,7 +31,8 @@ HOST_LIBSEMANAGE_DEPENDENCIES = \
+ 	host-libsepol \
+ 	host-libselinux \
+ 	host-bzip2 \
+-	host-swig
++	host-swig \
++	host-python3
+ 
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	$(HOST_CONFIGURE_OPTS) \
+@@ -39,19 +40,10 @@ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/" \
+ 	DEFAULT_SEMANAGE_CONF_LOCATION=$(HOST_DIR)/etc/selinux/semanage.conf
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	PYINC="-I$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)/" \
+ 	PYTHONLIBDIR="$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/" \
+ 	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
+-else
+-HOST_LIBSEMANAGE_DEPENDENCIES += host-python
+-HOST_LIBSEMANAGE_MAKE_OPTS += \
+-	PYINC="-I$(HOST_DIR)/include/python$(PYTHON_VERSION_MAJOR)/" \
+-	PYTHONLIBDIR="$(HOST_DIR)/lib/python$(PYTHON_VERSION_MAJOR)/" \
+-	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
+-endif
+ 
+ define HOST_LIBSEMANAGE_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) all
 -- 
-Bye, Peter Korsgaard
+2.24.1
