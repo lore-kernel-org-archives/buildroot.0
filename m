@@ -1,50 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2020 22:33:23 +0100
-Subject: [Buildroot] [git commit] package/ussp-push: add all blue5_utils
- dependencies
-Message-ID: <20200204212624.0F3498B798@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 4 Feb 2020 22:38:18 +0100
+Subject: [Buildroot] [PATCH v4 1/1] toolchain/toolchain-buildroot:
+ PPC64(LE) support in musl requires ALTIVEC
+In-Reply-To: <20200204213548.20234-1-vfazio@xes-inc.com>
+References: <20200204192520.2059-1-vfazio@xes-inc.com>
+ <20200204213548.20234-1-vfazio@xes-inc.com>
+Message-ID: <a6cb5cb5-f7b0-e956-929b-b9c035ddb735@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34e160b19f2c9bfe334a5e1e4274af000d6aff60
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le 04/02/2020 ? 22:35, Vincent Fazio a ?crit?:
+> musl currently assumes all PPC64(LE) CPUs support ALTIVEC instructions.
+> 
+> However, there are exceptions (such as the e5500) for which musl builds
+> ultimately generate illegal instructions for the targets.
+> 
+> Disable musl if the PPC64(LE) CPU does not support ALTIVEC instructions.
+> 
+> This patch addresses the issues seen here:
+>   https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092743
+>   https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092744
+> 
+> musl mailing list thread:
+>   https://www.openwall.com/lists/musl/2020/02/03/10
+> 
+> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 
-Commit 61a813339af43024ec05e749a05886fff1bf2a39 forgot to add all the
-bluez5_utils dependencies
 
-Fixes:
- - http://autobuild.buildroot.org/results/9a1600ab6b6c8587e8e254e1a9653f5316d3c4fd
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ussp-push/Config.in | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Best regards,
+Romain
 
-diff --git a/package/ussp-push/Config.in b/package/ussp-push/Config.in
-index ef40ae7a53..276c8dca20 100644
---- a/package/ussp-push/Config.in
-+++ b/package/ussp-push/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_USSP_PUSH
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5_utils
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
- 	select BR2_PACKAGE_OPENOBEX
- 	select BR2_PACKAGE_BLUEZ5_UTILS
- 	help
-@@ -12,6 +14,8 @@ config BR2_PACKAGE_USSP_PUSH
- 
- 	  http://www.xmailserver.org/ussp-push.html
- 
--comment "ussp-push needs a toolchain w/ wchar, threads, dynamic library"
-+comment "ussp-push needs a toolchain w/ wchar, threads, dynamic library, headers >= 3.4"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+> ---
+> 
+> Changes v3 -> v4:
+>   - document musl mailing list thread (suggested by Romain)
+> 
+> Changes v2 -> v3:
+>   - change to 'depends on' semantics (suggested by Romain)
+> 
+> Changes v1 -> v2:
+>   - clarify commit message (suggested by Matthew)
+>   - add job logs (suggested by Romain)
+> 
+> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+> ---
+>  toolchain/toolchain-buildroot/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index a980f766ac..8c33b2b4dd 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -86,6 +86,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+>  		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
+>  		   BR2_powerpc64le || BR2_RISCV_64 || BR2_sh   || BR2_x86_64
+>  	depends on !BR2_powerpc_SPE # not supported, build breaks
+> +	depends on !(BR2_powerpc64 || BR2_powerpc64le) || BR2_POWERPC_CPU_HAS_ALTIVEC
+>  	# sh2 nommu is supported by musl, but we don't have support
+>  	# for it in Buildroot.
+>  	depends on BR2_USE_MMU
+> 
