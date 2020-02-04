@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Feb 2020 14:54:34 +0100
-Subject: [Buildroot] [PATCH v3 6/8] package/mariadb: explicitly define
- logging directory to mysqld
-In-Reply-To: <20200204012200.7273-6-bluemrp9@gmail.com> (Ryan Coe's message of
- "Mon, 3 Feb 2020 17:21:58 -0800")
+Date: Tue, 04 Feb 2020 14:55:29 +0100
+Subject: [Buildroot] [PATCH v3 7/8] package/mariadb: do not pass
+ --user=mysql to mysql_install_db
+In-Reply-To: <20200204012200.7273-7-bluemrp9@gmail.com> (Ryan Coe's message of
+ "Mon, 3 Feb 2020 17:21:59 -0800")
 References: <20200204012200.7273-1-bluemrp9@gmail.com>
- <20200204012200.7273-6-bluemrp9@gmail.com>
-Message-ID: <87wo92jw4l.fsf@dell.be.48ers.dk>
+ <20200204012200.7273-7-bluemrp9@gmail.com>
+Message-ID: <87sgjqjw32.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,11 @@ To: buildroot@busybox.net
 
 >>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
- > By default, mariadb creates logging files under the data directory.
- > This patch updates the startup scripts to log under /var/log/mysql.
+ > We currently install the default database by passing --user=mysql to the
+ > install script. With the upcoming bump to the 10.4 series, this does not
+ > work as intended. An error occurs because of missing PAM modules. We work
+ > around this now by creating the default db as root and calling chown to
+ > change the files to user mysql.
 
  > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
  > ---
