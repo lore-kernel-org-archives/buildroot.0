@@ -1,20 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Feb 2020 19:25:37 +0100
-Subject: [Buildroot] [PATCH] configs/stm32mp157c_dk2_defconfig: bump
- Linux to 5.4.7
-In-Reply-To: <20200104134542.3427-1-b.bilas@grinn-global.com> (Bartosz Bilas's
- message of "Sat, 4 Jan 2020 14:45:42 +0100")
-References: <20200104134542.3427-1-b.bilas@grinn-global.com>
-Message-ID: <87blqeyztq.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Feb 2020 19:26:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-pydantic: new package
+In-Reply-To: <20200104135043.774-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Sat, 4 Jan 2020 15:50:43 +0200")
+References: <20200104135043.774-1-asafka7@gmail.com>
+Message-ID: <877e12yzsh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bartosz" == Bartosz Bilas <b.bilas@grinn-global.com> writes:
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
- > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+ > Data validation and settings management using python 3.6
+ > type hinting.
+
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
 Committed, thanks.
 
