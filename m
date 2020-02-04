@@ -1,45 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2020 14:57:20 +0100
-Subject: [Buildroot] [git commit] package/mariadb: do not pass --user=mysql
- to mysql_install_db
-Message-ID: <20200204134625.7B4168B4BF@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 4 Feb 2020 14:59:58 +0100
+Subject: [Buildroot] [PATCH v3 for-next 00/11] gitlab Qemu runtime
+ testing
+In-Reply-To: <87k16s4lkk.fsf@dell.be.48ers.dk>
+References: <20191117201909.12900-1-romain.naour@smile.fr>
+ <4ae261dd-e9f5-0212-eafd-c642c21d27bf@smile.fr>
+ <99a9e061-7fca-c7c0-683b-49845067ba8f@mind.be>
+ <87k16s4lkk.fsf@dell.be.48ers.dk>
+Message-ID: <341bf831-7063-ca42-2fa1-967ce7836d92@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b74423025defaa9eaa1541987ec5cd1060cda7b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-We currently install the default database by passing --user=mysql to the
-install script. With the upcoming bump to the 10.4 series, this does not
-work as intended. An error occurs because of missing PAM modules. We work
-around this now by creating the default db as root and calling chown to
-change the files to user mysql.
+Le 19/12/2019 ? 12:11, Peter Korsgaard a ?crit?:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+> Hi,
+> 
+>  >> I discussed about this series with Jeremy and he suggest to add the Qemu command
+>  >> line into the Qemu's defconfig file (add a new Kconfig option).
+>  >> With that, we can even add a new Makefile target "make run-qemu" to start Qemu
+>  >> when the Qemu command line is set in the defconfig (this would avoid adding
+>  >> several launch.sh script).
+> 
+>  > So something like
+> 
+>  > config BR2_PACKAGE_HOST_QEMU_LAUNCH_ARGS
+>  > 	string "qemu launch command"
+>  > 	help
+>  > 	  Command to launch qemu. If this is defined, 'make run-qemu' can be
+>  > 	  used to build everything and launch qemu.
+> 
+> 
+>  > HOST_QEMU_LAUNCH_ARGS = $(call qstrip,$(BR2_PACKAGE_HOST_QEMU_LAUNCH_ARGS))
+>  > ifneq ($(HOST_QEMU_LAUNCH_ARGS),)
+>  > run-qemu: world
+>  > 	$(Q)$(HOST_QEMU) <kernel args> <rootfs args> $(HOST_QEMU_LAUNCH_ARGS)
+>  > endif
+> 
+>  > Looks like a good idea indeed!
+> 
+> Cute. The kernel arguments (-kernel path/to/kernel/image) could indeed
+> probably be standardized, but we do some to have quite some variation in
+> the rootfs arguments.
+> 
+> But OK, we could start with just including the rootfs argument in
+> _LAUNCH_ARGS.
+> 
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mariadb/S97mysqld | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+About the qemu-system-* binary, should we use the one from the host or use the
+one from the host-qemu package? (or it depend?)
 
-diff --git a/package/mariadb/S97mysqld b/package/mariadb/S97mysqld
-index b895014b54..54594a9e87 100644
---- a/package/mariadb/S97mysqld
-+++ b/package/mariadb/S97mysqld
-@@ -27,12 +27,13 @@ start() {
- 	# if mysql lib directory doesn't exist
- 	if [ `ls -1 $MYSQL_LIB 2> /dev/null | wc -l` = 0 ] ; then
- 		printf "Creating mysql system tables ... "
--		$MYSQL_BIN/mysql_install_db --basedir=/usr --user=mysql \
-+		$MYSQL_BIN/mysql_install_db --basedir=/usr \
- 			--datadir=$MYSQL_LIB > /dev/null 2>&1
- 		if [ $? != 0 ]; then
- 			echo "FAIL"
- 			exit 1
- 		fi
-+		chown -R mysql:mysql $MYSQL_LIB
- 		echo "OK"
- 	fi
- 
+It can be convenient to use the Qemu provided by the host since it can provide
+full feature support. The Qemu provided by host-qemu only support some
+dependencies but not all.
+
+On the other hand, the user can still use the qemu-system-* he want by not using
+make run-qemu but using the qemu command line in the console.
+
+Best regards,
+Romain
