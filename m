@@ -1,74 +1,44 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Tue, 4 Feb 2020 10:54:33 -0600
-Subject: [Buildroot] [PATCH v2 1/1] toolchain/toolchain-buildroot:
- PPC64(LE) support in musl requires ALTIVEC
-In-Reply-To: <71a6bd49-fa71-6b30-a5aa-846e9f16b415@smile.fr>
-References: <20200131153952.680-1-vfazio@xes-inc.com>
- <71a6bd49-fa71-6b30-a5aa-846e9f16b415@smile.fr>
-Message-ID: <6c6b16fa-b1fe-2e13-5ea9-e9b383ce7cc4@xes-inc.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 4 Feb 2020 17:41:11 +0100
+Subject: [Buildroot] [git commit] package/lvm2: bump version to 2.02.185
+Message-ID: <20200204164418.1F8BA8B629@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+commit: https://git.buildroot.net/buildroot/commit/?id=c93af327916f6d6813e2344a61f3fa2c57db1b33
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2/4/20 10:11 AM, Romain Naour wrote:
-> Hi Vincent,
->
-> Le 31/01/2020 ? 16:39, Vincent Fazio a ?crit?:
->> musl currently assumes all PPC64(LE) CPUs support ALTIVEC instructions.
->>
->> However, there are exceptions (such as the e5500) for which musl builds
->> ultimately generate illegal instructions for the targets.
->>
->> Disable musl if the PPC64(LE) CPU does not support ALTIVEC instructions.
->>
->> This patch addresses the issues seen here:
->>    https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092743
->>    https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092744
-> I reported this issue to the musl mailing list. I'm not sure the e5500 support
-> will be added in the end.
->
-> https://www.openwall.com/lists/musl/2020/02/03/10
->
->> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
->> ---
->>   toolchain/toolchain-buildroot/Config.in | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
->> index a980f766ac..09a46822c9 100644
->> --- a/toolchain/toolchain-buildroot/Config.in
->> +++ b/toolchain/toolchain-buildroot/Config.in
->> @@ -83,8 +83,10 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
->>   	bool "musl"
->>   	depends on BR2_aarch64	   || BR2_arm   || BR2_armeb   || BR2_i386 || \
->>   		   BR2_microblaze  || BR2_mips  || BR2_mipsel  || BR2_mips64 || \
->> -		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
->> -		   BR2_powerpc64le || BR2_RISCV_64 || BR2_sh   || BR2_x86_64
->> +		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_RISCV_64 || \
->> +		   BR2_sh	   || BR2_x86_64 || \
->> +		   ((BR2_powerpc64 || BR2_powerpc64le) && BR2_POWERPC_CPU_HAS_ALTIVEC)
->> +		   # musl assumes all PPC64 targets support ALTIVEC instructions
-> Well, previously the architectures was sorted alphabetically. Please keep it.
->
-> You can add the dependency this way:
->
-> # musl assumes all PPC64 targets support ALTIVEC instructions
-> depends on !(BR2_powerpc64 || BR2_powerpc64le) || BR2_POWERPC_CPU_HAS_ALTIVEC
-Ack, i didn't even notice they were alpha-sorted. i'll fix this in v3. 
-Thanks
-> Best regards,
-> Romain
->
->>   	depends on !BR2_powerpc_SPE # not supported, build breaks
->>   	# sh2 nommu is supported by musl, but we don't have support
->>   	# for it in Buildroot.
->>
--- 
-Vincent Fazio
-Embedded Software Engineer - Linux
-Extreme Engineering Solutions, Inc
-http://www.xes-inc.com
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index ad0d93b144..3d560c4be3 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,5 +1,5 @@
+ # From ftp://sources.redhat.com/pub/lvm2/sha512.sum
+-sha512 3947523c6b0862ada40677ed171ed0cf95e070119e377296fc5ccb153e9c4212d34c0b16a887dbd68ccf265525345dabfed2aa59fb3604555429a7e2ecfff4d7  LVM2.2.02.183.tgz
++sha512 f421505551aec2a09bc862f2fcc1ee825bc4d94c53a01d13265631e99308d60fbca40112be5bc7824cce3ef223c0775d2f6c345f6a3f227229a0566c903841bf  LVM2.2.02.185.tgz
+ # Locally computed sha256 checksums
+ sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
+ sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LIB
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 3da713fe83..43370b03bf 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.183
++LVM2_VERSION = 2.02.185
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
+ LVM2_INSTALL_STAGING = YES
