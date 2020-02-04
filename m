@@ -1,82 +1,31 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue,  4 Feb 2020 17:58:52 +0100
-Subject: [Buildroot] [PATCH 3/3] package/pkg-meson.mk: explicitly specify
- pkg-config settings
-In-Reply-To: <20200204165852.1819360-1-arnout@mind.be>
-References: <20200204165852.1819360-1-arnout@mind.be>
-Message-ID: <20200204165852.1819360-3-arnout@mind.be>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Tue,  4 Feb 2020 18:01:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libimxvpuapi: use external waf
+Message-ID: <20200204170132.7334-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-meson is able to distinguish between host (= native) and target (=
-cross) compilation. It will explicitly pass different options to
-pkg-config to distinguish them. Therefore, we don't need to use the
-pkg-config wrapper when using meson, and can instead pass the pkg-config
-settings through the cross-compilation.conf.
+This makes libimxvpuapi use the Waf package ditributed in Buildroot,
+instead of its own one, as the latter does not support Python3.
 
-This is important because in some situations (e.g. for the Python
-configuration), meson sets the PKG_CONFIG_LIBDIR variable to a different
-value before calling pkg-config. Relying on our wrapper script doesn't
-work in that case (except if the script would unconditionally set
-PKG_CONFIG_LIBDIR, which it doesn't do at the moment).
-
-Add the sys_root and pkg_config_lib settings to cross-compilation.conf
-and use pkgconf directly instead of the wrapper.
-
-Note that this requires us to substitute STAGING_DIR as well, with an
-absolute path. This is not a big deal since cross-compilation.conf is
-regenerated for every package.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- package/meson/cross-compilation.conf.in | 4 +++-
- package/pkg-meson.mk                    | 2 ++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/libimxvpuapi/libimxvpuapi.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index fc8e27f7eb..369e225b3e 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -8,7 +8,7 @@ c = '@TARGET_CROSS at gcc'
- cpp = '@TARGET_CROSS at g++'
- ar = '@TARGET_CROSS at ar'
- strip = '@TARGET_CROSS at strip'
--pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-+pkgconfig = '@HOST_DIR@/bin/pkgconf'
+diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
+index bcabbf3877..a2a3b21105 100644
+--- a/package/libimxvpuapi/libimxvpuapi.mk
++++ b/package/libimxvpuapi/libimxvpuapi.mk
+@@ -10,5 +10,6 @@ LIBIMXVPUAPI_LICENSE = LGPL-2.1+
+ LIBIMXVPUAPI_LICENSE_FILES = LICENSE
+ LIBIMXVPUAPI_DEPENDENCIES = host-pkgconf host-python imx-vpu
+ LIBIMXVPUAPI_INSTALL_STAGING = YES
++LIBIMXVPUAPI_NEEDS_EXTERNAL_WAF = YES
  
- [properties]
- needs_exe_wrapper = true
-@@ -16,6 +16,8 @@ c_args = [@TARGET_CFLAGS@]
- c_link_args = [@TARGET_LDFLAGS@]
- cpp_args = [@TARGET_CXXFLAGS@]
- cpp_link_args = [@TARGET_LDFLAGS@]
-+sys_root = '@STAGING_DIR@'
-+pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
- 
- [host_machine]
- system = 'linux'
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index f1a3a69129..6bed2c26d2 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -79,6 +79,7 @@ define $(2)_CONFIGURE_CMDS
- 	    -e "s%@TARGET_LDFLAGS@%$$(call meson-format-flags,$$($(2)_LDFLAGS))%g" \
- 	    -e "s%@TARGET_CXXFLAGS@%$$(call meson-format-flags,$$($(2)_CXXFLAGS))%g" \
- 	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
-+	    -e "s%@STAGING_DIR@%$$(STAGING_DIR)%g" \
- 	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
- 	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
- 	    ) \
-@@ -196,6 +197,7 @@ define PKG_MESON_INSTALL_CROSS_CONF
- 	    -e "s%@TARGET_LDFLAGS@%$(call meson-format-flags,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g" \
- 	    -e "s%@TARGET_CXXFLAGS@%$(call meson-format-flags,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g" \
- 	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-+	    -e "s%@STAGING_DIR@%$$(STAGING_DIR)%g" \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
- 	sed -e "s%@PKG_TARGET_CFLAGS@%%g" \
+ $(eval $(waf-package))
 -- 
 2.24.1
