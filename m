@@ -1,72 +1,27 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Tue,  4 Feb 2020 22:53:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-imx: allow to build
- with Waf on Python3
-Message-ID: <20200204215357.26259-1-titouan.christophe@railnova.eu>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 Feb 2020 22:55:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rpm: bump to version 4.15.1
+In-Reply-To: <20200113214410.1439881-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 13 Jan 2020 22:44:10 +0100")
+References: <20200113214410.1439881-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r1zavwyx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This makes gst1-imx use the Waf package ditributed in Buildroot,
-instead of its own one, as the latter does not support Python3.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Also backport a patch from upstream that tweaks the wscript,
-such as to make it run on Waf >=2.0.12
+ > - Drop both patches (already in version)
+ > - Add libgcrypt optional dependency (added in version 4.15.1 with
+ >   https://github.com/rpm-software-management/rpm/commit/037106ecc899bad6d6e6f9d95768699542b871ea)
+ > - Add openmp support (added in version 4.15.1 with
+ >   https://github.com/rpm-software-management/rpm/commit/464d21dc8c176222c6586e2ee503fec6207f0d29)
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- .../gst1-imx/0001-waf-update-to-2-0-12.patch  | 28 +++++++++++++++++++
- package/gstreamer1/gst1-imx/gst1-imx.mk       |  1 +
- 2 files changed, 29 insertions(+)
- create mode 100644 package/gstreamer1/gst1-imx/0001-waf-update-to-2-0-12.patch
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/gstreamer1/gst1-imx/0001-waf-update-to-2-0-12.patch b/package/gstreamer1/gst1-imx/0001-waf-update-to-2-0-12.patch
-new file mode 100644
-index 0000000000..dcc586311e
---- /dev/null
-+++ b/package/gstreamer1/gst1-imx/0001-waf-update-to-2-0-12.patch
-@@ -0,0 +1,28 @@
-+From 66bc1c2b9c74dab4706a1ca3696e863ed8d30433 Mon Sep 17 00:00:00 2001
-+From: Max Krummenacher <max.krummenacher@toradex.com>
-+Date: Sun, 15 Dec 2019 14:24:54 +0000
-+Subject: [PATCH] waf: update to 2.0.12
-+
-+Prepare to allow building with python3.
-+
-+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-+[Titouan: backport part from upstream, but drop the update of waf itself]
-+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-+---
-+ wscript |  3 ++-
-+ 2 files changed, 12 insertions(+), 11 deletions(-)
-+
-+diff --git a/wscript b/wscript
-+index c3a9926..f076b64 100644
-+--- a/wscript
-++++ b/wscript
-+@@ -152,7 +152,8 @@ def configure(conf):
-+ 
-+ 	# test for GStreamer libraries
-+ 
-+-	gst_version_str = conf.check_cfg(package = 'gstreamer-1.0 >= 1.2.0', modversion = "gstreamer-1.0", uselib_store = 'GSTREAMER', args = '--cflags --libs', mandatory = 1)
-++	conf.check_cfg(package = 'gstreamer-1.0 >= 1.2.0', uselib_store = 'GSTREAMER', args = '--cflags --libs', mandatory = 1)
-++	gst_version_str = conf.check_cfg(modversion = "gstreamer-1.0", uselib_store = 'GSTREAMER', args = '--cflags --libs', mandatory = 1)
-+ 	gst_version = [int(x) for x in re.match('(\d*)\.(\d*)\.(\d*)', gst_version_str).groups()]
-+ 	conf.env['GSTREAMER_VERSION'] = gst_version
-+ 
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-index 43b4d9b15f..1156077274 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
-@@ -11,6 +11,7 @@ GST1_IMX_LICENSE = LGPL-2.0+
- GST1_IMX_LICENSE_FILES = LICENSE
- 
- GST1_IMX_INSTALL_STAGING = YES
-+GST1_IMX_NEEDS_EXTERNAL_WAF = YES
- 
- GST1_IMX_DEPENDENCIES += \
- 	host-pkgconf \
+Committed, thanks.
+
 -- 
-2.24.1
+Bye, Peter Korsgaard
