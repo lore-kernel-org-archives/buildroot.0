@@ -1,37 +1,43 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon,  3 Feb 2020 17:10:27 -0700
-Subject: [Buildroot] [PATCH 1/1] package/gcc: pass -Wno-error to debug builds
-Message-ID: <20200204001027.126863-1-james.hilliard1@gmail.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Mon,  3 Feb 2020 17:21:53 -0800
+Subject: [Buildroot] [PATCH v3 1/8] package/mariadb: fix permissions of data
+ dir when using systemd
+Message-ID: <20200204012200.7273-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
-   return S_ISLNK (st.st_mode);
-                     ^
+mysql_install_db is currently called in the systemd unit without
+--user=mysql that the sysv script uses. This will generate the initial
+database files with root permissions. However, mysqld runs as user mysql
+so this will cause problems. We fix this by calling chown instead of
+passing the user parameter because an upcoming version bump will fail when
+ran this way.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
- package/gcc/gcc.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Changes v2 -> v3:
+  - separate changes into separate patches (suggested by Thomas)
+Changes v1 -> v2:
+  - no change
+---
+ package/mariadb/mysqld.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 527f30bf22..badf358707 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -103,6 +103,10 @@ HOST_GCC_COMMON_CONF_ENV = \
- GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
- GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+diff --git a/package/mariadb/mysqld.service b/package/mariadb/mysqld.service
+index cd308310c6..3eaef173e1 100644
+--- a/package/mariadb/mysqld.service
++++ b/package/mariadb/mysqld.service
+@@ -2,7 +2,7 @@
+ Description=MySQL database server
  
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+GCC_COMMON_TARGET_CFLAGS += -Wno-error
-+endif
-+
- # Propagate options used for target software building to GCC target libs
- HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
- HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
+ [Service]
+-ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
++ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql && chown -R mysql:mysql /var/lib/mysql'
+ ExecStart=/usr/bin/mysqld_safe
+ Restart=always
+ User=mysql
 -- 
-2.20.1
+2.25.0
