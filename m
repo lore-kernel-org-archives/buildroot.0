@@ -1,41 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Feb 2020 23:59:22 +0100
-Subject: [Buildroot] [PATCH 2/2] docs/manual: describe the new
- <pkg>_IGNORE_CVES variable
-In-Reply-To: <20200204215232.666841-3-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Tue, 4 Feb 2020 22:52:31 +0100")
-References: <20200204215232.666841-1-thomas.petazzoni@bootlin.com>
- <20200204215232.666841-3-thomas.petazzoni@bootlin.com>
-Message-ID: <87imkmvu0l.fsf@dell.be.48ers.dk>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 04 Feb 2020 15:02:04 -0800
+Subject: [Buildroot] [PATCH 1/2] package/docker-containerd: bump to 1.3.2
+In-Reply-To: <CA+h8R2puYbJDhqUzYzxfyqV9DzBPwHDyUgxa42y5QFoUT=QrRw@mail.gmail.com>
+References: <20200110045033.1920685-1-christian@paral.in>
+ <87pnfrg0x6.fsf@dell.be.48ers.dk>
+ <CA+h8R2puYbJDhqUzYzxfyqV9DzBPwHDyUgxa42y5QFoUT=QrRw@mail.gmail.com>
+Message-ID: <874kw6gdn7.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hi Peter, all,
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > ---
- >  docs/manual/adding-packages-generic.txt | 14 ++++++++++++++
- >  1 file changed, 14 insertions(+)
+Christian Stewart <christian@paral.in> writes:
+>> Can you provide a more detailed commit message, please?
+>>
+>> In the past we have matched the runc and containerd versions with what
+>> upstream uses for docker-ce.
+>>
+>> What does this bring when used with docker-engine 19.03? Is it
+>> compatible?
 
- > diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
- > index baa052e31c..9a77923a92 100644
- > --- a/docs/manual/adding-packages-generic.txt
- > +++ b/docs/manual/adding-packages-generic.txt
- > @@ -488,6 +488,20 @@ not and can not work as people would expect it should:
- >    locations, `/lib/firmware`, `/usr/lib/firmware`, `/lib/modules`,
- >    `/usr/lib/modules`, and `/usr/share`, which are automatically excluded.
- 
- > +* +LIBFOO_IGNORE_CVES+ is a space-separated list of CVEs that tells
+While this release (1.3.x) is compatible with Docker and containerd is a
+separate project now (and could be updated as releases are published,
+independently from Docker);
 
-Maybe 'CVE identifiers' instead of CVEs?
+Docker 19.03.4 bumped their containerd reference to 1.2.10. Containerd
+has released a 1.2.12 release (on the 1.2.x as opposed to 1.3.x series)
+with bugfixes.
 
- > +  Buildroot CVE tracking tools which CVEs should be ignored for this
+For now, I will withdraw this patch and re-submit one to bump to 1.2.12.
 
-Maybe '.. list of CVE identifiers that should be ignored by the
-Buildroot CVE trackign tool for this package.' ?
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Christian
