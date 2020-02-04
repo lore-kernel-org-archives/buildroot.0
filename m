@@ -1,7 +1,7 @@
 From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Tue,  4 Feb 2020 15:16:33 +0100
-Subject: [Buildroot] [PATCH 1/3] package/lvm2: bump version to 2.02.185
-Message-ID: <20200204141633.9777-1-p.debruijn@unilogic.nl>
+Date: Tue,  4 Feb 2020 15:16:48 +0100
+Subject: [Buildroot] [PATCH 2/3] package/lvm2: optional systemd integration
+Message-ID: <20200204141648.9826-1-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lvm2/Config.in | 7 +++++++
+ package/lvm2/lvm2.mk   | 6 ++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index ad0d93b..3d560c4 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,5 +1,5 @@
- # From ftp://sources.redhat.com/pub/lvm2/sha512.sum
--sha512 3947523c6b0862ada40677ed171ed0cf95e070119e377296fc5ccb153e9c4212d34c0b16a887dbd68ccf265525345dabfed2aa59fb3604555429a7e2ecfff4d7  LVM2.2.02.183.tgz
-+sha512 f421505551aec2a09bc862f2fcc1ee825bc4d94c53a01d13265631e99308d60fbca40112be5bc7824cce3ef223c0775d2f6c345f6a3f227229a0566c903841bf  LVM2.2.02.185.tgz
- # Locally computed sha256 checksums
- sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
- sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LIB
+diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+index de5b972..0f9e86e 100644
+--- a/package/lvm2/Config.in
++++ b/package/lvm2/Config.in
+@@ -47,6 +47,13 @@ config BR2_PACKAGE_LVM2_APP_LIBRARY
+ comment "lvm2 application library needs a glibc or uClibc toolchain"
+ 	depends on BR2_TOOLCHAIN_USES_MUSL
+ 
++config BR2_PACKAGE_LVM2_SYSTEMD
++	bool "install systemd integration"
++	depends on BR2_PACKAGE_SYSTEMD
++	select BR2_PACKAGE_LVM2_APP_LIBRARY
++	help
++	  Install systemd generator and services.
++
+ endif
+ 
+ comment "lvm2 needs a toolchain w/ threads, dynamic library"
 diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 3da713f..43370b0 100644
+index 43370b0..9847f96 100644
 --- a/package/lvm2/lvm2.mk
 +++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -54,6 +54,12 @@ else
+ LVM2_CONF_OPTS += --disable-applib
+ endif
  
--LVM2_VERSION = 2.02.183
-+LVM2_VERSION = 2.02.185
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
- LVM2_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_LVM2_SYSTEMD),y)
++LVM2_DEPENDANCIES += systemd
++LVM2_CONF_OPTS += --enable-lvmetad
++LVM2_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install install_systemd_units install_systemd_generators
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+ LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
+ endif
 -- 
 2.7.4
