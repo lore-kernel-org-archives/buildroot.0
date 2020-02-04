@@ -1,49 +1,30 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Tue,  4 Feb 2020 15:13:10 -0800
-Subject: [Buildroot] [PATCH] linux/linux.hash: remove hash for COPYING
-Message-ID: <20200204231310.22132-1-mmayer@broadcom.com>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 4 Feb 2020 15:22:24 -0800
+Subject: [Buildroot] [PATCH v2 1/6] package/go: implement go modules
+ integration
+In-Reply-To: <18bb82ad-f3fd-d360-ee60-b3d1c4743057@xes-inc.com>
+References: <20200111041355.21705-1-christian@paral.in>
+ <18bb82ad-f3fd-d360-ee60-b3d1c4743057@xes-inc.com>
+Message-ID: <CA+h8R2ogHk+7U=oWEq09wxQqEfvf-Owrm1uZiVf_ZjrxuEeq4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The hash for "COPYING" changed between v4.16 and v4.17. Since kernels
-before and after the change are supported, storing the hash for this
-file will cause an error during "make legal-info" when a kernel with the
-respective other hash is being used.
+Hi Vincent,
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
----
+Apologies for the delay on this-
 
-One way to reproduce the problem:
+On Tue, Jan 14, 2020 at 8:56 AM Vincent Fazio <vfazio@xes-inc.com> wrote:
+> I tested this with a HOST Go package that i've got for git-lfs that I
+> haven't submitted yet and it needed a couple of tweaks.
+>
+> lmk your thoughts
 
-1) Download and extract
-   https://mirrors.edge.kernel.org/pub/linux/kernel/v4.x/linux-4.9.212.tar.xz
-2) Configure buildroot as usual
-3) Point LINUX_OVERRIDE_SRCDIR to the 4.9.212 directory created above
-4) make && make legal-info
+Unfortunately the format you've sent your corrections is a bit
+confusing for me, and I'd like to make sure I get it right. Do you
+have a copy of the .patch anywhere with your adjustments?
 
-[...]
->>> linux-tools  Collecting legal info
->>> linux custom Collecting legal info
-ERROR: COPYING has wrong sha256 hash:
-ERROR: expected: ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff
-ERROR: got     : af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-linux/linux.mk:606: recipe for target 'linux-legal-info' failed
-
- linux/linux.hash | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 940a90ed9dea..289171987aa1 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -8,4 +8,3 @@ sha256 be26156abdb38ac0576a34a235ef456bb8ca67fbbe56fc6649b8d069159f8bc4  linux-4
- # Locally computed
- sha256 6d60ce76bce2e1938f64027d12b1988c95245751feb635adfc551a021d5b3f26  linux-cip-4.19.88-cip16.tar.gz
- sha256 74ec782e11344e5c5db8e48899b464e296ef37acfb43ce7dfb01c09ea8d3e959  linux-cip-4.19.82-cip14-rt5.tar.gz
--sha256 ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff  COPYING
--- 
-2.17.1
+Best regards,
+Christian
