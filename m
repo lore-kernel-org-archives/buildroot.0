@@ -1,168 +1,49 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  4 Feb 2020 11:01:26 +0100
-Subject: [Buildroot] [PATCH] package/can-utils: bump to version 2020.02.0
-Message-ID: <20200204100126.26131-1-yegorslists@googlemail.com>
+From: Nathaniel Roach <nroach44@nroach44.id.au>
+Date: Tue, 4 Feb 2020 18:01:44 +0800
+Subject: [Buildroot] [PATCH 1/2] package/liboping: remove -Werror build
+ flag
+In-Reply-To: <87a75z1im0.fsf@dell.be.48ers.dk>
+References: <20200124143609.14313-1-nroach44@gmail.com>
+ <CAPi7W81yAtkC3xJPL++Lb-ZP=5yja0KRy00t3ALdp2Q4EGFv6g@mail.gmail.com>
+ <cfe054c8-2874-de9a-a604-763b3157e4d3@nroach44.id.au>
+ <CAPi7W80DpRDJJ04Mg6rb+4yoRLVdGbw7tyk0+J4xrDAtzz3h=g@mail.gmail.com>
+ <87a75z1im0.fsf@dell.be.48ers.dk>
+Message-ID: <339c075e-0764-574b-5e03-8b27342427b5@nroach44.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+HI Peter, Fabrice,
 
-Remove the upstreamed patch and change the license information.
+On 4/2/20 5:11 am, Peter Korsgaard wrote:
+>>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+> Hi,
+>
+>   >> > Can you be more specific on the build failure? For example, by
+>   >> > providing a link on autobuilder?
+>   >> > Otherwise, I would prefer an upstreamable solution such as adding a
+>   >> > --disable-werror option or adding a patch that fixes the issue.
+>   >> > There is a pending PR on a truncation error on upstream github:
+>   >> > https://github.com/octo/liboping/pull/50.
+>   >> > Is it related to your build failure? In this case, I would suggest to
+>   >> > retrieve this commit.
+>   >>
+>   >> The error is detailed in the Gentoo bug linked above, and this was their
+>   >> fix for it. There is one single build failure on the autobuilders, and
+>   >> it's got the same error:
+>   >> http://autobuild.buildroot.org/?reason=liboping-1.10.0
+>   > This error was raised in December 5th 2018 and has been fixed by
+>   > retrieving an upstream commit instead of disabling -Werror (see
+>   > https://patchwork.ozlabs.org/patch/1009066).
+>   > There was no more autobuilder failures after this patch was applied.
+>   > So this is strange that you still get a failure on your local machine.
+>   > Are you using the master branch or one of the official release (fix
+>   > was committed to 2018.08.x and 2018.11.x releases)?
+>
+> Any comments on that? In the mean time I have marked the patch as not
+> applicable in patchwork.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- ...o-find-SIOCGSTAMP-with-latest-kernel.patch | 109 ------------------
- package/can-utils/can-utils.hash              |   5 +-
- package/can-utils/can-utils.mk                |   6 +-
- 3 files changed, 6 insertions(+), 114 deletions(-)
- delete mode 100644 package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-
-diff --git a/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch b/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-deleted file mode 100644
-index 3cde5b42af..0000000000
---- a/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-+++ /dev/null
-@@ -1,109 +0,0 @@
--From e9590b1ca75d360eaf3211bebd86058214d48064 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 14 Jul 2019 21:50:43 +0200
--Subject: [PATCH] fix include to find SIOCGSTAMP with latest kernel
--
--In linux kernel commit 0768e17073dc527ccd18ed5f96ce85f9985e9115
--the asm-generic/sockios.h header no longer defines SIOCGSTAMP.
--Instead it provides only SIOCGSTAMP_OLD.
--
--The linux/sockios.h header now defines SIOCGSTAMP using either
--SIOCGSTAMP_OLD or SIOCGSTAMP_NEW as appropriate. This linux only
--header file is not pulled so we get a build failure.
--
--canlogserver.c: In function 'main':
--canlogserver.c:404:21: error: 'SIOCGSTAMP' undeclared (first use in this function); did you mean 'SIOCGRARP'?
--     if (ioctl(s[i], SIOCGSTAMP, &tv) < 0)
--                     ^~~~~~~~~~
--                     SIOCGRARP
--canlogserver.c:404:21: note: each undeclared identifier is reported only once for each function it appears in
--
--Fixes:
-- - http://autobuild.buildroot.org/results/363de7d9bf433be8bc47ba4ee52ae0bb80fa9021
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/linux-can/can-utils/pull/147]
-----
-- canlogserver.c | 1 +
-- cansniffer.c   | 1 +
-- isotpdump.c    | 1 +
-- isotpperf.c    | 1 +
-- isotpsniffer.c | 1 +
-- slcanpty.c     | 1 +
-- 6 files changed, 6 insertions(+)
--
--diff --git a/canlogserver.c b/canlogserver.c
--index f9ae159..4429ccd 100644
----- a/canlogserver.c
--+++ b/canlogserver.c
--@@ -62,6 +62,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/raw.h>
--+#include <linux/sockios.h>
-- #include <signal.h>
-- #include <errno.h>
-- 
--diff --git a/cansniffer.c b/cansniffer.c
--index b710058..0ff29b4 100644
----- a/cansniffer.c
--+++ b/cansniffer.c
--@@ -62,6 +62,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/bcm.h>
--+#include <linux/sockios.h>
-- 
-- #include "terminal.h"
-- 
--diff --git a/isotpdump.c b/isotpdump.c
--index 1ab9416..97baeca 100644
----- a/isotpdump.c
--+++ b/isotpdump.c
--@@ -57,6 +57,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/raw.h>
--+#include <linux/sockios.h>
-- #include "terminal.h"
-- 
-- #define NO_CAN_ID 0xFFFFFFFFU
--diff --git a/isotpperf.c b/isotpperf.c
--index 6ee6ede..5ad302a 100644
----- a/isotpperf.c
--+++ b/isotpperf.c
--@@ -57,6 +57,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/raw.h>
--+#include <linux/sockios.h>
-- 
-- #define NO_CAN_ID 0xFFFFFFFFU
-- #define PERCENTRES 2 /* resolution in percent for bargraph */
--diff --git a/isotpsniffer.c b/isotpsniffer.c
--index 6c19c8b..5d61872 100644
----- a/isotpsniffer.c
--+++ b/isotpsniffer.c
--@@ -56,6 +56,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/isotp.h>
--+#include <linux/sockios.h>
-- #include "terminal.h"
-- 
-- #define NO_CAN_ID 0xFFFFFFFFU
--diff --git a/slcanpty.c b/slcanpty.c
--index e90b32a..5fdfa55 100644
----- a/slcanpty.c
--+++ b/slcanpty.c
--@@ -37,6 +37,7 @@
-- 
-- #include <linux/can.h>
-- #include <linux/can/raw.h>
--+#include <linux/sockios.h>
-- 
-- /* maximum rx buffer len: extended CAN frame with timestamp */
-- #define SLC_MTU (sizeof("T1111222281122334455667788EA5F\r")+1)
---- 
--2.20.1
--
-diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
-index 403c59787e..adbf5b0bca 100644
---- a/package/can-utils/can-utils.hash
-+++ b/package/can-utils/can-utils.hash
-@@ -1,3 +1,4 @@
- # Locally computed
--sha256  370ad4b19447c29099f7300548f1a3362d6e123c4a6a827dbbd3110bc2c26839  can-utils-2018.02.0.tar.gz
--sha256  c258939ebb09c3857f5fc7704a449e5077cc881090c87b38f9a81332b96fa075  Makefile
-+sha256  ea0f96a02af37f16713284c7bdccdbae716d9bcb979ccfb51185d696c31f9ecf  can-utils-2020.02.0.tar.gz
-+sha256  c3dc748f5e725cf5ed89784fe78e4ff1b05d309bf1e7ade4c572e8fde1b8406c  LICENSES/BSD-3-Clause
-+sha256  995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  LICENSES/GPL-2.0-only.txt
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index 7e919a3efa..cd4dba5616 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--CAN_UTILS_VERSION = 2018.02.0
-+CAN_UTILS_VERSION = 2020.02.0
- CAN_UTILS_SITE = $(call github,linux-can,can-utils,v$(CAN_UTILS_VERSION))
--CAN_UTILS_LICENSE = BSD-3-Clause or GPL-2.0, GPL-2.0+
--CAN_UTILS_LICENSE_FILES = Makefile
-+CAN_UTILS_LICENSE = BSD-3-Clause or GPL-2.0
-+CAN_UTILS_LICENSE_FILES = LICENSES/BSD-3-Clause LICENSES/GPL-2.0-only.txt
- CAN_UTILS_AUTORECONF = YES
- 
- $(eval $(autotools-package))
--- 
-2.17.0
+Apologies for the delays, I'm going to have to test with the BR 
+toolchain instead of my ct-ng one.
