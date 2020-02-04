@@ -1,111 +1,147 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 4 Feb 2020 23:12:05 +0100
-Subject: [Buildroot] [PATCHv2 1/1] system: update lib64/32 symlink
- creation for mips64n32 and gcc >= 5.1.0
-In-Reply-To: <20191223144756.28247-1-patrickdepinguin@gmail.com>
-References: <20191223144756.28247-1-patrickdepinguin@gmail.com>
-Message-ID: <20200204231205.7f0c0c7c@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2020 23:14:27 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/mesa3d: add v3d driver
+ support
+In-Reply-To: <20200204230027.014f4603@gmx.net>
+References: <20200204144412.6666-1-ps.report@gmx.net>
+ <20200204144412.6666-2-ps.report@gmx.net>
+ <20200204205516.GB6335@scaer> <20200204224540.23f620c0@gmx.net>
+ <20200204230027.014f4603@gmx.net>
+Message-ID: <20200204221427.GE6335@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Dec 2019 15:47:55 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+Peter, All,
 
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> In gcc 5.1.0, a change was introduced which causes internal search paths
-> inside the sysroot to be relative to 'lib64' rather than 'lib'. See [1] [2]
-> and [3].
-> 
-> For example for dtc:
-> 
->      LD convert-dtsv0
->     /opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/bin/ld: cannot find crt1.o: No such file or directory
->     /opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/bin/ld: cannot find crti.o: No such file or directory
->     collect2: error: ld returned 1 exit status
->     make[1]: *** [Makefile:236: convert-dtsv0] Error 1
->     make[1]: *** Waiting for unfinished jobs....
->     make[1]: Leaving directory '/opt/buildroot/output/build/dtc-1.4.7'
->     make: *** [package/pkg-generic.mk:241: /opt/buildroot/output/build/dtc-1.4.7/.stamp_built] Error 2
-> 
-> In this case, crt1.o was searched for in following locations:
-> 
->     16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/n32/octeon3/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/n32/octeon3/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/lib/mips64-octeon-linux-gnu/7.3.0/n32/octeon3/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/lib/../lib32-fp/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/lib64/mips64-octeon-linux-gnu/7.3.0/n32/octeon3/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/lib64/../lib32-fp/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/usr/lib64/mips64-octeon-linux-gnu/7.3.0/n32/octeon3/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/usr/lib64/../lib32-fp/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/lib/mips64-octeon-linux-gnu/7.3.0/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/lib/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/lib64/mips64-octeon-linux-gnu/7.3.0/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/lib64/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/usr/lib64/mips64-octeon-linux-gnu/7.3.0/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
->     16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/usr/lib64/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
-> 
-> As can be seen above, all attempted paths contain 'lib64' as base,
-> instead of 'lib' or 'lib32', e.g.
-> 
-> .../sysroot/lib64/../lib32-fp/crt1.o
-> .../sysroot/lib64/crt1.o
-> 
-> This problem was detected on a gcc 7.x toolchain provided by Marvell as part
-> of their Octeon SDK. For this toolchain, here are the values of the paths
-> as detected by the Buildroot toolchain logic, for two different Octeon
-> processors:
-> 
-> - octeon2 (soft-float) (-mabi=n32 -march=octeon2):
-> SYSROOT_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/sys-root/;
-> ARCH_SYSROOT_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/sys-root/;
-> ARCH_SUBDIR=;
-> ARCH_LIB_DIR=lib32/octeon2;
-> SUPPORT_LIB_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/lib32/octeon2/
-> 
-> - octeon3 (hard-float) (-mabi=n32 -march=octeon3):
-> SYSROOT_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/sys-root/;
-> ARCH_SYSROOT_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/sys-root/;
-> ARCH_SUBDIR=;
-> ARCH_LIB_DIR=lib32-fp;
-> SUPPORT_LIB_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/lib32-fp/
-> 
-> For both cases (MIPS64n32) Buildroot created a symlink 'lib32->lib', from
-> SYSTEM_LIB_SYMLINK in system/system.mk. Additionally, the function
-> create_lib_symlinks in
-> toolchain/toolchain-external/pkg-toolchain-external.mk will use ARCH_LIB_DIR
-> and create an additional link $(ARCH_LIB_DIR)->lib.
-> For the Octeon3 case this thus results in the following symlinks (where the
-> 'lib32' one is normally not needed):
-> 
->     lib32 -> lib/
->     lib32-fp -> lib/
-> 
-> Since the toolchain is searching based on a 'lib64' component, it will fail
-> to find its internal paths.
-> 
-> To solve the problem, we need to create an additional symlink 'lib64':
-> 
->     lib64 -> lib/
-> 
-> [1] https://github.com/gcc-mirror/gcc/commit/257ccd463a4f25495b252a3bdf989d057c54678d
-> [2] https://gcc.gnu.org/ml/gcc-patches/2014-10/msg03377.html
-> [3] https://gcc.gnu.org/ml/gcc-patches/2014-11/msg00539.html
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  system/system.mk | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
+On 2020-02-04 23:00 +0100, Peter Seiderer spake thusly:
+> On Tue, 4 Feb 2020 22:45:40 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+> > On Tue, 4 Feb 2020 21:55:16 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > > On 2020-02-04 15:44 +0100, Peter Seiderer spake thusly:
+> > > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[--SNIP--]
+> > > > +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
+> > > > +	bool "Gallium v3d driver"
+> > > > +	depends on BR2_arm || BR2_aarch64
+> > > > +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> > > > +	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+> > > > +	select )
+> > > > +	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+> > > > +	help
+> > > > +	  Driver for Broadcom VC6 (rpi4) GPUs (needs kmsro and vc4).
+> > >
+> > > I don't understand why you added that '(needs kmsro and vc4)': the
+> > > corresponding config entries are properly selected above, and thus
+> > > this part of the help text is of no use for the user, and tend to in
+> >
+> > kmsro/vc4 would mean BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO (not mixed up
+> > with the selected BR2_PACKAGE_MESA3D_GALLIUM_KMSRO) and
+> > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4 (not mixed up with the selected
+> > BR2_PACKAGE_LIBDRM_VC4)...and all three mesa3d options (v3d, vc4, kmsro)
+> > are needed to get a functional RPi4-64bit graphic output (see e.g. [1]:
+> > The VC4 interface is via /dev/drm/card1. The V3D interface is via /dev/drm/card0.
+> > All drawing commands go to V3D (aka card0). All screen resolution and configuration
+> > commands go to VC4 (aka card1))...
 
-Applied to master, thanks.
+Slo it means the code you provided is not complete! Why do you not
+select the requried options?
 
-Thomas
+    select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
+    select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+
+We don't want to let the user resolve the dependencies manually. This is
+what the config options are for.
+
+Currently, with the code you provided, this means that the following
+defconfig would not generate a mesa3d that provperly supports the rpi4
+(if I understood things correctly):
+
+    BR2_arm=y
+    BR2_cortex_a7=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_INIT_NONE=y
+    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+    BR2_SYSTEM_BIN_SH_NONE=y
+    # BR2_PACKAGE_BUSYBOX is not set
+    BR2_PACKAGE_MESA3D=y
+    BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D=y
+    # BR2_PACKAGE_EUDEV_ENABLE_HWDB is not set
+    # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+    # BR2_TARGET_ROOTFS_TAR is not set
+
+This is definitely not nice at all... :-(
+
+Could you please fix that up?
+
+Regards,
+Yann E. MORIN.
+
+> > > fact be very confusing. But since this is the same mess with the other
+> > > options around, I left it. It would be nice to clean them away, though.
+> > >
+> > > > +	  It requires a recent enough mainline/raspberrypi kernel with
+> > > > +	  drm v3d (CONFIG_DRM_V3D, CONFIG_DRM_VC4) support enabled.
+> > >
+> > > "recent enough" is of no use to the user: some woudl consider 4.0 to be
+> > > recent, some would consider 5.0 to be old. Sol I replaced that with the
+> > > exact version v3d was merged in mainline linux, that is 4.18.
+> >
+> > Thanks for looking up at which kernel version CONFIG_DRM_V3D was added...,
+> > wanted to emphasize that both mainline and raspberrypi linux kernel
+> > are supported (some years ago only the mainline kernel supported DRM_VC4
+> > and/or 64-bit Rpi)...
+> >
+> > Regards,
+> > Peter
+> >
+> > [1] https://forum.qt.io/topic/107764/drm-kms-configuration-for-raspberry-pi-4
+> >
+> > >
+> > > Regards,
+> > > Yann E. MORIN.
+> > >
+> > > > +
+> > > >  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+> > > >  	bool "Gallium vc4 driver"
+> > > >  	depends on BR2_arm || BR2_aarch64
+> > > > diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> > > > index c7e5be55a0..1a18cf3c58 100644
+> > > > --- a/package/mesa3d/mesa3d.mk
+> > > > +++ b/package/mesa3d/mesa3d.mk
+> > > > @@ -84,6 +84,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
+> > > >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
+> > > >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
+> > > >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA)    += tegra
+> > > > +MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
+> > > >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
+> > > >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+> > > >  # DRI Drivers
+> > > > @@ -162,6 +163,8 @@ endif
+> > > >  MESA3D_PLATFORMS = surfaceless
+> > > >  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+> > > >  MESA3D_PLATFORMS += drm
+> > > > +else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D),y)
+> > > > +MESA3D_PLATFORMS += drm
+> > > >  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
+> > > >  MESA3D_PLATFORMS += drm
+> > > >  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
+> > > > --
+> > > > 2.25.0
+> > > >
+> > > > _______________________________________________
+> > > > buildroot mailing list
+> > > > buildroot at busybox.net
+> > > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > >
+> >
+> 
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
