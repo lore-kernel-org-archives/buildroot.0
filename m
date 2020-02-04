@@ -1,51 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 4 Feb 2020 10:09:42 +0100
-Subject: [Buildroot] [git commit] package/python-aioblescan: Bump to version
- 0.2.6
-Message-ID: <20200204085850.D5A8F8A3C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-redis: Bump to version 3.4.1
+Message-ID: <20200204085850.E4C708A3C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed998aef11f1450a0a1998521bedab8d0bef652d
+commit: https://git.buildroot.net/buildroot/commit/?id=d7512ee0fc927343ba360f773ed7f917a2d778e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-aioblescan/python-aioblescan.hash | 4 ++--
- package/python-aioblescan/python-aioblescan.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-redis/python-redis.hash | 4 ++--
+ package/python-redis/python-redis.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aioblescan/python-aioblescan.hash b/package/python-aioblescan/python-aioblescan.hash
-index d33162850a..902a7a30f8 100644
---- a/package/python-aioblescan/python-aioblescan.hash
-+++ b/package/python-aioblescan/python-aioblescan.hash
+diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
+index c2bca7ea45..02ec3bde5e 100644
+--- a/package/python-redis/python-redis.hash
++++ b/package/python-redis/python-redis.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioblescan/json
--md5	b662f44828a99430d4ed42c843ddb89c  aioblescan-0.2.4.tar.gz
--sha256	d613f24ffdb3dae48d6157443f76708f0c791034036330d00272af6b408b2c6c  aioblescan-0.2.4.tar.gz
-+md5	9ad3f04ea7ad4c81a53f8e1316985527  aioblescan-0.2.6.tar.gz
-+sha256	2e45c325e070a0ee4e952a7d0c56e95ad230643e1057fb5f3e95ea5c99081436  aioblescan-0.2.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/redis/json
+-md5	7c67aa4554f758261737e5a2dc913cf9  redis-3.3.11.tar.gz
+-sha256	8d0fc278d3f5e1249967cba2eb4a5632d19e45ce5c09442b8422d15ee2c22cc2  redis-3.3.11.tar.gz
++md5	c2062a26ea12b69e0d39a23451c89998  redis-3.4.1.tar.gz
++sha256	0dcfb335921b88a850d461dc255ff4708294943322bd55de6cfd68972490ca1f  redis-3.4.1.tar.gz
  # Locally computed sha256 checksums
- sha256	c2066cd44079e0c706234001af18cb6ad4b62fc68d0d08d29fdc7319916647e0  LICENSE.txt
-diff --git a/package/python-aioblescan/python-aioblescan.mk b/package/python-aioblescan/python-aioblescan.mk
-index 8a6bda3a65..6350007c70 100644
---- a/package/python-aioblescan/python-aioblescan.mk
-+++ b/package/python-aioblescan/python-aioblescan.mk
-@@ -4,10 +4,10 @@
+ sha256	790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
+diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
+index 4b7329f7a4..a93ccfe020 100644
+--- a/package/python-redis/python-redis.mk
++++ b/package/python-redis/python-redis.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOBLESCAN_VERSION = 0.2.4
-+PYTHON_AIOBLESCAN_VERSION = 0.2.6
- PYTHON_AIOBLESCAN_SOURCE = aioblescan-$(PYTHON_AIOBLESCAN_VERSION).tar.gz
--PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/a9/ad/1e2f41b2036bd76079f88cd94ce35b5a996d937dccaf432ea6b8092d3e11
--PYTHON_AIOBLESCAN_SETUP_TYPE = distutils
-+PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/66/b8/888c2eb4323ed498dbc7deeb8aee0cfec9edd8c25184b06a8874bb0cf84f
-+PYTHON_AIOBLESCAN_SETUP_TYPE = setuptools
- PYTHON_AIOBLESCAN_LICENSE = MIT
- PYTHON_AIOBLESCAN_LICENSE_FILES = LICENSE.txt
- 
+-PYTHON_REDIS_VERSION = 3.3.11
++PYTHON_REDIS_VERSION = 3.4.1
+ PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
+-PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/06/ca/00557c74279d2f256d3c42cabf237631355f3a132e4c74c2000e6647ad98
++PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/ef/2e/2c0f59891db7db087a7eeaa79bc7c7f2c039e71a2b5b0a41391e9d462926
+ PYTHON_REDIS_SETUP_TYPE = setuptools
+ PYTHON_REDIS_LICENSE = MIT
+ PYTHON_REDIS_LICENSE_FILES = LICENSE
