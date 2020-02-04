@@ -1,39 +1,44 @@
-From: Michel Alex <Alex.Michel@wiedemann-group.com>
-Date: Tue, 4 Feb 2020 09:52:02 +0000
-Subject: [Buildroot] [PATCH 1/1] package/network-manager-openvpn: new
- package
-In-Reply-To: <874kw6ofdw.fsf@dell.be.48ers.dk>
-References: <8b51f7b227fd3cef7bc968a0c4f0eebd018d6655.camel@wiedemann-group.com>
- <87h8073fdt.fsf@dell.be.48ers.dk>
- <4106e322c7a21137383f4aa10f70f7aa0c8abc65.camel@wiedemann-group.com>
- <874kw6ofdw.fsf@dell.be.48ers.dk>
-Message-ID: <673011296db7589d8efb4461a37594d9c993a13b.camel@wiedemann-group.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 4 Feb 2020 10:52:54 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libnspr: bump to version 4.25,
+ add xtensa support
+In-Reply-To: <20200204093351.6393df15@windsurf>
+References: <20200201084758.285234-1-bernd.kuhls@t-online.de>
+ <20200201102425.1556253b@windsurf>
+ <ba2c8b6f-1ccb-b077-a789-cdbe2b987915@mind.be>
+ <20200204093351.6393df15@windsurf>
+Message-ID: <997d58d1-758c-afd8-4580-ddf8074b3c63@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Hi Arnout, Thomas,
 
-I'm sorry for that, I must use evolution email client. Please use the
-attached file.
-
-Thanks,
-Alex
-
-On Tue, 2020-02-04 at 10:44 +0100, Peter Korsgaard wrote:
-> > > > > > 
+On 2/4/20 9:33 AM, Thomas Petazzoni wrote:
+> On Tue, 4 Feb 2020 09:25:46 +0100
+> Arnout Vandecappelle <arnout@mind.be> wrote:
 > 
-> Sorry, but the patch is badly wrapped by your mailer, so it cannot be
-> applied. Can you send it with git send-email? If that doesn't work,
-> the
-> please attach it instead.
+>>> I don't feel very strongly about it, but I'm wondering if it doesn't
+>>> make sense to keep BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT. There is some
+>>> architecture-specific code in libnpsr, so every time we add a new CPU
+>>> architecture, we would have to poentially re-add this hidden option.
+>>
+>>   For what it's worth, I agree with doing that. We don't want to end up in the
+>> libffi situation...
 > 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: v2-0001-package-network-manager-openvpn-new-package.patch
-Type: text/x-patch
-Size: 3200 bytes
-Desc: v2-0001-package-network-manager-openvpn-new-package.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200204/15ecea9f/attachment.bin>
+> Agreed. Though I don't think libnspr will ever be in the situation of
+> libffi, with zillions of reverse dependencies.
+
+I've sent a v2 for this patch after rebasing:
+https://patchwork.ozlabs.org/patch/1233202/
+
+Usually adding an architecture to nspr is about adding only type sizes. 
+This has been for Microblaze, Nds2, Nios2 and Xtensa, so probably it 
+will be the same for this new architecture to be supported.
+
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
