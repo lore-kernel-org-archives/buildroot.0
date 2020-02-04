@@ -1,48 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Feb 2020 15:22:36 +0100
-Subject: [Buildroot] [PATCH v2] package/grep: fix busybox aliasing
-In-Reply-To: <1580822081-3713-1-git-send-email-angelo@amarulasolutions.com>
- (Angelo Compagnucci's message of "Tue, 4 Feb 2020 14:14:41 +0100")
-References: <1580822081-3713-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <87k152jutv.fsf@dell.be.48ers.dk>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Tue,  4 Feb 2020 15:24:47 +0100
+Subject: [Buildroot] [PATCH v2] package/grep: fix egrep/fgrep shebang
+Message-ID: <1580826287-1343-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+egrep/fgrep are using autotools SHELL variable to exec the
+grep executable with correct options, SHELL is defaulted to
+/bin/bash which we usually don't have on target.
+This patch defaults on /bin/sh, when /bin/sh is not available
+on target, we simply remove the aliases.
 
- > When grep package is selected, it should be installed at the same exact
- > location where busybox installs it too, this way the grep/egrep/fgrep
- > executables will end up overwriting the busybox provided ones.
- > Busybox installs *grep executables in /bin, grep package in /usr/bin.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+Changelog:
+v1 -> v2:
+* Handling the corner case when BR2_SYSTEM_BIN_SH_NONE as suggested by
+  Yann
 
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ package/grep/Config.in | 2 ++
+ package/grep/grep.mk   | 9 +++++++++
+ 2 files changed, 11 insertions(+)
 
-Reworded slightly and committed, thanks.
-
- > ---
- > Changelog:
- > * Patch splitting as suggested by Peter
-
- > I tested manually chenghing the package to:
-
- > GREP_CONF_OPTS = SHELL=/bin/dash --exec-prefix=/
-
- > And this works. If /bin/sh is a link to /bin/zsh for example, it will
- > not work cause the configure is not able to run on zsh.
- > I suppose that changing the default /bin/sh to something not sh
- > compatible woulb break many other things.
-
-But that should never happen. A bunch of stuff will break if /bin/sh
-isn't working.
-
-So what about the 2nd fix? I take it that fgrep/egrep are still
-installed with a #!/bin/bash shebang?
-
-Either we do the SHELL= workaround or simply patch fgrep / egrep as a
-GREP_POST_TARGET_INSTALL_HOOK.
-
+diff --git a/package/grep/Config.in b/package/grep/Config.in
+index 5b0471b..47ced41 100644
+--- a/package/grep/Config.in
++++ b/package/grep/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_GREP
+ 	help
+ 	  The GNU regular expression matcher.
+ 
++	  egrep/fgrep aliases need /bin/sh to be available.
++
+ 	  http://www.gnu.org/software/grep/grep.html
+ 
+ comment "grep needs a toolchain w/ wchar"
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index be3e53b..02d8b50 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -12,6 +12,15 @@ GREP_LICENSE_FILES = COPYING
+ GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ GREP_CONF_OPTS = --exec-prefix=/
+ 
++ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
++define GREP_REMOVE_ALIAS
++	$(RM) $(TARGET_DIR)/bin/[fe]grep
++endef
++GREP_POST_INSTALL_TARGET_HOOKS += GREP_REMOVE_ALIAS
++else
++GREP_CONF_OPTS += SHELL=/bin/sh
++endif
++
+ # link with iconv if enabled
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ GREP_CONF_ENV += LIBS=-liconv
 -- 
-Bye, Peter Korsgaard
+2.7.4
