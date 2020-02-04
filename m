@@ -1,64 +1,37 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue,  4 Feb 2020 15:24:51 +0100
-Subject: [Buildroot] [PATCH 0/5] [RFC] Introduce cross-bin directory
-Message-ID: <20200204142456.1537358-1-arnout@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 4 Feb 2020 15:23:22 +0100
+Subject: [Buildroot] [git commit] package/grep: install to /bin to fix
+ busybox aliasing
+Message-ID: <20200204141405.8C1A18B4D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series is the start of a "cross-bin" directory that I've mentioned
-a couple of times already.
+commit: https://git.buildroot.net/buildroot/commit/?id=10bc79c612dd945af236f23e11b4df79b3c76257
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The idea is that host-tools that are meant for cross-building but don't
-encode the cross-target in their name can be put in this directory, and
-we put this directory in front of PATH for cross-compilation. For
-example, the pkg-config wrapper is really a cross-compilation wrapper.
-To be able to support building of host tools with it, we need to add
-environment variables to force host compilation in HOST_CONFIGURE_OPTS.
-By moving the pkg-config wrapper to the cross-bin directory, we can
-avoid that: for cross-compilation (i.e. target packages), the cross-bin
-dir is put in front of PATH, so the pkg-config wrapper for target is
-found. For native compilation (i.e. host packages), the cross-bin dir
-is *not* put in PATH, so the normal pkg-config configuration will be
-used.
+When the grep package is selected, it should be installed at the same exact
+location where busybox installs it too, this way the grep/egrep/fgrep
+executables will end up overwriting the busybox provided ones.
 
-This series does not do that yet for pkg-config itself. It is only done
-for python and python3. The idea is to start with something a little
-bit less far-reaching that pkg-config. Also, the python3 change is
-needed for meson packages that build python modules from C code (e.g.
-recent python-gobject). These need to have _PYTHON_SYSCONFIGDATA_NAME
-set in the environment, but we can't just export that unconditionally
-even for target packages because sometimes (e.g. in libglib2) meson
-builds native python modules as part of the build and those should
-*not* have _PYTHON_SYSCONFIGDATA_NAME set to the target name... The
-python3 wrapper nicely solves this.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/grep/grep.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The python2 wrapper is added as well for symmetry, and because it
-allows us to simplify the inner-python-package definitions.
-
-This series is posted as an RFC, but it can actually be applied as is.
-It is a requirement for many packages that use the newly-added
-gobject-introspection (e.g. gstreamer1, python-gobject).
-
-Arnout Vandecappelle (5):
-  package/Makefile.in: add HOST_BIN_CROSS
-  package/python3: install wrapper in HOST_BIN_CROSS
-  package/python: install wrapper in HOST_BIN_CROSS
-  package/pkg-python: rely on python wrapper in HOST_BIN_CROSS
-  package/pkg-meson: use TARGET_MAKE_ENV in configure
-
- package/Makefile.in               |  5 ++++-
- package/pkg-meson.mk              |  2 +-
- package/pkg-python.mk             | 22 +++-------------------
- package/python/python-wrapper.in  | 10 ++++++++++
- package/python/python.mk          | 17 ++++++++++++++---
- package/python3/python-wrapper.in | 24 ++++++++++++++++++++++++
- package/python3/python3.mk        | 17 ++++++++++++++---
- 7 files changed, 70 insertions(+), 27 deletions(-)
- create mode 100644 package/python/python-wrapper.in
- create mode 100644 package/python3/python-wrapper.in
-
--- 
-2.24.1
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 96685b0276..eefdfe6a74 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -10,6 +10,8 @@ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
+ GREP_LICENSE_FILES = COPYING
+ GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++# install into /bin like busybox grep
++GREP_CONF_OPTS = --exec-prefix=/
+ 
+ # link with iconv if enabled
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
