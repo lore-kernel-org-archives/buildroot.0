@@ -1,67 +1,101 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 4 Feb 2020 21:55:11 +0100
-Subject: [Buildroot] [PATCH v3 1/1] toolchain/toolchain-buildroot:
- PPC64(LE) support in musl requires ALTIVEC
-In-Reply-To: <20200204192520.2059-1-vfazio@xes-inc.com>
-References: <20200131153952.680-1-vfazio@xes-inc.com>
- <20200204192520.2059-1-vfazio@xes-inc.com>
-Message-ID: <a49512a3-205a-1a87-2b03-3fc7a1f9850e@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2020 21:55:16 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/mesa3d: add v3d driver
+ support
+In-Reply-To: <20200204144412.6666-2-ps.report@gmx.net>
+References: <20200204144412.6666-1-ps.report@gmx.net>
+ <20200204144412.6666-2-ps.report@gmx.net>
+Message-ID: <20200204205516.GB6335@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+Peter, All,
 
-Le 04/02/2020 ? 20:25, Vincent Fazio a ?crit?:
-> musl currently assumes all PPC64(LE) CPUs support ALTIVEC instructions.
-> 
-> However, there are exceptions (such as the e5500) for which musl builds
-> ultimately generate illegal instructions for the targets.
-> 
-> Disable musl if the PPC64(LE) CPU does not support ALTIVEC instructions.
+On 2020-02-04 15:44 +0100, Peter Seiderer spake thusly:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Maybe the link to the report to the mailing list can be added:
-https://www.openwall.com/lists/musl/2020/02/03/10
+Applied to master, thanks. I did a few tweaks to the help text,though,
+see below...
 
-Otherwise:
-
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-
-Best regards,
-Romain
-
-> 
-> This patch addresses the issues seen here:
->   https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092743
->   https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092744
-> 
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 > ---
+>  package/mesa3d/Config.in | 12 ++++++++++++
+>  package/mesa3d/mesa3d.mk |  3 +++
+>  2 files changed, 15 insertions(+)
 > 
-> Changes v2 -> v3:
->   - change to 'depends on' semantics (suggested by Romain)
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 5929e15442..1351d1cd97 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -224,6 +224,18 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
+>  	help
+>  	  Adds support for Nvidia Tegra GPUs, requires nouveau.
+>  
+> +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
+> +	bool "Gallium v3d driver"
+> +	depends on BR2_arm || BR2_aarch64
+> +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+> +	select BR2_PACKAGE_LIBDRM_VC4
+> +	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+> +	help
+> +	  Driver for Broadcom VC6 (rpi4) GPUs (needs kmsro and vc4).
+
+I don't understand why you added that '(needs kmsro and vc4)': the
+corresponding config entries are properly selected above, and thus
+this part of the help text is of no use for the user, and tend to in
+fact be very confusing. But since this is the same mess with the other
+options around, I left it. It would be nice to clean them away, though.
+
+> +	  It requires a recent enough mainline/raspberrypi kernel with
+> +	  drm v3d (CONFIG_DRM_V3D, CONFIG_DRM_VC4) support enabled.
+
+"recent enough" is of no use to the user: some woudl consider 4.0 to be
+recent, some would consider 5.0 to be old. Sol I replaced that with the
+exact version v3d was merged in mainline linux, that is 4.18.
+
+Regards,
+Yann E. MORIN.
+
+> +
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+>  	bool "Gallium vc4 driver"
+>  	depends on BR2_arm || BR2_aarch64
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index c7e5be55a0..1a18cf3c58 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -84,6 +84,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
+>  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
+>  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
+>  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA)    += tegra
+> +MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
+>  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
+>  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+>  # DRI Drivers
+> @@ -162,6 +163,8 @@ endif
+>  MESA3D_PLATFORMS = surfaceless
+>  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+>  MESA3D_PLATFORMS += drm
+> +else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D),y)
+> +MESA3D_PLATFORMS += drm
+>  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
+>  MESA3D_PLATFORMS += drm
+>  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
+> -- 
+> 2.25.0
 > 
-> Changes v1 -> v2:
->   - clarify commit message (suggested by Matthew)
->   - add job logs (suggested by Romain)
-> 
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-> ---
->  toolchain/toolchain-buildroot/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index a980f766ac..8c33b2b4dd 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -86,6 +86,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
->  		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
->  		   BR2_powerpc64le || BR2_RISCV_64 || BR2_sh   || BR2_x86_64
->  	depends on !BR2_powerpc_SPE # not supported, build breaks
-> +	depends on !(BR2_powerpc64 || BR2_powerpc64le) || BR2_POWERPC_CPU_HAS_ALTIVEC
->  	# sh2 nommu is supported by musl, but we don't have support
->  	# for it in Buildroot.
->  	depends on BR2_USE_MMU
-> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
