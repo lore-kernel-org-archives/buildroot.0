@@ -1,36 +1,96 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Tue,  4 Feb 2020 10:48:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jack2: drop dependency on
- host-python
-Message-ID: <20200204094842.18729-1-titouan.christophe@railnova.eu>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue,  4 Feb 2020 10:50:59 +0100
+Subject: [Buildroot] [PATCH v2] package/libnspr: remove
+ BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+Message-ID: <20200204095059.7315-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-python was listed in jack2 dependencies, but is actually
-not needed. Also tested with an experimental python3 based
-Waf package infrastructure, so we can exclude that jack2
-"accidentally" uses the host-python2 pulled in by Waf.
+Since all architectures supported by Buildroot are supported by libnspr
+BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT makes no sense anymore, so let's remove
+it all around.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/jack2/jack2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+V1->V2: rebased on top of master
+---
+ package/ecryptfs-utils/Config.in | 2 --
+ package/libnspr/Config.in        | 7 -------
+ package/libnss/Config.in         | 2 --
+ package/spidermonkey/Config.in   | 1 -
+ 4 files changed, 12 deletions(-)
 
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index b08c45cce7..db63b7f4b7 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -7,7 +7,7 @@
- JACK2_VERSION = 1.9.14
- JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
- JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
--JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
-+JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib
- JACK2_INSTALL_STAGING = YES
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 0c39f48d08..08210f05eb 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on BR2_USE_WCHAR # gettext
+ 	depends on BR2_USE_MMU # keyutils
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+-	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+ 	depends on !BR2_MIPS_NABI32 # libnss
+ 	depends on !BR2_STATIC_LIBS # libnss, keyutils
+ 	select BR2_PACKAGE_KEYUTILS
+@@ -29,7 +28,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	  http://ecryptfs.org
  
- JACK2_CONF_OPTS = --alsa
+ comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynamic library"
+-	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+ 		BR2_STATIC_LIBS
+diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
+index c1be7151e0..de8dd0a06b 100644
+--- a/package/libnspr/Config.in
++++ b/package/libnspr/Config.in
+@@ -1,8 +1,3 @@
+-config BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+-	def_bool y
+-
+-if BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+-
+ config BR2_PACKAGE_LIBNSPR
+ 	bool "libnspr"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -17,5 +12,3 @@ config BR2_PACKAGE_LIBNSPR
+ 
+ comment "libnspr needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-
+-endif
+diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+index 2dd0197236..feedcd4029 100644
+--- a/package/libnss/Config.in
++++ b/package/libnss/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBNSS
+ 	bool "libnss"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+-	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBNSPR
+ 	select BR2_PACKAGE_SQLITE
+@@ -28,5 +27,4 @@ config BR2_PACKAGE_LIBNSS_ARCH
+ endif
+ 
+ comment "libnss needs a toolchain w/ threads, dynamic library"
+-	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/spidermonkey/Config.in b/package/spidermonkey/Config.in
+index 5f12110626..150b941c94 100644
+--- a/package/spidermonkey/Config.in
++++ b/package/spidermonkey/Config.in
+@@ -8,7 +8,6 @@ config BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS
+ 	default y if BR2_riscv
+ 	default y if BR2_sh4 || BR2_sh4a
+ 	default y if BR2_sparc || BR2_sparc64
+-	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
+ 
+ config BR2_PACKAGE_SPIDERMONKEY_JIT_ARCH_SUPPORTS
+ 	bool
 -- 
-2.24.1
+2.20.1
