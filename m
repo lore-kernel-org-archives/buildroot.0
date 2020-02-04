@@ -1,78 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Feb 2020 14:13:00 +0100
-Subject: [Buildroot] [PATCH 0/2] autotools: do not overwrite first
- include path
-In-Reply-To: <20200204124013.17340-1-heiko.thiery@gmail.com>
-References: <20200204124013.17340-1-heiko.thiery@gmail.com>
-Message-ID: <20200204131300.GD3101@scaer>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Tue,  4 Feb 2020 14:14:41 +0100
+Subject: [Buildroot] [PATCH v2] package/grep: fix busybox aliasing
+Message-ID: <1580822081-3713-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
-On 2020-02-04 13:40 +0100, Heiko Thiery spake thusly:
-> The first patch fixes the issue with the autotools package.
-> For a detailed explanation take a look into the commit message.
-> 
-> The second patch removes the hooks that were introduced to workaround
-> the issue that is fixed with the first patch.
-> 
-> Heiko Thiery (1):
->   remove the hook for creating the m4 directory
-> 
-> Michael Walle (1):
->   autotools: do not overwrite first include path
+When grep package is selected, it should be installed at the same exact
+location where busybox installs it too, this way the grep/egrep/fgrep
+executables will end up overwriting the busybox provided ones.
+Busybox installs *grep executables in /bin, grep package in /usr/bin.
 
-Series applied to master, thanks! :-)
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+Changelog:
+* Patch splitting as suggested by Peter
 
-I just slightly reword the commit logs with a little bit of extra
-details.
+I tested manually chenghing the package to:
 
-Regards,
-Yann E. MORIN.
+GREP_CONF_OPTS = SHELL=/bin/dash --exec-prefix=/
 
->  package/atest/atest.mk                                    | 6 ------
->  package/autoconf/autoconf.mk                              | 6 +++---
->  package/automake/automake.mk                              | 4 +++-
->  package/bayer2rgb-neon/bayer2rgb-neon.mk                  | 6 ------
->  package/bluez-alsa/bluez-alsa.mk                          | 6 ------
->  package/davici/davici.mk                                  | 5 -----
->  package/dropwatch/dropwatch.mk                            | 6 ------
->  package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk      | 7 -------
->  .../gst1-plugins-bayer2rgb-neon.mk                        | 5 -----
->  package/gutenprint/gutenprint.mk                          | 7 -------
->  package/irqbalance/irqbalance.mk                          | 7 -------
->  package/jamvm/jamvm.mk                                    | 7 -------
->  package/janus-gateway/janus-gateway.mk                    | 5 -----
->  package/lcdapi/lcdapi.mk                                  | 6 ------
->  package/libdmtx/libdmtx.mk                                | 7 -------
->  package/libiscsi/libiscsi.mk                              | 6 ------
->  package/libpam-nfc/libpam-nfc.mk                          | 6 ------
->  package/libsoundtouch/libsoundtouch.mk                    | 5 -----
->  package/libva-utils/libva-utils.mk                        | 6 ------
->  package/ltrace/ltrace.mk                                  | 5 -----
->  package/mfoc/mfoc.mk                                      | 6 ------
->  package/minicom/minicom.mk                                | 6 ------
->  package/musl-fts/musl-fts.mk                              | 5 -----
->  package/open-lldp/open-lldp.mk                            | 8 --------
->  package/openpgm/openpgm.mk                                | 8 --------
->  package/pdbg/pdbg.mk                                      | 5 -----
->  package/sdbusplus/sdbusplus.mk                            | 6 ------
->  package/speexdsp/speexdsp.mk                              | 6 ------
->  package/sysprof/sysprof.mk                                | 6 ------
->  package/tesseract-ocr/tesseract-ocr.mk                    | 7 -------
->  30 files changed, 6 insertions(+), 175 deletions(-)
-> 
-> -- 
-> 2.20.1
-> 
+And this works. If /bin/sh is a link to /bin/zsh for example, it will
+not work cause the configure is not able to run on zsh.
+I suppose that changing the default /bin/sh to something not sh
+compatible woulb break many other things.
 
+ package/grep/grep.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 96685b0..be3e53b 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -10,6 +10,7 @@ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
+ GREP_LICENSE_FILES = COPYING
+ GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++GREP_CONF_OPTS = --exec-prefix=/
+ 
+ # link with iconv if enabled
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
