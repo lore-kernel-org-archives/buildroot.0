@@ -1,43 +1,65 @@
 From: Ryan Coe <bluemrp9@gmail.com>
-Date: Mon,  3 Feb 2020 17:21:53 -0800
-Subject: [Buildroot] [PATCH v3 1/8] package/mariadb: fix permissions of data
- dir when using systemd
-Message-ID: <20200204012200.7273-1-bluemrp9@gmail.com>
+Date: Mon,  3 Feb 2020 17:21:55 -0800
+Subject: [Buildroot] [PATCH v3 3/8] package/mariadb: add sysroot path to
+ mariadb_config
+In-Reply-To: <20200204012200.7273-1-bluemrp9@gmail.com>
+References: <20200204012200.7273-1-bluemrp9@gmail.com>
+Message-ID: <20200204012200.7273-3-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mysql_install_db is currently called in the systemd unit without
---user=mysql that the sysv script uses. This will generate the initial
-database files with root permissions. However, mysqld runs as user mysql
-so this will cause problems. We fix this by calling chown instead of
-passing the user parameter because an upcoming version bump will fail when
-ran this way.
+This patch adds @CMAKE_SYSROOT@ to mariadb_config.c.in. Without it,
+mariadb_config incorrectly returns host paths for include paths and
+library paths.
 
+Reported-by: Alexey Lukyanchuk <skif@skif-web.ru>
 Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
 Changes v2 -> v3:
-  - separate changes into separate patches (suggested by Thomas)
+  - remove extra slash between CMAKE_SYSROOT and CMAKE_INSTALL_PREFIX
 Changes v1 -> v2:
   - no change
 ---
- package/mariadb/mysqld.service | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...3-add-sysroot-path-to-mariadb_config.patch | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/mariadb/0003-add-sysroot-path-to-mariadb_config.patch
 
-diff --git a/package/mariadb/mysqld.service b/package/mariadb/mysqld.service
-index cd308310c6..3eaef173e1 100644
---- a/package/mariadb/mysqld.service
-+++ b/package/mariadb/mysqld.service
-@@ -2,7 +2,7 @@
- Description=MySQL database server
- 
- [Service]
--ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
-+ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql && chown -R mysql:mysql /var/lib/mysql'
- ExecStart=/usr/bin/mysqld_safe
- Restart=always
- User=mysql
+diff --git a/package/mariadb/0003-add-sysroot-path-to-mariadb_config.patch b/package/mariadb/0003-add-sysroot-path-to-mariadb_config.patch
+new file mode 100644
+index 0000000000..a072b37e29
+--- /dev/null
++++ b/package/mariadb/0003-add-sysroot-path-to-mariadb_config.patch
+@@ -0,0 +1,28 @@
++From 7e1b6aafeb9fe6558da7506b304c0efb5ea82281 Mon Sep 17 00:00:00 2001
++From: Ryan Coe <bluemrp9@gmail.com>
++Date: Fri, 13 Dec 2019 17:13:26 -0800
++Subject: [PATCH 1/1] add sysroot path to mariadb_config
++
++Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
++---
++ libmariadb/mariadb_config/mariadb_config.c.in | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libmariadb/mariadb_config/mariadb_config.c.in b/libmariadb/mariadb_config/mariadb_config.c.in
++index 703c9466a1d9214a85f3638d2e3b4ecfef0c7bd6..f5513333e670373f060a3c2574d1d42facfd0337 100644
++--- a/libmariadb/mariadb_config/mariadb_config.c.in
+++++ b/libmariadb/mariadb_config/mariadb_config.c.in
++@@ -5,8 +5,8 @@
++ 
++ static char *mariadb_progname;
++ 
++-#define INCLUDE "-I at CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@ -I at CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@/mysql"
++-#define LIBS    "-L at CMAKE_INSTALL_PREFIX@/@INSTALL_LIBDIR@/ -lmariadb"
+++#define INCLUDE "-I at CMAKE_SYSROOT@/@CMAKE_INSTALL_PREFIX@@INSTALL_INCLUDEDIR@ -I at CMAKE_SYSROOT@/@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@/mysql"
+++#define LIBS    "-L at CMAKE_SYSROOT@/@CMAKE_INSTALL_PREFIX@@INSTALL_LIBDIR@/ -lmariadb"
++ #define LIBS_SYS "@extra_dynamic_LDFLAGS@"
++ #define CFLAGS  INCLUDE
++ #define VERSION "@MARIADB_CLIENT_VERSION@"
++-- 
++2.24.1
++
 -- 
 2.25.0
