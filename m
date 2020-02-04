@@ -1,21 +1,26 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 4 Feb 2020 13:50:04 +0100
-Subject: [Buildroot] mail address change
-Message-ID: <CAEyMn7b0QzOmab8env0KVoWyM9eAhyqMEkPhvwEtXUyk0mDO1w@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 Feb 2020 13:52:02 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/qt5serialport: update hash
+ source URL
+In-Reply-To: <20200203211006.31507-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Mon, 3 Feb 2020 22:10:05 +0100")
+References: <20200203211006.31507-1-ps.report@gmx.net>
+Message-ID: <8736bqms5p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Justin,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-just got a reply that your old mail address is no longer valid. This
-old one is listed in the buildroot DEVELOPERS file.
+ > Be more specific for the hash source URL and change from
+ > summary page (.mirrorlist) to direct sha256 download page
+ > (.sha256).
 
-Could you please update your mail address or remove your entry if you
-no longer maintain the package listed there.
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Thanks
---
-Heiko
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
