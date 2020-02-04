@@ -1,67 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 4 Feb 2020 14:57:20 +0100
-Subject: [Buildroot] [git commit] package/mariadb: explicitly define logging
- directory to mysqld
-Message-ID: <20200204134625.72E758B4BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mariadb: do not pass --user=mysql
+ to mysql_install_db
+Message-ID: <20200204134625.7B4168B4BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b653736ce48b6e62eae636f6c8fc94be776b985
+commit: https://git.buildroot.net/buildroot/commit/?id=6b74423025defaa9eaa1541987ec5cd1060cda7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-By default, mariadb creates logging files under the data directory.
-This patch updates the startup scripts to log under /var/log/mysql.
+We currently install the default database by passing --user=mysql to the
+install script. With the upcoming bump to the 10.4 series, this does not
+work as intended. An error occurs because of missing PAM modules. We work
+around this now by creating the default db as root and calling chown to
+change the files to user mysql.
 
 Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/S97mysqld      | 7 ++++++-
- package/mariadb/mysqld.service | 3 ++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/mariadb/S97mysqld | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/mariadb/S97mysqld b/package/mariadb/S97mysqld
-index ffd3712400..b895014b54 100644
+index b895014b54..54594a9e87 100644
 --- a/package/mariadb/S97mysqld
 +++ b/package/mariadb/S97mysqld
-@@ -6,6 +6,8 @@
- MYSQL_LIB="/var/lib/mysql"
- MYSQL_RUN="/run/mysql"
- MYSQL_PIDFILE="$MYSQL_RUN/mysqld.pid"
-+MYSQL_LOG="/var/log/mysql"
-+MYSQL_LOGFILE="$MYSQL_LOG/mysqld.log"
- MYSQL_BIN="/usr/bin"
+@@ -27,12 +27,13 @@ start() {
+ 	# if mysql lib directory doesn't exist
+ 	if [ `ls -1 $MYSQL_LIB 2> /dev/null | wc -l` = 0 ] ; then
+ 		printf "Creating mysql system tables ... "
+-		$MYSQL_BIN/mysql_install_db --basedir=/usr --user=mysql \
++		$MYSQL_BIN/mysql_install_db --basedir=/usr \
+ 			--datadir=$MYSQL_LIB > /dev/null 2>&1
+ 		if [ $? != 0 ]; then
+ 			echo "FAIL"
+ 			exit 1
+ 		fi
++		chown -R mysql:mysql $MYSQL_LIB
+ 		echo "OK"
+ 	fi
  
- wait_for_ready() {
-@@ -38,11 +40,14 @@ start() {
- 	# so create a subdirectory for mysql.
- 	install -d -o mysql -g root -m 0755 $MYSQL_RUN
- 
-+	# Also create logging directory as user mysql.
-+	install -d -o mysql -g root -m 0755 $MYSQL_LOG
-+
- 	# We don't use start-stop-daemon because mysqld has its own
- 	# wrapper script.
- 	printf "Starting mysql ... "
- 	$MYSQL_BIN/mysqld_safe --pid-file=$MYSQL_PIDFILE --user=mysql \
--		> /dev/null 2>&1 &
-+		--log-error=$MYSQL_LOGFILE > /dev/null 2>&1 &
- 	wait_for_ready
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
- }
-diff --git a/package/mariadb/mysqld.service b/package/mariadb/mysqld.service
-index 3eaef173e1..d9ea74ebc3 100644
---- a/package/mariadb/mysqld.service
-+++ b/package/mariadb/mysqld.service
-@@ -3,7 +3,8 @@ Description=MySQL database server
- 
- [Service]
- ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql && chown -R mysql:mysql /var/lib/mysql'
--ExecStart=/usr/bin/mysqld_safe
-+ExecStartPre=install -d -o mysql -g root -m 0755 /var/log/mysql
-+ExecStart=/usr/bin/mysqld_safe --log-error=/var/log/mysql/mysqld.log
- Restart=always
- User=mysql
- RuntimeDirectory=mysql
