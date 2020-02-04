@@ -1,45 +1,136 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  4 Feb 2020 18:58:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sconeserver: add all blue5_utils
- dependencies
-Message-ID: <20200204175847.2888280-1-fontaine.fabrice@gmail.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Tue,  4 Feb 2020 10:18:51 -0800
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump to 10.3.22
+Message-ID: <20200204181851.26394-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 61a813339af43024ec05e749a05886fff1bf2a39 forgot to add all the
-bluez5_utils dependencies
+Release notes:
+https://mariadb.com/kb/en/library/mariadb-10322-release-notes/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Changelog:
+https://mariadb.com/kb/en/library/mariadb-10322-changelog/
+
+Fixes the following security vulnerability (10.3.22):
+CVE-2020-2574 - Vulnerability in the MySQL Client product of Oracle MySQL
+(component: C API). Supported versions that are affected are 5.6.46 and
+prior, 5.7.28 and prior and 8.0.18 and prior. Difficult to exploit
+vulnerability allows unauthenticated attacker with network access via
+multiple protocols to compromise MySQL Client. Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Client.
+
+Fixes the following security vulnerabilities (10.3.19):
+CVE-2019-2974 - Vulnerability in the MySQL Server product of Oracle MySQL
+(component: Server: Optimizer). Supported versions that are affected are
+5.6.45 and prior, 5.7.27 and prior and 8.0.17 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via
+multiple protocols to compromise MySQL Server. Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2019-2938 - Vulnerability in the MySQL Server product of Oracle MySQL
+(component: InnoDB). Supported versions that are affected are 5.7.27 and
+prior and 8.0.17 and prior. Difficult to exploit vulnerability allows high
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server. Successful attacks of this vulnerability can result in
+unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server.
+
+Patch 0002-fix-build-error-with-newer-cmake.patch has been removed as it
+has been applied upstream.
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
- package/sconeserver/Config.in | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ ...002-fix-build-error-with-newer-cmake.patch | 44 -------------------
+ package/mariadb/mariadb.hash                  | 10 ++---
+ package/mariadb/mariadb.mk                    |  2 +-
+ 3 files changed, 6 insertions(+), 50 deletions(-)
+ delete mode 100644 package/mariadb/0002-fix-build-error-with-newer-cmake.patch
 
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index 049d98123e..a42abd70b7 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -48,13 +48,17 @@ config BR2_PACKAGE_SCONESERVER_BLUETOOTH
- 	depends on BR2_USE_MMU # bluez5_utils -> dbus
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez5_utils -> dbus, libglib2
- 	depends on !BR2_STATIC_LIBS # bluez5_utils
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5_utils
- 	select BR2_PACKAGE_BLUEZ5_UTILS
- 	help
- 	  Bluetooth module for Sconeserver
+diff --git a/package/mariadb/0002-fix-build-error-with-newer-cmake.patch b/package/mariadb/0002-fix-build-error-with-newer-cmake.patch
+deleted file mode 100644
+index 5ffac688a3..0000000000
+--- a/package/mariadb/0002-fix-build-error-with-newer-cmake.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From c90ae2ca3dff267b9e21595376d22de397f6f78f Mon Sep 17 00:00:00 2001
+-From: Ryan Coe <bluemrp9@gmail.com>
+-Date: Tue, 20 Aug 2019 06:22:43 -0700
+-Subject: [PATCH] Fix build error with newer cmake
+-
+-Fixes the following build error:
+-
+-CMake Error at cmake/os/Linux.cmake:29 (STRING):
+-STRING sub-command REPLACE requires at least four arguments.
+-Call Stack (most recent call first):
+-CMakeLists.txt:101 (INCLUDE)
+-
+-CMake Error at cmake/os/Linux.cmake:29 (STRING):
+-STRING sub-command REPLACE requires at least four arguments.
+-Call Stack (most recent call first):
+-CMakeLists.txt:101 (INCLUDE)
+-
+-https://jira.mariadb.org/browse/MDEV-20596
+-
+-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+----
+- cmake/os/Linux.cmake | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/cmake/os/Linux.cmake b/cmake/os/Linux.cmake
+-index 50a2b21c838d8d6ca4cacc0704a9be4da3a57a0a..b871586acc9cfaddc3836cc9afafd85969120420 100644
+---- a/cmake/os/Linux.cmake
+-+++ b/cmake/os/Linux.cmake
+-@@ -26,9 +26,9 @@ SET(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -D_GNU_SOURCE=1)
+- 
+- # Fix CMake (< 2.8) flags. -rdynamic exports too many symbols.
+- FOREACH(LANG C CXX)
+--  STRING(REPLACE "-rdynamic" "" 
+--  CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS
+--  ${CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS}  
+-+  STRING(REPLACE "-rdynamic" ""
+-+  "CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS"
+-+  "${CMAKE_SHARED_LIBRARY_LINK_${LANG}_FLAGS}"
+-   )
+- ENDFOREACH()
+- 
+--- 
+-2.17.1
+-
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index a742d87daa..679643887f 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,8 +1,8 @@
+-# From https://downloads.mariadb.org/mariadb/10.3.18
+-md5 b3524c0825c3a1c255496daea38304a0  mariadb-10.3.18.tar.gz
+-sha1 922a317edd6f44baacc49831ca278e7a9878a363  mariadb-10.3.18.tar.gz
+-sha256 69456ca85bf9d96c6d28b4ade2a9f6787d79a602e27ef941f9ba4e0b55dddedc  mariadb-10.3.18.tar.gz
+-sha512 817253d18f20c74f9ec8030678fd50a28b1726fd59153023a3a5e9b3f79e1f44d79feb24ae9ed72d8c1c04017110c932aba7be0610fb06245590c7f5610db242  mariadb-10.3.18.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.3.22
++md5 f712a5e6fde038d0c9c6d2a2cd88b84e  mariadb-10.3.22.tar.gz
++sha1 f92f517fc2ea893ffb3d599ade219bf0a0045265  mariadb-10.3.22.tar.gz
++sha256 3200055dbdc27746981b3bb4bc182e2cb79dcf28ea88014b641a5b81280ccec7  mariadb-10.3.22.tar.gz
++sha512 57a6551b8939f54742963202d50a537e69e8ab9b2dca42ce3d2a09c0f7af368fded71f36af26f6cbd956d54fe43853981ba8fe28b7a3ba97c7d52ea4a0d233f6  mariadb-10.3.22.tar.gz
  
--comment "bluetooth support needs a toolchain w/ wchar, threads, dynamic library"
-+comment "bluetooth support needs a toolchain w/ wchar, threads, dynamic library, headers >= 3.4"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ # Hash for license files
+ sha256 a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 4e7d693aee..d5f4ef6bb5 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_SCONESERVER_RSS
- 	bool "rss"
+-MARIADB_VERSION = 10.3.18
++MARIADB_VERSION = 10.3.22
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
 -- 
-2.24.1
+2.25.0
