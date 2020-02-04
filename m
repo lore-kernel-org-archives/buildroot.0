@@ -1,45 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2020 22:48:22 +0100
-Subject: [Buildroot] [git commit] package/bluez-alsa: fix location of alsa
- config files
-Message-ID: <20200204214142.EB3AB8B81B@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2020 22:53:22 +0100
+Subject: [Buildroot] [git commit] package/imagemagick: fix configure error
+ with --disable-opencl in setups without libltdl
+Message-ID: <20200204214312.F33EE8B823@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e36111dbcefee516325728375190a33fc63a7b7
+commit: https://git.buildroot.net/buildroot/commit/?id=cf9591660a09c33058805f146790f4731df57925
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since alsa-lib version 1.1.7 [1] the location for add-on config files
-has changed.
+Fixes:
+http://autobuild.buildroot.net/results/d9a/d9a84b642357f758c3f84270fb9a109abd7e2684/
 
-In fact, the path for the alsa add-on config files has never been
-correct set in the package (it should have been
-`/usr/share/alsa/alsa.conf.d`).
+configure.ac contains a test using $ax_cv_check_cl_libcl:
 
-With alsa-lib version 1.1.7 or later the correct path is
-`/etc/alsa/conf.d`.
+if test "$build_modules" != 'no' || test "X$ax_cv_check_cl_libcl" != Xno; then
+  AC_MSG_RESULT([-------------------------------------------------------------])
+  AC_MSG_CHECKING([for libltdl])
 
-[1] https://github.com/alsa-project/alsa-lib/commit/93e03bdc2a3dcd5d12516f5de78e14d88a32ff2c
+But ax_cv_check_cl_libcl is only assigned a value (yes/no) if
+--disable-opencl is NOT passed, as the assignment logic is inside a
+conditional:
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+AC_ARG_ENABLE([opencl],
+    [AC_HELP_STRING([--disable-opencl],
+                    [do not use OpenCL])],
+    [disable_opencl=$enableval],
+    [disable_opencl='yes'])
+
+if test "$disable_opencl" = 'yes'; then
+  ..
+  AC_CACHE_CHECK([for OpenCL library], [ax_cv_check_cl_libcl],
+
+So configure errors out if --disable-opencl is passed on setups where
+libltdl isn't available:
+
+checking if libltdl package is complete... no
+configure: error: in `/home/naourr/work/instance-0/output-1/build/imagemagick-7.0.8-59':
+configure: error: libltdl is required for modules and OpenCL builds
+
+As a workaround, explictly set ax_cv_check_cl_libcl=no to skip this
+conditional.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/bluez-alsa/bluez-alsa.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/imagemagick/imagemagick.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
-index 6726298f5b..d5cb3ed67b 100644
---- a/package/bluez-alsa/bluez-alsa.mk
-+++ b/package/bluez-alsa/bluez-alsa.mk
-@@ -17,7 +17,7 @@ BLUEZ_ALSA_CONF_OPTS = \
- 	--enable-aplay \
- 	--disable-debug-time \
- 	--with-alsaplugindir=/usr/lib/alsa-lib \
--	--with-alsaconfdir=/usr/share/alsa
-+	--with-alsaconfdir=/etc/alsa/conf.d
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index eaa291a1bd..5ef04973a6 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -18,7 +18,9 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
+ IMAGEMAGICK_CONFIG_SCRIPTS += Magick++-config
+ endif
  
- ifeq ($(BR2_PACKAGE_FDK_AAC),y)
- BLUEZ_ALSA_DEPENDENCIES += fdk-aac
+-IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
++IMAGEMAGICK_CONF_ENV = \
++	ac_cv_sys_file_offset_bits=64 \
++	ax_cv_check_cl_libcl=no
+ 
+ IMAGEMAGICK_CONF_OPTS = \
+ 	--program-transform-name='s,,,' \
+@@ -179,7 +181,9 @@ HOST_IMAGEMAGICK_CONF_OPTS = \
+ 	--with-zlib
+ 
+ # uses clock_gettime, which was provided by librt in glibc < 2.17
+-HOST_IMAGEMAGICK_CONF_ENV = LIBS="-lrt"
++HOST_IMAGEMAGICK_CONF_ENV = \
++	LIBS="-lrt" \
++	ax_cv_check_cl_libcl=no
+ 
+ HOST_IMAGEMAGICK_DEPENDENCIES = \
+ 	host-libjpeg \
