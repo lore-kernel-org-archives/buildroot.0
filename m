@@ -1,58 +1,48 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Tue,  4 Feb 2020 15:17:01 +0100
-Subject: [Buildroot] [PATCH 3/3] package/lvm2: fix udev unsupported option
- warning
-Message-ID: <20200204141701.9881-1-p.debruijn@unilogic.nl>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 Feb 2020 15:22:36 +0100
+Subject: [Buildroot] [PATCH v2] package/grep: fix busybox aliasing
+In-Reply-To: <1580822081-3713-1-git-send-email-angelo@amarulasolutions.com>
+ (Angelo Compagnucci's message of "Tue, 4 Feb 2020 14:14:41 +0100")
+References: <1580822081-3713-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <87k152jutv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
----
- ...ve-unsupported-options-event-timeout-rule.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/lvm2/0002-udev-remove-unsupported-options-event-timeout-rule.patch
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
-diff --git a/package/lvm2/0002-udev-remove-unsupported-options-event-timeout-rule.patch b/package/lvm2/0002-udev-remove-unsupported-options-event-timeout-rule.patch
-new file mode 100644
-index 0000000..f162ec5
---- /dev/null
-+++ b/package/lvm2/0002-udev-remove-unsupported-options-event-timeout-rule.patch
-@@ -0,0 +1,33 @@
-+From 125f27ac37bc9b93cc96f64052b9681b3d479ee1 Mon Sep 17 00:00:00 2001
-+From: Peter Rajnoha <prajnoha@redhat.com>
-+Date: Tue, 13 Aug 2019 15:18:30 +0200
-+Subject: [PATCH] udev: remove unsupported OPTIONS+="event_timeout" rule
-+
-+The OPTIONS+="event_timeout" is Unsupported since systemd/udev version 216,
-+that is ~5 years ago.
-+
-+Since systemd/udev version 243, there's a new message printed if unsupported
-+OPTIONS value is used:
-+
-+  Invalid value for OPTIONS key, ignoring: 'event_timeout=180'
-+
-+Resolves: https://bugzilla.redhat.com/show_bug.cgi?id=1740666
-+
-+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-+---
-+diff --git a/udev/11-dm-lvm.rules.in b/udev/11-dm-lvm.rules.in
-+index 91cb991..7c58994 100644
-+--- a/udev/11-dm-lvm.rules.in
-++++ b/udev/11-dm-lvm.rules.in
-+@@ -37,8 +37,6 @@ ENV{DM_SUBSYSTEM_UDEV_FLAG0}!="1", ENV{DM_NOSCAN}=="1", ENV{DM_UDEV_DISABLE_OTHE
-+ 
-+ ENV{DM_UDEV_DISABLE_SUBSYSTEM_RULES_FLAG}=="1", GOTO="lvm_end"
-+ 
-+-OPTIONS+="event_timeout=180"
-+-
-+ # Do not create symlinks for inappropriate subdevices.
-+ ENV{DM_LV_NAME}=="pvmove?*|?*_vorigin", GOTO="lvm_disable"
-+ ENV{DM_LV_LAYER}=="?*", GOTO="lvm_disable"
-+-- 
-+2.9.3
-+
+ > When grep package is selected, it should be installed at the same exact
+ > location where busybox installs it too, this way the grep/egrep/fgrep
+ > executables will end up overwriting the busybox provided ones.
+ > Busybox installs *grep executables in /bin, grep package in /usr/bin.
+
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+
+Reworded slightly and committed, thanks.
+
+ > ---
+ > Changelog:
+ > * Patch splitting as suggested by Peter
+
+ > I tested manually chenghing the package to:
+
+ > GREP_CONF_OPTS = SHELL=/bin/dash --exec-prefix=/
+
+ > And this works. If /bin/sh is a link to /bin/zsh for example, it will
+ > not work cause the configure is not able to run on zsh.
+ > I suppose that changing the default /bin/sh to something not sh
+ > compatible woulb break many other things.
+
+But that should never happen. A bunch of stuff will break if /bin/sh
+isn't working.
+
+So what about the 2nd fix? I take it that fgrep/egrep are still
+installed with a #!/bin/bash shebang?
+
+Either we do the SHELL= workaround or simply patch fgrep / egrep as a
+GREP_POST_TARGET_INSTALL_HOOK.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
