@@ -1,35 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Feb 2020 22:49:52 +0100
-Subject: [Buildroot] [PATCH] package/bluez-alsa: fix location of alsa
- config files
-In-Reply-To: <20200201105640.8428-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Sat, 1 Feb 2020 11:56:40 +0100")
-References: <20200201105640.8428-1-joerg.krause@embedded.rocks>
-Message-ID: <87v9omvx8f.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue,  4 Feb 2020 22:52:29 +0100
+Subject: [Buildroot] [PATCH 0/2] Add CVE reporting to pkg-stats
+Message-ID: <20200204215232.666841-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+Hello,
 
- > Since alsa-lib version 1.1.7 [1] the location for add-on config files
- > has changed.
+This set of commit extends the pkg-stats tool to use the NVD database
+(https://nvd.nist.gov/vuln/data-feeds) to see if the current version
+of each Buildroot package is affected by a CVE.
 
- > In fact, the path for the alsa add-on config files has never been
- > correct set in the package (it should have been
- > `/usr/share/alsa/alsa.conf.d`).
+An example result can be seen here:
 
- > With alsa-lib version 1.1.7 or later the correct path is
- > `/etc/alsa/conf.d`.
+ - Human readable HTML:       https://bootlin.com/~thomas/stats-cve.html
+ - Machine parseable JSON:    https://bootlin.com/~thomas/stats-cve.json
 
- > [1] https://github.com/alsa-project/alsa-lib/commit/93e03bdc2a3dcd5d12516f5de78e14d88a32ff2c
+Thanks to this, we can see that 60 of our packages are apparently
+affected by a total of 185 CVEs.
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+A new per-package variable, <pkg>_IGNORE_CVES, is introduced, and
+allows to tell the tool to ignore some CVEs, for example because it is
+fixed by a local patch in Buildroot, or because the CVE does not apply
+to the Buildroot package (the CVE only affects a non-Linux operating
+system, or affect a functionality of the package that isn't built in
+Buildroot).
 
-Committed, thanks.
+Of course, the results are not perfect:
+
+ - The NVD database product names certainly don't 100% match the
+   Buildroot package names. We might have to add some extra metadata
+   information in each package (CPE ID ?) to map to the correct NVD
+   database product name.
+
+ - Buildroot packages that have a version selection are not correctly
+   handled.
+
+But overall, it already provide useful results. The plan is of course
+to implement e-mail notification to Buildroot developers in charge of
+packages with unfixed CVEs, in a second step.
+
+Thanks to Thomas DS and Titouan for all the help in the implementation
+of this. We started at 2 PM today, and we have this first version to
+show.
+
+Thomas DS: I told you we could have something done by the end of the day!
+
+Thomas
+
+Thomas Petazzoni (2):
+  support/scripts/pkg-stats: add support for CVE reporting
+  docs/manual: describe the new <pkg>_IGNORE_CVES variable
+
+ docs/manual/adding-packages-generic.txt |  14 +++
+ support/scripts/pkg-stats               | 157 +++++++++++++++++++++++-
+ 2 files changed, 170 insertions(+), 1 deletion(-)
 
 -- 
-Bye, Peter Korsgaard
+2.24.1
