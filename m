@@ -1,157 +1,72 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 4 Feb 2020 14:10:35 +0100
-Subject: [Buildroot] [PATCH v4 2/2] package/php-xdebug: new package
-In-Reply-To: <ad4d8011-dc9e-ccc2-c357-2464db5a6f61@smile.fr>
-References: <20191025182217.13682-1-nicolas.carrier@orolia.com>
- <20191025182217.13682-2-nicolas.carrier@orolia.com>
- <ad4d8011-dc9e-ccc2-c357-2464db5a6f61@smile.fr>
-Message-ID: <c5cf69fe-e2bc-81c2-5278-8b8568dce4db@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2020 14:02:38 +0100
+Subject: [Buildroot] [git commit] autotools: do not overwrite first include
+ path
+Message-ID: <20200204130106.00A298B36E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 25/10/2019 ? 21:14, Romain Naour a ?crit?:
-> Hi Nicolas,
-> 
-> Le 25/10/2019 ? 20:22, Nicolas Carrier a ?crit?:
->> Extension for PHP to assist with debugging and development.
->>
->> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
-> 
-> Reviewed-by: Romain Naour <romain.naour@smile.fr>
-> 
-> Best regards,
-> Romain
-> 
->> ---
->>
->> Changes v3 -> v4:
->>   - add myself to the DEVELOPERS file
->>
->> Changes v2 -> v3:
->>   - sorted correctly the new entry in the top level Config.in
->>   - use the AUTOCONF and AUTOHEADER variables from automake.mk
->>
->> Changes v1 -> v2:
->>   - move xdebug to php extensions submenu, with the following two consequences:
->>         - makes it dependent on php
->>         - makes it wrapped inside !STATIC test
->>   - removed empty line in Config.in
->>   - removed Web page: prefix in help string
->>   - one option per line in PHP_XDEBUG_CONF_OPTS
->>   - renamed to php-xdebug
->>   - changed license to `Xdebug License (PHP-3.0-like)`
->>
->> ---
->>
->>  DEVELOPERS                         |  3 +++
->>  package/Config.in                  |  1 +
->>  package/php-xdebug/Config.in       |  6 ++++++
->>  package/php-xdebug/php-xdebug.hash |  3 +++
->>  package/php-xdebug/php-xdebug.mk   | 28 ++++++++++++++++++++++++++++
->>  5 files changed, 41 insertions(+)
->>  create mode 100644 package/php-xdebug/Config.in
->>  create mode 100644 package/php-xdebug/php-xdebug.hash
->>  create mode 100644 package/php-xdebug/php-xdebug.mk
->>
->> diff --git a/DEVELOPERS b/DEVELOPERS
->> index ec4f50a79e..322d7f59c7 100644
->> --- a/DEVELOPERS
->> +++ b/DEVELOPERS
->> @@ -1724,6 +1724,9 @@ F:	package/libevdev/
->>  N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
->>  F:	package/uacme/
->>  
->> +N:	Nicolas Carrier <nicolas.carrier@orolia.com>
->> +F:	package/php-xdebug/
->> +
->>  N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
->>  F:	package/libgit2/
->>  
->> diff --git a/package/Config.in b/package/Config.in
->> index d78b4c444b..4f1b80a8e4 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -801,6 +801,7 @@ menu "External php extensions"
->>  	source "package/php-imagick/Config.in"
->>  	source "package/php-memcached/Config.in"
->>  	source "package/php-ssh2/Config.in"
->> +	source "package/php-xdebug/Config.in"
->>  	source "package/php-yaml/Config.in"
->>  	source "package/php-zmq/Config.in"
->>  endmenu
->> diff --git a/package/php-xdebug/Config.in b/package/php-xdebug/Config.in
->> new file mode 100644
->> index 0000000000..b5919e06cd
->> --- /dev/null
->> +++ b/package/php-xdebug/Config.in
->> @@ -0,0 +1,6 @@
->> +config BR2_PACKAGE_PHP_XDEBUG
->> +	bool "php-xdebug"
+commit: https://git.buildroot.net/buildroot/commit/?id=d255b67972b4b7f27572581fe0c8c8aa03d850c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Other php modules add a dependency on php package here
-	depends on BR2_PACKAGE_PHP
+The first include path is special in aclocal. For example it is the path
+for the --install option. Also, the first include is treated in a
+special way if it doesn't exists. This might be the case if there is the
+following construct:
 
-even if all php modules are guarded by a if BR2_PACKAGE_PHP [1]
-For example, we don't add a depends on BR2_PACKAGE_PYTHON to python modules.
+  configure.ac: AC_CONFIG_MACRO_DIR([m4])
+  Makefile.am: ACLOCAL_AMFLAGS="-I m4"
 
-So you're right it's not necessary to add the "depends on BR2_PACKAGE_PHP, maybe
-we should remove them.
+If the package doesn't have local macros, the m4/ directory might not
+exist. aclocal will then just issue a warning instead of aborting the
+execution with a fatal error. See discussion here:
+  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=565663
 
-[1]
-https://git.buildroot.net/buildroot/tree/package/Config.in?id=0b056944f5878304f51af3e9edb6d596f24fc370#n559
+Don't use the "-I" option in aclocal. Instead use ACLOCAL_PATH to pass
+the system-wide include dirs.
 
-Best regards,
-Romain
+As a side effect this should fix the use of $(ACLOCAL) alone. Up until
+now, $(ACLOCAL) didn't include the ACLOCAL_HOST_DIR system include path.
 
->> +	help
->> +	  Extension for PHP to assist with debugging and development.
->> +
->> +	  http://xdebug.org
->> diff --git a/package/php-xdebug/php-xdebug.hash b/package/php-xdebug/php-xdebug.hash
->> new file mode 100644
->> index 0000000000..d645142efc
->> --- /dev/null
->> +++ b/package/php-xdebug/php-xdebug.hash
->> @@ -0,0 +1,3 @@
->> +# Locally computed
->> +sha256 ef479ee1a3da3f933e0d046ca8cd0c14601f29b2c0c41cc60c9388546a4e0272  LICENSE
->> +sha256 b2aeb55335c5649034fe936abb90f61df175c4f0a0f0b97a219b3559541edfbd  php-xdebug-2.7.2.tar.gz
->> diff --git a/package/php-xdebug/php-xdebug.mk b/package/php-xdebug/php-xdebug.mk
->> new file mode 100644
->> index 0000000000..a77bbeee90
->> --- /dev/null
->> +++ b/package/php-xdebug/php-xdebug.mk
->> @@ -0,0 +1,28 @@
->> +################################################################################
->> +#
->> +# php-xdebug
->> +#
->> +################################################################################
->> +
->> +PHP_XDEBUG_VERSION = 2.7.2
->> +PHP_XDEBUG_SITE = $(call github,xdebug,xdebug,$(PHP_XDEBUG_VERSION))
->> +PHP_XDEBUG_INSTALL_STAGING = YES
->> +PHP_XDEBUG_LICENSE = Xdebug License (PHP-3.0-like)
->> +PHP_XDEBUG_LICENSE_FILES = LICENSE
->> +# phpize does the autoconf magic
->> +PHP_XDEBUG_DEPENDENCIES = php host-autoconf
->> +PHP_XDEBUG_CONF_OPTS = \
->> +	--enable-xdebug \
->> +	--with-php-config=$(STAGING_DIR)/usr/bin/php-config \
->> +	--with-xdebug=$(STAGING_DIR)/usr
->> +
->> +define PHP_XDEBUG_PHPIZE
->> +	(cd $(@D); \
->> +		PHP_AUTOCONF=$(AUTOCONF) \
->> +		PHP_AUTOHEADER=$(AUTOHEADER) \
->> +		$(STAGING_DIR)/usr/bin/phpize)
->> +endef
->> +
->> +PHP_XDEBUG_PRE_CONFIGURE_HOOKS += PHP_XDEBUG_PHPIZE
->> +
->> +$(eval $(autotools-package))
->>
-> 
+autoreconf will pass the "-I" options to every tool it runs, of which
+aclocal, which, as seen above, we don't want. So move the argument down
+to each individual tool, except for aclocal.
+
+Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998 at free.fr: slight rewording of the commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/autoconf/autoconf.mk | 6 +++---
+ package/automake/automake.mk | 4 +++-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index e5f474c72d..336ac59b42 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -21,6 +21,6 @@ HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
+ $(eval $(host-autotools-package))
+ 
+ # variables used by other packages
+-AUTOCONF = $(HOST_DIR)/bin/autoconf
+-AUTOHEADER = $(HOST_DIR)/bin/autoheader
+-AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
++AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
++AUTOHEADER = $(HOST_DIR)/bin/autoheader -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
++AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index 270337712e..89dcaa1293 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -32,4 +32,6 @@ $(eval $(host-autotools-package))
+ # variables used by other packages
+ AUTOMAKE = $(HOST_DIR)/bin/automake
+ ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+-ACLOCAL = $(HOST_DIR)/bin/aclocal -I $(ACLOCAL_DIR)
++ACLOCAL = $(HOST_DIR)/bin/aclocal
++ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
++export ACLOCAL_PATH
