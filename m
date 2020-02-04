@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  4 Feb 2020 02:33:20 -0800
-Subject: [Buildroot] [PATCH v2 5/7] package/restorecond: bump version to 3.0
+Date: Tue,  4 Feb 2020 02:33:22 -0800
+Subject: [Buildroot] [PATCH v2 7/7] package/checkpolicy: bump version to 3.0
 In-Reply-To: <20200204103322.428413-1-aduskett@gmail.com>
 References: <20200204103322.428413-1-aduskett@gmail.com>
-Message-ID: <20200204103322.428413-5-aduskett@gmail.com>
+Message-ID: <20200204103322.428413-7-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/restorecond/restorecond.hash | 2 +-
- package/restorecond/restorecond.mk   | 4 ++--
+ package/checkpolicy/checkpolicy.hash | 2 +-
+ package/checkpolicy/checkpolicy.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/restorecond/restorecond.hash b/package/restorecond/restorecond.hash
-index 7a82bda370..7532bbf054 100644
---- a/package/restorecond/restorecond.hash
-+++ b/package/restorecond/restorecond.hash
+diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
+index 9e77b9b027..264e21b8f3 100644
+--- a/package/checkpolicy/checkpolicy.hash
++++ b/package/checkpolicy/checkpolicy.hash
 @@ -1,5 +1,5 @@
  # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 cbf9820583e641ee0462fa7bc89e6024676af281e025703e17b2d019b1a25a4f restorecond-2.9.tar.gz
-+sha256 32a92c9f4bf48c613f9f467ced58d8c369eec8892239cd44d5d0e139b41926dc restorecond-3.0.tar.gz
+-sha256 a946c32b284532447857e4c48830f8816867c61220c8c08bdd32e6f691335f8e  checkpolicy-2.9.tar.gz
++sha256 c88c719a141dd5c1202d49c378c7f063349d630522d5e04dc6e0c53da81aa4f8  checkpolicy-3.0.tar.gz
  
  # Hash for license file
- sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/restorecond/restorecond.mk b/package/restorecond/restorecond.mk
-index cb4859c2d0..f68cc1a041 100644
---- a/package/restorecond/restorecond.mk
-+++ b/package/restorecond/restorecond.mk
+ sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+index 8f1ec72549..3b055df489 100644
+--- a/package/checkpolicy/checkpolicy.mk
++++ b/package/checkpolicy/checkpolicy.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--RESTORECOND_VERSION = 2.9
--RESTORECOND_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
-+RESTORECOND_VERSION = 3.0
-+RESTORECOND_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
- RESTORECOND_LICENSE = GPL-2.0
- RESTORECOND_LICENSE_FILES = COPYING
+-CHECKPOLICY_VERSION = 2.9
+-CHECKPOLICY_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
++CHECKPOLICY_VERSION = 3.0
++CHECKPOLICY_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
+ CHECKPOLICY_LICENSE = GPL-2.0
+ CHECKPOLICY_LICENSE_FILES = COPYING
  
 -- 
 2.24.1
