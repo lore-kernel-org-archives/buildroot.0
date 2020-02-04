@@ -1,79 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Feb 2020 22:53:22 +0100
-Subject: [Buildroot] [git commit] package/imagemagick: fix configure error
- with --disable-opencl in setups without libltdl
-Message-ID: <20200204214312.F33EE8B823@busybox.osuosl.org>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Tue,  4 Feb 2020 22:53:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-imx: allow to build
+ with Waf on Python3
+Message-ID: <20200204215357.26259-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf9591660a09c33058805f146790f4731df57925
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This makes gst1-imx use the Waf package ditributed in Buildroot,
+instead of its own one, as the latter does not support Python3.
 
-Fixes:
-http://autobuild.buildroot.net/results/d9a/d9a84b642357f758c3f84270fb9a109abd7e2684/
+Also backport a patch from upstream that tweaks the wscript,
+such as to make it run on Waf >=2.0.12
 
-configure.ac contains a test using $ax_cv_check_cl_libcl:
-
-if test "$build_modules" != 'no' || test "X$ax_cv_check_cl_libcl" != Xno; then
-  AC_MSG_RESULT([-------------------------------------------------------------])
-  AC_MSG_CHECKING([for libltdl])
-
-But ax_cv_check_cl_libcl is only assigned a value (yes/no) if
---disable-opencl is NOT passed, as the assignment logic is inside a
-conditional:
-
-AC_ARG_ENABLE([opencl],
-    [AC_HELP_STRING([--disable-opencl],
-                    [do not use OpenCL])],
-    [disable_opencl=$enableval],
-    [disable_opencl='yes'])
-
-if test "$disable_opencl" = 'yes'; then
-  ..
-  AC_CACHE_CHECK([for OpenCL library], [ax_cv_check_cl_libcl],
-
-So configure errors out if --disable-opencl is passed on setups where
-libltdl isn't available:
-
-checking if libltdl package is complete... no
-configure: error: in `/home/naourr/work/instance-0/output-1/build/imagemagick-7.0.8-59':
-configure: error: libltdl is required for modules and OpenCL builds
-
-As a workaround, explictly set ax_cv_check_cl_libcl=no to skip this
-conditional.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- package/imagemagick/imagemagick.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ .../gst1-imx/0001-waf-update-to-2-0-12.patch  | 28 +++++++++++++++++++
+ package/gstreamer1/gst1-imx/gst1-imx.mk       |  1 +
+ 2 files changed, 29 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-imx/0001-waf-update-to-2-0-12.patch
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index eaa291a1bd..5ef04973a6 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -18,7 +18,9 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
- IMAGEMAGICK_CONFIG_SCRIPTS += Magick++-config
- endif
+diff --git a/package/gstreamer1/gst1-imx/0001-waf-update-to-2-0-12.patch b/package/gstreamer1/gst1-imx/0001-waf-update-to-2-0-12.patch
+new file mode 100644
+index 0000000000..dcc586311e
+--- /dev/null
++++ b/package/gstreamer1/gst1-imx/0001-waf-update-to-2-0-12.patch
+@@ -0,0 +1,28 @@
++From 66bc1c2b9c74dab4706a1ca3696e863ed8d30433 Mon Sep 17 00:00:00 2001
++From: Max Krummenacher <max.krummenacher@toradex.com>
++Date: Sun, 15 Dec 2019 14:24:54 +0000
++Subject: [PATCH] waf: update to 2.0.12
++
++Prepare to allow building with python3.
++
++Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
++[Titouan: backport part from upstream, but drop the update of waf itself]
++Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
++---
++ wscript |  3 ++-
++ 2 files changed, 12 insertions(+), 11 deletions(-)
++
++diff --git a/wscript b/wscript
++index c3a9926..f076b64 100644
++--- a/wscript
+++++ b/wscript
++@@ -152,7 +152,8 @@ def configure(conf):
++ 
++ 	# test for GStreamer libraries
++ 
++-	gst_version_str = conf.check_cfg(package = 'gstreamer-1.0 >= 1.2.0', modversion = "gstreamer-1.0", uselib_store = 'GSTREAMER', args = '--cflags --libs', mandatory = 1)
+++	conf.check_cfg(package = 'gstreamer-1.0 >= 1.2.0', uselib_store = 'GSTREAMER', args = '--cflags --libs', mandatory = 1)
+++	gst_version_str = conf.check_cfg(modversion = "gstreamer-1.0", uselib_store = 'GSTREAMER', args = '--cflags --libs', mandatory = 1)
++ 	gst_version = [int(x) for x in re.match('(\d*)\.(\d*)\.(\d*)', gst_version_str).groups()]
++ 	conf.env['GSTREAMER_VERSION'] = gst_version
++ 
+diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
+index 43b4d9b15f..1156077274 100644
+--- a/package/gstreamer1/gst1-imx/gst1-imx.mk
++++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
+@@ -11,6 +11,7 @@ GST1_IMX_LICENSE = LGPL-2.0+
+ GST1_IMX_LICENSE_FILES = LICENSE
  
--IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
-+IMAGEMAGICK_CONF_ENV = \
-+	ac_cv_sys_file_offset_bits=64 \
-+	ax_cv_check_cl_libcl=no
+ GST1_IMX_INSTALL_STAGING = YES
++GST1_IMX_NEEDS_EXTERNAL_WAF = YES
  
- IMAGEMAGICK_CONF_OPTS = \
- 	--program-transform-name='s,,,' \
-@@ -179,7 +181,9 @@ HOST_IMAGEMAGICK_CONF_OPTS = \
- 	--with-zlib
- 
- # uses clock_gettime, which was provided by librt in glibc < 2.17
--HOST_IMAGEMAGICK_CONF_ENV = LIBS="-lrt"
-+HOST_IMAGEMAGICK_CONF_ENV = \
-+	LIBS="-lrt" \
-+	ax_cv_check_cl_libcl=no
- 
- HOST_IMAGEMAGICK_DEPENDENCIES = \
- 	host-libjpeg \
+ GST1_IMX_DEPENDENCIES += \
+ 	host-pkgconf \
+-- 
+2.24.1
