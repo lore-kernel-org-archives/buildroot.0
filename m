@@ -1,164 +1,154 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 4 Feb 2020 23:40:48 +0100
-Subject: [Buildroot] [PATCH v1 1/2] package/mesa3d: add v3d driver
- support
-In-Reply-To: <20200204221427.GE6335@scaer>
-References: <20200204144412.6666-1-ps.report@gmx.net>
- <20200204144412.6666-2-ps.report@gmx.net>
- <20200204205516.GB6335@scaer> <20200204224540.23f620c0@gmx.net>
- <20200204230027.014f4603@gmx.net> <20200204221427.GE6335@scaer>
-Message-ID: <20200204234048.69648d1e@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 Feb 2020 23:56:51 +0100
+Subject: [Buildroot] [PATCH 1/2] support/scripts/pkg-stats: add support
+ for CVE reporting
+In-Reply-To: <20200204215232.666841-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Tue, 4 Feb 2020 22:52:30 +0100")
+References: <20200204215232.666841-1-thomas.petazzoni@bootlin.com>
+ <20200204215232.666841-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87mu9yvu4s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Tue, 4 Feb 2020 23:14:27 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+ > This commit extends the pkg-stats script to grab information about the
+ > CVEs affecting the Buildroot packages.
 
-> Peter, All,
->
-> On 2020-02-04 23:00 +0100, Peter Seiderer spake thusly:
-> > On Tue, 4 Feb 2020 22:45:40 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
-> > > On Tue, 4 Feb 2020 21:55:16 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > > > On 2020-02-04 15:44 +0100, Peter Seiderer spake thusly:
-> > > > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> [--SNIP--]
-> > > > > +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
-> > > > > +	bool "Gallium v3d driver"
-> > > > > +	depends on BR2_arm || BR2_aarch64
-> > > > > +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> > > > > +	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-> > > > > +	select )
-> > > > > +	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-> > > > > +	help
-> > > > > +	  Driver for Broadcom VC6 (rpi4) GPUs (needs kmsro and vc4).
-> > > >
-> > > > I don't understand why you added that '(needs kmsro and vc4)': the
-> > > > corresponding config entries are properly selected above, and thus
-> > > > this part of the help text is of no use for the user, and tend to in
-> > >
-> > > kmsro/vc4 would mean BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO (not mixed up
-> > > with the selected BR2_PACKAGE_MESA3D_GALLIUM_KMSRO) and
-> > > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4 (not mixed up with the selected
-> > > BR2_PACKAGE_LIBDRM_VC4)...and all three mesa3d options (v3d, vc4, kmsro)
-> > > are needed to get a functional RPi4-64bit graphic output (see e.g. [1]:
-> > > The VC4 interface is via /dev/drm/card1. The V3D interface is via /dev/drm/card0.
-> > > All drawing commands go to V3D (aka card0). All screen resolution and configuration
-> > > commands go to VC4 (aka card1))...
->
-> Slo it means the code you provided is not complete! Why do you not
-> select the requried options?
->
->     select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
+ > To do so, it downloads the NVD database from
+ > https://nvd.nist.gov/vuln/data-feeds in JSON format, and processes the
+ > JSON file to determine which of our packages is affected by which
+ > CVE. The information is then displayed in both the HTML output and the
+ > JSON output of pkg-stats.
 
-Because none of the other drivers does so...
+ > To use this feature, you have to pass the new --nvd-path option,
+ > pointing to a writable directory where pkg-stats will store the NVD
+ > database. If the local database is less than 24 hours old, it will not
+ > re-download it. If it is more than 24 hours old, it will re-download
+ > only the files that have really been updated by upstream NVD.
 
->     select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+ > Packages can use the newly introduced <pkg>_IGNORE_CVES variable to
+ > tell pkg-stats that some CVEs should be ignored: it can be because a
+ > patch we have is fixing the CVE, or because the CVE doesn't apply in
+ > our case.
 
-Because I do not know if all use-cases need a mesa3d-vc4 driver
-(my use case definitely ;-) )...
+ > From an implementation point of view:
 
->
-> We don't want to let the user resolve the dependencies manually. This is
-> what the config options are for.
+ >  - The download_nvd() and download_nvd_year() function implement the
+ >    NVD database downloading.
 
-All freedom for the empowered users ;-)
+ >  - The check_package_cves() function will go through all the CVE
+ >    reports of the NVD database, which has one JSON file per year. For
+ >    each CVE report it will check if we have a package with the same
+ >    name in Buildroot. If we do, then
+ >    check_package_cve_version_affected() verifies if the version in
+ >    Buildroot is affected by the CVE.
 
->
-> Currently, with the code you provided, this means that the following
-> defconfig would not generate a mesa3d that provperly supports the rpi4
-> (if I understood things correctly):
->
->     BR2_arm=y
->     BR2_cortex_a7=y
->     BR2_TOOLCHAIN_EXTERNAL=y
->     BR2_INIT_NONE=y
->     BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
->     BR2_SYSTEM_BIN_SH_NONE=y
->     # BR2_PACKAGE_BUSYBOX is not set
->     BR2_PACKAGE_MESA3D=y
->     BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D=y
->     # BR2_PACKAGE_EUDEV_ENABLE_HWDB is not set
->     # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
->     # BR2_TARGET_ROOTFS_TAR is not set
+ >  - The statistics are extended with the total number of CVEs, and the
+ >    total number of packages that have at least one CVE pending.
 
-Yes...
+ >  - The HTML output is extended with these new details. There are no
+ >    changes to the code generating the JSON output because the existing
+ >    code is smart enough to automatically expose the new information.
 
->
-> This is definitely not nice at all... :-(
+ > This development is a collective effort with Titouan Christophe
+ > <titouan.christophe@railnova.eu> and Thomas De Schampheleire
+ > <thomas.de_schampheleire@nokia.com>.
 
-Yes, not all possible buildroot configs lead to an usable system...
-My reasoning was that the help text hint should be enough...
+Neat!
 
-Regards,
-Peter
 
->
-> Could you please fix that up?
->
-> Regards,
-> Yann E. MORIN.
->
-> > > > fact be very confusing. But since this is the same mess with the other
-> > > > options around, I left it. It would be nice to clean them away, though.
-> > > >
-> > > > > +	  It requires a recent enough mainline/raspberrypi kernel with
-> > > > > +	  drm v3d (CONFIG_DRM_V3D, CONFIG_DRM_VC4) support enabled.
-> > > >
-> > > > "recent enough" is of no use to the user: some woudl consider 4.0 to be
-> > > > recent, some would consider 5.0 to be old. Sol I replaced that with the
-> > > > exact version v3d was merged in mainline linux, that is 4.18.
-> > >
-> > > Thanks for looking up at which kernel version CONFIG_DRM_V3D was added...,
-> > > wanted to emphasize that both mainline and raspberrypi linux kernel
-> > > are supported (some years ago only the mainline kernel supported DRM_VC4
-> > > and/or 64-bit Rpi)...
-> > >
-> > > Regards,
-> > > Peter
-> > >
-> > > [1] https://forum.qt.io/topic/107764/drm-kms-configuration-for-raspberry-pi-4
-> > >
-> > > >
-> > > > Regards,
-> > > > Yann E. MORIN.
-> > > >
-> > > > > +
-> > > > >  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
-> > > > >  	bool "Gallium vc4 driver"
-> > > > >  	depends on BR2_arm || BR2_aarch64
-> > > > > diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> > > > > index c7e5be55a0..1a18cf3c58 100644
-> > > > > --- a/package/mesa3d/mesa3d.mk
-> > > > > +++ b/package/mesa3d/mesa3d.mk
-> > > > > @@ -84,6 +84,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
-> > > > >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
-> > > > >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
-> > > > >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA)    += tegra
-> > > > > +MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
-> > > > >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
-> > > > >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
-> > > > >  # DRI Drivers
-> > > > > @@ -162,6 +163,8 @@ endif
-> > > > >  MESA3D_PLATFORMS = surfaceless
-> > > > >  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-> > > > >  MESA3D_PLATFORMS += drm
-> > > > > +else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D),y)
-> > > > > +MESA3D_PLATFORMS += drm
-> > > > >  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
-> > > > >  MESA3D_PLATFORMS += drm
-> > > > >  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
-> > > > > --
-> > > > > 2.25.0
-> > > > >
-> > > > > _______________________________________________
-> > > > > buildroot mailing list
-> > > > > buildroot at busybox.net
-> > > > > http://lists.busybox.net/mailman/listinfo/buildroot
-> > > >
-> > >
-> >
->
+ > +NVD_START_YEAR = 2002
+ > +NVD_JSON_VERSION = "1.0"
+
+Looking at https://nvd.nist.gov/vuln/data-feeds#JSON_FEED I see a 1.1
+version instead of 1.0?
+
+
+ > +def check_package_cves_year(packages, nvd_file):
+ > +    cves = json.load(open(nvd_file))
+ > +    for cve in cves["CVE_Items"]:
+ > +        check_package_cve_filter(packages, cve)
+ > +
+ > +
+ > +def check_package_cves(nvd_path, packages):
+ > +    nvd_files = sorted(glob.glob(os.path.join(nvd_path, "nvdcve-%s-*.json" %
+ > +                                              NVD_JSON_VERSION)))
+ > +    for nvd_file in nvd_files:
+ > +        check_package_cves_year(packages, nvd_file)
+
+NIT: It is a bit confusing to swap the argument order between
+check_package_cves() and check_packages_cves_year().
+
+
+ > +def download_nvd_year(nvd_path, year):
+ > +    metaf = "nvdcve-%s-%s.meta" % (NVD_JSON_VERSION, year)
+ > +    path_metaf = os.path.join(nvd_path, metaf)
+ > +
+ > +    # If the meta file is less than a day old, we assume the NVD data
+ > +    # locally available is recent enough.
+ > +    if os.path.exists(path_metaf) and os.stat(path_metaf).st_mtime >= time.time() - 86400:
+ > +        return
+
+This could be swapped around to check for the json file so it doesn't
+break if this is stopped between downloading the meta and json file.
+
+
+ > +    # If not, we download the meta file
+ > +    url = "%s/%s" % (NVD_BASE_URL, metaf)
+ > +    print("Getting %s" % url)
+ > +    r = requests.get(url)
+ > +    meta_new = dict(x.strip().split(':', 1) for x in r.text.splitlines())
+ > +    if os.path.exists(path_metaf):
+ > +        # If the meta file already existed, we compare the existing
+ > +        # one with the data newly downloaded. If they are different,
+ > +        # we need to re-download the database.
+ > +        with open(path_metaf, "r") as f:
+ > +            meta_old = dict(x.strip().split(':', 1) for x in f)
+ > +        needs_download = meta_new != meta_old
+
+Is there any reason for doing the dict stuff instead of just comparing
+the old file with the new one directly? We don't seem to really use the
+content of the meta file for anything, right?
+
+
+ > +    else:
+ > +        # If the meta file does not exist locally, of course we need
+ > +        # to download the database
+ > +        needs_download = True
+ > +
+ > +    # If we don't need to download the database, bail out
+ > +    if not needs_download:
+ > +        return
+ > +
+ > +    # Write the meta file, possibly overwriting the existing one
+ > +    with open(path_metaf, "w") as f:
+ > +        f.write(r.text)
+ > +
+ > +    # Grab the compressed JSON NVD database
+ > +    jsonf = "nvdcve-%s-%s.json" % (NVD_JSON_VERSION, year)
+ > +    jsonf_gz = jsonf + ".gz"
+ > +    path_jsonf = os.path.join(nvd_path, jsonf)
+ > +    path_jsonf_gz = os.path.join(nvd_path, jsonf_gz)
+ > +    url = "%s/%s" % (NVD_BASE_URL, jsonf_gz)
+ > +    print("Getting %s" % url)
+ > +    r = requests.get(url)
+ > +    with open(path_jsonf_gz, "wb") as f:
+ > +        f.write(r.content)
+ > +
+ > +    # Uncompress and write it
+ > +    gz = gzip.GzipFile(path_jsonf_gz)
+ > +    with open(path_jsonf, "w") as f:
+ > +        f.write(gz.read())
+
+We could also just use gzip.open() to read the .json.gz files later on
+and save some disk space by never expanding the files on disk.
+
+If we want to completely get rid of race conditions, we probably need to
+write to a temporary file / sync / rename.
+
+-- 
+Bye, Peter Korsgaard
