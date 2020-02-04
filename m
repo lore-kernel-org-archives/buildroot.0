@@ -1,43 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 4 Feb 2020 14:57:20 +0100
-Subject: [Buildroot] [git commit] package/mariadb: remove mariadb_config
- from target
-Message-ID: <20200204134625.556F383AFD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mariadb: fix permissions of data
+ dir when using systemd
+Message-ID: <20200204134625.4CC028B4BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c700b5ea8dc8cbe992cba260c5e98736fa95b32f
+commit: https://git.buildroot.net/buildroot/commit/?id=add2c2ba2ec0e3fd18b6f6612dda6ab78ea6affd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We already remove mysql_config from the target since it's only useful in
-staging. The same is true for mariadb_config. Thus, we remove it from the
-target as well.
+mysql_install_db is currently called in the systemd unit without
+--user=mysql that the sysv script uses. This will generate the initial
+database files with root permissions. However, mysqld runs as user mysql
+so this will cause problems. We fix this by calling chown instead of
+passing the user parameter because an upcoming version bump will fail when
+ran this way.
 
 Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/mariadb/mysqld.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index f76a974d65..4e7d693aee 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -123,11 +123,12 @@ define MARIADB_INSTALL_INIT_SYSTEMD
- endef
- endif
+diff --git a/package/mariadb/mysqld.service b/package/mariadb/mysqld.service
+index cd308310c6..3eaef173e1 100644
+--- a/package/mariadb/mysqld.service
++++ b/package/mariadb/mysqld.service
+@@ -2,7 +2,7 @@
+ Description=MySQL database server
  
--# We don't need mysql_config on the target as it's only useful in staging
--# We also don't need the test suite on the target
-+# We don't need mysql_config or mariadb_config on the target as it's
-+# only useful in staging. We also don't need the test suite on the target.
- define MARIADB_POST_INSTALL
- 	mkdir -p $(TARGET_DIR)/var/lib/mysql
- 	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
-+	$(RM) $(TARGET_DIR)/usr/bin/mariadb_config
- 	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
- endef
- 
+ [Service]
+-ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
++ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql && chown -R mysql:mysql /var/lib/mysql'
+ ExecStart=/usr/bin/mysqld_safe
+ Restart=always
+ User=mysql
