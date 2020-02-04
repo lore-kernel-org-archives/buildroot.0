@@ -1,57 +1,72 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue,  4 Feb 2020 13:40:11 +0100
-Subject: [Buildroot] [PATCH 0/2] autotools: do not overwrite first include
+Date: Tue,  4 Feb 2020 13:40:12 +0100
+Subject: [Buildroot] [PATCH 1/2] autotools: do not overwrite first include
  path
-Message-ID: <20200204124013.17340-1-heiko.thiery@gmail.com>
+In-Reply-To: <20200204124013.17340-1-heiko.thiery@gmail.com>
+References: <20200204124013.17340-1-heiko.thiery@gmail.com>
+Message-ID: <20200204124013.17340-2-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The first patch fixes the issue with the autotools package.
-For a detailed explanation take a look into the commit message.
+From: Michael Walle <michael@walle.cc>
 
-The second patch removes the hooks that were introduced to workaround
-the issue that is fixed with the first patch.
+The first include path is special in aclocal. For example it is the path
+for the --install option. Also, the first include is treated in a
+special way if it doesn't exists. This might be the case if there is the
+following construct:
 
-Heiko Thiery (1):
-  remove the hook for creating the m4 directory
+  configure.ac: AC_CONFIG_MACRO_DIR([m4])
+  Makefile.am: ACLOCAL_AMFLAGS="-I m4"
 
-Michael Walle (1):
-  autotools: do not overwrite first include path
+If the package doesn't have local macros, the m4/ directory might not
+exist. aclocal will then just issue a warning instead of aborting the
+execution with a fatal error. See discussion here:
+  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=565663
 
- package/atest/atest.mk                                    | 6 ------
- package/autoconf/autoconf.mk                              | 6 +++---
- package/automake/automake.mk                              | 4 +++-
- package/bayer2rgb-neon/bayer2rgb-neon.mk                  | 6 ------
- package/bluez-alsa/bluez-alsa.mk                          | 6 ------
- package/davici/davici.mk                                  | 5 -----
- package/dropwatch/dropwatch.mk                            | 6 ------
- package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk      | 7 -------
- .../gst1-plugins-bayer2rgb-neon.mk                        | 5 -----
- package/gutenprint/gutenprint.mk                          | 7 -------
- package/irqbalance/irqbalance.mk                          | 7 -------
- package/jamvm/jamvm.mk                                    | 7 -------
- package/janus-gateway/janus-gateway.mk                    | 5 -----
- package/lcdapi/lcdapi.mk                                  | 6 ------
- package/libdmtx/libdmtx.mk                                | 7 -------
- package/libiscsi/libiscsi.mk                              | 6 ------
- package/libpam-nfc/libpam-nfc.mk                          | 6 ------
- package/libsoundtouch/libsoundtouch.mk                    | 5 -----
- package/libva-utils/libva-utils.mk                        | 6 ------
- package/ltrace/ltrace.mk                                  | 5 -----
- package/mfoc/mfoc.mk                                      | 6 ------
- package/minicom/minicom.mk                                | 6 ------
- package/musl-fts/musl-fts.mk                              | 5 -----
- package/open-lldp/open-lldp.mk                            | 8 --------
- package/openpgm/openpgm.mk                                | 8 --------
- package/pdbg/pdbg.mk                                      | 5 -----
- package/sdbusplus/sdbusplus.mk                            | 6 ------
- package/speexdsp/speexdsp.mk                              | 6 ------
- package/sysprof/sysprof.mk                                | 6 ------
- package/tesseract-ocr/tesseract-ocr.mk                    | 7 -------
- 30 files changed, 6 insertions(+), 175 deletions(-)
+Don't use the "-I" option in aclocal. Instead use ACLOCAL_PATH to pass
+the system-wide include dirs.
 
+As a side effect this should fix the use of $(ACLOCAL) alone. Up until
+now, $(ACLOCAL) didn't include the ACLOCAL_HOST_DIR system include path.
+
+autoreconf will pass the "-I" options to every tool it runs. So move the
+argument to each individual tool except aclocal.
+
+Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ package/autoconf/autoconf.mk | 6 +++---
+ package/automake/automake.mk | 4 +++-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index e5f474c72d..336ac59b42 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -21,6 +21,6 @@ HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
+ $(eval $(host-autotools-package))
+ 
+ # variables used by other packages
+-AUTOCONF = $(HOST_DIR)/bin/autoconf
+-AUTOHEADER = $(HOST_DIR)/bin/autoheader
+-AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
++AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
++AUTOHEADER = $(HOST_DIR)/bin/autoheader -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
++AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index 270337712e..89dcaa1293 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -32,4 +32,6 @@ $(eval $(host-autotools-package))
+ # variables used by other packages
+ AUTOMAKE = $(HOST_DIR)/bin/automake
+ ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+-ACLOCAL = $(HOST_DIR)/bin/aclocal -I $(ACLOCAL_DIR)
++ACLOCAL = $(HOST_DIR)/bin/aclocal
++ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
++export ACLOCAL_PATH
 -- 
 2.20.1
