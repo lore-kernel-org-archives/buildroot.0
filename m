@@ -1,43 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2020 19:28:51 +0100
-Subject: [Buildroot] [git commit] configs/bananapro: bump Linux to 5.4.7
-Message-ID: <20200204181858.2B4E58B6D0@busybox.osuosl.org>
+Date: Tue, 04 Feb 2020 19:46:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/orc: bump to version 0.4.31
+In-Reply-To: <20200104181532.2359664-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 4 Jan 2020 19:15:32 +0100")
+References: <20200104181532.2359664-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tv46xka9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9e19ef8005b34b5fefda92a10c26286635deda1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/bananapro_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ > Switch to meson buildsystem and so drop:
+ >  - !BR2_BINFMT_FLAT dependency
+ >  - hooks (not needed thanks to orc-test and tools options)
 
-diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
-index 95bd871468..e87d9ba633 100644
---- a/configs/bananapro_defconfig
-+++ b/configs/bananapro_defconfig
-@@ -5,8 +5,8 @@ BR2_GLOBAL_PATCH_DIR="board/lemaker/bananapro/patches"
- BR2_ARM_EABIHF=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
--# Linux headers same as kernel, a 5.3 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- # Toolchain
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.7"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
