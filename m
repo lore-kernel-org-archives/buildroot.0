@@ -1,77 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  4 Feb 2020 22:29:09 +0100
-Subject: [Buildroot] [PATCH] package/imagemagick: fix configure error with
- --disable-opencl in setups without libltdl
-Message-ID: <20200204212910.13935-1-peter@korsgaard.com>
+Date: Tue, 04 Feb 2020 22:31:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump to
+ 10.3.22
+In-Reply-To: <20200204181851.26394-1-bluemrp9@gmail.com> (Ryan Coe's message
+ of "Tue, 4 Feb 2020 10:18:51 -0800")
+References: <20200204181851.26394-1-bluemrp9@gmail.com>
+Message-ID: <87lfpixcn5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/d9a/d9a84b642357f758c3f84270fb9a109abd7e2684/
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
-configure.ac contains a test using $ax_cv_check_cl_libcl:
+ > Release notes:
+ > https://mariadb.com/kb/en/library/mariadb-10322-release-notes/
 
-if test "$build_modules" != 'no' || test "X$ax_cv_check_cl_libcl" != Xno; then
-  AC_MSG_RESULT([-------------------------------------------------------------])
-  AC_MSG_CHECKING([for libltdl])
+ > Changelog:
+ > https://mariadb.com/kb/en/library/mariadb-10322-changelog/
 
-But ax_cv_check_cl_libcl is only assigned a value (yes/no) if
---disable-opencl is NOT passed, as the assignment logic is inside a
-conditional:
+ > Fixes the following security vulnerability (10.3.22):
+ > CVE-2020-2574 - Vulnerability in the MySQL Client product of Oracle MySQL
+ > (component: C API). Supported versions that are affected are 5.6.46 and
+ > prior, 5.7.28 and prior and 8.0.18 and prior. Difficult to exploit
+ > vulnerability allows unauthenticated attacker with network access via
+ > multiple protocols to compromise MySQL Client. Successful attacks of this
+ > vulnerability can result in unauthorized ability to cause a hang or
+ > frequently repeatable crash (complete DOS) of MySQL Client.
 
-AC_ARG_ENABLE([opencl],
-    [AC_HELP_STRING([--disable-opencl],
-                    [do not use OpenCL])],
-    [disable_opencl=$enableval],
-    [disable_opencl='yes'])
+ > Fixes the following security vulnerabilities (10.3.19):
+ > CVE-2019-2974 - Vulnerability in the MySQL Server product of Oracle MySQL
+ > (component: Server: Optimizer). Supported versions that are affected are
+ > 5.6.45 and prior, 5.7.27 and prior and 8.0.17 and prior. Easily exploitable
+ > vulnerability allows low privileged attacker with network access via
+ > multiple protocols to compromise MySQL Server. Successful attacks of this
+ > vulnerability can result in unauthorized ability to cause a hang or
+ > frequently repeatable crash (complete DOS) of MySQL Server.
 
-if test "$disable_opencl" = 'yes'; then
-  ..
-  AC_CACHE_CHECK([for OpenCL library], [ax_cv_check_cl_libcl],
+ > CVE-2019-2938 - Vulnerability in the MySQL Server product of Oracle MySQL
+ > (component: InnoDB). Supported versions that are affected are 5.7.27 and
+ > prior and 8.0.17 and prior. Difficult to exploit vulnerability allows high
+ > privileged attacker with network access via multiple protocols to compromise
+ > MySQL Server. Successful attacks of this vulnerability can result in
+ > unauthorized ability to cause a hang or frequently repeatable crash
+ > (complete DOS) of MySQL Server.
 
-So configure errors out if --disable-opencl is passed on setups where
-libltdl isn't available:
+ > Patch 0002-fix-build-error-with-newer-cmake.patch has been removed as it
+ > has been applied upstream.
 
-checking if libltdl package is complete... no
-configure: error: in `/home/naourr/work/instance-0/output-1/build/imagemagick-7.0.8-59':
-configure: error: libltdl is required for modules and OpenCL builds
+ > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 
-As a workaround, explictly set ax_cv_check_cl_libcl=no to skip this
-conditional.
+Committed, thanks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/imagemagick/imagemagick.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index eaa291a1bd..5ef04973a6 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -18,7 +18,9 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
- IMAGEMAGICK_CONFIG_SCRIPTS += Magick++-config
- endif
- 
--IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
-+IMAGEMAGICK_CONF_ENV = \
-+	ac_cv_sys_file_offset_bits=64 \
-+	ax_cv_check_cl_libcl=no
- 
- IMAGEMAGICK_CONF_OPTS = \
- 	--program-transform-name='s,,,' \
-@@ -179,7 +181,9 @@ HOST_IMAGEMAGICK_CONF_OPTS = \
- 	--with-zlib
- 
- # uses clock_gettime, which was provided by librt in glibc < 2.17
--HOST_IMAGEMAGICK_CONF_ENV = LIBS="-lrt"
-+HOST_IMAGEMAGICK_CONF_ENV = \
-+	LIBS="-lrt" \
-+	ax_cv_check_cl_libcl=no
- 
- HOST_IMAGEMAGICK_DEPENDENCIES = \
- 	host-libjpeg \
 -- 
-2.20.1
+Bye, Peter Korsgaard
