@@ -1,47 +1,198 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 4 Feb 2020 11:47:00 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libxslt: bump
- version to 1.1.33
-Message-ID: <20200204103559.726418A521@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libxslt: security
+ bump to version 1.1.34
+Message-ID: <20200204103559.7B0578A521@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65287cfc5c8c728f45a0383cce337b30c51b9bb7
+commit: https://git.buildroot.net/buildroot/commit/?id=6a57eeda66a9c4068b9cc693ee786611c5a2d89a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes the following security issues:
+
+- CVE-2019-13117: In numbers.c in libxslt 1.1.33, an xsl:number with certain
+  format strings could lead to a uninitialized read in
+  xsltNumberFormatInsertNumbers.  This could allow an attacker to discern
+  whether a byte on the stack contains the characters A, a, I, i, or 0, or
+  any other character.
+
+- CVE-2019-13118: In numbers.c in libxslt 1.1.33, a type holding grouping
+  characters of an xsl:number instruction was too narrow and an invalid
+  character/length combination could be passed to xsltNumberFormatDecimal,
+  leading to a read of uninitialized stack data.
+
+- CVE-2019-18197: In xsltCopyText in transform.c in libxslt 1.1.33, a
+  pointer variable isn't reset under certain circumstances.  If the relevant
+  memory area happened to be freed and reused in a certain way, a bounds
+  check could fail and memory outside a buffer could be written to, or
+  uninitialized data could be disclosed.
+
+Remove patch (already in version)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 655e9f0699e1a3dd04746704cf5e0a32a18b150b)
+[Peter: mention security impact]
+(cherry picked from commit 5645107c39ab0ff556d42e54e6682c12e7db0f71)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxslt/libxslt.hash | 2 +-
- package/libxslt/libxslt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Fix-security-framework-bypass.patch       | 122 ---------------------
+ package/libxslt/libxslt.hash                       |   2 +-
+ package/libxslt/libxslt.mk                         |   2 +-
+ 3 files changed, 2 insertions(+), 124 deletions(-)
 
+diff --git a/package/libxslt/0001-Fix-security-framework-bypass.patch b/package/libxslt/0001-Fix-security-framework-bypass.patch
+deleted file mode 100644
+index 16700362b3..0000000000
+--- a/package/libxslt/0001-Fix-security-framework-bypass.patch
++++ /dev/null
+@@ -1,122 +0,0 @@
+-From e03553605b45c88f0b4b2980adfbbb8f6fca2fd6 Mon Sep 17 00:00:00 2001
+-From: Nick Wellnhofer <wellnhofer@aevum.de>
+-Date: Sun, 24 Mar 2019 09:51:39 +0100
+-Subject: [PATCH] Fix security framework bypass
+-
+-xsltCheckRead and xsltCheckWrite return -1 in case of error but callers
+-don't check for this condition and allow access. With a specially
+-crafted URL, xsltCheckRead could be tricked into returning an error
+-because of a supposedly invalid URL that would still be loaded
+-succesfully later on.
+-
+-Fixes #12.
+-
+-Thanks to Felix Wilhelm for the report.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- libxslt/documents.c | 18 ++++++++++--------
+- libxslt/imports.c   |  9 +++++----
+- libxslt/transform.c |  9 +++++----
+- libxslt/xslt.c      |  9 +++++----
+- 4 files changed, 25 insertions(+), 20 deletions(-)
+-
+-diff --git a/libxslt/documents.c b/libxslt/documents.c
+-index 3f3a7312..4aad11bb 100644
+---- a/libxslt/documents.c
+-+++ b/libxslt/documents.c
+-@@ -296,10 +296,11 @@ xsltLoadDocument(xsltTransformContextPtr ctxt, const xmlChar *URI) {
+- 	int res;
+- 
+- 	res = xsltCheckRead(ctxt->sec, ctxt, URI);
+--	if (res == 0) {
+--	    xsltTransformError(ctxt, NULL, NULL,
+--		 "xsltLoadDocument: read rights for %s denied\n",
+--			     URI);
+-+	if (res <= 0) {
+-+            if (res == 0)
+-+                xsltTransformError(ctxt, NULL, NULL,
+-+                     "xsltLoadDocument: read rights for %s denied\n",
+-+                                 URI);
+- 	    return(NULL);
+- 	}
+-     }
+-@@ -372,10 +373,11 @@ xsltLoadStyleDocument(xsltStylesheetPtr style, const xmlChar *URI) {
+- 	int res;
+- 
+- 	res = xsltCheckRead(sec, NULL, URI);
+--	if (res == 0) {
+--	    xsltTransformError(NULL, NULL, NULL,
+--		 "xsltLoadStyleDocument: read rights for %s denied\n",
+--			     URI);
+-+	if (res <= 0) {
+-+            if (res == 0)
+-+                xsltTransformError(NULL, NULL, NULL,
+-+                     "xsltLoadStyleDocument: read rights for %s denied\n",
+-+                                 URI);
+- 	    return(NULL);
+- 	}
+-     }
+-diff --git a/libxslt/imports.c b/libxslt/imports.c
+-index 874870cc..3783b247 100644
+---- a/libxslt/imports.c
+-+++ b/libxslt/imports.c
+-@@ -130,10 +130,11 @@ xsltParseStylesheetImport(xsltStylesheetPtr style, xmlNodePtr cur) {
+- 	int secres;
+- 
+- 	secres = xsltCheckRead(sec, NULL, URI);
+--	if (secres == 0) {
+--	    xsltTransformError(NULL, NULL, NULL,
+--		 "xsl:import: read rights for %s denied\n",
+--			     URI);
+-+	if (secres <= 0) {
+-+            if (secres == 0)
+-+                xsltTransformError(NULL, NULL, NULL,
+-+                     "xsl:import: read rights for %s denied\n",
+-+                                 URI);
+- 	    goto error;
+- 	}
+-     }
+-diff --git a/libxslt/transform.c b/libxslt/transform.c
+-index 13793914..0636dbd0 100644
+---- a/libxslt/transform.c
+-+++ b/libxslt/transform.c
+-@@ -3493,10 +3493,11 @@ xsltDocumentElem(xsltTransformContextPtr ctxt, xmlNodePtr node,
+-      */
+-     if (ctxt->sec != NULL) {
+- 	ret = xsltCheckWrite(ctxt->sec, ctxt, filename);
+--	if (ret == 0) {
+--	    xsltTransformError(ctxt, NULL, inst,
+--		 "xsltDocumentElem: write rights for %s denied\n",
+--			     filename);
+-+	if (ret <= 0) {
+-+            if (ret == 0)
+-+                xsltTransformError(ctxt, NULL, inst,
+-+                     "xsltDocumentElem: write rights for %s denied\n",
+-+                                 filename);
+- 	    xmlFree(URL);
+- 	    xmlFree(filename);
+- 	    return;
+-diff --git a/libxslt/xslt.c b/libxslt/xslt.c
+-index 780a5ad7..a234eb79 100644
+---- a/libxslt/xslt.c
+-+++ b/libxslt/xslt.c
+-@@ -6763,10 +6763,11 @@ xsltParseStylesheetFile(const xmlChar* filename) {
+- 	int res;
+- 
+- 	res = xsltCheckRead(sec, NULL, filename);
+--	if (res == 0) {
+--	    xsltTransformError(NULL, NULL, NULL,
+--		 "xsltParseStylesheetFile: read rights for %s denied\n",
+--			     filename);
+-+	if (res <= 0) {
+-+            if (res == 0)
+-+                xsltTransformError(NULL, NULL, NULL,
+-+                     "xsltParseStylesheetFile: read rights for %s denied\n",
+-+                                 filename);
+- 	    return(NULL);
+- 	}
+-     }
+--- 
+-2.11.0
+-
 diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-index f28150b71e..0326585959 100644
+index 0326585959..25aa30839e 100644
 --- a/package/libxslt/libxslt.hash
 +++ b/package/libxslt/libxslt.hash
 @@ -1,5 +1,5 @@
  # Locally calculated after checking pgp signature
--sha256	526ecd0abaf4a7789041622c3950c0e7f2c4c8835471515fd77eec684a355460	libxslt-1.1.32.tar.gz
-+sha256	8e36605144409df979cab43d835002f63988f3dc94d5d3537c12796db90e38c8	libxslt-1.1.33.tar.gz
+-sha256	8e36605144409df979cab43d835002f63988f3dc94d5d3537c12796db90e38c8	libxslt-1.1.33.tar.gz
++sha256	98b1bd46d6792925ad2dfe9a87452ea2adebf69dcb9919ffd55bf926a7f93f7f	libxslt-1.1.34.tar.gz
  
  # Hash for license file:
  sha256	7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819	COPYING
 diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 4632301b16..d2cef1cb04 100644
+index d2cef1cb04..2f37f303ac 100644
 --- a/package/libxslt/libxslt.mk
 +++ b/package/libxslt/libxslt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBXSLT_VERSION = 1.1.32
-+LIBXSLT_VERSION = 1.1.33
+-LIBXSLT_VERSION = 1.1.33
++LIBXSLT_VERSION = 1.1.34
  LIBXSLT_SITE = http://xmlsoft.org/sources
  LIBXSLT_INSTALL_STAGING = YES
  LIBXSLT_LICENSE = MIT
