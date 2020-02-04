@@ -1,37 +1,38 @@
 From: Christian Stewart <christian@paral.in>
-Date: Tue, 04 Feb 2020 15:02:04 -0800
-Subject: [Buildroot] [PATCH 1/2] package/docker-containerd: bump to 1.3.2
-In-Reply-To: <CA+h8R2puYbJDhqUzYzxfyqV9DzBPwHDyUgxa42y5QFoUT=QrRw@mail.gmail.com>
+Date: Tue, 04 Feb 2020 15:06:11 -0800
+Subject: [Buildroot] [PATCH 2/2] package/docker-proxy: bump to feeff4
+In-Reply-To: <87eew6jsx7.fsf@dell.be.48ers.dk>
 References: <20200110045033.1920685-1-christian@paral.in>
- <87pnfrg0x6.fsf@dell.be.48ers.dk>
- <CA+h8R2puYbJDhqUzYzxfyqV9DzBPwHDyUgxa42y5QFoUT=QrRw@mail.gmail.com>
-Message-ID: <874kw6gdn7.fsf@paral.in>
+ <20200110045033.1920685-2-christian@paral.in>
+ <87lfqfg0ve.fsf@dell.be.48ers.dk>
+ <CA+h8R2qiKXsKQsprOTAW6OeFhDPKYBcFMr5bDaUDVEr4AdiZhQ@mail.gmail.com>
+ <87eew6jsx7.fsf@dell.be.48ers.dk>
+Message-ID: <871rragdgc.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, all,
+Hi Peter,
 
-Christian Stewart <christian@paral.in> writes:
->> Can you provide a more detailed commit message, please?
->>
->> In the past we have matched the runc and containerd versions with what
->> upstream uses for docker-ce.
->>
->> What does this bring when used with docker-engine 19.03? Is it
->> compatible?
+Peter Korsgaard <peter@korsgaard.com> writes:
+> Ok. I am referring to references like this:
+>
+> https://github.com/moby/moby/issues/14856
+>
+> https://serverfault.com/questions/633604/what-is-the-point-of-the-docker-proxy-process-why-is-a-userspace-tcp-proxy-need
+>
+> Which makes me think that docker-proxy should be optional rather than
+> unconditionally selected by docker-engine.
+>
+> What do you think?
 
-While this release (1.3.x) is compatible with Docker and containerd is a
-separate project now (and could be updated as releases are published,
-independently from Docker);
+We could set --userland-proxy=false on the daemon, perhaps, and remove
+the docker-proxy requirement? I will do some tests on this.
 
-Docker 19.03.4 bumped their containerd reference to 1.2.10. Containerd
-has released a 1.2.12 release (on the 1.2.x as opposed to 1.3.x series)
-with bugfixes.
-
-For now, I will withdraw this patch and re-submit one to bump to 1.2.12.
+I think it makes sense to first bump docker-proxy (it still is started
+and used with the current configuration) and then remove it later.
 
 Best regards,
 Christian
