@@ -1,89 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2020 19:27:48 +0100
-Subject: [Buildroot] [git commit] board/lemaker/bananapro: fix wlan module
-Message-ID: <20200204181858.22ADA8B6D0@busybox.osuosl.org>
+Date: Tue, 4 Feb 2020 19:25:52 +0100
+Subject: [Buildroot] [git commit] package/python-pydantic: new package
+Message-ID: <20200204181858.17C788B6D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23bc8059cde54b5c29a559bff07e746a11590e23
+commit: https://git.buildroot.net/buildroot/commit/?id=c686556324c9f50262bca2f2acd86121c631899a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Restore a patch which disables 00B IRQ for the built-in wlan module which
-allows working wlan module again.  It turned out that it shouldn't have been
-deleted because the bug still exists in the mainline linux kernel, so keep
-this patch the same as armbian[1] to have wifi connection working correctly.
+Data validation and settings management using python 3.6
+type hinting.
 
-[1] https://github.com/armbian/build/blob/master/patch/kernel/sunxi-dev/ARM-dts-sun7i-Disable-OOB-IRQ-for-brcm-wifi-on-Cubietruck-and-Banana-Pro.patch
-
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ot-dts-sun7i-a20-bananapro.dts-disable-00.patch | 44 ++++++++++++++++++++++
- configs/bananapro_defconfig                        |  1 +
- 2 files changed, 45 insertions(+)
+ package/Config.in                            |  1 +
+ package/python-pydantic/Config.in            |  8 ++++++++
+ package/python-pydantic/python-pydantic.hash |  5 +++++
+ package/python-pydantic/python-pydantic.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-diff --git a/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch b/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
+diff --git a/package/Config.in b/package/Config.in
+index 6f2c278af9..c444a17737 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1057,6 +1057,7 @@ menu "External python modules"
+ 	source "package/python-pycrypto/Config.in"
+ 	source "package/python-pycryptodomex/Config.in"
+ 	source "package/python-pydal/Config.in"
++	source "package/python-pydantic/Config.in"
+ 	source "package/python-pyelftools/Config.in"
+ 	source "package/python-pyftpdlib/Config.in"
+ 	source "package/python-pygame/Config.in"
+diff --git a/package/python-pydantic/Config.in b/package/python-pydantic/Config.in
 new file mode 100644
-index 0000000000..c8e8c03753
+index 0000000000..07b506a20f
 --- /dev/null
-+++ b/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
-@@ -0,0 +1,44 @@
-+From 896e82ab14e7e4e361ffa7c81def787907c1bf4c Mon Sep 17 00:00:00 2001
-+From: Bartosz Bilas <b.bilas@grinn-global.com>
-+Date: Sun, 19 May 2019 21:04:35 +0200
-+Subject: [PATCH] arch/arm/boot/dts/sun7i-a20-bananapro.dts: disable 00B
-+ IRQ for brcm wifi module
++++ b/package/python-pydantic/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_PYDANTIC
++	bool "python-pydantic"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  Data validation and settings management using python 3.6
++	  type hinting.
 +
-+	BugLink: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=908438
++	  https://github.com/samuelcolvin/pydantic
+diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
+new file mode 100644
+index 0000000000..7bb076fe2f
+--- /dev/null
++++ b/package/python-pydantic/python-pydantic.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pydantic/json
++md5	ce0c1824d1797bc7d67953428c4fe965  pydantic-1.3.tar.gz
++sha256	2eab7d548b0e530bf65bee7855ad8164c2f6a889975d5e9c4eefd1e7c98245dc  pydantic-1.3.tar.gz
++# Locally computed sha256 checksums
++sha256	66badbfe56618ec52ddcbfda62450e43752d16fe1e7cae78d346c7ed10a35306  LICENSE
+diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
+new file mode 100644
+index 0000000000..0f9dd66a6f
+--- /dev/null
++++ b/package/python-pydantic/python-pydantic.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pydantic
++#
++################################################################################
 +
-+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-+---
-+ arch/arm/boot/dts/sun7i-a20-bananapro.dts | 16 +++++++++++++---
-+ 1 file changed, 13 insertions(+), 3 deletions(-)
++PYTHON_PYDANTIC_VERSION = 1.3
++PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
++PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/3e/69/b22c0eb3157115e1e3d111f574a6a41552539f1e53b064121ef4e9ac1368
++PYTHON_PYDANTIC_SETUP_TYPE = setuptools
++PYTHON_PYDANTIC_LICENSE = MIT
++PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
 +
-+diff --git a/arch/arm/boot/dts/sun7i-a20-bananapro.dts b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
-+index 0176e9de0..93b3340f5 100644
-+--- a/arch/arm/boot/dts/sun7i-a20-bananapro.dts
-++++ b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
-+@@ -160,9 +160,19 @@
-+ 	brcmf: wifi at 1 {
-+ 		reg = <1>;
-+ 		compatible = "brcm,bcm4329-fmac";
-+-		interrupt-parent = <&pio>;
-+-		interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
-+-		interrupt-names = "host-wake";
-++		/*
-++		 * OOB interrupt support is broken ATM, often the first irq
-++		 * does not get seen resulting in the drv probe failing with:
-++		 *
-++		 * brcmfmac: brcmf_sdio_bus_rxctl: resumed on timeout
-++		 * brcmfmac: brcmf_bus_started: failed: -110
-++		 * brcmfmac: brcmf_attach: dongle is not responding: err=-110
-++		 * brcmfmac: brcmf_sdio_firmware_callback: brcmf_attach failed
-++		 *
-++		 * interrupt-parent = <&pio>;
-++		 * interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
-++		 * interrupt-names = "host-wake";
-++		 */
-+ 	};
-+ };
-+ 
-+-- 
-+2.21.0
-+
-diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
-index a990380570..95bd871468 100644
---- a/configs/bananapro_defconfig
-+++ b/configs/bananapro_defconfig
-@@ -1,6 +1,7 @@
- # Architecture
- BR2_arm=y
- BR2_cortex_a7=y
-+BR2_GLOBAL_PATCH_DIR="board/lemaker/bananapro/patches"
- BR2_ARM_EABIHF=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
++$(eval $(python-package))
