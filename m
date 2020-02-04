@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Feb 2020 13:52:02 +0100
-Subject: [Buildroot] [PATCH v1 1/2] package/qt5serialport: update hash
+Date: Tue, 04 Feb 2020 13:52:06 +0100
+Subject: [Buildroot] [PATCH v1 2/2] package/qt5x11extras: update hash
  source URL
-In-Reply-To: <20200203211006.31507-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Mon, 3 Feb 2020 22:10:05 +0100")
+In-Reply-To: <20200203211006.31507-2-ps.report@gmx.net> (Peter Seiderer's
+ message of "Mon, 3 Feb 2020 22:10:06 +0100")
 References: <20200203211006.31507-1-ps.report@gmx.net>
-Message-ID: <8736bqms5p.fsf@dell.be.48ers.dk>
+ <20200203211006.31507-2-ps.report@gmx.net>
+Message-ID: <87y2tildl5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
