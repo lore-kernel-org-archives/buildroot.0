@@ -1,71 +1,126 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 4 Feb 2020 23:10:52 +0100
-Subject: [Buildroot] [PATCH v2 5/7] package/freescale-imx/imx-gpu-viv:
- bump to version 6.4.0.p1.0
-In-Reply-To: <20200203193155.12657-5-tuzakli.refik@gmail.com>
-References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
- <20200203193155.12657-5-tuzakli.refik@gmail.com>
-Message-ID: <20200204231052.350677e5@windsurf>
+Date: Tue, 4 Feb 2020 23:11:18 +0100
+Subject: [Buildroot] [git commit] system: also create a lib64 -> lib symlink
+ on mips64n32
+Message-ID: <20200204220048.0812F8B83D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=45fbadb0b785de116b369fb1d413063126316c19
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-(Gary, there is a question for you below.)
+In gcc 5.1.0, a change was introduced which causes internal search paths
+inside the sysroot to be relative to 'lib64' rather than 'lib'. See [1] [2]
+and [3].
 
-On Mon,  3 Feb 2020 22:31:53 +0300
-Refik Tuzakli <tuzakli.refik@gmail.com> wrote:
+For example for dtc:
 
-> Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
+     LD convert-dtsv0
+    /opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/bin/ld: cannot find crt1.o: No such file or directory
+    /opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/bin/ld: cannot find crti.o: No such file or directory
+    collect2: error: ld returned 1 exit status
+    make[1]: *** [Makefile:236: convert-dtsv0] Error 1
+    make[1]: *** Waiting for unfinished jobs....
+    make[1]: Leaving directory '/opt/buildroot/output/build/dtc-1.4.7'
+    make: *** [package/pkg-generic.mk:241: /opt/buildroot/output/build/dtc-1.4.7/.stamp_built] Error 2
 
-I've applied, but with some changes, and they may need further work
-from you. See below.
+In this case, crt1.o was searched for in following locations:
 
->  define IMX_GPU_VIV_BUILD_CMDS
->  	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/gpu-core/usr/include/*/*.h
-> -	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so
-> -	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so.1
-> -	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so.1.2.0
-> +	ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so
-> +	ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1
-> +	ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1.2
-> +	ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1.2.0
+    16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/n32/octeon3/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/n32/octeon3/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/lib/mips64-octeon-linux-gnu/7.3.0/n32/octeon3/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/lib/../lib32-fp/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/lib64/mips64-octeon-linux-gnu/7.3.0/n32/octeon3/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/lib64/../lib32-fp/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/usr/lib64/mips64-octeon-linux-gnu/7.3.0/n32/octeon3/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/usr/lib64/../lib32-fp/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/lib/mips64-octeon-linux-gnu/7.3.0/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/mips64-octeon-linux-gnu/7.3.0/../../../../mips64-octeon-linux-gnu/lib/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/lib64/mips64-octeon-linux-gnu/7.3.0/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/lib64/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/usr/lib64/mips64-octeon-linux-gnu/7.3.0/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
+    16073 access("/opt/buildroot/output/host/mips64-buildroot-linux-gnu/sysroot/usr/lib64/crt1.o", R_OK) = -1 ENOENT (No such file or directory)
 
-The libGL is only available for the wl and x11 backends, not for the fb
-backend, so these statements were creating broken symlinks when fb was
-the selected backend. So I've added some conditional to only do that
-when wl or x11 is used.
+As can be seen above, all attempted paths contain 'lib64' as base,
+instead of 'lib' or 'lib32', e.g.
 
->  	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so
->  	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1
->  	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1.0
-> @@ -115,7 +116,7 @@ define IMX_GPU_VIV_INSTALL_TARGET_CMDS
->  	$(IMX_GPU_VIV_INSTALL_EXAMPLES)
->  	$(IMX_GPU_VIV_INSTALL_GMEM_INFO)
->  	cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
-> -	for lib in EGL GAL GLESv2 VDK; do \
-> +	for lib in EGL GAL GL GLESv2 VDK vulkan; do \
+.../sysroot/lib64/../lib32-fp/crt1.o
+.../sysroot/lib64/crt1.o
 
-I have dropped this change. Indeed, the package was not updated to
-reflect that it also provides GL support, and there is no really
-organized Vulkan support in Buildroot today (except in mesa3d). So
-adding these need more work, and should be done in separate commits.
+This problem was detected on a gcc 7.x toolchain provided by Marvell as part
+of their Octeon SDK. For this toolchain, here are the values of the paths
+as detected by the Buildroot toolchain logic, for two different Octeon
+processors:
 
-Generally, I am surprised of the "fixes" done to libGL in BUILDS_CMDS
-since anyway libGL does not get installed. It was like that, so I kept
-it as it is, but I'm not sure why we did that. Gary, do you remember ?
+- octeon2 (soft-float) (-mabi=n32 -march=octeon2):
+SYSROOT_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/sys-root/;
+ARCH_SYSROOT_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/sys-root/;
+ARCH_SUBDIR=;
+ARCH_LIB_DIR=lib32/octeon2;
+SUPPORT_LIB_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/lib32/octeon2/
 
->  		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
->  			case $$f in \
->  				*-$(IMX_GPU_VIV_LIB_TARGET).so) : ;; \
+- octeon3 (hard-float) (-mabi=n32 -march=octeon3):
+SYSROOT_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/sys-root/;
+ARCH_SYSROOT_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/sys-root/;
+ARCH_SUBDIR=;
+ARCH_LIB_DIR=lib32-fp;
+SUPPORT_LIB_DIR=/opt/buildroot/output/host/opt/ext-toolchain/mips64-octeon-linux-gnu/lib32-fp/
 
-Thanks!
+For both cases (MIPS64n32) Buildroot created a symlink 'lib32->lib', from
+SYSTEM_LIB_SYMLINK in system/system.mk. Additionally, the function
+create_lib_symlinks in
+toolchain/toolchain-external/pkg-toolchain-external.mk will use ARCH_LIB_DIR
+and create an additional link $(ARCH_LIB_DIR)->lib.
+For the Octeon3 case this thus results in the following symlinks (where the
+'lib32' one is normally not needed):
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+    lib32 -> lib/
+    lib32-fp -> lib/
+
+Since the toolchain is searching based on a 'lib64' component, it will fail
+to find its internal paths.
+
+To solve the problem, we need to create an additional symlink 'lib64':
+
+    lib64 -> lib/
+
+[1] https://github.com/gcc-mirror/gcc/commit/257ccd463a4f25495b252a3bdf989d057c54678d
+[2] https://gcc.gnu.org/ml/gcc-patches/2014-10/msg03377.html
+[3] https://gcc.gnu.org/ml/gcc-patches/2014-11/msg00539.html
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ system/system.mk | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/system/system.mk b/system/system.mk
+index 8db87cb129..8fe2c138b0 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -56,9 +56,18 @@ define SYSTEM_RSYNC
+ endef
+ 
+ # Make a symlink lib32->lib or lib64->lib as appropriate.
+-# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
++# MIPS64/n32 requires lib32 even though it's a 64-bit arch. However, since gcc
++# 5.1.0 internal compiler paths in sysroot are relative to lib64, so we must
++# create both.
+ # $(1): base dir (either staging or target)
+-ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
++ifeq ($(BR2_MIPS_NABI32),y)
++define SYSTEM_LIB_SYMLINK
++	ln -snf lib $(1)/lib64
++	ln -snf lib $(1)/usr/lib64
++	ln -snf lib $(1)/lib32
++	ln -snf lib $(1)/usr/lib32
++endef
++else ifeq ($(BR2_ARCH_IS_64),y)
+ define SYSTEM_LIB_SYMLINK
+ 	ln -snf lib $(1)/lib64
+ 	ln -snf lib $(1)/usr/lib64
