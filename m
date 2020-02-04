@@ -1,39 +1,77 @@
-From: Alistair Francis <alistair.francis@wdc.com>
-Date: Tue,  4 Feb 2020 13:08:55 -0800
-Subject: [Buildroot] [PATCH] package/xen: Use host-python3 to build
-Message-ID: <20200204210855.26196-1-alistair.francis@wdc.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  4 Feb 2020 22:29:09 +0100
+Subject: [Buildroot] [PATCH] package/imagemagick: fix configure error with
+ --disable-opencl in setups without libltdl
+Message-ID: <20200204212910.13935-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
----
- package/xen/xen.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/d9a/d9a84b642357f758c3f84270fb9a109abd7e2684/
 
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 951af963e0..fa49f5996b 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -8,7 +8,7 @@ XEN_VERSION = 4.13.0
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
--XEN_DEPENDENCIES = host-acpica host-python
-+XEN_DEPENDENCIES = host-acpica host-python3
+configure.ac contains a test using $ax_cv_check_cl_libcl:
+
+if test "$build_modules" != 'no' || test "X$ax_cv_check_cl_libcl" != Xno; then
+  AC_MSG_RESULT([-------------------------------------------------------------])
+  AC_MSG_CHECKING([for libltdl])
+
+But ax_cv_check_cl_libcl is only assigned a value (yes/no) if
+--disable-opencl is NOT passed, as the assignment logic is inside a
+conditional:
+
+AC_ARG_ENABLE([opencl],
+    [AC_HELP_STRING([--disable-opencl],
+                    [do not use OpenCL])],
+    [disable_opencl=$enableval],
+    [disable_opencl='yes'])
+
+if test "$disable_opencl" = 'yes'; then
+  ..
+  AC_CACHE_CHECK([for OpenCL library], [ax_cv_check_cl_libcl],
+
+So configure errors out if --disable-opencl is passed on setups where
+libltdl isn't available:
+
+checking if libltdl package is complete... no
+configure: error: in `/home/naourr/work/instance-0/output-1/build/imagemagick-7.0.8-59':
+configure: error: libltdl is required for modules and OpenCL builds
+
+As a workaround, explictly set ax_cv_check_cl_libcl=no to skip this
+conditional.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/imagemagick/imagemagick.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index eaa291a1bd..5ef04973a6 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -18,7 +18,9 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
+ IMAGEMAGICK_CONFIG_SCRIPTS += Magick++-config
+ endif
  
- # Calculate XEN_ARCH
- ifeq ($(ARCH),aarch64)
-@@ -21,7 +21,7 @@ XEN_CONF_OPTS = \
- 	--disable-ocamltools \
- 	--with-initddir=/etc/init.d
+-IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
++IMAGEMAGICK_CONF_ENV = \
++	ac_cv_sys_file_offset_bits=64 \
++	ax_cv_check_cl_libcl=no
  
--XEN_CONF_ENV = PYTHON=$(HOST_DIR)/bin/python2
-+XEN_CONF_ENV = PYTHON=$(HOST_DIR)/bin/python3
- XEN_MAKE_ENV = \
- 	XEN_TARGET_ARCH=$(XEN_ARCH) \
- 	CROSS_COMPILE=$(TARGET_CROSS) \
+ IMAGEMAGICK_CONF_OPTS = \
+ 	--program-transform-name='s,,,' \
+@@ -179,7 +181,9 @@ HOST_IMAGEMAGICK_CONF_OPTS = \
+ 	--with-zlib
+ 
+ # uses clock_gettime, which was provided by librt in glibc < 2.17
+-HOST_IMAGEMAGICK_CONF_ENV = LIBS="-lrt"
++HOST_IMAGEMAGICK_CONF_ENV = \
++	LIBS="-lrt" \
++	ax_cv_check_cl_libcl=no
+ 
+ HOST_IMAGEMAGICK_DEPENDENCIES = \
+ 	host-libjpeg \
 -- 
-2.25.0
+2.20.1
