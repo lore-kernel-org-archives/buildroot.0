@@ -1,67 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2020 17:45:10 +0100
-Subject: [Buildroot] [git commit] package/lvm2: add upstream patch to fix
- udev unsupported option warning
-Message-ID: <20200204164418.2E8228B629@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue,  4 Feb 2020 17:58:50 +0100
+Subject: [Buildroot] [PATCH 1/3] package/pkg-meson.mk: refactor flags
+ substitution into function
+Message-ID: <20200204165852.1819360-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19bb4066db41a4019b6e6e2e47db6b20a4f19cab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+pkg-meson defines variables _MESON_SED_CFLAGS, _MESON_SED_LDFLAGS and
+_MESON_SED_CXXFLAGS that reformat the make-style flags (space-separated
+and unquoted) as meson-style flags (comma-separated and double-quoted).
+Similar variables are also defined in meson.mk. A future patch will add
+even more similar cases.
 
-Since systemd/udev version 243, there's a new message printed if unsupported
-OPTIONS value is used:
+Refactor this by defining a macro for this substitution, and using that
+macro in all places where *_MESON_SED_* is used. The definitions of
+these variables are no longer needed.
 
-  Invalid value for OPTIONS key, ignoring: 'event_timeout=180'
-
-Add a patch to drop this invalid value.
-
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-[Peter: extend commit message]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...ve-unsupported-options-event-timeout-rule.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/meson/meson.mk |  4 ----
+ package/pkg-meson.mk   | 20 ++++++++++----------
+ 2 files changed, 10 insertions(+), 14 deletions(-)
 
-diff --git a/package/lvm2/0002-udev-remove-unsupported-options-event-timeout-rule.patch b/package/lvm2/0002-udev-remove-unsupported-options-event-timeout-rule.patch
-new file mode 100644
-index 0000000000..f162ec58de
---- /dev/null
-+++ b/package/lvm2/0002-udev-remove-unsupported-options-event-timeout-rule.patch
-@@ -0,0 +1,33 @@
-+From 125f27ac37bc9b93cc96f64052b9681b3d479ee1 Mon Sep 17 00:00:00 2001
-+From: Peter Rajnoha <prajnoha@redhat.com>
-+Date: Tue, 13 Aug 2019 15:18:30 +0200
-+Subject: [PATCH] udev: remove unsupported OPTIONS+="event_timeout" rule
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index e51e76d1c0..810c84690a 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -45,10 +45,6 @@ else
+ HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
+ endif
+ 
+-HOST_MESON_SED_CFLAGS = $(if $(strip $(TARGET_CFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
+-HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+-HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+-
+ # Avoid interpreter shebang longer than 128 chars
+ define HOST_MESON_SET_INTERPRETER
+ 	$(SED) '1s:.*:#!/usr/bin/env python3:' $(HOST_DIR)/bin/meson
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index e7eea2aa58..f1a3a69129 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -29,6 +29,10 @@ MESON		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/meson
+ NINJA		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/ninja
+ NINJA_OPTS	= $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+ 
++# convert space-separated 'make'-style list of flags to comma-separated and
++# double-quoted 'meson'-style
++meson-format-flags = $(if $(strip $(1)),`printf '"%s"$(comma) ' $(1)`)
 +
-+The OPTIONS+="event_timeout" is Unsupported since systemd/udev version 216,
-+that is ~5 years ago.
-+
-+Since systemd/udev version 243, there's a new message printed if unsupported
-+OPTIONS value is used:
-+
-+  Invalid value for OPTIONS key, ignoring: 'event_timeout=180'
-+
-+Resolves: https://bugzilla.redhat.com/show_bug.cgi?id=1740666
-+
-+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-+---
-+diff --git a/udev/11-dm-lvm.rules.in b/udev/11-dm-lvm.rules.in
-+index 91cb991..7c58994 100644
-+--- a/udev/11-dm-lvm.rules.in
-++++ b/udev/11-dm-lvm.rules.in
-+@@ -37,8 +37,6 @@ ENV{DM_SUBSYSTEM_UDEV_FLAG0}!="1", ENV{DM_NOSCAN}=="1", ENV{DM_UDEV_DISABLE_OTHE
-+ 
-+ ENV{DM_UDEV_DISABLE_SUBSYSTEM_RULES_FLAG}=="1", GOTO="lvm_end"
-+ 
-+-OPTIONS+="event_timeout=180"
-+-
-+ # Do not create symlinks for inappropriate subdevices.
-+ ENV{DM_LV_NAME}=="pvmove?*|?*_vorigin", GOTO="lvm_disable"
-+ ENV{DM_LV_LAYER}=="?*", GOTO="lvm_disable"
-+-- 
-+2.9.3
-+
+ ################################################################################
+ # inner-meson-package -- defines how the configuration, compilation and
+ # installation of a Meson package should be done, implements a few hooks to
+@@ -61,10 +65,6 @@ $(2)_CFLAGS ?= $$(TARGET_CFLAGS)
+ $(2)_LDFLAGS ?= $$(TARGET_LDFLAGS)
+ $(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
+ 
+-$(2)_MESON_SED_CFLAGS = $$(if $$(strip $$($(2)_CFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CFLAGS)`)
+-$(2)_MESON_SED_LDFLAGS = $$(if $$(strip $$($(2)_LDFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_LDFLAGS)`)
+-$(2)_MESON_SED_CXXFLAGS = $$(if $$(strip $$($(2)_CXXFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CXXFLAGS)`)
+-
+ # Configure package for target
+ #
+ #
+@@ -75,9 +75,9 @@ define $(2)_CONFIGURE_CMDS
+ 	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+ 	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
+ 	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
+-	    -e "s%@TARGET_CFLAGS@%$$($(2)_MESON_SED_CFLAGS)%g" \
+-	    -e "s%@TARGET_LDFLAGS@%$$($(2)_MESON_SED_LDFLAGS)%g" \
+-	    -e "s%@TARGET_CXXFLAGS@%$$($(2)_MESON_SED_CXXFLAGS)%g" \
++	    -e "s%@TARGET_CFLAGS@%$$(call meson-format-flags,$$($(2)_CFLAGS))%g" \
++	    -e "s%@TARGET_LDFLAGS@%$$(call meson-format-flags,$$($(2)_LDFLAGS))%g" \
++	    -e "s%@TARGET_CXXFLAGS@%$$(call meson-format-flags,$$($(2)_CXXFLAGS))%g" \
+ 	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
+ 	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+ 	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
+@@ -192,9 +192,9 @@ define PKG_MESON_INSTALL_CROSS_CONF
+ 	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+ 	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
+ 	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
+-	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)@PKG_TARGET_CFLAGS@%g" \
+-	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)@PKG_TARGET_CFLAGS@%g" \
+-	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)@PKG_TARGET_CFLAGS@%g" \
++	    -e "s%@TARGET_CFLAGS@%$(call meson-format-flags,$(TARGET_CFLAGS))@PKG_TARGET_CFLAGS@%g" \
++	    -e "s%@TARGET_LDFLAGS@%$(call meson-format-flags,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g" \
++	    -e "s%@TARGET_CXXFLAGS@%$(call meson-format-flags,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g" \
+ 	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+ 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+ 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
+-- 
+2.24.1
