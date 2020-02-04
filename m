@@ -1,71 +1,49 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue,  4 Feb 2020 11:38:37 +0100
-Subject: [Buildroot] [PATCH] utils/check-package: add a check for the
- separation in the hash files
-Message-ID: <20200204103836.7730-1-heiko.thiery@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 4 Feb 2020 11:47:00 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libxml2: bump to
+ version 2.9.10
+Message-ID: <20200204103559.6943C8A521@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The seperation of the fields in the hash file should be 2 spaces for
-consitency.
+commit: https://git.buildroot.net/buildroot/commit/?id=80326d174c38abec17e4950d45ebc74a6f47bb0e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Add some extra infos about that in the "adding-packages-directory" part
-of the manual.
+Adds the --dynamic option to xml2-config, needed by libxslt 1.1.34+.
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Peter: mention the dependency from libxslt]
+(cherry picked from commit 2eeff0627233d9cecfa232dc0b3689ec8c1db4a2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-directory.txt | 6 ++++--
- utils/checkpackagelib/lib_hash.py         | 7 ++++++-
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ package/libxml2/libxml2.hash | 2 +-
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 1c8b9f96b5..2c1a7d8776 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -461,7 +461,8 @@ The hashes stored in that file are used to validate the integrity of the
- downloaded files and of the license files.
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index ce8f5ef7f2..d890713a7c 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	94fb70890143e3c6549f265cee93ec064c80a84c42ad0f23e85ee1fd6540a871	libxml2-2.9.9.tar.gz
++sha256	aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f	libxml2-2.9.10.tar.gz
+ # License files, locally calculated
+ sha256	c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd	COPYING
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index f4b4de090e..f6cf084b2b 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- The format of this file is one line for each file for which to check the
--hash, each line being space-separated, with these three fields:
-+hash. For every file to check the three fields (hash type, hash, filename)
-+has to be in that file separated by 2 spaces.
- 
- * the type of hash, one of:
- ** +md5+, +sha1+, +sha224+, +sha256+, +sha384+, +sha512+, +none+
-@@ -502,7 +503,8 @@ create the hash file in a subdirectory +<packageversion>+ of that package
- 
- .Note
- The number of spaces does not matter, so one can use spaces (or tabs) to
--properly align the different fields.
-+properly align the different fields. Nethertheless new packages has to be
-+separated by 2 spaces.
- 
- The +none+ hash type is reserved to those archives downloaded from a
- repository, like a 'git clone', a 'subversion checkout'...
-diff --git a/utils/checkpackagelib/lib_hash.py b/utils/checkpackagelib/lib_hash.py
-index 3e381119a5..618ae5f679 100644
---- a/utils/checkpackagelib/lib_hash.py
-+++ b/utils/checkpackagelib/lib_hash.py
-@@ -40,7 +40,7 @@ class HashType(_CheckFunction):
-         if len(fields) < 2:
-             return
- 
--        htype, hexa = fields[:2]
-+        htype, hexa, filename = fields[:3]
-         if htype == "none":
-             return
-         if htype not in self.len_of_hash.keys():
-@@ -53,3 +53,8 @@ class HashType(_CheckFunction):
-                     .format(self.filename, lineno, self.url_to_manual),
-                     text,
-                     "expected {} hex digits".format(self.len_of_hash[htype])]
-+
-+        if not re.match("^{}  {}  {}.*$".format(htype, hexa, filename), text):
-+            return ["{}:{}: separation does not match expectation ({}#adding-packages-hash)"
-+                    .format(self.filename, lineno, self.url_to_manual),
-+                    text]
--- 
-2.20.1
+-LIBXML2_VERSION = 2.9.9
++LIBXML2_VERSION = 2.9.10
+ LIBXML2_SITE = http://xmlsoft.org/sources
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_LICENSE = MIT
