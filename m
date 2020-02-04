@@ -1,39 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2020 19:25:29 +0100
-Subject: [Buildroot] [git commit] configs/stm32mp157c_dk2_defconfig: bump
- Linux to 5.4.7
-Message-ID: <20200204181858.0E8B28B6D0@busybox.osuosl.org>
+Date: Tue, 4 Feb 2020 19:27:48 +0100
+Subject: [Buildroot] [git commit] board/lemaker/bananapro: fix wlan module
+Message-ID: <20200204181858.22ADA8B6D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe0ff37ac30e0f7b30c8c3a64952f8d1e1876b97
+commit: https://git.buildroot.net/buildroot/commit/?id=23bc8059cde54b5c29a559bff07e746a11590e23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Restore a patch which disables 00B IRQ for the built-in wlan module which
+allows working wlan module again.  It turned out that it shouldn't have been
+deleted because the bug still exists in the mainline linux kernel, so keep
+this patch the same as armbian[1] to have wifi connection working correctly.
+
+[1] https://github.com/armbian/build/blob/master/patch/kernel/sunxi-dev/ARM-dts-sun7i-Disable-OOB-IRQ-for-brcm-wifi-on-Cubietruck-and-Banana-Pro.patch
 
 Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/stm32mp157c_dk2_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...ot-dts-sun7i-a20-bananapro.dts-disable-00.patch | 44 ++++++++++++++++++++++
+ configs/bananapro_defconfig                        |  1 +
+ 2 files changed, 45 insertions(+)
 
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index 0535cb212a..273eda46a0 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -1,12 +1,12 @@
+diff --git a/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch b/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
+new file mode 100644
+index 0000000000..c8e8c03753
+--- /dev/null
++++ b/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
+@@ -0,0 +1,44 @@
++From 896e82ab14e7e4e361ffa7c81def787907c1bf4c Mon Sep 17 00:00:00 2001
++From: Bartosz Bilas <b.bilas@grinn-global.com>
++Date: Sun, 19 May 2019 21:04:35 +0200
++Subject: [PATCH] arch/arm/boot/dts/sun7i-a20-bananapro.dts: disable 00B
++ IRQ for brcm wifi module
++
++	BugLink: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=908438
++
++Signed-off-by: Hans de Goede <hdegoede@redhat.com>
++Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
++---
++ arch/arm/boot/dts/sun7i-a20-bananapro.dts | 16 +++++++++++++---
++ 1 file changed, 13 insertions(+), 3 deletions(-)
++
++diff --git a/arch/arm/boot/dts/sun7i-a20-bananapro.dts b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
++index 0176e9de0..93b3340f5 100644
++--- a/arch/arm/boot/dts/sun7i-a20-bananapro.dts
+++++ b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
++@@ -160,9 +160,19 @@
++ 	brcmf: wifi at 1 {
++ 		reg = <1>;
++ 		compatible = "brcm,bcm4329-fmac";
++-		interrupt-parent = <&pio>;
++-		interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
++-		interrupt-names = "host-wake";
+++		/*
+++		 * OOB interrupt support is broken ATM, often the first irq
+++		 * does not get seen resulting in the drv probe failing with:
+++		 *
+++		 * brcmfmac: brcmf_sdio_bus_rxctl: resumed on timeout
+++		 * brcmfmac: brcmf_bus_started: failed: -110
+++		 * brcmfmac: brcmf_attach: dongle is not responding: err=-110
+++		 * brcmfmac: brcmf_sdio_firmware_callback: brcmf_attach failed
+++		 *
+++		 * interrupt-parent = <&pio>;
+++		 * interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
+++		 * interrupt-names = "host-wake";
+++		 */
++ 	};
++ };
++ 
++-- 
++2.21.0
++
+diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+index a990380570..95bd871468 100644
+--- a/configs/bananapro_defconfig
++++ b/configs/bananapro_defconfig
+@@ -1,6 +1,7 @@
+ # Architecture
  BR2_arm=y
  BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32mp157c-dk2/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_GLOBAL_PATCH_DIR="board/lemaker/bananapro/patches"
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
