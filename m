@@ -1,53 +1,30 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Tue,  4 Feb 2020 13:25:20 -0600
-Subject: [Buildroot] [PATCH v3 1/1] toolchain/toolchain-buildroot: PPC64(LE)
- support in musl requires ALTIVEC
-In-Reply-To: <20200131153952.680-1-vfazio@xes-inc.com>
-References: <20200131153952.680-1-vfazio@xes-inc.com>
-Message-ID: <20200204192520.2059-1-vfazio@xes-inc.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 Feb 2020 21:20:32 +0100
+Subject: [Buildroot] [PATCH] package/gcc: remove gcc 5.5 or1k fork
+In-Reply-To: <20200102220415.431543-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Thu, 2 Jan 2020 23:04:15 +0100")
+References: <20200102220415.431543-1-romain.naour@gmail.com>
+Message-ID: <87pneuxfxr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-musl currently assumes all PPC64(LE) CPUs support ALTIVEC instructions.
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-However, there are exceptions (such as the e5500) for which musl builds
-ultimately generate illegal instructions for the targets.
+ > Remove the old gcc 5.5 fork for or1k architecture
+ > that start to fail to build with recent version
+ > of Binutils >= 2.32 with the following error:
 
-Disable musl if the PPC64(LE) CPU does not support ALTIVEC instructions.
+ > host-gcc-final-or1k-musl-5.4.0-20170218/build/./gcc/crtbeginS.o: addend should be zero for plt relocations
+ > host/or1k-buildroot-linux-uclibc/bin/ld: final link failed: bad value
 
-This patch addresses the issues seen here:
-  https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092743
-  https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092744
+ > https://gitlab.com/kubu93/buildroot/-/jobs/391938988
 
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
----
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-Changes v2 -> v3:
-  - change to 'depends on' semantics (suggested by Romain)
+Committed, thanks.
 
-Changes v1 -> v2:
-  - clarify commit message (suggested by Matthew)
-  - add job logs (suggested by Romain)
-
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
----
- toolchain/toolchain-buildroot/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index a980f766ac..8c33b2b4dd 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -86,6 +86,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
- 		   BR2_powerpc64le || BR2_RISCV_64 || BR2_sh   || BR2_x86_64
- 	depends on !BR2_powerpc_SPE # not supported, build breaks
-+	depends on !(BR2_powerpc64 || BR2_powerpc64le) || BR2_POWERPC_CPU_HAS_ALTIVEC
- 	# sh2 nommu is supported by musl, but we don't have support
- 	# for it in Buildroot.
- 	depends on BR2_USE_MMU
 -- 
-2.25.0
+Bye, Peter Korsgaard
