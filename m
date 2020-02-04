@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2020 11:47:00 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libxslt: security
+Date: Tue, 4 Feb 2020 11:22:48 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libxslt: security
  bump to version 1.1.34
-Message-ID: <20200204103559.7B0578A521@busybox.osuosl.org>
+Message-ID: <20200204103605.94D408A529@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a57eeda66a9c4068b9cc693ee786611c5a2d89a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dd1e3f6065f4341bcec4308d28db8908159fb006
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes the following security issues:
 
