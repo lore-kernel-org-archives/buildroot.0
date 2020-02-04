@@ -1,67 +1,35 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 4 Feb 2020 17:11:04 +0100
-Subject: [Buildroot] [PATCH v2 1/1] toolchain/toolchain-buildroot:
- PPC64(LE) support in musl requires ALTIVEC
-In-Reply-To: <20200131153952.680-1-vfazio@xes-inc.com>
-References: <20200131153952.680-1-vfazio@xes-inc.com>
-Message-ID: <71a6bd49-fa71-6b30-a5aa-846e9f16b415@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2020 17:15:19 +0100
+Subject: [Buildroot] [git commit] utils/check-package: ignore ACLOCAL_PATH
+Message-ID: <20200204160643.A2EAC8B55C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+commit: https://git.buildroot.net/buildroot/commit/?id=76772cefd83603380819a24eed5ac25f1cd343d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 31/01/2020 ? 16:39, Vincent Fazio a ?crit?:
-> musl currently assumes all PPC64(LE) CPUs support ALTIVEC instructions.
-> 
-> However, there are exceptions (such as the e5500) for which musl builds
-> ultimately generate illegal instructions for the targets.
-> 
-> Disable musl if the PPC64(LE) CPU does not support ALTIVEC instructions.
-> 
-> This patch addresses the issues seen here:
->   https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092743
->   https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092744
+The aclocal program is provided by the automake package, so it makes
+sense to define aclocal-related variables in automake.mk.
 
-I reported this issue to the musl mailing list. I'm not sure the e5500 support
-will be added in the end.
+Add an exception to check-package to ignore that variable.
 
-https://www.openwall.com/lists/musl/2020/02/03/10
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ utils/checkpackagelib/lib_mk.py | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-> ---
->  toolchain/toolchain-buildroot/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index a980f766ac..09a46822c9 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -83,8 +83,10 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
->  	bool "musl"
->  	depends on BR2_aarch64	   || BR2_arm   || BR2_armeb   || BR2_i386 || \
->  		   BR2_microblaze  || BR2_mips  || BR2_mipsel  || BR2_mips64 || \
-> -		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
-> -		   BR2_powerpc64le || BR2_RISCV_64 || BR2_sh   || BR2_x86_64
-> +		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_RISCV_64 || \
-> +		   BR2_sh	   || BR2_x86_64 || \
-> +		   ((BR2_powerpc64 || BR2_powerpc64le) && BR2_POWERPC_CPU_HAS_ALTIVEC)
-> +		   # musl assumes all PPC64 targets support ALTIVEC instructions
-
-Well, previously the architectures was sorted alphabetically. Please keep it.
-
-You can add the dependency this way:
-
-# musl assumes all PPC64 targets support ALTIVEC instructions
-depends on !(BR2_powerpc64 || BR2_powerpc64le) || BR2_POWERPC_CPU_HAS_ALTIVEC
-
-Best regards,
-Romain
-
->  	depends on !BR2_powerpc_SPE # not supported, build breaks
->  	# sh2 nommu is supported by musl, but we don't have support
->  	# for it in Buildroot.
-> 
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index b805cd9925..a0caf84636 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -225,6 +225,7 @@ class TypoInPackageVariable(_CheckFunction):
+     ALLOWED = re.compile("|".join([
+         "ACLOCAL_DIR",
+         "ACLOCAL_HOST_DIR",
++        "ACLOCAL_PATH",
+         "BR_CCACHE_INITIAL_SETUP",
+         "BR_LIBC",
+         "BR_NO_CHECK_HASH_FOR",
