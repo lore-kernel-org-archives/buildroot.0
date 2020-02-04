@@ -1,35 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 4 Feb 2020 16:22:23 +0100
-Subject: [Buildroot] [PATCH v2] package/libnspr: remove
- BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
-In-Reply-To: <b1fbe4c2-03eb-9c45-484d-043a2f7b60b4@mind.be>
-References: <20200204095059.7315-1-giulio.benetti@benettiengineering.com>
- <20200204110416.074754d8@windsurf>
- <b1fbe4c2-03eb-9c45-484d-043a2f7b60b4@mind.be>
-Message-ID: <20200204162223.50db5e36@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  4 Feb 2020 16:41:47 +0100
+Subject: [Buildroot] [PATCH] package/libxml2: add upstream security fix for
+ CVE-2020-7595
+Message-ID: <20200204154148.23603-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 4 Feb 2020 15:36:01 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Fixes CVE-2020-7595: xmlStringLenDecodeEntities in parser.c in libxml2
+2.9.10 has an infinite loop in a certain end-of-file situation.
 
-> > Arnout and I both agreed that we want to keep this blind option, so I'm
-> > not sure I understand why you're sending this patch. Did we miss something?  
-> 
->  Actually, Giulio replied that in the other thread (but it should be part of the
-> commit log here, maybe): adding architecture support is trivial (just a matter
-> of defining the right sizes), so we should never need to re-add this option.
-> Just fix libnspr.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...e-loop-in-xmlStringLenDecodeEntities.patch | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/libxml2/0001-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch
 
-Yes, it is true that the architecture support in libnspr is trivial.
-Though we lived for quite some time without it for some CPU
-architectures :-)
-
-Thomas
+diff --git a/package/libxml2/0001-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch b/package/libxml2/0001-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch
+new file mode 100644
+index 0000000000..a79adc3f85
+--- /dev/null
++++ b/package/libxml2/0001-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch
+@@ -0,0 +1,36 @@
++From 0e1a49c8907645d2e155f0d89d4d9895ac5112b5 Mon Sep 17 00:00:00 2001
++From: Zhipeng Xie <xiezhipeng1@huawei.com>
++Date: Thu, 12 Dec 2019 17:30:55 +0800
++Subject: [PATCH] Fix infinite loop in xmlStringLenDecodeEntities
++
++When ctxt->instate == XML_PARSER_EOF,xmlParseStringEntityRef
++return NULL which cause a infinite loop in xmlStringLenDecodeEntities
++
++Found with libFuzzer.
++
++Fixes CVE-2020-7595: xmlStringLenDecodeEntities in parser.c in libxml2
++2.9.10 has an infinite loop in a certain end-of-file situation.
++
++Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ parser.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/parser.c b/parser.c
++index d1c31963..a34bb6cd 100644
++--- a/parser.c
+++++ b/parser.c
++@@ -2646,7 +2646,8 @@ xmlStringLenDecodeEntities(xmlParserCtxtPtr ctxt, const xmlChar *str, int len,
++     else
++         c = 0;
++     while ((c != 0) && (c != end) && /* non input consuming loop */
++-	   (c != end2) && (c != end3)) {
+++           (c != end2) && (c != end3) &&
+++           (ctxt->instate != XML_PARSER_EOF)) {
++ 
++ 	if (c == 0) break;
++         if ((c == '&') && (str[1] == '#')) {
++-- 
++2.20.1
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
