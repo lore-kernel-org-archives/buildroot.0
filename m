@@ -1,38 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2020 13:54:13 +0100
-Subject: [Buildroot] [git commit] package/jack2: drop dependency on
- host-python
-Message-ID: <20200204124327.2B69A8A60F@busybox.osuosl.org>
+Date: Tue, 04 Feb 2020 13:57:34 +0100
+Subject: [Buildroot] [PATCH] package/grep: fix busybox aliasing
+In-Reply-To: <1580813230-11405-1-git-send-email-angelo@amarulasolutions.com>
+ (Angelo Compagnucci's message of "Tue, 4 Feb 2020 11:47:10 +0100")
+References: <1580813230-11405-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <87pneuldc1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44b2fc55fa3cc161fd48327bcb51b7902d4b9a82
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
-host-python was listed in jack2 dependencies, but is actually
-not needed. Also tested with an experimental python3 based
-Waf package infrastructure, so we can exclude that jack2
-"accidentally" uses the host-python2 pulled in by Waf.
+ > When grep package is selected, it should be installed at the same exact
+ > location where busybox installs it too, this way the grep/egrep/fgrep
+ > executables will end up overwriting the busybox provided ones.
+ > Busybox installs *grep executables in /bin, grep package in /usr/bin.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/jack2/jack2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Moreover, egrep/fgrep is using autotools SHELL variable to execve the
+ > grep executable with correct options, SHELL is defaulted to /bin/bash
+ > which is usually not available on target.
 
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index b08c45cce7..db63b7f4b7 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -7,7 +7,7 @@
- JACK2_VERSION = 1.9.14
- JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
- JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
--JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
-+JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib
- JACK2_INSTALL_STAGING = YES
+"Moreover" in a commit message is quite a strong hint that the commit is
+doing several things ;)
+
+Can you split it up into two commits, one for the prefix issue and one
+for the SHELL issue?
+
+I take it that you checked that the configure logic works with
+SHELL=/bin/sh when that ISN'T bash?
+
+
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > ---
+ >  package/grep/grep.mk | 1 +
+ >  1 file changed, 1 insertion(+)
+
+ > diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+ > index 96685b0..7365a57 100644
+ > --- a/package/grep/grep.mk
+ > +++ b/package/grep/grep.mk
+ > @@ -10,6 +10,7 @@ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ >  GREP_LICENSE = GPL-3.0+
+ >  GREP_LICENSE_FILES = COPYING
+ >  GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ > +GREP_CONF_OPTS = SHELL=/bin/sh --exec-prefix=/
  
- JACK2_CONF_OPTS = --alsa
+ >  # link with iconv if enabled
+ >  ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ > -- 
+ > 2.7.4
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+Bye, Peter Korsgaard
