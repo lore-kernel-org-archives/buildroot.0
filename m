@@ -1,36 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Feb 2020 16:47:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-imx: allow to
- build with Waf on Python3
-In-Reply-To: <20200204215357.26259-1-titouan.christophe@railnova.eu>
-References: <20200204215357.26259-1-titouan.christophe@railnova.eu>
-Message-ID: <20200205164707.1fd67b0c@windsurf>
+Date: Wed, 5 Feb 2020 16:47:37 +0100
+Subject: [Buildroot] [git commit] package/libimxvpuapi: use external waf
+Message-ID: <20200205153640.288E8802AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  4 Feb 2020 22:53:57 +0100
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e343051cc86b60f71e85364095d60b6a6c06f600
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This makes gst1-imx use the Waf package ditributed in Buildroot,
-> instead of its own one, as the latter does not support Python3.
-> 
-> Also backport a patch from upstream that tweaks the wscript,
-> such as to make it run on Waf >=2.0.12
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> ---
->  .../gst1-imx/0001-waf-update-to-2-0-12.patch  | 28 +++++++++++++++++++
->  package/gstreamer1/gst1-imx/gst1-imx.mk       |  1 +
->  2 files changed, 29 insertions(+)
->  create mode 100644 package/gstreamer1/gst1-imx/0001-waf-update-to-2-0-12.patch
+This makes libimxvpuapi use the Waf package ditributed in Buildroot,
+instead of its own one, as the latter does not support Python3.
 
-Applied to master, thanks.
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libimxvpuapi/libimxvpuapi.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
+index bcabbf3877..a2a3b21105 100644
+--- a/package/libimxvpuapi/libimxvpuapi.mk
++++ b/package/libimxvpuapi/libimxvpuapi.mk
+@@ -10,5 +10,6 @@ LIBIMXVPUAPI_LICENSE = LGPL-2.1+
+ LIBIMXVPUAPI_LICENSE_FILES = LICENSE
+ LIBIMXVPUAPI_DEPENDENCIES = host-pkgconf host-python imx-vpu
+ LIBIMXVPUAPI_INSTALL_STAGING = YES
++LIBIMXVPUAPI_NEEDS_EXTERNAL_WAF = YES
+ 
+ $(eval $(waf-package))
