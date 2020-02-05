@@ -1,55 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 05 Feb 2020 19:09:09 +0000
-Subject: [Buildroot] [Bug 12546] New: Ninja 1.10 build Error
-Message-ID: <bug-12546-163@https.bugs.busybox.net/>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 5 Feb 2020 20:27:30 +0100
+Subject: [Buildroot] [PATCH] utils/check-package: add a check for the
+ separation in the hash files
+In-Reply-To: <20200205170729.GI3131@scaer>
+References: <20200204103836.7730-1-heiko.thiery@gmail.com>
+ <20200205170729.GI3131@scaer>
+Message-ID: <CAEyMn7Y_3eGyNY-BezPd9NvHox3tr7-BeLZuAYJodWTe-4zLTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12546
+Yann, All,
 
-            Bug ID: 12546
-           Summary: Ninja 1.10 build Error
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: damian.tometzki at familie-tometzki.de
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+> The script now throwsa traceback:
+>
+>     $ make check-package
+>     [lots of output...]
+>     Traceback (most recent call last):
+>       File "./utils/check-package", line 194, in <module>
+>         __main__()
+>       File "./utils/check-package", line 177, in __main__
+>         nwarnings, nlines = check_file_using_lib(fname)
+>       File "./utils/check-package", line 146, in check_file_using_lib
+>         nwarnings += print_warnings(cf.check_line(lineno + 1, text))
+>       File "/home/ymorin/dev/buildroot/buildroot/utils/checkpackagelib/lib_hash.py", line 57, in check_line
+>         if not re.match("^{}  {}  {}.*$".format(htype, hexa, filename), text):
+>       File "/usr/lib/python2.7/re.py", line 141, in match
+>         return _compile(pattern, flags).match(string)
+>       File "/usr/lib/python2.7/re.py", line 251, in _compile
+>         raise error, v # invalid expression
+>     sre_constants.error: multiple repeat
+>     make: *** [Makefile:1185: check-package] Error 1
+>
+> Care to have a look at it?
 
-Hello,
+Yes I see it .. the string has to be escaped .. I will prepare that
+and send a patch.
 
-i got with the actual buildroot git master the following error in step 
-building ninja 1.10:
-
-Make Error at CMakeLists.txt:124 (target_link_libraries):
-  Target "libninja-re2c" of type OBJECT_LIBRARY may not be linked into
-  another target.  One may link only to INTERFACE, STATIC or SHARED
-  libraries, or to executables with the ENABLE_EXPORTS property set.
-
-
-CMake Error at CMakeLists.txt:124 (target_link_libraries):
-  Target "libninja" of type OBJECT_LIBRARY may not be linked into another
-  target.  One may link only to INTERFACE, STATIC or SHARED libraries, or to
-  executables with the ENABLE_EXPORTS property set.
-
-
-CMake Error at CMakeLists.txt:124 (target_link_libraries):
-  Target "libninja-re2c" of type OBJECT_LIBRARY may not be linked into
-  another target.  One may link only to INTERFACE, STATIC or SHARED
-  libraries, or to executables with the ENABLE_EXPORTS property set.
-
-Best regards
-Damian
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+--
+Heiko
