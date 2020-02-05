@@ -1,78 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  5 Feb 2020 15:48:39 +0100
-Subject: [Buildroot] [PATCH 2/6 v2] package/linux-headers: license files
- hashes only valid for latest version
+Date: Wed,  5 Feb 2020 15:48:41 +0100
+Subject: [Buildroot] [PATCH 4/6 v2] boot/barebox: license files hashes only
+ valid for latest version
 In-Reply-To: <cover.1580914115.git.yann.morin.1998@free.fr>
 References: <cover.1580914115.git.yann.morin.1998@free.fr>
-Message-ID: <88a204c7db99f603e33f079b7d24017f2446865e.1580914115.git.yann.morin.1998@free.fr>
+Message-ID: <74a46f7ad7c46107c84347edb01879239a7a824b.1580914115.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Like we did on the previous commit, change linux-headers to only check
-the license hashes for the latest known version.
+We can only know the path to the license files for the known version.
+For custom, older or newer, versions may change, or may be moved
+around.
 
-To simplify the test, we introduce an intermediate, blind option that get
-selected by the two latest versions.
+So, do for U-Boot as was done for ATF, linux, and linux-headers, and
+only define the list of license files for the latest version.
+
+Add the hash for that license file, and align hashes to the new spacing
+convention.
 
 Reported-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Markus Mayer <mmayer@broadcom.com>
 ---
- package/linux-headers/Config.in.host   | 6 ++++++
- package/linux-headers/linux-headers.mk | 7 ++++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ boot/barebox/barebox.hash | 7 +++++--
+ boot/barebox/barebox.mk   | 2 ++
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 9f46a1052b..7a68ab7492 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -25,6 +25,7 @@ choice
- config BR2_KERNEL_HEADERS_AS_KERNEL
- 	bool "Same as kernel being built"
- 	depends on BR2_LINUX_KERNEL
-+	select BR2_KERNEL_HEADERS_LATEST if BR2_LINUX_KERNEL_LATEST_VERSION
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 42561ea571..64fec919b8 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,8 @@
+ # From https://www.barebox.org/download/barebox-2019.12.0.tar.bz2.md5
+-md5 2d25158ccffaa843c9e4943bbe820ce2 barebox-2019.12.0.tar.bz2
++md5  2d25158ccffaa843c9e4943bbe820ce2  barebox-2019.12.0.tar.bz2
  
- config BR2_KERNEL_HEADERS_4_4
- 	bool "Linux 4.4.x kernel headers"
-@@ -52,6 +53,7 @@ config BR2_KERNEL_HEADERS_4_19
- config BR2_KERNEL_HEADERS_5_4
- 	bool "Linux 5.4.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
- 	bool "Manually specified Linux version"
-@@ -83,6 +85,10 @@ config BR2_KERNEL_HEADERS_CUSTOM_GIT
- 
- endchoice
- 
-+# Select this for the latest kernel headers ersion (for licenses hashes)
-+config BR2_KERNEL_HEADERS_LATEST
-+	bool
+ # Locally calculated
+-sha256 fb77afc5c1a9783b8e1a9bb6c617973f5c0ed4c6f8e079f96cb7e7e0818a7a90 barebox-2019.12.0.tar.bz2
++sha256  fb77afc5c1a9783b8e1a9bb6c617973f5c0ed4c6f8e079f96cb7e7e0818a7a90  barebox-2019.12.0.tar.bz2
 +
- config BR2_DEFAULT_KERNEL_VERSION
- 	string "linux version"
- 	depends on BR2_KERNEL_HEADERS_VERSION
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 676c8c44ea..2b7879c62f 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -91,7 +91,12 @@ endif
- LINUX_HEADERS_DL_SUBDIR = linux
++# License files, locally computed
++sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 52178d89c8..f11f9950d1 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -33,7 +33,9 @@ endif
  
- LINUX_HEADERS_LICENSE = GPL-2.0
--LINUX_HEADERS_LICENSE_FILES = COPYING
-+ifeq ($(BR2_KERNEL_HEADERS_LATEST),y)
-+LINUX_HEADERS_LICENSE_FILES = \
-+	COPYING \
-+	LICENSES/preferred/GPL-2.0 \
-+	LICENSES/exceptions/Linux-syscall-note
+ $(1)_DEPENDENCIES = host-lzop
+ $(1)_LICENSE = GPL-2.0 with exceptions
++ifeq ($(BR2_TARGET_BAREBOX_LATEST_VERSION),y)
+ $(1)_LICENSE_FILES = COPYING
 +endif
  
- LINUX_HEADERS_INSTALL_STAGING = YES
+ $(1)_CUSTOM_EMBEDDED_ENV_PATH = $$(call qstrip,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV_PATH))
  
 -- 
 2.20.1
