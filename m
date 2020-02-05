@@ -1,43 +1,37 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 5 Feb 2020 20:27:30 +0100
-Subject: [Buildroot] [PATCH] utils/check-package: add a check for the
- separation in the hash files
-In-Reply-To: <20200205170729.GI3131@scaer>
-References: <20200204103836.7730-1-heiko.thiery@gmail.com>
- <20200205170729.GI3131@scaer>
-Message-ID: <CAEyMn7Y_3eGyNY-BezPd9NvHox3tr7-BeLZuAYJodWTe-4zLTw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Feb 2020 20:28:33 +0100
+Subject: [Buildroot] [git commit] package/xen: fix hash of license file
+Message-ID: <20200205191739.332A68D375@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f17792ed53e1dedb2938abb2ada90f8cb5a50356
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The script now throwsa traceback:
->
->     $ make check-package
->     [lots of output...]
->     Traceback (most recent call last):
->       File "./utils/check-package", line 194, in <module>
->         __main__()
->       File "./utils/check-package", line 177, in __main__
->         nwarnings, nlines = check_file_using_lib(fname)
->       File "./utils/check-package", line 146, in check_file_using_lib
->         nwarnings += print_warnings(cf.check_line(lineno + 1, text))
->       File "/home/ymorin/dev/buildroot/buildroot/utils/checkpackagelib/lib_hash.py", line 57, in check_line
->         if not re.match("^{}  {}  {}.*$".format(htype, hexa, filename), text):
->       File "/usr/lib/python2.7/re.py", line 141, in match
->         return _compile(pattern, flags).match(string)
->       File "/usr/lib/python2.7/re.py", line 251, in _compile
->         raise error, v # invalid expression
->     sre_constants.error: multiple repeat
->     make: *** [Makefile:1185: check-package] Error 1
->
-> Care to have a look at it?
+Xen was bumped from 4.12 to 4.13 in commit
+268e5689b5219890df8cec6e77f8783a8d1f95a3, but the license file hash
+was not updated. However, the license file has changed, with a new
+paragraph about the Sphinx documentation being licensed under CC-BY
+4.0 was added.  Update the SHA to match the new license.
 
-Yes I see it .. the string has to be escaped .. I will prepare that
-and send a patch.
+Take this opportunity to re-align the hashes.
 
---
-Heiko
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xen/xen.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index 22a6083d9b..4224924652 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 c69ae21b2ddeaf25532a81a448fcc6a218bc56f93c8907b2d416b2d4339c0afe xen-4.13.0.tar.gz
+-sha256 dba0d79260259c013c52e5d4daeaea564a2fbb9ff7fc6778c377a401ec3898de COPYING
++sha256  c69ae21b2ddeaf25532a81a448fcc6a218bc56f93c8907b2d416b2d4339c0afe  xen-4.13.0.tar.gz
++sha256  36b91794c6d4a678137c70c41e384c03b552c7efba82c0d73e6be842e41ab3d3  COPYING
