@@ -1,102 +1,55 @@
-From: Refik Tuzakli <tuzakli.refik@gmail.com>
-Date: Wed, 5 Feb 2020 21:44:36 +0300
-Subject: [Buildroot] [PATCH v2 5/7] package/freescale-imx/imx-gpu-viv:
- bump to version 6.4.0.p1.0
-In-Reply-To: <20200205174803.143caa52@windsurf>
-References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
- <20200203193155.12657-5-tuzakli.refik@gmail.com>
- <20200204231052.350677e5@windsurf>
- <CADCpmyPFFQO+0m3gK_825QHAMN18SeCOSLFFnyzswniZt5qN3Q@mail.gmail.com>
- <20200205174803.143caa52@windsurf>
-Message-ID: <CAMWBNu6Gnqxh+_fPzFJL6Tda3g=dWpcwkj0pH9TkPT-VutxKYQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 05 Feb 2020 19:09:09 +0000
+Subject: [Buildroot] [Bug 12546] New: Ninja 1.10 build Error
+Message-ID: <bug-12546-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=12546
+
+            Bug ID: 12546
+           Summary: Ninja 1.10 build Error
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: damian.tometzki at familie-tometzki.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
 Hello,
 
-Have nice vacation, Gary.
+i got with the actual buildroot git master the following error in step 
+building ninja 1.10:
 
-we don't need mesa3d to  work with opengl, opencl... if we use vivante
-dirver by NXP. it is  closed source and has limitations.
-For imx8 families it drops X11 and framebuffer backend for opengl support.
-Unfortunately, Gary is right. Instead of supporting mesa3d to enable it for
-imx users, they overwrite the opengl libraries in Yocto Project.
-There is etnaviv driver to use directly with mesa3d without any vivante
-driver. However it is new for gpu on imx8 families.
-So I can not make it work on imx8qxp.
+Make Error at CMakeLists.txt:124 (target_link_libraries):
+  Target "libninja-re2c" of type OBJECT_LIBRARY may not be linked into
+  another target.  One may link only to INTERFACE, STATIC or SHARED
+  libraries, or to executables with the ENABLE_EXPORTS property set.
 
-Thomas was right about opengl framebuffer backend. Now NXP does not supply
-libGL-fb on imx-gpu-viv-6.4.0.p1.0.
-It is buggy gpu driver for 32 bit architecture(imx6 familes). In Yocto
-project, they solve the problem by creating dummy libGL.so for framebuffer
-backend.
-It is also weird. I gues we need to wait for better gpu driver.
 
-Now I make weston and wayland work with vivante 6.4.0.p1.0 version on the
-opengl wayland backend. However,
-Freescale firmware is need to rearrange because after 6.4.0 there are
-neural network, openvx and vulkan support.
-If we add all these support, they occupy more than 125MB. I guess it is too
-much to allocate such space for libraries that we don't need.
+CMake Error at CMakeLists.txt:124 (target_link_libraries):
+  Target "libninja" of type OBJECT_LIBRARY may not be linked into another
+  target.  One may link only to INTERFACE, STATIC or SHARED libraries, or to
+  executables with the ENABLE_EXPORTS property set.
 
-Apart from freescale firmware, I plan to update weston for imx. I saw a
-discussion about it on Buildroot, too.
 
-I work on imx8qxp mek board by NXP. I only test wayland weston on it.
+CMake Error at CMakeLists.txt:124 (target_link_libraries):
+  Target "libninja-re2c" of type OBJECT_LIBRARY may not be linked into
+  another target.  One may link only to INTERFACE, STATIC or SHARED
+  libraries, or to executables with the ENABLE_EXPORTS property set.
 
-It wasn't me because I am almost new to contribute to Buildroot :)
-
-I have some experience about imx8 and  want to share.
-
-Cheers,
-
-On Wed, Feb 5, 2020 at 7:48 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> Hello,
->
-> On Wed, 5 Feb 2020 16:54:15 +0100
-> Gary Bisson <bisson.gary@gmail.com> wrote:
->
-> > I'm on vacation this week without any laptop around so my answer will
-> most
-> > likely be inaccurate.
->
-> Thanks, enjoy your vacations! :-)
->
-> > But I'll try off the top of my head:
-> > - the main goal was to copy the yocto recipe for the build cmds, the
-> links
-> > commands should match more or less
-> > - but openGL was indeed never properly supported anyway since it required
-> > to build mesa3d but overwrite the libGL library at the end (what was done
-> > by yocto at the time) which wasn't supported in BR
->
-> Argh. Horrible. Why do they do that ?
->
-> > - the only person I know who added some kind of openGL support in
-> Buildroot
-> > is you ;) (I recall a "imx-fix" branch in FE git server)
->
-> Me Thomas, or Refik ? I might have submitted some OpenGL changes a
-> while ago, but I'm certainly not the only one.
->
-> Well, OK, if we want full OpenGL support with imx-gpu-viv, some more
-> work is needed I believe, including actual testing on the target.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
-
+Best regards
+Damian
 
 -- 
-Refik Tuzakl?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200205/ebd472aa/attachment.html>
+You are receiving this mail because:
+You are on the CC list for the bug.
