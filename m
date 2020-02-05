@@ -1,122 +1,137 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Wed, 5 Feb 2020 16:56:43 +0100
-Subject: [Buildroot] [git commit] package/pkg-meson.mk: refactor flags
- substitution with make-comma-list
-Message-ID: <20200205155417.B4EA38CAA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/meson: add upstream patch to
+ support pkg_config_libdir
+Message-ID: <20200205155417.BF8FF8CAA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b05224d0c0f44a354336e8a445dfe876f8ac555
+commit: https://git.buildroot.net/buildroot/commit/?id=339fe6742e44bbbd173bc30956dc517f141837df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pkg-meson defines variables _MESON_SED_CFLAGS, _MESON_SED_LDFLAGS and
-_MESON_SED_CXXFLAGS that reformat the make-style flags (space-separated
-and unquoted) as meson-style flags (comma-separated and double-quoted).
-Similar variables are also defined in meson.mk. A future patch will add
-even more similar cases.
+To allow meson to distinguish between pkg-config for host (= native)
+and pkg-config for target (= cross), we want to be able to give a
+different pkg_config_libdir for host and for target. meson already has a
+'sys_root' option that sets the sysroot that is used by pkg-config, but
+we also need explicit search directories for pkg-config.
 
-However, we already have a macro that does something similar for
-generating JSON output: make-comma-list. So let's use that. However,
-make-comma-list doesn't add all the shell-expanded magic like
-_MESON_SED_CFLAGS, which results in the double quotes being removed by
-the shell. Therefore, we also need to change the quoting around it to
-single quotes instead of double quotes. For consistency, the quotes of
-the other sed expressions are changed as well. Except for the
-_MESON_EXTRA_BINARIES: the values set by packages (e.g. mesa3d) already
-contain single quotes, so changing the surrounding double quotes to
-single quotes would break them.
+Therefore, back-port an upstream patch (will be included in 0.54) that
+adds this feature.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[yann.morin.1998 at free.fr: slight fix in commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/meson/meson.mk |  4 ----
- package/pkg-meson.mk   | 42 +++++++++++++++++++-----------------------
- 2 files changed, 19 insertions(+), 27 deletions(-)
+ ...-envconfig-add-pkg_config_libdir-property.patch | 102 +++++++++++++++++++++
+ 1 file changed, 102 insertions(+)
 
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index e51e76d1c0..810c84690a 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -45,10 +45,6 @@ else
- HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
- endif
- 
--HOST_MESON_SED_CFLAGS = $(if $(strip $(TARGET_CFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
--HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
--HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
--
- # Avoid interpreter shebang longer than 128 chars
- define HOST_MESON_SET_INTERPRETER
- 	$(SED) '1s:.*:#!/usr/bin/env python3:' $(HOST_DIR)/bin/meson
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index e7eea2aa58..1f3aaadf5d 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -61,24 +61,20 @@ $(2)_CFLAGS ?= $$(TARGET_CFLAGS)
- $(2)_LDFLAGS ?= $$(TARGET_LDFLAGS)
- $(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
- 
--$(2)_MESON_SED_CFLAGS = $$(if $$(strip $$($(2)_CFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CFLAGS)`)
--$(2)_MESON_SED_LDFLAGS = $$(if $$(strip $$($(2)_LDFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_LDFLAGS)`)
--$(2)_MESON_SED_CXXFLAGS = $$(if $$(strip $$($(2)_CXXFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CXXFLAGS)`)
--
- # Configure package for target
- #
- #
- define $(2)_CONFIGURE_CMDS
- 	rm -rf $$($$(PKG)_SRCDIR)/build
- 	mkdir -p $$($$(PKG)_SRCDIR)/build
--	sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
--	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
--	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
--	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
--	    -e "s%@TARGET_CFLAGS@%$$($(2)_MESON_SED_CFLAGS)%g" \
--	    -e "s%@TARGET_LDFLAGS@%$$($(2)_MESON_SED_LDFLAGS)%g" \
--	    -e "s%@TARGET_CXXFLAGS@%$$($(2)_MESON_SED_CXXFLAGS)%g" \
--	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
-+	sed -e 's%@TARGET_CROSS@%$$(TARGET_CROSS)%g' \
-+	    -e 's%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g' \
-+	    -e 's%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g' \
-+	    -e 's%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g' \
-+	    -e 's%@TARGET_CFLAGS@%$$(call make-comma-list,$$($(2)_CFLAGS))%g' \
-+	    -e 's%@TARGET_LDFLAGS@%$$(call make-comma-list,$$($(2)_LDFLAGS))%g' \
-+	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
-+	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
- 	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
- 	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
- 	    ) \
-@@ -188,19 +184,19 @@ host-meson-package = $(call inner-meson-package,host-$(pkgname),$(call UPPERCASE
- # own flags if they need to.
- define PKG_MESON_INSTALL_CROSS_CONF
- 	mkdir -p $(HOST_DIR)/etc/meson
--	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
--	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
--	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
--	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
--	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)@PKG_TARGET_CFLAGS@%g" \
--	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)@PKG_TARGET_CFLAGS@%g" \
--	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)@PKG_TARGET_CFLAGS@%g" \
--	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-+	sed -e 's%@TARGET_CROSS@%$(TARGET_CROSS)%g' \
-+	    -e 's%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g' \
-+	    -e 's%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g' \
-+	    -e 's%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g' \
-+	    -e 's%@TARGET_CFLAGS@%$(call make-comma-list,$(TARGET_CFLAGS))@PKG_TARGET_CFLAGS@%g' \
-+	    -e 's%@TARGET_LDFLAGS@%$(call make-comma-list,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g' \
-+	    -e 's%@TARGET_CXXFLAGS@%$(call make-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g' \
-+	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
--	sed -e "s%@PKG_TARGET_CFLAGS@%%g" \
--	    -e "s%@PKG_TARGET_LDFLAGS@%%g" \
--	    -e "s%@PKG_TARGET_CXXFLAGS@%%g" \
-+	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
-+	    -e 's%@PKG_TARGET_LDFLAGS@%%g' \
-+	    -e 's%@PKG_TARGET_CXXFLAGS@%%g' \
- 	    $(HOST_DIR)/etc/meson/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
- endef
+diff --git a/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
+new file mode 100644
+index 0000000000..ae40ab8b1c
+--- /dev/null
++++ b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
+@@ -0,0 +1,102 @@
++From 3af920cb4a9c272b9b75a4f3eea9da9000520949 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?St=C3=A9phane=20Cerveau?= <scerveau@collabora.com>
++Date: Tue, 14 Jan 2020 11:11:52 +0100
++Subject: [PATCH] envconfig: add pkg_config_libdir property
++
++In order to unify the use of sysroot in the cross-file,
++the pkg_config_libdir can now be passed directly in the file.
++
++Upstream: 958df63dac810246e84c2b8eaa32d22d19ace0ef
++[Arnout: remove documentation changes: we don't extract docs/]
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ mesonbuild/dependencies/base.py |  6 ++++++
++ mesonbuild/envconfig.py         |  6 ++++++
++ run_unittests.py                | 30 +++++++++++++++++++++++++++++-
++ 3 files changed, 41 insertions(+), 1 deletion(-)
++
++diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
++index 40e304c7..282c314b 100644
++--- a/mesonbuild/dependencies/base.py
+++++ b/mesonbuild/dependencies/base.py
++@@ -697,6 +697,12 @@ class PkgConfigDependency(ExternalDependency):
++         mlog.debug('PKG_CONFIG_PATH: ' + new_pkg_config_path)
++         env['PKG_CONFIG_PATH'] = new_pkg_config_path
++ 
+++        pkg_config_libdir_prop = self.env.properties[self.for_machine].get_pkg_config_libdir()
+++        if pkg_config_libdir_prop:
+++            new_pkg_config_libdir = ':'.join([p for p in pkg_config_libdir_prop])
+++            env['PKG_CONFIG_LIBDIR'] = new_pkg_config_libdir
+++            mlog.debug('PKG_CONFIG_LIBDIR: ' + new_pkg_config_libdir)
+++
++         fenv = frozenset(env.items())
++         targs = tuple(args)
++         cache = PkgConfigDependency.pkgbin_cache
++diff --git a/mesonbuild/envconfig.py b/mesonbuild/envconfig.py
++index c8a37f4c..3e5e44b8 100644
++--- a/mesonbuild/envconfig.py
+++++ b/mesonbuild/envconfig.py
++@@ -143,6 +143,12 @@ class Properties(HasEnvVarFallback):
++     def get_sys_root(self) -> T.Optional[T.Union[str, T.List[str]]]:
++         return self.properties.get('sys_root', None)
++ 
+++    def get_pkg_config_libdir(self) -> T.Optional[T.List[str]]:
+++        p = self.properties.get('pkg_config_libdir', None)
+++        if p is None:
+++            return p
+++        return mesonlib.listify(p)
+++
++     def __eq__(self, other: T.Any) -> 'T.Union[bool, NotImplemented]':
++         if isinstance(other, type(self)):
++             return self.properties == other.properties
++diff --git a/run_unittests.py b/run_unittests.py
++index 676604f4..382c0964 100755
++--- a/run_unittests.py
+++++ b/run_unittests.py
++@@ -3621,6 +3621,34 @@ recommended as it is not supported on some platforms''')
++         self.wipe()
++         self.init(testdir, extra_args=['-Dstart_native=true'], override_envvars=env)
++ 
+++    @skipIfNoPkgconfig
+++    @unittest.skipIf(is_windows(), 'Help needed with fixing this test on windows')
+++    def test_pkg_config_libdir(self):
+++        testdir = os.path.join(self.unit_test_dir,
+++                               '46 native dep pkgconfig var')
+++        with tempfile.NamedTemporaryFile(mode='w', delete=False) as crossfile:
+++            crossfile.write(textwrap.dedent(
+++                '''[binaries]
+++                pkgconfig = 'pkg-config'
+++
+++                [properties]
+++                pkg_config_libdir = [r'{0}']
+++
+++                [host_machine]
+++                system = 'linux'
+++                cpu_family = 'arm'
+++                cpu = 'armv7'
+++                endian = 'little'
+++                '''.format(os.path.join(testdir, 'cross_pkgconfig'))))
+++            crossfile.flush()
+++            self.meson_cross_file = crossfile.name
+++
+++        env = {'PKG_CONFIG_LIBDIR':  os.path.join(testdir,
+++                                                  'native_pkgconfig')}
+++        self.init(testdir, extra_args=['-Dstart_native=false'], override_envvars=env)
+++        self.wipe()
+++        self.init(testdir, extra_args=['-Dstart_native=true'], override_envvars=env)
+++
++     def __reconfigure(self, change_minor=False):
++         # Set an older version to force a reconfigure from scratch
++         filename = os.path.join(self.privatedir, 'coredata.dat')
++@@ -6847,7 +6875,7 @@ class NativeFileTests(BasePlatformTests):
++ 
++ class CrossFileTests(BasePlatformTests):
++ 
++-    """Tests for cross file functioality not directly related to
+++    """Tests for cross file functionality not directly related to
++     cross compiling.
++ 
++     This is mainly aimed to testing overrides from cross files.
++-- 
++2.24.1
++
