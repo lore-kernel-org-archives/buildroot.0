@@ -1,82 +1,122 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Wed, 5 Feb 2020 16:56:43 +0100
-Subject: [Buildroot] [git commit] package/pkg-meson.mk: explicitly specify
- pkg-config settings
-Message-ID: <20200205155417.CB1FF83A52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-meson.mk: refactor flags
+ substitution with make-comma-list
+Message-ID: <20200205155417.B4EA38CAA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e0bc29993376613d200e892d491e31ea5a49622
+commit: https://git.buildroot.net/buildroot/commit/?id=1b05224d0c0f44a354336e8a445dfe876f8ac555
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-meson is able to distinguish between host (= native) and target (=
-cross) compilation. It will explicitly pass different options to
-pkg-config to distinguish them. Therefore, we don't need to use the
-pkg-config wrapper when using meson, and can instead pass the pkg-config
-settings through the cross-compilation.conf.
+pkg-meson defines variables _MESON_SED_CFLAGS, _MESON_SED_LDFLAGS and
+_MESON_SED_CXXFLAGS that reformat the make-style flags (space-separated
+and unquoted) as meson-style flags (comma-separated and double-quoted).
+Similar variables are also defined in meson.mk. A future patch will add
+even more similar cases.
 
-This is important because in some situations (e.g. for the Python
-configuration), meson sets the PKG_CONFIG_LIBDIR variable to a different
-value before calling pkg-config. Relying on our wrapper script doesn't
-work in that case (except if the script would unconditionally set
-PKG_CONFIG_LIBDIR, which it doesn't do at the moment).
-
-Add the sys_root and pkg_config_lib settings to cross-compilation.conf
-and use pkgconf directly instead of the wrapper.
-
-Note that this requires us to substitute STAGING_DIR as well, with an
-absolute path. This is not a big deal since cross-compilation.conf is
-regenerated for every package.
+However, we already have a macro that does something similar for
+generating JSON output: make-comma-list. So let's use that. However,
+make-comma-list doesn't add all the shell-expanded magic like
+_MESON_SED_CFLAGS, which results in the double quotes being removed by
+the shell. Therefore, we also need to change the quoting around it to
+single quotes instead of double quotes. For consistency, the quotes of
+the other sed expressions are changed as well. Except for the
+_MESON_EXTRA_BINARIES: the values set by packages (e.g. mesa3d) already
+contain single quotes, so changing the surrounding double quotes to
+single quotes would break them.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[yann.morin.1998 at free.fr: slight fix in commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/meson/cross-compilation.conf.in | 4 +++-
- package/pkg-meson.mk                    | 2 ++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/meson/meson.mk |  4 ----
+ package/pkg-meson.mk   | 42 +++++++++++++++++++-----------------------
+ 2 files changed, 19 insertions(+), 27 deletions(-)
 
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index fc8e27f7eb..369e225b3e 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -8,7 +8,7 @@ c = '@TARGET_CROSS at gcc'
- cpp = '@TARGET_CROSS at g++'
- ar = '@TARGET_CROSS at ar'
- strip = '@TARGET_CROSS at strip'
--pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-+pkgconfig = '@HOST_DIR@/bin/pkgconf'
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index e51e76d1c0..810c84690a 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -45,10 +45,6 @@ else
+ HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
+ endif
  
- [properties]
- needs_exe_wrapper = true
-@@ -16,6 +16,8 @@ c_args = [@TARGET_CFLAGS@]
- c_link_args = [@TARGET_LDFLAGS@]
- cpp_args = [@TARGET_CXXFLAGS@]
- cpp_link_args = [@TARGET_LDFLAGS@]
-+sys_root = '@STAGING_DIR@'
-+pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
- 
- [host_machine]
- system = 'linux'
+-HOST_MESON_SED_CFLAGS = $(if $(strip $(TARGET_CFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
+-HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+-HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+-
+ # Avoid interpreter shebang longer than 128 chars
+ define HOST_MESON_SET_INTERPRETER
+ 	$(SED) '1s:.*:#!/usr/bin/env python3:' $(HOST_DIR)/bin/meson
 diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 1f3aaadf5d..642b715938 100644
+index e7eea2aa58..1f3aaadf5d 100644
 --- a/package/pkg-meson.mk
 +++ b/package/pkg-meson.mk
-@@ -75,6 +75,7 @@ define $(2)_CONFIGURE_CMDS
- 	    -e 's%@TARGET_LDFLAGS@%$$(call make-comma-list,$$($(2)_LDFLAGS))%g' \
- 	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
- 	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
-+	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
+@@ -61,24 +61,20 @@ $(2)_CFLAGS ?= $$(TARGET_CFLAGS)
+ $(2)_LDFLAGS ?= $$(TARGET_LDFLAGS)
+ $(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
+ 
+-$(2)_MESON_SED_CFLAGS = $$(if $$(strip $$($(2)_CFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CFLAGS)`)
+-$(2)_MESON_SED_LDFLAGS = $$(if $$(strip $$($(2)_LDFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_LDFLAGS)`)
+-$(2)_MESON_SED_CXXFLAGS = $$(if $$(strip $$($(2)_CXXFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CXXFLAGS)`)
+-
+ # Configure package for target
+ #
+ #
+ define $(2)_CONFIGURE_CMDS
+ 	rm -rf $$($$(PKG)_SRCDIR)/build
+ 	mkdir -p $$($$(PKG)_SRCDIR)/build
+-	sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
+-	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+-	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
+-	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
+-	    -e "s%@TARGET_CFLAGS@%$$($(2)_MESON_SED_CFLAGS)%g" \
+-	    -e "s%@TARGET_LDFLAGS@%$$($(2)_MESON_SED_LDFLAGS)%g" \
+-	    -e "s%@TARGET_CXXFLAGS@%$$($(2)_MESON_SED_CXXFLAGS)%g" \
+-	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
++	sed -e 's%@TARGET_CROSS@%$$(TARGET_CROSS)%g' \
++	    -e 's%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g' \
++	    -e 's%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g' \
++	    -e 's%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g' \
++	    -e 's%@TARGET_CFLAGS@%$$(call make-comma-list,$$($(2)_CFLAGS))%g' \
++	    -e 's%@TARGET_LDFLAGS@%$$(call make-comma-list,$$($(2)_LDFLAGS))%g' \
++	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
++	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
  	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
  	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
  	    ) \
-@@ -192,6 +193,7 @@ define PKG_MESON_INSTALL_CROSS_CONF
- 	    -e 's%@TARGET_LDFLAGS@%$(call make-comma-list,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g' \
- 	    -e 's%@TARGET_CXXFLAGS@%$(call make-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g' \
- 	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
-+	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
+@@ -188,19 +184,19 @@ host-meson-package = $(call inner-meson-package,host-$(pkgname),$(call UPPERCASE
+ # own flags if they need to.
+ define PKG_MESON_INSTALL_CROSS_CONF
+ 	mkdir -p $(HOST_DIR)/etc/meson
+-	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+-	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+-	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
+-	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
+-	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)@PKG_TARGET_CFLAGS@%g" \
+-	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)@PKG_TARGET_CFLAGS@%g" \
+-	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)@PKG_TARGET_CFLAGS@%g" \
+-	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
++	sed -e 's%@TARGET_CROSS@%$(TARGET_CROSS)%g' \
++	    -e 's%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g' \
++	    -e 's%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g' \
++	    -e 's%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g' \
++	    -e 's%@TARGET_CFLAGS@%$(call make-comma-list,$(TARGET_CFLAGS))@PKG_TARGET_CFLAGS@%g' \
++	    -e 's%@TARGET_LDFLAGS@%$(call make-comma-list,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g' \
++	    -e 's%@TARGET_CXXFLAGS@%$(call make-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g' \
++	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
  	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
  	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
- 	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
+-	sed -e "s%@PKG_TARGET_CFLAGS@%%g" \
+-	    -e "s%@PKG_TARGET_LDFLAGS@%%g" \
+-	    -e "s%@PKG_TARGET_CXXFLAGS@%%g" \
++	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
++	    -e 's%@PKG_TARGET_LDFLAGS@%%g' \
++	    -e 's%@PKG_TARGET_CXXFLAGS@%%g' \
+ 	    $(HOST_DIR)/etc/meson/cross-compilation.conf.in \
+ 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
+ endef
