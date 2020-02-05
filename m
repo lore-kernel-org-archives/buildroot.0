@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Feb 2020 20:28:33 +0100
-Subject: [Buildroot] [git commit] package/xen: fix hash of license file
-Message-ID: <20200205191739.332A68D375@busybox.osuosl.org>
+Date: Wed, 5 Feb 2020 20:32:57 +0100
+Subject: [Buildroot] [PATCH] package/rng-tools: make jitterentropy
+ conditional
+In-Reply-To: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
+References: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20200205203257.48877881@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f17792ed53e1dedb2938abb2ada90f8cb5a50356
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed,  5 Feb 2020 12:26:08 -0600
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-Xen was bumped from 4.12 to 4.13 in commit
-268e5689b5219890df8cec6e77f8783a8d1f95a3, but the license file hash
-was not updated. However, the license file has changed, with a new
-paragraph about the Sphinx documentation being licensed under CC-BY
-4.0 was added.  Update the SHA to match the new license.
+> The update of rng-tools from 5 to 6.7 introduced a change where
+> the jitterentropy library was enabled by default instead of
+> returning a special 66 return code to hangle the case of no
+> hwrng. This patch reverts that change and allows a user to
+> select when to enable the jitterentropy source. The bug
+> documents an issue of when a hwrng is enabled with jitterentropy
+> there is a longer boot time.
 
-Take this opportunity to re-align the hashes.
+I don't understand this story of the 66 return code. Could you explain
+a bit more ?
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/xen/xen.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> index 11386d1e5d..c0bcffe59e 100644
+> --- a/package/rng-tools/rngd.service
+> +++ b/package/rng-tools/rngd.service
+> @@ -3,6 +3,7 @@ Description=Hardware RNG Entropy Gatherer Daemon
+>  
+>  [Service]
+>  ExecStart=/usr/sbin/rngd -f $DAEMON_ARGS
+> +SuccessExitStatus=66
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index 22a6083d9b..4224924652 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 c69ae21b2ddeaf25532a81a448fcc6a218bc56f93c8907b2d416b2d4339c0afe xen-4.13.0.tar.gz
--sha256 dba0d79260259c013c52e5d4daeaea564a2fbb9ff7fc6778c377a401ec3898de COPYING
-+sha256  c69ae21b2ddeaf25532a81a448fcc6a218bc56f93c8907b2d416b2d4339c0afe  xen-4.13.0.tar.gz
-+sha256  36b91794c6d4a678137c70c41e384c03b552c7efba82c0d73e6be842e41ab3d3  COPYING
+Will this work even if jitterentropy support is enabled ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
