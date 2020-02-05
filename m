@@ -1,40 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Feb 2020 20:32:57 +0100
-Subject: [Buildroot] [PATCH] package/rng-tools: make jitterentropy
- conditional
-In-Reply-To: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
-References: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20200205203257.48877881@windsurf>
+Date: Wed, 5 Feb 2020 20:33:06 +0100
+Subject: [Buildroot] [PATCH] package/xen: Fix COPYING sha256sum
+In-Reply-To: <20200205173317.20745-1-alistair.francis@wdc.com>
+References: <20200205173317.20745-1-alistair.francis@wdc.com>
+Message-ID: <20200205203306.5148e29f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  5 Feb 2020 12:26:08 -0600
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+On Wed,  5 Feb 2020 09:33:17 -0800
+Alistair Francis <alistair.francis@wdc.com> wrote:
 
-> The update of rng-tools from 5 to 6.7 introduced a change where
-> the jitterentropy library was enabled by default instead of
-> returning a special 66 return code to hangle the case of no
-> hwrng. This patch reverts that change and allows a user to
-> select when to enable the jitterentropy source. The bug
-> documents an issue of when a hwrng is enabled with jitterentropy
-> there is a longer boot time.
+> The COPYING file was updated between 4.12 and 4.13 as a new paragraph
+> about the Sphinx documentation being licensed under CC-BY 4.0 was added.
+> Update the SHA to match the new license.
+> 
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> ---
+>  package/xen/xen.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-I don't understand this story of the 66 return code. Could you explain
-a bit more ?
-
-> index 11386d1e5d..c0bcffe59e 100644
-> --- a/package/rng-tools/rngd.service
-> +++ b/package/rng-tools/rngd.service
-> @@ -3,6 +3,7 @@ Description=Hardware RNG Entropy Gatherer Daemon
->  
->  [Service]
->  ExecStart=/usr/sbin/rngd -f $DAEMON_ARGS
-> +SuccessExitStatus=66
-
-Will this work even if jitterentropy support is enabled ?
+Applied to master, thanks.
 
 Thomas
 -- 
