@@ -1,28 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Feb 2020 16:44:45 +0100
-Subject: [Buildroot] [PATCH 1/2] docs/website/sponsors.html: move Smile
- to past sponsors
-In-Reply-To: <20200205142631.6937-1-peter@korsgaard.com>
-References: <20200205142631.6937-1-peter@korsgaard.com>
-Message-ID: <20200205164445.4412ff93@windsurf>
+Date: Wed, 5 Feb 2020 16:45:54 +0100
+Subject: [Buildroot] [PATCH] package/gr-osmosdr: fix dependencies
+In-Reply-To: <1580914682-11394-1-git-send-email-gwenj@trabucayre.com>
+References: <1580914682-11394-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20200205164554.78333fdd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  5 Feb 2020 15:26:30 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Wed,  5 Feb 2020 15:58:02 +0100
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
 
-> The new text is unfortunately too long to fit in the box, so bump the
-> height to 400px for the top row.
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  docs/website/sponsors.html | 36 ++++++++----------------------------
->  1 file changed, 8 insertions(+), 28 deletions(-)
+> gr-osmosdr fails with:
+> CMake Error at /somewhere/buildroot/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/cmake/gnuradio/GnuradioConfig.cmake:116 (include):
+>   include could not find load file:
+> 
+>     /somewhere/buildroot/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/cmake/gnuradio/gnuradio-filterConfig.cmake
+> Call Stack (most recent call first):
+>   CMakeLists.txt:45 (find_package)
+> 
+> gr-osmosdr depends on BR2_PACKAGE_GNURADIO_BLOCKS, BR2_PACKAGE_GNURADIO_FFT and
+> BR2_PACKAGE_GNURADIO_FILTER.
 
-Both applied. Thanks!
+If it really needs these three features directly, we want gr-osmodr to
+select all three options, not just one that happens to internally imply
+the two others.
+
+Thanks!
 
 Thomas
 -- 
