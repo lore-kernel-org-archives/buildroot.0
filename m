@@ -1,31 +1,58 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 5 Feb 2020 16:05:59 +0100
-Subject: [Buildroot] ninja 1.10.0: build issue
-In-Reply-To: <CAGm1_ktqUWDo8Wjq_QEXTxx17H9UkJS0hxY869X16Fka_wz8mQ@mail.gmail.com>
-References: <CAGm1_ktqUWDo8Wjq_QEXTxx17H9UkJS0hxY869X16Fka_wz8mQ@mail.gmail.com>
-Message-ID: <CAGm1_ktcB65mOnipJ=xbnKjBxjW8bWRNLvrxhHXZCycAepGCSA@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed,  5 Feb 2020 16:08:42 +0100
+Subject: [Buildroot] [PATCH] docs/website: add commercial support section
+ with Mind
+Message-ID: <20200205150842.3511395-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 5, 2020 at 12:47 PM Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
->
-> I have a strange issue when building host-ninja. CMake complains about
-> wrong OBJECT library usage. This upstream PR [1] fixes the issue for
-> me.
->
-> CMake was also complaining about the missing re2c tool.
->
-> Am I the only one having these issues?
->
-> [1] https://github.com/ninja-build/ninja/pull/1731
+Add a section to the support page for commercial support.
 
-The ninja maintainer refused to take the patch.
+Add Mind, Bootlin and Smile in that section.
 
-On my Debian 10 system I have a host CMake 3.13.4 and it has no
-problems with object libraries.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ docs/website/support.html | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-Yegor
+diff --git a/docs/website/support.html b/docs/website/support.html
+index 1a5ce9e225..6c602b42d2 100644
+--- a/docs/website/support.html
++++ b/docs/website/support.html
+@@ -92,6 +92,31 @@
+     </div>
+   </div>
+ 
++  <div class="panel panel-primary">
++    <div class="panel-heading">Commercial support</div>
++    <div class="panel-body">
++      <p>In addition, the following companies are able to provide commercial
++	 support. Only companies heavily involved in Buildroot maintenance and
++	 community are listed here.</p>
++
++      <div class="row">
++	<div class="col-sm-12">
++	  <center>
++	    <a href="https://bootlin.com/engineering/">
++	      <img src="images/bootlin-logo.png" style="max-width:200px; margin-right:40px;"/>
++	    </a>
++	    <a href="https://mind.be/services/buildroot.html">
++	      <img src="images/mind-logo.png" style="max-width:200px; margin-right:40px;"/>
++	    </a>
++	    <a href="https://www.smile.eu/en/offers/embedded-iot">
++	      <img src="images/smile-logo.png" style="max-width:200px; margin-right:40px;"/>
++	    </a>
++	  </center>
++	</div>
++      </div>
++    </div>
++  </div>
++
+ </div><!--/.col-sm-10 -->
+ </div><!--/.row -->
+ </div>
+-- 
+2.24.1
