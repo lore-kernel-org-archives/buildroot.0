@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  5 Feb 2020 15:48:41 +0100
-Subject: [Buildroot] [PATCH 4/6 v2] boot/barebox: license files hashes only
- valid for latest version
+Date: Wed,  5 Feb 2020 15:48:42 +0100
+Subject: [Buildroot] [PATCH 5/6 v2] boot/at91bootstrap3: license files
+ hashes only valid for latest version
 In-Reply-To: <cover.1580914115.git.yann.morin.1998@free.fr>
 References: <cover.1580914115.git.yann.morin.1998@free.fr>
-Message-ID: <74a46f7ad7c46107c84347edb01879239a7a824b.1580914115.git.yann.morin.1998@free.fr>
+Message-ID: <87654888e86275f2ac6638c64ad048c1bda172df.1580914115.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,48 +15,29 @@ We can only know the path to the license files for the known version.
 For custom, older or newer, versions may change, or may be moved
 around.
 
-So, do for U-Boot as was done for ATF, linux, and linux-headers, and
-only define the list of license files for the latest version.
-
-Add the hash for that license file, and align hashes to the new spacing
-convention.
+So, do for at91bootstrap3 as was done for other packages in the recent
+past, and only define the list of license files for the latest version.
 
 Reported-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Markus Mayer <mmayer@broadcom.com>
 ---
- boot/barebox/barebox.hash | 7 +++++--
- boot/barebox/barebox.mk   | 2 ++
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ boot/at91bootstrap3/at91bootstrap3.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 42561ea571..64fec919b8 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,8 @@
- # From https://www.barebox.org/download/barebox-2019.12.0.tar.bz2.md5
--md5 2d25158ccffaa843c9e4943bbe820ce2 barebox-2019.12.0.tar.bz2
-+md5  2d25158ccffaa843c9e4943bbe820ce2  barebox-2019.12.0.tar.bz2
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 48c3a918a1..5cf865c681 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -20,7 +20,9 @@ AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VER
+ endif
  
- # Locally calculated
--sha256 fb77afc5c1a9783b8e1a9bb6c617973f5c0ed4c6f8e079f96cb7e7e0818a7a90 barebox-2019.12.0.tar.bz2
-+sha256  fb77afc5c1a9783b8e1a9bb6c617973f5c0ed4c6f8e079f96cb7e7e0818a7a90  barebox-2019.12.0.tar.bz2
-+
-+# License files, locally computed
-+sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 52178d89c8..f11f9950d1 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -33,7 +33,9 @@ endif
- 
- $(1)_DEPENDENCIES = host-lzop
- $(1)_LICENSE = GPL-2.0 with exceptions
-+ifeq ($(BR2_TARGET_BAREBOX_LATEST_VERSION),y)
- $(1)_LICENSE_FILES = COPYING
+ AT91BOOTSTRAP3_LICENSE = Atmel License
++ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION),y)
+ AT91BOOTSTRAP3_LICENSE_FILES = main.c
 +endif
  
- $(1)_CUSTOM_EMBEDDED_ENV_PATH = $$(call qstrip,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV_PATH))
- 
+ AT91BOOTSTRAP3_INSTALL_IMAGES = YES
+ AT91BOOTSTRAP3_INSTALL_TARGET = NO
 -- 
 2.20.1
