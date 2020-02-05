@@ -1,144 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Feb 2020 17:07:02 +0100
-Subject: [Buildroot] [PATCH 1/3] package/pkg-meson.mk: refactor flags
- substitution with make-comma-list
-In-Reply-To: <20200205103304.2515942-1-arnout@mind.be>
-References: <20200205103304.2515942-1-arnout@mind.be>
-Message-ID: <20200205160702.GE3131@scaer>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 5 Feb 2020 17:07:19 +0100
+Subject: [Buildroot] [PATCH v15 0/5] package/gobject-introspection: new
+ package
+In-Reply-To: <20200204213956.2124306-1-aduskett@gmail.com>
+References: <20200204213956.2124306-1-aduskett@gmail.com>
+Message-ID: <80581602-4f4a-faa1-de3a-c9377be09dfa@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hi Adam,
 
-On 2020-02-05 11:33 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> pkg-meson defines variables _MESON_SED_CFLAGS, _MESON_SED_LDFLAGS and
-> _MESON_SED_CXXFLAGS that reformat the make-style flags (space-separated
-> and unquoted) as meson-style flags (comma-separated and double-quoted).
-> Similar variables are also defined in meson.mk. A future patch will add
-> even more similar cases.
-> 
-> However, we already have a macro that does something similar for
-> generating JSON output: make-comma-list. So let's use that. However,
-> make-comma-list doesn't add all the shell-expanded magic like
-> _MESON_SED_CFLAGS, which results in the double quotes being removed by
-> the shell. Therefore, we also need to change the quoting around it to
-> single quotes instead of double quotes. For consistency, the quotes of
-> the other sed expressions are changed as well. Except for the
-> _MESON_EXTRA_BINARIES: the values set by packages (e.g. mesa3d) already
-> contain single quotes, so changing the surrounding quotes to double
-> would break them.
+unfortunately trying to issue a ./utils/test-pkg -p 
+gobject-introspection -d ../test-gio -a results in SKIPPED for every arch.
 
-That's the opposite: changing to single quotes would break them.
+Can you give a try and tell me if it is the same for you?
 
-I fixed and applied to master, thanks.
+Thanks
 
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/meson/meson.mk |  4 ----
->  package/pkg-meson.mk   | 42 +++++++++++++++++++-----------------------
->  2 files changed, 19 insertions(+), 27 deletions(-)
-> 
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> index e51e76d1c0..810c84690a 100644
-> --- a/package/meson/meson.mk
-> +++ b/package/meson/meson.mk
-> @@ -45,10 +45,6 @@ else
->  HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
->  endif
->  
-> -HOST_MESON_SED_CFLAGS = $(if $(strip $(TARGET_CFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
-> -HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
-> -HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
-> -
->  # Avoid interpreter shebang longer than 128 chars
->  define HOST_MESON_SET_INTERPRETER
->  	$(SED) '1s:.*:#!/usr/bin/env python3:' $(HOST_DIR)/bin/meson
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index e7eea2aa58..1f3aaadf5d 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -61,24 +61,20 @@ $(2)_CFLAGS ?= $$(TARGET_CFLAGS)
->  $(2)_LDFLAGS ?= $$(TARGET_LDFLAGS)
->  $(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
->  
-> -$(2)_MESON_SED_CFLAGS = $$(if $$(strip $$($(2)_CFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CFLAGS)`)
-> -$(2)_MESON_SED_LDFLAGS = $$(if $$(strip $$($(2)_LDFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_LDFLAGS)`)
-> -$(2)_MESON_SED_CXXFLAGS = $$(if $$(strip $$($(2)_CXXFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CXXFLAGS)`)
-> -
->  # Configure package for target
->  #
->  #
->  define $(2)_CONFIGURE_CMDS
->  	rm -rf $$($$(PKG)_SRCDIR)/build
->  	mkdir -p $$($$(PKG)_SRCDIR)/build
-> -	sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
-> -	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
-> -	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
-> -	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
-> -	    -e "s%@TARGET_CFLAGS@%$$($(2)_MESON_SED_CFLAGS)%g" \
-> -	    -e "s%@TARGET_LDFLAGS@%$$($(2)_MESON_SED_LDFLAGS)%g" \
-> -	    -e "s%@TARGET_CXXFLAGS@%$$($(2)_MESON_SED_CXXFLAGS)%g" \
-> -	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
-> +	sed -e 's%@TARGET_CROSS@%$$(TARGET_CROSS)%g' \
-> +	    -e 's%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g' \
-> +	    -e 's%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g' \
-> +	    -e 's%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g' \
-> +	    -e 's%@TARGET_CFLAGS@%$$(call make-comma-list,$$($(2)_CFLAGS))%g' \
-> +	    -e 's%@TARGET_LDFLAGS@%$$(call make-comma-list,$$($(2)_LDFLAGS))%g' \
-> +	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
-> +	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
->  	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
->  	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
->  	    ) \
-> @@ -188,19 +184,19 @@ host-meson-package = $(call inner-meson-package,host-$(pkgname),$(call UPPERCASE
->  # own flags if they need to.
->  define PKG_MESON_INSTALL_CROSS_CONF
->  	mkdir -p $(HOST_DIR)/etc/meson
-> -	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
-> -	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
-> -	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
-> -	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
-> -	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)@PKG_TARGET_CFLAGS@%g" \
-> -	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)@PKG_TARGET_CFLAGS@%g" \
-> -	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)@PKG_TARGET_CFLAGS@%g" \
-> -	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-> +	sed -e 's%@TARGET_CROSS@%$(TARGET_CROSS)%g' \
-> +	    -e 's%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g' \
-> +	    -e 's%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g' \
-> +	    -e 's%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g' \
-> +	    -e 's%@TARGET_CFLAGS@%$(call make-comma-list,$(TARGET_CFLAGS))@PKG_TARGET_CFLAGS@%g' \
-> +	    -e 's%@TARGET_LDFLAGS@%$(call make-comma-list,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g' \
-> +	    -e 's%@TARGET_CXXFLAGS@%$(call make-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g' \
-> +	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
->  	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
->  	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
-> -	sed -e "s%@PKG_TARGET_CFLAGS@%%g" \
-> -	    -e "s%@PKG_TARGET_LDFLAGS@%%g" \
-> -	    -e "s%@PKG_TARGET_CXXFLAGS@%%g" \
-> +	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
-> +	    -e 's%@PKG_TARGET_LDFLAGS@%%g' \
-> +	    -e 's%@PKG_TARGET_CXXFLAGS@%%g' \
->  	    $(HOST_DIR)/etc/meson/cross-compilation.conf.in \
->  	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
->  endef
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Best regards
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Giulio Benetti
+Benetti Engineering sas
+
+On 2/4/20 10:39 PM, Adam Duskett wrote:
+> It's baaaaaaaaack.
+> 
+> Changes:
+>   - Impliment Arnouts suggestions.
+>   - Blacklist x86 steam roller and core-avx, they cause segfualts with qemu.
+>   - Pray a bit more.
+>   - Drink a LOT more.
+> 
+> This depends on Arnouts patch series:
+> https://patchwork.ozlabs.org/project/buildroot/list/?series=156716
+> https://patchwork.ozlabs.org/project/buildroot/list/?series=156749
+> 
+> Adam Duskett (5):
+>    package/libiberty: new package
+>    package/qemu: do not support x86_steamroller or x86_core_avx2
+>    package/prelink-cross: new package
+>    package/gdb: depend on libiberty
+>    package/gobject-introspection: new package
+> 
+>   DEVELOPERS                                    |   2 +
+>   package/gdb/gdb.mk                            |   4 +-
+>   ...lete-upstream-attempt-at-cross-compi.patch |  33 ++++
+>   ...d-cross-compilation-support-to-meson.patch | 163 ++++++++++++++++++
+>   .../0003-disable-tests.patch                  |  29 ++++
+>   ...canner-add-use-binary-wrapper-option.patch |  52 ++++++
+>   ...scanner-add-a-use-ldd-wrapper-option.patch |  48 ++++++
+>   ...scanner-add-a-lib-dirs-envvar-option.patch |  73 ++++++++
+>   .../0007-Add-rpath-links-to-ccompiler.patch   |  29 ++++
+>   ...-error-return-codes-from-ldd-wrapper.patch |  28 +++
+>   package/gobject-introspection/Config.in       |  33 ++++
+>   .../gobject-introspection/g-ir-compiler.in    |   2 +
+>   .../g-ir-scanner-lddwrapper.in                |   2 +
+>   .../g-ir-scanner-qemuwrapper.in               |  18 ++
+>   package/gobject-introspection/g-ir-scanner.in |   8 +
+>   .../gobject-introspection.hash                |   4 +
+>   .../gobject-introspection.mk                  | 122 +++++++++++++
+>   package/libiberty/libiberty.hash              |   2 +
+>   package/libiberty/libiberty.mk                |  27 +++
+>   package/prelink-cross/prelink-cross.hash      |   3 +
+>   package/prelink-cross/prelink-cross.mk        |  16 ++
+>   package/qemu/Config.in.host                   |   1 +
+>   22 files changed, 698 insertions(+), 1 deletion(-)
+>   create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
+>   create mode 100644 package/gobject-introspection/0002-add-cross-compilation-support-to-meson.patch
+>   create mode 100644 package/gobject-introspection/0003-disable-tests.patch
+>   create mode 100644 package/gobject-introspection/0004-giscanner-add-use-binary-wrapper-option.patch
+>   create mode 100644 package/gobject-introspection/0005-giscanner-add-a-use-ldd-wrapper-option.patch
+>   create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
+>   create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
+>   create mode 100644 package/gobject-introspection/0008-ignore-error-return-codes-from-ldd-wrapper.patch
+>   create mode 100644 package/gobject-introspection/Config.in
+>   create mode 100644 package/gobject-introspection/g-ir-compiler.in
+>   create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
+>   create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+>   create mode 100644 package/gobject-introspection/g-ir-scanner.in
+>   create mode 100644 package/gobject-introspection/gobject-introspection.hash
+>   create mode 100644 package/gobject-introspection/gobject-introspection.mk
+>   create mode 100644 package/libiberty/libiberty.hash
+>   create mode 100644 package/libiberty/libiberty.mk
+>   create mode 100644 package/prelink-cross/prelink-cross.hash
+>   create mode 100644 package/prelink-cross/prelink-cross.mk
+> 
