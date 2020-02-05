@@ -1,56 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Feb 2020 17:44:51 +0100
-Subject: [Buildroot] [PATCH 0/2] package/norm: prepare for Python3
-In-Reply-To: <20200204133157.10824-1-titouan.christophe@railnova.eu>
-References: <20200204133157.10824-1-titouan.christophe@railnova.eu>
-Message-ID: <20200205164451.GH3131@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Feb 2020 17:48:03 +0100
+Subject: [Buildroot] [PATCH v2 5/7] package/freescale-imx/imx-gpu-viv:
+ bump to version 6.4.0.p1.0
+In-Reply-To: <CADCpmyPFFQO+0m3gK_825QHAMN18SeCOSLFFnyzswniZt5qN3Q@mail.gmail.com>
+References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
+ <20200203193155.12657-5-tuzakli.refik@gmail.com>
+ <20200204231052.350677e5@windsurf>
+ <CADCpmyPFFQO+0m3gK_825QHAMN18SeCOSLFFnyzswniZt5qN3Q@mail.gmail.com>
+Message-ID: <20200205174803.143caa52@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Titouan, All,
+Hello,
 
-On 2020-02-04 14:31 +0100, Titouan Christophe spake thusly:
-> This small series update the norm package to make it possible to compile it
-> using a Python3 based waf package infrastructure, and changes the download
-> server to Github to enhance the reliability of the tarball download, because
-> the original server is quite slow and unreliable.
-> 
-> Titouan Christophe (2):
->   package/norm: switch to Github hosted archive
->   package/norm: make wscript Python3 compatible
+On Wed, 5 Feb 2020 16:54:15 +0100
+Gary Bisson <bisson.gary@gmail.com> wrote:
 
-Series applied to master, thanks.
+> I'm on vacation this week without any laptop around so my answer will most
+> likely be inaccurate.
 
-I just re-aligned the hash fields with the new spacing convention.
+Thanks, enjoy your vacations! :-)
 
-Thanks!
+> But I'll try off the top of my head:
+> - the main goal was to copy the yocto recipe for the build cmds, the links
+> commands should match more or less
+> - but openGL was indeed never properly supported anyway since it required
+> to build mesa3d but overwrite the libGL library at the end (what was done
+> by yocto at the time) which wasn't supported in BR
 
-Regards,
-Yann E. MORIN.
+Argh. Horrible. Why do they do that ?
 
->  ...ction-call-for-Python3-compatibility.patch | 29 +++++++++++++
->  ...ixed-tabs-spaces-in-protolib-wscript.patch | 41 +++++++++++++++++++
->  package/norm/norm.hash                        |  2 +-
->  package/norm/norm.mk                          |  4 +-
->  4 files changed, 73 insertions(+), 3 deletions(-)
->  create mode 100644 package/norm/0002-Use-print-as-function-call-for-Python3-compatibility.patch
->  create mode 100644 package/norm/0003-Fix-mixed-tabs-spaces-in-protolib-wscript.patch
-> 
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> - the only person I know who added some kind of openGL support in Buildroot
+> is you ;) (I recall a "imx-fix" branch in FE git server)
 
+Me Thomas, or Refik ? I might have submitted some OpenGL changes a
+while ago, but I'm certainly not the only one.
+
+Well, OK, if we want full OpenGL support with imx-gpu-viv, some more
+work is needed I believe, including actual testing on the target.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
