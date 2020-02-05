@@ -1,131 +1,95 @@
 From: Changming Huang <jerry.huang@nxp.com>
-Date: Wed,  5 Feb 2020 18:52:25 +0800
-Subject: [Buildroot] [PATCH v4 7/9] package/qoriq-rcw:Enable IIC5_PMUX and
- CLK_OUT_PMUX for GPIO
-In-Reply-To: <20200205105227.13698-1-jerry.huang@nxp.com>
-References: <20200205105227.13698-1-jerry.huang@nxp.com>
-Message-ID: <20200205105227.13698-7-jerry.huang@nxp.com>
+Date: Wed,  5 Feb 2020 18:52:19 +0800
+Subject: [Buildroot] [PATCH v4 1/9] package/nxp: new package directory
+Message-ID: <20200205105227.13698-1-jerry.huang@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jerry Huang <jerry.huang@nxp.com>
+The "nxp" directory is intended to contain all NXP
+QorIQ (including PowerPC and LayerScape serial) related packages,
+together with their download site and version info.
 
-Because GPIO is used as interrupt for eNETC PHY and Micro-bus,
-IIC5_PMUX and CLK_OUT_PMUX are enabled for GPIO.
-
-Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
+Signed-off-by: Changming Huang <jerry.huang@nxp.com>
 ---
 changes since v3:
 no changes.
 
 changes since v2:
-no changes.
+1. change the sub-direcotry to "nxp".
+2. add helper.mk macro to extract compressed file.
 
 changes since v1:
-1. change to unconditional for these two patches.
+no changes.
 ---
- ...b-Enable-IIC5_PMUX-for-GPIO-function.patch | 42 +++++++++++++++++++
- ...nable-CLK_OUT_PMUX-for-GPIO-function.patch | 40 ++++++++++++++++++
- 2 files changed, 82 insertions(+)
- create mode 100644 package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
- create mode 100644 package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
+ package/Config.in     |  1 +
+ package/nxp/Config.in |  4 ++++
+ package/nxp/helper.mk | 32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 package/nxp/Config.in
+ create mode 100644 package/nxp/helper.mk
 
-diff --git a/package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch b/package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
+diff --git a/package/Config.in b/package/Config.in
+index 37861387e8..c697962ac0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -494,6 +494,7 @@ endmenu
+ 	source "package/nvidia-driver/Config.in"
+ 	source "package/nvidia-tegra23/Config.in"
+ 	source "package/nvme/Config.in"
++	source "package/nxp/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+ 	source "package/open2300/Config.in"
+diff --git a/package/nxp/Config.in b/package/nxp/Config.in
 new file mode 100644
-index 0000000000..21c6c84cbd
+index 0000000000..575542c7ab
 --- /dev/null
-+++ b/package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
-@@ -0,0 +1,42 @@
-+From 33b403cee1fa215927bc65dc14baf35a2fdbe7b3 Mon Sep 17 00:00:00 2001
-+From: Jerry Huang <jerry.huang@nxp.com>
-+Date: Thu, 19 Sep 2019 12:12:20 +0800
-+Subject: [PATCH 1/2] ls1028ardb: Enable IIC5_PMUX for GPIO function
++++ b/package/nxp/Config.in
+@@ -0,0 +1,4 @@
++menu "NXP QorIQ libraries"
++	depends on BR2_aarch64 || BR2_arm || BR2_powerpc64 || BR2_powerpc
 +
-+Set IIC5_PMUX = 1 to enable GPIO function.
-+
-+Signed-off-by: Jianchao Wang <jianchao.wang@nxp.com>
-+Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
-+---
-+ ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw | 2 +-
-+ ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw   | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-+index b46ea2e..5466a63 100644
-+--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-+@@ -26,7 +26,7 @@ SYSCLK_FREQ=600
-+ IIC2_PMUX=6
-+ IIC3_PMUX=2
-+ IIC4_PMUX=2
-+-IIC5_PMUX=2
-++IIC5_PMUX=1
-+ IIC6_PMUX=2
-+ CLK_OUT_PMUX=2
-+ EC1_SAI4_5_PMUX=5
-+diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-+index 04e2208..1908d8c 100644
-+--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-+@@ -26,7 +26,7 @@ SYSCLK_FREQ=600
-+ IIC2_PMUX=6
-+ IIC3_PMUX=2
-+ IIC4_PMUX=2
-+-IIC5_PMUX=2
-++IIC5_PMUX=1
-+ IIC6_PMUX=3
-+ CLK_OUT_PMUX=2
-+ EC1_SAI4_5_PMUX=5
-+--
-+2.17.1
-diff --git a/package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch b/package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
++endmenu
+diff --git a/package/nxp/helper.mk b/package/nxp/helper.mk
 new file mode 100644
-index 0000000000..4f00541d69
+index 0000000000..79e4236249
 --- /dev/null
-+++ b/package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
-@@ -0,0 +1,40 @@
-+From 4a3c9ea5d0c7bf8eec8cb6276d6f4d940f3946db Mon Sep 17 00:00:00 2001
-+From: Jerry Huang <jerry.huang@nxp.com>
-+Date: Thu, 19 Sep 2019 12:13:48 +0800
-+Subject: [PATCH 2/2] ls1028ardb/rcw: Enable CLK_OUT_PMUX for GPIO function
++++ b/package/nxp/helper.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# helper
++#
++################################################################################
 +
-+Signed-off-by: Jianchao Wang <jianchao.wang@nxp.com>
-+Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
-+---
-+ ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw | 2 +-
-+ ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw   | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
++# Helper for self-extracting binaries distributed by NXP.
++#
++# The --force option makes sure it doesn't fail if the source
++# directory already exists. The --auto-accept skips the license check,
++# as it is not needed in Buildroot because we have legal-info. Since
++# there's a EULA in the binary file, we extract it in this macro, and
++# it should therefore be added to the LICENSE_FILES variable of
++# packages using this macro. Also, remember to set REDISTRIBUTE to
++# "NO". Indeed, this is a legal minefield: the EULA specifies that the
++# Board Support Package includes software and hardware (sic!) for
++# which a separate license is needed...
++#
++# $(1): full path to the archive file
++#
++define NXP_EXTRACT_HELPER
++	awk 'BEGIN      { start = 0; } \
++	     /^EOEULA/  { start = 0; } \
++	                { if (start) print; } \
++	     /<<EOEULA/ { start = 1; }' \
++	    $(1) > $(@D)/EULA
++	cd $(@D) && sh $(1) --force --auto-accept
++	find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
++	rmdir $(@D)/$(basename $(notdir $(1)))
++endef
 +
-+diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-+index 5466a63..a5ed4d4 100644
-+--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-+@@ -28,7 +28,7 @@ IIC3_PMUX=2
-+ IIC4_PMUX=2
-+ IIC5_PMUX=1
-+ IIC6_PMUX=2
-+-CLK_OUT_PMUX=2
-++CLK_OUT_PMUX=1
-+ EC1_SAI4_5_PMUX=5
-+ EC1_SAI3_6_PMUX=5
-+ USB3_CLK_FSEL=39
-+diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-+index 1908d8c..c930b83 100644
-+--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-+@@ -28,7 +28,7 @@ IIC3_PMUX=2
-+ IIC4_PMUX=2
-+ IIC5_PMUX=1
-+ IIC6_PMUX=3
-+-CLK_OUT_PMUX=2
-++CLK_OUT_PMUX=1
-+ EC1_SAI4_5_PMUX=5
-+ EC1_SAI3_6_PMUX=5
-+ USB3_CLK_FSEL=39
-+--
-+2.17.1
++include $(sort $(wildcard package/nxp/*/*.mk))
 -- 
 2.17.1
