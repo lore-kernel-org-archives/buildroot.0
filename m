@@ -1,82 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Feb 2020 16:10:03 +0100
-Subject: [Buildroot] [PATCH] linux/linux.hash: remove hash for COPYING
-In-Reply-To: <20200204231310.22132-1-mmayer@broadcom.com>
-References: <20200204231310.22132-1-mmayer@broadcom.com>
-Message-ID: <20200205151003.GD3131@scaer>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 5 Feb 2020 09:15:18 -0600
+Subject: [Buildroot] [PATCH 1/2] package/localedef: bump to version 2.30
+In-Reply-To: <20200131222420.3d92ff13@gmx.net>
+References: <20200125234918.24829-1-romain.naour@gmail.com>
+ <CANQCQpZhQPvjr27oZwBeyPOnQDjtti-1XUp+_xQHCJesYBmMiw@mail.gmail.com>
+ <CANQCQpZ8g-L_Y5V3Xp5x99QaWotqQSPn5snV75e3w08TUG8zrA@mail.gmail.com>
+ <20200131222420.3d92ff13@gmx.net>
+Message-ID: <CANQCQpbE5nexg6HAt6Lhb9RTopYhmvjj32xnQ8fWTbS3CXe9EA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Markus, All,
+Peter,
 
-On 2020-02-04 15:13 -0800, Markus Mayer spake thusly:
-> The hash for "COPYING" changed between v4.16 and v4.17. Since kernels
-> before and after the change are supported, storing the hash for this
-> file will cause an error during "make legal-info" when a kernel with the
-> respective other hash is being used.
-> 
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+On Fri, Jan 31, 2020 at 3:25 PM Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> Hello *,
+>
+> On Fri, 31 Jan 2020 14:32:39 -0600, Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
+>
+> > Romain,
+> >
+> > On Fri, Jan 31, 2020 at 1:47 PM Matthew Weber
+> > <matthew.weber@rockwellcollins.com> wrote:
+> > >
+> > > Romain,
+> > >
+> > > On Sat, Jan 25, 2020 at 5:50 PM Romain Naour <romain.naour@gmail.com> wrote:
+> > > >
+> > > > Use the same version as for glibc package.
+> > >
+> > > Seems this bump requires a newer host compiler.  I found this on
+> > > Ubuntu 16.04.2  with gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0
+> > > 20160609
+> > >
+> > > BR2_aarch64=y
+> > > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> > > BR2_KERNEL_HEADERS_4_14=y
+> > > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> > > BR2_LINUX_KERNEL=y
+> > > BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > > BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+> > > BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> > > BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+> > > BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> > >
+> > > make host-localedef
+> > >
+> > > configure: error:
+> > > *** These critical programs are missing or too old: compiler
+> > > *** Check the INSTALL file for required versions.
+> > >
+> > > per the INSTALL file, GCC 6.2 or higher is required
+> >
+> > I did a build test reverting the 6.2 check (left it checking for 5)
+> > and it built OK.  I'd suggest adding a patch to revert
+> > https://sourceware.org/git/?p=glibc.git;a=commit;h=4dcbbc3b28aaeafe23e1a30db84055aa6f6fa987
+> > .
+> >
+> > In addition, I agree a host toolchain dependency needs to be added for
+> > 5 (unless we also revert
+> > https://sourceware.org/git/?p=glibc.git;a=commit;h=192963be49678b48f60218f1f794991cdd9fe472
+> >  to get back to 4.x which doesn't seem like it would work out).
+> >
+>
+> Suggested RFC patch (way back from December 2018) contained already an
+> '0002-HACK-accept-old-toolchains.patch' to fix configure/compile for
+> old host toolchains (see [1])..., maybe time to resurrect (and rebase)
+> this one?
 
-After discussing this at the devdays today, I've reworked it with
-another solution which allows us to notice those changes in the future:
-the license files are only added for the latest known version.
-
-I've also applied the same semantic to other packags that would exhibit
-the same problem.
-
-http://lists.busybox.net/pipermail/buildroot/2020-February/thread.html#273348
-
-Thanks for the report! :-)
+Agree, plus your 0001 for the linker seems to be required as well in
+the case I see with using 2019.11.1 on Ubuntu 16.04.
 
 Regards,
-Yann E. MORIN.
-
-> ---
-> 
-> One way to reproduce the problem:
-> 
-> 1) Download and extract
->    https://mirrors.edge.kernel.org/pub/linux/kernel/v4.x/linux-4.9.212.tar.xz
-> 2) Configure buildroot as usual
-> 3) Point LINUX_OVERRIDE_SRCDIR to the 4.9.212 directory created above
-> 4) make && make legal-info
-> 
-> [...]
-> >>> linux-tools  Collecting legal info
-> >>> linux custom Collecting legal info
-> ERROR: COPYING has wrong sha256 hash:
-> ERROR: expected: ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff
-> ERROR: got     : af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7
-> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-> linux/linux.mk:606: recipe for target 'linux-legal-info' failed
-> 
->  linux/linux.hash | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/linux/linux.hash b/linux/linux.hash
-> index 940a90ed9dea..289171987aa1 100644
-> --- a/linux/linux.hash
-> +++ b/linux/linux.hash
-> @@ -8,4 +8,3 @@ sha256 be26156abdb38ac0576a34a235ef456bb8ca67fbbe56fc6649b8d069159f8bc4  linux-4
->  # Locally computed
->  sha256 6d60ce76bce2e1938f64027d12b1988c95245751feb635adfc551a021d5b3f26  linux-cip-4.19.88-cip16.tar.gz
->  sha256 74ec782e11344e5c5db8e48899b464e296ef37acfb43ce7dfb01c09ea8d3e959  linux-cip-4.19.82-cip14-rt5.tar.gz
-> -sha256 ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff  COPYING
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Matt
