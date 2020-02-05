@@ -1,26 +1,91 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 05 Feb 2020 15:40:24 +0000
-Subject: [Buildroot] [Bug 11926] Cross compiled Qt applications aren't
- working anymore
-In-Reply-To: <bug-11926-163@https.bugs.busybox.net/>
-References: <bug-11926-163@https.bugs.busybox.net/>
-Message-ID: <bug-11926-163-9Od71b2n82@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Feb 2020 16:40:34 +0100
+Subject: [Buildroot] [git commit] docs/website/sponsors.html: move Smile to
+ past sponsors
+Message-ID: <20200205152933.7FC3F8CA23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11926
+commit: https://git.buildroot.net/buildroot/commit/?id=09db97b27ad5f70c0ca95680fd0086bb2eacf7c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #6 from Martin <martinv1985@gmail.com> ---
-I was having similar issues when compiling a image with qt for arm. Even
-qtdiag, which was also build using buildroot, had the error that the EGL/GLES
-libraries where linked using the absolute paths of the machine running
-buildroot. However, when testing Qt version 5.14 this problem seems to be
-resolved. The qtdiag works again and i can also compile and run one of the
-example programs myself.
+The new text is unfortunately too long to fit in the box, so bump the
+height to 400px for the top row.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/website/sponsors.html | 36 ++++++++----------------------------
+ 1 file changed, 8 insertions(+), 28 deletions(-)
+
+diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
+index 822407a987..bdec4c7f16 100644
+--- a/docs/website/sponsors.html
++++ b/docs/website/sponsors.html
+@@ -4,28 +4,6 @@
+ <div class="row nh"><!-- current sponsor row -->
+ <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
+ 
+-  <div class="panel panel-primary">
+-    <div class="panel-heading">Sponsors of the Buildroot Developers Meeting @ ELCE 2019</div>
+-    <div class="panel-body">
+-      <div class="col-sm-6">
+-	<p>The Buildroot community would like to thank
+-	  <a href="http://smile.eu">Smile</a> for providing the
+-	  meeting location for the 3 days of
+-	  the <a href="https://elinux.org/Buildroot:DeveloperDaysELCE2019">Buildroot
+-	  Developers Meeting</a> organized on October 25-27 before the
+-	  <a href="https://events.linuxfoundation.org/events/embedded-linux-conference-europe-2019/">Embedded
+-	    Linux Conference Europe</a> in Lyon, France.</p>
+-      </div>
+-
+-      <div class="col-sm-6">
+-	<a href="http://www.smile.eu">
+-	  <img class="img-responsive center-block" src="images/smile-logo.png"/>
+-	</a>
+-      </div>
+-
+-    </div>
+-  </div>
+-
+   <div class="panel panel-primary">
+     <div class="panel-heading">Sponsor of the Buildroot.org domain</div>
+     <div class="panel-body">
+@@ -58,10 +36,12 @@
+ 		  <img class="img-responsive center-block" src="images/smile-logo.png"/>
+ 		</a>
+ 	      </div>
+-	      <div class="col-sm-12" style="height: 350px;">
+-		<a href="https://www.smile.eu">Smile</a> sponsored
+-		the Buildroot Summer Camp that took place on July 1-5 2016 in Toulouse, France. Smile
+-		sponsored the participation of Romain Naour and paid the food expenses for the meeting participants.
++	      <div class="col-sm-12" style="height: 400px;">
++	        <a href="https://www.smile.eu">Smile</a> provided the meeting location for the
++		<a href="https://elinux.org/Buildroot:DeveloperDaysELCE2019">ELCE 2019</a>
++		meeting and sponsored the Buildroot Summer Camp that took place on July 1-5 2016
++		in Toulouse, France. Smile sponsored the participation of Romain Naour and paid
++		the food expenses for the meeting participants.
+ 		In 2018, Smile sponsored of LLVM/Clang integration into Buildroot, see the final
+ 		<a href="http://www.linuxembedded.fr/2018/07/llvmclang-integration-into-buildroot">report</a>.
+ 	      </div>
+@@ -77,7 +57,7 @@
+ 		  <img class="img-responsive center-block" src="images/mind-logo.png"/>
+ 		</a>
+ 	      </div>
+-	      <div class="col-sm-12" style="height: 350px;">
++	      <div class="col-sm-12" style="height: 400px;">
+ 		<a href="http://www.mind.be">Mind</a> sponsored
+ 		financially the Buildroot Association for the ELCE
+ 		2018 meeting, sponsored the dinner of the FOSDEM 2014,
+@@ -97,7 +77,7 @@
+ 		<p><a href="http://www.google.com">
+ 		    <img class="img-responsive center-block" src="images/google-logo.png"/></a></p>
+ 	      </div>
+-	      <div class="col-sm-12" style="height: 350px;">
++	      <div class="col-sm-12" style="height: 400px;">
+ 		<p><a href="http://www.google.com">Google</a> provided
+ 		  the logistics for the FOSDEM 2013, FOSDEM 2014,
+ 		  FOSDEM 2015, FOSDEM 2016, FOSDEM 2017, FOSDEM 2018
