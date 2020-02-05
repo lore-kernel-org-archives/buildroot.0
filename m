@@ -1,37 +1,35 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed,  5 Feb 2020 11:13:36 +0100
-Subject: [Buildroot] [PATCH] package/python-setuptools-scm-git-archive:
- depends on python-setuptools-scm
-Message-ID: <20200205101336.17902-1-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Feb 2020 11:30:06 +0100
+Subject: [Buildroot] [PATCH 1/7] board/freescale/common/imx: add support
+ for i.MX8QM
+In-Reply-To: <20190909121525.13935-1-maeva.manuel@nxp.com>
+References: <20190909121525.13935-1-maeva.manuel@nxp.com>
+Message-ID: <20200205113006.0930239e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello,
 
-python-setuptools-scm-git-archive requires python-setuptools-scm package so
-add it to its dependencies.
+On Mon, 9 Sep 2019 12:14:55 +0000
+Maeva Manuel <maeva.manuel@nxp.com> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/b356c948cf2b22534ca333cfe34dee31371c0007
+> Signed-off-by: Maeva Manuel <maeva.manuel@nxp.com>
+> ---
+>  board/freescale/common/imx/imx8-bootloader-prepare.sh | 7 +++++--
+>  board/freescale/common/imx/post-image.sh              | 4 +++-
+>  2 files changed, 8 insertions(+), 3 deletions(-)
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- .../python-setuptools-scm-git-archive.mk                         | 1 +
- 1 file changed, 1 insertion(+)
+Thanks, I have applied, but at a later point in the series, i.e after
+the imx-firmware-sc change that ensures the proper firmware gets
+installed.
 
-diff --git a/package/python-setuptools-scm-git-archive/python-setuptools-scm-git-archive.mk b/package/python-setuptools-scm-git-archive/python-setuptools-scm-git-archive.mk
-index 1c18095f54..032e2d3fc9 100644
---- a/package/python-setuptools-scm-git-archive/python-setuptools-scm-git-archive.mk
-+++ b/package/python-setuptools-scm-git-archive/python-setuptools-scm-git-archive.mk
-@@ -10,5 +10,6 @@ PYTHON_SETUPTOOLS_SCM_GIT_ARCHIVE_SITE = https://files.pythonhosted.org/packages
- PYTHON_SETUPTOOLS_SCM_GIT_ARCHIVE_SETUP_TYPE = setuptools
- PYTHON_SETUPTOOLS_SCM_GIT_ARCHIVE_LICENSE = MIT
- PYTHON_SETUPTOOLS_SCM_GIT_ARCHIVE_LICENSE_FILES = LICENSE
-+HOST_PYTHON_SETUPTOOLS_SCM_GIT_ARCHIVE_DEPENDENCIES = host-python-setuptools-scm
- 
- $(eval $(host-python-package))
+Thanks!
+
+Thomas
 -- 
-2.17.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
