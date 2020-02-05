@@ -1,26 +1,55 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Wed, 5 Feb 2020 08:58:46 -0800
-Subject: [Buildroot] [PATCH] linux/linux.hash: remove hash for COPYING
-In-Reply-To: <20200205151003.GD3131@scaer>
-References: <20200204231310.22132-1-mmayer@broadcom.com>
- <20200205151003.GD3131@scaer>
-Message-ID: <CAGt4E5sdAGCovKO55w=kCLYJkibukM6dRABWKC5VV6bp_CUqMw@mail.gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Wed,  5 Feb 2020 18:05:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
+ 3.2.1
+Message-ID: <20200205170532.32004-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 5 Feb 2020 at 07:10, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+This fixes CVE-2020-7044:
+In Wireshark 3.2.x before 3.2.1, the WASSP dissector could crash.
+This was addressed in epan/dissectors/packet-wassp.c by using
+>= and <= to resolve off-by-one errors.
 
-Hi Yann,
+Also change the hash file to the new spacing convention introduced
+by Yann E. Morin.
 
-> Thanks for the report! :-)
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/wireshark/wireshark.hash | 8 ++++----
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thanks for the quick turnaround. I appreciate it. :-)
-
-Regards,
--Markus
-
-> Regards,
-> Yann E. MORIN.
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 5635f2525b..65406b3001 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.0.txt
+-sha1 6c7d9784809fb16b57ca557864f78509aaf4f82a wireshark-3.2.0.tar.xz
+-sha256 4cfd33a19a454ff4002243e9d04d6afd64280a109a21ae652a192f2be2b1b66c wireshark-3.2.0.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.1.txt
++sha1  d0b8eb3e01264afb98ec151d7114ed14cf174ced  wireshark-3.2.1.tar.xz
++sha256  589f640058d6408ebbd695a80ebbd6e7bd99d8db64ecda253d27100dfd27e85b  wireshark-3.2.1.tar.xz
+ 
+ # Locally calculated
+-sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
++sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index c365a9feec..1e71fe755d 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 3.2.0
++WIRESHARK_VERSION = 3.2.1
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
+-- 
+2.24.1
