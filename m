@@ -1,53 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Feb 2020 17:19:48 +0100
-Subject: [Buildroot] [PATCHv2] package/ncurses: add upstream (security)
- patches up to 20200118
-In-Reply-To: <20200205133111.24540-1-patrickdepinguin@gmail.com>
-References: <20200205133111.24540-1-patrickdepinguin@gmail.com>
-Message-ID: <20200205161948.GG3131@scaer>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Wed, 5 Feb 2020 10:31:26 -0600
+Subject: [Buildroot] [PATCH v2 1/6] package/go: implement go modules
+ integration
+In-Reply-To: <CA+h8R2ogHk+7U=oWEq09wxQqEfvf-Owrm1uZiVf_ZjrxuEeq4Q@mail.gmail.com>
+References: <20200111041355.21705-1-christian@paral.in>
+ <18bb82ad-f3fd-d360-ee60-b3d1c4743057@xes-inc.com>
+ <CA+h8R2ogHk+7U=oWEq09wxQqEfvf-Owrm1uZiVf_ZjrxuEeq4Q@mail.gmail.com>
+Message-ID: <f46720fe-ee30-912c-73ce-5d632b59b8fa@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas, All,
+Chrisitan,
 
-On 2020-02-05 14:31 +0100, Thomas De Schampheleire spake thusly:
-> From: Peter Korsgaard <peter@korsgaard.com>
-> Fixes the following security issues:
-[--SNIP--]
-> While we are at it, adjust the white space in the .hash file to match
-> sha256sum output for consistency.
-[--SNIP--]
->  # Locally computed
-> -sha256	86106f0da1cf5ccfa0f0651665dd1b4515e8edad1c7972780155770548b317d9	COPYING
-> +sha256  86106f0da1cf5ccfa0f0651665dd1b4515e8edad1c7972780155770548b317d9  COPYING
+On 2/4/20 5:22 PM, Christian Stewart wrote:
+> Hi Vincent,
+>
+> Apologies for the delay on this-
+No problem, we all get busy.
+> On Tue, Jan 14, 2020 at 8:56 AM Vincent Fazio <vfazio@xes-inc.com> wrote:
+>> I tested this with a HOST Go package that i've got for git-lfs that I
+>> haven't submitted yet and it needed a couple of tweaks.
+>>
+>> lmk your thoughts
+> Unfortunately the format you've sent your corrections is a bit
+> confusing for me, and I'd like to make sure I get it right. Do you
+> have a copy of the .patch anywhere with your adjustments?
 
-The hash for the license file is now wrong:
+Sorry about that. Please take a look at the commit history here: 
+https://gitlab.com/vfazio/buildroot/-/commits/go-modules-fixups
 
-    >>> ncurses 6.1 Collecting legal info
-    ERROR: COPYING has wrong sha256 hash:
-    ERROR: expected:
-    86106f0da1cf5ccfa0f0651665dd1b4515e8edad1c7972780155770548b317d9
-    ERROR: got     :
-    4d1fde61868c73776a539366dccf5d5a4857e7fd7299efb1f02e07c2afe9ea87
-    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-    make[1]: *** [package/ncurses/ncurses.mk:200: ncurses-legal-info] Error 1
-    make: *** [Makefile:23: _all] Error 2
+Some of the changes aren't directly tied to your work, but help make 
+HOST and TARGET golang builds a bit easier to maintain (IMO).
 
-That's because it has been changed by ncurses-6.1-20200104, to change
-the Copyright year.
+Hopefully that helps.
 
-Fixed that and pushed, thanks.
-
-Regards,
-Yann E. MORIN.
+> Best regards,
+> Christian
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Vincent Fazio
+Embedded Software Engineer - Linux
+Extreme Engineering Solutions, Inc
+http://www.xes-inc.com
