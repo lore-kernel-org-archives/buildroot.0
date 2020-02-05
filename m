@@ -1,55 +1,84 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Wed,  5 Feb 2020 18:05:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
- 3.2.1
-Message-ID: <20200205170532.32004-1-titouan.christophe@railnova.eu>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 Feb 2020 18:06:12 +0100
+Subject: [Buildroot] [git commit] docs/manual: fields in hash files must be
+ separated by two sapces
+Message-ID: <20200205165615.510CF8D33A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes CVE-2020-7044:
-In Wireshark 3.2.x before 3.2.1, the WASSP dissector could crash.
-This was addressed in epan/dissectors/packet-wassp.c by using
->= and <= to resolve off-by-one errors.
+commit: https://git.buildroot.net/buildroot/commit/?id=ec060ced7aacda8bb93ee3c138c8ce33f5989ef3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also change the hash file to the new spacing convention introduced
-by Yann E. Morin.
+The seperation of the fields in the hash file should be 2 spaces for
+consitency
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Update the manual accordingly.
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998 at free.fr:
+  - drop the notes part, reword the first hunk
+  - update the examples
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/wireshark/wireshark.hash | 8 ++++----
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ docs/manual/adding-packages-directory.txt | 22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 5635f2525b..65406b3001 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.0.txt
--sha1 6c7d9784809fb16b57ca557864f78509aaf4f82a wireshark-3.2.0.tar.xz
--sha256 4cfd33a19a454ff4002243e9d04d6afd64280a109a21ae652a192f2be2b1b66c wireshark-3.2.0.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.1.txt
-+sha1  d0b8eb3e01264afb98ec151d7114ed14cf174ced  wireshark-3.2.1.tar.xz
-+sha256  589f640058d6408ebbd695a80ebbd6e7bd99d8db64ecda253d27100dfd27e85b  wireshark-3.2.1.tar.xz
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 1c8b9f96b5..4ceb3fd772 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -461,7 +461,7 @@ The hashes stored in that file are used to validate the integrity of the
+ downloaded files and of the license files.
  
- # Locally calculated
--sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-+sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index c365a9feec..1e71fe755d 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ The format of this file is one line for each file for which to check the
+-hash, each line being space-separated, with these three fields:
++hash, each line with the following three fields separated by two spaces:
  
--WIRESHARK_VERSION = 3.2.0
-+WIRESHARK_VERSION = 3.2.1
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
--- 
-2.24.1
+ * the type of hash, one of:
+ ** +md5+, +sha1+, +sha224+, +sha256+, +sha384+, +sha512+, +none+
+@@ -500,10 +500,6 @@ target run. For a package with multiple versions (like Qt5),
+ create the hash file in a subdirectory +<packageversion>+ of that package
+ (see also xref:patch-apply-order[]).
+ 
+-.Note
+-The number of spaces does not matter, so one can use spaces (or tabs) to
+-properly align the different fields.
+-
+ The +none+ hash type is reserved to those archives downloaded from a
+ repository, like a 'git clone', a 'subversion checkout'...
+ 
+@@ -514,22 +510,22 @@ downloaded patch, and an archive with no hash:
+ 
+ ----
+ # Hashes from: http://www.foosoftware.org/download/libfoo-1.2.3.tar.bz2.{sha1,sha256}:
+-sha1   486fb55c3efa71148fe07895fd713ea3a5ae343a                         libfoo-1.2.3.tar.bz2
+-sha256 efc8103cc3bcb06bda6a781532d12701eb081ad83e8f90004b39ab81b65d4369 libfoo-1.2.3.tar.bz2
++sha1  486fb55c3efa71148fe07895fd713ea3a5ae343a  libfoo-1.2.3.tar.bz2
++sha256  efc8103cc3bcb06bda6a781532d12701eb081ad83e8f90004b39ab81b65d4369  libfoo-1.2.3.tar.bz2
+ 
+ # md5 from: http://www.foosoftware.org/download/libfoo-1.2.3.tar.bz2.md5, sha256 locally computed:
+-md5    2d608f3c318c6b7557d551a5a09314f03452f1a1                         libfoo-data.bin
+-sha256 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b libfoo-data.bin
++md5  2d608f3c318c6b7557d551a5a09314f03452f1a1  libfoo-data.bin
++sha256  01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b  libfoo-data.bin
+ 
+ # Locally computed:
+-sha256 ff52101fb90bbfc3fe9475e425688c660f46216d7e751c4bbdb1dc85cdccacb9 libfoo-fix-blabla.patch
++sha256  ff52101fb90bbfc3fe9475e425688c660f46216d7e751c4bbdb1dc85cdccacb9  libfoo-fix-blabla.patch
+ 
+ # No hash for 1234:
+-none   xxx                                                              libfoo-1234.tar.gz
++none  xxx  libfoo-1234.tar.gz
+ 
+ # Hash for license files:
+-sha256 a45a845012742796534f7e91fe623262ccfb99460a2bd04015bd28d66fba95b8  COPYING
+-sha256 01b1f9f2c8ee648a7a596a1abe8aa4ed7899b1c9e5551bda06da6e422b04aa55  doc/COPYING.LGPL
++sha256  a45a845012742796534f7e91fe623262ccfb99460a2bd04015bd28d66fba95b8  COPYING
++sha256  01b1f9f2c8ee648a7a596a1abe8aa4ed7899b1c9e5551bda06da6e422b04aa55  doc/COPYING.LGPL
+ ----
+ 
+ If the +.hash+ file is present, and it contains one or more hashes for a
