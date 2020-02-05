@@ -1,47 +1,62 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Wed, 5 Feb 2020 10:31:26 -0600
-Subject: [Buildroot] [PATCH v2 1/6] package/go: implement go modules
- integration
-In-Reply-To: <CA+h8R2ogHk+7U=oWEq09wxQqEfvf-Owrm1uZiVf_ZjrxuEeq4Q@mail.gmail.com>
-References: <20200111041355.21705-1-christian@paral.in>
- <18bb82ad-f3fd-d360-ee60-b3d1c4743057@xes-inc.com>
- <CA+h8R2ogHk+7U=oWEq09wxQqEfvf-Owrm1uZiVf_ZjrxuEeq4Q@mail.gmail.com>
-Message-ID: <f46720fe-ee30-912c-73ce-5d632b59b8fa@xes-inc.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Feb 2020 17:38:56 +0100
+Subject: [Buildroot] [git commit] package/opencv3: disable VFPv3 options
+Message-ID: <20200205162834.5381080287@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chrisitan,
+commit: https://git.buildroot.net/buildroot/commit/?id=4d0f3dd8709f9f31a81eaa8a62cb35ef6ddddeaf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2/4/20 5:22 PM, Christian Stewart wrote:
-> Hi Vincent,
->
-> Apologies for the delay on this-
-No problem, we all get busy.
-> On Tue, Jan 14, 2020 at 8:56 AM Vincent Fazio <vfazio@xes-inc.com> wrote:
->> I tested this with a HOST Go package that i've got for git-lfs that I
->> haven't submitted yet and it needed a couple of tweaks.
->>
->> lmk your thoughts
-> Unfortunately the format you've sent your corrections is a bit
-> confusing for me, and I'd like to make sure I get it right. Do you
-> have a copy of the .patch anywhere with your adjustments?
+Commit a17402e42d8c996af239cfdb536e74188d6c6245 has conditionally
+enabled NEON and VFPv3 optimizations. However, the VFPv3 logic is
+causing issues on some targets such as Cortex-A5 with VFPv4-D16 but
+not VFPv4.
 
-Sorry about that. Please take a look at the commit history here: 
-https://gitlab.com/vfazio/buildroot/-/commits/go-modules-fixups
+Since the ENABLE_VFPV3=ON option only adds CFLAGS, we can always set
+it to OFF, and let Buildroot pass appropriate CFLAGS.
 
-Some of the changes aren't directly tied to your work, but help make 
-HOST and TARGET golang builds a bit easier to maintain (IMO).
+However, the ENABLE_NEON option also adds the build of NEON-specific
+code, so we keep this logic.
 
-Hopefully that helps.
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=11996
 
-> Best regards,
-> Christian
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/opencv3/opencv3.mk | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
--- 
-Vincent Fazio
-Embedded Software Engineer - Linux
-Extreme Engineering Solutions, Inc
-http://www.xes-inc.com
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 89ed8f4278..c99e84a29f 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -104,17 +104,15 @@ OPENCV3_CONF_OPTS += \
+ 
+ # Hardware support options.
+ #
+-# * PowerPC support is turned off since its only effect is altering CFLAGS,
+-#   adding '-mcpu=G3 -mtune=G5' to them, which is already handled by Buildroot.
++# * PowerPC and VFPv3 support are turned off since their only effects
++#   are altering CFLAGS, adding '-mcpu=G3 -mtune=G5' or '-mfpu=vfpv3'
++#   to them, which is already handled by Buildroot.
++# * NEON logic is needed as it is not only used to add CFLAGS, but
++#   also to enable additional NEON code.
+ OPENCV3_CONF_OPTS += \
+ 	-DENABLE_POWERPC=OFF \
+-	-DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF)
+-
+-ifeq ($(BR2_ARCH_IS_64):$(BR2_ARM_CPU_HAS_VFPV3),:y)
+-OPENCV3_CONF_OPTS += -DENABLE_VFPV3=ON
+-else
+-OPENCV3_CONF_OPTS += -DENABLE_VFPV3=OFF
+-endif
++	-DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF) \
++	-DENABLE_VFPV3=OFF
+ 
+ # Cuda stuff
+ OPENCV3_CONF_OPTS += \
