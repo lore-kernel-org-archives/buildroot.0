@@ -1,63 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 5 Feb 2020 16:23:42 +0100
-Subject: [Buildroot] [git commit] package/crudini: bump to version 0.9.3
-Message-ID: <20200205151310.6122C8CA02@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add runtime test for
+ Crudini (py2 and py3)
+Message-ID: <20200205151310.6ADDF8CA02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e9e199816560e72ef337ca18b11c203d65729f4
+commit: https://git.buildroot.net/buildroot/commit/?id=1b2319f93187127f3cb5d47392ac854762c8e1c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This release hasn't been published to pypi, so we switch to the Github
-release archive instead. This new version is Python 3.x compatible.
+This also adds the new tests to the gitlab CI configuration.
 
 Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/crudini/Config.in    | 2 +-
- package/crudini/crudini.hash | 5 +----
- package/crudini/crudini.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 7 deletions(-)
+ .gitlab-ci.yml                                |  2 ++
+ DEVELOPERS                                    |  1 +
+ support/testing/tests/package/test_crudini.py | 49 +++++++++++++++++++++++++++
+ 3 files changed, 52 insertions(+)
 
-diff --git a/package/crudini/Config.in b/package/crudini/Config.in
-index e4e26e52da..240848dffc 100644
---- a/package/crudini/Config.in
-+++ b/package/crudini/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_CRUDINI
- 	bool "crudini"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_INIPARSE # runtime
- 	help
- 	  A utility for handling ini files from the command line and
-diff --git a/package/crudini/crudini.hash b/package/crudini/crudini.hash
-index 6c08223b83..6f2563dfdd 100644
---- a/package/crudini/crudini.hash
-+++ b/package/crudini/crudini.hash
-@@ -1,6 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9b8500c90467f0a61c714fbe852c2a66
--md5    9b8500c90467f0a61c714fbe852c2a66 crudini-0.9.tar.gz
--
- # locally computed
--sha256  10512a5a2f7b54b42e48a1d00f0c6398947c2ba6c264b9fdef86677f0e949fd3  crudini-0.9.tar.gz
-+sha256  e1b8125ac4373ece3bb0bb047ba9336e5bd55ed5d56b9729968058c9385ab546  crudini-0.9.3.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/crudini/crudini.mk b/package/crudini/crudini.mk
-index c03f55c374..7141e2b2a0 100644
---- a/package/crudini/crudini.mk
-+++ b/package/crudini/crudini.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index c0140527db..a6436a8417 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -375,6 +375,8 @@ tests.init.test_systemd.TestInitSystemSystemdRwFull: { extends: .runtime_test }
+ tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: { extends: .runtime_test }
+ tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: { extends: .runtime_test }
+ tests.package.test_atop.TestAtop: { extends: .runtime_test }
++tests.package.test_crudini.TestCrudiniPy2: { extends: .runtime_test }
++tests.package.test_crudini.TestCrudiniPy3: { extends: .runtime_test }
+ tests.package.test_docker_compose.TestDockerCompose: { extends: .runtime_test }
+ tests.package.test_dropbear.TestDropbear: { extends: .runtime_test }
+ tests.package.test_glxinfo.TestGlxinfo: { extends: .runtime_test }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 67cce2f8e4..32b49f1736 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2460,6 +2460,7 @@ F:	package/mosquitto/
+ F:	package/python-avro/
+ F:	package/redis/
+ F:	package/waf/
++F:	support/testing/tests/package/test_crudini.py
  
--CRUDINI_VERSION = 0.9
--CRUDINI_SITE = https://pypi.python.org/packages/b5/65/5588903472f30fa01ca4951be00c03a317b27bac4cd1e945bd16b2c1b6d3
-+CRUDINI_VERSION = 0.9.3
-+CRUDINI_SITE = $(call github,pixelb,crudini,$(CRUDINI_VERSION))
- CRUDINI_SETUP_TYPE = setuptools
- CRUDINI_LICENSE = GPL-2.0
- CRUDINI_LICENSE_FILES = COPYING
+ N:	Trent Piepho <tpiepho@impinj.com>
+ F:	package/libp11/
+diff --git a/support/testing/tests/package/test_crudini.py b/support/testing/tests/package/test_crudini.py
+new file mode 100644
+index 0000000000..e320d3207e
+--- /dev/null
++++ b/support/testing/tests/package/test_crudini.py
+@@ -0,0 +1,49 @@
++import os
++from tests.package.test_python import TestPythonPackageBase
++
++
++INI_FILE_CONTENT = """
++[section]
++param = this-is-the-magic-value
++other = dont care
++"""
++
++
++class TestCrudiniBase(TestPythonPackageBase):
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_CRUDINI=y
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5", kernel="builtin",
++                           options=["-initrd", img])
++
++        self.emulator.login()
++
++        # 1. Create some sample .ini file
++        cmd = "echo -e '%s' > config.ini" % INI_FILE_CONTENT
++        _, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++
++        # 2. Attempt to get the value
++        out, ret = self.emulator.run("crudini --get config.ini section param")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out, ['this-is-the-magic-value'])
++
++
++class TestCrudiniPy2(TestCrudiniBase):
++    __test__ = True
++    config = TestCrudiniBase.config + \
++        """
++        BR2_PACKAGE_PYTHON=y
++        """
++
++
++class TestCrudiniPy3(TestCrudiniBase):
++    __test__ = True
++    config = TestCrudiniBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        """
