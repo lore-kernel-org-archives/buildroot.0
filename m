@@ -1,49 +1,52 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed,  5 Feb 2020 15:58:02 +0100
-Subject: [Buildroot] [PATCH] package/gr-osmosdr: fix dependencies
-Message-ID: <1580914682-11394-1-git-send-email-gwenj@trabucayre.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 5 Feb 2020 16:26:29 +0100
+Subject: [Buildroot] [git commit] package/webkitgtk: fix gstreamer-gl
+ dependency
+Message-ID: <20200205151530.A0EB18CA08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=b70e999e8427e45c017dc047327db576d17c0213
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gr-osmosdr fails with:
-CMake Error at /somewhere/buildroot/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/cmake/gnuradio/GnuradioConfig.cmake:116 (include):
-  include could not find load file:
+The gstreamer1 opengl plugin was moved from gst1-plugins-bad to
+gst1-plugins-base so we need to update webkitgtk to depend on the
+correct package.
 
-    /somewhere/buildroot/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/cmake/gnuradio/gnuradio-filterConfig.cmake
-Call Stack (most recent call first):
-  CMakeLists.txt:45 (find_package)
-
-gr-osmosdr depends on BR2_PACKAGE_GNURADIO_BLOCKS, BR2_PACKAGE_GNURADIO_FFT and
-BR2_PACKAGE_GNURADIO_FILTER.
-
-By replacing BLOCKS by FILTER (FILTER select FFT, and FFT select BLOCKS) every mandatories
-Gnu Radio modules are selected.
-
-fix:
-- http://autobuild.buildroot.net/results/1781db2b8c28641167f7a39a4d799930db13f9bf/
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gr-osmosdr/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/webkitgtk/Config.in    | 3 +--
+ package/webkitgtk/webkitgtk.mk | 1 -
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
-index f26380371f..8d42964900 100644
---- a/package/gr-osmosdr/Config.in
-+++ b/package/gr-osmosdr/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_GR_OSMOSDR
- 	bool "gr-osmosdr"
- 	depends on BR2_PACKAGE_GNURADIO
--	select BR2_PACKAGE_GNURADIO_BLOCKS
-+	select BR2_PACKAGE_GNURADIO_FILTER
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 3ac76f9886..4f10466c1f 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -108,8 +108,7 @@ if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+ config BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL
+ 	bool "use gstreamer-gl"
+ 	default y
+-	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+-	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
++	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
  	help
- 	  GNU Radio block for interfacing with various radio hardware
+ 	  Use the GStreamer GL elements for handling video content.
+ 	  This is recommended as it improves performance of video
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 389c16de4a..e5d591fcd2 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -100,7 +100,6 @@ endif
  
--- 
-2.24.1
+ ifeq ($(BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL),y)
+ WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
+-WEBKITGTK_DEPENDENCIES += gst1-plugins-bad
+ else
+ WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
+ endif
