@@ -1,33 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 05 Feb 2020 21:36:03 +0000
-Subject: [Buildroot] [Bug 12546] Ninja 1.10 build Error
-In-Reply-To: <bug-12546-163@https.bugs.busybox.net/>
-References: <bug-12546-163@https.bugs.busybox.net/>
-Message-ID: <bug-12546-163-EbLFZVa9Mq@https.bugs.busybox.net/>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 5 Feb 2020 23:14:21 +0100
+Subject: [Buildroot] [PATCH v15 0/5] package/gobject-introspection: new
+ package
+In-Reply-To: <80581602-4f4a-faa1-de3a-c9377be09dfa@benettiengineering.com>
+References: <20200204213956.2124306-1-aduskett@gmail.com>
+ <80581602-4f4a-faa1-de3a-c9377be09dfa@benettiengineering.com>
+Message-ID: <d70d7224-41a4-238d-179c-2afc2046e98d@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12546
+On 2/5/20 5:07 PM, Giulio Benetti wrote:
+> Hi Adam,
+> 
+> unfortunately trying to issue a ./utils/test-pkg -p
+> gobject-introspection -d ../test-gio -a results in SKIPPED for every arch.
 
-yegorslists at googlemail.com changed:
+You've forgotten package's entry in package/Config.in
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |yegorslists at googlemail.com
-                   |.org                        |
-             Status|NEW                         |ASSIGNED
-
---- Comment #1 from yegorslists at googlemail.com ---
-There is already a patch in the mailing list [1]. Could you please test it and
-report your results to the mailing list? Thanks.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2020-February/273355.html 
-
-Yegor
-
+Best regards
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Giulio Benetti
+Benetti Engineering sas
+
+> Can you give a try and tell me if it is the same for you?
+> 
+> Thanks
+> 
+> Best regards
+> 
