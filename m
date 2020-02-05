@@ -1,50 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Feb 2020 12:12:58 +0100
-Subject: [Buildroot] [PATCH 7/7] board/freescale/imx8qxpmek: update
- instructions
-In-Reply-To: <20190909121525.13935-7-maeva.manuel@nxp.com>
-References: <20190909121525.13935-1-maeva.manuel@nxp.com>
- <20190909121525.13935-7-maeva.manuel@nxp.com>
-Message-ID: <20200205121258.2466188e@windsurf>
+From: Frank Vanbever <frank.vanbever@essensium.com>
+Date: Wed, 05 Feb 2020 12:15:19 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/erlang: bump to version 22.2
+In-Reply-To: <20200205103739.62be0ec6@windsurf>
+References: <20200129172618.16966-1-frank.vanbever@essensium.com>
+ <20200204100733.22106-1-frank.vanbever@essensium.com>
+ <20200205103739.62be0ec6@windsurf>
+Message-ID: <2231542.ug6IuTeUKT@wintermute>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 9 Sep 2019 12:15:09 +0000
-Maeva Manuel <maeva.manuel@nxp.com> wrote:
+Hello Thomas,
 
-> 	The ahab-container.img has been replaced by
-> 	mx8qx-ahab-container.img because of the i.MX8QM support
-> 
-> Signed-off-by: Maeva Manuel <maeva.manuel@nxp.com>
-> ---
->  board/freescale/imx8qxpmek/readme.txt | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/board/freescale/imx8qxpmek/readme.txt b/board/freescale/imx8qxpmek/readme.txt
-> index 45f7915fe4..e10138f8f8 100644
-> --- a/board/freescale/imx8qxpmek/readme.txt
-> +++ b/board/freescale/imx8qxpmek/readme.txt
-> @@ -17,7 +17,8 @@ Build all components:
->    make
->  
->  You will find in output/images/ the following files:
-> -  - ahab-container.img
-> +
-> +  - mx8qx-ahab-container.img
+On Wednesday, 5 February 2020 10:37:39 CET Thomas Petazzoni wrote:
+> Why is this save_bootstrap now needed ?
 
-Since I did not take your commit for the firmware-imx update, this
-change is not needed. Indeed the bump in
-3ec818769d5140f337684d8c35497ca940bffa34 and the following fix in
-571b8ca09563ffa97a1d0df2fa076530426ab8da ensure that the name is still
-ahab-container.img.
+During development I encountered build failures due to the following file not 
+being present:
 
-Best regards,
+    otp_src_22.2/bootstrap/lib/kernel/include/logger.hrl
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The save_bootstrap command creates this file.
+
+I attempted to reproduce this build failure today and I am unable to do so.
+Likely the behaviour I saw was an artifact of some manipulation I did to fix 
+the build rather than inherent to Erlang itself.
+
+AFAICT all lines related to ERLANG_RUN_SAVE_BOOTSTRAP can be removed as they 
+serve no purpose. This is as you mention also supported by the Erlang 
+documentation.
+
+Given that it's removing code is this still something you can amend during the 
+merge or do you want me to resubmit the patches?
+
+Br,
+Frank
