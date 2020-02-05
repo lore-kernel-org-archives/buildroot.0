@@ -1,39 +1,84 @@
-From: Frank Vanbever <frank.vanbever@essensium.com>
-Date: Wed, 05 Feb 2020 12:15:19 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/erlang: bump to version 22.2
-In-Reply-To: <20200205103739.62be0ec6@windsurf>
-References: <20200129172618.16966-1-frank.vanbever@essensium.com>
- <20200204100733.22106-1-frank.vanbever@essensium.com>
- <20200205103739.62be0ec6@windsurf>
-Message-ID: <2231542.ug6IuTeUKT@wintermute>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Feb 2020 12:20:31 +0100
+Subject: [Buildroot] [PATCH 6/7] configs/freescale_imx8qmmek: new
+ defconfig
+In-Reply-To: <20190909121525.13935-6-maeva.manuel@nxp.com>
+References: <20190909121525.13935-1-maeva.manuel@nxp.com>
+ <20190909121525.13935-6-maeva.manuel@nxp.com>
+Message-ID: <20200205122031.37d07400@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello Maeva,
 
-On Wednesday, 5 February 2020 10:37:39 CET Thomas Petazzoni wrote:
-> Why is this save_bootstrap now needed ?
+On Mon, 9 Sep 2019 12:15:07 +0000
+Maeva Manuel <maeva.manuel@nxp.com> wrote:
 
-During development I encountered build failures due to the following file not 
-being present:
+> Signed-off-by: Maeva Manuel <maeva.manuel@nxp.com>
 
-    otp_src_22.2/bootstrap/lib/kernel/include/logger.hrl
+> diff --git a/board/freescale/imx8qmmek/readme.txt b/board/freescale/imx8qmmek/readme.txt
+> new file mode 100644
+> index 0000000000..15eecfa83e
+> --- /dev/null
+> +++ b/board/freescale/imx8qmmek/readme.txt
+> @@ -0,0 +1,66 @@
+> +***************************
+> +Freescale i.MX8QM MEK board
+> +***************************
+> +
+> +This file documents the Buildroot support for the Freescale i.MX8QM MEK board.
+> +
+> +Build
+> +=====
+> +
+> +First, configure Buildroot for the i.MX8QM MEK board:
+> +
+> +  make freescale_imx8qmmek_defconfig
+> +
+> +Build all components:
+> +
+> +  make
+> +
+> +You will find in output/images/ the following files:
+> +  - mx8qm-ahab-container.img
 
-The save_bootstrap command creates this file.
+The file is now really named ahab-container.img
 
-I attempted to reproduce this build failure today and I am unable to do so.
-Likely the behaviour I saw was an artifact of some manipulation I did to fix 
-the build rather than inherent to Erlang itself.
 
-AFAICT all lines related to ERLANG_RUN_SAVE_BOOTSTRAP can be removed as they 
-serve no purpose. This is as you mention also supported by the Erlang 
-documentation.
+> diff --git a/configs/freescale_imx8qmmek_defconfig b/configs/freescale_imx8qmmek_defconfig
+> new file mode 100644
+> index 0000000000..b0c433cf4a
+> --- /dev/null
+> +++ b/configs/freescale_imx8qmmek_defconfig
+> @@ -0,0 +1,40 @@
+> +BR2_aarch64=y
+> +BR2_ARM_FPU_VFPV4=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+> +#GCC version must be inferior to 8_X because of -Wstringop-truncation message error
+> +BR2_GCC_VERSION_7_X=y
 
-Given that it's removing code is this still something you can amend during the 
-merge or do you want me to resubmit the patches?
+Which component fails to build like this? Isn't this fixed by using a
+newer 4.14 kernel such as 4.14.98 like other Freescale/NXP defconfigs
+in Buildroot ?
 
-Br,
-Frank
+For a new defconfig, it is really not good if we can't use the current
+default version of gcc.
+
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qm-mek.dtb"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="ssh://git at bitbucket.sw.nxp.com/imx/linux-imx.git"
+
+This is not accessible to the public, you need to use public URLs.
+
+Could you fix these issues and send an updated version ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
