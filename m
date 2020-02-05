@@ -1,78 +1,47 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 5 Feb 2020 09:15:18 -0600
-Subject: [Buildroot] [PATCH 1/2] package/localedef: bump to version 2.30
-In-Reply-To: <20200131222420.3d92ff13@gmx.net>
-References: <20200125234918.24829-1-romain.naour@gmail.com>
- <CANQCQpZhQPvjr27oZwBeyPOnQDjtti-1XUp+_xQHCJesYBmMiw@mail.gmail.com>
- <CANQCQpZ8g-L_Y5V3Xp5x99QaWotqQSPn5snV75e3w08TUG8zrA@mail.gmail.com>
- <20200131222420.3d92ff13@gmx.net>
-Message-ID: <CANQCQpbE5nexg6HAt6Lhb9RTopYhmvjj32xnQ8fWTbS3CXe9EA@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 5 Feb 2020 16:15:41 +0100
+Subject: [Buildroot] [git commit] package/lapack: avoid selecting lapack and
+ clapack
+Message-ID: <20200205150454.EDD948C9F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=24814a095814f3cf241ad12f90c701f98bee6849
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Jan 31, 2020 at 3:25 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> Hello *,
->
-> On Fri, 31 Jan 2020 14:32:39 -0600, Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
->
-> > Romain,
-> >
-> > On Fri, Jan 31, 2020 at 1:47 PM Matthew Weber
-> > <matthew.weber@rockwellcollins.com> wrote:
-> > >
-> > > Romain,
-> > >
-> > > On Sat, Jan 25, 2020 at 5:50 PM Romain Naour <romain.naour@gmail.com> wrote:
-> > > >
-> > > > Use the same version as for glibc package.
-> > >
-> > > Seems this bump requires a newer host compiler.  I found this on
-> > > Ubuntu 16.04.2  with gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0
-> > > 20160609
-> > >
-> > > BR2_aarch64=y
-> > > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> > > BR2_KERNEL_HEADERS_4_14=y
-> > > BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> > > BR2_LINUX_KERNEL=y
-> > > BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> > > BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-> > > BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> > > BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-> > > BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> > >
-> > > make host-localedef
-> > >
-> > > configure: error:
-> > > *** These critical programs are missing or too old: compiler
-> > > *** Check the INSTALL file for required versions.
-> > >
-> > > per the INSTALL file, GCC 6.2 or higher is required
-> >
-> > I did a build test reverting the 6.2 check (left it checking for 5)
-> > and it built OK.  I'd suggest adding a patch to revert
-> > https://sourceware.org/git/?p=glibc.git;a=commit;h=4dcbbc3b28aaeafe23e1a30db84055aa6f6fa987
-> > .
-> >
-> > In addition, I agree a host toolchain dependency needs to be added for
-> > 5 (unless we also revert
-> > https://sourceware.org/git/?p=glibc.git;a=commit;h=192963be49678b48f60218f1f794991cdd9fe472
-> >  to get back to 4.x which doesn't seem like it would work out).
-> >
->
-> Suggested RFC patch (way back from December 2018) contained already an
-> '0002-HACK-accept-old-toolchains.patch' to fix configure/compile for
-> old host toolchains (see [1])..., maybe time to resurrect (and rebase)
-> this one?
+lapack and clapack generate the same libraries liblapack.so and
+libblas.so. So those two packages can't be selected at the same time.
 
-Agree, plus your 0001 for the linker seems to be required as well in
-the case I see with using 2019.11.1 on Ubuntu 16.04.
+This is a temporary fix waiting for a solution[2].
 
-Regards,
-Matt
+So:
+- add !BR2_PACKAGE_CLAPACK to lapack/Config.in.
+
+[1]: http://autobuild.buildroot.org/results/375/375078ed8f965ecf92eb9674bd071a518c3ef894//
+[2]: http://lists.busybox.net/pipermail/buildroot/2019-August/255894.html
+
+Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Romain Naour <romain.naour@smile.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/lapack/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/lapack/Config.in b/package/lapack/Config.in
+index 9687ace82d..6cd0810cb1 100644
+--- a/package/lapack/Config.in
++++ b/package/lapack/Config.in
+@@ -5,6 +5,7 @@ comment "lapack/blas needs a toolchain w/ fortran"
+ config BR2_PACKAGE_LAPACK
+ 	bool "lapack/blas"
+ 	depends on BR2_TOOLCHAIN_HAS_FORTRAN
++	depends on !BR2_PACKAGE_CLAPACK
+ 	# _fpu_control is used on PowerPC, but not available with uClibc
+ 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+ 	help
