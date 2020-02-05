@@ -1,71 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Feb 2020 15:37:51 +0100
-Subject: [Buildroot] [git commit] package/elixir: new package
-Message-ID: <20200205142657.B2F1F8C9AE@busybox.osuosl.org>
+Date: Wed, 5 Feb 2020 15:42:26 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/erlang: bump to version 22.2
+In-Reply-To: <20200204100733.22106-1-frank.vanbever@essensium.com>
+References: <20200129172618.16966-1-frank.vanbever@essensium.com>
+ <20200204100733.22106-1-frank.vanbever@essensium.com>
+Message-ID: <20200205154226.0dca67b1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14ff0c73899df6db0c83c5ecb8c85429df9513e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Frank,
 
-elixir is required to build RabbitMQ starting from v3.7
+I've applied your patch, but with some changes. See below.
 
-Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                 |  1 +
- package/elixir/elixir.hash |  3 +++
- package/elixir/elixir.mk   | 21 +++++++++++++++++++++
- 3 files changed, 25 insertions(+)
+On Tue,  4 Feb 2020 11:07:31 +0100
+Frank Vanbever <frank.vanbever@essensium.com> wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index af03992cc3..67cce2f8e4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -960,6 +960,7 @@ F:	package/upx/
- F:	package/zxing-cpp/
- 
- N:	Frank Vanbever <frank.vanbever@essensium.com>
-+F: 	package/elixir/
- F:	package/libmodsecurity/
- F:	package/nginx-modsecurity/
- 
-diff --git a/package/elixir/elixir.hash b/package/elixir/elixir.hash
-new file mode 100644
-index 0000000000..b4d2f8b6b0
---- /dev/null
-+++ b/package/elixir/elixir.hash
-@@ -0,0 +1,3 @@
-+# Computed locally
-+sha256 f3465d8a8e386f3e74831bf9594ee39e6dfde6aa430fe9260844cfe46aa10139  elixir-1.9.4.tar.gz
-+sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE
-diff --git a/package/elixir/elixir.mk b/package/elixir/elixir.mk
-new file mode 100644
-index 0000000000..7a545d43b0
---- /dev/null
-+++ b/package/elixir/elixir.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# elixir
-+#
-+################################################################################
-+
-+ELIXIR_VERSION = 1.9.4
-+ELIXIR_SITE = $(call github,elixir-lang,elixir,v$(ELIXIR_VERSION))
-+ELIXIR_LICENSE = Apache-2.0
-+ELIXIR_LICENSE_FILES = LICENSE
-+ELIXIR_DEPENDENCIES = host-erlang
-+
-+define HOST_ELIXIR_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) compile
-+endef
-+
-+define HOST_ELIXIR_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) PREFIX="$(HOST_DIR)" -C $(@D) install
-+endef
-+
-+$(eval $(host-generic-package))
+>  # See note below when updating Erlang
+> -ERLANG_VERSION = 21.0
+> +ERLANG_VERSION = 22.2
+>  ERLANG_SITE = http://www.erlang.org/download
+>  ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
+>  ERLANG_DEPENDENCIES = host-erlang
+> @@ -15,11 +15,20 @@ ERLANG_LICENSE_FILES = LICENSE.txt
+>  ERLANG_INSTALL_STAGING = YES
+>  
+>  # Patched erts/aclocal.m4
+> -ERLANG_AUTORECONF = YES
+> +define ERLANG_RUN_AUTOCONF
+> +	cd $(@D) && PATH=$(BR_PATH) ./otp_build autoconf
+> +endef
+> +HOST_ERLANG_DEPENDENCIES = host-autoconf
+> +ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
+
+ERLANG_AUTORECONF = YES does the thing for both the host and target
+packages.
+
+However here, you are adding host-autoconf as a dependency for
+host-erlang, but you're doing the autoconf only on the target erlang.
+So I fixed that to ensure we add host-autoconf to both target/host
+variants of erlang (which is pedantic since anyway erlang depends on
+host-erlang) and do the autoconf on both host and target.
+
+> +define ERLANG_RUN_SAVE_BOOTSTRAP
+> +	cd $(@D) && PATH=$(BR_PATH) ./otp_build save_bootstrap
+> +endef
+> +ERLANG_POST_CONFIGURE_HOOKS += ERLANG_RUN_SAVE_BOOTSTRAP
+
+As we discussed, this does not seem to be needed, at least from my
+testing, so I dropped this.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
