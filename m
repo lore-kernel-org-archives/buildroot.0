@@ -1,168 +1,85 @@
-From: Michael Walle <michael@walle.cc>
-Date: Wed, 05 Feb 2020 14:47:59 +0100
-Subject: [Buildroot] [PATCH v4 6/9] package/qoriq-cadence-dp-firmware:
- new package
-In-Reply-To: <20200205105227.13698-6-jerry.huang@nxp.com>
-References: <20200205105227.13698-1-jerry.huang@nxp.com>
- <20200205105227.13698-6-jerry.huang@nxp.com>
-Message-ID: <f806a25e2111a02a4c3048d2f91b9d34@walle.cc>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 5 Feb 2020 07:56:23 -0600
+Subject: [Buildroot] [PATCH v2] packagersyslog: enable options when
+ libcurl is enabled
+In-Reply-To: <CANQCQpYkxiByUsrfQbDHDd0WpAsTeiggJXJpJqNp6_N=M1ud5A@mail.gmail.com>
+References: <20191104211203.52912-1-matthew.weber@rockwellcollins.com>
+ <87a761ni4l.fsf@dell.be.48ers.dk>
+ <CANQCQpYkxiByUsrfQbDHDd0WpAsTeiggJXJpJqNp6_N=M1ud5A@mail.gmail.com>
+Message-ID: <CANQCQpaJmxptbNBoOuD9tyfL9rh_Y9d_6HOtwjVuqw2wxpcPgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 2020-02-05 11:52, schrieb Changming Huang:
-> From: Jerry Huang <jerry.huang@nxp.com>
-> 
-> This package provides the firmware for LS1028ARDB DP (display port).
-> 
-> Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
-> ---
-> changes since v3:
-> no changes.
-> 
-> changes since v2:
-> 1. change the package name to qoriq-cadence-dp-firmware.
-> 2. add the hash of COPYING.
-> 3. modify makefile with new option.
-> 4. update DEVELOPERS with alphabetic ordering
-> 
-> changes since v1:
-> 1. rename the package to fsl-qoriq-cadence-dp-fw.
-> 2. update DEVELOPERS.
-> 3. add the hash of package.
-> 4. modify the context fo config file to package name.
-> 5. re-write the makefile according to rule of buildroot.
-> 6. add the license message in makefile.
-> ---
->  DEVELOPERS                                    |  3 +++
->  package/nxp/Config.in                         |  2 ++
->  package/nxp/helper.mk                         |  2 ++
->  .../nxp/qoriq-cadence-dp-firmware/Config.in   |  4 ++++
->  .../qoriq-cadence-dp-firmware.hash            |  3 +++
->  .../qoriq-cadence-dp-firmware.mk              | 23 +++++++++++++++++++
->  6 files changed, 37 insertions(+)
->  create mode 100644 package/nxp/qoriq-cadence-dp-firmware/Config.in
->  create mode 100644
-> package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
->  create mode 100644
-> package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 9303841c47..0e131b0668 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -513,6 +513,9 @@ F:	configs/nanopi_m1_plus_defconfig
->  F:	configs/olimex_a13_olinuxino_defconfig
->  F:	configs/orangepi_plus_defconfig
-> 
-> +N:	Changming Huang <jerry.huang@nxp.com>
-> +F:	package/nxp/qoriq-cadence-dp-firmware/
-> +
->  N:	Chris Packham <judge.packham@gmail.com>
->  F:	package/gstreamer1/gst1-shark/
->  F:	package/micropython/
-> diff --git a/package/nxp/Config.in b/package/nxp/Config.in
-> index 575542c7ab..855d62700b 100644
-> --- a/package/nxp/Config.in
-> +++ b/package/nxp/Config.in
-> @@ -1,4 +1,6 @@
->  menu "NXP QorIQ libraries"
->  	depends on BR2_aarch64 || BR2_arm || BR2_powerpc64 || BR2_powerpc
-> 
-> +source "package/nxp/qoriq-cadence-dp-firmware/Config.in"
-> +
->  endmenu
-> diff --git a/package/nxp/helper.mk b/package/nxp/helper.mk
-> index 79e4236249..2eee2227af 100644
-> --- a/package/nxp/helper.mk
-> +++ b/package/nxp/helper.mk
-> @@ -4,6 +4,8 @@
->  #
-> 
-> ################################################################################
-> 
-> +NXP_QORIQ_SITE = http://www.nxp.com/lgfiles/sdk/lsdk1909
-> +
+Peter,
 
-I'm not sure if that NXP_QORIQ_SITE should go in here. But the specifc 
-version "lsdk1909" is for sure not correct.
+On Mon, Feb 3, 2020 at 11:35 AM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Peter,
+>
+> On Sun, Feb 2, 2020 at 9:07 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+> >
+> > >>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+> >
+> >  > Following the bump to 8.1910.0, items requiring libcurl were
+> >  > disabled by default. This patch selectively enables options
+> >  > which depend on libcurl when that package is enabled in the
+> >  > build.
+> >
+> >  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> >  > ---
+> >  > Changes
+> >  > v1 -> v2
+> >  > [Thomas
+> >  >  - Flipped libcurl conditional and name of this patchset to rsyslog
+> >  > ---
+> >  >  package/rsyslog/rsyslog.mk | 12 +++++++++++-
+> >  >  1 file changed, 11 insertions(+), 1 deletion(-)
+> >
+> >  > diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+> >  > index 5bd6b59ba3..d5a88b19d3 100644
+> >  > --- a/package/rsyslog/rsyslog.mk
+> >  > +++ b/package/rsyslog/rsyslog.mk
+> >  > @@ -17,7 +17,16 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
+> >  >  RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
+> >  >      $(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
+> >
+> >  > -# Disable items requiring libcurl
+> >  > +ifeq ($(BR2_PACKAGE_LIBCURL),y)
+> >  > +RSYSLOG_DEPENDENCIES += libcurl
+> >  > +RSYSLOG_CONF_OPTS += --enable-elasticsearch \
+> >  > +    --enable-clickhouse \
+> >  > +    --enable-omhttp \
+> >  > +    --enable-fmhttp \
+> >  > +    --enable-imdocker \
+> >  > +    --enable-omhttpfs \
+> >  > +    --enable-mmkubernetes
+> >
+> >  I was about to apply this, but it fails to build here (a config with
+> >  just curl and rsyslog):
+> >
+> > checking for CURL... yes
+> > checking for LIBLOGNORM... no
+> > configure: error: Package requirements (lognorm >= 2.0.3) were not met:
+> >
+> > Package 'lognorm', required by 'virtual:world', not found
+> >
+> > Consider adjusting the PKG_CONFIG_PATH environment variable if you
+> > installed software in a non-standard prefix.
+> >
+> > Alternatively, you may set the environment variables LIBLOGNORM_CFLAGS
+> > and LIBLOGNORM_LIBS to avoid the need to call pkg-config.
+> > See the pkg-config man page for more details.
+> > make[1]: *** [package/pkg-generic.mk:250: /home/peko/source/buildroot/output-rsyslog/build/rsyslog-8.1911.0/.stamp_configured] Error 1
+> >
+> > Care to take a look?
 
->  # Helper for self-extracting binaries distributed by NXP.
->  #
->  # The --force option makes sure it doesn't fail if the source
-> diff --git a/package/nxp/qoriq-cadence-dp-firmware/Config.in
-> b/package/nxp/qoriq-cadence-dp-firmware/Config.in
-> new file mode 100644
-> index 0000000000..3f494bd3a3
-> --- /dev/null
-> +++ b/package/nxp/qoriq-cadence-dp-firmware/Config.in
-> @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE
-> +	bool "qoriq-cadence-dp-firmware"
-> +	help
-> +	  NXP QorIQ cadence DP firmware, a resident EL3 firmware.
-> diff --git
-> a/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-> b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-> new file mode 100644
-> index 0000000000..89aaf1d71b
-> --- /dev/null
-> +++ 
-> b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256
-> 5871c5717be32f14a59624d5699d405e8ce9ae2e9c9ef86fd16e13d264a40e58
-> firmware-cadence-lsdk1909.bin
-> +sha256
-> d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561
-> COPYING
-> diff --git
-> a/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-> b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-> new file mode 100644
-> index 0000000000..239f4b9d75
-> --- /dev/null
-> +++ 
-> b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# qoriq-cadence-dp-firmware
-> +#
-> +################################################################################
-> +
-> +QORIQ_CADENCE_DP_FIRMWARE_VERSION = lsdk1909
-> +QORIQ_CADENCE_DP_FIRMWARE_SITE = $(NXP_QORIQ_SITE)
+Looking at this I think I'd like to reject my patch for now.  I think
+we need a specific use case to test this out and justify why libcurl
+options should be enabled.  I had just sent the patch to round out the
+previous bump that had disabled libcurl related items.
 
-why don't you just use
-QORIQ_CADENCE_DP_FIRMWARE_SITE = 
-http://www.nxp.com/lgfiles/sdk/$(QORIQ_CADENCE_DP_FIRMWARE_VERSION)
-
-> +QORIQ_CADENCE_DP_FIRMWARE_SOURCE =
-> firmware-cadence-$(QORIQ_CADENCE_DP_FIRMWARE_VERSION).bin
-> +QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP-Binary-EULA
-> +QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING
-> +QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
-> +QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
-> +
-> +define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
-> +	$(call
-> NXP_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
-> +endef
-> +
-> +define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
-> +	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin
-> $(BINARIES_DIR)/ls1028a-dp-fw.bin
-> +endef
-
-Installing the firmware into the target filesystem is missing. As 
-pointed out by me - and also
-Vladimir - the DisplayPort driver should rather load the firmare by its 
-on and should not
-depend on the bootloader to load it.
-
-> +
-> +$(eval $(generic-package))
+Matt
