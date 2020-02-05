@@ -1,70 +1,49 @@
-From: Alexandre PAYEN <alexandre.payen@smile.fr>
-Date: Wed, 5 Feb 2020 16:25:11 +0100
-Subject: [Buildroot] [PATCH v3] package/python-imutils: new package
-In-Reply-To: <20200205162013.2749e009@windsurf>
-References: <20190802144503.23601-1-alexandre.payen@smile.fr>
- <20200205162013.2749e009@windsurf>
-Message-ID: <CAC5PdM0c0RqgXOYe1YM3A-iUk19QuabZLyQE=tRvxxm=mn8H3Q@mail.gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Wed,  5 Feb 2020 15:58:02 +0100
+Subject: [Buildroot] [PATCH] package/gr-osmosdr: fix dependencies
+Message-ID: <1580914682-11394-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-thanks for the review.
-This patch was part of my work with lapack/clapack if I remember.
+gr-osmosdr fails with:
+CMake Error at /somewhere/buildroot/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/cmake/gnuradio/GnuradioConfig.cmake:116 (include):
+  include could not find load file:
 
-I will soon take some time to provide a new version of this patch.
+    /somewhere/buildroot/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/cmake/gnuradio/gnuradio-filterConfig.cmake
+Call Stack (most recent call first):
+  CMakeLists.txt:45 (find_package)
 
-Regards,
-Alexandre
+gr-osmosdr depends on BR2_PACKAGE_GNURADIO_BLOCKS, BR2_PACKAGE_GNURADIO_FFT and
+BR2_PACKAGE_GNURADIO_FILTER.
 
-Le mer. 5 f?vr. 2020 ? 16:20, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
+By replacing BLOCKS by FILTER (FILTER select FFT, and FFT select BLOCKS) every mandatories
+Gnu Radio modules are selected.
 
-> Hello Alexandre,
->
-> On Fri,  2 Aug 2019 16:45:03 +0200
-> Aalx <alexandre.payen@smile.fr> wrote:
->
-> > diff --git a/package/python-imutils/Config.in
-> b/package/python-imutils/Config.in
-> > new file mode 100644
-> > index 0000000000..0c8ffbda56
-> > --- /dev/null
-> > +++ b/package/python-imutils/Config.in
-> > @@ -0,0 +1,36 @@
-> > +config BR2_PACKAGE_PYTHON_IMUTILS
-> > +     bool "python-imutils"
-> > +     depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-scipy
-> > +     depends on BR2_PACKAGE_PYTHON3 # python-scipy
-> > +     depends on BR2_TOOLCHAIN_HAS_FORTRAN # python-scipy
-> > +     depends on BR2_TOOLCHAIN_HAS_ATOMIC # opencv3
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # opencv3
-> > +     depends on BR2_INSTALL_LIBSTDCPP # opencv3
-> > +     depends on BR2_USE_WCHAR # opencv3
-> > +     depends on !BR2_STATIC_LIBS  # opencv3
-> > +     depends on !BR2_PACKAGE_OPENCV # opencv3
-> > +     depends on BR2_PACKAGE_OPENCV3
->
-> If you "depends on BR2_PACKAGE_OPENCV3", there is no need to replicate
-> all the dependencies of opencv3 inside this package.
->
-> > +     select BR2_PACKAGE_PYTHON_SCIPY
->
-> We don't have this package in Buildroot, this needs to be added before
-> we can merge python-imutils.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200205/5d65ff15/attachment.html>
+fix:
+- http://autobuild.buildroot.net/results/1781db2b8c28641167f7a39a4d799930db13f9bf/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/gr-osmosdr/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
+index f26380371f..8d42964900 100644
+--- a/package/gr-osmosdr/Config.in
++++ b/package/gr-osmosdr/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_GR_OSMOSDR
+ 	bool "gr-osmosdr"
+ 	depends on BR2_PACKAGE_GNURADIO
+-	select BR2_PACKAGE_GNURADIO_BLOCKS
++	select BR2_PACKAGE_GNURADIO_FILTER
+ 	help
+ 	  GNU Radio block for interfacing with various radio hardware
+ 
+-- 
+2.24.1
