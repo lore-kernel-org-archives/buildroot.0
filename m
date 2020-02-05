@@ -1,82 +1,50 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed,  5 Feb 2020 12:26:08 -0600
-Subject: [Buildroot] [PATCH] package/rng-tools: make jitterentropy
- conditional
-Message-ID: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 05 Feb 2020 19:26:58 +0100
+Subject: [Buildroot] [PATCHv2] package/ncurses: add upstream (security)
+ patches up to 20200118
+In-Reply-To: <20200205161948.GG3131@scaer> (Yann E. MORIN's message of "Wed, 5
+ Feb 2020 17:19:48 +0100")
+References: <20200205133111.24540-1-patrickdepinguin@gmail.com>
+ <20200205161948.GG3131@scaer>
+Message-ID: <87sgjovqj1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The update of rng-tools from 5 to 6.7 introduced a change where
-the jitterentropy library was enabled by default instead of
-returning a special 66 return code to hangle the case of no
-hwrng. This patch reverts that change and allows a user to
-select when to enable the jitterentropy source. The bug
-documents an issue of when a hwrng is enabled with jitterentropy
-there is a longer boot time.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fixes:
-https://bugs.busybox.net/show_bug.cgi?id=12511
+ > Peter, Thomas, All,
+ > On 2020-02-05 14:31 +0100, Thomas De Schampheleire spake thusly:
+ >> From: Peter Korsgaard <peter@korsgaard.com>
+ >> Fixes the following security issues:
+ > [--SNIP--]
+ >> While we are at it, adjust the white space in the .hash file to match
+ >> sha256sum output for consistency.
+ > [--SNIP--]
+ >> # Locally computed
+ >> -sha256	86106f0da1cf5ccfa0f0651665dd1b4515e8edad1c7972780155770548b317d9	COPYING
+ >> +sha256  86106f0da1cf5ccfa0f0651665dd1b4515e8edad1c7972780155770548b317d9  COPYING
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/rng-tools/Config.in    | 1 -
- package/rng-tools/rng-tools.mk | 9 ++++++++-
- package/rng-tools/rngd.service | 1 +
- 3 files changed, 9 insertions(+), 2 deletions(-)
+ > The hash for the license file is now wrong:
 
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index 71514260e6..ddcc221d06 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_RNG_TOOLS
- 	# pthread_setaffinity_np
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
--	select BR2_PACKAGE_JITTERENTROPY_LIBRARY
- 	# For rdrand & darn ligcrypt is required and it's not obvious to users
- 	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64 || BR2_powerpc64le
- 	select BR2_PACKAGE_LIBSYSFS
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index 274079044c..e458fbb8eb 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -8,7 +8,7 @@ RNG_TOOLS_VERSION = 6.8
- RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
- RNG_TOOLS_LICENSE = GPL-2.0
- RNG_TOOLS_LICENSE_FILES = COPYING
--RNG_TOOLS_DEPENDENCIES = libsysfs jitterentropy-library host-pkgconf
-+RNG_TOOLS_DEPENDENCIES = libsysfs host-pkgconf
- # From git
- RNG_TOOLS_AUTORECONF = YES
- 
-@@ -29,6 +29,13 @@ else
- RNG_TOOLS_CONF_OPTS += --without-libgcrypt
- endif
- 
-+ifeq ($(BR2_PACKAGE_JITTERENTROPY_LIBRARY),y)
-+RNG_TOOLS_DEPENDENCIES += jitterentropy-library
-+RNG_TOOLS_CONF_OPTS += --enable-jitterentropy
-+else
-+RNG_TOOLS_CONF_OPTS += --disable-jitterentropy
-+endif
-+
- define RNG_TOOLS_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/rng-tools/S21rngd \
- 		$(TARGET_DIR)/etc/init.d/S21rngd
-diff --git a/package/rng-tools/rngd.service b/package/rng-tools/rngd.service
-index 11386d1e5d..c0bcffe59e 100644
---- a/package/rng-tools/rngd.service
-+++ b/package/rng-tools/rngd.service
-@@ -3,6 +3,7 @@ Description=Hardware RNG Entropy Gatherer Daemon
- 
- [Service]
- ExecStart=/usr/sbin/rngd -f $DAEMON_ARGS
-+SuccessExitStatus=66
- EnvironmentFile=-/etc/default/rngd
- 
- [Install]
+ >>>> ncurses 6.1 Collecting legal info
+ >     ERROR: COPYING has wrong sha256 hash:
+ >     ERROR: expected:
+ >     86106f0da1cf5ccfa0f0651665dd1b4515e8edad1c7972780155770548b317d9
+ >     ERROR: got     :
+ >     4d1fde61868c73776a539366dccf5d5a4857e7fd7299efb1f02e07c2afe9ea87
+ >     ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+ >     make[1]: *** [package/ncurses/ncurses.mk:200: ncurses-legal-info] Error 1
+ >     make: *** [Makefile:23: _all] Error 2
+
+ > That's because it has been changed by ncurses-6.1-20200104, to change
+ > the Copyright year.
+
+ > Fixed that and pushed, thanks.
+
+Ups, thanks!
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
