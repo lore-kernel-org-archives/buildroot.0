@@ -1,59 +1,26 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Feb 2020 16:26:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: fix gstreamer-gl
- dependency
-In-Reply-To: <20190807192313.118268-1-james.hilliard1@gmail.com>
-References: <20190807192313.118268-1-james.hilliard1@gmail.com>
-Message-ID: <f4558e3d-c0ec-962d-b1db-ea96e3862c27@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 05 Feb 2020 15:40:24 +0000
+Subject: [Buildroot] [Bug 11926] Cross compiled Qt applications aren't
+ working anymore
+In-Reply-To: <bug-11926-163@https.bugs.busybox.net/>
+References: <bug-11926-163@https.bugs.busybox.net/>
+Message-ID: <bug-11926-163-9Od71b2n82@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=11926
 
+--- Comment #6 from Martin <martinv1985@gmail.com> ---
+I was having similar issues when compiling a image with qt for arm. Even
+qtdiag, which was also build using buildroot, had the error that the EGL/GLES
+libraries where linked using the absolute paths of the machine running
+buildroot. However, when testing Qt version 5.14 this problem seems to be
+resolved. The qtdiag works again and i can also compile and run one of the
+example programs myself.
 
-On 07/08/2019 21:23, James Hilliard wrote:
-> The gstreamer1 opengl plugin was moved from gst1-plugins-bad to
-> gst1-plugins-base so we need to update webkitgtk to depend on the
-> correct package.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-> ---
->  package/webkitgtk/Config.in    | 3 +--
->  package/webkitgtk/webkitgtk.mk | 1 -
->  2 files changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-> index db67c89042..d822bec06a 100644
-> --- a/package/webkitgtk/Config.in
-> +++ b/package/webkitgtk/Config.in
-> @@ -95,8 +95,7 @@ if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
->  config BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL
->  	bool "use gstreamer-gl"
->  	default y
-> -	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
-> -	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
-> +	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
->  	help
->  	  Use the GStreamer GL elements for handling video content.
->  	  This is recommended as it improves performance of video
-> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> index f8cd728351..7c4a9c81f8 100644
-> --- a/package/webkitgtk/webkitgtk.mk
-> +++ b/package/webkitgtk/webkitgtk.mk
-> @@ -88,7 +88,6 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL),y)
->  WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
-> -WEBKITGTK_DEPENDENCIES += gst1-plugins-bad
->  else
->  WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
->  endif
-> 
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
