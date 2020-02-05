@@ -1,65 +1,59 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 4 Feb 2020 23:23:57 -0500
-Subject: [Buildroot] [PATCH 1/1] package/gcc: pass -Wno-error to debug
- builds
-In-Reply-To: <7b8ffab6-a31d-6bf7-f3c7-706fb0845ba0@smile.fr>
-References: <20200204001027.126863-1-james.hilliard1@gmail.com>
- <7b8ffab6-a31d-6bf7-f3c7-706fb0845ba0@smile.fr>
-Message-ID: <CADvTj4rkFZXX31ESPgW=nZex494HFjB-znTZKs7TB_nfX3Dp3Q@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 5 Feb 2020 06:53:45 +0100
+Subject: [Buildroot] [PATCH 2/2] docs/manual: describe the new
+ <pkg>_IGNORE_CVES variable
+In-Reply-To: <20200204215232.666841-3-thomas.petazzoni@bootlin.com>
+References: <20200204215232.666841-1-thomas.petazzoni@bootlin.com>
+ <20200204215232.666841-3-thomas.petazzoni@bootlin.com>
+Message-ID: <CAAXf6LUUGD0FsEbzmnr9xQ96x7T+Yff4Mr-_47r0x_2TLPXhQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 4, 2020 at 4:14 PM Romain Naour <romain.naour@smile.fr> wrote:
->
-> Hi James,
->
-> Le 04/02/2020 ? 01:10, James Hilliard a ?crit :
-> > Fixes:
-> > ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
-> >    return S_ISLNK (st.st_mode);
-> >                      ^
-> >
->
-> Can you provide a defconfig that allow to reproduce the issue.
-BR2_ENABLE_DEBUG=y
-BR2_DEBUG_3=y
-BR2_OPTIMIZE_G=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_HOST_GDB=y
-BR2_GDB_VERSION_8_3=y
+On Tue, Feb 4, 2020, 22:52 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
 
-FYI this fix was adapted from openembedded:
-https://github.com/openembedded/openembedded-core/blob/d3083e941578fb343454e106eba349adcc525ad3/meta/recipes-devtools/gcc/gcc-sanitizers.inc#L48-L49
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  docs/manual/adding-packages-generic.txt | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 >
-> Thanks!
+> diff --git a/docs/manual/adding-packages-generic.txt
+> b/docs/manual/adding-packages-generic.txt
+> index baa052e31c..9a77923a92 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -488,6 +488,20 @@ not and can not work as people would expect it should:
+>    locations, `/lib/firmware`, `/usr/lib/firmware`, `/lib/modules`,
+>    `/usr/lib/modules`, and `/usr/share`, which are automatically excluded.
 >
-> Best regards,
-> Romain
+> +* +LIBFOO_IGNORE_CVES+ is a space-separated list of CVEs that tells
+> +  Buildroot CVE tracking tools which CVEs should be ignored for this
+> +  package. This is typically used when the CVE is fixed by a patch in
+> +  the package, or when the CVE for some reason does not affect the
+> +  Buildroot package. A Makefile comment must always preceed the
+>
+
+Precede
+
++  addition of a CVE to this variable. Example:
+> +
+> +----------------------
+> +# 0001-fix-cve-2020-12345.patch
+> +LIBFOO_IGNORE_CVES += CVE-2020-12345
+> +# only when built with libbaz, which Buildroot doesn't support
+> +LIBFOO_IGNORE_CVES += CVE-2020-54321
+> +----------------------
+> +
+>  The recommended way to define these variables is to use the following
+>  syntax:
+>
+> --
+> 2.24.1
 >
 >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >  package/gcc/gcc.mk | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> > index 527f30bf22..badf358707 100644
-> > --- a/package/gcc/gcc.mk
-> > +++ b/package/gcc/gcc.mk
-> > @@ -103,6 +103,10 @@ HOST_GCC_COMMON_CONF_ENV = \
-> >  GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
-> >  GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
-> >
-> > +ifeq ($(BR2_ENABLE_DEBUG),y)
-> > +GCC_COMMON_TARGET_CFLAGS += -Wno-error
-> > +endif
-> > +
-> >  # Propagate options used for target software building to GCC target libs
-> >  HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
-> >  HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
-> >
->
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200205/fc7d4f89/attachment.html>
