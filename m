@@ -1,10 +1,10 @@
 From: Changming Huang <jerry.huang@nxp.com>
-Date: Wed,  5 Feb 2020 18:52:24 +0800
-Subject: [Buildroot] [PATCH v4 6/9] package/qoriq-cadence-dp-firmware: new
- package
+Date: Wed,  5 Feb 2020 18:52:20 +0800
+Subject: [Buildroot] v4 [PATCH 2/9] package/qoriq-rcw: move rcw into nxp and
+ rename it
 In-Reply-To: <20200205105227.13698-1-jerry.huang@nxp.com>
 References: <20200205105227.13698-1-jerry.huang@nxp.com>
-Message-ID: <20200205105227.13698-6-jerry.huang@nxp.com>
+Message-ID: <20200205105227.13698-2-jerry.huang@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,8 @@ To: buildroot@busybox.net
 
 From: Jerry Huang <jerry.huang@nxp.com>
 
-This package provides the firmware for LS1028ARDB DP (display port).
+Move package/rcw into package/nxp,
+and rename it to qoriq-rcw.
 
 Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
 ---
@@ -21,115 +22,234 @@ changes since v3:
 no changes.
 
 changes since v2:
-1. change the package name to qoriq-cadence-dp-firmware.
-2. add the hash of COPYING.
-3. modify makefile with new option.
-4. update DEVELOPERS with alphabetic ordering
+1. change the package name to qoriq-rcw to keep consistent with imx-xxx.
+2. add the handing in Config.in.legacy
 
 changes since v1:
-1. rename the package to fsl-qoriq-cadence-dp-fw.
-2. update DEVELOPERS.
-3. add the hash of package.
-4. modify the context fo config file to package name.
-5. re-write the makefile according to rule of buildroot.
-6. add the license message in makefile.
+1. new patch.
+2. move rcw to sub-directory freescale-qoriq.
+3. rename to fsl-qoriq-rcw.
 ---
- DEVELOPERS                                    |  3 +++
- package/nxp/Config.in                         |  2 ++
- package/nxp/helper.mk                         |  2 ++
- .../nxp/qoriq-cadence-dp-firmware/Config.in   |  4 ++++
- .../qoriq-cadence-dp-firmware.hash            |  3 +++
- .../qoriq-cadence-dp-firmware.mk              | 23 +++++++++++++++++++
- 6 files changed, 37 insertions(+)
- create mode 100644 package/nxp/qoriq-cadence-dp-firmware/Config.in
- create mode 100644 package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
- create mode 100644 package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+ Config.in.legacy                              |  8 +++
+ DEVELOPERS                                    |  2 +-
+ package/Config.in.host                        |  2 +-
+ package/{rcw => nxp/qoriq-rcw}/Config.in.host |  6 +--
+ .../rcw.hash => nxp/qoriq-rcw/qoriq-rcw.hash} |  2 +-
+ package/nxp/qoriq-rcw/qoriq-rcw.mk            | 50 +++++++++++++++++++
+ package/rcw/rcw.mk                            | 50 -------------------
+ 7 files changed, 64 insertions(+), 56 deletions(-)
+ rename package/{rcw => nxp/qoriq-rcw}/Config.in.host (88%)
+ rename package/{rcw/rcw.hash => nxp/qoriq-rcw/qoriq-rcw.hash} (82%)
+ create mode 100644 package/nxp/qoriq-rcw/qoriq-rcw.mk
+ delete mode 100644 package/rcw/rcw.mk
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7167b1d60c..515332e22c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
+ 
+ comment "Legacy options removed in 2019.11"
+ 
++config BR2_PACKAGE_HOST_RCW
++	bool "rcw package was removed"
++	select BR2_LEGACY
++	help
++	  Because rcw package has been renamed to qoriq-rcw and moved
++	  to "nxp", option BR2_PACKAGE_HOST_RCW is removed, the option
++	  BR2_PACKAGE_HOST_QORIQ_RCW can be used for QorIQ platforms.
++
+ config BR2_PACKAGE_RPI_USERLAND_START_VCFILED
+ 	bool "rpi-userland start vcfiled was removed"
+ 	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9303841c47..0e131b0668 100644
+index 16e8510b0a..9303841c47 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -513,6 +513,9 @@ F:	configs/nanopi_m1_plus_defconfig
- F:	configs/olimex_a13_olinuxino_defconfig
- F:	configs/orangepi_plus_defconfig
+@@ -1590,6 +1590,7 @@ F:	package/mrouted/
+ F:	package/mtd/
+ F:	package/mtools/
+ F:	package/nginx-upload/
++F:	package/nxp/qoriq-rcw/
+ F:	package/omniorb/
+ F:	package/openresolv/
+ F:	package/paxtest/
+@@ -1610,7 +1611,6 @@ F:	package/python-pyrex/
+ F:	package/python-tinyrpc/
+ F:	package/python-txdbus/
+ F:	package/raptor/
+-F:	package/rcw/
+ F:	package/rng-tools/
+ F:	package/rsyslog/
+ F:	package/setools/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 758c268e00..2b2069b88d 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -45,6 +45,7 @@ menu "Host utilities"
+ 	source "package/mtd/Config.in.host"
+ 	source "package/mtools/Config.in.host"
+ 	source "package/mxsldr/Config.in.host"
++	source "package/nxp/qoriq-rcw/Config.in.host"
+ 	source "package/omap-u-boot-utils/Config.in.host"
+ 	source "package/openocd/Config.in.host"
+ 	source "package/opkg-utils/Config.in.host"
+@@ -62,7 +63,6 @@ menu "Host utilities"
+ 	source "package/qemu/Config.in.host"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
+ 	source "package/rauc/Config.in.host"
+-	source "package/rcw/Config.in.host"
+ 	source "package/rustc/Config.in.host"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+diff --git a/package/rcw/Config.in.host b/package/nxp/qoriq-rcw/Config.in.host
+similarity index 88%
+rename from package/rcw/Config.in.host
+rename to package/nxp/qoriq-rcw/Config.in.host
+index a9253958d9..8f78a40908 100644
+--- a/package/rcw/Config.in.host
++++ b/package/nxp/qoriq-rcw/Config.in.host
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_HOST_RCW
++config BR2_PACKAGE_HOST_QORIQ_RCW
+ 	bool "host rcw"
+ 	help
+ 	  This package provides an reset configuration word(RCW)
+@@ -11,9 +11,9 @@ config BR2_PACKAGE_HOST_RCW
  
-+N:	Changming Huang <jerry.huang@nxp.com>
-+F:	package/nxp/qoriq-cadence-dp-firmware/
-+
- N:	Chris Packham <judge.packham@gmail.com>
- F:	package/gstreamer1/gst1-shark/
- F:	package/micropython/
-diff --git a/package/nxp/Config.in b/package/nxp/Config.in
-index 575542c7ab..855d62700b 100644
---- a/package/nxp/Config.in
-+++ b/package/nxp/Config.in
-@@ -1,4 +1,6 @@
- menu "NXP QorIQ libraries"
- 	depends on BR2_aarch64 || BR2_arm || BR2_powerpc64 || BR2_powerpc
+ 	  https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/
  
-+source "package/nxp/qoriq-cadence-dp-firmware/Config.in"
-+
- endmenu
-diff --git a/package/nxp/helper.mk b/package/nxp/helper.mk
-index 79e4236249..2eee2227af 100644
---- a/package/nxp/helper.mk
-+++ b/package/nxp/helper.mk
-@@ -4,6 +4,8 @@
- #
- ################################################################################
+-if BR2_PACKAGE_HOST_RCW
++if BR2_PACKAGE_HOST_QORIQ_RCW
  
-+NXP_QORIQ_SITE = http://www.nxp.com/lgfiles/sdk/lsdk1909
-+
- # Helper for self-extracting binaries distributed by NXP.
- #
- # The --force option makes sure it doesn't fail if the source
-diff --git a/package/nxp/qoriq-cadence-dp-firmware/Config.in b/package/nxp/qoriq-cadence-dp-firmware/Config.in
+-config BR2_PACKAGE_HOST_RCW_CUSTOM_PATH
++config BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH
+ 	string "RCW Source file paths"
+ 	help
+ 	  Space-separated list of .rcw and .rcwi files, that will be
+diff --git a/package/rcw/rcw.hash b/package/nxp/qoriq-rcw/qoriq-rcw.hash
+similarity index 82%
+rename from package/rcw/rcw.hash
+rename to package/nxp/qoriq-rcw/qoriq-rcw.hash
+index 7de1ec659a..e9708d960d 100644
+--- a/package/rcw/rcw.hash
++++ b/package/nxp/qoriq-rcw/qoriq-rcw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 1421ada9fec10b12ff21cd9ad82f0a835b191cb2dde80f03547764574b1346c3 rcw-LSDK-18.12.tar.gz
++sha256 1421ada9fec10b12ff21cd9ad82f0a835b191cb2dde80f03547764574b1346c3 qoriq-rcw-LSDK-18.12.tar.gz
+ sha256 a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd LICENSE
+diff --git a/package/nxp/qoriq-rcw/qoriq-rcw.mk b/package/nxp/qoriq-rcw/qoriq-rcw.mk
 new file mode 100644
-index 0000000000..3f494bd3a3
+index 0000000000..3308f20192
 --- /dev/null
-+++ b/package/nxp/qoriq-cadence-dp-firmware/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE
-+	bool "qoriq-cadence-dp-firmware"
-+	help
-+	  NXP QorIQ cadence DP firmware, a resident EL3 firmware.
-diff --git a/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-new file mode 100644
-index 0000000000..89aaf1d71b
---- /dev/null
-+++ b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 5871c5717be32f14a59624d5699d405e8ce9ae2e9c9ef86fd16e13d264a40e58  firmware-cadence-lsdk1909.bin
-+sha256 d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
-diff --git a/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-new file mode 100644
-index 0000000000..239f4b9d75
---- /dev/null
-+++ b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-@@ -0,0 +1,23 @@
++++ b/package/nxp/qoriq-rcw/qoriq-rcw.mk
+@@ -0,0 +1,50 @@
 +################################################################################
 +#
-+# qoriq-cadence-dp-firmware
++# qoriq-rcw
 +#
 +################################################################################
 +
-+QORIQ_CADENCE_DP_FIRMWARE_VERSION = lsdk1909
-+QORIQ_CADENCE_DP_FIRMWARE_SITE = $(NXP_QORIQ_SITE)
-+QORIQ_CADENCE_DP_FIRMWARE_SOURCE = firmware-cadence-$(QORIQ_CADENCE_DP_FIRMWARE_VERSION).bin
-+QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP-Binary-EULA
-+QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING
-+QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
-+QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
++QORIQ_RCW_VERSION = LSDK-18.12
++QORIQ_RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
++QORIQ_RCW_SITE_METHOD = git
++QORIQ_RCW_LICENSE = BSD-3-Clause
++QORIQ_RCW_LICENSE_FILES = LICENSE
 +
-+define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
-+	$(call NXP_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
++QORIQ_RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH))
++
++ifneq ($(QORIQ_RCW_FILES),)
++# Get the name of the custom rcw file from the custom list
++QORIQ_RCW_PROJECT = $(notdir $(filter %.rcw,$(QORIQ_RCW_FILES)))
++
++# Error if there are no or more than one .rcw file
++ifeq ($(BR_BUILDING),y)
++ifneq ($(words $(QORIQ_RCW_PROJECT)),1)
++$(error BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH must have exactly one .rcw file)
++endif
++endif
++
++define HOST_QORIQ_RCW_ADD_CUSTOM_RCW_FILES
++	mkdir -p $(@D)/custom_board/rcw
++	cp -f $(filter-out %.rcw,$(QORIQ_RCW_FILES)) $(@D)/custom_board
++	cp -f $(filter %.rcw,$(QORIQ_RCW_FILES)) $(@D)/custom_board/rcw
++endef
++HOST_QORIQ_RCW_POST_PATCH_HOOKS += HOST_QORIQ_RCW_ADD_CUSTOM_RCW_FILES
++
++define HOST_QORIQ_RCW_BUILD_CMDS
++	python $(@D)/rcw.py -i $(@D)/custom_board/rcw/$(QORIQ_RCW_PROJECT) -I $(@D)/custom_board -o $(@D)/PBL.bin
 +endef
 +
-+define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
++define HOST_QORIQ_RCW_INSTALL_DELIVERY_FILE
++	$(INSTALL) -D -m 0644 $(@D)/PBL.bin $(BINARIES_DIR)/PBL.bin
++endef
++endif
++
++# Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
++# could use a post image or SDK to build/install PBL files.
++define HOST_QORIQ_RCW_INSTALL_CMDS
++	mkdir -p  $(HOST_DIR)/share/rcw
++	cp -a $(@D)/* $(HOST_DIR)/share/rcw
++	$(HOST_QORIQ_RCW_INSTALL_DELIVERY_FILE)
 +endef
 +
-+$(eval $(generic-package))
++$(eval $(host-generic-package))
+diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
+deleted file mode 100644
+index 36d2da61b5..0000000000
+--- a/package/rcw/rcw.mk
++++ /dev/null
+@@ -1,50 +0,0 @@
+-################################################################################
+-#
+-# rcw
+-#
+-################################################################################
+-
+-RCW_VERSION = LSDK-18.12
+-RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
+-RCW_SITE_METHOD = git
+-RCW_LICENSE = BSD-3-Clause
+-RCW_LICENSE_FILES = LICENSE
+-
+-RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
+-
+-ifneq ($(RCW_FILES),)
+-# Get the name of the custom rcw file from the custom list
+-RCW_PROJECT = $(notdir $(filter %.rcw,$(RCW_FILES)))
+-
+-# Error if there are no or more than one .rcw file
+-ifeq ($(BR_BUILDING),y)
+-ifneq ($(words $(RCW_PROJECT)),1)
+-$(error BR2_PACKAGE_HOST_RCW_CUSTOM_PATH must have exactly one .rcw file)
+-endif
+-endif
+-
+-define HOST_RCW_ADD_CUSTOM_RCW_FILES
+-	mkdir -p $(@D)/custom_board/rcw
+-	cp -f $(filter-out %.rcw,$(RCW_FILES)) $(@D)/custom_board
+-	cp -f $(filter %.rcw,$(RCW_FILES)) $(@D)/custom_board/rcw
+-endef
+-HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
+-
+-define HOST_RCW_BUILD_CMDS
+-	python $(@D)/rcw.py -i $(@D)/custom_board/rcw/$(RCW_PROJECT) -I $(@D)/custom_board -o $(@D)/PBL.bin
+-endef
+-
+-define HOST_RCW_INSTALL_DELIVERY_FILE
+-	$(INSTALL) -D -m 0644 $(@D)/PBL.bin $(BINARIES_DIR)/PBL.bin
+-endef
+-endif
+-
+-# Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
+-# could use a post image or SDK to build/install PBL files.
+-define HOST_RCW_INSTALL_CMDS
+-	mkdir -p  $(HOST_DIR)/share/rcw
+-	cp -a $(@D)/* $(HOST_DIR)/share/rcw
+-	$(HOST_RCW_INSTALL_DELIVERY_FILE)
+-endef
+-
+-$(eval $(host-generic-package))
 -- 
 2.17.1
