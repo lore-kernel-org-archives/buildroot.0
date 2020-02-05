@@ -1,82 +1,36 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  5 Feb 2020 11:33:04 +0100
-Subject: [Buildroot] [PATCH 3/3] package/pkg-meson.mk: explicitly specify
- pkg-config settings
-In-Reply-To: <20200205103304.2515942-1-arnout@mind.be>
-References: <20200205103304.2515942-1-arnout@mind.be>
-Message-ID: <20200205103304.2515942-3-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Feb 2020 11:36:31 +0100
+Subject: [Buildroot] [PATCH 2/7] package/freescale-imx: add option for
+ i.MX8QM
+In-Reply-To: <20191108173026.GB9828@g751>
+References: <20190909121525.13935-1-maeva.manuel@nxp.com>
+ <20190909121525.13935-2-maeva.manuel@nxp.com>
+ <20191108173026.GB9828@g751>
+Message-ID: <20200205113631.5ba22eba@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-meson is able to distinguish between host (= native) and target (=
-cross) compilation. It will explicitly pass different options to
-pkg-config to distinguish them. Therefore, we don't need to use the
-pkg-config wrapper when using meson, and can instead pass the pkg-config
-settings through the cross-compilation.conf.
+On Fri, 8 Nov 2019 18:30:26 +0100
+Gary Bisson <bisson.gary@gmail.com> wrote:
 
-This is important because in some situations (e.g. for the Python
-configuration), meson sets the PKG_CONFIG_LIBDIR variable to a different
-value before calling pkg-config. Relying on our wrapper script doesn't
-work in that case (except if the script would unconditionally set
-PKG_CONFIG_LIBDIR, which it doesn't do at the moment).
+> This isn't sufficient, you also need to make sure to add
+> BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 in the
+> BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU definition as I'm sure it has a
+> Vivante GPU ;)
 
-Add the sys_root and pkg_config_lib settings to cross-compilation.conf
-and use pkgconf directly instead of the wrapper.
+True, I fixed that when applying.
 
-Note that this requires us to substitute STAGING_DIR as well, with an
-absolute path. This is not a big deal since cross-compilation.conf is
-regenerated for every package.
+> Looking at Config.in, seems that MX8MM has the same issue.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/meson/cross-compilation.conf.in | 4 +++-
- package/pkg-meson.mk                    | 2 ++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+It was fixed yesterday by commit 7b3c48ed8107c5cd39f5d761734964dcd8c8d408.
 
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index fc8e27f7eb..369e225b3e 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -8,7 +8,7 @@ c = '@TARGET_CROSS at gcc'
- cpp = '@TARGET_CROSS at g++'
- ar = '@TARGET_CROSS at ar'
- strip = '@TARGET_CROSS at strip'
--pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-+pkgconfig = '@HOST_DIR@/bin/pkgconf'
- 
- [properties]
- needs_exe_wrapper = true
-@@ -16,6 +16,8 @@ c_args = [@TARGET_CFLAGS@]
- c_link_args = [@TARGET_LDFLAGS@]
- cpp_args = [@TARGET_CXXFLAGS@]
- cpp_link_args = [@TARGET_LDFLAGS@]
-+sys_root = '@STAGING_DIR@'
-+pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
- 
- [host_machine]
- system = 'linux'
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 1f3aaadf5d..642b715938 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -75,6 +75,7 @@ define $(2)_CONFIGURE_CMDS
- 	    -e 's%@TARGET_LDFLAGS@%$$(call make-comma-list,$$($(2)_LDFLAGS))%g' \
- 	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
- 	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
-+	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
- 	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
- 	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
- 	    ) \
-@@ -192,6 +193,7 @@ define PKG_MESON_INSTALL_CROSS_CONF
- 	    -e 's%@TARGET_LDFLAGS@%$(call make-comma-list,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g' \
- 	    -e 's%@TARGET_CXXFLAGS@%$(call make-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g' \
- 	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
-+	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
- 	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
+Thanks!
+
+Thomas
 -- 
-2.24.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
