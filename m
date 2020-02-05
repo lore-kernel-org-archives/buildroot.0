@@ -1,111 +1,91 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 5 Feb 2020 23:16:52 +0100
-Subject: [Buildroot] [PATCH v15 3/5] package/prelink-cross: new package
-In-Reply-To: <20200204213956.2124306-4-aduskett@gmail.com>
-References: <20200204213956.2124306-1-aduskett@gmail.com>
- <20200204213956.2124306-4-aduskett@gmail.com>
-Message-ID: <00a6ea19-c623-1576-e106-3f71d0e92498@benettiengineering.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 5 Feb 2020 23:22:02 +0100
+Subject: [Buildroot] [PATCH 1/2] package/localedef: bump to version 2.30
+In-Reply-To: <CANQCQpbE5nexg6HAt6Lhb9RTopYhmvjj32xnQ8fWTbS3CXe9EA@mail.gmail.com>
+References: <20200125234918.24829-1-romain.naour@gmail.com>
+ <CANQCQpZhQPvjr27oZwBeyPOnQDjtti-1XUp+_xQHCJesYBmMiw@mail.gmail.com>
+ <CANQCQpZ8g-L_Y5V3Xp5x99QaWotqQSPn5snV75e3w08TUG8zrA@mail.gmail.com>
+ <20200131222420.3d92ff13@gmx.net>
+ <CANQCQpbE5nexg6HAt6Lhb9RTopYhmvjj32xnQ8fWTbS3CXe9EA@mail.gmail.com>
+Message-ID: <20200205232202.6ad30ff3@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+Hello Matt,
 
-you've missed package entry in package/Config.in here too.
+On Wed, 5 Feb 2020 09:15:18 -0600, Matthew Weber <matthew.weber@collins.com> wrote:
 
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+> Peter,
+>
+> On Fri, Jan 31, 2020 at 3:25 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > Hello *,
+> >
+> > On Fri, 31 Jan 2020 14:32:39 -0600, Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
+> >
+> > > Romain,
+> > >
+> > > On Fri, Jan 31, 2020 at 1:47 PM Matthew Weber
+> > > <matthew.weber@rockwellcollins.com> wrote:
+> > > >
+> > > > Romain,
+> > > >
+> > > > On Sat, Jan 25, 2020 at 5:50 PM Romain Naour <romain.naour@gmail.com> wrote:
+> > > > >
+> > > > > Use the same version as for glibc package.
+> > > >
+> > > > Seems this bump requires a newer host compiler.  I found this on
+> > > > Ubuntu 16.04.2  with gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0
+> > > > 20160609
+> > > >
+> > > > BR2_aarch64=y
+> > > > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> > > > BR2_KERNEL_HEADERS_4_14=y
+> > > > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> > > > BR2_LINUX_KERNEL=y
+> > > > BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > > > BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+> > > > BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> > > > BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+> > > > BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> > > >
+> > > > make host-localedef
+> > > >
+> > > > configure: error:
+> > > > *** These critical programs are missing or too old: compiler
+> > > > *** Check the INSTALL file for required versions.
+> > > >
+> > > > per the INSTALL file, GCC 6.2 or higher is required
+> > >
+> > > I did a build test reverting the 6.2 check (left it checking for 5)
+> > > and it built OK.  I'd suggest adding a patch to revert
+> > > https://sourceware.org/git/?p=glibc.git;a=commit;h=4dcbbc3b28aaeafe23e1a30db84055aa6f6fa987
+> > > .
+> > >
+> > > In addition, I agree a host toolchain dependency needs to be added for
+> > > 5 (unless we also revert
+> > > https://sourceware.org/git/?p=glibc.git;a=commit;h=192963be49678b48f60218f1f794991cdd9fe472
+> > >  to get back to 4.x which doesn't seem like it would work out).
+> > >
+> >
+> > Suggested RFC patch (way back from December 2018) contained already an
+> > '0002-HACK-accept-old-toolchains.patch' to fix configure/compile for
+> > old host toolchains (see [1])..., maybe time to resurrect (and rebase)
+> > this one?
+>
+> Agree, plus your 0001 for the linker seems to be required as well in
+> the case I see with using 2019.11.1 on Ubuntu 16.04.
 
-On 2/4/20 10:39 PM, Adam Duskett wrote:
-> Prelink-cross emulates a runtime linker for a given sysroot. This is
-> necessary to allow gobject-introspection to build its typelib files
-> during cross-compiling.
-> 
-> We're using a sha1 on the cross_prelink branch, as we need the
-> RTLD-enabled variant of prelink-cross.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
-> Changes v11 -> v13:
->    - Change version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2 as the commit
->      id b10e14218646d8b74773b82b0f8b395bce698fa2 no longer exists.
->   
-> Changes v10 -> v11:
->    - adopted by Yann
->    - switch to a https git server
->    - drop the Config.in.host entry
->    - fix typo in commit log
-> 
-> Changes v9 -> v10:
->    - None
-> 
-> Changes v8 -> v9:
->    - Add the package to the DEVELOPERS file under my name.
->    - Bump version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2
->    - Add host-elfutils as a dependency.
-> 
-> Changes v7 -> v8:
->    - None
-> 
-> Changes v1 -> v7:
->    - Add patch to series.
-> 
->   DEVELOPERS                               |  1 +
->   package/prelink-cross/prelink-cross.hash |  3 +++
->   package/prelink-cross/prelink-cross.mk   | 16 ++++++++++++++++
->   3 files changed, 20 insertions(+)
->   create mode 100644 package/prelink-cross/prelink-cross.hash
->   create mode 100644 package/prelink-cross/prelink-cross.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 844dccf8ff..febc3b3646 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -53,6 +53,7 @@ F:	package/openjdk/
->   F:	package/openjdk-bin/
->   F:	package/php/
->   F:	package/policycoreutils/
-> +F:	package/prelink-cross/
->   F:	package/polkit/
->   F:	package/python3/
->   F:	package/python-aioredis/
-> diff --git a/package/prelink-cross/prelink-cross.hash b/package/prelink-cross/prelink-cross.hash
-> new file mode 100644
-> index 0000000000..3ac33ac3d0
-> --- /dev/null
-> +++ b/package/prelink-cross/prelink-cross.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed
-> +sha256  cb3f5d833cd74b7e90e38465c9c948b0f4138c017509cb91e391b0931063429e  prelink-cross-a853a5d715d84eec93aa68e8f2df26b7d860f5b2.tar.gz
-> +sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
-> diff --git a/package/prelink-cross/prelink-cross.mk b/package/prelink-cross/prelink-cross.mk
-> new file mode 100644
-> index 0000000000..b43c209b16
-> --- /dev/null
-> +++ b/package/prelink-cross/prelink-cross.mk
-> @@ -0,0 +1,16 @@
-> +################################################################################
-> +#
-> +# host-prelink-cross
-> +#
-> +################################################################################
-> +
-> +HOST_PRELINK_CROSS_VERSION = a853a5d715d84eec93aa68e8f2df26b7d860f5b2
-> +HOST_PRELINK_CROSS_SITE = https://git.yoctoproject.org/git/prelink-cross
-> +HOST_PRELINK_CROSS_SITE_METHOD = git
-> +HOST_PRELINK_CROSS_LICENSE = GPL-2.0
-> +HOST_PRELINK_CROSS_LICENSE_FILES = COPYING
-> +# Sources from git, no configure script present
-> +HOST_PRELINK_CROSS_AUTORECONF = YES
-> +HOST_PRELINK_CROSS_DEPENDENCIES = host-elfutils host-libiberty
-> +
-> +$(eval $(host-autotools-package))
-> 
+I can provide a buildroot package/localdef patch the next days (but no chance to
+test myself as I have no access to an legacy linux system at the moment), or
+do you want to take over?
 
--- 
-Giulio Benetti
-Benetti Engineering sas
+Regards,
+Peter
+
+>
+> Regards,
+> Matt
