@@ -1,85 +1,56 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 5 Feb 2020 07:56:23 -0600
-Subject: [Buildroot] [PATCH v2] packagersyslog: enable options when
- libcurl is enabled
-In-Reply-To: <CANQCQpYkxiByUsrfQbDHDd0WpAsTeiggJXJpJqNp6_N=M1ud5A@mail.gmail.com>
-References: <20191104211203.52912-1-matthew.weber@rockwellcollins.com>
- <87a761ni4l.fsf@dell.be.48ers.dk>
- <CANQCQpYkxiByUsrfQbDHDd0WpAsTeiggJXJpJqNp6_N=M1ud5A@mail.gmail.com>
-Message-ID: <CANQCQpaJmxptbNBoOuD9tyfL9rh_Y9d_6HOtwjVuqw2wxpcPgg@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 5 Feb 2020 15:08:41 +0100
+Subject: [Buildroot] [PATCH v4 1/9] package/nxp: new package directory
+In-Reply-To: <20200205105227.13698-1-jerry.huang@nxp.com>
+References: <20200205105227.13698-1-jerry.huang@nxp.com>
+Message-ID: <CAEyMn7YhNQE8AaUu7vzpoO-TPcYgr5qWADKB-geq3AAj_MHZdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Hi Changming,
 
-On Mon, Feb 3, 2020 at 11:35 AM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Peter,
->
-> On Sun, Feb 2, 2020 at 9:07 AM Peter Korsgaard <peter@korsgaard.com> wrote:
-> >
-> > >>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
-> >
-> >  > Following the bump to 8.1910.0, items requiring libcurl were
-> >  > disabled by default. This patch selectively enables options
-> >  > which depend on libcurl when that package is enabled in the
-> >  > build.
-> >
-> >  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> >  > ---
-> >  > Changes
-> >  > v1 -> v2
-> >  > [Thomas
-> >  >  - Flipped libcurl conditional and name of this patchset to rsyslog
-> >  > ---
-> >  >  package/rsyslog/rsyslog.mk | 12 +++++++++++-
-> >  >  1 file changed, 11 insertions(+), 1 deletion(-)
-> >
-> >  > diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-> >  > index 5bd6b59ba3..d5a88b19d3 100644
-> >  > --- a/package/rsyslog/rsyslog.mk
-> >  > +++ b/package/rsyslog/rsyslog.mk
-> >  > @@ -17,7 +17,16 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
-> >  >  RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
-> >  >      $(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
-> >
-> >  > -# Disable items requiring libcurl
-> >  > +ifeq ($(BR2_PACKAGE_LIBCURL),y)
-> >  > +RSYSLOG_DEPENDENCIES += libcurl
-> >  > +RSYSLOG_CONF_OPTS += --enable-elasticsearch \
-> >  > +    --enable-clickhouse \
-> >  > +    --enable-omhttp \
-> >  > +    --enable-fmhttp \
-> >  > +    --enable-imdocker \
-> >  > +    --enable-omhttpfs \
-> >  > +    --enable-mmkubernetes
-> >
-> >  I was about to apply this, but it fails to build here (a config with
-> >  just curl and rsyslog):
-> >
-> > checking for CURL... yes
-> > checking for LIBLOGNORM... no
-> > configure: error: Package requirements (lognorm >= 2.0.3) were not met:
-> >
-> > Package 'lognorm', required by 'virtual:world', not found
-> >
-> > Consider adjusting the PKG_CONFIG_PATH environment variable if you
-> > installed software in a non-standard prefix.
-> >
-> > Alternatively, you may set the environment variables LIBLOGNORM_CFLAGS
-> > and LIBLOGNORM_LIBS to avoid the need to call pkg-config.
-> > See the pkg-config man page for more details.
-> > make[1]: *** [package/pkg-generic.mk:250: /home/peko/source/buildroot/output-rsyslog/build/rsyslog-8.1911.0/.stamp_configured] Error 1
-> >
-> > Care to take a look?
+> +################################################################################
+> +#
+> +# helper
+> +#
+> +################################################################################
+> +
+> +# Helper for self-extracting binaries distributed by NXP.
+> +#
+> +# The --force option makes sure it doesn't fail if the source
+> +# directory already exists. The --auto-accept skips the license check,
+> +# as it is not needed in Buildroot because we have legal-info. Since
+> +# there's a EULA in the binary file, we extract it in this macro, and
+> +# it should therefore be added to the LICENSE_FILES variable of
+> +# packages using this macro. Also, remember to set REDISTRIBUTE to
+> +# "NO". Indeed, this is a legal minefield: the EULA specifies that the
+> +# Board Support Package includes software and hardware (sic!) for
+> +# which a separate license is needed...
+> +#
+> +# $(1): full path to the archive file
+> +#
+> +define NXP_EXTRACT_HELPER
+> +       awk 'BEGIN      { start = 0; } \
+> +            /^EOEULA/  { start = 0; } \
+> +                       { if (start) print; } \
+> +            /<<EOEULA/ { start = 1; }' \
+> +           $(1) > $(@D)/EULA
+> +       cd $(@D) && sh $(1) --force --auto-accept
+> +       find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
+> +       rmdir $(@D)/$(basename $(notdir $(1)))
+> +endef
+> +
+> +include $(sort $(wildcard package/nxp/*/*.mk))
 
-Looking at this I think I'd like to reject my patch for now.  I think
-we need a specific use case to test this out and justify why libcurl
-options should be enabled.  I had just sent the patch to round out the
-previous bump that had disabled libcurl related items.
+This seems to be a duplication of the FREESCALE_IMX_EXTRACT_HELPER, isn't it?
 
-Matt
+Do we then can remove the other one and use only the new "nxp" one?
+
+By the way is there a plan to move all NXP specific packages (qoriq
+and imx) to the nxp subdir?
+
+--
+Heiko
