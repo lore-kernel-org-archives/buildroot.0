@@ -1,45 +1,50 @@
-From: Changming Huang <jerry.huang@nxp.com>
-Date: Wed,  5 Feb 2020 18:52:26 +0800
-Subject: [Buildroot] [PATCH v4 8/9] package/nxp/qoriq-rcw: introduce
- BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE for boot mode
-In-Reply-To: <20200205105227.13698-1-jerry.huang@nxp.com>
-References: <20200205105227.13698-1-jerry.huang@nxp.com>
-Message-ID: <20200205105227.13698-8-jerry.huang@nxp.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Feb 2020 12:12:58 +0100
+Subject: [Buildroot] [PATCH 7/7] board/freescale/imx8qxpmek: update
+ instructions
+In-Reply-To: <20190909121525.13935-7-maeva.manuel@nxp.com>
+References: <20190909121525.13935-1-maeva.manuel@nxp.com>
+ <20190909121525.13935-7-maeva.manuel@nxp.com>
+Message-ID: <20200205121258.2466188e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE for the boot mode.
-Because the RCW binary can be stored in different media, for example:
-sd - RCW locate in SD card, boot the board from SD card
-emmc - RCW locate in eMMC chip, boot the board from eMMC chip
-qspi - RCW locate in QSPI flash, boot the board from QSPI flash
-flexspi_nor - RCW locate in flexSPI, boot the board from flexSPI Nor/Nand flash
+On Mon, 9 Sep 2019 12:15:09 +0000
+Maeva Manuel <maeva.manuel@nxp.com> wrote:
 
-Signed-off-by: Changming Huang <jerry.huang@nxp.com>
----
-changes since v3:
-1. split this option from board patch.
----
- package/nxp/qoriq-rcw/Config.in.host | 6 ++++++
- 1 file changed, 6 insertions(+)
+> 	The ahab-container.img has been replaced by
+> 	mx8qx-ahab-container.img because of the i.MX8QM support
+> 
+> Signed-off-by: Maeva Manuel <maeva.manuel@nxp.com>
+> ---
+>  board/freescale/imx8qxpmek/readme.txt | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/board/freescale/imx8qxpmek/readme.txt b/board/freescale/imx8qxpmek/readme.txt
+> index 45f7915fe4..e10138f8f8 100644
+> --- a/board/freescale/imx8qxpmek/readme.txt
+> +++ b/board/freescale/imx8qxpmek/readme.txt
+> @@ -17,7 +17,8 @@ Build all components:
+>    make
+>  
+>  You will find in output/images/ the following files:
+> -  - ahab-container.img
+> +
+> +  - mx8qx-ahab-container.img
 
-diff --git a/package/nxp/qoriq-rcw/Config.in.host b/package/nxp/qoriq-rcw/Config.in.host
-index 9bf55894e8..7f5fbb3202 100644
---- a/package/nxp/qoriq-rcw/Config.in.host
-+++ b/package/nxp/qoriq-rcw/Config.in.host
-@@ -37,4 +37,10 @@ config BR2_PACKAGE_HOST_QORIQ_RCW_BIN
- 
- 	  If this option is empty, no rcw file is used.
- 
-+config BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE
-+	string "QorIQ RCW Boot mode"
-+	depends on !BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH
-+	help
-+	  Specify the boot mode, for example, sd, emmc, flexspi_nor.
-+
- endif
+Since I did not take your commit for the firmware-imx update, this
+change is not needed. Indeed the bump in
+3ec818769d5140f337684d8c35497ca940bffa34 and the following fix in
+571b8ca09563ffa97a1d0df2fa076530426ab8da ensure that the name is still
+ahab-container.img.
+
+Best regards,
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
