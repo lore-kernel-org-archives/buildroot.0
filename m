@@ -1,48 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  5 Feb 2020 13:50:41 +0100
-Subject: [Buildroot] [PATCH] package/runc: security bump to version
- 1.0.0-rc10
-Message-ID: <20200205125042.31122-1-peter@korsgaard.com>
+Date: Wed, 5 Feb 2020 13:50:54 +0100
+Subject: [Buildroot] [git commit] package/docker-containerd: security bump
+ to 1.2.12
+Message-ID: <20200205124027.F39DB8C5BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerability:
+commit: https://git.buildroot.net/buildroot/commit/?id=8ebb77ac1dd8dec2964ca7377be39ad082adb803
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes the following security issues:
 
 - CVE-2019-19921: runc volume mount race condition with shared mounts
 
-For details see the announcement:
-https://github.com/opencontainers/runc/releases/tag/v1.0.0-rc10
+- CVE-2019-16884: runc through 1.0.0-rc8, as used in Docker through
+  19.03.2-ce and other products, allows AppArmor restriction bypass because
+  libcontainer/rootfs_linux.go incorrectly checks mount targets, and thus a
+  malicious Docker image can mount over a /proc directory.
 
+For details, see the announcement:
+https://github.com/containerd/containerd/releases/tag/v1.2.12
+
+containerd is now a separate CNCF sponsored project, and is no longer
+explicitly associated with docker/moby.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/docker-containerd/docker-containerd.hash | 4 ++--
+ package/docker-containerd/docker-containerd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 3e8eff3cca..b895f6fccb 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index aad74089e9..a4acc17710 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256	2ec69c25df9f02c6fd38eb287145f8afba6772f809abe01df4534b5bfd68e8d4  runc-1.0.0-rc9.tar.gz
-+sha256	6b44985023347fb9c5a2cc6f761df8c41cc2c84a7a68a6e6acf834dff6653a9a  runc-1.0.0-rc10.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index acf61ab160..4c2f84ab16 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+ # Computed locally
+-sha256	6a4192fced10c390373adfa9fa9a4f12fe9f38bde580d90468a79ed6c8af75ee  docker-containerd-1.2.11.tar.gz
+-sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
++sha256 318886ea1efdec36f088fd6a0a0fe2b2f0ebdfd0066bdb4bd284bad12abc0a41  docker-containerd-1.2.12.tar.gz
++sha256 4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index 69068e44f8..67de8d7468 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.0.0-rc9
-+RUNC_VERSION = 1.0.0-rc10
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
--- 
-2.20.1
+-DOCKER_CONTAINERD_VERSION = 1.2.11
++DOCKER_CONTAINERD_VERSION = 1.2.12
+ DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
