@@ -1,70 +1,56 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 5 Feb 2020 16:16:59 +0100
-Subject: [Buildroot] [PATCH] docs/website: add commercial support
- section with Mind
-In-Reply-To: <20200205150842.3511395-1-arnout@mind.be>
-References: <20200205150842.3511395-1-arnout@mind.be>
-Message-ID: <271ecf95-74c7-d1bf-82e2-adccba2770c1@smile.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 5 Feb 2020 16:17:14 +0100
+Subject: [Buildroot] [PATCH] package/lapack: avoid selecting lapack and
+ clapack
+In-Reply-To: <20190805103518.8233-1-alexandre.payen@smile.fr>
+References: <20190805103518.8233-1-alexandre.payen@smile.fr>
+Message-ID: <b78fd4ec-9115-1b8f-62b2-6905f399ae59@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
 
-Le 05/02/2020 ? 16:08, Arnout Vandecappelle (Essensium/Mind) a ?crit?:
-> Add a section to the support page for commercial support.
+
+On 05/08/2019 12:35, Aalx wrote:
+> From: Alexandre PAYEN <alexandre.payen@smile.fr>
 > 
-> Add Mind, Bootlin and Smile in that section.
-
-The title of the commit only list Mind. Bootlin and Smile must be added :)
-
-Acked-by: Romain Naour <romain.naour@smile.fr>
-
-Best regards,
-Romain
-
+> lapack and clapack generate the same libraries liblapack.so and
+> libblas.so. So those two packages can't be selected at the same time.
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> This is a temporary fix waiting for a solution[2].
+> 
+> So:
+> - add !BR2_PACKAGE_CLAPACK to lapack/Config.in.
+> 
+> [1]: http://autobuild.buildroot.org/results/375/375078ed8f965ecf92eb9674bd071a518c3ef894//
+> [2]: http://lists.busybox.net/pipermail/buildroot/2019-August/255894.html
+> 
+> Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Romain Naour <romain.naour@smile.fr>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+
+ Applied to master, thanks.
+
+ Regards,
+ Arnout
+
 > ---
->  docs/website/support.html | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
+>  package/lapack/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/docs/website/support.html b/docs/website/support.html
-> index 1a5ce9e225..6c602b42d2 100644
-> --- a/docs/website/support.html
-> +++ b/docs/website/support.html
-> @@ -92,6 +92,31 @@
->      </div>
->    </div>
->  
-> +  <div class="panel panel-primary">
-> +    <div class="panel-heading">Commercial support</div>
-> +    <div class="panel-body">
-> +      <p>In addition, the following companies are able to provide commercial
-> +	 support. Only companies heavily involved in Buildroot maintenance and
-> +	 community are listed here.</p>
-> +
-> +      <div class="row">
-> +	<div class="col-sm-12">
-> +	  <center>
-> +	    <a href="https://bootlin.com/engineering/">
-> +	      <img src="images/bootlin-logo.png" style="max-width:200px; margin-right:40px;"/>
-> +	    </a>
-> +	    <a href="https://mind.be/services/buildroot.html">
-> +	      <img src="images/mind-logo.png" style="max-width:200px; margin-right:40px;"/>
-> +	    </a>
-> +	    <a href="https://www.smile.eu/en/offers/embedded-iot">
-> +	      <img src="images/smile-logo.png" style="max-width:200px; margin-right:40px;"/>
-> +	    </a>
-> +	  </center>
-> +	</div>
-> +      </div>
-> +    </div>
-> +  </div>
-> +
->  </div><!--/.col-sm-10 -->
->  </div><!--/.row -->
->  </div>
+> diff --git a/package/lapack/Config.in b/package/lapack/Config.in
+> index 9687ace82d..6cd0810cb1 100644
+> --- a/package/lapack/Config.in
+> +++ b/package/lapack/Config.in
+> @@ -5,6 +5,7 @@ comment "lapack/blas needs a toolchain w/ fortran"
+>  config BR2_PACKAGE_LAPACK
+>  	bool "lapack/blas"
+>  	depends on BR2_TOOLCHAIN_HAS_FORTRAN
+> +	depends on !BR2_PACKAGE_CLAPACK
+>  	# _fpu_control is used on PowerPC, but not available with uClibc
+>  	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+>  	help
 > 
