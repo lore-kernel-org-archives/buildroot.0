@@ -1,56 +1,34 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 5 Feb 2020 15:08:41 +0100
-Subject: [Buildroot] [PATCH v4 1/9] package/nxp: new package directory
-In-Reply-To: <20200205105227.13698-1-jerry.huang@nxp.com>
-References: <20200205105227.13698-1-jerry.huang@nxp.com>
-Message-ID: <CAEyMn7YhNQE8AaUu7vzpoO-TPcYgr5qWADKB-geq3AAj_MHZdw@mail.gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Wed,  5 Feb 2020 15:11:46 +0100
+Subject: [Buildroot] [PATCH 0/3] package/crudini: make it Python3 compatible
+Message-ID: <20200205141149.20749-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Changming,
+This small series bumps the version of crudini and its dependency iniparse,
+such as it can now run on Python3 based systems.
 
-> +################################################################################
-> +#
-> +# helper
-> +#
-> +################################################################################
-> +
-> +# Helper for self-extracting binaries distributed by NXP.
-> +#
-> +# The --force option makes sure it doesn't fail if the source
-> +# directory already exists. The --auto-accept skips the license check,
-> +# as it is not needed in Buildroot because we have legal-info. Since
-> +# there's a EULA in the binary file, we extract it in this macro, and
-> +# it should therefore be added to the LICENSE_FILES variable of
-> +# packages using this macro. Also, remember to set REDISTRIBUTE to
-> +# "NO". Indeed, this is a legal minefield: the EULA specifies that the
-> +# Board Support Package includes software and hardware (sic!) for
-> +# which a separate license is needed...
-> +#
-> +# $(1): full path to the archive file
-> +#
-> +define NXP_EXTRACT_HELPER
-> +       awk 'BEGIN      { start = 0; } \
-> +            /^EOEULA/  { start = 0; } \
-> +                       { if (start) print; } \
-> +            /<<EOEULA/ { start = 1; }' \
-> +           $(1) > $(@D)/EULA
-> +       cd $(@D) && sh $(1) --force --auto-accept
-> +       find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
-> +       rmdir $(@D)/$(basename $(notdir $(1)))
-> +endef
-> +
-> +include $(sort $(wildcard package/nxp/*/*.mk))
+It also adds a runtime test that performs a basic use-case run of the
+crudini tool, for both Python2 and Python3.
 
-This seems to be a duplication of the FREESCALE_IMX_EXTRACT_HELPER, isn't it?
+Titouan Christophe (3):
+  package/python-iniparse: bump to version 0.5
+  package/crudini: bump to version 0.9.3
+  support/testing: add runtime test for Crudini (py2 and py3)
 
-Do we then can remove the other one and use only the new "nxp" one?
+ .gitlab-ci.yml                                |  2 +
+ package/crudini/Config.in                     |  2 +-
+ package/crudini/crudini.hash                  |  5 +--
+ package/crudini/crudini.mk                    |  4 +-
+ package/python-iniparse/Config.in             |  3 +-
+ package/python-iniparse/python-iniparse.hash  |  6 +--
+ package/python-iniparse/python-iniparse.mk    |  4 +-
+ support/testing/tests/package/test_crudini.py | 40 +++++++++++++++++++
+ 8 files changed, 53 insertions(+), 13 deletions(-)
+ create mode 100644 support/testing/tests/package/test_crudini.py
 
-By the way is there a plan to move all NXP specific packages (qoriq
-and imx) to the nxp subdir?
-
---
-Heiko
+-- 
+2.24.1
