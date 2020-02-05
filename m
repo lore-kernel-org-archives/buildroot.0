@@ -1,33 +1,22 @@
-From: rscr <rafacrespiramon@gmail.com>
-Date: Wed, 5 Feb 2020 05:34:22 -0600 (CST)
-Subject: [Buildroot] QtWebEngine on RPI 0 W
-In-Reply-To: <1580734278053-0.post@n4.nabble.com>
-References: <1579861270269-0.post@n4.nabble.com>
- <20200125172550.45366ce5@gmx.net> <1580197267384-0.post@n4.nabble.com>
- <20200128085828.5959e493@gmx.net> <20200128104326.030b51d9@gmx.net>
- <1580384329954-0.post@n4.nabble.com> <20200130132047.5d82cab0@gmx.net>
- <1580734278053-0.post@n4.nabble.com>
-Message-ID: <1580902462241-0.post@n4.nabble.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 5 Feb 2020 12:47:44 +0100
+Subject: [Buildroot] ninja 1.10.0: build issue
+Message-ID: <CAGm1_ktqUWDo8Wjq_QEXTxx17H9UkJS0hxY869X16Fka_wz8mQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again, 
+I have a strange issue when building host-ninja. CMake complains about
+wrong OBJECT library usage. This upstream PR [1] fixes the issue for
+me.
 
-I have tested the QtWebEngine with a qt example and I got: 
+CMake was also complaining about the missing re2c tool.
 
-# ./minimal -platform eglfs
-Illegal instruction
+Am I the only one having these issues?
 
-Any idea of what could be causing it?
+[1] https://github.com/ninja-build/ninja/pull/1731
 
-Kind Regards
-
-Rafa
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+Regards,
+Yegor
