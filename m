@@ -1,104 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Feb 2020 16:23:42 +0100
-Subject: [Buildroot] [git commit] support/testing: add runtime test for
- Crudini (py2 and py3)
-Message-ID: <20200205151310.6ADDF8CA02@busybox.osuosl.org>
+From: Alexandre PAYEN <alexandre.payen@smile.fr>
+Date: Wed, 5 Feb 2020 16:25:11 +0100
+Subject: [Buildroot] [PATCH v3] package/python-imutils: new package
+In-Reply-To: <20200205162013.2749e009@windsurf>
+References: <20190802144503.23601-1-alexandre.payen@smile.fr>
+ <20200205162013.2749e009@windsurf>
+Message-ID: <CAC5PdM0c0RqgXOYe1YM3A-iUk19QuabZLyQE=tRvxxm=mn8H3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b2319f93187127f3cb5d47392ac854762c8e1c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-This also adds the new tests to the gitlab CI configuration.
+thanks for the review.
+This patch was part of my work with lapack/clapack if I remember.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .gitlab-ci.yml                                |  2 ++
- DEVELOPERS                                    |  1 +
- support/testing/tests/package/test_crudini.py | 49 +++++++++++++++++++++++++++
- 3 files changed, 52 insertions(+)
+I will soon take some time to provide a new version of this patch.
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index c0140527db..a6436a8417 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -375,6 +375,8 @@ tests.init.test_systemd.TestInitSystemSystemdRwFull: { extends: .runtime_test }
- tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: { extends: .runtime_test }
- tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: { extends: .runtime_test }
- tests.package.test_atop.TestAtop: { extends: .runtime_test }
-+tests.package.test_crudini.TestCrudiniPy2: { extends: .runtime_test }
-+tests.package.test_crudini.TestCrudiniPy3: { extends: .runtime_test }
- tests.package.test_docker_compose.TestDockerCompose: { extends: .runtime_test }
- tests.package.test_dropbear.TestDropbear: { extends: .runtime_test }
- tests.package.test_glxinfo.TestGlxinfo: { extends: .runtime_test }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 67cce2f8e4..32b49f1736 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2460,6 +2460,7 @@ F:	package/mosquitto/
- F:	package/python-avro/
- F:	package/redis/
- F:	package/waf/
-+F:	support/testing/tests/package/test_crudini.py
- 
- N:	Trent Piepho <tpiepho@impinj.com>
- F:	package/libp11/
-diff --git a/support/testing/tests/package/test_crudini.py b/support/testing/tests/package/test_crudini.py
-new file mode 100644
-index 0000000000..e320d3207e
---- /dev/null
-+++ b/support/testing/tests/package/test_crudini.py
-@@ -0,0 +1,49 @@
-+import os
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+INI_FILE_CONTENT = """
-+[section]
-+param = this-is-the-magic-value
-+other = dont care
-+"""
-+
-+
-+class TestCrudiniBase(TestPythonPackageBase):
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_CRUDINI=y
-+        """
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5", kernel="builtin",
-+                           options=["-initrd", img])
-+
-+        self.emulator.login()
-+
-+        # 1. Create some sample .ini file
-+        cmd = "echo -e '%s' > config.ini" % INI_FILE_CONTENT
-+        _, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+
-+        # 2. Attempt to get the value
-+        out, ret = self.emulator.run("crudini --get config.ini section param")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out, ['this-is-the-magic-value'])
-+
-+
-+class TestCrudiniPy2(TestCrudiniBase):
-+    __test__ = True
-+    config = TestCrudiniBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        """
-+
-+
-+class TestCrudiniPy3(TestCrudiniBase):
-+    __test__ = True
-+    config = TestCrudiniBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        """
+Regards,
+Alexandre
+
+Le mer. 5 f?vr. 2020 ? 16:20, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
+
+> Hello Alexandre,
+>
+> On Fri,  2 Aug 2019 16:45:03 +0200
+> Aalx <alexandre.payen@smile.fr> wrote:
+>
+> > diff --git a/package/python-imutils/Config.in
+> b/package/python-imutils/Config.in
+> > new file mode 100644
+> > index 0000000000..0c8ffbda56
+> > --- /dev/null
+> > +++ b/package/python-imutils/Config.in
+> > @@ -0,0 +1,36 @@
+> > +config BR2_PACKAGE_PYTHON_IMUTILS
+> > +     bool "python-imutils"
+> > +     depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-scipy
+> > +     depends on BR2_PACKAGE_PYTHON3 # python-scipy
+> > +     depends on BR2_TOOLCHAIN_HAS_FORTRAN # python-scipy
+> > +     depends on BR2_TOOLCHAIN_HAS_ATOMIC # opencv3
+> > +     depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # opencv3
+> > +     depends on BR2_INSTALL_LIBSTDCPP # opencv3
+> > +     depends on BR2_USE_WCHAR # opencv3
+> > +     depends on !BR2_STATIC_LIBS  # opencv3
+> > +     depends on !BR2_PACKAGE_OPENCV # opencv3
+> > +     depends on BR2_PACKAGE_OPENCV3
+>
+> If you "depends on BR2_PACKAGE_OPENCV3", there is no need to replicate
+> all the dependencies of opencv3 inside this package.
+>
+> > +     select BR2_PACKAGE_PYTHON_SCIPY
+>
+> We don't have this package in Buildroot, this needs to be added before
+> we can merge python-imutils.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200205/5d65ff15/attachment.html>
