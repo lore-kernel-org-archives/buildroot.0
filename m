@@ -1,54 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 5 Feb 2020 12:25:29 +0100
-Subject: [Buildroot] [git commit] board/freescale/common/imx: add support
- for i.MX8
-Message-ID: <20200205111426.415708122F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-sc-firmware:
+ bump to version 1.1 to support i.MX8
+Message-ID: <20200205111426.3713F8BFC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f8ace002831a01ed6aec59b704bd92c8a3b957f
+commit: https://git.buildroot.net/buildroot/commit/?id=a9c4bb3517e38998e4be9bffc85b678aec2c14bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Maeva Manuel <maeva.manuel@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/freescale/common/imx/imx8-bootloader-prepare.sh | 7 +++++--
- board/freescale/common/imx/post-image.sh              | 4 +++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/freescale-imx/imx-sc-firmware/Config.in          |  3 ++-
+ package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk | 11 +++++++++--
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index cbf741af30..302fd00658 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -27,8 +27,11 @@ main ()
- 		cat ${BINARIES_DIR}/u-boot.bin ${BINARIES_DIR}/mkimg.commit > ${BINARIES_DIR}/u-boot-hash.bin
- 		cp ${BINARIES_DIR}/bl31.bin ${BINARIES_DIR}/u-boot-atf.bin
- 		dd if=${BINARIES_DIR}/u-boot-hash.bin of=${BINARIES_DIR}/u-boot-atf.bin bs=1K seek=128
--
--		${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+		if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y$" ${BR2_CONFIG}; then
-+			${HOST_DIR}/bin/mkimage_imx8 -soc QM -rev B0 -append ${BINARIES_DIR}/mx8qm-ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qm-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a53 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+		else
-+			${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append ${BINARIES_DIR}/mx8qx-ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+		fi
- 	fi
+diff --git a/package/freescale-imx/imx-sc-firmware/Config.in b/package/freescale-imx/imx-sc-firmware/Config.in
+index 4a22f72b1f..4932e62dd2 100644
+--- a/package/freescale-imx/imx-sc-firmware/Config.in
++++ b/package/freescale-imx/imx-sc-firmware/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_IMX_SC_FIRMWARE
+ 	bool "imx-sc-firmware"
+-	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+ 	help
+ 	  System Control Unit Firmware blobs for the Freescale i.MX8
+ 	  SoCs.
+diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+index cb4e046b8a..6a768ea109 100644
+--- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
++++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+@@ -17,11 +17,18 @@ define IMX_SC_FIRMWARE_EXTRACT_CMDS
+ endef
  
- 	exit $?
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 19d8fffb63..138ea7b123 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -32,7 +32,9 @@ linux_image()
+ IMX_SC_FIRMWARE_INSTALL_IMAGES = YES
++
++# SCFW firmware is needed when generating imx8-boot-sd.bin which is
++# done in post-image script.
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+ define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
+-	# SCFW firmware is needed when generating imx8-boot-sd.bin which
+-	# is done in post-image script.
+ 	cp $(@D)/mx8qx-mek-scfw-tcm.bin $(BINARIES_DIR)/mx8qx-mek-scfw-tcm.bin
+ 	cp $(@D)/mx8qx-val-scfw-tcm.bin $(BINARIES_DIR)/mx8qx-val-scfw-tcm.bin
+ endef
++else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
++define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
++	cp $(@D)/mx8qm-*-scfw-tcm.bin $(BINARIES_DIR)/
++endef
++endif
  
- genimage_type()
- {
--	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
-+	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y$" ${BR2_CONFIG}; then
-+		echo "genimage.cfg.template_imx8"
-+	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_imx8"
- 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_imx8"
+ $(eval $(generic-package))
