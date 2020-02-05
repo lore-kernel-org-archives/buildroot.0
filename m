@@ -1,49 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Feb 2020 17:48:03 +0100
-Subject: [Buildroot] [PATCH v2 5/7] package/freescale-imx/imx-gpu-viv:
- bump to version 6.4.0.p1.0
-In-Reply-To: <CADCpmyPFFQO+0m3gK_825QHAMN18SeCOSLFFnyzswniZt5qN3Q@mail.gmail.com>
-References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
- <20200203193155.12657-5-tuzakli.refik@gmail.com>
- <20200204231052.350677e5@windsurf>
- <CADCpmyPFFQO+0m3gK_825QHAMN18SeCOSLFFnyzswniZt5qN3Q@mail.gmail.com>
-Message-ID: <20200205174803.143caa52@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 05 Feb 2020 16:49:50 +0000
+Subject: [Buildroot] [Bug 11996] opencv3 SIGILL on Cortex-A5 with VFPv4-D16
+In-Reply-To: <bug-11996-163@https.bugs.busybox.net/>
+References: <bug-11996-163@https.bugs.busybox.net/>
+Message-ID: <bug-11996-163-f93Z6ocwtq@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11996
 
-On Wed, 5 Feb 2020 16:54:15 +0100
-Gary Bisson <bisson.gary@gmail.com> wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> I'm on vacation this week without any laptop around so my answer will most
-> likely be inaccurate.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-Thanks, enjoy your vacations! :-)
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=4d0f3dd8709f9f31a81eaa8a62cb35ef6ddddeaf
 
-> But I'll try off the top of my head:
-> - the main goal was to copy the yocto recipe for the build cmds, the links
-> commands should match more or less
-> - but openGL was indeed never properly supported anyway since it required
-> to build mesa3d but overwrite the libGL library at the end (what was done
-> by yocto at the time) which wasn't supported in BR
-
-Argh. Horrible. Why do they do that ?
-
-> - the only person I know who added some kind of openGL support in Buildroot
-> is you ;) (I recall a "imx-fix" branch in FE git server)
-
-Me Thomas, or Refik ? I might have submitted some OpenGL changes a
-while ago, but I'm certainly not the only one.
-
-Well, OK, if we want full OpenGL support with imx-gpu-viv, some more
-work is needed I believe, including actual testing on the target.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
