@@ -1,56 +1,40 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Wed,  5 Feb 2020 09:13:18 +0100
-Subject: [Buildroot] [PATCH] package/lvm2: lvmetad systemd integration
-Message-ID: <20200205081318.3911-1-p.debruijn@unilogic.nl>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Feb 2020 09:39:46 +0100
+Subject: [Buildroot] [PATCH v2 5/7] package/freescale-imx/imx-gpu-viv:
+ bump to version 6.4.0.p1.0
+In-Reply-To: <CAMWBNu68n60JO5X1rUxnb5TD1RvV9FqeghtPLttJSHExkUy3gQ@mail.gmail.com>
+References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
+ <20200203193155.12657-5-tuzakli.refik@gmail.com>
+ <20200204231052.350677e5@windsurf>
+ <CAMWBNu68n60JO5X1rUxnb5TD1RvV9FqeghtPLttJSHExkUy3gQ@mail.gmail.com>
+Message-ID: <20200205093946.273d5b36@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lvmetad is usually combined with event-based system services that
-automatically run pvscan --cache on disks added or removed.  This
-way, the cache is automatically updated with metadata from new disks
-when they appear.  LVM udev rules and systemd services implement this
-automation.  Automatic scanning is usually combined with automatic
-activation.  For more information, see pvscan(8).
+Hello Refik,
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
----
- package/lvm2/Config.in | 3 +++
- package/lvm2/lvm2.mk   | 6 ++++++
- 2 files changed, 9 insertions(+)
+Please keep the Buildroot mailing list in Cc when replying. Thanks!
 
-diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-index de5b972..a828c31 100644
---- a/package/lvm2/Config.in
-+++ b/package/lvm2/Config.in
-@@ -44,6 +44,9 @@ config BR2_PACKAGE_LVM2_APP_LIBRARY
- 	help
- 	  Install application library (liblvm2app).
- 
-+	  Enable this if you need systemd integration,
-+	  like automatic activation of LVM logical volumes.
-+
- comment "lvm2 application library needs a glibc or uClibc toolchain"
- 	depends on BR2_TOOLCHAIN_USES_MUSL
- 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 3da713f..5cf6d93 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -54,6 +54,12 @@ else
- LVM2_CONF_OPTS += --disable-applib
- endif
- 
-+ifeq ($(BR2_PACKAGE_LVM2_APP_LIBRARY)$(BR2_PACKAGE_SYSTEMD),yy)
-+LVM2_DEPENDENCIES += systemd
-+LVM2_CONF_OPTS += --enable-lvmetad
-+LVM2_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install install_systemd_units install_systemd_generators
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
- endif
+On Wed, 5 Feb 2020 10:51:28 +0300
+Refik Tuzakli <tuzakli.refik@gmail.com> wrote:
+
+> X11 and fb backend do not support on i.MX 8 series. Only wayland and
+> xwayland are supported. Thus there is no libGL-fb.so. I guess there must
+> not be X11 backend. I suggest that X11 and fb support should be disabled
+> for imx8 or 64 bit vivante GPU support. 32bit vivante GPU support has
+> libGL-fb.so. .mk file is fine for 32bit but it must be adopted for 64bit
+> support.
+
+Hm, OK. Could you send follow-up patches improving that, with detailed
+explanations in the commit log ?
+
+Thanks a lot,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
