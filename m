@@ -1,85 +1,57 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed,  5 Feb 2020 13:55:18 +0100
-Subject: [Buildroot] [PATCH 1/1] system: don't attempt swapon/swapoff in
- inittab if not available
-Message-ID: <20200205125519.15246-1-patrickdepinguin@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 5 Feb 2020 14:12:14 +0100
+Subject: [Buildroot] QtWebEngine on RPI 0 W
+In-Reply-To: <1580902462241-0.post@n4.nabble.com>
+References: <1579861270269-0.post@n4.nabble.com>
+ <20200125172550.45366ce5@gmx.net>
+ <1580197267384-0.post@n4.nabble.com>
+ <20200128085828.5959e493@gmx.net> <20200128104326.030b51d9@gmx.net>
+ <1580384329954-0.post@n4.nabble.com>
+ <20200130132047.5d82cab0@gmx.net>
+ <1580734278053-0.post@n4.nabble.com>
+ <1580902462241-0.post@n4.nabble.com>
+Message-ID: <20200205141214.075cf5a3@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Hello Rafa,
 
-The default inittab files added by busybox and sysvinit run 'swapon -a'
-during init and 'swapoff -a' during shutdown.
+On Wed, 5 Feb 2020 05:34:22 -0600 (CST), rscr <rafacrespiramon@gmail.com> wrote:
 
-But, the swapon/swapoff programs are not guaranteed to be
-available. For the busybox versions, it is steered by
-CONFIG_SWAPON/CONFIG_SWAPOFF. For the util-linux versions, it is steered by
-BR2_PACKAGE_UTIL_LINUX_BINARIES.
+> Hi again,
+>
+> I have tested the QtWebEngine with a qt example and I got:
+>
+> # ./minimal -platform eglfs
+> Illegal instruction
+>
+> Any idea of what could be causing it?
 
-In a case where swapon/swapoff is not available but the inittab tries to
-execute them, the boot log would be polluted by error messages like:
+Hard to say without further information..., did your compile
+minimal yourself or did you enable 'BR2_PACKAGE_QT5BASE_EXAMPLES=y'
+and used the one installed as '/usr/lib/qt/examples/webenginewidgets/minimal/minimal'
+on the target?
 
-    swapon: not found
+Please provide a complete .config (or defconfig) file...
 
-Avoid this by commenting out the swapon/swapoff lines if the swapon/swapoff
-binaries are not available.
+Still using buildroot-2019.02.09?
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/busybox/busybox.mk   |  1 +
- package/sysvinit/sysvinit.mk |  1 +
- system/system.mk             | 13 +++++++++++++
- 3 files changed, 15 insertions(+)
+Regards,
+Peter
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 6283bc96ea..45f74271f2 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -226,6 +226,7 @@ endif # BR2_TARGET_GENERIC_GETTY
- BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_SET_GETTY
- 
- BUSYBOX_TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_ROOT_INITTAB
-+BUSYBOX_TARGET_FINALIZE_HOOKS += SYSTEM_UPDATE_SWAPON_SWAPOFF_INITTAB
- 
- endif # BR2_INIT_BUSYBOX
- 
-diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-index c778a9cde5..a717ae0459 100644
---- a/package/sysvinit/sysvinit.mk
-+++ b/package/sysvinit/sysvinit.mk
-@@ -45,5 +45,6 @@ endif # BR2_TARGET_GENERIC_GETTY
- SYSVINIT_TARGET_FINALIZE_HOOKS += SYSVINIT_SET_GETTY
- 
- SYSVINIT_TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_ROOT_INITTAB
-+SYSVINIT_TARGET_FINALIZE_HOOKS += SYSTEM_UPDATE_SWAPON_SWAPOFF_INITTAB
- 
- $(eval $(generic-package))
-diff --git a/system/system.mk b/system/system.mk
-index 8db87cb129..df6e1be693 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -87,6 +87,19 @@ define SYSTEM_REMOUNT_ROOT_INITTAB
- endef
- endif
- 
-+define SYSTEM_UPDATE_SWAPON_SWAPOFF_INITTAB
-+	if [ -e $(TARGET_DIR)/sbin/swapon ]; then \
-+		$(SED) '\%:/sbin/swapon%s/^#*//' $(TARGET_DIR)/etc/inittab ; \
-+	else \
-+		$(SED) '\%:/sbin/swapon%s/^#*/#/' $(TARGET_DIR)/etc/inittab ; \
-+	fi
-+	if [ -e $(TARGET_DIR)/sbin/swapoff ]; then \
-+		$(SED) '\%:/sbin/swapoff%s/^#*//' $(TARGET_DIR)/etc/inittab ; \
-+	else \
-+		$(SED) '\%:/sbin/swapoff%s/^#*/#/' $(TARGET_DIR)/etc/inittab ; \
-+	fi
-+endef
-+
- ifeq ($(BR_BUILDING)$(BR2_SYSTEM_DEFAULT_PATH),y"")
- $(error BR2_SYSTEM_DEFAULT_PATH can't be empty)
- endif
--- 
-2.24.1
+>
+> Kind Regards
+>
+> Rafa
+>
+>
+>
+> --
+> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
