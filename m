@@ -1,198 +1,96 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Feb 2020 16:48:05 +0100
-Subject: [Buildroot] [PATCH 1/1] utils/show-progress: add tool to show
- build progress at runtime
-In-Reply-To: <20190807203502.27269-1-vadim4j@gmail.com>
-References: <20190807203502.27269-1-vadim4j@gmail.com>
-Message-ID: <989f7e1a-4aff-6ba6-d909-5662511f5876@mind.be>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Wed, 5 Feb 2020 16:54:15 +0100
+Subject: [Buildroot] [PATCH v2 5/7] package/freescale-imx/imx-gpu-viv:
+ bump to version 6.4.0.p1.0
+In-Reply-To: <20200204231052.350677e5@windsurf>
+References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
+ <20200203193155.12657-5-tuzakli.refik@gmail.com>
+ <20200204231052.350677e5@windsurf>
+Message-ID: <CADCpmyPFFQO+0m3gK_825QHAMN18SeCOSLFFnyzswniZt5qN3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Vadim,
+Hi Thomas, Refik,
 
- We finally got to this patch :-)
+Le mar. 4 f?vr. 2020 ? 11:10 PM, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> a ?crit :
 
-On 07/08/2019 22:35, Vadim Kochan wrote:
-> This might be useful to watch the amount of built and selected
-> packages and some progress about it. So added python script which
-> prints progress and build stats. The sample of output is:
-> 
-> Press Ctrl-C to exit ...
-> 
-> Building: output/qemu_x86_64
->  ##################################------------------------------ [ 42.42% 14/33]
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> Hello,
+>
+> (Gary, there is a question for you below.)
+>
+> On Mon,  3 Feb 2020 22:31:53 +0300
+> Refik Tuzakli <tuzakli.refik@gmail.com> wrote:
+>
+> > Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
+>
+> I've applied, but with some changes, and they may need further work
+> from you. See below.
+>
+> >  define IMX_GPU_VIV_BUILD_CMDS
+> >       $(SED) 's/defined(LINUX)/defined(__linux__)/g'
+> $(@D)/gpu-core/usr/include/*/*.h
+> > -     ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so
+> > -     ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so.1
+> > -     ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so.1.2.0
+> > +     ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so
+> $(@D)/gpu-core/usr/lib/libGL.so
+> > +     ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so
+> $(@D)/gpu-core/usr/lib/libGL.so.1
+> > +     ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so
+> $(@D)/gpu-core/usr/lib/libGL.so.1.2
+> > +     ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so
+> $(@D)/gpu-core/usr/lib/libGL.so.1.2.0
+>
+> The libGL is only available for the wl and x11 backends, not for the fb
+> backend, so these statements were creating broken symlinks when fb was
+> the selected backend. So I've added some conditional to only do that
+> when wl or x11 is used.
+>
+> >       ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so
+> $(@D)/gpu-core/usr/lib/libEGL.so
+> >       ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so
+> $(@D)/gpu-core/usr/lib/libEGL.so.1
+> >       ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so
+> $(@D)/gpu-core/usr/lib/libEGL.so.1.0
+> > @@ -115,7 +116,7 @@ define IMX_GPU_VIV_INSTALL_TARGET_CMDS
+> >       $(IMX_GPU_VIV_INSTALL_EXAMPLES)
+> >       $(IMX_GPU_VIV_INSTALL_GMEM_INFO)
+> >       cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
+> > -     for lib in EGL GAL GLESv2 VDK; do \
+> > +     for lib in EGL GAL GL GLESv2 VDK vulkan; do \
+>
+> I have dropped this change. Indeed, the package was not updated to
+> reflect that it also provides GL support, and there is no really
+> organized Vulkan support in Buildroot today (except in mesa3d). So
+> adding these need more work, and should be done in separate commits.
+>
+> Generally, I am surprised of the "fixes" done to libGL in BUILDS_CMDS
+> since anyway libGL does not get installed. It was like that, so I kept
+> it as it is, but I'm not sure why we did that. Gary, do you remember ?
+>
 
- I tried it twice and it failed both times....
+I'm on vacation this week without any laptop around so my answer will most
+likely be inaccurate.
 
+But I'll try off the top of my head:
+- the main goal was to copy the yocto recipe for the build cmds, the links
+commands should match more or less
+- but openGL was indeed never properly supported anyway since it required
+to build mesa3d but overwrite the libGL library at the end (what was done
+by yocto at the time) which wasn't supported in BR
+- the only person I know who added some kind of openGL support in Buildroot
+is you ;) (I recall a "imx-fix" branch in FE git server)
 
- First I tried with an in-tree build, and that failed with:
+Hope this helps.
 
-Traceback (most recent call last):
-  File "/home/arnout/src/buildroot/utils/show-progress", line 104, in <module>
-    main()
-  File "/home/arnout/src/buildroot/utils/show-progress", line 83, in main
-    pkgs = get_pkgs_list(os.path.realpath(build_dir))
-  File "/home/arnout/src/buildroot/utils/show-progress", line 46, in get_pkgs_list
-    pkg_list = json.loads(p.communicate()[0])
-  File "/usr/lib64/python3.7/json/__init__.py", line 348, in loads
-    return _default_decoder.decode(s)
-  File "/usr/lib64/python3.7/json/decoder.py", line 337, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-  File "/usr/lib64/python3.7/json/decoder.py", line 355, in raw_decode
-    raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+Regards,
+Gary
 
-(for in-tree build, the '-C build_dir' shouldn't be there; so I'd make the
-build_dir optional and assume in-tree build if it's not provided.)
-
-
- Second, with out-of-tree build, it failed with:
-
-Traceback (most recent call last):
-  File "/home/arnout/src/buildroot/utils/show-progress", line 104, in <module>
-    main()
-  File "/home/arnout/src/buildroot/utils/show-progress", line 83, in main
-    pkgs = get_pkgs_list(os.path.realpath(build_dir))
-  File "/home/arnout/src/buildroot/utils/show-progress", line 46, in get_pkgs_list
-    pkg_list = json.loads(p.communicate()[0])
-  File "/usr/lib64/python3.7/json/__init__.py", line 348, in loads
-    return _default_decoder.decode(s)
-  File "/usr/lib64/python3.7/json/decoder.py", line 337, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-  File "/usr/lib64/python3.7/json/decoder.py", line 355, in raw_decode
-    raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 1 column 51421 (char 51420)
-
- That's probably a python3 issue. In fact, the script should explicitly call
-python3. We don't want deprecated stuff.
-
-
- We also discussed a bit about whether this should be integrated in brmake, but
-it seems quite difficult so let's just get a working version in first :-)
-
- Regards,
- Arnout
-
-> ---
->  utils/show-progress | 106 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 106 insertions(+)
->  create mode 100755 utils/show-progress
-> 
-> diff --git a/utils/show-progress b/utils/show-progress
-> new file mode 100755
-> index 0000000000..1395664696
-> --- /dev/null
-> +++ b/utils/show-progress
-> @@ -0,0 +1,106 @@
-> +#!/usr/bin/env python
-> +
-> +from __future__ import print_function
-> +import subprocess
-> +import json
-> +import time
-> +import sys
-> +import os
-> +
-> +do_exit = False
-> +
-> +class Package:
-> +    def __init__(self):
-> +        self.build_dir = ""
-> +        self.version = ""
-> +        self.type = ""
-> +        self.name = ""
-> +
-> +    def get_full_name(self):
-> +        if self.version != "":
-> +            return self.name + "-" + self.version
-> +        return self.name
-> +
-> +    def is_built(self):
-> +        return os.path.exists(self.build_dir + "/build/" + \
-> +                self.get_full_name() + "/.stamp_" + self.type + "_installed")
-> +
-> +def usage():
-> +    print("""Usage: show-progress [-h] PATH
-> +
-> +Shows progress about selected and built packages.
-> +PATH must point to the output folder with generated Makefile.
-> +
-> +Example usage:
-> + $ show-progress output/qemu_x86_64
-> +""")
-> +    sys.exit(0)
-> +
-> +def get_pkgs_list(build_dir):
-> +    cmd = ["make", "-C", build_dir, "-s", "--no-print-directory", "show-info"]
-> +    results = []
-> +
-> +    with open(os.devnull, 'wb') as devnull:
-> +        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull,
-> +                             universal_newlines=True)
-> +        pkg_list = json.loads(p.communicate()[0])
-> +
-> +        for p in pkg_list:
-> +            if pkg_list[p]["type"] == "rootfs" or pkg_list[p]["virtual"]:
-> +                continue
-> +
-> +            pkg = Package()
-> +            pkg.version = pkg_list[p]["version"]
-> +            pkg.build_dir = build_dir
-> +            pkg.name = p
-> +
-> +            if pkg_list[p]["install_images"]:
-> +                pkg.type = "images"
-> +            elif pkg_list[p]["install_staging"] and not pkg_list[p]["install_target"]:
-> +                pkg.type = "staging"
-> +            else:
-> +                pkg.type = pkg_list[p]["type"]
-> +
-> +            results.append(pkg)
-> +
-> +    return results
-> +
-> +def progress(ready, total):
-> +    max_len = 60
-> +    perc = ready / (total * 1.0)
-> +    fill = int(round(perc * max_len))
-> +    line = '#' * fill + '-' * (60 - fill)
-> +    line = line + '[{:>7.2%} {: >2d}/{}]'.format(perc, ready, total)
-> +    print('\r', line, end='')
-> +    sys.stdout.flush()
-> +
-> +def main():
-> +    if "-h" in sys.argv or "--help" in sys.argv or len(sys.argv) == 1:
-> +        usage()
-> +
-> +    build_dir = sys.argv[1]
-> +
-> +    pkgs = get_pkgs_list(os.path.realpath(build_dir))
-> +    total = len(pkgs)
-> +
-> +    print("Press Ctrl-C to exit ...\n")
-> +    print("Building: " + build_dir)
-> +
-> +    while not do_exit:
-> +        ready = 0
-> +
-> +        for p in pkgs:
-> +            if p.is_built():
-> +                ready = ready + 1
-> +
-> +        progress(ready, total)
-> +        time.sleep(1)
-> +
-> +        if ready == total:
-> +            print("Done")
-> +            break
-> +
-> +try:
-> +    main()
-> +except KeyboardInterrupt:
-> +    do_exit = True
-> 
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200205/3c3f6d8c/attachment.html>
