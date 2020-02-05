@@ -1,90 +1,46 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 5 Feb 2020 17:07:19 +0100
-Subject: [Buildroot] [PATCH v15 0/5] package/gobject-introspection: new
- package
-In-Reply-To: <20200204213956.2124306-1-aduskett@gmail.com>
-References: <20200204213956.2124306-1-aduskett@gmail.com>
-Message-ID: <80581602-4f4a-faa1-de3a-c9377be09dfa@benettiengineering.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 Feb 2020 17:10:44 +0100
+Subject: [Buildroot] [git commit] package/gr-osmosdr: fix dependencies
+Message-ID: <20200205155953.307F98CAA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=3d99cdcc86ccbbb4c7381a025181d22d6558d9b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-unfortunately trying to issue a ./utils/test-pkg -p 
-gobject-introspection -d ../test-gio -a results in SKIPPED for every arch.
+gr-osmosdr fails with:
+CMake Error at /somewhere/buildroot/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/cmake/gnuradio/GnuradioConfig.cmake:116 (include):
+  include could not find load file:
 
-Can you give a try and tell me if it is the same for you?
+    /somewhere/buildroot/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/cmake/gnuradio/gnuradio-filterConfig.cmake
+Call Stack (most recent call first):
+  CMakeLists.txt:45 (find_package)
 
-Thanks
+gr-osmosdr depends on BR2_PACKAGE_GNURADIO_BLOCKS, BR2_PACKAGE_GNURADIO_FFT and
+BR2_PACKAGE_GNURADIO_FILTER.
 
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+fix:
+- http://autobuild.buildroot.net/results/1781db2b8c28641167f7a39a4d799930db13f9bf/
 
-On 2/4/20 10:39 PM, Adam Duskett wrote:
-> It's baaaaaaaaack.
-> 
-> Changes:
->   - Impliment Arnouts suggestions.
->   - Blacklist x86 steam roller and core-avx, they cause segfualts with qemu.
->   - Pray a bit more.
->   - Drink a LOT more.
-> 
-> This depends on Arnouts patch series:
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=156716
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=156749
-> 
-> Adam Duskett (5):
->    package/libiberty: new package
->    package/qemu: do not support x86_steamroller or x86_core_avx2
->    package/prelink-cross: new package
->    package/gdb: depend on libiberty
->    package/gobject-introspection: new package
-> 
->   DEVELOPERS                                    |   2 +
->   package/gdb/gdb.mk                            |   4 +-
->   ...lete-upstream-attempt-at-cross-compi.patch |  33 ++++
->   ...d-cross-compilation-support-to-meson.patch | 163 ++++++++++++++++++
->   .../0003-disable-tests.patch                  |  29 ++++
->   ...canner-add-use-binary-wrapper-option.patch |  52 ++++++
->   ...scanner-add-a-use-ldd-wrapper-option.patch |  48 ++++++
->   ...scanner-add-a-lib-dirs-envvar-option.patch |  73 ++++++++
->   .../0007-Add-rpath-links-to-ccompiler.patch   |  29 ++++
->   ...-error-return-codes-from-ldd-wrapper.patch |  28 +++
->   package/gobject-introspection/Config.in       |  33 ++++
->   .../gobject-introspection/g-ir-compiler.in    |   2 +
->   .../g-ir-scanner-lddwrapper.in                |   2 +
->   .../g-ir-scanner-qemuwrapper.in               |  18 ++
->   package/gobject-introspection/g-ir-scanner.in |   8 +
->   .../gobject-introspection.hash                |   4 +
->   .../gobject-introspection.mk                  | 122 +++++++++++++
->   package/libiberty/libiberty.hash              |   2 +
->   package/libiberty/libiberty.mk                |  27 +++
->   package/prelink-cross/prelink-cross.hash      |   3 +
->   package/prelink-cross/prelink-cross.mk        |  16 ++
->   package/qemu/Config.in.host                   |   1 +
->   22 files changed, 698 insertions(+), 1 deletion(-)
->   create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
->   create mode 100644 package/gobject-introspection/0002-add-cross-compilation-support-to-meson.patch
->   create mode 100644 package/gobject-introspection/0003-disable-tests.patch
->   create mode 100644 package/gobject-introspection/0004-giscanner-add-use-binary-wrapper-option.patch
->   create mode 100644 package/gobject-introspection/0005-giscanner-add-a-use-ldd-wrapper-option.patch
->   create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
->   create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
->   create mode 100644 package/gobject-introspection/0008-ignore-error-return-codes-from-ldd-wrapper.patch
->   create mode 100644 package/gobject-introspection/Config.in
->   create mode 100644 package/gobject-introspection/g-ir-compiler.in
->   create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
->   create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
->   create mode 100644 package/gobject-introspection/g-ir-scanner.in
->   create mode 100644 package/gobject-introspection/gobject-introspection.hash
->   create mode 100644 package/gobject-introspection/gobject-introspection.mk
->   create mode 100644 package/libiberty/libiberty.hash
->   create mode 100644 package/libiberty/libiberty.mk
->   create mode 100644 package/prelink-cross/prelink-cross.hash
->   create mode 100644 package/prelink-cross/prelink-cross.mk
-> 
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/gr-osmosdr/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
+index f26380371f..1e80137f35 100644
+--- a/package/gr-osmosdr/Config.in
++++ b/package/gr-osmosdr/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_GR_OSMOSDR
+ 	bool "gr-osmosdr"
+ 	depends on BR2_PACKAGE_GNURADIO
+ 	select BR2_PACKAGE_GNURADIO_BLOCKS
++	select BR2_PACKAGE_GNURADIO_FFT
++	select BR2_PACKAGE_GNURADIO_FILTER
+ 	help
+ 	  GNU Radio block for interfacing with various radio hardware
+ 
