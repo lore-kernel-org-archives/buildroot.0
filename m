@@ -1,56 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Feb 2020 16:17:14 +0100
-Subject: [Buildroot] [PATCH] package/lapack: avoid selecting lapack and
- clapack
-In-Reply-To: <20190805103518.8233-1-alexandre.payen@smile.fr>
-References: <20190805103518.8233-1-alexandre.payen@smile.fr>
-Message-ID: <b78fd4ec-9115-1b8f-62b2-6905f399ae59@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Feb 2020 16:20:13 +0100
+Subject: [Buildroot] [PATCH v3] package/python-imutils: new package
+In-Reply-To: <20190802144503.23601-1-alexandre.payen@smile.fr>
+References: <20190802144503.23601-1-alexandre.payen@smile.fr>
+Message-ID: <20200205162013.2749e009@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Alexandre,
 
+On Fri,  2 Aug 2019 16:45:03 +0200
+Aalx <alexandre.payen@smile.fr> wrote:
 
-On 05/08/2019 12:35, Aalx wrote:
-> From: Alexandre PAYEN <alexandre.payen@smile.fr>
-> 
-> lapack and clapack generate the same libraries liblapack.so and
-> libblas.so. So those two packages can't be selected at the same time.
-> 
-> This is a temporary fix waiting for a solution[2].
-> 
-> So:
-> - add !BR2_PACKAGE_CLAPACK to lapack/Config.in.
-> 
-> [1]: http://autobuild.buildroot.org/results/375/375078ed8f965ecf92eb9674bd071a518c3ef894//
-> [2]: http://lists.busybox.net/pipermail/buildroot/2019-August/255894.html
-> 
-> Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Romain Naour <romain.naour@smile.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> diff --git a/package/python-imutils/Config.in b/package/python-imutils/Config.in
+> new file mode 100644
+> index 0000000000..0c8ffbda56
+> --- /dev/null
+> +++ b/package/python-imutils/Config.in
+> @@ -0,0 +1,36 @@
+> +config BR2_PACKAGE_PYTHON_IMUTILS
+> +	bool "python-imutils"
+> +	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-scipy
+> +	depends on BR2_PACKAGE_PYTHON3 # python-scipy
+> +	depends on BR2_TOOLCHAIN_HAS_FORTRAN # python-scipy
+> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC # opencv3
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # opencv3
+> +	depends on BR2_INSTALL_LIBSTDCPP # opencv3
+> +	depends on BR2_USE_WCHAR # opencv3
+> +	depends on !BR2_STATIC_LIBS  # opencv3
+> +	depends on !BR2_PACKAGE_OPENCV # opencv3
+> +	depends on BR2_PACKAGE_OPENCV3
 
- Applied to master, thanks.
+If you "depends on BR2_PACKAGE_OPENCV3", there is no need to replicate
+all the dependencies of opencv3 inside this package.
 
- Regards,
- Arnout
+> +	select BR2_PACKAGE_PYTHON_SCIPY
 
-> ---
->  package/lapack/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/lapack/Config.in b/package/lapack/Config.in
-> index 9687ace82d..6cd0810cb1 100644
-> --- a/package/lapack/Config.in
-> +++ b/package/lapack/Config.in
-> @@ -5,6 +5,7 @@ comment "lapack/blas needs a toolchain w/ fortran"
->  config BR2_PACKAGE_LAPACK
->  	bool "lapack/blas"
->  	depends on BR2_TOOLCHAIN_HAS_FORTRAN
-> +	depends on !BR2_PACKAGE_CLAPACK
->  	# _fpu_control is used on PowerPC, but not available with uClibc
->  	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
->  	help
-> 
+We don't have this package in Buildroot, this needs to be added before
+we can merge python-imutils.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
