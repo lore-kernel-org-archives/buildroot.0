@@ -1,211 +1,122 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Wed, 5 Feb 2020 10:05:11 +0100
-Subject: [Buildroot] [PATCH 1/2] package/systemd: set machine id file
- instalation as optional choice
-In-Reply-To: <4f7091d2-04f2-011d-b425-aa93adff1747@grinn-global.com>
-References: <20191117113345.159653-1-b.bilas@grinn-global.com>
- <0b8bd9be-3109-f998-5a44-cca063d1e207@mind.be>
- <CAFvCimUuDJUWzKPA-rX0rqcFNGgNARvD5gdLYqDjR+XVdbgUVA@mail.gmail.com>
- <6987e42b-89ad-cbf3-fd03-ee3ad74880b7@mind.be>
- <20191119094006.065afe96@windsurf.home>
- <CAFvCimWo84uxBqohUeG9zA_nD21AfCUp6nme_a8aBQ8sRShACg@mail.gmail.com>
- <29c3de2c-0add-0305-3c47-1e02658e9fac@grinn-global.com>
- <53507a28-495b-1b77-cc08-1e78afcd2d0b@grinn-global.com>
- <4f7091d2-04f2-011d-b425-aa93adff1747@grinn-global.com>
-Message-ID: <CAFvCimVPXnxza=Us7yae=dM-REe3f6WmvmS73pZb_fjp6Y-mjw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 Feb 2020 10:15:34 +0100
+Subject: [Buildroot] [PATCH 1/3] package/pkg-meson.mk: refactor flags
+ substitution into function
+In-Reply-To: <20200204165852.1819360-1-arnout@mind.be>
+References: <20200204165852.1819360-1-arnout@mind.be>
+Message-ID: <20200205091534.GA3131@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-So don't drop your patch ?
+Arnout, All,
 
-I still think that the approach I proposed upstream is the best one but I
-am pessimistic about the chances of upsreaming...
-I'll ping the issue, but don't hold your breath.
+On 2020-02-04 17:58 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> pkg-meson defines variables _MESON_SED_CFLAGS, _MESON_SED_LDFLAGS and
+> _MESON_SED_CXXFLAGS that reformat the make-style flags (space-separated
+> and unquoted) as meson-style flags (comma-separated and double-quoted).
+> Similar variables are also defined in meson.mk. A future patch will add
+> even more similar cases.
+> 
+> Refactor this by defining a macro for this substitution, and using that
+> macro in all places where *_MESON_SED_* is used. The definitions of
+> these variables are no longer needed.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-If this is rejected upstream, we might want to keep the patch locally, but
-that's a subject to discuss when we reach that point.
+As seen IRL, we already have the make-comma-list macro that provides the
+same exact feature, in support/misc/pkg-utils.mk, which you could use
+instead of your meson-format-flags one.
 
-Le lun. 3 f?vr. 2020 ? 19:41, Bartosz Bilas <b.bilas@grinn-global.com> a
-?crit :
+Regards,
+Yann E. MORIN.
 
-> Nah, sorry guys - I've been mistaken for the email so please ignore the
-> previous message then.
->
->
-> Best
-> Bartek
-> On 03.02.2020 19:34, Bartosz Bilas wrote:
->
-> Hi everyone,
->
-> I had finally a couple of time to double-check that and I agree with
-> Jeremy that I was wrong therefore let's reject this patch as it turned out
-> as an unthought idea.
->
->
-> Best
-> Bartek
-> On 03.02.2020 19:28, Bartosz Bilas wrote:
->
-> Hello everyone,
->
-> let's reject this patch due to possible upstream solution as Jeremy
-> mentioned.
-> Best
-> Bartek
-> On 19.11.2019 11:15, J?r?my ROSEN wrote:
->
-> As a side-note, I am working with upstream to have a better support of (3)
-> : https://github.com/systemd/systemd/pull/14059
->
-> I am a bit cautious about the new config option because it seems too
-> "advanced" for a config option (for me, it's something that should be set
-> in a post-image or overlay) but that's open to discussion.
->
-> Please wait a little before applying this patch, if that's the way
-> buildroot wants to go, so my pull-request above is solved and we might
-> backport it to ease our transition.
->
-> Cheers
-> J?r?my
->
-> Le mar. 19 nov. 2019 ? 09:40, Thomas Petazzoni <
-> thomas.petazzoni at bootlin.com> a ?crit :
->
->> Hello,
->>
->> On Sun, 17 Nov 2019 17:00:05 +0100
->> Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->> > > Could something like that be enough ? can we trust "remount RW" ?
->> > > maybe "remount RW" should be renamed "create a RW filesystem" and
->> enable various
->> > > tweaks related to RO vs RW
->> >
->> >  As written above: no.
->> >
->> >  The problem is: we're not a distro.
->>
->> Agreed.
->>
->> > We leave too much freedom for the user to
->> > integrate things in various ways to be able to make assumptions about
->> what is
->> > the right way to do things. So, the only thing we can do is to give a
->> decent
->> > out-of-the-box experience, and let the user figure out how to tweak
->> things -
->> > possibly adding a config option for a common situation that is easily
->> handled in
->> > a generic way. The other thing we can do is to provide documentation
->> about the
->> > proper way to integrate things in different scenarios.
->> >
->> >  I'm starting to agree that this option is maybe not that great.
->>
->> But I would in fact not come to the same conclusion. Having this empty
->> machine-id file is useless and causes problems when the filesystem is
->> R/W. So for the sake of supporting the R/O case (for which we create
->> this empty machine-id file), we make the R/W experience less good.
->>
->> So I'd say that the right approach is to not do too much integration by
->> precisely having the option proposed by Bartosz, with many the tweak
->> that it should default y if rootfs is really, and default disable
->> otherwise, but while still being an option that the user can tweak,
->> because as you rightfully explained, the RW/RO remount option is just a
->> clue, not a definitive answer on whether /etc is writable or not.
->>
->> To me, having this option matches the Buildroot way: we are not a
->> distro, we don't enforce how the system should work, so we provide the
->> appropriate options, while making sure the option has the most sensible
->> default values.
->>
->> Generally speaking, Buildroot kind of supports "out of the box" two use
->> cases:
->>
->>  (1) The root filesystem is completely read-write.
->>
->>  (2) The root filesystem is completely read-only, and all files that need
->>      to be written are stored in tmpfs, and therefore are volatile.
->>
->> I.e, we do not have any explicit support for what is I guess a much
->> more common use case than (2):
->>
->>  (3) The root filesystem is completely read-only, but there is another
->>      read-write partition somewhere that stores the information that can
->>      change but needs to be persistent (user configuration, etc.)
->>
->> Since we don't have explicit support for (3), there is no way we can
->> properly support machine-id and ConditionFirstBoot in the case of (2),
->> because there's nowhere we can store /etc/machine-id.
->>
->> So the best we can do is in the case of (2), default to creating an
->> empty /etc/machine-id, while giving the possibility for the user
->> implementing (3) in its own way, to disable the creation of the empty
->> /etc/machine-id.
->>
->> Best regards,
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Bootlin
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
->>
->
->
-> --
-> [image: SMILE]  <http://www.smile.eu/>
->
-> 20 rue des Jardins
-> 92600 Asni?res-sur-Seine
-> *J?r?my ROSEN*
-> Architecte technique
->
-> [image: email] jeremy.rosen at smile.fr
-> [image: phone]  +33 6 88 25 87 42
-> [image: url] http://www.smile.eu
->
-> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-> <https://www.facebook.com/smileopensource> [image: LinkedIn]
-> <https://www.linkedin.com/company/smile> [image: Github]
-> <https://github.com/Smile-SA>
->
-> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
->
->
+> ---
+>  package/meson/meson.mk |  4 ----
+>  package/pkg-meson.mk   | 20 ++++++++++----------
+>  2 files changed, 10 insertions(+), 14 deletions(-)
+> 
+> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> index e51e76d1c0..810c84690a 100644
+> --- a/package/meson/meson.mk
+> +++ b/package/meson/meson.mk
+> @@ -45,10 +45,6 @@ else
+>  HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
+>  endif
+>  
+> -HOST_MESON_SED_CFLAGS = $(if $(strip $(TARGET_CFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
+> -HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+> -HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+> -
+>  # Avoid interpreter shebang longer than 128 chars
+>  define HOST_MESON_SET_INTERPRETER
+>  	$(SED) '1s:.*:#!/usr/bin/env python3:' $(HOST_DIR)/bin/meson
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index e7eea2aa58..f1a3a69129 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -29,6 +29,10 @@ MESON		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/meson
+>  NINJA		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/ninja
+>  NINJA_OPTS	= $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+>  
+> +# convert space-separated 'make'-style list of flags to comma-separated and
+> +# double-quoted 'meson'-style
+> +meson-format-flags = $(if $(strip $(1)),`printf '"%s"$(comma) ' $(1)`)
+> +
+>  ################################################################################
+>  # inner-meson-package -- defines how the configuration, compilation and
+>  # installation of a Meson package should be done, implements a few hooks to
+> @@ -61,10 +65,6 @@ $(2)_CFLAGS ?= $$(TARGET_CFLAGS)
+>  $(2)_LDFLAGS ?= $$(TARGET_LDFLAGS)
+>  $(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
+>  
+> -$(2)_MESON_SED_CFLAGS = $$(if $$(strip $$($(2)_CFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CFLAGS)`)
+> -$(2)_MESON_SED_LDFLAGS = $$(if $$(strip $$($(2)_LDFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_LDFLAGS)`)
+> -$(2)_MESON_SED_CXXFLAGS = $$(if $$(strip $$($(2)_CXXFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CXXFLAGS)`)
+> -
+>  # Configure package for target
+>  #
+>  #
+> @@ -75,9 +75,9 @@ define $(2)_CONFIGURE_CMDS
+>  	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+>  	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
+>  	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
+> -	    -e "s%@TARGET_CFLAGS@%$$($(2)_MESON_SED_CFLAGS)%g" \
+> -	    -e "s%@TARGET_LDFLAGS@%$$($(2)_MESON_SED_LDFLAGS)%g" \
+> -	    -e "s%@TARGET_CXXFLAGS@%$$($(2)_MESON_SED_CXXFLAGS)%g" \
+> +	    -e "s%@TARGET_CFLAGS@%$$(call meson-format-flags,$$($(2)_CFLAGS))%g" \
+> +	    -e "s%@TARGET_LDFLAGS@%$$(call meson-format-flags,$$($(2)_LDFLAGS))%g" \
+> +	    -e "s%@TARGET_CXXFLAGS@%$$(call meson-format-flags,$$($(2)_CXXFLAGS))%g" \
+>  	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
+>  	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+>  	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
+> @@ -192,9 +192,9 @@ define PKG_MESON_INSTALL_CROSS_CONF
+>  	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+>  	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
+>  	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
+> -	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)@PKG_TARGET_CFLAGS@%g" \
+> -	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)@PKG_TARGET_CFLAGS@%g" \
+> -	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)@PKG_TARGET_CFLAGS@%g" \
+> +	    -e "s%@TARGET_CFLAGS@%$(call meson-format-flags,$(TARGET_CFLAGS))@PKG_TARGET_CFLAGS@%g" \
+> +	    -e "s%@TARGET_LDFLAGS@%$(call meson-format-flags,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g" \
+> +	    -e "s%@TARGET_CXXFLAGS@%$(call meson-format-flags,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g" \
+>  	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+>  	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+>  	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
+> -- 
+> 2.24.1
+> 
 > _______________________________________________
-> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
->
->
-> _______________________________________________
-> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
->
->
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200205/d16b4a3f/attachment.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
