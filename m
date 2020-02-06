@@ -1,89 +1,41 @@
-From: Andrea Simeoni <andreasimeoni73@gmail.com>
-Date: Thu, 6 Feb 2020 18:22:06 +0100
-Subject: [Buildroot] How to create a vfat "data" partition
-Message-ID: <CAPmASetNL5QjGn3-ZqvcAMT_s2k8ZuMhufBYy8ei5eF5a6shKw@mail.gmail.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Thu,  6 Feb 2020 14:32:23 -0300
+Subject: [Buildroot] [PATCH 0/2] A better solution for the swapon/swapoff
+ issue in inittag
+Message-ID: <20200206173225.25677-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I read the genimage manual (i.e. https://github.com/pengutronix/genimage)
-but I still not sure the exact syntax to create a vfat partitio, with
-mountpoint /opt where I can put files using the Buildroot overlay
-directory.
+From: Carlos Santos <unixmania@gmail.com>
 
-I tried this:
+The current solution is a bit clunky. It adds target-finalize hooks to
+two packages and defines the hook in system/system.mk. The hook code is
+more complex than it needs to be.
 
-image boot.vfat {
->   vfat {
->     files = {
->       "bcm2710-rpi-3-b.dtb",
->       "bcm2710-rpi-3-b-plus.dtb",
->       "bcm2710-rpi-cm3.dtb",
->       "rpi-firmware/bootcode.bin",
->       "rpi-firmware/cmdline.txt",
->       "rpi-firmware/config.txt",
->       "rpi-firmware/fixup.dat",
->       "rpi-firmware/start.elf",
->       "rpi-firmware/overlays",
->       "zImage"
->     }
->   }
->   size = 32M
-> }
->
-> image sdcard.img {
->   hdimage {
->   }
->
->   partition boot {
->     partition-type = 0xC
->     bootable = "true"
->     image = "boot.vfat"
->   }
->
->   partition rootfs {
->     partition-type = 0x83
->     image = "rootfs.ext4"
->   }
->
->   partition data {
->     partition-type = 0xC
->     image = "data.vfat"
->     size = 200M
->     mountpoint = "/opt"
->   }
-> }
->
+This solution ensures that swapon/swapoff are built if BR2_USE_MMU == y,
+only, and moves the hook to skeleton-init-sysv.mk.
+---
+CC: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+CC: Peter Korsgaard <peter@korsgaard.com>
+---
 
-But it seems the Buildroot implementation of genimage does not allow the
-mountpoint option.
-Removing that option this is the error:
+Carlos Santos (2):
+  Revert "system: don't attempt swapon/swapoff in inittab if not
+    available"
+  package/skeleton-init-sysv: conditionally enable swapon/swapoff in
+    inittab
 
->>>   Executing post-image script board/raspberrypi3/post-image.sh
-> INFO: cmd: "mkdir -p "/mnt/dev/buildroot/output/build/genimage.tmp""
-> (stderr):
-> INFO: cmd: "rm -rf "/mnt/dev/buildroot/output/build/genimage.tmp"/*"
-> (stderr):
-> INFO: cmd: "mkdir -p "/mnt/dev/buildroot/output/build/genimage.tmp""
-> (stderr):
-> INFO: cmd: "cp -a "/tmp/tmp.yAAi28XBRS"
-> "/mnt/dev/buildroot/output/build/genimage.tmp/root"" (stderr):
-> INFO: cmd: "find '/mnt/dev/buildroot/output/build/genimage.tmp/root'
-> -depth -type d -printf '%P\0' | xargs -0 -I {} touch -r
-> '/tmp/tmp.yAAi28XBRS/{}'
-> '/mnt/dev/buildroot/output/build/genimage.tmp/root/{}'" (stderr):
-> ERROR: file(data.vfat): stat(/mnt/dev/buildroot/output/images/data.vfat)
-> failed: No such file or directory
-> ERROR: hdimage(sdcard.img): could not setup data.vfat
->
+ package/busybox/Config.in                        |  6 ++++++
+ package/busybox/busybox.mk                       | 15 ++++++++++++++-
+ package/skeleton-init-sysv/skeleton-init-sysv.mk | 12 ++++++++++++
+ package/sysvinit/sysvinit.mk                     |  1 -
+ package/util-linux/Config.in                     |  1 +
+ system/Config.in                                 |  6 ++++++
+ system/system.mk                                 | 13 -------------
+ 7 files changed, 39 insertions(+), 15 deletions(-)
 
-It seems it wants an image for data.
-How should i create it? I didn't find anything in the Buildroot manual.
-
-Thanks in advance
-Andrea S.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200206/5c38fbd6/attachment.html>
+-- 
+2.18.2
