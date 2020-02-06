@@ -1,35 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 06 Feb 2020 09:02:51 +0000
-Subject: [Buildroot] [Bug 12546] Ninja 1.10 build Error
-In-Reply-To: <bug-12546-163@https.bugs.busybox.net/>
-References: <bug-12546-163@https.bugs.busybox.net/>
-Message-ID: <bug-12546-163-xuO75icKqQ@https.bugs.busybox.net/>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Thu,  6 Feb 2020 10:36:23 +0100
+Subject: [Buildroot] [PATCH 00/10] Improvements to systemd
+Message-ID: <20200206093633.251413-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12546
+Hello,
 
-yegorslists at googlemail.com changed:
+this contains several cleanups ond improvements on systemd,
+it replaces old patches [1] and [2], including the
+requested changes.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Target Milestone|---                         |2020.02
+1.   allow the hook to operate on files added from an overlay
+2.   hooks libnss-systemd into the rootfs (so that DynamicUser
+     option works correctly)
+3.   and following: update and improve user accounts
+     (depends on 2.)
+7.   and following: support systemd catalog files
+9.   run systemd-tmpfiles in fakeroot step
 
---- Comment #3 from yegorslists at googlemail.com ---
-Hallo Damian,
 
-thanks for testing. Could you add your Tested-By tag to my patch e-mail? See
-[1] for more information.
+[1] - https://patchwork.ozlabs.org/patch/1222103/
+[2] - https://patchwork.ozlabs.org/patch/1222179/
 
-The warning are OK. re2c is an optional dependency and "Manually-specified
-variables" are common BR settings. If they cannot be applied, they are just
-ignored.
 
-[1] http://nightly.buildroot.org/manual.html#_reviewing_and_testing_patches
+Norbert Lange (10):
+  package/systemd: move preset-all HOOK to fakeroot stage
+  package/systemd: add libnss-systemd to name resolution
+  package/systemd: remove unused user accounts
+  package/systemd: create "remote" user if the feature is enabled
+  package/systemd: cosmetic rearrange list of users
+  package/systemd: sync user comments to upstream
+  Makefile: Handle systemd catalogs in PURGE_LOCALES
+  package/systemd: add hook to update journalctl catalogs
+  package/systemd: option to delete all catalog files
+  package/systemd: invoke systemd-tmpfilesd on final image
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+ Makefile                   |  8 ++++++
+ package/systemd/Config.in  | 12 ++++++++
+ package/systemd/systemd.mk | 56 ++++++++++++++++++++++++++++++--------
+ 3 files changed, 65 insertions(+), 11 deletions(-)
+
+--
+2.24.1
