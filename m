@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Feb 2020 19:19:39 +0100
-Subject: [Buildroot] [PATCH 3/4] package/kodi-peripheral-steamcontroller:
- bump version
-In-Reply-To: <20200206181940.84202-1-bernd.kuhls@t-online.de>
-References: <20200206181940.84202-1-bernd.kuhls@t-online.de>
-Message-ID: <20200206181940.84202-3-bernd.kuhls@t-online.de>
+Date: Thu,  6 Feb 2020 19:19:37 +0100
+Subject: [Buildroot] [PATCH 1/4] package/kodi-inputstream-rtmp: bump version
+ to 2.0.8-Leia
+Message-ID: <20200206181940.84202-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,35 +13,35 @@ Switched _LICENSE_FILES to debian/copyright.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-peripheral-steamcontroller.hash                      | 4 ++--
- .../kodi-peripheral-steamcontroller.mk                        | 4 ++--
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash | 4 ++--
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
-index 8a44ccfdba..15706cb043 100644
---- a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
-+++ b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+index d47de14f7a..c984f44e76 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 26edbe8778d9267cb35f18e44b7e9cbd3d3c193710edc9e586b20eed5f4ff0f8  kodi-peripheral-steamcontroller-0347e66dc8464184d636aea2cfe10491d6fcda96.tar.gz
--sha256 e91f65473335a700e38f88138f7a9413ce0cb878cfc5810c7b9b3ecc87f8ec41  src/addon.cpp
-+sha256 aece8f4b4c4360ae6b8007c9a1d1ee39d90808053bc5b2e3e08e4c5c70a7f8db  kodi-peripheral-steamcontroller-702fea828f9c5c94d0bd77dbb5fe78451edfa2ea.tar.gz
-+sha256 243622a4e1a2ba091ae1d433483ad8b34a7cc337048d5bef8072fbb324fbc79a  debian/copyright
-diff --git a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
-index 1b244602af..15607145b8 100644
---- a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
-+++ b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
+-sha256 bc4cd1f4df6bc24d035c537c365977493f412acc711cf60d82179d1ef494e275  kodi-inputstream-rtmp-2.0.6-Leia.tar.gz
+-sha256 8aabbb74959bcadd8b2f0c08844c287142bd3e4d386ccb2c3502a98f60cd31c1  src/RTMPStream.cpp
++sha256 69f63289bd560f8491fca32e98603afd05a6c94f0791856d873a36285d54c185  kodi-inputstream-rtmp-2.0.8-Leia.tar.gz
++sha256 ddba7d22c2586f13de40786c21f3b87c6913c9937f4862dc828d33cfff0395eb  debian/copyright
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+index dc141659ac..6b62e6eb00 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PERIPHERAL_STEAMCONTROLLER_VERSION = 0347e66dc8464184d636aea2cfe10491d6fcda96
-+KODI_PERIPHERAL_STEAMCONTROLLER_VERSION = 702fea828f9c5c94d0bd77dbb5fe78451edfa2ea
- KODI_PERIPHERAL_STEAMCONTROLLER_SITE = $(call github,kodi-game,peripheral.steamcontroller,$(KODI_PERIPHERAL_STEAMCONTROLLER_VERSION))
- KODI_PERIPHERAL_STEAMCONTROLLER_LICENSE = GPL-2.0+
--KODI_PERIPHERAL_STEAMCONTROLLER_LICENSE_FILES = src/addon.cpp
-+KODI_PERIPHERAL_STEAMCONTROLLER_LICENSE_FILES = debian/copyright
- KODI_PERIPHERAL_STEAMCONTROLLER_DEPENDENCIES = kodi-platform libusb
+-KODI_INPUTSTREAM_RTMP_VERSION = 2.0.6-Leia
++KODI_INPUTSTREAM_RTMP_VERSION = 2.0.8-Leia
+ KODI_INPUTSTREAM_RTMP_SITE = $(call github,xbmc,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
+ KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
+-KODI_INPUTSTREAM_RTMP_LICENSE_FILES = src/RTMPStream.cpp
++KODI_INPUTSTREAM_RTMP_LICENSE_FILES = debian/copyright
+ KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
  
  $(eval $(cmake-package))
 -- 
