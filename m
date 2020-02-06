@@ -1,85 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Feb 2020 11:46:46 +0100
-Subject: [Buildroot] [git commit] linux: license files hashes are only valid
- for latest known version
-Message-ID: <20200206111838.7FD318D3F5@busybox.osuosl.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu,  6 Feb 2020 14:21:32 +0100
+Subject: [Buildroot] [PATCH v2] package/ninja: fix build for cmake 3.10
+Message-ID: <20200206132132.23734-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af33b1c29388b6fb6c6fc68c578b6c2315f1aaf3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-The content of COPYING changed between v4.16 and v4.17. Since kernels
-before and after the change are supported, storing the hash for this
-file will cause an error during "make legal-info" when a kernel with the
-respective other hash is being used.
+If the host cmake is 3.10, the configuration step produces
+the following error:
 
-So, for the kernel, we do like we did for ATF: the license file is only
-listed for the latest version.
+CMake Error at CMakeLists.txt:87 (target_link_libraries):
+Target "libninja" of type OBJECT_LIBRARY may not be linked into another
+target. One may link only to STATIC or SHARED libraries, or to executables
+with the ENABLE_EXPORTS property set.
 
-In the process, add the missing license files referenced from COPYING
-and align the fields to the new spacing convention.
+This patch fixes CMakeLists.txt to use the object library as it was intended
+in cmake 3.10.
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-[yann.morin.1998 at free.fr:
-  - only list the licenses files for the latest version
-  - restore the hash for COPYING
-  - introduce hashes for the two new license files
-  - expand commit log accordingly
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+https://bugs.busybox.net/show_bug.cgi?id=12546
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Tested-by: Damian Tometzki <dti@familie-tometzki.de>
 ---
- linux/linux.hash | 20 ++++++++++++--------
- linux/linux.mk   |  7 ++++++-
- 2 files changed, 18 insertions(+), 9 deletions(-)
+Changes v1 -> v2:
+    - add Tested-by tag from Damian
+    - mention bug report
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 510f69cf19..8082a8cfba 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,15 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 945f2bf6af69eed0ac81ef75b571f37ae1e16a9bb8a2ae698a365ee3ec2c74b9  linux-5.4.17.tar.xz
-+sha256  945f2bf6af69eed0ac81ef75b571f37ae1e16a9bb8a2ae698a365ee3ec2c74b9  linux-5.4.17.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 47e6c22722917d3609c430392b7549267c1f097ddae9dc0e7f071a6ea4c7a357  linux-4.4.212.tar.xz
--sha256 ade738a606c9b52ecf764e94b4e77116caa3a2b8abd30f4534d220ac6894be30  linux-4.9.212.tar.xz
--sha256 d88ea97993c56b1fa0b0a05061bcde476c6be4fc3bb2de8bd97a8f8ff7278249  linux-4.14.169.tar.xz
--sha256 be26156abdb38ac0576a34a235ef456bb8ca67fbbe56fc6649b8d069159f8bc4  linux-4.19.101.tar.xz
-+sha256  47e6c22722917d3609c430392b7549267c1f097ddae9dc0e7f071a6ea4c7a357  linux-4.4.212.tar.xz
-+sha256  ade738a606c9b52ecf764e94b4e77116caa3a2b8abd30f4534d220ac6894be30  linux-4.9.212.tar.xz
-+sha256  d88ea97993c56b1fa0b0a05061bcde476c6be4fc3bb2de8bd97a8f8ff7278249  linux-4.14.169.tar.xz
-+sha256  be26156abdb38ac0576a34a235ef456bb8ca67fbbe56fc6649b8d069159f8bc4  linux-4.19.101.tar.xz
- # Locally computed
--sha256 18f9ddba0b777d1942d6c81877ba97c4bcd08488e2c409e57dcce866b9de5fc2  linux-cip-4.19.98-cip19.tar.gz
--sha256 7d5aeb67da41dc66ef28621ef994ef4403e8b1f5c3df38b1843da20972444280  linux-cip-4.19.98-cip19-rt7.tar.gz
--sha256 ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff  COPYING
-+sha256  18f9ddba0b777d1942d6c81877ba97c4bcd08488e2c409e57dcce866b9de5fc2  linux-cip-4.19.98-cip19.tar.gz
-+sha256  7d5aeb67da41dc66ef28621ef994ef4403e8b1f5c3df38b1843da20972444280  linux-cip-4.19.98-cip19-rt7.tar.gz
+ .../0003-CMake-fix-object-library-usage.patch | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/ninja/0003-CMake-fix-object-library-usage.patch
+
+diff --git a/package/ninja/0003-CMake-fix-object-library-usage.patch b/package/ninja/0003-CMake-fix-object-library-usage.patch
+new file mode 100644
+index 0000000000..af69837c08
+--- /dev/null
++++ b/package/ninja/0003-CMake-fix-object-library-usage.patch
+@@ -0,0 +1,56 @@
++From 7982ecebe1c1c41e82779a65fa2d93f19ffd755f Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Wed, 5 Feb 2020 12:28:44 +0100
++Subject: [PATCH 3/3] CMake: fix object library usage
 +
-+# Licenses hashes
-+sha256  ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff  COPYING
-+sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/preferred/GPL-2.0
-+sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 9a2f63d4df..bf308b807a 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -6,7 +6,12 @@
- 
- LINUX_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
- LINUX_LICENSE = GPL-2.0
--LINUX_LICENSE_FILES = COPYING
-+ifeq ($(BR2_LINUX_KERNEL_LATEST_VERSION),y)
-+LINUX_LICENSE_FILES = \
-+	COPYING \
-+	LICENSES/preferred/GPL-2.0 \
-+	LICENSES/exceptions/Linux-syscall-note
-+endif
- 
- define LINUX_HELP_CMDS
- 	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
++Object libraries cannot be use in target_link_libraries() command
++as they are no normal binary files like *.a or *.so but a collection
++of object files.
++
++See add_library() definition for details.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ CMakeLists.txt | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index af8010f..028a7bb 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -83,8 +83,7 @@ target_compile_definitions(libninja PRIVATE _WIN32_WINNT=0x0601 __USE_MINGW_ANSI
++ endif()
++
++ # Main executable is library plus main() function.
++-add_executable(ninja src/ninja.cc)
++-target_link_libraries(ninja PRIVATE libninja libninja-re2c)
+++add_executable(ninja src/ninja.cc $<TARGET_OBJECTS:libninja> $<TARGET_OBJECTS:libninja-re2c>)
++
++ # Tests all build into ninja_test executable.
++ add_executable(ninja_test
++@@ -106,11 +105,12 @@ add_executable(ninja_test
++	src/subprocess_test.cc
++	src/test.cc
++	src/util_test.cc
+++	$<TARGET_OBJECTS:libninja>
+++	$<TARGET_OBJECTS:libninja-re2c>
++ )
++ if(WIN32)
++	target_sources(ninja_test PRIVATE src/includes_normalize_test.cc src/msvc_helper_test.cc)
++ endif()
++-target_link_libraries(ninja_test PRIVATE libninja libninja-re2c)
++
++ foreach(perftest
++   build_log_perftest
++@@ -120,8 +120,7 @@ foreach(perftest
++   hash_collision_bench
++   manifest_parser_perftest
++ )
++-  add_executable(${perftest} src/${perftest}.cc)
++-  target_link_libraries(${perftest} PRIVATE libninja libninja-re2c)
+++  add_executable(${perftest} src/${perftest}.cc $<TARGET_OBJECTS:libninja> $<TARGET_OBJECTS:libninja-re2c>)
++ endforeach()
++
++ enable_testing()
++--
++2.17.0
+-- 
+2.17.0
