@@ -1,50 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 06 Feb 2020 09:36:47 +0000
-Subject: [Buildroot] [Bug 11926] Cross compiled Qt applications aren't
- working anymore
-In-Reply-To: <bug-11926-163@https.bugs.busybox.net/>
-References: <bug-11926-163@https.bugs.busybox.net/>
-Message-ID: <bug-11926-163-DpAoNoaoqe@https.bugs.busybox.net/>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Thu,  6 Feb 2020 10:36:25 +0100
+Subject: [Buildroot] [PATCH 02/10] package/systemd: add libnss-systemd to
+ name resolution
+In-Reply-To: <20200206093633.251413-1-nolange79@gmail.com>
+References: <20200206093633.251413-1-nolange79@gmail.com>
+Message-ID: <20200206093633.251413-3-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11926
+The feature DynamicUser creates users/groups without
+touching the /etc/{passwd,group} files on disk.
+Adding the dynamic resolver to /etc/nsswitch.conf
+ensures the Names are resolved consistently.
 
---- Comment #8 from Martin <martinv1985@gmail.com> ---
-Created attachment 8361
-  --> https://bugs.busybox.net/attachment.cgi?id=8361&action=edit
-defconfig file to reproduce bug
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ package/systemd/systemd.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-See the attached custom_qt_link_bug_defconfig for a minimal configuration for
-this bug.
-
-I used buildroot master (cloned on Tue Feb 4, commit
-4fb3c69854b01fd8f6483a8dbbb73d05ef26e96a) with 2 patches i found on patchwork.
-The patches are '[RFC,v3,1/2] package/qt5: bump latest version to 5.13.2' and
-'[RFC,v3,2/2] package/qt5: bump latest version to 5.14.1'. I did need to
-slightly adjust the patches to get them working with that specific commit. I
-still need to look up the best way to give the feedback on those patches, but
-for now i will mention it here.
-I had to change the patch for the files
-'package/qt5/qt5x11extras/5.13.2/qt5serialport.hash' and
-'package/qt5/qt5x11extras/5.13.2/qt5x11extras.hash'. These
-files where changed in master after the patch was created. The first line in
-each files where changed, ending in '.sha256' instead of '.mirrorlist'.
-
-I used a toolchain that buildroot compiled. I did change the host dir to an
-out-of-tree folder.
-
-With buildroot-2019.11.1 qtdiag did not work. The output of 'readelf -d'
-already showed that libGLES is linked using absolute paths and on the target
-device i also got the "no such file or directory" errors. Using the
-buildroot-master & qt5.14 patches readelf did not show absolute paths and
-qtdiag worked on the target device.
-
-I hope this is enough information. I am still learning to use buildroot etc.
-
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 05b07cfd1b..a390cdd1a9 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -409,7 +409,15 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+ 	touch $(TARGET_DIR)/etc/machine-id
+ endef
+ 
++define SYSTEMD_ADD_NSSCONFIG_HOOK
++	grep >/dev/null '^passwd:.*systemd' $(TARGET_DIR)/etc/nsswitch.conf || \
++		sed '/^passwd:/ s/$$/ systemd/' $(TARGET_DIR)/etc/nsswitch.conf
++	grep >/dev/null '^group:.*systemd' $(TARGET_DIR)/etc/nsswitch.conf || \
++		sed '/^group:/ s/$$/ systemd/' $(TARGET_DIR)/etc/nsswitch.conf
++endef
++
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
++	SYSTEMD_ADD_NSSCONFIG_HOOK \
+ 	SYSTEMD_INSTALL_INIT_HOOK \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+ 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.24.1
