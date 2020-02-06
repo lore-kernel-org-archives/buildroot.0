@@ -1,49 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Feb 2020 10:51:50 +0100
-Subject: [Buildroot] [EXT] Re: [PATCH v4 1/9] package/nxp: new package
- directory
-In-Reply-To: <CA+h21hqTB3LVV91DaRf=b=XyUv_UhQB0Snjv-qCu2+z+RW+k=g@mail.gmail.com>
-References: <20200205105227.13698-1-jerry.huang@nxp.com>
- <CAEyMn7YhNQE8AaUu7vzpoO-TPcYgr5qWADKB-geq3AAj_MHZdw@mail.gmail.com>
- <VI1PR04MB5136E5E9F34B5A91437E89B2FE1D0@VI1PR04MB5136.eurprd04.prod.outlook.com>
- <CA+h21hqTB3LVV91DaRf=b=XyUv_UhQB0Snjv-qCu2+z+RW+k=g@mail.gmail.com>
-Message-ID: <20200206105150.14fb9a83@windsurf>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu,  6 Feb 2020 10:54:21 +0100
+Subject: [Buildroot] [PATCH] package/libftdi1: fix python support
+Message-ID: <20200206095421.12987-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 6 Feb 2020 11:44:24 +0200
-Vladimir Oltean <olteanv@gmail.com> wrote:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-> > > This seems to be a duplication of the FREESCALE_IMX_EXTRACT_HELPER, isn't
-> > > it?
-> > > Do we then can remove the other one and use only the new "nxp" one?
-> > >
-> > > By the way is there a plan to move all NXP specific packages (qoriq and imx) to
-> > > the nxp subdir?  
-> > Yes, the helper is the duplication of FREESCALE_IMX_EXTRACT_HELPER.
-> > Because Freescale is merged into NXP a few years ago, according to NXP's policy, we need to use nxp, instead of freescale.
-> > So, I think the packages related NXP should be move into nxp directory.
-> >  
-> 
-> Is it really NXP policy though?
-> The thing is that LS1028A and several other boards are already
-> supported by some downstream Buildroot patches, so it makes sense to
-> keep using the folder names that we have there, i.e. "nxp" instead of
-> changing to "freescale".
+Add an upstreamed patch that reorders find_package() commands.
+This way Python interpreter will be detected first and based on
+it the Python libraries can be found.
 
-The proposal is not to change from nxp to freescale, but the opposite.
+Fixes the following CMake error:
 
-However, I think it's good to keep in mind that NXP's policy applies to
-whatever NXP does. The Buildroot project is independent and is not
-forced in any way to comply with NXP policies.
+Could NOT find PythonLibs (missing: PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS)
 
-Best regards,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ .../0004-CMake-reorder-Python-detection.patch | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/libftdi1/0004-CMake-reorder-Python-detection.patch
 
-Thomas
+diff --git a/package/libftdi1/0004-CMake-reorder-Python-detection.patch b/package/libftdi1/0004-CMake-reorder-Python-detection.patch
+new file mode 100644
+index 0000000000..b0eedf07d4
+--- /dev/null
++++ b/package/libftdi1/0004-CMake-reorder-Python-detection.patch
+@@ -0,0 +1,32 @@
++From 640c2b3c0c72d5194d422ff7dda086c4533fba00 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Mon, 13 Jan 2020 14:08:44 +0100
++Subject: [PATCH 4/4] CMake: reorder Python detection
++
++PythonInterp should be detected before PythonLibs otherwise
++CMake exits with the following message:
++
++Could NOT find PythonLibs (missing: PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS)
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ python/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
++index 90811ca..368bb7e 100644
++--- a/python/CMakeLists.txt
+++++ b/python/CMakeLists.txt
++@@ -12,8 +12,8 @@ if ( PYTHON_BINDINGS )
++       set ( SWIG_FOUND TRUE )
++     endif ()
++   endif ()
++-  find_package ( PythonLibs )
++   find_package ( PythonInterp )
+++  find_package ( PythonLibs )
++ endif ()
++ 
++ if ( SWIG_FOUND AND PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND )
++-- 
++2.17.0
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.0
