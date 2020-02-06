@@ -1,56 +1,89 @@
-From: Alex Corcoles <alex@corcoles.net>
-Date: Thu, 6 Feb 2020 18:18:37 +0100
-Subject: [Buildroot] "PATCH": hack to be able to build Rust targetting
- MIPS
-In-Reply-To: <CAPAYC_whFdF00V4M9qZEZOPz4VTMzJ1aOdruR-qjvUKkWw93uQ@mail.gmail.com>
-References: <CAPAYC_xPtDO=j3fWeOEbC41X3PXJZ+7AD=WRm8A1DGQrtbadFQ@mail.gmail.com>
- <CAPAYC_y98TxMoBtG=P9hDe26=1rHfaoMyoH5NJyLHbRxcxpMAQ@mail.gmail.com>
- <20200119213102.GA2894@ned>
- <CAPAYC_xA2zkmmADgr9G2mspcS=Ej16wOM75rT-aCKbK42hzk5g@mail.gmail.com>
- <CAPAYC_wFywnPH6j8muHXvX1n+bLrWkZxBMrm+ywXQAyTbvsK8Q@mail.gmail.com>
- <CAPAYC_whFdF00V4M9qZEZOPz4VTMzJ1aOdruR-qjvUKkWw93uQ@mail.gmail.com>
-Message-ID: <CAPAYC_yo=DkwQzeF-t9jqH6p2ywBF2+=+5agrKA-vhWULAB71A@mail.gmail.com>
+From: Andrea Simeoni <andreasimeoni73@gmail.com>
+Date: Thu, 6 Feb 2020 18:22:06 +0100
+Subject: [Buildroot] How to create a vfat "data" partition
+Message-ID: <CAPmASetNL5QjGn3-ZqvcAMT_s2k8ZuMhufBYy8ei5eF5a6shKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
+I read the genimage manual (i.e. https://github.com/pengutronix/genimage)
+but I still not sure the exact syntax to create a vfat partitio, with
+mountpoint /opt where I can put files using the Buildroot overlay
+directory.
 
-Just managed to get everything working. I've documented the whole process
-at:
+I tried this:
 
-https://github.com/alexpdp7/retrofw2-rust
+image boot.vfat {
+>   vfat {
+>     files = {
+>       "bcm2710-rpi-3-b.dtb",
+>       "bcm2710-rpi-3-b-plus.dtb",
+>       "bcm2710-rpi-cm3.dtb",
+>       "rpi-firmware/bootcode.bin",
+>       "rpi-firmware/cmdline.txt",
+>       "rpi-firmware/config.txt",
+>       "rpi-firmware/fixup.dat",
+>       "rpi-firmware/start.elf",
+>       "rpi-firmware/overlays",
+>       "zImage"
+>     }
+>   }
+>   size = 32M
+> }
+>
+> image sdcard.img {
+>   hdimage {
+>   }
+>
+>   partition boot {
+>     partition-type = 0xC
+>     bootable = "true"
+>     image = "boot.vfat"
+>   }
+>
+>   partition rootfs {
+>     partition-type = 0x83
+>     image = "rootfs.ext4"
+>   }
+>
+>   partition data {
+>     partition-type = 0xC
+>     image = "data.vfat"
+>     size = 200M
+>     mountpoint = "/opt"
+>   }
+> }
+>
 
-The problems are:
+But it seems the Buildroot implementation of genimage does not allow the
+mountpoint option.
+Removing that option this is the error:
 
-1) Rust updated their mips targets to mips32r2, while the kind of devices
-I'm using are plain non-r1 mips32. I created a patch for buildroot that
-patches Rust (on top of a patch I found that bumps it to Rust 1.40.0) to
-use the proper instruction set. I've opened a bug to see if they change the
-target or add a new one at:
+>>>   Executing post-image script board/raspberrypi3/post-image.sh
+> INFO: cmd: "mkdir -p "/mnt/dev/buildroot/output/build/genimage.tmp""
+> (stderr):
+> INFO: cmd: "rm -rf "/mnt/dev/buildroot/output/build/genimage.tmp"/*"
+> (stderr):
+> INFO: cmd: "mkdir -p "/mnt/dev/buildroot/output/build/genimage.tmp""
+> (stderr):
+> INFO: cmd: "cp -a "/tmp/tmp.yAAi28XBRS"
+> "/mnt/dev/buildroot/output/build/genimage.tmp/root"" (stderr):
+> INFO: cmd: "find '/mnt/dev/buildroot/output/build/genimage.tmp/root'
+> -depth -type d -printf '%P\0' | xargs -0 -I {} touch -r
+> '/tmp/tmp.yAAi28XBRS/{}'
+> '/mnt/dev/buildroot/output/build/genimage.tmp/root/{}'" (stderr):
+> ERROR: file(data.vfat): stat(/mnt/dev/buildroot/output/images/data.vfat)
+> failed: No such file or directory
+> ERROR: hdimage(sdcard.img): could not setup data.vfat
+>
 
-https://github.com/rust-lang/rust/issues/68865
+It seems it wants an image for data.
+How should i create it? I didn't find anything in the Buildroot manual.
 
-2) buildroot doesn't support building Rust for uclibc, I hardcoded that. It
-would be nice to write a proper solution to this, but I'm not familiar
-enough with buildroot. Does anyone know where I could request that?
-
-3) I had some issues with sdl-mixer, which I fixed by pulling RetroFW's
-sdl-mixer. This is even more terrible, but I have even less idea about how
-to fix it.
-
-Cheers,
-
-?lex
-
--- 
-   ___
- {~._.~}
-  ( Y )
- ()~*~()  mail: alex at corcoles dot net
- (_)-(_)  http://alex.corcoles.net/
+Thanks in advance
+Andrea S.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200206/1299ec05/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200206/5c38fbd6/attachment.html>
