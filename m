@@ -1,58 +1,68 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Thu,  6 Feb 2020 10:36:31 +0100
-Subject: [Buildroot] [PATCH 08/10] package/systemd: add hook to update
- journalctl catalogs
+Date: Thu,  6 Feb 2020 10:36:32 +0100
+Subject: [Buildroot] [PATCH 09/10] package/systemd: option to delete all
+ catalog files
 In-Reply-To: <20200206093633.251413-1-nolange79@gmail.com>
 References: <20200206093633.251413-1-nolange79@gmail.com>
-Message-ID: <20200206093633.251413-9-nolange79@gmail.com>
+Message-ID: <20200206093633.251413-10-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-journald supports catalog files, or rather a binary database of
-those.
-This add a hook to create said database from the available
-catalog source files (which are not needed afterwards).
+Unless you need to rebuild the database, there is
+no need for the (source) catalog files.
 
-One ugly workaround is or ensuring that PURGE_LOCALES is
-called before, we do this by adding this hook
-(will then run twice during the finalize target step).
+This option removes the files in a ROOTFS_PRE_CMD_HOOK
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/systemd/systemd.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/systemd/Config.in  | 12 ++++++++++++
+ package/systemd/systemd.mk |  8 ++++++++
+ 2 files changed, 20 insertions(+)
 
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index c727082a1a..c0727db94a 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -224,6 +224,18 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
+ 
+ 	  http://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
+ 
++config BR2_PACKAGE_SYSTEMD_RETAIN_CATALOGS
++	bool "retain source catalog files"
++	help
++	  catalog files are used to provide extended and potentially localized
++	  messages for the journal.
++	  The files reside in /usr/lib/systemd/catalog, but arent used directly,
++	  instead a binary database will be built using these files.
++
++	  Only if the database needs to be rebuilt later they need to be retained.
++
++	  https://www.freedesktop.org/wiki/Software/systemd/catalog/
++
+ config BR2_PACKAGE_SYSTEMD_LOCALED
+ 	bool "enable locale daemon"
+ 	help
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 6ea25e3363..8db3a1b117 100644
+index 8db3a1b117..4d6ff0be45 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -500,6 +500,16 @@ define SYSTEMD_PRESET_ALL
- endef
- SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_PRESET_ALL
+@@ -401,6 +401,14 @@ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
+ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
+ endif
  
-+define SYSTEMD_UPDATE_CATALOGS
-+	$(HOST_DIR)/bin/journalctl --root=$(TARGET_DIR) --update-catalog
++ifneq ($(BR2_PACKAGE_SYSTEMD_RETAIN_CATALOGS),y)
++define SYSTEMD_RM_SOURCE_CATALOGS_HOOK
++	rm -rf $(TARGET_DIR)/usr/lib/systemd/catalog
 +endef
 +
-+# SYSTEMD_UPDATE_CATALOGS needs to run after PURGE_LOCALES
-+ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
-+SYSTEMD_TARGET_FINALIZE_HOOKS += PURGE_LOCALES
++SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_RM_SOURCE_CATALOGS_HOOK
 +endif
-+SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_UPDATE_CATALOGS
 +
- SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
- SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
- 
-@@ -577,6 +587,7 @@ HOST_SYSTEMD_DEPENDENCIES = \
- #   $(HOST_DIR)/lib
- # * thus re-tweak rpath after the installation for all binaries that need it
- HOST_SYSTEMD_HOST_TOOLS = \
-+	journalctl \
- 	systemd-analyze \
- 	systemd-mount \
- 	systemctl \
+ define SYSTEMD_INSTALL_INIT_HOOK
+ 	ln -fs multi-user.target \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/default.target
 -- 
 2.24.1
