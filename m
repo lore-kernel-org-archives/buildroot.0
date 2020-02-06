@@ -1,32 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Feb 2020 20:42:54 +0100
-Subject: [Buildroot] [PATCH 6/6 v2] boot/optee-os: license files hashes
- only valid for latest version
-In-Reply-To: <76db34fbca7b956090aaf4557510cf89a3d2d72c.1580914115.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Wed, 5 Feb 2020 15:48:43 +0100")
-References: <cover.1580914115.git.yann.morin.1998@free.fr>
- <76db34fbca7b956090aaf4557510cf89a3d2d72c.1580914115.git.yann.morin.1998@free.fr>
-Message-ID: <8736bnzem9.fsf@dell.be.48ers.dk>
+Date: Thu, 6 Feb 2020 18:38:35 +0100
+Subject: [Buildroot] [git commit] boot/uboot: license files hashes only
+ valid for latest version
+Message-ID: <20200206193221.AE07D8D426@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ff1a03ab28c8b5ffd7703cc4710bf20cc6223b5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > We can only know the path to the license files for the known version.
- > For custom, older or newer, versions may change, or may be moved
- > around.
+We can only know the details of the license files for known versions.  For
+custom, older or newer versions, the license files may change, or may be
+moved around.
 
- > So, do for optee-os as was done for other packages in the recent past,
- > and only define the list of license files for the latest version.
+So, do for U-Boot as was done for ATF, linux, and linux-headers, and only
+define the list of license files for the latest version.
 
- > Reported-by: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Markus Mayer <mmayer@broadcom.com>
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/uboot/uboot.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 1f444351d7..2bfa50779b 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -8,7 +8,9 @@ UBOOT_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
+ UBOOT_BOARD_NAME = $(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
+ 
+ UBOOT_LICENSE = GPL-2.0+
++ifeq ($(BR2_TARGET_UBOOT_LATEST_VERSION),y)
+ UBOOT_LICENSE_FILES = Licenses/gpl-2.0.txt
++endif
+ 
+ UBOOT_INSTALL_IMAGES = YES
+ 
