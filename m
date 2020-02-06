@@ -1,74 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  6 Feb 2020 22:39:03 +0100
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.4.x series
-Message-ID: <20200206213903.26096-1-peter@korsgaard.com>
+Date: Thu,  6 Feb 2020 23:21:05 +0100
+Subject: [Buildroot] [PATCH 1/2] package/wireguard-linux-compat: bump
+ version to 0.0.20200205
+Message-ID: <20200206222107.31981-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Includes fixes for issues found through fuzzing.  For details, see the
+announcement:
+
+https://lists.zx2c4.com/pipermail/wireguard/2020-February/004962.html
+
+While we are at it, adjust the white space in the .hash file to match the
+new agreements.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 6 +++---
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 00871a50db..38c7510d9e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 47715fecb1..0ee202ca9e 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004905.html
+-sha256 8610c6d8712cfd885f50b1a8c572518edf318c094d68491ea218bb50566a9a8a  wireguard-linux-compat-0.0.20200128.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-February/004962.html
++sha256  9669e165fc7252cab7f908ba57f160f6d57539b7cc81180f260cb675d2fd362b  wireguard-linux-compat-0.0.20200205.tar.xz
+ # Locally calculated
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index 097b80e70d..0efb9c3aea 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.4.17" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.4.18" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.98-cip19" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.98-cip19-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 8082a8cfba..7b3efc73ea 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  945f2bf6af69eed0ac81ef75b571f37ae1e16a9bb8a2ae698a365ee3ec2c74b9  linux-5.4.17.tar.xz
-+sha256  92e9f1fd69543e9ce2a9e6eb918823b1846d2dd99246a74456263cd5ad234d89  linux-5.4.18.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  47e6c22722917d3609c430392b7549267c1f097ddae9dc0e7f071a6ea4c7a357  linux-4.4.212.tar.xz
--sha256  ade738a606c9b52ecf764e94b4e77116caa3a2b8abd30f4534d220ac6894be30  linux-4.9.212.tar.xz
--sha256  d88ea97993c56b1fa0b0a05061bcde476c6be4fc3bb2de8bd97a8f8ff7278249  linux-4.14.169.tar.xz
--sha256  be26156abdb38ac0576a34a235ef456bb8ca67fbbe56fc6649b8d069159f8bc4  linux-4.19.101.tar.xz
-+sha256  00f73c3c7a2beebf5832422c81a037b05ca1217d5f4f6cbcc49284bf7fb2bcb2  linux-4.4.213.tar.xz
-+sha256  af85ff764670c2a934ee5b2590437d8e3ab32b1a0b8d51358f36c6bbf6c5eb64  linux-4.9.213.tar.xz
-+sha256  940a63247d11476daea6d114a9599be0eb68eeb2e295fe279e0f3312af1e17c3  linux-4.14.170.tar.xz
-+sha256  302e8388dd7b49d1b779225cf865af74b9837d1e955b1b290fdd71baf97ce015  linux-4.19.102.tar.xz
- # Locally computed
- sha256  18f9ddba0b777d1942d6c81877ba97c4bcd08488e2c409e57dcce866b9de5fc2  linux-cip-4.19.98-cip19.tar.gz
- sha256  7d5aeb67da41dc66ef28621ef994ef4403e8b1f5c3df38b1843da20972444280  linux-cip-4.19.98-cip19-rt7.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 094fb9e10e..cae56701e4 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -315,11 +315,11 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.212"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.212"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.169"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.101"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.17"	if BR2_KERNEL_HEADERS_5_4
-+	default "4.4.213"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.213"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.170"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.102"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.18"	if BR2_KERNEL_HEADERS_5_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200128
++WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200205
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
 -- 
 2.20.1
