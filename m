@@ -1,104 +1,99 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu,  6 Feb 2020 15:08:59 -0600
-Subject: [Buildroot] [PATCH] package/localedef: relax required toolchain
- version
-Message-ID: <20200206210859.6978-1-matthew.weber@rockwellcollins.com>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Thu, 6 Feb 2020 15:11:16 -0600
+Subject: [Buildroot] [PATCH 1/2] package/localedef: bump to version 2.30
+In-Reply-To: <CANQCQpYk=3kZXm7LeHyKhxKQ0a3ocUozD+yhmEsiLw+Q5jtoDg@mail.gmail.com>
+References: <20200125234918.24829-1-romain.naour@gmail.com>
+ <CANQCQpZhQPvjr27oZwBeyPOnQDjtti-1XUp+_xQHCJesYBmMiw@mail.gmail.com>
+ <CANQCQpZ8g-L_Y5V3Xp5x99QaWotqQSPn5snV75e3w08TUG8zrA@mail.gmail.com>
+ <20200131222420.3d92ff13@gmx.net>
+ <CANQCQpbE5nexg6HAt6Lhb9RTopYhmvjj32xnQ8fWTbS3CXe9EA@mail.gmail.com>
+ <20200205232202.6ad30ff3@gmx.net>
+ <CANQCQpYk=3kZXm7LeHyKhxKQ0a3ocUozD+yhmEsiLw+Q5jtoDg@mail.gmail.com>
+Message-ID: <CANQCQpYhMp6Pvk0R93HEF5a+=jY4=EKo47+kzF45YZ1LqhmeQQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The glibc package has been updating the toolchain version
-dependency since 2.28.x. The dependencies don't currently
-apply to the localedef build of the package, so this
-patchset relaxes the restriction such that builds can still
-occur on older host machines.
+Peter,
 
-The current supported minimum versions after this patch
-is applied are:
-GCC 4.8
-Binutils 2.24
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-Tested against:
-Ubuntu 14.04.3 (GCC 4.8 and Binutils 2.24)
-Ubuntu 16.04 (GCC 5.4.0 and Binutils 2.26.1)
----
- ...y-on-GCC-to-4.8-and-binutils-to-2.24.patch | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+On Wed, Feb 5, 2020 at 4:28 PM Matthew Weber <matthew.weber@collins.com> wrote:
+>
+> Peter S,
+>
+> On Wed, Feb 5, 2020 at 4:22 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > Hello Matt,
+> >
+> > On Wed, 5 Feb 2020 09:15:18 -0600, Matthew Weber <matthew.weber@collins.com> wrote:
+> >
+> > > Peter,
+> > >
+> > > On Fri, Jan 31, 2020 at 3:25 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> > > >
+> > > > Hello *,
+> > > >
+> > > > On Fri, 31 Jan 2020 14:32:39 -0600, Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
+> > > >
+> > > > > Romain,
+> > > > >
+> > > > > On Fri, Jan 31, 2020 at 1:47 PM Matthew Weber
+> > > > > <matthew.weber@rockwellcollins.com> wrote:
+> > > > > >
+> > > > > > Romain,
+> > > > > >
+> > > > > > On Sat, Jan 25, 2020 at 5:50 PM Romain Naour <romain.naour@gmail.com> wrote:
+> > > > > > >
+> > > > > > > Use the same version as for glibc package.
+> > > > > >
+> > > > > > Seems this bump requires a newer host compiler.  I found this on
+> > > > > > Ubuntu 16.04.2  with gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0
+> > > > > > 20160609
+> > > > > >
+> > > > > > BR2_aarch64=y
+> > > > > > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> > > > > > BR2_KERNEL_HEADERS_4_14=y
+> > > > > > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> > > > > > BR2_LINUX_KERNEL=y
+> > > > > > BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > > > > > BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+> > > > > > BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> > > > > > BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+> > > > > > BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> > > > > >
+> > > > > > make host-localedef
+> > > > > >
+> > > > > > configure: error:
+> > > > > > *** These critical programs are missing or too old: compiler
+> > > > > > *** Check the INSTALL file for required versions.
+> > > > > >
+> > > > > > per the INSTALL file, GCC 6.2 or higher is required
+> > > > >
+> > > > > I did a build test reverting the 6.2 check (left it checking for 5)
+> > > > > and it built OK.  I'd suggest adding a patch to revert
+> > > > > https://sourceware.org/git/?p=glibc.git;a=commit;h=4dcbbc3b28aaeafe23e1a30db84055aa6f6fa987
+> > > > > .
+> > > > >
+> > > > > In addition, I agree a host toolchain dependency needs to be added for
+> > > > > 5 (unless we also revert
+> > > > > https://sourceware.org/git/?p=glibc.git;a=commit;h=192963be49678b48f60218f1f794991cdd9fe472
+> > > > >  to get back to 4.x which doesn't seem like it would work out).
+> > > > >
+> > > >
+> > > > Suggested RFC patch (way back from December 2018) contained already an
+> > > > '0002-HACK-accept-old-toolchains.patch' to fix configure/compile for
+> > > > old host toolchains (see [1])..., maybe time to resurrect (and rebase)
+> > > > this one?
+> > >
+> > > Agree, plus your 0001 for the linker seems to be required as well in
+> > > the case I see with using 2019.11.1 on Ubuntu 16.04.
+> >
+> > I can provide a buildroot package/localdef patch the next days (but no chance to
+> > test myself as I have no access to an legacy linux system at the moment), or
+> > do you want to take over?
 
-diff --git a/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-new file mode 100644
-index 0000000000..a6e87cc317
---- /dev/null
-+++ b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-@@ -0,0 +1,64 @@
-+From 313e04bfbd281f9b46fdde097aacb59d501820a3 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Thu, 6 Feb 2020 14:36:21 -0600
-+Subject: [PATCH] relax dependency on GCC to 4.8 and binutils to 2.24
-+
-+The glibc package has been updating the toolchain version
-+dependency since 2.28.x. The dependencies don't currently
-+apply to the localedef build of the package, so this
-+patchset relaxes the restriction such that builds can still
-+occur on older host machines.
-+
-+Here's a related post from 2018 for a similar patchset.
-+http://lists.busybox.net/pipermail/buildroot/2018-December/237949.html
-+
-+Timeline of relevant commits that adjust the dependency upstream.
-+GCC 4.9+
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=4add86749a31f302674599b69d2eea691d69341a
-+Binutils 2.25+
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=073e8fa7739ed453d6854b834f290c263a6cdb9f
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=b4396163aa8666f970aaf43eaca25f3a92b18c1b
-+GCC 5+
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=192963be49678b48f60218f1f794991cdd9fe472
-+GCC 6.2+
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=4dcbbc3b28aaeafe23e1a30db84055aa6f6fa987
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ configure | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 6d26b824..9ac2e5e9 100755
-+--- a/configure
-++++ b/configure
-+@@ -4601,7 +4601,7 @@ $as_echo_n "checking version of $AS... " >&6; }
-+   ac_prog_version=`$AS --version 2>&1 | sed -n 's/^.*GNU assembler.* \([0-9]*\.[0-9.]*\).*$/\1/p'`
-+   case $ac_prog_version in
-+     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
-+-    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-++    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-+        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-+     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
-+ 
-+@@ -4731,7 +4731,7 @@ $as_echo_n "checking version of $LD... " >&6; }
-+   ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
-+   case $ac_prog_version in
-+     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
-+-    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-++    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-+        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-+     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
-+ 
-+@@ -5140,7 +5140,7 @@ int
-+ main ()
-+ {
-+ 
-+-#if !defined __GNUC__ || __GNUC__ < 6 || (__GNUC__ == 6 && __GNUC_MINOR__ < 2)
-++#if !defined __GNUC__ || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8)
-+ #error insufficient compiler
-+ #endif
-+   ;
-+-- 
-+2.18.0
-+
--- 
-2.18.0
+http://patchwork.ozlabs.org/patch/1234578/
+
+Matt
