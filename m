@@ -1,86 +1,96 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  6 Feb 2020 23:21:06 +0100
-Subject: [Buildroot] [PATCH 2/2] package/wireguard-tools: bump to version
- 1.0-20200206
-In-Reply-To: <20200206222107.31981-1-peter@korsgaard.com>
-References: <20200206222107.31981-1-peter@korsgaard.com>
-Message-ID: <20200206222107.31981-2-peter@korsgaard.com>
+Date: Thu, 06 Feb 2020 23:37:20 +0100
+Subject: [Buildroot] [PATCH 2/2] package/skeleton-init-sysv:
+ conditionally enable swapon/swapoff in inittab
+In-Reply-To: <20200206173225.25677-3-unixmania@gmail.com> (unixmania's message
+ of "Thu, 6 Feb 2020 14:32:25 -0300")
+References: <20200206173225.25677-1-unixmania@gmail.com>
+ <20200206173225.25677-3-unixmania@gmail.com>
+Message-ID: <87r1z7xrz3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop libmnl dependency. From the announcement:
+>>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
 
- * netlink: remove libmnl requirement
+ > From: Carlos Santos <unixmania@gmail.com>
+ > The default inittab files added by busybox and sysvinit run 'swapon -a'
+ > during init and 'swapoff -a' during shutdown but those programs are not
+ > guaranteed to be available, so the boot log may become polluted by error
+ > messages like this:
 
-We no longer require libmnl.  It turns out that inlining the small subset of
-libmnl that we actually use results in a smaller binary than the overhead of
-linking to the external library.
+ >     swapon: not found
 
-pkg-config is still used for the systemd support though, so move the
-host-pkgconf dependency there.
+ > To avoid this, make the swapon/swapoff lines in inittab optional.
 
-For more details, see the announcement:
+ > - Add a BR2_SYSTEM_HAS_SWAPON_SWAPOFF config to inform that swapon and
+ >   swapoff are available.
 
-https://lists.zx2c4.com/pipermail/wireguard/2020-February/004963.html
+ > - Add a BR2_PACKAGE_BUSYBOX_SWAPON_SWAPOFF config that depends on
+ >   BR2_USE_MMU and selects BR2_SYSTEM_HAS_SWAPON_SWAPOFF. Build the
+ >   Busybox swapon/swapoff utilities based on this new option.
 
-While we are at it, adjust the white space in the .hash file to match the
-new agreements.
+ > - Make UTIL_LINUX_BINARIES select BR2_SYSTEM_HAS_SWAPON_SWAPOFF config.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard-tools/Config.in            | 1 -
- package/wireguard-tools/wireguard-tools.hash | 6 +++---
- package/wireguard-tools/wireguard-tools.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ > - Add a targe-finalize hook to skeleton-init-sysv that comments-out or
+ >   enables the swapon/swapoff lines in /etc/inittab, based on the value
+ >   of BR2_SYSTEM_HAS_SWAPON_SWAPOFF.
 
-diff --git a/package/wireguard-tools/Config.in b/package/wireguard-tools/Config.in
-index eee6a8a940..130f4c48ed 100644
---- a/package/wireguard-tools/Config.in
-+++ b/package/wireguard-tools/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_WIREGUARD_TOOLS
- 	bool "wireguard tools"
- 	# kernel module requires 3.10+, userspace makes no sense without it
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
--	select BR2_PACKAGE_LIBMNL
- 	help
- 	  WireGuard is an extremely simple yet fast and modern VPN
- 	  that utilizes state-of-the-art cryptography. It aims to be
-diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
-index 1650f67e7a..9ea0d3ce86 100644
---- a/package/wireguard-tools/wireguard-tools.hash
-+++ b/package/wireguard-tools/wireguard-tools.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004869.html
--sha256 15bfdbdbecbd3870ced9a7e68286c871bfcb2071d165f113808081f2e428faa3  wireguard-tools-1.0.20200121.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-February/004963.html
-+sha256  f5207248c6a3c3e3bfc9ab30b91c1897b00802ed861e1f9faaed873366078c64  wireguard-tools-1.0.20200206.tar.xz
- # Locally calculated
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
-index 0acf0fcbb5..c2b2c36651 100644
---- a/package/wireguard-tools/wireguard-tools.mk
-+++ b/package/wireguard-tools/wireguard-tools.mk
-@@ -4,15 +4,15 @@
- #
- ################################################################################
+ > Based on a previous patch sent by Thomas De Schampheleire.
+
+ > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+ > ---
+ > CC: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > CC: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  package/busybox/Config.in                        |  6 ++++++
+ >  package/busybox/busybox.mk                       | 14 ++++++++++++++
+ >  package/skeleton-init-sysv/skeleton-init-sysv.mk | 12 ++++++++++++
+ >  package/util-linux/Config.in                     |  1 +
+ >  system/Config.in                                 |  6 ++++++
+ >  5 files changed, 39 insertions(+)
+
+ > diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+ > index 5e5c586762..9103256494 100644
+ > --- a/package/busybox/Config.in
+ > +++ b/package/busybox/Config.in
+ > @@ -68,6 +68,12 @@ config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
+ >  comment "Busybox individual binaries need a toolchain w/ dynamic library"
+ >  	depends on BR2_STATIC_LIBS
  
--WIREGUARD_TOOLS_VERSION = 1.0.20200121
-+WIREGUARD_TOOLS_VERSION = 1.0.20200206
- WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
- WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
- WIREGUARD_TOOLS_LICENSE = GPL-2.0
- WIREGUARD_TOOLS_LICENSE_FILES = COPYING
--WIREGUARD_TOOLS_DEPENDENCIES = host-pkgconf libmnl
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
- WIREGUARD_TOOLS_MAKE_OPTS += WITH_SYSTEMDUNITS=yes
-+WIREGUARD_TOOLS_DEPENDENCIES += host-pkgconf
- else
- WIREGUARD_TOOLS_MAKE_OPTS += WITH_SYSTEMDUNITS=no
- endif
+ > +config BR2_PACKAGE_BUSYBOX_SWAPON_SWAPOFF
+ > +	bool
+ > +	default y
+ > +	depends on BR2_USE_MMU
+ > +	select BR2_SYSTEM_HAS_SWAPON_SWAPOFF # used by skeleton-init-sysv
+
+You are presumably missing some option text here so this becomes a
+visible option in menuconfig.
+
+
+
+ > +ifeq ($(BR2_PACKAGE_BUSYBOX_SWAPON_SWAPOFF),y)
+ > +define BUSYBOX_SET_SWAPON_SWAPOFF
+ > +	$(call KCONFIG_ENABLE_OPT,CONFIG_SWAPON,$(BUSYBOX_BUILD_CONFIG))
+ > +	$(call KCONFIG_ENABLE_OPT,CONFIG_SWAPOFF,$(BUSYBOX_BUILD_CONFIG))
+ > +	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_SWAPONOFF_LABEL,$(BUSYBOX_BUILD_CONFIG))
+ > +endef
+ > +else
+ > +define BUSYBOX_SET_SWAPON_SWAPOFF
+ > +	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPON,$(BUSYBOX_BUILD_CONFIG))
+ > +	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPOFF,$(BUSYBOX_BUILD_CONFIG))
+ > +endef
+ > +endif
+
+I am not really convinced that this is an improvement over Thomas'
+version. In general I think we should keep the .config tweaks to a
+minimum as it can be quite confusing to users that their (potentially
+custom) .config settings is overridden.
+
+Do you see any functional issue with the swapon/off handling as is, or
+is it just a question of "taste"?
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
