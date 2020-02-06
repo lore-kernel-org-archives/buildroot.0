@@ -1,58 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Feb 2020 21:01:56 +0100
-Subject: [Buildroot] [git commit] package/clamav: security bump version to
- 0.102.2
-Message-ID: <20200206195403.C1B038D42D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 6 Feb 2020 21:22:32 +0100
+Subject: [Buildroot] Kconfig warnings with GCC9
+In-Reply-To: <CAGt4E5vMQgJKAKfFgr7oUmMJjyDufB72L7VVUgS-UGg8g6c+_A@mail.gmail.com>
+References: <CAGt4E5su1GkK+5ghxC9x9G9KNizC-5jm5E58qPKkDXKuDu5CqQ@mail.gmail.com>
+ <20200110215652.291df299@windsurf>
+ <CAGt4E5u+KA3Vi0dp+YRAYnvXSJN1XXF=S86Th4NoyamnQSWpiw@mail.gmail.com>
+ <87a76ujsuv.fsf@dell.be.48ers.dk>
+ <CAGt4E5s9k2ypwQ5MXBpQA=Wf_W8SMN4u_DvXJtDeJeR0-9H0Eg@mail.gmail.com>
+ <CAGt4E5vMQgJKAKfFgr7oUmMJjyDufB72L7VVUgS-UGg8g6c+_A@mail.gmail.com>
+Message-ID: <20200206212232.5262c903@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19748514b8907ff1dbc2d7cb6c02362927a238e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Markus,
 
-Fixes CVE-2020-3123: A vulnerability in the Data-Loss-Prevention (DLP)
-module in Clam AntiVirus (ClamAV) Software versions 0.102.1 and 0.102.0
-could allow an unauthenticated, remote attacker to cause a denial of service
-condition on an affected device.  The vulnerability is due to an
-out-of-bounds read affecting users that have enabled the optional DLP
-feature.  An attacker could exploit this vulnerability by sending a crafted
-email file to an affected device.  An exploit could allow the attacker to
-cause the ClamAV scanning process crash, resulting in a denial of service
-condition.
+On Thu, 6 Feb 2020 10:30:28 -0800
+Markus Mayer <markus.mayer@broadcom.com> wrote:
 
-Release notes:
-https://lists.clamav.net/pipermail/clamav-announce/2020/000045.html
+> > That's kernel 5.4. Kconfig itself complains about a few Kconfig values
+> > for my stock kernel (maybe because that's 5.3?), but the compiler is
+> > fine. So we should be good.  
+> 
+> Okay. I poked around some more. Turns out that kconfig on the Linux
+> side changed *a lot* between 4.17-rc2 and 5.5. Many files were
+> renamed. A good number of functions was rewritten (partially precisely
+> to avoid the format-overflow warnings). The easiest approach might
+> just be to take the Linux kconfig implementation as is and re-apply
+> the Buildroot customizations on top of the new implementation rather
+> than trying to merge in all the changes from Linux and risking
+> breakage by doing that incorrectly.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This easiest approach is what we do every time we update the Kconfig
+code in Buildroot.
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 72ce1b1c44..613d9b4122 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 0dbda8d0d990d068732966f13049d112a26dce62145d234383467c1d877dedd6  clamav-0.102.1.tar.gz
-+sha256 89fcdcc0eba329ca84d270df09d2bb89ae55f5024b0c3bddb817512fb2c907d3  clamav-0.102.2.tar.gz
- sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index a4059ae200..b8d7de52fa 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.102.1
-+CLAMAV_VERSION = 0.102.2
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+> Is there an easy-ish way to see all the customizations that Buildroot
+> did to kconfig over the years (excluding code changes imported from
+> Linux during past kconfig upgrades)?
+
+See support/kconfig/patches/ and support/kconfig/README.buildroot.
+
+Looking forward to the bump of our Kconfig code base!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
