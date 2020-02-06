@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Feb 2020 19:19:38 +0100
-Subject: [Buildroot] [PATCH 2/4] package/kodi-peripheral-joystick: bump
- version to 1.4.9-Leia
+Date: Thu,  6 Feb 2020 19:19:40 +0100
+Subject: [Buildroot] [PATCH 4/4] package/kodi-screensaver-asteroids: bump
+ version to 2.3.2
 In-Reply-To: <20200206181940.84202-1-bernd.kuhls@t-online.de>
 References: <20200206181940.84202-1-bernd.kuhls@t-online.de>
-Message-ID: <20200206181940.84202-2-bernd.kuhls@t-online.de>
+Message-ID: <20200206181940.84202-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,35 +15,35 @@ Switched _LICENSE_FILES to debian/copyright.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-peripheral-joystick/kodi-peripheral-joystick.hash    | 4 ++--
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk  | 4 ++--
+ .../kodi-screensaver-asteroids.hash                           | 4 ++--
+ .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk  | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index af55dc03ec..15397c05cd 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+index e4c37ba7ba..00d40413b6 100644
+--- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 b6ddefed73582a3dc9bc36a9d40f8309139802ef9cfc130933bd0fe6e569d933  kodi-peripheral-joystick-1.4.8-Leia.tar.gz
--sha256 5f5ee7add3f2c451b387c5a9f39edf33e1cee920871a4863e795d00d27546c33  src/addon.cpp
-+sha256 e83c32380a51ea74bd5f0af74afc747ff5de99167934e2644bc2b3438cd998d0  kodi-peripheral-joystick-1.4.9-Leia.tar.gz
-+sha256 2bb807179053b1a7795f9952539a394664847f561a9ffa4ccc36d7bb3cddadf9  debian/copyright
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index c56cfef43f..9cce174da1 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+-sha256 fa7671a1c88b75e6d26a172fdffdad4fdbd78f000f54632c47e38c17cd0da460  kodi-screensaver-asteroids-2.3.1-Leia.tar.gz
+-sha256 f4f073e8ac29971d33cc7e16ed57452e04f2365bee331de291da65e44ede081e  src/main.cpp
++sha256 c359f8bb6a2e9b42dcfb063cdf965ce0b3fc95761816d98160000aea33894241  kodi-screensaver-asteroids-2.3.2-Leia.tar.gz
++sha256 297a1d34e6000f1b1a924f5ab75c16c2270968bfa47357dd8fa3799c9dfc47d8  debian/copyright
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+index 70d9d8e48b..278efb4eea 100644
+--- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PERIPHERAL_JOYSTICK_VERSION = 1.4.8-Leia
-+KODI_PERIPHERAL_JOYSTICK_VERSION = 1.4.9-Leia
- KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
--KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = src/addon.cpp
-+KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = debian/copyright
- KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi tinyxml udev
+-KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.3.1-Leia
++KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.3.2-Leia
+ KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,xbmc,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
+ KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
++KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = debian/copyright
+ KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = glm kodi
  
  $(eval $(cmake-package))
 -- 
