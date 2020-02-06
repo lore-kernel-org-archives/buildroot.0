@@ -1,29 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Feb 2020 19:28:05 +0100
-Subject: [Buildroot] [PATCH 4/6 v2] boot/barebox: license files hashes
- only valid for latest version
-In-Reply-To: <74a46f7ad7c46107c84347edb01879239a7a824b.1580914115.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Wed, 5 Feb 2020 15:48:41 +0100")
-References: <cover.1580914115.git.yann.morin.1998@free.fr>
- <74a46f7ad7c46107c84347edb01879239a7a824b.1580914115.git.yann.morin.1998@free.fr>
-Message-ID: <87blqbzi2y.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  6 Feb 2020 19:43:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version to
+ 0.102.2
+Message-ID: <20200206184314.215974-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Release notes:
+https://lists.clamav.net/pipermail/clamav-announce/2020/000045.html
 
- > We can only know the path to the license files for the known version.
- > For custom, older or newer, versions may change, or may be moved
- > around.
+Fixes CVE-2020-3123.
 
- > So, do for U-Boot as was done for ATF, linux, and linux-headers, and
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-s/U-Boot/Barebox/ ;)
-
-Committed, thanks.
-
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 72ce1b1c44..613d9b4122 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 0dbda8d0d990d068732966f13049d112a26dce62145d234383467c1d877dedd6  clamav-0.102.1.tar.gz
++sha256 89fcdcc0eba329ca84d270df09d2bb89ae55f5024b0c3bddb817512fb2c907d3  clamav-0.102.2.tar.gz
+ sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index a4059ae200..b8d7de52fa 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLAMAV_VERSION = 0.102.1
++CLAMAV_VERSION = 0.102.2
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 -- 
-Bye, Peter Korsgaard
+2.20.1
