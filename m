@@ -1,75 +1,26 @@
-From: Alex Corcoles <alex@corcoles.net>
-Date: Thu, 6 Feb 2020 19:00:44 +0100
-Subject: [Buildroot] "PATCH": hack to be able to build Rust targetting
- MIPS
-In-Reply-To: <d69167a6-8c09-8318-e646-5b2ae4a84991@xes-inc.com>
-References: <CAPAYC_xPtDO=j3fWeOEbC41X3PXJZ+7AD=WRm8A1DGQrtbadFQ@mail.gmail.com>
- <CAPAYC_y98TxMoBtG=P9hDe26=1rHfaoMyoH5NJyLHbRxcxpMAQ@mail.gmail.com>
- <20200119213102.GA2894@ned>
- <CAPAYC_xA2zkmmADgr9G2mspcS=Ej16wOM75rT-aCKbK42hzk5g@mail.gmail.com>
- <CAPAYC_wFywnPH6j8muHXvX1n+bLrWkZxBMrm+ywXQAyTbvsK8Q@mail.gmail.com>
- <CAPAYC_whFdF00V4M9qZEZOPz4VTMzJ1aOdruR-qjvUKkWw93uQ@mail.gmail.com>
- <CAPAYC_yo=DkwQzeF-t9jqH6p2ywBF2+=+5agrKA-vhWULAB71A@mail.gmail.com>
- <d69167a6-8c09-8318-e646-5b2ae4a84991@xes-inc.com>
-Message-ID: <CAPAYC_ws6G_P8xDeZ7qVeDF3RLARud62JNYd2XECJYs1C8Myaw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 06 Feb 2020 19:18:15 +0100
+Subject: [Buildroot] [PATCH 3/6 v2] boot/uboot: license files hashes
+ only valid for latest version
+In-Reply-To: <75edead37a0d9c4d78b3d03739bbfab1f35ee3a6.1580914115.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Wed, 5 Feb 2020 15:48:40 +0100")
+References: <cover.1580914115.git.yann.morin.1998@free.fr>
+ <75edead37a0d9c4d78b3d03739bbfab1f35ee3a6.1580914115.git.yann.morin.1998@free.fr>
+Message-ID: <87ftfnzijc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Thu, Feb 6, 2020 at 6:50 PM Vincent Fazio <vfazio@xes-inc.com> wrote:
+ > We can only know the path to the license files for the known version.
+ > For custom, older or newer, versions may change, or may be moved
+ > around.
 
-> I'm not familiar with Rust, but there should be a cleaner way to set the
-> target cpu than hacking the default. Preferably the target MIPS cpu
-> selected within Buildroot would inform the target cpu?
->
-> A quick search seems to suggest this may be possible
-> (https://gitissue.com/issues/5a1e9e776805170abd3c8a38):
->
-> [build]
-> target = "mipsel-unknown-linux-gnu"
->
-> [target.mipsel-unknown-linux-gnu]
-> rustflags = [
->    "-C", "link-arg=-EL",
->    "-C", "target-cpu=mips32",
->    "-C", "target-feature=+mips32,-mips32r2,-fpxx,-nooddspreg",
-> ]
->
+It is not only the path, but also the content (hash), so I slightly
+reworded this and committed, thanks.
 
-Yeah, probably there are slightly cleaner solutions. I think that Rust
-targetting mips32r2 by default sucks a little bit, so I'm not losing hope
-completely that the change will be reverted. If they do so, I think it
-would be quite easy for buildroot to iron out the few niggles required to
-get this to work.
-
-However, I'm not really knowledgeable about buildroot, so all the patches
-involved in this are terrible. I saw the solution you quote at:
-
-https://github.com/rust-lang/rust/issues/37507#issuecomment-476026815
-
-, but I wasn't sure how to plug that cleanly into buildroot, so I went for
-the ugly solution. Perhaps I can plug that into buildroot/package/rust/
-rust.mk, though. If I have some time I will try to clean things up
-(unfortunately, I was unemployed since mid-November, which gave me tons of
-spare time for this silly stuff... but I start a new job on Monday, so I
-won't have so much time..,).
-
-If someone wants to spend time on this, I will be happy to test or
-whatever, though.
-
-Cheers,
-
-?lex
 -- 
-   ___
- {~._.~}
-  ( Y )
- ()~*~()  mail: alex at corcoles dot net
- (_)-(_)  http://alex.corcoles.net/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200206/9e12a4ac/attachment.html>
+Bye, Peter Korsgaard
