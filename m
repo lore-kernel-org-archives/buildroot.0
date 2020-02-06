@@ -1,95 +1,82 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 5 Feb 2020 19:12:22 -0600
-Subject: [Buildroot] [PATCH] package/rng-tools: make jitterentropy
- conditional
-In-Reply-To: <CANQCQparBzmSPD9epjQw8t6jyMejP0E1X0GjTUkXHpjXTi8Svg@mail.gmail.com>
-References: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
- <20200205203257.48877881@windsurf>
- <CANQCQparBzmSPD9epjQw8t6jyMejP0E1X0GjTUkXHpjXTi8Svg@mail.gmail.com>
-Message-ID: <CANQCQpZ9Hs6DA6XJpBnMLxqnnJj8N3TYQLsDSp_YR3xqR8G-bQ@mail.gmail.com>
+From: Jerry Huang <jerry.huang@nxp.com>
+Date: Thu, 6 Feb 2020 03:41:46 +0000
+Subject: [Buildroot] [EXT] Re: [PATCH v4 1/9] package/nxp: new package
+ directory
+In-Reply-To: <CAEyMn7YhNQE8AaUu7vzpoO-TPcYgr5qWADKB-geq3AAj_MHZdw@mail.gmail.com>
+References: <20200205105227.13698-1-jerry.huang@nxp.com>
+ <CAEyMn7YhNQE8AaUu7vzpoO-TPcYgr5qWADKB-geq3AAj_MHZdw@mail.gmail.com>
+Message-ID: <VI1PR04MB5136E5E9F34B5A91437E89B2FE1D0@VI1PR04MB5136.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
 
 
-On Wed, Feb 5, 2020 at 2:46 PM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Thomas,
->
-> On Wed, Feb 5, 2020 at 1:33 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
+Best Regards
+Jerry Huang
+
+> -----Original Message-----
+> From: Heiko Thiery <heiko.thiery@gmail.com>
+> Sent: Wednesday, February 5, 2020 10:09 PM
+> To: Jerry Huang <jerry.huang@nxp.com>
+> Cc: buildroot at busybox.net; olteanv at gmail.com; Michael Walle
+> <michael@walle.cc>; geomatsi at gmail.com; matthew.weber at collins.com;
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Subject: [EXT] Re: [Buildroot] [PATCH v4 1/9] package/nxp: new package
+> directory
+> 
+> Caution: EXT Email
+> 
+> Hi Changming,
+> 
 > >
-> > On Wed,  5 Feb 2020 12:26:08 -0600
-> > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+> +###############################################################
+> ######
+> > +###########
+> > +#
+> > +# helper
+> > +#
 > >
-> > > The update of rng-tools from 5 to 6.7 introduced a change where
-> > > the jitterentropy library was enabled by default instead of
-> > > returning a special 66 return code to hangle the case of no
-> > > hwrng. This patch reverts that change and allows a user to
-> > > select when to enable the jitterentropy source. The bug
-> > > documents an issue of when a hwrng is enabled with jitterentropy
-> > > there is a longer boot time.
-> >
-> > I don't understand this story of the 66 return code. Could you explain
-> > a bit more ?
->
-> In Buildroot commit 22cb51e1 the systemd support addition included the
-> successcode change based on the Fedora bugfix for ignoring if no hwrng
-> is present (https://bugzilla.redhat.com/show_bug.cgi?id=892178).
+> +###############################################################
+> ######
+> > +###########
+> > +
+> > +# Helper for self-extracting binaries distributed by NXP.
+> > +#
+> > +# The --force option makes sure it doesn't fail if the source #
+> > +directory already exists. The --auto-accept skips the license check,
+> > +# as it is not needed in Buildroot because we have legal-info. Since
+> > +# there's a EULA in the binary file, we extract it in this macro, and
+> > +# it should therefore be added to the LICENSE_FILES variable of #
+> > +packages using this macro. Also, remember to set REDISTRIBUTE to #
+> > +"NO". Indeed, this is a legal minefield: the EULA specifies that the
+> > +# Board Support Package includes software and hardware (sic!) for #
+> > +which a separate license is needed...
+> > +#
+> > +# $(1): full path to the archive file # define NXP_EXTRACT_HELPER
+> > +       awk 'BEGIN      { start = 0; } \
+> > +            /^EOEULA/  { start = 0; } \
+> > +                       { if (start) print; } \
+> > +            /<<EOEULA/ { start = 1; }' \
+> > +           $(1) > $(@D)/EULA
+> > +       cd $(@D) && sh $(1) --force --auto-accept
+> > +       find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1
+> -exec mv {} $(@D) \;
+> > +       rmdir $(@D)/$(basename $(notdir $(1))) endef
+> > +
+> > +include $(sort $(wildcard package/nxp/*/*.mk))
+> 
+> This seems to be a duplication of the FREESCALE_IMX_EXTRACT_HELPER, isn't
+> it?
+> Do we then can remove the other one and use only the new "nxp" one?
+> 
+> By the way is there a plan to move all NXP specific packages (qoriq and imx) to
+> the nxp subdir?
+Yes, the helper is the duplication of FREESCALE_IMX_EXTRACT_HELPER.
+Because Freescale is merged into NXP a few years ago, according to NXP's policy, we need to use nxp, instead of freescale.
+So, I think the packages related NXP should be move into nxp directory.
 
-Ryan Barnett noticed that rng-tools dropped the special return code.
-I guess we could just drop support for this special case as well....
-https://github.com/nhorman/rng-tools/blob/v6.8/rngd.c#L805
-
->
-> >
-> > > index 11386d1e5d..c0bcffe59e 100644
-> > > --- a/package/rng-tools/rngd.service
-> > > +++ b/package/rng-tools/rngd.service
-> > > @@ -3,6 +3,7 @@ Description=Hardware RNG Entropy Gatherer Daemon
-> > >
-> > >  [Service]
-> > >  ExecStart=/usr/sbin/rngd -f $DAEMON_ARGS
-> > > +SuccessExitStatus=66
-> >
-> > Will this work even if jitterentropy support is enabled ?
->
-> My understanding is that you'd never hit this return case when
-> jitterentropy support built in as it would always init the entropy
-> pool using that library as a source.  Thus the problem of the boot
-> delay even when hwrng is present.
->
-> Matt
-
-
-
--- 
-
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+> --
+> Heiko
