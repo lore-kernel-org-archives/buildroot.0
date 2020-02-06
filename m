@@ -1,82 +1,73 @@
-From: Jerry Huang <jerry.huang@nxp.com>
-Date: Thu, 6 Feb 2020 03:41:46 +0000
-Subject: [Buildroot] [EXT] Re: [PATCH v4 1/9] package/nxp: new package
- directory
-In-Reply-To: <CAEyMn7YhNQE8AaUu7vzpoO-TPcYgr5qWADKB-geq3AAj_MHZdw@mail.gmail.com>
-References: <20200205105227.13698-1-jerry.huang@nxp.com>
- <CAEyMn7YhNQE8AaUu7vzpoO-TPcYgr5qWADKB-geq3AAj_MHZdw@mail.gmail.com>
-Message-ID: <VI1PR04MB5136E5E9F34B5A91437E89B2FE1D0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 06 Feb 2020 08:46:24 +0000
+Subject: [Buildroot] [Bug 12546] Ninja 1.10 build Error
+In-Reply-To: <bug-12546-163@https.bugs.busybox.net/>
+References: <bug-12546-163@https.bugs.busybox.net/>
+Message-ID: <bug-12546-163-yqvRgenyIe@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=12546
+
+--- Comment #2 from damian.tometzki at familie-tometzki.de ---
+Hello,
+
+it works now but with some warnings:
+
+-- Detecting CXX compile features - done
+CMake Warning at CMakeLists.txt:36 (message):
+  re2c was not found; changes to src/*.in.cc will not affect your build.
 
 
-Best Regards
-Jerry Huang
+-- Configuring done
+-- Generating done
+CMake Warning:
+  Manually-specified variables were not used by the project:
 
-> -----Original Message-----
-> From: Heiko Thiery <heiko.thiery@gmail.com>
-> Sent: Wednesday, February 5, 2020 10:09 PM
-> To: Jerry Huang <jerry.huang@nxp.com>
-> Cc: buildroot at busybox.net; olteanv at gmail.com; Michael Walle
-> <michael@walle.cc>; geomatsi at gmail.com; matthew.weber at collins.com;
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Subject: [EXT] Re: [Buildroot] [PATCH v4 1/9] package/nxp: new package
-> directory
-> 
-> Caution: EXT Email
-> 
-> Hi Changming,
-> 
-> >
-> +###############################################################
-> ######
-> > +###########
-> > +#
-> > +# helper
-> > +#
-> >
-> +###############################################################
-> ######
-> > +###########
-> > +
-> > +# Helper for self-extracting binaries distributed by NXP.
-> > +#
-> > +# The --force option makes sure it doesn't fail if the source #
-> > +directory already exists. The --auto-accept skips the license check,
-> > +# as it is not needed in Buildroot because we have legal-info. Since
-> > +# there's a EULA in the binary file, we extract it in this macro, and
-> > +# it should therefore be added to the LICENSE_FILES variable of #
-> > +packages using this macro. Also, remember to set REDISTRIBUTE to #
-> > +"NO". Indeed, this is a legal minefield: the EULA specifies that the
-> > +# Board Support Package includes software and hardware (sic!) for #
-> > +which a separate license is needed...
-> > +#
-> > +# $(1): full path to the archive file # define NXP_EXTRACT_HELPER
-> > +       awk 'BEGIN      { start = 0; } \
-> > +            /^EOEULA/  { start = 0; } \
-> > +                       { if (start) print; } \
-> > +            /<<EOEULA/ { start = 1; }' \
-> > +           $(1) > $(@D)/EULA
-> > +       cd $(@D) && sh $(1) --force --auto-accept
-> > +       find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1
-> -exec mv {} $(@D) \;
-> > +       rmdir $(@D)/$(basename $(notdir $(1))) endef
-> > +
-> > +include $(sort $(wildcard package/nxp/*/*.mk))
-> 
-> This seems to be a duplication of the FREESCALE_IMX_EXTRACT_HELPER, isn't
-> it?
-> Do we then can remove the other one and use only the new "nxp" one?
-> 
-> By the way is there a plan to move all NXP specific packages (qoriq and imx) to
-> the nxp subdir?
-Yes, the helper is the duplication of FREESCALE_IMX_EXTRACT_HELPER.
-Because Freescale is merged into NXP a few years ago, according to NXP's policy, we need to use nxp, instead of freescale.
-So, I think the packages related NXP should be move into nxp directory.
+    BUILD_DOC
+    BUILD_DOCS
+    BUILD_EXAMPLE
+    BUILD_EXAMPLES
+    BUILD_TEST
+    BUILD_TESTING
+    BUILD_TESTS
+    CMAKE_ASM_COMPILER
+    CMAKE_FIND_ROOT_PATH_MODE_LIBRARY
 
-> --
-> Heiko
+
+-- Build files have been written to:
+/data/kernel/buildroot/output/build/host-ninja-1.10.0
+>>> host-ninja 1.10.0 Building
+PATH="/data/kernel/buildroot/output/host/bin:/data/kernel/buildroot/output/host/sbin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/damian/.local/bin:/home/damian/bin"
+PKG_CONFIG="/data/kernel/buildroot/output/host/bin/pkg-config"
+PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+PKG_CONFIG_LIBDIR="/data/kernel/buildroot/output/host/lib/pkgconfig:/data/kernel/buildroot/output/host/share/pkgconfig"
+ /usr/bin/make -j3  -C /data/kernel/buildroot/output/build/host-ninja-1.10.0/
+Scanning dependencies of target libninja-re2c
+Scanning dependencies of target libninja
+[  3%] Built target libninja-re2c
+[ 42%] Built target libninja
+Scanning dependencies of target hash_collision_bench
+Scanning dependencies of target depfile_parser_perftest
+Scanning dependencies of target clparser_perftest
+[ 45%] Built target hash_collision_bench
+[ 49%] Built target clparser_perftest
+[ 52%] Built target depfile_parser_perftest
+Scanning dependencies of target ninja
+Scanning dependencies of target manifest_parser_perftest
+Scanning dependencies of target build_log_perftest
+[ 59%] Built target manifest_parser_perftest
+[ 59%] Built target ninja
+[ 63%] Built target build_log_perftest
+Scanning dependencies of target ninja_test
+Scanning dependencies of target canon_perftest
+[ 66%] Built target canon_perftest
+[100%] Built target ninja_test
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
