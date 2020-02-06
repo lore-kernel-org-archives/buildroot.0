@@ -1,37 +1,32 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  6 Feb 2020 11:04:16 -0800
-Subject: [Buildroot] [PATCH 3/3] package/qemu: add support for sparc64
-In-Reply-To: <20200206190416.48560-1-aduskett@gmail.com>
-References: <20200206190416.48560-1-aduskett@gmail.com>
-Message-ID: <20200206190416.48560-3-aduskett@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 06 Feb 2020 20:39:09 +0100
+Subject: [Buildroot] [PATCH 5/6 v2] boot/at91bootstrap3: license files
+ hashes only valid for latest version
+In-Reply-To: <87654888e86275f2ac6638c64ad048c1bda172df.1580914115.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Wed, 5 Feb 2020 15:48:42 +0100")
+References: <cover.1580914115.git.yann.morin.1998@free.fr>
+ <87654888e86275f2ac6638c64ad048c1bda172df.1580914115.git.yann.morin.1998@free.fr>
+Message-ID: <877e0zzesi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-This prevents illegal instruction errors when running qemu.
+ > We can only know the path to the license files for the known version.
+ > For custom, older or newer, versions may change, or may be moved
+ > around.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/qemu/qemu.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ > So, do for at91bootstrap3 as was done for other packages in the recent
+ > past, and only define the list of license files for the latest version.
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 6794157709..f6c14c6a47 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -237,6 +237,9 @@ endif
- ifeq ($(HOST_QEMU_ARCH),sh4aeb)
- HOST_QEMU_ARCH = sh4eb
- endif
-+ifeq ($(HOST_QEMU_ARCH),sparc64)
-+HOST_QEMU_ARCH = sparc64
-+endif
- ifeq ($(HOST_QEMU_ARCH),csky)
- ifeq ($(BR2_ck610),y)
- HOST_QEMU_ARCH = cskyv1
+ > Reported-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Markus Mayer <mmayer@broadcom.com>
+
+Committed, thanks.
+
 -- 
-2.21.1 (Apple Git-122.3)
+Bye, Peter Korsgaard
