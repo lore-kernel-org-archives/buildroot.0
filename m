@@ -1,194 +1,126 @@
-From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Fri, 7 Feb 2020 15:19:48 -0600
-Subject: [Buildroot] [PATCH v1 1/1] package/libtalloc: update to add
- libtalloc
-In-Reply-To: <20200201233543.1729e8a8@windsurf>
-References: <20200129150841.9546-1-jared.bents@rockwellcollins.com>
- <20200201233543.1729e8a8@windsurf>
-Message-ID: <CAM=7fbcO16TBgLVHrX7P+=sem2o=QKQG-ts_V6otH1+_B3FYdw@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 7 Feb 2020 15:19:57 -0600
+Subject: [Buildroot] [PATCH v3 00/10] Merge rust and cargo
+In-Reply-To: <20200207180829.165689-1-arnout@mind.be>
+References: <20200207180829.165689-1-arnout@mind.be>
+Message-ID: <CANQCQpaLJEZa4f6FjZ_v4GJ-F9nDNSn1=AAOrdu8tr6YEWoDCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+All,
 
-On Sat, Feb 1, 2020 at 4:36 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Jared,
->
-> Thanks for your contribution. A number of comments/questions below.
->
-> On Wed, 29 Jan 2020 09:08:41 -0600
-> jared.bents at rockwellcollins.com wrote:
->
-> >  package/Config.in                |  1 +
-> >  package/libtalloc/Config.in      |  8 ++++
-> >  package/libtalloc/libtalloc.hash |  2 +
-> >  package/libtalloc/libtalloc.mk   | 74 ++++++++++++++++++++++++++++++++
-> >  4 files changed, 85 insertions(+)
->
-> Entry missing in the DEVELOPERS file.
 
-Will include in v2
-
+On Fri, Feb 7, 2020 at 12:09 PM Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
 >
-> > diff --git a/package/libtalloc/Config.in b/package/libtalloc/Config.in
-> > new file mode 100644
-> > index 0000000000..168d367793
-> > --- /dev/null
-> > +++ b/package/libtalloc/Config.in
-> > @@ -0,0 +1,8 @@
-> > +config BR2_PACKAGE_LIBTALLOC
-> > +     bool "libtalloc"
+> The source code for Cargo, the build and package manager for Rust, is now
+> shipped along with the compiler and standard library.
 >
-> Really no toolchain dependencies at all? Did you test this package with
-> test-pkg ?
-
-I missed the toolchain dependencies. Will add those in v2
-
+> So there can not be a standalone package for Cargo anymore.
 >
-> > diff --git a/package/libtalloc/libtalloc.hash b/package/libtalloc/libtalloc.hash
-> > new file mode 100644
-> > index 0000000000..ff1df0f8a9
-> > --- /dev/null
-> > +++ b/package/libtalloc/libtalloc.hash
-> > @@ -0,0 +1,2 @@
-> > +# Locally calculated after checking pgp signature
-> > +sha256 ef4822d2fdafd2be8e0cabc3ec3c806ae29b8268e932c5e9a4cd5585f37f9f77  talloc-2.3.1.tar.gz
->
-> We will need a license file hash. See below.
-
-I'll add both files as license files and get them included in the .hash
-
->
-> > diff --git a/package/libtalloc/libtalloc.mk b/package/libtalloc/libtalloc.mk
-> > new file mode 100644
-> > index 0000000000..82a5bcb45e
-> > --- /dev/null
-> > +++ b/package/libtalloc/libtalloc.mk
-> > @@ -0,0 +1,74 @@
-> > +################################################################################
-> > +#
-> > +# libtalloc
-> > +#
-> > +################################################################################
-> > +
-> > +LIBTALLOC_VERSION = 2.3.1
-> > +LIBTALLOC_SITE = https://www.samba.org/ftp/talloc
-> > +LIBTALLOC_SOURCE = talloc-$(LIBTALLOC_VERSION).tar.gz
-> > +LIBTALLOC_LICENSE = LGPL-3.0+
->
-> The python bindings are under GPL-3.0+
->
-> > +# no license file but available in source at man/talloc.3.xml
->
-> I suggest using talloc.h as the license file for LGPL-3.0+ and
-> pytalloc.h as the license file for GPL-3.0+.
->
-> > +LIBTALLOC_INSTALL_STAGING = YES
-> > +LIBTALLOC_CFLAGS = $(TARGET_CFLAGS)
-> > +LIBTALLOC_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
->
-> If you use TARGET_NLS_LIBS here, then you need
-> $(TARGET_NLS_DEPENDENCIES) in the <pkg>_DEPENDENCIES variable. Make
-> sure it is really needed though.
-
-It appears it is not needed, will remove
-
->
-> > +LIBTALLOC_CONF_ENV = \
-> > +     CFLAGS="$(LIBTALLOC_CFLAGS)" \
-> > +     LDFLAGS="$(LIBTALLOC_LDFLAGS)" \
-> > +     XSLTPROC=false \
-> > +     WAF_NO_PREFORK=1
-> > +
-> > +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-> > +LIBTALLOC_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
-> > +LIBTALLOC_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
-> > +LIBTALLOC_DEPENDENCIES += libtirpc host-pkgconf
-> > +endif
->
-> Are you sure libtirpc is really used by libtalloc ? I know it is
-> checked in lib/replace/wscript, but I don't see where it gets used, and
-> I don't see why a memory allocator library would care about RPC
-> support. Could you comment on this ?
-
-I see an undef happening related to RPC in lib/replace/system/nis.h.
-It is refering to a conflict for AUTH_ERROR with rpc/rpc.h. However,
-that is the only reference I am seeing as nettype.h is not used
-anywhere.
-
->
-> > +
-> > +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> > +LIBTALLOC_PYTHON = \
-> > +     PYTHON="$(HOST_DIR)/bin/python3" \
-> > +     PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
->
-> I'm not sure we need this LIBTALLOC_PYTHON variable, just put these
-> variables in LIBTALLOC_MAKE_ENV, which itself is initially set to
-> TARGET_MAKE_ENV, and then used in the commands.
+> This series does the following:
+> - move the installation of cargo config to toolchain post-install hook.
+> - update host-rust to build and install Cargo.
+> - install host-cargo-bin if host-rust-bin is selected instead of host-rust.
+> - update dependencies for package(s) using Cargo.
+> - remove cargo packaging.
+> - update the packaging documentation.
+> - bump rust (+cargo) to 1.40.
+> - remove cargo-bin as well (now bundled with rust binaries).
 >
 
-I can't seem to get the build to work by switching to using
-LIBTALLOC_MAKE_ENV but if I can get it working, I'll include in v2
+Build and runtime tested (x86 32bit )
 
-> > +LIBTALLOC_DEPENDENCIES += host-python3 python3
-> > +LIBTALLOC_CONF_ENV += \
-> > +     $(LIBTALLOC_PYTHON) \
-> > +     python_LDFLAGS="" \
-> > +     python_LIBDIR=""
->
-> Setting these python_LDFLAGS and python_LIBDIR to empty values looks
-> weird. Why do you need that? Aren't they empty by default anyway?
+Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-Yeah they appear to not be needed. I had incorrectly assumed they were
-needed while basing off of samba4 since libtalloc is included in
-samba4
-
+> It was previously posted by Eric Le Bihan [1] and by Patrick Havelange
+> [2]. I wanted to merge it, but I made some invasive changes (the first
+> patch) so I'm reposting just to be sure.
 >
-> > +define LIBTALLOC_CONFIGURE_CMDS
-> > +     $(INSTALL) -m 0644 package/samba4/samba4-cache.txt $(@D)/cache.txt;
-> > +     echo 'Checking uname machine type: $(BR2_ARCH)' >>$(@D)/cache.txt;
-> > +     (cd $(@D); \
-> > +             $(TARGET_CONFIGURE_OPTS) \
-> > +             $(LIBTALLOC_CONF_ENV) \
-> > +             ./buildtools/bin/waf configure \
-> > +                     --prefix=/usr \
-> > +                     --sysconfdir=/etc \
-> > +                     --localstatedir=/var \
-> > +                     --with-libiconv=$(STAGING_DIR)/usr \
-> > +                     --cross-compile \
-> > +                     --cross-answers=$(@D)/cache.txt \
-> > +                     --hostcc=gcc \
-> > +                     --disable-rpath \
-> > +                     --disable-rpath-install \
-> > +                     --bundled-libraries='!asn1_compile,!compile_et' \
-> > +                     $(LIBTALLOC_CONF_OPTS) \
+> Regards,
+> Arnout
 >
-> Why don't you use the waf-package infrastructure if this is a waf
-> package ? Hm, I see samba4 is also not using the waf package
-> infrastructure for some reason.
-
-I'll investigate using the waf-package infrastructure for v2
-
+> [1] http://patchwork.ozlabs.org/project/buildroot/list/?series=140900
+> [2] http://patchwork.ozlabs.org/project/buildroot/list/?series=153317
 >
-> Thanks,
+> Arnout Vandecappelle (Essensium/Mind) (1):
+>   package/rustc: install cargo config as toolchain post-install hook
 >
-> Thomas
+> Eric Le Bihan (7):
+>   package/rust: build and install cargo
+>   package/cargo-bin: install if rust-bin selected
+>   package/rust-bin: host variant depends on host-cargo-bin
+>   package/rust: drop dependency on host-cargo-bin
+>   package/ripgrep: depends on host-rustc
+>   package/cargo: drop package
+>   docs/manual: cargo packages depend on host-rustc
+>
+> Patrick Havelange (2):
+>   package/rust: bump to 1.40
+>   package/cargo-bin: remove and use cargo-bin from rust-bin package
+>
+>  DEVELOPERS                                    |   2 -
+>  docs/manual/adding-packages-cargo.txt         |   4 +-
+>  package/Config.in.host                        |   1 -
+>  package/cargo-bin/cargo-bin.hash              |  13 -
+>  package/cargo-bin/cargo-bin.mk                |  13 -
+>  package/cargo/Config.in.host                  |   9 -
+>  package/cargo/cargo.hash                      |   8 -
+>  package/cargo/cargo.mk                        |  91 ------
+>  package/ripgrep/Config.in                     |   2 +-
+>  package/ripgrep/ripgrep.mk                    |   2 +-
+>  package/rust-bin/rust-bin.hash                |  93 +++---
+>  package/rust-bin/rust-bin.mk                  |  29 +-
+>  ...esence-of-LLVM-library-in-stage0-lib.patch | 264 ------------------
+>  package/rust/rust.hash                        |   6 +-
+>  package/rust/rust.mk                          |   8 +-
+>  .../config.in => rustc/cargo-config.in}       |   0
+>  package/rustc/rustc.mk                        |  12 +
+>  support/testing/tests/package/test_rust.py    |   2 -
+>  18 files changed, 85 insertions(+), 474 deletions(-)
+>  delete mode 100644 package/cargo-bin/cargo-bin.hash
+>  delete mode 100644 package/cargo-bin/cargo-bin.mk
+>  delete mode 100644 package/cargo/Config.in.host
+>  delete mode 100644 package/cargo/cargo.hash
+>  delete mode 100644 package/cargo/cargo.mk
+>  delete mode 100644 package/rust/0001-Workaround-presence-of-LLVM-library-in-stage0-lib.patch
+>  rename package/{cargo/config.in => rustc/cargo-config.in} (100%)
+>
 > --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> 2.24.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thank you for the review,
-Jared
 
--- 
-Jared M. Bents | Sr. Software Engineer | Commercial Avionics
+
+--
+
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+
 COLLINS AEROSPACE
-400 Collins Road NE, Cedar Rapids, Iowa 52498 USA
-jared.bents at collins.com | collinsaerospace.com
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
