@@ -1,126 +1,100 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 7 Feb 2020 15:19:57 -0600
-Subject: [Buildroot] [PATCH v3 00/10] Merge rust and cargo
-In-Reply-To: <20200207180829.165689-1-arnout@mind.be>
-References: <20200207180829.165689-1-arnout@mind.be>
-Message-ID: <CANQCQpaLJEZa4f6FjZ_v4GJ-F9nDNSn1=AAOrdu8tr6YEWoDCg@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri, 7 Feb 2020 22:34:02 +0100
+Subject: [Buildroot] [PATCH v16 0/4] package/gobject-introspection: new
+ package
+In-Reply-To: <20200207023834.877032-1-aduskett@gmail.com>
+References: <20200207023834.877032-1-aduskett@gmail.com>
+Message-ID: <636b2b73-3bf2-481b-886a-354ad4613311@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hi Adam, All,
 
+I've built succesfully gobject-introspection with test-pkg -a, so I'm 
+going to send Tested-by: for every patch.
 
-On Fri, Feb 7, 2020 at 12:09 PM Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
->
-> The source code for Cargo, the build and package manager for Rust, is now
-> shipped along with the compiler and standard library.
->
-> So there can not be a standalone package for Cargo anymore.
->
-> This series does the following:
-> - move the installation of cargo config to toolchain post-install hook.
-> - update host-rust to build and install Cargo.
-> - install host-cargo-bin if host-rust-bin is selected instead of host-rust.
-> - update dependencies for package(s) using Cargo.
-> - remove cargo packaging.
-> - update the packaging documentation.
-> - bump rust (+cargo) to 1.40.
-> - remove cargo-bin as well (now bundled with rust binaries).
->
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
 
-Build and runtime tested (x86 32bit )
-
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-> It was previously posted by Eric Le Bihan [1] and by Patrick Havelange
-> [2]. I wanted to merge it, but I made some invasive changes (the first
-> patch) so I'm reposting just to be sure.
->
-> Regards,
-> Arnout
->
-> [1] http://patchwork.ozlabs.org/project/buildroot/list/?series=140900
-> [2] http://patchwork.ozlabs.org/project/buildroot/list/?series=153317
->
-> Arnout Vandecappelle (Essensium/Mind) (1):
->   package/rustc: install cargo config as toolchain post-install hook
->
-> Eric Le Bihan (7):
->   package/rust: build and install cargo
->   package/cargo-bin: install if rust-bin selected
->   package/rust-bin: host variant depends on host-cargo-bin
->   package/rust: drop dependency on host-cargo-bin
->   package/ripgrep: depends on host-rustc
->   package/cargo: drop package
->   docs/manual: cargo packages depend on host-rustc
->
-> Patrick Havelange (2):
->   package/rust: bump to 1.40
->   package/cargo-bin: remove and use cargo-bin from rust-bin package
->
->  DEVELOPERS                                    |   2 -
->  docs/manual/adding-packages-cargo.txt         |   4 +-
->  package/Config.in.host                        |   1 -
->  package/cargo-bin/cargo-bin.hash              |  13 -
->  package/cargo-bin/cargo-bin.mk                |  13 -
->  package/cargo/Config.in.host                  |   9 -
->  package/cargo/cargo.hash                      |   8 -
->  package/cargo/cargo.mk                        |  91 ------
->  package/ripgrep/Config.in                     |   2 +-
->  package/ripgrep/ripgrep.mk                    |   2 +-
->  package/rust-bin/rust-bin.hash                |  93 +++---
->  package/rust-bin/rust-bin.mk                  |  29 +-
->  ...esence-of-LLVM-library-in-stage0-lib.patch | 264 ------------------
->  package/rust/rust.hash                        |   6 +-
->  package/rust/rust.mk                          |   8 +-
->  .../config.in => rustc/cargo-config.in}       |   0
->  package/rustc/rustc.mk                        |  12 +
->  support/testing/tests/package/test_rust.py    |   2 -
->  18 files changed, 85 insertions(+), 474 deletions(-)
->  delete mode 100644 package/cargo-bin/cargo-bin.hash
->  delete mode 100644 package/cargo-bin/cargo-bin.mk
->  delete mode 100644 package/cargo/Config.in.host
->  delete mode 100644 package/cargo/cargo.hash
->  delete mode 100644 package/cargo/cargo.mk
->  delete mode 100644 package/rust/0001-Workaround-presence-of-LLVM-library-in-stage0-lib.patch
->  rename package/{cargo/config.in => rustc/cargo-config.in} (100%)
->
-> --
-> 2.24.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
---
-
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+On 2/7/20 3:38 AM, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> This time, with 100% more working.
+> 
+> My brain didn't work so well at Devdays apparently:
+> 
+> Changes:
+>    - Add gobject-introspection back into Config.in. I'm bad and somehow missed
+>      this in v15.
+>    
+>    - Remove GOBJECT_INTROSPECTION_PC_FILE_FIXUP in goi.mk, as the sed wasn't
+>      doing anything.
+>    
+>    - Paths in g-ir-compiler.in weren't 100% correct due to moving g-ir-compiler
+>      to the host directory, so qemu was trying to load the host compiler and not
+>      the staging compiler, which would cause qemu to puke.
+> 
+>    - I removed a -x in g-ir-scanner-wrapper because I am blind.
+>    
+> I tested this patch series with gstreamer1, and it works! You, too, can now
+> have high-functioning projects use glib based c libraries! Hooray!
+> 
+> Thanks, everybody!
+> 
+> Adam
+> Adam
+> 
+> Adam Duskett (4):
+>    package/libiberty: new package
+>    package/prelink-cross: new package
+>    package/gdb: depend on libiberty
+>    package/gobject-introspection: new package
+> 
+>   DEVELOPERS                                    |   3 +
+>   package/Config.in                             |   1 +
+>   package/gdb/gdb.mk                            |   4 +-
+>   ...lete-upstream-attempt-at-cross-compi.patch |  33 ++++
+>   ...d-cross-compilation-support-to-meson.patch | 163 ++++++++++++++++++
+>   .../0003-disable-tests.patch                  |  29 ++++
+>   ...canner-add-use-binary-wrapper-option.patch |  52 ++++++
+>   ...scanner-add-a-use-ldd-wrapper-option.patch |  48 ++++++
+>   ...scanner-add-a-lib-dirs-envvar-option.patch |  73 ++++++++
+>   .../0007-Add-rpath-links-to-ccompiler.patch   |  29 ++++
+>   ...-error-return-codes-from-ldd-wrapper.patch |  28 +++
+>   package/gobject-introspection/Config.in       |  33 ++++
+>   .../gobject-introspection/g-ir-compiler.in    |   3 +
+>   .../g-ir-scanner-lddwrapper.in                |   2 +
+>   .../g-ir-scanner-qemuwrapper.in               |  17 ++
+>   package/gobject-introspection/g-ir-scanner.in |   8 +
+>   .../gobject-introspection.hash                |   4 +
+>   .../gobject-introspection.mk                  | 116 +++++++++++++
+>   package/libiberty/libiberty.hash              |   2 +
+>   package/libiberty/libiberty.mk                |  27 +++
+>   package/prelink-cross/prelink-cross.hash      |   3 +
+>   package/prelink-cross/prelink-cross.mk        |  16 ++
+>   22 files changed, 693 insertions(+), 1 deletion(-)
+>   create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
+>   create mode 100644 package/gobject-introspection/0002-add-cross-compilation-support-to-meson.patch
+>   create mode 100644 package/gobject-introspection/0003-disable-tests.patch
+>   create mode 100644 package/gobject-introspection/0004-giscanner-add-use-binary-wrapper-option.patch
+>   create mode 100644 package/gobject-introspection/0005-giscanner-add-a-use-ldd-wrapper-option.patch
+>   create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
+>   create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
+>   create mode 100644 package/gobject-introspection/0008-ignore-error-return-codes-from-ldd-wrapper.patch
+>   create mode 100644 package/gobject-introspection/Config.in
+>   create mode 100644 package/gobject-introspection/g-ir-compiler.in
+>   create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
+>   create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+>   create mode 100644 package/gobject-introspection/g-ir-scanner.in
+>   create mode 100644 package/gobject-introspection/gobject-introspection.hash
+>   create mode 100644 package/gobject-introspection/gobject-introspection.mk
+>   create mode 100644 package/libiberty/libiberty.hash
+>   create mode 100644 package/libiberty/libiberty.mk
+>   create mode 100644 package/prelink-cross/prelink-cross.hash
+>   create mode 100644 package/prelink-cross/prelink-cross.mk
+> 
