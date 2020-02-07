@@ -1,79 +1,29 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Fri, 7 Feb 2020 10:13:04 +0100
-Subject: [Buildroot] [PATCH 05/10] package/systemd: cosmetic rearrange
- list of users
-In-Reply-To: <20200206093633.251413-6-nolange79@gmail.com>
-References: <20200206093633.251413-1-nolange79@gmail.com>
- <20200206093633.251413-6-nolange79@gmail.com>
-Message-ID: <CAFvCimWQmzczt5u0LuTW=vg4UUfXAZ3VAskCmU8CFYGPVgEcxw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 07 Feb 2020 10:13:37 +0100
+Subject: [Buildroot] [PATCH] package/libftdi1: fix python support
+In-Reply-To: <20200206095421.12987-1-yegorslists@googlemail.com>
+ (yegorslists's message of "Thu, 6 Feb 2020 10:54:21 +0100")
+References: <20200206095421.12987-1-yegorslists@googlemail.com>
+Message-ID: <87imkiyd32.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-could you add a line pointing to the corresponding file in systemd's source
-code (i.e the sysuser file from upstream)
-that would help future reviewers
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-apart from that
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Add an upstreamed patch that reorders find_package() commands.
+ > This way Python interpreter will be detected first and based on
+ > it the Python libraries can be found.
 
-Reviewed-by: J?r?my Rosen <jeremy.rosen@smile.fr>
+ > Fixes the following CMake error:
 
-Le jeu. 6 f?vr. 2020 ? 10:37, Norbert Lange <nolange79@gmail.com> a ?crit :
+ > Could NOT find PythonLibs (missing: PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS)
 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/systemd/systemd.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index b3e83b5d3b..b6bd85f130 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -428,10 +428,12 @@ define SYSTEMD_INSTALL_IMAGES_CMDS
->  endef
->
->  define SYSTEMD_USERS
-> +       # udev user groups
->         - - input -1 * - - - Input device group
-> -       - - systemd-journal -1 * - - - Journal
->         - - render -1 * - - - DRI rendering nodes
->         - - kvm -1 * - - - kvm nodes
-> +       # systemd user groups
-> +       - - systemd-journal -1 * - - - Journal
->         $(SYSTEMD_REMOTE_USER)
->         $(SYSTEMD_COREDUMP_USER)
->         $(SYSTEMD_NETWORKD_USER)
-> --
-> 2.24.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
+We don't seem to have any autobuilder failures in libftdi1 for almost 1
+year. Any idea why this doesn't trigger on the autobuilders?
 
 -- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200207/2efa99e0/attachment.html>
+Bye, Peter Korsgaard
