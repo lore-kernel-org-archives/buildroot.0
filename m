@@ -1,83 +1,83 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Fri,  7 Feb 2020 16:39:27 +0100
-Subject: [Buildroot] [PATCH] package/gnuradio: backport patch: drop
- boost/cstdint.hpp and use cstdint
-Message-ID: <1581089967-28375-1-git-send-email-gwenj@trabucayre.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 7 Feb 2020 17:58:57 +0100
+Subject: [Buildroot] [PATCH 1/2] pkg-stats: query release-monitoring.org
+ with upstream name
+In-Reply-To: <20200205181702.4abbbd83@windsurf>
+References: <20190828070251.22886-1-francois.perrad@gadz.org>
+ <20200205181702.4abbbd83@windsurf>
+Message-ID: <CAB0FRsvs4Rm-ZHvSsDgZHijSM1qL7ygsWAhaK=S_cDdWC+n80Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Le mer. 5 f?vr. 2020 ? 18:17, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-gr-digital/glfsr.h include boost/cstdint.hpp to have uintxx_t.
-These types are in boost namespace but nor using namespace xxx, nor boost:: are used.
-The result is :
-In file included from /home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/glfsr.cc:23:
-/home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/../include/gnuradio/digital/glfsr.h:42:5: error: 'uint32_t' does not name a type; did you mean 'u_int32_t'?
-uint32_t d_shift_register;
-^~~~~~~~
-u_int32_t
+> Hello,
+>
+> On Wed, 28 Aug 2019 09:02:50 +0200
+> Francois Perrad <fperrad@gmail.com> wrote:
+>
+> > By default, this upstream name is our BR name.
+> > But with perl-package infrastructure, the variables *_DISTNAME
+> > give the CPAN name which is known by release-monitoring.org
+> >
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> Since we have this information already in Buildroot, it makes sense to
+> use it. However, the search on release-monitoring.org is done in two
+> steps:
+>
+>  - Using the Buildroot distribution in release-monitoring and its
+>    mapping concept. In this case, we really want to use the Buildroot
+>    package name unchanged (which is not what your patch does)
+>
+>
+It means that a part of Buildroot source (or configuration) is hosted on
+release-monitoring.org instead of our own git repository.
 
-Since Gnuradio policy is Less boost == better and C++11 is used, use cstdint
-instead of boost/cstdint.hpp.
 
-Applied in gnuradio master (475e4a156b516c089175afb998acdc80b740b437)
+>  - Then, if no result is found through the Buildroot distribution
+>    above, we search in the entire namespace. Here, we should search
+>    with _DISTNAME when available. We could also improve the logic to
+>    strip python- and lua- in the front of packages, to help the guess
+>    to work.
+>
+> Would you be willing to work on this ? It's not too far from the patch
+> you have already implemented here.
+>
+>
+Another point about release-monitoring.org,
+how to exclude `dev` branches when the policy of the upstream project is to
+name them with an odd minor number ?
 
-fix:
- - http://autobuild.buildroot.net/results/14015f499e58fee530877ac052878bbe2f799942/
- - http://autobuild.buildroot.net/results/53239f98dd5e03d4dc1bb4eb91ed765f77dbf0ec/
+Here, some false positives:
+                          perl |  DISTRO  |
+https://release-monitoring.org/project/13599 | 5.30.1       | 5.31.8
+|
+                     webkitgtk |  DISTRO  |
+https://release-monitoring.org/project/05355 | 2.26.3       | 2.27.4
+|
+                     wpewebkit |  DISTRO  |
+https://release-monitoring.org/project/17557 | 2.26.3       | 2.27.4
+|
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- ....h-drop-boost-cstdint.hpp-and-use-cs.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
+Fran?ois
 
-diff --git a/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch b/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
-new file mode 100644
-index 0000000000..335d59b63e
---- /dev/null
-+++ b/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
-@@ -0,0 +1,38 @@
-+From f643bc12100c67288adda3699a9e61d6a66fb529 Mon Sep 17 00:00:00 2001
-+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Date: Fri, 7 Feb 2020 16:49:30 +0100
-+Subject: [PATCH] gr-digital:glfsr.h: drop boost/cstdint.hpp and use cstdint
-+
-+gr-digital/glfsr.h include boost/cstdint.hpp to have uintxx_t.
-+These types are in boost namespace but nor using namespace xxx, nor boost:: are used.
-+The result is :
-+In file included from /home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/glfsr.cc:23:
-+/home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/../include/gnuradio/digital/glfsr.h:42:5: error: 'uint32_t' does not name a type; did you mean 'u_int32_t'?
-+uint32_t d_shift_register;
-+^~~~~~~~
-+u_int32_t
-+
-+Since Gnuradio policy is Less boost == better and C++11 is used, use cstdint
-+instead of boost/cstdint.hpp.
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+ gr-digital/include/gnuradio/digital/glfsr.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gr-digital/include/gnuradio/digital/glfsr.h b/gr-digital/include/gnuradio/digital/glfsr.h
-+index 0b5141f1f..1003bcd01 100644
-+--- a/gr-digital/include/gnuradio/digital/glfsr.h
-++++ b/gr-digital/include/gnuradio/digital/glfsr.h
-+@@ -24,7 +24,7 @@
-+ #define INCLUDED_DIGITAL_GLFSR_H
-+ 
-+ #include <gnuradio/digital/api.h>
-+-#include <boost/cstdint.hpp>
-++#include <cstdint>
-+ 
-+ namespace gr {
-+ namespace digital {
-+-- 
-+2.24.1
-+
--- 
-2.24.1
+Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200207/ad86134b/attachment.html>
