@@ -1,56 +1,46 @@
 From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Fri, 7 Feb 2020 10:11:24 +0100
-Subject: [Buildroot] [PATCH 03/10] package/systemd: remove unused user
- accounts
-In-Reply-To: <20200206093633.251413-4-nolange79@gmail.com>
+Date: Fri, 7 Feb 2020 10:11:53 +0100
+Subject: [Buildroot] [PATCH 04/10] package/systemd: create "remote" user
+ if the feature is enabled
+In-Reply-To: <20200206093633.251413-5-nolange79@gmail.com>
 References: <20200206093633.251413-1-nolange79@gmail.com>
- <20200206093633.251413-4-nolange79@gmail.com>
-Message-ID: <CAFvCimVgTb8XcC4fnR3NQLHa6dhv0b=9JyU_CVjHB_n=9ryAwQ@mail.gmail.com>
+ <20200206093633.251413-5-nolange79@gmail.com>
+Message-ID: <CAFvCimWJPqUMoe8pGHSsGH6RvAniu8Q9Ak8poVNWCoo4rmjZSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes...
-Long term we should use systems-sysuser for that, so upstream trickles down
-automatically
-
-in the mean time,
-
 Reviewed-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-
 
 Le jeu. 6 f?vr. 2020 ? 10:37, Norbert Lange <nolange79@gmail.com> a ?crit :
 
-> Since V235 the "gateway" and "upload" services use DynamicUsers,
-> requiring no entries in /etc/passwd.
-> This functionality requires option nss-systemd, which is always
-> enabled in buildroot.
->
-> The "bus-proxy" user was removed in V230
->
 > Signed-off-by: Norbert Lange <nolange79@gmail.com>
 > ---
->  package/systemd/systemd.mk | 3 ---
->  1 file changed, 3 deletions(-)
+>  package/systemd/systemd.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
 > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index a390cdd1a9..b46c4fd540 100644
+> index b46c4fd540..b3e83b5d3b 100644
 > --- a/package/systemd/systemd.mk
 > +++ b/package/systemd/systemd.mk
-> @@ -431,10 +431,7 @@ define SYSTEMD_USERS
+> @@ -181,6 +181,7 @@ endif
+>
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE),y)
+>  SYSTEMD_CONF_OPTS += -Dremote=true
+> +SYSTEMD_REMOTE_USER = systemd-journal-remote -1 systemd-journal-remote -1
+> * /var/log/journal/remote - - Journal Remote
+>  else
+>  SYSTEMD_CONF_OPTS += -Dremote=false
+>  endif
+> @@ -431,7 +432,7 @@ define SYSTEMD_USERS
 >         - - systemd-journal -1 * - - - Journal
 >         - - render -1 * - - - DRI rendering nodes
 >         - - kvm -1 * - - - kvm nodes
-> -       systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus
-> messages to/from a bus
-> -       systemd-journal-gateway -1 systemd-journal-gateway -1 *
-> /var/log/journal - - Journal Gateway
->         systemd-journal-remote -1 systemd-journal-remote -1 *
+> -       systemd-journal-remote -1 systemd-journal-remote -1 *
 > /var/log/journal/remote - - Journal Remote
-> -       systemd-journal-upload -1 systemd-journal-upload -1 * - - -
-> Journal Upload
+> +       $(SYSTEMD_REMOTE_USER)
 >         $(SYSTEMD_COREDUMP_USER)
 >         $(SYSTEMD_NETWORKD_USER)
 >         $(SYSTEMD_RESOLVED_USER)
@@ -85,4 +75,4 @@ Architecte technique
 <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200207/01b5f147/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200207/241524fe/attachment.html>
