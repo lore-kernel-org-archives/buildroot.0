@@ -1,9 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  6 Feb 2020 18:38:32 -0800
-Subject: [Buildroot] [PATCH v16 2/4] package/gdb: depend on libiberty
+Date: Thu,  6 Feb 2020 18:38:33 -0800
+Subject: [Buildroot] [PATCH v16 3/4] package/prelink-cross: new package
 In-Reply-To: <20200207023834.877032-1-aduskett@gmail.com>
 References: <20200207023834.877032-1-aduskett@gmail.com>
-Message-ID: <20200207023834.877032-3-aduskett@gmail.com>
+Message-ID: <20200207023834.877032-4-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,88 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-If present, GDB may use a system installed libiberty. As such, we must ensure
-that host-libiberty is installed first.
+Prelink-cross emulates a runtime linker for a given sysroot. This is
+necessary to allow gobject-introspection to build its typelib files
+during cross-compiling.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We're using a sha1 on the cross_prelink branch, as we need the
+RTLD-enabled variant of prelink-cross.
+
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-v13 -> v14:
-  - Fix typo in the comment. (Arnout)
-
-v1 -> v11:
-  - Add this patch to the series
-
- package/gdb/gdb.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 46d745a897..01f7e14460 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -35,7 +35,9 @@ endif
- # For the host variant, we really want to build with XML support,
- # which is needed to read XML descriptions of target architectures. We
- # also need ncurses.
--HOST_GDB_DEPENDENCIES = host-expat host-ncurses
-+# As for libiberty, gdb may use a system-installed one if present, so
-+# we must ensure ours is installed first.
-+HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses
+Changes v11 -> v13:
+  - Change version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2 as the commit
+    id b10e14218646d8b74773b82b0f8b395bce698fa2 no longer exists.
  
- # Disable building documentation
- GDB_MAKE_OPTS += MAKEINFO=true
+Changes v10 -> v11:
+  - adopted by Yann
+  - switch to a https git server
+  - drop the Config.in.host entry
+  - fix typo in commit log
+
+Changes v9 -> v10:
+  - None
+
+Changes v8 -> v9:
+  - Add the package to the DEVELOPERS file under my name.
+  - Bump version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2
+  - Add host-elfutils as a dependency.
+
+Changes v7 -> v8:
+  - None
+
+Changes v1 -> v7:
+  - Add patch to series.
+
+ DEVELOPERS                               |  1 +
+ package/prelink-cross/prelink-cross.hash |  3 +++
+ package/prelink-cross/prelink-cross.mk   | 16 ++++++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/prelink-cross/prelink-cross.hash
+ create mode 100644 package/prelink-cross/prelink-cross.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 79ddddd9c3..7db172d45f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -53,6 +53,7 @@ F:	package/openjdk/
+ F:	package/openjdk-bin/
+ F:	package/php/
+ F:	package/policycoreutils/
++F:	package/prelink-cross/
+ F:	package/polkit/
+ F:	package/python3/
+ F:	package/python-aioredis/
+diff --git a/package/prelink-cross/prelink-cross.hash b/package/prelink-cross/prelink-cross.hash
+new file mode 100644
+index 0000000000..3ac33ac3d0
+--- /dev/null
++++ b/package/prelink-cross/prelink-cross.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  cb3f5d833cd74b7e90e38465c9c948b0f4138c017509cb91e391b0931063429e  prelink-cross-a853a5d715d84eec93aa68e8f2df26b7d860f5b2.tar.gz
++sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
+diff --git a/package/prelink-cross/prelink-cross.mk b/package/prelink-cross/prelink-cross.mk
+new file mode 100644
+index 0000000000..b43c209b16
+--- /dev/null
++++ b/package/prelink-cross/prelink-cross.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# host-prelink-cross
++#
++################################################################################
++
++HOST_PRELINK_CROSS_VERSION = a853a5d715d84eec93aa68e8f2df26b7d860f5b2
++HOST_PRELINK_CROSS_SITE = https://git.yoctoproject.org/git/prelink-cross
++HOST_PRELINK_CROSS_SITE_METHOD = git
++HOST_PRELINK_CROSS_LICENSE = GPL-2.0
++HOST_PRELINK_CROSS_LICENSE_FILES = COPYING
++# Sources from git, no configure script present
++HOST_PRELINK_CROSS_AUTORECONF = YES
++HOST_PRELINK_CROSS_DEPENDENCIES = host-elfutils host-libiberty
++
++$(eval $(host-autotools-package))
 -- 
 2.24.1
