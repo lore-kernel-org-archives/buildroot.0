@@ -1,10 +1,10 @@
 From: Changming Huang <jerry.huang@nxp.com>
-Date: Fri,  7 Feb 2020 16:38:55 +0800
-Subject: [Buildroot] [PATCH v5 7/9] package/qoriq-rcw:Enable IIC5_PMUX and
- CLK_OUT_PMUX for GPIO
+Date: Fri,  7 Feb 2020 16:38:54 +0800
+Subject: [Buildroot] [PATCH v5 6/9] package/qoriq-cadence-dp-firmware: new
+ package
 In-Reply-To: <20200207083857.28058-1-jerry.huang@nxp.com>
 References: <20200207083857.28058-1-jerry.huang@nxp.com>
-Message-ID: <20200207083857.28058-7-jerry.huang@nxp.com>
+Message-ID: <20200207083857.28058-6-jerry.huang@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,122 +13,113 @@ To: buildroot@busybox.net
 
 From: Jerry Huang <jerry.huang@nxp.com>
 
-Because GPIO is used as interrupt for eNETC PHY and Micro-bus,
-IIC5_PMUX and CLK_OUT_PMUX are enabled for GPIO.
+This package provides the firmware for LS1028ARDB DP (display port).
 
 Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
 ---
 changes since v4:
-no changes.
+1. remove the variable NXP_QORIQ_SITE.
+2. use the url for qoriq-cadence-dp-firmware site directly.
 
 changes since v3:
 no changes.
 
 changes since v2:
-no changes.
+1. change the package name to qoriq-cadence-dp-firmware.
+2. add the hash of COPYING.
+3. modify makefile with new option.
+4. update DEVELOPERS with alphabetic ordering
 
 changes since v1:
-1. change to unconditional for these two patches.
+1. rename the package to fsl-qoriq-cadence-dp-fw.
+2. update DEVELOPERS.
+3. add the hash of package.
+4. modify the context fo config file to package name.
+5. re-write the makefile according to rule of buildroot.
+6. add the license message in makefile.
 ---
- ...b-Enable-IIC5_PMUX-for-GPIO-function.patch | 42 +++++++++++++++++++
- ...nable-CLK_OUT_PMUX-for-GPIO-function.patch | 40 ++++++++++++++++++
- 2 files changed, 82 insertions(+)
- create mode 100644 package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
- create mode 100644 package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
+ DEVELOPERS                                    |  3 +++
+ package/nxp/Config.in                         |  2 ++
+ .../nxp/qoriq-cadence-dp-firmware/Config.in   |  4 ++++
+ .../qoriq-cadence-dp-firmware.hash            |  3 +++
+ .../qoriq-cadence-dp-firmware.mk              | 23 +++++++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/nxp/qoriq-cadence-dp-firmware/Config.in
+ create mode 100644 package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
+ create mode 100644 package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
 
-diff --git a/package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch b/package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e555b9773b..ffb07d67ea 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -529,6 +529,9 @@ F:	configs/nanopi_m1_plus_defconfig
+ F:	configs/olimex_a13_olinuxino_defconfig
+ F:	configs/orangepi_plus_defconfig
+ 
++N:	Changming Huang <jerry.huang@nxp.com>
++F:	package/nxp/qoriq-cadence-dp-firmware/
++
+ N:	Chris Packham <judge.packham@gmail.com>
+ F:	package/gstreamer1/gst1-shark/
+ F:	package/micropython/
+diff --git a/package/nxp/Config.in b/package/nxp/Config.in
+index 575542c7ab..855d62700b 100644
+--- a/package/nxp/Config.in
++++ b/package/nxp/Config.in
+@@ -1,4 +1,6 @@
+ menu "NXP QorIQ libraries"
+ 	depends on BR2_aarch64 || BR2_arm || BR2_powerpc64 || BR2_powerpc
+ 
++source "package/nxp/qoriq-cadence-dp-firmware/Config.in"
++
+ endmenu
+diff --git a/package/nxp/qoriq-cadence-dp-firmware/Config.in b/package/nxp/qoriq-cadence-dp-firmware/Config.in
 new file mode 100644
-index 0000000000..21c6c84cbd
+index 0000000000..3f494bd3a3
 --- /dev/null
-+++ b/package/nxp/qoriq-rcw/0001-ls1028ardb-Enable-IIC5_PMUX-for-GPIO-function.patch
-@@ -0,0 +1,42 @@
-+From 33b403cee1fa215927bc65dc14baf35a2fdbe7b3 Mon Sep 17 00:00:00 2001
-+From: Jerry Huang <jerry.huang@nxp.com>
-+Date: Thu, 19 Sep 2019 12:12:20 +0800
-+Subject: [PATCH 1/2] ls1028ardb: Enable IIC5_PMUX for GPIO function
-+
-+Set IIC5_PMUX = 1 to enable GPIO function.
-+
-+Signed-off-by: Jianchao Wang <jianchao.wang@nxp.com>
-+Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
-+---
-+ ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw | 2 +-
-+ ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw   | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-+index b46ea2e..5466a63 100644
-+--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-+@@ -26,7 +26,7 @@ SYSCLK_FREQ=600
-+ IIC2_PMUX=6
-+ IIC3_PMUX=2
-+ IIC4_PMUX=2
-+-IIC5_PMUX=2
-++IIC5_PMUX=1
-+ IIC6_PMUX=2
-+ CLK_OUT_PMUX=2
-+ EC1_SAI4_5_PMUX=5
-+diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-+index 04e2208..1908d8c 100644
-+--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-+@@ -26,7 +26,7 @@ SYSCLK_FREQ=600
-+ IIC2_PMUX=6
-+ IIC3_PMUX=2
-+ IIC4_PMUX=2
-+-IIC5_PMUX=2
-++IIC5_PMUX=1
-+ IIC6_PMUX=3
-+ CLK_OUT_PMUX=2
-+ EC1_SAI4_5_PMUX=5
-+--
-+2.17.1
-diff --git a/package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch b/package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
++++ b/package/nxp/qoriq-cadence-dp-firmware/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE
++	bool "qoriq-cadence-dp-firmware"
++	help
++	  NXP QorIQ cadence DP firmware, a resident EL3 firmware.
+diff --git a/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
 new file mode 100644
-index 0000000000..4f00541d69
+index 0000000000..89aaf1d71b
 --- /dev/null
-+++ b/package/nxp/qoriq-rcw/0002-ls1028ardb-Enable-CLK_OUT_PMUX-for-GPIO-function.patch
-@@ -0,0 +1,40 @@
-+From 4a3c9ea5d0c7bf8eec8cb6276d6f4d940f3946db Mon Sep 17 00:00:00 2001
-+From: Jerry Huang <jerry.huang@nxp.com>
-+Date: Thu, 19 Sep 2019 12:13:48 +0800
-+Subject: [PATCH 2/2] ls1028ardb/rcw: Enable CLK_OUT_PMUX for GPIO function
++++ b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 5871c5717be32f14a59624d5699d405e8ce9ae2e9c9ef86fd16e13d264a40e58  firmware-cadence-lsdk1909.bin
++sha256 d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
+diff --git a/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+new file mode 100644
+index 0000000000..5c29602574
+--- /dev/null
++++ b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# qoriq-cadence-dp-firmware
++#
++################################################################################
 +
-+Signed-off-by: Jianchao Wang <jianchao.wang@nxp.com>
-+Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
-+---
-+ ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw | 2 +-
-+ ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw   | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
++QORIQ_CADENCE_DP_FIRMWARE_VERSION = lsdk1909
++QORIQ_CADENCE_DP_FIRMWARE_SITE = http://www.nxp.com/lgfiles/sdk/$(QORIQ_CADENCE_DP_FIRMWARE_VERSION)
++QORIQ_CADENCE_DP_FIRMWARE_SOURCE = firmware-cadence-$(QORIQ_CADENCE_DP_FIRMWARE_VERSION).bin
++QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP-Binary-EULA
++QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING
++QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
++QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
 +
-+diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-+index 5466a63..a5ed4d4 100644
-+--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_emmcboot.rcw
-+@@ -28,7 +28,7 @@ IIC3_PMUX=2
-+ IIC4_PMUX=2
-+ IIC5_PMUX=1
-+ IIC6_PMUX=2
-+-CLK_OUT_PMUX=2
-++CLK_OUT_PMUX=1
-+ EC1_SAI4_5_PMUX=5
-+ EC1_SAI3_6_PMUX=5
-+ USB3_CLK_FSEL=39
-+diff --git a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-+index 1908d8c..c930b83 100644
-+--- a/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-++++ b/ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.rcw
-+@@ -28,7 +28,7 @@ IIC3_PMUX=2
-+ IIC4_PMUX=2
-+ IIC5_PMUX=1
-+ IIC6_PMUX=3
-+-CLK_OUT_PMUX=2
-++CLK_OUT_PMUX=1
-+ EC1_SAI4_5_PMUX=5
-+ EC1_SAI3_6_PMUX=5
-+ USB3_CLK_FSEL=39
-+--
-+2.17.1
++define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
++	$(call NXP_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
++endef
++
++define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
++endef
++
++$(eval $(generic-package))
 -- 
 2.17.1
