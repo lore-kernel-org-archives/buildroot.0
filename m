@@ -1,515 +1,217 @@
-From: Jerry Huang <jerry.huang@nxp.com>
-Date: Fri, 7 Feb 2020 05:23:04 +0000
-Subject: [Buildroot] [EXT] Re: [PATCH v4 9/9] board/nxp/ls1028ardb: new
- board
-In-Reply-To: <CA+h21hq0rYdQ7zUu1CCTvu56FJ15d0YApbjSA0sAkFL6KXWoGw@mail.gmail.com>
-References: <20200205105227.13698-1-jerry.huang@nxp.com>
- <20200205105227.13698-9-jerry.huang@nxp.com>
- <CA+h21hq0rYdQ7zUu1CCTvu56FJ15d0YApbjSA0sAkFL6KXWoGw@mail.gmail.com>
-Message-ID: <VI1PR04MB5136A6F311AC3D6F3AA56866FE1C0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 07 Feb 2020 07:28:36 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-02-06
+Message-ID: <20200207072841.EC07F87D33@hemlock.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
+
+Autobuild statistics for 2020-02-06
+===============================
+
+      branch |  OK | NOK | TIM | TOT |
+  2019.02.x  | 15  |  1  |  0  | 16  |
+  2019.11.x  | 18  |  5  |  0  | 23  |
+    master   | 67  | 93  |  0  | 160 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+              sdl_mixer-1.2.12 | 17
+                    brltty-6.0 | 8 
+                   erlang-22.2 | 6 
+               libglib2-2.62.4 | 4 
+                    parted-3.3 | 4 
+host-sdbusplus-4212292bcf13... | 3 
+                 mesa3d-19.3.3 | 3 
+                   mimic-1.1.0 | 3 
+                      bash-5.0 | 2 
+              gnuradio-3.8.0.0 | 2 
+              host-grpc-1.25.0 | 2 
+           host-nodejs-12.14.1 | 2 
+             host-pango-1.44.6 | 2 
+                 opencv3-3.4.9 | 2 
+               php-geoip-1.1.1 | 2 
+                 ripgrep-0.8.1 | 2 
+                 rocksdb-6.6.4 | 2 
+                apr-util-1.6.1 | 1 
+              bitcoin-0.19.0.1 | 1 
+                  cc-tool-0.26 | 1 
+glmark2-9e01aef1a786b28aca7... | 1 
+            gst-ffmpeg-0.10.13 | 1 
+          gstreamer1-mm-1.10.0 | 1 
+           host-doxygen-1.8.17 | 1 
+               host-llvm-9.0.1 | 1 
+            host-mfgtools-0.02 | 1 
+             libopenssl-1.1.1d | 1 
+           libsamplerate-0.1.9 | 1 
+               libsigsegv-2.12 | 1 
+libsvgtiny-ea9d99fc8b231c22... | 1 
+                    mpv-0.29.1 | 1 
+                  ndisc6-1.0.4 | 1 
+                   nload-0.7.4 | 1 
+                oprofile-1.3.0 | 1 
+                  pango-1.44.6 | 1 
+                php-ssh2-1.1.2 | 1 
+                 php-zmq-1.1.3 | 1 
+             python-lxml-4.4.1 | 1 
+       python-matplotlib-3.0.3 | 1 
+                qt5base-5.12.7 | 1 
+sdbusplus-4212292bcf136d04b... | 1 
+                   sdl2-2.0.10 | 1 
+                      tio-1.32 | 1 
+toolchain-external-codesour... | 1 
 
 
-Best Regards
-Jerry Huang
+Detail of failures
+------------------
 
-> -----Original Message-----
-> From: Vladimir Oltean <olteanv@gmail.com>
-> Sent: Wednesday, February 5, 2020 8:39 PM
-> To: Jerry Huang <jerry.huang@nxp.com>
-> Cc: buildroot at busybox.net; Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com>; Michael Walle <michael@walle.cc>;
-> Matthew Weber <matthew.weber@collins.com>; geomatsi at gmail.com
-> Subject: [EXT] Re: [PATCH v4 9/9] board/nxp/ls1028ardb: new board
-> 
-> Caution: EXT Email
-> 
-> Hi Jerry,
-> 
-> On Wed, 5 Feb 2020 at 12:54, Changming Huang <jerry.huang@nxp.com>
-> wrote:
-> >
-> > This is to support NXP LS1028ARDB board in Buildroot.
-> > The board is setup to track the Linux at 4.19 via NXP LSDK-19.09.
-> >
-> > The target will build uboot and RCW binary with arm-trusted-firmware
-> support.
-> >
-> > board/nxp/ls1028ardb/: scripts related with ls1028ardb
-> > nxp_ls1028ardb-64b_defconfig: defconfig boot from SD card
-> >
-> > Signed-off-by: Changming Huang <jerry.huang@nxp.com>
-> > ---
-> > changes since v3:
-> > 1. merge previous version patch 8 and patch 9 to one.
-> > 2. split RCW options BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE to
-> another patch.
-> > 3. remove scritps about emmc and xspi.
-> > 4. remove xspi and emmc configuration.
-> > 5. add new option BR2_ROOTFS_OVERLAY for 10-network.rules.
-> > 6. modify u-boot environment scripts, remove all setting not used.
-> > 7. remove the scripts which is not used by default configuration.
-> >
-> > changes since v2:
-> > 1. Modify the qoriq-cadence-dp-firmware option in defconfig.
-> > 2. rename defconfig to nxp_ls1028*.
-> > 3. remove extra packages except busybox in defconfig.
-> > 4. modify the description of file genimage.xspi.cfg.template.
-> >
-> > changes since v1:
-> > 1. add new option in configs/freescale_ls1028ardb-xxxx_defconfig.
-> > ---
-> >  board/nxp/common/ls/busybox.config            |  9 ++
-> >  .../etc/udev/rules.d/10-network.rules         | 16 ++++
-> >  board/nxp/ls1028ardb/genimage.sd.cfg.template | 52 ++++++++++++
-> >  board/nxp/ls1028ardb/post-image.sh            | 57 +++++++++++++
-> >  board/nxp/ls1028ardb/readme.txt               | 61 +++++++++++++
-> >  .../nxp/ls1028ardb/u-boot-environment-sd.txt  | 13 +++
-> >  configs/nxp_ls1028ardb-64b_defconfig          | 85
-> +++++++++++++++++++
-> >  7 files changed, 293 insertions(+)
-> >  create mode 100644 board/nxp/common/ls/busybox.config
-> >  create mode 100644
-> > board/nxp/ls1028ardb/enetc_init_overlay/etc/udev/rules.d/10-network.ru
-> > les  create mode 100644 board/nxp/ls1028ardb/genimage.sd.cfg.template
-> >  create mode 100755 board/nxp/ls1028ardb/post-image.sh
-> >  create mode 100644 board/nxp/ls1028ardb/readme.txt  create mode
-> > 100644 board/nxp/ls1028ardb/u-boot-environment-sd.txt
-> >  create mode 100644 configs/nxp_ls1028ardb-64b_defconfig
-> >
-> > diff --git a/board/nxp/common/ls/busybox.config
-> > b/board/nxp/common/ls/busybox.config
-> > new file mode 100644
-> > index 0000000000..7074c65aa6
-> > --- /dev/null
-> > +++ b/board/nxp/common/ls/busybox.config
-> > @@ -0,0 +1,9 @@
-> > +#
-> > +# Additional Busybox Settings
-> > +#
-> > +CONFIG_TASKSET=y
-> > +CONFIG_FEATURE_TASKSET_FANCY=y
-> > +CONFIG_FEATURE_DF_FANCY=y
-> > +CONFIG_FEATURE_SEAMLESS_GZ=y
-> > +CONFIG_FEATURE_SEAMLESS_BZ2=y
-> > +CONFIG_FEATURE_SEAMLESS_XZ=y
-> > diff --git
-> > a/board/nxp/ls1028ardb/enetc_init_overlay/etc/udev/rules.d/10-network.
-> > rules
-> > b/board/nxp/ls1028ardb/enetc_init_overlay/etc/udev/rules.d/10-network.
-> > rules
-> > new file mode 100644
-> > index 0000000000..19f41634bd
-> > --- /dev/null
-> > +++ b/board/nxp/ls1028ardb/enetc_init_overlay/etc/udev/rules.d/10-netw
-> > +++ ork.rules
-> > @@ -0,0 +1,16 @@
-> > +# ENETC rules
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.0",
-> DRIVERS=="fsl_enetc", NAME:="eno0"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.1",
-> DRIVERS=="fsl_enetc", NAME:="eno1"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.2",
-> DRIVERS=="fsl_enetc", NAME:="eno2"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.6",
-> DRIVERS=="fsl_enetc", NAME:="eno3"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.0",
-> DRIVERS=="fsl_enetc_vf", NAME:="eno0vf0"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.1",
-> DRIVERS=="fsl_enetc_vf", NAME:="eno0vf1"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.2",
-> DRIVERS=="fsl_enetc_vf", NAME:="eno1vf0"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.3",
-> DRIVERS=="fsl_enetc_vf", NAME:="eno1vf1"
-> > +# LS1028 switch rules
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5",
-> DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p0", NAME="swp0"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5",
-> DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p1", NAME="swp1"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5",
-> DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p2", NAME="swp2"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5",
-> DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p3", NAME="swp3"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5",
-> DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p4", NAME="swp4"
-> > +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5",
-> DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p5", NAME="swp5"
-> > diff --git a/board/nxp/ls1028ardb/genimage.sd.cfg.template
-> > b/board/nxp/ls1028ardb/genimage.sd.cfg.template
-> > new file mode 100644
-> > index 0000000000..ab50e103c1
-> > --- /dev/null
-> > +++ b/board/nxp/ls1028ardb/genimage.sd.cfg.template
-> > @@ -0,0 +1,52 @@
-> > +# Minimal SD card image for the NXP boards Template # # SD card image
-> > +(sdcard.img) format:
-> > +# * the SD card must have 4 kB free space at the beginning, # *
-> > +U-Boot is dumped as is, # * a FAT partition at offset 64 MB is
-> > +containing Image and DTB files # * a single root filesystem partition
-> > +is required (ext2, ext3 or ext4) #
-> > +
-> > +image boot.vfat {
-> > +  vfat {
-> > +    files = {
-> > +      %FILES%
-> > +    }
-> > +  }
-> > +  size = 256M
-> > +}
-> > +
-> > +image sdcard.img {
-> > +  hdimage {
-> > +  }
-> > +
-> > +  partition rcw {
-> > +    in-partition-table = "no"
-> > +    image = "bl2_sd.pbl"
-> > +    offset = 4096
-> > +  }
-> > +
-> > +  partition u-boot {
-> > +    in-partition-table = "no"
-> > +    image = "fip.bin"
-> > +    offset = 1M
-> > +  }
-> > +
-> > +  partition u-boot-environment {
-> > +    in-partition-table = "no"
-> > +    image = "uboot-env.bin"
-> > +    offset = 5M
-> > +  }
-> > +
-> > +  partition boot {
-> > +    partition-type = 0xC
-> > +    bootable = "true"
-> > +    image = "boot.vfat"
-> > +    offset = 64M
-> > +  }
-> > +
-> > +  partition rootfs {
-> > +    partition-type = 0x83
-> > +    image = "rootfs.ext2"
-> > +  }
-> > +}
-> > diff --git a/board/nxp/ls1028ardb/post-image.sh
-> > b/board/nxp/ls1028ardb/post-image.sh
-> > new file mode 100755
-> > index 0000000000..c655074386
-> > --- /dev/null
-> > +++ b/board/nxp/ls1028ardb/post-image.sh
-> > @@ -0,0 +1,57 @@
-> > +#!/usr/bin/env bash
-> > +# args from BR2_ROOTFS_POST_SCRIPT_ARGS # $2 linux building directory
-> > +# $3 buildroot top directory # $4 u-boot building directory
-> > +
-> > +#
-> > +# dtb_list extracts the list of DTB files from
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME
-> > +# in ${BR_CONFIG}, then prints the corresponding list of file names for the
-> > +# genimage configuration file
-> > +#
-> > +dtb_file()
-> > +{
-> > +       local DTB_LIST="$(sed -n
-> 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([\/a-z0-9 \-]*\)"$/\1/p'
-> ${BR2_CONFIG})"
-> > +
-> > +       for dt in $DTB_LIST; do
-> > +               echo -n "\"`basename $dt`.dtb\", "
-> > +       done
-> > +}
-> > +
-> > +#
-> > +# genimage.sd.cfg.template: Boot from SD
-> > +# genimage.emmc.cfg.template: Boot from eMMC
-> > +#
-> > +genimage_type()
-> > +{
-> > +       if grep -Eq
-> "^BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE=\"emmc\"$"
-> ${BR2_CONFIG}; then
-> > +               echo "genimage.emmc.cfg.template"
-> > +       elif grep -Eq
-> "^BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE=\"sd\"$" ${BR2_CONFIG};
-> then
-> > +               echo "genimage.sd.cfg.template"
-> > +       fi
-> > +}
-> > +
-> > +main()
-> > +{
-> > +       local FILES="$(dtb_file) "ls1028a-dp-fw.bin", "Image""
-> > +       local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
-> > +       local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-> > +
-> > +       sed -e "s/%FILES%/${FILES}/" \
-> > +               board/nxp/ls1028ardb/$(genimage_type) >
-> ${GENIMAGE_CFG}
-> > +
-> > +       rm -rf "${GENIMAGE_TMP}"
-> > +
-> > +       genimage \
-> > +               --rootpath "${TARGET_DIR}" \
-> > +               --tmppath "${GENIMAGE_TMP}" \
-> > +               --inputpath "${BINARIES_DIR}" \
-> > +               --outputpath "${BINARIES_DIR}" \
-> > +               --config "${GENIMAGE_CFG}"
-> > +
-> > +       rm -f ${GENIMAGE_CFG}
-> > +
-> > +       exit $?
-> > +}
-> > +
-> > +main $@
-> > diff --git a/board/nxp/ls1028ardb/readme.txt
-> b/board/nxp/ls1028ardb/readme.txt
-> > new file mode 100644
-> > index 0000000000..713babd7c3
-> > --- /dev/null
-> > +++ b/board/nxp/ls1028ardb/readme.txt
-> > @@ -0,0 +1,61 @@
-> > +LS1028ARDB board is one platform based on LS1028A silicon for industry,
-> > +which is supported in LSDK-19.09.
-> > +
-> > +One simple image file is created by buildroot, which includes RCW, uboot,
-> > +Linux kernel, rootfs and other necessary binaries for this board.
-> > +
-> > +To program the image file created by buildroot into the flash.
-> > +There are two way to do it:
-> > +
-> > +1. Program the image file on PC machine for SD card boot
-> > +  $ sudo dd if=./output/images/sdcard.img of=/dev/sdx
-> > +  # or in some other host machine:
-> > +  $ sudo dd if=./output/images/sdcard.img of=/dev/mmcblkx
-> > +
-> > +  # find the right SD Card device name in your host machine and replace the
-> > +  # ?sdx? or ?mmcblkx?.
-> > +
-> > +2. Program the image file on board for eMMC and XSPI boot
-> > +Make sure your board has ipaddr, netmask, and serverip defined to reach
-> your
-> > +tftp server.
-> > +
-> > +  2.1 Program eMMC boot image file to eMMC chip
-> > +    # Make sure output/images/sdcard.img is stored to tftp server
-> > +    # Below command is one example
-> > +    => tftpboot 0xa0000000 sdcard.img
-> > +    => mmc dev 1
-> > +    => mmc erase 0 0x200000
-> > +    => mmc write 0xa0000000 0 0x200000
-> > +
-> > +    # The size "0x200000" will be changed when the image size is different.
-> > +
-> > +  2.2 Program XSPI boot image file to flash
-> > +    # Make sure output/images/xspi.cpio.img is stored to tftp server
-> > +    # Below command is one example
-> > +    => tftpboot 0xa0000000 xspi.cpio.img
-> > +    => sf probe
-> > +    => sf erase 0 $filesize
-> > +    => sf write 0xa0000000 0 $filesize
-> > +
-> > +3. Booting your new system
-> > +Before booting the new system, we should make sure the switch setting is
-> right.
-> > +below switch setting is for each booting mode:
-> > +    +-----------+---------------------+
-> > +    |Boot mode  | Switch setting      |
-> > +    +---------------------------------+
-> > +    |SD boot    | SW2[1~4] = 0b?1000  |
-> > +    +---------------------------------+
-> > +    |eMMC boot  | SW2[1~4] = 0b?1001  |
-> > +    +---------------------------------+
-> > +    |XSPI boot  | SW2[1~4] = 0b?1111  |
-> > +    +-----------+---------------------+
-> > +
-> > +or we use following command to reset the board in uboot prompt:
-> > +  # boot from SD card
-> > +  => qixis_reset sd
-> > +
-> > +  # boot from eMMC chip
-> > +  => qixis_reset emmc
-> > +
-> > +  # boot from XSPI
-> > +  => qixis_reset qspi
-> > diff --git a/board/nxp/ls1028ardb/u-boot-environment-sd.txt
-> b/board/nxp/ls1028ardb/u-boot-environment-sd.txt
-> > new file mode 100644
-> > index 0000000000..f91e6b585f
-> > --- /dev/null
-> > +++ b/board/nxp/ls1028ardb/u-boot-environment-sd.txt
-> > @@ -0,0 +1,13 @@
-> > +baudrate=115200
-> > +bootcmd=setenv bootargs root=/dev/mmcblk0p2 rootwait rw
-> earlycon=uart8250,0x21c0500 console=ttyS0,115200 cma=256M
-> video=1920x1080-32 at 60;mmcinfo;fatload mmc 0:1 ${dp_load} ${dp_file}; hdp
-> load ${dp_load} ${dp_offset};fatload mmc 0:1 ${loadaddr} ${bootfile};fatload
-> mmc 0:1 ${fdtaddr} ${fdtfile};booti ${loadaddr} - ${fdtaddr}
-> > +bootdelay=3
-> > +bootfile=Image
-> > +fdtfile=fsl-ls1028a-rdb.dtb
-> > +loadaddr=0xa0000000
-> > +fdtaddr=0xb0000000
-> > +dp_file=ls1028a-dp-fw.bin
-> > +dp_load=0x90000000
-> > +dp_offset=0x2000
-> > +stderr=serial
-> > +stdin=serial
-> > +stdout=serial
-> > diff --git a/configs/nxp_ls1028ardb-64b_defconfig
-> b/configs/nxp_ls1028ardb-64b_defconfig
-> > new file mode 100644
-> > index 0000000000..ede72ff0ef
-> > --- /dev/null
-> > +++ b/configs/nxp_ls1028ardb-64b_defconfig
-> > @@ -0,0 +1,85 @@
-> > +# Architecture
-> > +BR2_aarch64=y
-> > +BR2_cortex_a72=y
-> > +
-> > +# Filesystem
-> > +BR2_TARGET_ROOTFS_EXT2=y
-> > +BR2_TARGET_ROOTFS_EXT2_4=y
-> > +
-> > +# Hostname and issue
-> > +BR2_TARGET_GENERIC_HOSTNAME="LS1028ARDB"
-> > +
-> > +# toolchain
-> > +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> > +BR2_TOOLCHAIN_BUILDROOT_LIBC="glibc"
-> > +
-> > +# Linux headers same as kernel
-> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-> > +
-> > +# bootloader
-> > +BR2_TARGET_UBOOT=y
-> > +BR2_TARGET_UBOOT_BOARDNAME="ls1028ardb_tfa"
-> > +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> >
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://eur01.safelinks.protectio
-> n.outlook.com/?url=https%3A%2F%2Fsource.codeaurora.org%2Fexternal%2Fqo
-> riq%2Fqoriq-components%2Fu-boot&amp;data=02%7C01%7Cjerry.huang%40nx
-> p.com%7Ce7f374b4b8684185612a08d7aa3878c0%7C686ea1d3bc2b4c6fa92cd
-> 99c5c301635%7C0%7C0%7C637165031827183010&amp;sdata=Zhc99R0%2F7y
-> tVSywcJTFySbuX99tLwthU2yAym2dGxEE%3D&amp;reserved=0"
-> > +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="LSDK-19.09"
-> > +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> > +BR2_TARGET_UBOOT_FORMAT_BIN=n
-> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-dtb.bin"
-> > +BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE=y
-> > +BR2_TARGET_UBOOT_ENVIMAGE=y
-> >
-> +BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/nxp/ls1028ardb/u-boot-e
-> nvironment-sd.txt"
-> > +BR2_TARGET_UBOOT_ENVIMAGE_SIZE="0x2000"
-> > +
-> > +# Kernel
-> > +BR2_LINUX_KERNEL=y
-> > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> >
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://eur01.safelinks.protection
-> .outlook.com/?url=https%3A%2F%2Fsource.codeaurora.org%2Fexternal%2Fqor
-> iq%2Fqoriq-components%2Flinux&amp;data=02%7C01%7Cjerry.huang%40nxp.
-> com%7Ce7f374b4b8684185612a08d7aa3878c0%7C686ea1d3bc2b4c6fa92cd99
-> c5c301635%7C0%7C0%7C637165031827183010&amp;sdata=qR633dpjWuIi3ck
-> %2BWjyZOuJlhp4ZtiTLWy9YfiFzctc%3D&amp;reserved=0"
-> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="LSDK-19.09-V4.19"
-> 
-> The LSDK has monthly bugfix releases and the most recent tag,
-> currently, is LSDK-19.09-update-311219-V4.19. There have been some
-> bugfixes since the tag you're proposing related to the Ethernet ports,
-> among other things. Shouldn't you use the most recently available tag?
-> Similar question for U-Boot and atf.
-Ok, the uboot and Linux will use the latest LSDK version LSDK-19.09-update-311219 and LSDK-19.09-update-311219-V4.19.
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv32    |         apr-util-1.6.1         | NOK | http://autobuild.buildroot.net/results/9ce5049938d229ee43108745f6e78e63d0b90ba6 |     
+    arm      |            bash-5.0            | NOK | http://autobuild.buildroot.net/results/c7ac9c265d25261c0089eb9e2ed347e462ab2d04 | ORPH
+microblazeel |            bash-5.0            | NOK | http://autobuild.buildroot.net/results/d2860798afc1527356ffd127ea46f8986e068165 | ORPH
+    arc      |        bitcoin-0.19.0.1        | NOK | http://autobuild.buildroot.net/results/019a21399beda15a059136b23eb770382c1a7281 |     
+    or1k     |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/3d8e8c385e96ddee9aee9fc4acf95475d5038103 |     
+   xtensa    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/d9bb60b9666febd2c8182c75dfd49cfd95c3b767 |     
+    arm      |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/9cf780890ceb8509aae19a01b0e18a9c8df81a01 |     
+   mipsel    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/b58db439e7918efc28e95f6f94fa5a351fe400e3 |     
+    or1k     |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/e06f4f0492126f6d6a0e05d38b4acdf465f6ab33 |     
+  powerpc    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/389056fb62b11314d53a6e7c0dcd0653447adfef |     
+  mips64el   |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/d6ab5815cbc47cbf88bdb45109dde253f35cb095 |     
+   xtensa    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/86641bf9d150c5f10e7efb51bbdd6632ceb3a072 |     
+    m68k     |          cc-tool-0.26          | NOK | http://autobuild.buildroot.net/results/4aecfaa4bae38d48ab3ace1dd5b1b9d6158dd93b |     
+   x86_64    |          erlang-22.2           | NOK | http://autobuild.buildroot.net/results/342e3e588c94b923c36dd3c945efa88bc5f9f2e4 |     
+  powerpc    |          erlang-22.2           | NOK | http://autobuild.buildroot.net/results/e382c2493179ab454b8a5118d5a04bc3dbaf7887 |     
+    arm      |          erlang-22.2           | NOK | http://autobuild.buildroot.net/results/4d7d775f6e793da5ed7246cc0dc57bbc1e101083 |     
+    arm      |          erlang-22.2           | NOK | http://autobuild.buildroot.net/results/fccb4ec83fb19df1ea186e3fe1a76dd3e5d58aaf |     
+    arm      |          erlang-22.2           | NOK | http://autobuild.buildroot.net/results/a9b861058640f0d311b6fa6afc54f610769c770c |     
+  sparc64    |          erlang-22.2           | NOK | http://autobuild.buildroot.net/results/94a51b4fba8151de64fbd9e2e90b6b41a9aa6b9a |     
+  aarch64    | glmark2-9e01aef1a786b28aca7... | NOK | http://autobuild.buildroot.net/results/7ef3c6e36335a7644afdb77f5bf907bad1203767 |     
+   mipsel    |        gnuradio-3.8.0.0        | NOK | http://autobuild.buildroot.net/results/14015f499e58fee530877ac052878bbe2f799942 |     
+   xtensa    |        gnuradio-3.8.0.0        | NOK | http://autobuild.buildroot.net/results/53239f98dd5e03d4dc1bb4eb91ed765f77dbf0ec |     
+ aarch64_be  |       gst-ffmpeg-0.10.13       | NOK | http://autobuild.buildroot.net/results/cf2d254bb103b9540b93a671c64b7571c9489a41 | ORPH
+   x86_64    |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/f485e91ce80bbde00031101f0d0e04fd1c5a6603 |     
+   nios2     |      host-doxygen-1.8.17       | NOK | http://autobuild.buildroot.net/results/31b432fa4c5e5acf3531c6f08ce65216bb8f059c |     
+  aarch64    |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/668c1182a2bf524fcbf95b36d53b6ada399a61d1 |     
+   x86_64    |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/6039e0cf3878a5e96d3bcd728fae4c1bdfb0c67e |     
+  mips64el   |        host-llvm-9.0.1         | NOK | http://autobuild.buildroot.net/results/df190991d2a8cfe37fc56684dbe08fefb7fbe2f0 |     
+    arm      |       host-mfgtools-0.02       | NOK | http://autobuild.buildroot.net/results/4dd1ce2bacdf4e553fc73f3384e728df36646d11 |     
+   mipsel    |      host-nodejs-12.14.1       | NOK | http://autobuild.buildroot.net/results/98b27ff25cf4056b61bf74b7e0f5bf61d10e1b57 |     
+   x86_64    |      host-nodejs-12.14.1       | NOK | http://autobuild.buildroot.net/results/e13e1f9a5b6c1debd9a22a2774534e43e7f07ae3 |     
+    arm      |       host-pango-1.44.6        | NOK | http://autobuild.buildroot.net/results/1700878281e51cbb9d160d1975e563f6b29c3628 | ORPH
+    sh4      |       host-pango-1.44.6        | NOK | http://autobuild.buildroot.net/results/df1e16114486e190d36c63bba7610dd4eff9c9fd | ORPH
+    arm      | host-sdbusplus-4212292bcf13... | NOK | http://autobuild.buildroot.net/results/7e984fdd773f165a960f30699e9c71109085f2b4 |     
+    arm      | host-sdbusplus-4212292bcf13... | NOK | http://autobuild.buildroot.net/results/74530f8bebfa01800a3b828f97c483a2b4ce3f2d |     
+    arm      | host-sdbusplus-4212292bcf13... | NOK | http://autobuild.buildroot.net/results/fc33b67f2730e4b3f7292ac3436d80a1dfac593f |     
+    arm      |        libglib2-2.62.4         | NOK | http://autobuild.buildroot.net/results/80bd8e23b35ca84160b4eeaaeb00aa1969b4ce39 |     
+    arm      |        libglib2-2.62.4         | NOK | http://autobuild.buildroot.net/results/abf0953de82beb31c111c233e5f4bf874d9d3c44 |     
+    arm      |        libglib2-2.62.4         | NOK | http://autobuild.buildroot.net/results/ecf5fc6483296ff0ffb4edae97fe1cd3fc35b0ea |     
+  powerpc    |        libglib2-2.62.4         | NOK | http://autobuild.buildroot.net/results/1431c0f3f2dc7d65a1f2339c3dd6ec563c5c28e4 |     
+    m68k     |       libopenssl-1.1.1d        | NOK | http://autobuild.buildroot.net/results/3926b9da090358e294e0269457a1bb0a687d2cc4 |     
+    m68k     |      libsamplerate-0.1.9       | NOK | http://autobuild.buildroot.net/results/e788a49b3df2ebae08923087a4cf2fd3485e1b5f | ORPH
+  riscv64    |        libsigsegv-2.12         | NOK | http://autobuild.buildroot.net/results/2a3826119905a5d72b43b48b28b887b6989e9549 |     
+   x86_64    | libsvgtiny-ea9d99fc8b231c22... | NOK | http://autobuild.buildroot.net/results/96cb855e0532262393ebd486bf560e2b82bd5380 | ORPH
+    arm      |         mesa3d-19.3.3          | NOK | http://autobuild.buildroot.net/results/3edfa13f5af92400bfadcdd41905fff2111d5f44 |     
+    arc      |         mesa3d-19.3.3          | NOK | http://autobuild.buildroot.net/results/66a908cefac91bc1d18d3a35dd6578078ab60538 |     
+    arc      |         mesa3d-19.3.3          | NOK | http://autobuild.buildroot.net/results/87fea36b2c3540f49fc4052ad159aac10aa66c22 |     
+    m68k     |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/31a87b8538ebfa47d839fd1d389a5a59ba69f4a3 |     
+  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/26464e2aee87809ee76b7272c2c209e191144964 |     
+  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/e07690ab58cf2ca2d076320860f21edbce6f6990 |     
+  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/c6ab2b45748ea73d3d89b63cf16d2b5d0620b1d5 |     
+    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/ebd824c04b1cae786faeda79698288893e51f99f | ORPH
+    m68k     |          nload-0.7.4           | NOK | http://autobuild.buildroot.net/results/096fd1c13fcfe801199741796e9b2a592932e534 | ORPH
+  aarch64    |         opencv3-3.4.9          | NOK | http://autobuild.buildroot.net/results/c4acee0cc9c83dcce33bcdc19f4030a8dbbe8fab |     
+   xtensa    |         opencv3-3.4.9          | NOK | http://autobuild.buildroot.net/results/ec397589fb35d00c6f9451f9446260c87847b7ca |     
+    arc      |         oprofile-1.3.0         | NOK | http://autobuild.buildroot.net/results/e1c5944e73af452e8aa11f2e2adee456fcf84876 |     
+    arm      |          pango-1.44.6          | NOK | http://autobuild.buildroot.net/results/ac6ea1e69571bf56079b5854ad1e9307335c4ba9 | ORPH
+   sparc     |           parted-3.3           | NOK | http://autobuild.buildroot.net/results/bb09735379ac59d3034f942ea7f2de33d31808c9 |     
+   mipsel    |           parted-3.3           | NOK | http://autobuild.buildroot.net/results/2c7201fec7d3e52fc8ae749047d218c0f15e185e |     
+    m68k     |           parted-3.3           | NOK | http://autobuild.buildroot.net/results/838aa8e864d542cfc262b717a228deffe3682d5b |     
+   xtensa    |           parted-3.3           | NOK | http://autobuild.buildroot.net/results/479d9829cb4fba4a01939264b412824dac5e1d31 |     
+   nios2     |        php-geoip-1.1.1         | NOK | http://autobuild.buildroot.net/results/664fb755ca754441981f96d18961e246abdee009 | ORPH
+ powerpc64   |        php-geoip-1.1.1         | NOK | http://autobuild.buildroot.net/results/ef76b43be1e31ddfea6dd9ba4dba3fbdbc439137 | ORPH
+    arm      |         php-ssh2-1.1.2         | NOK | http://autobuild.buildroot.net/results/33f9136c9890a5a196545665312651a84874028e | ORPH
+  riscv32    |         php-zmq-1.1.3          | NOK | http://autobuild.buildroot.net/results/578cdc65e7e86b52dfd2693c93c12f5f965da980 | ORPH
+   mipsel    |       python-lxml-4.4.1        | NOK | http://autobuild.buildroot.net/results/79bc070f98d6d9d8ef78df12b248cdc7d0e405c3 |     
+    arm      |    python-matplotlib-3.0.3     | NOK | http://autobuild.buildroot.net/results/2eb872b9cc76fe4f7d422cfb9331aa999bf0093d |     
+ aarch64_be  |         qt5base-5.12.7         | NOK | http://autobuild.buildroot.net/results/3ae862c96107ff5b34abb2606db988327f44c33e |     
+    mips     |         ripgrep-0.8.1          | NOK | http://autobuild.buildroot.net/results/b5f63d3ebd3d36bb2fd784ebe60bbe428f89b215 |     
+    arm      |         ripgrep-0.8.1          | NOK | http://autobuild.buildroot.net/results/0d1448c026ff48242e8f6c7d89ce3c6f4075c231 |     
+   nios2     |         rocksdb-6.6.4          | NOK | http://autobuild.buildroot.net/results/b43076903a8e2c11454e7d5cdd2d792cab1e096a |     
+   nios2     |         rocksdb-6.6.4          | NOK | http://autobuild.buildroot.net/results/824f59efb0729ada8a37071214425a17b443a1c9 |     
+  riscv64    | sdbusplus-4212292bcf136d04b... | NOK | http://autobuild.buildroot.net/results/9d84c817c1331b297b2fd2a593045cd32da3819b |     
+  powerpc    |          sdl2-2.0.10           | NOK | http://autobuild.buildroot.net/results/7a572b7143e0ddcdd490e63e08d3f91b2d53f139 |     
+    arc      |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/000962969278783dbe52ca9e507950280399220a | ORPH
+  riscv32    |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/65d700384ab737475cb02a1f8817eaa4f8734e99 | ORPH
+    arm      |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/31e924190448aa96152c24dfafaa737930da6a31 | ORPH
+    arm      |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/4a1dc42ad8965a7f26df67d8df01fcaf3840efd5 | ORPH
+    i586     |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/9fd6ce9e41d35305157c7d2315de38ed89d13329 | ORPH
+microblazeel |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/94dc3bcdb08f6db871a29248be43514176eb5a59 | ORPH
+  aarch64    |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/63ae0bddb3c4436efe967c318e299047f496c5a5 | ORPH
+   x86_64    |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/6c7cbc2b3a525631164c304683f4f77fedc39438 | ORPH
+   nios2     |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/4c614f0a5d1982b7f0ad9966f0aa6cdb1ec82036 | ORPH
+    mips     |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/df18cbbb9c63576a3052d7a63ac42e84f3a98491 | ORPH
+    arm      |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/b00385e67e8781ba9f055b14c45fb773ab880d95 | ORPH
+    i586     |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/5e971c4e9269a073ca8ab8af10f6dccf45fc066b | ORPH
+  mips64el   |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/b802914b8101144d3e7f492f7128b3c1ed1af690 | ORPH
+    arm      |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/291c50ef0f7230c9d01127300b8805fb5928b69d | ORPH
+    mips     |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/37872fc6985c14c0458dd52daa49e1166af15741 | ORPH
+    sh4      |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/962d27cbda6f7833af06c2348a9fb6b15eacc5df | ORPH
+  mips64el   |        sdl_mixer-1.2.12        | NOK | http://autobuild.buildroot.net/results/a6797bc079a627e140c9c5eaad98b6d7493611dc | ORPH
+   sparc     |            tio-1.32            | NOK | http://autobuild.buildroot.net/results/24378a22565684e98910db41eef71d63d09ad21b |     
+    arm      | toolchain-external-codesour... | NOK | http://autobuild.buildroot.net/results/b1507064461e180fb5b5fc650033503e216cb90c | ORPH
 
-> > +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> >
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64
-> /configs/lsdk.config"
-> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-rdb"
-> > +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-> > +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
-> > +
-> > +# Serial port config
-> > +BR2_TARGET_GENERIC_GETTY=y
-> 
-> I think getty on downstream Buildroot for LS1028A-RDB doesn't work
-> properly with this setting as y. What is different here?
-Ls1028ardb need the GETTY, otherwise we can't enter Linux prompt.
 
-> > +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> > +
-> > +# required tools to create the microSD image
-> > +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> > +BR2_PACKAGE_HOST_GENIMAGE=y
-> > +BR2_PACKAGE_HOST_MTOOLS=y
-> > +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nxp/ls1028ardb/post-image.sh"
-> > +BR2_ROOTFS_POST_SCRIPT_ARGS="$(LINUX_DIR) $(TOPDIR)
-> $(UBOOT_DIR)"
-> > +
-> > +# busybox setting
-> >
-> +BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/nxp/common/ls
-> /busybox.config"
-> > +BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-> > +
-> > +# packages for rcw
-> > +BR2_PACKAGE_HOST_QORIQ_RCW=y
-> > +BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE="sd"
-> >
-> +BR2_PACKAGE_HOST_QORIQ_RCW_BIN="ls1028ardb/R_SQPP_0x85bb/rcw_1
-> 300_sdboot.bin"
-> > +
-> > +#Display port firmware
-> > +BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE=y
-> > +
-> > +#eudev support
-> > +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> > +BR2_ROOTFS_OVERLAY="board/nxp/ls1028ardb/enetc_init_overlay"
-> 
-> Why is this called so specific "enetc_init_overlay" and not
-> "rootfs_overlay"? If we want to add more files to the rootfs in the
-> future, can't we just use the same rootfs overlay for that?
-Will change to rootfs_overlay to cover all options.
+Results for branch '2019.02.x'
+==============================
 
-> > +
-> > +# Arm-Trusted-Firmware
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-> >
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE="u-boot-dt
-> b.bin"
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-> >
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://eur
-> 01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsource.codeaurora.
-> org%2Fexternal%2Fqoriq%2Fqoriq-components%2Fatf&amp;data=02%7C01%7
-> Cjerry.huang%40nxp.com%7Ce7f374b4b8684185612a08d7aa3878c0%7C686ea
-> 1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637165031827183010&amp;sd
-> ata=mnN%2FjI0pui6Tkc7oYBPPFqu0RvYPHTxW0xy%2FI2vONHo%3D&amp;rese
-> rved=0"
-> >
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="LSDK-
-> 19.09"
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1028ardb"
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="pbl"
-> >
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_DEPENDENCIES="h
-> ost-qoriq-rcw"
-> >
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BOOT
-> _MODE=sd RCW=$(BINARIES_DIR)/rcw_1300_sdboot.bin"
-> > --
-> > 2.17.1
-> >
-> 
-> Thanks,
-> -Vladimir
+Classification of failures by reason
+------------------------------------
+
+              webkitgtk-2.26.2 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  aarch64    |        webkitgtk-2.26.2        | NOK | http://autobuild.buildroot.net/results/634087c9aee94032adc4deb9cb21a422cdf2e361 |     
+
+
+Results for branch '2019.11.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+           libwebsockets-3.2.0 | 1 
+               log4cplus-2.0.4 | 1 
+                    mpv-0.29.1 | 1 
+                qt5base-5.12.5 | 1 
+                 xvisor-0.2.11 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |      libwebsockets-3.2.0       | NOK | http://autobuild.buildroot.net/results/3ad88161ae3f09aaaa85f0a1b63d2953faf538ae |     
+    arc      |        log4cplus-2.0.4         | NOK | http://autobuild.buildroot.net/results/b6c57c73d24482e077df50e4c2dcc0a4b436492a |     
+  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/9ecdf10cc44a6a1b9a4160b849a2a35ab24839c0 |     
+   x86_64    |         qt5base-5.12.5         | NOK | http://autobuild.buildroot.net/results/4fd7cd6712cbfa5ca42a3ff1e8bfe86b2f25822b |     
+  aarch64    |         xvisor-0.2.11          | NOK | http://autobuild.buildroot.net/results/3a2748a190280aa1ced6f9613975ce2bc722fcfb |     
+
+
+
+-- 
+http://autobuild.buildroot.net
