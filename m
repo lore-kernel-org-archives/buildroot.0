@@ -1,29 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 07 Feb 2020 10:13:37 +0100
-Subject: [Buildroot] [PATCH] package/libftdi1: fix python support
-In-Reply-To: <20200206095421.12987-1-yegorslists@googlemail.com>
- (yegorslists's message of "Thu, 6 Feb 2020 10:54:21 +0100")
-References: <20200206095421.12987-1-yegorslists@googlemail.com>
-Message-ID: <87imkiyd32.fsf@dell.be.48ers.dk>
+Date: Fri, 07 Feb 2020 10:13:45 +0100
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.4.x series
+In-Reply-To: <20200206213903.26096-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 6 Feb 2020 22:39:03 +0100")
+References: <20200206213903.26096-1-peter@korsgaard.com>
+Message-ID: <87eev6yd2u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Add an upstreamed patch that reorders find_package() commands.
- > This way Python interpreter will be detected first and based on
- > it the Python libraries can be found.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > Fixes the following CMake error:
-
- > Could NOT find PythonLibs (missing: PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS)
-
-We don't seem to have any autobuilder failures in libftdi1 for almost 1
-year. Any idea why this doesn't trigger on the autobuilders?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
