@@ -1,55 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Feb 2020 15:54:10 +0100
-Subject: [Buildroot] [git commit] package/wpebackend-fdo: bump to version
- 1.4.1
-Message-ID: <20200207144412.EF1358D4CE@busybox.osuosl.org>
+Date: Fri, 7 Feb 2020 15:54:59 +0100
+Subject: [Buildroot] [git commit] package/wireguard-tools: bump to version
+ 1.0-20200206
+Message-ID: <20200207144412.E956C80479@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f027a771bcafbef088006c3f11d3a3ccc0bafa7
+commit: https://git.buildroot.net/buildroot/commit/?id=0d41be5f6cff753a5e5b869f2bcdba70eff25bcc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a bugfix release which solves a couple of build issues.
-Full release notes:
+Drop libmnl dependency. From the announcement:
 
-  https://wpewebkit.org/release/wpebackend-fdo-1.4.1.html
+ * netlink: remove libmnl requirement
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+We no longer require libmnl.  It turns out that inlining the small subset of
+libmnl that we actually use results in a smaller binary than the overhead of
+linking to the external library.
+
+pkg-config is still used for the systemd support though, so move the
+host-pkgconf dependency there.
+
+For more details, see the announcement:
+
+https://lists.zx2c4.com/pipermail/wireguard/2020-February/004963.html
+
+While we are at it, adjust the white space in the .hash file to match the
+new agreements.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/wireguard-tools/Config.in            | 1 -
+ package/wireguard-tools/wireguard-tools.hash | 6 +++---
+ package/wireguard-tools/wireguard-tools.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index 85e02e22a8..fbeed390e6 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.4.0.tar.xz.sums
--md5 63553c3f43593c2a8c587c32e88fdf3c wpebackend-fdo-1.4.0.tar.xz
--sha1 a426d9a778ab52be2f4dd9cc7d324b43abac2f80 wpebackend-fdo-1.4.0.tar.xz
--sha256 a919ca4a5bc445f9419a5b7f3781cfc98e5abcf5d7259eb1869f5ab20fd18baf wpebackend-fdo-1.4.0.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.4.1.tar.xz.sums
-+md5 c6362491a4a38ddac42b66f140e1cff2 wpebackend-fdo-1.4.1.tar.xz
-+sha1 9217c8a5511bc53544b42cb23390256580ac4b0c wpebackend-fdo-1.4.1.tar.xz
-+sha256 6249a0b7cbfa662206a8d2fa24e2c574e75c681ad0e93468091f1dc68ddb299d wpebackend-fdo-1.4.1.tar.xz
- 
- # Hashes for license files:
- sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index 1f3fc705cc..4a7c569d9c 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/wireguard-tools/Config.in b/package/wireguard-tools/Config.in
+index eee6a8a940..130f4c48ed 100644
+--- a/package/wireguard-tools/Config.in
++++ b/package/wireguard-tools/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_WIREGUARD_TOOLS
+ 	bool "wireguard tools"
+ 	# kernel module requires 3.10+, userspace makes no sense without it
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+-	select BR2_PACKAGE_LIBMNL
+ 	help
+ 	  WireGuard is an extremely simple yet fast and modern VPN
+ 	  that utilizes state-of-the-art cryptography. It aims to be
+diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
+index 1650f67e7a..9ea0d3ce86 100644
+--- a/package/wireguard-tools/wireguard-tools.hash
++++ b/package/wireguard-tools/wireguard-tools.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004869.html
+-sha256 15bfdbdbecbd3870ced9a7e68286c871bfcb2071d165f113808081f2e428faa3  wireguard-tools-1.0.20200121.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-February/004963.html
++sha256  f5207248c6a3c3e3bfc9ab30b91c1897b00802ed861e1f9faaed873366078c64  wireguard-tools-1.0.20200206.tar.xz
+ # Locally calculated
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
+index 0acf0fcbb5..c2b2c36651 100644
+--- a/package/wireguard-tools/wireguard-tools.mk
++++ b/package/wireguard-tools/wireguard-tools.mk
+@@ -4,15 +4,15 @@
  #
  ################################################################################
  
--WPEBACKEND_FDO_VERSION = 1.4.0
-+WPEBACKEND_FDO_VERSION = 1.4.1
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+-WIREGUARD_TOOLS_VERSION = 1.0.20200121
++WIREGUARD_TOOLS_VERSION = 1.0.20200206
+ WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
+ WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
+ WIREGUARD_TOOLS_LICENSE = GPL-2.0
+ WIREGUARD_TOOLS_LICENSE_FILES = COPYING
+-WIREGUARD_TOOLS_DEPENDENCIES = host-pkgconf libmnl
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ WIREGUARD_TOOLS_MAKE_OPTS += WITH_SYSTEMDUNITS=yes
++WIREGUARD_TOOLS_DEPENDENCIES += host-pkgconf
+ else
+ WIREGUARD_TOOLS_MAKE_OPTS += WITH_SYSTEMDUNITS=no
+ endif
