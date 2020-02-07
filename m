@@ -1,111 +1,42 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@essensium.com>
-Date: Fri,  7 Feb 2020 10:37:05 +0100
-Subject: [Buildroot] [PATCH 2/2] package/python-pymupdf: new package.
-In-Reply-To: <20200207093705.32687-1-raphael.melotte@essensium.com>
-References: <20200207093705.32687-1-raphael.melotte@essensium.com>
-Message-ID: <20200207093705.32687-3-raphael.melotte@essensium.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 07 Feb 2020 11:04:25 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-02-06
+In-Reply-To: <20200207111804.GB298248@momiji> (Adrian Perez de Castro's
+ message of "Fri, 7 Feb 2020 11:18:04 +0200")
+References: <20200207072841.EC07F87D33@hemlock.osuosl.org>
+ <20200207111804.GB298248@momiji>
+Message-ID: <87a75uyaqe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python bindings for the PDF rendering library MuPDF.
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-Signed-off-by: Rapha?l M?lotte <raphael.melotte@mind.be>
-Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
----
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-pymupdf/Config.in           | 12 +++++++++++
- package/python-pymupdf/python-pymupdf.hash |  3 +++
- package/python-pymupdf/python-pymupdf.mk   | 25 ++++++++++++++++++++++
- 5 files changed, 42 insertions(+)
- create mode 100644 package/python-pymupdf/Config.in
- create mode 100644 package/python-pymupdf/python-pymupdf.hash
- create mode 100644 package/python-pymupdf/python-pymupdf.mk
+ > On Fri, 07 Feb 2020 07:28:36 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+ >> Detail of failures
+ >> ------------------
+ >> 
+ >> arch     |             reason             | OK? |                                       url                                       | orph?
+ >> -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+ >> aarch64    |        webkitgtk-2.26.2        | NOK | http://autobuild.buildroot.net/results/634087c9aee94032adc4deb9cb21a422cdf2e361 |     
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9c527c3625..0c67165f4a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1931,6 +1931,7 @@ F:	package/paho-mqtt-cpp/
- N:	Rapha?l M?lotte <raphael.melotte@essensium.com>
- F:	package/jbig2dec/
- F:	package/mupdf/
-+F:  package/python-pymupdf/
- 
- N:	R?mi R?rolle <remi.rerolle@gmail.com>
- F:	package/libfreeimage/
-diff --git a/package/Config.in b/package/Config.in
-index df29673221..ffe1013e82 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1013,6 +1013,7 @@ menu "External python modules"
- 	source "package/python-pylibftdi/Config.in"
- 	source "package/python-pylru/Config.in"
- 	source "package/python-pymodbus/Config.in"
-+	source "package/python-pymupdf/Config.in"
- 	source "package/python-pymysql/Config.in"
- 	source "package/python-pynacl/Config.in"
- 	source "package/python-pyopenssl/Config.in"
-diff --git a/package/python-pymupdf/Config.in b/package/python-pymupdf/Config.in
-new file mode 100644
-index 0000000000..2d95423e95
---- /dev/null
-+++ b/package/python-pymupdf/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_PYMUPDF
-+	bool "python-pymupdf"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_MUPDF
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Python bindings for the PDF rendering library MuPDF.
-+
-+	  https://github.com/pymupdf/PyMuPDF
-+
-+comment "python-pymupdf needs Xorg"
-+	depends on !BR2_PACKAGE_XORG7
-diff --git a/package/python-pymupdf/python-pymupdf.hash b/package/python-pymupdf/python-pymupdf.hash
-new file mode 100644
-index 0000000000..6729c6b91b
---- /dev/null
-+++ b/package/python-pymupdf/python-pymupdf.hash
-@@ -0,0 +1,3 @@
-+# md5, sha256 from https://pypi.org/pypi/pymupdf/json
-+md5	0e924bbb7364ba63df65d33fee9656f0  PyMuPDF-1.16.0.tar.gz
-+sha256	1a6cc5b8b0fb9aa16bfa453fdfed445398f00d2556e78d90ba54cdce8d900857  python-pymupdf-1.16.0.tar.gz
-diff --git a/package/python-pymupdf/python-pymupdf.mk b/package/python-pymupdf/python-pymupdf.mk
-new file mode 100644
-index 0000000000..e0f03dc2cf
---- /dev/null
-+++ b/package/python-pymupdf/python-pymupdf.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# python-pymupdf
-+#
-+################################################################################
-+
-+PYTHON_PYMUPDF_VERSION = 1.16.0
-+# python-pymupdf's version must match exactly mupdf's version
-+PYTHON_PYMUPDF_SOURCE = PyMuPDF-$(PYTHON_PYMUPDF_VERSION).tar.gz
-+PYTHON_PYMUPDF_SITE = https://files.pythonhosted.org/packages/d2/da/692102b6e6868a57d1dc7f98d07413116a02493b3b49a798dcd6f676d368
-+PYTHON_PYMUPDF_SETUP_TYPE = distutils
-+PYTHON_PYMUPDF_LICENSE = GPL-3.0
-+PYTHON_PYMUPDF_DEPENDENCIES = mupdf zlib
-+
-+PYTHON_PYMUPDF_ENV = CFLAGS="-I$(STAGING_DIR)/usr/include/mupdf"
-+
-+# We need to remove the original paths as we provide them in the CFLAGS:
-+define PYTHON_PYMUPDF_REMOVE_PATHS
-+	sed -i "s:\/usr\/include\/mupdf::g" $(@D)/setup.py
-+	sed -i "s:\/usr\/local\/include\/mupdf::g" $(@D)/setup.py
-+endef
-+
-+PYTHON_PYMUPDF_POST_PATCH_HOOKS = PYTHON_PYMUPDF_REMOVE_PATHS
-+
-+$(eval $(python-package))
+ > This would be fixed by having CMake 3.10+ installed in the host.
+
+ > Buildroot commit 65205c2425bccb7039ca0e2caffb7c64c26805f7 updated host-cmake
+ > to 3.10 but then it was reverted by 5b57ae7ad197fd641c233f22d326c846b9ea2204.
+
+ > So I suppose that the builder either does not have CMake installed in the
+ > system, or that it is older than 3.10 so host-cmake is built instead? But
+ > currently host-cmake is version 3.8 ?\_(?)_/? 
+
+Notice that this is only for 2019.02.x. Master already ensures cmake is
+3.10+. Given that 2019.02.x is just about to go EOL and the issues we
+had in the past with building newer cmake versions with old host
+toolchains / dependencies, I think the least bad solution is to just
+keep it like this.
+
 -- 
-2.23.0
+Bye, Peter Korsgaard
