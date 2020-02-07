@@ -1,198 +1,99 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri,  7 Feb 2020 19:08:26 +0100
-Subject: [Buildroot] [PATCH v3 07/10] package/cargo: drop package
-In-Reply-To: <20200207180829.165689-1-arnout@mind.be>
-References: <20200207180829.165689-1-arnout@mind.be>
-Message-ID: <20200207180829.165689-8-arnout@mind.be>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Fri,  7 Feb 2020 13:06:27 -0600
+Subject: [Buildroot] [2019.11.x] package/localedef: relax required toolchain
+ version
+Message-ID: <20200207190627.14111-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+The glibc package has been updating the toolchain version
+dependency since 2.28.x. The dependencies don't currently
+apply to the localedef build of the package, so this
+patchset relaxes the restriction such that builds can still
+occur on older host machines.
 
-As no package depends on the standalone cargo package, it can be
-dropped.
+The current supported minimum versions after this patch
+is applied are:
+GCC 4.8
+Binutils 2.24
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- DEVELOPERS                                 |  1 -
- package/Config.in.host                     |  1 -
- package/cargo/Config.in.host               |  9 ---
- package/cargo/cargo.hash                   |  8 --
- package/cargo/cargo.mk                     | 85 ----------------------
- support/testing/tests/package/test_rust.py |  2 -
- 6 files changed, 106 deletions(-)
- delete mode 100644 package/cargo/Config.in.host
- delete mode 100644 package/cargo/cargo.hash
- delete mode 100644 package/cargo/cargo.mk
+ ...y-on-GCC-to-4.8-and-binutils-to-2.24.patch | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3520072034..e0f6e7278c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -709,7 +709,6 @@ N:	Eric Le Bihan <eric.le.bihan.dev@free.fr>
- F:	docs/manual/adding-packages-meson.txt
- F:	package/adwaita-icon-theme/
- F:	package/cargo-bin/
--F:	package/cargo/
- F:	package/darkhttpd/
- F:	package/eudev/
- F:	package/execline/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 62e860d7c3..d69961e813 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -3,7 +3,6 @@ menu "Host utilities"
- 	source "package/aespipe/Config.in.host"
- 	source "package/android-tools/Config.in.host"
- 	source "package/btrfs-progs/Config.in.host"
--	source "package/cargo/Config.in.host"
- 	source "package/cbootimage/Config.in.host"
- 	source "package/checkpolicy/Config.in.host"
- 	source "package/checksec/Config.in.host"
-diff --git a/package/cargo/Config.in.host b/package/cargo/Config.in.host
-deleted file mode 100644
-index c33c6851f2..0000000000
---- a/package/cargo/Config.in.host
-+++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_PACKAGE_HOST_CARGO
--	bool "host cargo"
--	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
--	select BR2_PACKAGE_HOST_RUSTC
--	help
--	  Cargo is the package manager for the Rust programming
--	  language.
--
--	  https://crates.io/
-diff --git a/package/cargo/cargo.hash b/package/cargo/cargo.hash
-deleted file mode 100644
-index baa2cfbc33..0000000000
---- a/package/cargo/cargo.hash
-+++ /dev/null
-@@ -1,8 +0,0 @@
--# Locally generated
--sha256 1a4bae6910ca895157a1abe8225eb2b7e9b49ee1ee1e4e72fb81cb8e1446bff9  cargo-0.26.0.tar.gz
--sha256 dc7240d60a869fa24a68c8734fb7c810c27cca0a6dad52df6279865e4e8e7fae  rust-installer-4f994850808a572e2cc8d43f968893c8e942e9bf.tar.gz
--sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
--sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
--sha256 8bd89f9222dc80292f4107347103b693ac66f3a083371f0629ccf42338abe880  LICENSE-THIRD-PARTY
--# From https://src.fedoraproject.org/repo/pkgs/cargo/cargo-0.26.0-vendor.tar.xz/sha512
--sha512 6ed2a1644c9b18fc24ddad5350d41b6c36cd5b62de4cf0b748a57b589f4f0ac12f91461989158d58d0892bf6fc2c1626cf574e7e2b9da4b0e35f72dfd88f9048  cargo-0.26.0-vendor.tar.xz
-diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
-deleted file mode 100644
-index 3f6646d027..0000000000
---- a/package/cargo/cargo.mk
-+++ /dev/null
-@@ -1,85 +0,0 @@
--################################################################################
--#
--# cargo
--#
--################################################################################
--
--CARGO_VERSION = 0.26.0
--CARGO_SITE = $(call github,rust-lang,cargo,$(CARGO_VERSION))
--CARGO_LICENSE = Apache-2.0 or MIT
--CARGO_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
--
--CARGO_DEPS_SHA512 = 6ed2a1644c9b18fc24ddad5350d41b6c36cd5b62de4cf0b748a57b589f4f0ac12f91461989158d58d0892bf6fc2c1626cf574e7e2b9da4b0e35f72dfd88f9048
--CARGO_DEPS_SITE = https://src.fedoraproject.org/repo/pkgs/cargo/$(CARGO_DEPS_SOURCE)/sha512/$(CARGO_DEPS_SHA512)
--CARGO_DEPS_SOURCE = cargo-$(CARGO_VERSION)-vendor.tar.xz
--
--CARGO_INSTALLER_VERSION = 4f994850808a572e2cc8d43f968893c8e942e9bf
--CARGO_INSTALLER_SITE = $(call github,rust-lang,rust-installer,$(CARGO_INSTALLER_VERSION))
--CARGO_INSTALLER_SOURCE = rust-installer-$(CARGO_INSTALLER_VERSION).tar.gz
--
--HOST_CARGO_EXTRA_DOWNLOADS = \
--	$(CARGO_DEPS_SITE)/$(CARGO_DEPS_SOURCE) \
--	$(CARGO_INSTALLER_SITE)/$(CARGO_INSTALLER_SOURCE)
--
--HOST_CARGO_DEPENDENCIES = \
--	$(BR2_CMAKE_HOST_DEPENDENCY) \
--	host-pkgconf \
--	host-openssl \
--	host-libhttpparser \
--	host-libssh2 \
--	host-libcurl \
--	host-rustc \
--	host-cargo-bin
--
--HOST_CARGO_SNAP_BIN = $(HOST_CARGO_BIN_DIR)/cargo/bin/cargo
--HOST_CARGO_HOME = $(HOST_DIR)/share/cargo
--
--define HOST_CARGO_EXTRACT_DEPS
--	@mkdir -p $(@D)/vendor
--	$(call suitable-extractor,$(CARGO_DEPS_SOURCE)) \
--		$(HOST_CARGO_DL_DIR)/$(CARGO_DEPS_SOURCE) | \
--		$(TAR) --strip-components=1 -C $(@D)/vendor $(TAR_OPTIONS) -
--endef
--
--HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_DEPS
--
--define HOST_CARGO_EXTRACT_INSTALLER
--	@mkdir -p $(@D)/src/rust-installer
--	$(call suitable-extractor,$(CARGO_INSTALLER_SOURCE)) \
--		$(HOST_CARGO_DL_DIR)/$(CARGO_INSTALLER_SOURCE) | \
--		$(TAR) --strip-components=1 -C $(@D)/src/rust-installer $(TAR_OPTIONS) -
--endef
--
--HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_INSTALLER
--
--define HOST_CARGO_SETUP_DEPS
--	mkdir -p $(@D)/.cargo
--	( \
--		echo "[source.crates-io]"; \
--		echo "registry = 'https://github.com/rust-lang/crates.io-index'"; \
--		echo "replace-with = 'vendored-sources'"; \
--		echo "[source.vendored-sources]"; \
--		echo "directory = '$(@D)/vendor'"; \
--	) > $(@D)/.cargo/config
--endef
--
--HOST_CARGO_PRE_CONFIGURE_HOOKS += HOST_CARGO_SETUP_DEPS
--
--HOST_CARGO_SNAP_OPTS = \
--	--release \
--	$(if $(VERBOSE),--verbose)
--
--HOST_CARGO_ENV = \
--	RUSTFLAGS="$(addprefix -Clink-arg=,$(HOST_LDFLAGS))" \
--	CARGO_HOME=$(HOST_CARGO_HOME)
--
--define HOST_CARGO_BUILD_CMDS
--	(cd $(@D); $(HOST_MAKE_ENV) $(HOST_CARGO_ENV) $(HOST_CARGO_SNAP_BIN) \
--		build $(HOST_CARGO_SNAP_OPTS))
--endef
--
--define HOST_CARGO_INSTALL_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/target/release/cargo $(HOST_DIR)/bin/cargo
--endef
--
--$(eval $(host-generic-package))
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index 9854c3692e..15bb93dd97 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -73,7 +73,6 @@ class TestRustBin(TestRustBase):
-         BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-         BR2_TARGET_ROOTFS_CPIO=y
-         # BR2_TARGET_ROOTFS_TAR is not set
--        BR2_PACKAGE_HOST_CARGO=y
-         BR2_PACKAGE_HOST_RUSTC=y
-         """
- 
-@@ -102,7 +101,6 @@ class TestRust(TestRustBase):
-         BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-         BR2_TARGET_ROOTFS_CPIO=y
-         # BR2_TARGET_ROOTFS_TAR is not set
--        BR2_PACKAGE_HOST_CARGO=y
-         BR2_PACKAGE_HOST_RUSTC=y
-         BR2_PACKAGE_HOST_RUST=y
-         """
+diff --git a/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+new file mode 100644
+index 0000000000..f5fcb4b90a
+--- /dev/null
++++ b/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+@@ -0,0 +1,62 @@
++From 313e04bfbd281f9b46fdde097aacb59d501820a3 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Thu, 6 Feb 2020 14:36:21 -0600
++Subject: [PATCH] relax dependency on GCC to 4.8 and binutils to 2.24
++
++The glibc package has been updating the toolchain version
++dependency since 2.28.x. The dependencies don't currently
++apply to the localedef build of the package, so this
++patchset relaxes the restriction such that builds can still
++occur on older host machines.
++
++Here's a related post from 2018 for a similar patchset.
++http://lists.busybox.net/pipermail/buildroot/2018-December/237949.html
++
++Timeline of relevant commits that adjust the dependency upstream.
++GCC 4.9+
++ https://sourceware.org/git/?p=glibc.git;a=commit;h=4add86749a31f302674599b69d2eea691d69341a
++Binutils 2.25+
++ https://sourceware.org/git/?p=glibc.git;a=commit;h=073e8fa7739ed453d6854b834f290c263a6cdb9f
++ https://sourceware.org/git/?p=glibc.git;a=commit;h=b4396163aa8666f970aaf43eaca25f3a92b18c1b
++GCC 5+
++ https://sourceware.org/git/?p=glibc.git;a=commit;h=192963be49678b48f60218f1f794991cdd9fe472
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ configure | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/configure b/configure
++index 6d26b824..9ac2e5e9 100755
++--- a/configure
+++++ b/configure
++@@ -4601,7 +4601,7 @@ $as_echo_n "checking version of $AS... " >&6; }
++   ac_prog_version=`$AS --version 2>&1 | sed -n 's/^.*GNU assembler.* \([0-9]*\.[0-9.]*\).*$/\1/p'`
++   case $ac_prog_version in
++     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
++-    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
+++    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
++        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
++     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
++ 
++@@ -4731,7 +4731,7 @@ $as_echo_n "checking version of $LD... " >&6; }
++   ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
++   case $ac_prog_version in
++     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
++-    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
+++    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
++        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
++     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
++ 
++@@ -5140,7 +5140,7 @@ int
++ main ()
++ {
++ 
++-#if !defined __GNUC__ || __GNUC__ < 5
+++#if !defined __GNUC__ || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8)
++ #error insufficient compiler
++ #endif
++   ;
++-- 
++2.18.0
++
 -- 
-2.24.1
+2.18.0
