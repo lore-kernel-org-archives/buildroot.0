@@ -1,98 +1,97 @@
 From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@essensium.com>
-Date: Fri,  7 Feb 2020 12:43:48 +0100
-Subject: [Buildroot] [PATCH 2/4] package/python-botocore: new package.
+Date: Fri,  7 Feb 2020 12:43:49 +0100
+Subject: [Buildroot] [PATCH 3/4] package/python-s3transfer: new package.
 In-Reply-To: <20200207114350.31365-1-raphael.melotte@essensium.com>
 References: <20200207114350.31365-1-raphael.melotte@essensium.com>
-Message-ID: <20200207114350.31365-3-raphael.melotte@essensium.com>
+Message-ID: <20200207114350.31365-4-raphael.melotte@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Low-level, data-driven core of boto 3.
+An Amazon S3 Transfer Manager.
 
 Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/python-botocore/Config.in            | 10 ++++++++++
- package/python-botocore/python-botocore.hash |  5 +++++
- package/python-botocore/python-botocore.mk   | 14 ++++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/python-botocore/Config.in
- create mode 100644 package/python-botocore/python-botocore.hash
- create mode 100644 package/python-botocore/python-botocore.mk
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/python-s3transfer/Config.in              |  9 +++++++++
+ package/python-s3transfer/python-s3transfer.hash |  5 +++++
+ package/python-s3transfer/python-s3transfer.mk   | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/python-s3transfer/Config.in
+ create mode 100644 package/python-s3transfer/python-s3transfer.hash
+ create mode 100644 package/python-s3transfer/python-s3transfer.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ea44b0709a..5aa26a88af 100644
+index 5aa26a88af..4d636ebb47 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2077,6 +2077,7 @@ F:	package/uhttpd/
- F:	package/ustream-ssl/
- 
+@@ -2079,6 +2079,7 @@ F:	package/ustream-ssl/
  N:  Rapha?l M?lotte <raphael.melotte@essensium.com>
-+F:  package/python-botocore/
+ F:  package/python-botocore/
  F:  package/python-jmespath/
++F:  package/python-s3transfer/
  
  N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+ F:	package/paho-mqtt-cpp/
 diff --git a/package/Config.in b/package/Config.in
-index 920de84a7e..9279ad20c9 100644
+index 9279ad20c9..9d5d5dba6d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -877,6 +877,7 @@ menu "External python modules"
- 	source "package/python-beautifulsoup4/Config.in"
- 	source "package/python-bitstring/Config.in"
- 	source "package/python-bluezero/Config.in"
-+	source "package/python-botocore/Config.in"
- 	source "package/python-bottle/Config.in"
- 	source "package/python-brotli/Config.in"
- 	source "package/python-bunch/Config.in"
-diff --git a/package/python-botocore/Config.in b/package/python-botocore/Config.in
+@@ -1109,6 +1109,7 @@ menu "External python modules"
+ 	source "package/python-rpi-gpio/Config.in"
+ 	source "package/python-rpi-ws281x/Config.in"
+ 	source "package/python-rtslib-fb/Config.in"
++	source "package/python-s3transfer/Config.in"
+ 	source "package/python-scandir/Config.in"
+ 	source "package/python-scapy/Config.in"
+ 	source "package/python-schedule/Config.in"
+diff --git a/package/python-s3transfer/Config.in b/package/python-s3transfer/Config.in
 new file mode 100644
-index 0000000000..a552900b6c
+index 0000000000..6587a5fe39
 --- /dev/null
-+++ b/package/python-botocore/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_BOTOCORE
-+	bool "python-botocore"
-+	select BR2_PACKAGE_PYTHON_JMESPATH # runtime
-+	select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
-+	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
-+	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
++++ b/package/python-s3transfer/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_S3TRANSFER
++	bool "python-s3transfer"
++	select BR2_PACKAGE_PYTHON_BOTOCORE # runtime
++	# runtime, not needed for python3:
++	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON
 +	help
-+	  Low-level, data-driven core of boto 3.
++	  An Amazon S3 Transfer Manager.
 +
-+	  https://github.com/boto/botocore
-diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
++	  https://github.com/boto/s3transfer
+diff --git a/package/python-s3transfer/python-s3transfer.hash b/package/python-s3transfer/python-s3transfer.hash
 new file mode 100644
-index 0000000000..199c4cdff1
+index 0000000000..6b554607da
 --- /dev/null
-+++ b/package/python-botocore/python-botocore.hash
++++ b/package/python-s3transfer/python-s3transfer.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/botocore/json
-+md5	a75ae28d58d64dbf689d18ac3424342a  botocore-1.12.210.tar.gz
-+sha256	7983b7624b3f71648a7101fbcb437e3d599b4f79b754e89220e574482a2f8298  botocore-1.12.210.tar.gz
++# md5, sha256 from https://pypi.org/pypi/s3transfer/json
++md5	8ca74015d9dc58af26c68276a8867eca  s3transfer-0.2.1.tar.gz
++sha256	6efc926738a3cd576c2a79725fed9afde92378aa5c6a957e3af010cb019fac9d  s3transfer-0.2.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256	0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
-diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
++sha256	8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac  LICENSE.txt
+diff --git a/package/python-s3transfer/python-s3transfer.mk b/package/python-s3transfer/python-s3transfer.mk
 new file mode 100644
-index 0000000000..378bd93768
+index 0000000000..86bdc19eae
 --- /dev/null
-+++ b/package/python-botocore/python-botocore.mk
++++ b/package/python-s3transfer/python-s3transfer.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-botocore
++# python-s3transfer
 +#
 +################################################################################
 +
-+PYTHON_BOTOCORE_VERSION = 1.12.210
-+PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
-+PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/39/78/068e7cf5bb9901f34eacbf449cdfbdf32e470333930cbcda890cfc9fb820
-+PYTHON_BOTOCORE_SETUP_TYPE = setuptools
-+PYTHON_BOTOCORE_LICENSE = Apache-2.0
-+PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt
++PYTHON_S3TRANSFER_VERSION = 0.2.1
++PYTHON_S3TRANSFER_SOURCE = s3transfer-$(PYTHON_S3TRANSFER_VERSION).tar.gz
++PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/39/12/150cd55c606ebca6725683642a8e7068cd6af10f837ce5419a9f16b7fb55
++PYTHON_S3TRANSFER_SETUP_TYPE = setuptools
++PYTHON_S3TRANSFER_LICENSE = Apache-2.0
++PYTHON_S3TRANSFER_LICENSE_FILES = LICENSE.txt
 +
 +$(eval $(python-package))
 -- 
