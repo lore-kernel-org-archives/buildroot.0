@@ -1,78 +1,53 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri,  7 Feb 2020 19:08:20 +0100
-Subject: [Buildroot] [PATCH v3 01/10] package/rustc: install cargo config as
- toolchain post-install hook
+Date: Fri,  7 Feb 2020 19:08:21 +0100
+Subject: [Buildroot] [PATCH v3 02/10] package/rust: build and install cargo
 In-Reply-To: <20200207180829.165689-1-arnout@mind.be>
 References: <20200207180829.165689-1-arnout@mind.be>
-Message-ID: <20200207180829.165689-2-arnout@mind.be>
+Message-ID: <20200207180829.165689-3-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The cargo config file is much like the cmake and meson configuration
-files, something that tells the cargo build system how the
-cross-toolchain is configured. It can be used not only with our own
-host-cargo package, but also with a pre-installed cargo.
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-Therefore, install the cargo config file as a toolchain post-install
-hook, just like we do for cmake and meson. However, we don't have a
-pkg-cargo infrastructure (yet) so we can't put it there. The cargo
-package itself will be removed soon, so that's not appropriate either.
-Therefore, put it in the rustc package - any cargo package will need
-rustc.
+Cargo source code is not provided anymore as a separate tarball but is
+now built along with the Rust compiler.
 
-Remove the config handling from the cargo package.
+So update rust host variant to build Cargo and install the
+cross-compilation configuration file.
 
+All this will be overwritten again by the host-cargo package, but
+that will be removed in later commits.
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+Tested-by: Sam Voss <sam.voss@rockwellcollins.com>
+[Arnout: merge all install commands in HOST_RUST_INSTALL_CMDS]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/cargo/cargo.mk                             |  6 ------
- package/{cargo/config.in => rustc/cargo-config.in} |  0
- package/rustc/rustc.mk                             | 12 ++++++++++++
- 3 files changed, 12 insertions(+), 6 deletions(-)
- rename package/{cargo/config.in => rustc/cargo-config.in} (100%)
+ package/rust/rust.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
-index a387281b4c..3f6646d027 100644
---- a/package/cargo/cargo.mk
-+++ b/package/cargo/cargo.mk
-@@ -80,12 +80,6 @@ endef
- 
- define HOST_CARGO_INSTALL_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/target/release/cargo $(HOST_DIR)/bin/cargo
--	$(INSTALL) -D package/cargo/config.in \
--		$(HOST_DIR)/share/cargo/config
--	$(SED) 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
--		$(HOST_DIR)/share/cargo/config
--	$(SED) 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
--		$(HOST_DIR)/share/cargo/config
- endef
- 
- $(eval $(host-generic-package))
-diff --git a/package/cargo/config.in b/package/rustc/cargo-config.in
-similarity index 100%
-rename from package/cargo/config.in
-rename to package/rustc/cargo-config.in
-diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
-index 6eea9b4fc5..35ffc36106 100644
---- a/package/rustc/rustc.mk
-+++ b/package/rustc/rustc.mk
-@@ -20,3 +20,15 @@ endif
- RUSTC_HOST_NAME = $(RUSTC_HOST_ARCH)-unknown-linux-gnu
- 
- $(eval $(host-virtual-package))
-+
-+ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
-+define RUSTC_INSTALL_CARGO_CONFIG
-+	mkdir -p $(HOST_DIR)/share/cargo
-+	sed -e 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
-+		-e 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
-+		package/rustc/cargo-config.in \
-+		> $(HOST_DIR)/share/cargo/config
-+endef
-+# check-package disable TypoInPackageVariable - TOOLCHAIN intended
-+TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += RUSTC_INSTALL_CARGO_CONFIG
-+endif
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 5d14fc6682..9bbed15082 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -47,11 +47,14 @@ define HOST_RUST_CONFIGURE_CMDS
+ 		echo 'python = "$(HOST_DIR)/bin/python2"'; \
+ 		echo 'submodules = false'; \
+ 		echo 'vendor = true'; \
++		echo 'extended = true'; \
++		echo 'tools = ["cargo"]'; \
+ 		echo 'compiler-docs = false'; \
+ 		echo 'docs = false'; \
+ 		echo 'verbose = $(HOST_RUST_VERBOSITY)'; \
+ 		echo '[install]'; \
+ 		echo 'prefix = "$(HOST_DIR)"'; \
++		echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
+ 		echo '[rust]'; \
+ 		echo 'channel = "stable"'; \
+ 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
 -- 
 2.24.1
