@@ -1,96 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Feb 2020 15:59:07 +0100
-Subject: [Buildroot] [git commit] package/ninja: fix build for cmake 3.10
-Message-ID: <20200207144916.95B008D4D3@busybox.osuosl.org>
+From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@essensium.com>
+Date: Fri,  7 Feb 2020 16:03:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-pydns: new package.
+Message-ID: <20200207150327.4335-1-raphael.melotte@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb5ffe3c907ac2abc12d2d09d913c2fccaa71330
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Python DNS library.
 
-If the host cmake is 3.10, the configuration step produces
-the following error:
-
-CMake Error at CMakeLists.txt:87 (target_link_libraries):
-Target "libninja" of type OBJECT_LIBRARY may not be linked into another
-target. One may link only to STATIC or SHARED libraries, or to executables
-with the ENABLE_EXPORTS property set.
-
-This patch fixes CMakeLists.txt to use the object library as it was intended
-in cmake 3.10.
-
-Fixes:
-https://bugs.busybox.net/show_bug.cgi?id=12546
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Tested-by: Damian Tometzki <dti@familie-tometzki.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
 ---
- .../0003-CMake-fix-object-library-usage.patch      | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+ DEVELOPERS                             |  3 +++
+ package/Config.in                      |  1 +
+ package/python-pydns/Config.in         |  7 +++++++
+ package/python-pydns/python-pydns.hash |  5 +++++
+ package/python-pydns/python-pydns.mk   | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/python-pydns/Config.in
+ create mode 100644 package/python-pydns/python-pydns.hash
+ create mode 100644 package/python-pydns/python-pydns.mk
 
-diff --git a/package/ninja/0003-CMake-fix-object-library-usage.patch b/package/ninja/0003-CMake-fix-object-library-usage.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d8ea23e0b3..68bd86f23e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2076,6 +2076,9 @@ N:	Rahul Jain <rahul.jain@imgtec.com>
+ F:	package/uhttpd/
+ F:	package/ustream-ssl/
+ 
++N:  Rapha?l M?lotte <raphael.melotte@essensium.com>
++F:  package/python-pydns/
++
+ N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+ F:	package/paho-mqtt-cpp/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index bad4f9cba6..6fd2ea44be 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1059,6 +1059,7 @@ menu "External python modules"
+ 	source "package/python-pycryptodomex/Config.in"
+ 	source "package/python-pydal/Config.in"
+ 	source "package/python-pydantic/Config.in"
++	source "package/python-pydns/Config.in"
+ 	source "package/python-pyelftools/Config.in"
+ 	source "package/python-pyftpdlib/Config.in"
+ 	source "package/python-pygame/Config.in"
+diff --git a/package/python-pydns/Config.in b/package/python-pydns/Config.in
 new file mode 100644
-index 0000000000..8f8fac994e
+index 0000000000..55aac0d5d8
 --- /dev/null
-+++ b/package/ninja/0003-CMake-fix-object-library-usage.patch
-@@ -0,0 +1,56 @@
-+From 7982ecebe1c1c41e82779a65fa2d93f19ffd755f Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Wed, 5 Feb 2020 12:28:44 +0100
-+Subject: [PATCH] CMake: fix object library usage
++++ b/package/python-pydns/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PYDNS
++	bool "python-pydns"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Python DNS library.
 +
-+Object libraries cannot be use in target_link_libraries() command
-+as they are no normal binary files like *.a or *.so but a collection
-+of object files.
++	  http://pydns.sourceforge.net/
+diff --git a/package/python-pydns/python-pydns.hash b/package/python-pydns/python-pydns.hash
+new file mode 100644
+index 0000000000..cbefbaa132
+--- /dev/null
++++ b/package/python-pydns/python-pydns.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pydns/json
++md5	e9574b74f01111405815a5fdccec15ce  pydns-2.3.6.tar.gz
++sha256	f1960d8bff0aafad9252b9e80279748fe7ebe5e719487d132ccb1281523cdb62  pydns-2.3.6.tar.gz
++# Locally computed sha256 checksums
++sha256	c1adc2cbd2a87ea2f78b68bd677f505e806f4d7580f23d81fbb998a99d4b75bd  LICENSE
+diff --git a/package/python-pydns/python-pydns.mk b/package/python-pydns/python-pydns.mk
+new file mode 100644
+index 0000000000..415fdc6962
+--- /dev/null
++++ b/package/python-pydns/python-pydns.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pydns
++#
++################################################################################
 +
-+See add_library() definition for details.
++PYTHON_PYDNS_VERSION = 2.3.6
++PYTHON_PYDNS_SOURCE = pydns-$(PYTHON_PYDNS_VERSION).tar.gz
++PYTHON_PYDNS_SITE = https://files.pythonhosted.org/packages/4b/9e/be4f6bbe72c2a12bb83f8a91e027fe58507afe7325dcd08b914f2bf0f1f0
++PYTHON_PYDNS_SETUP_TYPE = distutils
++PYTHON_PYDNS_LICENSE = CNRI-Python-GPL-Compatible
++PYTHON_PYDNS_LICENSE_FILES = LICENSE
 +
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ CMakeLists.txt | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index af8010f..028a7bb 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -83,8 +83,7 @@ target_compile_definitions(libninja PRIVATE _WIN32_WINNT=0x0601 __USE_MINGW_ANSI
-+ endif()
-+
-+ # Main executable is library plus main() function.
-+-add_executable(ninja src/ninja.cc)
-+-target_link_libraries(ninja PRIVATE libninja libninja-re2c)
-++add_executable(ninja src/ninja.cc $<TARGET_OBJECTS:libninja> $<TARGET_OBJECTS:libninja-re2c>)
-+
-+ # Tests all build into ninja_test executable.
-+ add_executable(ninja_test
-+@@ -106,11 +105,12 @@ add_executable(ninja_test
-+	src/subprocess_test.cc
-+	src/test.cc
-+	src/util_test.cc
-++	$<TARGET_OBJECTS:libninja>
-++	$<TARGET_OBJECTS:libninja-re2c>
-+ )
-+ if(WIN32)
-+	target_sources(ninja_test PRIVATE src/includes_normalize_test.cc src/msvc_helper_test.cc)
-+ endif()
-+-target_link_libraries(ninja_test PRIVATE libninja libninja-re2c)
-+
-+ foreach(perftest
-+   build_log_perftest
-+@@ -120,8 +120,7 @@ foreach(perftest
-+   hash_collision_bench
-+   manifest_parser_perftest
-+ )
-+-  add_executable(${perftest} src/${perftest}.cc)
-+-  target_link_libraries(${perftest} PRIVATE libninja libninja-re2c)
-++  add_executable(${perftest} src/${perftest}.cc $<TARGET_OBJECTS:libninja> $<TARGET_OBJECTS:libninja-re2c>)
-+ endforeach()
-+
-+ enable_testing()
-+--
-+2.17.0
++$(eval $(python-package))
+-- 
+2.23.0
