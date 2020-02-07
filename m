@@ -1,8 +1,8 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Fri, 7 Feb 2020 14:22:56 +0100
+From: Norbert Lange <nolange79@gmail.com>
+Date: Fri, 7 Feb 2020 14:32:00 +0100
 Subject: [Buildroot] [PATCH 05/10] package/systemd: cosmetic rearrange
  list of users
-In-Reply-To: <CADYdroNei=n_MK1iURBRqKBz5KFj=ghtkiYCstLNU=_TBPQoTA@mail.gmail.com>
+In-Reply-To: <CAFvCimVUR=DZiJ2T5bv+YBdysZBFVBwTPVpPr9w3-2MTb41=fQ@mail.gmail.com>
 References: <20200206093633.251413-1-nolange79@gmail.com>
  <20200206093633.251413-6-nolange79@gmail.com>
  <CAFvCimWQmzczt5u0LuTW=vg4UUfXAZ3VAskCmU8CFYGPVgEcxw@mail.gmail.com>
@@ -11,49 +11,68 @@ References: <20200206093633.251413-1-nolange79@gmail.com>
  <CADYdroNNEhAiEb10nO5h-Q5Sxp4MT0F6mMhR04tcpoKBza_7Jg@mail.gmail.com>
  <CAFvCimUei-cLjBYU5don-L9hJA5WgMS-NynOpsmTqsQ=bChmww@mail.gmail.com>
  <CADYdroNei=n_MK1iURBRqKBz5KFj=ghtkiYCstLNU=_TBPQoTA@mail.gmail.com>
-Message-ID: <CAFvCimVUR=DZiJ2T5bv+YBdysZBFVBwTPVpPr9w3-2MTb41=fQ@mail.gmail.com>
+ <CAFvCimVUR=DZiJ2T5bv+YBdysZBFVBwTPVpPr9w3-2MTb41=fQ@mail.gmail.com>
+Message-ID: <CADYdroO6nG4Jyw0icSb=c-Yxhnfsgr2NQJCdm8nhtwsmiL9v4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le ven. 7 f?vr. 2020 ? 14:11, Norbert Lange <nolange79@gmail.com> a ?crit :
+Define what you mean with break - chances are, its not worse than all of
+packages suddenly creating system users.
+
+I meant that the lists from BR2_ROOTFS_USERS_TABLES are handled special and
+create normal users (uid >= 0),
+while all packages (buildroot or user packages) create system users with
+uid=-1.
+
+new packages could use 's' and 'u' instead, with -1 being somewhat
+ambiguous then (potentially being deprecated one day).
+
+Am Fr., 7. Feb. 2020 um 14:23 Uhr schrieb J?r?my ROSEN <
+jeremy.rosen@smile.fr>:
 
 >
 >
+> Le ven. 7 f?vr. 2020 ? 14:11, Norbert Lange <nolange79@gmail.com> a
+> ?crit :
 >
-> what about changing mkuser default -1 to system user, adding a new value
-> ('-2' or 'u') for normal user?
-> That way you just need to patch the 1-2 spots where normal users are
-> generated.
+>>
+>>
+>>
+>> what about changing mkuser default -1 to system user, adding a new value
+>> ('-2' or 'u') for normal user?
+>> That way you just need to patch the 1-2 spots where normal users are
+>> generated.
+>>
+>>
+> There are no such spot that I could find at first glance in buildroot
+> itself, but that would break user packages...
+> so I don't think that's a good idea. It would fix more (harmless) bugs
+> than it would create, but the bugs
+> created would be more problematic than the bugs fixed....
 >
+> --
+> [image: SMILE]  <http://www.smile.eu/>
 >
-There are no such spot that I could find at first glance in buildroot
-itself, but that would break user packages...
-so I don't think that's a good idea. It would fix more (harmless) bugs than
-it would create, but the bugs
-created would be more problematic than the bugs fixed....
-
--- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+> 20 rue des Jardins
+> 92600 Asni?res-sur-Seine
+> *J?r?my ROSEN*
+> Architecte technique
+>
+> [image: email] jeremy.rosen at smile.fr
+> [image: phone]  +33 6 88 25 87 42
+> [image: url] http://www.smile.eu
+>
+> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+> <https://www.facebook.com/smileopensource> [image: LinkedIn]
+> <https://www.linkedin.com/company/smile> [image: Github]
+> <https://github.com/Smile-SA>
+>
+> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200207/72c85b6f/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200207/d7c40351/attachment.html>
