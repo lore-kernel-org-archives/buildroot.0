@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri,  7 Feb 2020 19:08:22 +0100
-Subject: [Buildroot] [PATCH v3 03/10] package/cargo-bin: install if rust-bin
- selected
+Date: Fri,  7 Feb 2020 19:08:23 +0100
+Subject: [Buildroot] [PATCH v3 04/10] package/rust-bin: host variant depends
+ on host-cargo-bin
 In-Reply-To: <20200207180829.165689-1-arnout@mind.be>
 References: <20200207180829.165689-1-arnout@mind.be>
-Message-ID: <20200207180829.165689-4-arnout@mind.be>
+Message-ID: <20200207180829.165689-5-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,27 @@ To: buildroot@busybox.net
 
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-If host-rust-bin, the pre-built Rust compiler, is selected as a rustc
-provider, then also install the pre-built cargo binary to be coherent.
+Ensure installation of pre-built cargo binary by adding it to the
+dependency list of the host variant of the pre-built Rust compiler.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-[Arnout: don't install cargo config, alread moved]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/cargo-bin/cargo-bin.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/rust-bin/rust-bin.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
-index 3614f7a53d..3eaf417531 100644
---- a/package/cargo-bin/cargo-bin.mk
-+++ b/package/cargo-bin/cargo-bin.mk
-@@ -10,4 +10,10 @@ CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
- CARGO_BIN_LICENSE = Apache-2.0 or MIT
- CARGO_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
+index a374215e20..bef3102450 100644
+--- a/package/rust-bin/rust-bin.mk
++++ b/package/rust-bin/rust-bin.mk
+@@ -10,6 +10,7 @@ RUST_BIN_LICENSE = Apache-2.0 or MIT
+ RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
  
-+ifeq ($(BR2_PACKAGE_HOST_RUST_BIN),y)
-+define HOST_CARGO_BIN_INSTALL_CMDS
-+	$(@D)/install.sh --prefix=$(HOST_DIR) --disable-ldconfig
-+endef
-+endif
-+
- $(eval $(host-generic-package))
+ HOST_RUST_BIN_PROVIDES = host-rustc
++HOST_RUST_BIN_DEPENDENCIES = host-cargo-bin
+ 
+ HOST_RUST_BIN_SOURCE = rustc-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
+ 
 -- 
 2.24.1
