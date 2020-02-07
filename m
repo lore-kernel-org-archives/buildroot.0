@@ -1,99 +1,106 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  7 Feb 2020 13:06:27 -0600
-Subject: [Buildroot] [2019.11.x] package/localedef: relax required toolchain
- version
-Message-ID: <20200207190627.14111-1-matthew.weber@rockwellcollins.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri,  7 Feb 2020 11:51:44 -0800
+Subject: [Buildroot] [PATCH] package/uclibc: fix ctype.h is*_l definitions
+Message-ID: <20200207195144.4060-1-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The glibc package has been updating the toolchain version
-dependency since 2.28.x. The dependencies don't currently
-apply to the localedef build of the package, so this
-patchset relaxes the restriction such that builds can still
-occur on older host machines.
+ctype locale-specific macro definitions are broken because they result
+in dereference of pointer to structure of incomplete type.
+Drop these macros since they are optional and let applications use
+functions with the same names.
 
-The current supported minimum versions after this patch
-is applied are:
-GCC 4.8
-Binutils 2.24
+Backported from:
+  https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=d1a3ca7ca56630fddde7311a0474eed4a21335a7
+Fixes:
+  http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39
 
-Cc: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- ...y-on-GCC-to-4.8-and-binutils-to-2.24.patch | 62 +++++++++++++++++++
- 1 file changed, 62 insertions(+)
- create mode 100644 package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+ ...ctype.h-drop-is-_l-macro-definitions.patch | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
 
-diff --git a/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+diff --git a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
 new file mode 100644
-index 0000000000..f5fcb4b90a
+index 000000000000..5557a9c1e730
 --- /dev/null
-+++ b/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-@@ -0,0 +1,62 @@
-+From 313e04bfbd281f9b46fdde097aacb59d501820a3 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Thu, 6 Feb 2020 14:36:21 -0600
-+Subject: [PATCH] relax dependency on GCC to 4.8 and binutils to 2.24
++++ b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
+@@ -0,0 +1,72 @@
++From d1a3ca7ca56630fddde7311a0474eed4a21335a7 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Mon, 3 Feb 2020 13:57:32 -0800
++Subject: [PATCH] include/ctype.h: drop is*_l macro definitions
 +
-+The glibc package has been updating the toolchain version
-+dependency since 2.28.x. The dependencies don't currently
-+apply to the localedef build of the package, so this
-+patchset relaxes the restriction such that builds can still
-+occur on older host machines.
++ctype locale-specific macro definitions are broken because they result
++in dereference of pointer to structure of incomplete type.
++Drop these macros since they are optional and let applications use
++functions with the same names.
 +
-+Here's a related post from 2018 for a similar patchset.
-+http://lists.busybox.net/pipermail/buildroot/2018-December/237949.html
++This change fixes parted-3.3 build with uClibc-ng:
++  http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39/build-end.log
 +
-+Timeline of relevant commits that adjust the dependency upstream.
-+GCC 4.9+
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=4add86749a31f302674599b69d2eea691d69341a
-+Binutils 2.25+
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=073e8fa7739ed453d6854b834f290c263a6cdb9f
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=b4396163aa8666f970aaf43eaca25f3a92b18c1b
-+GCC 5+
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=192963be49678b48f60218f1f794991cdd9fe472
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 +---
-+ configure | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
++ include/ctype.h | 33 ---------------------------------
++ 1 file changed, 33 deletions(-)
 +
-+diff --git a/configure b/configure
-+index 6d26b824..9ac2e5e9 100755
-+--- a/configure
-++++ b/configure
-+@@ -4601,7 +4601,7 @@ $as_echo_n "checking version of $AS... " >&6; }
-+   ac_prog_version=`$AS --version 2>&1 | sed -n 's/^.*GNU assembler.* \([0-9]*\.[0-9.]*\).*$/\1/p'`
-+   case $ac_prog_version in
-+     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
-+-    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-++    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-+        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-+     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
++diff --git a/include/ctype.h b/include/ctype.h
++index ecd5e730886a..e934cf3321a6 100644
++--- a/include/ctype.h
+++++ b/include/ctype.h
++@@ -350,46 +350,13 @@ libc_hidden_proto(tolower_l)
++ /* Return the uppercase version of C.  */
++ extern int toupper_l (int __c, __locale_t __l) __THROW;
 + 
-+@@ -4731,7 +4731,7 @@ $as_echo_n "checking version of $LD... " >&6; }
-+   ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
-+   case $ac_prog_version in
-+     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
-+-    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-++    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-+        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-+     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
++-# if __GNUC__ >= 2 && defined __OPTIMIZE__ && !defined __cplusplus
++-#  define tolower_l(c, locale) __tobody(c, tolower_l, (locale)->__ctype_tolower, (c, locale))
++-#  define toupper_l(c, locale) __tobody(c, toupper_l, (locale)->__ctype_toupper, (c, locale))
++-# endif	/* Optimizing gcc */
++-
++-
++-# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
++ # ifndef __NO_CTYPE
++-#  define __isalnum_l(c,l)	__isctype_l((c), _ISalnum, (l))
++-#  define __isalpha_l(c,l)	__isctype_l((c), _ISalpha, (l))
++-#  define __iscntrl_l(c,l)	__isctype_l((c), _IScntrl, (l))
++-#  define __isdigit_l(c,l)	__isctype_l((c), _ISdigit, (l))
++-#  define __islower_l(c,l)	__isctype_l((c), _ISlower, (l))
++-#  define __isgraph_l(c,l)	__isctype_l((c), _ISgraph, (l))
++-#  define __isprint_l(c,l)	__isctype_l((c), _ISprint, (l))
++-#  define __ispunct_l(c,l)	__isctype_l((c), _ISpunct, (l))
++-#  define __isspace_l(c,l)	__isctype_l((c), _ISspace, (l))
++-#  define __isupper_l(c,l)	__isctype_l((c), _ISupper, (l))
++-#  define __isxdigit_l(c,l)	__isctype_l((c), _ISxdigit, (l))
++-#  define __isblank_l(c,l)	__isctype_l((c), _ISblank, (l))
++-
++ #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
++ 	&& defined __UCLIBC_SUSV4_LEGACY__
++ #   define __isascii_l(c,l)	((l), __isascii (c))
++ #   define __toascii_l(c,l)	((l), __toascii (c))
++ #  endif
 + 
-+@@ -5140,7 +5140,7 @@ int
-+ main ()
-+ {
-+ 
-+-#if !defined __GNUC__ || __GNUC__ < 5
-++#if !defined __GNUC__ || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8)
-+ #error insufficient compiler
-+ #endif
-+   ;
++-#  define isalnum_l(c,l)	__isalnum_l ((c), (l))
++-#  define isalpha_l(c,l)	__isalpha_l ((c), (l))
++-#  define iscntrl_l(c,l)	__iscntrl_l ((c), (l))
++-#  define isdigit_l(c,l)	__isdigit_l ((c), (l))
++-#  define islower_l(c,l)	__islower_l ((c), (l))
++-#  define isgraph_l(c,l)	__isgraph_l ((c), (l))
++-#  define isprint_l(c,l)	__isprint_l ((c), (l))
++-#  define ispunct_l(c,l)	__ispunct_l ((c), (l))
++-#  define isspace_l(c,l)	__isspace_l ((c), (l))
++-#  define isupper_l(c,l)	__isupper_l ((c), (l))
++-#  define isxdigit_l(c,l)	__isxdigit_l ((c), (l))
++-#  define isblank_l(c,l)	__isblank_l ((c), (l))
++-
++ #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
++ 	&& defined __UCLIBC_SUSV4_LEGACY__
++ #   define isascii_l(c,l)	__isascii_l ((c), (l))
 +-- 
-+2.18.0
++2.20.1
 +
 -- 
-2.18.0
+2.20.1
