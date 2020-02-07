@@ -1,106 +1,56 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri,  7 Feb 2020 11:51:44 -0800
-Subject: [Buildroot] [PATCH] package/uclibc: fix ctype.h is*_l definitions
-Message-ID: <20200207195144.4060-1-jcmvbkbc@gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Fri,  7 Feb 2020 21:56:37 +0100
+Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2020.01.0
+Message-ID: <20200207205637.246925-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ctype locale-specific macro definitions are broken because they result
-in dereference of pointer to structure of incomplete type.
-Drop these macros since they are optional and let applications use
-functions with the same names.
-
-Backported from:
-  https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=d1a3ca7ca56630fddde7311a0474eed4a21335a7
-Fixes:
-  http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- ...ctype.h-drop-is-_l-macro-definitions.patch | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-new file mode 100644
-index 000000000000..5557a9c1e730
---- /dev/null
-+++ b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-@@ -0,0 +1,72 @@
-+From d1a3ca7ca56630fddde7311a0474eed4a21335a7 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Mon, 3 Feb 2020 13:57:32 -0800
-+Subject: [PATCH] include/ctype.h: drop is*_l macro definitions
-+
-+ctype locale-specific macro definitions are broken because they result
-+in dereference of pointer to structure of incomplete type.
-+Drop these macros since they are optional and let applications use
-+functions with the same names.
-+
-+This change fixes parted-3.3 build with uClibc-ng:
-+  http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39/build-end.log
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ include/ctype.h | 33 ---------------------------------
-+ 1 file changed, 33 deletions(-)
-+
-+diff --git a/include/ctype.h b/include/ctype.h
-+index ecd5e730886a..e934cf3321a6 100644
-+--- a/include/ctype.h
-++++ b/include/ctype.h
-+@@ -350,46 +350,13 @@ libc_hidden_proto(tolower_l)
-+ /* Return the uppercase version of C.  */
-+ extern int toupper_l (int __c, __locale_t __l) __THROW;
-+ 
-+-# if __GNUC__ >= 2 && defined __OPTIMIZE__ && !defined __cplusplus
-+-#  define tolower_l(c, locale) __tobody(c, tolower_l, (locale)->__ctype_tolower, (c, locale))
-+-#  define toupper_l(c, locale) __tobody(c, toupper_l, (locale)->__ctype_toupper, (c, locale))
-+-# endif	/* Optimizing gcc */
-+-
-+-
-+-# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
-+ # ifndef __NO_CTYPE
-+-#  define __isalnum_l(c,l)	__isctype_l((c), _ISalnum, (l))
-+-#  define __isalpha_l(c,l)	__isctype_l((c), _ISalpha, (l))
-+-#  define __iscntrl_l(c,l)	__isctype_l((c), _IScntrl, (l))
-+-#  define __isdigit_l(c,l)	__isctype_l((c), _ISdigit, (l))
-+-#  define __islower_l(c,l)	__isctype_l((c), _ISlower, (l))
-+-#  define __isgraph_l(c,l)	__isctype_l((c), _ISgraph, (l))
-+-#  define __isprint_l(c,l)	__isctype_l((c), _ISprint, (l))
-+-#  define __ispunct_l(c,l)	__isctype_l((c), _ISpunct, (l))
-+-#  define __isspace_l(c,l)	__isctype_l((c), _ISspace, (l))
-+-#  define __isupper_l(c,l)	__isctype_l((c), _ISupper, (l))
-+-#  define __isxdigit_l(c,l)	__isctype_l((c), _ISxdigit, (l))
-+-#  define __isblank_l(c,l)	__isctype_l((c), _ISblank, (l))
-+-
-+ #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-+ 	&& defined __UCLIBC_SUSV4_LEGACY__
-+ #   define __isascii_l(c,l)	((l), __isascii (c))
-+ #   define __toascii_l(c,l)	((l), __toascii (c))
-+ #  endif
-+ 
-+-#  define isalnum_l(c,l)	__isalnum_l ((c), (l))
-+-#  define isalpha_l(c,l)	__isalpha_l ((c), (l))
-+-#  define iscntrl_l(c,l)	__iscntrl_l ((c), (l))
-+-#  define isdigit_l(c,l)	__isdigit_l ((c), (l))
-+-#  define islower_l(c,l)	__islower_l ((c), (l))
-+-#  define isgraph_l(c,l)	__isgraph_l ((c), (l))
-+-#  define isprint_l(c,l)	__isprint_l ((c), (l))
-+-#  define ispunct_l(c,l)	__ispunct_l ((c), (l))
-+-#  define isspace_l(c,l)	__isspace_l ((c), (l))
-+-#  define isupper_l(c,l)	__isupper_l ((c), (l))
-+-#  define isxdigit_l(c,l)	__isxdigit_l ((c), (l))
-+-#  define isblank_l(c,l)	__isblank_l ((c), (l))
-+-
-+ #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-+ 	&& defined __UCLIBC_SUSV4_LEGACY__
-+ #   define isascii_l(c,l)	__isascii_l ((c), (l))
-+-- 
-+2.20.1
-+
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index bdec2b8e50..687bac1823 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2019.12.0"
++	bool "2020.01.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2019.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2020.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 64fec919b8..5ade20e18b 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,8 +1,8 @@
+-# From https://www.barebox.org/download/barebox-2019.12.0.tar.bz2.md5
+-md5  2d25158ccffaa843c9e4943bbe820ce2  barebox-2019.12.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2020.01.0.tar.bz2.md5
++md5  05038e0b61b68ce40e038295b809c548  barebox-2020.01.0.tar.bz2
+ 
+ # Locally calculated
+-sha256  fb77afc5c1a9783b8e1a9bb6c617973f5c0ed4c6f8e079f96cb7e7e0818a7a90  barebox-2019.12.0.tar.bz2
++sha256  8968e6b0d72d79eba636917b067b925e3bbb54d38c6c2acfc4e1e49909b42f33  barebox-2020.01.0.tar.bz2
+ 
+ # License files, locally computed
+ sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
 -- 
-2.20.1
+2.25.0
