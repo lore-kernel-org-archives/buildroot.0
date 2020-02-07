@@ -1,125 +1,150 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  7 Feb 2020 15:50:21 +0100
-Subject: [Buildroot] [PATCH 06/10] package/opencv: drop gstreamer 0.10.x
- support
+Date: Fri,  7 Feb 2020 15:50:24 +0100
+Subject: [Buildroot] [PATCH 09/10] package/nvidia-tegra23-binaries: drop
+ gstreamer 0.10.x support
 In-Reply-To: <20200207145026.28384-1-peter@korsgaard.com>
 References: <20200207145026.28384-1-peter@korsgaard.com>
-Message-ID: <20200207145026.28384-7-peter@korsgaard.com>
+Message-ID: <20200207145026.28384-10-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the upcoming removal of gstreamer 0.10, the logic for building opencv
-with support for it must go as well.
-
-As there is now a single option for gstreamer (1.x) support, convert the
-gstreamer support choice to a normal option for simplicity.
+With the upcoming removal of gstreamer 0.10, the logic for installing
+binaries using gstreamer 0.10.x in nvidia-tegra23-binaries must go as well.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy         |  7 +++++++
- package/opencv/Config.in | 31 ++++---------------------------
- package/opencv/opencv.mk |  8 +-------
- 3 files changed, 12 insertions(+), 34 deletions(-)
+ Config.in.legacy                              | 14 +++++++++
+ .../nvidia-tegra23-binaries/Config.in         | 16 ----------
+ .../nvidia-tegra23-binaries.mk                | 31 -------------------
+ 3 files changed, 14 insertions(+), 47 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 4d81a2a09a..20cf568be9 100644
+index 96848f7f06..e9725d30b3 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+@@ -146,6 +146,20 @@ endif
  
  comment "Legacy options removed in 2020.02"
  
-+config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
-+	bool "opencv gstreamer 0.10.x support removed"
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
++	bool "nvidia-tegra23 binaries gstreamer 0.10.x support removed"
 +	select BR2_LEGACY
 +	help
 +	  Gstreamer 0.10.x is no longer available in Buildroot, so
-+	  neither is the support in opencv.
++	  neither is the support in nvidia-tegra23 binaries.
 +
- config BR2_PACKAGE_LIBPLAYER
- 	bool "libplayer package was removed"
- 	select BR2_LEGACY
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index c74dfd9572..836f5c96e8 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -195,44 +195,21 @@ config BR2_PACKAGE_OPENCV_WITH_FFMPEG
- 	help
- 	  Use ffmpeg from the target system.
- 
--choice
--	prompt "gstreamer support"
--	help
--	  OpenCV prefers gstreamer-1 over gstreamer-0.10.
--
--config BR2_PACKAGE_OPENCV_WITHOUT_GSTREAMER
--	bool "none"
--
--config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
--	bool "gstreamer-0.10"
--	depends on BR2_USE_MMU # gstreamer -> libglib2
--	depends on BR2_USE_WCHAR # gstreamer -> libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
--	depends on !BR2_STATIC_LIBS # gstreamer
--	select BR2_PACKAGE_GSTREAMER
--	select BR2_PACKAGE_GST_PLUGINS_BASE
--	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
--
--comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads, dynamic library"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS
--
- config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
--	bool "gstreamer-1.x"
-+	bool "gstreamer support"
- 	depends on BR2_USE_MMU # gstreamer1 -> libglib2
- 	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2
- 	select BR2_PACKAGE_GSTREAMER1
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS
++	bool "nvidia-tegra23 binaries sample apps removed"
++	select BR2_LEGACY
 +	help
-+	  Enable gstreamer support.
++	  Gstreamer 0.10.x is no longer available in Buildroot, so
++	  neither is the support in nvidia-tegra23 binaries.
++
+ config BR2_PACKAGE_FREERDP_GSTREAMER
+ 	bool "freerdp gstreamer 0.10.x support removed"
+ 	select BR2_LEGACY
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
+index 3494c5b9a8..0c09051b6a 100644
+--- a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
+@@ -23,20 +23,4 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
+ config BR2_PACKAGE_PROVIDES_LIBOPENMAX
+ 	default "nvidia-tegra23-binaries"
  
--comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
-+comment "gstreamer support needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 
--endchoice
+-config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
+-	bool "GStreamer 0.10.x plugins"
+-	depends on BR2_PACKAGE_GSTREAMER # Run-time only
+-	select BR2_PACKAGE_XLIB_LIBXV
+-	help
+-	  GStreamer 0.10.x plugins
 -
- config BR2_PACKAGE_OPENCV_WITH_GTK
- 	bool "gtk support"
- 	depends on BR2_PACKAGE_XORG7
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 4c15075fe0..939058e4ed 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -155,6 +155,7 @@ OPENCV_CONF_OPTS += \
- OPENCV_CONF_OPTS += \
- 	-DWITH_1394=OFF \
- 	-DWITH_EIGEN=OFF \
-+	-DWITH_GSTREAMER_0_10=OFF \
- 	-DWITH_IMAGEIO=OFF \
- 	-DWITH_OPENCL=OFF \
- 	-DWITH_OPENEXR=OFF \
-@@ -178,13 +179,6 @@ else
- OPENCV_CONF_OPTS += -DWITH_FFMPEG=OFF
+-config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS
+-	bool "NVIDIA multimedia sample apps"
+-	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
+-	help
+-	  nvgstplayer and nvgstcapture multimedia test applications.
+-
+-comment "GStreamer 0.10.x plugins need GStreamer 0.10"
+-	depends on !BR2_PACKAGE_GSTREAMER
+-
  endif
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+index 9b153b0250..ed3c5a78b4 100644
+--- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+@@ -10,10 +10,6 @@ NVIDIA_TEGRA23_BINARIES_SOURCE = $(NVIDIA_TEGRA23_BASE)_R$(NVIDIA_TEGRA23_BINARI
  
--ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER),y)
--OPENCV_CONF_OPTS += -DWITH_GSTREAMER_0_10=ON
--OPENCV_DEPENDENCIES += gstreamer gst-plugins-base
--else
--OPENCV_CONF_OPTS += -DWITH_GSTREAMER_0_10=OFF
+ NVIDIA_TEGRA23_BINARIES_LICENSE = License For Customer Use of NVIDIA Software
+ NVIDIA_TEGRA23_BINARIES_LICENSE_FILES = nv_tegra/LICENSE
+-ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
+-NVIDIA_TEGRA23_BINARIES_LICENSE += LGPL-2.1
+-NVIDIA_TEGRA23_BINARIES_LICENSE_FILES += nv_tegra/nv_sample_apps/LICENSE.gst-openmax
+-endif
+ 
+ NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
+ 
+@@ -24,10 +20,6 @@ NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
+ NVIDIA_TEGRA23_BINARIES_DEPENDENCIES = mesa3d-headers \
+ 	xlib_libX11 xlib_libXext
+ 
+-ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
+-NVIDIA_TEGRA23_BINARIES_DEPENDENCIES += xlib_libXv
 -endif
 -
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),y)
- OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON
- OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
+ NVIDIA_TEGRA23_BINARIES_PROVIDES = libegl libgles libopenmax
+ 
+ NVIDIA_TEGRA23_BINARIES_DRV = \
+@@ -38,10 +30,6 @@ define NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
+ 	$(call suitable-extractor,$(@D)/nv_tegra/nvidia_drivers.tbz2) \
+ 		$(@D)/nv_tegra/nvidia_drivers.tbz2 | \
+ 	$(TAR) --strip-components=0 -C $(@D)/nv_tegra/nvidia_drivers/ $(TAR_OPTIONS) -
+-	$(INSTALL) -d $(@D)/nv_tegra/nv_sample_apps/nvgstapps
+-	$(call suitable-extractor,$(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2) \
+-		$(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2 | \
+-	$(TAR) --strip-components=0 -C $(@D)/nv_tegra/nv_sample_apps/nvgstapps/ $(TAR_OPTIONS) -
+ endef
+ NVIDIA_TEGRA23_BINARIES_POST_EXTRACT_HOOKS += NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
+ 
+@@ -55,28 +43,11 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS
+ 	)
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
+-define NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS
+-	mkdir -p $(1)/usr/lib/gstreamer-0.10/
+-	cp -dpfr $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/lib/gstreamer-0.10/*.so \
+-		$(1)/usr/lib/gstreamer-0.10/
+-endef
+-endif
+-
+-ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS),y)
+-define NVIDIA_TEGRA23_BINARIES_INSTALL_APPS
+-	mkdir -p $(TARGET_DIR)/usr/bin/
+-	cp -dpfr $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/bin/* \
+-		$(TARGET_DIR)/usr/bin/
+-endef
+-endif
+-
+ define NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING_CMDS
+ 	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(STAGING_DIR))
+ 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig/
+ 	cp -dpfr package/nvidia-tegra23/nvidia-tegra23-binaries/*.pc \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/
+-	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(STAGING_DIR))
+ endef
+ 
+ define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
+@@ -88,8 +59,6 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/etc/nv_tegra_release
+ 	$(INSTALL) -D -m 0644 $(@D)/$(NVIDIA_TEGRA23_BINARIES_DRV) \
+ 		$(TARGET_DIR)/usr/lib/xorg/modules/drivers/tegra_drv.so
+-	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(TARGET_DIR))
+-	$(NVIDIA_TEGRA23_BINARIES_INSTALL_APPS)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.20.1
