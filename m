@@ -1,40 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 07 Feb 2020 15:55:09 +0100
-Subject: [Buildroot] [PATCH 2/2] package/wireguard-tools: bump to
- version 1.0-20200206
-In-Reply-To: <20200206222107.31981-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 6 Feb 2020 23:21:06 +0100")
-References: <20200206222107.31981-1-peter@korsgaard.com>
- <20200206222107.31981-2-peter@korsgaard.com>
-Message-ID: <87o8uawipe.fsf@dell.be.48ers.dk>
+Date: Fri, 7 Feb 2020 15:54:02 +0100
+Subject: [Buildroot] [git commit] package/libftdi1: fix python support
+Message-ID: <20200207144412.D94648D4D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=df734533cfeab86951436b6d0e19e8294e271b35
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop libmnl dependency. From the announcement:
- >  * netlink: remove libmnl requirement
+Add an upstreamed patch that reorders find_package() commands.
+This way Python interpreter will be detected first and based on
+it the Python libraries can be found.
 
- > We no longer require libmnl.  It turns out that inlining the small subset of
- > libmnl that we actually use results in a smaller binary than the overhead of
- > linking to the external library.
+Fixes the following CMake error:
 
- > pkg-config is still used for the systemd support though, so move the
- > host-pkgconf dependency there.
+Could NOT find PythonLibs (missing: PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS)
 
- > For more details, see the announcement:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0004-CMake-reorder-Python-detection.patch      | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
- > https://lists.zx2c4.com/pipermail/wireguard/2020-February/004963.html
-
- > While we are at it, adjust the white space in the .hash file to match the
- > new agreements.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libftdi1/0004-CMake-reorder-Python-detection.patch b/package/libftdi1/0004-CMake-reorder-Python-detection.patch
+new file mode 100644
+index 0000000000..c6c2b28c46
+--- /dev/null
++++ b/package/libftdi1/0004-CMake-reorder-Python-detection.patch
+@@ -0,0 +1,32 @@
++From 640c2b3c0c72d5194d422ff7dda086c4533fba00 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Mon, 13 Jan 2020 14:08:44 +0100
++Subject: [PATCH] CMake: reorder Python detection
++
++PythonInterp should be detected before PythonLibs otherwise
++CMake exits with the following message:
++
++Could NOT find PythonLibs (missing: PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS)
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ python/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
++index 90811ca..368bb7e 100644
++--- a/python/CMakeLists.txt
+++++ b/python/CMakeLists.txt
++@@ -12,8 +12,8 @@ if ( PYTHON_BINDINGS )
++       set ( SWIG_FOUND TRUE )
++     endif ()
++   endif ()
++-  find_package ( PythonLibs )
++   find_package ( PythonInterp )
+++  find_package ( PythonLibs )
++ endif ()
++ 
++ if ( SWIG_FOUND AND PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND )
++-- 
++2.17.0
++
