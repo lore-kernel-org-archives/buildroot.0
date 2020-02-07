@@ -1,398 +1,241 @@
-From: Changming Huang <jerry.huang@nxp.com>
-Date: Fri,  7 Feb 2020 16:38:57 +0800
-Subject: [Buildroot] [PATCH v5 9/9] board/nxp/ls1028ardb: new board
-In-Reply-To: <20200207083857.28058-1-jerry.huang@nxp.com>
-References: <20200207083857.28058-1-jerry.huang@nxp.com>
-Message-ID: <20200207083857.28058-9-jerry.huang@nxp.com>
+From: Michael Walle <michael@walle.cc>
+Date: Fri, 07 Feb 2020 09:52:10 +0100
+Subject: [Buildroot] [EXT] Re: [PATCH v4 6/9]
+ package/qoriq-cadence-dp-firmware: new package
+In-Reply-To: <VI1PR04MB5136AEACA1DAF944960828FCFE1C0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+References: <20200205105227.13698-1-jerry.huang@nxp.com>
+ <20200205105227.13698-6-jerry.huang@nxp.com>
+ <f806a25e2111a02a4c3048d2f91b9d34@walle.cc>
+ <VI1PR04MB5136AEACA1DAF944960828FCFE1C0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+Message-ID: <7991fe9e26bbc0413784f10e3709ab78@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is to support NXP LS1028ARDB board in Buildroot.
-The board is setup to track the Linux at 4.19 via NXP LSDK-19.09.
+Am 2020-02-07 02:26, schrieb Jerry Huang:
+> Best Regards
+> Jerry Huang
+> 
+>> -----Original Message-----
+>> From: Michael Walle <michael@walle.cc>
+>> Sent: Wednesday, February 5, 2020 9:48 PM
+>> To: Jerry Huang <jerry.huang@nxp.com>
+>> Cc: buildroot at busybox.net; thomas.petazzoni at bootlin.com;
+>> matthew.weber at collins.com; geomatsi at gmail.com; olteanv at gmail.com
+>> Subject: [EXT] Re: [PATCH v4 6/9] package/qoriq-cadence-dp-firmware: 
+>> new
+>> package
+>> 
+>> Caution: EXT Email
+>> 
+>> Am 2020-02-05 11:52, schrieb Changming Huang:
+>> > From: Jerry Huang <jerry.huang@nxp.com>
+>> >
+>> > This package provides the firmware for LS1028ARDB DP (display port).
+>> >
+>> > Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
+>> > ---
+>> > changes since v3:
+>> > no changes.
+>> >
+>> > changes since v2:
+>> > 1. change the package name to qoriq-cadence-dp-firmware.
+>> > 2. add the hash of COPYING.
+>> > 3. modify makefile with new option.
+>> > 4. update DEVELOPERS with alphabetic ordering
+>> >
+>> > changes since v1:
+>> > 1. rename the package to fsl-qoriq-cadence-dp-fw.
+>> > 2. update DEVELOPERS.
+>> > 3. add the hash of package.
+>> > 4. modify the context fo config file to package name.
+>> > 5. re-write the makefile according to rule of buildroot.
+>> > 6. add the license message in makefile.
+>> > ---
+>> >  DEVELOPERS                                    |  3 +++
+>> >  package/nxp/Config.in                         |  2 ++
+>> >  package/nxp/helper.mk                         |  2 ++
+>> >  .../nxp/qoriq-cadence-dp-firmware/Config.in   |  4 ++++
+>> >  .../qoriq-cadence-dp-firmware.hash            |  3 +++
+>> >  .../qoriq-cadence-dp-firmware.mk              | 23
+>> +++++++++++++++++++
+>> >  6 files changed, 37 insertions(+)
+>> >  create mode 100644 package/nxp/qoriq-cadence-dp-firmware/Config.in
+>> >  create mode 100644
+>> > package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
+>> >  create mode 100644
+>> > package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+>> >
+>> > diff --git a/DEVELOPERS b/DEVELOPERS
+>> > index 9303841c47..0e131b0668 100644
+>> > --- a/DEVELOPERS
+>> > +++ b/DEVELOPERS
+>> > @@ -513,6 +513,9 @@ F:        configs/nanopi_m1_plus_defconfig
+>> >  F:   configs/olimex_a13_olinuxino_defconfig
+>> >  F:   configs/orangepi_plus_defconfig
+>> >
+>> > +N:   Changming Huang <jerry.huang@nxp.com>
+>> > +F:   package/nxp/qoriq-cadence-dp-firmware/
+>> > +
+>> >  N:   Chris Packham <judge.packham@gmail.com>
+>> >  F:   package/gstreamer1/gst1-shark/
+>> >  F:   package/micropython/
+>> > diff --git a/package/nxp/Config.in b/package/nxp/Config.in index
+>> > 575542c7ab..855d62700b 100644
+>> > --- a/package/nxp/Config.in
+>> > +++ b/package/nxp/Config.in
+>> > @@ -1,4 +1,6 @@
+>> >  menu "NXP QorIQ libraries"
+>> >       depends on BR2_aarch64 || BR2_arm || BR2_powerpc64 ||
+>> > BR2_powerpc
+>> >
+>> > +source "package/nxp/qoriq-cadence-dp-firmware/Config.in"
+>> > +
+>> >  endmenu
+>> > diff --git a/package/nxp/helper.mk b/package/nxp/helper.mk index
+>> > 79e4236249..2eee2227af 100644
+>> > --- a/package/nxp/helper.mk
+>> > +++ b/package/nxp/helper.mk
+>> > @@ -4,6 +4,8 @@
+>> >  #
+>> >
+>> >
+>> ################################################################
+>> ######
+>> > ##########
+>> >
+>> > +NXP_QORIQ_SITE =
+>> > +https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.
+>> >
+>> +nxp.com%2Flgfiles%2Fsdk%2Flsdk1909&amp;data=02%7C01%7Cjerry.huang%
+>> 40n
+>> >
+>> +xp.com%7Ce570360260aa4b23ad6708d7aa42085b%7C686ea1d3bc2b4c6fa92
+>> cd99c5
+>> >
+>> +c301635%7C0%7C0%7C637165072894599859&amp;sdata=y0oeGsbp%2FvxW
+>> GdocRx4W
+>> > +Z1sPhepE3gFFfIdSTev%2F%2BU4%3D&amp;reserved=0
+>> > +
+>> 
+>> I'm not sure if that NXP_QORIQ_SITE should go in here. But the specifc 
+>> version
+>> "lsdk1909" is for sure not correct.
+> Will remove NXP_QORIQ_SITE from next version.
+> 
+>> >  # Helper for self-extracting binaries distributed by NXP.
+>> >  #
+>> >  # The --force option makes sure it doesn't fail if the source diff
+>> > --git a/package/nxp/qoriq-cadence-dp-firmware/Config.in
+>> > b/package/nxp/qoriq-cadence-dp-firmware/Config.in
+>> > new file mode 100644
+>> > index 0000000000..3f494bd3a3
+>> > --- /dev/null
+>> > +++ b/package/nxp/qoriq-cadence-dp-firmware/Config.in
+>> > @@ -0,0 +1,4 @@
+>> > +config BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE
+>> > +     bool "qoriq-cadence-dp-firmware"
+>> > +     help
+>> > +       NXP QorIQ cadence DP firmware, a resident EL3 firmware.
+>> > diff --git
+>> > a/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
+>> > b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
+>> > new file mode 100644
+>> > index 0000000000..89aaf1d71b
+>> > --- /dev/null
+>> > +++
+>> > b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
+>> > @@ -0,0 +1,3 @@
+>> > +# Locally calculated
+>> > +sha256
+>> > 5871c5717be32f14a59624d5699d405e8ce9ae2e9c9ef86fd16e13d264a40e58
+>> > firmware-cadence-lsdk1909.bin
+>> > +sha256
+>> > d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561
+>> > COPYING
+>> > diff --git
+>> > a/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+>> > b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+>> > new file mode 100644
+>> > index 0000000000..239f4b9d75
+>> > --- /dev/null
+>> > +++
+>> > b/package/nxp/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+>> > @@ -0,0 +1,23 @@
+>> >
+>> +###############################################################
+>> ######
+>> > +###########
+>> > +#
+>> > +# qoriq-cadence-dp-firmware
+>> > +#
+>> >
+>> +###############################################################
+>> ######
+>> > +###########
+>> > +
+>> > +QORIQ_CADENCE_DP_FIRMWARE_VERSION = lsdk1909
+>> > +QORIQ_CADENCE_DP_FIRMWARE_SITE = $(NXP_QORIQ_SITE)
+>> 
+>> why don't you just use
+>> QORIQ_CADENCE_DP_FIRMWARE_SITE =
+>> https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.nxp.
+>> com%2Flgfiles%2Fsdk%2F%24(QORIQ_CADENCE_DP_FIRMWARE_VERSION&a
+>> mp;data=02%7C01%7Cjerry.huang%40nxp.com%7Ce570360260aa4b23ad6708
+>> d7aa42085b%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6371650
+>> 72894609853&amp;sdata=4nh9qImzs1JjE1CPLEKU3Hx%2BP7lkLudTNfd41TZ7K
+>> %2Fc%3D&amp;reserved=0)
+> will use the url directly next version.
+> 
+>> > +QORIQ_CADENCE_DP_FIRMWARE_SOURCE =
+>> > firmware-cadence-$(QORIQ_CADENCE_DP_FIRMWARE_VERSION).bin
+>> > +QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP-Binary-EULA
+>> > +QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING
+>> > +QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
+>> > +QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
+>> > +
+>> > +define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
+>> > +     $(call
+>> >
+>> NXP_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORI
+>> Q_CADENCE
+>> > _DP_FIRMWARE_SOURCE))
+>> > +endef
+>> > +
+>> > +define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
+>> > +     $(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin
+>> > $(BINARIES_DIR)/ls1028a-dp-fw.bin
+>> > +endef
+>> 
+>> Installing the firmware into the target filesystem is missing. As 
+>> pointed out by
+>> me - and also Vladimir - the DisplayPort driver should rather load the 
+>> firmare by
+>> its on and should not depend on the bootloader to load it.
+> We don't install this firmware into target filesystem, because we need
+> to load it to hardware before mounting target filesystem.
 
-The target will build uboot and RCW binary with arm-trusted-firmware support.
+You didn't get my point. The correct way to load the firmware is by 
+linux
+requesting it from the filesystem, not by loading it in the bootloader. 
+So
+at least this package should go into the right direction, independent 
+from
+what you're doing in your own kernel. Also what is the upstream status 
+of
+the graphics patches for the LS1028A. I couldn't find any patches 
+regarding
+ls1028a and its mali core on the linux mailing list. If there are no 
+patches
+for now, please wait until it will be discussed on the kernel mailing 
+list
+how the firmware loading will be handled. TBH, I don't like to see some
+proprietary handling in buildroot.
 
-board/nxp/ls1028ardb/: scripts related with ls1028ardb
-nxp_ls1028ardb-64b_defconfig: defconfig boot from SD card
+-michael
 
-Signed-off-by: Changming Huang <jerry.huang@nxp.com>
----
-changes since v4:
-1. change the uboot version to LSDK-19.09-update-311219.
-2. change the linux version to LSDK-19.09-update-311219-V4.19.
-3. change the NXP atf version to LSDK-19.09-update-311219.
-
-changes since v3:
-1. merge previous version patch 8 and patch 9 to one.
-2. split RCW options BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE to another patch.
-3. remove scritps about emmc and xspi.
-4. remove xspi and emmc configuration.
-5. add new option BR2_ROOTFS_OVERLAY for 10-network.rules.
-6. modify u-boot environment scripts, remove all setting not used.
-7. remove the scripts which is not used by default configuration.
-
-changes since v2:
-1. Modify the qoriq-cadence-dp-firmware option in defconfig.
-2. rename defconfig to nxp_ls1028*.
-3. remove extra packages except busybox in defconfig.
-4. modify the description of file genimage.xspi.cfg.template.
-
-changes since v1:
-1. add new option in configs/freescale_ls1028ardb-xxxx_defconfig.
----
- board/nxp/common/ls/busybox.config            |  9 ++
- board/nxp/ls1028ardb/genimage.sd.cfg.template | 52 ++++++++++++
- board/nxp/ls1028ardb/post-image.sh            | 57 +++++++++++++
- board/nxp/ls1028ardb/readme.txt               | 61 +++++++++++++
- .../etc/udev/rules.d/10-network.rules         | 16 ++++
- .../nxp/ls1028ardb/u-boot-environment-sd.txt  | 13 +++
- configs/nxp_ls1028ardb-64b_defconfig          | 85 +++++++++++++++++++
- 7 files changed, 293 insertions(+)
- create mode 100644 board/nxp/common/ls/busybox.config
- create mode 100644 board/nxp/ls1028ardb/genimage.sd.cfg.template
- create mode 100755 board/nxp/ls1028ardb/post-image.sh
- create mode 100644 board/nxp/ls1028ardb/readme.txt
- create mode 100644 board/nxp/ls1028ardb/rootfs_overlay/etc/udev/rules.d/10-network.rules
- create mode 100644 board/nxp/ls1028ardb/u-boot-environment-sd.txt
- create mode 100644 configs/nxp_ls1028ardb-64b_defconfig
-
-diff --git a/board/nxp/common/ls/busybox.config b/board/nxp/common/ls/busybox.config
-new file mode 100644
-index 0000000000..7074c65aa6
---- /dev/null
-+++ b/board/nxp/common/ls/busybox.config
-@@ -0,0 +1,9 @@
-+#
-+# Additional Busybox Settings
-+#
-+CONFIG_TASKSET=y
-+CONFIG_FEATURE_TASKSET_FANCY=y
-+CONFIG_FEATURE_DF_FANCY=y
-+CONFIG_FEATURE_SEAMLESS_GZ=y
-+CONFIG_FEATURE_SEAMLESS_BZ2=y
-+CONFIG_FEATURE_SEAMLESS_XZ=y
-diff --git a/board/nxp/ls1028ardb/genimage.sd.cfg.template b/board/nxp/ls1028ardb/genimage.sd.cfg.template
-new file mode 100644
-index 0000000000..ab50e103c1
---- /dev/null
-+++ b/board/nxp/ls1028ardb/genimage.sd.cfg.template
-@@ -0,0 +1,52 @@
-+# Minimal SD card image for the NXP boards Template
-+#
-+# SD card image (sdcard.img) format:
-+# * the SD card must have 4 kB free space at the beginning,
-+# * U-Boot is dumped as is,
-+# * a FAT partition at offset 64 MB is containing Image and DTB files
-+# * a single root filesystem partition is required (ext2, ext3 or ext4)
-+#
-+
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      %FILES%
-+    }
-+  }
-+  size = 256M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition rcw {
-+    in-partition-table = "no"
-+    image = "bl2_sd.pbl"
-+    offset = 4096
-+  }
-+
-+  partition u-boot {
-+    in-partition-table = "no"
-+    image = "fip.bin"
-+    offset = 1M
-+  }
-+
-+  partition u-boot-environment {
-+    in-partition-table = "no"
-+    image = "uboot-env.bin"
-+    offset = 5M
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+    offset = 64M
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/nxp/ls1028ardb/post-image.sh b/board/nxp/ls1028ardb/post-image.sh
-new file mode 100755
-index 0000000000..c655074386
---- /dev/null
-+++ b/board/nxp/ls1028ardb/post-image.sh
-@@ -0,0 +1,57 @@
-+#!/usr/bin/env bash
-+# args from BR2_ROOTFS_POST_SCRIPT_ARGS
-+# $2 linux building directory
-+# $3 buildroot top directory
-+# $4 u-boot building directory
-+
-+#
-+# dtb_list extracts the list of DTB files from BR2_LINUX_KERNEL_INTREE_DTS_NAME
-+# in ${BR_CONFIG}, then prints the corresponding list of file names for the
-+# genimage configuration file
-+#
-+dtb_file()
-+{
-+	local DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([\/a-z0-9 \-]*\)"$/\1/p' ${BR2_CONFIG})"
-+
-+	for dt in $DTB_LIST; do
-+		echo -n "\"`basename $dt`.dtb\", "
-+	done
-+}
-+
-+#
-+# genimage.sd.cfg.template: Boot from SD
-+# genimage.emmc.cfg.template: Boot from eMMC
-+#
-+genimage_type()
-+{
-+	if grep -Eq "^BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE=\"emmc\"$" ${BR2_CONFIG}; then
-+		echo "genimage.emmc.cfg.template"
-+	elif grep -Eq "^BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE=\"sd\"$" ${BR2_CONFIG}; then
-+		echo "genimage.sd.cfg.template"
-+	fi
-+}
-+
-+main()
-+{
-+	local FILES="$(dtb_file) "ls1028a-dp-fw.bin", "Image""
-+	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
-+	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+	sed -e "s/%FILES%/${FILES}/" \
-+		board/nxp/ls1028ardb/$(genimage_type) > ${GENIMAGE_CFG}
-+
-+	rm -rf "${GENIMAGE_TMP}"
-+
-+	genimage \
-+		--rootpath "${TARGET_DIR}" \
-+		--tmppath "${GENIMAGE_TMP}" \
-+		--inputpath "${BINARIES_DIR}" \
-+		--outputpath "${BINARIES_DIR}" \
-+		--config "${GENIMAGE_CFG}"
-+
-+	rm -f ${GENIMAGE_CFG}
-+
-+	exit $?
-+}
-+
-+main $@
-diff --git a/board/nxp/ls1028ardb/readme.txt b/board/nxp/ls1028ardb/readme.txt
-new file mode 100644
-index 0000000000..713babd7c3
---- /dev/null
-+++ b/board/nxp/ls1028ardb/readme.txt
-@@ -0,0 +1,61 @@
-+LS1028ARDB board is one platform based on LS1028A silicon for industry,
-+which is supported in LSDK-19.09.
-+
-+One simple image file is created by buildroot, which includes RCW, uboot,
-+Linux kernel, rootfs and other necessary binaries for this board.
-+
-+To program the image file created by buildroot into the flash.
-+There are two way to do it:
-+
-+1. Program the image file on PC machine for SD card boot
-+  $ sudo dd if=./output/images/sdcard.img of=/dev/sdx
-+  # or in some other host machine:
-+  $ sudo dd if=./output/images/sdcard.img of=/dev/mmcblkx
-+
-+  # find the right SD Card device name in your host machine and replace the
-+  # ?sdx? or ?mmcblkx?.
-+
-+2. Program the image file on board for eMMC and XSPI boot
-+Make sure your board has ipaddr, netmask, and serverip defined to reach your
-+tftp server.
-+
-+  2.1 Program eMMC boot image file to eMMC chip
-+    # Make sure output/images/sdcard.img is stored to tftp server
-+    # Below command is one example
-+    => tftpboot 0xa0000000 sdcard.img
-+    => mmc dev 1
-+    => mmc erase 0 0x200000
-+    => mmc write 0xa0000000 0 0x200000
-+
-+    # The size "0x200000" will be changed when the image size is different.
-+
-+  2.2 Program XSPI boot image file to flash
-+    # Make sure output/images/xspi.cpio.img is stored to tftp server
-+    # Below command is one example
-+    => tftpboot 0xa0000000 xspi.cpio.img
-+    => sf probe
-+    => sf erase 0 $filesize
-+    => sf write 0xa0000000 0 $filesize
-+
-+3. Booting your new system
-+Before booting the new system, we should make sure the switch setting is right.
-+below switch setting is for each booting mode:
-+    +-----------+---------------------+
-+    |Boot mode  | Switch setting      |
-+    +---------------------------------+
-+    |SD boot    | SW2[1~4] = 0b?1000  |
-+    +---------------------------------+
-+    |eMMC boot  | SW2[1~4] = 0b?1001  |
-+    +---------------------------------+
-+    |XSPI boot  | SW2[1~4] = 0b?1111  |
-+    +-----------+---------------------+
-+
-+or we use following command to reset the board in uboot prompt:
-+  # boot from SD card
-+  => qixis_reset sd
-+
-+  # boot from eMMC chip
-+  => qixis_reset emmc
-+
-+  # boot from XSPI
-+  => qixis_reset qspi
-diff --git a/board/nxp/ls1028ardb/rootfs_overlay/etc/udev/rules.d/10-network.rules b/board/nxp/ls1028ardb/rootfs_overlay/etc/udev/rules.d/10-network.rules
-new file mode 100644
-index 0000000000..19f41634bd
---- /dev/null
-+++ b/board/nxp/ls1028ardb/rootfs_overlay/etc/udev/rules.d/10-network.rules
-@@ -0,0 +1,16 @@
-+# ENETC rules
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.0", DRIVERS=="fsl_enetc", NAME:="eno0"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.1", DRIVERS=="fsl_enetc", NAME:="eno1"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.2", DRIVERS=="fsl_enetc", NAME:="eno2"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.6", DRIVERS=="fsl_enetc", NAME:="eno3"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.0", DRIVERS=="fsl_enetc_vf", NAME:="eno0vf0"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.1", DRIVERS=="fsl_enetc_vf", NAME:="eno0vf1"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.2", DRIVERS=="fsl_enetc_vf", NAME:="eno1vf0"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.3", DRIVERS=="fsl_enetc_vf", NAME:="eno1vf1"
-+# LS1028 switch rules
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p0", NAME="swp0"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p1", NAME="swp1"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p2", NAME="swp2"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p3", NAME="swp3"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p4", NAME="swp4"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p5", NAME="swp5"
-diff --git a/board/nxp/ls1028ardb/u-boot-environment-sd.txt b/board/nxp/ls1028ardb/u-boot-environment-sd.txt
-new file mode 100644
-index 0000000000..f91e6b585f
---- /dev/null
-+++ b/board/nxp/ls1028ardb/u-boot-environment-sd.txt
-@@ -0,0 +1,13 @@
-+baudrate=115200
-+bootcmd=setenv bootargs root=/dev/mmcblk0p2 rootwait rw earlycon=uart8250,0x21c0500 console=ttyS0,115200 cma=256M video=1920x1080-32 at 60;mmcinfo;fatload mmc 0:1 ${dp_load} ${dp_file}; hdp load ${dp_load} ${dp_offset};fatload mmc 0:1 ${loadaddr} ${bootfile};fatload mmc 0:1 ${fdtaddr} ${fdtfile};booti ${loadaddr} - ${fdtaddr}
-+bootdelay=3
-+bootfile=Image
-+fdtfile=fsl-ls1028a-rdb.dtb
-+loadaddr=0xa0000000
-+fdtaddr=0xb0000000
-+dp_file=ls1028a-dp-fw.bin
-+dp_load=0x90000000
-+dp_offset=0x2000
-+stderr=serial
-+stdin=serial
-+stdout=serial
-diff --git a/configs/nxp_ls1028ardb-64b_defconfig b/configs/nxp_ls1028ardb-64b_defconfig
-new file mode 100644
-index 0000000000..cb0131a35c
---- /dev/null
-+++ b/configs/nxp_ls1028ardb-64b_defconfig
-@@ -0,0 +1,85 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_cortex_a72=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Hostname and issue
-+BR2_TARGET_GENERIC_HOSTNAME="LS1028ARDB"
-+
-+# toolchain
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_TOOLCHAIN_BUILDROOT_LIBC="glibc"
-+
-+# Linux headers same as kernel
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="ls1028ardb_tfa"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/u-boot"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="LSDK-19.09-update-311219"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_FORMAT_BIN=n
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-dtb.bin"
-+BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE=y
-+BR2_TARGET_UBOOT_ENVIMAGE=y
-+BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/nxp/ls1028ardb/u-boot-environment-sd.txt"
-+BR2_TARGET_UBOOT_ENVIMAGE_SIZE="0x2000"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/linux"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="LSDK-19.09-update-311219-V4.19"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-rdb"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
-+
-+# Serial port config
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+
-+# required tools to create the microSD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nxp/ls1028ardb/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(LINUX_DIR) $(TOPDIR) $(UBOOT_DIR)"
-+
-+# busybox setting
-+BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/nxp/common/ls/busybox.config"
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+
-+# packages for rcw
-+BR2_PACKAGE_HOST_QORIQ_RCW=y
-+BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE="sd"
-+BR2_PACKAGE_HOST_QORIQ_RCW_BIN="ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.bin"
-+
-+#Display port firmware
-+BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE=y
-+
-+#eudev support
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_OVERLAY="board/nxp/ls1028ardb/rootfs_overlay"
-+
-+# Arm-Trusted-Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE="u-boot-dtb.bin"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/atf"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="LSDK-19.09-update-311219"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1028ardb"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="pbl"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_DEPENDENCIES="host-qoriq-rcw"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BOOT_MODE=sd RCW=$(BINARIES_DIR)/rcw_1300_sdboot.bin"
--- 
-2.17.1
+> 
+>> > +
+>> > +$(eval $(generic-package))
