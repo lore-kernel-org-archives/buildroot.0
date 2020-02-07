@@ -1,106 +1,141 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 7 Feb 2020 12:50:50 +0100
-Subject: [Buildroot] [PATCH 4/4] package/python-boto3: new package.
-In-Reply-To: <20200207114350.31365-5-raphael.melotte@essensium.com>
-References: <20200207114350.31365-1-raphael.melotte@essensium.com>
- <20200207114350.31365-5-raphael.melotte@essensium.com>
-Message-ID: <CAGm1_kuzcwzgkkLZiY0Z0AaNHFWgpxDhYh5fVYvqSzsiQF7g3w@mail.gmail.com>
+Date: Fri, 7 Feb 2020 13:26:18 +0100
+Subject: [Buildroot] [PATCH] package/libftdi1: fix python support
+In-Reply-To: <875zgiy8dq.fsf@dell.be.48ers.dk>
+References: <20200206095421.12987-1-yegorslists@googlemail.com>
+ <87imkiyd32.fsf@dell.be.48ers.dk>
+ <CAGm1_kvMR9y5FtiAUNcMDT8V4diTFNk=3KSD7twQzkXw0jm-tQ@mail.gmail.com>
+ <875zgiy8dq.fsf@dell.be.48ers.dk>
+Message-ID: <CAGm1_ksGCvr8bmLMjrrNaGQvcaGS=2GuC7yqQcvTBE93_1Z-Jw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 7, 2020 at 12:44 PM Rapha?l M?lotte
-<raphael.melotte@essensium.com> wrote:
+On Fri, Feb 7, 2020 at 11:55 AM Peter Korsgaard <peter@korsgaard.com> wrote:
 >
-> The AWS SDK for Python.
+> >>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 >
-> Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
+>  > Hi Peter,
+>  > On Fri, Feb 7, 2020 at 10:13 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>  >>
+>  >> >>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>  >>
+>  >> > From: Yegor Yefremov <yegorslists@googlemail.com>
+>  >> > Add an upstreamed patch that reorders find_package() commands.
+>  >> > This way Python interpreter will be detected first and based on
+>  >> > it the Python libraries can be found.
+>  >>
+>  >> > Fixes the following CMake error:
+>  >>
+>  >> > Could NOT find PythonLibs (missing: PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS)
+>  >>
+>  >> We don't seem to have any autobuilder failures in libftdi1 for almost 1
+>  >> year. Any idea why this doesn't trigger on the autobuilders?
+>
+>  > In the version 1.4 find_package() calls were made without the REQUIRED
+>  > keyword. Hence, this error wasn't detected by the autobuilders. This
+>  > is now fixed upstream and I hope a new release will appear soon. But
+>  > meanwhile let's apply this fix.
+>
+> Ahh, so you mean that the python module would just not be built?
+>
+> That is not what I see here using a defconfig with libftdi1 and python3
+> on a machine with python 2.7 and python 3.7:
+>
+> -- Could NOT find Boost
+> -- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE)
+> -- Not generating API documentation
+> -- Detected git snapshot version: 2019.11-1302-ge5e84823bb
+> -- Found SWIG: /home/peko/source/buildroot/output-ftdi/host/bin/swig (found version "4.0.1")
+> -- Found PythonLibs: /home/peko/source/buildroot/output-ftdi/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libpython3.8.so (found version "3.8.1")
+> -- Found PythonInterp: /home/peko/source/buildroot/output-ftdi/host/bin/python3.8 (found version "3.8.1")
+> CMake Deprecation Warning at /usr/share/cmake-3.13/Modules/UseSWIG.cmake:524 (message):
+>   SWIG_ADD_MODULE is deprecated.  Use SWIG_ADD_LIBRARY instead.
+> Call Stack (most recent call first):
+>   python/CMakeLists.txt:28 (swig_add_module)
+>
+>
+> CMake Warning (dev) at /usr/share/cmake-3.13/Modules/UseSWIG.cmake:564 (message):
+>   Policy CMP0078 is not set.  Run "cmake --help-policy CMP0078" for policy
+>   details.  Use the cmake_policy command to set the policy and suppress this
+>   warning.
+> Call Stack (most recent call first):
+>   /usr/share/cmake-3.13/Modules/UseSWIG.cmake:525 (swig_add_library)
+>   python/CMakeLists.txt:28 (swig_add_module)
+> This warning is for project developers.  Use -Wno-dev to suppress it.
+>
+> -- Building python bindings via swig. Will be installed under /usr/lib/python3.8/site-packages
+>
+>
+> So it correctly finds our host-python3 and does not get confused about
+> the python 2.7 / 3.7 on my build machine.
+>
+> In what setup is it failing for you without this patch?
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+This is what I get when invoking "make libftdi1"
 
-> ---
->  DEVELOPERS                             |  1 +
->  package/Config.in                      |  1 +
->  package/python-boto3/Config.in         |  9 +++++++++
->  package/python-boto3/python-boto3.hash |  5 +++++
->  package/python-boto3/python-boto3.mk   | 14 ++++++++++++++
->  5 files changed, 30 insertions(+)
->  create mode 100644 package/python-boto3/Config.in
->  create mode 100644 package/python-boto3/python-boto3.hash
->  create mode 100644 package/python-boto3/python-boto3.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 4d636ebb47..2b9837d17a 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2077,6 +2077,7 @@ F:        package/uhttpd/
->  F:     package/ustream-ssl/
->
->  N:  Rapha?l M?lotte <raphael.melotte@essensium.com>
-> +F:  package/python-boto3/
->  F:  package/python-botocore/
->  F:  package/python-jmespath/
->  F:  package/python-s3transfer/
-> diff --git a/package/Config.in b/package/Config.in
-> index 9d5d5dba6d..54101c3803 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -877,6 +877,7 @@ menu "External python modules"
->         source "package/python-beautifulsoup4/Config.in"
->         source "package/python-bitstring/Config.in"
->         source "package/python-bluezero/Config.in"
-> +       source "package/python-boto3/Config.in"
->         source "package/python-botocore/Config.in"
->         source "package/python-bottle/Config.in"
->         source "package/python-brotli/Config.in"
-> diff --git a/package/python-boto3/Config.in b/package/python-boto3/Config.in
-> new file mode 100644
-> index 0000000000..67b1420388
-> --- /dev/null
-> +++ b/package/python-boto3/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_BOTO3
-> +       bool "python-boto3"
-> +       select BR2_PACKAGE_PYTHON_BOTOCORE # runtime
-> +       select BR2_PACKAGE_PYTHON_JMESPATH # runtime
-> +       select BR2_PACKAGE_PYTHON_S3TRANSFER # runtime
-> +       help
-> +         The AWS SDK for Python.
-> +
-> +         https://github.com/boto/boto3
-> diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
-> new file mode 100644
-> index 0000000000..49eb9ae5c6
-> --- /dev/null
-> +++ b/package/python-boto3/python-boto3.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/boto3/json
-> +md5    02e0d5ea4affd9c64e9166d5d3786766  boto3-1.9.210.tar.gz
-> +sha256 e221f6867282266e06aec2213f0ea5fdbd4eb3facbca4fcbf96886073350bc5e  boto3-1.9.210.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-> diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
-> new file mode 100644
-> index 0000000000..e00cb84ad1
-> --- /dev/null
-> +++ b/package/python-boto3/python-boto3.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-boto3
-> +#
-> +################################################################################
-> +
-> +PYTHON_BOTO3_VERSION = 1.9.210
-> +PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
-> +PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/d3/ac/79093e14a5397096d1fe4a17329a8453cebed8629cbc434e2dad5fb75b65
-> +PYTHON_BOTO3_SETUP_TYPE = setuptools
-> +PYTHON_BOTO3_LICENSE = Apache-2.0
-> +PYTHON_BOTO3_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
-> --
-> 2.23.0
->
+>>> libftdi1 1.4 Configuring
+(mkdir -p /home/YegorYefremov/MyProjects/oss/br-test-v2/bsp-uboot/build/libftdi1-1.4/
+&& cd /home/YegorYefremov/MyProjects/oss/br-test-v2/bsp-uboot/build/libftdi1-1.4/
+&& rm -f CMakeCache.txt &&
+PATH="/home/YegorYefremov/MyProjects/oss/br-test-v2/bsp-uboot/host/bin:/home/YegorYefremov/MyProjects/oss/br-test-v2/bsp-uboot/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+ /usr/bin/cmake
+/home/YegorYefremov/MyProjects/oss/br-test-v2/bsp-uboot/build/libftdi1-1.4/
+-DCMAKE_TOOLCHAIN_FILE="/home/YegorYefremov/MyProjects/oss/br-test-v2/bsp-uboot/host/share/buildroot/toolchainfile.cmake"
+-DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF
+-DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF
+-DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF
+-DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON  -DDOCUMENTATION=OFF
+-DEXAMPLES=OFF -DFTDIPP=OFF -DPYTHON_BINDINGS=ON -DFTDI_EEPROM=OFF )
+-- The C compiler identification is GNU 9.2.1
+-- Check for working C compiler:
+/home/user/br-test-v2/bsp-uboot/host/bin/arm-none-linux-gnueabihf-gcc
+-- Check for working C compiler:
+/home/user/br-test-v2/bsp-uboot/host/bin/arm-none-linux-gnueabihf-gcc
+-- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Build type: Release
+-- Found PkgConfig:
+/home/user/br-test-v2/bsp-uboot/host/bin/pkg-config (found version
+"1.6.1")
+-- Checking for module 'libusb-1.0'
+--   Found libusb-1.0, version 1.0.23
+-- Found LIBUSB:
+/home/user/br-test-v2/bsp-uboot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libusb-1.0.so
+-- Could NOT find Boost
+-- Found Doxygen: /usr/bin/doxygen (found version "1.8.13") found
+components:  doxygen dot
+-- Not generating API documentation
+-- Detected git snapshot version: 2019.11-1302-ge5e84823bb
+-- Found SWIG: /usr/bin/swig3.0 (found version "3.0.12")
+-- Could NOT find PythonLibs (missing: PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS)
+-- Found PythonInterp: /home/user/br-test-v2/bsp-uboot/host/bin/python
+(found version "3.8.1")
+-- Not building python bindings
+-- ftdi_eeprom build is disabled
+-- libConfuse not found, won't build ftdi_eeprom
+-- Not building example programs.
+-- NOT building unit test
+-- Configuring done
+-- Generating done
+
+I was using this defconfig [1]. To speed up the build I've changed the
+ABI to ARMHF and used the default external toolchain. And python3,
+libftdi1 together with python bindings were selected.
+
+My host has:
+
+Python 3.6.7
+Python 2.7.15rc1
+
+[1] https://github.com/visionsystemsgmbh/onrisc_br_bsp/blob/master/configs/baltos_defconfig
+
+P.S. another issue is that as you can see cmake has found the host's
+own SWIG version and not BR's version which is 4.0.x.
+
+Yegor
