@@ -1,42 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Feb 2020 16:53:20 +0100
-Subject: [Buildroot] [git commit] package/luarocks: bump to version 3.3.1
-Message-ID: <20200207154240.DED1B8D4FC@busybox.osuosl.org>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Fri,  7 Feb 2020 16:39:27 +0100
+Subject: [Buildroot] [PATCH] package/gnuradio: backport patch: drop
+ boost/cstdint.hpp and use cstdint
+Message-ID: <1581089967-28375-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d004460fe8ff30ec616126ef206997c8347f412
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+gr-digital/glfsr.h include boost/cstdint.hpp to have uintxx_t.
+These types are in boost namespace but nor using namespace xxx, nor boost:: are used.
+The result is :
+In file included from /home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/glfsr.cc:23:
+/home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/../include/gnuradio/digital/glfsr.h:42:5: error: 'uint32_t' does not name a type; did you mean 'u_int32_t'?
+uint32_t d_shift_register;
+^~~~~~~~
+u_int32_t
+
+Since Gnuradio policy is Less boost == better and C++11 is used, use cstdint
+instead of boost/cstdint.hpp.
+
+Applied in gnuradio master (475e4a156b516c089175afb998acdc80b740b437)
+
+fix:
+ - http://autobuild.buildroot.net/results/14015f499e58fee530877ac052878bbe2f799942/
+ - http://autobuild.buildroot.net/results/53239f98dd5e03d4dc1bb4eb91ed765f77dbf0ec/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ....h-drop-boost-cstdint.hpp-and-use-cs.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index f001729170..069d181d61 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 8de54eb851f5245ed3708d94d8872e825b9704049d3ad4febe8e219f419b427d  luarocks-3.3.0.tar.gz
-+sha256 eb20cd9814df05535d9aae98da532217c590fc07d48d90ca237e2a7cdcf284fe  luarocks-3.3.1.tar.gz
- sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 84b3fe4387..123f8c0734 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAROCKS_VERSION = 3.3.0
-+LUAROCKS_VERSION = 3.3.1
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+diff --git a/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch b/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
+new file mode 100644
+index 0000000000..335d59b63e
+--- /dev/null
++++ b/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
+@@ -0,0 +1,38 @@
++From f643bc12100c67288adda3699a9e61d6a66fb529 Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Fri, 7 Feb 2020 16:49:30 +0100
++Subject: [PATCH] gr-digital:glfsr.h: drop boost/cstdint.hpp and use cstdint
++
++gr-digital/glfsr.h include boost/cstdint.hpp to have uintxx_t.
++These types are in boost namespace but nor using namespace xxx, nor boost:: are used.
++The result is :
++In file included from /home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/glfsr.cc:23:
++/home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/../include/gnuradio/digital/glfsr.h:42:5: error: 'uint32_t' does not name a type; did you mean 'u_int32_t'?
++uint32_t d_shift_register;
++^~~~~~~~
++u_int32_t
++
++Since Gnuradio policy is Less boost == better and C++11 is used, use cstdint
++instead of boost/cstdint.hpp.
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ gr-digital/include/gnuradio/digital/glfsr.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gr-digital/include/gnuradio/digital/glfsr.h b/gr-digital/include/gnuradio/digital/glfsr.h
++index 0b5141f1f..1003bcd01 100644
++--- a/gr-digital/include/gnuradio/digital/glfsr.h
+++++ b/gr-digital/include/gnuradio/digital/glfsr.h
++@@ -24,7 +24,7 @@
++ #define INCLUDED_DIGITAL_GLFSR_H
++ 
++ #include <gnuradio/digital/api.h>
++-#include <boost/cstdint.hpp>
+++#include <cstdint>
++ 
++ namespace gr {
++ namespace digital {
++-- 
++2.24.1
++
+-- 
+2.24.1
