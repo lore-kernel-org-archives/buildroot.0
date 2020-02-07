@@ -1,155 +1,140 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Fri, 7 Feb 2020 13:52:21 +0100
-Subject: [Buildroot] [PATCH 03/10] package/systemd: remove unused user
- accounts
-In-Reply-To: <CAFvCimUAQeBr57ZKc+_+fX+NbPf_WeS_8mA0Fzxiu2tFr5GZ9Q@mail.gmail.com>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Fri, 7 Feb 2020 13:53:34 +0100
+Subject: [Buildroot] [PATCH 05/10] package/systemd: cosmetic rearrange
+ list of users
+In-Reply-To: <CADYdroNxsdmgJHEaW1rHXN4KbyCkoD=yFzVuVPPeMV_xF0j4VA@mail.gmail.com>
 References: <20200206093633.251413-1-nolange79@gmail.com>
- <20200206093633.251413-4-nolange79@gmail.com>
- <CAFvCimVgTb8XcC4fnR3NQLHa6dhv0b=9JyU_CVjHB_n=9ryAwQ@mail.gmail.com>
- <CADYdroPy+s9pAoSbB_oqMprHJhzKqnF-0iu-sxuLCXsRM--yog@mail.gmail.com>
- <CAFvCimUAQeBr57ZKc+_+fX+NbPf_WeS_8mA0Fzxiu2tFr5GZ9Q@mail.gmail.com>
-Message-ID: <CADYdroMwD2vkmkDXUn-GFLZssGLjieHxMmiQ=NFpW_zbe-S3CA@mail.gmail.com>
+ <20200206093633.251413-6-nolange79@gmail.com>
+ <CAFvCimWQmzczt5u0LuTW=vg4UUfXAZ3VAskCmU8CFYGPVgEcxw@mail.gmail.com>
+ <CADYdroNxsdmgJHEaW1rHXN4KbyCkoD=yFzVuVPPeMV_xF0j4VA@mail.gmail.com>
+Message-ID: <CAFvCimUVLFW-K2WCU2nFLHkQutsW7HKjWeV5zWJ3cLqK3JurKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I mean if you dont enable host target sysuser, systemd and other packages
-might not install the config files (these are after all just used for
-preparing a system).
-if you for example enable journal-remote and not sysuser on the target, you
-would need to enable  journal-remote and sysuser on the host, then grab the
-config files from the host.
+Le ven. 7 f?vr. 2020 ? 13:47, Norbert Lange <nolange79@gmail.com> a ?crit :
 
-Sure, everything can be solved somehow, but it would be easier to figure
-out the correct way *before* someone begins hacking ( see
-https://github.com/systemd/systemd/issues/14806 ).
-
-For ex. you could always enable sysuser on the target and just offer an
-option to remove those files in the rootfs image afterwards.
-
-Norbert
-
-Am Fr., 7. Feb. 2020 um 13:44 Uhr schrieb J?r?my ROSEN <
-jeremy.rosen@smile.fr>:
-
-> That's already in place. We already build host-systemd whenever we build
-> systemd (host-sysuser is currently disabled but that's trivial to enable)
+> Not sure if you meant to reply to patch #6 instead.
 >
-> It's just a question of doing it, really... and teaching mkusers a few
-> trick to go with it
+> maybe :P
+
+
+> The main reference is the README, and the templates in sysusers.d.
+> You want me to add this as comment in the .mk file if I understood
+> correctly?
 >
-> Le ven. 7 f?vr. 2020 ? 13:41, Norbert Lange <nolange79@gmail.com> a
-> ?crit :
+> That's very minor... I meant pointing to the sysusers.d files so someone
+that doesn't know systemd as well can check that nothing has changed
+
+
+> Also I am not sure why those users/groups aren't already in the systemd
+> skeleton.
 >
->> Sure, but that could get tricky is you dont enable sysuser.d on the
->> target,
->> then you would need to grab the files from the host installation and use
->> similar build-options as the target.
+> That's a pretty good question. Also, since they are created by
+mkusers they have a UID > 1000 that confuses journald.
+(they get their own journal files, as if they were normal users, instead of
+being logged only in the system journals)
+
+
+> Should I post just an amended Patch #5 or wait a while to redo the series
+> once I got feedback for the rest?
+>
+> Wait for more feedback, that's too minor to have you respin just for that.
+
+Cheers
+Jeremy
+
+
+> Am Fr., 7. Feb. 2020 um 10:13 Uhr schrieb J?r?my ROSEN <
+> jeremy.rosen at smile.fr>:
+>
+>> could you add a line pointing to the corresponding file in
+>> systemd's source code (i.e the sysuser file from upstream)
+>> that would help future reviewers
 >>
->> Some smart infrastructure work would be needed to not complicate things
->> between non-system, systemd with option x disabled,
->> and full systemd.
+>> apart from that
 >>
->> Am Fr., 7. Feb. 2020 um 10:11 Uhr schrieb J?r?my ROSEN <
->> jeremy.rosen at smile.fr>:
+>> Reviewed-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 >>
->>> Yes...
->>> Long term we should use systems-sysuser for that, so upstream trickles
->>> down automatically
+>> Le jeu. 6 f?vr. 2020 ? 10:37, Norbert Lange <nolange79@gmail.com> a
+>> ?crit :
+>>
+>>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>>> ---
+>>>  package/systemd/systemd.mk | 4 +++-
+>>>  1 file changed, 3 insertions(+), 1 deletion(-)
 >>>
->>> in the mean time,
+>>> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+>>> index b3e83b5d3b..b6bd85f130 100644
+>>> --- a/package/systemd/systemd.mk
+>>> +++ b/package/systemd/systemd.mk
+>>> @@ -428,10 +428,12 @@ define SYSTEMD_INSTALL_IMAGES_CMDS
+>>>  endef
 >>>
->>> Reviewed-by: J?r?my Rosen <jeremy.rosen@smile.fr>
->>>
->>>
->>> Le jeu. 6 f?vr. 2020 ? 10:37, Norbert Lange <nolange79@gmail.com> a
->>> ?crit :
->>>
->>>> Since V235 the "gateway" and "upload" services use DynamicUsers,
->>>> requiring no entries in /etc/passwd.
->>>> This functionality requires option nss-systemd, which is always
->>>> enabled in buildroot.
->>>>
->>>> The "bus-proxy" user was removed in V230
->>>>
->>>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
->>>> ---
->>>>  package/systemd/systemd.mk | 3 ---
->>>>  1 file changed, 3 deletions(-)
->>>>
->>>> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
->>>> index a390cdd1a9..b46c4fd540 100644
->>>> --- a/package/systemd/systemd.mk
->>>> +++ b/package/systemd/systemd.mk
->>>> @@ -431,10 +431,7 @@ define SYSTEMD_USERS
->>>>         - - systemd-journal -1 * - - - Journal
->>>>         - - render -1 * - - - DRI rendering nodes
->>>>         - - kvm -1 * - - - kvm nodes
->>>> -       systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus
->>>> messages to/from a bus
->>>> -       systemd-journal-gateway -1 systemd-journal-gateway -1 *
->>>> /var/log/journal - - Journal Gateway
->>>>         systemd-journal-remote -1 systemd-journal-remote -1 *
->>>> /var/log/journal/remote - - Journal Remote
->>>> -       systemd-journal-upload -1 systemd-journal-upload -1 * - - -
->>>> Journal Upload
->>>>         $(SYSTEMD_COREDUMP_USER)
->>>>         $(SYSTEMD_NETWORKD_USER)
->>>>         $(SYSTEMD_RESOLVED_USER)
->>>> --
->>>> 2.24.1
->>>>
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>>
->>>
->>>
+>>>  define SYSTEMD_USERS
+>>> +       # udev user groups
+>>>         - - input -1 * - - - Input device group
+>>> -       - - systemd-journal -1 * - - - Journal
+>>>         - - render -1 * - - - DRI rendering nodes
+>>>         - - kvm -1 * - - - kvm nodes
+>>> +       # systemd user groups
+>>> +       - - systemd-journal -1 * - - - Journal
+>>>         $(SYSTEMD_REMOTE_USER)
+>>>         $(SYSTEMD_COREDUMP_USER)
+>>>         $(SYSTEMD_NETWORKD_USER)
 >>> --
->>> [image: SMILE]  <http://www.smile.eu/>
+>>> 2.24.1
 >>>
->>> 20 rue des Jardins
->>> 92600 Asni?res-sur-Seine
->>> *J?r?my ROSEN*
->>> Architecte technique
->>>
->>> [image: email] jeremy.rosen at smile.fr
->>> [image: phone]  +33 6 88 25 87 42
->>> [image: url] http://www.smile.eu
->>>
->>> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
->>> <https://www.facebook.com/smileopensource> [image: LinkedIn]
->>> <https://www.linkedin.com/company/smile> [image: Github]
->>> <https://github.com/Smile-SA>
->>>
->>> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
->>> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
 >>>
 >>
+>>
+>> --
+>> [image: SMILE]  <http://www.smile.eu/>
+>>
+>> 20 rue des Jardins
+>> 92600 Asni?res-sur-Seine
+>> *J?r?my ROSEN*
+>> Architecte technique
+>>
+>> [image: email] jeremy.rosen at smile.fr
+>> [image: phone]  +33 6 88 25 87 42
+>> [image: url] http://www.smile.eu
+>>
+>> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+>> <https://www.facebook.com/smileopensource> [image: LinkedIn]
+>> <https://www.linkedin.com/company/smile> [image: Github]
+>> <https://github.com/Smile-SA>
+>>
+>> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+>> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+>>
 >
-> --
-> [image: SMILE]  <http://www.smile.eu/>
->
-> 20 rue des Jardins
-> 92600 Asni?res-sur-Seine
-> *J?r?my ROSEN*
-> Architecte technique
->
-> [image: email] jeremy.rosen at smile.fr
-> [image: phone]  +33 6 88 25 87 42
-> [image: url] http://www.smile.eu
->
-> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-> <https://www.facebook.com/smileopensource> [image: LinkedIn]
-> <https://www.linkedin.com/company/smile> [image: Github]
-> <https://github.com/Smile-SA>
->
-> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
->
+
+-- 
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200207/1b3fde0a/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200207/1cf7dd76/attachment.html>
