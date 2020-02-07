@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri,  7 Feb 2020 19:08:25 +0100
-Subject: [Buildroot] [PATCH v3 06/10] package/ripgrep: depends on host-rustc
+Date: Fri,  7 Feb 2020 19:08:27 +0100
+Subject: [Buildroot] [PATCH v3 08/10] docs/manual: cargo packages depend on
+ host-rustc
 In-Reply-To: <20200207180829.165689-1-arnout@mind.be>
 References: <20200207180829.165689-1-arnout@mind.be>
-Message-ID: <20200207180829.165689-7-arnout@mind.be>
+Message-ID: <20200207180829.165689-9-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +13,38 @@ To: buildroot@busybox.net
 
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-As all providers of rustc also install cargo, there is no need to depend
-on the standalone cargo package anymore. Instead add host-rustc to the
-dependency list.
+As Cargo is either installed by host-rust or host-rust-bin, the
+Cargo-based packages should depend on host-rustc.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+[Arnout: also select HOST_RUSTC in Config.in]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/ripgrep/Config.in  | 2 +-
- package/ripgrep/ripgrep.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-cargo.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ripgrep/Config.in b/package/ripgrep/Config.in
-index 5446ad046c..0ea2902b34 100644
---- a/package/ripgrep/Config.in
-+++ b/package/ripgrep/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_RIPGREP
- 	bool "ripgrep"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
--	select BR2_PACKAGE_HOST_CARGO
-+	select BR2_PACKAGE_HOST_RUSTC
- 	help
- 	  ripgrep is a line-oriented search tool that
- 	  recursively searches your current directory
-diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
-index 0bb7017a96..832c076f26 100644
---- a/package/ripgrep/ripgrep.mk
-+++ b/package/ripgrep/ripgrep.mk
-@@ -9,7 +9,7 @@ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
- RIPGREP_LICENSE = MIT
- RIPGREP_LICENSE_FILES = LICENSE-MIT
- 
--RIPGREP_DEPENDENCIES = host-cargo
-+RIPGREP_DEPENDENCIES = host-rustc
- RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
- RIPGREP_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
- 
+diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
+index b6029e1eed..bb078b6981 100644
+--- a/docs/manual/adding-packages-cargo.txt
++++ b/docs/manual/adding-packages-cargo.txt
+@@ -18,7 +18,7 @@ The +Config.in+ file of Cargo-based package 'foo' should contain:
+ 01: config BR2_PACKAGE_FOO
+ 02: 	bool "foo"
+ 03: 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+-04: 	select BR2_PACKAGE_HOST_CARGO
++04: 	select BR2_PACKAGE_HOST_RUSTC
+ 05: 	help
+ 06: 	  This is a comment that explains what foo is.
+ 07:
+@@ -44,7 +44,7 @@ package. Let's start with an example:
+ 10: FOO_LICENSE = GPL-3.0+
+ 11: FOO_LICENSE_FILES = COPYING
+ 12:
+-13: FOO_DEPENDENCIES = host-cargo
++13: FOO_DEPENDENCIES = host-rustc
+ 14:
+ 15: FOO_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+ 16: FOO_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
 -- 
 2.24.1
