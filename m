@@ -1,9 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  6 Feb 2020 18:38:31 -0800
-Subject: [Buildroot] [PATCH v16 1/4] package/libiberty: new package
+Date: Thu,  6 Feb 2020 18:38:32 -0800
+Subject: [Buildroot] [PATCH v16 2/4] package/gdb: depend on libiberty
 In-Reply-To: <20200207023834.877032-1-aduskett@gmail.com>
 References: <20200207023834.877032-1-aduskett@gmail.com>
-Message-ID: <20200207023834.877032-2-aduskett@gmail.com>
+Message-ID: <20200207023834.877032-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,97 +12,35 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Some packages, like prelink-cross, want to use libiberty but do not bundle
-their own instance (which is good!).
-
-However, libiberty is made for being bundled in packages: all GNU
-packages that use libiberty (gcc, Binutils, gdb, et al...) all have their own
-bundled variant. This common practice means that there is no official upstream
-for libiberty, the closest being as part of the combined Binutils-gdb tree.
-
-So we introduce a new host-only package, that installs just libiberty from a
-Binutils released tarball.
-
-Again, as packages usually bundle libiberty, it usually only installs a static
-version. Furthermore, it does not obey the usual --enable-shared and
---disable-static flags; it only ever builds a static version.
-
-Furthermore, -fPIC is not used with this library, but some packages may pick it
-to build shared objects. This behavior is the case for host-gdb, for example,
-which accidentally picks that library instead of its internal one.
-
-So, rather than fix the various gdb versions and variants we can use, we ensure
-that the libiberty we install is usable in shared objects, and we always build
-before host-gdb.
+If present, GDB may use a system installed libiberty. As such, we must ensure
+that host-libiberty is installed first.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v15 -> v16:
-  - Cleaned up the grammar in the commit message.
+v13 -> v14:
+  - Fix typo in the comment. (Arnout)
 
-Changes v1 -> v15:
+v1 -> v11:
   - Add this patch to the series
 
- DEVELOPERS                       |  1 +
- package/libiberty/libiberty.hash |  2 ++
- package/libiberty/libiberty.mk   | 27 +++++++++++++++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/libiberty/libiberty.hash
- create mode 100644 package/libiberty/libiberty.mk
+ package/gdb/gdb.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d8ea23e0b3..79ddddd9c3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2552,6 +2552,7 @@ F:	package/keyutils/
- F:	package/libbsd/
- F:	package/libedit/
- F:	package/libgsm/
-+F:	package/libiberty/
- F:	package/libinput/
- F:	package/libiscsi/
- F:	package/libpri/
-diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
-new file mode 100644
-index 0000000000..270f38dfa7
---- /dev/null
-+++ b/package/libiberty/libiberty.hash
-@@ -0,0 +1,2 @@
-+# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
-+sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
-diff --git a/package/libiberty/libiberty.mk b/package/libiberty/libiberty.mk
-new file mode 100644
-index 0000000000..17976fdd4f
---- /dev/null
-+++ b/package/libiberty/libiberty.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# libiberty
-+#
-+################################################################################
-+
-+LIBIBERTY_VERSION = 2.32
-+LIBIBERTY_SOURCE = binutils-$(LIBIBERTY_VERSION).tar.xz
-+LIBIBERTY_SITE = $(BR2_GNU_MIRROR)/binutils
-+LIBIBERTY_DL_SUBDIR = binutils
-+LIBIBERTY_SUBDIR = libiberty
-+
-+# We explicitly disable multilib, as we do in binutils.
-+# By default, libiberty installs nothing, so we must force it.
-+HOST_LIBIBERTY_CONF_OPTS = \
-+	--disable-multilib \
-+	--enable-install-libiberty
-+
-+# Some packages (e.g. host-gdb) will pick this library and build shared
-+# objects with it. But libiberty does not honour the --enable-shared and
-+# --disable-static flags; it only ever builds a static library no matter
-+# what. So we must force -fPIC in build flags.
-+HOST_LIBIBERTY_CONF_ENV = \
-+	CFLAGS="$(HOST_CFLAGS) -fPIC" \
-+	LDFLAGS="$(HOST_LDFLAGS) -fPIC"
-+
-+$(eval $(host-autotools-package))
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 46d745a897..01f7e14460 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -35,7 +35,9 @@ endif
+ # For the host variant, we really want to build with XML support,
+ # which is needed to read XML descriptions of target architectures. We
+ # also need ncurses.
+-HOST_GDB_DEPENDENCIES = host-expat host-ncurses
++# As for libiberty, gdb may use a system-installed one if present, so
++# we must ensure ours is installed first.
++HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses
+ 
+ # Disable building documentation
+ GDB_MAKE_OPTS += MAKEINFO=true
 -- 
 2.24.1
