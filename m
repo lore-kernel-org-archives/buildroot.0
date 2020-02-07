@@ -1,85 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Feb 2020 15:54:59 +0100
-Subject: [Buildroot] [git commit] package/wireguard-tools: bump to version
- 1.0-20200206
-Message-ID: <20200207144412.E956C80479@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 7 Feb 2020 15:55:07 +0100
+Subject: [Buildroot] [PATCH] package/libftdi1: fix python support
+In-Reply-To: <871rr6xxcl.fsf@dell.be.48ers.dk>
+References: <20200206095421.12987-1-yegorslists@googlemail.com>
+ <87imkiyd32.fsf@dell.be.48ers.dk>
+ <CAGm1_kvMR9y5FtiAUNcMDT8V4diTFNk=3KSD7twQzkXw0jm-tQ@mail.gmail.com>
+ <875zgiy8dq.fsf@dell.be.48ers.dk>
+ <CAGm1_ksGCvr8bmLMjrrNaGQvcaGS=2GuC7yqQcvTBE93_1Z-Jw@mail.gmail.com>
+ <871rr6xxcl.fsf@dell.be.48ers.dk>
+Message-ID: <CAGm1_ktss6p4wNv7FrZSgH8N=jQbnRTepEHNk_r6+MoGxy23Xg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d41be5f6cff753a5e5b869f2bcdba70eff25bcc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, Feb 7, 2020 at 3:53 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+>
+> Hi,
+>
+>  > This is what I get when invoking "make libftdi1"
+>
+> Ok. It is not really clear to me why it fails for you but not for me,
+> but ok - Committed, thanks.
+>
+>  > P.S. another issue is that as you can see cmake has found the host's
+>  > own SWIG version and not BR's version which is 4.0.x.
+>
+> Hmm, indeed. We do add our host-swig to the path, so I guess something
+> is hardcoded to look in /usr/bin first?
+>
+> Care to take a look?
 
-Drop libmnl dependency. From the announcement:
+Will do.
 
- * netlink: remove libmnl requirement
-
-We no longer require libmnl.  It turns out that inlining the small subset of
-libmnl that we actually use results in a smaller binary than the overhead of
-linking to the external library.
-
-pkg-config is still used for the systemd support though, so move the
-host-pkgconf dependency there.
-
-For more details, see the announcement:
-
-https://lists.zx2c4.com/pipermail/wireguard/2020-February/004963.html
-
-While we are at it, adjust the white space in the .hash file to match the
-new agreements.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard-tools/Config.in            | 1 -
- package/wireguard-tools/wireguard-tools.hash | 6 +++---
- package/wireguard-tools/wireguard-tools.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/package/wireguard-tools/Config.in b/package/wireguard-tools/Config.in
-index eee6a8a940..130f4c48ed 100644
---- a/package/wireguard-tools/Config.in
-+++ b/package/wireguard-tools/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_WIREGUARD_TOOLS
- 	bool "wireguard tools"
- 	# kernel module requires 3.10+, userspace makes no sense without it
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
--	select BR2_PACKAGE_LIBMNL
- 	help
- 	  WireGuard is an extremely simple yet fast and modern VPN
- 	  that utilizes state-of-the-art cryptography. It aims to be
-diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
-index 1650f67e7a..9ea0d3ce86 100644
---- a/package/wireguard-tools/wireguard-tools.hash
-+++ b/package/wireguard-tools/wireguard-tools.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004869.html
--sha256 15bfdbdbecbd3870ced9a7e68286c871bfcb2071d165f113808081f2e428faa3  wireguard-tools-1.0.20200121.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-February/004963.html
-+sha256  f5207248c6a3c3e3bfc9ab30b91c1897b00802ed861e1f9faaed873366078c64  wireguard-tools-1.0.20200206.tar.xz
- # Locally calculated
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
-index 0acf0fcbb5..c2b2c36651 100644
---- a/package/wireguard-tools/wireguard-tools.mk
-+++ b/package/wireguard-tools/wireguard-tools.mk
-@@ -4,15 +4,15 @@
- #
- ################################################################################
- 
--WIREGUARD_TOOLS_VERSION = 1.0.20200121
-+WIREGUARD_TOOLS_VERSION = 1.0.20200206
- WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
- WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
- WIREGUARD_TOOLS_LICENSE = GPL-2.0
- WIREGUARD_TOOLS_LICENSE_FILES = COPYING
--WIREGUARD_TOOLS_DEPENDENCIES = host-pkgconf libmnl
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
- WIREGUARD_TOOLS_MAKE_OPTS += WITH_SYSTEMDUNITS=yes
-+WIREGUARD_TOOLS_DEPENDENCIES += host-pkgconf
- else
- WIREGUARD_TOOLS_MAKE_OPTS += WITH_SYSTEMDUNITS=no
- endif
+Yegor
