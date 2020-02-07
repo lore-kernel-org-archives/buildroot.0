@@ -1,83 +1,80 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 7 Feb 2020 17:58:57 +0100
-Subject: [Buildroot] [PATCH 1/2] pkg-stats: query release-monitoring.org
- with upstream name
-In-Reply-To: <20200205181702.4abbbd83@windsurf>
-References: <20190828070251.22886-1-francois.perrad@gadz.org>
- <20200205181702.4abbbd83@windsurf>
-Message-ID: <CAB0FRsvs4Rm-ZHvSsDgZHijSM1qL7ygsWAhaK=S_cDdWC+n80Q@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri,  7 Feb 2020 19:08:19 +0100
+Subject: [Buildroot] [PATCH v3 00/10] Merge rust and cargo
+Message-ID: <20200207180829.165689-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mer. 5 f?vr. 2020 ? 18:17, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
+The source code for Cargo, the build and package manager for Rust, is now
+shipped along with the compiler and standard library.
 
-> Hello,
->
-> On Wed, 28 Aug 2019 09:02:50 +0200
-> Francois Perrad <fperrad@gmail.com> wrote:
->
-> > By default, this upstream name is our BR name.
-> > But with perl-package infrastructure, the variables *_DISTNAME
-> > give the CPAN name which is known by release-monitoring.org
-> >
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->
-> Since we have this information already in Buildroot, it makes sense to
-> use it. However, the search on release-monitoring.org is done in two
-> steps:
->
->  - Using the Buildroot distribution in release-monitoring and its
->    mapping concept. In this case, we really want to use the Buildroot
->    package name unchanged (which is not what your patch does)
->
->
-It means that a part of Buildroot source (or configuration) is hosted on
-release-monitoring.org instead of our own git repository.
+So there can not be a standalone package for Cargo anymore.
 
+This series does the following:
+- move the installation of cargo config to toolchain post-install hook.
+- update host-rust to build and install Cargo.
+- install host-cargo-bin if host-rust-bin is selected instead of host-rust.
+- update dependencies for package(s) using Cargo.
+- remove cargo packaging.
+- update the packaging documentation.
+- bump rust (+cargo) to 1.40.
+- remove cargo-bin as well (now bundled with rust binaries).
 
->  - Then, if no result is found through the Buildroot distribution
->    above, we search in the entire namespace. Here, we should search
->    with _DISTNAME when available. We could also improve the logic to
->    strip python- and lua- in the front of packages, to help the guess
->    to work.
->
-> Would you be willing to work on this ? It's not too far from the patch
-> you have already implemented here.
->
->
-Another point about release-monitoring.org,
-how to exclude `dev` branches when the policy of the upstream project is to
-name them with an odd minor number ?
+It was previously posted by Eric Le Bihan [1] and by Patrick Havelange
+[2]. I wanted to merge it, but I made some invasive changes (the first
+patch) so I'm reposting just to be sure.
 
-Here, some false positives:
-                          perl |  DISTRO  |
-https://release-monitoring.org/project/13599 | 5.30.1       | 5.31.8
-|
-                     webkitgtk |  DISTRO  |
-https://release-monitoring.org/project/05355 | 2.26.3       | 2.27.4
-|
-                     wpewebkit |  DISTRO  |
-https://release-monitoring.org/project/17557 | 2.26.3       | 2.27.4
-|
+Regards,
+Arnout
 
-Fran?ois
+[1] http://patchwork.ozlabs.org/project/buildroot/list/?series=140900
+[2] http://patchwork.ozlabs.org/project/buildroot/list/?series=153317
 
-Thanks a lot!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200207/ad86134b/attachment.html>
+Arnout Vandecappelle (Essensium/Mind) (1):
+  package/rustc: install cargo config as toolchain post-install hook
+
+Eric Le Bihan (7):
+  package/rust: build and install cargo
+  package/cargo-bin: install if rust-bin selected
+  package/rust-bin: host variant depends on host-cargo-bin
+  package/rust: drop dependency on host-cargo-bin
+  package/ripgrep: depends on host-rustc
+  package/cargo: drop package
+  docs/manual: cargo packages depend on host-rustc
+
+Patrick Havelange (2):
+  package/rust: bump to 1.40
+  package/cargo-bin: remove and use cargo-bin from rust-bin package
+
+ DEVELOPERS                                    |   2 -
+ docs/manual/adding-packages-cargo.txt         |   4 +-
+ package/Config.in.host                        |   1 -
+ package/cargo-bin/cargo-bin.hash              |  13 -
+ package/cargo-bin/cargo-bin.mk                |  13 -
+ package/cargo/Config.in.host                  |   9 -
+ package/cargo/cargo.hash                      |   8 -
+ package/cargo/cargo.mk                        |  91 ------
+ package/ripgrep/Config.in                     |   2 +-
+ package/ripgrep/ripgrep.mk                    |   2 +-
+ package/rust-bin/rust-bin.hash                |  93 +++---
+ package/rust-bin/rust-bin.mk                  |  29 +-
+ ...esence-of-LLVM-library-in-stage0-lib.patch | 264 ------------------
+ package/rust/rust.hash                        |   6 +-
+ package/rust/rust.mk                          |   8 +-
+ .../config.in => rustc/cargo-config.in}       |   0
+ package/rustc/rustc.mk                        |  12 +
+ support/testing/tests/package/test_rust.py    |   2 -
+ 18 files changed, 85 insertions(+), 474 deletions(-)
+ delete mode 100644 package/cargo-bin/cargo-bin.hash
+ delete mode 100644 package/cargo-bin/cargo-bin.mk
+ delete mode 100644 package/cargo/Config.in.host
+ delete mode 100644 package/cargo/cargo.hash
+ delete mode 100644 package/cargo/cargo.mk
+ delete mode 100644 package/rust/0001-Workaround-presence-of-LLVM-library-in-stage0-lib.patch
+ rename package/{cargo/config.in => rustc/cargo-config.in} (100%)
+
+-- 
+2.24.1
