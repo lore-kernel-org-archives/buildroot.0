@@ -1,115 +1,21 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 7 Feb 2020 16:47:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-pbkdf2: new package.
-In-Reply-To: <20200207153106.5042-1-raphael.melotte@essensium.com>
-References: <20200207153106.5042-1-raphael.melotte@essensium.com>
-Message-ID: <CAGm1_ktm0teSPvR9M9pWvhfF9qv4xBXMRTy+7Jn8KaOu0c9yHw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 07 Feb 2020 16:53:33 +0100
+Subject: [Buildroot] [PATCH] package/luarocks: bump to version 3.3.1
+In-Reply-To: <20200207145955.17509-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Fri, 7 Feb 2020 15:59:55 +0100")
+References: <20200207145955.17509-1-francois.perrad@gadz.org>
+Message-ID: <87blqawg02.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Rapha?l,
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-On Fri, Feb 7, 2020 at 4:31 PM Rapha?l M?lotte
-<raphael.melotte@essensium.com> wrote:
->
-> PKCS#5 v2.0 PBKDF2 Module.
->
-> Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
-> ---
->  DEVELOPERS                               |  3 +++
->  package/Config.in                        |  1 +
->  package/python-pbkdf2/Config.in          |  6 ++++++
->  package/python-pbkdf2/python-pbkdf2.hash |  3 +++
->  package/python-pbkdf2/python-pbkdf2.mk   | 13 +++++++++++++
->  5 files changed, 26 insertions(+)
->  create mode 100644 package/python-pbkdf2/Config.in
->  create mode 100644 package/python-pbkdf2/python-pbkdf2.hash
->  create mode 100644 package/python-pbkdf2/python-pbkdf2.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index d8ea23e0b3..7701958beb 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2076,6 +2076,9 @@ N:        Rahul Jain <rahul.jain@imgtec.com>
->  F:     package/uhttpd/
->  F:     package/ustream-ssl/
->
-> +N:  Rapha?l M?lotte <raphael.melotte@essensium.com>
-> +F:  package/python-pbkdf2/
-> +
->  N:     Refik Tuzakli <tuzakli.refik@gmail.com>
->  F:     package/paho-mqtt-cpp/
->
-> diff --git a/package/Config.in b/package/Config.in
-> index bad4f9cba6..2142b4e978 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1029,6 +1029,7 @@ menu "External python modules"
->         source "package/python-pathpy/Config.in"
->         source "package/python-pathtools/Config.in"
->         source "package/python-pathvalidate/Config.in"
-> +       source "package/python-pbkdf2/Config.in"
->         source "package/python-periphery/Config.in"
->         source "package/python-pexpect/Config.in"
->         source "package/python-pickleshare/Config.in"
-> diff --git a/package/python-pbkdf2/Config.in b/package/python-pbkdf2/Config.in
-> new file mode 100644
-> index 0000000000..90015b2cc0
-> --- /dev/null
-> +++ b/package/python-pbkdf2/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_PBKDF2
-> +       bool "python-pbkdf2"
-> +       help
-> +         PKCS\#5 v2.0 PBKDF2 Module.
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Perhaps a longer description is better:
+Committed, thanks.
 
-This module implements the password-based key derivation function,
-PBKDF2, specified in RSA PKCS#5 v2.0.
-
-> +
-> +         http://www.dlitz.net/software/python-pbkdf2/
-> diff --git a/package/python-pbkdf2/python-pbkdf2.hash b/package/python-pbkdf2/python-pbkdf2.hash
-> new file mode 100644
-> index 0000000000..4accff7662
-> --- /dev/null
-> +++ b/package/python-pbkdf2/python-pbkdf2.hash
-> @@ -0,0 +1,3 @@
-> +# md5, sha256 from https://pypi.org/pypi/pbkdf2/json
-> +md5    40cda566f61420490206597243dd869f  pbkdf2-1.3.tar.gz
-> +sha256 ac6397369f128212c43064a2b4878038dab78dab41875364554aaf2a684e6979  pbkdf2-1.3.tar.gz
-> diff --git a/package/python-pbkdf2/python-pbkdf2.mk b/package/python-pbkdf2/python-pbkdf2.mk
-> new file mode 100644
-> index 0000000000..f015297524
-> --- /dev/null
-> +++ b/package/python-pbkdf2/python-pbkdf2.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# python-pbkdf2
-> +#
-> +################################################################################
-> +
-> +PYTHON_PBKDF2_VERSION = 1.3
-> +PYTHON_PBKDF2_SOURCE = pbkdf2-$(PYTHON_PBKDF2_VERSION).tar.gz
-> +PYTHON_PBKDF2_SITE = https://files.pythonhosted.org/packages/02/c0/6a2376ae81beb82eda645a091684c0b0becb86b972def7849ea9066e3d5e
-> +PYTHON_PBKDF2_SETUP_TYPE = setuptools
-> +PYTHON_PBKDF2_LICENSE = MIT
-
-The license text is in the in the readme.txt file [1]. So you can
-specify it as PYTHON_PBKDF2_LICENSE_FILES and add its hash.
-
-[1] https://github.com/dlitz/python-pbkdf2/blob/master/README.txt
-
-Regards,
-Yegor
-
-> +
-> +$(eval $(python-package))
-> --
-> 2.23.0
->
+-- 
+Bye, Peter Korsgaard
