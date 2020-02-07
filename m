@@ -1,53 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Feb 2020 15:54:56 +0100
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
- version to 0.0.20200205
-Message-ID: <20200207144412.EE6408D4CF@busybox.osuosl.org>
+Date: Fri, 07 Feb 2020 15:59:51 +0100
+Subject: [Buildroot] [PATCH v2] package/ninja: fix build for cmake 3.10
+In-Reply-To: <20200206132132.23734-1-yegorslists@googlemail.com>
+ (yegorslists's message of "Thu, 6 Feb 2020 14:21:32 +0100")
+References: <20200206132132.23734-1-yegorslists@googlemail.com>
+Message-ID: <87k14ywihk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=235520084aaad8c6cfe6a6061f71564837333bf9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-Includes fixes for issues found through fuzzing.  For details, see the
-announcement:
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > If the host cmake is 3.10, the configuration step produces
+ > the following error:
 
-https://lists.zx2c4.com/pipermail/wireguard/2020-February/004962.html
+ > CMake Error at CMakeLists.txt:87 (target_link_libraries):
+ > Target "libninja" of type OBJECT_LIBRARY may not be linked into another
+ > target. One may link only to STATIC or SHARED libraries, or to executables
+ > with the ENABLE_EXPORTS property set.
 
-While we are at it, adjust the white space in the .hash file to match the
-new agreements.
+ > This patch fixes CMakeLists.txt to use the object library as it was intended
+ > in cmake 3.10.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 6 +++---
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > Fixes:
+ > https://bugs.busybox.net/show_bug.cgi?id=12546
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index 47715fecb1..0ee202ca9e 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-January/004905.html
--sha256 8610c6d8712cfd885f50b1a8c572518edf318c094d68491ea218bb50566a9a8a  wireguard-linux-compat-0.0.20200128.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-February/004962.html
-+sha256  9669e165fc7252cab7f908ba57f160f6d57539b7cc81180f260cb675d2fd362b  wireguard-linux-compat-0.0.20200205.tar.xz
- # Locally calculated
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 097b80e70d..0efb9c3aea 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200128
-+WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200205
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Tested-by: Damian Tometzki <dti@familie-tometzki.de>
+ > ---
+ > Changes v1 -> v2:
+ >     - add Tested-by tag from Damian
+ >     - mention bug report
+
+Please use the -N option when generating patches from git (here and the
+libftdi1 patch) - check-package complains:
+
+Applying: package/ninja: fix build for cmake 3.10
+package/ninja/0003-CMake-fix-object-library-usage.patch:4: generate your patches with 'git format-patch -N'
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
