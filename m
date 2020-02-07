@@ -1,76 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 07 Feb 2020 11:55:13 +0100
-Subject: [Buildroot] [PATCH] package/libftdi1: fix python support
-In-Reply-To: <CAGm1_kvMR9y5FtiAUNcMDT8V4diTFNk=3KSD7twQzkXw0jm-tQ@mail.gmail.com>
- (Yegor Yefremov's message of "Fri, 7 Feb 2020 10:30:17 +0100")
-References: <20200206095421.12987-1-yegorslists@googlemail.com>
- <87imkiyd32.fsf@dell.be.48ers.dk>
- <CAGm1_kvMR9y5FtiAUNcMDT8V4diTFNk=3KSD7twQzkXw0jm-tQ@mail.gmail.com>
-Message-ID: <875zgiy8dq.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@essensium.com>
+Date: Fri,  7 Feb 2020 12:43:46 +0100
+Subject: [Buildroot] [PATCH 0/4] Add python-boto3
+Message-ID: <20200207114350.31365-1-raphael.melotte@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+Rapha?l M?lotte (4):
+  package/python-jmespath: new package.
+  package/python-botocore: new package.
+  package/python-s3transfer: new package.
+  package/python-boto3: new package.
 
- > Hi Peter,
- > On Fri, Feb 7, 2020 at 10:13 AM Peter Korsgaard <peter@korsgaard.com> wrote:
- >> 
- >> >>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
- >> 
- >> > From: Yegor Yefremov <yegorslists@googlemail.com>
- >> > Add an upstreamed patch that reorders find_package() commands.
- >> > This way Python interpreter will be detected first and based on
- >> > it the Python libraries can be found.
- >> 
- >> > Fixes the following CMake error:
- >> 
- >> > Could NOT find PythonLibs (missing: PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS)
- >> 
- >> We don't seem to have any autobuilder failures in libftdi1 for almost 1
- >> year. Any idea why this doesn't trigger on the autobuilders?
-
- > In the version 1.4 find_package() calls were made without the REQUIRED
- > keyword. Hence, this error wasn't detected by the autobuilders. This
- > is now fixed upstream and I hope a new release will appear soon. But
- > meanwhile let's apply this fix.
-
-Ahh, so you mean that the python module would just not be built?
-
-That is not what I see here using a defconfig with libftdi1 and python3
-on a machine with python 2.7 and python 3.7:
-
--- Could NOT find Boost
--- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE)
--- Not generating API documentation
--- Detected git snapshot version: 2019.11-1302-ge5e84823bb
--- Found SWIG: /home/peko/source/buildroot/output-ftdi/host/bin/swig (found version "4.0.1")
--- Found PythonLibs: /home/peko/source/buildroot/output-ftdi/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libpython3.8.so (found version "3.8.1")
--- Found PythonInterp: /home/peko/source/buildroot/output-ftdi/host/bin/python3.8 (found version "3.8.1")
-CMake Deprecation Warning at /usr/share/cmake-3.13/Modules/UseSWIG.cmake:524 (message):
-  SWIG_ADD_MODULE is deprecated.  Use SWIG_ADD_LIBRARY instead.
-Call Stack (most recent call first):
-  python/CMakeLists.txt:28 (swig_add_module)
-
-
-CMake Warning (dev) at /usr/share/cmake-3.13/Modules/UseSWIG.cmake:564 (message):
-  Policy CMP0078 is not set.  Run "cmake --help-policy CMP0078" for policy
-  details.  Use the cmake_policy command to set the policy and suppress this
-  warning.
-Call Stack (most recent call first):
-  /usr/share/cmake-3.13/Modules/UseSWIG.cmake:525 (swig_add_library)
-  python/CMakeLists.txt:28 (swig_add_module)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
--- Building python bindings via swig. Will be installed under /usr/lib/python3.8/site-packages
-
-
-So it correctly finds our host-python3 and does not get confused about
-the python 2.7 / 3.7 on my build machine.
-
-In what setup is it failing for you without this patch?
+ DEVELOPERS                                       |  6 ++++++
+ package/Config.in                                |  4 ++++
+ package/python-boto3/Config.in                   |  9 +++++++++
+ package/python-boto3/python-boto3.hash           |  5 +++++
+ package/python-boto3/python-boto3.mk             | 14 ++++++++++++++
+ package/python-botocore/Config.in                | 10 ++++++++++
+ package/python-botocore/python-botocore.hash     |  5 +++++
+ package/python-botocore/python-botocore.mk       | 14 ++++++++++++++
+ package/python-jmespath/Config.in                |  6 ++++++
+ package/python-jmespath/python-jmespath.hash     |  5 +++++
+ package/python-jmespath/python-jmespath.mk       | 14 ++++++++++++++
+ package/python-s3transfer/Config.in              |  9 +++++++++
+ package/python-s3transfer/python-s3transfer.hash |  5 +++++
+ package/python-s3transfer/python-s3transfer.mk   | 14 ++++++++++++++
+ 14 files changed, 120 insertions(+)
+ create mode 100644 package/python-boto3/Config.in
+ create mode 100644 package/python-boto3/python-boto3.hash
+ create mode 100644 package/python-boto3/python-boto3.mk
+ create mode 100644 package/python-botocore/Config.in
+ create mode 100644 package/python-botocore/python-botocore.hash
+ create mode 100644 package/python-botocore/python-botocore.mk
+ create mode 100644 package/python-jmespath/Config.in
+ create mode 100644 package/python-jmespath/python-jmespath.hash
+ create mode 100644 package/python-jmespath/python-jmespath.mk
+ create mode 100644 package/python-s3transfer/Config.in
+ create mode 100644 package/python-s3transfer/python-s3transfer.hash
+ create mode 100644 package/python-s3transfer/python-s3transfer.mk
 
 -- 
-Bye, Peter Korsgaard
+2.23.0
