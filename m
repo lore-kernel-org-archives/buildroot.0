@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 7 Feb 2020 12:49:34 +0100
-Subject: [Buildroot] [PATCH 1/4] package/python-jmespath: new package.
-In-Reply-To: <20200207114350.31365-2-raphael.melotte@essensium.com>
+Date: Fri, 7 Feb 2020 12:50:13 +0100
+Subject: [Buildroot] [PATCH 2/4] package/python-botocore: new package.
+In-Reply-To: <20200207114350.31365-3-raphael.melotte@essensium.com>
 References: <20200207114350.31365-1-raphael.melotte@essensium.com>
- <20200207114350.31365-2-raphael.melotte@essensium.com>
-Message-ID: <CAGm1_kuVtnU+8iQDAxP-RvXiNCEGbAWo7MiSJVEQHYQKOO5Acg@mail.gmail.com>
+ <20200207114350.31365-3-raphael.melotte@essensium.com>
+Message-ID: <CAGm1_kv827Jp3x_QO95APckJ=9E++nkdzmH6N_=NMy7pSt3MYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,99 +14,92 @@ To: buildroot@busybox.net
 On Fri, Feb 7, 2020 at 12:44 PM Rapha?l M?lotte
 <raphael.melotte@essensium.com> wrote:
 >
-> JMESPath is a query language for JSON.
+> Low-level, data-driven core of boto 3.
 >
 > Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
-
-On Sun, Oct 6, 2019 at 6:33 PM Adam Ford <aford173@gmail.com> wrote:
->
-> When using mctrl_gpio_to_gpiod, it dereferences gpios into a single
-> requested GPIO.  This dereferencing can break if gpios is NULL,
-> so this patch adds a NULL check before dereferencing it.  If
-> gpios is NULL, this function will also return NULL.
->
-> Signed-off-by: Adam Ford <aford173@gmail.com>
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 > ---
->  DEVELOPERS                                   |  3 +++
+>  DEVELOPERS                                   |  1 +
 >  package/Config.in                            |  1 +
->  package/python-jmespath/Config.in            |  6 ++++++
->  package/python-jmespath/python-jmespath.hash |  5 +++++
->  package/python-jmespath/python-jmespath.mk   | 14 ++++++++++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-jmespath/Config.in
->  create mode 100644 package/python-jmespath/python-jmespath.hash
->  create mode 100644 package/python-jmespath/python-jmespath.mk
+>  package/python-botocore/Config.in            | 10 ++++++++++
+>  package/python-botocore/python-botocore.hash |  5 +++++
+>  package/python-botocore/python-botocore.mk   | 14 ++++++++++++++
+>  5 files changed, 31 insertions(+)
+>  create mode 100644 package/python-botocore/Config.in
+>  create mode 100644 package/python-botocore/python-botocore.hash
+>  create mode 100644 package/python-botocore/python-botocore.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index d8ea23e0b3..ea44b0709a 100644
+> index ea44b0709a..5aa26a88af 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -2076,6 +2076,9 @@ N:        Rahul Jain <rahul.jain@imgtec.com>
->  F:     package/uhttpd/
+> @@ -2077,6 +2077,7 @@ F:        package/uhttpd/
 >  F:     package/ustream-ssl/
 >
-> +N:  Rapha?l M?lotte <raphael.melotte@essensium.com>
-> +F:  package/python-jmespath/
-> +
->  N:     Refik Tuzakli <tuzakli.refik@gmail.com>
->  F:     package/paho-mqtt-cpp/
+>  N:  Rapha?l M?lotte <raphael.melotte@essensium.com>
+> +F:  package/python-botocore/
+>  F:  package/python-jmespath/
 >
+>  N:     Refik Tuzakli <tuzakli.refik@gmail.com>
 > diff --git a/package/Config.in b/package/Config.in
-> index bad4f9cba6..920de84a7e 100644
+> index 920de84a7e..9279ad20c9 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -981,6 +981,7 @@ menu "External python modules"
->         source "package/python-jaraco-functools/Config.in"
->         source "package/python-jedi/Config.in"
->         source "package/python-jinja2/Config.in"
-> +       source "package/python-jmespath/Config.in"
->         source "package/python-json-schema-validator/Config.in"
->         source "package/python-jsonmodels/Config.in"
->         source "package/python-jsonschema/Config.in"
-> diff --git a/package/python-jmespath/Config.in b/package/python-jmespath/Config.in
+> @@ -877,6 +877,7 @@ menu "External python modules"
+>         source "package/python-beautifulsoup4/Config.in"
+>         source "package/python-bitstring/Config.in"
+>         source "package/python-bluezero/Config.in"
+> +       source "package/python-botocore/Config.in"
+>         source "package/python-bottle/Config.in"
+>         source "package/python-brotli/Config.in"
+>         source "package/python-bunch/Config.in"
+> diff --git a/package/python-botocore/Config.in b/package/python-botocore/Config.in
 > new file mode 100644
-> index 0000000000..7bcd8f6a19
+> index 0000000000..a552900b6c
 > --- /dev/null
-> +++ b/package/python-jmespath/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_JMESPATH
-> +       bool "python-jmespath"
+> +++ b/package/python-botocore/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_PYTHON_BOTOCORE
+> +       bool "python-botocore"
+> +       select BR2_PACKAGE_PYTHON_JMESPATH # runtime
+> +       select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
+> +       select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
+> +       select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
 > +       help
-> +         JMESPath is a query language for JSON.
+> +         Low-level, data-driven core of boto 3.
 > +
-> +         https://github.com/jmespath/jmespath.py
-> diff --git a/package/python-jmespath/python-jmespath.hash b/package/python-jmespath/python-jmespath.hash
+> +         https://github.com/boto/botocore
+> diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
 > new file mode 100644
-> index 0000000000..6114ff0192
+> index 0000000000..199c4cdff1
 > --- /dev/null
-> +++ b/package/python-jmespath/python-jmespath.hash
+> +++ b/package/python-botocore/python-botocore.hash
 > @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/jmespath/json
-> +md5    5c3380a84c565d7438e4766fd4b7a775  jmespath-0.9.4.tar.gz
-> +sha256 bde2aef6f44302dfb30320115b17d030798de8c4110e28d5cf6cf91a7a31074c  jmespath-0.9.4.tar.gz
+> +# md5, sha256 from https://pypi.org/pypi/botocore/json
+> +md5    a75ae28d58d64dbf689d18ac3424342a  botocore-1.12.210.tar.gz
+> +sha256 7983b7624b3f71648a7101fbcb437e3d599b4f79b754e89220e574482a2f8298  botocore-1.12.210.tar.gz
 > +# Locally computed sha256 checksums
-> +sha256 66b313cce80ed0623fc7db3f24863a0c80fd83eb341a46b57864158ae74faa56  LICENSE.txt
-> diff --git a/package/python-jmespath/python-jmespath.mk b/package/python-jmespath/python-jmespath.mk
+> +sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
+> diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
 > new file mode 100644
-> index 0000000000..4afd06fd48
+> index 0000000000..378bd93768
 > --- /dev/null
-> +++ b/package/python-jmespath/python-jmespath.mk
+> +++ b/package/python-botocore/python-botocore.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-jmespath
+> +# python-botocore
 > +#
 > +################################################################################
 > +
-> +PYTHON_JMESPATH_VERSION = 0.9.4
-> +PYTHON_JMESPATH_SOURCE = jmespath-$(PYTHON_JMESPATH_VERSION).tar.gz
-> +PYTHON_JMESPATH_SITE = https://files.pythonhosted.org/packages/2c/30/f0162d3d83e398c7a3b70c91eef61d409dea205fb4dc2b47d335f429de32
-> +PYTHON_JMESPATH_SETUP_TYPE = setuptools
-> +PYTHON_JMESPATH_LICENSE = MIT
-> +PYTHON_JMESPATH_LICENSE_FILES = LICENSE.txt
+> +PYTHON_BOTOCORE_VERSION = 1.12.210
+> +PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
+> +PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/39/78/068e7cf5bb9901f34eacbf449cdfbdf32e470333930cbcda890cfc9fb820
+> +PYTHON_BOTOCORE_SETUP_TYPE = setuptools
+> +PYTHON_BOTOCORE_LICENSE = Apache-2.0
+> +PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt
 > +
 > +$(eval $(python-package))
 > --
