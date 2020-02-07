@@ -1,65 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Feb 2020 15:54:02 +0100
-Subject: [Buildroot] [git commit] package/libftdi1: fix python support
-Message-ID: <20200207144412.D94648D4D0@busybox.osuosl.org>
+Date: Fri, 7 Feb 2020 15:54:10 +0100
+Subject: [Buildroot] [git commit] package/wpebackend-fdo: bump to version
+ 1.4.1
+Message-ID: <20200207144412.EF1358D4CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df734533cfeab86951436b6d0e19e8294e271b35
+commit: https://git.buildroot.net/buildroot/commit/?id=1f027a771bcafbef088006c3f11d3a3ccc0bafa7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an upstreamed patch that reorders find_package() commands.
-This way Python interpreter will be detected first and based on
-it the Python libraries can be found.
+This is a bugfix release which solves a couple of build issues.
+Full release notes:
 
-Fixes the following CMake error:
+  https://wpewebkit.org/release/wpebackend-fdo-1.4.1.html
 
-Could NOT find PythonLibs (missing: PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS)
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0004-CMake-reorder-Python-detection.patch      | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+ package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libftdi1/0004-CMake-reorder-Python-detection.patch b/package/libftdi1/0004-CMake-reorder-Python-detection.patch
-new file mode 100644
-index 0000000000..c6c2b28c46
---- /dev/null
-+++ b/package/libftdi1/0004-CMake-reorder-Python-detection.patch
-@@ -0,0 +1,32 @@
-+From 640c2b3c0c72d5194d422ff7dda086c4533fba00 Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Mon, 13 Jan 2020 14:08:44 +0100
-+Subject: [PATCH] CMake: reorder Python detection
-+
-+PythonInterp should be detected before PythonLibs otherwise
-+CMake exits with the following message:
-+
-+Could NOT find PythonLibs (missing: PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS)
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ python/CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
-+index 90811ca..368bb7e 100644
-+--- a/python/CMakeLists.txt
-++++ b/python/CMakeLists.txt
-+@@ -12,8 +12,8 @@ if ( PYTHON_BINDINGS )
-+       set ( SWIG_FOUND TRUE )
-+     endif ()
-+   endif ()
-+-  find_package ( PythonLibs )
-+   find_package ( PythonInterp )
-++  find_package ( PythonLibs )
-+ endif ()
-+ 
-+ if ( SWIG_FOUND AND PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND )
-+-- 
-+2.17.0
-+
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+index 85e02e22a8..fbeed390e6 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpebackend-fdo-1.4.0.tar.xz.sums
+-md5 63553c3f43593c2a8c587c32e88fdf3c wpebackend-fdo-1.4.0.tar.xz
+-sha1 a426d9a778ab52be2f4dd9cc7d324b43abac2f80 wpebackend-fdo-1.4.0.tar.xz
+-sha256 a919ca4a5bc445f9419a5b7f3781cfc98e5abcf5d7259eb1869f5ab20fd18baf wpebackend-fdo-1.4.0.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.4.1.tar.xz.sums
++md5 c6362491a4a38ddac42b66f140e1cff2 wpebackend-fdo-1.4.1.tar.xz
++sha1 9217c8a5511bc53544b42cb23390256580ac4b0c wpebackend-fdo-1.4.1.tar.xz
++sha256 6249a0b7cbfa662206a8d2fa24e2c574e75c681ad0e93468091f1dc68ddb299d wpebackend-fdo-1.4.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+index 1f3fc705cc..4a7c569d9c 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEBACKEND_FDO_VERSION = 1.4.0
++WPEBACKEND_FDO_VERSION = 1.4.1
+ WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+ WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+ WPEBACKEND_FDO_INSTALL_STAGING = YES
