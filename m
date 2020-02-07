@@ -1,96 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Feb 2020 23:37:20 +0100
-Subject: [Buildroot] [PATCH 2/2] package/skeleton-init-sysv:
- conditionally enable swapon/swapoff in inittab
-In-Reply-To: <20200206173225.25677-3-unixmania@gmail.com> (unixmania's message
- of "Thu, 6 Feb 2020 14:32:25 -0300")
-References: <20200206173225.25677-1-unixmania@gmail.com>
- <20200206173225.25677-3-unixmania@gmail.com>
-Message-ID: <87r1z7xrz3.fsf@dell.be.48ers.dk>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Thu,  6 Feb 2020 18:38:30 -0800
+Subject: [Buildroot] [PATCH v16 0/4] package/gobject-introspection: new
+ package
+Message-ID: <20200207023834.877032-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+From: Adam Duskett <Aduskett@gmail.com>
 
- > From: Carlos Santos <unixmania@gmail.com>
- > The default inittab files added by busybox and sysvinit run 'swapon -a'
- > during init and 'swapoff -a' during shutdown but those programs are not
- > guaranteed to be available, so the boot log may become polluted by error
- > messages like this:
+This time, with 100% more working.
 
- >     swapon: not found
+My brain didn't work so well at Devdays apparently:
 
- > To avoid this, make the swapon/swapoff lines in inittab optional.
+Changes:
+  - Add gobject-introspection back into Config.in. I'm bad and somehow missed
+    this in v15.
+  
+  - Remove GOBJECT_INTROSPECTION_PC_FILE_FIXUP in goi.mk, as the sed wasn't
+    doing anything.
+  
+  - Paths in g-ir-compiler.in weren't 100% correct due to moving g-ir-compiler
+    to the host directory, so qemu was trying to load the host compiler and not
+    the staging compiler, which would cause qemu to puke.
 
- > - Add a BR2_SYSTEM_HAS_SWAPON_SWAPOFF config to inform that swapon and
- >   swapoff are available.
+  - I removed a -x in g-ir-scanner-wrapper because I am blind.
+  
+I tested this patch series with gstreamer1, and it works! You, too, can now
+have high-functioning projects use glib based c libraries! Hooray!
 
- > - Add a BR2_PACKAGE_BUSYBOX_SWAPON_SWAPOFF config that depends on
- >   BR2_USE_MMU and selects BR2_SYSTEM_HAS_SWAPON_SWAPOFF. Build the
- >   Busybox swapon/swapoff utilities based on this new option.
+Thanks, everybody!
 
- > - Make UTIL_LINUX_BINARIES select BR2_SYSTEM_HAS_SWAPON_SWAPOFF config.
+Adam
+Adam
 
- > - Add a targe-finalize hook to skeleton-init-sysv that comments-out or
- >   enables the swapon/swapoff lines in /etc/inittab, based on the value
- >   of BR2_SYSTEM_HAS_SWAPON_SWAPOFF.
+Adam Duskett (4):
+  package/libiberty: new package
+  package/prelink-cross: new package
+  package/gdb: depend on libiberty
+  package/gobject-introspection: new package
 
- > Based on a previous patch sent by Thomas De Schampheleire.
-
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
- > ---
- > CC: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > CC: Peter Korsgaard <peter@korsgaard.com>
- > ---
- >  package/busybox/Config.in                        |  6 ++++++
- >  package/busybox/busybox.mk                       | 14 ++++++++++++++
- >  package/skeleton-init-sysv/skeleton-init-sysv.mk | 12 ++++++++++++
- >  package/util-linux/Config.in                     |  1 +
- >  system/Config.in                                 |  6 ++++++
- >  5 files changed, 39 insertions(+)
-
- > diff --git a/package/busybox/Config.in b/package/busybox/Config.in
- > index 5e5c586762..9103256494 100644
- > --- a/package/busybox/Config.in
- > +++ b/package/busybox/Config.in
- > @@ -68,6 +68,12 @@ config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
- >  comment "Busybox individual binaries need a toolchain w/ dynamic library"
- >  	depends on BR2_STATIC_LIBS
- 
- > +config BR2_PACKAGE_BUSYBOX_SWAPON_SWAPOFF
- > +	bool
- > +	default y
- > +	depends on BR2_USE_MMU
- > +	select BR2_SYSTEM_HAS_SWAPON_SWAPOFF # used by skeleton-init-sysv
-
-You are presumably missing some option text here so this becomes a
-visible option in menuconfig.
-
-
-
- > +ifeq ($(BR2_PACKAGE_BUSYBOX_SWAPON_SWAPOFF),y)
- > +define BUSYBOX_SET_SWAPON_SWAPOFF
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_SWAPON,$(BUSYBOX_BUILD_CONFIG))
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_SWAPOFF,$(BUSYBOX_BUILD_CONFIG))
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_SWAPONOFF_LABEL,$(BUSYBOX_BUILD_CONFIG))
- > +endef
- > +else
- > +define BUSYBOX_SET_SWAPON_SWAPOFF
- > +	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPON,$(BUSYBOX_BUILD_CONFIG))
- > +	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPOFF,$(BUSYBOX_BUILD_CONFIG))
- > +endef
- > +endif
-
-I am not really convinced that this is an improvement over Thomas'
-version. In general I think we should keep the .config tweaks to a
-minimum as it can be quite confusing to users that their (potentially
-custom) .config settings is overridden.
-
-Do you see any functional issue with the swapon/off handling as is, or
-is it just a question of "taste"?
+ DEVELOPERS                                    |   3 +
+ package/Config.in                             |   1 +
+ package/gdb/gdb.mk                            |   4 +-
+ ...lete-upstream-attempt-at-cross-compi.patch |  33 ++++
+ ...d-cross-compilation-support-to-meson.patch | 163 ++++++++++++++++++
+ .../0003-disable-tests.patch                  |  29 ++++
+ ...canner-add-use-binary-wrapper-option.patch |  52 ++++++
+ ...scanner-add-a-use-ldd-wrapper-option.patch |  48 ++++++
+ ...scanner-add-a-lib-dirs-envvar-option.patch |  73 ++++++++
+ .../0007-Add-rpath-links-to-ccompiler.patch   |  29 ++++
+ ...-error-return-codes-from-ldd-wrapper.patch |  28 +++
+ package/gobject-introspection/Config.in       |  33 ++++
+ .../gobject-introspection/g-ir-compiler.in    |   3 +
+ .../g-ir-scanner-lddwrapper.in                |   2 +
+ .../g-ir-scanner-qemuwrapper.in               |  17 ++
+ package/gobject-introspection/g-ir-scanner.in |   8 +
+ .../gobject-introspection.hash                |   4 +
+ .../gobject-introspection.mk                  | 116 +++++++++++++
+ package/libiberty/libiberty.hash              |   2 +
+ package/libiberty/libiberty.mk                |  27 +++
+ package/prelink-cross/prelink-cross.hash      |   3 +
+ package/prelink-cross/prelink-cross.mk        |  16 ++
+ 22 files changed, 693 insertions(+), 1 deletion(-)
+ create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
+ create mode 100644 package/gobject-introspection/0002-add-cross-compilation-support-to-meson.patch
+ create mode 100644 package/gobject-introspection/0003-disable-tests.patch
+ create mode 100644 package/gobject-introspection/0004-giscanner-add-use-binary-wrapper-option.patch
+ create mode 100644 package/gobject-introspection/0005-giscanner-add-a-use-ldd-wrapper-option.patch
+ create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
+ create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
+ create mode 100644 package/gobject-introspection/0008-ignore-error-return-codes-from-ldd-wrapper.patch
+ create mode 100644 package/gobject-introspection/Config.in
+ create mode 100644 package/gobject-introspection/g-ir-compiler.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner.in
+ create mode 100644 package/gobject-introspection/gobject-introspection.hash
+ create mode 100644 package/gobject-introspection/gobject-introspection.mk
+ create mode 100644 package/libiberty/libiberty.hash
+ create mode 100644 package/libiberty/libiberty.mk
+ create mode 100644 package/prelink-cross/prelink-cross.hash
+ create mode 100644 package/prelink-cross/prelink-cross.mk
 
 -- 
-Bye, Peter Korsgaard
+2.24.1
