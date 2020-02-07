@@ -1,48 +1,59 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri,  7 Feb 2020 16:14:24 +0100
-Subject: [Buildroot] [PATCH 0/3] packages/exim: fix build failures
-Message-ID: <20200207151427.12475-1-luca@lucaceresoli.net>
+Date: Fri,  7 Feb 2020 16:14:25 +0100
+Subject: [Buildroot] [PATCH 1/3] package/exim: fix target build on some
+ toolchains
+In-Reply-To: <20200207151427.12475-1-luca@lucaceresoli.net>
+References: <20200207151427.12475-1-luca@lucaceresoli.net>
+Message-ID: <20200207151427.12475-2-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-exim is failing on the autobuilders since the version bump to 4.93 (commit
-6038c3232acfdb: "package/exim: bump version to 4.93.0.3").
+Building with the Sourcery CodeBench ARM 2014.05 the build fails with this
+error:
 
-Commit 2c692e81a844b30b ("package/exim: fix host build") fixed one failure
-when building the host tools, but we still have a similar ("'for' loop
-initial declarations are only allowed in C99 mode") one when cross-building
-target files.
+  >>> exim_dbmbuild utility built
 
-In patch 1 I applied a similar fix (add -std=c99), but more failures
-started appearing later in the build process.
+  /home/ceresoli/devel/buildroot/output/host/bin/arm-none-linux-gnueabi-gcc -DEXIM_DUMPDB exim_dbutil.c
+  exim_dbutil.c: In function 'main':
+  exim_dbutil.c:568:1: error: 'for' loop initial declarations are only allowed in C99 mode
+   for (uschar * key = dbfn_scan(dbm, TRUE, &cursor);
+   ^
+  exim_dbutil.c:568:1: note: use option -std=c99 or -std=gnu99 to compile your code
+  exim_dbutil.c:630:2: error: 'for' loop initial declarations are only allowed in C99 mode
+    for (int i = 1; i <= wait->count; i++)
+    ^
+  exim_dbutil.c:642:6: error: 'for' loop initial declarations are only allowed in C99 mode
+        for (int j = 0; j < MESSAGE_ID_LENGTH; j++)
+        ^
 
-I have not completely understood the new failures, yet with a couple of
-patches it is now building. This is done in patch 2 but I'm not sure it is
-a correct solution.
+Fix by enforcing C99. This completes commit
+2c692e81a844b30b4d3161dfd9897b3265bb9279 ("package/exim: fix host build")
+to also fix target builds.
 
-Finally another failure appeared. It is yet another
-for-loop-initial-declaration error, but happens later in the install
-step. This is fixed in patch 3 adding another -std=c99.
+Fixes: http://autobuild.buildroot.net/results/6b7e08090f5f0f2627cc3e89b349c2052b6e3116/
 
-I cannot work on this issue for the next few days, so here are my patches,
-as-is, in case anybody wants to have a look before 2020.02.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/exim/exim.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Luca
-
-Luca Ceresoli (3):
-  package/exim: fix target build on some toolchains
-  package/exim: fix various build failures
-  package/exim: fix build error during install step
-
- ..._lock-fix-lstat-related-build-errors.patch | 50 +++++++++++++++++++
- .../exim/0006-sieve-fix-build-errors.patch    | 41 +++++++++++++++
- package/exim/exim.mk                          |  7 ++-
- 3 files changed, 96 insertions(+), 2 deletions(-)
- create mode 100644 package/exim/0005-exim_lock-fix-lstat-related-build-errors.patch
- create mode 100644 package/exim/0006-sieve-fix-build-errors.patch
-
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index c07d6f919cb0..0ad9a8de8000 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -127,7 +127,8 @@ define EXIM_BUILD_CMDS
+ 		LNCC=$(HOSTCC) \
+ 		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
+ 		LFLAGS="-fPIC $(HOST_LDFLAGS)"
+-	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS)
++	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS) \
++		CFLAGS="-std=c99 $(TARGET_CFLAGS)"
+ endef
+ 
+ # Need to replicate the LFLAGS in install, as exim still wants to build
 -- 
 2.25.0
