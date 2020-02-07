@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri,  7 Feb 2020 19:08:21 +0100
-Subject: [Buildroot] [PATCH v3 02/10] package/rust: build and install cargo
+Date: Fri,  7 Feb 2020 19:08:22 +0100
+Subject: [Buildroot] [PATCH v3 03/10] package/cargo-bin: install if rust-bin
+ selected
 In-Reply-To: <20200207180829.165689-1-arnout@mind.be>
 References: <20200207180829.165689-1-arnout@mind.be>
-Message-ID: <20200207180829.165689-3-arnout@mind.be>
+Message-ID: <20200207180829.165689-4-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +13,31 @@ To: buildroot@busybox.net
 
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-Cargo source code is not provided anymore as a separate tarball but is
-now built along with the Rust compiler.
-
-So update rust host variant to build Cargo and install the
-cross-compilation configuration file.
-
-All this will be overwritten again by the host-cargo package, but
-that will be removed in later commits.
+If host-rust-bin, the pre-built Rust compiler, is selected as a rustc
+provider, then also install the pre-built cargo binary to be coherent.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-Tested-by: Sam Voss <sam.voss@rockwellcollins.com>
-[Arnout: merge all install commands in HOST_RUST_INSTALL_CMDS]
+[Arnout: don't install cargo config, alread moved]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/rust/rust.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/cargo-bin/cargo-bin.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index 5d14fc6682..9bbed15082 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -47,11 +47,14 @@ define HOST_RUST_CONFIGURE_CMDS
- 		echo 'python = "$(HOST_DIR)/bin/python2"'; \
- 		echo 'submodules = false'; \
- 		echo 'vendor = true'; \
-+		echo 'extended = true'; \
-+		echo 'tools = ["cargo"]'; \
- 		echo 'compiler-docs = false'; \
- 		echo 'docs = false'; \
- 		echo 'verbose = $(HOST_RUST_VERBOSITY)'; \
- 		echo '[install]'; \
- 		echo 'prefix = "$(HOST_DIR)"'; \
-+		echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
- 		echo '[rust]'; \
- 		echo 'channel = "stable"'; \
- 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
+diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
+index 3614f7a53d..3eaf417531 100644
+--- a/package/cargo-bin/cargo-bin.mk
++++ b/package/cargo-bin/cargo-bin.mk
+@@ -10,4 +10,10 @@ CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
+ CARGO_BIN_LICENSE = Apache-2.0 or MIT
+ CARGO_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+ 
++ifeq ($(BR2_PACKAGE_HOST_RUST_BIN),y)
++define HOST_CARGO_BIN_INSTALL_CMDS
++	$(@D)/install.sh --prefix=$(HOST_DIR) --disable-ldconfig
++endef
++endif
++
+ $(eval $(host-generic-package))
 -- 
 2.24.1
