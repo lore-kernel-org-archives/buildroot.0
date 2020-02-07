@@ -1,78 +1,101 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Fri, 7 Feb 2020 14:32:00 +0100
-Subject: [Buildroot] [PATCH 05/10] package/systemd: cosmetic rearrange
- list of users
-In-Reply-To: <CAFvCimVUR=DZiJ2T5bv+YBdysZBFVBwTPVpPr9w3-2MTb41=fQ@mail.gmail.com>
-References: <20200206093633.251413-1-nolange79@gmail.com>
- <20200206093633.251413-6-nolange79@gmail.com>
- <CAFvCimWQmzczt5u0LuTW=vg4UUfXAZ3VAskCmU8CFYGPVgEcxw@mail.gmail.com>
- <CADYdroNxsdmgJHEaW1rHXN4KbyCkoD=yFzVuVPPeMV_xF0j4VA@mail.gmail.com>
- <CAFvCimUVLFW-K2WCU2nFLHkQutsW7HKjWeV5zWJ3cLqK3JurKQ@mail.gmail.com>
- <CADYdroNNEhAiEb10nO5h-Q5Sxp4MT0F6mMhR04tcpoKBza_7Jg@mail.gmail.com>
- <CAFvCimUei-cLjBYU5don-L9hJA5WgMS-NynOpsmTqsQ=bChmww@mail.gmail.com>
- <CADYdroNei=n_MK1iURBRqKBz5KFj=ghtkiYCstLNU=_TBPQoTA@mail.gmail.com>
- <CAFvCimVUR=DZiJ2T5bv+YBdysZBFVBwTPVpPr9w3-2MTb41=fQ@mail.gmail.com>
-Message-ID: <CADYdroO6nG4Jyw0icSb=c-Yxhnfsgr2NQJCdm8nhtwsmiL9v4g@mail.gmail.com>
+From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@essensium.com>
+Date: Fri,  7 Feb 2020 15:16:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-rsa: new package.
+Message-ID: <20200207141629.31586-1-raphael.melotte@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Define what you mean with break - chances are, its not worse than all of
-packages suddenly creating system users.
+Python-RSA is a pure-Python RSA implementation.
 
-I meant that the lists from BR2_ROOTFS_USERS_TABLES are handled special and
-create normal users (uid >= 0),
-while all packages (buildroot or user packages) create system users with
-uid=-1.
+Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
+---
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/python-rsa/Config.in       | 10 ++++++++++
+ package/python-rsa/python-rsa.hash |  6 ++++++
+ package/python-rsa/python-rsa.mk   | 15 +++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/python-rsa/Config.in
+ create mode 100644 package/python-rsa/python-rsa.hash
+ create mode 100644 package/python-rsa/python-rsa.mk
 
-new packages could use 's' and 'u' instead, with -1 being somewhat
-ambiguous then (potentially being deprecated one day).
-
-Am Fr., 7. Feb. 2020 um 14:23 Uhr schrieb J?r?my ROSEN <
-jeremy.rosen@smile.fr>:
-
->
->
-> Le ven. 7 f?vr. 2020 ? 14:11, Norbert Lange <nolange79@gmail.com> a
-> ?crit :
->
->>
->>
->>
->> what about changing mkuser default -1 to system user, adding a new value
->> ('-2' or 'u') for normal user?
->> That way you just need to patch the 1-2 spots where normal users are
->> generated.
->>
->>
-> There are no such spot that I could find at first glance in buildroot
-> itself, but that would break user packages...
-> so I don't think that's a good idea. It would fix more (harmless) bugs
-> than it would create, but the bugs
-> created would be more problematic than the bugs fixed....
->
-> --
-> [image: SMILE]  <http://www.smile.eu/>
->
-> 20 rue des Jardins
-> 92600 Asni?res-sur-Seine
-> *J?r?my ROSEN*
-> Architecte technique
->
-> [image: email] jeremy.rosen at smile.fr
-> [image: phone]  +33 6 88 25 87 42
-> [image: url] http://www.smile.eu
->
-> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-> <https://www.facebook.com/smileopensource> [image: LinkedIn]
-> <https://www.linkedin.com/company/smile> [image: Github]
-> <https://github.com/Smile-SA>
->
-> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200207/d7c40351/attachment.html>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d8ea23e0b3..b470e34cc5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2076,6 +2076,9 @@ N:	Rahul Jain <rahul.jain@imgtec.com>
+ F:	package/uhttpd/
+ F:	package/ustream-ssl/
+ 
++N:  Rapha?l M?lotte <raphael.melotte@essensium.com>
++F:  package/python-rsa/
++
+ N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+ F:	package/paho-mqtt-cpp/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index bad4f9cba6..d190d18874 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1106,6 +1106,7 @@ menu "External python modules"
+ 	source "package/python-requests-toolbelt/Config.in"
+ 	source "package/python-rpi-gpio/Config.in"
+ 	source "package/python-rpi-ws281x/Config.in"
++	source "package/python-rsa/Config.in"
+ 	source "package/python-rtslib-fb/Config.in"
+ 	source "package/python-scandir/Config.in"
+ 	source "package/python-scapy/Config.in"
+diff --git a/package/python-rsa/Config.in b/package/python-rsa/Config.in
+new file mode 100644
+index 0000000000..c02601105b
+--- /dev/null
++++ b/package/python-rsa/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_RSA
++	bool "python-rsa"
++	select BR2_PACKAGE_PYTHON_PYASN1
++	help
++	  Python-RSA is a pure-Python RSA implementation. It supports
++	  encryption and decryption, signing and verifying signatures,
++	  and key generation according to PKCS\#1 version 1.5. It can be
++	  used as a Python library as well as on the command line.
++
++	  https://stuvel.eu/rsa
+diff --git a/package/python-rsa/python-rsa.hash b/package/python-rsa/python-rsa.hash
+new file mode 100644
+index 0000000000..c93c2243fb
+--- /dev/null
++++ b/package/python-rsa/python-rsa.hash
+@@ -0,0 +1,6 @@
++# md5, sha256 from https://pypi.org/rsa/json:
++md5  9f9af433a16868b616fc609215e91ddb  rsa-4.0.tar.gz
++sha256  1a836406405730121ae9823e19c6e806c62bbad73f890574fff50efa4122c487  rsa-4.0.tar.gz
++
++# Locally computed checksums:
++sha256	073f28b7d389c8fe74f607e17c27f81eaa5ace69edc43a884f23f41b41c5c726  LICENSE
+diff --git a/package/python-rsa/python-rsa.mk b/package/python-rsa/python-rsa.mk
+new file mode 100644
+index 0000000000..e847eaffb1
+--- /dev/null
++++ b/package/python-rsa/python-rsa.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-rsa
++#
++################################################################################
++
++PYTHON_RSA_VERSION = 4.0
++PYTHON_RSA_SOURCE = rsa-$(PYTHON_RSA_VERSION).tar.gz
++PYTHON_RSA_SITE = https://files.pythonhosted.org/packages/cb/d0/8f99b91432a60ca4b1cd478fd0bdf28c1901c58e3a9f14f4ba3dba86b57f
++PYTHON_RSA_SETUP_TYPE = setuptools
++PYTHON_RSA_LICENSE = APACHE
++PYTHON_RSA_LICENSE_FILES = LICENSE
++PYTHON_RSA_DEPENDENCIES = python-pyasn1
++
++$(eval $(python-package))
+-- 
+2.23.0
