@@ -1,101 +1,206 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Feb 2020 19:56:12 +0100
-Subject: [Buildroot] [git commit] package/localedef: relax required
- toolchain version
-Message-ID: <20200208184737.A09DF8D46A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 8 Feb 2020 20:00:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/weston: update patches with
+ upstream backports
+In-Reply-To: <20200208065920.128317-1-james.hilliard1@gmail.com>
+References: <20200208065920.128317-1-james.hilliard1@gmail.com>
+Message-ID: <20200208190011.GC5156@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=281bfbcaea855c2f6f73ec13a6c050fcf2c602a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+James, All,
 
-The glibc package has been updating the toolchain version
-dependency since 2.28.x. The dependencies don't currently
-apply to the localedef build of the package, so this
-patchset relaxes the restriction such that builds can still
-occur on older host machines.
+Why? Your commit logs are desparately in need of more details. When a
+baclkport from upstream is needed, ia sound reason should be provided.
 
-The current supported minimum versions after this patch
-is applied are:
-GCC 4.8
-Binutils 2.24
+Is it fixing a CVE?
+Is it fixing a runtime issue?
+Is it fixing a build issue?
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ndency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-new file mode 100644
-index 0000000000..a6e87cc317
---- /dev/null
-+++ b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-@@ -0,0 +1,64 @@
-+From 313e04bfbd281f9b46fdde097aacb59d501820a3 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Thu, 6 Feb 2020 14:36:21 -0600
-+Subject: [PATCH] relax dependency on GCC to 4.8 and binutils to 2.24
-+
-+The glibc package has been updating the toolchain version
-+dependency since 2.28.x. The dependencies don't currently
-+apply to the localedef build of the package, so this
-+patchset relaxes the restriction such that builds can still
-+occur on older host machines.
-+
-+Here's a related post from 2018 for a similar patchset.
-+http://lists.busybox.net/pipermail/buildroot/2018-December/237949.html
-+
-+Timeline of relevant commits that adjust the dependency upstream.
-+GCC 4.9+
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=4add86749a31f302674599b69d2eea691d69341a
-+Binutils 2.25+
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=073e8fa7739ed453d6854b834f290c263a6cdb9f
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=b4396163aa8666f970aaf43eaca25f3a92b18c1b
-+GCC 5+
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=192963be49678b48f60218f1f794991cdd9fe472
-+GCC 6.2+
-+ https://sourceware.org/git/?p=glibc.git;a=commit;h=4dcbbc3b28aaeafe23e1a30db84055aa6f6fa987
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ configure | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 6d26b824..9ac2e5e9 100755
-+--- a/configure
-++++ b/configure
-+@@ -4601,7 +4601,7 @@ $as_echo_n "checking version of $AS... " >&6; }
-+   ac_prog_version=`$AS --version 2>&1 | sed -n 's/^.*GNU assembler.* \([0-9]*\.[0-9.]*\).*$/\1/p'`
-+   case $ac_prog_version in
-+     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
-+-    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-++    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-+        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-+     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
-+ 
-+@@ -4731,7 +4731,7 @@ $as_echo_n "checking version of $LD... " >&6; }
-+   ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
-+   case $ac_prog_version in
-+     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
-+-    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-++    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-+        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-+     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
-+ 
-+@@ -5140,7 +5140,7 @@ int
-+ main ()
-+ {
-+ 
-+-#if !defined __GNUC__ || __GNUC__ < 6 || (__GNUC__ == 6 && __GNUC_MINOR__ < 2)
-++#if !defined __GNUC__ || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8)
-+ #error insufficient compiler
-+ #endif
-+   ;
-+-- 
-+2.18.0
-+
+On 2020-02-07 23:59 -0700, James Hilliard spake thusly:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  ...include-sys-mman.h-in-os-compatibili.patch | 17 ++---
+>  ...issing-defines-for-pre-v3.17-kernels.patch | 42 ------------
+>  ...-the-seal-logic-behind-HAVE_MEMFD_CR.patch | 67 +++++++++++++++++++
+>  3 files changed, 76 insertions(+), 50 deletions(-)
+>  delete mode 100644 package/weston/0002-add-missing-defines-for-pre-v3.17-kernels.patch
+>  create mode 100644 package/weston/0002-shared-guard-all-the-seal-logic-behind-HAVE_MEMFD_CR.patch
+> 
+> diff --git a/package/weston/0001-unconditionally-include-sys-mman.h-in-os-compatibili.patch b/package/weston/0001-unconditionally-include-sys-mman.h-in-os-compatibili.patch
+> index 0c632fbf35..33b1353fba 100644
+> --- a/package/weston/0001-unconditionally-include-sys-mman.h-in-os-compatibili.patch
+> +++ b/package/weston/0001-unconditionally-include-sys-mman.h-in-os-compatibili.patch
+> @@ -1,4 +1,4 @@
+> -From 888dd1ae6a0261230b2bc47079d7b20df8c05e68 Mon Sep 17 00:00:00 2001
+> +From 7b36f171d09354a2d3a48db0ae2d34d66aa4f1ae Mon Sep 17 00:00:00 2001
+>  From: James Hilliard <james.hilliard1@gmail.com>
+>  Date: Sat, 1 Feb 2020 20:02:29 -0700
+>  Subject: [PATCH] unconditionally include sys/mman.h in os-compatibility.c
+> @@ -13,20 +13,21 @@ Fixes:
+>                           LOCK_READ
+>  
+>  Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> -[Upstream status:
+> -https://gitlab.freedesktop.org/wayland/weston/merge_requests/368]
+> +[james.hilliard1 at gmail.com: backport from upstream commit
+> +7b36f171d09354a2d3a48db0ae2d34d66aa4f1ae]
+>  ---
+> - shared/os-compatibility.c | 2 --
+> - 1 file changed, 2 deletions(-)
+> + shared/os-compatibility.c | 3 ---
+> + 1 file changed, 3 deletions(-)
+>  
+>  diff --git a/shared/os-compatibility.c b/shared/os-compatibility.c
+> -index 5e1ce479..ddc37807 100644
+> +index 5e1ce479..041c929f 100644
+>  --- a/shared/os-compatibility.c
+>  +++ b/shared/os-compatibility.c
+> -@@ -35,9 +35,7 @@
+> +@@ -34,10 +34,7 @@
+> + #include <string.h>
+>   #include <stdlib.h>
+>   #include <libweston/zalloc.h>
+> - 
+> +-
+>  -#ifdef HAVE_MEMFD_CREATE
+>   #include <sys/mman.h>
+>  -#endif
+> diff --git a/package/weston/0002-add-missing-defines-for-pre-v3.17-kernels.patch b/package/weston/0002-add-missing-defines-for-pre-v3.17-kernels.patch
+> deleted file mode 100644
+> index 39360f4fd2..0000000000
+> --- a/package/weston/0002-add-missing-defines-for-pre-v3.17-kernels.patch
+> +++ /dev/null
+> @@ -1,42 +0,0 @@
+> -From f43c98b23e0d7731cd8d7a9b4510c359f3df7930 Mon Sep 17 00:00:00 2001
+> -From: James Hilliard <james.hilliard1@gmail.com>
+> -Date: Sat, 1 Feb 2020 23:32:29 -0700
+> -Subject: [PATCH] add missing defines for pre-v3.17 kernels
+> -
+> -Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> -[Upstream status:
+> -https://gitlab.freedesktop.org/wayland/weston/merge_requests/369]
+> ----
+> - shared/os-compatibility.c | 16 ++++++++++++++++
+> - 1 file changed, 16 insertions(+)
+> -
+> -diff --git a/shared/os-compatibility.c b/shared/os-compatibility.c
+> -index ddc37807..26c39e67 100644
+> ---- a/shared/os-compatibility.c
+> -+++ b/shared/os-compatibility.c
+> -@@ -39,6 +39,22 @@
+> - 
+> - #include "os-compatibility.h"
+> - 
+> -+#ifndef F_GET_SEALS
+> -+#define F_GET_SEALS	(1034)
+> -+#endif
+> -+
+> -+#ifndef F_SEAL_SHRINK
+> -+#define F_SEAL_SHRINK	0x0002
+> -+#endif
+> -+
+> -+#ifndef F_SEAL_GROW
+> -+#define F_SEAL_GROW	0x0004
+> -+#endif
+> -+
+> -+#ifndef F_SEAL_WRITE
+> -+#define F_SEAL_WRITE	0x0008
+> -+#endif
+> -+
+> - #define READONLY_SEALS (F_SEAL_SHRINK | F_SEAL_GROW | F_SEAL_WRITE)
+> - 
+> - int
+> --- 
+> -2.20.1
+> -
+> diff --git a/package/weston/0002-shared-guard-all-the-seal-logic-behind-HAVE_MEMFD_CR.patch b/package/weston/0002-shared-guard-all-the-seal-logic-behind-HAVE_MEMFD_CR.patch
+> new file mode 100644
+> index 0000000000..c403ede4be
+> --- /dev/null
+> +++ b/package/weston/0002-shared-guard-all-the-seal-logic-behind-HAVE_MEMFD_CR.patch
+> @@ -0,0 +1,67 @@
+> +From f0d3a6149158f682230ae9a1e69289431974f635 Mon Sep 17 00:00:00 2001
+> +From: Sebastian Wick <sebastian@sebastianwick.net>
+> +Date: Wed, 5 Feb 2020 10:27:23 +0100
+> +Subject: [PATCH] shared: guard all the seal logic behind HAVE_MEMFD_CREATE
+> +
+> +The initial version of os_ro_anonymous_file missed two guards around the
+> +seal logic which leads to a compilation error on older systems.
+> +
+> +Also make the check for a read-only file symmetric in
+> +os_ro_anonymous_file_get_fd and os_ro_anonymous_file_put_fd.
+> +
+> +Signed-off-by: Sebastian Wick <sebastian@sebastianwick.net>
+> +[james.hilliard1 at gmail.com: backport from upstream commit
+> +f0d3a6149158f682230ae9a1e69289431974f635]
+> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> +---
+> + shared/os-compatibility.c | 15 +++++++++------
+> + 1 file changed, 9 insertions(+), 6 deletions(-)
+> +
+> +diff --git a/shared/os-compatibility.c b/shared/os-compatibility.c
+> +index 041c929f..2e12b7cc 100644
+> +--- a/shared/os-compatibility.c
+> ++++ b/shared/os-compatibility.c
+> +@@ -340,6 +340,7 @@ os_ro_anonymous_file_get_fd(struct ro_anonymous_file *file,
+> + 	void *src, *dst;
+> + 	int seals, fd;
+> + 
+> ++#ifdef HAVE_MEMFD_CREATE
+> + 	seals = fcntl(file->fd, F_GET_SEALS);
+> + 
+> + 	/* file was sealed for read-only and we don't have to support MAP_SHARED
+> +@@ -348,6 +349,7 @@ os_ro_anonymous_file_get_fd(struct ro_anonymous_file *file,
+> + 	if (seals != -1 && mapmode == RO_ANONYMOUS_FILE_MAPMODE_PRIVATE &&
+> + 	    (seals & READONLY_SEALS) == READONLY_SEALS)
+> + 		return file->fd;
+> ++#endif
+> + 
+> + 	/* for all other cases we create a new anonymous file that can be mapped
+> + 	 * with MAP_SHARED and copy the contents to it and return that instead
+> +@@ -388,17 +390,18 @@ os_ro_anonymous_file_get_fd(struct ro_anonymous_file *file,
+> + int
+> + os_ro_anonymous_file_put_fd(int fd)
+> + {
+> ++#ifdef HAVE_MEMFD_CREATE
+> + 	int seals = fcntl(fd, F_GET_SEALS);
+> + 	if (seals == -1 && errno != EINVAL)
+> + 		return -1;
+> + 
+> +-	/* If the fd cannot be sealed seals is -1 at this point
+> +-	 * or the file can be sealed but has not been sealed for writing.
+> +-	 * In both cases we created a new anonymous file that we have to
+> +-	 * close.
+> ++	/* The only case in which we do NOT have to close the file is when the file
+> ++	 * was sealed for read-only
+> + 	 */
+> +-	if (seals == -1 || !(seals & F_SEAL_WRITE))
+> +-		close(fd);
+> ++	if (seals != -1 && (seals & READONLY_SEALS) == READONLY_SEALS)
+> ++		return 0;
+> ++#endif
+> + 
+> ++	close(fd);
+> + 	return 0;
+> + }
+> +-- 
+> +2.20.1
+> +
+> -- 
+> 2.20.1
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
