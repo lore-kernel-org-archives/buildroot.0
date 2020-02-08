@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 8 Feb 2020 22:24:40 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/qemu: add support for sparc64
-In-Reply-To: <20200208211512.994361-3-aduskett@gmail.com>
+Date: Sat, 8 Feb 2020 22:33:00 +0100
+Subject: [Buildroot] [PATCH v2 2/3] package/qemu: do not support
+ x86_steamroller or x86_core_avx2
+In-Reply-To: <20200208211512.994361-2-aduskett@gmail.com>
 References: <20200208211512.994361-1-aduskett@gmail.com>
- <20200208211512.994361-3-aduskett@gmail.com>
-Message-ID: <20200208212440.GB23769@scaer>
+ <20200208211512.994361-2-aduskett@gmail.com>
+Message-ID: <20200208213300.GC23769@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,34 +17,35 @@ Adam, All,
 On 2020-02-08 13:15 -0800, aduskett at gmail.com spake thusly:
 > From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/qemu/qemu.mk | 3 +++
->  1 file changed, 3 insertions(+)
+> These CPU's cause segfaults with qemu.
 > 
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 6794157709..f6c14c6a47 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -237,6 +237,9 @@ endif
->  ifeq ($(HOST_QEMU_ARCH),sh4aeb)
->  HOST_QEMU_ARCH = sh4eb
->  endif
-> +ifeq ($(HOST_QEMU_ARCH),sparc64)
-> +HOST_QEMU_ARCH = sparc64
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-I have some issues parsing that condition...
+If the issue is with the excistign qemu version, then that patch should
+be first. If that's qemu-4.2 that brings the failure, the patch should
+be squashed into the bump patch.
 
-If HOST_QEMU_ARCH is set to sparc64, then we assign it the same value it
-already had. This is a bit of a noop, no?
+No need to resend, we can re-order when applying.
 
 Regards,
 Yann E. MORIN.
 
-> +endif
->  ifeq ($(HOST_QEMU_ARCH),csky)
->  ifeq ($(BR2_ck610),y)
->  HOST_QEMU_ARCH = cskyv1
+> ---
+>  package/qemu/Config.in.host | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+> index d6b4bf6dd4..ea9281c5fb 100644
+> --- a/package/qemu/Config.in.host
+> +++ b/package/qemu/Config.in.host
+> @@ -20,6 +20,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+>  	default y if BR2_sparc64
+>  	default y if BR2_xtensa
+>  	default y if BR2_x86_64
+> +	depends on !BR2_x86_steamroller && !BR2_x86_core_avx2
+>  	depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
+>  
+>  config BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS
 > -- 
 > 2.24.1
 > 
