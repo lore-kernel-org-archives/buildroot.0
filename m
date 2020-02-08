@@ -1,66 +1,171 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sat,  8 Feb 2020 22:57:50 +0100
-Subject: [Buildroot] [PATCH v2 0/2] Add CVE reporting to pkg-stats
-Message-ID: <20200208215752.13628-1-titouan.christophe@railnova.eu>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 8 Feb 2020 22:58:07 +0100
+Subject: [Buildroot] [PATCH 00/10] Remove gstreamer 0.10
+In-Reply-To: <20200207145026.28384-1-peter@korsgaard.com>
+References: <20200207145026.28384-1-peter@korsgaard.com>
+Message-ID: <20200208215807.GD23769@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 2020-02-07 15:50 +0100, Peter Korsgaard spake thusly:
+> Gstreamer 0.10 hasn't seen an upstream releases in 8 years and is
+> missing a lot of features and (security) fixes compared to gstreamer
+> 1.x. Lets drop the packages and support in other packages before
+> releasing the new LTS.
 
-This set of commit extends the pkg-stats tool to use the NVD database
-(https://nvd.nist.gov/vuln/data-feeds) to see if the current version
-of each Buildroot package is affected by a CVE.
+It's dead, Jim.
 
-An example result can be seen here:
+Series applied to master, thanks.
 
- - Human readable HTML:       https://bootlin.com/~thomas/stats-cve.html
- - Machine parseable JSON:    https://bootlin.com/~thomas/stats-cve.json
+Regards,
+Yann E. MORIN.
 
-Thanks to this, we can see that 60 of our packages are apparently
-affected by a total of 185 CVEs.
-
-A new per-package variable, <pkg>_IGNORE_CVES, is introduced, and
-allows to tell the tool to ignore some CVEs, for example because it is
-fixed by a local patch in Buildroot, or because the CVE does not apply
-to the Buildroot package (the CVE only affects a non-Linux operating
-system, or affect a functionality of the package that isn't built in
-Buildroot).
-
-Of course, the results are not perfect:
-
- - The NVD database product names certainly don't 100% match the
-   Buildroot package names. We might have to add some extra metadata
-   information in each package (CPE ID ?) to map to the correct NVD
-   database product name.
-
- - Language-specific packages (for example: python-paho-mqtt and paho-mqtt-c)
-   are probably not correctly handled.
-
- - Buildroot packages that have a version selection are not correctly
-   handled.
-
-But overall, it already provide useful results. The plan is of course
-to implement e-mail notification to Buildroot developers in charge of
-packages with unfixed CVEs, in a second step.
-
-Thanks to Thomas Petazzoni, Thomas DS and all the reviewers for this effort !
-
-
-Best regards,
-
-Titouan
-
----
-Thomas Petazzoni (2):
-  support/scripts/pkg-stats: add support for CVE reporting
-  docs/manual: describe the new <pkg>_IGNORE_CVES variable
-
- docs/manual/adding-packages-generic.txt |  14 +++
- support/scripts/pkg-stats               | 149 +++++++++++++++++++++++-
- 2 files changed, 162 insertions(+), 1 deletion(-)
+> Peter Korsgaard (10):
+>   package/classpath: drop gstreamer 0.10.x support
+>   package/gupnp-dlna: drop gstreamer 0.10.x support
+>   package/libnice: drop gstreamer 0.10.x support
+>   package/qt5multimedia: drop gstreamer 0.10.x support
+>   package/libplayer: remove package
+>   package/opencv: drop gstreamer 0.10.x support
+>   package/opencv3: drop gstreamer 0.10.x support
+>   package/freerdp: drop gstreamer 0.10.x support
+>   package/nvidia-tegra23-binaries: drop gstreamer 0.10.x support
+>   package/gstreamer/*: remove packages
+> 
+>  Config.in.legacy                              |  51 ++
+>  DEVELOPERS                                    |   1 -
+>  package/Config.in                             |   1 -
+>  package/classpath/classpath.mk                |  11 +-
+>  package/freerdp/Config.in                     |  24 +-
+>  package/freerdp/freerdp.mk                    |   9 +-
+>  package/gstreamer/Config.in                   |  13 -
+>  package/gstreamer/gst-ffmpeg/0001-gcc47.patch |  65 --
+>  ...arm-avoid-using-the-movw-instruction.patch |  41 --
+>  package/gstreamer/gst-ffmpeg/Config.in        |  30 -
+>  package/gstreamer/gst-ffmpeg/gst-ffmpeg.hash  |   6 -
+>  package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk    | 103 ---
+>  .../0001-gplay-add-missing-include.patch      |  23 -
+>  ...0002-Fix-bashism-in-configure-script.patch |  48 --
+>  .../0003-Use-proper-objdump.patch             |  36 --
+>  ...nkage-add-lrt-for-shared-memory-func.patch |  46 --
+>  ...-of-obsolete-VIDIOC_DBG_G_CHIP_IDENT.patch |  69 --
+>  package/gstreamer/gst-fsl-plugins/Config.in   | 105 ----
+>  .../gst-fsl-plugins/gst-fsl-plugins.hash      |   4 -
+>  .../gst-fsl-plugins/gst-fsl-plugins.mk        |  40 --
+>  package/gstreamer/gst-omapfb/Config.in        |   7 -
+>  package/gstreamer/gst-omapfb/gst-omapfb.hash  |   2 -
+>  package/gstreamer/gst-omapfb/gst-omapfb.mk    |  20 -
+>  .../gst-plugin-x170/0001-correct-CFLAGS.patch |  28 -
+>  package/gstreamer/gst-plugin-x170/Config.in   |  16 -
+>  .../gst-plugin-x170/gst-plugin-x170.hash      |   2 -
+>  .../gst-plugin-x170/gst-plugin-x170.mk        |  18 -
+>  ...s-jpegformat-unbreak-non-debug-build.patch |  78 ---
+>  .../0002-fix-dfb-example.patch                |  22 -
+>  ...03-drop-buggy-libvpx-legacy-handling.patch |  44 --
+>  package/gstreamer/gst-plugins-bad/Config.in   | 334 ----------
+>  .../gst-plugins-bad/gst-plugins-bad.hash      |   5 -
+>  .../gst-plugins-bad/gst-plugins-bad.mk        | 593 ------------------
+>  .../gst-plugins-base/0001-tremor.patch        | 139 ----
+>  ...x-build-on-x86-if-emmintrin.h-is-ava.patch |  38 --
+>  ...-s-HAVE_EMMINTRIN_H-not-HAVE_XMMINTR.patch |  27 -
+>  package/gstreamer/gst-plugins-base/Config.in  | 110 ----
+>  .../gst-plugins-base/gst-plugins-base.hash    |   5 -
+>  .../gst-plugins-base/gst-plugins-base.mk      | 196 ------
+>  .../gst-plugins-good/0001-linux36.patch       |  37 --
+>  ...ilation-against-newer-kernel-headers.patch |  30 -
+>  package/gstreamer/gst-plugins-good/Config.in  | 234 -------
+>  .../gst-plugins-good/gst-plugins-good.hash    |   4 -
+>  .../gst-plugins-good/gst-plugins-good.mk      | 394 ------------
+>  package/gstreamer/gst-plugins-ugly/Config.in  |  53 --
+>  .../gst-plugins-ugly/gst-plugins-ugly.hash    |   6 -
+>  .../gst-plugins-ugly/gst-plugins-ugly.mk      |  90 ---
+>  package/gstreamer/gstreamer.mk                |   1 -
+>  package/gstreamer/gstreamer/0001-bison3.patch |  24 -
+>  package/gstreamer/gstreamer/Config.in         |  38 --
+>  package/gstreamer/gstreamer/gstreamer.hash    |   5 -
+>  package/gstreamer/gstreamer/gstreamer.mk      |  36 --
+>  package/gupnp-dlna/gupnp-dlna.mk              |   7 +-
+>  package/libnice/libnice.mk                    |   8 +-
+>  package/libplayer/0001-add-fpic.patch         |  18 -
+>  .../libplayer/0002-fix-configure-cflags.patch |  41 --
+>  package/libplayer/Config.in                   |  28 -
+>  package/libplayer/libplayer.hash              |   3 -
+>  package/libplayer/libplayer.mk                |  36 --
+>  .../nvidia-tegra23-binaries/Config.in         |  16 -
+>  .../nvidia-tegra23-binaries.mk                |  31 -
+>  package/opencv/Config.in                      |  31 +-
+>  package/opencv/opencv.mk                      |   8 +-
+>  package/opencv3/Config.in                     |  27 +-
+>  package/opencv3/opencv3.mk                    |   8 +-
+>  package/qt5/qt5multimedia/qt5multimedia.mk    |   4 -
+>  66 files changed, 68 insertions(+), 3560 deletions(-)
+>  delete mode 100644 package/gstreamer/Config.in
+>  delete mode 100644 package/gstreamer/gst-ffmpeg/0001-gcc47.patch
+>  delete mode 100644 package/gstreamer/gst-ffmpeg/0002-arm-avoid-using-the-movw-instruction.patch
+>  delete mode 100644 package/gstreamer/gst-ffmpeg/Config.in
+>  delete mode 100644 package/gstreamer/gst-ffmpeg/gst-ffmpeg.hash
+>  delete mode 100644 package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+>  delete mode 100644 package/gstreamer/gst-fsl-plugins/0001-gplay-add-missing-include.patch
+>  delete mode 100644 package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch
+>  delete mode 100644 package/gstreamer/gst-fsl-plugins/0003-Use-proper-objdump.patch
+>  delete mode 100644 package/gstreamer/gst-fsl-plugins/0004-Fix-libgstfsl-linkage-add-lrt-for-shared-memory-func.patch
+>  delete mode 100644 package/gstreamer/gst-fsl-plugins/0005-Remove-use-of-obsolete-VIDIOC_DBG_G_CHIP_IDENT.patch
+>  delete mode 100644 package/gstreamer/gst-fsl-plugins/Config.in
+>  delete mode 100644 package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.hash
+>  delete mode 100644 package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+>  delete mode 100644 package/gstreamer/gst-omapfb/Config.in
+>  delete mode 100644 package/gstreamer/gst-omapfb/gst-omapfb.hash
+>  delete mode 100644 package/gstreamer/gst-omapfb/gst-omapfb.mk
+>  delete mode 100644 package/gstreamer/gst-plugin-x170/0001-correct-CFLAGS.patch
+>  delete mode 100644 package/gstreamer/gst-plugin-x170/Config.in
+>  delete mode 100644 package/gstreamer/gst-plugin-x170/gst-plugin-x170.hash
+>  delete mode 100644 package/gstreamer/gst-plugin-x170/gst-plugin-x170.mk
+>  delete mode 100644 package/gstreamer/gst-plugins-bad/0001-opus-jpegformat-unbreak-non-debug-build.patch
+>  delete mode 100644 package/gstreamer/gst-plugins-bad/0002-fix-dfb-example.patch
+>  delete mode 100644 package/gstreamer/gst-plugins-bad/0003-drop-buggy-libvpx-legacy-handling.patch
+>  delete mode 100644 package/gstreamer/gst-plugins-bad/Config.in
+>  delete mode 100644 package/gstreamer/gst-plugins-bad/gst-plugins-bad.hash
+>  delete mode 100644 package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
+>  delete mode 100644 package/gstreamer/gst-plugins-base/0001-tremor.patch
+>  delete mode 100644 package/gstreamer/gst-plugins-base/0002-audioresample-Fix-build-on-x86-if-emmintrin.h-is-ava.patch
+>  delete mode 100644 package/gstreamer/gst-plugins-base/0003-audioresample-It-s-HAVE_EMMINTRIN_H-not-HAVE_XMMINTR.patch
+>  delete mode 100644 package/gstreamer/gst-plugins-base/Config.in
+>  delete mode 100644 package/gstreamer/gst-plugins-base/gst-plugins-base.hash
+>  delete mode 100644 package/gstreamer/gst-plugins-base/gst-plugins-base.mk
+>  delete mode 100644 package/gstreamer/gst-plugins-good/0001-linux36.patch
+>  delete mode 100644 package/gstreamer/gst-plugins-good/0002-v4l2-fix-compilation-against-newer-kernel-headers.patch
+>  delete mode 100644 package/gstreamer/gst-plugins-good/Config.in
+>  delete mode 100644 package/gstreamer/gst-plugins-good/gst-plugins-good.hash
+>  delete mode 100644 package/gstreamer/gst-plugins-good/gst-plugins-good.mk
+>  delete mode 100644 package/gstreamer/gst-plugins-ugly/Config.in
+>  delete mode 100644 package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash
+>  delete mode 100644 package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
+>  delete mode 100644 package/gstreamer/gstreamer.mk
+>  delete mode 100644 package/gstreamer/gstreamer/0001-bison3.patch
+>  delete mode 100644 package/gstreamer/gstreamer/Config.in
+>  delete mode 100644 package/gstreamer/gstreamer/gstreamer.hash
+>  delete mode 100644 package/gstreamer/gstreamer/gstreamer.mk
+>  delete mode 100644 package/libplayer/0001-add-fpic.patch
+>  delete mode 100644 package/libplayer/0002-fix-configure-cflags.patch
+>  delete mode 100644 package/libplayer/Config.in
+>  delete mode 100644 package/libplayer/libplayer.hash
+>  delete mode 100644 package/libplayer/libplayer.mk
+> 
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-2.24.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
