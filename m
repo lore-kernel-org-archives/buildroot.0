@@ -1,44 +1,149 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sat,  8 Feb 2020 11:39:00 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libnss: fix powerpc altivec build
- failure
-In-Reply-To: <20200208103900.3572-1-giulio.benetti@benettiengineering.com>
-References: <20200208103900.3572-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200208103900.3572-2-giulio.benetti@benettiengineering.com>
+From: Refik Tuzakli <tuzakli.refik@gmail.com>
+Date: Sat,  8 Feb 2020 16:49:50 +0300
+Subject: [Buildroot] [PATCH v3 1/1] package/freescale-imx/imx-dpu-g2d: new
+ package
+Message-ID: <20200208134950.28582-1-tuzakli.refik@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NSS_DISABLE_ALTIVEC variable has been introduced into libnss so let's
-use it to prevent Altivec build failure on PowerPc by passing
-NSS_DISABLE_ALTIVEC=1 if BR2_POWERPC_CPU_HAS_ALTIVEC is not 'y'.
+imx-dpu-g2d package is used by i.MX 8 and i.MX 8X series instead
+of imx-vpu or imx-vpu-hantro. With this commit, imx-dpu-g2d is added
+and is enabled for i.MX8 and i.MX 8X.
 
-Fixes:
-http://autobuild.buildroot.net/results/957/957cec911bcd68a18418ad02f13e7e3001521c59/
-http://autobuild.buildroot.net/results/6a1/6a1578619a477e1605fe152070f004b662f1d839/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
 ---
- package/libnss/libnss.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ DEVELOPERS                                    |  1 +
+ package/freescale-imx/Config.in               |  8 ++++
+ package/freescale-imx/imx-dpu-g2d/Config.in   | 23 ++++++++++++
+ .../imx-dpu-g2d/imx-dpu-g2d.hash              |  4 ++
+ .../freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk  | 37 +++++++++++++++++++
+ 5 files changed, 73 insertions(+)
+ create mode 100644 package/freescale-imx/imx-dpu-g2d/Config.in
+ create mode 100644 package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
+ create mode 100644 package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
 
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 4de9d3183f..e439150ecd 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -50,6 +50,11 @@ LIBNSS_BUILD_VARS = \
- 	OS_TEST=$(BR2_PACKAGE_LIBNSS_ARCH) \
- 	NSS_ENABLE_WERROR=0
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3520072034..198b687d39 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2077,6 +2077,7 @@ F:	package/uhttpd/
+ F:	package/ustream-ssl/
  
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
-+# Disable Altivec if not supported
-+LIBNSS_BUILD_VARS += NSS_DISABLE_ALTIVEC=1
+ N:	Refik Tuzakli <tuzakli.refik@gmail.com>
++F:	package/freescale-imx/imx-dpu-g2d
+ F:	package/paho-mqtt-cpp/
+ 
+ N:	R??mi R??rolle <remi.rerolle@gmail.com>
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index 711e8f72c2..2343511c28 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -79,6 +79,11 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
+ 	bool
+ 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+ 
++config BR2_PACKAGE_FREESCALE_IMX_HAS_DPU
++	bool
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++
+ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ 	bool
+ 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
+@@ -99,6 +104,9 @@ source "package/freescale-imx/imx-uuc/Config.in"
+ source "package/freescale-imx/imx-vpu/Config.in"
+ source "package/freescale-imx/imx-vpu-hantro/Config.in"
+ source "package/freescale-imx/imx-vpuwrap/Config.in"
++if BR2_PACKAGE_FREESCALE_IMX_HAS_DPU
++source "package/freescale-imx/imx-dpu-g2d/Config.in"
++endif
+ source "package/freescale-imx/firmware-imx/Config.in"
+ source "package/freescale-imx/imx-sc-firmware/Config.in"
+ if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
+diff --git a/package/freescale-imx/imx-dpu-g2d/Config.in b/package/freescale-imx/imx-dpu-g2d/Config.in
+new file mode 100644
+index 0000000000..377ad31dcb
+--- /dev/null
++++ b/package/freescale-imx/imx-dpu-g2d/Config.in
+@@ -0,0 +1,23 @@
++comment "imx-dpu-g2d needs a glibc toolchain"
++	depends on BR2_aarch64
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
++
++config BR2_PACKAGE_IMX_DPU_G2D
++	bool "imx-dpu-g2d"
++	# Library binaries are linked against libc.so.6
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_LIBDRM
++	help
++	  Userspace DPU 2D libraries for Vivante GPU on i.MX platforms.
++
++	  This library is provided by NXP as-is and doesn't have an
++	  upstream.
++
++if BR2_PACKAGE_IMX_DPU_G2D
++
++config BR2_PACKAGE_IMX_DPU_G2D_EXAMPLES
++	bool "install examples"
++	help
++	  Copy the Vivante DPU examples to the target.
++
++endif
+diff --git a/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
+new file mode 100644
+index 0000000000..50eee591c3
+--- /dev/null
++++ b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256	46c72ce9b98b7116e9f7f53a66aadc8fb66910473477c6553db77ed71e54d7ea  imx-dpu-g2d-1.8.2.bin
++sha256  d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
++sha256  9665930f69c0b6f4a4c055d7fe2b8ee563e771efbc83892abb1955e61492cdf7  EULA
+diff --git a/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
+new file mode 100644
+index 0000000000..ea5bbb9f97
+--- /dev/null
++++ b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# imx-dpu-g2d
++#
++################################################################################
++
++IMX_DPU_G2D_VERSION = 1.8.2
++IMX_DPU_G2D_SITE = $(FREESCALE_IMX_SITE)
++IMX_DPU_G2D_SOURCE = imx-dpu-g2d-$(IMX_DPU_G2D_VERSION).bin
++IMX_DPU_G2D_DEPENDENCIES = libdrm
++IMX_DPU_G2D_INSTALL_STAGING = YES
++
++IMX_DPU_G2D_LICENSE = NXP Semiconductor Software License Agreement
++IMX_DPU_G2D_LICENSE_FILES = EULA COPYING
++IMX_DPU_G2D_REDISTRIBUTE = NO
++
++define IMX_DPU_G2D_EXTRACT_CMDS
++	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_DPU_G2D_DL_DIR)/$(IMX_DPU_G2D_SOURCE))
++endef
++
++define IMX_DPU_G2D_INSTALL_STAGING_CMDS
++	cp -dpfr $(@D)/g2d/usr/* $(STAGING_DIR)/usr
++endef
++
++ifeq ($(BR2_PACKAGE_IMX_DPU_G2D_EXAMPLES),y)
++define IMX_DPU_G2D_INSTALL_EXAMPLES
++	mkdir -p $(TARGET_DIR)/usr/share/examples/
++	cp -dpfr $(@D)/gpu-demos/opt/* $(TARGET_DIR)/usr/share/examples/
++endef
 +endif
 +
- ifeq ($(BR2_ARCH_IS_64),y)
- # MIPS64 n32 is treated as a 32-bit architecture by libnss.
- # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1010730
++define IMX_DPU_G2D_INSTALL_TARGET_CMDS
++	$(IMX_DPU_G2D_INSTALL_EXAMPLES)
++	cp -dpfr $(@D)/g2d/usr/lib $(TARGET_DIR)/usr
++endef
++
++$(eval $(generic-package))
 -- 
-2.20.1
+2.17.1
