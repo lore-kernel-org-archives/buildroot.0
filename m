@@ -1,30 +1,21 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat,  8 Feb 2020 00:45:28 -0700
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: don't select kmsro for iris
- driver
-Message-ID: <20200208074528.39326-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Feb 2020 08:46:03 +0100
+Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2020.01.0
+In-Reply-To: <20200207205637.246925-1-b.bilas@grinn-global.com> (Bartosz
+ Bilas's message of "Fri, 7 Feb 2020 21:56:37 +0100")
+References: <20200207205637.246925-1-b.bilas@grinn-global.com>
+Message-ID: <877e0xwmh0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/mesa3d/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+>>>>> "Bartosz" == Bartosz Bilas <b.bilas@grinn-global.com> writes:
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 94e3f2cb9e..850d306add 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -116,7 +116,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
- 	bool "Gallium iris driver"
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
--	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	help
- 	  Mesa driver for iris-based Intel GPUs.
- 
+ > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
