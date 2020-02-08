@@ -1,48 +1,34 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sat,  8 Feb 2020 22:57:52 +0100
-Subject: [Buildroot] [PATCH v2 2/2] docs/manual: describe the new
- <pkg>_IGNORE_CVES variable
-In-Reply-To: <20200208215752.13628-1-titouan.christophe@railnova.eu>
-References: <20200208215752.13628-1-titouan.christophe@railnova.eu>
-Message-ID: <20200208215752.13628-3-titouan.christophe@railnova.eu>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 8 Feb 2020 23:01:39 +0100
+Subject: [Buildroot] [git commit] package/qemu: do not support
+ x86_steamroller or x86_core_avx2
+Message-ID: <20200208215113.1B1998D66B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=1f7efaf89f03e793252f9e97885a937cd6d67c56
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+These CPU's cause segfaults with qemu.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- docs/manual/adding-packages-generic.txt | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ package/qemu/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index baa052e31c..9a77923a92 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -488,6 +488,20 @@ not and can not work as people would expect it should:
-   locations, `/lib/firmware`, `/usr/lib/firmware`, `/lib/modules`,
-   `/usr/lib/modules`, and `/usr/share`, which are automatically excluded.
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index d6b4bf6dd4..ea9281c5fb 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -20,6 +20,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	default y if BR2_sparc64
+ 	default y if BR2_xtensa
+ 	default y if BR2_x86_64
++	depends on !BR2_x86_steamroller && !BR2_x86_core_avx2
+ 	depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
  
-+* +LIBFOO_IGNORE_CVES+ is a space-separated list of CVEs that tells
-+  Buildroot CVE tracking tools which CVEs should be ignored for this
-+  package. This is typically used when the CVE is fixed by a patch in
-+  the package, or when the CVE for some reason does not affect the
-+  Buildroot package. A Makefile comment must always preceed the
-+  addition of a CVE to this variable. Example:
-+
-+----------------------
-+# 0001-fix-cve-2020-12345.patch
-+LIBFOO_IGNORE_CVES += CVE-2020-12345
-+# only when built with libbaz, which Buildroot doesn't support
-+LIBFOO_IGNORE_CVES += CVE-2020-54321
-+----------------------
-+
- The recommended way to define these variables is to use the following
- syntax:
- 
--- 
-2.24.1
+ config BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS
