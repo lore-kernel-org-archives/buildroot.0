@@ -1,84 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 8 Feb 2020 22:12:27 +0100
-Subject: [Buildroot] [PATCH] support / toolchain: use consistent code
- style for C code
-In-Reply-To: <20200208194400.18754-1-peter@korsgaard.com>
-References: <20200208194400.18754-1-peter@korsgaard.com>
-Message-ID: <20200208211227.GA23769@scaer>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat,  8 Feb 2020 13:15:11 -0800
+Subject: [Buildroot] [PATCH v2 2/3] package/qemu: do not support
+ x86_steamroller or x86_core_avx2
+In-Reply-To: <20200208211512.994361-1-aduskett@gmail.com>
+References: <20200208211512.994361-1-aduskett@gmail.com>
+Message-ID: <20200208211512.994361-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On 2020-02-08 20:44 +0100, Peter Korsgaard spake thusly:
-> Most, but not all our C code follows the Linux kernel code style (as
-> documented in Documentation/process/coding-style.rst).  Adjust the few
-> places doing differently:
-> 
-> - Braces:
->   ..but the preferred way, as shown to us by the prophets Kernighan
->   and Ritchie, is to put the opening brace last on the line
-> 
-> - Spaces after keywords:
->   Use a space after (most) keywords
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+These CPU's cause segfaults with qemu.
 
-I just dropped the 'support /' from the title, because both really are
-pretty much about the toolchain "infra".
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/qemu/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/scripts/check-kernel-headers.sh | 3 +--
->  toolchain/toolchain-wrapper.c           | 2 +-
->  2 files changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-> index d1864cb05e..841df98b64 100755
-> --- a/support/scripts/check-kernel-headers.sh
-> +++ b/support/scripts/check-kernel-headers.sh
-> @@ -53,8 +53,7 @@ int main(int argc __attribute__((unused)),
->      int l = LINUX_VERSION_CODE & ~0xFF;
->      int h = KERNEL_VERSION(${HDR_M},${HDR_m},0);
->  
-> -    if(l != h)
-> -    {
-> +    if (l != h) {
->          printf("Incorrect selection of kernel headers: ");
->          printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
->                 ((LINUX_VERSION_CODE>>16) & 0xFF),
-> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> index b7705a4cbf..8cfc963ccd 100644
-> --- a/toolchain/toolchain-wrapper.c
-> +++ b/toolchain/toolchain-wrapper.c
-> @@ -434,7 +434,7 @@ int main(int argc, char **argv)
->  		/* Both args below can be set at compile/link time
->  		 * and are ignored correctly when not used
->  		 */
-> -		if(i == argc)
-> +		if (i == argc)
->  			*cur++ = "-fPIE";
->  
->  		if (!found_shared)
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index d6b4bf6dd4..ea9281c5fb 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -20,6 +20,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	default y if BR2_sparc64
+ 	default y if BR2_xtensa
+ 	default y if BR2_x86_64
++	depends on !BR2_x86_steamroller && !BR2_x86_core_avx2
+ 	depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
+ 
+ config BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.1
