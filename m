@@ -1,49 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Feb 2020 19:54:01 +0100
-Subject: [Buildroot] [git commit] package/luarocks: fix buildroot addon vs
- 3.3.x
-Message-ID: <20200208184737.97C198D46A@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sat, 8 Feb 2020 19:58:42 +0100
+Subject: [Buildroot] [PATCH 0/2] autotools: do not overwrite first
+ include path
+In-Reply-To: <20200208184027.GB5156@scaer>
+References: <20200204124013.17340-1-heiko.thiery@gmail.com>
+ <20200204131300.GD3101@scaer> <87y2tdv7ev.fsf@dell.be.48ers.dk>
+ <20200208184027.GB5156@scaer>
+Message-ID: <CAEyMn7ag9m0Q+RUUt9n6ZpnpkxpqxJ0AYywUGCh+9JqNzobgyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3d9ca7a633bf43987422a515723d5c8f8ca4699
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann, All,
 
-an internal API change introduced by version 3.3.0 causes the following failure:
-```
-Error: LuaRocks 3.3.1 bug (please report at https://github.com/luarocks/luarocks/issues).
-Arch.: linux-x86_64
-.../user/build/qarm/host/share/lua/5.3/luarocks/queries.lua:55: assertion failed!
-stack traceback:
-	[C]: in function 'assert'
-	.../user/build/qarm/host/share/lua/5.3/luarocks/queries.lua:55: in function 'luarocks.queries.new'
-	...m/host/share/lua/5.3/luarocks/cmd/external/buildroot.lua:322: in function 'luarocks.cmd.external.buildroot.command'
-	(...tail calls...)
-	[C]: in function 'xpcall'
-	/home/user/build/qarm/host/share/lua/5.3/luarocks/cmd.lua:620: in function 'luarocks.cmd.run_command'
-	/home/user/build/qarm/host/bin/luarocks:38: in main chunk
-	[C]: in ?
-```
+Am Sa., 8. Feb. 2020 um 19:40 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
+>
+> Peter, All,
+>
+> On 2020-02-08 08:56 +0100, Peter Korsgaard spake thusly:
+> > >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> >
+> >  > Heiko, All,
+> >  > On 2020-02-04 13:40 +0100, Heiko Thiery spake thusly:
+> >  >> The first patch fixes the issue with the autotools package.
+> >  >> For a detailed explanation take a look into the commit message.
+> >  >>
+> >  >> The second patch removes the hooks that were introduced to workaround
+> >  >> the issue that is fixed with the first patch.
+> >  >>
+> >  >> Heiko Thiery (1):
+> >  >> remove the hook for creating the m4 directory
+> >  >>
+> >  >> Michael Walle (1):
+> >  >> autotools: do not overwrite first include path
+> >
+> >  > Series applied to master, thanks! :-)
+> >
+> >  > I just slightly reword the commit logs with a little bit of extra
+> >  > details.
+> >
+> > It unfortunately seems to cause some breakage :/
+> >
+> > E.G. sdl_mixer fails with an autools-related issues since this got
+> > applied:
+> >
+> > libtool: Version mismatch error.  This is libtool 2.4.6, but the
+> > libtool: definition of this LT_INIT comes from libtool 2.2.6.
+> > libtool: You should recreate aclocal.m4 with macros from libtool 2.4.6
+> > libtool: and run autoconf again.
+> >
+> > http://autobuild.buildroot.net/?reason=sdl_mixer-1.2.12
+> >
+> > Care to take a look?
+>
+> Patch on the list. I'll test sdl2_mixer now, it should have the same
+> issue, since that code has not changed from the 1.2 era (even if our
+> autobuilders do not yet report a single failure...).
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/luarocks/buildroot.lua | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+That was fast .. no chance for me to take a look ;-/
 
-diff --git a/package/luarocks/buildroot.lua b/package/luarocks/buildroot.lua
-index e829b6db00..67dac33aa2 100644
---- a/package/luarocks/buildroot.lua
-+++ b/package/luarocks/buildroot.lua
-@@ -319,7 +319,7 @@ function buildroot.command(args)
-    local rockname = assert(args.rockname)
-    local fsname = args.brname or rockname
- 
--   local query = queries.new(rockname:lower(), nil, false, 'src')
-+   local query = queries.new(rockname:lower(), nil, nil, false, 'src')
-    local url, err = search.find_suitable_rock(query)
-    if not url then
-       return nil, "Could not find a result named " .. tostring(query) .. ": " .. err
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
