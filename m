@@ -1,97 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Feb 2020 20:01:10 +0100
-Subject: [Buildroot] [git commit] package/sdl_mixer: fix build after aclocal
- include revamp
-Message-ID: <20200208185443.7ED248D4F5@busybox.osuosl.org>
+Date: Sat, 08 Feb 2020 20:12:48 +0100
+Subject: [Buildroot] [PATCH] package/rng-tools: make jitterentropy
+ conditional
+In-Reply-To: <CANQCQpZ9Hs6DA6XJpBnMLxqnnJj8N3TYQLsDSp_YR3xqR8G-bQ@mail.gmail.com>
+ (Matthew Weber's message of "Wed, 5 Feb 2020 19:12:22 -0600")
+References: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
+ <20200205203257.48877881@windsurf>
+ <CANQCQparBzmSPD9epjQw8t6jyMejP0E1X0GjTUkXHpjXTi8Svg@mail.gmail.com>
+ <CANQCQpZ9Hs6DA6XJpBnMLxqnnJj8N3TYQLsDSp_YR3xqR8G-bQ@mail.gmail.com>
+Message-ID: <87wo8wuc3z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03a8884c469b96fa85042cd551774f98491687c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
-After d255b67972 (autotools: do not overwrite first include path), the
-ordering of include paths has changed: the system directories are
-specified with explicit options passed to autoreconf, which means that
-any directory specified in the package _AUTORECONF_OPTS are no longer
-first:
+ > Thomas,
+ > On Wed, Feb 5, 2020 at 2:46 PM Matthew Weber
+ > <matthew.weber@rockwellcollins.com> wrote:
+ >> 
+ >> Thomas,
+ >> 
+ >> On Wed, Feb 5, 2020 at 1:33 PM Thomas Petazzoni
+ >> <thomas.petazzoni@bootlin.com> wrote:
+ >> >
+ >> > On Wed,  5 Feb 2020 12:26:08 -0600
+ >> > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+ >> >
+ >> > > The update of rng-tools from 5 to 6.7 introduced a change where
+ >> > > the jitterentropy library was enabled by default instead of
+ >> > > returning a special 66 return code to hangle the case of no
+ >> > > hwrng. This patch reverts that change and allows a user to
+ >> > > select when to enable the jitterentropy source. The bug
+ >> > > documents an issue of when a hwrng is enabled with jitterentropy
+ >> > > there is a longer boot time.
+ >> >
+ >> > I don't understand this story of the 66 return code. Could you explain
+ >> > a bit more ?
+ >> 
+ >> In Buildroot commit 22cb51e1 the systemd support addition included the
+ >> successcode change based on the Fedora bugfix for ignoring if no hwrng
+ >> is present (https://bugzilla.redhat.com/show_bug.cgi?id=892178).
 
-  - in package/autoconf/autoconf.mk, we define AUTORECONF as:
-    AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+ > Ryan Barnett noticed that rng-tools dropped the special return code.
+ > I guess we could just drop support for this special case as well....
+ > https://github.com/nhorman/rng-tools/blob/v6.8/rngd.c#L805
 
-  - in package/pkg-autotools.mk, we call AUTORECONF with:
-    $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+Has that Fedora patch ever been included upstream? I don't seem to find
+it in the history.
 
-So, the include directory specified by SDL_MIXER_AUTORECONF_OPTS is now
-lagging behind the system headers, and the very issue that d255b67972
-was suposed to fix in a generic way, pops up back for this specific
-case.
+I btw see there is a 6.9 release with more bugfixes, care to send a
+patch bumping the version?
 
-We fix that by patching sdl_mixer so that it uses the bog-down standard
-mechanisms, to specify the macro directory from within configure.in,
-instead of specifying it on the command line, so that the magic
-introduced by d255b67972 does happen.
-
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Michael Walle <michael@walle.cc>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0004-configure__set_macro_directory.patch      | 34 ++++++++++++++++++++++
- package/sdl_mixer/sdl_mixer.mk                     |  1 -
- 2 files changed, 34 insertions(+), 1 deletion(-)
-
-diff --git a/package/sdl_mixer/0004-configure__set_macro_directory.patch b/package/sdl_mixer/0004-configure__set_macro_directory.patch
-new file mode 100644
-index 0000000000..5b47f0e80d
---- /dev/null
-+++ b/package/sdl_mixer/0004-configure__set_macro_directory.patch
-@@ -0,0 +1,34 @@
-+# HG changeset patch
-+# User "Yann E. MORIN" <yann.morin.1998@free.fr>
-+# Date 1581183281 -3600
-+#      Sat Feb 08 18:34:41 2020 +0100
-+# Node ID 753a1f394620056c35790a571ff5f7c248445943
-+# Parent  eb5f08bf9994bf5164ca68015f2e030c2c9dddcd
-+configure: set macro directory
-+
-+Setting the macro directory in configure.in, rather than specifying it
-+on the command line, ensures that it is properly searched in the correct
-+order, and that autoreconf properly updates our macros with the newer
-+system ones, if any.
-+
-+Fixes:
-+    http://autobuild.buildroot.org/results/63a/63ae0bddb3c4436efe967c318e299047f496c5a5/build-end.log
-+
-+    libtool: Version mismatch error.  This is libtool 2.4.6, but the
-+    libtool: definition of this LT_INIT comes from libtool 2.2.6.
-+    libtool: You should recreate aclocal.m4 with macros from libtool 2.4.6
-+    libtool: and run autoconf again.
-+
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+
-+diff --git a/configure.in b/configure.in
-+--- a/configure.in
-++++ b/configure.in
-+@@ -1,6 +1,7 @@
-+ dnl Process this file with autoconf to produce a configure script.
-+ AC_INIT(README)
-+ AC_CONFIG_AUX_DIR(build-scripts)
-++AC_CONFIG_MACRO_DIR([acinclude])
-+ 
-+ dnl Set various version strings - taken gratefully from the GTk sources
-+ 
-diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
-index ab6f7ef014..73eb821ff3 100644
---- a/package/sdl_mixer/sdl_mixer.mk
-+++ b/package/sdl_mixer/sdl_mixer.mk
-@@ -18,7 +18,6 @@ SDL_MIXER_DEPENDENCIES = sdl
- 
- # We're patching configure.in, so we need to autoreconf
- SDL_MIXER_AUTORECONF = YES
--SDL_MIXER_AUTORECONF_OPTS = -Iacinclude
- 
- SDL_MIXER_CONF_OPTS = \
- 	--without-x \
+-- 
+Bye, Peter Korsgaard
