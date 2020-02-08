@@ -1,57 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  8 Feb 2020 20:44:00 +0100
-Subject: [Buildroot] [PATCH] support / toolchain: use consistent code style
- for C code
-Message-ID: <20200208194400.18754-1-peter@korsgaard.com>
+Date: Sat, 08 Feb 2020 20:47:03 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libnss: bump version to 3.50
+In-Reply-To: <20200208103900.3572-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Sat, 8 Feb 2020 11:38:59 +0100")
+References: <20200208103900.3572-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87ftfkuaiw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Most, but not all our C code follows the Linux kernel code style (as
-documented in Documentation/process/coding-style.rst).  Adjust the few
-places doing differently:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-- Braces:
-  ..but the preferred way, as shown to us by the prophets Kernighan
-  and Ritchie, is to put the opening brace last on the line
+ > It requires already bumped libnspr version 4.25.
+ > Release notes:
+ > https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.50_release_notes
 
-- Spaces after keywords:
-  Use a space after (most) keywords
+ > Drop all patches since they have been upstreamed.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/scripts/check-kernel-headers.sh | 3 +--
- toolchain/toolchain-wrapper.c           | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-index d1864cb05e..841df98b64 100755
---- a/support/scripts/check-kernel-headers.sh
-+++ b/support/scripts/check-kernel-headers.sh
-@@ -53,8 +53,7 @@ int main(int argc __attribute__((unused)),
-     int l = LINUX_VERSION_CODE & ~0xFF;
-     int h = KERNEL_VERSION(${HDR_M},${HDR_m},0);
- 
--    if(l != h)
--    {
-+    if (l != h) {
-         printf("Incorrect selection of kernel headers: ");
-         printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
-                ((LINUX_VERSION_CODE>>16) & 0xFF),
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index b7705a4cbf..8cfc963ccd 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -434,7 +434,7 @@ int main(int argc, char **argv)
- 		/* Both args below can be set at compile/link time
- 		 * and are ignored correctly when not used
- 		 */
--		if(i == argc)
-+		if (i == argc)
- 			*cur++ = "-fPIE";
- 
- 		if (!found_shared)
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
