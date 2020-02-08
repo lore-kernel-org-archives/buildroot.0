@@ -1,36 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Feb 2020 19:55:44 +0100
-Subject: [Buildroot] [PATCH] package/luarocks: fix buildroot addon vs
- 3.3.x
-In-Reply-To: <20200208142706.6097-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Sat, 8 Feb 2020 15:27:06 +0100")
-References: <20200208142706.6097-1-francois.perrad@gadz.org>
-Message-ID: <87eev4vrgv.fsf@dell.be.48ers.dk>
+Date: Sat, 08 Feb 2020 19:58:36 +0100
+Subject: [Buildroot] [PATCH] package/localedef: relax required toolchain
+ version
+In-Reply-To: <20200206210859.6978-1-matthew.weber@rockwellcollins.com> (Matt
+ Weber's message of "Thu, 6 Feb 2020 15:08:59 -0600")
+References: <20200206210859.6978-1-matthew.weber@rockwellcollins.com>
+Message-ID: <87a75svrc3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
- > an internal API change introduced by version 3.3.0 causes the following failure:
- > ```
- > Error: LuaRocks 3.3.1 bug (please report at https://github.com/luarocks/luarocks/issues).
- > Arch.: linux-x86_64
- > .../user/build/qarm/host/share/lua/5.3/luarocks/queries.lua:55: assertion failed!
- > stack traceback:
- > 	[C]: in function 'assert'
- > 	.../user/build/qarm/host/share/lua/5.3/luarocks/queries.lua:55: in function 'luarocks.queries.new'
- > 	...m/host/share/lua/5.3/luarocks/cmd/external/buildroot.lua:322: in function 'luarocks.cmd.external.buildroot.command'
- > 	(...tail calls...)
- > 	[C]: in function 'xpcall'
- > 	/home/user/build/qarm/host/share/lua/5.3/luarocks/cmd.lua:620: in function 'luarocks.cmd.run_command'
- > 	/home/user/build/qarm/host/bin/luarocks:38: in main chunk
- > 	[C]: in ?
- > ```
+ > The glibc package has been updating the toolchain version
+ > dependency since 2.28.x. The dependencies don't currently
+ > apply to the localedef build of the package, so this
+ > patchset relaxes the restriction such that builds can still
+ > occur on older host machines.
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > The current supported minimum versions after this patch
+ > is applied are:
+ > GCC 4.8
+ > Binutils 2.24
+
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 Committed, thanks.
 
