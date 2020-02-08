@@ -1,32 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Feb 2020 09:32:41 +0100
-Subject: [Buildroot] [PATCH] package/uclibc: fix ctype.h is*_l
- definitions
-In-Reply-To: <20200207195144.4060-1-jcmvbkbc@gmail.com> (Max Filippov's
- message of "Fri, 7 Feb 2020 11:51:44 -0800")
-References: <20200207195144.4060-1-jcmvbkbc@gmail.com>
-Message-ID: <87mu9tv5qu.fsf@dell.be.48ers.dk>
+Date: Sat, 8 Feb 2020 08:45:08 +0100
+Subject: [Buildroot] [git commit] boot/barebox: bump version to 2020.01.0
+Message-ID: <20200208082403.5F8038D3C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=694d134a49f665b1f687d09d587112fae605fd7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > ctype locale-specific macro definitions are broken because they result
- > in dereference of pointer to structure of incomplete type.
- > Drop these macros since they are optional and let applications use
- > functions with the same names.
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- > Backported from:
- >   https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=d1a3ca7ca56630fddde7311a0474eed4a21335a7
- > Fixes:
- >   http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39
-
- > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index bdec2b8e50..687bac1823 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2019.12.0"
++	bool "2020.01.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2019.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2020.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 64fec919b8..5ade20e18b 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,8 +1,8 @@
+-# From https://www.barebox.org/download/barebox-2019.12.0.tar.bz2.md5
+-md5  2d25158ccffaa843c9e4943bbe820ce2  barebox-2019.12.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2020.01.0.tar.bz2.md5
++md5  05038e0b61b68ce40e038295b809c548  barebox-2020.01.0.tar.bz2
+ 
+ # Locally calculated
+-sha256  fb77afc5c1a9783b8e1a9bb6c617973f5c0ed4c6f8e079f96cb7e7e0818a7a90  barebox-2019.12.0.tar.bz2
++sha256  8968e6b0d72d79eba636917b067b925e3bbb54d38c6c2acfc4e1e49909b42f33  barebox-2020.01.0.tar.bz2
+ 
+ # License files, locally computed
+ sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
