@@ -1,171 +1,326 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 8 Feb 2020 22:58:07 +0100
-Subject: [Buildroot] [PATCH 00/10] Remove gstreamer 0.10
-In-Reply-To: <20200207145026.28384-1-peter@korsgaard.com>
-References: <20200207145026.28384-1-peter@korsgaard.com>
-Message-ID: <20200208215807.GD23769@scaer>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Sat,  8 Feb 2020 22:57:51 +0100
+Subject: [Buildroot] [PATCH v2 1/2] support/scripts/pkg-stats: add support
+ for CVE reporting
+In-Reply-To: <20200208215752.13628-1-titouan.christophe@railnova.eu>
+References: <20200208215752.13628-1-titouan.christophe@railnova.eu>
+Message-ID: <20200208215752.13628-2-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-02-07 15:50 +0100, Peter Korsgaard spake thusly:
-> Gstreamer 0.10 hasn't seen an upstream releases in 8 years and is
-> missing a lot of features and (security) fixes compared to gstreamer
-> 1.x. Lets drop the packages and support in other packages before
-> releasing the new LTS.
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-It's dead, Jim.
+This commit extends the pkg-stats script to grab information about the
+CVEs affecting the Buildroot packages.
 
-Series applied to master, thanks.
+To do so, it downloads the NVD database from
+https://nvd.nist.gov/vuln/data-feeds in JSON format, and processes the
+JSON file to determine which of our packages is affected by which
+CVE. The information is then displayed in both the HTML output and the
+JSON output of pkg-stats.
 
-Regards,
-Yann E. MORIN.
+To use this feature, you have to pass the new --nvd-path option,
+pointing to a writable directory where pkg-stats will store the NVD
+database. If the local database is less than 24 hours old, it will not
+re-download it. If it is more than 24 hours old, it will re-download
+only the files that have really been updated by upstream NVD.
 
-> Peter Korsgaard (10):
->   package/classpath: drop gstreamer 0.10.x support
->   package/gupnp-dlna: drop gstreamer 0.10.x support
->   package/libnice: drop gstreamer 0.10.x support
->   package/qt5multimedia: drop gstreamer 0.10.x support
->   package/libplayer: remove package
->   package/opencv: drop gstreamer 0.10.x support
->   package/opencv3: drop gstreamer 0.10.x support
->   package/freerdp: drop gstreamer 0.10.x support
->   package/nvidia-tegra23-binaries: drop gstreamer 0.10.x support
->   package/gstreamer/*: remove packages
-> 
->  Config.in.legacy                              |  51 ++
->  DEVELOPERS                                    |   1 -
->  package/Config.in                             |   1 -
->  package/classpath/classpath.mk                |  11 +-
->  package/freerdp/Config.in                     |  24 +-
->  package/freerdp/freerdp.mk                    |   9 +-
->  package/gstreamer/Config.in                   |  13 -
->  package/gstreamer/gst-ffmpeg/0001-gcc47.patch |  65 --
->  ...arm-avoid-using-the-movw-instruction.patch |  41 --
->  package/gstreamer/gst-ffmpeg/Config.in        |  30 -
->  package/gstreamer/gst-ffmpeg/gst-ffmpeg.hash  |   6 -
->  package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk    | 103 ---
->  .../0001-gplay-add-missing-include.patch      |  23 -
->  ...0002-Fix-bashism-in-configure-script.patch |  48 --
->  .../0003-Use-proper-objdump.patch             |  36 --
->  ...nkage-add-lrt-for-shared-memory-func.patch |  46 --
->  ...-of-obsolete-VIDIOC_DBG_G_CHIP_IDENT.patch |  69 --
->  package/gstreamer/gst-fsl-plugins/Config.in   | 105 ----
->  .../gst-fsl-plugins/gst-fsl-plugins.hash      |   4 -
->  .../gst-fsl-plugins/gst-fsl-plugins.mk        |  40 --
->  package/gstreamer/gst-omapfb/Config.in        |   7 -
->  package/gstreamer/gst-omapfb/gst-omapfb.hash  |   2 -
->  package/gstreamer/gst-omapfb/gst-omapfb.mk    |  20 -
->  .../gst-plugin-x170/0001-correct-CFLAGS.patch |  28 -
->  package/gstreamer/gst-plugin-x170/Config.in   |  16 -
->  .../gst-plugin-x170/gst-plugin-x170.hash      |   2 -
->  .../gst-plugin-x170/gst-plugin-x170.mk        |  18 -
->  ...s-jpegformat-unbreak-non-debug-build.patch |  78 ---
->  .../0002-fix-dfb-example.patch                |  22 -
->  ...03-drop-buggy-libvpx-legacy-handling.patch |  44 --
->  package/gstreamer/gst-plugins-bad/Config.in   | 334 ----------
->  .../gst-plugins-bad/gst-plugins-bad.hash      |   5 -
->  .../gst-plugins-bad/gst-plugins-bad.mk        | 593 ------------------
->  .../gst-plugins-base/0001-tremor.patch        | 139 ----
->  ...x-build-on-x86-if-emmintrin.h-is-ava.patch |  38 --
->  ...-s-HAVE_EMMINTRIN_H-not-HAVE_XMMINTR.patch |  27 -
->  package/gstreamer/gst-plugins-base/Config.in  | 110 ----
->  .../gst-plugins-base/gst-plugins-base.hash    |   5 -
->  .../gst-plugins-base/gst-plugins-base.mk      | 196 ------
->  .../gst-plugins-good/0001-linux36.patch       |  37 --
->  ...ilation-against-newer-kernel-headers.patch |  30 -
->  package/gstreamer/gst-plugins-good/Config.in  | 234 -------
->  .../gst-plugins-good/gst-plugins-good.hash    |   4 -
->  .../gst-plugins-good/gst-plugins-good.mk      | 394 ------------
->  package/gstreamer/gst-plugins-ugly/Config.in  |  53 --
->  .../gst-plugins-ugly/gst-plugins-ugly.hash    |   6 -
->  .../gst-plugins-ugly/gst-plugins-ugly.mk      |  90 ---
->  package/gstreamer/gstreamer.mk                |   1 -
->  package/gstreamer/gstreamer/0001-bison3.patch |  24 -
->  package/gstreamer/gstreamer/Config.in         |  38 --
->  package/gstreamer/gstreamer/gstreamer.hash    |   5 -
->  package/gstreamer/gstreamer/gstreamer.mk      |  36 --
->  package/gupnp-dlna/gupnp-dlna.mk              |   7 +-
->  package/libnice/libnice.mk                    |   8 +-
->  package/libplayer/0001-add-fpic.patch         |  18 -
->  .../libplayer/0002-fix-configure-cflags.patch |  41 --
->  package/libplayer/Config.in                   |  28 -
->  package/libplayer/libplayer.hash              |   3 -
->  package/libplayer/libplayer.mk                |  36 --
->  .../nvidia-tegra23-binaries/Config.in         |  16 -
->  .../nvidia-tegra23-binaries.mk                |  31 -
->  package/opencv/Config.in                      |  31 +-
->  package/opencv/opencv.mk                      |   8 +-
->  package/opencv3/Config.in                     |  27 +-
->  package/opencv3/opencv3.mk                    |   8 +-
->  package/qt5/qt5multimedia/qt5multimedia.mk    |   4 -
->  66 files changed, 68 insertions(+), 3560 deletions(-)
->  delete mode 100644 package/gstreamer/Config.in
->  delete mode 100644 package/gstreamer/gst-ffmpeg/0001-gcc47.patch
->  delete mode 100644 package/gstreamer/gst-ffmpeg/0002-arm-avoid-using-the-movw-instruction.patch
->  delete mode 100644 package/gstreamer/gst-ffmpeg/Config.in
->  delete mode 100644 package/gstreamer/gst-ffmpeg/gst-ffmpeg.hash
->  delete mode 100644 package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
->  delete mode 100644 package/gstreamer/gst-fsl-plugins/0001-gplay-add-missing-include.patch
->  delete mode 100644 package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch
->  delete mode 100644 package/gstreamer/gst-fsl-plugins/0003-Use-proper-objdump.patch
->  delete mode 100644 package/gstreamer/gst-fsl-plugins/0004-Fix-libgstfsl-linkage-add-lrt-for-shared-memory-func.patch
->  delete mode 100644 package/gstreamer/gst-fsl-plugins/0005-Remove-use-of-obsolete-VIDIOC_DBG_G_CHIP_IDENT.patch
->  delete mode 100644 package/gstreamer/gst-fsl-plugins/Config.in
->  delete mode 100644 package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.hash
->  delete mode 100644 package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
->  delete mode 100644 package/gstreamer/gst-omapfb/Config.in
->  delete mode 100644 package/gstreamer/gst-omapfb/gst-omapfb.hash
->  delete mode 100644 package/gstreamer/gst-omapfb/gst-omapfb.mk
->  delete mode 100644 package/gstreamer/gst-plugin-x170/0001-correct-CFLAGS.patch
->  delete mode 100644 package/gstreamer/gst-plugin-x170/Config.in
->  delete mode 100644 package/gstreamer/gst-plugin-x170/gst-plugin-x170.hash
->  delete mode 100644 package/gstreamer/gst-plugin-x170/gst-plugin-x170.mk
->  delete mode 100644 package/gstreamer/gst-plugins-bad/0001-opus-jpegformat-unbreak-non-debug-build.patch
->  delete mode 100644 package/gstreamer/gst-plugins-bad/0002-fix-dfb-example.patch
->  delete mode 100644 package/gstreamer/gst-plugins-bad/0003-drop-buggy-libvpx-legacy-handling.patch
->  delete mode 100644 package/gstreamer/gst-plugins-bad/Config.in
->  delete mode 100644 package/gstreamer/gst-plugins-bad/gst-plugins-bad.hash
->  delete mode 100644 package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
->  delete mode 100644 package/gstreamer/gst-plugins-base/0001-tremor.patch
->  delete mode 100644 package/gstreamer/gst-plugins-base/0002-audioresample-Fix-build-on-x86-if-emmintrin.h-is-ava.patch
->  delete mode 100644 package/gstreamer/gst-plugins-base/0003-audioresample-It-s-HAVE_EMMINTRIN_H-not-HAVE_XMMINTR.patch
->  delete mode 100644 package/gstreamer/gst-plugins-base/Config.in
->  delete mode 100644 package/gstreamer/gst-plugins-base/gst-plugins-base.hash
->  delete mode 100644 package/gstreamer/gst-plugins-base/gst-plugins-base.mk
->  delete mode 100644 package/gstreamer/gst-plugins-good/0001-linux36.patch
->  delete mode 100644 package/gstreamer/gst-plugins-good/0002-v4l2-fix-compilation-against-newer-kernel-headers.patch
->  delete mode 100644 package/gstreamer/gst-plugins-good/Config.in
->  delete mode 100644 package/gstreamer/gst-plugins-good/gst-plugins-good.hash
->  delete mode 100644 package/gstreamer/gst-plugins-good/gst-plugins-good.mk
->  delete mode 100644 package/gstreamer/gst-plugins-ugly/Config.in
->  delete mode 100644 package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash
->  delete mode 100644 package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
->  delete mode 100644 package/gstreamer/gstreamer.mk
->  delete mode 100644 package/gstreamer/gstreamer/0001-bison3.patch
->  delete mode 100644 package/gstreamer/gstreamer/Config.in
->  delete mode 100644 package/gstreamer/gstreamer/gstreamer.hash
->  delete mode 100644 package/gstreamer/gstreamer/gstreamer.mk
->  delete mode 100644 package/libplayer/0001-add-fpic.patch
->  delete mode 100644 package/libplayer/0002-fix-configure-cflags.patch
->  delete mode 100644 package/libplayer/Config.in
->  delete mode 100644 package/libplayer/libplayer.hash
->  delete mode 100644 package/libplayer/libplayer.mk
-> 
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Packages can use the newly introduced <pkg>_IGNORE_CVES variable to
+tell pkg-stats that some CVEs should be ignored: it can be because a
+patch we have is fixing the CVE, or because the CVE doesn't apply in
+our case.
 
+From an implementation point of view:
+
+ - A new class CVE implement most of the required functionalities:
+   - Downloading the yearly NVD files
+   - Reading and extracting relevant data from these files
+   - Matching Packages against a CVE
+   - Support for the format "1.0" of the NVD feeds, currently much more easier
+     to process than the version "1.1", as the latter only provides CPE IDs.
+     Both feed versions seem to provide the same data anyway.
+
+ - The statistics are extended with the total number of CVEs, and the
+   total number of packages that have at least one CVE pending.
+
+ - The HTML output is extended with these new details. There are no
+   changes to the code generating the JSON output because the existing
+   code is smart enough to automatically expose the new information.
+
+This development is a collective effort with Titouan Christophe
+<titouan.christophe@railnova.eu> and Thomas De Schampheleire
+<thomas.de_schampheleire@nokia.com>.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+Changes v1 -> v2 (Titouan):
+ * Don't extract database files from gzip to json in downloader
+ * Refactor CVEs traversal and matching in the CVE class
+ * Simplify the NVD files downloader
+ * Index the packages by name in a dict for faster CVE matching
+ * Fix small typos and python idioms
+---
+ support/scripts/pkg-stats | 149 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 148 insertions(+), 1 deletion(-)
+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index e477828f7b..2784a43d05 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -26,10 +26,17 @@ import subprocess
+ import requests  # URL checking
+ import json
+ import certifi
++import distutils.version
++import time
++import gzip
+ from urllib3 import HTTPSConnectionPool
+ from urllib3.exceptions import HTTPError
+ from multiprocessing import Pool
+ 
++NVD_START_YEAR = 2002
++NVD_JSON_VERSION = "1.0"
++NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
++
+ INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
+ URL_RE = re.compile(r"\s*https?://\S*\s*$")
+ 
+@@ -47,6 +54,7 @@ class Package:
+     all_licenses = list()
+     all_license_files = list()
+     all_versions = dict()
++    all_ignored_cves = dict()
+ 
+     def __init__(self, name, path):
+         self.name = name
+@@ -61,6 +69,7 @@ class Package:
+         self.url = None
+         self.url_status = None
+         self.url_worker = None
++        self.cves = list()
+         self.latest_version = (RM_API_STATUS_ERROR, None, None)
+ 
+     def pkgvar(self):
+@@ -152,6 +161,12 @@ class Package:
+                 self.warnings = int(m.group(1))
+                 return
+ 
++    def is_cve_ignored(self, cve):
++        """
++        Tells if the CVE is ignored by the package
++        """
++        return cve in self.all_ignored_cves.get(self.pkgvar(), [])
++
+     def __eq__(self, other):
+         return self.path == other.path
+ 
+@@ -163,6 +178,103 @@ class Package:
+             (self.name, self.path, self.has_license, self.has_license_files, self.has_hash, self.patch_count)
+ 
+ 
++class CVE:
++    """An accessor class for CVE Items in NVD files"""
++    def __init__(self, nvd_cve):
++        """Initialize a CVE from its NVD JSON representation"""
++        self.nvd_cve = nvd_cve
++
++    @staticmethod
++    def download_nvd_year(nvd_path, year):
++        metaf = "nvdcve-%s-%s.meta" % (NVD_JSON_VERSION, year)
++        path_metaf = os.path.join(nvd_path, metaf)
++        jsonf_gz = "nvdcve-%s-%s.json.gz" % (NVD_JSON_VERSION, year)
++        path_jsonf_gz = os.path.join(nvd_path, jsonf_gz)
++
++        # If the database file is less than a day old, we assume the NVD data
++        # locally available is recent enough.
++        if os.path.exists(path_jsonf_gz) and os.stat(path_jsonf_gz).st_mtime >= time.time() - 86400:
++            return path_jsonf_gz
++
++        # If not, we download the meta file
++        url = "%s/%s" % (NVD_BASE_URL, metaf)
++        print("Getting %s" % url)
++        page_meta = requests.get(url)
++        page_meta.raise_for_status()
++        if os.path.exists(path_metaf):
++            # If the meta file already existed, we compare the existing
++            # one with the data newly downloaded. If they are different,
++            # we need to re-download the database.
++            meta_known = open(path_metaf, "r").read()
++            if page_meta.text == meta_known:
++                return path_jsonf_gz
++
++        # Grab the compressed JSON NVD, and write files to disk
++        url = "%s/%s" % (NVD_BASE_URL, jsonf_gz)
++        print("Getting %s" % url)
++        page_data = requests.get(url)
++        page_data.raise_for_status()
++        open(path_jsonf_gz, "wb").write(page_data.content)
++        open(path_metaf, "w").write(page_meta.text)
++        return path_jsonf_gz
++
++    @classmethod
++    def read_nvd_dir(cls, nvd_dir):
++        """
++        Iterate over all the CVEs contained in NIST Vulnerability Database
++        feeds since NVD_START_YEAR. If the files are missing or outdated in
++        nvd_dir, a fresh copy will be downloaded, and kept in .json.gz
++        """
++        for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
++            filename = CVE.download_nvd_year(nvd_dir, year)
++            content = json.load(gzip.GzipFile(filename))
++            for cve in content["CVE_Items"]:
++                yield cls(cve['cve'])
++
++    def each_product(self):
++        """Iterate over each product section of this cve"""
++        for vendor in self.nvd_cve['affects']['vendor']['vendor_data']:
++            for product in vendor['product']['product_data']:
++                yield product
++
++    @property
++    def identifier(self):
++        """The CVE unique identifier"""
++        return self.nvd_cve['CVE_data_meta']['ID']
++
++    @property
++    def pkg_names(self):
++        """The set of package names referred by this CVE definition"""
++        return set(p['product_name'] for p in self.each_product())
++
++    def affects(self, br_pkg):
++        """
++        True if the Buildroot Package object passed as argument is affected
++        by this CVE.
++        """
++        for product in self.each_product():
++            if product['product_name'] != br_pkg.name:
++                continue
++
++            for v in product['version']['version_data']:
++                if v["version_affected"] == "=":
++                    if br_pkg.current_version == v["version_value"]:
++                        return True
++                elif v["version_affected"] == "<=":
++                    pkg_version = distutils.version.LooseVersion(br_pkg.current_version)
++                    if not hasattr(pkg_version, "version"):
++                        print("Cannot parse package '%s' version '%s'" % (br_pkg.name, br_pkg.current_version))
++                        continue
++                    cve_affected_version = distutils.version.LooseVersion(v["version_value"])
++                    if not hasattr(cve_affected_version, "version"):
++                        print("Cannot parse CVE affected version '%s'" % v["version_value"])
++                        continue
++                    return pkg_version <= cve_affected_version
++                else:
++                    print("version_affected: %s" % v['version_affected'])
++        return False
++
++
+ def get_pkglist(npackages, package_list):
+     """
+     Builds the list of Buildroot packages, returning a list of Package
+@@ -227,7 +339,7 @@ def get_pkglist(npackages, package_list):
+ def package_init_make_info():
+     # Fetch all variables@once
+     variables = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars",
+-                                         "VARS=%_LICENSE %_LICENSE_FILES %_VERSION"])
++                                         "VARS=%_LICENSE %_LICENSE_FILES %_VERSION %_IGNORE_CVES"])
+     variable_list = variables.splitlines()
+ 
+     # We process first the host package VERSION, and then the target
+@@ -261,6 +373,10 @@ def package_init_make_info():
+             pkgvar = pkgvar[:-8]
+             Package.all_versions[pkgvar] = value
+ 
++        elif pkgvar.endswith("_IGNORE_CVES"):
++            pkgvar = pkgvar[:-12]
++            Package.all_ignored_cves[pkgvar] = value.split(" ")
++
+ 
+ def check_url_status_worker(url, url_status):
+     if url_status != "Missing" and url_status != "No Config.in":
+@@ -355,6 +471,13 @@ def check_package_latest_version(packages):
+     del http_pool
+ 
+ 
++def check_package_cves(nvd_path, packages):
++    for cve in CVE.read_nvd_dir(nvd_path):
++        for pkg_name in cve.pkg_names:
++            if pkg_name in packages and cve.affects(packages[pkg_name]):
++                packages[pkg_name].cves.append(cve.identifier)
++
++
+ def calculate_stats(packages):
+     stats = defaultdict(int)
+     for pkg in packages:
+@@ -390,6 +513,9 @@ def calculate_stats(packages):
+         else:
+             stats["version-not-uptodate"] += 1
+         stats["patches"] += pkg.patch_count
++        stats["total-cves"] += len(pkg.cves)
++        if len(pkg.cves) != 0:
++            stats["pkg-cves"] += 1
+     return stats
+ 
+ 
+@@ -601,6 +727,17 @@ def dump_html_pkg(f, pkg):
+     f.write("  <td class=\"%s\">%s</td>\n" %
+             (" ".join(td_class), url_str))
+ 
++    # CVEs
++    td_class = ["centered"]
++    if len(pkg.cves) == 0:
++        td_class.append("correct")
++    else:
++        td_class.append("wrong")
++    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
++    for cve in pkg.cves:
++        f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
++    f.write("  </td>\n")
++
+     f.write(" </tr>\n")
+ 
+ 
+@@ -618,6 +755,7 @@ def dump_html_all_pkgs(f, packages):
+ <td class=\"centered\">Latest version</td>
+ <td class=\"centered\">Warnings</td>
+ <td class=\"centered\">Upstream URL</td>
++<td class=\"centered\">CVEs</td>
+ </tr>
+ """)
+     for pkg in sorted(packages):
+@@ -656,6 +794,10 @@ def dump_html_stats(f, stats):
+             stats["version-not-uptodate"])
+     f.write("<tr><td>Packages with no known upstream version</td><td>%s</td></tr>\n" %
+             stats["version-unknown"])
++    f.write("<tr><td>Packages affected by CVEs</td><td>%s</td></tr>\n" %
++            stats["pkg-cves"])
++    f.write("<tr><td>Total number of CVEs affecting all packages</td><td>%s</td></tr>\n" %
++            stats["total-cves"])
+     f.write("</table>\n")
+ 
+ 
+@@ -714,6 +856,8 @@ def parse_args():
+                           help='Number of packages')
+     packages.add_argument('-p', dest='packages', action='store',
+                           help='List of packages (comma separated)')
++    parser.add_argument('--nvd-path', dest='nvd_path',
++                        help='Path to the local NVD database')
+     args = parser.parse_args()
+     if not args.html and not args.json:
+         parser.error('at least one of --html or --json (or both) is required')
+@@ -746,6 +890,9 @@ def __main__():
+     check_package_urls(packages)
+     print("Getting latest versions ...")
+     check_package_latest_version(packages)
++    if args.nvd_path:
++        print("Checking packages CVEs")
++        check_package_cves(args.nvd_path, {p.name: p for p in packages})
+     print("Calculate stats")
+     stats = calculate_stats(packages)
+     if args.html:
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.1
