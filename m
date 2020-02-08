@@ -1,72 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Feb 2020 20:13:07 +0100
-Subject: [Buildroot] [git commit] Revert "system: don't attempt
- swapon/swapoff in inittab if not available"
-Message-ID: <20200208190924.601288D506@busybox.osuosl.org>
+Date: Sat, 08 Feb 2020 20:33:43 +0100
+Subject: [Buildroot] [PATCHv5] toolchain: allow using custom headers
+ newer than latest known ones
+In-Reply-To: <20200115182907.7104-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Wed, 15 Jan 2020 19:29:07 +0100")
+References: <20200115182907.7104-1-yann.morin.1998@free.fr>
+Message-ID: <87k14wub54.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffb189ed5a96576f2df2ef4c4b181ccee5fec657
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-This reverts commit c4dce0ae0f5d5d7fecb6f493e974e131a6df43da.
+ > From: Vincent Fazio <vfazio@xes-inc.com>
+ > When Buildroot is released, it knows up to a certain kernel header
+ > version, and no later. However, it is possible that an external
+ > toolchain will be used, that uses headers newer than the latest version
+ > Buildroot knows about.
 
-A different fix will be provided in a forthcoming patch.
+ > This may also happen when testing a development, an rc-class, or a newly
+ > released kernel, either in an external toolchain, or with an internal
+ > toolchain with custom headers (same-as-kernel, custom version, custom
+ > git, custom tarball).
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/busybox/busybox.mk   |  1 -
- package/sysvinit/sysvinit.mk |  1 -
- system/system.mk             | 13 -------------
- 3 files changed, 15 deletions(-)
+ > In the current state, Buildroot would refuse to use such toolchains,
+ > because the test is for strict equality.
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 45f74271f2..6283bc96ea 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -226,7 +226,6 @@ endif # BR2_TARGET_GENERIC_GETTY
- BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_SET_GETTY
- 
- BUSYBOX_TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_ROOT_INITTAB
--BUSYBOX_TARGET_FINALIZE_HOOKS += SYSTEM_UPDATE_SWAPON_SWAPOFF_INITTAB
- 
- endif # BR2_INIT_BUSYBOX
- 
-diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-index a717ae0459..c778a9cde5 100644
---- a/package/sysvinit/sysvinit.mk
-+++ b/package/sysvinit/sysvinit.mk
-@@ -45,6 +45,5 @@ endif # BR2_TARGET_GENERIC_GETTY
- SYSVINIT_TARGET_FINALIZE_HOOKS += SYSVINIT_SET_GETTY
- 
- SYSVINIT_TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_ROOT_INITTAB
--SYSVINIT_TARGET_FINALIZE_HOOKS += SYSTEM_UPDATE_SWAPON_SWAPOFF_INITTAB
- 
- $(eval $(generic-package))
-diff --git a/system/system.mk b/system/system.mk
-index 6f1f5c27b1..8fe2c138b0 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -96,19 +96,6 @@ define SYSTEM_REMOUNT_ROOT_INITTAB
- endef
- endif
- 
--define SYSTEM_UPDATE_SWAPON_SWAPOFF_INITTAB
--	if [ -x $(TARGET_DIR)/sbin/swapon ]; then \
--		$(SED) '\%:/sbin/swapon%s/^#*//' $(TARGET_DIR)/etc/inittab ; \
--	else \
--		$(SED) '\%:/sbin/swapon%s/^#*/#/' $(TARGET_DIR)/etc/inittab ; \
--	fi
--	if [ -x $(TARGET_DIR)/sbin/swapoff ]; then \
--		$(SED) '\%:/sbin/swapoff%s/^#*//' $(TARGET_DIR)/etc/inittab ; \
--	else \
--		$(SED) '\%:/sbin/swapoff%s/^#*/#/' $(TARGET_DIR)/etc/inittab ; \
--	fi
--endef
--
- ifeq ($(BR_BUILDING)$(BR2_SYSTEM_DEFAULT_PATH),y"")
- $(error BR2_SYSTEM_DEFAULT_PATH can't be empty)
- endif
+ > We'd like to make that situation possible, but we also want the user not
+ > to be lenient at the same time, and select the right headers version
+ > when it is known.
+
+ > So, we add a new Kconfig blind option that the latest kernel headers
+ > version selects. This options is then used to decide whether we do a
+ > strict or loose check of the kernel headers.
+
+ > Suggested-by: Aaron Sierra <asierra@xes-inc.com>
+ > Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+ > [yann.morin.1998 at free.fr:
+ >   - only do a loose check for the latest version
+ >   - expand commit log
+ > ]
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+ > ---
+ > Changes v4 -> v5: (Yann)
+ >   - include string.h for strcmp()  (Vincent)
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
