@@ -1,21 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Feb 2020 08:46:03 +0100
-Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2020.01.0
-In-Reply-To: <20200207205637.246925-1-b.bilas@grinn-global.com> (Bartosz
- Bilas's message of "Fri, 7 Feb 2020 21:56:37 +0100")
-References: <20200207205637.246925-1-b.bilas@grinn-global.com>
-Message-ID: <877e0xwmh0.fsf@dell.be.48ers.dk>
+Date: Sat, 08 Feb 2020 08:48:44 +0100
+Subject: [Buildroot] [PATCH] package/util-linux: upgrade to version
+ 2.35.1
+In-Reply-To: <20200207231608.1745-1-unixmania@gmail.com> (unixmania's message
+ of "Fri, 7 Feb 2020 20:16:08 -0300")
+References: <20200207231608.1745-1-unixmania@gmail.com>
+Message-ID: <8736blwmcj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bartosz" == Bartosz Bilas <b.bilas@grinn-global.com> writes:
+>>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
 
- > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+ > From: Carlos Santos <unixmania@gmail.com>
+ > Drop patches already applied upstream and, consequently, AUTORECONF.
 
-Committed, thanks.
+Great, I noticed the release with yesterdays' LWN and was going to do
+the bump this weekend - Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
