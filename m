@@ -1,109 +1,156 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  9 Feb 2020 23:03:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gensio: disable tests
-Message-ID: <20200209220322.4164865-1-fontaine.fabrice@gmail.com>
+Date: Sun,  9 Feb 2020 23:45:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php-*: fix autoconf variables
+Message-ID: <20200209224516.245288-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will fix a build failure without threads
+Build of php-* packages are broken since commit
+3292f3de499717360cf18d7fecd79ac096216ca8 because
+$(HOST_DIR)/bin/auto{conf,header} have been replaced by
+$(HOST_DIR)/bin/auto{conf,header} -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+
+So revert this change (which should have been only refactoring) for
+those packages
 
 Fixes:
- - http://autobuild.buildroot.org/results/e94d0e0b46afc1223a74bcc471909f4adef0d6f3
+ - http://autobuild.buildroot.org/results/0d5f4a792652e302b8c00c1e0f99966cc930fbac
+ - http://autobuild.buildroot.org/results/91a559183db212803a90cb399a1cb505b14818d9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...1-configure.ac-add-with-tests-option.patch | 60 +++++++++++++++++++
- package/gensio/gensio.mk                      |  5 +-
- 2 files changed, 64 insertions(+), 1 deletion(-)
- create mode 100644 package/gensio/0001-configure.ac-add-with-tests-option.patch
+ package/php-amqp/php-amqp.mk           | 4 ++--
+ package/php-geoip/php-geoip.mk         | 4 ++--
+ package/php-gnupg/php-gnupg.mk         | 4 ++--
+ package/php-imagick/php-imagick.mk     | 4 ++--
+ package/php-memcached/php-memcached.mk | 4 ++--
+ package/php-ssh2/php-ssh2.mk           | 4 ++--
+ package/php-yaml/php-yaml.mk           | 4 ++--
+ package/php-zmq/php-zmq.mk             | 4 ++--
+ 8 files changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/package/gensio/0001-configure.ac-add-with-tests-option.patch b/package/gensio/0001-configure.ac-add-with-tests-option.patch
-new file mode 100644
-index 0000000000..34b9638a4e
---- /dev/null
-+++ b/package/gensio/0001-configure.ac-add-with-tests-option.patch
-@@ -0,0 +1,60 @@
-+From 02eca526fd0d7923ca2c4e143e3c8bf00bd43d9c Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 9 Feb 2020 22:51:25 +0100
-+Subject: [PATCH] configure.ac: add --with-tests option
-+
-+Allow the user to disable tests through --without-tests, this is
-+especially useful on embedded systems
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/cminyard/gensio/pull/10]
-+---
-+ Makefile.am  |  4 ++--
-+ configure.ac | 16 ++++++++++++++++
-+ 2 files changed, 18 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index e063b1d..2459223 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,8 +1,8 @@
-+ 
-+ ACLOCAL_AMFLAGS = -I m4
-+ 
-+-SUBDIRS = lib include $(SWIG_DIR) tests tools man examples
-++SUBDIRS = lib include $(SWIG_DIR) $(TESTS_DIR) tools man examples
-+ 
-+-DIST_SUBDIRS = lib swig include tests tools man examples
-++DIST_SUBDIRS = lib swig include $(TESTS_DIR) tools man examples
-+ 
-+ EXTRA_DIST = README.rst reconf
-+diff --git a/configure.ac b/configure.ac
-+index 3519d4a..50a9dee 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -145,6 +145,22 @@ AC_ARG_WITH(pythonusepthreads,
-+    fi,
-+ )
-+ 
-++TESTS_DIR=
-++use_tests=yes
-++AC_ARG_WITH(tests,
-++[  --with-tests=yes|no      Build tests or not.],
-++    if test "x$withval" = "xyes"; then
-++      use_tests=yes
-++    elif test "x$withval" = "xno"; then
-++      use_tests=no
-++    fi,
-++)
-++
-++if test "x$use_tests" != "xno"; then
-++   TESTS_DIR="tests"
-++fi
-++AC_SUBST(TESTS_DIR)
-++
-+ AC_SEARCH_LIBS([clock_gettime], [rt posix4])
-+ 
-+ # Handle RS485 support
-+-- 
-+2.24.1
-+
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index a975fcb9e6..04167815ac 100644
---- a/package/gensio/gensio.mk
-+++ b/package/gensio/gensio.mk
-@@ -9,10 +9,13 @@ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net
- GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GENSIO_LICENSE_FILES = COPYING.LIB COPYING
- GENSIO_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+GENSIO_AUTORECONF = YES
- GENSIO_CONF_OPTS = \
- 	--without-openipmi \
- 	--without-swig \
--	--without-python
-+	--without-python \
-+	--without-tests
+diff --git a/package/php-amqp/php-amqp.mk b/package/php-amqp/php-amqp.mk
+index 8f3ba1f9f4..c808ecdbd6 100644
+--- a/package/php-amqp/php-amqp.mk
++++ b/package/php-amqp/php-amqp.mk
+@@ -16,8 +16,8 @@ PHP_AMQP_LICENSE_FILES = LICENSE
  
- GENSIO_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
+ define PHP_AMQP_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(AUTOCONF) \
+-		PHP_AUTOHEADER=$(AUTOHEADER) \
++		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-geoip/php-geoip.mk b/package/php-geoip/php-geoip.mk
+index 8bff564e2d..82ecba5816 100644
+--- a/package/php-geoip/php-geoip.mk
++++ b/package/php-geoip/php-geoip.mk
+@@ -16,8 +16,8 @@ PHP_GEOIP_LICENSE_FILES = geoip.c
+ 
+ define PHP_GEOIP_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(AUTOCONF) \
+-		PHP_AUTOHEADER=$(AUTOHEADER) \
++		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
+index 8137da4978..ae0a781154 100644
+--- a/package/php-gnupg/php-gnupg.mk
++++ b/package/php-gnupg/php-gnupg.mk
+@@ -16,8 +16,8 @@ PHP_GNUPG_LICENSE_FILES = LICENSE
+ 
+ define PHP_GNUPG_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(AUTOCONF) \
+-		PHP_AUTOHEADER=$(AUTOHEADER) \
++		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
+index a5541b0035..ca0cbc7492 100644
+--- a/package/php-imagick/php-imagick.mk
++++ b/package/php-imagick/php-imagick.mk
+@@ -16,8 +16,8 @@ PHP_IMAGICK_LICENSE_FILES = LICENSE
+ 
+ define PHP_IMAGICK_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(AUTOCONF) \
+-		PHP_AUTOHEADER=$(AUTOHEADER) \
++		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
+index 67ccc6747a..4607d099f3 100644
+--- a/package/php-memcached/php-memcached.mk
++++ b/package/php-memcached/php-memcached.mk
+@@ -18,8 +18,8 @@ PHP_MEMCACHED_LICENSE_FILES = LICENSE fastlz/LICENSE g_fmt.h
+ 
+ define PHP_MEMCACHED_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(AUTOCONF) \
+-		PHP_AUTOHEADER=$(AUTOHEADER) \
++		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
+index 98453acbcf..c9c13010dd 100644
+--- a/package/php-ssh2/php-ssh2.mk
++++ b/package/php-ssh2/php-ssh2.mk
+@@ -16,8 +16,8 @@ PHP_SSH2_LICENSE_FILES = LICENSE
+ 
+ define PHP_SSH2_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(AUTOCONF) \
+-		PHP_AUTOHEADER=$(AUTOHEADER) \
++		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-yaml/php-yaml.mk b/package/php-yaml/php-yaml.mk
+index 40f7385c6a..e23d897978 100644
+--- a/package/php-yaml/php-yaml.mk
++++ b/package/php-yaml/php-yaml.mk
+@@ -16,8 +16,8 @@ PHP_YAML_LICENSE_FILES = LICENSE
+ 
+ define PHP_YAML_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(AUTOCONF) \
+-		PHP_AUTOHEADER=$(AUTOHEADER) \
++		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
+diff --git a/package/php-zmq/php-zmq.mk b/package/php-zmq/php-zmq.mk
+index 892c42130f..fed71955b6 100644
+--- a/package/php-zmq/php-zmq.mk
++++ b/package/php-zmq/php-zmq.mk
+@@ -15,8 +15,8 @@ PHP_ZMQ_LICENSE_FILES = LICENSE
+ 
+ define PHP_ZMQ_PHPIZE
+ 	(cd $(@D); \
+-		PHP_AUTOCONF=$(AUTOCONF) \
+-		PHP_AUTOHEADER=$(AUTOHEADER) \
++		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
+ 		$(STAGING_DIR)/usr/bin/phpize)
+ endef
+ 
 -- 
 2.24.1
