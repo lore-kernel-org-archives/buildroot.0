@@ -1,70 +1,72 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Feb 2020 11:06:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: add support for gallium
- i915 driver
-In-Reply-To: <20200208074250.38952-1-james.hilliard1@gmail.com>
-References: <20200208074250.38952-1-james.hilliard1@gmail.com>
-Message-ID: <20200209100655.GJ23769@scaer>
+Date: Sun, 9 Feb 2020 11:21:31 +0100
+Subject: [Buildroot] [PATCH v3 02/10] package/rust: build and install
+ cargo
+In-Reply-To: <20200207180829.165689-3-arnout@mind.be>
+References: <20200207180829.165689-1-arnout@mind.be>
+ <20200207180829.165689-3-arnout@mind.be>
+Message-ID: <20200209102131.GK23769@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Arnout, All,
 
-On 2020-02-08 00:42 -0700, James Hilliard spake thusly:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/mesa3d/Config.in | 12 ++++++++++++
->  package/mesa3d/mesa3d.mk |  1 +
->  2 files changed, 13 insertions(+)
+On 2020-02-07 19:08 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 > 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 94e3f2cb9e..3da5fd3737 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -113,6 +113,18 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
->  	help
->  	  Mesa driver for Freedreno GPUs.
->  
-> +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
-> +	bool "Gallium i915 driver"
-> +	depends on BR2_i386 || BR2_x86_64
-> +	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
-> +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> +	select BR2_PACKAGE_LIBDRM_INTEL
-> +	help
-> +	  Support for i915-based Intel GPUs.
-> +
-> +comment "Gallium i915: Only one i915 provider can be built"
-> +	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
+> Cargo source code is not provided anymore as a separate tarball but is
+> now built along with the Rust compiler.
+> 
+> So update rust host variant to build Cargo and install the
+> cross-compilation configuration file.
+> 
+> All this will be overwritten again by the host-cargo package, but
+> that will be removed in later commits.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+> Tested-by: Sam Voss <sam.voss@rockwellcollins.com>
+> [Arnout: merge all install commands in HOST_RUST_INSTALL_CMDS]
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-We also want to hide the comment when the architecture is not x86, so I
-added the missign  dependency on x86.
+The commit does not look to do what it says in the commit log.
 
-Applied to master with that fixed, thanks.
+The commit log says "merge all install commands in HOST_RUST_INSTALL_CMDS"
+but HOST_RUST_INSTALL_CMDS are not touched; only CONFIGURE_CMDS are.
+
+So, I'm not sure I follow what's going on...
 
 Regards,
 Yann E. MORIN.
 
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
->  	bool "Gallium iris driver"
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 1a18cf3c58..7fb07ae05c 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -74,6 +74,7 @@ endif
->  #Gallium Drivers
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO) += freedreno
-> +MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915)     += i915
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS)     += iris
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
+> ---
+>  package/rust/rust.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+> index 5d14fc6682..9bbed15082 100644
+> --- a/package/rust/rust.mk
+> +++ b/package/rust/rust.mk
+> @@ -47,11 +47,14 @@ define HOST_RUST_CONFIGURE_CMDS
+>  		echo 'python = "$(HOST_DIR)/bin/python2"'; \
+>  		echo 'submodules = false'; \
+>  		echo 'vendor = true'; \
+> +		echo 'extended = true'; \
+> +		echo 'tools = ["cargo"]'; \
+>  		echo 'compiler-docs = false'; \
+>  		echo 'docs = false'; \
+>  		echo 'verbose = $(HOST_RUST_VERBOSITY)'; \
+>  		echo '[install]'; \
+>  		echo 'prefix = "$(HOST_DIR)"'; \
+> +		echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
+>  		echo '[rust]'; \
+>  		echo 'channel = "stable"'; \
+>  		echo '[target.$(RUSTC_TARGET_NAME)]'; \
 > -- 
-> 2.20.1
+> 2.24.1
 > 
 > _______________________________________________
 > buildroot mailing list
