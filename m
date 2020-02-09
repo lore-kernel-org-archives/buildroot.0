@@ -1,45 +1,87 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  9 Feb 2020 16:12:42 +0100
-Subject: [Buildroot] [PATCH 3/3] package/sdbusplus: drop broken autoreconf
- include directive
-In-Reply-To: <cover.1581261155.git.yann.morin.1998@free.fr>
+Date: Sun, 9 Feb 2020 16:24:41 +0100
+Subject: [Buildroot] [PATCH 2/3] package/automake: also include
+ autoconf-archive in search paths
+In-Reply-To: <e78e62c9d171941a0c8c8a93ba73d3edade4a9b1.1581261155.git.yann.morin.1998@free.fr>
 References: <cover.1581261155.git.yann.morin.1998@free.fr>
-Message-ID: <d829177dd62464e09391482db381f7eb5416b6ac.1581261155.git.yann.morin.1998@free.fr>
+ <e78e62c9d171941a0c8c8a93ba73d3edade4a9b1.1581261155.git.yann.morin.1998@free.fr>
+Message-ID: <20200209152441.GP23769@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since d255b67972 (autotools: do not overwrite first include path),
-specifying an include directive as autoreconf options will break the
-build, as this would change the ordering of include directories (the
-first one is treated specially by aclocal).
+All,
 
-Now that the infra takes care of adding the autoconf archive macro
-directory to the glocal search path, we can remove the offending
-include directive from sdbusplus autoreconf options (dropping the
-whole variable now that it is unused).
+On 2020-02-09 16:12 +0100, Yann E. MORIN spake thusly:
+> Since d255b67972 (autotools: do not overwrite first include path), the
+> ordering of include paths has changed: the system directories are
+> specified with explicit options passed to autoreconf, which means that
+> any directory specified in the package _AUTORECONF_OPTS are no longer
+> first:
+> 
+>   - in package/autoconf/autoconf.mk, we define AUTORECONF as:
+>     AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+> 
+>   - in package/pkg-autotools.mk, we call AUTORECONF with:
+>     $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+> 
+> For a package that needs autoconf-archive, this means that it has to
+> provide a custom include directive, in its own _AUTORECONF_OPTS. This in
+> turn means that this directory becomes the first, and goes directly
+> opposite to what d255b67972 was supposed to accomplish.
+> 
+> However, the path to the autoconf archive macro directory is mnot
+> searched by default either, so a package has no way to add such an
+> aclocal include directive.
+> 
+> We can only add it in the global search directory, and we do so only for
+> those packages that have autoconf-archive in their dependencies.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Michael Walle <michael@walle.cc>
+> Cc: Heiko Thiery <heiko.thiery@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/automake/automake.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+> index 89dcaa1293..238116cb94 100644
+> --- a/package/automake/automake.mk
+> +++ b/package/automake/automake.mk
+> @@ -33,5 +33,11 @@ $(eval $(host-autotools-package))
+>  AUTOMAKE = $(HOST_DIR)/bin/automake
+>  ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+>  ACLOCAL = $(HOST_DIR)/bin/aclocal
+> -ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
+> +ACLOCAL_PATH = $(subst $(space),:,$(strip \
+> +	$(ACLOCAL_DIR) \
+> +	$(ACLOCAL_HOST_DIR) \
+> +	$(if $(filter host-autoconf-archive,$($(PKG)_FINAL_ALL_DEPENDENCIES)),\
+> +		$(HOST_DIR)/share/autoconf-archive \
+> +	) \
+> +))
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Michael Walle <michael@walle.cc>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>
-Cc: John Faith <jfaith@impinj.com>
----
- package/sdbusplus/sdbusplus.mk | 1 -
- 1 file changed, 1 deletion(-)
+This makes check-package whine because it is not indented. Sigh...
+Indenting with a TAB fixes the check-package error, and is still a
+working fix.
 
-diff --git a/package/sdbusplus/sdbusplus.mk b/package/sdbusplus/sdbusplus.mk
-index 9d3d1e8cf4..2bb7a30cfd 100644
---- a/package/sdbusplus/sdbusplus.mk
-+++ b/package/sdbusplus/sdbusplus.mk
-@@ -17,7 +17,6 @@ HOST_SDBUSPLUS_DEPENDENCIES = \
- SDBUSPLUS_CONF_OPTS = --disable-sdbuspp
- HOST_SDBUSPLUS_CONF_OPTS = --disable-libsdbusplus
- SDBUSPLUS_AUTORECONF = YES
--SDBUSPLUS_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
- SDBUSPLUS_INSTALL_STAGING = YES
- SDBUSPLUS_LICENSE = Apache-2.0
- SDBUSPLUS_LICENSE_FILES = LICENSE
+Regards,
+Yann E. MORIN.
+
+>  export ACLOCAL_PATH
+> -- 
+> 2.20.1
+> 
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
