@@ -1,41 +1,163 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Sun,  9 Feb 2020 19:03:21 +0100
-Subject: [Buildroot] [PATCH v4 3/9] configs/qemu_m68k_q800: remove host-qemu
+Date: Sun,  9 Feb 2020 19:03:22 +0100
+Subject: [Buildroot] [PATCH v4 4/9] configs/qemu{x86,
+ x86_64}: add a serial console
 In-Reply-To: <20200209180327.455426-1-romain.naour@smile.fr>
 References: <20200209180327.455426-1-romain.naour@smile.fr>
-Message-ID: <20200209180327.455426-4-romain.naour@smile.fr>
+Message-ID: <20200209180327.455426-5-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building upstream host-qemu for m68k_q800 is useless
-since it doesn't support the q800 machine:
+The current Buildroot defconfigs for qemu_x86 and qemu_x86_64
+instantiate a console on tty1, which appears on QEMU's
+graphical window. Add a console on the serial port (ttyS0) to
+be used later for gitlab testing.
 
-qemu-system-m68k: -M q800: unsupported machine type
+This change is need since the script used for gitlab testing
+needs to use a serial output with pexpect.
 
-This defconfig must be used with the QEMU fork from [1]
-using q800-v2.11.0 branch.
+This change is similar to the one made for raspberrypi [1] to
+handle HDMI and serial console:
 
-[1] https://github.com/vivier/qemu-m68k
+This requires three changes:
+ 1. have two 'console=' entries in the kernel command line: tty1,
+    then ttyS0;
+ 2. change BR2_TARGET_GENERIC_GETTY_PORT to "console", so it starts
+    a getty on the last console= passed to the kernel, ttyS0;
+ 3. add a new getty on tty1 to the generated inittab.
+
+Step 2 is actually obtained by removing BR2_TARGET_GENERIC_GETTY_PORT
+entirely from the defconfigs, since "console" is the default value.
+
+Step 3 requires a post-build script since the Buildroot makefiles can
+configure only one console.
+
+Note: instead of simply adding a new getty on ttyS0 (which would
+work) this patch actually changes BR2_TARGET_GENERIC_GETTY_PORT to
+instantiate a console on UART, then adds back tty1 via
+post-build.sh. This is done only to avoid the "GENERIC_SERIAL" comment
+where we instantiate a console on QEMU graphical window, then
+instantiate a really-serial console on another line.
+
+The result is these two inittab lines:
+
+  console::respawn:/sbin/getty -L  console 0 vt100 # GENERIC_SERIAL
+  tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window
+
+[1] 20878a1017e2bf7eb8c5f870dc6d2641493cb0f9
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- configs/qemu_m68k_q800_defconfig | 4 ----
- 1 file changed, 4 deletions(-)
+ board/qemu/x86/post-build.sh    | 11 +++++++++++
+ board/qemu/x86/readme.txt       |  2 +-
+ board/qemu/x86_64/post-build.sh | 11 +++++++++++
+ board/qemu/x86_64/readme.txt    |  2 +-
+ configs/qemu_x86_64_defconfig   |  4 +++-
+ configs/qemu_x86_defconfig      |  4 +++-
+ 6 files changed, 30 insertions(+), 4 deletions(-)
+ create mode 100755 board/qemu/x86/post-build.sh
+ create mode 100755 board/qemu/x86_64/post-build.sh
 
-diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
-index 2ef73d1dd6..e2a5f27431 100644
---- a/configs/qemu_m68k_q800_defconfig
-+++ b/configs/qemu_m68k_q800_defconfig
-@@ -23,7 +23,3 @@ BR2_LINUX_KERNEL_VMLINUX=y
- # Serial port config
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--
--# host-qemu for gitlab testing
--BR2_PACKAGE_HOST_QEMU=y
--BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+diff --git a/board/qemu/x86/post-build.sh b/board/qemu/x86/post-build.sh
+new file mode 100755
+index 0000000000..bf83a002c2
+--- /dev/null
++++ b/board/qemu/x86/post-build.sh
+@@ -0,0 +1,11 @@
++#!/bin/sh
++
++set -u
++set -e
++
++# Add a console on tty1
++if [ -e ${TARGET_DIR}/etc/inittab ]; then
++    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
++	sed -i '/GENERIC_SERIAL/a\
++tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window' ${TARGET_DIR}/etc/inittab
++fi
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+index 42fc2439da..3bbafecf91 100644
+--- a/board/qemu/x86/readme.txt
++++ b/board/qemu/x86/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
+ 
+-  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "rootwait root=/dev/vda" -net nic,model=virtio -net user
++  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "rootwait root=/dev/vda console=tty1 console=ttyS0" -serial stdio -net nic,model=virtio -net user
+ 
+ Optionally add -smp N to emulate a SMP system with N CPUs.
+ 
+diff --git a/board/qemu/x86_64/post-build.sh b/board/qemu/x86_64/post-build.sh
+new file mode 100755
+index 0000000000..bf83a002c2
+--- /dev/null
++++ b/board/qemu/x86_64/post-build.sh
+@@ -0,0 +1,11 @@
++#!/bin/sh
++
++set -u
++set -e
++
++# Add a console on tty1
++if [ -e ${TARGET_DIR}/etc/inittab ]; then
++    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
++	sed -i '/GENERIC_SERIAL/a\
++tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window' ${TARGET_DIR}/etc/inittab
++fi
+diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
+index 4a1c0c0ff5..93ac22a947 100644
+--- a/board/qemu/x86_64/readme.txt
++++ b/board/qemu/x86_64/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
+ 
+-  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "rootwait root=/dev/vda" -net nic,model=virtio -net user
++  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "rootwait root=/dev/vda console=tty1 console=ttyS0" -serial stdio -net nic,model=virtio -net user
+ 
+ Optionally add -smp N to emulate a SMP system with N CPUs.
+ 
+diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
+index cbd0413a90..b561e42e51 100644
+--- a/configs/qemu_x86_64_defconfig
++++ b/configs/qemu_x86_64_defconfig
+@@ -3,12 +3,14 @@ BR2_x86_64=y
+ 
+ # System
+ BR2_SYSTEM_DHCP="eth0"
+-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
++# Image
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/qemu/x86_64/post-build.sh"
++
+ # Linux headers same as kernel, a 4.19 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index 6ca3ab9627..52f1744344 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -4,12 +4,14 @@ BR2_x86_pentiumpro=y
+ 
+ # System
+ BR2_SYSTEM_DHCP="eth0"
+-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
++# Image
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/qemu/x86/post-build.sh"
++
+ # Linux headers same as kernel, a 4.19 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
 -- 
 2.24.1
