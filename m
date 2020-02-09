@@ -1,7 +1,9 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun,  9 Feb 2020 21:44:56 +0100
+Date: Sun,  9 Feb 2020 21:44:57 +0100
 Subject: [Buildroot] [PATCH] package/minicom: bump version
-Message-ID: <20200209204457.108600-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20200209204457.108600-1-giulio.benetti@benettiengineering.com>
+References: <20200209204457.108600-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20200209204457.108600-2-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
