@@ -1,45 +1,63 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  9 Feb 2020 22:28:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/glslsandbox-player: remove 'v'
- prefix
-Message-ID: <20200209212825.4044875-1-fontaine.fabrice@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sun, 9 Feb 2020 18:28:39 -0300
+Subject: [Buildroot] [PATCH v6 5/6] package/polkit: add init service file
+In-Reply-To: <20191208160808.7fcc27ec@windsurf.home>
+References: <20191206234649.3972927-1-aduskett@gmail.com>
+ <20191206234649.3972927-5-aduskett@gmail.com>
+ <20191208160808.7fcc27ec@windsurf.home>
+Message-ID: <CAJ4jsaeGW4swqZ0a-s1ypM-OHFNran_+a2=OGrtRjObYunz8WQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes version parsing for release-monitoring.org support
+On Sun, Dec 8, 2019 at 12:08 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> +Carlos in Cc for the review of the init script.
+>
+> On Fri,  6 Dec 2019 15:46:48 -0800
+> aduskett at gmail.com wrote:
+>
+> > diff --git a/package/polkit/S50polkit b/package/polkit/S50polkit
+> > new file mode 100644
+> > index 0000000000..55c10e99ae
+> > --- /dev/null
+> > +++ b/package/polkit/S50polkit
+> > @@ -0,0 +1,15 @@
+> > +#!/bin/sh
+> > +#
+> > +# start polkitd
+> > +#
+> > +
+> > +case "$1" in
+> > +     start)
+> > +             start-stop-daemon -q -S -x /usr/lib/polkit-1/polkitd -- --no-debug &
+>
+> Why is the & necessary at this end ?
+>
+> I think this init script deserves a comment that explains why it
+> doesn't follow the traditional pattern for init scripts.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/glslsandbox-player/glslsandbox-player.hash | 2 +-
- package/glslsandbox-player/glslsandbox-player.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Why is a polkitd init script requited if, according to the man page
 
-diff --git a/package/glslsandbox-player/glslsandbox-player.hash b/package/glslsandbox-player/glslsandbox-player.hash
-index 2d25b4bb40..66dac9354a 100644
---- a/package/glslsandbox-player/glslsandbox-player.hash
-+++ b/package/glslsandbox-player/glslsandbox-player.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3458294a50c3d2fd54f806e46dd7bfba5f1e6aedadd6c396c76d70793419432b  glslsandbox-player-v2019.08.23.tar.gz
-+sha256  3458294a50c3d2fd54f806e46dd7bfba5f1e6aedadd6c396c76d70793419432b  glslsandbox-player-2019.08.23.tar.gz
- sha256  06a79395e8f3a4cc7ad068c6b59dfbe12c0efa4d27791e532345ceb1f41aea8a  LICENSE
-diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
-index d6dfb8fc91..5ace69d7dd 100644
---- a/package/glslsandbox-player/glslsandbox-player.mk
-+++ b/package/glslsandbox-player/glslsandbox-player.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GLSLSANDBOX_PLAYER_VERSION = v2019.08.23
--GLSLSANDBOX_PLAYER_SITE = $(call github,jolivain,glslsandbox-player,$(GLSLSANDBOX_PLAYER_VERSION))
-+GLSLSANDBOX_PLAYER_VERSION = 2019.08.23
-+GLSLSANDBOX_PLAYER_SITE = $(call github,jolivain,glslsandbox-player,v$(GLSLSANDBOX_PLAYER_VERSION))
- GLSLSANDBOX_PLAYER_AUTORECONF = YES
- GLSLSANDBOX_PLAYER_DEPENDENCIES = libegl libgles host-pkgconf
- 
+DESCRIPTION
+       polkitd provides the org.freedesktop.PolicyKit1 D-Bus service
+       on the system message bus. Users or administrators should never
+       need to start this daemon as it will be automatically started
+       by dbus-daemon(1) or systemd(1) whenever an application calls
+       into the service.
+
 -- 
-2.24.1
+Carlos Santos <unixmania@gmail.com>
