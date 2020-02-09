@@ -1,69 +1,109 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Feb 2020 22:34:07 +0100
-Subject: [Buildroot] [PATCH] package/uclibc: restore __isctype_l
- definition
-In-Reply-To: <20200209200937.25440-1-jcmvbkbc@gmail.com>
-References: <20200209200937.25440-1-jcmvbkbc@gmail.com>
-Message-ID: <20200209213407.GW23769@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  9 Feb 2020 23:03:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gensio: disable tests
+Message-ID: <20200209220322.4164865-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Max, All,
+This will fix a build failure without threads
 
-On 2020-02-09 12:09 -0800, Max Filippov spake thusly:
-> Recent is*_l fix broke uclibc build because removed __isctype_l
-> definition was used in libc/misc/ctype/ctype.c. Restore it.
-> 
-> Fixes: 8723c5e7a6db ("package/uclibc: fix ctype.h is*_l definitions")
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/e94d0e0b46afc1223a74bcc471909f4adef0d6f3
 
-Thanks for the quick fix! :-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...1-configure.ac-add-with-tests-option.patch | 60 +++++++++++++++++++
+ package/gensio/gensio.mk                      |  5 +-
+ 2 files changed, 64 insertions(+), 1 deletion(-)
+ create mode 100644 package/gensio/0001-configure.ac-add-with-tests-option.patch
 
-I've applied to master, with the folowing changes:
-
-  - add new patch, don't fix existing one
-  - add URL to upstream ML post
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../0001-include-ctype.h-drop-is-_l-macro-definitions.patch   | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-> index 5557a9c1e730..41c9d3d2bd81 100644
-> --- a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-> +++ b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-> @@ -20,7 +20,7 @@ diff --git a/include/ctype.h b/include/ctype.h
->  index ecd5e730886a..e934cf3321a6 100644
->  --- a/include/ctype.h
->  +++ b/include/ctype.h
-> -@@ -350,46 +350,13 @@ libc_hidden_proto(tolower_l)
-> +@@ -350,46 +350,14 @@ libc_hidden_proto(tolower_l)
->   /* Return the uppercase version of C.  */
->   extern int toupper_l (int __c, __locale_t __l) __THROW;
->   
-> @@ -30,7 +30,7 @@ index ecd5e730886a..e934cf3321a6 100644
->  -# endif	/* Optimizing gcc */
->  -
->  -
-> --# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
-> + # define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
->   # ifndef __NO_CTYPE
->  -#  define __isalnum_l(c,l)	__isctype_l((c), _ISalnum, (l))
->  -#  define __isalpha_l(c,l)	__isctype_l((c), _ISalpha, (l))
-> -- 
-> 2.20.1
-> 
-
+diff --git a/package/gensio/0001-configure.ac-add-with-tests-option.patch b/package/gensio/0001-configure.ac-add-with-tests-option.patch
+new file mode 100644
+index 0000000000..34b9638a4e
+--- /dev/null
++++ b/package/gensio/0001-configure.ac-add-with-tests-option.patch
+@@ -0,0 +1,60 @@
++From 02eca526fd0d7923ca2c4e143e3c8bf00bd43d9c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 9 Feb 2020 22:51:25 +0100
++Subject: [PATCH] configure.ac: add --with-tests option
++
++Allow the user to disable tests through --without-tests, this is
++especially useful on embedded systems
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/cminyard/gensio/pull/10]
++---
++ Makefile.am  |  4 ++--
++ configure.ac | 16 ++++++++++++++++
++ 2 files changed, 18 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index e063b1d..2459223 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1,8 +1,8 @@
++ 
++ ACLOCAL_AMFLAGS = -I m4
++ 
++-SUBDIRS = lib include $(SWIG_DIR) tests tools man examples
+++SUBDIRS = lib include $(SWIG_DIR) $(TESTS_DIR) tools man examples
++ 
++-DIST_SUBDIRS = lib swig include tests tools man examples
+++DIST_SUBDIRS = lib swig include $(TESTS_DIR) tools man examples
++ 
++ EXTRA_DIST = README.rst reconf
++diff --git a/configure.ac b/configure.ac
++index 3519d4a..50a9dee 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -145,6 +145,22 @@ AC_ARG_WITH(pythonusepthreads,
++    fi,
++ )
++ 
+++TESTS_DIR=
+++use_tests=yes
+++AC_ARG_WITH(tests,
+++[  --with-tests=yes|no      Build tests or not.],
+++    if test "x$withval" = "xyes"; then
+++      use_tests=yes
+++    elif test "x$withval" = "xno"; then
+++      use_tests=no
+++    fi,
+++)
+++
+++if test "x$use_tests" != "xno"; then
+++   TESTS_DIR="tests"
+++fi
+++AC_SUBST(TESTS_DIR)
+++
++ AC_SEARCH_LIBS([clock_gettime], [rt posix4])
++ 
++ # Handle RS485 support
++-- 
++2.24.1
++
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index a975fcb9e6..04167815ac 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
+@@ -9,10 +9,13 @@ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net
+ GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GENSIO_LICENSE_FILES = COPYING.LIB COPYING
+ GENSIO_INSTALL_STAGING = YES
++# We're patching configure.ac
++GENSIO_AUTORECONF = YES
+ GENSIO_CONF_OPTS = \
+ 	--without-openipmi \
+ 	--without-swig \
+-	--without-python
++	--without-python \
++	--without-tests
+ 
+ GENSIO_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.1
