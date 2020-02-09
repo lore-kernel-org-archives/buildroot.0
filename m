@@ -1,28 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 09 Feb 2020 10:05:43 +0100
-Subject: [Buildroot] [PATCH] package/Config.in: fix make failure by
- removing gstreamer/Config.in
-In-Reply-To: <20200209083651.117868-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Sun, 9 Feb 2020 09:36:51 +0100")
-References: <20200209083651.117868-1-giulio.benetti@benettiengineering.com>
-Message-ID: <877e0wt9js.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 9 Feb 2020 10:12:38 +0100
+Subject: [Buildroot] [git commit] package/mesa3d: fix iris driver depends
+ and selects
+Message-ID: <20200209090520.132518D6FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3268650a67982b7273cf592e029777f0c214c024
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > After commit:
- > https://git.buildroot.net/buildroot/commit/?id=fb49c7a26182f9d48f8283e7328fddc216962c94
- > gstreamer entry in package/Config.in was left behind resulting in every
- > make call to fail. So let's remove orphaned gstreamer entry from
- > package/Config.in
+iris is inherently an x86-only driver, and it hard codes gcc options
+specific to x86m like -msse2, causing build breakage on other
+architectures.
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+iris also does not use kmsro, but the select was accidentally added when
+iris was introduced.
 
-Crap, thanks for fixing it.
+Fix both by adding the missing dependency to x86, and by removing the
+select to kmsro.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998 at free.fr:
+  - ad dependency to x86
+  - reword commit log accordingly
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/mesa3d/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 94e3f2cb9e..3d72c60d1f 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -115,8 +115,8 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 	bool "Gallium iris driver"
++	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+-	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+ 	help
+ 	  Mesa driver for iris-based Intel GPUs.
+ 
