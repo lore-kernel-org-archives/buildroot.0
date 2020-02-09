@@ -1,57 +1,47 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 9 Feb 2020 20:09:52 +0100
-Subject: [Buildroot] [PATCH 3/3] package/sdbusplus: drop broken
- autoreconf include directive
-In-Reply-To: <d829177dd62464e09391482db381f7eb5416b6ac.1581261155.git.yann.morin.1998@free.fr>
-References: <cover.1581261155.git.yann.morin.1998@free.fr>
- <d829177dd62464e09391482db381f7eb5416b6ac.1581261155.git.yann.morin.1998@free.fr>
-Message-ID: <CAEyMn7bAEqyzDTZ2pc1moA+iM1Ue0W0Fq4Vt-gVz0igann=uBw@mail.gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sun, 9 Feb 2020 11:21:45 -0800
+Subject: [Buildroot] [PATCH] package/uclibc: fix ctype.h is*_l
+ definitions
+In-Reply-To: <20200209163842.GT23769@scaer>
+References: <20200207195144.4060-1-jcmvbkbc@gmail.com>
+ <87mu9tv5qu.fsf@dell.be.48ers.dk> <20200209163842.GT23769@scaer>
+Message-ID: <CAMo8BfLcrUf3rR9m7h5xjN5Cgbu-2q7qUnXivDX_Foxz1nXf7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-
-
-Am So., 9. Feb. 2020 um 16:12 Uhr schrieb Yann E. MORIN
-<yann.morin.1998@free.fr>:
+On Sun, Feb 9, 2020 at 8:38 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> On 2020-02-08 09:32 +0100, Peter Korsgaard spake thusly:
+> > >>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
+> >
+> >  > ctype locale-specific macro definitions are broken because they result
+> >  > in dereference of pointer to structure of incomplete type.
+> >  > Drop these macros since they are optional and let applications use
+> >  > functions with the same names.
+> >
+> >  > Backported from:
+> >  >   https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=d1a3ca7ca56630fddde7311a0474eed4a21335a7
+> >  > Fixes:
+> >  >   http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39
+> >
+> >  > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> >
+> > Committed, thanks.
 >
-> Since d255b67972 (autotools: do not overwrite first include path),
-> specifying an include directive as autoreconf options will break the
-> build, as this would change the ordering of include directories (the
-> first one is treated specially by aclocal).
+> uClibc now fails to build:
+>     http://autobuild.buildroot.org/results/124/124e8ad32e1dbaf131749456f4b59333623cd91f/build-end.log
 >
-> Now that the infra takes care of adding the autoconf archive macro
-> directory to the glocal search path, we can remove the offending
-> include directive from sdbusplus autoreconf options (dropping the
-> whole variable now that it is unused).
+>     home/test/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-build
+>     root-linux-uclibc/8.3.0/../../../../xtensa-buildroot-linux-uclibc/bin
+>     /ld: libc/libc_so.a(isalnum_l.os):(.text+0x0): undefined reference to
+>     `__isctype_l'
 >
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Michael Walle <michael@walle.cc>
-> Cc: Heiko Thiery <heiko.thiery@gmail.com>
-> Cc: John Faith <jfaith@impinj.com>
+> Care to have a look, please?
 
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+Looking at it, sorry.
 
-
-> ---
->  package/sdbusplus/sdbusplus.mk | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/package/sdbusplus/sdbusplus.mk b/package/sdbusplus/sdbusplus.mk
-> index 9d3d1e8cf4..2bb7a30cfd 100644
-> --- a/package/sdbusplus/sdbusplus.mk
-> +++ b/package/sdbusplus/sdbusplus.mk
-> @@ -17,7 +17,6 @@ HOST_SDBUSPLUS_DEPENDENCIES = \
->  SDBUSPLUS_CONF_OPTS = --disable-sdbuspp
->  HOST_SDBUSPLUS_CONF_OPTS = --disable-libsdbusplus
->  SDBUSPLUS_AUTORECONF = YES
-> -SDBUSPLUS_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
->  SDBUSPLUS_INSTALL_STAGING = YES
->  SDBUSPLUS_LICENSE = Apache-2.0
->  SDBUSPLUS_LICENSE_FILES = LICENSE
-> --
-> 2.20.1
->
+-- 
+Thanks.
+-- Max
