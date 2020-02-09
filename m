@@ -1,37 +1,78 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun,  9 Feb 2020 11:34:41 -0700
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: add missing depends and
- driver name to r100 driver
-Message-ID: <20200209183441.130187-1-james.hilliard1@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 9 Feb 2020 19:42:42 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/qemu: Bump to version 4.2.0
+In-Reply-To: <1e980ad7-7660-01de-a8cd-4aa2e37c5a39@gmail.com>
+References: <20200208211512.994361-1-aduskett@gmail.com>
+ <91337da1-a611-ebbe-d344-f99388e46bc1@gmail.com>
+ <1e980ad7-7660-01de-a8cd-4aa2e37c5a39@gmail.com>
+Message-ID: <570aa4e4-6896-b8be-9956-345f17196f47@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Propagate libdrm dependencies.
+Hi Adam, All,
 
-Add r100 to menu name to differentiate from r200 dri driver.
+Le 09/02/2020 ? 14:33, Romain Naour a ?crit?:
+> Hi Adam, All,
+> 
+> Le 09/02/2020 ? 11:35, Romain Naour a ?crit?:
+>> Hi Adam,
+>>
+>> Le 08/02/2020 ? 22:15, aduskett at gmail.com a ?crit?:
+>>> From: Adam Duskett <Aduskett@gmail.com>
+>>>
+>>> Other changes:
+>>>   - Remove upstream patches
+>>>   - Update COPYING.LIB hash as upstream updated the file to match the new LGPL
+>>>     2.1 license from upstream. See:
+>>>     https://github.com/qemu/qemu/commit/f0d44cc4462f112bce5ec556e87eff4eec682e39
+>>>
+>>> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+>>> ---
+>>> Changes v1 -> v2:
+>>>   - Remove the uneeded pactches in the qemu/3.1.1.1 directory (Baruch)
+>>>   - Move the upstream patches to qemu/4.2.0
+>>>
+>>
+>> Thanks for this update.
+>>
+>> I'm testing your patch with my series about Qemu runtime testing in gitlab.
+>>
+>> Last time I tested using Qemu 3.1.1.1 and most of qemu defconfig were ok:
+>> https://gitlab.com/kubu93/buildroot/pipelines/116212917
+>>
+>> Here is a new test using Qemu 4.2:
+>> https://gitlab.com/kubu93/buildroot/pipelines/116270515
+>>
+>> We will see if there is any regression :)
+> 
+> All tests passed except qemu_arm_vexpress-tz that was already broken due to a
+> python crypto issue (ImportError: No module named 'Crypto').
+> 
+> Tested-by: Romain Naour <romain.naour@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/mesa3d/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This new version of Qemu add the support for m68k q800 target [1] for which we
+have a qemu defconfig that required a qemu fork [2]
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index ff39652508..788705544d 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -355,7 +355,9 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
- 	  Support for Nvidia-based GPUs.
- 
- config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
--	bool "DRI radeon driver"
-+	bool "DRI radeon r100 driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_LIBDRM_RADEON
- 	help
--- 
-2.20.1
+I tested successfully our defconfig with qemu 4.2.
+
+[1] https://wiki.qemu.org/ChangeLog/4.2#68k
+[2]
+https://git.buildroot.net/buildroot/tree/board/qemu/m68k-q800/readme.txt?h=2019.11.1
+[3] http://lists.busybox.net/pipermail/buildroot/2020-February/273749.html
+
+Best regards,
+Romain
+
+
+> 
+> Best regards,
+> Romain
+> 
+>>
+>> Best regards,
+>> Romain
+>>
+> 
