@@ -1,53 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Feb 2020 09:48:02 +0100
-Subject: [Buildroot] [PATCH] package/Config.in: fix make failure by
- removing gstreamer/Config.in
-In-Reply-To: <20200209083651.117868-1-giulio.benetti@benettiengineering.com>
-References: <20200209083651.117868-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200209084802.GE23769@scaer>
+Date: Sun, 9 Feb 2020 09:49:37 +0100
+Subject: [Buildroot] [PATCH v2 2/3] package/qemu: do not support
+ x86_steamroller or x86_core_avx2
+In-Reply-To: <20200208211512.994361-2-aduskett@gmail.com>
+References: <20200208211512.994361-1-aduskett@gmail.com>
+ <20200208211512.994361-2-aduskett@gmail.com>
+Message-ID: <20200209084937.GF23769@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio, All,
+Adam, All,
 
-On 2020-02-09 09:36 +0100, Giulio Benetti spake thusly:
-> After commit:
-> https://git.buildroot.net/buildroot/commit/?id=fb49c7a26182f9d48f8283e7328fddc216962c94
-> gstreamer entry in package/Config.in was left behind resulting in every
-> make call to fail. So let's remove orphaned gstreamer entry from
-> package/Config.in
+On 2020-02-08 13:15 -0800, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> These CPU's cause segfaults with qemu.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-How did we even miss that to begin with? Damn...
-
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Applied to master, thanks!
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/Config.in | 1 -
->  1 file changed, 1 deletion(-)
+>  package/qemu/Config.in.host | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 72630d4ee9..dfa3f34b9d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -26,7 +26,6 @@ menu "Audio and video applications"
->  	source "package/fluid-soundfont/Config.in"
->  	source "package/fluidsynth/Config.in"
->  	source "package/gmrender-resurrect/Config.in"
-> -	source "package/gstreamer/Config.in"
->  	source "package/gstreamer1/Config.in"
->  	source "package/jack1/Config.in"
->  	source "package/jack2/Config.in"
+> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+> index d6b4bf6dd4..ea9281c5fb 100644
+> --- a/package/qemu/Config.in.host
+> +++ b/package/qemu/Config.in.host
+> @@ -20,6 +20,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+>  	default y if BR2_sparc64
+>  	default y if BR2_xtensa
+>  	default y if BR2_x86_64
+> +	depends on !BR2_x86_steamroller && !BR2_x86_core_avx2
+>  	depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
+>  
+>  config BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS
 > -- 
-> 2.20.1
+> 2.24.1
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
