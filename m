@@ -1,76 +1,58 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun,  9 Feb 2020 10:26:29 +0100
-Subject: [Buildroot] [PATCH] package/libnss: fix PowerPc build failure
-Message-ID: <20200209092629.20131-1-giulio.benetti@benettiengineering.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 9 Feb 2020 11:04:51 +0100
+Subject: [Buildroot] [git commit] package/mesa3d: add support for gallium
+ i915 driver
+Message-ID: <20200209095411.845B77FE13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NSS assumes <sys/auvx.h> is always present but that's not true, so add a
-patch to check if it exists or not.
+commit: https://git.buildroot.net/buildroot/commit/?id=aacf71d10784fdcc61100f66bfc93a88c765f974
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998 at free.fr: also guard comment with x86 dependency]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Patch is already pending upstream:
-https://bugzilla.mozilla.org/show_bug.cgi?id=1614183
----
- ...heck-if-PPC-__has_include-sys-auxv.h.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
+ package/mesa3d/Config.in | 13 +++++++++++++
+ package/mesa3d/mesa3d.mk |  1 +
+ 2 files changed, 14 insertions(+)
 
-diff --git a/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch b/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
-new file mode 100644
-index 0000000000..0efe866643
---- /dev/null
-+++ b/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
-@@ -0,0 +1,46 @@
-+From ad1025f21f00231cd464a92ed34b334897af6842 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Sun, 9 Feb 2020 10:15:16 +0100
-+Subject: [PATCH] Bug 1614183 - Check if PPC __has_include(<sys/auxv.h>)
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 3d72c60d1f..9965b0e972 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -113,6 +113,19 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+ 	help
+ 	  Mesa driver for Freedreno GPUs.
+ 
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
++	bool "Gallium i915 driver"
++	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_LIBDRM_INTEL
++	help
++	  Support for i915-based Intel GPUs.
 +
-+Some build environment doesn't provide <sys/auxv.h> and this causes
-+build failure, so let's check if that header exists by using
-+__has_include() helper.
++comment "Gallium i915: Only one i915 provider can be built"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
 +
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ nss/lib/freebl/blinit.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/nss/lib/freebl/blinit.c b/nss/lib/freebl/blinit.c
-+index 7e8adfc64..f4fd59f5a 100644
-+--- a/nss/lib/freebl/blinit.c
-++++ b/nss/lib/freebl/blinit.c
-+@@ -431,7 +431,8 @@ ppc_crypto_support()
-+ 
-+ #if defined(__powerpc__)
-+ 
-+-#if defined(__linux__) || (defined(__FreeBSD__) && __FreeBSD__ >= 12)
-++#if __has_include(<sys/auxv.h>) && \
-++    (defined(__linux__) || (defined(__FreeBSD__) && __FreeBSD__ >= 12))
-+ #include <sys/auxv.h>
-+ #elif (defined(__FreeBSD__) && __FreeBSD__ < 12)
-+ #include <sys/sysctl.h>
-+@@ -449,10 +450,14 @@ CheckPPCSupport()
-+ 
-+     unsigned long hwcaps = 0;
-+ #if defined(__linux__)
-++#if __has_include(<sys/auxv.h>)
-+     hwcaps = getauxval(AT_HWCAP2);
-++#endif
-+ #elif defined(__FreeBSD__)
-+ #if __FreeBSD__ >= 12
-++#if __has_include(<sys/auxv.h>)
-+     elf_aux_info(AT_HWCAP2, &hwcaps, sizeof(hwcaps));
-++#endif
-+ #else
-+     size_t len = sizeof(hwcaps);
-+     sysctlbyname("hw.cpu_features2", &hwcaps, &len, NULL, 0);
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 	bool "Gallium iris driver"
+ 	depends on BR2_i386 || BR2_x86_64
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1a18cf3c58..7fb07ae05c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -74,6 +74,7 @@ endif
+ #Gallium Drivers
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO) += freedreno
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915)     += i915
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS)     += iris
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
