@@ -1,58 +1,69 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 9 Feb 2020 14:33:03 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/qemu: Bump to version 4.2.0
-In-Reply-To: <91337da1-a611-ebbe-d344-f99388e46bc1@gmail.com>
-References: <20200208211512.994361-1-aduskett@gmail.com>
- <91337da1-a611-ebbe-d344-f99388e46bc1@gmail.com>
-Message-ID: <1e980ad7-7660-01de-a8cd-4aa2e37c5a39@gmail.com>
+From: Refik Tuzakli <tuzakli.refik@gmail.com>
+Date: Sun,  9 Feb 2020 16:44:06 +0300
+Subject: [Buildroot] [PATCH v1 1/3] package/opengl/libopenvx: new virtual
+ package
+Message-ID: <20200209134408.10534-1-tuzakli.refik@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam, All,
+Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
+---
+ DEVELOPERS                            | 1 +
+ package/opengl/Config.in              | 1 +
+ package/opengl/libopenvx/Config.in    | 6 ++++++
+ package/opengl/libopenvx/libopenvx.mk | 7 +++++++
+ 4 files changed, 15 insertions(+)
+ create mode 100644 package/opengl/libopenvx/Config.in
+ create mode 100644 package/opengl/libopenvx/libopenvx.mk
 
-Le 09/02/2020 ? 11:35, Romain Naour a ?crit?:
-> Hi Adam,
-> 
-> Le 08/02/2020 ? 22:15, aduskett at gmail.com a ?crit?:
->> From: Adam Duskett <Aduskett@gmail.com>
->>
->> Other changes:
->>   - Remove upstream patches
->>   - Update COPYING.LIB hash as upstream updated the file to match the new LGPL
->>     2.1 license from upstream. See:
->>     https://github.com/qemu/qemu/commit/f0d44cc4462f112bce5ec556e87eff4eec682e39
->>
->> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->> ---
->> Changes v1 -> v2:
->>   - Remove the uneeded pactches in the qemu/3.1.1.1 directory (Baruch)
->>   - Move the upstream patches to qemu/4.2.0
->>
-> 
-> Thanks for this update.
-> 
-> I'm testing your patch with my series about Qemu runtime testing in gitlab.
-> 
-> Last time I tested using Qemu 3.1.1.1 and most of qemu defconfig were ok:
-> https://gitlab.com/kubu93/buildroot/pipelines/116212917
-> 
-> Here is a new test using Qemu 4.2:
-> https://gitlab.com/kubu93/buildroot/pipelines/116270515
-> 
-> We will see if there is any regression :)
-
-All tests passed except qemu_arm_vexpress-tz that was already broken due to a
-python crypto issue (ImportError: No module named 'Crypto').
-
-Tested-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-> 
-> Best regards,
-> Romain
-> 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cb13035bc4..fa9043b0c4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2076,6 +2076,7 @@ F:	package/uhttpd/
+ F:	package/ustream-ssl/
+ 
+ N:	Refik Tuzakli <tuzakli.refik@gmail.com>
++F:	package/opengl/libopenvx
+ F:	package/paho-mqtt-cpp/
+ 
+ N:	R??mi R??rolle <remi.rerolle@gmail.com>
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+index cbc001427d..10bdefdb39 100644
+--- a/package/opengl/Config.in
++++ b/package/opengl/Config.in
+@@ -4,3 +4,4 @@ source "package/opengl/libgles/Config.in"
+ source "package/opengl/libopencl/Config.in"
+ source "package/opengl/libopenvg/Config.in"
+ source "package/opengl/libopenmax/Config.in"
++source "package/opengl/libopenvx/Config.in"
+diff --git a/package/opengl/libopenvx/Config.in b/package/opengl/libopenvx/Config.in
+new file mode 100644
+index 0000000000..58d497130e
+--- /dev/null
++++ b/package/opengl/libopenvx/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HAS_LIBOPENVX
++	bool
++
++config BR2_PACKAGE_PROVIDES_LIBOPENVX
++	string
++	depends on BR2_PACKAGE_HAS_LIBOPENVX
+diff --git a/package/opengl/libopenvx/libopenvx.mk b/package/opengl/libopenvx/libopenvx.mk
+new file mode 100644
+index 0000000000..25ef639d3c
+--- /dev/null
++++ b/package/opengl/libopenvx/libopenvx.mk
+@@ -0,0 +1,7 @@
++################################################################################
++#
++# libopenvx
++#
++################################################################################
++
++$(eval $(virtual-package))
+-- 
+2.17.1
