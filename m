@@ -1,93 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 9 Feb 2020 17:37:28 +0100
-Subject: [Buildroot] [PATCH v3 02/10] package/rust: build and install
- cargo
-In-Reply-To: <20200209102131.GK23769@scaer>
-References: <20200207180829.165689-1-arnout@mind.be>
- <20200207180829.165689-3-arnout@mind.be> <20200209102131.GK23769@scaer>
-Message-ID: <88b71ee6-02ca-f0f3-27bb-5ef04ac1f3a9@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 9 Feb 2020 17:38:42 +0100
+Subject: [Buildroot] [PATCH] package/uclibc: fix ctype.h is*_l
+ definitions
+In-Reply-To: <87mu9tv5qu.fsf@dell.be.48ers.dk>
+References: <20200207195144.4060-1-jcmvbkbc@gmail.com>
+ <87mu9tv5qu.fsf@dell.be.48ers.dk>
+Message-ID: <20200209163842.GT23769@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Max, All,
 
+On 2020-02-08 09:32 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
+> 
+>  > ctype locale-specific macro definitions are broken because they result
+>  > in dereference of pointer to structure of incomplete type.
+>  > Drop these macros since they are optional and let applications use
+>  > functions with the same names.
+> 
+>  > Backported from:
+>  >   https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=d1a3ca7ca56630fddde7311a0474eed4a21335a7
+>  > Fixes:
+>  >   http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39
+> 
+>  > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> 
+> Committed, thanks.
 
-On 09/02/2020 11:21, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2020-02-07 19:08 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
->> From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->>
->> Cargo source code is not provided anymore as a separate tarball but is
->> now built along with the Rust compiler.
->>
->> So update rust host variant to build Cargo and install the
->> cross-compilation configuration file.
+uClibc now fails to build:
+    http://autobuild.buildroot.org/results/124/124e8ad32e1dbaf131749456f4b59333623cd91f/build-end.log
 
- Hm, this last part of the sentence is not valid anymore.
+    home/test/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-build
+    root-linux-uclibc/8.3.0/../../../../xtensa-buildroot-linux-uclibc/bin
+    /ld: libc/libc_so.a(isalnum_l.os):(.text+0x0): undefined reference to
+    `__isctype_l'
 
->>
->> All this will be overwritten again by the host-cargo package, but
->> that will be removed in later commits.
->>
->> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
->> Tested-by: Sam Voss <sam.voss@rockwellcollins.com>
->> [Arnout: merge all install commands in HOST_RUST_INSTALL_CMDS]
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> The commit does not look to do what it says in the commit log.
-> 
-> The commit log says "merge all install commands in HOST_RUST_INSTALL_CMDS"
-> but HOST_RUST_INSTALL_CMDS are not touched; only CONFIGURE_CMDS are.
+Care to have a look, please?
 
- The previous version split up the _INSTALL_CMDS into separate variables. I
-undid that change and merged them together in a single HOST_RUST_INSTALL_CMDS,
-so there's no change anymore. Well, originally there still was the installation
-of cargo/config but I moved that somewhere else and in a separate commit. So
-probably a better description would have been "don't change
-HOST_RUST_INSTALL_CMDS; move cargo/config generation to post-toolchain hook and
-in a separate commit".
+Regards,
+Yann E. MORIN.
 
- Regards,
- Arnout
-
-> 
-> So, I'm not sure I follow what's going on...
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> ---
->>  package/rust/rust.mk | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
->> index 5d14fc6682..9bbed15082 100644
->> --- a/package/rust/rust.mk
->> +++ b/package/rust/rust.mk
->> @@ -47,11 +47,14 @@ define HOST_RUST_CONFIGURE_CMDS
->>  		echo 'python = "$(HOST_DIR)/bin/python2"'; \
->>  		echo 'submodules = false'; \
->>  		echo 'vendor = true'; \
->> +		echo 'extended = true'; \
->> +		echo 'tools = ["cargo"]'; \
->>  		echo 'compiler-docs = false'; \
->>  		echo 'docs = false'; \
->>  		echo 'verbose = $(HOST_RUST_VERBOSITY)'; \
->>  		echo '[install]'; \
->>  		echo 'prefix = "$(HOST_DIR)"'; \
->> +		echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
->>  		echo '[rust]'; \
->>  		echo 'channel = "stable"'; \
->>  		echo '[target.$(RUSTC_TARGET_NAME)]'; \
->> -- 
->> 2.24.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
