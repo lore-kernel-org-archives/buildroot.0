@@ -1,11 +1,11 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 9 Feb 2020 20:09:27 +0100
-Subject: [Buildroot] [PATCH 1/3] package/libsigrok: drop remnants of
- autoreconf
-In-Reply-To: <f3a6a36229cf2b73df2ea2f5ee0c092c601cf4ea.1581261155.git.yann.morin.1998@free.fr>
+Date: Sun, 9 Feb 2020 20:09:43 +0100
+Subject: [Buildroot] [PATCH 2/3] package/automake: also include
+ autoconf-archive in search paths
+In-Reply-To: <e78e62c9d171941a0c8c8a93ba73d3edade4a9b1.1581261155.git.yann.morin.1998@free.fr>
 References: <cover.1581261155.git.yann.morin.1998@free.fr>
- <f3a6a36229cf2b73df2ea2f5ee0c092c601cf4ea.1581261155.git.yann.morin.1998@free.fr>
-Message-ID: <CAEyMn7b2DCTgpA9s1dBODAYivbo01mg4zpP+5sD4hu5vEBEKtw@mail.gmail.com>
+ <e78e62c9d171941a0c8c8a93ba73d3edade4a9b1.1581261155.git.yann.morin.1998@free.fr>
+Message-ID: <CAEyMn7aHsY=Bxs9Emi9KaffDs=H7mBqcbWeg_BEUaNG6PfmfOg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,41 +17,62 @@ Hi Yann,
 Am So., 9. Feb. 2020 um 16:12 Uhr schrieb Yann E. MORIN
 <yann.morin.1998@free.fr>:
 >
-> libsigrok has not needed autoreconf since b428801934 (package/libsigrok:
-> bump version to 0.4.0), 4 years ago now.
+> Since d255b67972 (autotools: do not overwrite first include path), the
+> ordering of include paths has changed: the system directories are
+> specified with explicit options passed to autoreconf, which means that
+> any directory specified in the package _AUTORECONF_OPTS are no longer
+> first:
 >
-> As such, we no longer need the autoreconf options, nor the dependency on
-> the autoconf archive.
+>   - in package/autoconf/autoconf.mk, we define AUTORECONF as:
+>     AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+>
+>   - in package/pkg-autotools.mk, we call AUTORECONF with:
+>     $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+>
+> For a package that needs autoconf-archive, this means that it has to
+> provide a custom include directive, in its own _AUTORECONF_OPTS. This in
+> turn means that this directory becomes the first, and goes directly
+> opposite to what d255b67972 was supposed to accomplish.
+>
+> However, the path to the autoconf archive macro directory is mnot
+> searched by default either, so a package has no way to add such an
+> aclocal include directive.
+>
+> We can only add it in the global search directory, and we do so only for
+> those packages that have autoconf-archive in their dependencies.
 >
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Cc: Michael Walle <michael@walle.cc>
+> Cc: Heiko Thiery <heiko.thiery@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 
 Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
 
 
+
 > ---
->  package/libsigrok/libsigrok.mk | 2 --
->  1 file changed, 2 deletions(-)
+>  package/automake/automake.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 >
-> diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-> index 7a128e8dfa..4c1f31ea6e 100644
-> --- a/package/libsigrok/libsigrok.mk
-> +++ b/package/libsigrok/libsigrok.mk
-> @@ -53,9 +53,7 @@ endif
->
->  ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
->  LIBSIGROK_CONF_OPTS += --enable-cxx
-> -LIBSIGROK_AUTORECONF_OPTS += -I $(HOST_DIR)/share/autoconf-archive
->  LIBSIGROK_DEPENDENCIES += \
-> -       host-autoconf-archive \
->         glibmm \
->         host-doxygen \
->         $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+> index 89dcaa1293..238116cb94 100644
+> --- a/package/automake/automake.mk
+> +++ b/package/automake/automake.mk
+> @@ -33,5 +33,11 @@ $(eval $(host-autotools-package))
+>  AUTOMAKE = $(HOST_DIR)/bin/automake
+>  ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+>  ACLOCAL = $(HOST_DIR)/bin/aclocal
+> -ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
+> +ACLOCAL_PATH = $(subst $(space),:,$(strip \
+> +       $(ACLOCAL_DIR) \
+> +       $(ACLOCAL_HOST_DIR) \
+> +       $(if $(filter host-autoconf-archive,$($(PKG)_FINAL_ALL_DEPENDENCIES)),\
+> +               $(HOST_DIR)/share/autoconf-archive \
+> +       ) \
+> +))
+>  export ACLOCAL_PATH
 > --
 > 2.20.1
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
