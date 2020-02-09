@@ -1,51 +1,57 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sun, 9 Feb 2020 21:05:13 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-02-06
-In-Reply-To: <87a75uyaqe.fsf@dell.be.48ers.dk>
-References: <20200207072841.EC07F87D33@hemlock.osuosl.org>
- <20200207111804.GB298248@momiji> <87a75uyaqe.fsf@dell.be.48ers.dk>
-Message-ID: <20200209210513.GB517066@momiji>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 9 Feb 2020 20:09:27 +0100
+Subject: [Buildroot] [PATCH 1/3] package/libsigrok: drop remnants of
+ autoreconf
+In-Reply-To: <f3a6a36229cf2b73df2ea2f5ee0c092c601cf4ea.1581261155.git.yann.morin.1998@free.fr>
+References: <cover.1581261155.git.yann.morin.1998@free.fr>
+ <f3a6a36229cf2b73df2ea2f5ee0c092c601cf4ea.1581261155.git.yann.morin.1998@free.fr>
+Message-ID: <CAEyMn7b2DCTgpA9s1dBODAYivbo01mg4zpP+5sD4hu5vEBEKtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 07 Feb 2020 11:04:25 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
-> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
-> 
->  > On Fri, 07 Feb 2020 07:28:36 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->  >> Detail of failures
->  >> ------------------
->  >> 
->  >> arch     |             reason             | OK? |                                       url                                       | orph?
->  >> -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
->  >> aarch64    |        webkitgtk-2.26.2        | NOK | http://autobuild.buildroot.net/results/634087c9aee94032adc4deb9cb21a422cdf2e361 |     
-> 
->  > This would be fixed by having CMake 3.10+ installed in the host.
-> 
->  > Buildroot commit 65205c2425bccb7039ca0e2caffb7c64c26805f7 updated host-cmake
->  > to 3.10 but then it was reverted by 5b57ae7ad197fd641c233f22d326c846b9ea2204.
-> 
->  > So I suppose that the builder either does not have CMake installed in the
->  > system, or that it is older than 3.10 so host-cmake is built instead? But
->  > currently host-cmake is version 3.8 ?\_(?)_/? 
-> 
-> Notice that this is only for 2019.02.x. Master already ensures cmake is
-> 3.10+. Given that 2019.02.x is just about to go EOL and the issues we
-> had in the past with building newer cmake versions with old host
-> toolchains / dependencies, I think the least bad solution is to just
-> keep it like this.
+Hi Yann,
 
-Indeed, you make a very good point. Let's keep thing as-is then :-)
+Am So., 9. Feb. 2020 um 16:12 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
+>
+> libsigrok has not needed autoreconf since b428801934 (package/libsigrok:
+> bump version to 0.4.0), 4 years ago now.
+>
+> As such, we no longer need the autoreconf options, nor the dependency on
+> the autoconf archive.
+>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Cheers,
-?Adrian
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200209/035da2e6/attachment.asc>
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+
+
+> ---
+>  package/libsigrok/libsigrok.mk | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+> index 7a128e8dfa..4c1f31ea6e 100644
+> --- a/package/libsigrok/libsigrok.mk
+> +++ b/package/libsigrok/libsigrok.mk
+> @@ -53,9 +53,7 @@ endif
+>
+>  ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
+>  LIBSIGROK_CONF_OPTS += --enable-cxx
+> -LIBSIGROK_AUTORECONF_OPTS += -I $(HOST_DIR)/share/autoconf-archive
+>  LIBSIGROK_DEPENDENCIES += \
+> -       host-autoconf-archive \
+>         glibmm \
+>         host-doxygen \
+>         $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
