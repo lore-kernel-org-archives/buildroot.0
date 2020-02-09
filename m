@@ -1,58 +1,76 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Feb 2020 10:17:33 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d: don't select kmsro
- for iris driver
-In-Reply-To: <20200208222809.45196-1-james.hilliard1@gmail.com>
-References: <20200208222809.45196-1-james.hilliard1@gmail.com>
-Message-ID: <20200209091733.GH23769@scaer>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sun,  9 Feb 2020 10:26:29 +0100
+Subject: [Buildroot] [PATCH] package/libnss: fix PowerPc build failure
+Message-ID: <20200209092629.20131-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+NSS assumes <sys/auvx.h> is always present but that's not true, so add a
+patch to check if it exists or not.
 
-On 2020-02-08 15:28 -0700, James Hilliard spake thusly:
-> The kmsro package was accidentially selected when the iris option was added.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+Patch is already pending upstream:
+https://bugzilla.mozilla.org/show_bug.cgi?id=1614183
+---
+ ...heck-if-PPC-__has_include-sys-auxv.h.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
 
-iris is also an x86-only driver, so I've also added a dependency on x86.
-
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/mesa3d/Config.in | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 94e3f2cb9e..850d306add 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -116,7 +116,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
->  	bool "Gallium iris driver"
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> -	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
->  	help
->  	  Mesa driver for iris-based Intel GPUs.
->  
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch b/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
+new file mode 100644
+index 0000000000..0efe866643
+--- /dev/null
++++ b/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
+@@ -0,0 +1,46 @@
++From ad1025f21f00231cd464a92ed34b334897af6842 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sun, 9 Feb 2020 10:15:16 +0100
++Subject: [PATCH] Bug 1614183 - Check if PPC __has_include(<sys/auxv.h>)
++
++Some build environment doesn't provide <sys/auxv.h> and this causes
++build failure, so let's check if that header exists by using
++__has_include() helper.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/lib/freebl/blinit.c | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/nss/lib/freebl/blinit.c b/nss/lib/freebl/blinit.c
++index 7e8adfc64..f4fd59f5a 100644
++--- a/nss/lib/freebl/blinit.c
+++++ b/nss/lib/freebl/blinit.c
++@@ -431,7 +431,8 @@ ppc_crypto_support()
++ 
++ #if defined(__powerpc__)
++ 
++-#if defined(__linux__) || (defined(__FreeBSD__) && __FreeBSD__ >= 12)
+++#if __has_include(<sys/auxv.h>) && \
+++    (defined(__linux__) || (defined(__FreeBSD__) && __FreeBSD__ >= 12))
++ #include <sys/auxv.h>
++ #elif (defined(__FreeBSD__) && __FreeBSD__ < 12)
++ #include <sys/sysctl.h>
++@@ -449,10 +450,14 @@ CheckPPCSupport()
++ 
++     unsigned long hwcaps = 0;
++ #if defined(__linux__)
+++#if __has_include(<sys/auxv.h>)
++     hwcaps = getauxval(AT_HWCAP2);
+++#endif
++ #elif defined(__FreeBSD__)
++ #if __FreeBSD__ >= 12
+++#if __has_include(<sys/auxv.h>)
++     elf_aux_info(AT_HWCAP2, &hwcaps, sizeof(hwcaps));
+++#endif
++ #else
++     size_t len = sizeof(hwcaps);
++     sysctlbyname("hw.cpu_features2", &hwcaps, &len, NULL, 0);
++-- 
++2.20.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
