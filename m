@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Feb 2020 17:15:21 +0100
+Date: Sun, 9 Feb 2020 17:21:52 +0100
 Subject: [Buildroot] [PATCH 1/1] package/mesa3d: add support for dri
  r200 driver
 In-Reply-To: <20200209153053.128369-1-james.hilliard1@gmail.com>
 References: <20200209153053.128369-1-james.hilliard1@gmail.com>
-Message-ID: <20200209161521.GQ23769@scaer>
+Message-ID: <20200209162152.GR23769@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -33,34 +33,6 @@ On 2020-02-09 08:30 -0700, James Hilliard spake thusly:
 > -config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
 > -	bool "DRI radeon driver"
 > +config BR2_PACKAGE_MESA3D_DRI_DRIVER_R100
-
-You forgot to handle the legacy option (in top-level Config.in.legacy).
-
-However, I wonder how important that rename is; I believe we can keep
-the existing option as-is, and just adjust the prompt to make it
-explicit this is about r100.
-
-Besides, a siple config doesn ot build:
-
-    BR2_x86_64=y
-    BR2_x86_steamroller=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_INIT_NONE=y
-    BR2_SYSTEM_BIN_SH_NONE=y
-    # BR2_PACKAGE_BUSYBOX is not set
-    BR2_PACKAGE_MESA3D=y
-    BR2_PACKAGE_MESA3D_DRI_DRIVER_R200=y
-
-which fails with:
-
-    meson.build:449:4: ERROR: Problem encountered: building dri drivers
-    require at least one windowing system or classic osmesa
-
-Care to have a look and respin, please?
-
-Regards,
-Yann E. MORIN.
-
 > +	bool "DRI radeon r100 driver"
 >  	select BR2_PACKAGE_MESA3D_DRI_DRIVER
 >  	select BR2_PACKAGE_LIBDRM_RADEON
@@ -71,6 +43,16 @@ Yann E. MORIN.
 > +	bool "DRI radeon r200 driver"
 > +	select BR2_PACKAGE_MESA3D_DRI_DRIVER
 > +	select BR2_PACKAGE_LIBDRM_RADEON
+
+You forgot to propagate the dependency of BR2_PACKAGE_LIBDRM_RADEON,
+which depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC.
+
+Note that r100 has the same issue, too, so maybe fix it too (as a
+separate preliminary patch).
+
+Regards,
+Yann E. MORIN.
+
 > +	help
 > +	  Legacy Radeon driver for R200 series GPUs.
 > +
