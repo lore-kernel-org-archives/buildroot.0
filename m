@@ -1,44 +1,86 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 9 Feb 2020 11:35:03 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/qemu: Bump to version 4.2.0
-In-Reply-To: <20200208211512.994361-1-aduskett@gmail.com>
-References: <20200208211512.994361-1-aduskett@gmail.com>
-Message-ID: <91337da1-a611-ebbe-d344-f99388e46bc1@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 9 Feb 2020 11:35:31 +0100
+Subject: [Buildroot] [git commit] package/gnuradio: backport build fixes
+ with less use of Boost
+Message-ID: <20200209111420.AAD908D7AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=e84ea995d7de321aeb8fdcf2835e411a6f06727a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 08/02/2020 ? 22:15, aduskett at gmail.com a ?crit?:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Other changes:
->   - Remove upstream patches
->   - Update COPYING.LIB hash as upstream updated the file to match the new LGPL
->     2.1 license from upstream. See:
->     https://github.com/qemu/qemu/commit/f0d44cc4462f112bce5ec556e87eff4eec682e39
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Remove the uneeded pactches in the qemu/3.1.1.1 directory (Baruch)
->   - Move the upstream patches to qemu/4.2.0
-> 
+Backport patch from upstream to fix build failures such as:
 
-Thanks for this update.
+    In file included from /home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/glfsr.cc:23:
+    /home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/../include/gnuradio/digital/glfsr.h:42:5: error: 'uint32_t' does not name a type; did you mean 'u_int32_t'?
+        uint32_t d_shift_register;
+        ^~~~~~~~
+        u_int32_t
 
-I'm testing your patch with my series about Qemu runtime testing in gitlab.
+Since Gnuradio policy is Less boost == better and C++11 is used, use cstdint
+instead of boost/cstdint.hpp.
 
-Last time I tested using Qemu 3.1.1.1 and most of qemu defconfig were ok:
-https://gitlab.com/kubu93/buildroot/pipelines/116212917
+Applied in gnuradio master (475e4a156b516c089175afb998acdc80b740b437)
 
-Here is a new test using Qemu 4.2:
-https://gitlab.com/kubu93/buildroot/pipelines/116270515
+fix:
+ - http://autobuild.buildroot.net/results/14015f499e58fee530877ac052878bbe2f799942/
+ - http://autobuild.buildroot.net/results/53239f98dd5e03d4dc1bb4eb91ed765f77dbf0ec/
 
-We will see if there is any regression :)
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+[yann.morin.1998 at free.fr:
+  - add upstream reference in the patch itself
+  - minor eye-candy in commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-Best regards,
-Romain
+diff --git a/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch b/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
+new file mode 100644
+index 0000000000..532bebcf2e
+--- /dev/null
++++ b/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
+@@ -0,0 +1,39 @@
++From f643bc12100c67288adda3699a9e61d6a66fb529 Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Fri, 7 Feb 2020 16:49:30 +0100
++Subject: [PATCH] gr-digital:glfsr.h: drop boost/cstdint.hpp and use cstdint
++
++gr-digital/glfsr.h include boost/cstdint.hpp to have uintxx_t.
++These types are in boost namespace but nor using namespace xxx, nor boost:: are used.
++The result is :
++In file included from /home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/glfsr.cc:23:
++/home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/../include/gnuradio/digital/glfsr.h:42:5: error: 'uint32_t' does not name a type; did you mean 'u_int32_t'?
++uint32_t d_shift_register;
++^~~~~~~~
++u_int32_t
++
++Since Gnuradio policy is Less boost == better and C++11 is used, use cstdint
++instead of boost/cstdint.hpp.
++
++[backported from 475e4a156b516c089175afb998acdc80b740b437]
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ gr-digital/include/gnuradio/digital/glfsr.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gr-digital/include/gnuradio/digital/glfsr.h b/gr-digital/include/gnuradio/digital/glfsr.h
++index 0b5141f1f..1003bcd01 100644
++--- a/gr-digital/include/gnuradio/digital/glfsr.h
+++++ b/gr-digital/include/gnuradio/digital/glfsr.h
++@@ -24,7 +24,7 @@
++ #define INCLUDED_DIGITAL_GLFSR_H
++ 
++ #include <gnuradio/digital/api.h>
++-#include <boost/cstdint.hpp>
+++#include <cstdint>
++ 
++ namespace gr {
++ namespace digital {
++-- 
++2.24.1
++
