@@ -1,63 +1,66 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sun, 9 Feb 2020 18:28:39 -0300
-Subject: [Buildroot] [PATCH v6 5/6] package/polkit: add init service file
-In-Reply-To: <20191208160808.7fcc27ec@windsurf.home>
-References: <20191206234649.3972927-1-aduskett@gmail.com>
- <20191206234649.3972927-5-aduskett@gmail.com>
- <20191208160808.7fcc27ec@windsurf.home>
-Message-ID: <CAJ4jsaeGW4swqZ0a-s1ypM-OHFNran_+a2=OGrtRjObYunz8WQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 9 Feb 2020 22:32:42 +0100
+Subject: [Buildroot] [git commit] package/uclibc: restore __isctype_l
+ definition
+Message-ID: <20200209212142.D27857F8DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 8, 2019 at 12:08 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> +Carlos in Cc for the review of the init script.
->
-> On Fri,  6 Dec 2019 15:46:48 -0800
-> aduskett at gmail.com wrote:
->
-> > diff --git a/package/polkit/S50polkit b/package/polkit/S50polkit
-> > new file mode 100644
-> > index 0000000000..55c10e99ae
-> > --- /dev/null
-> > +++ b/package/polkit/S50polkit
-> > @@ -0,0 +1,15 @@
-> > +#!/bin/sh
-> > +#
-> > +# start polkitd
-> > +#
-> > +
-> > +case "$1" in
-> > +     start)
-> > +             start-stop-daemon -q -S -x /usr/lib/polkit-1/polkitd -- --no-debug &
->
-> Why is the & necessary at this end ?
->
-> I think this init script deserves a comment that explains why it
-> doesn't follow the traditional pattern for init scripts.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+commit: https://git.buildroot.net/buildroot/commit/?id=115185b407a35e61785e83eccd0bcaed7eaac5f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Why is a polkitd init script requited if, according to the man page
+Recent is*_l fix broke uclibc build because removed __isctype_l
+definition was used in libc/misc/ctype/ctype.c. Restore it.
 
-DESCRIPTION
-       polkitd provides the org.freedesktop.PolicyKit1 D-Bus service
-       on the system message bus. Users or administrators should never
-       need to start this daemon as it will be automatically started
-       by dbus-daemon(1) or systemd(1) whenever an application calls
-       into the service.
+Fixes: 8723c5e7a6db ("package/uclibc: fix ctype.h is*_l definitions")
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+[yann.morin.1998 at free.fr:
+  - add new patch, don't fix existing one
+  - add URL to upstream ML post
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...de-ctype.h-restore-__isctype_l-definition.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
--- 
-Carlos Santos <unixmania@gmail.com>
+diff --git a/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch b/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
+new file mode 100644
+index 0000000000..a0e115c763
+--- /dev/null
++++ b/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
+@@ -0,0 +1,32 @@
++From 7a9a3e4b36955e8530756823d3443f6822562c56 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 9 Feb 2020 22:29:53 +0100
++Subject: [PATCH] include/ctype.h: restore __isctype_l definition
++
++Recent is*_l fix broke uclibc build because removed __isctype_l
++definition was used in libc/misc/ctype/ctype.c. Restore it.
++
++Fixes: d1a3ca7ca566 ("include/ctype.h: drop is*_l macro definitions")
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Upstream status:
++https://mailman.uclibc-ng.org/pipermail/devel/2020-February/001940.html
++---
++ include/ctype.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/include/ctype.h b/include/ctype.h
++index e934cf332..05f21c553 100644
++--- a/include/ctype.h
+++++ b/include/ctype.h
++@@ -350,6 +350,7 @@ libc_hidden_proto(tolower_l)
++ /* Return the uppercase version of C.  */
++ extern int toupper_l (int __c, __locale_t __l) __THROW;
++ 
+++# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
++ # ifndef __NO_CTYPE
++ #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
++ 	&& defined __UCLIBC_SUSV4_LEGACY__
++-- 
++2.20.1
++
