@@ -1,72 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Feb 2020 15:55:14 +0100
-Subject: [Buildroot] [PATCH] package/sdl_mixer: fix build after aclocal
- include revamp
-In-Reply-To: <CAEyMn7Y83CUfmyRDU+d5JAg5n8PwEBge3vSsO+Txjf1M-cDkJw@mail.gmail.com>
-References: <20200208182611.16087-1-yann.morin.1998@free.fr>
- <875zggvr40.fsf@dell.be.48ers.dk> <20200209140820.GN23769@scaer>
- <CAEyMn7Y83CUfmyRDU+d5JAg5n8PwEBge3vSsO+Txjf1M-cDkJw@mail.gmail.com>
-Message-ID: <20200209145514.GO23769@scaer>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun,  9 Feb 2020 08:12:02 -0700
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: add support for gallium
+ r300 driver
+Message-ID: <20200209151202.51777-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/mesa3d/Config.in | 16 +++++++++++++---
+ package/mesa3d/mesa3d.mk |  1 +
+ 2 files changed, 14 insertions(+), 3 deletions(-)
 
-On 2020-02-09 15:41 +0100, Heiko Thiery spake thusly:
-> Hi,?
-> I also realized this packages but did not have the chance for a deeper look at it.
-
-Can you avoid top-posting, please?
-
-> --
-> Heiko
-> Yann E. MORIN < [1]yann.morin.1998@free.fr> schrieb am So., 9. Feb. 2020, 15:08:
-> 
->   On 2020-02-08 20:03 +0100, Peter Korsgaard spake thusly:
->   > >>>>> "Yann" == Yann E MORIN < [2]yann.morin.1998@free.fr> writes:
->   >? > After d255b67972 (autotools: do not overwrite first include path), the
->   >? > ordering of include paths has changed: the system directories are
->   >? > specified with explicit options passed to autoreconf, which means that
->   >? > any directory specified in the package _AUTORECONF_OPTS are no longer
->   >? > first:
->   > Most likely we also need to fix a number of other packages:
->   > git grep '_AUTORECONF_OPTS ='
->   > package/asterisk/asterisk.mk:ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson
->   > package/gstreamer/gst-plugin-x170/gst-plugin-x170.mk:GST_PLUGIN_X170_AUTORECONF_OPTS = -Im4/
->   > package/log4cpp/log4cpp.mk:LOG4CPP_AUTORECONF_OPTS = -I m4
->   > package/sdbusplus/sdbusplus.mk:SDBUSPLUS_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
-> 
->   gst-plugin-x170: we've removed it now.
-> 
->   log4cpp builds OK.
-> 
->   sdbusplus indeed fails, and it is not trivial to fix. I have a solution,
->   but it is ultimately ugly, which implies either we're in deep sh!t, or I
->   missed something obviously obvious (I'd bet on the latter).
-
-I have a nice patch, shiny and all, but a little bit too involved in my
-opinion. Patch incoming in a moment...
-
->   Which means that libsigrok may have the same issue as sdbusplus... I'll
->   try to come up with something saner for bot
-
-libsigrok is a false-positive: it dnow longer needs host-autoconf-archive
-anymore, I'll send an clean up patch any moment now...
-
->   I did not even dare look into asterisk for now...
-
-(still afraid of even peekign in there...)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 9965b0e972..f5d04b8e2b 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -166,6 +166,14 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
+ 	help
+ 	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
+ 
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300
++	bool "Gallium Radeon R300 driver"
++	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_LIBDRM_RADEON
++	help
++	  Driver for ATI/AMD Radeon R300/R400/R500 GPUs.
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
+ 	bool "Gallium Radeon R600 driver"
+ 	depends on BR2_i386 || BR2_x86_64
+@@ -275,17 +283,19 @@ config BR2_PACKAGE_MESA3D_VDPAU
+ 	bool "Gallium VDPAU state tracker"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
++		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300 \
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 \
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+ 	select BR2_PACKAGE_MESA3D_NEEDS_X11
+ 	select BR2_PACKAGE_LIBVDPAU
+ 	help
+-	  VDPAU state tracker (needs r600, radeonsi or nouveau gallium
+-	  drivers).
++	  VDPAU state tracker (needs r300, r600, radeonsi or nouveau
++	  gallium drivers).
+ 
+-comment "Gallium VDPAU state tracker needs X.org and gallium drivers r600, radeonsi or nouveau"
++comment "Gallium VDPAU state tracker needs X.org and gallium drivers r300, r600, radeonsi or nouveau"
+ 	depends on !BR2_PACKAGE_XORG7 || \
+ 		!(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
++		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300 \
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 \
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI)
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 7fb07ae05c..c14716bf15 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -80,6 +80,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST) += panfrost
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300)     += r300
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
