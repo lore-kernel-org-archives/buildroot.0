@@ -1,78 +1,68 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 9 Feb 2020 19:42:42 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/qemu: Bump to version 4.2.0
-In-Reply-To: <1e980ad7-7660-01de-a8cd-4aa2e37c5a39@gmail.com>
-References: <20200208211512.994361-1-aduskett@gmail.com>
- <91337da1-a611-ebbe-d344-f99388e46bc1@gmail.com>
- <1e980ad7-7660-01de-a8cd-4aa2e37c5a39@gmail.com>
-Message-ID: <570aa4e4-6896-b8be-9956-345f17196f47@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sun, 9 Feb 2020 19:49:42 +0100
+Subject: [Buildroot] [PATCH v4 3/9] configs/qemu_m68k_q800: remove
+ host-qemu
+In-Reply-To: <80a8f480-807b-b5a4-d3dd-97c535a7cb0c@smile.fr>
+References: <20200209180327.455426-1-romain.naour@smile.fr>
+ <20200209180327.455426-4-romain.naour@smile.fr>
+ <80a8f480-807b-b5a4-d3dd-97c535a7cb0c@smile.fr>
+Message-ID: <6ce8f7ac-fde4-b5c9-bb87-c39ba8fe0392@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam, All,
-
-Le 09/02/2020 ? 14:33, Romain Naour a ?crit?:
-> Hi Adam, All,
+Le 09/02/2020 ? 19:12, Romain Naour a ?crit?:
+> Hi,
 > 
-> Le 09/02/2020 ? 11:35, Romain Naour a ?crit?:
->> Hi Adam,
+> Le 09/02/2020 ? 19:03, Romain Naour a ?crit?:
+>> Building upstream host-qemu for m68k_q800 is useless
+>> since it doesn't support the q800 machine:
 >>
->> Le 08/02/2020 ? 22:15, aduskett at gmail.com a ?crit?:
->>> From: Adam Duskett <Aduskett@gmail.com>
->>>
->>> Other changes:
->>>   - Remove upstream patches
->>>   - Update COPYING.LIB hash as upstream updated the file to match the new LGPL
->>>     2.1 license from upstream. See:
->>>     https://github.com/qemu/qemu/commit/f0d44cc4462f112bce5ec556e87eff4eec682e39
->>>
->>> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->>> ---
->>> Changes v1 -> v2:
->>>   - Remove the uneeded pactches in the qemu/3.1.1.1 directory (Baruch)
->>>   - Move the upstream patches to qemu/4.2.0
->>>
+>> qemu-system-m68k: -M q800: unsupported machine type
 >>
->> Thanks for this update.
+>> This defconfig must be used with the QEMU fork from [1]
+>> using q800-v2.11.0 branch.
 >>
->> I'm testing your patch with my series about Qemu runtime testing in gitlab.
->>
->> Last time I tested using Qemu 3.1.1.1 and most of qemu defconfig were ok:
->> https://gitlab.com/kubu93/buildroot/pipelines/116212917
->>
->> Here is a new test using Qemu 4.2:
->> https://gitlab.com/kubu93/buildroot/pipelines/116270515
->>
->> We will see if there is any regression :)
+>> [1] https://github.com/vivier/qemu-m68k
 > 
-> All tests passed except qemu_arm_vexpress-tz that was already broken due to a
-> python crypto issue (ImportError: No module named 'Crypto').
+> This patch has been sent for the first time almost one year ago, since then
+> m68k_q800 port has been merged upstream and released with Qemu 4.2.0 [1]
 > 
-> Tested-by: Romain Naour <romain.naour@gmail.com>
+> I still need to check if it really work with our qemu defconfig.
 
-This new version of Qemu add the support for m68k q800 target [1] for which we
-have a qemu defconfig that required a qemu fork [2]
+Yes, our qemu m68k Q800 defconfig works well with qemu-system-m68k v4.2.0 :)
 
-I tested successfully our defconfig with qemu 4.2.
-
-[1] https://wiki.qemu.org/ChangeLog/4.2#68k
-[2]
-https://git.buildroot.net/buildroot/tree/board/qemu/m68k-q800/readme.txt?h=2019.11.1
-[3] http://lists.busybox.net/pipermail/buildroot/2020-February/273749.html
+This patch can be dropped as soon as qemu 4.2.0 is merged in Buildroot.
 
 Best regards,
 Romain
 
-
+> 
+> [1]
+> https://git.qemu.org/?p=qemu.git;a=commit;h=04e7ca8d0f15a1c185f7b4b5c0de797730c2ed86
 > 
 > Best regards,
 > Romain
 > 
 >>
->> Best regards,
->> Romain
+>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>> ---
+>>  configs/qemu_m68k_q800_defconfig | 4 ----
+>>  1 file changed, 4 deletions(-)
+>>
+>> diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
+>> index 2ef73d1dd6..e2a5f27431 100644
+>> --- a/configs/qemu_m68k_q800_defconfig
+>> +++ b/configs/qemu_m68k_q800_defconfig
+>> @@ -23,7 +23,3 @@ BR2_LINUX_KERNEL_VMLINUX=y
+>>  # Serial port config
+>>  BR2_TARGET_GENERIC_GETTY=y
+>>  BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+>> -
+>> -# host-qemu for gitlab testing
+>> -BR2_PACKAGE_HOST_QEMU=y
+>> -BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 >>
 > 
