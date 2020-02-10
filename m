@@ -1,164 +1,70 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Mon, 10 Feb 2020 16:58:01 +0100
-Subject: [Buildroot] [PATCH v2 2/7] package/freescale-imx/imx-dpu-g2d:
- new package imx-dpu-g2d package is used by i.MX 8 and i.MX 8X series
- instead of imx-vpu or imx-vpu-hantro.With this commit,
- imx-dpu-g2d is added and is enabled for i.MX 8X.
-In-Reply-To: <20200203193155.12657-2-tuzakli.refik@gmail.com>
-References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
- <20200203193155.12657-2-tuzakli.refik@gmail.com>
-Message-ID: <20200210155801.GB335587@p1g2.work>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Mon, 10 Feb 2020 16:55:47 +0100
+Subject: [Buildroot] [PATCH v2 1/2] pkgconf: Add a host-pkg-config wrapper
+ script.
+Message-ID: <20200210155548.31928-1-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Refik,
+The host-pkg-config wrapper script replicate the configuration
+present in HOST_MAKE_ENV, with the exception of PKG_CONFIG_LIBDIR
+whose default is already equal to what we want.
 
-Sorry but I disagree with the title/log of this commit.
+This wrapper script can be used with build systems that recognise the
+difference between a host dependency and a target dependency.
 
-This has nothing to do with vpu, it's all about g2d which is NXP
-interface for 2D graphics operations (CSC, rotation etc).
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 
-On most platforms (like i.MX6 for instance) there is a 3D GPU and a 2D
-GPU, so for those Vivante package was providing the libg2d libraries
-that leveraged the 2D GPU.
+--
 
-Now on newer platform such as i.MX8X, there's no 2D GPU but the display
-IP (here called DPU) can perform the 2D operations so another package
-was created.
+HOST_MAKE_ENV could be modified to use host-pkg-config, but since we
+cannot guarantee that every host package will use the PKG_CONFIG
+environment variable (instead of e.g. finding pkg-config in $PATH), the
+other PKG_CONFIG_* variables probably need to be kept as well, so it
+wouldn't be useful to use it there.
+---
+ package/pkgconf/host-pkg-config | 8 ++++++++
+ package/pkgconf/pkgconf.mk      | 3 +++
+ 2 files changed, 11 insertions(+)
+ create mode 100644 package/pkgconf/host-pkg-config
 
-Here is where the selection is made in Yocto:
-https://source.codeaurora.org/external/imx/meta-fsl-bsp-release/tree/imx/meta-bsp/conf/machine/include/imx-base.inc?h=warrior-4.19.35-1.1.0#n222
-
-So my opinion is that, like Yocto, we should create a virtual g2d
-package that either be populated by Vivante libs by the platforms that
-have 2D GPU or by DPU on others.
-
-Regards,
-Gary
-
-On Mon, Feb 03, 2020 at 10:31:50PM +0300, Refik Tuzakli wrote:
-> Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
-> ---
->  package/freescale-imx/Config.in               |  7 ++++
->  package/freescale-imx/imx-dpu-g2d/Config.in   | 23 ++++++++++++
->  .../imx-dpu-g2d/imx-dpu-g2d.hash              |  5 +++
->  .../freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk  | 37 +++++++++++++++++++
->  4 files changed, 72 insertions(+)
->  create mode 100644 package/freescale-imx/imx-dpu-g2d/Config.in
->  create mode 100644 package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
->  create mode 100644 package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
-> 
-> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-> index d23bcdbd9a..586e67ea72 100644
-> --- a/package/freescale-imx/Config.in
-> +++ b/package/freescale-imx/Config.in
-> @@ -75,6 +75,10 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
->  	bool
->  	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
->  
-> +config BR2_PACKAGE_FREESCALE_IMX_HAS_DPU
-> +	bool
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-> +
->  config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
->  	bool
->  	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
-> @@ -94,6 +98,9 @@ source "package/freescale-imx/imx-uuc/Config.in"
->  source "package/freescale-imx/imx-vpu/Config.in"
->  source "package/freescale-imx/imx-vpu-hantro/Config.in"
->  source "package/freescale-imx/imx-vpuwrap/Config.in"
-> +if BR2_PACKAGE_FREESCALE_IMX_HAS_DPU
-> +source "package/freescale-imx/imx-dpu-g2d/Config.in"
-> +endif
->  source "package/freescale-imx/firmware-imx/Config.in"
->  source "package/freescale-imx/imx-sc-firmware/Config.in"
->  if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
-> diff --git a/package/freescale-imx/imx-dpu-g2d/Config.in b/package/freescale-imx/imx-dpu-g2d/Config.in
-> new file mode 100644
-> index 0000000000..2675840093
-> --- /dev/null
-> +++ b/package/freescale-imx/imx-dpu-g2d/Config.in
-> @@ -0,0 +1,23 @@
-> +comment "imx-dpu-g2d needs a glibc toolchain"
-> +	depends on BR2_aarch64
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-> +
-> +config BR2_PACKAGE_IMX_DPU_G2D
-> +	bool "imx-dpu-g2d"
-> +	# Library binaries are linked against libc.so.6
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	select BR2_PACKAGE_IMX_GPU_VIV
-> +	help
-> +	  Userspace DPU 2D libraries for Vivante GPU on i.MX platforms.
-> +
-> +	  This library is provided by NXP as-is and doesn't have an
-> +	  upstream.
-> +
-> +if BR2_PACKAGE_IMX_DPU_G2D
-> +
-> +config BR2_PACKAGE_IMX_DPU_G2D_EXAMPLES
-> +	bool "install examples"
-> +	help
-> +	  Copy the Vivante DPU examples to the target.
-> +
-> +endif
-> diff --git a/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
-> new file mode 100644
-> index 0000000000..22be60077f
-> --- /dev/null
-> +++ b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
-> @@ -0,0 +1,5 @@
-> +# Locally calculated
-> +sha256	46c72ce9b98b7116e9f7f53a66aadc8fb66910473477c6553db77ed71e54d7ea  imx-dpu-g2d-1.8.2.bin
-> +sha256  d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
-> +sha256  9665930f69c0b6f4a4c055d7fe2b8ee563e771efbc83892abb1955e61492cdf7  EULA
-> +
-> diff --git a/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
-> new file mode 100644
-> index 0000000000..75fb7e21f0
-> --- /dev/null
-> +++ b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
-> @@ -0,0 +1,37 @@
-> +################################################################################
-> +#
-> +# imx-dpu-g2d
-> +#
-> +################################################################################
-> +
-> +IMX_DPU_G2D_VERSION = 1.8.2
-> +IMX_DPU_G2D_SITE = $(FREESCALE_IMX_SITE)
-> +IMX_DPU_G2D_SOURCE = imx-dpu-g2d-$(IMX_DPU_G2D_VERSION).bin
-> +IMX_DPU_G2D_DEPENDENCIES = imx-gpu-viv
-> +IMX_DPU_G2D_INSTALL_STAGING = YES
-> +
-> +IMX_DPU_G2D_LICENSE = NXP Semiconductor Software License Agreement
-> +IMX_DPU_G2D_LICENSE_FILES = EULA COPYING
-> +IMX_DPU_G2D_REDISTRIBUTE = NO
-> +
-> +define IMX_DPU_G2D_EXTRACT_CMDS
-> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_DPU_G2D_DL_DIR)/$(IMX_DPU_G2D_SOURCE))
-> +endef
-> +
-> +define IMX_DPU_G2D_INSTALL_STAGING_CMDS
-> +	cp -a $(@D)/g2d/usr/* $(STAGING_DIR)/usr
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_IMX_DPU_G2D_EXAMPLES),y)
-> +define IMX_DPU_G2D_INSTALL_EXAMPLES
-> +	mkdir -p $(TARGET_DIR)/usr/share/examples/
-> +	cp -a $(@D)/gpu-demos/opt/* $(TARGET_DIR)/usr/share/examples/
-> +endef
-> +endif
-> +
-> +define IMX_DPU_G2D_INSTALL_TARGET_CMDS
-> +	$(IMX_DPU_G2D_INSTALL_EXAMPLES)
-> +	cp -a $(@D)/g2d/usr/lib $(TARGET_DIR)/usr
-> +endef
-> +
-> +$(eval $(generic-package))
-> -- 
-> 2.17.1
-> 
+diff --git a/package/pkgconf/host-pkg-config b/package/pkgconf/host-pkg-config
+new file mode 100644
+index 0000000000..de23ce2737
+--- /dev/null
++++ b/package/pkgconf/host-pkg-config
+@@ -0,0 +1,8 @@
++#!/bin/sh
++PKGCONFDIR=$(dirname $0)
++
++# Default PKG_CONFIG_LIBDIR is HOST_DIR/lib/pkgconfig:HOST_DIR/share/pkgconfig
++PKG_CONFIG_SYSROOT_DIR="/" \
++	exec ${PKGCONFDIR}/pkgconf \
++		--keep-system-cflags \
++		--keep-system-libs "$@"
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index 1851ecfca4..f3eb47931a 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
+@@ -11,6 +11,7 @@ PKGCONF_LICENSE = pkgconf license
+ PKGCONF_LICENSE_FILES = COPYING
+ 
+ PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/bin/pkg-config
++HOST_PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/bin/host-pkg-config
+ 
+ define PKGCONF_LINK_PKGCONFIG
+ 	ln -sf pkgconf $(TARGET_DIR)/usr/bin/pkg-config
+@@ -19,6 +20,8 @@ endef
+ define HOST_PKGCONF_INSTALL_WRAPPER
+ 	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
+ 		$(HOST_DIR)/bin/pkg-config
++	$(INSTALL) -m 0755 -D package/pkgconf/host-pkg-config \
++		$(HOST_DIR)/bin/host-pkg-config
+ 	$(SED) 's, at STAGING_SUBDIR@,$(STAGING_SUBDIR),g' \
+ 		$(HOST_DIR)/bin/pkg-config
+ endef
+-- 
+2.25.0
