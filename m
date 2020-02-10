@@ -1,46 +1,44 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 10 Feb 2020 14:28:14 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/erlang: bump to version 22.2
-In-Reply-To: <20200205154226.0dca67b1@windsurf>
-References: <20200129172618.16966-1-frank.vanbever@essensium.com>
- <20200204100733.22106-1-frank.vanbever@essensium.com>
- <20200205154226.0dca67b1@windsurf>
-Message-ID: <CAJtjsKY+bh8y6GxHGMr3ZNOApke_jxHXa_cYkHP9xGEWsYZh4A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 10 Feb 2020 14:27:21 +0100
+Subject: [Buildroot] [PATCH 2/3] package/automake: also include
+ autoconf-archive in search paths
+In-Reply-To: <e78e62c9d171941a0c8c8a93ba73d3edade4a9b1.1581261155.git.yann.morin.1998@free.fr>
+References: <cover.1581261155.git.yann.morin.1998@free.fr>
+ <e78e62c9d171941a0c8c8a93ba73d3edade4a9b1.1581261155.git.yann.morin.1998@free.fr>
+Message-ID: <20200210142721.3390d716@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Frank, All,
+On Sun,  9 Feb 2020 16:12:41 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Sorry for the late reply.
+> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+> index 89dcaa1293..238116cb94 100644
+> --- a/package/automake/automake.mk
+> +++ b/package/automake/automake.mk
+> @@ -33,5 +33,11 @@ $(eval $(host-autotools-package))
+>  AUTOMAKE = $(HOST_DIR)/bin/automake
+>  ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+>  ACLOCAL = $(HOST_DIR)/bin/aclocal
+> -ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
+> +ACLOCAL_PATH = $(subst $(space),:,$(strip \
+> +	$(ACLOCAL_DIR) \
+> +	$(ACLOCAL_HOST_DIR) \
+> +	$(if $(filter host-autoconf-archive,$($(PKG)_FINAL_ALL_DEPENDENCIES)),\
+> +		$(HOST_DIR)/share/autoconf-archive \
+> +	) \
+> +))
 
-On Wed, Feb 5, 2020 at 3:42 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> I've applied your patch, but with some changes. See below.
->
-> On Tue,  4 Feb 2020 11:07:31 +0100
-> Frank Vanbever <frank.vanbever@essensium.com> wrote:
->
-> > +define ERLANG_RUN_SAVE_BOOTSTRAP
-> > +     cd $(@D) && PATH=$(BR_PATH) ./otp_build save_bootstrap
-> > +endef
-> > +ERLANG_POST_CONFIGURE_HOOKS += ERLANG_RUN_SAVE_BOOTSTRAP
->
-> As we discussed, this does not seem to be needed, at least from my
-> testing, so I dropped this.
+Meh :-/ Can we add something more explicit than that in the
+infrastructure? Poking around in the package dependencies like this to
+second guess which path should be added to ACLOCAL_PATH is not really
+great :-/
 
-I've just tested it, doing a fresh compilation from buildroot/master
-and I got the following error:
-make[4]: Entering directory
-'/home/johan/Documents/buildroot/output/build/erlang-22.2/lib/ssl/src'
-make[4]: *** No rule to make target
-'../../../bootstrap/lib/kernel/include/logger.hrl', needed by
-'../ebin/dtls_connection.beam'.  Stop.
-
-Since Frank said this file is created by the save_bootstrap command, I
-guess it is finally required.
+Thomas
 -- 
-Johan
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
