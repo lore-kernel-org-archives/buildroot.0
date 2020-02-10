@@ -1,44 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Feb 2020 14:27:21 +0100
-Subject: [Buildroot] [PATCH 2/3] package/automake: also include
- autoconf-archive in search paths
-In-Reply-To: <e78e62c9d171941a0c8c8a93ba73d3edade4a9b1.1581261155.git.yann.morin.1998@free.fr>
-References: <cover.1581261155.git.yann.morin.1998@free.fr>
- <e78e62c9d171941a0c8c8a93ba73d3edade4a9b1.1581261155.git.yann.morin.1998@free.fr>
-Message-ID: <20200210142721.3390d716@windsurf>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Mon, 10 Feb 2020 10:29:52 -0300
+Subject: [Buildroot] [git commit] package/polkit: bump to version 0.116
+In-Reply-To: <20200210093339.1782bd4d@windsurf>
+References: <20191208145140.33E3E8899E@busybox.osuosl.org>
+ <CAJ4jsacmmUF8eKM9Xs+5vVseg8VrHw-K1APU-O=6DGdyvDJvTg@mail.gmail.com>
+ <20200210093339.1782bd4d@windsurf>
+Message-ID: <CAJ4jsafO8WJT-v9v2kY+QYaDDg+1By_xDMtmLzm_-+DEReORDw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  9 Feb 2020 16:12:41 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Mon, Feb 10, 2020 at 5:33 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Carlos,
+>
+> On Sun, 9 Feb 2020 21:00:31 -0300
+> Carlos Santos <unixmania@gmail.com> wrote:
+>
+> > > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> > > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> >
+> > Argh, the mozjs (spidermonkey) dependency increases the size of the
+> > target system by 45 MiB!
+>
+> Yes, the mozjs dependency is unfortunate, and trust me, we would very
+> much have liked polkit to use a different JS engine, or no JS at all.
+> We have been postponing this polkit bump for years due to this. But
+> this is upstream polkit's decision, and at some point, we have no
+> choice but to follow what they did.
+>
+> If you look at the polkit archive, many years ago there was a patch
+> series posted to use the ducktape JS engine instead of mozjs. It would
+> be very nice to revive this work and hopefully bring it upstream.
+> Indeed, ducktape is 2 orders of magnitude smaller than mozjs I believe.
+>
+> > $ file build/buildroot-fs/ext2/target/usr/{bin/js60,lib/libmozjs-60.so}
+> > build/buildroot-fs/ext2/target/usr/bin/js60:           ELF 64-bit LSB
+> > executable, x86-64, version 1 (GNU/Linux), dynamically linked,
+> > interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 4.14.0,
+> > BuildID[sha1]=93295e8e66ae075577bc76110d7a81fc3f9b6359, stripped
+> > build/buildroot-fs/ext2/target/usr/lib/libmozjs-60.so: ELF 64-bit LSB
+> > shared object, x86-64, version 1 (GNU/Linux), dynamically linked,
+> > BuildID[sha1]=2cda65c78b09727e5ee4ac481f8847ca07953cc9, stripped
+> >
+> > $ du -hc build/buildroot-fs/ext2/target/usr/{bin/js60,lib/libmozjs-60.so}
+> > 23M    build/buildroot-fs/ext2/target/usr/bin/js60
+>
+> Is this binary dynamically linked against libmozjs, or statically
+> linked against it? The fact that it has the same size as libmozjs makes
+> me think it might be statically linked against it.
+>
+> > 23M    build/buildroot-fs/ext2/target/usr/lib/libmozjs-60.so
+>
+> Best regards,
+>
+> Thomas
 
-> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-> index 89dcaa1293..238116cb94 100644
-> --- a/package/automake/automake.mk
-> +++ b/package/automake/automake.mk
-> @@ -33,5 +33,11 @@ $(eval $(host-autotools-package))
->  AUTOMAKE = $(HOST_DIR)/bin/automake
->  ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
->  ACLOCAL = $(HOST_DIR)/bin/aclocal
-> -ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
-> +ACLOCAL_PATH = $(subst $(space),:,$(strip \
-> +	$(ACLOCAL_DIR) \
-> +	$(ACLOCAL_HOST_DIR) \
-> +	$(if $(filter host-autoconf-archive,$($(PKG)_FINAL_ALL_DEPENDENCIES)),\
-> +		$(HOST_DIR)/share/autoconf-archive \
-> +	) \
-> +))
+I'd just add --disable-js-shell to SPIDERMONKEY_CONF_OPTS, since the
+JS shell is not required.
 
-Meh :-/ Can we add something more explicit than that in the
-infrastructure? Poking around in the package dependencies like this to
-second guess which path should be added to ACLOCAL_PATH is not really
-great :-/
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Carlos Santos <unixmania@gmail.com>
