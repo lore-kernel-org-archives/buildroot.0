@@ -1,52 +1,107 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 10 Feb 2020 11:47:05 +0100
-Subject: [Buildroot] [PATCH 12/12] support/testing: add missing test file
- for perl-html-parser
-In-Reply-To: <20200210104706.19186-1-patrickdepinguin@gmail.com>
+Date: Mon, 10 Feb 2020 12:10:43 +0100
+Subject: [Buildroot] [PATCH 05/12] package/perl-mojolicious-plugin-i18n:
+ new package
+In-Reply-To: <20200210104706.19186-6-patrickdepinguin@gmail.com>
 References: <20200210104706.19186-1-patrickdepinguin@gmail.com>
-Message-ID: <20200210104706.19186-13-patrickdepinguin@gmail.com>
+ <20200210104706.19186-6-patrickdepinguin@gmail.com>
+Message-ID: <CAAXf6LV27Zj4y=wUSePP1g25w3XxZkBUDvZuY8ZQQAYW87g+Vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+El lun., 10 feb. 2020 a las 11:47, Thomas De Schampheleire
+(<patrickdepinguin@gmail.com>) escribi?:
+>
+> From: Joeri Barbarien <joeri.barbarien@nokia.com>
+>
+> Added via utils/scancpan, without changes.
+>
+> Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  package/perl-mojolicious-plugin-i18n/Config.in     |  7 +++++++
+>  .../perl-mojolicious-plugin-i18n.hash              |  3 +++
+>  .../perl-mojolicious-plugin-i18n.mk                | 14 ++++++++++++++
+>  5 files changed, 26 insertions(+)
+>  create mode 100644 package/perl-mojolicious-plugin-i18n/Config.in
+>  create mode 100644 package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
+>  create mode 100644 package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index c7b98fb349..dd6199bf6d 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2385,6 +2385,7 @@ F:        package/perl-mime-base64-urlsafe/
+>  F:     package/perl-mojolicious-plugin-authentication/
+>  F:     package/perl-mojolicious-plugin-authorization/
+>  F:     package/perl-mojolicious-plugin-cspheader/
+> +F:     package/perl-mojolicious-plugin-i18n/
+>  F:     package/perl-net-snmp/
+>  F:     package/perl-net-ssh2/
+>  F:     package/perl-net-telnet/
+> diff --git a/package/Config.in b/package/Config.in
+> index c85f0676cf..3a664b2521 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -781,6 +781,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-mojolicious-plugin-authentication/Config.in"
+>         source "package/perl-mojolicious-plugin-authorization/Config.in"
+>         source "package/perl-mojolicious-plugin-cspheader/Config.in"
+> +       source "package/perl-mojolicious-plugin-i18n/Config.in"
+>         source "package/perl-moo/Config.in"
+>         source "package/perl-net-dns/Config.in"
+>         source "package/perl-net-http/Config.in"
+> diff --git a/package/perl-mojolicious-plugin-i18n/Config.in b/package/perl-mojolicious-plugin-i18n/Config.in
+> new file mode 100644
+> index 0000000000..cbe11451c5
+> --- /dev/null
+> +++ b/package/perl-mojolicious-plugin-i18n/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_I18N
+> +       bool "perl-mojolicious-plugin-i18n"
+> +       select BR2_PACKAGE_PERL_MOJOLICIOUS # runtime
+> +       help
+> +         Internationalization Plugin for Mojolicious.
+> +
+> +         https://metacpan.org/release/Mojolicious-Plugin-I18N
+> diff --git a/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
+> new file mode 100644
+> index 0000000000..81253cdec4
+> --- /dev/null
+> +++ b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
+> @@ -0,0 +1,3 @@
+> +# retrieved by scancpan from http://cpan.metacpan.org/
+> +md5    4002f7a7da4c90973ad6eedfb0fcfa16 Mojolicious-Plugin-I18N-1.6.tar.gz
+> +sha256 32fb5ef8037d954b7ecebef5c1b2b24b420abd829702312f4ad42794f52b514d Mojolicious-Plugin-I18N-1.6.tar.gz
+> diff --git a/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
+> new file mode 100644
+> index 0000000000..7de8db8c52
+> --- /dev/null
+> +++ b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# perl-mojolicious-plugin-i18n
+> +#
+> +################################################################################
+> +
+> +PERL_MOJOLICIOUS_PLUGIN_I18N_VERSION = 1.6
+> +PERL_MOJOLICIOUS_PLUGIN_I18N_SOURCE = Mojolicious-Plugin-I18N-$(PERL_MOJOLICIOUS_PLUGIN_I18N_VERSION).tar.gz
+> +PERL_MOJOLICIOUS_PLUGIN_I18N_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHARIFULN
+> +PERL_MOJOLICIOUS_PLUGIN_I18N_DEPENDENCIES = host-perl-module-build
+> +PERL_MOJOLICIOUS_PLUGIN_I18N_LICENSE = Artistic or GPL-1.0+
 
-This file was created by utils/scancpan while adding other packages but
-apparently not yet added in the repo.
+It seems I did not correctly add the LICENSE_FILES here. Moreover, the
+license declared in the META.{json,yml} files ('perl-5') versus the
+one described in README.pod (Artistic-2.0) do not correspond, as the
+former would also allow GPL-1.0. Will reduce to Artistic-2.0 instead.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- .../tests/package/test_perl_html_parser.py    | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
- create mode 100644 support/testing/tests/package/test_perl_html_parser.py
+Will resend a v2.
 
-diff --git a/support/testing/tests/package/test_perl_html_parser.py b/support/testing/tests/package/test_perl_html_parser.py
-new file mode 100644
-index 0000000000..6431633482
---- /dev/null
-+++ b/support/testing/tests/package/test_perl_html_parser.py
-@@ -0,0 +1,20 @@
-+from tests.package.test_perl import TestPerlBase
-+
-+
-+class TestPerlHTMLParser(TestPerlBase):
-+    """
-+    package:
-+        HTML-Parser   XS
-+    direct dependencies:
-+        HTML-Tagset
-+    """
-+
-+    config = TestPerlBase.config + \
-+        """
-+        BR2_PACKAGE_PERL=y
-+        BR2_PACKAGE_PERL_HTML_PARSER=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("HTML::Parser")
--- 
-2.24.1
+Best regards,
+Thomas
