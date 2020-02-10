@@ -1,76 +1,41 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 10 Feb 2020 17:45:45 +0100
-Subject: [Buildroot] [PATCH 12/12] support/testing: add missing test
- file for perl-html-parser
-In-Reply-To: <20200210104706.19186-13-patrickdepinguin@gmail.com>
-References: <20200210104706.19186-1-patrickdepinguin@gmail.com>
- <20200210104706.19186-13-patrickdepinguin@gmail.com>
-Message-ID: <CAB0FRsv9JjB-TMA_LjAtUg-xnygdWsY841R858xjOfAL6+fZeg@mail.gmail.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon, 10 Feb 2020 17:48:11 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/erlang: bump to version 22.2
+In-Reply-To: <CAJtjsKZUot++xWhq6DB=eR9qZ46sdo7vXbKpcYnr6RMSa-Phvw@mail.gmail.com>
+References: <20200129172618.16966-1-frank.vanbever@essensium.com>
+ <20200204100733.22106-1-frank.vanbever@essensium.com>
+ <20200205154226.0dca67b1@windsurf>
+ <CAJtjsKY+bh8y6GxHGMr3ZNOApke_jxHXa_cYkHP9xGEWsYZh4A@mail.gmail.com>
+ <20200210143008.1895547d@windsurf>
+ <CAJtjsKanOr6knqJeDJ84hv-68NdQRs164_NnTAkPsVAB16mYjg@mail.gmail.com>
+ <CAJtjsKYB4GkZu5xp-ak9BYEkarqKB6yQiHGf0F1foQf6EjV+qQ@mail.gmail.com>
+ <CAJtjsKbZ55Pkb14Y_zTXCuVhcnBTNphzd7MqrG1dnC2pLFpzXw@mail.gmail.com>
+ <20200210165713.69f99ece@windsurf>
+ <CAJtjsKZUot++xWhq6DB=eR9qZ46sdo7vXbKpcYnr6RMSa-Phvw@mail.gmail.com>
+Message-ID: <CAJtjsKa_DvMPZDpgdQTVyynxyV0YHL_0EgEH+5BALLOApwgNxA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 10 f?vr. 2020 ? 11:48, Thomas De Schampheleire <
-patrickdepinguin@gmail.com> a ?crit :
+On Mon, Feb 10, 2020 at 5:07 PM Johan Oudinet <johan.oudinet@gmail.com> wrote:
+>
+> On Mon, Feb 10, 2020 at 4:57 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Is this an upstream bug, i.e this folder should not be present in the
+> > release tarball?
+>
+> I think so, yes. This directory has been removed on the next version : 22.2.1
+> Well, we could also simply bump the version. As a minor release, it
+> should not require too much effort.
 
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->
-> This file was created by utils/scancpan while adding other packages but
-> apparently not yet added in the repo.
->
->
-HTML-Parser is a dependency of libwww-perl,
-and already tested by
-https://git.busybox.net/buildroot/tree/support/testing/tests/package/test_perl_libwww_perl.py#n39
+Actually, they don't put minor releases into their download section.
+So I think it is best to patch it as I mentioned it. I've also opened
+a bug report about it:
+https://bugs.erlang.org/browse/ERL-1168
 
-Someone may think this additional test is redundant.
-
-Fran?ois
-
-
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  .../tests/package/test_perl_html_parser.py    | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
->  create mode 100644 support/testing/tests/package/test_perl_html_parser.py
->
-> diff --git a/support/testing/tests/package/test_perl_html_parser.py
-> b/support/testing/tests/package/test_perl_html_parser.py
-> new file mode 100644
-> index 0000000000..6431633482
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_perl_html_parser.py
-> @@ -0,0 +1,20 @@
-> +from tests.package.test_perl import TestPerlBase
-> +
-> +
-> +class TestPerlHTMLParser(TestPerlBase):
-> +    """
-> +    package:
-> +        HTML-Parser   XS
-> +    direct dependencies:
-> +        HTML-Tagset
-> +    """
-> +
-> +    config = TestPerlBase.config + \
-> +        """
-> +        BR2_PACKAGE_PERL=y
-> +        BR2_PACKAGE_PERL_HTML_PARSER=y
-> +        """
-> +
-> +    def test_run(self):
-> +        self.login()
-> +        self.module_test("HTML::Parser")
-> --
-> 2.24.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200210/2a5b5e74/attachment.html>
+I'll submit the patch in a few minutes.
+-- 
+Johan
