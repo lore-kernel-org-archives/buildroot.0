@@ -1,46 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Feb 2020 16:56:39 +0100
-Subject: [Buildroot] [PATCH v2 5/7] package/freescale-imx/imx-gpu-viv:
- bump to version 6.4.0.p1.0
-In-Reply-To: <20200210155102.GA335587@p1g2.work>
-References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
- <20200203193155.12657-5-tuzakli.refik@gmail.com>
- <20200204231052.350677e5@windsurf>
- <CADCpmyPFFQO+0m3gK_825QHAMN18SeCOSLFFnyzswniZt5qN3Q@mail.gmail.com>
- <20200205174803.143caa52@windsurf>
- <CAMWBNu6Gnqxh+_fPzFJL6Tda3g=dWpcwkj0pH9TkPT-VutxKYQ@mail.gmail.com>
- <20200210155102.GA335587@p1g2.work>
-Message-ID: <20200210165639.1719949d@windsurf>
+Date: Mon, 10 Feb 2020 16:57:13 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/erlang: bump to version 22.2
+In-Reply-To: <CAJtjsKbZ55Pkb14Y_zTXCuVhcnBTNphzd7MqrG1dnC2pLFpzXw@mail.gmail.com>
+References: <20200129172618.16966-1-frank.vanbever@essensium.com>
+ <20200204100733.22106-1-frank.vanbever@essensium.com>
+ <20200205154226.0dca67b1@windsurf>
+ <CAJtjsKY+bh8y6GxHGMr3ZNOApke_jxHXa_cYkHP9xGEWsYZh4A@mail.gmail.com>
+ <20200210143008.1895547d@windsurf>
+ <CAJtjsKanOr6knqJeDJ84hv-68NdQRs164_NnTAkPsVAB16mYjg@mail.gmail.com>
+ <CAJtjsKYB4GkZu5xp-ak9BYEkarqKB6yQiHGf0F1foQf6EjV+qQ@mail.gmail.com>
+ <CAJtjsKbZ55Pkb14Y_zTXCuVhcnBTNphzd7MqrG1dnC2pLFpzXw@mail.gmail.com>
+Message-ID: <20200210165713.69f99ece@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 10 Feb 2020 16:51:02 +0100
-Gary Bisson <bisson.gary@gmail.com> wrote:
+On Mon, 10 Feb 2020 16:51:48 +0100
+Johan Oudinet <johan.oudinet@gmail.com> wrote:
 
-> > we don't need mesa3d to  work with opengl, opencl... if we use vivante
-> > dirver by NXP. it is  closed source and has limitations.  
+> > There is no deps directory inside lib/ssl/src in the last release of
+> > erlang (22.2.6). I guess this was a left over from the guy who made
+> > the archive?
+> > So my fix proposition to simply sed this file won't work in future
+> > erlang versions.  
 > 
-> Yes you do need mesa3d otherwise you won't have any header and therefore
-> won't be able to build anything.
+> I confirm that removing lib/ssl/src/deps directory fix the build issue
+> on my machine. I can submit a patch that removes this directory as a
+> PRE_CONFIGURE hook, what do you think?
 
-If it's only for headers, don't use mesa3d, but mesa3d-headers. The
-mesa3d-headers is precisely designed to provide the OpenGL/Khronos
-headers for the OpenGL implementations that don't provide it.
-
-> > > Me Thomas, or Refik ? I might have submitted some OpenGL changes a
-> > > while ago, but I'm certainly not the only one.  
-> 
-> You Thomas, sorry for the confusion. I don't think you ever pushed the
-> change as you were not happy with it at the time.
-> 
-> It was on http://git.free-electrons.com/, is a bootlin equivalent
-> existing?
-
-No, we closed our own repo. Do you have the details of the change you
-are talking about ? I could try to see if I still have it locally.
+Is this an upstream bug, i.e this folder should not be present in the
+release tarball?
 
 Thomas
 -- 
