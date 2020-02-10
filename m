@@ -1,31 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 10 Feb 2020 14:19:42 +0000
-Subject: [Buildroot] [Bug 11906] the new version of mesa3d cannot support
- etnaviv when compiled with --enable-autotools
-In-Reply-To: <bug-11906-163@https.bugs.busybox.net/>
-References: <bug-11906-163@https.bugs.busybox.net/>
-Message-ID: <bug-11906-163-YKkzBmDnra@https.bugs.busybox.net/>
+From: Gervais, Francois <FGervais@distech-controls.com>
+Date: Mon, 10 Feb 2020 14:30:13 +0000
+Subject: [Buildroot] [EXT] Re: [PATCH v4 5/9] boot/arm-trusted-firmware:
+ introduce two new options
+Message-ID: <DM6PR01MB58491DFF606B05CFFFD84A01F3190@DM6PR01MB5849.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11906
+> > two new options for arm-trusted-firmware:
+> > 1. BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS
+> >?????? - for additional targets, E.G. "pbl".
+> 
+> This option was already added in commit
+> 05b8c7da6de863561d66717735a4870f2766454c, which is part of Buildroot
+> master.
 
-Hichem <hfekih@cannon.com> changed:
+Somebody reported a problem with my patch last week. I'm still investigating with
+him but it seems that the qstrip wrapping might be required which
+05b8c7da6de863561d66717735a4870f2766454c is missing.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Jerry maybe you can try on your side? You could rebase your v5 on top
+of master and try to build arm-trusted-firmware from scratch with 
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS empty.
 
---- Comment #4 from Hichem <hfekih@cannon.com> ---
-I don't know when this is resolved. but I tested buildroot-2019.11.1 and the
-Problem does not exist anymore.
+You might see this error message:
 
-the kmsro can be built, since mesa build system is switched to meson
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+make: *** empty string invalid as file name.  Stop.
