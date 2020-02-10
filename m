@@ -1,60 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Feb 2020 09:33:39 +0100
-Subject: [Buildroot] [git commit] package/polkit: bump to version 0.116
-In-Reply-To: <CAJ4jsacmmUF8eKM9Xs+5vVseg8VrHw-K1APU-O=6DGdyvDJvTg@mail.gmail.com>
-References: <20191208145140.33E3E8899E@busybox.osuosl.org>
- <CAJ4jsacmmUF8eKM9Xs+5vVseg8VrHw-K1APU-O=6DGdyvDJvTg@mail.gmail.com>
-Message-ID: <20200210093339.1782bd4d@windsurf>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 10 Feb 2020 10:01:38 +0100
+Subject: [Buildroot] [PATCH 0/3] packages/exim: fix build failures
+In-Reply-To: <87tv41v758.fsf@dell.be.48ers.dk>
+References: <20200207151427.12475-1-luca@lucaceresoli.net>
+ <87tv41v758.fsf@dell.be.48ers.dk>
+Message-ID: <91298deb-4c90-05dc-d88b-0d3aa781a2e9@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Carlos,
+Hi Peter,
 
-On Sun, 9 Feb 2020 21:00:31 -0300
-Carlos Santos <unixmania@gmail.com> wrote:
-
-> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>  
+On 08/02/20 09:02, Peter Korsgaard wrote:
+>>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 > 
-> Argh, the mozjs (spidermonkey) dependency increases the size of the
-> target system by 45 MiB!
-
-Yes, the mozjs dependency is unfortunate, and trust me, we would very
-much have liked polkit to use a different JS engine, or no JS at all.
-We have been postponing this polkit bump for years due to this. But
-this is upstream polkit's decision, and at some point, we have no
-choice but to follow what they did.
-
-If you look at the polkit archive, many years ago there was a patch
-series posted to use the ducktape JS engine instead of mozjs. It would
-be very nice to revive this work and hopefully bring it upstream.
-Indeed, ducktape is 2 orders of magnitude smaller than mozjs I believe.
-
-> $ file build/buildroot-fs/ext2/target/usr/{bin/js60,lib/libmozjs-60.so}
-> build/buildroot-fs/ext2/target/usr/bin/js60:           ELF 64-bit LSB
-> executable, x86-64, version 1 (GNU/Linux), dynamically linked,
-> interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 4.14.0,
-> BuildID[sha1]=93295e8e66ae075577bc76110d7a81fc3f9b6359, stripped
-> build/buildroot-fs/ext2/target/usr/lib/libmozjs-60.so: ELF 64-bit LSB
-> shared object, x86-64, version 1 (GNU/Linux), dynamically linked,
-> BuildID[sha1]=2cda65c78b09727e5ee4ac481f8847ca07953cc9, stripped
+>  > exim is failing on the autobuilders since the version bump to 4.93 (commit
+>  > 6038c3232acfdb: "package/exim: bump version to 4.93.0.3").
 > 
-> $ du -hc build/buildroot-fs/ext2/target/usr/{bin/js60,lib/libmozjs-60.so}
-> 23M    build/buildroot-fs/ext2/target/usr/bin/js60
+>  > Commit 2c692e81a844b30b ("package/exim: fix host build") fixed one failure
+>  > when building the host tools, but we still have a similar ("'for' loop
+>  > initial declarations are only allowed in C99 mode") one when cross-building
+>  > target files.
+> 
+>  > In patch 1 I applied a similar fix (add -std=c99), but more failures
+>  > started appearing later in the build process.
+> 
+>  > I have not completely understood the new failures, yet with a couple of
+>  > patches it is now building. This is done in patch 2 but I'm not sure it is
+>  > a correct solution.
+> 
+>  > Finally another failure appeared. It is yet another
+>  > for-loop-initial-declaration error, but happens later in the install
+>  > step. This is fixed in patch 3 adding another -std=c99.
+> 
+>  > I cannot work on this issue for the next few days, so here are my patches,
+>  > as-is, in case anybody wants to have a look before 2020.02.
+> 
+> Thanks, the patches looks sensible to me. Did you submit them upstream?
+> We normally add a link to that in the patches.
 
-Is this binary dynamically linked against libmozjs, or statically
-linked against it? The fact that it has the same size as libmozjs makes
-me think it might be statically linked against it.
+I still haven't sent them to upstream because I thought there could be a
+better fix. I plan to send them within a few days after having another
+look into it. After that I'm also sending v2 here with the
+"Upstream-status" added.
 
-> 23M    build/buildroot-fs/ext2/target/usr/lib/libmozjs-60.so
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Luca
