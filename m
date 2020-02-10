@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Feb 2020 14:09:50 +0100
+Date: Mon, 10 Feb 2020 14:13:26 +0100
 Subject: [Buildroot] [PATCH v4 6/9] board/qemu: add post-image script
  for gitlab qemu testing
 In-Reply-To: <20200209180327.455426-7-romain.naour@smile.fr>
 References: <20200209180327.455426-1-romain.naour@smile.fr>
  <20200209180327.455426-7-romain.naour@smile.fr>
-Message-ID: <20200210140950.704d0d4b@windsurf>
+Message-ID: <20200210141326.289a52ff@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -39,9 +39,14 @@ Romain Naour <romain.naour@smile.fr> wrote:
 > 
 > Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-Why is this script copied a zillion times? This looks like a
-maintenance nightmare. Why not put it in board/qemu/, and have a single
-script used by all configurations ?
+Is it really a good idea to automatically start Qemu at the end of the
+build of those defconfigs ? While I understand how it makes sense for
+Gitlab CI, it is not very practical/convenient for normal users.
+
+Can't we start the test under Qemu by a separate command from
+.gitlab-ci.yml instead?
+
+Thanks,
 
 Thomas
 -- 
