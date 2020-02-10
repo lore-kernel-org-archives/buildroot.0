@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 10 Feb 2020 11:46:56 +0100
-Subject: [Buildroot] [PATCH 03/12]
- package/perl-mojolicious-plugin-authorization: new package
+Date: Mon, 10 Feb 2020 11:46:57 +0100
+Subject: [Buildroot] [PATCH 04/12]
+ package/perl-mojolicious-plugin-cspheader: new package
 In-Reply-To: <20200210104706.19186-1-patrickdepinguin@gmail.com>
 References: <20200210104706.19186-1-patrickdepinguin@gmail.com>
-Message-ID: <20200210104706.19186-4-patrickdepinguin@gmail.com>
+Message-ID: <20200210104706.19186-5-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,106 +13,89 @@ To: buildroot@busybox.net
 
 From: Joeri Barbarien <joeri.barbarien@nokia.com>
 
-Added via utils/scancpan, but removing the 'suspicious' dependency on
-'host-perl-mojolicious'.
-
-    During configuration, the package warns:
-
-    Checking prerequisites...
-      requires:
-        !  Mojo::Base is not installed
-      build_requires:
-        !  Mojolicious::Lite is not installed
-        !  Test::Mojo is not installed
-
-    ERRORS/WARNINGS FOUND IN PREREQUISITES.  You may wish to install the versions
-    of the modules indicated above before proceeding with this installation
-
-    Run 'Build installdeps' to install missing prerequisites.
-
-But the build and installation continues correctly nonetheless.
+Added via utils/scancpan, without changes.
 
 Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- DEVELOPERS                                        |  1 +
- package/Config.in                                 |  1 +
- .../Config.in                                     |  7 +++++++
- .../perl-mojolicious-plugin-authorization.hash    |  6 ++++++
- .../perl-mojolicious-plugin-authorization.mk      | 15 +++++++++++++++
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../perl-mojolicious-plugin-cspheader/Config.in    |  8 ++++++++
+ .../perl-mojolicious-plugin-cspheader.hash         |  6 ++++++
+ .../perl-mojolicious-plugin-cspheader.mk           | 14 ++++++++++++++
  5 files changed, 30 insertions(+)
- create mode 100644 package/perl-mojolicious-plugin-authorization/Config.in
- create mode 100644 package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
- create mode 100644 package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
+ create mode 100644 package/perl-mojolicious-plugin-cspheader/Config.in
+ create mode 100644 package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.hash
+ create mode 100644 package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 16d07b8e9a..37976a7d43 100644
+index 37976a7d43..c7b98fb349 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2383,6 +2383,7 @@ F:	package/perl-locale-maketext-lexicon/
- F:	package/perl-math-prime-util/
+@@ -2384,6 +2384,7 @@ F:	package/perl-math-prime-util/
  F:	package/perl-mime-base64-urlsafe/
  F:	package/perl-mojolicious-plugin-authentication/
-+F:	package/perl-mojolicious-plugin-authorization/
+ F:	package/perl-mojolicious-plugin-authorization/
++F:	package/perl-mojolicious-plugin-cspheader/
  F:	package/perl-net-snmp/
  F:	package/perl-net-ssh2/
  F:	package/perl-net-telnet/
 diff --git a/package/Config.in b/package/Config.in
-index bad2314019..f487ed2b96 100644
+index f487ed2b96..c85f0676cf 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -779,6 +779,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-module-runtime/Config.in"
+@@ -780,6 +780,7 @@ menu "Perl libraries/modules"
  	source "package/perl-mojolicious/Config.in"
  	source "package/perl-mojolicious-plugin-authentication/Config.in"
-+	source "package/perl-mojolicious-plugin-authorization/Config.in"
+ 	source "package/perl-mojolicious-plugin-authorization/Config.in"
++	source "package/perl-mojolicious-plugin-cspheader/Config.in"
  	source "package/perl-moo/Config.in"
  	source "package/perl-net-dns/Config.in"
  	source "package/perl-net-http/Config.in"
-diff --git a/package/perl-mojolicious-plugin-authorization/Config.in b/package/perl-mojolicious-plugin-authorization/Config.in
+diff --git a/package/perl-mojolicious-plugin-cspheader/Config.in b/package/perl-mojolicious-plugin-cspheader/Config.in
 new file mode 100644
-index 0000000000..87976cbbe8
+index 0000000000..841b309470
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-authorization/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION
-+	bool "perl-mojolicious-plugin-authorization"
++++ b/package/perl-mojolicious-plugin-cspheader/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_CSPHEADER
++	bool "perl-mojolicious-plugin-cspheader"
 +	select BR2_PACKAGE_PERL_MOJOLICIOUS # runtime
 +	help
-+	  A plugin to make authorization a bit easier.
++	  Mojolicious Plugin to add Content-Security-Policy header to
++	  every HTTP response.
 +
-+	  https://metacpan.org/module/Mojolicious::Plugin::Authorization
-diff --git a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
++	  https://metacpan.org/release/Mojolicious-Plugin-CSPHeader
+diff --git a/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.hash b/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.hash
 new file mode 100644
-index 0000000000..c55eefe2ff
+index 0000000000..d0f9dc3ab0
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
++++ b/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    9c009599cf397e3eacf5d7cd0dec45b8 Mojolicious-Plugin-Authorization-1.05.tar.gz
-+sha256 87f84092d5698595ad0d01e745eca1d6affd1f3d662786f39f3583c54ffed0e3 Mojolicious-Plugin-Authorization-1.05.tar.gz
++md5    3d1b01c393e7ed576e4b503d26a88a3e Mojolicious-Plugin-CSPHeader-0.06.tar.gz
++sha256 0523a170af6620dab5b746725f171a138b6cff3d2d84e1a30af891741550f4a7 Mojolicious-Plugin-CSPHeader-0.06.tar.gz
 +
 +# computed by scancpan
-+sha256 fd9632faca5a3d6af4cb9cf776514de87d2b34bff3a6cf06c23eea0f9cc3ab06 LICENSE
-diff --git a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
++sha256 4bb36edd2bcafef11ca615f69607953a31ee05ae172b69990aee317e95653456 LICENSE
+diff --git a/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.mk b/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.mk
 new file mode 100644
-index 0000000000..3fcee08a46
+index 0000000000..438d6d517e
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
-@@ -0,0 +1,15 @@
++++ b/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-mojolicious-plugin-authorization
++# perl-mojolicious-plugin-cspheader
 +#
 +################################################################################
 +
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_VERSION = 1.05
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_SOURCE = Mojolicious-Plugin-Authorization-$(PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_VERSION).tar.gz
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_SITE = $(BR2_CPAN_MIRROR)/authors/id/B/BY/BYTEROCK
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_DEPENDENCIES = host-perl-module-build
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_LICENSE = Artistic or GPL-1.0+
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_LICENSE_FILES = LICENSE
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_DISTNAME = Mojolicious-Plugin-Authorization
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_VERSION = 0.06
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_SOURCE = Mojolicious-Plugin-CSPHeader-$(PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_VERSION).tar.gz
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDIDRY
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_LICENSE = Artistic or GPL-1.0+
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_LICENSE_FILES = LICENSE
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_DISTNAME = Mojolicious-Plugin-CSPHeader
 +
 +$(eval $(perl-package))
 -- 
