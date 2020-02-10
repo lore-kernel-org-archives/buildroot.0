@@ -1,30 +1,44 @@
-From: Gervais, Francois <FGervais@distech-controls.com>
-Date: Mon, 10 Feb 2020 14:30:13 +0000
-Subject: [Buildroot] [EXT] Re: [PATCH v4 5/9] boot/arm-trusted-firmware:
- introduce two new options
-Message-ID: <DM6PR01MB58491DFF606B05CFFFD84A01F3190@DM6PR01MB5849.prod.exchangelabs.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 10 Feb 2020 15:40:01 +0100
+Subject: [Buildroot] [PATCH v4 5/9] board/qemu: add defconfig file name
+ as tag before the qemu command line
+In-Reply-To: <cccdab0a-73d4-3409-275e-a1b8b3422643@smile.fr>
+References: <20200209180327.455426-1-romain.naour@smile.fr>
+ <20200209180327.455426-6-romain.naour@smile.fr>
+ <20200210140839.4dab48c8@windsurf>
+ <cccdab0a-73d4-3409-275e-a1b8b3422643@smile.fr>
+Message-ID: <20200210154001.3efa80ca@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > two new options for arm-trusted-firmware:
-> > 1. BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS
-> >?????? - for additional targets, E.G. "pbl".
+Hello,
+
+On Mon, 10 Feb 2020 14:37:27 +0100
+Romain Naour <romain.naour@smile.fr> wrote:
+
+> > qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -smp 1 -kernel output/images/Image -append "rootwait root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 # qemu_aarch64_virt_defconfig
+> > 
+> > This way, the information is still encoded on the same line, but it's a
+> > comment, so if a newcomer copy/pastes that command line, it will really
+> > work.  
 > 
-> This option was already added in commit
-> 05b8c7da6de863561d66717735a4870f2766454c, which is part of Buildroot
-> master.
+> Ok, I see your point.
+> 
+> I did this way since the qemu cmd line can be on several lines (see
+> board/qemu/arm-vexpress-tz/readme.txt).
+> 
+> Do we require that the qemu cmd line must be on one line ?
 
-Somebody reported a problem with my patch last week. I'm still investigating with
-him but it seems that the qstrip wrapping might be required which
-05b8c7da6de863561d66717735a4870f2766454c is missing.
+Is it really because it is on multiple lines that you need this marker?
+Not because some readme.txt document several different defconfigs, and
+you need to know which qemu command line corresponds to which defconfig
+?
 
-Jerry maybe you can try on your side? You could rebase your v5 on top
-of master and try to build arm-trusted-firmware from scratch with 
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS empty.
-
-You might see this error message:
-
-make: *** empty string invalid as file name.  Stop.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
