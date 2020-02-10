@@ -1,19 +1,19 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 10 Feb 2020 14:47:59 +0100
+Date: Mon, 10 Feb 2020 14:49:53 +0100
 Subject: [Buildroot] [PATCH v4 6/9] board/qemu: add post-image script
  for gitlab qemu testing
-In-Reply-To: <20200210140950.704d0d4b@windsurf>
+In-Reply-To: <20200210141326.289a52ff@windsurf>
 References: <20200209180327.455426-1-romain.naour@smile.fr>
  <20200209180327.455426-7-romain.naour@smile.fr>
- <20200210140950.704d0d4b@windsurf>
-Message-ID: <f049e76f-b96a-b355-1597-b7fda6412afe@smile.fr>
+ <20200210141326.289a52ff@windsurf>
+Message-ID: <c75289a9-f3de-6e82-2f1a-6089c9eda738@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 10/02/2020 ? 14:09, Thomas Petazzoni a ?crit?:
+Le 10/02/2020 ? 14:13, Thomas Petazzoni a ?crit?:
 > On Sun,  9 Feb 2020 19:03:24 +0100
 > Romain Naour <romain.naour@smile.fr> wrote:
 > 
@@ -41,29 +41,25 @@ Le 10/02/2020 ? 14:09, Thomas Petazzoni a ?crit?:
 >>
 >> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 > 
-> Why is this script copied a zillion times? This looks like a
-> maintenance nightmare. Why not put it in board/qemu/, and have a single
-> script used by all configurations ?
+> Is it really a good idea to automatically start Qemu at the end of the
+> build of those defconfigs ? While I understand how it makes sense for
+> Gitlab CI, it is not very practical/convenient for normal users.
 
-I'm not sure if we should share the same post-image script for several boards.
-It's not clear how we should maintain theses scripts in board directory.
+Qemu is not started automatically at the end of the build.
+The build process only create the script start-qemu.sh that must be called by
+the user (or by the gitlab-ci).
 
-For example for genimage (post-image.sh) :
-board/lego/ev3/post-image.sh
-board/grinn/liteboard/post-image.sh
-board/nexbox/a95x/post-image.sh
+> 
+> Can't we start the test under Qemu by a separate command from
+> .gitlab-ci.yml instead?
 
-This is the same script.
-Maybe we need something board/common/post-image.sh ?
-
-For Qemu board, maybe add the script in board/qemu/common/post-image.sh.
-
-There is also a special case for sh4, so I'll add a second script to add
-"-serial stdio -display none" instead of "-display none"
+This is what this patch is doing :)
 
 Best regards,
 Romain
 
+> 
+> Thanks,
 > 
 > Thomas
 > 
