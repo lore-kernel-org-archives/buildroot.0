@@ -1,65 +1,128 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 10 Feb 2020 14:49:53 +0100
-Subject: [Buildroot] [PATCH v4 6/9] board/qemu: add post-image script
- for gitlab qemu testing
-In-Reply-To: <20200210141326.289a52ff@windsurf>
-References: <20200209180327.455426-1-romain.naour@smile.fr>
- <20200209180327.455426-7-romain.naour@smile.fr>
- <20200210141326.289a52ff@windsurf>
-Message-ID: <c75289a9-f3de-6e82-2f1a-6089c9eda738@smile.fr>
+From: Michael Walle <michael@walle.cc>
+Date: Mon, 10 Feb 2020 14:50:54 +0100
+Subject: [Buildroot] [PATCH 2/3] package/automake: also include
+ autoconf-archive in search paths
+In-Reply-To: <3dad5906-9e8a-a682-e0af-cbabf1f2331c@mind.be>
+References: <cover.1581261155.git.yann.morin.1998@free.fr>
+ <e78e62c9d171941a0c8c8a93ba73d3edade4a9b1.1581261155.git.yann.morin.1998@free.fr>
+ <20200209152441.GP23769@scaer> <d1521ad22c5023eb516919647f00798f@walle.cc>
+ <122439f4768d20854faa230c873ea664@walle.cc>
+ <3dad5906-9e8a-a682-e0af-cbabf1f2331c@mind.be>
+Message-ID: <1042b9647b2f18ca54d32e2ef6d1c704@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 10/02/2020 ? 14:13, Thomas Petazzoni a ?crit?:
-> On Sun,  9 Feb 2020 19:03:24 +0100
-> Romain Naour <romain.naour@smile.fr> wrote:
+Am 2020-02-10 14:14, schrieb Arnout Vandecappelle:
+> On 10/02/2020 14:09, Michael Walle wrote:
+>> Am 2020-02-10 14:06, schrieb Michael Walle:
+>>> Hi Yann,
+>>> 
+>>> Am 2020-02-09 16:24, schrieb Yann E. MORIN:
+>>>> All,
+>>>> 
+>>>> On 2020-02-09 16:12 +0100, Yann E. MORIN spake thusly:
+>>>>> Since d255b67972 (autotools: do not overwrite first include path), 
+>>>>> the
+>>>>> ordering of include paths has changed: the system directories are
+>>>>> specified with explicit options passed to autoreconf, which means 
+>>>>> that
+>>>>> any directory specified in the package _AUTORECONF_OPTS are no 
+>>>>> longer
+>>>>> first:
+>>>>> 
+>>>>> ? - in package/autoconf/autoconf.mk, we define AUTORECONF as:
+>>>>> ??? AUTOCONF = $(HOST_DIR)/bin/autoconf -I "$(ACLOCAL_DIR)" -I
+>>>>> "$(ACLOCAL_HOST_DIR)"
+>>>>> 
+>>>>> ? - in package/pkg-autotools.mk, we call AUTORECONF with:
+>>>>> ??? $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) 
+>>>>> $($(PKG)_AUTORECONF_OPTS)
+>>>>> 
+>>>>> For a package that needs autoconf-archive, this means that it has 
+>>>>> to
+>>>>> provide a custom include directive, in its own _AUTORECONF_OPTS. 
+>>>>> This in
+>>>>> turn means that this directory becomes the first, and goes directly
+>>>>> opposite to what d255b67972 was supposed to accomplish.
+>>>>> 
+>>>>> However, the path to the autoconf archive macro directory is mnot
+>>>>> searched by default either, so a package has no way to add such an
+>>>>> aclocal include directive.
+>>>>> 
+>>>>> We can only add it in the global search directory, and we do so 
+>>>>> only for
+>>>>> those packages that have autoconf-archive in their dependencies.
+>>>>> 
+>>>>> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>>>>> Cc: Michael Walle <michael@walle.cc>
+>>>>> Cc: Heiko Thiery <heiko.thiery@gmail.com>
+>>>>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>>>>> Cc: Arnout Vandecappelle <arnout@mind.be>
+>>>>> Cc: Peter Korsgaard <peter@korsgaard.com>
+>>>>> ---
+>>>>> ?package/automake/automake.mk | 8 +++++++-
+>>>>> ?1 file changed, 7 insertions(+), 1 deletion(-)
+>>>>> 
+>>>>> diff --git a/package/automake/automake.mk 
+>>>>> b/package/automake/automake.mk
+>>>>> index 89dcaa1293..238116cb94 100644
+>>>>> --- a/package/automake/automake.mk
+>>>>> +++ b/package/automake/automake.mk
+>>>>> @@ -33,5 +33,11 @@ $(eval $(host-autotools-package))
+>>>>> ?AUTOMAKE = $(HOST_DIR)/bin/automake
+>>>>> ?ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+>>>>> ?ACLOCAL = $(HOST_DIR)/bin/aclocal
+>>>>> -ACLOCAL_PATH = $(ACLOCAL_DIR):$(ACLOCAL_HOST_DIR)
+>>>>> +ACLOCAL_PATH = $(subst $(space),:,$(strip \
+>>>>> +??? $(ACLOCAL_DIR) \
+>>>>> +??? $(ACLOCAL_HOST_DIR) \
+>>>>> +??? $(if $(filter 
+>>>>> host-autoconf-archive,$($(PKG)_FINAL_ALL_DEPENDENCIES)),\
+>>>>> +??????? $(HOST_DIR)/share/autoconf-archive \
+>>>>> +??? ) \
+>>>>> +))
+>>>> 
+>>>> This makes check-package whine because it is not indented. Sigh...
+>>>> Indenting with a TAB fixes the check-package error, and is still a
+>>>> working fix.
+>>> 
+>>> This makes me wonder why these are installed into 
+>>> share/autoconf-archive
+>>> instead of $(ACLOCAL_HOST_DIR) in the first place. Eg. on my debian 
+>>> system
+>>> all the macros of autoconf-archive are installed to 
+>>> /usr/share/aclocal.
+>> 
+>> Ok, to answer this myself:
+>> ?
+>> https://git.buildroot.net/buildroot/commit/?id=2c490f00c8d8a7d34ed6da9130cef8a5e97cef56
+>> 
+>> 
+>> Still, maybe this has changed over time and there is no such bug 
+>> anymore?
 > 
->> This commit add the same post-image script for each qemu board
->> in order to generate start-qemu.sh in BINARIES_DIR.
->> The start-qemu.sh script can be used by Buildroot user to start
->> Qemu or by a gitlab CI.
->>
->> To find the correct qemu command line in the readme.txt, we use
->> the second post script argument which must contain "$(BR2_DEFCONFIG)"
->>
->>   BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
->>
->> Doing a basename allow to retrieve the name of the defconfig
->> file (ex: qemu_aarch64_virt_defconfig) that should match
->> on on the "tag" previously introduced in the readme.txt.
->>
->> The script start-qemu.sh is able to modify the qemu command
->> line if CI_JOB_NAME defined in the environment. This allow
->> to disable the graphical output and redirect serial I/Os to
->> console.
->>
->> Only sh4/sh4eb needs a special handling by adding
->> "-serial stdio -display none" instead of "-display none".
->>
->> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>  No, such issues in packages are unavoidable. autoconf-macros routinely 
+> breaks
+> "API", which is OK because it's assumed to be vendored into the
+> package source code.
 > 
-> Is it really a good idea to automatically start Qemu at the end of the
-> build of those defconfigs ? While I understand how it makes sense for
-> Gitlab CI, it is not very practical/convenient for normal users.
+>  I believe Debian never uses it when a package is built, so they don't 
+> have that
+> problem.
 
-Qemu is not started automatically at the end of the build.
-The build process only create the script start-qemu.sh that must be called by
-the user (or by the gitlab-ci).
+I see, so actually the package should be fixed, correct? OTOH, it might 
+also be
+useful to support the building of bare packages (eg ones without the 
+autoconf
+macros inside the package). Wouldn't it then make more sense to have 
+some kind of
+variable which additional macros a package needs? and according to that 
+variable,
+the ACLOCAL_PATH is extended? I guess autoconf-archive isn't the only 
+package which
+can provide additional macros.
 
-> 
-> Can't we start the test under Qemu by a separate command from
-> .gitlab-ci.yml instead?
-
-This is what this patch is doing :)
-
-Best regards,
-Romain
-
-> 
-> Thanks,
-> 
-> Thomas
-> 
+-michael
