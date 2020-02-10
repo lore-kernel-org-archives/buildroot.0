@@ -1,9 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 10 Feb 2020 12:26:31 +0100
-Subject: [Buildroot] [PATCHv2 08/12] package/perl-mozilla-ca: new package
+Date: Mon, 10 Feb 2020 12:26:33 +0100
+Subject: [Buildroot] [PATCHv2 10/12] package/perl-path-class: new host
+ package
 In-Reply-To: <20200210112636.8155-1-patrickdepinguin@gmail.com>
 References: <20200210112636.8155-1-patrickdepinguin@gmail.com>
-Message-ID: <20200210112636.8155-9-patrickdepinguin@gmail.com>
+Message-ID: <20200210112636.8155-11-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,90 +13,63 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-This is a dependency for perl-lwp-protocol-https (added in a subsequent
-patch).
+Dependency for perl-crypt-ssleay (added in a subsequent commit)
 
-Added via utils/scancpan, updating license only.
+Added via utils/scancpan, without changes.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
  DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/perl-mozilla-ca/Config.in            |  6 ++++++
- package/perl-mozilla-ca/perl-mozilla-ca.hash |  6 ++++++
- package/perl-mozilla-ca/perl-mozilla-ca.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/perl-mozilla-ca/Config.in
- create mode 100644 package/perl-mozilla-ca/perl-mozilla-ca.hash
- create mode 100644 package/perl-mozilla-ca/perl-mozilla-ca.mk
+ package/perl-path-class/perl-path-class.hash |  6 ++++++
+ package/perl-path-class/perl-path-class.mk   | 15 +++++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/perl-path-class/perl-path-class.hash
+ create mode 100644 package/perl-path-class/perl-path-class.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 54120f8142..75417e5473 100644
+index 647c4f94f1..c8b71ee7c1 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2388,6 +2388,7 @@ F:	package/perl-mojolicious-plugin-authorization/
- F:	package/perl-mojolicious-plugin-cspheader/
- F:	package/perl-mojolicious-plugin-i18n/
- F:	package/perl-mojolicious-plugin-securityheader/
-+F:	package/perl-mozilla-ca/
+@@ -2393,6 +2393,7 @@ F:	package/perl-mozilla-ca/
  F:	package/perl-net-snmp/
  F:	package/perl-net-ssh2/
  F:	package/perl-net-telnet/
-diff --git a/package/Config.in b/package/Config.in
-index 813da4efff..8a61139d3f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -784,6 +784,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mojolicious-plugin-i18n/Config.in"
- 	source "package/perl-mojolicious-plugin-securityheader/Config.in"
- 	source "package/perl-moo/Config.in"
-+	source "package/perl-mozilla-ca/Config.in"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
- 	source "package/perl-net-snmp/Config.in"
-diff --git a/package/perl-mozilla-ca/Config.in b/package/perl-mozilla-ca/Config.in
++F:	package/perl-path-class/
+ F:	package/pigz/
+ F:	package/xenomai/
+ F:	support/scripts/size-stats
+diff --git a/package/perl-path-class/perl-path-class.hash b/package/perl-path-class/perl-path-class.hash
 new file mode 100644
-index 0000000000..733d07e1f9
+index 0000000000..d2741dfca4
 --- /dev/null
-+++ b/package/perl-mozilla-ca/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_MOZILLA_CA
-+	bool "perl-mozilla-ca"
-+	help
-+	  Mozilla's CA cert bundle in PEM format.
-+
-+	  https://metacpan.org/release/Mozilla-CA
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.hash b/package/perl-mozilla-ca/perl-mozilla-ca.hash
-new file mode 100644
-index 0000000000..0d52d192e6
---- /dev/null
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.hash
++++ b/package/perl-path-class/perl-path-class.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    9c93333e1d9d3fad639e9d4082898de1 Mozilla-CA-20180117.tar.gz
-+sha256 f2cc9fbe119f756313f321e0d9f1fac0859f8f154ac9d75b1a264c1afdf4e406 Mozilla-CA-20180117.tar.gz
++md5    13e6db714f6d5a0e62ca1c4a7fc4d0f3 Path-Class-0.37.tar.gz
++sha256 654781948602386f2cb2e4473a739f17dc6953d92aabc2498a4ca2561bc248ce Path-Class-0.37.tar.gz
 +
 +# computed by scancpan
-+sha256 95cd63dae5c2bf6e7cf33435981614a36c85ef01fc7a02464e05e58a5355398e README
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.mk b/package/perl-mozilla-ca/perl-mozilla-ca.mk
++sha256 636b5c82eabfe3d4cd86126db9502fd537d1442ad2c88c93dbe221e62b5f1710 LICENSE
+diff --git a/package/perl-path-class/perl-path-class.mk b/package/perl-path-class/perl-path-class.mk
 new file mode 100644
-index 0000000000..9fca66d000
+index 0000000000..185b7f6391
 --- /dev/null
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.mk
-@@ -0,0 +1,14 @@
++++ b/package/perl-path-class/perl-path-class.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# perl-mozilla-ca
++# perl-path-class
 +#
 +################################################################################
 +
-+PERL_MOZILLA_CA_VERSION = 20180117
-+PERL_MOZILLA_CA_SOURCE = Mozilla-CA-$(PERL_MOZILLA_CA_VERSION).tar.gz
-+PERL_MOZILLA_CA_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AB/ABH
-+PERL_MOZILLA_CA_LICENSE = MPL-2.0
-+PERL_MOZILLA_CA_LICENSE_FILES = README
-+PERL_MOZILLA_CA_DISTNAME = Mozilla-CA
++PERL_PATH_CLASS_VERSION = 0.37
++PERL_PATH_CLASS_SOURCE = Path-Class-$(PERL_PATH_CLASS_VERSION).tar.gz
++PERL_PATH_CLASS_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KW/KWILLIAMS
++HOST_PERL_PATH_CLASS_DEPENDENCIES = host-perl-module-build
++PERL_PATH_CLASS_LICENSE = Artistic or GPL-1.0+
++PERL_PATH_CLASS_LICENSE_FILES = LICENSE
++PERL_PATH_CLASS_DISTNAME = Path-Class
 +
-+$(eval $(perl-package))
++$(eval $(host-perl-package))
 -- 
 2.24.1
