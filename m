@@ -1,107 +1,111 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 10 Feb 2020 12:10:43 +0100
-Subject: [Buildroot] [PATCH 05/12] package/perl-mojolicious-plugin-i18n:
- new package
-In-Reply-To: <20200210104706.19186-6-patrickdepinguin@gmail.com>
-References: <20200210104706.19186-1-patrickdepinguin@gmail.com>
- <20200210104706.19186-6-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LV27Zj4y=wUSePP1g25w3XxZkBUDvZuY8ZQQAYW87g+Vg@mail.gmail.com>
+Date: Mon, 10 Feb 2020 12:26:23 +0100
+Subject: [Buildroot] [PATCHv2 00/12] More perl packages + chartjs
+Message-ID: <20200210112636.8155-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El lun., 10 feb. 2020 a las 11:47, Thomas De Schampheleire
-(<patrickdepinguin@gmail.com>) escribi?:
->
-> From: Joeri Barbarien <joeri.barbarien@nokia.com>
->
-> Added via utils/scancpan, without changes.
->
-> Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  DEVELOPERS                                         |  1 +
->  package/Config.in                                  |  1 +
->  package/perl-mojolicious-plugin-i18n/Config.in     |  7 +++++++
->  .../perl-mojolicious-plugin-i18n.hash              |  3 +++
->  .../perl-mojolicious-plugin-i18n.mk                | 14 ++++++++++++++
->  5 files changed, 26 insertions(+)
->  create mode 100644 package/perl-mojolicious-plugin-i18n/Config.in
->  create mode 100644 package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
->  create mode 100644 package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index c7b98fb349..dd6199bf6d 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2385,6 +2385,7 @@ F:        package/perl-mime-base64-urlsafe/
->  F:     package/perl-mojolicious-plugin-authentication/
->  F:     package/perl-mojolicious-plugin-authorization/
->  F:     package/perl-mojolicious-plugin-cspheader/
-> +F:     package/perl-mojolicious-plugin-i18n/
->  F:     package/perl-net-snmp/
->  F:     package/perl-net-ssh2/
->  F:     package/perl-net-telnet/
-> diff --git a/package/Config.in b/package/Config.in
-> index c85f0676cf..3a664b2521 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -781,6 +781,7 @@ menu "Perl libraries/modules"
->         source "package/perl-mojolicious-plugin-authentication/Config.in"
->         source "package/perl-mojolicious-plugin-authorization/Config.in"
->         source "package/perl-mojolicious-plugin-cspheader/Config.in"
-> +       source "package/perl-mojolicious-plugin-i18n/Config.in"
->         source "package/perl-moo/Config.in"
->         source "package/perl-net-dns/Config.in"
->         source "package/perl-net-http/Config.in"
-> diff --git a/package/perl-mojolicious-plugin-i18n/Config.in b/package/perl-mojolicious-plugin-i18n/Config.in
-> new file mode 100644
-> index 0000000000..cbe11451c5
-> --- /dev/null
-> +++ b/package/perl-mojolicious-plugin-i18n/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_I18N
-> +       bool "perl-mojolicious-plugin-i18n"
-> +       select BR2_PACKAGE_PERL_MOJOLICIOUS # runtime
-> +       help
-> +         Internationalization Plugin for Mojolicious.
-> +
-> +         https://metacpan.org/release/Mojolicious-Plugin-I18N
-> diff --git a/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
-> new file mode 100644
-> index 0000000000..81253cdec4
-> --- /dev/null
-> +++ b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
-> @@ -0,0 +1,3 @@
-> +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    4002f7a7da4c90973ad6eedfb0fcfa16 Mojolicious-Plugin-I18N-1.6.tar.gz
-> +sha256 32fb5ef8037d954b7ecebef5c1b2b24b420abd829702312f4ad42794f52b514d Mojolicious-Plugin-I18N-1.6.tar.gz
-> diff --git a/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
-> new file mode 100644
-> index 0000000000..7de8db8c52
-> --- /dev/null
-> +++ b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# perl-mojolicious-plugin-i18n
-> +#
-> +################################################################################
-> +
-> +PERL_MOJOLICIOUS_PLUGIN_I18N_VERSION = 1.6
-> +PERL_MOJOLICIOUS_PLUGIN_I18N_SOURCE = Mojolicious-Plugin-I18N-$(PERL_MOJOLICIOUS_PLUGIN_I18N_VERSION).tar.gz
-> +PERL_MOJOLICIOUS_PLUGIN_I18N_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHARIFULN
-> +PERL_MOJOLICIOUS_PLUGIN_I18N_DEPENDENCIES = host-perl-module-build
-> +PERL_MOJOLICIOUS_PLUGIN_I18N_LICENSE = Artistic or GPL-1.0+
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-It seems I did not correctly add the LICENSE_FILES here. Moreover, the
-license declared in the META.{json,yml} files ('perl-5') versus the
-one described in README.pod (Artistic-2.0) do not correspond, as the
-former would also allow GPL-1.0. Will reduce to Artistic-2.0 instead.
-
-Will resend a v2.
+v2: update license and license-files for perl-mojolicious-plugin-i18n.
 
 Best regards,
 Thomas
+
+
+Joeri Barbarien (7):
+  package/perl-locale-maketext-lexicon: new package
+  package/perl-i18n: new package
+  package/perl-mojolicious-plugin-authorization: new package
+  package/perl-mojolicious-plugin-cspheader: new package
+  package/perl-mojolicious-plugin-i18n: new package
+  package/perl-mojolicious-plugin-securityheader: new package
+  package/chartjs: new package
+
+Thomas De Schampheleire (5):
+  package/perl-mozilla-ca: new package
+  package/perl-lwp-protocol-https: new package
+  package/perl-path-class: new host package
+  package/perl-crypt-ssleay: new package
+  support/testing: add missing test file for perl-html-parser
+
+ DEVELOPERS                                    | 11 +++++
+ package/Config.in                             | 10 +++++
+ package/chartjs/Config.in                     |  7 +++
+ package/chartjs/chartjs.hash                  |  3 ++
+ package/chartjs/chartjs.mk                    | 21 +++++++++
+ package/perl-crypt-ssleay/Config.in           | 12 ++++++
+ .../perl-crypt-ssleay/perl-crypt-ssleay.hash  |  6 +++
+ .../perl-crypt-ssleay/perl-crypt-ssleay.mk    | 18 ++++++++
+ package/perl-i18n/Config.in                   |  7 +++
+ package/perl-i18n/perl-i18n.hash              |  6 +++
+ package/perl-i18n/perl-i18n.mk                | 14 ++++++
+ .../perl-locale-maketext-lexicon/Config.in    |  6 +++
+ .../perl-locale-maketext-lexicon.hash         |  6 +++
+ .../perl-locale-maketext-lexicon.mk           | 14 ++++++
+ package/perl-lwp-protocol-https/Config.in     | 14 ++++++
+ .../perl-lwp-protocol-https.hash              |  6 +++
+ .../perl-lwp-protocol-https.mk                | 14 ++++++
+ .../Config.in                                 |  7 +++
+ ...perl-mojolicious-plugin-authorization.hash |  6 +++
+ .../perl-mojolicious-plugin-authorization.mk  | 15 +++++++
+ .../Config.in                                 |  8 ++++
+ .../perl-mojolicious-plugin-cspheader.hash    |  6 +++
+ .../perl-mojolicious-plugin-cspheader.mk      | 14 ++++++
+ .../perl-mojolicious-plugin-i18n/Config.in    |  7 +++
+ .../perl-mojolicious-plugin-i18n.hash         |  6 +++
+ .../perl-mojolicious-plugin-i18n.mk           | 15 +++++++
+ .../Config.in                                 |  7 +++
+ ...erl-mojolicious-plugin-securityheader.hash |  6 +++
+ .../perl-mojolicious-plugin-securityheader.mk | 14 ++++++
+ package/perl-mozilla-ca/Config.in             |  6 +++
+ package/perl-mozilla-ca/perl-mozilla-ca.hash  |  6 +++
+ package/perl-mozilla-ca/perl-mozilla-ca.mk    | 14 ++++++
+ package/perl-path-class/perl-path-class.hash  |  6 +++
+ package/perl-path-class/perl-path-class.mk    | 15 +++++++
+ package/perl-try-tiny/perl-try-tiny.mk        |  1 +
+ .../tests/package/test_perl_crypt_ssleay.py   | 43 +++++++++++++++++++
+ .../tests/package/test_perl_html_parser.py    | 20 +++++++++
+ .../package/test_perl_lwp_protocol_https.py   | 42 ++++++++++++++++++
+ 38 files changed, 439 insertions(+)
+ create mode 100644 package/chartjs/Config.in
+ create mode 100644 package/chartjs/chartjs.hash
+ create mode 100644 package/chartjs/chartjs.mk
+ create mode 100644 package/perl-crypt-ssleay/Config.in
+ create mode 100644 package/perl-crypt-ssleay/perl-crypt-ssleay.hash
+ create mode 100644 package/perl-crypt-ssleay/perl-crypt-ssleay.mk
+ create mode 100644 package/perl-i18n/Config.in
+ create mode 100644 package/perl-i18n/perl-i18n.hash
+ create mode 100644 package/perl-i18n/perl-i18n.mk
+ create mode 100644 package/perl-locale-maketext-lexicon/Config.in
+ create mode 100644 package/perl-locale-maketext-lexicon/perl-locale-maketext-lexicon.hash
+ create mode 100644 package/perl-locale-maketext-lexicon/perl-locale-maketext-lexicon.mk
+ create mode 100644 package/perl-lwp-protocol-https/Config.in
+ create mode 100644 package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash
+ create mode 100644 package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
+ create mode 100644 package/perl-mojolicious-plugin-authorization/Config.in
+ create mode 100644 package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
+ create mode 100644 package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
+ create mode 100644 package/perl-mojolicious-plugin-cspheader/Config.in
+ create mode 100644 package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.hash
+ create mode 100644 package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.mk
+ create mode 100644 package/perl-mojolicious-plugin-i18n/Config.in
+ create mode 100644 package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
+ create mode 100644 package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
+ create mode 100644 package/perl-mojolicious-plugin-securityheader/Config.in
+ create mode 100644 package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash
+ create mode 100644 package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk
+ create mode 100644 package/perl-mozilla-ca/Config.in
+ create mode 100644 package/perl-mozilla-ca/perl-mozilla-ca.hash
+ create mode 100644 package/perl-mozilla-ca/perl-mozilla-ca.mk
+ create mode 100644 package/perl-path-class/perl-path-class.hash
+ create mode 100644 package/perl-path-class/perl-path-class.mk
+ create mode 100644 support/testing/tests/package/test_perl_crypt_ssleay.py
+ create mode 100644 support/testing/tests/package/test_perl_html_parser.py
+ create mode 100644 support/testing/tests/package/test_perl_lwp_protocol_https.py
+
+-- 
+2.24.1
