@@ -1,46 +1,50 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 10 Feb 2020 19:47:33 +0100
-Subject: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.4.3
-In-Reply-To: <20200210183213.GA22114@dell5510>
-References: <20200210120353.49600-1-giulio.benetti@benettiengineering.com>
- <20200210183213.GA22114@dell5510>
-Message-ID: <275ee76b-cd07-26fe-c0d7-2bf7cd831815@benettiengineering.com>
+From: Michael Walle <michael@walle.cc>
+Date: Mon, 10 Feb 2020 20:11:30 +0100
+Subject: [Buildroot] [RFC PATCH] package/sdbusplus: fix the build
+Message-ID: <20200210191131.2520-1-michael@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Petr,
+Commit d255b67972b4b7f27572581fe0c8c8aa03d850c8 fixed the handling of
+the a package local m4/ directory which might be missing. But this only
+works if it is the very first argument. But for this package this is not
+possible because we already occupy this with the extra include directory
+for autoconf-archive. Bring back the hook to create the m4/ directory to
+fix this.
 
-On 2/10/20 7:32 PM, Petr Vorel wrote:
-> Hi Giulio,
-> 
->> Bump to version 2.4.3 of nfs-utils. All patches have been upstreamed, so
->> drop them all. It must be used rpcgen build by host-nfs-utils, to do
->> this let's pass its path to --with-rpcgen= instead of 'internal'.
-> 
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
 
-Thanks for reviewing.
+IMHO keeping this hook if the package has an include directory in its
+_AUTORECONF_OPTS variable is the least bad thing to do.
 
-> Thanks for updating it.
-> I've tested it some time ago, but there are a few more upstream changes so going
-> to test it again.
+Unfortunately, I've only been able to test this briefly with the host
+build.
 
-Ok thank you, I've tested with test-pkg -a, better double check since 
-it's a big version jump ;-)
+ package/sdbusplus/sdbusplus.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Best regards
+diff --git a/package/sdbusplus/sdbusplus.mk b/package/sdbusplus/sdbusplus.mk
+index 9d3d1e8cf4..b771576a1d 100644
+--- a/package/sdbusplus/sdbusplus.mk
++++ b/package/sdbusplus/sdbusplus.mk
+@@ -22,5 +22,14 @@ SDBUSPLUS_INSTALL_STAGING = YES
+ SDBUSPLUS_LICENSE = Apache-2.0
+ SDBUSPLUS_LICENSE_FILES = LICENSE
+ 
++# Autoreconf is missing the m4/ directory, which might actually be missing
++# iff it was the first argument, but unfortunately we are overriding the
++# first include directory above. Thus we need that hook here.
++define SDBUSPLUS_CREATE_M4
++       mkdir -p $(@D)/m4
++endef
++SDBUSPLUS_POST_PATCH_HOOKS += SDBUSPLUS_CREATE_M4
++HOST_SDBUSPLUS_POST_PATCH_HOOKS += SDBUSPLUS_CREATE_M4
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> Kind regards,
-> Petr
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+2.20.1
