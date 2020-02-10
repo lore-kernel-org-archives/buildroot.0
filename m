@@ -1,10 +1,9 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 10 Feb 2020 11:46:59 +0100
-Subject: [Buildroot] [PATCH 06/12]
- package/perl-mojolicious-plugin-securityheader: new package
+Date: Mon, 10 Feb 2020 11:47:00 +0100
+Subject: [Buildroot] [PATCH 07/12] package/chartjs: new package
 In-Reply-To: <20200210104706.19186-1-patrickdepinguin@gmail.com>
 References: <20200210104706.19186-1-patrickdepinguin@gmail.com>
-Message-ID: <20200210104706.19186-7-patrickdepinguin@gmail.com>
+Message-ID: <20200210104706.19186-8-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,89 +12,97 @@ To: buildroot@busybox.net
 
 From: Joeri Barbarien <joeri.barbarien@nokia.com>
 
-Added via utils/scancpan, without changes.
+Note: even though the Chart.js developers make specific tarballs on GitHub
+(i.e. not simply 'source code' tarballs), they cannot be used in Buildroot
+because their names do not encode a version number, e.g. 'Chart.js.zip'.
+This means that on upgrades, the same tarball name would have different
+contents and thus a different hash.
 
 Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../Config.in                                      |  7 +++++++
- .../perl-mojolicious-plugin-securityheader.hash    |  6 ++++++
- .../perl-mojolicious-plugin-securityheader.mk      | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/perl-mojolicious-plugin-securityheader/Config.in
- create mode 100644 package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash
- create mode 100644 package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/chartjs/Config.in    |  7 +++++++
+ package/chartjs/chartjs.hash |  3 +++
+ package/chartjs/chartjs.mk   | 21 +++++++++++++++++++++
+ 5 files changed, 33 insertions(+)
+ create mode 100644 package/chartjs/Config.in
+ create mode 100644 package/chartjs/chartjs.hash
+ create mode 100644 package/chartjs/chartjs.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index dd6199bf6d..30bf7c2b18 100644
+index 30bf7c2b18..54120f8142 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2386,6 +2386,7 @@ F:	package/perl-mojolicious-plugin-authentication/
- F:	package/perl-mojolicious-plugin-authorization/
- F:	package/perl-mojolicious-plugin-cspheader/
- F:	package/perl-mojolicious-plugin-i18n/
-+F:	package/perl-mojolicious-plugin-securityheader/
- F:	package/perl-net-snmp/
- F:	package/perl-net-ssh2/
- F:	package/perl-net-telnet/
+@@ -2372,6 +2372,7 @@ F:	package/civetweb/
+ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ F:	docs/manual/
+ F:	package/cereal/
++F:	package/chartjs/
+ F:	package/libtelnet/
+ F:	package/opkg-utils/
+ F:	package/perl-convert-asn1/
 diff --git a/package/Config.in b/package/Config.in
-index 3a664b2521..6c55a7471d 100644
+index 6c55a7471d..813da4efff 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -782,6 +782,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mojolicious-plugin-authorization/Config.in"
- 	source "package/perl-mojolicious-plugin-cspheader/Config.in"
- 	source "package/perl-mojolicious-plugin-i18n/Config.in"
-+	source "package/perl-mojolicious-plugin-securityheader/Config.in"
- 	source "package/perl-moo/Config.in"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
-diff --git a/package/perl-mojolicious-plugin-securityheader/Config.in b/package/perl-mojolicious-plugin-securityheader/Config.in
+@@ -1513,6 +1513,7 @@ menu "External AngularJS plugins"
+ endmenu
+ endif
+ 	source "package/bootstrap/Config.in"
++	source "package/chartjs/Config.in"
+ 	source "package/duktape/Config.in"
+ 	source "package/explorercanvas/Config.in"
+ 	source "package/flot/Config.in"
+diff --git a/package/chartjs/Config.in b/package/chartjs/Config.in
 new file mode 100644
-index 0000000000..35e8e122ab
+index 0000000000..73cc9b7750
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-securityheader/Config.in
++++ b/package/chartjs/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER
-+	bool "perl-mojolicious-plugin-securityheader"
-+	select BR2_PACKAGE_PERL_MOJOLICIOUS # runtime
++config BR2_PACKAGE_CHARTJS
++	bool "chartjs"
 +	help
-+	  Mojolicious Plugin.
++	  Chart.js, a simple yet flexible JavaScript charting library
++	  for designers & developers
 +
-+	  http://github.com/reneeb/Mojolicious-Plugin-SecurityHeader
-diff --git a/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash
++	  https://www.chartjs.org/
+diff --git a/package/chartjs/chartjs.hash b/package/chartjs/chartjs.hash
 new file mode 100644
-index 0000000000..b8a20bdd60
+index 0000000000..d2426ea614
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    38cf59258547ac866577db2d43632f30 Mojolicious-Plugin-SecurityHeader-0.07.tar.gz
-+sha256 940474eaf7a415e5117b004387862473612e079a413590db1eb9c85d17a6648f Mojolicious-Plugin-SecurityHeader-0.07.tar.gz
-+
-+# computed by scancpan
-+sha256 0c38e4629cc9eee869217d62ad765e581e54958596672046a62dfa4cfd87bb09 LICENSE
-diff --git a/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk
++++ b/package/chartjs/chartjs.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256	8079d8fd39131fcfaec33f1c7799412bcf8e051e25b10bd6e37fc16159417aa1  chartjs-v2.9.3.tar.gz
++sha256	7b43caae91f31b18dc81fae6e0f7aa1acbecaa6d84e3249905cbe15308307d67  LICENSE.md
+diff --git a/package/chartjs/chartjs.mk b/package/chartjs/chartjs.mk
 new file mode 100644
-index 0000000000..1f287f6f6a
+index 0000000000..171e0a4a7c
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk
-@@ -0,0 +1,14 @@
++++ b/package/chartjs/chartjs.mk
+@@ -0,0 +1,21 @@
 +################################################################################
 +#
-+# perl-mojolicious-plugin-securityheader
++# chartjs
 +#
 +################################################################################
 +
-+PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_VERSION = 0.07
-+PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_SOURCE = Mojolicious-Plugin-SecurityHeader-$(PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_VERSION).tar.gz
-+PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RE/RENEEB
-+PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_LICENSE = Artistic-2.0
-+PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_LICENSE_FILES = LICENSE
-+PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_DISTNAME = Mojolicious-Plugin-SecurityHeader
++CHARTJS_VERSION = v2.9.3
++CHARTJS_SITE = $(call github,chartjs,Chart.js,$(CHARTJS_VERSION))
++CHARTJS_LICENSE = MIT
++CHARTJS_LICENSE_FILES = LICENSE.md
 +
-+$(eval $(perl-package))
++define CHARTJS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/dist/Chart.min.css \
++		$(TARGET_DIR)/var/www/chartjs/css/Chart.css
++	$(INSTALL) -m 0644 -D $(@D)/dist/Chart.min.js \
++		$(TARGET_DIR)/var/www/chartjs/js/Chart.js
++	$(INSTALL) -m 0644 -D $(@D)/dist/Chart.bundle.min.js \
++		$(TARGET_DIR)/var/www/chartjs/js/Chart.bundle.js
++endef
++
++$(eval $(generic-package))
 -- 
 2.24.1
