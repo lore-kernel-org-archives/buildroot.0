@@ -1,8 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 10 Feb 2020 10:11:48 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libftdi1: fix unresolved symbol
- issue
-Message-ID: <20200210091149.8584-1-yegorslists@googlemail.com>
+Date: Mon, 10 Feb 2020 10:11:49 +0100
+Subject: [Buildroot] [PATCH 2/2] support/testing: add libftdi1 test case
+In-Reply-To: <20200210091149.8584-1-yegorslists@googlemail.com>
+References: <20200210091149.8584-1-yegorslists@googlemail.com>
+Message-ID: <20200210091149.8584-2-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,51 +12,78 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-GCC later than 5.x produce _fdti1.so file with an undefined
-symbol str2charp_size due to C99 inline semantics change. So
-remove this keyword.
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- ...g-python-fix-unresolved-symbol-issue.patch | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/libftdi1/0005-swig-python-fix-unresolved-symbol-issue.patch
+ .gitlab-ci.yml                                |  2 ++
+ DEVELOPERS                                    |  1 +
+ .../testing/tests/package/sample_libftdi1.py  |  1 +
+ .../testing/tests/package/test_libftdi1.py    | 25 +++++++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_libftdi1.py
+ create mode 100644 support/testing/tests/package/test_libftdi1.py
 
-diff --git a/package/libftdi1/0005-swig-python-fix-unresolved-symbol-issue.patch b/package/libftdi1/0005-swig-python-fix-unresolved-symbol-issue.patch
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index a6436a8417..b4dad3173e 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -381,6 +381,8 @@ tests.package.test_docker_compose.TestDockerCompose: { extends: .runtime_test }
+ tests.package.test_dropbear.TestDropbear: { extends: .runtime_test }
+ tests.package.test_glxinfo.TestGlxinfo: { extends: .runtime_test }
+ tests.package.test_ipython.TestIPythonPy3: { extends: .runtime_test }
++tests.package.test_libftdi1.TestPythonPy2Libftdi1: { extends: .runtime_test }
++tests.package.test_libftdi1.TestPythonPy3Libftdi1: { extends: .runtime_test }
+ tests.package.test_lpeg.TestLuaLPeg: { extends: .runtime_test }
+ tests.package.test_lpeg.TestLuajitLPeg: { extends: .runtime_test }
+ tests.package.test_lsqlite3.TestLuaLsqlite3: { extends: .runtime_test }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cb13035bc4..6623b7c5c1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2627,6 +2627,7 @@ F:	package/ti-utils/
+ F:	package/x11r7/xapp_xconsole/
+ F:	package/x11r7/xapp_xinput-calibrator/
+ F:	package/zlog/
++F:	support/testing/tests/package/test_libftdi1.py
+ F:	support/testing/tests/package/test_python_can.py
+ F:	utils/scanpypi
+ 
+diff --git a/support/testing/tests/package/sample_libftdi1.py b/support/testing/tests/package/sample_libftdi1.py
 new file mode 100644
-index 0000000000..bffaf12f91
+index 0000000000..2da6124b40
 --- /dev/null
-+++ b/package/libftdi1/0005-swig-python-fix-unresolved-symbol-issue.patch
-@@ -0,0 +1,30 @@
-+From e12e592e982fe71b2761da0de7b19e93f67ed22c Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Tue, 6 Aug 2019 13:42:06 +0200
-+Subject: [PATCH] swig: python: fix unresolved symbol issue
++++ b/support/testing/tests/package/sample_libftdi1.py
+@@ -0,0 +1 @@
++import ftdi1 # noqa
+diff --git a/support/testing/tests/package/test_libftdi1.py b/support/testing/tests/package/test_libftdi1.py
+new file mode 100644
+index 0000000000..78c928484c
+--- /dev/null
++++ b/support/testing/tests/package/test_libftdi1.py
+@@ -0,0 +1,25 @@
++from tests.package.test_python import TestPythonPackageBase
 +
-+GCC later than 5.x produce _fdti1.so file with an undefined
-+symbol str2charp_size due to C99 inline semantics change. So
-+remove this keyword.
 +
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ python/ftdi1.i | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++class TestPythonPy2Libftdi1(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON=y
++        BR2_PACKAGE_LIBFTDI1=y
++        BR2_PACKAGE_LIBFTDI1_PYTHON_BINDINGS=y
++        """
++    sample_scripts = ["tests/package/sample_libftdi1.py"]
++    timeout = 40
 +
-+diff --git a/python/ftdi1.i b/python/ftdi1.i
-+index 93793f8..0d150cb 100644
-+--- a/python/ftdi1.i
-++++ b/python/ftdi1.i
-+@@ -19,7 +19,7 @@ inline PyObject* charp2str(const char *v_, long len)
-+ #endif
-+ }
-+ 
-+-inline char * str2charp_size(PyObject* pyObj, int * size)
-++char * str2charp_size(PyObject* pyObj, int * size)
-+ {
-+   char * v_ = 0;
-+ #if PY_MAJOR_VERSION >= 3
-+-- 
-+2.17.0
 +
++class TestPythonPy3Libftdi1(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_LIBFTDI1=y
++        BR2_PACKAGE_LIBFTDI1_PYTHON_BINDINGS=y
++        """
++    sample_scripts = ["tests/package/sample_libftdi1.py"]
++    timeout = 40
 -- 
 2.17.0
