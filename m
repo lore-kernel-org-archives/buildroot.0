@@ -1,156 +1,68 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  9 Feb 2020 23:45:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php-*: fix autoconf variables
-Message-ID: <20200209224516.245288-1-fontaine.fabrice@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sun, 9 Feb 2020 21:00:31 -0300
+Subject: [Buildroot] [git commit] package/polkit: bump to version 0.116
+In-Reply-To: <20191208145140.33E3E8899E@busybox.osuosl.org>
+References: <20191208145140.33E3E8899E@busybox.osuosl.org>
+Message-ID: <CAJ4jsacmmUF8eKM9Xs+5vVseg8VrHw-K1APU-O=6DGdyvDJvTg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build of php-* packages are broken since commit
-3292f3de499717360cf18d7fecd79ac096216ca8 because
-$(HOST_DIR)/bin/auto{conf,header} have been replaced by
-$(HOST_DIR)/bin/auto{conf,header} -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+On Sun, Dec 8, 2019 at 12:00 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> commit: https://git.buildroot.net/buildroot/commit/?id=ce2a5eff7890815afeb26105c7760b6f8d2986e0
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Other changes:
+>   - Add spidermonkey as a dependency.
+>   - Add 0001-make-netgroup-support-optional.patch to allow building on musl.
+>   - Add a runtime dependency on dbus.
+>   - Add --disable-libelongind.
+>   - Add --disable-libsystemd-login.
+>   - Update dependencies for systemd pam support.
+>   - Update dependencies for udisks.
+>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-So revert this change (which should have been only refactoring) for
-those packages
+Argh, the mozjs (spidermonkey) dependency increases the size of the
+target system by 45 MiB!
 
-Fixes:
- - http://autobuild.buildroot.org/results/0d5f4a792652e302b8c00c1e0f99966cc930fbac
- - http://autobuild.buildroot.org/results/91a559183db212803a90cb399a1cb505b14818d9
+2020-02-09T20:12:08 Superblock backups stored on blocks:
+2020-02-09T20:12:08 8193, 24577, 40961, 57345
+2020-02-09T20:12:08
+2020-02-09T20:12:08 Allocating group tables: done
+2020-02-09T20:12:08 Writing inode tables: done
+2020-02-09T20:12:08 Copying files into the device: __populate_fs:
+Could not allocate block in ext2 filesystem while writing file
+"libmozjs-60.so"
+2020-02-09T20:12:08 mkfs.ext2: Could not allocate block in ext2
+filesystem while populating file system
+2020-02-09T20:12:08 *** Maybe you need to increase the filesystem size
+(BR2_TARGET_ROOTFS_EXT2_SIZE)
+2020-02-09T20:12:08 make[1]: *** [fs/ext2/ext2.mk:64:
+/work/qemu_x86_64_glibc_eudev/images/rootfs.ext2] Error 1
+2020-02-09T20:12:08 make: *** [Makefile:23: _all] Error 2
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/php-amqp/php-amqp.mk           | 4 ++--
- package/php-geoip/php-geoip.mk         | 4 ++--
- package/php-gnupg/php-gnupg.mk         | 4 ++--
- package/php-imagick/php-imagick.mk     | 4 ++--
- package/php-memcached/php-memcached.mk | 4 ++--
- package/php-ssh2/php-ssh2.mk           | 4 ++--
- package/php-yaml/php-yaml.mk           | 4 ++--
- package/php-zmq/php-zmq.mk             | 4 ++--
- 8 files changed, 16 insertions(+), 16 deletions(-)
+$ grep -F BR2_TARGET_ROOTFS_EXT2_SIZE .config
+BR2_TARGET_ROOTFS_EXT2_SIZE="60M"
 
-diff --git a/package/php-amqp/php-amqp.mk b/package/php-amqp/php-amqp.mk
-index 8f3ba1f9f4..c808ecdbd6 100644
---- a/package/php-amqp/php-amqp.mk
-+++ b/package/php-amqp/php-amqp.mk
-@@ -16,8 +16,8 @@ PHP_AMQP_LICENSE_FILES = LICENSE
- 
- define PHP_AMQP_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(AUTOCONF) \
--		PHP_AUTOHEADER=$(AUTOHEADER) \
-+		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-geoip/php-geoip.mk b/package/php-geoip/php-geoip.mk
-index 8bff564e2d..82ecba5816 100644
---- a/package/php-geoip/php-geoip.mk
-+++ b/package/php-geoip/php-geoip.mk
-@@ -16,8 +16,8 @@ PHP_GEOIP_LICENSE_FILES = geoip.c
- 
- define PHP_GEOIP_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(AUTOCONF) \
--		PHP_AUTOHEADER=$(AUTOHEADER) \
-+		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
-index 8137da4978..ae0a781154 100644
---- a/package/php-gnupg/php-gnupg.mk
-+++ b/package/php-gnupg/php-gnupg.mk
-@@ -16,8 +16,8 @@ PHP_GNUPG_LICENSE_FILES = LICENSE
- 
- define PHP_GNUPG_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(AUTOCONF) \
--		PHP_AUTOHEADER=$(AUTOHEADER) \
-+		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
-index a5541b0035..ca0cbc7492 100644
---- a/package/php-imagick/php-imagick.mk
-+++ b/package/php-imagick/php-imagick.mk
-@@ -16,8 +16,8 @@ PHP_IMAGICK_LICENSE_FILES = LICENSE
- 
- define PHP_IMAGICK_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(AUTOCONF) \
--		PHP_AUTOHEADER=$(AUTOHEADER) \
-+		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
-index 67ccc6747a..4607d099f3 100644
---- a/package/php-memcached/php-memcached.mk
-+++ b/package/php-memcached/php-memcached.mk
-@@ -18,8 +18,8 @@ PHP_MEMCACHED_LICENSE_FILES = LICENSE fastlz/LICENSE g_fmt.h
- 
- define PHP_MEMCACHED_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(AUTOCONF) \
--		PHP_AUTOHEADER=$(AUTOHEADER) \
-+		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
-index 98453acbcf..c9c13010dd 100644
---- a/package/php-ssh2/php-ssh2.mk
-+++ b/package/php-ssh2/php-ssh2.mk
-@@ -16,8 +16,8 @@ PHP_SSH2_LICENSE_FILES = LICENSE
- 
- define PHP_SSH2_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(AUTOCONF) \
--		PHP_AUTOHEADER=$(AUTOHEADER) \
-+		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-yaml/php-yaml.mk b/package/php-yaml/php-yaml.mk
-index 40f7385c6a..e23d897978 100644
---- a/package/php-yaml/php-yaml.mk
-+++ b/package/php-yaml/php-yaml.mk
-@@ -16,8 +16,8 @@ PHP_YAML_LICENSE_FILES = LICENSE
- 
- define PHP_YAML_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(AUTOCONF) \
--		PHP_AUTOHEADER=$(AUTOHEADER) \
-+		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
-diff --git a/package/php-zmq/php-zmq.mk b/package/php-zmq/php-zmq.mk
-index 892c42130f..fed71955b6 100644
---- a/package/php-zmq/php-zmq.mk
-+++ b/package/php-zmq/php-zmq.mk
-@@ -15,8 +15,8 @@ PHP_ZMQ_LICENSE_FILES = LICENSE
- 
- define PHP_ZMQ_PHPIZE
- 	(cd $(@D); \
--		PHP_AUTOCONF=$(AUTOCONF) \
--		PHP_AUTOHEADER=$(AUTOHEADER) \
-+		PHP_AUTOCONF=$(HOST_DIR)/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/bin/autoheader \
- 		$(STAGING_DIR)/usr/bin/phpize)
- endef
- 
+$ file build/buildroot-fs/ext2/target/usr/{bin/js60,lib/libmozjs-60.so}
+build/buildroot-fs/ext2/target/usr/bin/js60:           ELF 64-bit LSB
+executable, x86-64, version 1 (GNU/Linux), dynamically linked,
+interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 4.14.0,
+BuildID[sha1]=93295e8e66ae075577bc76110d7a81fc3f9b6359, stripped
+build/buildroot-fs/ext2/target/usr/lib/libmozjs-60.so: ELF 64-bit LSB
+shared object, x86-64, version 1 (GNU/Linux), dynamically linked,
+BuildID[sha1]=2cda65c78b09727e5ee4ac481f8847ca07953cc9, stripped
+
+$ du -hc build/buildroot-fs/ext2/target/usr/{bin/js60,lib/libmozjs-60.so}
+23M    build/buildroot-fs/ext2/target/usr/bin/js60
+23M    build/buildroot-fs/ext2/target/usr/lib/libmozjs-60.so
+45M    total
+
 -- 
-2.24.1
+Carlos Santos <unixmania@gmail.com>
