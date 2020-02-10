@@ -1,9 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 10 Feb 2020 11:47:01 +0100
-Subject: [Buildroot] [PATCH 08/12] package/perl-mozilla-ca: new package
+Date: Mon, 10 Feb 2020 11:47:02 +0100
+Subject: [Buildroot] [PATCH 09/12] package/perl-lwp-protocol-https: new
+ package
 In-Reply-To: <20200210104706.19186-1-patrickdepinguin@gmail.com>
 References: <20200210104706.19186-1-patrickdepinguin@gmail.com>
-Message-ID: <20200210104706.19186-9-patrickdepinguin@gmail.com>
+Message-ID: <20200210104706.19186-10-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,90 +13,147 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-This is a dependency for perl-lwp-protocol-https (added in a subsequent
-patch).
+Dependency for perl-crypt-ssleay (added in subsequent commit).
 
-Added via utils/scancpan, updating license only.
+Added via utils/scancpan, without changes.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/perl-mozilla-ca/Config.in            |  6 ++++++
- package/perl-mozilla-ca/perl-mozilla-ca.hash |  6 ++++++
- package/perl-mozilla-ca/perl-mozilla-ca.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/perl-mozilla-ca/Config.in
- create mode 100644 package/perl-mozilla-ca/perl-mozilla-ca.hash
- create mode 100644 package/perl-mozilla-ca/perl-mozilla-ca.mk
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/perl-lwp-protocol-https/Config.in     | 14 +++++++
+ .../perl-lwp-protocol-https.hash              |  6 +++
+ .../perl-lwp-protocol-https.mk                | 14 +++++++
+ .../package/test_perl_lwp_protocol_https.py   | 42 +++++++++++++++++++
+ 6 files changed, 78 insertions(+)
+ create mode 100644 package/perl-lwp-protocol-https/Config.in
+ create mode 100644 package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash
+ create mode 100644 package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
+ create mode 100644 support/testing/tests/package/test_perl_lwp_protocol_https.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 54120f8142..75417e5473 100644
+index 75417e5473..647c4f94f1 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2388,6 +2388,7 @@ F:	package/perl-mojolicious-plugin-authorization/
- F:	package/perl-mojolicious-plugin-cspheader/
- F:	package/perl-mojolicious-plugin-i18n/
- F:	package/perl-mojolicious-plugin-securityheader/
-+F:	package/perl-mozilla-ca/
- F:	package/perl-net-snmp/
- F:	package/perl-net-ssh2/
- F:	package/perl-net-telnet/
+@@ -2381,6 +2381,7 @@ F:	package/perl-crypt-cbc/
+ F:	package/perl-crypt-openssl-aes/
+ F:	package/perl-i18n/
+ F:	package/perl-locale-maketext-lexicon/
++F:	package/perl-lwp-protocol-https/
+ F:	package/perl-math-prime-util/
+ F:	package/perl-mime-base64-urlsafe/
+ F:	package/perl-mojolicious-plugin-authentication/
 diff --git a/package/Config.in b/package/Config.in
-index 813da4efff..8a61139d3f 100644
+index 8a61139d3f..05dd1e452f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -784,6 +784,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mojolicious-plugin-i18n/Config.in"
- 	source "package/perl-mojolicious-plugin-securityheader/Config.in"
- 	source "package/perl-moo/Config.in"
-+	source "package/perl-mozilla-ca/Config.in"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
- 	source "package/perl-net-snmp/Config.in"
-diff --git a/package/perl-mozilla-ca/Config.in b/package/perl-mozilla-ca/Config.in
+@@ -770,6 +770,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-libwww-perl/Config.in"
+ 	source "package/perl-locale-maketext-lexicon/Config.in"
+ 	source "package/perl-lwp-mediatypes/Config.in"
++	source "package/perl-lwp-protocol-https/Config.in"
+ 	source "package/perl-mail-dkim/Config.in"
+ 	source "package/perl-mailtools/Config.in"
+ 	source "package/perl-math-prime-util/Config.in"
+diff --git a/package/perl-lwp-protocol-https/Config.in b/package/perl-lwp-protocol-https/Config.in
 new file mode 100644
-index 0000000000..733d07e1f9
+index 0000000000..c4a7b306b3
 --- /dev/null
-+++ b/package/perl-mozilla-ca/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_MOZILLA_CA
-+	bool "perl-mozilla-ca"
++++ b/package/perl-lwp-protocol-https/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_PERL_LWP_PROTOCOL_HTTPS
++	bool "perl-lwp-protocol-https"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_PERL_IO_SOCKET_SSL # runtime
++	select BR2_PACKAGE_PERL_MOZILLA_CA # runtime
++	select BR2_PACKAGE_PERL_NET_HTTP # runtime
++	select BR2_PACKAGE_PERL_LIBWWW_PERL # runtime
 +	help
-+	  Mozilla's CA cert bundle in PEM format.
++	  Provide https support for LWP::UserAgent.
 +
-+	  https://metacpan.org/release/Mozilla-CA
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.hash b/package/perl-mozilla-ca/perl-mozilla-ca.hash
++	  https://metacpan.org/release/LWP-Protocol-https
++
++comment "perl-lwp-protocol-https needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash
 new file mode 100644
-index 0000000000..0d52d192e6
+index 0000000000..899cc22079
 --- /dev/null
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.hash
++++ b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    9c93333e1d9d3fad639e9d4082898de1 Mozilla-CA-20180117.tar.gz
-+sha256 f2cc9fbe119f756313f321e0d9f1fac0859f8f154ac9d75b1a264c1afdf4e406 Mozilla-CA-20180117.tar.gz
++md5    b8943dfb7d187af63c36fc18ab15947d LWP-Protocol-https-6.07.tar.gz
++sha256 522cc946cf84a1776304a5737a54b8822ec9e79b264d0ba0722a70473dbfb9e7 LWP-Protocol-https-6.07.tar.gz
 +
 +# computed by scancpan
-+sha256 95cd63dae5c2bf6e7cf33435981614a36c85ef01fc7a02464e05e58a5355398e README
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.mk b/package/perl-mozilla-ca/perl-mozilla-ca.mk
++sha256 a93c39b0bce2bdff027b58d8a97f5116183b18b23da366fd7e1ec361d4603db2 README
+diff --git a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
 new file mode 100644
-index 0000000000..9fca66d000
+index 0000000000..00b93c74aa
 --- /dev/null
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.mk
++++ b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-mozilla-ca
++# perl-lwp-protocol-https
 +#
 +################################################################################
 +
-+PERL_MOZILLA_CA_VERSION = 20180117
-+PERL_MOZILLA_CA_SOURCE = Mozilla-CA-$(PERL_MOZILLA_CA_VERSION).tar.gz
-+PERL_MOZILLA_CA_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AB/ABH
-+PERL_MOZILLA_CA_LICENSE = MPL-2.0
-+PERL_MOZILLA_CA_LICENSE_FILES = README
-+PERL_MOZILLA_CA_DISTNAME = Mozilla-CA
++PERL_LWP_PROTOCOL_HTTPS_VERSION = 6.07
++PERL_LWP_PROTOCOL_HTTPS_SOURCE = LWP-Protocol-https-$(PERL_LWP_PROTOCOL_HTTPS_VERSION).tar.gz
++PERL_LWP_PROTOCOL_HTTPS_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
++PERL_LWP_PROTOCOL_HTTPS_LICENSE = Artistic or GPL-1.0+
++PERL_LWP_PROTOCOL_HTTPS_LICENSE_FILES = README
++PERL_LWP_PROTOCOL_HTTPS_DISTNAME = LWP-Protocol-https
 +
 +$(eval $(perl-package))
+diff --git a/support/testing/tests/package/test_perl_lwp_protocol_https.py b/support/testing/tests/package/test_perl_lwp_protocol_https.py
+new file mode 100644
+index 0000000000..35437459a1
+--- /dev/null
++++ b/support/testing/tests/package/test_perl_lwp_protocol_https.py
+@@ -0,0 +1,42 @@
++from tests.package.test_perl import TestPerlBase
++
++
++class TestPerlLWPProtocolhttps(TestPerlBase):
++    """
++    package:
++        LWP-Protocol-https
++    direct dependencies:
++        IO-Socket-SSL
++        Mozilla-CA
++        Net-HTTP
++        libwww-perl
++    indirect dependencies:
++        Encode-Locale
++        File-Listing
++        HTML-Parser   XS
++        HTML-Tagset
++        HTTP-Cookies
++        HTTP-Daemon
++        HTTP-Date
++        HTTP-Message
++        HTTP-Negotiate
++        IO-HTML
++        LWP-MediaTypes
++        Net-SSLeay   XS
++        TimeDate
++        Try-Tiny
++        URI
++        WWW-RobotRules
++    """
++
++    config = TestPerlBase.config + \
++        """
++        BR2_PACKAGE_PERL=y
++        BR2_PACKAGE_PERL_LWP_PROTOCOL_HTTPS=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("HTML::Parser")
++        self.module_test("Net::SSLeay")
++        self.module_test("LWP::Protocol::https")
 -- 
 2.24.1
