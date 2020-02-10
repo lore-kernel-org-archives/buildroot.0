@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 10 Feb 2020 11:46:58 +0100
-Subject: [Buildroot] [PATCH 05/12] package/perl-mojolicious-plugin-i18n: new
- package
+Date: Mon, 10 Feb 2020 11:46:59 +0100
+Subject: [Buildroot] [PATCH 06/12]
+ package/perl-mojolicious-plugin-securityheader: new package
 In-Reply-To: <20200210104706.19186-1-patrickdepinguin@gmail.com>
 References: <20200210104706.19186-1-patrickdepinguin@gmail.com>
-Message-ID: <20200210104706.19186-6-patrickdepinguin@gmail.com>
+Message-ID: <20200210104706.19186-7-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,78 +20,81 @@ Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
  DEVELOPERS                                         |  1 +
  package/Config.in                                  |  1 +
- package/perl-mojolicious-plugin-i18n/Config.in     |  7 +++++++
- .../perl-mojolicious-plugin-i18n.hash              |  3 +++
- .../perl-mojolicious-plugin-i18n.mk                | 14 ++++++++++++++
- 5 files changed, 26 insertions(+)
- create mode 100644 package/perl-mojolicious-plugin-i18n/Config.in
- create mode 100644 package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
- create mode 100644 package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
+ .../Config.in                                      |  7 +++++++
+ .../perl-mojolicious-plugin-securityheader.hash    |  6 ++++++
+ .../perl-mojolicious-plugin-securityheader.mk      | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/perl-mojolicious-plugin-securityheader/Config.in
+ create mode 100644 package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash
+ create mode 100644 package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c7b98fb349..dd6199bf6d 100644
+index dd6199bf6d..30bf7c2b18 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2385,6 +2385,7 @@ F:	package/perl-mime-base64-urlsafe/
- F:	package/perl-mojolicious-plugin-authentication/
+@@ -2386,6 +2386,7 @@ F:	package/perl-mojolicious-plugin-authentication/
  F:	package/perl-mojolicious-plugin-authorization/
  F:	package/perl-mojolicious-plugin-cspheader/
-+F:	package/perl-mojolicious-plugin-i18n/
+ F:	package/perl-mojolicious-plugin-i18n/
++F:	package/perl-mojolicious-plugin-securityheader/
  F:	package/perl-net-snmp/
  F:	package/perl-net-ssh2/
  F:	package/perl-net-telnet/
 diff --git a/package/Config.in b/package/Config.in
-index c85f0676cf..3a664b2521 100644
+index 3a664b2521..6c55a7471d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -781,6 +781,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mojolicious-plugin-authentication/Config.in"
+@@ -782,6 +782,7 @@ menu "Perl libraries/modules"
  	source "package/perl-mojolicious-plugin-authorization/Config.in"
  	source "package/perl-mojolicious-plugin-cspheader/Config.in"
-+	source "package/perl-mojolicious-plugin-i18n/Config.in"
+ 	source "package/perl-mojolicious-plugin-i18n/Config.in"
++	source "package/perl-mojolicious-plugin-securityheader/Config.in"
  	source "package/perl-moo/Config.in"
  	source "package/perl-net-dns/Config.in"
  	source "package/perl-net-http/Config.in"
-diff --git a/package/perl-mojolicious-plugin-i18n/Config.in b/package/perl-mojolicious-plugin-i18n/Config.in
+diff --git a/package/perl-mojolicious-plugin-securityheader/Config.in b/package/perl-mojolicious-plugin-securityheader/Config.in
 new file mode 100644
-index 0000000000..cbe11451c5
+index 0000000000..35e8e122ab
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-i18n/Config.in
++++ b/package/perl-mojolicious-plugin-securityheader/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_I18N
-+	bool "perl-mojolicious-plugin-i18n"
++config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER
++	bool "perl-mojolicious-plugin-securityheader"
 +	select BR2_PACKAGE_PERL_MOJOLICIOUS # runtime
 +	help
-+	  Internationalization Plugin for Mojolicious.
++	  Mojolicious Plugin.
 +
-+	  https://metacpan.org/release/Mojolicious-Plugin-I18N
-diff --git a/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
++	  http://github.com/reneeb/Mojolicious-Plugin-SecurityHeader
+diff --git a/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash
 new file mode 100644
-index 0000000000..81253cdec4
+index 0000000000..b8a20bdd60
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
-@@ -0,0 +1,3 @@
++++ b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash
+@@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    4002f7a7da4c90973ad6eedfb0fcfa16 Mojolicious-Plugin-I18N-1.6.tar.gz
-+sha256 32fb5ef8037d954b7ecebef5c1b2b24b420abd829702312f4ad42794f52b514d Mojolicious-Plugin-I18N-1.6.tar.gz
-diff --git a/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
++md5    38cf59258547ac866577db2d43632f30 Mojolicious-Plugin-SecurityHeader-0.07.tar.gz
++sha256 940474eaf7a415e5117b004387862473612e079a413590db1eb9c85d17a6648f Mojolicious-Plugin-SecurityHeader-0.07.tar.gz
++
++# computed by scancpan
++sha256 0c38e4629cc9eee869217d62ad765e581e54958596672046a62dfa4cfd87bb09 LICENSE
+diff --git a/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk
 new file mode 100644
-index 0000000000..7de8db8c52
+index 0000000000..1f287f6f6a
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
++++ b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-mojolicious-plugin-i18n
++# perl-mojolicious-plugin-securityheader
 +#
 +################################################################################
 +
-+PERL_MOJOLICIOUS_PLUGIN_I18N_VERSION = 1.6
-+PERL_MOJOLICIOUS_PLUGIN_I18N_SOURCE = Mojolicious-Plugin-I18N-$(PERL_MOJOLICIOUS_PLUGIN_I18N_VERSION).tar.gz
-+PERL_MOJOLICIOUS_PLUGIN_I18N_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHARIFULN
-+PERL_MOJOLICIOUS_PLUGIN_I18N_DEPENDENCIES = host-perl-module-build
-+PERL_MOJOLICIOUS_PLUGIN_I18N_LICENSE = Artistic or GPL-1.0+
-+PERL_MOJOLICIOUS_PLUGIN_I18N_DISTNAME = Mojolicious-Plugin-I18N
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_VERSION = 0.07
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_SOURCE = Mojolicious-Plugin-SecurityHeader-$(PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_VERSION).tar.gz
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RE/RENEEB
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_LICENSE = Artistic-2.0
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_LICENSE_FILES = LICENSE
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_DISTNAME = Mojolicious-Plugin-SecurityHeader
 +
 +$(eval $(perl-package))
 -- 
