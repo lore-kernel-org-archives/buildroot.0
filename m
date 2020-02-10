@@ -1,107 +1,74 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@essensium.com>
-Date: Mon, 10 Feb 2020 14:31:02 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/python-pbkdf2: new package.
-In-Reply-To: <20200207153106.5042-1-raphael.melotte@essensium.com>
-References: <20200207153106.5042-1-raphael.melotte@essensium.com>
-Message-ID: <20200210133102.2654-1-raphael.melotte@essensium.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 10 Feb 2020 14:37:27 +0100
+Subject: [Buildroot] [PATCH v4 5/9] board/qemu: add defconfig file name
+ as tag before the qemu command line
+In-Reply-To: <20200210140839.4dab48c8@windsurf>
+References: <20200209180327.455426-1-romain.naour@smile.fr>
+ <20200209180327.455426-6-romain.naour@smile.fr>
+ <20200210140839.4dab48c8@windsurf>
+Message-ID: <cccdab0a-73d4-3409-275e-a1b8b3422643@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This module implements the password-based key derivation function,
-PBKDF2, specified in RSA PKCS#5 v2.0.
+Hi Thomas,
 
-Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
+Le 10/02/2020 ? 14:08, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Sun,  9 Feb 2020 19:03:23 +0100
+> Romain Naour <romain.naour@smile.fr> wrote:
+> 
+>> diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
+>> index f868905d91..3443de05a8 100644
+>> --- a/board/qemu/aarch64-virt/readme.txt
+>> +++ b/board/qemu/aarch64-virt/readme.txt
+>> @@ -1,6 +1,6 @@
+>>  Run the emulation with:
+>>  
+>> -  qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -smp 1 -kernel output/images/Image -append "rootwait root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0
+>> +qemu_aarch64_virt_defconfig: qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -smp 1 -kernel output/images/Image -append "rootwait root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0
+> 
+> While I understand the idea, I believe this will potentially cause some
+> confusing for newcomers just getting started with Buildroot, and
+> potentially not too familiar with Linux.
+> 
+> Indeed, when one sees:
+> 
+> """
+> Run the emulation with:
+> 
+> SOME COMPLICATED COMMAND
+> """
+> 
+> One will clearly copy/paste "SOME COMPLICATED COMMAND", and here it
+> won't work anymore. So I understand that adding this metadata helps you
+> grepping through the readme.txt file to find the right command, but it
+> makes the instructions less directly usable by their original target:
+> newcomers to Buildroot.
+> 
+> One less bad option is to do it like this:
+> 
+> qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -smp 1 -kernel output/images/Image -append "rootwait root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 # qemu_aarch64_virt_defconfig
+> 
+> This way, the information is still encoded on the same line, but it's a
+> comment, so if a newcomer copy/pastes that command line, it will really
+> work.
 
----
-Changes v1 -> v2:
-  - add README.txt as the license file (+hash) (suggested by Yegor)
-  - update the description to be more explicit (suggested by Yegor)
+Ok, I see your point.
 
-Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
----
- DEVELOPERS                               |  3 +++
- package/Config.in                        |  1 +
- package/python-pbkdf2/Config.in          |  7 +++++++
- package/python-pbkdf2/python-pbkdf2.hash |  6 ++++++
- package/python-pbkdf2/python-pbkdf2.mk   | 14 ++++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/python-pbkdf2/Config.in
- create mode 100644 package/python-pbkdf2/python-pbkdf2.hash
- create mode 100644 package/python-pbkdf2/python-pbkdf2.mk
+I did this way since the qemu cmd line can be on several lines (see
+board/qemu/arm-vexpress-tz/readme.txt).
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d8ea23e0b3..7701958beb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2076,6 +2076,9 @@ N:	Rahul Jain <rahul.jain@imgtec.com>
- F:	package/uhttpd/
- F:	package/ustream-ssl/
- 
-+N:  Rapha?l M?lotte <raphael.melotte@essensium.com>
-+F:  package/python-pbkdf2/
-+
- N:	Refik Tuzakli <tuzakli.refik@gmail.com>
- F:	package/paho-mqtt-cpp/
- 
-diff --git a/package/Config.in b/package/Config.in
-index bad4f9cba6..2142b4e978 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1029,6 +1029,7 @@ menu "External python modules"
- 	source "package/python-pathpy/Config.in"
- 	source "package/python-pathtools/Config.in"
- 	source "package/python-pathvalidate/Config.in"
-+	source "package/python-pbkdf2/Config.in"
- 	source "package/python-periphery/Config.in"
- 	source "package/python-pexpect/Config.in"
- 	source "package/python-pickleshare/Config.in"
-diff --git a/package/python-pbkdf2/Config.in b/package/python-pbkdf2/Config.in
-new file mode 100644
-index 0000000000..bd6a32907d
---- /dev/null
-+++ b/package/python-pbkdf2/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PBKDF2
-+	bool "python-pbkdf2"
-+	help
-+      This module implements the password-based key derivation function,
-+      PBKDF2, specified in RSA PKCS#5 v2.0.
-+
-+	  http://www.dlitz.net/software/python-pbkdf2/
-diff --git a/package/python-pbkdf2/python-pbkdf2.hash b/package/python-pbkdf2/python-pbkdf2.hash
-new file mode 100644
-index 0000000000..b372a7fde8
---- /dev/null
-+++ b/package/python-pbkdf2/python-pbkdf2.hash
-@@ -0,0 +1,6 @@
-+# md5, sha256 from https://pypi.org/pypi/pbkdf2/json
-+md5	40cda566f61420490206597243dd869f  pbkdf2-1.3.tar.gz
-+sha256	ac6397369f128212c43064a2b4878038dab78dab41875364554aaf2a684e6979  pbkdf2-1.3.tar.gz
-+
-+# Locally computed:
-+sha256 903898253c5953a86a9b2333578a0e2403eb780b1b49d9ebca85a3c47aa2f9c1  README.txt
-diff --git a/package/python-pbkdf2/python-pbkdf2.mk b/package/python-pbkdf2/python-pbkdf2.mk
-new file mode 100644
-index 0000000000..b1e011f752
---- /dev/null
-+++ b/package/python-pbkdf2/python-pbkdf2.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pbkdf2
-+#
-+################################################################################
-+
-+PYTHON_PBKDF2_VERSION = 1.3
-+PYTHON_PBKDF2_SOURCE = pbkdf2-$(PYTHON_PBKDF2_VERSION).tar.gz
-+PYTHON_PBKDF2_SITE = https://files.pythonhosted.org/packages/02/c0/6a2376ae81beb82eda645a091684c0b0becb86b972def7849ea9066e3d5e
-+PYTHON_PBKDF2_SETUP_TYPE = setuptools
-+PYTHON_PBKDF2_LICENSE = MIT
-+PYTHON_PBKDF2_LICENSE_FILES = README.txt
-+
-+$(eval $(python-package))
--- 
-2.23.0
+Do we require that the qemu cmd line must be on one line ?
+
+Best regards,
+Romain
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
