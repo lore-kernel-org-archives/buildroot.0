@@ -1,9 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 11 Feb 2020 08:34:02 -0800
-Subject: [Buildroot] [PATCH v17 3/5] package/prelink-cross: new package
+Date: Tue, 11 Feb 2020 08:34:03 -0800
+Subject: [Buildroot] [PATCH v17 4/5] package/pkgconf: prepend sysroot paths
+ to common gobject-introspection utils
 In-Reply-To: <20200211163404.87262-1-aduskett@gmail.com>
 References: <20200211163404.87262-1-aduskett@gmail.com>
-Message-ID: <20200211163404.87262-4-aduskett@gmail.com>
+Message-ID: <20200211163404.87262-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,88 +13,63 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Prelink-cross emulates a runtime linker for a given sysroot. This is
-necessary to allow gobject-introspection to build its typelib files
-during cross-compiling.
+Many autotools packages call pkg-conf to inquire as to where the following
+utilities are:
 
-We're using a sha1 on the cross_prelink branch, as we need the
-RTLD-enabled variant of prelink-cross.
+g_ir_scanner
+g_ir_compiler
+g_ir_generate
+
+Because gobject uses wrappers to call qemu, prepending the sysroot to the paths
+of these compilers is necessary.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v11 -> v13:
-  - Change version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2 as the commit
-    id b10e14218646d8b74773b82b0f8b395bce698fa2 no longer exists.
+Changes v1 -> v17:
+  - Add this patch to the series.
+
+ ...fix-with-the-sysroot-a-subset-of-variables.patch | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
+index 5a9713d651..a7811752d2 100644
+--- a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
++++ b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
+@@ -15,11 +15,13 @@ be prefixed by the sysroot, and which path should not be prefixed by
+ the sysroot.
  
-Changes v10 -> v11:
-  - adopted by Yann
-  - switch to a https git server
-  - drop the Config.in.host entry
-  - fix typo in commit log
-
-Changes v9 -> v10:
-  - None
-
-Changes v8 -> v9:
-  - Add the package to the DEVELOPERS file under my name.
-  - Bump version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2
-  - Add host-elfutils as a dependency.
-
-Changes v7 -> v8:
-  - None
-
-Changes v1 -> v7:
-  - Add patch to series.
-
- DEVELOPERS                               |  1 +
- package/prelink-cross/prelink-cross.hash |  3 +++
- package/prelink-cross/prelink-cross.mk   | 16 ++++++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/prelink-cross/prelink-cross.hash
- create mode 100644 package/prelink-cross/prelink-cross.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 63f00ef748..9fd2673243 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -53,6 +53,7 @@ F:	package/openjdk/
- F:	package/openjdk-bin/
- F:	package/php/
- F:	package/policycoreutils/
-+F:	package/prelink-cross/
- F:	package/polkit/
- F:	package/python3/
- F:	package/python-aioredis/
-diff --git a/package/prelink-cross/prelink-cross.hash b/package/prelink-cross/prelink-cross.hash
-new file mode 100644
-index 0000000000..3ac33ac3d0
---- /dev/null
-+++ b/package/prelink-cross/prelink-cross.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  cb3f5d833cd74b7e90e38465c9c948b0f4138c017509cb91e391b0931063429e  prelink-cross-a853a5d715d84eec93aa68e8f2df26b7d860f5b2.tar.gz
-+sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
-diff --git a/package/prelink-cross/prelink-cross.mk b/package/prelink-cross/prelink-cross.mk
-new file mode 100644
-index 0000000000..b43c209b16
---- /dev/null
-+++ b/package/prelink-cross/prelink-cross.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# host-prelink-cross
-+#
-+################################################################################
-+
-+HOST_PRELINK_CROSS_VERSION = a853a5d715d84eec93aa68e8f2df26b7d860f5b2
-+HOST_PRELINK_CROSS_SITE = https://git.yoctoproject.org/git/prelink-cross
-+HOST_PRELINK_CROSS_SITE_METHOD = git
-+HOST_PRELINK_CROSS_LICENSE = GPL-2.0
-+HOST_PRELINK_CROSS_LICENSE_FILES = COPYING
-+# Sources from git, no configure script present
-+HOST_PRELINK_CROSS_AUTORECONF = YES
-+HOST_PRELINK_CROSS_DEPENDENCIES = host-elfutils host-libiberty
-+
-+$(eval $(host-autotools-package))
+ So, let's simply have a whitelist of paths that should be prefixed:
+-includedir, libdir, mapdir, pkgdatadir and sdkdir. This list of
+-variables was collected over years of Buildroot development. All other
+-paths are not prefixed by the sysroot.
++g_ir_scanner, g_ir_compiler, g_ir_generate, includedir, libdir, mapdir,
++pkgdatadir and sdkdir. This list of variables was collected over years of
++Buildroot development. All other paths are not prefixed by the sysroot.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++[Updated to include gobject-introspection paths]
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ ---
+  libpkgconf/tuple.c | 60 ++++++++++++++++++++++++++++++++--------------
+  1 file changed, 42 insertions(+), 18 deletions(-)
+@@ -28,7 +30,7 @@ diff --git a/libpkgconf/tuple.c b/libpkgconf/tuple.c
+ index 8523709..7cd2fff 100644
+ --- a/libpkgconf/tuple.c
+ +++ b/libpkgconf/tuple.c
+-@@ -160,6 +160,18 @@ dequote(const char *value)
++@@ -160,6 +160,21 @@ dequote(const char *value)
+  	return buf;
+  }
+  
+@@ -36,6 +38,9 @@ index 8523709..7cd2fff 100644
+ +pkgconf_tuple_parse_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, bool add_sysroot);
+ +
+ +const char *sysrooted_keys[] = {
+++	"g_ir_scanner",
+++	"g_ir_compiler",
+++	"g_ir_generate",
+ +	"includedir",
+ +	"libdir",
+ +	"mapdir",
 -- 
 2.21.1 (Apple Git-122.3)
