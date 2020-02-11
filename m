@@ -1,53 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Feb 2020 00:06:02 +0100
-Subject: [Buildroot] [git commit] package/iozone: bump to version 3_489
-Message-ID: <20200211225643.DAAEF8DE55@busybox.osuosl.org>
+Date: Wed, 12 Feb 2020 00:05:11 +0100
+Subject: [Buildroot] [git commit] package/sdl2_mixer: bump to version 2.0.4
+Message-ID: <20200211225643.CCEEC8DE55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fc16d14a5a94c379c5ac8578c62a2396792860d
+commit: https://git.buildroot.net/buildroot/commit/?id=62002ff64eb5dc4a20c653e3053b08e67b43b8a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also install "fileop", another file system benchmarking tool
-provided by the iozone package.
+Also enabled support for Opus music playback using opusfile library
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iozone/iozone.hash | 2 +-
- package/iozone/iozone.mk   | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/sdl2_mixer/sdl2_mixer.hash | 4 ++--
+ package/sdl2_mixer/sdl2_mixer.mk   | 9 ++++++++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
-index 8522486297..f2f40473c3 100644
---- a/package/iozone/iozone.hash
-+++ b/package/iozone/iozone.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/sdl2_mixer/sdl2_mixer.hash b/package/sdl2_mixer/sdl2_mixer.hash
+index 441d0124e4..f3bab151f2 100644
+--- a/package/sdl2_mixer/sdl2_mixer.hash
++++ b/package/sdl2_mixer/sdl2_mixer.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256	960265163d93f15f7ad352f726d4837c5dd794fff357c743fdb56cbcf4abca04	iozone3_488.tar
-+sha256	6155850d1019f2450dc926bbdb5a24abf423ee3bb928ab1e68569cf60a908584	iozone3_489.tar
-diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
-index adc5a66955..a491faf9d4 100644
---- a/package/iozone/iozone.mk
-+++ b/package/iozone/iozone.mk
+-sha256  5a24f62a610249d744cbd8d28ee399d8905db7222bf3bdbc8a8b4a76e597695f  SDL2_mixer-2.0.1.tar.gz
+-sha256  4fc74d216e009c7cc5d939b688fc122b329787dcd24f69ae2a08ce052c826b39  COPYING.txt
++sha256  b4cf5a382c061cd75081cf246c2aa2f9df8db04bdda8dcdc6b6cca55bede2419  SDL2_mixer-2.0.4.tar.gz
++sha256  113727180e7956cb9718b03b41da85b63ea54743a33047071a623bf672895a10  COPYING.txt
+diff --git a/package/sdl2_mixer/sdl2_mixer.mk b/package/sdl2_mixer/sdl2_mixer.mk
+index 34bba5772d..f349b8ca80 100644
+--- a/package/sdl2_mixer/sdl2_mixer.mk
++++ b/package/sdl2_mixer/sdl2_mixer.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IOZONE_VERSION = 3_488
-+IOZONE_VERSION = 3_489
- IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
- IOZONE_SITE = http://www.iozone.org/src/current
- IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
-@@ -25,6 +25,8 @@ endef
- define IOZONE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/src/current/iozone \
- 		$(TARGET_DIR)/usr/bin/iozone
-+	$(INSTALL) -D -m 755 $(@D)/src/current/fileop \
-+		$(TARGET_DIR)/usr/bin/fileop
- endef
+-SDL2_MIXER_VERSION = 2.0.1
++SDL2_MIXER_VERSION = 2.0.4
+ SDL2_MIXER_SOURCE = SDL2_mixer-$(SDL2_MIXER_VERSION).tar.gz
+ SDL2_MIXER_SITE = http://www.libsdl.org/projects/SDL_mixer/release
+ SDL2_MIXER_LICENSE = Zlib
+@@ -35,6 +35,13 @@ else
+ SDL2_MIXER_CONF_OPTS += --disable-music-mod-modplug
+ endif
  
- $(eval $(generic-package))
++ifeq ($(BR2_PACKAGE_OPUSFILE),y)
++SDL2_MIXER_CONF_OPTS += --enable-music-opus
++SDL2_MIXER_DEPENDENCIES += opusfile
++else
++SDL2_MIXER_CONF_OPTS += --disable-music-opus
++endif
++
+ ifeq ($(BR2_PACKAGE_TREMOR),y)
+ SDL2_MIXER_CONF_OPTS += --enable-music-ogg-tremor
+ SDL2_MIXER_DEPENDENCIES += tremor
