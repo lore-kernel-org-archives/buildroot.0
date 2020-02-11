@@ -1,41 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 11 Feb 2020 21:40:34 +0100
-Subject: [Buildroot] [PATCH v2, 1/1] package/jpeg-turbo: fix build with SIMD
-Message-ID: <20200211204034.266999-1-fontaine.fabrice@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 11 Feb 2020 22:44:44 +0200
+Subject: [Buildroot] [PATCH 1/2] package/webkitgtk: disable JSC JIT for
+ MIPSr6
+Message-ID: <20200211204445.782766-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add -fPIC as requested by upstream in
-https://github.com/libjpeg-turbo/libjpeg-turbo/pull/366
+Forcibly disable the JavaScriptCore JIT compilation support
+for MIPSr6 processors, which are unsupported.
 
-Fixes:
- - http://autobuild.buildroot.org/results/5b7ce0a8f8d1f485bd7104ac2b40257bb17b284b
+Fixes: http://autobuild.buildroot.net/results/3d21d3c3460cd85a4c828dd197929cdf17aaf4e0
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
-Changes v1 -> v2:
- - Fix typo in title: without -> with
+ package/webkitgtk/webkitgtk.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
- package/jpeg-turbo/jpeg-turbo.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 2767ce6de4..1d24406e0f 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -13,7 +13,9 @@ JPEG_TURBO_INSTALL_STAGING = YES
- JPEG_TURBO_PROVIDES = jpeg
- JPEG_TURBO_DEPENDENCIES = host-pkgconf
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index e5d591fcd2..cbd9003071 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -104,4 +104,13 @@ else
+ WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
+ endif
  
--JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
-+JPEG_TURBO_CONF_OPTS = \
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -fPIC" \
-+	-DWITH_JPEG8=ON
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
++# JIT is not supported for MIPS r6, but the WebKit build system does not
++# have a check for these processors. Disable JIT forcibly here and use
++# the CLoop interpreter instead.
++#
++# Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=191258
++ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON
++endif
++
+ $(eval $(cmake-package))
 -- 
-2.24.1
+2.25.0
