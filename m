@@ -1,37 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Feb 2020 23:29:00 +0100
-Subject: [Buildroot] [git commit] Config.in.legacy: fix selection of
- bluez5_utils
-Message-ID: <20200211223133.A78708DAAB@busybox.osuosl.org>
+Date: Tue, 11 Feb 2020 23:33:45 +0100
+Subject: [Buildroot] [git commit] package/webkitgtk: disable JSC JIT for
+ MIPSr6
+Message-ID: <20200211223133.DDD8F8DAAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a46a016b4db368dc5b5bb4f21247e6f018a674d
+commit: https://git.buildroot.net/buildroot/commit/?id=5eb70cecedd03e08977a06bcc115b6a954d3da9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Select BR2_PACKAGE_BLUEZ5_UTILS only if all its reverse dependencies
-are selected
+Forcibly disable the JavaScriptCore JIT compilation support
+for MIPSr6 processors, which are unsupported.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes: http://autobuild.buildroot.net/results/3d21d3c3460cd85a4c828dd197929cdf17aaf4e0
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/webkitgtk/webkitgtk.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 563f6d39e3..bf69b579e3 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -207,7 +207,8 @@ config BR2_GCC_VERSION_OR1K
- config BR2_PACKAGE_BLUEZ_UTILS
- 	bool "bluez-utils was removed"
- 	select BR2_LEGACY
--	select BR2_PACKAGE_BLUEZ5_UTILS
-+	select BR2_PACKAGE_BLUEZ5_UTILS if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 \
-+		&& BR2_TOOLCHAIN_HAS_SYNC_4
- 	help
- 	  The bluez-utils (BlueZ 4.x) package was removed as it is
- 	  deprecated since a long time. As an alternative, the
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index e5d591fcd2..cbd9003071 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -104,4 +104,13 @@ else
+ WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
+ endif
+ 
++# JIT is not supported for MIPS r6, but the WebKit build system does not
++# have a check for these processors. Disable JIT forcibly here and use
++# the CLoop interpreter instead.
++#
++# Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=191258
++ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON
++endif
++
+ $(eval $(cmake-package))
