@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 11 Feb 2020 21:37:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jpeg-turbo: fix build without SIMD
-Message-ID: <20200211203755.266720-1-fontaine.fabrice@gmail.com>
+Date: Tue, 11 Feb 2020 21:40:34 +0100
+Subject: [Buildroot] [PATCH v2, 1/1] package/jpeg-turbo: fix build with SIMD
+Message-ID: <20200211204034.266999-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,6 +16,9 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix typo in title: without -> with
+
  package/jpeg-turbo/jpeg-turbo.mk | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
