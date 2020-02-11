@@ -1,23 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Feb 2020 00:07:23 +0100
-Subject: [Buildroot] [PATCH] package/sdl2_mixer: bump to version 2.0.4
-In-Reply-To: <20200209154927.7974-2-gilles.talis@gmail.com> (Gilles Talis's
- message of "Sun, 9 Feb 2020 16:49:27 +0100")
-References: <20200209154927.7974-1-gilles.talis@gmail.com>
- <20200209154927.7974-2-gilles.talis@gmail.com>
-Message-ID: <875zgchges.fsf@dell.be.48ers.dk>
+Date: Wed, 12 Feb 2020 00:06:02 +0100
+Subject: [Buildroot] [git commit] package/iozone: bump to version 3_489
+Message-ID: <20200211225643.DAAEF8DE55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7fc16d14a5a94c379c5ac8578c62a2396792860d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Also enabled support for Opus music playback using opusfile library
- > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Also install "fileop", another file system benchmarking tool
+provided by the iozone package.
 
-Committed, thanks.
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/iozone/iozone.hash | 2 +-
+ package/iozone/iozone.mk   | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
+index 8522486297..f2f40473c3 100644
+--- a/package/iozone/iozone.hash
++++ b/package/iozone/iozone.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	960265163d93f15f7ad352f726d4837c5dd794fff357c743fdb56cbcf4abca04	iozone3_488.tar
++sha256	6155850d1019f2450dc926bbdb5a24abf423ee3bb928ab1e68569cf60a908584	iozone3_489.tar
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+index adc5a66955..a491faf9d4 100644
+--- a/package/iozone/iozone.mk
++++ b/package/iozone/iozone.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IOZONE_VERSION = 3_488
++IOZONE_VERSION = 3_489
+ IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
+ IOZONE_SITE = http://www.iozone.org/src/current
+ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
+@@ -25,6 +25,8 @@ endef
+ define IOZONE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/src/current/iozone \
+ 		$(TARGET_DIR)/usr/bin/iozone
++	$(INSTALL) -D -m 755 $(@D)/src/current/fileop \
++		$(TARGET_DIR)/usr/bin/fileop
+ endef
+ 
+ $(eval $(generic-package))
