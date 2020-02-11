@@ -1,94 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Feb 2020 23:31:54 +0100
-Subject: [Buildroot] [git commit] package/musl: move riscv64 register index
- constant definitions
-Message-ID: <20200211223133.D62788DB62@busybox.osuosl.org>
+Date: Tue, 11 Feb 2020 23:55:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rng-tools: bump version to 6.9
+In-Reply-To: <CAG=Azd-zWTxrtypciUHCtLZ7_xWgPDpprD2qZ=qqE2=5PKXWXw@mail.gmail.com>
+ (Wesley Chow's message of "Sat, 8 Feb 2020 17:38:59 -0500")
+References: <CAG=Azd-zWTxrtypciUHCtLZ7_xWgPDpprD2qZ=qqE2=5PKXWXw@mail.gmail.com>
+Message-ID: <87eev0hgy6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3672b699f007e0191aaf77a6271fe1a96526651
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Wesley" == Wesley Chow <wes@cortico.ai> writes:
 
-The riscv64 build of libsigsegv using musl fails due to a missing
-definition for REG_SP. This constant is used to index the __gregs
-array in the ucontext_t structure.
+ > Fixes high rngd startup latency along with other minor bugs:
+ > https://github.com/nhorman/rng-tools/releases/tag/v6.9
 
-This fix moves the musl defintion of REG_SP (and others) from
-arch/riscv64/bits/reg.h to arch/riscv64/bits/signal.h
-so that it is picked up correctly.
+ > Signed-off-by: Wesley Chow <wes.chow@gmail.com>
 
-The patch was downloaded from upstream:
-https://git.musl-libc.org/cgit/musl/commit/?id=329e79299daaa994b8e75941331a1093051ea5d9
+Your patch was unfortunately badly word wrapped / white space corrupted,
+so I had to fix it up manually. Please consider using git send-email in
+the future.
 
-Fixes:
-http://autobuild.buildroot.org/results/8fcd5cb912e513ac08a81e3ee726e29ac22212bb/
+Committed, thanks.
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...cv64-register-index-constants-to-signal.h.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+ > ---
+ > package/rng-tools/rng-tools.hash | 2 +-
+ > package/rng-tools/rng-tools.mk   | 2 +-
+ > 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch b/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch
-new file mode 100644
-index 0000000000..8221c0ea30
---- /dev/null
-+++ b/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch
-@@ -0,0 +1,54 @@
-+From 329e79299daaa994b8e75941331a1093051ea5d9 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Tue, 4 Feb 2020 09:29:13 -0500
-+Subject: move riscv64 register index constants to signal.h
-+
-+under _GNU_SOURCE for namespace cleanliness, analogous to other archs.
-+the original placement in sys/reg.h seems not to have been motivated;
-+such a header isn't even present on other implementations.
-+
-+Downloaded from upstream commit
-+https://git.musl-libc.org/cgit/musl/commit/?id=329e79299daaa994b8e75941331a1093051ea5d9
-+
-+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-+---
-+ arch/riscv64/bits/reg.h    | 6 ------
-+ arch/riscv64/bits/signal.h | 9 +++++++++
-+ 2 files changed, 9 insertions(+), 6 deletions(-)
-+
-+diff --git a/arch/riscv64/bits/reg.h b/arch/riscv64/bits/reg.h
-+index c800788c..2633f39d 100644
-+--- a/arch/riscv64/bits/reg.h
-++++ b/arch/riscv64/bits/reg.h
-+@@ -1,8 +1,2 @@
-+ #undef __WORDSIZE
-+ #define __WORDSIZE 64
-+-#define REG_PC 0
-+-#define REG_RA 1
-+-#define REG_SP 2
-+-#define REG_TP 4
-+-#define REG_S0 8
-+-#define REG_A0 10
-+diff --git a/arch/riscv64/bits/signal.h b/arch/riscv64/bits/signal.h
-+index 2ff4be30..b006334f 100644
-+--- a/arch/riscv64/bits/signal.h
-++++ b/arch/riscv64/bits/signal.h
-+@@ -35,6 +35,15 @@ typedef struct mcontext_t {
-+ 	union __riscv_mc_fp_state __fpregs;
-+ } mcontext_t;
-+ 
-++#if defined(_GNU_SOURCE)
-++#define REG_PC 0
-++#define REG_RA 1
-++#define REG_SP 2
-++#define REG_TP 4
-++#define REG_S0 8
-++#define REG_A0 10
-++#endif
-++
-+ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
-+ typedef unsigned long greg_t;
-+ typedef unsigned long gregset_t[32];
-+-- 
-+cgit v1.2.1
-+
+ > diff --git a/package/rng-tools/rng-tools.hash
+ > b/package/rng-tools/rng-tools.hash
+ > index 5989d9f022..c4bc11e89f 100644
+ > --- a/package/rng-tools/rng-tools.hash
+ > +++ b/package/rng-tools/rng-tools.hash
+ > @@ -1,3 +1,3 @@
+ > # Locally computed
+ > -sha256 93e548d4aaf2a1897d4b677f41d8473db1c7f57648adeca18cafa1907e410bb3
+ >  rng-tools-6.8.tar.gz
+ > +sha256  a57a7f51a2e3c0faa8afb979709a4c0cbea36d0b52fd835b104f8fb4fd1fa610
+ >  rng-tools-6.9.tar.gz
+ > sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643
+ >  COPYING
+ > diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+ > index 274079044c..5338e95590 100644
+ > --- a/package/rng-tools/rng-tools.mk
+ > +++ b/package/rng-tools/rng-tools.mk
+ > @@ -4,7 +4,7 @@
+ > #
+ > ################################################################################
+
+ > -RNG_TOOLS_VERSION = 6.8
+ > +RNG_TOOLS_VERSION = 6.9
+ > RNG_TOOLS_SITE = $(call
+ > github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
+ > RNG_TOOLS_LICENSE = GPL-2.0
+ > RNG_TOOLS_LICENSE_FILES = COPYING
+ > --
+ > 2.17.1
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+-- 
+Bye, Peter Korsgaard
