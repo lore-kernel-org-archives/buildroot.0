@@ -1,86 +1,34 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 11 Feb 2020 16:21:32 +0100
-Subject: [Buildroot] [PATCH] package/rng-tools: make jitterentropy
- conditional
-In-Reply-To: <CANQCQpb8YvhCXireoGM_cwnJnp2T8uGLunPj_3ARyuKgQO+Adw@mail.gmail.com>
-References: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
- <20200205203257.48877881@windsurf>
- <CANQCQparBzmSPD9epjQw8t6jyMejP0E1X0GjTUkXHpjXTi8Svg@mail.gmail.com>
- <CANQCQpZ9Hs6DA6XJpBnMLxqnnJj8N3TYQLsDSp_YR3xqR8G-bQ@mail.gmail.com>
- <87wo8wuc3z.fsf@dell.be.48ers.dk>
- <CANQCQpb8YvhCXireoGM_cwnJnp2T8uGLunPj_3ARyuKgQO+Adw@mail.gmail.com>
-Message-ID: <CAGm1_ksUDVmG3-b6H8FRSBzb9=0GahR7Q5Uh3YKM4uAysvkZZg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 11 Feb 2020 15:29:21 +0000
+Subject: [Buildroot] [Bug 12526] host-nodejs 12.14.1: configure fail:
+ AttributeError: 'module' object has no attribute 'sha1'
+In-Reply-To: <bug-12526-163@https.bugs.busybox.net/>
+References: <bug-12526-163@https.bugs.busybox.net/>
+Message-ID: <bug-12526-163-MsC1tO8JNz@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+https://bugs.busybox.net/show_bug.cgi?id=12526
 
-On Tue, Feb 11, 2020 at 4:06 PM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Peter,
->
->
-> On Sat, Feb 8, 2020 at 1:13 PM Peter Korsgaard <peter@korsgaard.com> wrote:
-> >
-> > >>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
-> >
-> >  > Thomas,
-> >  > On Wed, Feb 5, 2020 at 2:46 PM Matthew Weber
-> >  > <matthew.weber@rockwellcollins.com> wrote:
-> >  >>
-> >  >> Thomas,
-> >  >>
-> >  >> On Wed, Feb 5, 2020 at 1:33 PM Thomas Petazzoni
-> >  >> <thomas.petazzoni@bootlin.com> wrote:
-> >  >> >
-> >  >> > On Wed,  5 Feb 2020 12:26:08 -0600
-> >  >> > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
-> >  >> >
-> >  >> > > The update of rng-tools from 5 to 6.7 introduced a change where
-> >  >> > > the jitterentropy library was enabled by default instead of
-> >  >> > > returning a special 66 return code to hangle the case of no
-> >  >> > > hwrng. This patch reverts that change and allows a user to
-> >  >> > > select when to enable the jitterentropy source. The bug
-> >  >> > > documents an issue of when a hwrng is enabled with jitterentropy
-> >  >> > > there is a longer boot time.
-> >  >> >
-> >  >> > I don't understand this story of the 66 return code. Could you explain
-> >  >> > a bit more ?
-> >  >>
-> >  >> In Buildroot commit 22cb51e1 the systemd support addition included the
-> >  >> successcode change based on the Fedora bugfix for ignoring if no hwrng
-> >  >> is present (https://bugzilla.redhat.com/show_bug.cgi?id=892178).
-> >
-> >  > Ryan Barnett noticed that rng-tools dropped the special return code.
-> >  > I guess we could just drop support for this special case as well....
-> >  > https://github.com/nhorman/rng-tools/blob/v6.8/rngd.c#L805
-> >
-> > Has that Fedora patch ever been included upstream? I don't seem to find
-> > it in the history.
->
-> It doesn't look like it.  I'm wondering if we should just drop this
-> systemd unit return behavior and put a comment in the service file
-> about enabling an entropy package if this service fails without a
-> hardware rng present.  Seems too complicated to try and cover this
-> special case.
->
-> >
-> > I btw see there is a 6.9 release with more bugfixes, care to send a
-> > patch bumping the version?
->
-> I'll review the one that was just sent.  I also ping'd the original
-> bug report to see if they could test with this bump as there are a
-> number of minor jitterentropy related fixes.
-> http://patchwork.ozlabs.org/patch/1235396/
+Aleksandr Makarov <seems.deviant@gmail.com> changed:
 
-We had similar issue today with am335x (kernel 5.4.x). Bumping
-rng-tools to v6.9 helped.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |INVALID
 
-The next bump will be more interesting as rng-tools moves to openssl
-instead of libgcrypt and this dependency is mandatory.
+--- Comment #1 from Aleksandr Makarov <seems.deviant@gmail.com> ---
+I've found a solution to that. It appears that customizing Target Architecture
+Variant to a non-default value fixes the issue. I've changed from nocona
+(default) to steamroller and that fixed the issue.
 
-Yegor
+$ make menuconfig
+ Target options  --->
+  Target Architecture Variant (steamroller)  --->
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
