@@ -1,53 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Feb 2020 23:39:01 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: add missing
- qstrip
-In-Reply-To: <DM6PR01MB584983C3A449D028309B3DACF3180@DM6PR01MB5849.prod.exchangelabs.com>
- (Francois Gervais's message of "Tue, 11 Feb 2020 20:22:00 +0000")
-References: <DM6PR01MB584983C3A449D028309B3DACF3180@DM6PR01MB5849.prod.exchangelabs.com>
-Message-ID: <87v9ochhq2.fsf@dell.be.48ers.dk>
+Date: Tue, 11 Feb 2020 23:40:38 +0100
+Subject: [Buildroot] [PATCH] package/mesa3d: fix circular dependency in
+ Kconfig
+In-Reply-To: <20200210205146.23753-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Mon, 10 Feb 2020 21:51:46 +0100")
+References: <20200210205146.23753-1-yann.morin.1998@free.fr>
+Message-ID: <87r1z0hhnd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gervais," == Gervais, Francois <FGervais@distech-controls.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Add missing qstrip wrapping to the new
- > BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS option.
+ > When the r300 driver was introduced in c5ae77c97 (package/mesa3d: add
+ > support for gallium r300 driver), a last-minute fix was introduced by
+ > Yann, to properly propagate the dependency of a selected symbol.
 
- > Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
+ > However, this ended up causing a spurious circular dependency that does
+ > not really exists, but that Kconfig is not smart enough to detect is in
+ > fact OK.
+
+ > Fixing this is pretty non-obvious, but we have an easy way out: the
+ > dependency is about libdrm's radeon driver requirement for a toolchain
+ > that has the sync4 family of primitives, which is always a given for an
+ > x86 toolchain. As the radeon r300 driver is x86-only, this dependency is
+ > forcefully fulfilled.
+
+ > So, we drop the propagated dependency, and replace it by a fat comment.
+
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Romain Naour <romain.naour@gmail.com>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Cc: James Hilliard <james.hilliard1@gmail.com>
 
 Committed, thanks.
-
-Notice that something in your mailer has corrupted the patch by
-converting tabs to spaces. Consider using git send-email / a different
-mail server in the future.
-
- > ---
- >  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
-
- > diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
- > index bf1ac46cf6..34737018aa 100644
- > --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
- > +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
- > @@ -140,7 +140,7 @@ endef
- >  endif
-
- >  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += \
- > -       $(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS)
- > +       $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS))
-
- >  define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- >         $(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
- > -- 
- > 2.20.1
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
