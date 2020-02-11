@@ -1,45 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Feb 2020 23:42:27 +0100
-Subject: [Buildroot] [git commit] package/ogre: link with libatomic when
- needed
-Message-ID: <20200211223134.129148DB62@busybox.osuosl.org>
+Date: Tue, 11 Feb 2020 23:29:00 +0100
+Subject: [Buildroot] [git commit] Config.in.legacy: fix selection of
+ bluez5_utils
+Message-ID: <20200211223133.A78708DAAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc88757481534b129b34b1890ef1569a71308229
+commit: https://git.buildroot.net/buildroot/commit/?id=9a46a016b4db368dc5b5bb4f21247e6f018a674d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On some architectures, atomic binutils are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
-
-/home/test/autobuild/run/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/8.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: ../../lib/libOgreMain.so.1.12.0: undefined reference to `__atomic_fetch_add_8'
-
-This is often for example the case on sparc v8 32 bits.
-
-Fixes:
- - http://autobuild.buildroot.org/results/3a09e2d1d26b19243244eb7f9235c85488a788d2
+Select BR2_PACKAGE_BLUEZ5_UTILS only if all its reverse dependencies
+are selected
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ogre/ogre.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ Config.in.legacy | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/ogre/ogre.mk b/package/ogre/ogre.mk
-index f7711e41f1..253e022a73 100644
---- a/package/ogre/ogre.mk
-+++ b/package/ogre/ogre.mk
-@@ -39,4 +39,9 @@ else
- OGRE_CONF_OPTS += -DOGRE_BUILD_COMPONENT_PYTHON=OFF
- endif
- 
-+# Uses __atomic_fetch_add_8
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+OGRE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-+endif
-+
- $(eval $(cmake-package))
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 563f6d39e3..bf69b579e3 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -207,7 +207,8 @@ config BR2_GCC_VERSION_OR1K
+ config BR2_PACKAGE_BLUEZ_UTILS
+ 	bool "bluez-utils was removed"
+ 	select BR2_LEGACY
+-	select BR2_PACKAGE_BLUEZ5_UTILS
++	select BR2_PACKAGE_BLUEZ5_UTILS if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 \
++		&& BR2_TOOLCHAIN_HAS_SYNC_4
+ 	help
+ 	  The bluez-utils (BlueZ 4.x) package was removed as it is
+ 	  deprecated since a long time. As an alternative, the
