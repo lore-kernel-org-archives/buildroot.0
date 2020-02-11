@@ -1,74 +1,93 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 11 Feb 2020 09:03:23 -0600
-Subject: [Buildroot] [PATCH] package/rng-tools: make jitterentropy
- conditional
-In-Reply-To: <87wo8wuc3z.fsf@dell.be.48ers.dk>
-References: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
- <20200205203257.48877881@windsurf>
- <CANQCQparBzmSPD9epjQw8t6jyMejP0E1X0GjTUkXHpjXTi8Svg@mail.gmail.com>
- <CANQCQpZ9Hs6DA6XJpBnMLxqnnJj8N3TYQLsDSp_YR3xqR8G-bQ@mail.gmail.com>
- <87wo8wuc3z.fsf@dell.be.48ers.dk>
-Message-ID: <CANQCQpb8YvhCXireoGM_cwnJnp2T8uGLunPj_3ARyuKgQO+Adw@mail.gmail.com>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Tue, 11 Feb 2020 15:14:53 +0000
+Subject: [Buildroot] [PATCH 1/1] package/musl: move riscv64 register index
+ constant definitions
+Message-ID: <20200211151453.4972-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+The riscv64 build of libsigsegv using musl fails due to a missing
+definition for REG_SP. This constant is used to index the __gregs
+array in the ucontext_t structure.
 
+This fix moves the musl defintion of REG_SP (and others) from
+arch/riscv64/bits/reg.h to arch/riscv64/bits/signal.h
+so that it is picked up correctly.
 
-On Sat, Feb 8, 2020 at 1:13 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
->
->  > Thomas,
->  > On Wed, Feb 5, 2020 at 2:46 PM Matthew Weber
->  > <matthew.weber@rockwellcollins.com> wrote:
->  >>
->  >> Thomas,
->  >>
->  >> On Wed, Feb 5, 2020 at 1:33 PM Thomas Petazzoni
->  >> <thomas.petazzoni@bootlin.com> wrote:
->  >> >
->  >> > On Wed,  5 Feb 2020 12:26:08 -0600
->  >> > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
->  >> >
->  >> > > The update of rng-tools from 5 to 6.7 introduced a change where
->  >> > > the jitterentropy library was enabled by default instead of
->  >> > > returning a special 66 return code to hangle the case of no
->  >> > > hwrng. This patch reverts that change and allows a user to
->  >> > > select when to enable the jitterentropy source. The bug
->  >> > > documents an issue of when a hwrng is enabled with jitterentropy
->  >> > > there is a longer boot time.
->  >> >
->  >> > I don't understand this story of the 66 return code. Could you explain
->  >> > a bit more ?
->  >>
->  >> In Buildroot commit 22cb51e1 the systemd support addition included the
->  >> successcode change based on the Fedora bugfix for ignoring if no hwrng
->  >> is present (https://bugzilla.redhat.com/show_bug.cgi?id=892178).
->
->  > Ryan Barnett noticed that rng-tools dropped the special return code.
->  > I guess we could just drop support for this special case as well....
->  > https://github.com/nhorman/rng-tools/blob/v6.8/rngd.c#L805
->
-> Has that Fedora patch ever been included upstream? I don't seem to find
-> it in the history.
+The patch was downloaded from upstream:
+https://git.musl-libc.org/cgit/musl/commit/?id=329e79299daaa994b8e75941331a1093051ea5d9
 
-It doesn't look like it.  I'm wondering if we should just drop this
-systemd unit return behavior and put a comment in the service file
-about enabling an entropy package if this service fails without a
-hardware rng present.  Seems too complicated to try and cover this
-special case.
+Fixes:
+http://autobuild.buildroot.org/results/8fcd5cb912e513ac08a81e3ee726e29ac22212bb/
 
->
-> I btw see there is a 6.9 release with more bugfixes, care to send a
-> patch bumping the version?
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+---
+ ...register-index-constants-to-signal.h.patch | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch
 
-I'll review the one that was just sent.  I also ping'd the original
-bug report to see if they could test with this bump as there are a
-number of minor jitterentropy related fixes.
-http://patchwork.ozlabs.org/patch/1235396/
-
-Matt
+diff --git a/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch b/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch
+new file mode 100644
+index 0000000000..8221c0ea30
+--- /dev/null
++++ b/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch
+@@ -0,0 +1,54 @@
++From 329e79299daaa994b8e75941331a1093051ea5d9 Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Tue, 4 Feb 2020 09:29:13 -0500
++Subject: move riscv64 register index constants to signal.h
++
++under _GNU_SOURCE for namespace cleanliness, analogous to other archs.
++the original placement in sys/reg.h seems not to have been motivated;
++such a header isn't even present on other implementations.
++
++Downloaded from upstream commit
++https://git.musl-libc.org/cgit/musl/commit/?id=329e79299daaa994b8e75941331a1093051ea5d9
++
++Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
++---
++ arch/riscv64/bits/reg.h    | 6 ------
++ arch/riscv64/bits/signal.h | 9 +++++++++
++ 2 files changed, 9 insertions(+), 6 deletions(-)
++
++diff --git a/arch/riscv64/bits/reg.h b/arch/riscv64/bits/reg.h
++index c800788c..2633f39d 100644
++--- a/arch/riscv64/bits/reg.h
+++++ b/arch/riscv64/bits/reg.h
++@@ -1,8 +1,2 @@
++ #undef __WORDSIZE
++ #define __WORDSIZE 64
++-#define REG_PC 0
++-#define REG_RA 1
++-#define REG_SP 2
++-#define REG_TP 4
++-#define REG_S0 8
++-#define REG_A0 10
++diff --git a/arch/riscv64/bits/signal.h b/arch/riscv64/bits/signal.h
++index 2ff4be30..b006334f 100644
++--- a/arch/riscv64/bits/signal.h
+++++ b/arch/riscv64/bits/signal.h
++@@ -35,6 +35,15 @@ typedef struct mcontext_t {
++ 	union __riscv_mc_fp_state __fpregs;
++ } mcontext_t;
++ 
+++#if defined(_GNU_SOURCE)
+++#define REG_PC 0
+++#define REG_RA 1
+++#define REG_SP 2
+++#define REG_TP 4
+++#define REG_S0 8
+++#define REG_A0 10
+++#endif
+++
++ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
++ typedef unsigned long greg_t;
++ typedef unsigned long gregset_t[32];
++-- 
++cgit v1.2.1
++
+-- 
+2.20.1
