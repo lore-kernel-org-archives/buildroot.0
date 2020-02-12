@@ -1,101 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 12 Feb 2020 19:06:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gensio: bump to version 1.5.1
-Message-ID: <20200212180653.428941-1-fontaine.fabrice@gmail.com>
+Date: Wed, 12 Feb 2020 20:49:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: bump to
+ version 1.2.4
+Message-ID: <20200212194916.1326207-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update indentation of hash file (2 spaces)
-- This will fix a build failure without threads thanks to
-  https://github.com/cminyard/gensio/commit/8918de5b30f90b826c48064e9ee92304b63ffe85
-  and associated upstream patch
-
-Fixes:
- - http://autobuild.buildroot.org/results/e94d0e0b46afc1223a74bcc471909f4adef0d6f3
+Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...tests-Makefile-am-don-t-add-lpthread.patch | 29 +++++++++++++++++++
- package/gensio/gensio.hash                    | 12 ++++----
- package/gensio/gensio.mk                      |  6 ++--
- 3 files changed, 39 insertions(+), 8 deletions(-)
- create mode 100644 package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch
+ package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 4 ++--
+ package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch b/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch
-new file mode 100644
-index 0000000000..5a9f3b7da5
---- /dev/null
-+++ b/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch
-@@ -0,0 +1,29 @@
-+From f63b15e690581d898da56ef2540b6199f5728e58 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 11 Feb 2020 19:14:53 +0100
-+Subject: [PATCH] tests/Makefile.am: don't add -lpthread
-+
-+Don't add -lpthread unconditionally to oomtest_LDADD to avoid a build
-+failure without threads, it will be added to LIBS by configure.ac if
-+needed
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/cminyard/gensio/commit/f63b15e690581d898da56ef2540b6199f5728e58]
-+---
-+ tests/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tests/Makefile.am b/tests/Makefile.am
-+index a280acc..b4335c5 100644
-+--- a/tests/Makefile.am
-++++ b/tests/Makefile.am
-+@@ -127,7 +127,7 @@ test_fuzz: test_fuzz_certauth test_fuzz_mux test_fuzz_ssl test_fuzz_telnet \
-+ 
-+ oomtest_SOURCES = oomtest.c
-+ 
-+-oomtest_LDADD = $(top_builddir)/lib/libgensio.la $(OPENSSL_LIBS) -lpthread
-++oomtest_LDADD = $(top_builddir)/lib/libgensio.la $(OPENSSL_LIBS)
-+ 
-+ noinst_PROGRAMS = oomtest
-+ 
-diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
-index fcf5662f67..623b41904c 100644
---- a/package/gensio/gensio.hash
-+++ b/package/gensio/gensio.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/ser2net/files/
--md5 3a84895e41b9ca85801d2d5727977356  gensio-1.4.1.tar.gz
--sha1 3b268b7c37edabd87547f98d03ecf4929f3e5381  gensio-1.4.1.tar.gz
-+# From https://sourceforge.net/projects/ser2net/files/ser2net/
-+md5  53c027dfaaf374f57d5f36a6250fc018  gensio-1.5.1.tar.gz
-+sha1  8329d7828016e643f60b8b3e70564d32cd03008f  gensio-1.5.1.tar.gz
- # Locally computed:
--sha256 a0608921c6ccec115a1298d02423b9d8482b444f5772d8a8fde7ceabbadd679a  gensio-1.4.1.tar.gz
--sha256 501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
--sha256 dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
-+sha256  c1ed28f5bd72185dba666a900d29afbecba58727d6c0dde4a182143273fc1e6b  gensio-1.5.1.tar.gz
-+sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-+sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index a975fcb9e6..cf9c18f80f 100644
---- a/package/gensio/gensio.mk
-+++ b/package/gensio/gensio.mk
-@@ -4,11 +4,13 @@
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+index 92e8a3690b..78dbdf8ae4 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 1582fdbbd0449bcfe4ffae2ccb9e5bf0577459a32bb25604e01accb847da1a2d libtorrent-rasterbar-1.2.3.tar.gz
+-sha256 f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8 COPYING
++sha256  8759bddb589006ee164438588adaf007325b3bcaf6ae4c64d87a2b914409c680  libtorrent-rasterbar-1.2.4.tar.gz
++sha256  f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8  COPYING
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+index e81440d7c3..5b80e99238 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GENSIO_VERSION = 1.4.1
--GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net
-+GENSIO_VERSION = 1.5.1
-+GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GENSIO_LICENSE_FILES = COPYING.LIB COPYING
- GENSIO_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+GENSIO_AUTORECONF = YES
- GENSIO_CONF_OPTS = \
- 	--without-openipmi \
- 	--without-swig \
+-LIBTORRENT_RASTERBAR_VERSION = 1.2.3
++LIBTORRENT_RASTERBAR_VERSION = 1.2.4
+ LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
+ LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
+ LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
 -- 
 2.24.1
