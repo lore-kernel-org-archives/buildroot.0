@@ -1,49 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Feb 2020 10:22:19 +0100
-Subject: [Buildroot] [PATCH 1/2] pkg-stats: query release-monitoring.org
- with upstream name
-In-Reply-To: <CAB0FRsvs4Rm-ZHvSsDgZHijSM1qL7ygsWAhaK=S_cDdWC+n80Q@mail.gmail.com>
-References: <20190828070251.22886-1-francois.perrad@gadz.org>
- <20200205181702.4abbbd83@windsurf>
- <CAB0FRsvs4Rm-ZHvSsDgZHijSM1qL7ygsWAhaK=S_cDdWC+n80Q@mail.gmail.com>
-Message-ID: <20200212102219.1bf92791@windsurf.home>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Wed, 12 Feb 2020 11:40:40 +0100
+Subject: [Buildroot] [PATCH] package/modem-manager: bump to version 1.12.6
+Message-ID: <20200212104040.1070430-1-aleksander@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+https://lists.freedesktop.org/archives/modemmanager-devel/2020-February/007713.html
 
-On Fri, 7 Feb 2020 17:58:57 +0100
-Fran?ois Perrad <francois.perrad@gadz.org> wrote:
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+---
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> >  - Using the Buildroot distribution in release-monitoring and its
-> >    mapping concept. In this case, we really want to use the Buildroot
-> >    package name unchanged (which is not what your patch does)
->
-> It means that a part of Buildroot source (or configuration) is hosted on
-> release-monitoring.org instead of our own git repository.
-
-Not really. What is stored on release-monitoring side is the mapping of
-Buildroot package name to release-monitoring.org project names.
-
-If we were to store this information on the Buildroot side, we could
-say "it's a release-monitoring.org information that is stored inside
-the Buildroot source code".
-
-> Another point about release-monitoring.org,
-> how to exclude `dev` branches when the policy of the upstream project is to
-> name them with an odd minor number ?
-
-This is a known issue, see
-https://github.com/fedora-infra/anitya/issues/753. It would be great if
-someone could work on this.
-
-Best regards,
-
-Thomas
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index ef2fe9c08f..f9d790cd0c 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  852d61755e0c1a8d0c609b17192d742b324fdd2e513f3ed64b228befb859a95b  ModemManager-1.12.4.tar.xz
++sha256  2eb3353ee5518005c51d429308695c69d8c38cf2fd9102b04f785c03a0cc624c  ModemManager-1.12.6.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 3fc7337eb3..75fc5811db 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MODEM_MANAGER_VERSION = 1.12.4
++MODEM_MANAGER_VERSION = 1.12.6
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.0
