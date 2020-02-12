@@ -1,48 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 12 Feb 2020 22:21:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mongoose: security bump to version
- 6.17
-Message-ID: <20200212212134.1573180-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 12 Feb 2020 22:34:06 +0100
+Subject: [Buildroot] udisks situation
+In-Reply-To: <4669dcc6-5080-22fc-702e-74f145a1a936@benettiengineering.com>
+ (Giulio Benetti's message of "Wed, 12 Feb 2020 21:52:58 +0100")
+References: <4669dcc6-5080-22fc-702e-74f145a1a936@benettiengineering.com>
+Message-ID: <87sgjffq29.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2019-19307: An integer overflow in parse_mqtt in mongoose.c in
-  Cesanta Mongoose 6.16 allows an attacker to achieve remote DoS
-  (infinite loop), or possibly cause an out-of-bounds write, by sending
-  a crafted MQTT protocol packet.
-- Update indentation of hash file (two spaces)
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mongoose/mongoose.hash | 4 ++--
- package/mongoose/mongoose.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Hi All,
+ > during bump of udisks package from version 1.0.5(the last known 1.x
+ > version) to version 2.8.4 lot of heavy dependencies have been added:
+ > - gobject-introspection(upcoming from Adam Duskett[1])
+ > - libblockdev(upcoming from me) => libbytesize, volume_key(upcoming from me)
+ > - parted
+ > - polkit
+ > - sg3-utils
+ > - libxslt
+ > then it needs:
+ > - toolchain w/ glibc
+ > - nls enabled
 
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index d380131631..c5de11bec2 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	1f20f2781862560ddf3203dfb0e6fcf248a68bf92aefbeafb9d2a629c4767c02  mongoose-6.16.tar.gz
--sha256	fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
-+sha256  5bff3cc70bb2248cf87d06a3543f120f3b29b9368d25a7715443cb10612987cc  mongoose-6.17.tar.gz
-+sha256  fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index bb40de261e..7944f5e534 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONGOOSE_VERSION = 6.16
-+MONGOOSE_VERSION = 6.17
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPL-2.0
- MONGOOSE_LICENSE_FILES = LICENSE
+ > Adam Duskett, while testing(and fixing) my udisks branch[2] against
+ > its gobject-introspection patchset[1], found out that currently Fedora
+ > provides both udisks[3] and udisks2[4]. udisks(1) is considered
+ > obsolete but they still offer it as a package.
+
+ > Upstream didn't create a dedicated 1.x branch, but considering the
+ > amount of dependencies for version 2.x, maybe we could imitate Fedora
+ > and keep package "udisks" as it is(since its development stopped on
+ > version 1.0.5), and package "udisks2" that will follow upstream.
+
+ > The meaning to keep both packages is to have different memory
+ > footprints, but most of all retro-fitting. udisks2 provides
+ > "udisksctrl" tool, while udisks(1) provides "udisks" tool that are not
+ > compatible.
+
+ > I have already discussed about this in IRC with Thomas Petazzoni and
+ > we ended up to keep udisks2 to follow upstream, but udisks(1) seems to
+ > be still used.
+
+I don't feel strongly about either, but long term we have to follow
+upstream.
+
+Out of interest, why this focus on udisks? We don't have any packages
+with reverse dependencies to udisks in Buildroot?
+
 -- 
-2.24.1
+Bye, Peter Korsgaard
