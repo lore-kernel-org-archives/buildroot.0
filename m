@@ -1,30 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Feb 2020 09:41:55 +0100
-Subject: [Buildroot] [PATCH] package/toolchain: bumb ARC tools to
- arc-2019.09 release
-In-Reply-To: <DM6PR12MB2876FA1B7F20DAFB4DDF9B72D91B0@DM6PR12MB2876.namprd12.prod.outlook.com>
- (Evgeniy Didin's message of "Wed, 12 Feb 2020 07:48:50 +0000")
-References: <20200116072242.10524-1-Evgeniy.Didin@synopsys.com>
- <20200117203435.GM22540@scaer>
- <MN2PR12MB2877CB96415FE15CBBC17D13D9300@MN2PR12MB2877.namprd12.prod.outlook.com>
- <20200118120906.GS22540@scaer>
- <DM6PR12MB2876FA1B7F20DAFB4DDF9B72D91B0@DM6PR12MB2876.namprd12.prod.outlook.com>
-Message-ID: <87wo8sfb8s.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 12 Feb 2020 10:22:19 +0100
+Subject: [Buildroot] [PATCH 1/2] pkg-stats: query release-monitoring.org
+ with upstream name
+In-Reply-To: <CAB0FRsvs4Rm-ZHvSsDgZHijSM1qL7ygsWAhaK=S_cDdWC+n80Q@mail.gmail.com>
+References: <20190828070251.22886-1-francois.perrad@gadz.org>
+ <20200205181702.4abbbd83@windsurf>
+ <CAB0FRsvs4Rm-ZHvSsDgZHijSM1qL7ygsWAhaK=S_cDdWC+n80Q@mail.gmail.com>
+Message-ID: <20200212102219.1bf92791@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Evgeniy" == Evgeniy Didin <Evgeniy.Didin@synopsys.com> writes:
+Hello Fran?ois,
 
- > Hi Peter,
- > This is a polite reminder so this patch would be in next release of 2019.11.x branch.
- > Between rc1 and release there were some critical changes which are preferable to have in latest Buildroot release.
+On Fri, 7 Feb 2020 17:58:57 +0100
+Fran?ois Perrad <francois.perrad@gadz.org> wrote:
 
-I am ok with doing the backport. I will get to it next time I sync the
-2019.11.x branch. Right now I'm busy getting master sorted out for
-2020.02-rc1.
+> >  - Using the Buildroot distribution in release-monitoring and its
+> >    mapping concept. In this case, we really want to use the Buildroot
+> >    package name unchanged (which is not what your patch does)
+>
+> It means that a part of Buildroot source (or configuration) is hosted on
+> release-monitoring.org instead of our own git repository.
 
+Not really. What is stored on release-monitoring side is the mapping of
+Buildroot package name to release-monitoring.org project names.
+
+If we were to store this information on the Buildroot side, we could
+say "it's a release-monitoring.org information that is stored inside
+the Buildroot source code".
+
+> Another point about release-monitoring.org,
+> how to exclude `dev` branches when the policy of the upstream project is to
+> name them with an odd minor number ?
+
+This is a known issue, see
+https://github.com/fedora-infra/anitya/issues/753. It would be great if
+someone could work on this.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
