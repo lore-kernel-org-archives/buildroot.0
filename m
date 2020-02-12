@@ -1,92 +1,35 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Feb 2020 15:16:16 -0700
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: allow selecting GLX platform
-Message-ID: <20200212221616.53785-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 12 Feb 2020 23:23:36 +0100
+Subject: [Buildroot] udisks situation
+In-Reply-To: <dc8a077b-9d32-6d42-41a1-522c51385dce@benettiengineering.com>
+ (Giulio Benetti's message of "Wed, 12 Feb 2020 22:44:10 +0100")
+References: <4669dcc6-5080-22fc-702e-74f145a1a936@benettiengineering.com>
+ <87sgjffq29.fsf@dell.be.48ers.dk>
+ <dc8a077b-9d32-6d42-41a1-522c51385dce@benettiengineering.com>
+Message-ID: <87o8u3fnrr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/mesa3d/Config.in | 36 ++++++++++++++++++++++++++++++++++++
- package/mesa3d/mesa3d.mk |  6 ++++++
- 2 files changed, 42 insertions(+)
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index dbfc59bad5..b8b8451bbd 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -414,8 +414,40 @@ config BR2_PACKAGE_MESA3D_OPENGL_GLX
- comment "OpenGL GLX support needs X11"
- 	depends on !BR2_PACKAGE_XORG7
- 
-+if BR2_PACKAGE_MESA3D_OPENGL_GLX
-+
-+choice
-+	prompt "GLX platform"
-+
-+config BR2_PACKAGE_MESA3D_OPENGL_GLX_DRI
-+	bool "dri"
-+
-+config BR2_PACKAGE_MESA3D_OPENGL_GLX_XLIB
-+	bool "xlib"
-+	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER
-+
-+comment "xlib conflicts with any mesa3d dri drivers"
-+	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
-+
-+config BR2_PACKAGE_MESA3D_OPENGL_GLX_GALLIUM_XLIB
-+	bool "gallium-xlib"
-+	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
-+
-+comment "gallium-xlib conflicts with any mesa3d dri drivers and requires gallium w/ swrast"
-+	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER || \
-+		!BR2_PACKAGE_MESA3D_GALLIUM_DRIVER || \
-+		!BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
-+
-+endchoice
-+
-+endif
-+
- config BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	bool "OpenGL EGL"
-+	depends on !BR2_PACKAGE_MESA3D_OPENGL_GLX || \
-+		BR2_PACKAGE_MESA3D_OPENGL_GLX_DRI
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 	select BR2_PACKAGE_MESA3D_GBM
-@@ -423,6 +455,10 @@ config BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL
- 	  applications similar to GLX, for X, and WGL, for Windows.
- 
-+comment "OpenGL EGL is incompatible w/ non-dri GLX platforms"
-+	depends on BR2_PACKAGE_MESA3D_OPENGL_GLX
-+	depends on !BR2_PACKAGE_MESA3D_OPENGL_GLX_DRI
-+
- config BR2_PACKAGE_MESA3D_OPENGL_ES
- 	bool "OpenGL ES"
- 	select BR2_PACKAGE_HAS_LIBGLES
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index c14716bf15..a853454e05 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -57,7 +57,13 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
- #  dri          : dri based GLX requires at least one DRI driver || dri based GLX requires shared-glapi
- #  xlib         : xlib conflicts with any dri driver
- #  gallium-xlib : Gallium-xlib based GLX requires at least one gallium driver || Gallium-xlib based GLX requires softpipe or llvmpipe || gallium-xlib conflicts with any dri driver.
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX_DRI),y)
- MESA3D_CONF_OPTS += -Dglx=dri
-+else ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX_XLIB),y)
-+MESA3D_CONF_OPTS += -Dglx=xlib
-+else ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX_GALLIUM_XLIB),y)
-+MESA3D_CONF_OPTS += -Dglx=gallium-xlib
-+endif
- ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),y)
- MESA3D_CONF_OPTS += -Dgallium-xa=true
- else
+Hi,
+
+ >> Out of interest, why this focus on udisks? We don't have any packages
+ >> with reverse dependencies to udisks in Buildroot?
+
+ > Everything started out when I've followed this:
+ > https://elinux.org/Buildroot#Important
+ > Following that I've already bumped at and nfs-utils is pending after
+ > upstreaming all patches.
+ > I've update it during last 6 months, but only few days ago I've
+ > realized that it's not followed so much by chatting in IRC :-), this
+ > is the reason of udisks interest(it was listed there).
+ > Basically I was trying to find something for Buildroot.
+
+Ahh ok ;)
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
