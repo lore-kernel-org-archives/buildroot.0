@@ -1,64 +1,92 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 12 Feb 2020 22:48:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libxmlpp: bump to version 3.2.0
-Message-ID: <20200212214856.1770509-1-fontaine.fabrice@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 12 Feb 2020 15:16:16 -0700
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: allow selecting GLX platform
+Message-ID: <20200212221616.53785-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update site in Config.in, see
-  https://gitlab.gnome.org/GNOME/libxmlplusplus/commit/604ae3c286a20683f9688f8da5221b3bf89886d0
-- Update indentation of hash file (two spaces)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/libxmlpp/Config.in     | 2 +-
- package/libxmlpp/libxmlpp.hash | 6 +++---
- package/libxmlpp/libxmlpp.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/mesa3d/Config.in | 36 ++++++++++++++++++++++++++++++++++++
+ package/mesa3d/mesa3d.mk |  6 ++++++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/package/libxmlpp/Config.in b/package/libxmlpp/Config.in
-index 7244586841..3249a84398 100644
---- a/package/libxmlpp/Config.in
-+++ b/package/libxmlpp/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_LIBXMLPP
- 	help
- 	  libxml++ is a C++ wrapper for the libxml XML parser library.
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index dbfc59bad5..b8b8451bbd 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -414,8 +414,40 @@ config BR2_PACKAGE_MESA3D_OPENGL_GLX
+ comment "OpenGL GLX support needs X11"
+ 	depends on !BR2_PACKAGE_XORG7
  
--	  http://libxmlplusplus.sourceforge.net/
-+	  https://libxmlplusplus.github.io/libxmlplusplus/
++if BR2_PACKAGE_MESA3D_OPENGL_GLX
++
++choice
++	prompt "GLX platform"
++
++config BR2_PACKAGE_MESA3D_OPENGL_GLX_DRI
++	bool "dri"
++
++config BR2_PACKAGE_MESA3D_OPENGL_GLX_XLIB
++	bool "xlib"
++	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER
++
++comment "xlib conflicts with any mesa3d dri drivers"
++	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
++
++config BR2_PACKAGE_MESA3D_OPENGL_GLX_GALLIUM_XLIB
++	bool "gallium-xlib"
++	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
++
++comment "gallium-xlib conflicts with any mesa3d dri drivers and requires gallium w/ swrast"
++	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER || \
++		!BR2_PACKAGE_MESA3D_GALLIUM_DRIVER || \
++		!BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
++
++endchoice
++
++endif
++
+ config BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	bool "OpenGL EGL"
++	depends on !BR2_PACKAGE_MESA3D_OPENGL_GLX || \
++		BR2_PACKAGE_MESA3D_OPENGL_GLX_DRI
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+ 	select BR2_PACKAGE_MESA3D_GBM
+@@ -423,6 +455,10 @@ config BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL
+ 	  applications similar to GLX, for X, and WGL, for Windows.
  
- comment "libxml++ needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR \
-diff --git a/package/libxmlpp/libxmlpp.hash b/package/libxmlpp/libxmlpp.hash
-index cc5247a116..7a59880e7e 100644
---- a/package/libxmlpp/libxmlpp.hash
-+++ b/package/libxmlpp/libxmlpp.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/libxml++/3.0/libxml++-3.0.1.sha256sum
--sha256	19dc8d21751806c015179bc0b83f978e65c878724501bfc0b6c1bcead29971a6	libxml++-3.0.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/libxml++/3.2/libxml++-3.2.0.sha256sum
-+sha256  b786fae7fd7820d356698069a787d107995c3efcbef50d8f4efd3766ab768e4f  libxml++-3.2.0.tar.xz
- 
- # Hash for license file
--sha256	a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7	COPYING
-+sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-diff --git a/package/libxmlpp/libxmlpp.mk b/package/libxmlpp/libxmlpp.mk
-index 14a3d97a8f..98cba2a5a2 100644
---- a/package/libxmlpp/libxmlpp.mk
-+++ b/package/libxmlpp/libxmlpp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBXMLPP_VERSION_MAJOR = 3.0
--LIBXMLPP_VERSION = $(LIBXMLPP_VERSION_MAJOR).1
-+LIBXMLPP_VERSION_MAJOR = 3.2
-+LIBXMLPP_VERSION = $(LIBXMLPP_VERSION_MAJOR).0
- LIBXMLPP_LICENSE = LGPL-2.1 (library), LGPL-2.0+ (examples)
- LIBXMLPP_LICENSE_FILES = COPYING
- LIBXMLPP_SOURCE = libxml++-$(LIBXMLPP_VERSION).tar.xz
++comment "OpenGL EGL is incompatible w/ non-dri GLX platforms"
++	depends on BR2_PACKAGE_MESA3D_OPENGL_GLX
++	depends on !BR2_PACKAGE_MESA3D_OPENGL_GLX_DRI
++
+ config BR2_PACKAGE_MESA3D_OPENGL_ES
+ 	bool "OpenGL ES"
+ 	select BR2_PACKAGE_HAS_LIBGLES
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index c14716bf15..a853454e05 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -57,7 +57,13 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+ #  dri          : dri based GLX requires at least one DRI driver || dri based GLX requires shared-glapi
+ #  xlib         : xlib conflicts with any dri driver
+ #  gallium-xlib : Gallium-xlib based GLX requires at least one gallium driver || Gallium-xlib based GLX requires softpipe or llvmpipe || gallium-xlib conflicts with any dri driver.
++ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX_DRI),y)
+ MESA3D_CONF_OPTS += -Dglx=dri
++else ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX_XLIB),y)
++MESA3D_CONF_OPTS += -Dglx=xlib
++else ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX_GALLIUM_XLIB),y)
++MESA3D_CONF_OPTS += -Dglx=gallium-xlib
++endif
+ ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),y)
+ MESA3D_CONF_OPTS += -Dgallium-xa=true
+ else
 -- 
-2.24.1
+2.20.1
