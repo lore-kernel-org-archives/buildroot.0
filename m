@@ -1,35 +1,134 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Feb 2020 23:23:36 +0100
-Subject: [Buildroot] udisks situation
-In-Reply-To: <dc8a077b-9d32-6d42-41a1-522c51385dce@benettiengineering.com>
- (Giulio Benetti's message of "Wed, 12 Feb 2020 22:44:10 +0100")
-References: <4669dcc6-5080-22fc-702e-74f145a1a936@benettiengineering.com>
- <87sgjffq29.fsf@dell.be.48ers.dk>
- <dc8a077b-9d32-6d42-41a1-522c51385dce@benettiengineering.com>
-Message-ID: <87o8u3fnrr.fsf@dell.be.48ers.dk>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed, 12 Feb 2020 14:51:59 -0800
+Subject: [Buildroot] [PATCH 1/3] package/libtextstyle: new package
+Message-ID: <20200212225201.1919594-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+From: Adam Duskett <Aduskett@gmail.com>
 
-Hi,
+This library provides an easy way to add styling to programs that produce
+output to a console or terminal emulator window.
 
- >> Out of interest, why this focus on udisks? We don't have any packages
- >> with reverse dependencies to udisks in Buildroot?
+libtextstyle is for you if your application produces text that is more readable
+when it is accompanied with styling information, such as color, font attributes
+(weight, posture), or underlining.
 
- > Everything started out when I've followed this:
- > https://elinux.org/Buildroot#Important
- > Following that I've already bumped at and nfs-utils is pending after
- > upstreaming all patches.
- > I've update it during last 6 months, but only few days ago I've
- > realized that it's not followed so much by chatting in IRC :-), this
- > is the reason of udisks interest(it was listed there).
- > Basically I was trying to find something for Buildroot.
+Newer versions of gettext-gnu require this package.
 
-Ahh ok ;)
+Tested with test-pkg -p gettext-tiny in Debian 10 and Centos 7
 
+            br-arm-full [1/6]: OK
+ br-arm-cortex-a9-glibc [2/6]: OK
+  br-arm-cortex-m4-full [3/6]: OK
+         br-x86-64-musl [4/6]: OK
+     br-arm-full-static [5/6]: OK
+           sourcery-arm [6/6]: OK
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/libtextstyle/Config.in         | 14 +++++++++++++
+ package/libtextstyle/libtextstyle.hash |  6 ++++++
+ package/libtextstyle/libtextstyle.mk   | 28 ++++++++++++++++++++++++++
+ 5 files changed, 50 insertions(+)
+ create mode 100644 package/libtextstyle/Config.in
+ create mode 100644 package/libtextstyle/libtextstyle.hash
+ create mode 100644 package/libtextstyle/libtextstyle.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cb13035bc4..33190d79f9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -46,6 +46,7 @@ F:	package/libressl/
+ F:	package/libselinux/
+ F:	package/libsemanage/
+ F:	package/libsepol/
++F:	package/libtextstyle/
+ F:	package/libwebsockets/
+ F:	package/mender-grubenv/
+ F:	package/nginx-naxsi/
+diff --git a/package/Config.in b/package/Config.in
+index dfa3f34b9d..481f619016 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1884,6 +1884,7 @@ menu "Text and terminal handling"
+ 	source "package/libiconv/Config.in"
+ 	source "package/libunistring/Config.in"
+ 	source "package/linenoise/Config.in"
++	source "package/libtextstyle/Config.in"
+ 	source "package/ncurses/Config.in"
+ 	source "package/newt/Config.in"
+ 	source "package/oniguruma/Config.in"
+diff --git a/package/libtextstyle/Config.in b/package/libtextstyle/Config.in
+new file mode 100644
+index 0000000000..6858be5bf6
+--- /dev/null
++++ b/package/libtextstyle/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_LIBTEXTSTYLE
++	bool "libtextstyle"
++	depends on BR2_USE_WCHAR
++	help
++	  This library provides an easy way to add styling to
++	  programs that produce output to a console or terminal
++	  emulator window.
++
++	  libtextstyle is for you if your application produces text
++	  that is more readable when it is accompanied with styling
++	  information, such as color, font attributes
++	  (weight, posture), or underlining.
++
++	  http://www.gnu.org/software/gettext/
+diff --git a/package/libtextstyle/libtextstyle.hash b/package/libtextstyle/libtextstyle.hash
+new file mode 100644
+index 0000000000..5c5aee85bf
+--- /dev/null
++++ b/package/libtextstyle/libtextstyle.hash
+@@ -0,0 +1,6 @@
++# From https://lists.gnu.org/archive/html/info-gnu/2019-05/msg00011.html
++sha1  62f4a6a2fd5f80bfd0e66c497a04094fa3e07b90  gettext-0.20.1.tar.xz
++
++# Locally calculated
++sha256  53f02fbbec9e798b0faaf7c73272f83608e835c6288dd58be6c9bb54624a3800  gettext-0.20.1.tar.xz
++sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/libtextstyle/libtextstyle.mk b/package/libtextstyle/libtextstyle.mk
+new file mode 100644
+index 0000000000..e5b5706085
+--- /dev/null
++++ b/package/libtextstyle/libtextstyle.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# libtextstyle
++#
++################################################################################
++
++LIBTEXTSTYLE_VERSION = 0.20.1
++LIBTEXTSTYLE_SITE = $(BR2_GNU_MIRROR)/gettext
++LIBTEXTSTYLE_SOURCE = gettext-$(LIBTEXTSTYLE_VERSION).tar.xz
++LIBTEXTSTYLE_INSTALL_STAGING = YES
++LIBTEXTSTYLE_LICENSE = GPL-3.0+
++LIBTEXTSTYLE_LICENSE_FILES = COPYING
++LIBTEXTSTYLE_SUBDIR = libtextstyle
++HOST_LIBTEXTSTYLE_SUBDIR = libtextstyle
++
++# gettext-tools require libtextstyle.m4
++define LIBTEXTSTYLE_INSTALL_M4
++	$(INSTALL) -D -m 0755 $(@D)/libtextstyle/m4/libtextstyle.m4 $(ACLOCAL_DIR)/libtextstyle.m4
++endef
++LIBTEXTSTYLE_POST_INSTALL_STAGING_HOOKS += LIBTEXTSTYLE_INSTALL_M4
++
++define HOST_LIBTEXTSTYLE_INSTALL_M4
++	$(INSTALL) -D -m 0755 $(@D)/libtextstyle/m4/libtextstyle.m4 $(ACLOCAL_HOST_DIR)/libtextstyle.m4
++endef
++HOST_LIBTEXTSTYLE_POST_INSTALL_HOOKS += HOST_LIBTEXTSTYLE_INSTALL_M4
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.24.1
