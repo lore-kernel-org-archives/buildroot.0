@@ -1,9 +1,9 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Thu, 13 Feb 2020 21:52:57 +0100
-Subject: [Buildroot] [PATCH] package/libmicrohttpd: bump to version 0.9.70
+Date: Thu, 13 Feb 2020 21:52:58 +0100
+Subject: [Buildroot] [PATCH] package/ncdu: bump to version 1.14.2
 In-Reply-To: <20200213205258.18302-1-gilles.talis@gmail.com>
 References: <20200213205258.18302-1-gilles.talis@gmail.com>
-Message-ID: <20200213205258.18302-2-gilles.talis@gmail.com>
+Message-ID: <20200213205258.18302-3-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ncdu/ncdu.hash | 6 +++---
+ package/ncdu/ncdu.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index c13eccf837..0fc451fcde 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 fb9b6b148b787493e637d3083588711e65cbcb726fa02cee2cd543c5de27e37e  libmicrohttpd-0.9.69.tar.gz
-+sha256 90d0a3d396f96f9bc41eb0f7e8187796049285fabef82604acd4879590977307  libmicrohttpd-0.9.70.tar.gz
- sha256 7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 3fc61fe2c7..f47d7ec214 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
+diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+index ff2f469025..285dc9bfa4 100644
+--- a/package/ncdu/ncdu.hash
++++ b/package/ncdu/ncdu.hash
+@@ -1,5 +1,5 @@
+-# From https://dev.yorhel.nl/download/ncdu-1.14.1.tar.gz.sha256
+-sha256 be31e0e8c13a0189f2a186936f7e298c6390ebdc573bb4a1330bc1fcbf56e13e ncdu-1.14.1.tar.gz
++# From https://dev.yorhel.nl/download/ncdu-1.14.2.tar.gz.sha256
++sha256 947a7f5c1d0cd4e338e72b4f5bc5e2873651442cec3cb012e04ad2c37152c6b1 ncdu-1.14.2.tar.gz
+ 
+ # computed locally
+-sha256 a05f1fd38432052dc8588da66b8bf3e9e103e29a82c0b5d72c65d4d9fc830f2e COPYING
++sha256 978f49428f21714c973706030c0ef09983cc1e2889a1b7b521dbf8860870cf05 COPYING
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+index 336d413227..681c8bd87a 100644
+--- a/package/ncdu/ncdu.mk
++++ b/package/ncdu/ncdu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMICROHTTPD_VERSION = 0.9.69
-+LIBMICROHTTPD_VERSION = 0.9.70
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
+-NCDU_VERSION = 1.14.1
++NCDU_VERSION = 1.14.2
+ NCDU_SITE = http://dev.yorhel.nl/download
+ 
+ NCDU_DEPENDENCIES = ncurses
 -- 
 2.17.1
