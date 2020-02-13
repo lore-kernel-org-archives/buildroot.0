@@ -1,86 +1,80 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 13 Feb 2020 06:59:54 -0800
-Subject: [Buildroot] udisks situation
-In-Reply-To: <140df557-3b15-3f36-ac78-9d8d3139ad63@mind.be>
-References: <4669dcc6-5080-22fc-702e-74f145a1a936@benettiengineering.com>
- <140df557-3b15-3f36-ac78-9d8d3139ad63@mind.be>
-Message-ID: <CAFSsvmrBcntdBX4++6-Xzfb4GA7rp-ActKOEHE=TBeRx7ijy4Q@mail.gmail.com>
+From: Frank Vanbever <frank.vanbever@essensium.com>
+Date: Thu, 13 Feb 2020 16:14:13 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/rabbitmq-server: clean up
+ license list
+In-Reply-To: <20200204100733.22106-3-frank.vanbever@essensium.com>
+References: <20200204100733.22106-3-frank.vanbever@essensium.com>
+Message-ID: <20200213151414.25831-1-frank.vanbever@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To be fair, I use udisks in my projects. It's quite handy for handling sdcards!
+Moving the licenses to a single file name per line and ensuring they're in
+alphabetical order makes it easier to see what changed in case these licenses
+change.
 
+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+---
+ package/rabbitmq-server/rabbitmq-server.hash |  2 +-
+ package/rabbitmq-server/rabbitmq-server.mk   | 27 +++++++++++++-------
+ 2 files changed, 19 insertions(+), 10 deletions(-)
 
-On Thu, Feb 13, 2020 at 1:43 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 12/02/2020 21:52, Giulio Benetti wrote:
-> > Hi All,
-> >
-> > during bump of udisks package from version 1.0.5(the last known 1.x version) to
-> > version 2.8.4 lot of heavy dependencies have been added:
-> > - gobject-introspection(upcoming from Adam Duskett[1])
-> > - libblockdev(upcoming from me) => libbytesize, volume_key(upcoming from me)
-> > - parted
-> > - polkit
-> > - sg3-utils
-> > - libxslt
-> > then it needs:
-> > - toolchain w/ glibc
-> > - nls enabled
-> >
-> > Adam Duskett, while testing(and fixing) my udisks branch[2] against its
-> > gobject-introspection patchset[1], found out that currently Fedora provides both
-> > udisks[3] and udisks2[4]. udisks(1) is considered obsolete but they still offer
-> > it as a package.
-> >
-> > Upstream didn't create a dedicated 1.x branch, but considering the amount of
-> > dependencies for version 2.x, maybe we could imitate Fedora and keep package
-> > "udisks" as it is(since its development stopped on version 1.0.5), and package
-> > "udisks2" that will follow upstream.
-> >
-> > The meaning to keep both packages is to have different memory footprints, but
-> > most of all retro-fitting. udisks2 provides "udisksctrl" tool, while udisks(1)
-> > provides "udisks" tool that are not compatible.
-> >
-> > I have already discussed about this in IRC with Thomas Petazzoni and we ended up
-> > to keep udisks2 to follow upstream, but udisks(1) seems to be still used.
->
->  What Fedora does is of little relevance to Buildroot IMO.
->
->  Rather, let's look at who seems to be interested in the udisks package. Its
-> last real change if from Pieterjan in 2016. The only real change before that is
-> the addition of the package by Marek in 2013. So I'd say that probably nobody is
-> using it.
->
->  Our usual approach in such a case is to do whatever is the easiest. So in this
-> case, I'd say: simply bump the udisks package even though it adds all those
-> dependencies and the API changes.
->
->  If someone has a problem with that, we have several ways to fix it later, e.g.
-> by adding a udisks1 package.
->
->
-> > On the counterpart, being Buildroot an embedded linux build system, where the
-> > system is not meant to be upgraded during its lifetime,
->
->  Err, what? No no no, not upgrading during its lifetime would be a *very* bad idea!
->
->  Regards,
->  Arnout
->
-> > one could tell "do you
-> > want udisks? So use new udisks and rewrite the interface to it on you
-> > application or daemon.". But IMHO this case sounds to me similar(even if of
-> > minor impact) to packages "gstreamer" and "gstreamer1".
-> >
-> > [1]: https://patchwork.ozlabs.org/project/buildroot/list/?series=157909
-> > [2]: https://github.com/giuliobenetti/buildroot/tree/dev/udisks-bump
-> > [3]: https://apps.fedoraproject.org/packages/udisks
-> > [4]: https://apps.fedoraproject.org/packages/udisks2
-> >
-> > Best regards
+diff --git a/package/rabbitmq-server/rabbitmq-server.hash b/package/rabbitmq-server/rabbitmq-server.hash
+index 3c552820c1..5ad55b167b 100644
+--- a/package/rabbitmq-server/rabbitmq-server.hash
++++ b/package/rabbitmq-server/rabbitmq-server.hash
+@@ -1,6 +1,5 @@
+ # Locally computed
+ sha256  395689bcf57fd48aed452fcd43ff9a992de40067d3ea5c44e14680d69db7b78e  rabbitmq-server-3.6.6.tar.xz
+-sha256  f3a296f863a2729506bf0e9f1b3f219e63ede4906a88790fdd4d696f825b70ba  LICENSE-MPL-RabbitMQ
+ sha256  2d6485b111c3ef40900d5accb40388fbf99d4b018274b3617e1c92b86d95c985  LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE-APACHE2-ExplorerCanvas
+ sha256  809fa1ed21450f59827d1e9aec720bbc4b687434fa22283c6cb5dd82a47ab9c0  LICENSE-APL2-Rebar
+@@ -15,4 +14,5 @@ sha256  fc93cc7361401413887f4c1349e4b0be4bcef936eaafbcc7485038abe197c692  LICENS
+ sha256  363a3b367503176fad7fd794168193ff9add85c3d28b73af804b67ff11c59115  LICENSE-MIT-Mochiweb
+ sha256  cfc50fa0d7ee02c2d71c8866ef211a4814e8c89c50b725d27e8bdf550291a9ed  LICENSE-MIT-Sammy060
+ sha256  c29e506dd734930964382e52e98f60ab7a46c2be639165a3a25083272c8fc29f  LICENSE-MIT-SockJS
++sha256  f3a296f863a2729506bf0e9f1b3f219e63ede4906a88790fdd4d696f825b70ba  LICENSE-MPL-RabbitMQ
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE-MPL2
+diff --git a/package/rabbitmq-server/rabbitmq-server.mk b/package/rabbitmq-server/rabbitmq-server.mk
+index f9c28e6677..99b1ed4100 100644
+--- a/package/rabbitmq-server/rabbitmq-server.mk
++++ b/package/rabbitmq-server/rabbitmq-server.mk
+@@ -8,15 +8,24 @@ RABBITMQ_SERVER_VERSION = 3.6.6
+ RABBITMQ_SERVER_SITE = http://www.rabbitmq.com/releases/rabbitmq-server/v$(RABBITMQ_SERVER_VERSION)
+ RABBITMQ_SERVER_SOURCE = rabbitmq-server-$(RABBITMQ_SERVER_VERSION).tar.xz
+ RABBITMQ_SERVER_LICENSE = MPL-1.1, Apache-2.0, BSD-2-Clause, EPL, MIT, MPL-2.0
+-RABBITMQ_SERVER_LICENSE_FILES = LICENSE-MPL-RabbitMQ \
+-				LICENSE LICENSE-APACHE2-ExplorerCanvas \
+-				LICENSE-APL2-Rebar LICENSE-APL2-Stomp-Websocket \
+-				LICENSE-BSD-base64js LICENSE-BSD-glMatrix \
+-				LICENSE-EPL-OTP LICENSE-MIT-EJS10 \
+-				LICENSE-MIT-Flot LICENSE-MIT-jQuery164 \
+-				LICENSE-MIT-Mochi LICENSE-MIT-Mochiweb \
+-				LICENSE-MIT-Sammy060 LICENSE-MIT-SockJS \
+-				LICENSE-MPL2
++RABBITMQ_SERVER_LICENSE_FILES =
++	LICENSE \
++	LICENSE-APACHE2-ExplorerCanvas \
++	LICENSE-APL2-Rebar \
++	LICENSE-APL2-Stomp-Websocket \
++	LICENSE-BSD-base64js \
++	LICENSE-BSD-glMatrix \
++	LICENSE-EPL-OTP
++	LICENSE-MIT-EJS10 \
++	LICENSE-MIT-Flot \
++	LICENSE-MIT-jQuery164 \
++	LICENSE-MIT-Mochi \
++	LICENSE-MIT-Mochiweb \
++	LICENSE-MIT-Sammy060 \
++	LICENSE-MIT-SockJS \
++	LICENSE-MPL-RabbitMQ \
++	LICENSE-MPL2
++
+ RABBITMQ_SERVER_DEPENDENCIES = host-libxslt host-zip erlang libxslt
+ RABBITMQ_SERVER_TARGET_BINS = rabbitmq-plugins rabbitmq-server rabbitmqctl rabbitmq-env rabbitmq-defaults
+ 
+-- 
+2.20.1
