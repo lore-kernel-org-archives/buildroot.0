@@ -1,32 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 13 Feb 2020 21:09:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: enable back libressl
-Message-ID: <20200213200915.2238881-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Feb 2020 21:17:58 +0100
+Subject: [Buildroot] [PATCH] apckage/dovecot: security bump to version
+ 2.3.9.3
+In-Reply-To: <20200213200313.32228-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 13 Feb 2020 21:03:13 +0100")
+References: <20200213200313.32228-1-peter@korsgaard.com>
+Message-ID: <87y2t6dyx5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libressl support has been fixed since version 3.4.2 and
-https://github.com/sqlcipher/sqlcipher/commit/ce489ebb4788207f27b1641f8d2bfe6b65462260
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/sqlcipher/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ > Fixes the following security issues:
+ > - CVE-2020-7046: Truncated UTF-8 can be used to DoS submission-login and
+ >   lmtp processes
+ >   lib-smtp doesn't handle truncated command parameters properly, resulting
+ >   in infinite loop taking 100% CPU for the process.  This happens for LMTP
+ >   (where it doesn't matter so much) and also for submission-login where
+ >   unauthenticated users can trigger it.
 
-diff --git a/package/sqlcipher/Config.in b/package/sqlcipher/Config.in
-index b26bc7709f..332754b15a 100644
---- a/package/sqlcipher/Config.in
-+++ b/package/sqlcipher/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_SQLCIPHER
- 	depends on !BR2_PACKAGE_SQLITE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	help
- 	  SQLCipher is an SQLite extension that provides 256 bits AES
- 	  encryption of database files. Note that it is a fork of
+ > - CVE-2020-7957: Specially crafted mail can crash snippet generation
+ >   Snippet generation crashes if:
+ > ??- message is large enough that message-parser returns multiple body
+ >     blocks
+ > ??- The first block(s) don't contain the full snippet (e.g.  full of
+ >     whitespace)
+ > ??- input ends with '>'
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Ups, typo in $SUBJECT :/
+
 -- 
-2.24.1
+Bye, Peter Korsgaard
