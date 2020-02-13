@@ -1,7 +1,8 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Feb 2020 22:33:04 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-pip: bump to version 20.0.2
-Message-ID: <20200213053304.108218-1-james.hilliard1@gmail.com>
+Date: Wed, 12 Feb 2020 22:40:26 -0700
+Subject: [Buildroot] [PATCH 1/1] package/{protobuf,
+ python-protobuf}: bump to version 3.11.3
+Message-ID: <20200213054026.7590-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +11,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pip/python-pip.hash | 4 ++--
- package/python-pip/python-pip.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
-index 7d02a51023..58bc239154 100644
---- a/package/python-pip/python-pip.hash
-+++ b/package/python-pip/python-pip.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pip/json
--md5	1aaaf90fbafc50e7ba1e66ffceb00960  pip-19.3.1.tar.gz
--sha256	21207d76c1031e517668898a6b46a9fb1501c7a4710ef5dfd6a40ad9e6757ea7  pip-19.3.1.tar.gz
-+md5	7d42ba49b809604f0df3d55df1c3fd86  pip-20.0.2.tar.gz
-+sha256	7db0c8ea4c7ea51c8049640e8e6e7fde949de672bfa4949920675563a5a6967f  pip-20.0.2.tar.gz
- # Locally computed sha256 checksums
- sha256	5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-index b8be234d24..cc40eecdfe 100644
---- a/package/python-pip/python-pip.mk
-+++ b/package/python-pip/python-pip.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PIP_VERSION = 19.3.1
-+PYTHON_PIP_VERSION = 20.0.2
- PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
--PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/ce/ea/9b445176a65ae4ba22dce1d93e4b5fe182f953df71a145f557cffaffc1bf
-+PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/8e/76/66066b7bc71817238924c7e4b448abdb17eb0c92d645769c223f9ace478f
- PYTHON_PIP_SETUP_TYPE = setuptools
- PYTHON_PIP_LICENSE = MIT
- PYTHON_PIP_LICENSE_FILES = LICENSE.txt
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 5ebf99a993..c82ae84f22 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	5abfd5bf11dc0a14bb2303883fa76ecde48a4b447eb2f9f90b84592ce8b8707c  protobuf-cpp-3.11.0.tar.gz
++sha256	9ffb1fe6091240f2e7bcaca5b65fb19cb7b951ffc9a60d8b2c9d73f89f0e0a51  protobuf-cpp-3.11.3.tar.gz
+ sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index ed21f13c41..1531bfffb2 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works, as they share the same
+ # version/site variables.
+-PROTOBUF_VERSION = 3.11.0
++PROTOBUF_VERSION = 3.11.3
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index e299b8c760..0ede47ec20 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	a5ef6dccfe29f46168af8ab5194147f24701727a84661611fe80532ba83d3edd  protobuf-python-3.11.0.tar.gz
++sha256	a9c6c3821ece08f8db55392edbbec4d4a5392fa5df148188309ed6c5a842e3b7  protobuf-python-3.11.3.tar.gz
+ sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
 -- 
 2.20.1
