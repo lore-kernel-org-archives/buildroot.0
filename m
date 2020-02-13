@@ -1,8 +1,8 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Feb 2020 23:06:59 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-httplib2: bump to version
- 0.17.0
-Message-ID: <20200213060659.103904-1-james.hilliard1@gmail.com>
+Date: Wed, 12 Feb 2020 23:12:35 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-cython: bump to version
+ 0.29.15
+Message-ID: <20200213061235.1242-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,37 +11,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-httplib2/python-httplib2.hash | 4 ++--
- package/python-httplib2/python-httplib2.mk   | 4 ++--
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-httplib2/python-httplib2.hash b/package/python-httplib2/python-httplib2.hash
-index d299b61bc8..b1a1c32ac5 100644
---- a/package/python-httplib2/python-httplib2.hash
-+++ b/package/python-httplib2/python-httplib2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/httplib2/json
--md5	427cda9f4d55762db325bd2eb46b7fe0  httplib2-0.14.0.tar.gz
--sha256	34537dcdd5e0f2386d29e0e2c6d4a1703a3b982d34c198a5102e6e5d6194b107  httplib2-0.14.0.tar.gz
-+md5	4a55ae1d33721110bf81b4d197bfa862  httplib2-0.17.0.tar.gz
-+sha256	de96d0a49f46d0ee7e0aae80141d37b8fcd6a68fb05d02e0b82c128592dd8261  httplib2-0.17.0.tar.gz
- # Locally computer sha256 checksums
- sha256	d8b8e99f77a260b8ca939f6a73ed0ea86977229a3d97f85547f499a62f61f5af  PKG-INFO
-diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
-index a74c0e7c72..f9e1d8b3d7 100644
---- a/package/python-httplib2/python-httplib2.mk
-+++ b/package/python-httplib2/python-httplib2.mk
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index 31e1b0d992..06ebbd5a9d 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5	6e2f139e30bb08d68366f9370d87964c  Cython-0.29.14.tar.gz
+-sha256	e4d6bb8703d0319eb04b7319b12ea41580df44fd84d83ccda13ea463c6801414  Cython-0.29.14.tar.gz
++md5	63c819697ed7ce89c6455ff578312a26  Cython-0.29.15.tar.gz
++sha256	60d859e1efa5cc80436d58aecd3718ff2e74b987db0518376046adedba97ac30  Cython-0.29.15.tar.gz
+ # Locally computed sha256 checksums
+ sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index 6c23e14218..997a38db1c 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HTTPLIB2_VERSION = 0.14.0
-+PYTHON_HTTPLIB2_VERSION = 0.17.0
- PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
--PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/ce/2e/87461bfbb7e561203b759b3f7f639e2144226604372830d00a8279960ae1
-+PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/6d/97/8225643419a53dd52d84c34d9d1e99bdbe18083dc760e7a2d0c47c0fab93
- PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
- PYTHON_HTTPLIB2_LICENSE = MIT
- PYTHON_HTTPLIB2_LICENSE_FILES = PKG-INFO
+-PYTHON_CYTHON_VERSION = 0.29.14
++PYTHON_CYTHON_VERSION = 0.29.15
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/9c/9b/706dac7338c2860cd063a28cdbf5e9670995eaea408abbf2e88ba070d90d
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/d9/82/d01e767abb9c4a5c07a6a1e6f4d5a8dfce7369318d31f48a52374094372e
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
 -- 
 2.20.1
