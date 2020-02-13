@@ -1,31 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Feb 2020 23:26:21 +0100
-Subject: [Buildroot] [PATCH 1/3] package/libsigrok: drop remnants of
- autoreconf
-In-Reply-To: <f3a6a36229cf2b73df2ea2f5ee0c092c601cf4ea.1581261155.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 9 Feb 2020 16:12:40 +0100")
-References: <cover.1581261155.git.yann.morin.1998@free.fr>
- <f3a6a36229cf2b73df2ea2f5ee0c092c601cf4ea.1581261155.git.yann.morin.1998@free.fr>
-Message-ID: <87mu9mceeq.fsf@dell.be.48ers.dk>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Thu, 13 Feb 2020 23:26:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/parted: disable on uclibc
+In-Reply-To: <87d0aidul6.fsf@dell.be.48ers.dk>
+References: <20200118163929.663035-1-fontaine.fabrice@gmail.com>
+ <87d0aidul6.fsf@dell.be.48ers.dk>
+Message-ID: <f4f69402-631b-ef46-5f2c-af49fc279cb0@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hi Peter,
 
- > libsigrok has not needed autoreconf since b428801934 (package/libsigrok:
- > bump version to 0.4.0), 4 years ago now.
+On 2/13/20 10:51 PM, Peter Korsgaard wrote:
+>>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+> 
+>   > Like postgreSQL (and imagemagick), parted does not build against uClibc
+>   > with locales enabled, due to an uClibc bug, see
+>   > http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html:
+> 
+>   > In file included from atari.c:42:
+>   > atari.c: In function 'atr_part_correct':
+>   > atari.c:221:9: error: dereferencing pointer to incomplete type 'struct __uclibc_locale_struct'
+>   >   return isalnum_l(part->id[0], atr_c_locale)
+>   >          ^~~~~~~~~
+> 
+>   > So disable parted on uclibc
+> 
+>   > Fixes:
+>   >  - http://autobuild.buildroot.org/results/992518d340a9f32a0721d6e66936850c4c3ef2e4
+> 
+>   > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> 
+> What about the reverse dependencies? E.G. udisks and python-pyparted?
 
- > As such, we no longer need the autoreconf options, nor the dependency on
- > the autoconf archive.
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
+Since I'm bumping udisks :-), udisks already depends on 
+!BR2_TOOLCHAIN_USES_UCLIBC, but python-pyparted does not, so it deserves 
+a build with the same autobuilder failure defconfig, I let you know.
 
 -- 
-Bye, Peter Korsgaard
+Giulio Benetti
+Benetti Engineering sas
