@@ -1,44 +1,73 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 13 Feb 2020 19:36:35 +0200
-Subject: [Buildroot] [PATCH] package/squashfs: update homepage link
-Message-ID: <06ad4a90ea60a0813cea84b9be67c25777b6aacb.1581615395.git.baruch@tkos.co.il>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Thu, 13 Feb 2020 09:46:55 -0800
+Subject: [Buildroot] [PATCH v4 1/1] package/mariadb: patch mariadb_config to
+ add sysroot path
+Message-ID: <20200213174655.17309-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Development moved to github.com.
+This patch adds @CMAKE_SYSROOT@ to mariadb_config.c.in. Without it,
+mariadb_config and mysql_config incorrectly returns host paths for
+include paths and library paths.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Upstream report and status:
+https://jira.mariadb.org/browse/CONC-454
+https://github.com/mariadb-corporation/mariadb-connector-c/pull/127
+
+Reported-by: Alexey Lukyanchuk <skif@skif-web.ru>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
- package/squashfs/Config.in      | 2 +-
- package/squashfs/Config.in.host | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v3 -> v4:
+  - add upstream status (suggested by Peter)
+Changes v2 -> v3:
+  - remove extra slash between CMAKE_SYSROOT and CMAKE_INSTALL_PREFIX
+Changes v1 -> v2:
+  - no change
+---
+ ...2-add-sysroot-path-to-mariadb_config.patch | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch
 
-diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
-index f5ae5d9bec85..60b243d98975 100644
---- a/package/squashfs/Config.in
-+++ b/package/squashfs/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_SQUASHFS
- 	help
- 	  Tools to generate SquashFS filesystems.
- 
--	  http://squashfs.sourceforge.net/
-+	  https://github.com/plougher/squashfs-tools
- 
- if BR2_PACKAGE_SQUASHFS
- 
-diff --git a/package/squashfs/Config.in.host b/package/squashfs/Config.in.host
-index b353374dd0c7..aa25b37658c5 100644
---- a/package/squashfs/Config.in.host
-+++ b/package/squashfs/Config.in.host
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_HOST_SQUASHFS
- 	help
- 	  Tools to generate SquashFS filesystems.
- 
--	  http://squashfs.sourceforge.net/
-+	  https://github.com/plougher/squashfs-tools
+diff --git a/package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch b/package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch
+new file mode 100644
+index 0000000000..e78434f930
+--- /dev/null
++++ b/package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch
+@@ -0,0 +1,32 @@
++From 7e1b6aafeb9fe6558da7506b304c0efb5ea82281 Mon Sep 17 00:00:00 2001
++From: Ryan Coe <bluemrp9@gmail.com>
++Date: Fri, 13 Dec 2019 17:13:26 -0800
++Subject: [PATCH 1/1] add sysroot path to mariadb_config
++
++Upstream report and status:
++https://jira.mariadb.org/browse/CONC-454
++https://github.com/mariadb-corporation/mariadb-connector-c/pull/127
++
++Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
++---
++ libmariadb/mariadb_config/mariadb_config.c.in | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libmariadb/mariadb_config/mariadb_config.c.in b/libmariadb/mariadb_config/mariadb_config.c.in
++index 703c9466a1d9214a85f3638d2e3b4ecfef0c7bd6..f5513333e670373f060a3c2574d1d42facfd0337 100644
++--- a/libmariadb/mariadb_config/mariadb_config.c.in
+++++ b/libmariadb/mariadb_config/mariadb_config.c.in
++@@ -5,8 +5,8 @@
++ 
++ static char *mariadb_progname;
++ 
++-#define INCLUDE "-I at CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@ -I at CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@/mysql"
++-#define LIBS    "-L at CMAKE_INSTALL_PREFIX@/@INSTALL_LIBDIR@/ -lmariadb"
+++#define INCLUDE "-I at CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@ -I at CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@/mysql"
+++#define LIBS    "-L at CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@/@INSTALL_LIBDIR@/ -lmariadb"
++ #define LIBS_SYS "@extra_dynamic_LDFLAGS@"
++ #define CFLAGS  INCLUDE
++ #define VERSION "@MARIADB_CLIENT_VERSION@"
++-- 
++2.24.1
++
 -- 
 2.25.0
