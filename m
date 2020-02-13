@@ -1,8 +1,7 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Feb 2020 22:46:12 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-pyopenssl: bump to version
- 19.1.0
-Message-ID: <20200213054612.35952-1-james.hilliard1@gmail.com>
+Date: Wed, 12 Feb 2020 22:51:31 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-pyyaml: bump to version 5.3
+Message-ID: <20200213055131.49728-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,37 +10,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyopenssl/python-pyopenssl.hash | 4 ++--
- package/python-pyopenssl/python-pyopenssl.mk   | 4 ++--
+ package/python-pyyaml/python-pyyaml.hash | 4 ++--
+ package/python-pyyaml/python-pyyaml.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
-index 30071cf9ff..b457aeacdd 100644
---- a/package/python-pyopenssl/python-pyopenssl.hash
-+++ b/package/python-pyopenssl/python-pyopenssl.hash
+diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
+index a5cbf82986..e0d182bcbb 100644
+--- a/package/python-pyyaml/python-pyyaml.hash
++++ b/package/python-pyyaml/python-pyyaml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyopenssl/json
--md5 b9876625dc1d5a5a662d748689191537  pyOpenSSL-19.0.0.tar.gz
--sha256 aeca66338f6de19d1aa46ed634c3b9ae519a64b458f8468aec688e7e3c20f200  pyOpenSSL-19.0.0.tar.gz
-+md5 d9804fedbd1eb0c7d9243397b1fbf972  pyOpenSSL-19.1.0.tar.gz
-+sha256 9a24494b2602aaf402be5c9e30a0b82d4a5c67528fe8fb475e3f3bc00dd69507  pyOpenSSL-19.1.0.tar.gz
- # Locally computed sha256
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
-index d341ef124d..bbbd836a1b 100644
---- a/package/python-pyopenssl/python-pyopenssl.mk
-+++ b/package/python-pyopenssl/python-pyopenssl.mk
+ # md5, sha256 from https://pypi.org/pypi/PyYAML/json
+-md5	20f87ab421b0271dbf371dc5c1cddb5c  PyYAML-5.1.2.tar.gz
+-sha256	01adf0b6c6f61bd11af6e10ca52b7d4057dd0be0343eb9283c878cf3af56aee4  PyYAML-5.1.2.tar.gz
++md5	adbb0d336b509d6472d3b095a0f1cf30  PyYAML-5.3.tar.gz
++sha256	e9f45bd5b92c7974e59bcd2dcc8631a6b6cc380a904725fce7bc08872e691615  PyYAML-5.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256	a2adb9c959b797494a0ef80bdf60e22db2749ee3e0c0908556e3eb548f967c56  LICENSE
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index 165a938f11..5d9246d37c 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYOPENSSL_VERSION = 19.0.0
-+PYTHON_PYOPENSSL_VERSION = 19.1.0
- PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
--PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/40/d0/8efd61531f338a89b4efa48fcf1972d870d2b67a7aea9dcf70783c8464dc
-+PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/0d/1d/6cc4bd4e79f78be6640fab268555a11af48474fac9df187c3361a1d1d2f0
- PYTHON_PYOPENSSL_LICENSE = Apache-2.0
- PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
- PYTHON_PYOPENSSL_SETUP_TYPE = setuptools
+-PYTHON_PYYAML_VERSION = 5.1.2
++PYTHON_PYYAML_VERSION = 5.3
+ PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
+-PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/e3/e8/b3212641ee2718d556df0f23f78de8303f068fe29cdaa7a91018849582fe
++PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/3d/d9/ea9816aea31beeadccd03f1f8b625ecf8f645bd66744484d162d84803ce5
+ PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
 -- 
 2.20.1
