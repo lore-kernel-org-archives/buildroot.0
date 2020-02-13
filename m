@@ -1,108 +1,66 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 13 Feb 2020 06:08:57 +0100
-Subject: [Buildroot] [PATCH 3/3] package/gettext-tiny: bump version to
- 0.3.1
-In-Reply-To: <20200212225201.1919594-3-aduskett@gmail.com>
-References: <20200212225201.1919594-1-aduskett@gmail.com>
- <20200212225201.1919594-3-aduskett@gmail.com>
-Message-ID: <CAEyMn7ave0fMBUnPJO8Myy6p5i+SFjyp5Afh+uaa4kS-m7UzZg@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 12 Feb 2020 22:10:17 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-mako: bump to version 1.1.1
+Message-ID: <20200213051017.29152-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+License hash change is due to date update.
 
-Am Mi., 12. Feb. 2020 um 23:52 Uhr schrieb <aduskett@gmail.com>:
->
-> From: Adam Duskett <Aduskett@gmail.com>
->
-> Other changes:
->   - Update gettext to 0.20.1
->   - Remove share/gettext-tiny/m4/lock.m4 from GETTEXT_TINY_EXTRA_GETTEXT_FILES
->     and the install list, as this file was removed in commit
->     8c2bfdbddb13a480d88ceac4ab0e5886bda957cb.
->
-> Tested with test-pkg -p gettext-tiny in Debian 10 and Centos 7
->
->             br-arm-full [1/6]: OK
->  br-arm-cortex-a9-glibc [2/6]: OK
->   br-arm-cortex-m4-full [3/6]: OK
->          br-x86-64-musl [4/6]: OK
->      br-arm-full-static [5/6]: OK
->            sourcery-arm [6/6]: OK
->
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/gettext-tiny/gettext-tiny.hash | 8 ++++----
->  package/gettext-tiny/gettext-tiny.mk   | 8 +++-----
->  2 files changed, 7 insertions(+), 9 deletions(-)
->
-> diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
-> index 9232fe8530..91f6614cce 100644
-> --- a/package/gettext-tiny/gettext-tiny.hash
-> +++ b/package/gettext-tiny/gettext-tiny.hash
-> @@ -1,7 +1,7 @@
->  # Locally Computed:
-> -sha256 efc740007c82a9b3a0d382fb50d212fa7dc0beddb9695409ee79684f9f2124b2  gettext-tiny-adaa9c64921e80f2b8dd3610ffb508618b9204f3.tar.gz
-> +sha256 654dcd52f2650476c8822b60bee89c20a0aa7f6a1bf6001701eeacd71a9e388b  gettext-tiny-0.3.1.tar.gz
->  sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
->  sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  extra/COPYING
-> -# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
-> -md5  df3f5690eaa30fd228537b00cb7b7590         gettext-0.19.8.1.tar.xz
-> -sha1 e0fe90ede22f7f16bbde7bdea791a835f2773fc9 gettext-0.19.8.1.tar.xz
-> +# From https://lists.gnu.org/archive/html/info-gnu/2019-05/msg00011.html
-> +md5  9ed9e26ab613b668e0026222a9c23639         gettext-0.20.1.tar.xz
-> +sha1 62f4a6a2fd5f80bfd0e66c497a04094fa3e07b90 gettext-0.20.1.tar.xz
-> diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-> index 09a98f99b4..0aed1e4b1f 100644
-> --- a/package/gettext-tiny/gettext-tiny.mk
-> +++ b/package/gettext-tiny/gettext-tiny.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->
-> -GETTEXT_TINY_VERSION = adaa9c64921e80f2b8dd3610ffb508618b9204f3
-> -GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,$(GETTEXT_TINY_VERSION))
-> +GETTEXT_TINY_VERSION = 0.3.1
-> +GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,v$(GETTEXT_TINY_VERSION))
->  GETTEXT_TINY_LICENSE = MIT, GPL-3.0+ (extra gettext)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-mako/python-mako.hash | 6 +++---
+ package/python-mako/python-mako.mk   | 4 ++--
+ package/python3-mako/python3-mako.mk | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-The git version adaa9c64921e80f2b8dd3610ffb508618b9204f3 is newer than
-the latest release 0.3.1.
-
->  GETTEXT_TINY_INSTALL_STAGING = YES
->  GETTEXT_TINY_LICENSE_FILES = LICENSE
-> @@ -14,12 +14,11 @@ HOST_GETTEXT_TINY_LICENSE_FILES = LICENSE extra/COPYING
->  GETTEXT_TINY_PROVIDES = gettext
->
->  # needed for gettextize
-> -GETTEXT_TINY_ARCHIVE_VERSION = 0.19.8
-> +GETTEXT_TINY_ARCHIVE_VERSION = 0.20.1
->
->  GETTEXT_TINY_EXTRA_GETTEXT_FILES = \
->         gettext-tools/misc/gettextize.in \
->         gettext-tools/po/Makevars.template \
-> -       gettext-runtime/m4/lock.m4 \
->         gettext-runtime/po/boldquot.sed \
->         gettext-runtime/po/en at boldquot.header \
->         gettext-runtime/po/en at quot.header \
-> @@ -83,7 +82,6 @@ define HOST_GETTEXT_TINY_INSTALL_CMDS
->
->         $(INSTALL) -m 0755 -D $(@D)/gettextize $(HOST_DIR)/bin/gettextize
->         $(INSTALL) -m 0644 -D $(@D)/build-aux/config.rpath $(HOST_DIR)/share/gettext-tiny/config.rpath
-> -       $(INSTALL) -m 0644 -D $(@D)/extra/lock.m4 $(HOST_DIR)/share/gettext-tiny/m4/lock.m4
->         $(INSTALL) -m 0644 -D $(@D)/extra/Makefile.in.in $(HOST_DIR)/share/gettext-tiny/po/Makefile.in.in
->         $(INSTALL) -m 0644 -D $(@D)/extra/boldquot.sed $(HOST_DIR)/share/gettext-tiny/po/boldquot.sed
->         $(INSTALL) -m 0644 -D $(@D)/extra/en at boldquot.header $(HOST_DIR)/share/gettext-tiny/po/en at boldquot.header
-> --
-> 2.24.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
---
-Heiko
+diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
+index 0f0dadcd0c..a1c18c9916 100644
+--- a/package/python-mako/python-mako.hash
++++ b/package/python-mako/python-mako.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/mako/json
+-md5	6c3f2da0b74af529a4c4a537d0848bf2  Mako-1.1.0.tar.gz
+-sha256	a36919599a9b7dc5d86a7a8988f23a9a3a3d083070023bab23d64f7f1d1e0a4b  Mako-1.1.0.tar.gz
++md5	2660a4916f2f63456e6885c727b7cd2f  Mako-1.1.1.tar.gz
++sha256	2984a6733e1d472796ceef37ad48c26f4a984bb18119bb2dbc37a44d8f6e75a4  Mako-1.1.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	c3b124673c93872156757a934c75b498d68eec09510e25e549d9dc2013776499  LICENSE
++sha256	47cd0d41b1092f9161cfb629ed15e5cea185144710ff4633a4281ef088ff5de7  LICENSE
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index 622359493a..5be9937fee 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
+@@ -6,9 +6,9 @@
+ 
+ # Please keep in sync with
+ # package/python3-mako/python3-mako.mk
+-PYTHON_MAKO_VERSION = 1.1.0
++PYTHON_MAKO_VERSION = 1.1.1
+ PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+-PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/b0/3c/8dcd6883d009f7cae0f3157fb53e9afb05a0d3d33b3db1268ec2e6f4a56b
++PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/28/03/329b21f00243fc2d3815399413845dbbfb0745cff38a29d3597e97f8be58
+ PYTHON_MAKO_SETUP_TYPE = setuptools
+ PYTHON_MAKO_LICENSE = MIT
+ PYTHON_MAKO_LICENSE_FILES = LICENSE
+diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
+index 31df4194eb..6d5c1a185e 100644
+--- a/package/python3-mako/python3-mako.mk
++++ b/package/python3-mako/python3-mako.mk
+@@ -6,9 +6,9 @@
+ 
+ # Please keep in sync with
+ # package/python-mako/python-mako.mk
+-PYTHON3_MAKO_VERSION = 1.1.0
++PYTHON3_MAKO_VERSION = 1.1.1
+ PYTHON3_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+-PYTHON3_MAKO_SITE = https://files.pythonhosted.org/packages/b0/3c/8dcd6883d009f7cae0f3157fb53e9afb05a0d3d33b3db1268ec2e6f4a56b
++PYTHON3_MAKO_SITE = https://files.pythonhosted.org/packages/28/03/329b21f00243fc2d3815399413845dbbfb0745cff38a29d3597e97f8be58
+ PYTHON3_MAKO_SETUP_TYPE = setuptools
+ PYTHON3_MAKO_LICENSE = MIT
+ PYTHON3_MAKO_LICENSE_FILES = LICENSE
+-- 
+2.20.1
