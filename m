@@ -1,81 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Feb 2020 18:12:55 +0100
-Subject: [Buildroot] [git commit] package/doxygen: needs host gcc >= 4.9
-Message-ID: <20200213170142.9AB888DF6C@busybox.osuosl.org>
+Date: Thu, 13 Feb 2020 18:09:24 +0100
+Subject: [Buildroot] [git commit] package/libxmlpp: bump to version 3.2.0
+Message-ID: <20200213170142.88BF28DF6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88bb278d5ac790bee0c3a438464da82ee7625cff
+commit: https://git.buildroot.net/buildroot/commit/?id=a583a9fd1a13158a4ff30e11ce8172fe5938ebdf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-host-doxygen use std::make_unique which is a C++14 feature and so not
-available with host gcc 4.8 so add a Config.in.host for doxygen and add
-host gcc 4.9 dependency to host-doxygen and sigrok C++ option
-
-Fixes:
- - http://autobuild.buildroot.org/results/3ac78c5d4728287bafdfeb3a54f50eb193934b63
+- Update site in Config.in, see
+  https://gitlab.gnome.org/GNOME/libxmlplusplus/commit/604ae3c286a20683f9688f8da5221b3bf89886d0
+- Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in.host         |  1 +
- package/doxygen/Config.in.host | 12 ++++++++++++
- package/libsigrok/Config.in    |  7 +++++--
- 3 files changed, 18 insertions(+), 2 deletions(-)
+ package/libxmlpp/Config.in     | 2 +-
+ package/libxmlpp/libxmlpp.hash | 6 +++---
+ package/libxmlpp/libxmlpp.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 62e860d7c3..dfea478868 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -14,6 +14,7 @@ menu "Host utilities"
- 	source "package/dfu-util/Config.in.host"
- 	source "package/dos2unix/Config.in.host"
- 	source "package/dosfstools/Config.in.host"
-+	source "package/doxygen/Config.in.host"
- 	source "package/dtc/Config.in.host"
- 	source "package/e2fsprogs/Config.in.host"
- 	source "package/e2tools/Config.in.host"
-diff --git a/package/doxygen/Config.in.host b/package/doxygen/Config.in.host
-new file mode 100644
-index 0000000000..3a06199c93
---- /dev/null
-+++ b/package/doxygen/Config.in.host
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_HOST_DOXYGEN
-+	bool "host doxygen"
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++14
-+	help
-+	  Doxygen is the de facto standard tool for generating
-+	  documentation from annotated C++ sources, but it also
-+	  supports other popular programming languages such as C,
-+	  Objective-C, C#, PHP, Java, Python, IDL (Corba, Microsoft,
-+	  and UNO/OpenOffice flavors), Fortran, VHDL, Tcl, and to some
-+	  extent D.
-+
-+	  http://www.doxygen.nl/
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-index a4b9f66566..69531e621c 100644
---- a/package/libsigrok/Config.in
-+++ b/package/libsigrok/Config.in
-@@ -26,13 +26,16 @@ config BR2_PACKAGE_LIBSIGROKCXX
- 	bool "build C++ bindings"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # glibmm
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-doxygen
- 	select BR2_PACKAGE_GLIBMM
-+	select BR2_PACKAGE_HOST_DOXYGEN
+diff --git a/package/libxmlpp/Config.in b/package/libxmlpp/Config.in
+index 7244586841..3249a84398 100644
+--- a/package/libxmlpp/Config.in
++++ b/package/libxmlpp/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_LIBXMLPP
  	help
- 	  Build libsigrok C++ bindings as well.
+ 	  libxml++ is a C++ wrapper for the libxml XML parser library.
  
--comment "C++ bindings need a toolchain w/ C++, gcc >= 4.9"
-+comment "C++ bindings need a toolchain w/ C++, gcc >= 4.9, host gcc >= 4.9"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_HOST_GCC_AT_LEAST_4_9
+-	  http://libxmlplusplus.sourceforge.net/
++	  https://libxmlplusplus.github.io/libxmlplusplus/
  
- endif
+ comment "libxml++ needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR \
+diff --git a/package/libxmlpp/libxmlpp.hash b/package/libxmlpp/libxmlpp.hash
+index cc5247a116..7a59880e7e 100644
+--- a/package/libxmlpp/libxmlpp.hash
++++ b/package/libxmlpp/libxmlpp.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/libxml++/3.0/libxml++-3.0.1.sha256sum
+-sha256	19dc8d21751806c015179bc0b83f978e65c878724501bfc0b6c1bcead29971a6	libxml++-3.0.1.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/libxml++/3.2/libxml++-3.2.0.sha256sum
++sha256  b786fae7fd7820d356698069a787d107995c3efcbef50d8f4efd3766ab768e4f  libxml++-3.2.0.tar.xz
  
+ # Hash for license file
+-sha256	a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7	COPYING
++sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
+diff --git a/package/libxmlpp/libxmlpp.mk b/package/libxmlpp/libxmlpp.mk
+index 14a3d97a8f..98cba2a5a2 100644
+--- a/package/libxmlpp/libxmlpp.mk
++++ b/package/libxmlpp/libxmlpp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBXMLPP_VERSION_MAJOR = 3.0
+-LIBXMLPP_VERSION = $(LIBXMLPP_VERSION_MAJOR).1
++LIBXMLPP_VERSION_MAJOR = 3.2
++LIBXMLPP_VERSION = $(LIBXMLPP_VERSION_MAJOR).0
+ LIBXMLPP_LICENSE = LGPL-2.1 (library), LGPL-2.0+ (examples)
+ LIBXMLPP_LICENSE_FILES = COPYING
+ LIBXMLPP_SOURCE = libxml++-$(LIBXMLPP_VERSION).tar.xz
