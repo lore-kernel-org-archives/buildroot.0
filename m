@@ -1,89 +1,42 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Thu, 13 Feb 2020 21:52:56 +0100
-Subject: [Buildroot] [PATCH] package/libhttpparser: bump to version 2.9.3
-Message-ID: <20200213205258.18302-1-gilles.talis@gmail.com>
+Date: Thu, 13 Feb 2020 21:52:57 +0100
+Subject: [Buildroot] [PATCH] package/libmicrohttpd: bump to version 0.9.70
+In-Reply-To: <20200213205258.18302-1-gilles.talis@gmail.com>
+References: <20200213205258.18302-1-gilles.talis@gmail.com>
+Message-ID: <20200213205258.18302-2-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also dropped patch that was pushed upstream
-
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- ...tion-when-calling-ln-at-install-time.patch | 39 -------------------
- package/libhttpparser/libhttpparser.hash      |  2 +-
- package/libhttpparser/libhttpparser.mk        |  2 +-
- 3 files changed, 2 insertions(+), 41 deletions(-)
- delete mode 100644 package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch b/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
-deleted file mode 100644
-index 70f16f662f..0000000000
---- a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 384917321c45e492b0ca7aaa94d4b15324aef95d Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Fri, 28 Aug 2015 19:02:11 +0200
--Subject: [PATCH] Use -f option when calling ln at install time
--
--This allows "make install; make install" to work properly.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: Renaud AUBIN <root@renaud.io>
-----
-- Makefile | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 6cf63bd..c182e5c 100644
----- a/Makefile
--+++ b/Makefile
--@@ -133,14 +133,14 @@ tags: http_parser.c http_parser.h test.c
-- install: library
-- 	$(INSTALL) -D  http_parser.h $(DESTDIR)$(INCLUDEDIR)/http_parser.h
-- 	$(INSTALL) -D $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
---	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
---	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
--+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
--+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
-- 
-- install-strip: library
-- 	$(INSTALL) -D  http_parser.h $(DESTDIR)$(INCLUDEDIR)/http_parser.h
-- 	$(INSTALL) -D -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
---	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
---	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
--+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
--+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
-- 
-- uninstall:
-- 	rm $(DESTDIR)$(INCLUDEDIR)/http_parser.h
---- 
--2.6.2
--
-diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
-index a87c0ffa7a..4634b06620 100644
---- a/package/libhttpparser/libhttpparser.hash
-+++ b/package/libhttpparser/libhttpparser.hash
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index c13eccf837..0fc451fcde 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256 5199500e352584852c95c13423edc5f0cb329297c81dd69c3c8f52a75496da08  libhttpparser-2.9.2.tar.gz
-+sha256 8fa0ab8770fd8425a9b431fdbf91623c4d7a9cdb842b9339289bd2b0b01b0d3d  libhttpparser-2.9.3.tar.gz
- sha256 79e6ba8b687cb54786207342b9b6fcee0ac10218453ed9009b84d949b2233cc0  LICENSE-MIT
-diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
-index 082fe12767..d7b6907493 100644
---- a/package/libhttpparser/libhttpparser.mk
-+++ b/package/libhttpparser/libhttpparser.mk
+ # Locally calculated
+-sha256 fb9b6b148b787493e637d3083588711e65cbcb726fa02cee2cd543c5de27e37e  libmicrohttpd-0.9.69.tar.gz
++sha256 90d0a3d396f96f9bc41eb0f7e8187796049285fabef82604acd4879590977307  libmicrohttpd-0.9.70.tar.gz
+ sha256 7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 3fc61fe2c7..f47d7ec214 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBHTTPPARSER_VERSION = 2.9.2
-+LIBHTTPPARSER_VERSION = 2.9.3
- LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,v$(LIBHTTPPARSER_VERSION))
- LIBHTTPPARSER_INSTALL_STAGING = YES
- LIBHTTPPARSER_LICENSE = MIT
+-LIBMICROHTTPD_VERSION = 0.9.69
++LIBMICROHTTPD_VERSION = 0.9.70
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
 -- 
 2.17.1
