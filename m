@@ -1,95 +1,22 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 13 Feb 2020 11:07:36 -0600
-Subject: [Buildroot] [PATCH] package/rng-tools: make jitterentropy
- conditional
-In-Reply-To: <CAGm1_ksUDVmG3-b6H8FRSBzb9=0GahR7Q5Uh3YKM4uAysvkZZg@mail.gmail.com>
-References: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
- <20200205203257.48877881@windsurf>
- <CANQCQparBzmSPD9epjQw8t6jyMejP0E1X0GjTUkXHpjXTi8Svg@mail.gmail.com>
- <CANQCQpZ9Hs6DA6XJpBnMLxqnnJj8N3TYQLsDSp_YR3xqR8G-bQ@mail.gmail.com>
- <87wo8wuc3z.fsf@dell.be.48ers.dk>
- <CANQCQpb8YvhCXireoGM_cwnJnp2T8uGLunPj_3ARyuKgQO+Adw@mail.gmail.com>
- <CAGm1_ksUDVmG3-b6H8FRSBzb9=0GahR7Q5Uh3YKM4uAysvkZZg@mail.gmail.com>
-Message-ID: <CANQCQpatBqo1S1Pn9usEPzLOPusqK1LQOBcoos8uObZ+skFgxg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Feb 2020 18:09:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qpdf: bump to version 9.1.1
+In-Reply-To: <20200212210854.1562030-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 12 Feb 2020 22:08:54 +0100")
+References: <20200212210854.1562030-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k14qfm8j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
+ > Update indentation of hash file (two spaces)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-On Tue, Feb 11, 2020 at 9:22 AM Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
->
-> Hi Matt,
->
-> On Tue, Feb 11, 2020 at 4:06 PM Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
-> >
-> > Peter,
-> >
-> >
-> > On Sat, Feb 8, 2020 at 1:13 PM Peter Korsgaard <peter@korsgaard.com> wrote:
-> > >
-> > > >>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
-> > >
-> > >  > Thomas,
-> > >  > On Wed, Feb 5, 2020 at 2:46 PM Matthew Weber
-> > >  > <matthew.weber@rockwellcollins.com> wrote:
-> > >  >>
-> > >  >> Thomas,
-> > >  >>
-> > >  >> On Wed, Feb 5, 2020 at 1:33 PM Thomas Petazzoni
-> > >  >> <thomas.petazzoni@bootlin.com> wrote:
-> > >  >> >
-> > >  >> > On Wed,  5 Feb 2020 12:26:08 -0600
-> > >  >> > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
-> > >  >> >
-> > >  >> > > The update of rng-tools from 5 to 6.7 introduced a change where
-> > >  >> > > the jitterentropy library was enabled by default instead of
-> > >  >> > > returning a special 66 return code to hangle the case of no
-> > >  >> > > hwrng. This patch reverts that change and allows a user to
-> > >  >> > > select when to enable the jitterentropy source. The bug
-> > >  >> > > documents an issue of when a hwrng is enabled with jitterentropy
-> > >  >> > > there is a longer boot time.
-> > >  >> >
-> > >  >> > I don't understand this story of the 66 return code. Could you explain
-> > >  >> > a bit more ?
-> > >  >>
-> > >  >> In Buildroot commit 22cb51e1 the systemd support addition included the
-> > >  >> successcode change based on the Fedora bugfix for ignoring if no hwrng
-> > >  >> is present (https://bugzilla.redhat.com/show_bug.cgi?id=892178).
-> > >
-> > >  > Ryan Barnett noticed that rng-tools dropped the special return code.
-> > >  > I guess we could just drop support for this special case as well....
-> > >  > https://github.com/nhorman/rng-tools/blob/v6.8/rngd.c#L805
-> > >
-> > > Has that Fedora patch ever been included upstream? I don't seem to find
-> > > it in the history.
-> >
-> > It doesn't look like it.  I'm wondering if we should just drop this
-> > systemd unit return behavior and put a comment in the service file
-> > about enabling an entropy package if this service fails without a
-> > hardware rng present.  Seems too complicated to try and cover this
-> > special case.
-> >
-> > >
-> > > I btw see there is a 6.9 release with more bugfixes, care to send a
-> > > patch bumping the version?
-> >
-> > I'll review the one that was just sent.  I also ping'd the original
-> > bug report to see if they could test with this bump as there are a
-> > number of minor jitterentropy related fixes.
-> > http://patchwork.ozlabs.org/patch/1235396/
->
-> We had similar issue today with am335x (kernel 5.4.x). Bumping
-> rng-tools to v6.9 helped.
->
+Committed, thanks.
 
-Thank you for that feedback, I'll make this patch is superseded as the
-bump resolved the bug.  I'll add a note with this patchwork thread in
-the bug report as well.
-
-Matt
+-- 
+Bye, Peter Korsgaard
