@@ -1,47 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Feb 2020 18:08:47 +0100
-Subject: [Buildroot] [git commit] package/qpdf: bump to version 9.1.1
-Message-ID: <20200213170142.7ED4D8DF6B@busybox.osuosl.org>
+Date: Thu, 13 Feb 2020 18:12:55 +0100
+Subject: [Buildroot] [git commit] package/doxygen: needs host gcc >= 4.9
+Message-ID: <20200213170142.9AB888DF6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7c1ab49cdbd560a0e7abd0a6a15688ca0129962
+commit: https://git.buildroot.net/buildroot/commit/?id=88bb278d5ac790bee0c3a438464da82ee7625cff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation of hash file (two spaces)
+host-doxygen use std::make_unique which is a C++14 feature and so not
+available with host gcc 4.8 so add a Config.in.host for doxygen and add
+host gcc 4.9 dependency to host-doxygen and sigrok C++ option
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3ac78c5d4728287bafdfeb3a54f50eb193934b63
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qpdf/qpdf.hash | 4 ++--
- package/qpdf/qpdf.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/Config.in.host         |  1 +
+ package/doxygen/Config.in.host | 12 ++++++++++++
+ package/libsigrok/Config.in    |  7 +++++--
+ 3 files changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
-index 48b8c77f1e..050c9d9a4c 100644
---- a/package/qpdf/qpdf.hash
-+++ b/package/qpdf/qpdf.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/qpdf/files/qpdf/9.1.0/qpdf-9.1.0.sha512/download
--sha512	7561ffc366dbce9df58cc85ff18480b28b0d46de04733ba463139188bee95690f92cf0960a328619f0c9f34ce865598db490fa1c6aaa76ee87d2c034a5f7f57e  qpdf-9.1.0.tar.gz
-+# From https://sourceforge.net/projects/qpdf/files/qpdf/9.1.1/qpdf-9.1.1.sha512/download
-+sha512  008a11fef663a57ca173631f2053988023babea6c333cfe01db0ef955c8cd36d387ed9f2039f55bd5f9ca94c7a8e400461a09a15c5f89e03bc0817fdd0d3d585  qpdf-9.1.1.tar.gz
- # Locally computed:
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
- sha256  fb929ac30decb4dc3a2eea2bec6c43296a797c5d2d602deb3784ee39430583d5  Artistic-2.0
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index 5d28a8007a..ac703d716e 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 62e860d7c3..dfea478868 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -14,6 +14,7 @@ menu "Host utilities"
+ 	source "package/dfu-util/Config.in.host"
+ 	source "package/dos2unix/Config.in.host"
+ 	source "package/dosfstools/Config.in.host"
++	source "package/doxygen/Config.in.host"
+ 	source "package/dtc/Config.in.host"
+ 	source "package/e2fsprogs/Config.in.host"
+ 	source "package/e2tools/Config.in.host"
+diff --git a/package/doxygen/Config.in.host b/package/doxygen/Config.in.host
+new file mode 100644
+index 0000000000..3a06199c93
+--- /dev/null
++++ b/package/doxygen/Config.in.host
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HOST_DOXYGEN
++	bool "host doxygen"
++	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++14
++	help
++	  Doxygen is the de facto standard tool for generating
++	  documentation from annotated C++ sources, but it also
++	  supports other popular programming languages such as C,
++	  Objective-C, C#, PHP, Java, Python, IDL (Corba, Microsoft,
++	  and UNO/OpenOffice flavors), Fortran, VHDL, Tcl, and to some
++	  extent D.
++
++	  http://www.doxygen.nl/
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index a4b9f66566..69531e621c 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -26,13 +26,16 @@ config BR2_PACKAGE_LIBSIGROKCXX
+ 	bool "build C++ bindings"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # glibmm
++	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-doxygen
+ 	select BR2_PACKAGE_GLIBMM
++	select BR2_PACKAGE_HOST_DOXYGEN
+ 	help
+ 	  Build libsigrok C++ bindings as well.
  
--QPDF_VERSION = 9.1.0
-+QPDF_VERSION = 9.1.1
- QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
- QPDF_INSTALL_STAGING = YES
- QPDF_LICENSE = Apache-2.0 or Artistic-2.0
+-comment "C++ bindings need a toolchain w/ C++, gcc >= 4.9"
++comment "C++ bindings need a toolchain w/ C++, gcc >= 4.9, host gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_HOST_GCC_AT_LEAST_4_9
+ 
+ endif
+ 
