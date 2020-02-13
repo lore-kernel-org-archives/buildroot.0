@@ -1,46 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Feb 2020 18:10:07 +0100
-Subject: [Buildroot] [git commit] package/modem-manager: bump to version
- 1.12.6
-Message-ID: <20200213170142.90FE98DE61@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 13 Feb 2020 19:36:35 +0200
+Subject: [Buildroot] [PATCH] package/squashfs: update homepage link
+Message-ID: <06ad4a90ea60a0813cea84b9be67c25777b6aacb.1581615395.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a29bd9775ed8aa455a48ad39be4af038bfdb68c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Development moved to github.com.
 
-https://lists.freedesktop.org/archives/modemmanager-devel/2020-February/007713.html
-
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
+ package/squashfs/Config.in      | 2 +-
+ package/squashfs/Config.in.host | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index ef2fe9c08f..f9d790cd0c 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  852d61755e0c1a8d0c609b17192d742b324fdd2e513f3ed64b228befb859a95b  ModemManager-1.12.4.tar.xz
-+sha256  2eb3353ee5518005c51d429308695c69d8c38cf2fd9102b04f785c03a0cc624c  ModemManager-1.12.6.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 3fc7337eb3..75fc5811db 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
+index f5ae5d9bec85..60b243d98975 100644
+--- a/package/squashfs/Config.in
++++ b/package/squashfs/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_SQUASHFS
+ 	help
+ 	  Tools to generate SquashFS filesystems.
  
--MODEM_MANAGER_VERSION = 1.12.4
-+MODEM_MANAGER_VERSION = 1.12.6
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+-	  http://squashfs.sourceforge.net/
++	  https://github.com/plougher/squashfs-tools
+ 
+ if BR2_PACKAGE_SQUASHFS
+ 
+diff --git a/package/squashfs/Config.in.host b/package/squashfs/Config.in.host
+index b353374dd0c7..aa25b37658c5 100644
+--- a/package/squashfs/Config.in.host
++++ b/package/squashfs/Config.in.host
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_HOST_SQUASHFS
+ 	help
+ 	  Tools to generate SquashFS filesystems.
+ 
+-	  http://squashfs.sourceforge.net/
++	  https://github.com/plougher/squashfs-tools
+-- 
+2.25.0
