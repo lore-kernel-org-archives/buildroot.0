@@ -1,47 +1,53 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Feb 2020 22:56:08 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-simplejson: bump to version
- 3.17.0
-Message-ID: <20200213055608.76191-1-james.hilliard1@gmail.com>
+From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
+Date: Thu, 13 Feb 2020 11:22:27 +0530
+Subject: [Buildroot] [PATCH 0/4] Fix ATF v2.2 build for rk3399,
+ add roc-rk3399-pc board
+Message-ID: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-simplejson/python-simplejson.hash | 4 ++--
- package/python-simplejson/python-simplejson.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+From: Suniel Mahesh <sunil@amarulasolutions.com>
 
-diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
-index f9d2aaefd3..d89d824d14 100644
---- a/package/python-simplejson/python-simplejson.hash
-+++ b/package/python-simplejson/python-simplejson.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/simplejson/json
--md5	744fa99aed207478f8fbf9dd9f04fad3  simplejson-3.16.0.tar.gz
--sha256	b1f329139ba647a9548aa05fb95d046b4a677643070dc2afc05fa2e975d09ca5  simplejson-3.16.0.tar.gz
-+md5	8a5ed75c367b90fedc3d685742e2a1c7  simplejson-3.17.0.tar.gz
-+sha256	2b4b2b738b3b99819a17feaf118265d0753d5536049ea570b3c43b51c4701e81  simplejson-3.17.0.tar.gz
- # Locally computed sha256 checksums
- sha256	fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
-diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
-index 20b5b2481b..3e875015a8 100644
---- a/package/python-simplejson/python-simplejson.mk
-+++ b/package/python-simplejson/python-simplejson.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SIMPLEJSON_VERSION = 3.16.0
-+PYTHON_SIMPLEJSON_VERSION = 3.17.0
- PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
--PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/e3/24/c35fb1c1c315fc0fffe61ea00d3f88e85469004713dab488dee4f35b0aff
-+PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/98/87/a7b98aa9256c8843f92878966dc3d8d914c14aad97e2c5ce4798d5743e07
- PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
- PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
- PYTHON_SIMPLEJSON_SETUP_TYPE = setuptools
+This patch set does the following:
+Fix ATF v2.2 build for rk3399 SoC's.
+Add arm-gnu-a-toolchain package, which acts as a secondary bare metal toolchain
+to build ATF. The required pre-built toolchain is taken from ARM developers site and
+installed in host filesystem only.
+Add rk3399 support for building ATF.
+Add new defconfig file for roc-rk3399-pc.
+
+The patch set is tested on roc-rk3399-pc, a rk3399 based target. 
+
+Jagan Teki (1):
+  boot/arm-trusted-firmware: Disable bin copy for rk3399
+
+Suniel Mahesh (3):
+  package/arm-gnu-a-toolchain: new package
+  boot/arm-trusted-firmware: add support for rockchip rk3399
+  configs/roc-rk3399-pc: new defconfig
+
+ .gitlab-ci.yml                                     |  1 +
+ DEVELOPERS                                         |  4 ++
+ board/firefly/roc-rk3399-pc/extlinux.conf          |  4 ++
+ board/firefly/roc-rk3399-pc/genimage.cfg           | 22 +++++++++
+ board/firefly/roc-rk3399-pc/post-build.sh          |  5 ++
+ board/firefly/roc-rk3399-pc/readme.txt             | 17 +++++++
+ boot/arm-trusted-firmware/Config.in                |  2 +-
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk  |  4 ++
+ configs/roc_pc_rk3399_defconfig                    | 53 ++++++++++++++++++++++
+ .../arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash   |  3 ++
+ package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk | 27 +++++++++++
+ 11 files changed, 141 insertions(+), 1 deletion(-)
+ create mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
+ create mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
+ create mode 100644 board/firefly/roc-rk3399-pc/post-build.sh
+ create mode 100644 board/firefly/roc-rk3399-pc/readme.txt
+ create mode 100644 configs/roc_pc_rk3399_defconfig
+ create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
+ create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
+
 -- 
-2.20.1
+2.7.4
