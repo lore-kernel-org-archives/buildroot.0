@@ -1,8 +1,7 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Feb 2020 22:27:30 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-pexpect: bump to version
- 4.8.0
-Message-ID: <20200213052730.93302-1-james.hilliard1@gmail.com>
+Date: Wed, 12 Feb 2020 22:33:04 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-pip: bump to version 20.0.2
+Message-ID: <20200213053304.108218-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,37 +10,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pexpect/python-pexpect.hash | 4 ++--
- package/python-pexpect/python-pexpect.mk   | 4 ++--
+ package/python-pip/python-pip.hash | 4 ++--
+ package/python-pip/python-pip.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
-index 6972cdb806..87df05d881 100644
---- a/package/python-pexpect/python-pexpect.hash
-+++ b/package/python-pexpect/python-pexpect.hash
+diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
+index 7d02a51023..58bc239154 100644
+--- a/package/python-pip/python-pip.hash
++++ b/package/python-pip/python-pip.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pexpect/json
--md5	ed003242cbf308aee1b1eaecdef59e43  pexpect-4.7.0.tar.gz
--sha256	9e2c1fd0e6ee3a49b28f95d4b33bc389c89b20af6a1255906e90ff1262ce62eb  pexpect-4.7.0.tar.gz
-+md5	153eb25184249d6a85fde9acf4804085  pexpect-4.8.0.tar.gz
-+sha256	fc65a43959d153d0114afe13997d439c22823a27cefceb5ff35c2178c6784c0c  pexpect-4.8.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pip/json
+-md5	1aaaf90fbafc50e7ba1e66ffceb00960  pip-19.3.1.tar.gz
+-sha256	21207d76c1031e517668898a6b46a9fb1501c7a4710ef5dfd6a40ad9e6757ea7  pip-19.3.1.tar.gz
++md5	7d42ba49b809604f0df3d55df1c3fd86  pip-20.0.2.tar.gz
++sha256	7db0c8ea4c7ea51c8049640e8e6e7fde949de672bfa4949920675563a5a6967f  pip-20.0.2.tar.gz
  # Locally computed sha256 checksums
- sha256	4a483ae1c4dc738a6c8b73feb49074e1835da02ab5aa686f2675029906fa364d  LICENSE
-diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
-index 45e331f647..a9609cbe79 100644
---- a/package/python-pexpect/python-pexpect.mk
-+++ b/package/python-pexpect/python-pexpect.mk
+ sha256	5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+index b8be234d24..cc40eecdfe 100644
+--- a/package/python-pip/python-pip.mk
++++ b/package/python-pip/python-pip.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PEXPECT_VERSION = 4.7.0
-+PYTHON_PEXPECT_VERSION = 4.8.0
- PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
--PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/1c/b1/362a0d4235496cb42c33d1d8732b5e2c607b0129ad5fdd76f5a583b9fcb3
-+PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/e5/9b/ff402e0e930e70467a7178abb7c128709a30dfb22d8777c043e501bc1b10
- PYTHON_PEXPECT_LICENSE = ISC
- PYTHON_PEXPECT_LICENSE_FILES = LICENSE
- PYTHON_PEXPECT_SETUP_TYPE = distutils
+-PYTHON_PIP_VERSION = 19.3.1
++PYTHON_PIP_VERSION = 20.0.2
+ PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
+-PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/ce/ea/9b445176a65ae4ba22dce1d93e4b5fe182f953df71a145f557cffaffc1bf
++PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/8e/76/66066b7bc71817238924c7e4b448abdb17eb0c92d645769c223f9ace478f
+ PYTHON_PIP_SETUP_TYPE = setuptools
+ PYTHON_PIP_LICENSE = MIT
+ PYTHON_PIP_LICENSE_FILES = LICENSE.txt
 -- 
 2.20.1
