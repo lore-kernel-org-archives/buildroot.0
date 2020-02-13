@@ -1,54 +1,77 @@
 From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
-Date: Thu, 13 Feb 2020 11:22:28 +0530
-Subject: [Buildroot] [PATCH 1/4] boot/arm-trusted-firmware: Disable bin copy
- for rk3399
+Date: Thu, 13 Feb 2020 11:22:29 +0530
+Subject: [Buildroot] [PATCH 2/4] package/arm-gnu-a-toolchain: new package
 In-Reply-To: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
 References: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <1581573151-18943-2-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <1581573151-18943-3-git-send-email-sunil@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jagan Teki <jagan@amarulasolutions.com>
+From: Suniel Mahesh <sunil@amarulasolutions.com>
 
-Unlike other SoC platforms, rockchip platforms doesn't require a binary
-generation on TF-A project.
+arm trusted firmware requires a bare metal toolchain for its build.
+Add pre-built cross-compilation ARM-A bare metal toolchain for Arm Cortex-A
+family processors to avoid the following build error.
 
-This is due to rockchip platforms have non-continuous memory areas in
-the linker script with a huge gap between them, so generating the binary
-would require addition padding which indeed increases the size of the binary.
+make[3]: arm-none-eabi-gcc: Command not found
 
-Interestingly this binary generation is disabled in v2.2 of TF-A on below
-commit:
- commit <33218d2a8143> "rockchip: Disable binary generation for all SoCs."
+pre-built bate metal ARM GNU-A toolchain installs into the host file system folder
+/opt/gcc-arm-none-eabi.
 
-So, select default binary boot images as *.bin only if it's not rk3399.
+https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz
 
-This fixes the atf build on rk3399 with v2.2.
-
-Note: the same can be applied to rest of rockchip platforms if
-they use v2.2 TF-A.
-
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-Tested-by: Suniel Mahesh <sunil@amarulasolutions.com>
+Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
 ---
- boot/arm-trusted-firmware/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash   |  3 +++
+ package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk | 27 ++++++++++++++++++++++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
+ create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 373591d..0006931 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -155,7 +155,7 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES
- 	string "Binary boot images"
--	default "*.bin"
-+	default "*.bin" if BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM!=rk3399
- 	help
- 	  Names of generated image files that are installed in the
- 	  output images/ directory.
+diff --git a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
+new file mode 100644
+index 0000000..aa0a23a
+--- /dev/null
++++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++#sha256 bb17109f0ee697254a5d4ae6e5e01440e3ea8f0277f2e8169bf95d07c7d5fe69 gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
++sha256 ac952d89ae0fc3543e81099e7d34917efc621f5def112eee843fd1ce755eca8c  gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz
+diff --git a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
+new file mode 100644
+index 0000000..74e0bee
+--- /dev/null
++++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# arm-gnu-a-toolchain
++#
++################################################################################
++
++ARM_GNU_A_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel
++ARM_GNU_A_TOOLCHAIN_VERSION = 9.2-2019.12
++ARM_GNU_A_TOOLCHAIN_SOURCE = gcc-arm-$(ARM_GNU_A_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
++ARM_GNU_A_TOOLCHAIN_LICENSE = GPL-3.0+
++ARM_GNU_A_TOOLCHAIN_LICENSE_FILES =
++
++HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi 
++
++define HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_CMDS
++    rm -rf $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
++    mkdir -p $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
++    cp -rf $(@D)/* $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
++
++    cd $(HOST_DIR)/bin && \
++	for i in $(HOST_DIR)/opt/gcc-arm-none-eabi/bin/*; do \
++        ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
++    done
++
++endef
++
++$(eval $(host-generic-package))
 -- 
 2.7.4
