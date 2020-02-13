@@ -1,21 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Feb 2020 22:02:49 +0100
-Subject: [Buildroot] [PATCH] package/squashfs: update homepage link
-In-Reply-To: <06ad4a90ea60a0813cea84b9be67c25777b6aacb.1581615395.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 13 Feb 2020 19:36:35 +0200")
-References: <06ad4a90ea60a0813cea84b9be67c25777b6aacb.1581615395.git.baruch@tkos.co.il>
-Message-ID: <87tv3udwue.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Feb 2020 22:03:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bootstrap: security bump to
+ version 4.3.1
+In-Reply-To: <20200213180051.1917130-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 13 Feb 2020 19:00:51 +0100")
+References: <20200213180051.1917130-1-fontaine.fabrice@gmail.com>
+Message-ID: <87pneidwsq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Development moved to github.com.
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > - Fix CVE-2018-14042: In Bootstrap before 4.1.2, XSS is possible in the
+ >   data-container property of tooltip.
+ > - Fix an XSS vulnerability (CVE-2019-8331) in our tooltip and popover
+ >   plugins by implementing a new HTML sanitizer
+ > - Update indentation of hash file (two spaces)
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
