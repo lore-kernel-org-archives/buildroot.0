@@ -1,46 +1,49 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Feb 2020 20:11:44 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-txaio: bump to version 20.1.1
-Message-ID: <20200213031144.65006-1-james.hilliard1@gmail.com>
+Date: Wed, 12 Feb 2020 20:16:18 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-six: bump to version 1.14.0
+Message-ID: <20200213031618.65525-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+License hash change is due to date update.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-txaio/python-txaio.hash | 4 ++--
- package/python-txaio/python-txaio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-six/python-six.hash | 6 +++---
+ package/python-six/python-six.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
-index 8b43a3dc8f..778efed8a3 100644
---- a/package/python-txaio/python-txaio.hash
-+++ b/package/python-txaio/python-txaio.hash
+diff --git a/package/python-six/python-six.hash b/package/python-six/python-six.hash
+index fe9a455c05..0d1e75fe9e 100644
+--- a/package/python-six/python-six.hash
++++ b/package/python-six/python-six.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/txaio/json
--md5	ecdd4d0f401c7f01f22830b4d2788593  txaio-18.8.1.tar.gz
--sha256	67e360ac73b12c52058219bb5f8b3ed4105d2636707a36a7cdafb56fe06db7fe  txaio-18.8.1.tar.gz
-+md5	53ec110dd7c7d84606abc151f607f0ae  txaio-20.1.1.tar.gz
-+sha256	f24e10396f026c75364ae23ffac8d72c156dc5f3733d332febb356c9d8d6b58d  txaio-20.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/six/json
+-md5	e92c23c882c7d5564ce5773fe31b2771  six-1.13.0.tar.gz
+-sha256	30f610279e8b2578cab6db20741130331735c781b56053c59c4076da27f06b66  six-1.13.0.tar.gz
++md5	21674588a57e649d1a6d977ec3122140  six-1.14.0.tar.gz
++sha256	236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a  six-1.14.0.tar.gz
  # Locally computed sha256 checksums
- sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
-index 8f73f36748..409213b3de 100644
---- a/package/python-txaio/python-txaio.mk
-+++ b/package/python-txaio/python-txaio.mk
+-sha256	b7529b8c07171a78a8c36c3283905528e4812945d977d125eb926e8ccbf245b6  LICENSE
++sha256	8bb850c565aa389fdc16f3a46965ad23d82adff60f2393fc2762b63185e8e6c9  LICENSE
+diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
+index 906c268d74..8acc739f2e 100644
+--- a/package/python-six/python-six.mk
++++ b/package/python-six/python-six.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TXAIO_VERSION = 18.8.1
-+PYTHON_TXAIO_VERSION = 20.1.1
- PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
--PYTHON_TXAIO_SITE = https://files.pythonhosted.org/packages/c1/99/81de004578e9afe017bb1d4c8968088a33621c05449fe330bdd7016d5377
-+PYTHON_TXAIO_SITE = https://files.pythonhosted.org/packages/50/ea/dd4c34ade00ddfcd2f32b4f1e7136a50ae13894009d64024a9d03f8c594f
- PYTHON_TXAIO_LICENSE = MIT
- PYTHON_TXAIO_LICENSE_FILES = LICENSE
- PYTHON_TXAIO_SETUP_TYPE = setuptools
+-PYTHON_SIX_VERSION = 1.13.0
++PYTHON_SIX_VERSION = 1.14.0
+ PYTHON_SIX_SOURCE = six-$(PYTHON_SIX_VERSION).tar.gz
+-PYTHON_SIX_SITE = https://files.pythonhosted.org/packages/94/3e/edcf6fef41d89187df7e38e868b2dd2182677922b600e880baad7749c865
++PYTHON_SIX_SITE = https://files.pythonhosted.org/packages/21/9f/b251f7f8a76dec1d6651be194dfba8fb8d7781d10ab3987190de8391d08e
+ PYTHON_SIX_SETUP_TYPE = setuptools
+ PYTHON_SIX_LICENSE = MIT
+ PYTHON_SIX_LICENSE_FILES = LICENSE
 -- 
 2.20.1
