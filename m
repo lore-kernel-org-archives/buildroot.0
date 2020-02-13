@@ -1,61 +1,142 @@
 From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Thu, 13 Feb 2020 13:36:53 +0530
-Subject: [Buildroot] [PATCH 1/4] boot/arm-trusted-firmware: Disable bin
- copy for rk3399
-In-Reply-To: <20200213072350.vwly4eganmeq57mu@bars>
+Date: Thu, 13 Feb 2020 13:52:23 +0530
+Subject: [Buildroot] [PATCH 4/4] configs/roc-rk3399-pc: new defconfig
+In-Reply-To: <1581573151-18943-5-git-send-email-sunil@amarulasolutions.com>
 References: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
- <1581573151-18943-2-git-send-email-sunil@amarulasolutions.com>
- <20200213072350.vwly4eganmeq57mu@bars>
-Message-ID: <CAMty3ZC-c0aazuTtKXF8U8B3w=_e8BeicG-hN=jLDCrqUxenFQ@mail.gmail.com>
+ <1581573151-18943-5-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <CAMty3ZCKK+Lyi7zawfgPArb75ZB9GXNi9Ga=J5yQi4_35zDUWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 13, 2020 at 12:53 PM Sergey Matyukevich <geomatsi@gmail.com> wrote:
+On Thu, Feb 13, 2020 at 11:23 AM <sunil@amarulasolutions.com> wrote:
 >
-> Hi,
+> From: Suniel Mahesh <sunil@amarulasolutions.com>
 >
-> > Unlike other SoC platforms, rockchip platforms doesn't require a binary
-> > generation on TF-A project.
-> >
-> > This is due to rockchip platforms have non-continuous memory areas in
-> > the linker script with a huge gap between them, so generating the binary
-> > would require addition padding which indeed increases the size of the binary.
-> >
-> > Interestingly this binary generation is disabled in v2.2 of TF-A on below
-> > commit:
-> >  commit <33218d2a8143> "rockchip: Disable binary generation for all SoCs."
-> >
-> > So, select default binary boot images as *.bin only if it's not rk3399.
-> >
-> > This fixes the atf build on rk3399 with v2.2.
-> >
-> > Note: the same can be applied to rest of rockchip platforms if
-> > they use v2.2 TF-A.
-> >
-> > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> > Tested-by: Suniel Mahesh <sunil@amarulasolutions.com>
-> > ---
-> >  boot/arm-trusted-firmware/Config.in | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> This initial support includes:
+> Linux 5.4
+> U-Boot 2020.01
+> Arm Trusted Firmware v2.2
+> Buildroot default packages.
 >
-> ...
+> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+> ---
+>  .gitlab-ci.yml                            |  1 +
+>  DEVELOPERS                                |  4 +++
+>  board/firefly/roc-rk3399-pc/extlinux.conf |  4 +++
+>  board/firefly/roc-rk3399-pc/genimage.cfg  | 22 +++++++++++++
+>  board/firefly/roc-rk3399-pc/post-build.sh |  5 +++
+>  board/firefly/roc-rk3399-pc/readme.txt    | 17 ++++++++++
+>  configs/roc_pc_rk3399_defconfig           | 53 +++++++++++++++++++++++++++++++
+>  7 files changed, 106 insertions(+)
+>  create mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
+>  create mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
+>  create mode 100644 board/firefly/roc-rk3399-pc/post-build.sh
+>  create mode 100644 board/firefly/roc-rk3399-pc/readme.txt
+>  create mode 100644 configs/roc_pc_rk3399_defconfig
 >
-> >  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES
-> >       string "Binary boot images"
-> > -     default "*.bin"
-> > +     default "*.bin" if BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM!=rk3399
-> >       help
-> >         Names of generated image files that are installed in the
-> >         output images/ directory.
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index a6436a8..8140243 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -301,6 +301,7 @@ raspberrypi4_64_defconfig: { extends: .defconfig }
+>  raspberrypi4_defconfig: { extends: .defconfig }
+>  raspberrypi_defconfig: { extends: .defconfig }
+>  riotboard_defconfig: { extends: .defconfig }
+> +roc_pc_rk3399_defconfig: { extends: .defconfig }
+>  rock64_defconfig: { extends: .defconfig }
+>  roseapplepi_defconfig: { extends: .defconfig }
+>  s6lx9_microboard_defconfig: { extends: .defconfig }
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index cb13035..a60c9fd 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2342,6 +2342,10 @@ N:       Steven Noonan <steven@uplinklabs.net>
+>  F:     package/hwloc/
+>  F:     package/powertop/
 >
-> IIUC, it should be customized in your board defconfig.
+> +N:     Suniel Mahesh <sunil@amarulasolutions.com>
+> +F:     board/firefly/
+> +F:     configs/roc_pc_rk3399_defconfig
+> +
+>  N:     Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+>  F:     package/lcdproc/
+>  F:     package/python-influxdb/
+> diff --git a/board/firefly/roc-rk3399-pc/extlinux.conf b/board/firefly/roc-rk3399-pc/extlinux.conf
+> new file mode 100644
+> index 0000000..50a358f
+> --- /dev/null
+> +++ b/board/firefly/roc-rk3399-pc/extlinux.conf
+> @@ -0,0 +1,4 @@
+> +label RK3399RocPC linux
 
-Not sure of it. Technically this is how rockchip SoC behaves wrt ATF
-build. If we mark BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="" to all
-supporting boards of  rockchip start with rk3399, rk3288 etc.. it
-ended up huge and meaningless change, IMHO.
+s/RK3399RocPC/ROC-RK3399-PC
+
+> +  kernel /boot/Image
+> +  devicetree /boot/rk3399-roc-pc.dtb
+> +  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk0p1 rootwait
+> diff --git a/board/firefly/roc-rk3399-pc/genimage.cfg b/board/firefly/roc-rk3399-pc/genimage.cfg
+> new file mode 100644
+> index 0000000..966c869
+> --- /dev/null
+> +++ b/board/firefly/roc-rk3399-pc/genimage.cfg
+> @@ -0,0 +1,22 @@
+> +image sdcard.img {
+> +       hdimage {
+> +       }
+> +
+> +       partition u-boot-tpl-spl-dtb {
+> +               in-partition-table = "no"
+> +               image = "idbloader.img"
+> +               offset = 32K
+> +       }
+> +
+> +       partition u-boot-dtb {
+> +               in-partition-table = "no"
+> +               image = "u-boot.itb"
+> +               offset = 8M
+> +               size = 30M
+> +       }
+> +
+> +       partition rootfs {
+> +               partition-type = 0x83
+> +               image = "rootfs.ext4"
+> +       }
+> +}
+> diff --git a/board/firefly/roc-rk3399-pc/post-build.sh b/board/firefly/roc-rk3399-pc/post-build.sh
+> new file mode 100644
+> index 0000000..1f5ff6a
+> --- /dev/null
+> +++ b/board/firefly/roc-rk3399-pc/post-build.sh
+> @@ -0,0 +1,5 @@
+> +#!/bin/sh
+> +
+> +BOARD_DIR="$(dirname $0)"
+> +
+> +install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
+> diff --git a/board/firefly/roc-rk3399-pc/readme.txt b/board/firefly/roc-rk3399-pc/readme.txt
+> new file mode 100644
+> index 0000000..f8367fb
+> --- /dev/null
+> +++ b/board/firefly/roc-rk3399-pc/readme.txt
+> @@ -0,0 +1,17 @@
+> +Libre Computer Board ROC-RK3399-PC
+> +===================================
+> +
+> +ROC-RK3399-PC is highest performance platforms leveraging the popular
+> +Rockchip RK3399 SoC from Firefly and Libretech.
+> +
+> +Wiki link:
+> +https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/roc-rk3399-pc.html
+> +
+> +Build:
+> +
+> +  $ make roc_pc_rk3399_defconfig
+> +  $ make
+> +
+
+Add information about how to program the image?
 
 Jagan.
