@@ -1,44 +1,43 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 13 Feb 2020 23:26:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/parted: disable on uclibc
-In-Reply-To: <87d0aidul6.fsf@dell.be.48ers.dk>
-References: <20200118163929.663035-1-fontaine.fabrice@gmail.com>
- <87d0aidul6.fsf@dell.be.48ers.dk>
-Message-ID: <f4f69402-631b-ef46-5f2c-af49fc279cb0@benettiengineering.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Feb 2020 23:24:50 +0100
+Subject: [Buildroot] [git commit] package/libsigrok: drop remnants of
+ autoreconf
+Message-ID: <20200213221532.B8BF68E029@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=7ba7b9603b686524e1981e5251e9e25f5034d1bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2/13/20 10:51 PM, Peter Korsgaard wrote:
->>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
-> 
->   > Like postgreSQL (and imagemagick), parted does not build against uClibc
->   > with locales enabled, due to an uClibc bug, see
->   > http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html:
-> 
->   > In file included from atari.c:42:
->   > atari.c: In function 'atr_part_correct':
->   > atari.c:221:9: error: dereferencing pointer to incomplete type 'struct __uclibc_locale_struct'
->   >   return isalnum_l(part->id[0], atr_c_locale)
->   >          ^~~~~~~~~
-> 
->   > So disable parted on uclibc
-> 
->   > Fixes:
->   >  - http://autobuild.buildroot.org/results/992518d340a9f32a0721d6e66936850c4c3ef2e4
-> 
->   > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> What about the reverse dependencies? E.G. udisks and python-pyparted?
+libsigrok has not needed autoreconf since b428801934 (package/libsigrok:
+bump version to 0.4.0), 4 years ago now.
 
-Since I'm bumping udisks :-), udisks already depends on 
-!BR2_TOOLCHAIN_USES_UCLIBC, but python-pyparted does not, so it deserves 
-a build with the same autobuilder failure defconfig, I let you know.
+As such, we no longer need the autoreconf options, nor the dependency on
+the autoconf archive.
 
--- 
-Giulio Benetti
-Benetti Engineering sas
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libsigrok/libsigrok.mk | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+index 7a128e8dfa..4c1f31ea6e 100644
+--- a/package/libsigrok/libsigrok.mk
++++ b/package/libsigrok/libsigrok.mk
+@@ -53,9 +53,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
+ LIBSIGROK_CONF_OPTS += --enable-cxx
+-LIBSIGROK_AUTORECONF_OPTS += -I $(HOST_DIR)/share/autoconf-archive
+ LIBSIGROK_DEPENDENCIES += \
+-	host-autoconf-archive \
+ 	glibmm \
+ 	host-doxygen \
+ 	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
