@@ -1,8 +1,10 @@
 From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
-Date: Thu, 13 Feb 2020 11:22:27 +0530
-Subject: [Buildroot] [PATCH 0/4] Fix ATF v2.2 build for rk3399,
- add roc-rk3399-pc board
-Message-ID: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
+Date: Thu, 13 Feb 2020 11:22:30 +0530
+Subject: [Buildroot] [PATCH 3/4] boot/arm-trusted-firmware: add support for
+ rockchip rk3399
+In-Reply-To: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
+References: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <1581573151-18943-4-git-send-email-sunil@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,43 +13,27 @@ To: buildroot@busybox.net
 
 From: Suniel Mahesh <sunil@amarulasolutions.com>
 
-This patch set does the following:
-Fix ATF v2.2 build for rk3399 SoC's.
-Add arm-gnu-a-toolchain package, which acts as a secondary bare metal toolchain
-to build ATF. The required pre-built toolchain is taken from ARM developers site and
-installed in host filesystem only.
-Add rk3399 support for building ATF.
-Add new defconfig file for roc-rk3399-pc.
+Add support for TF-A image builds for Rockchip rk3399 chip.
 
-The patch set is tested on roc-rk3399-pc, a rk3399 based target. 
+Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+---
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Jagan Teki (1):
-  boot/arm-trusted-firmware: Disable bin copy for rk3399
-
-Suniel Mahesh (3):
-  package/arm-gnu-a-toolchain: new package
-  boot/arm-trusted-firmware: add support for rockchip rk3399
-  configs/roc-rk3399-pc: new defconfig
-
- .gitlab-ci.yml                                     |  1 +
- DEVELOPERS                                         |  4 ++
- board/firefly/roc-rk3399-pc/extlinux.conf          |  4 ++
- board/firefly/roc-rk3399-pc/genimage.cfg           | 22 +++++++++
- board/firefly/roc-rk3399-pc/post-build.sh          |  5 ++
- board/firefly/roc-rk3399-pc/readme.txt             | 17 +++++++
- boot/arm-trusted-firmware/Config.in                |  2 +-
- boot/arm-trusted-firmware/arm-trusted-firmware.mk  |  4 ++
- configs/roc_pc_rk3399_defconfig                    | 53 ++++++++++++++++++++++
- .../arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash   |  3 ++
- package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk | 27 +++++++++++
- 11 files changed, 141 insertions(+), 1 deletion(-)
- create mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
- create mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
- create mode 100644 board/firefly/roc-rk3399-pc/post-build.sh
- create mode 100644 board/firefly/roc-rk3399-pc/readme.txt
- create mode 100644 configs/roc_pc_rk3399_defconfig
- create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
- create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
-
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 3473701..cc757b5 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -90,6 +90,10 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
+ endif
+ 
++ifeq ($(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM)),rk3399)
++ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-arm-gnu-a-toolchain
++endif
++
+ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
+ 
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
 -- 
 2.7.4
