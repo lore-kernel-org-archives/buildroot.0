@@ -1,49 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Feb 2020 22:07:10 +0100
-Subject: [Buildroot] [git commit] package/sqlcipher: security bump to
- version 4.3.0
-Message-ID: <20200213205632.9F7128DF69@busybox.osuosl.org>
+Date: Thu, 13 Feb 2020 22:07:31 +0100
+Subject: [Buildroot] [git commit] package/sqlcipher: enable back libressl
+Message-ID: <20200213205632.A7DEB8DF69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9440e8def9ab77482b059436749242d14fd5da6
+commit: https://git.buildroot.net/buildroot/commit/?id=15e74f9a82dca478b345ac9ce69c448259e499da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From https://www.zetetic.net/blog/2019/08/14/defcon-sqlite-attacks:
-
-"We strongly recommend that all applications upgrade to SQLCipher 4.2.0
-to take advantage of the latest security updates, especially if an
-application interacts with non-encrypted databases using SQLCipher."
+libressl support has been fixed since version 3.4.2 and
+https://github.com/sqlcipher/sqlcipher/commit/ce489ebb4788207f27b1641f8d2bfe6b65462260
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlcipher/sqlcipher.hash | 2 +-
- package/sqlcipher/sqlcipher.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sqlcipher/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
-index 7ebfc23f75..c37db7a20a 100644
---- a/package/sqlcipher/sqlcipher.hash
-+++ b/package/sqlcipher/sqlcipher.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  2f803017378c7479cb791be59b7bad8392a15acddbcc094e4433581fe421f4ca  sqlcipher-4.0.1.tar.gz
-+sha256  fccb37e440ada898902b294d02cde7af9e8706b185d77ed9f6f4d5b18b4c305f  sqlcipher-4.3.0.tar.gz
- sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index d4f7a19973..14290745aa 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLCIPHER_VERSION = 4.0.1
-+SQLCIPHER_VERSION = 4.3.0
- SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
- SQLCIPHER_LICENSE = BSD-3-Clause
- SQLCIPHER_LICENSE_FILES = LICENSE
+diff --git a/package/sqlcipher/Config.in b/package/sqlcipher/Config.in
+index b26bc7709f..332754b15a 100644
+--- a/package/sqlcipher/Config.in
++++ b/package/sqlcipher/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_SQLCIPHER
+ 	depends on !BR2_PACKAGE_SQLITE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
+ 	  SQLCipher is an SQLite extension that provides 256 bits AES
+ 	  encryption of database files. Note that it is a fork of
