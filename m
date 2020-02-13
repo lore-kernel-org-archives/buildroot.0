@@ -1,30 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Feb 2020 22:57:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rocksdb: switch to
- generic-package
-In-Reply-To: <20200204211348.3631258-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 4 Feb 2020 22:13:48 +0100")
-References: <20200204211348.3631258-1-fontaine.fabrice@gmail.com>
-Message-ID: <878sl6dual.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Feb 2020 23:03:40 +0100
+Subject: [Buildroot] [PATCH 1/2] support/scripts/pkg-stats: add support
+ for CVE reporting
+In-Reply-To: <6c4454d9-28bc-70ef-579a-7e3b1931ec5d@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 5 Feb 2020 11:48:07 +0100")
+References: <20200204215232.666841-1-thomas.petazzoni@bootlin.com>
+ <20200204215232.666841-2-thomas.petazzoni@bootlin.com>
+ <6c4454d9-28bc-70ef-579a-7e3b1931ec5d@mind.be>
+Message-ID: <874kvudu0z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > Switch from cmake-package to generic-package to allow rocksdb to run the
- > ./build_tools/build_detect_platform script and detect compiler options
- > such as C++17 support for -faligned-new
+Hi,
 
- > First patch needs to be updated and second patch can be dropped
+ >> +            pkg_version = distutils.version.LooseVersion(pkg.current_version)
+ >> +            if not hasattr(pkg_version, "version"):
+ >> +                print("Cannot parse package '%s' version '%s'" % (pkg.name, pkg.current_version))
+ >> +                continue
+ >> +            cve_affected_version = distutils.version.LooseVersion(v["version_value"])
+ >> +            if not hasattr(cve_affected_version, "version"):
+ >> +                print("Cannot parse CVE affected version '%s'" % v["version_value"])
+ >> +                continue
+ >> +            return pkg_version < cve_affected_version
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results//22c9909c0d20e3871775f3874f7723910d7e5a41
- >  - http://autobuild.buildroot.org/results/ab7b2bc9e9653a7093d8b27d4445c28993572ca4
+ >  Maybe use packaging.version instead? [1]
 
-Dropped the extra / in the first URL and committed, thanks.
+ > [1]
+ > https://stackoverflow.com/questions/11887762/how-do-i-compare-version-numbers-in-python
+
+ >  Hm, but the packaging module is not installed on my system (which does have
+ > setuptools), so maybe not...
+
+On Debian atleast, this is available in python{,3}-packaging, but is not
+a reverse dependency of setuptools:
+
+apt-cache rdepends python-packaging
+python-packaging
+Reverse Depends:
+  legit
+  python-sphinx
+  sagemath
+  python-pdal
+  python-deprecation
+  python-nipype
+
+The stackoverflow package alternatively talks about distutils.version,
+which we AFAIK also mentioned earlier.
 
 -- 
 Bye, Peter Korsgaard
