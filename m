@@ -1,46 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Feb 2020 22:02:42 +0100
-Subject: [Buildroot] [git commit] package/squashfs: update homepage link
-Message-ID: <20200213205632.86BDF8DFBC@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Thu, 13 Feb 2020 22:19:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/parted: disable on uclibc
+In-Reply-To: <20200118163929.663035-1-fontaine.fabrice@gmail.com>
+References: <20200118163929.663035-1-fontaine.fabrice@gmail.com>
+Message-ID: <86a0a3ec-0b35-56d5-d90c-2ded88e94a6d@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b656b4ecfc95f27c7b3a53d58372a80ae992b2a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Fabrice,
 
-Development moved to github.com.
+On 1/18/20 5:39 PM, Fabrice Fontaine wrote:
+> Like postgreSQL (and imagemagick), parted does not build against uClibc
+> with locales enabled, due to an uClibc bug, see
+> http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html:
+> 
+> In file included from atari.c:42:
+> atari.c: In function 'atr_part_correct':
+> atari.c:221:9: error: dereferencing pointer to incomplete type 'struct __uclibc_locale_struct'
+>    return isalnum_l(part->id[0], atr_c_locale)
+>           ^~~~~~~~~
+> 
+> So disable parted on uclibc
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/992518d340a9f32a0721d6e66936850c4c3ef2e4
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/squashfs/Config.in      | 2 +-
- package/squashfs/Config.in.host | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
-index f5ae5d9bec..60b243d989 100644
---- a/package/squashfs/Config.in
-+++ b/package/squashfs/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_SQUASHFS
- 	help
- 	  Tools to generate SquashFS filesystems.
- 
--	  http://squashfs.sourceforge.net/
-+	  https://github.com/plougher/squashfs-tools
- 
- if BR2_PACKAGE_SQUASHFS
- 
-diff --git a/package/squashfs/Config.in.host b/package/squashfs/Config.in.host
-index b353374dd0..aa25b37658 100644
---- a/package/squashfs/Config.in.host
-+++ b/package/squashfs/Config.in.host
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_HOST_SQUASHFS
- 	help
- 	  Tools to generate SquashFS filesystems.
- 
--	  http://squashfs.sourceforge.net/
-+	  https://github.com/plougher/squashfs-tools
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+> ---
+>   package/parted/Config.in | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/parted/Config.in b/package/parted/Config.in
+> index f48b365a2d..a35b30662f 100644
+> --- a/package/parted/Config.in
+> +++ b/package/parted/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_PARTED
+>   	bool "parted"
+>   	depends on BR2_ENABLE_LOCALE
+>   	depends on BR2_USE_WCHAR
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+>   	select BR2_PACKAGE_UTIL_LINUX
+>   	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>   	help
+> @@ -9,5 +10,6 @@ config BR2_PACKAGE_PARTED
+>   
+>   	  http://www.gnu.org/software/parted/
+>   
+> -comment "parted needs a toolchain w/ locale, wchar"
+> -	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
+> +comment "parted needs a glibc or musl toolchain w/ locale, wchar"
+> +	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
+> +		!BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
+> 
