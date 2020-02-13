@@ -1,26 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 13 Feb 2020 17:10:46 +0000
-Subject: [Buildroot] [Bug 12511] rng-tools has forced dependency on
- jitterentropy-library ; It slows boot considerably
-In-Reply-To: <bug-12511-163@https.bugs.busybox.net/>
-References: <bug-12511-163@https.bugs.busybox.net/>
-Message-ID: <bug-12511-163-9jwR7jRoLz@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Feb 2020 18:13:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/doxygen: needs host gcc >= 4.9
+In-Reply-To: <20200211213352.314822-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 11 Feb 2020 22:33:52 +0100")
+References: <20200211213352.314822-1-fontaine.fabrice@gmail.com>
+Message-ID: <8736befm1p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12511
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
---- Comment #5 from Matt Weber <matthew.weber@rockwellcollins.com> ---
-Yegor noted in the http://patchwork.ozlabs.org/patch/1233971/ thread that the
-bump of rng-tools made the startup cost of having jitterentropy as a source
-better. 
+ > host-doxygen use std::make_unique which is a C++14 feature and so not
+ > available with host gcc 4.8 so add a Config.in.host for doxygen and add
+ > host gcc 4.9 dependency to host-doxygen and sigrok C++ option
 
-Axel, I'll let you confirm if you feel this did enough or if we still need to
-breakout providing the user an option.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/3ac78c5d4728287bafdfeb3a54f50eb193934b63
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
