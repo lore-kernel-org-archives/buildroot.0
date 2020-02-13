@@ -1,56 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 13 Feb 2020 19:00:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bootstrap: security bump to version
- 4.3.1
-Message-ID: <20200213180051.1917130-1-fontaine.fabrice@gmail.com>
+Date: Thu, 13 Feb 2020 19:41:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: security bump to version
+ 4.3.0
+Message-ID: <20200213184148.2090807-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2018-14042: In Bootstrap before 4.1.2, XSS is possible in the
-  data-container property of tooltip.
-- Fix an XSS vulnerability (CVE-2019-8331) in our tooltip and popover
-  plugins by implementing a new HTML sanitizer
-- Update indentation of hash file (two spaces)
+From https://www.zetetic.net/blog/2019/08/14/defcon-sqlite-attacks:
+
+"We strongly recommend that all applications upgrade to SQLCipher 4.2.0
+to take advantage of the latest security updates, especially if an
+application interacts with non-encrypted databases using SQLCipher."
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bootstrap/bootstrap.hash | 4 ++--
- package/bootstrap/bootstrap.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/sqlcipher/sqlcipher.hash | 2 +-
+ package/sqlcipher/sqlcipher.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bootstrap/bootstrap.hash b/package/bootstrap/bootstrap.hash
-index ed29f9c529..a9602f7e49 100644
---- a/package/bootstrap/bootstrap.hash
-+++ b/package/bootstrap/bootstrap.hash
+diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
+index 7ebfc23f75..c37db7a20a 100644
+--- a/package/sqlcipher/sqlcipher.hash
++++ b/package/sqlcipher/sqlcipher.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256	75c0325fd82e29cf524e28d8be7716c216cc507ba85b087ab36868209236aa01  bootstrap-4.1.0-dist.zip
--sha256	0ce7fbe215cdf921ed87d00a374404681d5d24898589a7fe60e068d09289b4ba  css/bootstrap.css
-+sha256  888ffd30b7e192381e2f6a948ca04669fdcc2ccc2ba016de00d38c8e30793323  bootstrap-4.3.1-dist.zip
-+sha256  35fbb6dc3891aacaf1ffa07abec2344fdbc454aab533a2a03bcf93577eb7837b  css/bootstrap.css
-diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
-index 0699485f52..c9f6003b52 100644
---- a/package/bootstrap/bootstrap.mk
-+++ b/package/bootstrap/bootstrap.mk
+ # locally computed
+-sha256  2f803017378c7479cb791be59b7bad8392a15acddbcc094e4433581fe421f4ca  sqlcipher-4.0.1.tar.gz
++sha256  fccb37e440ada898902b294d02cde7af9e8706b185d77ed9f6f4d5b18b4c305f  sqlcipher-4.3.0.tar.gz
+ sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index d4f7a19973..14290745aa 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BOOTSTRAP_VERSION = 4.1.0
-+BOOTSTRAP_VERSION = 4.3.1
- BOOTSTRAP_SITE = https://github.com/twbs/bootstrap/releases/download/v$(BOOTSTRAP_VERSION)
- BOOTSTRAP_SOURCE = bootstrap-$(BOOTSTRAP_VERSION)-dist.zip
- BOOTSTRAP_LICENSE = MIT
-@@ -12,6 +12,7 @@ BOOTSTRAP_LICENSE_FILES = css/bootstrap.css
- 
- define BOOTSTRAP_EXTRACT_CMDS
- 	$(UNZIP) $(BOOTSTRAP_DL_DIR)/$(BOOTSTRAP_SOURCE) -d $(@D)
-+	mv $(@D)/bootstrap-$(BOOTSTRAP_VERSION)-dist/* $(@D)
- endef
- 
- define BOOTSTRAP_INSTALL_TARGET_CMDS
+-SQLCIPHER_VERSION = 4.0.1
++SQLCIPHER_VERSION = 4.3.0
+ SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
+ SQLCIPHER_LICENSE = BSD-3-Clause
+ SQLCIPHER_LICENSE_FILES = LICENSE
 -- 
 2.24.1
