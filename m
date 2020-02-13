@@ -1,64 +1,37 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 13 Feb 2020 22:19:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/parted: disable on uclibc
-In-Reply-To: <20200118163929.663035-1-fontaine.fabrice@gmail.com>
-References: <20200118163929.663035-1-fontaine.fabrice@gmail.com>
-Message-ID: <86a0a3ec-0b35-56d5-d90c-2ded88e94a6d@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 13 Feb 2020 22:21:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: security bump to
+ version 4.3.0
+In-Reply-To: <87lfp6dwnk.fsf@dell.be.48ers.dk>
+References: <20200213184148.2090807-1-fontaine.fabrice@gmail.com>
+ <87lfp6dwnk.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W81yF9SRvUHrg_8zwv7Mt4zObkQOryLCUzGUFetOTMneyA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Le jeu. 13 f?vr. 2020 ? 22:06, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+>
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > From https://www.zetetic.net/blog/2019/08/14/defcon-sqlite-attacks:
+>  > "We strongly recommend that all applications upgrade to SQLCipher 4.2.0
+>  > to take advantage of the latest security updates, especially if an
+>  > application interacts with non-encrypted databases using SQLCipher."
+>
+>  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Committed, thanks.
+>
+> What should we do for 2019.02.x (which uses 3.2.0)?
+3.2.0 has been released in 2014 and is based on SQLite 3.8.6 which is
+very old and subject to multiple CVEs so I would advise to bump from
+3.2.0 to 4.3.0.
+>
+> --
+> Bye, Peter Korsgaard
+Best Regards,
 
-On 1/18/20 5:39 PM, Fabrice Fontaine wrote:
-> Like postgreSQL (and imagemagick), parted does not build against uClibc
-> with locales enabled, due to an uClibc bug, see
-> http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html:
-> 
-> In file included from atari.c:42:
-> atari.c: In function 'atr_part_correct':
-> atari.c:221:9: error: dereferencing pointer to incomplete type 'struct __uclibc_locale_struct'
->    return isalnum_l(part->id[0], atr_c_locale)
->           ^~~~~~~~~
-> 
-> So disable parted on uclibc
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/992518d340a9f32a0721d6e66936850c4c3ef2e4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-> ---
->   package/parted/Config.in | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/parted/Config.in b/package/parted/Config.in
-> index f48b365a2d..a35b30662f 100644
-> --- a/package/parted/Config.in
-> +++ b/package/parted/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_PARTED
->   	bool "parted"
->   	depends on BR2_ENABLE_LOCALE
->   	depends on BR2_USE_WCHAR
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
->   	select BR2_PACKAGE_UTIL_LINUX
->   	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->   	help
-> @@ -9,5 +10,6 @@ config BR2_PACKAGE_PARTED
->   
->   	  http://www.gnu.org/software/parted/
->   
-> -comment "parted needs a toolchain w/ locale, wchar"
-> -	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
-> +comment "parted needs a glibc or musl toolchain w/ locale, wchar"
-> +	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-> +		!BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
-> 
+Fabrice
