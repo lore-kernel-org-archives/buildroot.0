@@ -1,23 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Feb 2020 18:10:09 +0100
-Subject: [Buildroot] [PATCH] package/modem-manager: bump to version
- 1.12.6
-In-Reply-To: <20200212104040.1070430-1-aleksander@aleksander.es> (Aleksander
- Morgado's message of "Wed, 12 Feb 2020 11:40:40 +0100")
-References: <20200212104040.1070430-1-aleksander@aleksander.es>
-Message-ID: <877e0qfm6m.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Feb 2020 17:10:46 +0000
+Subject: [Buildroot] [Bug 12511] rng-tools has forced dependency on
+ jitterentropy-library ; It slows boot considerably
+In-Reply-To: <bug-12511-163@https.bugs.busybox.net/>
+References: <bug-12511-163@https.bugs.busybox.net/>
+Message-ID: <bug-12511-163-9jwR7jRoLz@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Aleksander" == Aleksander Morgado <aleksander@aleksander.es> writes:
+https://bugs.busybox.net/show_bug.cgi?id=12511
 
- > https://lists.freedesktop.org/archives/modemmanager-devel/2020-February/007713.html
- > Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+--- Comment #5 from Matt Weber <matthew.weber@rockwellcollins.com> ---
+Yegor noted in the http://patchwork.ozlabs.org/patch/1233971/ thread that the
+bump of rng-tools made the startup cost of having jitterentropy as a source
+better. 
 
-Committed, thanks.
+Axel, I'll let you confirm if you feel this did enough or if we still need to
+breakout providing the user an option.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
