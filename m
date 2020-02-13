@@ -1,41 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 13 Feb 2020 23:15:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcoap: add openssl and gnutls
- optional dependencies
-Message-ID: <20200213221510.2343763-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Feb 2020 23:18:47 +0100
+Subject: [Buildroot] [PATCH] package/eudev: Fix monitor starting
+In-Reply-To: <20200210064742.551472-1-joel@jms.id.au> (Joel Stanley's message
+ of "Mon, 10 Feb 2020 17:17:42 +1030")
+References: <20200210064742.551472-1-joel@jms.id.au>
+Message-ID: <87v9oacerc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openssl and gnutls are optional dependencies since version 4.2.0 and
-https://github.com/obgm/libcoap/commit/4cef54f15190a42b6d3ad7a17ed71331e50a1bdf
+>>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
 
-Prefer gnutls over openssl has done by upstream in their configure.ac
-when the user does not provide any option (which is the case currently)
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libcoap/libcoap.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ > When the kernel has CONFIG_SHMEM disabled /dev is a ramfs (instead of a
+ > tmpfs) and the name_to_handle_at system call is not supported. This
+ > causes eudev's monitor application to exit on startup.
 
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index e2fbaa3dfb..02577ecebe 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
-@@ -13,4 +13,12 @@ LIBCOAP_DEPENDENCIES = host-pkgconf
- LIBCOAP_CONF_OPTS = --disable-examples
- LIBCOAP_AUTORECONF = YES
- 
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+LIBCOAP_DEPENDENCIES += gnutls
-+LIBCOAP_CONF_OPTS += --with-gnutls
-+else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBCOAP_DEPENDENCIES += openssl
-+LIBCOAP_CONF_OPTS += --with-openssl
-+endif
-+
- $(eval $(autotools-package))
+ > Upstream eudev has added this fix which is not yet part of a release.
+
+ > Signed-off-by: Joel Stanley <joel@jms.id.au>
+
+Extended the subject with to say '.. Fix monitor starting for kernels
+w/o CONFIG_SHMEM' and committed, thanks.
+
 -- 
-2.24.1
+Bye, Peter Korsgaard
