@@ -1,110 +1,86 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 13 Feb 2020 14:43:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-canopen: new package
-In-Reply-To: <20200213134040.701-1-attila.wagner@onyxinsight.com>
-References: <20200213134040.701-1-attila.wagner@onyxinsight.com>
-Message-ID: <CAGm1_kvFQ6RiAkMkAs94M7W0G16m03w9HQjyN5ocTq=ZPm+YSg@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 13 Feb 2020 06:59:54 -0800
+Subject: [Buildroot] udisks situation
+In-Reply-To: <140df557-3b15-3f36-ac78-9d8d3139ad63@mind.be>
+References: <4669dcc6-5080-22fc-702e-74f145a1a936@benettiengineering.com>
+ <140df557-3b15-3f36-ac78-9d8d3139ad63@mind.be>
+Message-ID: <CAFSsvmrBcntdBX4++6-Xzfb4GA7rp-ActKOEHE=TBeRx7ijy4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Attila,
+To be fair, I use udisks in my projects. It's quite handy for handling sdcards!
 
-On Thu, Feb 13, 2020 at 2:40 PM Attila Wagner
-<attila.wagner@onyxinsight.com> wrote:
->
-> A Python implementation of the CANopen standard.
->
-> Signed-off-by: Attila Wagner <attila.wagner@onyxinsight.com>
 
-Looks good to me.
-
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-> ---
->  DEVELOPERS                                 |  3 +++
->  package/Config.in                          |  1 +
->  package/python-canopen/Config.in           |  9 +++++++++
->  package/python-canopen/python-canopen.hash |  4 ++++
->  package/python-canopen/python-canopen.mk   | 14 ++++++++++++++
->  5 files changed, 31 insertions(+)
->  create mode 100644 package/python-canopen/Config.in
->  create mode 100644 package/python-canopen/python-canopen.hash
->  create mode 100644 package/python-canopen/python-canopen.mk
+On Thu, Feb 13, 2020 at 1:43 AM Arnout Vandecappelle <arnout@mind.be> wrote:
 >
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index cb13035bc4..19dbbb59ec 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -271,6 +271,9 @@ F:  package/luasec/
->  F:     package/lua-ev/
->  F:     package/orbit/
 >
-> +N:     Attila Wagner <attila.wagner@onyxinsight.com>
-> +F:     package/python-canopen/
-> +
->  N:     Bartosz Bilas <b.bilas@grinn-global.com>
->  F:     package/python-esptool/
->  F:     package/python-pyaes/
-> diff --git a/package/Config.in b/package/Config.in
-> index dfa3f34b9d..5eaf3cf818 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -881,6 +881,7 @@ menu "External python modules"
->         source "package/python-bunch/Config.in"
->         source "package/python-cached-property/Config.in"
->         source "package/python-can/Config.in"
-> +       source "package/python-canopen/Config.in"
->         source "package/python-cbor/Config.in"
->         source "package/python-cchardet/Config.in"
->         source "package/python-certifi/Config.in"
-> diff --git a/package/python-canopen/Config.in b/package/python-canopen/Config.in
-> new file mode 100644
-> index 0000000000..e36b8c7643
-> --- /dev/null
-> +++ b/package/python-canopen/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_CANOPEN
-> +       bool "python-canopen"
-> +       select BR2_PACKAGE_PYTHON_CAN # runtime
-> +       help
-> +         A Python implementation of the CANopen standard. The aim
-> +         of the project is to support the most common parts of the
-> +         CiA 301 standard in a Pythonic interface.
-> +
-> +         https://github.com/christiansandberg/canopen
-> diff --git a/package/python-canopen/python-canopen.hash b/package/python-canopen/python-canopen.hash
-> new file mode 100644
-> index 0000000000..e1a628a3a3
-> --- /dev/null
-> +++ b/package/python-canopen/python-canopen.hash
-> @@ -0,0 +1,4 @@
-> +# sha256 from https://pypi.org/pypi/canopen/json
-> +sha256 4394770d528e93a48936138c4a7b37b5dff26d54f82a435ad9790cd1e43f55b9  canopen-1.0.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 0740d30978affcd91c0fc817b7cf942a332381bf0380fe17e60c6a0b377c6e0d  LICENSE.txt
-> diff --git a/package/python-canopen/python-canopen.mk b/package/python-canopen/python-canopen.mk
-> new file mode 100644
-> index 0000000000..fc328c698e
-> --- /dev/null
-> +++ b/package/python-canopen/python-canopen.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-canopen
-> +#
-> +################################################################################
-> +
-> +PYTHON_CANOPEN_VERSION = 1.0.0
-> +PYTHON_CANOPEN_SOURCE = canopen-$(PYTHON_CANOPEN_VERSION).tar.gz
-> +PYTHON_CANOPEN_SITE = https://files.pythonhosted.org/packages/1f/2b/55b6d82b3dcba184a01c6fe027df239953940e36a463cd24b71e67bd1f37
-> +PYTHON_CANOPEN_SETUP_TYPE = setuptools
-> +PYTHON_CANOPEN_LICENSE = MIT
-> +PYTHON_CANOPEN_LICENSE_FILES = LICENSE.txt
-> +
-> +$(eval $(python-package))
-> --
-> 2.24.0.windows.2
 >
+> On 12/02/2020 21:52, Giulio Benetti wrote:
+> > Hi All,
+> >
+> > during bump of udisks package from version 1.0.5(the last known 1.x version) to
+> > version 2.8.4 lot of heavy dependencies have been added:
+> > - gobject-introspection(upcoming from Adam Duskett[1])
+> > - libblockdev(upcoming from me) => libbytesize, volume_key(upcoming from me)
+> > - parted
+> > - polkit
+> > - sg3-utils
+> > - libxslt
+> > then it needs:
+> > - toolchain w/ glibc
+> > - nls enabled
+> >
+> > Adam Duskett, while testing(and fixing) my udisks branch[2] against its
+> > gobject-introspection patchset[1], found out that currently Fedora provides both
+> > udisks[3] and udisks2[4]. udisks(1) is considered obsolete but they still offer
+> > it as a package.
+> >
+> > Upstream didn't create a dedicated 1.x branch, but considering the amount of
+> > dependencies for version 2.x, maybe we could imitate Fedora and keep package
+> > "udisks" as it is(since its development stopped on version 1.0.5), and package
+> > "udisks2" that will follow upstream.
+> >
+> > The meaning to keep both packages is to have different memory footprints, but
+> > most of all retro-fitting. udisks2 provides "udisksctrl" tool, while udisks(1)
+> > provides "udisks" tool that are not compatible.
+> >
+> > I have already discussed about this in IRC with Thomas Petazzoni and we ended up
+> > to keep udisks2 to follow upstream, but udisks(1) seems to be still used.
+>
+>  What Fedora does is of little relevance to Buildroot IMO.
+>
+>  Rather, let's look at who seems to be interested in the udisks package. Its
+> last real change if from Pieterjan in 2016. The only real change before that is
+> the addition of the package by Marek in 2013. So I'd say that probably nobody is
+> using it.
+>
+>  Our usual approach in such a case is to do whatever is the easiest. So in this
+> case, I'd say: simply bump the udisks package even though it adds all those
+> dependencies and the API changes.
+>
+>  If someone has a problem with that, we have several ways to fix it later, e.g.
+> by adding a udisks1 package.
+>
+>
+> > On the counterpart, being Buildroot an embedded linux build system, where the
+> > system is not meant to be upgraded during its lifetime,
+>
+>  Err, what? No no no, not upgrading during its lifetime would be a *very* bad idea!
+>
+>  Regards,
+>  Arnout
+>
+> > one could tell "do you
+> > want udisks? So use new udisks and rewrite the interface to it on you
+> > application or daemon.". But IMHO this case sounds to me similar(even if of
+> > minor impact) to packages "gstreamer" and "gstreamer1".
+> >
+> > [1]: https://patchwork.ozlabs.org/project/buildroot/list/?series=157909
+> > [2]: https://github.com/giuliobenetti/buildroot/tree/dev/udisks-bump
+> > [3]: https://apps.fedoraproject.org/packages/udisks
+> > [4]: https://apps.fedoraproject.org/packages/udisks2
+> >
+> > Best regards
