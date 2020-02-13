@@ -1,66 +1,47 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Feb 2020 22:10:17 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-mako: bump to version 1.1.1
-Message-ID: <20200213051017.29152-1-james.hilliard1@gmail.com>
+Date: Wed, 12 Feb 2020 22:15:34 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-markdown: bump to version
+ 3.2.1
+Message-ID: <20200213051534.53563-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-License hash change is due to date update.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-mako/python-mako.hash | 6 +++---
- package/python-mako/python-mako.mk   | 4 ++--
- package/python3-mako/python3-mako.mk | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-markdown/python-markdown.hash | 4 ++--
+ package/python-markdown/python-markdown.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
-index 0f0dadcd0c..a1c18c9916 100644
---- a/package/python-mako/python-mako.hash
-+++ b/package/python-mako/python-mako.hash
+diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
+index 6eff2035bb..8c72072432 100644
+--- a/package/python-markdown/python-markdown.hash
++++ b/package/python-markdown/python-markdown.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mako/json
--md5	6c3f2da0b74af529a4c4a537d0848bf2  Mako-1.1.0.tar.gz
--sha256	a36919599a9b7dc5d86a7a8988f23a9a3a3d083070023bab23d64f7f1d1e0a4b  Mako-1.1.0.tar.gz
-+md5	2660a4916f2f63456e6885c727b7cd2f  Mako-1.1.1.tar.gz
-+sha256	2984a6733e1d472796ceef37ad48c26f4a984bb18119bb2dbc37a44d8f6e75a4  Mako-1.1.1.tar.gz
- # Locally computed sha256 checksums
--sha256	c3b124673c93872156757a934c75b498d68eec09510e25e549d9dc2013776499  LICENSE
-+sha256	47cd0d41b1092f9161cfb629ed15e5cea185144710ff4633a4281ef088ff5de7  LICENSE
-diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
-index 622359493a..5be9937fee 100644
---- a/package/python-mako/python-mako.mk
-+++ b/package/python-mako/python-mako.mk
-@@ -6,9 +6,9 @@
+ # md5, sha256 from https://pypi.org/pypi/markdown/json
+-md5	d84732ecc65b3a1bff693d9d4c24277f  Markdown-3.1.1.tar.gz
+-sha256	2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a  Markdown-3.1.1.tar.gz
++md5	7a894dc55992b37cdbcba5c4049455fc  Markdown-3.2.1.tar.gz
++sha256	90fee683eeabe1a92e149f7ba74e5ccdc81cd397bd6c516d93a8da0ef90b6902  Markdown-3.2.1.tar.gz
+ # Locally computed sha256
+ sha256	6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+index a8311168f5..1f352fd7f1 100644
+--- a/package/python-markdown/python-markdown.mk
++++ b/package/python-markdown/python-markdown.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Please keep in sync with
- # package/python3-mako/python3-mako.mk
--PYTHON_MAKO_VERSION = 1.1.0
-+PYTHON_MAKO_VERSION = 1.1.1
- PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
--PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/b0/3c/8dcd6883d009f7cae0f3157fb53e9afb05a0d3d33b3db1268ec2e6f4a56b
-+PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/28/03/329b21f00243fc2d3815399413845dbbfb0745cff38a29d3597e97f8be58
- PYTHON_MAKO_SETUP_TYPE = setuptools
- PYTHON_MAKO_LICENSE = MIT
- PYTHON_MAKO_LICENSE_FILES = LICENSE
-diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
-index 31df4194eb..6d5c1a185e 100644
---- a/package/python3-mako/python3-mako.mk
-+++ b/package/python3-mako/python3-mako.mk
-@@ -6,9 +6,9 @@
- 
- # Please keep in sync with
- # package/python-mako/python-mako.mk
--PYTHON3_MAKO_VERSION = 1.1.0
-+PYTHON3_MAKO_VERSION = 1.1.1
- PYTHON3_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
--PYTHON3_MAKO_SITE = https://files.pythonhosted.org/packages/b0/3c/8dcd6883d009f7cae0f3157fb53e9afb05a0d3d33b3db1268ec2e6f4a56b
-+PYTHON3_MAKO_SITE = https://files.pythonhosted.org/packages/28/03/329b21f00243fc2d3815399413845dbbfb0745cff38a29d3597e97f8be58
- PYTHON3_MAKO_SETUP_TYPE = setuptools
- PYTHON3_MAKO_LICENSE = MIT
- PYTHON3_MAKO_LICENSE_FILES = LICENSE
+-PYTHON_MARKDOWN_VERSION = 3.1.1
++PYTHON_MARKDOWN_VERSION = 3.2.1
+ PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
+-PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/ac/df/0ae25a9fd5bb528fe3c65af7143708160aa3b47970d5272003a1ad5c03c6
++PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/98/79/ce6984767cb9478e6818bd0994283db55c423d733cc62a88a3ffb8581e11
+ PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
+ PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+ PYTHON_MARKDOWN_SETUP_TYPE = setuptools
 -- 
 2.20.1
