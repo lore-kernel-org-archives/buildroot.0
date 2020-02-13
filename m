@@ -1,67 +1,60 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 13 Feb 2020 12:52:34 -0700
-Subject: [Buildroot] [PATCH v4 1/1] package/nodejs: Remove --shared-zlib
- configure arg
-In-Reply-To: <20200130232435.113452-1-james.hilliard1@gmail.com>
-References: <20200130232435.113452-1-james.hilliard1@gmail.com>
-Message-ID: <CADvTj4qyvN8Gzhcn9v0BfgLqhLwPu0xkYg+JsLh33JFakZurBg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Feb 2020 21:03:13 +0100
+Subject: [Buildroot] [PATCH] apckage/dovecot: security bump to version
+ 2.3.9.3
+Message-ID: <20200213200313.32228-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change produces a node binary that is not dynamically linked with zlib.
-$ ldd host/bin/node
-    linux-vdso.so.1 (0x00007ffe363f3000)
-    libcrypto.so.1.1 =>
-/home/buildroot/buildroot/output/host/lib/libcrypto.so.1.1
-(0x00007f16d687d000)
-    libssl.so.1.1 =>
-/home/buildroot/buildroot/output/host/lib/libssl.so.1.1
-(0x00007f16d67ea000)
-    libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f16d67cb000)
-    libstdc++.so.6 => /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-(0x00007f16d65dd000)
-    libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f16d648e000)
-    libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f16d6474000)
-    libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0
-(0x00007f16d644f000)
-    libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f16d625e000)
-    /lib64/ld-linux-x86-64.so.2 (0x00007f16d9155000)
+Fixes the following security issues:
 
-On Thu, Jan 30, 2020 at 4:24 PM James Hilliard
-<james.hilliard1@gmail.com> wrote:
->
-> From: Thomas Preston <thomas.preston@codethink.co.uk>
->
-> The nodejs configure.py file orders zlib headers before the bundled ICU
-> headers. The zlib headers happen to be located in the system include
-> directory, next to some system ICU headers (not bundled). If these are
-> built before nodejs is, nodejs will get confused and try to use the
-> system ICU headers instead of the bundled ones.
->
-> Fix this by removing the --shared-zlib configure argument, since we
-> search in the system include directory after bundled ICU headers anyway.
->
-> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/nodejs/nodejs.mk | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index e6eb73d576..205e8a8bd5 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -63,7 +63,6 @@ define HOST_NODEJS_CONFIGURE_CMDS
->                 --shared-openssl \
->                 --shared-openssl-includes=$(HOST_DIR)/include/openssl \
->                 --shared-openssl-libpath=$(HOST_DIR)/lib \
-> -               --shared-zlib \
->                 --no-cross-compiling \
->                 --with-intl=small-icu \
->         )
-> --
-> 2.20.1
->
+- CVE-2020-7046: Truncated UTF-8 can be used to DoS submission-login and
+  lmtp processes
+  lib-smtp doesn't handle truncated command parameters properly, resulting
+  in infinite loop taking 100% CPU for the process.  This happens for LMTP
+  (where it doesn't matter so much) and also for submission-login where
+  unauthenticated users can trigger it.
+
+- CVE-2020-7957: Specially crafted mail can crash snippet generation
+  Snippet generation crashes if:
+??- message is large enough that message-parser returns multiple body
+    blocks
+??- The first block(s) don't contain the full snippet (e.g.  full of
+    whitespace)
+??- input ends with '>'
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index e8c76b3c1e..e61937495a 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 4784fb98dd41b83888e4aa9908efcbcad2e04a254e97440863903c0c498486f9  dovecot-2.3.9.2.tar.gz
++sha256 f89fb69423fc5bdc05955c8fc0607eab9e33511f9a643b721763db6156c49651  dovecot-2.3.9.3.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 5b19fa6235..9f89ce6354 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).9.2
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).9.3
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-- 
+2.20.1
