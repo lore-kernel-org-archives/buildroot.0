@@ -1,30 +1,30 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Thu, 13 Feb 2020 22:54:54 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add me for Qemu defconfigs
-Message-ID: <20200213215454.536983-1-romain.naour@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Feb 2020 22:57:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rocksdb: switch to
+ generic-package
+In-Reply-To: <20200204211348.3631258-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 4 Feb 2020 22:13:48 +0100")
+References: <20200204211348.3631258-1-fontaine.fabrice@gmail.com>
+Message-ID: <878sl6dual.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index afd9e5dddc..3f67a85d55 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2120,6 +2120,8 @@ F:	package/irssi/
- F:	package/vnstat/
- 
- N:	Romain Naour <romain.naour@gmail.com>
-+F:	board/qemu/
-+F:	configs/qemu_*
- F:	package/alure/
- F:	package/aubio/
- F:	package/binutils/
+ > Switch from cmake-package to generic-package to allow rocksdb to run the
+ > ./build_tools/build_detect_platform script and detect compiler options
+ > such as C++17 support for -faligned-new
+
+ > First patch needs to be updated and second patch can be dropped
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results//22c9909c0d20e3871775f3874f7723910d7e5a41
+ >  - http://autobuild.buildroot.org/results/ab7b2bc9e9653a7093d8b27d4445c28993572ca4
+
+Dropped the extra / in the first URL and committed, thanks.
+
 -- 
-2.24.1
+Bye, Peter Korsgaard
