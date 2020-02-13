@@ -1,98 +1,95 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 13 Feb 2020 17:19:09 +0100
-Subject: [Buildroot] udisks situation
-In-Reply-To: <140df557-3b15-3f36-ac78-9d8d3139ad63@mind.be>
-References: <4669dcc6-5080-22fc-702e-74f145a1a936@benettiengineering.com>
- <140df557-3b15-3f36-ac78-9d8d3139ad63@mind.be>
-Message-ID: <dd9c4fb8-867b-9442-f319-b6de6ff87235@benettiengineering.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 13 Feb 2020 11:07:36 -0600
+Subject: [Buildroot] [PATCH] package/rng-tools: make jitterentropy
+ conditional
+In-Reply-To: <CAGm1_ksUDVmG3-b6H8FRSBzb9=0GahR7Q5Uh3YKM4uAysvkZZg@mail.gmail.com>
+References: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
+ <20200205203257.48877881@windsurf>
+ <CANQCQparBzmSPD9epjQw8t6jyMejP0E1X0GjTUkXHpjXTi8Svg@mail.gmail.com>
+ <CANQCQpZ9Hs6DA6XJpBnMLxqnnJj8N3TYQLsDSp_YR3xqR8G-bQ@mail.gmail.com>
+ <87wo8wuc3z.fsf@dell.be.48ers.dk>
+ <CANQCQpb8YvhCXireoGM_cwnJnp2T8uGLunPj_3ARyuKgQO+Adw@mail.gmail.com>
+ <CAGm1_ksUDVmG3-b6H8FRSBzb9=0GahR7Q5Uh3YKM4uAysvkZZg@mail.gmail.com>
+Message-ID: <CANQCQpatBqo1S1Pn9usEPzLOPusqK1LQOBcoos8uObZ+skFgxg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Yegor,
 
-On 2/13/20 10:43 AM, Arnout Vandecappelle wrote:
-> 
-> 
-> On 12/02/2020 21:52, Giulio Benetti wrote:
->> Hi All,
->>
->> during bump of udisks package from version 1.0.5(the last known 1.x version) to
->> version 2.8.4 lot of heavy dependencies have been added:
->> - gobject-introspection(upcoming from Adam Duskett[1])
->> - libblockdev(upcoming from me) => libbytesize, volume_key(upcoming from me)
->> - parted
->> - polkit
->> - sg3-utils
->> - libxslt
->> then it needs:
->> - toolchain w/ glibc
->> - nls enabled
->>
->> Adam Duskett, while testing(and fixing) my udisks branch[2] against its
->> gobject-introspection patchset[1], found out that currently Fedora provides both
->> udisks[3] and udisks2[4]. udisks(1) is considered obsolete but they still offer
->> it as a package.
->>
->> Upstream didn't create a dedicated 1.x branch, but considering the amount of
->> dependencies for version 2.x, maybe we could imitate Fedora and keep package
->> "udisks" as it is(since its development stopped on version 1.0.5), and package
->> "udisks2" that will follow upstream.
->>
->> The meaning to keep both packages is to have different memory footprints, but
->> most of all retro-fitting. udisks2 provides "udisksctrl" tool, while udisks(1)
->> provides "udisks" tool that are not compatible.
->>
->> I have already discussed about this in IRC with Thomas Petazzoni and we ended up
->> to keep udisks2 to follow upstream, but udisks(1) seems to be still used.
-> 
->   What Fedora does is of little relevance to Buildroot IMO.
-> 
->   Rather, let's look at who seems to be interested in the udisks package. Its
-> last real change if from Pieterjan in 2016. The only real change before that is
-> the addition of the package by Marek in 2013. So I'd say that probably nobody is
-> using it.
-> 
->   Our usual approach in such a case is to do whatever is the easiest. So in this
-> case, I'd say: simply bump the udisks package even though it adds all those
-> dependencies and the API changes.
 
-Ok, then let's bump it following upstream.
+On Tue, Feb 11, 2020 at 9:22 AM Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+>
+> Hi Matt,
+>
+> On Tue, Feb 11, 2020 at 4:06 PM Matthew Weber
+> <matthew.weber@rockwellcollins.com> wrote:
+> >
+> > Peter,
+> >
+> >
+> > On Sat, Feb 8, 2020 at 1:13 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+> > >
+> > > >>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+> > >
+> > >  > Thomas,
+> > >  > On Wed, Feb 5, 2020 at 2:46 PM Matthew Weber
+> > >  > <matthew.weber@rockwellcollins.com> wrote:
+> > >  >>
+> > >  >> Thomas,
+> > >  >>
+> > >  >> On Wed, Feb 5, 2020 at 1:33 PM Thomas Petazzoni
+> > >  >> <thomas.petazzoni@bootlin.com> wrote:
+> > >  >> >
+> > >  >> > On Wed,  5 Feb 2020 12:26:08 -0600
+> > >  >> > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+> > >  >> >
+> > >  >> > > The update of rng-tools from 5 to 6.7 introduced a change where
+> > >  >> > > the jitterentropy library was enabled by default instead of
+> > >  >> > > returning a special 66 return code to hangle the case of no
+> > >  >> > > hwrng. This patch reverts that change and allows a user to
+> > >  >> > > select when to enable the jitterentropy source. The bug
+> > >  >> > > documents an issue of when a hwrng is enabled with jitterentropy
+> > >  >> > > there is a longer boot time.
+> > >  >> >
+> > >  >> > I don't understand this story of the 66 return code. Could you explain
+> > >  >> > a bit more ?
+> > >  >>
+> > >  >> In Buildroot commit 22cb51e1 the systemd support addition included the
+> > >  >> successcode change based on the Fedora bugfix for ignoring if no hwrng
+> > >  >> is present (https://bugzilla.redhat.com/show_bug.cgi?id=892178).
+> > >
+> > >  > Ryan Barnett noticed that rng-tools dropped the special return code.
+> > >  > I guess we could just drop support for this special case as well....
+> > >  > https://github.com/nhorman/rng-tools/blob/v6.8/rngd.c#L805
+> > >
+> > > Has that Fedora patch ever been included upstream? I don't seem to find
+> > > it in the history.
+> >
+> > It doesn't look like it.  I'm wondering if we should just drop this
+> > systemd unit return behavior and put a comment in the service file
+> > about enabling an entropy package if this service fails without a
+> > hardware rng present.  Seems too complicated to try and cover this
+> > special case.
+> >
+> > >
+> > > I btw see there is a 6.9 release with more bugfixes, care to send a
+> > > patch bumping the version?
+> >
+> > I'll review the one that was just sent.  I also ping'd the original
+> > bug report to see if they could test with this bump as there are a
+> > number of minor jitterentropy related fixes.
+> > http://patchwork.ozlabs.org/patch/1235396/
+>
+> We had similar issue today with am335x (kernel 5.4.x). Bumping
+> rng-tools to v6.9 helped.
+>
 
->   If someone has a problem with that, we have several ways to fix it later, e.g.
-> by adding a udisks1 package.
-> 
-> 
->> On the counterpart, being Buildroot an embedded linux build system, where the
->> system is not meant to be upgraded during its lifetime,
-> 
->   Err, what? No no no, not upgrading during its lifetime would be a *very* bad idea!
+Thank you for that feedback, I'll make this patch is superseded as the
+bump resolved the bug.  I'll add a note with this patchwork thread in
+the bug report as well.
 
-Yes, you're right, indeed I'm looking at swupdate.
-
-Thank you
--- 
-Giulio Benetti
-Benetti Engineering sas
-
->   Regards,
->   Arnout
-> 
->> one could tell "do you
->> want udisks? So use new udisks and rewrite the interface to it on you
->> application or daemon.". But IMHO this case sounds to me similar(even if of
->> minor impact) to packages "gstreamer" and "gstreamer1".
->>
->> [1]: https://patchwork.ozlabs.org/project/buildroot/list/?series=157909
->> [2]: https://github.com/giuliobenetti/buildroot/tree/dev/udisks-bump
->> [3]: https://apps.fedoraproject.org/packages/udisks
->> [4]: https://apps.fedoraproject.org/packages/udisks2
->>
->> Best regards
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Matt
