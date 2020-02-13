@@ -1,48 +1,196 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Feb 2020 23:12:35 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-cython: bump to version
- 0.29.15
-Message-ID: <20200213061235.1242-1-james.hilliard1@gmail.com>
+From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
+Date: Thu, 13 Feb 2020 11:22:31 +0530
+Subject: [Buildroot] [PATCH 4/4] configs/roc-rk3399-pc: new defconfig
+In-Reply-To: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
+References: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <1581573151-18943-5-git-send-email-sunil@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+From: Suniel Mahesh <sunil@amarulasolutions.com>
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 31e1b0d992..06ebbd5a9d 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	6e2f139e30bb08d68366f9370d87964c  Cython-0.29.14.tar.gz
--sha256	e4d6bb8703d0319eb04b7319b12ea41580df44fd84d83ccda13ea463c6801414  Cython-0.29.14.tar.gz
-+md5	63c819697ed7ce89c6455ff578312a26  Cython-0.29.15.tar.gz
-+sha256	60d859e1efa5cc80436d58aecd3718ff2e74b987db0518376046adedba97ac30  Cython-0.29.15.tar.gz
- # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 6c23e14218..997a38db1c 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+This initial support includes:
+Linux 5.4
+U-Boot 2020.01
+Arm Trusted Firmware v2.2
+Buildroot default packages.
+
+Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+---
+ .gitlab-ci.yml                            |  1 +
+ DEVELOPERS                                |  4 +++
+ board/firefly/roc-rk3399-pc/extlinux.conf |  4 +++
+ board/firefly/roc-rk3399-pc/genimage.cfg  | 22 +++++++++++++
+ board/firefly/roc-rk3399-pc/post-build.sh |  5 +++
+ board/firefly/roc-rk3399-pc/readme.txt    | 17 ++++++++++
+ configs/roc_pc_rk3399_defconfig           | 53 +++++++++++++++++++++++++++++++
+ 7 files changed, 106 insertions(+)
+ create mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
+ create mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
+ create mode 100644 board/firefly/roc-rk3399-pc/post-build.sh
+ create mode 100644 board/firefly/roc-rk3399-pc/readme.txt
+ create mode 100644 configs/roc_pc_rk3399_defconfig
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index a6436a8..8140243 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -301,6 +301,7 @@ raspberrypi4_64_defconfig: { extends: .defconfig }
+ raspberrypi4_defconfig: { extends: .defconfig }
+ raspberrypi_defconfig: { extends: .defconfig }
+ riotboard_defconfig: { extends: .defconfig }
++roc_pc_rk3399_defconfig: { extends: .defconfig }
+ rock64_defconfig: { extends: .defconfig }
+ roseapplepi_defconfig: { extends: .defconfig }
+ s6lx9_microboard_defconfig: { extends: .defconfig }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cb13035..a60c9fd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2342,6 +2342,10 @@ N:	Steven Noonan <steven@uplinklabs.net>
+ F:	package/hwloc/
+ F:	package/powertop/
  
--PYTHON_CYTHON_VERSION = 0.29.14
-+PYTHON_CYTHON_VERSION = 0.29.15
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/9c/9b/706dac7338c2860cd063a28cdbf5e9670995eaea408abbf2e88ba070d90d
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/d9/82/d01e767abb9c4a5c07a6a1e6f4d5a8dfce7369318d31f48a52374094372e
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
++N:	Suniel Mahesh <sunil@amarulasolutions.com>
++F:	board/firefly/
++F:	configs/roc_pc_rk3399_defconfig
++
+ N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+ F:	package/lcdproc/
+ F:	package/python-influxdb/
+diff --git a/board/firefly/roc-rk3399-pc/extlinux.conf b/board/firefly/roc-rk3399-pc/extlinux.conf
+new file mode 100644
+index 0000000..50a358f
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/extlinux.conf
+@@ -0,0 +1,4 @@
++label RK3399RocPC linux
++  kernel /boot/Image
++  devicetree /boot/rk3399-roc-pc.dtb
++  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk0p1 rootwait
+diff --git a/board/firefly/roc-rk3399-pc/genimage.cfg b/board/firefly/roc-rk3399-pc/genimage.cfg
+new file mode 100644
+index 0000000..966c869
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/genimage.cfg
+@@ -0,0 +1,22 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot-tpl-spl-dtb {
++		in-partition-table = "no"
++		image = "idbloader.img"
++		offset = 32K
++	}
++
++	partition u-boot-dtb {
++		in-partition-table = "no"
++		image = "u-boot.itb"
++		offset = 8M
++		size = 30M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/firefly/roc-rk3399-pc/post-build.sh b/board/firefly/roc-rk3399-pc/post-build.sh
+new file mode 100644
+index 0000000..1f5ff6a
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++
++install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
+diff --git a/board/firefly/roc-rk3399-pc/readme.txt b/board/firefly/roc-rk3399-pc/readme.txt
+new file mode 100644
+index 0000000..f8367fb
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/readme.txt
+@@ -0,0 +1,17 @@
++Libre Computer Board ROC-RK3399-PC
++===================================
++
++ROC-RK3399-PC is highest performance platforms leveraging the popular
++Rockchip RK3399 SoC from Firefly and Libretech.
++
++Wiki link:
++https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/roc-rk3399-pc.html
++
++Build:
++
++  $ make roc_pc_rk3399_defconfig
++  $ make
++
++--
++Suniel Mahesh <sunil@amarulasolutions.com>
++10-Feb-2020
+diff --git a/configs/roc_pc_rk3399_defconfig b/configs/roc_pc_rk3399_defconfig
+new file mode 100644
+index 0000000..e5a82da
+--- /dev/null
++++ b/configs/roc_pc_rk3399_defconfig
+@@ -0,0 +1,53 @@
++# Architecture
++BR2_aarch64=y
++BR2_cortex_a72_a53=y
++
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++
++# Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.2"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="roc-pc-rk3399"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.18"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-roc-pc"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# Filesystem
++BR2_TARGET_GENERIC_HOSTNAME="roc-rk3399-pc"
++BR2_TARGET_GENERIC_ISSUE="Welcome to ROC-RK3399-PC!"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/firefly/roc-rk3399-pc/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/firefly/roc-rk3399-pc/post-build.sh"
 -- 
-2.20.1
+2.7.4
