@@ -1,50 +1,47 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Feb 2020 22:23:47 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-passlib: bump to version
- 1.7.2
-Message-ID: <20200213052347.80162-1-james.hilliard1@gmail.com>
+Date: Wed, 12 Feb 2020 22:27:30 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-pexpect: bump to version
+ 4.8.0
+Message-ID: <20200213052730.93302-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-License hash change is due to date update.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-passlib/python-passlib.hash | 6 +++---
- package/python-passlib/python-passlib.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pexpect/python-pexpect.hash | 4 ++--
+ package/python-pexpect/python-pexpect.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-passlib/python-passlib.hash b/package/python-passlib/python-passlib.hash
-index 8e7f790af0..867223e19a 100644
---- a/package/python-passlib/python-passlib.hash
-+++ b/package/python-passlib/python-passlib.hash
+diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
+index 6972cdb806..87df05d881 100644
+--- a/package/python-pexpect/python-pexpect.hash
++++ b/package/python-pexpect/python-pexpect.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/passlib/json
--md5	254869dae3fd9f09f0746a3cb29a0b15  passlib-1.7.1.tar.gz
--sha256	3d948f64138c25633613f303bcc471126eae67c04d5e3f6b7b8ce6242f8653e0  passlib-1.7.1.tar.gz
-+md5	b908529cfd4c33057c244324c692eae7  passlib-1.7.2.tar.gz
-+sha256	8d666cef936198bc2ab47ee9b0410c94adf2ba798e5a84bf220be079ae7ab6a8  passlib-1.7.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pexpect/json
+-md5	ed003242cbf308aee1b1eaecdef59e43  pexpect-4.7.0.tar.gz
+-sha256	9e2c1fd0e6ee3a49b28f95d4b33bc389c89b20af6a1255906e90ff1262ce62eb  pexpect-4.7.0.tar.gz
++md5	153eb25184249d6a85fde9acf4804085  pexpect-4.8.0.tar.gz
++sha256	fc65a43959d153d0114afe13997d439c22823a27cefceb5ff35c2178c6784c0c  pexpect-4.8.0.tar.gz
  # Locally computed sha256 checksums
--sha256	ae8cd74bd5be7be586c52def8bcddfe817872cf2e0782b159d37f88bf0ff11fc  LICENSE
-+sha256	49a74ad666f456493d6b9e2cda7c55e46ad512ce2c67db4accaddb27bb240bb9  LICENSE
-diff --git a/package/python-passlib/python-passlib.mk b/package/python-passlib/python-passlib.mk
-index 1a3726b607..6ab94fd66e 100644
---- a/package/python-passlib/python-passlib.mk
-+++ b/package/python-passlib/python-passlib.mk
+ sha256	4a483ae1c4dc738a6c8b73feb49074e1835da02ab5aa686f2675029906fa364d  LICENSE
+diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+index 45e331f647..a9609cbe79 100644
+--- a/package/python-pexpect/python-pexpect.mk
++++ b/package/python-pexpect/python-pexpect.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PASSLIB_VERSION = 1.7.1
-+PYTHON_PASSLIB_VERSION = 1.7.2
- PYTHON_PASSLIB_SOURCE = passlib-$(PYTHON_PASSLIB_VERSION).tar.gz
--PYTHON_PASSLIB_SITE = https://files.pythonhosted.org/packages/25/4b/6fbfc66aabb3017cd8c3bd97b37f769d7503ead2899bf76e570eb91270de
-+PYTHON_PASSLIB_SITE = https://files.pythonhosted.org/packages/6d/6b/4bfca0c13506535289b58f9c9761d20f56ed89439bfe6b8e07416ce58ee1
- PYTHON_PASSLIB_SETUP_TYPE = setuptools
- PYTHON_PASSLIB_LICENSE = BSD-3-Clause
- PYTHON_PASSLIB_LICENSE_FILES = LICENSE
+-PYTHON_PEXPECT_VERSION = 4.7.0
++PYTHON_PEXPECT_VERSION = 4.8.0
+ PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
+-PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/1c/b1/362a0d4235496cb42c33d1d8732b5e2c607b0129ad5fdd76f5a583b9fcb3
++PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/e5/9b/ff402e0e930e70467a7178abb7c128709a30dfb22d8777c043e501bc1b10
+ PYTHON_PEXPECT_LICENSE = ISC
+ PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+ PYTHON_PEXPECT_SETUP_TYPE = distutils
 -- 
 2.20.1
