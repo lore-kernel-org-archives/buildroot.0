@@ -1,63 +1,58 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Fri, 14 Feb 2020 11:25:18 +0300
-Subject: [Buildroot] [PATCH 3/4] boot/arm-trusted-firmware: add support
- for rockchip rk3399
-In-Reply-To: <1581573151-18943-4-git-send-email-sunil@amarulasolutions.com>
-References: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
- <1581573151-18943-4-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <20200214082518.g4mwdz5oymjuoanw@bars>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Feb 2020 09:39:10 +0100
+Subject: [Buildroot] [PATCH] package/postgresql: security bump to version
+ 12.2
+Message-ID: <20200214083910.26327-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Add support for TF-A image builds for Rockchip rk3399 chip.
-> 
-> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
-> ---
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index 3473701..cc757b5 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -90,6 +90,10 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
->  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
->  endif
->  
-> +ifeq ($(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM)),rk3399)
-> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-arm-gnu-a-toolchain
-> +endif
-> +
+Fixes the following security issues:
 
-As per explanation by Thomas and Jagan, RK3399 ATF needs 32bit ARM
-toolchain. Taking into account that different vendors may re-use
-the same hardware blocks, it probably makes sense to describe this
-dependency in a more generic way, not specific to RK3399 chip.
+- CVE-2020-1720: ALTER ... DEPENDS ON EXTENSION is missing authorization checks
+  https://www.postgresql.org/about/news/2011/
 
-Following the existing patterns in ATF package mk file, new ATF
-config option can be introduced:
+Update the license hash for a change in copyright years:
+-Portions Copyright (c) 1996-2019, PostgreSQL Global Development Group
++Portions Copyright (c) 1996-2020, PostgreSQL Global Development Group
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 34737018aa..160884e0ff 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -75,6 +75,10 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UB
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
- endif
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/postgresql/postgresql.hash | 10 +++++-----
+ package/postgresql/postgresql.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 5acdc957f2..7cb0c67d63 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,7 +1,7 @@
+-# From https://ftp.postgresql.org/pub/source/v12.1/postgresql-12.1.tar.bz2.md5
+-md5 2ee1bd4ec5f49363a3f456f07e599b41  postgresql-12.1.tar.bz2
+-# From https://ftp.postgresql.org/pub/source/v12.1/postgresql-12.1.tar.bz2.sha256
+-sha256 a09bf3abbaf6763980d0f8acbb943b7629a8b20073de18d867aecdb7988483ed  postgresql-12.1.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.2/postgresql-12.2.tar.bz2.md5
++md5  a88ceea8ecf2741307f663e4539b58b7  postgresql-12.2.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.2/postgresql-12.2.tar.bz2.sha256
++sha256  ad1dcc4c4fc500786b745635a9e1eba950195ce20b8913f50345bb7d5369b5de  postgresql-12.2.tar.bz2
  
-+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_32BIT_ARM_REQUIRED),y)
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-arm-gnu-a-toolchain
-+endif
-+
- ifeq ($(BR2_TARGET_VEXPRESS_FIRMWARE),y)
-
-This option BR2_TARGET_ARM_TRUSTED_FIRMWARE_32BIT_ARM_REQUIRED then
-can be specified in a defconfig for specific board.
-
-Thoughts ? Comments ?
-
-Regards,
-Sergey
+ # License file, Locally calculated
+-sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
++sha256	739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 7d8bef643b..378197d33b 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 12.1
++POSTGRESQL_VERSION = 12.2
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
+-- 
+2.20.1
