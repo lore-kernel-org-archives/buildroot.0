@@ -1,70 +1,36 @@
-From: Sunil Kumar Mahesh <sunil@amarulasolutions.com>
-Date: Fri, 14 Feb 2020 15:05:52 +0530
-Subject: [Buildroot] [PATCH 3/4] boot/arm-trusted-firmware: add support
- for rockchip rk3399
-In-Reply-To: <20200214082518.g4mwdz5oymjuoanw@bars>
-References: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
- <1581573151-18943-4-git-send-email-sunil@amarulasolutions.com>
- <20200214082518.g4mwdz5oymjuoanw@bars>
-Message-ID: <CAM+7aWvaLOq5UnqBX-T3VnV0c28o8Z6WGG0uXPAb2V=zYHOCgQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Feb 2020 10:45:56 +0100
+Subject: [Buildroot] [git commit] board/freescale/common/imx: add
+ support for i.MX8
+In-Reply-To: <CAOMZO5CHe+RMh2DMAm=aSraq6+bnu=nZdkbT6L-5LWd8EFa9HQ@mail.gmail.com>
+ (Fabio Estevam's message of "Wed, 12 Feb 2020 12:28:51 -0300")
+References: <20200205111426.415708122F@busybox.osuosl.org>
+ <CAOMZO5BOONSJYw9hrgJXNMJTOW0mDB+Xz7BfcexOPkuOZ80XeQ@mail.gmail.com>
+ <20200212161816.23f55959@windsurf>
+ <CAOMZO5CHe+RMh2DMAm=aSraq6+bnu=nZdkbT6L-5LWd8EFa9HQ@mail.gmail.com>
+Message-ID: <875zg9cxij.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 14, 2020 at 1:55 PM Sergey Matyukevich <geomatsi@gmail.com> wrote:
->
-> > Add support for TF-A image builds for Rockchip rk3399 chip.
-> >
-> > Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
-> > ---
-> >  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> > index 3473701..cc757b5 100644
-> > --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> > +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> > @@ -90,6 +90,10 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
-> >  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
-> >  endif
-> >
-> > +ifeq ($(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM)),rk3399)
-> > +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-arm-gnu-a-toolchain
-> > +endif
-> > +
->
-> As per explanation by Thomas and Jagan, RK3399 ATF needs 32bit ARM
-> toolchain. Taking into account that different vendors may re-use
-> the same hardware blocks, it probably makes sense to describe this
-> dependency in a more generic way, not specific to RK3399 chip.
->
-> Following the existing patterns in ATF package mk file, new ATF
-> config option can be introduced:
->
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index 34737018aa..160884e0ff 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -75,6 +75,10 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UB
->  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
->  endif
->
-> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_32BIT_ARM_REQUIRED),y)
-> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-arm-gnu-a-toolchain
-> +endif
-> +
->  ifeq ($(BR2_TARGET_VEXPRESS_FIRMWARE),y)
->
-> This option BR2_TARGET_ARM_TRUSTED_FIRMWARE_32BIT_ARM_REQUIRED then
-> can be specified in a defconfig for specific board.
->
-> Thoughts ? Comments ?
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
-This will add an extra config option per board (which has such
-requirement). Is it an appropriate solution ?
-Suniel
->
-> Regards,
-> Sergey
+ > Hi Thomas,
+ > On Wed, Feb 12, 2020 at 12:18 PM Thomas Petazzoni
+ > <thomas.petazzoni@bootlin.com> wrote:
+
+ >> It's my fault for applying only parts of Maeva's patches, because some
+ >> of the patches had already been applied in a different form.
+ >> 
+ >> Could you try this:
+
+ > This fixes the build issue. Also did a boot test and it works fine:
+
+ > Tested-by: Fabio Estevam <festevam@gmail.com>
+
+Great. Thomas, can you send a real patch for this?
+
+-- 
+Bye, Peter Korsgaard
