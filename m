@@ -1,7 +1,10 @@
 From: Louis-Paul Cordier <lpdev@cordier.org>
-Date: Fri, 14 Feb 2020 15:28:22 +0100
-Subject: [Buildroot] [PATCH 1/3] package/intel-gmmlib: bump version to 19.4.1
-Message-ID: <20200214142824.27553-1-lpdev@cordier.org>
+Date: Fri, 14 Feb 2020 15:28:23 +0100
+Subject: [Buildroot] [PATCH 2/3] package/intel-mediadriver: bump version to
+ 19.4.0r
+In-Reply-To: <20200214142824.27553-1-lpdev@cordier.org>
+References: <20200214142824.27553-1-lpdev@cordier.org>
+Message-ID: <20200214142824.27553-2-lpdev@cordier.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +15,32 @@ From: Louis-Paul CORDIER <lpdev@cordier.org>
 
 Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
 ---
- package/intel-gmmlib/intel-gmmlib.hash | 2 +-
- package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/intel-mediadriver/intel-mediadriver.hash | 3 ++-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index a23020673a..1e8baba6c7 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index f53d19a69d..a3f124c3f8 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,4 @@
  # Locally computed
--sha256 60944d54a4992553f92d71ba9f8f4191d297407b564b0f24e9912b415689582e  intel-gmmlib-19.2.3.tar.gz
-+sha256 bb874b41c499abb8f6253b1834e93a02ed9744de71f2503ee9cd4100af7c1860  intel-gmmlib-19.4.1.tar.gz
- sha256 b61d639c5d84ec710ffcf5600ac92f8a4ace66670c1f9bd921f3bde671d36033  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index 7a943ed141..517fc09131 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256 79279c991d918deaa52239dac55787b9c7562e520cd58744171b468d28b8af40  intel-media-19.2.1.tar.gz
++sha256 a03bd75eefe9cb0245e3aab2723b3fef555d9f180a180b2c29d7b12d483d9ec2  intel-media-19.4.0r.tar.gz
+ sha256 74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
++
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index 0acac52e35..c3157867ed 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
--INTEL_GMMLIB_VERSION = 19.2.3
-+INTEL_GMMLIB_VERSION = 19.4.1
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ 
+-INTEL_MEDIADRIVER_VERSION = 19.2.1
++INTEL_MEDIADRIVER_VERSION = 19.4.0r
+ INTEL_MEDIADRIVER_SITE = http://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 -- 
 2.20.1
