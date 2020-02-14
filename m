@@ -1,46 +1,46 @@
-From: Louis-Paul Cordier <lpdev@cordier.org>
-Date: Fri, 14 Feb 2020 16:43:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/intel-mediasdk: enable compilation
- with x11 dri3
-Message-ID: <20200214154350.31588-1-lpdev@cordier.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Feb 2020 17:16:21 +0100
+Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump version to
+ 0.0.20200214
+Message-ID: <20200214161622.32050-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
----
- package/intel-mediasdk/Config.in         | 1 +
- package/intel-mediasdk/intel-mediasdk.mk | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Includes misc fixes. For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2020-February/005013.html
 
-diff --git a/package/intel-mediasdk/Config.in b/package/intel-mediasdk/Config.in
-index 05293d7604..0bfaf1272b 100644
---- a/package/intel-mediasdk/Config.in
-+++ b/package/intel-mediasdk/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_INTEL_MEDIASDK
- 	depends on BR2_PACKAGE_XORG7  # intel-mediadriver
- 	select BR2_PACKAGE_INTEL_MEDIADRIVER
- 	select BR2_PACKAGE_LIBDRM_INTEL
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  Intel(R) Media SDK provides an API to access
- 	  hardware-accelerated video decode, encode and filtering on
-diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-index 368e108308..b040729506 100644
---- a/package/intel-mediasdk/intel-mediasdk.mk
-+++ b/package/intel-mediasdk/intel-mediasdk.mk
-@@ -10,8 +10,8 @@ INTEL_MEDIASDK_LICENSE = MIT
- INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 0ee202ca9e..5c0962d85d 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-February/004962.html
+-sha256  9669e165fc7252cab7f908ba57f160f6d57539b7cc81180f260cb675d2fd362b  wireguard-linux-compat-0.0.20200205.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-February/005013.html
++sha256  6aaed62beb23803a456b7875a56e9462125a589c9dfb6d0b672c1a8f9f3f45ab  wireguard-linux-compat-0.0.20200214.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index 0efb9c3aea..057fee7fce 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- INTEL_MEDIASDK_INSTALL_STAGING = YES
--INTEL_MEDIASDK_DEPENDENCIES = intel-mediadriver
-+INTEL_MEDIASDK_DEPENDENCIES = intel-mediadriver xorgproto
- 
--INTEL_MEDIASDK_CONF_OPTS = -DMFX_INCLUDE="$(@D)/api/include"
-+INTEL_MEDIASDK_CONF_OPTS = -DMFX_INCLUDE="$(@D)/api/include" -DENABLE_X11_DRI3=ON
- 
- $(eval $(cmake-package))
+-WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200205
++WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200214
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
 -- 
 2.20.1
