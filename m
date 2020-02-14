@@ -1,83 +1,136 @@
-From: Sunil Kumar Mahesh <sunil@amarulasolutions.com>
-Date: Fri, 14 Feb 2020 18:03:31 +0530
-Subject: [Buildroot] [PATCH 1/4] boot/arm-trusted-firmware: Disable bin
- copy for rk3399
-In-Reply-To: <CAM+7aWv-4fjhC-XX2hSz7PTJeMf4MNUESRGV==B4xdtFJzs5GA@mail.gmail.com>
-References: <1581573151-18943-1-git-send-email-sunil@amarulasolutions.com>
- <1581573151-18943-2-git-send-email-sunil@amarulasolutions.com>
- <20200213072350.vwly4eganmeq57mu@bars>
- <CAMty3ZC-c0aazuTtKXF8U8B3w=_e8BeicG-hN=jLDCrqUxenFQ@mail.gmail.com>
- <20200214052043.6ab9688f@windsurf>
- <CAMty3ZA3F6td2xwAqVLZvF5ZK+_G3kj-U89yccJCEEyM3tMzcQ@mail.gmail.com>
- <20200214082625.4d114bc9@windsurf>
- <CAM+7aWv-4fjhC-XX2hSz7PTJeMf4MNUESRGV==B4xdtFJzs5GA@mail.gmail.com>
-Message-ID: <CAM+7aWtevTcc5mwtCS4pp-xkLPPMuALGVrskxmTS=25atU8reA@mail.gmail.com>
+From: Patrick Havelange <patrick.havelange@essensium.com>
+Date: Fri, 14 Feb 2020 13:48:18 +0100
+Subject: [Buildroot] [PATCH v2 01/10] package/pkg-cargo.mk: Introduce the
+ cargo package infrastructure.
+Message-ID: <20200214124827.30767-1-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 14, 2020 at 4:27 PM Sunil Kumar Mahesh
-<sunil@amarulasolutions.com> wrote:
->
-> On Fri, Feb 14, 2020 at 12:56 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > On Fri, 14 Feb 2020 12:25:37 +0530
-> > Jagan Teki <jagan@amarulasolutions.com> wrote:
-> >
-> > > > Sergey is right here: I don't think we want to encode platform-specific
-> > > > stuff like this in Kconfig files.
-> > > >
-> > > > What is the problem if you leave this to the default of *.bin ?
-> > >
-> > > Is looking for *.bin in build/rk3399/release/*.bin but v2.2 is not
-> > > creating any bin since rk3399 (or rockchip) doesn't need bins.
-> > >
-> > > .mk file change:
-> > >
-> > > define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
-> > >         $(foreach f,$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES)), \
-> > >                 cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(f) $(BINARIES_DIR)/
-> > >         )
-> > >
-> > > Build log:
-> > >
-> > > >>> arm-trusted-firmware v2.2 Installing to images directory
-> > > cp -dpf /mnt/out/build/arm-trusted-firmware-v2.2/build/rk3399/release/*.bin
-> > > /mnt/out/images/
-> > > cp: cannot stat
-> > > '/mnt/out/build/arm-trusted-firmware-v2.2/build/rk3399/release/*.bin':
-> > > No such file or directory
-> > > package/pkg-generic.mk:339: recipe for target
-> > > '/mnt/out/build/arm-trusted-firmware-v2.2/.stamp_images_installed'
-> > > failed
-> > > make[1]: *** [/mnt/out/build/arm-trusted-firmware-v2.2/.stamp_images_installed]
-> > > Error 1
-> > > Makefile:23: recipe for target '_all' failed
-> > > make: *** [_all] Error 2
-> >
-> > What is your image name then? You don't install any image?
-> >
-> > One possibility is to change:
-> >
-> > -         $(foreach f,$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES)), \
-> > +         $(foreach f,$(wilard $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES))), \
-> >
->
-> Yes wildcard function is working. tested with the above change in BR.
-> Suniel
+In order to be package agnostic, the install phase is now using
+cargo instead of install.
 
-Sorry, my bad, need to test other targets which might depend on this
-changeset. will update
-Suniel
->
-> > But still, it would be nice to understand what is your image name. I
-> > guess I could find that out by doing a build, though :)
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+
+---
+This is the V2 of the previously posted series :
+http://patchwork.ozlabs.org/project/buildroot/list/?series=156166&state=%2A&archive=both
+
+A lot of changes following the buildroot developer meeting's
+decisions from February 2020.
+
+Needs to be applied on top of the rust 1.40 bump
+---
+ package/Makefile.in  |  1 +
+ package/pkg-cargo.mk | 89 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 90 insertions(+)
+ create mode 100644 package/pkg-cargo.mk
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 285e2837ef..650d7c166e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -426,3 +426,4 @@ include package/pkg-kernel-module.mk
+ include package/pkg-waf.mk
+ include package/pkg-golang.mk
+ include package/pkg-meson.mk
++include package/pkg-cargo.mk
+diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+new file mode 100644
+index 0000000000..2242f3a082
+--- /dev/null
++++ b/package/pkg-cargo.mk
+@@ -0,0 +1,89 @@
++################################################################################
++# Cargo package infrastructure
++#
++# This file implements an infrastructure that eases development of package
++# .mk files for Cargo packages. It should be used for all packages that use
++# Cargo as their build system.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++# In terms of implementation, this Cargo infrastructure requires the .mk file
++# to only specify metadata information about the package: name, version,
++# download URL, etc.
++#
++# We still allow the package .mk file to override what the different steps
++# are doing, if needed. For example, if <PKG>_BUILD_CMDS is already defined,
++# it is used as the list of commands to perform to build the package,
++# instead of the default Cargo behaviour. The package can also define some
++# post operation hooks.
++#
++################################################################################
++
++################################################################################
++# inner-cargo-package -- defines how the configuration, compilation and
++# installation of a cargo package should be done, implements a few hooks
++# to tune the build process for cargo specifities and calls the generic
++# package infrastructure to generate the necessary make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
++
++define inner-cargo-package
++
++# We need host-rustc to run cargo
++$(2)_DEPENDENCIES += host-rustc
++
++$(2)_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
++$(2)_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
++
++ifeq ($(4),target)
++    $(2)_CARGO_TARGET_OPT = --target $$(RUSTC_TARGET_NAME)
++endif
++
++#
++# Build step. Only define it if not already defined by the package .mk
++# file.
++#
++ifndef $(2)_BUILD_CMDS
++define $(2)_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $$($(2)_CARGO_ENV) \
++		cargo build \
++			--$$($(2)_CARGO_MODE) \
++			$$($(2)_CARGO_TARGET_OPT) \
++			--manifest-path $$(@D)/Cargo.toml
++endef
++endif
++
++#
++# Target installation step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $$($(2)_CARGO_ENV) \
++		cargo install \
++			--root $(TARGET_DIR)/usr/ \
++			--bins \
++			--path $$(@D) \
++			$$($(2)_CARGO_TARGET_OPT) \
++			--force
++endef
++endif
++
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++
++endef
++
++################################################################################
++# cargo-package -- the target generator macro for Cargo packages
++################################################################################
++
++cargo-package = $(call inner-cargo-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
+-- 
+2.17.1
