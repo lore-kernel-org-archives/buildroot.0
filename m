@@ -1,82 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 14 Feb 2020 17:57:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mono: fix build with powerpc
-In-Reply-To: <CA+TH9Vk2c-bJEuEa7csOw9dJFgNfoWsXNNcmGRtGi7sBezghqA@mail.gmail.com>
-References: <20200214163851.2900799-1-fontaine.fabrice@gmail.com>
- <CA+TH9Vk2c-bJEuEa7csOw9dJFgNfoWsXNNcmGRtGi7sBezghqA@mail.gmail.com>
-Message-ID: <CAPi7W83n=9b4yLYnKMrF2RUbALGvrYj0CCAQqBaYEm5P1hjq=w@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 14 Feb 2020 18:21:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.3.4
+Message-ID: <20200214172116.454450-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le ven. 14 f?vr. 2020 ? 17:44, Angelo Compagnucci
-<angelo.compagnucci@gmail.com> a ?crit :
->
->
->
-> Il giorno ven 14 feb 2020 alle ore 17:38 Fabrice Fontaine <fontaine.fabrice@gmail.com> ha scritto:
->>
->> Fixes:
->>  - http://autobuild.buildroot.org/results/fff0dd08f71facbe367d982d19158ee084ae8047
->>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> ---
->>  ...-leftover-code-from-pre-monoctx-area.patch | 33 +++++++++++++++++++
->>  1 file changed, 33 insertions(+)
->>  create mode 100644 package/mono/0004-ppc32-delete-leftover-code-from-pre-monoctx-area.patch
->>
->> diff --git a/package/mono/0004-ppc32-delete-leftover-code-from-pre-monoctx-area.patch b/package/mono/0004-ppc32-delete-leftover-code-from-pre-monoctx-area.patch
->> new file mode 100644
->> index 0000000000..cfda7fdfaa
->> --- /dev/null
->> +++ b/package/mono/0004-ppc32-delete-leftover-code-from-pre-monoctx-area.patch
->> @@ -0,0 +1,33 @@
->> +From 121928d29ac1e0aebb80531b3ebcca1a9ffcd618 Mon Sep 17 00:00:00 2001
->> +From: Bernhard Urban-Forster <lewurm@gmail.com>
->> +Date: Fri, 6 Dec 2019 11:35:11 +0100
->> +Subject: [PATCH] [ppc32] delete leftover code from pre-monoctx area (#18072)
->> +
->> +Also update assert which doesn't make sense since we have moved over to MonoContext
->> +
->> +Some context: e7011c780f676914f559f14f25e76c192bb2b0b2
->> +
->> +Fixes: https://github.com/mono/mono/issues/18064
->> +[Retrieved from:
->> +https://github.com/mono/mono/commit/121928d29ac1e0aebb80531b3ebcca1a9ffcd618]
->> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> +---
->> + mono/mini/exceptions-ppc.c | 5 +----
->> + 1 file changed, 1 insertion(+), 4 deletions(-)
->> +
->> +diff --git a/mono/mini/exceptions-ppc.c b/mono/mini/exceptions-ppc.c
->> +index 44d09bcaba1d..d14f8383eba9 100644
->> +--- a/mono/mini/exceptions-ppc.c
->> ++++ b/mono/mini/exceptions-ppc.c
->> +@@ -692,10 +692,7 @@ mono_arch_handle_altstack_exception (void *sigctx, MONO_SIG_HANDLER_INFO_TYPE *s
->> +       /* may need to adjust pointers in the new struct copy, depending on the OS */
->> +       uc_copy = (MonoContext*)(sp + 16);
->> +       mono_sigctx_to_monoctx (uc, uc_copy);
->> +-#if defined(__linux__) && !defined(__mono_ppc64__)
->> +-      uc_copy->uc_mcontext.uc_regs = (gpointer)((char*)uc_copy + ((char*)uc->uc_mcontext.uc_regs - (char*)uc));
->> +-#endif
->> +-      g_assert (mono_arch_ip_from_context (uc) == mono_arch_ip_from_context (uc_copy));
->> ++      g_assert (mono_arch_ip_from_context (uc) == MONO_CONTEXT_GET_IP (uc_copy));
->> +       /* at the return form the signal handler execution starts in altstack_handle_and_restore() */
->> +       UCONTEXT_REG_LNK(uc) = UCONTEXT_REG_NIP(uc);
->> + #ifdef PPC_USES_FUNCTION_DESCRIPTOR
->
->
-> It's really worth to backport an upstream patch when we can wait for the next release?
-It depends on when the release will happen. Is it planned before the
-end of February?
->
->>
->> --
->> 2.24.1
->>
->
->
-> --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 667a74b1a8..7d428f2322 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.3.3
++MESA3D_HEADERS_VERSION = 19.3.4
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index e14b890e73..3237135b1c 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2020-January/000567.html
+-sha256 81ce4810bb25d61300f8104856461f4d49cf7cb794aa70cb572312e370c39f09  mesa-19.3.3.tar.xz
+-sha512 1f792fbde71132afd4a43d6abe6a3d640f375e83641c6144c82312774434c9588ffba65a3ba38394947bd753656aa85213b6cd9f745cec0040c0559eb41f0dc9  mesa-19.3.3.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2020-February/000570.html
++sha256 1da467e6ae2799a517e242462331eafd29ae77d9872f3a845df81f7c308e8fe4  mesa-19.3.4.tar.xz
++sha512 2bbb3dc8f1d839f11fe12cc959393cd69607fa6714b2166b80299e0559d2d3b0ac38ed4e15ac3e5f472264eb24536d1901d350f7409f3a7e00d6f4ccbb2312fb  mesa-19.3.4.tar.xz
+ 
+ # License
+ sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index c14716bf15..2a22d2fddc 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.3.3
++MESA3D_VERSION = 19.3.4
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.20.1
