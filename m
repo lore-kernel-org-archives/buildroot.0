@@ -1,64 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Feb 2020 09:13:21 +0100
-Subject: [Buildroot] [PATCH v2,3/3] package/parted: disable on uclibc
-In-Reply-To: <20200213223644.2346193-3-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 13 Feb 2020 23:36:44 +0100")
-References: <20200213223644.2346193-1-fontaine.fabrice@gmail.com>
- <20200213223644.2346193-3-fontaine.fabrice@gmail.com>
-Message-ID: <87a75ld1su.fsf@dell.be.48ers.dk>
+Date: Fri, 14 Feb 2020 09:09:49 +0100
+Subject: [Buildroot] [git commit] package/udisks: add locale dependency
+Message-ID: <20200214080204.5F0878E095@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a17cb3532c7f2dfb0916c14ea07894f70d29f059
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Like postgreSQL (and imagemagick), parted does not build against uClibc
- > with locales enabled, due to an uClibc bug, see
- > http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html:
+Commit b5f0c6efb24826641719c493382211e5d768417b forgot to propagate new
+locale dependency from parted to udisks
 
- > In file included from atari.c:42:
- > atari.c: In function 'atr_part_correct':
- > atari.c:221:9: error: dereferencing pointer to incomplete type 'struct __uclibc_locale_struct'
- >   return isalnum_l(part->id[0], atr_c_locale)
- >          ^~~~~~~~~
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/udisks/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
- > So disable parted on uclibc
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/992518d340a9f32a0721d6e66936850c4c3ef2e4
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Peter Korsgaard):
- >  - Update parted's reverse dependencies
-
-Committed after fixing the white space issues, thanks.
-
-check-package warns about this:
-
-Applying: package/parted: disable on uclibc
-package/python-pyparted/Config.in:15: line contains trailing whitespace
-package/python-pyparted/Config.in:15: empty line at end of file
-92 lines processed
-2 warnings generated
-
-Consider adding a post-commit hook with it, E.G. something like:
-
-cat .git/hooks/post-commit
-#!/bin/sh
-#
-# An example hook script that is called after a successful
-# commit is made.
-#
-# To enable this hook, rename this file to "post-commit".
-
-# check-package on added/changed files
-git show --no-renames HEAD | \
-        lsdiff -s | \
-        awk '{ if ($1 != "-") print substr($2, 3) }' | \
-        xargs -r ./utils/check-package
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/udisks/Config.in b/package/udisks/Config.in
+index 80a905fd9b..f4044b0d0d 100644
+--- a/package/udisks/Config.in
++++ b/package/udisks/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_UDISKS
+ 	bool "udisks"
++	depends on BR2_ENABLE_LOCALE # parted
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # spidermonkey
+ 	depends on BR2_INSTALL_LIBSTDCPP # spidermonkey
+ 	depends on BR2_PACKAGE_HAS_UDEV
+@@ -49,10 +50,10 @@ comment "udisks needs udev /dev management"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_HAS_UDEV
+ 
+-comment "udisks needs a glibc or musl toolchain with C++, wchar, dynamic library, NPTL, gcc >= 4.9"
++comment "udisks needs a glibc or musl toolchain with locale, C++, wchar, dynamic library, NPTL, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
++	depends on !BR2_ENABLE_LOCALE || BR2_TOOLCHAIN_USES_UCLIBC || \
+ 		!BR2_INSTALL_LIBSTDCPP || \
+ 		BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
