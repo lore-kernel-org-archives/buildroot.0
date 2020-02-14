@@ -1,46 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Feb 2020 17:16:21 +0100
-Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump version to
- 0.0.20200214
-Message-ID: <20200214161622.32050-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 14 Feb 2020 17:38:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mono: fix build with powerpc
+Message-ID: <20200214163851.2900799-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Includes misc fixes. For details, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2020-February/005013.html
+Fixes:
+ - http://autobuild.buildroot.org/results/fff0dd08f71facbe367d982d19158ee084ae8047
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-leftover-code-from-pre-monoctx-area.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/mono/0004-ppc32-delete-leftover-code-from-pre-monoctx-area.patch
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index 0ee202ca9e..5c0962d85d 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-February/004962.html
--sha256  9669e165fc7252cab7f908ba57f160f6d57539b7cc81180f260cb675d2fd362b  wireguard-linux-compat-0.0.20200205.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-February/005013.html
-+sha256  6aaed62beb23803a456b7875a56e9462125a589c9dfb6d0b672c1a8f9f3f45ab  wireguard-linux-compat-0.0.20200214.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 0efb9c3aea..057fee7fce 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200205
-+WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200214
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+diff --git a/package/mono/0004-ppc32-delete-leftover-code-from-pre-monoctx-area.patch b/package/mono/0004-ppc32-delete-leftover-code-from-pre-monoctx-area.patch
+new file mode 100644
+index 0000000000..cfda7fdfaa
+--- /dev/null
++++ b/package/mono/0004-ppc32-delete-leftover-code-from-pre-monoctx-area.patch
+@@ -0,0 +1,33 @@
++From 121928d29ac1e0aebb80531b3ebcca1a9ffcd618 Mon Sep 17 00:00:00 2001
++From: Bernhard Urban-Forster <lewurm@gmail.com>
++Date: Fri, 6 Dec 2019 11:35:11 +0100
++Subject: [PATCH] [ppc32] delete leftover code from pre-monoctx area (#18072)
++
++Also update assert which doesn't make sense since we have moved over to MonoContext
++
++Some context: e7011c780f676914f559f14f25e76c192bb2b0b2
++
++Fixes: https://github.com/mono/mono/issues/18064
++[Retrieved from:
++https://github.com/mono/mono/commit/121928d29ac1e0aebb80531b3ebcca1a9ffcd618]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ mono/mini/exceptions-ppc.c | 5 +----
++ 1 file changed, 1 insertion(+), 4 deletions(-)
++
++diff --git a/mono/mini/exceptions-ppc.c b/mono/mini/exceptions-ppc.c
++index 44d09bcaba1d..d14f8383eba9 100644
++--- a/mono/mini/exceptions-ppc.c
+++++ b/mono/mini/exceptions-ppc.c
++@@ -692,10 +692,7 @@ mono_arch_handle_altstack_exception (void *sigctx, MONO_SIG_HANDLER_INFO_TYPE *s
++ 	/* may need to adjust pointers in the new struct copy, depending on the OS */
++ 	uc_copy = (MonoContext*)(sp + 16);
++ 	mono_sigctx_to_monoctx (uc, uc_copy);
++-#if defined(__linux__) && !defined(__mono_ppc64__)
++-	uc_copy->uc_mcontext.uc_regs = (gpointer)((char*)uc_copy + ((char*)uc->uc_mcontext.uc_regs - (char*)uc));
++-#endif
++-	g_assert (mono_arch_ip_from_context (uc) == mono_arch_ip_from_context (uc_copy));
+++	g_assert (mono_arch_ip_from_context (uc) == MONO_CONTEXT_GET_IP (uc_copy));
++ 	/* at the return form the signal handler execution starts in altstack_handle_and_restore() */
++ 	UCONTEXT_REG_LNK(uc) = UCONTEXT_REG_NIP(uc);
++ #ifdef PPC_USES_FUNCTION_DESCRIPTOR
 -- 
-2.20.1
+2.24.1
