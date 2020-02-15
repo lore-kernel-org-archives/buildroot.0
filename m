@@ -1,24 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2020 11:53:44 +0100
-Subject: [Buildroot] [PATCH] package/go: bump version to 1.13.8
-In-Reply-To: <20200213203528.2739-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 13 Feb 2020 21:35:27 +0100")
-References: <20200213203528.2739-1-peter@korsgaard.com>
-Message-ID: <87lfp4kton.fsf@dell.be.48ers.dk>
+Date: Sat, 15 Feb 2020 11:54:12 +0100
+Subject: [Buildroot] [PATCH] package/libhttpparser: bump to version 2.9.3
+In-Reply-To: <20200213205258.18302-1-gilles.talis@gmail.com> (Gilles Talis's
+ message of "Thu, 13 Feb 2020 21:52:56 +0100")
+References: <20200213205258.18302-1-gilles.talis@gmail.com>
+Message-ID: <87h7zsktnv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
- > Includes fixes ncludes fixes to the runtime, the crypto/x509, and net/http
- > packages.
+ > Also dropped patch that was pushed upstream
+ > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Fixed the commit message and committed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
