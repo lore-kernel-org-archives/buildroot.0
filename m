@@ -1,46 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2020 11:58:38 +0100
-Subject: [Buildroot] [git commit] package/ncdu: bump to version 1.14.2
-Message-ID: <20200215105640.967E08E0BE@busybox.osuosl.org>
+Date: Sat, 15 Feb 2020 11:53:57 +0100
+Subject: [Buildroot] [git commit] package/libhttpparser: bump to version
+ 2.9.3
+Message-ID: <20200215105640.822788E0BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84140d000702ead2fb62cfbd3d9244873b691668
+commit: https://git.buildroot.net/buildroot/commit/?id=c7faf7f9963618b02a465e1e185b2d2b1d767114
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also dropped patch that was pushed upstream
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncdu/ncdu.hash | 6 +++---
- package/ncdu/ncdu.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...-f-option-when-calling-ln-at-install-time.patch | 39 ----------------------
+ package/libhttpparser/libhttpparser.hash           |  2 +-
+ package/libhttpparser/libhttpparser.mk             |  2 +-
+ 3 files changed, 2 insertions(+), 41 deletions(-)
 
-diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
-index ff2f469025..285dc9bfa4 100644
---- a/package/ncdu/ncdu.hash
-+++ b/package/ncdu/ncdu.hash
-@@ -1,5 +1,5 @@
--# From https://dev.yorhel.nl/download/ncdu-1.14.1.tar.gz.sha256
--sha256 be31e0e8c13a0189f2a186936f7e298c6390ebdc573bb4a1330bc1fcbf56e13e ncdu-1.14.1.tar.gz
-+# From https://dev.yorhel.nl/download/ncdu-1.14.2.tar.gz.sha256
-+sha256 947a7f5c1d0cd4e338e72b4f5bc5e2873651442cec3cb012e04ad2c37152c6b1 ncdu-1.14.2.tar.gz
- 
- # computed locally
--sha256 a05f1fd38432052dc8588da66b8bf3e9e103e29a82c0b5d72c65d4d9fc830f2e COPYING
-+sha256 978f49428f21714c973706030c0ef09983cc1e2889a1b7b521dbf8860870cf05 COPYING
-diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
-index 336d413227..681c8bd87a 100644
---- a/package/ncdu/ncdu.mk
-+++ b/package/ncdu/ncdu.mk
+diff --git a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch b/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
+deleted file mode 100644
+index 70f16f662f..0000000000
+--- a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 384917321c45e492b0ca7aaa94d4b15324aef95d Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Fri, 28 Aug 2015 19:02:11 +0200
+-Subject: [PATCH] Use -f option when calling ln at install time
+-
+-This allows "make install; make install" to work properly.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Renaud AUBIN <root@renaud.io>
+----
+- Makefile | 8 ++++----
+- 1 file changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 6cf63bd..c182e5c 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -133,14 +133,14 @@ tags: http_parser.c http_parser.h test.c
+- install: library
+- 	$(INSTALL) -D  http_parser.h $(DESTDIR)$(INCLUDEDIR)/http_parser.h
+- 	$(INSTALL) -D $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
+--	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
+--	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
+-+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
+-+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
+- 
+- install-strip: library
+- 	$(INSTALL) -D  http_parser.h $(DESTDIR)$(INCLUDEDIR)/http_parser.h
+- 	$(INSTALL) -D -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
+--	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
+--	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
+-+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
+-+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
+- 
+- uninstall:
+- 	rm $(DESTDIR)$(INCLUDEDIR)/http_parser.h
+--- 
+-2.6.2
+-
+diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
+index a87c0ffa7a..4634b06620 100644
+--- a/package/libhttpparser/libhttpparser.hash
++++ b/package/libhttpparser/libhttpparser.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 5199500e352584852c95c13423edc5f0cb329297c81dd69c3c8f52a75496da08  libhttpparser-2.9.2.tar.gz
++sha256 8fa0ab8770fd8425a9b431fdbf91623c4d7a9cdb842b9339289bd2b0b01b0d3d  libhttpparser-2.9.3.tar.gz
+ sha256 79e6ba8b687cb54786207342b9b6fcee0ac10218453ed9009b84d949b2233cc0  LICENSE-MIT
+diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
+index 082fe12767..d7b6907493 100644
+--- a/package/libhttpparser/libhttpparser.mk
++++ b/package/libhttpparser/libhttpparser.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NCDU_VERSION = 1.14.1
-+NCDU_VERSION = 1.14.2
- NCDU_SITE = http://dev.yorhel.nl/download
- 
- NCDU_DEPENDENCIES = ncurses
+-LIBHTTPPARSER_VERSION = 2.9.2
++LIBHTTPPARSER_VERSION = 2.9.3
+ LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,v$(LIBHTTPPARSER_VERSION))
+ LIBHTTPPARSER_INSTALL_STAGING = YES
+ LIBHTTPPARSER_LICENSE = MIT
