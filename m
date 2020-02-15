@@ -1,91 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2020 11:53:57 +0100
-Subject: [Buildroot] [git commit] package/libhttpparser: bump to version
- 2.9.3
-Message-ID: <20200215105640.822788E0BF@busybox.osuosl.org>
+Date: Sat, 15 Feb 2020 12:04:02 +0100
+Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
+ version to 0.0.20200214
+Message-ID: <20200215105640.DB9E58E094@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7faf7f9963618b02a465e1e185b2d2b1d767114
+commit: https://git.buildroot.net/buildroot/commit/?id=10fe3405dfe734449d567b9e8d6a96fa5ef9e12a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also dropped patch that was pushed upstream
+Includes misc fixes. For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2020-February/005013.html
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-f-option-when-calling-ln-at-install-time.patch | 39 ----------------------
- package/libhttpparser/libhttpparser.hash           |  2 +-
- package/libhttpparser/libhttpparser.mk             |  2 +-
- 3 files changed, 2 insertions(+), 41 deletions(-)
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch b/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
-deleted file mode 100644
-index 70f16f662f..0000000000
---- a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 384917321c45e492b0ca7aaa94d4b15324aef95d Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Fri, 28 Aug 2015 19:02:11 +0200
--Subject: [PATCH] Use -f option when calling ln at install time
--
--This allows "make install; make install" to work properly.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: Renaud AUBIN <root@renaud.io>
-----
-- Makefile | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 6cf63bd..c182e5c 100644
----- a/Makefile
--+++ b/Makefile
--@@ -133,14 +133,14 @@ tags: http_parser.c http_parser.h test.c
-- install: library
-- 	$(INSTALL) -D  http_parser.h $(DESTDIR)$(INCLUDEDIR)/http_parser.h
-- 	$(INSTALL) -D $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
---	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
---	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
--+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
--+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
-- 
-- install-strip: library
-- 	$(INSTALL) -D  http_parser.h $(DESTDIR)$(INCLUDEDIR)/http_parser.h
-- 	$(INSTALL) -D -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
---	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
---	ln -s $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
--+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
--+	ln -sf $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SOLIBNAME).$(SOEXT)
-- 
-- uninstall:
-- 	rm $(DESTDIR)$(INCLUDEDIR)/http_parser.h
---- 
--2.6.2
--
-diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
-index a87c0ffa7a..4634b06620 100644
---- a/package/libhttpparser/libhttpparser.hash
-+++ b/package/libhttpparser/libhttpparser.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 5199500e352584852c95c13423edc5f0cb329297c81dd69c3c8f52a75496da08  libhttpparser-2.9.2.tar.gz
-+sha256 8fa0ab8770fd8425a9b431fdbf91623c4d7a9cdb842b9339289bd2b0b01b0d3d  libhttpparser-2.9.3.tar.gz
- sha256 79e6ba8b687cb54786207342b9b6fcee0ac10218453ed9009b84d949b2233cc0  LICENSE-MIT
-diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
-index 082fe12767..d7b6907493 100644
---- a/package/libhttpparser/libhttpparser.mk
-+++ b/package/libhttpparser/libhttpparser.mk
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 0ee202ca9e..5c0962d85d 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-February/004962.html
+-sha256  9669e165fc7252cab7f908ba57f160f6d57539b7cc81180f260cb675d2fd362b  wireguard-linux-compat-0.0.20200205.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-February/005013.html
++sha256  6aaed62beb23803a456b7875a56e9462125a589c9dfb6d0b672c1a8f9f3f45ab  wireguard-linux-compat-0.0.20200214.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index 0efb9c3aea..057fee7fce 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBHTTPPARSER_VERSION = 2.9.2
-+LIBHTTPPARSER_VERSION = 2.9.3
- LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,v$(LIBHTTPPARSER_VERSION))
- LIBHTTPPARSER_INSTALL_STAGING = YES
- LIBHTTPPARSER_LICENSE = MIT
+-WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200205
++WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200214
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
