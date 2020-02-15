@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2020 12:02:01 +0100
-Subject: [Buildroot] [PATCH] package/screen: bump version to 4.8.0
-In-Reply-To: <20200214072701.26574-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 14 Feb 2020 08:27:01 +0100")
-References: <20200214072701.26574-1-peter@korsgaard.com>
-Message-ID: <87r1ywjeqe.fsf@dell.be.48ers.dk>
+Date: Sat, 15 Feb 2020 12:02:19 +0100
+Subject: [Buildroot] [PATCH] package/postgresql: security bump to
+ version 12.2
+In-Reply-To: <20200214083910.26327-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 14 Feb 2020 09:39:10 +0100")
+References: <20200214083910.26327-1-peter@korsgaard.com>
+Message-ID: <87mu9kjepw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes a memory corruption issue in OSC 49 handling.  Notice that this is
- > only enabled if screen is built with --enable-rxvt_osc, which isn't the case
- > in Buildroot. From the release notes:
+ > Fixes the following security issues:
+ > - CVE-2020-1720: ALTER ... DEPENDS ON EXTENSION is missing authorization checks
+ >   https://www.postgresql.org/about/news/2011/
 
- > As last fix, fixes potential memory overwrite of quite big size (~768
- > bytes), and even though I'm not sure about potential exploitability of
- > that issue, I highly recommend everyone to upgrade as soon as possible.
- > This issue is present at least since v.4.2.0 (haven't checked earlier).
-
- > https://lists.gnu.org/archive/html/screen-devel/2020-02/msg00007.html
-
- > Upstream changed the gnu.org URLs to use HTTPS, so adjust
- > 0005-rename-sched_h.patch to match.
+ > Update the license hash for a change in copyright years:
+ > -Portions Copyright (c) 1996-2019, PostgreSQL Global Development Group
+ > +Portions Copyright (c) 1996-2020, PostgreSQL Global Development Group
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
