@@ -1,44 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2020 11:53:19 +0100
-Subject: [Buildroot] [git commit] package/go: bump version to 1.13.8
-Message-ID: <20200215105640.770248E094@busybox.osuosl.org>
+Date: Sat, 15 Feb 2020 11:50:40 +0100
+Subject: [Buildroot] [git commit] package/dovecot: security bump to version
+ 2.3.9.3
+Message-ID: <20200215105640.6FBA68E0BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b15ef3505f7db2ecc5c50cbca189796aca7899d
+commit: https://git.buildroot.net/buildroot/commit/?id=250535975d1f700a54c97cd31f4032b8cee5b52e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Includes fixes to the runtime, the crypto/x509, and net/http
-packages.
+Fixes the following security issues:
+
+- CVE-2020-7046: Truncated UTF-8 can be used to DoS submission-login and
+  lmtp processes
+  lib-smtp doesn't handle truncated command parameters properly, resulting
+  in infinite loop taking 100% CPU for the process.  This happens for LMTP
+  (where it doesn't matter so much) and also for submission-login where
+  unauthenticated users can trigger it.
+
+- CVE-2020-7957: Specially crafted mail can crash snippet generation
+  Snippet generation crashes if:
+  - message is large enough that message-parser returns multiple body
+    blocks
+  - The first block(s) don't contain the full snippet (e.g.  full of
+    whitespace)
+  - input ends with '>'
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index b607ce37d4..dc966e85d2 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	e4ad42cc5f5c19521fbbbde3680995f2546110b5c6aa2b48c3754ff7af9b41f4  go1.13.7.src.tar.gz
-+sha256	b13bf04633d4d8cf53226ebeaace8d4d2fd07ae6fa676d0844a688339debec34  go1.13.8.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 43c04ac0c5..376c3db7f0 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index e8c76b3c1e..e61937495a 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 4784fb98dd41b83888e4aa9908efcbcad2e04a254e97440863903c0c498486f9  dovecot-2.3.9.2.tar.gz
++sha256 f89fb69423fc5bdc05955c8fc0607eab9e33511f9a643b721763db6156c49651  dovecot-2.3.9.3.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 5b19fa6235..9f89ce6354 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GO_VERSION = 1.13.7
-+GO_VERSION = 1.13.8
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).9.2
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).9.3
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
