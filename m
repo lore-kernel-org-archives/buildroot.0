@@ -1,55 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2020 16:09:25 +0100
-Subject: [Buildroot] [PATCH 1/4] package/webkitgtk: needs >= GCC 7
-Message-ID: <20200215150929.13293-1-peter@korsgaard.com>
+Date: Sat, 15 Feb 2020 16:09:26 +0100
+Subject: [Buildroot] [PATCH 2/4] package/webkitgtk: security bump to version
+ 2.26.4
+In-Reply-To: <20200215150929.13293-1-peter@korsgaard.com>
+References: <20200215150929.13293-1-peter@korsgaard.com>
+Message-ID: <20200215150929.13293-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CMakeLists.txt contains a toolchain check:
+Fixes the following security issues:
 
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    if (${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS "7.3.0")
-        message(FATAL_ERROR "GCC 7.3 or newer is required to build WebKit. Use a newer GCC version or Clang.")
-    endif ()
-endif ()
+- CVE-2020-3862: Impact: A malicious website may be able to cause a denial
+  of service.  Description: A denial of service issue was addressed with
+  improved memory handling.
 
-So bump the toolchain dependency to >= GCC 7.  The check is really about >=
-7.3.0, but we do not have such detailed version checks.  Given that GCC
-7.3.0 was released in January 2018 (and 7.1.0 in May 2017), most external
-GCC 7.x toolchains probably use >= 7.3.0.
+- CVE-2020-3864: Impact: A DOM object context may not have had a unique
+  security origin.  Description: A logic issue was addressed with improved
+  validation.
+
+- CVE-2020-3865: Impact: A top-level DOM object context may have incorrectly
+  been considered secure.  Description: A logic issue was addressed with
+  improved validation.
+
+- CVE-2020-3867: Impact: Processing maliciously crafted web content may lead
+  to universal cross site scripting.  Description: A logic issue was
+  addressed with improved state management.
+
+- CVE-2020-3868: Impact: Processing maliciously crafted web content may lead
+  to arbitrary code execution.  Description: Multiple memory corruption
+  issues were addressed with improved memory handling.
+
+For more details, see the advisory:
+https://webkitgtk.org/security/WSA-2020-0002.html
+
+While we are at it, adjust the white space in the .hash function to match
+the new agreements.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 12 ++++++------
+ package/webkitgtk/webkitgtk.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 4f10466c1f..86f58821a3 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -12,17 +12,17 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 13d8742b7f..0dfbe93137 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,8 +1,8 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.26.3.tar.xz.sums
+-md5 4c27d59a032710dae3cffa5990bb6aea webkitgtk-2.26.3.tar.xz
+-sha1 8d5a7b4f330788847f85e1b2cb6191435dcf9f28 webkitgtk-2.26.3.tar.xz
+-sha256 add51153943cc11d90a7038d0ea5f6332281e6c0be0640f802a211b035f0e611 webkitgtk-2.26.3.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.26.4.tar.xz.sums
++md5  60f881729f3b71244b7f6e58790073e0  webkitgtk-2.26.4.tar.xz
++sha1  72f209c08ecc8ad4f0f6b767d4fa1be7a652df33  webkitgtk-2.26.4.tar.xz
++sha256  4386900713dfadf9741177210b32623cab22562a79ffd0d446b66569934b113f  webkitgtk-2.26.4.tar.xz
  
--comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6"
-+comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 7"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_USES_GLIBC || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	depends on BR2_USE_MMU
+ # Hashes for license files:
+-sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+-sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce Source/WebCore/LICENSE-LGPL-2.1
++sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
++sha256  f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce  Source/WebCore/LICENSE-LGPL-2.1
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index cbd9003071..cdb6556554 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_WEBKITGTK
- 	bool "webkitgtk"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+-WEBKITGTK_VERSION = 2.26.3
++WEBKITGTK_VERSION = 2.26.4
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
 2.20.1
