@@ -1,96 +1,206 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Feb 2020 16:26:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/meson: fix pkg-config --static
-Message-ID: <20200215152620.3553021-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 15 Feb 2020 16:49:10 +0100
+Subject: [Buildroot] [PATCH v3 1/2] support/scripts/pkg-stats: add
+ support for CVE reporting
+In-Reply-To: <20200215124417.236492-2-titouan.christophe@railnova.eu> (Titouan
+ Christophe's message of "Sat, 15 Feb 2020 13:44:16 +0100")
+References: <20200215124417.236492-1-titouan.christophe@railnova.eu>
+ <20200215124417.236492-2-titouan.christophe@railnova.eu>
+Message-ID: <87sgjbj1ft.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pkg-config wrapper is not used since commit
-4e0bc29993376613d200e892d491e31ea5a49622, this raise static build
-failures with libglib2 because --static is not passed anymore to
-pkg-config so add a patch to get back the old behaviour.
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
+ > From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > This commit extends the pkg-stats script to grab information about the
+ > CVEs affecting the Buildroot packages.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...dencies-base.py-add-pkg_config_stati.patch | 38 +++++++++++++++++++
- package/meson/cross-compilation.conf.in       |  1 +
- package/pkg-meson.mk                          |  1 +
- 3 files changed, 40 insertions(+)
- create mode 100644 package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
+ > To do so, it downloads the NVD database from
+ > https://nvd.nist.gov/vuln/data-feeds in JSON format, and processes the
+ > JSON file to determine which of our packages is affected by which
+ > CVE. The information is then displayed in both the HTML output and the
+ > JSON output of pkg-stats.
 
-diff --git a/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-new file mode 100644
-index 0000000000..7bb00f3fba
---- /dev/null
-+++ b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-@@ -0,0 +1,38 @@
-+From 3a4962ede0d12bac66b38e0843f6e2ea75b03d50 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 15 Feb 2020 15:13:59 +0100
-+Subject: [PATCH] mesonbuild/dependencies/base.py: add pkg_config_static
-+
-+Allow the user to always call pkg-config with --static thanks to a
-+pkg_config_static property. This will allow to fix static build failures
-+with libglib2:
-+
-+FAILED: gio/gio
-+/home/naourr/work/instance-0/output-1/host/bin/arm-linux-gcc  -o gio/gio 'gio/6ae6c9e@@gio at exe/gio-tool.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-cat.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-copy.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-info.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-list.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-mime.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-mkdir.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-monitor.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-mount.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-move.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-open.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-rename.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-remove.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-save.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-set.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-trash.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-tree.c.o' -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -static -Wl,--start-group gio/libgio-2.0.a glib/libglib-2.0.a gobject/libgobject-2.0.a gmodule/libgmodule-2.0.a -pthread /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libz.a /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmount.a /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libpcre.a -lm /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libffi.a -Wl,--end-group '-Wl,-rpath,$ORIGIN/:$ORIGIN/../glib:$ORIGIN/../gobject:$ORIGIN/../gmodule' -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/gio -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/glib -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/gobject -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/gmodule
-+/home/naourr/work/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmount.a(la-fs.o): in function `__mnt_fs_set_source_ptr':
-+fs.c:(.text+0x5ec): undefined reference to `blkid_parse_tag_string'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ mesonbuild/dependencies/base.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
-+index a83e3d6c..913bff6b 100644
-+--- a/mesonbuild/dependencies/base.py
-++++ b/mesonbuild/dependencies/base.py
-+@@ -840,7 +840,7 @@ class PkgConfigDependency(ExternalDependency):
-+     def _set_libs(self):
-+         env = None
-+         libcmd = [self.name, '--libs']
-+-        if self.static:
-++        if self.static or self.env.properties[self.for_machine].get('pkg_config_static', False):
-+             libcmd.append('--static')
-+         # Force pkg-config to output -L fields even if they are system
-+         # paths so we can do manual searching with cc.find_library() later.
-+-- 
-+2.24.1
-+
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index 369e225b3e..d80c472de6 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -18,6 +18,7 @@ cpp_args = [@TARGET_CXXFLAGS@]
- cpp_link_args = [@TARGET_LDFLAGS@]
- sys_root = '@STAGING_DIR@'
- pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
-+pkg_config_static = '@STATIC@'
+ > To use this feature, you have to pass the new --nvd-path option,
+ > pointing to a writable directory where pkg-stats will store the NVD
+ > database. If the local database is less than 24 hours old, it will not
+ > re-download it. If it is more than 24 hours old, it will re-download
+ > only the files that have really been updated by upstream NVD.
+
+ > Packages can use the newly introduced <pkg>_IGNORE_CVES variable to
+ > tell pkg-stats that some CVEs should be ignored: it can be because a
+ > patch we have is fixing the CVE, or because the CVE doesn't apply in
+ > our case.
+
+ >> From an implementation point of view:
+
+ >  - A new class CVE implement most of the required functionalities:
+ >    - Downloading the yearly NVD files
+ >    - Reading and extracting relevant data from these files
+ >    - Matching Packages against a CVE
+
+ >  - The statistics are extended with the total number of CVEs, and the
+ >    total number of packages that have at least one CVE pending.
+
+ >  - The HTML output is extended with these new details. There are no
+ >    changes to the code generating the JSON output because the existing
+ >    code is smart enough to automatically expose the new information.
+
+ > This development is a collective effort with Titouan Christophe
+ > <titouan.christophe@railnova.eu> and Thomas De Schampheleire
+ > <thomas.de_schampheleire@nokia.com>.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ > ---
+ > Changes v1 -> v2 (Titouan):
+ >  * Don't extract database files from gzip to json in downloader
+ >  * Refactor CVEs traversal and matching in the CVE class
+ >  * Simplify the NVD files downloader
+ >  * Index the packages by name in a dict for faster CVE matching
+ >  * Fix small typos and python idioms
+
+ > Changes v2 -> v3 (Titouan & Thomas DS):
+ >  * Force downloading of the nvd file if it doesn't exist locally
+ >  * Catch nvd reading errors, and display a message to the user
+ >  * Create the directory for nvd files if needed
+ > ---
+ >  support/scripts/pkg-stats | 159 +++++++++++++++++++++++++++++++++++++-
+ >  1 file changed, 158 insertions(+), 1 deletion(-)
+
+ > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+ > index e477828f7b..46c8a66155 100755
+ > --- a/support/scripts/pkg-stats
+ > +++ b/support/scripts/pkg-stats
+ > @@ -26,10 +26,17 @@ import subprocess
+ >  import requests  # URL checking
+ >  import json
+ >  import certifi
+ > +import distutils.version
+ > +import time
+ > +import gzip
+ >  from urllib3 import HTTPSConnectionPool
+ >  from urllib3.exceptions import HTTPError
+ >  from multiprocessing import Pool
  
- [host_machine]
- system = 'linux'
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 642b715938..9482845cd3 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -76,6 +76,7 @@ define $(2)_CONFIGURE_CMDS
- 	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
- 	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
- 	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
-+	    -e 's%@STATIC@%$$(if $$(BR2_STATIC_LIBS),true,false)%g' \
- 	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
- 	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
- 	    ) \
+ > +NVD_START_YEAR = 2002
+ > +NVD_JSON_VERSION = "1.0"
+ > +NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
+ > +
+ >  INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
+ >  URL_RE = re.compile(r"\s*https?://\S*\s*$")
+ 
+ > @@ -47,6 +54,7 @@ class Package:
+ >      all_licenses = list()
+ >      all_license_files = list()
+ >      all_versions = dict()
+ > +    all_ignored_cves = dict()
+ 
+ >      def __init__(self, name, path):
+ >          self.name = name
+ > @@ -61,6 +69,7 @@ class Package:
+ >          self.url = None
+ >          self.url_status = None
+ >          self.url_worker = None
+ > +        self.cves = list()
+ >          self.latest_version = (RM_API_STATUS_ERROR, None, None)
+ 
+ >      def pkgvar(self):
+ > @@ -152,6 +161,12 @@ class Package:
+ >                  self.warnings = int(m.group(1))
+ >                  return
+ 
+ > +    def is_cve_ignored(self, cve):
+ > +        """
+ > +        Tells if the CVE is ignored by the package
+ > +        """
+ > +        return cve in self.all_ignored_cves.get(self.pkgvar(), [])
+ > +
+ >      def __eq__(self, other):
+ >          return self.path == other.path
+ 
+ > @@ -163,6 +178,110 @@ class Package:
+ >              (self.name, self.path, self.has_license, self.has_license_files, self.has_hash, self.patch_count)
+ 
+ 
+ > +class CVE:
+ > +    """An accessor class for CVE Items in NVD files"""
+ > +    def __init__(self, nvd_cve):
+ > +        """Initialize a CVE from its NVD JSON representation"""
+ > +        self.nvd_cve = nvd_cve
+ > +
+ > +    @staticmethod
+ > +    def download_nvd_year(nvd_path, year):
+ > +        metaf = "nvdcve-%s-%s.meta" % (NVD_JSON_VERSION, year)
+ > +        path_metaf = os.path.join(nvd_path, metaf)
+ > +        jsonf_gz = "nvdcve-%s-%s.json.gz" % (NVD_JSON_VERSION, year)
+ > +        path_jsonf_gz = os.path.join(nvd_path, jsonf_gz)
+ > +
+ > +        # If the database file is less than a day old, we assume the NVD data
+ > +        # locally available is recent enough.
+ > +        if os.path.exists(path_jsonf_gz) and os.stat(path_jsonf_gz).st_mtime >= time.time() - 86400:
+ > +            return path_jsonf_gz
+ > +
+ > +        # If not, we download the meta file
+ > +        url = "%s/%s" % (NVD_BASE_URL, metaf)
+ > +        print("Getting %s" % url)
+ > +        page_meta = requests.get(url)
+ > +        page_meta.raise_for_status()
+ > +
+ > +        # If the meta file already existed, we compare the existing
+ > +        # one with the data newly downloaded. If they are different,
+ > +        # we need to re-download the database.
+ > +        # If the database does not exist locally, we need to redownload it in
+ > +        # any case.
+ > +        if os.path.exists(path_metaf) and os.path.exists(path_jsonf_gz):
+ > +            meta_known = open(path_metaf, "r").read()
+ > +            if page_meta.text == meta_known:
+ > +                return path_jsonf_gz
+ > +
+ > +        # Grab the compressed JSON NVD, and write files to disk
+ > +        url = "%s/%s" % (NVD_BASE_URL, jsonf_gz)
+ > +        print("Getting %s" % url)
+ > +        page_data = requests.get(url)
+ > +        page_data.raise_for_status()
+
+NIT: you called the meta file URL download page_meta, so I changed this
+to page_json for consistency.
+
+
+ > @@ -261,6 +380,10 @@ def package_init_make_info():
+ >              pkgvar = pkgvar[:-8]
+ >              Package.all_versions[pkgvar] = value
+ 
+ > +        elif pkgvar.endswith("_IGNORE_CVES"):
+ > +            pkgvar = pkgvar[:-12]
+ > +            Package.all_ignored_cves[pkgvar] = value.split(" ")
+
+Only splitting on space may not work in case we end up with something
+like:
+
+# only affects Windows
+FOO_IGNORE_CVES += \
+    CVE_2020_1234 \
+    CVE_2020_1235
+
+So I changed it to value.split().
+
+
+ > @@ -601,6 +737,17 @@ def dump_html_pkg(f, pkg):
+ >      f.write("  <td class=\"%s\">%s</td>\n" %
+ >              (" ".join(td_class), url_str))
+ 
+ > +    # CVEs
+ > +    td_class = ["centered"]
+
+Maybe we shouldn't add this row when CVE scanning isn't available? I
+left it in as it would require passing that info around.
+
+Committed with these minor fixes, thanks.
+
 -- 
-2.24.1
+Bye, Peter Korsgaard
