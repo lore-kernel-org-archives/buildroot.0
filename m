@@ -1,126 +1,85 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 14 Feb 2020 20:57:33 +0100
-Subject: [Buildroot] [PATCH] core: fix packages-file-list.txt after an
- incremental build
-Message-ID: <20200214195734.32081-1-patrickdepinguin@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 15 Feb 2020 07:14:45 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-02-14
+Message-ID: <20200215071449.C30EA84B60@fraxinus.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Hello,
 
-The package instrumentation step 'step_pkg_size' is populating the files:
-    output/build/packages-file-list.txt
-    output/build/packages-file-list-staging.txt
-    output/build/packages-file-list-host.txt
-by comparing the list of files before and after installation of a package,
-with some clever tricks to detect changes to existing files etc.
+Autobuild statistics for 2020-02-14
+===============================
 
-As an optimization, instead of gathering this list before and after each
-package, where the 'after-state' of one package is the same as the
-'before-state' of the next package, only the 'after-state' is used and
-is shared between packages.
+      branch |  OK | NOK | TIM | TOT |
+  2019.02.x  |  3  |  1  |  0  |  4  |
+  2019.11.x  |  4  |  0  |  0  |  4  |
+    master   | 32  | 12  |  6  | 50  |
 
-This works fine, except at the end of the build, as explained next.
+Results for branch 'master'
+===========================
 
-In the target-finalize step, many files will be touched. For example, files
-like /etc/hosts, /etc/os-release, but also all object files that are
-stripped, and all files touched by post-build scripts or created by rootfs
-overlays. This means that the 'after-state' of the last package does not
-reflect the actual situation after target-finalize is run.
+Classification of failures by reason
+------------------------------------
 
-For a single complete build this poses no problem. But, if one incrementally
-rebuilds a package after the initial build, e.g. with 'make foo-rebuild',
-then all changes that happened in target-finalize at the end of the initial
-build (the 'after-state' of the last package built) will be detected as
-changes caused by the rebuild of package foo. As a result, all these files
-will incorrectly be treated as 'owned' by package foo.
+                  host-ncurses | 3 
+                         libnl | 3 
+                    brltty-6.0 | 2 
+                 mesa3d-19.3.3 | 2 
+              host-grpc-1.25.0 | 1 
+        host-gutenprint-5.2.14 | 1 
+host-sdbusplus-4212292bcf13... | 1 
+               libglib2-2.62.4 | 1 
+                   libnss-3.50 | 1 
+                   mimic-1.1.0 | 1 
+                    parted-3.3 | 1 
+                       unknown | 1 
 
-Correct this situation by capturing a new state at the end of
-target-finalize, so that the 'before-state' of an incremental build will be
-correct.
 
-Note: the reasoning above talks about packages-file-list.txt and
-target-finalize, but also applies to
-packages-file-list-staging.txt/staging-finalize and
-packages-file-list-host.txt/host-finalize.
+Detail of failures
+------------------
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- Makefile               | 10 ++++++++++
- package/pkg-generic.mk | 23 ++++++++++++++++++-----
- 2 files changed, 28 insertions(+), 5 deletions(-)
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/7b89404dd84a337906d2fd4b22d7564fecf4fbf8 |     
+  powerpc    |           brltty-6.0           | NOK | http://autobuild.buildroot.net/results/b32ac9f780443d93948dc3650f45cbb71af7a09c |     
+    m68k     |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/0ff2b744d88eb57b0744bde1c511638722d94498 |     
+    arm      |     host-gutenprint-5.2.14     | NOK | http://autobuild.buildroot.net/results/47bf2b3cbab6ecc6824635c3716024479623f4ec | ORPH
+  aarch64    |          host-ncurses          | TIM | http://autobuild.buildroot.net/results/997212fe0a09dd2498bb87115af5cf3783b1a64f |     
+  riscv32    |          host-ncurses          | TIM | http://autobuild.buildroot.net/results/dadebd5b570fdc362e5d675384cea0ea0a228f71 |     
+  mips64el   |          host-ncurses          | TIM | http://autobuild.buildroot.net/results/cd555abdbe6474e456ce45561463b63a3b1c08e4 |     
+  riscv64    | host-sdbusplus-4212292bcf13... | NOK | http://autobuild.buildroot.net/results/105f925742936a43d3f2500d727ec738b6d866b2 |     
+    arm      |        libglib2-2.62.4         | NOK | http://autobuild.buildroot.net/results/0d36952def63cb69628697fa6408aeb6ce10cb5b |     
+  aarch64    |             libnl              | TIM | http://autobuild.buildroot.net/results/4d7bb0551997babd4e8722cf11eac320755427ad |     
+    arc      |             libnl              | TIM | http://autobuild.buildroot.net/results/3b122a037570dc3d9925c9bc24c2201f1cc9f288 |     
+    arm      |             libnl              | TIM | http://autobuild.buildroot.net/results/84bca9d83a81e26400bfaca2fc360251f8057892 |     
+  powerpc    |          libnss-3.50           | NOK | http://autobuild.buildroot.net/results/1ddaf4e54f9d393f0583f4f6c4bc2920a6e8336c |     
+  aarch64    |         mesa3d-19.3.3          | NOK | http://autobuild.buildroot.net/results/032b8dafefcd2ec8bdfaf10bc3e9542a79dde45e |     
+    arm      |         mesa3d-19.3.3          | NOK | http://autobuild.buildroot.net/results/5de0240a4bcb87a6444e97370047c42d722656bc |     
+  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/68aaa99098bee74c8f2a1066deff796a4f485b23 |     
+    arc      |           parted-3.3           | NOK | http://autobuild.buildroot.net/results/6b5bdf681150a05f68c197ff0d31ed04c36780c8 |     
+  riscv64    |            unknown             | NOK | http://autobuild.buildroot.net/results/e5bece3c444349c87cd4b22b4e333af6a35de4ba |     
 
-diff --git a/Makefile b/Makefile
-index a52f1c75fd..af24630d2f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -801,6 +801,16 @@ endif # merged /usr
- 
- 	touch $(TARGET_DIR)/usr
- 
-+# AFTER ALL FILE-CHANGING ACTIONS:
-+# Update timestamps in internal file list to fix attribution of files
-+# to packages on subsequent builds
-+	$(call step_pkg_size_file_list,$(TARGET_DIR))
-+	$(call step_pkg_size_finalize)
-+	$(call step_pkg_size_file_list,$(STAGING_DIR),-staging)
-+	$(call step_pkg_size_finalize,-staging)
-+	$(call step_pkg_size_file_list,$(HOST_DIR),-host)
-+	$(call step_pkg_size_finalize,-host)
-+
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
- 	@rm -f $(ROOTFS_COMMON_TAR)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 268d999efb..2f11e3903f 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -57,6 +57,22 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
- 
- # Hooks to collect statistics about installed files
- 
-+# Helper function to create the file list -- also used from target-finalize
-+# $(1): base directory to search in
-+# $(2): suffix of file  (optional)
-+define step_pkg_size_file_list
-+	cd $(1); \
-+	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
-+		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(2).new
-+endef
-+# Helper function to mark the latest file list as the reference for next
-+# iteration -- also used from target-finalize
-+# $(1): suffix of file  (optional)
-+define step_pkg_size_finalize
-+	mv $(BUILD_DIR)/.files-list$(1).new \
-+		$(BUILD_DIR)/.files-list$(1).stat
-+endef
-+
- # The suffix is typically empty for the target variant, for legacy backward
- # compatibility.
- # $(1): package name
-@@ -66,9 +82,7 @@ define step_pkg_size_inner
- 	@touch $(BUILD_DIR)/.files-list$(3).stat
- 	@touch $(BUILD_DIR)/packages-file-list$(3).txt
- 	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
--	cd $(2); \
--	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
--		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(3).new
-+	$(call step_pkg_size_file_list,$(2),$(3))
- 	LC_ALL=C comm -13 \
- 		$(BUILD_DIR)/.files-list$(3).stat \
- 		$(BUILD_DIR)/.files-list$(3).new \
-@@ -76,8 +90,7 @@ define step_pkg_size_inner
- 	sed -r -e 's/^[^,]+/$(1)/' \
- 		$($(PKG)_BUILDDIR)/.files-list$(3).txt \
- 		>> $(BUILD_DIR)/packages-file-list$(3).txt
--	mv $(BUILD_DIR)/.files-list$(3).new \
--		$(BUILD_DIR)/.files-list$(3).stat
-+	$(call step_pkg_size_finalize,$(3))
- endef
- 
- define step_pkg_size
+
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                   glm-0.9.8.4 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |          glm-0.9.8.4           | NOK | http://autobuild.buildroot.net/results/bca408aa0b4857d5c4fb6c36f0646f891ced4a86 | ORPH
+
+
+
 -- 
-2.24.1
+http://autobuild.buildroot.net
