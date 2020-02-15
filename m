@@ -1,76 +1,48 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Feb 2020 11:02:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libargon2: bump to version 20190702
-Message-ID: <20200215100247.3280316-1-fontaine.fabrice@gmail.com>
+Date: Sat, 15 Feb 2020 11:25:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/botan: bump to version 2.13.0
+Message-ID: <20200215102505.3286075-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- There is no incompatibility of this version with php, the issue was
-  due to libargon2 itself that installs library to lib/x86_64-linux-gnu
-  on Linux x86_64 host since
-  https://github.com/P-H-C/phc-winner-argon2/commit/d3639142fa71f8095ee36e64068f71b3c97baf6d
+- Calculate hash of tarball locally, hash of 2.13.0 is not in
+  https://botan.randombit.net/releases/sha256sums.txt
+- Update hash of license file (update in year:
+  https://github.com/randombit/botan/commit/3567c921c102448fabc8c2643a1cb6acdb6f9e5c)
 - Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libargon2/libargon2.hash |  4 ++--
- package/libargon2/libargon2.mk   | 11 ++++++-----
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ package/botan/botan.hash | 5 ++---
+ package/botan/botan.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/libargon2/libargon2.hash b/package/libargon2/libargon2.hash
-index c524b42718..331eea99f4 100644
---- a/package/libargon2/libargon2.hash
-+++ b/package/libargon2/libargon2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 eaea0172c1f4ee4550d1b6c9ce01aab8d1ab66b4207776aa67991eb5872fdcd8  libargon2-20171227.tar.gz
--sha256 220f8736a89ff51c92ef3d497f413b48e6cf1df3d6278bc909c6308c78e1718e  LICENSE
-+sha256  daf972a89577f8772602bf2eb38b6a3dd3d922bf5724d45e7f9589b5e830442c  libargon2-20190702.tar.gz
-+sha256  220f8736a89ff51c92ef3d497f413b48e6cf1df3d6278bc909c6308c78e1718e  LICENSE
-diff --git a/package/libargon2/libargon2.mk b/package/libargon2/libargon2.mk
-index e10343a15e..b3f6e1b216 100644
---- a/package/libargon2/libargon2.mk
-+++ b/package/libargon2/libargon2.mk
-@@ -4,18 +4,19 @@
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index a04825a758..29efddb35c 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,4 +1,3 @@
+-# From https://botan.randombit.net/releases/sha256sums.txt
+-sha256 f7874da2aeb8c018fd77df40b2137879bf90b66f5589490c991e83fb3e8094be  Botan-2.11.0.tar.xz
+ # Locally computed
+-sha256 161011a9be56a6e825c06257005055a148056b5c756f75a0b99dae0883fcab7a  license.txt
++sha256  f57ae42a41e1091bca58f44f41addebd9a390b651603952c881ec89d50187e90  Botan-2.13.0.tar.xz
++sha256  fb7f0322d36fba55ca17d77bc203a9f09a40daa8a249b75cf8887aba36cec9d0  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 62027280d3..6394b5ef95 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# 20190702 is not recognized by php7.3
--LIBARGON2_VERSION = 20171227
-+LIBARGON2_VERSION = 20190702
- LIBARGON2_SITE = $(call github,P-H-C,phc-winner-argon2,$(LIBARGON2_VERSION))
- LIBARGON2_LICENSE = CC0-1.0 or Apache-2.0
- LIBARGON2_LICENSE_FILES = LICENSE
- LIBARGON2_INSTALL_STAGING = YES
- 
-+LIBARGON2_OPTS = LIBRARY_REL=lib
-+
- # GCC_TARGET_ARCH is not defined for all architectures, but libargon2
- # only uses it to detect if some x86 optimizations can be used, and
- # GCC_TARGET_ARCH is defined on x86.
- ifneq ($(GCC_TARGET_ARCH),)
--LIBARGON2_OPTS = OPTTARGET=$(GCC_TARGET_ARCH)
-+LIBARGON2_OPTS += OPTTARGET=$(GCC_TARGET_ARCH)
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-@@ -29,12 +30,12 @@ endef
- 
- define LIBARGON2_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
--		DESTDIR=$(STAGING_DIR) install
-+		$(LIBARGON2_OPTS) DESTDIR=$(STAGING_DIR) install
- endef
- 
- define LIBARGON2_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
--		DESTDIR=$(TARGET_DIR) install
-+		$(LIBARGON2_OPTS) DESTDIR=$(TARGET_DIR) install
- endef
- 
- $(eval $(generic-package))
+-BOTAN_VERSION = 2.11.0
++BOTAN_VERSION = 2.13.0
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
 -- 
 2.24.1
