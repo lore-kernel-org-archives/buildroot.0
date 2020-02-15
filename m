@@ -1,30 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2020 12:02:19 +0100
-Subject: [Buildroot] [PATCH] package/postgresql: security bump to
- version 12.2
-In-Reply-To: <20200214083910.26327-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 14 Feb 2020 09:39:10 +0100")
-References: <20200214083910.26327-1-peter@korsgaard.com>
-Message-ID: <87mu9kjepw.fsf@dell.be.48ers.dk>
+Date: Sat, 15 Feb 2020 12:03:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gnuplot: bump to version 5.2.8
+In-Reply-To: <20200214101647.6077-1-mf@go-sys.de> (Michael Fischer's message
+ of "Fri, 14 Feb 2020 11:16:47 +0100")
+References: <20200214101647.6077-1-mf@go-sys.de>
+Message-ID: <87imk8jenm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Michael" == Michael Fischer <mf@go-sys.de> writes:
 
- > Fixes the following security issues:
- > - CVE-2020-1720: ALTER ... DEPENDS ON EXTENSION is missing authorization checks
- >   https://www.postgresql.org/about/news/2011/
+ > Signed-off-by: Michael Fischer <mf@go-sys.de>
 
- > Update the license hash for a change in copyright years:
- > -Portions Copyright (c) 1996-2019, PostgreSQL Global Development Group
- > +Portions Copyright (c) 1996-2020, PostgreSQL Global Development Group
+Please detail in the commit message what happened to the patches. Is
+patch 0002 upstream or no longer needed?
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
+Care to fix that and resend?
 
 -- 
 Bye, Peter Korsgaard
