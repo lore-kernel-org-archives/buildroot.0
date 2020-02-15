@@ -1,61 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2020 11:50:40 +0100
-Subject: [Buildroot] [git commit] package/dovecot: security bump to version
- 2.3.9.3
-Message-ID: <20200215105640.6FBA68E0BC@busybox.osuosl.org>
+Date: Sat, 15 Feb 2020 11:58:38 +0100
+Subject: [Buildroot] [git commit] package/ncdu: bump to version 1.14.2
+Message-ID: <20200215105640.967E08E0BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=250535975d1f700a54c97cd31f4032b8cee5b52e
+commit: https://git.buildroot.net/buildroot/commit/?id=84140d000702ead2fb62cfbd3d9244873b691668
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
-
-- CVE-2020-7046: Truncated UTF-8 can be used to DoS submission-login and
-  lmtp processes
-  lib-smtp doesn't handle truncated command parameters properly, resulting
-  in infinite loop taking 100% CPU for the process.  This happens for LMTP
-  (where it doesn't matter so much) and also for submission-login where
-  unauthenticated users can trigger it.
-
-- CVE-2020-7957: Specially crafted mail can crash snippet generation
-  Snippet generation crashes if:
-  - message is large enough that message-parser returns multiple body
-    blocks
-  - The first block(s) don't contain the full snippet (e.g.  full of
-    whitespace)
-  - input ends with '>'
-
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ncdu/ncdu.hash | 6 +++---
+ package/ncdu/ncdu.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index e8c76b3c1e..e61937495a 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
+diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+index ff2f469025..285dc9bfa4 100644
+--- a/package/ncdu/ncdu.hash
++++ b/package/ncdu/ncdu.hash
 @@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256 4784fb98dd41b83888e4aa9908efcbcad2e04a254e97440863903c0c498486f9  dovecot-2.3.9.2.tar.gz
-+sha256 f89fb69423fc5bdc05955c8fc0607eab9e33511f9a643b721763db6156c49651  dovecot-2.3.9.3.tar.gz
- sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 5b19fa6235..9f89ce6354 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+-# From https://dev.yorhel.nl/download/ncdu-1.14.1.tar.gz.sha256
+-sha256 be31e0e8c13a0189f2a186936f7e298c6390ebdc573bb4a1330bc1fcbf56e13e ncdu-1.14.1.tar.gz
++# From https://dev.yorhel.nl/download/ncdu-1.14.2.tar.gz.sha256
++sha256 947a7f5c1d0cd4e338e72b4f5bc5e2873651442cec3cb012e04ad2c37152c6b1 ncdu-1.14.2.tar.gz
+ 
+ # computed locally
+-sha256 a05f1fd38432052dc8588da66b8bf3e9e103e29a82c0b5d72c65d4d9fc830f2e COPYING
++sha256 978f49428f21714c973706030c0ef09983cc1e2889a1b7b521dbf8860870cf05 COPYING
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+index 336d413227..681c8bd87a 100644
+--- a/package/ncdu/ncdu.mk
++++ b/package/ncdu/ncdu.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).9.2
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).9.3
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-NCDU_VERSION = 1.14.1
++NCDU_VERSION = 1.14.2
+ NCDU_SITE = http://dev.yorhel.nl/download
+ 
+ NCDU_DEPENDENCIES = ncurses
