@@ -1,35 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2020 12:01:42 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add me for toolchain topic
-In-Reply-To: <20200213222913.538012-1-romain.naour@smile.fr> (Romain Naour's
- message of "Thu, 13 Feb 2020 23:29:13 +0100")
-References: <20200213222913.538012-1-romain.naour@smile.fr>
-Message-ID: <87v9o8jeqx.fsf@dell.be.48ers.dk>
+Date: Sat, 15 Feb 2020 12:02:01 +0100
+Subject: [Buildroot] [PATCH] package/screen: bump version to 4.8.0
+In-Reply-To: <20200214072701.26574-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 14 Feb 2020 08:27:01 +0100")
+References: <20200214072701.26574-1-peter@korsgaard.com>
+Message-ID: <87r1ywjeqe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > The first time I worked on the Buildroot's toolchain infra
- > was to add support for the Sourcery Codebench Standard
- > (licenced) edition toolchain (from Mentor Graphics) for
- > x86 target [1]. The series was rejected though.
+ > Fixes a memory corruption issue in OSC 49 handling.  Notice that this is
+ > only enabled if screen is built with --enable-rxvt_osc, which isn't the case
+ > in Buildroot. From the release notes:
 
- > But the knowledge gained from this work served to refactor
- > the toolchain-external infra in Buildroot [2].
+ > As last fix, fixes potential memory overwrite of quite big size (~768
+ > bytes), and even though I'm not sure about potential exploitability of
+ > that issue, I highly recommend everyone to upgrade as soon as possible.
+ > This issue is present at least since v.4.2.0 (haven't checked earlier).
 
- > Nowadays, I'm using toolchains-builder project to do
- > some toolchain build testing to keep GNU tools up to date
- > in Buildroot.
+ > https://lists.gnu.org/archive/html/screen-devel/2020-02/msg00007.html
 
- > [1] http://lists.busybox.net/pipermail/buildroot/2014-November/112036.html
- > [2] http://lists.busybox.net/pipermail/buildroot/2016-October/175433.html
- > [3] https://gitlab.com/kubu93/toolchains-builder/
+ > Upstream changed the gnu.org URLs to use HTTPS, so adjust
+ > 0005-rename-sched_h.patch to match.
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
