@@ -1,51 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2020 12:00:45 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: add Romain Naour for toolchain
- topic
-Message-ID: <20200215105640.BC77A8E0BE@busybox.osuosl.org>
+Date: Sat, 15 Feb 2020 11:53:19 +0100
+Subject: [Buildroot] [git commit] package/go: bump version to 1.13.8
+Message-ID: <20200215105640.770248E094@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=579f26faa5e70f106d1c1e2d9a3c8784f6faf394
+commit: https://git.buildroot.net/buildroot/commit/?id=9b15ef3505f7db2ecc5c50cbca189796aca7899d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The first time I worked on the Buildroot's toolchain infra
-was to add support for the Sourcery Codebench Standard
-(licenced) edition toolchain (from Mentor Graphics) for
-x86 target [1]. The series was rejected though.
+Includes fixes to the runtime, the crypto/x509, and net/http
+packages.
 
-But the knowledge gained from this work served to refactor
-the toolchain-external infra in Buildroot [2].
-
-Nowadays, I'm using toolchains-builder project to do
-some toolchain build testing to keep GNU tools up to date
-in Buildroot.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2014-November/112036.html
-[2] http://lists.busybox.net/pipermail/buildroot/2016-October/175433.html
-[3] https://gitlab.com/kubu93/toolchains-builder/
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3f67a85d55..e4a3bcb24a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2163,9 +2163,7 @@ F:	package/waffle/
- F:	package/xenomai/
- F:	package/zziplib/
- F:	support/testing/tests/package/test_glxinfo.py
--F:	toolchain/toolchain-external/toolchain-external-arm-aarch64/
--F:	toolchain/toolchain-external/toolchain-external-arm-aarch64-be/
--F:	toolchain/toolchain-external/toolchain-external-arm-arm/
-+F:	toolchain/
+diff --git a/package/go/go.hash b/package/go/go.hash
+index b607ce37d4..dc966e85d2 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	e4ad42cc5f5c19521fbbbde3680995f2546110b5c6aa2b48c3754ff7af9b41f4  go1.13.7.src.tar.gz
++sha256	b13bf04633d4d8cf53226ebeaace8d4d2fd07ae6fa676d0844a688339debec34  go1.13.8.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 43c04ac0c5..376c3db7f0 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>
- F:	package/davfs2/
+-GO_VERSION = 1.13.7
++GO_VERSION = 1.13.8
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
