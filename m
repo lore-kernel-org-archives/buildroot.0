@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 12:55:48 +0100
-Subject: [Buildroot] [PATCH 4/4] package/wpewebkit: security bump to
+Date: Sun, 16 Feb 2020 12:55:54 +0100
+Subject: [Buildroot] [PATCH 2/4] package/webkitgtk: security bump to
  version 2.26.4
-In-Reply-To: <20200215150929.13293-4-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 15 Feb 2020 16:09:28 +0100")
+In-Reply-To: <20200215150929.13293-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 15 Feb 2020 16:09:26 +0100")
 References: <20200215150929.13293-1-peter@korsgaard.com>
- <20200215150929.13293-4-peter@korsgaard.com>
-Message-ID: <8736baiw57.fsf@dell.be.48ers.dk>
+ <20200215150929.13293-2-peter@korsgaard.com>
+Message-ID: <87y2t2hhkl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -37,7 +37,7 @@ To: buildroot@busybox.net
  >   issues were addressed with improved memory handling.
 
  > For more details, see the advisory:
- > https://wpewebkit.org/security/WSA-2020-0002.html
+ > https://webkitgtk.org/security/WSA-2020-0002.html
 
  > While we are at it, adjust the white space in the .hash function to match
  > the new agreements.
