@@ -1,228 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 15:26:31 +0100
-Subject: [Buildroot] [git commit] package/libgpg-error: bump to version 1.37
-Message-ID: <20200216141641.68BAC8E1F8@busybox.osuosl.org>
+Date: Sun, 16 Feb 2020 15:22:26 +0100
+Subject: [Buildroot] [git commit] package/gensio: bump to version 1.5.1
+Message-ID: <20200216141641.2DD918E1F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c40501b9ce272c79c94fa9c7a5126b8fd4dc1df3
+commit: https://git.buildroot.net/buildroot/commit/?id=5349c37e726263a3bd3cf8cb24fce0bba144578f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove patch (already in version)
-- Update indentation of hash file (two spaces)
+- Update indentation of hash file (2 spaces)
+- This will fix a build failure without threads thanks to
+  https://github.com/cminyard/gensio/commit/8918de5b30f90b826c48064e9ee92304b63ffe85
+  and associated upstream patch
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e94d0e0b46afc1223a74bcc471909f4adef0d6f3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgpg-error/0001-gawk5-support.patch | 162 --------------------------
- package/libgpg-error/libgpg-error.hash        |   8 +-
- package/libgpg-error/libgpg-error.mk          |   4 +-
- 3 files changed, 5 insertions(+), 169 deletions(-)
+ ...0001-tests-Makefile-am-don-t-add-lpthread.patch | 29 ++++++++++++++++++++++
+ package/gensio/gensio.hash                         | 12 ++++-----
+ package/gensio/gensio.mk                           |  6 +++--
+ 3 files changed, 39 insertions(+), 8 deletions(-)
 
-diff --git a/package/libgpg-error/0001-gawk5-support.patch b/package/libgpg-error/0001-gawk5-support.patch
-deleted file mode 100644
-index 09d114c45f..0000000000
---- a/package/libgpg-error/0001-gawk5-support.patch
-+++ /dev/null
-@@ -1,162 +0,0 @@
--From 7865041c77f4f7005282f10f9b6666b19072fbdf Mon Sep 17 00:00:00 2001
--From: NIIBE Yutaka <gniibe@fsij.org>
--Date: Mon, 15 Apr 2019 15:10:44 +0900
--Subject: [PATCH] awk: Prepare for Gawk 5.0.
--
--* src/Makefile.am: Use pkg_namespace (instead of namespace).
--* src/mkerrnos.awk: Likewise.
--* lang/cl/mkerrcodes.awk: Don't escape # in regexp.
--* src/mkerrcodes.awk, src/mkerrcodes1.awk, src/mkerrcodes2.awk: Ditto.
--
--Downloaded from
--https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libgpg-error/files/libgpg-error-1.36-gawk5-support.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
--
--In Gawk 5.0, regexp routines are replaced by Gnulib implementation,
--which only allows escaping specific characters.
--
--GnuPG-bug-id: 4459
--Reported-by: Marius Schamschula
--Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-----
-- lang/cl/mkerrcodes.awk |  2 +-
-- src/Makefile.am        |  2 +-
-- src/mkerrcodes.awk     |  2 +-
-- src/mkerrcodes1.awk    |  2 +-
-- src/mkerrcodes2.awk    |  2 +-
-- src/mkerrnos.awk       |  2 +-
-- src/mkstrtable.awk     | 10 +++++-----
-- 7 files changed, 11 insertions(+), 11 deletions(-)
--
--diff --git a/lang/cl/mkerrcodes.awk b/lang/cl/mkerrcodes.awk
--index ae29043..9a1fc18 100644
----- a/lang/cl/mkerrcodes.awk
--+++ b/lang/cl/mkerrcodes.awk
--@@ -122,7 +122,7 @@ header {
-- }
-- 
-- !header {
---  sub (/\#.+/, "");
--+  sub (/#.+/, "");
--   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
-- 
--   if (/^$/)
--diff --git a/src/Makefile.am b/src/Makefile.am
--index ce1b882..f2590cb 100644
----- a/src/Makefile.am
--+++ b/src/Makefile.am
--@@ -293,7 +293,7 @@ code-from-errno.h: mkerrcodes$(EXEEXT_FOR_BUILD) Makefile
-- 
-- errnos-sym.h: Makefile mkstrtable.awk errnos.in
-- 	$(AWK) -f $(srcdir)/mkstrtable.awk -v textidx=2 -v nogettext=1 \
---		-v prefix=GPG_ERR_ -v namespace=errnos_ \
--+		-v prefix=GPG_ERR_ -v pkg_namespace=errnos_ \
-- 		$(srcdir)/errnos.in >$@
-- 
-- 
--diff --git a/src/mkerrcodes.awk b/src/mkerrcodes.awk
--index 46d436c..e9c857c 100644
----- a/src/mkerrcodes.awk
--+++ b/src/mkerrcodes.awk
--@@ -85,7 +85,7 @@ header {
-- }
-- 
-- !header {
---  sub (/\#.+/, "");
--+  sub (/#.+/, "");
--   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
-- 
--   if (/^$/)
--diff --git a/src/mkerrcodes1.awk b/src/mkerrcodes1.awk
--index a771a73..4578e29 100644
----- a/src/mkerrcodes1.awk
--+++ b/src/mkerrcodes1.awk
--@@ -81,7 +81,7 @@ header {
-- }
-- 
-- !header {
---  sub (/\#.+/, "");
--+  sub (/#.+/, "");
--   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
-- 
--   if (/^$/)
--diff --git a/src/mkerrcodes2.awk b/src/mkerrcodes2.awk
--index ea58503..188f7a4 100644
----- a/src/mkerrcodes2.awk
--+++ b/src/mkerrcodes2.awk
--@@ -91,7 +91,7 @@ header {
-- }
-- 
-- !header {
---  sub (/\#.+/, "");
--+  sub (/#.+/, "");
--   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
-- 
--   if (/^$/)
--diff --git a/src/mkerrnos.awk b/src/mkerrnos.awk
--index f79df66..15b1aad 100644
----- a/src/mkerrnos.awk
--+++ b/src/mkerrnos.awk
--@@ -83,7 +83,7 @@ header {
-- }
-- 
-- !header {
---  sub (/\#.+/, "");
--+  sub (/#.+/, "");
--   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
-- 
--   if (/^$/)
--diff --git a/src/mkstrtable.awk b/src/mkstrtable.awk
--index c9de9c1..285e45f 100644
----- a/src/mkstrtable.awk
--+++ b/src/mkstrtable.awk
--@@ -77,7 +77,7 @@
-- #
-- # The variable prefix can be used to prepend a string to each message.
-- #
---# The variable namespace can be used to prepend a string to each
--+# The variable pkg_namespace can be used to prepend a string to each
-- # variable and macro name.
-- 
-- BEGIN {
--@@ -102,7 +102,7 @@ header {
--       print "/* The purpose of this complex string table is to produce";
--       print "   optimal code with a minimum of relocations.  */";
--       print "";
---      print "static const char " namespace "msgstr[] = ";
--+      print "static const char " pkg_namespace "msgstr[] = ";
--       header = 0;
--     }
--   else
--@@ -110,7 +110,7 @@ header {
-- }
-- 
-- !header {
---  sub (/\#.+/, "");
--+  sub (/#.+/, "");
--   sub (/[ 	]+$/, ""); # Strip trailing space and tab characters.
-- 
--   if (/^$/)
--@@ -150,7 +150,7 @@ END {
--   else
--     print "  gettext_noop (\"" last_msgstr "\");";
--   print "";
---  print "static const int " namespace "msgidx[] =";
--+  print "static const int " pkg_namespace "msgidx[] =";
--   print "  {";
--   for (i = 0; i < coded_msgs; i++)
--     print "    " pos[i] ",";
--@@ -158,7 +158,7 @@ END {
--   print "  };";
--   print "";
--   print "static GPG_ERR_INLINE int";
---  print namespace "msgidxof (int code)";
--+  print pkg_namespace "msgidxof (int code)";
--   print "{";
--   print "  return (0 ? 0";
-- 
---- 
--2.21.0
--
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index 2169182f60..05c46d6d43 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
+diff --git a/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch b/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch
+new file mode 100644
+index 0000000000..5a9f3b7da5
+--- /dev/null
++++ b/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch
+@@ -0,0 +1,29 @@
++From f63b15e690581d898da56ef2540b6199f5728e58 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 11 Feb 2020 19:14:53 +0100
++Subject: [PATCH] tests/Makefile.am: don't add -lpthread
++
++Don't add -lpthread unconditionally to oomtest_LDADD to avoid a build
++failure without threads, it will be added to LIBS by configure.ac if
++needed
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/cminyard/gensio/commit/f63b15e690581d898da56ef2540b6199f5728e58]
++---
++ tests/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tests/Makefile.am b/tests/Makefile.am
++index a280acc..b4335c5 100644
++--- a/tests/Makefile.am
+++++ b/tests/Makefile.am
++@@ -127,7 +127,7 @@ test_fuzz: test_fuzz_certauth test_fuzz_mux test_fuzz_ssl test_fuzz_telnet \
++ 
++ oomtest_SOURCES = oomtest.c
++ 
++-oomtest_LDADD = $(top_builddir)/lib/libgensio.la $(OPENSSL_LIBS) -lpthread
+++oomtest_LDADD = $(top_builddir)/lib/libgensio.la $(OPENSSL_LIBS)
++ 
++ noinst_PROGRAMS = oomtest
++ 
+diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
+index fcf5662f67..623b41904c 100644
+--- a/package/gensio/gensio.hash
++++ b/package/gensio/gensio.hash
 @@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature
--# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.36.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.37.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256 babd98437208c163175c29453f8681094bcaf92968a15cafb1a276076b33c97c  libgpg-error-1.36.tar.bz2
-+sha256  b32d6ff72a73cf79797f7f2d039e95e9c6f92f0c1450215410840ab62aea9763  libgpg-error-1.37.tar.bz2
- # Locally calculated
--sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
--sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-+sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-+sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index de4d114506..6281faa662 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -4,14 +4,12 @@
+-# From https://sourceforge.net/projects/ser2net/files/
+-md5 3a84895e41b9ca85801d2d5727977356  gensio-1.4.1.tar.gz
+-sha1 3b268b7c37edabd87547f98d03ecf4929f3e5381  gensio-1.4.1.tar.gz
++# From https://sourceforge.net/projects/ser2net/files/ser2net/
++md5  53c027dfaaf374f57d5f36a6250fc018  gensio-1.5.1.tar.gz
++sha1  8329d7828016e643f60b8b3e70564d32cd03008f  gensio-1.5.1.tar.gz
+ # Locally computed:
+-sha256 a0608921c6ccec115a1298d02423b9d8482b444f5772d8a8fde7ceabbadd679a  gensio-1.4.1.tar.gz
+-sha256 501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
+-sha256 dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
++sha256  c1ed28f5bd72185dba666a900d29afbecba58727d6c0dde4a182143273fc1e6b  gensio-1.5.1.tar.gz
++sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
++sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index 0078ea6c57..0386b30fd7 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
+@@ -4,11 +4,13 @@
  #
  ################################################################################
  
--LIBGPG_ERROR_VERSION = 1.36
-+LIBGPG_ERROR_VERSION = 1.37
- LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
- LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
- LIBGPG_ERROR_LICENSE_FILES = COPYING COPYING.LIB
- LIBGPG_ERROR_INSTALL_STAGING = YES
--# 0001-gawk5-support.patch
--LIBGPG_ERROR_AUTORECONF = YES
- LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
- LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- LIBGPG_ERROR_CONF_OPTS = --disable-tests \
+-GENSIO_VERSION = 1.4.1
+-GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net
++GENSIO_VERSION = 1.5.1
++GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GENSIO_LICENSE_FILES = COPYING.LIB COPYING
+ GENSIO_INSTALL_STAGING = YES
++# We're patching configure.ac
++GENSIO_AUTORECONF = YES
+ GENSIO_CONF_OPTS = \
+ 	--without-openipmi \
+ 	--without-swig \
