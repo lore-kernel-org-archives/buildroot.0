@@ -1,50 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 15:21:23 +0100
-Subject: [Buildroot] [git commit] package/python-cryptography: bump to
- version 2.8
-Message-ID: <20200216141641.110CB8E1F7@busybox.osuosl.org>
+Date: Sun, 16 Feb 2020 15:22:07 +0100
+Subject: [Buildroot] [git commit] package/libtorrent-rasterbar: bump to
+ version 1.2.4
+Message-ID: <20200216141641.243F28E1F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e57d571b71f694d611f2565ffe71ec33cef2ce37
+commit: https://git.buildroot.net/buildroot/commit/?id=cc0c9915dbd65474623aa2d30cbc695a4e1c7c20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Update indentation of hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-cryptography/python-cryptography.hash | 4 ++--
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 4 ++--
+ package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 715beb71d1..30ffa73d72 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cryptography/json
--md5	7dfe1035cae43569e571318f000462a4  cryptography-2.7.tar.gz
--sha256	e6347742ac8f35ded4a46ff835c60e68c22a536a8ae5c4422966d06946b6d4c6  cryptography-2.7.tar.gz
-+md5	77730058b556c6d9838679a94c6229ce  cryptography-2.8.tar.gz
-+sha256	3cda1f0ed8747339bbdf71b9f38ca74c7b592f24f65cdb3ab3765e4b02871651  cryptography-2.8.tar.gz
- # Locally computed sha256 checksums
- sha256	35452b557fab0efb1e80d7edb9c4e5118b9384082adaa051dde342102cb9de8d  LICENSE
- sha256	aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index dad09672eb..54437ae688 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+index 92e8a3690b..78dbdf8ae4 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 1582fdbbd0449bcfe4ffae2ccb9e5bf0577459a32bb25604e01accb847da1a2d libtorrent-rasterbar-1.2.3.tar.gz
+-sha256 f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8 COPYING
++sha256  8759bddb589006ee164438588adaf007325b3bcaf6ae4c64d87a2b914409c680  libtorrent-rasterbar-1.2.4.tar.gz
++sha256  f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8  COPYING
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+index e81440d7c3..5b80e99238 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CRYPTOGRAPHY_VERSION = 2.7
-+PYTHON_CRYPTOGRAPHY_VERSION = 2.8
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/c2/95/f43d02315f4ec074219c6e3124a87eba1d2d12196c2767fadfdc07a83884
-+PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/be/60/da377e1bed002716fb2d5d1d1cab720f298cb33ecff7bf7adea72788e4e4
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-LIBTORRENT_RASTERBAR_VERSION = 1.2.3
++LIBTORRENT_RASTERBAR_VERSION = 1.2.4
+ LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
+ LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
+ LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
