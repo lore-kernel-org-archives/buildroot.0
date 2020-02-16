@@ -1,117 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 11:20:23 +0100
-Subject: [Buildroot] [git commit] package/libcurl: rename curl binary config
- symbol
-Message-ID: <20200216101709.779D18E159@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 16 Feb 2020 12:00:28 +0100
+Subject: [Buildroot] [PATCH 3/3] package/kodi-inputstream-rtmp: bump version
+ to 2.0.9
+In-Reply-To: <20200216110028.779166-1-bernd.kuhls@t-online.de>
+References: <20200216110028.779166-1-bernd.kuhls@t-online.de>
+Message-ID: <20200216110028.779166-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a057339cc124bbf7c6a3e567fd57413bed3ddd5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Package optional or choice config symbols are usually prefixed with the
-package config symbol name. Rename BR2_PACKAGE_CURL to
-BR2_PACKAGE_LIBCURL_CURL to conform.
-
-Update references to the old name.
-
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                     | 8 ++++++++
- docs/manual/adding-packages-tips.txt | 2 +-
- package/dehydrated/Config.in         | 2 +-
- package/glslsandbox-player/Config.in | 2 +-
- package/libcurl/Config.in            | 2 +-
- package/libcurl/libcurl.mk           | 2 +-
- 6 files changed, 13 insertions(+), 5 deletions(-)
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash | 2 +-
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index bf69b579e3..87966facb4 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+index c984f44e76..ba6ae0d91d 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 69f63289bd560f8491fca32e98603afd05a6c94f0791856d873a36285d54c185  kodi-inputstream-rtmp-2.0.8-Leia.tar.gz
++sha256 56dac63262fa736620863900d903616d4827d735992e6d8beda84e377a5599e5  kodi-inputstream-rtmp-2.0.9-Leia.tar.gz
+ sha256 ddba7d22c2586f13de40786c21f3b87c6913c9937f4862dc828d33cfff0395eb  debian/copyright
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+index 6b62e6eb00..e850be40ff 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2020.02"
- 
-+config BR2_PACKAGE_CURL
-+	bool "BR2_PACKAGE_CURL was renamed"
-+	select BR2_PACKAGE_LIBCURL_CURL
-+	select BR2_LEGACY
-+	help
-+	  The BR2_PACKAGE_CURL config symbol was renamed to
-+	  BR2_PACKAGE_LIBCURL_CURL.
-+
- config BR2_PACKAGE_GSTREAMER
- 	bool "gstreamer-0.10 removed"
- 	select BR2_LEGACY
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index d10f276e83..95a1d599ef 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -98,7 +98,7 @@ config snippet. For example, here's how you would test +libcurl+ with
- ----
- $ cat libcurl.config
- BR2_PACKAGE_LIBCURL=y
--BR2_PACKAGE_CURL=y
-+BR2_PACKAGE_LIBCURL_CURL=y
- BR2_PACKAGE_OPENSSL=y
- ----
- 
-diff --git a/package/dehydrated/Config.in b/package/dehydrated/Config.in
-index f14ae0f611..979938d70c 100644
---- a/package/dehydrated/Config.in
-+++ b/package/dehydrated/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_DEHYDRATED
- 	select BR2_PACKAGE_BASH
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
- 	select BR2_PACKAGE_LIBCURL
--	select BR2_PACKAGE_CURL
-+	select BR2_PACKAGE_LIBCURL_CURL
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_BIN if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBRESSL_BIN if BR2_PACKAGE_LIBRESSL
-diff --git a/package/glslsandbox-player/Config.in b/package/glslsandbox-player/Config.in
-index 32239d29d0..dc0d2c07f1 100644
---- a/package/glslsandbox-player/Config.in
-+++ b/package/glslsandbox-player/Config.in
-@@ -41,7 +41,7 @@ config BR2_PACKAGE_GLSLSANDBOX_PLAYER_SCRIPTS
- 	select BR2_PACKAGE_BASH # runtime
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if BR2_PACKAGE_BUSYBOX # bash
- 	select BR2_PACKAGE_COREUTILS # runtime (timeout)
--	select BR2_PACKAGE_CURL # runtime
-+	select BR2_PACKAGE_LIBCURL_CURL # runtime
- 	select BR2_PACKAGE_IMAGEMAGICK # runtime
- 	select BR2_PACKAGE_JPEG # runtime
- 	select BR2_PACKAGE_LIBCURL # runtime
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index 652285c0f8..d05cbedf77 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_LIBCURL
- 
- if BR2_PACKAGE_LIBCURL
- 
--config BR2_PACKAGE_CURL
-+config BR2_PACKAGE_LIBCURL_CURL
- 	bool "curl binary"
- 	help
- 	  Install curl binary as well
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index a7f10ddde5..16b11ca944 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -162,7 +162,7 @@ define LIBCURL_FIX_DOT_PC
- endef
- LIBCURL_POST_PATCH_HOOKS += $(if $(BR2_PACKAGE_LIBCURL_OPENSSL),LIBCURL_FIX_DOT_PC)
- 
--ifeq ($(BR2_PACKAGE_CURL),)
-+ifeq ($(BR2_PACKAGE_LIBCURL_CURL),)
- define LIBCURL_TARGET_CLEANUP
- 	rm -rf $(TARGET_DIR)/usr/bin/curl
- endef
+-KODI_INPUTSTREAM_RTMP_VERSION = 2.0.8-Leia
++KODI_INPUTSTREAM_RTMP_VERSION = 2.0.9-Leia
+ KODI_INPUTSTREAM_RTMP_SITE = $(call github,xbmc,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
+ KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_RTMP_LICENSE_FILES = debian/copyright
+-- 
+2.20.1
