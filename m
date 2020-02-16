@@ -1,61 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 22:28:27 +0100
-Subject: [Buildroot] [PATCH v4 4/9] configs/qemu{x86,
- x86_64}: add a serial console
-In-Reply-To: <20200209180327.455426-5-romain.naour@smile.fr> (Romain Naour's
- message of "Sun, 9 Feb 2020 19:03:22 +0100")
-References: <20200209180327.455426-1-romain.naour@smile.fr>
- <20200209180327.455426-5-romain.naour@smile.fr>
-Message-ID: <87zhdicjd0.fsf@dell.be.48ers.dk>
+Date: Sun, 16 Feb 2020 22:15:59 +0100
+Subject: [Buildroot] [git commit] package/janus-gateway: bump version to
+ 0.8.1
+Message-ID: <20200216212052.F14068E334@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=350dc80dcbaee4fd544902eb0e9e1f5fbd6088d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The current Buildroot defconfigs for qemu_x86 and qemu_x86_64
- > instantiate a console on tty1, which appears on QEMU's
- > graphical window. Add a console on the serial port (ttyS0) to
- > be used later for gitlab testing.
+Other changes:
+  - Update License hash which properly adds the OpenSSL exception.
 
- > This change is need since the script used for gitlab testing
- > needs to use a serial output with pexpect.
+Tested with Debian 8:
 
- > This change is similar to the one made for raspberrypi [1] to
- > handle HDMI and serial console:
+br-arm-full [1/6]: OK
+br-arm-cortex-a9-glibc [2/6]:   OK
+ br-arm-cortex-m4-full [3/6]:   SKIPPED
+        br-x86-64-musl [4/6]:   OK
+    br-arm-full-static [5/6]:   SKIPPED
+          sourcery-arm [6/6]:   OK
 
- > This requires three changes:
- >  1. have two 'console=' entries in the kernel command line: tty1,
- >     then ttyS0;
- >  2. change BR2_TARGET_GENERIC_GETTY_PORT to "console", so it starts
- >     a getty on the last console= passed to the kernel, ttyS0;
- >  3. add a new getty on tty1 to the generated inittab.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/janus-gateway/janus-gateway.hash | 4 ++--
+ package/janus-gateway/janus-gateway.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > Step 2 is actually obtained by removing BR2_TARGET_GENERIC_GETTY_PORT
- > entirely from the defconfigs, since "console" is the default value.
-
- > Step 3 requires a post-build script since the Buildroot makefiles can
- > configure only one console.
-
- > Note: instead of simply adding a new getty on ttyS0 (which would
- > work) this patch actually changes BR2_TARGET_GENERIC_GETTY_PORT to
- > instantiate a console on UART, then adds back tty1 via
- > post-build.sh. This is done only to avoid the "GENERIC_SERIAL" comment
- > where we instantiate a console on QEMU graphical window, then
- > instantiate a really-serial console on another line.
-
- > The result is these two inittab lines:
-
- >   console::respawn:/sbin/getty -L  console 0 vt100 # GENERIC_SERIAL
- >   tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window
-
- > [1] 20878a1017e2bf7eb8c5f870dc6d2641493cb0f9
-
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index 784c43d252..b74ec2511f 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 d34868c259f388105fe16a5cd304a5684d45b1eddbe436293f4aa2178c0e4b6e janus-gateway-0.7.3.tar.gz
+-sha256 0a884af515b4593503f6f0c9b424db3945bd77eaa2644d25f45eb93a412b3c19 COPYING
++sha256 668758f06e2a158f83b89d17aad322959221fbeadcc5611c6f7a38ff76fd2896 janus-gateway-0.8.1.tar.gz
++sha256 91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6 COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index 0d0a22491f..d17a80f788 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-JANUS_GATEWAY_VERSION = 0.7.3
++JANUS_GATEWAY_VERSION = 0.8.1
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
+-JANUS_GATEWAY_LICENSE = GPL-3.0
++JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
+ 
+ # ding-libs provides the ini_config library
