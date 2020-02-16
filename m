@@ -1,46 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 15:22:07 +0100
-Subject: [Buildroot] [git commit] package/libtorrent-rasterbar: bump to
- version 1.2.4
-Message-ID: <20200216141641.243F28E1F7@busybox.osuosl.org>
+Date: Sun, 16 Feb 2020 15:23:35 +0100
+Subject: [Buildroot] [git commit] package/python-pyyaml: bump to version 5.3
+Message-ID: <20200216141641.43C598E1F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc0c9915dbd65474623aa2d30cbc695a4e1c7c20
+commit: https://git.buildroot.net/buildroot/commit/?id=fcca4ef19d0e4b6d6c690505913e83f2f112ad74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation of hash file (two spaces)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 4 ++--
- package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pyyaml/python-pyyaml.hash | 4 ++--
+ package/python-pyyaml/python-pyyaml.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-index 92e8a3690b..78dbdf8ae4 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 1582fdbbd0449bcfe4ffae2ccb9e5bf0577459a32bb25604e01accb847da1a2d libtorrent-rasterbar-1.2.3.tar.gz
--sha256 f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8 COPYING
-+sha256  8759bddb589006ee164438588adaf007325b3bcaf6ae4c64d87a2b914409c680  libtorrent-rasterbar-1.2.4.tar.gz
-+sha256  f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8  COPYING
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-index e81440d7c3..5b80e99238 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
+index a5cbf82986..e0d182bcbb 100644
+--- a/package/python-pyyaml/python-pyyaml.hash
++++ b/package/python-pyyaml/python-pyyaml.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/PyYAML/json
+-md5	20f87ab421b0271dbf371dc5c1cddb5c  PyYAML-5.1.2.tar.gz
+-sha256	01adf0b6c6f61bd11af6e10ca52b7d4057dd0be0343eb9283c878cf3af56aee4  PyYAML-5.1.2.tar.gz
++md5	adbb0d336b509d6472d3b095a0f1cf30  PyYAML-5.3.tar.gz
++sha256	e9f45bd5b92c7974e59bcd2dcc8631a6b6cc380a904725fce7bc08872e691615  PyYAML-5.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256	a2adb9c959b797494a0ef80bdf60e22db2749ee3e0c0908556e3eb548f967c56  LICENSE
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index 165a938f11..5d9246d37c 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBTORRENT_RASTERBAR_VERSION = 1.2.3
-+LIBTORRENT_RASTERBAR_VERSION = 1.2.4
- LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
- LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
- LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
+-PYTHON_PYYAML_VERSION = 5.1.2
++PYTHON_PYYAML_VERSION = 5.3
+ PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
+-PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/e3/e8/b3212641ee2718d556df0f23f78de8303f068fe29cdaa7a91018849582fe
++PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/3d/d9/ea9816aea31beeadccd03f1f8b625ecf8f645bd66744484d162d84803ce5
+ PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
