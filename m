@@ -1,49 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 15:23:50 +0100
-Subject: [Buildroot] [git commit] package/python-simplejson: bump to version
- 3.17.0
-Message-ID: <20200216141641.512DB8E187@busybox.osuosl.org>
+Date: Sun, 16 Feb 2020 15:27:10 +0100
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.4.x series
+Message-ID: <20200216141641.875078E187@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f20c1c42fc2d2300da15b3a4b191a144aecd839
+commit: https://git.buildroot.net/buildroot/commit/?id=dc43b918ec76289f58463868a0295ffd78a01440
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-simplejson/python-simplejson.hash | 4 ++--
- package/python-simplejson/python-simplejson.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
-index f9d2aaefd3..d89d824d14 100644
---- a/package/python-simplejson/python-simplejson.hash
-+++ b/package/python-simplejson/python-simplejson.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/simplejson/json
--md5	744fa99aed207478f8fbf9dd9f04fad3  simplejson-3.16.0.tar.gz
--sha256	b1f329139ba647a9548aa05fb95d046b4a677643070dc2afc05fa2e975d09ca5  simplejson-3.16.0.tar.gz
-+md5	8a5ed75c367b90fedc3d685742e2a1c7  simplejson-3.17.0.tar.gz
-+sha256	2b4b2b738b3b99819a17feaf118265d0753d5536049ea570b3c43b51c4701e81  simplejson-3.17.0.tar.gz
- # Locally computed sha256 checksums
- sha256	fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
-diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
-index 20b5b2481b..3e875015a8 100644
---- a/package/python-simplejson/python-simplejson.mk
-+++ b/package/python-simplejson/python-simplejson.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 38c7510d9e..86e273a150 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--PYTHON_SIMPLEJSON_VERSION = 3.16.0
-+PYTHON_SIMPLEJSON_VERSION = 3.17.0
- PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
--PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/e3/24/c35fb1c1c315fc0fffe61ea00d3f88e85469004713dab488dee4f35b0aff
-+PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/98/87/a7b98aa9256c8843f92878966dc3d8d914c14aad97e2c5ce4798d5743e07
- PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
- PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
- PYTHON_SIMPLEJSON_SETUP_TYPE = setuptools
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.4.18" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.4.20" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.98-cip19" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.98-cip19-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 7b3efc73ea..d99a9661af 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  92e9f1fd69543e9ce2a9e6eb918823b1846d2dd99246a74456263cd5ad234d89  linux-5.4.18.tar.xz
++sha256  793f6dcd9a7074dc61bbb092b40b3ce9567f776f21589ecd09f07bc9ed5c67bb  linux-5.4.20.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  00f73c3c7a2beebf5832422c81a037b05ca1217d5f4f6cbcc49284bf7fb2bcb2  linux-4.4.213.tar.xz
+-sha256  af85ff764670c2a934ee5b2590437d8e3ab32b1a0b8d51358f36c6bbf6c5eb64  linux-4.9.213.tar.xz
+-sha256  940a63247d11476daea6d114a9599be0eb68eeb2e295fe279e0f3312af1e17c3  linux-4.14.170.tar.xz
+-sha256  302e8388dd7b49d1b779225cf865af74b9837d1e955b1b290fdd71baf97ce015  linux-4.19.102.tar.xz
++sha256  b6aa65ee2c0767864175e3a9cf7b0b3751263b04a7c8a6e760e9b982282fa76c  linux-4.4.214.tar.xz
++sha256  b47f093dac7034c7c4722e80042c05e4ef53c14a4f28aa992117a127d2b1e483  linux-4.9.214.tar.xz
++sha256  4fe02489e4b4a187eccf0ef87df6100534c9d485e76d876b1fa247c7635332a0  linux-4.14.171.tar.xz
++sha256  23ebffb28c2607682fcb91df90d77467ac5b16a50961de298ef266a919d66be8  linux-4.19.104.tar.xz
+ # Locally computed
+ sha256  18f9ddba0b777d1942d6c81877ba97c4bcd08488e2c409e57dcce866b9de5fc2  linux-cip-4.19.98-cip19.tar.gz
+ sha256  7d5aeb67da41dc66ef28621ef994ef4403e8b1f5c3df38b1843da20972444280  linux-cip-4.19.98-cip19-rt7.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 71d35dad7f..60af628b5c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -318,11 +318,11 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.213"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.213"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.170"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.102"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.18"	if BR2_KERNEL_HEADERS_5_4
++	default "4.4.214"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.214"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.171"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.104"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.20"	if BR2_KERNEL_HEADERS_5_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
