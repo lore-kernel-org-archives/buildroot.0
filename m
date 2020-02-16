@@ -1,50 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 12:55:54 +0100
-Subject: [Buildroot] [PATCH 2/4] package/webkitgtk: security bump to
- version 2.26.4
-In-Reply-To: <20200215150929.13293-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 15 Feb 2020 16:09:26 +0100")
-References: <20200215150929.13293-1-peter@korsgaard.com>
- <20200215150929.13293-2-peter@korsgaard.com>
-Message-ID: <87y2t2hhkl.fsf@dell.be.48ers.dk>
+Date: Sun, 16 Feb 2020 12:54:37 +0100
+Subject: [Buildroot] [git commit] package/webkitgtk: needs >= GCC 7
+Message-ID: <20200216114439.C4E6E8E188@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following security issues:
- > - CVE-2020-3862: Impact: A malicious website may be able to cause a denial
- >   of service.  Description: A denial of service issue was addressed with
- >   improved memory handling.
+CMakeLists.txt contains a toolchain check:
 
- > - CVE-2020-3864: Impact: A DOM object context may not have had a unique
- >   security origin.  Description: A logic issue was addressed with improved
- >   validation.
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+    if (${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS "7.3.0")
+        message(FATAL_ERROR "GCC 7.3 or newer is required to build WebKit. Use a newer GCC version or Clang.")
+    endif ()
+endif ()
 
- > - CVE-2020-3865: Impact: A top-level DOM object context may have incorrectly
- >   been considered secure.  Description: A logic issue was addressed with
- >   improved validation.
+So bump the toolchain dependency to >= GCC 7.  The check is really about >=
+7.3.0, but we do not have such detailed version checks.  Given that GCC
+7.3.0 was released in January 2018 (and 7.1.0 in May 2017), most external
+GCC 7.x toolchains probably use >= 7.3.0.
 
- > - CVE-2020-3867: Impact: Processing maliciously crafted web content may lead
- >   to universal cross site scripting.  Description: A logic issue was
- >   addressed with improved state management.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/webkitgtk/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- > - CVE-2020-3868: Impact: Processing maliciously crafted web content may lead
- >   to arbitrary code execution.  Description: Multiple memory corruption
- >   issues were addressed with improved memory handling.
-
- > For more details, see the advisory:
- > https://webkitgtk.org/security/WSA-2020-0002.html
-
- > While we are at it, adjust the white space in the .hash function to match
- > the new agreements.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 4f10466c1f..86f58821a3 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -12,17 +12,17 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 
+-comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6"
++comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 7"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_USES_GLIBC || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_6
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_WEBKITGTK
+ 	bool "webkitgtk"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
