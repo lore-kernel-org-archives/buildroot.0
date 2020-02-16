@@ -1,102 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 15:22:26 +0100
-Subject: [Buildroot] [git commit] package/gensio: bump to version 1.5.1
-Message-ID: <20200216141641.2DD918E1F7@busybox.osuosl.org>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sun, 16 Feb 2020 17:38:03 +0300
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: disable TEAP
+ for internal TLS implementation
+In-Reply-To: <20200114080234.lcyzcovnetczvw6i@bars>
+References: <20200108190439.459316-1-geomatsi@gmail.com>
+ <17bdeec1-8e1f-9049-f285-853cb34fcfdc@mind.be>
+ <20200114080234.lcyzcovnetczvw6i@bars>
+Message-ID: <20200216143803.GA2902@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5349c37e726263a3bd3cf8cb24fce0bba144578f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> > > EAP-TEAP support in hostapd/wpa_supplicant fails to build with internal
+> > > TLS implementation. This patch disables TEAP support in wpa_supplicant
+> > > when internal TLS implementation is selected. Similar fix for hostapd
+> > > package has already been merged to Buildroot: see commit 47d14e3b1c20
+> > > ("package/hostapd: disable TEAP for internal TLS implementation").
+> > > 
+> > > TEAP is still an experimental feature that is not recommmended for
+> > > production use. Currently it should not be used for anything else
+> > > than experimentation and interoperability testing. Those who needs
+> > > experimenting with TEAP are encouraged to enable openssl in their
+> > > buildroot configuration.
+> > 
+> >  So then why don't we just unconditionally disable this feature? Preferably with
+> > a comment in the .mk file that it's disabled due to its experimental nature, so
+> > that someone who needs it a couple of years down the line can note that it's not
+> > longer experimental.
+> 
+> Well, this is another possible option. But I don't see why we should
+> disable it completely. TEAP does not build with internal hostapd TLSv1
+> implementation, which in its turn is also marked as experimental. On
+> the other hand, TEAP successfully builds if OpenSSL is selected as TLS
+> implementation. So why don't we just disable known broken combination,
+> leaving the choice between working combinations to the end user.
 
-- Update indentation of hash file (2 spaces)
-- This will fix a build failure without threads thanks to
-  https://github.com/cminyard/gensio/commit/8918de5b30f90b826c48064e9ee92304b63ffe85
-  and associated upstream patch
+Hi Thomas, Arnout,
 
-Fixes:
- - http://autobuild.buildroot.org/results/e94d0e0b46afc1223a74bcc471909f4adef0d6f3
+It has been a while since my last reply. Do you still have any other
+concerns regarding suggested approach ?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...0001-tests-Makefile-am-don-t-add-lpthread.patch | 29 ++++++++++++++++++++++
- package/gensio/gensio.hash                         | 12 ++++-----
- package/gensio/gensio.mk                           |  6 +++--
- 3 files changed, 39 insertions(+), 8 deletions(-)
+Let me reiterate the idea. TEAP is a farily new and experimental hostapd
+feature which does not compile with internal hostapd TLS implementation.
+On the other hand, it can be successfully built with OpenSSL as TLS
+provider for hostapd.
 
-diff --git a/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch b/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch
-new file mode 100644
-index 0000000000..5a9f3b7da5
---- /dev/null
-+++ b/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch
-@@ -0,0 +1,29 @@
-+From f63b15e690581d898da56ef2540b6199f5728e58 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 11 Feb 2020 19:14:53 +0100
-+Subject: [PATCH] tests/Makefile.am: don't add -lpthread
-+
-+Don't add -lpthread unconditionally to oomtest_LDADD to avoid a build
-+failure without threads, it will be added to LIBS by configure.ac if
-+needed
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/cminyard/gensio/commit/f63b15e690581d898da56ef2540b6199f5728e58]
-+---
-+ tests/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tests/Makefile.am b/tests/Makefile.am
-+index a280acc..b4335c5 100644
-+--- a/tests/Makefile.am
-++++ b/tests/Makefile.am
-+@@ -127,7 +127,7 @@ test_fuzz: test_fuzz_certauth test_fuzz_mux test_fuzz_ssl test_fuzz_telnet \
-+ 
-+ oomtest_SOURCES = oomtest.c
-+ 
-+-oomtest_LDADD = $(top_builddir)/lib/libgensio.la $(OPENSSL_LIBS) -lpthread
-++oomtest_LDADD = $(top_builddir)/lib/libgensio.la $(OPENSSL_LIBS)
-+ 
-+ noinst_PROGRAMS = oomtest
-+ 
-diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
-index fcf5662f67..623b41904c 100644
---- a/package/gensio/gensio.hash
-+++ b/package/gensio/gensio.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/ser2net/files/
--md5 3a84895e41b9ca85801d2d5727977356  gensio-1.4.1.tar.gz
--sha1 3b268b7c37edabd87547f98d03ecf4929f3e5381  gensio-1.4.1.tar.gz
-+# From https://sourceforge.net/projects/ser2net/files/ser2net/
-+md5  53c027dfaaf374f57d5f36a6250fc018  gensio-1.5.1.tar.gz
-+sha1  8329d7828016e643f60b8b3e70564d32cd03008f  gensio-1.5.1.tar.gz
- # Locally computed:
--sha256 a0608921c6ccec115a1298d02423b9d8482b444f5772d8a8fde7ceabbadd679a  gensio-1.4.1.tar.gz
--sha256 501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
--sha256 dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
-+sha256  c1ed28f5bd72185dba666a900d29afbecba58727d6c0dde4a182143273fc1e6b  gensio-1.5.1.tar.gz
-+sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-+sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index 0078ea6c57..0386b30fd7 100644
---- a/package/gensio/gensio.mk
-+++ b/package/gensio/gensio.mk
-@@ -4,11 +4,13 @@
- #
- ################################################################################
- 
--GENSIO_VERSION = 1.4.1
--GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net
-+GENSIO_VERSION = 1.5.1
-+GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GENSIO_LICENSE_FILES = COPYING.LIB COPYING
- GENSIO_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+GENSIO_AUTORECONF = YES
- GENSIO_CONF_OPTS = \
- 	--without-openipmi \
- 	--without-swig \
+So suggested approach explicitly disables broken configuration, but still
+lets the users to play with it if they need to.
+
+Regards,
+Sergey
