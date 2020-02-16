@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 12:55:42 +0100
-Subject: [Buildroot] [PATCH 3/4] package/wpewebkit: needs >= GCC 7
-In-Reply-To: <20200215150929.13293-3-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 15 Feb 2020 16:09:27 +0100")
+Date: Sun, 16 Feb 2020 12:55:48 +0100
+Subject: [Buildroot] [PATCH 4/4] package/wpewebkit: security bump to
+ version 2.26.4
+In-Reply-To: <20200215150929.13293-4-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 15 Feb 2020 16:09:28 +0100")
 References: <20200215150929.13293-1-peter@korsgaard.com>
- <20200215150929.13293-3-peter@korsgaard.com>
-Message-ID: <877e0miw5d.fsf@dell.be.48ers.dk>
+ <20200215150929.13293-4-peter@korsgaard.com>
+Message-ID: <8736baiw57.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +15,32 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > CMakeLists.txt contains a toolchain check:
- > if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
- >     if (${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS "7.3.0")
- >         message(FATAL_ERROR "GCC 7.3 or newer is required to build WebKit. Use a newer GCC version or Clang.")
- >     endif ()
- > endif ()
+ > Fixes the following security issues:
+ > - CVE-2020-3862: Impact: A malicious website may be able to cause a denial
+ >   of service.  Description: A denial of service issue was addressed with
+ >   improved memory handling.
 
- > So bump the toolchain dependency to >= GCC 7.  The check is really about >=
- > 7.3.0, but we do not have such detailed version checks.  Given that GCC
- > 7.3.0 was released in January 2018 (and 7.1.0 in May 2017), most external
- > GCC 7.x toolchains probably use >= 7.3.0.
+ > - CVE-2020-3864: Impact: A DOM object context may not have had a unique
+ >   security origin.  Description: A logic issue was addressed with improved
+ >   validation.
+
+ > - CVE-2020-3865: Impact: A top-level DOM object context may have incorrectly
+ >   been considered secure.  Description: A logic issue was addressed with
+ >   improved validation.
+
+ > - CVE-2020-3867: Impact: Processing maliciously crafted web content may lead
+ >   to universal cross site scripting.  Description: A logic issue was
+ >   addressed with improved state management.
+
+ > - CVE-2020-3868: Impact: Processing maliciously crafted web content may lead
+ >   to arbitrary code execution.  Description: Multiple memory corruption
+ >   issues were addressed with improved memory handling.
+
+ > For more details, see the advisory:
+ > https://wpewebkit.org/security/WSA-2020-0002.html
+
+ > While we are at it, adjust the white space in the .hash function to match
+ > the new agreements.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
