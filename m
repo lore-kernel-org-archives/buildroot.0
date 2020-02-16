@@ -1,44 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 17:17:18 +0100
-Subject: [Buildroot] [git commit] package/minicom: bump version
-Message-ID: <20200216160603.9535C8E263@busybox.osuosl.org>
+Date: Sun, 16 Feb 2020 17:23:08 +0100
+Subject: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.4.3
+In-Reply-To: <20200210120353.49600-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Mon, 10 Feb 2020 13:03:53 +0100")
+References: <20200210120353.49600-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87wo8mec2b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce084ccb761e5744006d067fcd664607f97371af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-For a minor fix.
+ > Bump to version 2.4.3 of nfs-utils. All patches have been upstreamed, so
+ > drop them all. It must be used rpcgen build by host-nfs-utils, to do
+ > this let's pass its path to --with-rpcgen= instead of 'internal'.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/minicom/minicom.hash | 2 +-
- package/minicom/minicom.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > ---
+ >  .../0001-Patch-taken-from-Gentoo.patch        | 60 ----------------
+ >  ...tch-legacy-index-in-favour-of-strchr.patch | 72 -------------------
+ >  ...e-script-find-getrpcbynumber-in-libt.patch | 46 ------------
+ >  ...ntd-Add-check-for-struct-file_handle.patch | 46 ------------
+ >  ...tils-add-missing-include-of-stdint.h.patch | 33 ---------
+ >  ...de-sys-sysmacros.h-where-appropriate.patch | 50 -------------
+ >  package/nfs-utils/nfs-utils.hash              |  4 +-
+ >  package/nfs-utils/nfs-utils.mk                |  5 +-
+ >  8 files changed, 5 insertions(+), 311 deletions(-)
+ >  delete mode 100644 package/nfs-utils/0001-Patch-taken-from-Gentoo.patch
+ >  delete mode 100644 package/nfs-utils/0002-Switch-legacy-index-in-favour-of-strchr.patch
+ >  delete mode 100644 package/nfs-utils/0003-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
+ >  delete mode 100644 package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch
+ >  delete mode 100644 package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch
+ >  delete mode 100644 package/nfs-utils/0006-Include-sys-sysmacros.h-where-appropriate.patch
 
-diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
-index 9725f58f6d..7622ec004c 100644
---- a/package/minicom/minicom.hash
-+++ b/package/minicom/minicom.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 c8e34cc583f3b09c65871f5080b04799895b1ebd72092c0e18cb20a631f6c4b1  minicom-a6a507dcb8bd4cb5da7af9e2dc75b8e495fedbb6.tar.gz
-+sha256 f2b69b874b93f7bb68ad84e09d4d4c7a79160fcdd0117e8c0c1465fe71e64f28  minicom-52b626b15a883b0300682a03aa8e048e317f1e56.tar.gz
- sha256 cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
-diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-index d299dac43d..77bc6f533d 100644
---- a/package/minicom/minicom.mk
-+++ b/package/minicom/minicom.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > +++ b/package/nfs-utils/nfs-utils.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
  
--MINICOM_VERSION = a6a507dcb8bd4cb5da7af9e2dc75b8e495fedbb6
-+MINICOM_VERSION = 52b626b15a883b0300682a03aa8e048e317f1e56
- MINICOM_SITE = https://salsa.debian.org/minicom-team/minicom.git
- MINICOM_SITE_METHOD = git
- MINICOM_LICENSE = GPL-2.0+
+ > -NFS_UTILS_VERSION = 1.3.4
+ > +NFS_UTILS_VERSION = 2.4.3
+ >  NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ >  NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ >  NFS_UTILS_LICENSE = GPL-2.0+
+ > @@ -23,7 +23,8 @@ NFS_UTILS_CONF_OPTS = \
+ >  	--enable-ipv6 \
+ >  	--without-tcp-wrappers \
+ >  	--with-statedir=/run/nfs \
+ > -	--with-rpcgen=internal
+ > +	--with-rpcgen=$(HOST_DIR)/bin/rpcgen
+
+While host-nfs-utils does get implicitly pulled in by libtirpc, it
+isn't very obvious - So I've added an explicit host-nfs-utils dependency
+and committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
