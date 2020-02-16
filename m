@@ -1,49 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 15:23:17 +0100
-Subject: [Buildroot] [git commit] package/python-pyopenssl: bump to version
- 19.1.0
-Message-ID: <20200216141641.3A3C18E1F8@busybox.osuosl.org>
+Date: Sun, 16 Feb 2020 15:23:50 +0100
+Subject: [Buildroot] [git commit] package/python-simplejson: bump to version
+ 3.17.0
+Message-ID: <20200216141641.512DB8E187@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a3d6c61b3107b5cda86c4231a731ec149ec1b83
+commit: https://git.buildroot.net/buildroot/commit/?id=4f20c1c42fc2d2300da15b3a4b191a144aecd839
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyopenssl/python-pyopenssl.hash | 4 ++--
- package/python-pyopenssl/python-pyopenssl.mk   | 4 ++--
+ package/python-simplejson/python-simplejson.hash | 4 ++--
+ package/python-simplejson/python-simplejson.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
-index 30071cf9ff..b457aeacdd 100644
---- a/package/python-pyopenssl/python-pyopenssl.hash
-+++ b/package/python-pyopenssl/python-pyopenssl.hash
+diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
+index f9d2aaefd3..d89d824d14 100644
+--- a/package/python-simplejson/python-simplejson.hash
++++ b/package/python-simplejson/python-simplejson.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyopenssl/json
--md5 b9876625dc1d5a5a662d748689191537  pyOpenSSL-19.0.0.tar.gz
--sha256 aeca66338f6de19d1aa46ed634c3b9ae519a64b458f8468aec688e7e3c20f200  pyOpenSSL-19.0.0.tar.gz
-+md5 d9804fedbd1eb0c7d9243397b1fbf972  pyOpenSSL-19.1.0.tar.gz
-+sha256 9a24494b2602aaf402be5c9e30a0b82d4a5c67528fe8fb475e3f3bc00dd69507  pyOpenSSL-19.1.0.tar.gz
- # Locally computed sha256
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
-index d341ef124d..bbbd836a1b 100644
---- a/package/python-pyopenssl/python-pyopenssl.mk
-+++ b/package/python-pyopenssl/python-pyopenssl.mk
+ # md5, sha256 from https://pypi.org/pypi/simplejson/json
+-md5	744fa99aed207478f8fbf9dd9f04fad3  simplejson-3.16.0.tar.gz
+-sha256	b1f329139ba647a9548aa05fb95d046b4a677643070dc2afc05fa2e975d09ca5  simplejson-3.16.0.tar.gz
++md5	8a5ed75c367b90fedc3d685742e2a1c7  simplejson-3.17.0.tar.gz
++sha256	2b4b2b738b3b99819a17feaf118265d0753d5536049ea570b3c43b51c4701e81  simplejson-3.17.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
+diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
+index 20b5b2481b..3e875015a8 100644
+--- a/package/python-simplejson/python-simplejson.mk
++++ b/package/python-simplejson/python-simplejson.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYOPENSSL_VERSION = 19.0.0
-+PYTHON_PYOPENSSL_VERSION = 19.1.0
- PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
--PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/40/d0/8efd61531f338a89b4efa48fcf1972d870d2b67a7aea9dcf70783c8464dc
-+PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/0d/1d/6cc4bd4e79f78be6640fab268555a11af48474fac9df187c3361a1d1d2f0
- PYTHON_PYOPENSSL_LICENSE = Apache-2.0
- PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
- PYTHON_PYOPENSSL_SETUP_TYPE = setuptools
+-PYTHON_SIMPLEJSON_VERSION = 3.16.0
++PYTHON_SIMPLEJSON_VERSION = 3.17.0
+ PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
+-PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/e3/24/c35fb1c1c315fc0fffe61ea00d3f88e85469004713dab488dee4f35b0aff
++PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/98/87/a7b98aa9256c8843f92878966dc3d8d914c14aad97e2c5ce4798d5743e07
+ PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
+ PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
+ PYTHON_SIMPLEJSON_SETUP_TYPE = setuptools
