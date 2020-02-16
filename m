@@ -1,50 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 15:25:43 +0100
-Subject: [Buildroot] [git commit] package/python-cython: bump to version
- 0.29.15
-Message-ID: <20200216141641.604D38E187@busybox.osuosl.org>
+Date: Sun, 16 Feb 2020 15:23:17 +0100
+Subject: [Buildroot] [git commit] package/python-pyopenssl: bump to version
+ 19.1.0
+Message-ID: <20200216141641.3A3C18E1F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a00757f78e8aafc019eabfb6ba794d5fc6a07df2
+commit: https://git.buildroot.net/buildroot/commit/?id=6a3d6c61b3107b5cda86c4231a731ec149ec1b83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
+ package/python-pyopenssl/python-pyopenssl.hash | 4 ++--
+ package/python-pyopenssl/python-pyopenssl.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 31e1b0d992..06ebbd5a9d 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	6e2f139e30bb08d68366f9370d87964c  Cython-0.29.14.tar.gz
--sha256	e4d6bb8703d0319eb04b7319b12ea41580df44fd84d83ccda13ea463c6801414  Cython-0.29.14.tar.gz
-+md5	63c819697ed7ce89c6455ff578312a26  Cython-0.29.15.tar.gz
-+sha256	60d859e1efa5cc80436d58aecd3718ff2e74b987db0518376046adedba97ac30  Cython-0.29.15.tar.gz
- # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 6c23e14218..997a38db1c 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
+diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
+index 30071cf9ff..b457aeacdd 100644
+--- a/package/python-pyopenssl/python-pyopenssl.hash
++++ b/package/python-pyopenssl/python-pyopenssl.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyopenssl/json
+-md5 b9876625dc1d5a5a662d748689191537  pyOpenSSL-19.0.0.tar.gz
+-sha256 aeca66338f6de19d1aa46ed634c3b9ae519a64b458f8468aec688e7e3c20f200  pyOpenSSL-19.0.0.tar.gz
++md5 d9804fedbd1eb0c7d9243397b1fbf972  pyOpenSSL-19.1.0.tar.gz
++sha256 9a24494b2602aaf402be5c9e30a0b82d4a5c67528fe8fb475e3f3bc00dd69507  pyOpenSSL-19.1.0.tar.gz
+ # Locally computed sha256
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
+index d341ef124d..bbbd836a1b 100644
+--- a/package/python-pyopenssl/python-pyopenssl.mk
++++ b/package/python-pyopenssl/python-pyopenssl.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CYTHON_VERSION = 0.29.14
-+PYTHON_CYTHON_VERSION = 0.29.15
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/9c/9b/706dac7338c2860cd063a28cdbf5e9670995eaea408abbf2e88ba070d90d
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/d9/82/d01e767abb9c4a5c07a6a1e6f4d5a8dfce7369318d31f48a52374094372e
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+-PYTHON_PYOPENSSL_VERSION = 19.0.0
++PYTHON_PYOPENSSL_VERSION = 19.1.0
+ PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
+-PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/40/d0/8efd61531f338a89b4efa48fcf1972d870d2b67a7aea9dcf70783c8464dc
++PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/0d/1d/6cc4bd4e79f78be6640fab268555a11af48474fac9df187c3361a1d1d2f0
+ PYTHON_PYOPENSSL_LICENSE = Apache-2.0
+ PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
+ PYTHON_PYOPENSSL_SETUP_TYPE = setuptools
