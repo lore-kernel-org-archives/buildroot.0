@@ -1,51 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 15:21:44 +0100
-Subject: [Buildroot] [git commit] package/python-six: bump to version 1.14.0
-Message-ID: <20200216141641.1A3F38E187@busybox.osuosl.org>
+Date: Sun, 16 Feb 2020 15:21:23 +0100
+Subject: [Buildroot] [git commit] package/python-cryptography: bump to
+ version 2.8
+Message-ID: <20200216141641.110CB8E1F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe659f55eedff1fe04a287cbd647a37562e3eef2
+commit: https://git.buildroot.net/buildroot/commit/?id=e57d571b71f694d611f2565ffe71ec33cef2ce37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash change is due to date update.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-six/python-six.hash | 6 +++---
- package/python-six/python-six.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-cryptography/python-cryptography.hash | 4 ++--
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-six/python-six.hash b/package/python-six/python-six.hash
-index fe9a455c05..0d1e75fe9e 100644
---- a/package/python-six/python-six.hash
-+++ b/package/python-six/python-six.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/six/json
--md5	e92c23c882c7d5564ce5773fe31b2771  six-1.13.0.tar.gz
--sha256	30f610279e8b2578cab6db20741130331735c781b56053c59c4076da27f06b66  six-1.13.0.tar.gz
-+md5	21674588a57e649d1a6d977ec3122140  six-1.14.0.tar.gz
-+sha256	236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a  six-1.14.0.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index 715beb71d1..30ffa73d72 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cryptography/json
+-md5	7dfe1035cae43569e571318f000462a4  cryptography-2.7.tar.gz
+-sha256	e6347742ac8f35ded4a46ff835c60e68c22a536a8ae5c4422966d06946b6d4c6  cryptography-2.7.tar.gz
++md5	77730058b556c6d9838679a94c6229ce  cryptography-2.8.tar.gz
++sha256	3cda1f0ed8747339bbdf71b9f38ca74c7b592f24f65cdb3ab3765e4b02871651  cryptography-2.8.tar.gz
  # Locally computed sha256 checksums
--sha256	b7529b8c07171a78a8c36c3283905528e4812945d977d125eb926e8ccbf245b6  LICENSE
-+sha256	8bb850c565aa389fdc16f3a46965ad23d82adff60f2393fc2762b63185e8e6c9  LICENSE
-diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
-index 906c268d74..8acc739f2e 100644
---- a/package/python-six/python-six.mk
-+++ b/package/python-six/python-six.mk
+ sha256	35452b557fab0efb1e80d7edb9c4e5118b9384082adaa051dde342102cb9de8d  LICENSE
+ sha256	aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index dad09672eb..54437ae688 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SIX_VERSION = 1.13.0
-+PYTHON_SIX_VERSION = 1.14.0
- PYTHON_SIX_SOURCE = six-$(PYTHON_SIX_VERSION).tar.gz
--PYTHON_SIX_SITE = https://files.pythonhosted.org/packages/94/3e/edcf6fef41d89187df7e38e868b2dd2182677922b600e880baad7749c865
-+PYTHON_SIX_SITE = https://files.pythonhosted.org/packages/21/9f/b251f7f8a76dec1d6651be194dfba8fb8d7781d10ab3987190de8391d08e
- PYTHON_SIX_SETUP_TYPE = setuptools
- PYTHON_SIX_LICENSE = MIT
- PYTHON_SIX_LICENSE_FILES = LICENSE
+-PYTHON_CRYPTOGRAPHY_VERSION = 2.7
++PYTHON_CRYPTOGRAPHY_VERSION = 2.8
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/c2/95/f43d02315f4ec074219c6e3124a87eba1d2d12196c2767fadfdc07a83884
++PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/be/60/da377e1bed002716fb2d5d1d1cab720f298cb33ecff7bf7adea72788e4e4
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
