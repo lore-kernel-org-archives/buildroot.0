@@ -1,23 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2020 15:26:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: bump to version
- 1.37
-In-Reply-To: <20200215112734.3300812-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 15 Feb 2020 12:27:34 +0100")
-References: <20200215112734.3300812-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9o6fw0y.fsf@dell.be.48ers.dk>
+Date: Sun, 16 Feb 2020 15:27:32 +0100
+Subject: [Buildroot] [PATCH 1/2] package/wireguard-linux-compat: bump
+ version to 0.0.20200215
+In-Reply-To: <20200215182020.20862-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 15 Feb 2020 19:20:19 +0100")
+References: <20200215182020.20862-1-peter@korsgaard.com>
+Message-ID: <87r1yufvzf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > - Remove patch (already in version)
- > - Update indentation of hash file (two spaces)
+ > Fixes a regression introduced in 0.0.20200214.  For details, see the
+ > announcement:
+ > https://lists.zx2c4.com/pipermail/wireguard/2020-February/005014.html
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
