@@ -1,41 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Feb 2020 10:13:08 +0100
-Subject: [Buildroot] [git commit] support/run-tests: reorder imports
-Message-ID: <20200217090133.D4EF78E378@busybox.osuosl.org>
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Mon, 17 Feb 2020 11:39:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openlayers: bump version to 6.2.1
+Message-ID: <20200217103944.70798-1-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5abe7e4ce3e098ddb7a060e24f2f8aa60b0353a7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Reorder imports using the isort utility to fix a warning from pylint3:
-
-wrong-import-order: standard import "import multiprocessing" should be
-placed before "import nose2"
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 ---
- support/testing/run-tests | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/openlayers/openlayers.hash | 2 +-
+ package/openlayers/openlayers.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index f295c053ff..022209b414 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -1,9 +1,10 @@
- #!/usr/bin/env python3
- import argparse
--import sys
-+import multiprocessing
- import os
-+import sys
-+
- import nose2
--import multiprocessing
+diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
+index b9efd448a1..f1678507d7 100644
+--- a/package/openlayers/openlayers.hash
++++ b/package/openlayers/openlayers.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	9513cf83d5a2c6093e8c4321fc50ef03cb16fb7c455858924059f5924b0fa20c	v6.1.1-dist.zip
++sha256	e133a2ad952f4a31002b1a3217f6b4b68bc9f02bcf6c0b9970638a2627887101	v6.2.1-dist.zip
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+index 85003b620d..65a1fe00fa 100644
+--- a/package/openlayers/openlayers.mk
++++ b/package/openlayers/openlayers.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- from infra.basetest import BRConfigTest
- 
+-OPENLAYERS_VERSION = 6.1.1
++OPENLAYERS_VERSION = 6.2.1
+ OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
+ OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
+ OPENLAYERS_LICENSE = BSD-2-Clause
+-- 
+2.25.0
