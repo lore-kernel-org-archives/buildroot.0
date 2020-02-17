@@ -1,48 +1,75 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Mon, 17 Feb 2020 22:23:27 +0100
-Subject: [Buildroot] [PATCH v6 05/28] package/qwt: Partially convert to
+Date: Mon, 17 Feb 2020 22:23:33 +0100
+Subject: [Buildroot] [PATCH v6 11/28] package/qt5webchannel: Convert to
  qmake infra
 In-Reply-To: <20200217212350.29750-1-anaumann@ultratronik.de>
 References: <20200217212350.29750-1-anaumann@ultratronik.de>
-Message-ID: <20200217212350.29750-6-anaumann@ultratronik.de>
+Message-ID: <20200217212350.29750-12-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the qmake infra CONFIGURE and BUILD generic but keep the manipulation
-of qwtconfig.pri as PRE_CONFIGURE_HOOK as well as the custom install steps.
+The install of the javascript is custom and thus needs to be kept.
 
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- package/qwt/qwt.mk | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ package/qt5/qt5webchannel/qt5webchannel.mk | 39 ++--------------------
+ 1 file changed, 2 insertions(+), 37 deletions(-)
 
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-index e0ffec765f..1fec17b19a 100644
---- a/package/qwt/qwt.mk
-+++ b/package/qwt/qwt.mk
-@@ -41,14 +41,11 @@ else
- QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDll.*$$/QWT_CONFIG += QwtDll/'
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
+index 22523036e7..112d5218ba 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.mk
++++ b/package/qt5/qt5webchannel/qt5webchannel.mk
+@@ -25,18 +25,6 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5WEBCHANNEL_DEPENDENCIES += qt5declarative
  endif
  
--define QWT_CONFIGURE_CMDS
-+define QWT_PRE_CONFIGURE_CMD
- 	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
--	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE))
- endef
- 
--define QWT_BUILD_CMDS
+-define QT5WEBCHANNEL_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
+-endef
+-
+-define QT5WEBCHANNEL_BUILD_CMDS
 -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 -endef
-+QWT_PRE_CONFIGURE_HOOKS += QWT_PRE_CONFIGURE_CMD
- 
- # After installation, we fixup the INSTALL_PREFIX in qwtconfig.pri so
- # that when building with qmake, -L$(STAGING_DIR)/usr/lib is used and
-@@ -64,4 +61,4 @@ define QWT_INSTALL_TARGET_CMDS
- 	rm -Rf $(TARGET_DIR)/usr/mkspecs
+-
+-define QT5WEBCHANNEL_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+-endef
+-
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
+ 	$(INSTALL) -m 0644 -D $(@D)/examples/webchannel/shared/qwebchannel.js \
+@@ -49,29 +37,6 @@ define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
  endef
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+-define QT5WEBCHANNEL_INSTALL_TARGET_QMLS
+-	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebChannel $(TARGET_DIR)/usr/qml/
+-endef
+-endif
+-
+-ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+-define QT5WEBCHANNEL_INSTALL_TARGET_EXAMPLES
+-	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/webchannel $(TARGET_DIR)/usr/lib/qt/examples/
+-endef
+-endif
+-
+-ifneq ($(BR2_STATIC_LIBS),y)
+-define QT5WEBCHANNEL_INSTALL_TARGET_LIBS
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebChannel.so.* $(TARGET_DIR)/usr/lib
+-endef
+-endif
+-
+-define QT5WEBCHANNEL_INSTALL_TARGET_CMDS
+-	$(QT5WEBCHANNEL_INSTALL_TARGET_LIBS)
+-	$(QT5WEBCHANNEL_INSTALL_TARGET_QMLS)
+-	$(QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT)
+-	$(QT5WEBCHANNEL_INSTALL_TARGET_EXAMPLES)
+-endef
++QT5WEBCHANNEL_POST_INSTALL_TARGET_HOOKS += QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
  
 -$(eval $(generic-package))
 +$(eval $(qmake-package))
