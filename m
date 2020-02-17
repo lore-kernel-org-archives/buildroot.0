@@ -1,37 +1,45 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Mon, 17 Feb 2020 22:23:48 +0100
-Subject: [Buildroot] [PATCH v6 26/28] package/qt5virtualkeyboard: Add
- optional dependency on qt5quickcontrols2
+Date: Mon, 17 Feb 2020 22:23:43 +0100
+Subject: [Buildroot] [PATCH v6 21/28] package/python-sip: Fix qmake usage
+ for per-package build
 In-Reply-To: <20200217212350.29750-1-anaumann@ultratronik.de>
 References: <20200217212350.29750-1-anaumann@ultratronik.de>
-Message-ID: <20200217212350.29750-27-anaumann@ultratronik.de>
+Message-ID: <20200217212350.29750-22-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The basic example depends on qt5quickcontrols2.
+Since python-sip is not built by the qmake infra, we need to explicitly
+integrate the qt.conf fixup needed for successful per-package build and
+consistently use qmake via QT5_QMAKE variable.
 
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/python-sip/python-sip.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-index 162ed88c8c..ea41b5ff86 100644
---- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-+++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-@@ -15,6 +15,10 @@ QT5VIRTUALKEYBOARD_SOURCE = qtvirtualkeyboard-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5
- QT5VIRTUALKEYBOARD_DEPENDENCIES = qt5base qt5declarative qt5svg
- QT5VIRTUALKEYBOARD_INSTALL_STAGING = YES
+diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
+index 1d6c205396..7ae2d43e1e 100644
+--- a/package/python-sip/python-sip.mk
++++ b/package/python-sip/python-sip.mk
+@@ -38,6 +38,7 @@ define HOST_PYTHON_SIP_INSTALL_CMDS
+ endef
  
-+ifeq ($(BR2_PACKAGE_QT5QUICKCONTROLS2),y)
-+QT5VIRTUALKEYBOARD_DEPENDENCIES += qt5quickcontrols2
-+endif
-+
- QT5VIRTUALKEYBOARD_LICENSE = GPL-3.0
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5VIRTUALKEYBOARD_LICENSE_FILES = LICENSE.GPL3
+ define PYTHON_SIP_CONFIGURE_CMDS
++	$(QT5_QT_CONF_FIXUP)
+ 	(cd $(@D); \
+ 		$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/bin/python configure.py \
+ 			--bindir $(TARGET_DIR)/usr/bin \
+@@ -46,7 +47,7 @@ define PYTHON_SIP_CONFIGURE_CMDS
+ 			--sipdir $(TARGET_DIR)/usr/share/sip \
+ 			--sysroot $(STAGING_DIR)/usr \
+ 			--use-qmake && \
+-		$(HOST_DIR)/bin/qmake)
++		$(QT5_QMAKE))
+ endef
+ 
+ define PYTHON_SIP_BUILD_CMDS
 -- 
 2.25.0
