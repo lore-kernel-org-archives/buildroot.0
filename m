@@ -1,40 +1,53 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 17 Feb 2020 08:56:19 +0100
-Subject: [Buildroot] [PATCH] package/mpd: bump version to 0.21.20
-Message-ID: <20200217075619.23398-1-joerg.krause@embedded.rocks>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 17 Feb 2020 21:01:31 +1300
+Subject: [Buildroot] [PATCH] syslog-ng: bump version to 3.25.1
+Message-ID: <20200217080131.25672-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/syslog-ng/syslog-ng.conf | 2 +-
+ package/syslog-ng/syslog-ng.hash | 2 +-
+ package/syslog-ng/syslog-ng.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index ecc2ee42a5..70ca9df582 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  d3275e11d85637adde250cadf3b4f5aec2144228f0d8085767493fc46c55b2f9  mpd-0.21.19.tar.xz
-+sha256  422ef0a996d961f3ebc6856395f3a855b45fa0059910e878fb98281007e510e1  mpd-0.21.20.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 647cac4f32..a879a33d33 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+index e8b9f1fba4..a04a4770b1 100644
+--- a/package/syslog-ng/syslog-ng.conf
++++ b/package/syslog-ng/syslog-ng.conf
+@@ -1,4 +1,4 @@
+- at version: 3.24
++ at version: 3.25
  
- MPD_VERSION_MAJOR = 0.21
--MPD_VERSION = $(MPD_VERSION_MAJOR).19
-+MPD_VERSION = $(MPD_VERSION_MAJOR).20
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+ source s_sys {
+ 	file("/proc/kmsg" program_override("kernel"));
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index 62bc48a7af..962c354b4c 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 d4d0a0357b452be96b69d6f741129275530d8f0451e35adc408ad5635059fa3d  syslog-ng-3.24.1.tar.gz
++sha256 34cb9673bcde58d543890e6c1189f466f938e199f227c524a6fa2f47f4db6817  syslog-ng-3.25.1.tar.gz
+ sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
+ sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 68260172a2..9b7e9a1317 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please check at runtime if the version in
+ # syslog-ng.conf header needs to be updated
+-SYSLOG_NG_VERSION = 3.24.1
++SYSLOG_NG_VERSION = 3.25.1
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
 -- 
 2.25.0
