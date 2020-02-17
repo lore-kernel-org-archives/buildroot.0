@@ -1,223 +1,87 @@
-From: Frank Vanbever <frank.vanbever@essensium.com>
-Date: Mon, 17 Feb 2020 15:58:05 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/fluentbit: new package
-In-Reply-To: <20200217133806.21237-1-frank.vanbever@essensium.com>
-References: <20200217133806.21237-1-frank.vanbever@essensium.com>
-Message-ID: <20200217145805.18815-1-frank.vanbever@essensium.com>
+From: Jean Burgat <jeanburgat33@gmail.com>
+Date: Mon, 17 Feb 2020 19:18:24 +0100
+Subject: [Buildroot] [PATCH] package/openFPGALoader: new package
+Message-ID: <20200217181825.29766-1-jeanburgat33@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Kevin Hilman <khilman@baylibre.com>
-
-Fluent Bit is an open source and multi-platform Log Processor and
-Forwarder which allows you to collect data/logs from different
-sources, unify and send them to multiple destinations.
-
-_FILE_OFFSET_BITS==64 needs to be filtered out to allow building with old glibc
-versions (<2.23).
-
-0001-lib-flb_libco-ppc-Fix-signature-for-co_create-API-18.patch is
-required to allow building for PowerPC.
-
-Signed-off-by: Kevin Hilman <khilman@baylibre.com>
-Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+Signed-off-by: Jean Burgat <jeanburgat33@gmail.com>
 ---
-v2 -> v3:
- - Cleaned up included patch: "Backported from:", "Signed off by:" and some
-   additional explanation on why the patch is necessary
+ package/Config.in                          |  1 +
+ package/openFPGALoader/Config.in           | 18 ++++++++++++++++++
+ package/openFPGALoader/openFPGALoader.hash |  3 +++
+ package/openFPGALoader/openFPGALoader.mk   | 13 +++++++++++++
+ 4 files changed, 35 insertions(+)
+ create mode 100644 package/openFPGALoader/Config.in
+ create mode 100644 package/openFPGALoader/openFPGALoader.hash
+ create mode 100644 package/openFPGALoader/openFPGALoader.mk
 
-This patch is adapted from http://patchwork.ozlabs.org/patch/1038388/
-with some clean-up and additional fixes.
-
-Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...c-Fix-signature-for-co_create-API-18.patch | 42 ++++++++++++
- package/fluent-bit/Config.in                  | 15 +++++
- package/fluent-bit/fluent-bit.hash            |  3 +
- package/fluent-bit/fluent-bit.mk              | 65 +++++++++++++++++++
- 6 files changed, 127 insertions(+)
- create mode 100644 package/fluent-bit/0001-lib-flb_libco-ppc-Fix-signature-for-co_create-API-18.patch
- create mode 100644 package/fluent-bit/Config.in
- create mode 100644 package/fluent-bit/fluent-bit.hash
- create mode 100644 package/fluent-bit/fluent-bit.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e4a3bcb24a..0c309d94e4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -960,6 +960,7 @@ F:	package/zxing-cpp/
- 
- N:	Frank Vanbever <frank.vanbever@essensium.com>
- F: 	package/elixir/
-+F: 	package/fluent-bit/
- F:	package/libmodsecurity/
- F:	package/nginx-modsecurity/
- 
 diff --git a/package/Config.in b/package/Config.in
-index dfa3f34b9d..f3d84f16e5 100644
+index dfa3f34b9d..daf2feaae9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2298,6 +2298,7 @@ menu "System tools"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
- 	source "package/emlog/Config.in"
-+	source "package/fluent-bit/Config.in"
- 	source "package/ftop/Config.in"
- 	source "package/getent/Config.in"
- 	source "package/htop/Config.in"
-diff --git a/package/fluent-bit/0001-lib-flb_libco-ppc-Fix-signature-for-co_create-API-18.patch b/package/fluent-bit/0001-lib-flb_libco-ppc-Fix-signature-for-co_create-API-18.patch
+@@ -499,6 +499,7 @@ endmenu
+ 	source "package/ofono/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+ 	source "package/open2300/Config.in"
++	source "package/openFPGALoader/Config.in"
+ 	source "package/openipmi/Config.in"
+ 	source "package/openocd/Config.in"
+ 	source "package/openpowerlink/Config.in"
+diff --git a/package/openFPGALoader/Config.in b/package/openFPGALoader/Config.in
 new file mode 100644
-index 0000000000..c85bf85d33
+index 0000000000..0e96e81906
 --- /dev/null
-+++ b/package/fluent-bit/0001-lib-flb_libco-ppc-Fix-signature-for-co_create-API-18.patch
-@@ -0,0 +1,42 @@
-+From 731dab51a41d3635ceae5481d89d30148caac96d Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Tue, 11 Feb 2020 19:36:21 -0800
-+Subject: [PATCH] lib: flb_libco: ppc: Fix signature for co_create API (#1886)
-+
-+This patch fixes build errors for the flb_libco dependency when builidng
-+for PowerPC.
-+
-+Backported from: 731dab51a41d3635ceae5481d89d30148caac96d
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-+---
-+ lib/flb_libco/ppc.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/lib/flb_libco/ppc.c b/lib/flb_libco/ppc.c
-+index e6536d56..533256b3 100644
-+--- a/lib/flb_libco/ppc.c
-++++ b/lib/flb_libco/ppc.c
-+@@ -279,7 +279,9 @@ static uint32_t* co_create_(unsigned size, uintptr_t entry) {
-+   return t;
-+ }
-+ 
-+-cothread_t co_create(unsigned int size, void (*entry_)(void)) {
-++cothread_t co_create(unsigned int size, void (*entry_)(void),
-++                     size_t *out_size) {
-++
-+   uintptr_t entry = (uintptr_t)entry_;
-+   uint32_t* t = 0;
-+ 
-+@@ -325,7 +327,7 @@ cothread_t co_create(unsigned int size, void (*entry_)(void)) {
-+     t[10] = (uint32_t)(sp >> shift >> shift);
-+     t[11] = (uint32_t)sp;
-+   }
-+-
-++  *out_size = size;
-+   return t;
-+ }
-+ 
-+-- 
-+2.20.1
-+
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-new file mode 100644
-index 0000000000..98efaa36ff
---- /dev/null
-+++ b/package/fluent-bit/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_FLUENT_BIT
-+	bool "fluent-bit"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
++++ b/package/openFPGALoader/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_OPENFPGALOADER
++	bool "openFPGALoader"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on BR2_TOOLCHAIN_USES_GLIBC # argp
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_INSTALL_LIBSTDCPP # libftdipp1
++	depends on BR2_USE_WCHAR # libftdipp1
++	select BR2_PACKAGE_LIBFTDI1
++	select BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1
 +	help
-+	  Fluent Bit is an open source and multi-platform Log
-+	  processor and forwarder which allows you to collect
-+	  data/logs from different sources, unify and send them to
-+	  multiple destinations.
++	  Universal utility for programming FPGA
 +
-+	  http://fluentbit.io
++	  https://github.com/trabucayre/openFPGALoader/
 +
-+comment "fluent-bit needs a toolchain w/ C++, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
++comment "openFPGALoader needs a glibc toolchain w/ threads, wchar, C++, udev"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
++		!BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_HAS_UDEV
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/openFPGALoader/openFPGALoader.hash b/package/openFPGALoader/openFPGALoader.hash
 new file mode 100644
-index 0000000000..1a8e0d121c
+index 0000000000..1e65809fd3
 --- /dev/null
-+++ b/package/fluent-bit/fluent-bit.hash
++++ b/package/openFPGALoader/openFPGALoader.hash
 @@ -0,0 +1,3 @@
-+# computed locally
-+sha256  e897949356855e2a7d1a71085c7c21653b7792ef137d19d665e7b5dcd8e4d46a  fluent-bit-1.3.7.tar.gz
-+sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
++# Locally computed
++sha256 fcff4999164ee2d3734f16b7f1d2063b3a68e237921e8d63c2afe75e16cdc7ce  openFPGALoader-849e5751e06d4d00f323205d5f02ee01f9f59a61.tar.gz
++sha256 8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef  LICENSE
+diff --git a/package/openFPGALoader/openFPGALoader.mk b/package/openFPGALoader/openFPGALoader.mk
 new file mode 100644
-index 0000000000..c48d77a1fe
+index 0000000000..6706e7ffbf
 --- /dev/null
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -0,0 +1,65 @@
++++ b/package/openFPGALoader/openFPGALoader.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# fluent-bit
++# openFPGALoader
 +#
 +################################################################################
 +
-+FLUENT_BIT_VERSION = 1.3.7
-+FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
-+FLUENT_BIT_LICENSE = Apache-2.0
-+FLUENT_BIT_LICENSE_FILE = LICENSE
-+
-+# LuaJIT and filter_lua do not support cross compilation
-+FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=OFF -DFLB_FILTER_LUA=OFF
-+
-+# Only build the daemon. Disable optional build of fluent-bit.so
-+FLUENT_BIT_CONF_OPTS += -DFLB_SHARED_LIB=OFF -DBUILD_SHARED_LIBS=OFF
-+
-+# Don't build the examples
-+FLUENT_BIT_CONF_OPTS += -DFLB_EXAMPLES=OFF
-+
-+# onigmo option does not support cross compilation
-+FLUENT_BIT_CONF_OPTS += -DFLB_PARSER=OFF -DFLB_REGEX=OFF
-+
-+# backtrace option does not support cross compilation
-+FLUENT_BIT_CONF_OPTS += -DFLB_BACKTRACE=OFF
-+
-+ifeq ($(BR2_PACKAGE_HOST_FLEX)$(BR2_PACKAGE_HOST_BISON),yy)
-+FLUENT_BIT_DEPENDENCIES += host-flex host-bison
-+FLUENT_BIT_CONF_OPTS += -DFLB_RECORD_ACCESSOR=ON -DFLB_STREAM_PROCESSOR=ON
-+else
-+FLUENT_BIT_CONF_OPTS += -DFLB_RECORD_ACCESSOR=OFF -DFLB_STREAM_PROCESSOR=OFF
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
-+FLUENT_BIT_DEPENDENCIES += musl-fts
-+FLUENT_BIT_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-lfts
-+endif
-+
-+# fts.h does not support _FILE_OFFSET_BITS=64 in glibc 2.22
-+FLUENT_BIT_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
-+FLUENT_BIT_CXXFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CXXFLAGS))
-+
-+FLUENT_BIT_CONF_OPTS += -DCMAKE_C_FLAGS="$(FLUENT_BIT_CFLAGS)" \
-+			-DCMAKE_CXX_FLAGS="$(FLUENT_BIT_CXXFLAGS)"
-+
-+define FLUENT_BIT_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/init/fluent-bit.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/fluent-bit.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../..//usr/lib/systemd/system/fluent-bit.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/fluent-bit.service
-+endef
-+
-+# Install the default configuration files
-+define FLUENT_BIT_INSTALL_CONF
-+	mkdir -p $(TARGET_DIR)/etc/fluent-bit
-+	$(INSTALL) -m 0644 -D $(@D)/conf/fluent-bit.conf \
-+		$(TARGET_DIR)/etc/fluent-bit/fluent-bit.conf
-+	$(INSTALL) -m 0644 -D $(@D)/conf/plugins.conf \
-+		$(TARGET_DIR)/etc/fluent-bit/plugins.conf
-+endef
-+
-+FLUENT_BIT_POST_INSTALL_TARGET_HOOKS += FLUENT_BIT_INSTALL_CONF
++OPENFPGALOADER_VERSION = 849e5751e06d4d00f323205d5f02ee01f9f59a61
++OPENFPGALOADER_SITE = $(call github,trabucayre,openFPGALoader,$(OPENFPGALOADER_VERSION))
++OPENFPGALOADER_LICENSE = AGPL-3.0
++OPENFPGALOADER_LICENSE_FILES = LICENSE
++OPENFPGALOADER_DEPENDENCIES = libftdi1 udev
 +
 +$(eval $(cmake-package))
 -- 
-2.20.1
+2.11.0
