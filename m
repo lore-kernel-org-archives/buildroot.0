@@ -1,134 +1,151 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 17 Feb 2020 15:30:29 +0100
-Subject: [Buildroot] [PATCH 3/4] package/libblockdev: add new package
+Date: Mon, 17 Feb 2020 15:30:28 +0100
+Subject: [Buildroot] [PATCH 2/4] package/volume_key: add new package
 In-Reply-To: <20200217143030.5031-1-giulio.benetti@benettiengineering.com>
 References: <20200217143030.5031-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200217143030.5031-4-giulio.benetti@benettiengineering.com>
+Message-ID: <20200217143030.5031-3-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libblockdev is a library for manipulating block devices.
+The volume_key project provides a libvolume_key, a library for manipulating
+storage volume encryption keys and storing them separately from volumes, and an
+associated command-line tool, named volume_key.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/libblockdev/Config.in        | 22 +++++++++++++++
- package/libblockdev/libblockdev.hash |  3 +++
- package/libblockdev/libblockdev.mk   | 40 ++++++++++++++++++++++++++++
- 5 files changed, 67 insertions(+)
- create mode 100644 package/libblockdev/Config.in
- create mode 100644 package/libblockdev/libblockdev.hash
- create mode 100644 package/libblockdev/libblockdev.mk
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...ove-po-Makefile.in-entry-from-AC_CON.patch | 28 +++++++++++++++++++
+ package/volume_key/Config.in                  | 19 +++++++++++++
+ package/volume_key/volume_key.hash            |  3 ++
+ package/volume_key/volume_key.mk              | 22 +++++++++++++++
+ 6 files changed, 74 insertions(+)
+ create mode 100644 package/volume_key/0001-configure.ac-remove-po-Makefile.in-entry-from-AC_CON.patch
+ create mode 100644 package/volume_key/Config.in
+ create mode 100644 package/volume_key/volume_key.hash
+ create mode 100644 package/volume_key/volume_key.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 5276c09384..514b850c08 100644
+index 6f2dbbb11a..5276c09384 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1009,6 +1009,7 @@ F:	package/xapian/
+@@ -1016,6 +1016,7 @@ F:	package/minicom/
+ F:	package/nfs-utils/
+ F:	package/sunxi-mali-mainline/
+ F:	package/sunxi-mali-mainline-driver/
++F:	package/volume_key/
  
- N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
- F:	package/at/
-+F:	package/libblockdev/
- F:	package/libbytesize/
- F:	package/libnspr/
- F:	package/libnss/
+ N:	Gregory Dymarek <gregd72002@gmail.com>
+ F:	package/ding-libs/
 diff --git a/package/Config.in b/package/Config.in
-index a058d7d2f0..40118b58b0 100644
+index 4d76a5791f..a058d7d2f0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1456,6 +1456,7 @@ menu "Hardware handling"
- 	source "package/let-me-create/Config.in"
- 	source "package/libaio/Config.in"
- 	source "package/libatasmart/Config.in"
-+	source "package/libblockdev/Config.in"
- 	source "package/libcec/Config.in"
- 	source "package/libfreefare/Config.in"
- 	source "package/libftdi/Config.in"
-diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
+@@ -1310,6 +1310,7 @@ menu "Crypto"
+ 	source "package/tpm2-tss/Config.in"
+ 	source "package/trousers/Config.in"
+ 	source "package/ustream-ssl/Config.in"
++	source "package/volume_key/Config.in"
+ 	source "package/wolfssl/Config.in"
+ endmenu
+ 
+diff --git a/package/volume_key/0001-configure.ac-remove-po-Makefile.in-entry-from-AC_CON.patch b/package/volume_key/0001-configure.ac-remove-po-Makefile.in-entry-from-AC_CON.patch
 new file mode 100644
-index 0000000000..0b0a943d5f
+index 0000000000..44d6ee0d4b
 --- /dev/null
-+++ b/package/libblockdev/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_LIBBLOCKDEV
-+	bool "libblockdev"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # volume_key -> cryptsetup
-+	depends on BR2_USE_MMU # lvm2, volume_key -> cryptsetup
-+	depends on !BR2_STATIC_LIBS # volume_key -> cryptsetup
-+	depends on BR2_SYSTEM_ENABLE_NLS # volume_key
-+	select BR2_PACKAGE_LIBBYTESIZE
-+	select BR2_PACKAGE_LIBYAML
-+	select BR2_PACKAGE_PARTED
-+	select BR2_PACKAGE_VOLUME_KEY
-+	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-+	select BR2_PACKAGE_UTIL_LINUX
++++ b/package/volume_key/0001-configure.ac-remove-po-Makefile.in-entry-from-AC_CON.patch
+@@ -0,0 +1,28 @@
++From d1142e667f4f2f2fcd2d36a006919325c1a4377e Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sat, 25 Jan 2020 17:24:38 +0100
++Subject: [PATCH] configure.ac: remove po/Makefile.in entry from
++ AC_CONFIG_FILES
++
++AC_CONFIG_FILES should not contain po/Makefile.in file because
++gettextize will re-add it again causing build failure.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 7d3d27a..f4295ff 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -244,5 +244,5 @@ if test "$GCC" = yes ; then
++ fi
++ 
++ dnl po/Makefile
++-AC_CONFIG_FILES([Makefile contrib/Makefile doc/Makefile lib/Makefile po/Makefile.in python/Makefile python/python/Makefile python/python3/Makefile src/Makefile tests/Makefile])
+++AC_CONFIG_FILES([Makefile contrib/Makefile doc/Makefile lib/Makefile python/Makefile python/python/Makefile python/python3/Makefile src/Makefile tests/Makefile])
++ AC_OUTPUT
++-- 
++2.20.1
++
+diff --git a/package/volume_key/Config.in b/package/volume_key/Config.in
+new file mode 100644
+index 0000000000..0c0827253d
+--- /dev/null
++++ b/package/volume_key/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_VOLUME_KEY
++	bool "volume_key"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # cryptsetup, libassuan, libglib2, libgpgme, libnss
++	depends on BR2_USE_MMU # cryptsetup, libassuan, libglib2, libgpgme
++	depends on !BR2_STATIC_LIBS # cryptsetup, libnss
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme, libassuan
++	select BR2_PACKAGE_CRYPTSETUP
++	select BR2_PACKAGE_LIBASSUAN
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBGPGME
++	select BR2_PACKAGE_LIBNSS
 +	help
-+	  libblockdev is a C library supporting GObject introspection for
-+	  manipulation of block devices
++	  The volume_key project provides a libvolume_key, a library for manipulating
++	  storage volume encryption keys and storing them separately from volumes, and an
++	  associated command-line tool, named volume_key.
 +
-+	  https://github.com/storaged-project/libblockdev/
-+
-+comment "libblockdev needs udev /dev management and a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
++	  https://pagure.io/volume_key
+diff --git a/package/volume_key/volume_key.hash b/package/volume_key/volume_key.hash
 new file mode 100644
-index 0000000000..0bf9a2c934
+index 0000000000..3925429b4e
 --- /dev/null
-+++ b/package/libblockdev/libblockdev.hash
++++ b/package/volume_key/volume_key.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256 c5fc030474b44afcaedd8ea10388282534a6d5bb25488b780e645fbf0a6d4d80  libblockdev-2.23-1.tar.gz
-+sha256 97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
++sha256 f83146352464048f823c164e755dc10da0e06db024de5b1b6f78beeb8438dc22  volume_key-f56614199726ba1897d8687f0927535693b6603f.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/volume_key/volume_key.mk b/package/volume_key/volume_key.mk
 new file mode 100644
-index 0000000000..0dcab4c445
+index 0000000000..8d5bff6d8e
 --- /dev/null
-+++ b/package/libblockdev/libblockdev.mk
-@@ -0,0 +1,40 @@
++++ b/package/volume_key/volume_key.mk
+@@ -0,0 +1,22 @@
 +################################################################################
 +#
-+# libblockdev
++# volume_key
 +#
 +################################################################################
 +
-+LIBBLOCKDEV_VERSION = 2.23-1
-+LIBBLOCKDEV_SITE = $(call github,storaged-project,libblockdev,$(LIBBLOCKDEV_VERSION))
-+LIBBLOCKDEV_LICENSE = LGPL-2.1+
-+LIBBLOCKDEV_LICENSE_FILES = LICENSE
-+LIBBLOCKDEV_DEPENDENCIES = host-autoconf-archive host-pkgconf kmod \
-+			   libbytesize libyaml parted udev util-linux \
-+			   volume_key
-+LIBBLOCKDEV_INSTALL_STAGING = YES
-+LIBBLOCKDEV_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
-+LIBBLOCKDEV_AUTORECONF = YES
++VOLUME_KEY_VERSION = f56614199726ba1897d8687f0927535693b6603f
++VOLUME_KEY_SITE = https://pagure.io/volume_key.git
++VOLUME_KEY_SITE_METHOD = git
++VOLUME_KEY_LICENSE = GPL-2.0+
++VOLUME_KEY_LICENSE_FILES = COPYING
++VOLUME_KEY_DEPENDENCIES = cryptsetup libglib2 libgpgme libnss $(TARGET_NLS_DEPENDENCIES)
++VOLUME_KEY_INSTALL_STAGING = YES
++VOLUME_KEY_AUTORECONF = YES
++VOLUME_KEY_GETTEXTIZE = YES
 +
-+LIBBLOCKDEV_CONF_OPTS = --without-nvdimm
-+
-+ifeq ($(BR2_PACKAGE_DMRAID),y)
-+LIBBLOCKDEV_CONF_OPTS += --with-dmraid
-+LIBBLOCKDEV_DEPENDENCIES += dmraid
-+else
-+LIBBLOCKDEV_CONF_OPTS += --without-dmraid
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBBLOCKDEV_CONF_OPTS += --enable-introspection=yes
-+LIBBLOCKDEV_DEPENDENCIES += gobject-introspection
-+else
-+LIBBLOCKDEV_CONF_OPTS += --enable-introspection=no
-+endif
-+
-+# Autoreconf requires an existing m4 directory
-+define LIBBLOCKDEV_MKDIR_M4
-+	mkdir -p $(@D)/m4
-+endef
-+LIBBLOCKDEV_POST_PATCH_HOOKS += LIBBLOCKDEV_MKDIR_M4
++VOLUME_KEY_CONF_OPTS = --with-sysroot=$(STAGING_DIR) \
++		       --with-gpgme-prefix=$(STAGING_DIR)/usr \
++		       --without-python \
++		       --without-python3
 +
 +$(eval $(autotools-package))
 -- 
