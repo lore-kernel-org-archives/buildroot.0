@@ -1,74 +1,57 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Mon, 17 Feb 2020 22:23:34 +0100
-Subject: [Buildroot] [PATCH v6 12/28] package/qt5webkit: Convert to qmake
- infra
+Date: Mon, 17 Feb 2020 22:23:35 +0100
+Subject: [Buildroot] [PATCH v6 13/28] package/qt5webkit-examples: Convert to
+ qmake infra
 In-Reply-To: <20200217212350.29750-1-anaumann@ultratronik.de>
 References: <20200217212350.29750-1-anaumann@ultratronik.de>
-Message-ID: <20200217212350.29750-13-anaumann@ultratronik.de>
+Message-ID: <20200217212350.29750-14-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mostly straightforward conversion.
-The jsc binary was not installed automatically. Unsure of its significance
-the custom install command is kept in a hook.
-
-Note:
-The generic install creates QtWebProcess in /usr/libexec/ instead of /usr/bin.
+Straightforward conversion. Only conditional dependencies have to remain.
 
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- package/qt5/qt5webkit/qt5webkit.mk | 29 +++++++----------------------
- 1 file changed, 7 insertions(+), 22 deletions(-)
+ .../qt5webkit-examples/qt5webkit-examples.mk  | 23 +------------------
+ 1 file changed, 1 insertion(+), 22 deletions(-)
 
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-index 25c5495482..f20fa24b9c 100644
---- a/package/qt5/qt5webkit/qt5webkit.mk
-+++ b/package/qt5/qt5webkit/qt5webkit.mk
-@@ -37,35 +37,20 @@ endif
- # QtWebkit's build system uses python, but only supports python2. We work
- # around this by forcing python2 early in the PATH, via a python->python2
- # symlink.
--QT5WEBKIT_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
-+QT5WEBKIT_CONF_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
-+QT5WEBKIT_MAKE_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
- define QT5WEBKIT_PYTHON2_SYMLINK
- 	mkdir -p $(@D)/host-bin
- 	ln -sf $(HOST_DIR)/bin/python2 $(@D)/host-bin/python
- endef
- QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
+diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
+index 94153fd652..1f6058657d 100644
+--- a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
++++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
+@@ -26,29 +26,8 @@ ifeq ($(BR2_PACKAGE_QT5XMLPATTERNS),y)
+ QT5WEBKIT_EXAMPLES_DEPENDENCIES += qt5xmlpatterns
+ endif
  
--define QT5WEBKIT_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(HOST_DIR)/bin/qmake WEBKIT_CONFIG+=use_system_leveldb)
+-define QT5WEBKIT_EXAMPLES_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
 -endef
 -
--define QT5WEBKIT_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(MAKE) -C $(@D)
+-define QT5WEBKIT_EXAMPLES_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 -endef
 -
--define QT5WEBKIT_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(MAKE) -C $(@D) install
+-define QT5WEBKIT_EXAMPLES_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
 -endef
-+QT5WEBKIT_CONF_OPTS = WEBKIT_CONFIG+=use_system_leveldb
- 
--ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
--define QT5WEBKIT_INSTALL_TARGET_QMLS
--	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebKit $(TARGET_DIR)/usr/qml/
--endef
--endif
 -
--define QT5WEBKIT_INSTALL_TARGET_CMDS
--	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebKit*.so.* $(TARGET_DIR)/usr/lib
-+define QT5WEBKIT_INSTALL_TARGET_EXTRAS
- 	cp -dpf $(@D)/bin/* $(TARGET_DIR)/usr/bin/
--	$(QT5WEBKIT_INSTALL_TARGET_QMLS)
- endef
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5WEBKIT_EXAMPLES_DEPENDENCIES += qt5declarative
+-define QT5WEBKIT_EXAMPLES_INSTALL_QML
+-	cp -dpfr $(@D)/examples/webkitqml $(TARGET_DIR)/usr/lib/qt/examples
+-endef
+ endif
  
+-define QT5WEBKIT_EXAMPLES_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/lib/qt/examples
+-	cp -dpfr $(@D)/examples/webkitwidgets $(TARGET_DIR)/usr/lib/qt/examples
+-	$(QT5WEBKIT_EXAMPLES_INSTALL_QML)
+-endef
+-
 -$(eval $(generic-package))
-+QT5WEBKIT_POST_INSTALL_TARGET_HOOKS += QT5WEBKIT_INSTALL_TARGET_EXTRAS
-+
 +$(eval $(qmake-package))
 -- 
 2.25.0
