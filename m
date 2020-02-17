@@ -1,77 +1,63 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 17 Feb 2020 12:04:21 +0000
-Subject: [Buildroot] [Bug 11926] Cross compiled Qt applications aren't
- working anymore
-In-Reply-To: <bug-11926-163@https.bugs.busybox.net/>
-References: <bug-11926-163@https.bugs.busybox.net/>
-Message-ID: <bug-11926-163-wSVsd1pbIP@https.bugs.busybox.net/>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 17 Feb 2020 13:16:25 +0100
+Subject: [Buildroot] [PATCH] package/libxml2: add upstream security fix for
+ CVE-2019-20388
+Message-ID: <20200217121626.31154-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11926
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
---- Comment #10 from Peter Seiderer <ps.report@gmx.net> ---
-(In reply to Martin from comment #9)
+Fixes CVE-2019-20388: xmlSchemaPreRun in xmlschemas.c in libxml2 2.9.10
+allows an xmlSchemaValidateStream memory leak.
 
-Hello Martin,
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ ...mory-leak-in-xmlSchemaValidateStream.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/libxml2/0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch
 
-can reproduce your problem with the given defconfig (independent of the custom
-setting BR2_HOST_DIR or using the default).
-
-Using sunxi-mali-mainline I get:
-
-    $ readelf -d target/usr/bin/qtdiag | grep libGLESv2
-    0x00000001 (NEEDED)                     Shared library:
-[/my_build_path/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libGLESv2.so]
-
-
-Same defconfig changed to rpi-userland leads to:
-
-    $ readelf -d target/usr/bin/qtdiag | grep libGLESv2
-    0x00000001 (NEEDED)                     Shared library: [libGLESv2.so]
-
-
-For sunxi-mali-mainline:
-
-    $ cat
-host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig/glesv2.pc
-    prefix=/usr
-    exec_prefix=${prefix}
-    libdir=${exec_prefix}/lib
-    includedir=${prefix}/include
-
-    Name: glesv2
-    Description: ARM Mali implementation of OpenGL ESv2
-    Version: 2.0
-    Requires:
-    Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
-    Cflags: -I${includedir}
-
-
-For rpi-userland:
-
-    $ cat
-host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig/glesv2.pc 
-    prefix=/usr
-    exec_prefix=${prefix}
-    libdir=${exec_prefix}/lib
-    includedir=${prefix}/include
-
-    Name: glesv2
-    Description: RasberryPi implementation of OpenGL ESv2
-    Version: 2.0
-    Libs: -L${libdir} -lGLESv2
-    Cflags: -I${includedir}/
-
-
-Did not see where the different linking comes from...
-
-Regards,
-Peter
-
+diff --git a/package/libxml2/0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch b/package/libxml2/0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch
+new file mode 100644
+index 0000000000..49ff6fbe00
+--- /dev/null
++++ b/package/libxml2/0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch
+@@ -0,0 +1,33 @@
++From 7ffcd44d7e6c46704f8af0321d9314cd26e0e18a Mon Sep 17 00:00:00 2001
++From: Zhipeng Xie <xiezhipeng1@huawei.com>
++Date: Tue, 20 Aug 2019 16:33:06 +0800
++Subject: [PATCH] Fix memory leak in xmlSchemaValidateStream
++
++When ctxt->schema is NULL, xmlSchemaSAXPlug->xmlSchemaPreRun
++alloc a new schema for ctxt->schema and set vctxt->xsiAssemble
++to 1. Then xmlSchemaVStart->xmlSchemaPreRun initialize
++vctxt->xsiAssemble to 0 again which cause the alloced schema
++can not be freed anymore.
++
++Found with libFuzzer.
++
++Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
++---
++ xmlschemas.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/xmlschemas.c b/xmlschemas.c
++index 301c8449..39d92182 100644
++--- a/xmlschemas.c
+++++ b/xmlschemas.c
++@@ -28090,7 +28090,6 @@ xmlSchemaPreRun(xmlSchemaValidCtxtPtr vctxt) {
++     vctxt->nberrors = 0;
++     vctxt->depth = -1;
++     vctxt->skipDepth = -1;
++-    vctxt->xsiAssemble = 0;
++     vctxt->hasKeyrefs = 0;
++ #ifdef ENABLE_IDC_NODE_TABLES_TEST
++     vctxt->createIDCNodeTables = 1;
++-- 
++2.24.1
++
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.24.1
