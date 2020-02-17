@@ -1,45 +1,48 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Mon, 17 Feb 2020 22:23:43 +0100
-Subject: [Buildroot] [PATCH v6 21/28] package/python-sip: Fix qmake usage
- for per-package build
+Date: Mon, 17 Feb 2020 22:23:45 +0100
+Subject: [Buildroot] [PATCH v6 23/28] package/qt5webengine: add libXdamage
+ as XCB dependency
 In-Reply-To: <20200217212350.29750-1-anaumann@ultratronik.de>
 References: <20200217212350.29750-1-anaumann@ultratronik.de>
-Message-ID: <20200217212350.29750-22-anaumann@ultratronik.de>
+Message-ID: <20200217212350.29750-24-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since python-sip is not built by the qmake infra, we need to explicitly
-integrate the qt.conf fixup needed for successful per-package build and
-consistently use qmake via QT5_QMAKE variable.
+Fixes a build failure.
 
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- package/python-sip/python-sip.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/qt5/qt5webengine/Config.in       | 1 +
+ package/qt5/qt5webengine/qt5webengine.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
-index 1d6c205396..7ae2d43e1e 100644
---- a/package/python-sip/python-sip.mk
-+++ b/package/python-sip/python-sip.mk
-@@ -38,6 +38,7 @@ define HOST_PYTHON_SIP_INSTALL_CMDS
- endef
+diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+index 0e776ecb61..f98530fa4d 100644
+--- a/package/qt5/qt5webengine/Config.in
++++ b/package/qt5/qt5webengine/Config.in
+@@ -59,6 +59,7 @@ config BR2_PACKAGE_QT5WEBENGINE
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_QT5BASE_XCB
+ 	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER if BR2_PACKAGE_QT5BASE_XCB
+ 	select BR2_PACKAGE_XLIB_LIBXTST if BR2_PACKAGE_QT5BASE_XCB
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_QT5BASE_XCB
+ 	help
+ 	  The Qt WebEngine module provides a web browser engine that
+ 	  makes it easy to embed content from the World Wide Web into
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+index 798b777df0..cd7a0ba81c 100644
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -23,7 +23,7 @@ QT5WEBENGINE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT \
  
- define PYTHON_SIP_CONFIGURE_CMDS
-+	$(QT5_QT_CONF_FIXUP)
- 	(cd $(@D); \
- 		$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/bin/python configure.py \
- 			--bindir $(TARGET_DIR)/usr/bin \
-@@ -46,7 +47,7 @@ define PYTHON_SIP_CONFIGURE_CMDS
- 			--sipdir $(TARGET_DIR)/usr/share/sip \
- 			--sysroot $(STAGING_DIR)/usr \
- 			--use-qmake && \
--		$(HOST_DIR)/bin/qmake)
-+		$(QT5_QMAKE))
- endef
+ ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+ QT5WEBENGINE_DEPENDENCIES += xlib_libXScrnSaver xlib_libXcomposite \
+-	xlib_libXcursor xlib_libXi xlib_libXrandr xlib_libXtst
++	xlib_libXcursor xlib_libXi xlib_libXrandr xlib_libXtst xlib_libXdamage
+ endif
  
- define PYTHON_SIP_BUILD_CMDS
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
 -- 
 2.25.0
