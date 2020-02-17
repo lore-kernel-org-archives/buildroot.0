@@ -1,46 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Feb 2020 10:12:24 +0100
-Subject: [Buildroot] [PATCH 1/2] support/run-tests: reorder imports
-In-Reply-To: <CAGm1_ktNXE41xmTqVb5vBbJvZJ2sik0XZ9f8wxEg9iDVTs=53w@mail.gmail.com>
- (Yegor Yefremov's message of "Mon, 17 Feb 2020 09:10:08 +0100")
-References: <20200213100906.11506-1-yegorslists@googlemail.com>
- <87eeuufvg8.fsf@dell.be.48ers.dk>
- <CAGm1_ktU8-WuO=93jBRts7TExzJ=NbZYKO0QzbzWuthQYuaAqQ@mail.gmail.com>
- <87r1ytd4kd.fsf@dell.be.48ers.dk>
- <CAGm1_ktNXE41xmTqVb5vBbJvZJ2sik0XZ9f8wxEg9iDVTs=53w@mail.gmail.com>
-Message-ID: <87imk5d1c7.fsf@dell.be.48ers.dk>
+Date: Mon, 17 Feb 2020 10:13:08 +0100
+Subject: [Buildroot] [git commit] support/run-tests: reorder imports
+Message-ID: <20200217090133.D4EF78E378@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5abe7e4ce3e098ddb7a060e24f2f8aa60b0353a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > On Mon, Feb 17, 2020 at 9:02 AM Peter Korsgaard <peter@korsgaard.com> wrote:
- >> 
- >> >>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
- >> 
- >> > Hi Peter,
- >> > On Sun, Feb 16, 2020 at 3:39 PM Peter Korsgaard <peter@korsgaard.com> wrote:
- >> >>
- >> >> >>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
- >> >>
- >> >> > From: Yegor Yefremov <yegorslists@googlemail.com>
- >> >> > Reorder imports using the isort utility.
- >> >>
- >> >> Why? Does the current order cause any issues or warnings from linters?
- >> 
- >> > I get this warning:
- >> 
- >> > wrong-import-order: standard import "import multiprocessing" should be
- >> > placed before "import nose2"
- >> 
- >> Ok, From what checker do you get this warning?
+Reorder imports using the isort utility to fix a warning from pylint3:
 
- > pylint3 support/testing/run-tests
+wrong-import-order: standard import "import multiprocessing" should be
+placed before "import nose2"
 
-Ok, committed with that added to the commit message, thanks.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/testing/run-tests | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index f295c053ff..022209b414 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -1,9 +1,10 @@
+ #!/usr/bin/env python3
+ import argparse
+-import sys
++import multiprocessing
+ import os
++import sys
++
+ import nose2
+-import multiprocessing
+ 
+ from infra.basetest import BRConfigTest
+ 
