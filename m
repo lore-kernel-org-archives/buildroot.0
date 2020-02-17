@@ -1,41 +1,65 @@
-From: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
-Date: Mon, 17 Feb 2020 15:37:59 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-pathlib2: select
- python-scandir
-In-Reply-To: <CALFsTFWKxZkoyyxJETMsO1966tm5OGr8aWSWYCX6p4bk9+_fLQ@mail.gmail.com>
-References: <20191216194815.5436-1-asafka7@gmail.com>
- <20191222144200.048e1559@windsurf>
- <CALFsTFWKxZkoyyxJETMsO1966tm5OGr8aWSWYCX6p4bk9+_fLQ@mail.gmail.com>
-Message-ID: <CADDqny+MWBJGCAQnk3sRjTteXSM63Jtgq8Ki2SrSgYU974WMzQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 17 Feb 2020 22:46:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qpdf: fix build with gcc 4.8
+Message-ID: <20200217214601.1600353-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Asaf, All,
+Fixes:
+ - http://autobuild.buildroot.org/results/ad7fb68ae87850a85509eed80fd0cae8721b10c5
 
-On Sun, Dec 22, 2019 at 11:39 AM Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> Yeah that's true, but pathlib2 can be chosen only for python 2,
-> so we can say for sure it's needed.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ests-cxx11.cc-fix-build-with-gcc-4.8.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/qpdf/0001-libtests-cxx11.cc-fix-build-with-gcc-4.8.patch
 
-I can confirm that pathlib2 will crash on first invocation when using
-python2 if BR2_PACKAGE_PYTHON_SCANDIR is not enabled.
-
-Thanks,
-
-Conrad
+diff --git a/package/qpdf/0001-libtests-cxx11.cc-fix-build-with-gcc-4.8.patch b/package/qpdf/0001-libtests-cxx11.cc-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..76504c7475
+--- /dev/null
++++ b/package/qpdf/0001-libtests-cxx11.cc-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,38 @@
++From e70c2605a11d12a8eeee3e7eec46077956e11e1f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 17 Feb 2020 22:36:08 +0100
++Subject: [PATCH] libtests/cxx11.cc: fix build with gcc 4.8
++
++Build fails on gcc 4.8 since version 9.1.1 and commit
++752416554086d5d34323bc14164d5084db83cfbd:
++
++libtests/cxx11.cc: In function 'void do_regex()':
++libtests/cxx11.cc:347:42: error: 'strlen' is not a member of 'std'
++     std::cregex_iterator m3(str7, str7 + std::strlen(str7), expr4);
++                                          ^
++
++To fix the build failure, add missing include on cstring
++
++Fixes:
++ - http://autobuild.buildroot.org/results/ad7fb68ae87850a85509eed80fd0cae8721b10c5
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/qpdf/qpdf/pull/400]
++---
++ libtests/cxx11.cc | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libtests/cxx11.cc b/libtests/cxx11.cc
++index fa1dc6b..91ed7b1 100644
++--- a/libtests/cxx11.cc
+++++ b/libtests/cxx11.cc
++@@ -1,5 +1,6 @@
++ #include <iostream>
++ #include <cassert>
+++#include <cstring>
++ #include <functional>
++ #include <type_traits>
++ #include <cstdint>
++-- 
++2.24.1
++
 -- 
-Conrad Ratschan | Software Engineer | Commercial Avionics
-COLLINS AEROSPACE
-400 Collins Road NE, Cedar Rapids, IA 52498, USA
-conrad.ratschan at collins.com | collinsaerospace.com
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
+2.24.1
