@@ -1,118 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Feb 2020 00:46:39 +0100
-Subject: [Buildroot] [PATCH 2/2] package/apache: fix build with per-package
- directory support
-In-Reply-To: <20200217234639.107108-1-thomas.petazzoni@bootlin.com>
-References: <20200217234639.107108-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200217234639.107108-2-thomas.petazzoni@bootlin.com>
+Date: Tue, 18 Feb 2020 00:50:47 +0100
+Subject: [Buildroot] [PATCH] package/pkg-python: fix for per-package
+ directories
+Message-ID: <20200217235048.107343-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When APR_INCLUDEDIR and APU_INCLUDEDIR point to the same directory,
-Apache builds properly. However, with per-package directory support,
-they point to different directories, and APU_INCLUDEDIR contains both
-the APR headers and the APU headers.
+With per-package directory support, Python external modules are
+causing a problem: the _sysconfigdata.py module installed by the
+Python interpreter contains a number of paths that are relative to the
+current package per-package directory, i.e python or python3. For
+example:
 
-Due to this, the Apache Makefile logic to generate its exports.c file
-leads to duplicate definitions, because the APR headers are considered
-twice: once from APR_INCLUDEDIR, once from APU_INCLUDEDIR.
+'BLDSHARED': '/home/thomas/projets/buildroot/output/per-package/python/host/bin/arm-linux-gcc -shared',
+'CC': '/home/thomas/projets/buildroot/output/per-package/python/host/bin/arm-linux-gcc',
+'CXX': '/home/thomas/projets/buildroot/output/per-package/python/host/bin/arm-linux-g++',
+etc.
 
-We fix this by introducing a patch to the Apache build system.
+These paths are problematic, because it means that the wrong compiler
+gets used when building external Python modules: instead of using the
+compiler from the external Python module per-package host directory,
+it uses the one from the 'python' or 'python3' per-package host
+directory. Due to this, any native dependency needed by the external
+Python module is not found, even though it is properly present in the
+current package per-package directory.
 
-In addition, apr provides a special libtool script that gets used by
-apr-util and apache. apr-util already had a fixup for this, but apache
-did not, which was causing the gcc from apr-util per-package
-directories be used during the apache build, causing build failures.
+Of course, the problem occurs with both target Python modules and host
+Python modules.
 
-To fix this, we adjust this libtool script to point to the correct
-tools in apache's per-package directories.
+To fix this, we simply rewrite those paths in _sysconfigdata.py before
+building a Python package.
 
-There are no autobuilder failures for this, because Apache needs
-apr-util, and apr-util currently fails to build when
-BR2_PER_PACKAGE_DIRECTORIES=y.
+Interestingly, until now, the _sysconfidata.py that was used during
+the build was the one from $(TARGET_DIR), which is a bit unusual: it
+is more common to use files from $(STAGING_DIR) during the build
+process. So this commit changes the PYTHON_PATH and PYTHON3_PATH
+variables so that they point to $(STAGING_DIR), which makes the
+_sysconfigdata.py fixup in $(STAGING_DIR) effective.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/a24b0555fd4261b50dc3986635c30717d9cbe764/ (python-psycopg2)
+  http://autobuild.buildroot.net/results/080fa893e1b0e7a8c8a31ac1c98eb8871b97264d/ (python-alsaaudio)
+  http://autobuild.buildroot.net/results/79bc070f98d6d9d8ef78df12b248cdc7d0e405c3/ (python-lxml)
+  and many more Python packages that use native code with a native library
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...in-handle-separate-APR_INCLUDE_DIR-A.patch | 48 +++++++++++++++++++
- package/apache/apache.mk                      |  8 ++++
- 2 files changed, 56 insertions(+)
- create mode 100644 package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch
+ package/pkg-python.mk      | 10 ++++++++++
+ package/python/python.mk   |  2 +-
+ package/python3/python3.mk |  2 +-
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch b/package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch
-new file mode 100644
-index 0000000000..b4ad128677
---- /dev/null
-+++ b/package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch
-@@ -0,0 +1,48 @@
-+From 00281390e82db18fe0de4033be4045f9391a8ee5 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 15 Nov 2018 14:04:29 +0100
-+Subject: [PATCH] server/Makefile.in: handle separate
-+ APR_INCLUDE_DIR/APU_INCLUDE_DIR
-+
-+If APR_INCLUDEDIR and APU_INCLUDEDIR point to different directories,
-+but for example APU_INCLUDEDIR contains both the apr headers and apu
-+headers, the "export_files" file will contain duplicate header files,
-+causing the exports.c file to contain duplicate definitions, making
-+the build fail.
-+
-+This commit fixes that by making sure we only use the apr headers from
-+APR_INCLUDEDIR and the apu headers from the APU_INCLUDEDIR.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream: https://bz.apache.org/bugzilla/show_bug.cgi?id=62930
-+---
-+ server/Makefile.in | 6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
-+
-+diff --git a/server/Makefile.in b/server/Makefile.in
-+index 1fa334467d..2258f0bdf2 100644
-+--- a/server/Makefile.in
-++++ b/server/Makefile.in
-+@@ -34,7 +34,6 @@ test_char.h: gen_test_char
-+ util.lo: test_char.h
-+ 
-+ EXPORT_DIRS = $(top_srcdir)/include $(top_srcdir)/os/$(OS_DIR)
-+-EXPORT_DIRS_APR = $(APR_INCLUDEDIR) $(APU_INCLUDEDIR)
-+ 
-+ # If export_files is a dependency here, but we remove it during this stage,
-+ # when exports.c is generated, make will not detect that export_files is no
-+@@ -60,9 +59,8 @@ export_files:
-+ 	      ls $$dir/*.h ; \
-+ 	  done; \
-+ 	  echo "$(top_srcdir)/server/mpm_fdqueue.h"; \
-+-	  for dir in $(EXPORT_DIRS_APR); do \
-+-	      ls $$dir/ap[ru].h $$dir/ap[ru]_*.h 2>/dev/null; \
-+-	  done; \
-++	  ls $(APR_INCLUDE_DIR)/{apr.h,apr_*.h} 2>/dev/null; \
-++	  ls $(APU_INCLUDE_DIR)/{apu.h,apu_*.h} 2>/dev/null; \
-+ 	) | sed -e s,//,/,g | sort -u > $@
-+ 
-+ exports.c: export_files
-+-- 
-+2.19.1
-+
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 22e7be8832..5fcb9e5371 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -16,6 +16,14 @@ APACHE_INSTALL_STAGING = YES
- APACHE_AUTORECONF = YES
- APACHE_DEPENDENCIES = apr apr-util pcre
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 4ded4fde83..4bf762e662 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -90,6 +90,14 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 	--root=/ \
+ 	--single-version-externally-managed
  
 +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-+define APACHE_FIXUP_APR_LIBTOOL
-+	$(SED) "s@$(PER_PACKAGE_DIR)/[^/]\+/@$(PER_PACKAGE_DIR)/apache/@g" \
-+		$(STAGING_DIR)/usr/build-1/libtool
++define PKG_PYTHON_FIXUP_SYSCONFIGDATA
++	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
++		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
++		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
 +endef
-+APACHE_POST_CONFIGURE_HOOKS += APACHE_FIXUP_APR_LIBTOOL
 +endif
 +
- APACHE_CONF_ENV= \
- 	ap_cv_void_ptr_lt_long=no \
- 	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre-config
+ ################################################################################
+ # inner-python-package -- defines how the configuration, compilation
+ # and installation of a Python package should be done, implements a
+@@ -234,6 +242,8 @@ $(2)_PYTHON_INTERPRETER = $$(HOST_DIR)/bin/$$($(2)_NEEDS_HOST_PYTHON)
+ endif
+ endif
+ 
++$(2)_PRE_CONFIGURE_HOOKS += PKG_PYTHON_FIXUP_SYSCONFIGDATA
++
+ #
+ # Build step. Only define it if not already defined by the package .mk
+ # file.
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 41a981e3d3..1c393b255d 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -240,7 +240,7 @@ HOST_PYTHON_POST_INSTALL_HOOKS += HOST_PYTHON_INSTALL_PYTHON_SYMLINK
+ endif
+ 
+ # Provided to other packages
+-PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
++PYTHON_PATH = $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 9432f1c59e..6a12c1f0e8 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -253,7 +253,7 @@ HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
+ endif
+ 
+ # Provided to other packages
+-PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/
++PYTHON3_PATH = $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/
+ 
+ # Support for socket.AF_BLUETOOTH
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_HEADERS),y)
 -- 
 2.24.1
