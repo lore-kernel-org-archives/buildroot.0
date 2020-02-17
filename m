@@ -1,83 +1,43 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 17 Feb 2020 00:33:59 -0700
-Subject: [Buildroot] [PATCH 1/1] package/gensio: bump to version 1.5.2
-Message-ID: <20200217073359.46923-1-james.hilliard1@gmail.com>
+From: Ludovic Desroches <ludovic.desroches@microchip.com>
+Date: Mon, 17 Feb 2020 08:42:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-simplejson: bump to
+ version 3.17.0
+In-Reply-To: <874kvqhank.fsf@dell.be.48ers.dk>
+References: <20200213055608.76191-1-james.hilliard1@gmail.com>
+ <874kvqhank.fsf@dell.be.48ers.dk>
+Message-ID: <20200217074230.bzyxboycybkiy4ua@M43218.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...tests-Makefile-am-don-t-add-lpthread.patch | 29 -------------------
- package/gensio/gensio.hash                    |  6 ++--
- package/gensio/gensio.mk                      |  2 +-
- 3 files changed, 4 insertions(+), 33 deletions(-)
- delete mode 100644 package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch
+On Sun, Feb 16, 2020 at 03:25:19PM +0100, Peter Korsgaard wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+> 
+>  > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> 
+> Committed, thanks.
+> 
+> What is the use case for this library in Buildroot? Isn't it just
+> identical to the json module included with python / python3?
 
-diff --git a/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch b/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch
-deleted file mode 100644
-index 5a9f3b7da5..0000000000
---- a/package/gensio/0001-tests-Makefile-am-don-t-add-lpthread.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From f63b15e690581d898da56ef2540b6199f5728e58 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 11 Feb 2020 19:14:53 +0100
--Subject: [PATCH] tests/Makefile.am: don't add -lpthread
--
--Don't add -lpthread unconditionally to oomtest_LDADD to avoid a build
--failure without threads, it will be added to LIBS by configure.ac if
--needed
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/cminyard/gensio/commit/f63b15e690581d898da56ef2540b6199f5728e58]
-----
-- tests/Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/tests/Makefile.am b/tests/Makefile.am
--index a280acc..b4335c5 100644
----- a/tests/Makefile.am
--+++ b/tests/Makefile.am
--@@ -127,7 +127,7 @@ test_fuzz: test_fuzz_certauth test_fuzz_mux test_fuzz_ssl test_fuzz_telnet \
-- 
-- oomtest_SOURCES = oomtest.c
-- 
---oomtest_LDADD = $(top_builddir)/lib/libgensio.la $(OPENSSL_LIBS) -lpthread
--+oomtest_LDADD = $(top_builddir)/lib/libgensio.la $(OPENSSL_LIBS)
-- 
-- noinst_PROGRAMS = oomtest
-- 
-diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
-index 623b41904c..b63e459f16 100644
---- a/package/gensio/gensio.hash
-+++ b/package/gensio/gensio.hash
-@@ -1,7 +1,7 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5  53c027dfaaf374f57d5f36a6250fc018  gensio-1.5.1.tar.gz
--sha1  8329d7828016e643f60b8b3e70564d32cd03008f  gensio-1.5.1.tar.gz
-+md5  eecceb741c34708deb8b29b7b84d5bd0  gensio-1.5.2.tar.gz
-+sha1  4209ba80ecd1ead930ee8d9e60f384afd20481bd  gensio-1.5.2.tar.gz
- # Locally computed:
--sha256  c1ed28f5bd72185dba666a900d29afbecba58727d6c0dde4a182143273fc1e6b  gensio-1.5.1.tar.gz
-+sha256  9213b05bcab615fe5b9c5d71bb5fe765500271941980ba606904ffc5d0cd30fa  gensio-1.5.2.tar.gz
- sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
- sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index 0386b30fd7..5272c3c0d7 100644
---- a/package/gensio/gensio.mk
-+++ b/package/gensio/gensio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GENSIO_VERSION = 1.5.1
-+GENSIO_VERSION = 1.5.2
- GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GENSIO_LICENSE_FILES = COPYING.LIB COPYING
--- 
-2.20.1
+Hi,
+
+Long time ago it was a requirement for Lava, that's why I introduced it.
+Since we are no longer using it and I know many changes happened to this
+project, I don't know if it's still needed.
+
+Regards
+
+Ludovic
+
+> 
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
