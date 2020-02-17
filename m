@@ -1,55 +1,62 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Mon, 17 Feb 2020 20:19:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5charts: fix install with
- per-package
-In-Reply-To: <20200217011357.2c7d1f95@windsurf>
-References: <20200216194230.1413696-1-fontaine.fabrice@gmail.com>
- <20200216212356.43072c64@gmx.net>
- <CAPi7W80D9eZJDs-0N+5SA1Z5PGJB-1hvn6h1Dz=aWW=SfSGKMQ@mail.gmail.com>
- <20200217011357.2c7d1f95@windsurf>
-Message-ID: <5d345f8c-aab1-5df8-4cef-0f4f0376d1ab@andin.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 17 Feb 2020 20:39:08 +0100
+Subject: [Buildroot] [PATCH] package/libxml2: add upstream security fix
+ for CVE-2019-20388
+In-Reply-To: <20200217121626.31154-1-patrickdepinguin@gmail.com>
+References: <20200217121626.31154-1-patrickdepinguin@gmail.com>
+Message-ID: <20200217203908.19c223e9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Hello,
 
-Am 17.02.20 um 01:13 schrieb Thomas Petazzoni:
-> Hello,
-> 
-> On Sun, 16 Feb 2020 22:03:48 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
->>> The original 'libQt5Charts.so.2.1.3' file is installed into the qt5base per-package directory instead
->>> of the qt5charts per-package directory one...
->> Indeed, you're right, I thought my patch was fixing the issue but it
->> was not. The issue was fixed by running make qt5charts-dirclean and
->> make qt5charts a second time ...
->> It should be noted that the same kind of build failure are raised on
->> qt5svg, qt5webengine, qt5xmlpatterns and qt5scripts.
->> There is patch in patchwork from March 2019 that could fix this issue
->> but it is set as superseded:
->> https://patchwork.ozlabs.org/patch/1056425/.
-> 
-> Andreas Naumann (in Cc) is working on making Qt5 compatible with
-> per-package directory builds.
+On Mon, 17 Feb 2020 13:16:25 +0100
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-Yes, actually I'm still not quite happy with what I have, or better, 
-with the amount of testing that I got done, but I guess I'll just send 
-what I have now and see your comments.
-
-Anyway, my approach to fix above issue is to use per-package customized 
-versions of qt.conf with the per-package sysroot and derive target 
-install from these folders also.
-
-
-best regards,
-Andreas
-
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > 
-> Best regards,
+> Fixes CVE-2019-20388: xmlSchemaPreRun in xmlschemas.c in libxml2 2.9.10
+> allows an xmlSchemaValidateStream memory leak.
 > 
-> Thomas
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  ...mory-leak-in-xmlSchemaValidateStream.patch | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/libxml2/0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch
 > 
+> diff --git a/package/libxml2/0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch b/package/libxml2/0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch
+> new file mode 100644
+> index 0000000000..49ff6fbe00
+> --- /dev/null
+> +++ b/package/libxml2/0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch
+> @@ -0,0 +1,33 @@
+> +From 7ffcd44d7e6c46704f8af0321d9314cd26e0e18a Mon Sep 17 00:00:00 2001
+> +From: Zhipeng Xie <xiezhipeng1@huawei.com>
+> +Date: Tue, 20 Aug 2019 16:33:06 +0800
+> +Subject: [PATCH] Fix memory leak in xmlSchemaValidateStream
+> +
+> +When ctxt->schema is NULL, xmlSchemaSAXPlug->xmlSchemaPreRun
+> +alloc a new schema for ctxt->schema and set vctxt->xsiAssemble
+> +to 1. Then xmlSchemaVStart->xmlSchemaPreRun initialize
+> +vctxt->xsiAssemble to 0 again which cause the alloced schema
+> +can not be freed anymore.
+> +
+> +Found with libFuzzer.
+> +
+> +Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
+
+Thanks Thomas for sending security patches! :-)
+
+We request patches to have a SoB line from the person submitting them.
+Could you add your SoB here ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
