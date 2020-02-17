@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Feb 2020 00:28:39 +0100
-Subject: [Buildroot] [PATCH v2 2/4] package/arm-gnu-a-toolchain: new
- package
-In-Reply-To: <c869c9ee905f59cbe6cc1b51143293c9@walle.cc>
-References: <1581590685-31680-1-git-send-email-sunil@amarulasolutions.com>
- <1581590685-31680-3-git-send-email-sunil@amarulasolutions.com>
- <c869c9ee905f59cbe6cc1b51143293c9@walle.cc>
-Message-ID: <20200217002839.247728a5@windsurf>
+Date: Mon, 17 Feb 2020 01:13:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5charts: fix install with
+ per-package
+In-Reply-To: <CAPi7W80D9eZJDs-0N+5SA1Z5PGJB-1hvn6h1Dz=aWW=SfSGKMQ@mail.gmail.com>
+References: <20200216194230.1413696-1-fontaine.fabrice@gmail.com>
+ <20200216212356.43072c64@gmx.net>
+ <CAPi7W80D9eZJDs-0N+5SA1Z5PGJB-1hvn6h1Dz=aWW=SfSGKMQ@mail.gmail.com>
+Message-ID: <20200217011357.2c7d1f95@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +15,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 14 Feb 2020 13:32:46 +0100
-Michael Walle <michael@walle.cc> wrote:
+On Sun, 16 Feb 2020 22:03:48 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> > pre-built bate metal ARM GNU-A toolchain installs into the host file
-> > system folder
-> > /opt/gcc-arm-none-eabi.
-> > 
-> > https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz  
-> 
-> Can this be some kind of virtual package? What if I don't like a 
-> prebuild
-> binary, if I don't have a x86_64 buildhost or want to have another gcc 
-> version.
+> > The original 'libQt5Charts.so.2.1.3' file is installed into the qt5base per-package directory instead
+> > of the qt5charts per-package directory one...  
+> Indeed, you're right, I thought my patch was fixing the issue but it
+> was not. The issue was fixed by running make qt5charts-dirclean and
+> make qt5charts a second time ...
+> It should be noted that the same kind of build failure are raised on
+> qt5svg, qt5webengine, qt5xmlpatterns and qt5scripts.
+> There is patch in patchwork from March 2019 that could fix this issue
+> but it is set as superseded:
+> https://patchwork.ozlabs.org/patch/1056425/.
 
-We can only support a pre-built toolchain for this: our toolchain
-infrastructure only supports building a single toolchain, which is the
-toolchain targetting Linux. Here, it's only for the case where the
-target architecture is ARM64, *but* some firmware needs to be built for
-ARM32 that we need a secondary toolchain.
-
-To solve this, in the context of Buildroot, there is not much choice
-besides using a pre-built toolchain for this secondary toolchain.
-
-If you need another toolchain for some other firmware, then just create
-a different package for it, and use it when building your firmware.
-
-Creating a virtual package would make things more complicated here: one
-can only "depends on" a virtual package, so the user would have to know
-that he needs to enable this toolchain package in order to be able to
-build ATF.
-
-I believe what is being proposed here is the most reasonable solution
-we can do while keeping things simple.
+Andreas Naumann (in Cc) is working on making Qt5 compatible with
+per-package directory builds.
 
 Best regards,
 
