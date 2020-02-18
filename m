@@ -1,52 +1,47 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Tue, 18 Feb 2020 10:43:17 +0100
-Subject: [Buildroot] [PATCH v6 06/28] package/qwt: Add missing qt5svg
- dependency
-In-Reply-To: <20200217225611.571c3eec@windsurf>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-7-anaumann@ultratronik.de>
- <20200217225611.571c3eec@windsurf>
-Message-ID: <2c74699f-c4d5-d4ed-8c4f-16594484c6f6@andin.de>
+From: lpdev at cordier.org <lpdev@cordier.org>
+Date: Tue, 18 Feb 2020 10:45:15 +0100 (CET)
+Subject: [Buildroot] Add BR2_EXTRA_CXX_FLAGS to be appended to
+ TARGET_CXXFLAGS
+Message-ID: <ea-mime-5e4bb22b-5970-2e2a6b21@www-2.mailo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Dear all,
 
-Am 17.02.20 um 22:56 schrieb Thomas Petazzoni:
-> On Mon, 17 Feb 2020 22:23:28 +0100
-> Andreas Naumann <anaumann@ultratronik.de> wrote:
-> 
->> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
->> ---
->>   package/qwt/qwt.mk | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
->> index 1fec17b19a..50df7e2642 100644
->> --- a/package/qwt/qwt.mk
->> +++ b/package/qwt/qwt.mk
->> @@ -19,6 +19,7 @@ QWT_CONFIG += -e 's%/features%/mkspecs/features%'
->>   
->>   ifeq ($(BR2_PACKAGE_QWT_SVG),y)
->>   QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtSvg.*$$/QWT_CONFIG += QwtSvg/'
->> +QWT_DEPENDENCIES += qt5svg
->>   else
->>   QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtSvg.*$$/\# QWT_CONFIG += QwtSvg/'
->>   endif
-> 
-> This looks like a fix we should apply today. Why doesn't this trigger
-> any autobuilder failure?
 
-Probably because qwt is built after qt5svg (more or less by chance). 
-However, in per-package mode this becomes a problem because the libs are 
-not copied to the qwt per-package staging.
 
-regards,
-Andreas
+For some reason, I need to disable cxx11 ABI on my entire buildroot build. AFAIK, it is currently not possible to set project-wide cxx flag, like _GLIBCXX_USE_CXX11_ABI=0. Currently this flag has to be set on all package manually.
 
-> 
-> Thomas
-> 
+
+
+After studying a bit the buildroot makefiles, TARGET_CXXFLAGS is populated by some buildroot options, such as BR2_BINFMT_FLAT, etc.
+
+
+
+I see 2 possible solutions to solve that:
+
+
+
+- at the buildroot build level, add an option like BR2_USE_CXX11_ABI, or more generally, BR2_EXTRA_CXX_FLAGS (that can be extended to cflags as well).
+
+- at the buildroot toolchain build level, add an option in the buildroot toolchain that allows to control the CXX11 ABI
+
+
+
+What do you think about that?
+
+
+
+Thanks
+
+
+
+Louis-Paul CORDIER
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200218/0a05770d/attachment.html>
