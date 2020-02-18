@@ -1,60 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Feb 2020 09:42:25 +0100
-Subject: [Buildroot] [PATCH] package/owfs: fixup Python sysconfigdata
- for per-package directories
-In-Reply-To: <20200217235523.107701-1-thomas.petazzoni@bootlin.com>
-References: <20200217235523.107701-1-thomas.petazzoni@bootlin.com>
-Message-ID: <7bf974a2-e1cb-4c34-2ad0-f0ac83d7279d@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 18 Feb 2020 01:43:39 -0700
+Subject: [Buildroot] [PATCH 1/1] package/cog: add patch fixing cog segfault
+Message-ID: <20200218084339.21371-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+Thread 1 "cog" received signal SIGSEGV, Segmentation fault.
+xkb_state_update_mask (state=0x0, base_mods=0, latched_mods=0, locked_mods=0, base_group=base_group at entry=0, latched_group=latched_group at entry=0, locked_group=0) at ../src/state.c:814
+814	    prev_components = state->components;
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ ...ata.state-is-not-null-before-calling.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
 
-On 18/02/2020 00:55, Thomas Petazzoni wrote:
-> This is needed so that building the owfs Python module uses the gcc
-> from owfs per-package directory, and not the one from the python
-> per-package directory.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/0d582dda367507991a4c38141db36b0fa8e47e67/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/owfs/owfs.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
-> index 7668735ff5..ffc0b3098d 100644
-> --- a/package/owfs/owfs.mk
-> +++ b/package/owfs/owfs.mk
-> @@ -87,6 +87,16 @@ OWFS_DEPENDENCIES += python host-swig
->  # Patching owfs to do the right thing is not trivial, it's much easier to
->  # override the PYSITEDIR variable in make.
->  OWFS_EXTRA_MAKE_OPTS += PYSITEDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-> +
-> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-> +define OWFS_FIXUP_PYTHON_SYSCONFIGDATA
-> +	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
-> +		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
-> +		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/owfs/:g"
-
- Why is this needed for owfs and not for all the other python packages?
-
- I wanted to look at the autobuild failure but unfortunately it seems the server
-is unresponsive...
-
- Regards,
- Arnout
-
-> +endef
-> +OWFS_PRE_CONFIGURE_HOOKS += OWFS_FIXUP_PYTHON_SYSCONFIGDATA
-> +endif
-> +
->  else
->  OWFS_CONF_OPTS += --disable-owpython --without-python
->  endif
-> 
+diff --git a/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch b/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
+new file mode 100644
+index 0000000000..4e8d4ad121
+--- /dev/null
++++ b/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
+@@ -0,0 +1,30 @@
++From 9f1f1e64b65e6680d5cdedf5a3b753ef85fc01f4 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Tue, 18 Feb 2020 01:20:50 -0700
++Subject: [PATCH] fdo: ensure xkb_data.state is not null before calling
++ xkb_state_update_mask (#180)
++
++[james.hilliard1 at gmail.com: backport from upstream commit
++9f1f1e64b65e6680d5cdedf5a3b753ef85fc01f4]
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++---
++ platform/cog-platform-fdo.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/platform/cog-platform-fdo.c b/platform/cog-platform-fdo.c
++index 36177fc..e6f1cb5 100644
++--- a/platform/cog-platform-fdo.c
+++++ b/platform/cog-platform-fdo.c
++@@ -894,6 +894,9 @@ keyboard_on_modifiers (void *data,
++                        uint32_t mods_locked,
++                        uint32_t group)
++ {
+++    if (xkb_data.state == NULL)
+++        return;
+++
++     xkb_state_update_mask (xkb_data.state,
++                            mods_depressed,
++                            mods_latched,
++-- 
++2.20.1
++
+-- 
+2.20.1
