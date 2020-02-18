@@ -1,23 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 18 Feb 2020 10:09:28 +0000
-Subject: [Buildroot] [Bug 12271] python-iptables runtime dependencies
-In-Reply-To: <bug-12271-163@https.bugs.busybox.net/>
-References: <bug-12271-163@https.bugs.busybox.net/>
-Message-ID: <bug-12271-163-n7QelyiE9t@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 18 Feb 2020 13:38:29 +0100
+Subject: [Buildroot] [PATCH] package/owfs: fixup Python sysconfigdata
+ for per-package directories
+In-Reply-To: <7bf974a2-e1cb-4c34-2ad0-f0ac83d7279d@mind.be>
+References: <20200217235523.107701-1-thomas.petazzoni@bootlin.com>
+ <7bf974a2-e1cb-4c34-2ad0-f0ac83d7279d@mind.be>
+Message-ID: <20200218133829.78d5dfef@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12271
+Hello Arnout,
 
-Frank Vanbever <frank.vanbever+brbugzilla@essensium.com> changed:
+On Tue, 18 Feb 2020 09:42:25 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+>  Why is this needed for owfs and not for all the other python packages?
 
+Well:
+
+  https://patchwork.ozlabs.org/patch/1239695/
+
+is doing exactly the same thing in the python-package infra for all
+other Python packages.
+
+Best regards,
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
