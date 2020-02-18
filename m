@@ -1,64 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Feb 2020 15:46:12 +0100
+Date: Tue, 18 Feb 2020 15:47:39 +0100
 Subject: [Buildroot] [PATCH 2/4] package/volume_key: add new package
-In-Reply-To: <20bd5175-2e2c-a2b8-0ff0-350d58e01a9b@benettiengineering.com>
+In-Reply-To: <7785b80a-8198-23ed-5bed-9485c0a31075@benettiengineering.com>
 References: <20200217143030.5031-1-giulio.benetti@benettiengineering.com>
  <20200217143030.5031-3-giulio.benetti@benettiengineering.com>
  <20200217195114.7336e67e@windsurf>
  <20bd5175-2e2c-a2b8-0ff0-350d58e01a9b@benettiengineering.com>
-Message-ID: <20200218154612.4fc237a6@windsurf>
+ <7785b80a-8198-23ed-5bed-9485c0a31075@benettiengineering.com>
+Message-ID: <20200218154739.7617bb04@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Tue, 18 Feb 2020 14:46:17 +0100
+On Tue, 18 Feb 2020 15:06:47 +0100
 Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> >> diff --git a/package/volume_key/0001-configure.ac-remove-po-Makefile.in-entry-from-AC_CON.patch b/package/volume_key/0001-configure.ac-remove-po-Makefile.in-entry-from-AC_CON.patch
-> >> new file mode 100644
-> >> index 0000000000..44d6ee0d4b
-> >> --- /dev/null
-> >> +++ b/package/volume_key/0001-configure.ac-remove-po-Makefile.in-entry-from-AC_CON.patch
-> >> @@ -0,0 +1,28 @@
-> >> +From d1142e667f4f2f2fcd2d36a006919325c1a4377e Mon Sep 17 00:00:00 2001
-> >> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> >> +Date: Sat, 25 Jan 2020 17:24:38 +0100
-> >> +Subject: [PATCH] configure.ac: remove po/Makefile.in entry from
-> >> + AC_CONFIG_FILES
-> >> +
-> >> +AC_CONFIG_FILES should not contain po/Makefile.in file because
-> >> +gettextize will re-add it again causing build failure.
-> >> +
-> >> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>  
+> >> AC_PATH_PROG([GPG], [gpg2])
+> >> AC_ARG_VAR([GPG])
+> >> AC_DEFINE_UNQUOTED([GPG_PATH], "$GPG", [Path to the gpg2 executable])
+> >>
+> >> So don't we need gnupg on the host for this to work ?  
 > > 
-> > Was this reported upstream?  
+> > Yes, host-gnupg2, I've missed it since my distro provides it.  
 > 
-> Not this patch, because the issue happens only when gettextizing, and if 
-> instead you build without getextizing it fails. So I don't think 
-> upstream will be interested about it, what do you think?
-> This was a doubt I had while dealing with this.
+> I've retried building, gnupg2 only is supported but it's not mandatory 
+> to build. So as I can understand we can avoid adding host-gnupg2.
 
-Well, it is a problem if one can't autoreconf/gettextize the upstream
-project as-is, no?
-
-> > I see:
-> > 
-> > PKG_CHECK_MODULES(blkid, [blkid])
-> > 
-> > don't we need the blkid library from util-linux ? I see it is selected
-> > by cryptsetup, which is why it works.  
-> 
-> Yes, but if cryptsetup already selects it, do I need to repeat it in 
-> volume-key dependencies?
-
-I think since the configure.ac explicitly checks it, it makes sense to
-not rely on the fact that a dependency by chance also uses it.
-
-Thanks,
+Weird, I thought AC_PATH_PROG() was aborting if the tool was not found.
+If that's not the case, then we should ensure the build never uses
+gpg2, even if available, so that the build result doesn't depend on
+whether gpg2 is available system-wide or not.
 
 Thomas
 -- 
