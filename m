@@ -1,45 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Feb 2020 19:44:18 +0100
-Subject: [Buildroot] [PATCH 2/2] Makefile: don't recreate staging
- symlink if it exists
-In-Reply-To: <CAAXf6LWzJA5tnAXs3KMPip77men=bjgRYKf_KOUizrjP4WHkPg@mail.gmail.com>
-References: <20200218150101.22274-1-patrickdepinguin@gmail.com>
- <20200218150101.22274-2-patrickdepinguin@gmail.com>
- <20200218164003.21afcd94@windsurf>
- <CAAXf6LWzJA5tnAXs3KMPip77men=bjgRYKf_KOUizrjP4WHkPg@mail.gmail.com>
-Message-ID: <20200218194418.5f38002b@windsurf>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Tue, 18 Feb 2020 19:49:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-markdown: bump to
+ version 3.2.1
+In-Reply-To: <20200213051534.53563-1-james.hilliard1@gmail.com>
+References: <20200213051534.53563-1-james.hilliard1@gmail.com>
+Message-ID: <20200218194953.5dbe8970@x230_1.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 Feb 2020 18:59:49 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+Hi James,
+On Wed, 12 Feb 2020 22:15:34 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> > The question that comes to mind is: why are you building something
-> > against the Buildroot toolchain/sysroot, before the Buildroot build has
-> > completed ?  
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-markdown/python-markdown.hash | 4 ++--
+>  package/python-markdown/python-markdown.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> No, the initial Buildroot build _is_ completed first. Then the
-> application build starts according to the scenario described.
-> In our case, the extra Buildroot 'make' is done to let Buildroot
-> create the images, passing a custom TARGET_DIR which is an extended
-> copy of the original output/target. This step happens multiple times
-> for different boards, out of the same Buildroot (the boards differ a
-> bit in our own software plus perhaps some other customization done in
-> the rootfs). From the perspective of the application build, the fact
-> that Buildroot 'make' is called shouldn't matter because all the files
-> it needs will not be touched. Buildroot itself is also retained as-is,
-> except it is asked to produce images.
+> diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
+> index 6eff2035bb..8c72072432 100644
+> --- a/package/python-markdown/python-markdown.hash
+> +++ b/package/python-markdown/python-markdown.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/markdown/json
+> -md5	d84732ecc65b3a1bff693d9d4c24277f  Markdown-3.1.1.tar.gz
+> -sha256	2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a  Markdown-3.1.1.tar.gz
+> +md5	7a894dc55992b37cdbcba5c4049455fc  Markdown-3.2.1.tar.gz
+> +sha256	90fee683eeabe1a92e149f7ba74e5ccdc81cd397bd6c516d93a8da0ef90b6902  Markdown-3.2.1.tar.gz
 
-Ah, ok. Convoluted use case, but OK. Anyway, the change makes sense, so
-we'll apply. Thanks for the additional explanation!
+The new .hash convention is to use 2 spaces between fields, like : <type>  <hash>  <name>
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>  # Locally computed sha256
+>  sha256	6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
+> diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+> index a8311168f5..1f352fd7f1 100644
+> --- a/package/python-markdown/python-markdown.mk
+> +++ b/package/python-markdown/python-markdown.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_MARKDOWN_VERSION = 3.1.1
+> +PYTHON_MARKDOWN_VERSION = 3.2.1
+>  PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
+> -PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/ac/df/0ae25a9fd5bb528fe3c65af7143708160aa3b47970d5272003a1ad5c03c6
+> +PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/98/79/ce6984767cb9478e6818bd0994283db55c423d733cc62a88a3ffb8581e11
+>  PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
+>  PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+>  PYTHON_MARKDOWN_SETUP_TYPE = setuptools
+> -- 
+> 2.20.1
+> 
+Regards,
+Gwenhael
