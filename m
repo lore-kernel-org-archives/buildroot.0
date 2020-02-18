@@ -1,109 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Feb 2020 04:06:04 +0100
-Subject: [Buildroot] [git commit branch/next] package/openfpgaloader: new
- package
-Message-ID: <20200219025442.3DBC68E4FB@busybox.osuosl.org>
+Date: Wed, 19 Feb 2020 00:43:21 +0100
+Subject: [Buildroot] [git commit branch/next] package/avahi: drop most of
+ the AVAHI_CONF_ENV vars
+Message-ID: <20200219025442.3233F8E4FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c27c7ea4648f1ea071075eacca8ab15ea218fa89
+commit: https://git.buildroot.net/buildroot/commit/?id=02bd5eb59ff113203ea60ffee68bfdbacc4c9245
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-openFPGALoader is a tool for programming FPGA.
+Most are legacy from when the package was added and not really necessary.
 
-Signed-off-by: Jean Burgat <jeanburgat33@gmail.com>
+This commit is based on dropping the CONF_ENV vars in libgtk2 [1].
+
+[1] https://git.buildroot.net/buildroot/commit/package/libgtk2/libgtk2.mk?id=4d80cbdf6c2c186da26f36575d6635604f00d29a
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  3 +++
- package/Config.in                          |  1 +
- package/openfpgaloader/Config.in           | 18 ++++++++++++++++++
- package/openfpgaloader/openfpgaloader.hash |  3 +++
- package/openfpgaloader/openfpgaloader.mk   | 18 ++++++++++++++++++
- 5 files changed, 43 insertions(+)
+ package/avahi/avahi.mk | 51 +-------------------------------------------------
+ 1 file changed, 1 insertion(+), 50 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e4a3bcb24a..69b460f12c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1216,6 +1216,9 @@ F:	package/quota/
- N:	Jason Pruitt <jrspruitt@gmail.com>
- F:	package/librtlsdr/
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 53021f6b6d..23127edcb9 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -10,56 +10,7 @@ AVAHI_LICENSE = LGPL-2.1+
+ AVAHI_LICENSE_FILES = LICENSE
+ AVAHI_INSTALL_STAGING = YES
  
-+N:	Jean Burgat <jeanburgat33@gmail.com>
-+F:	package/openfpgaloader/
-+
- N:	Jens Kleintje <scooby22@web.de>
- F:	package/gcnano-binaries/
+-AVAHI_CONF_ENV = \
+-	ac_cv_func_strtod=yes \
+-	ac_fsusage_space=yes \
+-	fu_cv_sys_stat_statfs2_bsize=yes \
+-	ac_cv_func_closedir_void=no \
+-	ac_cv_func_getloadavg=no \
+-	ac_cv_lib_util_getloadavg=no \
+-	ac_cv_lib_getloadavg_getloadavg=no \
+-	ac_cv_func_getgroups=yes \
+-	ac_cv_func_getgroups_works=yes \
+-	ac_cv_func_chown_works=yes \
+-	ac_cv_have_decl_euidaccess=no \
+-	ac_cv_func_euidaccess=no \
+-	ac_cv_have_decl_strnlen=yes \
+-	ac_cv_func_strnlen_working=yes \
+-	ac_cv_func_lstat_dereferences_slashed_symlink=yes \
+-	ac_cv_func_lstat_empty_string_bug=no \
+-	ac_cv_func_stat_empty_string_bug=no \
+-	vb_cv_func_rename_trailing_slash_bug=no \
+-	ac_cv_have_decl_nanosleep=yes \
+-	jm_cv_func_nanosleep_works=yes \
+-	gl_cv_func_working_utimes=yes \
+-	ac_cv_func_utime_null=yes \
+-	ac_cv_have_decl_strerror_r=yes \
+-	ac_cv_func_strerror_r_char_p=no \
+-	jm_cv_func_svid_putenv=yes \
+-	ac_cv_func_getcwd_null=yes \
+-	ac_cv_func_getdelim=yes \
+-	ac_cv_func_mkstemp=yes \
+-	utils_cv_func_mkstemp_limitations=no \
+-	utils_cv_func_mkdir_trailing_slash_bug=no \
+-	jm_cv_func_gettimeofday_clobber=no \
+-	am_cv_func_working_getline=yes \
+-	gl_cv_func_working_readdir=yes \
+-	jm_ac_cv_func_link_follows_symlink=no \
+-	utils_cv_localtime_cache=no \
+-	ac_cv_struct_st_mtim_nsec=no \
+-	gl_cv_func_tzset_clobber=no \
+-	gl_cv_func_getcwd_null=yes \
+-	gl_cv_func_getcwd_path_max=yes \
+-	ac_cv_func_fnmatch_gnu=yes \
+-	am_getline_needs_run_time_check=no \
+-	am_cv_func_working_getline=yes \
+-	gl_cv_func_mkdir_trailing_slash_bug=no \
+-	gl_cv_func_mkstemp_limitations=no \
+-	ac_cv_func_working_mktime=yes \
+-	jm_cv_func_working_re_compile_pattern=yes \
+-	ac_use_included_regex=no \
+-	avahi_cv_sys_cxx_works=yes \
+-	DATADIRNAME=share
++AVAHI_CONF_ENV = DATADIRNAME=share
  
-diff --git a/package/Config.in b/package/Config.in
-index dfa3f34b9d..53cf280c8e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -499,6 +499,7 @@ endmenu
- 	source "package/ofono/Config.in"
- 	source "package/on2-8170-modules/Config.in"
- 	source "package/open2300/Config.in"
-+	source "package/openfpgaloader/Config.in"
- 	source "package/openipmi/Config.in"
- 	source "package/openocd/Config.in"
- 	source "package/openpowerlink/Config.in"
-diff --git a/package/openfpgaloader/Config.in b/package/openfpgaloader/Config.in
-new file mode 100644
-index 0000000000..9835b84b64
---- /dev/null
-+++ b/package/openfpgaloader/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_OPENFPGALOADER
-+	bool "openfpgaloader"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi1
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_INSTALL_LIBSTDCPP # libftdipp1
-+	depends on BR2_USE_WCHAR # libftdipp1
-+	select BR2_PACKAGE_ARGP_STANDALONE \
-+	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL # argp
-+	select BR2_PACKAGE_LIBFTDI1
-+	select BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1
-+	help
-+	  Universal utility for programming FPGA
-+
-+	  https://github.com/trabucayre/openFPGALoader/
-+
-+comment "openfpgaloader needs udev, a toolchain w/ threads, wchar, C++"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/openfpgaloader/openfpgaloader.hash b/package/openfpgaloader/openfpgaloader.hash
-new file mode 100644
-index 0000000000..a084e938b0
---- /dev/null
-+++ b/package/openfpgaloader/openfpgaloader.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  fcff4999164ee2d3734f16b7f1d2063b3a68e237921e8d63c2afe75e16cdc7ce  openfpgaloader-849e5751e06d4d00f323205d5f02ee01f9f59a61.tar.gz
-+sha256  8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef  LICENSE
-diff --git a/package/openfpgaloader/openfpgaloader.mk b/package/openfpgaloader/openfpgaloader.mk
-new file mode 100644
-index 0000000000..f806fd68f9
---- /dev/null
-+++ b/package/openfpgaloader/openfpgaloader.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# openfpgaloader
-+#
-+################################################################################
-+
-+OPENFPGALOADER_VERSION = 849e5751e06d4d00f323205d5f02ee01f9f59a61
-+OPENFPGALOADER_SITE = $(call github,trabucayre,openFPGALoader,$(OPENFPGALOADER_VERSION))
-+OPENFPGALOADER_LICENSE = AGPL-3.0
-+OPENFPGALOADER_LICENSE_FILES = LICENSE
-+OPENFPGALOADER_DEPENDENCIES = libftdi1 udev
-+
-+ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-+OPENFPGALOADER_DEPENDENCIES += argp-standalone
-+OPENFPGALOADER_CONF_OPTS += -DCMAKE_CXX_STANDARD_LIBRARIES="-largp"
-+endif
-+
-+$(eval $(cmake-package))
+ # Note: even if we have Gtk2 and Gtk3 support in Buildroot, we
+ # explicitly disable support for them, in order to avoid the following
