@@ -1,74 +1,126 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 18 Feb 2020 16:08:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cog: add patch fixing cog
- segfault
-In-Reply-To: <20200218084339.21371-1-james.hilliard1@gmail.com>
-References: <20200218084339.21371-1-james.hilliard1@gmail.com>
-Message-ID: <20200218160857.GC245372@momiji>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Tue, 18 Feb 2020 15:15:57 +0100
+Subject: [Buildroot] [PATCH v3] package/openfpgaloader: new package
+In-Reply-To: <20200218083247.15882-1-jeanburgat33@gmail.com>
+References: <20200218083247.15882-1-jeanburgat33@gmail.com>
+Message-ID: <20200218151557.66b95a9b@x230_1.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 Feb 2020 01:43:39 -0700, James Hilliard <james.hilliard1@gmail.com> wrote:
-> Fixes:
-> Thread 1 "cog" received signal SIGSEGV, Segmentation fault.
-> xkb_state_update_mask (state=0x0, base_mods=0, latched_mods=0, locked_mods=0, base_group=base_group at entry=0, latched_group=latched_group at entry=0, locked_group=0) at ../src/state.c:814
-> 814	    prev_components = state->components;
+On Tue, 18 Feb 2020 09:32:47 +0100
+Jean Burgat <jeanburgat33@gmail.com> wrote:
+
+> openFPGALoader is a tool for programming FPGA.
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
-
+> Signed-off-by: Jean Burgat <jeanburgat33@gmail.com>
 > ---
->  ...ata.state-is-not-null-before-calling.patch | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
+> Changes v2 -> v3
+>  - hash: use 2 spaces (Heiko)
+> Changes v1 -> v2
+>  - openFPGALoader -> openfpgaloader (Thomas)
+>  - merge DEVELOPERS in first patch (Thomas)
+>  - select BR2_PACKAGE_ARGP_STANDALONE when non glibc (Thomas)
+> ---
+>  DEVELOPERS                                 |  3 +++
+>  package/Config.in                          |  1 +
+>  package/openfpgaloader/Config.in           | 18 ++++++++++++++++++
+>  package/openfpgaloader/openfpgaloader.hash |  3 +++
+>  package/openfpgaloader/openfpgaloader.mk   | 18 ++++++++++++++++++
+>  5 files changed, 43 insertions(+)
+>  create mode 100644 package/openfpgaloader/Config.in
+>  create mode 100644 package/openfpgaloader/openfpgaloader.hash
+>  create mode 100644 package/openfpgaloader/openfpgaloader.mk
 > 
-> diff --git a/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch b/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
-> new file mode 100644
-> index 0000000000..4e8d4ad121
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index e4a3bcb24a..69b460f12c 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1216,6 +1216,9 @@ F:	package/quota/
+>  N:	Jason Pruitt <jrspruitt@gmail.com>
+>  F:	package/librtlsdr/
+>  
+> +N:	Jean Burgat <jeanburgat33@gmail.com>
+> +F:	package/openfpgaloader/
+> +
+>  N:	Jens Kleintje <scooby22@web.de>
+>  F:	package/gcnano-binaries/
+>  
+> diff --git a/package/Config.in b/package/Config.in
+> index dfa3f34b9d..53cf280c8e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -499,6 +499,7 @@ endmenu
+>  	source "package/ofono/Config.in"
+>  	source "package/on2-8170-modules/Config.in"
+>  	source "package/open2300/Config.in"
+> +	source "package/openfpgaloader/Config.in"
+>  	source "package/openipmi/Config.in"
+>  	source "package/openocd/Config.in"
+>  	source "package/openpowerlink/Config.in"
+> diff --git a/package/openfpgaloader/Config.in
+> b/package/openfpgaloader/Config.in new file mode 100644
+> index 0000000000..24551fb414
 > --- /dev/null
-> +++ b/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
-> @@ -0,0 +1,30 @@
-> +From 9f1f1e64b65e6680d5cdedf5a3b753ef85fc01f4 Mon Sep 17 00:00:00 2001
-> +From: James Hilliard <james.hilliard1@gmail.com>
-> +Date: Tue, 18 Feb 2020 01:20:50 -0700
-> +Subject: [PATCH] fdo: ensure xkb_data.state is not null before calling
-> + xkb_state_update_mask (#180)
+> +++ b/package/openfpgaloader/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_OPENFPGALOADER
+> +	bool "openfpgaloader"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi1
+> +	depends on BR2_PACKAGE_HAS_UDEV
+> +	depends on BR2_INSTALL_LIBSTDCPP # libftdipp1
+> +	depends on BR2_USE_WCHAR # libftdipp1
+> +	select BR2_PACKAGE_ARGP_STANDALONE \
+> +	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL # argp
+> +	select BR2_PACKAGE_LIBFTDI1
+> +	select BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1
+> +	help
+> +	  Universal utility for programming FPGA
 > +
-> +[james.hilliard1 at gmail.com: backport from upstream commit
-> +9f1f1e64b65e6680d5cdedf5a3b753ef85fc01f4]
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +---
-> + platform/cog-platform-fdo.c | 3 +++
-> + 1 file changed, 3 insertions(+)
+> +	  https://github.com/trabucayre/openFPGALoader/
 > +
-> +diff --git a/platform/cog-platform-fdo.c b/platform/cog-platform-fdo.c
-> +index 36177fc..e6f1cb5 100644
-> +--- a/platform/cog-platform-fdo.c
-> ++++ b/platform/cog-platform-fdo.c
-> +@@ -894,6 +894,9 @@ keyboard_on_modifiers (void *data,
-> +                        uint32_t mods_locked,
-> +                        uint32_t group)
-> + {
-> ++    if (xkb_data.state == NULL)
-> ++        return;
-> ++
-> +     xkb_state_update_mask (xkb_data.state,
-> +                            mods_depressed,
-> +                            mods_latched,
-> +-- 
-> +2.20.1
+> +comment "openfpgaloader needs a toolchain w/ threads, wchar, C++, udev"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+> +		!BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_HAS_UDEV
+> diff --git a/package/openfpgaloader/openfpgaloader.hash
+> b/package/openfpgaloader/openfpgaloader.hash new file mode 100644
+> index 0000000000..037d4915ae
+> --- /dev/null
+> +++ b/package/openfpgaloader/openfpgaloader.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256  fcff4999164ee2d3734f16b7f1d2063b3a68e237921e8d63c2afe75e16cdc7ce
+> openfpgaloader-849e5751e06d4d00f323205d5f02ee01f9f59a61.tar.gz +sha256
+> 8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef  LICENSE
+> diff --git a/package/openfpgaloader/openfpgaloader.mk
+> b/package/openfpgaloader/openfpgaloader.mk new file mode 100644 index
+> 0000000000..372a684e62 --- /dev/null
+> +++ b/package/openfpgaloader/openfpgaloader.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# openfpgaloader
+> +#
+> +################################################################################
 > +
+> +OPENFPGALOADER_VERSION = 849e5751e06d4d00f323205d5f02ee01f9f59a61
+> +OPENFPGALOADER_SITE = $(call
+> github,trabucayre,openFPGALoader,$(OPENFPGALOADER_VERSION))
+> +OPENFPGALOADER_LICENSE = AGPL-3.0 +OPENFPGALOADER_LICENSE_FILES = LICENSE
+> +OPENFPGALOADER_DEPENDENCIES = libftdi1 udev
+> +
+> +ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+> +OPENFPGALOADER_DEPENDENCIES += argp-standalone
+> +OPENFPGALOADER_CONF_OPTS = -DCMAKE_CXX_STANDARD_LIBRARIES="-largp"
+> +endif
+> +
+> +$(eval $(cmake-package))
 > -- 
-> 2.20.1
+> 2.11.0
 > 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200218/940e17ea/attachment.asc>
+Compile-tested-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+
+Best regards,
+Gwenhael
