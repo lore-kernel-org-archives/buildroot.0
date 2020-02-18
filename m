@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 18 Feb 2020 10:08:58 +0000
+Date: Tue, 18 Feb 2020 10:09:28 +0000
 Subject: [Buildroot] [Bug 12271] python-iptables runtime dependencies
 In-Reply-To: <bug-12271-163@https.bugs.busybox.net/>
 References: <bug-12271-163@https.bugs.busybox.net/>
-Message-ID: <bug-12271-163-2CG5LD2PXh@https.bugs.busybox.net/>
+Message-ID: <bug-12271-163-n7QelyiE9t@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,8 +16,7 @@ Frank Vanbever <frank.vanbever+brbugzilla@essensium.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |frank.vanbever+brbugzilla at e
-                   |.org                        |ssensium.com
+             Status|NEW                         |ASSIGNED
 
 -- 
 You are receiving this mail because:
