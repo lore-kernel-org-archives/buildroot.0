@@ -1,169 +1,96 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 18 Feb 2020 14:38:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5webengine: Fix building
- against system ffmpeg
-In-Reply-To: <CAOgXH4cKir4gopXC8vi0rENaamo4aw=Epv2dShmCgRv3wwNFQg@mail.gmail.com>
-References: <CAOgXH4cKir4gopXC8vi0rENaamo4aw=Epv2dShmCgRv3wwNFQg@mail.gmail.com>
-Message-ID: <20200218143854.1cbe341e@gmx.net>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Tue, 18 Feb 2020 07:44:02 -0600
+Subject: [Buildroot] [PATCH v2 2/3] package/mesa3d-headers: fix install
+ of dri.pc
+In-Reply-To: <20191023062220.5646-2-bernd.kuhls@t-online.de>
+References: <20191023062220.5646-1-bernd.kuhls@t-online.de>
+ <20191023062220.5646-2-bernd.kuhls@t-online.de>
+Message-ID: <83b7dd57-52cb-2c8f-07f1-8f08f907242e@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nathan,
+Tested xserver_xorg-server and nvidia-driver builds with this patch applied
 
-thanks for taking care of bug 12416 and the provided patch!
+Tested-by: Vincent Fazio <vfazio@xes-inc.com>
 
-On Wed, 22 Jan 2020 11:19:22 -0500, Nathan Ford <nford@westpond.com> wrote:
-
->  As of QT 5.10 the WEBENGINE_CONFIG options have been
->  removed in favor of configure command line options.
->  dist/changes-5.9.0 and dist/changes-5.10.0 document
->  this.
-
-No need for additional indent here...
-
+On 10/23/19 1:22 AM, Bernd Kuhls wrote:
+> Due to the switch of mesa3d to the meson build system the upstream
+> tarball does not include dri.pc.in anymore, it is created during the
+> build now:
+> https://cgit.freedesktop.org/mesa/mesa/tree/src/mesa/drivers/dri/meson.build?h=19.2#n93
 >
-> qt5webengine also now requires webp mux support or the auto
-> detection of ffmpeg will fail.
+> In order to provide dri.pc we need to add a version taken from a dri-
+> based mesa3d build to our source repository, by doing so we can reduce
+> the number of sed commands.
 >
-> This fixes bug 12416
-
-Your patch is based on the one provided in the bug report [1]
-(plus the additional webp_mux and alsa changes)?
-
-If so mention it here ;-)
-
+> Without this patch the build of xserver_xorg-server, switched to virtual
+> opengl provider, will fail:
 >
-> Signed-off-by: Nathan Ford <nford@westpond.com>
+> checking for XSERVERCFLAGS... no
+> configure: error: Package requirements (fixesproto >= 5.0 damageproto
+>   >= 1.1 xcmiscproto >= 1.2.0 xtrans >= 1.3.5 bigreqsproto >= 1.1.0
+>   xproto >= 7.0.31 randrproto >= 1.6.0 renderproto >= 0.11 xextproto
+>   >= 7.2.99.901 inputproto >= 2.3 kbproto >= 1.0.3 fontsproto >= 2.1.3
+>   pixman-1 >= 0.27.2 videoproto recordproto >= 1.13.99.1 resourceproto
+>   >= 1.2.0 xf86driproto >= 2.1.0 glproto >= 1.4.17 dri >= 7.8.0 dri3proto
+>   presentproto >= 1.1 xineramaproto xkbfile  pixman-1 >= 0.27.2 xfont2
+>   >= 2.0.0 xau xshmfence >= 1.1 xdmcp) were not met:
 >
-> diff --git a/package/qt5/qt5webengine/Config.in
-> b/package/qt5/qt5webengine/Config.in
-> index 0e776ec..18e4418 100644
-> --- a/package/qt5/qt5webengine/Config.in
-> +++ b/package/qt5/qt5webengine/Config.in
-> @@ -42,6 +42,7 @@ config BR2_PACKAGE_QT5WEBENGINE
->         select BR2_PACKAGE_OPUS
->         select BR2_PACKAGE_WEBP
->         select BR2_PACKAGE_WEBP_DEMUX
-> +       select BR2_PACKAGE_WEBP_MUX
->         select BR2_PACKAGE_QT5BASE_DBUS
->         select BR2_PACKAGE_QT5BASE_EGLFS
->         select BR2_PACKAGE_QT5BASE_FONTCONFIG
-> diff --git a/package/qt5/qt5webengine/qt5webengine.mk
-> b/package/qt5/qt5webengine/qt5webengine.mk
-> index 1d5ee8d..5a2ca6d 100644
-> --- a/package/qt5/qt5webengine/qt5webengine.mk
-> +++ b/package/qt5/qt5webengine/qt5webengine.mk
-> @@ -30,16 +30,16 @@ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
->  QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
->  endif
+> Package 'dri', required by 'virtual:world', not found
 >
-> -QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_system_ffmpeg
-> +QT5WEBENGINE_QMAKEFLAGS += -webengine-ffmpeg
-
-Buildroot still supports two qt versions, Qt-latest (5.12.7) and Qt-LTS
-(5.6.x)..., so there is the need to support both configure methods (unless
-the new one although works for 5.6.x)...
-
 >
->  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
-> -QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_proprietary_codecs
-> +QT5WEBENGINE_QMAKEFLAGS += -webengine-proprietary-codecs
->  endif
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: no changes, included in new series switching xserver_xorg-server
+>      to virtual opengl provider
 >
->  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_ALSA),y)
->  QT5WEBENGINE_DEPENDENCIES += alsa-lib
->  else
-> -QT5WEBENGINE_QMAKEFLAGS += QT_CONFIG-=alsa
-> +QT5WEBENGINE_QMAKEFLAGS += -no-webengine-alsa
->  endif
+>   package/mesa3d-headers/dri.pc            | 10 ++++++++++
+>   package/mesa3d-headers/mesa3d-headers.mk |  9 ++-------
+>   2 files changed, 12 insertions(+), 7 deletions(-)
+>   create mode 100644 package/mesa3d-headers/dri.pc
 >
->  # QtWebengine's build system uses python, but only supports python2. We work
-> @@ -64,7 +64,7 @@ QT5WEBENGINE_ENV +=
-> GN_PKG_CONFIG_HOST=$(@D)/host-bin/host-pkg-config
->  endif
->
->  define QT5WEBENGINE_CONFIGURE_CMDS
-> -       (cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV)
-> $(HOST_DIR)/bin/qmake $(QT5WEBENGINE_QMAKEFLAGS))
-> +       (cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV)
-> $(HOST_DIR)/bin/qmake -- $(QT5WEBENGINE_QMAKEFLAGS))
->  endef
->
->  define QT5WEBENGINE_BUILD_CMDS
+> diff --git a/package/mesa3d-headers/dri.pc b/package/mesa3d-headers/dri.pc
+> new file mode 100644
+> index 0000000000..bd9a33b6c6
+> --- /dev/null
+> +++ b/package/mesa3d-headers/dri.pc
+> @@ -0,0 +1,10 @@
+> +prefix=/usr
+> +libdir=${prefix}/lib
+> +includedir=${prefix}/include
+> +
+> +dridriverdir=/usr/lib/dri
+> +
+> +Name: dri
+> +Description: Direct Rendering Infrastructure
+> +Version: @VERSION@
+> +Cflags: -I${includedir}
+> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+> index 8670184742..99d6e52498 100644
+> --- a/package/mesa3d-headers/mesa3d-headers.mk
+> +++ b/package/mesa3d-headers/mesa3d-headers.mk
+> @@ -34,13 +34,8 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
+>   # Not using $(SED) because we do not want to work in-place, and $(SED)
+>   # contains -i.
+>   define MESA3D_HEADERS_BUILD_DRI_PC
+> -	sed -e 's:@\(exec_\)\?prefix@:/usr:' \
+> -	    -e 's:@libdir@:$${exec_prefix}/lib:' \
+> -	    -e 's:@includedir@:$${prefix}/include:' \
+> -	    -e 's:@DRI_DRIVER_INSTALL_DIR@:$${libdir}/dri:' \
+> -	    -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
+> -	    -e 's:@DRI_PC_REQ_PRIV@::' \
+> -	    $(@D)/src/mesa/drivers/dri/dri.pc.in \
+> +	sed -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
+> +	    package/mesa3d-headers/dri.pc \
+>   	    >$(@D)/src/mesa/drivers/dri/dri.pc
+>   endef
+>   
 
-Your patch got somewhere garbled (see e.g. [2]), I get the
-following errors while applying:
-
-	$ git am patch-qt5webengine-nathan-ford-001.diff
-Applying: As of QT 5.10 the WEBENGINE_CONFIG options have been
-error: git diff header lacks filename information when removing 1 leading pathname component (line 2)
-Patch failed at 0001 As of QT 5.10 the WEBENGINE_CONFIG options have been
-
-Checked your patch after applying manually, seems to work as expected with
-the following buildroot config snippet:
-
-BR2_PACKAGE_QT5WEBENGINE=y
-BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS=y
-# BR2_PACKAGE_QT5WEBENGINE_ALSA is not set
-
-	$ diff -u build/qt5webengine-5.12.7_orig/config.summary build/qt5webengine-5.12.7/config.summary
---- build/qt5webengine-5.12.7_orig/config.summary	2020-02-18 12:21:02.354085462 +0100
-+++ build/qt5webengine-5.12.7/config.summary	2020-02-18 13:21:59.772558050 +0100
-@@ -3,7 +3,7 @@
-   Full debug information ................. no
-   Pepper Plugins ......................... no
-   Printing and PDF ....................... no
--  Proprietary Codecs ..................... no
-+  Proprietary Codecs ..................... yes
-   Spellchecker ........................... yes
-   Native Spellchecker .................... no
-   WebRTC ................................. no
-@@ -14,14 +14,14 @@
-   Kerberos Authentication ................ no
-   Support qpa-xcb ........................ no
-   Building v8 snapshot supported ......... yes
--  Use ALSA ............................... yes
-+  Use ALSA ............................... no
-   Use PulseAudio ......................... no
-   Optional system libraries used:
-     re2 .................................. no
-     icu .................................. no
--    libwebp, libwebpmux and libwebpdemux . no
-+    libwebp, libwebpmux and libwebpdemux . yes
-     opus ................................. yes
--    ffmpeg ............................... no
-+    ffmpeg ............................... yes
-     libvpx ............................... yes
-     snappy ............................... no
-     glib ................................. yes
-@@ -49,5 +49,3 @@
-     xcursor .............................. no
-     xi ................................... no
-     xtst ................................. no
-
-
-Care to re-send (best using git format-patch/send-email, see [3])?
-
-One further question out of interest, on which hardware do you run
-qtwebengine and how (or which buildroot config/defconfig do you use)?
-
-There is a report from one buildroot user not to be able to run
-the minimal example on RaspberryPi Zero (see [4] and [5])...
-
-Regards,
-Peter
-
-
-[1] https://bugs.busybox.net/show_bug.cgi?id=12416
-[2] https://patchwork.ozlabs.org/patch/1227357/
-[3] https://buildroot.org/downloads/manual/manual.html#submitting-patches
-[4] http://lists.busybox.net/pipermail/buildroot/2020-February/273320.html
-[5] http://lists.busybox.net/pipermail/buildroot/2020-February/273329.html
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Vincent Fazio
+Embedded Software Engineer - Linux
+Extreme Engineering Solutions, Inc
+http://www.xes-inc.com
