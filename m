@@ -1,136 +1,88 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 18 Feb 2020 10:45:59 +0100
-Subject: [Buildroot] [PATCH] package/avahi: bump to version 0.8
-Message-ID: <20200218094600.31221-1-joerg.krause@embedded.rocks>
+Date: Tue, 18 Feb 2020 10:46:00 +0100
+Subject: [Buildroot] [PATCH] package/avahi: drop most of the AVAHI_CONF_ENV
+ vars
+In-Reply-To: <20200218094600.31221-1-joerg.krause@embedded.rocks>
+References: <20200218094600.31221-1-joerg.krause@embedded.rocks>
+Message-ID: <20200218094600.31221-2-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump also includes:
- * Drop upstream security patch which is included in the new version
- * Unconditionally disable support for Qt5 [1] (same as Qt3 and Qt4)
- * Switch from host-inttool to host-gettext [2]
- * Conditionally enable support for libevent [3]
+Most are legacy from when the package was added and not really necessary.
 
-[1] https://github.com/lathiat/avahi/commit/5dbb32767ae3f5a371cfbd04b4e3a9a634b8efc4
-[2] https://github.com/lathiat/avahi/commit/3d5a0c68057e2ed76187a0bb565baaa10d566003
-[3] https://github.com/lathiat/avahi/commit/998e20cd76927ce978fb5676820a38308e21f45d
+This commit is based on dropping the CONF_ENV vars in libgtk2 [1].
+
+[1] https://git.buildroot.net/buildroot/commit/package/libgtk2/libgtk2.mk?id=4d80cbdf6c2c186da26f36575d6635604f00d29a
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...ast-queries-from-address-not-on-loca.patch | 48 -------------------
- package/avahi/avahi.hash                      |  2 +-
- package/avahi/avahi.mk                        | 11 ++++-
- 3 files changed, 10 insertions(+), 51 deletions(-)
- delete mode 100644 package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch
+ package/avahi/avahi.mk | 51 +-----------------------------------------
+ 1 file changed, 1 insertion(+), 50 deletions(-)
 
-diff --git a/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch b/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch
-deleted file mode 100644
-index 0e8408c830..0000000000
---- a/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From e111def44a7df4624a4aa3f85fe98054bffb6b4f Mon Sep 17 00:00:00 2001
--From: Trent Lloyd <trent@lloyd.id.au>
--Date: Sat, 22 Dec 2018 09:06:07 +0800
--Subject: [PATCH] Drop legacy unicast queries from address not on local link
--
--When handling legacy unicast queries, ensure that the source IP is
--inside a subnet on the local link, otherwise drop the packet.
--
--Fixes #145
--Fixes #203
--CVE-2017-6519
--CVE-2018-100084
--
--Backported from: e111def44a7df4624a4aa3f85fe98054bffb6b4f
--Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
-----
-- avahi-core/server.c | 8 ++++++++
-- 1 file changed, 8 insertions(+)
--
--diff --git a/avahi-core/server.c b/avahi-core/server.c
--index a2cb19a8..a2580e38 100644
----- a/avahi-core/server.c
--+++ b/avahi-core/server.c
--@@ -930,6 +930,7 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
-- 
--     if (avahi_dns_packet_is_query(p)) {
--         int legacy_unicast = 0;
--+        char t[AVAHI_ADDRESS_STR_MAX];
-- 
--         /* For queries EDNS0 might allow ARCOUNT != 0. We ignore the
--          * AR section completely here, so far. Until the day we add
--@@ -947,6 +948,13 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
--             legacy_unicast = 1;
--         }
-- 
--+        if (!is_mdns_mcast_address(dst_address) &&
--+            !avahi_interface_address_on_link(i, src_address)) {
--+
--+            avahi_log_debug("Received non-local unicast query from host %s on interface '%s.%i'.", avahi_address_snprint(t, sizeof(t), src_address), i->hardware->name, i->protocol);
--+            return;
--+        }
--+
--         if (legacy_unicast)
--             reflect_legacy_unicast_query_packet(s, p, i, src_address, port);
-- 
---- 
--2.19.1
--
-diff --git a/package/avahi/avahi.hash b/package/avahi/avahi.hash
-index b4d36ffe50..cfc7ba020d 100644
---- a/package/avahi/avahi.hash
-+++ b/package/avahi/avahi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 57a99b5dfe7fdae794e3d1ee7a62973a368e91e414bd0dfa5d84434de5b14804  avahi-0.7.tar.gz
-+sha256 060309d7a333d38d951bc27598c677af1796934dbd98e1024e7ad8de798fedda  avahi-0.8.tar.gz
- sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE
 diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 53021f6b6d..115ed2226d 100644
+index 115ed2226d..dd282ec144 100644
 --- a/package/avahi/avahi.mk
 +++ b/package/avahi/avahi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AVAHI_VERSION = 0.7
-+AVAHI_VERSION = 0.8
- AVAHI_SITE = https://github.com/lathiat/avahi/releases/download/v$(AVAHI_VERSION)
- AVAHI_LICENSE = LGPL-2.1+
+@@ -10,56 +10,7 @@ AVAHI_LICENSE = LGPL-2.1+
  AVAHI_LICENSE_FILES = LICENSE
-@@ -74,6 +74,7 @@ AVAHI_CONF_ENV = \
- AVAHI_CONF_OPTS = \
- 	--disable-qt3 \
- 	--disable-qt4 \
-+	--disable-qt5 \
- 	--disable-gtk \
- 	--disable-gtk3 \
- 	--disable-gdbm \
-@@ -90,7 +91,7 @@ AVAHI_CONF_OPTS = \
- 	--with-autoipd-group=avahi
+ AVAHI_INSTALL_STAGING = YES
  
- AVAHI_DEPENDENCIES = \
--	host-intltool host-pkgconf \
-+	host-gettext host-pkgconf \
- 	$(TARGET_NLS_DEPENDENCIES)
+-AVAHI_CONF_ENV = \
+-	ac_cv_func_strtod=yes \
+-	ac_fsusage_space=yes \
+-	fu_cv_sys_stat_statfs2_bsize=yes \
+-	ac_cv_func_closedir_void=no \
+-	ac_cv_func_getloadavg=no \
+-	ac_cv_lib_util_getloadavg=no \
+-	ac_cv_lib_getloadavg_getloadavg=no \
+-	ac_cv_func_getgroups=yes \
+-	ac_cv_func_getgroups_works=yes \
+-	ac_cv_func_chown_works=yes \
+-	ac_cv_have_decl_euidaccess=no \
+-	ac_cv_func_euidaccess=no \
+-	ac_cv_have_decl_strnlen=yes \
+-	ac_cv_func_strnlen_working=yes \
+-	ac_cv_func_lstat_dereferences_slashed_symlink=yes \
+-	ac_cv_func_lstat_empty_string_bug=no \
+-	ac_cv_func_stat_empty_string_bug=no \
+-	vb_cv_func_rename_trailing_slash_bug=no \
+-	ac_cv_have_decl_nanosleep=yes \
+-	jm_cv_func_nanosleep_works=yes \
+-	gl_cv_func_working_utimes=yes \
+-	ac_cv_func_utime_null=yes \
+-	ac_cv_have_decl_strerror_r=yes \
+-	ac_cv_func_strerror_r_char_p=no \
+-	jm_cv_func_svid_putenv=yes \
+-	ac_cv_func_getcwd_null=yes \
+-	ac_cv_func_getdelim=yes \
+-	ac_cv_func_mkstemp=yes \
+-	utils_cv_func_mkstemp_limitations=no \
+-	utils_cv_func_mkdir_trailing_slash_bug=no \
+-	jm_cv_func_gettimeofday_clobber=no \
+-	am_cv_func_working_getline=yes \
+-	gl_cv_func_working_readdir=yes \
+-	jm_ac_cv_func_link_follows_symlink=no \
+-	utils_cv_localtime_cache=no \
+-	ac_cv_struct_st_mtim_nsec=no \
+-	gl_cv_func_tzset_clobber=no \
+-	gl_cv_func_getcwd_null=yes \
+-	gl_cv_func_getcwd_path_max=yes \
+-	ac_cv_func_fnmatch_gnu=yes \
+-	am_getline_needs_run_time_check=no \
+-	am_cv_func_working_getline=yes \
+-	gl_cv_func_mkdir_trailing_slash_bug=no \
+-	gl_cv_func_mkstemp_limitations=no \
+-	ac_cv_func_working_mktime=yes \
+-	jm_cv_func_working_re_compile_pattern=yes \
+-	ac_use_included_regex=no \
+-	avahi_cv_sys_cxx_works=yes \
+-	DATADIRNAME=share
++AVAHI_CONF_ENV = DATADIRNAME=share
  
- AVAHI_CFLAGS = $(TARGET_CFLAGS)
-@@ -130,6 +131,12 @@ else
- AVAHI_CONF_OPTS += --disable-dbus
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBEVENT),y)
-+AVAHI_DEPENDENCIES += libevent
-+else
-+AVAHI_CONF_OPTS += --disable-libevent
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
- AVAHI_DEPENDENCIES += libglib2
- else
+ # Note: even if we have Gtk2 and Gtk3 support in Buildroot, we
+ # explicitly disable support for them, in order to avoid the following
 -- 
 2.25.0
