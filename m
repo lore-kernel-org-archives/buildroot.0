@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Feb 2020 00:41:27 +0100
-Subject: [Buildroot] [PATCH] package/libiio: bump to version 0.19
-In-Reply-To: <1582059128-12704-1-git-send-email-pjtexier@koncepto.io>
-References: <1582059128-12704-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20200219004127.33deee5e@windsurf>
+Date: Wed, 19 Feb 2020 00:41:41 +0100
+Subject: [Buildroot] [git commit branch/next] package/uacme: bump version to
+ 1.0.22
+Message-ID: <20200218233006.C7A508E4CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 Feb 2020 21:52:08 +0100
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=066d552499fac9bab41971530b114776b9ca27c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> See full changelog https://github.com/analogdevicesinc/libiio/releases/tag/v0.19
-> 
-> Also remove patch applied upstream
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  ...ll-of-binaries-with-a-static-only-library.patch | 44 ----------------------
->  package/libiio/libiio.hash                         |  2 +-
->  package/libiio/libiio.mk                           |  2 +-
->  3 files changed, 2 insertions(+), 46 deletions(-)
->  delete mode 100644 package/libiio/0001-fix-install-of-binaries-with-a-static-only-library.patch
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index b8d631d50b..5c68680b54 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	c80bbee3c2ac3a64f70abe23be3b7768039785863170ac062625407a0b61e635        uacme-1.0.21.tar.gz
++sha256	08070779232c9711a227189ee2d3cb55042f6be2ea0aa59525cb7b554c4688b0        uacme-1.0.22.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 5813399c56..c5931e2682 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UACME_VERSION = 1.0.21
++UACME_VERSION = 1.0.22
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
