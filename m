@@ -1,96 +1,31 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Tue, 18 Feb 2020 21:52:08 +0100
-Subject: [Buildroot] [PATCH] package/libiio: bump to version 0.19
-Message-ID: <1582059128-12704-1-git-send-email-pjtexier@koncepto.io>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 18 Feb 2020 22:33:53 +0100
+Subject: [Buildroot] [PATCH v6 00/28] Qt5 qmake infra and per-package
+ compatibility
+In-Reply-To: <20200217212350.29750-1-anaumann@ultratronik.de>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+Message-ID: <20200218223353.09cdf837@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See full changelog https://github.com/analogdevicesinc/libiio/releases/tag/v0.19
+Hello Andreas,
 
-Also remove patch applied upstream
+On Mon, 17 Feb 2020 22:23:22 +0100, Andreas Naumann <anaumann@ultratronik.de> wrote:
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- ...ll-of-binaries-with-a-static-only-library.patch | 44 ----------------------
- package/libiio/libiio.hash                         |  2 +-
- package/libiio/libiio.mk                           |  2 +-
- 3 files changed, 2 insertions(+), 46 deletions(-)
- delete mode 100644 package/libiio/0001-fix-install-of-binaries-with-a-static-only-library.patch
 
-diff --git a/package/libiio/0001-fix-install-of-binaries-with-a-static-only-library.patch b/package/libiio/0001-fix-install-of-binaries-with-a-static-only-library.patch
-deleted file mode 100644
-index a02bb60..0000000
---- a/package/libiio/0001-fix-install-of-binaries-with-a-static-only-library.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 5090603d01779bb1717fb0c50953330e8770550f Mon Sep 17 00:00:00 2001
--From: Pierre-Jean Texier <pjtexier@koncepto.io>
--Date: Sun, 23 Jun 2019 14:11:37 +0200
--Subject: [PATCH] fix install of binaries with a static only library
--
--Define CMAKE_INSTALL_RPATH only if ENABLE_SHARED is set otherwise the
--following issue occured:
--
--CMake Error at iiod/cmake_install.cmake:45 (file):
--  file RPATH_CHANGE could not write new RPATH:
--
--    /usr/lib
--
--  to the file:
--
--    /home/pjtexier/<path>/usr/sbin/iiod
--
--  No valid ELF RPATH or RUNPATH entry exists in the file; File does not have
--  a valid ELF identification.
--Call Stack (most recent call first):
--  cmake_install.cmake:50 (include)
--
--Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
--[Upstream status: https://github.com/analogdevicesinc/libiio/pull/283]
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index d9b7ea1..634e553 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -15,7 +15,7 @@ endif()
-- 
-- set(CMAKE_INSTALL_DOCDIR "" CACHE PATH "documentation root (DATAROOTDIR/doc/${PROJECT_NAME}${LIBIIO_VERSION_MAJOR}-doc)")
-- include(GNUInstallDirs)
---if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
--+if(ENABLE_SHARED AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-- 	set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
-- 	set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-- endif()
---- 
--2.7.4
--
-diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
-index 34c3144..dd85ffa 100644
---- a/package/libiio/libiio.hash
-+++ b/package/libiio/libiio.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 bc2c5299974b65cfe9aa4a06d8c74d7651594e026bce416db48a2c5aa7ba2554  libiio-0.18.tar.gz
-+sha256 81c414d5c47b715d9bc9275b9fabbfd9e9483e60c035f3001b5977932049595d  libiio-0.19.tar.gz
- sha256 102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  COPYING.txt
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-index 8c8f79b..efd582a 100644
---- a/package/libiio/libiio.mk
-+++ b/package/libiio/libiio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIIO_VERSION = 0.18
-+LIBIIO_VERSION = 0.19
- LIBIIO_SITE = $(call github,analogdevicesinc,libiio,v$(LIBIIO_VERSION))
- LIBIIO_INSTALL_STAGING = YES
- LIBIIO_LICENSE = LGPL-2.1+
--- 
-2.7.4
+> - qtwebengine locales appear in usr/translations/qtwebengine_locales/
+> instead of usr/translations/qtwebengine_locales/qtwebengine_locales/
+
+And this perfect as the qtwebengine searches for locales *.pak files
+exactly under this location e.g.:
+
+	/usr/translations/qtwebengine_locales/en-US.pak
+
+The double path is a buildroot qt5webengine package install mistake...,
+patch fixing this will follow soon...
+
+Regards,
+Peter
