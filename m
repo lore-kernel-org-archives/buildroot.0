@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Feb 2020 00:45:24 +0100
-Subject: [Buildroot] [PATCH] package/avahi: bump to version 0.8
-In-Reply-To: <20200218094600.31221-1-joerg.krause@embedded.rocks>
+Date: Wed, 19 Feb 2020 00:45:28 +0100
+Subject: [Buildroot] [PATCH] package/avahi: drop most of the
+ AVAHI_CONF_ENV vars
+In-Reply-To: <20200218094600.31221-2-joerg.krause@embedded.rocks>
 References: <20200218094600.31221-1-joerg.krause@embedded.rocks>
-Message-ID: <20200219004524.72f8b623@windsurf>
+ <20200218094600.31221-2-joerg.krause@embedded.rocks>
+Message-ID: <20200219004528.6c65a5a1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 Feb 2020 10:45:59 +0100
+On Tue, 18 Feb 2020 10:46:00 +0100
 J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-> This bump also includes:
->  * Drop upstream security patch which is included in the new version
->  * Unconditionally disable support for Qt5 [1] (same as Qt3 and Qt4)
->  * Switch from host-inttool to host-gettext [2]
+> Most are legacy from when the package was added and not really necessary.
+> 
+> This commit is based on dropping the CONF_ENV vars in libgtk2 [1].
+> 
+> [1] https://git.buildroot.net/buildroot/commit/package/libgtk2/libgtk2.mk?id=4d80cbdf6c2c186da26f36575d6635604f00d29a
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/avahi/avahi.mk | 51 +-----------------------------------------
+>  1 file changed, 1 insertion(+), 50 deletions(-)
 
-Is host-gettext always needed? Normally it's only needed when
---enable-nls is passed, and this is already taken care of by
-$(TARGET_NLS_DEPENDENCIES), which contains host-gettext when
-BR2_ENABLE_SYSTEM_NLS=y.
-
-Could you double check this ?
-
-Also, another question is: Avahi really still has some code to support
-Qt3, and the corresponding --enable-qt3 option ?
-
-Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
