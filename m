@@ -1,66 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Feb 2020 03:51:01 +0100
-Subject: [Buildroot] [git commit] package/qpdf: fix build with gcc 4.8
-Message-ID: <20200218023935.250788E3EC@busybox.osuosl.org>
+Date: Tue, 18 Feb 2020 03:51:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qpdf: fix build with gcc 4.8
+In-Reply-To: <20200217214601.1600353-1-fontaine.fabrice@gmail.com>
+References: <20200217214601.1600353-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200218035122.5e7a2a1c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53461ad699ba319accf27a29964d4d5fa3348b79
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 17 Feb 2020 22:46:01 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/ad7fb68ae87850a85509eed80fd0cae8721b10c5
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ad7fb68ae87850a85509eed80fd0cae8721b10c5
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ests-cxx11.cc-fix-build-with-gcc-4.8.patch | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/qpdf/0001-libtests-cxx11.cc-fix-build-with-gcc-4.8.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-libtests-cxx11.cc-fix-build-with-gcc-4.8.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/qpdf/0001-libtests-cxx11.cc-fix-build-with-gcc-4.8.patch b/package/qpdf/0001-libtests-cxx11.cc-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..76504c7475
---- /dev/null
-+++ b/package/qpdf/0001-libtests-cxx11.cc-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,38 @@
-+From e70c2605a11d12a8eeee3e7eec46077956e11e1f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 17 Feb 2020 22:36:08 +0100
-+Subject: [PATCH] libtests/cxx11.cc: fix build with gcc 4.8
-+
-+Build fails on gcc 4.8 since version 9.1.1 and commit
-+752416554086d5d34323bc14164d5084db83cfbd:
-+
-+libtests/cxx11.cc: In function 'void do_regex()':
-+libtests/cxx11.cc:347:42: error: 'strlen' is not a member of 'std'
-+     std::cregex_iterator m3(str7, str7 + std::strlen(str7), expr4);
-+                                          ^
-+
-+To fix the build failure, add missing include on cstring
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/ad7fb68ae87850a85509eed80fd0cae8721b10c5
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/qpdf/qpdf/pull/400]
-+---
-+ libtests/cxx11.cc | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libtests/cxx11.cc b/libtests/cxx11.cc
-+index fa1dc6b..91ed7b1 100644
-+--- a/libtests/cxx11.cc
-++++ b/libtests/cxx11.cc
-+@@ -1,5 +1,6 @@
-+ #include <iostream>
-+ #include <cassert>
-++#include <cstring>
-+ #include <functional>
-+ #include <type_traits>
-+ #include <cstdint>
-+-- 
-+2.24.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
