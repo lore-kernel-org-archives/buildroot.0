@@ -1,47 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Feb 2020 00:55:22 +0100
-Subject: [Buildroot] [PATCH] package/owfs: fixup Python sysconfigdata for
- per-package directories
-Message-ID: <20200217235523.107701-1-thomas.petazzoni@bootlin.com>
+Date: Tue, 18 Feb 2020 01:11:44 +0100
+Subject: [Buildroot] [git commit] package/gutenprint: add back the hook for
+ creating the m4local directory
+Message-ID: <20200218000007.079F48E3DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is needed so that building the owfs Python module uses the gcc
-from owfs per-package directory, and not the one from the python
-per-package directory.
+commit: https://git.buildroot.net/buildroot/commit/?id=7f5a2c5466a6ee37b62b48fc6175e30448f4e7fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Commit 64c42c5e2c26261e26c3548c86b02f55d12f341b removed the hook for
+creating the m4local directory with the assumption that it would be
+created because the first include is treated in a special way if it
+doesn't exists
+
+However, this assumption was wrong as m4local is the second include, the
+first one is m4 (which already exists in the archive). So put back the
+hook. The other solutions would be to patch:
+ - Makefile.{am,in} to remove m4local
+ - configure.ac and Makefile.{am,in} to add m4local before m4
+However, both solutions don't seem to be upstreamable
 
 Fixes:
+ - http://autobuild.buildroot.org/results/e40313c6ec193d6156e26eff62303545fba09413
 
-  http://autobuild.buildroot.net/results/0d582dda367507991a4c38141db36b0fa8e47e67/
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/owfs/owfs.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/gutenprint/gutenprint.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
-index 7668735ff5..ffc0b3098d 100644
---- a/package/owfs/owfs.mk
-+++ b/package/owfs/owfs.mk
-@@ -87,6 +87,16 @@ OWFS_DEPENDENCIES += python host-swig
- # Patching owfs to do the right thing is not trivial, it's much easier to
- # override the PYSITEDIR variable in make.
- OWFS_EXTRA_MAKE_OPTS += PYSITEDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+
-+ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-+define OWFS_FIXUP_PYTHON_SYSCONFIGDATA
-+	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
-+		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
-+		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/owfs/:g"
+diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+index e99d62ca79..9cb80c3e95 100644
+--- a/package/gutenprint/gutenprint.mk
++++ b/package/gutenprint/gutenprint.mk
+@@ -14,6 +14,13 @@ GUTENPRINT_LICENSE_FILES = COPYING
+ # Needed, as we touch Makefile.am
+ GUTENPRINT_AUTORECONF = YES
+ 
++# Needed by autoreconf
++define GUTENPRINT_CREATE_M4_DIR
++	mkdir -p $(@D)/m4local
 +endef
-+OWFS_PRE_CONFIGURE_HOOKS += OWFS_FIXUP_PYTHON_SYSCONFIGDATA
-+endif
++GUTENPRINT_POST_PATCH_HOOKS += GUTENPRINT_CREATE_M4_DIR
++HOST_GUTENPRINT_POST_PATCH_HOOKS += GUTENPRINT_CREATE_M4_DIR
 +
- else
- OWFS_CONF_OPTS += --disable-owpython --without-python
- endif
--- 
-2.24.1
+ GUTENPRINT_DEPENDENCIES = \
+ 	cups host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
