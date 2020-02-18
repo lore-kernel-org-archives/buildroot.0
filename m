@@ -1,84 +1,49 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 18 Feb 2020 18:59:49 +0100
-Subject: [Buildroot] [PATCH 2/2] Makefile: don't recreate staging
- symlink if it exists
-In-Reply-To: <20200218164003.21afcd94@windsurf>
-References: <20200218150101.22274-1-patrickdepinguin@gmail.com>
- <20200218150101.22274-2-patrickdepinguin@gmail.com>
- <20200218164003.21afcd94@windsurf>
-Message-ID: <CAAXf6LWzJA5tnAXs3KMPip77men=bjgRYKf_KOUizrjP4WHkPg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 18 Feb 2020 19:10:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pulseview: depends on host gcc
+ >= 4.9
+In-Reply-To: <20200218183822.2f6a8e33@windsurf>
+References: <20200216180613.908370-1-fontaine.fabrice@gmail.com>
+ <20200218183822.2f6a8e33@windsurf>
+Message-ID: <CAPi7W81bL=0TH=gJykPnyCuRPbCyPaH+f+gPkaGpm0qF9Qiizg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar., 18 feb. 2020 a las 16:40, Thomas Petazzoni
-(<thomas.petazzoni@bootlin.com>) escribi?:
+Le mar. 18 f?vr. 2020 ? 18:38, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
 >
-> Hello,
+> On Sun, 16 Feb 2020 19:06:13 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 >
-> On Tue, 18 Feb 2020 16:01:00 +0100
-> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+> > Commit 88bb278d5ac790bee0c3a438464da82ee7625cff forgot to propagate the
+> > new host gcc >= 4.9 dependency from BR2_PACKAGE_LIBSIGROKCXX
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/5dc9dc95d0534b35e2443c120162b5176edafe0b
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/pulseview/Config.in | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >
-> > Create the staging symlink the same way as the host symlink. This means
-> > using a make dependency rather than recreating it every time.
-> >
-> > In coreutils versions below 8.27, re-creation of symbolic links was not
-> > atomic. This means that there is a period in time where the existing link is
-> > removed, before the new one is created. In coreutils 8.27 this was fixed,
-> > see [1]. Note that CentOS 7 ships with coreutils 8.22.
-> >
-> > In the following scenario, this is a problem:
-> >
-> > - an application is compiled using the sysroot prepared by Buildroot and
-> >   links against Xenomai userspace libraries, but its build process is steered
-> >   from outside of Buildroot
-> > - to know the correct flags, the application makefile uses the 'xeno-config'
-> >   file to request them, and passes DESTDIR=/buildroot/output/staging
-> > - the xeno-config responds with flags based on the path
-> >   '/buildroot/output/staging/...'
-> > - while the application build is ongoing, a 'make' happens in Buildroot,
-> >   causing the 'staging' symlink to be recreated (even though it already
-> >   existed)
-> > - when exactly at this time, the application calls the compiler with -I
-> >   flags pointing to output/staging, the build fails with:
-> >
-> >   -I/buildroot/output/staging/usr/include/xenomai/mercury: Error:  ^ is not a directory
-> >   -I/buildroot/output/staging/usr/include/xenomai: Error:  ^ is not a directory
-> >   -I/buildroot/output/staging/usr/include/xenomai/xenomai: Error:  ^ is not a directory
-> >   -I/buildroot/output/staging/usr/include/xenomai/psos: Error:  ^ is not a directory
-> >   Failed: ** ^ *
-> >
-> > Work around this problem by only creating the staging symlink once, similar
-> > to how the host symlink (if any) is created.
-> >
-> > See also commit d0f4f95e390bcb1c953efa125f5277a8a235396e which changed the
-> > way these symlinks are made. The reasoning in this commit is to move away
-> > from the 'dirs' target.
-> >
-> > [1] https://github.com/coreutils/coreutils/commit/376967889ed7ed561e46ff6d88a66779db62737a
+> Applied to master, thanks. However, what would be really good is to
+> remove the dependency of libsigrok on host-doxygen. It's a bit annoying
+> that generating the documentation cannot be disabled.
+doxygen is not only used to generate the documentation.
+sigrok C++ bindings use it to parse libsigrok symbols instead of the
+python pygccxml module since commit
+https://sigrok.org/gitweb/?p=libsigrok.git;a=commit;h=3532ed01256b986ecaf37ea5bb29d81465e2aa89
 >
-> Wow, thanks for the investigation and detailed commit log. Quite crazy
-> stuff.
+> Thanks,
 >
-> The question that comes to mind is: why are you building something
-> against the Buildroot toolchain/sysroot, before the Buildroot build has
-> completed ?
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-No, the initial Buildroot build _is_ completed first. Then the
-application build starts according to the scenario described.
-In our case, the extra Buildroot 'make' is done to let Buildroot
-create the images, passing a custom TARGET_DIR which is an extended
-copy of the original output/target. This step happens multiple times
-for different boards, out of the same Buildroot (the boards differ a
-bit in our own software plus perhaps some other customization done in
-the rootfs). From the perspective of the application build, the fact
-that Buildroot 'make' is called shouldn't matter because all the files
-it needs will not be touched. Buildroot itself is also retained as-is,
-except it is asked to produce images.
-
-Best regards,
-Thomas
+Fabrice
