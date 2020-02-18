@@ -1,59 +1,30 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Tue, 18 Feb 2020 19:49:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-markdown: bump to
- version 3.2.1
-In-Reply-To: <20200213051534.53563-1-james.hilliard1@gmail.com>
-References: <20200213051534.53563-1-james.hilliard1@gmail.com>
-Message-ID: <20200218194953.5dbe8970@x230_1.trabucayre.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 18 Feb 2020 20:03:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sigrok: explain why host-doxygen is
+ needed
+Message-ID: <20200218190339.50107-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi James,
-On Wed, 12 Feb 2020 22:15:34 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libsigrok/libsigrok.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-markdown/python-markdown.hash | 4 ++--
->  package/python-markdown/python-markdown.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
-> index 6eff2035bb..8c72072432 100644
-> --- a/package/python-markdown/python-markdown.hash
-> +++ b/package/python-markdown/python-markdown.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/markdown/json
-> -md5	d84732ecc65b3a1bff693d9d4c24277f  Markdown-3.1.1.tar.gz
-> -sha256	2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a  Markdown-3.1.1.tar.gz
-> +md5	7a894dc55992b37cdbcba5c4049455fc  Markdown-3.2.1.tar.gz
-> +sha256	90fee683eeabe1a92e149f7ba74e5ccdc81cd397bd6c516d93a8da0ef90b6902  Markdown-3.2.1.tar.gz
-
-The new .hash convention is to use 2 spaces between fields, like : <type>  <hash>  <name>
-
->  # Locally computed sha256
->  sha256	6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
-> diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
-> index a8311168f5..1f352fd7f1 100644
-> --- a/package/python-markdown/python-markdown.mk
-> +++ b/package/python-markdown/python-markdown.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -PYTHON_MARKDOWN_VERSION = 3.1.1
-> +PYTHON_MARKDOWN_VERSION = 3.2.1
->  PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
-> -PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/ac/df/0ae25a9fd5bb528fe3c65af7143708160aa3b47970d5272003a1ad5c03c6
-> +PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/98/79/ce6984767cb9478e6818bd0994283db55c423d733cc62a88a3ffb8581e11
->  PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
->  PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
->  PYTHON_MARKDOWN_SETUP_TYPE = setuptools
-> -- 
-> 2.20.1
-> 
-Regards,
-Gwenhael
+diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+index a02775d889..ec03c53e39 100644
+--- a/package/libsigrok/libsigrok.mk
++++ b/package/libsigrok/libsigrok.mk
+@@ -57,6 +57,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
+ LIBSIGROK_CONF_OPTS += --enable-cxx
++# host-doxygen is used by C++ bindings to parse libsigrok symbols
+ LIBSIGROK_DEPENDENCIES += \
+ 	glibmm \
+ 	host-doxygen \
+-- 
+2.25.0
