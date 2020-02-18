@@ -1,76 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Feb 2020 03:51:55 +0100
-Subject: [Buildroot] [PATCH] package/nodejs: security bump to version
- 12.16.0
-In-Reply-To: <20200217223849.16987-1-peter@korsgaard.com>
-References: <20200217223849.16987-1-peter@korsgaard.com>
-Message-ID: <20200218035155.5d9c4d70@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 17 Feb 2020 20:15:21 -0700
+Subject: [Buildroot] [PATCH v5 1/1] package/nodejs: Use zlib headers from
+ HOST_ZLIB_SRCDIR for host-nodejs
+Message-ID: <20200218031521.32988-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 17 Feb 2020 23:38:49 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+The nodejs configure.py file orders zlib headers before the bundled ICU
+headers. The zlib headers happen to be located in the system include
+directory, next to some system ICU headers (not bundled). If these are
+built before nodejs is, nodejs will get confused and try to use the
+system ICU headers instead of the bundled ones.
 
-> Fixes the following security issues (12.15.0):
-> 
-> - CVE-2019-15606: HTTP header values do not have trailing OWS trimmed
-> 
-> - CVE-2019-15605: HTTP request smuggling using malformed Transfer-Encoding
->   header
-> 
-> - CVE-2019-15604: Remotely trigger an assertion on a TLS server with a
->   malformed certificate string
-> 
-> For more details, see the advisory:
-> https://nodejs.org/en/blog/vulnerability/february-2020-security-releases/
-> 
-> On top of this, 12.16.0 brings a number of changes and bugfixes.
-> 
-> Update the license hash for an addition of the (MIT) licensing terms for the
-> uvwsai module:
-> 
-> +
-> +- uvwasi, located at deps/uvwasi, is licensed as follows:
-> +  """
-> +    MIT License
-> +
-> +    Copyright (c) 2019 Colin Ihrig and Contributors
-> +
-> +    Permission is hereby granted, free of charge, to any person obtaining a copy
-> +    of this software and associated documentation files (the "Software"), to deal
-> +    in the Software without restriction, including without limitation the rights
-> +    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> +    copies of the Software, and to permit persons to whom the Software is
-> +    furnished to do so, subject to the following conditions:
-> +
-> +    The above copyright notice and this permission notice shall be included in all
-> +    copies or substantial portions of the Software.
-> +
-> +    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> +    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> +    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> +    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> +    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> +    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> +    SOFTWARE.
-> +  """
-> 
-> While we are at it, adjust the white space in the .hash function to match
-> the new agreements.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/nodejs/nodejs.hash | 6 +++---
->  package/nodejs/nodejs.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Fix this by using headers from HOST_ZLIB_SRCDIR so that the ICU headers
+in the system include directory are not used.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v4 -> v5:
+  - use headers from HOST_ZLIB_SRCDIR
+  - use shared zlib instead of static zlib
+---
+ package/nodejs/nodejs.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thomas
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 0de3495df9..30f5b35809 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -64,6 +64,8 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 		--shared-openssl-includes=$(HOST_DIR)/include/openssl \
+ 		--shared-openssl-libpath=$(HOST_DIR)/lib \
+ 		--shared-zlib \
++		--shared-zlib-includes=$(HOST_ZLIB_SRCDIR) \
++		--shared-zlib-libpath=$(HOST_DIR)/lib \
+ 		--no-cross-compiling \
+ 		--with-intl=small-icu \
+ 	)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
