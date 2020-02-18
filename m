@@ -1,29 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Feb 2020 00:39:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libupnpp: remove unneeded
- static workaround
-In-Reply-To: <20200216145204.272998-1-fontaine.fabrice@gmail.com>
-References: <20200216145204.272998-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200219003935.7406511e@windsurf>
+Date: Wed, 19 Feb 2020 00:41:27 +0100
+Subject: [Buildroot] [PATCH] package/libiio: bump to version 0.19
+In-Reply-To: <1582059128-12704-1-git-send-email-pjtexier@koncepto.io>
+References: <1582059128-12704-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20200219004127.33deee5e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 16 Feb 2020 15:52:04 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Tue, 18 Feb 2020 21:52:08 +0100
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-> libupnpp uses pkg-config since version 0.15.1 and
-> https://opensourceprojects.eu/p/libupnpp/code/ci/3dc44417e868b9b4417cbc15f8173e0a2e142b17
-> so remove unneeded static workaround
+> See full changelog https://github.com/analogdevicesinc/libiio/releases/tag/v0.19
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Also remove patch applied upstream
+> 
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 > ---
->  package/libupnpp/libupnpp.mk | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
+>  ...ll-of-binaries-with-a-static-only-library.patch | 44 ----------------------
+>  package/libiio/libiio.hash                         |  2 +-
+>  package/libiio/libiio.mk                           |  2 +-
+>  3 files changed, 2 insertions(+), 46 deletions(-)
+>  delete mode 100644 package/libiio/0001-fix-install-of-binaries-with-a-static-only-library.patch
 
-Applied to master, thanks.
+Applied to next, thanks.
 
 Thomas
 -- 
