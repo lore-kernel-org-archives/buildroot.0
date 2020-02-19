@@ -1,49 +1,41 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 19 Feb 2020 10:11:51 +0100
-Subject: [Buildroot] [PATCH] package/libxml2: properly set
- LIBXML2_IGNORE_CVES
-In-Reply-To: <20200218233647.128671-1-thomas.petazzoni@bootlin.com>
-References: <20200218233647.128671-1-thomas.petazzoni@bootlin.com>
-Message-ID: <CAAXf6LX65aoXZG+4+M71g-XZqha53aFrg6KFcOta=pBy2DkUJQ@mail.gmail.com>
+Date: Wed, 19 Feb 2020 10:21:39 +0100
+Subject: [Buildroot] CVE tracking for selected packages
+Message-ID: <CAAXf6LURHBGiU6zTD-KQ85R+MjUxn9vJQc04-ViEXuS1r6HvCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mi?., 19 feb. 2020 a las 0:37, Thomas Petazzoni
-(<thomas.petazzoni@bootlin.com>) escribi?:
->
-> The libxml2 package has two patches that fix the two CVEs affecting
-> libxml2 in version 2.9.10, so let's use LIBXML2_IGNORE_CVES to ensure
-> these CVEs are no longer reported by pkg-stats.
->
-> Cc: Titouan Christophe <titouan.christophe@railnova.eu>
-> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/libxml2/libxml2.mk | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-> index f6cf084b2b..ea6a8c1f6d 100644
-> --- a/package/libxml2/libxml2.mk
-> +++ b/package/libxml2/libxml2.mk
-> @@ -9,6 +9,10 @@ LIBXML2_SITE = http://xmlsoft.org/sources
->  LIBXML2_INSTALL_STAGING = YES
->  LIBXML2_LICENSE = MIT
->  LIBXML2_LICENSE_FILES = COPYING
-> +# 0001-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch
-> +LIBXML2_IGNORE_CVES += CVE-2020-7595
-> +# 0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch
-> +LIBXML2_IGNORE_CVES += CVE-2019-20388
->  LIBXML2_CONFIG_SCRIPTS = xml2-config
->
->  # relocation truncated to fit: R_68K_GOT16O
-> --
+Hi all,
 
-Thanks, I was just going to make this change after Peter's mail :-)
+With the recent addition of CVE checks in the pkg-stats script, we
+have made a great step forward, and anyone can check the list at:
+http://autobuild.buildroot.org/stats/ to see which packages have which CVEs.
 
-What is the update frequency of http://autobuild.buildroot.org/stats/ ?
+What would be another great improvement, is the possibility to check
+for a given defconfig in a particular Buildroot tree (i.e. not
+necessarily the master) which CVEs are not yet solved.
 
-/Thomas
+Basically something like:
+
+    make cve-info
+
+which would list only those CVEs applicable for the packages selected,
+so that a user knows directly if action is required or not for their
+particular case.
+
+Alternatively, we could add the info to 'make show-info', but since
+obtaining the info will also require a download of the CVE databases,
+I assume this is not desired.
+
+For the implementation, I assume we should either create a make target
+to call pkg-stats with the list of packages required, and perhaps
+restricting to CVE checking only (instead of also version checking),
+or extract the CVE logic to another file that can be reused by both
+pkg-stats as the new thing.
+
+Feedback welcome!
+
+Thomas
