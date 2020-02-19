@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Feb 2020 00:43:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/connman: bump to 1.38
-In-Reply-To: <20200219231616.19489-1-petr.vorel@gmail.com>
-References: <20200219231616.19489-1-petr.vorel@gmail.com>
-Message-ID: <20200220004323.17052b16@windsurf>
+Date: Thu, 20 Feb 2020 00:44:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/brltty: fix build with expat
+In-Reply-To: <20200214164036.2901160-1-fontaine.fabrice@gmail.com>
+References: <20200214164036.2901160-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200220004432.5d237143@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Fabrice,
 
-On Thu, 20 Feb 2020 00:16:16 +0100
-Petr Vorel <petr.vorel@gmail.com> wrote:
+On Fri, 14 Feb 2020 17:40:36 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> NOTE: andes-nds32 it's due problems with libffi and it's not caused by this update.
-> Any idea, how to disable andes-nds32?
-> 
-> configure: error: "libffi has not been ported to nds32le-buildroot-linux-gnu."
-> make: *** [package/pkg-generic.mk:264: /home/pvorel/br-test-pkg/andes-nds32/build/libffi-3.3/.stamp_configured] Error 1
+> Build with expat fails since January 14th (for an unknown reason as
+> commit cd16e18584066d2817d3acb3822e173f9f23455e does not seem to be the
+> culprit even if this is the more suspicious commit around that time) on:
 
-You don't have to worry about this: any configuration on NDS32 that has
-BR2_PACKAGE_LIBFFI=y is rejected and not tested by the autobuilders.
+Thanks a lot for this patch, it was a good starting point to
+investigate more, and based on your research, I could dig deeper and
+submit what I believe is a more correct solution:
 
-Ideally, we should have a BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS option, but
-libffi has so many reverse dependencies that nobody ever did the effort
-to add this option.
+  http://patchwork.ozlabs.org/patch/1241072/
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
