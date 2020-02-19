@@ -1,43 +1,30 @@
-From: John Keeping <john@metanate.com>
-Date: Wed, 19 Feb 2020 11:25:59 +0000
-Subject: [Buildroot] [PATCH] package/util-linux: disable systemd for host
- build
-Message-ID: <20200219112559.1429304-1-john@metanate.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 19 Feb 2020 13:28:08 +0100
+Subject: [Buildroot] [PATCH] package/libxml2: properly set
+ LIBXML2_IGNORE_CVES
+In-Reply-To: <CAAXf6LX65aoXZG+4+M71g-XZqha53aFrg6KFcOta=pBy2DkUJQ@mail.gmail.com>
+References: <20200218233647.128671-1-thomas.petazzoni@bootlin.com>
+ <CAAXf6LX65aoXZG+4+M71g-XZqha53aFrg6KFcOta=pBy2DkUJQ@mail.gmail.com>
+Message-ID: <20200219132808.5c8a7151@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building host-util-linux, the systemdsystemunitdir is set to the
-real host directory, so the install step fails with:
+On Wed, 19 Feb 2020 10:11:51 +0100
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-/usr/bin/install: cannot remove '/usr/lib/systemd/system/fstrim.service': Permission denied
-/usr/bin/install: cannot remove '/usr/lib/systemd/system/fstrim.timer': Permission denied
+> What is the update frequency of http://autobuild.buildroot.org/stats/ ?
 
-Since we don't need systemd support in host-util-linux, unconditionally
-disable it for the host build.
+Normally every day at 8:00 AM CET. Based on the data of the next branch
+when a next branch exists, otherwise using data of the master branch.
 
-Signed-off-by: John Keeping <john@metanate.com>
----
- package/util-linux/util-linux.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+However, we will probably want to run it on master / LTS as well in
+order to have CVE information for these branches as well.
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 549442232e..b6ccaaa78d 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -38,7 +38,10 @@ UTIL_LINUX_CONF_OPTS += \
- HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
- 
- # We also don't want the host-python dependency
--HOST_UTIL_LINUX_CONF_OPTS = --without-python
-+HOST_UTIL_LINUX_CONF_OPTS = \
-+	--without-systemd \
-+	--with-systemdsystemunitdir=no \
-+	--without-python
- 
- # Prevent the installation from attempting to move shared libraries from
- # ${usrlib_execdir} (/usr/lib) to ${libdir} (/lib), since both paths are
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
