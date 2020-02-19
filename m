@@ -1,34 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2020 17:02:00 +0100
-Subject: [Buildroot] [PATCH 3/5] package/libtomcrypt: annotate _IGNORE_CVES
+Date: Wed, 19 Feb 2020 17:01:59 +0100
+Subject: [Buildroot] [PATCH 2/5] package/libsndfile: annotate _IGNORE_CVES
  for the included security patches
 In-Reply-To: <20200219160203.874-1-peter@korsgaard.com>
 References: <20200219160203.874-1-peter@korsgaard.com>
-Message-ID: <20200219160203.874-3-peter@korsgaard.com>
+Message-ID: <20200219160203.874-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also mark CVE-2018-13419 as disputed.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libtomcrypt/libtomcrypt.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/libsndfile/libsndfile.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
-index 583bcb15ff..c2f1babb49 100644
---- a/package/libtomcrypt/libtomcrypt.mk
-+++ b/package/libtomcrypt/libtomcrypt.mk
-@@ -13,6 +13,9 @@ LIBTOMCRYPT_INSTALL_STAGING = YES
- LIBTOMCRYPT_INSTALL_TARGET = NO # only static library
- LIBTOMCRYPT_DEPENDENCIES = libtommath
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index 22909ffb62..4a375ab609 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
+@@ -10,6 +10,17 @@ LIBSNDFILE_INSTALL_STAGING = YES
+ LIBSNDFILE_LICENSE = LGPL-2.1+
+ LIBSNDFILE_LICENSE_FILES = COPYING
  
-+# 0001-fix-CVE-2019-17362.patch
-+LIBTOMCRYPT_IGNORE_CVES += CVE-2019-17362
++# 0001-double64_init-Check-psf-sf.channels-against-upper-bo.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-14634
++# 0002-Check-MAX_CHANNELS-in-sndfile-deinterleave.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2018-13139 CVE-2018-19432
++# 0003-a-ulaw-fix-multiple-buffer-overflows-432.patch
++LIBSNDFILE_IGNORE_CVES += \
++	CVE-2017-14245 CVE-2017-14246 CVE-2017-17456 CVE-2017-17457 \
++	CVE-2018-19661 CVE-2018-19662
++# disputed
++LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
 +
- LIBTOMCRYPT_CFLAGS = -I./src/headers $(TARGET_CFLAGS) -DLTC_SOURCE -DLTM_DESC
- 
- define LIBTOMCRYPT_BUILD_CMDS
+ LIBSNDFILE_CONF_OPTS = \
+ 	--disable-sqlite \
+ 	--disable-alsa \
 -- 
 2.20.1
