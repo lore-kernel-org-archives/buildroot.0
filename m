@@ -1,79 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Feb 2020 21:38:41 +0100
-Subject: [Buildroot] [PATCH 3/3] package/pkg-meson.mk: explicitly
- specify pkg-config settings
-In-Reply-To: <20200205103304.2515942-3-arnout@mind.be>
-References: <20200205103304.2515942-1-arnout@mind.be>
- <20200205103304.2515942-3-arnout@mind.be>
-Message-ID: <20200219213841.3a1fb7a5@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Feb 2020 22:34:07 +0100
+Subject: [Buildroot] [PATCH v3 1/2] support/scripts/pkg-stats: add
+ support for CVE reporting
+In-Reply-To: <CAAXf6LV8MSXPGrQW2GUhJcR4pjupw2EHFb7H6x4R0OkbrYFiMQ@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Wed, 19 Feb 2020 21:33:45
+ +0100")
+References: <20200215124417.236492-1-titouan.christophe@railnova.eu>
+ <20200215124417.236492-2-titouan.christophe@railnova.eu>
+ <20200219194858.11b317f6@windsurf>
+ <CAAXf6LV8MSXPGrQW2GUhJcR4pjupw2EHFb7H6x4R0OkbrYFiMQ@mail.gmail.com>
+Message-ID: <87mu9ecldc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-On Wed,  5 Feb 2020 11:33:04 +0100
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+Hi,
 
-> meson is able to distinguish between host (= native) and target (=
-> cross) compilation. It will explicitly pass different options to
-> pkg-config to distinguish them. Therefore, we don't need to use the
-> pkg-config wrapper when using meson, and can instead pass the pkg-config
-> settings through the cross-compilation.conf.
-> 
-> This is important because in some situations (e.g. for the Python
-> configuration), meson sets the PKG_CONFIG_LIBDIR variable to a different
-> value before calling pkg-config. Relying on our wrapper script doesn't
-> work in that case (except if the script would unconditionally set
-> PKG_CONFIG_LIBDIR, which it doesn't do at the moment).
-> 
-> Add the sys_root and pkg_config_lib settings to cross-compilation.conf
-> and use pkgconf directly instead of the wrapper.
-> 
-> Note that this requires us to substitute STAGING_DIR as well, with an
-> absolute path. This is not a big deal since cross-compilation.conf is
-> regenerated for every package.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > In the memory usage, RES first increased to ~4G, and then dropped back
+ > to 2.2G. I think this is the Python garbage collector kicking in,
+ > _after_ the new file is loaded.
+ > So the worst case memory usage is roughly the size of two largest
+ > subsequent years.
 
-Unfortunately, this breaks the build of libglib2 in static linking
-scenarios:
+ > Doing some quick google search, I stumbled upon the 'pandas' python
+ > package, which has a read_json function too. During a quick test, it
+ > seemed to be more memory efficient, and the total memory size on
+ > subsequent reads stayed in the 2.x GB range.
 
-  http://autobuild.buildroot.net/results/35c/35ce460192581a3ce2866ef5d3cb5391afd68cc5/build-end.log
+ > content = pandas.read_json('/tmp/nvd/nvdcve-1.0-2019.json.gz')
+ > content = pandas.read_json('/tmp/nvd/nvdcve-1.0-2018.json.gz')
 
-And now that I have merged the fixes for the erlang an sdbusplus
-issues, this libglib2 issue is the #1 issue hitting the autobuilders on
-master.
+ > In the full test of pkg-stats, I still saw a peak memory usage near
+ > the end, but it 'seemed' better :-)
 
-The problem comes from the fact that by skipping the wrapper, you are
-no longer passing the --static option to pkg-config when building
-statically.
+Or perhaps something that doesn't load the entire json structure into
+memory? Jsonslicer seems like a possible solution:
 
-From a quick look at build/lib/mesonbuild/dependencies/base.py in the
-Meson code base, it seems like there is some way to have it pass
---static to pkg-config:
+https://pypi.org/project/jsonslicer/
 
-        if self.static:
-            libcmd.append('--static')
-
-But it's not clear to me how that happens. Perhaps with your better
-knowledge of the Meson code base you will have an idea here ?
-
-Of course, we don't want to unconditionally pass --static, as --static
-should be passed when using pkg-config to look up for target libraries,
-but not when looking up for host libraries, and the whole point of your
-initial patch was precisely to leave it up to meson to invoke
-pkg-config the "right" way depending on whether it was cross-compiling
-something or natively compiling.
-
-Could you help here ?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
