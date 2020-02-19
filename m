@@ -1,50 +1,46 @@
-From: Whitney, Scott <scwhitn@amazon.com>
-Date: Wed, 19 Feb 2020 14:25:17 +0000
-Subject: [Buildroot] Overlay not using a merged /usr?
-Message-ID: <1582122316810.2357@amazon.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Wed, 19 Feb 2020 15:46:49 +0100
+Subject: [Buildroot] [PATCH v6 00/28] Qt5 qmake infra and per-package
+ compatibility
+In-Reply-To: <20200218223353.09cdf837@gmx.net>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200218223353.09cdf837@gmx.net>
+Message-ID: <83acad38-c76a-6fa1-dfe9-11d069e6d469@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Buildroot community,
+Hi Peter,
 
+Am 18.02.20 um 22:33 schrieb Peter Seiderer:
+> Hello Andreas,
+> 
+> On Mon, 17 Feb 2020 22:23:22 +0100, Andreas Naumann <anaumann@ultratronik.de> wrote:
+> 
+> 
+>> - qtwebengine locales appear in usr/translations/qtwebengine_locales/
+>> instead of usr/translations/qtwebengine_locales/qtwebengine_locales/
+> 
+> And this perfect as the qtwebengine searches for locales *.pak files
+> exactly under this location e.g.:
+> 
+> 	/usr/translations/qtwebengine_locales/en-US.pak
+> 
+> The double path is a buildroot qt5webengine package install mistake...,
 
-I am working with a TI AM6548 SoC, and need to add some firmware (.elf) files so that they will end up in /lib/firmware/ti-pruss.  These files get loaded into some special cores within the SoC to create additional Ethernet ports.
+That's what I'm saying. And the generic qmake infra would fix it.
 
+regards,
+Andreas
 
-I am using a Buildroot overlay with BR2_EXTERNAL, and tried to add the files under rootfs-overlay/lib/firmware/ti-pruss, i.e.:
-
-
-scwhitn at ud9a5a686d6f756:~/Projects/AR_Reflex3_Buildroot/overlay/board/control-carrier/rootfs-overlay$ ls lib/firmware/ti-pruss
-am65x-pru0-prueth-fw.elf  am65x-rtu0-prueth-fw.elf
-am65x-pru1-prueth-fw.elf  am65x-rtu1-prueth-fw.elf
-
-
-However, when I run make, I get the following error, and I'm not sure how to resolve it:
-
-
->>>   Sanity check in overlay /home/local/ANT/scwhitn/Projects/AR_Reflex3_Buildroot/overlay/board/control-carrier/rootfs-overlay
-ERROR: The overlay in /home/local/ANT/scwhitn/Projects/AR_Reflex3_Buildroot/overlay/board/control-carrier/rootfs-overlay is not using a merged /usr for the following directories: /lib
-Makefile:738: recipe for target 'target-finalize' failed
-make: *** [target-finalize] Error 1
-
-
-I'm not even sure what this message means, or how to fix it.  At the moment, the only "user" we really have is root.
-
-
-Can someone explain how to add these files so that they will show up in /lib/firmware/ti-pruss/*.elf without errors?
-
-
-I'm using buildroot-2019.02.6.  This is _urgent_; it's the last peripheral that we need to support before the project can be handed over to out client as complete.
-
-
-Thanks for your help and understanding
-
-
-Scott Whitney
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200219/d4303543/attachment.html>
+> patch fixing this will follow soon...
+> 
+> Regards,
+> Peter
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
