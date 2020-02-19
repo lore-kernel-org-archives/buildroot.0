@@ -1,44 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2020 17:01:59 +0100
-Subject: [Buildroot] [PATCH 2/5] package/libsndfile: annotate _IGNORE_CVES
+Date: Wed, 19 Feb 2020 17:02:02 +0100
+Subject: [Buildroot] [PATCH 5/5] package/ipsec-tools: annotate _IGNORE_CVES
  for the included security patches
 In-Reply-To: <20200219160203.874-1-peter@korsgaard.com>
 References: <20200219160203.874-1-peter@korsgaard.com>
-Message-ID: <20200219160203.874-2-peter@korsgaard.com>
+Message-ID: <20200219160203.874-5-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also mark CVE-2018-13419 as disputed.
-
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsndfile/libsndfile.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/ipsec-tools/ipsec-tools.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index 22909ffb62..4a375ab609 100644
---- a/package/libsndfile/libsndfile.mk
-+++ b/package/libsndfile/libsndfile.mk
-@@ -10,6 +10,17 @@ LIBSNDFILE_INSTALL_STAGING = YES
- LIBSNDFILE_LICENSE = LGPL-2.1+
- LIBSNDFILE_LICENSE_FILES = COPYING
+diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
+index 634d752661..72bd8c196c 100644
+--- a/package/ipsec-tools/ipsec-tools.mk
++++ b/package/ipsec-tools/ipsec-tools.mk
+@@ -15,6 +15,11 @@ IPSEC_TOOLS_DEPENDENCIES = openssl flex host-pkgconf host-flex host-bison
+ # we patch configure.ac
+ IPSEC_TOOLS_AUTORECONF = YES
  
-+# 0001-double64_init-Check-psf-sf.channels-against-upper-bo.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2017-14634
-+# 0002-Check-MAX_CHANNELS-in-sndfile-deinterleave.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2018-13139 CVE-2018-19432
-+# 0003-a-ulaw-fix-multiple-buffer-overflows-432.patch
-+LIBSNDFILE_IGNORE_CVES += \
-+	CVE-2017-14245 CVE-2017-14246 CVE-2017-17456 CVE-2017-17457 \
-+	CVE-2018-19661 CVE-2018-19662
-+# disputed
-+LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
++# 0004-CVE-2015-4047.patch
++IPSEC_TOOLS_IGNORE_CVES += CVE-2015-4047
++# 0005-CVE-2016-10396.patch
++IPSEC_TOOLS_IGNORE_CVES += CVE-2016-10396
 +
- LIBSNDFILE_CONF_OPTS = \
- 	--disable-sqlite \
- 	--disable-alsa \
+ # configure hardcodes -Werror, so override CFLAGS on make invocation
+ IPSEC_TOOLS_MAKE_OPTS = CFLAGS='$(TARGET_CFLAGS)'
+ 
 -- 
 2.20.1
