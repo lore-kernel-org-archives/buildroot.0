@@ -1,59 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2020 16:12:18 +0100
-Subject: [Buildroot] Overlay not using a merged /usr?
-In-Reply-To: <1582122316810.2357@amazon.com> (Scott Whitney's message of "Wed, 
- 19 Feb 2020 14:25:17 +0000")
-References: <1582122316810.2357@amazon.com>
-Message-ID: <87r1yqd31p.fsf@dell.be.48ers.dk>
+Date: Wed, 19 Feb 2020 17:01:58 +0100
+Subject: [Buildroot] [PATCH 1/5] package/audiofile: annotate _IGNORE_CVES
+ for the included security patches
+Message-ID: <20200219160203.874-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Whitney," == Whitney, Scott <scwhitn@amazon.com> writes:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/audiofile/audiofile.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
- > Hello Buildroot community,
- > I am working with a TI AM6548 SoC, and need to add some firmware
- > (.elf) files so that they will end up in /lib/firmware/ti-pruss.
- > These files get loaded into some special cores within the SoC to
- > create additional Ethernet ports.
-
-
- > I am using a Buildroot overlay with BR2_EXTERNAL, and tried to add the files under rootfs-overlay/lib/firmware/ti-pruss, i.e.:
-
-
- > scwhitn at ud9a5a686d6f756:~/Projects/AR_Reflex3_Buildroot/overlay/board/control-carrier/rootfs-overlay$ ls lib/firmware/ti-pruss
- > am65x-pru0-prueth-fw.elf  am65x-rtu0-prueth-fw.elf
- > am65x-pru1-prueth-fw.elf  am65x-rtu1-prueth-fw.elf
-
-
- > However, when I run make, I get the following error, and I'm not sure how to resolve it:
-
-
- >>>> Sanity check in overlay /home/local/ANT/scwhitn/Projects/AR_Reflex3_Buildroot/overlay/board/control-carrier/rootfs-overlay
- > ERROR: The overlay in
- > /home/local/ANT/scwhitn/Projects/AR_Reflex3_Buildroot/overlay/board/control-carrier/rootfs-overlay
- > is not using a merged /usr for the following directories: /lib
- > Makefile:738: recipe for target 'target-finalize' failed
- > make: *** [target-finalize] Error 1
-
-
-You are presumably using a merged /usr (BR2_ROOTFS_MERGED_USR), where
-/lib should be a symlink to /usr/lib, so when you add a rootfs overlay
-containing a /lib directory this is no longer valid and it complains.
-
-Simply put your files in the overlay under /usr/lib/.. instead.
-
-
- > I'm using buildroot-2019.02.6.  This is _urgent_; it's the last
- > peripheral that we need to support before the project can be handed
- > over to out client as complete.
-
-You may consider moving to 2019.02.9 for a number of (security) fixes
-since the 2019.02.6 release, and also notice that the 2019.02.x will go
-end of life in approximately 1 month, so consider updating to 2020.02
-(once released at the end of the month).
-
+diff --git a/package/audiofile/audiofile.mk b/package/audiofile/audiofile.mk
+index 2f2e8902e9..bb46436d85 100644
+--- a/package/audiofile/audiofile.mk
++++ b/package/audiofile/audiofile.mk
+@@ -15,6 +15,22 @@ AUDIOFILE_AUTORECONF = YES
+ AUDIOFILE_LICENSE = GPL-2.0+, LGPL-2.1+
+ AUDIOFILE_LICENSE_FILES = COPYING COPYING.GPL
+ 
++# 0003-Always-check-the-number-of-coefficients.patch
++AUDIOFILE_IGNORE_CVES += \
++	CVE-2017-6827 CVE-2017-6828 CVE-2017-6832 \
++	CVE-2017-6833 CVE-2017-6835 CVE-2017-6837
++# 0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
++AUDIOFILE_IGNORE_CVES += CVE-2017-6829
++# 0005-Check-for-multiplication-overflow-in-sfconvert.patch
++AUDIOFILE_IGNORE_CVES += \
++	CVE-2017-6830 CVE-2017-6834 CVE-2017-6836 CVE-2017-6838
++# 0006-Actually-fail-when-error-occurs-in-parseFormat.patch
++AUDIOFILE_IGNORE_CVES += CVE-2017-6831
++# 0007-Check-for-multiplication-overflow-in-MSADPCM-decodeS.patch
++AUDIOFILE_IGNORE_CVES += CVE-2017-6839
++# 0008-CVE-2015-7747.patch
++AUDIOFILE_IGNORE_CVES += CVE-2015-7747
++
+ ifeq ($(BR2_PACKAGE_FLAC),y)
+ AUDIOFILE_DEPENDENCIES += flac
+ AUDIOFILE_CONF_OPTS += --enable-flac
 -- 
-Bye, Peter Korsgaard
+2.20.1
