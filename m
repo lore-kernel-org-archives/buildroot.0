@@ -1,30 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Feb 2020 20:15:28 +0100
-Subject: [Buildroot] [PATCH 1/2] Makefile: use HOST_DIR_SYMLINK instead
- of hardcoding
-In-Reply-To: <20200218150101.22274-1-patrickdepinguin@gmail.com>
-References: <20200218150101.22274-1-patrickdepinguin@gmail.com>
-Message-ID: <20200219201528.01885f68@windsurf>
+Date: Wed, 19 Feb 2020 20:15:47 +0100
+Subject: [Buildroot] [git commit] package/qwt: add missing qt5svg dependency
+Message-ID: <20200219190449.C38DE8E549@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 Feb 2020 16:00:59 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bd99e4e54de06c1183c7823f14b05a3be8061296
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qwt/qwt.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks. Both applied to master.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index e0ffec765f..a82c786cb1 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -19,6 +19,7 @@ QWT_CONFIG += -e 's%/features%/mkspecs/features%'
+ 
+ ifeq ($(BR2_PACKAGE_QWT_SVG),y)
+ QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtSvg.*$$/QWT_CONFIG += QwtSvg/'
++QWT_DEPENDENCIES += qt5svg
+ else
+ QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtSvg.*$$/\# QWT_CONFIG += QwtSvg/'
+ endif
