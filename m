@@ -1,27 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Feb 2020 13:28:08 +0100
-Subject: [Buildroot] [PATCH] package/libxml2: properly set
- LIBXML2_IGNORE_CVES
-In-Reply-To: <CAAXf6LX65aoXZG+4+M71g-XZqha53aFrg6KFcOta=pBy2DkUJQ@mail.gmail.com>
-References: <20200218233647.128671-1-thomas.petazzoni@bootlin.com>
- <CAAXf6LX65aoXZG+4+M71g-XZqha53aFrg6KFcOta=pBy2DkUJQ@mail.gmail.com>
-Message-ID: <20200219132808.5c8a7151@windsurf>
+Date: Wed, 19 Feb 2020 13:38:31 +0100
+Subject: [Buildroot] CVE tracking for selected packages
+In-Reply-To: <CAAXf6LURHBGiU6zTD-KQ85R+MjUxn9vJQc04-ViEXuS1r6HvCQ@mail.gmail.com>
+References: <CAAXf6LURHBGiU6zTD-KQ85R+MjUxn9vJQc04-ViEXuS1r6HvCQ@mail.gmail.com>
+Message-ID: <20200219133831.12b266fd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 19 Feb 2020 10:11:51 +0100
+On Wed, 19 Feb 2020 10:21:39 +0100
 Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-> What is the update frequency of http://autobuild.buildroot.org/stats/ ?
+> What would be another great improvement, is the possibility to check
+> for a given defconfig in a particular Buildroot tree (i.e. not
+> necessarily the master) which CVEs are not yet solved.
+> 
+> Basically something like:
+> 
+>     make cve-info
 
-Normally every day at 8:00 AM CET. Based on the data of the next branch
-when a next branch exists, otherwise using data of the master branch.
+Absolutely.
 
-However, we will probably want to run it on master / LTS as well in
-order to have CVE information for these branches as well.
+> For the implementation, I assume we should either create a make target
+> to call pkg-stats with the list of packages required, and perhaps
+> restricting to CVE checking only (instead of also version checking),
+> or extract the CVE logic to another file that can be reused by both
+> pkg-stats as the new thing.
+
+I don't think calling into pkg-stats is really a good idea for that, we
+probably want some other "thing", possibly also used by pkg-stats.
+
+Best regards,
 
 Thomas
 -- 
