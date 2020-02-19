@@ -1,37 +1,37 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 19 Feb 2020 20:41:25 -0300
-Subject: [Buildroot] [git commit] board/freescale/common/imx: add
- support for i.MX8
-In-Reply-To: <CAOMZO5CHe+RMh2DMAm=aSraq6+bnu=nZdkbT6L-5LWd8EFa9HQ@mail.gmail.com>
-References: <20200205111426.415708122F@busybox.osuosl.org>
- <CAOMZO5BOONSJYw9hrgJXNMJTOW0mDB+Xz7BfcexOPkuOZ80XeQ@mail.gmail.com>
- <20200212161816.23f55959@windsurf>
- <CAOMZO5CHe+RMh2DMAm=aSraq6+bnu=nZdkbT6L-5LWd8EFa9HQ@mail.gmail.com>
-Message-ID: <CAOMZO5AfxhroxyMEB44tZgjWwmeZvwX9NhmztrvR+SnBqugBfA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 20 Feb 2020 00:43:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/connman: bump to 1.38
+In-Reply-To: <20200219231616.19489-1-petr.vorel@gmail.com>
+References: <20200219231616.19489-1-petr.vorel@gmail.com>
+Message-ID: <20200220004323.17052b16@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Wed, Feb 12, 2020 at 12:28 PM Fabio Estevam <festevam@gmail.com> wrote:
->
-> Hi Thomas,
->
-> On Wed, Feb 12, 2020 at 12:18 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->
-> > It's my fault for applying only parts of Maeva's patches, because some
-> > of the patches had already been applied in a different form.
-> >
-> > Could you try this:
->
-> This fixes the build issue. Also did a boot test and it works fine:
->
-> Tested-by: Fabio Estevam <festevam@gmail.com>
+On Thu, 20 Feb 2020 00:16:16 +0100
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-Do you plan to submit this as a formal patch?
+> NOTE: andes-nds32 it's due problems with libffi and it's not caused by this update.
+> Any idea, how to disable andes-nds32?
+> 
+> configure: error: "libffi has not been ported to nds32le-buildroot-linux-gnu."
+> make: *** [package/pkg-generic.mk:264: /home/pvorel/br-test-pkg/andes-nds32/build/libffi-3.3/.stamp_configured] Error 1
 
-Thanks
+You don't have to worry about this: any configuration on NDS32 that has
+BR2_PACKAGE_LIBFFI=y is rejected and not tested by the autobuilders.
+
+Ideally, we should have a BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS option, but
+libffi has so many reverse dependencies that nobody ever did the effort
+to add this option.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
