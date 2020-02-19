@@ -1,46 +1,59 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Wed, 19 Feb 2020 15:46:49 +0100
-Subject: [Buildroot] [PATCH v6 00/28] Qt5 qmake infra and per-package
- compatibility
-In-Reply-To: <20200218223353.09cdf837@gmx.net>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200218223353.09cdf837@gmx.net>
-Message-ID: <83acad38-c76a-6fa1-dfe9-11d069e6d469@andin.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Feb 2020 16:12:18 +0100
+Subject: [Buildroot] Overlay not using a merged /usr?
+In-Reply-To: <1582122316810.2357@amazon.com> (Scott Whitney's message of "Wed, 
+ 19 Feb 2020 14:25:17 +0000")
+References: <1582122316810.2357@amazon.com>
+Message-ID: <87r1yqd31p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Whitney," == Whitney, Scott <scwhitn@amazon.com> writes:
 
-Am 18.02.20 um 22:33 schrieb Peter Seiderer:
-> Hello Andreas,
-> 
-> On Mon, 17 Feb 2020 22:23:22 +0100, Andreas Naumann <anaumann@ultratronik.de> wrote:
-> 
-> 
->> - qtwebengine locales appear in usr/translations/qtwebengine_locales/
->> instead of usr/translations/qtwebengine_locales/qtwebengine_locales/
-> 
-> And this perfect as the qtwebengine searches for locales *.pak files
-> exactly under this location e.g.:
-> 
-> 	/usr/translations/qtwebengine_locales/en-US.pak
-> 
-> The double path is a buildroot qt5webengine package install mistake...,
+ > Hello Buildroot community,
+ > I am working with a TI AM6548 SoC, and need to add some firmware
+ > (.elf) files so that they will end up in /lib/firmware/ti-pruss.
+ > These files get loaded into some special cores within the SoC to
+ > create additional Ethernet ports.
 
-That's what I'm saying. And the generic qmake infra would fix it.
 
-regards,
-Andreas
+ > I am using a Buildroot overlay with BR2_EXTERNAL, and tried to add the files under rootfs-overlay/lib/firmware/ti-pruss, i.e.:
 
-> patch fixing this will follow soon...
-> 
-> Regards,
-> Peter
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+
+ > scwhitn at ud9a5a686d6f756:~/Projects/AR_Reflex3_Buildroot/overlay/board/control-carrier/rootfs-overlay$ ls lib/firmware/ti-pruss
+ > am65x-pru0-prueth-fw.elf  am65x-rtu0-prueth-fw.elf
+ > am65x-pru1-prueth-fw.elf  am65x-rtu1-prueth-fw.elf
+
+
+ > However, when I run make, I get the following error, and I'm not sure how to resolve it:
+
+
+ >>>> Sanity check in overlay /home/local/ANT/scwhitn/Projects/AR_Reflex3_Buildroot/overlay/board/control-carrier/rootfs-overlay
+ > ERROR: The overlay in
+ > /home/local/ANT/scwhitn/Projects/AR_Reflex3_Buildroot/overlay/board/control-carrier/rootfs-overlay
+ > is not using a merged /usr for the following directories: /lib
+ > Makefile:738: recipe for target 'target-finalize' failed
+ > make: *** [target-finalize] Error 1
+
+
+You are presumably using a merged /usr (BR2_ROOTFS_MERGED_USR), where
+/lib should be a symlink to /usr/lib, so when you add a rootfs overlay
+containing a /lib directory this is no longer valid and it complains.
+
+Simply put your files in the overlay under /usr/lib/.. instead.
+
+
+ > I'm using buildroot-2019.02.6.  This is _urgent_; it's the last
+ > peripheral that we need to support before the project can be handed
+ > over to out client as complete.
+
+You may consider moving to 2019.02.9 for a number of (security) fixes
+since the 2019.02.6 release, and also notice that the 2019.02.x will go
+end of life in approximately 1 month, so consider updating to 2020.02
+(once released at the end of the month).
+
+-- 
+Bye, Peter Korsgaard
