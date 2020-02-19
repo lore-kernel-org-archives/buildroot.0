@@ -1,46 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2020 22:34:07 +0100
-Subject: [Buildroot] [PATCH v3 1/2] support/scripts/pkg-stats: add
- support for CVE reporting
-In-Reply-To: <CAAXf6LV8MSXPGrQW2GUhJcR4pjupw2EHFb7H6x4R0OkbrYFiMQ@mail.gmail.com>
- (Thomas De Schampheleire's message of "Wed, 19 Feb 2020 21:33:45
- +0100")
-References: <20200215124417.236492-1-titouan.christophe@railnova.eu>
- <20200215124417.236492-2-titouan.christophe@railnova.eu>
- <20200219194858.11b317f6@windsurf>
- <CAAXf6LV8MSXPGrQW2GUhJcR4pjupw2EHFb7H6x4R0OkbrYFiMQ@mail.gmail.com>
-Message-ID: <87mu9ecldc.fsf@dell.be.48ers.dk>
+Date: Wed, 19 Feb 2020 22:37:04 +0100
+Subject: [Buildroot] [PATCH 2/5] package/libsndfile: annotate
+ _IGNORE_CVES for the included security patches
+In-Reply-To: <20200219200853.58120567@windsurf> (Thomas Petazzoni's message of
+ "Wed, 19 Feb 2020 20:08:53 +0100")
+References: <20200219160203.874-1-peter@korsgaard.com>
+ <20200219160203.874-2-peter@korsgaard.com>
+ <20200219200853.58120567@windsurf>
+Message-ID: <87imk2cl8f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Hi,
+ > On Wed, 19 Feb 2020 17:01:59 +0100
+ > Peter Korsgaard <peter@korsgaard.com> wrote:
 
- > In the memory usage, RES first increased to ~4G, and then dropped back
- > to 2.2G. I think this is the Python garbage collector kicking in,
- > _after_ the new file is loaded.
- > So the worst case memory usage is roughly the size of two largest
- > subsequent years.
+ >> Also mark CVE-2018-13419 as disputed.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > Doing some quick google search, I stumbled upon the 'pandas' python
- > package, which has a read_json function too. During a quick test, it
- > seemed to be more memory efficient, and the total memory size on
- > subsequent reads stayed in the 2.x GB range.
+ > What does "disputed" means in this context ?
 
- > content = pandas.read_json('/tmp/nvd/nvdcve-1.0-2019.json.gz')
- > content = pandas.read_json('/tmp/nvd/nvdcve-1.0-2018.json.gz')
+That someone related to the project claims that it isn't a security
+issue or cannot reproduce the issue.
 
- > In the full test of pkg-stats, I still saw a peak memory usage near
- > the end, but it 'seemed' better :-)
+Specifically for this CVE, see the discussion here:
 
-Or perhaps something that doesn't load the entire json structure into
-memory? Jsonslicer seems like a possible solution:
-
-https://pypi.org/project/jsonslicer/
+https://github.com/erikd/libsndfile/issues/398
 
 -- 
 Bye, Peter Korsgaard
