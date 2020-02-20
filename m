@@ -1,92 +1,408 @@
 From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Thu, 20 Feb 2020 17:01:19 +0100
-Subject: [Buildroot] [PATCH v3 10/10] docs/manual/adding-packages-cargo:
- Update for legal-info
+Date: Thu, 20 Feb 2020 17:01:18 +0100
+Subject: [Buildroot] [PATCH v3 09/10] package/ripgrep: add legal-info for
+ dependencies
 In-Reply-To: <20200220160119.3407-1-patrick.havelange@essensium.com>
 References: <20200220160119.3407-1-patrick.havelange@essensium.com>
-Message-ID: <20200220160119.3407-10-patrick.havelange@essensium.com>
+Message-ID: <20200220160119.3407-9-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added a bit of explanations regarding the vendored licenses.
+As the dependencies are now vendored in the tarball, we can
+extract them easily. Added a helper script to list them.
+Updated the .hash & .mk files with those new licenses.
 
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 ---
- docs/manual/adding-packages-cargo.txt | 45 ++++++++++++++++++++-------
- 1 file changed, 34 insertions(+), 11 deletions(-)
+ package/ripgrep/find_vendor_licenses.sh |   6 +
+ package/ripgrep/ripgrep.hash            | 167 +++++++++++++++++++++++
+ package/ripgrep/ripgrep.mk              |   4 +-
+ package/ripgrep/vendor.inc              | 169 ++++++++++++++++++++++++
+ 4 files changed, 345 insertions(+), 1 deletion(-)
+ create mode 100755 package/ripgrep/find_vendor_licenses.sh
+ create mode 100644 package/ripgrep/vendor.inc
 
-diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
-index e7d03eb7b5..e92b8bc353 100644
---- a/docs/manual/adding-packages-cargo.txt
-+++ b/docs/manual/adding-packages-cargo.txt
-@@ -38,19 +38,25 @@ with an example:
- 04: #
- 05: ################################################################################
- 06:
--07: FOO_VERSION = 1.0
--08: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
--09: FOO_SITE = http://www.foosoftware.org/download
--10: FOO_LICENSE = GPL-3.0+
--11: FOO_LICENSE_FILES = COPYING
--12:
--13: $(eval $(cargo-package))
-+07: include package/foo/vendor.inc
-+08:
-+09: FOO_VERSION = 1.0
-+10: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
-+11: FOO_SITE = http://www.foosoftware.org/download
-+12: FOO_LICENSE = GPL-3.0+
-+13: FOO_LICENSE_FILES = COPYING $(FOO_VENDOR_LICENSE_FILES)
-+14:
-+15: $(eval $(cargo-package))
- --------------------------------
+diff --git a/package/ripgrep/find_vendor_licenses.sh b/package/ripgrep/find_vendor_licenses.sh
+new file mode 100755
+index 0000000000..fd8638e399
+--- /dev/null
++++ b/package/ripgrep/find_vendor_licenses.sh
+@@ -0,0 +1,6 @@
++#!/bin/sh
++# to run from the extracted final sources
++find VENDOR/ -type f \
++    \( -iname '*license*' -o -iname 'licence*' -o -iname 'copying*' -o -iname 'copyright*' \) \
++    -a -not -name '*.a' | \
++    sort
+diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
+index 1e70cbae5a..cad9fdc865 100644
+--- a/package/ripgrep/ripgrep.hash
++++ b/package/ripgrep/ripgrep.hash
+@@ -1,3 +1,170 @@
+ # Locally calculated
+ sha256 c02fe3077c95872175b098d002f872a619195436569a7dff443bbb605bc27474 ripgrep-11.0.1.tar.gz
+ sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f LICENSE-MIT
++# Locally calculated with:
++# for i in $(find_vendor_licenses.sh) ; do echo -n "sha256 " ; sha256sum $i ; done | sort --key=3
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/aho-corasick/COPYING
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  VENDOR/aho-corasick/LICENSE-MIT
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/aho-corasick/UNLICENSE
++sha256 f3f8d32084848316048c5a1e125a3c5003eb32145a5f5f2a0d5586377324f9ba  VENDOR/atty/LICENSE
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/autocfg/LICENSE-APACHE
++sha256 27995d58ad5c1145c1a8cd86244ce844886958a35eb2b78c6b772748669999ac  VENDOR/autocfg/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/base64/LICENSE-APACHE
++sha256 0dd882e53de11566d50f8e8e2d5a651bcf3fabee4987d70f306233cf39094ba7  VENDOR/base64/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/bitflags/LICENSE-APACHE
++sha256 6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb  VENDOR/bitflags/LICENSE-MIT
++sha256 13361f93b3db60ddb43f8fdc97ba469461019bbf7589f6bde833eb3d995d2497  VENDOR/bstr/COPYING
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/bstr/LICENSE-APACHE
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  VENDOR/bstr/LICENSE-MIT
++sha256 b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  VENDOR/bytecount/LICENSE.Apache2
++sha256 a5dea80c1f383cb5f80a6bb0da5e55a2beb9f24adb123ce6300af2cbaaa3bf65  VENDOR/bytecount/LICENSE.MIT
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/byteorder/COPYING
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  VENDOR/byteorder/LICENSE-MIT
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/byteorder/UNLICENSE
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/cc/LICENSE-APACHE
++sha256 378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397  VENDOR/cc/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/cfg-if/LICENSE-APACHE
++sha256 378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397  VENDOR/cfg-if/LICENSE-MIT
++sha256 6725d1437fc6c77301f2ff0e7d52914cf4f9509213e1078dc77d9356dbe6eac5  VENDOR/clap/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/crossbeam-channel/LICENSE-APACHE
++sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  VENDOR/crossbeam-channel/LICENSE-MIT
++sha256 924a49392dc8304def57586be4ebd69aaf51e16fd245b55b4b69ad2cce6b715a  VENDOR/crossbeam-channel/LICENSE-THIRD-PARTY
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/crossbeam-utils/LICENSE-APACHE
++sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  VENDOR/crossbeam-utils/LICENSE-MIT
++sha256 8b98376eb373dcf81950474efe34b5576a8171460dff500cc58a1ed8d160cd57  VENDOR/encoding_rs/COPYRIGHT
++sha256 13361f93b3db60ddb43f8fdc97ba469461019bbf7589f6bde833eb3d995d2497  VENDOR/encoding_rs_io/COPYING
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/encoding_rs_io/LICENSE-APACHE
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  VENDOR/encoding_rs_io/LICENSE-MIT
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  VENDOR/encoding_rs/LICENSE-APACHE
++sha256 f2ad48641d9c997d9ae3b95d93d1cd6e1ab12ab4c44de89937c7bfabbd076a4a  VENDOR/encoding_rs/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/fnv/LICENSE-APACHE
++sha256 65fdb6c76cd61612070c066eec9ecdb30ee74fb27859d0d9af58b9f499fd0c3e  VENDOR/fnv/LICENSE-MIT
++sha256 03b114f53e6587a398931762ee11e2395bfdba252a329940e2c8c9e81813845b  VENDOR/fuchsia-cprng/LICENSE
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/glob/LICENSE-APACHE
++sha256 6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb  VENDOR/glob/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/itoa/LICENSE-APACHE
++sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  VENDOR/itoa/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/lazy_static/LICENSE-APACHE
++sha256 0621878e61f0d0fda054bcbe02df75192c28bde1ecc8289cbd86aeba2dd72720  VENDOR/lazy_static/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/libc/LICENSE-APACHE
++sha256 6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb  VENDOR/libc/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/log/LICENSE-APACHE
++sha256 6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb  VENDOR/log/LICENSE-MIT
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/memchr/COPYING
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  VENDOR/memchr/LICENSE-MIT
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/memchr/UNLICENSE
++sha256 04ea4849dba9dcae07113850c6f1b1a69052c625210639914eee352023f750ad  VENDOR/memmap/LICENSE-APACHE
++sha256 bd1d8f06a6ce1f7645991e347b95864b970eed43624305eb4bb78c09aef8692d  VENDOR/memmap/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/num_cpus/LICENSE-APACHE
++sha256 0593d22d122d4bfec6407115e3907546312976f75473417aaa4c57ecd2095ae6  VENDOR/num_cpus/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/packed_simd/LICENSE-APACHE
++sha256 6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb  VENDOR/packed_simd/LICENSE-MIT
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/pcre2/COPYING
++sha256 cb3c929a05e6cbc9de9ab06a4c57eeb60ca8c724bef6c138c87d3a577e27aa14  VENDOR/pcre2/LICENSE-MIT
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/pcre2-sys/COPYING
++sha256 cb3c929a05e6cbc9de9ab06a4c57eeb60ca8c724bef6c138c87d3a577e27aa14  VENDOR/pcre2-sys/LICENSE-MIT
++sha256 46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b  VENDOR/pcre2-sys/pcre2/cmake/COPYING-CMAKE-SCRIPTS
++sha256 99272c55f3dcfa07a8a7e15a5c1a33096e4727de74241d65fa049fccfdd59507  VENDOR/pcre2-sys/pcre2/COPYING
++sha256 c4a8b89cd38d6a7501d5b11a472fa15e71a051b66d6331c6cda364101389d6ee  VENDOR/pcre2-sys/pcre2/LICENCE
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/pcre2-sys/UNLICENSE
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/pcre2/UNLICENSE
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/pkg-config/LICENSE-APACHE
++sha256 378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397  VENDOR/pkg-config/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/proc-macro2/LICENSE-APACHE
++sha256 378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397  VENDOR/proc-macro2/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/quote/LICENSE-APACHE
++sha256 c9a75f18b9ab2927829a208fc6aa2cf4e63b8420887ba29cdb265d6619ae82d5  VENDOR/quote/LICENSE-MIT
++sha256 90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5  VENDOR/rand_chacha/COPYRIGHT
++sha256 aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf  VENDOR/rand_chacha/LICENSE-APACHE
++sha256 209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b  VENDOR/rand_chacha/LICENSE-MIT
++sha256 90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5  VENDOR/rand/COPYRIGHT
++sha256 90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5  VENDOR/rand_core-0.3.1/COPYRIGHT
++sha256 aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf  VENDOR/rand_core-0.3.1/LICENSE-APACHE
++sha256 209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b  VENDOR/rand_core-0.3.1/LICENSE-MIT
++sha256 90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5  VENDOR/rand_core/COPYRIGHT
++sha256 aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf  VENDOR/rand_core/LICENSE-APACHE
++sha256 209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b  VENDOR/rand_core/LICENSE-MIT
++sha256 90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5  VENDOR/rand_hc/COPYRIGHT
++sha256 aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf  VENDOR/rand_hc/LICENSE-APACHE
++sha256 a771e4354f6b3ad4c92da1a5c9a239b6c291527db869632ecea4f20e24ca1135  VENDOR/rand_hc/LICENSE-MIT
++sha256 90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5  VENDOR/rand_isaac/COPYRIGHT
++sha256 aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf  VENDOR/rand_isaac/LICENSE-APACHE
++sha256 209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b  VENDOR/rand_isaac/LICENSE-MIT
++sha256 90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5  VENDOR/rand_jitter/COPYRIGHT
++sha256 aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf  VENDOR/rand_jitter/LICENSE-APACHE
++sha256 209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b  VENDOR/rand_jitter/LICENSE-MIT
++sha256 aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf  VENDOR/rand/LICENSE-APACHE
++sha256 209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b  VENDOR/rand/LICENSE-MIT
++sha256 90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5  VENDOR/rand_os/COPYRIGHT
++sha256 aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf  VENDOR/rand_os/LICENSE-APACHE
++sha256 209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b  VENDOR/rand_os/LICENSE-MIT
++sha256 90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5  VENDOR/rand_pcg/COPYRIGHT
++sha256 aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf  VENDOR/rand_pcg/LICENSE-APACHE
++sha256 2234e3cefee876aeb686ad89e978bdb07bf118a1186ab1cf161bcdf69d4b4f57  VENDOR/rand_pcg/LICENSE-MIT
++sha256 90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5  VENDOR/rand_xorshift/COPYRIGHT
++sha256 aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf  VENDOR/rand_xorshift/LICENSE-APACHE
++sha256 209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b  VENDOR/rand_xorshift/LICENSE-MIT
++sha256 00d7b0c8bf95ea93162fccc84da96b906b15add708eade04f7ee6141f7b53141  VENDOR/rdrand/LICENSE
++sha256 efcfee7981ff72431fffb06925cad00a23dce079ed4354f61030ad5abdb78829  VENDOR/redox_syscall/LICENSE
++sha256 cb46b697c3fd9d27d7bfe1b1ad48f8a58a284984504c6eb215ae2164538df7cb  VENDOR/redox_termios/LICENSE
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/regex-automata/COPYING
++sha256 58cf078acc03da3e280a938c2bd9943f554fc9b6ced89ad93ba35ca436872899  VENDOR/regex-automata/data/fowler-tests/LICENSE
++sha256 58cf078acc03da3e280a938c2bd9943f554fc9b6ced89ad93ba35ca436872899  VENDOR/regex-automata/data/tests/fowler/LICENSE
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  VENDOR/regex-automata/LICENSE-MIT
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/regex-automata/UNLICENSE
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/regex/LICENSE-APACHE
++sha256 6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb  VENDOR/regex/LICENSE-MIT
++sha256 58cf078acc03da3e280a938c2bd9943f554fc9b6ced89ad93ba35ca436872899  VENDOR/regex/src/testdata/LICENSE
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/regex-syntax/LICENSE-APACHE
++sha256 6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb  VENDOR/regex-syntax/LICENSE-MIT
++sha256 74db5baf44a41b1000312c673544b3374e4198af5605c7f9080a402cec42cfa3  VENDOR/regex-syntax/src/unicode_tables/LICENSE-UNICODE
++sha256 c6c8c9dbe29fb4d68d829c7a402f9f6baae3472ecf107cc2a57c75a9a8d1b85c  VENDOR/remove_dir_all/LICENCE-APACHE
++sha256 db264505cb1856383e255c8373da9e5aeadc1cd92b570fcc94fd1fb7d892db78  VENDOR/remove_dir_all/LICENCE-MIT
++sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  VENDOR/ryu/LICENSE-APACHE
++sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  VENDOR/ryu/LICENSE-BOOST
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/same-file/COPYING
++sha256 cb3c929a05e6cbc9de9ab06a4c57eeb60ca8c724bef6c138c87d3a577e27aa14  VENDOR/same-file/LICENSE-MIT
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/same-file/UNLICENSE
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/serde_derive/LICENSE-APACHE
++sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  VENDOR/serde_derive/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/serde_json/LICENSE-APACHE
++sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  VENDOR/serde_json/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/serde/LICENSE-APACHE
++sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  VENDOR/serde/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/smallvec/LICENSE-APACHE
++sha256 0b28172679e0009b655da42797c03fd163a3379d5cfa67ba1f1655e974a2a1a9  VENDOR/smallvec/LICENSE-MIT
++sha256 1738b51502ae831fb59ffbeb22ebdd90bf17e5c72fe57c00b47552415f133fd8  VENDOR/strsim/LICENSE
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/syn/LICENSE-APACHE
++sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  VENDOR/syn/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/tempfile/LICENSE-APACHE
++sha256 8b427f5bc501764575e52ba4f9d95673cf8f6d80a86d0d06599852e1a9a20a36  VENDOR/tempfile/LICENSE-MIT
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/termcolor/COPYING
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  VENDOR/termcolor/LICENSE-MIT
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/termcolor/UNLICENSE
++sha256 6252f0c8d4a0df9b2dc0c6464cb2489dbe8859b0eb727e19c14e6af1ee432394  VENDOR/termion/LICENSE
++sha256 ce93600c49fbb3e14df32efe752264644f6a2f8e08a735ba981725799e5309ef  VENDOR/textwrap/LICENSE
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/thread_local/LICENSE-APACHE
++sha256 c9a75f18b9ab2927829a208fc6aa2cf4e63b8420887ba29cdb265d6619ae82d5  VENDOR/thread_local/LICENSE-MIT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/ucd-util/LICENSE-APACHE
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  VENDOR/ucd-util/LICENSE-MIT
++sha256 ea8df489e83b7674d5c9d50c320bec3b15d2e2eeb7a3a8879a666d91e5640c16  VENDOR/ucd-util/LICENSE-UNICODE
++sha256 23860c2a7b5d96b21569afedf033469bab9fe14a1b24a35068b8641c578ce24d  VENDOR/unicode-width/COPYRIGHT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/unicode-width/LICENSE-APACHE
++sha256 7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0  VENDOR/unicode-width/LICENSE-MIT
++sha256 23860c2a7b5d96b21569afedf033469bab9fe14a1b24a35068b8641c578ce24d  VENDOR/unicode-xid/COPYRIGHT
++sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  VENDOR/unicode-xid/LICENSE-APACHE
++sha256 7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0  VENDOR/unicode-xid/LICENSE-MIT
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/utf8-ranges/COPYING
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  VENDOR/utf8-ranges/LICENSE-MIT
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/utf8-ranges/UNLICENSE
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/walkdir/COPYING
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  VENDOR/walkdir/LICENSE-MIT
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/walkdir/UNLICENSE
++sha256 b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  VENDOR/winapi/LICENSE-APACHE
++sha256 ce7bc3499fee93d5022ef430d5e4201e79a6d9154f3974e42f41349f0569e09b  VENDOR/winapi/LICENSE-MIT
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/winapi-util/COPYING
++sha256 cb3c929a05e6cbc9de9ab06a4c57eeb60ca8c724bef6c138c87d3a577e27aa14  VENDOR/winapi-util/LICENSE-MIT
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/winapi-util/UNLICENSE
++sha256 01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f  VENDOR/wincolor/COPYING
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  VENDOR/wincolor/LICENSE-MIT
++sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  VENDOR/wincolor/UNLICENSE
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 1023b4bad8..3be143e15c 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -4,9 +4,11 @@
+ #
+ ################################################################################
  
--The Makefile starts with the definition of the standard variables for package
--declaration (lines 7 to 11).
-+The Makefile starts with the inclusion of a second file that
-+contains the vendored licenses, more info on that topic later.
-+Then it continues with the definition of the standard variables
-+for package declaration (lines 9 to 13).
- 
--As seen in line 13, it is based on the cargo-package infrastructure. Cargo will
-+FOO_VENDOR_LICENSE_FILES is defined in the previously included file vendor.inc
++include package/ripgrep/vendor.inc
 +
-+As seen in line 15, it is based on the cargo-package infrastructure. Cargo will
- be invoked automatically by this infrastructure. The required dependencies of the
- crate will be downloaded and the buildroot dependencies will also be set.
+ RIPGREP_VERSION = 11.0.1
+ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+ RIPGREP_LICENSE = MIT
+-RIPGREP_LICENSE_FILES = LICENSE-MIT
++RIPGREP_LICENSE_FILES = LICENSE-MIT $(RIPGREP_VENDOR_LICENSE_FILES)
  
-@@ -58,7 +64,20 @@ It is still possible to define custom build commands or install commands (i.e.
- with FOO_BUILD_CMDS and FOO_INSTALL_TARGET_CMDS).
- Those will then replace the commands from the cargo infrastructure.
- 
--==== About Dependencies Management
-+The file vendor.inc contains only one variable :
-+
-+------------------------------
-+01: FOO_VENDOR_LICENSES_FILES = \
-+02: 	VENDOR/bar/COPYING \
-+03: 	VENDOR/blah/LICENSE-MIT \
-+04:	VENDOR/bleh/COPYING \
-+05: 
-+--------------------------------
-+
-+It is recommended to generate the list via scripting.
-+A script example can be found in the ripgrep directory.
-+
-+==== About Dependencies Management and Licenses
- 
- A crate can depend on other libraries from crates.io or git repositories, listed
- in its Cargo.toml file. Before starting a build, the +cargo vendor+ command
-@@ -66,3 +85,7 @@ will be run and will take care of downloading those dependencies.
- 
- The final source tarball will contain all the required dependencies, effectively
- permitting us to do an offline build.
-+
-+In order for the +legal-info+ target to work as expected, it is necessary to list
-+the licenses of the vendored dependencies. Each of those entries should be added
-+to the +.mk+ and +.hash+ files.
+ $(eval $(cargo-package))
+diff --git a/package/ripgrep/vendor.inc b/package/ripgrep/vendor.inc
+new file mode 100644
+index 0000000000..df131ac533
+--- /dev/null
++++ b/package/ripgrep/vendor.inc
+@@ -0,0 +1,169 @@
++# Generated with:
++# (echo "RIPGREP_VENDOR_LICENSE_FILES = \\" ; \
++# 	find_vendor_licenses.sh | sed 's%^\(.*\)$%\t\1 \\%') 
++RIPGREP_VENDOR_LICENSE_FILES = \
++	VENDOR/aho-corasick/COPYING \
++	VENDOR/aho-corasick/LICENSE-MIT \
++	VENDOR/aho-corasick/UNLICENSE \
++	VENDOR/atty/LICENSE \
++	VENDOR/autocfg/LICENSE-APACHE \
++	VENDOR/autocfg/LICENSE-MIT \
++	VENDOR/base64/LICENSE-APACHE \
++	VENDOR/base64/LICENSE-MIT \
++	VENDOR/bitflags/LICENSE-APACHE \
++	VENDOR/bitflags/LICENSE-MIT \
++	VENDOR/bstr/COPYING \
++	VENDOR/bstr/LICENSE-APACHE \
++	VENDOR/bstr/LICENSE-MIT \
++	VENDOR/bytecount/LICENSE.Apache2 \
++	VENDOR/bytecount/LICENSE.MIT \
++	VENDOR/byteorder/COPYING \
++	VENDOR/byteorder/LICENSE-MIT \
++	VENDOR/byteorder/UNLICENSE \
++	VENDOR/cc/LICENSE-APACHE \
++	VENDOR/cc/LICENSE-MIT \
++	VENDOR/cfg-if/LICENSE-APACHE \
++	VENDOR/cfg-if/LICENSE-MIT \
++	VENDOR/clap/LICENSE-MIT \
++	VENDOR/crossbeam-channel/LICENSE-APACHE \
++	VENDOR/crossbeam-channel/LICENSE-MIT \
++	VENDOR/crossbeam-channel/LICENSE-THIRD-PARTY \
++	VENDOR/crossbeam-utils/LICENSE-APACHE \
++	VENDOR/crossbeam-utils/LICENSE-MIT \
++	VENDOR/encoding_rs/COPYRIGHT \
++	VENDOR/encoding_rs_io/COPYING \
++	VENDOR/encoding_rs_io/LICENSE-APACHE \
++	VENDOR/encoding_rs_io/LICENSE-MIT \
++	VENDOR/encoding_rs/LICENSE-APACHE \
++	VENDOR/encoding_rs/LICENSE-MIT \
++	VENDOR/fnv/LICENSE-APACHE \
++	VENDOR/fnv/LICENSE-MIT \
++	VENDOR/fuchsia-cprng/LICENSE \
++	VENDOR/glob/LICENSE-APACHE \
++	VENDOR/glob/LICENSE-MIT \
++	VENDOR/itoa/LICENSE-APACHE \
++	VENDOR/itoa/LICENSE-MIT \
++	VENDOR/lazy_static/LICENSE-APACHE \
++	VENDOR/lazy_static/LICENSE-MIT \
++	VENDOR/libc/LICENSE-APACHE \
++	VENDOR/libc/LICENSE-MIT \
++	VENDOR/log/LICENSE-APACHE \
++	VENDOR/log/LICENSE-MIT \
++	VENDOR/memchr/COPYING \
++	VENDOR/memchr/LICENSE-MIT \
++	VENDOR/memchr/UNLICENSE \
++	VENDOR/memmap/LICENSE-APACHE \
++	VENDOR/memmap/LICENSE-MIT \
++	VENDOR/num_cpus/LICENSE-APACHE \
++	VENDOR/num_cpus/LICENSE-MIT \
++	VENDOR/packed_simd/LICENSE-APACHE \
++	VENDOR/packed_simd/LICENSE-MIT \
++	VENDOR/pcre2/COPYING \
++	VENDOR/pcre2/LICENSE-MIT \
++	VENDOR/pcre2-sys/COPYING \
++	VENDOR/pcre2-sys/LICENSE-MIT \
++	VENDOR/pcre2-sys/pcre2/cmake/COPYING-CMAKE-SCRIPTS \
++	VENDOR/pcre2-sys/pcre2/COPYING \
++	VENDOR/pcre2-sys/pcre2/LICENCE \
++	VENDOR/pcre2-sys/UNLICENSE \
++	VENDOR/pcre2/UNLICENSE \
++	VENDOR/pkg-config/LICENSE-APACHE \
++	VENDOR/pkg-config/LICENSE-MIT \
++	VENDOR/proc-macro2/LICENSE-APACHE \
++	VENDOR/proc-macro2/LICENSE-MIT \
++	VENDOR/quote/LICENSE-APACHE \
++	VENDOR/quote/LICENSE-MIT \
++	VENDOR/rand_chacha/COPYRIGHT \
++	VENDOR/rand_chacha/LICENSE-APACHE \
++	VENDOR/rand_chacha/LICENSE-MIT \
++	VENDOR/rand/COPYRIGHT \
++	VENDOR/rand_core-0.3.1/COPYRIGHT \
++	VENDOR/rand_core-0.3.1/LICENSE-APACHE \
++	VENDOR/rand_core-0.3.1/LICENSE-MIT \
++	VENDOR/rand_core/COPYRIGHT \
++	VENDOR/rand_core/LICENSE-APACHE \
++	VENDOR/rand_core/LICENSE-MIT \
++	VENDOR/rand_hc/COPYRIGHT \
++	VENDOR/rand_hc/LICENSE-APACHE \
++	VENDOR/rand_hc/LICENSE-MIT \
++	VENDOR/rand_isaac/COPYRIGHT \
++	VENDOR/rand_isaac/LICENSE-APACHE \
++	VENDOR/rand_isaac/LICENSE-MIT \
++	VENDOR/rand_jitter/COPYRIGHT \
++	VENDOR/rand_jitter/LICENSE-APACHE \
++	VENDOR/rand_jitter/LICENSE-MIT \
++	VENDOR/rand/LICENSE-APACHE \
++	VENDOR/rand/LICENSE-MIT \
++	VENDOR/rand_os/COPYRIGHT \
++	VENDOR/rand_os/LICENSE-APACHE \
++	VENDOR/rand_os/LICENSE-MIT \
++	VENDOR/rand_pcg/COPYRIGHT \
++	VENDOR/rand_pcg/LICENSE-APACHE \
++	VENDOR/rand_pcg/LICENSE-MIT \
++	VENDOR/rand_xorshift/COPYRIGHT \
++	VENDOR/rand_xorshift/LICENSE-APACHE \
++	VENDOR/rand_xorshift/LICENSE-MIT \
++	VENDOR/rdrand/LICENSE \
++	VENDOR/redox_syscall/LICENSE \
++	VENDOR/redox_termios/LICENSE \
++	VENDOR/regex-automata/COPYING \
++	VENDOR/regex-automata/data/fowler-tests/LICENSE \
++	VENDOR/regex-automata/data/tests/fowler/LICENSE \
++	VENDOR/regex-automata/LICENSE-MIT \
++	VENDOR/regex-automata/UNLICENSE \
++	VENDOR/regex/LICENSE-APACHE \
++	VENDOR/regex/LICENSE-MIT \
++	VENDOR/regex/src/testdata/LICENSE \
++	VENDOR/regex-syntax/LICENSE-APACHE \
++	VENDOR/regex-syntax/LICENSE-MIT \
++	VENDOR/regex-syntax/src/unicode_tables/LICENSE-UNICODE \
++	VENDOR/remove_dir_all/LICENCE-APACHE \
++	VENDOR/remove_dir_all/LICENCE-MIT \
++	VENDOR/ryu/LICENSE-APACHE \
++	VENDOR/ryu/LICENSE-BOOST \
++	VENDOR/same-file/COPYING \
++	VENDOR/same-file/LICENSE-MIT \
++	VENDOR/same-file/UNLICENSE \
++	VENDOR/serde_derive/LICENSE-APACHE \
++	VENDOR/serde_derive/LICENSE-MIT \
++	VENDOR/serde_json/LICENSE-APACHE \
++	VENDOR/serde_json/LICENSE-MIT \
++	VENDOR/serde/LICENSE-APACHE \
++	VENDOR/serde/LICENSE-MIT \
++	VENDOR/smallvec/LICENSE-APACHE \
++	VENDOR/smallvec/LICENSE-MIT \
++	VENDOR/strsim/LICENSE \
++	VENDOR/syn/LICENSE-APACHE \
++	VENDOR/syn/LICENSE-MIT \
++	VENDOR/tempfile/LICENSE-APACHE \
++	VENDOR/tempfile/LICENSE-MIT \
++	VENDOR/termcolor/COPYING \
++	VENDOR/termcolor/LICENSE-MIT \
++	VENDOR/termcolor/UNLICENSE \
++	VENDOR/termion/LICENSE \
++	VENDOR/textwrap/LICENSE \
++	VENDOR/thread_local/LICENSE-APACHE \
++	VENDOR/thread_local/LICENSE-MIT \
++	VENDOR/ucd-util/LICENSE-APACHE \
++	VENDOR/ucd-util/LICENSE-MIT \
++	VENDOR/ucd-util/LICENSE-UNICODE \
++	VENDOR/unicode-width/COPYRIGHT \
++	VENDOR/unicode-width/LICENSE-APACHE \
++	VENDOR/unicode-width/LICENSE-MIT \
++	VENDOR/unicode-xid/COPYRIGHT \
++	VENDOR/unicode-xid/LICENSE-APACHE \
++	VENDOR/unicode-xid/LICENSE-MIT \
++	VENDOR/utf8-ranges/COPYING \
++	VENDOR/utf8-ranges/LICENSE-MIT \
++	VENDOR/utf8-ranges/UNLICENSE \
++	VENDOR/walkdir/COPYING \
++	VENDOR/walkdir/LICENSE-MIT \
++	VENDOR/walkdir/UNLICENSE \
++	VENDOR/winapi/LICENSE-APACHE \
++	VENDOR/winapi/LICENSE-MIT \
++	VENDOR/winapi-util/COPYING \
++	VENDOR/winapi-util/LICENSE-MIT \
++	VENDOR/winapi-util/UNLICENSE \
++	VENDOR/wincolor/COPYING \
++	VENDOR/wincolor/LICENSE-MIT \
++	VENDOR/wincolor/UNLICENSE \
 -- 
 2.17.1
