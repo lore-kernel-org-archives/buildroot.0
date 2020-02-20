@@ -1,66 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Feb 2020 21:31:05 +0100
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: iterate over
- CVEs in streaming
-Message-ID: <20200220202309.66BFE8E604@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Thu, 20 Feb 2020 22:18:55 +0100
+Subject: [Buildroot] [PATCH] package/at: fix parallel build failure
+Message-ID: <20200220211855.32961-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=712f81c41cde9d58c750ae2b1617831c0b07ccbd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add a patch to finally fix parallel build failure. Patch is pending
+upstream:
+https://salsa.debian.org/debian/at/merge_requests/14
 
-The NVD files that are used to build the list of CVEs affecting
-Buildroot packages are quite large (a few hundreds MB of json),
-and cause the pkg-stats scripts to have a huge memory footprint
-(a few GB with Python 2.7).
-
-However, because we only need to iterate on CVE items one by one,
-we can process them in streaming (ie decoding one CVE at a time
-from the JSON representation). Because the json module from the
-python standard library does not support such a mode of operation,
-we switch to the third-party package ijson, which is compatible
-with both Python 2 and Python3.
-
-To run the script with these modifications, one should install
-the ijson python package. This can be done with pip:
-`pip install ijson`. On Debian based distributions, this can
-also be done with the apt package manager:
-`apt install python-ijson`.
-
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- support/scripts/pkg-stats | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ ...-Makefile-fix-parallel-build-failure.patch | 41 +++++++++++++++++++
+ package/at/at.mk                              |  3 --
+ 2 files changed, 41 insertions(+), 3 deletions(-)
+ create mode 100644 package/at/0004-Makefile-fix-parallel-build-failure.patch
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index c113cf9606..7721d98459 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -25,6 +25,7 @@ import re
- import subprocess
- import requests  # URL checking
- import json
-+import ijson
- import certifi
- import distutils.version
- import time
-@@ -231,11 +232,11 @@ class CVE:
-         for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
-             filename = CVE.download_nvd_year(nvd_dir, year)
-             try:
--                content = json.load(gzip.GzipFile(filename))
-+                content = ijson.items(gzip.GzipFile(filename), 'CVE_Items.item')
-             except:
-                 print("ERROR: cannot read %s. Please remove the file then rerun this script" % filename)
-                 raise
--            for cve in content["CVE_Items"]:
-+            for cve in content:
-                 yield cls(cve['cve'])
- 
-     def each_product(self):
+diff --git a/package/at/0004-Makefile-fix-parallel-build-failure.patch b/package/at/0004-Makefile-fix-parallel-build-failure.patch
+new file mode 100644
+index 0000000000..6e3dc24ca4
+--- /dev/null
++++ b/package/at/0004-Makefile-fix-parallel-build-failure.patch
+@@ -0,0 +1,41 @@
++From 3ace0b57e2aacb784c01a3c7694c6c92461937ff Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Thu, 20 Feb 2020 22:00:11 +0100
++Subject: [PATCH] Makefile: fix parallel build failure
++
++At the moment parallel build fails due to 2 causes:
++1) parsetime.l tries to include incomplete y.tab.h, since y.tab.h is the
++result of yacc -d parsetime.y
++2) when compiling y.tab.c, y.tab.c itself is not complete, since it is
++the result of yacc -d parsetime.y
++
++So fix it by:
++1) making parsetime.l to wait for y.tab.h to be created by yacc
++2) waiting for y.tab.c and y.tab.h to be created before compile them
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ Makefile.in | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/Makefile.in b/Makefile.in
++index 4c11913..57c3a0c 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -83,6 +83,8 @@ y.tab.c y.tab.h: parsetime.y
++ lex.yy.c: parsetime.l
++ 	$(LEX) -i parsetime.l
++ 
+++parsetime.l: y.tab.h
+++
++ atd.service: atd.service.in
++ 	cat $< | sed -e 's![@]sbindir[@]!$(sbindir)!g' | sed -e 's![@]atjobdir[@]!$(atjobdir)!g' > $@
++ 
++@@ -173,3 +175,4 @@ perm.o: perm.c config.h privs.h at.h
++ posixtm.o: posixtm.c posixtm.h
++ daemon.o: daemon.c config.h daemon.h privs.h
++ getloadavg.o: getloadavg.c config.h getloadavg.h
+++y.tab.o: y.tab.c y.tab.h
++-- 
++2.20.1
++
+diff --git a/package/at/at.mk b/package/at/at.mk
+index e0517af294..dbf649c0be 100644
+--- a/package/at/at.mk
++++ b/package/at/at.mk
+@@ -7,9 +7,6 @@
+ AT_VERSION = 7c74fa1aece6bc6db351763dc012193d5d634b7e
+ AT_SITE = https://salsa.debian.org/debian/at.git
+ AT_SITE_METHOD = git
+-# Tried to add missing deps for parsetime.l but still parallel build fails
+-# in some case, so at the moment let's keep MAKE1
+-AT_MAKE = $(MAKE1)
+ AT_AUTORECONF = YES
+ AT_DEPENDENCIES = $(if $(BR2_PACKAGE_FLEX),flex) host-bison host-flex
+ AT_LICENSE = GPL-2.0+, GPL-3.0+, ISC
+-- 
+2.20.1
