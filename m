@@ -1,29 +1,25 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 20 Feb 2020 17:33:14 -0300
-Subject: [Buildroot] [PATCH 1/2] board/freescale: use correct
- ahab-container.img file name
-In-Reply-To: <20200220021858.700249-1-thomas.petazzoni@bootlin.com>
-References: <20200220021858.700249-1-thomas.petazzoni@bootlin.com>
-Message-ID: <CAOMZO5AgM7Zp-SBvy6MCegi+b4NzJBc3QiiwOhPpLCUeKh4BiQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Feb 2020 21:34:30 +0100
+Subject: [Buildroot] [PATCH] docs/website: add commercial support
+ section with Mind
+In-Reply-To: <20200205150842.3511395-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Wed, 5 Feb 2020 16:08:42 +0100")
+References: <20200205150842.3511395-1-arnout@mind.be>
+Message-ID: <875zg12e21.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-On Wed, Feb 19, 2020 at 11:19 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Commit 3f8ace002831a01ed6aec59b704bd92c8a3b957f
-> ("board/freescale/common/imx: add support for i.MX8") had its
-> conflicts incorrectly tweaked when applied to Buildroot. The
-> ahab-container.img is installed with this name (ahab-container.img) by
-> the imx-firmware package, and not mx8qm-ahab-container.img or
-> mx8qx-ahab-container.img.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Add a section to the support page for commercial support.
+ > Add Mind, Bootlin and Smile in that section.
 
-Reported-by: Fabio Estevam <festevam@gmail.com>
-Tested-by: Fabio Estevam <festevam@gmail.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed after dropping 'with Mind' in subject, thanks.
+
+-- 
+Bye, Peter Korsgaard
