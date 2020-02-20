@@ -1,38 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Feb 2020 13:16:52 +0100
-Subject: [Buildroot] [git commit] package/vorbis-tools: annotate
- _IGNORE_CVES for the included security patches
-Message-ID: <20200220120646.971268E5C3@busybox.osuosl.org>
+Date: Thu, 20 Feb 2020 13:15:22 +0100
+Subject: [Buildroot] [git commit] package/libsndfile: annotate _IGNORE_CVES
+ for the included security patches
+Message-ID: <20200220120646.86B4C8E5C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca9700cd628712ded750fb9d16a978d558602aa9
+commit: https://git.buildroot.net/buildroot/commit/?id=91126d8863927745123769ed36b3f74c79d93b7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Also mark CVE-2018-13419 as disputed.
+
+[Peter: add dispute link as suggested by Thomas]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vorbis-tools/vorbis-tools.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/libsndfile/libsndfile.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/vorbis-tools/vorbis-tools.mk b/package/vorbis-tools/vorbis-tools.mk
-index 1bec1e2b96..407ea975e7 100644
---- a/package/vorbis-tools/vorbis-tools.mk
-+++ b/package/vorbis-tools/vorbis-tools.mk
-@@ -10,6 +10,14 @@ VORBIS_TOOLS_LICENSE = GPL-2.0
- VORBIS_TOOLS_LICENSE_FILES = COPYING
- VORBIS_TOOLS_DEPENDENCIES = libao libogg libvorbis libcurl
- VORBIS_TOOLS_CONF_OPTS = --program-transform-name=''
-+
-+# 0001-oggenc-Fix-large-alloca-on-bad-AIFF-input.patch
-+VORBIS_TOOLS_IGNORE_CVES += CVE-2015-6749
-+# 0002-oggenc-validate-count-of-channels-in-the-header-CVE-.patch
-+VORBIS_TOOLS_IGNORE_CVES += CVE-2014-9638 CVE-2014-9639
-+# 0003-oggenc-fix-crash-on-raw-file-close-reported-by-Hanno.patch
-+VORBIS_TOOLS_IGNORE_CVES += CVE-2014-9640
-+
- # ogg123 calls math functions but forgets to link with libm
- VORBIS_TOOLS_CONF_ENV = LIBS=-lm
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index 22909ffb62..19c3184961 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
+@@ -10,6 +10,17 @@ LIBSNDFILE_INSTALL_STAGING = YES
+ LIBSNDFILE_LICENSE = LGPL-2.1+
+ LIBSNDFILE_LICENSE_FILES = COPYING
  
++# 0001-double64_init-Check-psf-sf.channels-against-upper-bo.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-14634
++# 0002-Check-MAX_CHANNELS-in-sndfile-deinterleave.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2018-13139 CVE-2018-19432
++# 0003-a-ulaw-fix-multiple-buffer-overflows-432.patch
++LIBSNDFILE_IGNORE_CVES += \
++	CVE-2017-14245 CVE-2017-14246 CVE-2017-17456 CVE-2017-17457 \
++	CVE-2018-19661 CVE-2018-19662
++# disputed, https://github.com/erikd/libsndfile/issues/398
++LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
++
+ LIBSNDFILE_CONF_OPTS = \
+ 	--disable-sqlite \
+ 	--disable-alsa \
