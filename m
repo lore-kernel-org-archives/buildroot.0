@@ -1,61 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 20 Feb 2020 07:27:15 +0000
-Subject: [Buildroot] [Bug 12416] qt5webengine should not use WEBENGINE_CONFIG
-In-Reply-To: <bug-12416-163@https.bugs.busybox.net/>
-References: <bug-12416-163@https.bugs.busybox.net/>
-Message-ID: <bug-12416-163-8swI6dU7YE@https.bugs.busybox.net/>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 20 Feb 2020 08:41:48 +0100
+Subject: [Buildroot] [PATCH v1] package/qt5webengine: fix translations
+ target install path
+Message-ID: <20200220074148.8026-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12416
+Through the evolution of the qt5webengine package patch ([1], [2])
+until the initial commit ([3]) the translations target install
+path got mangled resulting in a double trailing qtwebengine_locales
+path:
+  /usr/translations/qtwebengine_locales/qtwebengine_locales
+Instead of:
+  /usr/translations/qtwebengine_locales
 
---- Comment #2 from JeffyCN <jeffy.chen@rock-chips.com> ---
-(In reply to Peter Seiderer from comment #1)
-Hi Peter,
+Fixes the translations runtime access failure resulting in the
+following warning:
 
-Thanks for noticing that.
+  WARNING:resource_bundle_qt.cpp(116): locale_file_path.empty() for locale
 
-We are using a custom version of buildroot(2018.02-rc3 with qt5 bumpped to
-5.12.2):
-https://github.com/rockchip-linux/buildroot/tree/rockchip/2018.02-rc3
+[1] http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
+[2] https://patchwork.ozlabs.org/patch/640633
+[3] https://git.buildroot.net/buildroot/commit/?id=89080bac9bc47946a09c1e74f2f872363bf6785b
 
-Configs: rockchip_*_defconfig, running on a few arm/arm64 based
-platforms(rockchip evb boards)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5webengine/qt5webengine.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-We've tested minimal too, did see some issues on arm 32bit platforms:
-1/ 5.12.2 would report segfaults, should be fine for the newer versions(e.g.
-5.12.5):
-https://github.com/rockchip-linux/buildroot/commit/6e4fc810cdea122b1bd86c8649d276c485f794f9
-
-2/ I can't recall the exact phenomenon, could be the same as RaspberryPi's...
-
-It seems like the chromium might be compiled with different fpu setting than
-the other packages on arm 32bit platform, which is because it would try to
-detect neon support from the qt5base's CFLAGS and currently buildroot would not
-specify that there, but embedded in the gcc toolchain instead:
-
-qt5webengine-5.12.2$ vi src/core/config/linux.pri
-    # TODO: use neon detection from qtbase
-    !lessThan(MARMV, 8) {
-        gn_args += arm_use_neon=true
-    } else {
-        MFPU = $$extractCFlag("-mfpu=.*")
-        !isEmpty(MFPU):contains(MFPU, ".*neon.*") {
-            gn_args += arm_use_neon=true
-        } else {
-            gn_args += arm_use_neon=false
-            # If the toolchain does not explicitly specify to use NEON
-instructions
-            # we use arm_neon_optional for ARMv7
-            equals(MARMV, 7): gn_args += arm_optionally_use_neon=true
-        }
-    }
-
-https://github.com/rockchip-linux/buildroot/commit/8e832026edbb6e70df283629dadca981854866ad
-
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+index 1d5ee8d819..2b41ab79d0 100644
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -90,8 +90,7 @@ define QT5WEBENGINE_INSTALL_TARGET_LIBS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebEngine*.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpf $(STAGING_DIR)/usr/libexec/QtWebEngineProcess $(TARGET_DIR)/usr/libexec/
+ 	cp -dpfr $(STAGING_DIR)/usr/resources/ $(TARGET_DIR)/usr/
+-	mkdir -p $(TARGET_DIR)/usr/translations/qtwebengine_locales/
+-	cp -dpfr $(STAGING_DIR)/usr/translations/qtwebengine_locales $(TARGET_DIR)/usr/translations/qtwebengine_locales/
++	cp -dpfr $(STAGING_DIR)/usr/translations/qtwebengine_locales $(TARGET_DIR)/usr/translations/
+ endef
+ endif
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.25.0
