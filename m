@@ -1,59 +1,68 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Thu, 20 Feb 2020 14:11:49 -0600
-Subject: [Buildroot] [PATCH v2 2/2] package/nvidia-driver: bump version to
- 390.132
-In-Reply-To: <20200220201149.7426-1-vfazio@xes-inc.com>
-References: <20200220201149.7426-1-vfazio@xes-inc.com>
-Message-ID: <20200220201149.7426-2-vfazio@xes-inc.com>
+From: Julien Olivain <juju@cotds.org>
+Date: Thu, 20 Feb 2020 21:27:34 +0100
+Subject: [Buildroot] [PATCH 1/2] board/freescale: use correct
+ ahab-container.img file name
+In-Reply-To: <20200220021858.700249-1-thomas.petazzoni@bootlin.com>
+References: <20200220021858.700249-1-thomas.petazzoni@bootlin.com>
+Message-ID: <efadf675f8868fca038b0eb30f9d20df@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Zach Vargas <zvargas@xes-inc.com>
+Hi Thomas,
 
-Support Linux kernel 5.4.
+Patch looks good.  I successfully built and booted on i.MX8 MEK QM and 
+QXP boards. Thanks!
 
-Change the 64-bit download to exclude 32-bit compatibility libs.
+On 2020-02-20 03:18, Thomas Petazzoni wrote:
+> Commit 3f8ace002831a01ed6aec59b704bd92c8a3b957f
+> ("board/freescale/common/imx: add support for i.MX8") had its
+> conflicts incorrectly tweaked when applied to Buildroot. The
+> ahab-container.img is installed with this name (ahab-container.img) by
+> the imx-firmware package, and not mx8qm-ahab-container.img or
+> mx8qx-ahab-container.img.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  board/freescale/common/imx/imx8-bootloader-prepare.sh | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh
+> b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+> index 302fd00658..45c648e360 100755
+> --- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
+> +++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+> @@ -28,9 +28,9 @@ main ()
+>  		cp ${BINARIES_DIR}/bl31.bin ${BINARIES_DIR}/u-boot-atf.bin
+>  		dd if=${BINARIES_DIR}/u-boot-hash.bin
+> of=${BINARIES_DIR}/u-boot-atf.bin bs=1K seek=128
+>  		if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y$" 
+> ${BR2_CONFIG}; then
+> -			${HOST_DIR}/bin/mkimage_imx8 -soc QM -rev B0 -append
+> ${BINARIES_DIR}/mx8qm-ahab-container.img -c -scfw
+> ${BINARIES_DIR}/mx8qm-mek-scfw-tcm.bin -ap
+> ${BINARIES_DIR}/u-boot-atf.bin a53 0x80000000 -out
+> ${BINARIES_DIR}/imx8-boot-sd.bin
+> +			${HOST_DIR}/bin/mkimage_imx8 -soc QM -rev B0 -append
+> ${BINARIES_DIR}/ahab-container.img -c -scfw
+> ${BINARIES_DIR}/mx8qm-mek-scfw-tcm.bin -ap
+> ${BINARIES_DIR}/u-boot-atf.bin a53 0x80000000 -out
+> ${BINARIES_DIR}/imx8-boot-sd.bin
+>  		else
+> -			${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append
+> ${BINARIES_DIR}/mx8qx-ahab-container.img -c -scfw
+> ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap
+> ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out
+> ${BINARIES_DIR}/imx8-boot-sd.bin
+> +			${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append
+> ${BINARIES_DIR}/ahab-container.img -c -scfw
+> ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap
+> ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out
+> ${BINARIES_DIR}/imx8-boot-sd.bin
+>  		fi
+>  	fi
 
-Signed-off-by: Zach Vargas <zvargas@xes-inc.com>
-[vfazio: 64-bit package change]
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
----
-Depends on http://patchwork.ozlabs.org/patch/1181847/
-
- package/nvidia-driver/nvidia-driver.hash | 4 ++--
- package/nvidia-driver/nvidia-driver.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
-index 79ac052610..7f2248d0f9 100644
---- a/package/nvidia-driver/nvidia-driver.hash
-+++ b/package/nvidia-driver/nvidia-driver.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256 6f4af70ee3d03ed31c497a5d555164c56057b53ecedfc0d2c8de4b0b90728805  NVIDIA-Linux-x86-390.67.run
--sha256 6df2ca1a7420b6751bcaf257d321b14f4e5f7ca54d77a43514912a3792ece65a  NVIDIA-Linux-x86_64-390.67.run
-+sha256 51adb28f0ed4548f35a88a93ad6767ebd807fa14f418bf5e51a6d63a3ff7f275  NVIDIA-Linux-x86-390.132.run
-+sha256 b6b4b8af37e78e026c9ebdf4a5c64ea412dfcb710931dd028c22dac228de659d  NVIDIA-Linux-x86_64-390.132-no-compat32.run
- sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  LICENSE
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index 0ac8d2a5fb..75041ecb46 100644
---- a/package/nvidia-driver/nvidia-driver.mk
-+++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--NVIDIA_DRIVER_VERSION = 390.67
-+NVIDIA_DRIVER_VERSION = 390.132
- NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
- NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
--NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
-+NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION)$(if $(BR2_x86_64),-no-compat32).run
- NVIDIA_DRIVER_LICENSE = NVIDIA Software License
- NVIDIA_DRIVER_LICENSE_FILES = LICENSE
- NVIDIA_DRIVER_REDISTRIBUTE = NO
--- 
-2.25.1
+Reviewed-by: Julien Olivain <juju@cotds.org>
+Tested-by: Julien Olivain <juju@cotds.org>
