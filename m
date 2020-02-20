@@ -1,59 +1,73 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Thu, 20 Feb 2020 13:57:30 -0600
-Subject: [Buildroot] [PATCH 2/2] package/nvidia-driver: bump version to
- 390.132
-In-Reply-To: <20200220195730.5011-1-vfazio@xes-inc.com>
-References: <20200220195730.5011-1-vfazio@xes-inc.com>
-Message-ID: <20200220195730.5011-2-vfazio@xes-inc.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 20 Feb 2020 21:11:15 +0100
+Subject: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: iterate over
+ CVEs in streaming
+In-Reply-To: <20200220182723.52615-1-titouan.christophe@railnova.eu>
+References: <20200220182723.52615-1-titouan.christophe@railnova.eu>
+Message-ID: <CAAXf6LXfTgKQT8Ua8Hqs0MZDp0961Eh+-_aMcxqC_VE8mMSqmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Zach Vargas <zvargas@xes-inc.com>
+Hi Titouan,
 
-Support Linux kernel 5.4.
+El jue., 20 feb. 2020 a las 19:27, Titouan Christophe
+(<titouan.christophe@railnova.eu>) escribi?:
+>
+> The NVD files that are used to build the list of CVEs affecting
+> Buildroot packages are quite large (a few hundreds MB of json),
+> and cause the pkg-stats scripts to have a huge memory footprint
+> (a few GB with Python 2.7).
+>
+> However, because we only need to iterate on CVE items one by one,
+> we can process them in streaming (ie decoding one CVE at a time
+> from the JSON representation). Because the json module from the
+> python standard library does not support such a mode of operation,
+> we switch to the third-party package ijson, which is compatible
+> with both Python 2 and Python3.
+>
+> To run the script with these modifications, one should install
+> the ijson python package. This can be done with pip:
+> `pip install ijson`. On Debian based distributions, this can
+> also be done with the apt package manager:
+> `apt install python-ijson`.
+>
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> ---
+>  support/scripts/pkg-stats | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+> index c113cf9606..7721d98459 100755
+> --- a/support/scripts/pkg-stats
+> +++ b/support/scripts/pkg-stats
+> @@ -25,6 +25,7 @@ import re
+>  import subprocess
+>  import requests  # URL checking
+>  import json
+> +import ijson
+>  import certifi
+>  import distutils.version
+>  import time
+> @@ -231,11 +232,11 @@ class CVE:
+>          for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
+>              filename = CVE.download_nvd_year(nvd_dir, year)
+>              try:
+> -                content = json.load(gzip.GzipFile(filename))
+> +                content = ijson.items(gzip.GzipFile(filename), 'CVE_Items.item')
+>              except:
+>                  print("ERROR: cannot read %s. Please remove the file then rerun this script" % filename)
+>                  raise
+> -            for cve in content["CVE_Items"]:
+> +            for cve in content:
+>                  yield cls(cve['cve'])
+>
+>      def each_product(self):
 
-Change the 64bit download to exclude 32bit compatibility libs.
+This is _way_ better. In my test run observing top output, resident
+memory stayed around 50 MB.
 
-Signed-off-by: Zach Vargas <zvargas@xes-inc.com>
-[vfazio: 64bit package change]
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
----
-Depends on http://patchwork.ozlabs.org/patch/1181847/
-
- package/nvidia-driver/nvidia-driver.hash | 4 ++--
- package/nvidia-driver/nvidia-driver.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
-index 79ac052610..7f2248d0f9 100644
---- a/package/nvidia-driver/nvidia-driver.hash
-+++ b/package/nvidia-driver/nvidia-driver.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256 6f4af70ee3d03ed31c497a5d555164c56057b53ecedfc0d2c8de4b0b90728805  NVIDIA-Linux-x86-390.67.run
--sha256 6df2ca1a7420b6751bcaf257d321b14f4e5f7ca54d77a43514912a3792ece65a  NVIDIA-Linux-x86_64-390.67.run
-+sha256 51adb28f0ed4548f35a88a93ad6767ebd807fa14f418bf5e51a6d63a3ff7f275  NVIDIA-Linux-x86-390.132.run
-+sha256 b6b4b8af37e78e026c9ebdf4a5c64ea412dfcb710931dd028c22dac228de659d  NVIDIA-Linux-x86_64-390.132-no-compat32.run
- sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  LICENSE
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index b0ff277640..a13c0a88f4 100644
---- a/package/nvidia-driver/nvidia-driver.mk
-+++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--NVIDIA_DRIVER_VERSION = 390.67
-+NVIDIA_DRIVER_VERSION = 390.132
- NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
- NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
--NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
-+NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION)$(if $(BR2_x86_64),-no-compat32).run
- NVIDIA_DRIVER_LICENSE = NVIDIA Software License
- NVIDIA_DRIVER_LICENSE_FILES = LICENSE
- NVIDIA_DRIVER_REDISTRIBUTE = NO
--- 
-2.25.1
+Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
