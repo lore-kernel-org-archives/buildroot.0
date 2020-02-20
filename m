@@ -1,58 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Feb 2020 03:01:15 +0100
-Subject: [Buildroot] [PATCH 2/3]
- toolchain/toolchain-external/toolchain-external-custom: add option to
- indicate SSP_STRONG support
+Date: Thu, 20 Feb 2020 03:01:16 +0100
+Subject: [Buildroot] [PATCH 3/3] Config.in: ensure BR2_SSP_STRONG can only
+ be selected if supported
 In-Reply-To: <20200220020117.695236-1-thomas.petazzoni@bootlin.com>
 References: <20200220020117.695236-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200220020117.695236-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20200220020117.695236-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a user-visible option
-BR2_TOOLCHAIN_EXTERNAL_HAS_SSP_STRONG, which will allow the user to
-indicate if the custom external toolchain does or does not have
-SSP_STRONG support. Depending on this, the user will be able to use
-(or not) the BR2_SSP_STRONG option.
+This commit ensures that BR2_SSP_STRONG cannot be chosen if the
+toolchain doesn't support strong SSP.
 
-Checking if what the user said is true or not about this is already
-done in toolchain/toolchain-external/pkg-toolchain-external.mk:
+Fixes:
 
-        $$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC),$(BR2_SSP_OPTION))
-
-If the user selects BR2_SSP_STRONG, this will check if
--fstack-protector-strong is really supported.
+  http://autobuild.buildroot.net/results/cba93a681d10692c4e4c5584e4c962bd18a608d4/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../toolchain-external-custom/Config.in.options      | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 302f6babac..c8cd2c03cc 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -410,6 +410,18 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
- 	  leave the default value, Buildroot will tell you if it's
- 	  correct or not.
+diff --git a/Config.in b/Config.in
+index 5a4239bc9a..2913d39ec8 100644
+--- a/Config.in
++++ b/Config.in
+@@ -758,6 +758,7 @@ config BR2_SSP_REGULAR
  
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP_STRONG
-+	bool "Toolchain has SSP strong support?"
-+	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	depends on BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_SSP_STRONG
-+	help
-+	  Selection this option if your external toolchain has strong
-+	  Stack Smashing Protection support enabled. If you don't
-+	  know, leave the default value, Buildroot will tell you if
-+	  it's correct or not.
-+
- config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
- 	bool "Toolchain has RPC support?"
- 	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ config BR2_SSP_STRONG
+ 	bool "-fstack-protector-strong"
++	depends on BR2_TOOLCHAIN_HAS_SSP_STRONG
+ 	help
+ 	  Like -fstack-protector but includes additional functions to be
+ 	  protected - those that have local array definitions, or have
 -- 
 2.24.1
