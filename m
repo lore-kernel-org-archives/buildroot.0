@@ -1,148 +1,119 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 20 Feb 2020 10:15:26 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/avahi: bump to version 0.8
-Message-ID: <20200220091526.232214-1-joerg.krause@embedded.rocks>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 20 Feb 2020 10:31:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/meson: fix pkg-config --static
+In-Reply-To: <b355bbc2-43a2-7ad4-3767-5b44393a8fab@mind.be>
+References: <20200215152620.3553021-1-fontaine.fabrice@gmail.com>
+ <b355bbc2-43a2-7ad4-3767-5b44393a8fab@mind.be>
+Message-ID: <CAPi7W82e5kXnY44BU-LZmJxut09nw8C04aMcj_fOW6u1Cn-LOw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump also includes:
- * Drop upstream security patch which is included in the new version
- * Unconditionally disable support for Qt5 [1] (same as Qt3 and Qt4)
- * Drop dependency on host-inttool, as avahi switched to host-gettext [2]
- * Conditionally enable support for libevent [3]
- * Drop disabling support for Qt3, Qt4, and GTK, which are disabled by
-   default now
+Le jeu. 20 f?vr. 2020 ? 10:29, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+>
+>
+> On 15/02/2020 16:26, Fabrice Fontaine wrote:
+> > pkg-config wrapper is not used since commit
+> > 4e0bc29993376613d200e892d491e31ea5a49622, this raise static build
+> > failures with libglib2 because --static is not passed anymore to
+> > pkg-config so add a patch to get back the old behaviour.
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  ...dencies-base.py-add-pkg_config_stati.patch | 38 +++++++++++++++++++
+> >  package/meson/cross-compilation.conf.in       |  1 +
+> >  package/pkg-meson.mk                          |  1 +
+> >  3 files changed, 40 insertions(+)
+> >  create mode 100644 package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
+> >
+> > diff --git a/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
+> > new file mode 100644
+> > index 0000000000..7bb00f3fba
+> > --- /dev/null
+> > +++ b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
+> > @@ -0,0 +1,38 @@
+> > +From 3a4962ede0d12bac66b38e0843f6e2ea75b03d50 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +Date: Sat, 15 Feb 2020 15:13:59 +0100
+> > +Subject: [PATCH] mesonbuild/dependencies/base.py: add pkg_config_static
+> > +
+> > +Allow the user to always call pkg-config with --static thanks to a
+> > +pkg_config_static property. This will allow to fix static build failures
+> > +with libglib2:
+> > +
+> > +FAILED: gio/gio
+> > +/home/naourr/work/instance-0/output-1/host/bin/arm-linux-gcc  -o gio/gio 'gio/6ae6c9e@@gio at exe/gio-tool.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-cat.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-copy.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-info.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-list.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-mime.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-mkdir.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-monitor.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-mount.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-move.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-open.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-rename.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-remove.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-save.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-set.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-trash.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-tree.c.o' -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -static -Wl,--start-group gio/libgio-2.0.a glib/libglib-2.0.a gobject/libgobject-2.0.a gmodule/libgmodule-2.0.a -pthread /home/naourr/work/instance-0/output-1/host/arm-build
+> >  root-linux-uclibcgnueabi/sysroot/usr/lib/libz.a /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmount.a /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libpcre.a -lm /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libffi.a -Wl,--end-group '-Wl,-rpath,$ORIGIN/:$ORIGIN/../glib:$ORIGIN/../gobject:$ORIGIN/../gmodule' -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/gio -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/glib -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/gobject -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/gmodule
+> > +/home/naourr/work/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmount.a(la-fs.o): in function `__mnt_fs_set_source_ptr':
+> > +fs.c:(.text+0x5ec): undefined reference to `blkid_parse_tag_string'
+> > +
+> > +Fixes:
+> > + - http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +---
+> > + mesonbuild/dependencies/base.py | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
+> > +index a83e3d6c..913bff6b 100644
+> > +--- a/mesonbuild/dependencies/base.py
+> > ++++ b/mesonbuild/dependencies/base.py
+> > +@@ -840,7 +840,7 @@ class PkgConfigDependency(ExternalDependency):
+> > +     def _set_libs(self):
+> > +         env = None
+> > +         libcmd = [self.name, '--libs']
+> > +-        if self.static:
+> > ++        if self.static or self.env.properties[self.for_machine].get('pkg_config_static', False):
+>
+>  Looks OK-ish to me, *if* we can get it accepted upstream. As is, it probably
+> won't get accepted because it misses a documentation update.
+>
+>  Maybe we should go upstream and ask advice...
+I opened a PR here: https://github.com/mesonbuild/meson/pull/6629.
+I already got some feedback however I don't know yet if it will be accepted.
+>
+>
+>  Regards,
+>  Arnout
+>
+> > +             libcmd.append('--static')
+> > +         # Force pkg-config to output -L fields even if they are system
+> > +         # paths so we can do manual searching with cc.find_library() later.
+> > +--
+> > +2.24.1
+> > +
+> > diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> > index 369e225b3e..d80c472de6 100644
+> > --- a/package/meson/cross-compilation.conf.in
+> > +++ b/package/meson/cross-compilation.conf.in
+> > @@ -18,6 +18,7 @@ cpp_args = [@TARGET_CXXFLAGS@]
+> >  cpp_link_args = [@TARGET_LDFLAGS@]
+> >  sys_root = '@STAGING_DIR@'
+> >  pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
+> > +pkg_config_static = '@STATIC@'
+> >
+> >  [host_machine]
+> >  system = 'linux'
+> > diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> > index 642b715938..9482845cd3 100644
+> > --- a/package/pkg-meson.mk
+> > +++ b/package/pkg-meson.mk
+> > @@ -76,6 +76,7 @@ define $(2)_CONFIGURE_CMDS
+> >           -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
+> >           -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
+> >           -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
+> > +         -e 's%@STATIC@%$$(if $$(BR2_STATIC_LIBS),true,false)%g' \
+> >           $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+> >               -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
+> >           ) \
+> >
+Best Regards,
 
-[1] https://github.com/lathiat/avahi/commit/5dbb32767ae3f5a371cfbd04b4e3a9a634b8efc4
-[2] https://github.com/lathiat/avahi/commit/3d5a0c68057e2ed76187a0bb565baaa10d566003
-[3] https://github.com/lathiat/avahi/commit/998e20cd76927ce978fb5676820a38308e21f45d
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
-v2 [suggested by Thomas Petazzoni]:
- * host-gettext (as replacement for host-intltool) is not needed
- * drop disabling support for Qt3, Qt4, and GTK, which are already
-   disabled by default
----
- ...ast-queries-from-address-not-on-loca.patch | 48 -------------------
- package/avahi/avahi.hash                      |  2 +-
- package/avahi/avahi.mk                        | 16 ++++---
- 3 files changed, 10 insertions(+), 56 deletions(-)
- delete mode 100644 package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch
-
-diff --git a/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch b/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch
-deleted file mode 100644
-index 0e8408c830..0000000000
---- a/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From e111def44a7df4624a4aa3f85fe98054bffb6b4f Mon Sep 17 00:00:00 2001
--From: Trent Lloyd <trent@lloyd.id.au>
--Date: Sat, 22 Dec 2018 09:06:07 +0800
--Subject: [PATCH] Drop legacy unicast queries from address not on local link
--
--When handling legacy unicast queries, ensure that the source IP is
--inside a subnet on the local link, otherwise drop the packet.
--
--Fixes #145
--Fixes #203
--CVE-2017-6519
--CVE-2018-100084
--
--Backported from: e111def44a7df4624a4aa3f85fe98054bffb6b4f
--Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
-----
-- avahi-core/server.c | 8 ++++++++
-- 1 file changed, 8 insertions(+)
--
--diff --git a/avahi-core/server.c b/avahi-core/server.c
--index a2cb19a8..a2580e38 100644
----- a/avahi-core/server.c
--+++ b/avahi-core/server.c
--@@ -930,6 +930,7 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
-- 
--     if (avahi_dns_packet_is_query(p)) {
--         int legacy_unicast = 0;
--+        char t[AVAHI_ADDRESS_STR_MAX];
-- 
--         /* For queries EDNS0 might allow ARCOUNT != 0. We ignore the
--          * AR section completely here, so far. Until the day we add
--@@ -947,6 +948,13 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
--             legacy_unicast = 1;
--         }
-- 
--+        if (!is_mdns_mcast_address(dst_address) &&
--+            !avahi_interface_address_on_link(i, src_address)) {
--+
--+            avahi_log_debug("Received non-local unicast query from host %s on interface '%s.%i'.", avahi_address_snprint(t, sizeof(t), src_address), i->hardware->name, i->protocol);
--+            return;
--+        }
--+
--         if (legacy_unicast)
--             reflect_legacy_unicast_query_packet(s, p, i, src_address, port);
-- 
---- 
--2.19.1
--
-diff --git a/package/avahi/avahi.hash b/package/avahi/avahi.hash
-index b4d36ffe50..cfc7ba020d 100644
---- a/package/avahi/avahi.hash
-+++ b/package/avahi/avahi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 57a99b5dfe7fdae794e3d1ee7a62973a368e91e414bd0dfa5d84434de5b14804  avahi-0.7.tar.gz
-+sha256 060309d7a333d38d951bc27598c677af1796934dbd98e1024e7ad8de798fedda  avahi-0.8.tar.gz
- sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 23127edcb9..ea15172c8a 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AVAHI_VERSION = 0.7
-+AVAHI_VERSION = 0.8
- AVAHI_SITE = https://github.com/lathiat/avahi/releases/download/v$(AVAHI_VERSION)
- AVAHI_LICENSE = LGPL-2.1+
- AVAHI_LICENSE_FILES = LICENSE
-@@ -23,9 +23,7 @@ AVAHI_CONF_ENV = DATADIRNAME=share
- # programs, we decided to disable their support to solve the circular
- # dependency.
- AVAHI_CONF_OPTS = \
--	--disable-qt3 \
--	--disable-qt4 \
--	--disable-gtk \
-+	--disable-qt5 \
- 	--disable-gtk3 \
- 	--disable-gdbm \
- 	--disable-pygobject \
-@@ -40,9 +38,7 @@ AVAHI_CONF_OPTS = \
- 	--with-autoipd-user=avahi \
- 	--with-autoipd-group=avahi
- 
--AVAHI_DEPENDENCIES = \
--	host-intltool host-pkgconf \
--	$(TARGET_NLS_DEPENDENCIES)
-+AVAHI_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- 
- AVAHI_CFLAGS = $(TARGET_CFLAGS)
- 
-@@ -81,6 +77,12 @@ else
- AVAHI_CONF_OPTS += --disable-dbus
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBEVENT),y)
-+AVAHI_DEPENDENCIES += libevent
-+else
-+AVAHI_CONF_OPTS += --disable-libevent
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
- AVAHI_DEPENDENCIES += libglib2
- else
--- 
-2.25.1
+Fabrice
